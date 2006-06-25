@@ -68,6 +68,12 @@ gnc_tree_view_transaction_new_with_model(GncTreeModelTransaction *model);
 Account *
 gnc_tree_view_transaction_get_anchor(GncTreeViewTransaction *tv);
 
+Split *
+gnc_tree_view_transaction_get_selected_split(GncTreeViewTransaction *tv);
+
+void
+gnc_tree_view_transaction_delete_selected(GncTreeViewTransaction *tv);
+
 /** @} */
 
 

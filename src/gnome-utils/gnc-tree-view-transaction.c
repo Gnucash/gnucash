@@ -290,7 +290,6 @@ get_model_iter_from_view_string(GncTreeViewTransaction *tv,
     return TRUE;
 }
 
-//FIXME: should this be needed?
 static gboolean
 get_model_iter_from_selection(GncTreeViewTransaction *tv,
                               GtkTreeSelection *sel, GtkTreeIter *iter)
@@ -307,14 +306,28 @@ get_model_iter_from_selection(GncTreeViewTransaction *tv,
 
 }
 
+Split *
+gnc_tree_view_transaction_get_selected_split(GncTreeViewTransaction *tv)
+{
+    GtkTreeIter iter;
+    GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+    Split *split = NULL;
+
+    if (get_model_iter_from_selection(tv, sel, &iter)) {
+        GncTreeModelTransaction *model = get_trans_model_from_view(tv);
+        gnc_tree_model_transaction_get_split_and_trans(
+            model, &iter, NULL, NULL, &split, NULL);
+    }
+    return split;
+}
+
 static GtkTreePath *
-get_view_path_from_model_iter(GncTreeViewTransaction *view, GtkTreeIter *iter)
+get_view_path_from_model_iter(GncTreeViewTransaction *tv, GtkTreeIter *iter)
 {
     GncTreeModelSort *s_model;
     GtkTreeIter s_iter;
 
-    s_model = GNC_TREE_MODEL_SORT(gtk_tree_view_get_model(
-                                      GTK_TREE_VIEW(view)));
+    s_model = GNC_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
     gnc_tree_model_sort_convert_child_iter_to_iter(s_model, &s_iter, iter);
     return gtk_tree_model_get_path(GTK_TREE_MODEL(s_model), &s_iter);
 }
@@ -659,6 +672,8 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     case COL_BALANCE:
         if (is_trans && trans && anchor) {
             num = xaccTransGetAccountBalance(trans, anchor);
+            if (gnc_reverse_balance(anchor)) 
+                num = gnc_numeric_neg(num);
             s = xaccPrintAmount(num, gnc_account_print_info(
                                         anchor, FALSE));
         } else s = "";
@@ -1277,10 +1292,9 @@ start_edit(GtkCellRenderer *cr, GtkCellEditable *editable,
     return;
 }
 
-static void
-delete_row_cb(GtkMenuItem *menuitem, gpointer *userdata)
+void
+gnc_tree_view_transaction_delete_selected(GncTreeViewTransaction *tv)
 {
-    GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(userdata);
     GncTreeModelTransaction *model;
     GtkTreeIter iter;
     GtkTreeSelection *sel;
@@ -1317,58 +1331,30 @@ delete_row_cb(GtkMenuItem *menuitem, gpointer *userdata)
         }
     }
 }
-
-static void
-do_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer userdata)
-{
-    GtkWidget *menu, *menuitem;
-
-    menu = gtk_menu_new ();
-    menuitem = gtk_menu_item_new_with_label(_("delete"));
-
-    g_signal_connect(menuitem, "activate", (GCallback) delete_row_cb,
-                     treeview);
-
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    gtk_menu_set_title(GTK_MENU(menu), "title"); //FIXME
-
-    gtk_widget_show_all(menu);
-
-    /*  gdk_event_get_time() accepts a NULL argument */
-    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
-                   event ? event->button : 0,
-                   gdk_event_get_time((GdkEvent*)event));
-}
+#if 0
 
 static gboolean
 gtvt_button_press_event_handler(GtkWidget *treeview, GdkEventButton *event,
                                 gpointer userdata)
 {
-    /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
-        GtkTreeSelection *sel;
-
-        sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
-
-        if (gtk_tree_selection_count_selected_rows(sel) <= 1) {
-            GtkTreePath *path;
-
-            /* Get tree path for row that was clicked */
-            if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
-                                              (gint) event->x,
-                                              (gint) event->y,
-                                              &path, NULL, NULL, NULL)) {
-                gtk_tree_selection_unselect_all(sel);
-                gtk_tree_selection_select_path(sel, path);
-                gtk_tree_path_free(path);
-            }
+    GtkTreeSelection *sel;
+    
+    sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
+    
+    if (gtk_tree_selection_count_selected_rows(sel) <= 1) {
+        GtkTreePath *path;
+        
+        /* Get tree path for row that was clicked */
+        if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
+                                          (gint) event->x,
+                                          (gint) event->y,
+                                          &path, NULL, NULL, NULL)) {
+            gtk_tree_selection_unselect_all(sel);
+            gtk_tree_selection_select_path(sel, path);
+            gtk_tree_path_free(path);
         }
-        do_popup_menu(treeview, event, userdata);
-
-        return TRUE;
     }
-
-    return FALSE;
+    do_popup_menu(treeview, event, userdata);   
 }
 
 static gboolean
@@ -1377,6 +1363,7 @@ gtvt_popup_menu_handler(GtkWidget *widget, gpointer userdata)
     do_popup_menu(widget, NULL, userdata);
     return TRUE;
 }
+#endif
 
 /* Creates a treeview with the list of fields */
 static GncTreeViewTransaction *
@@ -1458,10 +1445,6 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
 
     //gtk_tree_selection_set_mode(gtk_tree_view_get_selection(tv),
     //                            GTK_SELECTION_BROWSE);
-    g_signal_connect(G_OBJECT(tv), "popup-menu",
-                     G_CALLBACK(gtvt_popup_menu_handler), NULL);
-    g_signal_connect(G_OBJECT(tv), "button-press-event",
-                     G_CALLBACK(gtvt_button_press_event_handler), NULL);
     g_signal_connect_after(G_OBJECT(tv), "key-press-event",
                      G_CALLBACK(gtvt_key_press_cb), NULL);
     return tv;
