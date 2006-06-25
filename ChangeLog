@@ -1,3 +1,7 @@
+2006-06-25  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/pixmaps/gnucash_splash.png: reduced-size splash image.
+
 2006-06-24  Derek Atkins  <derek@ihtfp.com>
 
 	Allow building from either SVN or SVK
