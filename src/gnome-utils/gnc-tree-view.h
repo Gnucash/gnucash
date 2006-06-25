@@ -34,6 +34,7 @@
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
+#include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
 
@@ -399,6 +400,17 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
 /* Returns TRUE if path is a vaid path for the treeview */
 gboolean
 gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path);
+
+/** This button press handler calls the common button press handler
+ *  for all pages.  The GtkTreeView eats all button presses and
+ *  doesn't pass them up the widget tree, even when doesn't do
+ *  anything with them.  The only way to get access to the button
+ *  presses in an tree page is here on the tree view widget.  Button
+ *  presses on all other pages are caught by the signal registered in
+ *  gnc-main-window.c. */
+gboolean
+gnc_tree_view_button_press_cb(GtkWidget *widget, GdkEventButton *event, 
+                              GncPluginPage *page);
 
 /** @} */
 

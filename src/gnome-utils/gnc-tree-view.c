@@ -2156,5 +2156,23 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
     return;
 }
 
+gboolean
+gnc_tree_view_button_press_cb(GtkWidget *widget, GdkEventButton *event, 
+                              GncPluginPage *page)
+{
+  gboolean result;
+
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+
+  ENTER("widget %p, event %p, page %p", widget, event, page);
+  result = gnc_main_window_button_press_cb(widget, event, page);
+  LEAVE(" ");
+
+  /* Always return FALSE.  This will let the tree view callback run as
+   * well which will select the item under the cursor.  By the time
+   * the user sees the menu both callbacks will have run and the menu
+   * actions will operate on the just-selected row. */
+  return FALSE;
+}
 
 /** @} */

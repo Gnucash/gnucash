@@ -95,8 +95,6 @@ static GncPluginPage *gnc_plugin_page_budget_recreate_page (
     GtkWidget *window, GKeyFile *file, const gchar *group);
 
 
-static gboolean gppb_button_press_cb(
-    GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
 static gboolean gppb_key_press_cb(
     GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
 static void gppb_double_click_cb(
@@ -399,7 +397,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     g_signal_connect(G_OBJECT(selection), "changed",
                      G_CALLBACK(gppb_selection_changed_cb), plugin_page);
     g_signal_connect(G_OBJECT(tree_view), "button-press-event",
-                     G_CALLBACK(gppb_button_press_cb), plugin_page);
+                     G_CALLBACK(gnc_tree_view_button_press_cb), plugin_page);
     g_signal_connect(G_OBJECT(tree_view), "row-activated",
                      G_CALLBACK(gppb_double_click_cb), page);
     g_signal_connect_after(G_OBJECT(tree_view), "key-press-event",
@@ -555,27 +553,6 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
                                   &priv->fd, key_file, group_name);
     LEAVE(" ");
     return page;
-}
-
-/** This button press handler calls the common button press handler
- *  for all pages.  The GtkTreeView eats all button presses and
- *  doesn't pass them up the widget tree, even when doesn't do
- *  anything with them.  The only way to get access to the button
- *  presses in an account tree page is here on the tree view widget.
- *  Button presses on all other pages are caught by the signal
- *  registered in gnc-main-window.c. */
-static gboolean
-gppb_button_press_cb(GtkWidget *widget, GdkEventButton *event,
-                     GncPluginPage *page)
-{
-  gboolean result;
-
-  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
-
-  ENTER("widget %p, event %p, page %p", widget, event, page);
-  result = gnc_main_window_button_press_cb(widget, event, page);
-  LEAVE(" ");
-  return result;
 }
 
 static gboolean

@@ -104,9 +104,6 @@ static void gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page, 
 static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 /* Callbacks */
-static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
-							      GdkEventButton *event,
-			       				      GncPluginPage *page);
 static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
 							  GtkTreePath        *path,
 							  GtkTreeViewColumn  *col,
@@ -456,7 +453,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-			  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
+                          G_CALLBACK (gnc_tree_view_button_press_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "row-activated",
 			  G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
 
@@ -582,33 +579,6 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 
 
 /* Callbacks */
-
-/** This button press handler calls the common button press handler
- *  for all pages.  The GtkTreeView eats all button presses and
- *  doesn't pass them up the widget tree, even when doesn't do
- *  anything with them.  The only way to get access to the button
- *  presses in an account tree page is here on the tree view widget.
- *  Button presses on all other pages are caught by the signal
- *  registered in gnc-main-window.c. */
-static gboolean
-gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
-					      GdkEventButton *event,
-	       				      GncPluginPage *page)
-{
-  gboolean result;
-
-  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
-
-  ENTER("widget %p, event %p, page %p", widget, event, page);
-  result = gnc_main_window_button_press_cb(widget, event, page);
-  LEAVE(" ");
-
-  /* Always return FALSE.  This will let the tree view callback run as
-   * well which will select the item under the cursor.  By the time
-   * the user sees the menu both callbacks will have run and the menu
-   * actions will operate on the just-selected account. */
-  return FALSE;
-}
 
 static void
 gppat_open_account_common (GncPluginPageAccountTree *page,
