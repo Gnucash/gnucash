@@ -1,3 +1,8 @@
+2006-06-27  Christian Stimming <stimming@tuhh.de>
+
+	* src/backend/file/gnc-backend-file.c: Ignore failed chown()
+	because it always fails on vfat/samba. #345913
+
 2006-06-26  David Hampton  <hampton@employees.org>
 
 	* src/pixmaps/gnucash-icon.png:
