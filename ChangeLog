@@ -1,5 +1,12 @@
 2006-06-27  David Hampton  <hampton@employees.org>
 
+	* src/report/standard-reports/portfolio.scm:
+
+	* src/report/standard-reports/advanced-portfolio.scm: Restore the
+	original sort ordering which is grouping by parent account, and
+	then sorting within a group first by account code and then by
+	account name.  Partial fix for #345385.
+
 	* src/quotes/gnc-fq-update.in:
 	* src/quotes/gnc-fq-check.in:
 	* src/quotes/gnc-fq-helper.in:

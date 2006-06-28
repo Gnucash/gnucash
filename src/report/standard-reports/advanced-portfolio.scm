@@ -645,11 +645,6 @@
            table
 	   headercols)
           
-	  (set! accounts (sort accounts
-			       (lambda (a b)
-				 (string<? (gnc:account-get-name a)
-					   (gnc:account-get-name b)))))
-
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn
            include-empty include-gains show-symbol show-listing show-shares show-price 
