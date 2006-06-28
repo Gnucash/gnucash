@@ -40,7 +40,8 @@ sub check_modules {
   foreach my $mod (@missing) {
     print STDERR "  ".$mod."\n";
   }
-  print STDERR "Run 'update-finance-quote' as root to install them.\n";
+  print STDERR "Use your system's package manager to install them,\n";
+  print STDERR "or run 'gnc-fq-update' as root.\n";
 
   exit 1;
 }
@@ -184,15 +185,15 @@ if ($exchange eq "currency") {
 
 =head1 NAME
 
-dump-finance-quote	- Print out data from the F::Q module
+dump-gnc-fq	- Print out data from the F::Q module
 
 =head1 SYNOPSIS
 
-    dump-finance-quote yahoo CSCO JNPR
-    dump-finance-quote yahoo BAESY.PK
-    dump-finance-quote europe 48406.PA 13000.PA
-    dump-finance-quote vwd 632034
-    dump-finance-quote ftportfolios FKYGTX
+    dump-gnc-fq yahoo CSCO JNPR
+    dump-gnc-fq yahoo BAESY.PK
+    dump-gnc-fq europe 48406.PA 13000.PA
+    dump-gnc-fq vwd 632034
+    dump-gnc-fq ftportfolios FKYGTX
 
 =head1 DESCRIPTION
 

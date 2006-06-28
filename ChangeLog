@@ -1,3 +1,12 @@
+2006-06-27  David Hampton  <hampton@employees.org>
+
+	* src/quotes/gnc-fq-update.in:
+	* src/quotes/gnc-fq-check.in:
+	* src/quotes/gnc-fq-helper.in:
+	* src/quotes/gnc-fq-dump: When modules can't be found refer users
+	to their package manager first.  Other fixups for the utility
+	program name changes.
+
 2006-06-27  Christian Stimming <stimming@tuhh.de>
 
 	* src/backend/file/gnc-backend-file.c: Ignore failed chown()

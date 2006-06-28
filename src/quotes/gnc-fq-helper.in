@@ -1,6 +1,6 @@
 #!@-PERL-@ -w
 ######################################################################
-### finance-quote-helper - present a scheme interface to Finance::Quote
+### gnc-fq-helper - present a scheme interface to Finance::Quote
 ### Copyright 2001 Rob Browning <rlb@cs.utexas.edu>
 ### 
 ### This program is free software; you can redistribute it and/or    
@@ -50,7 +50,7 @@ use FileHandle;
 
 # Output (on standard output, one output form per input line):
 
-# Schemified version of finance-quote's output, basically an alist of
+# Schemified version of gnc-fq's output, basically an alist of
 # alists, as in the example below.  Right now, only the fields that
 # this script knows about (and knows how to convert to scheme) are
 # returned, so the conversion function will have to be updated
@@ -65,7 +65,7 @@ use FileHandle;
 
 # For example:
 
-#  $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./finance-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./gnc-fq-helper
 # (("CSCO" (symbol . "CSCO")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
 #          (last . 20.375)
@@ -82,7 +82,7 @@ use FileHandle;
 # On error, the overall result may be #f, or on individual errors, the
 # list sub-item for a given symbol may be #f, like this:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./finance-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU")' | ./gnc-fq-helper
 # (#f
 #  ("JDSU" (symbol . "JDSU")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
@@ -124,7 +124,8 @@ sub check_modules {
   }
 
   print STDERR "\n";
-  print STDERR "Run 'update-finance-quote' as root to install them.\n";
+  print STDERR "Use your system's package manager to install them,\n";
+  print STDERR "or run 'gnc-fq-update' as root.\n";
 
   print "missing-lib";
 
@@ -317,7 +318,7 @@ check_modules ();
 
 # Create a stockquote object.
 my $quoter = Finance::Quote->new();
-my $prgnam = "scmio-finance-quote";
+my $prgnam = "gnc-fq-helper";
 
 # Disable default currency conversions.
 $quoter->set_currency();
