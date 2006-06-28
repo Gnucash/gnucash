@@ -45,7 +45,7 @@ RDEPEND=">=dev-libs/glib-2.4.0
 	hbci? ( net-libs/aqbanking
 		chipcard? ( sys-libs/libchipcard )
 	)
-	quotes? ( dev-perl/DateManip
+	quotes? ( dev-perl/Crypt-SSLeay
 		dev-perl/Finance-Quote
 		dev-perl/HTML-TableExtract )
 	postgres? ( dev-db/postgresql )

@@ -1,3 +1,13 @@
+2006-06-28  David Hampton  <hampton@employees.org>
+
+	* packaging/gnucash-1.9.x.ebuild:
+	* src/quotes/gnc-fq-update.in:
+	* src/quotes/gnc-fq-check.in:
+	* src/quotes/gnc-fq-helper.in:
+	* src/quotes/gnc-fq-dump: Recent version of Finance::Quote no
+	longer depend on Date::Manip, but they do now depend on
+	Crypt::SSLeay.
+
 2006-06-27  David Hampton  <hampton@employees.org>
 
 	* src/report/standard-reports/portfolio.scm:
