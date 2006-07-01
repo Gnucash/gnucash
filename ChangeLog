@@ -1,3 +1,8 @@
+2006-07-01  David Hampton  <hampton@employees.org>
+
+	* src/quotes/gnc-fq-helper.in: This one file really does require
+	the perl Date::Manip module.
+
 2006-07-01  Christian Stimming  <stimming@tuhh.de>
 
 	* po/nl.po, po/glossary/nl.po: Updated Dutch translation by

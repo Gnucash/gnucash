@@ -27,6 +27,13 @@ use strict;
 use English;
 use FileHandle;
 
+# The following include is needed for the ParseDateString function.
+# This should eventually be replaced with a requirement for F::Q
+# version 1.11 (or better) and the use of the 'isodate' field to
+# handle the date part of the conversion.  Still need a method to
+# handle the time conversion.
+use Date::Manip;
+
 # Input: (on standard input - one entry per line and one line per
 # entry, and double quotes must only be delimiters, not string
 # content -- remember, we don't have a real scheme parser on the perl
