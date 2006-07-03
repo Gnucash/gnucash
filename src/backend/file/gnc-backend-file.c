@@ -519,18 +519,18 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             /* Use the permissions from the original data file */
             if(chmod(tmp_name, statbuf.st_mode) != 0)
             {
-                qof_backend_set_error(be, ERR_BACKEND_PERM);
-		/* FIXME: Even if the chmod did fail, the save
+	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+		/* Even if the chmod did fail, the save
 		   nevertheless completed successfully. It is
 		   therefore wrong to signal the ERR_BACKEND_PERM
 		   error here which implies that the saving itself
-		   failed! What should we do? */
+		   failed. Instead, we simply ignore this. */
                 PWARN("unable to chmod filename %s: %s",
                         tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
-#if VFAT_DOESNT_SUCK  /* chmod always fails on vfat fs */
-                g_free(tmp_name);
-                return FALSE;
+#if VFAT_DOESNT_SUCK  /* chmod always fails on vfat/samba fs */
+                /* g_free(tmp_name); */
+                /* return FALSE; */
 #endif
             }
 #ifdef HAVE_CHOWN

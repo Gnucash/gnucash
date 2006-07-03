@@ -231,11 +231,6 @@
                  (_ "Price")
                  (_ "Value")))
           
-	  (set! accounts (sort accounts
-			       (lambda (a b)
-				 (string<? (gnc:account-get-name a)
-					   (gnc:account-get-name b)))))
-
           (table-add-stock-rows
            table accounts to-date currency 
            exchange-fn price-fn include-empty collector)

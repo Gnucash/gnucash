@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Usage:
+#   gnc-svnversion <srcdir>
+#
+# Prints the revision number to stdout and exits 0 on success
+# exits with errorcode 1 if we're not in an svn or svk checkout
+#
+# Written By:  Derek Atkins <derek@ihtfp.com>
+#
+# $Id$
+
+# Print an error message and then exit
+my_die()
+{
+  echo "$1"
+  exit 1
+}
+
+# Make sure we have a srcdir
+[ -n "$1" ] || my_die "Usage: $0 <srcdir>"
+[ -d "$1" ] || my_die "$0: $1: not a directory"
+
+# Find the real srcdir.
+# This handles the case of a symlink (lndir) tree
+# $real_srcdir will hold the actual source dir
+if test -h "$1"/Makefile.am
+then 
+  tmp_srcdir=`readlink "$1"/Makefile.am`
+  real_srcdir="$1/`dirname ${tmp_srcdir}`"
+else
+  real_srcdir="$1"
+fi
+
+# Test if this code is an SVN Checkout
+#   If this is an svn checkout we assume you have svnversion!
+if test -d "${real_srcdir}"/.svn
+then
+  svnversion "$real_srcdir"
+  exit $?
+fi
+
+# If we get here then this is NOT an svn checkout.  Maybe it's
+# SVK?  First, check if we've got 'svk' in the path.  If not,
+# then exit with an error code of 1..
+which svk >/dev/null 2>&1
+if test $? != 0 ; then exit 1 ; fi
+
+# Okay, we have 'svk'.  Now see if $real_srcdir is an svk checkout
+svkinfo=`svk info "$real_srcdir" 2>&1`
+if test $? != 0 ; then exit 1 ; fi
+
+# If we got here, then $real_srcdir is an svk checkout.  Parse out
+# the revision info, print it out, and then output 0.  Just combine
+# all the revision numbers into a single string by combining them
+# with periods.
+svkinfo=`svk info "$real_srcdir" | grep Rev | sed -e 's/^.* \([0-9:]*\)$/\1/'`
+echo $svkinfo | sed -e 's/\s/./g'
+
+exit 0

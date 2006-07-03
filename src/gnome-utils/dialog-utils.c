@@ -464,6 +464,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
       return TRUE;
 
     case GDK_minus:
+    case GDK_KP_Subtract:
+    case GDK_underscore:
       if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
       {
         const char *c;
@@ -484,9 +486,6 @@ gnc_handle_date_accelerator (GdkEventKey *event,
           return FALSE;
       }
 
-      /* fall through */
-    case GDK_KP_Subtract:
-    case GDK_underscore:
       if (event->state & GDK_SHIFT_MASK)
         g_date_subtract_days (&gdate, 7);
       else if (event->state & GDK_MOD1_MASK)

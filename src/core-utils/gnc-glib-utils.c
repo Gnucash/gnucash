@@ -22,6 +22,8 @@
 \********************************************************************/
 
 #include "config.h"
+#include <stdio.h>
+#include <string.h>
 
 #include "gnc-glib-utils.h"
 
@@ -40,4 +42,26 @@ safe_utf8_collate (const char * da, const char * db)
   if (db)
     return -1;
   return 0;
+}
+
+gboolean
+gnc_utf8_validate (const gchar *str)
+{
+  return g_utf8_validate(str, -1, NULL);
+}
+
+void
+gnc_utf8_strip_invalid (gchar *str)
+{
+  gchar *end;
+  gint len;
+
+  if (g_utf8_validate(str, -1, (const gchar **)&end))
+    return;
+
+  g_warning("Invalid utf8 string: %s", str);
+  do {
+    len = strlen(end);
+    memmove(end, end+1, len);	/* shuffle the remainder one byte */
+  } while (!g_utf8_validate(str, -1, (const gchar **)&end));
 }

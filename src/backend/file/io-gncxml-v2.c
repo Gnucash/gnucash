@@ -28,7 +28,9 @@
 #include <unistd.h>
 #include <zlib.h>
 #include <errno.h>
-#include <sys/wait.h>
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
@@ -1354,7 +1356,15 @@ wait_for_gzip()
     if (gzip_child_pid == 0)
         return TRUE;
 
+#ifdef HAVE_SYS_WAIT_H
     retval = waitpid(gzip_child_pid, NULL, WUNTRACED);
+#else
+    /* FIXME: Windows doesn't have waitpid. According to glib's
+       g_spawn_async_with_pipes(), we should use one of the
+       g_spawn functions and some Win32-API WaitFor*() function
+       here. For now, we ignore that race condition. */
+    retval = 1;
+#endif
     gzip_child_pid = 0;
 
     return retval != -1;

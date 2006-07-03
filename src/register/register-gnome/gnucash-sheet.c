@@ -195,6 +195,7 @@ gnucash_sheet_stop_editing (GnucashSheet *sheet)
         gnucash_sheet_hide_editing_cursor (sheet);
 
         sheet->editing = FALSE;
+        sheet->input_cancelled = FALSE;
 }
 
 

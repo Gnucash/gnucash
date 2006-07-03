@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.59)
-AC_INIT([gnucash], [1.9.7], [gnucash-devel@gnucash.org])
+AC_INIT([gnucash], [1.9.8], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
@@ -93,7 +93,7 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_HEADER_STDC
 
-AC_CHECK_HEADERS(limits.h sys/times.h)
+AC_CHECK_HEADERS(limits.h sys/times.h sys/wait.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
@@ -785,7 +785,8 @@ AC_SUBST(OFX_DIR)
 AC_ARG_ENABLE( mt940,
   [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
   if test "x$enableval" != "xno" ; then
-    MT940_DIR=mt940
+    MT940_DIR=mt940 ;
+    HBCI_DIR=hbci ;
   fi)
 if test x${MT940_DIR} = xmt940 ;
 then
@@ -984,10 +985,6 @@ AC_SUBST(enable_latex_docs)
 # ----------------------------------------------------------------------------
 BB_ENABLE_DOXYGEN
 
-
-# check for callgrind
-# ----------------------------------------------------------------------------
-AC_CHECK_HEADERS(valgrind/callgrind.h)
 
 ### --------------------------------------------------------------------------
 ### Libraries
@@ -2027,16 +2024,10 @@ then
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  if test -h ${srcdir}/Makefile.am
-  then 
-    tmp_srcdir=`readlink ${srcdir}/Makefile.am`
-    real_srcdir="${srcdir}/`dirname ${tmp_srcdir}`"
-  else
-    real_srcdir=${srcdir}
-  fi
-  if test -d ${real_srcdir}/.svn
+  ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
+  if test $? = 0
   then
-    # This code is from SVN, so enable error-on-warning
+    # This code is from SVN/SVK, so enable error-on-warning
     error_on_warning_as_default="yes"
   else
     # This is from a tarball, so disable error-on-warning

@@ -107,7 +107,6 @@
     </menu>
 
     <menu name="Extensions" action="ExtensionsAction">
-      <menuitem name="Callgrind"      action="ExtensionsCallgrindAction"/>
       <placeholder name="ExtensionsPlaceholder"/>
     </menu>
 

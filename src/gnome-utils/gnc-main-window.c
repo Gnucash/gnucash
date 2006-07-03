@@ -41,9 +41,6 @@
 #include "gkeyfile.h"
 #endif
 #include "gtk-compat.h"
-#ifdef HAVE_VALGRIND_CALLGRIND_H
-#include <valgrind/callgrind.h>
-#endif
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -83,7 +80,6 @@ enum {
  *  back to the corresponding GncPluginPage object. */
 #define PLUGIN_PAGE_LABEL "plugin-page"
 
-#define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
@@ -127,7 +123,6 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
@@ -314,9 +309,6 @@ static GtkToggleActionEntry toggle_actions [] =
 	{ "ViewStatusbarAction", NULL, N_("Stat_us Bar"), NULL,
 	  N_("Show/hide the status bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
-	{ "ExtensionsCallgrindAction", NULL, "Use Callgrind", NULL,
-	  "Enable/disable the Valgrind/Callgrind profiling tool.",
-	  G_CALLBACK (gnc_main_window_cmd_extensions_callgrind), FALSE },
 };
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
@@ -375,9 +367,6 @@ static const gchar *initially_insensitive_actions[] = {
 static const gchar *always_hidden_actions[] = {
 	"ViewSortByAction",
 	"ViewFilterByAction",
-#ifndef HAVE_VALGRIND_CALLGRIND_H
-	"ExtensionsCallgrindAction",
-#endif
 	NULL
 };
 
@@ -2011,7 +2000,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label, *entry;
 	const gchar *icon;
 	GtkWidget *image;
-	gboolean immutable = FALSE;
 	GList *tmp;
 
 	if (window)
@@ -2039,16 +2027,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  gtk_widget_show(GTK_WIDGET(window));
 	} else if ((window == NULL) && active_windows) {
 	  window = active_windows->data;
-	}
-
-	/* Is this the first page in the first window? */
-	if (window == active_windows->data) {
-	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	  if (priv->installed_pages == NULL) {
-	    immutable = TRUE;
-	    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
-			       GINT_TO_POINTER(1));
-	  }
 	}
 
 	page->window = GTK_WIDGET(window);
@@ -2090,7 +2068,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 			 page);
 
 	/* Add close button - Not for immutable pages */
-	if (!immutable) {
+	if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE)) {
 	  GtkWidget *close_image, *close_button;
 	  GtkRequisition requisition;
 	  
@@ -3076,32 +3054,6 @@ gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 	} else {
 		gtk_widget_hide (priv->statusbar);
 	}
-}
-
-static void
-gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window)
-{
-#ifdef HAVE_VALGRIND_CALLGRIND_H
-	static GTimeVal start, end;
-
-	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-	  g_print("Start timing.\n");
-	  g_get_current_time(&start);
-	  CALLGRIND_START_INSTRUMENTATION();
-	  CALLGRIND_TOGGLE_COLLECT();
-	} else {
-	  CALLGRIND_TOGGLE_COLLECT();
-	  CALLGRIND_STOP_INSTRUMENTATION();
-	  g_get_current_time(&end);
-	  if (start.tv_usec > end.tv_usec) {
-	    end.tv_usec += 1000000;
-	    end.tv_sec  -= 1;
-	  }
-	  g_print("Callgrind enabled for %d.%6d seconds.\n",
-		 (int)(end.tv_sec - start.tv_sec),
-		 (int)(end.tv_usec - start.tv_usec));
-	}
-#endif
 }
 
 static void

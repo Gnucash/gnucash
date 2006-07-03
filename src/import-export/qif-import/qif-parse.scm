@@ -429,25 +429,26 @@
         (numeric-date-parts '())
         (retval date-string)
         (match (regexp-exec qif-date-compiled-rexp date-string)))
-    (if (match:substring match 1)
-        (set! date-parts (list (match:substring match 1)
-                               (match:substring match 2)
-                               (match:substring match 3)))
-	;; This is of the form XXXXXXXX; split the string based on
-	;; whether the format is YYYYxxxx or xxxxYYYY
-	(let ((date-str (match:substring match 4)))
-	  (case format
-	    ((d-m-y m-d-y)
-	     (let ((m (regexp-exec qif-date-mdy-compiled-rexp date-str)))
-	       (set! date-parts (list (match:substring m 1)
-				      (match:substring m 2)
-				      (match:substring m 3)))))
-	  ((y-m-d y-d-m)
-	     (let ((m (regexp-exec qif-date-ymd-compiled-rexp date-str)))
-	       (set! date-parts (list (match:substring m 1)
-				      (match:substring m 2)
-				      (match:substring m 3)))))
-	  )))
+    (if match
+        (if (match:substring match 1)
+             (set! date-parts (list (match:substring match 1)
+                                    (match:substring match 2)
+                                    (match:substring match 3)))
+             ;; This is of the form XXXXXXXX; split the string based on
+             ;; whether the format is YYYYxxxx or xxxxYYYY
+             (let ((date-str (match:substring match 4)))
+               (case format
+                 ((d-m-y m-d-y)
+                  (let ((m (regexp-exec qif-date-mdy-compiled-rexp date-str)))
+                    (set! date-parts (list (match:substring m 1)
+                                           (match:substring m 2)
+                                           (match:substring m 3)))))
+                 ((y-m-d y-d-m)
+                  (let ((m (regexp-exec qif-date-ymd-compiled-rexp date-str)))
+                    (set! date-parts (list (match:substring m 1)
+                                           (match:substring m 2)
+                                           (match:substring m 3)))))
+                 ))))
 	
     ;; get the strings into numbers (but keep the strings around)
     (set! numeric-date-parts

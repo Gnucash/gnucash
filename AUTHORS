@@ -190,6 +190,7 @@ Yves-Eric Martin <yem_lists.gnucash.org@filter.yve.net> work on financial year e
 Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
 David Montenegro <sunrise2000@comcast.net> all sorts of Scheme reports
 Orestes Mas <orestes@tsc.upc.es> Catalan translation
+Bernard Meens <meensb@xs4all.nl> Dutch translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 Lucimar Moresco <lucimarmoresco@hotmail.com> pt_BR account templates
@@ -243,6 +244,7 @@ Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> lots of postgres backend work
 Didier Vidal <didier-devel@9online.fr> various G2 fixes.
+Oliver Vollmer <ovo@mx.lihas.de> German account templates SKR03
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 Darin Willits <darin@blueyonder.co.uk> initial budgeting prototype
