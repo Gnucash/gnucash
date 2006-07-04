@@ -1,3 +1,8 @@
+2006-07-04  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Proof-read and improved German translation by feedback
+	from Andi Köhler.
+
 2006-07-01  David Hampton  <hampton@employees.org>
 
 	* src/quotes/gnc-fq-helper.in: This one file really does require
