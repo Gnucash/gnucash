@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-15 12:04+0200\n"
-"PO-Revision-Date: 2006-05-30 21:48+0200\n"
+"POT-Creation-Date: 2006-07-05 22:39+0200\n"
+"PO-Revision-Date: 2006-07-05 21:59+0200\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2256,7 +2256,7 @@ msgstr "Crear nueva factura"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:101
-#: ../src/gnome/gnc-plugin-page-account-tree.c:146
+#: ../src/gnome/gnc-plugin-page-account-tree.c:147
 msgid "New _Account..."
 msgstr "Nueva _cuenta..."
 
@@ -2283,7 +2283,7 @@ msgstr "Copiar"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:115
 #: ../src/gnome/gnc-plugin-page-register.c:179
-#: ../src/gnome-utils/gnc-main-window.c:249
+#: ../src/gnome-utils/gnc-main-window.c:248
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:941
 msgid "_Paste"
 msgstr "_Pegar"
@@ -2419,7 +2419,7 @@ msgstr "Cancelar"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:195
 #: ../src/gnome/glade/register.glade.h:16
-#: ../src/gnome/gnc-plugin-page-account-tree.c:220
+#: ../src/gnome/gnc-plugin-page-account-tree.c:221
 #: ../src/gnome/gnc-plugin-page-budget.c:169
 #: ../src/gnome/gnc-plugin-page-register.c:329
 msgid "Delete"
@@ -3544,7 +3544,7 @@ msgstr "Completo"
 #: ../src/gnome/dialog-sxsincelast.c:401 ../src/gnome/glade/price.glade.h:22
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/glade/sched-xact.glade.h:203
-#: ../src/gnome-utils/gnc-main-window.c:213
+#: ../src/gnome-utils/gnc-main-window.c:212
 #: ../src/gnome/window-reconcile.c:2025
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
@@ -3558,14 +3558,14 @@ msgstr "_Asiento"
 #: ../src/gnome/dialog-scheduledxaction.c:244
 #: ../src/gnome/dialog-sxsincelast.c:403 ../src/gnome/glade/lots.glade.h:27
 #: ../src/gnome/glade/register.glade.h:101
-#: ../src/gnome-utils/gnc-main-window.c:214
+#: ../src/gnome-utils/gnc-main-window.c:213
 msgid "_View"
 msgstr "_Ver"
 
 #: ../src/gnome/dialog-scheduledxaction.c:245
 #: ../src/gnome/dialog-sxsincelast.c:404
 #: ../src/gnome/glade/register.glade.h:74
-#: ../src/gnome-utils/gnc-main-window.c:215
+#: ../src/gnome-utils/gnc-main-window.c:214
 msgid "_Actions"
 msgstr "A_cciones"
 
@@ -4718,7 +4718,7 @@ msgid "Add a new commodity."
 msgstr "Añadir una nueva mercancía."
 
 #: ../src/gnome/glade/commodities.glade.h:3
-#: ../src/gnome/gnc-plugin-page-account-tree.c:218
+#: ../src/gnome/gnc-plugin-page-account-tree.c:219
 msgid "Edit"
 msgstr "Editar"
 
@@ -6896,122 +6896,122 @@ msgstr "Abrir un presupuesto existente"
 msgid "Select a Budget"
 msgstr "Seleccionar presupuesto"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:147
+#: ../src/gnome/gnc-plugin-page-account-tree.c:148
 msgid "Create a new Account"
 msgstr "Crear una cuenta nueva"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:149
+#: ../src/gnome/gnc-plugin-page-account-tree.c:150
 msgid "New Account _Hierarchy..."
 msgstr "Nuevo _plan de cuentas..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:150
+#: ../src/gnome/gnc-plugin-page-account-tree.c:151
 msgid "Extend the current book by merging with new account type categories"
 msgstr "Ampliar el libro actual añadiendo nuevas categorías de tipos de cuenta"
 
 #. File menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:152
+#: ../src/gnome/gnc-plugin-page-account-tree.c:153
 #: ../src/gnome/gnc-plugin-page-budget.c:131
 msgid "Open _Account"
 msgstr "Abrir _cuenta"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:153
+#: ../src/gnome/gnc-plugin-page-account-tree.c:154
 #: ../src/gnome/gnc-plugin-page-budget.c:132
 msgid "Open the selected account"
 msgstr "Abrir la cuenta seleccionada"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:155
+#: ../src/gnome/gnc-plugin-page-account-tree.c:156
 #: ../src/gnome/gnc-plugin-page-budget.c:135
 msgid "Open _Subaccounts"
 msgstr "Abrir _subcuentas"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:156
+#: ../src/gnome/gnc-plugin-page-account-tree.c:157
 #: ../src/gnome/gnc-plugin-page-budget.c:136
 msgid "Open the selected account and all its subaccounts"
 msgstr "Abrir las cuentas seleccionadas y todas sus subcuentas"
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:160
+#: ../src/gnome/gnc-plugin-page-account-tree.c:161
 #: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2009
 msgid "_Edit Account"
 msgstr "_Editar cuenta"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:161
+#: ../src/gnome/gnc-plugin-page-account-tree.c:162
 #: ../src/gnome/gnc-plugin-page-register.c:183
 msgid "Edit the selected account"
 msgstr "Editar la cuenta seleccionada"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:163
+#: ../src/gnome/gnc-plugin-page-account-tree.c:164
 msgid "_Delete Account..."
 msgstr "_Borrar cuenta..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:164
+#: ../src/gnome/gnc-plugin-page-account-tree.c:165
 msgid "Delete selected account"
 msgstr "Borrar cuenta seleccionada"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:166
+#: ../src/gnome/gnc-plugin-page-account-tree.c:167
 msgid "_Renumber Subaccounts..."
 msgstr "_Renumerar subcuentas..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:167
+#: ../src/gnome/gnc-plugin-page-account-tree.c:168
 msgid "Renumber the children of the selected account"
 msgstr "Renumerar los hijos de la cuenta seleccionada"
 
 #. View menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:171
+#: ../src/gnome/gnc-plugin-page-account-tree.c:172
 #: ../src/gnome/gnc-plugin-page-budget.c:152
 #: ../src/gnome/gnc-plugin-page-register.c:223
-#: ../src/gnome-utils/gnc-main-window.c:260
+#: ../src/gnome-utils/gnc-main-window.c:259
 msgid "_Filter By..."
 msgstr "_Filtrar por..."
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:175
+#: ../src/gnome/gnc-plugin-page-account-tree.c:176
 #: ../src/gnome/gnc-plugin-page-register.c:231
 msgid "_Reconcile..."
 msgstr "_Conciliar..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:176
+#: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:232
 msgid "Reconcile the selected account"
 msgstr "Conciliar la cuenta seleccionada"
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:178
+#: ../src/gnome/gnc-plugin-page-account-tree.c:179
 #: ../src/gnome/gnc-plugin-page-register.c:228
 #: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/window-reconcile.c:2012
 msgid "_Transfer..."
 msgstr "_Transferir..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:179
+#: ../src/gnome/gnc-plugin-page-account-tree.c:180
 #: ../src/gnome/gnc-plugin-page-register.c:229
 #: ../src/gnome/window-reconcile.c:2013
 msgid "Transfer funds from one account to another"
 msgstr "Transferir fondos de una cuenta a otra"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:181
+#: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:234
 msgid "Stoc_k Split..."
 msgstr "Canje de _acciones..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:182
+#: ../src/gnome/gnc-plugin-page-account-tree.c:183
 #: ../src/gnome/gnc-plugin-page-register.c:235
 msgid "Record a stock split or a stock merger"
 msgstr "Anotar una división o una fusión de valores"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:184
+#: ../src/gnome/gnc-plugin-page-account-tree.c:185
 msgid "View _Lots..."
 msgstr "Ver _paquetes..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:185
+#: ../src/gnome/gnc-plugin-page-account-tree.c:186
 #: ../src/gnome/gnc-plugin-page-register.c:238
 msgid "Bring up the lot viewer/editor window"
 msgstr "Mostrar el visor/editor de paquetes"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:187
+#: ../src/gnome/gnc-plugin-page-account-tree.c:188
 msgid "Check & Repair A_ccount"
 msgstr "Comprobar y reparar _cuenta"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:188
+#: ../src/gnome/gnc-plugin-page-account-tree.c:189
 #: ../src/gnome/window-reconcile.c:2016
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
@@ -7019,11 +7019,11 @@ msgid ""
 msgstr ""
 "Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta cuenta"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:190
+#: ../src/gnome/gnc-plugin-page-account-tree.c:191
 msgid "Check & Repair Su_baccount"
 msgstr "Comprobar y reparar _subcuentas"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:191
+#: ../src/gnome/gnc-plugin-page-account-tree.c:192
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -7031,11 +7031,11 @@ msgstr ""
 "Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta "
 "cuenta y sus subcuentas"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:194
+#: ../src/gnome/gnc-plugin-page-account-tree.c:195
 msgid "Check & Repair A_ll"
 msgstr "Comprobar y reparar _todo"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:195
+#: ../src/gnome/gnc-plugin-page-account-tree.c:196
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -7043,14 +7043,14 @@ msgstr ""
 "Buscar y reparar asientos descuadrados y anotaciones huérfanas en todas las "
 "cuentas"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:217
+#: ../src/gnome/gnc-plugin-page-account-tree.c:218
 #: ../src/gnome/gnc-plugin-page-budget.c:168 ../src/gnome/lot-viewer.c:436
 #: ../src/gnome-utils/gnc-file.c:97 ../src/gnome-utils/gnc-file.c:839
 #: ../src/gnome/window-reconcile.c:1564
 msgid "Open"
 msgstr "Abrir"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:219
+#: ../src/gnome/gnc-plugin-page-account-tree.c:220
 msgid "New"
 msgstr "Nuevo"
 
@@ -7062,7 +7062,7 @@ msgstr "Nuevo"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
-#: ../src/gnome/gnc-plugin-page-account-tree.c:307
+#: ../src/gnome/gnc-plugin-page-account-tree.c:309
 #: ../src/gnome-utils/glade/preferences.glade.h:31
 #: ../intl-scm/guile-strings.c:822 ../intl-scm/guile-strings.c:1214
 #: ../intl-scm/guile-strings.c:1676 ../intl-scm/guile-strings.c:1724
@@ -7072,48 +7072,48 @@ msgstr "Nuevo"
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:907
+#: ../src/gnome/gnc-plugin-page-account-tree.c:917
 msgid "(no name)"
 msgstr "(sin nombre)"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:929
+#: ../src/gnome/gnc-plugin-page-account-tree.c:939
 #, c-format
 msgid "Deleting account %s"
 msgstr "Borrando cuenta %s"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1021
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1031
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "La cuenta %s se borrará."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1031
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1041
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Todos los asientos en esta cuenta se moverán a la cuenta %s."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1035
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1045
 msgid "All transactions in this account will be deleted."
 msgstr "Todos los asientos en esta cuenta van a ser borrados."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1042
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1052
 #, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
 msgstr "Todas sus subcuentas se van a mover a la cuenta %s."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1046
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1056
 msgid "All of its subaccounts will be deleted."
 msgstr "Todas sus subcuentas se van a borrar."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1050
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1060
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Todos los asientos de las subcuentas se moverán a la cuenta %s."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1054
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1064
 msgid "All sub-account transactions will be deleted."
 msgstr "Se borrarán todos los asientos de las subcuentas."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1059
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1069
 msgid "Are you sure you want to do this?"
 msgstr "¿Está seguro de que desea hacer esto?"
 
@@ -7171,31 +7171,31 @@ msgstr "Im_primir cheque..."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:173
-#: ../src/gnome-utils/gnc-main-window.c:243
+#: ../src/gnome-utils/gnc-main-window.c:242
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:935
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../src/gnome/gnc-plugin-page-register.c:174
-#: ../src/gnome-utils/gnc-main-window.c:244
+#: ../src/gnome-utils/gnc-main-window.c:243
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:936
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Cortar la selección actual y copiarlo al portapapeles"
 
 #: ../src/gnome/gnc-plugin-page-register.c:176
-#: ../src/gnome-utils/gnc-main-window.c:246
+#: ../src/gnome-utils/gnc-main-window.c:245
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:938
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../src/gnome/gnc-plugin-page-register.c:177
-#: ../src/gnome-utils/gnc-main-window.c:247
+#: ../src/gnome-utils/gnc-main-window.c:246
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:939
 msgid "Copy the current selection to clipboard"
 msgstr "Copiar la selección actual al portapapeles"
 
 #: ../src/gnome/gnc-plugin-page-register.c:180
-#: ../src/gnome-utils/gnc-main-window.c:250
+#: ../src/gnome-utils/gnc-main-window.c:249
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:942
 msgid "Paste the clipboard content at the cursor position"
 msgstr "Pegar el contenido del portapapeles en la posición del cursor"
@@ -7265,7 +7265,7 @@ msgstr "Añadir asiento de _reversión"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:221
-#: ../src/gnome-utils/gnc-main-window.c:258
+#: ../src/gnome-utils/gnc-main-window.c:257
 msgid "_Sort By..."
 msgstr "_Ordenar por..."
 
@@ -9299,19 +9299,19 @@ msgstr "Cuenta de débito:"
 msgid "To Amount:"
 msgstr "A cantidad:"
 
-#: ../src/gnome-utils/dialog-utils.c:960
+#: ../src/gnome-utils/dialog-utils.c:959
 msgid "Remember and don't _ask me again."
 msgstr "Recordar y no volver a _preguntar otra vez."
 
-#: ../src/gnome-utils/dialog-utils.c:961
+#: ../src/gnome-utils/dialog-utils.c:960
 msgid "Don't _tell me again."
 msgstr "No _avisar otra vez."
 
-#: ../src/gnome-utils/dialog-utils.c:964
+#: ../src/gnome-utils/dialog-utils.c:963
 msgid "Remember and don't ask me again this _session."
 msgstr "Recordar y no volver a preguntar en esta _sesión."
 
-#: ../src/gnome-utils/dialog-utils.c:965
+#: ../src/gnome-utils/dialog-utils.c:964
 msgid "Don't tell me again this _session."
 msgstr "No avisar otra vez en esta sesión."
 
@@ -9508,7 +9508,7 @@ msgstr "KOI8-U (Ucraniano)"
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:571
 msgid "ISO-8859-1 KOI8-U"
-msgstr "ISO-8859-1 KOI8-U"
+msgstr "ISO-8859-1 ISO-8859-15"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:692
@@ -10855,7 +10855,7 @@ msgstr "Fallo al procesar el archivo: %s"
 msgid "Failed to open file: %s: %s"
 msgstr "Fallo al abrir el archivo: %s: %s"
 
-#: ../src/gnome-utils/gnc-file.c:101 ../src/gnome-utils/gnc-main-window.c:227
+#: ../src/gnome-utils/gnc-file.c:101 ../src/gnome-utils/gnc-main-window.c:226
 msgid "_Import"
 msgstr "_Importar"
 
@@ -10867,7 +10867,7 @@ msgstr "Importar"
 msgid "Save"
 msgstr "Guardar"
 
-#: ../src/gnome-utils/gnc-file.c:113 ../src/gnome-utils/gnc-main-window.c:228
+#: ../src/gnome-utils/gnc-file.c:113 ../src/gnome-utils/gnc-main-window.c:227
 msgid "_Export"
 msgstr "_Exportar"
 
@@ -11181,7 +11181,7 @@ msgstr "Ha ocurrido un error de E/S desconocido (%d)."
 msgid "Save changes to the file?"
 msgstr "¿Guardar cambios al archivo?"
 
-#: ../src/gnome-utils/gnc-file.c:556 ../src/gnome-utils/gnc-main-window.c:893
+#: ../src/gnome-utils/gnc-file.c:556 ../src/gnome-utils/gnc-main-window.c:892
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
@@ -11304,251 +11304,251 @@ msgid "_Open Account"
 msgstr "Abrir _Cuenta"
 
 #. Toplevel
-#: ../src/gnome-utils/gnc-main-window.c:212
+#: ../src/gnome-utils/gnc-main-window.c:211
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../src/gnome-utils/gnc-main-window.c:216
+#: ../src/gnome-utils/gnc-main-window.c:215
 msgid "Tra_nsaction"
 msgstr "_Asiento"
 
-#: ../src/gnome-utils/gnc-main-window.c:217
+#: ../src/gnome-utils/gnc-main-window.c:216
 msgid "_Reports"
 msgstr "_Informes"
 
-#: ../src/gnome-utils/gnc-main-window.c:218
+#: ../src/gnome-utils/gnc-main-window.c:217
 msgid "_Tools"
 msgstr "_Herramientas"
 
-#: ../src/gnome-utils/gnc-main-window.c:219
+#: ../src/gnome-utils/gnc-main-window.c:218
 msgid "E_xtensions"
 msgstr "E_xtensiones"
 
-#: ../src/gnome-utils/gnc-main-window.c:220
+#: ../src/gnome-utils/gnc-main-window.c:219
 msgid "_Windows"
 msgstr "Ven_tanas"
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:221
+#: ../src/gnome-utils/gnc-main-window.c:220
 #: ../src/gnome/window-reconcile.c:1986 ../src/gnome/window-reconcile.c:2034
 msgid "_Help"
 msgstr "A_yuda"
 
 #. File menu
 #. Transaction menu
-#: ../src/gnome-utils/gnc-main-window.c:225
+#: ../src/gnome-utils/gnc-main-window.c:224
 #: ../src/gnome/window-reconcile.c:2022
 msgid "_New"
 msgstr "_Nuevo"
 
-#: ../src/gnome-utils/gnc-main-window.c:226
+#: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Open"
 msgstr "_Abrir"
 
-#: ../src/gnome-utils/gnc-main-window.c:229
+#: ../src/gnome-utils/gnc-main-window.c:228
 msgid "_Print..."
 msgstr "Im_primir..."
 
-#: ../src/gnome-utils/gnc-main-window.c:230
+#: ../src/gnome-utils/gnc-main-window.c:229
 msgid "Print the currently active page"
 msgstr "Imprimir la pestaña actual"
 
-#: ../src/gnome-utils/gnc-main-window.c:231
+#: ../src/gnome-utils/gnc-main-window.c:230
 msgid "Proper_ties"
 msgstr "P_ropiedades"
 
-#: ../src/gnome-utils/gnc-main-window.c:232
+#: ../src/gnome-utils/gnc-main-window.c:231
 msgid "Edit the properties of the current file"
 msgstr "Editar las propiedades del archivo actual"
 
-#: ../src/gnome-utils/gnc-main-window.c:234
+#: ../src/gnome-utils/gnc-main-window.c:233
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: ../src/gnome-utils/gnc-main-window.c:235
+#: ../src/gnome-utils/gnc-main-window.c:234
 msgid "Close the currently active page"
 msgstr "Cerrar la pestaña actual"
 
-#: ../src/gnome-utils/gnc-main-window.c:237
+#: ../src/gnome-utils/gnc-main-window.c:236
 msgid "_Quit"
 msgstr "_Salir"
 
-#: ../src/gnome-utils/gnc-main-window.c:238
+#: ../src/gnome-utils/gnc-main-window.c:237
 msgid "Quit this application"
 msgstr "Salir de esta aplicación"
 
-#: ../src/gnome-utils/gnc-main-window.c:252
+#: ../src/gnome-utils/gnc-main-window.c:251
 msgid "Pr_eferences"
 msgstr "_Preferencias"
 
-#: ../src/gnome-utils/gnc-main-window.c:253
+#: ../src/gnome-utils/gnc-main-window.c:252
 msgid "Edit the global preferences of GnuCash"
 msgstr "Editar las preferencias globales de GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:259
+#: ../src/gnome-utils/gnc-main-window.c:258
 msgid "Select sorting criteria for this page view"
 msgstr "Seleccionar el criterio de ordenación para esta vista"
 
-#: ../src/gnome-utils/gnc-main-window.c:261
+#: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Select the account types that should be displayed."
 msgstr "Seleccione los tipos de cuentas que se deberían mostrar."
 
-#: ../src/gnome-utils/gnc-main-window.c:262
+#: ../src/gnome-utils/gnc-main-window.c:261
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: ../src/gnome-utils/gnc-main-window.c:263
+#: ../src/gnome-utils/gnc-main-window.c:262
 msgid "Refresh this window"
 msgstr "Actualizar esta ventana"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-main-window.c:268
+#: ../src/gnome-utils/gnc-main-window.c:267
 #: ../src/gnome/window-reconcile.c:2015
 msgid "_Check & Repair"
 msgstr "_Comprobar y reparar"
 
-#: ../src/gnome-utils/gnc-main-window.c:269
+#: ../src/gnome-utils/gnc-main-window.c:268
 msgid "Reset _Warnings..."
 msgstr "Restablecer _advertencias..."
 
-#: ../src/gnome-utils/gnc-main-window.c:270
+#: ../src/gnome-utils/gnc-main-window.c:269
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
 "Restablecer el estado de todos los mensajes de advertencia, de forma que se "
 "muestren de nuevo."
 
-#: ../src/gnome-utils/gnc-main-window.c:272
+#: ../src/gnome-utils/gnc-main-window.c:271
 msgid "Re_name Page"
 msgstr "Re_nombrar pestaña"
 
-#: ../src/gnome-utils/gnc-main-window.c:273
+#: ../src/gnome-utils/gnc-main-window.c:272
 msgid "Rename this page."
 msgstr "Cambiar el nombre a esta pestaña"
 
 #. Windows menu
-#: ../src/gnome-utils/gnc-main-window.c:278
+#: ../src/gnome-utils/gnc-main-window.c:277
 msgid "_New Window"
 msgstr "_Nueva ventana"
 
-#: ../src/gnome-utils/gnc-main-window.c:279
+#: ../src/gnome-utils/gnc-main-window.c:278
 msgid "Open a new top-level GnuCash window."
 msgstr "Abrir una nueva ventana GnuCash de nivel superior."
 
-#: ../src/gnome-utils/gnc-main-window.c:281
+#: ../src/gnome-utils/gnc-main-window.c:280
 msgid "New Window with _Page"
 msgstr "Nueva ventana con _pestaña"
 
-#: ../src/gnome-utils/gnc-main-window.c:282
+#: ../src/gnome-utils/gnc-main-window.c:281
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Mover la pestaña actual a una ventana nueva de GnuCash."
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:287
+#: ../src/gnome-utils/gnc-main-window.c:286
 msgid "Tutorial and Concepts _Guide"
 msgstr "Tutorial y _guía de conceptos"
 
-#: ../src/gnome-utils/gnc-main-window.c:288
+#: ../src/gnome-utils/gnc-main-window.c:287
 msgid "Open the GnuCash Tutorial"
 msgstr "Abrir el tutorial de GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:290
+#: ../src/gnome-utils/gnc-main-window.c:289
 msgid "_Contents"
 msgstr "_Índice"
 
-#: ../src/gnome-utils/gnc-main-window.c:291
+#: ../src/gnome-utils/gnc-main-window.c:290
 msgid "Open the GnuCash Help"
 msgstr "Abrir la ayuda de GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:293
+#: ../src/gnome-utils/gnc-main-window.c:292
 msgid "_About"
 msgstr "_Acerca de GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:294
+#: ../src/gnome-utils/gnc-main-window.c:293
 msgid "About GnuCash"
 msgstr "Acerca de GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:304
+#: ../src/gnome-utils/gnc-main-window.c:303
 msgid "_Toolbar"
 msgstr "_Herramientas"
 
-#: ../src/gnome-utils/gnc-main-window.c:305
+#: ../src/gnome-utils/gnc-main-window.c:304
 msgid "Show/hide the toolbar on this window"
 msgstr "Mostrar/ocultar la barra de herramientas en esta ventana"
 
-#: ../src/gnome-utils/gnc-main-window.c:307
+#: ../src/gnome-utils/gnc-main-window.c:306
 msgid "Su_mmary Bar"
 msgstr "Barra de _resumen"
 
-#: ../src/gnome-utils/gnc-main-window.c:308
+#: ../src/gnome-utils/gnc-main-window.c:307
 msgid "Show/hide the summary bar on this window"
 msgstr "Mostrar/ocultar la barra de resumen en esta ventana"
 
-#: ../src/gnome-utils/gnc-main-window.c:310
+#: ../src/gnome-utils/gnc-main-window.c:309
 msgid "Stat_us Bar"
 msgstr "Barra de _estado"
 
-#: ../src/gnome-utils/gnc-main-window.c:311
+#: ../src/gnome-utils/gnc-main-window.c:310
 msgid "Show/hide the status bar on this window"
 msgstr "Mostrar/ocultar la barra de estado en esta ventana"
 
-#: ../src/gnome-utils/gnc-main-window.c:321
+#: ../src/gnome-utils/gnc-main-window.c:320
 msgid "Window _1"
 msgstr "Ventana _1"
 
-#: ../src/gnome-utils/gnc-main-window.c:322
+#: ../src/gnome-utils/gnc-main-window.c:321
 msgid "Window _2"
 msgstr "Ventana _2"
 
-#: ../src/gnome-utils/gnc-main-window.c:323
+#: ../src/gnome-utils/gnc-main-window.c:322
 msgid "Window _3"
 msgstr "Ventana _3"
 
-#: ../src/gnome-utils/gnc-main-window.c:324
+#: ../src/gnome-utils/gnc-main-window.c:323
 msgid "Window _4"
 msgstr "Ventana _4"
 
-#: ../src/gnome-utils/gnc-main-window.c:325
+#: ../src/gnome-utils/gnc-main-window.c:324
 msgid "Window _5"
 msgstr "Ventana _5"
 
-#: ../src/gnome-utils/gnc-main-window.c:326
+#: ../src/gnome-utils/gnc-main-window.c:325
 msgid "Window _6"
 msgstr "Ventana _6"
 
-#: ../src/gnome-utils/gnc-main-window.c:327
+#: ../src/gnome-utils/gnc-main-window.c:326
 msgid "Window _7"
 msgstr "Ventana _7"
 
-#: ../src/gnome-utils/gnc-main-window.c:328
+#: ../src/gnome-utils/gnc-main-window.c:327
 msgid "Window _8"
 msgstr "Ventana _8"
 
-#: ../src/gnome-utils/gnc-main-window.c:329
+#: ../src/gnome-utils/gnc-main-window.c:328
 msgid "Window _9"
 msgstr "Ventana _9"
 
-#: ../src/gnome-utils/gnc-main-window.c:330
+#: ../src/gnome-utils/gnc-main-window.c:329
 msgid "Window _0"
 msgstr "Ventana _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:890
+#: ../src/gnome-utils/gnc-main-window.c:889
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "¿Guardar cambios en el archivo %s antes de cerrar?"
 
-#: ../src/gnome-utils/gnc-main-window.c:901
+#: ../src/gnome-utils/gnc-main-window.c:900
 msgid "<unknown>"
 msgstr "<desconocido>"
 
-#: ../src/gnome-utils/gnc-main-window.c:917
+#: ../src/gnome-utils/gnc-main-window.c:916
 msgid "Close _Without Saving"
 msgstr "Cerrar _sin guardar"
 
-#: ../src/gnome-utils/gnc-main-window.c:988
+#: ../src/gnome-utils/gnc-main-window.c:987
 msgid "Quit GnuCash?"
 msgstr "¿Salir de GnuCash?"
 
-#: ../src/gnome-utils/gnc-main-window.c:989
+#: ../src/gnome-utils/gnc-main-window.c:988
 msgid ""
 "You are attempting to close the last GnuCash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
@@ -11556,36 +11556,36 @@ msgstr ""
 "Está intentando cerrar la última ventana GnuCash.  Si lo hace saldrá de la "
 "aplicación.  ¿Está seguro de que es lo que quiere hacer?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1124
+#: ../src/gnome-utils/gnc-main-window.c:1123
 msgid "<no file>"
 msgstr "<sin archivo>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3227
+#: ../src/gnome-utils/gnc-main-window.c:3215
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "El gestor de finanzas personales GnuCash. ¡La manera GNU de gestionar su "
 "dinero!"
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3240
+#: ../src/gnome-utils/gnc-main-window.c:3228
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s  Esta copia se compiló a partir de svn r%s el %s."
 
-#: ../src/gnome-utils/gnc-main-window.c:3243
+#: ../src/gnome-utils/gnc-main-window.c:3231
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  Esta copia se compiló a partir de r%s el %s."
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3255
-#: ../src/gnome-utils/gnc-main-window.c:3294
+#: ../src/gnome-utils/gnc-main-window.c:3243
+#: ../src/gnome-utils/gnc-main-window.c:3282
 msgid "translator_credits"
 msgstr "Eneko Lacunza <enlar@enlar.net>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3272
+#: ../src/gnome-utils/gnc-main-window.c:3260
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -20318,166 +20318,3 @@ msgstr ""
 "será reemplazadado por algo aún más raro e inexplicable. Hay otra teoría que "
 "dice que esto ya ha ocurrido. Douglas Adams, «El restaurante al final del "
 "Universo»"
-
-#~ msgid "Lost Accounts"
-#~ msgstr "Cuentas Perdidas"
-
-#~ msgid "Title placeholder"
-#~ msgstr "Contenedor del título"
-
-#~ msgid "placeholder"
-#~ msgstr "contenedor"
-
-#~ msgid ""
-#~ "Warning This is a DEVELOPMENT version of GnuCash. It probably has lots of "
-#~ "bugs and unstable features!\n"
-#~ "If you are looking for a stable personal finance application, you should "
-#~ "use the latest release of GnuCash 1.8"
-#~ msgstr ""
-#~ "Atención esta es una versión de DESARROLLO de GnuCash. ¡Probablemente "
-#~ "tiene muchos fallos y características inestables!\n"
-#~ "Si está buscando una aplicación de finanzas personales estable, debería "
-#~ "usar la última versión de GnuCash 1.8"
-
-#~ msgid ""
-#~ "Changes have been made since the last time it was saved. If you continue "
-#~ "without saving these changes will be discarded."
-#~ msgstr ""
-#~ "Se han hecho cambios desde la última vez que se guardó. Si continúa sin "
-#~ "guardar estos cambios se perderán."
-
-#~ msgid "$1,234.50"
-#~ msgstr "1.234,50 ¤"
-
-#~ msgid "$14,650.24"
-#~ msgstr "14.650,24 ¤"
-
-#~ msgid "$15.00"
-#~ msgstr "15,00 ¤"
-
-#~ msgid "-$15.00"
-#~ msgstr "-15,00 ¤"
-
-#~ msgid "-$86,764.29"
-#~ msgstr "-86.764,29 ¤"
-
-#~ msgid "-72,114.05"
-#~ msgstr "-72.114,04 ¤"
-
-#~ msgid "Finish"
-#~ msgstr "Finalizar"
-
-#~ msgid "New File"
-#~ msgstr "Nuevo _archivo"
-
-#~ msgid "Open File"
-#~ msgstr "Abrir Archivo"
-
-#~ msgid "Reconciled balance:"
-#~ msgstr "Saldo conciliado:"
-
-#~ msgid "Save File"
-#~ msgstr "Guardar archivo"
-
-#~ msgid "_Check and Repair..."
-#~ msgstr "_Comprobar y reparar..."
-
-#~ msgid "_Transfer"
-#~ msgstr "_Transferir"
-
-#~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new information you "
-#~ "have entered.\n"
-#~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
-#~ "\n"
-#~ "Click \"Back\" to review your currency selections."
-#~ msgstr ""
-#~ "Pulse «Finalizar» para actualizar sus cuentas con la nueva información "
-#~ "que ha introducido.\n"
-#~ "\n"
-#~ "Pulse «Cancelar» para cancelar el proceso de carga del archivo.\n"
-#~ "\n"
-#~ "Pulse «Volver» para revisar su selección de moneda."
-
-#~ msgid "Import currency and stock information"
-#~ msgstr "Importar información de divisas y cotizaciones"
-
-#~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. Information "
-#~ "about currencies, stocks, and mutual funds needs to be updated for the "
-#~ "new version. \n"
-#~ "\n"
-#~ "This dialog will prompt you for some additional information about each "
-#~ "currency, stock, and mutual fund that appear in your accounts.  After you "
-#~ "have entered this information, you can update your accounts for the new "
-#~ "version of GnuCash.\n"
-#~ "\n"
-#~ "Hit \"Cancel\" now to stop loading the file."
-#~ msgstr ""
-#~ "El archivo que está cargando es de una versión anterior de GnuCash. La "
-#~ "información sobre divisas, acciones y fondos de inversión necesita ser "
-#~ "actualizada para la nueva versión.\n"
-#~ "\n"
-#~ "Esta ventana le preguntará alguna información adicional sobre cada "
-#~ "divisa, acción y fondo de inversión que aparezca en sus cuentas.  Después "
-#~ "de introducir esta información, puede actualizar sus cuentas para la "
-#~ "nueva versión de GnuCash.\n"
-#~ "\n"
-#~ "Pulse «Cancelar» para parar la carga del archivo."
-
-#~ msgid "Update your accounts with the new information"
-#~ msgstr "Actualizar las cuentas con la nueva información"
-
-#~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, use "
-#~ "\"CURRENCY\". Enter a new type in the box if the ones in the pick list "
-#~ "are inappropriate."
-#~ msgstr ""
-#~ "Elija el tipo de moneda o valor. Para divisas, use «DIVISA». Introduzca "
-#~ "un tipo nuevo en el cuadro si los que hay en la lista son inapropiados."
-
-#~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \"US Dollar\" "
-#~ "or \"Red Hat Stock\""
-#~ msgstr ""
-#~ "Introduzca una descripción para la divisa o las acciones, por "
-#~ "ejemplo«Dolar Americano» o «Acciones de Red Hat»"
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol "
-#~ "(such as \"USD\"), or other unique abbreviation for the name."
-#~ msgstr ""
-#~ "Introduzca el símbolo de cotización (como «RHAT»), símbolo de divisa "
-#~ "(como «USD») u otra abreviatura única para el nombre."
-
-#~ msgid ""
-#~ "Click \"Next\" to accept the information and move to the next currency or "
-#~ "stock."
-#~ msgstr ""
-#~ "Pulse «Siguiente» para aceptar la información y continuar a la siguiente "
-#~ "divisa o valor."
-
-#~ msgid ""
-#~ "You must put values for the type, name, and abbreviation of the currency/"
-#~ "stock."
-#~ msgstr ""
-#~ "Debe poner valores para el tipo, nombre y la abreviatura de la divisa/"
-#~ "valor."
-
-#~ msgid "Do you want to display '%s'?"
-#~ msgstr "¿Quiere mostrar «%s»?"
-
-#~ msgid ""
-#~ "GnuCash has found %d reports from an earlier version of GnuCash but can't "
-#~ "tell which ones you had open.  You will now have the option to open each "
-#~ "report or not.  From now on, GnuCash will remember which reports you "
-#~ "leave open, so you won't see this message again."
-#~ msgstr ""
-#~ "GnuCash ha encontrado %d informes de una versión anterior de GnuCash pero "
-#~ "no puede saber cuáles tenía abiertos.  Ahora puede decidir si quiere o no "
-#~ "quiere abrir cada uno de los informes.  En adelante, GnuCash recordará "
-#~ "qué informes deja abiertos, de forma que no verá este mensaje de nuevo."
-
-#~ msgid "Find"
-#~ msgstr "Buscar"
