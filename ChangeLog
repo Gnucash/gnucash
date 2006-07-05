@@ -1,3 +1,13 @@
+2006-07-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/core-utils/gnc-glib-utils.h
+	* src/core-utils/gw-core-utils-spec.scm:
+	  Remove the gnc_utf8_validate() API. It's not used anywhere.
+	* src/core-utils/gnc-glib-utils.c:
+	  Rework gnc_utf8_validate() as a copy-and-paste of g_utf8_validate
+	  but ignore certain control characters between 0x00 and 0x20
+	  that are not valid XML characters.  Fixes #346535.
+	
 2006-07-04  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: Proof-read and improved German translation by feedback

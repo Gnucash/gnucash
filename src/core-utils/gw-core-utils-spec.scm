@@ -55,14 +55,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:utf8-validate
-   '<gw:bool>
-   "gnc_utf8_validate"
-   '(((<gw:mchars> caller-owned) program))
-   "Validate UTF8 encoded text.")
-
-  (gw:wrap-function
-   ws
    'gnc:utf8-strip-invalid
    '<gw:void>
    "gnc_utf8_strip_invalid"
