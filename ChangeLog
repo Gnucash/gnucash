@@ -1,3 +1,10 @@
+2006-07-06  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.c: When creating accounts from
+	the register, fix the name parsing logic to correctly handle the
+	case where the first new account will be the first child of its
+	parent.  Fixes #345771.
+
 2006-07-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/core-utils/gnc-glib-utils.h
