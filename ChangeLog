@@ -1,3 +1,8 @@
+2006-07-07  David Hampton  <hampton@cisco.com>
+
+	* src/engine/Transaction.c: Restore 1.8 behavior by using the full
+	date/time when sorting on the posted date.  Fixes #346954.
+
 2006-07-06  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c: When creating accounts from
