@@ -2052,14 +2052,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
       return;
   }
 
-  qof_event_suspend();
   new_trans = xaccTransReverse(trans);
-
-  /* Clear transaction level info */
-  xaccTransSetDatePostedSecs(new_trans, time(NULL));
-  xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-
-  qof_event_resume();
 
   /* Now jump to new trans */
   gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));

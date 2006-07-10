@@ -1926,6 +1926,9 @@ xaccTransReverse (Transaction *orig)
   kvp_val = kvp_value_new_guid(xaccTransGetGUID(trans));
   kvp_frame_set_slot_nc(orig->inst.kvp_data, TRANS_REVERSED_BY, kvp_val);
 
+  xaccTransSetDatePostedSecs(trans, time(NULL));
+  xaccTransSetDateEnteredSecs(trans, time(NULL));
+
   xaccTransCommitEdit(trans);
   return trans;
 }

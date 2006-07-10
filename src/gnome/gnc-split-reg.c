@@ -911,10 +911,6 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
   
   new_trans = xaccTransReverse(trans);
 
-  /* Clear transaction level info */
-  xaccTransSetDatePostedSecs(new_trans, time(NULL));
-  xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-
   /* Now jump to new trans */
   gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
 }
