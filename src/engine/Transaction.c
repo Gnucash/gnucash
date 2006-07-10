@@ -778,7 +778,8 @@ xaccTransGetRateForCommodity(const Transaction *trans,
 
     trans_curr = xaccTransGetCurrency(trans);
     if (gnc_commodity_equal(trans_curr, split_com)) {
-        *rate = gnc_numeric_create(1, 1);
+        if (rate) 
+            *rate = gnc_numeric_create(1, 1);
         return TRUE;
     }
 
@@ -796,8 +797,9 @@ xaccTransGetRateForCommodity(const Transaction *trans,
 
             if (!gnc_numeric_zero_p(xaccSplitGetValue(s)) &&
                 !gnc_numeric_zero_p(xaccSplitGetValue(s))) {
-                *rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
-                                        GNC_DENOM_REDUCE);
+                if (rate) 
+                    *rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
+                                            GNC_DENOM_REDUCE);
                 return TRUE;
             }
         }
