@@ -1,3 +1,14 @@
+2006-07-09  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 2.0.0
+	* src/gnome-utils/glade/totd.glade: Removed 1.8 references
+	* doc/README.OFX: Removed 1.8 references
+	* doc/tip_of_the_day.list.in: Removed 1.8 references
+	* doc/README.german: Removed 1.8 references
+	* doc/TRANSLATION_HOWTO: Removed 1.8 references
+	* README: Removed 1.8 references
+	
 2006-07-07  David Hampton  <hampton@cisco.com>
 
 	* src/engine/Transaction.c: Restore 1.8 behavior by using the full

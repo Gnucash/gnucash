@@ -1,6 +1,29 @@
 Version history:
 ------- -------
 
+ 2.0.0 - 9 July 2006
+ 	 o Release of new stable version 2.0.0.
+	 o GnuCash 2.0 is based on state-of-the-art gtk2 GUI technology.
+	 o GnuCash 2.0 follows the Gnome Human Interface Guidelines (HIG) for
+	   a consistent behaviour and look-and-feel for the whole Desktop.
+	 o New tabbed window.
+	 o New importing feature: OFX DirectConnect can directly retrieve and
+	   import account statements over the Internet.
+	 o Implemented a "Hide account" feature to keep a better overview of
+	   your current accounts.
+	 o Implemented the ability to create budgets within GnuCash using
+	   your account data.
+	 o New importing feature: MT940 files can be imported (in addition to
+	   QIF files and OFX files).
+	 o The data file format has been improved with respect to
+	   international characters. Data files with international characters
+	   can be transferred to other countries flawlessly.
+	 o Support for Accounting Periods.
+	 o GnuCash Help and Guide are now fully integrated with the GNOME Help
+	   system (Yelp).
+	 o New releases of Finance::Quote and LibOFX will be coming soon to
+	   update support for GnuCash 2.0.0.
+
  1.9.8 - 18 June 2006
  	 o Welcome to GnuCash 1.9.8 aka "Grab that cash with both hands and
 	 make a stash" the first release candidate of the GnuCash Open Source

@@ -1,13 +1,5 @@
 ############################################################
-          GnuCash 1.9.x README file.
-
-NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
-BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
-
-USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS)
-
-If you want something a bit more tested, please use the
-1.8 stable series.
+          GnuCash 2.0.x README file.
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +7,6 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 1.6.x
   - Upgrading from 1.8.x
   - Dependencies
   - Invocation/running
@@ -23,7 +14,7 @@ Table of Contents:
   - Building & Installing
   - Supported Platforms
   - Additional Download Sites
-  - Getting the Source via CVS
+  - Getting the Source via SVN
   - Developing GnuCash
 
 ########
@@ -140,7 +131,7 @@ http://www.gnucash.org/en/hacking.phtml
 Upgrading from earlier versions
 -------------------------------
 
-There are many, many changes from the 1.6 series - have a look at the
+There are many, many changes from the 1.8 series - have a look at the
 NEWS file if you want more details. In particular:
 
 - GnuCash now requires g-wrap 1.3.4 or better. See the "dependencies"
@@ -164,7 +155,7 @@ Dependencies
 
 The following packages are required to be installed to run GnuCash:
 
-[FIXME; see README.dependencies]
+[see README.dependencies]
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
@@ -179,7 +170,7 @@ versions of required packages.
 To use the new import features (OFX and HBCI) you need to obtain
 the following;
   libofx: This library provide support for OFX file imports. 
-    GnuCash-1.8.10 and newer needs at least the version libofx-0.7.0
+    GnuCash-2.0.0 and newer needs at least the version libofx-0.7.0
     or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
   aqbanking: This library provide support for HBCI online actions.
@@ -331,7 +322,7 @@ details.
 Supported Platforms
 -------------------
 
-GnuCash 1.8.x is known to work with the following operating systems:
+GnuCash 2.0.x is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, PPC
 Solaris		      -- Sparc
@@ -410,10 +401,10 @@ directory to be called, and is optional. If you leave it out,
 you'll have a directory called "trunk" created containing all the
 source code.
 
-If you want the latest 1.8.x code, you'd need to pull from the 
-1.8 branch, as follows:
+If you want the latest 2.0.x code, you'd need to pull from the 
+2.0 branch, as follows:
 
-  svn checkout http://svn.gnucash.org/repo/gnucash/branches/1.8 gnucash-1.8
+  svn checkout http://svn.gnucash.org/repo/gnucash/branches/2.0 gnucash-2.0
 
 
 ##################
