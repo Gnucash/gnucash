@@ -1,5 +1,13 @@
 ############################################################
-          GnuCash 2.0.x README file.
+          GnuCash 2.1.x README file.
+
+NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT 
+BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!   
+
+USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS) 
+
+If you want something a bit more tested, please use the 
+1.8 stable series. 
 ------------------------------------------------------------
 
 ##################
