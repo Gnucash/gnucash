@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.59)
-AC_INIT([gnucash], [1.9.8], [gnucash-devel@gnucash.org])
+AC_INIT([gnucash], [2.0.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
@@ -312,6 +312,21 @@ AC_SUBST(G_WRAP_MODULE_DIR)
 AC_SUBST(G_WRAP_LIB_DIR)
 
 AS_SCRUB_INCLUDE(CFLAGS)
+
+AC_MSG_CHECKING([for (g-wrap) guile module])
+if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
+  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+        ${GUILE} -c "(use-modules (g-wrap))" > /dev/null 2>&1
+then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR([
+
+   Cannot find the (g-wrap) guile module.
+   Are you sure you have g-wrap installed?
+
+])
+fi
 
 AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
 if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \

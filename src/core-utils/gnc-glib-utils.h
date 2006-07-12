@@ -56,19 +56,12 @@
 int safe_utf8_collate (const char *str1, const char *str2);
 
 
-/** This is a helper function for guile. C code should call
- *  g_utf8_validate directly.
- *
- *  @param str The string to be validated.
- *
- *  @return TRUE if this string is valid utf8. */
-gboolean gnc_utf8_validate (const gchar *str);
-
-
 /** Strip any non-utf8 characters from a string.  This function
  *  rewrites the string "in place" instead of allocating and returning
- *  a new string.  This allows it to operat on strings that are
- *  defined as character arrays in a larger data structure.
+ *  a new string.  This allows it to operate on strings that are
+ *  defined as character arrays in a larger data structure.  Note that
+ *  it also removes some subset of invalid XML characters, too.
+ *  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
  *
  *  @param str A pointer to the string to strip of invalid
  *  characters. */

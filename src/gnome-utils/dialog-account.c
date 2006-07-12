@@ -1563,10 +1563,14 @@ gnc_split_account_name (const char *in_name, Account **base_account)
   GList *list, *node;
 
   group = gnc_get_current_group ();
-  list = xaccGroupGetAccountList (group);
   names = g_strsplit(in_name, gnc_get_account_separator_string(), -1);
 
   for (ptr = names; *ptr; ptr++) {
+    /* Stop if there are no children at the current level. */
+    if (group == NULL)
+      break;
+    list = xaccGroupGetAccountList (group);
+
     /* Look for the first name in the children. */
     for (node = list; node; node = g_list_next(node)) {
       account = node->data;
@@ -1583,9 +1587,6 @@ gnc_split_account_name (const char *in_name, Account **base_account)
       break;
 
     group = xaccAccountGetChildren (account);
-    if (group == NULL)
-      break;
-    list = xaccGroupGetAccountList (group);
   }
 
   out_names = g_strdupv(ptr);
