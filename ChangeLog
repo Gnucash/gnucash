@@ -1,3 +1,12 @@
+2006-07-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Group.c:
+	  Allow account-separator character in account names (#347321).
+	  Revert to previous behavior of xaccGetAccountFromFullName()
+	  which was changed in r13467 when the function was restructured.
+	  This patch returns to the old behavior (but uses the new
+	  function structure).
+
 2006-07-09  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

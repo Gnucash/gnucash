@@ -556,35 +556,74 @@ static Account *
 xaccGetAccountFromFullNameHelper (const AccountGroup *grp,
 				  gchar **names)
 {
-  Account *found;
+  Account *found = NULL;
   GList *node;
+  gchar *name_str, *temp_str;
+  const gchar *separator;
+  gboolean str_alloced = FALSE;
 
   g_return_val_if_fail(grp, NULL);
   g_return_val_if_fail(names, NULL);
 
-  /* Look for the first name in the children. */
-  for (node = grp->accounts; node; node = node->next) {
-    Account *account = node->data;
+  separator = gnc_get_account_separator_string();
+  /* start with the first name in the list */
+  name_str = names[0];
 
-    if (safe_strcmp(xaccAccountGetName (account), names[0]) == 0) {
-      /* We found an account.  If the next entry is NULL, there is
-       * nothing left in the name, so just return the account. */
-      if (names[1] == NULL)
-	return account;
+  /* Make sure we actually HAVE a string! */
+  if (name_str == NULL)
+    return NULL;
 
-      /* No children?  We're done. */
-      if (!account->children)
-	return NULL;
+  while (1)
+  {
+    /* Look for the first name in the children. */
+    for (node = grp->accounts; node; node = node->next) {
+      Account *account = node->data;
 
-      /* There's stuff left to search for.  Search recursively. */
-      found = xaccGetAccountFromFullNameHelper(account->children, &names[1]);
-      if (found != NULL) {
-	return found;
+      if (safe_strcmp(xaccAccountGetName (account), name_str) == 0) {
+	/* We found an account.  If the next entry is NULL, there is
+	 * nothing left in the name, so just return the account. */
+	if (names[1] == NULL) {
+	  found = account;
+	  goto done;
+	}
+
+	/* No children?  We're done. */
+	if (!account->children) {
+	  found = NULL;
+	  goto done;
+	}
+
+	/* There's stuff left to search for.  Search recursively. */
+	found = xaccGetAccountFromFullNameHelper(account->children, &names[1]);
+	if (found != NULL) {
+	  goto done;
+	}
       }
     }
+
+    /* If we got here then we didn't find a match based on name_str
+     * so build a new name_str using the next token and try again.
+     */
+
+    /* If there's no more names then we're done.  We didn't find anything */
+    if (names[1] == NULL) {
+      found = NULL;
+      break;
+    }
+
+    /* Build the new name string */
+    temp_str = g_strconcat(name_str, separator, names[1], NULL);
+    if (str_alloced)
+      g_free(name_str);
+    str_alloced = TRUE;
+    names++;
+    name_str = temp_str;    
   }
 
-  return NULL;
+done:
+  if (str_alloced)
+    g_free(name_str);
+  return found;
 }
 
 
