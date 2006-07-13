@@ -117,9 +117,9 @@ qsf_get_config(QofBackend *be)
 	g_free(option);
 	option = g_new0(QofBackendOption, 1);
 	option->option_name = QSF_ENCODING;
-	option->description = _("Encoding string to use when writing the XML file.");
+	option->description = _("String encoding to use when writing the XML file.");
 	option->tooltip = _("QSF defaults to UTF-8. Other encodings are supported by "
-			"passing the encoding string in this option.");
+			"passing the string encoding in this option.");
 	option->type = KVP_TYPE_STRING;
 	option->value = (gpointer)params->encoding;
 	qof_backend_prepare_option(be, option);

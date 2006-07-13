@@ -689,7 +689,7 @@ gxi_parse_file (GncXmlImportData *data)
   qof_session_begin (session, data->filename, TRUE, FALSE);
   io_err = qof_session_get_error (session);
   if (io_err != ERR_BACKEND_NO_ERR) {
-    message = _("The file could not be reopen.");
+    message = _("The file could not be reopened.");
     goto cleanup_parse_file;
   }
 
@@ -708,7 +708,7 @@ gxi_parse_file (GncXmlImportData *data)
     goto cleanup_parse_file;
   } else if (io_err != ERR_FILEIO_NO_ENCODING) {
     /* another error, cannot handle this here */
-    message = _("The file could not be reopen.");
+    message = _("The file could not be reopened.");
     goto cleanup_parse_file;
   }
 

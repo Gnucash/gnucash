@@ -30,7 +30,7 @@ mouse button brings up the transaction menu options.")
 
  N_( "To enter multiple-split transactions such as a paycheck with \
 multiple deductions, click the Split button in the tool bar. \
-Alternatively, in the View -> Style menu, you can choose the register \
+Alternatively, in the View menu, you can choose the register \
 style Auto-Split Ledger or Transaction Journal.")
 
  N_( "As you enter amounts in the register, you can use the GnuCash \

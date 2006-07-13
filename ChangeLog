@@ -1,5 +1,18 @@
 2006-07-13  Andreas Köhler  <andi5.py@gmx.net>
 
+	* doc/tip_of_the_day.list.in:
+	* lib/libqof/backend/file/qsf-backend.c:
+	* src/gnome-search/search.glade:
+	* src/gnome-utils/druid-gnc-xml-import.c:
+	* src/gnome-utils/glade/preferences.glade:
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/import-export/import-provider-format.glade:
+	* src/report/report-system/report.scm: String fixes that have
+	  been delayed due to the string freeze.
+
 	* src/gnome/glade/account.glade: In the account dialog, do not
 	  expand the upper left entries when the window is resized.
 	  Automatic scrollbars for the notes field.

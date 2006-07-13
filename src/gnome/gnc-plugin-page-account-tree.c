@@ -188,7 +188,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
-	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccount"), NULL,
+	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccounts"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },
