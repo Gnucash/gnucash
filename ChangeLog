@@ -1,3 +1,9 @@
+2006-07-13  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/glade/account.glade: In the account dialog, do not
+	  expand the upper left entries when the window is resized.
+	  Automatic scrollbars for the notes field.
+
 2006-07-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Group.c:
