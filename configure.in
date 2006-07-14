@@ -67,6 +67,7 @@ dnl Set of available languages.
 ALL_LINGUAS="ca cs da de el en_GB es_NI es eu fr hu it ja nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk zh_CN zh_TW"
 
 GETTEXT_PACKAGE=gnucash
+AC_MSG_NOTICE([Ignore error message "./po/POTFILES.in: No such file or directory." if it occurrs.])
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
 	[GetText version number])
@@ -103,10 +104,10 @@ AC_CHECK_FUNCS(setenv,,[
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
-if test $am_cv_scanf_lld = "no"; then
+if test x$am_cv_scanf_lld = "xno"; then
   SCANF_QD_CHECK
 
-  if test $am_cv_scanf_qs = "no"; then
+  if test x$am_cv_scanf_qs = "xno"; then
     AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
   fi
 fi
@@ -730,7 +731,7 @@ then
 	# This is libofx >= 0.7.x
 	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
     else
-        if x${want_ofx} = xyes ; then
+        if test x${want_ofx} = xyes ; then
 	    AC_MSG_ERROR([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
         else
 	    AC_MSG_RESULT([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
@@ -892,12 +893,12 @@ AC_SUBST(GNC_HELPDIR)
 
 AC_ARG_ENABLE( etags,
   [  --enable-etags               enable automatic create of TAGS file],
-  if test $enableval = yes; then
+  if test x$enableval = xyes; then
      USE_ETAGS=1
   fi,
   USE_ETAGS=0)
 
-if test ${USE_ETAGS} = 1; then
+if test x${USE_ETAGS} = x1; then
   AC_CHECK_PROG(GNC_ETAGS_FILE, etags, TAGS)
 fi
 
@@ -908,12 +909,12 @@ AM_CONDITIONAL(GNC_ETAGS_FILE, test x${GNC_ETAGS_FILE} = xTAGS)
 
 AC_ARG_ENABLE( ctags,
   [  --enable-ctags               enable automatic create of tags file],
-  if test $enableval = yes; then
+  if test x$enableval = xyes; then
      USE_CTAGS=1
   fi,
   USE_CTAGS=0)
 
-if test ${USE_CTAGS} = 1; then
+if test x${USE_CTAGS} = x1; then
   AC_CHECK_PROG(GNC_CTAGS_FILE, ctags, tags)
 fi
 
@@ -1085,13 +1086,13 @@ then
     # check for gtkhtml 3.x versions.
     gtkhtml=0
     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1] , [gtkhtml=0])
-    if test $gtkhtml = 0
+    if test x$gtkhtml = x0
       then
     	PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 , [gtkhtml=1] , [gtkhtml=0])
-    	if test $gtkhtml = 0
+    	if test x$gtkhtml = x0
     	  then
     	     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , [gtkhtml=1] , [gtkhtml=0])
-    	     if test $gtkhtml = 0
+    	     if test x$gtkhtml = x0
     	       then 
     	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1],
                                     AC_MSG_ERROR([Could not find a working gtkhtml version (need 3.1, 3.2, 3.6, or 3.8)]))
@@ -1115,7 +1116,7 @@ esac
     
     AC_ARG_ENABLE( efence,
       [  --enable-efence               link using efence],
-      if test $enableval = yes; then
+      if test x$enableval = xyes; then
          EFENCE_LIBS="-lefence"
          USE_EFENCE=1
 	 AC_DEFINE(USE_EFENCE,,We are using EFence)
@@ -1266,12 +1267,12 @@ then
   PKG_CHECK_MODULES(LIBGSF, $libgsf_reqs)
   
   AC_CHECK_DECL(fdopen, fdopen_works=yes, fdopen_works=no)
-  if test $fdopen_works = no ; then
+  if test x$fdopen_works = xno ; then
   	unset ac_cv_have_decl_fdopen
   	CFLAGS="$CFLAGS -D_POSIX_SOURCE"
   	AC_MSG_NOTICE([adding -D_POSIX_SOURCE to CFLAGS])
   	AC_CHECK_DECL(fdopen, fdopen_works=yes, fdopen_works=no)
-  	if test $fdopen_works = no ; then
+  	if test x$fdopen_works = xno ; then
   		AC_MSG_ERROR([fdopen is not available])
   	fi
   fi
@@ -1285,12 +1286,12 @@ then
   			[[struct timeval tv;]])],
   		struct_timeval_works=yes,
   		struct_timeval_works=no)
-  	test $struct_timeval_works = yes && break
+  	test x$struct_timeval_works = xyes && break
   	# Try this for the second attempt:
-  	test $try = 1 && CFLAGS="$CFLAGS -D__EXTENSIONS__"
+  	test x$try = x1 && CFLAGS="$CFLAGS -D__EXTENSIONS__"
   done
   AC_MSG_RESULT($struct_timeval_works)
-  if test $struct_timeval_works = no ; then
+  if test x$struct_timeval_works = xno ; then
   	AC_MSG_ERROR([struct timeval is not available])
   fi
   
@@ -1309,7 +1310,7 @@ then
   [[void *ptr = &lstat]])],
   need_bsd2=no, need_bsd2=yes)
   AC_MSG_RESULT($need_bsd2)
-  if test $need_bsd1 = yes -o $need_bsd2 = yes; then
+  if test x$need_bsd1 = xyes -o x$need_bsd2 = xyes; then
   	CFLAGS="$CFLAGS -D_BSD_SOURCE"
   fi
   
@@ -1475,18 +1476,18 @@ then
   #dnl	esac[]dnl
   #dnl])
   have_gnome=no
-  if  test $want_gnome = no ; then 
+  if test x$want_gnome = xno ; then 
       AC_MSG_WARN([GNOME support disabled, as requested (Use --with-gnome to enable)])
   else
       PKG_CHECK_MODULES(LIBGSF_GNOME, $libgsf_gnome_reqs,
   	[have_gnome=yes],
-  	[if test $want_gnome = yes; then
+  	[if test x$want_gnome = xyes; then
   	    AC_MSG_ERROR([GNOME support requested, but not available.])
   	 else
   	    AC_MSG_WARN([GNOME support disabled, unable to find required version of VFS and/or Bonobo])
   	 fi])
   fi
-  AM_CONDITIONAL(WITH_LIBGSF_GNOME, test $have_gnome = yes)
+  AM_CONDITIONAL(WITH_LIBGSF_GNOME, test x$have_gnome = xyes)
   
   dnl # LDFLAGS="-no-undefined $LDFLAGS"
   
@@ -1658,7 +1659,7 @@ then
       ;;
   esac
   AC_MSG_RESULT($with_win32)
-  AM_CONDITIONAL(WITH_WIN32, test $with_win32 = yes)
+  AM_CONDITIONAL(WITH_WIN32, test x$with_win32 = xyes)
   
   dnl *****************************
   dnl FIXME: perhaps declare with AC_ARG_VAR?
@@ -1684,12 +1685,12 @@ then
   AC_TRY_COMPILE([#include <math.h>], [double f = M_PI], works_without_bsd_source=yes, works_without_bsd_source=no)
   AC_MSG_RESULT($works_without_bsd_source)
   
-  if test $works_without_bsd_source = no ; then
+  if test x$works_without_bsd_source = xno ; then
   	CFLAGS="$CFLAGS -D_BSD_SOURCE"
   	AC_MSG_CHECKING([whether M_PI is available with -D_BSD_SOURCE])
   	AC_TRY_COMPILE([#include <math.h>], [double f = M_PI], m_pi_works=yes, m_pi_works=no)
   	AC_MSG_RESULT($m_pi_works)
-  	if test $m_pi_works = no ; then
+  	if test x$m_pi_works = xno ; then
   		AC_MSG_ERROR([M_PI is not available])
   	fi
   fi
@@ -1716,7 +1717,7 @@ then
   dnl
   dnl On BSD, we seem to need -lm for finite
   dnl
-  if test $ac_cv_func_finite = no; then
+  if test x$ac_cv_func_finite = xno; then
     AC_CHECK_LIB(m, finite,
           [AC_DEFINE(HAVE_FINITE, 1,
   		[Define if the finite function is available]
@@ -1729,7 +1730,7 @@ then
   
   dnl Handle systems that have stuff in -lm.
   AC_CHECK_FUNCS(log)
-  if test $ac_cv_func_log = no; then
+  if test x$ac_cv_func_log = xno; then
     AC_CHECK_LIB(m, log,
           [AC_DEFINE(HAVE_LOG, 1,
   		[Define if the log function is available]
@@ -1753,7 +1754,7 @@ then
   float_msg=no
   EXTRA_LIBS= EXTRA_INCLUDES=
   AC_C_LONG_DOUBLE
-  if test $ac_cv_c_long_double = yes; then
+  if test x$ac_cv_c_long_double = xyes; then
       have_mandatory_funcs=yes
       need_sunmath=0
       sunmathlinkstuff='-L/opt/SUNWspro/lib -R/opt/SUNWspro/lib -lsunmath'
@@ -1765,7 +1766,7 @@ then
   		      ,
   		      [AC_CHECK_LIB(sunmath,
   			  $ldfunc,
-  			  [ if test $need_sunmath = 0; then
+  			  [ if test x$need_sunmath = x0; then
   				# FIXME: better idea?
   				LDFLAGS="$LDFLAGS $sunmathlinkstuff"
   				sunmathinclude=`ls -d /opt/SUNWspro/*/include/cc | sed '$!d'`
@@ -1775,7 +1776,7 @@ then
   			  [have_mandatory_funcs=no],
   			  [-L/opt/SUNWspro/lib $GOFFICE_DEPS_LIBS])])])
       done
-      if test $need_sunmath = 1; then
+      if test x$need_sunmath = x1; then
   	EXTRA_LIBS="$EXTRA_LIBS $sunmathlinkstuff"
   	EXTRA_INCLUDES="$EXTRA_INCLUDES -I$sunmathinclude"
   	AC_CHECK_HEADERS([sunmath.h floatingpoint.h],
@@ -1972,7 +1973,7 @@ AC_CHECK_FUNCS(pthread_mutex_init)
 AC_REPLACE_FUNCS(strptime localtime_r)
 #AC_REPLACE_FUNCS(scm_strptime)
 
-if test $am_cv_val_LC_MESSAGES = "no"; then
+if test x$am_cv_val_LC_MESSAGES = "xno"; then
   LC_MESSAGES_ENUM="LC_ALL"
 else
   LC_MESSAGES_ENUM="LC_MESSAGES"
@@ -2070,17 +2071,17 @@ then
   # -Wdeclaration-after-statement in order to preserve source code
   # compatibility to gcc 2.95 and other compilers.
   GCC_VERSION=`${CC} -dumpversion`
-  if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 3; then
+  if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 3; then
      # This is gcc >= 3.x.x
-     if test `echo ${GCC_VERSION} | cut -d. -f2` -ge 4; then
+     if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
 	# This is gcc >= 3.4.x
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
-     else if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 4; then
+     else if test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
 	# This is gcc == 4.x.x
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
 	# rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
 	warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	if test $gwrap_major_version = 1 -a $gwrap_minor_version -lt 9 ; then
+	if test x$gwrap_major_version = x1 -a "$gwrap_minor_version" -lt 9 ; then
 	    # This is g-wrap 1.3 + gcc4.  Test error-on-warning
             case "$gnc_error_on_warning" in
 	    auto)
