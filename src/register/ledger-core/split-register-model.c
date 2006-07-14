@@ -1676,7 +1676,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     /* Does the user want to be warned? */
     window = gnc_split_register_get_parent(reg);
     dialog =
-      gtk_message_dialog_new_with_markup(GTK_WINDOW(window),
+      gtk_message_dialog_new(GTK_WINDOW(window),
 					 GTK_DIALOG_DESTROY_WITH_PARENT,
 					 GTK_MESSAGE_WARNING,
 					 GTK_BUTTONS_CANCEL,

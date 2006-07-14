@@ -1,3 +1,10 @@
+2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/register/ledger-core/split-register-control.c:
+	* src/register/ledger-core/split-register-model.c: Let
+	  GtkMessageDialog render the headers of two warnings in bold
+	  font.
+
 2006-07-13  Andreas Köhler  <andi5.py@gmx.net>
 
 	* doc/tip_of_the_day.list.in:
