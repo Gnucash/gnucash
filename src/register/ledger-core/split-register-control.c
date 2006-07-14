@@ -675,19 +675,17 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* now perform the completion */
-
-        gnc_suspend_gui_refresh ();
-
-        info->pending_trans_guid = *xaccTransGetGUID(trans);
         if ((pending_trans != NULL) && (pending_trans != trans)) {
+            if (gnc_split_register_begin_edit_or_warn(info, trans))
+                return TRUE;
+
             if (xaccTransIsOpen (pending_trans))
                 xaccTransCommitEdit (pending_trans);
             else g_assert_not_reached();
-            g_assert(!xaccTransIsOpen(trans));
-            xaccTransBeginEdit(trans);
         }
         g_assert(xaccTransIsOpen(trans));
         pending_trans = trans;
+        gnc_suspend_gui_refresh ();
 
         gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
         blank_split = NULL;
