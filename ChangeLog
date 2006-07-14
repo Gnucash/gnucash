@@ -1,5 +1,8 @@
 2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome/schemas/Makefile.am: Add
+	  apps_gnucash_scheduled_transctions.schemas.in. Fixes #340641.
+
 	* src/register/ledger-core/split-register-control.c:
 	* src/register/ledger-core/split-register-model.c: Let
 	  GtkMessageDialog render the headers of two warnings in bold
