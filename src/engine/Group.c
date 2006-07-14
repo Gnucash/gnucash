@@ -611,6 +611,11 @@ xaccGetAccountFromFullNameHelper (const AccountGroup *grp,
       break;
     }
 
+    /* If we are here, we didn't find anything and there
+     * must be more separators. So, continue looking with
+     * a longer name, in case there is a name with the
+     * separator character in it. */ 
+
     /* Build the new name string */
     temp_str = g_strconcat(name_str, separator, names[1], NULL);
     if (str_alloced)
