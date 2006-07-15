@@ -715,7 +715,7 @@ then
 	# This is libofx >= 0.7.x
 	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
     else
-        if x${want_ofx} = xyes ; then
+        if test x${want_ofx} = xyes ; then
 	    AC_MSG_ERROR([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
         else
 	    AC_MSG_RESULT([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
