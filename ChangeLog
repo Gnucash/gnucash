@@ -4,6 +4,9 @@
 	* autogen.sh:
 	  make sure that po/POTFILES.in exists so configure doens't complain.
 
+	* configure.in:
+	  check for (g-wrap gw-glib-spec) instead of (g-wrap) #347404.
+
 2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/schemas/Makefile.am: Add
