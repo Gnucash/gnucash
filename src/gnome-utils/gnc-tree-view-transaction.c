@@ -103,8 +103,8 @@ typedef enum {
     COL_ACCOUNT,
     COL_AMOUNT,
     COL_VALUE,
-    COL_CREDIT,
     COL_DEBIT,
+    COL_CREDIT,
     COL_RECN,
     COL_BALANCE,
     COL_RATE,
@@ -148,12 +148,12 @@ static ColDef all_tree_view_transaction_columns[] = {
     {COL_VALUE, -1,
      "Val", "value", "xxxxxx", -1,
      NULL, NULL, NULL},
-    {COL_CREDIT, -1,
-     "Credit", "credit", "xxxxxx", -1,
-     gtvt_edited_cb, get_editable_start_editing_cb,
-     NULL},
     {COL_DEBIT, -1,
      "Debit", "debit", "xxxxxx", -1,
+     gtvt_edited_cb, get_editable_start_editing_cb,
+     NULL},
+    {COL_CREDIT, -1,
+     "Credit", "credit", "xxxxxx", -1,
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_BALANCE, -1,
@@ -1006,8 +1006,8 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
         break;
     case COL_AMOUNT:
     case COL_RATE:
-    case COL_CREDIT:
-    case COL_DEBIT: {
+    case COL_DEBIT:
+    case COL_CREDIT: {
         Account *acct;
         gnc_numeric input;
         Split *split2 = NULL;
@@ -1452,7 +1452,7 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
 
 static ViewCol col_list[] = {
     COL_DATE, COL_NUM, COL_DESCRIPTION, COL_ACCOUNT, COL_RECN,
-    COL_AMOUNT, COL_VALUE, COL_RATE, COL_CREDIT, COL_DEBIT,
+    COL_AMOUNT, COL_VALUE, COL_RATE, COL_DEBIT, COL_CREDIT,
     COL_BALANCE, -1};
 
 GncTreeViewTransaction *
