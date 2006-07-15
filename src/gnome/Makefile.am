@@ -56,6 +56,7 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-register.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
+  gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
   lot-viewer.c \
@@ -92,6 +93,7 @@ noinst_HEADERS = \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
+  gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
   gw-gnc.h \

@@ -55,6 +55,8 @@
 #include "gnc-window.h"
 #include "gnc-session.h"
 
+#include "gnc-plugin-page-sx-list.h"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 #ifdef QSF_IMPORT_NO_LONGER_BROKEN
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -435,7 +437,9 @@ gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData
 static void
 gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_scheduled_xaction_dialog_create ();
+        GncPluginPage *page = gnc_plugin_page_sx_list_new();
+        gnc_main_window_open_page(NULL, page);
+        //gnc_ui_scheduled_xaction_dialog_create ();
 }
 
 static void

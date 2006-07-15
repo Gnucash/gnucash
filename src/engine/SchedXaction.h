@@ -42,6 +42,9 @@
 #include "FreqSpec.h"
 #include "gnc-engine.h"
 
+#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
+#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
+
 /**
  * The SchedXaction data.
 */

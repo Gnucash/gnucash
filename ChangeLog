@@ -1,3 +1,15 @@
+2006-07-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/SchedXaction.h (GNC_IS_SX,GNC_SX): added for convenience.
+
+	* src/gnome/ui/gnc-plugin-page-sx-list-ui.xml:
+	* src/gnome/gnc-plugin-page-sx-list.[ch]: SX List as a plugin page.
+
+	* src/gnome/gnc-plugin-basic-commands.c: Call SX List plugin page,
+	not dialog.
+
+	* src/doc/sx.rst: Added.
+
 2006-07-01  David Hampton  <hampton@employees.org>
 
 	* src/quotes/gnc-fq-helper.in: This one file really does require
