@@ -5,6 +5,11 @@
 	to dangling points by deleting all pointers after calling
 	AB_Banking_Fini.
 
+2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/schemas/Makefile.am: Add
+	  apps_gnucash_scheduled_transctions.schemas.in. Fixes #340641.
+
 2006-07-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Group.c:
