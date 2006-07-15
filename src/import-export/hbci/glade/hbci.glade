@@ -185,108 +185,74 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox112">
+		<widget class="GtkVBox" id="vbox157">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkVBox" id="vbox157">
+		    <widget class="GtkScrolledWindow" id="scrolledwindow25">
 		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkScrolledWindow" id="scrolledwindow25">
+			<widget class="GtkCList" id="account_page_list">
 			  <property name="visible">True</property>
-			  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
-			  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+			  <property name="can_focus">True</property>
+			  <property name="n_columns">3</property>
+			  <property name="column_widths">281,242,53</property>
+			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			  <property name="show_titles">True</property>
 			  <property name="shadow_type">GTK_SHADOW_IN</property>
-			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			  <child>
-			    <widget class="GtkCList" id="account_page_list">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="n_columns">3</property>
-			      <property name="column_widths">281,242,53</property>
-			      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-			      <property name="show_titles">True</property>
-			      <property name="shadow_type">GTK_SHADOW_IN</property>
+			    <widget class="GtkLabel" id="label834">
+			      <property name="label" translatable="yes">HBCI account name</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 
-			      <child>
-				<widget class="GtkLabel" id="label834">
-				  <property name="label" translatable="yes">HBCI account name</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
+			  <child>
+			    <widget class="GtkLabel" id="label835">
+			      <property name="label" translatable="yes">GnuCash account name</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 
-			      <child>
-				<widget class="GtkLabel" id="label835">
-				  <property name="label" translatable="yes">GnuCash account name</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label836">
-				  <property name="label" translatable="yes">New?</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
+			  <child>
+			    <widget class="GtkLabel" id="label836">
+			      <property name="label" translatable="yes">New?</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
 			    </widget>
 			  </child>
 			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">True</property>
-			  <property name="fill">True</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label828">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Click on the line of a HBCI account name if you want to match it to a GnuCash account. Click &quot;Forward&quot; when all desired accounts are matching.</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">True</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
 		      </child>
 		    </widget>
 		    <packing>
@@ -297,78 +263,23 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 		  </child>
 
 		  <child>
-		    <widget class="GtkFrame" id="frame72">
+		    <widget class="GtkLabel" id="label828">
 		      <property name="visible">True</property>
-		      <property name="label_xalign">0</property>
-		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-		      <child>
-			<widget class="GtkVBox" id="vbox144">
-			  <property name="border_width">5</property>
-			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">5</property>
-
-			  <child>
-			    <widget class="GtkButton" id="updatelist_button">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Update 
-account list</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkButton" id="aqhbci_again_button">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">AqHBCI 
-Setup</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label8877442">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">HBCI Setup</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="type">label_item</property>
-			</packing>
-		      </child>
+		      <property name="label" translatable="yes">Click on the line of a HBCI account name if you want to match it to a GnuCash account. Click &quot;Forward&quot; when all desired accounts are matching.</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -1519,6 +1430,7 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
+
 	  <child>
 	    <widget class="GtkButton" id="close_button">
 	      <property name="visible">True</property>
@@ -1531,7 +1443,6 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
-
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -1888,6 +1799,7 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">2</property>
 	    </widget>
 	  </child>
+
 	  <child>
 	    <widget class="GtkButton" id="ok_button">
 	      <property name="visible">True</property>
@@ -1900,7 +1812,6 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">1</property>
 	    </widget>
 	  </child>
-
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -2251,6 +2162,7 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
+
 	  <child>
 	    <widget class="GtkButton" id="button2">
 	      <property name="visible">True</property>
@@ -2263,7 +2175,6 @@ Press &quot;Apply&quot; now.</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
-
 	</widget>
 	<packing>
 	  <property name="padding">0</property>

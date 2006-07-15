@@ -1,3 +1,10 @@
+2006-07-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Remove obsolete
+	buttons for aqbanking/hbci setup that are unneeded. Fix crash due
+	to dangling points by deleting all pointers after calling
+	AB_Banking_Fini.
+
 2006-07-14  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
