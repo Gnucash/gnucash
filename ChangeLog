@@ -1,3 +1,10 @@
+2006-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:
+	  check for (g-wrap) module (#347680)
+	  Apparently some distributions ship g-wrap-config separately
+	  from the g-wrap.scm guile module.
+
 2006-07-16  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-main-window.c: Do not move windows on
