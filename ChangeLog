@@ -8,6 +8,12 @@
 	* src/import-export/qif-import/qif-file.scm:
 	  Ignore any unknown !Option specification.  Fixes #160735.
 
+	* src/import-export/qif-import/qif-parse.scm:
+	  Allow comma-radix numbers without a radix.  Fixes #142424.
+	  I.e., allow "17.500" to be parsed either as "seventeen and a half"
+	  or as "seventeen thousand five hundred".  Note that numbers STILL
+	  default to decimal-radix instead of asking the user to choose.
+
 2006-07-16  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-main-window.c: Do not move windows on
