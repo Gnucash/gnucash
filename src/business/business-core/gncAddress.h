@@ -80,11 +80,10 @@ typedef struct _gncAddress GncAddress;
 
 /** @name Create/Destroy functions 
  @{ */
-/** create a new address */
-GncAddress * gncAddressCreate (QofBook *book, QofEntity *parent);
-
-/** destroy an address */
+GncAddress *gncAddressCreate (QofBook *book, QofEntity *parent);
 void gncAddressDestroy (GncAddress *addr);
+void gncAddressBeginEdit (GncAddress *addr);
+void gncAddressCommitEdit (GncAddress *addr);
 
 /** @} */
 
