@@ -30,11 +30,10 @@
 
 #include "gnc-engine.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
 #include "gnc-component-manager.h"
-#include "dialog-scheduledxaction.h"
+#include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
@@ -551,7 +550,7 @@ static void
 sxftd_ok_clicked(SXFromTransInfo *sxfti)
 {
   QofBook *book;
-  GList *sx_list;
+  SchedXactions *sxes;
   guint sx_error = sxftd_compute_sx(sxfti);
 
   if (sx_error != 0
@@ -559,23 +558,14 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
     PERR( "Error in sxftd_compute_sx after ok_clicked [%d]", sx_error );
   }
   else {
-    SchedXactionDialog *sxd;
-
     if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
             gnc_error_dialog( gnc_ui_get_toplevel(), 
                               _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
     }
     book = gnc_get_current_book ();
-    sx_list = gnc_book_get_schedxactions(book);
-    sx_list = g_list_append(sx_list, sxfti->sx);
-    gnc_book_set_schedxactions(book, sx_list);
-    sxd = (SchedXactionDialog*)
-            gnc_find_first_gui_component(
-                    DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
-    if ( sxd ) {
-      gnc_sxd_list_refresh( sxd );
-    }
+    sxes = gnc_book_get_schedxactions(book);
+    gnc_sxes_add_sx(sxes, sxfti->sx);
   }
 
   sxftd_close(sxfti, FALSE);
@@ -617,8 +607,7 @@ static void
 sxftd_advanced_clicked(SXFromTransInfo *sxfti)
 {
   guint sx_error = sxftd_compute_sx(sxfti);
-  SchedXactionDialog *adv_dlg;
-  SchedXactionEditorDialog *adv_edit_dlg;
+  GncSxEditorDialog *adv_edit_dlg;
   GMainContext *context;
 
   if ( sx_error != 0
@@ -634,10 +623,8 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   context = g_main_context_default();
   while (g_main_context_iteration(context, FALSE));
 
-  adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
   adv_edit_dlg =
-    gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
-                                                  sxfti->sx,
+    gnc_ui_scheduled_xaction_editor_dialog_create(sxfti->sx,
                                                   TRUE /* newSX */);
   /* close ourself, since advanced editing entails us, and there are sync
    * issues otherwise. */

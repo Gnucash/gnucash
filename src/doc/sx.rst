@@ -9,6 +9,8 @@ Overview
   - Show Next "year"s worth of SX instances
     - gnc_sx_get_instances({now + 1yr})
 
+- SX Editor
+
 - SinceLastRun
   - Last .. present (+ create-in-advance, reminder) instances
     - gnc_sx_get_instances(now)
@@ -16,14 +18,17 @@ Overview
 TODO
 ----
 
-- 'sx_updated' QOF events
+- [x] sx list -> qof collection
+- [ ] sx engine events
+  - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
+  - [ ] sx modified -- QOF_EVENT_MODIFY
 
 - gnc_dense_cal
   - change number-month properties to display (width, length)
-  - set_data(GncSxUpcomingInstances *future);
-  - set_model(GncSxUpcomingInstances *model);
+  - upcoming_instances_add_to_gnc_dense_cal(GncSxUpcomingInstances *future);
+  - set_model(GncTemporalInstancesModel *mdl)
+    - new interface creation.
     - register callbacks for signals
-    - set_data(...)
 
 - transaction creation
   - verification routine
@@ -43,12 +48,6 @@ Pedantic Todo
 - s/SchedXaction/Scheduled/
 - s/temporal_state/instance_sequence_context/
 
-
-<?c
-
-
-?>
-
 GtkTreeModelIface
 -----------------
 
@@ -60,4 +59,3 @@ GtkTreeModelIface
   - rows_reordered : ???
 
 - GtkTreeSortableIface
-  - 

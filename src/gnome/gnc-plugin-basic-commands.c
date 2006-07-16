@@ -41,7 +41,6 @@
 #include "dialog-chart-export.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
-#include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
 #include "dialog-totd.h"
 #include "druid-acct-period.h"
@@ -439,7 +438,6 @@ gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, Gnc
 {
         GncPluginPage *page = gnc_plugin_page_sx_list_new();
         gnc_main_window_open_page(NULL, page);
-        //gnc_ui_scheduled_xaction_dialog_create ();
 }
 
 static void

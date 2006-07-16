@@ -1,3 +1,24 @@
+2006-07-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/SX-book-p.h:
+	* src/engine/SX-book.h:
+	* src/engine/SX-book.c: Promote SX list from a GList to a
+	`SchedXactions` QOF Entity.  Create add/remove API that emits
+	GNC_EVENT_{INSERT,REMOVE} signals.  Correctly associate the SX
+	List with the collection of SchedXaction qof-type rather than the
+	SX template transactions qof-type.  Remove some (now-)dead
+	code.  Fix long-standing bug in registration of SX qof types.
+	
+	* src/gnome/dialog-sx-editor.[ch]:
+	* src/gnome/dialog-schedxaction.[ch]:
+	Move the SX editor dialog subset of dialog-schedxaction to
+	dialog-sx-editor.[ch].
+
+	* src/gnome/gnc-plugin-page-sx-list.c:
+	Hookup SX editor for both 'new' and 'edit' actions. Hookup
+	row-activation from tree-view.  Extend GncSxInstanceModel to
+	support SchedXactions (sx list) modification events.
+
 2006-07-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/SchedXaction.h (GNC_IS_SX,GNC_SX): added for convenience.

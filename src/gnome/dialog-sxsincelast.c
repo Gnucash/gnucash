@@ -63,7 +63,6 @@
 #include "Transaction.h"
 #include "Scrub.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "dialog-utils.h"
 #include "finvar.h"
 #include "gnc-date.h"
@@ -85,7 +84,6 @@
 #include "gnc-split-reg.h"
 
 #include "dialog-sxsincelast.h"
-#include "dialog-scheduledxaction.h"
 
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
@@ -1361,7 +1359,7 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
                   gpointer arg1, gpointer ud )
 {
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        GList *sxList, *toDelPtr, *elt;
+        GList *toDelPtr;
         GtkCList *cl;
         gint row;
         toDeleteTuple *tdt;
@@ -1384,31 +1382,28 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
                                               SX_OBSOLETE_CLIST ) );
 
         if ( g_list_length( cl->selection ) > 0 ) {
-                SchedXactionDialog *sxd;
-                sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+          GList *to_delete = NULL, *del_iter;
+          SchedXactions *sxes;
 
-                gnc_suspend_gui_refresh();
-                for ( toDelPtr = cl->selection;
-                      toDelPtr;
-                      toDelPtr = toDelPtr->next ) {
+          sxes = gnc_book_get_schedxactions(gnc_get_current_book());
+          
+          gnc_suspend_gui_refresh();
+          for (toDelPtr = cl->selection; toDelPtr; toDelPtr = toDelPtr->next)
+          {
+            row = GPOINTER_TO_INT(toDelPtr->data);
+            tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
+            to_delete = g_list_append(to_delete, tdt->sx);
+          }
 
-                        row = GPOINTER_TO_INT(toDelPtr->data);
-                        tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
-                        elt = g_list_find( sxList, tdt->sx );
-                        sxList = g_list_remove_link( sxList, elt );
+          for (del_iter = to_delete; del_iter != NULL; del_iter = del_iter->next)
+          {
+            SchedXaction* sx = (SchedXaction*)del_iter->data;
+            gnc_sxes_del_sx(sxes, sx);
+            xaccSchedXactionFree(sx);
+          }
+          g_list_free(to_delete);
 
-                        xaccSchedXactionFree( (SchedXaction*)elt->data );
-                }
-                gnc_resume_gui_refresh();
-
-                gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
-
-                sxd = (SchedXactionDialog*)
-                        gnc_find_first_gui_component(
-                                DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
-                if ( sxd ) {
-                        gnc_sxd_list_refresh( sxd );
-                }
+          gnc_resume_gui_refresh();
         }
 
         sxsincelast_close_handler( sxsld );
@@ -2113,7 +2108,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
         toCreateInstance *tci;
 
         instanceList = NULL;
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book () );
+        sxList = gnc_book_get_schedxactions(gnc_get_current_book ())->sx_list;
 
         if ( sxList == NULL ) {
                 DEBUG( "No scheduled transactions to populate." );

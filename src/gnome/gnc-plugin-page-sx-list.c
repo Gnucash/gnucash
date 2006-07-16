@@ -42,6 +42,7 @@
 #include "gkeyfile.h"
 #endif
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-dense-cal.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-page-sx-list.h"
@@ -50,8 +51,8 @@
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "gnc-book.h"
+#include "dialog-sx-editor.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -206,6 +207,8 @@ static void gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page, GKeyF
 static GncPluginPage *gnc_plugin_page_sx_list_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 static void gppsl_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
+
+static void gppsl_row_activated_cb(GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
 
 
 /* Callbacks */
@@ -367,7 +370,6 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
      GtkAction *edit_action, *delete_action;
      gboolean selection_state = TRUE;
 
-     printf("selection changed\n");
      page = GNC_PLUGIN_PAGE(user_data);
      edit_action = gnc_plugin_page_get_action(page, "SxListEditAction");
      delete_action = gnc_plugin_page_get_action(page, "SxListDeleteAction");
@@ -405,6 +407,14 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
      }
 
      {
+          GtkAction *edit_action, *delete_action;
+          edit_action = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(page), "SxListEditAction");
+          delete_action = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(page), "SxListDeleteAction");
+          gtk_action_set_sensitive(edit_action, FALSE);
+          gtk_action_set_sensitive(delete_action, FALSE);
+     }
+
+     {
           GtkCellRenderer *renderer;
           GtkTreeViewColumn *column;
           GtkTreeSelection *selection;
@@ -433,7 +443,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
           g_signal_connect(G_OBJECT(selection), "changed", (GCallback)gppsl_selection_changed_cb, (gpointer)page);
 
-          //g_signal_connect(G_OBJECT(tree_view), "row-activated", (GCallback)gppsl_row_activate_cb, (gpointer)page);
+          g_signal_connect(G_OBJECT(priv->tree_view), "row-activated", (GCallback)gppsl_row_activated_cb, (gpointer)page);
      }
 
      {
@@ -564,20 +574,8 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
 /* Callbacks */
 
-static void
-gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
-{
-     printf("new\n");
-}
-
-static void
-gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
-{
-     printf("edit\n");
-}
-
 static SchedXaction*
-_sx_for_iter(gpointer data, gpointer user_data)
+_sx_for_path(gpointer data, gpointer user_data)
 {
      GtkTreeIter iter;
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
@@ -586,15 +584,77 @@ _sx_for_iter(gpointer data, gpointer user_data)
 }
 
 static void
+gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
+{
+     FreqSpec *fs;
+     SchedXaction *new_sx;
+     gboolean new_sx_flag = TRUE;
+
+     new_sx = xaccSchedXactionMalloc(gnc_get_current_book());
+     /* Give decent initial FreqSpec for SX */
+     fs = xaccSchedXactionGetFreqSpec(new_sx);
+     {
+       GDate *now;
+       now = g_date_new();
+       g_date_set_time_t(now, time(NULL));
+       xaccFreqSpecSetMonthly(fs, now, 1);
+       xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
+       g_date_free(now);
+     }
+     gnc_ui_scheduled_xaction_editor_dialog_create(new_sx, new_sx_flag);
+}
+
+static void
+_edit_sx(gpointer data, gpointer user_data)
+{
+     gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
+}
+
+static void
+gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
+{
+     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+     GtkTreeSelection *selection;
+     GList *selected_paths, *to_edit;
+     GtkTreeModel *model;
+
+     selection = gtk_tree_view_get_selection(priv->tree_view);
+     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
+     if (g_list_length(selected_paths) == 0)
+     {
+          PERR("no selection edit.");
+          return;
+     }
+
+     to_edit = g_list_map(selected_paths, (GMapFunc)_sx_for_path, model);
+     g_list_foreach(to_edit, (GFunc)_edit_sx, NULL);
+     g_list_free(to_edit);
+     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
+     g_list_free(selected_paths);
+}
+
+static void
+gppsl_row_activated_cb(GtkTreeView *tree_view,
+                       GtkTreePath *path,
+                       GtkTreeViewColumn *column,
+                       gpointer user_data)
+{
+     GncPluginPageSxList *page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
+     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+     SchedXaction *sx = _sx_for_path(path, priv->tree_model);
+     gnc_ui_scheduled_xaction_editor_dialog_create(sx, FALSE);
+}
+
+
+static void
 _destroy_sx(gpointer data, gpointer user_data)
 {
+     SchedXactions *sxes;
      SchedXaction *sx = (SchedXaction*)data;
      GNCBook *book;
-     GList *book_sxes;
      book = gnc_get_current_book();
-     book_sxes = gnc_book_get_schedxactions(book);
-     book_sxes = g_list_remove(book_sxes, sx);
-     gnc_book_set_schedxactions(book, book_sxes);
+     sxes = gnc_book_get_schedxactions(book);
+     gnc_sxes_del_sx(sxes, sx);
      xaccSchedXactionFree(sx);
 }
 
@@ -605,6 +665,8 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      GtkTreeSelection *selection;
      GList *selected_paths, *to_delete = NULL;
      GtkTreeModel *model;
+
+     // @@fixme -- add (suppressible?) confirmation dialog
      
      selection = gtk_tree_view_get_selection(priv->tree_view);
      selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
@@ -614,7 +676,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
           return;
      }
 
-     to_delete = g_list_map(selected_paths, (GMapFunc)_sx_for_iter, model);
+     to_delete = g_list_map(selected_paths, (GMapFunc)_sx_for_path, model);
      {
           GList *list;
           for (list = to_delete; list != NULL; list = list->next)
@@ -626,7 +688,82 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      g_list_free(to_delete);
      g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
      g_list_free(selected_paths);
- }
+}
+
+#if 0 // compare/sort fns
+static gint
+gnc_sxd_clist_compare_sx_name( GtkCList *cl, gconstpointer a, gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+
+        sxa = (SchedXaction*)(((GtkCListRow*)a)->data);
+        sxb = (SchedXaction*)(((GtkCListRow*)b)->data);
+        g_assert( sxa || sxb );
+        if ( !sxa ) {
+                return 1;
+        }
+        if ( !sxb ) {
+                return -1;
+        }
+        return strcmp( xaccSchedXactionGetName( sxa ),
+                       xaccSchedXactionGetName( sxb ) );
+}
+
+static gint
+gnc_sxd_clist_compare_sx_freq( GtkCList *cl,
+                               gconstpointer a,
+                               gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+
+        g_assert( a || b );
+        if ( !a ) return 1;
+        if ( !b ) return -1;
+        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
+        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
+        g_assert( sxa || sxb );
+        if ( !sxa ) return 1;
+        if ( !sxb ) return -1;
+        return gnc_freq_spec_compare( xaccSchedXactionGetFreqSpec( sxa ),
+                                      xaccSchedXactionGetFreqSpec( sxb ) );
+}
+
+static gint
+gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
+                                     gconstpointer a,
+                                     gconstpointer b )
+{
+        SchedXaction *sxa, *sxb;
+        GDate gda, gdb;
+
+        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
+        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
+
+        g_assert( sxa || sxb );
+        if ( !sxa ) {
+                return 1;
+        }
+        if ( !sxb ) {
+                return -1;
+        }
+        g_assert( sxa && sxb );
+
+        gda = xaccSchedXactionGetNextInstance( sxa, NULL );
+        gdb = xaccSchedXactionGetNextInstance( sxb, NULL );
+
+        if ( ! ( g_date_valid(&gda) && g_date_valid(&gdb) ) ) {
+                return 0;
+        }
+        if ( !g_date_valid(&gda) ) {
+                return 1;
+        }
+        if ( !g_date_valid(&gdb) ) {
+                return -1;
+        }
+        return g_date_compare( &gda, &gdb );
+}
+
+#endif // 0 - compare/sort fns
 
 /* ------------------------------------------------------------ */
 
@@ -649,7 +786,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 
      // postponed
      {
-          // defer list.
+          // @@fixme - defer list.
      }
 
      // to-create
@@ -708,7 +845,7 @@ gnc_sx_get_instances(GDate *range_end)
 
      instances = gnc_sx_instance_model_new();
      instances->range_end = *range_end;
-     sxes = gnc_book_get_schedxactions(gnc_get_current_book());
+     sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
      instances->sx_instance_list = g_list_map(sxes, (GMapFunc)_gnc_sx_gen_instances, (gpointer)range_end);
 
      return instances;
@@ -788,41 +925,62 @@ static void
 _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
      GncSxInstanceModel *instances = GNC_SX_INSTANCE_MODEL(user_data);
-     SchedXaction *sx;
 
-     if (!GNC_IS_SX(ent))
+     // selection rules {
+     //   (gnc_collection_get_schedxaction_list(book), GNC_EVENT_ITEM_ADDED)
+     //   (gnc_collection_get_schedxaction_list(book), GNC_EVENT_ITEM_REMOVED)
+     //   (GNC_IS_SX(ent), QOF_EVENT_MODIFIED)
+     // }
+     if (!(GNC_IS_SX(ent) || GNC_IS_SXES(ent)))
           return;
-     sx = GNC_SX(ent);
 
-     if (event_type & QOF_EVENT_DESTROY)
+     if (GNC_IS_SX(ent))
      {
-          gpointer sx_instance_to_remove = NULL;
-          GList *list;
-          // find, remove, update
-          for (list = instances->sx_instance_list; list != NULL; list = list->next)
+          SchedXaction *sx;
+          sx = GNC_SX(ent);
+          if (event_type & QOF_EVENT_MODIFY)
           {
-               if (sx == ((GncSxInstances*)list->data)->sx)
-               {
-                    sx_instance_to_remove = list->data;
-                    break;
-               }
+               // @re-generate instance, update
           }
-          if (sx_instance_to_remove != NULL)
+          /* else { unsupported event type; ignore } */
+     }
+     else if (GNC_IS_SXES(ent))
+     {
+          SchedXactions *sxes = GNC_SXES(ent);
+          SchedXaction *sx = GNC_SX(evt_data);
+
+          sxes = NULL;
+          if (event_type & GNC_EVENT_ITEM_REMOVED)
           {
-               instances->sx_instance_list = g_list_remove(instances->sx_instance_list, sx_instance_to_remove);
+               gpointer sx_instance_to_remove = NULL;
+               GList *list;
+
+               // find, remove, update
+               for (list = instances->sx_instance_list; list != NULL; list = list->next)
+               {
+                    if (sx == ((GncSxInstances*)list->data)->sx)
+                    {
+                         sx_instance_to_remove = list->data;
+                         break;
+                    }
+               }
+               if (sx_instance_to_remove != NULL)
+               {
+                    instances->sx_instance_list = g_list_remove(instances->sx_instance_list, sx_instance_to_remove);
+                    g_signal_emit_by_name(instances, "updated");
+               }
+               else { printf("err\n"); }
+          }
+          else if (event_type & GNC_EVENT_ITEM_ADDED)
+          {
+               // generate instances, add to instance list, emit update.
+               instances->sx_instance_list
+                    = g_list_append(instances->sx_instance_list,
+                                    (*_gnc_sx_gen_instances)((gpointer)sx, (gpointer)&instances->range_end));
                g_signal_emit_by_name(instances, "updated");
           }
-          else { printf("err\n"); }
+          // else { printf("unsupported event type [%d]\n", event_type); }
      }
-     else if (event_type & QOF_EVENT_CREATE)
-     {
-          // add, update
-          g_signal_emit_by_name(instances, "updated");
-     }
-     else { printf("unknown\n"); }
-     /* else { unsupported event type; ignore } */
-
-     instances = 0;
 }
 
 
@@ -1005,7 +1163,6 @@ gsltma_proxy_row_deleted(GtkTreeModel *treemodel,
      g_signal_emit_by_name(user_data, "row-deleted", arg1);
 }
 
-
 static void
 gsltma_proxy_row_has_child_toggled(GtkTreeModel *treemodel,
                                    GtkTreePath *arg1,
@@ -1015,7 +1172,6 @@ gsltma_proxy_row_has_child_toggled(GtkTreeModel *treemodel,
      g_signal_emit_by_name(user_data, "row-has-child-toggled", arg1, arg2);
 }
 
-
 static void
 gsltma_proxy_row_inserted(GtkTreeModel *treemodel,
                           GtkTreePath *arg1,
@@ -1024,7 +1180,6 @@ gsltma_proxy_row_inserted(GtkTreeModel *treemodel,
 {
      g_signal_emit_by_name(user_data, "row-inserted", arg1, arg2);
 }
-
 
 static void
 gsltma_proxy_rows_reordered(GtkTreeModel *treemodel,
@@ -1050,7 +1205,7 @@ gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 }
 
 static void
-gsltma_populate(GncSxListTreeModelAdapter *model)
+gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
 {
      GtkTreeIter iter;
      GList *list;
@@ -1063,7 +1218,6 @@ gsltma_populate(GncSxListTreeModelAdapter *model)
           char last_occur_date_buf[MAX_DATE_LENGTH+1];
           char next_occur_date_buf[MAX_DATE_LENGTH+1];
 
-                        
           frequency_str = g_string_sized_new(32);
           fs = xaccSchedXactionGetFreqSpec(instances->sx);
           xaccFreqSpecGetFreqStr(fs, frequency_str);
@@ -1099,9 +1253,9 @@ static void
 gsltma_updated_cb(GncSxInstanceModel *instances, gpointer user_data)
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-     printf("update!\n");
+     printf("update\n");
      gtk_tree_store_clear(model->real);
-     gsltma_populate(model);
+     gsltma_populate_tree_store(model);
 }
 
 GncSxListTreeModelAdapter*
@@ -1112,8 +1266,7 @@ gnc_sx_list_tree_model_adapter_new(GncSxInstanceModel *instances)
      rtn = GNC_SX_LIST_TREE_MODEL_ADAPTER(g_object_new(GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER, NULL));
      rtn->instances = instances;
 
-     // copy data over...
-     gsltma_populate(rtn);
+     gsltma_populate_tree_store(rtn);
 
      g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsltma_updated_cb, (gpointer)rtn);
 

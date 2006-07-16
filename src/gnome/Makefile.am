@@ -40,11 +40,11 @@ libgncgnome_la_SOURCES = \
   dialog-price-edit-db.c \
   dialog-print-check.c \
   dialog-progress.c \
+  dialog-sx-editor.c \
   dialog-sx-from-trans.c \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
   dialog-userpass.c \
-  dialog-scheduledxaction.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-merge.c \
@@ -79,9 +79,9 @@ noinst_HEADERS = \
   dialog-new-user.h \
   dialog-print-check.h \
   dialog-progress.h \
+  dialog-sx-editor.h \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
-  dialog-scheduledxaction.h \
   druid-acct-period.h \
   druid-hierarchy.h \
   druid-merge.h \
