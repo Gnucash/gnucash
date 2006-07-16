@@ -4,6 +4,9 @@
 	  Make GncAddress more QOF compliant.  (#343726)
 	  Adds BeginEdit/CommitEdit calls.
 
+	* src/business/business-gnome/dialog-invoice.c:
+	  Set the summary bar values when the window is first opened (#345978).
+
 2006-07-15  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/report/report-system/html-text.scm: Remove a duplicate of
