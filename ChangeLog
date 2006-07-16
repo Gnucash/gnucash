@@ -1,3 +1,8 @@
+2006-07-16  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-main-window.c: Do not move windows on
+	  restoration that would be offscreen.
+
 2006-07-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncAddress.[ch]:
