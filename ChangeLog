@@ -1,19 +1,34 @@
+2006-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:
+	  check for (g-wrap) module (#347680)
+	  Apparently some distributions ship g-wrap-config separately
+	  from the g-wrap.scm guile module.
+
 2006-07-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Remove obsolete
 	buttons for aqbanking/hbci setup that are unneeded. Fix crash due
 	to dangling points by deleting all pointers after calling
-	AB_Banking_Fini.
+	AB_Banking_Fini. (#347595)
 
 2006-07-14  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
-	  check for (g-wrap gw-glib-spec) instead of (g-wrap) #347404.
+	  check for (g-wrap gw-glib-spec). Bomb out if not found. #347404.
+
+	* configure.in:
+	  Pull down one change from r14497 to fix a broken test (#347607).
 
 2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/schemas/Makefile.am: Add
 	  apps_gnucash_scheduled_transctions.schemas.in. Fixes #340641.
+
+2006-07-13  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	* Fix off-by-one bug that strips all spaces from imported strings.
+	  (#347472)
 
 2006-07-12  Derek Atkins  <derek@ihtfp.com>
 
@@ -23,6 +38,9 @@
 	  which was changed in r13467 when the function was restructured.
 	  This patch returns to the old behavior (but uses the new
 	  function structure).
+
+	* Handle the case of a user who has svk but hasn't configured it.
+	  (#347403).
 
 2006-07-09  Chris Lyttle  <chris@wilddev.net>
 
