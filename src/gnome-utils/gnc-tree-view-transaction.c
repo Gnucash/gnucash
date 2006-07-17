@@ -70,6 +70,7 @@ test basis mode debcred edit for blanktrans
 #include "gnc-exp-parser.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "gnc-gui-query.h"
 
 #define SPLIT_TRANS_STR _("-- Split Transaction --")
 
@@ -306,6 +307,7 @@ get_model_iter_from_selection(GncTreeViewTransaction *tv,
 
 }
 
+#define get_selected_split gnc_tree_view_transaction_get_selected_split
 Split *
 gnc_tree_view_transaction_get_selected_split(GncTreeViewTransaction *tv)
 {
@@ -319,6 +321,22 @@ gnc_tree_view_transaction_get_selected_split(GncTreeViewTransaction *tv)
             model, &iter, NULL, NULL, &split, NULL);
     }
     return split;
+}
+
+#define get_selected_trans gnc_tree_view_transaction_get_selected_trans
+Transaction *
+gnc_tree_view_transaction_get_selected_trans(GncTreeViewTransaction *tv)
+{
+    GtkTreeIter iter;
+    GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+    Transaction *trans = NULL;
+
+    if (get_model_iter_from_selection(tv, sel, &iter)) {
+        GncTreeModelTransaction *model = get_trans_model_from_view(tv);
+        gnc_tree_model_transaction_get_split_and_trans(
+            model, &iter, NULL, NULL, NULL, &trans);
+    }
+    return trans;
 }
 
 static GtkTreePath *
@@ -1066,6 +1084,16 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
     }
 }
 
+void
+gnc_tree_view_transaction_cancel_edit(GncTreeViewTransaction *tv)
+{
+    Transaction *t = tv->priv->dirty_trans;
+
+    if (t && xaccTransIsOpen(t)) {
+        xaccTransRollbackEdit(tv->priv->dirty_trans);
+        tv->priv->dirty_trans = NULL;
+    }
+}
 /* Returns TRUE if dialog was cancelled. Does nothing is 'new_trans'
    is the dirty trans. */
 static gboolean
@@ -1104,8 +1132,7 @@ transaction_changed_confirm(GncTreeViewTransaction *tv,
         break;
 
     case GTK_RESPONSE_REJECT:
-        xaccTransRollbackEdit(tv->priv->dirty_trans);
-        tv->priv->dirty_trans = NULL;
+        gnc_tree_view_transaction_cancel_edit(tv);
         break;
     case GTK_RESPONSE_CANCEL:
     default:
@@ -1113,6 +1140,21 @@ transaction_changed_confirm(GncTreeViewTransaction *tv,
     }
 
     return FALSE;
+}
+
+static void
+restore_cursor_to_dirty(GncTreeViewTransaction *tv)
+{
+    GtkTreeIter iter;
+    GncTreeModelTransaction *model = get_trans_model_from_view(tv);
+
+    /* FIXME?: restore split cursor */
+    if (gnc_tree_model_transaction_get_iter_from_trans_and_split(
+            model, tv->priv->dirty_trans, NULL, &iter)) {
+        GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
+        GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+        gtk_tree_selection_select_path(sel, path);
+    }
 }
 
 static void
@@ -1125,27 +1167,47 @@ motion_cb(GtkTreeSelection *sel, gpointer data)
     GtkTreeIter iter;
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(data);
     GncTreeModelTransaction *model; // = GNC_TREE_MODEL_TRANSACTION(data);
-    Split *split;
     Transaction *trans = NULL;
 
     model = get_trans_model_from_view(tv);
     mark_split_dirty(tv, NULL, NULL);
 
     if (get_model_iter_from_selection(tv, sel, &iter)) {
-        gboolean is_split, is_blank;
         gnc_tree_model_transaction_get_split_and_trans (
-            model, &iter, &is_split, &is_blank, &split, &trans);
+            model, &iter, NULL, NULL, NULL, &trans);
 
         if (transaction_changed_confirm(tv, trans)) {
             /* Restore cursor position */
-            if (gnc_tree_model_transaction_get_iter_from_trans(
-                    model, tv->priv->dirty_trans, &iter)) {
-                GtkTreePath *path;
-                path = get_view_path_from_model_iter(tv, &iter);
-                gtk_tree_selection_select_path(sel, path);
-            }
+            restore_cursor_to_dirty(tv);
         } else
             gnc_tree_model_transaction_set_blank_split_parent(model, trans);
+    }
+}
+
+void 
+gnc_tree_view_transaction_select_split(GncTreeViewTransaction *tv, 
+                                       Split *split)
+{
+    GtkTreeIter iter;
+    GncTreeModelTransaction *model = get_trans_model_from_view(tv);
+
+    if (gnc_tree_model_transaction_get_iter_from_trans_and_split(
+            model, NULL, split, &iter)) {
+        GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
+        GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+        gtk_tree_selection_select_path(sel, path);
+    }
+}
+
+void gnc_tree_view_transaction_goto_blank_trans(GncTreeViewTransaction *tv)
+{
+    GtkTreeIter iter;
+    GncTreeModelTransaction *model = get_trans_model_from_view(tv);
+
+    if (gnc_tree_model_transaction_get_blank_trans_iter(model, &iter)) {
+        GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
+        GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+        gtk_tree_selection_select_path(sel, path);
     }
 }
 
@@ -1203,7 +1265,7 @@ editing_done_cb(GtkCellEditable *ce, gpointer user_data)
         old_acct = xaccSplitGetAccount(split);
 
         if (old_acct != new_acct) {
-            gnc_numeric input, reg_rate;
+            gnc_numeric input;
             gnc_commodity *reg_comm = tv->priv->reg_comm;
 
             PINFO("setting %s to %s", xaccAccountGetName(old_acct),
@@ -1215,8 +1277,8 @@ editing_done_cb(GtkCellEditable *ce, gpointer user_data)
                transaction currency into the register commodity.  If
                we allowed the loss of this info, we wouldn't know what
                to display for any split. */
-            if (xaccTransGetRateForCommodity(
-                    trans, reg_comm, split, &reg_rate)) {
+            if (!old_acct || 
+                xaccTransGetRateForCommodity(trans, reg_comm, split, NULL)) {
                 begin_edit(tv, NULL, trans);
                 mark_split_dirty(tv, split, trans);
                 xaccSplitSetAccount(split, new_acct);
@@ -1331,6 +1393,27 @@ gnc_tree_view_transaction_delete_selected(GncTreeViewTransaction *tv)
         }
     }
 }
+
+void
+gnc_tree_view_transaction_reinit_trans(GncTreeViewTransaction *tv)
+{
+    Transaction *trans;
+
+    trans = get_selected_trans(tv);
+    if (trans) {
+        Split *s;
+        int i = 0;
+        
+        begin_edit(tv, NULL, trans);        
+        while ((s = xaccTransGetSplit(trans, i)) != NULL) {
+            if (xaccTransGetRateForCommodity(
+                    trans, tv->priv->reg_comm, s, NULL))
+                xaccSplitDestroy(s);
+            else i++;
+        }
+    }
+}
+
 #if 0
 
 static gboolean
@@ -1479,7 +1562,7 @@ gnc_tree_view_transaction_new_with_model(GncTreeModelTransaction *model)
 
 /* CONTROL */
 static gboolean
-gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
+gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
 {
     GtkTreeView *tv = GTK_TREE_VIEW(treeview);
     GtkTreeViewColumn *col;
@@ -1510,8 +1593,69 @@ gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
     return TRUE;
 }
 
+void
+gnc_tree_view_transaction_enter(GncTreeViewTransaction *tv)
+{
+    GdkEventKey event;
+    event.type = GDK_KEY_PRESS;
+    event.keyval = GDK_Return;
+    gtvt_key_press_cb(GTK_WIDGET(tv), &event, NULL);
+}
+
 Account *
 gnc_tree_view_transaction_get_anchor(GncTreeViewTransaction *tv)
 {
     return tv->priv->anchor; /* cached from model */
 }
+
+void
+gnc_tree_view_transaction_void(GncTreeViewTransaction *tv)
+{
+    const char *reason;
+    GtkWidget *dialog, *entry;
+    Transaction *trans;
+    GladeXML *xml;
+    gint result;
+    
+    trans = get_selected_trans(tv);
+    if (!trans || xaccTransHasSplitsInState(trans, VREC))
+        return;
+    
+    if (xaccTransHasReconciledSplits(trans) || 
+        xaccTransHasSplitsInState(trans, CREC)) {
+        gnc_error_dialog(NULL, _("You cannot void a transaction with "
+                                 "reconciled or cleared splits."));
+        return;
+    }
+    
+    xml = gnc_glade_xml_new("register.glade", "Void Transaction");
+    dialog = glade_xml_get_widget(xml, "Void Transaction");
+    entry = glade_xml_get_widget(xml, "reason");
+    
+    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    if (result == GTK_RESPONSE_OK) {
+        reason = gtk_entry_get_text(GTK_ENTRY(entry));
+        if (reason == NULL)
+            reason = "";
+        begin_edit(tv, NULL, trans);
+        xaccTransVoid(trans, reason);
+    }
+    
+    /* All done. Get rid of it. */
+    gtk_widget_destroy(dialog);
+    g_object_unref(xml);
+}
+
+void
+gnc_tree_view_transaction_unvoid(GncTreeViewTransaction *tv)
+{
+
+    Transaction *trans = get_selected_trans(tv);
+    
+    if (!trans || !xaccTransHasSplitsInState(trans, VREC))
+        return;
+
+    begin_edit(tv, NULL, trans);
+    xaccTransUnvoid(trans);
+}
+

@@ -68,11 +68,28 @@ gnc_tree_view_transaction_new_with_model(GncTreeModelTransaction *model);
 Account *
 gnc_tree_view_transaction_get_anchor(GncTreeViewTransaction *tv);
 
-Split *
+Split * 
 gnc_tree_view_transaction_get_selected_split(GncTreeViewTransaction *tv);
+Transaction *
+gnc_tree_view_transaction_get_selected_trans(GncTreeViewTransaction *tv);
 
-void
-gnc_tree_view_transaction_delete_selected(GncTreeViewTransaction *tv);
+void gnc_tree_view_transaction_delete_selected(GncTreeViewTransaction *tv);
+
+void gnc_tree_view_transaction_reinit_trans(GncTreeViewTransaction *tv);
+
+void gnc_tree_view_transaction_enter(GncTreeViewTransaction *tv);
+
+void gnc_tree_view_transaction_cancel_edit(GncTreeViewTransaction *tv);
+
+void gnc_tree_view_transaction_void(GncTreeViewTransaction *tv);
+void gnc_tree_view_transaction_unvoid(GncTreeViewTransaction *tv);
+
+
+void gnc_tree_view_transaction_goto_blank_trans(GncTreeViewTransaction *tv);
+
+void gnc_tree_view_transaction_select_split(GncTreeViewTransaction *tv, 
+                                            Split *split);
+
 
 /** @} */
 
