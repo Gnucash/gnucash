@@ -672,16 +672,12 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 
   gncEntryComputeValue (qty, price, (taxable ? table : NULL), taxincluded,
 			discount, disc_type, disc_how,
+			100,  /* XXX -- compute a real denominator */
 			value, NULL, &taxes);
 
-  /* Now convert the values to the proper denomination */
-  if (value)
-    *value = gnc_numeric_convert (*value, 100 /* XXX */, GNC_RND_ROUND);
-
-  if (tax_value) {
+  /* return the tax value */
+  if (tax_value)
     *tax_value = gncAccountValueTotal (taxes);
-    *tax_value = gnc_numeric_convert (*tax_value, 100 /* XXX */, GNC_RND_ROUND);
-  }
 }
 
 gboolean

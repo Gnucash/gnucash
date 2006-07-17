@@ -14,6 +14,14 @@
 	  or as "seventeen thousand five hundred".  Note that numbers STILL
 	  default to decimal-radix instead of asking the user to choose.
 
+	* src/business/business-core/gncEntry.[ch]:
+	* src/business/business-ledger/gncEntryLedger.c:
+	  Properly round invoice entries and totals.  Fixes #300042.
+	  Perform internal computations to LCD, but then export rounded values.
+	  Now, using the test case in Bug #300042 I get the same values
+	  in the invoice window, in the printable invoice report, and
+	  in the CoA Registers.
+
 2006-07-16  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-main-window.c: Do not move windows on
