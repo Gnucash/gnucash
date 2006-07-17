@@ -41,6 +41,7 @@
 #endif
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
+#include "gnc-plugin-page-transactions.h"
 
 #include "Scrub.h"
 #include "Scrub3.h"
@@ -594,7 +595,18 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	window = GNC_PLUGIN_PAGE (page)->window;
+#if 0
 	new_page = gnc_plugin_page_register_new (account, include_subs);
+#else
+        {
+            GncTreeModelTransaction *model;
+            GncTreeViewTransaction *tv;
+            model = gnc_tree_model_transaction_new_from_account(account);
+            tv = gnc_tree_view_transaction_new_with_model(model);
+            g_object_unref(G_OBJECT(model));
+            new_page = gnc_plugin_page_transactions_new(tv);
+        }
+#endif
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
