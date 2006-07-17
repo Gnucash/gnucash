@@ -2103,22 +2103,23 @@ gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path)
     return gtk_tree_model_get_iter(s_model, &iter, path);
 }
 
-void
+gboolean
 gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
                      GtkTreePath *path, GdkEventKey *event)
 {
     GtkTreeView *tv = GTK_TREE_VIEW(view);
     gint depth;
-    gboolean shifted;
+    gboolean shifted, wrapped;
 
-    if (event->type != GDK_KEY_PRESS) return;
+    if (event->type != GDK_KEY_PRESS) return FALSE;
 
     switch (event->keyval) {
     case GDK_Tab:
     case GDK_ISO_Left_Tab:
     case GDK_KP_Tab:
         shifted = event->state & GDK_SHIFT_MASK;
-        if (get_column_next_to(tv, col, shifted)) {
+        wrapped = get_column_next_to(tv, col, shifted); 
+        if (wrapped) {
             /* This is the end (or beginning) of the line, buddy. */
             depth = gtk_tree_path_get_depth(path);
             if (shifted) {
@@ -2140,6 +2141,7 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
 
     case GDK_Return:
     case GDK_KP_Enter:
+        wrapped = TRUE;
         if (gtk_tree_view_row_expanded(tv, path)) {
             gtk_tree_path_down(path);
         } else {
@@ -2153,7 +2155,7 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
         }
         break;
     }
-    return;
+    return wrapped;
 }
 
 gboolean

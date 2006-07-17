@@ -1567,6 +1567,7 @@ gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
     GtkTreeView *tv = GTK_TREE_VIEW(treeview);
     GtkTreeViewColumn *col;
     GtkTreePath *path = NULL;
+    gboolean wrapped, tabbed = FALSE;
 
     if (event->type != GDK_KEY_PRESS) return TRUE;
 
@@ -1574,15 +1575,24 @@ gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
     case GDK_Tab:
     case GDK_ISO_Left_Tab:
     case GDK_KP_Tab:
+        tabbed = TRUE;
+        break;
     case GDK_Return:
     case GDK_KP_Enter:
-        gtk_tree_view_get_cursor(tv, &path, &col);
-        if (!path) return TRUE;
-        finish_edit(col);
         break;
     default: return TRUE;
     }
-    gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
+
+    gtk_tree_view_get_cursor(tv, &path, &col);
+    if (!path) return TRUE;
+    finish_edit(col);
+    wrapped = gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
+
+    if (wrapped && tabbed) {
+        mark_split_dirty(GNC_TREE_VIEW_TRANSACTION(tv), NULL, NULL);
+        gtk_tree_view_get_cursor(tv, &path, &col);
+        wrapped = gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
+    }
 
     if (!path || !gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path)) {
         /* no need to restore cursor because we won't move. */

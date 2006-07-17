@@ -392,8 +392,8 @@ gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column);
 /* Takes a GdkEventKey and the current path and column for the
  * treeview.  Interprets the event as something that might move the
  * cursor.  Returns the new column and the possibly changed (if
- * navigation wrapped a row) path. */
-void
+ * navigation wrapped a row) path.  Returns TRUE if the path changed. */
+gboolean
 gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
                      GtkTreePath *path, GdkEventKey *event);
 
