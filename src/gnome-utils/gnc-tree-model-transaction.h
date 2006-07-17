@@ -84,70 +84,21 @@ gnc_tree_model_transaction_new_from_account (Account *acc);
 /** @name Transaction Tree Model Get/Set Functions
   @{ */
 
-#if 0
-/** Convert a model/iter pair to a gnucash split.  This routine should
- *  only be called from an split tree view filter function.  The
- *  model and iter values will be provided as part of the call to the
- *  filter.
- *
- *  @param model A pointer to the split tree model.
- *
- *  @param iter A gtk_tree_iter corresponding to a single split in
- *  the model.
- *
- *  @return A pointer to the corresponding split.
- */
-Transaction *gnc_tree_model_transaction_get_split (
-    GncTreeModelTransaction *model, GtkTreeIter *iter);
-
-
-/** Convert a model/split pair into a gtk_tree_model_iter.  This
- *  routine should only be called from the file
- *  gnc-tree-view-split.c.
- *
- *  @internal
- *
- *  @param model The model that an split belongs to.
- *
- *  @param split The split to convert.
- *
- *  @param iter A pointer to an iter.  This iter will be rewritten to
- *  contain the results of the query.
- *
- *  @return TRUE if the split was found and the iter filled
- *  in. FALSE otherwise.
- */
-gboolean gnc_tree_model_transaction_get_iter_from_trans (
-    GncTreeModelTransaction *model,
-    Transaction *trans,
-    GtkTreeIter *iter);
-
-
-/** Convert a model/split pair into a gtk_tree_model_path.  This
- *  routine should only be called from the file
- *  gnc-tree-view-split.c.
- *
- *  @internal
- *
- *  @param model The model that an split belongs to.
- *
- *  @param split The split to convert.
- *
- *  @return A pointer to a path describing the split.  It is the
- *  responsibility of the caller to free this path when done.
- */
-GtkTreePath *gnc_tree_model_transaction_get_path_from_trans (
+// FALSE if failure
+gboolean 
+gnc_tree_model_transaction_set_blank_split_parent(
     GncTreeModelTransaction *model, Transaction *trans);
-#endif
 
-gboolean gnc_tree_model_transaction_set_blank_split_parent(
-    GncTreeModelTransaction *model, Transaction *trans);
+// FALSE if failure
+gboolean 
+gnc_tree_model_transaction_get_blank_trans_iter(GncTreeModelTransaction *model,
+                                                GtkTreeIter *iter);
 
 Account *
 gnc_tree_model_transaction_get_anchor(GncTreeModelTransaction *model);
 
 gboolean
-gnc_tree_model_transaction_get_split_and_trans (
+gnc_tree_model_transaction_get_split_and_trans(
     GncTreeModelTransaction *model, GtkTreeIter *iter,
     gboolean *is_split, gboolean *is_blank,
     Split **split, Transaction **trans);
@@ -158,9 +109,12 @@ gnc_tree_model_transaction_commit_split(GncTreeModelTransaction *model,
 gint gtmt_sort_by_date(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
                        gpointer user_data);
 
+/* If 'trans' is NULL, use split's parent.  If 'split' is NULL, just
+   get the transaction iter. */
 gboolean
-gnc_tree_model_transaction_get_iter_from_trans(
-    GncTreeModelTransaction *model, Transaction *trans, GtkTreeIter *iter);
+gnc_tree_model_transaction_get_iter_from_trans_and_split(
+    GncTreeModelTransaction *model, Transaction *trans, Split *split, 
+    GtkTreeIter *iter);
 
 /** @} */
 

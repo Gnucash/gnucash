@@ -910,10 +910,10 @@ delete_row_at_path(GncTreeModelTransaction *model, GtkTreePath *path)
     if (depth == 2) {
         if (gtk_tree_path_up(path) && gnc_tree_model_transaction_get_iter(
                 GTK_TREE_MODEL(model), &iter, path)) {
-            //gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+            gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
             tnode = iter.user_data2;
             /* Assumption: When the blank split is removed from the blank
-               trans, it's always the last child of the blank trans. */
+               trans, it's always the last child of the blank trans. */ 
             if (IS_BLANK_TRANS(&iter) && tnode->data == model->priv->btrans) {
                 increment_stamp(model);
 
@@ -1036,9 +1036,9 @@ gnc_tree_model_transaction_get_split_and_trans (
     g_return_val_if_fail(VALID_ITER(model, iter), FALSE);
 
     if (is_split)
-        *is_split = IS_SPLIT(iter);
+        *is_split = !!IS_SPLIT(iter);
     if (is_blank)
-        *is_blank = IS_BLANK(iter);
+        *is_blank = !!IS_BLANK(iter);
 
     if (trans) {
         node = iter->user_data2;
@@ -1134,62 +1134,55 @@ gnc_tree_model_transaction_commit_split(GncTreeModelTransaction *model,
     }
 }
 
-static gboolean
-get_iter_from_split (GncTreeModelTransaction *model, Split *split,
-                     GtkTreeIter *iter)
+#define get_iter gnc_tree_model_transaction_get_iter_from_trans_and_split
+gboolean
+gnc_tree_model_transaction_get_iter_from_trans_and_split(
+    GncTreeModelTransaction *model, Transaction *trans, Split *split, 
+    GtkTreeIter *iter)
 {
     GncTreeModelTransactionPrivate *priv;
-    GList *tnode, *snode, *slist;
-    Transaction *trans;
-    gint flags;
+    GList *tnode, *snode = NULL;
+    gint flags = 0;
 
-    g_return_val_if_fail(GNC_IS_TREE_MODEL_TRANSACTION (model), FALSE);
-    g_return_val_if_fail(split && iter, FALSE);
+    g_return_val_if_fail(GNC_IS_TREE_MODEL_TRANSACTION(model), FALSE);
+    g_return_val_if_fail(VALID_ITER(model, iter), FALSE);
 
     priv = model->priv;
-    if (priv->book != xaccSplitGetBook(split)) return FALSE;
+    if (split && !trans) trans = xaccSplitGetParent(split);
 
-    trans = xaccSplitGetParent(split);
+    if (trans && priv->book != xaccTransGetBook(trans)) return FALSE;
+    if (split && priv->book != xaccSplitGetBook(split)) return FALSE;    
+    if (split && !xaccTransStillHasSplit(trans, split)) return FALSE;
+
     tnode = g_list_find(priv->tlist, trans);
     if (!tnode) return FALSE;
 
-    if (!xaccTransStillHasSplit(trans, split)) return FALSE;
-
-    slist = xaccTransGetSplitList(trans);
-    snode = g_list_find(slist, split);
-    flags = SPLIT;
-    if (!snode && split == (Split *) ((GList *)priv->bsplit_node)->data) {
-        snode = priv->bsplit_node;
-        flags |= BLANK;
+    if (split) {
+        GList *slist = xaccTransGetSplitList(trans);
+        snode = g_list_find(slist, split);
+        flags |= SPLIT;
+        if (!snode && split == (Split *) ((GList *)priv->bsplit_node)->data) {
+            snode = priv->bsplit_node;
+            flags |= BLANK;
+        }
+        if (!snode) return FALSE;
     }
-    if (!snode) return FALSE;
+
+    if (trans == priv->btrans)
+        flags |= BLANK;
 
     *iter = make_iter(model, flags, tnode, snode);
     return TRUE;
 }
 
-gboolean
-gnc_tree_model_transaction_get_iter_from_trans(
-    GncTreeModelTransaction *model, Transaction *trans, GtkTreeIter *iter)
+gboolean 
+gnc_tree_model_transaction_get_blank_trans_iter(GncTreeModelTransaction *model,
+                                                GtkTreeIter *iter)
 {
-    GncTreeModelTransactionPrivate *priv;
-    GList *tnode;
-    gint flags = 0;
+    if (!iter) return FALSE;
 
     g_return_val_if_fail(GNC_IS_TREE_MODEL_TRANSACTION(model), FALSE);
-    g_return_val_if_fail(trans && iter, FALSE);
-
-    priv = model->priv;
-    if (priv->book != xaccTransGetBook(trans)) return FALSE;
-
-    tnode = g_list_find(priv->tlist, trans);
-    if (!tnode) return FALSE;
-
-    if (trans == priv->btrans)
-        flags |= BLANK;
-
-    *iter = make_iter(model, flags, tnode, NULL);
-    return TRUE;
+    return get_iter(model, model->priv->btrans, NULL, iter);
 }
 
 /* Returns just the path to the transaction if idx_of_split is -1. */
@@ -1238,7 +1231,7 @@ gnc_tree_model_transaction_event_handler(
     GtkTreeIter iter;
     GtkTreePath *path;
     Transaction *trans;
-    Split *split;
+    Split *split = NULL;
     QofIdType type;
     const gchar *name;
     GList *tnode;
@@ -1255,7 +1248,7 @@ gnc_tree_model_transaction_event_handler(
 
         switch (event_type) {
         case QOF_EVENT_MODIFY:
-            if (get_iter_from_split(model, split, &iter)) {
+            if (get_iter(model, NULL, split, &iter)) {
                 DEBUG("change split %p (%s)", split, name);
                 changed_row_at(model, &iter);
             }
@@ -1278,7 +1271,7 @@ gnc_tree_model_transaction_event_handler(
             if (split == priv->bsplit) break;
 
             /* Tell the filters/views where the new row was added. */
-            if (get_iter_from_split(model, split, &iter)) {
+            if (get_iter(model, trans, split, &iter)) {
                 DEBUG("add split %p (%s)", split, name);
                 insert_row_at(model, &iter);
             }
@@ -1306,8 +1299,7 @@ gnc_tree_model_transaction_event_handler(
                 insert_row_at(model, &iter);
             }
 
-            if (gnc_tree_model_transaction_get_iter_from_trans(
-                    model, trans, &iter)) {
+            if (get_iter(model, trans, NULL, &iter)) {
                 DEBUG("change trans %p (%s)", trans, name);
                 changed_row_at(model, &iter);
             }
@@ -1320,8 +1312,7 @@ gnc_tree_model_transaction_event_handler(
 
                 iter = make_iter(model, BLANK, tnode, NULL);
                 changed_row_at(model, &iter);
-            } else if (gnc_tree_model_transaction_get_iter_from_trans(
-                           model, trans, &iter)) {
+            } else if (get_iter(model, trans, NULL, &iter)) {
                 delete_row_at(model, &iter);
                 DEBUG("destroy trans %p (%s)", trans, name);
             }
