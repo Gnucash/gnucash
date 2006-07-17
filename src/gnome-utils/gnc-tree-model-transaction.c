@@ -1145,7 +1145,7 @@ gnc_tree_model_transaction_get_iter_from_trans_and_split(
     gint flags = 0;
 
     g_return_val_if_fail(GNC_IS_TREE_MODEL_TRANSACTION(model), FALSE);
-    g_return_val_if_fail(VALID_ITER(model, iter), FALSE);
+    g_return_val_if_fail(iter, FALSE);
 
     priv = model->priv;
     if (split && !trans) trans = xaccSplitGetParent(split);
