@@ -54,9 +54,11 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-basic-commands.c \
   gnc-plugin-budget.c \
   gnc-plugin-register.c \
+  gnc-plugin-transactions.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
   gnc-plugin-page-register.c \
+  gnc-plugin-page-transactions.c \
   gnc-split-reg.c \
   lot-viewer.c \
   reconcile-list.c \
@@ -84,7 +86,6 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-book-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
-
 
 gnomeappdir = ${datadir}/applications
 
@@ -116,9 +117,11 @@ noinst_HEADERS = \
   gnc-plugin-basic-commands.h \
   gnc-plugin-budget.h \
   gnc-plugin-register.h \
+  gnc-plugin-transactions.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
   gnc-plugin-page-register.h \
+  gnc-plugin-page-transactions.h \
   gnc-split-reg.h \
   gw-gnc.h \
   lot-viewer.h \
@@ -132,7 +135,6 @@ EXTRA_DIST = \
   gnucash.keys.in \
   gnucash.mime \
   ${gwmod_DATA}
-
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
