@@ -62,7 +62,7 @@ run_parser_test (TestNode *node)
 {
   gboolean succeeded;
   gnc_numeric result;
-  char *error_loc;
+  char *error_loc = NULL;
 
   result = gnc_numeric_error( -1 );
   printf("Running test \"%s\" [%s] = ", node->test_name, node->exp);
@@ -139,6 +139,18 @@ test_parser (void)
   add_fail_test ("bad expression", "  (5 + 23)/   ", 14);
   add_fail_test ("bad expression", "  ((((5 + 23)/   ", 17);
   add_fail_test ("divide by zero", "  4 / (1 - 1)", -1);
+
+  /* FIXME: what's the correct error code here? */
+  add_fail_test ("bad expression", ")1", 0);
+  add_fail_test ("bad expression", "1\"%", 0);
+  add_fail_test ("bad expression", "1%\"", 0);
+  add_fail_test ("bad expression", "1(", 0);
+  add_fail_test ("bad expression", "1)", 0);
+  add_fail_test ("bad expression", "=1", 0);
+  add_fail_test ("bad expression", "1 / asdf", 0);
+  
+  add_pass_test ("1 + asdf", "1 + asdf", gnc_numeric_create(1, 1));
+  add_pass_test ("1 * asdf", "1 * asdf", gnc_numeric_zero());
 
   add_pass_test ("zero", "0", gnc_numeric_zero ());
   add_pass_test ("zero with whitespace", "\n\t   0  ", gnc_numeric_zero ());
