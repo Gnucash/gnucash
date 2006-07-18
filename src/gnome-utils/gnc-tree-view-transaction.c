@@ -22,6 +22,11 @@ test basis mode debcred edit for blanktrans
  - reorderable columns? solved by gconf
  - column selection? solved by gconf
 
+BUGS:
+  - blank split sometimes appears before other splits
+  - Gtk-CRITICAL **: _gtk_rbtree_reorder: assertion `tree->root->count == 
+      length' failed
+
 */
 /********************************************************************\
  * gnc-tree-view-transaction.c -- GtkTreeView implementation to     *
@@ -1094,7 +1099,7 @@ gnc_tree_view_transaction_cancel_edit(GncTreeViewTransaction *tv)
         tv->priv->dirty_trans = NULL;
     }
 }
-/* Returns TRUE if dialog was cancelled. Does nothing is 'new_trans'
+/* Returns TRUE if dialog was canceled. Does nothing is 'new_trans'
    is the dirty trans. */
 static gboolean
 transaction_changed_confirm(GncTreeViewTransaction *tv,
