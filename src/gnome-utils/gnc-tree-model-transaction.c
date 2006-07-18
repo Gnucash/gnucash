@@ -1,9 +1,6 @@
 /*
   TODO: remove bsplit_node, bsplit_parent_node: would that really be simpler?
 
-  - The SEP trans stuff works ok, but it complicates view iter
-  navigation, so I don't use it.  It could probably be removed.
-
 */
 
 /********************************************************************\
@@ -63,15 +60,12 @@ struct GncTreeModelTransactionPrivate
                             representation of the iter */
     GList *bsplit_parent_node;
 
-    Transaction *sep_trans;
     gint event_handler_id;
 };
 
 #define TREE_MODEL_TRANSACTION_CM_CLASS "tree-model-transactions"
-#define SEP   0x4
 #define BLANK 0x2
 #define SPLIT 0x1
-#define IS_SEP(x)   (GPOINTER_TO_INT((x)->user_data) & SEP)
 #define IS_BLANK(x) (GPOINTER_TO_INT((x)->user_data) & BLANK)
 #define IS_SPLIT(x) (GPOINTER_TO_INT((x)->user_data) & SPLIT)
 #define IS_BLANK_SPLIT(x) (IS_BLANK(x) && IS_SPLIT(x))
@@ -79,7 +73,7 @@ struct GncTreeModelTransactionPrivate
 
 /* Meaning of user_data fields in iter struct:
  *
- * user_data:  a bitfield for SEP, BLANK, SPLIT
+ * user_data:  a bitfield for BLANK, SPLIT
  * user_data2: a pointer to a node in a GList of Transactions
  *            if this is a Split, then this points to the GList node of the
  *            parent transaction
@@ -271,11 +265,6 @@ gnc_tree_model_transaction_new(GList *tlist)
     priv->btrans = xaccMallocTransaction(priv->book);
     priv->tlist = g_list_append(priv->tlist, priv->btrans);
 
-    if (0) {
-        priv->sep_trans = xaccMallocTransaction(priv->book);
-        xaccTransSetDatePostedSecs(priv->sep_trans, time(NULL));
-        priv->tlist = g_list_append(priv->tlist, priv->sep_trans);
-    }
     priv->event_handler_id = qof_event_register_handler(
         gnc_tree_model_transaction_event_handler, model);
     LEAVE("model %p", model);
@@ -412,7 +401,7 @@ gnc_tree_model_transaction_get_value (GtkTreeModel *tm, GtkTreeIter *iter,
     GncTreeModelTransaction *model = GNC_TREE_MODEL_TRANSACTION (tm);
     Split *split = NULL;
     Transaction *trans;
-    gboolean is_split, is_blank, is_sep;
+    gboolean is_split, is_blank;
     const GUID * guid;
     GList *node;
 
@@ -421,7 +410,6 @@ gnc_tree_model_transaction_get_value (GtkTreeModel *tm, GtkTreeIter *iter,
 
     is_split = IS_SPLIT(iter);
     is_blank = IS_BLANK(iter);
-    is_sep = IS_SEP(iter);
     node = (GList *) iter->user_data2;
     trans = (Transaction *) node->data;
     if (is_split) {
@@ -444,12 +432,8 @@ gnc_tree_model_transaction_get_value (GtkTreeModel *tm, GtkTreeIter *iter,
             g_value_set_ulong(value, 0);
         else {
             gulong i = (gulong) xaccTransGetDate(trans);
-            if (is_sep)
+            if (is_blank && i == 0)
                 g_value_set_ulong(value, time(NULL));
-            else if (is_blank && i == 0)
-                /* kinda hokie but we just want default blank trans
-                   right after sep */
-                g_value_set_ulong(value, time(NULL)+10);
             else
                 g_value_set_ulong(value, i);
         }
@@ -494,10 +478,8 @@ gnc_tree_model_transaction_get_iter(GtkTreeModel *tm, GtkTreeIter *iter,
 
     if (depth == 1) { /* Trans */
         snode = NULL;
-        /* Check if this is the separator or blank trans */
-        if (tnode->data == model->priv->sep_trans)
-            flags = SEP;
-        else if (tnode->data == model->priv->btrans)
+        /* Check if this is the blank trans */
+        if (tnode->data == model->priv->btrans)
             flags = BLANK;
         else flags = 0;
     } else if (depth == 2) {  /* Split */
@@ -546,7 +528,7 @@ gnc_tree_model_transaction_get_path (GtkTreeModel *tm, GtkTreeIter *iter)
     path = gtk_tree_path_new();
     tnode = iter->user_data2;
 
-    /* This works fine for the separator and blank trans, too. */
+    /* This works fine for the blank trans, too. */
     pos = g_list_position(model->priv->tlist, tnode);
     if (pos == -1)
         goto fail;
@@ -611,13 +593,11 @@ gnc_tree_model_transaction_iter_next (GtkTreeModel *tm, GtkTreeIter *iter)
         snode = NULL;
         tnode = tnode->next;
 
-        /* Check if this is the separator or blank trans */
+        /* Check if this is the blank trans */
         if (!tnode) {
             LEAVE("last trans has no next");
             goto fail;
-        } else if (tnode->data == model->priv->sep_trans)
-            flags |= SEP;
-        else if (tnode->data == model->priv->btrans)
+        } else if (tnode->data == model->priv->btrans)
             flags |= BLANK;
 
     }
@@ -649,9 +629,7 @@ gnc_tree_model_transaction_iter_children (GtkTreeModel *tm, GtkTreeIter *iter,
         /* Get the very first iter */
         tnode = model->priv->tlist;
         if (tnode) {
-            if (tnode->data == model->priv->sep_trans)
-                flags = SEP;
-            else if (tnode->data == model->priv->btrans)
+            if (tnode->data == model->priv->btrans)
                 flags = BLANK;
 
             *iter = make_iter(model, flags, tnode, NULL);
@@ -667,8 +645,6 @@ gnc_tree_model_transaction_iter_children (GtkTreeModel *tm, GtkTreeIter *iter,
 
     if (IS_SPLIT(parent))
         goto fail;  /* Splits never have children */
-    if (IS_SEP(parent))
-        goto fail;  /* The separator trans has no children */
 
     tnode = parent->user_data2;
     trans = tnode->data;
@@ -711,10 +687,6 @@ gnc_tree_model_transaction_iter_has_child (GtkTreeModel *tm, GtkTreeIter *iter)
         LEAVE(" splits have no children");
         return FALSE;
     }
-    if (IS_SEP(iter)) {
-        LEAVE(" the separator has no children");
-        return FALSE;
-    }
 
     tnode = iter->user_data2;
     trans = tnode->data;
@@ -753,7 +725,7 @@ gnc_tree_model_transaction_iter_n_children (GtkTreeModel *tm,
 
     g_assert(VALID_ITER(model, iter));
 
-    if (IS_SEP(iter) || IS_SPLIT(iter)) {
+    if (IS_SPLIT(iter)) {
         LEAVE("iter has no children");
         return 0;
     }
@@ -788,9 +760,7 @@ gnc_tree_model_transaction_iter_nth_child (GtkTreeModel *tm, GtkTreeIter *iter,
             PERR("Trans list should never be NULL.");
             goto fail;
         }
-        if (tnode->data == model->priv->sep_trans)
-            flags = SEP;
-        else if (tnode->data == model->priv->btrans)
+        if (tnode->data == model->priv->btrans)
             flags = BLANK;
 
         *iter = make_iter(model, flags, tnode, NULL);
@@ -801,8 +771,8 @@ gnc_tree_model_transaction_iter_nth_child (GtkTreeModel *tm, GtkTreeIter *iter,
     DEBUG("parent iter %s", iter_to_string(parent));
     g_assert(VALID_ITER(model, parent));
 
-    if (IS_SPLIT(parent) || IS_SEP(parent))
-        goto fail;  /* Splits and separator have no children */
+    if (IS_SPLIT(parent))
+        goto fail;  /* Splits have no children */
 
     flags = SPLIT;
     tnode = parent->user_data2;
@@ -990,8 +960,6 @@ gnc_tree_model_transaction_set_blank_split_parent(
 
     priv = model->priv;
     tnode = g_list_find(priv->tlist, trans);
-
-    if (priv->sep_trans == trans) return FALSE;
 
     bs_parent_node = priv->bsplit_parent_node;
 
@@ -1351,8 +1319,7 @@ gtmt_sort_by_date(GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b,
     GList *tnode;
     time_t i, j;
 
-    /* Games we play here: blank trans is always last; sep trans is
-       always now */
+    /* Games we play here: blank trans is always last */
     if (!VALID_ITER(model, a)) PERR("Invalid a iter.");
     if (!VALID_ITER(model, b)) PERR("Invalid b iter.");
 
@@ -1360,9 +1327,9 @@ gtmt_sort_by_date(GtkTreeModel *tm, GtkTreeIter *a, GtkTreeIter *b,
     if (IS_BLANK_TRANS(b)) return -1;
 
     tnode = a->user_data2;
-    i = IS_SEP(a) ? time(NULL) : xaccTransGetDate((Transaction*)tnode->data);
+    i = xaccTransGetDate((Transaction*)tnode->data);
     tnode = b->user_data2;
-    j = IS_SEP(b) ? time(NULL) : xaccTransGetDate((Transaction*)tnode->data);
+    j = xaccTransGetDate((Transaction*)tnode->data);
 
     return (gint)(i - j);
 }
