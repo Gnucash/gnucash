@@ -67,6 +67,13 @@ gnc_module_system_search_dirs(void)
   {
     switch(*cpos) 
     {
+#ifndef G_OS_WIN32
+    /* On windows, with '\' as the directory separator character,
+       this additional de-quoting will make every path processing
+       fail miserably. Anyway this should probably be thrown out
+       altogether, because this additional level of de-quoting
+       (after shell quoting) is completely unexpected and
+       uncommon. */
     case '\\':
       if(!escchar) 
       {
@@ -78,6 +85,7 @@ gnc_module_system_search_dirs(void)
         escchar = FALSE;
       }
       break;
+#endif
       
     case ':':
       if(!escchar) 

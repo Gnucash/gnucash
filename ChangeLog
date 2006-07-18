@@ -1,3 +1,9 @@
+2006-07-18   Christian Stimming <stimming@tuhh.de>
+
+	* src/gnc-module/gnc-module.c: On windows, deactivate gnucash's
+	extra de-quoting of path names that is done on the GNC_MODULE_PATH
+	env variable.
+
 2006-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
