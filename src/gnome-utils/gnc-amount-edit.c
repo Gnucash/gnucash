@@ -319,7 +319,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 
   g_return_if_fail(gae != NULL);
   g_return_if_fail(GNC_IS_AMOUNT_EDIT(gae));
-  g_return_if_fail(!gnc_numeric_check (amount));
+  if (gnc_numeric_check(amount)) amount = gnc_numeric_zero();
 
   gae->amount = amount;
   gae->need_to_parse = FALSE;
