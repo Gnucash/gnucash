@@ -54,6 +54,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
@@ -127,9 +128,7 @@ static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, 
 static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
-#endif
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
@@ -181,15 +180,13 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split) },
-#ifdef LOTS_READY_FOR_SHOWTIME
 	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
-#endif
 	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
-	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccount"), NULL,
+	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccounts"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },
@@ -209,9 +206,7 @@ static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"EditDeleteAccountAction",
 	"ActionsReconcileAction",
-#ifdef LOTS_READY_FOR_SHOWTIME
 	"ActionsLotsAction",
-#endif
 	NULL
 };
 
@@ -301,6 +296,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	GtkActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
 	GncPluginPage *parent;
+	const GList *page_list;
 
 	ENTER("page %p", plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
@@ -315,6 +311,14 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
+
+	/* Is this the first accounts page? */
+	page_list =
+	  gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
+	if (plugin_page == page_list->data) {
+	  g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
+			    GINT_TO_POINTER(1));
+	}
 
 	/* Create menu and toolbar information */
 	action_group =
@@ -1171,7 +1175,6 @@ gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
 	gnc_stock_split_dialog (window, account);
 }
 
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void
 gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
 				       GncPluginPageAccountTree *page)
@@ -1181,7 +1184,6 @@ gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
 	account = gnc_plugin_page_account_tree_get_current_account (page);
 	gnc_lot_viewer_dialog (account);
 }
-#endif
 
 static void
 gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page)

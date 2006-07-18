@@ -43,7 +43,30 @@
  @{ 
 */
 
-int safe_utf8_collate (const char * da, const char * db);
+/** Collate two utf8 strings.  This function performs basic argument
+ *  checking before calling g_utf8_collate.
+ *
+ *  @param str1 The first string.
+ *
+ *  @param str2 The first string.
+ *
+ *  @return Same return value as g_utf8_collate. The values are: < 0
+ *  if str1 compares before str2, 0 if they compare equal, > 0 if str1
+ *  compares after str2. */
+int safe_utf8_collate (const char *str1, const char *str2);
+
+
+/** Strip any non-utf8 characters from a string.  This function
+ *  rewrites the string "in place" instead of allocating and returning
+ *  a new string.  This allows it to operate on strings that are
+ *  defined as character arrays in a larger data structure.  Note that
+ *  it also removes some subset of invalid XML characters, too.
+ *  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
+ *
+ *  @param str A pointer to the string to strip of invalid
+ *  characters. */
+void gnc_utf8_strip_invalid (gchar *str);
+
 
 /** @} */
 

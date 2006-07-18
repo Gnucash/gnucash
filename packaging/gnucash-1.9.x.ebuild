@@ -11,7 +11,7 @@
 
 inherit eutils gnome2 
 
-DOC_VER="1.8.5"
+DOC_VER="1.9.0"
 
 DESCRIPTION="A personal finance manager (unstable version)."
 HOMEPAGE="http://www.gnucash.org/"
@@ -45,7 +45,7 @@ RDEPEND=">=dev-libs/glib-2.4.0
 	hbci? ( net-libs/aqbanking
 		chipcard? ( sys-libs/libchipcard )
 	)
-	quotes? ( dev-perl/DateManip
+	quotes? ( dev-perl/Crypt-SSLeay
 		dev-perl/Finance-Quote
 		dev-perl/HTML-TableExtract )
 	postgres? ( dev-db/postgresql )
@@ -83,8 +83,7 @@ src_compile() {
 src_install() {
 	gnome2_src_install || die "gnome2_src_install failed"
 	dodoc AUTHORS ChangeLog* DOCUMENTERS HACKING INSTALL LICENSE NEWS TODO README* doc/README*
-	make_desktop_entry ${P} "GnuCash ${PV}" \
-		/usr/share/${PN}/pixmaps/appicon.png "Office;Finance"
+	make_desktop_entry ${P} "GnuCash ${PV}" gnucash-icon.png "GNOME;Office;Finance"
 
 	cd ${WORKDIR}/${PN}-docs-${DOC_VER}
 	make DESTDIR=${D} \

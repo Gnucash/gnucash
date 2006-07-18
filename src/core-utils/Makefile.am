@@ -1,4 +1,3 @@
-
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
 libcore_utils_la_SOURCES = \
@@ -10,7 +9,6 @@ libcore_utils_la_SOURCES = \
   gnc-gobject-utils.c
 
 libcore_utils_la_LIBADD = \
-  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
   ${GTK_LIBS}
@@ -36,7 +34,6 @@ noinst_HEADERS = \
 EXTRA_DIST = ${gwmod_DATA}
 
 AM_CFLAGS = \
-  -I${top_srcdir}/lib/glib26 \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

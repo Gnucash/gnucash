@@ -54,6 +54,7 @@ enum {
 
 /* values for selection info */
 enum {
+        TARGET_UTF8_STRING,
         TARGET_STRING,
         TARGET_TEXT,
         TARGET_COMPOUND_TEXT
@@ -61,7 +62,6 @@ enum {
 
 static GnomeCanvasItemClass *gnc_item_edit_parent_class;
 static GdkAtom clipboard_atom = GDK_NONE;
-static GdkAtom ctext_atom = GDK_NONE;
 
 
 typedef struct _TextDrawInfo TextDrawInfo;
@@ -84,6 +84,7 @@ struct _TextDrawInfo
 };
 
 
+static void queue_sync (GncItemEdit *item_edit);
 static void gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
 					 gint x, gint y,
 					 gint width, gint height,
@@ -218,7 +219,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 	/* Selection */
         if (start_pos != end_pos)
         {
-                gint start_byte_pos, end_byte_pos;
+                gint start_byte_pos, end_byte_pos, color;
 
                 start_byte_pos = g_utf8_offset_to_pointer (text, start_pos) - text;
                 end_byte_pos = g_utf8_offset_to_pointer (text, end_pos) - text;
@@ -230,7 +231,8 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
                 attr->end_index = end_byte_pos;
                 pango_attr_list_insert (attr_list, attr);
 
-                attr = pango_attr_background_new (0x0, 0x0, 0x0);
+                color = GTK_WIDGET_HAS_FOCUS(item_edit->sheet) ? 0x0 : 0x7fff;
+                attr = pango_attr_background_new (color, color, color);
                 attr->start_index = start_byte_pos;
                 attr->end_index = end_byte_pos;
                 pango_attr_list_insert (attr_list, attr);
@@ -447,6 +449,7 @@ gnc_item_edit_focus_in (GncItemEdit *item_edit)
         ev.window = GTK_WIDGET (item_edit->sheet)->window;
         ev.in = TRUE;
         gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+        queue_sync(item_edit);
 }
 
 void
@@ -461,6 +464,7 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
         ev.window = GTK_WIDGET (item_edit->sheet)->window;
         ev.in = FALSE;
         gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+        queue_sync(item_edit);
 }
 
 void
@@ -810,7 +814,6 @@ gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time)
         gnc_item_edit_cut_copy_clipboard(item_edit, time, TRUE);
 }
 
-
 void
 gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time)
 {
@@ -824,11 +827,10 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time)
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-        if (ctext_atom == GDK_NONE)
-                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
         gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
-                              clipboard_atom, ctext_atom, time);
+                              clipboard_atom,
+                              gdk_atom_intern("UTF8_STRING", FALSE),
+                              time);
 }
 
 
@@ -838,11 +840,10 @@ gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time)
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-        if (ctext_atom == GDK_NONE)
-                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
         gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
-                              GDK_SELECTION_PRIMARY, ctext_atom, time);
+                              GDK_SELECTION_PRIMARY,
+                              gdk_atom_intern("UTF8_STRING", FALSE),
+                              time);
 }
 
 
@@ -1142,9 +1143,10 @@ GnomeCanvasItem *
 gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 {
         static const GtkTargetEntry targets[] = {
-                { "STRING", 0, TARGET_STRING },
+                { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+                { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
                 { "TEXT",   0, TARGET_TEXT }, 
-                { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT }
+                { "STRING", 0, TARGET_STRING },
         };
         static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
 
@@ -1436,7 +1438,7 @@ gnc_item_edit_selection_clear (GncItemEdit          *item_edit,
 
 
 void
-gnc_item_edit_selection_get (GncItemEdit         *item_edit,
+gnc_item_edit_selection_get (GncItemEdit      *item_edit,
 			     GtkSelectionData *selection_data,
 			     guint             info,
 			     guint             time)
@@ -1461,41 +1463,15 @@ gnc_item_edit_selection_get (GncItemEdit         *item_edit,
                 str = gtk_editable_get_chars(editable, start_pos, end_pos);
         }
         else /* CLIPBOARD */
+        {
                 str = item_edit->clipboard;
+        }
 
         if (str == NULL)
                 return;
 
         length = strlen(str);
-  
-        if (info == TARGET_STRING)
-        {
-                gtk_selection_data_set (selection_data,
-                                        GDK_SELECTION_TYPE_STRING,
-                                        8 * sizeof(gchar), (guchar *) str,
-                                        length);
-        }
-        else if ((info == TARGET_TEXT) || (info == TARGET_COMPOUND_TEXT))
-        {
-                guchar *text;
-                gchar c;
-                GdkAtom encoding;
-                gint format;
-                gint new_length;
-
-                c = str[length];
-                str[length] = '\0';
-
-                gdk_string_to_compound_text(str, &encoding, &format,
-                                            &text, &new_length);
-
-                gtk_selection_data_set(selection_data, encoding,
-                                       format, text, new_length);
-
-                gdk_free_compound_text(text);
-
-                str[length] = c;
-        }
+        gtk_selection_data_set_text(selection_data, str, length);
 
         if (str != item_edit->clipboard)
                 g_free(str);
@@ -1512,85 +1488,66 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
         gint old_pos;
         gint tmp_pos;
 	gint start_sel, end_sel;
-        enum {INVALID, STRING, CTEXT} type;
+        enum {INVALID, CTEXT} type;
 
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE(item_edit->editor);
 
-        if (selection_data->type == GDK_TARGET_STRING)
-                type = STRING;
-        else if ((selection_data->type ==
-                  gdk_atom_intern("COMPOUND_TEXT", FALSE)) ||
-                 (selection_data->type == gdk_atom_intern("TEXT", FALSE)))
+        /* @fixme: this should implement the fallback logic from
+         * gtkclipboard.c:request_text_received_func.  It'd be nice to have a
+         * good way to test the various request types. :( --jsled **/
+
+        if (selection_data->type == GDK_TARGET_STRING
+            || selection_data->type == gdk_atom_intern("UTF8_STRING", FALSE)
+            || selection_data->type == gdk_atom_intern("COMPOUND_TEXT", FALSE)
+            || selection_data->type == gdk_atom_intern("TEXT", FALSE))
+        {
                 type = CTEXT;
+        }
         else
+        {
                 type = INVALID;
+        }
 
         if (type == INVALID || selection_data->length < 0)
         {
                 /* avoid infinite loop */
                 if (selection_data->target != GDK_TARGET_STRING)
+                {
                         gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
                                               selection_data->selection,
                                               GDK_TARGET_STRING, time);
+                }
                 return;
         }
 
         reselect = FALSE;
 
-        if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel) && 
-            (!item_edit->has_selection || 
-             (selection_data->selection == clipboard_atom)))
+        if (gtk_editable_get_selection_bounds(editable, &start_sel, &end_sel)
+            && (!item_edit->has_selection
+                || selection_data->selection == clipboard_atom))
         {
                 reselect = TRUE;
-
                 gtk_editable_delete_text(editable, start_sel, end_sel);
         }
 
         tmp_pos = old_pos = gtk_editable_get_position (editable);
 
-        switch (type)
         {
-                case STRING:
-                        selection_data->data[selection_data->length] = 0;
-
-                        gtk_editable_insert_text
-                                (editable, (gchar *) selection_data->data,
-                                 strlen((gchar *)selection_data->data),
-                                 &tmp_pos);
-
+                guchar *sel = gtk_selection_data_get_text(selection_data);
+        
+                if (sel)
+                {
+                        gtk_editable_insert_text(editable,
+                                                 sel, strlen(sel),
+                                                 &tmp_pos);
                         gtk_editable_set_position(editable, tmp_pos);
-                        break;
-                case CTEXT: {
-                        gchar **list;
-                        gint count;
-                        gint i;
-
-                        count = gdk_text_property_to_text_list
-                                (selection_data->type, selection_data->format, 
-                                 selection_data->data, selection_data->length,
-                                 &list);
-
-                        for (i = 0; i < count; i++) 
-                        {
-                                gtk_editable_insert_text(editable,
-                                                         list[i],
-                                                         strlen(list[i]),
-                                                         &tmp_pos);
-
-                                gtk_editable_set_position(editable, tmp_pos);
-                        }
-
-                        if (count > 0)
-                                gdk_free_text_list(list);
+                        g_free(sel);
                 }
-                break;
-                case INVALID: /* quiet compiler */
-                        break;
         }
-
+        
         if (!reselect)
                 return;
 

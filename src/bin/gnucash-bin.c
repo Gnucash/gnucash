@@ -350,7 +350,6 @@ load_gnucash_modules()
         { "gnucash/register/ledger-core", 0, FALSE },
         { "gnucash/register/register-core", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
-        { "gnucash/import-export/binary-import", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/mt940", 0, TRUE },

@@ -5,6 +5,7 @@ schemas_in_files = \
   apps_gnucash_dialog_prices.schemas.in \
   apps_gnucash_dialog_print_checks.schemas.in \
   apps_gnucash_dialog_reconcile.schemas.in \
+  apps_gnucash_dialog_scheduled_transctions.schemas.in \
   apps_gnucash_dialog_totd.schemas.in \
   apps_gnucash_general.schemas.in \
   apps_gnucash_warnings.schemas.in \

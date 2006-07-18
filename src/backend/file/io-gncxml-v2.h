@@ -181,9 +181,6 @@ typedef struct {
 gint gnc_xml2_find_ambiguous(
     const gchar *filename, GList *encodings, GHashTable **unique,
     GHashTable **ambiguous, GList **impossible);
-typedef gint (*find_ambiguous_handler)(
-    const gchar *filename, GList *encodings, GHashTable **unique,
-    GHashTable **ambiguous, GList **impossible);
 
 /** Parse a file in push mode, but replace byte sequences in the file given a
  * hash table of substitutions
@@ -191,8 +188,6 @@ typedef gint (*find_ambiguous_handler)(
  * @param subst hash table with keys and values of type gchar*
  */
 gboolean gnc_xml2_parse_with_subst (
-    FileBackend *fbe, QofBook *book, GHashTable *subst);
-typedef gboolean (*parse_with_subst_handler)(
     FileBackend *fbe, QofBook *book, GHashTable *subst);
 
 #endif /* __IO_GNCXML_V2_H__ */

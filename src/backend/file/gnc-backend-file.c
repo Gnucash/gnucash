@@ -45,15 +45,14 @@
 #include <dirent.h>
 #include <time.h>
 
+#include "qof.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
-#include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-#include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
 
@@ -403,8 +402,6 @@ gnc_file_be_determine_file_type(const char *path)
     }
   } else if (gnc_is_xml_data_file(path)) {
     return GNC_BOOK_XML1_FILE;
-  } else if (gnc_is_bin_file(path)) {
-    return GNC_BOOK_BIN_FILE;
   }
   return GNC_BOOK_NOT_OURS;
 }
@@ -426,7 +423,6 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
@@ -523,18 +519,18 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             /* Use the permissions from the original data file */
             if(chmod(tmp_name, statbuf.st_mode) != 0)
             {
-                qof_backend_set_error(be, ERR_BACKEND_PERM);
-		/* FIXME: Even if the chmod did fail, the save
+	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+		/* Even if the chmod did fail, the save
 		   nevertheless completed successfully. It is
 		   therefore wrong to signal the ERR_BACKEND_PERM
 		   error here which implies that the saving itself
-		   failed! What should we do? */
+		   failed. Instead, we simply ignore this. */
                 PWARN("unable to chmod filename %s: %s",
                         tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
-#if VFAT_DOESNT_SUCK  /* chmod always fails on vfat fs */
-                g_free(tmp_name);
-                return FALSE;
+#if VFAT_DOESNT_SUCK  /* chmod always fails on vfat/samba fs */
+                /* g_free(tmp_name); */
+                /* return FALSE; */
 #endif
             }
 #ifdef HAVE_CHOWN
@@ -868,10 +864,6 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
-    case GNC_BOOK_BIN_FILE:
-        qof_session_load_from_binfile(book, be->fullpath);
-        error = gnc_get_binfile_io_error();
-        break;
     default:
         PWARN("File not any known type");
         error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
@@ -945,7 +937,7 @@ compression_changed_cb(GConfEntry *entry, gpointer user_data)
         be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
 }
 
-QofBackend*
+static QofBackend*
 gnc_backend_new(void)
 {
 	FileBackend *gnc_be;

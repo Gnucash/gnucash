@@ -492,6 +492,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     load_return = scm_call_4(qif_file_load, SCM_CAR(imported_files),
 			     scm_filename, wind->ticker_map, window);
     
+    /* turn back the cursor */
+    gnc_unset_busy_cursor(NULL);
+
     /* a list returned is (#f error-message) for an error, 
      * (#t error-message) for a warning, or just #f for an 
      * exception. */
@@ -527,6 +530,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       return TRUE;
     }
     else {
+      /* turn on the busy cursor */
+      gnc_set_busy_cursor(NULL, TRUE);
+
       /* call the field parser */
       parse_return = scm_call_1(qif_file_parse, SCM_CAR(imported_files));
       
@@ -569,6 +575,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 	}
       }
 
+      /* turn back the cursor */
+      gnc_unset_busy_cursor(NULL);
+
       /* Can this ever happen??? */
       if(parse_return == SCM_BOOL_F) {
         gnc_error_dialog(wind->window,
@@ -596,9 +605,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     wind->imported_files = imported_files;
     scm_gc_protect_object(wind->imported_files);
     
-    /* turn back the cursor */
-    gnc_unset_busy_cursor(NULL);
-
     if(ask_date_format) {
       /* we need to get a date format, so go to the next page */
       return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);

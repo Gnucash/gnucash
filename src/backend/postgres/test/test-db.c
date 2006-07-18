@@ -1093,7 +1093,7 @@ main (int argc, char **argv)
     DbInfo *dbinfo;
     
     qof_init();
-    do_test(qof_load_backend_library (QOF_LIB_DIR, PG_LIB_NAME),
+    do_test(qof_load_backend_library ("../.libs/", PG_LIB_NAME),
             " loading gnc-backend-postgres GModule failed");
 
     dbinfo = g_new0(DbInfo, 1);

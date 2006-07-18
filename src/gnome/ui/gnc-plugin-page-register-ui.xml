@@ -38,7 +38,7 @@
 	<menuitem name="ActionsTransfer"         action="ActionsTransferAction"/>
 	<menuitem name="ActionsReconcile"        action="ActionsReconcileAction"/>
 	<menuitem name="ActionsStockSplit"       action="ActionsStockSplitAction"/>
-	<!-- menuitem name="ActionLots"              action="ActionsLotsAction"/ -->
+	<menuitem name="ActionLots"              action="ActionsLotsAction"/>
         <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
         <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>

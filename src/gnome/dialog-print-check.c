@@ -409,7 +409,7 @@ gnc_ui_print_check_response_cb(GtkDialog * dialog,
 {
   switch (response) {
     case GTK_RESPONSE_HELP:
-      gnc_gnome_help(HF_USAGE, HL_PRINTCHECK);
+      gnc_gnome_help(HF_HELP, HL_PRINTCHECK);
       return;
 
     case GTK_RESPONSE_OK:

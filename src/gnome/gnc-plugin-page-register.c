@@ -131,9 +131,7 @@ static void gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *act
 static void gnc_plugin_page_register_cmd_reconcile (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transfer (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_stock_split (GtkAction *action, GncPluginPageRegister *plugin_page);
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void gnc_plugin_page_register_cmd_lots (GtkAction *action, GncPluginPageRegister *plugin_page);
-#endif
 static void gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -173,13 +171,13 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	/* Edit menu */
 
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
-	  NULL,
+	  N_("Cut the current selection and copy it to clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cut) },
 	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
-	  NULL,
+	  N_("Copy the current selection to clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_copy) },
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
-	  NULL,
+	  N_("Paste the clipboard content at the cursor position"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste) },
 	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit Account"), "<control>e",
 	  N_("Edit the selected account"),
@@ -236,16 +234,14 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
-#ifdef LOTS_READY_FOR_SHOWTIME
 	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-#endif
 	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
 	{ "EditExchangeRateAction", NULL, N_("Edit E_xchange Rate"), NULL,
-	  N_("Exit the exchange rate for the current transaction"),
+	  N_("Edit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
 	{ "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),
@@ -312,9 +308,7 @@ static const gchar *important_actions[] = {
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
-#ifdef LOTS_READY_FOR_SHOWTIME
 	"ActionsLotsAction",
-#endif
 	NULL
 };
 
@@ -2329,7 +2323,6 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction *action,
   LEAVE(" ");
 }
 
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void
 gnc_plugin_page_register_cmd_lots (GtkAction *action,
 				   GncPluginPageRegister *page)
@@ -2344,7 +2337,6 @@ gnc_plugin_page_register_cmd_lots (GtkAction *action,
   gnc_lot_viewer_dialog (account);
   LEAVE(" ");
 }
-#endif
 
 static void
 gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action,

@@ -27,14 +27,13 @@ as other services, such as bill payment.  Features requiring direct access
 2. Requirements
 ------------
 
-LibOFX 0.6.2 or later (in the 0.6x series, for GnuCash 1.8, the interface will 
-change in later versions) 
+LibOFX 0.7.0 or later 
 http://libofx.sourceforge.net/
 
 which in turn requires:
 OpenSP 1.3.x or later, http://openjade.sourceforge.net/
 
-Then you enable OFX support by building GnuCash 1.7.x/1.8.x with:
+Then you enable OFX support by building GnuCash with:
 
 --enable-ofx added to ./autogen.sh (for CVS) or ./configure (for tarballs)
 make
@@ -263,9 +262,7 @@ from bank to bank.
 
 (8) Can I export my Gnucash data in QIF, OFX, CSV, etc. ?
 
-Export capability is currently being built into LibOfx.  During the
-1.8.x series, Gnucash will be able to export in any format supported by
-LibOFX.
+Export capability is currently being built into LibOfx. 
 
 
 7. Credits-------

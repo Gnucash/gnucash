@@ -406,7 +406,7 @@ gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data)
 void
 gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  gnc_gnome_help(HF_USAGE, NULL);
+  gnc_gnome_help(HF_HELP, HL_USAGE);
 }
 
 void
@@ -1677,6 +1677,9 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   /* Now create the plugin page for this invoice and display it. */
   new_page = gnc_plugin_page_invoice_new (iw);
   gnc_main_window_open_page (gnc_plugin_business_get_window(), new_page);
+
+  /* Initialize the summary bar */
+  gnc_invoice_redraw_all_cb(iw->reg, iw);
 
   return iw;
 }

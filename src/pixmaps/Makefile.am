@@ -33,5 +33,8 @@ gncpixmap_DATA = \
   stock_split_title.png \
   stock_split_watermark.png
 
+gncicondir = ${datadir}/pixmaps
+gncicon_DATA = gnucash-icon.png
+
 EXTRA_DIST = \
-  ${gncpixmap_DATA}
+  ${gncpixmap_DATA} ${gncicon_DATA}

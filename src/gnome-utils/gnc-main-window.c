@@ -41,9 +41,6 @@
 #include "gkeyfile.h"
 #endif
 #include "gtk-compat.h"
-#ifdef HAVE_VALGRIND_CALLGRIND_H
-#include <valgrind/callgrind.h>
-#endif
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -83,7 +80,6 @@ enum {
  *  back to the corresponding GncPluginPage object. */
 #define PLUGIN_PAGE_LABEL "plugin-page"
 
-#define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
@@ -127,7 +123,6 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
@@ -314,9 +309,6 @@ static GtkToggleActionEntry toggle_actions [] =
 	{ "ViewStatusbarAction", NULL, N_("Stat_us Bar"), NULL,
 	  N_("Show/hide the status bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
-	{ "ExtensionsCallgrindAction", NULL, "Use Callgrind", NULL,
-	  "Enable/disable the Valgrind/Callgrind profiling tool.",
-	  G_CALLBACK (gnc_main_window_cmd_extensions_callgrind), FALSE },
 };
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
@@ -375,9 +367,6 @@ static const gchar *initially_insensitive_actions[] = {
 static const gchar *always_hidden_actions[] = {
 	"ViewSortByAction",
 	"ViewFilterByAction",
-#ifndef HAVE_VALGRIND_CALLGRIND_H
-	"ExtensionsCallgrindAction",
-#endif
 	NULL
 };
 
@@ -557,24 +546,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
   /* Get the window coordinates, etc. */
-  pos = g_key_file_get_integer_list(data->key_file, window_group,
-				    WINDOW_POSITION, &length, &error);
-  if (error) {
-    g_warning("error reading group %s key %s: %s",
-	      window_group, WINDOW_POSITION, error->message);
-    g_error_free(error);
-    error = NULL;
-  } else if (length != 2) {
-    g_warning("invalid number of values for group %s key %s",
-	      window_group, WINDOW_POSITION);
-  } else {
-    gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
-    DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
-  }
-  if (pos) {
-    g_free(pos);
-  }
-
   geom = g_key_file_get_integer_list(data->key_file, window_group,
 				     WINDOW_GEOMETRY, &length, &error);
   if (error) {
@@ -589,8 +560,34 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
     DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
   }
+  /* keep the geometry for a test whether the windows position
+     is offscreen */
+
+  pos = g_key_file_get_integer_list(data->key_file, window_group,
+				    WINDOW_POSITION, &length, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_POSITION, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (length != 2) {
+    g_warning("invalid number of values for group %s key %s",
+	      window_group, WINDOW_POSITION);
+  } else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
+	     (pos[0] > gdk_screen_width()) ||
+	     (pos[1] + (geom ? geom[1] : 0) < 0) ||
+	     (pos[1] > gdk_screen_height())) {
+    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
+	    pos[0], pos[1], geom[0], geom[1]);
+  } else {
+    gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
+    DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
+  }
   if (geom) {
     g_free(geom);
+  }
+  if (pos) {
+    g_free(pos);
   }
 
   max = g_key_file_get_boolean(data->key_file, window_group,
@@ -1592,6 +1589,32 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
   return FALSE;
 }
 
+static gboolean
+gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
+					   GdkEventKey *event,
+					   GncPluginPage *page)
+{
+  if (event->keyval == GDK_Escape) {
+    GtkWidget *label, *entry2;
+
+    g_return_val_if_fail(GTK_IS_ENTRY(entry), FALSE);
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+
+    ENTER("");
+    if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
+				    page, &label, &entry2)) {
+      LEAVE("can't find required widgets");
+      return FALSE;
+    }
+
+    gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+    gtk_widget_hide(entry);
+    gtk_widget_show(label);
+    LEAVE("");
+  }
+  return FALSE;
+}
+
 /************************************************************
  *                   Widget Implementation                  *
  ************************************************************/
@@ -1985,7 +2008,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label, *entry;
 	const gchar *icon;
 	GtkWidget *image;
-	gboolean immutable = FALSE;
 	GList *tmp;
 
 	if (window)
@@ -2013,16 +2035,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  gtk_widget_show(GTK_WIDGET(window));
 	} else if ((window == NULL) && active_windows) {
 	  window = active_windows->data;
-	}
-
-	/* Is this the first page in the first window? */
-	if (window == active_windows->data) {
-	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	  if (priv->installed_pages == NULL) {
-	    immutable = TRUE;
-	    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
-			       GINT_TO_POINTER(1));
-	  }
 	}
 
 	page->window = GTK_WIDGET(window);
@@ -2056,12 +2068,15 @@ gnc_main_window_open_page (GncMainWindow *window,
 	g_signal_connect(G_OBJECT(entry), "focus-out-event",
 			 G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
 			 page);
+	g_signal_connect(G_OBJECT(entry), "key-press-event",
+			 G_CALLBACK(gnc_main_window_tab_entry_key_press_event),
+			 page);
 	g_signal_connect(G_OBJECT(entry), "editing-done",
 			 G_CALLBACK(gnc_main_window_tab_entry_editing_done),
 			 page);
 
 	/* Add close button - Not for immutable pages */
-	if (!immutable) {
+	if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE)) {
 	  GtkWidget *close_image, *close_button;
 	  GtkRequisition requisition;
 	  
@@ -2618,6 +2633,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
         gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
 
 	priv->progressbar = gtk_progress_bar_new ();
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
 	gtk_widget_show (priv->progressbar);
 	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);
@@ -3049,32 +3065,6 @@ gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 }
 
 static void
-gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window)
-{
-#ifdef HAVE_VALGRIND_CALLGRIND_H
-	static GTimeVal start, end;
-
-	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-	  g_print("Start timing.\n");
-	  g_get_current_time(&start);
-	  CALLGRIND_START_INSTRUMENTATION();
-	  CALLGRIND_TOGGLE_COLLECT();
-	} else {
-	  CALLGRIND_TOGGLE_COLLECT();
-	  CALLGRIND_STOP_INSTRUMENTATION();
-	  g_get_current_time(&end);
-	  if (start.tv_usec > end.tv_usec) {
-	    end.tv_usec += 1000000;
-	    end.tv_sec  -= 1;
-	  }
-	  g_print("Callgrind enabled for %d.%6d seconds.\n",
-		 (int)(end.tv_sec - start.tv_sec),
-		 (int)(end.tv_usec - start.tv_usec));
-	}
-#endif
-}
-
-static void
 gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window)
 {
 	GncMainWindow *new_window;
@@ -3232,7 +3222,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
 				       "The GNU way to manage your money!");
-	const gchar *copyright = "© 1998-2005 Linas Vepstas";
+	const gchar *copyright = "© 1997-2006 Contributors";
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 

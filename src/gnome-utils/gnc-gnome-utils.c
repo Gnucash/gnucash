@@ -66,13 +66,13 @@ static int gnome_is_initialized = FALSE;
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
+  gnc_gnome_help (HF_HELP, HL_GLOBPREFS);
 }
 
 static void
 gnc_commodity_help_cb (void)
 {
-  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
+  gnc_gnome_help (HF_HELP, HL_COMMODITY);
 }
 
 /* gnc_configure_date_format

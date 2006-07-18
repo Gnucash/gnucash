@@ -1,14 +1,14 @@
-# translation of gnucash-1.9.6.po to
+# translation of gnucash-1.9.7.po to Slovak
 # Copyright (C) 2001, 2002, 2003, 2005, 2006 Free Software Foundation, Inc.
 #
-# Zdenko Podobný <zdpo@mailbox.sk>, 2001, 2002, 2003, 2004, 2005, 2006.
+# Zdenko Podobny <zdpo@mailbox.sk>, 2001, 2002, 2003, 2004, 2005, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-1.9.6\n"
+"Project-Id-Version: gnucash-1.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-14 19:06-0600\n"
-"PO-Revision-Date: 2006-05-20 17:52+0200\n"
-"Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
+"POT-Creation-Date: 2006-06-05 20:16-0600\n"
+"PO-Revision-Date: 2006-07-01 22:43+0200\n"
+"Last-Translator: Zdenko Podobny <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,27 +61,27 @@ msgstr "Numerická chyba"
 #. colon. You should only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:515
 msgid "not cleared:n"
-msgstr ""
+msgstr "n"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:517
 msgid "cleared:c"
-msgstr ""
+msgstr "o"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:519
 msgid "reconciled:y"
-msgstr ""
+msgstr "v"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:521
 msgid "frozen:f"
-msgstr ""
+msgstr "z"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:523
 msgid "void:v"
-msgstr "void:v"
+msgstr "ne"
 
 #: ../src/app-utils/gnc-ui-util.c:564 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
@@ -98,7 +98,7 @@ msgid "Retained Earnings"
 msgstr "Získané výnosy"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:640 ../src/engine/Account.c:2142
+#: ../src/app-utils/gnc-ui-util.c:640 ../src/engine/Account.c:2139
 #: ../src/register/ledger-core/split-register.c:2029
 #: ../intl-scm/guile-strings.c:2116
 msgid "Equity"
@@ -143,12 +143,6 @@ msgid ""
 msgstr ""
 "Je problém s voľbou %s:%s.\n"
 "%s"
-
-#. Translators: Name of the account where all the missing accounts
-#. are put into. (FIXME: is this correct?)
-#: ../src/backend/file/io-gncbin-r.c:507
-msgid "Lost Accounts"
-msgstr "Stratené účty"
 
 #: ../src/backend/postgres/PostgresBackend.c:1870
 #, c-format
@@ -291,16 +285,16 @@ msgstr "GnuCash %s"
 msgid "Built %s from r%s"
 msgstr "Vytvorené %s z r%s"
 
-#: ../src/bin/gnucash-bin.c:402
+#: ../src/bin/gnucash-bin.c:405
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
 msgstr "Informácie o cenách neboli získané. Financie::Quote nie je správne nainštalované.\n"
 
 #. Install Price Quote Sources
-#: ../src/bin/gnucash-bin.c:455
+#: ../src/bin/gnucash-bin.c:458
 msgid "Checking Finance::Quote..."
 msgstr "Kontrola Finance::Quote..."
 
-#: ../src/bin/gnucash-bin.c:462
+#: ../src/bin/gnucash-bin.c:465
 msgid "Loading data..."
 msgstr "Načítavanie dát..."
 
@@ -319,7 +313,7 @@ msgstr "Načítavanie dát..."
 #: ../src/register/ledger-core/split-register.c:2008
 #: ../intl-scm/guile-strings.c:1470 ../intl-scm/guile-strings.c:3058
 #: ../intl-scm/guile-strings.c:3352 ../intl-scm/guile-strings.c:3554
-#: ../intl-scm/guile-strings.c:3726 ../intl-scm/guile-strings.c:3834
+#: ../intl-scm/guile-strings.c:3726 ../intl-scm/guile-strings.c:3828
 msgid "Invoice"
 msgstr "Faktúra"
 
@@ -333,14 +327,14 @@ msgstr "Faktúra"
 #: ../src/business/business-gnome/dialog-invoice.c:2398
 #: ../intl-scm/guile-strings.c:3060 ../intl-scm/guile-strings.c:3354
 #: ../intl-scm/guile-strings.c:3556 ../intl-scm/guile-strings.c:3728
-#: ../intl-scm/guile-strings.c:3860
+#: ../intl-scm/guile-strings.c:3854
 msgid "Bill"
 msgstr "Účtenka"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/app-utils/prefs.scm
-#: ../src/business/business-core/gncInvoice.c:593 ../src/engine/Account.c:2141
-#: ../intl-scm/guile-strings.c:820 ../intl-scm/guile-strings.c:3830
+#: ../src/business/business-core/gncInvoice.c:593 ../src/engine/Account.c:2138
+#: ../intl-scm/guile-strings.c:820 ../intl-scm/guile-strings.c:3824
 msgid "Expense"
 msgstr "Výdaj"
 
@@ -371,8 +365,8 @@ msgstr "Auto rozdelenie "
 #: ../src/register/ledger-core/split-register.c:2004
 #: ../src/register/ledger-core/split-register.c:2009
 #: ../src/register/ledger-core/split-register.c:2018
-#: ../intl-scm/guile-strings.c:3816 ../intl-scm/guile-strings.c:3832
-#: ../intl-scm/guile-strings.c:3862
+#: ../intl-scm/guile-strings.c:3810 ../intl-scm/guile-strings.c:3826
+#: ../intl-scm/guile-strings.c:3856
 msgid "Payment"
 msgstr "Platba"
 
@@ -1346,11 +1340,11 @@ msgstr "_Typ:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
 msgid "<b>Bills</b>"
-msgstr ""
+msgstr "<b>Účty</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
 msgid "<b>Invoices</b>"
-msgstr ""
+msgstr "<b>Faktúry</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
 msgid "Default number of register rows to display in Invoices."
@@ -1367,7 +1361,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Number of _rows:"
-msgstr ""
+msgstr "Počet _riadkov:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:142
@@ -1403,7 +1397,7 @@ msgstr "_Akumulovať rozdelenia pri vystavení"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
-msgstr ""
+msgstr "Vopre_d o (dní)"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Notify when due"
@@ -1886,10 +1880,9 @@ msgstr "Aká daňová tabuľka sa má použiť pri tomto dodávateľovi?"
 #. Toplevel
 #. Extensions Menu
 #. src/business/business-reports/business-reports.scm
-#. src/business/business-gnome/business-gnome.scm
 #: ../src/business/business-gnome/gnc-plugin-business.c:148
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
-#: ../intl-scm/guile-strings.c:3108 ../intl-scm/guile-strings.c:3798
+#: ../intl-scm/guile-strings.c:3108
 msgid "_Business"
 msgstr "_Podnikanie"
 
@@ -2191,6 +2184,7 @@ msgstr "Kopírovať"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:115
 #: ../src/gnome-utils/gnc-main-window.c:253
 #: ../src/gnome/gnc-plugin-page-register.c:179
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:941
 msgid "_Paste"
 msgstr "_Vložiť"
 
@@ -2229,7 +2223,7 @@ msgid "Record the current entry"
 msgstr "Zaznamená aktuálnu položku"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:132
-#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:1995
+#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2000
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
@@ -2238,7 +2232,7 @@ msgid "Cancel the current entry"
 msgstr "Zruší aktuálnu položku"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:135
-#: ../src/gnome/glade/register.glade.h:82 ../src/gnome/window-reconcile.c:2023
+#: ../src/gnome/glade/register.glade.h:82 ../src/gnome/window-reconcile.c:2028
 msgid "_Delete"
 msgstr "O_dstrániť"
 
@@ -2608,7 +2602,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:119
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:510
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1036
-#: ../src/engine/Account.c:2133 ../intl-scm/guile-strings.c:2894
+#: ../src/engine/Account.c:2130 ../intl-scm/guile-strings.c:2894
 msgid "Cash"
 msgstr "Hotovosť"
 
@@ -2617,8 +2611,8 @@ msgstr "Hotovosť"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:122
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../intl-scm/guile-strings.c:1472 ../intl-scm/guile-strings.c:3828
-#: ../intl-scm/guile-strings.c:3844
+#: ../intl-scm/guile-strings.c:1472 ../intl-scm/guile-strings.c:3822
+#: ../intl-scm/guile-strings.c:3838
 msgid "Charge"
 msgstr "Výdavok"
 
@@ -2711,7 +2705,7 @@ msgstr "Medzisúčet"
 #. src/tax/us/de_DE.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:130
 #: ../intl-scm/guile-strings.c:3346 ../intl-scm/guile-strings.c:3540
-#: ../intl-scm/guile-strings.c:3720 ../intl-scm/guile-strings.c:3806
+#: ../intl-scm/guile-strings.c:3720 ../intl-scm/guile-strings.c:3800
 msgid "Tax"
 msgstr "Daň"
 
@@ -2900,32 +2894,32 @@ msgid "_Value: "
 msgstr ""
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2132 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2129 ../src/import-export/hbci/gnc-hbci-utils.c:586
 #: ../intl-scm/guile-strings.c:2892
 msgid "Bank"
 msgstr "Bankový účet"
 
-#: ../src/engine/Account.c:2134
+#: ../src/engine/Account.c:2131
 msgid "Asset"
 msgstr "Aktíva"
 
-#: ../src/engine/Account.c:2135
+#: ../src/engine/Account.c:2132
 msgid "Credit Card"
 msgstr "Platobná karta"
 
-#: ../src/engine/Account.c:2136
+#: ../src/engine/Account.c:2133
 msgid "Liability"
 msgstr "Pasíva"
 
-#: ../src/engine/Account.c:2137
+#: ../src/engine/Account.c:2134
 msgid "Stock"
 msgstr "Akcie"
 
-#: ../src/engine/Account.c:2138
+#: ../src/engine/Account.c:2135
 msgid "Mutual Fund"
 msgstr "Investičný fond"
 
-#: ../src/engine/Account.c:2139 ../src/gnome-utils/dialog-commodity.c:731
+#: ../src/engine/Account.c:2136 ../src/gnome-utils/dialog-commodity.c:731
 #: ../src/gnome-utils/gnc-tree-view-price.c:441
 msgid "Currency"
 msgstr "Mena"
@@ -2933,18 +2927,18 @@ msgstr "Mena"
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/report-system/report-utilities.scm
 #. src/app-utils/prefs.scm
-#: ../src/engine/Account.c:2140
+#: ../src/engine/Account.c:2137
 #: ../src/register/ledger-core/split-register.c:2045
 #: ../intl-scm/guile-strings.c:818 ../intl-scm/guile-strings.c:2908
-#: ../intl-scm/guile-strings.c:3856
+#: ../intl-scm/guile-strings.c:3850
 msgid "Income"
 msgstr "Príjem"
 
-#: ../src/engine/Account.c:2143
+#: ../src/engine/Account.c:2140
 msgid "A/Receivable"
 msgstr "Účet na zaplatenie"
 
-#: ../src/engine/Account.c:2144
+#: ../src/engine/Account.c:2141
 msgid "A/Payable"
 msgstr "Splatná faktúra"
 
@@ -3114,29 +3108,29 @@ msgstr "-- Rozdeliť transakciu --"
 msgid "Split"
 msgstr "Rozdelenia"
 
-#: ../src/engine/Transaction.c:1732
+#: ../src/engine/Transaction.c:1733
 msgid "Voided transaction"
 msgstr ""
 
 #. Dirtying taken care of by SetReadOnly
-#: ../src/engine/Transaction.c:1743
+#: ../src/engine/Transaction.c:1744
 msgid "Transaction Voided"
 msgstr ""
 
-#: ../src/engine/cap-gains.c:230
+#: ../src/engine/cap-gains.c:237
 msgid "Orphaned Gains"
 msgstr ""
 
-#: ../src/engine/cap-gains.c:244 ../src/engine/cap-gains.c:958
-#: ../src/engine/cap-gains.c:963 ../src/engine/cap-gains.c:964
+#: ../src/engine/cap-gains.c:251 ../src/engine/cap-gains.c:974
+#: ../src/engine/cap-gains.c:979 ../src/engine/cap-gains.c:980
 msgid "Realized Gain/Loss"
 msgstr ""
 
-#: ../src/engine/cap-gains.c:246
+#: ../src/engine/cap-gains.c:253
 msgid "Realized Gains or Losses from Commodity or Trading Accounts that haven't been recorded elsewhere."
 msgstr ""
 
-#: ../src/engine/cap-gains.c:574
+#: ../src/engine/cap-gains.c:584
 msgid "Lot"
 msgstr ""
 
@@ -3479,11 +3473,11 @@ msgstr "Nie je možné vytvoriť počiatočný stav."
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/transaction.scm
 #. src/business/business-reports/owner-report.scm
-#: ../src/gnome-utils/dialog-account.c:647 ../src/gnome-utils/gnc-icons.c:14
+#: ../src/gnome-utils/dialog-account.c:647 ../src/gnome-utils/gnc-icons.c:16
 #: ../src/gnome/dialog-find-transactions.c:103
 #: ../src/gnome/glade/stocks.glade.h:3
 #: ../src/import-export/generic-import.glade.h:11
-#: ../src/import-export/hbci/gnc-hbci-utils.c:590
+#: ../src/import-export/hbci/gnc-hbci-utils.c:585
 #: ../src/import-export/qif-import/qif.glade.h:2
 #: ../src/register/ledger-core/split-register-model.c:177
 #: ../intl-scm/guile-strings.c:848 ../intl-scm/guile-strings.c:1124
@@ -3839,7 +3833,7 @@ msgstr ""
 msgid "You have already corrected the problem and restarted the gconf backend with the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will continue loading."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:188
+#: ../src/gnome-utils/druid-gnc-xml-import.c:189
 msgid ""
 "The file you tried to load does not specify an encoding, so GnuCash is unable to unambiguously interpret it. This is typical for files created with GnuCash prior to 2.0.\n"
 "\n"
@@ -3850,159 +3844,159 @@ msgid ""
 "The page is not overly complicated, just take the time until you feel comfortable with it. You can always come back and read this message again."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:202
+#: ../src/gnome-utils/druid-gnc-xml-import.c:203
 msgid "Missing file encoding"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:205
+#: ../src/gnome-utils/druid-gnc-xml-import.c:206
 msgid ""
 "The file has been loaded successfully. If you click 'Apply' it will be saved and reloaded into the main application. That way you will have a working file as backup in the same directory.\n"
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:227
+#: ../src/gnome-utils/druid-gnc-xml-import.c:228
 msgid "Unicode"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:229
+#: ../src/gnome-utils/druid-gnc-xml-import.c:230
 msgid "European"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:230
+#: ../src/gnome-utils/druid-gnc-xml-import.c:231
 msgid "ISO-8859-1 (West European)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:231
+#: ../src/gnome-utils/druid-gnc-xml-import.c:232
 msgid "ISO-8859-2 (East European)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:232
+#: ../src/gnome-utils/druid-gnc-xml-import.c:233
 msgid "ISO-8859-3 (South European)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:233
+#: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "ISO-8859-4 (North European)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:234
+#: ../src/gnome-utils/druid-gnc-xml-import.c:235
 msgid "ISO-8859-5 (Cyrillic)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:235
+#: ../src/gnome-utils/druid-gnc-xml-import.c:236
 msgid "ISO-8859-6 (Arabic)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:236
+#: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-7 (Greek)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:237
+#: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-8 (Hebrew)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:238
+#: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-9 (Turkish)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:239
+#: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-10 (Nordic)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:240
+#: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-11 (Thai)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:241
+#: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-13 (Baltic)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:242
+#: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-14 (Celtic)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:243
+#: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-15 (West European, Euro sign)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:244
+#: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-16 (South-East European)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:245
+#: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "Cyrillic"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:246
+#: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "KOI8-R (Russian)"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:247
+#: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "KOI8-U (Ukrainian)"
 msgstr ""
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
-#: ../src/gnome-utils/druid-gnc-xml-import.c:597
+#: ../src/gnome-utils/druid-gnc-xml-import.c:571
 msgid "ISO-8859-1 KOI8-U"
 msgstr ""
 
 #. another error, cannot handle this here
-#: ../src/gnome-utils/druid-gnc-xml-import.c:712
-#: ../src/gnome-utils/druid-gnc-xml-import.c:731
+#: ../src/gnome-utils/druid-gnc-xml-import.c:692
+#: ../src/gnome-utils/druid-gnc-xml-import.c:711
 msgid "The file could not be reopen."
 msgstr ""
 
 #. try to load once again
-#: ../src/gnome-utils/druid-gnc-xml-import.c:719
-#: ../src/gnome-utils/gnc-file.c:741 ../src/gnome-utils/gnc-file.c:753
+#: ../src/gnome-utils/druid-gnc-xml-import.c:699
+#: ../src/gnome-utils/gnc-file.c:746 ../src/gnome-utils/gnc-file.c:758
 msgid "Reading file..."
 msgstr "Čítanie súbora..."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:739
+#: ../src/gnome-utils/druid-gnc-xml-import.c:719
 msgid "Parsing file..."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:746
+#: ../src/gnome-utils/druid-gnc-xml-import.c:726
 msgid "There was an error parsing the file."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:769
-#: ../src/gnome-utils/gnc-file.c:967
+#: ../src/gnome-utils/druid-gnc-xml-import.c:749
+#: ../src/gnome-utils/gnc-file.c:972
 msgid "Writing file..."
 msgstr "Zapisujem do súboru..."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:847
+#: ../src/gnome-utils/druid-gnc-xml-import.c:827
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:853
+#: ../src/gnome-utils/druid-gnc-xml-import.c:833
 #, c-format
 msgid "There are %d unassigned words. Please decide on them or add encodings."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:861
+#: ../src/gnome-utils/druid-gnc-xml-import.c:841
 #, c-format
 msgid "There are %d undecodable words. Please add encodings."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1049
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1029
 msgid "That GnuCash XML file is already loaded. Please select another file."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1347
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1330
 msgid "This encoding has been added to the list already."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1357
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1340
 msgid "This is an invalid encoding."
-msgstr ""
+msgstr "Toto je neplatné kódovanie."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1492
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1475
 msgid "No files to merge. Please add ones by clicking on 'Load another file'."
-msgstr ""
+msgstr "Nie sú žiadne súbory pre spojenie. Prodajte prosím nejaké pomocou kliknunia na 'Načítať ďaľší súbor"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:1
 msgid "1 /"
@@ -4010,11 +4004,11 @@ msgstr "1 /"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:2
 msgid "<b>Quote Source Information</b>"
-msgstr ""
+msgstr "<b>Informácie o zdroji cien</b>"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:3
 msgid "CUSI_P or other code:"
-msgstr ""
+msgstr "CUSI_P alebo iný kód"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:4
 msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
@@ -4038,11 +4032,11 @@ msgstr "Vložte typ komodity: Pre akcie je to často burza, kde sa s akciami obc
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "F_raction traded:"
-msgstr ""
+msgstr "O_bchodovateľný podiel:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
 msgid "Select security/currency "
-msgstr ""
+msgstr "Vyberte cenný papier/menu "
 
 #: ../src/gnome-utils/glade/commodity.glade.h:11
 msgid "Select user information here..."
@@ -4050,7 +4044,7 @@ msgstr "Tu si vyberte informácie o používateľovi..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:12
 msgid "Si_ngle:"
-msgstr ""
+msgstr "Jede_n:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:13
 msgid "These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes."
@@ -4066,11 +4060,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/commodity.glade.h:16
 msgid "Time_zone:"
-msgstr ""
+msgstr "Časová _zóna:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid "Type of quote source:"
-msgstr ""
+msgstr "Typ zdroja cien:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:18
 msgid "Warning: Finance::Quote not installed properly."
@@ -4078,23 +4072,23 @@ msgstr "Varovanie: Financie::Quote nie je správne nainštalované."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:19
 msgid "_Full name:"
-msgstr ""
+msgstr "Úp_lný názov"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:20
 msgid "_Get Online Quotes"
-msgstr ""
+msgstr "Stia_hnuť online údaje"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:21
 msgid "_Multiple:"
-msgstr ""
+msgstr "_Viac:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:22
 msgid "_Symbol/abbreviation:"
-msgstr ""
+msgstr "_Symbol/skratka:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:24
 msgid "_Unknown:"
-msgstr ""
+msgstr "_Neznámy:"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -4308,11 +4302,11 @@ msgstr "Zrušiť zvolený súbor"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:17
 msgid "_Edit list of encodings"
-msgstr ""
+msgstr "_Upraviť zoznam kódovaní"
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:1
 msgid "<b>Current File List</b>"
-msgstr ""
+msgstr "<b>Aktuálny zoznam súborov</b>"
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:2
 msgid ""
@@ -4323,7 +4317,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:5
 msgid "_Load another file"
-msgstr ""
+msgstr "Načítať ďa_lší súbor"
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 msgid "_Unload selected file"
@@ -4368,11 +4362,11 @@ msgstr ""
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:2
 #, no-c-format
 msgid "%Y-%m-%d"
-msgstr ""
+msgstr "%Y-%m-%d"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:4
 msgid "Abbreviation"
-msgstr ""
+msgstr "Skratka"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:5
 msgid "Date format:"
@@ -4380,7 +4374,7 @@ msgstr "Formát dátumu:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:6
 msgid "December 31, 2000"
-msgstr ""
+msgstr "December 31, 2000"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:7
 #: ../src/import-export/generic-import.glade.h:32
@@ -4443,19 +4437,19 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:4
 msgid "Remember the answer and don't tell me again."
-msgstr ""
+msgstr "Pamätať si odpoveď a už mi nepripomínať znova."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:1
 msgid "'_Enter' moves to blank transaction"
-msgstr ""
+msgstr "'_Enter' presúva na prázdnu transkaciu"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:2
 msgid "07/31/05"
-msgstr ""
+msgstr "07/31/05"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:3
 msgid "2005-07-31"
-msgstr ""
+msgstr "2005-07-3"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:4
 msgid "31.07.05"
@@ -4488,7 +4482,7 @@ msgstr "<b>Štandardný štýl</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:11
 msgid "<b>End Date</b>"
-msgstr "<b>Konečný Dátum</b>"
+msgstr "<b>Dátum do</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:12
 msgid "<b>Fancy Date Format</b>"
@@ -4500,7 +4494,7 @@ msgstr "<b>Súbory</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:14
 msgid "<b>General</b>"
-msgstr "<b>Všeobecný</b>"
+msgstr "<b>Všeobecné</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:15
 msgid "<b>Graphics</b>"
@@ -4508,7 +4502,7 @@ msgstr "<b>Grafika</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:16
 msgid "<b>Labels</b>"
-msgstr ""
+msgstr "<b>Označenia</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:17
 msgid "<b>Location</b>"
@@ -4520,7 +4514,7 @@ msgstr "<b>Číslo</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:19
 msgid "<b>Other Defaults</b>"
-msgstr ""
+msgstr "<b>Ostatné štandardy</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:20
 msgid "<b>Reconciling</b>"
@@ -4528,7 +4522,7 @@ msgstr "<b>Vysporiadanie</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:21
 msgid "<b>Reverse Balanced Accounts</b>"
-msgstr ""
+msgstr "<b>Protiúčty</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:22
 msgid "<b>Search Dialog</b>"
@@ -4536,15 +4530,15 @@ msgstr "<b>Vyhľadávací dialóg</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:23
 msgid "<b>Separator Character</b>"
-msgstr ""
+msgstr "<b>Oddelovací znak</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:24
 msgid "<b>Start Date</b>"
-msgstr "<b>Začiatočný Dátum</b>"
+msgstr "<b>Dátum od</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:25
 msgid "<b>Summarybar Content</b>"
-msgstr ""
+msgstr "<b>Obsah sumárneho panela</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:26
 msgid "<b>Time Format</b>"
@@ -4598,11 +4592,11 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:35
 msgid "Automatic _interest transfer"
-msgstr ""
+msgstr "Automatický transfer ú_roku"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:36
 msgid "Automatic credit card _payment"
-msgstr ""
+msgstr "Automatické _platby kreditkou kartou"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:37
 msgid "Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)"
@@ -4618,31 +4612,31 @@ msgstr "Automaticky zobraziť zoznam účtov alebo úkon počas vkladania."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
 msgid "C_redit accounts"
-msgstr ""
+msgstr "K_reditné účty"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:41
 msgid "Ch_oose:"
-msgstr ""
+msgstr "Vy_berte:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:42
 msgid "Character:"
-msgstr ""
+msgstr "Znak:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:43
 msgid "Check cleared _transactions"
-msgstr ""
+msgstr "Kontrolovať vyčistené _transakcie"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:44
 msgid "Com_press files"
-msgstr ""
+msgstr "Kom_primovať súbory"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid "Compress the data file with gzip when saving it to disk."
-msgstr ""
+msgstr "Pri ukladaní súboru na disk komprimovať súbor pomocu gzip."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:46
 msgid "Date/Time"
-msgstr ""
+msgstr "Dátum/Čas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:3
@@ -4655,7 +4649,7 @@ msgstr "Zmazať staré súbory log/záloh po týchto dňoch (0 = nikdy)."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Display \"_tip of the day\" dialog"
-msgstr ""
+msgstr "Zobraziť dialód \"_tip dňa"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Display hints for using GnuCash at startup"
@@ -4663,7 +4657,7 @@ msgstr "Pri štarte zobraz typy pre používanie GnuCash"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:51
 msgid "Display ne_gative amounts in red"
-msgstr ""
+msgstr "_Záporné sumy zobraziť červenou"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:52
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
@@ -4676,7 +4670,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:54
 msgid "Display toolbar items as icons only."
-msgstr ""
+msgstr "Zobraziť panel nástrojov iba s ikonami."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:55
 msgid "Display toolbar items as text only."
@@ -4696,19 +4690,19 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:59
 msgid "Double _mode colors alternate with transactions"
-msgstr ""
+msgstr "Dvoj_farebný alternatívny režim s transakciami"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Draw _vertical lines between columns"
-msgstr ""
+msgstr "Kresliť z_vislé čiary medzi stĺpcami"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:61
 msgid "Draw hori_zontal lines between rows"
-msgstr ""
+msgstr "_Kresliť vodorovné čiary medzi riadkami"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Enables support for the European Union EURO currency."
-msgstr ""
+msgstr "Povoliť podporu pre menu Európskej únie EURO."
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -4738,7 +4732,7 @@ msgstr "Všeobecné"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "GnuCash Options"
-msgstr ""
+msgstr "Gnucash voľby"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:65
 msgid "GnuCash Preferences"
@@ -4770,31 +4764,31 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:72
 msgid "Include _grand total"
-msgstr ""
+msgstr "Vrátane _celkového súčtu"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Include _non-currency totals"
-msgstr ""
+msgstr "Vrátane _nepeňažných súčtov"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Loc_ale:"
-msgstr ""
+msgstr "Loc_ale:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "New search _limit:"
-msgstr ""
+msgstr "Nový _limit hľadania:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Number of _transactions:"
-msgstr ""
+msgstr "Počet _transakcií:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid "Perform account list _setup on new file"
-msgstr ""
+msgstr "Pri novom súbore _spustiť nastavenie účtov"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr ""
+msgstr "Pri vytváraní dialógu Vysporiadanie vykonať predkontrolu očistených transakcií"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:80
 msgid "Present the new account list dialog when you choose \"New File\" from the \"File\" menu"
@@ -4819,11 +4813,11 @@ msgstr "Register"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid "Register Defaults"
-msgstr ""
+msgstr "Štandardy registra"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "Register opens in a new _window"
-msgstr ""
+msgstr "Register otvára nové _okno"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "Report opens in a new _window"
@@ -4831,7 +4825,7 @@ msgstr "_Výkaz sa otvorí v novom okne"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "Reports"
-msgstr "Vý_kazy"
+msgstr "Výkazy"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "Show a close button on each notebook tab.  These function identically to the 'Close' menu item."
@@ -4843,15 +4837,15 @@ msgstr "Zobrazovať súčty všetkých účtov skonvertované do štandardnej me
 
 #: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "Show all transactions on one line. (Two in double line mode.)"
-msgstr ""
+msgstr "Zobraziť všetky transakcie na jednom riadku (na dvoch pri dvojriadkovom režime"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Show close button on _notebook tabs"
-msgstr ""
+msgstr "Zobraziť tlačidlo \"Zatvoriť\" na kartách"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Show horizontal borders on the cells."
-msgstr ""
+msgstr "Zobraziť vodorovné okraje na bunkách."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Show this many transactions in a register. A value of zero means show all transactions."
@@ -4887,7 +4881,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Transaction _journal"
-msgstr "Denník transakcií"
+msgstr "Denník _transakcií"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "US Dollars (USD)"
@@ -4983,51 +4977,51 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "_Auto-raise lists"
-msgstr ""
+msgstr "_Automaticky ponukané zoznamy"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid "_Auto-split ledger"
-msgstr ""
+msgstr "_Automaticky delená účtovná kniha"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "_Automatic decimal point"
-msgstr ""
+msgstr "_Automatická desatinná čiarka"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "_Basic ledger"
-msgstr ""
+msgstr "_Základná účtovná kniha"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "_Decimal places:"
-msgstr ""
+msgstr "_Desatinné miesta:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "_Double line mode"
-msgstr ""
+msgstr "_Dvojriadkový režim"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "_Enable euro support"
-msgstr ""
+msgstr "Povoliť podporu _Euro"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "_Europe:"
-msgstr ""
+msgstr "_Európa:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "_ISO:"
-msgstr ""
+msgstr "_ISO:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "_Icons only"
-msgstr ""
+msgstr "Iba _ikony"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid "_Income & expense"
-msgstr ""
+msgstr "Príj_my & výdaje"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "_None"
-msgstr ""
+msgstr "Žiad_ne"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "_Relative:"
@@ -5185,274 +5179,274 @@ msgstr ""
 msgid "Failed to open file: %s: %s"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:834
+#: ../src/gnome-utils/gnc-file.c:97 ../src/gnome-utils/gnc-file.c:839
 #: ../src/gnome/gnc-plugin-page-account-tree.c:217
-#: ../src/gnome/gnc-plugin-page-budget.c:168 ../src/gnome/lot-viewer.c:427
-#: ../src/gnome/window-reconcile.c:1559
+#: ../src/gnome/gnc-plugin-page-budget.c:168 ../src/gnome/lot-viewer.c:436
+#: ../src/gnome/window-reconcile.c:1564
 msgid "Open"
 msgstr "Otvoriť"
 
-#: ../src/gnome-utils/gnc-file.c:100 ../src/gnome-utils/gnc-main-window.c:231
+#: ../src/gnome-utils/gnc-file.c:101 ../src/gnome-utils/gnc-main-window.c:231
 msgid "_Import"
 msgstr "_Import"
 
-#: ../src/gnome-utils/gnc-file.c:102 ../src/gnome-utils/gnc-file.c:256
+#: ../src/gnome-utils/gnc-file.c:103 ../src/gnome-utils/gnc-file.c:261
 msgid "Import"
 msgstr "Import"
 
-#: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1015
+#: ../src/gnome-utils/gnc-file.c:109 ../src/gnome-utils/gnc-file.c:1020
 msgid "Save"
 msgstr "Uložiť"
 
-#: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-main-window.c:232
+#: ../src/gnome-utils/gnc-file.c:113 ../src/gnome-utils/gnc-main-window.c:232
 msgid "_Export"
 msgstr "_Export"
 
-#: ../src/gnome-utils/gnc-file.c:115 ../src/gnome-utils/gnc-file.c:272
-#: ../src/gnome-utils/gnc-file.c:872
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:948
+#: ../src/gnome-utils/gnc-file.c:116 ../src/gnome-utils/gnc-file.c:277
+#: ../src/gnome-utils/gnc-file.c:877
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:975
 msgid "Export"
 msgstr "Export"
 
-#: ../src/gnome-utils/gnc-file.c:156
+#: ../src/gnome-utils/gnc-file.c:159
 msgid "All files"
 msgstr "Všetky súbory"
 
 #. Just in case
-#: ../src/gnome-utils/gnc-file.c:196
+#: ../src/gnome-utils/gnc-file.c:201
 #: ../src/import-export/hbci/druid-hbci-utils.c:159
 #: ../src/import-export/hbci/druid-hbci-utils.c:173
 msgid "(null)"
 msgstr "(nič)"
 
-#: ../src/gnome-utils/gnc-file.c:205
+#: ../src/gnome-utils/gnc-file.c:210
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:210
+#: ../src/gnome-utils/gnc-file.c:215
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:215
+#: ../src/gnome-utils/gnc-file.c:220
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:220
+#: ../src/gnome-utils/gnc-file.c:225
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:226
+#: ../src/gnome-utils/gnc-file.c:231
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:232
+#: ../src/gnome-utils/gnc-file.c:237
 msgid "This file/URL appears to be from a newer version of GnuCash. You must upgrade your version of GnuCash to work with this data."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:239
+#: ../src/gnome-utils/gnc-file.c:244
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:249
+#: ../src/gnome-utils/gnc-file.c:254
 #, c-format
 msgid "GnuCash could not obtain the lock for %s. That database may be in use by another user, in which case you should not open the database. Do you want to proceed with opening the database?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:257
+#: ../src/gnome-utils/gnc-file.c:262
 #, c-format
 msgid "GnuCash could not obtain the lock for %s. That database may be in use by another user, in which case you should not import the database. Do you want to proceed with importing the database?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:265
+#: ../src/gnome-utils/gnc-file.c:270
 #, c-format
 msgid "GnuCash could not obtain the lock for %s. That database may be in use by another user, in which case you should not save the database. Do you want to proceed with saving the database?"
 msgstr "GnuCash nemôže získať zámok pre %s. Databáza môže byť používaná iným užívateľom, a preto nebude možné uložiť databázu. Prajete si pokračovať v ukladaní databázy?"
 
-#: ../src/gnome-utils/gnc-file.c:273
+#: ../src/gnome-utils/gnc-file.c:278
 #, c-format
 msgid "GnuCash could not obtain the lock for %s. That database may be in use by another user, in which case you should not export the database. Do you want to proceed with exporting the database?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:296
+#: ../src/gnome-utils/gnc-file.c:301
 #, c-format
 msgid "GnuCash could not write to %s. That database may be on a read-only file system, or you may not have write permission for the directory."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:303
+#: ../src/gnome-utils/gnc-file.c:308
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:309
+#: ../src/gnome-utils/gnc-file.c:314
 #, c-format
 msgid "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:315
+#: ../src/gnome-utils/gnc-file.c:320
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:320
+#: ../src/gnome-utils/gnc-file.c:325
 #: ../src/register/register-core/formulacell.c:116
 #: ../src/register/register-core/pricecell.c:180
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:326
+#: ../src/gnome-utils/gnc-file.c:331
 #, c-format
 msgid "Invalid QSF Object file! The QSF object file %s failed to validate against the QSF object schema. The XML structure of the file is either not well-formed or contains illegal data."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:333
+#: ../src/gnome-utils/gnc-file.c:338
 #, c-format
 msgid "Invalid QSF Map file! The QSF map file %s failed to validate against the QSF map schema. The XML structure of the file is either not well-formed or contains illegal data."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:340
+#: ../src/gnome-utils/gnc-file.c:345
 #, c-format
 msgid "The QSF Map file %s was written for a different version of QOF.  It may need to be modified to work with your current QOF installation."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:347
+#: ../src/gnome-utils/gnc-file.c:352
 #, c-format
 msgid "The selected QSF map %s contains unusable data. This is usually because not all the required parameters for the defined objects have calculations described in the map."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:354
+#: ../src/gnome-utils/gnc-file.c:359
 #, c-format
 msgid "The selected QSF object file %s contains one or more invalid GUIDs. The file cannot be processed - please check the source of the file and try again."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:361
+#: ../src/gnome-utils/gnc-file.c:366
 #, c-format
 msgid "The selected QSF Object file %s requires a map but it was not provided."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:367
+#: ../src/gnome-utils/gnc-file.c:372
 #, c-format
 msgid "Wrong QSF map selected. The selected map %s validates but was written for different QOF objects.  The list of objects defined in this map does not include all the objects described in the current QSF object file."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:375
+#: ../src/gnome-utils/gnc-file.c:380
 #, c-format
 msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:381
+#: ../src/gnome-utils/gnc-file.c:386
 #, c-format
 msgid "When converting XML strings into numbers, an overflow has been detected. The QSF object file %s contains invalid data in a field that is meant to hold a number."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:388
+#: ../src/gnome-utils/gnc-file.c:393
 #, c-format
 msgid "The QSF object file %s is valid and contains GnuCash objects. However, GnuCash cannot open the file directly because the data needs to be merged into an existing GnuCash data book. Please open a GnuCash file or create a new one, then import this QSF object file so that the data can be merged into the main data book."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:398
+#: ../src/gnome-utils/gnc-file.c:403
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr ""
-
-#: ../src/gnome-utils/gnc-file.c:404
-#, c-format
-msgid "There was an error parsing the file %s."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:409
 #, c-format
-msgid "The file %s is empty."
+msgid "There was an error parsing the file %s."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:414
 #, c-format
-msgid "The file %s could not be found."
+msgid "The file %s is empty."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:419
+#, c-format
+msgid "The file %s could not be found."
+msgstr ""
+
+#: ../src/gnome-utils/gnc-file.c:424
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:425
+#: ../src/gnome-utils/gnc-file.c:430
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "Typ súboru %s je neznámy."
 
-#: ../src/gnome-utils/gnc-file.c:430
+#: ../src/gnome-utils/gnc-file.c:435
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:435
+#: ../src/gnome-utils/gnc-file.c:440
 #, c-format
 msgid "Could not write to file %s Check that you have permission to write to this file and that there is sufficient space to create it."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:442
+#: ../src/gnome-utils/gnc-file.c:447
 msgid "This database is from an older version of GnuCash. Do you want to want to upgrade the database to the current version?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:449
+#: ../src/gnome-utils/gnc-file.c:454
 msgid "The SQL database is in use by other users, and the upgrade cannot be performed until they logoff. If there are currently no other users, consult the  documentation to learn how to clear out dangling login sessions."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:459
+#: ../src/gnome-utils/gnc-file.c:464
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:548
+#: ../src/gnome-utils/gnc-file.c:553
 msgid "Save changes to the file?"
 msgstr "Uložiť zmeny do súboru?"
 
-#: ../src/gnome-utils/gnc-file.c:551 ../src/gnome-utils/gnc-main-window.c:903
+#: ../src/gnome-utils/gnc-file.c:556 ../src/gnome-utils/gnc-main-window.c:903
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr "Ak nevykonáte úloženie dát, zmeny za posledných %d minút budú ignorované."
 
-#: ../src/gnome-utils/gnc-file.c:565
+#: ../src/gnome-utils/gnc-file.c:570
 msgid "Continue _Without Saving"
 msgstr "Pokračovať _bez uloženia"
 
-#: ../src/gnome-utils/gnc-file.c:645
+#: ../src/gnome-utils/gnc-file.c:650
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash nevie získať zámok pre %s."
 
-#: ../src/gnome-utils/gnc-file.c:647
+#: ../src/gnome-utils/gnc-file.c:652
 msgid "That database may be in use by another user, in which case you should not open the database. What would you like to do?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:650
+#: ../src/gnome-utils/gnc-file.c:655
 msgid "That database may be on a read-only file system, or you may not have write permission for the directory. If you proceed you may not be able to save any changes. What would you like to do?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:667
+#: ../src/gnome-utils/gnc-file.c:672
 msgid "_Open Anyway"
 msgstr "Aj tak _otvoriť"
 
-#: ../src/gnome-utils/gnc-file.c:669
+#: ../src/gnome-utils/gnc-file.c:674
 msgid "_Create New File"
 msgstr "Vy_tvoriť nový súbor"
 
-#: ../src/gnome-utils/gnc-file.c:908 ../src/gnome-utils/gnc-file.c:1104
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1300
+#: ../src/gnome-utils/gnc-file.c:913 ../src/gnome-utils/gnc-file.c:1109
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1327
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:923
+#: ../src/gnome-utils/gnc-file.c:928
 msgid "Exporting file..."
 msgstr "Exportovanie súboru..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:936
+#: ../src/gnome-utils/gnc-file.c:941
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -5497,40 +5491,40 @@ msgstr "HTTP prístup k sieti je zakázaný. Môžete ho povoliť v sekcií Sie�
 msgid "There was an error accessing %s."
 msgstr "Vyskytla sa chyba počas prístupu k %s."
 
-#: ../src/gnome-utils/gnc-icons.c:15
+#: ../src/gnome-utils/gnc-icons.c:17
 msgid "_Delete Account"
 msgstr "O_dstrániť účet"
 
 #. Edit menu
-#: ../src/gnome-utils/gnc-icons.c:16
+#: ../src/gnome-utils/gnc-icons.c:18
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
-#: ../src/gnome/window-reconcile.c:2004
+#: ../src/gnome/window-reconcile.c:2009
 msgid "_Edit Account"
 msgstr "_Upraviť účet"
 
-#: ../src/gnome-utils/gnc-icons.c:17
+#: ../src/gnome-utils/gnc-icons.c:19
 msgid "_New Account"
 msgstr "_Nový účet"
 
 #. Account menu
-#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2001
+#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2006
 msgid "_Open Account"
 msgstr "_Otvoriť účet"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-icons.c:19
+#: ../src/gnome-utils/gnc-icons.c:21
 #: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:228
-#: ../src/gnome/window-reconcile.c:2007
+#: ../src/gnome/window-reconcile.c:2012
 msgid "_Transfer..."
 msgstr "_Previesť..."
 
-#: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/glade/register.glade.h:39
+#: ../src/gnome-utils/gnc-icons.c:22 ../src/gnome/glade/register.glade.h:39
 #: ../src/gnome/gnc-plugin-page-register.c:275
 msgid "S_plit Transaction"
 msgstr "Roz_deliť transakciu"
 
-#: ../src/gnome-utils/gnc-icons.c:21 ../src/gnome/glade/register.glade.h:88
+#: ../src/gnome-utils/gnc-icons.c:23 ../src/gnome/glade/register.glade.h:88
 #: ../src/gnome/gnc-plugin-page-register.c:246
 msgid "_Jump"
 msgstr "_Skok"
@@ -5546,7 +5540,7 @@ msgstr "_Súbor"
 #: ../src/gnome/dialog-sxsincelast.c:401 ../src/gnome/glade/price.glade.h:22
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/glade/sched-xact.glade.h:203
-#: ../src/gnome/window-reconcile.c:2020
+#: ../src/gnome/window-reconcile.c:2025
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
 msgstr "_Upraviť"
@@ -5587,14 +5581,14 @@ msgstr "_Okná"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:225
-#: ../src/gnome/window-reconcile.c:1981 ../src/gnome/window-reconcile.c:2029
+#: ../src/gnome/window-reconcile.c:1986 ../src/gnome/window-reconcile.c:2034
 msgid "_Help"
 msgstr "_Pomocník"
 
 #. File menu
 #. Transaction menu
 #: ../src/gnome-utils/gnc-main-window.c:229
-#: ../src/gnome/window-reconcile.c:2017
+#: ../src/gnome/window-reconcile.c:2022
 msgid "_New"
 msgstr "_Nový"
 
@@ -5608,7 +5602,7 @@ msgstr "_Tlač..."
 
 #: ../src/gnome-utils/gnc-main-window.c:234
 msgid "Print the currently active page"
-msgstr ""
+msgstr "Vytlačí aktuálnu aktívnu stránku"
 
 #: ../src/gnome-utils/gnc-main-window.c:235
 msgid "Proper_ties"
@@ -5637,23 +5631,31 @@ msgstr "Ukočenie aplikácie"
 #. Edit menu
 #: ../src/gnome-utils/gnc-main-window.c:247
 #: ../src/gnome/gnc-plugin-page-register.c:173
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:935
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
 #: ../src/gnome-utils/gnc-main-window.c:248
+#: ../src/gnome/gnc-plugin-page-register.c:174
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:936
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Vystrinutie aktuálneho výberu a jeho skopírovanie do schránky"
 
 #: ../src/gnome-utils/gnc-main-window.c:250
 #: ../src/gnome/gnc-plugin-page-register.c:176
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:938
 msgid "_Copy"
 msgstr "_Kopírovať"
 
 #: ../src/gnome-utils/gnc-main-window.c:251
+#: ../src/gnome/gnc-plugin-page-register.c:177
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:939
 msgid "Copy the current selection to clipboard"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:254
+#: ../src/gnome/gnc-plugin-page-register.c:180
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:942
 msgid "Paste the clipboard content at the cursor position"
 msgstr ""
 
@@ -5697,7 +5699,7 @@ msgstr "Obnoviť toto okno"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:272
-#: ../src/gnome/window-reconcile.c:2010
+#: ../src/gnome/window-reconcile.c:2015
 msgid "_Check & Repair"
 msgstr "_Kontrola a oprava"
 
@@ -5848,30 +5850,30 @@ msgstr "Pokúšate sa ukončiť posledné Gnucash okno. Týmto ukončíte aplik�
 msgid "<no file>"
 msgstr "<žiaden súbor>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3233
+#: ../src/gnome-utils/gnc-main-window.c:3263
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3246
+#: ../src/gnome-utils/gnc-main-window.c:3276
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:3249
+#: ../src/gnome-utils/gnc-main-window.c:3279
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr ""
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3261
-#: ../src/gnome-utils/gnc-main-window.c:3300
+#: ../src/gnome-utils/gnc-main-window.c:3291
+#: ../src/gnome-utils/gnc-main-window.c:3330
 msgid "translator_credits"
-msgstr ""
+msgstr "Zdenko Podobný"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3278
+#: ../src/gnome-utils/gnc-main-window.c:3308
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -5884,81 +5886,81 @@ msgstr ""
 #. CY Strings
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:66
-#: ../src/gnome-utils/gnc-period-select.c:81 ../intl-scm/guile-strings.c:3922
+#: ../src/gnome-utils/gnc-period-select.c:81 ../intl-scm/guile-strings.c:3916
 msgid "Today"
-msgstr "dnes"
+msgstr "Dnes"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:67 ../intl-scm/guile-strings.c:3890
+#: ../src/gnome-utils/gnc-period-select.c:67 ../intl-scm/guile-strings.c:3884
 msgid "Start of this month"
 msgstr "Začiatku tohoto mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:68 ../intl-scm/guile-strings.c:3898
+#: ../src/gnome-utils/gnc-period-select.c:68 ../intl-scm/guile-strings.c:3892
 msgid "Start of previous month"
 msgstr "Začiatku predchádzajúceho mesiaca"
 
 #: ../src/gnome-utils/gnc-period-select.c:69
 msgid "Start of this quarter"
-msgstr ""
+msgstr "Začiatoko tohoto kvartálu"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:70 ../intl-scm/guile-strings.c:3914
+#: ../src/gnome-utils/gnc-period-select.c:70 ../intl-scm/guile-strings.c:3908
 msgid "Start of previous quarter"
 msgstr "Začiatku predchádzajúceho kvartálu"
 
 #: ../src/gnome-utils/gnc-period-select.c:71
 msgid "Start of this year"
-msgstr ""
+msgstr "Začiatku toto roku"
 
 #: ../src/gnome-utils/gnc-period-select.c:72
 msgid "Start of previous year"
-msgstr ""
+msgstr "Začiatku predchádzajúceho roku"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:75
 msgid "Start of this fiscal year"
-msgstr ""
+msgstr "Začiatku tohto fiskálneho roku"
 
 #: ../src/gnome-utils/gnc-period-select.c:76
 msgid "Start of previous fiscal year"
-msgstr ""
+msgstr "Začiatku predchádzajúceho fiskálneho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:3894
+#: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:3888
 msgid "End of this month"
-msgstr "konca tohoto mesiaca"
+msgstr "Konca tohoto mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:83 ../intl-scm/guile-strings.c:3902
+#: ../src/gnome-utils/gnc-period-select.c:83 ../intl-scm/guile-strings.c:3896
 msgid "End of previous month"
-msgstr "konca predchádzajúceho mesiaca"
+msgstr "Konca predchádzajúceho mesiaca"
 
 #: ../src/gnome-utils/gnc-period-select.c:84
 msgid "End of this quarter"
-msgstr ""
+msgstr "Konca tohoto kvartálu"
 
 #. src/app-utils/date-utilities.scm
-#: ../src/gnome-utils/gnc-period-select.c:85 ../intl-scm/guile-strings.c:3918
+#: ../src/gnome-utils/gnc-period-select.c:85 ../intl-scm/guile-strings.c:3912
 msgid "End of previous quarter"
-msgstr "konca predchádzajúceho kvartálu"
+msgstr "Konca predchádzajúceho kvartálu"
 
 #: ../src/gnome-utils/gnc-period-select.c:86
 msgid "End of this year"
-msgstr ""
+msgstr "Konca tohto roku"
 
 #: ../src/gnome-utils/gnc-period-select.c:87
 msgid "End of previous year"
-msgstr "konca predchádzajúceho roku"
+msgstr "Konca predchádzajúceho roku"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:90
 msgid "End of this fiscal year"
-msgstr "konca tohto fiskálneho roku"
+msgstr "Konca tohto fiskálneho roku"
 
 #: ../src/gnome-utils/gnc-period-select.c:91
 msgid "End of previous fiscal year"
-msgstr "konca predchádzajúceho fiskálneho roku"
+msgstr "Konca predchádzajúceho fiskálneho roku"
 
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:88
@@ -6153,7 +6155,7 @@ msgstr "Typy účtov"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:394
 msgid "Namespace"
-msgstr ""
+msgstr "Označenie"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -6390,7 +6392,7 @@ msgid "Complete"
 msgstr "Úplne"
 
 #: ../src/gnome/dialog-scheduledxaction.c:243
-#: ../src/gnome/dialog-sxsincelast.c:402 ../src/gnome/window-reconcile.c:1980
+#: ../src/gnome/dialog-sxsincelast.c:402 ../src/gnome/window-reconcile.c:1985
 msgid "_Transaction"
 msgstr "_Transakcia"
 
@@ -6484,7 +6486,7 @@ msgstr ""
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
 #: ../src/gnome/dialog-sxsincelast.c:424
-#: ../src/gnome/gnc-plugin-basic-commands.c:443
+#: ../src/gnome/gnc-plugin-basic-commands.c:459
 #, c-format
 msgid "There are no Scheduled Transactions to be entered at this time. (%d transaction automatically created)"
 msgid_plural "There are no Scheduled Transactions to be entered at this time. (%d transactions automatically created)"
@@ -6561,40 +6563,42 @@ msgid ""
 "%s\n"
 "Congratulations! You are done closing books!"
 msgstr ""
+"%s\n"
+"Blahoželám! Podarilo sa Vám uzatvoriť uzatvoriť účtovné knihy!"
 
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:547
 msgid "Period:"
-msgstr ""
+msgstr "Obdobie:"
 
 #: ../src/gnome/druid-acct-period.c:548
 msgid "Closing Date:"
-msgstr ""
+msgstr "Závierkový deň:"
 
 #: ../src/gnome/druid-hierarchy.c:389
 msgid "Selected"
-msgstr ""
+msgstr "Zvolené"
 
 #: ../src/gnome/druid-hierarchy.c:477
 #, c-format
 msgid "<b>Accounts in '%s'</b>"
-msgstr ""
+msgstr "<b>Účty v '%s'</b>"
 
 #: ../src/gnome/druid-hierarchy.c:494
 msgid "<b>Accounts in Category</b>"
-msgstr ""
+msgstr "<b>Účty v kategórií</b>"
 
 #: ../src/gnome/druid-hierarchy.c:703
 msgid "zero"
-msgstr ""
+msgstr "nula"
 
 #: ../src/gnome/druid-hierarchy.c:714
 msgid "existing account"
-msgstr ""
+msgstr "existujúci účet"
 
 #: ../src/gnome/druid-hierarchy.c:919
 msgid "Use Existing"
-msgstr ""
+msgstr "Použiť existujúce"
 
 #: ../src/gnome/druid-loan.c:552
 msgid "Fixed"
@@ -7220,7 +7224,7 @@ msgstr ""
 #: ../src/gnome/glade/budget.glade.h:17 ../src/gnome/glade/print.glade.h:10
 #: ../src/gnome/glade/sched-xact.glade.h:133
 #: ../src/gnome/gnc-plugin-page-budget.c:170
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:949
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:976
 msgid "Options"
 msgstr "Možnosti"
 
@@ -7231,7 +7235,7 @@ msgstr ""
 #: ../src/gnome/glade/budget.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:169
 msgid "Start Date:"
-msgstr "Začiatočný Dátum:"
+msgstr "Dátum od:"
 
 #: ../src/gnome/glade/budget.glade.h:20
 msgid "The number of leading digits to keep when rounding"
@@ -7303,7 +7307,7 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:1
 msgid "<b>Securities</b>"
-msgstr ""
+msgstr "<b>Cenné papiere</b>"
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
@@ -7320,7 +7324,7 @@ msgstr "Odobrať aktuálnu komoditu."
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
-msgstr ""
+msgstr "Cenné papiere"
 
 #: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
@@ -7837,13 +7841,13 @@ msgid "Include _subaccounts"
 msgstr ""
 
 #. starting balance title/value
-#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1658
+#: ../src/gnome/glade/reconcile.glade.h:4 ../src/gnome/window-reconcile.c:1663
 msgid "Starting Balance:"
 msgstr "Počiatočný stav:"
 
 #: ../src/gnome/glade/reconcile.glade.h:5
 msgid "Statement _Date:"
-msgstr ""
+msgstr "Dátum výkazu:"
 
 #: ../src/gnome/glade/reconcile.glade.h:6
 msgid "_Ending Balance:"
@@ -7967,7 +7971,7 @@ msgstr "Vloží transakciu zo schránky"
 
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
-msgstr ""
+msgstr "Dôvod pre zrušenie platnosti:"
 
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:207
@@ -8046,7 +8050,7 @@ msgstr "Triediť podľa čísla"
 
 #: ../src/gnome/glade/register.glade.h:57
 msgid "Sort by action field"
-msgstr ""
+msgstr "Triediť podľa akcie"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/register.glade.h:58 ../intl-scm/guile-strings.c:1728
@@ -8102,15 +8106,15 @@ msgstr "Stav"
 
 #: ../src/gnome/glade/register.glade.h:71
 msgid "Toda_y"
-msgstr ""
+msgstr "_Dnes"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
-msgstr ""
+msgstr "Zrušenie planosti"
 
 #: ../src/gnome/glade/register.glade.h:73
 msgid "_Action"
-msgstr ""
+msgstr "_Akcia"
 
 #: ../src/gnome/glade/register.glade.h:75
 msgid "_Amount"
@@ -8175,7 +8179,7 @@ msgstr "_Dátum vyúčtovania"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
-msgstr ""
+msgstr "_Dnes"
 
 #: ../src/gnome/glade/register.glade.h:99
 msgid "_Transaction Journal"
@@ -8199,115 +8203,115 @@ msgstr "Používate pre platby escrow účet?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid "10th"
-msgstr ""
+msgstr "10"
 
 #: ../src/gnome/glade/sched-xact.glade.h:6
 msgid "11th"
-msgstr ""
+msgstr "11"
 
 #: ../src/gnome/glade/sched-xact.glade.h:7
 msgid "12th"
-msgstr ""
+msgstr "12"
 
 #: ../src/gnome/glade/sched-xact.glade.h:8
 msgid "13th"
-msgstr ""
+msgstr "13"
 
 #: ../src/gnome/glade/sched-xact.glade.h:9
 msgid "14th"
-msgstr ""
+msgstr "14"
 
 #: ../src/gnome/glade/sched-xact.glade.h:10
 msgid "15th"
-msgstr ""
+msgstr "15"
 
 #: ../src/gnome/glade/sched-xact.glade.h:11
 msgid "16th"
-msgstr ""
+msgstr "16"
 
 #: ../src/gnome/glade/sched-xact.glade.h:12
 msgid "17th"
-msgstr ""
+msgstr "17"
 
 #: ../src/gnome/glade/sched-xact.glade.h:13
 msgid "18th"
-msgstr ""
+msgstr "18"
 
 #: ../src/gnome/glade/sched-xact.glade.h:14
 msgid "19th"
-msgstr ""
+msgstr "19"
 
 #: ../src/gnome/glade/sched-xact.glade.h:15
 msgid "1st"
-msgstr ""
+msgstr "1"
 
 #: ../src/gnome/glade/sched-xact.glade.h:16
 msgid "20th"
-msgstr ""
+msgstr "20"
 
 #: ../src/gnome/glade/sched-xact.glade.h:17
 msgid "21st"
-msgstr ""
+msgstr "21"
 
 #: ../src/gnome/glade/sched-xact.glade.h:18
 msgid "22nd"
-msgstr ""
+msgstr "22"
 
 #: ../src/gnome/glade/sched-xact.glade.h:19
 msgid "23rd"
-msgstr ""
+msgstr "23"
 
 #: ../src/gnome/glade/sched-xact.glade.h:20
 msgid "24th"
-msgstr ""
+msgstr "24"
 
 #: ../src/gnome/glade/sched-xact.glade.h:21
 msgid "25th"
-msgstr ""
+msgstr "25"
 
 #: ../src/gnome/glade/sched-xact.glade.h:22
 msgid "26th"
-msgstr ""
+msgstr "26"
 
 #: ../src/gnome/glade/sched-xact.glade.h:23
 msgid "27th"
-msgstr ""
+msgstr "27"
 
 #: ../src/gnome/glade/sched-xact.glade.h:24
 msgid "28th"
-msgstr ""
+msgstr "28"
 
 #: ../src/gnome/glade/sched-xact.glade.h:25
 msgid "2nd"
-msgstr ""
+msgstr "2"
 
 #: ../src/gnome/glade/sched-xact.glade.h:26
 msgid "3rd"
-msgstr ""
+msgstr "3"
 
 #: ../src/gnome/glade/sched-xact.glade.h:27
 msgid "4th"
-msgstr ""
+msgstr "4"
 
 #: ../src/gnome/glade/sched-xact.glade.h:28
 msgid "5th"
-msgstr ""
+msgstr "5"
 
 #: ../src/gnome/glade/sched-xact.glade.h:29
 msgid "6th"
-msgstr ""
+msgstr "6"
 
 #: ../src/gnome/glade/sched-xact.glade.h:30
 msgid "7th"
-msgstr ""
+msgstr "7"
 
 #: ../src/gnome/glade/sched-xact.glade.h:31
 msgid "8th"
-msgstr ""
+msgstr "8"
 
 #: ../src/gnome/glade/sched-xact.glade.h:32
 msgid "9th"
-msgstr ""
+msgstr "9"
 
 #: ../src/gnome/glade/sched-xact.glade.h:33
 msgid "<b>Name</b>"
@@ -8335,7 +8339,7 @@ msgstr "<b>Vzorová transakcia</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:39
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr ""
+msgstr "<b>Štandardy editora transakcií</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:41
 msgid "<b>Upcoming</b>"
@@ -8351,19 +8355,19 @@ msgstr "Pokročilé..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:45
 msgid "Apr, Aug, Dec"
-msgstr ""
+msgstr "Apr, Aug, Dec"
 
 #: ../src/gnome/glade/sched-xact.glade.h:46
 msgid "Apr, Oct"
-msgstr ""
+msgstr "Apr, Okt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:47
 msgid "April"
-msgstr ""
+msgstr "Apríl"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: ../src/gnome/glade/sched-xact.glade.h:49
 msgid "Auto-Created Transactions Notification"
@@ -8371,7 +8375,7 @@ msgstr "Upozornenie na automaticky vytvorené transakcie"
 
 #: ../src/gnome/glade/sched-xact.glade.h:50
 msgid "Begin notifications this many days before the transaction is created."
-msgstr ""
+msgstr "Začať uporňovať toľkoto dní pre vytvorením transakcie."
 
 #: ../src/gnome/glade/sched-xact.glade.h:51
 msgid "Bi-Weekly"
@@ -8383,7 +8387,7 @@ msgstr "Závisí na tom, či rozdelenia nemajú premenné"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Crea_te in advance, days:"
-msgstr ""
+msgstr "Vytvoriť skôr o:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:54
 msgid "Create"
@@ -8423,7 +8427,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:63
 msgid "Custom"
-msgstr ""
+msgstr "Vlastné"
 
 #: ../src/gnome/glade/sched-xact.glade.h:65
 msgid "Daily [M-F]"
@@ -8466,7 +8470,7 @@ msgstr "Koniec"
 
 #: ../src/gnome/glade/sched-xact.glade.h:75
 msgid "End Date:"
-msgstr "Konečný Dátum:"
+msgstr "Dátum do:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:76
 msgid "Ended On"
@@ -8714,7 +8718,7 @@ msgstr "Hlavná časť do:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "R_emind in advance, days:"
-msgstr ""
+msgstr "Pripom_enúť skôr o:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:148
 msgid "Range: "
@@ -8722,7 +8726,7 @@ msgstr "Rozsah: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:149
 msgid "Remind in advance:"
-msgstr ""
+msgstr "Pripomenúť skôr:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:150
 msgid "Repayment"
@@ -8795,7 +8799,7 @@ msgstr "Určenie zdrojového účtu"
 
 #: ../src/gnome/glade/sched-xact.glade.h:170
 msgid "Start Date: "
-msgstr "Počiatočný dátum: "
+msgstr "Dátum od: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:171
 msgid "State"
@@ -8912,15 +8916,15 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:202
 msgid "_Auto-create new transactions"
-msgstr ""
+msgstr "_Automaticky vytvoriť nové transakcie"
 
 #: ../src/gnome/glade/sched-xact.glade.h:204
 msgid "_Notify before transactions are created "
-msgstr ""
+msgstr "Upozor_niť pred vytvorením transakcie"
 
 #: ../src/gnome/glade/sched-xact.glade.h:205
 msgid "_Run when data file opened"
-msgstr ""
+msgstr "_Spustiť pri otváraní súboru"
 
 #: ../src/gnome/glade/sched-xact.glade.h:207
 msgid "days."
@@ -8928,7 +8932,7 @@ msgstr "dní."
 
 #: ../src/gnome/glade/sched-xact.glade.h:208
 msgid "months"
-msgstr ""
+msgstr "mesiace"
 
 #: ../src/gnome/glade/sched-xact.glade.h:209
 msgid "months."
@@ -8936,7 +8940,7 @@ msgstr "mesiace."
 
 #: ../src/gnome/glade/sched-xact.glade.h:210
 msgid "occurrences"
-msgstr ""
+msgstr "výskyty"
 
 #: ../src/gnome/glade/sched-xact.glade.h:211
 msgid "remaining"
@@ -8956,7 +8960,7 @@ msgstr "rok(y)."
 
 #: ../src/gnome/glade/sched-xact.glade.h:215
 msgid "years"
-msgstr ""
+msgstr "roky"
 
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
@@ -9084,166 +9088,166 @@ msgstr "Užívateľské meno a heslo"
 
 #: ../src/gnome/glade/userpass.glade.h:3
 msgid "_Password:"
-msgstr ""
+msgstr "_Heslo:"
 
 #: ../src/gnome/glade/userpass.glade.h:4
 msgid "_Username:"
-msgstr ""
+msgstr "Po_užívateľ:"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:57
 msgid "New Accounts _Page"
-msgstr ""
+msgstr "Nová s_tránka účtov"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
 msgid "Open a new Account Tree page"
-msgstr ""
+msgstr "Otvorí novú stránku so stromom účtov"
 
 #. File menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:95
+#: ../src/gnome/gnc-plugin-basic-commands.c:103
 msgid "New _File"
-msgstr ""
+msgstr "_Nový súbor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:96
+#: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "Create a new file"
 msgstr "Vytvorí nový súbor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:98
+#: ../src/gnome/gnc-plugin-basic-commands.c:106
 msgid "_Open..."
-msgstr ""
+msgstr "_Otvoriť..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:99
+#: ../src/gnome/gnc-plugin-basic-commands.c:107
 msgid "Open an existing GnuCash file"
-msgstr ""
+msgstr "Otvorí existujúci GnuCash súbor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:101
+#: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_Save"
 msgstr "_Uložiť"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:102
+#: ../src/gnome/gnc-plugin-basic-commands.c:110
 msgid "Save the current file"
 msgstr "Uloženie aktuálneho súboru"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:104
+#: ../src/gnome/gnc-plugin-basic-commands.c:112
 msgid "Save _As..."
 msgstr "Uložiť _ako..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:108
+#: ../src/gnome/gnc-plugin-basic-commands.c:117
 msgid "_QSF Import"
 msgstr "_QSF Import"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:109
+#: ../src/gnome/gnc-plugin-basic-commands.c:118
 msgid "Import a QSF object file"
 msgstr "Importovanie súbor s QSF objektmi"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:112
+#: ../src/gnome/gnc-plugin-basic-commands.c:122
 msgid "Export _Accounts"
 msgstr "Expo_rtovať účty"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:113
+#: ../src/gnome/gnc-plugin-basic-commands.c:123
 msgid "Export the account hierarchy to a new GnuCash datafile"
 msgstr "Exportovať hierarchiu účtov do nového GnuCash súboru"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:116
+#: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Export _Chart of Accounts to QSF"
 msgstr "Exportovať _Zoznam účtov do QSF"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:117
+#: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Export the chart of accounts for a date with balances as QSF"
 msgstr ""
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:122
+#: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "_Find..."
 msgstr "_Hľadať..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:123
+#: ../src/gnome/gnc-plugin-basic-commands.c:135
 msgid "Find transactions with a search"
 msgstr "Pohľadá transakciu"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:125
+#: ../src/gnome/gnc-plugin-basic-commands.c:137
 msgid "Ta_x Options"
 msgstr "Nastavenia _daní"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:126
+#: ../src/gnome/gnc-plugin-basic-commands.c:138
 msgid "Setup tax information for all income and expense accounts"
 msgstr "Nastavenie daňových informácií pre všetky príjmové a výdajové účty"
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:131
+#: ../src/gnome/gnc-plugin-basic-commands.c:143
 msgid "_Scheduled Transactions"
 msgstr "_Plánované transakcie"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:132
+#: ../src/gnome/gnc-plugin-basic-commands.c:144
 msgid "_Scheduled Transaction Editor"
 msgstr "Editor plánovaných tran_sakcií"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:133
+#: ../src/gnome/gnc-plugin-basic-commands.c:145
 msgid "The list of Scheduled Transactions"
 msgstr "Zoznam plánovaných transakcií"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:135
+#: ../src/gnome/gnc-plugin-basic-commands.c:147
 msgid "_Since Last Run..."
 msgstr "_Od posledného spustenia..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:136
+#: ../src/gnome/gnc-plugin-basic-commands.c:148
 msgid "Create Scheduled Transactions since the last time run"
 msgstr ""
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:138
+#: ../src/gnome/gnc-plugin-basic-commands.c:150
 msgid "_Mortgage & Loan Repayment..."
 msgstr "_Splácanie hypotéky & pôžičky..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:139
+#: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "Nastaviť plánované transakcie pre splácanie pôžičky"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:141
+#: ../src/gnome/gnc-plugin-basic-commands.c:154
 msgid "Close _Books"
 msgstr "Zatvoriť _knihy"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:142
+#: ../src/gnome/gnc-plugin-basic-commands.c:155
 msgid "Archive old data using accounting periods"
 msgstr ""
 
 #. Tools menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:147
+#: ../src/gnome/gnc-plugin-basic-commands.c:161
 msgid "_Price Editor"
 msgstr "Edito_r cien"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:148
+#: ../src/gnome/gnc-plugin-basic-commands.c:162
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Prezeranie a úprava cien pre akciové a investičné fondy"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:150
+#: ../src/gnome/gnc-plugin-basic-commands.c:164
 msgid "_Security Editor"
-msgstr ""
+msgstr "_Editor cenných papierov"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:151
+#: ../src/gnome/gnc-plugin-basic-commands.c:165
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Prezeranie a úprava komodít pre akciové a investičné fondy"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:153
+#: ../src/gnome/gnc-plugin-basic-commands.c:167
 msgid "_Financial Calculator"
 msgstr "_Finančná kalkukačka"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:154
+#: ../src/gnome/gnc-plugin-basic-commands.c:168
 msgid "Use the financial calculator"
 msgstr "Použiť finančnú kalkukačku"
 
 #. Help menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:159
+#: ../src/gnome/gnc-plugin-basic-commands.c:173
 msgid "_Tips Of The Day"
 msgstr "_Tip dňa"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:160
+#: ../src/gnome/gnc-plugin-basic-commands.c:174
 msgid "View the Tips of the Day"
 msgstr "Prezeranie Tipov dňa"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:378
+#: ../src/gnome/gnc-plugin-basic-commands.c:392
 msgid "Select the QSF file to import into GnuCash"
 msgstr ""
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:431
+#: ../src/gnome/gnc-plugin-basic-commands.c:447
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "Nie sú žiadne naplánované transakcie, ktoré by mali byť teraz vložené."
 
@@ -9334,7 +9338,7 @@ msgstr "Vysporiadať zvolený účet"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:179
 #: ../src/gnome/gnc-plugin-page-register.c:229
-#: ../src/gnome/window-reconcile.c:2008
+#: ../src/gnome/window-reconcile.c:2013
 msgid "Transfer funds from one account to another"
 msgstr "Prevedie fondy z jedného účtu na druhý"
 
@@ -9362,7 +9366,7 @@ msgid "Check & Repair A_ccount"
 msgstr "Kontrola a _oprava účtu"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
-#: ../src/gnome/window-reconcile.c:2011
+#: ../src/gnome/window-reconcile.c:2016
 msgid "Check for and repair unbalanced transactions and orphan splits in this account"
 msgstr "Skontroluje a opraví nerovnovážne transakcie a osirotené rozdelenia v tomto účte"
 
@@ -9382,9 +9386,7 @@ msgstr "Skontro_lovať a opraviť všetko"
 msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
 msgstr "Skontroluje a opraví nerovnovážne transakcie a osirotené rozdelenia vo všetkých účtoch"
 
-#. src/business/business-gnome/business-gnome.scm
 #: ../src/gnome/gnc-plugin-page-account-tree.c:219
-#: ../intl-scm/guile-strings.c:3800
 msgid "New"
 msgstr "Nový"
 
@@ -9480,16 +9482,16 @@ msgstr ""
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:168
 msgid "_Print Check..."
-msgstr ""
+msgstr "Vy_tlačiť šek..."
 
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-register.c:188
 msgid "Cu_t Transaction"
-msgstr ""
+msgstr "Vys_trihnúť transakciu"
 
 #: ../src/gnome/gnc-plugin-page-register.c:189
 msgid "Cut the selected transaction into clipboard"
-msgstr ""
+msgstr "VYstrihnúť označenú transaakciu do schánky"
 
 #: ../src/gnome/gnc-plugin-page-register.c:191
 msgid "_Copy Transaction"
@@ -9530,11 +9532,11 @@ msgstr "Z_mazať transakciu"
 
 #: ../src/gnome/gnc-plugin-page-register.c:212
 msgid "_Void Transaction"
-msgstr ""
+msgstr "_Zrušenie platnosti transakcie"
 
 #: ../src/gnome/gnc-plugin-page-register.c:214
 msgid "_Unvoid Transaction"
-msgstr ""
+msgstr "_Obnova platnosti transakcie"
 
 #: ../src/gnome/gnc-plugin-page-register.c:216
 msgid "Add _Reversing Transaction"
@@ -9580,12 +9582,12 @@ msgstr "Otvorí okno výkazu pre túto transakciu"
 
 #: ../src/gnome/gnc-plugin-page-register.c:264
 msgid "Account Transaction Report"
-msgstr ""
+msgstr "Výkaz účtovnej transakcie"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:290
 msgid "Transaction _Journal"
-msgstr ""
+msgstr "Denník _transakcií"
 
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:326
@@ -9625,8 +9627,8 @@ msgstr "_Uložiť transakciu"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1125
 #: ../src/gnome/gnc-plugin-page-register.c:1157
-#: ../src/import-export/hbci/gnc-hbci-utils.c:578
-#: ../src/import-export/hbci/gnc-hbci-utils.c:580
+#: ../src/import-export/hbci/gnc-hbci-utils.c:573
+#: ../src/import-export/hbci/gnc-hbci-utils.c:575
 msgid "unknown"
 msgstr "neznámy"
 
@@ -9803,7 +9805,7 @@ msgstr ""
 msgid "Manage your finances, accounts, and investments"
 msgstr ""
 
-#: ../src/gnome/lot-viewer.c:587
+#: ../src/gnome/lot-viewer.c:596
 #, c-format
 msgid "Lots in Account %s"
 msgstr ""
@@ -10573,144 +10575,93 @@ msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Ste si istý, že chcete odstrániť zvolenú transakciu?"
 
 #. ending balance title/value
-#: ../src/gnome/window-reconcile.c:1668
+#: ../src/gnome/window-reconcile.c:1673
 msgid "Ending Balance:"
-msgstr "Konečný stav:"
+msgstr "Koncový stav:"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile.c:1678
+#: ../src/gnome/window-reconcile.c:1683
 msgid "Reconciled Balance:"
 msgstr "Vysporiadaná bilancia:"
 
 #. difference title/value
-#: ../src/gnome/window-reconcile.c:1688
+#: ../src/gnome/window-reconcile.c:1693
 msgid "Difference:"
 msgstr "Rozdiel:"
 
-#: ../src/gnome/window-reconcile.c:1870
+#: ../src/gnome/window-reconcile.c:1875
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 
-#: ../src/gnome/window-reconcile.c:1927
+#: ../src/gnome/window-reconcile.c:1932
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Prajete si odložiť toto vysporiadanie a dokončiť ho neskôr?"
 
-#: ../src/gnome/window-reconcile.c:1961
+#: ../src/gnome/window-reconcile.c:1966
 msgid "You have made changes to this reconcile window. Are you sure you want to cancel?"
 msgstr ""
 
 #. Toplevel
-#: ../src/gnome/window-reconcile.c:1978
+#: ../src/gnome/window-reconcile.c:1983
 msgid "_Reconcile"
 msgstr "_Vysporiadať"
 
-#: ../src/gnome/window-reconcile.c:1979
+#: ../src/gnome/window-reconcile.c:1984
 msgid "_Account"
 msgstr "_Účet"
 
 #. Reconcile menu
-#: ../src/gnome/window-reconcile.c:1985
+#: ../src/gnome/window-reconcile.c:1990
 msgid "_Reconcile Information..."
 msgstr "_Informácie o vysporiadaní..."
 
-#: ../src/gnome/window-reconcile.c:1986
+#: ../src/gnome/window-reconcile.c:1991
 msgid "Change the reconcile information including statement date and ending balance."
 msgstr "Zmeniť informácie o vysporiadaní vrátane dátumu vyúčtovania a konečného zostatku."
 
-#: ../src/gnome/window-reconcile.c:1989
+#: ../src/gnome/window-reconcile.c:1994
 msgid "_Finish"
 msgstr "_Ukončiť"
 
-#: ../src/gnome/window-reconcile.c:1990
+#: ../src/gnome/window-reconcile.c:1995
 msgid "Finish the reconciliation of this account"
 msgstr "Ukončiť vysporiadanie tohoto účtu"
 
-#: ../src/gnome/window-reconcile.c:1992
+#: ../src/gnome/window-reconcile.c:1997
 msgid "_Postpone"
 msgstr "Od_ložiť"
 
-#: ../src/gnome/window-reconcile.c:1993
+#: ../src/gnome/window-reconcile.c:1998
 msgid "Postpone the reconciliation of this account"
 msgstr "Odloží vysporiadanie tohoto účtu"
 
-#: ../src/gnome/window-reconcile.c:1996
+#: ../src/gnome/window-reconcile.c:2001
 msgid "Cancel the reconciliation of this account"
 msgstr "Prerušiť vysporiadavanie tohoto účtu"
 
-#: ../src/gnome/window-reconcile.c:2002
+#: ../src/gnome/window-reconcile.c:2007
 msgid "Open the account"
 msgstr "Otvoriť účet"
 
-#: ../src/gnome/window-reconcile.c:2005
+#: ../src/gnome/window-reconcile.c:2010
 msgid "Edit the main account for this register"
 msgstr "Upraví hlavný účet v tomto registri"
 
-#: ../src/gnome/window-reconcile.c:2018
+#: ../src/gnome/window-reconcile.c:2023
 msgid "Add a new transaction to the account"
 msgstr "Pridá novú transakciu do účtu"
 
-#: ../src/gnome/window-reconcile.c:2021
+#: ../src/gnome/window-reconcile.c:2026
 msgid "Edit the current transaction"
 msgstr "Upraví aktuálnu transakciu"
 
-#: ../src/gnome/window-reconcile.c:2024
+#: ../src/gnome/window-reconcile.c:2029
 msgid "Delete the selected transaction"
 msgstr "Odstrániť zvolenú transakciu"
 
-#: ../src/gnome/window-reconcile.c:2030
+#: ../src/gnome/window-reconcile.c:2035
 msgid "Open the GnuCash help window"
 msgstr "Otvorí okno s pomocníkom pre GnuCash"
-
-#: ../src/import-export/binary-import/binary-import.glade.h:1
-msgid ""
-"Click \"Finish\" to update your accounts to use the new information you have entered.\n"
-"\n"
-"Click \"Cancel\" to cancel the file-loading process.  \n"
-"\n"
-"Click \"Back\" to review your currency selections."
-msgstr ""
-
-#: ../src/import-export/binary-import/binary-import.glade.h:6
-msgid "Import currency and stock information"
-msgstr "Importovať informácie o menách a akciách"
-
-#: ../src/import-export/binary-import/binary-import.glade.h:7
-msgid ""
-"The file you are loading is from an older version of GnuCash. Information about currencies, stocks, and mutual funds needs to be updated for the new version. \n"
-"\n"
-"This dialog will prompt you for some additional information about each currency, stock, and mutual fund that appear in your accounts.  After you have entered this information, you can update your accounts for the new version of GnuCash.\n"
-"\n"
-"Hit \"Cancel\" now to stop loading the file."
-msgstr ""
-
-#: ../src/import-export/binary-import/binary-import.glade.h:12
-msgid "Update your accounts with the new information"
-msgstr "Aktualizujte svoje účty s novými informáciami"
-
-#: ../src/import-export/binary-import/druid-commodity.c:266
-msgid "Pick the type of the currency or security. For national currencies, use \"CURRENCY\". Enter a new type in the box if the ones in the pick list are inappropriate."
-msgstr ""
-
-#: ../src/import-export/binary-import/druid-commodity.c:288
-msgid "Enter a descriptive name for the currency or stock, such as \"US Dollar\" or \"Red Hat Stock\""
-msgstr ""
-
-#: ../src/import-export/binary-import/druid-commodity.c:307
-msgid "Enter the ticker symbol (such as \"RHAT\"), national currency symbol (such as \"USD\"), or other unique abbreviation for the name."
-msgstr ""
-
-#: ../src/import-export/binary-import/druid-commodity.c:326
-msgid "Click \"Next\" to accept the information and move to the next currency or stock."
-msgstr ""
-
-#: ../src/import-export/binary-import/druid-commodity.c:408
-msgid "You must put values for the type, name, and abbreviation of the currency/stock."
-msgstr ""
-
-#: ../src/import-export/binary-import/druid-commodity.c:419
-#: ../src/import-export/qif-import/druid-qif-import.c:1400
-msgid "You must enter an existing national currency or enter a different type."
-msgstr "Musíte vložiť existujúcu národnú menu alebo vložte iný typ."
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
@@ -10734,7 +10685,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:7
 msgid "<b>Generic Importer</b>"
-msgstr ""
+msgstr "<b>Všeobecný import</b>"
 
 #: ../src/import-export/generic-import.glade.h:8
 msgid "A"
@@ -10903,15 +10854,15 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:60
 msgid "Use _bayesian matching"
-msgstr ""
+msgstr "Použiť bayesianske porovnávanie"
 
 #: ../src/import-export/generic-import.glade.h:61
 msgid "Use bayesian algorithms to match new transactions with existing accounts."
-msgstr ""
+msgstr "Použiť bayesianov algoritmus na priradenie nových transakcií k existujúcim účtom."
 
 #: ../src/import-export/generic-import.glade.h:62
 msgid "Yellow"
-msgstr ""
+msgstr "Žltá"
 
 #: ../src/import-export/generic-import.glade.h:63
 msgid "do not translate"
@@ -11016,36 +10967,36 @@ msgstr ""
 msgid "The two passwords didn't match. Please try again."
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:144
+#: ../src/import-export/hbci/druid-hbci-initial.c:145
 #, c-format
 msgid "%s at %s (code %s)"
 msgstr "%s v %s (kód %s)"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:149
+#: ../src/import-export/hbci/druid-hbci-initial.c:150
 #, c-format
 msgid "%s at bank code %s"
 msgstr "%s v bankom kóde %s"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:506
+#: ../src/import-export/hbci/druid-hbci-initial.c:522
 msgid "Choose AqBanking Backend"
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:507
+#: ../src/import-export/hbci/druid-hbci-initial.c:523
 msgid "Please choose an AqBanking backend to be configured"
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:508
+#: ../src/import-export/hbci/druid-hbci-initial.c:524
 msgid "Co_nfigure"
 msgstr ""
 
 #. Each of the %s is the name of the backend, e.g. "aqhbci".
-#: ../src/import-export/hbci/druid-hbci-initial.c:619
+#: ../src/import-export/hbci/druid-hbci-initial.c:642
 #, c-format
 msgid "The external program \"%s Setup Wizard\" returned a nonzero exit code which means it has not been finished successfully. The further HBCI setup can only be finished if the %s Setup Wizard is run successfully. Please try to start and successfully finish the %s Setup Wizard program again."
 msgstr ""
 
 #. Each of the %s is the name of the backend, e.g. "aqhbci".
-#: ../src/import-export/hbci/druid-hbci-initial.c:632
+#: ../src/import-export/hbci/druid-hbci-initial.c:655
 #, c-format
 msgid ""
 "The external program \"%s Setup Wizard\" has not been found. \n"
@@ -11358,7 +11309,7 @@ msgstr "Heslo:"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
 msgid "<b>HBCI</b>"
-msgstr ""
+msgstr "<b>HBCI</b>"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 msgid "Activate verbose debug messages for HBCI Online Banking."
@@ -11366,11 +11317,11 @@ msgstr "Aktivovať podrobné ladiace správy pre HBCI Online Banking."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
 msgid "Remember _PIN"
-msgstr ""
+msgstr "Pamätať si _PIN"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
 msgid "Remember the PIN for HBCI in memory during a session."
-msgstr ""
+msgstr "Uchovať v pamúti počas sedenia PIN pre HBCI"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
 msgid "_Verbose debug messages"
@@ -11473,7 +11424,7 @@ msgstr ""
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
-#: ../src/import-export/hbci/gnc-hbci-utils.c:534
+#: ../src/import-export/hbci/gnc-hbci-utils.c:529
 #: ../intl-scm/guile-strings.c:22 ../intl-scm/guile-strings.c:62
 msgid "Unspecified"
 msgstr "Nešpecifikovaný"
@@ -11687,12 +11638,12 @@ msgid ""
 "Please select a date format for the file.  QIF files created by European software are likely  to be in \"d-m-y\" or day-month-year format, where US QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
 msgstr ""
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:520
+#: ../src/import-export/log-replay/gnc-log-replay.c:525
 msgid "Select a .log file to replay"
 msgstr "Vyberte chybový protokol (.log) na zopakovanie"
 
 #. Translators: %s is the file name.
-#: ../src/import-export/log-replay/gnc-log-replay.c:537
+#: ../src/import-export/log-replay/gnc-log-replay.c:542
 #, c-format
 msgid "Cannot open the current log file: %s"
 msgstr ""
@@ -11701,16 +11652,16 @@ msgstr ""
 #. * First argument is the filename,
 #. * second argument is the error.
 #.
-#: ../src/import-export/log-replay/gnc-log-replay.c:550
+#: ../src/import-export/log-replay/gnc-log-replay.c:555
 #, c-format
 msgid "Failed to open log file: %s: %s"
 msgstr ""
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:557
+#: ../src/import-export/log-replay/gnc-log-replay.c:562
 msgid "The log file you selected was empty."
 msgstr ""
 
-#: ../src/import-export/log-replay/gnc-log-replay.c:563
+#: ../src/import-export/log-replay/gnc-log-replay.c:568
 msgid "The log file you selected cannot be read.  The file header was not recognized."
 msgstr ""
 
@@ -11796,89 +11747,93 @@ msgstr "Spracovať súbor odpovedí OFX/QFX"
 msgid "Enter a name for the account"
 msgstr "Vložte názov účtu"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:358
+#: ../src/import-export/qif-import/druid-qif-import.c:363
 msgid "Select QIF File"
 msgstr "Zvoliť QIF súbor"
 
 #. stay here if no file specified
-#: ../src/import-export/qif-import/druid-qif-import.c:450
+#: ../src/import-export/qif-import/druid-qif-import.c:457
 msgid "Please select a file to load."
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:456
+#: ../src/import-export/qif-import/druid-qif-import.c:463
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:468
+#: ../src/import-export/qif-import/druid-qif-import.c:475
 msgid "That QIF file is already loaded. Please select another file."
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:495
+#: ../src/import-export/qif-import/druid-qif-import.c:502
 #, c-format
 msgid "QIF file load warning: %s"
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:502
+#: ../src/import-export/qif-import/druid-qif-import.c:509
 msgid "An error occurred while loading the QIF file."
 msgstr "Vyskytla sa chyba pri načítavaní QIF súboru."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:510
+#: ../src/import-export/qif-import/druid-qif-import.c:517
 #, c-format
 msgid "QIF file load failed: %s"
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:568
+#: ../src/import-export/qif-import/druid-qif-import.c:575
 msgid "An error occurred while parsing the QIF file."
 msgstr "Vyskytla sa chyba pri spracovávaní QIF súboru."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:578
+#: ../src/import-export/qif-import/druid-qif-import.c:585
 #, c-format
 msgid "QIF file parse failed: %s"
 msgstr ""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:810
+#: ../src/import-export/qif-import/druid-qif-import.c:817
 msgid "You must enter an account name."
 msgstr "Musíte vložiť názov účtu."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1170
+#: ../src/import-export/qif-import/druid-qif-import.c:1177
 msgid "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
 msgstr "Vyskytla sa chyba počas importovanie QIF transakcií do GnuCash. Vaše účty sú nezmenené."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1217
-#: ../src/import-export/qif-import/druid-qif-import.c:1661
+#: ../src/import-export/qif-import/druid-qif-import.c:1224
+#: ../src/import-export/qif-import/druid-qif-import.c:1668
 msgid "(split)"
 msgstr "(rozdelenie)"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1381
+#: ../src/import-export/qif-import/druid-qif-import.c:1388
 msgid "You must enter a Type for the commodity."
 msgstr "Musíte vložiť typ pre komoditu."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1386
+#: ../src/import-export/qif-import/druid-qif-import.c:1393
 msgid "You must enter a name for the commodity."
 msgstr "Musíte vložiť názov komodity."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1391
+#: ../src/import-export/qif-import/druid-qif-import.c:1398
 msgid "You must enter an abbreviation for the commodity."
 msgstr "Musíte vložiť skratku pre komoditu."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1534
+#: ../src/import-export/qif-import/druid-qif-import.c:1407
+msgid "You must enter an existing national currency or enter a different type."
+msgstr "Musíte vložiť existujúcu národnú menu alebo vložte iný typ."
+
+#: ../src/import-export/qif-import/druid-qif-import.c:1541
 #, c-format
 msgid "Enter information about \"%s\""
 msgstr "Vložte informácie o \"%s\""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1546
+#: ../src/import-export/qif-import/druid-qif-import.c:1553
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 msgstr "Vyberte komoditnú burzu (NASDAQ, NYSE, atď)."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1570
+#: ../src/import-export/qif-import/druid-qif-import.c:1577
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr "Vložte plný názov komodity ako napríklad \"Akcie Red Hat\""
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1592
+#: ../src/import-export/qif-import/druid-qif-import.c:1599
 msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
 msgstr "Vložte burzový symbol (ako napríklad \"RHAT\") alebo inú jedinečnú skratku pre názov."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1613
+#: ../src/import-export/qif-import/druid-qif-import.c:1620
 msgid "Click \"Next\" to accept the information and move on."
 msgstr "Kliknite na \"Nasledujúci\" k akceptovaniu informácií a pohybu ďalej."
 
@@ -11892,7 +11847,7 @@ msgstr "Importuje súbor Quicken QIF"
 
 #: ../src/import-export/qif-import/qif.glade.h:1
 msgid "<b>QIF Import</b>"
-msgstr ""
+msgstr "<b>QIF Import</b>"
 
 #: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Account name:"
@@ -12188,7 +12143,7 @@ msgstr ""
 
 #: ../src/import-export/qif/qif-parse.c:112
 msgid "account"
-msgstr ""
+msgstr "účet"
 
 #: ../src/import-export/qif/qif-parse.c:113
 msgid "option:autoswitch"
@@ -12256,7 +12211,7 @@ msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
 msgid "Use bayesian matching"
-msgstr ""
+msgstr "Použiť bayesianske porovnávanie"
 
 #: ../src/register/ledger-core/split-register-control.c:57
 msgid "Rebalance Transaction"
@@ -12531,7 +12486,7 @@ msgstr ""
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:1964
-#: ../intl-scm/guile-strings.c:3812
+#: ../intl-scm/guile-strings.c:3806
 msgid "Deposit"
 msgstr "Vklad"
 
@@ -12596,8 +12551,8 @@ msgstr "Priamy dlh"
 #: ../src/register/ledger-core/split-register.c:2022
 #: ../src/register/ledger-core/split-register.c:2027
 #: ../src/register/ledger-core/split-register.c:2052
-#: ../intl-scm/guile-strings.c:3822 ../intl-scm/guile-strings.c:3824
-#: ../intl-scm/guile-strings.c:3826
+#: ../intl-scm/guile-strings.c:3816 ../intl-scm/guile-strings.c:3818
+#: ../intl-scm/guile-strings.c:3820
 msgid "Buy"
 msgstr "Nákup"
 
@@ -12610,8 +12565,8 @@ msgstr "Nákup"
 #: ../src/register/ledger-core/split-register.c:2023
 #: ../src/register/ledger-core/split-register.c:2028
 #: ../src/register/ledger-core/split-register.c:2053
-#: ../intl-scm/guile-strings.c:3850 ../intl-scm/guile-strings.c:3852
-#: ../intl-scm/guile-strings.c:3854
+#: ../intl-scm/guile-strings.c:3844 ../intl-scm/guile-strings.c:3846
+#: ../intl-scm/guile-strings.c:3848
 msgid "Sell"
 msgstr "Predaj"
 
@@ -12623,9 +12578,9 @@ msgstr "Poplatok"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2019
-#: ../intl-scm/guile-strings.c:3858
+#: ../intl-scm/guile-strings.c:3852
 msgid "Rebate"
-msgstr "Zľava"
+msgstr "Rabat"
 
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2039
@@ -12647,7 +12602,7 @@ msgstr "Krátkodobé kapitálové výnosy"
 msgid "Dist"
 msgstr "Distribúcia"
 
-#: ../src/register/register-gnome/gnucash-item-list.c:462
+#: ../src/register/register-gnome/gnucash-item-list.c:474
 msgid "List"
 msgstr ""
 
@@ -12664,103 +12619,103 @@ msgstr "Vlastnosti HTML štýlu: %s"
 msgid "Style Sheet Name"
 msgstr "Názov štýlu"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:273
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:274
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:276
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:277
 msgid "The numeric ID of the report."
 msgstr ""
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:914
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:932
 msgid "_Print Report..."
-msgstr ""
+msgstr "_Tlačiť výkaz..."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:915
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:933
 msgid "Print the current report"
-msgstr ""
+msgstr "Vytlačí aktuálny report"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:917
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:944
 msgid "Add _Report"
-msgstr ""
+msgstr "P_ridať výkaz"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:918
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:945
 msgid "Add the current report to the `Custom' menu for later use. The report will be saved in the file ~/.gnucash/saved-reports-2.0. It will be accessible as menu entry in the report menu at the next startup of GnuCash."
-msgstr ""
+msgstr "Pridať aktuálny výkaz do ponuky `Vlastné' pre neskoršie použitie. Výkaz bude uložený do súboru ~/.gnucash/saved-reports-2.0. Dostuný bude ako položka v ponuke výkazov pri nasledujúcom sputení GnuCash."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:923
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:950
 msgid "Export _Report"
 msgstr "Exportovať _výkaz"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:924
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:951
 msgid "Export HTML-formatted report to file"
 msgstr "Exportuje výkaz ako HTML naformátovaný súbor"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:926
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:953
 msgid "_Report Options"
 msgstr "Nastavenia _výkazu"
 
 #. src/report/report-system/html-utilities.scm
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:927
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:954
 #: ../intl-scm/guile-strings.c:2878 ../intl-scm/guile-strings.c:2884
 #: ../intl-scm/guile-strings.c:2890
 msgid "Edit report options"
 msgstr "Upraviť nastavenie výkazu"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:930
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:957
 msgid "Back"
 msgstr "Predchádzajúci"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:931
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:958
 msgid "Move back one step in the history"
 msgstr "Posunie o jeden krok späť v histórií"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:933
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:960
 msgid "Forward"
 msgstr "Dopredu"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:934
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:961
 msgid "Move forward one step in the history"
 msgstr "Posunie o jeden krok dopredu v histórii"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:936
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:963
 msgid "Reload"
 msgstr "Znova načítanie"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:937
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:964
 msgid "Reload the current page"
-msgstr ""
+msgstr "Znovu načítať aktuálnu stranu"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:939
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:966
 msgid "Stop"
 msgstr "Zastaviť"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:940
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:967
 msgid "Cancel outstanding HTML requests"
 msgstr "Zrušiť nevyjavené HTML požiadavky"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:947
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:974
 msgid "Print"
 msgstr "Tlač"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1222
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1259
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1249
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1286
 msgid "HTML"
 msgstr "HTML"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1225
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1252
 msgid "Choose export format"
 msgstr "Zvoľte formát exportu"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1226
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1253
 msgid "Choose the export format for this report:"
 msgstr "Zvoľte formát, do ktorého bude výkaz exportovaný:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1266
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1293
 #, c-format
 msgid "Save %s To File"
 msgstr "Uložiť %s do súboru"
 
 #. %s is the strerror(3) string of the error that occurred.
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1281
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1308
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -12771,16 +12726,16 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1291
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1318
 msgid "You cannot save to that file."
 msgstr "Nie je možné uložiť do toho súboru."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1372
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1399
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr ""
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1403
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1430
 msgid "There are no options for this report."
 msgstr "Pre tento výkaz nie sú nastavenia."
 
@@ -12887,13 +12842,13 @@ msgstr "Chyba výkazu"
 msgid "An error occurred while running the report."
 msgstr "Pri behu výkazu došlo k chybe."
 
-#: ../src/report/report-gnome/window-report.c:243
-#: ../src/report/report-gnome/window-report.c:265
+#: ../src/report/report-gnome/window-report.c:250
+#: ../src/report/report-gnome/window-report.c:272
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "Zle naformátované nastavenie URL: %s"
 
-#: ../src/report/report-gnome/window-report.c:253
+#: ../src/report/report-gnome/window-report.c:260
 #, c-format
 msgid "Badly report id: %s"
 msgstr "Zlé ID výkazu: %s"
@@ -12907,27 +12862,27 @@ msgstr "_Štýly"
 msgid "Edit report style sheets."
 msgstr "Upraviť štýl výkazu."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:101
+#: ../lib/libqof/backend/file/qsf-backend.c:102
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:102
+#: ../lib/libqof/backend/file/qsf-backend.c:103
 msgid "QOF can compress QSF XML files using gzip. Note that compression is not used when outputting to STDOUT."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:110
+#: ../lib/libqof/backend/file/qsf-backend.c:111
 msgid "List of QSF map files to use for this session."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:111
+#: ../lib/libqof/backend/file/qsf-backend.c:112
 msgid "QOF can convert objects within QSF XML files using a map of the changes required."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:119
+#: ../lib/libqof/backend/file/qsf-backend.c:120
 msgid "Encoding string to use when writing the XML file."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:120
+#: ../lib/libqof/backend/file/qsf-backend.c:121
 msgid "QSF defaults to UTF-8. Other encodings are supported by passing the encoding string in this option."
 msgstr ""
 
@@ -14089,7 +14044,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:600 ../intl-scm/guile-strings.c:940
 #: ../intl-scm/guile-strings.c:1280
 msgid "Entries"
-msgstr ""
+msgstr "Položky"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:602
@@ -14127,7 +14082,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:614 ../intl-scm/guile-strings.c:942
 #: ../intl-scm/guile-strings.c:1282
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "Vzor uzávierkových položiek"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14135,7 +14090,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:616 ../intl-scm/guile-strings.c:944
 #: ../intl-scm/guile-strings.c:1284
 msgid "Any text in the Description column which identifies closing entries"
-msgstr ""
+msgstr "Akýkoľvek text v stĺpci Popis, ktorý identifikuje uzavierkové položky"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14143,7 +14098,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:618 ../intl-scm/guile-strings.c:946
 #: ../intl-scm/guile-strings.c:1286
 msgid "Closing Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Vzor úzavierkovej položky rozlišuje veľké a malé písmená"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14151,7 +14106,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:620 ../intl-scm/guile-strings.c:948
 #: ../intl-scm/guile-strings.c:1288
 msgid "Causes the Closing Entries Pattern match to be case-sensitive"
-msgstr ""
+msgstr "Spôsobí, že vzor bude citlivý na veľkosť písmen"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14159,7 +14114,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:622 ../intl-scm/guile-strings.c:950
 #: ../intl-scm/guile-strings.c:1290
 msgid "Closing Entries Pattern is regular expression"
-msgstr ""
+msgstr "Vzor úzavierkovej položky je regulárny výraz"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14167,7 +14122,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:624 ../intl-scm/guile-strings.c:952
 #: ../intl-scm/guile-strings.c:1292
 msgid "Causes the Closing Entries Pattern to be treated as a regular expression"
-msgstr ""
+msgstr "Spôsobí, že so vzorom sa bude narábať ako s regulárnym výrazom"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -14632,13 +14587,13 @@ msgstr "%s - %s"
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:874 ../intl-scm/guile-strings.c:1254
 msgid "Start Date"
-msgstr "Počiatočný dátum"
+msgstr "Dátum od"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:876 ../intl-scm/guile-strings.c:1256
 msgid "End Date"
-msgstr "Konečný dátum"
+msgstr "Dátum do"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/account-summary.scm
@@ -14653,13 +14608,13 @@ msgstr "Výkaz z týchto účtov, ak to hĺbka zobrazenia povoľuje."
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:886 ../intl-scm/guile-strings.c:2046
 msgid "Flatten list to depth limit"
-msgstr ""
+msgstr "Vyrovnať zoznam na hĺbku limitu"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:888 ../intl-scm/guile-strings.c:2048
 msgid "Displays accounts which exceed the depth limit at the depth limit"
-msgstr ""
+msgstr "Zobraziť účty, ktoré sú nad limitom hĺbky v hĺbke limitu"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/account-summary.scm
@@ -14700,7 +14655,7 @@ msgstr "Zobraziť prázdne miesto namiesto nulových zostatkov"
 #: ../intl-scm/guile-strings.c:902 ../intl-scm/guile-strings.c:1262
 #: ../intl-scm/guile-strings.c:1956 ../intl-scm/guile-strings.c:2062
 msgid "Show accounting-style rules"
-msgstr ""
+msgstr "Zobrazenie podľa úštovných pravidiel"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -14709,7 +14664,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:904 ../intl-scm/guile-strings.c:1264
 #: ../intl-scm/guile-strings.c:1958 ../intl-scm/guile-strings.c:2064
 msgid "Use rules beneath columns of added numbers like accountants do"
-msgstr ""
+msgstr "Použiť pravidlá nad stĺpcami pridaných čísle ako to robia účtovníci"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:910
@@ -15963,7 +15918,7 @@ msgstr "Kód"
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2016
 msgid "Account title"
-msgstr ""
+msgstr "Titulok účtu"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2032
@@ -16922,12 +16877,12 @@ msgstr "Zobraziť výkaz %s"
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:2936
 msgid "Welcome Sample Report"
-msgstr ""
+msgstr "Vitajte v ukážkovom výkaze"
 
 #. src/report/report-gnome/report-gnome.scm
 #: ../intl-scm/guile-strings.c:2938
 msgid "Welcome-to-GnuCash report screen"
-msgstr ""
+msgstr "Vitajte v zobrazení GnuCash výkazov"
 
 #. src/scm/command-line.scm
 #: ../intl-scm/guile-strings.c:2940
@@ -17200,8 +17155,8 @@ msgstr ""
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3132
 #, c-format
-msgid "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
-msgstr "Transakcie súvisiace so spoločnosťou %d obsahujú viac ako len jednu menu. Tento výkaz nie je navrhnutý tak, aby sa s ním mohlo pracovať."
+msgid "Transactions relating to '%s' contain more than one currency.  This report is not designed to cope with this possibility."
+msgstr "Transakcie súvisiace s  '%s' obsahujú viac ako len jednu menu. Tento výkaz nie je navrhnutý tak, aby sa s ním mohlo pracovať."
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3134
@@ -17794,195 +17749,190 @@ msgstr "E-mailová adresa spoločnosti"
 msgid "Company Contact Person"
 msgstr "Kontaktná osoba"
 
-#. src/business/business-gnome/business-gnome.scm
-#: ../intl-scm/guile-strings.c:3802
-msgid "Find"
-msgstr "Nájsť"
-
 #. src/tax/us/txf-de_DE.scm
-#: ../intl-scm/guile-strings.c:3804
+#: ../intl-scm/guile-strings.c:3798
 msgid "The electronic tax number of your business"
 msgstr "Vaše elektronické daňové číslo"
 
 #. src/tax/us/de_DE.scm
-#: ../intl-scm/guile-strings.c:3808
+#: ../intl-scm/guile-strings.c:3802
 msgid "Tax Number"
 msgstr "Daňové číslo"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3810
+#: ../intl-scm/guile-strings.c:3804
 msgid "Funds In"
 msgstr "Fondy v"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3814
+#: ../intl-scm/guile-strings.c:3808
 msgid "Receive"
 msgstr "Príjem"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3818 ../intl-scm/guile-strings.c:3848
-#: ../intl-scm/guile-strings.c:3864
+#: ../intl-scm/guile-strings.c:3812 ../intl-scm/guile-strings.c:3842
+#: ../intl-scm/guile-strings.c:3858
 msgid "Increase"
 msgstr "Nárast"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3820 ../intl-scm/guile-strings.c:3836
-#: ../intl-scm/guile-strings.c:3846
+#: ../intl-scm/guile-strings.c:3814 ../intl-scm/guile-strings.c:3830
+#: ../intl-scm/guile-strings.c:3840
 msgid "Decrease"
 msgstr "Zníženie"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3838
+#: ../intl-scm/guile-strings.c:3832
 msgid "Funds Out"
 msgstr "Nedostatočné krytie"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3840
+#: ../intl-scm/guile-strings.c:3834
 msgid "Withdrawal"
 msgstr "Výber"
 
 #. src/app-utils/prefs.scm
-#: ../intl-scm/guile-strings.c:3842
+#: ../intl-scm/guile-strings.c:3836
 msgid "Spend"
 msgstr "Výdaj"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3866
+#: ../intl-scm/guile-strings.c:3860
 msgid "Current Year Start"
 msgstr "Začiatku aktuálneho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3868
+#: ../intl-scm/guile-strings.c:3862
 msgid "Start of the current calendar year"
 msgstr "Začiatku aktuálneho kalendárneho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3870
+#: ../intl-scm/guile-strings.c:3864
 msgid "Current Year End"
 msgstr "konca aktuálneho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3872
+#: ../intl-scm/guile-strings.c:3866
 msgid "End of the current calendar year"
 msgstr "konca aktuálneho kalendárneho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3874
+#: ../intl-scm/guile-strings.c:3868
 msgid "Previous Year Start"
 msgstr "Začiatok predchádzajúceho roka"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3876
+#: ../intl-scm/guile-strings.c:3870
 msgid "Beginning of the previous calendar year"
 msgstr "Začiatok predchádzajúceho kalendárneho roka"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3878
+#: ../intl-scm/guile-strings.c:3872
 msgid "Previous Year End"
 msgstr "konca predchádzajúceho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3880
+#: ../intl-scm/guile-strings.c:3874
 msgid "End of the Previous Year"
 msgstr "konca predchádzajúceho roku"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3882
+#: ../intl-scm/guile-strings.c:3876
 msgid "Start of Financial Period"
 msgstr "Začiatok finančného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3884
+#: ../intl-scm/guile-strings.c:3878
 msgid "Start of the accounting period, as set in the global preferences"
 msgstr "Začiatok účtovného obdobia, ako je nastavené vo všeobecných nastaveniach"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3886
+#: ../intl-scm/guile-strings.c:3880
 msgid "End of Financial Period"
 msgstr "konca finančného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3888
+#: ../intl-scm/guile-strings.c:3882
 msgid "End of the accounting period, as set in the global preferences"
 msgstr "Koniec účtovného obdobia, ako je nastavené vo všeobecných nastaveniach"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3892
+#: ../intl-scm/guile-strings.c:3886
 msgid "Start of the current month"
 msgstr "Začiatku aktuálneho mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3896
+#: ../intl-scm/guile-strings.c:3890
 msgid "End of the current month"
 msgstr "konca aktuálneho mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3900
+#: ../intl-scm/guile-strings.c:3894
 msgid "The beginning of the previous month"
 msgstr "Začiatku predchádzajúceho mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3904
+#: ../intl-scm/guile-strings.c:3898
 msgid "Last day of previous month"
 msgstr "Posledný deň predchádzajúceho mesiaca"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3906
+#: ../intl-scm/guile-strings.c:3900
 msgid "Start of current quarter"
 msgstr "Začiatku aktuálneho kvartálu"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3908
+#: ../intl-scm/guile-strings.c:3902
 msgid "The start of the latest quarterly accounting period"
 msgstr "Začiatku posledného kvartálneho účtovného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3910
+#: ../intl-scm/guile-strings.c:3904
 msgid "End of current quarter"
 msgstr "konca aktuálneho kvartálu"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3912
+#: ../intl-scm/guile-strings.c:3906
 msgid "The end of the latest quarterly accounting period"
 msgstr "konca posledného kvartálneho účtovného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3916
+#: ../intl-scm/guile-strings.c:3910
 msgid "The start of the previous quarterly accounting period"
 msgstr "Začiatku predchádzajúceho kvartálneho účtovného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3920
+#: ../intl-scm/guile-strings.c:3914
 msgid "End of previous quarterly accounting period"
 msgstr "konca predchádzajúceho kvartálneho účtovného obdobia"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3924
+#: ../intl-scm/guile-strings.c:3918
 msgid "The current date"
 msgstr "Aktuálny dátum"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3926 ../intl-scm/guile-strings.c:3928
+#: ../intl-scm/guile-strings.c:3920 ../intl-scm/guile-strings.c:3922
 msgid "One Month Ago"
 msgstr "Pred mesiacom"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3930 ../intl-scm/guile-strings.c:3932
+#: ../intl-scm/guile-strings.c:3924 ../intl-scm/guile-strings.c:3926
 msgid "One Week Ago"
 msgstr "Pred týždňom"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3934 ../intl-scm/guile-strings.c:3936
+#: ../intl-scm/guile-strings.c:3928 ../intl-scm/guile-strings.c:3930
 msgid "Three Months Ago"
 msgstr "Pred tromi mesiacmi"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3938 ../intl-scm/guile-strings.c:3940
+#: ../intl-scm/guile-strings.c:3932 ../intl-scm/guile-strings.c:3934
 msgid "Six Months Ago"
 msgstr "Pred šiestimi mesiacmi"
 
 #. src/app-utils/date-utilities.scm
-#: ../intl-scm/guile-strings.c:3942 ../intl-scm/guile-strings.c:3944
+#: ../intl-scm/guile-strings.c:3936 ../intl-scm/guile-strings.c:3938
 msgid "One Year Ago"
 msgstr "Pred rokom"
 
@@ -18057,3 +18007,15 @@ msgstr ""
 #: ../doc/tip_of_the_day.list.in:82
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr "Existuje teória, podľa ktorej, ak niekto zistí, pre koho a prečo tu je Vesmír, tak okamžite zmizne a bude nahradený s niečím ešte viac bizarnejším a nevysvetliteľným. Je ešte iná teória, že už sa to stalo. Douglas Adams, \"Reštaurácia na konci Vesmíru\""
+
+#~ msgid "Lost Accounts"
+#~ msgstr "Stratené účty"
+
+#~ msgid "Import currency and stock information"
+#~ msgstr "Importovať informácie o menách a akciách"
+
+#~ msgid "Update your accounts with the new information"
+#~ msgstr "Aktualizujte svoje účty s novými informáciami"
+
+#~ msgid "Find"
+#~ msgstr "Nájsť"
