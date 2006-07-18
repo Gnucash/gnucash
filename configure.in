@@ -314,8 +314,8 @@ AC_SUBST(G_WRAP_LIB_DIR)
 AS_SCRUB_INCLUDE(CFLAGS)
 
 AC_MSG_CHECKING([for (g-wrap) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
         ${GUILE} -c "(use-modules (g-wrap))" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
@@ -330,8 +330,8 @@ else
 fi
 
 AC_MSG_CHECKING([for (g-wrap gw-glib-spec) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
         ${GUILE} -c "(use-modules (g-wrap gw-glib-spec))" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
@@ -346,16 +346,16 @@ else
 fi
 
 AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
         ${GUILE} -c "(use-modules (g-wrap gw-standard))" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
   AC_MSG_CHECKING([for (g-wrap gw standard) guile module])
-  if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-    GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+  if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
+    GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
         ${GUILE} -c "(use-modules (g-wrap gw standard))" > /dev/null 2>&1
   then
     AC_MSG_RESULT(yes)
