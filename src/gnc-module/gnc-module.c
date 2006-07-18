@@ -220,8 +220,9 @@ gnc_module_system_refresh(void)
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
-          fullpath = g_strdup_printf("%s/%s", (char *)(current->data), 
+          fullpath = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", (char *)(current->data), 
                                      dent->d_name);
+	  /* G_DIR_SEPARATOR_S is "/" on unix and "\\" on windows. */
           info     = gnc_module_get_info(fullpath);
           
           if(info) 
