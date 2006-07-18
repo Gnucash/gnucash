@@ -860,10 +860,38 @@ increment_stamp(GncTreeModelTransaction *model)
 }
 
 static void
+update_parent(GncTreeModelTransaction *model, GtkTreePath *path)
+{
+    GList *tnode;
+    GtkTreeIter iter;
+
+    if (gtk_tree_path_up(path) && gnc_tree_model_transaction_get_iter(
+            GTK_TREE_MODEL(model), &iter, path)) {
+        /* emit changed on the parent because balance may have changed */
+        /* This has an undesired side-effect in the sort model.  The
+           order of identical sort keys unfortunately changes when
+           row_changed is emitted. */
+        gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+        tnode = iter.user_data2;
+
+        /* Checkme: Isn't there a simpler condition to check for? */ 
+        if (IS_BLANK_TRANS(&iter) && (tnode->data == model->priv->btrans) && 
+            (xaccTransCountSplits(model->priv->btrans) == 0)) {
+            increment_stamp(model);
+            
+            PINFO("toggling has_child at row %s\n",
+                  gtk_tree_path_to_string(path));
+            
+            gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model),
+                                                 path, &iter);
+        }
+    }
+}
+
+static void
 insert_row_at(GncTreeModelTransaction *model, GtkTreeIter *iter)
 {
     GtkTreePath *path;
-    GList *tnode;
 
     g_assert(VALID_ITER(model, iter));
     path = gnc_tree_model_transaction_get_path(GTK_TREE_MODEL(model), iter);
@@ -875,31 +903,13 @@ insert_row_at(GncTreeModelTransaction *model, GtkTreeIter *iter)
         gtk_tree_model_row_inserted(GTK_TREE_MODEL(model), path, iter);
     } else PERR("Tried to insert with invalid iter.");
 
-    if (gtk_tree_path_up(path) && gnc_tree_model_transaction_get_iter(
-            GTK_TREE_MODEL(model), iter, path)) {
-        //gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, iter);
-        tnode = iter->user_data2;
-        /* Assumption: When the blank split is inserted into the blank
-           trans, it's always the first child of the blank trans. */
-        if (IS_BLANK_TRANS(iter) && tnode->data == model->priv->btrans) {
-            increment_stamp(model);
-
-            PINFO("toggling has_child at row %s\n",
-                  gtk_tree_path_to_string(path));
-            gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model),
-                                                 path, iter);
-        }
-    }
-
+    update_parent(model, path);
     gtk_tree_path_free(path);
 }
 
 static void
 delete_row_at_path(GncTreeModelTransaction *model, GtkTreePath *path)
 {
-    GncTreeModelTransactionPrivate *priv = model->priv;
-    GList *tnode;
-    GtkTreeIter iter;
     gint depth;
 
     if (!path) PERR("Null path");
@@ -908,31 +918,16 @@ delete_row_at_path(GncTreeModelTransaction *model, GtkTreePath *path)
 
     depth = gtk_tree_path_get_depth(path);
     if (depth == 2) {
-        if (gtk_tree_path_up(path) && gnc_tree_model_transaction_get_iter(
-                GTK_TREE_MODEL(model), &iter, path)) {
-            gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
-            tnode = iter.user_data2;
-            /* Assumption: When the blank split is removed from the blank
-               trans, it's always the last child of the blank trans. */ 
-            if (IS_BLANK_TRANS(&iter) && tnode->data == model->priv->btrans) {
-                increment_stamp(model);
-
-                PINFO("toggling has_child at row %s\n",
-                      gtk_tree_path_to_string(path));
-
-                gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model),
-                                                     path, &iter);
-            }
-        }
+        update_parent(model, path);
     } else {
+        GtkTreeIter iter;
         if (gnc_tree_model_transaction_get_iter(
-                GTK_TREE_MODEL(model), &iter, path)) {
-            tnode = iter.user_data2;
+                GTK_TREE_MODEL(model), &iter, path)) { 
+            GList *tnode = iter.user_data2;
+            GncTreeModelTransactionPrivate *priv = model->priv;
             if (tnode == priv->bsplit_parent_node)
                 priv->bsplit_parent_node = NULL;
-            model->priv->tlist = g_list_delete_link(
-                model->priv->tlist, tnode);
-
+            priv->tlist = g_list_delete_link(priv->tlist, tnode);
         }
     }
 }
@@ -1059,8 +1054,9 @@ make_new_blank_split(GncTreeModelTransaction *model)
     GList *tnode = model->priv->bsplit_parent_node;
 
     split = xaccMallocSplit(model->priv->book);
-    if (model->priv->anchor)
-        xaccSplitSetAccount(split, model->priv->anchor);
+    // This is maybe a BadIdea.
+    //if (model->priv->anchor)
+    //    xaccSplitSetAccount(split, model->priv->anchor);
     model->priv->bsplit = split;
     model->priv->bsplit_node->data = model->priv->bsplit;
 
