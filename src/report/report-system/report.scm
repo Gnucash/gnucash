@@ -98,8 +98,10 @@
 	      (hash-set! *gnc:_report-templates_*
 			 (gnc:report-template-name report-rec) report-rec)
 	      (begin
-		(gnc:error (_ "Refusing to add custom report with the same name as an existing report."))
-		(gnc:error (_ "Please edit your saved-reports file and delete the section for: " name))
+		;; FIXME: We should pass the top-level window
+		;; instead of the #f to gnc:error-dialog, but I
+		;; have no idea where to get it from.
+		(gnc:error-dialog #f (string-append (_ "A custom report with this name already exists. Either rename the report to store it with a different name, or edit your saved-reports file and delete the section with the following name: ") name ))
 		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
