@@ -1,3 +1,4 @@
+# translation of gnucash-trunk-es.po to spanish
 # translation of gnucash-1.9.8.po to spanish
 # translation of gnucash-1.9.6.po to spanish
 # Traduccion de «GnuCash» al español
@@ -8,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-1.9.8\n"
+"Project-Id-Version: gnucash-trunk-es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-05 22:39+0200\n"
-"PO-Revision-Date: 2006-07-05 23:16+0200\n"
+"PO-Revision-Date: 2006-07-18 21:46+0200\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -355,7 +356,7 @@ msgstr "Extra a cargar a la tarjeta"
 
 #: ../src/business/business-core/gncInvoice.c:1067
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr "Generado desde una factura. Pruebe des-enviando la factura."
+msgstr "Generado desde una factura. Pruebe descontabilizando la factura."
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/business/business-core/gncInvoice.c:1085
@@ -758,7 +759,7 @@ msgstr "No puede contabilizar una hoja de gasto con un valor metálico total nega
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:630
 msgid "Do you really want to post the invoice?"
-msgstr "¿Está seguro de que quiere enviar la factura?"
+msgstr "¿Está seguro de que quiere contabilizar la factura?"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -772,7 +773,7 @@ msgstr "Fecha de pago"
 
 #: ../src/business/business-gnome/dialog-invoice.c:632
 msgid "Post Date"
-msgstr "Fecha de envio"
+msgstr "Fecha de contabilización"
 
 #: ../src/business/business-gnome/dialog-invoice.c:633
 msgid "Post to Account"
@@ -780,7 +781,7 @@ msgstr "Contabilizar en cuenta"
 
 #: ../src/business/business-gnome/dialog-invoice.c:634
 msgid "Accumulate Splits?"
-msgstr "¿Acumular anotaciones?"
+msgstr "¿Acumular desgloses?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:928
 #: ../src/gnome/window-reconcile.c:1051
@@ -1174,12 +1175,12 @@ msgstr "Debe seleccionar una cuenta de transferencia desde el plan de cuentas."
 
 #: ../src/business/business-gnome/dialog-payment.c:251
 msgid "You must enter an account name for posting."
-msgstr "Debe introducir un nombre de cuenta para envio."
+msgstr "Debe introducir un nombre de cuenta para contabilización."
 
 #: ../src/business/business-gnome/dialog-payment.c:260
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "La cuenta de envio «%s» que ha seleccionado no existe."
+msgstr "La cuenta de contabilización «%s» que ha seleccionado no existe."
 
 #: ../src/business/business-gnome/dialog-payment.c:460
 #, c-format
@@ -1364,13 +1365,11 @@ msgstr "El último día del mes para obtener el descuento por prontopago."
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
-msgstr ""
-"El número de días después de la fecha de envío durante los cuales será "
-"aplicable el descuento por prontopago."
+msgstr "El número de días después de la fecha de contabilización durante los cuales será aplicable el descuento por prontopago."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The number of days to pay the bill after the post date."
-msgstr "El número de días para pagar la factura después de la fecha del envío."
+msgstr "El número de días para pagar la factura después de la fecha de la contabilización."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
 msgid "The percentage discount applied for early payment."
@@ -1439,8 +1438,7 @@ msgid ""
 "changed in the Post dialog."
 msgstr ""
 "Indica que en el caso de que haya más de una entrada en la factura que "
-"transfieren a la misma cuenta, estos deben acumularse en un único asiento "
-"por omisión. Este valor puede cambiarse en la ventana Enviar."
+"transfieren a la misma cuenta, estos deben acumularse por omisión en un único desglose. Este valor puede cambiarse en la ventana Contabilizar."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid ""
@@ -1464,7 +1462,7 @@ msgstr "Indica si debe mostrarse la lista de facturas vencidas al arrancar."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
-msgstr "_Acumular anotaciones al contabilizar"
+msgstr "_Acumular desgloses al contabilizar"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
@@ -1926,7 +1924,7 @@ msgstr "Información de pago"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Post To"
-msgstr "Enviar a"
+msgstr "Contabilizar en"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:8
 msgid "Transfer Account"
@@ -2424,7 +2422,7 @@ msgstr "Blanco"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 msgid "Post"
-msgstr "Enviar"
+msgstr "Contabilizar"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:199
 msgid "Unpost"
@@ -2432,7 +2430,7 @@ msgstr "Descontabilizar"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
-msgstr "Acumular anotaciones múltiples en una"
+msgstr "Acumular múltiples desgloses en uno"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid ""
@@ -2477,10 +2475,8 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"Si este campo esta marcado, todas las anotaciones de una factura que se "
-"correspondan con la misma cuenta se acumularán en una única anotación "
-"contable. Este campo puede cambiarse en cada factura en la ventana "
-"Contabilizando."
+"Si este campo esta marcado, todas las partidas de una factura que se "
+"correspondan con la misma cuenta se acumularán en un único desglose. Este campo puede cambiarse en cada factura en la ventana Contabilizar."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
 msgid "Is tax included in this type of business entry?"
@@ -3341,7 +3337,7 @@ msgstr "Descuadre"
 #: ../src/engine/Split.c:1220 ../src/engine/Split.c:1237
 #: ../intl-scm/guile-strings.c:2548 ../intl-scm/guile-strings.c:2570
 msgid "-- Split Transaction --"
-msgstr "-- anotaciones múltiples --"
+msgstr "-- asiento con múltiples desgloses --"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/engine/Split.c:1253 ../src/gnome/druid-stock-split.c:448
@@ -3559,12 +3555,12 @@ msgstr "Este asiento programado ha cambiado, ¿está seguro de que quiere cancelar
 #: ../src/gnome/dialog-scheduledxaction.c:794
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "No se puede analizar la fórmula de crédito para el asiento «%s»."
+msgstr "No se puede analizar la fórmula de crédito para el desglose «%s»."
 
 #: ../src/gnome/dialog-scheduledxaction.c:820
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "No se pudo analizar la fórmula de débito para el asiento «%s»."
+msgstr "No se pudo analizar la fórmula de débito para el desglose «%s»."
 
 #: ../src/gnome/dialog-scheduledxaction.c:858
 #: ../src/gnome/dialog-sx-from-trans.c:269
@@ -4386,9 +4382,7 @@ msgid ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
-msgstr ""
-"Esta cuenta está únicamente como contenedor en el plan de cuentas. No pueden "
-"crearse asientos a/desde esta cuenta, sólo a/desde subcuentas."
+msgstr "Esta cuenta está únicamente como contenedor en el plan de cuentas. No pueden crearse asientos a/desde esta cuenta, sólo a/desde subcuentas."
 
 #: ../src/gnome/glade/account.glade.h:73
 msgid ""
@@ -5415,7 +5409,7 @@ msgstr "Editar tipo de cambio"
 
 #: ../src/gnome/glade/register.glade.h:23
 msgid "Edit the exchange rate for the current split"
-msgstr "Editar el tipo de cambio para la anotación actual"
+msgstr "Editar el tipo de cambio para el desglose actual"
 
 #: ../src/gnome/glade/register.glade.h:24
 msgid "End:"
@@ -5423,7 +5417,7 @@ msgstr "Fin:"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
-msgstr "Eliminar todas las anotaciones excepto la de esta cuenta."
+msgstr "Eliminar todos los desgloses excepto el de esta cuenta."
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
@@ -5476,7 +5470,7 @@ msgstr "Guardar el asiento actual"
 
 #: ../src/gnome/glade/register.glade.h:38
 msgid "Remove Transaction Splits"
-msgstr "Eliminar anotaciones de asiento"
+msgstr "Eliminar desgloses del asiento"
 
 #: ../src/gnome/glade/register.glade.h:39
 #: ../src/gnome/gnc-plugin-page-register.c:275
@@ -5507,12 +5501,12 @@ msgstr "Mostrar _todo"
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:276
 msgid "Show all splits in the current transaction"
-msgstr "Mostrar todas las anotaciones del asiento actual"
+msgstr "Mostrar todos los desgloses del asiento actual"
 
 #: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:291
 msgid "Show expanded transactions with all splits"
-msgstr "Mostrar asientos expandidos con todas las anotaciones"
+msgstr "Mostrar asientos expandidos con todos los desgloses"
 
 #: ../src/gnome/glade/register.glade.h:48
 #: ../src/gnome/gnc-plugin-page-register.c:285
@@ -5896,7 +5890,7 @@ msgstr "Bisemanal"
 
 #: ../src/gnome/glade/sched-xact.glade.h:52
 msgid "Conditional on splits not having variables"
-msgstr "Condicional en asientos que no tienen variables"
+msgstr "Condicional en desgloses que no tienen variables"
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Crea_te in advance, days:"
@@ -6604,9 +6598,7 @@ msgstr "Símbolo"
 
 #: ../src/gnome/glade/stocks.glade.h:18
 msgid "This druid will help you record a stock split or stock merger."
-msgstr ""
-"Este asistente le ayudará a anotar una división (split)\n"
-"o una fusión (merger) de valores."
+msgstr "Este asistente le ayudará a anotar una división (split) o una fusión (merger) de valores."
 
 #: ../src/gnome/glade/stocks.glade.h:19
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
@@ -6982,7 +6974,7 @@ msgstr "Comprobar y reparar _cuenta"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr "Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta cuenta"
+msgstr "Buscar y reparar asientos descuadrados y desgloses huérfanos en esta cuenta"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
 msgid "Check & Repair Su_baccount"
@@ -6993,7 +6985,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta "
+"Buscar y reparar asientos descuadrados y desgloses huérfanos en esta "
 "cuenta y sus subcuentas"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:195
@@ -7005,7 +6997,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"Buscar y reparar asientos descuadrados y anotaciones huérfanas en todas las "
+"Buscar y reparar asientos descuadrados y desgloses huérfanos en todas las "
 "cuentas"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:218
@@ -7201,11 +7193,11 @@ msgstr "_Borrar asiento"
 
 #: ../src/gnome/gnc-plugin-page-register.c:203
 msgid "Remo_ve Transaction Splits"
-msgstr "_Eliminar anotaciones del asiento"
+msgstr "_Eliminar desgloses del asiento"
 
 #: ../src/gnome/gnc-plugin-page-register.c:204
 msgid "Remove all splits in the current transaction"
-msgstr "Borrar todas las anotaciones del asiento actual"
+msgstr "Borrar todos los desgloses del asiento actual"
 
 #: ../src/gnome/gnc-plugin-page-register.c:206
 msgid "_Enter Transaction"
@@ -7370,7 +7362,7 @@ msgstr "y subcuentas"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1978
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "No puede invalidar un asiento con anotaciones conciliadas o punteadas."
+msgstr "No puede invalidar un asiento con desgloses conciliados o punteados."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2046
 #: ../src/gnome/gnc-split-reg.c:908
@@ -7427,36 +7419,36 @@ msgstr "Este asiento está marcado como de sólo lectura con el comentario: «%s»"
 
 #: ../src/gnome/gnc-split-reg.c:969
 msgid "Remove the splits from this transaction?"
-msgstr "¿Eliminar las anotaciones de este asiento?"
+msgstr "¿Eliminar los desgloses de este asiento?"
 
 #: ../src/gnome/gnc-split-reg.c:970
 msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"Este asiento contiene anotaciones conciliadas. Modificarlo no es una buena "
+"Este asiento contiene desgloses conciliados. Modificarlo no es una buena "
 "idea, puesto que haría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:994
 msgid "_Remove Splits"
-msgstr "_Eliminar anotaciones"
+msgstr "_Eliminar desgloses"
 
 #: ../src/gnome/gnc-split-reg.c:1069
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "¿Borrar la anotación «%s» del asiento «%s»?"
+msgstr "¿Borrar el desglose «%s» del asiento «%s»?"
 
 #: ../src/gnome/gnc-split-reg.c:1070
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
-"¡Estaría borrando una anotación conciliada! No es una buena idea puesto que "
+"¡Estaría borrando un desglose conciliado! No es una buena idea puesto que "
 "causaría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1073
 msgid "You cannot delete this split."
-msgstr "No puede borrar esta anotación."
+msgstr "No puede borrar este desglose."
 
 #: ../src/gnome/gnc-split-reg.c:1074
 msgid ""
@@ -7465,10 +7457,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"Esta es la anotación que une este asiento al registro. No puede borrarla "
+"Esta es el desglose que une este asiento al registro. No puede borrarla "
 "desde esta ventana de registro.  Puede borrar el asiento completo desde esta "
 "ventana, o puede cambiar a otro registro que muestre otra parte de este "
-"mismo asiento y borrar la anotación desde ese registro."
+"mismo asiento y borrar el desglose desde ese registro."
 
 #: ../src/gnome/gnc-split-reg.c:1101
 msgid "(no memo)"
@@ -7480,7 +7472,7 @@ msgstr "(no descripción)"
 
 #: ../src/gnome/gnc-split-reg.c:1127
 msgid "_Delete Split"
-msgstr "_Borrar anotación"
+msgstr "_Borrar desglose"
 
 #: ../src/gnome/gnc-split-reg.c:1143
 msgid "Delete the current transaction?"
@@ -7491,7 +7483,7 @@ msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"¡Estaría borrando un asiento con anotaciones conciliadas! Esto no es una "
+"¡Estaría borrando un asiento con desgloses conciliados! Esto no es una "
 "buena idea, puesto que haría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1795
@@ -8235,7 +8227,7 @@ msgstr ""
 "registro nueva. Los valores posibles son «libro», «auto-libro» y «diario». "
 "El valor «libro» indica que cada asiento debe mostrarse en una o dos líneas. "
 "El valor «auto-libro» hace lo mismo, pero expande además el asiento actual "
-"para mostrar todas las anotaciones. El valor «diario» muestra todos los "
+"para mostrar todos los desgloses. El valor «diario» muestra todos los "
 "asientos expandidos."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
@@ -8363,7 +8355,7 @@ msgstr "Usar etiquetas de cuenta formales"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:1
 msgid "Change contents of reconciled split"
-msgstr "Cambiar contenidos de la anotación conciliada"
+msgstr "Cambiar contenidos del desglose conciliado"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:2
 msgid "Commit changes to a invoice_entry"
@@ -8399,7 +8391,7 @@ msgstr "Duplicando un asiento modificado"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
 msgid "Mark transaction split as unreconciled"
-msgstr "Marcar la anotación del asiento como no-conciliado"
+msgstr "Marcar el desglose del asiento como no-conciliado"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
 msgid "Read only register"
@@ -8407,11 +8399,11 @@ msgstr "Registro de sólo lectura"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
 msgid "Remove a splits from a transaction"
-msgstr "Eliminar una anotación de un asiento"
+msgstr "Eliminar un desglose de un asiento"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
 msgid "Remove all the splits from a transaction"
-msgstr "Eliminar todas las anotaciones de un asiento"
+msgstr "Eliminar todos los desgloses de un asiento"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
 msgid ""
@@ -8420,7 +8412,7 @@ msgid ""
 "reconciliations."
 msgstr ""
 "Esta ventana se muestra antes de permitirle cambiar el contenido de un "
-"asiento conciliado. Permitir estos cambios puede hacer difícil conciliar en "
+"desglose conciliado. Permitir estos cambios puede hacer difícil conciliar en "
 "el futuro."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:15
@@ -8442,7 +8434,7 @@ msgid ""
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
 "Esta ventana se presenta antes de permitirle eliminar un asiento que "
-"contiene anotaciones conciliadas. Hacerlo puede quitar la cantidad "
+"contiene desgloses conciliados. Hacerlo puede quitar la cantidad "
 "conciliada del registro y puede hacer difícil conciliar en el futuro."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
@@ -8462,10 +8454,7 @@ msgid ""
 "This dialog is presented before allowing you to mark a transaction split as "
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
-msgstr ""
-"Esta ventana se presenta antes de permitirle marcar una anotación como no "
-"conciliado. Hacerlo puede quitar la cantidad conciliada del registro y hacer "
-"más difícil conciliar en el futuro."
+msgstr "Esta ventana se presenta antes de permitirle marcar un desglose de asiento como no conciliado. Hacerlo puede quitar la cantidad conciliada del registro y hacer más difícil conciliar en el futuro."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
 msgid ""
@@ -8473,8 +8462,8 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
-"Esta ventana se presenta antes de permitirle eliminar una anotación "
-"conciliada de un asiento. Hacerlo puede quitar la cantidad conciliada del "
+"Esta ventana se presenta antes de permitirle eliminar un desglose "
+"conciliado de un asiento. Hacerlo puede quitar la cantidad conciliada del "
 "registro y hacer más difícil conciliar en el futuro."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
@@ -8482,7 +8471,7 @@ msgid ""
 "This dialog is presented before allowing you to remove a splits from a "
 "transaction."
 msgstr ""
-"Esta ventana se presenta antes de permitirle eliminar una anotación de un "
+"Esta ventana se presenta antes de permitirle eliminar un desglose de un "
 "asiento."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
@@ -8492,7 +8481,7 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
-"Esta ventana se presenta antes de permitirle eliminar todas las anotaciones "
+"Esta ventana se presenta antes de permitirle eliminar todas los desgloses"
 "(incluyendo algunos conciliados) de un asiento. Hacerlo puede quitar la "
 "cantidad conciliada del registro y hacer más difícil conciliar en el futuro."
 
@@ -8501,7 +8490,7 @@ msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
-"Esta ventana se presenta antes de permitirle eliminar todas las anotaciones "
+"Esta ventana se presenta antes de permitirle eliminar todas los desgloses"
 "de un asiento."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:25
@@ -9961,7 +9950,7 @@ msgstr "<b>Información de cambio/cotización</b>"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:2
 msgid "<b>Split Information</b>"
-msgstr "<b>Información de anotación</b>"
+msgstr "<b>Información del desglose</b>"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:3
 msgid "To A_mount:"
@@ -10183,7 +10172,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:33
 msgid "All transactions are expanded to show all splits."
-msgstr "Todos los asientos se expanden para mostrar todas las anotaciones."
+msgstr "Todos los asientos se expanden para mostrar todos los desgloses."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:34
 msgid ""
@@ -10206,7 +10195,7 @@ msgid ""
 "Automatically expand the current transaction to show all splits.  All other "
 "transactions are shown on one line. (Two in double line mode.)"
 msgstr ""
-"Expandir el asiento actual para mostrar todas las anotaciones.  Todos los "
+"Expandir el asiento actual para mostrar todos los desgloses.  Todos los "
 "demás asientos se muestran en una línea. (Dos en el modo de doble línea)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:38
@@ -12061,8 +12050,7 @@ msgid ""
 "required)."
 msgstr ""
 "«Seleccionar acción de importación» le permite cambiar el asiento "
-"coincidente para conciliarlo, o establecer la cuenta de destino de la "
-"anotación para auto-saldarlo (en caso necesario)."
+"coincidente para conciliarlo, o establecer la cuenta de destino del desglose para auto-saldarlo (en caso necesario)."
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -12181,7 +12169,7 @@ msgstr "Verde"
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Imported transaction's first split:"
-msgstr "Primera anotación del asiento importado:"
+msgstr "Primer desglose del asiento importado:"
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid ""
@@ -12205,7 +12193,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:38
 msgid "List of downloaded transactions (source split shown):"
-msgstr "Lista de asientos descargados (se muestra anotación origen):"
+msgstr "Lista de asientos descargados (se muestra desglose origen):"
 
 #: ../src/import-export/generic-import.glade.h:39
 msgid "Match _display threshold"
@@ -12231,7 +12219,7 @@ msgstr "Elija o añada una cuenta GnuCash adecuada para:"
 
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Potential splits matching the selected transaction: "
-msgstr "Anotaciones que podrían concordar con el asiento seleccionado:"
+msgstr "Desgloses que podrían concordar con el asiento seleccionado:"
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "R"
@@ -13179,7 +13167,7 @@ msgstr "a/d/m"
 
 #: ../src/import-export/import-main-matcher.c:304
 msgid "Destination account for the auto-balance split."
-msgstr "Cuenta de destino para la anotación de cuadrado automático."
+msgstr "Cuenta de destino para el desglose de cuadrado automático."
 
 #: ../src/import-export/import-main-matcher.c:651
 msgid "New, already balanced"
@@ -13433,7 +13421,7 @@ msgstr ""
 #: ../src/import-export/qif-import/druid-qif-import.c:1230
 #: ../src/import-export/qif-import/druid-qif-import.c:1674
 msgid "(split)"
-msgstr "(anotación)"
+msgstr "(desglose)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1394
 msgid "You must enter a Type for the commodity."
@@ -14092,7 +14080,7 @@ msgstr ""
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
-msgstr "Va a sobreescribir una anotación existente. ¿Está seguro?"
+msgstr "Va a sobreescribir un desglose existente. ¿Está seguro?"
 
 #: ../src/register/ledger-core/split-register.c:728
 msgid ""
@@ -14264,15 +14252,15 @@ msgstr "Cuadrar _manualmente"
 
 #: ../src/register/ledger-core/split-register-control.c:108
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Permitir a GnuCash _añadir una anotación de ajuste"
+msgstr "Permitir a GnuCash _añadir un desglose de ajuste"
 
 #: ../src/register/ledger-core/split-register-control.c:113
 msgid "Adjust current account _split total"
-msgstr "Ajustar el total de la ano_tación de la cuenta actual"
+msgstr "Ajustar el total del de_sglose de la cuenta actual"
 
 #: ../src/register/ledger-core/split-register-control.c:119
 msgid "Adjust _other account split total"
-msgstr "Ajustar el total de la anotación de _otra cuenta"
+msgstr "Ajustar el total del desglose de _otra cuenta"
 
 #: ../src/register/ledger-core/split-register-control.c:130
 msgid "_Rebalance"
@@ -14305,15 +14293,13 @@ msgstr "_Guardar cambios"
 
 #: ../src/register/ledger-core/split-register-control.c:1457
 msgid "Mark split as unreconciled?"
-msgstr "¿Marcar anotación como no conciliado?"
+msgstr "¿Marcar desglose como no conciliado?"
 
 #: ../src/register/ledger-core/split-register-control.c:1459
 msgid ""
 "You are about to mark a reconciled split as unreconciled.  Doing so might "
 "make future reconciliation difficult!  Continue with this change?"
-msgstr ""
-"Va a marcar este asiento como no conciliado. ¡Hacer esto puede dificultar "
-"los punteos en el futuro! ¿Continuar con este cambio?"
+msgstr "Va a marcar este desglose conciliado como no conciliado. ¡Hacer esto puede dificultar el conciliar en el futuro! ¿Continuar con este cambio?"
 
 #: ../src/register/ledger-core/split-register-control.c:1476
 msgid "_Unreconcile"
@@ -14435,7 +14421,7 @@ msgstr "Introducir el tipo de asiento, o seleccionar uno de la lista"
 
 #: ../src/register/ledger-core/split-register-model.c:1061
 msgid "Enter a description of the split"
-msgstr "Introducir una descripción para la anotación"
+msgstr "Introducir una descripción para el desglose"
 
 #: ../src/register/ledger-core/split-register-model.c:1136
 msgid "Enter the effective share price"
@@ -14453,7 +14439,7 @@ msgstr "Introduzca la cuenta desde la que transferir, o seleccione una de la lis
 #: ../src/register/ledger-core/split-register-model.c:1299
 msgid "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Este asiento tiene múltiples anotaciones; pulse el boton «Desglosar» para "
+"Este asiento tiene múltiples desgloses; pulse el boton «Desglosar» para "
 "ver todas"
 
 #: ../src/register/ledger-core/split-register-model.c:1302
@@ -14477,19 +14463,19 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:1671
 msgid "Change reconciled split?"
-msgstr "¿Cambiar anotación conciliada?"
+msgstr "¿Cambiar desglose conciliado?"
 
 #: ../src/register/ledger-core/split-register-model.c:1673
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
 msgstr ""
-"Va a cambiar una anotación conciliada.  ¡Hacerlo puede dificultar "
+"Va a cambiar un desglose conciliado.  ¡Hacerlo puede dificultar "
 "conciliaciones futuras! ¿Continuar con este cambio?"
 
 #: ../src/register/ledger-core/split-register-model.c:1686
 msgid "Chan_ge Split"
-msgstr "Cambiar _anotación"
+msgstr "Cambiar des_glose"
 
 #: ../src/register/ledger-core/split-register-model.c:1773
 msgid "Enter debit formula for real transaction"
@@ -18093,7 +18079,7 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2010
 msgid "Include splits with no shares for calculating money-in and money-out"
-msgstr "Incluir anotaciones sin acciones para calcular el dinero entrante y saliente"
+msgstr "Incluir desgloses sin acciones para calcular el dinero entrante y saliente"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2012
@@ -18518,9 +18504,7 @@ msgstr "¿Mostrar el código de cuenta?"
 msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
-msgstr ""
-"¿Mostrar el nombre de la otra cuenta? (si este es un asiento desglosado, "
-"este parámetro se adivina)."
+msgstr "¿Mostrar el nombre de la otra cuenta? (si este es un asiento con múltiples desgloses, este parámetro se adivina)."
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2470
@@ -18638,12 +18622,12 @@ msgstr "Subtotales/encabezados secundarios"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2536
 msgid "Split Odd"
-msgstr "Anotación impar"
+msgstr "Desglose impar"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2540
 msgid "Split Even"
-msgstr "Anotación par"
+msgstr "Desglose par"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2550
@@ -20083,8 +20067,7 @@ msgid ""
 "View -> Style menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Para introducir un asiento con múltiples anotaciones como una nómina con "
-"múltiples deducciones, pulse el botón «Desglosar» en la barra de "
+"Para introducir un asiento con múltiples desgloses, como por ejemplo una nómina con múltiples deducciones, pulse el botón «Desglosar» en la barra de "
 "herramientas. Sino, puede elegir el estilo de libro «Libro autodesglosado» o "
 "«Libro diario» en el menú «Ver»."
 
