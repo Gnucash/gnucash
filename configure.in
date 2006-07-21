@@ -1176,6 +1176,18 @@ then
   AM_CONDITIONAL(HAVE_GTK26, test "x$HAVE_GTK26" = "xyes" )
   
   
+  AC_MSG_CHECKING(for GTK - version >= 2.10.0)
+  if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
+  then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(HAVE_GTK_2_10,1,[System has gtk 2.10.0 or better])
+    HAVE_GTK_2_10=yes
+  else
+    AC_MSG_RESULT(no)
+  fi
+  AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
+  
+  
   AC_MSG_CHECKING(for pango version >= 1.8.0)
   if $PKG_CONFIG 'pango >= 1.8.0'
   then
@@ -1887,6 +1899,7 @@ then
 else
   ### A bunch of am conditionals that need to be set
   AM_CONDITIONAL(HAVE_GTK26, false )
+  AM_CONDITIONAL(HAVE_GTK_2_10, false)
   AM_CONDITIONAL(HAVE_PANGO18, false )
   AM_CONDITIONAL(HAVE_LIBGSF, false)
   AM_CONDITIONAL(HAVE_GOFFICE, false)

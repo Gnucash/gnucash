@@ -108,6 +108,9 @@ static void gnc_window_main_window_init (GncWindowIface *iface);
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
+#ifdef HAVE_GTK_2_10
+static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint pos, GncMainWindow *window);
+#endif
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
@@ -1889,6 +1892,9 @@ gnc_main_window_connect (GncMainWindow *window,
 	priv->usage_order = g_list_prepend (priv->usage_order, page);
 	gtk_notebook_append_page_menu (notebook, page->notebook_page,
 				       tab_hbox, menu_label);
+#ifdef HAVE_GTK_2_10
+	gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
+#endif
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
 	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
@@ -2623,6 +2629,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (priv->notebook);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
+#ifdef HAVE_GTK_2_10
+	g_signal_connect (G_OBJECT (priv->notebook), "page-reordered",
+			  G_CALLBACK (gnc_main_window_page_reordered), window);
+#endif
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
@@ -2842,6 +2852,46 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
 	LEAVE(" ");
 }
+
+#ifdef HAVE_GTK_2_10
+/** This function is invoked when a GtkNotebook tab gets reordered by
+ *  drag and drop. It adjusts the list installed_pages to reflect the new
+ *  ordering so that GnuCash saves and restores the tabs correctly.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_page_reordered (GtkNotebook *notebook,
+				GtkWidget *child,
+				guint pos,
+				GncMainWindow *window)
+{
+	GncMainWindowPrivate *priv;
+	GncPluginPage *page;
+	GList *old_link;
+
+	ENTER("Notebook %p, child %p, index %d, window %p",
+	       notebook, child, pos, window);
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+
+	if (!child) return;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+	page = g_object_get_data (G_OBJECT (child), PLUGIN_PAGE_LABEL);
+	if (!page) return;
+
+	old_link = g_list_find (priv->installed_pages, page);
+	if (!old_link) return;
+
+	priv->installed_pages = g_list_delete_link (priv->installed_pages,
+						    old_link);
+	priv->installed_pages = g_list_insert (priv->installed_pages,
+					       page, pos);
+
+	LEAVE(" ");
+}
+#endif
 
 static void
 gnc_main_window_plugin_added (GncPlugin *manager,

@@ -1,3 +1,9 @@
+2006-07-21  Andreas Köhler  <andi5.py@gmx.net>
+
+	* configure.in:
+	* src/gnome-utils/gnc-main-window.c: Make tabs within one notebook
+	  reorderable by dnd for gtk>=2.10. Fixes #343454.
+
 2006-07-18   Christian Stimming <stimming@tuhh.de>
 
 	* src/gnc-module/gnc-module.c: On windows, deactivate gnucash's
