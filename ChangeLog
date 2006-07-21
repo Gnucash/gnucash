@@ -1,3 +1,10 @@
+2006-07-21  Christian Stimming <stimming@tuhh.de>
+
+	* accounts/de_DE/Makefile.am: Removed acctchrt_skr03.gnucash-xea
+	from distribution and installation by request of its author who
+	doubts the fiscal correctness of this account chart for small
+	businesses.
+
 2006-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
