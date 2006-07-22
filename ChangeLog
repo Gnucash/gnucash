@@ -1,3 +1,7 @@
+2006-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: check for SLIB.  (#347922)
+
 2006-07-21  Andreas Köhler  <andi5.py@gmx.net>
 
 	* configure.in:
