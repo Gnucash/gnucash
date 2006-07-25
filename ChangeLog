@@ -10,6 +10,12 @@
 	doubts the fiscal correctness of this account chart for small
 	businesses.
 
+2006-07-18  Christian Stimming <stimming@tuhh.de>
+
+	* configure.in:
+	  Re-use existing GUILE_LOAD_PATH variable in order not to override
+	  existing search paths.
+
 2006-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:
