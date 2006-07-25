@@ -1325,7 +1325,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/uk">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Use the date format comon in the United Kingdom.</property>
+		  <property name="tooltip" translatable="yes">Use the date format common in the United Kingdom.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">U_K:</property>
 		  <property name="use_underline">True</property>
@@ -1350,7 +1350,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/us">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Use the date format comon in the United States.</property>
+		  <property name="tooltip" translatable="yes">Use the date format common in the United States.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_US:</property>
 		  <property name="use_underline">True</property>
