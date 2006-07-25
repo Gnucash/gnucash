@@ -33,6 +33,12 @@
 	* src/business/business-gnome/dialog-invoice.c:
 	  Set the summary bar values when the window is first opened (#345978).
 
+2006-07-15  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	* lib/libqof/qof/gnc-numeric.c:
+	   Avoid SIGFPE due to modulo-by-zero is the requested number of
+	   significant figures is greater than log10(2^63).
+
 2006-07-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Remove obsolete
