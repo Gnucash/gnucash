@@ -25,8 +25,7 @@ libgncmod_dialog_tax_table_la_SOURCES = \
   dialog-tax-table.c
 
 noinst_HEADERS = \
-  dialog-tax-table.h \
-  gw-dialog-tax-table.h
+  dialog-tax-table.h
 
 libgncmod_dialog_tax_table_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
@@ -42,7 +41,7 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
-libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
+nodist_libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
 
 libgw_dialog_tax_table_la_LIBADD = \
   libgncmod-dialog-tax-table.la \
@@ -50,8 +49,9 @@ libgw_dialog_tax_table_la_LIBADD = \
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-dialog-tax-table.scm \
   gw-dialog-tax-table-spec.scm
+nodist_gwmod_DATA = \
+  gw-dialog-tax-table.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = dialog-tax-table.scm
@@ -97,5 +97,5 @@ gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
 
 BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
 	gw-dialog-tax-table.h
-CLEANFILES = g-wrapped gnucash .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-dialog-tax-table.html
+CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
+	${SCM_FILE_LINKS} gw-dialog-tax-table.html

@@ -64,9 +64,6 @@ gncinclude_HEADERS = \
   guile-util.h \
   option-util.h
 
-noinst_HEADERS = \
-  gw-app-utils.h
-
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -90,7 +87,7 @@ libgw_app_utils_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-libgw_app_utils_la_SOURCES = gw-app-utils.c
+nodist_libgw_app_utils_la_SOURCES = gw-app-utils.c
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 
@@ -107,7 +104,8 @@ gncscm_DATA = \
   simple-obj.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-app-utils.scm gw-app-utils-spec.scm
+gwmod_DATA = gw-app-utils-spec.scm
+nodist_gwmod_DATA = gw-app-utils.scm
 
 noinst_DATA = .scm-links
 
@@ -146,5 +144,5 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
 	  (gw:generate-wrapset \"gw-app-utils\")"
 
 BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-DISTCLEANFILES = ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links \
-                 gw-app-utils.html
+CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS} gnucash g-wrapped \
+	.scm-links gw-app-utils.html
