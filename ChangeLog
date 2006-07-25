@@ -1,3 +1,9 @@
+2006-07-24  Derek Atkins  <derek@ihtfp.com>
+
+	* po/POTFILES.skip:
+	  - Now that we distribute the SX schema properly, don't skip it
+	    in the POTFILES.skip file.
+
 2006-07-23  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-tree-view.c: Correctly set column sort
