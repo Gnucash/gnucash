@@ -10,6 +10,13 @@
 	doubts the fiscal correctness of this account chart for small
 	businesses.
 
+2006-07-20  Christian Stimming <stimming@tuhh.de>
+
+	* src/report/report-system/report.scm:
+	  Change cmdline warning into an actual user's error dialog
+	  when user attempts to save a report with the same name as
+	  an existing report.
+
 2006-07-18  Christian Stimming <stimming@tuhh.de>
 
 	* configure.in:
