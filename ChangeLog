@@ -1,5 +1,10 @@
 2006-07-24  Derek Atkins  <derek@ihtfp.com>
 
+	* [lots of Makefile.am files]:
+	  Allow proper compile/install from tarball using separate builddir.
+	  - Don't distribute (most) generated files.
+	  - Be (more) consistent about when generated files are cleaned.
+
 	* po/POTFILES.skip:
 	  - Now that we distribute the SX schema properly, don't skip it
 	    in the POTFILES.skip file.

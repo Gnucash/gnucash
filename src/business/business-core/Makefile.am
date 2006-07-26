@@ -52,8 +52,7 @@ noinst_HEADERS = \
   gncTaxTable.h \
   gncTaxTableP.h \
   gncVendor.h \
-  gncVendorP.h \
-  gw-business-core.h
+  gncVendorP.h
 
 libgncmod_business_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
@@ -67,7 +66,9 @@ libgncmod_business_core_la_LIBADD = \
 # business-core-helpers.c
 
 libgw_business_core_la_SOURCES = \
-  gncBusGuile.c \
+  gncBusGuile.c
+
+nodist_libgw_business_core_la_SOURCES = \
   gw-business-core.c
 
 libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
@@ -83,8 +84,9 @@ gncmod_DATA = business-core.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-business-core.scm \
   gw-business-core-spec.scm
+nodist_gwmod_DATA = \
+  gw-business-core.scm
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
@@ -118,5 +120,5 @@ gw-business-core.scm gw-business-core.c gw-business-core.h: \
 	 (gw:generate-wrapset \"gw-business-core\")"
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-business-core.html
+CLEANFILES = $(BUILT_SOURCES) gw-business-core.html \
+	g-wrapped gnucash .scm-links ${SCM_FILE_LINKS}

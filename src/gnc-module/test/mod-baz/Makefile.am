@@ -14,10 +14,10 @@ libbaz_la_SOURCES = baz.c
 libbaz_la_LIBADD = ../mod-foo/libfoo.la
 
 noinst_HEADERS = \
-  baz.h \
-  baz-gwrap.h
+  baz.h
 
-libgncmodbaz_la_SOURCES = baz-gwrap.c gnc-mod-baz.c
+libgncmodbaz_la_SOURCES = gnc-mod-baz.c
+nodist_libgncmodbaz_la_SOURCES = baz-gwrap.c
 
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
@@ -36,8 +36,7 @@ baz-gwrap.c baz-gwrap.h: baz-gwrap.scm ${top_builddir}/config.status
 	  (gw:generate-wrapset \"baz-gwrap\")"
 
 BUILT_SOURCES = baz-gwrap.c baz-gwrap.h
-
-DISTCLEANFILES = baz-gwrap.html
+CLEANFILES = $(BUILT_SOURCES) baz-gwrap.html
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

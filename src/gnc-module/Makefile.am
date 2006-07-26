@@ -18,7 +18,7 @@ libgncmodule_la_LIBADD = \
   ${GLIB_LIBS} \
   -lltdl
 
-libgw_gnc_module_la_SOURCES = gw-gnc-module.c
+nodist_libgw_gnc_module_la_SOURCES = gw-gnc-module.c
 
 libgw_gnc_module_la_LIBADD = libgncmodule.la \
   ${G_WRAP_LINK_ARGS} \
@@ -29,7 +29,8 @@ gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnc-module.scm gw-gnc-module-spec.scm 
+gwmod_DATA = gw-gnc-module-spec.scm 
+nodist_gwmod_DATA = gw-gnc-module.scm
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -37,9 +38,6 @@ gncinclude_HEADERS = \
   gnc-module.h
 
 noinst_DATA = .scm-links
-
-noinst_HEADERS = \
- gw-gnc-module.h
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
@@ -71,5 +69,5 @@ gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
 	  (gw:generate-wrapset \"gw-gnc-module\")"
 
 BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
-CLEANFILES = .scm-links g-wrapped gnucash
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc-module.html
+CLEANFILES = $(BUILT_SOURCES) .scm-links g-wrapped gnucash \
+	${SCM_FILE_LINKS} gw-gnc-module.html

@@ -64,8 +64,7 @@ noinst_HEADERS = \
   dialog-vendor.h \
   gnc-plugin-business.h \
   gnc-plugin-page-invoice.h \
-  search-owner.h \
-  gw-business-gnome.h
+  search-owner.h
 
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
@@ -89,7 +88,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${EFENCE_LIBS}
 
 
-libgw_business_gnome_la_SOURCES = gw-business-gnome.c
+nodist_libgw_business_gnome_la_SOURCES = gw-business-gnome.c
 
 libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_business_gnome_la_LIBADD  = \
@@ -106,8 +105,9 @@ gncmod_DATA = business-gnome.scm
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
-  gw-business-gnome.scm \
   gw-business-gnome-spec.scm
+nodist_gwmod_DATA = \
+  gw-business-gnome.scm
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
@@ -147,5 +147,5 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
 	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
-CLEANFILES = g-wrapped gnucash .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-business-gnome.html
+CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
+	${SCM_FILE_LINKS} gw-business-gnome.html
