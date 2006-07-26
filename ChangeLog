@@ -3,6 +3,10 @@
 	* src/gnome-utils/gnc-tree-view.c: Correctly set column sort
 	  orders from gconf. Fixes #348248.
 
+2006-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: check for SLIB.  (#347922)
+
 2006-07-21  Christian Stimming <stimming@tuhh.de>
 
 	* accounts/de_DE/Makefile.am: Removed acctchrt_skr03.gnucash-xea

@@ -345,6 +345,21 @@ else
 ])
 fi
 
+AC_MSG_CHECKING([for SLIB support])
+if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
+        ${GUILE} -c "(use-modules (ice-9 slib)) (require 'printf)" > /dev/null 2>&1
+then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR([
+
+   Cannot find SLIB.  Are you sure you have it installed?
+   See http://bugzilla.gnome.org/show_bug.cgi?id=347922
+
+])
+fi
+
 AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
 if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
   GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
