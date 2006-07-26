@@ -25,10 +25,9 @@ TODO
 
 - gnc_dense_cal
   - change number-month properties to display (width, length)
-  - upcoming_instances_add_to_gnc_dense_cal(GncSxUpcomingInstances *future);
-  - set_model(GncTemporalInstancesModel *mdl)
+  x set_model(GncTemporalInstancesModel *mdl)
     - new interface creation.
-    - register callbacks for signals
+    x register callbacks for signals
 
 - transaction creation
   - verification routine

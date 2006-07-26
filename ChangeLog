@@ -1,3 +1,16 @@
+2006-07-25  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c:
+	Add GncDenseCalModel interface, support.
+	Add unfinished GncDenseCalTransient model impl. for
+	one-off being-edited-SX calendar usage.
+
+	* src/gnome/gnc-plugin-page-sx-list.c:
+	Add GncSxInstanceDenseCalAdapter between GncSxInstanceModel and
+	GncDenseCalModel.  Start to hook up 'added' and 'removing' signals
+	on the GncSxInstanceModel.  The SX-List dense-cal works again, and
+	reflects both removed and new SXes.
+
 2006-07-16  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/SX-book-p.h:

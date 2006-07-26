@@ -36,6 +36,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <glade/glade-xml.h>
 #ifndef HAVE_GLIB26
@@ -60,6 +61,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"
 
+typedef struct _GncSxInstanceDenseCalAdapter GncSxInstanceDenseCalAdapter;
 typedef struct _GncSxInstanceModel GncSxInstanceModel;
 typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
 
@@ -70,6 +72,7 @@ typedef struct GncPluginPageSxListPrivate
      gint gppsl_event_handler_id;
 
      GladeXML* gxml;
+     GncSxInstanceDenseCalAdapter *dense_cal_model;
      GncDenseCal* gdcal;
 
      GncSxInstanceModel* instances;
@@ -83,6 +86,8 @@ typedef struct GncPluginPageSxListPrivate
 
 static GObjectClass *parent_class = NULL;
 
+/* ------------------------------------------------------------ */
+
 struct _GncSxInstanceModel
 {
      GObject parent;
@@ -90,21 +95,23 @@ struct _GncSxInstanceModel
      /* private */
      gint qof_event_handler_id;
 
-     // signals
-     //void (*added)(GncSxInstance *sx); // gpointer user_data
-     //void (*removed)(GncSxInstance *sx); // gpointer user_data
-     //void (*changed)(GncSxInstance *inst); // gpointer user_data
+     /* signals */
+     /* void (*added)(GncSxInstance *sx); // gpointer user_data */
+     /* void (*removed)(GncSxInstance *sx); // gpointer user_data */
+     /* void (*changed)(GncSxInstance *inst); // gpointer user_data */
 
      /* public */
      GDate range_end;
-     GList *sx_instance_list; // <GncSxInstances*>
+     GList *sx_instance_list; /* <GncSxInstances*> */
 };
 
 typedef struct _GncSxInstanceModelClass
 {
      GObjectClass parent;
 
+     guint removing_signal_id;
      guint updated_signal_id;
+     guint added_signal_id;
 } GncSxInstanceModelClass;
 
 typedef struct _GncSxInstances
@@ -150,11 +157,40 @@ GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
 
 /* ------------------------------------------------------------ */
 
+typedef struct _GncSxInstanceDenseCalAdapterClass
+{
+  GObjectClass parent;
+} GncSxInstanceDenseCalAdapterClass;
+
+struct _GncSxInstanceDenseCalAdapter 
+{
+  GObject parent;
+
+  GncSxInstanceModel *instances;
+};
+
+GncSxInstanceDenseCalAdapter* gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances);
+GType gnc_sx_instance_dense_cal_adapter_get_type(void);
+static GList* gsidca_get_contained(GncDenseCalModel *model);
+static gchar* gsidca_get_name(GncDenseCalModel *model, guint tag);
+static gchar* gsidca_get_info(GncDenseCalModel *model, guint tag);
+static gint gsidca_get_instance_count(GncDenseCalModel *model, guint tag);
+static void gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
+
+#define GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER	          (gnc_sx_instance_dense_cal_adapter_get_type ())
+#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(obj)	          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapter))
+#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapterClass))
+#define GNC_IS_SX_INSTANCE_DENSE_CAL_ADAPTER(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER))
+#define GNC_IS_SX_INSTANCE_DENSE_CAL_ADAPTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER))
+#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapterClass))
+
+/* ------------------------------------------------------------ */
+
 struct _GncSxListTreeModelAdapter
 {
      GObject parent;
 
-     /* private */
+     /* protected */
      GncSxInstanceModel *instances;
      GtkTreeStore *real;
 };
@@ -313,7 +349,7 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                   gnc_plugin_page_sx_list_actions,
                                   gnc_plugin_page_sx_list_n_actions,
                                   plugin_page);
-     //gnc_plugin_init_short_names (action_group, toolbar_labels);
+     /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
 
      LEAVE("page %p, priv %p, action group %p",
            plugin_page, priv, action_group);
@@ -448,10 +484,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
      {
           GtkWidget *w;
-          w = glade_xml_get_widget(priv->gxml, "upcoming_cal_hbox");
-          priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new());
+
+          priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
+          priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
           gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
           gnc_dense_cal_set_num_months(priv->gdcal, 12);
+
+          w = glade_xml_get_widget(priv->gxml, "upcoming_cal_hbox");
           gtk_container_add(GTK_CONTAINER(w), GTK_WIDGET(priv->gdcal));
           gtk_widget_show_all(w);
      }
@@ -462,8 +501,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                 gnc_plugin_page_sx_list_close_cb,
                                 page);
 
-     // @@fixme
-     //gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(priv->widget));
+     /* @@fixme */
+     /* gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(priv->widget)); */
 
      return priv->widget;
 }
@@ -494,10 +533,10 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
 static void
 gppsl_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
-     // if (type != SX)
-     //   return;
-     // - correlate SX to tree_store data
-     // - update || add || remove
+     /* if (type != SX)
+        return; */
+     /* - correlate SX to tree_store data */
+     /* - update || add || remove */
      return;
 }
 
@@ -530,7 +569,7 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
 #if 0
      gnc_tree_view_account_save(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
                                 &priv->fd, key_file, group_name);
-#endif // 0
+#endif /* 0 */
      LEAVE(" ");
 }
 
@@ -566,7 +605,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 #if 0
      gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
                                    &priv->fd, key_file, group_name);
-#endif // 0
+#endif /* 0 */
      LEAVE(" ");
      return GNC_PLUGIN_PAGE(page);
 }
@@ -666,7 +705,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      GList *selected_paths, *to_delete = NULL;
      GtkTreeModel *model;
 
-     // @@fixme -- add (suppressible?) confirmation dialog
+     /* @@fixme -- add (suppressible?) confirmation dialog */
      
      selection = gtk_tree_view_get_selection(priv->tree_view);
      selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
@@ -690,7 +729,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      g_list_free(selected_paths);
 }
 
-#if 0 // compare/sort fns
+#if 0 /* compare/sort fns */
 static gint
 gnc_sxd_clist_compare_sx_name( GtkCList *cl, gconstpointer a, gconstpointer b )
 {
@@ -763,7 +802,7 @@ gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
         return g_date_compare( &gda, &gdb );
 }
 
-#endif // 0 - compare/sort fns
+#endif /* 0 - compare/sort fns */
 
 /* ------------------------------------------------------------ */
 
@@ -784,12 +823,12 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
      remind_end = creation_end;
      g_date_add_days(&remind_end, xaccSchedXactionGetAdvanceReminder(sx));
 
-     // postponed
+     /* postponed */
      {
-          // @@fixme - defer list.
+          /* @@fixme - defer list. */
      }
 
-     // to-create
+     /* to-create */
      g_date_clear(&cur_date, 1);
      sequence_ctx = gnc_sx_create_temporal_state(sx);
      cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
@@ -799,33 +838,29 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             && (g_date_compare(&cur_date, &creation_end) <= 0))
      {
           GncSxInstance *inst;
-          char str[64];
-          g_date_strftime(str, 64, "%c", &cur_date);
-
           inst = g_new0(GncSxInstance, 1);
           inst->parent = instances;
           inst->type = TO_CREATE;
           g_date_clear(&inst->date, 1);
           inst->date = cur_date;
+
           instances->upcoming = g_list_append(instances->upcoming, inst);
 
           gnc_sx_incr_temporal_state(sx, sequence_ctx);
           cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
      }
 
-     // reminders
+     /* reminders */
      while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &remind_end) <= 0)
      {
           GncSxInstance *inst;
-          char str[64];
-          g_date_strftime(str, 64, "%c", &cur_date);
-
           inst = g_new0(GncSxInstance, 1);
           inst->parent = instances;
           inst->type = REMINDER;
           g_date_clear(&inst->date, 1);
           inst->date = cur_date;
-          instances->upcoming = g_list_append(instances->upcoming, inst);
+
+          instances->remind = g_list_append(instances->remind, inst);
 
           gnc_sx_incr_temporal_state(sx, sequence_ctx);
           cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
@@ -899,16 +934,40 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
      object_class->dispose = gnc_sx_instance_model_dispose;
      object_class->finalize = gnc_sx_instance_model_finalize;
 
+     klass->removing_signal_id =
+          g_signal_new("removing",
+                       GNC_TYPE_SX_INSTANCE_MODEL,
+                       G_SIGNAL_RUN_FIRST,
+                       0, /* class offset */
+                       NULL, /* accumulator */
+                       NULL, /* accum data */
+                       g_cclosure_marshal_VOID__POINTER,
+                       G_TYPE_NONE,
+                       1,
+                       G_TYPE_POINTER);
+
      klass->updated_signal_id =
           g_signal_new("updated",
                        GNC_TYPE_SX_INSTANCE_MODEL,
                        G_SIGNAL_RUN_FIRST,
-                       0, // class offset
-                       NULL, // accumulator
-                       NULL, // accum data
+                       0, /* class offset */
+                       NULL, /* accumulator */
+                       NULL, /* accum data */
                        g_cclosure_marshal_VOID__VOID,
                        G_TYPE_NONE,
                        0, NULL);
+
+     klass->added_signal_id =
+          g_signal_new("added",
+                       GNC_TYPE_SX_INSTANCE_MODEL,
+                       G_SIGNAL_RUN_FIRST,
+                       0, /* class offset */
+                       NULL, /* accumulator */
+                       NULL, /* accum data */
+                       g_cclosure_marshal_VOID__POINTER,
+                       G_TYPE_NONE,
+                       1,
+                       G_TYPE_POINTER);
 }
 
 static void
@@ -926,11 +985,11 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
 {
      GncSxInstanceModel *instances = GNC_SX_INSTANCE_MODEL(user_data);
 
-     // selection rules {
+     /* selection rules {
      //   (gnc_collection_get_schedxaction_list(book), GNC_EVENT_ITEM_ADDED)
      //   (gnc_collection_get_schedxaction_list(book), GNC_EVENT_ITEM_REMOVED)
      //   (GNC_IS_SX(ent), QOF_EVENT_MODIFIED)
-     // }
+     // } */
      if (!(GNC_IS_SX(ent) || GNC_IS_SXES(ent)))
           return;
 
@@ -940,7 +999,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           sx = GNC_SX(ent);
           if (event_type & QOF_EVENT_MODIFY)
           {
-               // @re-generate instance, update
+               /* @re-generate instance, update*/
           }
           /* else { unsupported event type; ignore } */
      }
@@ -955,7 +1014,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                gpointer sx_instance_to_remove = NULL;
                GList *list;
 
-               // find, remove, update
+               /* find, remove, update */
                for (list = instances->sx_instance_list; list != NULL; list = list->next)
                {
                     if (sx == ((GncSxInstances*)list->data)->sx)
@@ -966,23 +1025,202 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                }
                if (sx_instance_to_remove != NULL)
                {
+                    g_signal_emit_by_name(instances, "removing", GUINT_TO_POINTER(GPOINTER_TO_UINT(((GncSxInstances*)sx_instance_to_remove)->sx)));
                     instances->sx_instance_list = g_list_remove(instances->sx_instance_list, sx_instance_to_remove);
-                    g_signal_emit_by_name(instances, "updated");
+                    g_signal_emit_by_name(instances, "updated"); // @@fixme remove
                }
                else { printf("err\n"); }
           }
           else if (event_type & GNC_EVENT_ITEM_ADDED)
           {
-               // generate instances, add to instance list, emit update.
+               /* generate instances, add to instance list, emit update. */
                instances->sx_instance_list
                     = g_list_append(instances->sx_instance_list,
                                     (*_gnc_sx_gen_instances)((gpointer)sx, (gpointer)&instances->range_end));
-               g_signal_emit_by_name(instances, "updated");
+               g_signal_emit_by_name(instances, "added", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
+               g_signal_emit_by_name(instances, "updated"); // @fixme remove
           }
-          // else { printf("unsupported event type [%d]\n", event_type); }
+          /* else { printf("unsupported event type [%d]\n", event_type); } */
      }
 }
 
+/* ------------------------------------------------------------ */
+
+static void
+gnc_sx_instance_dense_cal_adapter_class_init(GncSxInstanceDenseCalAdapterClass *klass)
+{
+     ; /* nop */
+}
+
+static void
+gnc_sx_instance_dense_cal_adapter_init(GTypeInstance *instance, gpointer klass)
+{
+     /*GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(instance);*/
+     ; /* nop */
+}
+
+static void
+gnc_sx_instance_dense_cal_adapter_interface_init(gpointer g_iface, gpointer iface_data)
+{
+     GncDenseCalModelIface *iface = (GncDenseCalModelIface*)g_iface;
+     iface->get_contained = gsidca_get_contained;
+     iface->get_name = gsidca_get_name;
+     iface->get_info = gsidca_get_info;
+     iface->get_instance_count = gsidca_get_instance_count;
+     iface->get_instance = gsidca_get_instance;
+}
+
+static void
+gsidca_instances_added_cb(GncSxInstanceModel *model, gpointer instance_added, gpointer user_data)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
+     g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(instance_added));
+}
+
+static void
+gsidca_instances_updated_cb(GncSxInstanceModel *model, gpointer user_data)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
+     // @@fixme figure out which; emit appropriate signal.
+     GList *exposed_tags;
+     printf("instances updated\n");
+     for (exposed_tags = gsidca_get_contained(GNC_DENSE_CAL_MODEL(adapter)); exposed_tags != NULL; exposed_tags = exposed_tags->next)
+     {
+          g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT(exposed_tags->data));
+     }
+}
+
+static void
+gsidca_instances_removing_cb(GncSxInstanceModel *model, gpointer instance_to_be_removed, gpointer user_data)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
+     printf("removing instance...\n");
+     g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT(instance_to_be_removed));
+}
+
+GncSxInstanceDenseCalAdapter*
+gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances)
+{
+     GncSxInstanceDenseCalAdapter *adapter = g_object_new(GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, NULL);
+     adapter->instances = instances;
+     g_signal_connect(instances, "added", (GCallback)gsidca_instances_added_cb, adapter);
+     g_signal_connect(instances, "updated", (GCallback)gsidca_instances_updated_cb, adapter);
+     g_signal_connect(instances, "removing", (GCallback)gsidca_instances_removing_cb, adapter);
+     return adapter;
+}
+
+GType
+gnc_sx_instance_dense_cal_adapter_get_type(void)
+{
+     static GType type = 0;
+     if (type == 0)
+     {
+          static const GTypeInfo info = {
+               sizeof (GncSxInstanceDenseCalAdapterClass),
+               NULL, /* base init */
+               NULL, /* base finalize */
+               (GClassInitFunc)gnc_sx_instance_dense_cal_adapter_class_init,
+               NULL, /* class finalize */
+               NULL, /* class data */
+               sizeof(GncSxInstanceDenseCalAdapter),
+               0, /* n_preallocs */
+               (GInstanceInitFunc)gnc_sx_instance_dense_cal_adapter_init
+          };
+          static const GInterfaceInfo iDenseCalModelInfo = {
+               (GInterfaceInitFunc)gnc_sx_instance_dense_cal_adapter_interface_init,
+               NULL, /* interface finalize */
+               NULL, /* interface data */
+          };
+
+          type = g_type_register_static (G_TYPE_OBJECT,
+                                         "GncSxInstanceDenseCalAdapterType",
+                                         &info, 0);
+          g_type_add_interface_static(type,
+                                      GNC_TYPE_DENSE_CAL_MODEL,
+                                      &iDenseCalModelInfo);
+     }
+     return type;
+}
+
+static gint
+gsidca_find_sx_with_tag(gconstpointer list_data,
+                        gconstpointer find_data)
+{
+     GncSxInstances *sx_instances = (GncSxInstances*)list_data;
+     return (GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)) == find_data ? 0 : 1);
+}
+
+static GList*
+gsidca_get_contained(GncDenseCalModel *model)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
+     //"removing return g_list_map(instances->sxes, sx_to_tag, null);
+     GList *list = NULL, *sxes;
+     for (sxes = adapter->instances->sx_instance_list; sxes != NULL; sxes = sxes->next)
+     {
+          GncSxInstances *sx_instances = (GncSxInstances*)sxes->data;
+          list = g_list_append(list, GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)));
+     }
+     return list;
+}
+
+static gchar*
+gsidca_get_name(GncDenseCalModel *model, guint tag)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
+     GncSxInstances *insts
+          = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+     if (insts == NULL)
+          return NULL;
+     return xaccSchedXactionGetName(insts->sx);
+}
+
+static gchar*
+gsidca_get_info(GncDenseCalModel *model, guint tag)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
+     // g_list_find(instances->sxes, {sx_to_tag, tag}).get_freq_spec().get_freq_str();
+     FreqSpec *spec;
+     GString *info;
+     gchar *info_str;
+     GncSxInstances *insts
+          = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+     if (insts == NULL)
+          return NULL;
+     spec = xaccSchedXactionGetFreqSpec(insts->sx);
+     info = g_string_sized_new(16);
+     xaccFreqSpecGetFreqStr(spec, info);
+     info_str = info->str; // @fixme leaked... :/
+     g_string_free(info, FALSE);
+     return info_str;
+}
+
+static gint
+gsidca_get_instance_count(GncDenseCalModel *model, guint tag)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
+     // g_list_find(instances->sxes, {sx_to_tag, tag}).length();
+     GncSxInstances *insts
+          = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+     if (insts == NULL)
+          return 0;
+     return g_list_length(insts->upcoming);
+}
+
+static void
+gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date)
+{
+     GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(model);
+     GncSxInstance *inst;
+     GncSxInstances *insts
+          = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
+     if (insts == NULL)
+          return;
+     inst = (GncSxInstance*)g_list_nth_data(insts->upcoming, instance_index);
+     g_date_valid(&inst->date);
+     *date = inst->date;
+     g_date_valid(date);
+}
 
 /* ------------------------------------------------------------ */
 
@@ -1021,7 +1259,7 @@ gnc_sx_list_tree_model_adapter_get_type(void)
 static void
 gnc_sx_list_tree_model_adapter_class_init(GncSxListTreeModelAdapterClass *klass)
 {
-     ; // nop
+     ; /* nop */
 }
 
 static GtkTreeModelFlags

@@ -1584,7 +1584,7 @@ gnc_sxed_update_cal( GncSxEditorDialog *sxed )
         }
 
         if ( sxed->markId != -1 ) {
-                gnc_dense_cal_mark_remove( sxed->example_cal, sxed->markId );
+          // gnc_dense_cal_mark_remove( sxed->example_cal, sxed->markId );
                 sxed->markId = -1;
         }
 
@@ -1643,9 +1643,10 @@ gnc_sxed_update_cal( GncSxEditorDialog *sxed )
                 }
                 info = g_string_sized_new( 16 );
                 xaccFreqSpecGetFreqStr( fs, info );
-                sxed->markId = gnc_dense_cal_mark( sxed->example_cal, i,
+                sxed->markId = -1;
+                /*sxed->markId = gnc_dense_cal_mark( sxed->example_cal, i,
                                                    sxed->cal_marks,
-                                                   name, info->str );
+                                                   name, info->str );*/
                 gtk_widget_queue_draw( GTK_WIDGET( sxed->example_cal ) );
 
                 g_string_free( info, TRUE );

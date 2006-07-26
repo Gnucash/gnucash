@@ -1,6 +1,6 @@
 /********************************************************************\
  * gnc-dense-cal.c : a custom densely-dispalyed calendar widget     *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <math.h>
@@ -31,6 +32,231 @@
 
 /* For PERR, only... */
 #include "gnc-engine.h"
+
+enum { GDCM_ADDED, GDCM_UPDATE, GDCM_REMOVE, LAST_SIGNAL };
+static guint gnc_dense_cal_model_signals[LAST_SIGNAL] = { 0 };
+
+static void
+gnc_dense_cal_model_base_init(gpointer g_class)
+{
+     static gboolean initialized = FALSE;
+     
+     if (!initialized)
+     {
+          gnc_dense_cal_model_signals[GDCM_ADDED]
+               = g_signal_new("added",
+                              G_TYPE_FROM_CLASS(g_class),
+                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                              0 /* default offset */,
+                              NULL /* accumulator */,
+                              NULL /* accum. data */,
+                              g_cclosure_marshal_VOID__UINT,
+                              G_TYPE_NONE /* return */,
+                              1 /* n_params */,
+                              G_TYPE_UINT /* param types */
+                    );
+
+          gnc_dense_cal_model_signals[GDCM_UPDATE]
+               = g_signal_new("update",
+                              G_TYPE_FROM_CLASS(g_class),
+                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                              0 /* default offset */,
+                              NULL /* accumulator */,
+                              NULL /* accum. data */,
+                              g_cclosure_marshal_VOID__UINT,
+                              G_TYPE_NONE /* return */,
+                              1 /* n_params */,
+                              G_TYPE_UINT /* param types */
+                    );
+
+          gnc_dense_cal_model_signals[GDCM_REMOVE]
+               = g_signal_new("removing",
+                              G_TYPE_FROM_CLASS(g_class),
+                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                              0 /* default offset */,
+                              NULL /* accumulator */,
+                              NULL /* accum. data */,
+                              g_cclosure_marshal_VOID__UINT,
+                              G_TYPE_NONE /* return */,
+                              1 /* n_params */,
+                              G_TYPE_UINT /* param types */
+                    );
+
+          initialized = TRUE;
+     }
+}
+
+GType
+gnc_dense_cal_model_get_type(void)
+{
+     static GType type = 0;
+     if (type == 0) {
+          static const GTypeInfo info = {
+               sizeof(GncDenseCalModelIface),
+               gnc_dense_cal_model_base_init,   /* base_init */
+               NULL,   /* base_finalize */
+               NULL,   /* class_init */
+               NULL,   /* class_finalize */
+               NULL,   /* class_data */
+               0,
+               0,      /* n_preallocs */
+               NULL    /* instance_init */
+          };
+          type = g_type_register_static(G_TYPE_INTERFACE, "GncDenseCalModel", &info, 0);
+     }
+     return type;
+}
+
+GList*
+gnc_dense_cal_model_get_contained(GncDenseCalModel *model)
+{
+     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_contained)(model);
+}
+
+gchar*
+gnc_dense_cal_model_get_name(GncDenseCalModel *model, guint tag)
+{
+     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_name)(model, tag);
+}
+
+gchar*
+gnc_dense_cal_model_get_info(GncDenseCalModel *model, guint tag)
+{
+     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_info)(model, tag);
+}
+
+gint
+gnc_dense_cal_model_get_instance_count(GncDenseCalModel *model, guint tag)
+{
+     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance_count)(model, tag);
+}
+
+void
+gnc_dense_cal_model_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date)
+{
+     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance)(model, tag, instance_index, date);
+}
+
+/* ------------------------------------------------------------ */
+
+static GList* gdctm_get_contained(GncDenseCalModel *model);
+static gchar* gdctm_get_name(GncDenseCalModel *model, guint tag);
+static gchar* gdctm_get_info(GncDenseCalModel *model, guint tag);
+static gint gdctm_get_instance_count(GncDenseCalModel *model, guint tag);
+static void gdctm_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
+
+static void
+gnc_dense_cal_transient_dense_cal_model_iface_init(gpointer g_iface, gpointer iface_data)
+{
+     GncDenseCalModelIface *iface = (GncDenseCalModelIface*)g_iface;
+     iface->get_contained = gdctm_get_contained;
+     iface->get_name = gdctm_get_name;
+     iface->get_info = gdctm_get_info;
+     iface->get_instance_count = gdctm_get_instance_count;
+     iface->get_instance = gdctm_get_instance;
+}
+ 
+GType
+gnc_dense_cal_transient_model_get_type(void)
+{
+     static GType type = 0;
+     if (type == 0)
+     {
+          static const GTypeInfo info = {
+               sizeof (GncDenseCalTransientModel),
+               NULL,   /* base_init */
+               NULL,   /* base_finalize */
+               NULL,   /* class_init */
+               NULL,   /* class_finalize */
+               NULL,   /* class_data */
+               0,      
+               0,      /* n_preallocs */
+               NULL    /* instance_init */
+          };
+          static const GInterfaceInfo iDenseCalModelInfo = {
+               (GInterfaceInitFunc)gnc_dense_cal_transient_dense_cal_model_iface_init,
+               NULL, /* interface finalize */
+               NULL, /* interface data */
+          };
+          type = g_type_register_static(G_TYPE_OBJECT, "GncDenseCalTransientModel", &info, 0);
+          g_type_add_interface_static(type,
+                                      GNC_TYPE_DENSE_CAL_MODEL,
+                                      &iDenseCalModelInfo);
+     }
+     return type;
+}
+
+GncDenseCalTransientModel*
+gnc_dense_cal_transient_model_new(gchar *name, gchar *info, int num_marks)
+{
+     GncDenseCalTransientModel *model = g_object_new(GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, NULL);
+     model->name = name;
+     model->info = info;
+     model->num_marks = num_marks;
+     model->cal_marks = g_new0(GDate*, num_marks);
+     return model;
+}
+
+void
+gnc_dense_cal_transient_model_update_no_end(GDate *start, FreqSpec *fs)
+{
+     // emit_by_name("update");
+}
+
+void
+gnc_dense_cal_transient_model_update_count_end(GDate *start, FreqSpec *fs, int numOccur)
+{
+     // emit_by_name("update");
+}
+
+void
+gnc_dense_cal_transient_model_update_date_end(GDate *start, FreqSpec *fs, GDate *endDate)
+{
+     // emit_by_name("update");
+}
+
+static GList*
+gdctm_get_contained(GncDenseCalModel *model)
+{
+     GList *rtn = NULL;
+     rtn = g_list_append(rtn, GUINT_TO_POINTER(1));
+     return rtn;
+}
+
+static gchar*
+gdctm_get_name(GncDenseCalModel *model, guint tag)
+{
+     GncDenseCalTransientModel *mdl = GNC_DENSE_CAL_TRANSIENT_MODEL(model);
+     // assert(tag == 1)
+     return mdl->name;
+}
+
+static gchar*
+gdctm_get_info(GncDenseCalModel *model, guint tag)
+{
+     GncDenseCalTransientModel *mdl = GNC_DENSE_CAL_TRANSIENT_MODEL(model);
+     // assert(tag == 1)
+     return mdl->info;
+}
+
+static gint
+gdctm_get_instance_count(GncDenseCalModel *model, guint tag)
+{
+     GncDenseCalTransientModel *mdl = GNC_DENSE_CAL_TRANSIENT_MODEL(model);
+     // assert(tag == 1)
+     return mdl->num_marks;
+}
+
+static void
+gdctm_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date)
+{
+     GncDenseCalTransientModel *mdl = GNC_DENSE_CAL_TRANSIENT_MODEL(model);
+     // assert(tag == 1)
+     // assert 0 < instance_index < model->num_marks;
+     *date = *mdl->cal_marks[instance_index];
+}
+
+/* ------------------------------------------------------------ */
 
 /**
  * Todo:
@@ -83,16 +309,6 @@ static const gchar* MONTH_THIS_COLOR = "lavender";
 static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
 static const gchar* MARK_COLOR = "Yellow";
-
-static const gchar* MARKS_LOST_SIGNAL_NAME = "marks_lost";
-
-/* SIGNALS */
-enum gnc_dense_cal_signal_enum {
-  MARKS_LOST_SIGNAL,
-  LAST_SIGNAL
-};
-
-static guint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
 
 static QofLogModule log_module = GNC_MOD_SX;
 
@@ -153,6 +369,13 @@ static void populate_hover_window( GncDenseCal *dcal, gint doc );
 static void month_coords( GncDenseCal *dcal, int monthOfCal, GList **outList );
 static void doc_coords( GncDenseCal *dcal, int dayOfCal,
                         int *x1, int *y1, int *x2, int *y2 );
+
+static void gdc_mark_add(GncDenseCal *dcal, guint tag, gchar *name, gchar *info, guint size, GDate **dateArray);
+static void gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove);
+
+static void gdc_add_tag_markings(GncDenseCal *cal, guint tag);
+static void gdc_add_markings(GncDenseCal *cal);
+static void gdc_remove_markings(GncDenseCal *cal);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -235,16 +458,6 @@ gnc_dense_cal_class_init (GncDenseCalClass *klass)
         widget_class = GTK_WIDGET_CLASS (klass);
 
         parent_class = g_type_class_peek_parent (klass);
-
-        gnc_dense_cal_signals[MARKS_LOST_SIGNAL] =
-                g_signal_new (MARKS_LOST_SIGNAL_NAME,
-			      G_OBJECT_CLASS_TYPE (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GncDenseCalClass, marks_lost_cb),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 
         object_class->finalize = gnc_dense_cal_finalize;
         object_class->dispose = gnc_dense_cal_dispose;
@@ -394,6 +607,14 @@ gnc_dense_cal_new(void)
         dcal = g_object_new(GNC_TYPE_DENSE_CAL, NULL, NULL);
 
         return GTK_WIDGET (dcal);
+}
+
+GtkWidget*
+gnc_dense_cal_new_with_model(GncDenseCalModel *model)
+{
+     GncDenseCal *cal = GNC_DENSE_CAL(gnc_dense_cal_new());
+     gnc_dense_cal_set_model(cal, model);
+     return GTK_WIDGET(cal);
 }
 
 static void
@@ -687,7 +908,10 @@ recompute_mark_storage( GncDenseCal *dcal )
  createNew:
         dcal->numMarks = num_weeks(dcal) * 7;
         dcal->marks = g_new0( GList*, dcal->numMarks );
-        g_signal_emit_by_name( dcal, MARKS_LOST_SIGNAL_NAME );
+        if (dcal->model)
+        {
+             gdc_add_markings(dcal);
+        }
 }
 
 static void
@@ -892,8 +1116,6 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                 int i;
                 int x1, x2, y1, y2;
                 GdkColor markColor, black;
-                GList *l;
-                gdc_mark_data *gdcmd;
 
                 gdk_color_parse( MARK_COLOR, &markColor );
                 gdk_colormap_alloc_color( gdk_colormap_get_system(), &markColor, TRUE, TRUE );
@@ -902,13 +1124,13 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                 /* FIXME: use a different GC for this */
                 gdk_gc_set_foreground( widget->style->fg_gc[widget->state], &markColor );
                 for ( i=0; i<dcal->numMarks; i++ ) {
-                        for ( l = dcal->marks[i]; l ; l = l->next ) {
-                                gdcmd = (gdc_mark_data*)l->data;
-                                doc_coords( dcal, i, &x1, &y1, &x2, &y2 );
-                                gdk_draw_rectangle( dcal->drawbuf,
-                                                    widget->style->fg_gc[widget->state],
-                                                    TRUE, x1, y1, (x2-x1), (y2-y1) );
-                        }
+                     if (dcal->marks[i] != NULL)
+                     {
+                          doc_coords( dcal, i, &x1, &y1, &x2, &y2 );
+                          gdk_draw_rectangle( dcal->drawbuf,
+                                              widget->style->fg_gc[widget->state],
+                                              TRUE, x1, y1, (x2-x1), (y2-y1) );
+                     }
                 }
                 gdk_gc_set_foreground( widget->style->fg_gc[widget->state], &black );
         }
@@ -1529,9 +1751,10 @@ gdc_get_doc_offset( GncDenseCal *dcal, GDate *d )
         /* soc == start-of-calendar */
         GDate soc;
 
+        g_date_clear(&soc, 1);
         g_date_set_dmy( &soc, 1, dcal->month, dcal->year );
         /* ensure not before calendar start. */
-        if ( g_date_get_julian(d) < g_date_get_julian(&soc) ) {
+        if (g_date_get_julian(d) < g_date_get_julian(&soc)) {
                 return -1;
         }
         /* do computation here, since we're going to change the
@@ -1546,13 +1769,110 @@ gdc_get_doc_offset( GncDenseCal *dcal, GDate *d )
         return toRet;
 }
 
+static void
+gdc_add_tag_markings(GncDenseCal *cal, guint tag)
+{
+     gchar *name, *info;
+     gint num_marks, idx;
+     GDate **dates;
+
+     // copy the values into the old marking function.
+     name = gnc_dense_cal_model_get_name(cal->model, tag);
+     info = gnc_dense_cal_model_get_info(cal->model, tag);
+     num_marks = gnc_dense_cal_model_get_instance_count(cal->model, tag);
+     dates = g_new0(GDate*, num_marks);
+     for (idx = 0; idx < num_marks; idx++)
+     {
+          dates[idx] = g_date_new();
+          gnc_dense_cal_model_get_instance(cal->model, tag, idx, dates[idx]);
+     }
+
+     gdc_mark_add(cal, tag, name, info, num_marks, dates);
+
+     for (idx = 0; idx < num_marks; idx++)
+     {
+          g_date_free(dates[idx]);
+     }
+     g_free(dates);
+}
+
+static void
+gdc_add_markings(GncDenseCal *cal)
+{
+     GList *tags;
+     tags = gnc_dense_cal_model_get_contained(cal->model);
+     for (; tags != NULL; tags = tags->next)
+     {
+          guint tag = GPOINTER_TO_UINT(tags->data);
+          gdc_add_tag_markings(cal, tag);
+     }
+}
+
+static void
+gdc_remove_markings(GncDenseCal *cal)
+{
+     GList *tags;
+     tags = gnc_dense_cal_model_get_contained(cal->model);
+     for (; tags != NULL; tags = tags->next)
+     {
+          guint tag = GPOINTER_TO_UINT(tags->data);
+          gdc_mark_remove(cal, tag);
+     }
+}
+
+static void
+gdc_model_added_cb(GncDenseCalModel *model, guint added_tag, gpointer user_data)
+{
+     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
+     printf("gdc_model_added_cb update\n");
+     gdc_add_tag_markings(cal, added_tag);
+} 
+
+static void
+gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_data)
+{
+     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
+     printf("gdc_model_update_cb update for tag [%d]\n", update_tag);
+     gdc_mark_remove(cal, update_tag);
+     gdc_add_tag_markings(cal, update_tag);
+}
+
+static void
+gdc_model_removing_cb(GncDenseCalModel *model, guint remove_tag, gpointer user_data)
+{
+     GncDenseCal *cal = GNC_DENSE_CAL(user_data);
+     printf("gdc_model_removing_cb update [%d]\n", remove_tag);
+     gdc_mark_remove(cal, remove_tag);
+}
+
+void
+gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model)
+{
+     if (cal->model != NULL)
+     {
+          gdc_remove_markings(cal);
+          // g_object_unref(cal->model);
+          cal->model = NULL;
+     }
+     cal->model = model;
+     //g_object_ref(model);
+     g_signal_connect(G_OBJECT(cal->model), "added", (GCallback)gdc_model_added_cb, cal);
+     g_signal_connect(G_OBJECT(cal->model), "update", (GCallback)gdc_model_update_cb, cal);
+     g_signal_connect(G_OBJECT(cal->model), "removing", (GCallback)gdc_model_removing_cb, cal);
+
+     gdc_add_markings(cal);
+}
+
 /**
  * Marks the given array of GDate*s on the calendar with the given name.
  **/
-guint
-gnc_dense_cal_mark( GncDenseCal *dcal,
-                    guint size, GDate **dateArray,
-                    gchar *name, gchar *info )
+static void
+gdc_mark_add(GncDenseCal *dcal,
+             guint tag,
+             gchar *name,
+             gchar *info,
+             guint size,
+             GDate **dateArray)
 {
         guint i;
 	gint doc;
@@ -1561,7 +1881,7 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
 
         if ( size == 0 ) {
                 PERR( "0 size not allowed\n" );
-                return -1;
+                return;
         }
 
         newMark = g_new0( gdc_mark_data, 1 );
@@ -1573,8 +1893,9 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
         if ( info ) {
                 newMark->info = g_strdup(info);
         }
-        newMark->tag = dcal->lastMarkTag++;
+        newMark->tag = tag;
         newMark->ourMarks = NULL;
+        printf("saving mark with tag [%d]\n", newMark->tag);
 
         for ( i=0; i<size; i++ ) {
                 d = dateArray[i];
@@ -1594,11 +1915,10 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
         dcal->markData = g_list_append( dcal->markData, (gpointer)newMark );
         gnc_dense_cal_draw_to_buffer( dcal );
         gtk_widget_queue_draw( GTK_WIDGET( dcal ) );
-        return newMark->tag;
 }
 
-void
-gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
+static void
+gdc_mark_remove(GncDenseCal *dcal, guint markToRemove)
 {
         GList *l, *calMarkL;
         gint doc;
@@ -1616,12 +1936,15 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
                 if ( gdcmd->tag == markToRemove )
                         break;
         }
-        g_assert( l != NULL );
         if ( l == NULL ) {
                 DEBUG( "l == null" );
                 return;
         }
-        g_assert( gdcmd != NULL );
+        if (gdcmd == NULL)
+        {
+          DEBUG("gdcmd == null");
+          return;
+        }
 
         l = NULL;
         for ( calMarkL = gdcmd->ourMarks;

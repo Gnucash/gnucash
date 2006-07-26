@@ -735,7 +735,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   }
   /* remove old marks */
   if ( sxfti->mark_id != -1 ) {
-    gnc_dense_cal_mark_remove( sxfti->example_cal, sxfti->mark_id );
+    //gnc_dense_cal_mark_remove( sxfti->example_cal, sxfti->mark_id );
     sxfti->mark_id = -1;
   }
   if ( i > 0 ) {
@@ -748,10 +748,12 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     name = gtk_editable_get_chars( GTK_EDITABLE(w), 0, -1 );
     info = g_string_sized_new( 16 );
     xaccFreqSpecGetFreqStr( fs, info );
+    /*
     sxfti->mark_id =
       gnc_dense_cal_mark( sxfti->example_cal,
                           i, sxfti->cal_marks,
-                          name, info->str );
+                          name, info->str );*/
+    sxfti->mark_id = -1;
     gtk_widget_queue_draw( GTK_WIDGET(sxfti->example_cal) );
     g_free( name );
     g_string_free( info, TRUE );
