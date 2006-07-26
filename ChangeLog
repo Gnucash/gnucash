@@ -30,6 +30,11 @@
 	  Apparently some distributions ship g-wrap-config separately
 	  from the g-wrap.scm guile module.
 
+2006-07-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-file.scm:
+	  Ignore any unknown !Option specification.  Fixes #160735.
+
 	* src/business/business-gnome/dialog-invoice.c:
 	  Set the summary bar values when the window is first opened (#345978).
 

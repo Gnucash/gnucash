@@ -79,7 +79,7 @@
                  ;; now do something with the line 
                  (if
                   (eq? tag #\!)
-                  (begin 
+                  (let ((old-qstate qstate-type))
                     (set! qstate-type (qif-parse:parse-bang-field value))
                     (case qstate-type 
                       ((type:bank type:cash type:ccard type:invst type:port 
@@ -101,7 +101,17 @@
                       ((option:autoswitch)
                        (set! ignore-accounts #t))
                       ((clear:autoswitch)
-                       (set! ignore-accounts #f))))
+                       (set! ignore-accounts #f))
+                      (else
+		       ;; Ignore any other "option:" identifiers and
+		       ;; just return to the previously known !type
+                       (if (string-match "^option:"
+                                         (symbol->string qstate-type))
+                           (begin
+                             (display "qif-file:read-file ignoring ")
+                             (write qstate-type)
+                             (newline)
+                             (set! qstate-type old-qstate))))))
                   
 ;;;                        (#t 
 ;;;                         (display "qif-file:read-file can't handle ")
