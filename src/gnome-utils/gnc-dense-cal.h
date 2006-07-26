@@ -95,40 +95,6 @@ void gnc_dense_cal_transient_model_update_date_end(GDate *start, FreqSpec *fs, G
 
 /* ------------------------------------------------------------ */
 
-#if 0
-#define GNC_TYPE_DENSE_CAL_STORE (gnc_dense_cal_store_get_type())
-#define GNC_DENSE_CAL_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStore))
-#define GNC_DENSE_CAL_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStoreClass))
-#define GNC_IS_DENSE_CAL_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_STORE))
-#define GNC_IS_DENSE_CAL_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_DENSE_CAL_STORE))
-#define GNC_DENSE_CAL_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStore))
-  
-typedef struct _GncDenseCalStore GncDenseCalStore;
-typedef struct _GncDenseCalStoreClass GncDenseCalStoreClass;
-
-struct _GncDenseCalStoreClass
-{
-  GObjectClass parent_class;
-};
-
-struct GncDenseCalStore
-{
-  GObject parent;
-};
-
-GType gnc_dense_cal_store_get_type(void);
-GncDenseCalStore *gnc_dense_cal_store_new(void);
-void gnc_dense_cal_store_clear(GncDenseCalStore *store);
-guint gnc_dense_cal_store_add(GncDenseCalStore *dcal,
-                              gchar *name,
-                              gchar *info,
-                              guint size,
-                              GDate **daysArray);
-void gnc_dense_cal_store_remove(GncDenseCalStore *dcal, guint markToRemove);
-#endif // 0
-
-/* ------------------------------------------------------------ */
-
 #define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ()) 
 #define GNC_DENSE_CAL(obj)          GTK_CHECK_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
 #define GNC_DENSE_CAL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_dense_cal_get_type (), GncDenseCalClass)
