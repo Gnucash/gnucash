@@ -32,6 +32,12 @@
 	  when user attempts to save a report with the same name as
 	  an existing report.
 
+2006-07-19  Christian Stimming <stimming@tuhh.de>
+
+	* src/engine/test-core/test-engine-stuff.c:
+	  Fix test of numerics in random splits, because multiplications
+	  might also turn out zero.
+
 2006-07-18  Christian Stimming <stimming@tuhh.de>
 
 	* configure.in:
