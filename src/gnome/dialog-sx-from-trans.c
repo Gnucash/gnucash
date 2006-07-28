@@ -75,8 +75,6 @@ static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gp
 
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
 
-typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } endType;
-
 typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
                                  * the numeric equivalences explicitly here
                                  */
@@ -94,11 +92,8 @@ typedef struct
   Transaction *trans;
   SchedXaction *sx;
 
+  GncDenseCalTransientModel *dense_cal_model;
   GncDenseCal *example_cal;
-  /** Storage for the maximum possible number of marks we could put on the
-   *  calendar. */
-  GDate **cal_marks;
-  gint mark_id;
 
   GNCDateEdit *startDateGDE, *endDateGDE;
 
@@ -106,7 +101,7 @@ typedef struct
 
 typedef struct
 {
-  endType type;
+  gdctm_end_type type;
   GDate end_date;
   guint n_occurrences;
 } getEndTuple;
@@ -367,20 +362,16 @@ sxftd_init( SXFromTransInfo *sxfti )
 
   /* Setup the example calendar and related data structures. */
   {
-    int i;
+    int num_marks = SXFTD_EXCAL_NUM_MONTHS * 31;
 
     w = GTK_WIDGET(glade_xml_get_widget( sxfti->gxml, SXFTD_EX_CAL_FRAME ));
-    sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new());
+    sxfti->dense_cal_model = gnc_dense_cal_transient_model_new(num_marks);
+    sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
+
     g_assert( sxfti->example_cal );
     gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
     gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
     gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
-
-    sxfti->mark_id = -1;
-    sxfti->cal_marks = g_new0( GDate*, (SXFTD_EXCAL_NUM_MONTHS * 31) );
-    for ( i=0; i < SXFTD_EXCAL_NUM_MONTHS * 31; i++ ) {
-      sxfti->cal_marks[i] = g_date_new();
-    }
   }
 
   /* Setup the start and end dates as GNCDateEdits */
@@ -634,14 +625,8 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
 static void
 sxftd_destroy( GtkWidget *w, gpointer user_data )
 {
-  int i;
   SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
 
-  for ( i=0; i<SXFTD_EXCAL_NUM_MONTHS*31; i++ ) {
-    g_date_free( sxfti->cal_marks[i] );
-  }
-  g_free( sxfti->cal_marks );
-    
   if ( sxfti->sx ) {
     xaccSchedXactionFree(sxfti->sx);
     sxfti->sx = NULL;
@@ -694,11 +679,8 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   struct tm *tmpTm;
   time_t tmp_tt;
   GDate date, startDate;
-  unsigned int i;
   FreqSpec *fs;
   getEndTuple get;
-  gchar *name;
-  GString *info;
 
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
@@ -720,44 +702,26 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   xaccFreqSpecGetNextInstance( fs, &date, &date );
   startDate = date;
 
-  i = 0;
-  while ( (i < (SXFTD_EXCAL_NUM_MONTHS * 31))
-          && g_date_valid( &date )
-          /* Do checking against end restriction. */
-          && ( ( get.type == NEVER_END )
-               || ( get.type == END_ON_DATE
-                    && g_date_compare( &date, &(get.end_date) ) <= 0 )
-               || ( get.type == END_AFTER_N_OCCS
-                    && i < get.n_occurrences ) ) ) {
+  switch (get.type)
+  {
+  case NEVER_END:
+    gnc_dense_cal_transient_model_update_no_end(sxfti->dense_cal_model, &startDate, fs);
+    break;
+  case END_ON_DATE:
+    gnc_dense_cal_transient_model_update_date_end(sxfti->dense_cal_model, &startDate, fs, &get.end_date);
+    break;
+  case END_AFTER_N_OCCS:
+    gnc_dense_cal_transient_model_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
+    break;
+  default:
+    printf("unknown get.type [%d]\n", get.type);
+    break;
+  }
 
-    *sxfti->cal_marks[i++] = date;
-    xaccFreqSpecGetNextInstance( fs, &date, &date );
-  }
-  /* remove old marks */
-  if ( sxfti->mark_id != -1 ) {
-    //gnc_dense_cal_mark_remove( sxfti->example_cal, sxfti->mark_id );
-    sxfti->mark_id = -1;
-  }
-  if ( i > 0 ) {
-    GtkWidget *w;
-    gnc_dense_cal_set_month( sxfti->example_cal,
-                             g_date_get_month( &startDate ) );
-    gnc_dense_cal_set_year( sxfti->example_cal,
-                            g_date_get_year( &startDate ) );
-    w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
-    name = gtk_editable_get_chars( GTK_EDITABLE(w), 0, -1 );
-    info = g_string_sized_new( 16 );
-    xaccFreqSpecGetFreqStr( fs, info );
-    /*
-    sxfti->mark_id =
-      gnc_dense_cal_mark( sxfti->example_cal,
-                          i, sxfti->cal_marks,
-                          name, info->str );*/
-    sxfti->mark_id = -1;
-    gtk_widget_queue_draw( GTK_WIDGET(sxfti->example_cal) );
-    g_free( name );
-    g_string_free( info, TRUE );
-  }
+  gnc_dense_cal_set_month( sxfti->example_cal,
+                           g_date_get_month( &startDate ) );
+  gnc_dense_cal_set_year( sxfti->example_cal,
+                          g_date_get_year( &startDate ) );
 
   xaccFreqSpecFree( fs );
 }

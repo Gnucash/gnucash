@@ -73,25 +73,36 @@ void gnc_dense_cal_model_get_instance(GncDenseCalModel *model, guint tag, gint i
 #define GNC_IS_DENSE_CAL_TRANSIENT_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL))
 #define GNC_DENSE_CAL_TRANSIENT_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, GncDenseCalTransientModel))
   
+typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } gdctm_end_type;
+
 typedef struct _GncDenseCalTransientModel
 {
-  GObject parent;
-  gchar *name;
-  gchar *info;
-  int num_marks;
-  GDate **cal_marks;
+     GObject parent;
+     
+     GDate start_date;
+     gdctm_end_type end_type;
+     GDate end_date;
+     gint n_occurrences;
+     gchar *name;
+     gchar *info;
+     int num_marks;
+     int num_real_marks; 
+     GDate **cal_marks;
 } GncDenseCalTransientModel;
 
 typedef struct _GncDenseCalTransientModelClass
 {
-  GObjectClass parent_class;
+     GObjectClass parent_class;
 } GncDenseCalTransientModelClass;
 
 GType gnc_dense_cal_transient_model_get_type(void);
-GncDenseCalTransientModel* gnc_dense_cal_transient_model_new(gchar *name, gchar *info, int num_marks);
-void gnc_dense_cal_transient_model_update_no_end(GDate *start, FreqSpec *fs);
-void gnc_dense_cal_transient_model_update_count_end(GDate *start, FreqSpec *fs, int numOccur);
-void gnc_dense_cal_transient_model_update_date_end(GDate *start, FreqSpec *fs, GDate *endDate);
+GncDenseCalTransientModel* gnc_dense_cal_transient_model_new(int num_marks);
+void gnc_dense_cal_transient_model_clear(GncDenseCalTransientModel *model);
+void gnc_dense_cal_transient_model_update_name(GncDenseCalTransientModel *model, gchar* name);
+void gnc_dense_cal_transient_model_update_info(GncDenseCalTransientModel *model, gchar* info);
+void gnc_dense_cal_transient_model_update_no_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs);
+void gnc_dense_cal_transient_model_update_count_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, int num_occur);
+void gnc_dense_cal_transient_model_update_date_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, GDate *end_date);
 
 /* ------------------------------------------------------------ */
 

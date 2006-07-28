@@ -104,54 +104,43 @@ typedef enum _EndTypeEnum {
         END_OCCUR,
 } EndType;
 
-/* Runtime/dialog information about a particular SX. */
-typedef struct _SxRuntimeInfo
-{
-        SchedXaction *sx;
-        // the gnc-dense-cal mark-tag
-        gint         markTag;
-        // which row in the GTK CList this SX is.
-        gint         row;
-} SxRuntimeInfo;
-
 struct _GncSxEditorDialog
 {
-        GladeXML *gxml;
-        GtkWidget *dialog;
-        SchedXaction *sx;
-        /* If this is a new scheduled transaction or not. */
-        int newsxP;
+     GladeXML *gxml;
+     GtkWidget *dialog;
+     SchedXaction *sx;
+     /* If this is a new scheduled transaction or not. */
+     int newsxP;
 
-        /* The various widgets in the dialog */
-        GNCLedgerDisplay *ledger;
+     /* The various widgets in the dialog */
+     GNCLedgerDisplay *ledger;
 
-        GNCFrequency *gncfreq;
-        GncDenseCal *example_cal;
-        GDate **cal_marks;
-        gint markId;
+     GNCFrequency *gncfreq;
+     GncDenseCalTransientModel *dense_cal_model;
+     GncDenseCal *example_cal;
 
-        GtkEditable *nameEntry;
+     GtkEditable *nameEntry;
 
-        GtkLabel *lastOccurLabel;
+     GtkLabel *lastOccurLabel;
 
-        GtkToggleButton *autocreateOpt;
-        GtkToggleButton *notifyOpt;
-        GtkToggleButton *advanceOpt;
-        GtkSpinButton *advanceSpin;
-        GtkToggleButton *remindOpt;
-        GtkSpinButton *remindSpin;
+     GtkToggleButton *autocreateOpt;
+     GtkToggleButton *notifyOpt;
+     GtkToggleButton *advanceOpt;
+     GtkSpinButton *advanceSpin;
+     GtkToggleButton *remindOpt;
+     GtkSpinButton *remindSpin;
 
-        GtkToggleButton *optEndDate;
-        GtkToggleButton *optEndNone;
-        GtkToggleButton *optEndCount;
-        GtkEntry *endCountSpin;
-        GtkEntry *endRemainSpin;
-        GNCDateEdit *endDateEntry;
+     GtkToggleButton *optEndDate;
+     GtkToggleButton *optEndNone;
+     GtkToggleButton *optEndCount;
+     GtkEntry *endCountSpin;
+     GtkEntry *endRemainSpin;
+     GNCDateEdit *endDateEntry;
 
-        char *sxGUIDstr;
+     char *sxGUIDstr;
 
-        GncEmbeddedWindow *embed_window;
-	GncPluginPage *plugin_page;
+     GncEmbeddedWindow *embed_window;
+     GncPluginPage *plugin_page;
 };
 
 /** Prototypes **********************************************************/
@@ -1032,7 +1021,6 @@ advance_toggle( GtkButton *o, GncSxEditorDialog *sxed )
 static void
 scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 {
-        int i;
         GncSxEditorDialog *sxed = data;
 
         if (sxed == NULL)
@@ -1049,11 +1037,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 
         g_free (sxed->sxGUIDstr);
         sxed->sxGUIDstr = NULL;
-
-        for ( i=0; i<(EX_CAL_NUM_MONTHS*31); i++ ) {
-                g_free( sxed->cal_marks[i] );
-        }
-        g_free( sxed->cal_marks );
 
         if ( sxed->newsxP ) {
                 /* FIXME: WTF???
@@ -1179,15 +1162,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
 
         sxed->sx     = sx;
         sxed->newsxP = newSX;
-        /* Setup dense-cal local mark storage */
-        {
-                sxed->cal_marks = g_new0( GDate*, EX_CAL_NUM_MONTHS * 31 );
-                for( i=0; i<(EX_CAL_NUM_MONTHS * 31); i++ ) {
-                        sxed->cal_marks[i] = g_date_new();
-                }
-                sxed->markId = -1;
-        }
-
         /* Setup the end-date GNC widget */
         {
                 GtkWidget *endDateBox =
@@ -1289,8 +1263,9 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
         gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->gncfreq) );
 
         b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "example_cal_hbox" ));
-        sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new());
-        g_assert( sxed->example_cal );
+        sxed->dense_cal_model = gnc_dense_cal_transient_model_new(EX_CAL_NUM_MONTHS*31);
+        sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxed->dense_cal_model)));
+        g_assert(sxed->example_cal);
         gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxed->example_cal, EX_CAL_MO_PER_COL );
         gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->example_cal) );
@@ -1469,8 +1444,8 @@ static
 void
 set_endgroup_toggle_states( GncSxEditorDialog *sxed, EndType type )
 {
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endDateEntry),   (type == END_DATE) );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountSpin),  (type == END_OCCUR) );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endDateEntry), (type == END_DATE) );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountSpin), (type == END_OCCUR) );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainSpin), (type == END_OCCUR) );
 }
 
@@ -1551,109 +1526,61 @@ static
 void
 gnc_sxed_update_cal( GncSxEditorDialog *sxed )
 {
-        int i;
         FreqSpec *fs;
-        GDate d;
-        END_TYPE endType;
-        GDate endDate;
-        int numRemain;
+        GDate start_date;
 
-        endType = NO_END;
-        numRemain = -1;
-        /* figure out the end restriction */
-        if ( gtk_toggle_button_get_active( sxed->optEndDate ) ) {
-                time_t tt;
-                struct tm *tmpTm;
-                endType = DATE_END;
-                tt = gnc_date_edit_get_date( sxed->endDateEntry );
-                tmpTm = g_new0( struct tm, 1 );
-                *tmpTm = *(localtime( &tt ));
-                g_date_set_day( &endDate, tmpTm->tm_mday );
-                g_date_set_month( &endDate, tmpTm->tm_mon+1 );
-                g_date_set_year( &endDate, tmpTm->tm_year + 1900 );
-                g_free( tmpTm );
-        } else if ( gtk_toggle_button_get_active( sxed->optEndNone ) ) {
-                endType = NO_END;
-        } else if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
-                endType = COUNT_END;
-		numRemain =
-		  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
-
-        } else {
-                g_assert( FALSE );
-        }
-
-        if ( sxed->markId != -1 ) {
-          // gnc_dense_cal_mark_remove( sxed->example_cal, sxed->markId );
-                sxed->markId = -1;
-        }
+        g_date_clear(&start_date, 1);
 
         fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &d );
-        g_date_subtract_days( &d, 1 );
-        xaccFreqSpecGetNextInstance( fs, &d, &d );
+        gnc_frequency_save_state( sxed->gncfreq, fs, &start_date );
+        g_date_subtract_days( &start_date, 1 );
+        xaccFreqSpecGetNextInstance( fs, &start_date, &start_date );
 
         /* Deal with the fact that this SX may have been run before [the
          * calendar should only show upcoming instances]... */
         {
-                GDate *lastInst;
+             GDate *lastInst;
 
-                lastInst = xaccSchedXactionGetLastOccurDate( sxed->sx );
-                if ( g_date_valid( lastInst )
-                     && g_date_valid( &d )
-                     && g_date_compare( lastInst, &d ) != 0 ) {
-                        d = *lastInst;
-                        xaccFreqSpecGetNextInstance( fs, &d, &d );
-                }
+             lastInst = xaccSchedXactionGetLastOccurDate( sxed->sx );
+             if ( g_date_valid( lastInst )
+                  && g_date_valid( &start_date )
+                  && g_date_compare( lastInst, &start_date ) != 0 ) {
+                  start_date = *lastInst;
+                  xaccFreqSpecGetNextInstance(fs, &start_date, &start_date);
+             }
         }
 
-        if ( !g_date_valid( &d ) ) {
-                /* Nothing to do. */
-                xaccFreqSpecFree( fs );
-                return;
+        if (!g_date_valid(&start_date))
+        {
+             /* Nothing to do. */
+             gnc_dense_cal_transient_model_clear(sxed->dense_cal_model);
+             xaccFreqSpecFree(fs);
+             return;
         }
 
-        i = 0;
-        gnc_dense_cal_set_month( sxed->example_cal, g_date_get_month( &d ) );
-        gnc_dense_cal_set_year(  sxed->example_cal, g_date_get_year( &d ) );
-        while ( (i < EX_CAL_NUM_MONTHS * 31)
-                && g_date_valid( &d )
-                /* Restrict based on end date */
-                && ( endType == NO_END
-                     || ( endType == DATE_END
-                          && g_date_compare( &d, &endDate ) <= 0 )
-                     || ( endType == COUNT_END
-                          && i < numRemain ) ) ) {
-                *(sxed->cal_marks[i++]) = d;
-                xaccFreqSpecGetNextInstance( fs, &d, &d );
+        gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&start_date));
+        gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&start_date));
+
+        /* figure out the end restriction */
+        if (gtk_toggle_button_get_active(sxed->optEndDate))
+        {
+             GDate end_date;
+             g_date_set_time_t(&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
+             gnc_dense_cal_transient_model_update_date_end(sxed->dense_cal_model, &start_date, fs, &end_date);
         }
-        if ( i <= 0 ) {
-                xaccFreqSpecFree( fs );
-                return;
+        else if (gtk_toggle_button_get_active(sxed->optEndNone))
+        {
+             gnc_dense_cal_transient_model_update_no_end(sxed->dense_cal_model, &start_date, fs);
         }
-
-        { 
-                gchar *name;
-                GString *info;
-
-                name = gtk_editable_get_chars( sxed->nameEntry, 0, -1 );
-                if ( strlen( name ) == 0 ) {
-                        g_free(name);
-                        name = NULL;
-                }
-                info = g_string_sized_new( 16 );
-                xaccFreqSpecGetFreqStr( fs, info );
-                sxed->markId = -1;
-                /*sxed->markId = gnc_dense_cal_mark( sxed->example_cal, i,
-                                                   sxed->cal_marks,
-                                                   name, info->str );*/
-                gtk_widget_queue_draw( GTK_WIDGET( sxed->example_cal ) );
-
-                g_string_free( info, TRUE );
-                if ( name != NULL )
-                {
-                        g_free( name );
-                }
+        else if (gtk_toggle_button_get_active(sxed->optEndCount))
+        {
+             gint num_remain
+		  = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
+             gnc_dense_cal_transient_model_update_count_end(sxed->dense_cal_model, &start_date, fs, num_remain);
+        }
+        else
+        {
+             g_assert( FALSE );
         }
 
         xaccFreqSpecFree( fs );

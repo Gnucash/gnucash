@@ -25,9 +25,12 @@ TODO
 
 - gnc_dense_cal
   - change number-month properties to display (width, length)
-  x set_model(GncTemporalInstancesModel *mdl)
-    - new interface creation.
-    x register callbacks for signals
+  - [x] set_model(GncTemporalInstancesModel *mdl)
+    - [x] new interface creation.
+    - [x] register callbacks for signals
+
+- sx-from-trans
+  - [ ] convert to GObject, hookup destroy/finalize
 
 - transaction creation
   - verification routine

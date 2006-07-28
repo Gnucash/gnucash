@@ -163,13 +163,13 @@ gnc_dense_cal_transient_model_get_type(void)
      if (type == 0)
      {
           static const GTypeInfo info = {
-               sizeof (GncDenseCalTransientModel),
+               sizeof (GncDenseCalTransientModelClass),
                NULL,   /* base_init */
                NULL,   /* base_finalize */
                NULL,   /* class_init */
                NULL,   /* class_finalize */
                NULL,   /* class_data */
-               0,      
+               sizeof(GncDenseCalTransientModel),
                0,      /* n_preallocs */
                NULL    /* instance_init */
           };
@@ -187,32 +187,107 @@ gnc_dense_cal_transient_model_get_type(void)
 }
 
 GncDenseCalTransientModel*
-gnc_dense_cal_transient_model_new(gchar *name, gchar *info, int num_marks)
+gnc_dense_cal_transient_model_new(int num_marks)
 {
      GncDenseCalTransientModel *model = g_object_new(GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, NULL);
-     model->name = name;
-     model->info = info;
      model->num_marks = num_marks;
      model->cal_marks = g_new0(GDate*, num_marks);
+     {
+          int i = 0;
+          for (i = 0; i < model->num_marks; i++)
+          {
+               model->cal_marks[i] = g_date_new();
+          }
+     }
+     model->num_real_marks = 0;
+     g_date_clear(&model->start_date, 1);
+     g_date_set_time_t(&model->start_date, time(NULL));
+     model->end_type = NEVER_END;
+     g_date_clear(&model->end_date, 1);
+     g_date_set_time_t(&model->end_date, time(NULL));
+     model->n_occurrences = 0;
      return model;
 }
 
 void
-gnc_dense_cal_transient_model_update_no_end(GDate *start, FreqSpec *fs)
+gnc_dense_cal_transient_model_clear(GncDenseCalTransientModel *model)
 {
-     // emit_by_name("update");
+     model->num_real_marks = 0;
+     g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
 }
 
 void
-gnc_dense_cal_transient_model_update_count_end(GDate *start, FreqSpec *fs, int numOccur)
+gnc_dense_cal_transient_model_update_name(GncDenseCalTransientModel *model, gchar *name)
 {
-     // emit_by_name("update");
+     if (model->name != NULL)
+     {
+          g_free(model->name);
+     }
+     model->name = g_strdup(name);
+     g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
 }
 
 void
-gnc_dense_cal_transient_model_update_date_end(GDate *start, FreqSpec *fs, GDate *endDate)
+gnc_dense_cal_transient_model_update_info(GncDenseCalTransientModel *model, gchar *info)
 {
-     // emit_by_name("update");
+     if (model->info != NULL)
+     {
+          g_free(model->info);
+     }
+     model->info = g_strdup(info);
+     g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
+}
+
+static void
+gdctm_generic_update(GncDenseCalTransientModel *trans, GDate *start, FreqSpec *fs)
+{
+     int i;
+     GDate date;
+
+     date = *start;
+     /* go one day before what's in the box so we can get the correct start
+      * date. */
+     g_date_subtract_days(&date, 1);
+     xaccFreqSpecGetNextInstance(fs, &date, &date);
+
+     i = 0;
+     while ((i < trans->num_marks)
+            && g_date_valid(&date)
+            /* Do checking against end restriction. */
+            && ((trans->end_type == NEVER_END)
+                || (trans->end_type == END_ON_DATE
+                    && g_date_compare(&date, &trans->end_date) <= 0)
+                || (trans->end_type == END_AFTER_N_OCCS
+                    && i < trans->n_occurrences)))
+     {
+          *trans->cal_marks[i++] = date;
+          xaccFreqSpecGetNextInstance(fs, &date, &date);
+     }
+     trans->num_real_marks = (i-1);
+     g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
+}
+
+void
+gnc_dense_cal_transient_model_update_no_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs)
+{
+     model->end_type = NEVER_END;
+     gdctm_generic_update(model, start, fs);
+}
+
+void
+gnc_dense_cal_transient_model_update_count_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, int num_occur)
+{
+     model->end_type = END_AFTER_N_OCCS;
+     model->n_occurrences = num_occur;
+     gdctm_generic_update(model, start, fs);
+}
+
+void
+gnc_dense_cal_transient_model_update_date_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, GDate *end_date)
+{
+     model->end_type = END_ON_DATE;
+     model->end_date = *end_date;
+     gdctm_generic_update(model, start, fs);
 }
 
 static GList*
@@ -244,7 +319,7 @@ gdctm_get_instance_count(GncDenseCalModel *model, guint tag)
 {
      GncDenseCalTransientModel *mdl = GNC_DENSE_CAL_TRANSIENT_MODEL(model);
      // assert(tag == 1)
-     return mdl->num_marks;
+     return mdl->num_real_marks;
 }
 
 static void
