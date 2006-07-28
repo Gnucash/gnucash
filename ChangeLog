@@ -1,3 +1,10 @@
+2006-07-28  Christian Stimming <stimming@tuhh.de>
+
+	* accounts/de_DE/Makefile.am: Updated acctchrt_skr03.gnucash-xea
+	by Oliver Vollmer. Enabled it again for distribution and
+	installation because the author thinks it is verified enough by
+	now.
+
 2006-07-24  Derek Atkins  <derek@ihtfp.com>
 
 	* [lots of Makefile.am files]:
