@@ -52,9 +52,11 @@ typedef enum {
   GNC_SEARCH_MATCH_ANY = 1
 } GNCSearchType;
 
-#define COL_NAME    0
-#define COL_POINTER 1
-#define NUM_COLS    2
+enum search_cols {
+  SEARCH_COL_NAME = 0,
+  SEARCH_COL_POINTER,
+  NUM_SEARCH_COLS
+};
 
 struct _GNCSearchWindow {
   GtkWidget *	dialog;
@@ -565,7 +567,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
   if (!gtk_combo_box_get_active_iter(combo_box, &iter))
     return;
   model = gtk_combo_box_get_model(combo_box);
-  gtk_tree_model_get(model, &iter, COL_POINTER, &param, -1);
+  gtk_tree_model_get(model, &iter, SEARCH_COL_POINTER, &param, -1);
 
   if (gnc_search_param_type_match (param, data->param)) {
     /* The param type is the same, just save the new param */
@@ -640,13 +642,13 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
   data->container = hbox;
   data->param = sw->last_param;
 
-  store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
+  store = gtk_list_store_new(NUM_SEARCH_COLS, G_TYPE_STRING, G_TYPE_POINTER);
   combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start(GTK_CELL_LAYOUT (combo_box), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-                                  "text", COL_NAME,
+                                  "text", SEARCH_COL_NAME,
                                   NULL);
 
   for (l = sw->params_list; l; l = l->next) {
@@ -654,8 +656,8 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
-		       COL_NAME, _(param->title),
-		       COL_POINTER, param,
+		       SEARCH_COL_NAME, _(param->title),
+		       SEARCH_COL_POINTER, param,
 		       -1);
 
     if (param == sw->last_param) /* is this the right parameter to start? */

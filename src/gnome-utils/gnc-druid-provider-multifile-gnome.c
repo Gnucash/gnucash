@@ -11,8 +11,11 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 
-#define FILE_FILENAME 0
-#define FILE_POINTER  1
+enum file_cols {
+  FILE_COL_FILENAME = 0,
+  FILE_COL_POINTER,
+  NUM_FILE_COLS
+};
 
 static void gnc_druid_provider_multifile_gnome_class_init	(GNCDruidProviderMultifileGnomeClass *class);
 static void gnc_druid_provider_multifile_gnome_finalize		(GObject *obj);
@@ -63,7 +66,7 @@ gnc_dpmfg_select_file_cb(GtkTreeSelection *selection,
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
     gtk_tree_model_get(model, &iter,
-		       FILE_POINTER, &prov_mf->selected_file,
+		       FILE_COL_POINTER, &prov_mf->selected_file,
 		       -1);
   } else {
     prov_mf->selected_file = NULL;
@@ -93,8 +96,8 @@ gnc_dpmfg_refresh_list(GNCDruidProviderMultifileGnome *prov_mf)
 
     gtk_list_store_prepend(store, &iter);
     gtk_list_store_set(store, &iter,
-		       FILE_FILENAME, filename,
-		       FILE_POINTER, list->data,
+		       FILE_COL_FILENAME, filename,
+		       FILE_COL_POINTER, list->data,
 		       -1);
     if (prov_mf->selected_file == list->data) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
@@ -260,12 +263,12 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   prov->file_view = view;
 
   /* Set up the file view */
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_POINTER);
+  store = gtk_list_store_new (NUM_FILE_COLS, G_TYPE_STRING, G_TYPE_POINTER);
   gtk_tree_view_set_model(GTK_TREE_VIEW(view), GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes("", renderer,
-						    "text", FILE_FILENAME,
+						    "text", FILE_COL_FILENAME,
 						    NULL);
   gtk_tree_view_append_column(GTK_TREE_VIEW(view), column);
 

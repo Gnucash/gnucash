@@ -45,8 +45,11 @@ enum
         LAST_SIGNAL
 };
 
-#define COLUMN_ACCT_NAME 0
-#define COLUMN_ACCT_PTR  1
+enum account_cols {
+	ACCT_COL_NAME = 0,
+	ACCT_COL_PTR,
+	NUM_ACCT_COLS
+};
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
@@ -137,9 +140,9 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas->acctTypeFilters = FALSE;
         gas->newAccountButton = NULL;
 
-	gas->store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_POINTER);
+	gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
         widget =
-	  gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), COLUMN_ACCT_NAME);
+	  gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), ACCT_COL_NAME);
         gas->combo = GTK_COMBO_BOX_ENTRY(widget);
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),
 				GTK_TREE_MODEL(gas->store));
@@ -195,8 +198,8 @@ gas_populate_list( GNCAccountSel *gas )
 	  name = xaccAccountGetFullName(acc);
 	  gtk_list_store_append(gas->store, &iter);
 	  gtk_list_store_set(gas->store, &iter,
-			     COLUMN_ACCT_NAME, name,
-			     COLUMN_ACCT_PTR,  acc,
+			     ACCT_COL_NAME, name,
+			     ACCT_COL_PTR,  acc,
 			     -1);
 	  if (g_utf8_collate(name, currentSel) == 0) {
 	    active = i;
@@ -262,7 +265,7 @@ gnc_account_sel_find_account (GtkTreeModel *model,
 {
   Account *model_acc;
 
-  gtk_tree_model_get(model, iter, COLUMN_ACCT_PTR, &model_acc, -1);
+  gtk_tree_model_get(model, iter, ACCT_COL_PTR, &model_acc, -1);
   if (data->acct != model_acc)
     return FALSE;
 
@@ -295,7 +298,7 @@ gnc_account_sel_get_account( GNCAccountSel *gas )
 	  return NULL;
 
 	gtk_tree_model_get(GTK_TREE_MODEL(gas->store), &iter,
-			   COLUMN_ACCT_PTR, &acc,
+			   ACCT_COL_PTR, &acc,
 			   -1);
         return acc;
 }
@@ -426,7 +429,7 @@ gnc_account_sel_purge_account( GNCAccountSel *gas,
 
   if (!recursive) {
     do {
-      gtk_tree_model_get(model, &iter, COLUMN_ACCT_PTR, &acc, -1);
+      gtk_tree_model_get(model, &iter, ACCT_COL_PTR, &acc, -1);
       if (acc == target) {
 	gtk_list_store_remove(gas->store, &iter);
 	break;
@@ -434,7 +437,7 @@ gnc_account_sel_purge_account( GNCAccountSel *gas,
     } while (gtk_tree_model_iter_next(model, &iter));
   } else {
     do {
-      gtk_tree_model_get(model, &iter, COLUMN_ACCT_PTR, &acc, -1);
+      gtk_tree_model_get(model, &iter, ACCT_COL_PTR, &acc, -1);
       while (acc) {
 	if (acc == target)
 	  break;

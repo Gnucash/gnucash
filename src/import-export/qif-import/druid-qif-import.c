@@ -55,19 +55,28 @@
 
 #define PREV_ROW "prev_row"
 
-#define FILENAME_INDEX 0
-#define FILENAME_NAME  1
+enum filename_cols {
+  FILENAME_COL_INDEX = 0,
+  FILENAME_COL_NAME,
+  NUM_FILENAME_COLS
+};
 
-#define ACCOUNT_INDEX     0
-#define ACCOUNT_QIF_NAME  1
-#define ACCOUNT_GNC_NAME  2
-#define ACCOUNT_NEW       3
+enum account_cols {
+  ACCOUNT_COL_INDEX = 0,
+  ACCOUNT_COL_QIF_NAME,
+  ACCOUNT_COL_GNC_NAME,
+  ACCOUNT_COL_NEW,
+  NUM_ACCOUNT_COLS
+};
 
-#define QIF_TRANS_INDEX       0
-#define QIF_TRANS_DATE        1
-#define QIF_TRANS_DESCRIPTION 2
-#define QIF_TRANS_AMOUNT      3
-#define QIF_TRANS_CHECKED     4
+enum qif_trans_cols {
+  QIF_TRANS_COL_INDEX = 0,
+  QIF_TRANS_COL_DATE,
+  QIF_TRANS_COL_DESCRIPTION,
+  QIF_TRANS_COL_AMOUNT,
+  QIF_TRANS_COL_CHECKED,
+  NUM_QIF_TRANS_COLS
+};
 
 struct _qifimportwindow {
   GtkWidget * window;
@@ -688,7 +697,7 @@ gnc_ui_qif_import_select_loaded_file_cb (GtkTreeSelection *selection,
   gint row;
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-    gtk_tree_model_get(model, &iter, FILENAME_INDEX, &row, -1);
+    gtk_tree_model_get(model, &iter, FILENAME_COL_INDEX, &row, -1);
     if(SCM_LISTP(wind->imported_files) && 
        (scm_ilength(wind->imported_files) > row)) {
       scm_gc_unprotect_object(wind->selected_file);
@@ -805,8 +814,8 @@ update_file_page(QIFImportWindow * wind)
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
-		       FILENAME_INDEX, row++,
-		       FILENAME_NAME, row_text,
+		       FILENAME_COL_INDEX, row++,
+		       FILENAME_COL_NAME, row_text,
 		       -1);
     if(scm_qiffile == wind->selected_file) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
@@ -939,10 +948,10 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
     gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter,
-		       ACCOUNT_INDEX,    row++,
-		       ACCOUNT_QIF_NAME, qif_name,
-		       ACCOUNT_GNC_NAME, gnc_name,
-		       ACCOUNT_NEW,      checked,
+		       ACCOUNT_COL_INDEX,    row++,
+		       ACCOUNT_COL_QIF_NAME, qif_name,
+		       ACCOUNT_COL_GNC_NAME, gnc_name,
+		       ACCOUNT_COL_NEW,      checked,
 		       -1);
     accts_left = SCM_CDR(accts_left);
   }
@@ -1017,19 +1026,20 @@ create_account_picker_view(GtkWidget *widget,
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
 
-  store = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(col_name, renderer,
-						    "text", ACCOUNT_QIF_NAME,
+						    "text", ACCOUNT_COL_QIF_NAME,
 						    NULL);
   g_object_set(column, "expand", TRUE, NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"), renderer,
-						    "text", ACCOUNT_GNC_NAME,
+						    "text", ACCOUNT_COL_GNC_NAME,
 						    NULL);
   g_object_set(column, "expand", TRUE, NULL);
   gtk_tree_view_append_column(view, column);
@@ -1037,7 +1047,7 @@ create_account_picker_view(GtkWidget *widget,
   renderer = gtk_cell_renderer_toggle_new();
   g_object_set(renderer, "activatable", FALSE, NULL);
   column = gtk_tree_view_column_new_with_attributes(_("New?"), renderer,
-						    "active", ACCOUNT_NEW,
+						    "active", ACCOUNT_COL_NEW,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
@@ -1067,10 +1077,12 @@ select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
-  gtk_tree_model_get(model, &iter, ACCOUNT_INDEX, &row, -1);
+  gtk_tree_model_get(model, &iter, ACCOUNT_COL_INDEX, &row, -1);
   prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), PREV_ROW));
+  if (row == prev_row)
+    return;
   g_object_set_data(G_OBJECT(model), PREV_ROW, GINT_TO_POINTER(row));
-  if ((row == -1) || (row == prev_row))
+  if (row == -1)
     return;
 
   /* find the <qif-map-entry> corresponding to the selected row */
@@ -1317,10 +1329,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
       gtk_list_store_append(store, &iter);
       gtk_list_store_set
 	(store, &iter,
-	 QIF_TRANS_INDEX, rownum++,
-	 QIF_TRANS_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
-	 QIF_TRANS_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
-	 QIF_TRANS_AMOUNT, amount_str,
+	 QIF_TRANS_COL_INDEX, rownum++,
+	 QIF_TRANS_COL_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+	 QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+	 QIF_TRANS_COL_AMOUNT, amount_str,
 	 -1);
 
       retval      = SCM_CDR(retval); 
@@ -1764,11 +1776,11 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
       gtk_list_store_append(store, &iter);
       gtk_list_store_set
 	(store, &iter,
-	 QIF_TRANS_INDEX, rownum++,
-	 QIF_TRANS_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
-	 QIF_TRANS_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
-	 QIF_TRANS_AMOUNT, amount_str,
-	 QIF_TRANS_CHECKED, selected != SCM_BOOL_F,
+	 QIF_TRANS_COL_INDEX, rownum++,
+	 QIF_TRANS_COL_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+	 QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+	 QIF_TRANS_COL_AMOUNT, amount_str,
+	 QIF_TRANS_COL_CHECKED, selected != SCM_BOOL_F,
 	 -1);
 
       possible_matches = SCM_CDR(possible_matches);
@@ -1785,7 +1797,7 @@ gnc_ui_qif_import_duplicate_new_select_cb (GtkTreeSelection *selection,
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter))
     gtk_tree_model_get(model, &iter,
-		       QIF_TRANS_INDEX, &wind->selected_transaction,
+		       QIF_TRANS_COL_INDEX, &wind->selected_transaction,
 		       -1);
   refresh_old_transactions(wind, -1);
 }
@@ -1823,7 +1835,7 @@ gnc_ui_qif_import_duplicate_old_select_cb (GtkTreeSelection *selection,
   /* Get the row the user clicked on and update the scheme
    * code/rebuild the list store.  */
   gtk_tree_model_get(model, &iter,
-		     QIF_TRANS_INDEX, &row,
+		     QIF_TRANS_COL_INDEX, &row,
 		     -1);
   refresh_old_transactions(wind, row);
 }
@@ -2083,12 +2095,12 @@ gnc_ui_qif_import_druid_make(void)
   
   /* Set up the selected file view */
   view = GTK_TREE_VIEW(retval->selected_file_view);
-  store = gtk_list_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+  store = gtk_list_store_new(NUM_FILENAME_COLS, G_TYPE_INT, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
-						    "text", FILENAME_NAME,
+						    "text", FILENAME_COL_NAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
@@ -2109,26 +2121,26 @@ gnc_ui_qif_import_druid_make(void)
 
   /* Set up the new transaction view */
   view = GTK_TREE_VIEW(retval->new_transaction_view);
-  store = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING,
-			     G_TYPE_STRING, G_TYPE_STRING);
+  store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
-						    "text", QIF_TRANS_DATE,
+						    "text", QIF_TRANS_COL_DATE,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
-						    "text", QIF_TRANS_DESCRIPTION,
+						    "text", QIF_TRANS_COL_DESCRIPTION,
 						    NULL);
   gtk_tree_view_append_column(view, column);
   gtk_tree_view_column_set_expand(column, TRUE);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
-						    "text", QIF_TRANS_AMOUNT,
+						    "text", QIF_TRANS_COL_AMOUNT,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
@@ -2140,33 +2152,32 @@ gnc_ui_qif_import_druid_make(void)
 
   /* Set up the old transaction view */
   view = GTK_TREE_VIEW(retval->old_transaction_view);
-  store = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_STRING,
-			     G_TYPE_STRING, G_TYPE_STRING,
-			     G_TYPE_BOOLEAN);
+  store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
-						    "text", QIF_TRANS_DATE,
+						    "text", QIF_TRANS_COL_DATE,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
-						    "text", QIF_TRANS_DESCRIPTION,
+						    "text", QIF_TRANS_COL_DESCRIPTION,
 						    NULL);
   gtk_tree_view_append_column(view, column);
   gtk_tree_view_column_set_expand(column, TRUE);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
-						    "text", QIF_TRANS_AMOUNT,
+						    "text", QIF_TRANS_COL_AMOUNT,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_toggle_new();
   column = gtk_tree_view_column_new_with_attributes(_("Dup?"), renderer,
-						    "active", QIF_TRANS_CHECKED,
+						    "active", QIF_TRANS_COL_CHECKED,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 

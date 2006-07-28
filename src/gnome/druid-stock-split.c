@@ -47,10 +47,13 @@
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
 
-#define COLUMN_ACCOUNT  0
-#define COLUMN_FULLNAME 1
-#define COLUMN_MNEMONIC 2
-#define COLUMN_SHARES   3
+enum split_cols {
+  SPLIT_COL_ACCOUNT = 0,
+  SPLIT_COL_FULLNAME,
+  SPLIT_COL_MNEMONIC,
+  SPLIT_COL_SHARES,
+  NUM_SPLIT_COLS
+};
 
 /** structures *********************************************************/
 typedef struct
@@ -154,10 +157,10 @@ fill_account_list (StockSplitInfo *info, Account *selected_account)
 
     gtk_list_store_append(list, &iter);
     gtk_list_store_set(list, &iter,
-		       COLUMN_ACCOUNT,   account,
-		       COLUMN_FULLNAME,  full_name,
-		       COLUMN_MNEMONIC, gnc_commodity_get_mnemonic(commodity),
-		       COLUMN_SHARES,    xaccPrintAmount(balance, print_info),
+		       SPLIT_COL_ACCOUNT,   account,
+		       SPLIT_COL_FULLNAME,  full_name,
+		       SPLIT_COL_MNEMONIC, gnc_commodity_get_mnemonic(commodity),
+		       SPLIT_COL_SHARES,    xaccPrintAmount(balance, print_info),
 		       -1);
 
     if (account == selected_account) {
@@ -197,7 +200,7 @@ selection_changed (GtkTreeSelection *selection,
   if (!gtk_tree_selection_get_selected(selection, &list, &iter))
     return;
   gtk_tree_model_get(list, &iter,
-		     COLUMN_ACCOUNT, &info->acct,
+		     SPLIT_COL_ACCOUNT, &info->acct,
 		     -1);
 }
 
@@ -597,25 +600,25 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     view = GTK_TREE_VIEW(info->account_view);
 
-    store = gtk_list_store_new(4, G_TYPE_POINTER, G_TYPE_STRING,
+    store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_POINTER, G_TYPE_STRING,
 			       G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
-						      "text", COLUMN_FULLNAME,
+						      "text", SPLIT_COL_FULLNAME,
 						      NULL);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Symbol"), renderer,
-						      "text", COLUMN_MNEMONIC,
+						      "text", SPLIT_COL_MNEMONIC,
 						      NULL);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Shares"), renderer,
-						      "text", COLUMN_SHARES,
+						      "text", SPLIT_COL_SHARES,
 						      NULL);
     gtk_tree_view_append_column(view, column);
 

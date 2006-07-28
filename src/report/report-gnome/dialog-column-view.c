@@ -35,13 +35,19 @@
 #include "guile-mappings.h"
 #include "gnc-report.h"
 
-#define AVAILABLE_NAME        0
-#define AVAILABLE_ROW         1
+enum available_cols {
+  AVAILABLE_COL_NAME = 0,
+  AVAILABLE_COL_ROW,
+  NUM_AVAILABLE_COLS
+};
 
-#define CONTENTS_NAME         0
-#define CONTENTS_ROW          1
-#define CONTENTS_REPORT_ROWS  2
-#define CONTENTS_REPORT_COLS  3
+enum contents_cols {
+  CONTENTS_COL_NAME = 0,
+  CONTENTS_COL_ROW,
+  CONTENTS_COL_REPORT_ROWS,
+  CONTENTS_COL_REPORT_COLS,
+  NUM_CONTENTS_COLS
+};
 
 struct gncp_column_view_edit {
   GNCOptionWin * optwin;
@@ -141,8 +147,8 @@ update_display_lists(gnc_column_view_edit * view)
       name = SCM_STRING_CHARS(scm_call_1(template_menu_name, SCM_CAR(names)));
       gtk_list_store_append(store, &iter);
       gtk_list_store_set(store, &iter,
-			 AVAILABLE_NAME, name,
-			 AVAILABLE_ROW, i,
+			 AVAILABLE_COL_NAME, name,
+			 AVAILABLE_COL_ROW, i,
 			 -1);
     }
   }
@@ -182,13 +188,13 @@ update_display_lists(gnc_column_view_edit * view)
       gtk_list_store_append(store, &iter);
       gtk_list_store_set
 	(store, &iter,
-	 CONTENTS_NAME, SCM_STRING_CHARS(scm_call_1(report_menu_name,
-						    this_report)),
-	 CONTENTS_ROW, i,
-	 CONTENTS_REPORT_COLS, scm_num2int(SCM_CADR(SCM_CAR(contents)),
-					   SCM_ARG1, __FUNCTION__),
-	 CONTENTS_REPORT_ROWS, scm_num2int(SCM_CADDR(SCM_CAR(contents)),
-					   SCM_ARG1, __FUNCTION__),
+	 CONTENTS_COL_NAME, SCM_STRING_CHARS(scm_call_1(report_menu_name,
+							this_report)),
+	 CONTENTS_COL_ROW, i,
+	 CONTENTS_COL_REPORT_COLS, scm_num2int(SCM_CADR(SCM_CAR(contents)),
+					       SCM_ARG1, __FUNCTION__),
+	 CONTENTS_COL_REPORT_ROWS, scm_num2int(SCM_CADDR(SCM_CAR(contents)),
+					       SCM_ARG1, __FUNCTION__),
 	 -1);
     }
   }
@@ -209,7 +215,7 @@ gnc_column_view_select_avail_cb(GtkTreeSelection *selection,
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter))
     gtk_tree_model_get(model, &iter,
-		       AVAILABLE_ROW, &r->available_selected,
+		       AVAILABLE_COL_ROW, &r->available_selected,
 		       -1);
 }
 
@@ -222,7 +228,7 @@ gnc_column_view_select_contents_cb(GtkTreeSelection *selection,
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter))
     gtk_tree_model_get(model, &iter,
-		       AVAILABLE_ROW, &r->contents_selected,
+		       AVAILABLE_COL_ROW, &r->contents_selected,
 		       -1);
 }
 
@@ -331,12 +337,12 @@ gnc_column_view_edit_options(SCM options, SCM view)
     scm_gc_protect_object(r->contents_list);
 
     /* Build the 'available' view */
-    store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+    store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_INT);
     gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes("", renderer,
-						      "text", AVAILABLE_NAME,
+						      "text", AVAILABLE_COL_NAME,
 						      NULL);
     gtk_tree_view_append_column(r->available, column);
 
@@ -345,24 +351,25 @@ gnc_column_view_edit_options(SCM options, SCM view)
 		     G_CALLBACK(gnc_column_view_select_avail_cb), r);
 
     /* Build the 'contents' view */
-    store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
+    store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
+				G_TYPE_INT, G_TYPE_INT);
     gtk_tree_view_set_model(r->contents, GTK_TREE_MODEL(store));
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Report"), renderer,
-						      "text", CONTENTS_NAME,
+						      "text", CONTENTS_COL_NAME,
 						      NULL);
     gtk_tree_view_append_column(r->contents, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Cols"), renderer,
-						      "text", CONTENTS_REPORT_COLS,
+						      "text", CONTENTS_COL_REPORT_COLS,
 						      NULL);
     gtk_tree_view_append_column(r->contents, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Rows"), renderer,
-						      "text", CONTENTS_REPORT_ROWS,
+						      "text", CONTENTS_COL_REPORT_ROWS,
 						      NULL);
     gtk_tree_view_append_column(r->contents, column);
 

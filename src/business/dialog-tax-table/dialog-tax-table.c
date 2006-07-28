@@ -44,12 +44,18 @@
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
 #define GCONF_SECTION "dialogs/business/tax_tables"
 
-#define TABLE_NAME    0
-#define TABLE_POINTER 1
+enum tax_table_cols {
+  TAX_TABLE_COL_NAME = 0,
+  TAX_TABLE_COL_POINTER,
+  NUM_TAX_TABLE_COLS
+};
 
-#define ENTRY_NAME    0
-#define ENTRY_POINTER 1
-#define ENTRY_AMOUNT  2
+enum tax_entry_cols {
+  TAX_ENTRY_COL_NAME = 0,
+  TAX_ENTRY_COL_POINTER,
+  TAX_ENTRY_COL_AMOUNT,
+  NUM_TAX_ENTRY_COLS
+};
 
 void tax_table_new_table_cb (GtkButton *button, TaxTableWindow *ttw);
 void tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw);
@@ -362,9 +368,9 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
 
     gtk_list_store_prepend(store, &iter);
     gtk_list_store_set(store, &iter,
-		       ENTRY_NAME, row_text[0],
-		       ENTRY_POINTER, entry,
-		       ENTRY_AMOUNT, row_text[1],
+		       TAX_ENTRY_COL_NAME, row_text[0],
+		       TAX_ENTRY_COL_POINTER, entry,
+		       TAX_ENTRY_COL_AMOUNT, row_text[1],
 		       -1);
     if (entry == selected_entry) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
@@ -422,8 +428,8 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
     gtk_list_store_prepend(store, &iter);
     gtk_list_store_set(store, &iter,
-		       TABLE_NAME, gncTaxTableGetName (table),
-		       TABLE_POINTER, table,
+		       TAX_TABLE_COL_NAME, gncTaxTableGetName (table),
+		       TAX_TABLE_COL_POINTER, table,
 		       -1);
     if (table == ttw->current_table) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
@@ -467,7 +473,7 @@ tax_table_selection_changed (GtkTreeSelection *selection,
   if (!gtk_tree_selection_get_selected(selection, &model, &iter))
     return;
 
-  gtk_tree_model_get(model, &iter, TABLE_POINTER, &table, -1);
+  gtk_tree_model_get(model, &iter, TAX_TABLE_COL_POINTER, &table, -1);
   g_return_if_fail (table);
 
   /* If we've changed, then reset the entry list */
@@ -494,7 +500,7 @@ tax_table_entry_selection_changed (GtkTreeSelection *selection,
     return;
   }
 
-  gtk_tree_model_get(model, &iter, ENTRY_POINTER, &ttw->current_entry, -1);
+  gtk_tree_model_get(model, &iter, TAX_ENTRY_COL_POINTER, &ttw->current_entry, -1);
 }
 
 static void
@@ -677,12 +683,13 @@ gnc_ui_tax_table_window_new (GNCBook *book)
 
   /* Create the tax tables view */
   view = GTK_TREE_VIEW(ttw->names_view);
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_POINTER);
+  store = gtk_list_store_new (NUM_TAX_TABLE_COLS, G_TYPE_STRING,
+			      G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes("", renderer,
-						    "text", TABLE_NAME,
+						    "text", TAX_TABLE_COL_NAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
@@ -693,12 +700,13 @@ gnc_ui_tax_table_window_new (GNCBook *book)
 
   /* Create the tax table entries view */
   view = GTK_TREE_VIEW(ttw->entries_view);
-  store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING);
+  store = gtk_list_store_new (NUM_TAX_ENTRY_COLS, G_TYPE_STRING,
+			      G_TYPE_POINTER, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes("", renderer,
-						    "text", ENTRY_NAME,
+						    "text", TAX_ENTRY_COL_NAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 

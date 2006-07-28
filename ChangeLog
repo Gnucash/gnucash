@@ -1,4 +1,20 @@
-2006-07-12  David Hampton  <hampton@cisco.com>
+2006-07-27  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/hbci/druid-hbci-initial.c:
+	* src/report/report-gnome/dialog-column-view.c:
+	* src/business/business-gnome/dialog-billterms.c:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.c:
+	* src/gnome-utils/gnc-account-sel.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/lot-viewer.c:
+	* src/gnome/druid-stock-split.c:
+	* src/gnome-search/dialog-search.c: Regularize column names. Use
+	enums instead of a sequence of #defines.
+
+2006-07-12  David Hampton  <hampton@employees.org>
 
 	* various: Pull trunk changes 14460:14486 into branch.
 

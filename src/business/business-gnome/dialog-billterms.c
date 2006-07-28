@@ -40,8 +40,11 @@
 
 #define DIALOG_BILLTERMS_CM_CLASS "billterms-dialog"
 
-#define TERM_NAME 0
-#define TERM_TERM 1
+enum term_cols {
+  BILL_TERM_COL_NAME = 0,
+  BILL_TERM_COL_TERM,
+  NUM_BILL_TERM_COLS
+};
 
 void billterms_new_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw);
@@ -511,8 +514,8 @@ billterms_window_refresh (BillTermsWindow *btw)
 
     gtk_list_store_prepend(store, &iter);
     gtk_list_store_set(store, &iter,
-		       TERM_NAME, gncBillTermGetName(term),
-		       TERM_TERM, term,
+		       BILL_TERM_COL_NAME, gncBillTermGetName(term),
+		       BILL_TERM_COL_TERM, term,
 		       -1);
     if (term == btw->current_term) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
@@ -550,7 +553,7 @@ billterm_selection_changed (GtkTreeSelection *selection,
   g_return_if_fail (btw);
 
   if (gtk_tree_selection_get_selected(selection, &model, &iter))
-    gtk_tree_model_get(model, &iter, TERM_TERM, &term, -1);
+    gtk_tree_model_get(model, &iter, BILL_TERM_COL_TERM, &term, -1);
 
   /* If we've changed, then reset the term list */
   if (term != btw->current_term)
@@ -700,12 +703,12 @@ gnc_ui_billterms_window_new (GNCBook *book)
 
   /* Initialize the view */
   view = GTK_TREE_VIEW(btw->terms_view);
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_POINTER);
+  store = gtk_list_store_new (NUM_BILL_TERM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes("", renderer,
-						    "text", TERM_NAME,
+						    "text", BILL_TERM_COL_NAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 

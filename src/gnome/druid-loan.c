@@ -100,10 +100,13 @@
 
 #define OPT_VBOX_SPACING 2
 
-#define COLUMN_DATE      0
-#define COLUMN_PAYMENT   1
-#define COLUMN_PRINCIPAL 2
-#define COLUMN_INTEREST  3
+enum loan_cols {
+	LOAN_COL_DATE = 0,
+	LOAN_COL_PAYMENT,
+	LOAN_COL_PRINCIPAL,
+	LOAN_COL_INTEREST,
+	NUM_LOAN_COLS
+};
 
 typedef enum {
         CURRENT_YEAR,
@@ -1774,25 +1777,25 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
-							  "text", COLUMN_DATE,
+							  "text", LOAN_COL_DATE,
 							  NULL);
 	gtk_tree_view_append_column(ldd->revView, column);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Payment"), renderer,
-							  "text", COLUMN_PAYMENT,
+							  "text", LOAN_COL_PAYMENT,
 							  NULL);
 	gtk_tree_view_append_column(ldd->revView, column);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Principal"), renderer,
-							  "text", COLUMN_PRINCIPAL,
+							  "text", LOAN_COL_PRINCIPAL,
 							  NULL);
 	gtk_tree_view_append_column(ldd->revView, column);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Interest"), renderer,
-							  "text", COLUMN_INTEREST,
+							  "text", LOAN_COL_INTEREST,
 							  NULL);
 	gtk_tree_view_append_column(ldd->revView, column);
 
@@ -1806,7 +1809,7 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 			renderer = gtk_cell_renderer_text_new();
 			column = gtk_tree_view_column_new_with_attributes
 			  (ldd->ld.repayOpts[i]->name, renderer,
-			   "text", COLUMN_INTEREST + i,
+			   "text", LOAN_COL_INTEREST + i,
 			   NULL);
 			gtk_tree_view_append_column(ldd->revView, column);
                 }
@@ -2835,7 +2838,7 @@ ld_rev_update_view( LoanDruidData *ldd, GDate *start, GDate *end )
 		gtk_list_store_append(store, &iter);
 
 		qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, &rrr->date );
-		gtk_list_store_set( store, &iter, COLUMN_DATE, tmpBuf, -1 );
+		gtk_list_store_set( store, &iter, LOAN_COL_DATE, tmpBuf, -1 );
 
                 for ( i=0; i<ldd->ld.revNumPmts; i++ )
                 {

@@ -54,10 +54,13 @@
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
 #define GCONF_SECTION "dialogs/account"
 
-#define COLUMN_FULLNAME  0
-#define COLUMN_FIELDNAME 1
-#define COLUMN_OLD_VALUE 2
-#define COLUMN_NEW_VALUE 3
+enum account_cols {
+  ACCOUNT_COL_FULLNAME = 0,
+  ACCOUNT_COL_FIELDNAME,
+  ACCOUNT_COL_OLD_VALUE,
+  ACCOUNT_COL_NEW_VALUE,
+  NUM_ACCOUNT_COLS
+};
 
 typedef enum
 {
@@ -586,10 +589,10 @@ fill_helper(gpointer key, gpointer value, gpointer data)
 
   gtk_list_store_append(fs->list, &iter);
   gtk_list_store_set(fs->list, &iter,
-		     COLUMN_FULLNAME,  full_name,
-		     COLUMN_FIELDNAME, account_field_name,
-		     COLUMN_OLD_VALUE, account_field_value,
-		     COLUMN_NEW_VALUE, value_str,
+		     ACCOUNT_COL_FULLNAME,  full_name,
+		     ACCOUNT_COL_FIELDNAME, account_field_name,
+		     ACCOUNT_COL_OLD_VALUE, account_field_value,
+		     ACCOUNT_COL_NEW_VALUE, value_str,
 		     -1);
   g_free(full_name);
   fs->count++;
@@ -634,7 +637,7 @@ extra_change_verify (AccountWindow *aw,
   if (!account)
     return FALSE;
 
-  store = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_STRING,
+  store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_STRING);
 
   size = 0;
@@ -647,31 +650,31 @@ extra_change_verify (AccountWindow *aw,
   }
 
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),
-				       COLUMN_FULLNAME,
+				       ACCOUNT_COL_FULLNAME,
 				       GTK_SORT_ASCENDING);
 
   view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
-						    "text", COLUMN_FULLNAME,
+						    "text", ACCOUNT_COL_FULLNAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Field"), renderer,
-						    "text", COLUMN_FIELDNAME,
+						    "text", ACCOUNT_COL_FIELDNAME,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Old Value"), renderer,
-						    "text", COLUMN_OLD_VALUE,
+						    "text", ACCOUNT_COL_OLD_VALUE,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("New Value"), renderer,
-						    "text", COLUMN_NEW_VALUE,
+						    "text", ACCOUNT_COL_NEW_VALUE,
 						    NULL);
   gtk_tree_view_append_column(view, column);
 

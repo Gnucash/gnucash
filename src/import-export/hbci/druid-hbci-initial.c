@@ -51,11 +51,14 @@
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
-#define COLUMN_INDEX     0
-#define COLUMN_HBCI_NAME 1
-#define COLUMN_HBCI_ACCT 2
-#define COLUMN_GNC_NAME  3
-#define COLUMN_CHECKED   4
+enum account_list_cols {
+  ACCOUNT_LIST_COL_INDEX = 0,
+  ACCOUNT_LIST_COL_HBCI_NAME,
+  ACCOUNT_LIST_COL_HBCI_ACCT,
+  ACCOUNT_LIST_COL_GNC_NAME,
+  ACCOUNT_LIST_COL_CHECKED,
+  NUM_ACCOUNT_LIST_COLS
+};
 
 typedef enum _infostate {
   INI_UPDATE_ACCOUNTS,
@@ -168,10 +171,10 @@ update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
 
   gtk_list_store_append(info->accountstore, &iter);
   gtk_list_store_set(info->accountstore, &iter,
-		     COLUMN_HBCI_NAME, hbci_name,
-		     COLUMN_HBCI_ACCT, hacc,
-		     COLUMN_GNC_NAME, gnc_name,
-		     COLUMN_CHECKED, FALSE,
+		     ACCOUNT_LIST_COL_HBCI_NAME, hbci_name,
+		     ACCOUNT_LIST_COL_HBCI_ACCT, hacc,
+		     ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
+		     ACCOUNT_LIST_COL_CHECKED, FALSE,
 		     -1);
 
   g_free(gnc_name);
@@ -371,7 +374,7 @@ on_accountlist_changed (GtkTreeSelection *selection,
     return;
   gtk_tree_selection_unselect_iter(selection, &iter);
   gtk_tree_model_get(model, &iter,
-		     COLUMN_HBCI_ACCT, &hbci_acc,
+		     ACCOUNT_LIST_COL_HBCI_ACCT, &hbci_acc,
 		     -1);
 
   if (hbci_acc) {
@@ -400,12 +403,12 @@ on_accountlist_changed (GtkTreeSelection *selection,
       g_hash_table_insert (info->gnc_hash, hbci_acc, gnc_acc);
       gnc_name = xaccAccountGetFullName (gnc_acc);
       gtk_list_store_set(info->accountstore, &iter,
-			 COLUMN_GNC_NAME, gnc_name,
+			 ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
 			 -1);
       g_free(gnc_name);
     } else {
       gtk_list_store_set(info->accountstore, &iter,
-			 COLUMN_GNC_NAME, "",
+			 ACCOUNT_LIST_COL_GNC_NAME, "",
 			 -1);
     }
   } /* hbci_acc */
@@ -702,7 +705,8 @@ void gnc_hbci_initial_druid (void)
     info->accountpage = page;
     info->accountview =
       GTK_TREE_VIEW(glade_xml_get_widget(xml, "account_page_view"));
-    info->accountstore = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_STRING,
+    info->accountstore = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
+					    G_TYPE_INT, G_TYPE_STRING,
 					    G_TYPE_POINTER, G_TYPE_STRING,
 					    G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(info->accountview, GTK_TREE_MODEL(info->accountstore));
@@ -710,14 +714,14 @@ void gnc_hbci_initial_druid (void)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("HBCI account name"),
 						      renderer,
-						      "text", COLUMN_HBCI_NAME,
+						      "text", ACCOUNT_LIST_COL_HBCI_NAME,
 						      NULL);
     gtk_tree_view_append_column(info->accountview, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"),
 						      renderer,
-						      "text", COLUMN_GNC_NAME,
+						      "text", ACCOUNT_LIST_COL_GNC_NAME,
 						      NULL);
     gtk_tree_view_append_column(info->accountview, column);
     gtk_tree_view_column_set_expand(column, TRUE);
@@ -725,7 +729,7 @@ void gnc_hbci_initial_druid (void)
     renderer = gtk_cell_renderer_toggle_new();
     column = gtk_tree_view_column_new_with_attributes(_("New?"),
 						      renderer,
-						      "active", COLUMN_CHECKED,
+						      "active", ACCOUNT_LIST_COL_CHECKED,
 						      NULL);
     gtk_tree_view_append_column(info->accountview, column);
 

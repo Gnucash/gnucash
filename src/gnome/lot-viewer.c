@@ -50,13 +50,15 @@
 
 #define LOT_VIEWER_CM_CLASS "lot-viewer"
 
-#define OPEN_COL  0
-#define CLOSE_COL 1
-#define TITLE_COL 2
-#define BALN_COL  3
-#define GAINS_COL 4
-#define PNTR_COL  5
-#define NUM_COLS  6
+enum lot_cols {
+  LOT_COL_OPEN = 0,
+  LOT_COL_CLOSE,
+  LOT_COL_TITLE,
+  LOT_COL_BALN,
+  LOT_COL_GAINS,
+  LOT_COL_PNTR,
+  NUM_LOT_COLS
+};
 
 #define RESPONSE_VIEW          1
 #define RESPONSE_DELETE        2
@@ -299,7 +301,7 @@ lv_selection_changed_cb (GtkTreeSelection *selection,
    GtkTreeIter iter;
 
    if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-     gtk_tree_model_get(model, &iter, PNTR_COL, &lot, -1);
+     gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &lot, -1);
      lv_select_row(lv, lot);
    } else {
      lv_unselect_row(lv);
@@ -322,7 +324,7 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
 
    selection = gtk_tree_view_get_selection(lv->lot_view);
    if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-     gtk_list_store_set(GTK_LIST_STORE(model), &iter, TITLE_COL, title, -1);
+     gtk_list_store_set(GTK_LIST_STORE(model), &iter, LOT_COL_TITLE, title, -1);
    }
 }
 
@@ -391,7 +393,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 
    selection = gtk_tree_view_get_selection(lv->lot_view);
    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-     gtk_tree_model_get(model, &iter, PNTR_COL, &selected_lot, -1);
+     gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &selected_lot, -1);
 
    /* Crazy. Should update in place if possible. */
    gtk_list_store_clear (lv->lot_store);
@@ -409,14 +411,13 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       gnc_numeric amt_baln = gnc_lot_get_balance (lot);
       gnc_commodity *currency = find_first_currency (lot);
       gnc_numeric gains_baln = get_realized_gains (lot, currency);
-      const char *row_vals[NUM_COLS];
 
       store = lv->lot_store;
       gtk_list_store_append(store, &iter);
 
       /* Opening date */
       qof_print_date_buff (obuff, MAX_DATE_LENGTH, open_date);
-      gtk_list_store_set(store, &iter, OPEN_COL, obuff, -1);
+      gtk_list_store_set(store, &iter, LOT_COL_OPEN, obuff, -1);
 
       /* Closing date */
       if (gnc_lot_is_closed (lot))
@@ -426,29 +427,28 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
          time_t close_date = xaccTransGetDate (ftrans);
    
          qof_print_date_buff (cbuff, MAX_DATE_LENGTH, close_date);
-	 gtk_list_store_set(store, &iter, CLOSE_COL, cbuff, -1);
-         row_vals[CLOSE_COL] = cbuff;
+	 gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, -1);
       }
       else
       {
-	gtk_list_store_set(store, &iter, CLOSE_COL, cbuff, _("Open"), -1);
+	gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, _("Open"), -1);
       }
 
       /* Title */
-      gtk_list_store_set(store, &iter, TITLE_COL, gnc_lot_get_title(lot), -1);
+      gtk_list_store_set(store, &iter, LOT_COL_TITLE, gnc_lot_get_title(lot), -1);
       
       /* Amount */
       xaccSPrintAmount (baln_buff, amt_baln, 
                  gnc_account_print_info (lv->account, TRUE));
-      gtk_list_store_set(store, &iter, BALN_COL, baln_buff, -1);
+      gtk_list_store_set(store, &iter, LOT_COL_BALN, baln_buff, -1);
 
       /* Capital Gains/Losses Appreciation/Depreciation */
       xaccSPrintAmount (gain_buff, gains_baln, 
                  gnc_commodity_print_info (currency, TRUE));
-      gtk_list_store_set(store, &iter, GAINS_COL, gain_buff, -1);
+      gtk_list_store_set(store, &iter, LOT_COL_GAINS, gain_buff, -1);
 
       /* Self-reference */
-      gtk_list_store_set(store, &iter, PNTR_COL, lot, -1);
+      gtk_list_store_set(store, &iter, LOT_COL_PNTR, lot, -1);
    }
 
    /* re-select the row that the user had previously selected, 
@@ -457,7 +457,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
      model = GTK_TREE_MODEL(lv->lot_store);
      if (gtk_tree_model_get_iter_first(model, &iter)) {
        do {
-	 gtk_tree_model_get(model, &iter, PNTR_COL, &this_lot, -1);
+	 gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &this_lot, -1);
 	 if (this_lot == selected_lot) {
 	   gtk_tree_selection_select_iter(selection, &iter);
 	   found = TRUE;
@@ -598,7 +598,7 @@ lv_init_lot_view (GNCLotViewer *lv)
   g_return_if_fail(GTK_IS_TREE_VIEW(lv->lot_view));
 
   view = lv->lot_view;
-  store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_STRING,
+  store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
@@ -607,27 +607,27 @@ lv_init_lot_view (GNCLotViewer *lv)
   /* Set up the columns */
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
-						    "text", OPEN_COL, NULL);
+						    "text", LOT_COL_OPEN, NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
-						    "text", CLOSE_COL, NULL);
+						    "text", LOT_COL_CLOSE, NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
-						    "text", TITLE_COL, NULL);
+						    "text", LOT_COL_TITLE, NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
-						    "text", BALN_COL, NULL);
+						    "text", LOT_COL_BALN, NULL);
   gtk_tree_view_append_column(view, column);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
-						    "text", GAINS_COL, NULL);
+						    "text", LOT_COL_GAINS, NULL);
   gtk_tree_view_append_column(view, column);
 
   /* Set up the selection callbacks */
