@@ -1678,6 +1678,9 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   new_page = gnc_plugin_page_invoice_new (iw);
   gnc_main_window_open_page (gnc_plugin_business_get_window(), new_page);
 
+  /* Initialize the summary bar */
+  gnc_invoice_redraw_all_cb(iw->reg, iw);
+
   return iw;
 }
 

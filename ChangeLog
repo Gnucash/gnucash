@@ -1,3 +1,8 @@
+2006-07-30  David Hampton  <hampton@employees.org>
+
+	* various: Pull trunk changes 14487:14580 into deprecated-cleanup
+	branch.
+
 2006-07-27  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/glade/billterms.glade: Fix a
@@ -154,6 +159,163 @@
 * Above this line is the deprecated-cleanup branch ChangeLog.
 * Below this line is the Trunk ChangeLog
 ********************
+
+2006-07-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/schemas/apps_gnucash_warnings.schemas.in:
+	* src/gnome-utils/gnc-main-window.c: Add warning close_last_window
+	  and show it when user tries to close the last GnuCash window.
+	  Fixes #338865.
+
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/glade/preferences.glade:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in: Add new
+	  setting general/show_splash_screen to
+	  preferences_dialog->General and only show the splash screen if
+	  it is TRUE. Fixes 339876.
+
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome-utils/glade/preferences.glade: Fixed some duplicate
+	  accelerators.
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in:
+	* src/gnome-utils/glade/preferences.glade: Add preference
+	  general/tab_position to choose the edge of the notebook the tabs
+	  will be showed (top, bottom, left or right). Add it to
+	  preferences_dialog->Windows. Move "Show close button on notebook
+	  tabs" from General to Windows. Fixes #340299.
+
+2006-07-24  Derek Atkins  <derek@ihtfp.com>
+
+	* [lots of Makefile.am files]:
+	  Allow proper compile/install from tarball using separate builddir.
+	  - Don't distribute (most) generated files.
+	  - Be (more) consistent about when generated files are cleaned.
+
+	* po/POTFILES.skip:
+	  - Now that we distribute the SX schema properly, don't skip it
+	    in the POTFILES.skip file.
+
+2006-07-23  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-tree-view.c: Correctly set column sort
+	  orders from gconf. Fixes #348248.
+
+2006-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: check for SLIB.  (#347922)
+
+2006-07-21  Andreas Köhler  <andi5.py@gmx.net>
+
+	* configure.in:
+	* src/gnome-utils/gnc-main-window.c: Make tabs within one notebook
+	  reorderable by dnd for gtk>=2.10. Fixes #343454.
+
+2006-07-18   Christian Stimming <stimming@tuhh.de>
+
+	* src/gnc-module/gnc-module.c: On windows, deactivate gnucash's
+	extra de-quoting of path names that is done on the GNC_MODULE_PATH
+	env variable.
+
+2006-07-16  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:
+	  check for (g-wrap) module (#347680)
+	  Apparently some distributions ship g-wrap-config separately
+	  from the g-wrap.scm guile module.
+
+	* src/import-export/qif-import/qif-file.scm:
+	  Ignore any unknown !Option specification.  Fixes #160735.
+
+	* src/import-export/qif-import/qif-parse.scm:
+	  Allow comma-radix numbers without a radix.  Fixes #142424.
+	  I.e., allow "17.500" to be parsed either as "seventeen and a half"
+	  or as "seventeen thousand five hundred".  Note that numbers STILL
+	  default to decimal-radix instead of asking the user to choose.
+
+	* src/business/business-core/gncEntry.[ch]:
+	* src/business/business-ledger/gncEntryLedger.c:
+	  Properly round invoice entries and totals.  Fixes #300042.
+	  Perform internal computations to LCD, but then export rounded values.
+	  Now, using the test case in Bug #300042 I get the same values
+	  in the invoice window, in the printable invoice report, and
+	  in the CoA Registers.
+
+2006-07-16  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-main-window.c: Do not move windows on
+	  restoration that would be offscreen.
+
+2006-07-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncAddress.[ch]:
+	  Make GncAddress more QOF compliant.  (#343726)
+	  Adds BeginEdit/CommitEdit calls.
+
+	* src/business/business-gnome/dialog-invoice.c:
+	  Set the summary bar values when the window is first opened (#345978).
+
+2006-07-15  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/report/report-system/html-text.scm: Remove a duplicate of
+	  gnc:html-text?.
+
+2006-07-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Remove obsolete
+	buttons for aqbanking/hbci setup that are unneeded. Fix crash due
+	to dangling points by deleting all pointers after calling
+	AB_Banking_Fini.
+
+2006-07-14  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:
+	* autogen.sh:
+	  make sure that po/POTFILES.in exists so configure doens't complain.
+
+	* configure.in:
+	  check for (g-wrap gw-glib-spec) instead of (g-wrap) #347404.
+
+2006-07-14  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/schemas/Makefile.am: Add
+	  apps_gnucash_scheduled_transctions.schemas.in. Fixes #340641.
+
+	* src/register/ledger-core/split-register-control.c:
+	* src/register/ledger-core/split-register-model.c: Let
+	  GtkMessageDialog render the headers of two warnings in bold
+	  font.
+
+2006-07-13  Andreas Köhler  <andi5.py@gmx.net>
+
+	* doc/tip_of_the_day.list.in:
+	* lib/libqof/backend/file/qsf-backend.c:
+	* src/gnome-search/search.glade:
+	* src/gnome-utils/druid-gnc-xml-import.c:
+	* src/gnome-utils/glade/preferences.glade:
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/import-export/import-provider-format.glade:
+	* src/report/report-system/report.scm: String fixes that have
+	  been delayed due to the string freeze.
+
+	* src/gnome/glade/account.glade: In the account dialog, do not
+	  expand the upper left entries when the window is resized.
+	  Automatic scrollbars for the notes field.
+
+2006-07-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Group.c:
+	  Allow account-separator character in account names (#347321).
+	  Revert to previous behavior of xaccGetAccountFromFullName()
+	  which was changed in r13467 when the function was restructured.
+	  This patch returns to the old behavior (but uses the new
+	  function structure).
 
 2006-07-09  Chris Lyttle  <chris@wilddev.net>
 

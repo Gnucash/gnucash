@@ -47,7 +47,9 @@ which svk >/dev/null 2>&1
 if test $? != 0 ; then exit 1 ; fi
 
 # Okay, we have 'svk'.  Now see if $real_srcdir is an svk checkout
-svkinfo=`svk info "$real_srcdir" 2>&1`
+# Note that the 'echo n' is to protect against having svk installed
+# without having configured the depotmap.
+svkinfo=`echo n | svk info "$real_srcdir" 2>&1`
 if test $? != 0 ; then exit 1 ; fi
 
 # If we got here, then $real_srcdir is an svk checkout.  Parse out

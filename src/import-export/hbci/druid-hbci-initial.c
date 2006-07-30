@@ -87,9 +87,6 @@ struct _hbciinitialinfo
   /* hbci_account (direct) -> gnucash_account  -- DO NOT DELETE THE KEYS! */
   GHashTable *gnc_hash;
 
-  /* Status of user's movement through the wizard */
-  Infostate state;
-
 };
 
 static void
@@ -318,25 +315,6 @@ on_aqbutton_prepare (GnomeDruidPage *gnomedruidpage,
 }
 
 
-static gboolean 
-on_accountlist_back (GnomeDruidPage  *gnomedruidpage,
-		     gpointer         arg1,
-		     gpointer         user_data)
-{
-  HBCIInitialInfo *info = user_data;
-  g_assert(info);
-  
-  switch (info->state) {
-  case INI_MATCH_ACCOUNTS:
-  case MATCH_ACCOUNTS:
-    gnome_druid_set_page (GNOME_DRUID (info->druid), 
-			  GNOME_DRUID_PAGE (info->filepage));
-    return TRUE;
-  default:
-    return FALSE;
-  }
-}
-
 static void
 on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
 			gpointer arg1,
@@ -419,28 +397,6 @@ on_accountlist_changed (GtkTreeSelection *selection,
 
 
 
-
-static void
-on_button_clicked (GtkButton *button,
-		   gpointer user_data)
-{
-  HBCIInitialInfo *info = user_data;
-  const char *name;
-  g_assert(info->druid);
-  
-  name = gtk_widget_get_name (GTK_WIDGET (button));
-  if (strcmp (name, "aqhbci_button") == 0) {
-/*     info->state = ADD_BANK; */
-    /* gnome_druid_set_page (GNOME_DRUID (info->druid), 
-       GNOME_DRUID_PAGE (info->bankpage)); */
-  } else if (strcmp (name, "updatelist_button") == 0) {
-    info->state = UPDATE_ACCOUNTS;
-    /* Nothing else to do. */
-  } else {
-    printf("on_button_clicked: Oops, unknown button: %s\n",
-	   name);
-  }
-}
 
 #if (AQBANKING_VERSION_MAJOR > 1) || \
   ((AQBANKING_VERSION_MAJOR == 1) && \
@@ -591,8 +547,12 @@ on_aqhbci_button (GtkButton *button,
     /* Call the qt wizard. See the note above about why this approach
        is chosen. */
 
-    /* In gtk2, this would be g_spawn_async or similar. */
+    /* Reset existing mapping tables */
     AB_Banking_Fini (info->api);
+    if (info->gnc_hash != NULL)
+      g_hash_table_destroy (info->gnc_hash);
+    info->gnc_hash = NULL;
+    /* In gtk2, this would be g_spawn_async or similar. */
     {
       pid_t pid;
       pid = fork();
@@ -736,16 +696,8 @@ void gnc_hbci_initial_druid (void)
     selection = gtk_tree_view_get_selection(info->accountview);
     g_signal_connect (selection, "changed",
 		      G_CALLBACK (on_accountlist_changed), info);
-    g_signal_connect (glade_xml_get_widget (xml, "aqhbci_again_button"), 
-		      "clicked",
-		      G_CALLBACK (on_aqhbci_button), info);
-    g_signal_connect (glade_xml_get_widget (xml, "updatelist_button"),
-		      "clicked",
-		      G_CALLBACK (on_button_clicked), info);
     g_signal_connect (page, "prepare", 
 		      G_CALLBACK (on_accountlist_prepare), info);
-    g_signal_connect (page, "back", 
-		      G_CALLBACK (on_accountlist_back), info);
   }
 
 

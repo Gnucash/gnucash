@@ -14,7 +14,7 @@ libcore_utils_la_LIBADD = \
   ${GCONF_LIBS} \
   ${GTK_LIBS}
 
-libgw_core_utils_la_SOURCES = \
+nodist_libgw_core_utils_la_SOURCES = \
   gw-core-utils.c
 
 libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
@@ -30,8 +30,7 @@ noinst_HEADERS = \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
   gnc-gobject-utils.h \
-  gnc-gtk-utils.h \
-  gw-core-utils.h
+  gnc-gtk-utils.h
 
 EXTRA_DIST = ${gwmod_DATA}
 
@@ -43,7 +42,8 @@ AM_CFLAGS = \
   ${GTK_CFLAGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
+gwmod_DATA = gw-core-utils-spec.scm
+nodist_gwmod_DATA = gw-core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
@@ -69,5 +69,5 @@ gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
            (gw:generate-wrapset \"gw-core-utils\")"
 
 BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
-CLEANFILES = g-wrapped gnucash .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-core-utils.html
+CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
+	${SCM_FILE_LINKS} gw-core-utils.html

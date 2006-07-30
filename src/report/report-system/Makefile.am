@@ -68,15 +68,15 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-libgw_report_system_la_SOURCES = gw-report-system.c
+nodist_libgw_report_system_la_SOURCES = gw-report-system.c
 libgw_report_system_la_LIBADD = \
   libgncmod-report-system.la \
   ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
+gwmod_DATA = gw-report-system-spec.scm
+nodist_gwmod_DATA = gw-report-system.scm
 
-noinst_HEADERS = gw-report-system.h
 noinst_DATA = .scm-links gw-report-system.h
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA} ${gwmod_DATA}
@@ -93,5 +93,5 @@ gw-report-system.scm gw-report-system.c gw-report-system.h: \
 	  (gw:generate-wrapset \"gw-report-system\")"
 
 BUILT_SOURCES = gw-report-system.scm gw-report-system.c gw-report-system.h
-CLEANFILES = gnucash g-wrapped report .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-report-system.html
+CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped report .scm-links \
+	${SCM_FILE_LINKS} gw-report-system.html

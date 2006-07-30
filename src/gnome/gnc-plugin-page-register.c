@@ -179,7 +179,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
 	  N_("Paste the clipboard content at the cursor position"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste) },
-	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit Account"), "<control>e",
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_edit_account) },
 
@@ -241,7 +241,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
 	{ "EditExchangeRateAction", NULL, N_("Edit E_xchange Rate"), NULL,
-	  N_("Exit the exchange rate for the current transaction"),
+	  N_("Edit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
 	{ "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),

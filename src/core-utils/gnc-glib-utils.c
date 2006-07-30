@@ -110,7 +110,7 @@ safe_utf8_collate (const char * da, const char * db)
     ((Char) < 0x110000 &&			      \
      (((Char) & 0xFFFFF800) != 0xD800) &&	      \
      ((Char) < 0xFDD0 || (Char) > 0xFDEF) &&	      \
-     ((Char) > 0x20 || (Char) == 0x09 || (Char) == 0x0A || (Char) == 0x0D) && \
+     ((Char) >= 0x20 || (Char) == 0x09 || (Char) == 0x0A || (Char) == 0x0D) && \
      ((Char) & 0xFFFE) != 0xFFFE)
 
 /**

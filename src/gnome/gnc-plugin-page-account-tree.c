@@ -161,7 +161,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts) },
 
 	/* Edit menu */
-	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit Account"), "<control>e",
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), NULL,
@@ -191,7 +191,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
-	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccount"), NULL,
+	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccounts"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },

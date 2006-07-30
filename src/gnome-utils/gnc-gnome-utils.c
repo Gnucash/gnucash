@@ -385,7 +385,8 @@ gnc_gui_init(void)
         return main_window;
     }
 
-    gnc_gui_init_splash();
+    if (gnc_gconf_get_bool(GCONF_GENERAL, "show_splash_screen", NULL))
+        gnc_gui_init_splash();
 
     gnome_is_initialized = TRUE;
 

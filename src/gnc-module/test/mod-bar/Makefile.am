@@ -12,10 +12,10 @@ checklib_LTLIBRARIES = libbar.la libgncmodbar.la
 libbar_la_SOURCES = bar.c
 
 noinst_HEADERS = \
-  bar.h \
-  bar-gwrap.h
+  bar.h
 
-libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
+libgncmodbar_la_SOURCES=gnc-mod-bar.c
+nodist_libgncmodbar_la_SOURCES=bar-gwrap.c
 
 libgncmodbar_la_LIBADD=libbar.la \
   $(G_WRAP_LINK_ARGS) \
@@ -32,8 +32,7 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm ${top_builddir}/config.status
 	  (gw:generate-wrapset \"bar-gwrap\")"
 
 BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
-
-DISTCLEANFILES = bar-gwrap.html
+CLEANFILES = $(BUILT_SOURCES) bar-gwrap.html
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

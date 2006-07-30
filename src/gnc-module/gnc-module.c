@@ -67,6 +67,13 @@ gnc_module_system_search_dirs(void)
   {
     switch(*cpos) 
     {
+#ifndef G_OS_WIN32
+    /* On windows, with '\' as the directory separator character,
+       this additional de-quoting will make every path processing
+       fail miserably. Anyway this should probably be thrown out
+       altogether, because this additional level of de-quoting
+       (after shell quoting) is completely unexpected and
+       uncommon. */
     case '\\':
       if(!escchar) 
       {
@@ -78,6 +85,7 @@ gnc_module_system_search_dirs(void)
         escchar = FALSE;
       }
       break;
+#endif
       
     case ':':
       if(!escchar) 
@@ -220,8 +228,9 @@ gnc_module_system_refresh(void)
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
-          fullpath = g_strdup_printf("%s/%s", (char *)(current->data), 
+          fullpath = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", (char *)(current->data), 
                                      dent->d_name);
+	  /* G_DIR_SEPARATOR_S is "/" on unix and "\\" on windows. */
           info     = gnc_module_get_info(fullpath);
           
           if(info) 

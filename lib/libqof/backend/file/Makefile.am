@@ -40,6 +40,4 @@ qsf-dir.h: qsf-dir.h.in Makefile
 	mv $@.tmp $@
 
 BUILT_SOURCES = qsf-dir.h
-
-CONFIG_CLEAN_FILES = qsf-dir.h
-
+CLEANFILES = qsf-dir.h

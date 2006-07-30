@@ -3,8 +3,8 @@ SUBDIRS = glade schemas ui
 lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
-#nodist_gwmod_DATA = gw-gnc.scm
+gwmod_DATA = gw-gnc-spec.scm
+nodist_gwmod_DATA = gw-gnc.scm
 
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
@@ -24,7 +24,7 @@ libgncgnome_la_LIBADD = \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
-libgw_gnc_la_SOURCES = gw-gnc.c
+nodist_libgw_gnc_la_SOURCES = gw-gnc.c
 
 libgw_gnc_la_LDFLAGS =  \
   ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
@@ -94,12 +94,10 @@ noinst_HEADERS = \
   gnc-plugin-page-budget.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
-  gw-gnc.h \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
-  window-reconcile.h \
-  gw-gnc.h
+  window-reconcile.h
 
 EXTRA_DIST = \
   gnucash.desktop.in \
@@ -167,5 +165,5 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gnucash.desktop gnucash g-wrapped .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc.html
+CLEANFILES = $(BUILT_SOURCES) gnucash.desktop \
+	gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} gw-gnc.html

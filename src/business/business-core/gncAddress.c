@@ -50,6 +50,8 @@ struct _gncAddress
   char *	email;
 };
 
+static QofLogModule log_module = GNC_MOD_BUSINESS;
+
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
 
 G_INLINE_FUNC void mark_address (GncAddress *address);
@@ -137,6 +139,16 @@ void
 gncAddressDestroy (GncAddress *addr)
 {
   if (!addr) return;
+  addr->inst.do_free = TRUE;
+  gncAddressCommitEdit (addr);
+}
+
+static void
+gncAddressFree (GncAddress *addr)
+{
+  if (!addr) return;
+
+  qof_event_gen (&addr->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (addr->name);
   CACHE_REMOVE (addr->addr1);
@@ -147,16 +159,19 @@ gncAddressDestroy (GncAddress *addr)
   CACHE_REMOVE (addr->fax);
   CACHE_REMOVE (addr->email);
 
+  qof_instance_release (&addr->inst);
   g_free (addr);
 }
 
+
 /* Set functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (member == str) return; \
 	if (!safe_strcmp (member, str)) return; \
+	gncAddressBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -166,65 +181,99 @@ void gncAddressSetName (GncAddress *addr, const char *name)
 {
   if (!addr) return;
   if (!name) return;
-  SET_STR(addr->name, name);
+  SET_STR(addr, addr->name, name);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetAddr1 (GncAddress *addr, const char *addr1)
 {
   if (!addr) return;
   if (!addr1) return;
-  SET_STR(addr->addr1, addr1);
+  SET_STR(addr, addr->addr1, addr1);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetAddr2 (GncAddress *addr, const char *addr2)
 {
   if (!addr) return;
   if (!addr2) return;
-  SET_STR(addr->addr2, addr2);
+  SET_STR(addr, addr->addr2, addr2);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetAddr3 (GncAddress *addr, const char *addr3)
 {
   if (!addr) return;
   if (!addr3) return;
-  SET_STR(addr->addr3, addr3);
+  SET_STR(addr, addr->addr3, addr3);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
 {
   if (!addr) return;
   if (!addr4) return;
-  SET_STR(addr->addr4, addr4);
+  SET_STR(addr, addr->addr4, addr4);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetPhone (GncAddress *addr, const char *phone)
 {
   if (!addr) return;
   if (!phone) return;
-  SET_STR(addr->phone, phone);
+  SET_STR(addr, addr->phone, phone);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetFax (GncAddress *addr, const char *fax)
 {
   if (!addr) return;
   if (!fax) return;
-  SET_STR(addr->fax, fax);
+  SET_STR(addr, addr->fax, fax);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
 
 void gncAddressSetEmail (GncAddress *addr, const char *email)
 {
   if (!addr) return;
   if (!email) return;
-  SET_STR(addr->email, email);
+  SET_STR(addr, addr->email, email);
   mark_address (addr);
+  gncAddressCommitEdit (addr);
 }
+
+void gncAddressBeginEdit (GncAddress *addr)
+{
+  qof_begin_edit (&addr->inst);
+}
+
+static inline void gncAddressOnError (QofInstance *inst, QofBackendError errcode)
+{
+  PERR("Address QofBackend Failure: %d", errcode);
+}
+  
+static inline void gncAddressOnDone (QofInstance *addr) { }
+
+static inline void address_free (QofInstance *inst)
+{
+  GncAddress *addr = (GncAddress *) inst;
+  gncAddressFree (addr);
+}
+
+void gncAddressCommitEdit (GncAddress *addr)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(addr))) return;
+  qof_commit_edit_part2 (&addr->inst, gncAddressOnError,
+                         gncAddressOnDone, address_free);
+}
+             
 
 /* Get Functions */
 

@@ -165,13 +165,10 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   argv-list-converters.h \
-  gnc-dir.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
   gnc-druid-provider-multifile-gnome.h \
-  gnc-version.h \
-  gw-gnome-utils.h \
   search-param.h
 
 libgncmod_gnome_utils_la_LIBADD = \
@@ -198,7 +195,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GOFFICE_LIBS} \
   ${LIBXML2_LIBS}
 
-libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
+nodist_libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
 libgw_gnome_utils_la_LIBADD = \
   libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -209,7 +206,8 @@ libgw_gnome_utils_la_LIBADD = \
   ${GLIB_LIBS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
+gwmod_DATA = gw-gnome-utils-spec.scm
+nodist_gwmod_DATA = gw-gnome-utils.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnome-utils.scm 
@@ -312,8 +310,8 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = gnucash g-wrapped .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
+CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links \
+	${SCM_FILE_LINKS} gw-gnome-utils.html
 
 #
 # I hate inconsistent standards. Autotools puts help files into

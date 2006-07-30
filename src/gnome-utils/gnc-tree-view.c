@@ -903,7 +903,7 @@ gnc_tree_view_set_sort_order (GncTreeView *view,
     return;
   order = gnc_enum_from_nick(GTK_TYPE_SORT_TYPE, name, GTK_SORT_ASCENDING);
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
-					    &current, &order))
+					    &current, NULL))
       current = GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID;
   g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
