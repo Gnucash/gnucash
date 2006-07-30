@@ -1,3 +1,13 @@
+2006-07-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in:
+	* src/gnome-utils/glade/preferences.glade: Add preference
+	  general/tab_position to choose the edge of the notebook the tabs
+	  will be showed (top, bottom, left or right). Add it to
+	  preferences_dialog->Windows. Move "Show close button on notebook
+	  tabs" from General to Windows. Fixes #340299.
+
 2006-07-24  Derek Atkins  <derek@ihtfp.com>
 
 	* [lots of Makefile.am files]:

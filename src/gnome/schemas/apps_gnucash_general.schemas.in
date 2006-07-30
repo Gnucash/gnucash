@@ -462,5 +462,22 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/general/tab_position</key>
+      <applyto>/apps/gnucash/general/tab_position</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>top</default>
+      <locale name="C">
+        <short>Position of the notebook tabs</short>
+        <long>
+	  This setting determines the edge at which the tabs for
+	  switching pages in notebooks are drawn. Possible values
+	  are "top", "left", "bottom" and "right".
+	  It defaults to "top".
+	</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

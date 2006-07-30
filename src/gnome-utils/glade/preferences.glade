@@ -1522,7 +1522,7 @@
 	    <widget class="GtkTable" id="table2">
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">17</property>
+	      <property name="n_rows">16</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
@@ -1592,8 +1592,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">4</property>
-		  <property name="bottom_attach">5</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1618,30 +1618,6 @@
 		  <property name="right_attach">4</property>
 		  <property name="top_attach">1</property>
 		  <property name="bottom_attach">2</property>
-		  <property name="x_padding">12</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkCheckButton" id="gconf/general/tab_close_buttons">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Show a close button on each notebook tab.  These function identically to the 'Close' menu item.</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Show close button on _notebook tabs</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
-		  <property name="top_attach">3</property>
-		  <property name="bottom_attach">4</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1698,8 +1674,8 @@
 		<packing>
 		  <property name="left_attach">1</property>
 		  <property name="right_attach">3</property>
-		  <property name="top_attach">13</property>
-		  <property name="bottom_attach">14</property>
+		  <property name="top_attach">12</property>
+		  <property name="bottom_attach">13</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
 		</packing>
@@ -1723,8 +1699,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">13</property>
-		  <property name="bottom_attach">14</property>
+		  <property name="top_attach">12</property>
+		  <property name="bottom_attach">13</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1747,8 +1723,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">12</property>
-		  <property name="bottom_attach">13</property>
+		  <property name="top_attach">11</property>
+		  <property name="bottom_attach">12</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1772,8 +1748,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">11</property>
-		  <property name="bottom_attach">12</property>
+		  <property name="top_attach">10</property>
+		  <property name="bottom_attach">11</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1796,8 +1772,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">10</property>
-		  <property name="bottom_attach">11</property>
+		  <property name="top_attach">9</property>
+		  <property name="bottom_attach">10</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1821,8 +1797,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">9</property>
-		  <property name="bottom_attach">10</property>
+		  <property name="top_attach">8</property>
+		  <property name="bottom_attach">9</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1845,8 +1821,8 @@
 		<packing>
 		  <property name="left_attach">1</property>
 		  <property name="right_attach">2</property>
-		  <property name="top_attach">9</property>
-		  <property name="bottom_attach">10</property>
+		  <property name="top_attach">8</property>
+		  <property name="bottom_attach">9</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1868,8 +1844,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">8</property>
-		  <property name="bottom_attach">9</property>
+		  <property name="top_attach">7</property>
+		  <property name="bottom_attach">8</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1892,8 +1868,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">7</property>
-		  <property name="bottom_attach">8</property>
+		  <property name="top_attach">6</property>
+		  <property name="bottom_attach">7</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -1917,8 +1893,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">6</property>
-		  <property name="bottom_attach">7</property>
+		  <property name="top_attach">5</property>
+		  <property name="bottom_attach">6</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1941,8 +1917,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">5</property>
-		  <property name="bottom_attach">6</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1965,8 +1941,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">14</property>
-		  <property name="bottom_attach">15</property>
+		  <property name="top_attach">13</property>
+		  <property name="bottom_attach">14</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -1989,8 +1965,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">15</property>
-		  <property name="bottom_attach">16</property>
+		  <property name="top_attach">14</property>
+		  <property name="bottom_attach">15</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -2014,8 +1990,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">16</property>
-		  <property name="bottom_attach">17</property>
+		  <property name="top_attach">15</property>
+		  <property name="bottom_attach">16</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -2038,8 +2014,8 @@
 		<packing>
 		  <property name="left_attach">1</property>
 		  <property name="right_attach">2</property>
-		  <property name="top_attach">16</property>
-		  <property name="bottom_attach">17</property>
+		  <property name="top_attach">15</property>
+		  <property name="bottom_attach">16</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -3020,7 +2996,7 @@
 	    <widget class="GtkTable" id="table5">
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">9</property>
+	      <property name="n_rows">18</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
@@ -3239,6 +3215,225 @@
 		  <property name="right_attach">1</property>
 		  <property name="top_attach">1</property>
 		  <property name="bottom_attach">2</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label110">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">12</property>
+		  <property name="bottom_attach">13</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label111">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Tab Position&lt;/b&gt;</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">True</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">13</property>
+		  <property name="bottom_attach">14</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/tab_position/top">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the notebook tabs at the top of the window.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">To_p</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">14</property>
+		  <property name="bottom_attach">15</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/tab_position/bottom">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the notebook tabs at the bottom of the window.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">B_ottom</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">gconf/general/tab_position/top</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">15</property>
+		  <property name="bottom_attach">16</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/tab_position/left">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the notebook tabs at the left of the window.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Left</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">gconf/general/tab_position/top</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">16</property>
+		  <property name="bottom_attach">17</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/tab_position/right">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the notebook tabs at the right of the window.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Right</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">gconf/general/tab_position/top</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">17</property>
+		  <property name="bottom_attach">18</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label112">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">9</property>
+		  <property name="bottom_attach">10</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label113">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Close Button&lt;/b&gt;</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">True</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">10</property>
+		  <property name="bottom_attach">11</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="gconf/general/tab_close_buttons">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show a close button on each notebook tab.  These function identically to the 'Close' menu item.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Show close button on _notebook tabs</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">11</property>
+		  <property name="bottom_attach">12</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>

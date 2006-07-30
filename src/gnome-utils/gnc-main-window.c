@@ -83,6 +83,7 @@ enum {
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
+#define KEY_TAB_POSITION	"tab_position"
 
 /* Static Globals *******************************************************/
 
@@ -2369,6 +2370,28 @@ gnc_main_window_update_toolbar (GncMainWindow *window)
 	LEAVE("");
 }
 
+static void
+gnc_main_window_update_tab_position (GncMainWindow *window)
+{
+	GtkPositionType position = GTK_POS_TOP;
+	gchar *conf_string;
+	GncMainWindowPrivate *priv;
+
+	ENTER ("window %p", window);
+	conf_string = gnc_gconf_get_string (GCONF_GENERAL,
+					    KEY_TAB_POSITION, NULL);
+	if (conf_string) {
+		position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
+					       conf_string, GTK_POS_TOP);
+		g_free (conf_string);
+	}
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
+
+	LEAVE ("");
+}
+
 /*
  * Based on code from Epiphany (src/ephy-window.c)
  */
@@ -2502,6 +2525,8 @@ gnc_main_window_gconf_changed (GConfClient *client,
 	  key_tail++;
 	if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {
 	  gnc_main_window_update_toolbar(window);
+	} else if (strcmp(key_tail, KEY_TAB_POSITION) == 0) {
+	  gnc_main_window_update_tab_position(window);
 	}
 }
 
@@ -2710,6 +2735,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
 				   gnc_main_window_gconf_changed);
 	gnc_main_window_update_toolbar(window);
+	gnc_main_window_update_tab_position(window);
 
 	gnc_main_window_init_menu_updaters(window);
 
