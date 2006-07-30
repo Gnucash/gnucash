@@ -1,5 +1,10 @@
 2006-07-30  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome/schemas/apps_gnucash_warnings.schemas.in:
+	* src/gnome-utils/gnc-main-window.c: Add warning close_last_window
+	  and show it when user tries to close the last GnuCash window.
+	  Fixes #338865.
+
 	* src/gnome-utils/gnc-gnome-utils.c:
 	* src/gnome-utils/glade/preferences.glade:
 	* src/gnome/schemas/apps_gnucash_general.schemas.in: Add new
