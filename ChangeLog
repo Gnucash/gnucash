@@ -1,5 +1,11 @@
 2006-07-30  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome-utils/glade/preferences.glade: Fixed some duplicate
+	  accelerators.
+
 	* src/gnome-utils/gnc-main-window.c:
 	* src/gnome/schemas/apps_gnucash_general.schemas.in:
 	* src/gnome-utils/glade/preferences.glade: Add preference

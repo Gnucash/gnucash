@@ -179,7 +179,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
 	  N_("Paste the clipboard content at the cursor position"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste) },
-	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit Account"), "<control>e",
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_edit_account) },
 

@@ -144,7 +144,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
     N_("The list of Scheduled Transactions"),
     G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor) },
-  { "ActionsSinceLastRunAction", NULL, N_("_Since Last Run..."), NULL,
+  { "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
     N_("Create Scheduled Transactions since the last time run"),
     G_CALLBACK (gnc_main_window_cmd_actions_since_last_run) },
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
