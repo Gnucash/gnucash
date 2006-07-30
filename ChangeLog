@@ -1,5 +1,12 @@
 2006-07-30  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/glade/preferences.glade:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in: Add new
+	  setting general/show_splash_screen to
+	  preferences_dialog->General and only show the splash screen if
+	  it is TRUE. Fixes 339876.
+
 	* src/gnome/gnc-plugin-page-account-tree.c:
 	* src/gnome/gnc-plugin-page-register.c:
 	* src/gnome/gnc-plugin-basic-commands.c:
