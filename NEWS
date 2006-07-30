@@ -1,6 +1,37 @@
 Version history:
 ------- -------
 
+ 2.0.1 - 30 July 2006
+ 	 o Release of new stable version 2.0.1
+	 o Configure changes;
+	 - Check for (g-wrap) module, apparently some distributions ship
+	   g-wrap-config separately from the g-wrap.scm guile module.
+	 - Check for SLIB.
+	 o Core changes;
+	 - Correctly set column sort orders from gconf.
+	 - Allow proper compile/install from tarball using separate builddir.
+	 o Import Changes;
+	 - Fixed bug where OFX/HBCI imports loose spaces in descriptions
+	 - Ignore any unknown !Option in QIF files that are being imported.
+	 - Allow comma-radix numbers without a radix. I.e., allow "17.500" to
+	   be parsed either as "seventeen and a half" or as "seventeen thousand
+	   five hundred".  Note that numbers STILL default to decimal-radix
+	   instead of asking the user to choose.
+	 - Replace the hbox separating debits from credits in the
+	   reconciliation window by a homogeneous table.
+	 - Remove obsolete buttons for aqbanking/hbci setup that are unneeded.
+	 o Business changes;
+	 - Fixed problem when booking an invoice with account name using
+	   account separator character.
+	 - Set the summary bar values when the invoice window is first opened.
+	 - Properly round invoice entries and totals.
+	 o Scheduled Transactions changes;
+	 - Changed Since-Last-Run default to automatically run at GnuCash
+	   start.
+	 o Reports changes;
+	 - Change cmdline warning into an actual user's error dialog when user
+	   attempts to save a report with the same name as an existing report.
+	 
  2.0.0 - 9 July 2006
  	 o Release of new stable version 2.0.0.
 	 o GnuCash 2.0 is based on state-of-the-art gtk2 GUI technology.
