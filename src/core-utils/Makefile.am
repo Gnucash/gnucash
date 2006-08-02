@@ -6,7 +6,8 @@ libcore_utils_la_SOURCES = \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
-  gnc-gobject-utils.c
+  gnc-gobject-utils.c \
+  gnc-gtk-utils.c
 
 libcore_utils_la_LIBADD = \
   ${GLIB_LIBS} \
@@ -28,7 +29,8 @@ noinst_HEADERS = \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
-  gnc-gobject-utils.h
+  gnc-gobject-utils.h \
+  gnc-gtk-utils.h
 
 EXTRA_DIST = ${gwmod_DATA}
 

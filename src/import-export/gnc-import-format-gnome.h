@@ -28,7 +28,7 @@ struct _GNCImportProvFormatGnome
   GNCDruidProvider parent;
 
   GnomeDruidPage*	page;
-  GtkOptionMenu*	format_menu;
+  GtkComboBox*		format_combo;
   GtkLabel*		sample_label;
 
   GncImportFormat	choice;

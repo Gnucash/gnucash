@@ -3,6 +3,7 @@
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
  * Copyright (C) 2001,2002,2006 Derek Atkins
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -32,6 +33,7 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "gnc-component-manager.h"
+#include "gnc-gtk-utils.h"
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -304,20 +306,27 @@ void
 gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
 			       GList *acct_types)
 {
-  GList *list, *node, *names = NULL;
+  GtkListStore *store;
+  GtkEntry *entry;
+  GList *list, *node;
   char *text;
-  gboolean found = FALSE;
 
-  g_return_if_fail (combo);
+  g_return_if_fail (combo && GTK_IS_COMBO_BOX_ENTRY(combo));
   g_return_if_fail (book);
   g_return_if_fail (acct_types);
 
   /* Figure out if anything is set in the combo */
-  text = gtk_editable_get_chars (GTK_EDITABLE ((GTK_COMBO (combo))->entry), 0, -1);
+  text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
 
   list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
 
-  /* Create a list of names.  Figure out if we've got the 'saved' one */
+  /* Clear the existing list */
+  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo)));
+  gtk_entry_set_text(entry, "");
+  store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
+  gtk_list_store_clear(store);
+
+ /* Add the account names to the combo box */
   for (node = list; node; node = node->next) {
     Account *account = node->data;
     char *name;
@@ -328,27 +337,14 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
       continue;
 
     name = xaccAccountGetFullName (account);
-    if (name != NULL) {
-      names = g_list_append (names, name);
-      if (!safe_strcmp (name, text))
-	found = TRUE;
-    }
+    gtk_combo_box_append_text(GTK_COMBO_BOX(combo), name);
+    g_free(name);
   }
+  gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 
   g_list_free (list);
 
-  /* set the popdown strings and the default to last selected choice
-   * (or the first entry if none was previously selected */
-
-  if (names) {
-    gtk_combo_set_popdown_strings (GTK_COMBO (combo), names);
-    gtk_entry_set_text (GTK_ENTRY ((GTK_COMBO (combo))->entry),
-			found ? text : names->data);
-  }
-
-  for (node = names; node; node = node->next)
-    g_free (node->data);
-  g_list_free (names);
+  gnc_cbe_set_by_string(GTK_COMBO_BOX_ENTRY(combo), text);
 
   if (text)
     g_free (text);

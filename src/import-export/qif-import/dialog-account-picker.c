@@ -2,6 +2,7 @@
  * dialog-account-picker.c -- window for picking a Gnucash account  * 
  * from the QIF importer.                                           *
  * Copyright (C) 2000-2001 Bill Gribble <grib@billgribble.com>      *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -34,31 +35,36 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 
+enum account_cols {
+  ACCOUNT_COL_NAME = 0,
+  ACCOUNT_COL_FULLNAME,
+  ACCOUNT_COL_CHECK,
+  NUM_ACCOUNT_COLS
+};
+
 struct _accountpickerdialog {
   GtkWidget       * dialog;
-  GtkWidget       * treeview;
+  GtkTreeView     * treeview;
   QIFImportWindow * qif_wind;
   SCM             map_entry;  
   gchar           * selected_name;
 };
 
 static void
-row_data_destroy_cb(gpointer data) {
-  g_free(data);
-}
-
-static void
-acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
-                    char * base_name, int *row)
+acct_tree_add_accts(SCM accts,
+		    GtkTreeStore *store,
+		    GtkTreeIter *parent,
+                    const char *base_name,
+                    const char *selected_name,
+                    GtkTreeRowReference **reference)
 {
-  char         * acctinfo[2];
+  GtkTreeIter  iter;
+  char         * compname;
   char         * acctname;
-  GtkCTreeNode * node; 
   gboolean     leafnode;
   SCM          current;
+  gboolean     checked;
   
-  acctinfo[1] = "";
-
   while(!SCM_NULLP(accts)) {
     current = SCM_CAR(accts);
 
@@ -69,9 +75,9 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
     }
 
     if (SCM_STRINGP(SCM_CAR(current)))
-      acctinfo[0] = g_strdup(SCM_STRING_CHARS(SCM_CAR(current)));
+      compname = SCM_STRING_CHARS(SCM_CAR(current));
     else
-      acctinfo[0] = g_strdup("");
+      compname = "";
 
     if(!SCM_NULLP(SCM_CADDR(current))) {
       leafnode = FALSE;
@@ -79,38 +85,41 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
     else {
       leafnode = TRUE;
     }
-    
-    node = gtk_ctree_insert_node(tree, parent, NULL, 
-                                 acctinfo, 2,
-                                 NULL, NULL, NULL, NULL,
-                                 leafnode, TRUE);
 
-    gnc_clist_set_check (GTK_CLIST (tree), (*row)++, 1,
-                         SCM_CADR (current) == SCM_BOOL_T);
-
-    /* set some row data */ 
-    if(base_name && (strlen(base_name) > 0)) {
+    /* compute full name */ 
+    if(base_name && *base_name) {
       acctname =  g_strjoin(gnc_get_account_separator_string(),
-			    base_name, acctinfo[0], (char *)NULL);
+			    base_name, compname, (char *)NULL);
     }
     else {
-      acctname = g_strdup(acctinfo[0]);
+      acctname = g_strdup(compname);
     }
-    gtk_ctree_node_set_row_data_full(tree, node,
-                                     acctname,
-                                     row_data_destroy_cb);
+
+    checked = (SCM_CADR (current) == SCM_BOOL_T);
+
+    gtk_tree_store_append(store, &iter, parent);
+    gtk_tree_store_set(store, &iter,
+		       ACCOUNT_COL_NAME, compname,
+		       ACCOUNT_COL_FULLNAME, acctname,
+		       ACCOUNT_COL_CHECK, checked,
+		       -1);
+
+    if (reference && !*reference &&
+	selected_name && (g_utf8_collate(selected_name, acctname) == 0)) {
+      GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+      *reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+      gtk_tree_path_free(path);
+    }
+
     if(!leafnode) {
-      acct_tree_add_accts(SCM_CADDR(current), tree, node, acctname, row);
+      acct_tree_add_accts(SCM_CADDR(current), store, &iter, acctname,
+			  selected_name, reference);
     }
-    
+
+    g_free(acctname);
+
     accts = SCM_CDR(accts);      
   }
-}
-
-static gint
-test_str_cmp(gconstpointer a, gconstpointer b)
-{
-  return strcmp(a, b);
 }
 
 static void
@@ -119,32 +128,26 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import)
   SCM  get_accts = scm_c_eval_string("qif-import:get-all-accts");
   SCM  acct_tree = scm_call_1(get_accts, 
 			      gnc_ui_qif_import_druid_get_mappings(import));
-  GtkCTreeNode * new_sel;
-  int row = 0;
+  GtkTreeStore *store;
+  GtkTreePath *path;
+  GtkTreeSelection* selection;
+  GtkTreeRowReference *reference = NULL;
 
-  gtk_clist_freeze(GTK_CLIST(picker->treeview));
-  gtk_clist_clear(GTK_CLIST(picker->treeview));
-  gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
-                                      1, GTK_JUSTIFY_CENTER);
+  store = GTK_TREE_STORE(gtk_tree_view_get_model(picker->treeview));
+  gtk_tree_store_clear(store);
 
-  acct_tree_add_accts(acct_tree, GTK_CTREE(picker->treeview),
-                      NULL, NULL, &row);
+  acct_tree_add_accts(acct_tree, store, NULL, NULL,
+		      picker->selected_name, &reference);
 
-  if(picker->selected_name) {
-    new_sel =
-      gtk_ctree_find_by_row_data_custom(GTK_CTREE(picker->treeview),
-                                        NULL,
-                                        picker->selected_name,
-                                        &test_str_cmp);
-    
-    gtk_ctree_select(GTK_CTREE(picker->treeview), new_sel);
-    gtk_ctree_node_moveto(GTK_CTREE(picker->treeview), new_sel, 0,
-                          0.5, 0.0);
+  if (reference) {
+    selection = gtk_tree_view_get_selection(picker->treeview);
+    path = gtk_tree_row_reference_get_path(reference);
+    if (path) {
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_path_free(path);
+    }
+    gtk_tree_row_reference_free(reference);
   }
-
-  gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
-  gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
-  gtk_clist_thaw(GTK_CLIST(picker->treeview));
 }
 
 static void
@@ -189,32 +192,23 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 }
 
 static void
-gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
-                                    GtkCTreeNode  * node,
-                                    gint column,
-                                    gpointer  user_data)
+gnc_ui_qif_account_picker_changed_cb (GtkTreeSelection *selection,
+				      gpointer          user_data)
 {
   QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gchar *name;
 
   g_free(wind->selected_name);
-  wind->selected_name = 
-    g_strdup(gtk_ctree_node_get_row_data(tree, node));
-
-  scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(wind->selected_name));
-}
-
-
-static void
-gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
-                                      GtkCTreeNode  * node,
-                                      gint column,
-                                      gpointer  user_data)
-{
-  QIFAccountPickerDialog * wind = user_data;
-
-  g_free(wind->selected_name);
-  wind->selected_name = NULL;
+  if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+    gtk_tree_model_get(model, &iter, ACCOUNT_COL_FULLNAME, &name, -1);
+    wind->selected_name = g_strdup(name);
+    scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(wind->selected_name));
+  } else {
+    wind->selected_name = NULL;
+  }
 }
 
 
@@ -259,7 +253,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
      G_CALLBACK (gnc_ui_qif_account_picker_new_cb), wind);
 
   wind->dialog     = glade_xml_get_widget (xml, "QIF Import Account Picker");
-  wind->treeview   = glade_xml_get_widget (xml, "account_tree");
+  wind->treeview   = GTK_TREE_VIEW(glade_xml_get_widget (xml, "account_tree"));
   wind->qif_wind   = qif_wind;
 
   wind->map_entry  = map_entry;
@@ -269,13 +263,34 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   scm_gc_protect_object(wind->map_entry);
 
-  g_signal_connect(wind->treeview, "tree_select_row",
-		   G_CALLBACK(gnc_ui_qif_account_picker_select_cb),
-		   wind);
+  {
+    GtkTreeStore *store;
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
+    GtkTreeSelection *selection;
 
-  g_signal_connect(wind->treeview, "tree_unselect_row",
-		   G_CALLBACK(gnc_ui_qif_account_picker_unselect_cb),
-		   wind);
+    store = gtk_tree_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+			       G_TYPE_BOOLEAN);
+    gtk_tree_view_set_model(wind->treeview, GTK_TREE_MODEL(store));
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
+						      "text", ACCOUNT_COL_NAME,
+						      NULL);
+    g_object_set(column, "expand", TRUE, NULL);
+    gtk_tree_view_append_column(wind->treeview, column);
+
+    renderer = gtk_cell_renderer_toggle_new();
+    g_object_set(renderer, "activatable", FALSE, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_("New?"), renderer,
+						      "active", ACCOUNT_COL_CHECK,
+						      NULL);
+    gtk_tree_view_append_column(wind->treeview, column);
+
+    selection = gtk_tree_view_get_selection(wind->treeview);
+    g_signal_connect(selection, "changed",
+		     G_CALLBACK(gnc_ui_qif_account_picker_changed_cb), wind);
+  }
 
   g_signal_connect_after(wind->dialog, "map",
 			 G_CALLBACK(gnc_ui_qif_account_picker_map_cb),

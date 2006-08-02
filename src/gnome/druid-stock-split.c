@@ -47,6 +47,14 @@
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
 
+enum split_cols {
+  SPLIT_COL_ACCOUNT = 0,
+  SPLIT_COL_FULLNAME,
+  SPLIT_COL_MNEMONIC,
+  SPLIT_COL_SHARES,
+  NUM_SPLIT_COLS
+};
+
 /** structures *********************************************************/
 typedef struct
 {
@@ -54,7 +62,7 @@ typedef struct
   GtkWidget * druid;
 
   /* account page data */
-  GtkWidget * account_list;
+  GtkWidget * account_view;
   Account   * acct;
 
   /* info page data */
@@ -107,18 +115,22 @@ gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static int
-fill_account_list (StockSplitInfo *info, Account *account)
+fill_account_list (StockSplitInfo *info, Account *selected_account)
 {
-  GtkCList *clist;
+  GtkTreeRowReference *reference = NULL;
+  GtkTreeView *view;
+  GtkListStore *list;
+  GtkTreeIter iter;
+  GtkTreePath *path;
   GList *accounts;
   GList *node;
   gint rows = 0;
+  gchar *full_name;
 
-  clist = GTK_CLIST (info->account_list);
+  view = GTK_TREE_VIEW(info->account_view);
+  list = GTK_LIST_STORE(gtk_tree_view_get_model(view));
 
-  gtk_clist_freeze (clist);
-
-  gtk_clist_clear (clist);
+  gtk_list_store_clear (list);
 
   accounts = xaccGroupGetSubAccountsSorted (gnc_get_current_group ());
   for (node = accounts; node; node = node->next)
@@ -127,8 +139,6 @@ fill_account_list (StockSplitInfo *info, Account *account)
     GNCPrintAmountInfo print_info;
     const gnc_commodity *commodity;
     gnc_numeric balance;
-    char *strings[4];
-    gint row;
 
     if (!xaccAccountIsPriced(account))
         continue;
@@ -142,59 +152,56 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
     commodity = xaccAccountGetCommodity (account);
 
+    full_name = xaccAccountGetFullName (account);
     print_info = gnc_account_print_info (account, FALSE);
 
-    strings[0] = xaccAccountGetFullName (account);
-    strings[1] = (char *) gnc_commodity_get_mnemonic (commodity);
-    strings[2] = (char *) xaccPrintAmount (balance, print_info);
-    strings[3] = NULL;
+    gtk_list_store_append(list, &iter);
+    gtk_list_store_set(list, &iter,
+		       SPLIT_COL_ACCOUNT,  account,
+		       SPLIT_COL_FULLNAME, full_name,
+		       SPLIT_COL_MNEMONIC, gnc_commodity_get_mnemonic(commodity),
+		       SPLIT_COL_SHARES,   xaccPrintAmount(balance, print_info),
+		       -1);
 
-    row = gtk_clist_append (clist, strings);
+    if (account == selected_account) {
+      path = gtk_tree_model_get_path(GTK_TREE_MODEL(list), &iter);
+      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(list), path);
+      gtk_tree_path_free(path);
+    }
 
-    gtk_clist_set_row_data (clist, row, account);
-
-    g_free (strings[0]);
+    g_free (full_name);
 
     rows++;
   }
   g_list_free(accounts);
 
-  {
-    gint row = 0;
-
-    if (account)
-      row = gtk_clist_find_row_from_data (clist, account);
-
-    if (row < 0)
-      row = 0;
-
-    gtk_clist_select_row (GTK_CLIST (info->account_list), row, 0);
+  if (reference) {
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(view);
+    path = gtk_tree_row_reference_get_path(reference);
+    gtk_tree_row_reference_free(reference);
+    if (path) {
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
+      gtk_tree_path_free(path);
+    }
   }
-
-  gtk_clist_columns_autosize (clist);
-
-  gtk_clist_thaw (clist);
 
   return rows;
 }
 
 static void
-clist_select_row (GtkCList *clist,
-                  gint row,
-                  gint column,
-                  GdkEventButton *event,
-                  gpointer user_data)
+selection_changed (GtkTreeSelection *selection,
+		   gpointer user_data)
 {
   StockSplitInfo *info = user_data;
-  Account *account;
+  GtkTreeModel *list;
+  GtkTreeIter iter;
 
-  account = gtk_clist_get_row_data (clist, row);
-
-  /* Happens when the first row is inserted, before the row data can be added */
-  if (account == NULL)
+  if (!gtk_tree_selection_get_selected(selection, &list, &iter))
     return;
-
-  info->acct = account;
+  gtk_tree_model_get(list, &iter,
+		     SPLIT_COL_ACCOUNT, &info->acct,
+		     -1);
 }
 
 static void
@@ -583,16 +590,42 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
   /* account list */
   {
-    GtkCList *clist;
+    GtkTreeView *view;
+    GtkListStore *store;
+    GtkTreeSelection *selection;
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
 
-    info->account_list = glade_xml_get_widget (xml, "account_clist");
+    info->account_view = glade_xml_get_widget (xml, "account_view");
 
-    clist = GTK_CLIST (info->account_list);
+    view = GTK_TREE_VIEW(info->account_view);
 
-    gtk_clist_set_selection_mode (clist, GTK_SELECTION_BROWSE);
+    store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_POINTER, G_TYPE_STRING,
+			       G_TYPE_STRING, G_TYPE_STRING);
+    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
 
-    g_signal_connect (clist, "select_row",
-		      G_CALLBACK (clist_select_row), info);
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
+						      "text", SPLIT_COL_FULLNAME,
+						      NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Symbol"), renderer,
+						      "text", SPLIT_COL_MNEMONIC,
+						      NULL);
+    gtk_tree_view_append_column(view, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Shares"), renderer,
+						      "text", SPLIT_COL_SHARES,
+						      NULL);
+    gtk_tree_view_append_column(view, column);
+
+    selection = gtk_tree_view_get_selection(view);
+    gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
+    g_signal_connect (selection, "changed",
+		      G_CALLBACK (selection_changed), info);
   }
 
   /* info widgets */

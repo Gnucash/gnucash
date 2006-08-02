@@ -2,6 +2,7 @@
  * dialog-billterms.c -- Dialog to create and edit billing terms
  * Copyright (C) 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -39,13 +40,18 @@
 
 #define DIALOG_BILLTERMS_CM_CLASS "billterms-dialog"
 
-void billterms_row_selected (GtkCList *clist, gint row, gint column,
-			     GdkEventButton *event, gpointer user_data);
+enum term_cols {
+  BILL_TERM_COL_NAME = 0,
+  BILL_TERM_COL_TERM,
+  NUM_BILL_TERM_COLS
+};
+
 void billterms_new_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_edit_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_window_close (GtkWidget *widget, gpointer data);
 void billterms_window_destroy_cb (GtkWidget *widget, gpointer data);
+void billterms_type_combobox_changed (GtkComboBox *cb, gpointer data);
 
 typedef struct _billterm_notebook {
   GtkTooltips *		tooltips;
@@ -68,7 +74,7 @@ typedef struct _billterm_notebook {
 
 struct _billterms_window {
   GtkWidget *	dialog;
-  GtkWidget *	terms_clist;
+  GtkWidget *	terms_view;
   GtkWidget *	desc_entry;
   GtkWidget *	type_label;
   GtkWidget *	term_vbox;
@@ -342,51 +348,14 @@ maybe_set_type (NewBillTerm *nbt, GncBillTermType type)
   show_notebook (&nbt->notebook);
 }
 
-static void
-on_days1_activate (GtkWidget *w, gpointer data)
+void
+billterms_type_combobox_changed (GtkComboBox *cb, gpointer data)
 {
   NewBillTerm *nbt = data;
+  gint value;
 
-  maybe_set_type (nbt, GNC_TERM_TYPE_DAYS);
-}
-
-static void
-on_proximo1_activate (GtkWidget *w, gpointer data)
-{
-  NewBillTerm *nbt = data;
-
-  maybe_set_type (nbt, GNC_TERM_TYPE_PROXIMO);
-}
-
-static void
-make_menu (GtkWidget *omenu, NewBillTerm *nbt)
-{
-  GladeXML *xml;
-  GtkWidget *popup;
-
-  /* Open and read the Popup XML */
-  xml = gnc_glade_xml_new ("billterms.glade", "Term Type Popup");
-  popup = glade_xml_get_widget (xml, "Term Type Popup");
-
-  /* Glade insists on making this a tearoff menu. */
-  if (gnc_gconf_menus_have_tearoff()) {
-    GtkMenuShell *ms = GTK_MENU_SHELL (popup);
-    GtkWidget *tearoff;
-
-    tearoff = g_list_nth_data (ms->children, 0);
-    ms->children = g_list_remove (ms->children, tearoff);
-    gtk_widget_destroy (tearoff);
-  }
-
-  /* attach the signal handlers */
-  glade_xml_signal_connect_data (xml, "on_days1_activate",
-				 G_CALLBACK (on_days1_activate), nbt);
-  glade_xml_signal_connect_data (xml, "on_proximo1_activate",
-				 G_CALLBACK (on_proximo1_activate), nbt);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), popup);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu),
-			       nbt->notebook.type - 1);
+  value = gtk_combo_box_get_active(cb);
+  maybe_set_type (nbt, value + 1);
 }
 
 static GncBillTerm *
@@ -396,7 +365,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   GncBillTerm *created_term = NULL;
   NewBillTerm *nbt;
   GladeXML *xml;
-  GtkWidget *box;
+  GtkWidget *box, *combo_box;
   gint response;
   gboolean done;
   const gchar *dialog_name;
@@ -432,7 +401,8 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     nbt->notebook.type = GNC_TERM_TYPE_DAYS;
 
   /* Create the menu */
-  make_menu (glade_xml_get_widget (xml, "type_menu"), nbt);
+  combo_box = glade_xml_get_widget (xml, "type_combobox");
+  gtk_combo_box_set_active(GTK_COMBO_BOX(combo_box), nbt->notebook.type - 1);
 
   /* Show the right notebook page */
   show_notebook (&nbt->notebook);
@@ -509,27 +479,26 @@ static void
 billterms_window_refresh (BillTermsWindow *btw)
 {
   GList *list, *node;
-  GtkAdjustment *vadjustment;
-  GtkCList *clist;
-  gfloat save_value = 0.0;
+  GncBillTerm *term;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection *selection;
+  GtkTreeRowReference *reference = NULL;
 
   g_return_if_fail (btw);
-  clist = GTK_CLIST (btw->terms_clist);
-
-  vadjustment = gtk_clist_get_vadjustment (clist);
-  if (vadjustment)
-    save_value = vadjustment->value;
+  view = GTK_TREE_VIEW (btw->terms_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
 
   /* Clear the list */
-  gtk_clist_freeze (clist);
-  gtk_clist_clear (clist);
-
+  gtk_list_store_clear (store);
   gnc_gui_component_clear_watches (btw->component_id);
 
   /* Add the items to the list */
   list = gncBillTermGetTerms (btw->book);
 
-  /* If there are no erms, clear the term display */
+  /* If there are no terms, clear the term display */
   if (list == NULL) {
     btw->current_term = NULL;
     billterms_term_refresh (btw);
@@ -538,20 +507,21 @@ billterms_window_refresh (BillTermsWindow *btw)
   }
 
   for ( node = list; node; node = node->next) {
-    char *row_text[2];
-    gint row;
-    GncBillTerm *term = node->data;
-
+    term = node->data;
     gnc_gui_component_watch_entity (btw->component_id,
 				    gncBillTermGetGUID (term),
 				    QOF_EVENT_MODIFY);
 
-    row_text[0] = (char *)gncBillTermGetName (term);
-    row_text[1] = NULL;
-
-    row = gtk_clist_prepend (clist, row_text);
-    gtk_clist_set_row_data (clist, row, term);
-    gtk_clist_set_selectable (clist, row, TRUE);
+    gtk_list_store_prepend(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       BILL_TERM_COL_NAME, gncBillTermGetName(term),
+		       BILL_TERM_COL_TERM, term,
+		       -1);
+    if (term == btw->current_term) {
+      path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+      gtk_tree_path_free(path);
+    }
   }
 
   g_list_free (list);
@@ -560,38 +530,30 @@ billterms_window_refresh (BillTermsWindow *btw)
 				       GNC_BILLTERM_MODULE_NAME,
 				       QOF_EVENT_CREATE | QOF_EVENT_DESTROY);
 
-  if (vadjustment) {
-    save_value = CLAMP (save_value, vadjustment->lower,
-			vadjustment->upper - vadjustment->page_size);
-    gtk_adjustment_set_value (vadjustment, save_value);
+  if (reference) {
+    path = gtk_tree_row_reference_get_path(reference);
+    gtk_tree_row_reference_free(reference);
+    if (path) {
+      selection = gtk_tree_view_get_selection(view);
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
+      gtk_tree_path_free(path);
+    }
   }
-
-  gtk_clist_thaw (clist);
-
-  {
-    gint row = gtk_clist_find_row_from_data (clist, btw->current_term);
-
-    if (row < 0)
-      row = 0;
-
-    gtk_clist_select_row (clist, row, 0);
-
-    /* If this row isn't visible, move it to the center */
-    if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_FULL)
-      gtk_clist_moveto (clist, row, 0, 0.5, 0);
-  }
-  /* select_row() above will refresh the term display */
 }
 
-void
-billterms_row_selected (GtkCList *clist, gint row, gint column,
-			GdkEventButton *event, gpointer user_data)
+static void
+billterm_selection_changed (GtkTreeSelection *selection,
+			    BillTermsWindow  *btw) 
 {
-  BillTermsWindow *btw = user_data;
-  GncBillTerm *term = gtk_clist_get_row_data (clist, row);
+  GncBillTerm *term = NULL;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
 
   g_return_if_fail (btw);
-  g_return_if_fail (term);
+
+  if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    gtk_tree_model_get(model, &iter, BILL_TERM_COL_TERM, &term, -1);
 
   /* If we've changed, then reset the term list */
   if (term != btw->current_term)
@@ -599,10 +561,15 @@ billterms_row_selected (GtkCList *clist, gint row, gint column,
 
   /* And force a refresh of the entries */
   billterms_term_refresh (btw);
+}
 
-  /* If the user double-clicked on the item, pop up the edit window */
-  if (event && event->type == GDK_2BUTTON_PRESS)
-    new_billterm_dialog (btw, term, NULL);
+static void
+billterm_selection_activated (GtkTreeView       *tree_view,
+			      GtkTreePath       *path,
+			      GtkTreeViewColumn *column,
+			      BillTermsWindow   *btw)
+{
+  new_billterm_dialog (btw, btw->current_term, NULL);
 }
 
 void
@@ -702,6 +669,11 @@ gnc_ui_billterms_window_new (GNCBook *book)
   BillTermsWindow *btw;
   GladeXML *xml;
   GtkWidget *widget;
+  GtkTreeView *view;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkListStore *store;
+  GtkTreeSelection *selection;
 
   if (!book) return NULL;
 
@@ -724,10 +696,27 @@ gnc_ui_billterms_window_new (GNCBook *book)
   /* Open and read the XML */
   xml = gnc_glade_xml_new ("billterms.glade", "Terms Window");
   btw->dialog = glade_xml_get_widget (xml, "Terms Window");
-  btw->terms_clist = glade_xml_get_widget (xml, "terms_clist");
+  btw->terms_view = glade_xml_get_widget (xml, "terms_view");
   btw->desc_entry = glade_xml_get_widget (xml, "desc_entry");
   btw->type_label = glade_xml_get_widget (xml, "type_label");
   btw->term_vbox = glade_xml_get_widget (xml, "term_vbox");
+
+  /* Initialize the view */
+  view = GTK_TREE_VIEW(btw->terms_view);
+  store = gtk_list_store_new (NUM_BILL_TERM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes("", renderer,
+						    "text", BILL_TERM_COL_NAME,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  g_signal_connect(view, "row-activated",
+		   G_CALLBACK(billterm_selection_activated), btw);
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(billterm_selection_changed), btw);
 
   /* Initialize the notebook widgets */
   init_notebook_widgets (&btw->notebook, TRUE,

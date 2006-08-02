@@ -2,6 +2,7 @@
  * dialog-commodity.h -- "select" and "new" commodity windows       *
  *                       (GnuCash)                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -214,7 +215,7 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
 /** Given a combo box, fill in the known commodity namespaces and then
  *  select one.
  *
- *  @param combobox The combo box to populate with information.
+ *  @param cbe The widget to populate with information.
  *
  *  @param sel The namespace that should be initially selected when
  *  the combo box appears.
@@ -226,25 +227,25 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  *
  *  @note The returned string must be freed by the caller.
  */
-void gnc_ui_update_namespace_picker(GtkWidget * combobox,
-				    const char * sel,
+void gnc_ui_update_namespace_picker(GtkWidget *cbe,
+				    const gchar *sel,
 				    dialog_commodity_mode mode);
 
 /** Given a combo box, return the currently selected namespaces.
  *
- *  @param combobox The combo box of namespaces.
+ *  @param cbe The combo box of namespaces.
  *
  *  @return The currently selected namespace.
  *
  *  @note This string is owned by the engine and must not be freed by
  *  the caller.
  */
-const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
+gchar *gnc_ui_namespace_picker_ns (GtkWidget *cbe);
 
 /** Given a combo box, fill in all the known commodities for the
  *  specified namespace, and then select one.
  *
- *  @param combobox The combo box to populate with information.
+ *  @param cbe The widget to populate with information.
  *
  *  @param namespace All commodities with this namespace will be added
  *  to the combo box.
@@ -252,9 +253,9 @@ const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
  *  @param sel The commodity that should be initially selected when
  *  the combo box appears.
  */
-void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
-                                    const char * namespace,
-                                    const char * sel);
+void gnc_ui_update_commodity_picker(GtkWidget *cbe,
+                                    const gchar *namespace,
+                                    const gchar *sel);
 /** @} */
 
 #endif

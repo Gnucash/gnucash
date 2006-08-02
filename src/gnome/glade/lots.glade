@@ -324,7 +324,7 @@
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="changed" handler="lv_title_entry_changed_cb" last_modification_time="Sun, 22 May 2005 21:25:12 GMT"/>
 		    </widget>
@@ -492,96 +492,18 @@
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
-		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkCList" id="lot clist">
+			<widget class="GtkTreeView" id="lot view">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">A list of all of the lots in this account.</property>
 			  <property name="can_focus">True</property>
-			  <property name="n_columns">5</property>
-			  <property name="column_widths">80,80,80,80,80</property>
-			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-			  <property name="show_titles">True</property>
-			  <property name="shadow_type">GTK_SHADOW_IN</property>
-			  <signal name="select_row" handler="lv_select_row_cb" last_modification_time="Sun, 22 May 2005 21:25:47 GMT"/>
-			  <signal name="unselect_row" handler="lv_unselect_row_cb" last_modification_time="Sun, 22 May 2005 21:26:02 GMT"/>
-
-			  <child>
-			    <widget class="GtkLabel" id="label3">
-			      <property name="label" translatable="yes">Opened</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_CENTER</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label4">
-			      <property name="label" translatable="yes">Closed</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_CENTER</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label5">
-			      <property name="label" translatable="yes">Title</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_CENTER</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label6">
-			      <property name="label" translatable="yes">Balance</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_CENTER</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label7">
-			      <property name="label" translatable="yes">Gains</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_CENTER</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
+			  <property name="headers_visible">True</property>
+			  <property name="rules_hint">True</property>
+			  <property name="reorderable">False</property>
+			  <property name="enable_search">False</property>
+			  <property name="fixed_height_mode">False</property>
 			</widget>
 		      </child>
 		    </widget>

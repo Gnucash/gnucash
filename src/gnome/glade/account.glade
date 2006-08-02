@@ -294,7 +294,6 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="mnemonic_widget">account_scu</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -464,93 +463,6 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="account_scu">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Smallest fraction of this commodity that can be referenced.</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget1">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget2">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Use Commodity Value</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget3">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget4">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/10</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget5">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/100</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget6">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/1000</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget7">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/10000</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget8">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/100000</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget9">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">1/1000000</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="left_attach">1</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">4</property>
-			  <property name="bottom_attach">5</property>
-			  <property name="x_options">fill</property>
-			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkScrolledWindow" id="scrolledwindow9">
 			  <property name="visible">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -583,6 +495,38 @@
 			  <property name="right_attach">2</property>
 			  <property name="top_attach">5</property>
 			  <property name="bottom_attach">6</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options">fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkEventBox" id="eventbox1">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Smallest fraction of this commodity that can be referenced.</property>
+			  <property name="visible_window">True</property>
+			  <property name="above_child">False</property>
+
+			  <child>
+			    <widget class="GtkComboBox" id="account_scu">
+			      <property name="visible">True</property>
+			      <property name="items" translatable="yes">Use Commodity Value
+1
+1/10
+1/100
+1/1000
+1/10000
+1/100000
+1/1000000</property>
+			      <property name="focus_on_click">True</property>
+			    </widget>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">4</property>
+			  <property name="bottom_attach">5</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options">fill</property>
 			</packing>

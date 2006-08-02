@@ -6,6 +6,7 @@
  * freshly-retreived account list, the widget will re-select that account.
  *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  * All rights reserved.
  **/
 
@@ -42,7 +43,8 @@ typedef struct
         GtkHBox hbox;
         gboolean initDone;
 	gboolean isModal;
-        GtkCombo *combo;
+	GtkListStore *store;
+        GtkComboBoxEntry *combo;
         GList *acctTypeFilters;
         gint eventHandlerId;
         /* The state of this pointer also serves as a flag about what state
@@ -64,7 +66,7 @@ typedef struct
 
 GType      gnc_account_sel_get_type (void);
 GtkWidget* gnc_account_sel_new (void);
-GtkWidget* gnc_account_sel_gtk_entry (GNCAccountSel *gas);
+
 /**
  * Sets the GAS to the given account.  If the account doesn't exist in the
  * list, then it doesn't change the state of the GAS.  If the account is
@@ -98,5 +100,8 @@ void gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
  **/
 void gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
                                               gboolean state );
+
+gint gnc_account_sel_get_num_account( GNCAccountSel *gas );
+void gnc_account_sel_purge_account( GNCAccountSel *gas, Account *acc, gboolean recursive);
 
 #endif /* !ndef GNC_ACCOUNT_SEL_H */

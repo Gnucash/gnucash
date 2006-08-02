@@ -21,14 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-/* This uses the clist widget, which I know is deprecated in gnome2. 
- * Sorry, I'll try to keep it real simple.
- *
- * For example: I'd like to allow the user to edit the lot
- * title 'in-place' in the clist, but gnome-1.2 does not allow
- * entry widgets in clist cells.
- *
- * XXX todo: The button "view lot in register" is not implemented.
+/* XXX todo: The button "view lot in register" is not implemented.
  *   it needs to open register window showing only the splits in the 
  *     given lot ... 
  *
@@ -57,12 +50,15 @@
 
 #define LOT_VIEWER_CM_CLASS "lot-viewer"
 
-#define OPEN_COL  0
-#define CLOSE_COL 1
-#define TITLE_COL 2
-#define BALN_COL  3
-#define GAINS_COL 4
-#define NUM_COLS  5
+enum lot_cols {
+  LOT_COL_OPEN = 0,
+  LOT_COL_CLOSE,
+  LOT_COL_TITLE,
+  LOT_COL_BALN,
+  LOT_COL_GAINS,
+  LOT_COL_PNTR,
+  NUM_LOT_COLS
+};
 
 #define RESPONSE_VIEW          1
 #define RESPONSE_DELETE        2
@@ -83,14 +79,14 @@ struct _GNCLotViewer
    GtkButton     * scrub_lot_button;
    GtkPaned      * lot_hpaned;
    GtkPaned      * lot_vpaned;
-   GtkCList      * lot_clist;
+   GtkTreeView   * lot_view;
+   GtkListStore  * lot_store;
    GtkTextView   * lot_notes;
    GtkEntry      * title_entry;
    GtkCList      * mini_clist;
 
    Account       * account;
    GNCLot        * selected_lot;
-   int             selected_row;
 };
 
 static void gnc_lot_viewer_fill (GNCLotViewer *lv);
@@ -98,16 +94,6 @@ static void gnc_lot_viewer_fill (GNCLotViewer *lv);
 /* ======================================================================== */
 /* Callback prototypes */
 
-void  lv_select_row_cb (GtkCList       *clist,
-			gint            row,
-			gint            column,
-			GdkEvent       *event,
-			gpointer        user_data);
-void lv_unselect_row_cb (GtkCList       *clist,
-			 gint            row,
-			 gint            column,
-			 GdkEvent       *event,
-			 gpointer        user_data);
 void lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data);
 void lv_response_cb (GtkDialog *dialog, gint response, gpointer data);
 void lv_window_destroy_cb (GtkObject *object, gpointer user_data);
@@ -227,18 +213,11 @@ lv_clear_splits (GNCLotViewer *lv)
 /* ======================================================================== */
 /* Callback for selecting a row the the list-of-list clist */
 
-void 
-lv_select_row_cb (GtkCList       *clist,
-                  gint            row,
-                  gint            column,
-                  GdkEvent       *event,
-                  gpointer        user_data)
+static void 
+lv_select_row (GNCLotViewer *lv,
+	       GNCLot       *lot)
 {
-   GNCLotViewer *lv = user_data;
-   GNCLot *lot;
    const char * str;
-
-   lot = gtk_clist_get_row_data (clist, row);
 
    str = gnc_lot_get_title (lot);
    if (!str) str = "";
@@ -253,8 +232,6 @@ lv_select_row_cb (GtkCList       *clist,
 
    /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
    lv->selected_lot = lot;
-   lv->selected_row = row;
-
    lv_show_splits (lv);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
@@ -271,7 +248,6 @@ lv_unset_lot (GNCLotViewer *lv)
 {
    /* Set immediately, to avoid recursion in gtkentry "changed" cb. */
    lv->selected_lot = NULL;
-   lv->selected_row = -1;
 
    /* Blank the title widget */
    gtk_entry_set_text (lv->title_entry, "");
@@ -294,27 +270,17 @@ lv_unset_lot (GNCLotViewer *lv)
 /* ======================================================================== */
 /* Callback for un-selecting a row the the list-of-list clist */
 
-void 
-lv_unselect_row_cb (GtkCList       *clist,
-                    gint            row,
-                    gint            column,
-                    GdkEvent       *event,
-                    gpointer        user_data)
+static void 
+lv_unselect_row (GNCLotViewer *lv)
 {
-   GNCLotViewer *lv = user_data;
    GNCLot *lot = lv->selected_lot;
    const char * str;
    char * notes;
 
-   if (lv->selected_row < 0)
-     return;
-
-   /* Get the title, plunk it into ctree */
-   str = gtk_entry_get_text (lv->title_entry);
-   gtk_clist_set_text (lv->lot_clist, row, TITLE_COL, str);
-
    if (lot)
    {
+      /* Get the title, save_the_title */
+      str = gtk_entry_get_text (lv->title_entry);
       gnc_lot_set_title (lot, str);
 
       /* Get the notes, save the notes */
@@ -326,6 +292,23 @@ lv_unselect_row_cb (GtkCList       *clist,
    lv_unset_lot (lv);
 }
 
+static void
+lv_selection_changed_cb (GtkTreeSelection *selection,
+			 GNCLotViewer *lv)  
+{
+   GNCLot *lot;
+   GtkTreeModel *model;
+   GtkTreeIter iter;
+
+   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+     gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &lot, -1);
+     lv_select_row(lv, lot);
+   } else {
+     lv_unselect_row(lv);
+   }
+}
+
+
 /* ======================================================================== */
 /* Callback when user types a new lot title into the entry widget */
 
@@ -333,10 +316,16 @@ void
 lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
+   GtkTreeModel *model;
+   GtkTreeIter iter;
+   GtkTreeSelection *selection;
    const char * title;
    title = gtk_entry_get_text (lv->title_entry);
-   if (0 > lv->selected_row) return; 
-   gtk_clist_set_text (lv->lot_clist, lv->selected_row, TITLE_COL, title);
+
+   selection = gtk_tree_view_get_selection(lv->lot_view);
+   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+     gtk_list_store_set(GTK_LIST_STORE(model), &iter, LOT_COL_TITLE, title, -1);
+   }
 }
 
 /* ======================================================================== */
@@ -392,16 +381,23 @@ get_realized_gains (GNCLot *lot, gnc_commodity *currency)
 static void
 gnc_lot_viewer_fill (GNCLotViewer *lv)
 {
-   int row;
    LotList *lot_list, *node;
-   GNCLot *selected_lot;
-   int selected_row = -1;
+   GNCLot *this_lot, *selected_lot = NULL;
+   GtkListStore *store;
+   GtkTreeModel *model;
+   GtkTreeIter iter;
+   GtkTreeSelection *selection;
+   gboolean found = FALSE;
 
    lot_list = xaccAccountGetLotList (lv->account);
 
-   selected_lot = lv->selected_lot;
-   gtk_clist_freeze (lv->lot_clist);
-   gtk_clist_clear (lv->lot_clist);
+   selection = gtk_tree_view_get_selection(lv->lot_view);
+   if (gtk_tree_selection_get_selected (selection, &model, &iter))
+     gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &selected_lot, -1);
+
+   /* Crazy. Should update in place if possible. */
+   gtk_list_store_clear (lv->lot_store);
+
    for (node = lot_list; node; node=node->next)
    {
       char obuff[MAX_DATE_LENGTH];
@@ -415,11 +411,13 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       gnc_numeric amt_baln = gnc_lot_get_balance (lot);
       gnc_commodity *currency = find_first_currency (lot);
       gnc_numeric gains_baln = get_realized_gains (lot, currency);
-      const char *row_vals[NUM_COLS];
+
+      store = lv->lot_store;
+      gtk_list_store_append(store, &iter);
 
       /* Opening date */
       qof_print_date_buff (obuff, MAX_DATE_LENGTH, open_date);
-      row_vals[OPEN_COL] = obuff;
+      gtk_list_store_set(store, &iter, LOT_COL_OPEN, obuff, -1);
 
       /* Closing date */
       if (gnc_lot_is_closed (lot))
@@ -429,43 +427,48 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
          time_t close_date = xaccTransGetDate (ftrans);
    
          qof_print_date_buff (cbuff, MAX_DATE_LENGTH, close_date);
-         row_vals[CLOSE_COL] = cbuff;
+	 gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, -1);
       }
       else
       {
-         row_vals[CLOSE_COL] = _("Open");
+	gtk_list_store_set(store, &iter, LOT_COL_CLOSE, cbuff, _("Open"), -1);
       }
 
       /* Title */
-      row_vals[TITLE_COL] = gnc_lot_get_title (lot);
+      gtk_list_store_set(store, &iter, LOT_COL_TITLE, gnc_lot_get_title(lot), -1);
       
       /* Amount */
       xaccSPrintAmount (baln_buff, amt_baln, 
                  gnc_account_print_info (lv->account, TRUE));
-      row_vals[BALN_COL] = baln_buff;
+      gtk_list_store_set(store, &iter, LOT_COL_BALN, baln_buff, -1);
 
       /* Capital Gains/Losses Appreciation/Depreciation */
       xaccSPrintAmount (gain_buff, gains_baln, 
                  gnc_commodity_print_info (currency, TRUE));
-      row_vals[GAINS_COL] = gain_buff;
+      gtk_list_store_set(store, &iter, LOT_COL_GAINS, gain_buff, -1);
 
       /* Self-reference */
-      row = gtk_clist_append (lv->lot_clist, (char **)row_vals);
-      gtk_clist_set_row_data (lv->lot_clist, row, lot);
-      if (lot == selected_lot) selected_row = row;
+      gtk_list_store_set(store, &iter, LOT_COL_PNTR, lot, -1);
    }
-   gtk_clist_thaw (lv->lot_clist);
 
    /* re-select the row that the user had previously selected, 
     * if possible. */
-   if (-1 < selected_row)
-   {
-      gtk_clist_select_row (lv->lot_clist, selected_row, 1);
+   if (selected_lot) {
+     model = GTK_TREE_MODEL(lv->lot_store);
+     if (gtk_tree_model_get_iter_first(model, &iter)) {
+       do {
+	 gtk_tree_model_get(model, &iter, LOT_COL_PNTR, &this_lot, -1);
+	 if (this_lot == selected_lot) {
+	   gtk_tree_selection_select_iter(selection, &iter);
+	   found = TRUE;
+	   break;
+	 }
+       } while (gtk_tree_model_iter_next(model, &iter));
+     }
    }
-   else
-   {
-      gtk_clist_unselect_all (lv->lot_clist);
-   }
+
+   if (!found)
+     gtk_tree_selection_unselect_all(selection);
 }
 
 /* ======================================================================== */
@@ -584,6 +587,58 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
 /* ======================================================================== */
 
 static void
+lv_init_lot_view (GNCLotViewer *lv)
+{
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+  GtkCellRenderer *renderer;
+
+  g_return_if_fail(GTK_IS_TREE_VIEW(lv->lot_view));
+
+  view = lv->lot_view;
+  store = gtk_list_store_new(NUM_LOT_COLS, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+			     G_TYPE_POINTER);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  lv->lot_store = store;
+
+  /* Set up the columns */
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Opened"), renderer,
+						    "text", LOT_COL_OPEN, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Closed"), renderer,
+						    "text", LOT_COL_CLOSE, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
+						    "text", LOT_COL_TITLE, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
+						    "text", LOT_COL_BALN, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
+						    "text", LOT_COL_GAINS, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  /* Set up the selection callbacks */
+  selection =  gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(lv_selection_changed_cb), lv);
+}
+
+/* ======================================================================== */
+
+static void
 lv_create (GNCLotViewer *lv)
 {
    GladeXML *xml;
@@ -603,7 +658,8 @@ lv_create (GNCLotViewer *lv)
    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
    lv->scrub_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub lot button"));
 
-   lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
+   lv->lot_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "lot view"));
+   lv_init_lot_view(lv);
    lv->lot_notes = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "lot notes text"));
    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
 
@@ -620,18 +676,11 @@ lv_create (GNCLotViewer *lv)
    lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
 
    lv->selected_lot = NULL;
-   lv->selected_row = -1;
     
    /* Setup signals */
    glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
                                      lv);
-
-   g_signal_connect (lv->lot_clist, "select_row",
-                     G_CALLBACK (lv_select_row_cb), lv);
-
-   g_signal_connect (lv->lot_clist, "unselect_row",
-                     G_CALLBACK (lv_unselect_row_cb), lv);
 
    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
 }

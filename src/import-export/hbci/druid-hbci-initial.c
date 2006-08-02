@@ -1,6 +1,7 @@
 /********************************************************************\
  * druid-hbci-initial.c -- hbci creation functionality              *
  * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -51,6 +52,15 @@
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
+enum account_list_cols {
+  ACCOUNT_LIST_COL_INDEX = 0,
+  ACCOUNT_LIST_COL_HBCI_NAME,
+  ACCOUNT_LIST_COL_HBCI_ACCT,
+  ACCOUNT_LIST_COL_GNC_NAME,
+  ACCOUNT_LIST_COL_CHECKED,
+  NUM_ACCOUNT_LIST_COLS
+};
+
 struct _hbciinitialinfo 
 {
   GtkWidget *window;
@@ -61,34 +71,18 @@ struct _hbciinitialinfo
   
   /* account match page */
   GtkWidget *accountpage;
-  GtkWidget *accountlist;
+  GtkTreeView *accountview;
+  GtkListStore *accountstore;
     
   /* OpenHBCI stuff */
   AB_BANKING *api;
   GNCInteractor *interactor;
 
-  /* account match: row_number (int) -> hbci_account */
-  GHashTable *hbci_hash;
   /* hbci_account (direct) -> gnucash_account  -- DO NOT DELETE THE KEYS! */
   GHashTable *gnc_hash;
 
 };
 
-static gboolean
-hash_remove (gpointer key, gpointer value, gpointer user_data) 
-{
-  free (key);
-  return TRUE;
-}
-
-static void
-delete_hash (GHashTable *hash) 
-{
-  if (hash != NULL) {
-    g_hash_table_foreach_remove (hash, &hash_remove, NULL);
-    g_hash_table_destroy (hash);
-  }
-}
 static void
 reset_initial_info (HBCIInitialInfo *info)
 {
@@ -99,8 +93,6 @@ reset_initial_info (HBCIInitialInfo *info)
   }
   info->api = NULL;
 
-  delete_hash (info->hbci_hash);
-  info->hbci_hash = NULL;
   if (info->gnc_hash != NULL)
     g_hash_table_destroy (info->gnc_hash);
   info->gnc_hash = NULL;
@@ -150,48 +142,47 @@ static AB_ACCOUNT *
 update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  gchar *row_text[3];
+  gchar *gnc_name, *hbci_name;
   Account *gacc;
-  int row;
-  gint *row_key;
+  GtkTreeIter iter;
 
   g_assert(hacc);
   g_assert(info);
-  row_text[2] = "";
-  
-  row_text[0] = gnc_hbci_account_longname(hacc);
+
+  hbci_name = gnc_hbci_account_longname(hacc);
 		
   /* Get corresponding gnucash account */
   gacc = g_hash_table_lookup (info->gnc_hash, hacc);
 
   /* Build the text for the gnucash account. */
   if (gacc == NULL)
-    row_text[1] = "";
+    gnc_name = g_strdup("");
   else 
-    row_text[1] = xaccAccountGetFullName (gacc);
+    gnc_name = xaccAccountGetFullName (gacc);
 
-  /* Add this row to the list */
-  row = gtk_clist_append (GTK_CLIST (info->accountlist), row_text);
+  gtk_list_store_append(info->accountstore, &iter);
+  gtk_list_store_set(info->accountstore, &iter,
+		     ACCOUNT_LIST_COL_HBCI_NAME, hbci_name,
+		     ACCOUNT_LIST_COL_HBCI_ACCT, hacc,
+		     ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
+		     ACCOUNT_LIST_COL_CHECKED, FALSE,
+		     -1);
 
-  /* Set the "new" checkbox. */
-  gnc_clist_set_check (GTK_CLIST (info->accountlist), row, 2,
-		       FALSE);
-
-  /* Store the row_number -> hbci_account hash reference. */
-  row_key = g_new(gint, 1);
-  *row_key = row;
-  g_hash_table_insert (info->hbci_hash, row_key, (AB_ACCOUNT*)hacc);
-
+  g_free(gnc_name);
+  g_free(hbci_name);
   return NULL;
 }
 
-/* Update the account list GtkCList widget */
+/* Update the account list GtkListStore widget */
 static void
 update_accountlist (HBCIInitialInfo *info)
 {
-  int sel_row = 0;
   AB_BANKING *banking;
   AB_ACCOUNT_LIST2 *acclist;
+  GtkTreeModel *model;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  GtkTreePath *path = NULL;
 
   g_assert(info);
   banking = info->api;
@@ -199,15 +190,12 @@ update_accountlist (HBCIInitialInfo *info)
   g_assert(info->gnc_hash);
 
   /* Store old selected row here. */
-  sel_row = (GTK_CLIST(info->accountlist))->focus_row;
+  selection = gtk_tree_view_get_selection(info->accountview);
+  if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    path = gtk_tree_model_get_path(model, &iter);
 
   /* Delete old list */
-  gtk_clist_freeze (GTK_CLIST (info->accountlist));
-  gtk_clist_clear (GTK_CLIST (info->accountlist));
-
-  /* Delete old hash with row_number -> hbci_account */
-  delete_hash (info->hbci_hash);
-  info->hbci_hash = g_hash_table_new (&g_int_hash, &g_int_equal);
+  gtk_list_store_clear(info->accountstore);
   
   /* Go through all HBCI accounts */
   acclist = AB_Banking_GetAccounts(banking);
@@ -218,14 +206,13 @@ update_accountlist (HBCIInitialInfo *info)
   else
     printf("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
 
-  /* printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash)); */
   /* printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
-  
-  gtk_clist_thaw (GTK_CLIST (info->accountlist));
 
-  /* move to the old selected row */
-  (GTK_CLIST(info->accountlist))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(info->accountlist), sel_row, 0, 0.0, 0.0);
+  if (path) {
+    gtk_tree_selection_select_path(selection, path);
+    gtk_tree_view_scroll_to_cell(info->accountview, path, NULL, FALSE, 0.0, 0.0);
+    gtk_tree_path_free(path);
+  }
 }
 /*
  * end update_accountlist 
@@ -344,17 +331,24 @@ on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
 
 
 static void
-on_accountlist_select_row (GtkCList *clist, gint row,
-			   gint column, GdkEvent *event,
-			   gpointer user_data)
+on_accountlist_changed (GtkTreeSelection *selection,
+			gpointer          user_data)     
 {
   HBCIInitialInfo *info = user_data;
   AB_ACCOUNT *hbci_acc;
   Account *gnc_acc, *old_value;
-  gchar *longname;
+  gchar *longname, *gnc_name;
   gnc_commodity *currency = NULL;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
   
-  hbci_acc = g_hash_table_lookup (info->hbci_hash, &row);
+  if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    return;
+  gtk_tree_selection_unselect_iter(selection, &iter);
+  gtk_tree_model_get(model, &iter,
+		     ACCOUNT_LIST_COL_HBCI_ACCT, &hbci_acc,
+		     -1);
+
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
@@ -378,12 +372,17 @@ on_accountlist_select_row (GtkCList *clist, gint row,
     if (gnc_acc) {
       if (old_value) 
 	g_hash_table_remove (info->gnc_hash, hbci_acc);
-      
       g_hash_table_insert (info->gnc_hash, hbci_acc, gnc_acc);
+      gnc_name = xaccAccountGetFullName (gnc_acc);
+      gtk_list_store_set(info->accountstore, &iter,
+			 ACCOUNT_LIST_COL_GNC_NAME, gnc_name,
+			 -1);
+      g_free(gnc_name);
+    } else {
+      gtk_list_store_set(info->accountstore, &iter,
+			 ACCOUNT_LIST_COL_GNC_NAME, "",
+			 -1);
     }
-    
-    /* update display */
-    update_accountlist(info);
   } /* hbci_acc */
 }
 
@@ -544,8 +543,6 @@ on_aqhbci_button (GtkButton *button,
 
     /* Reset existing mapping tables */
     AB_Banking_Fini (info->api);
-    delete_hash (info->hbci_hash);
-    info->hbci_hash = NULL;
     if (info->gnc_hash != NULL)
       g_hash_table_destroy (info->gnc_hash);
     info->gnc_hash = NULL;
@@ -626,6 +623,9 @@ void gnc_hbci_initial_druid (void)
   HBCIInitialInfo *info;
   GladeXML *xml;
   GtkWidget *page;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
   
   info = g_new0 (HBCIInitialInfo, 1);
 
@@ -657,9 +657,39 @@ void gnc_hbci_initial_druid (void)
   {
     page = glade_xml_get_widget(xml, "account_match_page");
     info->accountpage = page;
-    info->accountlist = glade_xml_get_widget(xml, "account_page_list");
-    g_signal_connect (info->accountlist, "select_row",
-		      G_CALLBACK (on_accountlist_select_row), info);
+    info->accountview =
+      GTK_TREE_VIEW(glade_xml_get_widget(xml, "account_page_view"));
+    info->accountstore = gtk_list_store_new(NUM_ACCOUNT_LIST_COLS,
+					    G_TYPE_INT, G_TYPE_STRING,
+					    G_TYPE_POINTER, G_TYPE_STRING,
+					    G_TYPE_BOOLEAN);
+    gtk_tree_view_set_model(info->accountview, GTK_TREE_MODEL(info->accountstore));
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("HBCI account name"),
+						      renderer,
+						      "text", ACCOUNT_LIST_COL_HBCI_NAME,
+						      NULL);
+    gtk_tree_view_append_column(info->accountview, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"),
+						      renderer,
+						      "text", ACCOUNT_LIST_COL_GNC_NAME,
+						      NULL);
+    gtk_tree_view_append_column(info->accountview, column);
+    gtk_tree_view_column_set_expand(column, TRUE);
+
+    renderer = gtk_cell_renderer_toggle_new();
+    column = gtk_tree_view_column_new_with_attributes(_("New?"),
+						      renderer,
+						      "active", ACCOUNT_LIST_COL_CHECKED,
+						      NULL);
+    gtk_tree_view_append_column(info->accountview, column);
+
+    selection = gtk_tree_view_get_selection(info->accountview);
+    g_signal_connect (selection, "changed",
+		      G_CALLBACK (on_accountlist_changed), info);
     g_signal_connect (page, "prepare", 
 		      G_CALLBACK (on_accountlist_prepare), info);
   }

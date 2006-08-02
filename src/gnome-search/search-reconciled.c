@@ -3,6 +3,8 @@
  *
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
@@ -29,6 +31,7 @@
 #include "Transaction.h"	/* for ?REC */
 
 #include "search-reconciled.h"
+#include "search-core-utils.h"
 
 #define d(x)
 
@@ -160,13 +163,6 @@ gncs_validate (GNCSearchCoreType *fe)
 }
 
 static void
-option_changed (GtkWidget *widget, GNCSearchReconciled *fe)
-{
-  fe->how = (char_match_t)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static void
 toggle_changed (GtkToggleButton *button, GNCSearchReconciled *fe)
 {
   gboolean is_on = gtk_toggle_button_get_active (button);
@@ -180,43 +176,18 @@ toggle_changed (GtkToggleButton *button, GNCSearchReconciled *fe)
 }
 
 static GtkWidget *
-add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       char_match_t option)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-#define ADD_MENU_ITEM(str,op) { \
-	item = add_menu_item (menu, fe, str, op); \
-	if (fi->how == op) { current = index; first = item; } \
-	index++; \
-} 
-
-static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
   GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0, index = 0;
+  GtkComboBox *combo;
 
-  menu = gtk_menu_new ();
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+  gnc_combo_box_search_add(combo, _("is"), CHAR_MATCH_ANY);
+  gnc_combo_box_search_add(combo, _("is not"), CHAR_MATCH_NONE);
+  gnc_combo_box_search_changed(combo, &fi->how);
+  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : CHAR_MATCH_ANY);
 
-  ADD_MENU_ITEM (_("is"), CHAR_MATCH_ANY);
-  first = item;			/* Force one */ 
-  ADD_MENU_ITEM (_("is not"), CHAR_MATCH_NONE);
-
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
-
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
-
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static GtkWidget *

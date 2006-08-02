@@ -3,6 +3,7 @@
  *                           scheduled transaction from a real one  *
  * Copyright (C) 2001 Robert Merkel <rgmerk@mira.net>               *
  * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -55,7 +56,7 @@
 #define SXFTD_PARAM_TABLE "param_table"
 #define SXFTD_NAME_ENTRY "name_entry"
 #define SXFTD_N_OCCURRENCES_ENTRY "n_occurrences_entry"
-#define SXFTD_FREQ_OPTION_MENU "freq_option_menu"
+#define SXFTD_FREQ_COMBO_BOX "freq_combo_box"
 /* #define SXFTD_END_DATE_EDIT "end_date_edit" */
 #define SXFTD_START_DATE_EDIT "start_date_edit"
 #define SXFTD_EX_CAL_FRAME "ex_cal_frame"
@@ -71,7 +72,7 @@
 
 static QofLogModule log_module = GNC_MOD_SX;
 
-static void sxftd_freq_option_changed( GtkWidget *w, gpointer user_data );
+static void sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
 
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
@@ -295,8 +296,8 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
 
   /* Note that we make the start date the *NEXT* instance, not the
    * present one. */
-  w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_OPTION_MENU);
-  index = gnc_option_menu_get_active(w);
+  w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_COMBO_BOX);
+  index = gtk_combo_box_get_active(GTK_COMBO_BOX(w));
 
   switch(index)
   {
@@ -423,6 +424,12 @@ sxftd_init( SXFromTransInfo *sxfti )
   /* compute good initial date. */
   start_tt = xaccTransGetDate( sxfti->trans );
   g_date_set_time_t( &date, start_tt );
+  w = glade_xml_get_widget(sxfti->gxml,
+			   SXFTD_FREQ_COMBO_BOX);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(w), 0);
+  g_signal_connect( w, "changed",
+                    G_CALLBACK(sxftd_freq_combo_changed),
+                    sxfti );
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
@@ -437,14 +444,6 @@ sxftd_init( SXFromTransInfo *sxfti )
   pos = 0;
   gtk_editable_insert_text( GTK_EDITABLE(w), transName,
                             (strlen(transName) * sizeof(char)), &pos );
-
-  w = glade_xml_get_widget(sxfti->gxml,
-			   SXFTD_FREQ_OPTION_MENU);
-  gnc_option_menu_init(w);
-  w = gtk_option_menu_get_menu( GTK_OPTION_MENU(w) );
-  g_signal_connect( GTK_OBJECT(w), "selection-done",
-                    G_CALLBACK(sxftd_freq_option_changed),
-                    sxfti );
 
   g_signal_connect( GTK_OBJECT(w), "destroy",
                     G_CALLBACK(sxftd_destroy),
@@ -588,7 +587,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
  * somehow.
  **/
 static void
-sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
+sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
 {
   SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
   GDate date, nextDate;

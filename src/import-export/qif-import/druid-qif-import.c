@@ -1,7 +1,8 @@
 /********************************************************************\
- * druid-qif-import.c -- window for importing QIF files            *
+ * druid-qif-import.c -- window for importing QIF files             *
  *                        (GnuCash)                                 *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -43,6 +44,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
@@ -51,21 +53,45 @@
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
 
+#define PREV_ROW "prev_row"
+
+enum filename_cols {
+  FILENAME_COL_INDEX = 0,
+  FILENAME_COL_NAME,
+  NUM_FILENAME_COLS
+};
+
+enum account_cols {
+  ACCOUNT_COL_INDEX = 0,
+  ACCOUNT_COL_QIF_NAME,
+  ACCOUNT_COL_GNC_NAME,
+  ACCOUNT_COL_NEW,
+  NUM_ACCOUNT_COLS
+};
+
+enum qif_trans_cols {
+  QIF_TRANS_COL_INDEX = 0,
+  QIF_TRANS_COL_DATE,
+  QIF_TRANS_COL_DESCRIPTION,
+  QIF_TRANS_COL_AMOUNT,
+  QIF_TRANS_COL_CHECKED,
+  NUM_QIF_TRANS_COLS
+};
+
 struct _qifimportwindow {
   GtkWidget * window;
   GtkWidget * druid;
   GtkWidget * filename_entry;
   GtkWidget * acct_entry;
   GtkWidget * date_format_combo;
-  GtkWidget * date_format_entry;
-  GtkWidget * selected_file_list;
-  GtkWidget * acct_list;
-  GtkWidget * cat_list;
-  GtkWidget * memo_list;
+  GtkWidget * selected_file_view;
+  GtkWidget * acct_view;
+  GtkWidget * cat_view;
+  GtkWidget * memo_view;
   GtkWidget * currency_picker;
   GtkWidget * currency_entry;
-  GtkWidget * new_transaction_list;
-  GtkWidget * old_transaction_list;
+  GtkWidget * new_transaction_view;
+  GtkWidget * old_transaction_view;
   
   GList     * pre_comm_pages;
   GList     * commodity_pages;
@@ -113,7 +139,7 @@ static void update_categories_page(QIFImportWindow * win);
 static void update_memo_page(QIFImportWindow * win);
 
 static void update_account_picker_page(QIFImportWindow * wind,
-				       SCM make_display, GtkWidget *list,
+				       SCM make_display, GtkWidget *view,
 				       SCM map_info, SCM * display_info);
 
 static void gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
@@ -427,9 +453,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   const char * path_to_load;
   const gchar * default_acctname = NULL;
 
-  GList * format_strings;
-  GList * listit;
-
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
   SCM qif_file_parse  = scm_c_eval_string("qif-file:parse-fields");
@@ -548,24 +571,16 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       if(SCM_LISTP(parse_return) && 
          (SCM_CAR(parse_return) == SCM_BOOL_T)) {
 
+	gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
 	if ((date_formats = scm_call_2(qif_file_parse_results,
 				       SCM_CDR(parse_return),
 				       scm_str2symbol("date"))) != SCM_BOOL_F) {
-	  format_strings = NULL;
 	  while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
-	    format_strings = 
-	      g_list_append(format_strings, 
-			    g_strdup(SCM_SYMBOL_CHARS(SCM_CAR(date_formats))));
+	    gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
+				      SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
 	    date_formats = SCM_CDR(date_formats);
 	  }
-	  gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
-					format_strings);
-
-	  for(listit = format_strings; listit; listit=listit->next) {
-	    free(listit->data);
-	    listit->data = NULL;
-	  }
-	  g_list_free(format_strings);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), 0);
         
 	  ask_date_format = TRUE;
 
@@ -639,9 +654,12 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
 
   SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
   SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
-  SCM  format_sym = 
-    scm_str2symbol(gtk_entry_get_text(GTK_ENTRY(wind->date_format_entry)));
+  SCM  format_sym;
+  gchar *text;
   
+  text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->date_format_combo));
+  format_sym = scm_str2symbol(text);
+  g_free(text);
   scm_call_2(reparse_dates, wind->selected_file, format_sym);
   
   if(scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
@@ -670,20 +688,28 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
  ****************************************************************/
 
 static void
-gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
-                                        int row, int column,
-                                        GdkEvent   * event,
-                                        gpointer  user_data)
+gnc_ui_qif_import_select_loaded_file_cb (GtkTreeSelection *selection,
+					 gpointer          user_data)   
 {
   QIFImportWindow * wind = user_data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint row;
 
-  if(SCM_LISTP(wind->imported_files) && 
-     (scm_ilength(wind->imported_files) > row)) {
+  if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+    gtk_tree_model_get(model, &iter, FILENAME_COL_INDEX, &row, -1);
+    if(SCM_LISTP(wind->imported_files) && 
+       (scm_ilength(wind->imported_files) > row)) {
+      scm_gc_unprotect_object(wind->selected_file);
+      wind->selected_file = scm_list_ref(wind->imported_files,
+					 scm_int2num(row));   
+      scm_gc_protect_object(wind->selected_file);
+    } 
+  } else {
     scm_gc_unprotect_object(wind->selected_file);
-    wind->selected_file = scm_list_ref(wind->imported_files,
-				       scm_int2num(row));   
+    wind->selected_file = SCM_BOOL_F;
     scm_gc_protect_object(wind->selected_file);
-  } 
+  }
 }
 
 /********************************************************************
@@ -768,38 +794,47 @@ update_file_page(QIFImportWindow * wind)
   SCM       loaded_file_list = wind->imported_files;
   SCM       scm_qiffile = SCM_BOOL_F;
   SCM       qif_file_path;
-  int       row;
-  int       sel_item=-1;
+  int       row = 0;
   char      * row_text;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeRowReference *reference = NULL;
 
   /* clear the list */
-  gtk_clist_clear(GTK_CLIST(wind->selected_file_list));
+  view = GTK_TREE_VIEW(wind->selected_file_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
   qif_file_path = scm_c_eval_string("qif-file:path");
-  
-  /* iterate over all the imported files */
-  gtk_clist_freeze(GTK_CLIST(wind->selected_file_list));
   
   while(!SCM_NULLP(loaded_file_list)) {  
     scm_qiffile = SCM_CAR(loaded_file_list);
     row_text    = SCM_STRING_CHARS(scm_call_1(qif_file_path, scm_qiffile));
 
-    row = gtk_clist_append(GTK_CLIST(wind->selected_file_list),
-                           &row_text);
-
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       FILENAME_COL_INDEX, row++,
+		       FILENAME_COL_NAME, row_text,
+		       -1);
     if(scm_qiffile == wind->selected_file) {
-      sel_item = row;
+      path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+      reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+      gtk_tree_path_free(path);
     }
 
     loaded_file_list = SCM_CDR(loaded_file_list);
   }
-  gtk_clist_thaw(GTK_CLIST(wind->selected_file_list));
 
-  if(sel_item >= 0) {
-    gtk_clist_select_row(GTK_CLIST(wind->selected_file_list), sel_item, 0);
+  if (reference) {
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(view);
+    path = gtk_tree_row_reference_get_path(reference);
+    if (path) {
+      gtk_tree_selection_select_path(selection, path);
+      gtk_tree_path_free(path);
+    }
+    gtk_tree_row_reference_free(reference);
   }
-
-  /* Wheee! Look at me! I'm a little one-line hack to make stuff work! */
-  gtk_widget_queue_resize (wind->window);
 }
 
 
@@ -868,28 +903,32 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
  * update_account_picker_page 
  * Generic function to update an account_picker page.  This
  * generalizes the code shared whenever any QIF -> GNC mapper is
- * updating it's CLIST.  It asks the Scheme side to guess some account
+ * updating it's LIST STORE.  It asks the Scheme side to guess some account
  * translations and then shows the account name and suggested
- * translation in the Accounts page clist (acount picker list).
+ * translation in the Accounts page view (acount picker list).
  ****************************************************************/
 
 static void
 update_account_picker_page(QIFImportWindow * wind, SCM make_display,
-			   GtkWidget *list, SCM map_info, SCM * display_info)
+			   GtkWidget *view, SCM map_info, SCM * display_info)
 {
 
   SCM  get_qif_name = scm_c_eval_string("qif-map-entry:qif-name");
   SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
   SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
   SCM  accts_left;
-  int  sel_row=0;
-  char * row_text[3];
-  int  row;
+  const gchar *qif_name, *gnc_name;
+  gboolean checked;
+  gint row = 0;
+  gint prev_row;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection *selection;
 
-  /* get the old selection row */
-  sel_row = (GTK_CLIST(list))->focus_row;
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(view)));
 
-  /* now get the list of strings to display in the clist widget */
+  /* now get the list of strings to display in the gtk_list_store widget */
   accts_left = scm_call_3(make_display,
 			  wind->imported_files,
 			  map_info, 
@@ -899,37 +938,32 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
   *display_info = accts_left;  
   scm_gc_protect_object(*display_info);
   
-  gtk_clist_column_titles_passive (GTK_CLIST(list));
-
   /* clear the list */
-  gtk_clist_clear(GTK_CLIST(list));
-
-  /* update the text in the boxes */
-  gtk_clist_freeze(GTK_CLIST(list));
-
-  gtk_clist_set_column_justification(GTK_CLIST(list),
-                                     2,
-                                     GTK_JUSTIFY_CENTER);
-
-  row_text[2] = "";
+  gtk_list_store_clear(store);
 
   while(!SCM_NULLP(accts_left)) {
-    row_text[0] = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
-    row_text[1] = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
-    
-    row = gtk_clist_append(GTK_CLIST(list), row_text);
+    qif_name = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
+    gnc_name = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
+    checked  = (scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
-    gnc_clist_set_check (GTK_CLIST(list), row, 2,
-                         scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
-
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       ACCOUNT_COL_INDEX,    row++,
+		       ACCOUNT_COL_QIF_NAME, qif_name,
+		       ACCOUNT_COL_GNC_NAME, gnc_name,
+		       ACCOUNT_COL_NEW,      checked,
+		       -1);
     accts_left = SCM_CDR(accts_left);
   }
 
-  gtk_clist_thaw(GTK_CLIST(list));
-
   /* move to the old selected row */
-  (GTK_CLIST(list))->focus_row = sel_row;
-  gtk_clist_moveto(GTK_CLIST(list), sel_row, 0, 0.0, 0.0);
+  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(store), PREV_ROW));
+  if (prev_row != -1) {
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+    path = gtk_tree_path_new_from_indices (prev_row, -1);
+    gtk_tree_selection_select_path(selection, path);
+    gtk_tree_path_free(path);
+  }
 }
 
 
@@ -944,7 +978,7 @@ update_accounts_page(QIFImportWindow * wind)
 
   SCM  make_account_display = scm_c_eval_string("qif-dialog:make-account-display");
 
-  update_account_picker_page (wind, make_account_display, wind->acct_list,
+  update_account_picker_page (wind, make_account_display, wind->acct_view,
 			      wind->acct_map_info, &(wind->acct_display_info));
 }
 
@@ -958,7 +992,7 @@ update_categories_page(QIFImportWindow * wind)
 {
   SCM  make_category_display = scm_c_eval_string("qif-dialog:make-category-display");
 
-  update_account_picker_page (wind, make_category_display, wind->cat_list,
+  update_account_picker_page (wind, make_category_display, wind->cat_view,
 			      wind->cat_map_info, &(wind->cat_display_info));
 }
 
@@ -972,8 +1006,54 @@ update_memo_page(QIFImportWindow * wind)
 {
   SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
 
-  update_account_picker_page (wind, make_memo_display, wind->memo_list,
+  update_account_picker_page (wind, make_memo_display, wind->memo_view,
 			      wind->memo_map_info, &(wind->memo_display_info));
+}
+
+
+/********************************************************************
+ ********************************************************************/
+
+static void
+create_account_picker_view(GtkWidget *widget,
+			   const gchar *col_name,
+			   GCallback callback,
+			   gpointer user_data)
+{
+  GtkTreeView *view = GTK_TREE_VIEW(widget);
+  GtkListStore *store;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+
+  store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_BOOLEAN);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(col_name, renderer,
+						    "text", ACCOUNT_COL_QIF_NAME,
+						    NULL);
+  g_object_set(column, "expand", TRUE, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"), renderer,
+						    "text", ACCOUNT_COL_GNC_NAME,
+						    NULL);
+  g_object_set(column, "expand", TRUE, NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_toggle_new();
+  g_object_set(renderer, "activatable", FALSE, NULL);
+  column = gtk_tree_view_column_new_with_attributes(_("New?"), renderer,
+						    "active", ACCOUNT_COL_NEW,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  g_object_set_data(G_OBJECT(store), PREV_ROW, GINT_TO_POINTER(-1));
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed", callback, user_data);
 }
 
 /********************************************************************
@@ -985,12 +1065,26 @@ update_memo_page(QIFImportWindow * wind)
  * function.
  ********************************************************************/
 static void
-select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
+select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
+	     SCM display_info, SCM map_info,
 	     void (*update_page)(QIFImportWindow *))
 {
   SCM   get_name = scm_c_eval_string("qif-map-entry:qif-name");
   SCM   selected_acct;
-  
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint row, prev_row;
+
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return;
+  gtk_tree_model_get(model, &iter, ACCOUNT_COL_INDEX, &row, -1);
+  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), PREV_ROW));
+  if (row == prev_row)
+    return;
+  g_object_set_data(G_OBJECT(model), PREV_ROW, GINT_TO_POINTER(row));
+  if (row == -1)
+    return;
+
   /* find the <qif-map-entry> corresponding to the selected row */
   selected_acct = scm_list_ref(display_info, scm_int2num(row));
   
@@ -1010,13 +1104,11 @@ select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
-                                         gint column, GdkEvent * event,
-                                         gpointer user_data)
+gnc_ui_qif_import_account_line_select_cb(GtkTreeSelection *selection,
+					 gpointer          user_data)   
 {
   QIFImportWindow * wind = user_data;
-
-  select_line (wind, row, wind->acct_display_info, wind->acct_map_info,
+  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_accounts_page);
 }
 
@@ -1027,13 +1119,11 @@ gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
-                                          gint column, GdkEvent * event,
-                                          gpointer user_data)
+gnc_ui_qif_import_category_line_select_cb(GtkTreeSelection *selection,
+					  gpointer          user_data)   
 {
   QIFImportWindow * wind = user_data;
-
-  select_line (wind, row, wind->cat_display_info, wind->cat_map_info,
+  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_categories_page);
 }
 
@@ -1044,13 +1134,11 @@ gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_memo_line_select_cb(GtkCList * clist, gint row,
-                                      gint column, GdkEvent * event,
-                                      gpointer user_data)
+gnc_ui_qif_import_memo_line_select_cb(GtkTreeSelection *selection,
+				      gpointer          user_data)   
 {
   QIFImportWindow * wind = user_data;
-
-  select_line (wind, row, wind->memo_display_info, wind->memo_map_info,
+  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_memo_page);
 }
 
@@ -1128,12 +1216,17 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   Transaction  * gnc_xtn;
   Split        * gnc_split;
   gnc_commodity * old_commodity;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection* selection;
 
   const char * mnemonic = NULL; 
-  const char * namespace = NULL;
+  gchar * namespace = NULL;
   const char * fullname = NULL;
-  const gchar * row_text[4] = { NULL, NULL, NULL, NULL };
-  int  rownum;
+  const gchar * amount_str;
+  int  rownum = 0;
 
   /* get the default currency */
   const char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
@@ -1148,13 +1241,14 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
+    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
     fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
     
     gnc_commodity_set_namespace(page->commodity, namespace);
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
+    g_free(namespace);
     old_commodity = page->commodity;
     page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
@@ -1212,41 +1306,43 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
       return FALSE;
     }
 
-    gtk_clist_column_titles_passive (GTK_CLIST(wind->new_transaction_list));
-
     /* otherwise, make up the display for the duplicates page */
-    gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
-    gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
+    view = GTK_TREE_VIEW(wind->new_transaction_view);
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+    gtk_list_store_clear(store);
 
     while(!SCM_NULLP(retval)) {
       current_xtn = SCM_CAAR(retval);
       gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
-      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
-
-      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
-      row_text[1] = xaccTransGetDescription(gnc_xtn);
 
       if(xaccTransCountSplits(gnc_xtn) > 2) {
-        row_text[2] = g_strdup(_("(split)")); 
+        amount_str = _("(split)"); 
       }
       else {
-        row_text[2] = 
+	gnc_split = xaccTransGetSplit(gnc_xtn, 0);  
+        amount_str = 
           xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
                           gnc_account_print_info
                           (xaccSplitGetAccount(gnc_split), TRUE));
       }
 
-      rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
-                                (gchar **) row_text);      
-      
+      gtk_list_store_append(store, &iter);
+      gtk_list_store_set
+	(store, &iter,
+	 QIF_TRANS_COL_INDEX, rownum++,
+	 QIF_TRANS_COL_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+	 QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+	 QIF_TRANS_COL_AMOUNT, amount_str,
+	 -1);
+
       retval      = SCM_CDR(retval); 
     }
 
-    gtk_clist_columns_autosize(GTK_CLIST(wind->new_transaction_list));
-
-    gtk_clist_thaw(GTK_CLIST(wind->new_transaction_list));        
-    gtk_clist_select_row(GTK_CLIST(wind->new_transaction_list), 0, 0);
-  }  
+    selection = gtk_tree_view_get_selection(view);
+    path = gtk_tree_path_new_from_indices (0, -1);
+    gtk_tree_selection_select_path(selection, path);
+    gtk_tree_path_free(path);
+  }
 
   gnc_resume_gui_refresh();
   return TRUE;
@@ -1384,7 +1480,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
   QIFDruidPage    * qpage = g_object_get_data(G_OBJECT(page), "page_struct");
   
-  const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
+  gchar *namespace       = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
   const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
   int  show_matches;
@@ -1392,6 +1488,8 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   if(!namespace || (namespace[0] == 0)) {
     gnc_warning_dialog(wind->window,
 		       _("You must enter a Type for the commodity."));
+    if (namespace)
+      g_free(namespace);
     return TRUE;
   }
   else if(!name || (name[0] == 0)) {
@@ -1413,8 +1511,10 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
 		       _("You must enter an existing national "
 			 "currency or enter a different type."));
 
+    g_free(namespace);
     return TRUE;
   }
+  g_free(namespace);
 
   if(page == (g_list_last(wind->commodity_pages))->data) {
     /* it's time to import the accounts. */
@@ -1568,9 +1668,9 @@ make_qif_druid_page(gnc_commodity * comm)
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  retval->new_type_combo = gtk_combo_new(); 
-  gtk_box_pack_start(GTK_BOX(temp),
-                     retval->new_type_combo, TRUE, TRUE, 0);
+  retval->new_type_combo = gtk_combo_box_entry_new_text();
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
+  gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
 
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
@@ -1641,17 +1741,15 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
   SCM          selected;
   Transaction  * gnc_xtn;
   Split        * gnc_split;
-  const gchar  * row_text[4] = { NULL, NULL, NULL, NULL };
-  int          rownum;
+  const gchar  * amount_str;
+  int          rownum = 0;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkTreeIter iter;
 
-  gtk_clist_column_titles_passive (GTK_CLIST(wind->old_transaction_list));
-
-  gtk_clist_clear(GTK_CLIST(wind->old_transaction_list));
-  gtk_clist_freeze(GTK_CLIST(wind->old_transaction_list));
-
-  gtk_clist_set_column_justification(GTK_CLIST(wind->old_transaction_list),
-                                     3,
-                                     GTK_JUSTIFY_CENTER);
+  view = GTK_TREE_VIEW(wind->old_transaction_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
 
   if(wind->match_transactions != SCM_BOOL_F) {
     possible_matches = SCM_CDR(scm_list_ref(wind->match_transactions,
@@ -1659,59 +1757,86 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
     scm_call_2(scm_c_eval_string("qif-import:refresh-match-selection"),
 	       possible_matches, scm_int2num(selection));
 
-    row_text[3] = "";
-
     while(!SCM_NULLP(possible_matches)) {
       current_xtn = SCM_CAR(possible_matches);
       gnc_xtn     = (Transaction *)gw_wcp_get_ptr(SCM_CAR(current_xtn));
       selected    = SCM_CDR(current_xtn);
-      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
-      
-      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
-      row_text[1] = xaccTransGetDescription(gnc_xtn);
       
       if(xaccTransCountSplits(gnc_xtn) > 2) {
-        row_text[2] = _("(split)");
+        amount_str = _("(split)"); 
       }
       else {
-        row_text[2] = 
+	gnc_split = xaccTransGetSplit(gnc_xtn, 0);  
+        amount_str = 
           xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
                           gnc_account_print_info
                           (xaccSplitGetAccount(gnc_split), TRUE));
       }
-      
-      rownum = gtk_clist_append(GTK_CLIST(wind->old_transaction_list),
-                                (gchar **) row_text);
 
-      gnc_clist_set_check (GTK_CLIST(wind->old_transaction_list),
-                           rownum, 3, selected != SCM_BOOL_F);
+      gtk_list_store_append(store, &iter);
+      gtk_list_store_set
+	(store, &iter,
+	 QIF_TRANS_COL_INDEX, rownum++,
+	 QIF_TRANS_COL_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+	 QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+	 QIF_TRANS_COL_AMOUNT, amount_str,
+	 QIF_TRANS_COL_CHECKED, selected != SCM_BOOL_F,
+	 -1);
 
       possible_matches = SCM_CDR(possible_matches);
     }
   }
-
-  gtk_clist_columns_autosize (GTK_CLIST(wind->old_transaction_list));
-
-  gtk_clist_thaw(GTK_CLIST(wind->old_transaction_list));
 }
 
 static void
-gnc_ui_qif_import_duplicate_new_select_cb(GtkCList * clist, int row, int col, 
-                                          GdkEvent * ev, gpointer user_data)
+gnc_ui_qif_import_duplicate_new_select_cb (GtkTreeSelection *selection,
+					   QIFImportWindow  *wind)
 {
-  QIFImportWindow * wind = user_data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
 
-  wind->selected_transaction = row;
+  if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    gtk_tree_model_get(model, &iter,
+		       QIF_TRANS_COL_INDEX, &wind->selected_transaction,
+		       -1);
   refresh_old_transactions(wind, -1);
 }
 
+static gboolean
+reset_ignore_old_select(gboolean *ignore)
+{
+  *ignore = FALSE;
+  return FALSE;
+}
 
 static void
-gnc_ui_qif_import_duplicate_old_select_cb(GtkCList * clist, int row, int col, 
-                                          GdkEvent * ev, gpointer user_data)
+gnc_ui_qif_import_duplicate_old_select_cb (GtkTreeSelection *selection,
+					   QIFImportWindow  *wind)
 {
-  QIFImportWindow * wind = user_data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint row;
+  static gboolean ignore_old_select = FALSE;
 
+  /* Get the current selection then clear it.  We're about to clear
+   * the entire list store and rebuild it so this prevents errors. */
+  if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    return;
+  gtk_tree_selection_unselect_all(selection);
+
+  /* Getting a weird double call the first time a line is clicked.
+   * Once via gtk_tree_view_button_press and then again via
+   * gtk_tree_view_grab_focus. */
+  if (ignore_old_select)
+    return;
+  ignore_old_select = TRUE;
+  g_idle_add((GSourceFunc)reset_ignore_old_select, &ignore_old_select);
+
+  /* Get the row the user clicked on and update the scheme
+   * code/rebuild the list store.  */
+  gtk_tree_model_get(model, &iter,
+		     QIF_TRANS_COL_INDEX, &row,
+		     -1);
   refresh_old_transactions(wind, row);
 }
 
@@ -1808,6 +1933,12 @@ gnc_ui_qif_import_druid_make(void)
   SCM  mapping_info;
   SCM  create_ticker_map;
   int  i;
+  GtkTreeView *view;
+  GtkListStore *store;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+
 
   char * pre_page_names[NUM_PRE_PAGES] = {
     "start_page", "load_file_page", "date_format_page", "account_name_page",
@@ -1858,10 +1989,6 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK (gnc_ui_qif_import_date_format_next_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_select_loaded_file_cb",
-     G_CALLBACK (gnc_ui_qif_import_select_loaded_file_cb), retval);
-
-  glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_loaded_files_prepare_cb",
      G_CALLBACK (gnc_ui_qif_import_loaded_files_prepare_cb), retval);
 
@@ -1880,18 +2007,6 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_default_acct_back_cb",
      G_CALLBACK (gnc_ui_qif_import_default_acct_back_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_account_line_select_cb",
-     G_CALLBACK (gnc_ui_qif_import_account_line_select_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_category_line_select_cb",
-     G_CALLBACK (gnc_ui_qif_import_category_line_select_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_memo_line_select_cb",
-     G_CALLBACK (gnc_ui_qif_import_memo_line_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_accounts_prepare_cb",
@@ -1918,14 +2033,6 @@ gnc_ui_qif_import_druid_make(void)
      G_CALLBACK (gnc_ui_qif_import_commodity_prepare_cb), retval);
 
   glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_duplicate_new_select_cb",
-     G_CALLBACK (gnc_ui_qif_import_duplicate_new_select_cb), retval);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_qif_import_duplicate_old_select_cb",
-     G_CALLBACK (gnc_ui_qif_import_duplicate_old_select_cb), retval);
-
-  glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_finish_cb",
      G_CALLBACK (gnc_ui_qif_import_finish_cb), retval);
 
@@ -1950,18 +2057,17 @@ gnc_ui_qif_import_druid_make(void)
   retval->druid          = glade_xml_get_widget (xml, "qif_import_druid");
   retval->filename_entry = glade_xml_get_widget (xml, "qif_filename_entry");
   retval->acct_entry     = glade_xml_get_widget (xml, "qif_account_entry");
-  retval->date_format_combo = glade_xml_get_widget (xml, "date_format_combo");
-  retval->date_format_entry = glade_xml_get_widget (xml, "date_format_entry");
-  retval->selected_file_list = glade_xml_get_widget(xml, "selected_file_list");
-  retval->currency_picker = glade_xml_get_widget (xml, "currency_combo");
+  retval->date_format_combo = glade_xml_get_widget (xml, "date_format_combobox");
+  retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
+  retval->currency_picker = glade_xml_get_widget (xml, "currency_comboboxentry");
   retval->currency_entry = glade_xml_get_widget (xml, "currency_entry");
-  retval->acct_list      = glade_xml_get_widget (xml, "account_page_list");
-  retval->cat_list       = glade_xml_get_widget (xml, "category_page_list");
-  retval->memo_list      = glade_xml_get_widget (xml, "memo_page_list");
-  retval->new_transaction_list = 
-    glade_xml_get_widget (xml, "new_transaction_list");
-  retval->old_transaction_list = 
-    glade_xml_get_widget (xml, "old_transaction_list");
+  retval->acct_view      = glade_xml_get_widget (xml, "account_page_view");
+  retval->cat_view       = glade_xml_get_widget (xml, "category_page_view");
+  retval->memo_view      = glade_xml_get_widget (xml, "memo_page_view");
+  retval->new_transaction_view = 
+    glade_xml_get_widget (xml, "new_transaction_view");
+  retval->old_transaction_view = 
+    glade_xml_get_widget (xml, "old_transaction_view");
   
   retval->pre_comm_pages   = NULL;
   retval->post_comm_pages  = NULL;
@@ -1987,6 +2093,100 @@ gnc_ui_qif_import_druid_make(void)
                     glade_xml_get_widget (xml, doc_page_names[i]));
   }
   
+  /* Set up the selected file view */
+  view = GTK_TREE_VIEW(retval->selected_file_view);
+  store = gtk_list_store_new(NUM_FILENAME_COLS, G_TYPE_INT, G_TYPE_STRING);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
+						    "text", FILENAME_COL_NAME,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(gnc_ui_qif_import_select_loaded_file_cb),
+		   retval);
+  
+  create_account_picker_view(retval->acct_view, _("QIF account name"),
+			     G_CALLBACK(gnc_ui_qif_import_account_line_select_cb),
+			     retval);
+  create_account_picker_view(retval->cat_view,  _("QIF category name"),
+			     G_CALLBACK(gnc_ui_qif_import_category_line_select_cb),
+			     retval);
+  create_account_picker_view(retval->memo_view, _("QIF payee/memo"),
+			     G_CALLBACK(gnc_ui_qif_import_memo_line_select_cb),
+			     retval);
+
+  /* Set up the new transaction view */
+  view = GTK_TREE_VIEW(retval->new_transaction_view);
+  store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
+						    "text", QIF_TRANS_COL_DATE,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
+						    "text", QIF_TRANS_COL_DESCRIPTION,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+  gtk_tree_view_column_set_expand(column, TRUE);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
+						    "text", QIF_TRANS_COL_AMOUNT,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(gnc_ui_qif_import_duplicate_new_select_cb),
+		   retval);
+
+
+  /* Set up the old transaction view */
+  view = GTK_TREE_VIEW(retval->old_transaction_view);
+  store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
+			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
+						    "text", QIF_TRANS_COL_DATE,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
+						    "text", QIF_TRANS_COL_DESCRIPTION,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+  gtk_tree_view_column_set_expand(column, TRUE);
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
+						    "text", QIF_TRANS_COL_AMOUNT,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  renderer = gtk_cell_renderer_toggle_new();
+  column = gtk_tree_view_column_new_with_attributes(_("Dup?"), renderer,
+						    "active", QIF_TRANS_COL_CHECKED,
+						    NULL);
+  gtk_tree_view_append_column(view, column);
+
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_connect(selection, "changed",
+		   G_CALLBACK(gnc_ui_qif_import_duplicate_old_select_cb),
+		   retval);
+
+
   /* load the saved-state of the mappings from Quicken accounts and
    * categories to gnucash accounts */
   load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
@@ -2017,6 +2217,7 @@ gnc_ui_qif_import_druid_make(void)
   scm_gc_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->currency_picker));
   gnc_ui_update_commodity_picker(retval->currency_picker,
                                  GNC_COMMODITY_NS_CURRENCY, 
                                  gnc_commodity_get_printname

@@ -23,6 +23,7 @@
     @brief import-backend.c: Generic importer backend implementation (duplicate matching algorithm, action handling,  etc.)
     @author Copyright (C) 2002 Benoit Grégoire
     @author Christian Stimming
+    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
  
 #include "config.h"
@@ -256,9 +257,9 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
   }
 }
 
-GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
+GdkPixbuf* gen_probability_pixbuf(gint score_original, GNCImportSettings *settings, GtkWidget * widget)
 {
-  GdkPixmap* retval = NULL;
+  GdkPixbuf* retval = NULL;
   gint i, j;
   gint score;
   const gint height = 15;
@@ -339,11 +340,7 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
 	}
     }  
   
-  retval =  gdk_pixmap_colormap_create_from_xpm_d    (NULL,
-						      gtk_widget_get_colormap(widget),
-						      NULL,
-						      NULL,
-						      xpm);
+  retval =  gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
   for(i=0;i<=num_colors+height;i++)
     { 
       /*DEBUG("free_loop i=%d%s%s",i,": ",xpm[i]);*/
@@ -820,23 +817,14 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
 /***********************************************************************
  */
 
-/** /brief -- Processes every selected match
+/** /brief -- Processes one match
    according to its selected action.  */
-void
-gnc_import_process_trans_clist (GtkCList *clist, 
-				GncImportMatchMap *matchmap)
+gboolean
+gnc_import_process_trans_item (GncImportMatchMap *matchmap,
+			       GNCImportTransInfo *trans_info)
 {
-  GNCImportTransInfo * trans_info;
-  gint row_number = 0, i = 0;
-  g_assert (clist);
-  
   /* DEBUG("Begin"); */
-  gtk_clist_freeze (clist);
-  trans_info = 
-    (GNCImportTransInfo *) gtk_clist_get_row_data(clist, 0);
-  
-  for(i = 1; trans_info != NULL; i++)
-    {
+
       g_assert (trans_info);
       /*DEBUG("Iteration %d, action %d, split %s", i, 
 	trans_info->action,
@@ -845,7 +833,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
       switch (gnc_import_TransInfo_get_action (trans_info))
 	{
 	case GNCImport_SKIP:
-	  break;
+	  return FALSE;
 	case GNCImport_ADD:
 	  /* Transaction gets imported. */
 
@@ -951,24 +939,8 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	default:
 	  DEBUG("Invalid GNCImportAction for this imported transaction.");
 	}
-
-      /* For all actions except SKIP delete this transaction now. */
-      if(trans_info->action != GNCImport_SKIP) {
-	row_number = gtk_clist_find_row_from_data(clist, trans_info);
-	gtk_clist_remove (clist, row_number);
-	/* decrement the iteration counter since we've just removed
-	   one row. */
-	i--;
-      }
-
-      /* Get next trans_info, NULL if finished */
-      trans_info =
-	(GNCImportTransInfo *) gtk_clist_get_row_data(clist, i);
-    }
-  
   /*DEBUG("End");*/
-  gtk_clist_thaw (clist);
-  /*DEBUG("Thawed.")*/
+  return FALSE;
 }
 
 /********************************************************************\

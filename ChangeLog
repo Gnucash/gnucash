@@ -1,3 +1,10 @@
+2006-08-02  David Hampton  <hampton@employees.org>
+
+	* various: Remove the majority of the remaining deprecated widgets
+	by collapsing the "deprecated-cleanup" branch (r13935:14581) back
+	into trunk.  This patch also creates a new file for the code that
+	requires a GtkEntry text to match one of its completions.
+
 2006-07-31  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/gnucash-bin.c:
