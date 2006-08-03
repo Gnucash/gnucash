@@ -1,3 +1,11 @@
+2006-08-03  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/dialog-reset-warnings.c:
+	* src/gnome/schemas/apps_gnucash_warnings.schemas.in: Add tooltips
+	  to the checkboxes in the Reset Warnings dialog showing the long
+	  descriptions. Remove all linebreaks in these strings to make
+	  them look better.
+
 2006-08-02  David Hampton  <hampton@employees.org>
 
 	* various: Remove the majority of the remaining deprecated widgets

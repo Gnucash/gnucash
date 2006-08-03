@@ -11,11 +11,7 @@
       <default>0</default>
       <locale name="C">
         <short>Change contents of reconciled split</short>
-        <long>
-	  This dialog is presented before allowing you to change the
-	  contents of a reconciled split.  Allowing these changes can
-	  make it hard to perform future reconciliations.
-	</long>
+        <long>This dialog is presented before allowing you to change the contents of a reconciled split.  Allowing these changes can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>
 
@@ -28,10 +24,7 @@
       <default>0</default>
       <locale name="C">
         <short>Exit GnuCash</short>
-        <long>
-	  This dialog is presented when you attempt to close the last GnuCash
-	  window.
-	</long>
+        <long>This dialog is presented when you attempt to close the last GnuCash window.</long>
       </locale>
     </schema>
 
@@ -44,12 +37,7 @@
       <default>0</default>
       <locale name="C">
         <short>Mark transaction split as unreconciled</short>
-        <long>
-	  This dialog is presented before allowing you to mark a
-	  transaction split as unreconciled.  Doing so will throw off
-	  the reconciled value of the register and can make it hard to
-	  perform future reconciliations.
-	</long>
+        <long>This dialog is presented before allowing you to mark a transaction split as unreconciled.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>
 
@@ -62,9 +50,7 @@
       <default>0</default>
       <locale name="C">
         <short>Read only register</short>
-        <long>
-	  This dialog is presented when a read-only register is opened.
-	</long>
+        <long>This dialog is presented when a read-only register is opened.</long>
       </locale>
     </schema>
 
@@ -77,9 +63,7 @@
       <default>0</default>
       <locale name="C">
         <short>Delete a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to delete a transaction.
-	</long>
+        <long>This dialog is presented before allowing you to delete a transaction.</long>
       </locale>
     </schema>
 
@@ -92,12 +76,7 @@
       <default>0</default>
       <locale name="C">
         <short>Delete a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to delete a 
-	  transaction that contains reconciled splits.  Doing so will
-	  throw off the reconciled value of the register and can make
-	  it hard to perform future reconciliations.
-        </long>
+        <long>This dialog is presented before allowing you to delete a transaction that contains reconciled splits.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>
 
@@ -110,10 +89,7 @@
       <default>0</default>
       <locale name="C">
         <short>Remove a splits from a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to remove a
-	  splits from a transaction.
-	</long>
+        <long>This dialog is presented before allowing you to remove a splits from a transaction.</long>
       </locale>
     </schema>
 
@@ -126,12 +102,7 @@
       <default>0</default>
       <locale name="C">
         <short>Remove a splits from a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to remove a
-	  reconciled splits from a transaction. Doing so will throw
-	  off the reconciled value of the register and can make it
-	  hard to perform future reconciliations.
-	</long>
+        <long>This dialog is presented before allowing you to remove a reconciled split from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>
 
@@ -144,10 +115,7 @@
       <default>0</default>
       <locale name="C">
         <short>Remove all the splits from a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to remove all
-	  splits from a transaction.
-	</long>
+        <long>This dialog is presented before allowing you to remove all splits from a transaction.</long>
       </locale>
     </schema>
 
@@ -160,12 +128,7 @@
       <default>0</default>
       <locale name="C">
         <short>Remove all the splits from a transaction</short>
-        <long>
-	  This dialog is presented before allowing you to remove all
-	  splits (including some reconciled splits) from a transaction.
-          Doing so will throw off the reconciled value of the register
-          and can make it hard to perform future reconciliations.
-	</long>
+        <long>This dialog is presented before allowing you to remove all splits (including some reconciled splits) from a transaction.  Doing so will throw off the reconciled value of the register and can make it hard to perform future reconciliations.</long>
       </locale>
     </schema>
 
@@ -178,10 +141,7 @@
       <default>0</default>
       <locale name="C">
         <short>Commit changes to a transaction</short>
-        <long>
-          This dialog is presented when you attempt to move out of a modified
-          transaction.  The changed data must be either saved or discarded.
-	</long>
+        <long>This dialog is presented when you attempt to move out of a modified transaction.  The changed data must be either saved or discarded.</long>
       </locale>
     </schema>
 
@@ -194,10 +154,7 @@
       <default>0</default>
       <locale name="C">
         <short>Duplicating a changed transaction</short>
-        <long>
-          This dialog is presented when you attempt to duplicate a modified
-          transaction.  The changed data must be saved or the duplication canceled.
-	</long>
+        <long>This dialog is presented when you attempt to duplicate a modified transaction.  The changed data must be saved or the duplication canceled.</long>
       </locale>
     </schema>
 
@@ -210,10 +167,7 @@
       <default>0</default>
       <locale name="C">
         <short>Commit changes to a invoice_entry</short>
-        <long>
-          This dialog is presented when you attempt to move out of a modified
-          invoice entry.  The changed data must be either saved or discarded.
-	</long>
+        <long>This dialog is presented when you attempt to move out of a modified invoice entry.  The changed data must be either saved or discarded.</long>
       </locale>
     </schema>
 
@@ -226,10 +180,7 @@
       <default>0</default>
       <locale name="C">
         <short>Duplicating a changed invoice_entry</short>
-        <long>
-          This dialog is presented when you attempt to duplicate a modified
-          invoice entry.  The changed data must be saved or the duplication canceled.
-	</long>
+        <long>This dialog is presented when you attempt to duplicate a modified invoice entry.  The changed data must be saved or the duplication canceled.</long>
       </locale>
     </schema>
 
@@ -242,9 +193,7 @@
       <default>0</default>
       <locale name="C">
         <short>Delete a commodity</short>
-        <long>
-	  This dialog is presented before allowing you to delete a commodity.
-	</long>
+        <long>This dialog is presented before allowing you to delete a commodity.</long>
       </locale>
     </schema>
 
@@ -257,11 +206,7 @@
       <default>0</default>
       <locale name="C">
         <short>Delete a commodity and prices</short>
-        <long>
-	  This dialog is presented before allowing you to delete a commodity
-	  that has price quotes attached.  Deleting the commodity will delete
-	  the quotes as well.
-	</long>
+        <long>This dialog is presented before allowing you to delete a commodity that has price quotes attached.  Deleting the commodity will delete the quotes as well.</long>
       </locale>
     </schema>
 
@@ -274,10 +219,7 @@
       <default>0</default>
       <locale name="C">
         <short>Delete multiple price quotes</short>
-        <long>
-	  This dialog is presented before allowing you to delete multiple price
-	  quotes at one time.
-	</long>
+        <long>This dialog is presented before allowing you to delete multiple price quotes at one time.</long>
       </locale>
     </schema>
 
