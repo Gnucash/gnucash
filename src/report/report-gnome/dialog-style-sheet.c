@@ -365,6 +365,7 @@ gnc_style_sheet_select_dialog_create(void)
   ss->list_view  = GTK_TREE_VIEW(glade_xml_get_widget (xml, "style_sheet_list_view"));
   ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
   gtk_tree_view_set_model(ss->list_view, GTK_TREE_MODEL(ss->list_store));
+  g_object_unref(ss->list_store);
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes(ss->list_view, -1,
 					      _("Style Sheet Name"), renderer,

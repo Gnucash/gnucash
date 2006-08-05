@@ -602,6 +602,7 @@ lv_init_lot_view (GNCLotViewer *lv)
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
   lv->lot_store = store;
 
   /* Set up the columns */

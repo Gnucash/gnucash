@@ -412,6 +412,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 			     G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
 			     GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   /* Add the columns */
   add_text_column(view, _("Date"), DOWNLOADED_COL_DATE);

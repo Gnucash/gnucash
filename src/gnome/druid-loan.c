@@ -1774,6 +1774,7 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd->revView = GTK_TREE_VIEW(
 		gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) ));
+	g_object_unref(store);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,

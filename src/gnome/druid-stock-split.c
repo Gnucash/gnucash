@@ -603,6 +603,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     store = gtk_list_store_new(NUM_SPLIT_COLS, G_TYPE_POINTER, G_TYPE_STRING,
 			       G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,

@@ -664,6 +664,7 @@ void gnc_hbci_initial_druid (void)
 					    G_TYPE_POINTER, G_TYPE_STRING,
 					    G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(info->accountview, GTK_TREE_MODEL(info->accountstore));
+    g_object_unref(info->accountstore);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("HBCI account name"),

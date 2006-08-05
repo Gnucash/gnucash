@@ -227,6 +227,7 @@ load_category_list (TaxInfoDialog *ti_dialog)
 
   view = GTK_TREE_VIEW(ti_dialog->txf_category_view);
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  g_object_ref(store);
   gtk_tree_view_set_model(view, NULL);
 
   gtk_list_store_clear(store);
@@ -244,6 +245,7 @@ load_category_list (TaxInfoDialog *ti_dialog)
   }
 
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 }
 
 static void
@@ -706,6 +708,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     tree_view = GTK_TREE_VIEW(glade_xml_get_widget(xml, "txf_category_view"));
     store =  gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(tree_view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes
       (_("Form"), renderer, "text", 0, NULL);

@@ -316,6 +316,7 @@ gnc_import_match_picker_init_downloaded_view (GNCImportMatchPicker * matcher)
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   add_column(view, _("Account"),     DOWNLOADED_COL_ACCOUNT);
   add_column(view, _("Date"),        DOWNLOADED_COL_DATE);
@@ -344,6 +345,7 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_POINTER);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_pixbuf_new();
   g_object_set(renderer, "xalign", 0.0, NULL);

@@ -413,6 +413,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 						 G_TYPE_POINTER);
     gtk_tree_view_set_model(td->template_gtktreeview,
 			    GTK_TREE_MODEL(td->template_list_store));
+    g_object_unref(td->template_list_store);
     g_list_foreach(templates, fill_template_list_func, td->template_list_store);
 
     renderer = gtk_cell_renderer_text_new();

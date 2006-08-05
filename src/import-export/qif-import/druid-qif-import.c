@@ -1029,6 +1029,7 @@ create_account_picker_view(GtkWidget *widget,
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(col_name, renderer,
@@ -2097,6 +2098,7 @@ gnc_ui_qif_import_druid_make(void)
   view = GTK_TREE_VIEW(retval->selected_file_view);
   store = gtk_list_store_new(NUM_FILENAME_COLS, G_TYPE_INT, G_TYPE_STRING);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
@@ -2124,6 +2126,7 @@ gnc_ui_qif_import_druid_make(void)
   store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
@@ -2155,6 +2158,7 @@ gnc_ui_qif_import_druid_make(void)
   store = gtk_list_store_new(NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,

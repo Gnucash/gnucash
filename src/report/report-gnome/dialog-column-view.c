@@ -338,6 +338,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     /* Build the 'available' view */
     store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_INT);
     gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes("", renderer,
@@ -353,6 +354,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
 				G_TYPE_INT, G_TYPE_INT);
     gtk_tree_view_set_model(r->contents, GTK_TREE_MODEL(store));
+    g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Report"), renderer,

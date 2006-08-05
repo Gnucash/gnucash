@@ -265,6 +265,7 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   /* Set up the file view */
   store = gtk_list_store_new (NUM_FILE_COLS, G_TYPE_STRING, G_TYPE_POINTER);
   gtk_tree_view_set_model(GTK_TREE_VIEW(view), GTK_TREE_MODEL(store));
+  g_object_unref(store);
 
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes("", renderer,
