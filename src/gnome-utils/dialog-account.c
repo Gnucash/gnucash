@@ -497,8 +497,8 @@ gnc_finish_ok (AccountWindow *aw,
 /* Record all of the children of the given account as needing their
  * type changed to the one specified. */
 static void
-gnc_edit_change_account_types(GHashTable *change_type, Account *account,
-                              Account *except, GNCAccountType type)
+gnc_change_account_types(GHashTable *change_type, Account *account,
+                         Account *except, GNCAccountType type)
 {
   AccountGroup *children;
   GList *list;
@@ -521,7 +521,7 @@ gnc_edit_change_account_types(GHashTable *change_type, Account *account,
   for (node= list; node; node = node->next)
   {
     account = node->data;
-    gnc_edit_change_account_types(change_type, account, except, type);
+    gnc_change_account_types(change_type, account, except, type);
   }
 }
 
@@ -640,8 +640,7 @@ extra_change_verify (AccountWindow *aw,
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_STRING);
 
-  size = 0;
-  size += fill_list(account, GTK_LIST_STORE(store), change_type);
+  size = fill_list(account, GTK_LIST_STORE(store), change_type);
 
   if (size == 0)
   {
@@ -888,7 +887,7 @@ gnc_edit_account_ok(AccountWindow *aw)
     change_all = FALSE;
 
   if (change_children)
-    gnc_edit_change_account_types(change_type, account, NULL, aw->type);
+    gnc_change_account_types(change_type, account, NULL, aw->type);
 
   if (change_all)
   {
@@ -903,7 +902,7 @@ gnc_edit_account_ok(AccountWindow *aw)
       temp = xaccAccountGetParentAccount(ancestor);
     } while (temp != NULL);
 
-    gnc_edit_change_account_types(change_type, ancestor, account, aw->type);
+    gnc_change_account_types(change_type, ancestor, account, aw->type);
   }
 
   if (!extra_change_verify(aw, change_type))
@@ -928,6 +927,8 @@ static void
 gnc_new_account_ok (AccountWindow *aw)
 {
   gnc_numeric balance;
+  GHashTable *change_type;
+  Account *new_parent;
 
   ENTER("aw %p", aw);
 
@@ -971,7 +972,41 @@ gnc_new_account_ok (AccountWindow *aw)
     }
   }
 
-  gnc_finish_ok (aw, NULL);
+  /* If the new parent's type is not compatible with the new type,
+   * the whole sub-tree containing the account must be re-typed. */
+  change_type = g_hash_table_new (NULL, NULL);
+
+  new_parent = gnc_tree_view_account_get_selected_account (
+    GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  if (new_parent != aw->top_level_account)
+  {
+    if (!xaccAccountTypesCompatible (xaccAccountGetType(new_parent),
+                                     aw->type))
+    {
+      Account *ancestor;
+      Account *temp;
+
+      temp = new_parent;
+      do
+      {
+        ancestor = temp;
+        temp = xaccAccountGetParentAccount (ancestor);
+      } while (temp != NULL);
+
+      gnc_change_account_types (change_type, ancestor, NULL, aw->type);
+
+      if (!extra_change_verify (aw, change_type))
+      {
+        g_hash_table_destroy (change_type);
+        LEAVE(" ");
+        return;
+      }
+    }
+  }
+
+  gnc_finish_ok (aw, change_type);
+
+  g_hash_table_destroy (change_type);
   LEAVE(" ");
 }
 
