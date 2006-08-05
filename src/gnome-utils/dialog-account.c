@@ -583,7 +583,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   if (fs->account == account) return;
 
   full_name = xaccAccountGetFullName(account);
-  account_field_name = "Type";
+  account_field_name = _("Type");
   account_field_value = xaccAccountGetTypeStr(xaccAccountGetType(account));
   value_str = xaccAccountGetTypeStr(GPOINTER_TO_INT(value));
 
@@ -645,7 +645,7 @@ extra_change_verify (AccountWindow *aw,
 
   if (size == 0)
   {
-    gtk_widget_destroy(GTK_WIDGET(store));
+    g_object_unref(store);
     return TRUE;
   }
 
@@ -654,6 +654,7 @@ extra_change_verify (AccountWindow *aw,
 				       GTK_SORT_ASCENDING);
 
   view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
+  g_object_unref(store);
   renderer = gtk_cell_renderer_text_new();
   column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
 						    "text", ACCOUNT_COL_FULLNAME,
@@ -919,7 +920,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   gnc_finish_ok (aw, change_type);
 
   g_hash_table_destroy (change_type);
-    LEAVE(" ");
+  LEAVE(" ");
 }
 
 
