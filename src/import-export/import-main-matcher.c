@@ -135,7 +135,6 @@ on_matcher_ok_clicked (GtkButton *button,
      anyway? */
   for (item = refs_list; item; item = g_slist_next(item)) {
     ref = item->data;
-    model = gtk_tree_row_reference_get_model(ref);
     path =  gtk_tree_row_reference_get_path(ref);
     if (gtk_tree_model_get_iter(model, &iter, path))
       gtk_list_store_remove(GTK_LIST_STORE(model), &iter);

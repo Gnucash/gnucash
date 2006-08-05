@@ -39,6 +39,16 @@
 
 #include <gtk/gtk.h>
 
+/** @name gtk Backwards Compatability Functions
+ @{ 
+*/
+#ifndef HVE_GTK26
+gchar *gtk_combo_box_get_active_text   (GtkComboBox *combo_box);
+#endif
+
+/** @} */
+
+
 /** @name gtk Miscellaneous Functions
  @{ 
 */
@@ -46,7 +56,6 @@
 void gnc_cbe_set_by_string(GtkComboBoxEntry *cbe, const gchar *text);
 void gnc_cbe_add_completion (GtkComboBoxEntry *cbe);
 void gnc_cbe_require_list_item (GtkComboBoxEntry *cbe);
-
 
 /** @} */
 

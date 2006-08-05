@@ -29,6 +29,25 @@
 #define CHANGED_ID "changed_id"
 
 
+#ifndef HAVE_GTK26
+/* Backwards compatability support for function introduced in gtk
+ * 2.6. */
+gchar *
+gtk_combo_box_get_active_text (GtkComboBox *combo_box)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gchar *text;
+
+  if (!gtk_combo_box_get_active_iter(combo_box, &iter))
+    return NULL;
+  model = gtk_combo_box_get_model(combo_box);
+  gtk_tree_model_get(model, &iter, 0, &text, -1);
+  return text;
+}
+#endif
+
+
 /** Find an entry in the GtkComboBoxEntry by its text value, and set
  *  the widget to that value.  This function also records the index of
  *  that text value for use when the user leaves the widget.

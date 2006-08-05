@@ -30,6 +30,7 @@
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 
