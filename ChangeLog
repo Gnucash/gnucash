@@ -5,7 +5,9 @@
 	* src/gnome-utils/dialog-account.c: Check for account type
 	  compatibility when creating a new account. Fixes 344966.
 
-	* src/core-utils/gnc-gtk-utils.c: Unref entry completion.
+	* src/core-utils/gnc-gtk-utils.c: Unref entry completion, inline
+	  completion only for gtk>=2.6.
+
 	* src/gnome-utils/dialog-account.c: I18n "Type", unref store.
 
 2006-08-03  Andreas Köhler  <andi5.py@gmx.net>
