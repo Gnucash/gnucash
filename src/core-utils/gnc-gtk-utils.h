@@ -42,7 +42,7 @@
 /** @name gtk Backwards Compatability Functions
  @{ 
 */
-#ifndef HVE_GTK26
+#ifndef HAVE_GTK26
 gchar *gtk_combo_box_get_active_text   (GtkComboBox *combo_box);
 #endif
 
