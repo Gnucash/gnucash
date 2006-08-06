@@ -875,7 +875,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 	  /* Done editing. */
 	  xaccTransCommitEdit 
 	    (gnc_import_TransInfo_get_trans (trans_info));
-	  break;
+	  return TRUE;
 	case GNCImport_CLEAR: {
 	  GNCImportMatchInfo *selected_match =
 	    gnc_import_TransInfo_get_selected_match (trans_info);
@@ -932,7 +932,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 	      trans_info->trans = NULL;
 	    }
 	  }
-	  break;
+	  return TRUE;
 	case GNCImport_EDIT:
 	    PERR("EDIT action is UNSUPPORTED!");
 	  break;
