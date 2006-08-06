@@ -675,21 +675,21 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
     err = read( fd, &(ff_acctype), sizeof(char) );
     if( err != sizeof(char) ) { return NULL; }
     switch (ff_acctype) {
-      case FF_BANK: 		{ acctype = BANK; 		break; }
-      case FF_CASH: 		{ acctype = CASH; 		break; }
-      case FF_ASSET: 		{ acctype = ASSET; 		break; }
-      case FF_CREDIT: 		{ acctype = CREDIT; 		break; }
-      case FF_LIABILITY:	{ acctype = LIABILITY; 		break; }
-      case FF_STOCK: 		{ acctype = STOCK; 		break; }
-      case FF_MUTUAL: 		{ acctype = MUTUAL; 		break; }
-      case FF_INCOME: 		{ acctype = INCOME; 		break; }
-      case FF_EXPENSE: 		{ acctype = EXPENSE; 		break; }
-      case FF_EQUITY: 		{ acctype = EQUITY; 		break; }
-      case FF_CHECKING: 	{ acctype = CHECKING; 		break; }
-      case FF_SAVINGS: 		{ acctype = SAVINGS; 		break; }
-      case FF_MONEYMRKT: 	{ acctype = MONEYMRKT;	 	break; }
-      case FF_CREDITLINE: 	{ acctype = CREDITLINE; 	break; }
-      case FF_CURRENCY: 	{ acctype = CURRENCY; 		break; }
+      case FF_BANK: 		{ acctype = ACCT_TYPE_BANK; 		break; }
+      case FF_CASH: 		{ acctype = ACCT_TYPE_CASH; 		break; }
+      case FF_ASSET: 		{ acctype = ACCT_TYPE_ASSET; 		break; }
+      case FF_CREDIT: 		{ acctype = ACCT_TYPE_CREDIT; 		break; }
+      case FF_LIABILITY:	{ acctype = ACCT_TYPE_LIABILITY;	break; }
+      case FF_STOCK: 		{ acctype = ACCT_TYPE_STOCK; 		break; }
+      case FF_MUTUAL: 		{ acctype = ACCT_TYPE_MUTUAL; 		break; }
+      case FF_INCOME: 		{ acctype = ACCT_TYPE_INCOME; 		break; }
+      case FF_EXPENSE: 		{ acctype = ACCT_TYPE_EXPENSE; 		break; }
+      case FF_EQUITY: 		{ acctype = ACCT_TYPE_EQUITY; 		break; }
+      case FF_CHECKING: 	{ acctype = ACCT_TYPE_CHECKING; 	break; }
+      case FF_SAVINGS: 		{ acctype = ACCT_TYPE_SAVINGS; 		break; }
+      case FF_MONEYMRKT: 	{ acctype = ACCT_TYPE_MONEYMRKT; 	break; }
+      case FF_CREDITLINE: 	{ acctype = ACCT_TYPE_CREDITLINE; 	break; }
+      case FF_CURRENCY: 	{ acctype = ACCT_TYPE_CURRENCY;		break; }
       default: return NULL;
     }
     xaccAccountSetType (acc, acctype);
@@ -872,7 +872,7 @@ readAccInfo(int fd, Account *acc, int token) {
   if(!acc) return(FALSE);
 
   acc_type = xaccAccountGetType(acc);
-  if ((acc_type == STOCK) || (acc_type == MUTUAL)) {
+  if ((acc_type == ACCT_TYPE_STOCK) || (acc_type == ACCT_TYPE_MUTUAL)) {
     const char *tmp = readString( fd, token );
     if(NULL == tmp) return(FALSE);
     if(strlen(tmp) > 0) dxaccAccountSetPriceSrc(acc, tmp);

@@ -473,7 +473,7 @@ gnc_employee_new_window (GNCBook *bookp,
   ew->ccard_acct_check = glade_xml_get_widget (xml, "ccard_check");
 
   edit = gnc_account_sel_new();
-  acct_types = g_list_prepend(NULL, (gpointer)CREDIT);
+  acct_types = g_list_prepend(NULL, (gpointer)ACCT_TYPE_CREDIT);
   gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types);
   g_list_free (acct_types);
 

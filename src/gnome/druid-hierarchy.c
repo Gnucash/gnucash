@@ -698,7 +698,7 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 		string = xaccPrintAmount (balance, print_info);
 	}
 
- 	if (xaccAccountGetType(account) == EQUITY) {
+ 	if (xaccAccountGetType(account) == ACCT_TYPE_EQUITY) {
 	  allow_value = FALSE;
 	  string=_("zero");
 	} else {

@@ -117,14 +117,14 @@ typedef struct _startRecnWindowData
  * change!  These macros define the account types for which an auto interest
  * xfer dialog could pop up, if the user's preferences allow it.
  */
-#define account_type_has_auto_interest_charge(type)  (((type) == CREDIT) || \
-                                                      ((type) == LIABILITY) ||\
-						      ((type) == PAYABLE))
+#define account_type_has_auto_interest_charge(type)  (((type) == ACCT_TYPE_CREDIT) || \
+                                                      ((type) == ACCT_TYPE_LIABILITY) ||\
+						      ((type) == ACCT_TYPE_PAYABLE))
 
-#define account_type_has_auto_interest_payment(type) (((type) == BANK)  || \
-                                                      ((type) == ASSET) || \
-                                                      ((type) == MUTUAL) || \
-						      ((type) == RECEIVABLE))
+#define account_type_has_auto_interest_payment(type) (((type) == ACCT_TYPE_BANK)  || \
+                                                      ((type) == ACCT_TYPE_ASSET) || \
+                                                      ((type) == ACCT_TYPE_MUTUAL) || \
+						      ((type) == ACCT_TYPE_RECEIVABLE))
 
 #define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \
@@ -980,7 +980,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   if (formal)
     title = _("Debits");
   else
-    title = gnc_get_debit_string(NO_TYPE);
+    title = gnc_get_debit_string(ACCT_TYPE_NONE);
 
   gtk_frame_set_label(GTK_FRAME(recnData->debit_frame), title);
 
@@ -990,7 +990,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   if (formal)
     title = _("Credits");
   else
-    title = gnc_get_credit_string(NO_TYPE);
+    title = gnc_get_credit_string(ACCT_TYPE_NONE);
 
   gtk_frame_set_label(GTK_FRAME(recnData->credit_frame), title);
 
@@ -1847,7 +1847,8 @@ find_payment_account(Account *account)
         continue;
 
       type = xaccAccountGetType(a);
-      if ((type == BANK) || (type == CASH) || (type == ASSET))
+      if ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
+	  (type == ACCT_TYPE_ASSET))
         return a;
     }
   }
@@ -1897,7 +1898,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
   xaccAccountSetReconcileLastDate (account, date);
 
   if (auto_payment &&
-      (xaccAccountGetType (account) == CREDIT) &&
+      (xaccAccountGetType (account) == ACCT_TYPE_CREDIT) &&
       (gnc_numeric_negative_p (recnData->new_ending)))
   {
     Account *payment_account;

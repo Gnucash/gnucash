@@ -65,10 +65,10 @@
 
     @param new_account_default_type
 	 Default account type of a
-    new account. Can be NULL.  If not NO_TYPE, it will be the
-    account's type if a new account is created.  If not NO_TYPE, the
-    function will also warn the user if the found or created account's
-    commodity doesn't match.
+    new account. Can be NULL.  If not ACCT_TYPE_NONE, it will be the
+    account's type if a new account is created.  If not
+    ACCT_TYPE_NONE, the function will also warn the user if the found
+    or created account's commodity doesn't match.
 
     @param auto_create 
          Only active if no account with the

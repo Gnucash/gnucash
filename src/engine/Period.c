@@ -624,7 +624,7 @@ find_nearest_equity_acct (Account *acc)
    for (node=acc_list; node; node=node->next)
    {
       candidate = (Account *) node->data;
-      if ((EQUITY == xaccAccountGetType (candidate)) &&
+      if ((ACCT_TYPE_EQUITY == xaccAccountGetType (candidate)) &&
           gnc_commodity_equiv(xaccAccountGetCommodity(acc),
                               xaccAccountGetCommodity(candidate)))
       {
@@ -647,8 +647,8 @@ find_nearest_equity_acct (Account *acc)
    candidate = xaccMallocAccount (xaccGroupGetBook(parent));
    xaccAccountBeginEdit (candidate);
    xaccGroupInsertAccount (parent, candidate);
-   xaccAccountSetType (candidate, EQUITY);
-   xaccAccountSetName (candidate, xaccAccountGetTypeStr(EQUITY));
+   xaccAccountSetType (candidate, ACCT_TYPE_EQUITY);
+   xaccAccountSetName (candidate, xaccAccountGetTypeStr(ACCT_TYPE_EQUITY));
    xaccAccountSetCommodity (candidate, xaccAccountGetCommodity(acc));
    xaccAccountCommitEdit (candidate);
    
@@ -710,7 +710,8 @@ add_closing_balances (AccountGroup *closed_grp,
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
        * and income or expense or equity account */
-      if ((INCOME != tip) && (EXPENSE != tip) && (EQUITY != tip)) 
+      if ((ACCT_TYPE_INCOME != tip) && (ACCT_TYPE_EXPENSE != tip) &&
+	  (ACCT_TYPE_EQUITY != tip)) 
       {
          gnc_numeric baln;
          baln = xaccAccountGetBalance (candidate);

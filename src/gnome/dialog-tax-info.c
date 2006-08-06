@@ -474,7 +474,7 @@ tax_info_show_income_accounts (TaxInfoDialog *ti_dialog, gboolean show_income)
   ti_dialog->income = show_income;
 
   tree = GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview);
-  show_type = show_income ? INCOME : EXPENSE;
+  show_type = show_income ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE;
 
   gnc_tree_view_account_get_view_info (tree, &info);
 
@@ -523,7 +523,7 @@ gnc_tax_info_income_cb (GtkWidget *w, gpointer data)
 
   tax_info_show_income_accounts (ti_dialog, show_income);
 
-  ti_dialog->account_type = show_income ? INCOME : EXPENSE;
+  ti_dialog->account_type = show_income ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE;
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview));
 
   gnc_tax_info_update_accounts (ti_dialog);
@@ -670,7 +670,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
-  ti_dialog->account_type = EXPENSE;
+  ti_dialog->account_type = ACCT_TYPE_EXPENSE;
   ti_dialog->income_txf_infos = load_txf_info (TRUE);
   ti_dialog->expense_txf_infos = load_txf_info (FALSE);
 

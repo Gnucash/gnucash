@@ -78,7 +78,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
       gnc_commodity_new( book,
 			 "template", "template",
                          "template", "template", 1 ) );
-   xaccAccountSetType( sx->template_acct, BANK );
+   xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
    ag = gnc_book_get_template_group( book );
    xaccGroupInsertAccount( ag, sx->template_acct );
 }

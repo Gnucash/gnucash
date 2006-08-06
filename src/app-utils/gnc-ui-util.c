@@ -117,18 +117,18 @@ gnc_configure_reverse_balance (void)
   }
   else if (safe_strcmp (choice, "income_expense") == 0)
   {
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
+    reverse_type[ACCT_TYPE_INCOME]  = TRUE;
+    reverse_type[ACCT_TYPE_EXPENSE] = TRUE;
   }
   else
   {
     if (safe_strcmp (choice, "credit") != 0)
       PERR("bad value '%s'", choice);
-    reverse_type[LIABILITY] = TRUE;
-    reverse_type[PAYABLE]   = TRUE;
-    reverse_type[EQUITY]    = TRUE;
-    reverse_type[INCOME]    = TRUE;
-    reverse_type[CREDIT]    = TRUE;
+    reverse_type[ACCT_TYPE_LIABILITY] = TRUE;
+    reverse_type[ACCT_TYPE_PAYABLE]   = TRUE;
+    reverse_type[ACCT_TYPE_EQUITY]    = TRUE;
+    reverse_type[ACCT_TYPE_INCOME]    = TRUE;
+    reverse_type[ACCT_TYPE_CREDIT]    = TRUE;
   }
 
   if (choice != NULL)
@@ -450,14 +450,14 @@ gnc_ui_account_get_tax_info_string (const Account *account)
     return NULL;
 
   atype = xaccAccountGetType (account);
-  if (atype != INCOME && atype != EXPENSE)
+  if (atype != ACCT_TYPE_INCOME && atype != ACCT_TYPE_EXPENSE)
     return NULL;
 
   code = xaccAccountGetTaxUSCode (account);
   if (!code)
     return NULL;
 
-  category = scm_c_eval_string (atype == INCOME ?
+  category = scm_c_eval_string (atype == ACCT_TYPE_INCOME ?
 				"txf-income-categories" :
 				"txf-expense-categories");
 
@@ -592,7 +592,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   base_name = equity_base_name (equity_type);
 
   account = xaccGetAccountFromName (group, base_name);
-  if (account && xaccAccountGetType (account) != EQUITY)
+  if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
   if (!account)
@@ -600,7 +600,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
     base_name = base_name && *base_name ? _(base_name) : "";
 
     account = xaccGetAccountFromName (group, base_name);
-    if (account && xaccAccountGetType (account) != EQUITY)
+    if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
       account = NULL;
   }
 
@@ -613,7 +613,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   name = g_strconcat (base_name, " - ",
                       gnc_commodity_get_mnemonic (currency), NULL);
   account = xaccGetAccountFromName (group, name);
-  if (account && xaccAccountGetType (account) != EQUITY)
+  if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
   name_exists = (account != NULL);
@@ -638,7 +638,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   }
 
   parent = xaccGetAccountFromName (group, _("Equity"));
-  if (parent && xaccAccountGetType (parent) != EQUITY)
+  if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
     parent = NULL;
 
   account = xaccMallocAccount (book);
@@ -646,7 +646,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   xaccAccountBeginEdit (account);
 
   xaccAccountSetName (account, name);
-  xaccAccountSetType (account, EQUITY);
+  xaccAccountSetType (account, ACCT_TYPE_EQUITY);
   xaccAccountSetCommodity (account, currency);
 
   if (parent)

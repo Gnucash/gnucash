@@ -1839,37 +1839,37 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
   switch (sr_type)
   {
     case BANK_REGISTER:
-      return BANK;
+      return ACCT_TYPE_BANK;
     case CASH_REGISTER:
-      return CASH;
+      return ACCT_TYPE_CASH;
     case ASSET_REGISTER:
-      return ASSET;
+      return ACCT_TYPE_ASSET;
     case CREDIT_REGISTER:
-      return CREDIT;
+      return ACCT_TYPE_CREDIT;
     case LIABILITY_REGISTER:
-      return LIABILITY;
+      return ACCT_TYPE_LIABILITY;
     case PAYABLE_REGISTER:
-      return PAYABLE;
+      return ACCT_TYPE_PAYABLE;
     case RECEIVABLE_REGISTER:
-      return RECEIVABLE;
+      return ACCT_TYPE_RECEIVABLE;
     case INCOME_LEDGER:  
     case INCOME_REGISTER:
-      return INCOME;
+      return ACCT_TYPE_INCOME;
     case EXPENSE_REGISTER:
-      return EXPENSE;
+      return ACCT_TYPE_EXPENSE;
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      return STOCK;
+      return ACCT_TYPE_STOCK;
     case CURRENCY_REGISTER:
-      return CURRENCY;
+      return ACCT_TYPE_CURRENCY;
     case GENERAL_LEDGER:  
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
     case EQUITY_REGISTER:
-      return EQUITY;
+      return ACCT_TYPE_EQUITY;
     case SEARCH_LEDGER:
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
     default:
-      return NO_TYPE;
+      return ACCT_TYPE_NONE;
   }
 }
 

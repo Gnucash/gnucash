@@ -247,7 +247,7 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
-    xaccAccountSetType (acc, INCOME);
+    xaccAccountSetType (acc, ACCT_TYPE_INCOME);
     xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
     xaccAccountSetNotes (acc, 
          _("Realized Gains or Losses from "

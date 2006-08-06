@@ -207,7 +207,7 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
 				      TRUE,
 				      _("Destination account for the auto-balance split."),
 				      xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
-				      NO_TYPE,
+				      ACCT_TYPE_NONE,
 				      old_acc,
 				      &ok_pressed);
   if(ok_pressed)

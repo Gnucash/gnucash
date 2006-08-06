@@ -1098,8 +1098,8 @@ gnc_get_debit_string(GNCAccountType account_type)
   if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Debit"));
 
-  if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
-    account_type = NO_TYPE;
+  if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
+    account_type = ACCT_TYPE_NONE;
 
   type_string = xaccAccountTypeEnumAsString(account_type);
 
@@ -1136,8 +1136,8 @@ gnc_get_credit_string(GNCAccountType account_type)
   if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Credit"));
 
-  if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
-    account_type = NO_TYPE;
+  if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
+    account_type = ACCT_TYPE_NONE;
 
   type_string = xaccAccountTypeEnumAsString(account_type);
 

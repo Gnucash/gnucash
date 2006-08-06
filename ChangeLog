@@ -1,3 +1,8 @@
+2006-08-06  David Hampton  <hampton@employees.org>
+
+	* various: Regularize the account type names into the form
+	ACCT_TYPE_xxx.
+
 2006-08-05  David Hampton  <hampton@employees.org>
 
 	* import-backend.c: gnc_import_process_trans_item() should return

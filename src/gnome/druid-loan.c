@@ -425,23 +425,26 @@ gnc_ui_sx_loan_druid_create(void)
         /* non-gladeable widget setup */
         {
                 int i;
-                // LIABILITY
+                // ACCT_TYPE_LIABILITY
                 GList *liabilityAcct;
-                // BANK, CASH, CREDIT, ASSET + LIABILITY
+                // ACCT_TYPE_BANK, ACCT_TYPE_CASH, ACCT_TYPE_CREDIT,
+                // ACCT_TYPE_ASSET + ACCT_TYPE_LIABILITY
                 GList *paymentFromAccts;
-                // EXPENSE, LIABILITY, + payment-froms.
+                // ACCT_TYPE_EXPENSE, ACCT_TYPE_LIABILITY, + payment-froms.
                 GList *paymentToAccts;
                 int fromLen = 5;
-                GNCAccountType paymentFroms[] = { BANK, CASH, CREDIT, ASSET, LIABILITY };
+                GNCAccountType paymentFroms[] = { ACCT_TYPE_BANK, ACCT_TYPE_CASH,
+						  ACCT_TYPE_CREDIT, ACCT_TYPE_ASSET,
+						  ACCT_TYPE_LIABILITY };
                 int toLen = 2;
-                GNCAccountType paymentTos[] = { EXPENSE };
+                GNCAccountType paymentTos[] = { ACCT_TYPE_EXPENSE };
 
                 liabilityAcct = NULL;
                 paymentFromAccts = NULL;
                 paymentToAccts = NULL;
 
                 liabilityAcct = g_list_append( liabilityAcct,
-                                               GINT_TO_POINTER( LIABILITY ) );
+                                               GINT_TO_POINTER( ACCT_TYPE_LIABILITY ) );
                 for ( i = 0; i < fromLen; i++ )
                 {
                         paymentFromAccts

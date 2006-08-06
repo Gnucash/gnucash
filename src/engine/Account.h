@@ -72,49 +72,67 @@ typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
 
 typedef enum 
 {
-  BAD_TYPE = -1, /**< Not a type */
-  NO_TYPE = -1,/**< Not a type */
+  ACCT_TYPE_INVALID = -1, /**< Not a type */
+  ACCT_TYPE_NONE = -1,/**< Not a type */
   
-  BANK = 0, /**< The bank account type denotes a savings or checking account
-	     * held at a bank.  Often interest bearing. */
-  CASH = 1,/**< The cash account type is used to denote a shoe-box or pillowcase
-	    * stuffed with cash. */
-  CREDIT = 3, /**< The Credit card account is used to denote credit (e.g. amex)
-	       * and debit (e.g. visa, mastercard) card accounts */
-  ASSET = 2,  /**< asset (and liability) accounts indicate generic, generalized accounts
-	       * that are none of the above. */
-  LIABILITY = 4, /**< liability (and asset) accounts indicate generic, generalized accounts
-		  * that are none of the above. */
-  STOCK = 5,  /**< Stock accounts will typically be shown in registers
-	       * which show three columns: price, number of shares, and value. */
-  MUTUAL= 6, /**< Mutual Fund accounts will typically be shown in registers
-	      * which show three columns: price, number of shares, and value. */
-  CURRENCY = 7, /**< The currency account type indicates that the
-		 * account is a currency trading account.  In many
-		 * ways, a currency trading account is like a stock
-		 * trading account. It is shown in the register with
-		 * three columns: price, number of shares, and
-		 * value. Note: Since version 1.7.0, this account is
-		 * no longer needed to exchange currencies between
-		 * accounts, so this type is DEPRECATED. */
-  INCOME = 8, /**< Income accounts are used to denote income */
+  ACCT_TYPE_BANK = 0,	/**< The bank account type denotes a savings
+			 *   or checking account held at a bank.
+			 *   Often * interest * bearing. */
+  ACCT_TYPE_CASH = 1,	/**< The cash account type is used to denote a
+			 *   shoe-box or pillowcase stuffed with *
+			 *   cash. */
+  ACCT_TYPE_CREDIT = 3,	/**< The Credit card account is used to denote
+			 *   credit (e.g. amex) and debit (e.g. visa,
+			 *   mastercard) * card accounts */
+  ACCT_TYPE_ASSET = 2,	/**< asset (and liability) accounts indicate
+			 *   generic, generalized accounts that are
+			 *   none of the * above. */
+  ACCT_TYPE_LIABILITY = 4,/**< liability (and asset) accounts indicate
+			   *   generic, generalized accounts that are
+			   *   none of the * above. */
+  ACCT_TYPE_STOCK = 5,	/**< Stock accounts will typically be shown in
+			 *   registers which show three columns:
+			 *   price, number of * shares, and value. */
+  ACCT_TYPE_MUTUAL= 6,	/**< Mutual Fund accounts will typically be
+			 *   shown in registers which show three
+			 *   columns: price, * number of shares, and
+			 *   value. */
+  ACCT_TYPE_CURRENCY = 7,/**< The currency account type indicates that
+			  *   the account is a currency trading
+			  *   account.  In many * ways, a currency
+			  *   trading account is like a stock *
+			  *   trading account. It is shown in the
+			  *   register with * three columns: price,
+			  *   number of shares, and * value. Note:
+			  *   Since version 1.7.0, this account is *
+			  *   no longer needed to exchange currencies
+			  *   between * accounts, so this type is
+			  *   DEPRECATED. */
+  ACCT_TYPE_INCOME = 8,	/**< Income accounts are used to denote
+			 *   income */
   
-  EXPENSE = 9,/**< Expense accounts are used to denote expenses. */
+  ACCT_TYPE_EXPENSE = 9,/**< Expense accounts are used to denote
+			 *   expenses. */
   
-  EQUITY = 10,/**< Equity account is used to balance the balance sheet. */
+  ACCT_TYPE_EQUITY = 10,/**< Equity account is used to balance the
+			 *   balance sheet. */
   
-  RECEIVABLE = 11,  /**< A/R account type */
+  ACCT_TYPE_RECEIVABLE = 11,/**< A/R account type */
 
-  PAYABLE = 12,  /**< A/P account type */
+  ACCT_TYPE_PAYABLE = 12,  /**< A/P account type */
 
   NUM_ACCOUNT_TYPES = 13,  /**< stop here; the following types
 			    * just aren't ready for prime time */
   
   /* bank account types */
-  CHECKING = 13, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
-  SAVINGS = 14, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
-  MONEYMRKT = 15, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
-  CREDITLINE = 16,     /**< line of credit -- don't use this for now, see NUM_ACCOUNT_TYPES  */
+  ACCT_TYPE_CHECKING = 13, /**< bank account type -- don't use this
+			    *   for now, see NUM_ACCOUNT_TYPES  */
+  ACCT_TYPE_SAVINGS = 14, /**< bank account type -- don't use this for
+			   *   now, see NUM_ACCOUNT_TYPES  */
+  ACCT_TYPE_MONEYMRKT = 15, /**< bank account type -- don't use this
+			     *   for now, see NUM_ACCOUNT_TYPES  */
+  ACCT_TYPE_CREDITLINE = 16, /**< line of credit -- don't use this for
+			      *   now, see NUM_ACCOUNT_TYPES  */
 } GNCAccountType;
 
 
@@ -481,19 +499,19 @@ gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
  * Conversion routines for the account types to/from strings
  * that are used in persistant storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is INCOME -> "INCOME". */
+ * Typical converstion is ACCT_TYPE_INCOME -> "INCOME". */
 const char * xaccAccountTypeEnumAsString (GNCAccountType type); 
 /**
  * Conversion routines for the account types to/from strings
  * that are used in persistant storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is INCOME -> "INCOME". */
+ * Typical converstion is "INCOME" -> ACCT_TYPE_INCOME. */
 gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
 /**
  * Conversion routines for the account types to/from strings
  * that are used in persistant storage, communications.  These
  * strings should *not* be translated to the local language.
- * Typical converstion is INCOME -> "INCOME". */
+ * Typical converstion is "INCOME" -> ACCT_TYPE_INCOME. */
 GNCAccountType xaccAccountStringToEnum (const char* str);
 
 /** The xaccAccountGetTypeStr() routine returns a string suitable for 

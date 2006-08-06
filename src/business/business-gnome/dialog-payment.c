@@ -320,11 +320,11 @@ gnc_payment_set_account_types (GncTreeViewAccount *tree)
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     switch (i) {
-    case BANK:
-    case CASH:
-    case CREDIT:
-    case ASSET:
-    case LIABILITY:
+    case ACCT_TYPE_BANK:
+    case ACCT_TYPE_CASH:
+    case ACCT_TYPE_CREDIT:
+    case ACCT_TYPE_ASSET:
+    case ACCT_TYPE_LIABILITY:
       avi.include_type[i] = TRUE;
       break;
     default:

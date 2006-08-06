@@ -2161,8 +2161,8 @@ gnc_split_register_model_new (void)
 
   /* FIXME: We really only need a due date for 'invoices', not for
    * 'payments' or 'receipts'.  This implies we really only need the
-   * due-date for transactions that credit the RECEIVABLE or debit
-   * the PAYABLE account type.
+   * due-date for transactions that credit the ACCT_TYPE_RECEIVABLE or
+   * debit the ACCT_TYPE_PAYABLE account type.
    */
   gnc_table_model_set_io_flags_handler(
       model, gnc_split_register_get_rate_io_flags, RATE_CELL);

@@ -121,8 +121,8 @@ guint32 gnc_tree_model_account_types_get_selection(GtkTreeSelection *sel);
 
 /* Gets the selected account type.  Use the function if your view
    allows the selection of only one account type. If no types are
-   selected, returns NO_TYPE.  If more than one type is selected,
-   arbitrarily returns one of the selected types. */
+   selected, returns ACCT_TYPE_NONE.  If more than one type is
+   selected, arbitrarily returns one of the selected types. */
 GNCAccountType
 gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel);
 

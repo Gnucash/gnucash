@@ -129,7 +129,7 @@ typedef struct _RenumberDialog
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static int last_used_account_type = BANK;
+static int last_used_account_type = ACCT_TYPE_BANK;
 
 static GList *ac_destroy_cb_list = NULL;
 
@@ -169,7 +169,7 @@ gnc_account_commodity_from_type (AccountWindow * aw, gboolean update)
 {
   dialog_commodity_mode new_mode;
 
-  if ((aw->type == STOCK) || (aw->type == MUTUAL))
+  if ((aw->type == ACCT_TYPE_STOCK) || (aw->type == ACCT_TYPE_MUTUAL))
     new_mode = DIAG_COMM_NON_CURRENCY;
   else
     new_mode = DIAG_COMM_CURRENCY;
@@ -803,7 +803,7 @@ gnc_common_ok (AccountWindow *aw)
   }
 
   /* check for valid type */
-  if (aw->type == BAD_TYPE) {
+  if (aw->type == ACCT_TYPE_INVALID) {
     const char *message = _("You must select an account type.");
     gnc_error_dialog(aw->dialog, message);
     LEAVE("invalid type");
@@ -1121,18 +1121,18 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
   sensitive = FALSE;
 
   type_id = gnc_tree_model_account_types_get_selection_single(selection);
-  if (type_id == NO_TYPE) {
-    aw->type = BAD_TYPE;
+  if (type_id == ACCT_TYPE_NONE) {
+    aw->type = ACCT_TYPE_INVALID;
   } else {
     aw->type = type_id;
     last_used_account_type = type_id;
 
     gnc_account_commodity_from_type (aw, TRUE);
 
-    sensitive = (aw->type != EQUITY &&
-		 aw->type != CURRENCY &&
-		 aw->type != STOCK &&
-		 aw->type != MUTUAL);
+    sensitive = (aw->type != ACCT_TYPE_EQUITY &&
+		 aw->type != ACCT_TYPE_CURRENCY &&
+		 aw->type != ACCT_TYPE_STOCK &&
+		 aw->type != ACCT_TYPE_MUTUAL);
   }
 
   gtk_widget_set_sensitive (aw->opening_balance_page, sensitive);
@@ -1557,7 +1557,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   if (default_commodity != NULL) {
     commodity = default_commodity;
-  } else if ((aw->type != STOCK) && (aw->type != MUTUAL)) {
+  } else if ((aw->type != ACCT_TYPE_STOCK) && (aw->type != ACCT_TYPE_MUTUAL)) {
     commodity = parent_commodity;
   } else {
     commodity = NULL;

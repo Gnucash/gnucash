@@ -557,7 +557,7 @@ gnc_stock_split_druid_view_filter_income (Account  *account,
   GNCAccountType type;
 
   type = xaccAccountGetType(account);
-  return (type == INCOME);
+  return (type == ACCT_TYPE_INCOME);
 }
 
 static gboolean
@@ -567,7 +567,8 @@ gnc_stock_split_druid_view_filter_asset (Account  *account,
   GNCAccountType type;
 
   type = xaccAccountGetType(account);
-  return ((type == BANK) || (type == CASH) || (type == ASSET));
+  return ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
+	  (type == ACCT_TYPE_ASSET));
 }
 
 static void

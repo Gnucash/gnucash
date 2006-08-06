@@ -365,8 +365,8 @@ on_accountlist_changed (GtkTreeSelection *selection,
     }
 
     gnc_acc = gnc_import_select_account(info->window,
-					NULL, TRUE, longname, currency, BANK,
-					old_value, NULL);
+					NULL, TRUE, longname, currency,
+					ACCT_TYPE_BANK, old_value, NULL);
     g_free(longname);
 
     if (gnc_acc) {

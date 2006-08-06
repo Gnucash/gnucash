@@ -276,7 +276,7 @@ accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
   
   gnc_acc = gnc_import_select_account(NULL, 
 				      online_id, 1, account_name, NULL, 
-				      NO_TYPE, NULL, NULL);
+				      ACCT_TYPE_NONE, NULL, NULL);
   g_free(online_id);
   if (gnc_acc) {
     /* Store chosen gnucash account in callback data */

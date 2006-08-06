@@ -71,7 +71,7 @@ chart_collection_cb(QofEntity *ent, gpointer user_data)
 	data = (chart_data*)user_data;
 	acc = (Account*)ent;
 	if(0 == safe_strcmp(EQUITY_ACCOUNT_NAME, xaccAccountGetName(acc)) 
-		&& (xaccAccountGetType(acc) == EQUITY))
+		&& (xaccAccountGetType(acc) == ACCT_TYPE_EQUITY))
 	{
 		success = qof_entity_copy_to_session(data->chart_session, ent);
 		if(!success) { return; }
@@ -248,7 +248,7 @@ on_dateok_clicked (chart_data  *data)
 			xaccAccountBeginEdit (data->equity_account);
 			xaccAccountSetName (data->equity_account, EQUITY_ACCOUNT_NAME);
 			xaccAccountSetDescription(data->equity_account, EQUITY_ACCOUNT_NAME);
-			xaccAccountSetType (data->equity_account, EQUITY);
+			xaccAccountSetType (data->equity_account, ACCT_TYPE_EQUITY);
 			xaccAccountSetCommodity (data->equity_account, gnc_default_currency());
 		  }
 		qof_object_foreach(GNC_ID_ACCOUNT, book, chart_entity_cb, data);

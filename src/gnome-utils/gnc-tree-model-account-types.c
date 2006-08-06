@@ -252,7 +252,7 @@ gnc_tree_model_account_types_get_selection_single(GtkTreeSelection *sel)
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
         if (selected & (1 << i))
             return i;
-    return NO_TYPE;
+    return ACCT_TYPE_NONE;
 }
 
 void
@@ -334,7 +334,7 @@ gnc_tree_model_account_types_get_iter (GtkTreeModel * tree_model,
 
     i = gtk_tree_path_get_indices (path)[0];
 
-    if (i > NO_TYPE && i < NUM_ACCOUNT_TYPES) {
+    if (i > ACCT_TYPE_NONE && i < NUM_ACCOUNT_TYPES) {
         iter->stamp = model->stamp;
         iter->user_data = GINT_TO_POINTER (i);
         return TRUE;
@@ -468,7 +468,7 @@ gnc_tree_model_account_types_iter_nth_child (GtkTreeModel * tree_model,
 
     model = GNC_TREE_MODEL_ACCOUNT_TYPES (tree_model);
 
-    if (n > NO_TYPE && n < NUM_ACCOUNT_TYPES) {
+    if (n > ACCT_TYPE_NONE && n < NUM_ACCOUNT_TYPES) {
 	iter->stamp = model->stamp;
 	iter->user_data = GINT_TO_POINTER (n);
 	return TRUE;

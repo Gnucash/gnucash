@@ -129,7 +129,8 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 
 	  com = xaccAccountGetCommodity(act);
 	  if (com &&
-	      (!gnc_commodity_is_iso(com) || xaccAccountGetType(act) == CURRENCY) &&
+	      (!gnc_commodity_is_iso(com) ||
+	       xaccAccountGetType(act) == ACCT_TYPE_CURRENCY) &&
 	      gnc_commodity_get_quote_flag(com)) {
 	    if (!kvpnode)
 	      kvpnode= xmlNewNode(NULL, BAD_CAST act_slots_string);

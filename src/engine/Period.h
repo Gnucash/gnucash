@@ -62,7 +62,7 @@
  *    balances will be placed.   This argument may be NULL,
  *    if it is NULL, then a search algorithm will be used to 
  *    find a suitable equity account.  If NULL, this routine 
- *    searches for the 'nearest' account of GNCAccountType EQUITY 
+ *    searches for the 'nearest' account of GNCAccountType ACCT_TYPE_EQUITY 
  *    among its siblings, or the siblings of its parents.  It 
  *    does not search downwards.  If it does not find such an 
  *    account, it will create one, hanging off the top-most group.

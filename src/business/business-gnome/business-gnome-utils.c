@@ -357,13 +357,13 @@ gnc_business_account_types (GncOwner *owner)
 
   switch (gncOwnerGetType (owner)) {
   case GNC_OWNER_CUSTOMER:
-    return (g_list_prepend (NULL, (gpointer)RECEIVABLE));
+    return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_RECEIVABLE));
   case GNC_OWNER_VENDOR:
   case GNC_OWNER_EMPLOYEE:
-    return (g_list_prepend (NULL, (gpointer)PAYABLE));
+    return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_PAYABLE));
     break;
   default:
-    return (g_list_prepend (NULL, (gpointer)NO_TYPE));
+    return (g_list_prepend (NULL, (gpointer)ACCT_TYPE_NONE));
   }
 }
 

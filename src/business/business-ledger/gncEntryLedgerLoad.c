@@ -132,14 +132,15 @@ skip_expense_acct_cb (Account *account, gpointer user_data)
 
   /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
   type = xaccAccountGetType (account);
-  if (type == PAYABLE || type == RECEIVABLE ||
-      type == CASH || type == BANK || type == EQUITY)
+  if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
+      type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
+      type == ACCT_TYPE_EQUITY)
   {
     return TRUE;
   }
 
   /* If this is an ORDER or INVOICE, then leave out the expenses.  */
-  if (type == EXPENSE) return TRUE;
+  if (type == ACCT_TYPE_EXPENSE) return TRUE;
 
   /* Don't add placeholder accounts */
   if (xaccAccountGetPlaceholder (account)) return TRUE;
@@ -154,14 +155,15 @@ skip_income_acct_cb (Account *account, gpointer user_data)
 
   /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
   type = xaccAccountGetType (account);
-  if (type == PAYABLE || type == RECEIVABLE ||
-      type == CASH || type == BANK || type == EQUITY)
+  if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
+      type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
+      type == ACCT_TYPE_EQUITY)
   {
     return TRUE;
   }
 
   /* If this is a BILL, then leave out the incomes */
-  if (type == INCOME) return TRUE;
+  if (type == ACCT_TYPE_INCOME) return TRUE;
 
   /* Don't add placeholder accounts */
   if (xaccAccountGetPlaceholder (account)) return TRUE;

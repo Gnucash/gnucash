@@ -99,7 +99,7 @@ gnc_import_add_account(struct _accountpickerdialog * picker)
   GList * valid_types = NULL;
   /*DEBUG("Begin");  */
   
-  if(picker->new_account_default_type!=NO_TYPE)
+  if(picker->new_account_default_type!=ACCT_TYPE_NONE)
     {
       /*Yes, this is weird, but we really DO want to pass the value instead of the pointer...*/
      valid_types = g_list_prepend(valid_types, (gpointer)picker->new_account_default_type);

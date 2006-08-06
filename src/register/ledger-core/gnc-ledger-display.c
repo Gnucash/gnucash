@@ -200,8 +200,8 @@ gnc_get_default_register_style (GNCAccountType type)
 
   switch (type) {
 #if 0
-  case PAYABLE:
-  case RECEIVABLE:
+  case ACCT_TYPE_PAYABLE:
+  case ACCT_TYPE_RECEIVABLE:
     new_style = REG_STYLE_LEDGER;
     break;
 #endif
@@ -246,41 +246,41 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
   {
     switch (account_type)
     {
-      case BANK:
+      case ACCT_TYPE_BANK:
         return BANK_REGISTER;
 
-      case CASH:
+      case ACCT_TYPE_CASH:
         return CASH_REGISTER;
 
-      case ASSET:
+      case ACCT_TYPE_ASSET:
         return ASSET_REGISTER;
 
-      case CREDIT:
+      case ACCT_TYPE_CREDIT:
         return CREDIT_REGISTER;
 
-      case LIABILITY:
+      case ACCT_TYPE_LIABILITY:
         return LIABILITY_REGISTER;
 
-      case PAYABLE:
+      case ACCT_TYPE_PAYABLE:
         return PAYABLE_REGISTER;
 
-      case RECEIVABLE:
+      case ACCT_TYPE_RECEIVABLE:
         return RECEIVABLE_REGISTER;
 
-      case STOCK:
-      case MUTUAL:
+      case ACCT_TYPE_STOCK:
+      case ACCT_TYPE_MUTUAL:
         return STOCK_REGISTER;
 
-      case INCOME:
+      case ACCT_TYPE_INCOME:
         return INCOME_REGISTER;
 
-      case EXPENSE:
+      case ACCT_TYPE_EXPENSE:
         return EXPENSE_REGISTER;
 
-      case EQUITY:
+      case ACCT_TYPE_EQUITY:
         return EQUITY_REGISTER;
 
-      case CURRENCY:
+      case ACCT_TYPE_CURRENCY:
         return CURRENCY_REGISTER;
 
       default:
@@ -297,17 +297,17 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 
   switch (account_type)
   {
-    case BANK:
-    case CASH:
-    case ASSET:
-    case CREDIT:
-    case LIABILITY:
-    case RECEIVABLE:
-    case PAYABLE:
+    case ACCT_TYPE_BANK:
+    case ACCT_TYPE_CASH:
+    case ACCT_TYPE_ASSET:
+    case ACCT_TYPE_CREDIT:
+    case ACCT_TYPE_LIABILITY:
+    case ACCT_TYPE_RECEIVABLE:
+    case ACCT_TYPE_PAYABLE:
     {
-      /* If any of the sub-accounts have STOCK or MUTUAL types,
-       * then we must use the PORTFOLIO_LEDGER ledger. Otherwise,
-       * a plain old GENERAL_LEDGER will do. */
+      /* If any of the sub-accounts have ACCT_TYPE_STOCK or
+       * ACCT_TYPE_MUTUAL types, then we must use the PORTFOLIO_LEDGER
+       * ledger. Otherwise, a plain old GENERAL_LEDGER will do. */
       gpointer ret;
       reg_type = GENERAL_LEDGER;
 
@@ -318,18 +318,18 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
       break;
     }
 
-    case STOCK:
-    case MUTUAL:
-    case CURRENCY:
+    case ACCT_TYPE_STOCK:
+    case ACCT_TYPE_MUTUAL:
+    case ACCT_TYPE_CURRENCY:
       reg_type = PORTFOLIO_LEDGER;
       break;
 
-    case INCOME:
-    case EXPENSE:
+    case ACCT_TYPE_INCOME:
+    case ACCT_TYPE_EXPENSE:
       reg_type = INCOME_LEDGER;
       break;
 
-    case EQUITY:
+    case ACCT_TYPE_EQUITY:
       reg_type = GENERAL_LEDGER;
       break;
 
@@ -360,8 +360,8 @@ gnc_ledger_display_simple (Account *account)
   gboolean use_double_line;
 
   switch (acc_type) {
-  case PAYABLE:
-  case RECEIVABLE:
+  case ACCT_TYPE_PAYABLE:
+  case ACCT_TYPE_RECEIVABLE:
     use_double_line = TRUE;
     break;
   default:
