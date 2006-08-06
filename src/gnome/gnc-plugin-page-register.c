@@ -241,7 +241,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
 	{ "EditExchangeRateAction", NULL, N_("Edit E_xchange Rate"), NULL,
-	  N_("Exit the exchange rate for the current transaction"),
+	  N_("Edit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
 	{ "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),

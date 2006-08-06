@@ -335,7 +335,7 @@
       <locale name="C">
         <short>Show horizontal borders in a register</short>
         <long>
-	 Show horizontal borders between cells in a register.  If active
+	 Show horizontal borders between rows in a register.  If active
 	 the border between cells will be indicated with a heavy line.
 	 Otherwise the border between cells will not be marked.
 	</long>
@@ -351,7 +351,7 @@
       <locale name="C">
         <short>Show vertical borders in a register</short>
         <long>
-	 Show vertical borders between cells in a register.  If active
+	 Show vertical borders between columns in a register.  If active
 	 the border between cells will be indicated with a heavy line.
 	 Otherwise the border between cells will not be marked.
 	</long>

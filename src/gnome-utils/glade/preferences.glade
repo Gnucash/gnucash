@@ -978,7 +978,7 @@
 	      <child>
 		<widget class="GtkEntry" id="gconf/general/account_separator">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">The character that will be used between components of an account name.  Legal values are any single non-alphanumeric unicode character, or any of the following strings: &quot;colon&quot; &quot;slash&quot;, &quot;backslash&quot;, &quot;dash&quot; and &quot;period&quot;.</property>
+		  <property name="tooltip" translatable="yes">The character that will be used between components of an account name.  A legal value is any single character except letters and numbers, or any of the following strings: &quot;colon&quot; &quot;slash&quot;, &quot;backslash&quot;, &quot;dash&quot; and &quot;period&quot;.</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">True</property>
 		  <property name="visibility">True</property>
@@ -1180,7 +1180,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label101">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">31.07.05</property>
+		  <property name="label" translatable="yes">31.07.2005</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1204,7 +1204,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label100">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">31/07/05</property>
+		  <property name="label" translatable="yes">31/07/2005</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1228,7 +1228,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label99">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">07/31/05</property>
+		  <property name="label" translatable="yes">07/31/2005</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1300,7 +1300,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/ce">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Use the date format comon in continental Europe.</property>
+		  <property name="tooltip" translatable="yes">Use the date format common in continental Europe.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Europe:</property>
 		  <property name="use_underline">True</property>
@@ -3078,9 +3078,9 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/both_horiz">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Display toolbar items with the text label beside the icon.  Labels are only shown for the most frequently used items.</property>
+		  <property name="tooltip" translatable="yes">Display toolbar items with the text label beside the icon.  Labels are only shown for the most important items.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Text besi_de icons</property>
+		  <property name="label" translatable="yes">Priority text besi_de icons</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
