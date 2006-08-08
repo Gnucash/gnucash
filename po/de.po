@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-07 15:59+0200\n"
-"PO-Revision-Date: 2006-08-07 16:08+0200\n"
+"POT-Creation-Date: 2006-08-08 11:47+0200\n"
+"PO-Revision-Date: 2006-08-08 11:52+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -6229,7 +6229,7 @@ msgstr "Restliche Monate:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:116
 msgid "Mortgage/Loan Druid"
-msgstr "Hypothek/Darlehen Druide"
+msgstr "Hypothek/Darlehen Assistent"
 
 #: ../src/gnome/glade/sched-xact.glade.h:117
 msgid "Mortgage/Loan Repayment Setup"
@@ -6888,7 +6888,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:150
 msgid "_Mortgage & Loan Repayment..."
-msgstr "_Hypothek & Darlehen Druide..."
+msgstr "_Hypothek & Darlehen Assistent..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -8085,9 +8085,9 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid ""
-"If set to TRUE then any newly created scheduled transactions will have its "
-"'auto create' flag set by default. The user can change this pre-transaction "
-"flag during transaction creation, or at any later time by editing the "
+"If active, any newly created scheduled transaction will have its 'auto "
+"create' flag set active by default. The user can change this flag during "
+"transaction creation, or at any later time by editing the scheduled "
 "transaction."
 msgstr ""
 "Wenn aktiviert, werden neu erstellte Terminierte Buchungen »Automatisch "
@@ -8096,11 +8096,10 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid ""
-"If set to TRUE then any newly created scheduled transactions will have its "
-"'notify' flag set by default. The user can change this pre-transaction flag "
-"during transaction creation, or at any later time by editing the "
-"transaction. This setting only has meaning of the create_auto setting is "
-"TRUE."
+"If active, any newly created scheduled transaction will have its 'notify' "
+"flag set by default. The user can change this flag during transaction "
+"creation, or at any later time by editing the scheduled transaction. This "
+"setting only has meaning of the create_auto setting is active."
 msgstr ""
 "Wenn aktiviert, werden neu erstellte Terminierte Buchungen »Benachrichtigen« "
 "als Voreinstellung aktiviert haben. Diese Einstellung kann bei jeder "
@@ -8126,10 +8125,10 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid ""
-"Whether or not to show scheduled transactions \"since last run\" dialog when "
-"a data file is opened. This includes the initial data file open when GnuCash "
-"starts. A value of TRUE says to show the dialog; FALSE says not to show the "
-"dialog."
+"This setting controls whether the scheduled transactions \"since last run\" "
+"dialog is shown automatically when a data file is opened. This includes the "
+"initial opening of the data file when GnuCash starts. If this setting is "
+"active, show the dialog, otherwise it is not shown."
 msgstr ""
 "Ob das Fenster »Seit letztem Aufruf« beim Öffnen einer Datei angezeigt wird."
 
@@ -9505,49 +9504,40 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:189
 msgid ""
-"The file you tried to load does not specify an encoding, so GnuCash is "
-"unable to unambiguously interpret it. This is typical for files created with "
-"GnuCash prior to 2.0.\n"
+"The file you are trying to load is from an older version of GnuCash. The "
+"file format in the older versions was missing the detailed specification of "
+"the character encoding being used. This means the text in your data file "
+"could be read in multiple ambiguous ways. This ambiguity cannot be resolved "
+"automatically, but the new GnuCash 2.0.0 file format will include all "
+"necessary specifications so that you do not have to go through this step "
+"again.\n"
 "\n"
-"On the next page you will be asked to select the best looking decoded string "
-"for every ambiguous word GnuCash found while trying to open your file. "
-"Therefore GnuCash has guessed what encodings you might have used. So "
-"probably everything will look just fine and you can simply click 'Forward'.\n"
+"GnuCash will try to guess the correct character encoding for your data file. "
+"On the next page GnuCash will show the resulting texts when using this "
+"guess. You have to check whether the words look as expected. Either "
+"everything looks fine and you can simply press 'Forward'. Or the words "
+"contain unexpected characters, in which case you should select different "
+"character encodings to see different results. You may have to edit the list "
+"of character encodings by clicking on the respective button.\n"
 "\n"
-"If it does not work for you, try to change the default encoding at the top. "
-"Maybe you even have to edit the list of encodings by clicking on the button "
-"in the top right corner.\n"
-"\n"
-"The page is not overly complicated, just take the time until you feel "
-"comfortable with it. You can always come back and read this message again."
+"Press 'Forward' now to select the correct character encoding for your data "
+"file."
 msgstr ""
-"Die zu öffnende Datei enthält keine Angaben zu der verwendeten "
-"Zeichenkodierung. Dies ist bei allen Dateien der GnuCash-Version 1.9 oder "
-"älter der Fall. Es bedeutet, dass GnuCash die enthaltenen Texte in "
-"mehrfacher Bedeutung lesen könnte. Eine solche Mehrdeutigkeit kann nicht "
-"automatisch behoben werden.\n"
+"Die zu öffnende Datei enthält keine Angaben zu der verwendeten Zeichenkodierung. Dies ist bei allen Dateien der GnuCash-Version 1.9 oder älter der Fall. Es bedeutet, dass GnuCash die enthaltenen Texte in mehrfacher Bedeutung lesen könnte. Eine solche Mehrdeutigkeit kann nicht automatisch behoben werden.\n"
 "\n"
-"Auf der nächsten Seite sollen Sie die besten Bedeutungen der gelesenen Texte "
-"auswählen. GnuCash versucht dafür, eine passende Zeichenkodierung zu "
-"erraten. Wenn die erratene Zeichenkodierung passend war, werden alle Texte "
-"richtig aussehen und Sie können einfach »Vor« klicken.\n"
+"Auf der nächsten Seite sollen Sie die besten Bedeutungen der gelesenen Texte auswählen. GnuCash versucht dafür, eine passende Zeichenkodierung zu erraten. Wenn die erratene Zeichenkodierung passend war, werden alle Texte richtig aussehen und Sie können einfach »Vor« klicken.\n"
 "\n"
-"Wenn die Texte nicht wie erwartet aussehen, sollten Sie eine andere "
-"Zeichenkodierung mit der oberen Auswahlbox probieren. Wenn auch dies noch "
-"nicht hilft, sollten Sie weitere Zeichenkodierungen auswählen, indem Sie auf "
-"den Knopf rechts oben klicken.\n"
+"Wenn die Texte nicht wie erwartet aussehen, sollten Sie eine andere Zeichenkodierung mit der oberen Auswahlbox probieren. Wenn auch dies noch nicht hilft, sollten Sie weitere Zeichenkodierungen auswählen, indem Sie auf den Knopf rechts oben klicken.\n"
 "\n"
-"Es werden keine Änderungen vorgenommen, bevor Sie nicht auf der allerletzten "
-"Seite »Anwenden« klicken. Sie können jederzeit mit »Zurück« auf diese Seite "
-"zurückkehren, um diese Erklärung erneut zu lesen.\n"
+"Es werden keine Änderungen vorgenommen, bevor Sie nicht auf der allerletzten Seite »Anwenden« klicken. Sie können jederzeit mit »Zurück« auf diese Seite zurückkehren, um diese Erklärung erneut zu lesen.\n"
 "\n"
 "Klicken Sie nun »Vor«."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:203
-msgid "Missing file encoding"
+#: ../src/gnome-utils/druid-gnc-xml-import.c:209
+msgid "Ambiguous character encoding"
 msgstr "Zeichenkodierung der Datei unbekannt"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:206
+#: ../src/gnome-utils/druid-gnc-xml-import.c:212
 msgid ""
 "The file has been loaded successfully. If you click 'Apply' it will be saved "
 "and reloaded into the main application. That way you will have a working "
@@ -9561,153 +9551,153 @@ msgstr ""
 "\n"
 "Wenn Sie die Einstellungen noch ändern möchten, können Sie »Zurück« klicken."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:228
+#: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:230
+#: ../src/gnome-utils/druid-gnc-xml-import.c:236
 msgid "European"
 msgstr "Europäisch"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:231
+#: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-1 (West European)"
 msgstr "ISO-8859-1 (Westeuropäisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:232
+#: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-2 (East European)"
 msgstr "ISO-8859-2 (Osteuropäisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:233
+#: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-3 (South European)"
 msgstr "ISO-8859-3 (Südeuropäisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:234
+#: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-4 (North European)"
 msgstr "ISO-8859-4 (Nordeuropäisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:235
+#: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-5 (Cyrillic)"
 msgstr "ISO-8859-5 (Kyrillisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:236
+#: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-6 (Arabic)"
 msgstr "ISO-8859-6 (Arabisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:237
+#: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-7 (Greek)"
 msgstr "ISO-8859-7 (Griechisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:238
+#: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-8 (Hebrew)"
 msgstr "ISO-8859-8 (Hebräisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:239
+#: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "ISO-8859-9 (Turkish)"
 msgstr "ISO-8859-9 (Türkisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:240
+#: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "ISO-8859-10 (Nordic)"
 msgstr "ISO-8859-10 (Skandinavisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:241
+#: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "ISO-8859-11 (Thai)"
 msgstr "ISO-8859-11 (Thai)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:242
+#: ../src/gnome-utils/druid-gnc-xml-import.c:248
 msgid "ISO-8859-13 (Baltic)"
 msgstr "ISO-8859-13 (Baltisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:243
+#: ../src/gnome-utils/druid-gnc-xml-import.c:249
 msgid "ISO-8859-14 (Celtic)"
 msgstr "ISO-8859-14 (Keltisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:244
+#: ../src/gnome-utils/druid-gnc-xml-import.c:250
 msgid "ISO-8859-15 (West European, Euro sign)"
 msgstr "ISO-8859-15 (Westeuropäisch, Euro-Zeichen)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:245
+#: ../src/gnome-utils/druid-gnc-xml-import.c:251
 msgid "ISO-8859-16 (South-East European)"
 msgstr "ISO-8859-16 (Südost-Europäisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:246
+#: ../src/gnome-utils/druid-gnc-xml-import.c:252
 msgid "Cyrillic"
 msgstr "Kyrillisch"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:247
+#: ../src/gnome-utils/druid-gnc-xml-import.c:253
 msgid "KOI8-R (Russian)"
 msgstr "KOI8-R (Russisch)"
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:248
+#: ../src/gnome-utils/druid-gnc-xml-import.c:254
 msgid "KOI8-U (Ukrainian)"
 msgstr "KOI8-U (Ukraninisch)"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
-#: ../src/gnome-utils/druid-gnc-xml-import.c:571
+#: ../src/gnome-utils/druid-gnc-xml-import.c:577
 msgid "ISO-8859-1 KOI8-U"
 msgstr "ISO-8859-1 ISO-8859-15"
 
 #. another error, cannot handle this here
-#: ../src/gnome-utils/druid-gnc-xml-import.c:692
-#: ../src/gnome-utils/druid-gnc-xml-import.c:711
+#: ../src/gnome-utils/druid-gnc-xml-import.c:698
+#: ../src/gnome-utils/druid-gnc-xml-import.c:717
 msgid "The file could not be reopened."
 msgstr "Die Datei konnte nicht neu geöffnet werden."
 
 #. try to load once again
-#: ../src/gnome-utils/druid-gnc-xml-import.c:699
+#: ../src/gnome-utils/druid-gnc-xml-import.c:705
 #: ../src/gnome-utils/gnc-file.c:746 ../src/gnome-utils/gnc-file.c:758
 msgid "Reading file..."
 msgstr "Datei wird gelesen..."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:719
+#: ../src/gnome-utils/druid-gnc-xml-import.c:725
 msgid "Parsing file..."
 msgstr "Datei wird verarbeitet..."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:726
+#: ../src/gnome-utils/druid-gnc-xml-import.c:732
 msgid "There was an error parsing the file."
 msgstr "Beim Verarbeiten der Datei ist ein Fehler aufgetreten."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:749
+#: ../src/gnome-utils/druid-gnc-xml-import.c:755
 #: ../src/gnome-utils/gnc-file.c:972
 msgid "Writing file..."
 msgstr "Datei wird geschrieben..."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:827
+#: ../src/gnome-utils/druid-gnc-xml-import.c:833
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
 msgstr ""
 "Es gibt %d nicht zugewiesene und %d nicht dekodierbare Worte. Bitte wählen "
 "Sie jeweils eine Zeichenkodierung aus."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:833
+#: ../src/gnome-utils/druid-gnc-xml-import.c:839
 #, c-format
 msgid "There are %d unassigned words. Please decide on them or add encodings."
 msgstr ""
 "Es gibt %d nicht zugewiesene Worte. Bitte wählen Sie jeweils einen der "
 "Wortvorschläge oder wählen eine Zeichenkodierung."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:841
+#: ../src/gnome-utils/druid-gnc-xml-import.c:847
 #, c-format
 msgid "There are %d undecodable words. Please add encodings."
 msgstr ""
 "Es gibt %d nicht dekodierbare Worte. Bitte wählen Sie eine Zeichenkodierung "
 "aus."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1029
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1035
 msgid "That GnuCash XML file is already loaded. Please select another file."
 msgstr ""
 "Diese GnuCash-Datei ist bereits geöffnet. Bitte wählen Sie eine andere Datei."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1330
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1336
 msgid "This encoding has been added to the list already."
 msgstr "Diese Zeichenkodierung existiert bereits in der Liste."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1340
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1346
 msgid "This is an invalid encoding."
 msgstr "Dies ist keine gültige Zeichenkodierung."
 
-#: ../src/gnome-utils/druid-gnc-xml-import.c:1475
+#: ../src/gnome-utils/druid-gnc-xml-import.c:1481
 msgid "No files to merge. Please add ones by clicking on 'Load another file'."
 msgstr ""
 "Keine Dateien, die zusammengefügt werden können. Bitte wählen Sie welche, "
@@ -10071,7 +10061,7 @@ msgid ""
 "this if you have saved your accounts to separate GnuCash files.\n"
 "\n"
 "Click \"Forward\" to finish loading files and move to the next step of the "
-"GnuCash XML import process."
+"GnuCash Datafile import process."
 msgstr ""
 "Wenn Sie jetzt noch mehr Dateien importieren möchten, klicken Sie bitte "
 "»Eine andere Datei laden«. Das ist insbesondere sinnvoll, wenn Sie Ihre "
@@ -10097,15 +10087,15 @@ msgid "Edit the list of encodings"
 msgstr "Die Liste der Zeichenkodierungen bearbeiten"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
-msgid "Finish GnuCash XML Import"
+msgid "Finish GnuCash Datafile Import"
 msgstr "GnuCash-Datei Import abschließen"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-msgid "GnuCash XML Import Druid"
+msgid "GnuCash Datafile Import Druid"
 msgstr "GnuCash-Datei Import-Assistent"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
-msgid "GnuCash XML files you have loaded"
+msgid "GnuCash data files you have loaded"
 msgstr "GnuCash-Dateien, die Sie geladen haben"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:15
@@ -13462,6 +13452,7 @@ msgid "Set a date format for this QIF file"
 msgstr "Ein Datumsformat für diese QIF-Datei setzen"
 
 #: ../src/import-export/import-provider-format.glade.h:5
+#: ../src/import-export/qif-import/qif.glade.h:81
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
 "components of a date are printed.  In most cases, it is possible to "
@@ -14043,28 +14034,6 @@ msgstr "Den Namen des Standard QIF Konto setzen"
 msgid "Show some documentation-only pages in QIF Import druid."
 msgstr ""
 "Seiten im QIF-Import anzeigen, die ausschließlich Dokumentation enthalten."
-
-#: ../src/import-export/qif-import/qif.glade.h:81
-msgid ""
-"The QIF file format does not specify which order the day, month, and year "
-"components of a date are printed.  In most cases, it is possible to "
-"automatically determine which format is in use in a particular file. "
-"However, in the file you have just imported there exist more than one "
-"possible format that fits the data.  \n"
-"\n"
-"Please select a date format for the file.  QIF files created by European "
-"software are likely  to be in \"d-m-y\" or day-month-year format, where US "
-"QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
-msgstr ""
-"Das QIF-Dateiformat macht keine Angaben darüber, in welcher Reihenfolge Tag, "
-"Monat und Jahr gespeichert sind. In den meisten Fällen kann dies automatisch "
-"festgestellt werden, aber in der von Ihnen importierten Datei gab es "
-"Mehrdeutigkeiten, die nicht aufgelöst werden konnten.\n"
-"\n"
-"Bitte wählen Sie daher ein Datumsformat für die Datei. QIF Dateien, die von "
-"europäischer Software erzeugt wurden, haben meistens das Format »d-m-y« (Tag-"
-"Monat-Jahr), wogegen Dateien aus dem amerikanischen Raum eher das Format »m-"
-"d-y« (Monat-Tag-Jahr) haben.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:85
 msgid ""
