@@ -205,12 +205,12 @@ show_session_error (QofBackendError io_error,
     case ERR_BACKEND_NO_ERR:
       uh_oh = FALSE;
       break;
-	
-	case ERR_BACKEND_NO_HANDLER: {
-		fmt = _("No suitable backend was found for %s.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break;
-	}
+
+    case ERR_BACKEND_NO_HANDLER:
+      fmt = _("No suitable backend was found for %s.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL %s is not supported by this version of GnuCash.");
       gnc_error_dialog (parent, fmt, newfile);
