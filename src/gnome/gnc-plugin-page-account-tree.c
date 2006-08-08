@@ -578,7 +578,7 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_page);
 
-	/* Install it now so we can them manipulate the created widget */
+	/* Install it now so we can then manipulate the created widget */
 	gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
 
         gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 

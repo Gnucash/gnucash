@@ -427,7 +427,8 @@ typedef struct {
  *  @param data A data structure containing state about the
  *  window/page restoration process. */
 static void
-gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data)
+gnc_main_window_restore_page (GncMainWindow *window, 
+                              GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
@@ -436,10 +437,12 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
   GError *error = NULL;
 
   ENTER("window %p, data %p (key file %p, window %d, page start %d, page num %d)",
-	window, data, data->key_file, data->window_num, data->page_offset, data->page_num);
+	window, data, data->key_file, data->window_num, data->page_offset, 
+        data->page_num);
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-  page_group = g_strdup_printf(PAGE_STRING, data->page_offset + data->page_num);
+  page_group = g_strdup_printf(PAGE_STRING, 
+                               data->page_offset + data->page_num);
   page_type = g_key_file_get_string(data->key_file, page_group,
 				    PAGE_TYPE, &error);
   if (error) {

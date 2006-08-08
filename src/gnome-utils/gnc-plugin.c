@@ -313,7 +313,7 @@ gnc_plugin_set_important_actions (GtkActionGroup *action_group,
   }
 
   /* If this trips, you've got too many "important" actions.  That
-   * can't *all* me that important, can they? */
+   * can't *all* be that important, can they? */
   g_assert(i <= 3);
 }
 

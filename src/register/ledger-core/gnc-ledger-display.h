@@ -36,14 +36,15 @@
 
 /** Definitions *****************************************************/
 
-/* The xaccLedgerDisplay struct describes a single register/ledger
- * instance. */
+/* The GNCLedgerDisplay struct describes a single register/ledger
+ * instance.  It has a SplitRegister specially configured for
+ * displaying the results of a Query.  It also stores the Query.  */
 typedef struct gnc_ledger_display GNCLedgerDisplay;
 
 typedef void (*GNCLedgerDisplayDestroy) (GNCLedgerDisplay *ld);
 typedef gncUIWidget (*GNCLedgerDisplayGetParent) (GNCLedgerDisplay *ld);
 typedef void (*GNCLedgerDisplaySetHelp) (GNCLedgerDisplay *ld,
-                                      const char *help_str);
+                                         const char *help_str);
 
 typedef enum
 {
@@ -70,7 +71,7 @@ void gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
                                       GNCLedgerDisplayDestroy destroy,
                                       GNCLedgerDisplayGetParent get_parent);
 
-/** Returns the parent of a given */
+/** Returns the parent of a given ledger display */
 gncUIWidget gnc_ledger_display_get_parent( GNCLedgerDisplay *ld );
 
 /* return the split register associated with a ledger display */

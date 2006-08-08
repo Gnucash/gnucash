@@ -93,7 +93,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
     entity = qof_collection_lookup_entity (col, &guid);                     \
     if (NULL == entity)                                                     \
     {                                                                       \
-      result->error_message = g_strdup_printf (_("Entity Not Found: %s"), location); \
+      result->error_message = g_strdup_printf (_("Entity Not Found: %s"),   \
+                                               location);                   \
       return FALSE;                                                         \
     }                                                                       \
 
@@ -247,8 +248,8 @@ gnc_restore_all_state (gpointer session, gpointer unused)
 #if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
         /* See if there's an old style state file to be found */
         scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
-                   (session ?
-                    gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+                   (session ? gw_wcp_assimilate_ptr(
+                        session, scm_c_eval_string("<gnc:Session*>")) :
                     SCM_BOOL_F));
         /* At this point the reports have only been loaded into
            memory.  Now we create their ui component. */

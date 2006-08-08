@@ -167,7 +167,7 @@ void gnc_gconf_suggest_sync (void);
 
 /** Register a callback for when a specific key in the general section
  *  of Gnucash's gconf data is changed.  Any time the key's value
- *  chagnes, the routine will be invoked and will be passed both the
+ *  changes, the routine will be invoked and will be passed both the
  *  changes gconf entry and the user data passed to this function.
  *
  *  @param key This value contains the name of the key within the
