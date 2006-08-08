@@ -1,5 +1,9 @@
 2006-08-08  Christian Stimming <stimming@tuhh.de>
 
+	* configure.in, src/gnome-utils/schemas/Makefile.am: Find absolute
+	path of gconftool-2 during configure. Make gconftool rules to fail
+	if gconftool-2 could not be found. bug#349851.
+
 	* src/gnome-utils/druid-gnc-xml-import.c: Improve wording for XML
 	data file import druid. bug#342727.
 
