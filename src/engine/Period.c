@@ -559,11 +559,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
     * routine, and it is not needed for the current usage. */
    src_grp = xaccGetAccountGroup (src_book);
    dst_grp = xaccGetAccountGroup (dest_book);
-   xaccAccountGroupBeginEdit (dst_grp);
-   xaccAccountGroupBeginEdit (src_grp);
    xaccGroupCopyGroup (dst_grp, src_grp);
-   xaccAccountGroupCommitEdit (src_grp);
-   xaccAccountGroupCommitEdit (dst_grp);
 
    /* Next, run the query */
    xaccAccountGroupBeginEdit (dst_grp);
