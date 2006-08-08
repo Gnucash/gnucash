@@ -270,7 +270,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   /* figure out where we are going to. */
   if (info->traverse_to_new)
   {
-    find_trans = xaccSplitGetParent (blank_split);
+    find_trans = blank_trans;
     find_split = NULL;
     find_trans_split = blank_split;
   }
@@ -355,9 +355,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   table->model->dividing_row = -1;
 
-  if (multi_line)
-    trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
-
   // Ensure that the transaction and splits being edited are in the split
   // list we're about to load.
   if (pending_trans != NULL)
@@ -381,6 +378,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
       slist = g_list_append(slist, pending_split);
     }
   }
+
+  if (multi_line)
+    trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   /* populate the table */
   for (node = slist; node; node = node->next) 
@@ -443,16 +443,27 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     g_hash_table_destroy (trans_table);
 
   /* add the blank split at the end. */
-  split = blank_split;
-  trans = xaccSplitGetParent (split);
-  if (pending_trans == trans)
+  if (pending_trans == blank_trans)
     found_pending = TRUE;
 
-  if (trans == find_trans)
+  if (blank_trans == find_trans)
     new_trans_row = vcell_loc.virt_row;
 
-  if (split == find_trans_split)
+  if (blank_split == find_trans_split)
     new_trans_split_row = vcell_loc.virt_row;
+
+  /* If we didn't find the pending transaction, it was removed
+   * from the account. */
+  if (!found_pending)
+  {
+      info->pending_trans_guid = *guid_null ();
+      if (xaccTransIsOpen (pending_trans))
+          xaccTransCommitEdit (pending_trans);
+      else if (pending_trans) 
+          g_assert_not_reached();
+
+      pending_trans = NULL;
+  }
 
   /* go to blank on first pass */
   if (info->first_pass)
@@ -466,7 +477,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     save_loc.phys_col_offset = 0;
   }
 
-  gnc_split_register_add_transaction (reg, trans, split,
+  gnc_split_register_add_transaction (reg, blank_trans, blank_split,
                                       lead_cursor, split_cursor,
                                       multi_line, start_primary_color,
                                       info->blank_split_edited, find_trans,
@@ -522,19 +533,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gnc_cursor_buffer_destroy (cursor_buffer);
     cursor_buffer = NULL;
-  }
-
-  /* If we didn't find the pending transaction, it was removed
-   * from the account. */
-  if (!found_pending)
-  {
-      info->pending_trans_guid = *guid_null ();
-      if (xaccTransIsOpen (pending_trans))
-          xaccTransCommitEdit (pending_trans);
-      else if (pending_trans) 
-          g_assert_not_reached();
-
-      pending_trans = NULL;
   }
 
   /* Set up the hint transaction, split, transaction split, and column. */
