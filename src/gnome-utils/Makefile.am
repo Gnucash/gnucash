@@ -66,6 +66,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-recurrence.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
+  gnc-gtk-utils.c \
   gnc-gui-query.c \
   gnc-html-graph-gog.c \
   gnc-html-history.c \
@@ -132,6 +133,7 @@ gncinclude_HEADERS = \
   gnc-recurrence.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \
+  gnc-gtk-utils.h \
   gnc-gui-query.h \
   gnc-html-graph-gog.h \
   gnc-html-history.h \
