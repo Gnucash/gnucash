@@ -210,7 +210,7 @@ int finishQuery(PGBackend *be);
  * -- sqlname -- input -- the name of the field in the sql table
  * -- fun -- input -- a subroutine returning a value
  * -- ndiffs -- input/output -- integer, incremented if the 
- *              value ofthe field and the value returned by
+ *              value of the field and the value returned by
  *              the subroutine differ.
  *
  * The different macros compare different field types.
@@ -245,7 +245,7 @@ int finishQuery(PGBackend *be);
 }
 
 /* Compare guids. A NULL GUID from the engine is considered to 
- * match any value of a GUID in teh sql database.  This is 
+ * match any value of a GUID in the sql database.  This is 
  * equality is used to enable deletion, where the GUID may have
  * already been set to NULL in the engine, but not yet in the DB.
  */

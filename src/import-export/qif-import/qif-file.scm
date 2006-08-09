@@ -640,7 +640,7 @@
 ;;  this is a semi-generic routine to apply a format check and 
 ;;  parsing routine to fields that can have multiple possible 
 ;;  formats.  In this case, any amount field cam be decimal or 
-;;  comma radix and the date firled can be any of several possible
+;;  comma radix and the date field can be any of several possible
 ;;  types. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

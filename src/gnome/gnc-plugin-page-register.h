@@ -64,7 +64,7 @@ typedef struct {
 
 /* function prototypes */
 
-/** Retrieve the type number for an "account tree" plugin page.
+/** Retrieve the type number for the plugin page.
  *
  *  @return The type number.
  */
@@ -82,7 +82,8 @@ GType gnc_plugin_page_register_get_type (void);
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *gnc_plugin_page_register_new (Account *account, gboolean subaccounts);
+GncPluginPage *
+gnc_plugin_page_register_new (Account *account, gboolean subaccounts);
 
 
 /** Create a new "register" plugin page, given a pointer to an already
@@ -95,14 +96,16 @@ GncPluginPage *gnc_plugin_page_register_new (Account *account, gboolean subaccou
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
+GncPluginPage *
+gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
 
 
 /** Create a new "register" plugin page containing a general ledger.
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *gnc_plugin_page_register_new_gl (void);
+GncPluginPage *
+gnc_plugin_page_register_new_gl (void);
 
 
 /** Set various register options on a newly created "register" plugin page.
@@ -132,7 +135,8 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
  *
  *  @param plugin_page A "register" page.
  */
-GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
+GNCSplitReg *
+gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
 
 /** Get the Account associated with this register page.
@@ -142,7 +146,8 @@ GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
  *  @return The account if the register contains only a single
  *  account, or an account and its sub-accounts.  NULL otherwise.
  */
-Account *gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
+Account *
+gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
 
 G_END_DECLS
 /** @} */

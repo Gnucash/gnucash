@@ -147,7 +147,7 @@ gnc_book_dom_tree_create(QofBook *book)
 
 /* ================================================================ */
 /* same as above, but we write out directly.  Only handle the guid 
- * and slots, everythign else is handled elsewehere */
+ * and slots, everything else is handled elsewehere */
 
 void
 write_book_parts(FILE *out, QofBook *book)

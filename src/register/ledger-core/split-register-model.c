@@ -1647,7 +1647,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   char recn;
 
   /* This assumes we reset the flag whenever we change splits.
-   * This happens in LedgerMoveCursor. */
+   * This happens in gnc_split_register_move_cursor(). */
   if (info->change_confirmed)
     return TRUE;
 
@@ -1691,7 +1691,6 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
       return FALSE;
 
     info->change_confirmed = TRUE;
-    return TRUE;
   }
 
   return TRUE;
