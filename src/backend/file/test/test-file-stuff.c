@@ -223,7 +223,7 @@ equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, QofBook 
     else
     {
         gnc_commodity_destroy(cmpcom);
-        return TRUE;
+        return FALSE;
     }
 }
 
