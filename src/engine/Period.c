@@ -395,13 +395,7 @@ lot_list_preen_open_lots (LotList *lot_list)
       LotList *lnext = lnode->next;
 
       if (lot_has_open_trans_tree (lot))
-      {
-         lot_list = g_list_remove_link (lot_list, lnode);
-         /* XXX freeing this node somehow leads to glib g_list
-          * memory corruption which later takes down the system. 
-          * I don't see why.  */
-         /* g_list_free_1 (lnode); */
-      }
+         lot_list = g_list_delete_link(lot_list, lnode);
       lnode = lnext;
    }
    LEAVE (" ");
