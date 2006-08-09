@@ -62,7 +62,7 @@
 	  have its 'notify' flag set by default.  The user can
 	  change this flag during transaction creation, or at any
 	  later time by editing the scheduled transaction. This
-	  setting only has meaning of the create_auto setting is
+	  setting only has meaning if the create_auto setting is
 	  active.
 	</long>
       </locale>
