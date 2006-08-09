@@ -227,38 +227,6 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:suspend-gui-refresh
-   '<gw:void>
-   "gnc_suspend_gui_refresh"
-   '()
-   "Suspend gui refresh events.")
-
-  (gw:wrap-function
-   ws
-   'gnc:resume-gui-refresh
-   '<gw:void>
-   "gnc_resume_gui_refresh"
-   '()
-   "Resume gui refresh events.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-refresh-all
-   '<gw:void>
-   "gnc_gui_refresh_all"
-   '()
-   "Refresh all gui components.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-refresh-suspended
-   '<gw:bool>
-   "gnc_gui_refresh_suspended"
-   '()
-   "Return #t if refreshes are suspended.")
-
-  (gw:wrap-function
-   ws
    'gnc:close-gui-component
    '<gw:void>
    "gnc_close_gui_component"
