@@ -1,7 +1,7 @@
 SUBDIRS = . test file
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-business-core.la libgw-business-core.la
+pkglib_LTLIBRARIES = libgncmod-business-core.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -13,6 +13,8 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} 
 
 libgncmod_business_core_la_SOURCES = \
+  swig-business-core.c \
+  gncBusGuile.c \
   businessmod-core.c \
   gncAddress.c \
   gncBillTerm.c \
@@ -65,28 +67,11 @@ libgncmod_business_core_la_LIBADD = \
 
 # business-core-helpers.c
 
-libgw_business_core_la_SOURCES = \
-  gncBusGuile.c
-
-nodist_libgw_business_core_la_SOURCES = \
-  gw-business-core.c
-
-libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_core_la_LIBADD  = \
-  libgncmod-business-core.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
+swig-business-core.c: business-core.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-business-core-spec.scm
-nodist_gwmod_DATA = \
-  gw-business-core.scm
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
@@ -110,15 +95,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-business-core.scm gw-business-core.c gw-business-core.h: \
- .scm-links gw-business-core-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (set! %load-path (cons \"../../engine\" %load-path)) \
-	 (primitive-load \"./gw-business-core-spec.scm\") \
-	 (gw:generate-wrapset \"gw-business-core\")"
 
-BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
+#BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
 CLEANFILES = $(BUILT_SOURCES) gw-business-core.html \
 	g-wrapped gnucash .scm-links ${SCM_FILE_LINKS}
