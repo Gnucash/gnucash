@@ -35,7 +35,7 @@
 #include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "gw-business-gnome.h"
+//#include "gw-business-gnome.h"
 
 #include "search-core-type.h"
 #include "search-owner.h"
@@ -101,7 +101,8 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
   //    return FALSE;
   //  }
 
-  scm_c_eval_string("(use-modules (g-wrapped gw-business-gnome))");
+  // Doesn't seem to be used:
+  //scm_c_eval_string("(use-modules (g-wrapped gw-business-gnome))");
   scm_c_eval_string("(use-modules (gnucash business-gnome))");
   scm_c_eval_string("(use-modules (gnucash report business-reports))");
 
