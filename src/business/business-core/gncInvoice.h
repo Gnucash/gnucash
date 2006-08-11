@@ -164,7 +164,6 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 #define gncInvoiceLookup(book,guid)    \
        QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_INVOICE, GncInvoice)
 
-gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
@@ -195,8 +194,10 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 /** deprecated functions */
 #define gncInvoiceGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
+//#define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))
+
+GUID gncInvoiceRetGUID(GncInvoice *x);
 
 #endif /* GNC_INVOICE_H_ */
 /** @} */

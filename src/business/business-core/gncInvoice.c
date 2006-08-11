@@ -94,6 +94,11 @@ mark_invoice (GncInvoice *invoice)
   qof_event_gen (&invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
+GUID gncInvoiceRetGUID(GncInvoice *x)
+{ 
+    return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()));
+}
+
 /* ================================================================== */
 /* Create/Destroy Functions */
 
