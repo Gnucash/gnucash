@@ -407,6 +407,8 @@ invoice_set_value (GNCOption *option, gboolean use_default,
   return FALSE;
 }
 
+#include "swig-runtime.h"
+
 /* Function to get the UI Value for a particular option */
 static SCM
 invoice_get_value (GNCOption *option, GtkWidget *widget)
@@ -414,7 +416,8 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
   GncInvoice *invoice;
 
   invoice = gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
-  return gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
+  return SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p_GncInvoice"), 0);
+  //return gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
 }
 
 

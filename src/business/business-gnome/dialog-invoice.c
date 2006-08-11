@@ -555,6 +555,8 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
   }
 }
 
+#include "swig-runtime.h"
+
 void
 gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
 {
@@ -569,7 +571,8 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
   func = scm_c_eval_string ("gnc:invoice-report-create");
   g_return_if_fail (SCM_PROCEDUREP (func));
 
-  arg = gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
+  arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p_GncInvoice"), 0);
+  //arg = gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
   args = scm_cons (arg, args);
 
   /* scm_gc_protect_object(func); */
