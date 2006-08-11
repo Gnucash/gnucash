@@ -31,6 +31,7 @@
 #include "gnc-module-api.h"
 #include "gw-dialog-tax-table.h"
 
+extern SCM scm_init_sw_dialog_tax_table_module(void);
 /* version of the gnc module system interface we require */
 int libgncmod_dialog_tax_table_LTX_gnc_module_system_interface = 0;
 
@@ -73,7 +74,8 @@ libgncmod_dialog_tax_table_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  scm_c_eval_string("(use-modules (g-wrapped gw-dialog-tax-table))");
+  scm_init_sw_dialog_tax_table_module();
+  scm_c_eval_string("(use-modules (sw_dialog_tax_table))");
   //  scm_c_eval_string("(use-modules (gnucash dialog-tax-table))");
 
   return TRUE;
