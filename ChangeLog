@@ -1,3 +1,9 @@
+2006-08-10  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/druid-qif-import.c: Fix account
+	currency problems when importing QIF files (introduced by the
+	widget cleanup.)
+
 2006-08-09  Derek Atkins  <derek@ihtfp.com>
 
 	* move gnc-gtk-utils from core-utils to gnome-utils because

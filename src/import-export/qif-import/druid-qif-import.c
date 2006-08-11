@@ -89,7 +89,6 @@ struct _qifimportwindow {
   GtkWidget * cat_view;
   GtkWidget * memo_view;
   GtkWidget * currency_picker;
-  GtkWidget * currency_entry;
   GtkWidget * new_transaction_view;
   GtkWidget * old_transaction_view;
   
@@ -1230,7 +1229,8 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   int  rownum = 0;
 
   /* get the default currency */
-  const char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
+  const char * currname =
+    gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
 
   /* busy cursor */
   gnc_suspend_gui_refresh ();
@@ -2061,7 +2061,6 @@ gnc_ui_qif_import_druid_make(void)
   retval->date_format_combo = glade_xml_get_widget (xml, "date_format_combobox");
   retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
   retval->currency_picker = glade_xml_get_widget (xml, "currency_comboboxentry");
-  retval->currency_entry = glade_xml_get_widget (xml, "currency_entry");
   retval->acct_view      = glade_xml_get_widget (xml, "account_page_view");
   retval->cat_view       = glade_xml_get_widget (xml, "category_page_view");
   retval->memo_view      = glade_xml_get_widget (xml, "memo_page_view");
