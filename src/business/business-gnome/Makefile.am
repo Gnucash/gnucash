@@ -1,7 +1,7 @@
 SUBDIRS = . glade schemas ui
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
+pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -30,6 +30,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core
 
 libgncmod_business_gnome_la_SOURCES = \
+  swig-business-gnome.c \
   businessmod-gnome.c \
   business-options-gnome.c \
   business-urls.c \
@@ -88,13 +89,8 @@ libgncmod_business_gnome_la_LIBADD = \
   ${EFENCE_LIBS}
 
 
-nodist_libgw_business_gnome_la_SOURCES = gw-business-gnome.c
-
-libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_gnome_la_LIBADD  = \
-  libgncmod-business-gnome.la \
-  ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS}
+swig-business-gnome.c: business-gnome.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
 # For Business Reports
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
@@ -103,15 +99,8 @@ gncscmmod_DATA =
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-gnome.scm
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-business-gnome-spec.scm
-nodist_gwmod_DATA = \
-  gw-business-gnome.scm
-
 EXTRA_DIST = \
   ${gncmod_DATA} \
-  ${gwmod_DATA} \
   ${gncscmmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
@@ -133,19 +122,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
-  .scm-links gw-business-gnome-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (set! %load-path (cons \"../business-core\" %load-path)) \
-	 (set! %load-path (cons \"${srcdir}/../business-core\" %load-path)) \
-	 (set! %load-path (cons \"../../engine\" %load-path)) \
-	 (set! %load-path (cons \"../../app-utils\" %load-path)) \
-	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \
-	 (primitive-load \"./gw-business-gnome-spec.scm\") \
-	 (gw:generate-wrapset \"gw-business-gnome\")"
-
-BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
+#BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
 CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
 	${SCM_FILE_LINKS} gw-business-gnome.html
