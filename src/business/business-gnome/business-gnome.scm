@@ -1,5 +1,8 @@
 (define-module (gnucash business-gnome))
-(use-modules (g-wrapped gw-business-gnome))
+;(use-modules (g-wrapped gw-business-gnome))
+(load-extension "libgncmod-business-gnome" "scm_init_sw_business_gnome_module")
+(use-modules (sw_business_gnome))
+
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
