@@ -57,6 +57,9 @@ Accounts -> Open Subaccounts from the menu.")
 decrement the selected date. You can use '+' and '-' to increment and \
 decrement check numbers as well.")
 
+ N_( "To switch between multiple tabs in the main window, press \
+Control+Alt+Page Up/Down.")
+
  N_( "In the reconcile window, you can press the spacebar to mark \
 transactions as reconciled.  You can also press Tab and Shift-Tab to \
 move between deposits and withdrawals.")
