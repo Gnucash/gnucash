@@ -120,7 +120,6 @@ gnc_commodity * gncCustomerGetCurrency (GncCustomer *customer);
 gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer);
 GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer);
 
-KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 /** @} */
 

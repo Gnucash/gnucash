@@ -67,10 +67,6 @@ QofEntity* qofOwnerGetOwner (GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofEntity *ent);
 
-/** \brief Set the parent owner. */
-void qofOwnerSetEndOwner (GncOwner *owner, GncOwner *parent);
-GncOwner* qofOwnerCreate (QofBook *book);
-
 gboolean
 gncOwnerRegister(void);
 
