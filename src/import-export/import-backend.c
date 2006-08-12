@@ -592,7 +592,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-      if(downloaded_split_amount == match_split_amount)
+      if(fabs(downloaded_split_amount - match_split_amount) < 1e-6)
+	/* bug#347791: Doubly type shouldn't be compared for exact
+	   equality, so we're using fabs() instead. */
 	/*if (gnc_numeric_equal(xaccSplitGetAmount
 	  (gnc_import_TransInfo_get_fsplit (trans_info)),
 	  xaccSplitGetAmount(split))) 
