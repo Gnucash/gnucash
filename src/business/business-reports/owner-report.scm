@@ -617,7 +617,7 @@
 	 (gnc:make-html-text
 	  (sprintf #f 
 		   (_ "No valid %s selected.  Click on the Options button to select a company.")
-		   type-str))))
+		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
 
     (gnc:free-query query)
     document))
