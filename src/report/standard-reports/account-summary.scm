@@ -133,7 +133,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-report-title
-      "a" opthelp-report-title reportname))
+      "a" opthelp-report-title (_ reportname)))
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name

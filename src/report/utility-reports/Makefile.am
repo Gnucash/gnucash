@@ -21,8 +21,9 @@ gncscmmod_DATA = \
   hello-world.scm \
   utility-reports.scm \
   view-column.scm \
-  welcome-to-gnucash.scm \
-  test-graphing.scm
+  welcome-to-gnucash.scm
+
+#  test-graphing.scm -- not intended for general public?!? Surely not translated at all.
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For separate build directory
