@@ -38,60 +38,58 @@
   (gnc:html-build-url type (string-append idstr guid) #f))
 
 (define (gnc:customer-anchor-text customer)
-  (guid-ref "customer=" gnc:url-type-customer (gnc:customer-get-guid customer)))
+  (guid-ref "customer=" gnc:url-type-customer (gncCustomerReturnGUID customer)))
 
 (define (gnc:job-anchor-text job)
-  (guid-ref "job=" gnc:url-type-job (gnc:job-get-guid job)))
+  (guid-ref "job=" gnc:url-type-job (gncJobReturnGUID job)))
 
 (define (gnc:vendor-anchor-text vendor)
-  (guid-ref "vendor=" gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
+  (guid-ref "vendor=" gnc:url-type-vendor (gncVendorReturnGUID vendor)))
 
 (define (gnc:employee-anchor-text employee)
-  (guid-ref "employee=" gnc:url-type-employee (gnc:employee-get-guid employee)))
+  (guid-ref "employee=" gnc:url-type-employee (gncEmployeeReturnGUID employee)))
 
 (define (gnc:invoice-anchor-text invoice)
-  (guid-ref "invoice=" gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
+  (guid-ref "invoice=" gnc:url-type-invoice (gncInvoiceReturnGUID invoice)))
 
 (define (gnc:owner-anchor-text owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (case type
-      ((gnc-owner-customer)
-       (gnc:customer-anchor-text (gnc:owner-get-customer owner)))
+      ((GNC-OWNER-CUSTOMER)
+       (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
 
-      ((gnc-owner-vendor)
-       (gnc:vendor-anchor-text (gnc:owner-get-vendor owner)))
+      ((GNC-OWNER-VENDOR)
+       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
 
-      ((gnc-owner-employee)
-       (gnc:employee-anchor-text (gnc:owner-get-employee owner)))
+      ((GNC-OWNER-EMPLOYEE)
+       (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
 
-      ((gnc-owner-job)
-       (gnc:job-anchor-text (gnc:owner-get-job owner)))
+      ((GNC-OWNER-JOB)
+       (gnc:job-anchor-text (gncOwnerGetJob owner)))
 
       (else
        ""))))
 
 (define (gnc:owner-report-text owner acc)
-  (let* ((end-owner (gnc:owner-get-end-owner owner))
-	 (type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type end-owner) #f))
+  (let* ((end-owner (gncOwnerGetEndOwner owner))
+	 (type (gncOwnerGetType end-owner))
 	 (ref #f))
 
     (case type
-      ((gnc-owner-customer)
+      ((GNC-OWNER-CUSTOMER)
        (set! ref "owner=c:"))
 
-      ((gnc-owner-vendor)
+      ((GNC-OWNER-VENDOR)
        (set! ref "owner=v:"))
 
-      ((gnc-owner-employee)
+      ((GNC-OWNER-EMPLOYEE)
        (set! ref "owner=e:"))
 
       (else (set! ref "unknown-type=")))
 
     (if ref
 	(begin
-	  (set! ref (string-append ref (gnc:owner-get-guid end-owner)))
+	  (set! ref (string-append ref (gncOwnerReturnGUID end-owner)))
 	  (if acc
 	      (set! ref (string-append ref "&acct="
 				       (gnc:account-get-guid acc))))
