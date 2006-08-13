@@ -760,10 +760,11 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
     args = scm_cons (SCM_BOOL_F, args);
   }
 
-  qtype = scm_c_eval_string("<gnc:GncOwner*>");
-  g_return_if_fail (qtype != SCM_UNDEFINED);
+  //qtype = scm_c_eval_string("<gnc:GncOwner*>");
+  //g_return_if_fail (qtype != SCM_UNDEFINED);
 
-  arg = gw_wcp_assimilate_ptr (owner, qtype);
+  arg = SWIG_NewPointerObj(owner, SWIG_TypeQuery("_p_GncOwner"), 0);
+  //arg = gw_wcp_assimilate_ptr (owner, qtype);
   g_return_if_fail (arg != SCM_UNDEFINED);
   args = scm_cons (arg, args);
 
