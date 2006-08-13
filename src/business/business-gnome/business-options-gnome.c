@@ -97,8 +97,9 @@ static GncOwnerType
 get_owner_type_from_option (GNCOption *option)
 {
   SCM odata = gnc_option_get_option_data (option);
-  //SCM conv_func;
-  /* CHECKME */
+
+  /* SWIG-wrapped enum values are thunks that evaluate to the enum value */
+  odata = scm_call_0(odata);
   return (GncOwnerType) scm_num2int(odata, SCM_ARG1, __FUNCTION__);
   /*
   conv_func = scm_c_eval_string ("gw:enum-<gnc:GncOwnerType>-val->int");
