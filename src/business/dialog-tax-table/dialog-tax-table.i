@@ -5,5 +5,4 @@
 #include <dialog-tax-table.h>
 %}
 
-/* Parse the header file to generate wrappers */
-%include <dialog-tax-table.h>
+TaxTableWindow * gnc_ui_tax_table_window_new (GNCBook *book);

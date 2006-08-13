@@ -29,7 +29,6 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "gw-dialog-tax-table.h"
 
 extern SCM scm_init_sw_dialog_tax_table_module(void);
 /* version of the gnc module system interface we require */
