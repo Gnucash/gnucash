@@ -37,6 +37,8 @@ SCM     gnc_glist_string_to_scm(GList * list);
 GList * gnc_scm_to_glist_string(SCM list);
 int     gnc_glist_string_p(SCM list);
 
+GSList * gnc_scm_to_gslist_string(SCM list);
+
 
 
 #endif
