@@ -83,15 +83,15 @@
       (list "query" (gnc:query->scm query)) ;; think this wants an scm...
       (list "journal" #t)
       (list "double" #t)
-      (list "debit-string" (N_ "Debit"))
-      (list "credit-string" (N_ "Credit"))
+      (list "debit-string" (_ "Debit"))
+      (list "credit-string" (_ "Credit"))
       )
      )
     ;; we'll leave query malloc'd in case this is required by the C side...
     
     ;; set options in the general tab...
     (set-option!
-     gnc:pagename-general (N_ "Title") (N_ "General Journal"))
+     gnc:pagename-general (N_ "Title") (_ reportname))
     ;; we can't (currently) set the Report name here
     ;; because it is automatically set to the template
     ;; name... :(

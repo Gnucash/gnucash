@@ -4,11 +4,6 @@
 	currency problems when importing QIF files (introduced by the
 	widget cleanup.)
 
-2006-08-09  Derek Atkins  <derek@ihtfp.com>
-
-	* move gnc-gtk-utils from core-utils to gnome-utils because
-	  core-utils should not depend on gtk.
-
 2006-08-08  Christian Stimming <stimming@tuhh.de>
 
 	* configure.in, src/gnome-utils/schemas/Makefile.am: Find absolute
