@@ -26,10 +26,12 @@
 
 #include "business-options.h"
 
-#include <g-wrap-wct.h>
+//#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
+#define FUNC_NAME __FUNCTION__
 
-#define LOOKUP_OPTION(fcn) { \
+#define LOOKUP_OPTION(fcn) \
   GNCOption *option; \
   SCM getter; \
   SCM value; \
@@ -47,12 +49,10 @@
   if (value == SCM_BOOL_F) \
     return NULL; \
   \
-  if (!gw_wcp_p(value)) \
-    scm_misc_error(fcn, "Item is not a gw:wcp.", value); \
-  \
-  return gw_wcp_get_ptr(value); \
-}
-	
+  if (!SWIG_IsPointer(value)) \
+    scm_misc_error(fcn, "Item is not a gw:wcp.", value)
+
+//  return gw_wcp_get_ptr(value);
 
 GncTaxTable*
 gnc_option_db_lookup_taxtable_option(GNCOptionDB *odb,
@@ -61,6 +61,7 @@ gnc_option_db_lookup_taxtable_option(GNCOptionDB *odb,
 				     GncTaxTable * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_taxtable_option");
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncTaxTable"), 1, 0);
 }
 
 GncInvoice*
@@ -70,6 +71,7 @@ gnc_option_db_lookup_invoice_option(GNCOptionDB *odb,
 				    GncInvoice * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_invoice_option");
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncInvoice"), 1, 0);
 }
 
 GncCustomer*
@@ -79,6 +81,7 @@ gnc_option_db_lookup_customer_option(GNCOptionDB *odb,
 				     GncCustomer * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_customer_option");
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncCustomer"), 1, 0);
 }
 
 GncVendor*
@@ -88,4 +91,5 @@ gnc_option_db_lookup_vendor_option(GNCOptionDB *odb,
 				   GncVendor * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_vendor_option");
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncVendor"), 1, 0);
 }

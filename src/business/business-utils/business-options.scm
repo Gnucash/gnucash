@@ -35,11 +35,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:invoice-get-guid item)))
+        (gncInvoiceReturnGUID item)))
 
   (define (convert-to-invoice item)
     (if (string? item)
-        (gnc:invoice-lookup item (gnc:get-current-book))
+        (gncInvoiceLookupDirect item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -73,7 +73,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -96,11 +96,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:customer-get-guid item)))
+        (gncCustomerReturnGUID item)))
 
   (define (convert-to-customer item)
     (if (string? item)
-        (gnc:customer-lookup item (gnc:get-current-book))
+        (gncCustomerLookupDirect item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -134,7 +134,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -157,11 +157,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:vendor-get-guid item)))
+        (gncVendorReturnGUID item)))
 
   (define (convert-to-vendor item)
     (if (string? item)
-        (gnc:vendor-lookup item (gnc:get-current-book))
+        (gncVendorLookupDirect item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -195,7 +195,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -218,11 +218,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:employee-get-guid item)))
+        (gncEmployeeReturnGUID item)))
 
   (define (convert-to-employee item)
     (if (string? item)
-        (gnc:employee-lookup item (gnc:get-current-book))
+        (gncEmployeeLookupDirect item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -256,7 +256,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -277,41 +277,40 @@
 	 value-validator
 	 owner-type)
 
-  (let ((option-value (gnc:owner-create)))
+  (let ((option-value (gncOwnerCreate)))
 
     (define (convert-to-pair item)
       (if (pair? item)
 	  item
-	  (cons (gw:enum-<gnc:GncOwnerType>-val->sym
-		 (gnc:owner-get-type item) #f)
-		(gnc:owner-get-guid item))))
+	  (cons (gncOwnerGetType item)
+		(gncOwnerReturnGUID item))))
 
     (define (convert-to-owner pair)
       (if (pair? pair)
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym (car pair) #f)))
+	  (let ((type (car pair)))
 	    (case type
-	      ((gnc-owner-customer)
+	      ((GNC-OWNER-CUSTOMER)
 	       (gnc:owner-init-customer
 		option-value
-		(gnc:customer-lookup (cdr pair) (gnc:get-current-book)))
+		(gncCustomerLookupDirect (cdr pair) (gnc:get-current-book)))
 	       option-value)
 
-	       ((gnc-owner-vendor)
+	       ((GNC-OWNER-VENDOR)
 		(gnc:owner-init-vendor
 		 option-value
-		 (gnc:vendor-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncVendorLookupDirect (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       ((gnc-owner-employee)
+	       ((GNC-OWNER-EMPLOYEE)
 		(gnc:owner-init-employee
 		 option-value
-		 (gnc:employee-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncEmployeeLookupDirect (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       ((gnc-owner-job)
+	       ((GNC-OWNER-JOB)
 		(gnc:owner-init-job
 		 option-value
-		 (gnc:job-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncJobLookupDirect (cdr pair) (gnc:get-current-book)))
 		option-value)
 
 	       (else #f)))
@@ -330,10 +329,9 @@
 	   (validator
 	    (if (not value-validator)
 		(lambda (owner)
-		  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-			       (if (pair? owner)
+		  (let ((type (if (pair? owner)
 				   (car owner)
-				   (gnc:owner-get-type owner)) #f)))
+				   (gncOwnerGetType owner))))
 		    (if (equal? type owner-type)
 			(list #t owner)
 			(list #f "Owner-Type Mismatch"))))
@@ -361,8 +359,8 @@
 	 (gnc:kvp-frame-set-slot-path f (cdr option)
 				      (append p '("value"))))
        (lambda (f p)
-	 (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
-	       (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
+	 (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
+	       (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
 	   (if (and t v (string? t) (string? v))
 	       (begin
 		 (set! option (cons (string->symbol t) v))
@@ -386,11 +384,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:taxtable-get-guid item)))
+        (gncTaxTableReturnGUID item)))
 
   (define (convert-to-taxtable item)
     (if (string? item)
-        (gnc:taxtable-lookup item (gnc:get-current-book))
+        (gncTaxTableLookupDirect item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -424,7 +422,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
