@@ -147,7 +147,7 @@ owner_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //owner = gw_wcp_get_ptr (value);
-  owner = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncOwner"), 1, 0);
+  owner = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncOwner"), 1, 0);
 
   /* XXX: should we verify that the owner type is correct? */
   if (!owner) {
@@ -172,7 +172,7 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
   owner.type = type;
   gnc_owner_get_owner (widget, &owner);
 
-  return SWIG_NewPointerObj(&owner, SWIG_TypeQuery("_p_GncOwner"), 0);
+  return SWIG_NewPointerObj(&owner, SWIG_TypeQuery("_p__gncOwner"), 0);
   //return gw_wcp_assimilate_ptr (&owner, scm_c_eval_string("<gnc:GncOwner*>"));
 }
 
@@ -217,7 +217,7 @@ customer_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //customer = gw_wcp_get_ptr (value);
-  customer = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncCustomer"), 1, 0);
+  customer = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
   gncOwnerInitCustomer (&owner, customer);
 
   widget = gnc_option_get_widget (option);
@@ -234,7 +234,7 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return SWIG_NewPointerObj(owner.owner.undefined, 
-                            SWIG_TypeQuery("_p_GncCustomer"), 0);
+                            SWIG_TypeQuery("_p__gncCustomer"), 0);
   //return gw_wcp_assimilate_ptr (owner.owner.undefined,
   //				scm_c_eval_string("<gnc:GncCustomer*>"));
 }
@@ -280,7 +280,7 @@ vendor_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //vendor = gw_wcp_get_ptr (value);
-  vendor = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncVendor"), 1, 0);
+  vendor = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
   gncOwnerInitVendor (&owner, vendor);
 
   widget = gnc_option_get_widget (option);
@@ -297,7 +297,7 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return SWIG_NewPointerObj(owner.owner.undefined, 
-                            SWIG_TypeQuery("_p_GncVendor"), 0);
+                            SWIG_TypeQuery("_p__gncVendor"), 0);
   //return gw_wcp_assimilate_ptr (owner.owner.undefined,
   //			scm_c_eval_string("<gnc:GncVendor*>"));
 }
@@ -342,7 +342,7 @@ employee_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //employee = gw_wcp_get_ptr (value);
-  employee = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncEmployee"), 1, 0);
+  employee = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncEmployee"), 1, 0);
   gncOwnerInitEmployee (&owner, employee);
 
   widget = gnc_option_get_widget (option);
@@ -359,7 +359,7 @@ employee_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return SWIG_NewPointerObj(owner.owner.undefined, 
-                            SWIG_TypeQuery("_p_GncEmployee"), 0);
+                            SWIG_TypeQuery("_p__gncEmployee"), 0);
   //return gw_wcp_assimilate_ptr (owner.owner.undefined,
   //			scm_c_eval_string("<gnc:GncEmployee*>"));
 }
@@ -419,7 +419,7 @@ invoice_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //invoice = gw_wcp_get_ptr (value);
-  invoice = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncInvoice"), 1, 0);
+  invoice = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
 
   widget = gnc_option_get_widget (option);
   gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
@@ -435,7 +435,7 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
   GncInvoice *invoice;
 
   invoice = gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
-  return SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p_GncInvoice"), 0);
+  return SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
   //return gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
 }
 
@@ -498,7 +498,7 @@ taxtable_set_value (GNCOption *option, gboolean use_default,
 		   "Item is not a gw:wcp.", value);
 
   //taxtable = gw_wcp_get_ptr (value);
-  taxtable= SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncTaxTable"), 1, 0);
+  taxtable= SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
 
   widget = gnc_option_get_widget (option);
   gnc_ui_optionmenu_set_value (widget, taxtable);
@@ -512,7 +512,7 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
   GncTaxTable *taxtable;
 
   taxtable = gnc_ui_optionmenu_get_value (widget);
-  return SWIG_NewPointerObj(taxtable, SWIG_TypeQuery("_p_GncTaxTable"), 0);
+  return SWIG_NewPointerObj(taxtable, SWIG_TypeQuery("_p__gncTaxTable"), 0);
   //return gw_wcp_assimilate_ptr (taxtable, scm_c_eval_string("<gnc:GncTaxTable*>"));
 }
 

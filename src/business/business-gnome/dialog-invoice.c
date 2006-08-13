@@ -571,7 +571,7 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
   func = scm_c_eval_string ("gnc:invoice-report-create");
   g_return_if_fail (SCM_PROCEDUREP (func));
 
-  arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p_GncInvoice"), 0);
+  arg = SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
   //arg = gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
   args = scm_cons (arg, args);
 
@@ -763,7 +763,7 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
   //qtype = scm_c_eval_string("<gnc:GncOwner*>");
   //g_return_if_fail (qtype != SCM_UNDEFINED);
 
-  arg = SWIG_NewPointerObj(owner, SWIG_TypeQuery("_p_GncOwner"), 0);
+  arg = SWIG_NewPointerObj(owner, SWIG_TypeQuery("_p__gncOwner"), 0);
   //arg = gw_wcp_assimilate_ptr (owner, qtype);
   g_return_if_fail (arg != SCM_UNDEFINED);
   args = scm_cons (arg, args);

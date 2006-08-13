@@ -90,7 +90,10 @@ libgncmod_business_gnome_la_LIBADD = \
 
 
 swig-business-gnome.c: business-gnome.i
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	swig -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src/business/business-core \
+	-I${top_srcdir}/src/engine \
+	-o $@ $<
 
 # For Business Reports
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/

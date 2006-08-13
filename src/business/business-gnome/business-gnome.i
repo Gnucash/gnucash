@@ -12,8 +12,9 @@
 #include <dialog-order.h>
 #include <dialog-payment.h>
 #include <dialog-vendor.h>
-
 %}
+
+%import "business-core.i"
 
 /* Parse the header file to generate wrappers */
 %include <business-urls.h>

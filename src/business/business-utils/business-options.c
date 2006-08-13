@@ -61,7 +61,7 @@ gnc_option_db_lookup_taxtable_option(GNCOptionDB *odb,
 				     GncTaxTable * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_taxtable_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncTaxTable"), 1, 0);
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
 }
 
 GncInvoice*
@@ -71,7 +71,7 @@ gnc_option_db_lookup_invoice_option(GNCOptionDB *odb,
 				    GncInvoice * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_invoice_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncInvoice"), 1, 0);
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
 }
 
 GncCustomer*
@@ -81,7 +81,7 @@ gnc_option_db_lookup_customer_option(GNCOptionDB *odb,
 				     GncCustomer * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_customer_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncCustomer"), 1, 0);
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
 }
 
 GncVendor*
@@ -91,5 +91,5 @@ gnc_option_db_lookup_vendor_option(GNCOptionDB *odb,
 				   GncVendor * default_value)
 {
   LOOKUP_OPTION("gnc_option_db_lookup_vendor_option");
-  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_GncVendor"), 1, 0);
+  return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
 }
