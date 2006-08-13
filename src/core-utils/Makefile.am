@@ -6,11 +6,13 @@ libcore_utils_la_SOURCES = \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
-  gnc-gobject-utils.c
+  gnc-gobject-utils.c \
+  gnc-gtk-utils.c
 
 libcore_utils_la_LIBADD = \
   ${GLIB_LIBS} \
-  ${GCONF_LIBS}
+  ${GCONF_LIBS} \
+  ${GTK_LIBS}
 
 nodist_libgw_core_utils_la_SOURCES = \
   gw-core-utils.c
@@ -27,7 +29,8 @@ noinst_HEADERS = \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
-  gnc-gobject-utils.h
+  gnc-gobject-utils.h \
+  gnc-gtk-utils.h
 
 EXTRA_DIST = ${gwmod_DATA}
 
@@ -35,7 +38,8 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
-  ${GCONF_CFLAGS}
+  ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-core-utils-spec.scm
