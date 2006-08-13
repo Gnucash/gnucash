@@ -33,7 +33,7 @@
 #ifndef GNC_OWNER_H_
 #define GNC_OWNER_H_
 
-typedef struct gnc_owner_s GncOwner;
+typedef struct _gncOwner GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
 
@@ -73,7 +73,7 @@ gncOwnerRegister(void);
 /** @} */
 
 /** \struct GncOwner */
-struct gnc_owner_s {
+struct _gncOwner {
   GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
   union {
     gpointer       undefined;
