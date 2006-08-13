@@ -41,6 +41,11 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gnc-session-scm.c \
   gncmod-engine.c \
+  swig-engine.c \
+  swig-kvp.c \
+  kvp-scm.c \
+  engine-helpers.c \
+  glib-helpers.c  \
   policy.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -112,6 +117,9 @@ libgncmod_engine_la_LIBADD = \
   ${GNUCASH_ENGINE_BASE_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
+swig-kvp.c: kvp.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+
 libgw_kvp_la_SOURCES = kvp-scm.c
 nodist_libgw_kvp_la_SOURCES = gw-kvp.c
 libgw_kvp_la_LDFLAGS = \
@@ -148,6 +156,9 @@ gwmod_DATA = \
 nodist_gwmod_DATA = \
   gw-engine.scm \
   gw-kvp.scm
+
+swig-engine.c: engine.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
 EXTRA_DIST = \
   README.query-api \

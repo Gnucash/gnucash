@@ -1,7 +1,9 @@
 (define-module (gnucash engine))
 
-(use-modules (g-wrap gw-wct))
+(load-extension "libgncmod-engine" "scm_init_sw_engine_module")
+(use-modules (sw_engine))
 
+(use-modules (g-wrap gw-wct))
 (use-modules (g-wrapped gw-engine))
 
 (export GNC-RND-FLOOR)
