@@ -643,9 +643,7 @@ totals to report currency")
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (string-append
-	   "No Valid Account Selected.  "
-	   "Click on the Options button and select the account to use."))))
+	  (_ "No valid account selected.  Click on the Options button and select the account to use."))))
     (gnc:free-query query)
     (gnc:report-finished)
     document))

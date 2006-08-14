@@ -1,3 +1,9 @@
+2006-08-11  Christian Stimming <stimming@tuhh.de>
+
+	* src/business/business-reports/aging.scm:
+	  Fix string that wasnt marked for translation.
+	  Fortunately exactly this string exists already.
+
 2006-08-08  Christian Stimming <stimming@tuhh.de>
 
 	* configure.in, src/gnome-utils/schemas/Makefile.am: Find absolute
