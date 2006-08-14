@@ -4,6 +4,9 @@
 	  Fix all last untranslated report titles.
 	  Deactivated Test Graphing report -- it is untranslated completely.
 
+	* gnucash/trunk/src/business/business-reports/owner-report.scm:
+	  Fix untranslated part of string.
+
 2006-08-11  Christian Stimming <stimming@tuhh.de>
 
 	* src/business/business-reports/aging.scm:
