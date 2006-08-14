@@ -794,9 +794,9 @@
     (gnc:html-text-append!
      p
      (gnc:html-markup-h2 (string-append
-			  report-title-string
+			  (_ report-title-string)
 			  ":"))
-     (gnc:html-markup-h2 (_ ""))
+     (gnc:html-markup-h2 "")
      (gnc:html-markup-p
       (_ "This report requires you to specify certain report options.")))
     (if report-id
@@ -818,7 +818,7 @@
     (gnc:html-text-append! 
      p 
      (gnc:html-markup-h2 (string-append 
-			  report-title-string
+			  (_ report-title-string)
 			  ":"))
      (gnc:html-markup-h2 (_ "No accounts selected"))
      (gnc:html-markup-p
