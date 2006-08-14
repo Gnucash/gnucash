@@ -1,3 +1,8 @@
+2006-08-14  David Hampton  <hampton@employees.org>
+
+	* doc/tip_of_the_day.list.in: Add a tip for raising the accounts
+	menu in a register page.
+
 2006-08-10  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/druid-qif-import.c: Fix account

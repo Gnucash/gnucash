@@ -78,6 +78,9 @@ report.")
 a style sheet for your report as a report option, and use \
 the Edit -> Style Sheets menu to customize style sheets.")
 
+ N_( "To raise the accounts menu in the transfer field of a register \
+page, press the Menu key or the Ctrl-Down key combination.")
+
  N_( "The GnuCash developers are easy to contact.  As well \
 as several mailing lists, you can chat to them live on IRC! \
 Join them on #gnucash at irc.gnome.org")
