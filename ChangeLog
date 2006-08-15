@@ -1,5 +1,9 @@
 2006-08-15  Christian Stimming <stimming@tuhh.de>
 
+	* src/core-utils/gnc-glib-utils.[hc]: Add
+	gnc_utf8_strip_invalid_strdup() that returns a stripped copy
+	instead of working in-place.
+
 	* src/import-export/hbci/dialog-hbcitrans.c (blz_changed_cb):
 	Ensure the encoding of the ktoblzcheck library is used
 	correctly. Their encoding is still always ISO-8859-1, but in
