@@ -1,5 +1,9 @@
 2006-08-15  Christian Stimming <stimming@tuhh.de>
 
+	* src/import-export/hbci/dialog-hbcitrans.c, druid-hbci-initial.c:
+	Double-check really every string from aqbanking for valid utf-8
+	characters.
+
 	* src/core-utils/gnc-glib-utils.[hc]: Add
 	gnc_utf8_strip_invalid_strdup() that returns a stripped copy
 	instead of working in-place.
