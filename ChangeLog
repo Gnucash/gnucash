@@ -1,3 +1,16 @@
+2006-08-15  David Hampton  <hampton@employees.org>
+
+	* src/core-utils/gnc-gconf-utils.[ch]:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/gnc-plugin.[ch]:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/dialog-reset-warnings.c:
+	* src/gnome-utils/gnc-tree-view.c: Remove overloading of an
+	argument passed to the gnc_gconf_add/remove_notification
+	functions..  This will solve a crash on Solaris caused by
+	g_vasprintf being passed a "%s" format string and a NULL as
+	argument.
+
 2006-08-14  David Hampton  <hampton@employees.org>
 
 	* doc/tip_of_the_day.list.in: Add a tip for raising the accounts

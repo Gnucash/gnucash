@@ -1827,8 +1827,10 @@ gnc_main_window_destroy (GtkObject *object)
 	  /* Update the "Windows" menu in all other windows */
 	  gnc_main_window_update_all_menu_items();
 
-	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
-	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL);
+	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
+					GNC_MAIN_WINDOW_NAME);
+	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
+					GNC_MAIN_WINDOW_NAME);
 
 	  qof_event_unregister_handler(priv->event_handler_id);
 	  priv->event_handler_id = 0;
@@ -2734,9 +2736,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_free(filename);
 
 	gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
-				   gnc_main_window_gconf_changed);
+				   gnc_main_window_gconf_changed,
+				   GNC_MAIN_WINDOW_NAME);
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-				   gnc_main_window_gconf_changed);
+				   gnc_main_window_gconf_changed,
+				   GNC_MAIN_WINDOW_NAME);
 	gnc_main_window_update_toolbar(window);
 	gnc_main_window_update_tab_position(window);
 

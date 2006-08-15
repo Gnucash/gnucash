@@ -743,7 +743,8 @@ gnc_gconf_suggest_sync (void)
 void
 gnc_gconf_add_notification (GObject *object,
 			    const gchar *section,
-			    GConfClientNotifyFunc callback)
+			    GConfClientNotifyFunc callback,
+			    const gchar *whoami)
 {
 	GConfClient *client;
 	GError *error = NULL;
@@ -752,6 +753,7 @@ gnc_gconf_add_notification (GObject *object,
 
 	g_return_if_fail(G_IS_OBJECT(object));
 	g_return_if_fail(callback != NULL);
+	g_return_if_fail(whoami != NULL);
 
 	client = gconf_client_get_default();
 	path = gnc_gconf_section_name(section);
@@ -785,8 +787,8 @@ gnc_gconf_add_notification (GObject *object,
 	/*
 	 * Save the values needed to undo this later.
 	 */
-	client_tag = g_strdup_printf(CLIENT_TAG, section);
-	notify_tag = g_strdup_printf(NOTIFY_TAG, section);
+	client_tag = g_strdup_printf(CLIENT_TAG, whoami);
+	notify_tag = g_strdup_printf(NOTIFY_TAG, whoami);
 	g_object_set_data(object, client_tag, client);
 	g_object_set_data(object, notify_tag, GUINT_TO_POINTER(id));
 	g_free(notify_tag);
@@ -843,22 +845,24 @@ gnc_gconf_add_anon_notification (const gchar *section,
 
 void
 gnc_gconf_remove_notification (GObject *object,
-			       const gchar *section)
+			       const gchar *section,
+			       const gchar *whoami)
 {
 	GConfClient *client;
 	gchar *path, *client_tag, *notify_tag;
 	guint id;
 
 	g_return_if_fail(G_IS_OBJECT(object));
+	g_return_if_fail(whoami != NULL);
 
 	/*
 	 * Remove any gconf notifications
 	 */
-	client_tag = g_strdup_printf(CLIENT_TAG, section);
+	client_tag = g_strdup_printf(CLIENT_TAG, whoami);
 	client = g_object_get_data(object, client_tag);
 	path = gnc_gconf_section_name(section);
 	if (client) {
-	  notify_tag = g_strdup_printf(NOTIFY_TAG, section);
+	  notify_tag = g_strdup_printf(NOTIFY_TAG, whoami);
 	  id = GPOINTER_TO_UINT(g_object_get_data(object, notify_tag));
 	  gconf_client_notify_remove(client, id);
 	  gconf_client_remove_dir(client, path, NULL);
