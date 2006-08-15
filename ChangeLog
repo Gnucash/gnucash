@@ -1,3 +1,11 @@
+2006-08-15  Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c (blz_changed_cb):
+	Ensure the encoding of the ktoblzcheck library is used
+	correctly. Their encoding is still always ISO-8859-1, but in
+	future versions they might change it to something else. We're
+	prepared now.
+
 2006-08-15  David Hampton  <hampton@employees.org>
 
 	* src/core-utils/gnc-gconf-utils.[ch]:

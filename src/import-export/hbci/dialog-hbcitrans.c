@@ -867,13 +867,26 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
   if (record) {
     const char *bankname = AccountNumberCheck_Record_bankName (record);
     GError *error = NULL;
+    const char *ktoblzcheck_encoding = 
+#ifdef KTOBLZCHECK_VERSION_MAJOR
+      /* This version number macro has been added in
+	 ktoblzcheck-1.10, but this function exists already since
+	 ktoblzcheck-1.7, so we're on the safe side. */
+      AccountNumberCheck_stringEncoding()
+#else
+      /* Every ktoblzcheck release before 1.10 is guaranteed to
+	 return strings only in ISO-8859-15. */
+      "ISO-8859-15"
+#endif
+      ;
     gchar *utf8_bankname = g_convert (bankname, strlen(bankname), 
-				      "UTF-8", "ISO-8859-15",
+				      "UTF-8", ktoblzcheck_encoding,
 				      NULL, NULL, &error);
     if (error != NULL) {
-      printf ("Error convertion bankname \"%s\" to UTF-8\n", bankname);
+      printf ("Error converting bankname \"%s\" to UTF-8\n", bankname);
       g_error_free (error);
-      utf8_bankname = g_strdup (bankname);
+      /* Conversion was erroneous, so don't use the string */
+      utf8_bankname = g_strdup (_("(unknown)"));
     }
     gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
 			(strlen(utf8_bankname)>0 ? 
