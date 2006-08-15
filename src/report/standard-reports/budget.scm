@@ -164,11 +164,11 @@
 
                (gnc:html-table-set-cell!
                 html-table
-                1 bgt-col "Bgt")
+                1 bgt-col (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
 
                (gnc:html-table-set-cell!
                 html-table
-                1 act-col "Act")
+                1 act-col (_ "Act")) ;; Translators: Abbreviation for "Actual"
 
                (set! period (+ period 1))
                )
@@ -329,7 +329,7 @@
                )
 
           (gnc:html-document-set-title!
-           doc (sprintf #f (_ "%s - %s")
+           doc (sprintf #f (_ "%s: %s")
                         report-name (gnc:budget-get-name budget)))
 
           (set! accounts (sort accounts account-full-name<?))
