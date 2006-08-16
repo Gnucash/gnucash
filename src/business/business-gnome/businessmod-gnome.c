@@ -36,6 +36,7 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 //#include "gw-business-gnome.h"
+#include "g-wrap-wct.h" //temp
 
 #include "search-core-type.h"
 #include "search-owner.h"
@@ -105,6 +106,24 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
   //scm_c_eval_string("(use-modules (g-wrapped gw-business-gnome))");
   scm_c_eval_string("(use-modules (gnucash business-gnome))");
   scm_c_eval_string("(use-modules (gnucash report business-reports))");
+
+  // temp code until gnc:id-type is wrapped
+  {
+      SCM wct_gnc_url_type = scm_c_eval_string("<gnc:url-type>");
+      SCM tmp;
+      
+      tmp = gw_wcp_assimilate_ptr(GNC_CUSTOMER_MODULE_NAME, wct_gnc_url_type);
+      scm_c_define("gnc:url-type-customer", tmp);
+      tmp = gw_wcp_assimilate_ptr(GNC_VENDOR_MODULE_NAME, wct_gnc_url_type);
+      scm_c_define("gnc:url-type-vendor", tmp);
+      tmp = gw_wcp_assimilate_ptr(GNC_EMPLOYEE_MODULE_NAME, wct_gnc_url_type);
+      scm_c_define("gnc:url-type-employee", tmp);
+      tmp = gw_wcp_assimilate_ptr(GNC_INVOICE_MODULE_NAME, wct_gnc_url_type);
+      scm_c_define("gnc:url-type-invoice", tmp);
+      tmp = gw_wcp_assimilate_ptr(URL_TYPE_OWNERREPORT, wct_gnc_url_type);
+      scm_c_define("gnc:url-type-ownerreport", tmp);
+  }
+
 
   if (refcount == 0) {
     /* Register the Owner search type */
