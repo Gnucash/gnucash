@@ -16,25 +16,61 @@
 #include <gncBusGuile.h>
 #include "engine-helpers.h"
 #include "gncBusGuile.h"
+
+#include <g-wrap-wct.h> //Temporary. Adds no link dep?!?
 %}
 
 %import "engine.i"
+
+// Temporary SWIG<->G-wrap converters 
+%typemap(in) QofBook * {
+  $1 = (QofBook *)gw_wcp_get_ptr($input);
+}
+
+%typemap(out) QofBook * {
+  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:Book*>"));
+}
+
 
 %rename(gncOwnerReturnGUID) gncOwnerRetGUID;
 
 %inline %{
 GUID gncTaxTableReturnGUID(GncTaxTable *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 GUID gncInvoiceReturnGUID(GncInvoice *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 GUID gncJobReturnGUID(GncJob *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 GUID gncVendorReturnGUID(GncVendor *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 GUID gncCustomerReturnGUID(GncCustomer *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 GUID gncEmployeeReturnGUID(GncEmployee *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
+GncTaxTable * gncTaxTableLookupFlip(GUID g, QofBook *b) 
+{ return gncTaxTableLookup(b, &g); }
+
+GncInvoice * gncInvoiceLookupFlip(GUID g, QofBook *b) 
+{ return gncInvoiceLookup(b, &g); }
+
+GncJob * gncJobLookupFlip(GUID g, QofBook *b) 
+{ return gncJobLookup(b, &g); }
+
+GncVendor * gncVendorLookupFlip(GUID g, QofBook *b) 
+{ return gncVendorLookup(b, &g); }
+
+GncCustomer * gncCustomerLookupFlip(GUID g, QofBook *b) 
+{ return gncCustomerLookup(b, &g); }
+
+GncEmployee * gncEmployeeLookupFlip(GUID g, QofBook *b) 
+{ return gncEmployeeLookup(b, &g); }
+
 %}
 
 //%typemap(in) EntryList {

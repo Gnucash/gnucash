@@ -43,6 +43,7 @@
 #include "gncOwnerP.h"
 #include "gncTaxTableP.h"
 #include "gncVendorP.h"
+#include "g-wrap-wct.h" //temp
 
 extern SCM scm_init_sw_business_core_module (void);
 
@@ -99,6 +100,23 @@ libgncmod_business_core_LTX_gnc_module_init(int refcount)
   scm_init_sw_business_core_module();
   scm_c_eval_string("(use-modules (sw_business_core))");
   scm_c_eval_string("(use-modules (gnucash business-core))");
+
+  // temp code until gnc:id-type is wrapped
+  {
+      SCM wct_gnc_id_type = scm_c_eval_string("<gnc:id-type>");
+      SCM tmp;
+      
+      tmp = gw_wcp_assimilate_ptr(INVOICE_FROM_TXN, wct_gnc_id_type);
+      scm_c_define("gnc:invoice-from-txn", tmp);
+      tmp = gw_wcp_assimilate_ptr(INVOICE_FROM_LOT, wct_gnc_id_type);
+      scm_c_define("gnc:invoice-from-lot", tmp);
+      tmp = gw_wcp_assimilate_ptr(INVOICE_OWNER, wct_gnc_id_type);
+      scm_c_define("gnc:invoice-owner", tmp);
+      tmp = gw_wcp_assimilate_ptr(OWNER_PARENTG, wct_gnc_id_type);
+      scm_c_define("gnc:owner-parentg", tmp);
+      tmp = gw_wcp_assimilate_ptr(OWNER_FROM_LOT, wct_gnc_id_type);
+      scm_c_define("gnc:owner-from-lot", tmp);
+  }
 
   return TRUE;
 }
