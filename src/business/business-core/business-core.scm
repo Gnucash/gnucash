@@ -7,17 +7,17 @@
 (define (gnc:owner-get-address owner)
   (let ((type (gncOwnerGetType owner)))
     (display owner) (newline) (newline)
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (let ((c (gncOwnerGetCustomer owner)))
 	 (gncCustomerGetAddr c)))
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (let ((v (gncOwnerGetVendor owner)))
 	 (gncVendorGetAddr v)))
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (let ((e (gncOwnerGetEmployee owner)))
 	 (gncEmployeeGetAddr e)))
-      ((GNC-OWNER-JOB)
+      ((eqv? type (GNC-OWNER-JOB))
        (gnc:owner-get-address (gnc:job-get-owner
 			       (gncOwnerGetJob owner))))
       (else '()))))
@@ -38,8 +38,8 @@
     (if name name ""))
 
   (let ((type (gncOwnerGetType owner)))
-    (case type
-      ((GNC-OWNER-JOB)
+    (cond
+      ((eqv? type (GNC-OWNER-JOB))
        (gnc:owner-get-name-dep (gnc:job-get-owner
 				(gncOwnerGetJob owner))))
       (else (just-name (gncOwnerGetName owner))))))
@@ -71,23 +71,23 @@
 
 (define (gnc:owner-get-owner-id owner)
   (let ((type (gncOwnerGetType owner)))
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (let ((c (gncOwnerGetCustomer owner)))
 	 (gncCustomerGetID c)))
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (let ((v (gncOwnerGetVendor owner)))
 	 (gncVendorGetID v)))
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (let ((e (gncOwnerGetEmployee owner)))
 	 (gncEmployeeGetID e)))
-      ((GNC-OWNER-JOB)
+      ((eqv? type (GNC-OWNER-JOB))
        (gnc:owner-get-owner-id (gncJobGetOwner (gncOwnerGetJob owner))))
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)
   (let ((type type-val))
-    (equal? type 'gnc-amount-type-percent)))
+    (equal? type (GNC-AMT-TYPE-PERCENT))))
 
 (define (gnc:owner-from-split split result-owner)
   (let* ((trans (gnc:split-get-parent split))
