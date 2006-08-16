@@ -23,7 +23,6 @@
 ;; Internally, values are always a guid. Externally, both guids and
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
-
 (define (gnc:make-invoice-option
 	 section
 	 name
@@ -39,7 +38,7 @@
 
   (define (convert-to-invoice item)
     (if (string? item)
-        (gncInvoiceLookupDirect item (gnc:get-current-book))
+        (gncInvoiceLookupFlip item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -73,7 +72,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -100,7 +99,7 @@
 
   (define (convert-to-customer item)
     (if (string? item)
-        (gncCustomerLookupDirect item (gnc:get-current-book))
+        (gncCustomerLookupFlip item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -134,7 +133,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -161,7 +160,7 @@
 
   (define (convert-to-vendor item)
     (if (string? item)
-        (gncVendorLookupDirect item (gnc:get-current-book))
+        (gncVendorLookupFlip item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -195,7 +194,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -222,7 +221,7 @@
 
   (define (convert-to-employee item)
     (if (string? item)
-        (gncEmployeeLookupDirect item (gnc:get-current-book))
+        (gncEmployeeLookupFlip item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -256,7 +255,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -288,32 +287,32 @@
     (define (convert-to-owner pair)
       (if (pair? pair)
 	  (let ((type (car pair)))
-	    (case type
-	      ((GNC-OWNER-CUSTOMER)
-	       (gnc:owner-init-customer
+	    (cond
+	      ((eqv? type (GNC-OWNER-CUSTOMER))
+	       (gncOwnerInitCustomer
 		option-value
-		(gncCustomerLookupDirect (cdr pair) (gnc:get-current-book)))
+		(gncCustomerLookupFlip (cdr pair) (gnc:get-current-book)))
 	       option-value)
 
-	       ((GNC-OWNER-VENDOR)
-		(gnc:owner-init-vendor
+	       ((eqv? type (GNC-OWNER-VENDOR))
+		(gncOwnerInitVendor
 		 option-value
-		 (gncVendorLookupDirect (cdr pair) (gnc:get-current-book)))
+		 (gncVendorLookupFlip (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       ((GNC-OWNER-EMPLOYEE)
-		(gnc:owner-init-employee
+	       ((eqv? type (GNC-OWNER-EMPLOYEE))
+		(gncOwnerInitEmployee
 		 option-value
-		 (gncEmployeeLookupDirect (cdr pair) (gnc:get-current-book)))
+		 (gncEmployeeLookupFlip (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       ((GNC-OWNER-JOB)
-		(gnc:owner-init-job
+	       ((eqv? type (GNC-OWNER-JOB))
+		(GncOwnerInitJob
 		 option-value
-		 (gncJobLookupDirect (cdr pair) (gnc:get-current-book)))
+		 (gncJobLookupFlip (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       (else #f)))
+	       (else '())))
 	  pair))
 
     (let* ((option (convert-to-pair (default-getter)))
@@ -328,6 +327,7 @@
 				  (if option-set option #f)))))
 	   (validator
 	    (if (not value-validator)
+                ;; this is the default value-validator, if none is given
 		(lambda (owner)
 		  (let ((type (if (pair? owner)
 				   (car owner)
@@ -359,8 +359,8 @@
 	 (gnc:kvp-frame-set-slot-path f (cdr option)
 				      (append p '("value"))))
        (lambda (f p)
-	 (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
-	       (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
+	 (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
+	       (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
 	   (if (and t v (string? t) (string? v))
 	       (begin
 		 (set! option (cons (string->symbol t) v))
@@ -388,7 +388,7 @@
 
   (define (convert-to-taxtable item)
     (if (string? item)
-        (gncTaxTableLookupDirect item (gnc:get-current-book))
+        (gncTaxTableLookupFlip item (gnc:get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -422,7 +422,7 @@
      (gnc:restore-form-generator value->string)
      (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)

@@ -54,17 +54,17 @@
 
 (define (gnc:owner-anchor-text owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond 
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
 
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
 
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
 
-      ((GNC-OWNER-JOB)
+      ((eqv? type (GNC-OWNER-JOB))
        (gnc:job-anchor-text (gncOwnerGetJob owner)))
 
       (else
@@ -75,14 +75,14 @@
 	 (type (gncOwnerGetType end-owner))
 	 (ref #f))
 
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (set! ref "owner=c:"))
 
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (set! ref "owner=v:"))
 
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (set! ref "owner=e:"))
 
       (else (set! ref "unknown-type=")))

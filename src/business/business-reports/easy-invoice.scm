@@ -624,11 +624,11 @@
 
 (define (make-myname-table book)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (kvp-frame-get-slot-path-gslist
+	 (addy (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*)))))
 
@@ -688,12 +688,12 @@
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncOwnerGetType 
 			(gncOwnerGetEndOwner owner))))
-	    (case type
-	      ((GNC-OWNER-CUSTOMER)
+	    (cond
+	      ((eqv? type (GNC-OWNER-CUSTOMER))
 	       (set! invoice? #t))
-	      ((GNC-OWNER-VENDOR)
+	      ((eqv? type (GNC-OWNER-VENDOR))
 	       (set! title (_ "Bill")))
-	      ((GNC-OWNER-EMPLOYEE)
+	      ((eqv? type (GNC-OWNER-EMPLOYEE))
 	       (set! title (_ "Expense Voucher")))))
 	  (set! title (sprintf #f (_"%s #%d") title
 			       (gncInvoiceGetID invoice)))))
@@ -720,8 +720,8 @@
 
         (if (opt-val "Display" "My Company ID")
           (let* ((book (gncInvoiceGetBook invoice))
-                 (slots (gnc-book-get-slots book))
-	         (taxid (kvp-frame-get-slot-path-gslist
+                 (slots (gnc:book-get-slots book))
+	         (taxid (gnc:kvp-frame-get-slot-path
 		    slots (append gnc:*kvp-option-path*
 		                  (list gnc:*business-label* gnc:*company-id*)))))
                  (if (and taxid (> (string-length taxid) 0))

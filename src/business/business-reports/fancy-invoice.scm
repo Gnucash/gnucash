@@ -665,26 +665,26 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (kvp-frame-get-slot-path-gslist
+;;	 (contact (gnc:kvp-frame-get-slot-path
 ;;		slots (append gnc:*kvp-option-path*
 ;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (kvp-frame-get-slot-path-gslist
+	 (addy (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (kvp-frame-get-slot-path-gslist
+	 (id (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (kvp-frame-get-slot-path-gslist
+	 (phone (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (kvp-frame-get-slot-path-gslist
+	 (fax (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (kvp-frame-get-slot-path-gslist
+	 (url (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-url*))))
 	 (invoice-cell (gnc:make-html-table-cell))
@@ -771,12 +771,12 @@
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncOwnerGetType 
 			(gncOwnerGetEndOwner owner))))
-	    (case type
-	      ((GNC-OWNER-CUSTOMER)
+	    (cond
+	      ((eqv? type (GNC-OWNER-CUSTOMER))
 	       (set! invoice? #t))
-	      ((GNC-OWNER-VENDOR)
+	      ((eqv? type (GNC-OWNER-VENDOR))
 	       (set! title (_ "Bill")))
-	      ((GNC-OWNER-EMPLOYEE)
+	      ((eqv? type (GNC-OWNER-EMPLOYEE))
 	       (set! title (_ "Expense Voucher")))))
 	  (set! title (sprintf #f (_"%s #%d") title
 			       (gncInvoiceGetID invoice)))))
@@ -786,7 +786,7 @@
 
     (if invoice
 	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (gnc-book-get-slots book))
+	      (slots (gnc:book-get-slots book))
 	      (date-object #f)
 	      (helper-table (gnc:make-html-table)))
 	  (set! table (make-entry-table invoice
@@ -914,7 +914,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (kvp-frame-get-slot-path-gslist
+	      (let* ((name (gnc:kvp-frame-get-slot-path
 			    slots (append gnc:*kvp-option-path*
 					  (list gnc:*business-label*
 						gnc:*company-name*))))
@@ -929,7 +929,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (kvp-frame-get-slot-path-gslist
+	      (let* ((contact (gnc:kvp-frame-get-slot-path
 			       slots (append gnc:*kvp-option-path*
 					     (list gnc:*business-label*
 						   gnc:*company-contact*))))

@@ -403,13 +403,13 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) GNC-OWNER-CUSTOMER (_ "Invoice") #f))
+  (options-generator '(receivable) (GNC-OWNER-CUSTOMER) (_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) GNC-OWNER-VENDOR (_ "Bill") #t))
+  (options-generator '(payable) (GNC-OWNER-VENDOR) (_ "Bill") #t))
 
 (define (employee-options-generator)
-  (options-generator '(payable) GNC-OWNER-EMPLOYEE (_ "Expense Report") #t))
+  (options-generator '(payable) (GNC-OWNER-EMPLOYEE) (_ "Expense Report") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -491,11 +491,11 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
+	 (slots (gnc:book-get-slots book))
+	 (name (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (kvp-frame-get-slot-path-gslist
+	 (addy (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*)))))
 
@@ -544,14 +544,15 @@
 	 (owner-type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
 
-    (case owner-type
-      ((GNC-OWNER-CUSTOMER)
-       (set! type-str (N_ "Customer")))
-      ((GNC-OWNER-VENDOR)
-       (set! type-str (N_ "Vendor")))
-      ((GNC-OWNER-EMPLOYEE)
-       (set! type-str (N_ "Employee"))))
-
+    (cond
+     ((eqv? owner-type (GNC-OWNER-CUSTOMER))
+      (set! type-str (N_ "Customer")))
+     ((eqv? owner-type (GNC-OWNER-VENDOR))
+      (gnc:error "got here")
+      (set! type-str (N_ "Vendor")))
+     ((eqv? owner-type (GNC-OWNER-EMPLOYEE))
+      (set! type-str (N_ "Employee"))))
+    
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
 
@@ -622,6 +623,7 @@
     (gnc:free-query query)
     document))
 
+;; FIXME: remember to replace #f's with '() when Account * is swig-wrapped.
 (define (find-first-account type)
   (define (find-first group num index)
     (if (>= index num)
@@ -642,21 +644,21 @@
 
 (define (find-first-account-for-owner owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (find-first-account 'receivable))
 
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (find-first-account 'payable))
 
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (find-first-account 'payable))
 
-      ((GNC-OWNER-JOB)
+      ((eqv? type (GNC-OWNER-JOB))
        (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
 
       (else
-       #f))))
+       #f))))  ;;FIXME: remember to convert
 
 (gnc:define-report
  'version 1
@@ -693,14 +695,14 @@
 
 (define (owner-report-create owner account)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (case type
-      ((GNC-OWNER-CUSTOMER)
+    (cond
+      ((eqv? type (GNC-OWNER-CUSTOMER))
        (owner-report-create-internal (N_ "Customer Report") owner account))
 
-      ((GNC-OWNER-VENDOR)
+      ((eqv? type (GNC-OWNER-VENDOR))
        (owner-report-create-internal (N_ "Vendor Report") owner account))
 
-      ((GNC-OWNER-EMPLOYEE)
+      ((eqv? type (GNC-OWNER-EMPLOYEE))
        (owner-report-create-internal (N_ "Employee Report") owner account))
 
       (else #f))))
