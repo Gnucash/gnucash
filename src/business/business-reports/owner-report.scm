@@ -548,7 +548,6 @@
      ((eqv? owner-type (GNC-OWNER-CUSTOMER))
       (set! type-str (N_ "Customer")))
      ((eqv? owner-type (GNC-OWNER-VENDOR))
-      (gnc:error "got here")
       (set! type-str (N_ "Vendor")))
      ((eqv? owner-type (GNC-OWNER-EMPLOYEE))
       (set! type-str (N_ "Employee"))))
