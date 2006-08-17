@@ -45,6 +45,7 @@
 #include "qofbook-p.h"
 #include "qofsession-p.h"
 #include "qofobject-p.h"
+#include "qofla-dir.h" /* for QOF_LIB_DIR */
 
 /** \deprecated should not be static */
 static QofSession * current_session = NULL;
