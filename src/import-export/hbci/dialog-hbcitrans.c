@@ -730,7 +730,7 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
 }
 
 AB_JOB *
-gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
+gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
 			      AB_ACCOUNT *h_acc, 
 			      GNC_HBCI_Transtype trans_type) 
 {
@@ -762,7 +762,7 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
 
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
+    AB_JobSingleDebitNote_SetTransaction(job, hbci_trans);
     break;
   case SINGLE_INTERNAL_TRANSFER:
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
@@ -771,12 +771,12 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
        ((AQBANKING_VERSION_MINOR == 6) && \
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
-    AB_JobInternalTransfer_SetTransaction(job, td->hbci_trans);
+    AB_JobInternalTransfer_SetTransaction(job, hbci_trans);
     break;
 #endif
   default:
   case SINGLE_TRANSFER:
-    AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
+    AB_JobSingleTransfer_SetTransaction(job, hbci_trans);
   };
 
   /* Add job to queue */

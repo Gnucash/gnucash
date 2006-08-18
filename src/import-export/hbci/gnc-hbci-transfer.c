@@ -120,7 +120,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
       {
 	AB_JOB *job = 
-	  gnc_hbci_trans_dialog_enqueue(td, api,
+	  gnc_hbci_trans_dialog_enqueue(gnc_hbci_dialog_get_htrans(td), api,
 					(AB_ACCOUNT *)h_acc, trans_type);
 
 	/* Check whether we really got a job */
