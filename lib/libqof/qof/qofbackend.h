@@ -273,7 +273,7 @@ gboolean
 qof_load_backend_library(const gchar *directory, const gchar* module_name);
 
 /** \brief Retrieve the backend used by this book */
-QofBackend* qof_book_get_backend (QofBook *book);
+QofBackend* qof_book_get_backend (const QofBook *book);
 
 void qof_book_set_backend (QofBook *book, QofBackend *);
 

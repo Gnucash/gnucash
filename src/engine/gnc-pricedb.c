@@ -2376,7 +2376,7 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void
-price_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
+price_foreach(const QofCollection *col, QofEntityForeachCB cb, gpointer data)
 {
   GNCPriceDB *db;
 

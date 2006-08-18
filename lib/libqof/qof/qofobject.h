@@ -92,7 +92,7 @@ struct _QofObject
   void                (*book_end)(QofBook *);
 
   /** Determine if there are any dirty items in this book */
-  gboolean            (*is_dirty)(QofCollection *);
+  gboolean            (*is_dirty)(const QofCollection *);
 
   /** Mark this object's book clean (for after a load) */
   void                (*mark_clean)(QofCollection *);
@@ -104,7 +104,7 @@ struct _QofObject
    *  provide this routine, as without it, little of interest can 
     * be done.
    */
-  void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
+  void                (*foreach)(const QofCollection *, QofEntityForeachCB, gpointer);
 
   /** Given a particular item of this type, return a printable string. 
    */

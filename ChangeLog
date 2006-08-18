@@ -1,3 +1,7 @@
+2006-08-18  David Hampton  <hampton@employees.org>
+
+	* various: Add some 'const' declarations.
+
 2006-08-17  Christian Stimming <stimming@tuhh.de>
 
 	* lib/libqof/qof/qof.h, qofsession.c: Move #include "qofla-dir.h"

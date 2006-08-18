@@ -57,13 +57,13 @@ void qof_instance_init (QofInstance *, QofIdType, QofBook *);
 void qof_instance_release (QofInstance *inst);
 
 /** Return the book pointer */
-QofBook * qof_instance_get_book (QofInstance *);
+QofBook * qof_instance_get_book (const QofInstance *);
 
 /** Return the GUID of this instance */
-const GUID * qof_instance_get_guid (QofInstance *);
+const GUID * qof_instance_get_guid (const QofInstance *);
 
 /** Return the pointer to the kvp_data */
-KvpFrame* qof_instance_get_slots (QofInstance *);
+KvpFrame* qof_instance_get_slots (const QofInstance *);
 
 /** Return the last time this instance was modified.  If QofInstances
  *  are used with the QofObject storage backends, then the instance
@@ -71,7 +71,7 @@ KvpFrame* qof_instance_get_slots (QofInstance *);
  *  multi-user updates.  Non-backend code should not set the update 
  *  times. 
  */
-Timespec qof_instance_get_last_update (QofInstance *inst);
+Timespec qof_instance_get_last_update (const QofInstance *inst);
 
 /** Compare two instances, based on thier last update times. 
  *  Returns a negative, zero or positive value, respectively, 
@@ -79,9 +79,9 @@ Timespec qof_instance_get_last_update (QofInstance *inst);
  *  Accepts NULL pointers, NULL's are by definition earlier
  *  than any value.
  */
-int qof_instance_version_cmp (QofInstance *left, QofInstance *right);
+int qof_instance_version_cmp (const QofInstance *left, const QofInstance *right);
 
-void qof_instance_print_dirty (QofEntity *entity, gpointer dummy);
+void qof_instance_print_dirty (const QofEntity *entity, gpointer dummy);
 
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
@@ -92,9 +92,9 @@ Sets this instance AND the collection as dirty.
 */
 void qof_instance_set_dirty(QofInstance* inst);
 
-gboolean qof_instance_check_edit(QofInstance *inst);
+gboolean qof_instance_check_edit(const QofInstance *inst);
 
-gboolean qof_instance_do_free(QofInstance *inst);
+gboolean qof_instance_do_free(const QofInstance *inst);
 
 void qof_instance_mark_free(QofInstance *inst);
 
@@ -109,7 +109,7 @@ QofInstance* qof_instance_create (QofIdType type, QofBook *book);
  *  the gemini kvp includes the book guid as well, so that the right book can
  *  be found.
  */
-void qof_instance_gemini (QofInstance *to, QofInstance *from);
+void qof_instance_gemini (QofInstance *to, const QofInstance *from);
 
 /** The qof_instance_lookup_twin() routine will find the "twin" of this
  *    instance 'src' in the given other 'book' (if the twin exists).
@@ -125,7 +125,7 @@ void qof_instance_gemini (QofInstance *to, QofInstance *from);
  *    in 'book', and return it.  If not found, it returns NULL.  This
  *    routine uses the 'gemini' kvp values to do its work. 
  */
-QofInstance * qof_instance_lookup_twin (QofInstance *src, QofBook *book);
+QofInstance * qof_instance_lookup_twin (const QofInstance *src, QofBook *book);
 
 /* @} */
 /* @} */

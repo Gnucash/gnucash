@@ -77,7 +77,7 @@ xaccMallocAccountGroup (QofBook *book)
 \********************************************************************/
 
 AccountGroup * 
-xaccCollGetAccountGroup (QofCollection *col)
+xaccCollGetAccountGroup (const QofCollection *col)
 {
   if (!col) return NULL;
   return qof_collection_get_data (col);
@@ -1287,7 +1287,7 @@ group_book_end (QofBook *book)
 }
 
 static gboolean
-group_is_dirty (QofCollection *col)
+group_is_dirty (const QofCollection *col)
 {
   return xaccGroupNotSaved(xaccCollGetAccountGroup(col));
 }
