@@ -2003,6 +2003,7 @@ xaccAccountSetHidden (Account *acc, gboolean val)
 {
   if (!acc) return;
   
+  xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, "hidden",
 			val ? "true" : NULL);
   mark_account (acc);
