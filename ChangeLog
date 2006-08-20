@@ -1,3 +1,9 @@
+2006-08-20  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-dtaus-import.[ch], gnc-plugin-hbci.c:
+	Add new HBCI action to File->Import that imports a DTAUS file and
+	sends all transfers as HBCI online transfers to the bank.
+
 2006-08-19  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnucash-desktop*: Update so that bug-buddy 2.16 will
