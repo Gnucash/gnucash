@@ -1,5 +1,10 @@
 2006-08-20  David Hampton  <hampton@employees.org>
 
+	* src/backend/file/gnc-account-xml-v2.c:
+	* src/backend/file/gnc-commodity-xml-v2.c:
+	* src/gnome/top-level.c: Remove some conditional code that is no
+	longer compiled, or shouldn't be compiled in 2.2.
+
 	* src/gnome/gnc-plugin-page-account-tree.c: Maintain the account
 	hierarchy when reparenting the descendants of a deleted account.
 
