@@ -102,10 +102,16 @@ void GNCInteractor_delete(GNCInteractor *data)
  */
 
 
-GtkWidget *GNCInteractor_parent(GNCInteractor *i)
+GtkWidget *GNCInteractor_parent(const GNCInteractor *i)
 {
   g_assert(i);
   return i->parent;
+}
+
+GtkWidget *GNCInteractor_dialog(const GNCInteractor *i)
+{
+  g_assert(i);
+  return i->dialog;
 }
 
 static void GNCInteractor_setRunning (GNCInteractor *data)
