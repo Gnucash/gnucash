@@ -2279,6 +2279,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/gnc-module/test/mod-baz/Makefile
           src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
+          src/gnome/gnucash.desktop.in
 	  src/gnome/glade/Makefile
 	  src/gnome/schemas/Makefile
 	  src/gnome/ui/Makefile

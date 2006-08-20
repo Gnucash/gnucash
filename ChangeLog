@@ -1,5 +1,8 @@
 2006-08-19  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnucash-desktop*: Update so that bug-buddy 2.16 will
+	still allow you to file bugs against gnucash.
+
 	* src/engine/Account.c: Add missing call to xaccAccountBeginEdit.
 
 2006-08-18  David Hampton  <hampton@employees.org>
