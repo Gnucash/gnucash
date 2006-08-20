@@ -1048,7 +1048,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	GList *acct_list, *ptr;
 
 	xaccAccountBeginEdit (daa);
-	acct_list = xaccGroupGetSubAccounts(children);
+	acct_list = g_list_copy(xaccGroupGetAccountList(children));
 	for (ptr = acct_list; ptr; ptr = g_list_next(ptr))
 	  xaccAccountInsertSubAccount (daa, ptr->data);
 	g_list_free(acct_list);
