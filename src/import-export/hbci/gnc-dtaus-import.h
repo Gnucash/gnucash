@@ -29,6 +29,18 @@
  *     selection dialogue asking the user to pick an DTAUS file. If one
  *     is selected then the DTAUS file is opened and read. Its contents
  *     are merged into the existing session (if any). The current
- *     session continues to remain open for editing. */
-void              gnc_file_dtaus_import (void);
+ *     session continues to remain open for editing.
+ *
+ * @param aqbanking_importername The aqbanking importer module that
+ * should be used. Possible values: "dtaus", "csv", "swift".
+ *
+ * @param aqbanking_profilename In aqbanking, each importer has one or
+ * more "profiles" that define the actual data fields that should be
+ * used. Possible values for swift: "swift-mt940" or "swift-mt942",
+ * but for all others: "default", or more precisely: Look into
+ * $datadir/aqbanking/imexporters and look into the "name" field of
+ * the foo.conf files.
+ */
+void              gnc_file_dtaus_import (const gchar *aqbanking_importername,
+					 const gchar *aqbanking_profilename);
 #endif

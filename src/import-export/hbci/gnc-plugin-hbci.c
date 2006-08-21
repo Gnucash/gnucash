@@ -523,7 +523,7 @@ static void
 gnc_plugin_hbci_cmd_dtaus_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_dtaus_import ();
+  gnc_file_dtaus_import ("dtaus", "default");
 }
 /************************************************************
  *                    Plugin Bootstrapping                   *

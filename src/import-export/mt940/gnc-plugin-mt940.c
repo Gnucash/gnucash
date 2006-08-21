@@ -145,7 +145,7 @@ static void
 gnc_plugin_mt940_cmd_import (GtkAction *action,
 			   GncMainWindowActionData *data)
 {
-  gnc_file_mt940_import ();
+  gnc_file_mt940_import ("swift", "swift-mt940");
 }
 
 

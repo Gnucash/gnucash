@@ -141,7 +141,8 @@ AB_ImExporterAccountInfo_TransactionsForEach(AB_IMEXPORTER_ACCOUNTINFO *iea,
  * Entry point
 \********************************************************************/
 
-void gnc_file_dtaus_import (void)
+void gnc_file_dtaus_import (const gchar *aqbanking_importername,
+			    const gchar *aqbanking_profilename)
 {
   char *selected_filename;
   char *default_dir;
@@ -184,10 +185,8 @@ void gnc_file_dtaus_import (void)
       GWEN_DB_NODE *dbProfiles;
       GWEN_DB_NODE *dbProfile;
       GNCInteractor *interactor = NULL;
-      const char *importerName = "dtaus"; /* possible values: csv, swift, dtaus, */
-      const char *profileName = "default";
-      /* Possible values for profile: "default" for most importers;
-	 for swift this can be "swiftmt940" or "swiftmt942". */
+      const char *importerName = aqbanking_importername;
+      const char *profileName = aqbanking_profilename;
 
       /* Get API */
       ab = gnc_AB_BANKING_new_currentbook (NULL, &interactor);
@@ -225,6 +224,15 @@ void gnc_file_dtaus_import (void)
 	      profileName, importerName);
 	printf("Profile \"%s\" for importer \"%s\" not found\n",
 	      profileName, importerName);
+	/* For debugging: Print those available names that have been found. */
+	dbProfile=GWEN_DB_GetFirstGroup(dbProfiles);
+	while(dbProfile) {
+	  const char *name;
+	  name=GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
+	  g_assert(name);
+	  printf("Only found profile \"%s\"\n", name);
+	  dbProfile=GWEN_DB_GetNextGroup(dbProfile);
+	}
 	return;
       }
       g_assert(dbProfile);
