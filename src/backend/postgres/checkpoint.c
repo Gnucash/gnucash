@@ -45,7 +45,6 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "qof.h"
-#include "Group.h"
 #include "gnc-commodity.h"
 
 #include "builder.h"
@@ -235,11 +234,13 @@ done:
 /* recompute fresh balance checkpoints for every account */
 
 void
-pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp)
+pgendAccountTreeRecomputeAllCheckpoints (PGBackend *be, Account *parent)
 {
    GList *acclist, *node;
 
-   acclist = xaccGroupGetSubAccounts(grp);
+   pgendAccountRecomputeAllCheckpoints (be, xaccAccountGetGUID(parent));
+
+   acclist = gnc_account_get_descendants(parent);
    for (node = acclist; node; node=node->next)
    {
       Account *acc = (Account *) node->data;
@@ -510,16 +511,16 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 /* get checkpoint value for all accounts */
 
 void
-pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
+pgendAccountTreeGetAllBalances (PGBackend *be, Account *root, 
                           Timespec as_of_date)
 {
    GList *acclist, *node;
 
-   if (!be || !grp) return;
+   if (!be || !root) return;
    ENTER("be=%p", be);
 
    /* loop over all accounts */
-   acclist = xaccGroupGetSubAccounts (grp);
+   acclist = gnc_account_get_descendants (root);
    for (node=acclist; node; node=node->next)
    {
       Account *acc = (Account *) node->data;

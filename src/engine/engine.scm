@@ -42,8 +42,8 @@
 (export GNC_COMMODITY_NS_MUTUAL)
 
 (export gnc:url->loaded-session)
-(export gnc:group-map-all-accounts)
-(export gnc:group-map-accounts)
+(export gnc:account-map-descendants)
+(export gnc:account-map-children)
 
 (export gnc:split-structure)
 (export gnc:make-split-scm)

@@ -30,8 +30,6 @@
  
 #include "AccountP.h"
 #include "qof.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-pricedb.h"
 
@@ -48,7 +46,7 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ============================================================= */
 /* ============================================================= */
-/*               ACCOUNT AND GROUP STUFF                         */
+/*                    ACCOUNT STUFF                              */
 /*      (UTILITIES FIRST, THEN SETTERS, THEN GETTERS)            */
 /* ============================================================= */
 /* ============================================================= */
@@ -136,8 +134,8 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
 }
 
 /* ============================================================= */
-/* The pgendStoreGroup() routine stores the account hierarchy to
- * the sql database.  That is, it stores not oonly the top-level
+/* The pgendStoreAccountTree() routine stores the account hierarchy
+ * to the sql database.  That is, it stores not oonly the top-level
  * accounts, but all of thier children too.   It also stores the
  * commodities associated with the accounts.  It does *not* store
  * any of the transactions.
@@ -150,38 +148,30 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
  */
 
 void
-pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp, 
+pgendStoreAccountTreeNoLock (PGBackend *be, Account *root, 
                        gboolean do_mark, gboolean do_check_version)
 {
-   GList *start, *node;
+   GList *descendants, *node;
 
-   if (!be || !grp) return;
-   ENTER("grp=%p mark=%d", grp, do_mark);
+   if (!be || !root) return;
+   ENTER("root=%p mark=%d", root, do_mark);
 
    /* walk the account tree, and store subaccounts */
-   start = xaccGroupGetAccountList (grp);
-   for (node=start; node; node=node->next) 
-   {
-      AccountGroup *subgrp;
-      Account *acc = node->data;
-
-      pgendStoreAccountNoLock (be, acc, do_mark, do_check_version);
-
-      /* recursively walk to child accounts */
-      subgrp = xaccAccountGetChildren (acc);
-      if (subgrp) pgendStoreGroupNoLock(be, subgrp, do_mark,
-                                        do_check_version);
-   }
+   pgendStoreAccountNoLock (be, root, do_mark, do_check_version);
+   descendants = gnc_account_get_descendants (root);
+   for (node=descendants; node; node=node->next) 
+      pgendStoreAccountNoLock (be, node->data, do_mark, do_check_version);
+   g_list_free(descendants);
    LEAVE(" ");
 }
 
 
 void
-pgendStoreGroup (PGBackend *be, AccountGroup *grp)
+pgendStoreAccountTree (PGBackend *be, Account *root)
 {
    char *p;
-   ENTER ("be=%p, grp=%p", be, grp);
-   if (!be || !grp) return;
+   ENTER ("be=%p, root=%p", be, root);
+   if (!be || !root) return;
 
    /* lock it up so that we store atomically */
    p = "BEGIN;\n"
@@ -192,12 +182,12 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 
    /* Clear the account marks; this is used to avoid visiting
     * the same account more than once. */
-   xaccClearMarkDownGr (grp, 0);
+   xaccClearMarkDown (root, 0);
 
-   pgendStoreGroupNoLock (be, grp, TRUE, TRUE);
+   pgendStoreAccountTreeNoLock (be, root, TRUE, TRUE);
 
    /* reset the write flags again */
-   xaccClearMarkDownGr (grp, 0);
+   xaccClearMarkDown (root, 0);
 
    p = "COMMIT;\n"
        "NOTIFY gncAccount;";
@@ -211,23 +201,23 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 /* ============================================================= */
 
 /* ============================================================= */
-/* This routine walks the account group, gets all KVP values */
+/* This routine walks the account tree, gets all KVP values */
 
-static gpointer
+static void
 restore_cb (Account *acc, void * cb_data)
 {
    PGBackend *be = (PGBackend *) cb_data;
-   if (0 == acc->idata) return NULL;
+   if (0 == acc->idata) return;
    acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
-   return NULL;
 }
 
 static void 
-pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
+pgendGetAllAccountKVP (PGBackend *be, Account *root)
 {
-   if (!grp) return;
+   if (!root) return;
 
-   xaccGroupForEachAccount (grp, restore_cb, be, TRUE);
+   restore_cb(root, NULL);
+   gnc_account_foreach_descendant(root, restore_cb, be);
 }
 
 /* ============================================================= */
@@ -319,8 +309,8 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    if (guid_equal(guid_null(), &acct_guid)) 
    {
       /* if the parent guid is null, then this
-       * account belongs in the top group */
-      xaccGroupInsertAccount (gnc_book_get_group(book), acc);
+       * account belongs in the top level */
+      gnc_account_append_child (gnc_book_get_root_account(book), acc);
    }
    else
    {
@@ -338,7 +328,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       else
       {
          xaccAccountBeginEdit(parent);
-         xaccAccountInsertSubAccount(parent, acc);
+         gnc_account_append_child(parent, acc);
          xaccAccountCommitEdit(parent);
       }
    }
@@ -375,7 +365,7 @@ pgendGetAccounts (PGBackend *be, QofBook *book)
 
       pgendGetCommodity (be, ri->commodity_string);
       commodity = gnc_string_to_commodity (ri->commodity_string,
-                                           xaccAccountGetBook (ri->account));
+                                           gnc_account_get_book(ri->account));
 
       if (commodity)
       {
@@ -403,7 +393,7 @@ pgendGetAccounts (PGBackend *be, QofBook *book)
       if (parent)
       {
         xaccAccountBeginEdit(parent);
-        xaccAccountInsertSubAccount(parent, ri->account);
+        gnc_account_append_child(parent, ri->account);
         xaccAccountCommitEdit(parent);
       }
       else
@@ -441,13 +431,8 @@ pgendGetAllAccounts (PGBackend *be)
    for (node=be->blist; node; node=node->next)
    {
       QofBook *book = node->data;
-      AccountGroup *topgrp = gnc_book_get_group (book);
-      pgendGetAllAccountKVP (be, topgrp);
-
-      /* Mark the newly read group as saved, since the act of putting
-       * it together will have caused it to be marked up as not-saved.
-       */
-      xaccGroupMarkSaved (topgrp);
+      Account *root = gnc_book_get_root_account(book);
+      pgendGetAllAccountKVP (be, root);
    }
 
    LEAVE (" ");
@@ -457,7 +442,7 @@ void
 pgendGetAllAccountsInBook (PGBackend *be, QofBook *book)
 {
    char *p, buff[400];
-   AccountGroup *topgrp;
+   Account *root;
 
    ENTER ("be=%p", be);
    if (!be || !book) return;
@@ -474,13 +459,8 @@ pgendGetAllAccountsInBook (PGBackend *be, QofBook *book)
    SEND_QUERY (be, buff, );
    pgendGetAccounts (be, book);
 
-   topgrp = gnc_book_get_group (book);
-   pgendGetAllAccountKVP (be, topgrp);
-
-   /* Mark the newly read group as saved, since the act of putting
-    * it together will have caused it to be marked up as not-saved.
-    */
-   xaccGroupMarkSaved (topgrp);
+   root = gnc_book_get_root_account(book);
+   pgendGetAllAccountKVP (be, root);
 
    LEAVE (" ");
 }
@@ -568,7 +548,6 @@ void
 pgend_account_commit_edit (QofBackend * bend, 
                            Account * acct)
 {
-   AccountGroup *parent;
    char *p;
    QofBackendError err;
    PGBackend *be = (PGBackend *)bend;
@@ -578,8 +557,6 @@ pgend_account_commit_edit (QofBackend * bend,
 
    if (FALSE == acct->inst.dirty)
    {
-      parent = xaccAccountGetParent(acct);
-      if (parent) parent->saved = 1;
       LEAVE ("account not written because not dirty");
       return;
    }
@@ -641,13 +618,6 @@ pgend_account_commit_edit (QofBackend * bend,
    SEND_QUERY (be,p,);
    FINISH_QUERY(be->connection);
 
-   /* Mark this up so that we don't get that annoying gui dialog
-    * about having to save to file.  unfortunately,however, this
-    * is too liberal, and could screw up synchronization if we've lost
-    * contact with the back end at some point.  So hack alert -- fix 
-    * this. */
-   parent = xaccAccountGetParent(acct);
-   if (parent) parent->saved = 1;
    LEAVE ("commited");
    return;
 }

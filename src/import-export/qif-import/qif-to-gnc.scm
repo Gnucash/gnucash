@@ -155,7 +155,7 @@
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo #t default-currency #f default-currency
-                                   gnc-acct-hash old-group new-group))))
+                                   gnc-acct-hash old-root new-root))))
           (if parent-acct
               (xaccAccountInsertSubAccount parent-acct new-acct)
               (xaccGroupInsertAccount new-group new-acct))
@@ -265,16 +265,16 @@
                    (qif-import:find-or-make-acct acctinfo #f
                                                  security #t default-currency
                                                  gnc-acct-hash 
-                                                 old-group new-group))
+                                                 old-root new-root))
                   ((and security (or stock?
 				     (gnc-commodity-is-currency security)))
                    (qif-import:find-or-make-acct 
                     acctinfo #f security #t default-currency
-                    gnc-acct-hash old-group new-group))
+                    gnc-acct-hash old-root new-root))
                   (#t 
                    (qif-import:find-or-make-acct 
                     acctinfo #f default-currency #t default-currency
-                    gnc-acct-hash old-group new-group)))))
+                    gnc-acct-hash old-root new-root)))))
         sorted-accounts-list)
        
        ;; before trying to mark transactions, prune down the list of 
@@ -355,7 +355,7 @@
        (if progress-dialog
            (gnc-progress-dialog-destroy progress-dialog))
        
-       new-group))))
+       new-root))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn

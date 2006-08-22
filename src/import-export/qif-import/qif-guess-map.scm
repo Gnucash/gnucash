@@ -25,8 +25,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:load-map-prefs)
-  (define (extract-all-account-info agroup root-name)
-    (if (not agroup)
+  (define (extract-all-account-info an-account root-name)
+    (if (not an-account)
         '()
         (let ((children-list (xaccGroupGetAccountListSorted agroup))
               (names '()))

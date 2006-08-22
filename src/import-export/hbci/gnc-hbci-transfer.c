@@ -78,7 +78,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     GList *template_list = 
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
-	( xaccAccountGetBook(gnc_acc)));
+	( gnc_account_get_book(gnc_acc)));
     int result;
     gboolean successful = FALSE;
     HBCITransDialog *td;
@@ -224,7 +224,7 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
       g_list_length(template_list),
       kvp_value_glist_to_string(kvp_list));*/
     gnc_hbci_set_book_template_list
-      (xaccAccountGetBook(gnc_acc), kvp_list);
+      (gnc_account_get_book(gnc_acc), kvp_list);
   }
 }
 

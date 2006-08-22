@@ -29,7 +29,6 @@
 #include "glib-compat.h"
 
 #include "FreqSpec.h"
-#include "Group.h"
 #include "Period.h"
 #include "Query.h"
 #include "Scrub.h"
@@ -280,7 +279,7 @@ show_book_details (AcctPeriodInfo *info)
   ntrans = get_num_xactions_before_date(currbook,
                    gnc_timet_get_day_end_gdate (&info->closing_date));
 
-  nacc = xaccGroupGetNumSubAccounts (xaccGetAccountGroup (currbook));
+  nacc = gnc_account_n_descendants (gnc_book_get_root_account (currbook));
 
   /* Display the book info */
   period_text = 

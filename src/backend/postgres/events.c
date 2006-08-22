@@ -1,4 +1,4 @@
-/********************************************************************\
+/********************************************************************	\
  * events.c -- implements event handling for postgres backend       *
  * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
@@ -290,16 +290,13 @@ pgendProcessEvents (QofBackend *bend)
 
                /* if the remote user created an account, mirror it here */
                acc = pgendCopyAccountToEngine (be, &(ev->guid));
-               xaccGroupMarkSaved (xaccAccountGetRoot(acc));
                ent = (QofEntity*)acc;
                break;
             }
             case QOF_EVENT_DESTROY: {
                Account * acc = pgendAccountLookup (be, &(ev->guid));
-               AccountGroup *topgrp = xaccAccountGetRoot(acc);
                xaccAccountBeginEdit (acc);
                xaccAccountDestroy (acc);
-               xaccGroupMarkSaved (topgrp);
                ent = (QofEntity*)acc;
                break;
             }

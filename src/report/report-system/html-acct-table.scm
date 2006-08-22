@@ -709,7 +709,7 @@
 	
 	(for-each
 	 (lambda (acct)
-	   (let* ((subaccts (gnc:account-get-immediate-subaccounts acct))
+	   (let* ((subaccts (gnc:account-get-children acct))
 		  ;; assign output parameters
 		  (account acct)
 		  (account-name (xaccAccountGetName acct))

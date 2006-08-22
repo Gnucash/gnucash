@@ -353,7 +353,7 @@
                 (for-each 
                  (lambda (acct)
                    (let ((this-acct-subs 
-                          (gnc:account-get-all-subaccounts acct)))
+                          (gnc:account-get-descendants acct)))
                      (if (list? this-acct-subs)
                          (set! subaccts 
                                (append subaccts this-acct-subs)))))

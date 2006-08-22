@@ -30,7 +30,6 @@
 #include <glib.h>
 #include "qof.h"
 #include "Account.h"
-#include "Group.h"
 #include "Scrub3.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
@@ -45,7 +44,7 @@ run_test (void)
 {
   QofSession *sess;
   QofBook *book;
-  AccountGroup *grp;
+  Account *root;
 
   /* --------------------------------------------------------- */
   /* In the first test, we will merely try to see if we can run
@@ -56,8 +55,8 @@ run_test (void)
 
   add_random_transactions_to_book (book, transaction_num);
 
-  grp = xaccGetAccountGroup (book);
-  xaccGroupScrubLots (grp);
+  root = gnc_book_get_root_account (book);
+  xaccAccountTreeScrubLots (root);
 
   /* --------------------------------------------------------- */
   /* In the second test, we create an account with unrealized gains,

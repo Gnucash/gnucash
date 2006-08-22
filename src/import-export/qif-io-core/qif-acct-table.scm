@@ -43,7 +43,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
-;; qif-io:acct-table-make-gnc-group
+;; qif-io:acct-table-make-gnc-acct-tree
 ;; fill in information for the gnucash accounts and organize them
 ;; in a group tree 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,4 +123,4 @@
 
     ;; the other brokerage-related accounts
 
-    group))
+    root))

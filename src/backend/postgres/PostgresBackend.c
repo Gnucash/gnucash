@@ -38,8 +38,6 @@
 #include <libpq-fe.h>  
 
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
@@ -713,7 +711,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    PGBackend *be = (PGBackend *)bend;
    Query *q = (Query*) q_p;
    const char * sql_query_string;
-   AccountGroup *topgroup;
+   Account *root;
    sqlQuery *sq;
 
    ENTER ("be=%p, qry=%p", be, q);
@@ -728,10 +726,10 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
-   topgroup = gnc_book_get_group (pgendGetBook(be));
+   root = gnc_book_get_root_account(pgendGetBook(be));
 
    /* stage transactions, save some postgres overhead */
-   xaccGroupBeginStagedTransactionTraversals (topgroup);
+   gnc_account_tree_begin_staged_transaction_traversals (root);
 
    /* We will be doing a bulk insertion of transactions below.
     * We can gain a tremendous performance improvement,
@@ -746,16 +744,12 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
     * by not very much.
     */
    ncalls = 0;
-   xaccAccountGroupBeginEdit(topgroup);
+   xaccAccountBeginEdit(root);
    pgendFillOutToCheckpoint (be, sql_query_string);
-   xaccAccountGroupCommitEdit(topgroup);
+   xaccAccountCommitEdit(root);
    PINFO ("number of calls to fill out=%d", ncalls);
 
    sql_Query_destroy(sq);
-
-   /* the fill-out will dirty a lot of data. That's irrelevent,
-    * mark it all as having been saved. */
-   xaccGroupMarkSaved (topgroup);
 
    pgendEnable(be);
    qof_event_resume();
@@ -793,7 +787,7 @@ get_all_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 static void
-pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
+pgendGetAllTransactions (PGBackend *be, Account *root)
 {
    GList *node, *xaction_list = NULL;
 
@@ -804,14 +798,14 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    xaction_list = pgendGetResults (be, get_all_trans_cb, xaction_list);
 
    /* restore the transactions */
-   xaccAccountGroupBeginEdit (grp);
+   xaccAccountBeginEdit (root);
    for (node=xaction_list; node; node=node->next)
    {
       xxxpgendCopyTransactionToEngine (be, (GUID *)node->data);
       guid_free (node->data);
    }
    g_list_free(xaction_list);
-   xaccAccountGroupCommitEdit (grp);
+   xaccAccountCommitEdit (root);
 
    pgendEnable(be);
    qof_event_resume();
@@ -871,9 +865,9 @@ static void
 pgendSync (QofBackend *bend, QofBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
-   AccountGroup *grp = gnc_book_get_group (book);
+   Account *root = gnc_book_get_root_account(book);
 
-   ENTER ("be=%p, grp=%p", be, grp);
+   ENTER ("be=%p, root=%p", be, root);
 
    pgend_set_book (be, book);
    be->version_check = (guint32) time(0);
@@ -894,8 +888,8 @@ pgendSync (QofBackend *bend, QofBook *book)
    pgendStoreBook (be, book);
 
    /* store the account group hierarchy, and then all transactions */
-   pgendStoreGroup (be, grp);
-   pgendStoreAllTransactions (be, grp);
+   pgendStoreAccountTree (be, root);
+   pgendStoreAllTransactions (be, root);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    qof_event_suspend();
@@ -907,7 +901,7 @@ pgendSync (QofBackend *bend, QofBook *book)
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
       Timespec ts = gnc_iso8601_to_timespec_gmt (CK_BEFORE_LAST_DATE);
-      pgendGroupGetAllBalances (be, grp, ts);
+      pgendAccountTreeGetAllBalances (be, root, ts);
    } 
    else
    {
@@ -958,9 +952,9 @@ pgendSyncSingleFile (QofBackend *bend, QofBook *book)
    char buff[4000];
    char *p;
    PGBackend *be = (PGBackend *)bend;
-   AccountGroup *grp = gnc_book_get_group (book);
+   Account *root = gnc_book_get_root_account(book);
 
-   ENTER ("be=%p, grp=%p", be, grp);
+   ENTER ("be=%p, root=%p", be, root);
 
    pgend_set_book (be, book);
 
@@ -1017,14 +1011,14 @@ pgendSyncSingleFile (QofBackend *bend, QofBook *book)
    pgendStoreBookNoLock (be, book, TRUE);
 
    /* Store accounts and commodities */
-   xaccClearMarkDownGr (grp, 0);
-   pgendStoreGroupNoLock (be, grp, TRUE, TRUE);
-   xaccClearMarkDownGr (grp, 0);
+   xaccClearMarkDown (root, 0);
+   pgendStoreAccountTreeNoLock (be, root, TRUE, TRUE);
+   xaccClearMarkDown (root, 0);
 
    /* Recursively walk transactions. Start by reseting the write 
     * flags. We use this to avoid infinite recursion */
-   xaccGroupBeginStagedTransactionTraversals(grp);
-   xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
+   gnc_account_tree_begin_staged_transaction_traversals(root);
+   gnc_account_tree_staged_transaction_traversal (root, 1, trans_traverse_cb, be);
 
    /* hack alert -- In some deranged theory, we should be
     * syncing prices here, as well as syncing any/all other
@@ -1424,7 +1418,7 @@ pgend_session_end (QofBackend *bend)
           * it might be opened in multi-user mode next time. Thus, update
           * the account balance checkpoints just in case. 
           */
-         /* pgendGroupRecomputeAllCheckpoints (be, be->topgroup); */
+         /* pgendAccountTreeRecomputeAllCheckpoints (be, be->root); */
          break;
 
       case MODE_POLL:
@@ -1481,7 +1475,7 @@ static void
 pgend_book_load_poll (QofBackend *bend, QofBook *book)
 {
    Timespec ts = gnc_iso8601_to_timespec_gmt (CK_BEFORE_LAST_DATE);
-   AccountGroup *grp;
+   Account *root;
    PGBackend *be = (PGBackend *)bend;
 
    if (!be) return;
@@ -1508,10 +1502,10 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
 
    pgendGetAllAccountsInBook (be, book);
 
-   grp = gnc_book_get_group (book);
-   xaccAccountGroupBeginEdit (grp);
-   pgendGroupGetAllBalances (be, grp, ts);
-   xaccAccountGroupCommitEdit (grp);
+   root = gnc_book_get_root_account (book);
+   xaccAccountBeginEdit (root);
+   pgendAccountTreeGetAllBalances (be, root, ts);
+   xaccAccountCommitEdit (root);
 
    /* re-enable events */
    pgendEnable(be);

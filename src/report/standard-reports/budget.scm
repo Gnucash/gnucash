@@ -294,7 +294,7 @@
       (apply max
 	     (map (lambda (acct)
 		    (let ((children
-			   (gnc:account-get-immediate-subaccounts acct)))
+			   (gnc:account-get-children acct)))
 		      (if (null? children)
 			  1
 			  (+ 1 (accounts-get-children-depth children)))))

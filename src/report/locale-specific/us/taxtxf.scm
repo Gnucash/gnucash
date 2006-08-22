@@ -437,7 +437,7 @@
                    (txf-special-split? (gnc:account-get-txf-code account)))
               (+ gen 1)		; Est Fed Tax has a extra generation
               gen)	       		; no kids, return input
-          (apply max (gnc:group-map-accounts
+          (apply max (gnc:account-map-children
                       (lambda (x) (num-generations x (+ 1 gen)))
                       children)))))
 
@@ -620,7 +620,7 @@
 	    (for-each (lambda (x)
 		   (if (gnc:account-is-inc-exp? x)
 		       (set! sum (+ sum (+ 1 (count-accounts (+ 1 level)
-							     (gnc:account-get-immediate-subaccounts x)))))
+							     (gnc:account-get-children x)))))
 		       0))
 		 accounts)
 	    sum)

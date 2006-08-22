@@ -37,8 +37,6 @@
 
 #include <gtk/gtktreemodel.h>
 
-#include "Group.h"
-
 G_BEGIN_DECLS
 
 /* type macros */

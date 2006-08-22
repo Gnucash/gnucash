@@ -56,9 +56,9 @@
          (qif-io:invst-xtn-import xtn qiffile acct-table commodity))
        (qif-io:file-invst-xtns qiffile))
 
-      ;; build a gnucash account group
-      (let ((group (qif-io:acct-table-make-gnc-group 
-                    acct-table qiffile commodity)))
+      ;; build a gnucash account tree
+      (let ((root (qif-io:acct-table-make-gnc-acct-tree 
+		   acct-table qiffile commodity)))
         ;; write the file
         (let* ((name (simple-format #f "file:~A.gnc" filename)))
           (simple-format #t "using book name='~A'\n" name)

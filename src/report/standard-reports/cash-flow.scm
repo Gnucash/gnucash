@@ -194,7 +194,7 @@
       (apply max
 	     (map (lambda (acct)
 		    (let ((children 
-			   (gnc:account-get-immediate-subaccounts acct)))
+			   (gnc:account-get-children acct)))
 		      (if (null? children)
 			  1
 			  (+ 1 (accounts-get-children-depth children)))))
@@ -382,7 +382,7 @@
               (if (<= (account-get-depth account) tree-depth)
                 (let* ((anchor (gnc:html-markup/format
                                  (if (and (= (account-get-depth account) tree-depth)
-                                          (not (eq? (gnc:account-get-immediate-subaccounts account) '())))
+                                          (not (eq? (gnc:account-get-children account) '())))
                                    (if show-subaccts?
                                      (_ "%s and subaccounts")
                                      (_ "%s and selected subaccounts"))

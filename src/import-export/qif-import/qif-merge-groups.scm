@@ -25,16 +25,16 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  gnc:group-find-duplicates 
+;;  gnc:account-tree-find-duplicates 
 ;;  detect redundant splits/xtns from 'new' and return 
 ;;  them in a list. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:group-find-duplicates old-group new-group window)
+(define (gnc:account-tree-find-duplicates old-root new-root window)
   ;; get all the transactions in the new group, then iterate over them
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
-  (let* ((new-xtns (gnc:group-get-transactions new-group))
+  (let* ((new-xtns (gnc:account-tree-get-transactions new-root))
 	 (progress-dialog #f)
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
@@ -47,7 +47,7 @@
 	  (gnc-progress-dialog-set-heading progress-dialog
 					   (_ "Finding duplicate transactions..."))))
 
-    ;; for each transaction in the new group, build a query that could
+    ;; for each transaction in the new account tree, build a query that could
     ;; match possibly similar transactions.
     (for-each
      (lambda (xtn) 
@@ -93,7 +93,7 @@
                  QOF-QUERY-AND)
                 
                 ;; we want the value for the split to match the value
-                ;; the old-group split.  We should really check for
+                ;; the old-root split.  We should really check for
                 ;; fuzziness.
                 (xaccQueryAddValueMatch
                  sq (xaccSplitGetValue split)

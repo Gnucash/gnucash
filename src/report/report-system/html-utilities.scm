@@ -458,7 +458,7 @@
 	 (lambda (x) (if x 
 			 (gnc-commodity-collector-merge
 			  this-collector x )))
-	 (gnc:group-map-all-accounts
+	 (gnc:account-map-descendants
 	  (lambda (a)
 	    ;; Important: Calculate the balance if and only if the
 	    ;; account a is shown, i.e. (use-acct? a) == #t.
@@ -580,7 +580,7 @@
 	     (lambda (acct)
 	       (let ((subaccts (filter 
 				use-acct?
-				(gnc:account-get-immediate-subaccounts acct))))
+				(gnc:account-get-children acct))))
 		 (set! sum (+ sum  1))
 		 (if (or (= current-depth tree-depth) (null? subaccts))
 		     sum
@@ -647,7 +647,7 @@
 	   (lambda (acct)
 	     (let ((subaccts (filter 
 			      use-acct?
-			      (gnc:account-get-immediate-subaccounts acct))))
+			      (gnc:account-get-children acct))))
 	       (set! work-done (+ 1 work-done))
 	       (if start-percent
 		   (gnc:report-percent-done

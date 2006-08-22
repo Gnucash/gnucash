@@ -133,6 +133,7 @@
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
+<<<<<<< HEAD
 ;; maximum level of subaccounts in the current-group.
 (define (gnc:get-current-group-depth)
   ;; Given a list of accounts, this function determines the maximum
@@ -148,11 +149,18 @@
 		accounts)))
   (accounts-get-children-depth 
    (xaccGroupGetAccountListSorted (gnc-get-current-group))))
+=======
+;; maximum level of subaccounts in the tree
+(define (gnc:get-current-account-tree-depth)
+  (let ((root (gnc:get-current-root-account)))
+    (gnc:account-get-depth root)))
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 
 (define (gnc:split-get-corr-account-full-name split)
   (xaccSplitGetCorrAccountFullName split))
 
 
+<<<<<<< HEAD
 ;; get children that are the direct descendant of this acct
 (define (gnc:account-get-immediate-subaccounts acct)
   (define (acctptr-eq? a1 a2)
@@ -178,12 +186,18 @@
   (let ((group (xaccAccountGetChildren acct)))
     (xaccGroupGetSubAccountsSorted group)))
 
+=======
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
   (append-map 
    (lambda (a)
+<<<<<<< HEAD
      (xaccGroupGetSubAccountsSorted
       (xaccAccountGetChildren a)))
+=======
+     (gnc:account-get-descendants a))
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
    accountlist))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
@@ -493,6 +507,7 @@
 ;; values rather than double values.
 (define (gnc:account-get-comm-balance-at-date account 
 					      date include-children?)
+<<<<<<< HEAD
   (let ((balance-collector
          (if include-children?
              (gnc:group-get-comm-balance-at-date
@@ -507,6 +522,27 @@
       (qof-query-set-sort-order query
 				(list SPLIT-TRANS TRANS-DATE-POSTED)
 				(list QUERY-DEFAULT-SORT)
+=======
+  (let ((balance-collector (gnc:make-commodity-collector))
+	(query (gnc:malloc-query))
+	(splits #f))
+
+      (if include-children?
+	  (for-each 
+	   (lambda (x) 
+	     (gnc:commodity-collector-merge balance-collector x))
+	   (gnc:account-map-descendants
+	    (lambda (child)
+	      (gnc:account-get-comm-balance-at-date child date #f))
+	    account)))
+
+      (gnc:query-set-book query (gnc:get-current-book))
+      (gnc:query-add-single-account-match query account 'query-and)
+      (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
+      (gnc:query-set-sort-order query
+				(list gnc:split-trans gnc:trans-date-posted)
+				(list gnc:query-default-sort)
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 				'())
       (qof-query-set-sort-increasing query #t #t #t)
       (qof-query-set-max-results query 1)
@@ -580,6 +616,7 @@
    get-balance-fn
    (lambda(x) #f)))
 
+<<<<<<< HEAD
 ;; returns a commodity-collector
 (define (gnc:group-get-comm-balance-at-date group date)
   (let ((this-collector (gnc:make-commodity-collector)))
@@ -593,6 +630,8 @@
       group))
     this-collector))
 
+=======
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
@@ -618,6 +657,7 @@
       include-children?))
     this-collector))
 
+<<<<<<< HEAD
 ;; the version which returns a commodity-collector
 (define (gnc:group-get-comm-balance-interval group from to)
   (let ((this-collector (gnc:make-commodity-collector)))
@@ -629,6 +669,8 @@
 		  account from to #t)) group))
     this-collector))
 
+=======
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 ;; This calculates the increase in the balance(s) of all accounts in
 ;; <accountlist> over the period from <from-date> to <to-date>.
 ;; Returns a commodity collector.
@@ -708,11 +750,16 @@
 	 (gnc:accounts-count-splits (cdr accounts)))
       0))
 
-;; Sums up any splits of a certain type affecting a group of accounts.
+;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 (define (gnc:account-get-trans-type-balance-interval
+<<<<<<< HEAD
 	 group type start-date-tp end-date-tp)
   (let* ((query (qof-query-create-for-splits))
+=======
+	 account-list type start-date-tp end-date-tp)
+  (let* ((query (gnc:malloc-query))
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 	 (splits #f)
 	 (get-val (lambda (alist key)
 		    (let ((lst (assoc-ref alist key)))
@@ -722,10 +769,17 @@
 	 (regexp (if (get-val type 'regexp) #t #f))
 	 (total (gnc:make-commodity-collector))
 	 )
+<<<<<<< HEAD
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (xaccQueryAddAccountMatch query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTS
+=======
+    (gnc:query-set-book query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-add-account-match query account-list 'guid-match-any 'query-and)
+    (gnc:query-add-date-match-timepair
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
      query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
@@ -751,9 +805,15 @@
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
+<<<<<<< HEAD
 	 group type start-date-tp end-date-tp)
   (let* ((str-query (qof-query-create-for-splits))
 	 (sign-query (qof-query-create-for-splits))
+=======
+	 account-list type start-date-tp end-date-tp)
+  (let* ((str-query (gnc:malloc-query))
+	 (sign-query (gnc:malloc-query))
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
 	 (total-query #f)
          (splits #f)
 	 (get-val (lambda (alist key)
@@ -765,6 +825,7 @@
 	 (pos? (if (get-val type 'positive) #t #f))
          (total (gnc:make-commodity-collector))
          )
+<<<<<<< HEAD
     (qof-query-set-book str-query (gnc-get-current-book))
     (qof-query-set-book sign-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
@@ -772,6 +833,15 @@
     (xaccQueryAddAccountMatch str-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddAccountMatch sign-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTS
+=======
+    (gnc:query-set-book str-query (gnc:get-current-book))
+    (gnc:query-set-book sign-query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! str-query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! sign-query (gnc:get-current-book))
+    (gnc:query-add-account-match str-query account-list 'guid-match-any 'query-and)
+    (gnc:query-add-account-match sign-query account-list 'guid-match-any 'query-and)
+    (gnc:query-add-date-match-timepair
+>>>>>>> Initial removal of the engine Group.h, GroupP.h, and Group.c files.
      str-query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)

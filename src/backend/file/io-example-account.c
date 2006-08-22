@@ -43,7 +43,6 @@
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
 
-#include "Group.h"
 #include "Scrub.h"
 #include "TransLog.h"
 
@@ -69,11 +68,11 @@ gnc_destroy_example_account(GncExampleAccount *gea)
         g_free(gea->filename);
         gea->filename = NULL;
     }
-    if(gea->group != NULL)
+    if(gea->root != NULL)
     {
-        xaccAccountGroupBeginEdit (gea->group);
-        xaccAccountGroupDestroy(gea->group);
-        gea->group = NULL;
+        xaccAccountBeginEdit (gea->root);
+        xaccAccountDestroy(gea->root);
+        gea->root = NULL;
     }
     if(gea->short_description != NULL)
     {
@@ -138,9 +137,9 @@ add_account_local(GncExampleAccount *gea, Account *act)
 
     xaccAccountScrubCommodity (act);
 
-    if (!xaccAccountGetParent(act))
+    if (!gnc_account_get_parent(act))
     {
-        xaccGroupInsertAccount(gea->group, act);
+        gnc_account_append_child(gea->root, act);
     }
 }
 
@@ -301,7 +300,7 @@ gnc_read_example_account(QofBook *book, const gchar *filename)
 
     gea->book = book;
     gea->filename = g_strdup(filename);
-    gea->group = xaccMallocAccountGroup(book);
+    gea->root = xaccMallocAccount(book);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
@@ -327,6 +326,8 @@ gnc_read_example_account(QofBook *book, const gchar *filename)
         return FALSE;
     }
 
+    xaccAccountBeginEdit(gea->root);
+
     if(!gnc_xml_parse_file(top_parser, filename,
                            generic_callback, gea, book))
     {
@@ -335,8 +336,7 @@ gnc_read_example_account(QofBook *book, const gchar *filename)
         return FALSE;
     }
 
-    xaccGroupMarkSaved(gea->group);
-    xaccAccountGroupCommitEdit(gea->group);
+    xaccAccountCommitEdit(gea->root);
     
     return gea;
 }
@@ -389,7 +389,7 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
     
     write_bool_part(out, GNC_ACCOUNT_EXCLUDEP, gea->exclude_from_select_all);
 
-    write_account_group(out, gea->group, NULL);
+    write_account_tree(out, gea->root, NULL);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
     

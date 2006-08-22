@@ -38,7 +38,6 @@
 #include "druid-hierarchy.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
-#include "Group.h"
 
 GtkWidget               *druid_hierarchy_window = NULL;
 static GtkWidget        *qsf_import_merge_window = NULL;
@@ -197,12 +196,15 @@ void currency_transfer_cb ( QofEntity* ent, gpointer user_data)
 	}
 }
 
+/* If the account has no parent, shove it into the top level under the root. */
 void reference_parent_cb ( QofEntity* ent, gpointer user_data)
 {
+	Account *root;
+
 	if(!ent) return;
-	if(xaccAccountGetParent((Account*)ent) == NULL) {
-		xaccGroupInsertAccount(xaccGroupGetRoot(
-			xaccGetAccountGroup(targetBook)), (Account*)ent);
+	if(gnc_account_get_parent((Account*)ent) == NULL) {
+		root = gnc_book_get_root_account(targetBook);
+		gnc_account_append_child(root, (Account*)ent);
 	}
 }
 

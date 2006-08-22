@@ -626,14 +626,14 @@
     document))
 
 (define (find-first-account type)
-  (define (find-first group num index)
+  (define (find-first account num index)
     (if (>= index num)
 	'()
 	(let* ((this-account (xaccGroupGetAccount group index))
 	       (account-type (xaccAccountGetType this-account)))
 	  (if (eq? account-type type)
-	      this-account
-	      (find-first group num (+ index 1))))))
+	      this-child
+	      (find-first account num (+ index 1))))))
 
   (let* ((current-group (gnc-get-current-group))
 	 (num-accounts (xaccGroupGetNumAccounts

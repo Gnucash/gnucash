@@ -98,8 +98,8 @@ struct account_s
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").
    */
-  AccountGroup *parent;    /* back-pointer to parent */
-  AccountGroup *children;  /* pointer to sub-accounts */
+  Account *parent;    /* back-pointer to parent */
+  GList *children;    /* list of sub-accounts */
 
   /* protected data, cached parameters */
   gnc_numeric starting_balance;

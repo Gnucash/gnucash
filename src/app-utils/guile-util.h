@@ -29,8 +29,7 @@
 
 #include "gnc-book.h"
 #include "qof.h"
-#include "Group.h"
-
+#include "Account.h"
 
 /* Helpful functions for calling functions that return
  * specific kinds of values. These functions do error

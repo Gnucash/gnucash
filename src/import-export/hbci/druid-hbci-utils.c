@@ -66,7 +66,7 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
       (gnc_acc, AB_Account_GetBankCode(hbci_acc));
 }
 
-static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
+static void accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
 {
   if (gnc_hbci_get_account_uid(gnc_acc))
     gnc_hbci_set_account_uid (gnc_acc, 0);
@@ -74,7 +74,6 @@ static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
     gnc_hbci_set_account_accountid (gnc_acc, "");
   if (gnc_hbci_get_account_bankcode(gnc_acc))
     gnc_hbci_set_account_bankcode (gnc_acc, "");
-  return NULL;
 }
 
 /* hash is a DIRECT hash from each HBCI account to each gnucash
@@ -82,13 +81,11 @@ static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
 void
 accounts_save_kvp (GHashTable *hash)
 {
-  AccountGroup *grp;
+  Account *root;
   g_assert(hash);
 
-  grp = gnc_book_get_group (gnc_get_current_book ());
-  xaccGroupForEachAccount (grp, 
-			   &accounts_clear_kvp,
-			   NULL, TRUE);
+  root = gnc_book_get_root_account (gnc_get_current_book ());
+  gnc_account_foreach_descendant (root, accounts_clear_kvp, NULL);
 
   g_hash_table_foreach (hash, &accounts_save_kvp_cb, NULL);
 }
@@ -112,7 +109,7 @@ struct hbci_acc_cb_data
   GHashTable *hash;
 };
 
-static gpointer 
+static void 
 gnc_hbci_new_hash_from_kvp_cb (Account *gnc_acc, gpointer user_data)
 {
   struct hbci_acc_cb_data *data = user_data;
@@ -122,7 +119,6 @@ gnc_hbci_new_hash_from_kvp_cb (Account *gnc_acc, gpointer user_data)
   if (hbci_acc) {
     g_hash_table_insert (data->hash, hbci_acc, gnc_acc);
   }
-  return NULL;
 }
 
 GHashTable *
@@ -133,12 +129,10 @@ gnc_hbci_new_hash_from_kvp (AB_BANKING *api)
   hash = g_hash_table_new (&g_direct_hash, &g_direct_equal);
   if (api) {
     struct hbci_acc_cb_data data;
-    AccountGroup *grp = gnc_book_get_group (gnc_get_current_book ());
+    Account *root = gnc_book_get_root_account (gnc_get_current_book ());
     data.api = api;
     data.hash = hash;
-    xaccGroupForEachAccount (grp, 
-			     &gnc_hbci_new_hash_from_kvp_cb,
-			     &data, TRUE);
+    gnc_account_foreach_descendant(root, gnc_hbci_new_hash_from_kvp_cb, &data);
   }
   return hash;
 }

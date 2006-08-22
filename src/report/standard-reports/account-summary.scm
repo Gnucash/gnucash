@@ -315,7 +315,7 @@
          (doc (gnc:make-html-document))
 	 ;; just in case we need this information...
          (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-group-depth) 
+                         (gnc:get-current-account-tree-depth) 
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn

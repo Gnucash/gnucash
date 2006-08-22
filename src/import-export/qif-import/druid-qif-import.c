@@ -116,7 +116,7 @@ struct _qifimportwindow {
   SCM       new_stocks;
   SCM       ticker_map;
 
-  SCM       imported_account_group;
+  SCM       imported_account_tree;
   SCM       match_transactions;
   int       selected_transaction;
 };
@@ -189,7 +189,7 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   scm_gc_unprotect_object(window->stock_hash);
   scm_gc_unprotect_object(window->new_stocks);
   scm_gc_unprotect_object(window->ticker_map);
-  scm_gc_unprotect_object(window->imported_account_group);
+  scm_gc_unprotect_object(window->imported_account_tree);
   scm_gc_unprotect_object(window->match_transactions);
 
   g_free(window);
@@ -1276,14 +1276,14 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 		     _("An error occurred while importing "
 		       "QIF transactions into GnuCash. Your "
 		       "accounts are unchanged."));    
-    scm_gc_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = SCM_BOOL_F;
-    scm_gc_protect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_tree);
+    wind->imported_account_tree = SCM_BOOL_F;
+    scm_gc_protect_object(wind->imported_account_tree);
   }
   else {
-    scm_gc_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = retval;
-    scm_gc_protect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_tree);
+    wind->imported_account_tree = retval;
+    scm_gc_protect_object(wind->imported_account_tree);
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
@@ -1853,7 +1853,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 {
   
   SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
-  SCM   cat_and_merge = scm_c_eval_string("gnc:group-catenate-and-merge");
+  SCM   cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
   SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
   
   QIFImportWindow * wind = user_data;
@@ -2056,7 +2056,7 @@ gnc_ui_qif_import_druid_make(void)
   retval->stock_hash        =  SCM_BOOL_F;
   retval->new_stocks        =  SCM_BOOL_F;
   retval->ticker_map        =  SCM_BOOL_F;
-  retval->imported_account_group   = SCM_BOOL_F;
+  retval->imported_account_tree   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
   retval->selected_transaction = 0;
   
@@ -2221,7 +2221,7 @@ gnc_ui_qif_import_druid_make(void)
   scm_gc_protect_object(retval->stock_hash);
   scm_gc_protect_object(retval->new_stocks);
   scm_gc_protect_object(retval->ticker_map);
-  scm_gc_protect_object(retval->imported_account_group);
+  scm_gc_protect_object(retval->imported_account_tree);
   scm_gc_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */

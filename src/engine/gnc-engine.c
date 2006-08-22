@@ -28,7 +28,6 @@
 #include "qof.h"
 #include "cashobjects.h"
 #include "AccountP.h"
-#include "GroupP.h"
 #include "SX-book-p.h"
 #include "gnc-budget.h"
 #include "TransactionP.h"

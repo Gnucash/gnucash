@@ -36,7 +36,6 @@
 
 #include <glib.h>
 
-#include "Group.h"
 #include "qof.h"
 #include "Transaction.h"
 
@@ -45,7 +44,7 @@
 int pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid); 
 void pgendCopySplitsToEngine (PGBackend *be, Transaction *trans);
 
-void pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp);
+void pgendStoreAllTransactions (PGBackend *be, Account *root);
 void pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans, gboolean do_check_version);
 
 void pgend_trans_commit_edit (QofBackend * bend, Transaction * trans, Transaction * oldtrans);

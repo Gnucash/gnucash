@@ -135,7 +135,6 @@ to store an SRInfo structure containing the blank split.
 
 #include <glib.h>
 
-#include "Group.h"
 #include "Transaction.h"
 #include "table-allgui.h"
 
