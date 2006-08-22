@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-14 12:03+0200\n"
-"PO-Revision-Date: 2006-08-14 12:06+0200\n"
+"POT-Creation-Date: 2006-08-22 14:46+0200\n"
+"PO-Revision-Date: 2006-08-22 14:49+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +101,7 @@ msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:640 ../src/engine/Account.c:2141
+#: ../src/app-utils/gnc-ui-util.c:640 ../src/engine/Account.c:2142
 #: ../src/register/ledger-core/split-register.c:2029
 #: ../intl-scm/guile-strings.c:1836
 msgid "Equity"
@@ -346,7 +346,7 @@ msgstr "Rechnung"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:593 ../src/engine/Account.c:2140
+#: ../src/business/business-core/gncInvoice.c:593 ../src/engine/Account.c:2141
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1242
 msgid "Expense"
 msgstr "Aufwendungen"
@@ -2783,7 +2783,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:119
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:510
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1036
-#: ../src/engine/Account.c:2132 ../intl-scm/guile-strings.c:852
+#: ../src/engine/Account.c:2133 ../intl-scm/guile-strings.c:852
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -3088,32 +3088,32 @@ msgid "_Value: "
 msgstr "_Wert: "
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2131 ../src/import-export/hbci/gnc-hbci-utils.c:593
+#: ../src/engine/Account.c:2132 ../src/import-export/hbci/gnc-hbci-utils.c:593
 #: ../intl-scm/guile-strings.c:850
 msgid "Bank"
 msgstr "Bank"
 
-#: ../src/engine/Account.c:2133
+#: ../src/engine/Account.c:2134
 msgid "Asset"
 msgstr "Aktiva"
 
-#: ../src/engine/Account.c:2134
+#: ../src/engine/Account.c:2135
 msgid "Credit Card"
 msgstr "Kreditkarte"
 
-#: ../src/engine/Account.c:2135
+#: ../src/engine/Account.c:2136
 msgid "Liability"
 msgstr "Passiva"
 
-#: ../src/engine/Account.c:2136
+#: ../src/engine/Account.c:2137
 msgid "Stock"
 msgstr "Aktienkonto"
 
-#: ../src/engine/Account.c:2137
+#: ../src/engine/Account.c:2138
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: ../src/engine/Account.c:2138 ../src/gnome-utils/dialog-commodity.c:731
+#: ../src/engine/Account.c:2139 ../src/gnome-utils/dialog-commodity.c:731
 #: ../src/gnome-utils/gnc-tree-view-price.c:441
 msgid "Currency"
 msgstr "Währung"
@@ -3121,18 +3121,18 @@ msgstr "Währung"
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2139
+#: ../src/engine/Account.c:2140
 #: ../src/register/ledger-core/split-register.c:2045
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:866
 #: ../intl-scm/guile-strings.c:1240
 msgid "Income"
 msgstr "Erträge"
 
-#: ../src/engine/Account.c:2142
+#: ../src/engine/Account.c:2143
 msgid "A/Receivable"
 msgstr "Forderungen"
 
-#: ../src/engine/Account.c:2143
+#: ../src/engine/Account.c:2144
 msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
@@ -20479,6 +20479,15 @@ msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:73
 msgid ""
+"To raise the accounts menu in the transfer field of a register page, press "
+"the Menu key or the Ctrl-Down key combination."
+msgstr ""
+"In einer Buchungszeile des Kontenfensters kann man die Liste der möglichen "
+"Konten aufrufen, indem man die Tastenkombination Strg+Pfeil nach unten "
+"drückt."
+
+#: ../doc/tip_of_the_day.list.in:76
+msgid ""
 "The GnuCash developers are easy to contact.  As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
@@ -20488,7 +20497,7 @@ msgstr ""
 "IRC (Internet Relay Chat) ausprobieren. Die Entwicker sind im Channel "
 "#gnucash auf irc.gnome.org zu finden."
 
-#: ../doc/tip_of_the_day.list.in:77
+#: ../doc/tip_of_the_day.list.in:80
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
