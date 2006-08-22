@@ -667,7 +667,8 @@ gnc_file_be_remove_old_files(FileBackend *be)
         if (gnc_file_be_select_files (dent) == 0)
              continue;
 
-        name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
+	/* G_DIR_SEPARATOR_S is "/" on unix and "\\" on windows. */
+        name = g_strconcat(be->dirname, G_DIR_SEPARATOR_S, dent->d_name, NULL);
         len = strlen(name) - 4;
 
         /* Is this file associated with the current data file */
