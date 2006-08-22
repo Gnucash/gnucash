@@ -31,14 +31,14 @@ ${top_builddir}/src/gnc-module/libgncmodule.la
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-BIN_DIR-@:${bindir}:g' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
-	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e 's#@-G_WRAP_MODULE_DIR-@#${G_WRAP_MODULE_DIR}#g' \
+	    -e 's#@-G_WRAP_LIB_DIR-@#${G_WRAP_LIB_DIR}#g' \
+	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
+	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
+            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -47,23 +47,23 @@ BUILT_SOURCES = i18n.h
 i18n.h: i18n.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
-            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
+            -e 's#@-PACKAGE-@#${PACKAGE}#g' \
+            -e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g'
 	mv $@.tmp $@
 
 
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-BIN_DIR-@:${bindir}:g' \
-	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
-	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
-	    -e "s:@-TOP_SRC_DIR-@:`pwd`/${top_srcdir}:g"
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e 's#@-G_WRAP_MODULE_DIR-@#${G_WRAP_MODULE_DIR}#g' \
+	    -e 's#@-G_WRAP_LIB_DIR-@#${G_WRAP_LIB_DIR}#g' \
+	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
+	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
+            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -108,6 +108,6 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 		${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-GCONF_SCHEMA_FILE_DIR-@:${GCONF_SCHEMA_FILE_DIR}:g'
+	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@
