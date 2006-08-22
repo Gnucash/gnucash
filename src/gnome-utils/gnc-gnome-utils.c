@@ -52,7 +52,6 @@
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
-#include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
