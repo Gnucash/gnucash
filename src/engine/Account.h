@@ -212,8 +212,6 @@ const gchar *gnc_get_account_separator_string (void);
 gunichar gnc_get_account_separator (void);
 void gnc_set_account_separator (const gchar *separator);
 
-Account *gnc_coll_get_root_account(QofCollection *col);
-void gnc_coll_set_root_account(QofCollection *col, Account *root);
 Account *gnc_book_get_root_account(QofBook *book);
 void gnc_book_set_root_account(QofBook *book, Account *root);
 

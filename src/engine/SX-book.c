@@ -52,7 +52,7 @@ static QofLogModule log_module = GNC_MOD_SX;
 
 /* ====================================================================== */
 
-Account *
+static Account *
 gnc_collection_get_template_root( const QofCollection *col )
 {
   return qof_collection_get_data (col);
@@ -67,7 +67,7 @@ gnc_book_get_template_root( QofBook *book )
   return gnc_collection_get_template_root (col);
 }
 
-void
+static void
 gnc_collection_set_template_root (QofCollection *col,
                                   Account *templateRoot)
 {

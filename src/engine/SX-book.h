@@ -49,7 +49,6 @@ GList * gnc_book_get_schedxactions(QofBook *book);
 
 /** Returns the template group from the book. **/
 Account *gnc_book_get_template_root(QofBook *book);
-Account *gnc_collection_get_template_root(const QofCollection *col);
 
 /** @return The list of SXes which reference the given Account. Caller should free this list. **/
 GList* gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct);

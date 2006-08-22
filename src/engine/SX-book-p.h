@@ -49,7 +49,6 @@ void gnc_collection_set_schedxactions( QofCollection *col, GList *newList );
 
 /* Associate the given template root account with a book */
 void gnc_book_set_template_root (QofBook *book, Account *templateRoot);
-void gnc_collection_set_template_root (QofCollection *col, Account *templateRoot);
 
 
 

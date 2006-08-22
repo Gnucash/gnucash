@@ -152,14 +152,14 @@ xaccInitAccount (Account * acc, QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
-Account * 
+static Account * 
 gnc_coll_get_root_account (QofCollection *col)
 {
   if (!col) return NULL;
   return qof_collection_get_data (col);
 }
 
-void
+static void
 gnc_coll_set_root_account (QofCollection *col, Account *root)
 {
   Account *old_root;
