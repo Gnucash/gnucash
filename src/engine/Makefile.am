@@ -205,7 +205,7 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: \
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's:@-libdir-@:${libdir}:g'
+                -e 's#@-libdir-@#${libdir}#g'
 	mv $@.tmp $@
 
 BUILT_SOURCES = iso-4217-currencies.c \

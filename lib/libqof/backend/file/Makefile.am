@@ -36,7 +36,7 @@ EXTRA_DIST = \
 qsf-dir.h: qsf-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	        -e 's:@-QSF_SCHEMA_DIR-@:${QOF_XML_DIR}:g'
+	        -e 's#@-QSF_SCHEMA_DIR-@#${QOF_XML_DIR}#g'
 	mv $@.tmp $@
 
 BUILT_SOURCES = qsf-dir.h

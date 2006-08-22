@@ -90,7 +90,7 @@ EXTRA_DIST = \
 qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's:@-libdir-@:${QOFLIBdir}:g'
+                -e 's#@-libdir-@#${QOFLIBdir}#g'
 	 mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
