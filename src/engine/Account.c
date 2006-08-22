@@ -219,15 +219,13 @@ xaccMallocAccount (QofBook *book)
 }
 
 Account *
-gnc_account_create_root (QofBook *book, gnc_commodity *com)
+gnc_account_create_root (QofBook *book)
 {
   Account *root;
 
   root = xaccMallocAccount(book);
   xaccAccountBeginEdit(root);
   root->type = ACCT_TYPE_ROOT;
-  root->commodity = com;
-  root->commodity_scu = gnc_commodity_get_fraction(com);
   xaccAccountCommitEdit(root);
   gnc_book_set_root_account(book, root);
   return root;

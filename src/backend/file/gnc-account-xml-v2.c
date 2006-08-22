@@ -447,8 +447,7 @@ gnc_account_end_handler(gpointer data_for_children,
             if (type != ACCT_TYPE_ROOT) {
                 root = gnc_book_get_root_account(book);
                 if (root == NULL) {
-		  gnc_commodity *com = xaccAccountGetCommodity(acc);
-		  root = gnc_account_create_root(book, com);
+		  root = gnc_account_create_root(book);
 		}
                 gnc_account_append_child(root, acc);
             }

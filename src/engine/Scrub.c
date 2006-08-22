@@ -666,6 +666,7 @@ xaccAccountScrubCommodity (Account *account)
   gnc_commodity *commodity;
 
   if (!account) return;
+  if (xaccAccountGetType(account) == ACCT_TYPE_ROOT) return;
 
   commodity = xaccAccountGetCommodity (account);
   if (commodity) return;

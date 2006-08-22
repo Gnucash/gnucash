@@ -191,8 +191,7 @@ add_account_local(sixtp_gdv2 *data, Account *act)
       if (parent == NULL) {
 	root = gnc_book_get_root_account(data->book);
 	if (root == NULL) {
-	  gnc_commodity *com = xaccAccountGetCommodity(act);
-	  root = gnc_account_create_root(data->book, com);
+	  root = gnc_account_create_root(data->book);
 	  /* Leave the account in the edit state. It will be committed
 	   * at the end of reading all the transactions. */
 	  xaccAccountBeginEdit(root);

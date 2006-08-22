@@ -148,7 +148,7 @@ typedef enum
 Account * xaccMallocAccount (QofBook *book);
 
 /** Create a new root level account.  */
-Account * gnc_account_create_root (QofBook *book, gnc_commodity *com);
+Account * gnc_account_create_root (QofBook *book);
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
  *    except that it also also places a pair of GUID-pointers
