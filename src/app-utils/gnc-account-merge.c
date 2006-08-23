@@ -44,7 +44,7 @@ account_trees_merge(Account *existing_root, Account *new_accts_root)
     Account *existing_named, *new_acct;
     const char *name;
 
-    new_acct = (Account*)accounts->data;
+    new_acct = (Account*)node->data;
     name = xaccAccountGetName(new_acct);
     existing_named = gnc_account_lookup_name(existing_root, name);
     switch (determine_account_merge_disposition(existing_named, new_acct))
