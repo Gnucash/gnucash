@@ -810,6 +810,10 @@ gnc_glade_xml_new (const char *filename, const char *root)
 {
   GladeXML *xml;
   char *fname;
+  const gchar *gnc_glade_dir = GNC_GLADE_DIR;
+  /* FIXME: On windows, gnc_glade_dir needs to be looked up
+     somewhere where it was specified at installation time instead
+     of compile time, e.g. in the registry. */
 
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (root != NULL, NULL);
@@ -820,7 +824,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
     glade_inited = TRUE;
   }
 
-  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, (char *)NULL);
+  fname = g_build_filename(gnc_glade_dir, filename, (char *)NULL);
 
   xml = glade_xml_new (fname, root, NULL);
 
