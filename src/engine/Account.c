@@ -180,9 +180,14 @@ Account *
 gnc_book_get_root_account (QofBook *book)
 {
   QofCollection *col;
+  Account *root;
+
   if (!book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
-  return gnc_coll_get_root_account (col);
+  root = gnc_coll_get_root_account (col);
+  if (root == NULL)
+    root = gnc_account_create_root(book);
+  return root;
 }
 
 void

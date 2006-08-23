@@ -190,12 +190,6 @@ add_account_local(sixtp_gdv2 *data, Account *act)
       parent = gnc_account_get_parent(act);
       if (parent == NULL) {
 	root = gnc_book_get_root_account(data->book);
-	if (root == NULL) {
-	  root = gnc_account_create_root(data->book);
-	  /* Leave the account in the edit state. It will be committed
-	   * at the end of reading all the transactions. */
-	  xaccAccountBeginEdit(root);
-	}
 	gnc_account_append_child(root, act);
       }
     }
@@ -776,7 +770,6 @@ qof_session_load_from_xml_file_v2_full(
     gnc_account_foreach_descendant(root,
 				   (AccountCb) xaccAccountCommitEdit,
 				   NULL);
-    xaccAccountCommitEdit (root);
 
     /* start logging again */
     xaccLogEnable ();

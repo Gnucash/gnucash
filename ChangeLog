@@ -94,6 +94,11 @@
 
 2006-08-20  David Hampton  <hampton@employees.org>
 
+	* src/backend/file/io-gncxml-v2.c:
+	* src/engine/Account.c: Make sure the root account exists when the
+	code asks for it.  This works both for reading a new file and a
+	user performing File->New->New File.
+
 	* src/gnome-utils/gnc-tree-model-account.c: Fix a mistake in the
 	updated tree model.
 
