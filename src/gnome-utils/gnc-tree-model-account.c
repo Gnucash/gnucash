@@ -920,9 +920,10 @@ gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
 	if (iter == NULL) {
-		num = gnc_account_n_children(priv->root);
-		LEAVE("count is %d", num);
-		return num;
+		/* How many children does the invisible root node
+		 * have. One! Its the real root account node. */
+		LEAVE("count is 1");
+		return 1;
 	}
 
 	g_return_val_if_fail (iter != NULL, FALSE);

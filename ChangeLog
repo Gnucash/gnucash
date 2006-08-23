@@ -94,6 +94,9 @@
 
 2006-08-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-model-account.c: Fix a mistake in the
+	updated tree model.
+
 	* src/backend/file/gnc-account-xml-v2.c:
 	* src/backend/file/gnc-commodity-xml-v2.c:
 	* src/gnome/top-level.c: Remove some conditional code that is no
