@@ -40,7 +40,12 @@
  * but for all others: "default", or more precisely: Look into
  * $datadir/aqbanking/imexporters and look into the "name" field of
  * the foo.conf files.
+ *
+ * @param execute_transactions If TRUE, import the transactions and
+ * additionally send them as online jobs over aqbanking/HBCI. If
+ * FALSE, simply import the transactions and that's it.
  */
-void              gnc_file_dtaus_import (const gchar *aqbanking_importername,
-					 const gchar *aqbanking_profilename);
+void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
+				const gchar *aqbanking_profilename,
+				gboolean execute_transactions);
 #endif

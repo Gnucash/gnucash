@@ -78,6 +78,7 @@ struct import_data
   AB_BANKING *ab;
   AB_ACCOUNT *hbci_account;
   GList *job_list;
+  gboolean execute_transactions;
 };
 
 
@@ -141,8 +142,9 @@ AB_ImExporterAccountInfo_TransactionsForEach(AB_IMEXPORTER_ACCOUNTINFO *iea,
  * Entry point
 \********************************************************************/
 
-void gnc_file_dtaus_import (const gchar *aqbanking_importername,
-			    const gchar *aqbanking_profilename)
+void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
+				const gchar *aqbanking_profilename,
+				gboolean execute_transactions)
 {
   char *selected_filename;
   char *default_dir;
@@ -269,6 +271,7 @@ void gnc_file_dtaus_import (const gchar *aqbanking_importername,
 	data.importer_generic = importer_generic_gui;
 	data.ab = ab;
 	data.job_list = NULL;
+	data.execute_transactions = execute_transactions;
 
 	/* Iterate through all accounts */
 	AB_ImExporterContext_AccountInfoForEach(ctx, accountinfolist_cb, &data);
@@ -277,19 +280,23 @@ void gnc_file_dtaus_import (const gchar *aqbanking_importername,
 	/* that's it */
 	g_free(selected_filename);
 
-	/* and run the gnucash importer. */
-	result = gnc_gen_trans_list_run (importer_generic_gui);
+	if (execute_transactions) {
+	  /* and run the gnucash importer. */
+	  result = gnc_gen_trans_list_run (importer_generic_gui);
 
-	if (result)
-	  /* NEW: Copied from gnc-hbci-transfer.c: */
-	  /* Execute these jobs now. This function already delete()s the
-	     job. */
-	  /* no parent so far: GNCInteractor_reparent (interactor, parent); */
-	  successful = gnc_hbci_multijob_execute (parent, ab, data.job_list, interactor);
-	/* else */
-
-	/* Delete all jobs from queue in any case. */
-	g_list_foreach (data.job_list, delpending_cb, ab);
+	  if (result)
+	    /* Execute these jobs now. This function already delete()s the
+	       job. */
+	    /* no parent so far; otherwise add this: GNCInteractor_reparent (interactor, parent); */
+	    successful = gnc_hbci_multijob_execute (parent, ab, data.job_list, interactor);
+	  /* else */
+	  
+	  /* Delete all jobs from queue in any case. */
+	  g_list_foreach (data.job_list, delpending_cb, ab);
+	}
+	else {
+	  successful = TRUE;
+	}
 
 	/* We clean up here. */
 	AB_ImExporterContext_free(ctx);
@@ -323,11 +330,17 @@ accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
   if (gnc_acc) {
     /* Store chosen gnucash account in callback data */
     data->gnc_acc = gnc_acc;
-    /* Retrieve the aqbanking account that belongs to this gnucash
-       account */
-    data->hbci_account = gnc_hbci_get_hbci_acc (data->ab, gnc_acc);
-    if (data->hbci_account == NULL) {
-      gnc_error_dialog (NULL, _("No HBCI account found for this gnucash account. These transactions will not be executed by HBCI."));
+
+    if (data->execute_transactions) {
+      /* Retrieve the aqbanking account that belongs to this gnucash
+	 account */
+      data->hbci_account = gnc_hbci_get_hbci_acc (data->ab, gnc_acc);
+      if (data->hbci_account == NULL) {
+	gnc_error_dialog (NULL, _("No HBCI account found for this gnucash account. These transactions will not be executed by HBCI."));
+      }
+    }
+    else {
+      data->hbci_account = NULL;
     }
   
     /* Iterate through all transactions.  */
