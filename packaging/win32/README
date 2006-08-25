@@ -1,0 +1,30 @@
+These scripts try to download and install a Windows/mingw32 build
+environment for GnuCash.
+
+Before you start with the automated build, you have to complete these
+steps manually. The directory variables are set in custom.sh.
+
+* Download MSYS (but *only* msys, no mingw and no msysdtk)
+from http://www.mingw.org/download.shtml -> Current -> MSYS -> (bin, *.exe)
+to $DOWNLOAD_DIR
+
+* Install MSYS (no postinstall)
+to $MSYS_DIR
+
+* Download wget
+from http://www.mingw.org/download.shtml -> Current -> mingwPORT -> (bin, wget-*)
+to $DOWNLOAD_DIR
+
+* Adjust installer.sh and/or custom.sh. Especially in the latter you
+  can comment out those build steps that have been completed already
+  and/or should not be performed now. If you want verbose output of
+  any script step, change the first line in install.sh and add the
+  "-x" switch.
+
+Start/Enter any MSYS shell. Let the automated build begin by:
+
+  $INSTALLER_DIR/installer.sh
+
+Good luck!
+
+More information is collected on http://wiki.gnucash.org/wiki/Windows
