@@ -6,6 +6,10 @@ GLOBAL_DIR=c:\\soft
 TMP_DIR=$GLOBAL_DIR\\tmp
 DOWNLOAD_DIR=$GLOBAL_DIR\\downloads
 
+REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
+REPOS_DIR=$GLOBAL_DIR\\repos
+GNUCASH_DIR=$GLOBAL_DIR\\gnucash
+
 MSYS_DIR=$GLOBAL_DIR\\msys
 
 WGET_DIR=$GLOBAL_DIR\\wget
@@ -78,10 +82,7 @@ AUTOTOOLS_DIR=$GLOBAL_DIR\\autotools
 SVN_URL="http://subversion.tigris.org/files/documents/15/32856/svn-1.3.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
-REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
-REPOS_DIR=$GLOBAL_DIR\\repos
-GNUCASH_DIR=$GLOBAL_DIR\\gnucash
-
+# There is no reason to ever need to comment these out!
 add_step inst_wget
 add_step inst_dtk
 add_step inst_mingw
