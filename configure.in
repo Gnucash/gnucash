@@ -1243,16 +1243,24 @@ then
   AC_SUBST(GSF_LIBS)
   
   dnl $4=true => don't die if failure.
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
-  if $PKG_CONFIG --silence-errors 'libgoffice-1 >= 0.0.4'
+  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0,,true)
+  if $PKG_CONFIG --silence-errors 'libgoffice-0.3 >= 0.3.0'
   then
     AC_DEFINE(HAVE_GOFFICE,1,[System has goffice-0.0.4 or better])
     HAVE_GOFFICE=yes
   else
-    AC_MSG_RESULT(using internally-packaged goffice)
-    GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
-    GOFFICE_LIBS='${top_builddir}/lib/goffice-0.0.4/goffice/libgoffice-1.la'
-    HAVE_GOFFICE=no
+    AC_MSG_RESULT(no)
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
+    if $PKG_CONFIG --silence-errors 'libgoffice-1 >= 0.0.4'
+    then
+      AC_DEFINE(HAVE_GOFFICE,1,[System has goffice-0.0.4 or better])
+      HAVE_GOFFICE=yes
+    else
+      AC_MSG_RESULT(using internally-packaged goffice)
+      GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
+      GOFFICE_LIBS='${top_builddir}/lib/goffice-0.0.4/goffice/libgoffice-1.la'
+      HAVE_GOFFICE=no
+    fi
   fi
   AM_CONDITIONAL(HAVE_GOFFICE, test "x$HAVE_GOFFICE" = "xyes")
   AC_SUBST(GOFFICE_CFLAGS)
