@@ -90,7 +90,7 @@ function prepare() {
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
-    quiet $_WGET_UDIR/wget --version
+    quiet $_WGET_UDIR/wget --version || true
     if [ $? = 0 ] ; then
         echo "already installed.  skipping."
     else
@@ -104,7 +104,7 @@ function inst_wget() {
 
 function inst_dtk() {
     setup MSYS DTK
-    quiet perl --help
+    quiet perl --help || true
     if [ $? = 0 ] ; then
         echo "msys dtk already installed.  skipping."
     else
@@ -123,7 +123,7 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
-    quiet gcc --version
+    quiet gcc --version || true
     if [ $? = 0 ] ; then
 	echo "mingw already installed.  skipping."
     else
@@ -140,7 +140,7 @@ function inst_mingw() {
 function inst_unzip() {
     setup Unzip
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
-    quiet $_UNZIP_UDIR/bin/unzip --help
+    quiet $_UNZIP_UDIR/bin/unzip --help || true
     if [ $? = 0 ] ; then
         echo "unzip already installed.  skipping."
     else
@@ -158,7 +158,7 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    quiet ld $REGEX_LDFLAGS -lregex -o tmp
+    quiet ld $REGEX_LDFLAGS -lregex -o tmp || true
     if [ $? = 0 ] ; then
         echo "regex already installed.  skipping."
     else
@@ -178,7 +178,7 @@ function inst_readline() {
     add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
     add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
     add_to_env $_READLINE_UDIR/bin PATH
-    quiet ld $READLINE_LDFLAGS -lreadline -o tmp
+    quiet ld $READLINE_LDFLAGS -lreadline -o tmp || true
     if [ $? = 0 ] ; then
         echo "readline already installed.  skipping."
     else
@@ -196,7 +196,7 @@ function inst_indent() {
     setup Indent
     _INDENT_UDIR=`unix_path $INDENT_DIR`
     add_to_env $_INDENT_UDIR/bin PATH
-    quiet which indent
+    quiet which indent || true
     if [ $? = 0 ] ; then
         echo "indent already installed.  skipping."
     else
@@ -213,11 +213,14 @@ function inst_guile() {
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     add_to_env $_GUILE_UDIR/bin PATH
     add_to_env $_GUILE_WFSDIR/share/guile/site/slib/ SCHEME_LIBRARY_PATH
+    set +e
     quiet guile -c '(use-modules (srfi srfi-39))' &&
     quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
     if [ $? = 0 ] ; then
-        echo "guile and slib already installed.  skipping.
+        set -e
+        echo "guile and slib already installed.  skipping."
     else
+        set -e
         wget -c $GUILE_URL -P $DOWNLOAD_DIR
         wget -c $SLIB_URL -P $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/guile-*.tar.gz -C $TMP_UDIR
@@ -281,8 +284,8 @@ function inst_guile() {
 
 function inst_glade() {
     setup Glade
-    quiet pkg-config --exists glib-2.0 gtk+-2.0
-    echo [ $? = 0 ] ; then
+    quiet pkg-config --exists glib-2.0 gtk+-2.0 || true
+    if [ $? = 0 ] ; then
         echo "glade already installed.  skipping."
     else
         wget -c $GLADE_URL -P $DOWNLOAD_DIR
@@ -305,7 +308,7 @@ function inst_gwrap() {
     _GWRAP_UDIR=`unix_path $GWRAP_DIR`
     add_to_env $_GWRAP_UDIR/bin PATH
     add_to_env $_GWRAP_WFSDIR/share/guile/site GUILE_LOAD_PATH
-    quiet g-wrap-config --version
+    quiet g-wrap-config --version || true
     if [ $? = 0 ] ; then
         echo "g-wrap already installed.  skipping."
     else
@@ -348,12 +351,15 @@ function inst_gnome() {
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    set +e
     quiet gconftool-2 --version &&
     pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
     quiet intltoolize --version
     if [ $? = 0 ] ; then
+        set -e
         echo "gnome packages installed.  skipping."
     else
+        set -e
         mkdir -p $GNOME_DIR
 	wget -c $INTLTOOL_URL -P $DOWNLOAD_DIR
 	wget -c $ORBIT2_URL -P $DOWNLOAD_DIR
@@ -412,10 +418,13 @@ function inst_autotools() {
     setup Autotools
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
+    set +e
     quiet autoconf --help && quiet automake --help && quiet libtool --help 
     if [ $? = 0 ] ; then
+        set -e
         echo "auto tools already installed.  skipping."
     else
+        set -e
         wget -c $AUTOCONF_URL -P $DOWNLOAD_DIR
         wget -c $AUTOMAKE_URL -P $DOWNLOAD_DIR
         wget -c $LIBTOOL_URL -P $DOWNLOAD_DIR
@@ -450,7 +459,7 @@ function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
     export PATH="$_SVN_UDIR/bin:$PATH"
-    quiet svn --version
+    quiet svn --version || true
     if [ $? = 0 ] ; then
         echo "subversion already installed.  skipping."
     else
