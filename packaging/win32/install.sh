@@ -531,7 +531,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     set +e
-    quiet pkg-config --exists libgoffice-0.3
+    quiet pkg-config --exists libgoffice-1
     if [ $? = 0 ] ; then
 	set -e
 	echo "goffice already installed.  skipping."
@@ -557,7 +557,8 @@ function inst_goffice() {
 	    make install
 	qpopd
     fi
-    pkg-config --exists libgoffice-0.3 || die "goffice not installed correctly"
+    pkg-config --exists libgoffice-0.3 && die "Sorry, for goffice gnucash expects a pkgconfig file with the name libgoffice-1.pc, but you have an installed file libgoffice-0.3.pc. You should probably rename that file."
+    pkg-config --exists libgoffice-1 || die "goffice not installed correctly"
 }
 
 function inst_svn() {
@@ -600,8 +601,9 @@ function inst_gnucash() {
     ./configure \
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
-	CPPFLAGS="${AUTOTOOLS_CPPFLAGS}" \
-	LDFLAGS="${AUTOTOOLS_LDFLAGS}"
+	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS}" \
+	CFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS}" \
+	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS}"
 #    make
     qpopd
 }
