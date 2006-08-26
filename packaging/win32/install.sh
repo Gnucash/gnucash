@@ -546,7 +546,12 @@ function inst_goffice() {
 		patch -p1 < $GOFFICE_PATCH
 	    autoconf
 	    ./configure --prefix=$_GOFFICE_UDIR
-	    find . -name Makefile.am | xargs sed -i -e '/INTLTOOL_XML_RULE/d'
+	    for f in `find . -name Makefile.am` ; do
+		if [ `grep -c INTLTOOL_XML_RULE $f` != 0 ] ; then
+		    cp $f $f.bak
+		    cat $f.bak | sed -e '/INTLTOOL_XML_RULE/d' > $f
+		fi
+	    done
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    make
 	    make install
