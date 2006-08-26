@@ -84,6 +84,7 @@ LIBGSF_DIR=$GLOBAL_DIR\\libgsf
 
 GOFFICE_URL="$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.0.tar.bz2"
 GOFFICE_DIR=$GLOBAL_DIR\\goffice
+GOFFICE_PATCH=`pwd`/goffice-0.3.0-patch.diff
 
 SVN_URL="http://subversion.tigris.org/files/documents/15/32856/svn-1.3.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
@@ -100,8 +101,8 @@ add_step inst_guile
 add_step inst_glade
 add_step inst_gwrap
 add_step inst_gnome
-add_step inst_libgsf
 add_step inst_autotools
+add_step inst_libgsf
 add_step inst_svn
 add_step svn_up
 add_step inst_gnucash

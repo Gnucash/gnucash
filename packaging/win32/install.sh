@@ -540,7 +540,14 @@ function inst_goffice() {
 	smart_wget $GOFFICE_URL $DOWNLOAD_DIR
 	tar -xjpf $DOWNLOAD_UDIR/goffice-*.tar.bz2 -C $TMP_UDIR
 	qpushd $TMP_UDIR/goffice-*
+	    cp configure.in configure.in.bak
+	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#)$#,[no-xml])#' > configure.in
+	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
+		patch -p1 < $GOFFICE_PATCH
+	    autoconf
 	    ./configure --prefix=$_GOFFICE_UDIR
+	    find . -name Makefile.am | xargs sed -i -e '/INTLTOOL_XML_RULE/d'
+	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    make
 	    make install
 	qpopd

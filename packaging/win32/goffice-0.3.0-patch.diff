@@ -1,0 +1,105 @@
+diff -ur goffice-0.3.0/configure.in goffice-0.3.0-mingw/configure.in
+--- goffice-0.3.0/configure.in	Mon Apr 17 19:15:44 2006
++++ goffice-0.3.0-mingw/configure.in	Fri Aug 25 14:32:11 2006
+@@ -226,6 +226,8 @@
+ AM_CONDITIONAL(WITH_WIN32, test $with_win32 = yes)
+ AM_CONDITIONAL(HAVE_LIBEXE, test x$LIBEXE = xyes)
+ 
++AC_CHECK_HEADERS([pwd.h grp.h])
++
+ dnl *****************************
+ dnl FIXME: perhaps declare with AC_ARG_VAR?
+ dnl	   If we use the initial value of a variable, we have to make it precious.
+diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils/go-file.c
+--- goffice-0.3.0/goffice/utils/go-file.c	Wed Mar 29 15:41:37 2006
++++ goffice-0.3.0-mingw/goffice/utils/go-file.c	Fri Aug 25 13:11:41 2006
+@@ -44,8 +44,12 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-#include <pwd.h>
+-#include <grp.h>
++#ifdef HAVE_PWD_H
++# include <pwd.h>
++#endif
++#ifdef HAVE_GRP_H
++# include <grp.h>
++#endif
+ #include <time.h>
+ /* ------------------------------------------------------------------------- */
+ 
+@@ -675,11 +679,13 @@
+ {
+ 	gboolean error = FALSE;
+ 	guint uid = 0;
++	gboolean islocal = FALSE;
++#ifdef HAVE_PWD_H
+ 	struct passwd *password_info;
+ 	const char *name;
+ 	gsize namelen;
+ 	char *nameutf8;
+-	gboolean islocal = FALSE;
++#endif
+ 
+ #ifdef GOFFICE_WITH_GNOME
+ 	GnomeVFSFileInfo *file_info;
+@@ -718,6 +724,7 @@
+ 		return g_strdup (_("remote user"));
+ 	}
+ 
++#ifdef HAVE_PWD_H
+ 	password_info = getpwuid (uid);
+ 
+ 	if (password_info == NULL)
+@@ -739,6 +746,9 @@
+ 		nameutf8[--namelen] = 0;
+ 
+ 	return nameutf8;
++#else
++	return NULL;
++#endif
+ }
+ 
+ /*
+@@ -750,10 +760,12 @@
+ {
+ 	gboolean error = FALSE;
+ 	guint gid = 0;
+-	struct group *group_info;
+ 	gboolean islocal = FALSE;
++#ifdef HAVE_GRP_H
++	struct group *group_info;
+ 	const char *name;
+ 	char *nameutf8;
++#endif
+ 
+ #ifdef GOFFICE_WITH_GNOME
+ 	GnomeVFSFileInfo *file_info;
+@@ -793,6 +805,7 @@
+ 		return g_strdup (_("remote"));
+ 	}
+ 
++#ifdef HAVE_GRP_H
+ 	group_info = getgrgid (gid);
+ 
+ 	if (group_info == NULL)
+@@ -802,6 +815,9 @@
+ 	(void) go_guess_encoding (name, strlen (name),
+ 				  NULL, &nameutf8);
+ 	return nameutf8;
++#else
++	return NULL;
++#endif
+ }
+ 
+ GOFilePermissions *
+--- goffice-0.3.0/configure.in~	Sat Aug 26 00:15:26 2006
++++ goffice-0.3.0/configure.in	Sat Aug 26 00:53:34 2006
+@@ -93,6 +93,7 @@
+ 	libxml-2.0		>= 2.4.12
+ 	pango			>= 1.8.1
+ 	pangoft2		>= 1.8.1
++	freetype2		>= 2.1.0
+ 	libart-2.0		>= 2.3.11
+ "
+ goffice_cairo_reqs="
