@@ -87,6 +87,22 @@ function prepare() {
     TMP_UDIR=`unix_path $TMP_DIR`
 }
 
+# usage:  smart_wget URL DESTDIR
+function smart_wget() {
+    _FILE=`basename $1`
+    _DLD=`unix_path $2`
+    _TMP=`unix_path $TMP_DIR`
+
+    # If the file already exists in the download directory ($2)
+    # then don't do anything.  But if it does NOT exist then
+    # download the file to the tmpdir and then when that completes
+    # move it to the dest dir.
+    if [ ! -f $_DLD/$_FILE ] ; then
+	wget -c $1 -P $TMP_DIR
+	mv $_TMP/$_FILE $_DLD
+    fi
+}
+
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
@@ -114,7 +130,7 @@ function inst_dtk() {
         echo "msys dtk already installed.  skipping."
     else
         set -e
-        wget -c $DTK_URL -P $DOWNLOAD_DIR
+        smart_wget $DTK_URL $DOWNLOAD_DIR
         echo "!!! The path must be: $MSYS_DIR !!!"
         $DOWNLOAD_UDIR/msysDTK-*.exe
         for file in \
@@ -137,7 +153,7 @@ function inst_mingw() {
     else
         set -e
         _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
-        wget -c $MINGW_URL -P $DOWNLOAD_DIR
+        smart_wget $MINGW_URL $DOWNLOAD_DIR
         echo "!!! Install g++ !!!"
         echo "!!! The path must be: $MINGW_DIR !!!"
         $DOWNLOAD_UDIR/MinGW-*.exe
@@ -156,7 +172,7 @@ function inst_unzip() {
         echo "unzip already installed.  skipping."
     else
         set -e
-        wget -c $UNZIP_URL -P $DOWNLOAD_DIR
+        smart_wget $UNZIP_URL $DOWNLOAD_DIR
         echo "!!! The path must be: $UNZIP_DIR !!!"
         $DOWNLOAD_UDIR/unzip-*.exe
     fi
@@ -177,8 +193,8 @@ function inst_regex() {
         echo "regex already installed.  skipping."
     else
         set -e
-        wget -c $REGEX_BIN_URL -P $DOWNLOAD_DIR
-        wget -c $REGEX_LIB_URL -P $DOWNLOAD_DIR
+        smart_wget $REGEX_BIN_URL $DOWNLOAD_DIR
+        smart_wget $REGEX_LIB_URL $DOWNLOAD_DIR
         mkdir -p $REGEX_DIR
         unzip $DOWNLOAD_UDIR/regex-*-bin.zip -d $REGEX_DIR
         unzip $DOWNLOAD_UDIR/regex-*-lib.zip -d $REGEX_DIR
@@ -200,8 +216,8 @@ function inst_readline() {
         echo "readline already installed.  skipping."
     else
         set -e
-        wget -c $READLINE_BIN_URL -P $DOWNLOAD_DIR
-        wget -c $READLINE_LIB_URL -P $DOWNLOAD_DIR
+        smart_wget $READLINE_BIN_URL $DOWNLOAD_DIR
+        smart_wget $READLINE_LIB_URL $DOWNLOAD_DIR
         mkdir -p $READLINE_DIR
         unzip $DOWNLOAD_DIR/readline-*-bin.zip -d $READLINE_DIR
         unzip $DOWNLOAD_DIR/readline-*-lib.zip -d $READLINE_DIR
@@ -221,7 +237,7 @@ function inst_indent() {
         echo "indent already installed.  skipping."
     else
         set -e
-        wget -c $INDENT_BIN_URL -P $DOWNLOAD_DIR
+        smart_wget $INDENT_BIN_URL $DOWNLOAD_DIR
         mkdir -p $INDENT_DIR
         unzip $DOWNLOAD_UDIR/indent-*-bin.zip -d $INDENT_DIR
     fi
@@ -242,8 +258,8 @@ function inst_guile() {
         echo "guile and slib already installed.  skipping."
     else
         set -e
-        wget -c $GUILE_URL -P $DOWNLOAD_DIR
-        wget -c $SLIB_URL -P $DOWNLOAD_DIR
+        smart_wget $GUILE_URL $DOWNLOAD_DIR
+        smart_wget $SLIB_URL $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/guile-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/guile-*
             qpushd ice-9
@@ -312,7 +328,7 @@ function inst_glade() {
         echo "glade already installed.  skipping."
     else
         set -e
-        wget -c $GLADE_URL -P $DOWNLOAD_DIR
+        smart_wget $GLADE_URL $DOWNLOAD_DIR
 	echo "!!! The path must be: $GLADE_DIR !!!"
 	$DOWNLOAD_UDIR/gtk-win32-devel-*.exe
 	qpushd $GLADE_DIR\\lib\\pkgconfig
@@ -339,7 +355,7 @@ function inst_gwrap() {
         echo "g-wrap already installed.  skipping."
     else
         set -e
-        wget -c $GWRAP_URL -P $DOWNLOAD_DIR
+        smart_wget $GWRAP_URL $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/g-wrap-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/g-wrap-*
             qpushd g-wrap
@@ -388,29 +404,29 @@ function inst_gnome() {
     else
         set -e
         mkdir -p $GNOME_DIR
-	wget -c $INTLTOOL_URL -P $DOWNLOAD_DIR
-	wget -c $ORBIT2_URL -P $DOWNLOAD_DIR
-	wget -c $ORBIT2_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $GCONF_URL -P $DOWNLOAD_DIR
-	wget -c $GCONF_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBBONOBO_URL -P $DOWNLOAD_DIR
-	wget -c $LIBBONOBO_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $GNOME_VFS_URL -P $DOWNLOAD_DIR
-	wget -c $GNOME_VFS_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOME_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOME_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMECANVAS_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMECANVAS_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBBONOBOUI_URL -P $DOWNLOAD_DIR
-	wget -c $LIBBONOBOUI_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEUI_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEUI_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEPRINT_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEPRINT_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEPRINTUI_URL -P $DOWNLOAD_DIR
-	wget -c $LIBGNOMEPRINTUI_DEV_URL -P $DOWNLOAD_DIR
-	wget -c $GTKHTML_URL -P $DOWNLOAD_DIR
-	wget -c $GTKHTML_DEV_URL -P $DOWNLOAD_DIR
+	smart_wget $INTLTOOL_URL $DOWNLOAD_DIR
+	smart_wget $ORBIT2_URL $DOWNLOAD_DIR
+	smart_wget $ORBIT2_DEV_URL $DOWNLOAD_DIR
+	smart_wget $GCONF_URL $DOWNLOAD_DIR
+	smart_wget $GCONF_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBBONOBO_URL $DOWNLOAD_DIR
+	smart_wget $LIBBONOBO_DEV_URL $DOWNLOAD_DIR
+	smart_wget $GNOME_VFS_URL $DOWNLOAD_DIR
+	smart_wget $GNOME_VFS_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOME_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOME_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMECANVAS_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBBONOBOUI_URL $DOWNLOAD_DIR
+	smart_wget $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEUI_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEPRINT_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR
+	smart_wget $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR
+	smart_wget $GTKHTML_URL $DOWNLOAD_DIR
+	smart_wget $GTKHTML_DEV_URL $DOWNLOAD_DIR
 	unzip $DOWNLOAD_UDIR/intltool-*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/ORBit2-[^d]*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/ORBit2-dev-*.zip -d $GNOME_DIR
@@ -452,23 +468,26 @@ function inst_autotools() {
         echo "auto tools already installed.  skipping."
     else
         set -e
-        wget -c $AUTOCONF_URL -P $DOWNLOAD_DIR
-        wget -c $AUTOMAKE_URL -P $DOWNLOAD_DIR
-        wget -c $LIBTOOL_URL -P $DOWNLOAD_DIR
+        smart_wget $AUTOCONF_URL $DOWNLOAD_DIR
+        smart_wget $AUTOMAKE_URL $DOWNLOAD_DIR
+        smart_wget $LIBTOOL_URL $DOWNLOAD_DIR
         tar -xjpf $DOWNLOAD_UDIR/autoconf-*.tar.bz2 -C $TMP_UDIR
         qpushd $TMP_UDIR/autoconf-*
+	    echo "building autoconf..."
            ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         tar -xjpf $DOWNLOAD_UDIR/automake-*.tar.bz2 -C $TMP_UDIR
         qpushd $TMP_UDIR/automake-*
+	    echo "building automake..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         tar -xzpf $DOWNLOAD_UDIR/libtool-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/libtool-*
+	    echo "building libtool..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
@@ -493,7 +512,7 @@ function inst_svn() {
         echo "subversion already installed.  skipping."
     else
         set -e
-        wget -c $SVN_URL -P $DOWNLOAD_DIR
+        smart_wget $SVN_URL $DOWNLOAD_DIR
         echo "!!! The path must be: $SVN_DIR !!!"
         $DOWNLOAD_UDIR/svn-*.exe
     fi
