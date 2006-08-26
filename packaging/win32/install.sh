@@ -91,7 +91,6 @@ function prepare() {
 function smart_wget() {
     _FILE=`basename $1`
     _DLD=`unix_path $2`
-    _TMP=`unix_path $TMP_DIR`
 
     # If the file already exists in the download directory ($2)
     # then don't do anything.  But if it does NOT exist then
@@ -99,7 +98,7 @@ function smart_wget() {
     # move it to the dest dir.
     if [ ! -f $_DLD/$_FILE ] ; then
 	wget -c $1 -P $TMP_DIR
-	mv $_TMP/$_FILE $_DLD
+	mv $TMP_UDIR/$_FILE $_DLD
     fi
 }
 
@@ -499,6 +498,54 @@ function inst_autotools() {
     quiet autoconf --help &&
     quiet automake --help &&
     quiet libtool --help || die "autotools not installed correctly"
+}
+
+function inst_libgsf() {
+    setup libGSF
+    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    add_to_env $_LIBGSF_UDIR/bin PATH
+    add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    set +e
+    quiet pkg-config --exists libgsf-1 libgsf-gnome-1
+    if [ $? = 0 ] ; then
+	set -e
+	echo "libgsf already installed.  skipping."
+    else
+	set -e
+	smart_wget $LIBGSF_URL $DOWNLOAD_DIR
+	tar -xjpf $DOWNLOAD_UDIR/libgsf-*.tar.bz2 -C $TMP_UDIR
+	qpushd $TMP_UDIR/libgsf-*
+	    cp configure.in configure.in.bak
+	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#' > configure.in
+	    autoconf
+	    ./configure --prefix=$_LIBGSF_UDIR
+	    make
+	    make install
+	qpopd
+    fi
+    pkg-config --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
+}
+
+function inst_goffice() {
+    setup GOffice
+    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    set +e
+    quiet pkg-config --exists libgoffice-1
+    if [ $? = 0 ] ; then
+	set -e
+	echo "goffice already installed.  skipping."
+    else
+	set -e
+	smart_wget $GOFFICE_URL $DOWNLOAD_DIR
+	tar -xjpf $DOWNLOAD_UDIR/goffice-*.tar.bz2 -C $TMP_UDIR
+	qpushd $TMP_UDIR/goffice-*
+	    ./configure --prefix=$_GOFFICE_UDIR
+	    make
+	    make install
+	qpopd
+    fi
+    pkg-config --exists libgoffice-1 || die "goffice not installed correctly"
 }
 
 function inst_svn() {
