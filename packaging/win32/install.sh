@@ -602,7 +602,7 @@ function inst_gnucash() {
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     qpushd $REPOS_DIR
     cp configure.in configure.in.bak
-    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#;/GUILE_LOAD_PATH/s,:,;,g' > configure.in
+    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#TOOL$#TOOL([],[no-xml])#;/GUILE_LOAD_PATH/s,:,;,g' > configure.in
     ./autogen.sh
     ./configure \
 	--prefix=$_GNUCASH_WFSDIR \
