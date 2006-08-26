@@ -90,10 +90,13 @@ function prepare() {
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
-    quiet $_WGET_UDIR/wget --version || true
+    set +e
+    quiet $_WGET_UDIR/wget --version
     if [ $? = 0 ] ; then
+        set -e
         echo "already installed.  skipping."
     else
+        set -e
         mkdir -p $WGET_DIR
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $WGET_DIR
         cp $_WGET_UDIR/*/*/wget.exe $WGET_DIR
@@ -104,10 +107,13 @@ function inst_wget() {
 
 function inst_dtk() {
     setup MSYS DTK
-    quiet perl --help || true
+    set +e
+    quiet perl --help
     if [ $? = 0 ] ; then
+        set -e
         echo "msys dtk already installed.  skipping."
     else
+        set -e
         wget -c $DTK_URL -P $DOWNLOAD_DIR
         echo "!!! The path must be: $MSYS_DIR !!!"
         $DOWNLOAD_UDIR/msysDTK-*.exe
@@ -123,10 +129,13 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
-    quiet gcc --version || true
+    set +e
+    quiet gcc --version
     if [ $? = 0 ] ; then
+        set -e
 	echo "mingw already installed.  skipping."
     else
+        set -e
         _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
         wget -c $MINGW_URL -P $DOWNLOAD_DIR
         echo "!!! Install g++ !!!"
@@ -140,10 +149,13 @@ function inst_mingw() {
 function inst_unzip() {
     setup Unzip
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
-    quiet $_UNZIP_UDIR/bin/unzip --help || true
+    set +e
+    quiet $_UNZIP_UDIR/bin/unzip --help
     if [ $? = 0 ] ; then
+        set -e
         echo "unzip already installed.  skipping."
     else
+        set -e
         wget -c $UNZIP_URL -P $DOWNLOAD_DIR
         echo "!!! The path must be: $UNZIP_DIR !!!"
         $DOWNLOAD_UDIR/unzip-*.exe
@@ -158,10 +170,13 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    quiet ld $REGEX_LDFLAGS -lregex -o tmp || true
+    set +e
+    quiet ld $REGEX_LDFLAGS -lregex -o tmp
     if [ $? = 0 ] ; then
+        set -e
         echo "regex already installed.  skipping."
     else
+        set -e
         wget -c $REGEX_BIN_URL -P $DOWNLOAD_DIR
         wget -c $REGEX_LIB_URL -P $DOWNLOAD_DIR
         mkdir -p $REGEX_DIR
@@ -178,10 +193,13 @@ function inst_readline() {
     add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
     add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
     add_to_env $_READLINE_UDIR/bin PATH
-    quiet ld $READLINE_LDFLAGS -lreadline -o tmp || true
+    set +e
+    quiet ld $READLINE_LDFLAGS -lreadline -o tmp
     if [ $? = 0 ] ; then
+        set -e
         echo "readline already installed.  skipping."
     else
+        set -e
         wget -c $READLINE_BIN_URL -P $DOWNLOAD_DIR
         wget -c $READLINE_LIB_URL -P $DOWNLOAD_DIR
         mkdir -p $READLINE_DIR
@@ -196,10 +214,13 @@ function inst_indent() {
     setup Indent
     _INDENT_UDIR=`unix_path $INDENT_DIR`
     add_to_env $_INDENT_UDIR/bin PATH
-    quiet which indent || true
+    set +e
+    quiet which indent
     if [ $? = 0 ] ; then
+        set -e
         echo "indent already installed.  skipping."
     else
+        set -e
         wget -c $INDENT_BIN_URL -P $DOWNLOAD_DIR
         mkdir -p $INDENT_DIR
         unzip $DOWNLOAD_UDIR/indent-*-bin.zip -d $INDENT_DIR
@@ -284,10 +305,13 @@ function inst_guile() {
 
 function inst_glade() {
     setup Glade
-    quiet pkg-config --exists glib-2.0 gtk+-2.0 || true
+    set +e
+    quiet pkg-config --exists glib-2.0 gtk+-2.0
     if [ $? = 0 ] ; then
+        set -e
         echo "glade already installed.  skipping."
     else
+        set -e
         wget -c $GLADE_URL -P $DOWNLOAD_DIR
 	echo "!!! The path must be: $GLADE_DIR !!!"
 	$DOWNLOAD_UDIR/gtk-win32-devel-*.exe
@@ -308,10 +332,13 @@ function inst_gwrap() {
     _GWRAP_UDIR=`unix_path $GWRAP_DIR`
     add_to_env $_GWRAP_UDIR/bin PATH
     add_to_env $_GWRAP_WFSDIR/share/guile/site GUILE_LOAD_PATH
-    quiet g-wrap-config --version || true
+    set +e
+    quiet g-wrap-config --version
     if [ $? = 0 ] ; then
+        set -e
         echo "g-wrap already installed.  skipping."
     else
+        set -e
         wget -c $GWRAP_URL -P $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/g-wrap-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/g-wrap-*
@@ -459,10 +486,13 @@ function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
     export PATH="$_SVN_UDIR/bin:$PATH"
-    quiet svn --version || true
+    set +e
+    quiet svn --version
     if [ $? = 0 ] ; then
+        set -e
         echo "subversion already installed.  skipping."
     else
+        set -e
         wget -c $SVN_URL -P $DOWNLOAD_DIR
         echo "!!! The path must be: $SVN_DIR !!!"
         $DOWNLOAD_UDIR/svn-*.exe
