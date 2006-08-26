@@ -103,6 +103,7 @@ add_step inst_gwrap
 add_step inst_gnome
 add_step inst_autotools
 add_step inst_libgsf
+add_step inst_goffice
 add_step inst_svn
 add_step svn_up
 add_step inst_gnucash

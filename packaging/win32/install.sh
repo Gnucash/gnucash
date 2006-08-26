@@ -539,20 +539,27 @@ function inst_goffice() {
 	set -e
 	smart_wget $GOFFICE_URL $DOWNLOAD_DIR
 	tar -xjpf $DOWNLOAD_UDIR/goffice-*.tar.bz2 -C $TMP_UDIR
+	mydir=`pwd`
 	qpushd $TMP_UDIR/goffice-*
 	    cp configure.in configure.in.bak
 	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#)$#,[no-xml])#' > configure.in
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
+	    cp goffice/Makefile.am goffice/Makefile.am.bak
+	    cat goffice/Makefile.am.bak \
+		| sed '/LIBADD/s#-lurlmon##;s#-lhtmlhelp##' \
+		> goffice/Makefile.am
+	    cp goffice/goffice.def goffice/goffice.def.bak
+	    cat goffice/goffice.def.bak \
+		| sed '/^go_doc_mark_not_modified$/d;/^go_plugin_init$/d;/^go_plugin_shutdown$/d' \
+		> goffice/goffice.def
+	    automake
 	    autoconf
 	    ./configure --prefix=$_GOFFICE_UDIR
-	    for f in `find . -name Makefile.am` ; do
-		if [ `grep -c INTLTOOL_XML_RULE $f` != 0 ] ; then
-		    cp $f $f.bak
-		    cat $f.bak | sed -e '/INTLTOOL_XML_RULE/d' > $f
-		fi
-	    done
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
+	    [ -f $mydir/intltool-merge ] && \
+		( mv intltool-merge intltool-merge.bak ; \
+		  cp -p $mydir/intltool-merge . )
 	    make
 	    make install
 	qpopd
