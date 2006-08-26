@@ -1,3 +1,14 @@
+2006-07-27  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c
+	(gnc_dense_cal_transient_model_new): Actually implement
+	GncDenseCalTransientModel. 
+
+	* src/gnome/dialog-sx-editor.c (gnc_sxed_update_cal): 
+	* src/gnome/dialog-sx-from-trans.c (sxftd_update_example_cal):
+	Use GncDenseCalTransientModel from previous ad-hoc updaters.
+
+
 2006-07-25  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.c:
