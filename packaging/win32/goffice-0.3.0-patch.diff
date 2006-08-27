@@ -110,7 +110,7 @@ diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils
  	gtk/local.def ms-compat/local.def utils/local.def
  	echo EXPORTS > $@ && \
 -	cat $^ | sort >> $@
-+	cat $^ | sort | sed '/^go_doc_mark_not_modified$/d;/^go_plugin_init$/d;/^go_plugin_shutdown$/d' >> $@
++	cat $^ | sort | sed '/^go_doc_mark_not_modified$$/d;/^go_plugin_init$$/d;/^go_plugin_shutdown$$/d' >> $@
  
  if HAVE_LIBEXE
  goffice_mslibdir = $(DESTDIR)$(libdir)
