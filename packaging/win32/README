@@ -23,7 +23,7 @@ to $DOWNLOAD_DIR
 
 Start/Enter any MSYS shell. Let the automated build begin by:
 
-  $INSTALLER_DIR/installer.sh
+  $INSTALLER_DIR/install.sh
 
 Good luck!
 

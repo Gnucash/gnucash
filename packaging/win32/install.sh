@@ -2,10 +2,21 @@
 
 set -e
 
-function add_step() {
-    steps=("${steps[@]}" "$@")
+function add_step() { steps=("${steps[@]}" "$@"); }
+function qpushd() { pushd "$@" >/dev/null; }
+function qpopd() { popd >/dev/null; }
+
+# c:/dir/sub
+function win_fs_path() {
+    echo "$*" | sed 's,\\,/,g'
 }
 
+# /c/dir/sub
+function unix_path() {
+    echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'
+}
+
+qpushd "$(dirname $(unix_path "$0"))"
 . custom.sh
 
 SEPS_ACLOCAL_FLAGS=" "
@@ -48,9 +59,6 @@ function die() {
 }
 
 function quiet() { "$@" &>/dev/null; }
-function qpushd() { pushd "$@" >/dev/null; }
-function qpopd() { popd >/dev/null; }
-
 function add_to_env() {
     _SEP=`eval echo '"$'"SEPS_$2"'"'`
     _ENV=`eval echo '"$'"$2"'"'`
@@ -64,16 +72,6 @@ function add_to_env() {
 	fi
 	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
     fi
-}
-
-# c:/dir/sub
-function win_fs_path() {
-    echo "$*" | sed 's,\\,/,g'
-}
-
-# /c/dir/sub
-function unix_path() {
-    echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'
 }
 
 function prepare() {
@@ -130,7 +128,7 @@ function inst_dtk() {
     else
         set -e
         smart_wget $DTK_URL $DOWNLOAD_DIR
-        echo "!!! The path must be: $MSYS_DIR !!!"
+        echo "!!! When asked for an installation path, specify $MSYS_DIR !!!"
         $DOWNLOAD_UDIR/msysDTK-*.exe
         for file in \
 	    /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
@@ -154,7 +152,7 @@ function inst_mingw() {
         _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
         smart_wget $MINGW_URL $DOWNLOAD_DIR
         echo "!!! Install g++ !!!"
-        echo "!!! The path must be: $MINGW_DIR !!!"
+        echo "!!! When asked for an installation path, specify $MINGW_DIR !!!"
         $DOWNLOAD_UDIR/MinGW-*.exe
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
@@ -172,7 +170,7 @@ function inst_unzip() {
     else
         set -e
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
-        echo "!!! The path must be: $UNZIP_DIR !!!"
+        echo "!!! When asked for an installation path, specify $UNZIP_DIR !!!"
         $DOWNLOAD_UDIR/unzip-*.exe
     fi
     add_to_env $_UNZIP_UDIR/bin PATH
@@ -328,7 +326,7 @@ function inst_glade() {
     else
         set -e
         smart_wget $GLADE_URL $DOWNLOAD_DIR
-	echo "!!! The path must be: $GLADE_DIR !!!"
+	echo "!!! When asked for an installation path, specify $GLADE_DIR !!!"
 	$DOWNLOAD_UDIR/gtk-win32-devel-*.exe
 	qpushd $GLADE_DIR\\lib\\pkgconfig
 	    cp cairo.pc cairo.pc.bak
@@ -579,7 +577,7 @@ function inst_svn() {
     else
         set -e
         smart_wget $SVN_URL $DOWNLOAD_DIR
-        echo "!!! The path must be: $SVN_DIR !!!"
+        echo "!!! When asked for an installation path, specify $SVN_DIR !!!"
         $DOWNLOAD_UDIR/svn-*.exe
     fi
 }
@@ -642,3 +640,10 @@ for step in "${steps[@]}" ; do
     eval $step
 done
 finish
+qpopd
+
+
+### Local Variables: ***
+### sh-basic-offset: 4 ***
+### tab-width: 8 ***
+### End: ***
