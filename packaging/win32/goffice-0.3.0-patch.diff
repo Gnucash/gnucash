@@ -83,7 +83,7 @@ diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils
  	group_info = getgrgid (gid);
  
  	if (group_info == NULL)
-@@ -802,6 +815,9 @@
+@@ -802,7 +815,10 @@
  	(void) go_guess_encoding (name, strlen (name),
  				  NULL, &nameutf8);
  	return nameutf8;
@@ -95,7 +95,7 @@ diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils
  GOFilePermissions *
 --- goffice-0.3.0/configure.in~	Sat Aug 26 00:15:26 2006
 +++ goffice-0.3.0/configure.in	Sat Aug 26 00:53:34 2006
-@@ -93,6 +93,7 @@
+@@ -93,7 +93,8 @@
  	libxml-2.0		>= 2.4.12
  	pango			>= 1.8.1
  	pangoft2		>= 1.8.1
@@ -103,3 +103,14 @@ diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils
  	libart-2.0		>= 2.3.11
  "
  goffice_cairo_reqs="
+--- goffice-0.3.0/goffice/Makefile.am~	Sat Aug 26 20:52:04 2006
++++ goffice-0.3.0/goffice/Makefile.am	Sat Aug 26 20:58:53 2006
+@@ -73,7 +73,7 @@
+ 	data/local.def drawing/local.def graph/local.def \
+ 	gtk/local.def ms-compat/local.def utils/local.def
+ 	echo EXPORTS > $@ && \
+-	cat $^ | sort >> $@
++	cat $^ | sort | sed '/^go_doc_mark_not_modified$/d;/^go_plugin_init$/d;/^go_plugin_shutdown$/d' >> $@
+ 
+ if HAVE_LIBEXE
+ goffice_mslibdir = $(DESTDIR)$(libdir)

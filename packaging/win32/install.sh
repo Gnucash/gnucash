@@ -550,10 +550,6 @@ function inst_goffice() {
 	    automake
 	    autoconf
 	    ./configure --prefix=$_GOFFICE_UDIR
-	    cp goffice/goffice.def goffice/goffice.def.bak
-	    cat goffice/goffice.def.bak \
-		| sed '/^go_doc_mark_not_modified$/d;/^go_plugin_init$/d;/^go_plugin_shutdown$/d' \
-		> goffice/goffice.def
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    [ -f $mydir/intltool-merge ] && \
 		( mv intltool-merge intltool-merge.bak ; \
