@@ -547,13 +547,13 @@ function inst_goffice() {
 	    cat goffice/Makefile.am.bak \
 		| sed '/LIBADD/s#-lurlmon##;s#-lhtmlhelp##' \
 		> goffice/Makefile.am
+	    automake
+	    autoconf
+	    ./configure --prefix=$_GOFFICE_UDIR
 	    cp goffice/goffice.def goffice/goffice.def.bak
 	    cat goffice/goffice.def.bak \
 		| sed '/^go_doc_mark_not_modified$/d;/^go_plugin_init$/d;/^go_plugin_shutdown$/d' \
 		> goffice/goffice.def
-	    automake
-	    autoconf
-	    ./configure --prefix=$_GOFFICE_UDIR
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    [ -f $mydir/intltool-merge ] && \
 		( mv intltool-merge intltool-merge.bak ; \
