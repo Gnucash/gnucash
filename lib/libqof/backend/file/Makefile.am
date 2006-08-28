@@ -7,7 +7,8 @@ AM_CFLAGS = \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   ${QOF_CFLAGS} \
   ${LIBXML2_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  -I$(top_srcdir)/lib/libc
 
 libgncqof_backend_qsf_la_SOURCES = \
   qsf-backend.c \
@@ -19,7 +20,8 @@ libgncqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \
  ${REGEX_LIBS} \
- ${LIBXML2_LIBS}
+ ${LIBXML2_LIBS} \
+ $(top_builddir)/lib/libc/libc-missing.la
 
 qsfschemadir = $(QOF_XML_DIR)
 qsfschema_DATA = \
