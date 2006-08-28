@@ -173,35 +173,50 @@ SCM_FILE_LINKS += \
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash g-wrapped
+	mkdir -p  gnucash g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
+
+clean-local:
+	$(RM) -rf gnucash g-wrapped
+
+.INTERMEDIATE: gwrap-files1 gwrap-files2
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: \
+  gwrap-files1
+
+gwrap-files1: \
   .scm-links gw-engine-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
 	 (gw:generate-wrapset \"gw-engine\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) ../gw-engine*.scm . )
 
 gw-kvp.scm gw-kvp.c gw-kvp.h: \
+  gwrap-files2
+
+gwrap-files2: \
   .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-wrapset \"gw-kvp\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) ../gw-kvp*.scm . )
 
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
@@ -213,5 +228,5 @@ BUILT_SOURCES = iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
 
-CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links gncla-dir.h \
+CLEANFILES = $(BUILT_SOURCES) .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
