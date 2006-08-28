@@ -363,6 +363,7 @@ function inst_gwrap() {
             cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
             ./configure \
 	        --prefix=$_GWRAP_WFSDIR \
+		--module-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
 	        LDFLAGS="-no-undefined"
             qpushd guile/g-wrap/gw
                 cp Makefile Makefile.bak
@@ -554,6 +555,8 @@ function inst_goffice() {
 	    [ -f $mydir/intltool-merge ] && \
 		( mv intltool-merge intltool-merge.bak ; \
 		  cp -p $mydir/intltool-merge . )
+	    echo libgoffice_init >> goffice/local.def
+	    echo libgoffice_shutdown >> goffice/local.def
 	    make
 	    make install
 	qpopd
