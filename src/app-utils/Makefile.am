@@ -124,17 +124,25 @@ SCM_FILE_LINKS += \
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash g-wrapped
+	mkdir -p  gnucash g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
+clean-local:
+	$(RM) -rf gnucash g-wrapped
+
+.INTERMEDIATE: gwrap-files
+
 gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
+  gwrap-files
+
+gwrap-files: \
   .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -142,7 +150,9 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
 	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-app-utils\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
 
 BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS} gnucash g-wrapped \
+CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS}  \
 	.scm-links gw-app-utils.html

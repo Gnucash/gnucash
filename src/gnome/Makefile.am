@@ -144,9 +144,8 @@ SCM_FILE_LINKS = gw-gnc-spec.scm
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf g-wrapped
+	mkdir -p  g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -154,7 +153,15 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+clean-local:
+	$(RM) -rf g-wrapped
+
+.INTERMEDIATE: gwrap-files
+
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
+  gwrap-files
+
+gwrap-files: \
   gw-gnc-spec.scm .scm-links ${top_builddir}/config.status Makefile
 	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -164,6 +171,9 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
 CLEANFILES = $(BUILT_SOURCES) gnucash.desktop \
-	gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} gw-gnc.html
+	g-wrapped .scm-links ${SCM_FILE_LINKS} gw-gnc.html

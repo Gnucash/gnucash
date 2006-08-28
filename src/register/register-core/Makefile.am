@@ -82,10 +82,8 @@ SCM_FILE_LINKS = gw-register-core-spec.scm
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
-	$(LN_S) -f . register
+	$(RM) -rf g-wrapped
+	mkdir -p  g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -93,7 +91,15 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+clean-local:
+	$(RM) -rf g-wrapped
+
+.INTERMEDIATE: gwrap-files
+
 gw-register-core.scm gw-register-core.c gw-register-core.h: \
+  gwrap-files
+
+gwrap-files: \
   .scm-links gw-register-core-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -101,7 +107,9 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: \
 	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-register-core-spec.scm\") \
 	  (gw:generate-wrapset \"gw-register-core\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped register .scm-links \
+CLEANFILES = $(BUILT_SOURCES) .scm-links \
 	${SCM_FILE_LINKS} gw-register-core.html
