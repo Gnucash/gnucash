@@ -33,6 +33,10 @@
 #include "qsf-xml.h"
 #include "qsf-dir.h"
 
+#ifndef HAVE_STRPTIME
+#include "strptime.h"
+#endif
+
 static QofLogModule log_module = QOF_MOD_QSF;
 
 static void
