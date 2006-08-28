@@ -189,6 +189,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GSF_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
+  ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
 nodist_libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c

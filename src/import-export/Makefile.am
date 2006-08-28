@@ -48,6 +48,7 @@ libgncmod_generic_import_la_LIBADD = \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
 gladedir = ${GNC_GLADE_DIR}

@@ -109,6 +109,7 @@ libgncmod_engine_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GNUCASH_ENGINE_BASE_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 

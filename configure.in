@@ -1401,6 +1401,9 @@ then
   	 macro_s_isreg=no])
   AC_MSG_RESULT($macro_s_isreg)
   
+  ##################################################
+  # Check for win32 platform
+  ##################################################
   AC_MSG_CHECKING([for native Win32])
   case $host in
     *-*-mingw*)
@@ -1424,6 +1427,16 @@ then
   esac
   AC_MSG_RESULT($platform_win32)
   AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
+  
+  ##################################################
+  # regex needs its own linker flag on win32 platform
+  ##################################################
+  if test "$platform_win32" = yes; then
+    REGEX_LIBS="-lregex"
+  else
+    REGEX_LIBS=""
+  fi
+  AC_SUBST(REGEX_LIBS)
   
   ##################################################
   # Checks for gtk-doc and docbook-tools

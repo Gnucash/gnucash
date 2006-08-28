@@ -18,6 +18,7 @@ libgncqof_backend_qsf_la_LDFLAGS = -module -avoid-version
 libgncqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \
+ ${REGEX_LIBS} \
  ${LIBXML2_LIBS}
 
 qsfschemadir = $(QOF_XML_DIR)

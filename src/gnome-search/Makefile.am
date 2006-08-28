@@ -62,6 +62,7 @@ libgncmod_gnome_search_la_LIBADD = \
   ${GTKHTML_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
+  ${REGEX_LIBS} \
   ${QOF_LIBS} \
   ${GNOME_PRINT_LIBS}
 

@@ -23,6 +23,7 @@ libgncmod_qif_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
 AM_CFLAGS = \

@@ -3,6 +3,7 @@ lib_LTLIBRARIES = libgncqof.la
 libgncqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
 libgncqof_la_LIBADD= \
   $(GLIB_LIBS) \
+  $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
