@@ -1266,6 +1266,43 @@ then
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
   
+  ##################################################
+  # Check for win32 platform
+  ##################################################
+  AC_MSG_CHECKING([for native Win32])
+  case $host in
+    *-*-mingw*)
+      native_win32=yes
+      ;;
+    *)
+      native_win32=no
+      ;;
+  esac
+  AC_MSG_RESULT([$native_win32])
+  AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
+  
+  AC_MSG_CHECKING([for Win32 platform in general])
+  case $host in
+    *-*-mingw*|*-*-cygwin*)
+      platform_win32=yes
+      ;;
+    *)
+      platform_win32=no
+      ;;
+  esac
+  AC_MSG_RESULT($platform_win32)
+  AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
+  
+  ##################################################
+  # regex needs its own linker flag on win32 platform
+  ##################################################
+  if test "$platform_win32" = yes; then
+    REGEX_LIBS="-lregex"
+  else
+    REGEX_LIBS=""
+  fi
+  AC_SUBST(REGEX_LIBS)
+  
   ### ------------------------------------------------------------------------
   ### Checks when building internal LIBGSF
   ### +libgsf-1.12.3
@@ -1400,43 +1437,6 @@ then
   	 AC_DEFINE([S_ISREG(m)], [(((m) & S_IFMT) == S_IFREG)])
   	 macro_s_isreg=no])
   AC_MSG_RESULT($macro_s_isreg)
-  
-  ##################################################
-  # Check for win32 platform
-  ##################################################
-  AC_MSG_CHECKING([for native Win32])
-  case $host in
-    *-*-mingw*)
-      native_win32=yes
-      ;;
-    *)
-      native_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT([$native_win32])
-  AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
-  
-  AC_MSG_CHECKING([for Win32 platform in general])
-  case $host in
-    *-*-mingw*|*-*-cygwin*)
-      platform_win32=yes
-      ;;
-    *)
-      platform_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT($platform_win32)
-  AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
-  
-  ##################################################
-  # regex needs its own linker flag on win32 platform
-  ##################################################
-  if test "$platform_win32" = yes; then
-    REGEX_LIBS="-lregex"
-  else
-    REGEX_LIBS=""
-  fi
-  AC_SUBST(REGEX_LIBS)
   
   ##################################################
   # Checks for gtk-doc and docbook-tools
