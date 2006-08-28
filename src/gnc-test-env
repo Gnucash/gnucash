@@ -61,6 +61,12 @@ exec guile -s $0 "$@"
       "\\\\" ;; Needs to be quoted twice because of additional shell quoting
       "/"))
 
+;; The path separator string; only needed for GUILE_LOAD_PATH
+(define path-sep-str
+  (if is-windows?
+      ";"
+      ":"))
+
 ;; Adapt the directory separator character in the given PATH and
 ;; return the result.
 (define (adapt-dirsep path)
@@ -83,10 +89,12 @@ exec guile -s $0 "$@"
 	  (string-join gnc-module-dirs
 		       ":")))
 
-(display " GUILE_LOAD_PATH=${GUILE_LOAD_PATH}:")
+(display " GUILE_LOAD_PATH=\"${GUILE_LOAD_PATH}")
+(display path-sep-str)
 (display (adapt-dirsep
 	  (string-join (append gnc-module-dirs guile-load-dirs)
-		       ":")))
+		       path-sep-str)))
+(display "\"")
 
 (display " LD_LIBRARY_PATH=${LD_LIBRARY_PATH}")
 (display (adapt-dirsep
