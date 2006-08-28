@@ -225,6 +225,14 @@ determines formatting details.")
    '((<gw:int> component-id))
    "Unregister a gui component by id.")
 
+  (gw:wrap-function 
+   ws 
+   'gnc:gui-refresh-all 
+   '<gw:void> 
+   "gnc_gui_refresh_all" 
+   '() 
+   "Refresh all gui components.")
+
   (gw:wrap-function
    ws
    'gnc:close-gui-component
