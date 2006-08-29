@@ -30,8 +30,6 @@ AM_CFLAGS = \
   ${GSF_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
-  gtktreedatalist.c \
-  gnctreemodelsort.c \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
@@ -101,8 +99,6 @@ libgncmod_gnome_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gtktreedatalist.h \
-  gnctreemodelsort.h \
   QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
