@@ -76,28 +76,3 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   $(glade_DATA) \
   generic-import-design.txt
-
-if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = 
-#For executing test cases
-SCM_FILE_LINKS +=
-endif
-
-noinst_DATA = .scm-links
-
-.scm-links:
-	rm -f g-wrapped gnucash generic-import import-export
-	$(LN_S) -f . import-export
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . generic-import
-	$(LN_S) -f . g-wrapped
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-CLEANFILES = gnucash generic-import g-wrapped .scm-links import-export
-DISTCLEANFILES = ${SCM_FILE_LINKS}
