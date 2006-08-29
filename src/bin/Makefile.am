@@ -2,6 +2,7 @@
 SUBDIRS = . overrides test
 
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   -DPREFIX=\"${prefix}\" \
   -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
