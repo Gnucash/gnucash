@@ -85,7 +85,7 @@ gnc_plugin_get_type (void)
 		};
 
 		gnc_plugin_type = g_type_register_static (G_TYPE_OBJECT,
-							  "GncPlugin",
+							  GNC_PLUGIN_NAME,
 							   &our_info, 0);
 	}
 
@@ -195,7 +195,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	if (class->gconf_section && class->gconf_notifications) {
 	  DEBUG ("Requesting notification for section %s", class->gconf_section);
 	  gnc_gconf_add_notification(G_OBJECT(window), class->gconf_section,
-				     class->gconf_notifications);
+				     class->gconf_notifications, GNC_PLUGIN_NAME);
 	}
 
 	/*
@@ -241,7 +241,8 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 	 */
 	if (class->gconf_section && class->gconf_notifications) {
 	  DEBUG ("Remove notification for section %s", class->gconf_section);
-	  gnc_gconf_remove_notification (G_OBJECT(window), class->gconf_section);
+	  gnc_gconf_remove_notification (G_OBJECT(window), class->gconf_section,
+					 GNC_PLUGIN_NAME);
 	}
 
 	/*

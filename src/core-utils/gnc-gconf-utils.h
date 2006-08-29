@@ -765,10 +765,15 @@ void gnc_gconf_unset_dir (const gchar *section,
  *  @param callback The function to call when a value changes.  This
  *  function will receive the key/value pair as one argument, and the
  *  'object' argument to this function as another of its arguments.
+ *
+ *  @param whoami A magic value that must match up this call to the
+ *  corresponding call to gnc_gconf_remove_notification().  This value
+ *  should be unique across all callers.
  */
 void gnc_gconf_add_notification (GObject *object,
 				 const gchar *section,
-				 GConfClientNotifyFunc callback);
+				 GConfClientNotifyFunc callback,
+				 const gchar *whoami);
 
 
 /** An alternative function for adding a notification callback to
@@ -820,9 +825,14 @@ guint gnc_gconf_add_anon_notification (const gchar *section,
  *
  *  @param section This string is used to find the correct
  *  notification function to remove from GConf.
+ *
+ *  @param whoami A magic value that must match up this call to the
+ *  corresponding call to gnc_gconf_add_notification().  This value
+ *  should be unique across all callers.
  */
 void gnc_gconf_remove_notification (GObject *object,
-				    const gchar *section);
+				    const gchar *section,
+				    const gchar *whoami);
 
 
 
