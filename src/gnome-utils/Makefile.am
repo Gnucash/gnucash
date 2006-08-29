@@ -320,6 +320,8 @@ BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 CLEANFILES = $(BUILT_SOURCES) .scm-links \
 	${SCM_FILE_LINKS} gw-gnome-utils.html
 
+# FIXME: Symlinking directories only works on non-win32.
+if !PLATFORM_WIN32
 #
 # I hate inconsistent standards. Autotools puts help files into
 # ${datadir}/gnome/help/${program} while the gnome2 libraries expect
@@ -330,3 +332,4 @@ install-data-hook:
 
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
+endif
