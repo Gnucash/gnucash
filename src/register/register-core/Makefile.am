@@ -108,7 +108,7 @@ gwrap-files: \
 	  (primitive-load \"./gw-register-core-spec.scm\") \
 	  (gw:generate-wrapset \"gw-register-core\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
 CLEANFILES = $(BUILT_SOURCES) .scm-links \

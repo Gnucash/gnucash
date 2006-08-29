@@ -314,7 +314,7 @@ gwrap-files: \
 	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 CLEANFILES = $(BUILT_SOURCES) .scm-links \

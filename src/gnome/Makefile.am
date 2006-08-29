@@ -172,7 +172,7 @@ gwrap-files: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
 CLEANFILES = $(BUILT_SOURCES) gnucash.desktop \

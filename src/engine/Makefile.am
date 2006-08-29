@@ -203,7 +203,7 @@ gwrap-files1: \
 	 (primitive-load \"./gw-engine-spec.scm\") \
 	 (gw:generate-wrapset \"gw-engine\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-engine*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-engine*.scm . )
 
 gw-kvp.scm gw-kvp.c gw-kvp.h: \
   gwrap-files2
@@ -216,7 +216,7 @@ gwrap-files2: \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-wrapset \"gw-kvp\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-kvp*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-kvp*.scm . )
 
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp

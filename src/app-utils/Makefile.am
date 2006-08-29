@@ -151,7 +151,7 @@ gwrap-files: \
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-app-utils\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
 CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS}  \

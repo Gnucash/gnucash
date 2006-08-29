@@ -75,7 +75,7 @@ gwrap-files: \
            (primitive-load \"./gw-core-utils-spec.scm\") \
            (gw:generate-wrapset \"gw-core-utils\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
 CLEANFILES = $(BUILT_SOURCES) .scm-links \

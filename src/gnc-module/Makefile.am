@@ -76,7 +76,7 @@ gwrap-files: \
 	  (primitive-load \"./gw-gnc-module-spec.scm\") \
 	  (gw:generate-wrapset \"gw-gnc-module\")"
 	touch $@
-	( cd g-wrapped; $(LN_S) ../gw-*.scm . )
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
 CLEANFILES = $(BUILT_SOURCES) .scm-links \
