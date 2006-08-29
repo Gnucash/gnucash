@@ -405,6 +405,7 @@ function inst_gnome() {
 	smart_wget $INTLTOOL_URL $DOWNLOAD_DIR
 	smart_wget $ORBIT2_URL $DOWNLOAD_DIR
 	smart_wget $ORBIT2_DEV_URL $DOWNLOAD_DIR
+	smart_wget $GAIL_URL $DOWNLOAD_DIR
 	smart_wget $GCONF_URL $DOWNLOAD_DIR
 	smart_wget $GCONF_DEV_URL $DOWNLOAD_DIR
 	smart_wget $LIBBONOBO_URL $DOWNLOAD_DIR
@@ -428,6 +429,7 @@ function inst_gnome() {
 	unzip $DOWNLOAD_UDIR/intltool-*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/ORBit2-[^d]*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/ORBit2-dev-*.zip -d $GNOME_DIR
+	unzip $DOWNLOAD_UDIR/gail-[^d]*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/GConf-[^d]*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/GConf-dev-*.zip -d $GNOME_DIR
 	unzip $DOWNLOAD_UDIR/libbonobo-[^d]*.zip -d $GNOME_DIR
