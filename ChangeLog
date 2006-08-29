@@ -1,9 +1,7 @@
-2006-08-19  David Hampton  <hampton@employees.org>
+2006-08-20  David Hampton  <hampton@employees.org>
 
-	* src/gnome/gnucash-desktop*: Update so that bug-buddy 2.16 will
-	still allow you to file bugs against gnucash.
-
-	* src/engine/Account.c: Add missing call to xaccAccountBeginEdit.
+	* src/gnome/gnc-plugin-page-account-tree.c: Maintain the account
+	hierarchy when reparenting the descendants of a deleted account.
 
 2006-08-18  David Hampton  <hampton@employees.org>
 
