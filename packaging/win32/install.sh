@@ -98,6 +98,19 @@ function smart_wget() {
 	wget -c $1 -P $TMP_DIR
 	mv $TMP_UDIR/$_FILE $_DLD
     fi
+    LAST_FILE=$_DLD/$_FILE
+}
+
+# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
+function wget_unpacked() {
+    smart_wget $1 $2
+    _UPD=`unix_path $3`
+    case $LAST_FILE in
+        *.zip)     unzip -o $LAST_FILE -d $_UPD;;
+        *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
+        *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
+        *)         die "Cannot unpack file $LAST_FILE!";;
+    esac
 }
 
 function inst_wget() {
@@ -123,12 +136,15 @@ function inst_dtk() {
     else
         smart_wget $DTK_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $MSYS_DIR !!!"
-        $DOWNLOAD_UDIR/msysDTK-*.exe
+        $LAST_FILE
         for file in \
 	    /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
-	    /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,libtool}
+	    /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,guile,libtool}
         do
-	    mv $file $file.bak
+            [ "${file##*.bak}" ] || continue
+            _dst_file=$file.bak
+            while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
+            mv $file $_dst_file
         done
     fi
     quiet perl --help || die "msys dtk not installed correctly"
@@ -144,7 +160,7 @@ function inst_mingw() {
         smart_wget $MINGW_URL $DOWNLOAD_DIR
         echo "!!! Install g++ !!!"
         echo "!!! When asked for an installation path, specify $MINGW_DIR !!!"
-        $DOWNLOAD_UDIR/MinGW-*.exe
+        $LAST_FILE
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
     quiet gcc --version && quiet ld --help || die "mingw not installed correctly"
@@ -159,7 +175,7 @@ function inst_unzip() {
     else
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $UNZIP_DIR !!!"
-        $DOWNLOAD_UDIR/unzip-*.exe
+        $LAST_FILE
     fi
     add_to_env $_UNZIP_UDIR/bin PATH
     quiet unzip --help || die "unzip unavailable"
@@ -171,18 +187,15 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    if quiet ld $REGEX_LDFLAGS -lregex -o tmp
+    if quiet ld $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
     then
         echo "regex already installed.  skipping."
     else
-        smart_wget $REGEX_BIN_URL $DOWNLOAD_DIR
-        smart_wget $REGEX_LIB_URL $DOWNLOAD_DIR
         mkdir -p $REGEX_DIR
-        unzip $DOWNLOAD_UDIR/regex-*-bin.zip -d $REGEX_DIR
-        unzip $DOWNLOAD_UDIR/regex-*-lib.zip -d $REGEX_DIR
+        wget_unpacked $REGEX_BIN_URL $DOWNLOAD_DIR $REGEX_DIR
+        wget_unpacked $REGEX_LIB_URL $DOWNLOAD_DIR $REGEX_DIR
     fi
-    rm -f tmp
-    quiet ld $REGEX_LDFLAGS -lregex -o tmp && rm tmp || die "regex not installed correctly"
+    quiet ld $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile || die "regex not installed correctly"
 }
 
 function inst_readline() {
@@ -191,18 +204,15 @@ function inst_readline() {
     add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
     add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
     add_to_env $_READLINE_UDIR/bin PATH
-    if quiet ld $READLINE_LDFLAGS -lreadline -o tmp
+    if quiet ld $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
     then
         echo "readline already installed.  skipping."
     else
-        smart_wget $READLINE_BIN_URL $DOWNLOAD_DIR
-        smart_wget $READLINE_LIB_URL $DOWNLOAD_DIR
         mkdir -p $READLINE_DIR
-        unzip $DOWNLOAD_DIR/readline-*-bin.zip -d $READLINE_DIR
-        unzip $DOWNLOAD_DIR/readline-*-lib.zip -d $READLINE_DIR
+        wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
+        wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
     fi
-    rm -f tmp
-    quiet ld $READLINE_LDFLAGS -lreadline -o tmp && rm tmp || die "readline not installed correctly"
+    quiet ld $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
 }
 
 function inst_indent() {
@@ -213,9 +223,8 @@ function inst_indent() {
     then
         echo "indent already installed.  skipping."
     else
-        smart_wget $INDENT_BIN_URL $DOWNLOAD_DIR
         mkdir -p $INDENT_DIR
-        unzip $DOWNLOAD_UDIR/indent-*-bin.zip -d $INDENT_DIR
+        wget_unpacked $INDENT_BIN_URL $DOWNLOAD_DIR $INDENT_DIR
     fi
     quiet which indent || die "indent unavailable"
 }
@@ -300,7 +309,7 @@ function inst_glade() {
     else
         smart_wget $GLADE_URL $DOWNLOAD_DIR
 	echo "!!! When asked for an installation path, specify $GLADE_DIR !!!"
-	$DOWNLOAD_UDIR/gtk-win32-devel-*.exe
+        $LAST_FILE
 	qpushd $GLADE_DIR\\lib\\pkgconfig
 	    cp cairo.pc cairo.pc.bak
 	    cat cairo.pc.bak | sed 's,libpng12,libpng13,' > cairo.pc
@@ -322,8 +331,7 @@ function inst_gwrap() {
     then
         echo "g-wrap already installed.  skipping."
     else
-        smart_wget $GWRAP_URL $DOWNLOAD_DIR
-        tar -xzpf $DOWNLOAD_UDIR/g-wrap-*.tar.gz -C $TMP_UDIR
+        wget_unpacked $GWRAP_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/g-wrap-*
             qpushd g-wrap
                 cp core-runtime.c core-runtime.c.bak
@@ -333,7 +341,7 @@ function inst_gwrap() {
             cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
             ./configure \
                 --prefix=$_GWRAP_WFSDIR \
-                --module-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
+                --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
             LDFLAGS="-no-undefined"
             qpushd guile/g-wrap/gw
                 cp Makefile Makefile.bak
@@ -369,54 +377,30 @@ function inst_gnome() {
         echo "gnome packages installed.  skipping."
     else
         mkdir -p $GNOME_DIR
-	smart_wget $INTLTOOL_URL $DOWNLOAD_DIR
-	smart_wget $ORBIT2_URL $DOWNLOAD_DIR
-	smart_wget $ORBIT2_DEV_URL $DOWNLOAD_DIR
-	smart_wget $GAIL_URL $DOWNLOAD_DIR
-	smart_wget $GCONF_URL $DOWNLOAD_DIR
-	smart_wget $GCONF_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBBONOBO_URL $DOWNLOAD_DIR
-	smart_wget $LIBBONOBO_DEV_URL $DOWNLOAD_DIR
-	smart_wget $GNOME_VFS_URL $DOWNLOAD_DIR
-	smart_wget $GNOME_VFS_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOME_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOME_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMECANVAS_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBBONOBOUI_URL $DOWNLOAD_DIR
-	smart_wget $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEUI_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEPRINT_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR
-	smart_wget $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR
-	smart_wget $GTKHTML_URL $DOWNLOAD_DIR
-	smart_wget $GTKHTML_DEV_URL $DOWNLOAD_DIR
-	unzip $DOWNLOAD_UDIR/intltool-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/ORBit2-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/ORBit2-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/gail-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/GConf-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/GConf-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libbonobo-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libbonobo-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/gnome-vfs-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/gnome-vfs-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnome-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnome-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomecanvas-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomecanvas-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libbonoboui-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libbonoboui-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeui-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeui-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeprint-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeprint-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeprintui-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/libgnomeprintui-dev-*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/gtkhtml-[^d]*.zip -d $GNOME_DIR
-	unzip $DOWNLOAD_UDIR/gtkhtml-dev-*.zip -d $GNOME_DIR
+	wget_unpacked $INTLTOOL_URL $GNOME_DIR
+	wget_unpacked $ORBIT2_URL $GNOME_DIR
+	wget_unpacked $ORBIT2_DEV_URL $GNOME_DIR
+	wget_unpacked $GAIL_URL $GNOME_DIR
+	wget_unpacked $GCONF_URL $GNOME_DIR
+	wget_unpacked $GCONF_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBBONOBO_URL $GNOME_DIR
+	wget_unpacked $LIBBONOBO_DEV_URL $GNOME_DIR
+	wget_unpacked $GNOME_VFS_URL $GNOME_DIR
+	wget_unpacked $GNOME_VFS_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBGNOME_URL $GNOME_DIR
+	wget_unpacked $LIBGNOME_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMECANVAS_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMECANVAS_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBBONOBOUI_URL $GNOME_DIR
+	wget_unpacked $LIBBONOBOUI_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEUI_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEUI_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINT_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINT_DEV_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINTUI_URL $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $GNOME_DIR
+	wget_unpacked $GTKHTML_URL $GNOME_DIR
+	wget_unpacked $GTKHTML_DEV_URL $GNOME_DIR
     fi
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     quiet gconftool-2 --version &&
@@ -432,24 +416,21 @@ function inst_autotools() {
     then
         echo "auto tools already installed.  skipping."
     else
-        smart_wget $AUTOCONF_URL $DOWNLOAD_DIR
-        smart_wget $AUTOMAKE_URL $DOWNLOAD_DIR
-        smart_wget $LIBTOOL_URL $DOWNLOAD_DIR
-        tar -xjpf $DOWNLOAD_UDIR/autoconf-*.tar.bz2 -C $TMP_UDIR
+        wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
+        wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
+        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/autoconf-*
             echo "building autoconf..."
            ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
-        tar -xjpf $DOWNLOAD_UDIR/automake-*.tar.bz2 -C $TMP_UDIR
         qpushd $TMP_UDIR/automake-*
             echo "building automake..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
-        tar -xzpf $DOWNLOAD_UDIR/libtool-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/libtool-*
             echo "building libtool..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
@@ -474,8 +455,7 @@ function inst_libgsf() {
     then
 	echo "libgsf already installed.  skipping."
     else
-	smart_wget $LIBGSF_URL $DOWNLOAD_DIR
-	tar -xjpf $DOWNLOAD_UDIR/libgsf-*.tar.bz2 -C $TMP_UDIR
+	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
 	qpushd $TMP_UDIR/libgsf-*
 	    cp configure.in configure.in.bak
 	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#' > configure.in
@@ -496,8 +476,7 @@ function inst_goffice() {
     then
 	echo "goffice already installed.  skipping."
     else
-	smart_wget $GOFFICE_URL $DOWNLOAD_DIR
-	tar -xjpf $DOWNLOAD_UDIR/goffice-*.tar.bz2 -C $TMP_UDIR
+	wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
 	mydir=`pwd`
 	qpushd $TMP_UDIR/goffice-*
 	    cp configure.in configure.in.bak
@@ -534,7 +513,7 @@ function inst_svn() {
     else
         smart_wget $SVN_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $SVN_DIR !!!"
-        $DOWNLOAD_UDIR/svn-*.exe
+        $LAST_FILE
     fi
 }
 
