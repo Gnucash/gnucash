@@ -103,13 +103,10 @@ function smart_wget() {
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
-    set +e
-    quiet $_WGET_UDIR/wget --version
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet $_WGET_UDIR/wget --version
+    then
         echo "already installed.  skipping."
     else
-        set -e
         mkdir -p $WGET_DIR
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $WGET_DIR
         cp $_WGET_UDIR/*/*/wget.exe $WGET_DIR
@@ -120,13 +117,10 @@ function inst_wget() {
 
 function inst_dtk() {
     setup MSYS DTK
-    set +e
-    quiet perl --help
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet perl --help
+    then
         echo "msys dtk already installed.  skipping."
     else
-        set -e
         smart_wget $DTK_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $MSYS_DIR !!!"
         $DOWNLOAD_UDIR/msysDTK-*.exe
@@ -142,13 +136,10 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
-    set +e
-    quiet gcc --version
-    if [ $? = 0 ] ; then
-        set -e
-	echo "mingw already installed.  skipping."
+    if quiet gcc --version
+    then
+        echo "mingw already installed.  skipping."
     else
-        set -e
         _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
         smart_wget $MINGW_URL $DOWNLOAD_DIR
         echo "!!! Install g++ !!!"
@@ -162,13 +153,10 @@ function inst_mingw() {
 function inst_unzip() {
     setup Unzip
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
-    set +e
-    quiet $_UNZIP_UDIR/bin/unzip --help
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet $_UNZIP_UDIR/bin/unzip --help
+    then
         echo "unzip already installed.  skipping."
     else
-        set -e
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $UNZIP_DIR !!!"
         $DOWNLOAD_UDIR/unzip-*.exe
@@ -183,13 +171,10 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    set +e
-    quiet ld $REGEX_LDFLAGS -lregex -o tmp
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet ld $REGEX_LDFLAGS -lregex -o tmp
+    then
         echo "regex already installed.  skipping."
     else
-        set -e
         smart_wget $REGEX_BIN_URL $DOWNLOAD_DIR
         smart_wget $REGEX_LIB_URL $DOWNLOAD_DIR
         mkdir -p $REGEX_DIR
@@ -206,13 +191,10 @@ function inst_readline() {
     add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
     add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
     add_to_env $_READLINE_UDIR/bin PATH
-    set +e
-    quiet ld $READLINE_LDFLAGS -lreadline -o tmp
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet ld $READLINE_LDFLAGS -lreadline -o tmp
+    then
         echo "readline already installed.  skipping."
     else
-        set -e
         smart_wget $READLINE_BIN_URL $DOWNLOAD_DIR
         smart_wget $READLINE_LIB_URL $DOWNLOAD_DIR
         mkdir -p $READLINE_DIR
@@ -227,13 +209,10 @@ function inst_indent() {
     setup Indent
     _INDENT_UDIR=`unix_path $INDENT_DIR`
     add_to_env $_INDENT_UDIR/bin PATH
-    set +e
-    quiet which indent
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet which indent
+    then
         echo "indent already installed.  skipping."
     else
-        set -e
         smart_wget $INDENT_BIN_URL $DOWNLOAD_DIR
         mkdir -p $INDENT_DIR
         unzip $DOWNLOAD_UDIR/indent-*-bin.zip -d $INDENT_DIR
@@ -247,14 +226,11 @@ function inst_guile() {
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     add_to_env $_GUILE_UDIR/bin PATH
     add_to_env $_GUILE_WFSDIR/share/guile/site/slib/ SCHEME_LIBRARY_PATH
-    set +e
-    quiet guile -c '(use-modules (srfi srfi-39))' &&
-    quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet guile -c '(use-modules (srfi srfi-39))' &&
+        quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
+    then
         echo "guile and slib already installed.  skipping."
     else
-        set -e
         smart_wget $GUILE_URL $DOWNLOAD_DIR
         smart_wget $SLIB_URL $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/guile-*.tar.gz -C $TMP_UDIR
@@ -318,13 +294,10 @@ function inst_guile() {
 
 function inst_glade() {
     setup Glade
-    set +e
-    quiet pkg-config --exists glib-2.0 gtk+-2.0
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet pkg-config --exists glib-2.0 gtk+-2.0
+    then
         echo "glade already installed.  skipping."
     else
-        set -e
         smart_wget $GLADE_URL $DOWNLOAD_DIR
 	echo "!!! When asked for an installation path, specify $GLADE_DIR !!!"
 	$DOWNLOAD_UDIR/gtk-win32-devel-*.exe
@@ -345,13 +318,10 @@ function inst_gwrap() {
     _GWRAP_UDIR=`unix_path $GWRAP_DIR`
     add_to_env $_GWRAP_UDIR/bin PATH
     add_to_env $_GWRAP_WFSDIR/share/guile/site GUILE_LOAD_PATH
-    set +e
-    quiet g-wrap-config --version
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet g-wrap-config --version
+    then
         echo "g-wrap already installed.  skipping."
     else
-        set -e
         smart_wget $GWRAP_URL $DOWNLOAD_DIR
         tar -xzpf $DOWNLOAD_UDIR/g-wrap-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/g-wrap-*
@@ -362,9 +332,9 @@ function inst_gwrap() {
             cp configure configure.bak
             cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
             ./configure \
-	        --prefix=$_GWRAP_WFSDIR \
-		--module-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
-	        LDFLAGS="-no-undefined"
+                --prefix=$_GWRAP_WFSDIR \
+                --module-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
+            LDFLAGS="-no-undefined"
             qpushd guile/g-wrap/gw
                 cp Makefile Makefile.bak
                 cat Makefile.bak | sed '/^libgw_guile_standard_la_LIBADD/s,$, ../../../libffi/libffi.la ../../../g-wrap/libgwrap-core-runtime.la,;/libgw_guile_gw_glib_la_LIBADD/s,$, ../../../g-wrap/libgwrap-core-runtime.la,' > Makefile
@@ -392,15 +362,12 @@ function inst_gnome() {
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    set +e
-    quiet gconftool-2 --version &&
-    pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
-    quiet intltoolize --version
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet gconftool-2 --version &&
+        pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+        quiet intltoolize --version
+    then
         echo "gnome packages installed.  skipping."
     else
-        set -e
         mkdir -p $GNOME_DIR
 	smart_wget $INTLTOOL_URL $DOWNLOAD_DIR
 	smart_wget $ORBIT2_URL $DOWNLOAD_DIR
@@ -461,33 +428,30 @@ function inst_autotools() {
     setup Autotools
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
-    set +e
-    quiet autoconf --help && quiet automake --help && quiet libtool --help 
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet autoconf --help && quiet automake --help && quiet libtool --help 
+    then
         echo "auto tools already installed.  skipping."
     else
-        set -e
         smart_wget $AUTOCONF_URL $DOWNLOAD_DIR
         smart_wget $AUTOMAKE_URL $DOWNLOAD_DIR
         smart_wget $LIBTOOL_URL $DOWNLOAD_DIR
         tar -xjpf $DOWNLOAD_UDIR/autoconf-*.tar.bz2 -C $TMP_UDIR
         qpushd $TMP_UDIR/autoconf-*
-	    echo "building autoconf..."
+            echo "building autoconf..."
            ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         tar -xjpf $DOWNLOAD_UDIR/automake-*.tar.bz2 -C $TMP_UDIR
         qpushd $TMP_UDIR/automake-*
-	    echo "building automake..."
+            echo "building automake..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         tar -xzpf $DOWNLOAD_UDIR/libtool-*.tar.gz -C $TMP_UDIR
         qpushd $TMP_UDIR/libtool-*
-	    echo "building libtool..."
+            echo "building libtool..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
@@ -506,13 +470,10 @@ function inst_libgsf() {
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    set +e
-    quiet pkg-config --exists libgsf-1 libgsf-gnome-1
-    if [ $? = 0 ] ; then
-	set -e
+    if quiet pkg-config --exists libgsf-1 libgsf-gnome-1
+    then
 	echo "libgsf already installed.  skipping."
     else
-	set -e
 	smart_wget $LIBGSF_URL $DOWNLOAD_DIR
 	tar -xjpf $DOWNLOAD_UDIR/libgsf-*.tar.bz2 -C $TMP_UDIR
 	qpushd $TMP_UDIR/libgsf-*
@@ -531,13 +492,10 @@ function inst_goffice() {
     setup GOffice
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    set +e
-    quiet pkg-config --exists libgoffice-0.3
-    if [ $? = 0 ] ; then
-	set -e
+    if quiet pkg-config --exists libgoffice-0.3
+    then
 	echo "goffice already installed.  skipping."
     else
-	set -e
 	smart_wget $GOFFICE_URL $DOWNLOAD_DIR
 	tar -xjpf $DOWNLOAD_UDIR/goffice-*.tar.bz2 -C $TMP_UDIR
 	mydir=`pwd`
@@ -570,13 +528,10 @@ function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
     export PATH="$_SVN_UDIR/bin:$PATH"
-    set +e
-    quiet svn --version
-    if [ $? = 0 ] ; then
-        set -e
+    if quiet svn --version
+    then
         echo "subversion already installed.  skipping."
     else
-        set -e
         smart_wget $SVN_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $SVN_DIR !!!"
         $DOWNLOAD_UDIR/svn-*.exe
