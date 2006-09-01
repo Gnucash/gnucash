@@ -209,7 +209,7 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: \
   gwrap-files2
 
 gwrap-files2: \
-  .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
+  .scm-links gw-kvp-spec.scm ${top_builddir}/config.status gwrap-files1
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
