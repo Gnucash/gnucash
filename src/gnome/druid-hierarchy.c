@@ -194,7 +194,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
 #endif
 
     i = strlen(locale);
-    ret = g_strdup_printf("%s/%s", top_dir, locale);
+    ret = g_build_filename(top_dir, locale, (char *)NULL);
 
     while (stat(ret, &buf) != 0)
     { 
@@ -202,12 +202,12 @@ gnc_get_ea_locale_dir(const char *top_dir)
 	if (i<1) 
 	{
 	    g_free(ret);
-	    ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+	    ret = g_build_filename(top_dir, default_locale, (char *)NULL);
 	    break;
 	}
 	locale[i] = '\0';
 	g_free(ret);
-	ret = g_strdup_printf("%s/%s", top_dir, locale);
+	ret = g_build_filename(top_dir, locale, (char *)NULL);
     }
     
     g_free(locale);
@@ -358,6 +358,7 @@ static void
 account_categories_tree_view_prepare (hierarchy_data  *data)
 {
 	GSList *list;
+	gchar *gnc_accounts_dir;
 	gchar *locale_dir;
 	GtkTreeView *tree_view;
 	GtkListStore *model;
@@ -366,9 +367,17 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 
-	locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
+#ifdef G_OS_WIN32
+	gnc_accounts_dir = 
+	  g_win32_get_package_installation_subdirectory
+	  (GETTEXT_PACKAGE, NULL, "accounts");
+#else
+	gnc_accounts_dir = g_strdup (GNC_ACCOUNTS_DIR);
+#endif
+	locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
  	list = gnc_load_example_account_list (data->temporary,
 					      locale_dir);
+	g_free (gnc_accounts_dir);
 	g_free (locale_dir);
 
 	/* Prepare the account_categories GtkTreeView with a model and with some columns */
