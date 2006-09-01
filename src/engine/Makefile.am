@@ -190,7 +190,7 @@ clean-local:
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
-	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
+	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@@PATH_SEPARATOR@${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: \
   gwrap-files1
