@@ -1006,6 +1006,15 @@ qof_session_begin (QofSession *session, const char * book_id,
     *p = '\0';
     qof_session_load_backend(session, access_method);
     g_free (access_method);
+#if G_OS_WIN32
+    if (NULL == session->backend)
+    {
+      /* On windows, a colon can be part of a normal filename. So if
+	 no backend was found (which means the part before the colon
+	 wasn't an access method), fall back to the file backend. */
+      qof_session_load_backend(session, "file"); 
+    }
+#endif
   }
   else
   {
