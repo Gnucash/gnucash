@@ -1006,7 +1006,7 @@ qof_session_begin (QofSession *session, const char * book_id,
     *p = '\0';
     qof_session_load_backend(session, access_method);
     g_free (access_method);
-#if G_OS_WIN32
+#ifdef G_OS_WIN32
     if (NULL == session->backend)
     {
       /* On windows, a colon can be part of a normal filename. So if
