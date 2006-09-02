@@ -370,7 +370,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 #ifdef G_OS_WIN32
 	gnc_accounts_dir = 
 	  g_win32_get_package_installation_subdirectory
-	  (GETTEXT_PACKAGE, NULL, "accounts");
+	  (GETTEXT_PACKAGE, NULL, "share\\gnucash\\accounts");
 #else
 	gnc_accounts_dir = g_strdup (GNC_ACCOUNTS_DIR);
 #endif

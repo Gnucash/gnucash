@@ -823,7 +823,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
 
 #ifdef G_OS_WIN32
   gnc_glade_dir = g_win32_get_package_installation_subdirectory
-    (GETTEXT_PACKAGE, NULL, "glade");
+    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\glade");
 #else
   gnc_glade_dir = g_strdup (GNC_GLADE_DIR);
 #endif
