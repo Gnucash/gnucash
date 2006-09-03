@@ -199,37 +199,51 @@ file_session_begin(QofBackend *be_start, QofSession *session,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     FileBackend *be = (FileBackend*) be_start;
-    char *p;
 
     ENTER (" ");
 
     /* Make sure the directory is there */
-    be->dirname = xaccResolveFilePath(book_id);
-    if (NULL == be->dirname)
+    be->fullpath = xaccResolveFilePath(book_id);
+    if (NULL == be->fullpath)
     {
         qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
         return;
     }
-    be->fullpath = g_strdup (be->dirname);
     be->be.fullpath = be->fullpath;
-    p = strrchr (be->dirname, G_DIR_SEPARATOR);
-    if (p && p != be->dirname)
+    be->dirname = g_path_get_dirname (be->fullpath);
+
     {
         struct stat statbuf;
         int rc;
 
-        *p = '\0';
+	/* Again check whether the directory can be accessed */
         rc = stat (be->dirname, &statbuf);
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
+	    /* Error on stat or if it isn't a directory means we
+	       cannot find this filename */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
             return;
         }
+
+	/* Now check whether we can stat(2) the file itself */
         rc = stat (be->fullpath, &statbuf);
+        if (rc != 0)
+        {
+	    /* Error on stat means the file doesn't exist */
+            qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+            g_free (be->fullpath); be->fullpath = NULL;
+            g_free (be->dirname); be->dirname = NULL;
+            return;
+        }
         if (rc == 0 && S_ISDIR(statbuf.st_mode))
        {
+	    /* FIXME: What is actually checked here? Whether the
+	       fullpath erroneously points to a directory or what? 
+	       Then the error message should be changed into something
+	       much more clear! */
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;

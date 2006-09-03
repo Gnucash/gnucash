@@ -1,3 +1,9 @@
+2006-09-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/backend/file/gnc-backend-file.c: Fix error checking for
+	non-existing filenames. Will now always give a "file not found"
+	message on nonexisting paths or filenames. #351351.
+
 2006-08-20  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-account-xml-v2.c:
