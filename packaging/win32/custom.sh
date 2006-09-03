@@ -47,6 +47,9 @@ GWRAP_DIR=$GLOBAL_DIR\\g-wrap
 GLADE_URL="$SF_MIRROR/gladewin32/gtk-win32-devel-2.8.18-rc1.exe"
 GLADE_DIR=$GLOBAL_DIR\\glade
 
+OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-v0.9.8b.exe"
+OPENSSL_DIR=$GLOBAL_DIR\\openssl
+
 GNOME_PLATFORM_URL="$GNOME_MIRROR/platform/2.14/2.14.3/win32"
 GNOME_DESKTOP_URL="$GNOME_MIRROR/desktop/2.14/2.14.2/win32"
 INTLTOOL_URL="$GNOME_PLATFORM_URL/intltool-0.35.0.zip"
@@ -101,6 +104,7 @@ add_step inst_indent
 add_step inst_guile
 add_step inst_glade
 add_step inst_gwrap
+add_step inst_openssl
 add_step inst_gnome
 add_step inst_autotools
 add_step inst_libgsf

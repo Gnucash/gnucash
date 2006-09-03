@@ -23,6 +23,7 @@ SEPS_ACLOCAL_FLAGS=" "
 SEPS_AUTOTOOLS_CPPFLAGS=" "
 SEPS_AUTOTOOLS_LDFLAGS=" "
 SEPS_GUILE_LOAD_PATH=";"
+SEPS_LIBGLADE_MODULE_PATH=";"
 SEPS_PATH=":"
 SEPS_PKG_CONFIG_PATH=":"
 SEPS_READLINE_CPPFLAGS=" "
@@ -35,6 +36,7 @@ ACLOCAL_FLAGS \
 AUTOTOOLS_CPPFLAGS \
 AUTOTOOLS_LDFLAGS \
 GUILE_LOAD_PATH \
+LIBGLADE_MODULE_PATH \
 PATH \
 PKG_CONFIG_PATH \
 READLINE_CPPFLAGS \
@@ -365,11 +367,27 @@ function inst_gwrap() {
     quiet g-wrap-config --version || die "g-wrap not installed correctly"
 }
 
+function inst_openssl() {
+    setup OpenSSL
+    if [ -f $WINDIR\\system32\\libssl32.dll ]
+    then
+        echo "openssl already installed.  skipping."
+    else
+        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
+	echo "!!! When asked for an installation path, specify $OPENSSL_DIR !!!"
+        $LAST_FILE
+    fi
+    [ -f $WINDIR\\system32\\libssl32.dll ] || die "openssl not installed correctly"
+}
+
 function inst_gnome() {
     setup Gnome platform
     _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _GNOME_WFSDIR=`win_fs_path $GNOME_DIR`
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
+    add_to_env $_GNOME_WFSDIR/lib/libglade/2.0 LIBGLADE_MODULE_PATH
     if quiet gconftool-2 --version &&
         pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
         quiet intltoolize --version
@@ -402,7 +420,6 @@ function inst_gnome() {
 	wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
     fi
-    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     quiet gconftool-2 --version &&
     pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
     quiet intltoolize --version || die "gnome not installed correctly"
