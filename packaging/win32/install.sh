@@ -107,12 +107,14 @@ function smart_wget() {
 function wget_unpacked() {
     smart_wget $1 $2
     _UPD=`unix_path $3`
+    echo -n "Extracting ${LAST_FILE##*/} ... "
     case $LAST_FILE in
-        *.zip)     unzip -o $LAST_FILE -d $_UPD;;
+        *.zip)     unzip -q -o $LAST_FILE -d $_UPD;;
         *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
         *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
         *)         die "Cannot unpack file $LAST_FILE!";;
     esac
+    echo "done"
 }
 
 function inst_wget() {
@@ -303,24 +305,144 @@ function inst_guile() {
     guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
 }
 
-function inst_glade() {
-    setup Glade
-    if quiet pkg-config --exists glib-2.0 gtk+-2.0
+function inst_openssl() {
+    setup OpenSSL
+    if [ -f $WINDIR\\system32\\libssl32.dll ]
     then
-        echo "glade already installed.  skipping."
+        echo "openssl already installed.  skipping."
     else
-        smart_wget $GLADE_URL $DOWNLOAD_DIR
-	echo "!!! When asked for an installation path, specify $GLADE_DIR !!!"
+        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
+	echo "!!! When asked for an installation path, specify $OPENSSL_DIR !!!"
         $LAST_FILE
-	qpushd $GLADE_DIR\\lib\\pkgconfig
-	    cp cairo.pc cairo.pc.bak
-	    cat cairo.pc.bak | sed 's,libpng12,libpng13,' > cairo.pc
-	qpopd
-	qpushd $GLADE_DIR\\bin
-	    cp intl.dll libintl-2.dll
-	qpopd
     fi
-    pkg-config --exists glib-2.0 gtk+-2.0 || die "glade not installed correctly"
+    [ -f $WINDIR\\system32\\libssl32.dll ] || die "openssl not installed correctly"
+}
+
+function inst_pexports() {
+    setup pexports
+    _PEXPORTS_UDIR=`unix_path $PEXPORTS_DIR`
+    add_to_env $_PEXPORTS_UDIR/bin PATH
+    if quiet which pexports
+    then
+        echo "pexports already installed.  skipping."
+    else
+        wget_unpacked $PEXPORTS_URL $DOWNLOAD_DIR $PEXPORTS_DIR
+        qpushd $PEXPORTS_DIR
+            mv pexports-* mydir
+            mv mydir/* .
+            rmdir mydir
+        qpopd
+    fi
+    quiet which pexports || die "pexports unavailable"
+}
+
+function inst_libxml2() {
+    setup LibXML2
+    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
+    if quiet ld -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile
+    then
+        echo "libxml2 already installed.  skipping."
+    else
+        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $LIBXML2_DIR
+        qpushd $LIBXML2_DIR
+            mv libxml2-* mydir
+            cp -r mydir/* .
+            rm -rf mydir
+            pexports bin/libxml2.dll > libxml2.def
+            dlltool --input-def libxml2.def --output-lib lib/libxml2.a
+            rm libxml2.def
+            _LIBXML2_VERSION=`echo $LAST_FILE | sed 's#.*libxml2-\(.*\).win32.zip#\1#'`
+            mkdir -p lib/pkgconfig
+            cat > lib/pkgconfig/libxml-2.0.pc <<EOF
+prefix=/ignore
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libXML
+Version: $_LIBXML2_VERSION
+Description: libXML library version2.
+Requires:
+Libs: -L${libdir} -lxml2 -lz
+Cflags: -I${includedir}
+EOF
+        qpopd
+    fi
+    quiet ld -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
+}
+
+function inst_gnome() {
+    setup Gnome platform
+    _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _GNOME_WFSDIR=`win_fs_path $GNOME_DIR`
+    add_to_env $_GNOME_UDIR/bin PATH
+    add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
+    add_to_env $_GNOME_WFSDIR/lib/libglade/2.0 LIBGLADE_MODULE_PATH
+    if quiet gconftool-2 --version &&
+        pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+        quiet intltoolize --version
+    then
+        echo "gnome packages installed.  skipping."
+    else
+        mkdir -p $GNOME_DIR
+	wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        qpushd $GNOME_DIR
+            [ -f bin/zlib1.dll ] || mv zlib1.dll bin
+        qpopd
+    fi
+    quiet gconftool-2 --version &&
+    pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+    quiet intltoolize --version || die "gnome not installed correctly"
 }
 
 function inst_gwrap() {
@@ -365,64 +487,6 @@ function inst_gwrap() {
     add_to_env $_GWRAP_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     guile -c '(use-modules (srfi srfi-39))' &&
     quiet g-wrap-config --version || die "g-wrap not installed correctly"
-}
-
-function inst_openssl() {
-    setup OpenSSL
-    if [ -f $WINDIR\\system32\\libssl32.dll ]
-    then
-        echo "openssl already installed.  skipping."
-    else
-        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
-	echo "!!! When asked for an installation path, specify $OPENSSL_DIR !!!"
-        $LAST_FILE
-    fi
-    [ -f $WINDIR\\system32\\libssl32.dll ] || die "openssl not installed correctly"
-}
-
-function inst_gnome() {
-    setup Gnome platform
-    _GNOME_UDIR=`unix_path $GNOME_DIR`
-    _GNOME_WFSDIR=`win_fs_path $GNOME_DIR`
-    add_to_env $_GNOME_UDIR/bin PATH
-    add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
-    add_to_env $_GNOME_WFSDIR/lib/libglade/2.0 LIBGLADE_MODULE_PATH
-    if quiet gconftool-2 --version &&
-        pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
-        quiet intltoolize --version
-    then
-        echo "gnome packages installed.  skipping."
-    else
-        mkdir -p $GNOME_DIR
-	wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-    fi
-    quiet gconftool-2 --version &&
-    pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
-    quiet intltoolize --version || die "gnome not installed correctly"
 }
 
 function inst_autotools() {

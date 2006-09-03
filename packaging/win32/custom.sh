@@ -16,6 +16,7 @@ WGET_DIR=$GLOBAL_DIR\\wget
 #WGET=
 
 SF_MIRROR="http://heanet.dl.sourceforge.net/sourceforge"
+GTK_MIRROR="ftp://ftp.gtk.org/pub"
 GNOME_MIRROR="ftp.gnome.org/pub/gnome"
 
 DTK_URL="$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
@@ -41,42 +42,70 @@ GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/slib3a3.zip"
 GUILE_DIR=$GLOBAL_DIR\\guile
 
-GWRAP_URL="http://download.savannah.gnu.org/releases/g-wrap/g-wrap-1.9.6.tar.gz"
-GWRAP_DIR=$GLOBAL_DIR\\g-wrap
-
-GLADE_URL="$SF_MIRROR/gladewin32/gtk-win32-devel-2.8.18-rc1.exe"
-GLADE_DIR=$GLOBAL_DIR\\glade
-
 OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-v0.9.8b.exe"
 OPENSSL_DIR=$GLOBAL_DIR\\openssl
 
-GNOME_PLATFORM_URL="$GNOME_MIRROR/platform/2.14/2.14.3/win32"
-GNOME_DESKTOP_URL="$GNOME_MIRROR/desktop/2.14/2.14.2/win32"
-INTLTOOL_URL="$GNOME_PLATFORM_URL/intltool-0.35.0.zip"
-GAIL_URL="$GNOME_PLATFORM_URL/gail-1.8.11.zip"
-GCONF_URL="$GNOME_PLATFORM_URL/GConf-2.14.0.zip"
-GCONF_DEV_URL="$GNOME_PLATFORM_URL/GConf-dev-2.14.0.zip"
-ORBIT2_URL="$GNOME_PLATFORM_URL/ORBit2-2.14.2.zip"
-ORBIT2_DEV_URL="$GNOME_PLATFORM_URL/ORBit2-dev-2.14.2.zip"
-LIBBONOBO_URL="$GNOME_PLATFORM_URL/libbonobo-2.14.0-20060619.zip"
-LIBBONOBO_DEV_URL="$GNOME_PLATFORM_URL/libbonobo-dev-2.14.0-20060619.zip"
-GNOME_VFS_URL="$GNOME_PLATFORM_URL/gnome-vfs-2.14.2.zip"
-GNOME_VFS_DEV_URL="$GNOME_PLATFORM_URL/gnome-vfs-dev-2.14.2.zip"
-LIBGNOME_URL="$GNOME_PLATFORM_URL/libgnome-2.14.1-20060613.zip"
-LIBGNOME_DEV_URL="$GNOME_PLATFORM_URL/libgnome-dev-2.14.1-20060613.zip"
-LIBGNOMECANVAS_URL="$GNOME_PLATFORM_URL/libgnomecanvas-2.14.0.zip"
-LIBGNOMECANVAS_DEV_URL="$GNOME_PLATFORM_URL/libgnomecanvas-dev-2.14.0.zip"
-LIBBONOBOUI_URL="$GNOME_PLATFORM_URL/libbonoboui-2.14.0.zip"
-LIBBONOBOUI_DEV_URL="$GNOME_PLATFORM_URL/libbonoboui-dev-2.14.0.zip"
-LIBGNOMEUI_URL="$GNOME_PLATFORM_URL/libgnomeui-2.14.1.zip"
-LIBGNOMEUI_DEV_URL="$GNOME_PLATFORM_URL/libgnomeui-dev-2.14.1.zip"
-LIBGNOMEPRINT_URL="$GNOME_DESKTOP_URL/libgnomeprint-2.12.1.zip"
-LIBGNOMEPRINT_DEV_URL="$GNOME_DESKTOP_URL/libgnomeprint-dev-2.12.1.zip"
-LIBGNOMEPRINTUI_URL="$GNOME_DESKTOP_URL/libgnomeprintui-2.12.1.zip"
-LIBGNOMEPRINTUI_DEV_URL="$GNOME_DESKTOP_URL/libgnomeprintui-dev-2.12.1.zip"
-GTKHTML_URL="$GNOME_DESKTOP_URL/gtkhtml-3.10.2.zip"
-GTKHTML_DEV_URL="$GNOME_DESKTOP_URL/gtkhtml-dev-3.10.2.zip"
+PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
+PEXPORTS_DIR=$GLOBAL_DIR\\pexports
+
+LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.26.win32.zip"
+LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
+
+GNOME_WIN32_URL="$GNOME_MIRROR/binaries/win32"
+GETTEXT_URL="$GTK_MIRROR/glib/2.12/win32/dependencies/gettext-0.14.5.zip"
+GETTEXT_DEV_URL="$GTK_MIRROR/glib/2.12/win32/dependencies/gettext-dev-0.14.5.zip"
+LIBICONV_URL="$GTK_MIRROR/glib/2.12/win32/dependencies/libiconv-1.9.1.bin.woe32.zip"
+GLIB_URL="$GNOME_WIN32_URL/glib/2.12/glib-2.12.1.zip"
+GLIB_DEV_URL="$GNOME_WIN32_URL/glib/2.12/glib-dev-2.12.1.zip"
+LIBPNG_URL="$GTK_MIRROR/gtk/v2.10/win32/dependencies/libpng-1.2.8-bin.zip"
+ZLIB_URL="$GTK_MIRROR/gtk/v2.10/win32/dependencies/zlib123-dll.zip"
+PKG_CONFIG_URL="$GTK_MIRROR/gtk/v2.10/win32/dependencies/pkg-config-0.20.zip"
+CAIRO_URL="$GTK_MIRROR/gtk/v2.8/win32/cairo-1.2.4.zip"
+CAIRO_DEV_URL="$GTK_MIRROR/gtk/v2.8/win32/cairo-dev-1.2.4.zip"
+FONTCONFIG_URL="$GTK_MIRROR/gtk/v2.8/win32/dependencies/fontconfig-2.2.2-20040412.zip"
+FONTCONFIG_DEV_URL="$GTK_MIRROR/gtk/v2.8/win32/dependencies/fontconfig-dev-2.2.2-20040412.zip"
+FREETYPE_URL="$GTK_MIRROR/gtk/v2.8/win32/dependencies/freetype-2.1.10.zip"
+ATK_URL="$GNOME_WIN32_URL/atk/1.11/atk-1.11.4.zip"
+ATK_DEV_URL="$GNOME_WIN32_URL/atk/1.11/atk-dev-1.11.4.zip"
+PANGO_URL="$GNOME_WIN32_URL/pango/1.12/pango-1.12.3.zip"
+PANGO_DEV_URL="$GNOME_WIN32_URL/pango/1.12/pango-dev-1.12.3.zip"
+LIBART_LGPL_URL="$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-2.3.17.zip"
+LIBART_LGPL_DEV_URL="$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.17.zip"
+GTK_URL="$GNOME_WIN32_URL/gtk+/2.8/gtk+-2.8.20.zip"
+GTK_DEV_URL="$GNOME_WIN32_URL/gtk+/2.8/gtk+-dev-2.8.20.zip"
+INTLTOOL_URL="$GNOME_WIN32_URL/intltool/0.35/intltool-0.35.0.zip"
+ORBIT2_URL="$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-2.14.2.zip"
+ORBIT2_DEV_URL="$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev-2.14.2.zip"
+GAIL_URL="$GNOME_WIN32_URL/gail/1.8/gail-1.8.11.zip"
+GAIL_DEV_URL="$GNOME_WIN32_URL/gail/1.8/gail-dev-1.8.11.zip"
+POPT_URL="$GNOME_MIRROR/platform/2.13/2.13.92/win32/dependencies/popt-1.10.2-tml-20050828.zip"
+POPT_DEV_URL="$GNOME_MIRROR/platform/2.13/2.13.92/win32/dependencies/popt-dev-1.10.2-tml-20050828.zip"
+GCONF_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-2.14.0.zip"
+GCONF_DEV_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-dev-2.14.0.zip"
+LIBBONOBO_URL="$GNOME_WIN32_URL/libbonobo/2.14/libbonobo-2.14.0-20060619.zip"
+LIBBONOBO_DEV_URL="$GNOME_WIN32_URL/libbonobo/2.14/libbonobo-dev-2.14.0-20060619.zip"
+GNOME_VFS_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2.zip"
+GNOME_VFS_DEV_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2.zip"
+LIBGNOME_URL="$GNOME_WIN32_URL/libgnome/2.14/libgnome-2.14.1-20060613.zip"
+LIBGNOME_DEV_URL="$GNOME_WIN32_URL/libgnome/2.14/libgnome-dev-2.14.1-20060613.zip"
+LIBGNOMECANVAS_URL="$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-2.14.0.zip"
+LIBGNOMECANVAS_DEV_URL="$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-dev-2.14.0.zip"
+LIBBONOBOUI_URL="$GNOME_WIN32_URL/libbonoboui/2.14/libbonoboui-2.14.0.zip"
+LIBBONOBOUI_DEV_URL="$GNOME_WIN32_URL/libbonoboui/2.14/libbonoboui-dev-2.14.0.zip"
+LIBGNOMEUI_URL="$GNOME_WIN32_URL/libgnomeui/2.14/libgnomeui-2.14.1.zip"
+LIBGNOMEUI_DEV_URL="$GNOME_WIN32_URL/libgnomeui/2.14/libgnomeui-dev-2.14.1.zip"
+LIBGLADE_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-2.6.0.zip"
+LIBGLADE_DEV_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-dev-2.6.0.zip"
+LIBGNOMEPRINT_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-2.12.1.zip"
+LIBGNOMEPRINT_DEV_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-dev-2.12.1.zip"
+LIBGNOMEPRINTUI_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-2.12.1.zip"
+LIBGNOMEPRINTUI_DEV_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-dev-2.12.1.zip"
+GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.10/gtkhtml-3.10.2.zip"
+GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.10/gtkhtml-dev-3.10.2.zip"
 GNOME_DIR=$GLOBAL_DIR\\gnome
+
+GWRAP_URL="http://download.savannah.gnu.org/releases/g-wrap/g-wrap-1.9.6.tar.gz"
+GWRAP_DIR=$GLOBAL_DIR\\g-wrap
 
 AUTOCONF_URL="http://ftp.gnu.org/gnu/autoconf/autoconf-2.60.tar.bz2"
 AUTOMAKE_URL="http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.bz2"
@@ -102,10 +131,11 @@ add_step inst_regex
 add_step inst_readline
 add_step inst_indent
 add_step inst_guile
-add_step inst_glade
-add_step inst_gwrap
 add_step inst_openssl
+add_step inst_pexports
+add_step inst_libxml2
 add_step inst_gnome
+add_step inst_gwrap
 add_step inst_autotools
 add_step inst_libgsf
 add_step inst_goffice
