@@ -38,6 +38,9 @@ READLINE_DIR=$GLOBAL_DIR\\readline
 INDENT_BIN_URL="$SF_MIRROR/gnuwin32/indent-2.2.9-bin.zip"
 INDENT_DIR=$GLOBAL_DIR\\indent
 
+ACTIVE_PERL_URL="http://downloads.activestate.com/ActivePerl/Windows/5.6/ActivePerl-5.6.1.638-MSWin32-x86.zip"
+ACTIVE_PERL_DIR=$GLOBAL_DIR\\active-perl
+
 GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/slib3a3.zip"
 GUILE_DIR=$GLOBAL_DIR\\guile
@@ -135,6 +138,7 @@ add_step inst_unzip
 add_step inst_regex
 add_step inst_readline
 add_step inst_indent
+add_step inst_active_perl
 add_step inst_guile
 add_step inst_openssl
 add_step inst_pexports
