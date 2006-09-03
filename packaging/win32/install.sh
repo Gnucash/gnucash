@@ -355,20 +355,37 @@ function inst_libxml2() {
             mkdir -p lib/pkgconfig
             cat > lib/pkgconfig/libxml-2.0.pc <<EOF
 prefix=/ignore
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
 
 Name: libXML
 Version: $_LIBXML2_VERSION
 Description: libXML library version2.
 Requires:
-Libs: -L${libdir} -lxml2 -lz
-Cflags: -I${includedir}
+Libs: -L\${libdir} -lxml2 -lz
+Cflags: -I\${includedir}
 EOF
         qpopd
     fi
     quiet ld -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
+}
+
+function inst_expat() {
+    setup Expat
+    _EXPAT_UDIR=`unix_path $EXPAT_DIR`
+    add_to_env $_EXPAT_UDIR/bin PATH
+    if quiet which xmlwf
+    then
+        echo "expat already installed.  skipping."
+    else
+        wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $EXPAT_DIR
+        qpushd $EXPAT_DIR
+            cp -r expat/* .
+            rm -rf expat
+        qpopd
+    fi
+    quiet which xmlwf || die "expat not installed correctly"
 }
 
 function inst_gnome() {
@@ -391,6 +408,7 @@ function inst_gnome() {
 	wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -399,6 +417,7 @@ function inst_gnome() {
 	wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -438,6 +457,7 @@ function inst_gnome() {
 	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         qpushd $GNOME_DIR
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
+            [ -f lib/libz.dll.a ] || dlltool -D bin/zlib1.dll -d lib/zlib.def -l lib/libz.dll.a
         qpopd
     fi
     quiet gconftool-2 --version &&
