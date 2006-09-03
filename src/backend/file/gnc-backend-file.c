@@ -212,7 +212,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     }
     be->fullpath = g_strdup (be->dirname);
     be->be.fullpath = be->fullpath;
-    p = strrchr (be->dirname, '/');
+    p = strrchr (be->dirname, G_DIR_SEPARATOR);
     if (p && p != be->dirname)
     {
         struct stat statbuf;
@@ -758,12 +758,12 @@ build_period_filepath (FileBackend *fbe, QofBook *book)
 
     /* XXX it would be nice for the user if we made the book 
      * closing date and/or title part of the file-name. */
-    p = strrchr (str, '/');
+    p = strrchr (str, G_DIR_SEPARATOR);
     p++;
     p = stpcpy (p, "book-");
     p = guid_to_string_buff (qof_book_get_guid(book), p);
     p = stpcpy (p, "-");
-    q = strrchr (fbe->fullpath, '/');
+    q = strrchr (fbe->fullpath, G_DIR_SEPARATOR);
     q++;
     p = stpcpy (p, q);
     p = stpcpy (p, ".gml");
