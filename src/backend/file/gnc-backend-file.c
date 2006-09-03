@@ -879,8 +879,24 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
     default:
-        PWARN("File not any known type");
-        error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
+        /* If file type wasn't known, check errno again to give the
+	   user some more useful feedback for some particular error
+	   conditions. */
+        switch (errno)
+	{
+	case EACCES: /* No read permission */
+	  PWARN("No read permission to file");
+	  error = ERR_FILEIO_FILE_EACCES;
+	  break;
+	case EISDIR: /* File is a directory - but on this error we don't arrive here */
+	  PWARN("Filename is a directory");
+	  error = ERR_FILEIO_FILE_NOT_FOUND;
+	  break;
+	default:
+	  PWARN("File not any known type");
+	  error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
+	  break;
+	}
         break;
     }
 
