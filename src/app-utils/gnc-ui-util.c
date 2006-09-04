@@ -123,7 +123,7 @@ gnc_configure_reverse_balance (void)
   else
   {
     if (safe_strcmp (choice, "credit") != 0)
-      PERR("bad value '%s'", choice);
+      PERR("bad value '%s'", choice ? choice : "(null)");
     reverse_type[ACCT_TYPE_LIABILITY] = TRUE;
     reverse_type[ACCT_TYPE_PAYABLE]   = TRUE;
     reverse_type[ACCT_TYPE_EQUITY]    = TRUE;
