@@ -127,10 +127,14 @@ GOFFICE_URL="$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.0.tar.bz2"
 GOFFICE_DIR=$GLOBAL_DIR\\goffice
 GOFFICE_PATCH=`pwd`/goffice-0.3.0-patch.diff
 
+GLADE_URL="$GNOME_MIRROR/sources/glade3/3.0/glade3-3.0.1.tar.bz2"
+GLADE_DIR=$GLOBAL_DIR\\glade
+
 SVN_URL="http://subversion.tigris.org/files/documents/15/32856/svn-1.3.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
 # There is no reason to ever need to comment these out!
+# * commented out glade, as it is not needed to run gnucash
 add_step inst_wget
 add_step inst_dtk
 add_step inst_mingw
@@ -149,6 +153,7 @@ add_step inst_gwrap
 add_step inst_autotools
 add_step inst_libgsf
 add_step inst_goffice
+#add_step inst_glade
 add_step inst_svn
 add_step svn_up
 add_step inst_gnucash

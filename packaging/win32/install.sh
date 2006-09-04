@@ -24,7 +24,6 @@ SEPS_AUTOTOOLS_CPPFLAGS=" "
 SEPS_AUTOTOOLS_LDFLAGS=" "
 SEPS_GUILE_LOAD_PATH=";"
 SEPS_INTLTOOL_PERL=" "
-SEPS_LIBGLADE_MODULE_PATH=";"
 SEPS_PATH=":"
 SEPS_PKG_CONFIG_PATH=":"
 SEPS_READLINE_CPPFLAGS=" "
@@ -38,7 +37,6 @@ AUTOTOOLS_CPPFLAGS \
 AUTOTOOLS_LDFLAGS \
 GUILE_LOAD_PATH \
 INTLTOOL_PERL \
-LIBGLADE_MODULE_PATH \
 PATH \
 PKG_CONFIG_PATH \
 READLINE_CPPFLAGS \
@@ -413,11 +411,9 @@ function inst_expat() {
 function inst_gnome() {
     setup Gnome platform
     _GNOME_UDIR=`unix_path $GNOME_DIR`
-    _GNOME_WFSDIR=`win_fs_path $GNOME_DIR`
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
-    add_to_env $_GNOME_WFSDIR/lib/libglade/2.0 LIBGLADE_MODULE_PATH
     if quiet gconftool-2 --version &&
         pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
         quiet intltoolize --version
@@ -624,6 +620,25 @@ function inst_goffice() {
 	qpopd
     fi
     pkg-config --exists libgoffice-0.3 || die "goffice not installed correctly"
+}
+
+function inst_glade() {
+    setup Glade
+    _GLADE_UDIR=`unix_path $GLADE_DIR`
+    _GLADE_WFSDIR=`win_fs_path $GLADE_DIR`
+    add_to_env $_GLADE_UDIR/bin PATH
+    if quiet glade-3 --version
+    then
+        echo "glade already installed.  skipping."
+    else
+        wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
+        qpushd $TMP_UDIR/glade3-*
+            ./configure --prefix=$_GLADE_WFSDIR
+            make
+            make install
+        qpopd
+    fi
+    quiet glade-3 --version || die "glade not installed correctly"
 }
 
 function inst_svn() {
