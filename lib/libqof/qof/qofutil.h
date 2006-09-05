@@ -45,7 +45,11 @@
 #if HAVE_SCANF_LLD
 # define QOF_SCANF_LLD "%lld"
 #else
-# define QOF_SCANF_LLD "%qd"
+# if HAVE_SCANF_QD
+#  define QOF_SCANF_LLD "%qd"
+# else
+#  error "No scanf format string is known for LLD. Fix your ./configure so that the correct one is detected!"
+# endif
 #endif
 
 #define QOF_MOD_UTIL "qof-utilities"
