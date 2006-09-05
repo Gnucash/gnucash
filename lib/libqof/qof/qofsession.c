@@ -1009,6 +1009,9 @@ qof_session_begin (QofSession *session, const char * book_id,
 #ifdef G_OS_WIN32
     if (NULL == session->backend)
     {
+      /* Clear the error condition of previous errors */
+      qof_session_clear_error (session);
+
       /* On windows, a colon can be part of a normal filename. So if
 	 no backend was found (which means the part before the colon
 	 wasn't an access method), fall back to the file backend. */
