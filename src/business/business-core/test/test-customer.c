@@ -24,6 +24,7 @@
  *
  *********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include "qof.h"
 #include "cashobjects.h"

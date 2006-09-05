@@ -24,6 +24,7 @@
  *
  *********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include "gncInvoiceP.h"
 #include "gncCustomerP.h"

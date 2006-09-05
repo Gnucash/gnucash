@@ -25,6 +25,7 @@
  *  02110-1301, USA.
  */
  
+#include "config.h"
 #include "qof.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
