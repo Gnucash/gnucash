@@ -106,7 +106,7 @@ SCANF_LLD_CHECK
 if test x$am_cv_scanf_lld = "xno"; then
   SCANF_QD_CHECK
 
-  if test x$am_cv_scanf_qs = "xno"; then
+  if test x$am_cv_scanf_qd = "xno"; then
     AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
   fi
 fi
