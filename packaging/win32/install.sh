@@ -519,6 +519,11 @@ function inst_gwrap() {
                 cat Makefile.bak | sed '/^std_libs/s,\\$, ../../libffi/libffi.la \\,' > Makefile
             qpopd
             make
+	    qpushd guile/g-wrap
+		# Fix the filenames of the to be loaded DLLs
+		cp guile.scm guile.scm.bak
+		sed "s/slot-ref wrapset 'shlib-path) \"\\\\\"))/slot-ref wrapset 'shlib-path) \"-0\\\\\"))/" guile.scm.bak > guile.scm
+	    qpopd
             make install
         qpopd
     fi    
@@ -680,10 +685,36 @@ function inst_gnucash() {
 	--enable-debug \
 	--enable-schemas-install=no \
 	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} -D_WIN32 -DLIBLTDL_DLL_IMPORT" \
-	LDFLAGS="-no-undefined ${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS}" \
-	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
-	PATH="${PATH}"
-#    make
+	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS}" \
+	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
+
+    # Add -no-undefined to LDFLAGS here manually because this must
+    # not be given during the ./configure tests
+    cp config.status config.status.bak ; sed 's/s,@LDFLAGS@,/s,@LDFLAGS@,-no-undefined /' config.status.bak > config.status
+    ./config.status
+    # Windows DLLs don't need relinking
+    cp ltmain.sh ltmain.sh.bak ; grep -v "need_relink=yes" ltmain.sh.bak > ltmain.sh
+    cp libtool libtool.bak ; grep -v "need_relink=yes" libtool.bak > libtool
+    # Exclude (for now) the test subdirectories from the build
+    # because executable linking is so painfully slow on mingw
+    perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+
+    make
+
+    # Try to fix the paths in the "gnucash" script
+    qpushd src/bin
+    rm gnucash
+    make PATH_SEPARATOR=";" gnucash
+    # FIXME: Still not all paths are set up correctly.
+    qpopd
+
+    make install
+    qpopd
+
+    qpushd ${_GNUCASH_WFSDIR}/lib/gnucash
+    # Remove the dependency_libs line from the installed .la files
+    # because otherwise loading the modules literally takes hours.
+    for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
     qpopd
 }
 
