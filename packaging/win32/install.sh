@@ -676,6 +676,8 @@ function svn_up() {
 function inst_gnucash() {
     setup GnuCash
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
+    POPT_CPPFLAGS="-I${_GNOME_UDIR}/include"
+    POPT_LDFLAGS="-L${_GNOME_UDIR}/lib"
     qpushd $REPOS_DIR
     cp configure.in configure.in.bak
     cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#TOOL$#TOOL([],[no-xml])#;/GUILE_LOAD_PATH/s,:,;,g' > configure.in
@@ -684,13 +686,13 @@ function inst_gnucash() {
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
 	--enable-schemas-install=no \
-	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} -D_WIN32 -DLIBLTDL_DLL_IMPORT" \
-	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS}" \
+	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${POPT_CPPFLAGS} -D_WIN32" \
+	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${POPT_LDFLAGS}" \
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
     # Add -no-undefined to LDFLAGS here manually because this must
     # not be given during the ./configure tests
-    cp config.status config.status.bak ; sed 's/s,@LDFLAGS@,/s,@LDFLAGS@,-no-undefined /' config.status.bak > config.status
+    cp config.status config.status.bak ; sed 's/\(s,@LDFLAGS@,.*\),/\1 -no-undefined,/' config.status.bak > config.status
     ./config.status
     # Windows DLLs don't need relinking
     cp ltmain.sh ltmain.sh.bak ; grep -v "need_relink=yes" ltmain.sh.bak > ltmain.sh
