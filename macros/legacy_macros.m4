@@ -153,6 +153,36 @@ int main ()
   fi
 ])
 
+AC_DEFUN([SCANF_I64D_CHECK],
+[
+  AC_CACHE_CHECK([if scanf supports %I64d conversions],
+                 am_cv_scanf_i64d,
+      AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  long long int e;
+
+  d = 0;
+  e =  100000;
+  e *= 100000;
+  if ((sscanf ("10000000000", "%I64d", &d) != 1) || (d != e))
+    exit (1);
+
+  exit (0);
+}
+],
+        am_cv_scanf_i64d=yes,
+        am_cv_scanf_i64d=no))
+  if test $am_cv_scanf_i64d = yes; then
+    AC_DEFINE(HAVE_SCANF_I64D, 1,
+      [Define if scanf supports %I64d conversions.])
+  fi
+])
+
 AC_DEFUN([LANGINFO_D_FMT_CHECK],
 [
   AC_CACHE_CHECK([for nl_langinfo and D_FMT], am_cv_langinfo_dfmt,

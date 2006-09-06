@@ -48,7 +48,11 @@
 # if HAVE_SCANF_QD
 #  define QOF_SCANF_LLD "%qd"
 # else
-#  error "No scanf format string is known for LLD. Fix your ./configure so that the correct one is detected!"
+#  if HAVE_SCANF_I64D
+#   define QOF_SCANF_LLD "%I64d"
+#  else
+#   error "No scanf format string is known for LLD. Fix your ./configure so that the correct one is detected!"
+#  endif
 # endif
 #endif
 
