@@ -73,17 +73,25 @@ SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash g-wrapped
+	mkdir -p  gnucash g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
+clean-local:
+	$(RM) -rf gnucash g-wrapped
+
+.INTERMEDIATE: gwrap-files
+
 gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
+  gwrap-files
+
+gwrap-files: \
   .scm-links gw-dialog-tax-table-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -94,8 +102,10 @@ gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
 	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \
 	 (primitive-load \"./gw-dialog-tax-table-spec.scm\") \
 	 (gw:generate-wrapset \"gw-dialog-tax-table\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
 	gw-dialog-tax-table.h
-CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
+CLEANFILES = $(BUILT_SOURCES) .scm-links \
 	${SCM_FILE_LINKS} gw-dialog-tax-table.html

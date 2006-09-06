@@ -100,17 +100,25 @@ SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash g-wrapped
+	mkdir -p  gnucash g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
+clean-local:
+	$(RM) -rf gnucash g-wrapped
+
+.INTERMEDIATE: gwrap-files
+
 gw-business-core.scm gw-business-core.c gw-business-core.h: \
+  gwrap-files
+
+gwrap-files: \
  .scm-links gw-business-core-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
@@ -118,7 +126,9 @@ gw-business-core.scm gw-business-core.c gw-business-core.h: \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \
 	 (primitive-load \"./gw-business-core-spec.scm\") \
 	 (gw:generate-wrapset \"gw-business-core\")"
+	touch $@
+	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
 CLEANFILES = $(BUILT_SOURCES) gw-business-core.html \
-	g-wrapped gnucash .scm-links ${SCM_FILE_LINKS}
+	.scm-links ${SCM_FILE_LINKS}

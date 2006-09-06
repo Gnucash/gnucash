@@ -50,14 +50,18 @@ SCM_FILE_LINKS = business-utils.scm \
 endif
 
 .scm-links: 
-	rm -f gnucash
-	$(LN_S) -f ${srcdir} gnucash 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-CLEANFILES = gnucash .scm-links
+clean-local:
+	$(RM) -rf gnucash
+
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
