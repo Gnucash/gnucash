@@ -1,0 +1,147 @@
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Input configuration for the Inno Setup Compiler
+; Copyright (c) 2004-2005 Christian Stimming <stimming@tuhh.de>
+;
+; Inno Setup Compiler: See http://www.jrsoftware.org/isdl.php
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Setup]
+; Using the name here directly because we want it capitalized
+AppName=GnuCash
+AppVerName=GnuCash @VERSION@
+AppPublisher=GnuCash Development Team
+AppPublisherURL=http://www.gnucash.org
+AppSupportURL=http://www.gnucash.org
+AppUpdatesURL=http://www.gnucash.org
+DefaultDirName={pf}\@PACKAGE@
+LicenseFile=COPYING
+Compression=lzma
+OutputDir=.
+OutputBaseFilename=@PACKAGE@-@VERSION@-setup
+UninstallFilesDir={app}\uninstall\@PACKAGE@
+InfoAfterFile=README
+
+[Types]
+Name: "full"; Description: "{cm:FullInstall}"
+Name: "custom"; Description: "{cm:CustomInstall}"; Flags: iscustom
+
+[Components]
+Name: "main"; Description: "{cm:MainFiles}"; Types: full custom; Flags: fixed
+Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
+Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Here we configure the included files and the place of their
+; installation
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Files]
+; The main executables and DLLs
+Source: "@prefix@\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main
+
+; and so on...
+
+; The loading shell script. It is post-processed by the Pascal script below.
+Source: "src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
+
+; And all the documentation
+Source: "README"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
+Source: "COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: doc
+Source: "README.W32"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
+Source: "AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
+Source: "ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
+
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Registry]
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Delete the created config script on uninstall
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[UninstallDelete]
+Type: files; Name: "{app}\bin\gnucash"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; This large section is a Pascal scripting program that will modify
+; the gnucash shell script so that it then includes the
+; correct values according to our local installation. See
+; http://www.remobjects.com/?ps for a syntax reference.
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Code]
+function MingwBacksl(const S: String): String;
+begin
+  { Modify the path name S so that it can be used by MinGW }
+  if Length(ExtractFileDrive(S)) = 0 then
+    Result := S
+  else begin
+    Result := '/'+S;
+    StringChange(Result, ':\', '\');
+  end;
+  StringChange(Result, '\', '/');
+end;
+
+procedure MyAfterInstallConfig(FileName: String);
+var
+  FileString, appdir, includedir, libdir: String;
+  Res: Boolean;
+begin
+
+  { Load the unchanged original file }
+  Res := LoadStringFromFile(Format('%s.in',[FileName]), FileString);
+  if Res = False then
+    MsgBox('Error on loading '+FileName+'.in for final adaptation', mbInformation, MB_OK);
+
+  { Insert the custom file header; #10 is the linefeed character }
+  Insert('#!/bin/sh '#10'dir="@prefix'+'@"'#10, FileString, 0);
+
+  { Get the installation-specific paths }
+  appdir := MingwBacksl(ExpandConstant('{app}'));
+  includedir := appdir + '/include';
+  libdir := appdir + '/lib';
+
+  { Now make all the replacements }
+  { Explanation: StringChange(S,FromStr,ToStr): Change all occurances in S of FromStr to ToStr. }
+  StringChange(FileString, '@'+'prefix@', appdir);
+  StringChange(FileString, '@'+'libdir@', libdir);
+  { ... and so on, for example: ... }
+  StringChange(FileString, '@'+'GNC_GLADE_DIR@', '@GNC_GLADE_DIR@');
+
+  { Save the final file }
+  Res := SaveStringToFile(FileName, FileString, False);
+  if Res = False then
+    MsgBox('Error on saving '+FileName+' for final adaptation', mbInformation, MB_OK);
+
+end;
+
+
+[Languages]
+Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; These are only for improved text messages
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Messages]
+
+[CustomMessages]
+; *** "Select Components" wizard page
+FullInstall=Full installation
+CustomInstall=Custom installation
+
+MainFiles=GnuCash Program
+TranslFiles=Translation Files
+TemplFiles=Account Template Files
+
+de.FullInstall=Komplett-Installation
+de.CustomInstall=Benutzerdefiniert
+
+de.MainFiles=GnuCash Hauptprogramm
+de.TranslFiles=Deutsche Übersetzung
+de.TemplFiles=Beispiel-Kontenrahmen
