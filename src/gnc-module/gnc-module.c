@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#ifdef G_OS_WIN32
+# undef DLL_EXPORT /* Will cause warnings in ltdl.h if defined */
+# define LIBLTDL_DLL_IMPORT
+#endif
 #include <ltdl.h>
 #include <guile/gh.h>
 #include <sys/types.h>
