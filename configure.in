@@ -101,6 +101,34 @@ AC_CHECK_FUNCS(setenv,,[
   ])
 ])
 
+##################################################
+# Check for win32 platform
+##################################################
+AC_MSG_CHECKING([for native Win32])
+case $host in
+  *-*-mingw*)
+    native_win32=yes
+    ;;
+  *)
+    native_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$native_win32])
+AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
+
+AC_MSG_CHECKING([for Win32 platform in general])
+case $host in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT($platform_win32)
+AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
+##################################################
+  
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 if test x$am_cv_scanf_lld = "xno"; then
@@ -1265,33 +1293,6 @@ then
   AM_CONDITIONAL(HAVE_GOFFICE, test "x$HAVE_GOFFICE" = "xyes")
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
-  
-  ##################################################
-  # Check for win32 platform
-  ##################################################
-  AC_MSG_CHECKING([for native Win32])
-  case $host in
-    *-*-mingw*)
-      native_win32=yes
-      ;;
-    *)
-      native_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT([$native_win32])
-  AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
-  
-  AC_MSG_CHECKING([for Win32 platform in general])
-  case $host in
-    *-*-mingw*|*-*-cygwin*)
-      platform_win32=yes
-      ;;
-    *)
-      platform_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT($platform_win32)
-  AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
   
   ##################################################
   # regex needs its own linker flag on win32 platform
