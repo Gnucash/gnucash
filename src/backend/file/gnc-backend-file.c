@@ -281,8 +281,23 @@ file_session_end(QofBackend *be_start)
     if (be->lockfd > 0)
         close (be->lockfd);
 
-    if (be->lockfile)
-        unlink (be->lockfile);
+    if (be->lockfile) {
+        int rv;
+#ifdef G_OS_WIN32
+	/* On windows, we need to allow write-access before
+	   unlink() can succeed */
+	rv = chmod (be->lockfile, S_IWRITE | S_IREAD);
+	if (rv) {
+	    PWARN("Error on chmod(%s): %d: %s", be->lockfile,
+		  errno, strerror(errno) ? strerror(errno) : "");
+	}
+#endif
+	rv = unlink (be->lockfile);
+	if (rv) {
+	    PWARN("Error on unlink(%s): %d: %s", be->lockfile,
+		  errno, strerror(errno) ? strerror(errno) : "");
+	}
+    }
 
     g_free (be->dirname);
     be->dirname = NULL;
