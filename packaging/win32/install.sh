@@ -676,6 +676,7 @@ function svn_up() {
 function inst_gnucash() {
     setup GnuCash
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
+    _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     POPT_CPPFLAGS="-I${_GNOME_UDIR}/include"
     POPT_LDFLAGS="-L${_GNOME_UDIR}/lib"
     qpushd $REPOS_DIR
@@ -706,8 +707,9 @@ function inst_gnucash() {
     # Try to fix the paths in the "gnucash" script
     qpushd src/bin
     rm gnucash
-    make PATH_SEPARATOR=";" gnucash
-    # FIXME: Still not all paths are set up correctly.
+    make PATH_SEPARATOR=";" \
+	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GWRAP_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin" \
+	gnucash
     qpopd
 
     make install
