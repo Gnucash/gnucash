@@ -14,7 +14,8 @@ AppPublisherURL=http://www.gnucash.org
 AppSupportURL=http://www.gnucash.org
 AppUpdatesURL=http://www.gnucash.org
 DefaultDirName={pf}\@PACKAGE@
-LicenseFile=COPYING
+DefaultGroupName=GnuCash
+LicenseFile=..\..\COPYING
 Compression=lzma
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
@@ -30,6 +31,18 @@ Name: "main"; Description: "{cm:MainFiles}"; Types: full custom; Flags: fixed
 Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
 Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
 
+[Tasks]
+Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
+
+[Icons]
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: menuicon
+Name: "{group}\Uninstall GnuCash"; Filename: "{uninstallexe}"; Tasks: menuicon
+Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: desktopicon
+
+[Run]
+Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; Flags: postinstall skipifsilent
+
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
 ; installation
@@ -37,18 +50,25 @@ Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
 [Files]
 ; The main executables and DLLs
 Source: "@prefix@\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
 
-; and so on...
+; The translations (no idea why mingw installs them in prefix/lib/locale)
+Source: "@prefix@\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+
+; The account templates
+Source: "@prefix@\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
 
 ; The loading shell script. It is post-processed by the Pascal script below.
-Source: "src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
+Source: "..\..\src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
 
 ; And all the documentation
-Source: "README"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
-Source: "COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: doc
-Source: "README.W32"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
-Source: "AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
-Source: "ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: doc
+Source: "..\..\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "..\..\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
+Source: "..\..\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "..\..\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -88,7 +108,7 @@ end;
 
 procedure MyAfterInstallConfig(FileName: String);
 var
-  FileString, appdir, includedir, libdir: String;
+  FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
   Res: Boolean;
 begin
 
@@ -102,15 +122,19 @@ begin
 
   { Get the installation-specific paths }
   appdir := MingwBacksl(ExpandConstant('{app}'));
-  includedir := appdir + '/include';
   libdir := appdir + '/lib';
+  pkglibdir := libdir + '/gnucash';
+  pkgdatadir := appdir + '/share/gnucash';
 
   { Now make all the replacements }
   { Explanation: StringChange(S,FromStr,ToStr): Change all occurances in S of FromStr to ToStr. }
-  StringChange(FileString, '@'+'prefix@', appdir);
-  StringChange(FileString, '@'+'libdir@', libdir);
-  { ... and so on, for example: ... }
-  StringChange(FileString, '@'+'GNC_GLADE_DIR@', '@GNC_GLADE_DIR@');
+  StringChange(FileString, '@'+'-PATH_SEPARATOR-@', ';');
+  StringChange(FileString, '@'+'-BIN_DIR-@', appdir + '/bin');
+  StringChange(FileString, '@'+'-GNC_PKGLIB_INSTALLDIR-@', pkglibdir);
+  StringChange(FileString, '@'+'-GNC_MODULE_DIR-@', pkglibdir);
+  StringChange(FileString, '@'+'-GNC_LIB_INSTALLDIR-@', libdir);
+  StringChange(FileString, '@'+'-GNC_GUILE_MODULE_DIR-@', pkgdatadir + '/guile-modules');
+  StringChange(FileString, '@'+'-GNC_SCM_INSTALL_DIR-@', pkgdatadir + '/scm');
 
   { Save the final file }
   Res := SaveStringToFile(FileName, FileString, False);
@@ -134,6 +158,10 @@ Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
 ; *** "Select Components" wizard page
 FullInstall=Full installation
 CustomInstall=Custom installation
+CreateDesktopIcon=Create a &desktop icon
+CreateMenuLink=Create a start menu link
+RunPrg=Run GnuCash now
+AdditionalIcons=Create these icons:
 
 MainFiles=GnuCash Program
 TranslFiles=Translation Files
@@ -141,6 +169,10 @@ TemplFiles=Account Template Files
 
 de.FullInstall=Komplett-Installation
 de.CustomInstall=Benutzerdefiniert
+de.CreateDesktopIcon=Ein Icon auf dem Desktop erstellen
+de.CreateMenuLink=Eine Verknüpfung im Startmenü erstellen
+de.RunPrg=GnuCash jetzt starten
+de.AdditionalIcons=Folgende Icons erstellen:
 
 de.MainFiles=GnuCash Hauptprogramm
 de.TranslFiles=Deutsche Übersetzung
