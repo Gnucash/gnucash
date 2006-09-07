@@ -4,6 +4,10 @@ PWD := $(shell pwd)
 pkglib_LTLIBRARIES = libgncmod-engine.la libgw-engine.la libgw-kvp.la
 
 AM_CFLAGS = \
+	-DPREFIX=\"${prefix}\" \
+	-DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+	-DDATADIR=\"${GNC_SHAREDIR}\" \
+	-DLIBDIR=\"${GNC_LIBDIR}\" \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/core-utils \
 	-I${top_srcdir}/src \
@@ -37,6 +41,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-filepath-utils.c \
   gnc-hooks.c \
   gnc-lot.c \
+  gnc-path.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
@@ -78,6 +83,7 @@ gncinclude_HEADERS = \
   gnc-event.h \
   gnc-filepath-utils.h \
   gnc-hooks.h \
+  gnc-path.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
@@ -221,6 +227,10 @@ gwrap-files2: \
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
+		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
+		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
+		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
+		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
                 -e 's#@-libdir-@#${libdir}#g'
 	mv $@.tmp $@
 
