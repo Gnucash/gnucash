@@ -719,7 +719,6 @@ function inst_gnucash() {
     # Remove the dependency_libs line from the installed .la files
     # because otherwise loading the modules literally takes hours.
     for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
-    find . -name '*.a' -exec rm '{}' ';'
     qpopd
 
     # Create a startup script that works without the msys shell
