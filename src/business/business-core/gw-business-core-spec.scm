@@ -34,6 +34,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <gncAddress.h>\n"
       "#include <gncBillTerm.h>\n"
       "#include <gncCustomer.h>\n"
