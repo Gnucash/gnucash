@@ -38,7 +38,7 @@
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "Group.h"
-#include "gnc-dir.h"
+#include "gnc-path.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
@@ -821,13 +821,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
     glade_inited = TRUE;
   }
 
-#ifdef G_OS_WIN32
-  gnc_glade_dir = g_win32_get_package_installation_subdirectory
-    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\glade");
-#else
-  gnc_glade_dir = g_strdup (GNC_GLADE_DIR);
-#endif
-
+  gnc_glade_dir = gnc_path_get_gladedir ();
   fname = g_build_filename(gnc_glade_dir, filename, (char *)NULL);
   g_free (gnc_glade_dir);
 

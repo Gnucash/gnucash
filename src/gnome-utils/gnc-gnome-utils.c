@@ -38,6 +38,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
+#include "gnc-path.h"
 #include "gnc-ui.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
@@ -193,12 +194,24 @@ gnc_gnome_init (int argc, char **argv, const char * version)
 {
   char *fullname;
   GError *error = NULL;
+  gchar *prefix = gnc_path_get_prefix ();
+  gchar *sysconfdir = gnc_path_get_sysconfdir ();
+  gchar *datadir = gnc_path_get_datadir ();
+  gchar *libdir = gnc_path_get_libdir ();
 
   gnc_gtk_add_rc_file();
   gnucash_program = gnome_program_init(
       "gnucash", version, LIBGNOMEUI_MODULE,
       argc, argv,
-      GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
+      GNOME_PARAM_APP_PREFIX, prefix,
+      GNOME_PARAM_APP_SYSCONFDIR, sysconfdir,
+      GNOME_PARAM_APP_DATADIR, datadir,
+      GNOME_PARAM_APP_LIBDIR, libdir,
+      GNOME_PARAM_NONE);
+  g_free (prefix);
+  g_free (sysconfdir);
+  g_free (datadir);
+  g_free (libdir);
 
   /* initialization required for gtkhtml */
   gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());

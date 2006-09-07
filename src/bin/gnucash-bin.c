@@ -33,7 +33,7 @@
 #include <libgnome/libgnome.h>
 #include "glib.h"
 #include "gnc-module.h"
-#include "i18n.h"
+#include "gnc-path.h"
 #include "gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
@@ -491,14 +491,15 @@ inner_main (void *closure, int argc, char **argv)
 
 int main(int argc, char ** argv)
 {
-
+    gchar *localedir = gnc_path_get_localedir ();
 #ifdef HAVE_GETTEXT
     /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
        via gtk_init(). */
-    bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
-    textdomain (TEXT_DOMAIN);
-    bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
+    bindtextdomain (GETTEXT_PACKAGE, localedir);
+    textdomain (GETTEXT_PACKAGE);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
+    g_free (localedir);
 
     gnc_module_system_init();
     envt_override();

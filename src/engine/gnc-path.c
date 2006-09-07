@@ -71,7 +71,14 @@ gchar *gnc_path_get_pkglibdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gladedir()
 {
-  return g_strdup (GNC_GLADE_DIR);
+  gchar *result;
+#ifdef G_OS_WIN32
+  result = g_win32_get_package_installation_subdirectory
+    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\glade");
+#else
+  result = g_strdup (GNC_GLADE_DIR);
+#endif
+  return result;
 }
 
 /** Returns the localedir path, usually
@@ -89,7 +96,15 @@ gchar *gnc_path_get_localedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_accountsdir()
 {
-  return g_strdup (GNC_ACCOUNTS_DIR);
+  gchar *result;
+#ifdef G_OS_WIN32
+  result = 
+    g_win32_get_package_installation_subdirectory
+    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\accounts");
+#else
+  result = g_strdup (GNC_ACCOUNTS_DIR);
+#endif
+  return result;
 }
 
 /** Returns the gconf schema config source path, usually

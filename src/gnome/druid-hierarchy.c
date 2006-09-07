@@ -43,7 +43,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-component-manager.h"
-#include "../gnome-utils/gnc-dir.h"
+#include "gnc-path.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui-util.h"
@@ -367,13 +367,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 
-#ifdef G_OS_WIN32
-	gnc_accounts_dir = 
-	  g_win32_get_package_installation_subdirectory
-	  (GETTEXT_PACKAGE, NULL, "share\\gnucash\\accounts");
-#else
-	gnc_accounts_dir = g_strdup (GNC_ACCOUNTS_DIR);
-#endif
+	gnc_accounts_dir = gnc_path_get_accountsdir ();
 	locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
  	list = gnc_load_example_account_list (data->temporary,
 					      locale_dir);

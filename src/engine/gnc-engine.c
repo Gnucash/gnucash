@@ -42,7 +42,7 @@
 #define GNC_LIB_NAME "gnc-backend-file"
 
 /* gnc-backend-file location */
-#include "gncla-dir.h"
+#include "gnc-path.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -76,17 +76,17 @@ void
 gnc_engine_init(int argc, char ** argv)
 {
   static struct {
-    const gchar* dir;
     const gchar* lib;
     gboolean required;
   } libs[] = {
-    { GNC_LIBDIR, GNC_LIB_NAME, TRUE },
+    { GNC_LIB_NAME, TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
-    { GNC_LIBDIR, "gnc-backend-postgres", FALSE },
-    { NULL, NULL, FALSE } }, *lib;
+    { "gnc-backend-postgres", FALSE },
+    { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
   gchar *tracefilename;
+  gchar *pkglibdir;
 
   if (1 == engine_is_initialized) return;
 
@@ -107,15 +107,16 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  for (lib = libs; lib->dir && lib->lib ; lib++)
+  pkglibdir = gnc_path_get_pkglibdir ();
+  for (lib = libs; lib->lib ; lib++)
   {
-      if (qof_load_backend_library(lib->dir, lib->lib))
+      if (qof_load_backend_library(pkglibdir, lib->lib))
       {
           engine_is_initialized = 1;
       }
       else
       {
-          g_message("failed to load %s from %s\n", lib->lib, lib->dir);
+	  g_message("failed to load %s from %s\n", lib->lib, pkglibdir);
 	  /* If this is a required library, stop now! */
 	  if (lib->required)
 	  {
@@ -123,6 +124,7 @@ gnc_engine_init(int argc, char ** argv)
 	  }
       }
   }
+  g_free (pkglibdir);
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

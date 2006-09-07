@@ -41,7 +41,7 @@
 #include "dialog-utils.h"
 #include "druid-gconf-setup.h"
 #include "druid-utils.h"
-#include "gnc-dir.h"
+#include "gnc-path.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-gnome-utils.h"
@@ -113,6 +113,7 @@ druid_gconf_update_path (GError **error)
   gchar *contents, **lines, *line;
   gboolean found_user_dir = FALSE;
   FILE *output;
+  gchar *gconfdir;
 
   data_filename = g_build_filename(g_get_home_dir(), ".gconf", (char *)NULL);
   path_filename = g_build_filename(g_get_home_dir(), ".gconf.path", (char *)NULL);
@@ -151,7 +152,9 @@ druid_gconf_update_path (GError **error)
   fprintf(output, "\n######## The following lines were added by GnuCash. ########\n");
   if (!found_user_dir)
     fprintf(output, PATH_STRING1);
-  fprintf(output, PATH_STRING2, GNC_GCONF_DIR);
+  gconfdir = gnc_path_get_gconfdir ();
+  fprintf(output, PATH_STRING2, gconfdir);
+  g_free (gconfdir);
   fprintf(output,   "############## End of lines added by GnuCash. ##############\n");
   if (fclose(output) != 0)  {
     *error = g_error_new (G_FILE_ERROR,
@@ -284,11 +287,13 @@ druid_gconf_update_page_prepare (GnomeDruidPage *druidpage,
   GtkTextBuffer *textbuffer;
   GtkWidget *textview;
   gchar *msg;
+  gchar *gconfdir = gnc_path_get_gconfdir ();
 
   textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_text");
   textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
-  msg = g_strdup_printf(PATH_STRING1 PATH_STRING2, GNC_GCONF_DIR);
+  msg = g_strdup_printf(PATH_STRING1 PATH_STRING2, gconfdir);
   gtk_text_buffer_set_text(textbuffer, msg, -1);
+  g_free (gconfdir);
 }
 
 
