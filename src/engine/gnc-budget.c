@@ -29,6 +29,8 @@
 #include <time.h>
 #include "qof.h"
 
+#include "glib-compat.h"
+
 #include "Account.h"
 #include "Group.h"
 
@@ -100,12 +102,7 @@ gnc_budget_new(QofBook *book)
     budget = g_new0(GncBudget, 1);
     qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
 
-#ifdef HAVE_GLIB29
     g_date_set_time_t(&date, time(NULL));
-#else
-    /* Deprecated since glib-2.10; use g_date_set_time_t instead. */
-    g_date_set_time(&date, time(NULL));
-#endif
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
     recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 
