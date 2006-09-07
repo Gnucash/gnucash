@@ -719,6 +719,16 @@ function inst_gnucash() {
     # Remove the dependency_libs line from the installed .la files
     # because otherwise loading the modules literally takes hours.
     for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
+    find . -name '*.a' -exec rm '{}' ';'
+    qpopd
+
+    # Create a startup script that works without the msys shell
+    qpushd ${_GNUCASH_WFSDIR}/bin
+    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin" > gnucash.bat
+    echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
+    echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
+    echo "set GUILE_LOAD_PATH=${GUILE_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+    echo "start gnucash-bin" >> gnucash.bat
     qpopd
 }
 
