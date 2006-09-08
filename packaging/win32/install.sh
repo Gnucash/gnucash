@@ -503,7 +503,7 @@ function inst_gwrap() {
             cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
             ./configure \
                 --prefix=$_GWRAP_WFSDIR \
-                --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
+                --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`\\\\share\\\\guile\\\\site
             qpushd guile/g-wrap/gw
                 cp Makefile Makefile.bak
                 cat Makefile.bak | sed '/^libgw_guile_standard_la_LIBADD/s,$, ../../../libffi/libffi.la ../../../g-wrap/libgwrap-core-runtime.la,;/libgw_guile_gw_glib_la_LIBADD/s,$, ../../../g-wrap/libgwrap-core-runtime.la,' > Makefile
