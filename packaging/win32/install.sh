@@ -504,7 +504,6 @@ function inst_gwrap() {
             ./configure \
                 --prefix=$_GWRAP_WFSDIR \
                 --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`
-            LDFLAGS="-no-undefined"
             qpushd guile/g-wrap/gw
                 cp Makefile Makefile.bak
                 cat Makefile.bak | sed '/^libgw_guile_standard_la_LIBADD/s,$, ../../../libffi/libffi.la ../../../g-wrap/libgwrap-core-runtime.la,;/libgw_guile_gw_glib_la_LIBADD/s,$, ../../../g-wrap/libgwrap-core-runtime.la,' > Makefile
@@ -518,7 +517,7 @@ function inst_gwrap() {
                 cp Makefile Makefile.bak
                 cat Makefile.bak | sed '/^std_libs/s,\\$, ../../libffi/libffi.la \\,' > Makefile
             qpopd
-            make
+            make LDFLAGS="-no-undefined"
 	    qpushd guile/g-wrap
 		# Fix the filenames of the to be loaded DLLs
 		cp guile.scm guile.scm.bak
@@ -573,6 +572,8 @@ function inst_autotools() {
 function inst_libgsf() {
     setup libGSF
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    ZLIB_CPPFLAGS="-I${_GNOME_UDIR}/include"
+    ZLIB_LDFLAGS="-L${_GNOME_UDIR}/lib"
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet pkg-config --exists libgsf-1 libgsf-gnome-1
@@ -584,7 +585,9 @@ function inst_libgsf() {
 	    cp configure.in configure.in.bak
 	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#' > configure.in
 	    autoconf
-	    ./configure --prefix=$_LIBGSF_UDIR
+	    ./configure --prefix=$_LIBGSF_UDIR \
+	    CPPFLAGS="${ZLIB_CPPFLAGS}" \
+	    LDFLAGS="${ZLIB_LDFLAGS}"
 	    make
 	    make install
 	qpopd
