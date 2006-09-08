@@ -50,6 +50,11 @@
 #include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
 
+#ifdef HAVE_GETTEXT
+#  include <libintl.h>
+#  include <locale.h>
+#endif
+
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
