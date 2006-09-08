@@ -211,7 +211,6 @@ gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
-  gnc-dir.h.in \
   gnc-svninfo.h \
   ${gwmod_DATA} \
   ${gncmod_DATA} \
@@ -221,14 +220,6 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-	    -e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
-	    -e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
-	    -e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g'
-	mv $@.tmp $@
-
 gnc-version.h: _gnc-version.h
 	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h

@@ -44,16 +44,6 @@ gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 	chmod u+x $@
 
-BUILT_SOURCES = i18n.h
-
-i18n.h: i18n.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's#@-PACKAGE-@#${PACKAGE}#g' \
-            -e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g'
-	mv $@.tmp $@
-
-
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -93,7 +83,7 @@ bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrin
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in i18n.h.in \
+EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in \
 	gnucash.in gnucash-valgrind.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
