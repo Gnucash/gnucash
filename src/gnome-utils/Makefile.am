@@ -263,7 +263,7 @@ _gnc-svninfo.h: Makefile
 		fi ; \
 	fi
 
-BUILT_SOURCES = gnc-dir.h gnc-version.h
+BUILT_SOURCES = gnc-version.h
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
