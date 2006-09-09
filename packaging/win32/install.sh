@@ -22,6 +22,8 @@ qpushd "$(dirname $(unix_path "$0"))"
 SEPS_ACLOCAL_FLAGS=" "
 SEPS_AUTOTOOLS_CPPFLAGS=" "
 SEPS_AUTOTOOLS_LDFLAGS=" "
+SEPS_GNOME_CPPFLAGS=" "
+SEPS_GNOME_LDFLAGS=" "
 SEPS_GUILE_LOAD_PATH=";"
 SEPS_INTLTOOL_PERL=" "
 SEPS_PATH=":"
@@ -35,6 +37,8 @@ ENV_VARS="\
 ACLOCAL_FLAGS \
 AUTOTOOLS_CPPFLAGS \
 AUTOTOOLS_LDFLAGS \
+GNOME_CPPFLAGS \
+GNOME_LDFLAGS \
 GUILE_LOAD_PATH \
 INTLTOOL_PERL \
 PATH \
@@ -411,6 +415,8 @@ function inst_expat() {
 function inst_gnome() {
     setup Gnome platform
     _GNOME_UDIR=`unix_path $GNOME_DIR`
+    add_to_env -I$_GNOME_UDIR/include GNOME_CPPFLAGS
+    add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
@@ -476,6 +482,21 @@ function inst_gnome() {
         qpushd $GNOME_DIR
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
             [ -f lib/libz.dll.a ] || dlltool -D bin/zlib1.dll -d lib/zlib.def -l lib/libz.dll.a
+            [ -f bin/libintl-2.dll ] || cp bin/intl.dll bin/libintl-2.dll
+            _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
+            cat > lib/pkgconfig/freetype2.pc <<EOF
+prefix=/ignore
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: FreeType 2
+Description: A free, high-quality, and portable font engine.
+Version: $_FREETYPE_VERSION
+Requires:
+Libs: -L\${libdir} -lfreetype -lz
+Cflags: -I\${includedir}/freetype2
+EOF
         qpopd
     fi
     quiet gconftool-2 --version &&
@@ -572,8 +593,6 @@ function inst_autotools() {
 function inst_libgsf() {
     setup libGSF
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
-    ZLIB_CPPFLAGS="-I${_GNOME_UDIR}/include"
-    ZLIB_LDFLAGS="-L${_GNOME_UDIR}/lib"
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet pkg-config --exists libgsf-1 libgsf-gnome-1
@@ -586,8 +605,8 @@ function inst_libgsf() {
 	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#' > configure.in
 	    autoconf
 	    ./configure --prefix=$_LIBGSF_UDIR \
-	    CPPFLAGS="${ZLIB_CPPFLAGS}" \
-	    LDFLAGS="${ZLIB_LDFLAGS}"
+	    CPPFLAGS="${GNOME_CPPFLAGS}" \
+	    LDFLAGS="${GNOME_LDFLAGS}"
 	    make
 	    make install
 	qpopd
@@ -616,7 +635,9 @@ function inst_goffice() {
 		> goffice/Makefile.am
 	    automake
 	    autoconf
-	    ./configure --prefix=$_GOFFICE_UDIR
+	    ./configure --prefix=$_GOFFICE_UDIR \
+	    CPPFLAGS="${GNOME_CPPFLAGS}" \
+	    LDFLAGS="${GNOME_LDFLAGS}"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    [ -f $mydir/intltool-merge ] && \
 		( mv intltool-merge intltool-merge.bak ; \
@@ -680,8 +701,6 @@ function inst_gnucash() {
     setup GnuCash
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
-    POPT_CPPFLAGS="-I${_GNOME_UDIR}/include"
-    POPT_LDFLAGS="-L${_GNOME_UDIR}/lib"
     qpushd $REPOS_DIR
     cp configure.in configure.in.bak
     cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#TOOL$#TOOL([],[no-xml])#;/GUILE_LOAD_PATH/s,:,;,g' > configure.in
@@ -690,8 +709,8 @@ function inst_gnucash() {
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
 	--enable-schemas-install=no \
-	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${POPT_CPPFLAGS} -D_WIN32" \
-	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${POPT_LDFLAGS}" \
+	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} -D_WIN32" \
+	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS}" \
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
     # Add -no-undefined to LDFLAGS here manually because this must
