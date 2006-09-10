@@ -481,7 +481,12 @@ function inst_gnome() {
 	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         qpushd $GNOME_DIR
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
-            [ -f lib/libz.dll.a ] || dlltool -D bin/zlib1.dll -d lib/zlib.def -l lib/libz.dll.a
+            if [ ! -f lib/libz.dll.a ]; then
+                qpushd bin
+                    dlltool -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
+                    mv libz.dll.a ../lib
+                qpopd
+            fi
             [ -f bin/libintl-2.dll ] || cp bin/intl.dll bin/libintl-2.dll
             _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
             cat > lib/pkgconfig/freetype2.pc <<EOF
@@ -745,7 +750,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd ${_GNUCASH_WFSDIR}/bin
-    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin" > gnucash.bat
+    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
     echo "set GUILE_LOAD_PATH=${GUILE_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
