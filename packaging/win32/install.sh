@@ -535,9 +535,9 @@ function inst_gwrap() {
                 cat Makefile.bak | sed '/^libgw_guile_standard_la_LIBADD/s,$, ../../../libffi/libffi.la ../../../g-wrap/libgwrap-core-runtime.la,;/libgw_guile_gw_glib_la_LIBADD/s,$, ../../../g-wrap/libgwrap-core-runtime.la,' > Makefile
                 make standard.c gw-glib.c
                 cp standard.scm standard.scm.bak
-                cat standard.scm.bak | sed -c 's,\(libgw-guile-standard\),../lib/\1-0,' > standard.scm
+                cat standard.scm.bak | sed 's,"\(libgw-guile-standard\)","../lib/\1-0",' > standard.scm
                 cp gw-glib.scm gw-glib.scm.bak
-                cat gw-glib.scm.bak | sed -c 's,\(libgw-guile-gw-glib\),../lib/\1-0,' > gw-glib.scm
+                cat gw-glib.scm.bak | sed 's,"\(libgw-guile-gw-glib\)","../lib/\1-0",' > gw-glib.scm
             qpopd
             qpushd guile/test
                 cp Makefile Makefile.bak
