@@ -4,10 +4,8 @@ SUBDIRS = . overrides test
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  -DPREFIX=\"${prefix}\" \
-  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
-  -DDATADIR=\"${GNC_SHAREDIR}\" \
-  -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \

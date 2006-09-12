@@ -86,7 +86,7 @@ gnc_engine_init(int argc, char ** argv)
   gnc_engine_init_hook_t hook;
   GList * cur;
   gchar *tracefilename;
-  gchar *pkglibdir;
+  gchar *libdir;
 
   if (1 == engine_is_initialized) return;
 
@@ -107,16 +107,16 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  pkglibdir = gnc_path_get_pkglibdir ();
+  libdir = gnc_path_get_libdir ();
   for (lib = libs; lib->lib ; lib++)
   {
-      if (qof_load_backend_library(pkglibdir, lib->lib))
+      if (qof_load_backend_library(libdir, lib->lib))
       {
           engine_is_initialized = 1;
       }
       else
       {
-	  g_message("failed to load %s from %s\n", lib->lib, pkglibdir);
+	  g_message("failed to load %s from %s\n", lib->lib, libdir);
 	  /* If this is a required library, stop now! */
 	  if (lib->required)
 	  {
@@ -124,7 +124,7 @@ gnc_engine_init(int argc, char ** argv)
 	  }
       }
   }
-  g_free (pkglibdir);
+  g_free (libdir);
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

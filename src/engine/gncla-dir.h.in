@@ -23,7 +23,12 @@
  *  02110-1301, USA.
  */
 
-#define GNC_LIBDIR "@-libdir-@"
+#define PREFIX "@-prefix-@"
+#define PKGDATADIR "@-pkgdatadir-@"
+#define PKGSYSCONFDIR "@-pkgsysconfdir-@"
+
+#define LIBDIR "@-libdir-@"
+#define PKGLIBDIR "@-pkglibdir-@"
 
 #define LOCALE_DIR  "@-LOCALE_DIR-@"
 

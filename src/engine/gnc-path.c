@@ -38,21 +38,21 @@ gchar *gnc_path_get_libdir()
 }
 
 /** Returns the datadir path, usually
- * "$prefix/share". Needed for gnome_program_init().
+ * "$prefix/share/gnucash". Needed for gnome_program_init().
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_datadir()
+gchar *gnc_path_get_pkgdatadir()
 {
-  return g_strdup (DATADIR);
+  return g_strdup (PKGDATADIR);
 }
 
 /** Returns the sysconfdir path, usually
- * "$prefix/etc". Needed for gnome_program_init().
+ * "$prefix/etc/gnucash". Needed for gnome_program_init().
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_sysconfdir()
+gchar *gnc_path_get_pkgsysconfdir()
 {
-  return g_strdup (SYSCONFDIR);
+  return g_strdup (PKGSYSCONFDIR);
 }
 
 
@@ -62,7 +62,7 @@ gchar *gnc_path_get_sysconfdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkglibdir()
 {
-  return g_strdup (GNC_LIBDIR);
+  return g_strdup (PKGLIBDIR);
 }
 
 /** Returns the glade file path, usually

@@ -37,17 +37,17 @@ gchar *gnc_path_get_prefix(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir(void);
 
-/** Returns the datadir path, usually
- * "$prefix/share". Needed for gnome_program_init(void).
+/** Returns the pkgdatadir path, usually
+ * "$prefix/share/gnucash". Needed for gnome_program_init(void).
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_datadir(void);
+gchar *gnc_path_get_pkgdatadir(void);
 
-/** Returns the sysconfdir path, usually
- * "$prefix/etc". Needed for gnome_program_init(void).
+/** Returns the pkgsysconfdir path, usually
+ * "$prefix/etc/gnucash". Needed for gnome_program_init(void).
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_sysconfdir(void);
+gchar *gnc_path_get_pkgsysconfdir(void);
 
 
 /** Returns the pkglibdir path, usually
