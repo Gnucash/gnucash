@@ -740,6 +740,15 @@ function inst_gnucash() {
     for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
     qpopd
 
+    qpushd ${_GNUCASH_WFSDIR}/etc/gconf/schemas
+    for file in *.schemas; do
+        gconftool-2 \
+            --config-source=xml:merged:${_GNUCASH_WFSDIR}/etc/gconf/gconf.xml.defaults \
+            --install-schema-file $file
+    done
+    gconftool-2 --shutdown
+    qpopd
+
     # Create a startup script that works without the msys shell
     qpushd ${_GNUCASH_WFSDIR}/bin
     echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
