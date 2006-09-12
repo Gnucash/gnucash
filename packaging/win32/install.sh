@@ -300,15 +300,11 @@ function inst_guile() {
 	    cp config.status config.status.bak
 	    cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
 	    ./config.status
-	    for file in {srfi,libguile-ltdl,libguile}/Makefile; do
-	        cp $file $file.bak
-	        cat $file.bak | sed '/^lib.*LDFLAGS =/s,\(\\*\)$, -no-undefined \1,' > $file
-	    done
 	    qpushd guile-config
 	      cp Makefile Makefile.bak
 	      cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
 	    qpopd
-	    make
+	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex -no-undefined"
 	    make install
 	qpopd
 	qpushd $GUILE_DIR/bin
@@ -718,10 +714,6 @@ function inst_gnucash() {
 	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS}" \
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
-    # Add -no-undefined to LDFLAGS here manually because this must
-    # not be given during the ./configure tests
-    cp config.status config.status.bak ; sed 's/\(s,@LDFLAGS@,.*\),/\1 -no-undefined,/' config.status.bak > config.status
-    ./config.status
     # Windows DLLs don't need relinking
     cp ltmain.sh ltmain.sh.bak ; grep -v "need_relink=yes" ltmain.sh.bak > ltmain.sh
     cp libtool libtool.bak ; grep -v "need_relink=yes" libtool.bak > libtool
@@ -729,7 +721,7 @@ function inst_gnucash() {
     # because executable linking is so painfully slow on mingw
     perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
 
-    make
+    make LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -no-undefined"
 
     # Try to fix the paths in the "gnucash" script
     qpushd src/bin
