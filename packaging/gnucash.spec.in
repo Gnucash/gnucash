@@ -187,6 +187,7 @@ fi
 %{_datadir}/gnucash
 %{_datadir}/applications/*
 %{_datadir}/xml/gnucash/xsl/*
+%{_datadir}/pixmaps/*
 %{_sysconfdir}/gconf/schemas/apps_gnucash*
 %if %{_with_ofx}
 %exclude %{_libdir}/gnucash/libgncmod-ofx*
