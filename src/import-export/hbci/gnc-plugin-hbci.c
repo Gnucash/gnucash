@@ -76,6 +76,7 @@ static void gnc_plugin_hbci_cmd_issue_transaction (GtkAction *action, GncMainWin
 static void gnc_plugin_hbci_cmd_issue_inttransaction (GtkAction *action, GncMainWindowActionData *data);
 #endif
 static void gnc_plugin_hbci_cmd_issue_direct_debit (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_mt940_import (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_hbci_cmd_dtaus_import (GtkAction *action, GncMainWindowActionData *data);
 
 
@@ -114,6 +115,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 
   /* File -> Import menu item */
+  { "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import MT940"), NULL,
+    N_("Import a MT940 file into GnuCash"),
+    G_CALLBACK (gnc_plugin_hbci_cmd_mt940_import) },
   { "DtausImportAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
     N_("Import a DTAUS file into GnuCash and send the transfers online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_import) },
@@ -524,6 +528,13 @@ gnc_plugin_hbci_cmd_dtaus_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
   gnc_file_aqbanking_import ("dtaus", "default", TRUE);
+}
+
+static void
+gnc_plugin_hbci_cmd_mt940_import (GtkAction *action,
+				  GncMainWindowActionData *data)
+{
+  gnc_file_aqbanking_import ("swift", "swift-mt940", FALSE);
 }
 /************************************************************
  *                    Plugin Bootstrapping                   *

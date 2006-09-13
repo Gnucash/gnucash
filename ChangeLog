@@ -1,3 +1,11 @@
+2006-09-13  Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-plugin-hbci.c: Move the MT940
+	importer action from the mt940 into the hbci plugin because in the
+	hbci plugin everything is already there. From now on, MT940
+	importing is available as soon as --enable-hbci is switched
+	on. The mt940 plugin can be removed from SVN now.
+
 2006-09-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/gnc-path.h, gnc-path.c: Add new file with utility
