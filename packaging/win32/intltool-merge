@@ -1,9 +1,0 @@
-#!/bin/sh
-#
-# Fake intltool-merge
-
-if [ "$1" != "-x" -a "$2" != "-u" ] ; then
-  exit 0
-fi
-
-cat "$6" | sed 's/<_/</g;s#</_#</#g;s#</ _#</ #g' > "$7"

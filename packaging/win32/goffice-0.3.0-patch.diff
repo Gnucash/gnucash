@@ -105,6 +105,15 @@ diff -ur goffice-0.3.0/goffice/utils/go-file.c goffice-0.3.0-mingw/goffice/utils
  goffice_cairo_reqs="
 --- goffice-0.3.0/goffice/Makefile.am~	Sat Aug 26 20:52:04 2006
 +++ goffice-0.3.0/goffice/Makefile.am	Sat Aug 26 20:58:53 2006
+@@ -30,7 +30,7 @@
+ if WITH_WIN32
+ libgoffice_0_la_DEPENDENCIES = goffice.def
+ libgoffice_0_la_LDFLAGS += -no-undefined -export-symbols goffice.def
+-libgoffice_0_la_LIBADD += -luuid -lhtmlhelp -lurlmon
++libgoffice_0_la_LIBADD += -luuid
+ endif
+ 
+ BUILT_SOURCES =	goffice-paths.h
 @@ -66,14 +66,14 @@
  include $(top_srcdir)/goffice.mk
  

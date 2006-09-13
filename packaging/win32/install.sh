@@ -602,9 +602,6 @@ function inst_libgsf() {
     else
 	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
 	qpushd $TMP_UDIR/libgsf-*
-	    cp configure.in configure.in.bak
-	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#$#([],[no-xml])#' > configure.in
-	    autoconf
 	    ./configure --prefix=$_LIBGSF_UDIR \
 	    CPPFLAGS="${GNOME_CPPFLAGS}" \
 	    LDFLAGS="${GNOME_LDFLAGS}"
@@ -626,25 +623,14 @@ function inst_goffice() {
 	wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
 	mydir=`pwd`
 	qpushd $TMP_UDIR/goffice-*
-	    cp configure.in configure.in.bak
-	    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#)$#,[no-xml])#' > configure.in
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
-	    cp goffice/Makefile.am goffice/Makefile.am.bak
-	    cat goffice/Makefile.am.bak \
-		| sed '/LIBADD/s#-lurlmon##;s#-lhtmlhelp##' \
-		> goffice/Makefile.am
 	    automake
 	    autoconf
 	    ./configure --prefix=$_GOFFICE_UDIR \
 	    CPPFLAGS="${GNOME_CPPFLAGS}" \
 	    LDFLAGS="${GNOME_LDFLAGS}"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
-	    [ -f $mydir/intltool-merge ] && \
-		( mv intltool-merge intltool-merge.bak ; \
-		  cp -p $mydir/intltool-merge . )
-	    echo libgoffice_init >> goffice/local.def
-	    echo libgoffice_shutdown >> goffice/local.def
 	    make
 	    make install
 	qpopd
@@ -703,8 +689,10 @@ function inst_gnucash() {
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     qpushd $REPOS_DIR
-    cp configure.in configure.in.bak
-    cat configure.in.bak | sed '/AC_PROG_INTLTOOL/s#TOOL$#TOOL([],[no-xml])#;/GUILE_LOAD_PATH/s,:,;,g' > configure.in
+    if grep "GUILE_LOAD_PATH.*:" configure.in; then
+        cp configure.in configure.in.bak
+        cat configure.in.bak | sed '/GUILE_LOAD_PATH/s,:,;,g' > configure.in
+    fi
     ./autogen.sh
     ./configure \
 	--prefix=$_GNUCASH_WFSDIR \
