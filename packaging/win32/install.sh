@@ -317,7 +317,7 @@ function inst_guile() {
 	unzip $DOWNLOAD_DIR/slib*.zip -d $_SLIB_DIR
 	qpushd $_SLIB_DIR/slib
 	    cp guile.init guile.init.bak
-	    echo "(define software-type (lambda () 'MS-DOS))" >> guile.init
+	    echo "(define software-type (lambda () 'ms-dos))" >> guile.init
 	qpopd
     fi
     add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
