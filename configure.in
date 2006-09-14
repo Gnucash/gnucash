@@ -433,6 +433,11 @@ AC_TRY_RUN([
 	       sizeof(gint64)))
 ],[
   AC_MSG_RESULT(no)
+],[
+  AC_MSG_RESULT(assuming yes)
+  AC_CHECK_LIB(guile, scm_long_long2num,
+               AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >=
+	       sizeof(gint64)))
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 
@@ -452,6 +457,8 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(no)
   AC_MSG_ERROR(cannot continue, size of unsigned long too small.)
+],[
+  AC_MSG_RESULT(assuming yes)
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 
