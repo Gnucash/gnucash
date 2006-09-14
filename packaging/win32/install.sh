@@ -32,7 +32,6 @@ SEPS_READLINE_CPPFLAGS=" "
 SEPS_READLINE_LDFLAGS=" "
 SEPS_REGEX_CPPFLAGS=" "
 SEPS_REGEX_LDFLAGS=" "
-SEPS_SCHEME_LIBRARY_PATH=";"
 ENV_VARS="\
 ACLOCAL_FLAGS \
 AUTOTOOLS_CPPFLAGS \
@@ -47,7 +46,6 @@ READLINE_CPPFLAGS \
 READLINE_LDFLAGS \
 REGEX_CPPFLAGS \
 REGEX_LDFLAGS \
-SCHEME_LIBRARY_PATH \
 "
 
 function setup() {
@@ -262,7 +260,6 @@ function inst_guile() {
     _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     add_to_env $_GUILE_UDIR/bin PATH
-    add_to_env $_GUILE_WFSDIR/share/guile/site/slib/ SCHEME_LIBRARY_PATH
     if quiet guile -c '(use-modules (srfi srfi-39))' &&
         quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
     then
@@ -312,12 +309,14 @@ function inst_guile() {
 	    mv libguile-srfi-srfi-4-v-1-1.dll libguile-srfi-srfi-4-v-1.dll
 	    mv libguile-srfi-srfi-13-14-v-1-1.dll libguile-srfi-srfi-13-14-v-1.dll
 	qpopd
-	_SLIB_DIR=$GUILE_DIR\\share\\guile\\site
+        _GUILE_MAJOR=`echo $_GUILE_UDIR/share/guile/1.* | sed 's,.*/,,'`
+	_SLIB_DIR=$GUILE_DIR\\share\\guile\\$_GUILE_MAJOR
 	mkdir -p $_SLIB_DIR
 	unzip $DOWNLOAD_DIR/slib*.zip -d $_SLIB_DIR
 	qpushd $_SLIB_DIR/slib
 	    cp guile.init guile.init.bak
-	    echo "(define software-type (lambda () 'ms-dos))" >> guile.init
+            sed '/lambda.*'"'"'unix/a\
+(define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
 	qpopd
     fi
     add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
@@ -742,7 +741,7 @@ function inst_gnucash() {
     echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
-    echo "set GUILE_LOAD_PATH=${GUILE_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+    echo "set GUILE_LOAD_PATH=${GWRAP_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
     echo "start gnucash-bin" >> gnucash.bat
     qpopd
 }
