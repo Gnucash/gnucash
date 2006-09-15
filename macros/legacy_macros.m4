@@ -116,7 +116,18 @@ int main ()
 }
 ],
         am_cv_scanf_lld=yes,
-        am_cv_scanf_lld=no))
+        am_cv_scanf_lld=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_lld=no
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
   if test $am_cv_scanf_lld = yes; then
     AC_DEFINE(HAVE_SCANF_LLD, 1,
       [Define if scanf supports %lld conversions.])
@@ -146,7 +157,18 @@ int main ()
 }
 ],
         am_cv_scanf_qd=yes,
-        am_cv_scanf_qd=no))
+        am_cv_scanf_qd=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_qd=no
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
   if test $am_cv_scanf_qd = yes; then
     AC_DEFINE(HAVE_SCANF_QD, 1,
       [Define if scanf supports %qd conversions.])
@@ -176,7 +198,18 @@ int main ()
 }
 ],
         am_cv_scanf_i64d=yes,
-        am_cv_scanf_i64d=no))
+        am_cv_scanf_i64d=no,[[
+	# When cross-compiling, simply insert known values here
+	case $host in
+	  *-*-mingw*)
+	    # For mingw we know the result
+	    am_cv_scanf_i64d=yes
+	    ;;
+	  *)
+	    AC_MSG_ERROR([scanf support unknown.])
+	    ;;
+	esac
+]]))
   if test $am_cv_scanf_i64d = yes; then
     AC_DEFINE(HAVE_SCANF_I64D, 1,
       [Define if scanf supports %I64d conversions.])
