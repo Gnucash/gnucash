@@ -84,6 +84,7 @@ function add_to_env() {
 
 function prepare() {
     mkdir -p $TMP_DIR
+    mkdir -p $DOWNLOAD_DIR
     for _ENV in $ENV_VARS; do
 	eval "${_ENV}_BASE"'=$'"${_ENV}"
 	eval "${_ENV}_ADDS="
@@ -126,7 +127,7 @@ function wget_unpacked() {
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
-    if quiet $_WGET_UDIR/wget --version
+    if quiet $_WGET_UDIR/wget --version || quiet wget --version
     then
         echo "already installed.  skipping."
     else
@@ -179,7 +180,7 @@ function inst_mingw() {
 function inst_unzip() {
     setup Unzip
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
-    if quiet $_UNZIP_UDIR/bin/unzip --help
+    if quiet $_UNZIP_UDIR/bin/unzip --help || quiet unzip --help
     then
         echo "unzip already installed.  skipping."
     else

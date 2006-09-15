@@ -1,5 +1,8 @@
 These scripts try to download and install a Windows/mingw32 build
-environment for GnuCash.
+environment for GnuCash on Windows. 
+
+For cross-compiling the windows executable on Linux, see the lower
+section of this file.
 
 Before you start with the automated build, you have to complete these
 steps manually. The directory variables are set in custom.sh.
@@ -28,3 +31,23 @@ Start/Enter any MSYS shell. Let the automated build begin by:
 Good luck!
 
 More information is collected on http://wiki.gnucash.org/wiki/Windows
+
+--------------------------
+
+Cross-compiling a Windows/mingw32 executable of GnuCash on a Linux
+host system.
+
+These steps need to be performed:
+
+* Edit the file create_cross_mingw.sh and set the PREFIX= variable to
+  the preferred prefix of the mingw32 gcc/binutils on your Linux. 
+
+* Then run the script create_cross_mingw.sh - it will download,
+  compile, and install a mingw32 toolchain.
+
+* Run "dos2unix custom.sh install.sh" and in custom.sh, make a
+  search&replace of '\\' into '/'.
+
+* Edit custom.sh to set your preferred directory paths.
+
+(... to be continued ...)
