@@ -25,6 +25,8 @@ SEPS_AUTOTOOLS_LDFLAGS=" "
 SEPS_GNOME_CPPFLAGS=" "
 SEPS_GNOME_LDFLAGS=" "
 SEPS_GUILE_LOAD_PATH=";"
+SEPS_GUILE_CPPFLAGS=" "
+SEPS_GUILE_LDFLAGS=" "
 SEPS_INTLTOOL_PERL=" "
 SEPS_PATH=":"
 SEPS_PKG_CONFIG_PATH=":"
@@ -39,6 +41,8 @@ AUTOTOOLS_LDFLAGS \
 GNOME_CPPFLAGS \
 GNOME_LDFLAGS \
 GUILE_LOAD_PATH \
+GUILE_CPPFLAGS \
+GUILE_LDFLAGS \
 INTLTOOL_PERL \
 PATH \
 PKG_CONFIG_PATH \
@@ -259,6 +263,8 @@ function inst_guile() {
     setup Guile
     _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
+    add_to_env -I$_GUILE_UDIR/include GUILE_CPPFLAGS
+    add_to_env -L$_GUILE_UDIR/lib GUILE_LDFLAGS
     add_to_env $_GUILE_UDIR/bin PATH
     if quiet guile -c '(use-modules (srfi srfi-39))' &&
         quiet guile -c "(use-modules (ice-9 slib)) (require 'printf)"
@@ -284,7 +290,7 @@ function inst_guile() {
                 cat raw-ltdl.c.bak | sed 's,\(SCMLTSTATIC\) LT_GLOBAL_DATA,\1,' > raw-ltdl.c
                 touch upstream/ltdl.c.diff
             qpopd
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
 	        --disable-elisp \
 	        --disable-networking \
 	        --disable-dependency-tracking \
@@ -522,7 +528,9 @@ function inst_gwrap() {
             qpopd
             cp configure configure.bak
             cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
+		CPPFLAGS="${GUILE_CPPFLAGS}" \
+		LDFLAGS="${GUILE_LDFLAGS}" \
                 --prefix=$_GWRAP_WFSDIR \
                 --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`\\\\share\\\\guile\\\\site
             qpushd guile/g-wrap/gw
@@ -565,19 +573,19 @@ function inst_autotools() {
         wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/autoconf-*
             echo "building autoconf..."
-           ./configure --prefix=$_AUTOTOOLS_UDIR
+           ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         qpushd $TMP_UDIR/automake-*
             echo "building automake..."
-            ./configure --prefix=$_AUTOTOOLS_UDIR
+            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         qpushd $TMP_UDIR/libtool-*
             echo "building libtool..."
-            ./configure --prefix=$_AUTOTOOLS_UDIR
+            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
@@ -601,7 +609,7 @@ function inst_libgsf() {
     else
 	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
 	qpushd $TMP_UDIR/libgsf-*
-	    ./configure --prefix=$_LIBGSF_UDIR \
+	    ./configure ${HOST_XCOMPILE} --prefix=$_LIBGSF_UDIR \
 	    CPPFLAGS="${GNOME_CPPFLAGS}" \
 	    LDFLAGS="${GNOME_LDFLAGS}"
 	    make
@@ -626,7 +634,7 @@ function inst_goffice() {
 		patch -p1 < $GOFFICE_PATCH
 	    automake
 	    autoconf
-	    ./configure --prefix=$_GOFFICE_UDIR \
+	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
 	    CPPFLAGS="${GNOME_CPPFLAGS}" \
 	    LDFLAGS="${GNOME_LDFLAGS}"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
@@ -648,7 +656,7 @@ function inst_glade() {
     else
         wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/glade3-*
-            ./configure --prefix=$_GLADE_WFSDIR
+            ./configure ${HOST_XCOMPILE} --prefix=$_GLADE_WFSDIR
             make
             make install
         qpopd
@@ -693,12 +701,12 @@ function inst_gnucash() {
         cat configure.in.bak | sed '/GUILE_LOAD_PATH/s,:,;,g' > configure.in
     fi
     ./autogen.sh
-    ./configure \
+    ./configure ${HOST_XCOMPILE} \
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
 	--enable-schemas-install=no \
-	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} -D_WIN32" \
-	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS}" \
+	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
+	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
     # Windows DLLs don't need relinking

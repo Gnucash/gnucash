@@ -10,6 +10,13 @@ REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
 REPOS_DIR=$GLOBAL_DIR\\repos
 GNUCASH_DIR=$GLOBAL_DIR\\gnucash
 
+####
+HOST_XCOMPILE=""
+# For cross-compiling, uncomment the following lines:
+#HOST_XCOMPILE="--host=mingw32"
+#PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+####
+
 MSYS_DIR=$GLOBAL_DIR\\msys
 
 WGET_DIR=$GLOBAL_DIR\\wget
