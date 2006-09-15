@@ -52,7 +52,7 @@ GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/slib3a3.zip"
 GUILE_DIR=$GLOBAL_DIR\\guile
 
-OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-v0.9.8b.exe"
+OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-0_9_8c.exe"
 OPENSSL_DIR=$GLOBAL_DIR\\openssl
 
 PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
