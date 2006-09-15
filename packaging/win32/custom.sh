@@ -12,9 +12,12 @@ GNUCASH_DIR=$GLOBAL_DIR\\gnucash
 
 ####
 HOST_XCOMPILE=""
+cross_compile="no"
 # For cross-compiling, uncomment the following lines:
 #HOST_XCOMPILE="--host=mingw32"
 #PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+#PATH=/opt/mingw32:$PATH
+#cross_compile=yes
 ####
 
 MSYS_DIR=$GLOBAL_DIR\\msys
@@ -149,9 +152,13 @@ add_step inst_unzip
 add_step inst_regex
 add_step inst_readline
 add_step inst_indent
-add_step inst_active_perl
+if test x$cross_compile != xyes ; then
+ add_step inst_active_perl
+fi
 add_step inst_guile
-add_step inst_openssl
+if test x$cross_compile != xyes ; then
+ add_step inst_openssl
+fi
 add_step inst_pexports
 add_step inst_libxml2
 add_step inst_expat

@@ -354,9 +354,14 @@ function inst_pexports() {
     else
         wget_unpacked $PEXPORTS_URL $DOWNLOAD_DIR $PEXPORTS_DIR
         qpushd $PEXPORTS_DIR
-            mv pexports-* mydir
-            mv mydir/* .
-            rmdir mydir
+	    mv pexports-* mydir
+	    mv mydir/* .
+	    rmdir mydir
+	    if test x$cross_compile = xyes ; then
+		cd src
+		make
+		cp pexports.exe ../bin/pexports
+	    fi
         qpopd
     fi
     quiet which pexports || die "pexports unavailable"
