@@ -32,6 +32,8 @@
 #ifndef __GNC_PLUGIN_PAGE_SX_LIST_H
 #define __GNC_PLUGIN_PAGE_SX_LIST_H
 
+#include "config.h"
+#include <glib/gi18n.h>
 #include <gtk/gtkwindow.h>
 #include "SchedXaction.h"
 #include "gnc-plugin-page.h"
@@ -71,6 +73,73 @@ GType gnc_plugin_page_sx_list_get_type (void);
  * @return The newly created plugin page.
  **/
 GncPluginPage *gnc_plugin_page_sx_list_new  (void);
+
+
+/** ------------------------------------------------------------ **/
+typedef struct _GncSxInstanceDenseCalAdapter GncSxInstanceDenseCalAdapter;
+typedef struct _GncSxInstanceModel GncSxInstanceModel;
+typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
+
+struct _GncSxInstanceModel
+{
+     GObject parent;
+
+     /* private */
+     gint qof_event_handler_id;
+
+     /* signals */
+     /* void (*added)(GncSxInstance *sx); // gpointer user_data */
+     /* void (*removed)(GncSxInstance *sx); // gpointer user_data */
+     /* void (*changed)(GncSxInstance *inst); // gpointer user_data */
+
+     /* public */
+     GDate range_end;
+     GList *sx_instance_list; /* <GncSxInstances*> */
+};
+
+typedef struct _GncSxInstanceModelClass
+{
+     GObjectClass parent;
+
+     guint removing_signal_id;
+     guint updated_signal_id;
+     guint added_signal_id;
+} GncSxInstanceModelClass;
+
+typedef struct _GncSxInstances
+{
+     SchedXaction *sx;
+     GHashTable /** <char*,NULL> **/ *variable_names;
+     gboolean variable_names_parsed;
+     
+     GDate next_instance_date;
+     
+     /** GList<GncSxInstance*> **/
+     GList *list;
+} GncSxInstances;
+
+typedef enum 
+{
+     IGNORED, POSTPONED, TO_CREATE, REMINDER, MAX_STATE
+} GncSxInstanceType;
+
+typedef struct _GncSxVariable
+{
+     GString *name;
+     GString *value;
+     gboolean editable;
+} GncSxVariable;
+
+typedef struct _GncSxInstance
+{
+     GncSxInstances *parent;
+     GncSxInstanceType type;
+     GDate date;
+     GHashTable *variable_bindings;
+} GncSxInstance;
+
+GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
+/** ------------------------------------------------------------ **/
 
 G_END_DECLS
 

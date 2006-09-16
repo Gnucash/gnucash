@@ -58,6 +58,7 @@
 
 /* FIXME: temp until variable-related-stuff settled. */
 #include "dialog-sxsincelast.h"
+#include "dialog-sx-since-last-run.h"
 
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>

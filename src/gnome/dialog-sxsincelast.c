@@ -406,6 +406,7 @@ static guint gnc_sxsld_menu_n_entries = G_N_ELEMENTS (gnc_sxsld_menu_entries);
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
  **/
+#if 0
 void
 gnc_sx_sxsincelast_book_opened (void)
 {
@@ -427,7 +428,7 @@ gnc_sx_sxsincelast_book_opened (void)
        -(ret));
   }
 }
-
+#endif // 0 
 
 static gboolean
 show_handler (const char *class, gint component_id,
@@ -455,6 +456,7 @@ show_handler (const char *class, gint component_id,
  * [e.g., for book-open-hook: do nothing; for menu-selection: display an info
  *  dialog stating there's nothing to do.]
  **/
+#if 0
 gint
 gnc_ui_sxsincelast_dialog_create()
 {
@@ -488,6 +490,7 @@ gnc_ui_sxsincelast_dialog_create()
         sxsincelast_init( sxsld );
         return autoCreateCount;
 }
+#endif //0
 
 static void 
 clist_set_all_cols_autoresize( GtkCList *cl, guint n_cols )
@@ -1697,6 +1700,10 @@ generate_instances(SchedXaction *sx,
         reminderTuple *rt;
         reminderInstanceTuple *rit;
         void *seqStateData;
+
+        void *foo = sxsincelast_init;
+        foo = sxsincelast_populate;
+        foo = show_handler;
 
         g_assert( g_date_valid(end) );
         g_assert( g_date_valid(reminderEnd) );

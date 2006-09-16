@@ -1,3 +1,14 @@
+2006-09-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-plugin-page-sx-list.c (sxsl_get_sx_vars): Add
+	variable extraction to instance-model creation.  The
+	GncSxInstances now has a hashtable of variables parsed from the
+	formula, and the GncSxInstance has a copy of that variables hash.
+	Not finished, but mostly in place.
+
+	* src/gnome/dialog-sx-since-last-run.c: New, simplified version of
+	the since-last-run dialog.  GncSxSlrTreeModelAdapter.
+
 2006-07-27  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.c

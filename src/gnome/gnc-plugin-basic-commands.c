@@ -42,6 +42,7 @@
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-sxsincelast.h"
+#include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
 #include "druid-acct-period.h"
 #include "druid-loan.h"

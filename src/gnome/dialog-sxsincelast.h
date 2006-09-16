@@ -37,8 +37,8 @@
  * [e.g., for book-open-hook: do nothing; for menu-selection: display an info
  *  dialog stating there's nothing to do.]
  **/
-gint gnc_ui_sxsincelast_dialog_create( void );
-void gnc_sx_sxsincelast_book_opened (void);
+//gint gnc_ui_sxsincelast_dialog_create( void );
+//void gnc_sx_sxsincelast_book_opened (void);
 
 /**
  * Returns the varaibles from the Splits of the given SchedXaction as the
