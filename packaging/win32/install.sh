@@ -163,7 +163,7 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
-    if quiet gcc --version
+    if quiet ${CC} --version
     then
         echo "mingw already installed.  skipping."
     else
@@ -174,7 +174,7 @@ function inst_mingw() {
         $LAST_FILE
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
-    quiet gcc --version && quiet ld --help || die "mingw not installed correctly"
+    quiet ${CC} --version && quiet ${LD} --help || die "mingw not installed correctly"
 }
 
 function inst_unzip() {
@@ -198,7 +198,7 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    if quiet ld $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
+    if quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
     then
         echo "regex already installed.  skipping."
     else
@@ -206,7 +206,7 @@ function inst_regex() {
         wget_unpacked $REGEX_BIN_URL $DOWNLOAD_DIR $REGEX_DIR
         wget_unpacked $REGEX_LIB_URL $DOWNLOAD_DIR $REGEX_DIR
     fi
-    quiet ld $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile || die "regex not installed correctly"
+    quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile || die "regex not installed correctly"
 }
 
 function inst_readline() {
@@ -215,7 +215,7 @@ function inst_readline() {
     add_to_env -I$_READLINE_UDIR/include READLINE_CPPFLAGS
     add_to_env -L$_READLINE_UDIR/lib READLINE_LDFLAGS
     add_to_env $_READLINE_UDIR/bin PATH
-    if quiet ld $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
+    if quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile
     then
         echo "readline already installed.  skipping."
     else
@@ -223,7 +223,7 @@ function inst_readline() {
         wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
         wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
     fi
-    quiet ld $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
+    quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
 }
 
 function inst_indent() {
@@ -326,7 +326,9 @@ function inst_guile() {
 (define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
 	qpopd
     fi
-    add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
+    if test x$cross_compile != xyes ; then
+	add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
+    fi
     guile -c '(use-modules (srfi srfi-39))' &&
     guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
 }
@@ -370,7 +372,7 @@ function inst_pexports() {
 function inst_libxml2() {
     setup LibXML2
     _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
-    if quiet ld -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile
+    if quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile
     then
         echo "libxml2 already installed.  skipping."
     else
@@ -380,7 +382,7 @@ function inst_libxml2() {
             cp -r mydir/* .
             rm -rf mydir
             pexports bin/libxml2.dll > libxml2.def
-            dlltool --input-def libxml2.def --output-lib lib/libxml2.a
+            ${DLLTOOL} --input-def libxml2.def --output-lib lib/libxml2.a
             rm libxml2.def
             _LIBXML2_VERSION=`echo $LAST_FILE | sed 's#.*libxml2-\(.*\).win32.zip#\1#'`
             mkdir -p lib/pkgconfig
@@ -399,7 +401,7 @@ Cflags: -I\${includedir}
 EOF
         qpopd
     fi
-    quiet ld -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
+    quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
 }
 
 function inst_expat() {
@@ -490,7 +492,7 @@ function inst_gnome() {
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
             if [ ! -f lib/libz.dll.a ]; then
                 qpushd bin
-                    dlltool -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
+                    ${DLLTOOL} -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
                     mv libz.dll.a ../lib
                 qpopd
             fi
@@ -510,6 +512,17 @@ Libs: -L\${libdir} -lfreetype -lz
 Cflags: -I\${includedir}/freetype2
 EOF
         qpopd
+    fi
+    if test x$cross_compile = xyes ; then
+        qpushd $GNOME_DIR/lib/pkgconfig
+	    perl -pi.bak -e"s!^prefix=.*\$!prefix=$GNOME_DIR!" *.pc
+	    #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+	qpopd
+	# Latest gnome-dev packages don't ship with *.la files
+	# anymore. What do we do...?
+        #qpushd $GNOME_DIR/bin
+	#    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
+	#qpopd
     fi
     quiet gconftool-2 --version &&
     pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
@@ -579,13 +592,13 @@ function inst_autotools() {
         wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/autoconf-*
             echo "building autoconf..."
-           ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
+           ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
         qpushd $TMP_UDIR/automake-*
             echo "building automake..."
-            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
+            ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
@@ -598,7 +611,9 @@ function inst_autotools() {
     fi
     add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+    if test x$cross_compile != xyes ; then
+	add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+    fi
     quiet autoconf --help &&
     quiet automake --help &&
     quiet libtool --help || die "autotools not installed correctly"
@@ -638,6 +653,7 @@ function inst_goffice() {
 	qpushd $TMP_UDIR/goffice-*
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
+	    aclocal ${ACLOCAL_FLAGS}
 	    automake
 	    autoconf
 	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \

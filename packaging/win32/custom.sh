@@ -12,12 +12,18 @@ GNUCASH_DIR=$GLOBAL_DIR\\gnucash
 
 ####
 HOST_XCOMPILE=""
-cross_compile="no"
+cross_compile=no
+LD=ld
+CC=gcc
+DLLTOOL=dlltool
 # For cross-compiling, uncomment the following lines:
-#HOST_XCOMPILE="--host=mingw32"
-#PKG_CONFIG_PATH="" # to avoid using the host's installed packages
-#PATH=/opt/mingw32:$PATH
-#cross_compile=yes
+# HOST_XCOMPILE="--host=mingw32"
+# PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+# PATH=/opt/mingw32/bin:$PATH
+# cross_compile=yes
+# LD=mingw32-ld
+# CC=mingw32-gcc
+# DLLTOOL=mingw32-dlltool
 ####
 
 MSYS_DIR=$GLOBAL_DIR\\msys
