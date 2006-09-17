@@ -16,14 +16,16 @@ cross_compile=no
 LD=ld
 CC=gcc
 DLLTOOL=dlltool
+LIBTOOLIZE=libtoolize
 # For cross-compiling, uncomment the following lines:
 # HOST_XCOMPILE="--host=mingw32"
 # PKG_CONFIG_PATH="" # to avoid using the host's installed packages
-# PATH=/opt/mingw32/bin:$PATH
+# PATH=/opt/mingw32/bin:/opt/mingw32/mingw32/bin:$PATH
 # cross_compile=yes
 # LD=mingw32-ld
 # CC=mingw32-gcc
 # DLLTOOL=mingw32-dlltool
+# LIBTOOLIZE=$GLOBAL_DIR/autotools/bin/libtoolize
 ####
 
 MSYS_DIR=$GLOBAL_DIR\\msys

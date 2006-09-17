@@ -583,13 +583,12 @@ function inst_autotools() {
     setup Autotools
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
-    if quiet autoconf --help && quiet automake --help && quiet libtool --help 
+    if quiet autoconf --help && quiet automake --help
     then
-        echo "auto tools already installed.  skipping."
+        echo "autoconf/automake already installed.  skipping."
     else
         wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
         wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
-        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/autoconf-*
             echo "building autoconf..."
            ./configure --prefix=$_AUTOTOOLS_UDIR
@@ -602,6 +601,12 @@ function inst_autotools() {
             make
             make install
         qpopd
+    fi
+    if quiet ${LIBTOOLIZE} --help 
+    then
+        echo "libtool/libtoolize already installed.  skipping."
+    else
+        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/libtool-*
             echo "building libtool..."
             ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
@@ -611,12 +616,10 @@ function inst_autotools() {
     fi
     add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
     add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    if test x$cross_compile != xyes ; then
-	add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-    fi
+    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     quiet autoconf --help &&
     quiet automake --help &&
-    quiet libtool --help || die "autotools not installed correctly"
+    quiet ${LIBTOOLIZE} --help || die "autotools not installed correctly"
 }
 
 function inst_libgsf() {
@@ -653,6 +656,7 @@ function inst_goffice() {
 	qpushd $TMP_UDIR/goffice-*
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
+	    ${LIBTOOLIZE} --force
 	    aclocal ${ACLOCAL_FLAGS}
 	    automake
 	    autoconf
