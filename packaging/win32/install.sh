@@ -722,12 +722,20 @@ function inst_gnucash() {
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     qpushd $REPOS_DIR
-    if grep "GUILE_LOAD_PATH.*:" configure.in; then
+    if test "x$cross_compile" = xyes ; then
+	# Set these variables manually because of cross-compiling
+	export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
+	export GUILE_INCS="${GUILE_CPPFLAGS}"
+	export BUILD_GUILE=yes
+	export name_build_guile=/usr/bin/guile-config
+    else
+	if grep -q "GUILE_LOAD_PATH.*:" configure.in; then
         cp configure.in configure.in.bak
         cat configure.in.bak | sed '/GUILE_LOAD_PATH/s,:,;,g' > configure.in
+	fi
     fi
     ./autogen.sh
-    ./configure ${HOST_XCOMPILE} \
+    ./configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
 	--enable-schemas-install=no \
@@ -740,7 +748,7 @@ function inst_gnucash() {
     cp libtool libtool.bak ; grep -v "need_relink=yes" libtool.bak > libtool
     # Exclude (for now) the test subdirectories from the build
     # because executable linking is so painfully slow on mingw
-    perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+    perl -pi -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
 
     make LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -no-undefined"
 

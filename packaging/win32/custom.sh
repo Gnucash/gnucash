@@ -11,21 +11,28 @@ REPOS_DIR=$GLOBAL_DIR\\repos
 GNUCASH_DIR=$GLOBAL_DIR\\gnucash
 
 ####
-HOST_XCOMPILE=""
-cross_compile=no
-LD=ld
-CC=gcc
-DLLTOOL=dlltool
-LIBTOOLIZE=libtoolize
-# For cross-compiling, uncomment the following lines:
-# HOST_XCOMPILE="--host=mingw32"
-# PKG_CONFIG_PATH="" # to avoid using the host's installed packages
-# PATH=/opt/mingw32/bin:/opt/mingw32/mingw32/bin:$PATH
-# cross_compile=yes
-# LD=mingw32-ld
-# CC=mingw32-gcc
-# DLLTOOL=mingw32-dlltool
-# LIBTOOLIZE=$GLOBAL_DIR/autotools/bin/libtoolize
+cross_compile="no"
+# For cross-compiling, uncomment the following line:
+#cross_compile="yes"
+
+if test "x$cross_compile" != xyes ; then
+    LIBTOOLIZE=libtoolize
+    HOST_XCOMPILE=""
+    TARGET_XCOMPILE=""
+    LD=ld
+    CC=gcc
+    DLLTOOL=dlltool
+else
+    # Insert your cross-compiler mingw32 bin-directories here
+    PATH=$GLOBAL_DIR/bin:$GLOBAL_DIR/mingw32/bin:$PATH
+    LIBTOOLIZE=$GLOBAL_DIR/autotools/bin/libtoolize
+    PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+    HOST_XCOMPILE="--host=mingw32"
+    TARGET_XCOMPILE="--target=mingw32"
+    LD=mingw32-ld
+    CC=mingw32-gcc
+    DLLTOOL=mingw32-dlltool
+fi
 ####
 
 MSYS_DIR=$GLOBAL_DIR\\msys
@@ -34,7 +41,7 @@ WGET_DIR=$GLOBAL_DIR\\wget
 #WGET=
 
 SF_MIRROR="http://heanet.dl.sourceforge.net/sourceforge"
-GTK_MIRROR="ftp://ftp.gtk.org/pub"
+GTK_MIRROR="ftp.gtk.org/pub"
 GNOME_MIRROR="ftp.gnome.org/pub/gnome"
 
 DTK_URL="$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
@@ -153,10 +160,12 @@ SVN_DIR=$GLOBAL_DIR\\svn
 
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
-add_step inst_wget
-add_step inst_dtk
-add_step inst_mingw
-add_step inst_unzip
+if test x$cross_compile != xyes ; then
+ add_step inst_wget
+ add_step inst_dtk
+ add_step inst_mingw
+ add_step inst_unzip
+fi
 add_step inst_regex
 add_step inst_readline
 add_step inst_indent

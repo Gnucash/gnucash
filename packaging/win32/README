@@ -39,14 +39,35 @@ host system.
 
 These steps need to be performed:
 
-* Edit the file create_cross_mingw.sh and set the PREFIX= variable to
-  the preferred prefix of the mingw32 gcc/binutils on your Linux. 
+1. Edit the file create_cross_mingw.sh and set the PREFIX= variable to
+   the preferred prefix of the mingw32 gcc/binutils on your
+   Linux. (It is strongly recommended to choose a different prefix
+   than your normal compiler toolchain in order to distinguish
+   your native vs. cross compiler more easily.) Then run the
+   script create_cross_mingw.sh - it will
+   download, compile, and install a mingw32 toolchain.
 
-* Then run the script create_cross_mingw.sh - it will download,
-  compile, and install a mingw32 toolchain.
+2. Edit the file custom.sh: Make a globale search-and-replace of
+   '\\' into '/' so that all directories are specified in unix
+   conventions. Set the variable cross_compile to "yes". Then
+   adjust the directories in custom.sh according to your
+   preferred installation, especially $GLOBAL_DIR.
 
-* In custom.sh, make a search&replace of '\\' into '/'.
+3. Download the binary windows packages for "guile" and "g-wrap"
+   from http://www.tu-harburg.de/~et2cs/gnc/ and unpack them into
+   the directories $GUILE_DIR and $GWRAP_DIR as given in
+   custom.sh. (This is done because the build system for guile and
+   g-wrap doesn't support cross-compiling.)
 
-* Edit custom.sh to set your preferred directory paths.
+4. Call install.sh which will read the directory settings from
+   custom.sh. It should download, compile, and install everything
+   automatically. Eventually the windows gnucash is installed into
+   $GNUCASH_DIR. 
 
-(... to be continued ...)
+5. The content of $GNUCASH_DIR (as well as all the other binary
+   packages) should then be copied to a windows machine. The paths
+   in $GNUCASH_DIR/bin/gnucash and/or $GNUCASH_DIR/bin/gnucash.bat
+   need to be adjusted for the installation location on the
+   windows machine.
+
+Good luck!
