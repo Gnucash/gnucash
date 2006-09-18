@@ -1,3 +1,10 @@
+2006-09-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/binreloc.[hc], src/engine/gnc-path.c,
+	src/bin/gnucash-bin.c, configure.in: Implement automatic
+	relocation of previously compiled-in paths. With the exception of
+	the env variables in src/bin/gnucash, we're fully relocatable now.
+
 2006-09-13  Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-plugin-hbci.c: Move the MT940

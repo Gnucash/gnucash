@@ -34,6 +34,7 @@
 #include "glib.h"
 #include "gnc-module.h"
 #include "gnc-path.h"
+#include "binreloc.h"
 #include "gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
@@ -496,7 +497,14 @@ inner_main (void *closure, int argc, char **argv)
 
 int main(int argc, char ** argv)
 {
-    gchar *localedir = gnc_path_get_localedir ();
+    gchar *localedir;
+    GError *binreloc_error = NULL;
+
+    /* Init binreloc */
+    if (!gbr_init (&binreloc_error) ) {
+      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
+    }
+    localedir = gnc_path_get_localedir ();
 #ifdef HAVE_GETTEXT
     /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
        via gtk_init(). */

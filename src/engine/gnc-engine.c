@@ -37,6 +37,7 @@
 #include "SchedXactionP.h"
 #include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
+#include "binreloc.h"
 
 /** gnc file backend library name */
 #define GNC_LIB_NAME "gnc-backend-file"
@@ -87,8 +88,20 @@ gnc_engine_init(int argc, char ** argv)
   GList * cur;
   gchar *tracefilename;
   gchar *libdir;
+#ifdef G_OS_WIN32
+  GError *binreloc_error = NULL;
+#endif
 
   if (1 == engine_is_initialized) return;
+
+#ifdef G_OS_WIN32
+  /* Init binreloc from a library. On Unix we don't need this - the
+     init in main() is enough. It's unclear whether we need this on
+     Windows here... */
+  if (!gbr_init_lib (&binreloc_error)) {
+    printf("gnc_engine_init: Error on gbr_init_lib: %s\n", binreloc_error->message);
+  }
+#endif
 
   /* initialize logging to our file. */
   tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",

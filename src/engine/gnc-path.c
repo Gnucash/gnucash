@@ -22,10 +22,13 @@
 #include "config.h"
 #include "gnc-path.h"
 #include "gncla-dir.h"
+#include <stdio.h>
+#include "binreloc.h"
 
 gchar *gnc_path_get_prefix()
 {
-  return g_strdup (PREFIX);
+  //printf("Returning prefix %s\n", gbr_find_prefix (PREFIX));
+  return gbr_find_prefix (PREFIX);
 }
 
 /** Returns the libdir path, usually
@@ -34,7 +37,8 @@ gchar *gnc_path_get_prefix()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir()
 {
-  return g_strdup (LIBDIR);
+  //printf("Returning libdir %s\n", gbr_find_lib_dir (LIBDIR));
+  return gbr_find_lib_dir (LIBDIR);
 }
 
 /** Returns the datadir path, usually
@@ -43,7 +47,11 @@ gchar *gnc_path_get_libdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgdatadir()
 {
-  return g_strdup (PKGDATADIR);
+  gchar *datadir = gbr_find_data_dir (DATADIR);
+  gchar *result = g_build_filename (datadir, "gnucash", (char*)NULL);
+  g_free (datadir);
+  //printf("Returning pkgdatadir %s\n", result);
+  return result;
 }
 
 /** Returns the sysconfdir path, usually
@@ -52,7 +60,11 @@ gchar *gnc_path_get_pkgdatadir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkgsysconfdir()
 {
-  return g_strdup (PKGSYSCONFDIR);
+  gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
+  gchar *result = g_build_filename (sysconfdir, "gnucash", (char*)NULL);
+  g_free (sysconfdir);
+  //printf("Returning pkgsysconfdir %s\n", result);
+  return result;
 }
 
 
@@ -62,7 +74,11 @@ gchar *gnc_path_get_pkgsysconfdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_pkglibdir()
 {
-  return g_strdup (PKGLIBDIR);
+  gchar *libdir = gnc_path_get_libdir ();
+  gchar *result = g_build_filename (libdir, "gnucash", (char*)NULL);
+  g_free (libdir);
+  //printf("Returning pkglibdir %s\n", result);
+  return result;
 }
 
 /** Returns the glade file path, usually
@@ -71,13 +87,10 @@ gchar *gnc_path_get_pkglibdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gladedir()
 {
-  gchar *result;
-#ifdef G_OS_WIN32
-  result = g_win32_get_package_installation_subdirectory
-    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\glade");
-#else
-  result = g_strdup (GNC_GLADE_DIR);
-#endif
+  gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+  gchar *result = g_build_filename (pkgdatadir, "glade", (char*)NULL);
+  g_free (pkgdatadir);
+  //printf("Returning gladedir %s\n", result);
   return result;
 }
 
@@ -87,7 +100,8 @@ gchar *gnc_path_get_gladedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir()
 {
-  return g_strdup (LOCALE_DIR);
+  //printf("Returning localedir %s\n", gbr_find_locale_dir (LOCALE_DIR));
+  return gbr_find_locale_dir (LOCALE_DIR);
 }
 
 /** Returns the glade file path, usually
@@ -96,14 +110,10 @@ gchar *gnc_path_get_localedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_accountsdir()
 {
-  gchar *result;
-#ifdef G_OS_WIN32
-  result = 
-    g_win32_get_package_installation_subdirectory
-    (GETTEXT_PACKAGE, NULL, "share\\gnucash\\accounts");
-#else
-  result = g_strdup (GNC_ACCOUNTS_DIR);
-#endif
+  gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+  gchar *result = g_build_filename (pkgdatadir, "accounts", (char*)NULL);
+  g_free (pkgdatadir);
+  //printf("Returning accountsdir %s\n", result);
   return result;
 }
 
@@ -113,6 +123,11 @@ gchar *gnc_path_get_accountsdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_gconfdir()
 {
-  return g_strdup (GNC_GCONF_DIR);
+  gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
+  gchar *result = g_build_filename (sysconfdir, "gconf", 
+				    "gconf.xml.defaults", (char*)NULL);
+  g_free (sysconfdir);
+  //printf("Returning gconfdir %s\n", result);
+  return result;
 }
 

@@ -24,8 +24,8 @@
  */
 
 #define PREFIX "@-prefix-@"
-#define PKGDATADIR "@-pkgdatadir-@"
-#define PKGSYSCONFDIR "@-pkgsysconfdir-@"
+#define DATADIR "@-datadir-@"
+#define SYSCONFDIR "@-sysconfdir-@"
 
 #define LIBDIR "@-libdir-@"
 #define PKGLIBDIR "@-pkglibdir-@"

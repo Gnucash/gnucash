@@ -152,6 +152,9 @@ AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
 
+# Init binreloc
+AM_BINRELOC
+
 ### --------------------------------------------------------------------------
 ### See if we have pkg-config
 

@@ -28,6 +28,7 @@ libgncmod_engine_la_SOURCES = \
   Split.c \
   TransLog.c \
   Transaction.c \
+  binreloc.c \
   cap-gains.c \
   cashobjects.c \
   gnc-associate-account.c \
@@ -67,6 +68,7 @@ gncinclude_HEADERS = \
   Split.h \
   TransLog.h \
   Transaction.h \
+  binreloc.h \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
@@ -113,6 +115,7 @@ libgncmod_engine_la_LIBADD = \
   ${QOF_LIBS} \
   ${REGEX_LIBS} \
   ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
 libgw_kvp_la_SOURCES = kvp-scm.c
@@ -229,8 +232,8 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
 		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
 		-e 's#@-libdir-@#${libdir}#g' \
-		-e 's#@-pkgsysconfdir-@#${GNC_CONFIGDIR}#g' \
-		-e 's#@-pkgdatadir-@#${GNC_SHAREDIR}#g' \
+		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
+		-e 's#@-datadir-@#${datadir}#g' \
 		-e 's#@-prefix-@#${prefix}#g'
 	mv $@.tmp $@
 
