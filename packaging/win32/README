@@ -45,8 +45,7 @@ These steps need to be performed:
 * Then run the script create_cross_mingw.sh - it will download,
   compile, and install a mingw32 toolchain.
 
-* Run "dos2unix custom.sh install.sh" and in custom.sh, make a
-  search&replace of '\\' into '/'.
+* In custom.sh, make a search&replace of '\\' into '/'.
 
 * Edit custom.sh to set your preferred directory paths.
 
