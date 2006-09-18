@@ -748,6 +748,7 @@ function inst_gnucash() {
 	--prefix=$_GNUCASH_WFSDIR \
 	--enable-debug \
 	--enable-schemas-install=no \
+	--enable-binreloc \
 	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
 	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
