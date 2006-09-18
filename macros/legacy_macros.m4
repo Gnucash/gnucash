@@ -14,13 +14,18 @@ if test x${GUILE} = x ; then
    AC_PATH_PROG(GUILE, guile, no)
 fi
 
+dnl We expect the following variables:
+dnl - BUILD_GUILE="yes" if guile-config is available in PATH
+dnl - name_build_guile="guile-config" i.e. the name of guile-config
+dnl - GUILE="/usr/bin/guile" as detected above.
+
 version_ok=
 min_guile_version=ifelse([$1], , 1.3,$1)
 max_guile_version=ifelse([$2], , 99.99.99,$2)
 
 AC_MSG_CHECKING(for guile - ${min_guile_version} <= version < ${max_guile_version})
 
-if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
+if test "x${BUILD_GUILE}" != x -a "x${BUILD_GUILE}" != xno ; then
   guile_version=`${name_build_guile} --version 2>&1`
   guile_version="$guile_version.0"
   guile_major_version=`echo $guile_version | \
