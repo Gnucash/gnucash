@@ -735,6 +735,8 @@ function inst_gnucash() {
 	export GUILE_INCS="${GUILE_CPPFLAGS}"
 	export BUILD_GUILE=yes
 	export name_build_guile=/usr/bin/guile-config
+	export G_WRAP_COMPILE_ARGS="-I${GWRAP_DIR}/include"
+	export G_WRAP_LINK_ARGS="-L${GWRAP_DIR} -lgwrap-guile-runtime -lgwrap-core-runtime -lffi"
     else
 	if grep -q "GUILE_LOAD_PATH.*:" configure.in; then
         cp configure.in configure.in.bak

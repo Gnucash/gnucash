@@ -292,9 +292,6 @@ AC_SUBST(GUILE_LIBS)
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
 
-G_WRAP_COMPILE_ARGS=""
-G_WRAP_LINK_ARGS=""
-
 AM_GUILE_VERSION_CHECK(1.6.0, , , [AC_MSG_ERROR([
 
   guile does not appear to be installed correctly, or is not in the
@@ -324,11 +321,15 @@ AM_PATH_GWRAP(1.3.3, , [AC_MSG_ERROR([
 
 # Find out what the g-wrap compile and link flags are.
 AC_MSG_CHECKING(for g-wrap compile args)
-G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
+if test "x$G_WRAP_COMPILE_ARGS" = "x" ; then
+  G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
+fi
 AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
 
 AC_MSG_CHECKING(for g-wrap link args)
-G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
+if test "x$G_WRAP_LINK_ARGS" = "x" ; then
+  G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
+fi
 # Dear g-wrap: adding -L/usr/lib is very silly.  Do not do this.
 G_WRAP_LINK_ARGS=`echo ${G_WRAP_LINK_ARGS} | sed -e 's|-L/usr/lib ||'`
 AC_MSG_RESULT($G_WRAP_LINK_ARGS)
