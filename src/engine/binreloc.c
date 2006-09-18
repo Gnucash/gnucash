@@ -41,6 +41,14 @@ _br_find_exe (GbrInitError *error)
 		*error = GBR_INIT_ERROR_DISABLED;
 	return NULL;
 #else
+#ifdef _WIN32
+	/* Shoot. I *thought* this program code already included the
+	   relocation code for windows. Unfortunately this is not the
+	   case :-( */
+	if (error)
+		*error = GBR_INIT_ERROR_DISABLED;
+	return NULL;
+#else
 	char *path, *path2, *line, *result;
 	size_t buf_size;
 	ssize_t size;
@@ -164,6 +172,7 @@ _br_find_exe (GbrInitError *error)
 	g_free (line);
 	fclose (f);
 	return path;
+#endif /* G_OS_WINDOWS */
 #endif /* ENABLE_BINRELOC */
 }
 
