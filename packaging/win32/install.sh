@@ -326,7 +326,14 @@ function inst_guile() {
 (define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
 	qpopd
     fi
-    if test x$cross_compile != xyes ; then
+    if test x$cross_compile = xyes ; then
+	qpushd $GUILE_DIR/bin
+	# The cross-compiling guile expects these program names
+	# for the build-time guile
+	ln -sf /usr/bin/guile-config mingw32-guile-config
+	ln -sf /usr/bin/guile mingw32-build-guile
+	qpopd
+    else
 	add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
     guile -c '(use-modules (srfi srfi-39))' &&
