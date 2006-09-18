@@ -268,8 +268,24 @@ esac
 ### Guile and g-wrap version checks (should this be something other than
 ### the Gnome check?)
 
+# If the user has given these values, cache them to override the
+# detected values.
+if test "x$GUILE_LIBS" != x; then
+  saved_GUILE_LIBS="$GUILE_LIBS"
+fi
+if test "x$GUILE_INCS" != x; then
+  saved_GUILE_INCS="$GUILE_INCS"
+fi
 GUILE_LIBS=""
 GNOME_CHECK_GUILE
+
+if test "x$saved_GUILE_LIBS" != x; then
+  GUILE_LIBS="$saved_GUILE_LIBS"
+fi
+if test "x$saved_GUILE_INCS" != x; then
+  GUILE_INCS="$saved_GUILE_INCS"
+fi
+
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 
