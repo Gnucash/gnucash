@@ -415,7 +415,7 @@ function inst_expat() {
     setup Expat
     _EXPAT_UDIR=`unix_path $EXPAT_DIR`
     add_to_env $_EXPAT_UDIR/bin PATH
-    if quiet which xmlwf
+    if quiet which xmlwf && test -f $_EXPAT_UDIR/bin/xmlwf.exe
     then
         echo "expat already installed.  skipping."
     else
@@ -819,6 +819,19 @@ function finish() {
 	    echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
 	fi
     done
+    if test "x$cross_compile" = "xyes" ; then
+	echo "You might want to create a binary tarball now as follows:"
+	qpushd $GLOBAL_DIR
+	echo tar -czf $HOME/gnucash-fullbin.tar.gz --anchored \
+	    --exclude='*.a' --exclude='*.o' --exclude='*.h' \
+	    --exclude='*.info' --exclude='*.html' \
+	    --exclude='*include/*' --exclude='*gtk-doc*' \
+	    --exclude='bin*' \
+	    --exclude='mingw32/*' --exclude='*bin/mingw32-*' \
+	    --exclude='gnucash-trunk*' \
+	    *
+	qpopd
+    fi
 }
 
 prepare
