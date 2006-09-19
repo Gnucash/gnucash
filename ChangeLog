@@ -1,3 +1,9 @@
+2006-09-19  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Remove mt940 module completely from the build and
+	SVN because all of its functionality has been moved into the hbci
+	(aqbanking) module.
+
 2006-09-19  Andreas Köhler  <andi5.py@gmx.net>
 
 	* $some.glade: Use some more automatic scrollbars.
