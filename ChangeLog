@@ -1,3 +1,11 @@
+2006-09-19  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/backend/file/gnc-backend-file.c:
+	* src/gnome-utils/gnc-file.c: Do not complain about non-existent
+	  files if we save to a new file. In pass one we ignore the error
+	  returned by stat and call qof_session_begin with
+	  create_if_nonexistent=TRUE for a second run.
+
 2006-09-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/binreloc.[hc], src/engine/gnc-path.c,
