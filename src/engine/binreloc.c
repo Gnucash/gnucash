@@ -308,7 +308,7 @@ static void set_gerror (GError **error, GbrInitError errcode);
 gboolean
 gbr_init (GError **error)
 {
-	GbrInitError errcode;
+	GbrInitError errcode = 0;
 
 	/* Locate the application's filename. */
 	exe = _br_find_exe (&errcode);
@@ -336,7 +336,7 @@ gbr_init (GError **error)
 gboolean
 gbr_init_lib (GError **error)
 {
-	GbrInitError errcode;
+	GbrInitError errcode = 0;
 
 	exe = _br_find_exe_for_symbol ((const void *) "", &errcode);
 	if (exe != NULL)
