@@ -1,5 +1,7 @@
 2006-09-19  Andreas Köhler  <andi5.py@gmx.net>
 
+	* $some.glade: Use some more automatic scrollbars.
+
 	* src/backend/file/gnc-backend-file.c:
 	* src/gnome-utils/gnc-file.c: Do not complain about non-existent
 	  files if we save to a new file. In pass one we ignore the error
