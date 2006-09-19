@@ -4,7 +4,11 @@
       <menu name="FileImport" action="FileImportAction">
       	<placeholder name="FileImportPlaceholder">
       	   <menuitem name="FileMt940Import" action="Mt940ImportAction"/>
+      	   <menuitem name="FileMt942Import" action="Mt942ImportAction"/>
       	   <menuitem name="FileDtausImport" action="DtausImportAction"/>
+      	   <menuitem name="FileCsvImport" action="CsvImportAction"/>
+      	   <menuitem name="FileDtausImportsend" action="DtausImportSendAction"/>
+      	   <menuitem name="FileCsvImportsend" action="CsvImportSendAction"/>
       	</placeholder>
       </menu>
     </menu>
