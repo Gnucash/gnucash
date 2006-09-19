@@ -56,7 +56,7 @@
 #include "import-account-matcher.h"
 #include "gnc-hbci-gettrans.h"
 
-#include "gnc-dtaus-import.h"
+#include "gnc-file-aqb-import.h"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 

@@ -33,7 +33,7 @@
 #include "gnc-hbci-getbalance.h"
 #include "gnc-hbci-gettrans.h"
 #include "gnc-hbci-transfer.h"
-#include "gnc-dtaus-import.h"
+#include "gnc-file-aqb-import.h"
 #include "gnc-plugin-hbci.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"

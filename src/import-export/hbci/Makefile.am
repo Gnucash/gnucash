@@ -6,7 +6,7 @@ libgncmod_hbci_la_SOURCES = \
   dialog-daterange.c \
   dialog-hbcitrans.c \
   dialog-pass.c \
-  gnc-dtaus-import.c \
+  gnc-file-aqb-import.c \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
   gnc-hbci-kvp.c \
@@ -31,7 +31,7 @@ noinst_HEADERS = \
   dialog-pass.h \
   druid-hbci-initial.h \
   druid-hbci-utils.h \
-  gnc-dtaus-import.h \
+  gnc-file-aqb-import.h \
   gnc-hbci-getbalance.h \
   gnc-hbci-gettrans.h \
   gnc-hbci-kvp.h \
