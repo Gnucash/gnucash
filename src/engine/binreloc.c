@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <string.h>
 #include "binreloc.h"
+#include <glib.h>
 
 G_BEGIN_DECLS
 
@@ -41,13 +42,26 @@ _br_find_exe (GbrInitError *error)
 		*error = GBR_INIT_ERROR_DISABLED;
 	return NULL;
 #else
-#ifdef _WIN32
-	/* Shoot. I *thought* this program code already included the
-	   relocation code for windows. Unfortunately this is not the
-	   case :-( */
-	if (error)
-		*error = GBR_INIT_ERROR_DISABLED;
-	return NULL;
+#ifdef G_OS_WIN32
+	/* I *thought* this program code already included the
+	   relocation code for windows. Unfortunately this is not
+	   the case and we have to add this manually. This is only
+	   one possibility; other ways of looking up the full path
+	   of gnucash-bin.exe probably exist.*/
+	gchar *prefix;
+	gchar *result;
+
+	/* From the documentation of
+	   g_win32_get_package_installation_directory: If both
+	   package and dll_name are NULL, the directory from where
+	   the main executable of the process was loaded is
+	   used. */
+	prefix = g_win32_get_package_installation_directory (GETTEXT_PACKAGE, NULL);
+	result = g_build_filename (prefix,
+				   "bin", "gnucash-bin.exe",
+				   (char*)NULL);
+	g_free (prefix);
+	return result;
 #else
 	char *path, *path2, *line, *result;
 	size_t buf_size;
@@ -189,6 +203,12 @@ _br_find_exe_for_symbol (const void *symbol, GbrInitError *error)
 		*error = GBR_INIT_ERROR_DISABLED;
 	return (char *) NULL;
 #else
+#ifdef G_OS_WIN32
+	g_warning ("_br_find_exe_for_symbol not implemented on win32.");
+	if (error)
+		*error = GBR_INIT_ERROR_DISABLED;
+	return (char *) NULL;
+#else
 	#define SIZE PATH_MAX + 100
 	FILE *f;
 	size_t address_string_len;
@@ -281,6 +301,7 @@ _br_find_exe_for_symbol (const void *symbol, GbrInitError *error)
 		return (char *) NULL;
 	else
 		return g_strdup (found);
+#endif /* G_OS_WIN32 */
 #endif /* ENABLE_BINRELOC */
 }
 
