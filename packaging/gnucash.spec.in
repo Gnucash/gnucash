@@ -7,7 +7,9 @@
 %define _with_ofx 0
 %define _with_hbci 0
 
-%define fc_rel %(rpm -q --queryformat='%{VERSION}' fedora-release)
+# The --whatprovides redhat-release lets us work on RHEL as well as FC
+# Granted, it will look weird, but at least it wont fail outright.
+%define fc_rel %(rpm -q --queryformat='%{VERSION}' --whatprovides redhat-release)
 %define version @-VERSION-@
 %define __libtoolize /bin/true
 
@@ -48,6 +50,7 @@ BuildRequires: 	gtkhtml3-devel >= %{gtkhtml3_version}
 BuildRequires: 	bzip2-devel, expat-devel, guile-devel
 BuildRequires: 	libglade2-devel, libgsf-devel
 BuildRequires: 	libjpeg-devel, openssl-devel
+BuildRequires:  libtool-ltdl-devel
 
 %description
 GnuCash is a personal finance manager. A check-book like
