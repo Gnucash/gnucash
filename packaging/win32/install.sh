@@ -758,7 +758,7 @@ function inst_gnucash() {
     cp libtool libtool.bak ; grep -v "need_relink=yes" libtool.bak > libtool
     # Exclude (for now) the test subdirectories from the build
     # because executable linking is so painfully slow on mingw
-    perl -pi -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+    perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
 
     make LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -no-undefined"
 
