@@ -766,7 +766,7 @@ function inst_gnucash() {
     qpushd src/bin
     rm gnucash
     make PATH_SEPARATOR=";" \
-	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GWRAP_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin" \
+	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GWRAP_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
 	gnucash
     qpopd
 
@@ -794,6 +794,7 @@ function inst_gnucash() {
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
     echo "set GUILE_LOAD_PATH=${GWRAP_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+    echo "set SCHEME_LIBRARY_PATH=${GUILE_DIR}\\share\\guile\\site\\slib\\" >> gnucash.bat
     echo "start gnucash-bin" >> gnucash.bat
     qpopd
 }
