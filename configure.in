@@ -2191,6 +2191,9 @@ else
 fi
 AC_MSG_RESULT($warnFLAGS)
 
+# Extend LDFLAGS because libtool on Windows requires this argument
+LDFLAGS="${LDFLAGS} -no-undefined"
+
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
 ### makefiles, so that we don't have an opportunity to adjust them
