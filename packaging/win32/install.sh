@@ -760,7 +760,7 @@ function inst_gnucash() {
     # because executable linking is so painfully slow on mingw
     perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
 
-    make LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -no-undefined"
+    make
 
     # Try to fix the paths in the "gnucash" script
     qpushd src/bin
