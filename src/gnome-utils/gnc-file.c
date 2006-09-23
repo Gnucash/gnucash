@@ -416,8 +416,12 @@ show_session_error (QofBackendError io_error,
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
-      fmt = _("The file %s could not be found.");
-      gnc_error_dialog (parent, fmt, newfile);
+      if (type == GNC_FILE_DIALOG_SAVE) {
+        uh_oh = FALSE;
+      } else {
+        fmt = _("The file %s could not be found.");
+        gnc_error_dialog (parent, fmt, newfile);
+      }
       break;
 
     case ERR_FILEIO_FILE_TOO_OLD:
@@ -1068,7 +1072,8 @@ gnc_file_save_as (void)
   }
 
   /* if the database doesn't exist, ask the user ... */
-  else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
+  else if ((ERR_FILEIO_FILE_NOT_FOUND == io_err) ||
+           (ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
     if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))

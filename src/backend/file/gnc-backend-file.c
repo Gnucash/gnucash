@@ -230,7 +230,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
 
 	/* Now check whether we can stat(2) the file itself */
         rc = stat (be->fullpath, &statbuf);
-        if (rc != 0)
+        if ((rc != 0) && (!create_if_nonexistent))
         {
 	    /* Error on stat means the file doesn't exist */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
