@@ -1,3 +1,9 @@
+2006-09-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/backend/file/gnc-backend-file.c: Fix error checking for
+	non-existing filenames. Will now always give a "file not found"
+	message on nonexisting paths or filenames. #351351.
+
 2006-08-22  Chris Shoemaker <chris.shoemaker@cox.net>
 
    Drop gtktreedatalist (and gnctreemodelsort) from the build because it can
