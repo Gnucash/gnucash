@@ -1366,6 +1366,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (gnc_split_register_handle_exchange (reg, FALSE))
      return TRUE;
 
+   gnc_suspend_gui_refresh ();
+
    /* determine whether we should commit the pending transaction */
    if (pending_trans != trans)
    {
@@ -1384,12 +1386,14 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        } else {
            PINFO("beginning edit of trans %p", trans);
            if (gnc_split_register_begin_edit_or_warn(info, trans))
+	   {
+	       gnc_resume_gui_refresh ();
                return FALSE;
+	   }
        }
        pending_trans = trans;
    }
    g_assert(xaccTransIsOpen(trans));
-   gnc_suspend_gui_refresh ();
 
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)

@@ -1,3 +1,9 @@
+2006-09-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/ledger-core/split-register*.c:
+	  suspend events around the Commit(). Fixes #347089 when combined
+	  with r14495.
+
 2006-09-19  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Remove mt940 module completely from the build and
