@@ -1,3 +1,17 @@
+2006-09-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/ledger-core/split-register*.c:
+	  suspend events around the Commit(). Fixes #347089 when combined
+	  with r14495.
+
+2006-08-22  Chris Shoemaker <chris.shoemaker@cox.net>
+
+   Avoid crash from opening transaction in more than one register. Bug #347089.
+   In any case where we might be opening the transaction and marking it as the
+   pending transaction, check first if it's already open.  If it is, we assume
+   that it's being edited by another register.  We report the error and abort
+   the action that would have opened the transaction.
+	
 2006-09-19  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/backend/file/gnc-backend-file.c:
