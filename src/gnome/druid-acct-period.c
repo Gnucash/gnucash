@@ -393,7 +393,8 @@ scrub_all(void)
   AccountGroup *group = gnc_get_current_group ();
   xaccGroupScrubOrphans (group);
   xaccGroupScrubImbalance (group);
-  xaccGroupScrubLots (group);
+  // XXX: Lots are disabled
+  //xaccGroupScrubLots (group);
 }
 
 /* =============================================================== */

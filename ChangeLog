@@ -4,6 +4,14 @@
 	  suspend events around the Commit(). Fixes #347089 when combined
 	  with r14495.
 
+	* src/gnome/druid-acct-period.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/window-reconcile.c:
+	  disable lot scrubbing during Check & Repair (#357370).
+	  Lots are supposed to be disabled in the 2.0 release until we
+	  get the cap-gains code working.  IMHO the cap-gains code should
+	  deal with extra txn splits instead of creating additional txns.
+
 2006-09-19  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Remove mt940 module completely from the build and

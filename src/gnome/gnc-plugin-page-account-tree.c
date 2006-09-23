@@ -1168,7 +1168,8 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 	xaccAccountScrubOrphans (account);
 	xaccAccountScrubImbalance (account);
 
-	xaccAccountScrubLots (account);
+	// XXX: Lots are disabled
+	//xaccAccountScrubLots (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1185,7 +1186,8 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 	xaccAccountTreeScrubOrphans (account);
 	xaccAccountTreeScrubImbalance (account);
 
-	xaccAccountTreeScrubLots (account);
+	// XXX: Lots are disabled
+	//xaccAccountTreeScrubLots (account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1200,7 +1202,8 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
 	xaccGroupScrubOrphans (group);
 	xaccGroupScrubImbalance (group);
 
-	xaccGroupScrubLots (group);
+	// XXX: Lots are disabled
+	//xaccGroupScrubLots (group);
 
 	gnc_resume_gui_refresh ();
 }
