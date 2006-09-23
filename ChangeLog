@@ -1,5 +1,10 @@
 2006-09-03  Christian Stimming  <stimming@tuhh.de>
 
+	* lib/libqof/qof/qofbackend.h, src/gnome-utils/gnc-file.c,
+	src/backend/file/gnc-backend-file.c: If the file type wasn't
+	recognized, check whether this failed because of no read
+	permission and give appropriate user feedback.
+
 	* src/backend/file/gnc-backend-file.c: Fix error checking for
 	non-existing filenames. Will now always give a "file not found"
 	message on nonexisting paths or filenames. #351351.

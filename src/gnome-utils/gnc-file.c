@@ -443,6 +443,11 @@ show_session_error (QofBackendError io_error,
       gnc_error_dialog(parent, fmt, newfile);
       break;
 
+    case ERR_FILEIO_FILE_EACCES:
+      fmt = _("No read permission to read from file %s.");
+      gnc_error_dialog (parent, fmt, newfile);
+      break;
+
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash. "
               "Do you want to want to upgrade the database "
