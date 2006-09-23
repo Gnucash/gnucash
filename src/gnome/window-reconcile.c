@@ -1228,7 +1228,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
-  xaccAccountTreeScrubLots (account);
+  // XXX: Lots are disabled.
+  //xaccAccountTreeScrubLots (account);
 
   gnc_resume_gui_refresh ();
 }
