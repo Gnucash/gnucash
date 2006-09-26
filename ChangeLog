@@ -179,9 +179,6 @@
 
 	* various: Unref all new stores.
 
-	* src/gnome-utils/dialog-account.c: Check for account type
-	  compatibility when creating a new account. Fixes 344966.
-
 	* src/core-utils/gnc-gtk-utils.c: Unref entry completion, inline
 	  completion only for gtk>=2.6.
 
