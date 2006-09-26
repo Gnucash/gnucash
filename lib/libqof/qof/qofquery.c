@@ -682,15 +682,17 @@ void qof_query_purge_terms (QofQuery *q, GSList *param_list)
   }
 }
 
-GList * qof_query_run (QofQuery *q)
+static GList * qof_query_run_internal (QofQuery *q,
+				       void(*run_cb)(QofQueryCB*,gpointer),
+				       gpointer cb_arg)
 {
   GList *matching_objects = NULL;
-  GList *node;
   int        object_count = 0;
 
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
   g_return_val_if_fail (q->books, NULL);
+  g_return_val_if_fail (run_cb, NULL);
   ENTER (" q=%p", q);
 
   /* XXX: Prioritize the query terms? */
@@ -712,26 +714,8 @@ GList * qof_query_run (QofQuery *q)
     memset (&qcb, 0, sizeof (qcb));
     qcb.query = q;
 
-    /* For each book */
-    for (node=q->books; node; node=node->next) 
-    {
-      QofBook *book = node->data;
-      QofBackend *be = book->backend;
-
-      /* run the query in the backend */
-      if (be) 
-      {
-        gpointer compiled_query = g_hash_table_lookup (q->be_compiled, book);
-
-        if (compiled_query && be->run_query)
-        {
-          (be->run_query) (be, compiled_query);
-        }
-      }
-
-      /* And then iterate over all the objects */
-      qof_object_foreach (q->search_for, book, (QofEntityForeachCB) check_item_cb, &qcb);
-    }
+    /* Run the query callback */
+    run_cb(&qcb, cb_arg);
 
     matching_objects = qcb.list;
     object_count = qcb.count;
@@ -792,6 +776,67 @@ GList * qof_query_run (QofQuery *q)
   
   LEAVE (" q=%p", q);
   return matching_objects;
+}
+
+static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
+{
+  GList *node;
+
+  (void)cb_arg; /* unused */
+  g_return_if_fail(qcb);
+
+  for (node=qcb->query->books; node; node=node->next) 
+  {
+    QofBook *book = node->data;
+    QofBackend *be = book->backend;
+
+    /* run the query in the backend */
+    if (be) 
+    {
+      gpointer compiled_query = g_hash_table_lookup (qcb->query->be_compiled,
+						     book);
+
+      if (compiled_query && be->run_query)
+      {
+	(be->run_query) (be, compiled_query);
+      }
+    }
+
+    /* And then iterate over all the objects */
+    qof_object_foreach (qcb->query->search_for, book,
+			(QofEntityForeachCB) check_item_cb, &qcb);
+  }
+}
+
+GList * qof_query_run (QofQuery *q)
+{
+  /* Just a wrapper */
+  return qof_query_run_internal(q, qof_query_run_cb, NULL);
+}
+
+static void qof_query_run_subq_cb(QofQueryCB* qcb, gpointer cb_arg)
+{
+  QofQuery* pq = cb_arg;
+
+  g_return_if_fail(pq);
+  g_list_foreach(qof_query_last_run(pq), check_item_cb, qcb);
+}
+
+GList *
+qof_query_run_subquery (QofQuery *subq, const QofQuery* primaryq)
+{
+  if (!subq) return NULL;
+  if (!primaryq) return NULL;
+
+  /* Make sure we're searching for the same thing */
+  g_return_val_if_fail (subq->search_for, NULL);
+  g_return_val_if_fail (primaryq->search_for, NULL);
+  g_return_val_if_fail(!safe_strcmp(subq->search_for, primaryq->search_for),
+		       NULL);
+
+  /* Perform the subquery */
+  return qof_query_run_internal(subq, qof_query_run_subq_cb,
+				(gpointer)primaryq);
 }
 
 GList *

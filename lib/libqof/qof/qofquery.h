@@ -221,6 +221,16 @@ GList * qof_query_run (QofQuery *query);
  */
 GList * qof_query_last_run (QofQuery *query);
 
+/** Perform a subquery, return the results.
+ *  Instead of running over a book, the subquery runs over the results
+ *  of the primary query.
+ *
+ *  Do NOT free the resulting list.  This list is managed internally
+ *  by QofQuery.
+ */
+GList * qof_query_run_subquery (QofQuery *subquery,
+                                const QofQuery* primary_query);
+
 /** Remove all query terms from query.  query matches nothing 
  *  after qof_query_clear().
  */

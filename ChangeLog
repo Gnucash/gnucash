@@ -1,3 +1,9 @@
+2006-09-26  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/libqof/qof/qofquery.[ch]:
+	  Implement SubQuery functionality in QOF:  qof_query_run_subquery()
+	  Now you can run one query off of the results of another query.
+
 2006-09-25  Derek Atkins  <derek@ihtfp.com>
 
 	[ Lots of files ]:
