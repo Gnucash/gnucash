@@ -240,7 +240,8 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 		}
 		return topnode;
 	}
-	if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
+	if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING) ||
+	    !safe_strcmp (pd->type_name, QOF_TYPE_NUMSTRING))
 	{
 		topnode = xmlNewNode (NULL, "qofquery:pred-string");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
@@ -555,6 +556,7 @@ int main (int argc, char * argv[])
 		{ "aint",   QOF_TYPE_INT32, NULL, NULL},
 		{ "aint64", QOF_TYPE_INT64, NULL, NULL},
 		{ "astr",   QOF_TYPE_STRING, NULL, NULL},
+		{ "nstr",   QOF_TYPE_NUMSTRING, NULL, NULL},
 		{ NULL },
 	};
 

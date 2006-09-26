@@ -864,7 +864,8 @@ gnc_queryterm2scm (QofQueryTerm *qt)
   qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
   qt_scm = scm_cons (gnc_query_compare2scm (pd->how), qt_scm);
 
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING)) {
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING) ||
+      !safe_strcmp (pd->type_name, QOF_TYPE_NUMSTRING)) {
     query_string_t pdata = (query_string_t) pd;
 
     qt_scm = scm_cons (gnc_query_string2scm (pdata->options), qt_scm);
@@ -969,7 +970,8 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
     /* Now compute the predicate */
 
-    if (!safe_strcmp (type, QOF_TYPE_STRING)) 
+    if (!safe_strcmp (type, QOF_TYPE_STRING) ||
+	!safe_strcmp (type, QOF_TYPE_NUMSTRING))
     {
       QofStringMatch options;
       gboolean is_regex;
@@ -991,8 +993,12 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       matchstring = SCM_STRING_CHARS (scm);
 
-      pd = qof_query_string_predicate (compare_how, matchstring,
-                                    options, is_regex);
+      if (!safe_strcmp (type, QOF_TYPE_STRING))
+	pd = qof_query_string_predicate (compare_how, matchstring,
+					 options, is_regex);
+      else
+	pd = qof_query_numstring_predicate (compare_how, matchstring,
+					    options, is_regex);
     } 
     else if (!safe_strcmp (type, QOF_TYPE_DATE)) 
     {

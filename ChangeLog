@@ -1,3 +1,12 @@
+2006-09-25  Derek Atkins  <derek@ihtfp.com>
+
+	[ Lots of files ]:
+	  Add a new QOF_TYPE_NUMSTRING to add numeric sorts.  (#150799).
+	  This new type is like QOF_TYPE_STRING but it sorts numerically
+	  (first) and then sorts alphanumerically (by the tail of the
+	  number).  Added the QOF Type, the gnome-search support, and
+	  modified TRANS_NUM to use the new type.
+
 2006-09-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/ledger-core/split-register*.c:

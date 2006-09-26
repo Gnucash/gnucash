@@ -1966,7 +1966,7 @@ trans_is_balanced_p (const Transaction *trans)
 gboolean xaccTransRegister (void)
 {
   static QofParam params[] = {
-    { TRANS_NUM, QOF_TYPE_STRING, 
+    { TRANS_NUM, QOF_TYPE_NUMSTRING, 
       (QofAccessFunc)xaccTransGetNum, 
       (QofSetterFunc)qofTransSetNum },
     { TRANS_DESCRIPTION, QOF_TYPE_STRING, 

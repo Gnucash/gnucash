@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <stdlib.h>
 
 #include "qof.h"
 #include "qofquerycore-p.h"
@@ -54,6 +55,7 @@ static QueryPredDataFree qof_query_predicate_free (QofType type);
 /* Core Type Predicate helpers */
 typedef const char * (*query_string_getter) (gpointer, QofParam *);
 static const char * query_string_type = QOF_TYPE_STRING;
+static const char * query_numstring_type = QOF_TYPE_NUMSTRING;
 
 typedef Timespec (*query_date_getter) (gpointer, QofParam *);
 static const char * query_date_type = QOF_TYPE_DATE;
@@ -124,18 +126,16 @@ static GHashTable *predEqualTable = NULL;
 /* *******************************************************************/
 /* TYPE-HANDLING FUNCTIONS */
 
-/* QOF_TYPE_STRING */
+/* QOF_TYPE_STRING and QOF_TYPE_NUMSTRING / common functions */
 
 static int
-string_match_predicate (gpointer object,
-                        QofParam *getter,
-                        QofQueryPredData *pd)
+string_match_predicate_common (gpointer object,
+			       QofParam *getter,
+			       QofQueryPredData *pd)
 {
   query_string_t pdata = (query_string_t) pd;
   const char *s;
   int ret = 0;
-
-  VERIFY_PREDICATE (query_string_type);
 
   s = ((query_string_getter)getter->param_getfcn) (object, getter);
 
@@ -166,6 +166,81 @@ string_match_predicate (gpointer object,
   }
 }
 
+static void
+string_free_pdata_common (QofQueryPredData *pd)
+{
+  query_string_t pdata = (query_string_t) pd;
+
+  if (pdata->is_regex)
+    regfree (&pdata->compiled);
+  else
+    g_free (pdata->matchstring);
+
+  g_free (pdata);
+}
+
+static QofQueryPredData *
+qof_query_string_predicate_common (QofQueryCompare how,
+				   const char *str, QofStringMatch options,
+				   gboolean is_regex,
+				   const char* type)
+{
+  query_string_t pdata;
+
+  g_return_val_if_fail (str, NULL);
+  g_return_val_if_fail (*str != '\0', NULL);
+  g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
+
+  pdata = g_new0 (query_string_def, 1);
+  pdata->pd.type_name = type;
+  pdata->pd.how = how;
+  pdata->options = options;
+  pdata->matchstring = g_strdup (str);
+
+  if (is_regex) {
+    int flags = REG_EXTENDED;
+    if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
+      flags |= REG_ICASE;
+
+    regcomp(&pdata->compiled, str, flags);
+    pdata->is_regex = TRUE;
+  }
+
+  return ((QofQueryPredData*)pdata);
+}
+
+static gboolean
+string_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
+{
+  query_string_t pd1 = (query_string_t) p1;
+  query_string_t pd2 = (query_string_t) p2;
+
+  if (pd1->options != pd2->options) return FALSE;
+  if (pd1->is_regex != pd2->is_regex) return FALSE;
+  return (safe_strcmp (pd1->matchstring, pd2->matchstring) == 0);
+}
+
+static char *
+string_to_string (gpointer object, QofParam *getter)
+{
+  const char *res;
+  res = ((query_string_getter)getter->param_getfcn)(object, getter);
+  if (res)
+    return g_strdup (res);
+  return NULL;
+}
+
+/* QOF_QUERY_STRING */
+
+static int
+string_match_predicate (gpointer object,
+                        QofParam *getter,
+                        QofQueryPredData *pd)
+{
+  VERIFY_PREDICATE (query_string_type);
+  return string_match_predicate_common(object, getter, pd);
+}
+
 static int
 string_compare_func (gpointer a, gpointer b, gint options,
                      QofParam *getter)
@@ -185,16 +260,8 @@ string_compare_func (gpointer a, gpointer b, gint options,
 static void
 string_free_pdata (QofQueryPredData *pd)
 {
-  query_string_t pdata = (query_string_t) pd;
-
   VERIFY_PDATA (query_string_type);
-
-  if (pdata->is_regex)
-    regfree (&pdata->compiled);
-  else
-    g_free (pdata->matchstring);
-
-  g_free (pdata);
+  return string_free_pdata_common(pd);
 }
 
 static QofQueryPredData *
@@ -204,20 +271,10 @@ string_copy_predicate (QofQueryPredData *pd)
 
   VERIFY_PDATA_R (query_string_type);
 
-  return qof_query_string_predicate (pd->how, pdata->matchstring,
-                                     pdata->options,
-                                     pdata->is_regex);
-}
-
-static gboolean
-string_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
-{
-  query_string_t pd1 = (query_string_t) p1;
-  query_string_t pd2 = (query_string_t) p2;
-
-  if (pd1->options != pd2->options) return FALSE;
-  if (pd1->is_regex != pd2->is_regex) return FALSE;
-  return (safe_strcmp (pd1->matchstring, pd2->matchstring) == 0);
+  return qof_query_string_predicate_common (pd->how, pdata->matchstring,
+					    pdata->options,
+					    pdata->is_regex,
+					    query_string_type);
 }
 
 QofQueryPredData *
@@ -225,38 +282,78 @@ qof_query_string_predicate (QofQueryCompare how,
                             const char *str, QofStringMatch options,
                             gboolean is_regex)
 {
-  query_string_t pdata;
-
-  g_return_val_if_fail (str, NULL);
-  g_return_val_if_fail (*str != '\0', NULL);
-  g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
-
-  pdata = g_new0 (query_string_def, 1);
-  pdata->pd.type_name = query_string_type;
-  pdata->pd.how = how;
-  pdata->options = options;
-  pdata->matchstring = g_strdup (str);
-
-  if (is_regex) {
-    int flags = REG_EXTENDED;
-    if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
-      flags |= REG_ICASE;
-
-    regcomp(&pdata->compiled, str, flags);
-    pdata->is_regex = TRUE;
-  }
-
-  return ((QofQueryPredData*)pdata);
+  return qof_query_string_predicate_common(how, str, options, is_regex,
+					   query_string_type);
 }
 
-static char *
-string_to_string (gpointer object, QofParam *getter)
+/* QOF_QUERY_NUMSTRING */
+
+static int
+numstring_match_predicate (gpointer object,
+                        QofParam *getter,
+                        QofQueryPredData *pd)
 {
-  const char *res;
-  res = ((query_string_getter)getter->param_getfcn)(object, getter);
-  if (res)
-    return g_strdup (res);
-  return NULL;
+  VERIFY_PREDICATE (query_numstring_type);
+  return string_match_predicate_common(object, getter, pd);
+}
+
+static int
+numstring_compare_func (gpointer a, gpointer b, gint options,
+                     QofParam *getter)
+{
+  const char *s1, *s2;
+  char *sr1, *sr2;
+  long i1, i2;
+  g_return_val_if_fail (a && b && getter &&getter->param_getfcn, COMPARE_ERROR);
+
+  s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
+  s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
+
+  // Deal with NULL strings
+  if (s1 == s2)  return 0;
+  if (!s1 && s2) return -1;
+  if (s1 && !s2) return 1;
+
+  // Convert to integers and test
+  i1 = strtol(s1, &sr1, 0);
+  i2 = strtol(s2, &sr2, 0);
+  if (i1 < i2)  return -1;
+  if (i1 > i2)  return 1;
+
+  // If the integers match, then test the REST of the string as text.
+  if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
+    return safe_strcasecmp (sr1, sr2);
+
+  return safe_strcmp (sr1, sr2);
+}
+
+static void
+numstring_free_pdata (QofQueryPredData *pd)
+{
+  VERIFY_PDATA (query_numstring_type);
+  return string_free_pdata_common(pd);
+}
+
+static QofQueryPredData *
+numstring_copy_predicate (QofQueryPredData *pd)
+{
+  query_string_t pdata = (query_string_t) pd;
+
+  VERIFY_PDATA_R (query_numstring_type);
+
+  return qof_query_string_predicate_common (pd->how, pdata->matchstring,
+					    pdata->options,
+					    pdata->is_regex,
+					    query_numstring_type);
+}
+
+QofQueryPredData *
+qof_query_numstring_predicate (QofQueryCompare how,
+                            const char *str, QofStringMatch options,
+                            gboolean is_regex)
+{
+  return qof_query_string_predicate_common(how, str, options, is_regex,
+					   query_numstring_type);
 }
 
 /* QOF_TYPE_DATE =================================================== */
@@ -1660,6 +1757,9 @@ static void init_tables (void)
   {
     { QOF_TYPE_STRING, string_match_predicate, string_compare_func,
       string_copy_predicate, string_free_pdata, string_to_string,
+      string_predicate_equal },
+    { QOF_TYPE_NUMSTRING, numstring_match_predicate, numstring_compare_func,
+      numstring_copy_predicate, numstring_free_pdata, string_to_string,
       string_predicate_equal },
     { QOF_TYPE_DATE, date_match_predicate, date_compare_func,
       date_copy_predicate, date_free_pdata, date_to_string,

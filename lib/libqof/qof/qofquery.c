@@ -1693,7 +1693,8 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     }
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING) ||
+      !safe_strcmp (pd->type_name, QOF_TYPE_NUMSTRING))
   {
     query_string_t pdata = (query_string_t) pd;
     g_string_append_printf (gs, " Match type %s",

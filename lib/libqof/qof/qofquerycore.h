@@ -141,6 +141,11 @@ QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
                                               QofStringMatch options,
                                               gboolean is_regex);
 
+QofQueryPredData *qof_query_numstring_predicate (QofQueryCompare how,
+						 const gchar *str,
+						 QofStringMatch options,
+						 gboolean is_regex);
+
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
                                             QofDateMatch options,
                                             Timespec date);

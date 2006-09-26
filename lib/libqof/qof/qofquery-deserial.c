@@ -694,6 +694,7 @@ int main (int argc, char * argv[])
 		{ "aflt", QOF_TYPE_DOUBLE, NULL, NULL},
 		{ "abool", QOF_TYPE_BOOLEAN, NULL, NULL},
 		{ "astr", QOF_TYPE_STRING, NULL, NULL},
+		{ "nstr", QOF_TYPE_NUMSTRING, NULL, NULL},
 		{ "adate", QOF_TYPE_DATE, NULL, NULL},
 		{ "anum", QOF_TYPE_NUMERIC, NULL, NULL},
 		{ "achar", QOF_TYPE_CHAR, NULL, NULL},

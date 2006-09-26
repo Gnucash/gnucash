@@ -426,7 +426,8 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	cm_param = (QofParam*) data;
 	g_return_if_fail(cm_param != NULL);
 	context->param = cm_param;
-	if(safe_strcmp(cm_param->param_type, QOF_TYPE_STRING) == 0)  { 
+	if(safe_strcmp(cm_param->param_type, QOF_TYPE_STRING) == 0 ||
+	   safe_strcmp(cm_param->param_type, QOF_TYPE_NUMSTRING) == 0)  { 
 		cm_string = (gchar*)cm_param->param_getfcn(importEnt, cm_param);
 		if(cm_string) {
 		string_setter = (void(*)(QofEntity*, const char*))cm_param->param_setfcn;

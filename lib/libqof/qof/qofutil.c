@@ -416,7 +416,8 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 	param_string = NULL;
     known_type = FALSE;
 	paramType = param->param_type;
-	if(safe_strcmp(paramType, QOF_TYPE_STRING) == 0)  { 
+	if(safe_strcmp(paramType, QOF_TYPE_STRING) == 0 ||
+	   safe_strcmp(paramType, QOF_TYPE_NUMSTRING) == 0)  { 
 			param_string = g_strdup(param->param_getfcn(ent, param));
 			if(param_string == NULL) { param_string = ""; }
             known_type = TRUE;
