@@ -523,6 +523,9 @@ const char * xaccAccountGetTypeStr (GNCAccountType type);
  *  to the local language. */
 GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
 
+/** Return the bitmask of account types compatible with a given type. */
+guint32 xaccAccountTypesCompatibleWith (GNCAccountType type);
+
 /** Return TRUE if accounts of type parent_type can have accounts
  * of type child_type as children. */
 gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
