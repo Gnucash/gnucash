@@ -113,9 +113,12 @@ GtkTreeModel * gnc_tree_model_account_types_valid (void);
    Caller is responsible for ref/unref. */
 GtkTreeModel * gnc_tree_model_account_types_filter_using_mask (guint32 types);
 
-/* Update the set of the visibible account types in 'model' to 'types'. */
+/* Update the set of the visibible account types in 'f_model' to 'types'. */
 void gnc_tree_model_account_types_set_mask (GtkTreeModel *f_model,
                                             guint32 types);
+
+/* Return the current set of the visibible account types. */
+guint32 gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model);
 
 /* Return the bitmask of the account type enums reflecting the state
    of the tree selection.  If your view allows the selection of

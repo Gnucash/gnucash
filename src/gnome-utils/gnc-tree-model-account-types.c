@@ -201,6 +201,14 @@ gnc_tree_model_account_types_set_mask (GtkTreeModel *f_model,
 }
 
 guint32
+gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model)
+{
+    g_return_val_if_fail (f_model, 0);
+
+    return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (f_model), TYPE_MASK));
+}
+
+guint32
 gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes * model)
 {
 	GncTreeModelAccountTypesPrivate *priv;
@@ -236,7 +244,12 @@ gnc_tree_model_account_types_get_selection (GtkTreeSelection *sel)
     view = gtk_tree_selection_get_tree_view(sel);
     g_return_val_if_fail (view, 0);
 
+    /* circumvent a bug in gtk+ not always filling f_model */
+    f_model = NULL;
     list = gtk_tree_selection_get_selected_rows(sel, &f_model);
+    if (!f_model)
+      f_model = gtk_tree_view_get_model(view);
+
     model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     if (model != account_types_tree_model)
        PERR("TreeSelection's TreeModel is not the account-types Model");
