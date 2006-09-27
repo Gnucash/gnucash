@@ -473,13 +473,17 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
    */
   if (sort->param_fcns) 
   {
-    sort->comp_fcn = qof_query_core_get_compare (resObj->param_type);
+    /* First, check if this parameter has a sort function override.
+     * if not then check if there's a global compare function for the type
+     */
+    if (resObj->param_compfcn)
+      sort->comp_fcn = resObj->param_compfcn;
+    else
+      sort->comp_fcn = qof_query_core_get_compare (resObj->param_type);
 
-    /* Hrm, perhaps this is an object compare, not a core compare? */
+    /* Next, perhaps this is an object compare, not a core type compare? */
     if (sort->comp_fcn == NULL)
-    {
       sort->obj_cmp = qof_class_get_default_sort (resObj->param_type);
-    }
   } 
   else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
   {

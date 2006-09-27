@@ -1968,7 +1968,8 @@ gboolean xaccTransRegister (void)
   static QofParam params[] = {
     { TRANS_NUM, QOF_TYPE_STRING, 
       (QofAccessFunc)xaccTransGetNum, 
-      (QofSetterFunc)qofTransSetNum },
+      (QofSetterFunc)qofTransSetNum,
+       qof_string_number_compare_func },
     { TRANS_DESCRIPTION, QOF_TYPE_STRING, 
       (QofAccessFunc)xaccTransGetDescription, 
       (QofSetterFunc)qofTransSetDescription },
