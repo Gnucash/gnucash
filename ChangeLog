@@ -1,3 +1,20 @@
+2006-09-26  Derek Atkins  <derek@ihtfp.com>
+
+	Add the ability to override the default sort (#150799).
+	Override the Transaction Number to sort numerically.
+	* lib/libqof/qof/qofclass.h:
+	* lib/libqof/qof/qofquery.c:
+	* lib/libqof/qof/qofquerycore-p.h:
+	* lib/libqof/qof/qofquerycore.[ch]:
+	  - Publish the QofCompareFunc prototype.
+	  - Add a new QofParam param_compfcn parameter
+	  - Change QofQuery to use the param_compfcn over the
+	    default type compare function.
+	  - create (and publish) a qof API to compare strings
+	    as numbers:  qof_string_number_compare_func()
+	* src/engine/Transaction.c:
+	  Assign TRANS_NUM to use qof_string_numer_compare_func()
+
 2006-09-25   Christian Stimming <stimming@tuhh.de>
 
 	* po/ne.po: Updated complete Nepali translation by Subir
