@@ -1,3 +1,8 @@
+2006-09-26  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-query-list.c:
+	  Initialize sort order in query lists. Fixes #357481.
+
 2006-09-26  Derek Atkins  <derek@ihtfp.com>
 
 	Add the ability to override the default sort (#150799).
