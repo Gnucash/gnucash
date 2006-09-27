@@ -808,7 +808,7 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
 
     /* And then iterate over all the objects */
     qof_object_foreach (qcb->query->search_for, book,
-			(QofEntityForeachCB) check_item_cb, &qcb);
+			(QofEntityForeachCB) check_item_cb, qcb);
   }
 }
 
