@@ -127,15 +127,11 @@ void xaccQueryAddStringMatch (Query* q, const char *matchstring,
 			      int case_sens, int use_regexp, QofQueryOp op,
 			      const char * path, ...);
 
-void xaccQueryAddNumStringMatch (Query* q, const char *matchstring,
-			      int case_sens, int use_regexp, QofQueryOp op,
-			      const char * path, ...);
-
 #define xaccQueryAddDescriptionMatch(q,m,c,r,o) \
 	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS, \
 				TRANS_DESCRIPTION, NULL)
 #define xaccQueryAddNumberMatch(q,m,c,r,o) \
-	xaccQueryAddNumStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS, \
+	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS, \
 				TRANS_NUM, NULL)
 #define xaccQueryAddActionMatch(q,m,c,r,o) \
 	xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_ACTION, \

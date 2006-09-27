@@ -44,9 +44,6 @@ struct _GNCSearchString {
   GNCSearchString_Type	how;
   gboolean		ign_case;
   char *		value;
-
-  /* Is this is String or a NumString */
-  gboolean		is_numstring;
 };
 
 struct _GNCSearchStringClass {
@@ -59,7 +56,6 @@ struct _GNCSearchStringClass {
 
 guint		gnc_search_string_get_type	(void);
 GNCSearchString	*gnc_search_string_new	(void);
-GNCSearchString	*gnc_search_string_new_numstring(void);
 
 /* methods */
 void	gnc_search_string_set_value(GNCSearchString *fi, const char *value);

@@ -83,8 +83,6 @@ single reference between two known objects.
  */
 
 #define QOF_TYPE_STRING    "string"
-#define QOF_TYPE_NUMSTRING "numstring" /**< a string that sorts in numeric
-					  order instead of typological order */
 #define QOF_TYPE_DATE      "date"
 #define QOF_TYPE_NUMERIC   "numeric"
 #define QOF_TYPE_DEBCRED   "debcred"

@@ -126,8 +126,7 @@ qof_book_merge_compare(QofBookMergeData *mergeData )
 		mergeParamName = qtparam->param_name;
 		g_return_val_if_fail(mergeParamName != NULL, -1);
 		mergeType = qtparam->param_type;
-		if(safe_strcmp(mergeType, QOF_TYPE_STRING) == 0 ||
-		   safe_strcmp(mergeType, QOF_TYPE_NUMSTRING) == 0)  { 
+		if(safe_strcmp(mergeType, QOF_TYPE_STRING) == 0)  { 
 			stringImport = qtparam->param_getfcn(mergeEnt,qtparam);
 			stringTarget = qtparam->param_getfcn(targetEnt,qtparam);
 			/* very strict string matches may need to be relaxed. */
@@ -644,8 +643,7 @@ qof_book_merge_commit_rule_loop(
 		g_return_if_fail(rule->mergeParam->data);
 		cm_param = rule->mergeParam->data;
 		rule->mergeType = cm_param->param_type;
-		if(safe_strcmp(rule->mergeType, QOF_TYPE_STRING) == 0 ||
-		   safe_strcmp(rule->mergeType, QOF_TYPE_NUMSTRING) == 0)  { 
+		if(safe_strcmp(rule->mergeType, QOF_TYPE_STRING) == 0)  { 
 			cm_string = cm_param->param_getfcn(rule->importEnt, cm_param);
 			string_setter = (void(*)(QofEntity*, const gchar*))cm_param->param_setfcn;
 			if(string_setter != NULL) { string_setter(rule->targetEnt, cm_string); }
@@ -838,8 +836,7 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 
 	param_string = NULL;
 	paramType = qtparam->param_type;
-	if(safe_strcmp(paramType, QOF_TYPE_STRING) == 0 ||
-	   safe_strcmp(paramType, QOF_TYPE_NUMSTRING) == 0)  { 
+	if(safe_strcmp(paramType, QOF_TYPE_STRING) == 0)  { 
 			param_string = g_strdup(qtparam->param_getfcn(qtEnt,qtparam));
 			if(param_string == NULL) { param_string = ""; }
 			return param_string;

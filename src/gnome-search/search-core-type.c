@@ -255,8 +255,6 @@ init_table (void)
 {
   gnc_search_core_register_type (QUERYCORE_STRING,
 				 (GNCSearchCoreNew) gnc_search_string_new);
-  gnc_search_core_register_type (QOF_TYPE_NUMSTRING,
-				 (GNCSearchCoreNew) gnc_search_string_new_numstring);
   gnc_search_core_register_type (QUERYCORE_DATE,
 				 (GNCSearchCoreNew) gnc_search_date_new);
   gnc_search_core_register_type (QUERYCORE_INT64,

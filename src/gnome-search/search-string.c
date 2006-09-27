@@ -112,7 +112,6 @@ gnc_search_string_init (GNCSearchString *o)
   o->value = NULL;
   o->how = SEARCH_STRING_CONTAINS;
   o->ign_case = TRUE;
-  o->is_numstring = FALSE;
 }
 
 static void
@@ -137,21 +136,6 @@ GNCSearchString *
 gnc_search_string_new (void)
 {
   GNCSearchString *o = g_object_new(GNC_TYPE_SEARCH_STRING, NULL);
-  return o;
-}
-
-/**
- * gnc_search_string_new_numstring:
- *
- * Create a new GNCSearchString object for a NumString.
- * 
- * Return value: A new #GNCSearchString object.
- **/
-GNCSearchString *
-gnc_search_string_new_numstring (void)
-{
-  GNCSearchString *o = g_object_new(GNC_TYPE_SEARCH_STRING, NULL);
-  o->is_numstring = TRUE;
   return o;
 }
 
@@ -375,10 +359,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
   if (ss->ign_case)
     options = STRING_MATCH_CASEINSENSITIVE;
 
-  if (ss->is_numstring)
-    return qof_query_numstring_predicate (how, ss->value, options, is_regex);
-  else
-    return gncQueryStringPredicate (how, ss->value, options, is_regex);
+  return gncQueryStringPredicate (how, ss->value, options, is_regex);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
@@ -388,10 +369,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
   g_return_val_if_fail (fse, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_STRING (fse), NULL);
 
-  if (fse->is_numstring)
-    se = gnc_search_string_new_numstring ();
-  else
-    se = gnc_search_string_new ();
+  se = gnc_search_string_new ();
   gnc_search_string_set_value (se, fse->value);
   gnc_search_string_set_how (se, fse->how);
   gnc_search_string_set_case (se, fse->ign_case);

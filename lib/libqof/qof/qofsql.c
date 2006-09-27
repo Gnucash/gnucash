@@ -308,8 +308,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		return NULL;
 	}
 
-	if (!strcmp (param_type, QOF_TYPE_STRING) ||
-	    !strcmp (param_type, QOF_TYPE_NUMSTRING))
+	if (!strcmp (param_type, QOF_TYPE_STRING))
 	{
 		pred_data = 
 		    qof_query_string_predicate (qop,        /* comparison to make */
@@ -606,8 +605,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 
 	ENTER (" param=%s param_type=%s type=%s content=%s", 
 		param->param_name, param->param_type, type, insert_string);
-	if(safe_strcmp(param->param_type, QOF_TYPE_STRING) == 0 ||
-	   safe_strcmp(param->param_type, QOF_TYPE_NUMSTRING) == 0)  { 
+	if(safe_strcmp(param->param_type, QOF_TYPE_STRING) == 0)  { 
 		string_setter = (void(*)(QofEntity*, const char*))param->param_setfcn;
 		if(string_setter != NULL) { string_setter(ent, insert_string); }
 		registered_type = TRUE;

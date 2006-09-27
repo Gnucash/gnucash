@@ -320,32 +320,6 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
 }
 
 void
-xaccQueryAddNumStringMatch (Query* q, const char *matchstring,
-			    int case_sens, int use_regexp, QofQueryOp op,
-			    const char * path, ...)
-{
-  QofQueryPredData *pred_data;
-  GSList *param_list;
-  va_list ap;
-
-  if (!path || !q)
-    return;
-
-  pred_data = qof_query_numstring_predicate (QOF_COMPARE_EQUAL, (char *)matchstring,
-				       (case_sens ? QOF_STRING_MATCH_NORMAL :
-					QOF_STRING_MATCH_CASEINSENSITIVE),
-				       use_regexp);
-  if (!pred_data)
-    return;
-
-  va_start (ap, path);
-  param_list = build_param_list_internal (path, ap);
-  va_end (ap);
-
-  qof_query_add_term (q, param_list, pred_data, op);
-}
-
-void
 xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
 			  QofQueryCompare how, QofQueryOp op,
 			  const char * path, ...)

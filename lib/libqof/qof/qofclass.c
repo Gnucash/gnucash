@@ -274,7 +274,6 @@ find_reference_param_cb(QofParam *param, gpointer user_data)
 	b = (struct param_ref_list*)user_data;
 	if((param->param_getfcn == NULL)||(param->param_setfcn == NULL)) { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_STRING)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMSTRING)) { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC)) { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DATE)) { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_CHAR)) { return; }

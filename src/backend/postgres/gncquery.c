@@ -958,8 +958,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     more_and = 0;
                 }
 
-            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_STRING) ||
-		       !safe_strcmp(pd->type_name, QOF_TYPE_NUMSTRING)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_STRING)) {
                 query_string_t pdata = (query_string_t) pd;
 
                 if (!safe_strcmp(path->data, SPLIT_ACTION)) {
