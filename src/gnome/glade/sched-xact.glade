@@ -8544,10 +8544,10 @@ If you make a mistake or want to make changes later, you can edit the created Sc
       </child>
 
       <child>
-	<widget class="GtkVPaned" id="vpaned1">
+	<widget class="GtkVPaned" id="paned">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="position">0</property>
+	  <property name="position">240</property>
 
 	  <child>
 	    <widget class="GtkScrolledWindow" id="scrolledwindow21">

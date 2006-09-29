@@ -53,11 +53,13 @@ G_BEGIN_DECLS
 
 
 /* typedefs & structures */
-typedef struct {
+typedef struct
+{
      GncPluginPage gnc_plugin_page;
 } GncPluginPageSxList;
 
-typedef struct {
+typedef struct
+{
      GncPluginPageClass gnc_plugin_page;
 } GncPluginPageSxListClass;
 
@@ -67,12 +69,12 @@ typedef struct {
  * Retrieve the type number for an "sx list" plugin page.
  * @return The type number.
  */
-GType gnc_plugin_page_sx_list_get_type (void);
+GType gnc_plugin_page_sx_list_get_type(void);
 
 /**
  * @return The newly created plugin page.
  **/
-GncPluginPage *gnc_plugin_page_sx_list_new  (void);
+GncPluginPage *gnc_plugin_page_sx_list_new(void);
 
 
 /** ------------------------------------------------------------ **/
@@ -109,36 +111,54 @@ typedef struct _GncSxInstanceModelClass
 typedef struct _GncSxInstances
 {
      SchedXaction *sx;
-     GHashTable /** <char*,NULL> **/ *variable_names;
+     GHashTable /** <name:char*,GncSxVariable*> **/ *variable_names;
      gboolean variable_names_parsed;
      
      GDate next_instance_date;
      
      /** GList<GncSxInstance*> **/
-     GList *list;
+     GList *list; // @fixme: s/list/?/
 } GncSxInstances;
 
 typedef enum 
 {
-     IGNORED, POSTPONED, TO_CREATE, REMINDER, MAX_STATE
-} GncSxInstanceType;
+     SX_INSTANCE_STATE_IGNORED,
+     SX_INSTANCE_STATE_POSTPONED,
+     SX_INSTANCE_STATE_TO_CREATE,
+     SX_INSTANCE_STATE_REMINDER,
+     SX_INSTANCE_STATE_MAX_STATE
+} GncSxInstanceState;
 
 typedef struct _GncSxVariable
 {
-     GString *name;
-     GString *value;
+     gchar *name;
+     gnc_numeric value; /**< only numeric values are supported. **/
      gboolean editable;
 } GncSxVariable;
 
 typedef struct _GncSxInstance
 {
-     GncSxInstances *parent;
-     GncSxInstanceType type;
-     GDate date;
-     GHashTable *variable_bindings;
+     GncSxInstances *parent; /**< the parent instances collection. **/
+     void *temporal_state; /**< the sx creation temporal state. **/
+     GncSxInstanceState orig_state; /**< the original state at generation time. **/
+     GncSxInstanceState state; /**< the current state of the instance (during editing) **/
+     GDate date; /**< the instance date. **/
+     GHashTable *variable_bindings; /**< variable bindings. **/
 } GncSxInstance;
 
 GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
+
+/** @return GList<GncSxVariable*> **/
+GList *gnc_sx_instance_get_variables(GncSxInstance *inst);
+
+Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);
+
+/**
+ * @return caller-owned.
+ **/
+GHashTable* gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash);
+
+
 /** ------------------------------------------------------------ **/
 
 G_END_DECLS

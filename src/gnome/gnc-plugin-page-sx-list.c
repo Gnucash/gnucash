@@ -93,14 +93,13 @@ static void gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass);
 static void gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass);
 static GncSxInstanceModel* gnc_sx_instance_model_new(void);
 
-static GncSxInstance* gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceType type, GDate *date, gint sequence_num);
+static GncSxInstance* gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num);
 
 static void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);
 static gint _get_vars_helper(Transaction *txn, void *var_hash_data);
-static void clear_variable_numerics(gpointer key, gpointer value, gpointer data);
 static int parse_vars_from_formula(const char *formula, GHashTable *varHash, gnc_numeric *result);
 
-static void gnc_util_copy_hash_table(GHashTable *from, GHashTable *to);
+static GncSxVariable* gnc_sx_variable_new(gchar *name);
 
 static void _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
 
@@ -374,6 +373,17 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
      gtk_action_set_sensitive(delete_action, selection_state);
 }
 
+#if 0
+static GtkTreeSortable*
+_setup_sortable_model(GtkTreeModel *model)
+{
+     GtkTreeModelSort *sortable;
+
+     sortable = gtk_tree_model_sort_new_with_model(model);
+     gtk_tree_model
+}
+#endif // 0
+
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
@@ -411,10 +421,12 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           GtkCellRenderer *renderer;
           GtkTreeViewColumn *column;
           GtkTreeSelection *selection;
+          //GtkTreeModel *sortable_model;
 
           priv->tree_model = gnc_sx_list_tree_model_adapter_new(priv->instances);
           priv->tree_view = GTK_TREE_VIEW(glade_xml_get_widget(priv->gxml, "sx_list"));
-          gtk_tree_view_set_model(priv->tree_view, GTK_TREE_MODEL(priv->tree_model));
+          //sortable_model = _setup_sortable_model(GTK_TREE_MODEL(priv->tree_model));
+          gtk_tree_view_set_model(priv->tree_view, GTK_TREE_MODEL(priv->tree_model)); // GTK_TREE_MODEL(sortable_model));
 
           renderer = gtk_cell_renderer_text_new();
           column = gtk_tree_view_column_new_with_attributes("Name", renderer, "text", 0, NULL);
@@ -763,19 +775,63 @@ gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
 
 /* ------------------------------------------------------------ */
 
+static void
+_sx_var_to_raw_numeric(gchar *name, GncSxVariable *var, GHashTable *parser_var_hash)
+{
+     g_hash_table_insert(parser_var_hash, name, &var->value);
+}
+
+static void
+_var_numeric_to_sx_var(gchar *name, gnc_numeric *num, GHashTable *sx_var_hash)
+{
+     gpointer p_var;
+     if (!g_hash_table_lookup_extended(sx_var_hash, name, NULL, &p_var))
+     {
+          p_var = (gpointer)gnc_sx_variable_new(name);
+          g_hash_table_insert(sx_var_hash, name, p_var);
+     }
+     ((GncSxVariable*)p_var)->value = *num;
+}
+
+static void
+_wipe_parsed_sx_var(gchar *key, GncSxVariable *var, gpointer unused_user_data)
+{
+     var->value = gnc_numeric_error(GNC_ERROR_ARG);
+}
+
+/**
+ * @return caller-owned.
+ **/
+GHashTable*
+gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash)
+{
+     GHashTable *parser_vars;
+     parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
+     g_hash_table_foreach(instance_var_hash, (GHFunc)_sx_var_to_raw_numeric, parser_vars);
+     return parser_vars;
+}
+
 static int
 parse_vars_from_formula(const char *formula,
-                        GHashTable *varHash,
+                        GHashTable *var_hash,
                         gnc_numeric *result)
 {
      gnc_numeric num;
      char *errLoc;
      int toRet = 0;
+     GHashTable *parser_vars;
 
-     if (!gnc_exp_parser_parse_separate_vars(formula, &num, &errLoc, varHash))
+     // convert var_hash -> variables for the parser.
+     parser_vars = gnc_sx_instance_get_variables_for_parser(var_hash);
+
+     if (!gnc_exp_parser_parse_separate_vars(formula, &num, &errLoc, parser_vars))
      {
           toRet = -1;
      }
+
+     // convert back.
+     g_hash_table_foreach(parser_vars, (GHFunc)_var_numeric_to_sx_var, var_hash);
+     g_hash_table_destroy(parser_vars);
 
      if (result != NULL)
      {
@@ -785,11 +841,14 @@ parse_vars_from_formula(const char *formula,
      return toRet;
 }
 
-static void
-clear_variable_numerics(gpointer key, gpointer value, gpointer data)
+static GncSxVariable*
+gnc_sx_variable_new(gchar *name)
 {
-     g_free((gnc_numeric*)value);
-     g_hash_table_insert((GHashTable*)data, key, NULL);
+     GncSxVariable *var = g_new0(GncSxVariable, 1);
+     var->name = name;
+     var->value = gnc_numeric_error(GNC_ERROR_ARG);
+     var->editable = TRUE;
+     return var;
 }
 
 static gint
@@ -831,14 +890,15 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
                 
           if (! gnc_commodity_equal(split_cmdty, first_cmdty))
           {
-               gnc_numeric *tmp_num;
-               GString *var_name = g_string_sized_new(16);
+               GncSxVariable *var;
+               GString *var_name;
+
+               var_name = g_string_sized_new(16);
                g_string_printf(var_name, "%s -> %s",
                                gnc_commodity_get_mnemonic(split_cmdty),
                                gnc_commodity_get_mnemonic(first_cmdty));
-               tmp_num = g_new0(gnc_numeric, 1);
-               *tmp_num = gnc_numeric_create(0, 1);
-               g_hash_table_insert(var_hash, g_strdup(var_name->str), tmp_num);
+               var = gnc_sx_variable_new(g_strdup(var_name->str));
+               g_hash_table_insert(var_hash, var->name, var);
                g_string_free(var_name, TRUE);
           }
 
@@ -873,8 +933,8 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
      return 0;
 }
 
-static void
-sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
+Account*
+gnc_sx_get_template_transaction_account(SchedXaction *sx)
 {
      AccountGroup *template_group;
      Account *sx_template_acct;
@@ -884,31 +944,35 @@ sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
      sx_guid_str = guid_to_string(xaccSchedXactionGetGUID(sx));
      /* Get account named after guid string. */
      sx_template_acct = xaccGetAccountFromName(template_group, sx_guid_str);
-     xaccAccountForEachTransaction(sx_template_acct, _get_vars_helper, var_hash);
-
-     // @@fixme - This should actually create GncSxVariable structures.
-     g_hash_table_foreach(var_hash, clear_variable_numerics, (gpointer)var_hash);
+     return sx_template_acct;
 }
 
 static void
-_clone_hash_entry(gpointer key, gpointer value, gpointer user_data)
+sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
+{
+     Account *sx_template_acct;
+     sx_template_acct = gnc_sx_get_template_transaction_account(sx);
+     xaccAccountForEachTransaction(sx_template_acct, _get_vars_helper, var_hash);
+}
+
+static void
+_clone_sx_var_hash_entry(gpointer key, gpointer value, gpointer user_data)
 {
      GHashTable *to = (GHashTable*)user_data;
-     g_hash_table_insert(to, key, value);
-}
-
-static void
-gnc_util_copy_hash_table(GHashTable *from, GHashTable *to)
-{
-     g_hash_table_foreach(from, _clone_hash_entry, (gpointer)to);
+     GncSxVariable *to_copy = (GncSxVariable*)value;
+     GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
+     var->value = to_copy->value;
+     var->editable = to_copy->editable;
+     g_hash_table_insert(to, key, var);
 }
 
 static GncSxInstance*
-gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceType type, GDate *date, gint sequence_num)
+gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num)
 {
      GncSxInstance *rtn = g_new0(GncSxInstance, 1);
      rtn->parent = parent;
-     rtn->type = type;
+     rtn->orig_state = state;
+     rtn->state = state;
      g_date_clear(&rtn->date, 1);
      rtn->date = *date;
 
@@ -916,14 +980,32 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceType type, GDate *date,
      {
           parent->variable_names = g_hash_table_new(g_str_hash, g_str_equal);
           sxsl_get_sx_vars(parent->sx, parent->variable_names);
+          g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
           parent->variable_names_parsed = TRUE;
 
           // @@fixme: add sequence_num as `i`, non-editable
      }
 
      rtn->variable_bindings = g_hash_table_new(g_str_hash, g_str_equal);
-     gnc_util_copy_hash_table(parent->variable_names, rtn->variable_bindings);
+     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
      return rtn;
+}
+
+static void
+_build_list_from_hash_elts(gpointer key, gpointer value, gpointer user_data)
+{
+     GList **list = (GList**)user_data;
+     *list = g_list_append(*list, value);
+}
+
+GList *
+gnc_sx_instance_get_variables(GncSxInstance *inst)
+{
+     GList *vars = NULL;
+     g_hash_table_foreach(inst->variable_bindings, _build_list_from_hash_elts, &vars);
+     
+     // @@fixme sort by name
+     return vars;
 }
 
 static GncSxInstances*
@@ -954,7 +1036,8 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 
                inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
                seq_num = gnc_sx_get_instance_count(sx, postponed->data);
-               inst = gnc_sx_instance_new(instances, POSTPONED, &inst_date, seq_num);
+               inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
+               //inst->sx_temporal_state = postponed->data;
                instances->list = g_list_append(instances->list, inst);
           }
      }
@@ -969,7 +1052,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
           GncSxInstance *inst;
           int seq_num;
           seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-          inst = gnc_sx_instance_new(instances, TO_CREATE, &cur_date, seq_num);
+          inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
           instances->list = g_list_append(instances->list, inst);
           gnc_sx_incr_temporal_state(sx, sequence_ctx);
           cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
@@ -981,7 +1064,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
           GncSxInstance *inst;
           int seq_num;
           seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-          inst = gnc_sx_instance_new(instances, REMINDER, &cur_date, seq_num);
+          inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
           instances->list = g_list_append(instances->list, inst);
           gnc_sx_incr_temporal_state(sx, sequence_ctx);
           cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);

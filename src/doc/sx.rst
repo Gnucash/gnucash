@@ -21,6 +21,7 @@ TODO
 - meta
   - [ ] move files around
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
+  - [ ] generic tree model adapter setup code
 
 - core
   - [x] sx list -> qof collection
@@ -43,18 +44,27 @@ TODO
   - [ ] XML migration, handling
 
 - since-last-run
-  - [ ] add reminders, postponed to SxInstanceModel
+  - [x] add reminders, postponed to SxInstanceModel
   - [ ] add obsolete flag to SxInstanceModel
-  - [ ] add mutation support to sx instance model
-    - [ ] state machine
-  - [ ] add variable state to sx instance model
-  - [ ] add sx_upcoming_instance_model()
+  - [x] add mutation support to sx instance model
+    - [x] state machine
+  - [x] add variable state to sx instance model
+  - [x] add sx_upcoming_instance_model()
       - [ ] add effect_auto_create()
   - [ ] add some sort of "ready to go" flag and api
-    - [ ] variable setting, primarily
-  - [ ] some sort of commit_changes()
+    - [x] variable setting, primarily
+  - [/] some sort of commit_changes()
     - ??? does effect_auto_create() imply or need commit_changes()?
   - [/] add variable table to instances
+  - [ ] ui: add 'review created transactions' checkbox to SLR dialog
+        using txn search.
+
+- destroy/cleanup
+  - [ ] GncSxInstanceModel
+  - [ ] GncSxSlr[Tree]Model[Adapter]
+  - [ ] GncSxList adapter
+  - [ ] GncPluginPageSxList
+  - ...
 
 Pedantic Todo
 ----------------------
@@ -62,7 +72,6 @@ Pedantic Todo
 - s/SchedXaction/Scheduled/
 - s/temporal_state/instance_sequence_context/
 - change instance variable from 'i' to '__i' or something
-
 
 ============================================================
 
@@ -115,14 +124,16 @@ The new SLR dialog will have the following:
   - to-create
   - [obsolete SX]?
 
-There is no seperate to-review page.
+There is no seperate to-review page, however the user may (optionally) want
+to see the created transactions.  This is done using the transaction-search
+functionality over the created transactions by ID.
 
 Upcoming instance states
 ---------------------------------------
 
-    reminder -> to-create
+    reminder  -> to-create
     postponed -> to-create
-    to-create -> postponed  (with constraints)
+    to-create -> postponed
     to-create -> ignore
 
 Definitions:
@@ -134,13 +145,34 @@ Definitions:
     ignore: a scheduled instance the user has explicitly prevented the
         instantiation of.
 
-What does the SX need to store?
-- postponed instance list.
-- last state of created instance.
+The SX need to store?
+- last state of *created* instance
+- postponed instance list
 
-    void gnc_sx_instance_model_change_state(sx_id, instance_id, new_state, **gerror)
-    boolean gnc_sx_instance_model_get_readiness(sx_id, instance_id)
-    boolean gnc_sx_instance_model_set_variables(sx_id, instance_id, variable_name:string, value:string, **gerrror)
+There is a constraint around a sequence of upcoming instance states.  In
+short: the last-created state and a list of postponed instances are modeled,
+but upcoming reminders are not.  As such, a reminder can never be before any
+other (modeled) instance type.  For instance, the following sequences are
+disallowed:
+
+[...]
+remind    <- will be lost/skipped over; must be converted to `postponed`.
+to-create <- this will be the last-recorded state.
+[...]
+
+[...]
+remind    <- same as previous; will be lost/skipped; must be `postponed`.
+postponed
+[...]
+
+remind    <- same...
+ignore
+[...]
+
+
+As such, the SinceLastRun model will enforce that there are no previous
+`remind` instances at every state change.  They will be silently converted to
+`postponed`-state transactions.
 
 Formula Parsing
 ------------------------
@@ -153,4 +185,17 @@ A SXes formula is parsed in the context of:
 - a variable-binding table.
 
 
+Testing Notes
+---------------------
+
+- auto-create
+  - auto-create with postponed instances shouldn't destroy postponed
+    instances
+
+- basic sequence stuff
+
+dialog-sxsincelast.c:  ~L1241:
+"Handle an interesting corner case of postponing or
+ignoring the first instance. We only want to incrment the
+counters for newly-discovered-as-to-be-created SXes."
 
