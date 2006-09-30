@@ -35,6 +35,11 @@
 #include "Transaction.h"
 #include "Account.h"
 #include "Scrub.h"
+#include "Query.h"
+#include "QueryNew.h"
+#include "gnc-ledger-display.h"
+#include "gnc-plugin-page-register.h"
+#include "gnc-main-window.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -46,6 +51,7 @@ struct _GncSxSinceLastRunDialog
      GncSxInstanceModel *instances;
      GncSxSlrTreeModelAdapter *editing_model;
      GtkTreeView *instance_view;
+     GtkToggleButton *review_created_txns_toggle;
 };
 
 /* ------------------------------------------------------------ */
@@ -104,6 +110,8 @@ GList* gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *model);
 #define GNC_SX_SLR_TREE_MODEL_ADAPTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapterClass))
 
 /* ------------------------------------------------------------ */
+
+static void _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids);
 
 static void dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog);
 
@@ -822,6 +830,8 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *model)
           gtk_paned_set_position(paned, 240);
      }
 
+     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(glade_xml_get_widget(glade, "review_txn_toggle"));
+     
      {
           GtkCellRenderer *renderer;
           GtkTreeViewColumn *col;
@@ -879,13 +889,44 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *model)
 }
 
 static void
+_show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids)
+{
+     GNCLedgerDisplay *ledger;
+     GncPluginPage *page;
+     Query *book_query, *guid_query, *query;
+     GList *created_txn_guid_iter;
+
+     book_query = xaccMallocQuery();
+     guid_query = xaccMallocQuery();
+     xaccQuerySetBook(book_query, gnc_get_current_book());
+     for (created_txn_guid_iter = created_txn_guids;
+          created_txn_guid_iter != NULL;
+          created_txn_guid_iter = created_txn_guid_iter->next)
+     {
+          xaccQueryAddGUIDMatch(guid_query, (GUID*)created_txn_guid_iter->data, GNC_ID_TRANS, QUERY_OR);
+     }
+     query = xaccQueryMerge(book_query, guid_query, QUERY_AND);
+
+     // inspired by dialog-find-transactions:do_find_cb:
+     // do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
+     ledger = gnc_ledger_display_query(query, SEARCH_LEDGER, REG_STYLE_JOURNAL);
+     gnc_ledger_display_refresh(ledger);
+     page = gnc_plugin_page_register_new_ledger(ledger);
+     g_object_set(G_OBJECT(page), "page-name", _("Created Transactions"), NULL);
+     gnc_main_window_open_page(NULL, page);
+
+     xaccFreeQuery(query);
+     xaccFreeQuery(book_query);
+     xaccFreeQuery(guid_query);
+}
+
+static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
+     GList *created_txns = NULL;
      switch (response_id)
      {
      case GTK_RESPONSE_OK:
-          // @@fixme: create transactions
-          printf("should effect change and stuff\n");
           // @@fixme validate current state(GError *errs);
           // - instance state constraints
           // - required variable binding
@@ -903,9 +944,15 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
                     return;
                }
           }
-          gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, NULL, NULL);
+          gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &created_txns, NULL);
+          if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle))
+          {
+               _show_created_transactions(app_dialog, created_txns);
+          }
+          g_list_free(created_txns);
           /* FALLTHROUGH */
      case GTK_RESPONSE_CANCEL: 
+     case GTK_RESPONSE_DELETE_EVENT:
           gtk_widget_destroy(GTK_WIDGET(dialog));
           // @@fixme: destroy models, &c.
           break;
@@ -1324,6 +1371,10 @@ gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *model)
           for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
           {
                GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
+
+               if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
+                    continue;
+
                g_hash_table_foreach(inst->variable_bindings, (GHFunc)_list_from_hash_elts, &var_list);
                for (var_iter = var_list; var_iter != NULL; var_iter = var_iter->next)
                {

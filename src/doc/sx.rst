@@ -51,12 +51,12 @@ TODO
   - [x] add variable state to sx instance model
   - [x] add sx_upcoming_instance_model()
       - [ ] add effect_auto_create()
-  - [ ] add some sort of "ready to go" flag and api
+  - [/] add some sort of "ready to go" flag and api
     - [x] variable setting, primarily
   - [/] some sort of commit_changes()
     - ??? does effect_auto_create() imply or need commit_changes()?
   - [/] add variable table to instances
-  - [ ] ui: add 'review created transactions' checkbox to SLR dialog
+  - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
 - destroy/cleanup
