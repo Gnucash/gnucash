@@ -49,6 +49,7 @@ TODO
   - [x] add mutation support to sx instance model
     - [x] state machine
   - [x] add variable state to sx instance model
+    - [ ] handle (hidden/system not for editing) variables.
   - [x] add sx_upcoming_instance_model()
       - [ ] add effect_auto_create()
   - [/] add some sort of "ready to go" flag and api

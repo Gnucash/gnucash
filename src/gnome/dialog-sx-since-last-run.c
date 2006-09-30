@@ -657,27 +657,38 @@ gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxIns
      }
 }
 
-void
-gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value)
+static GtkTreePath*
+_get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable)
 {
      GList *variables;
-     GtkTreePath *path;
-     GtkTreeIter iter;
      int indices[3];
-     GString *tmp_str;
+     GtkTreePath *path;
 
      indices[0] = g_list_index(model->instances->sx_instance_list, instance->parent);
      if (indices[0] == -1)
-          return;
+          return NULL;
      indices[1] = g_list_index(instance->parent->list, instance);
      if (indices[1] == -1)
-          return;
+          return NULL;
      variables = gnc_sx_instance_get_variables(instance);
      indices[2] = g_list_index(variables, variable);
      g_list_free(variables);
      if (indices[2] == -1)
-          return;
+          return NULL;
      path = gtk_tree_path_new_from_indices(indices[0], indices[1], indices[2], -1);
+     return path;
+}
+
+void
+gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value)
+{
+     GtkTreePath *path;
+     GtkTreeIter iter;
+     GString *tmp_str;
+
+     path = _get_path_for_variable(model, instance, variable);
+     if (path == NULL)
+          return;
      gtk_tree_model_get_iter(GTK_TREE_MODEL(model), &iter, path);
      
      variable->value = *new_value;
@@ -894,21 +905,18 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
      GNCLedgerDisplay *ledger;
      GncPluginPage *page;
      Query *book_query, *guid_query, *query;
-     GList *created_txn_guid_iter;
+     GList *guid_iter;
 
      book_query = xaccMallocQuery();
      guid_query = xaccMallocQuery();
      xaccQuerySetBook(book_query, gnc_get_current_book());
-     for (created_txn_guid_iter = created_txn_guids;
-          created_txn_guid_iter != NULL;
-          created_txn_guid_iter = created_txn_guid_iter->next)
+     for (guid_iter = created_txn_guids; guid_iter != NULL; guid_iter = guid_iter->next)
      {
-          xaccQueryAddGUIDMatch(guid_query, (GUID*)created_txn_guid_iter->data, GNC_ID_TRANS, QUERY_OR);
+          xaccQueryAddGUIDMatch(guid_query, (GUID*)guid_iter->data, GNC_ID_TRANS, QUERY_OR);
      }
      query = xaccQueryMerge(book_query, guid_query, QUERY_AND);
 
      // inspired by dialog-find-transactions:do_find_cb:
-     // do_find_cb (QueryNew *query, gpointer user_data, gpointer *result)
      ledger = gnc_ledger_display_query(query, SEARCH_LEDGER, REG_STYLE_JOURNAL);
      gnc_ledger_display_refresh(ledger);
      page = gnc_plugin_page_register_new_ledger(ledger);
@@ -937,10 +945,22 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
                printf("%d variables unbound\n", g_list_length(unbound_variables));
                if (g_list_length(unbound_variables) > 0)
                {
-                    //printf("%d variables unbound\n", g_list_length(unbound_variables));
                     // focus first variable
-                    //GtkTreePath *variable_path = _get_path_for_variable(model, instance, variable);
-                    // gtk_tree_view_set_cursor(app_dialog->instance_view, );
+                    GncSxSlrVariableNeeded *first_unbound;
+                    GtkTreePath *variable_path;
+                    GtkTreeViewColumn *variable_col;
+                    gint variable_view_column = 2;
+                    gboolean start_editing = TRUE;
+
+                    first_unbound = (GncSxSlrVariableNeeded*)unbound_variables->data;
+                    variable_path = _get_path_for_variable(app_dialog->editing_model, first_unbound->instance, first_unbound->variable);
+                    variable_col = gtk_tree_view_get_column(app_dialog->instance_view, variable_view_column);
+
+                    gtk_tree_view_set_cursor(app_dialog->instance_view, variable_path, variable_col, start_editing);
+
+                    gtk_tree_path_free(variable_path);
+                    g_list_foreach(unbound_variables, (GFunc)g_free, NULL);
+                    g_list_free(unbound_variables);
                     return;
                }
           }
