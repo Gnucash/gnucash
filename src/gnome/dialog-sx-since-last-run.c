@@ -40,6 +40,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-main-window.h"
+#include "gnc-component-manager.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -964,12 +965,16 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
                     return;
                }
           }
+          gnc_suspend_gui_refresh();
           gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &created_txns, NULL);
-          if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle))
+          gnc_resume_gui_refresh();
+          if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
+              && g_list_length(created_txns) > 0)
           {
                _show_created_transactions(app_dialog, created_txns);
           }
           g_list_free(created_txns);
+          created_txns = NULL;
           /* FALLTHROUGH */
      case GTK_RESPONSE_CANCEL: 
      case GTK_RESPONSE_DELETE_EVENT:

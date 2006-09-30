@@ -8614,7 +8614,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 		<widget class="GtkCheckButton" id="review_txn_toggle">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Review created transactions</property>
+		  <property name="label" translatable="yes">_Review created transactions</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
