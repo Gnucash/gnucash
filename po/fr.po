@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-08 11:47+0200\n"
-"PO-Revision-Date: 2006-05-26 19:00+0200\n"
+"PO-Revision-Date: 2006-10-02 19:00+0200\n"
 "Last-Translator: Fabrice Kurz <kurzf@voila.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -875,7 +875,7 @@ msgstr "Taxe :"
 # messages-i18n.c:344
 #: ../src/business/business-gnome/dialog-invoice.c:938
 msgid "Total Cash:"
-msgstr "Liquide total :"
+msgstr "Espèces total :"
 
 # messages-i18n.c:264 po/guile_strings.txt:211
 # src/gnome/glade-gnc-dialogs.c:629
@@ -2757,7 +2757,7 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
-"Si actif, GnuCash vérifie au démarrage si des factures sont proche de leur "
+"Si cette option est cochée, GnuCash vérifie au démarrage si des factures sont proche de leur "
 "échéance. Dans ce cas, il affiche un dialogue de rappel. La définition de "
 "« proche » est controllée par l'option « jours d'avance ». Autrement GnuCash "
 "ne vérifie pas les factures échues."
@@ -2767,7 +2767,7 @@ msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
 msgstr ""
-"Si actif, chaque nouvelle facture sera ouverte dans une nouvelle fenêtre. "
+"Si cette option est cochée, chaque nouvelle facture sera ouverte dans une nouvelle fenêtre. "
 "Sinon, elle sera ouverte dans un nouvel onglet de la fenêtre courante."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
@@ -2775,7 +2775,7 @@ msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
-"Si actif, seuls les items 'actifs' de la classe courante seront cherchés. "
+"Si cette option est cochée, seuls les items 'actifs' de la classe courante seront cherchés. "
 "Sinon tous les items de la classe courante seront cherchés. "
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
@@ -2783,7 +2783,7 @@ msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
-"Si actif, alors les taxes sont incluses par défaut dans les entrées de ce "
+"Si cette option est cochée, alors les taxes sont incluses par défaut dans les entrées de ce "
 "type. Cette option est héritée des clients et fournisseurs."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
@@ -2792,7 +2792,7 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"Si actif, alors les répartitions multiples d'une même facture qui "
+"Si cette option est cochée, alors les répartitions multiples d'une même facture qui "
 "transfèrent vers un même compte sont accumulées en une seule répartition. Ce "
 "choix peut être modifié pour chaque facture dans le dialogue de publication."
 
@@ -5790,7 +5790,7 @@ msgid ""
 "last stock price dated before the date will be kept and all earlier quotes "
 "deleted."
 msgstr ""
-"Si actif, supprime tous les cours antérieurs à la date spécifiée. Sinon, le "
+"Si cette option est cochée, supprime tous les cours antérieurs à la date spécifiée. Sinon, le "
 "dernier cours antérieur à cette date sera conservé et les autres supprimés."
 
 #: ../src/gnome/glade/price.glade.h:15
@@ -5799,7 +5799,7 @@ msgid ""
 "specified date.  Otherwise only stock prices added by Finance::Quote will be "
 "deleted."
 msgstr ""
-"Si actif, supprime tous les cours entrés manuellement antérieurs à la date "
+"Si cette option est cochée, supprime tous les cours entrés manuellement antérieurs à la date "
 "spécifiée. Sinon, seuls les cours entrés par Finance::Quote seront supprimés."
 
 # messages-i18n.c:202
@@ -7871,9 +7871,8 @@ msgstr ""
 
 # messages-i18n.c:157
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#, fuzzy
 msgid "Check & Repair Su_baccounts"
-msgstr "Vérifier & réparer les _sous-comptes"
+msgstr "Vérifier & Réparer les _sous-comptes"
 
 # messages-i18n.c:110
 #: ../src/gnome/gnc-plugin-page-account-tree.c:192
@@ -8180,9 +8179,8 @@ msgstr "Éditer le taux de c_hange"
 
 # messages-i18n.c:81
 #: ../src/gnome/gnc-plugin-page-register.c:244
-#, fuzzy
 msgid "Edit the exchange rate for the current transaction"
-msgstr "Éditer le taux de change pour la répartition courante"
+msgstr "Éditer le taux de change pour la transaction courante"
 
 #: ../src/gnome/gnc-plugin-page-register.c:249
 msgid "Sche_dule..."
@@ -8643,13 +8641,13 @@ msgid ""
 "If active, the new hierarchy dialog will be shown whenever the \"New File\" "
 "menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Si actif,  l'assistant de création de comptes ne s'affichera que si l'item "
+"Si cette option est cochée,  l'assistant de création de comptes ne s'affichera que si l'item "
 "« Nouveau Fichier »des menus est choisi."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
 msgid ""
 "If active, the new user dialog will be shown. Otherwise it will not be shown."
-msgstr "Si actif,  l'assistant de création de comptes s'affichera."
+msgstr "Si cette option est cochée,  l'assistant de création de comptes s'affichera."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
 msgid "Last pathname used"
@@ -8925,7 +8923,7 @@ msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"Si actif, après rapprochement d'un relevé de carte de crédit, demander à "
+"Si cette option est cochée, après rapprochement d'un relevé de carte de crédit, demander à "
 "l'utilisateur de saisir un paiement par carte de crédit"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
@@ -8934,8 +8932,8 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"Si actif, toutes les transactions  pointées dans le registre "
-"apparaitrontdéjà pointées dans le dialogue de rapprochement."
+"Si cette option est cochée, toutes les transactions  pointées dans le registre "
+"apparaitront déjà pointées dans le dialogue de rapprochement."
 
 # messages-i18n.c:80
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
@@ -8952,7 +8950,7 @@ msgid ""
 msgstr ""
 "Avant de rapprocher un compte qui charge ou paie des intérêts, demander à "
 "l'utilisateur de saisir une transaction pour l'intérêt chargé ou payé.\n"
-"Présentement, seulement supporté pour les comptes de Banque, de Crédit, de "
+"Cette fonctionnalité n'est actuellement supporté pour les comptes de Banque, de Crédit, de "
 "Fonds mutuels, d'Actifs, à Recevoir, Payable et de Dettes."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
@@ -8964,14 +8962,12 @@ msgid "Prompt for interest charges"
 msgstr "Demander les charges des interêts"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:1
-#, fuzzy
 msgid "How many days in advance to notify the user."
-msgstr ""
-"Prévenir combien de jours à l'avance de l'échéance de factures à payer ?"
+msgstr "Notifier l'utilisateur ce nombre de jours à l'avance."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:2
 msgid "How many days in advance to remind the user."
-msgstr ""
+msgstr "Prévenir l'utilisateur ce nombre de jours en avance."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
 msgid ""
@@ -8980,6 +8976,10 @@ msgid ""
 "transaction creation, or at any later time by editing the scheduled "
 "transaction."
 msgstr ""
+"Si cette option est cochée, toute nouvelle transaction récurrente aura un "
+"attribut « créée automatiquement » par défaut. L'utilisateur peut changer "
+"cet attribut lors de la création de cette transaction ou plus tard en "
+"éditant la transaction récurrente."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
 msgid ""
@@ -8988,21 +8988,25 @@ msgid ""
 "creation, or at any later time by editing the scheduled transaction. This "
 "setting only has meaning of the create_auto setting is active."
 msgstr ""
+"Si cette option est cochée, toute nouvelle transaction récurrente aura un "
+"attribut « notifier » par défaut. L'utilisateur peut changer cet attribut "
+"lors de la création de cette transaction ou plus tard en éditant la "
+"transaction récurrente. Ce paramètre n'est utile que si l'option « créer "
+"automatiquement »  est cochée."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
-msgstr ""
+msgstr "Cocher l'attribut « créer automatiquement » par défaut."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:6
 msgid "Set the \"notify\" flag by default"
-msgstr ""
+msgstr "Cocher l'attribut « notifier » par défaut."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:7
-#, fuzzy
 msgid "Show \"since last run\" dialog when a file is opened."
 msgstr ""
 "Execute l'assistant  « Depuis la dernière exécution » lors de l'ouverture "
-"d'un nouveau fichier."
+"d'un fichier."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
 msgid ""
@@ -9011,12 +9015,16 @@ msgid ""
 "initial opening of the data file when GnuCash starts. If this setting is "
 "active, show the dialog, otherwise it is not shown."
 msgstr ""
+"Cette option détermine si la fenêtre de dialogue « Depuis la dernière "
+"exécution » est affichée automatiquement à chaque ouverture de fichier y "
+"compris au lancement de GnuCash. La fenêtre est affichée si l'option est "
+"cochée."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:1
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
-msgstr "Si actif, autoriser « L' astuce du jour » au lancement de GnuCash."
+msgstr "Si cette option est cochée, autoriser « L' astuce du jour » au lancement de GnuCash."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -9124,7 +9132,7 @@ msgid ""
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
-"Si actif, toutes les lignes relatives à une seule transaction auront la même "
+"Si cette option est cochée, toutes les lignes relatives à une seule transaction auront la même "
 "couleur de fond. Sinon, les couleurs de fond seront alternées à chaque ligne"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
@@ -9133,7 +9141,7 @@ msgid ""
 "that are entered without one. Otherwise GnuCash will not modify entered "
 "numbers."
 msgstr ""
-"Si actif, GnuCash insérera automatiquement un point décimal dans les valeurs "
+"Si cette option est cochée, GnuCash insérera automatiquement un point décimal dans les valeurs "
 "qui sont entrées sans. Autrement, GnuCash ne modifiera pas les valeurs "
 "saisies."
 
@@ -9144,7 +9152,7 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
-"Si actif, un bouton « Fermer » sera affiché sur tout onglet qui devrait être "
+"Si cette option est cochée, un bouton « Fermer » sera affiché sur tout onglet qui devrait être "
 "fermé Sinon, aucun bouton de ce type ne sera affiché. Indépendamment de ce "
 "réglage, les pagespeuvent toujours être fermées par le menu « fermer » ou "
 "par le bouton « fermer » de la barre d'outils"
@@ -9154,7 +9162,7 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"Si actif, chaque nouveau registre sera ouvert dans une nouvelle fenêtre. "
+"Si cette option est cochée, chaque nouveau registre sera ouvert dans une nouvelle fenêtre. "
 "Sinon, il sera ouvert dans un nouvel onglet de la fenêtre courante."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:24
@@ -9162,7 +9170,7 @@ msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
 msgstr ""
-"Si actif, chaque nouveau rapport sera ouvert dans sa propre fenêtre. Sinon, "
+"Si cette option est cochée, chaque nouveau rapport sera ouvert dans sa propre fenêtre. Sinon, "
 "il sera ouvert dans un nouvel onglet de la fenêtre principale."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
@@ -9171,7 +9179,7 @@ msgid ""
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
-"Si actif, les étiquettes « Crédit » et « Débit » seront utilisés pour "
+"Si cette option est cochée, les étiquettes « Crédit » et « Débit » seront utilisés pour "
 "désigner les champs à l'écran. Sinon, des étiquettes informelles telles que "
 "« Augmenter/Diminuer», « Rentrée/Sortie de fonds» seront utilisées."
 
@@ -9180,7 +9188,7 @@ msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
-"Si actif,  un appui sur la touche « Entrer » va à la transaction vierge en "
+"Si cette option est cochée,  un appui sur la touche « Entrée » va à la transaction vierge en "
 "fin de registre.Sinon, un appui sur cette touche fait descendre d'une ligne."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
@@ -9190,7 +9198,7 @@ msgid ""
 "the users home directory. Otherwise the standard register colors will be "
 "used that GnuCash has always used."
 msgstr ""
-"Si actif, le registre sera colorié par le thème du système.Ce choix peut "
+"Si cette option est cochée, le registre sera colorié par le thème du système.Ce choix peut "
 "être surpassé en éditant le fichier gtkrc du répertoire home de "
 "l'utilisateur, en fournissant des couleurs personnelle. Sinon, les couleurs "
 "de GnuCashseront celles que GnuCash a toujours utilisées."
@@ -9201,7 +9209,7 @@ msgid ""
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
-"Si actif, la taille et la position de chaque fenêtre seront enregistrées à "
+"Si cette option est cochée, la taille et la position de chaque fenêtre seront enregistrées à "
 "leur fermeture.Les tailles et positions seront sauvegardées à la fermeture "
 "de GnuCash."
 
@@ -9230,14 +9238,14 @@ msgid "Show close buttons on notebook tabs"
 msgstr "Afficher le bouton de fermeture sur les onglets"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
-#, fuzzy
 msgid ""
 "Show horizontal borders between rows in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
-"Montre des bordures horizontales entre les cellules du registre. Si actif, "
-"la bordure entre les cellules sera indiquée par une ligne épaisse."
+"Afficher  des bordures horizontales entre les cellules du registre. Si "
+"l'option est cochée, la bordure entre les cellules sera indiquée par une "
+"ligne épaisse."
 
 # po/guile_strings.txt:208
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
@@ -9255,14 +9263,14 @@ msgstr ""
 "être modifié à tout moment par le menu « Affichage/Ligne Double »"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
-#, fuzzy
 msgid ""
 "Show vertical borders between columns in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
-"Montre des bordures verticales entre les cellules du registre. Si actif, la "
-"bordure entre les cellules sera indiquée par une ligne épaisse."
+"Afficher des bordures verticales entre les cellules du registre. Si l'option "
+"est cochée, la bordure entre les cellules sera indiquée par une ligne "
+"épaisse."
 
 # po/guile_strings.txt:210
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
@@ -9646,7 +9654,7 @@ msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
 msgstr ""
-"Si actif, les produits sans devise ( titres) seront affichés. Sinon, ils "
+"Si cette option est cochée, les produits sans devise ( titres) seront affichés. Sinon, ils "
 "seront cachés."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
@@ -9950,7 +9958,6 @@ msgstr "Type de recherche"
 
 # messages-i18n.c:303
 #: ../src/gnome-search/search.glade.h:12
-#, fuzzy
 msgid "_New item..."
 msgstr "_Nouvel item..."
 
@@ -10513,10 +10520,28 @@ msgid ""
 "Press 'Forward' now to select the correct character encoding for your data "
 "file."
 msgstr ""
+"Le fichier que vous essayez de charger a été enregistré avec une ancienne "
+"version de GnuCash. Il manque les spécifications de l'encodage des "
+"caractères utilisé. Ainsi le texte de votre fichier peut être compris de "
+"manière ambigue. cette ambiguité ne peut pas être levée automatiquement, "
+"mais le nouveau format de  fichier de Gnucash 2.0 contiendra toutes les "
+"informations nécessaires et  vous n'aurez pas à recommencer cette étape une "
+"nouvelle fois. \n"
+"\n"
+"GnuCash va essayer de déterminer l'encodage utilisé dans votre fichier. À la "
+"page suivante, vous verez les résultats de cette démarche. Vous devrez "
+"vérifier si les mots correspondent à ce que vous attendez. Si tout semble "
+"satisfaisant, vous n'aurez qu'à cliquer sur « Suivant ». Dans le cas "
+"contraire, vous devrez choisir un nouvel ancodage pour essayer d'améliorer "
+"le résultat. Vous devrez peut-être éditer la liste des encodages en cliquant "
+"sur le bouton respectif.\n"
+"\n"
+"Cliquez sur « Suivant » maintenant pour choisir l'encodage adapté à votre "
+"fichier."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:209
 msgid "Ambiguous character encoding"
-msgstr ""
+msgstr "Encodage de caractères ambigü"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:212
 msgid ""
@@ -10626,7 +10651,6 @@ msgstr "ISO-8859-1 ISO-8859-15"
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:698
 #: ../src/gnome-utils/druid-gnc-xml-import.c:717
-#, fuzzy
 msgid "The file could not be reopened."
 msgstr "Le fichier n'a pas pu être réouvert."
 
@@ -11051,7 +11075,6 @@ msgid "Choose a file to import"
 msgstr "Sélectionner un fichier à importer"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:5
-#, fuzzy
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate GnuCash files.\n"
@@ -11084,20 +11107,17 @@ msgid "Edit the list of encodings"
 msgstr "Modifier la liste des encodages"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
-#, fuzzy
 msgid "Finish GnuCash Datafile Import"
-msgstr "Terminer l'importation XML GnuCash"
+msgstr "Terminer l'importation de fichiers GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-#, fuzzy
 msgid "GnuCash Datafile Import Druid"
-msgstr "Assistant d'importation XML GnuCash"
+msgstr "Assistant d'importation de fichiers GnuCash"
 
 # messages-i18n.c:44
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
-#, fuzzy
 msgid "GnuCash data files you have loaded"
-msgstr "Fichiers XML GnuCash que vous avez chargés"
+msgstr "Fichiers GnuCash que vous avez chargés"
 
 # src/gnome/glade-gnc-dialogs.c:300
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:15
@@ -11256,23 +11276,20 @@ msgid "'_Enter' moves to blank transaction"
 msgstr "« _Entrée » va vers une transaction vierge"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:2
-#, fuzzy
 msgid "07/31/2005"
-msgstr "07/31/05"
+msgstr "07/31/2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:3
 msgid "2005-07-31"
 msgstr "2005-07-31"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:4
-#, fuzzy
 msgid "31.07.2005"
-msgstr "31.07.05"
+msgstr "31.07.2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:5
-#, fuzzy
 msgid "31/07/2005"
-msgstr "31/07/05"
+msgstr "31/07/2005"
 
 # messages-i18n.c:240
 #: ../src/gnome-utils/glade/preferences.glade.h:6
@@ -11520,13 +11537,13 @@ msgstr ""
 "l'icône."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:57
-#, fuzzy
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most important items."
 msgstr ""
 "Affiche les items de la barre d'outils avec le nom de la commande à côté de "
-"l'icone."
+"l'icone. Les étiquettes ne sont affichées que pour les itmes les plus "
+"importants."
 
 # po/guile_strings.txt:167
 #: ../src/gnome-utils/glade/preferences.glade.h:58
@@ -11585,7 +11602,7 @@ msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
 msgstr ""
-"Si actif, les produits sans devises seront affichés dans la barre de résumé."
+"Si cette option est cochée, les produits sans devises seront affichés dans la barre de résumé."
 "Sinon, seules les devises seront affichées."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:70
@@ -11595,7 +11612,7 @@ msgid ""
 "down one row."
 msgstr ""
 "Si sélectionné, aller à la transaction vierge après que l'utilisateur appuie "
-"sur « Entrer ». Autrement, descendre d'une ligne."
+"sur « Entrée ». Autrement, descendre d'une ligne."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid ""
@@ -11645,7 +11662,6 @@ msgstr ""
 "Fichier » depuis le menu « Fichier »"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:82
-#, fuzzy
 msgid "Priority text besi_de icons"
 msgstr "Texte à _côté des icônes"
 
@@ -11739,7 +11755,6 @@ msgid "Text _below icons"
 msgstr "Texte _sous les icônes"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:101
-#, fuzzy
 msgid ""
 "The character that will be used between components of an account name.  A "
 "legal value is any single character except letters and numbers, or any of "
@@ -11747,8 +11762,8 @@ msgid ""
 "\"period\"."
 msgstr ""
 "Le caractère qui sera utilisé entre les composants d'un nom de compte. Les "
-"valeurs possibles sont n'importe quel caractère alphanumérique de l'unicode, "
-"ou les chaînes de caractères suivantes : « colon », « slash », "
+"valeurs possibles sont n'importe quel caractère sauf les chiffres et les "
+"lettres, ou les chaînes de caractères suivantes : « colon », « slash », "
 "« backslash », « dash » et « period »."
 
 # messages-i18n.c:346
@@ -11789,17 +11804,14 @@ msgid "Use s_ystem _default"
 msgstr "Utiliser les _préférences Gnome"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:110
-#, fuzzy
 msgid "Use the date format common in continental Europe."
 msgstr "Utiliser le format de date en cours en Europe continentale."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:111
-#, fuzzy
 msgid "Use the date format common in the United Kingdom."
 msgstr "Utiliser le format de date en cours au Royaume-Uni."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:112
-#, fuzzy
 msgid "Use the date format common in the United States."
 msgstr "Utiliser le format de date en cours aux Etats Unis d'Amérique."
 
@@ -12409,7 +12421,7 @@ msgid "Could not make a backup of the file %s"
 msgstr "Impossible de faire une copie de sauvegarde pour le fichier %s"
 
 #: ../src/gnome-utils/gnc-file.c:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write to file %s.  Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
@@ -13599,7 +13611,7 @@ msgid ""
 "transaction whose best match's score is in the yellow zone (above the Auto-"
 "ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default."
 msgstr ""
-"Autoriser l'action PASSER dans la comparateur de transactions. Si actif, une "
+"Autoriser l'action PASSER dans la comparateur de transactions. Si cette option est cochée, une "
 "transaction dont le meilleur score est dans la zone jaune ( au dessus du "
 "seuil d'ajout automatique mais sous le seuil de suppression automatique) "
 "sera non traitée par défaut."
@@ -13620,7 +13632,7 @@ msgstr ""
 "Pour une nouvelle transaction, cliquez sur l'entrée de « l'autre compte » "
 "pour choisir le compte de destination pour équilibrer la transaction.\n"
 "Pour une transaction qui est un duplicata d'une transaction existante, "
-"cliquez sur l'entrée de « l'autre compte » ou « Description » \n"
+"cliquez sur l'entrée de « l'autre compte » ou « Description » "
 "pour vérifier si GnuCash a choisi la bonne transaction.\n"
 "Pour basculer des transactions entre les deux états, cliquez sur la case de "
 "la colonne « Nouveau ».\n"
@@ -13651,17 +13663,17 @@ msgid ""
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
 msgstr ""
-"Dans certains endroits, des guichets automatiques commerciaux (qui\n"
-"n'appartiennent pas à une institution financière) sont installé dans\n"
-"des endroits tels que les grandes surfaces. Ces guichets ajoutent\n"
-"leurs frais directement au montant de la transaction au lieu\n"
-"d'apparaître dans des transactions séparées ou dans les frais\n"
-"bancaires mensuels. Par exemple, vous retirez 100 EUR, et vous êtes\n"
-"débité de 101,50 EUR plus les frais Interac habituels. Si vous avez\n"
-"entré ce montant de 100 EUR manuellement dans votre compte de caisse,\n"
-"les montants ne correspondront pas, et les duplicata ne seront\n"
-"probablement pas repérés. Vous devez saisir la valeur maximum de tels\n"
-"frais dans votre région (dans votre devise locale), ou 0 si vous\n"
+"Dans certains endroits, des guichets automatiques commerciaux (qui "
+"n'appartiennent pas à une institution financière) sont installé dans "
+"des endroits tels que les grandes surfaces. Ces guichets ajoutent "
+"leurs frais directement au montant de la transaction au lieu "
+"d'apparaître dans des transactions séparées ou dans les frais "
+"bancaires mensuels. Par exemple, vous retirez 100 EUR, et vous êtes "
+"débité de 101,50 EUR plus les frais  habituels. \n"
+"Si vous avez entré ce montant de 100 EUR manuellement dans votre compte de caisse, "
+"les montants ne correspondront pas, et les duplicata ne seront "
+"probablement pas repérés. Vous devez saisir la valeur maximum de tels "
+"frais dans votre région (dans votre devise locale), ou 0 si vous "
 "n'utilisez jamais de tels guichets."
 
 #: ../src/import-export/generic-import.glade.h:38
@@ -14625,7 +14637,7 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Si actif, le mot de passe pour les actions HBCI sera mémorisé pendant la "
+"Si cette option est cochée, le mot de passe pour les actions HBCI sera mémorisé pendant la "
 "session. Sinon, il vous faudra le rentrer chaque fois qu'il sera demandé "
 "pendant une session."
 
@@ -14634,7 +14646,7 @@ msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
 msgstr ""
-"Si actif, la fenêtre sera fermée automatiquement quand l'importation HBCI "
+"Si cette option est cochée, la fenêtre sera fermée automatiquement quand l'importation HBCI "
 "sera terminée.Sinon elle restera ouverte"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
@@ -14772,7 +14784,6 @@ msgstr "Mettre un format de date pour ce fichier QIF"
 
 #: ../src/import-export/import-provider-format.glade.h:5
 #: ../src/import-export/qif-import/qif.glade.h:81
-#, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
 "components of a date are printed.  In most cases, it is possible to "
@@ -16492,12 +16503,10 @@ msgstr ""
 "changements nécessaires."
 
 #: ../lib/libqof/backend/file/qsf-backend.c:120
-#, fuzzy
 msgid "String encoding to use when writing the XML file."
 msgstr "Encodage à utiliser pour écrire le fichier XML."
 
 #: ../lib/libqof/backend/file/qsf-backend.c:121
-#, fuzzy
 msgid ""
 "QSF defaults to UTF-8. Other encodings are supported by passing the string "
 "encoding in this option."
@@ -17646,6 +17655,9 @@ msgid ""
 "store it with a different name, or edit your saved-reports file and delete "
 "the section with the following name: "
 msgstr ""
+"Un rapport personnalisé de ce nom existe déjà. Vous devez soit renommer "
+"votre rapport avec un autre nom, soit éditer le fichier du rapport "
+"personnalisé et supprimer la section avec le nom suivant : "
 
 # messages-i18n.c:124
 #. src/report/report-system/report.scm
@@ -17841,7 +17853,7 @@ msgid ""
 "selected time period"
 msgstr ""
 "Le compte sélectionné ne comporte pas de données/transaction (ou alors elles "
-"sont toutes à 0) pour la période sélectionnée"
+"sont toutes à 0) pour la période sélectionnée."
 
 # po/guile_strings.txt:127
 #. src/report/report-system/html-style-sheet.scm
@@ -18559,7 +18571,7 @@ msgstr "Couleur du marqueur"
 #: ../intl-scm/guile-strings.c:2824 ../intl-scm/guile-strings.c:2886
 #, c-format
 msgid "%s to %s"
-msgstr "%s à %s"
+msgstr "du %s au %s"
 
 # messages-i18n.c:168 po/guile_strings.txt:259
 #. src/report/standard-reports/price-scatter.scm
@@ -20751,7 +20763,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2522
 #, c-format
 msgid "From %s To %s"
-msgstr "de %s à %s"
+msgstr "du %s au %s"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2526
@@ -21261,7 +21273,7 @@ msgstr "Sous-"
 #: ../intl-scm/guile-strings.c:2962 ../intl-scm/guile-strings.c:3052
 #, c-format
 msgid "Period from %s to %s"
-msgstr "Période de %s à %s"
+msgstr "Période du %s au %s"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2964
@@ -22148,12 +22160,12 @@ msgstr "Afficher les soldes nuls?"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Transactions relating to '%s' contain more than one currency.  This report "
 "is not designed to cope with this possibility."
 msgstr ""
-"Les transactions concernant la société %d contiennent plus d'une devise. Ce "
+"Les transactions concernant la société %s contiennent plus d'une devise. Ce "
 "rapport n'est pas conçu pour cette éventualité."
 
 #. src/business/business-reports/aging.scm
@@ -22329,7 +22341,6 @@ msgstr ""
 "d'options de la transaction."
 
 #: ../doc/tip_of_the_day.list.in:26
-#, fuzzy
 msgid ""
 "To enter multiple-split transactions such as a paycheck with multiple "
 "deductions, click the Split button in the tool bar. Alternatively, in the "
@@ -22337,7 +22348,7 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "Pour saisir des transactions avec des répartitions multiples tel qu'un "
-"chèque de paie avec de multiples déductions, cliquez sur le bouton "
+"chèque de paiement avec de multiples déductions, cliquez sur le bouton "
 "Répartition dans la barre d'outils.\n"
 "\n"
 "Vous pouvez également choisir le Grand livre avec répartitions automatiques "
@@ -22475,183 +22486,3 @@ msgstr ""
 "Selon une autre théorie, la chose se serait en fait déjà produite.\n"
 "\n"
 "Douglas Adams, « Le Dernier Restaurant avant la Fin du Monde »"
-
-#~ msgid ""
-#~ "The file you tried to load does not specify an encoding, so GnuCash is "
-#~ "unable to unambiguously interpret it. This is typical for files created "
-#~ "with GnuCash prior to 2.0.\n"
-#~ "\n"
-#~ "On the next page you will be asked to select the best looking decoded "
-#~ "string for every ambiguous word GnuCash found while trying to open your "
-#~ "file. Therefore GnuCash has guessed what encodings you might have used. "
-#~ "So probably everything will look just fine and you can simply click "
-#~ "'Forward'.\n"
-#~ "\n"
-#~ "If it does not work for you, try to change the default encoding at the "
-#~ "top. Maybe you even have to edit the list of encodings by clicking on the "
-#~ "button in the top right corner.\n"
-#~ "\n"
-#~ "The page is not overly complicated, just take the time until you feel "
-#~ "comfortable with it. You can always come back and read this message again."
-#~ msgstr ""
-#~ "Le fichier que vous essayez de charger ne définit pas d'encodage, et "
-#~ "GnuCash ne sait pas l'interpréter sans ambiguité. C'est un phénomène "
-#~ "typique de fichiers créés avec une version de GnuCash antérieure à 2.0.\n"
-#~ "\n"
-#~ "À la page suivante, vous devrez choisir la meilleure description pour "
-#~ "chaque mot ambigü que GnuCash trouvera en essayant d'ouvrir votre "
-#~ "fichier. En outre, GnuCash a deviné quel encodage vous avez probablement "
-#~ "utilisé. Ainsi tout devrait être directement acceptable et vous n'aurez "
-#~ "qu'à cliquer sur « Suivant ».\n"
-#~ "\n"
-#~ "Si ça ne fonctionne pas pour vous, essayez de changer l'encodage. Vous "
-#~ "devrez peut-être éditer la liste des encodages en cliquant sur le bouton "
-#~ "en haut à gauche.\n"
-#~ "\n"
-#~ "La page n'est pas excessivement compliquée, prenez juste le temps qu'il "
-#~ "faut pour être à l'aise avec elle. N'hésitez pas à revenir à cette page "
-#~ "pour relire ce message."
-
-#~ msgid "Missing file encoding"
-#~ msgstr "L'encodage du fichier est absent"
-
-#~ msgid ""
-#~ "The QIF file format does not specify which order the day, month, and year "
-#~ "components of a date are printed.  In most cases, it is possible to "
-#~ "automatically determine which format is in use in a particular file. "
-#~ "However, in the file you have just imported there exist more than one "
-#~ "possible format that fits the data.  \n"
-#~ "\n"
-#~ "Please select a date format for the file.  QIF files created by European "
-#~ "software are likely  to be in \"d-m-y\" or day-month-year format, where "
-#~ "US QIF files are likely to be \"m-d-y\" or month-year-day.    \n"
-#~ msgstr ""
-#~ "Le fichier au format QIF ne spécifie pas dans quel ordre les éléments du "
-#~ "jour, du mois, et de l'année d'une date sont stockés. Dans la plupart des "
-#~ "cas, il est possible de déterminer automatiquement quel format est "
-#~ "utilisé dans un fichier en particulier. Cependant, dans ce fichier que "
-#~ "vous venez juste d'importer, il existe plus d'un format possible qui "
-#~ "correspond aux données.\n"
-#~ "\n"
-#~ "Sélectionnez, s'il vous plaît, un format de date pour le fichier. Les "
-#~ "fichiers QIF créés par les logiciels européens sont probablement comme "
-#~ "cela « j-m-a » ou format jour-mois-année, et les fichiers QIF US sont "
-#~ "habituellement « m-j-a » ou mois-jour-année.\n"
-
-# src/gnome/glade-gnc-dialogs.c:786
-#~ msgid ""
-#~ "AqHBCI \n"
-#~ "Setup"
-#~ msgstr "Configuration AqHBCI"
-
-# src/gnome/glade-gnc-dialogs.c:786
-#~ msgid "HBCI Setup"
-#~ msgstr "Configuration HBCI"
-
-#~ msgid ""
-#~ "Update \n"
-#~ "account list"
-#~ msgstr ""
-#~ "Mise à jour\n"
-#~ "de la liste des comptes"
-
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash 1.8."
-#~ msgstr ""
-#~ "Attention !! Ceci est une version de DEVELOPPEMENT de GnuCash. Il y a "
-#~ "probablement plein de bogues et de fonctionnalités instables ! Si vous "
-#~ "cherchez un logiciel de finances personnelles stable, utilisez plutôt la "
-#~ "dernière version de GnuCash 1.8."
-
-# messages-i18n.c:186
-#~ msgid "Lost Accounts"
-#~ msgstr "Comptes perdus/abandonnés"
-
-#~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new information you "
-#~ "have entered.\n"
-#~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
-#~ "\n"
-#~ "Click \"Back\" to review your currency selections."
-#~ msgstr ""
-#~ "Cliquez sur « Terminer » pour mettre à jour vos comptes en utilisant les "
-#~ "nouvelles informations que vous avez saisies.\n"
-#~ "\n"
-#~ "Cliquez sur « Annuler » pour annuler le processus de chargement du "
-#~ "fichier.\n"
-#~ "\n"
-#~ "Cliquez sur « Précédent » pour revoir vos sélections de devises."
-
-#~ msgid "Import currency and stock information"
-#~ msgstr "Importer les informations sur devise et action"
-
-#~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. Information "
-#~ "about currencies, stocks, and mutual funds needs to be updated for the "
-#~ "new version. \n"
-#~ "\n"
-#~ "This dialog will prompt you for some additional information about each "
-#~ "currency, stock, and mutual fund that appear in your accounts.  After you "
-#~ "have entered this information, you can update your accounts for the new "
-#~ "version of GnuCash.\n"
-#~ "\n"
-#~ "Hit \"Cancel\" now to stop loading the file."
-#~ msgstr ""
-#~ "Le fichier que vous chargez provient d'une ancienne version de GnuCash. "
-#~ "Les information sur les devises, actions, et fonds communs a besoin "
-#~ "d'être mise à jour pour la nouvelle version.\n"
-#~ "\n"
-#~ "Cette boîte de dialogue vous demandera des informations supplémentaires "
-#~ "sur chaque devise, action, et fond commun qui apparaît dans vos comptes. "
-#~ "Après que vous ayez saisi cette information, vous pouvez mettre à jour "
-#~ "vos comptes pour la nouvelle version de GnuCash.\n"
-#~ "\n"
-#~ "Appuyez sur « Annuler » maintenant pour stopper le chargement du fichier. "
-
-#~ msgid "Update your accounts with the new information"
-#~ msgstr "Mettre à jour vos comptes avec les nouvelles informations"
-
-#~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, use "
-#~ "\"CURRENCY\". Enter a new type in the box if the ones in the pick list "
-#~ "are inappropriate."
-#~ msgstr ""
-#~ "Sélectionner le type de devise ou titre. Pour les devises nationales, "
-#~ "utiliser « CURRENCY ». Saisir un nouveau type dans la fenêtre si celles "
-#~ "dans la liste à sélectionner sont inappropriées."
-
-#~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \"US Dollar\" "
-#~ "or \"Red Hat Stock\""
-#~ msgstr ""
-#~ "Saisir un nom descriptif pour la devise ou l'action, tel que « Dollar "
-#~ "US » or « Action Red Hat »"
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol "
-#~ "(such as \"USD\"), or other unique abbreviation for the name."
-#~ msgstr ""
-#~ "Saisir le symbole de l'action (tel que « RHAT »), le code Sicovam, le "
-#~ "code monétaire ISO (tel que « USD »), ou une autre abréviation unique "
-#~ "pour le nom."
-
-#~ msgid ""
-#~ "Click \"Next\" to accept the information and move to the next currency or "
-#~ "stock."
-#~ msgstr ""
-#~ "Cliquez sur « Suivant » pour accepter l'information et avancer à la "
-#~ "prochaine devise ou action."
-
-#~ msgid ""
-#~ "You must put values for the type, name, and abbreviation of the currency/"
-#~ "stock."
-#~ msgstr ""
-#~ "Vous devez mettre des valeurs pour le type, le nom, et l'abréviation de "
-#~ "la devise/action."
-
-# messages-i18n.c:182
-#~ msgid "Find"
-#~ msgstr "Chercher"

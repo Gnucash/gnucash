@@ -1,3 +1,7 @@
+2006-10-01  Christian Stimming  <stimming@tuhh.de>
+
+	* po/fr.po: Updated French translaction by Fabrice Kurz
+
 2006-09-26  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-query-list.c:
