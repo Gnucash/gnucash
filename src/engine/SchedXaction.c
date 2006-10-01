@@ -375,8 +375,10 @@ xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
-  *outAutoCreate = sx->autoCreateOption;
-  *outNotify     = sx->autoCreateNotify;
+  if (outAutoCreate != NULL)
+    *outAutoCreate = sx->autoCreateOption;
+  if (outNotify != NULL)
+    *outNotify     = sx->autoCreateNotify;
   return;
 }
 
