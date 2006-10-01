@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-23 13:08+0200\n"
-"PO-Revision-Date: 2006-09-23 13:10+0200\n"
+"PO-Revision-Date: 2006-09-26 21:18+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17566,7 +17566,7 @@ msgstr "für Buchungszeitraum"
 #: ../intl-scm/guile-strings.c:2114
 #, c-format
 msgid "For Period Covering %s to %s"
-msgstr "Für Periode %s bis %s"
+msgstr "für Periode %s bis %s"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1446
