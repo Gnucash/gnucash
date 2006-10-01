@@ -975,6 +975,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
      rtn->state = state;
      g_date_clear(&rtn->date, 1);
      rtn->date = *date;
+     rtn->temporal_state = gnc_sx_clone_temporal_state(temporal_state);
 
      if (! parent->variable_names_parsed)
      {
@@ -1028,16 +1029,17 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
      /* postponed */
      {
           GList *postponed = gnc_sx_get_defer_instances(sx);
-          for ( ; postponed != NULL; postponed = g_list_next(postponed))
+          for ( ; postponed != NULL; postponed = postponed->next)
           {
                GDate inst_date;
                int seq_num;
                GncSxInstance *inst;
 
+               g_date_clear(&inst_date, 1);
                inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
                seq_num = gnc_sx_get_instance_count(sx, postponed->data);
                inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
-               //inst->sx_temporal_state = postponed->data;
+               //inst->temporal_state = postponed->data;
                instances->list = g_list_append(instances->list, inst);
           }
      }

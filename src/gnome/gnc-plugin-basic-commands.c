@@ -445,28 +445,42 @@ static void
 gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
 {
   GncMainWindow *window;
-  gint ret;
+  GncSxSlrTreeModelAdapter *slr_model;
+  GncSxSlrSummary summary;
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
 	
   g_return_if_fail (data != NULL);
 
   window = data->window;
-  ret = gnc_ui_sxsincelast_dialog_create ();
-  if ( ret == 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
-  } else if ( ret < 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), ngettext
-		     /* Translators: %d is the number of transactions. This is a
-			ngettext(3) message. */
-		     ("There are no Scheduled Transactions to be entered at this time. "
-		      "(%d transaction automatically created)",
-		      "There are no Scheduled Transactions to be entered at this time. "
-		      "(%d transactions automatically created)",
-		      -(ret)),
-		     -(ret));
-  } /* else { this else [>0 means dialog was created] intentionally left
-     * blank. } */	       
+
+  slr_model = gnc_sx_get_slr_model();
+  gnc_sx_slr_model_summarize(slr_model, &summary);
+  gnc_sx_slr_model_effect_change(slr_model, TRUE, NULL, NULL);
+  if (summary.need_dialog)
+  {
+    gnc_ui_sx_since_last_run_dialog(slr_model);
+  }
+  else
+  {
+    if (summary.num_auto_create_no_notify_instances == 0)
+    {
+      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
+    }
+    else
+    {
+      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), ngettext
+                      /* Translators: %d is the number of transactions. This is a
+                         ngettext(3) message. */
+                      ("There are no Scheduled Transactions to be entered at this time. "
+                       "(%d transaction automatically created)",
+                       "There are no Scheduled Transactions to be entered at this time. "
+                       "(%d transactions automatically created)",
+                       summary.num_auto_create_no_notify_instances),
+                      summary.num_auto_create_no_notify_instances);
+    }
+  }
+  // @fixme g_object_unref(G_OBJECT(slr_model));
 }
 
 static void

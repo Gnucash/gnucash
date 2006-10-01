@@ -136,6 +136,7 @@ Upcoming instance states
     postponed -> to-create
     to-create -> postponed
     to-create -> ignore
+    to-create -> created [terminal]
 
 Definitions:
 
@@ -145,6 +146,7 @@ Definitions:
     to-create: an upcoming SX instance that should be created.
     ignore: a scheduled instance the user has explicitly prevented the
         instantiation of.
+    created: the instance has been created in this interaction cycle.
 
 The SX need to store?
 - last state of *created* instance
@@ -200,3 +202,18 @@ dialog-sxsincelast.c:  ~L1241:
 ignoring the first instance. We only want to incrment the
 counters for newly-discovered-as-to-be-created SXes."
 
+- auto-create 
+  - auto-create transactions can be created w/o user interaction
+    - their state is transitioned to 'created', which is not modifyable
+  
+  - auto-create (+notify) transactions should be displayed, even if they are
+    the only transactions created.
+  
+  - auto-create (-notify) transactions should not be displayed, unless there
+    are other transactions.
+  
+  - Scenarios
+    - only auto-create (-notify): no SLR, info dialog w/count (***)
+    - only auto-create (+notify): SLR dialog, already created
+    - others, auto-create (-notify): SLR dialog, incl. created 
+    - others, auto-create (+notify): SLR dialog, incl. created
