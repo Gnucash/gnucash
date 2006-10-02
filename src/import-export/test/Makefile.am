@@ -35,6 +35,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
   --library-dir    ${G_WRAP_LIB_DIR} \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_builddir}/src/scm \
