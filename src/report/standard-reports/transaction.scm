@@ -589,7 +589,7 @@
 	(cond ((not (null? current-accounts))
 	       (list (car current-accounts)))
 	      ((> num-accounts 0) (list first-account))
-	      (else ()))))
+	      (else '()))))
     #f #t))
 
   (gnc:register-trep-option
