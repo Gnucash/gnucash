@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-08 11:47+0200\n"
-"PO-Revision-Date: 2006-10-02 19:00+0200\n"
+"PO-Revision-Date: 2006-10-03 21:50+0200\n"
 "Last-Translator: Fabrice Kurz <kurzf@voila.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4855,11 +4855,11 @@ msgstr "Initialisation des nouveaux comptes"
 # po/guile_strings.txt:55
 #: ../src/gnome/glade/account.glade.h:63
 msgid "Show _hidden accounts"
-msgstr "Montrer les comptes _cachés"
+msgstr "Afficher les comptes _cachés"
 
 #: ../src/gnome/glade/account.glade.h:64
 msgid "Show _zero total accounts"
-msgstr "Ne pas afficher les comptes dont le solde est _nul"
+msgstr "Afficher les comptes dont le solde est _nul"
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/account.glade.h:65
