@@ -1,8 +1,28 @@
+2006-10-03  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	* src/gnome-utils/glade/transfer.glade: Fix for bug #359471.
+	  Remove the glade hookup of gnc_xfer_dialog_close_cb() to the
+	  close signal. This callback doesn't handle aborting correctly
+	  when called directly, but it will behave correctly when called
+	  indirectly from close_handler(). The "response" callback will
+	  now be called for all actions that close the dialog.
+
+2006-10-03  Andreas KÃ¶hler  <andi5.py@gmx.net>
+
+	* transaction.scm: Quote an empty scheme list and avoid crash of
+	  transaction report on empty session. Fixes #359412.
+
+2006-10-03  Christian Stimming  <stimming@tuhh.de>
+
+	* several Makefile.am files: Fix Makefiles for .schemas file
+	  installation. srcdir contains the .schemas.in files, but not the
+	  generated .schemas files. Fixes make distcheck.
+
 2006-10-01  Christian Stimming  <stimming@tuhh.de>
 
 	* po/fr.po: Updated French translaction by Fabrice Kurz
 
-2006-09-26  Andreas Köhler  <andi5.py@gmx.net>
+2006-09-26  Andreas KÃ¶hler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-query-list.c:
 	  Initialize sort order in query lists. Fixes #357481.
@@ -51,7 +71,7 @@
    that it's being edited by another register.  We report the error and abort
    the action that would have opened the transaction.
 	
-2006-09-19  Andreas Köhler  <andi5.py@gmx.net>
+2006-09-19  Andreas KÃ¶hler  <andi5.py@gmx.net>
 
 	* src/backend/file/gnc-backend-file.c:
 	* src/gnome-utils/gnc-file.c: Do not complain about non-existent
@@ -153,8 +173,13 @@
 
 2006-08-07 Christian Stimming <stimming@tuhh.de>
 
-	* po/hu.po: Updated Hungarian translation by Sulyok Péter
+	* po/hu.po: Updated Hungarian translation by Sulyok PÃ©ter
 	<peti@sulyok.hu>
+
+2006-08-06  Andreas KÃ¶hler  <andi5.py@gmx.net>
+
+	* various: String fixes that have been delayed due to the string
+	  freeze.
 
 2006-07-30  Chris Lyttle  <chris@wilddev.net>
 
