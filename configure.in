@@ -24,6 +24,10 @@ AC_INIT([gnucash], [2.0.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
+AC_CONFIG_HEADERS(gsf-config.h)
+AC_CONFIG_HEADERS(goffice-config.h)
+AC_CONFIG_HEADERS(goffice-features.h)
+
 # Initialize automake -- make sure we have at least version 1.9
 AM_INIT_AUTOMAKE(1.9)
 
@@ -1337,11 +1341,6 @@ then
 :libgsf_version_micro:libgsf_version_minor)
   dnl NOTE: Above line needs no leading whitespace!  --warlord
   
-  dnl 2005-11-19,jsled, this doesn't seem to work... :(
-  dnl ifelse(x$HAVE_LIBGSF, xyes,,
-    AC_CONFIG_HEADERS(gsf-config.h)
-  dnl)
-  
   AC_FUNC_FSEEKO
   AC_SYS_LARGEFILE
   
@@ -1605,13 +1604,6 @@ then
   m4_eval(goffice_version_epoch + goffice_version_major)[]dnl
 :goffice_version_minor:goffice_version_major)
   dnl NOTE: Above line needs no leading whitespace!  --warlord
-  
-  dnl This one is created by autoheader, ...
-  AC_CONFIG_HEADERS(goffice-config.h)
-  
-  dnl ... and this one is a small subset, maintained manually,
-  dnl which will be installed.
-  AC_CONFIG_HEADERS(goffice-features.h)
   dnl
   dnl Make sure these two won't clash.  Put the following to goffice-config.h:
   AH_BOTTOM([/* Don't include goffice-features.h, it's a subset of goffice-config.h. */
