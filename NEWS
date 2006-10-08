@@ -1,6 +1,35 @@
 Version history:
 ------- -------
 
+ 2.0.2 - 08 October 2006
+ 	 o Release of new stable version 2.0.2 
+	 o Configure changes;
+	 - Find absolute path of gconftool-2 during configure. Make gconftool
+	   rules to fail if gconftool-2 could not be found.
+	 - Fix Makefiles for .schemas file installation.
+	 o Core changes;
+	 - various: String fixes that have been delayed due to the string
+	   freeze.
+	 - Update so that bug-buddy 2.16 will still allow you to file bugs
+	   against gnucash.
+	 - Add a tip for raising the accounts menu in a register page.
+	 - Maintain the accounthierarchy when reparenting the descendants of a
+	   deleted account.
+	 - If the file type wasn't recognized, check whether this failed
+	   because of no read permission and give appropriate user feedback.
+	 - Avoid crash from opening transaction in more than one register.
+	 - Add the ability to override the default sort.
+	 o Import Changes;
+	 - Improve wording for XML data file import druid.
+	 - Replace exact comparison of doubles by checking for a small enough
+	   difference.
+	 - Double-check really every string from aqbanking for valid utf-8
+	   characters.
+	 o Translations;
+	 - Updated Hungarian translation
+	 - Updated complete Nepali translation
+	 - Updated French translation
+
  2.0.1 - 30 July 2006
  	 o Release of new stable version 2.0.1
 	 o Configure changes;
