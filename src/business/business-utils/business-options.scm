@@ -24,6 +24,8 @@
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
 
+(use-modules (gnucash main))
+
 (define (gnc:make-invoice-option
 	 section
 	 name
@@ -282,14 +284,13 @@
     (define (convert-to-pair item)
       (if (pair? item)
 	  item
-	  (cons (gw:enum-<gnc:GncOwnerType>-val->sym
-		 (gnc:owner-get-type item) #f)
+	  (cons (gnc:owner-get-type item)
 		(gnc:owner-get-guid item))))
 
     (define (convert-to-owner pair)
       (if (pair? pair)
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym (car pair) #f)))
-	    (case type
+	  (let ((type (car pair)))
+	    (cond
 	      ((gnc-owner-customer)
 	       (gnc:owner-init-customer
 		option-value
@@ -314,7 +315,7 @@
 		 (gnc:job-lookup (cdr pair) (gnc:get-current-book)))
 		option-value)
 
-	       (else #f)))
+	       (else '())))
 	  pair))
 
     (let* ((option (convert-to-pair (default-getter)))
@@ -330,10 +331,9 @@
 	   (validator
 	    (if (not value-validator)
 		(lambda (owner)
-		  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-			       (if (pair? owner)
-				   (car owner)
-				   (gnc:owner-get-type owner)) #f)))
+		  (let ((type (if (pair? owner)
+                                  (car owner)
+                                  (gnc:owner-get-type owner))))
 		    (if (equal? type owner-type)
 			(list #t owner)
 			(list #f "Owner-Type Mismatch"))))

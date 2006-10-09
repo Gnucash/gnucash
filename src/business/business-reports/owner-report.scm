@@ -348,7 +348,7 @@
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page owner-string "v"
 			  (N_ "The company for this report")
-			  (lambda () #f) #f owner-type))
+			  (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "owner-type" owner-type))
@@ -541,10 +541,10 @@
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
-	 (owner-type (opt-val "__reg" "owner-type"))
+	 (type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
 
-    (case owner-type
+    (cond
       ((gnc-owner-customer)
        (set! type-str (N_ "Customer")))
       ((gnc-owner-vendor)
@@ -627,8 +627,7 @@
     (if (>= index num)
 	#f
 	(let* ((this-account (gnc:group-get-account group index))
-	       (account-type (gw:enum-<gnc:AccountType>-val->sym
-			      (gnc:account-get-type this-account) #f)))
+	       (account-type (gnc:account-get-type this-account)))
 	  (if (eq? account-type type)
 	      this-account
 	      (find-first group num (+ index 1))))))
@@ -641,9 +640,8 @@
 	#f)))
 
 (define (find-first-account-for-owner owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+    (cond
       ((gnc-owner-customer)
        (find-first-account 'receivable))
 
@@ -657,7 +655,7 @@
        (find-first-account-for-owner (gnc:owner-get-end-owner owner)))
 
       (else
-       #f))))
+       #f))))  ;;FIXME: remember to convert
 
 (gnc:define-report
  'version 1
@@ -693,9 +691,8 @@
     (gnc:make-report report-name options)))
 
 (define (owner-report-create owner account)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+    (cond
       ((gnc-owner-customer)
        (owner-report-create-internal (N_ "Customer Report") owner account))
 

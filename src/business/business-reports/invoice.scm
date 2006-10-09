@@ -237,7 +237,7 @@
 
   (gnc:register-inv-option
    (gnc:make-invoice-option invoice-page invoice-name "x" ""
-			    (lambda () #f) #f))
+			    (lambda () '()) #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -639,10 +639,9 @@
     (if invoice
 	(begin
 	  (set! owner (gnc:invoice-get-owner invoice))
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-		       (gnc:owner-get-type 
-			(gnc:owner-get-end-owner owner)) #f)))
-	    (case type
+	  (let ((type (gnc:owner-get-type
+                       (gnc:owner-get-end-owner owner))))
+	    (cond
 	      ((gnc-owner-customer)
 	       (set! invoice? #t))
 	      ((gnc-owner-vendor)

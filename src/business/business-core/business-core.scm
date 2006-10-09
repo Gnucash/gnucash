@@ -1,12 +1,11 @@
 (define-module (gnucash business-core))
-(use-modules (g-wrapped gw-business-core))
+(use-modules (sw_business_core))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
 (define (gnc:owner-get-address owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type owner)))
+    (cond
       ((gnc-owner-customer)
        (let ((c (gnc:owner-get-customer owner)))
 	 (gnc:customer-get-addr c)))
@@ -19,7 +18,7 @@
       ((gnc-owner-job)
        (gnc:owner-get-address (gnc:job-get-owner
 			       (gnc:owner-get-job owner))))
-      (else ""))))
+      (else '()))))
 
 ;
 ; The -dep functions return combined strings of the appropriate
@@ -36,9 +35,8 @@
   (define (just-name name)
     (if name name ""))
 
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type owner)))
+    (cond
       ((gnc-owner-job)
        (gnc:owner-get-name-dep (gnc:job-get-owner
 				(gnc:owner-get-job owner))))
@@ -70,9 +68,8 @@
 	addr)))
 
 (define (gnc:owner-get-owner-id owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type owner) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type owner)))
+    (cond
       ((gnc-owner-customer)
        (let ((c (gnc:owner-get-customer owner)))
 	 (gnc:customer-get-id c)))
@@ -87,7 +84,7 @@
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)
-  (let ((type (gw:enum-<gnc:GncAmountType>-val->sym type-val #f)))
+  (let ((type type-val))
     (equal? type 'gnc-amount-type-percent)))
 
 (define (gnc:owner-from-split split result-owner)

@@ -53,9 +53,8 @@
   (guid-ref "invoice=" gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
 
 (define (gnc:owner-anchor-text owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
-    (case type
+  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+    (cond
       ((gnc-owner-customer)
        (gnc:customer-anchor-text (gnc:owner-get-customer owner)))
 
@@ -73,11 +72,10 @@
 
 (define (gnc:owner-report-text owner acc)
   (let* ((end-owner (gnc:owner-get-end-owner owner))
-	 (type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type end-owner) #f))
+	 (type (gnc:owner-get-type end-owner))
 	 (ref #f))
 
-    (case type
+    (cond
       ((gnc-owner-customer)
        (set! ref "owner=c:"))
 
