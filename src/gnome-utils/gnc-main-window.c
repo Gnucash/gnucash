@@ -997,13 +997,6 @@ gnc_main_window_delete_event (GtkWidget *window,
 {
   static gboolean already_dead = FALSE;
   QofSession *session;
-  GtkWidget *dialog;
-  gint response;
-  const gchar *title = _("Quit GnuCash?");
-  const gchar *message =_("You are attempting to close the last "
-			  "GnuCash window.  Doing so will quit the "
-			  "application.  Are you sure that this is "
-			  "what you want to do?");
 
   if (already_dead)
     return TRUE;
@@ -1027,26 +1020,10 @@ gnc_main_window_delete_event (GtkWidget *window,
     return TRUE;
   }
 
-  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-				  GTK_DIALOG_MODAL,
-				  GTK_MESSAGE_WARNING,
-				  GTK_BUTTONS_NONE,
-				  "%s", title);
-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					   "%s", message);
-  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			 GTK_STOCK_QUIT, GTK_RESPONSE_OK,
-			 NULL);
-  gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-  response = gnc_dialog_run (GTK_DIALOG (dialog), "close_last_window");
-  gtk_widget_destroy(dialog);
+  /* Tell gnucash to shutdown cleanly */
+  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+  already_dead = TRUE;
 
-  if (response == GTK_RESPONSE_OK) {
-    /* Tell gnucash to shutdown cleanly */
-    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-    already_dead = TRUE;
-  }
   return TRUE;
 }
 
