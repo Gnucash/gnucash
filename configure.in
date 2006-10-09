@@ -116,6 +116,9 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
 fi
 
+# Not sure if this is new enough
+AC_PROG_SWIG(1.3.25)
+
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
@@ -2157,7 +2160,7 @@ then
      fi
   fi
 
-  CFLAGS="${CFLAGS} ${warnFLAGS}"
+  CFLAGS="${warnFLAGS} ${CFLAGS}"
 
 else
   warnFLAGS=none

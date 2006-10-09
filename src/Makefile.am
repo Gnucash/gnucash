@@ -35,6 +35,7 @@ endif
 
 noinst_HEADERS = \
   RecnWindow.h \
+  swig-runtime.h \
   gnc-ui.h
 
 bin_SCRIPTS = gnc-test-env
