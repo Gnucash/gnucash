@@ -296,9 +296,9 @@
        
        (if (> work-to-do 100)
            (begin 
-             (set! progress-dialog (gnc:progress-dialog-new window #f))
-             (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
-             (gnc:progress-dialog-set-heading progress-dialog
+             (set! progress-dialog (gnc-progress-dialog-new window #f))
+             (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
+             (gnc-progress-dialog-set-heading progress-dialog
                                               (_ "Importing transactions..."))))
        
 
@@ -310,9 +310,9 @@
              (set! work-done (+ 1 work-done))
              (if progress-dialog 
                  (begin 
-                   (gnc:progress-dialog-set-value 
+                   (gnc-progress-dialog-set-value
                     progress-dialog (/ work-done work-to-do))
-                   (gnc:progress-dialog-update progress-dialog))) 
+                   (gnc-progress-dialog-update progress-dialog)))
              (if (not (qif-xtn:mark xtn))
                  (qif-import:mark-matching-xtns xtn rest))
              (if (not (null? (cdr rest)))
@@ -327,9 +327,9 @@
              (set! work-done (+ 1 work-done))
              (if progress-dialog 
                  (begin 
-                   (gnc:progress-dialog-set-value 
+                   (gnc-progress-dialog-set-value
                     progress-dialog (/ work-done work-to-do))
-                   (gnc:progress-dialog-update progress-dialog))) 
+                   (gnc-progress-dialog-update progress-dialog)))
              (if (not (qif-xtn:mark xtn))
                  (begin 
                    ;; create and fill in the GNC transaction
@@ -353,7 +353,7 @@
        
        ;; get rid of the progress dialog 
        (if progress-dialog
-           (gnc:progress-dialog-destroy progress-dialog))
+           (gnc-progress-dialog-destroy progress-dialog))
        
        new-group))))
 

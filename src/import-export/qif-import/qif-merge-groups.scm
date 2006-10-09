@@ -42,9 +42,9 @@
     
     (if (> work-to-do 100)
 	(begin 
-	  (set! progress-dialog (gnc:progress-dialog-new window #f))
-	  (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
-	  (gnc:progress-dialog-set-heading progress-dialog
+	  (set! progress-dialog (gnc-progress-dialog-new window #f))
+	  (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
+	  (gnc-progress-dialog-set-heading progress-dialog
 					   (_ "Finding duplicate transactions..."))))
 
     ;; for each transaction in the new group, build a query that could
@@ -55,9 +55,9 @@
 	 (set! work-done (+ 1 work-done))
 	 (if progress-dialog 
 	     (begin 
-	       (gnc:progress-dialog-set-value 
+	       (gnc-progress-dialog-set-value
 		progress-dialog (/ work-done work-to-do))
-	       (gnc:progress-dialog-update progress-dialog))) 
+	       (gnc-progress-dialog-update progress-dialog)))
 
 	 (gnc:query-set-book query (gnc:group-get-book old-group))
 
@@ -133,7 +133,7 @@
     
     ;; get rid of the progress dialog 
     (if progress-dialog
-	(gnc:progress-dialog-destroy progress-dialog))
+	(gnc-progress-dialog-destroy progress-dialog))
 
     ;; return the matches 
     matches))

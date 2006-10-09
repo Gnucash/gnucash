@@ -7,6 +7,9 @@
 
 (define-module (gnucash import-export qif-import))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+
+;; We do this initialization here because src/gnome isn't a real module.
+(load-extension "libgncgnome.so" "scm_init_sw_gnome_module")
 (use-modules (sw_gnome))
 
 (use-modules (gnucash gnc-module))

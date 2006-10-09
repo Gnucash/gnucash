@@ -53,9 +53,9 @@
 
      (if (> file-size 10000)
          (begin
-           (set! progress-dialog (gnc:progress-dialog-new window #f))
-           (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
-           (gnc:progress-dialog-set-heading progress-dialog
+           (set! progress-dialog (gnc-progress-dialog-new window #f))
+           (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
+           (gnc-progress-dialog-set-heading progress-dialog
                                             (_ "Loading QIF file..."))))
 
      (with-input-from-file path
@@ -388,9 +388,9 @@
 		 ;; update the progress bar for each line read
 		 (if progress-dialog 
 		     (begin 
-		       (gnc:progress-dialog-set-value 
+		       (gnc-progress-dialog-set-value
 			progress-dialog (/ bytes-read file-size))
-		       (gnc:progress-dialog-update progress-dialog)))
+		       (gnc-progress-dialog-update progress-dialog)))
                  
                  ;; this is if we read a normal (non-null, non-eof) line...
                  (if (not heinous-error)
@@ -406,7 +406,7 @@
      (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
      (if progress-dialog
-         (gnc:progress-dialog-destroy progress-dialog))
+         (gnc-progress-dialog-destroy progress-dialog))
 
      return-val)))
 
