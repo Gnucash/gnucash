@@ -76,7 +76,6 @@ gboolean gncOrderGetActive (GncOrder *order);
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
-gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 int gncOrderCompare (GncOrder *a, GncOrder *b);
