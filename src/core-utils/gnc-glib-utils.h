@@ -75,6 +75,13 @@ gboolean gnc_utf8_validate (const gchar *str);
 void gnc_utf8_strip_invalid (gchar *str);
 
 
+typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
+
+/**
+ * @return Caller-owned GList* of results of apply `fn` to `list` in order.
+ **/
+GList* gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data);
+
 /** @} */
 
 #endif /* GNC_GLIB_UTILS_H */

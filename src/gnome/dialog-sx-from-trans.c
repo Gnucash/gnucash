@@ -24,24 +24,24 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include "glib-compat.h"
-
-#include "gnc-engine.h"
-#include "SX-book.h"
-#include "SX-ttinfo.h"
-#include "SchedXaction.h"
-#include "gnc-component-manager.h"
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
+#include "glib-compat.h"
+#include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "qof.h"
-#include "gnc-gconf-utils.h"
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
+#include "gnc-dense-cal-store.h"
 #include "gnc-dense-cal.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "qof.h"
+#include "SchedXaction.h"
+#include "SX-book.h"
+#include "SX-ttinfo.h"
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #define SX_GLADE_FILE "sched-xact.glade"
 #define SXFTD_DIALOG_GLADE_NAME "sx_from_real_trans"
@@ -92,7 +92,7 @@ typedef struct
   Transaction *trans;
   SchedXaction *sx;
 
-  GncDenseCalTransientModel *dense_cal_model;
+  GncDenseCalStore *dense_cal_model;
   GncDenseCal *example_cal;
 
   GNCDateEdit *startDateGDE, *endDateGDE;
@@ -101,7 +101,7 @@ typedef struct
 
 typedef struct
 {
-  gdctm_end_type type;
+  gdcs_end_type type;
   GDate end_date;
   guint n_occurrences;
 } getEndTuple;
@@ -365,7 +365,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     int num_marks = SXFTD_EXCAL_NUM_MONTHS * 31;
 
     w = GTK_WIDGET(glade_xml_get_widget( sxfti->gxml, SXFTD_EX_CAL_FRAME ));
-    sxfti->dense_cal_model = gnc_dense_cal_transient_model_new(num_marks);
+    sxfti->dense_cal_model = gnc_dense_cal_store_new(num_marks);
     sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
 
     g_assert( sxfti->example_cal );
@@ -705,13 +705,13 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   switch (get.type)
   {
   case NEVER_END:
-    gnc_dense_cal_transient_model_update_no_end(sxfti->dense_cal_model, &startDate, fs);
+    gnc_dense_cal_store_update_no_end(sxfti->dense_cal_model, &startDate, fs);
     break;
   case END_ON_DATE:
-    gnc_dense_cal_transient_model_update_date_end(sxfti->dense_cal_model, &startDate, fs, &get.end_date);
+    gnc_dense_cal_store_update_date_end(sxfti->dense_cal_model, &startDate, fs, &get.end_date);
     break;
   case END_AFTER_N_OCCS:
-    gnc_dense_cal_transient_model_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
+    gnc_dense_cal_store_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
     break;
   default:
     printf("unknown get.type [%d]\n", get.type);

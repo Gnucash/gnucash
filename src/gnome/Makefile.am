@@ -60,6 +60,7 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
+  gnc-sx-list-tree-model-adapter.c \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
@@ -98,6 +99,7 @@ noinst_HEADERS = \
   gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
+  gnc-sx-list-tree-model-adapter.h \
   gw-gnc.h \
   lot-viewer.h \
   reconcile-list.h \

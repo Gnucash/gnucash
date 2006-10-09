@@ -20,91 +20,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef _DENSECAL_H_
-#define _DENSECAL_H_
+#ifndef _GNC_DENSE_CAL_H
+#define _GNC_DENSE_CAL_H
 
-#include <gdk/gdk.h>
-#include <gtk/gtkadjustment.h>
-#include <gtk/gtkwidget.h>
-#include <glib.h>
+#include "config.h"
+
 #include <FreqSpec.h>
+#include <glib.h>
+#include "gnc-dense-cal-model.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
-
-#define GNC_TYPE_DENSE_CAL_MODEL (gnc_dense_cal_model_get_type())
-#define GNC_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModel))
-#define GNC_IS_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_MODEL))
-#define GNC_DENSE_CAL_MODEL_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModelIface))
-  
-typedef struct _GncDenseCalModel GncDenseCalModel; /* non existant */
-typedef struct _GncDenseCalModelIface GncDenseCalModelIface;
-
-struct _GncDenseCalModelIface
-{
-  GTypeInterface parent;
-
-  /* signals */
-  void (*insert)(GncDenseCalModel *mdl, gint tag);
-  void (*update)(GncDenseCalModel *mdl, gint tag);
-  void (*remove)(GncDenseCalModel *mdl, gint tag);
-
-  /* virtual table */
-  GList* (*get_contained)(GncDenseCalModel *model);
-  gchar* (*get_name)(GncDenseCalModel *model, guint tag);
-  gchar* (*get_info)(GncDenseCalModel *model, guint tag);
-  gint (*get_instance_count)(GncDenseCalModel *model, guint tag);
-  void (*get_instance)(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
-};
-
-GType gnc_dense_cal_model_get_type(void);
-
-/* @fixme: glist mem alloc policy... ? */
-GList* gnc_dense_cal_model_get_contained(GncDenseCalModel *model);
-gchar* gnc_dense_cal_model_get_name(GncDenseCalModel *model, guint tag);
-gchar* gnc_dense_cal_model_get_info(GncDenseCalModel *model, guint tag);
-gint gnc_dense_cal_model_get_instance_count(GncDenseCalModel *model, guint tag);
-void gnc_dense_cal_model_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
-
-/* ------------------------------------------------------------ */
-#define GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL (gnc_dense_cal_transient_model_get_type())
-#define GNC_DENSE_CAL_TRANSIENT_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, GncDenseCalTransientModel))
-#define GNC_DENSE_CAL_TRANSIENT_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, GncDenseCalTransientModelClass))
-#define GNC_IS_DENSE_CAL_TRANSIENT_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL))
-#define GNC_IS_DENSE_CAL_TRANSIENT_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL))
-#define GNC_DENSE_CAL_TRANSIENT_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_DENSE_CAL_TRANSIENT_MODEL, GncDenseCalTransientModel))
-  
-typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } gdctm_end_type;
-
-typedef struct _GncDenseCalTransientModel
-{
-     GObject parent;
-     
-     GDate start_date;
-     gdctm_end_type end_type;
-     GDate end_date;
-     gint n_occurrences;
-     gchar *name;
-     gchar *info;
-     int num_marks;
-     int num_real_marks; 
-     GDate **cal_marks;
-} GncDenseCalTransientModel;
-
-typedef struct _GncDenseCalTransientModelClass
-{
-     GObjectClass parent_class;
-} GncDenseCalTransientModelClass;
-
-GType gnc_dense_cal_transient_model_get_type(void);
-GncDenseCalTransientModel* gnc_dense_cal_transient_model_new(int num_marks);
-void gnc_dense_cal_transient_model_clear(GncDenseCalTransientModel *model);
-void gnc_dense_cal_transient_model_update_name(GncDenseCalTransientModel *model, gchar* name);
-void gnc_dense_cal_transient_model_update_info(GncDenseCalTransientModel *model, gchar* info);
-void gnc_dense_cal_transient_model_update_no_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs);
-void gnc_dense_cal_transient_model_update_count_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, int num_occur);
-void gnc_dense_cal_transient_model_update_date_end(GncDenseCalTransientModel *model, GDate *start, FreqSpec *fs, GDate *end_date);
-
-/* ------------------------------------------------------------ */
 
 #define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ()) 
 #define GNC_DENSE_CAL(obj)          GTK_CHECK_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
@@ -126,75 +52,75 @@ enum GDC_COLORS {
 
 struct _GncDenseCal
 {
-        GtkWidget widget;
+     GtkWidget widget;
 
-        GdkPixmap *drawbuf;
+     GdkPixmap *drawbuf;
 
-        gboolean initialized;
+     gboolean initialized;
 
-        gboolean showPopup;
-        GtkWindow *transPopup;
+     gboolean showPopup;
+     GtkWindow *transPopup;
 
-        gint min_x_scale;
-        gint min_y_scale;
+     gint min_x_scale;
+     gint min_y_scale;
 
-        gint x_scale;
-        gint y_scale;
+     gint x_scale;
+     gint y_scale;
 
-        gint numMonths;
-        gint monthsPerCol;
-        gint num_weeks; /* computed */
+     gint numMonths;
+     gint monthsPerCol;
+     gint num_weeks; /* computed */
 
-        GDateMonth month;
-        gint year;
-        gint firstOfMonthOffset;
+     GDateMonth month;
+     gint year;
+     gint firstOfMonthOffset;
 
-        gint leftPadding;
-        gint topPadding;
+     gint leftPadding;
+     gint topPadding;
 
-        gboolean needInitMonthLabels;
-        gdc_month_coords monthPositions[12];
-        GdkFont *monthLabelFont;
-        GdkFont *dayLabelFont;
-        GdkPixmap *monthLabels[12];
+     gboolean needInitMonthLabels;
+     gdc_month_coords monthPositions[12];
+     GdkFont *monthLabelFont;
+     GdkFont *dayLabelFont;
+     GdkPixmap *monthLabels[12];
 
-        GdkColor weekColors[MAX_COLORS];
+     GdkColor weekColors[MAX_COLORS];
 
-        guint label_lbearing;
-        guint label_ascent;
-        guint label_width;
-        guint label_height;
-        guint dayLabelHeight;
+     guint label_lbearing;
+     guint label_ascent;
+     guint label_width;
+     guint label_height;
+     guint dayLabelHeight;
 
-  GncDenseCalModel *model;
+     GncDenseCalModel *model;
 
-        guint lastMarkTag;
+     guint lastMarkTag;
 
-        /**
-         * A GList of gdc_mark_data structs, one for each active/valid markTag.
-         **/
-        GList *markData;
-        int numMarks;
-        /* array of GList*s of per-cell markings. */
-        GList **marks;
+     /**
+      * A GList of gdc_mark_data structs, one for each active/valid markTag.
+      **/
+     GList *markData;
+     int numMarks;
+     /* array of GList*s of per-cell markings. */
+     GList **marks;
 
-	int disposed; /* private */
+     int disposed; /* private */
 };
 
 struct _GncDenseCalClass
 {
-        GtkWidgetClass parent_class;
+     GtkWidgetClass parent_class;
 };
 
 typedef struct _gdc_mark_data {
-        gchar *name;
-        gchar *info;
-        guint tag;
-        /* GdkColor markStyle; */
-        /**
-         * A GList of the dcal->marks indexes containing this mark.
-         **/
-        GList *ourMarks;
+     gchar *name;
+     gchar *info;
+     guint tag;
+     /* GdkColor markStyle; */
+     /**
+      * A GList of the dcal->marks indexes containing this mark.
+      **/
+     GList *ourMarks;
 } gdc_mark_data;
 
 GtkWidget*     gnc_dense_cal_new                    (void);
@@ -202,7 +128,6 @@ GtkWidget*     gnc_dense_cal_new_with_model         (GncDenseCalModel *model);
 GType          gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
-
 void gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon);
 /**
  * @param year Julian year: 2000 = 2000AD.
@@ -224,4 +149,4 @@ void gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove );
 
 G_END_DECLS
 
-#endif /* _DENSECAL_H_ */
+#endif /* _GNC_DENSE_CAL_H */

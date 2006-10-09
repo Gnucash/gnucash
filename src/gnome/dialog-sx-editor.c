@@ -41,6 +41,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
+#include "gnc-dense-cal-store.h"
 #include "gnc-embedded-window.h"
 #include "gnc-engine.h"
 #include "gnc-frequency.h"
@@ -117,7 +118,7 @@ struct _GncSxEditorDialog
      GNCLedgerDisplay *ledger;
 
      GNCFrequency *gncfreq;
-     GncDenseCalTransientModel *dense_cal_model;
+     GncDenseCalStore *dense_cal_model;
      GncDenseCal *example_cal;
 
      GtkEditable *nameEntry;
@@ -1264,7 +1265,7 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
         gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->gncfreq) );
 
         b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "example_cal_hbox" ));
-        sxed->dense_cal_model = gnc_dense_cal_transient_model_new(EX_CAL_NUM_MONTHS*31);
+        sxed->dense_cal_model = gnc_dense_cal_store_new(EX_CAL_NUM_MONTHS*31);
         sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxed->dense_cal_model)));
         g_assert(sxed->example_cal);
         gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
@@ -1554,7 +1555,7 @@ gnc_sxed_update_cal( GncSxEditorDialog *sxed )
         if (!g_date_valid(&start_date))
         {
              /* Nothing to do. */
-             gnc_dense_cal_transient_model_clear(sxed->dense_cal_model);
+             gnc_dense_cal_store_clear(sxed->dense_cal_model);
              xaccFreqSpecFree(fs);
              return;
         }
@@ -1567,17 +1568,17 @@ gnc_sxed_update_cal( GncSxEditorDialog *sxed )
         {
              GDate end_date;
              g_date_set_time_t(&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
-             gnc_dense_cal_transient_model_update_date_end(sxed->dense_cal_model, &start_date, fs, &end_date);
+             gnc_dense_cal_store_update_date_end(sxed->dense_cal_model, &start_date, fs, &end_date);
         }
         else if (gtk_toggle_button_get_active(sxed->optEndNone))
         {
-             gnc_dense_cal_transient_model_update_no_end(sxed->dense_cal_model, &start_date, fs);
+             gnc_dense_cal_store_update_no_end(sxed->dense_cal_model, &start_date, fs);
         }
         else if (gtk_toggle_button_get_active(sxed->optEndCount))
         {
              gint num_remain
 		  = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
-             gnc_dense_cal_transient_model_update_count_end(sxed->dense_cal_model, &start_date, fs, num_remain);
+             gnc_dense_cal_store_update_count_end(sxed->dense_cal_model, &start_date, fs, num_remain);
         }
         else
         {

@@ -27,7 +27,7 @@
 
 #include "gnc-glib-utils.h"
 
-int 
+int
 safe_utf8_collate (const char * da, const char * db)
 {
   if (da && !(*da))
@@ -64,4 +64,15 @@ gnc_utf8_strip_invalid (gchar *str)
     len = strlen(end);
     memmove(end, end+1, len);	/* shuffle the remainder one byte */
   } while (!g_utf8_validate(str, -1, (const gchar **)&end));
+}
+
+GList*
+gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
+{
+     GList *rtn = NULL;
+     for (; list != NULL; list = list->next)
+     {
+          rtn = g_list_append(rtn, (*fn)(list->data, user_data));
+     }
+     return rtn;
 }

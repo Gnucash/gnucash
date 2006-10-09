@@ -27,7 +27,8 @@
 
 #include "dialog-utils.h"
 #include "gnc-exp-parser.h"
-#include "gnc-plugin-page-sx-list.h"
+// #include "gnc-plugin-page-sx-list.h"
+#include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 
 #include "gnc-ui-util.h"
@@ -53,7 +54,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 struct _GncSxSinceLastRunDialog
 {
      GtkWidget *dialog;
-     //GncSxInstanceModel *instances;
      GncSxSlrTreeModelAdapter *editing_model;
      GtkTreeView *instance_view;
      GtkToggleButton *review_created_txns_toggle;
