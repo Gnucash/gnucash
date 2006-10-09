@@ -1,5 +1,4 @@
 (define-module (gnucash business-gnome))
-(use-modules (g-wrapped gw-business-gnome))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/gnome-utils" 0)

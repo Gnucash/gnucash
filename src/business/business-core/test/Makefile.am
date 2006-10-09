@@ -15,7 +15,6 @@ LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/engine/libgw-engine.la \
   ../libgncmod-business-core.la \
-  ../libgw-business-core.la \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   -lltdl
