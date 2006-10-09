@@ -6,13 +6,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash import-export qif-import))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (sw_gnome))
 
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 slib))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
-(use-modules (g-wrap gw-wct))
 
 (debug-enable 'debug)
 (debug-enable 'backtrace)

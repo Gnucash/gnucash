@@ -2,7 +2,7 @@
 (define-module (gnucash app-utils))
 (use-modules (g-wrapped gw-app-utils))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/engine" 0)

@@ -25,7 +25,6 @@
 
 (use-modules (g-wrap gw-wct))
 (use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-gnc))
 
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
