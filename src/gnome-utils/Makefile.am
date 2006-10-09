@@ -1,7 +1,7 @@
 SUBDIRS = glade schemas . test ui
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
+pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 
@@ -97,6 +97,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   print-session.c \
   search-param.c \
   gnc-dialog.c \
+  swig-gnome-utils.c \
   window-main-summarybar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -195,19 +196,9 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GOFFICE_LIBS} \
   ${LIBXML2_LIBS}
 
-nodist_libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
-libgw_gnome_utils_la_LIBADD = \
-  libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${QOF_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
-  ${GLIB_LIBS}
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnome-utils-spec.scm
-nodist_gwmod_DATA = gw-gnome-utils.scm
+swig-gnome-utils.c: gnome-utils.i ${noinst_HEADERS} ${gncinclude_HEADERS}
+	swig -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src/engine -o $@ $<
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnome-utils.scm 
@@ -218,7 +209,6 @@ gncscm_DATA = gnc-menu-extensions.scm
 EXTRA_DIST = \
   gnc-dir.h.in \
   gnc-svninfo.h \
-  ${gwmod_DATA} \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -280,18 +270,15 @@ _gnc-svninfo.h: Makefile
 BUILT_SOURCES = gnc-dir.h gnc-version.h
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnome-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += \
+SCM_FILE_LINKS = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
+	rm -f gnucash
 	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -299,19 +286,9 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
-  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status Makefile
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
-	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
-	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
-BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links \
-	${SCM_FILE_LINKS} gw-gnome-utils.html
+BUILT_SOURCES += swig-gnome-utils.c
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
 
 #
 # I hate inconsistent standards. Autotools puts help files into
