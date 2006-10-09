@@ -85,6 +85,8 @@ enum {
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 #define KEY_TAB_POSITION	"tab_position"
 
+#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
+
 /* Static Globals *******************************************************/
 
 /** The debugging module that this .o belongs to.  */

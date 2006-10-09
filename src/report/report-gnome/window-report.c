@@ -174,7 +174,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     scm_gc_protect_object(prm->scm_options);
     scm_gc_protect_object(prm->cur_report);
     
-    gnc_build_options_dialog_contents(prm->win, prm->db);
+    gnc_options_dialog_build_contents(prm->win, prm->db);
     gnc_option_db_clean(prm->db);
 
     gnc_options_dialog_set_apply_cb(prm->win, 

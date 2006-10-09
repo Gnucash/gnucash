@@ -1211,7 +1211,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
 
 /********************************************************************\
- * gnc_build_options_dialog_contents                                *
+ * gnc_options_dialog_build_contents                                *
  *   builds an options dialog given a property box and an options   *
  *   database                                                       *
  *                                                                  *
@@ -1220,7 +1220,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
+gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
                                   GNCOptionDB  *odb)
 {
   GNCOptionSection *section;

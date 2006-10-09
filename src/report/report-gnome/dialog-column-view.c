@@ -324,7 +324,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     r->contents_list = SCM_EOL;
     r->odb       = gnc_option_db_new(r->options);
 
-    gnc_build_options_dialog_contents(r->optwin, r->odb);
+    gnc_options_dialog_build_contents(r->optwin, r->odb);
 
     gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
                                           (r->optwin)),

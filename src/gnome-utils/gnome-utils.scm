@@ -1,6 +1,5 @@
 (define-module (gnucash gnome-utils))
 
-(use-modules (g-wrapped gw-gnome-utils))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 

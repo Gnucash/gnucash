@@ -147,7 +147,7 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
     scm_gc_protect_object(ssinfo->stylesheet);
     g_object_ref(gnc_options_dialog_widget(ssinfo->odialog));
 
-    gnc_build_options_dialog_contents(ssinfo->odialog, 
+    gnc_options_dialog_build_contents(ssinfo->odialog,
                                       ssinfo->odb);
     gnc_options_dialog_set_apply_cb(ssinfo->odialog, 
                                     gnc_style_sheet_options_apply_cb,

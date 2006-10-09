@@ -32,7 +32,6 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-gnome-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
 

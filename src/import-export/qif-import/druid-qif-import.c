@@ -48,7 +48,8 @@
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
+#include "g-wrap-wct.h" // still needed
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
@@ -460,7 +461,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
   SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
-  SCM window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -471,7 +471,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   /* get the file name */ 
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
-  window = gw_wcp_assimilate_ptr(wind->window, window_type);
+  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
 
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
@@ -1205,7 +1205,6 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
   SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
-  SCM   window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM   retval;
   SCM   current_xtn;
   SCM   window;
@@ -1260,7 +1259,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
-  window = gw_wcp_assimilate_ptr(wind->window, window_type);
+  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
   retval = scm_apply(qif_to_gnc, 
 		     SCM_LIST7(wind->imported_files,
 			       wind->acct_map_info, 

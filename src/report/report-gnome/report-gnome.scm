@@ -45,7 +45,7 @@
                        (gnc:report-options report)
                        report))
                 (gnc:report-set-editor-widget! report editor-widg))
-              (gnc:warning-dialog #f (_ "This report has no options.")))))))
+              (gnc:warning-dialog '() (_ "This report has no options.")))))))
 
 (define (gnc:add-report-template-menu-items)
   (define *template-items* '())

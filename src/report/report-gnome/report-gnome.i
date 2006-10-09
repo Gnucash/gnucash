@@ -6,16 +6,8 @@
 #include <dialog-column-view.h>
 #include <gnc-plugin-page-report.h>
 #include <window-report.h>
-
-#include <g-wrap-wct.h> //Temporary. Adds no link dep?!?
 %}
 
-// Temporary SWIG<->G-wrap converters
-%typemap(in) GncMainWindow * "$1 = (GncMainWindow *)gw_wcp_get_ptr($input);"
-%typemap(out) GncMainWindow * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:MainWindow*>"));
-}
-// End of temporary typemaps.
 
 void gnc_report_raise_editor(SCM report);
 void gnc_main_window_open_report(int report_id, GncMainWindow *window);
