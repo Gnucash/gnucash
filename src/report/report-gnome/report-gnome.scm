@@ -14,7 +14,7 @@
 (require 'printf)
 
 (use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-report-gnome))
+(use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -28,15 +28,15 @@
 ;; and returns a widget
 (define (gnc:report-options-editor report) 
   (if (equal? (gnc:report-type report) "Multicolumn View")
-      gnc:column-view-edit-options
-      gnc:default-options-editor))
+      gnc-column-view-edit-options
+      gnc-report-window-default-params-editor))
 
 ;; do not rely on the return value of this function - it has none.
 ;; instead, this function's side-effect is to set the report's editor widget.
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
-        (gnc:report-raise-editor report)
+        (gnc-report-raise-editor report)
         (begin
           (if (gnc:report-options report) 
               (begin 
@@ -79,7 +79,7 @@
                  (lambda (window)
                    (let ((report (gnc:make-report
                                   (gnc:report-template-name template))))
-                     (gnc:main-window-open-report report window)))))
+                     (gnc-main-window-open-report report window)))))
           (gnc:add-extension item))))
 
   (define (add-template name template)
@@ -127,5 +127,5 @@
     (N_ "Welcome-to-GnuCash report screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
-      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
+      (gnc-main-window-open-report (gnc:make-welcome-report) window))))
 )

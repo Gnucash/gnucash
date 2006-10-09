@@ -25,7 +25,7 @@
 
 #include <glib/gi18n.h>
 #include <libguile.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
@@ -64,7 +64,6 @@ struct gncp_column_view_edit {
   SCM       contents_list;
   int       contents_selected;
 };
-
 
 static void gnc_column_view_edit_add_cb(GtkButton * button,
                                         gpointer user_data);
@@ -271,8 +270,10 @@ gnc_column_view_edit_options(SCM options, SCM view)
 
   ptr = scm_call_1(get_editor, view);
   if(ptr != SCM_BOOL_F) {
-    GtkWindow * w = gw_wcp_get_ptr(ptr);
+#define FUNC_NAME "gtk_window_present"
+    GtkWindow * w = SWIG_MustGetPtr(ptr, SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
     gtk_window_present(w);
+#undef FUNC_NAME
     return NULL;
   }
   else {

@@ -52,6 +52,7 @@ lmod(char * mn)
   scm_c_eval_string(form);
   g_free(form);
 }
+extern SCM scm_init_sw_report_gnome_module(void);
 
 int
 libgncmod_report_gnome_LTX_gnc_module_init(int refcount)
@@ -67,8 +68,9 @@ libgncmod_report_gnome_LTX_gnc_module_init(int refcount)
   if(!gnc_module_load("gnucash/report/report-system", 0)) {
     return FALSE;
   }
+  scm_init_sw_report_gnome_module();
 
-  lmod ("(g-wrapped gw-report-gnome)");
+  lmod ("(sw_report_gnome)");
   lmod ("(gnucash report report-gnome)");
 
   if (refcount == 0)
