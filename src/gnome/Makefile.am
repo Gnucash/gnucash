@@ -1,10 +1,6 @@
 SUBDIRS = glade schemas ui
 
-lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnc-spec.scm
-nodist_gwmod_DATA = gw-gnc.scm
+lib_LTLIBRARIES = libgncgnome.la
 
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
@@ -24,13 +20,8 @@ libgncgnome_la_LIBADD = \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
-nodist_libgw_gnc_la_SOURCES = gw-gnc.c
-
-libgw_gnc_la_LDFLAGS =  \
-  ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
-libgw_gnc_la_LIBADD = libgncgnome.la
-
 libgncgnome_la_SOURCES = \
+  swig-gnome.c \
   dialog-chart-export.c  \
   dialog-commodities.c \
   dialog-fincalc.c \
@@ -99,10 +90,12 @@ noinst_HEADERS = \
   top-level.h \
   window-reconcile.h
 
-EXTRA_DIST = \
-  gnucash.desktop.in \
-  ${gwmod_DATA}
+swig-gnome.c: gnome.i ${noinst_HEADERS}
+	swig -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src/engine -o $@ $<
 
+EXTRA_DIST = \
+  gnucash.desktop.in
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -138,15 +131,9 @@ AM_CFLAGS = \
 
 noinst_DATA = .scm-links
 
-if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnc-spec.scm
-endif
-
 .scm-links: 
-	rm -f gnucash g-wrapped
+	rm -f gnucash
 	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -154,16 +141,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
-  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status Makefile
-	FLAVOR=gnome $(GUILE) -c \
-          "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-           (set! %load-path (cons \"../engine\" %load-path)) \
-           (set! %load-path (cons \"../app-utils\" %load-path)) \
-           (set! %load-path (cons \"../gnome-utils\" %load-path)) \
-           (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
-           (primitive-load \"./gw-gnc-spec.scm\") \
-           (gw:generate-wrapset \"gw-gnc\")"
-BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
+BUILT_SOURCES = swig-gnome.c
 CLEANFILES = $(BUILT_SOURCES) gnucash.desktop \
-	gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} gw-gnc.html
+	gnucash .scm-links ${SCM_FILE_LINKS}
