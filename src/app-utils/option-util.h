@@ -260,10 +260,10 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 				    gboolean years, const char *custom);
 
 
-/* private */
-void gncp_option_db_register_option(GNCOptionDBHandle handle,
-                                    SCM guile_option);
+void gnc_option_db_register_option(GNCOptionDBHandle handle,
+                                   SCM guile_option);
 
+/* private */
 void gncp_option_invoke_callback(GNCOptionChangeCallback callback,
                                  gpointer data);
 

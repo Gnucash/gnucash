@@ -35,6 +35,7 @@
 #include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 /* TODO: 
 
@@ -444,7 +445,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                        const char *name)
 {
   static SCM void_type = SCM_UNDEFINED;
-  static SCM callback_type = SCM_UNDEFINED;
 
   SCM register_proc;
   SCM arg;
@@ -466,12 +466,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     /* don't really need this - types are bound globally anyway. */
     if(void_type != SCM_UNDEFINED) scm_gc_protect_object(void_type);
   }
-  if(callback_type == SCM_UNDEFINED) {
-    callback_type = scm_c_eval_string("<gnc:OptionChangeCallback>");
-    /* don't really need this - types are bound globally anyway. */
-    if(callback_type != SCM_UNDEFINED)
-      scm_gc_protect_object(callback_type);
-  }
 
   /* Now build the args list for apply */
   args = SCM_EOL;
@@ -484,7 +478,8 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
   args = scm_cons(arg, args);
 
   /* next the callback */
-  arg = gw_wcp_assimilate_ptr(callback, callback_type);
+  arg = SWIG_NewPointerObj(
+      callback, SWIG_TypeQuery("GNCOptionChangeCallback"), 0);
   args = scm_cons(arg, args);
 
   /* next the name */
@@ -1451,7 +1446,7 @@ gnc_option_db_clean(GNCOptionDB *odb)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
+gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 {
   GNCOptionDB *odb;
   GNCOption *option;
@@ -2816,3 +2811,4 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 
   return value;
 }
+

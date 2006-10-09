@@ -1,6 +1,6 @@
 
 (define-module (gnucash app-utils))
-(use-modules (g-wrapped gw-app-utils))
+(use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
@@ -225,13 +225,8 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(re-export gnc:hook-define)
 (export gnc:hook-run-danglers)		;; from hooks.scm
 (re-export gnc:hook-add-dangler)
-(re-export gnc:hook-remove-dangler)
-(re-export gnc:*book-opened-hook*)
-(re-export gnc:*new-book-hook*)
-(re-export gnc:*book-closed-hook*)
 (re-export gnc:*report-hook*)
 
 ;; simple-obj
