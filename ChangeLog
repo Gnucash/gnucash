@@ -1,3 +1,7 @@
+2006-10-09  Josh Sled <jsled@asynchronous.org>
+
+	* art/: Add, with 2.0 {banner,icon,logo,splash} art.
+	
 2006-09-26  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/qof/qofquery.[ch]:
