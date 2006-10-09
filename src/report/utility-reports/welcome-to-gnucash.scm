@@ -25,7 +25,7 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
-(use-modules (g-wrapped gw-report-system))
+(use-modules (sw_report_system))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -42,16 +42,16 @@
       (gnc:option-set-value 
        (gnc:lookup-option options section name) value))
 
-    (set! options (gnc:report-options (gnc:find-report view)))
+    (set! options (gnc:report-options (gnc-report-find view)))
     (set-option! "General" "Report name" (_ "Welcome to GnuCash"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved 
-    (gnc:report-set-needs-save?! (gnc:find-report sub-welcome) #t)
-    (gnc:report-set-needs-save?! (gnc:find-report sub-accounts) #t)
-    (gnc:report-set-needs-save?! (gnc:find-report sub-expense-pie) #t)
-    (gnc:report-set-needs-save?! (gnc:find-report sub-income-pie) #t)
-    (gnc:report-set-needs-save?! (gnc:find-report sub-bar) #t)
+    (gnc:report-set-needs-save?! (gnc-report-find sub-welcome) #t)
+    (gnc:report-set-needs-save?! (gnc-report-find sub-accounts) #t)
+    (gnc:report-set-needs-save?! (gnc-report-find sub-expense-pie) #t)
+    (gnc:report-set-needs-save?! (gnc-report-find sub-income-pie) #t)
+    (gnc:report-set-needs-save?! (gnc-report-find sub-bar) #t)
 
     (set-option! "__general" "report-list" 
                  (list (list sub-welcome 1 1 #f)
@@ -60,13 +60,13 @@
                        (list sub-income-pie 1 1 #f)
                        (list sub-bar 2 1 #f)))
     
-    (set! options (gnc:report-options (gnc:find-report sub-expense-pie)))
+    (set! options (gnc:report-options (gnc-report-find sub-expense-pie)))
     (set-option! "Display" "Plot Width" 400)
     
-    (set! options (gnc:report-options (gnc:find-report sub-income-pie)))
+    (set! options (gnc:report-options (gnc-report-find sub-income-pie)))
     (set-option! "Display" "Plot Width" 400)
     
-    (set! options (gnc:report-options (gnc:find-report sub-bar)))
+    (set! options (gnc:report-options (gnc-report-find sub-bar)))
     (set-option! "Display" "Plot Width" 800)
 
     view))
