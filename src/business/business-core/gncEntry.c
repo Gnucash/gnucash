@@ -1141,7 +1141,7 @@ gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv)
   return (is_inv ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
 }
 
-GList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv)
+AccountValueList * gncEntryReturnTaxValues (GncEntry *entry, gboolean is_inv)
 {
   if (!entry) return NULL;
   gncEntryRecomputeValues (entry);

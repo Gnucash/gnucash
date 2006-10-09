@@ -644,7 +644,7 @@ gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice)
   return invoice->to_charge_amount;
 }
 
-GList * gncInvoiceGetEntries (GncInvoice *invoice)
+EntryList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->entries;

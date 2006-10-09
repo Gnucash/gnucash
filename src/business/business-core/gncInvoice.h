@@ -109,7 +109,8 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
-GList * gncInvoiceGetEntries (GncInvoice *invoice);
+typedef GList EntryList;
+EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
