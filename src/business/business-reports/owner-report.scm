@@ -156,8 +156,8 @@
     (for-each
      (lambda (lot)
        (let* ((bal (gnc:lot-get-balance lot))
-	      (invoice (gnc:invoice-get-invoice-from-lot lot))
-	      (post-date (gnc:invoice-get-date-posted invoice)))
+	      (invoice (gncInvoiceGetInvoiceFromLot lot))
+	      (post-date (gncInvoiceGetDatePosted invoice)))
 
 	 (if (not (gnc:numeric-zero-p bal))
 	     (begin
@@ -197,7 +197,7 @@
 	 (due-date #f)
 	 (value (gnc:transaction-get-account-value txn acc))
 	 (split (gnc:transaction-get-split txn 0))
-	 (invoice (gnc:invoice-get-invoice-from-txn txn))
+	 (invoice (gncInvoiceGetInvoiceFromTxn txn))
 	 (currency (gnc:transaction-get-currency txn))
 	 (type-str
 	  (cond
@@ -256,7 +256,7 @@
 	  
 	  ; Now print out the invoice row
 	  (if invoice
-	      (set! due-date (gnc:invoice-get-date-due invoice)))
+	      (set! due-date (gncInvoiceGetDateDue invoice)))
 
 	  (let ((row (make-row date due-date (gnc:transaction-get-num txn)
 			       type-str (gnc:split-get-memo split) value))
@@ -403,13 +403,13 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) 'gnc-owner-customer (_ "Invoice") #f))
+  (options-generator '(receivable) GNC-OWNER-CUSTOMER (_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) 'gnc-owner-vendor (_ "Bill") #t))
+  (options-generator '(payable) GNC-OWNER-VENDOR (_ "Bill") #t))
 
 (define (employee-options-generator)
-  (options-generator '(payable) 'gnc-owner-employee (_ "Expense Report") #t))
+  (options-generator '(payable) GNC-OWNER-EMPLOYEE (_ "Expense Report") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -430,7 +430,7 @@
   (line-helper (string->list string)))
 
 (define (setup-query q owner account end-date)
-  (let* ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+  (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
     (gnc:query-add-guid-match
      q 
@@ -545,23 +545,23 @@
 	 (type-str ""))
 
     (cond
-      ((gnc-owner-customer)
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (set! type-str (N_ "Customer")))
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (set! type-str (N_ "Vendor")))
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (set! type-str (N_ "Employee"))))
 
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
 
-    (if (gnc:owner-is-valid? owner)
+    (if (gncOwnerIsValid owner)
 	(begin
 	  (setup-query query owner account end-date)
 
 	  (gnc:html-document-set-title!
 	   document
-           (string-append (_ type-str ) " " (_ "Report:") " " (gnc:owner-get-name owner)))
+           (string-append (_ type-str ) " " (_ "Report:") " " (gncOwnerGetName owner)))
 
            (gnc:html-document-set-headline!
             document (gnc:html-markup
@@ -570,7 +570,7 @@
                       " " (_ "Report:") " "
                       (gnc:html-markup-anchor
                        (gnc:owner-anchor-text owner)
-                       (gnc:owner-get-name owner))))
+                       (gncOwnerGetName owner))))
 	  
 	  (if account
 	      (begin
@@ -625,7 +625,7 @@
 (define (find-first-account type)
   (define (find-first group num index)
     (if (>= index num)
-	#f
+	#f ;; FIXME
 	(let* ((this-account (gnc:group-get-account group index))
 	       (account-type (gnc:account-get-type this-account)))
 	  (if (eq? account-type type)
@@ -637,22 +637,22 @@
 			current-group)))
     (if (> num-accounts 0)
 	(find-first current-group num-accounts 0)
-	#f)))
+	#f))) ;; FIXME
 
 (define (find-first-account-for-owner owner)
-  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((gnc-owner-customer)
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (find-first-account 'receivable))
 
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (find-first-account 'payable))
 
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (find-first-account 'payable))
 
-      ((gnc-owner-job)
-       (find-first-account-for-owner (gnc:owner-get-end-owner owner)))
+      ((eqv? type GNC-OWNER-JOB)
+       (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
 
       (else
        #f))))  ;;FIXME: remember to convert
@@ -691,15 +691,15 @@
     (gnc:make-report report-name options)))
 
 (define (owner-report-create owner account)
-  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((gnc-owner-customer)
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (owner-report-create-internal (N_ "Customer Report") owner account))
 
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (owner-report-create-internal (N_ "Vendor Report") owner account))
 
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (owner-report-create-internal (N_ "Employee Report") owner account))
 
       (else #f))))
@@ -715,14 +715,14 @@
 	 account split query journal? double? title
 	 debit-string credit-string)
 
-  (let* ((temp-owner (gnc:owner-create))
+  (let* ((temp-owner (gncOwnerCreate))
 	 (owner (gnc:owner-from-split split temp-owner))
 	 (res #f))
 
     (if owner
 	(set! res (gnc:owner-report-create owner account)))
 
-    (gnc:owner-destroy temp-owner)
+    (gncOwnerDestroy temp-owner)
     res))
 
 (gnc:register-report-hook 'receivable #t

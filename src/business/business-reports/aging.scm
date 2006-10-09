@@ -180,12 +180,12 @@
 
   (define (do-update value)
     (let* ((transaction (gnc:split-get-parent split))
-	   (temp-owner (gnc:owner-create))
+	   (temp-owner (gncOwnerCreate))
 	   (owner (gnc:owner-from-split split temp-owner)))
 
       (if
        owner
-       (let* ((guid (gnc:owner-get-guid owner))
+       (let* ((guid (gncOwnerReturnGUID owner))
 	      (this-currency (gnc:transaction-get-currency transaction))
 	      (this-date (gnc:transaction-get-date-posted transaction))
 	      (company-info (hash-ref hash guid)))
@@ -198,13 +198,13 @@
 	     ;; if it's an existing company, destroy the temp owner and
 	     ;; then make sure the currencies match
 	     (begin
-	       (gnc:owner-destroy temp-owner)
+	       (gncOwnerDestroy temp-owner)
 	       (if (not (gnc:commodity-equiv?
 			 this-currency
 			 (company-get-currency company-info)))
 		   (cons #f (sprintf
 			     (_ "Transactions relating to '%s' contain \
-more than one currency.  This report is not designed to cope with this possibility.")  (gnc:owner-get-name owner)))
+more than one currency.  This report is not designed to cope with this possibility.")  (gncOwnerGetName owner)))
 		   (begin
 		     (gnc:debug "it's an old company")
 		     (if (gnc:numeric-negative-p value)
@@ -223,7 +223,7 @@ more than one currency.  This report is not designed to cope with this possibili
 		 (hash-set! hash guid new-company))
 	       (cons #t guid))))
        ; else (no owner)
-       (gnc:owner-destroy temp-owner))))
+       (gncOwnerDestroy temp-owner))))
   
   ;; figure out if this split is part of a closed lot
   ;; also save the split value...
@@ -386,7 +386,7 @@ totals to report currency")
 
   (define (get-name a)
     (let* ((owner (company-get-owner-obj (cdr a))))
-      (gnc:owner-get-name owner)))
+      (gncOwnerGetName owner)))
 
   ;; Predicates for sorting the companys once the data has been collected
 
@@ -602,7 +602,7 @@ totals to report currency")
 						(cdr company-list-entry))))
 			       (owner (company-get-owner-obj
 				       (cdr company-list-entry)))
-			       (company-name (gnc:owner-get-name owner)))
+			       (company-name (gncOwnerGetName owner)))
 
 			  (add-to-column-totals total-collector-list
 						monetary-list)
@@ -627,7 +627,7 @@ totals to report currency")
 				    (gnc:owner-anchor-text owner)
 				    company-name))
 				  monetary-list))
-			  (gnc:owner-destroy owner)))			
+			  (gncOwnerDestroy owner)))
 		      company-list)
 
 	    ;; add the totals

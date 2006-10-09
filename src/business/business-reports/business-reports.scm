@@ -28,7 +28,7 @@
 (gnc:module-load "gnucash/report/standard-reports" 0)
 (gnc:module-load "gnucash/business-utils" 0)
 
-;; this defines gnc:url-type-ownerreport and pulls in gnome-utils
+;; this defines URL-TYPE-OWNERREPORT and pulls in gnome-utils
 ;; to define gnc:html-build-url
 (gnc:module-load "gnucash/business-gnome" 0)
 
@@ -38,62 +38,62 @@
   (gnc:html-build-url type (string-append idstr guid) #f))
 
 (define (gnc:customer-anchor-text customer)
-  (guid-ref "customer=" gnc:url-type-customer (gnc:customer-get-guid customer)))
+  (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
 
 (define (gnc:job-anchor-text job)
-  (guid-ref "job=" gnc:url-type-job (gnc:job-get-guid job)))
+  (guid-ref "job=" URL-TYPE-JOB (gncJobReturnGUID job)))
 
 (define (gnc:vendor-anchor-text vendor)
-  (guid-ref "vendor=" gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
+  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
 
 (define (gnc:employee-anchor-text employee)
-  (guid-ref "employee=" gnc:url-type-employee (gnc:employee-get-guid employee)))
+  (guid-ref "employee=" URL-TYPE-EMPLOYEE (gncEmployeeReturnGUID employee)))
 
 (define (gnc:invoice-anchor-text invoice)
-  (guid-ref "invoice=" gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
+  (guid-ref "invoice=" URL-TYPE-INVOICE (gncInvoiceReturnGUID invoice)))
 
 (define (gnc:owner-anchor-text owner)
-  (let ((type (gnc:owner-get-type (gnc:owner-get-end-owner owner))))
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((gnc-owner-customer)
-       (gnc:customer-anchor-text (gnc:owner-get-customer owner)))
+      ((eqv? type GNC-OWNER-CUSTOMER)
+       (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
 
-      ((gnc-owner-vendor)
-       (gnc:vendor-anchor-text (gnc:owner-get-vendor owner)))
+      ((eqv? type GNC-OWNER-VENDOR)
+       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
 
-      ((gnc-owner-employee)
-       (gnc:employee-anchor-text (gnc:owner-get-employee owner)))
+      ((eqv? type GNC-OWNER-EMPLOYEE)
+       (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
 
-      ((gnc-owner-job)
-       (gnc:job-anchor-text (gnc:owner-get-job owner)))
+      ((eqv? type GNC-OWNER-JOB)
+       (gnc:job-anchor-text (gncOwnerGetJob owner)))
 
       (else
        ""))))
 
 (define (gnc:owner-report-text owner acc)
-  (let* ((end-owner (gnc:owner-get-end-owner owner))
-	 (type (gnc:owner-get-type end-owner))
+  (let* ((end-owner (gncOwnerGetEndOwner owner))
+	 (type (gncOwnerGetType end-owner))
 	 (ref #f))
 
     (cond
-      ((gnc-owner-customer)
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (set! ref "owner=c:"))
 
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (set! ref "owner=v:"))
 
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (set! ref "owner=e:"))
 
       (else (set! ref "unknown-type=")))
 
     (if ref
 	(begin
-	  (set! ref (string-append ref (gnc:owner-get-guid end-owner)))
+	  (set! ref (string-append ref (gncOwnerReturnGUID end-owner)))
 	  (if acc
 	      (set! ref (string-append ref "&acct="
 				       (gnc:account-get-guid acc))))
-	  (gnc:html-build-url gnc:url-type-ownerreport ref #f))
+	  (gnc:html-build-url URL-TYPE-OWNERREPORT ref #f))
 	ref)))
 
 (export gnc:menuname-business-reports)
