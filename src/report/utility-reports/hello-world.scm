@@ -12,7 +12,7 @@
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
@@ -431,7 +431,7 @@ new, totally cool report, consult the mailing list %s.")
       ;; Account Name" to html-markup-anchor.  The account name
       ;; passed must be the "full" account name that you get from
       ;; gnc:account-get-full-name.  You should build this url using
-      ;; (gnc:html-build-url ...)
+      ;; (gnc-build-url ...)
       ;;
       ;; html-markup-anchor takes the link to jump to as its first
       ;; arg and then puts the remaining args in the body of the
@@ -447,11 +447,11 @@ new, totally cool report, consult the mailing list %s.")
              (map 
               (lambda (acct)
                 (gnc:html-markup-anchor 
-		 (gnc:html-build-url gnc:url-type-register
+		 (gnc-build-url URL-TYPE-REGISTER
 				     (string-append "account=" 
 						    (gnc:account-get-full-name
 						     acct))
-				     #f)
+				     "")
                  (gnc:account-get-name acct)))
               accounts))))
           (gnc:html-document-add-object!

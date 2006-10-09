@@ -40,7 +40,7 @@
           #f)))
 
   (let* ((book-url (gnc:session-get-url session))
-	 (conf-file-name (gnc:html-encode-string book-url))
+	 (conf-file-name (gnc-html-encode-string book-url))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))

@@ -687,13 +687,13 @@
     (gnc:transaction-get-void-status trans)))
 
 (define (gnc:report-starting report-name)
-  (gnc:window-show-progress (sprintf #f
+  (gnc-window-show-progress (sprintf #f
 				     (_ "Building '%s' report ...")
 				     (gnc:gettext report-name))
 			    0))
 
 (define (gnc:report-render-starting report-name)
-  (gnc:window-show-progress (sprintf #f
+  (gnc-window-show-progress (sprintf #f
 				     (_ "Rendering '%s' report ...")
 				     (if (string-null? report-name)
 					 (gnc:gettext "Untitled")
@@ -701,10 +701,10 @@
 			    0))
 
 (define (gnc:report-percent-done percent)
-  (gnc:window-show-progress "" percent))
+  (gnc-window-show-progress "" percent))
 
 (define (gnc:report-finished)
-  (gnc:window-show-progress "" -1))
+  (gnc-window-show-progress "" -1))
 
 ;; function to count the total number of splits to be iterated
 (define (gnc:accounts-count-splits accounts)

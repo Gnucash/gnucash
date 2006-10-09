@@ -36,7 +36,7 @@
 (require 'sort)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (define reportname (N_ "Cash Flow"))
 

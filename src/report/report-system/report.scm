@@ -99,9 +99,9 @@
 			 (gnc:report-template-name report-rec) report-rec)
 	      (begin
 		;; FIXME: We should pass the top-level window
-		;; instead of the '() to gnc:error-dialog, but I
+		;; instead of the '() to gnc-error-dialog, but I
 		;; have no idea where to get it from.
-		(gnc:error-dialog '() (string-append (_ "A custom report with this name already exists. Either rename the report to store it with a different name, or edit your saved-reports file and delete the section with the following name: ") name ))
+		(gnc-error-dialog '() (string-append (_ "A custom report with this name already exists. Either rename the report to store it with a different name, or edit your saved-reports file and delete the section with the following name: ") name ))
 		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
@@ -436,7 +436,7 @@
   (let ((report (gnc-report-find id))
 	(start-time (gettimeofday))
 	(html #f))
-    (gnc:set-busy-cursor #f #t)
+    (gnc-set-busy-cursor '() #t)
     (gnc:backtrace-if-exception 
      (lambda ()
        (if report
@@ -447,7 +447,7 @@
 ;;	     (newline)
 ;;	     (display html) (newline)
 	     ))))
-    (gnc:unset-busy-cursor #f)
+    (gnc-unset-busy-cursor '())
     html))
 
 

@@ -29,13 +29,13 @@
 (gnc:module-load "gnucash/business-utils" 0)
 
 ;; this defines URL-TYPE-OWNERREPORT and pulls in gnome-utils
-;; to define gnc:html-build-url
+;; to define gnc-build-url
 (gnc:module-load "gnucash/business-gnome" 0)
 
 (define gnc:menuname-business-reports (N_ "_Business"))
 
 (define (guid-ref idstr type guid)
-  (gnc:html-build-url type (string-append idstr guid) #f))
+  (gnc-build-url type (string-append idstr guid) ""))
 
 (define (gnc:customer-anchor-text customer)
   (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
@@ -93,7 +93,7 @@
 	  (if acc
 	      (set! ref (string-append ref "&acct="
 				       (gnc:account-get-guid acc))))
-	  (gnc:html-build-url URL-TYPE-OWNERREPORT ref #f))
+	  (gnc-build-url URL-TYPE-OWNERREPORT ref ""))
 	ref)))
 
 (export gnc:menuname-business-reports)

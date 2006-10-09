@@ -22,16 +22,16 @@
 (define (gnc:kvp-option-dialog id-type slots title changed_cb)
   (let* ((options (gnc:make-kvp-options id-type))
 	 (optiondb (gnc:option-db-new options))
-	 (optionwin (gnc:option-dialog-new title)))
+	 (optionwin (gnc-options-dialog-new title)))
 
     (define (apply-cb)
       (gnc:options-scm->kvp options slots gnc:*kvp-option-path* #t)
       (if changed_cb (changed_cb)))
 
     (define (close-cb)
-      (gnc:option-dialog-destroy optionwin)
+      (gnc-options-dialog-destroy optionwin)
       (gnc:option-db-destroy optiondb))
 
     (gnc:options-kvp->scm options slots gnc:*kvp-option-path*)
-    (gnc:option-dialog-set-callbacks optionwin apply-cb close-cb)
-    (gnc:option-dialog-build-contents optionwin optiondb)))
+    (gnc-options-dialog-set-scm-callbacks optionwin apply-cb close-cb)
+    (gnc-options-dialog-build-contents optionwin optiondb)))

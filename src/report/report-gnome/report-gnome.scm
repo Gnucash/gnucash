@@ -45,7 +45,7 @@
                        (gnc:report-options report)
                        report))
                 (gnc:report-set-editor-widget! report editor-widg))
-              (gnc:warning-dialog '() (_ "This report has no options.")))))))
+              (gnc-warning-dialog '() (_ "This report has no options.")))))))
 
 (define (gnc:add-report-template-menu-items)
   (define *template-items* '())
@@ -80,7 +80,7 @@
                    (let ((report (gnc:make-report
                                   (gnc:report-template-name template))))
                      (gnc-main-window-open-report report window)))))
-          (gnc:add-extension item))))
+          (gnc-add-scm-extension item))))
 
   (define (add-template name template)
     (let ((menu-name (gnc:report-template-menu-name template)))
@@ -108,11 +108,11 @@
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  ;; (gnc:add-extension tax-menu)
-  (gnc:add-extension income-expense-menu)
-  (gnc:add-extension asset-liability-menu)
-  (gnc:add-extension utility-menu)
-  (gnc:add-extension custom-menu)
+  ;; (gnc-add-scm-extension tax-menu)
+  (gnc-add-scm-extension income-expense-menu)
+  (gnc-add-scm-extension asset-liability-menu)
+  (gnc-add-scm-extension utility-menu)
+  (gnc-add-scm-extension custom-menu)
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers gnc:*report-hook*)
@@ -121,7 +121,7 @@
   (gnc:add-report-template-menu-items)
 
   ;; the Welcome to GnuCash "extravaganza" report
-  (gnc:add-extension 
+  (gnc-add-scm-extension
    (gnc:make-menu-item 
     (N_ "Welcome Sample Report")
     (N_ "Welcome-to-GnuCash report screen")

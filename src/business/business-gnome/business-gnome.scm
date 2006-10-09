@@ -21,7 +21,7 @@
     (set-current-module m)))
 
 (define (business-report-function)
-  (gnc:add-extension
+  (gnc-add-scm-extension
    (gnc:make-menu gnc:menuname-business-reports
 		  (list gnc:menuname-reports))))
 
