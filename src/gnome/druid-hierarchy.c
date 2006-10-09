@@ -476,9 +476,13 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 
 	/* Add a new one if something selected */
 	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+		gchar *text2;
 		gtk_tree_model_get (model, &iter, COL_ACCOUNT, &gea, -1);
-		text = g_strdup_printf(_("<b>Accounts in '%s'</b>"), gea->title);
+		/* Translators: '%s' is the name of the selected account hierarchy template. */
+		text2 = g_strdup_printf(_("Accounts in '%s'"), gea->title);
+		text = g_strdup_printf("<b>%s</b>", text2);
 		gtk_label_set_markup(data->category_accounts_label, text);
+		g_free(text2);
 		g_free(text);
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, gea->long_description, -1);
@@ -493,8 +497,10 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
 		gtk_widget_show(GTK_WIDGET(tree_view));
 	} else {
-		gtk_label_set_markup(data->category_accounts_label,
-				     _("<b>Accounts in Category</b>"));
+		gchar *text;
+		text = g_strdup_printf ("<b>%s</b>", _("Accounts in Category"));
+		gtk_label_set_markup(data->category_accounts_label, text);
+		g_free (text);
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, "", -1);
 	}
