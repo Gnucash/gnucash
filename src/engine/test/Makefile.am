@@ -52,9 +52,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
   --gnc-module-dir ${top_srcdir}/src/engine \
-  --guile-load-dir ${top_srcdir}/src/engine/test \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --guile-load-dir ${top_srcdir}/src/engine/test
 
 TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \

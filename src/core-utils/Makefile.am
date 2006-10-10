@@ -41,6 +41,7 @@ AM_CFLAGS = \
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = core-utils.scm
 
+noinst_DATA = .scm-links
 EXTRA_DIST = $(gncmod_DATA)
 BUILT_SOURCES = swig-core-utils.c
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links

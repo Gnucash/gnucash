@@ -111,7 +111,7 @@ noinst_SCRIPTS = iso-currencies-to-c
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgncmodule.la \
   ../core-utils/libcore-utils.la \
-  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${GNUCASH_ENGINE_BASE_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
@@ -157,6 +157,8 @@ if GNUCASH_SEPARATE_BUILDDIR
 	done
 endif
 	touch .scm-links
+
+noinst_DATA = .scm-links
 
 swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
 	swig -guile $(SWIG_ARGS) -Linkage module \

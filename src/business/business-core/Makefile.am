@@ -7,7 +7,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
@@ -59,7 +58,6 @@ noinst_HEADERS = \
 libgncmod_business_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
@@ -91,6 +89,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+noinst_DATA = .scm-links
 
 BUILT_SOURCES = swig-business-core.c
 CLEANFILES = $(BUILT_SOURCES) \

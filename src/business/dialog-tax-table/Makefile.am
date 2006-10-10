@@ -17,7 +17,6 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
 
 libgncmod_dialog_tax_table_la_SOURCES = \
@@ -37,7 +36,6 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   ${EFENCE_LIBS}
@@ -71,5 +69,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+noinst_DATA = .scm-links
 BUILT_SOURCES = swig-dialog-tax-table.c
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}

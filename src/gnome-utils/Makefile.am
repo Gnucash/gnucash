@@ -24,7 +24,6 @@ AM_CFLAGS = \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
   ${GSF_CFLAGS}
@@ -186,7 +185,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
@@ -285,6 +283,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+noinst_DATA = .scm-links
 
 BUILT_SOURCES += swig-gnome-utils.c
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}

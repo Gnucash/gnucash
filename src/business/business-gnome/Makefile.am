@@ -22,7 +22,6 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
@@ -81,7 +80,6 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GLADE_LIBS} \
   ${GNOME_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
@@ -114,5 +112,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES =
+noinst_DATA = .scm-links
+
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}

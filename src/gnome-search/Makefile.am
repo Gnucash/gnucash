@@ -10,7 +10,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \

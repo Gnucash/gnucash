@@ -16,7 +16,6 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLADE_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgncgnome_la_SOURCES = \
@@ -114,7 +113,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \

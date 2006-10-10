@@ -181,9 +181,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --gnc-module-dir ${top_srcdir}/src/engine \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --gnc-module-dir ${top_srcdir}/src/engine
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \

@@ -10,7 +10,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GCONF_CFLAGS} \
@@ -72,7 +71,6 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}

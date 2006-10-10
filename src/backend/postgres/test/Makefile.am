@@ -8,9 +8,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/file \
-  --gnc-module-dir ${top_builddir}/src/backend/postgres \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --gnc-module-dir ${top_builddir}/src/backend/postgres
 
 TESTS_ENVIRONMENT := \
   TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \

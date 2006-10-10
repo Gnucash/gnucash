@@ -24,8 +24,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  ${GLIB_CFLAGS} ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS}
+  ${GLIB_CFLAGS} ${GUILE_INCS}
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \

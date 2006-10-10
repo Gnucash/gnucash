@@ -29,5 +29,5 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gncscmmod_DATA}
 
-CLEANFILES = gnucash report .scm-links
+CLEANFILES = gnucash report
 DISTCLEANFILES = ${SCM_FILE_LINKS}

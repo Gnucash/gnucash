@@ -58,7 +58,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
@@ -75,5 +74,5 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES =
+noinst_DATA = .scm-links
 CLEANFILES = $(BUILT_SOURCES) gnucash register .scm-links ${SCM_FILE_LINKS}
