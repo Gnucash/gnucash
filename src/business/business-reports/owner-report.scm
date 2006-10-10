@@ -115,7 +115,7 @@
 
 (define num-buckets 4)
 (define (new-bucket-vector)
-  (make-vector num-buckets (gnc:numeric-zero)))
+  (make-vector num-buckets (gnc-numeric-zero)))
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
@@ -126,9 +126,9 @@
 
 
 (define (make-aging-table options query bucket-intervals reverse?)
-  (let ((lots (gnc:query-get-lots query 'query-txn-match-any))
+  (let ((lots (gnc:query-get-lots query QUERY-TXN-MATCH-ANY))
 	(buckets (new-bucket-vector))
-	(payments (gnc:numeric-zero))
+	(payments (gnc-numeric-zero))
 	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table)))
 
@@ -145,13 +145,13 @@
 
     (define (apply-invoice date value)
       (let* ((bucket-index (find-bucket 0 bucket-intervals date))
-	     (new-value (gnc:numeric-add-fixed
+	     (new-value (gnc-numeric-add-fixed
 			 value
 			 (vector-ref buckets bucket-index))))
 	(vector-set! buckets bucket-index new-value)))
 
     (define (apply-payment value)
-      (set! payments (gnc:numeric-add-fixed value payments)))
+      (set! payments (gnc-numeric-add-fixed value payments)))
 
     (for-each
      (lambda (lot)
@@ -159,10 +159,10 @@
 	      (invoice (gncInvoiceGetInvoiceFromLot lot))
 	      (post-date (gncInvoiceGetDatePosted invoice)))
 
-	 (if (not (gnc:numeric-zero-p bal))
+	 (if (not (gnc-numeric-zero-p bal))
 	     (begin
 	       (if reverse?
-		   (set! bal (gnc:numeric-neg bal)))
+		   (set! bal (gnc-numeric-neg bal)))
 	       (if invoice
 		   (begin
 		     (apply-invoice post-date bal))
@@ -198,7 +198,7 @@
 	 (value (gnc:transaction-get-account-value txn acc))
 	 (split (gnc:transaction-get-split txn 0))
 	 (invoice (gncInvoiceGetInvoiceFromTxn txn))
-	 (currency (gnc:transaction-get-currency txn))
+	 (currency (xaccTransGetCurrency txn))
 	 (type-str
 	  (cond
 	   ((equal? type gnc:transaction-type-invoice)
@@ -215,12 +215,12 @@
     (define (make-row date due-date num type-str memo value)
       (let ((row-contents '()))
 	(if (date-col column-vector)
-	    (addto! row-contents (gnc:print-date date)))
+	    (addto! row-contents (gnc-print-date date)))
 	(if (date-due-col column-vector)
 	    (addto! row-contents 
 		    (if (and due-date
 			     (not (equal? due-date (cons 0 0))))
-			(gnc:print-date due-date)
+			(gnc-print-date due-date)
 			"")))
 	(if (num-col column-vector)
 	    (addto! row-contents num))
@@ -236,7 +236,7 @@
 	row-contents))
 
     (if reverse?
-	(set! value (gnc:numeric-neg value)))
+	(set! value (gnc-numeric-neg value)))
 
     (if (gnc:timepair-later start-date date)
 	(begin
@@ -245,7 +245,7 @@
 	  (if (not printed?)
 	      (begin
 		(set! printed? #t)
-		(if (not (gnc:numeric-zero-p total))
+		(if (not (gnc-numeric-zero-p total))
 		    (let ((row (make-row start-date #f "" (_ "Balance") "" total))
 			  (row-style (if odd-row? "normal-row" "alternate-row")))
 		      (gnc:html-table-append-row/markup! table row-style
@@ -273,9 +273,9 @@
 
 
 (define (make-txn-table options query acc start-date end-date)
-  (let ((txns (gnc:query-get-transactions query 'query-txn-match-any))
+  (let ((txns (gnc:query-get-transactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
-	(total (gnc:numeric-zero))
+	(total (gnc-numeric-zero))
 	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table))
 	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
@@ -302,7 +302,7 @@
 				       inv-str reverse? start-date total)))
 
 	      (set! printed? (car result))
-	      (set! total (gnc:numeric-add-fixed total (cadr result)))
+	      (set! total (gnc-numeric-add-fixed total (cadr result)))
 	      (set! odd-row? (caddr result))
 	      ))))
        txns))
@@ -312,7 +312,7 @@
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
 		    "total-label-cell"
-		    (if (gnc:numeric-negative-p total)
+		    (if (gnc-numeric-negative-p total)
 			(_ "Total Credit")
 			(_ "Total Due")))
 		   '())
@@ -435,24 +435,24 @@
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
-    (gnc:query-add-guid-match
+    (qof-query-add-guid-match
      q 
-     (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
+     (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER
+	   OWNER-PARENTG)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
      q
-     (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
+     (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
      q
-     (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
+     (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER
+	   OWNER-PARENTG)
+     guid QOF-QUERY-OR)
 
-    (gnc:query-add-single-account-match q account 'query-and)
-    (gnc:query-add-date-match-timepair q #f end-date #t end-date 'query-and)
-    (gnc:query-set-book q (gnc-get-current-book))
+    (gnc:query-add-single-account-match q account QOF-QUERY-AND)
+    (gnc:query-add-date-match-timepair q #f end-date #t end-date QOF-QUERY-AND)
+    (qof-query-set-book q (gnc-get-current-book))
     q))
 
 (define (make-owner-table owner)
@@ -479,7 +479,7 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc:print-date date) #\space "&nbsp;"))))
+    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -494,11 +494,11 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc:book-get-slots book))
-	 (name (gnc:kvp-frame-get-slot-path
+	 (slots (gnc-book-get-slots book))
+	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (gnc:kvp-frame-get-slot-path
+	 (addy (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*)))))
 
@@ -606,9 +606,9 @@
 	    (string-append
 	     (_ "Date Range")
 	     ": "
-	     (gnc:print-date start-date)
+	     (gnc-print-date start-date)
 	     " - "
-	     (gnc:print-date end-date))))
+	     (gnc-print-date end-date))))
 
 	  (make-break! document)
 

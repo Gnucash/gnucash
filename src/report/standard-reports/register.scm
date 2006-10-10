@@ -117,7 +117,7 @@
   (let ((account (gnc:split-get-account split))
         (balance (gnc:split-get-balance split)))
     (if (and account (gnc-reverse-balance account))
-        (gnc:numeric-neg balance)
+        (gnc-numeric-neg balance)
         balance)))
 
 (define (add-split-row table split column-vector row-style
@@ -126,7 +126,7 @@
          (parent (gnc:split-get-parent split))
          (account (gnc:split-get-account split))
          (currency (if account
-                       (gnc:account-get-commodity account)
+                       (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
          (damount (gnc:split-get-amount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
@@ -134,7 +134,7 @@
     (if (date-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:print-date 
+                    (gnc-print-date
                      (gnc:transaction-get-date-posted parent))
                     " ")))
     (if (num-col column-vector)
@@ -182,7 +182,7 @@
                      (gnc:html-split-anchor split split-value))
                     " ")))
     (if (debit-col column-vector)
-        (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -191,7 +191,7 @@
                         " "))
             (addto! row-contents " ")))
     (if (debit-col column-vector)
-        (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -337,7 +337,7 @@
       (define (colspan monetary)
         (cond
          ((amount-single-col used-columns) (amount-single-col used-columns))
-         ((gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+         ((gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
           (credit-col used-columns))
          (else (debit-col used-columns))))
 
@@ -346,7 +346,7 @@
             (if (and leader (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
-            (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
+            (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
                 (gnc:monetary-neg monetary)
                 monetary)))
 
@@ -429,12 +429,12 @@
                            (gnc:gnc-monetary-commodity split-value)
                            (gnc:gnc-monetary-amount split-value))
 
-	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+	  (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
 	      (debit-collector 'add
 			       (gnc:gnc-monetary-commodity split-value)
 			       (gnc:gnc-monetary-amount split-value)))
 
-	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+	  (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
 	      (credit-collector 'add
 			       (gnc:gnc-monetary-commodity split-value)
 			       (gnc:gnc-monetary-amount split-value)))
@@ -532,7 +532,7 @@
      (list
       (string-append
        (_ "Date") ":&nbsp;"
-       (string-expand (gnc:print-date (cons (current-time) 0))
+       (string-expand (gnc-print-date (cons (current-time) 0))
                       #\space "&nbsp;"))
       (make-client-table address)))
     (set-last-row-style!
@@ -561,7 +561,7 @@
 
     (set! query (gnc:scm->query query-scm))
 
-    (gnc:query-set-book query (gnc-get-current-book))
+    (qof-query-set-book query (gnc-get-current-book))
 
     (set! splits (if journal?
                      (gnc:query-get-splits-unique-trans query)

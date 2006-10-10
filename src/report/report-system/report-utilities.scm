@@ -38,7 +38,7 @@
 
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
-(define (gnc:commodity-value->string pair)
+(define (gnc-commodity-value->string pair)
   (xaccPrintAmount
    (cadr pair) (gnc-commodity-print-info (car pair) #t)))
 
@@ -126,10 +126,10 @@
 (define (gnc:accounts-get-commodities accounts exclude-commodity)
   (delete exclude-commodity
 	  (delete-duplicates
-	   (sort (map gnc:account-get-commodity accounts) 
+	   (sort (map xaccAccountGetCommodity accounts)
 		 (lambda (a b) 
-		   (string<? (or (gnc:commodity-get-mnemonic a) "")
-			     (or (gnc:commodity-get-mnemonic b) "")))))))
+		   (string<? (or (gnc-commodity-get-mnemonic a) "")
+			     (or (gnc-commodity-get-mnemonic b) "")))))))
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
@@ -303,11 +303,11 @@
 ;; Same as above but with gnc:numeric
 (define (gnc:make-numeric-collector)
   (let ;;; values
-      ((value (gnc:numeric-zero)))
+      ((value (gnc-numeric-zero)))
     (lambda (action amount)  ;;; Dispatch function
       (case action
 	((add) (if (gnc:gnc-numeric? amount) 
-		  (set! value (gnc:numeric-add-fixed amount value))
+		  (set! value (gnc-numeric-add-fixed amount value))
 		  (gnc:warn 
 		   "gnc:numeric-collector called with wrong argument: " amount)))
 	((total) value)
@@ -351,7 +351,7 @@
 ;;   'getpair <commodity> signreverse?: Returns the two-element-list
 ;;       with the <commodity> and its corresponding balance. If
 ;;       <commodity> doesn't exist, the balance will be
-;;       (gnc:numeric-zero). If signreverse? is true, the result's
+;;       (gnc-numeric-zero). If signreverse? is true, the result's
 ;;       sign will be reversed.
 ;;   (internal) 'list #f #f: get the association list of 
 ;;       commodity->numeric-collector
@@ -389,7 +389,7 @@
       (cond ((null? clist) '())
 	    (else (add-commodity-value 
 		   (caar clist) 
-		   (gnc:numeric-neg
+		   (gnc-numeric-neg
 		    (gnc:numeric-collector-total (cadar clist))))
 		  (minus-commodity-clist (cdr clist)))))
 
@@ -408,9 +408,9 @@
       (let ((pair (assoc c commoditylist)))
 	(cons c (cons 
 	      (if (not pair)
-		  (gnc:numeric-zero)
+		  (gnc-numeric-zero)
 		  (if sign?
-		      (gnc:numeric-neg 
+		      (gnc-numeric-neg
 		       (gnc:numeric-collector-total (cadr pair)))
 		      (gnc:numeric-collector-total (cadr pair))))
 	      '()))))
@@ -422,9 +422,9 @@
       (let ((pair (assoc c commoditylist)))
 	(gnc:make-gnc-monetary
 	 c (if (not pair)
-	       (gnc:numeric-zero)
+	       (gnc-numeric-zero)
 	       (if sign?
-		   (gnc:numeric-neg 
+		   (gnc-numeric-neg
 		    (gnc:numeric-collector-total (cadr pair)))
 		   (gnc:numeric-collector-total (cadr pair)))))))
     
@@ -433,9 +433,9 @@
       (case action
 	((add) (add-commodity-value commodity amount))
 	((merge) (add-commodity-clist 
-		 (gnc:commodity-collector-list commodity)))
+		 (gnc-commodity-collector-list commodity)))
 	((minusmerge) (minus-commodity-clist
-		      (gnc:commodity-collector-list commodity)))
+		      (gnc-commodity-collector-list commodity)))
 	((format) (process-commodity-list commodity commoditylist))
 	((reset) (set! commoditylist '()))
 	((getpair) (getpair commodity amount))
@@ -451,28 +451,28 @@
 ;; CAS: ugh.  Having two usages is even *more* confusing, so let's
 ;; please settle on one or the other.  What's Step 2?  How 'bout
 ;; documenting the new functions?
-(define (gnc:commodity-collector-add collector commodity amount)
+(define (gnc-commodity-collector-add collector commodity amount)
   (collector 'add commodity amount))
-(define (gnc:commodity-collector-merge collector other-collector)
+(define (gnc-commodity-collector-merge collector other-collector)
   (collector 'merge other-collector #f))
-(define (gnc:commodity-collector-minusmerge collector other-collector)
+(define (gnc-commodity-collector-minusmerge collector other-collector)
   (collector 'minusmerge other-collector #f))
-(define (gnc:commodity-collector-map collector function)
+(define (gnc-commodity-collector-map collector function)
   (collector 'format function #f))
-(define (gnc:commodity-collector-assoc collector commodity sign?)
+(define (gnc-commodity-collector-assoc collector commodity sign?)
   (collector 'getmonetary commodity sign?))
-(define (gnc:commodity-collector-assoc-pair collector commodity sign?)
+(define (gnc-commodity-collector-assoc-pair collector commodity sign?)
   (collector 'getpair commodity sign?))
-(define (gnc:commodity-collector-list collector)
+(define (gnc-commodity-collector-list collector)
   (collector 'list #f #f))
 
 ;; Returns zero if all entries in this collector are zero.
-(define (gnc:commodity-collector-allzero? collector)
+(define (gnc-commodity-collector-allzero? collector)
   (let ((result #t))
-    (gnc:commodity-collector-map 
+    (gnc-commodity-collector-map
      collector
      (lambda (commodity amount)
-       (if (not (gnc:numeric-zero-p amount))
+       (if (not (gnc-numeric-zero-p amount))
 	   (set! result #f))))
     result))
 
@@ -483,8 +483,8 @@
 (define (gnc:account-get-balance-at-date account date include-children?)
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
-    (cadr (gnc:commodity-collector-assoc-pair 
-	   collector (gnc:account-get-commodity account) #f))))
+    (cadr (gnc-commodity-collector-assoc-pair
+	   collector (xaccAccountGetCommodity account) #f))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -501,12 +501,12 @@
 	  (query (gnc:malloc-query))
 	  (splits #f))
       
-      (gnc:query-set-book query (gnc-get-current-book))
-      (gnc:query-add-single-account-match query account 'query-and)
-      (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
-      (gnc:query-set-sort-order query
-				(list gnc:split-trans gnc:trans-date-posted)
-				(list gnc:query-default-sort)
+      (qof-query-set-book query (gnc-get-current-book))
+      (gnc:query-add-single-account-match query account QOF-QUERY-AND)
+      (gnc:query-add-date-match-timepair query #f date #t date QOF-QUERY-AND)
+      (qof-query-set-sort-order query
+				(list SPLIT-TRANS TRANS-DATE-POSTED)
+				(list QUERY-DEFAULT-SORT)
 				'())
       (gnc:query-set-sort-increasing query #t #t #t)
       (gnc:query-set-max-results query 1)
@@ -515,8 +515,8 @@
       (gnc:free-query query)
 
       (if (and splits (not (null? splits)))
-	  (gnc:commodity-collector-add balance-collector 
-				       (gnc:account-get-commodity account)
+	  (gnc-commodity-collector-add balance-collector
+				       (xaccAccountGetCommodity account)
 				       (gnc:split-get-balance (car splits))))
       balance-collector))
 
@@ -531,8 +531,8 @@
     (for-each 
      (lambda (acct)
        ((if (reverse-balance-fn acct)
-	    gnc:commodity-collector-minusmerge 
-	    gnc:commodity-collector-merge)
+	    gnc-commodity-collector-minusmerge
+	    gnc-commodity-collector-merge)
 	collector (get-balance-fn acct)))
      accounts)
     collector))
@@ -585,7 +585,7 @@
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (x) 
-       (gnc:commodity-collector-merge this-collector x))
+       (gnc-commodity-collector-merge this-collector x))
      (gnc:group-map-all-accounts
       (lambda (account)
 	(gnc:account-get-comm-balance-at-date 
@@ -599,8 +599,8 @@
 (define (gnc:account-get-balance-interval account from to include-children?)
   (let ((collector (gnc:account-get-comm-balance-interval
                     account from to include-children?)))
-    (cadr (gnc:commodity-collector-assoc-pair 
-	   collector (gnc:account-get-commodity account) #f))))
+    (cadr (gnc-commodity-collector-assoc-pair
+	   collector (xaccAccountGetCommodity account) #f))))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval 
@@ -610,7 +610,7 @@
   ;; instead of the plain date.
   (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (gnc:commodity-collector-minusmerge
+    (gnc-commodity-collector-minusmerge
      this-collector
      (gnc:account-get-comm-balance-at-date
       account
@@ -622,7 +622,7 @@
 (define (gnc:group-get-comm-balance-interval group from to)
   (let ((this-collector (gnc:make-commodity-collector)))
     (for-each (lambda (x) 
-		(gnc:commodity-collector-merge this-collector x))
+		(gnc-commodity-collector-merge this-collector x))
 	      (gnc:group-map-all-accounts
 	       (lambda (account)
 		 (gnc:account-get-comm-balance-interval 
@@ -635,7 +635,7 @@
 (define (gnc:accountlist-get-comm-balance-interval accountlist from to)
   (let ((collector (gnc:make-commodity-collector)))
     (for-each (lambda (account)
-                (gnc:commodity-collector-merge 
+                (gnc-commodity-collector-merge
                  collector (gnc:account-get-comm-balance-interval 
                             account from to #f)))
               accountlist)
@@ -644,7 +644,7 @@
 (define (gnc:accountlist-get-comm-balance-at-date accountlist date)
    (let ((collector (gnc:make-commodity-collector)))
     (for-each (lambda (account)
-                (gnc:commodity-collector-merge 
+                (gnc-commodity-collector-merge
                  collector (gnc:account-get-comm-balance-at-date 
                             account date #f)))
               accountlist)
@@ -653,29 +653,29 @@
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-book temp-query book)
+     (qof-query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query
-	     'cleared-match-voided
-	     'query-and)
+	     CLEARED-VOIDED
+	     QOF-QUERY-AND)
 
      (set! temp-query (gnc:query-invert temp-query))
 
-     (set! query (gnc:query-merge query temp-query 'query-and))))
+     (set! query (gnc:query-merge query temp-query QOF-QUERY-AND))))
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-book temp-query book)
+     (qof-query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query
-	     'cleared-match-voided
-	     'query-and)
+	     CLEARED-VOIDED
+	     QOF-QUERY-AND)
 
-     (set! query (gnc:query-merge query temp-query 'query-and))))
+     (set! query (gnc:query-merge query temp-query QOF-QUERY-AND))))
 
 (define (gnc:split-voided? split)
   (let ((trans (gnc:split-get-parent split)))
@@ -722,23 +722,23 @@
 	 (regexp (if (get-val type 'regexp) #t #f))
 	 (total (gnc:make-commodity-collector))
 	 )
-    (gnc:query-set-book query (gnc-get-current-book))
+    (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (gnc:query-add-account-match query group 'guid-match-any 'query-and)
+    (gnc:query-add-account-match query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (gnc:query-add-date-match-timepair
      query
      (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp 'query-and)
+     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
     (gnc:query-add-description-match
-     query matchstr case-sens regexp 'query-and)
+     query matchstr case-sens regexp QOF-QUERY-AND)
     
     (set! splits (gnc:query-get-splits query))
     (map (lambda (split)
 		(let* ((shares (gnc:split-get-amount split))
-		       (acct-comm (gnc:account-get-commodity
+		       (acct-comm (xaccAccountGetCommodity
 				   (gnc:split-get-account split)))
 		       )
-		  (gnc:commodity-collector-add total acct-comm shares)
+		  (gnc-commodity-collector-add total acct-comm shares)
 		  )
 		)
 	 splits
@@ -765,39 +765,39 @@
 	 (pos? (if (get-val type 'positive) #t #f))
          (total (gnc:make-commodity-collector))
          )
-    (gnc:query-set-book str-query (gnc-get-current-book))
-    (gnc:query-set-book sign-query (gnc-get-current-book))
+    (qof-query-set-book str-query (gnc-get-current-book))
+    (qof-query-set-book sign-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
-    (gnc:query-add-account-match str-query group 'guid-match-any 'query-and)
-    (gnc:query-add-account-match sign-query group 'guid-match-any 'query-and)
+    (gnc:query-add-account-match str-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (gnc:query-add-account-match sign-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (gnc:query-add-date-match-timepair
      str-query
      (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp 'query-and)
+     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
     (gnc:query-add-date-match-timepair
      sign-query
      (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp 'query-and)
+     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
     (gnc:query-add-description-match
-     str-query matchstr case-sens regexp 'query-and)
+     str-query matchstr case-sens regexp QOF-QUERY-AND)
     (set! total-query
 	  ;; this is a tad inefficient, but its a simple way to accomplish
 	  ;; description match inversion...
 	  (if pos?
-	      (gnc:query-merge sign-query str-query 'query-and)
+	      (gnc:query-merge sign-query str-query QOF-QUERY-AND)
 	      (gnc:query-merge
-	       sign-query (gnc:query-invert str-query) 'query-and)
+	       sign-query (gnc:query-invert str-query) QOF-QUERY-AND)
 	      ))
     
     (set! splits (gnc:query-get-splits total-query))
     (map (lambda (split)
 	   (let* ((shares (gnc:split-get-amount split))
-		  (acct-comm (gnc:account-get-commodity
+		  (acct-comm (xaccAccountGetCommodity
 			      (gnc:split-get-account split)))
 		  )
-	     (or (gnc:numeric-negative-p shares)
-		 (gnc:commodity-collector-add total acct-comm shares)
+	     (or (gnc-numeric-negative-p shares)
+		 (gnc-commodity-collector-add total acct-comm shares)
 		 )
 	     )
 	   )
@@ -822,7 +822,7 @@
 		    report-commodity
 		    exchange-fn)))
 	 (amt (and sum (gnc:gnc-monetary-amount sum)))
-	 (neg? (and amt (gnc:numeric-negative-p amt)))
+	 (neg? (and amt (gnc-numeric-negative-p amt)))
 	 (bal (if neg?
 		  (let ((bal (gnc:make-commodity-collector)))
 		    (bal 'minusmerge signed-balance #f)
@@ -834,9 +834,9 @@
 		   exchange-fn))
 	 (balance
 	  (if (gnc:uniform-commodity? bal report-commodity)
-	      (if (gnc:numeric-zero-p amt) #f bal-sum)
+	      (if (gnc-numeric-zero-p amt) #f bal-sum)
 	      (if show-comm?
-		  (gnc:commodity-table bal report-commodity exchange-fn)
+		  (gnc-commodity-table bal report-commodity exchange-fn)
 		  bal-sum)
 	      ))
 	 )

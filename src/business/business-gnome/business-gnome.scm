@@ -25,4 +25,4 @@
    (gnc:make-menu gnc:menuname-business-reports
 		  (list gnc:menuname-reports))))
 
-(gnc:hook-add-dangler gnc:*report-hook* business-report-function)
+(gnc-hook-add-scm-dangler HOOK-REPORT business-report-function)

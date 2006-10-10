@@ -170,7 +170,7 @@
     (define (get-split-value split date)
       (monetary->double
        (gnc:make-gnc-monetary
-        (gnc:account-get-commodity (gnc:split-get-account split))
+        (xaccAccountGetCommodity (gnc:split-get-account split))
         (gnc:split-get-amount split))
        date))
     
@@ -318,7 +318,7 @@
                           (gnc-get-current-group)))))
     
     (define (monetary->double foreign-monetary date)
-      (gnc:numeric-to-double
+      (gnc-numeric-to-double
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
     
@@ -378,7 +378,7 @@
           
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc-get-current-book))
+          (qof-query-set-book query (gnc-get-current-book))
           
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
@@ -403,14 +403,14 @@
                       (delete-duplicates (append accounts subaccts)))))
 	  (gnc:report-percent-done 30)
           
-          (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
+          (gnc:query-add-account-match query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
           (gnc:query-add-date-match-timepair
-           query #t from-date-tp #t to-date-tp 'query-and)
-          (gnc:query-set-sort-order query
-				    (list gnc:split-trans gnc:trans-date-posted)
-				    (list gnc:query-default-sort)
+           query #t from-date-tp #t to-date-tp QOF-QUERY-AND)
+          (qof-query-set-sort-order query
+				    (list SPLIT-TRANS TRANS-DATE-POSTED)
+				    (list QUERY-DEFAULT-SORT)
 				    '())
           
           ;; get the query results 
@@ -427,7 +427,7 @@
 	  (gnc:report-percent-done 50)
           
           (set! startbal 
-                (gnc:numeric-to-double
+                (gnc-numeric-to-double
                  (gnc:gnc-monetary-amount
                   (gnc:sum-collector-commodity 
                    startbal
@@ -464,9 +464,9 @@
                                      (car p)
                                      " - "
                                      (xaccPrintAmount
-                                      (gnc:double-to-gnc-numeric
+                                      (double-to-gnc-numeric
                                        (cadr p)
-                                       (gnc:commodity-get-fraction report-currency)
+                                       (gnc-commodity-get-fraction report-currency)
                                        GNC-RND-ROUND)
                                       print-info))
                                     (car p)))
@@ -482,16 +482,16 @@
                    chart (string-append
                           (sprintf #f
                                    (_ "%s to %s")
-                                   (gnc:print-date from-date-tp) 
-                                   (gnc:print-date to-date-tp))
+                                   (gnc-print-date from-date-tp)
+                                   (gnc-print-date to-date-tp))
                           (if show-total?
                               (let ((total (apply + daily-totals)))
                                 (sprintf
                                  #f ": %s"
                                  (xaccPrintAmount
-                                  (gnc:double-to-gnc-numeric
+                                  (double-to-gnc-numeric
                                    total
-                                   (gnc:commodity-get-fraction report-currency)
+                                   (gnc-commodity-get-fraction report-currency)
                                    GNC-RND-ROUND)
                                   print-info)))
                               "")))

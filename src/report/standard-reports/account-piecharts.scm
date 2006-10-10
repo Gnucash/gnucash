@@ -239,7 +239,7 @@ balance at a given time"))
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the weighted
         ;; average of all past transactions.
-        (gnc:numeric-to-double 
+        (gnc-numeric-to-double
          (gnc:gnc-monetary-amount
           (gnc:sum-collector-commodity 
            c report-currency 
@@ -401,19 +401,19 @@ balance at a given time"))
                        (if do-intervals?
                            (sprintf #f
                                     (_ "%s to %s")
-                                    (gnc:print-date from-date-tp) 
-                                    (gnc:print-date to-date-tp))
+                                    (gnc-print-date from-date-tp)
+                                    (gnc-print-date to-date-tp))
                            (sprintf #f
                                     (_ "Balance at %s")
-                                    (gnc:print-date to-date-tp)))
+                                    (gnc-print-date to-date-tp)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
                              (sprintf
                               #f ": %s"
                               (xaccPrintAmount
-                               (gnc:double-to-gnc-numeric
+                               (double-to-gnc-numeric
                                 total
-                                (gnc:commodity-get-fraction report-currency)
+                                (gnc-commodity-get-fraction report-currency)
                                 GNC-RND-ROUND)
                                print-info)))
                            "")))
@@ -433,9 +433,9 @@ balance at a given time"))
 			       (string-append 
 				" - "
 				(xaccPrintAmount
-				 (gnc:double-to-gnc-numeric
+				 (double-to-gnc-numeric
 				  (car pair)
-				  (gnc:commodity-get-fraction report-currency)
+				  (gnc-commodity-get-fraction report-currency)
 				  GNC-RND-ROUND)
 				 print-info))
 			       "")))

@@ -114,7 +114,7 @@
              (let* ((bgt-col (+ (* period 2) colnum 1))
                     (act-col (+ 1 bgt-col))
 
-                    (comm (gnc:account-get-commodity acct))
+                    (comm (xaccAccountGetCommodity acct))
                     (numeric-val (gnc:budget-get-account-period-value
                                   budget acct period))
 
@@ -161,7 +161,7 @@
                     (date (gnc:budget-get-period-start-date budget period))
                     )
                (gnc:html-table-set-cell!
-                html-table 0 bgt-col (gnc:print-date date))
+                html-table 0 bgt-col (gnc-print-date date))
 
                (gnc:html-table-set-cell!
                 html-table

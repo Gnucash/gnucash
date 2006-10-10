@@ -417,7 +417,7 @@
                          (set! entry 
                                (qif-import:guess-acct
                                 xtn-cat
-                                (if (gnc:numeric-positive-p 
+                                (if (gnc-numeric-positive-p
                                      (qif-split:amount split))
                                     (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE)
                                     (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE))
@@ -494,7 +494,7 @@
                               entry (default-unspec-acct))
                              (qif-map-entry:set-allowed-types!
                               entry 
-                              (if (gnc:numeric-positive-p
+                              (if (gnc-numeric-positive-p
                                    (qif-split:amount split))
                                   (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
                                         GNC-BANK-TYPE GNC-CCARD-TYPE 
@@ -618,7 +618,7 @@
                    ;; gnc account already exists... we *know* what the 
                    ;; security is supposed to be 
                    (let ((commodity 
-                          (gnc:account-get-commodity existing-gnc-acct)))
+                          (xaccAccountGetCommodity existing-gnc-acct)))
                      (hash-set! stock-hash stock-name commodity))
                    
                    ;; we know nothing about this security.. we need to 
@@ -629,7 +629,7 @@
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
-                      (gnc:commodity-create book
+                      (gnc-commodity-new book
 					    stock-name
                                             GNC_COMMODITY_NS_NYSE
                                             ticker-symbol

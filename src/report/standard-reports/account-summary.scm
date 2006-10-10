@@ -324,7 +324,7 @@
     
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc:print-date date-tp))
+			(gnc-print-date date-tp))
      )
     
     (if (null? accounts)

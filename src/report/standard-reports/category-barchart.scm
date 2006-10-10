@@ -243,7 +243,7 @@ developing over time"))
                ;; created.
                (date-string-list
                 (map (lambda (date-list-item)
-                       (gnc:print-date
+                       (gnc-print-date
                         (if do-intervals?
                             (car date-list-item)
                             date-list-item)))
@@ -257,7 +257,7 @@ developing over time"))
           (define (collector->double c date)
             ;; Future improvement: Let the user choose which kind of
             ;; currency combining she want to be done. 
-            (gnc:numeric-to-double 
+            (gnc-numeric-to-double
              (gnc:gnc-monetary-amount
               (gnc:sum-collector-commodity 
                c report-currency 
@@ -406,8 +406,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
-                             (gnc:print-date from-date-tp) 
-                             (gnc:print-date to-date-tp)))
+                             (gnc-print-date from-date-tp)
+                             (gnc-print-date to-date-tp)))
              (gnc:html-barchart-set-width! chart width)
              (gnc:html-barchart-set-height! chart height)
              
@@ -416,7 +416,7 @@ developing over time"))
              ;; FIXME: axis labels are not yet supported by
              ;; libguppitank.
              (gnc:html-barchart-set-y-axis-label!
-              chart (gnc:commodity-get-mnemonic report-currency))
+              chart (gnc-commodity-get-mnemonic report-currency))
              (gnc:html-barchart-set-row-labels-rotated?! chart #t)
              (gnc:html-barchart-set-stacked?! chart stacked?)
              ;; If this is a stacked barchart, then reverse the legend.

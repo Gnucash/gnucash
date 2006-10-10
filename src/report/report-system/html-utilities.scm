@@ -48,7 +48,7 @@
 
 (define (gnc:price-anchor-text price)
   (gnc-build-url URL-TYPE-PRICE
-		      (string-append "price-guid=" (gnc:price-get-guid price))
+		      (string-append "price-guid=" (gncPriceGetGUID price))
 		      ""))
 
 ;; Make a new report and return the anchor to it. The new report of
@@ -102,7 +102,7 @@
                            (gnc:price-anchor-text price)
 			   (if value
 			       value
-			       (gnc:price-get-value price)))
+			       (gnc-price-get-value price)))
                           value)))
 
 (define (gnc:assign-colors num-colors)
@@ -266,13 +266,13 @@
     (if (and (not is-stock-account?)
 	     ;; FIXME: need to check whether we really have only one
 	     ;; foreign currency if is-stock-account==#t.
-	     (gnc:commodity-equiv? my-commodity report-commodity))
+	     (gnc-commodity-equiv my-commodity report-commodity))
 	;; usual case: the account balance in terms of report
 	;; commodity
 	(commodity-row-helper! 
 	 my-name #f
 	 (if balance 
-	     (gnc:commodity-collector-assoc 
+	     (gnc-commodity-collector-assoc
 	      balance report-commodity reverse-balance?)
 	     #f)
 	 main-row-style)
@@ -281,7 +281,7 @@
 	;; (loop below). Is also used if is-stock-account? is true.
 	(let ((my-balance 
 	       (if balance 
-		   (gnc:commodity-collector-assoc 
+		   (gnc-commodity-collector-assoc
 		    balance my-commodity reverse-balance?) #f)))
 	  (set! already-printed my-commodity)
 	  (commodity-row-helper! 
@@ -294,12 +294,12 @@
     ;; balance and its corresponding value in the
     ;; report-currency. One row for each non-report-currency. 
     (if (and balance (not is-stock-account?))
-	(gnc:commodity-collector-map
+	(gnc-commodity-collector-map
 	 balance 
 	 (lambda (curr val)
-	   (if (or (gnc:commodity-equiv? curr report-commodity)
+	   (if (or (gnc-commodity-equiv curr report-commodity)
 		   (and already-printed
-			(gnc:commodity-equiv? curr already-printed)))
+			(gnc-commodity-equiv curr already-printed)))
 	       '()
 	       (let ((bal 
 		      (if reverse-balance?
@@ -456,7 +456,7 @@
       (let ((this-collector (my-get-balance-nosub account)))
 	(for-each 
 	 (lambda (x) (if x 
-			 (gnc:commodity-collector-merge 
+			 (gnc-commodity-collector-merge
 			  this-collector x )))
 	 (gnc:group-map-all-accounts
 	  (lambda (a)
@@ -482,7 +482,7 @@
     ;; preference.
     (define (show-acct? a)
       (and (or show-zero-entries?
-	       (not (gnc:commodity-collector-allzero? 
+	       (not (gnc-commodity-collector-allzero?
 		     (my-get-balance a))))
 	   (use-acct? a)))
 
@@ -537,7 +537,7 @@
       (if show-other-curr?
 	  (add-commodity-rows! current-depth 
 			       (gnc:html-account-anchor acct)
-			       (gnc:account-get-commodity acct) 
+			       (xaccAccountGetCommodity acct)
 			       (my-get-balance acct)
 			       (gnc-reverse-balance acct)
 			       (gnc:account-has-shares? acct)
@@ -629,7 +629,7 @@
 				  subaccounts my-get-balance 
 				  gnc-reverse-balance)))
 		 (if thisbalance 
-		     (gnc:commodity-collector-merge subbalance thisbalance))
+		     (gnc-commodity-collector-merge subbalance thisbalance))
 		 subbalance)
 	       heading-style
 	       #t #f)))))
@@ -751,18 +751,18 @@
 		 ((exchanged 
 		   (exchange-fn 
 		    (gnc:make-gnc-monetary commodity 
-					   (gnc:numeric-create 1000 1))
+					   (gnc-numeric-create 1000 1))
 		    common-commodity)))
 	       (gnc:html-table-append-row! 
 		table
 		(list 
 		 (gnc:make-gnc-monetary commodity 
-					(gnc:numeric-create 1 1))
+					(gnc-numeric-create 1 1))
 		 (gnc:make-gnc-monetary
 		  common-commodity
-		  (gnc:numeric-div
+		  (gnc-numeric-div
 		   (gnc:gnc-monetary-amount exchanged)
-		   (gnc:numeric-create 1000 1)
+		   (gnc-numeric-create 1000 1)
 		   GNC-DENOM-AUTO 
 		   (logior (GNC-DENOM-SIGFIGS 6) 
 			   GNC-RND-ROUND)))))))

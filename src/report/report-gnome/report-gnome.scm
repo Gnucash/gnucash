@@ -115,7 +115,7 @@
   (gnc-add-scm-extension custom-menu)
 
   ;; run report-hook danglers
-  (gnc:hook-run-danglers gnc:*report-hook*)
+  (gnc:hook-run-danglers HOOK-REPORT)
 
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items)

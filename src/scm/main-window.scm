@@ -30,12 +30,12 @@
 
 (define (gnc:main-window-properties-cb)
   (let* ((book (gnc-get-current-book))
-	 (slots (gnc:book-get-slots book)))
+	 (slots (gnc-book-get-slots book)))
 
     (define (changed_cb)
-      (gnc:book-kvp-changed book))
+      (qof-book-kvp-changed book))
 			    
-    (gnc:kvp-option-dialog gnc:id-book
+    (gnc:kvp-option-dialog QOF-ID-BOOK-SCM
 			   slots (_ "Book Options")
 			   changed_cb)))
 

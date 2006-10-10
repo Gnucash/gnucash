@@ -142,7 +142,7 @@
 	    (val (cdr item))
 	    (ref (hash-ref hash acct)))
 
-       (hash-set! hash acct (if ref (gnc:numeric-add-fixed ref val) val))))
+       (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
    values))
 
 
@@ -174,7 +174,7 @@
 
     (if (date-col column-vector)
         (addto! row-contents
-                (gnc:print-date (gncEntryGetDate entry))))
+                (gnc-print-date (gncEntryGetDate entry))))
 
     (if (description-col column-vector)
         (addto! row-contents
@@ -391,7 +391,7 @@
 	  monetary
 	  (let ((amt (gnc:gnc-monetary-amount monetary)))
 	    (if amt
-		(if (gnc:numeric-negative-p amt)
+		(if (gnc-numeric-negative-p amt)
 		    (gnc:monetary-neg monetary)
 		    monetary)
 		monetary))))
@@ -416,7 +416,7 @@
 
     (define (add-payment-row table used-columns split total-collector)
       (let* ((t (gnc:split-get-parent split))
-	     (currency (gnc:transaction-get-currency t))
+	     (currency (xaccTransGetCurrency t))
 	     ;; XXX Need to know when to reverse the value
 	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
 	     (payment-style "grand-total")
@@ -428,7 +428,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc:print-date (gnc:transaction-get-date-posted t))))
+		    (gnc-print-date (gnc:transaction-get-date-posted t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -462,7 +462,7 @@
 		(hash-for-each
 		 (lambda (acct value)
 		   (let ((collector (gnc:make-commodity-collector))
-			 (commodity (gnc:account-get-commodity acct))
+			 (commodity (xaccAccountGetCommodity acct))
 			 (name (gnc:account-get-name acct)))
 		     (collector 'add commodity value)
 		     (add-subtotal-row table used-columns collector
@@ -609,7 +609,7 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc:print-date date) #\space "&nbsp;"))))
+    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -624,11 +624,11 @@
 
 (define (make-myname-table book)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc:book-get-slots book))
-	 (name (gnc:kvp-frame-get-slot-path
+	 (slots (gnc-book-get-slots book))
+	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (gnc:kvp-frame-get-slot-path
+	 (addy (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*)))))
 
@@ -720,8 +720,8 @@
 
         (if (opt-val "Display" "My Company ID")
           (let* ((book (gncInvoiceGetBook invoice))
-                 (slots (gnc:book-get-slots book))
-	         (taxid (gnc:kvp-frame-get-slot-path
+                 (slots (gnc-book-get-slots book))
+	         (taxid (kvp-frame-get-slot-path-gslist
 		    slots (append gnc:*kvp-option-path*
 		                  (list gnc:*business-label* gnc:*company-id*)))))
                  (if (and taxid (> (string-length taxid) 0))
@@ -768,7 +768,7 @@
               (add-html! document "Date: ")
               (add-html! document "</td>")
               (add-html! document "<td>")
-              (add-html! document (gnc:print-date post-date))
+              (add-html! document (gnc-print-date post-date))
               (add-html! document "</td>")
               (if (opt-val "Display" "Due Date")
                 (begin
@@ -776,7 +776,7 @@
                   (add-html! document "Due: ")
                   (add-html! document "</td>")
                   (add-html! document "<td>")
-                  (add-html! document (gnc:print-date due-date))
+                  (add-html! document (gnc-print-date due-date))
                   (add-html! document "</td>")))
               (add-html! document "</tr></table>"))
             (add-html! document 

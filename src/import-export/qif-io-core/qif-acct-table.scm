@@ -72,11 +72,11 @@
       
       (hash-fold
        (lambda (name acct p)
-         (let ((cmdty (gnc:account-get-commodity acct)))
+         (let ((cmdty (xaccAccountGetCommodity acct)))
            (if (not cmdty)
                (begin 
                  (gnc:account-begin-edit acct)
-                 (gnc:account-set-commodity acct commodity)
+                 (xaccAccountSetCommodity acct commodity)
                  (gnc:account-commit-edit acct))))
          (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
@@ -107,11 +107,11 @@
 
       (hash-fold
        (lambda (name acct p)
-         (let ((cmdty (gnc:account-get-commodity acct)))
+         (let ((cmdty (xaccAccountGetCommodity acct)))
            (if (not cmdty)
                (begin 
                  (gnc:account-begin-edit acct)
-                 (gnc:account-set-commodity acct commodity)
+                 (xaccAccountSetCommodity acct commodity)
                  (gnc:account-commit-edit acct))))
          (let ((type (xaccAccountGetType acct)))
            (if (= type -1)

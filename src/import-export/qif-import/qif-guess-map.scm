@@ -63,7 +63,7 @@
   ;;    (older saved prefs may not have this one)
   ;;  - a hash of QIF stock name to gnc-commodity*
   ;;    (older saved prefs may not have this one)
-  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map"))
+  (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map"))
          (results '()))
     
     ;; first, read the account map and category map from the 
@@ -153,8 +153,8 @@
                  (namespace (cadr entry))
                  (mnemonic (caddr entry)))
              (hash-set! table name
-                        (gnc:commodity-table-lookup
-                         (gnc:book-get-commodity-table (gnc-get-current-book))
+                        (gnc-commodity-table-lookup
+                         (gnc-commodity-table-get-table (gnc-get-current-book))
                          namespace mnemonic)))))
      commlist)
     table))
@@ -168,8 +168,8 @@
        (if (and value #t)
            (set! table
                  (cons (list key 
-                             (gnc:commodity-get-namespace value)
-                             (gnc:commodity-get-mnemonic value))
+                             (gnc-commodity-get-namespace value)
+                             (gnc-commodity-get-mnemonic value))
                        table))
            (display "write-commodities: something funny in hash table.\n"))
        #f) #f hashtab)
@@ -177,7 +177,7 @@
 
 
 (define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
-  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map")))
+  (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map")))
     ;; does the file exist? if not, create it; in either case,
     ;; make sure it's a directory and we have write and execute 
     ;; permission. 

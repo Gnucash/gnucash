@@ -296,16 +296,16 @@
   (define (set-amounts neg? amounts)
     (map 
      (lambda (split amount)
-       (qif-split:set-amount! split (if neg? (gnc:numeric-neg amount) amount)))
+       (qif-split:set-amount! split (if neg? (gnc-numeric-neg amount) amount)))
      (qif-xtn:splits self) amounts))
 
   (define (need-neg amounts)
-    (let ((sum (gnc:numeric-zero)))
+    (let ((sum (gnc-numeric-zero)))
       (for-each
        (lambda (amt)
-	 (set! sum (gnc:numeric-add sum amt 0 GNC-DENOM-LCD)))
+	 (set! sum (gnc-numeric-add sum amt 0 GNC-DENOM-LCD)))
        amounts)
-      (gnc:numeric-zero-p sum)))
+      (gnc-numeric-zero-p sum)))
 
   (let ((def-spl (qif-xtn:default-split self)))
     (if def-spl

@@ -193,7 +193,7 @@
     ;; 'report-currency' according to the exchange-fn. Returns a
     ;; double.
     (define (collector->double c date)
-      (gnc:numeric-to-double
+      (gnc-numeric-to-double
        (gnc:gnc-monetary-amount
         (gnc:sum-collector-commodity 
          c report-currency 
@@ -246,9 +246,9 @@
             (date-string-list (map 
                                (if inc-exp?
                                    (lambda (date-list-item)
-                                     (gnc:print-date
+                                     (gnc-print-date
                                       (car date-list-item)))
-                                   gnc:print-date)
+                                   gnc-print-date)
                                dates-list)))
 
        (set! assets-list
@@ -274,13 +274,13 @@
        (gnc:html-barchart-set-subtitle!
         chart (sprintf #f
                        (_ "%s to %s")
-                       (gnc:print-date from-date-tp) 
-                       (gnc:print-date to-date-tp)))
+                       (gnc-print-date from-date-tp)
+                       (gnc-print-date to-date-tp)))
        (gnc:html-barchart-set-width! chart width)
        (gnc:html-barchart-set-height! chart height)
        (gnc:html-barchart-set-row-labels! chart date-string-list)
        (gnc:html-barchart-set-y-axis-label!
-        chart (gnc:commodity-get-mnemonic report-currency))
+        chart (gnc-commodity-get-mnemonic report-currency))
        ;; Determine whether we have enough space for horizontal labels
        ;; -- kind of a hack. Assumptions: y-axis labels and legend
        ;; require 200 pixels, and each x-axes label needs 60 pixels.

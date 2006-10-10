@@ -125,7 +125,7 @@
 (export gnc:config-file-format-version)
 
 ;; gw-engine-spec.scm
-(re-export gnc:*save-options-hook*)
+(re-export HOOK-SAVE-OPTIONS)
 
 ;; date-utilities.scm
 
@@ -226,8 +226,8 @@
 
 ;; hooks 
 (export gnc:hook-run-danglers)		;; from hooks.scm
-(re-export gnc:hook-add-dangler)
-(re-export gnc:*report-hook*)
+(re-export gnc-hook-add-scm-dangler)
+(re-export HOOK-REPORT)
 
 ;; simple-obj
 (export make-simple-class)

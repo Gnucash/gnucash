@@ -19,4 +19,4 @@
   (if (null? args)
       (set! args '())
       (set! args (car args)))
-  (gnc:hook-run-danglers-real hook args))
+  (gnc-hook-run hook args))

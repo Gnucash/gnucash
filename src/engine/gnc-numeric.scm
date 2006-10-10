@@ -93,5 +93,5 @@
   (if (gnc:gnc-monetary? a)
       (gnc:make-gnc-monetary 
        (gnc:gnc-monetary-commodity a)
-       (gnc:numeric-neg (gnc:gnc-monetary-amount a)))
+       (gnc-numeric-neg (gnc:gnc-monetary-amount a)))
       (warn "wrong arguments for gnc:monetary-neg: " a)))

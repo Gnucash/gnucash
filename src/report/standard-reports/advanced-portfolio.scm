@@ -201,58 +201,58 @@
   ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
   ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
   (define (basis-builder b-list b-units b-value b-method)
-    (if (gnc:numeric-positive-p b-units)
+    (if (gnc-numeric-positive-p b-units)
 	(case b-method
 	  ((average-basis) 
            (if (not (eqv? b-list '()))
-               (list (cons (gnc:numeric-add b-units 
+               (list (cons (gnc-numeric-add b-units
                                             (caar b-list) 10000 GNC-RND-ROUND) 
-                           (gnc:numeric-div 
-                            (gnc:numeric-add b-value
-                                             (gnc:numeric-mul (caar b-list)
+                           (gnc-numeric-div
+                            (gnc-numeric-add b-value
+                                             (gnc-numeric-mul (caar b-list)
                                                               (cdar b-list) 
                                                               10000 GNC-RND-ROUND)
                                              10000 GNC-RND-ROUND)
-                            (gnc:numeric-add b-units 
+                            (gnc-numeric-add b-units
                                              (caar b-list) 10000 GNC-RND-ROUND)
                             10000 GNC-RND-ROUND)))
                (append b-list 
-                       (list (cons b-units (gnc:numeric-div 
+                       (list (cons b-units (gnc-numeric-div
                                             b-value b-units 10000 
                                             GNC-RND-ROUND))))))
 	  (else (append b-list 
-                        (list (cons b-units (gnc:numeric-div 
+                        (list (cons b-units (gnc-numeric-div
                                              b-value b-units 10000 
                                              GNC-RND-ROUND))))))
 	(if (not (eqv? b-list '()))
 	    (case b-method
 	      ((fifo-basis) 
-               (if (not (= -1 (gnc:numeric-compare 
-                               (gnc:numeric-abs b-units) (caar b-list))))
-                   (basis-builder (cdr b-list) (gnc:numeric-add 
+               (if (not (= -1 (gnc-numeric-compare
+                               (gnc-numeric-abs b-units) (caar b-list))))
+                   (basis-builder (cdr b-list) (gnc-numeric-add
                                                 b-units 
                                                 (caar b-list) 10000 GNC-RND-ROUND) 
                                   b-value b-method)
-                   (append (list (cons (gnc:numeric-add 
+                   (append (list (cons (gnc-numeric-add
                                         b-units 
                                         (caar b-list) 10000 GNC-RND-ROUND) 
                                        (cdar b-list))) (cdr b-list))))
 	      ((filo-basis) 
-               (if (not (= -1 (gnc:numeric-compare 
-                               (gnc:numeric-abs b-units) (caar (reverse b-list)))))
+               (if (not (= -1 (gnc-numeric-compare
+                               (gnc-numeric-abs b-units) (caar (reverse b-list)))))
                    (basis-builder (reverse (cdr (reverse b-list))) 
-                                  (gnc:numeric-add 
+                                  (gnc-numeric-add
                                    b-units 
                                    (caar (reverse b-list)) 
                                    10000 GNC-RND-ROUND) 
                                   b-value b-method)
                    (append (cdr (reverse b-list)) 
-                           (list (cons (gnc:numeric-add 
+                           (list (cons (gnc-numeric-add
                                         b-units 
                                         (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
                                        (cdar (reverse b-list)))))))
 	      ((average-basis) 
-               (list (cons (gnc:numeric-add 
+               (list (cons (gnc-numeric-add
                             (caar b-list) b-units 10000 GNC-RND-ROUND) 
                            (cdar b-list)))))
 	    '()
@@ -263,17 +263,17 @@
   ;; sum up the contents of the b-list built by basis-builder above
   (define (sum-basis b-list)
     (if (not (eqv? b-list '()))
-	(gnc:numeric-add (gnc:numeric-mul (caar b-list) (cdar b-list) 100 GNC-RND-ROUND) 
+	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) 100 GNC-RND-ROUND)
 			 (sum-basis (cdr b-list)) 100 GNC-RND-ROUND)
-	(gnc:numeric-zero)
+	(gnc-numeric-zero)
 	)
     )
   
   ;; sum up the total number of units in the b-list built by basis-builder above
   (define (units-basis b-list)
     (if (not (eqv? b-list '()))
-	(gnc:numeric-add (caar b-list) (units-basis (cdr b-list)) 100 GNC-RND-ROUND)
-	(gnc:numeric-zero)
+	(gnc-numeric-add (caar b-list) (units-basis (cdr b-list)) 100 GNC-RND-ROUND)
+	(gnc-numeric-zero)
 	)
     )
 
@@ -295,9 +295,9 @@
                  (current (car accounts))
                  (rest (cdr accounts))
                  (name (gnc:account-get-name current))
-                 (commodity (gnc:account-get-commodity current))
-                 (ticker-symbol (gnc:commodity-get-mnemonic commodity))
-                 (listing (gnc:commodity-get-namespace commodity))
+                 (commodity (xaccAccountGetCommodity current))
+                 (ticker-symbol (gnc-commodity-get-mnemonic commodity))
+                 (listing (gnc-commodity-get-namespace commodity))
                  (unit-collector (gnc:account-get-comm-balance-at-date
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
@@ -318,15 +318,15 @@
 				 (car price-list) #f))
 		 ;; if there is no price, set a sane commod-currency for those zero-share 
 		 ;; accounts. if its a no price account with shares, we'll get a currency later.
-		 (commod-currency (if price (gnc:price-get-currency price) currency))
+		 (commod-currency (if price (gnc-price-get-currency price) currency))
                  (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency))
 
-		 (txn-value (gnc:numeric-zero))
+		 (txn-value (gnc-numeric-zero))
 		 (txn-date to-date)
 		 (pricing-txn #f)
 		 (use-txn #f)
 		 (basis-list '())
-		 (txn-units (gnc:numeric-zero))
+		 (txn-units (gnc-numeric-zero))
 		 )
 
 
@@ -350,8 +350,8 @@
                                            s ACCT-TYPE-INCOME))))
 
 			    ;;only change the commod-currency if price failed
-			    (if (not price) (set! commod-currency (gnc:account-get-commodity (gnc:split-get-account s))))
-			    (set! txn-value (gnc:numeric-abs (gnc:split-get-value s)));;FIXME use gnc:split-get-share-price
+			    (if (not price) (set! commod-currency (xaccAccountGetCommodity (gnc:split-get-account s))))
+			    (set! txn-value (gnc-numeric-abs (gnc:split-get-value s)));;FIXME use gnc:split-get-share-price
 			    (set! txn-date (gnc:transaction-get-date-posted parent))
 			    (set! pricing-txn parent)
 			    )
@@ -376,39 +376,39 @@
 			(lambda (s)
 			  (cond
 			   ((same-split? s split) 
-;;                       (gnc:debug "amount " (gnc:numeric-to-double (gnc:split-get-amount s))
+;;                       (gnc:debug "amount " (gnc-numeric-to-double (gnc:split-get-amount s))
 ;;                                  " acct " (gnc:account-get-name (gnc:split-get-account s)) )
-;;                       (gnc:debug "value " (gnc:numeric-to-double (gnc:split-get-value s))
-;;                                  " in " (gnc:commodity-get-printname commod-currency)
+;;                       (gnc:debug "value " (gnc-numeric-to-double (gnc:split-get-value s))
+;;                                  " in " (gnc-commodity-get-printname commod-currency)
 ;;                                  " from " (gnc:transaction-get-description (gnc:split-get-parent s)))
 			    (cond
-			     ((or include-gains (not (gnc:numeric-zero-p (gnc:split-get-amount s))))
+			     ((or include-gains (not (gnc-numeric-zero-p (gnc:split-get-amount s))))
 			      (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
 ;; these lines do nothing, but are in a debug so I'm leaving it, just in case. asw.			     
-;;			      (if (< 0 (gnc:numeric-to-double
+;;			      (if (< 0 (gnc-numeric-to-double
 ;;					(gnc:split-get-amount s)))
 
 
 ;;				  (set! totalunits
 ;;					(+ totalunits
-;;					   (gnc:numeric-to-double (gnc:split-get-amount s))))
+;;					   (gnc-numeric-to-double (gnc:split-get-amount s))))
 ;;				  )
 
 
 ;;			      (set! totalunityears
 ;;				    (+ totalunityears 
-;;				       (* (gnc:numeric-to-double (gnc:split-get-amount s)) 
+;;				       (* (gnc-numeric-to-double (gnc:split-get-amount s))
 ;;					  (gnc:date-year-delta 
 ;;					   (car (gnc:transaction-get-date-posted parent))
 ;;					   (current-time))))) 
 			      (cond 
-			       ((gnc:numeric-negative-p (gnc:split-get-value s))
+			       ((gnc-numeric-negative-p (gnc:split-get-value s))
 				(moneyoutcoll
 				 'add commod-currency
-				 (gnc:numeric-neg (gnc:split-get-value s))))
+				 (gnc-numeric-neg (gnc:split-get-value s))))
 			       (else (moneyincoll 
 				      'add commod-currency
-				      (gnc:numeric-neg (gnc:split-get-value s))))))))
+				      (gnc-numeric-neg (gnc:split-get-value s))))))))
 			 
 			   ((split-account-type? s ACCT-TYPE-EXPENSE)
 			     (brokeragecoll 'add commod-currency (gnc:split-get-value s)))
@@ -432,24 +432,24 @@
 	    ;; and if we have a choice, use whichever is newest.
 	    (set! use-txn (if (not price) #t 
 			      (if prefer-pricelist #f
-				  (if (not (gnc:timepair-le txn-date (gnc:price-get-time price)))
+				  (if (not (gnc:timepair-le txn-date (gnc-price-get-time price)))
 				      #t #f))))
 
 	    ;; okay we're using the txn, so make a new price, value etc. and warn the user
 	    (if use-txn
 		(begin
-		  (set! price (if (not (gnc:numeric-zero-p txn-units))
+		  (set! price (if (not (gnc-numeric-zero-p txn-units))
 				  (gnc:make-gnc-monetary commod-currency
-							 (gnc:numeric-div txn-value
-									  (gnc:numeric-abs txn-units)
+							 (gnc-numeric-div txn-value
+									  (gnc-numeric-abs txn-units)
 									  100 GNC-RND-ROUND))
-				  (gnc:make-gnc-monetary commod-currency (gnc:numeric-zero))))
+				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 
 		  (set! value (if price (gnc:make-gnc-monetary commod-currency 
-						     (gnc:numeric-mul units 
+						     (gnc-numeric-mul units
 								      (gnc:gnc-monetary-amount price)
 								      100 GNC-RND-ROUND))
-				  (gnc:make-gnc-monetary commod-currency (gnc:numeric-zero))))
+				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 		  (set! warn-price-dirty #t)
 		  )  
 		)
@@ -465,17 +465,17 @@
 
 
 	    
-	  (if (or include-empty (not (gnc:numeric-zero-p units)))
+	  (if (or include-empty (not (gnc-numeric-zero-p units)))
 	    (let* ((moneyin (gnc:monetary-neg
 			    (gnc:sum-collector-commodity moneyincoll currency exchange-fn)))
 		  (moneyout (gnc:sum-collector-commodity moneyoutcoll currency exchange-fn))
 		  ;; just so you know, gain == realized gain, ugain == un-realized gain, bothgain, well..
 		  (gain (gnc:sum-collector-commodity gaincoll currency exchange-fn))
 		  (ugain (gnc:make-gnc-monetary currency 
-						(gnc:numeric-sub (gnc:gnc-monetary-amount (exchange-fn value currency))
+						(gnc-numeric-sub (gnc:gnc-monetary-amount (exchange-fn value currency))
 								 (sum-basis basis-list) 
 								 100 GNC-RND-ROUND)))
-		  (bothgain (gnc:make-gnc-monetary currency  (gnc:numeric-add (gnc:gnc-monetary-amount gain)
+		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
 									      (gnc:gnc-monetary-amount ugain)
 									      100 GNC-RND-ROUND)))
 
@@ -504,8 +504,8 @@
 	 	    (gnc:html-price-anchor
 	 	     price
 	 	     (gnc:make-gnc-monetary
-	  	     (gnc:price-get-currency price)
-		     (gnc:price-get-value price)))
+	  	     (gnc-price-get-currency price)
+		     (gnc-price-get-value price)))
 		    )))))
  	      (append! activecols (list (if use-txn "*" " ")
 					(gnc:make-html-table-header-cell/markup 
@@ -519,11 +519,11 @@
 										
 										
 					(gnc:make-html-table-header-cell/markup "number-cell" 
-					    (let ((moneyinvalue (gnc:numeric-to-double 
+					    (let ((moneyinvalue (gnc-numeric-to-double
 								 (gnc:gnc-monetary-amount moneyin))))
 					      (if (= 0.0 moneyinvalue)
 						  (sprintf #f "%.2f%%" moneyinvalue)
-						  (sprintf #f "%.2f%%" (* 100 (/ (gnc:numeric-to-double 
+						  (sprintf #f "%.2f%%" (* 100 (/ (gnc-numeric-to-double
 									     (gnc:gnc-monetary-amount bothgain))
 									    moneyinvalue))))))
 					 )
@@ -538,7 +538,7 @@
 	      )
 	    (table-add-stock-rows-internal rest odd-row?)
             )
-            (gnc:price-list-destroy price-list)
+            (gnc-price-list-destroy price-list)
 	    )))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
@@ -588,30 +588,30 @@
     (gnc:html-document-set-title!
      document (string-append 
                report-title
-               (sprintf #f " %s" (gnc:print-date to-date))))
+               (sprintf #f " %s" (gnc-print-date to-date))))
 
     (if (not (null? accounts))
         ; at least 1 account selected
         (let* ((exchange-fn (gnc:case-exchange-fn price-source currency to-date))
-               (pricedb (gnc:book-get-pricedb (gnc-get-current-book)))
+               (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
                (price-fn
                 (case price-source
                   ((pricedb-latest) 
                    (lambda (foreign date) 
-                    (gnc:pricedb-lookup-latest-any-currency pricedb foreign)))
+                    (gnc-pricedb-lookup-latest-any-currency pricedb foreign)))
                   ((pricedb-nearest) 
                    (lambda (foreign date) 
-                    (gnc:pricedb-lookup-nearest-in-time-any-currency
-		     pricedb foreign (gnc:timepair-canonical-day-time date))))
+                    (gnc-pricedb-lookup-nearest-in-time-any-currency
+		     pricedb foreign (timespecCanonicalDayTime date))))
 		  ((pricedb-latest-before)
 		   (lambda (foreign date)
-		     (gnc:pricedb-lookup-latest-before-any-currency
-		      pricedb foreign (gnc:timepair-canonical-day-time date))))))
+		     (gnc-pricedb-lookup-latest-before-any-currency
+		      pricedb foreign (timespecCanonicalDayTime date))))))
 	       (headercols (list (_ "Account")))
 	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
-	       (sum-total-both-gains (gnc:numeric-zero))
-	       (sum-total-gain (gnc:numeric-zero))
-	       (sum-total-ugain (gnc:numeric-zero)))
+	       (sum-total-both-gains (gnc-numeric-zero))
+	       (sum-total-gain (gnc-numeric-zero))
+	       (sum-total-ugain (gnc-numeric-zero)))
 
 	  ;;begin building lists for which columns to display
           (if show-symbol 
@@ -654,7 +654,7 @@
 
 	  (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
 	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
-	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc:numeric-add (gnc:gnc-monetary-amount sum-total-gain)
+	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
 										      (gnc:gnc-monetary-amount sum-total-ugain)
 										      100 GNC-RND-ROUND)))
 
@@ -683,12 +683,12 @@
 				"total-number-cell" sum-total-both-gains)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" 
-				(let ((totalinvalue (gnc:numeric-to-double 
+				(let ((totalinvalue (gnc-numeric-to-double
 						     (gnc:gnc-monetary-amount (gnc:monetary-neg (gnc:sum-collector-commodity 
 									       total-moneyin currency exchange-fn))))))
 				  (if (= 0.0 totalinvalue) 
 				      (sprintf #f "%.2f%%" totalinvalue) 
-				      (sprintf #f "%.2f%%" (* 100 (/ (gnc:numeric-to-double 
+				      (sprintf #f "%.2f%%" (* 100 (/ (gnc-numeric-to-double
 								      (gnc:gnc-monetary-amount sum-total-both-gains))
 										   totalinvalue))))))
 			       ))

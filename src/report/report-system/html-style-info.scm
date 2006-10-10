@@ -296,7 +296,7 @@
 
 (define (gnc:default-html-number-renderer datum params)  
   (xaccPrintAmount
-   (gnc:double-to-gnc-numeric datum 100 GNC-RND-ROUND)
+   (double-to-gnc-numeric datum 100 GNC-RND-ROUND)
    (gnc-default-print-info #f)))
 
 

@@ -369,7 +369,7 @@
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
-			(gnc:numeric-negative-p
+			(gnc-numeric-negative-p
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
@@ -409,7 +409,7 @@
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc:print-date date-tp))
+			(gnc-print-date date-tp))
      )
     
     (if (null? accounts)
@@ -523,7 +523,7 @@
                                                 report-commodity
                                                 weighted-fn)))
 		 
-                 (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	    
             (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	    )
@@ -644,13 +644,13 @@
 	  ;; we omit retianed earnings & unrealized gains
 	  ;; from the balance report, if zero, since they
 	  ;; are not present on normal balance sheets
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     retained-earnings))
 	       (add-subtotal-line right-table
 				  (_ "Retained Earnings")
 				  (_ "Retained Losses")
 				  retained-earnings))
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (add-subtotal-line right-table
 				  (_ "Unrealized Gains")

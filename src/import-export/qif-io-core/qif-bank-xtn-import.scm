@@ -78,7 +78,7 @@
         split))
 
     (gnc:transaction-begin-edit gnc-xtn)
-    (gnc:transaction-set-currency gnc-xtn commodity)
+    (xaccTransSetCurrency gnc-xtn commodity)
 
     ;; set the transaction date, number and description 
     (let ((date (qif-io:parse-date/format 
@@ -114,7 +114,7 @@
                   (if parsed-cat (list-ref parsed-cat 1) #f)))
             (add-split (cons acct-name 
                              (if acct-is-acct 'account 'category))
-                       (gnc:numeric-neg near-split-amt)
+                       (gnc-numeric-neg near-split-amt)
                        (qif-io:bank-xtn-memo qif-xtn) #\n))
           
           ;; split case: iterate over a list of qif splits and make a
@@ -136,7 +136,7 @@
                         (qif-io:split-amount split) amt-format)))
                  (add-split (cons acct-name 
                                   (if acct-is-acct 'account 'category))
-                            (gnc:numeric-neg amount)
+                            (gnc-numeric-neg amount)
                             (qif-io:split-memo split) #\n)))
              qif-splits))))
     

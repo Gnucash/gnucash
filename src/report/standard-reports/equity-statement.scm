@@ -280,8 +280,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc:print-date start-date-printable)
-                  (gnc:print-date end-date-tp)))
+                  (gnc-print-date start-date-printable)
+                  (gnc-print-date end-date-tp)))
     
     (if (null? accounts)
 	
@@ -344,8 +344,8 @@
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc:print-date start-date-printable)
-					(gnc:print-date end-date-tp))
+					(gnc-print-date start-date-printable)
+					(gnc-print-date end-date-tp))
 			       ))
 	       )
 	  
@@ -355,7 +355,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc:numeric-negative-p
+			      (gnc-numeric-negative-p
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
@@ -371,7 +371,7 @@
 		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
 			     bal)
 			(and show-fcur?
-			     (gnc:commodity-table
+			     (gnc-commodity-table
 			      pos-bal report-commodity exchange-fn))
 			bal
 			))
@@ -413,7 +413,7 @@
 						  report-commodity
 						  weighted-fn)))
 		   
-		   (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+		   (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	      
 	      (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	      unrealized-gain-collector
@@ -586,7 +586,7 @@
 	  (report-line
 	   build-table
 	   (string-append (_ "Capital") ", "
-			  (gnc:print-date start-date-printable))
+			  (gnc-print-date start-date-printable))
 	   #f start-total-equity
 	   1 start-exchange-fn #f "primary-subheading"
 	   )
@@ -611,7 +611,7 @@
 	   withdrawals
 	   0 end-exchange-fn #f #f
 	   )
-	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
+	  (or (gnc-commodity-collector-allzero? net-unrealized-gains)
 	      (report-line
 	       build-table 
 	       (_ "Unrealized Gains")
@@ -630,7 +630,7 @@
 	  (report-line
 	   build-table 
 	   (string-append (_ "Capital") ", "
-			  (gnc:print-date end-date-tp))
+			  (gnc-print-date end-date-tp))
 	   #f
 	   end-total-equity
 	   1 end-exchange-fn #f "primary-subheading"
@@ -643,8 +643,8 @@
           (and show-rates?
 	       (let* ((curr-tbl (gnc:make-html-table))
 		      (headers (list
-				(gnc:print-date start-date-printable)
-				(gnc:print-date end-date-tp)
+				(gnc-print-date start-date-printable)
+				(gnc-print-date end-date-tp)
 				)
 			       )
 		      (then (gnc:html-make-exchangerates

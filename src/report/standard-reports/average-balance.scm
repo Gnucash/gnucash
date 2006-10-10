@@ -140,8 +140,8 @@
                         gain-loss-accum)
       (set! data-rows
             (cons 
-             (list (gnc:print-date interval-start)
-                   (gnc:print-date interval-end)
+             (list (gnc-print-date interval-start)
+                   (gnc-print-date interval-end)
                    (/ (stats-accum 'total #f)
                       (gnc:timepair-delta interval-start 
                                           interval-end))
@@ -159,7 +159,7 @@
     (define (get-split-value split date)
       (monetary->double
        (gnc:make-gnc-monetary
-        (gnc:account-get-commodity (gnc:split-get-account split))
+        (xaccAccountGetCommodity (gnc:split-get-account split))
         (gnc:split-get-amount split))
        date))
     
@@ -306,7 +306,7 @@
               (list-all-zeros? (cdr alist)))))
     
     (define (monetary->double foreign-monetary date)
-      (gnc:numeric-to-double
+      (gnc-numeric-to-double
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
 
@@ -340,7 +340,7 @@
 
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc-get-current-book))
+          (qof-query-set-book query (gnc-get-current-book))
 
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
@@ -365,14 +365,14 @@
                       (delete-duplicates (append accounts subaccts)))))
 	  (gnc:report-percent-done 30)
 
-          (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
+          (gnc:query-add-account-match query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
           (gnc:query-add-date-match-timepair
-           query #t begindate #t enddate 'query-and)
-          (gnc:query-set-sort-order query
-				    (list gnc:split-trans gnc:trans-date-posted)
-				    (list gnc:query-default-sort)
+           query #t begindate #t enddate QOF-QUERY-AND)
+          (qof-query-set-sort-order query
+				    (list SPLIT-TRANS TRANS-DATE-POSTED)
+				    (list QUERY-DEFAULT-SORT)
 				    '())
           
           ;; get the query results 
@@ -389,7 +389,7 @@
 	  (gnc:report-percent-done 50)
 
           (set! startbal 
-                (gnc:numeric-to-double
+                (gnc-numeric-to-double
                  (gnc:gnc-monetary-amount
                   (gnc:sum-collector-commodity 
                    startbal

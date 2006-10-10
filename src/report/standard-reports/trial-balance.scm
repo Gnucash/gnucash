@@ -387,8 +387,8 @@
 	 (period-for (if terse-period?
 			 (string-append " " (_ "for Period"))
 			 (sprintf #f (string-append ", " (_ "%s to %s"))
-				  (gnc:print-date start-date-printable)
-				  (gnc:print-date end-date-tp))
+				  (gnc-print-date start-date-printable)
+				  (gnc-print-date end-date-tp))
 			 ))
 	 )
     
@@ -396,12 +396,12 @@
      doc (if (equal? report-variant 'current)
 	     (sprintf #f (string-append "%s %s %s")
 		      company-name report-title
-		      (gnc:print-date end-date-tp))
+		      (gnc-print-date end-date-tp))
 	     (sprintf #f (string-append "%s %s "
 					(_ "For Period Covering %s to %s"))
 		      company-name report-title
-		      (gnc:print-date start-date-printable)
-		      (gnc:print-date end-date-tp))
+		      (gnc-print-date start-date-printable)
+		      (gnc-print-date end-date-tp))
 	     )
      )
     
@@ -487,7 +487,7 @@
 	  (define (tot-abs-amt-cell amt)
 	    (let* ((neg-amt (gnc:make-commodity-collector))
 		   (rv (report-val amt))
-		   (neg? (gnc:numeric-negative-p
+		   (neg? (gnc-numeric-negative-p
 			  (gnc:gnc-monetary-amount rv)))
 		   (cell #f)
 		   )
@@ -547,7 +547,7 @@
                                                 report-commodity
                                                 weighted-fn)))
 		 
-                 (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	    
             (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	    )
@@ -820,7 +820,7 @@
 	  ;; 
 	  ;; we omit unrealized gains from the balance report, if
 	  ;; zero, since they are not present on normal trial balances
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (let* ((ug-row (+ header-rows
 				 (gnc:html-acct-table-num-rows

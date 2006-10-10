@@ -160,7 +160,7 @@
 	    (val (cdr item))
 	    (ref (hash-ref hash acct)))
 
-       (hash-set! hash acct (if ref (gnc:numeric-add-fixed ref val) val))))
+       (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
    values))
 
 (define (monetary-or-percent numeric currency entry-type)
@@ -180,7 +180,7 @@
 
     (if (date-col column-vector)
         (addto! row-contents
-                (gnc:print-date (gncEntryGetDate entry))))
+                (gnc-print-date (gncEntryGetDate entry))))
 
     (if (description-col column-vector)
         (addto! row-contents
@@ -405,7 +405,7 @@
 	  monetary
 	  (let ((amt (gnc:gnc-monetary-amount monetary)))
 	    (if amt
-		(if (gnc:numeric-negative-p amt)
+		(if (gnc-numeric-negative-p amt)
 		    (gnc:monetary-neg monetary)
 		    monetary)
 		monetary))))
@@ -433,7 +433,7 @@
 
     (define (add-payment-row table used-columns split total-collector)
       (let* ((t (gnc:split-get-parent split))
-	     (currency (gnc:transaction-get-currency t))
+	     (currency (xaccTransGetCurrency t))
 	     ;; XXX Need to know when to reverse the value
 	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
 	     (payment-style "grand-total")
@@ -445,7 +445,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc:print-date (gnc:transaction-get-date-posted t))))
+		    (gnc-print-date (gnc:transaction-get-date-posted t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -488,7 +488,7 @@
 		(hash-for-each
 		 (lambda (acct value)
 		   (let ((collector (gnc:make-commodity-collector))
-			 (commodity (gnc:account-get-commodity acct))
+			 (commodity (xaccAccountGetCommodity acct))
 			 (name (gnc:account-get-name acct)))
 		     (collector 'add commodity value)
 		     (add-subtotal-row table used-columns collector
@@ -649,7 +649,7 @@
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
     (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
-    ;;(string-expand (gnc:print-date date) #\space "&nbsp;")
+    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -665,26 +665,26 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc:book-get-slots book))
-	 (name (gnc:kvp-frame-get-slot-path
+	 (slots (gnc-book-get-slots book))
+	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (gnc:kvp-frame-get-slot-path
+;;	 (contact (kvp-frame-get-slot-path-gslist
 ;;		slots (append gnc:*kvp-option-path*
 ;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (gnc:kvp-frame-get-slot-path
+	 (addy (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (gnc:kvp-frame-get-slot-path
+	 (id (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (gnc:kvp-frame-get-slot-path
+	 (phone (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (gnc:kvp-frame-get-slot-path
+	 (fax (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (gnc:kvp-frame-get-slot-path
+	 (url (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-url*))))
 	 (invoice-cell (gnc:make-html-table-cell))
@@ -786,7 +786,7 @@
 
     (if invoice
 	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (gnc:book-get-slots book))
+	      (slots (gnc-book-get-slots book))
 	      (date-object #f)
 	      (helper-table (gnc:make-html-table)))
 	  (set! table (make-entry-table invoice
@@ -914,7 +914,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (gnc:kvp-frame-get-slot-path
+	      (let* ((name (kvp-frame-get-slot-path-gslist
 			    slots (append gnc:*kvp-option-path*
 					  (list gnc:*business-label*
 						gnc:*company-name*))))
@@ -929,7 +929,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (gnc:kvp-frame-get-slot-path
+	      (let* ((contact (kvp-frame-get-slot-path-gslist
 			       slots (append gnc:*kvp-option-path*
 					     (list gnc:*business-label*
 						   gnc:*company-contact*))))

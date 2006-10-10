@@ -204,7 +204,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f (_ "%s - %s to %s for")
 		  (get-option gnc:pagename-general gnc:optname-reportname)
-                  (gnc:print-date from-date-tp) (gnc:print-date to-date-tp)))
+                  (gnc-print-date from-date-tp) (gnc-print-date to-date-tp)))
 
 
     ;; add subaccounts if requested
@@ -252,10 +252,10 @@
                 (let* ((current (car accounts-internal))
                        (rest (cdr accounts-internal))
                        (name (gnc:account-get-name current))
-                       (curr-commodity (gnc:account-get-commodity current))
+                       (curr-commodity (xaccAccountGetCommodity current))
                       )
 
-                  ;(gnc:debug "calc-money-in-out-internal---" name "---" (gnc:commodity-get-printname curr-commodity))
+                  ;(gnc:debug "calc-money-in-out-internal---" name "---" (gnc-commodity-get-printname curr-commodity))
 
                   (for-each
                     (lambda (split)
@@ -265,16 +265,16 @@
                         (if (and (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date-tp)
                                  (gnc:timepair-ge (gnc:transaction-get-date-posted parent) from-date-tp))
                           (let* ((parent-description (gnc:transaction-get-description parent))
-                                 (parent-currency (gnc:transaction-get-currency parent)))
+                                 (parent-currency (xaccTransGetCurrency parent)))
                             ;(gnc:debug parent-description
                             ;           " - " 
-                            ;           (gnc:commodity-get-printname parent-currency))
+                            ;           (gnc-commodity-get-printname parent-currency))
                             (for-each
                               (lambda (s)
                                 (let* ((s-account (gnc:split-get-account s))
                                        (s-amount (gnc:split-get-amount s))
                                        (s-value (gnc:split-get-value s))
-                                       (s-commodity (gnc:account-get-commodity s-account)))
+                                       (s-commodity (xaccAccountGetCommodity s-account)))
 				  ;; Check if this is a dangling split
 				  ;; and print a warning
 				  (if (not s-account)
@@ -290,12 +290,12 @@
 				      (if (not (split-in-list? s seen-split-list))
 					  (begin  
 					    (set! seen-split-list (cons s seen-split-list))
-					    (if (gnc:numeric-negative-p s-value)
+					    (if (gnc-numeric-negative-p s-value)
 						(let ((pair (account-in-alist s-account money-in-alist)))
-						  ;(gnc:debug "in:" (gnc:commodity-get-printname s-commodity)
-						;	     (gnc:numeric-to-double s-amount) 
-						;	     (gnc:commodity-get-printname parent-currency)
-						;	     (gnc:numeric-to-double s-value))
+						  ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
+						;	     (gnc-numeric-to-double s-amount)
+						;	     (gnc-commodity-get-printname parent-currency)
+						;	     (gnc-numeric-to-double s-value))
 						  (if (not pair)
 						      (begin
 							(set! pair (list s-account (gnc:make-commodity-collector)))
@@ -306,17 +306,17 @@
 						      )
 						  (let ((s-account-in-collector (cadr pair))
 							(s-report-value (to-report-currency parent-currency
-											    (gnc:numeric-neg s-value)
+											    (gnc-numeric-neg s-value)
 											    (gnc:transaction-get-date-posted
 											     parent))))
 						    (money-in-collector 'add report-currency s-report-value)
 						    (s-account-in-collector 'add report-currency s-report-value))
 						  )
 						(let ((pair (account-in-alist s-account money-out-alist)))
-						  ;(gnc:debug "out:" (gnc:commodity-get-printname s-commodity)
-						;	     (gnc:numeric-to-double s-amount) 
-						;	     (gnc:commodity-get-printname parent-currency)
-						;	     (gnc:numeric-to-double s-value))
+						  ;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
+						;	     (gnc-numeric-to-double s-amount)
+						;	     (gnc-commodity-get-printname parent-currency)
+						;	     (gnc-numeric-to-double s-value))
 						  (if (not pair)
 						      (begin
 							(set! pair (list s-account (gnc:make-commodity-collector)))

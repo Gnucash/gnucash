@@ -406,7 +406,7 @@
 ;;     account-commodity: commodity
 ;; 
 ;;         returns the default commodity of the account in the current
-;;         row, as returned by gnc:account-get-commodity. the g-wrap
+;;         row, as returned by xaccAccountGetCommodity. the g-wrap
 ;;         documentation string reads: "Get the commodity in which the
 ;;         account is denominated." note: afaik, gnucash accounts can
 ;;         only contain one commodity; but it's plausible that future
@@ -696,7 +696,7 @@
 	(let ((this-collector
 	       (my-get-balance-nosub account start-date end-date)))
 	  (for-each
-	   (lambda (x) (if x (gnc:commodity-collector-merge this-collector x)))
+	   (lambda (x) (if x (gnc-commodity-collector-merge this-collector x)))
 	   (gnc:group-map-all-accounts
 	    (lambda (a)
 	      ;; Important: Calculate the balance if and only if the
@@ -726,7 +726,7 @@
 		  (account-children subaccts)
 		  (account-depth acct-depth)
 		  (logical-depth logi-depth)
-		  (account-commodity (gnc:account-get-commodity acct))
+		  (account-commodity (xaccAccountGetCommodity acct))
 		  (account-type (xaccAccountGetType acct))
 		  ;; N.B.: xaccAccountGetTypeStr really should be
 		  ;; called gnc:account-type-get-string
@@ -788,7 +788,7 @@
 	     (or (not (use-acct? acct))
 		 ;; ok, so we'll consider parent accounts with zero
 		 ;; recursive-bal to be zero balance leaf accounts
-		 (and (gnc:commodity-collector-allzero? recursive-bal)
+		 (and (gnc-commodity-collector-allzero? recursive-bal)
 		      (equal? zero-mode 'omit-leaf-acct))
 		 (begin
 		   (set! row-env
@@ -817,7 +817,7 @@
 	     (or (not (use-acct? acct))
 		 (not subtotal-mode)
 		 ;; ditto that remark concerning zero recursive-bal...
-		 (and (gnc:commodity-collector-allzero? recursive-bal)
+		 (and (gnc-commodity-collector-allzero? recursive-bal)
 		      (equal? zero-mode 'omit-leaf-acct))
 		 ;; ignore use-acct for subtotals...?
 		 ;; (not (use-acct? acct))
@@ -1058,7 +1058,7 @@
 	(gnc:html-table-append-row/markup! html-table row-markup row)
 	(gnc:html-table-append-row! html-table row))))
 
-(define (gnc:commodity-table amount report-commodity exchange-fn)
+(define (gnc-commodity-table amount report-commodity exchange-fn)
   ;; this creates a small two-column table listing each commodity
   ;; balance and its respective report balance.  note that this
   ;; shows report-commodity amounts twice: first as a commodity
@@ -1067,7 +1067,7 @@
   ;; readable.
   (let* ((table (gnc:make-html-table))
 	 )
-    (gnc:commodity-collector-map
+    (gnc-commodity-collector-map
      amount
      (lambda (curr val)
        (let ((bal (gnc:make-gnc-monetary curr val)))
@@ -1182,7 +1182,7 @@
                   ;; amount is either a <gnc:monetary> or #f
 		  (amount (and comm-amt
 			       (if (and (equal? zero-mode 'omit-balance)
-                                        (gnc:commodity-collector-allzero?
+                                        (gnc-commodity-collector-allzero?
                                          comm-amt)
                                         )
 				   #f
@@ -1204,7 +1204,7 @@
                                                    (equal?
                                                     row-type 'account-row)
                                                    )
-                                              gnc:commodity-table
+                                              gnc-commodity-table
                                               gnc:sum-collector-commodity
                                               )
                                           amt
@@ -1216,7 +1216,7 @@
 ; 						  (equal?
 ; 						   row-type 'account-row)
 ; 						  )
-; 					     (gnc:commodity-table
+; 					     (gnc-commodity-table
 ; 					      amt
 ; 					      report-commodity
 ; 					      exchange-fn)

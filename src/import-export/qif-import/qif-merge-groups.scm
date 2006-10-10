@@ -9,15 +9,15 @@
   (let ((query (gnc:malloc-query))
         (xtns #f))
 
-    (gnc:query-set-book query (gnc:group-get-book group))
+    (qof-query-set-book query (gnc:group-get-book group))
 
     ;; we want to find all transactions with every split inside the
     ;; account group.
     (gnc:query-add-account-match query
                                  (gnc:group-get-subaccounts group)
-                                 'guid-match-any 'query-and)
+                                 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
 
-    (set! xtns (gnc:query-get-transactions query 'query-txn-match-all))
+    (set! xtns (gnc:query-get-transactions query QUERY-TXN-MATCH-ALL))
     
     ;; lose the query 
     (gnc:free-query query)
@@ -59,18 +59,18 @@
 		progress-dialog (/ work-done work-to-do))
 	       (gnc-progress-dialog-update progress-dialog)))
 
-	 (gnc:query-set-book query (gnc:group-get-book old-group))
+	 (qof-query-set-book query (gnc:group-get-book old-group))
 
 	 ;; first, we want to find only transactions from the old group.
 	 (gnc:query-add-account-match query
 				      (gnc:group-get-subaccounts old-group)
-				      'guid-match-any 'query-and)
+				      QOF-GUID-MATCH-ANY QOF-QUERY-AND)
          
          ;; the date should be close to the same.. +/- a week. 
          (let ((date (gnc:transaction-get-date-posted xtn)))               
            (gnc:query-add-date-match-timepair
             query #t (decdate date WeekDelta) #t (incdate date WeekDelta)
-            'query-and))
+            QOF-QUERY-AND))
          
          ;; for each split in the transaction, add a term to match the 
          ;; properties of one split 
@@ -78,7 +78,7 @@
            (for-each 
             (lambda (split)
               (let ((sq (gnc:malloc-query)))
-		(gnc:query-set-book sq (gnc:group-get-book old-group))
+		(qof-query-set-book sq (gnc:group-get-book old-group))
                 
                 ;; we want to match the account in the old group that
                 ;; has the same name as an account in the new group.  If
@@ -90,21 +90,21 @@
                  (gnc:get-account-from-full-name
                   old-group (gnc-account-get-full-name
                              (gnc:split-get-account split)))
-                 'query-and)
+                 QOF-QUERY-AND)
                 
                 ;; we want the value for the split to match the value
                 ;; the old-group split.  We should really check for
                 ;; fuzziness.
                 (gnc:query-add-value-match 
                  sq (gnc:split-get-value split)
-                 'amt-sgn-match-either 'query-compare-equal
-                 'query-and)
+                 QOF-NUMERIC-MATCH-ANY QOF-COMPARE-EQUAL
+                 QOF-QUERY-AND)
                 
                 ;; now merge into the split query.  Reminder: q-splits
                 ;; is set up to match any split that matches any split
                 ;; in the current xtn; every split in an old transaction
                 ;; must pass that filter.
-                (let ((q-new (gnc:query-merge q-splits sq 'query-or)))
+                (let ((q-new (gnc:query-merge q-splits sq QOF-QUERY-OR)))
                   (gnc:free-query q-splits)
                   (gnc:free-query sq)
                   (set! q-splits q-new))))
@@ -112,14 +112,14 @@
            
            ;; now q-splits will match any split that is the same as one
            ;; split in the old-group xtn.  Merge it in.
-           (let ((q-new (gnc:query-merge query q-splits 'query-and)))
+           (let ((q-new (gnc:query-merge query q-splits QOF-QUERY-AND)))
              (gnc:free-query query)
              (gnc:free-query q-splits)
              (set! query q-new)))
          
          ;; now that we have built a query, get transactions in the old
          ;; account group that matches it.
-         (let ((old-xtns (gnc:query-get-transactions query 'query-txn-match-all)))
+         (let ((old-xtns (gnc:query-get-transactions query QUERY-TXN-MATCH-ALL)))
            (set! old-xtns (map 
                            (lambda (elt)
                              (cons elt #f)) old-xtns))

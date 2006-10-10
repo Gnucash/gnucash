@@ -52,7 +52,7 @@
 
 (define levelx-collector (make-level-collector MAX-LEVELS))
 
-(define today (gnc:timepair-canonical-day-time
+(define today (timespecCanonicalDayTime
                (cons (current-time) 0)))
 
 (define bdtm
@@ -276,7 +276,7 @@
          (value (xaccPrintAmount account-value print-info))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
-             (not (gnc:numeric-zero-p account-value)))
+             (not (gnc-numeric-zero-p account-value)))
         (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
@@ -388,7 +388,7 @@
         (txf-check-dups account))
 
     (if (or (not suppress-0) (= level 1)
-            (not (gnc:numeric-zero-p lx-value)))
+            (not (gnc-numeric-zero-p lx-value)))
         (begin
           (gnc:html-table-prepend-row!
            table
@@ -567,7 +567,7 @@
                ;; paymnent from the right year
                (from-est (if full-year?
                              (let ((bdtm (gnc:timepair->date
-                                          (gnc:timepair-canonical-day-time
+                                          (timespecCanonicalDayTime
                                            from-value))))
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
@@ -576,7 +576,7 @@
                              from-value))
                (to-est (if full-year?
                            (let* ((bdtm (gnc:timepair->date
-                                         (gnc:timepair-canonical-day-time
+                                         (timespecCanonicalDayTime
                                           from-value))))
                              (set-tm:mday bdtm 28) ; 28
                              (set-tm:mon bdtm 1) ; Feb
@@ -666,25 +666,25 @@
                              account from-special to-special #f)
                             (gnc:account-get-balance-interval
                              account from-value to-value #f))
-                        (gnc:numeric-zero)))) ; don't add non tax related
+                        (gnc-numeric-zero)))) ; don't add non tax related
 
               (set! account-balance
-                    (gnc:numeric-add-fixed
+                    (gnc-numeric-add-fixed
                      (if (> max-level level)
                          (cadr
                           (lx-collector (+ 1 level)
                                         'getpair
-                                        (gnc:account-get-commodity account)
+                                        (xaccAccountGetCommodity account)
                                         #f))
-                         (gnc:numeric-zero))
+                         (gnc-numeric-zero))
                        ;; make positive
                        (if (eq? type ACCT-TYPE-INCOME)
-                           (gnc:numeric-neg account-balance)
+                           (gnc-numeric-neg account-balance)
                            account-balance)))
 
               (lx-collector level
                             'add
-                            (gnc:account-get-commodity account)
+                            (xaccAccountGetCommodity account)
                             account-balance)
 
               (let ((level-x-output
@@ -723,7 +723,7 @@
           (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
           (today-date (strftime "D%m/%d/%Y" 
                                 (localtime 
-                                 (car (gnc:timepair-canonical-day-time
+                                 (car (timespecCanonicalDayTime
                                        (cons (current-time) 0)))))))
 
       ;; Now, the main body

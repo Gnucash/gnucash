@@ -360,7 +360,7 @@
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
-			(gnc:numeric-negative-p
+			(gnc-numeric-negative-p
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
@@ -397,8 +397,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc:print-date start-date-printable)
-                  (gnc:print-date end-date-tp)))
+                  (gnc-print-date start-date-printable)
+                  (gnc-print-date end-date-tp)))
     
     (if (null? accounts)
 	
@@ -431,8 +431,8 @@
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc:print-date start-date-printable)
-					(gnc:print-date end-date-tp))
+					(gnc-print-date start-date-printable)
+					(gnc-print-date end-date-tp))
 			       )
 			   )
 	       )
@@ -443,7 +443,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc:numeric-negative-p
+			      (gnc-numeric-negative-p
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
@@ -459,7 +459,7 @@
 		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
 			     bal)
 			(and show-fcur?
-			     (gnc:commodity-table
+			     (gnc-commodity-table
 			      pos-bal report-commodity exchange-fn))
 			bal
 			))

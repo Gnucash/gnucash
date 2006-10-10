@@ -27,14 +27,14 @@
     
     (define (compatible? account)
       (let ((acc-type (xaccAccountGetType account))
-            (acc-commodity (gnc:account-get-commodity account)))
+            (acc-commodity (xaccAccountGetCommodity account)))
         (and
          (if check-types? 
              (and (list? allowed-types)
                   (memv acc-type allowed-types))
              #t)
 	 (if check-commodity?
-	     (gnc:commodity-equiv? acc-commodity commodity)
+	     (gnc-commodity-equiv acc-commodity commodity)
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
@@ -99,8 +99,8 @@
                  new-acct (gnc:account-get-description same-gnc-account))
                 (xaccAccountSetType
                  new-acct (xaccAccountGetType same-gnc-account))
-                (gnc:account-set-commodity
-                 new-acct (gnc:account-get-commodity same-gnc-account))
+                (xaccAccountSetCommodity
+                 new-acct (xaccAccountGetCommodity same-gnc-account))
                 (gnc:account-set-notes 
                  new-acct (gnc:account-get-notes same-gnc-account))
                 (gnc:account-set-code 
@@ -125,7 +125,7 @@
                 (if (qif-map-entry:description acct-info)
                     (gnc:account-set-description 
                      new-acct (qif-map-entry:description acct-info)))
-                (gnc:account-set-commodity new-acct commodity)
+                (xaccAccountSetCommodity new-acct commodity)
                 
                 ;; if it's an incompatible account, set the
                 ;; name to be unique, and a description that 
@@ -182,8 +182,8 @@
             (gnc-acct-hash (make-hash-table 20))
             (separator (string-ref (gnc:account-separator-string) 0))
             (default-currency 
-              (gnc:commodity-table-find-full 
-               (gnc:book-get-commodity-table (gnc-get-current-book))
+              (gnc-commodity-table-find-full
+               (gnc-commodity-table-get-table (gnc-get-current-book))
                GNC_COMMODITY_NS_CURRENCY default-currency-name))
             (sorted-accounts-list '())
             (markable-xtns '())
@@ -267,7 +267,7 @@
                                                  gnc-acct-hash 
                                                  old-group new-group))
                   ((and security (or stock?
-				     (gnc:commodity-is-currency? security)))
+				     (gnc-commodity-is-currency security)))
                    (qif-import:find-or-make-acct 
                     acctinfo #f security #t default-currency
                     gnc-acct-hash old-group new-group))
@@ -338,7 +338,7 @@
                      (gnc:transaction-begin-edit gnc-xtn)
 
                      ;; FIXME. This is probably wrong
-                     (gnc:transaction-set-currency gnc-xtn
+                     (xaccTransSetCurrency gnc-xtn
                                                    (gnc-default-currency))
 
                      ;; build the transaction
@@ -368,7 +368,7 @@
                                        qif-acct-map qif-cat-map qif-memo-map)
   (let ((splits (qif-xtn:splits qif-xtn))
         (gnc-near-split (gnc:split-create (gnc-get-current-book)))
-        (near-split-total (gnc:numeric-zero))
+        (near-split-total (gnc-numeric-zero))
         (near-acct-info #f)
         (near-acct-name #f)
         (near-acct #f)
@@ -379,11 +379,11 @@
         (qif-memo (qif-split:memo (car (qif-xtn:splits qif-xtn))))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
         (qif-cleared (qif-xtn:cleared qif-xtn))
-        (n- (lambda (n) (gnc:numeric-neg n)))
-        (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
-        (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
-        (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
-        (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE))))
+        (n- (lambda (n) (gnc-numeric-neg n)))
+        (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
+        (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
+        (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
+        (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
     
     ;; set properties of the whole transaction     
     (apply gnc:transaction-set-date gnc-xtn (qif-xtn:date qif-xtn))
@@ -430,7 +430,7 @@
                        (memo (qif-split:memo qif-split))
                        (cat (qif-split:category qif-split)))
                    
-                   (if (not split-amt) (set! split-amt (gnc:numeric-zero)))
+                   (if (not split-amt) (set! split-amt (gnc-numeric-zero)))
                    ;; fill the splits in (near first).  This handles
                    ;; files in multiple currencies by pulling the
                    ;; currency value from the file import.
@@ -511,8 +511,8 @@
                (defer-share-price #f)
                (gnc-far-split (gnc:split-create (gnc-get-current-book))))
           
-          (if (not num-shares) (set! num-shares (gnc:numeric-zero)))
-          (if (not share-price) (set! share-price (gnc:numeric-zero)))
+          (if (not num-shares) (set! num-shares (gnc-numeric-zero)))
+          (if (not share-price) (set! share-price (gnc-numeric-zero)))
           (if (not split-amt) (set! split-amt (n* num-shares share-price)))
           
           ;; I don't think this should ever happen, but I want 
@@ -549,14 +549,14 @@
           ;; are amounts currency or shares? 
           (case qif-action
             ((buy buyx reinvint reinvdiv reinvsg reinvsh reinvmd reinvlg)
-             (if (not share-price) (set! share-price (gnc:numeric-zero)))
+             (if (not share-price) (set! share-price (gnc-numeric-zero)))
              (gnc:split-set-amount gnc-near-split num-shares)
              (gnc:split-set-value gnc-near-split split-amt)
              (gnc:split-set-value gnc-far-split (n- xtn-amt))
              (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
             
             ((sell sellx) 
-             (if (not share-price) (set! share-price (gnc:numeric-zero)))
+             (if (not share-price) (set! share-price (gnc-numeric-zero)))
              (gnc:split-set-amount gnc-near-split (n- num-shares))
              (gnc:split-set-value gnc-near-split (n- split-amt))
              (gnc:split-set-value gnc-far-split xtn-amt)
@@ -597,7 +597,7 @@
             ;; FIXME : this could be wrong.  Make sure the
             ;; share-amount is at the correct time.
             ((stksplit)
-             (let* ((splitratio (n/ num-shares (gnc:numeric-create 10 1)))
+             (let* ((splitratio (n/ num-shares (gnc-numeric-create 10 1)))
                     (in-shares 
                      (gnc:account-get-balance near-acct))
                     (out-shares (n* in-shares splitratio)))
@@ -678,11 +678,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:mark-some-splits splits xtn candidate-xtns)
-  (let* ((n- (lambda (n) (gnc:numeric-neg n)))
-         (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
-         (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
-         (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
-         (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE)))    
+  (let* ((n- (lambda (n) (gnc-numeric-neg n)))
+         (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
+         (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
+         (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
+         (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE)))
          (split (car splits))
          (near-acct-name #f)
          (far-acct-name #f)
@@ -703,7 +703,7 @@
         (begin 
           (set! near-acct-name (qif-xtn:from-acct xtn))
           (set! far-acct-name (qif-split:category split))
-          (set! group-amount (gnc:numeric-zero))
+          (set! group-amount (gnc-numeric-zero))
           
           ;; group-amount is the sum of all the splits in this xtn
           ;; going to the same account as 'split'.  We might be able
@@ -789,7 +789,7 @@
 (define (qif-import:xtn-has-matches? xtn acct-name date amount group-amt)
   (let ((matching-splits '())
         (same-acct-splits '())
-        (this-group-amt (gnc:numeric-zero))
+        (this-group-amt (gnc-numeric-zero))
         (how #f)
         (date-matches 
          (let ((self-date (qif-xtn:date xtn)))
@@ -800,11 +800,11 @@
                 (= (car self-date) (car date))
                 (= (cadr self-date) (cadr date))
                 (= (caddr self-date) (caddr date)))))
-        (n- (lambda (n) (gnc:numeric-neg n)))
-        (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
-        (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
-        (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
-        (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE))))
+        (n- (lambda (n) (gnc-numeric-neg n)))
+        (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
+        (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
+        (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
+        (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
     
     (if date-matches 
         (begin 
@@ -831,10 +831,10 @@
                     ;; we might be done if this-amt is either equal 
                     ;; to the split amount or the group amount.
                     (cond 
-                     ((gnc:numeric-equal this-amt amount)
+                     ((gnc-numeric-equal this-amt amount)
                       (set! how 
                             (cons 'one-to-one (list split))))
-                     ((and group-amt (gnc:numeric-equal this-amt group-amt))
+                     ((and group-amt (gnc-numeric-equal this-amt group-amt))
                       (set! how
                             (cons 'one-to-many (list split))))
                      (#t
@@ -850,7 +850,7 @@
           ;; now we're out of the loop.  if 'how' isn't set, 
           ;; we can still have a many-to-one match.
           (if (and (not how)
-                   (gnc:numeric-equal this-group-amt amount))
+                   (gnc-numeric-equal this-group-amt amount))
               (begin 
                 (set! how 
                       (cons 'many-to-one same-acct-splits))))))

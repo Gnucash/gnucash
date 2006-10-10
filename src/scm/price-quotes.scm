@@ -396,7 +396,7 @@
     ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
-    (let* ((ct (gnc:book-get-commodity-table book))
+    (let* ((ct (gnc-commodity-table-get-table book))
 	   (big-list
 	    (gnc-commodity-table-get-quotable-commodities
 	     ct))
@@ -444,14 +444,14 @@
     (if (equal? (car fq-call-data) "currency")
         (map (lambda (quote-item-info)
                (list (car fq-call-data)
-                     (gnc:commodity-get-mnemonic (car quote-item-info))
-                     (gnc:commodity-get-mnemonic (cadr quote-item-info))))
+                     (gnc-commodity-get-mnemonic (car quote-item-info))
+                     (gnc-commodity-get-mnemonic (cadr quote-item-info))))
              (cdr fq-call-data))
         (list
          (cons (car fq-call-data)
                (map
                 (lambda (quote-item-info)
-                  (gnc:commodity-get-mnemonic (car quote-item-info)))
+                  (gnc-commodity-get-mnemonic (car quote-item-info)))
                 (cdr fq-call-data))))))
 
   (define (fq-results->commod-tz-quote-triples fq-call-data fq-results)
@@ -538,11 +538,11 @@
            (price #f)
            (price-type #f)
            (currency-str (assq-ref quote-data 'currency))
-           (commodity-table (gnc:book-get-commodity-table book))
+           (commodity-table (gnc-commodity-table-get-table book))
            (currency
             (and commodity-table
                  (string? currency-str)
-                 (gnc:commodity-table-lookup commodity-table
+                 (gnc-commodity-table-lookup commodity-table
                                              "ISO4217"
                                              (string-upcase currency-str)))))
 
@@ -565,7 +565,7 @@
       ;; FIXME: SIGFIGS is not what we want here...
       (if price
           (set! price
-                (gnc:double-to-gnc-numeric price
+                (double-to-gnc-numeric price
                                            GNC-DENOM-AUTO
                                            (logior (GNC-DENOM-SIGFIGS 9)
                                                    GNC-RND-ROUND))))
@@ -576,32 +576,32 @@
 
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
-           currency-str ":" (gnc:commodity-get-mnemonic commodity))
-          (let ((gnc-price (gnc:price-create book)))
+           currency-str ":" (gnc-commodity-get-mnemonic commodity))
+          (let ((gnc-price (gnc-price-create book)))
             (if (not gnc-price)
                 (string-append
-                 currency-str ":" (gnc:commodity-get-mnemonic commodity))
+                 currency-str ":" (gnc-commodity-get-mnemonic commodity))
                 (begin
-                  (gnc:price-set-commodity gnc-price commodity)
-                  (gnc:price-set-currency gnc-price currency)
-                  (gnc:price-set-time gnc-price gnc-time)
-                  (gnc:price-set-source gnc-price "Finance::Quote")
-                  (gnc:price-set-type gnc-price price-type)
-                  (gnc:price-set-value gnc-price price)
+                  (gnc-price-set-commodity gnc-price commodity)
+                  (gnc-price-set-currency gnc-price currency)
+                  (gnc-price-set-time gnc-price gnc-time)
+                  (gnc-price-set-source gnc-price "Finance::Quote")
+                  (gnc-price-set-type gnc-price price-type)
+                  (gnc-price-set-value gnc-price price)
                   gnc-price))))))
 
   (define (book-add-prices! book prices)
-    (let ((pricedb (gnc:book-get-pricedb book)))
+    (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (gnc:pricedb-add-price pricedb price)
-         (gnc:price-unref price))
+         (gnc-pricedb-add-price pricedb price)
+         (gnc-price-unref price))
        prices)))
 
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 
-  (let* ((group (gnc:book-get-group book))
+  (let* ((group (xaccGetAccountGroup book))
          (fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (apply append
@@ -619,9 +619,9 @@
                              (if (car cq-pair)
                                  #f
                                  (string-append
-                                  (gnc:commodity-get-namespace (cdr cq-pair))
+                                  (gnc-commodity-get-namespace (cdr cq-pair))
                                   ":"
-                                  (gnc:commodity-get-mnemonic (cdr cq-pair)))))
+                                  (gnc-commodity-get-mnemonic (cdr cq-pair)))))
                            commod-tz-quote-triples)))
          ;; strip out the "bad" ones from above.
          (ok-syms
@@ -755,4 +755,4 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
     (if (list? sources)
 	(begin
 	  (gnc:msg "Found Finance::Quote version " (car sources))
-	  (gnc:quote-source-set-fq-installed (cdr sources))))))
+	  (gnc-quote-source-set-fq-installed (cdr sources))))))

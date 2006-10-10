@@ -225,7 +225,7 @@
                 (trans-splits (+ i 1))))))
   (gnc:make-transaction-scm
    (gnc:transaction-get-guid trans)
-   (gnc:transaction-get-currency trans)
+   (xaccTransGetCurrency trans)
    (gnc:transaction-get-date-entered trans)
    (if use-cut-semantics?
        (gnc:transaction-get-date-posted trans)
@@ -255,7 +255,7 @@
               (num         (gnc:transaction-scm-get-num trans-scm))
               (notes       (gnc:transaction-scm-get-notes trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
-          (if currency    (gnc:transaction-set-currency trans currency))
+          (if currency    (xaccTransSetCurrency trans currency))
           (if description (gnc:transaction-set-description trans description))
           (if num         (gnc:transaction-set-xnum trans num))
           (if notes       (gnc:transaction-set-notes trans notes))

@@ -67,13 +67,13 @@
 
 (define num-buckets 4)
 (define (new-bucket-vector)
-  (make-vector num-buckets (gnc:numeric-zero)))
+  (make-vector num-buckets (gnc-numeric-zero)))
 
 (define make-company-private
   (record-constructor company-info '(currency bucket-vector overpayment owner-obj)))
 
 (define (make-company currency owner-obj)
-  (make-company-private currency (new-bucket-vector) (gnc:numeric-zero) owner-obj))
+  (make-company-private currency (new-bucket-vector) (gnc-numeric-zero) owner-obj))
 
 (define company-get-currency
   (record-accessor company-info 'currency))
@@ -116,11 +116,11 @@
 	      (find-bucket (+ current-bucket 1) bucket-intervals date)))))
 
   (define (calculate-adjusted-values amount overpayment)
-    (if (>= (gnc:numeric-compare amount overpayment) 0)
-	(cons (gnc:numeric-sub-fixed amount overpayment)
-	      (gnc:numeric-zero))
-	(cons (gnc:numeric-zero)
-	      (gnc:numeric-sub-fixed overpayment amount))))
+    (if (>= (gnc-numeric-compare amount overpayment) 0)
+	(cons (gnc-numeric-sub-fixed amount overpayment)
+	      (gnc-numeric-zero))
+	(cons (gnc-numeric-zero)
+	      (gnc-numeric-sub-fixed overpayment amount))))
 
   (let* ((current-overpayment (company-get-overpayment company))
 	 (adjusted-values (calculate-adjusted-values amount current-overpayment))
@@ -129,7 +129,7 @@
 	 (bucket-index (find-bucket 0 bucket-intervals date))
 	 (buckets (company-get-buckets company))
 	 (new-bucket-value 
-	  (gnc:numeric-add-fixed adjusted-amount (vector-ref buckets bucket-index))))
+	  (gnc-numeric-add-fixed adjusted-amount (vector-ref buckets bucket-index))))
     (vector-set! buckets bucket-index new-bucket-value)
     (company-set-buckets company buckets)
     (company-set-overpayment company adjusted-overpayment)))
@@ -144,15 +144,15 @@
     (if (>= current-bucket-index (vector-length buckets))
 	amount
 	(let ((current-bucket-amt (vector-ref buckets current-bucket-index)))
-	  (if (>= (gnc:numeric-compare current-bucket-amt amount) 0)
+	  (if (>= (gnc-numeric-compare current-bucket-amt amount) 0)
 	      (begin
-		(vector-set! buckets current-bucket-index (gnc:numeric-sub-fixed 
+		(vector-set! buckets current-bucket-index (gnc-numeric-sub-fixed
 							   current-bucket-amt amount))
-		(gnc:numeric-zero))
+		(gnc-numeric-zero))
 	      (begin
-		(vector-set! buckets current-bucket-index (gnc:numeric-zero))
+		(vector-set! buckets current-bucket-index (gnc-numeric-zero))
 		(process-payment-driver 
-		 (gnc:numeric-sub-fixed amount current-bucket-amt)
+		 (gnc-numeric-sub-fixed amount current-bucket-amt)
 		 buckets
 		 (+ current-bucket-index 1)))))))
   
@@ -161,8 +161,8 @@
     (gnc:debug "processing payment of " amount)
     (gnc:debug "overpayment was " overpayment)
 
-	(if (gnc:numeric-positive-p overpayment)
-	    (company-set-overpayment company (gnc:numeric-add-fixed overpayment amount))
+	(if (gnc-numeric-positive-p overpayment)
+	    (company-set-overpayment company (gnc-numeric-add-fixed overpayment amount))
 	    
 	    (let ((result (process-payment-driver amount (company-get-buckets company) 0)))
 	      (gnc:debug "payment-driver processed.  new overpayment: " result)
@@ -186,20 +186,20 @@
       (if
        owner
        (let* ((guid (gncOwnerReturnGUID owner))
-	      (this-currency (gnc:transaction-get-currency transaction))
+	      (this-currency (xaccTransGetCurrency transaction))
 	      (this-date (gnc:transaction-get-date-posted transaction))
 	      (company-info (hash-ref hash guid)))
 
 	 (gnc:debug "update-company-hash called")
 	 (gnc:debug "owner: " owner ", guid: " guid)
 	 (gnc:debug "split-value: " value)
-	 (if reverse? (set! value (gnc:numeric-neg value)))
+	 (if reverse? (set! value (gnc-numeric-neg value)))
 	 (if company-info
 	     ;; if it's an existing company, destroy the temp owner and
 	     ;; then make sure the currencies match
 	     (begin
 	       (gncOwnerDestroy temp-owner)
-	       (if (not (gnc:commodity-equiv?
+	       (if (not (gnc-commodity-equiv
 			 this-currency
 			 (company-get-currency company-info)))
 		   (cons #f (sprintf
@@ -207,8 +207,8 @@
 more than one currency.  This report is not designed to cope with this possibility.")  (gncOwnerGetName owner)))
 		   (begin
 		     (gnc:debug "it's an old company")
-		     (if (gnc:numeric-negative-p value)
-			 (process-invoice company-info (gnc:numeric-neg value) bucket-intervals this-date)
+		     (if (gnc-numeric-negative-p value)
+			 (process-invoice company-info (gnc-numeric-neg value) bucket-intervals this-date)
 			 (process-payment company-info value))
 		     (hash-set! hash guid company-info)
 		     (cons #t guid))))
@@ -217,8 +217,8 @@ more than one currency.  This report is not designed to cope with this possibili
 	     (begin
 	       (gnc:debug "value" value)
 	       (let ((new-company (make-company this-currency owner)))
-		 (if (gnc:numeric-negative-p value)
-		     (process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
+		 (if (gnc-numeric-negative-p value)
+		     (process-invoice new-company (gnc-numeric-neg value) bucket-intervals this-date)
 		     (process-payment new-company value))
 		 (hash-set! hash guid new-company))
 	       (cons #t guid))))
@@ -240,11 +240,11 @@ more than one currency.  This report is not designed to cope with this possibili
 
 ;; get the total debt from the buckets
 (define (buckets-get-total buckets)
-  (let ((running-total (gnc:numeric-zero))
+  (let ((running-total (gnc-numeric-zero))
 	(buckets-list (vector->list buckets)))
     (for-each (lambda (bucket)
 		(set! running-total
-		      (gnc:numeric-add-fixed bucket running-total)))
+		      (gnc-numeric-add-fixed bucket running-total)))
 	      buckets-list)
     running-total))
 
@@ -258,7 +258,7 @@ more than one currency.  This report is not designed to cope with this possibili
 	 (bucket-b (company-get-buckets company-b))
 	 (total-a (buckets-get-total bucket-a))
 	 (total-b (buckets-get-total bucket-b))
-	 (difference-sign (gnc:numeric-compare (gnc:numeric-sub-fixed total-a total-b) (gnc:numeric-zero))))
+	 (difference-sign (gnc-numeric-compare (gnc-numeric-sub-fixed total-a total-b) (gnc-numeric-zero))))
 	 ;; if same totals, compare by name
 	 (if (= difference-sign 0)
 	     (gnc:safe-strcmp (car litem-a) (car litem-b))
@@ -270,11 +270,11 @@ more than one currency.  This report is not designed to cope with this possibili
   (define (driver buckets-a buckets-b)
     (if (null? buckets-a)
 	0
-	(let ((diff (gnc:numeric-compare 
-		     (gnc:numeric-sub-fixed 
+	(let ((diff (gnc-numeric-compare
+		     (gnc-numeric-sub-fixed
 		      (car buckets-a) 
 		      (car buckets-b)) 
-		     (gnc:numeric-zero))))
+		     (gnc-numeric-zero))))
 	  (if (= diff 0)
 	      (driver (cdr buckets-a) (cdr buckets-b))
 	      diff))))
@@ -304,12 +304,12 @@ more than one currency.  This report is not designed to cope with this possibili
     (set! begindate (decdate begindate NinetyDayDelta))	;XXX - 360 days!?!
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
-    (gnc:query-set-book query (gnc-get-current-book))
+    (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (gnc:query-add-single-account-match query account 'query-and)
-    (gnc:query-add-date-match-timepair query #t begindate #t date 'query-and)
-    (gnc:query-set-sort-order query 
-			      (list gnc:split-trans gnc:trans-date-posted)
+    (gnc:query-add-single-account-match query account QOF-QUERY-AND)
+    (gnc:query-add-date-match-timepair query #t begindate #t date QOF-QUERY-AND)
+    (qof-query-set-sort-order query
+			      (list SPLIT-TRANS TRANS-DATE-POSTED)
 			      '() '())
     (gnc:query-set-sort-increasing query #t #t #t)))
      
@@ -472,12 +472,12 @@ totals to report currency")
 
   ;; convert the buckets in the header data structure 
   (define (convert-to-monetary-list bucket-list currency overpayment)
-    (let* ((running-total (gnc:numeric-neg overpayment))
+    (let* ((running-total (gnc-numeric-neg overpayment))
 	   (monetised-buckets
 	   (map (lambda (bucket-list-entry)
 		  (begin
 		    (set! running-total 
-			  (gnc:numeric-add-fixed running-total bucket-list-entry))
+			  (gnc-numeric-add-fixed running-total bucket-list-entry))
 		  (gnc:make-gnc-monetary currency bucket-list-entry)))
 		(vector->list bucket-list))))
       (append (reverse monetised-buckets) 
