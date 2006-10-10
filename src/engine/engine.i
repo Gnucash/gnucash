@@ -153,7 +153,6 @@ QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
 
 %include <Group.h>
-%include <gnc-commodity.h>
 
 // TODO: Maybe unroll
 void qof_book_kvp_changed (QofBook *book);
@@ -242,6 +241,8 @@ gchar * gnc_build_book_path (const gchar *filename);
 
 void gnc_quote_source_set_fq_installed (GList *sources_list);
 %clear GList *;
+%ignore gnc_quote_source_set_fq_installed;
+%include <gnc-commodity.h>
 
 %include <gnc-lot.h>
 %include <gnc-session-scm.h>
