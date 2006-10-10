@@ -51,7 +51,7 @@
 #include "dialog-new-user.h"
 #include "gnc-session.h"
 #include "engine-helpers.h"
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN

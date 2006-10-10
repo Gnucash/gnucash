@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
+lib_LTLIBRARIES = libcore-utils.la
 
 libcore_utils_la_SOURCES = \
   gnc-main.c \
@@ -7,21 +7,13 @@ libcore_utils_la_SOURCES = \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
   gnc-gobject-utils.c \
+  swig-core-utils.c \
   gnc-gtk-utils.c
 
 libcore_utils_la_LIBADD = \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
   ${GTK_LIBS}
-
-nodist_libgw_core_utils_la_SOURCES = \
-  gw-core-utils.c
-
-libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_core_utils_la_LIBADD = \
-  libcore-utils.la \
-  ${GLIB_LIBS} \
-  ${GUILE_LIBS}
 
 noinst_HEADERS = \
   gnc-main.h \
@@ -32,42 +24,23 @@ noinst_HEADERS = \
   gnc-gobject-utils.h \
   gnc-gtk-utils.h
 
-EXTRA_DIST = ${gwmod_DATA}
+swig-core-utils.c: core-utils.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
 AM_CFLAGS = \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-core-utils-spec.scm
-nodist_gwmod_DATA = gw-core-utils.scm
-
-if GNUCASH_SEPARATE_BUILDDIR
-#Only needed when srcdir and builddir are different
-SCM_FILE_LINKS = gw-core-utils-spec.scm
-endif
-
 .scm-links: 
-	rm -f gnucash g-wrapped
+	rm -f gnucash
 	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
 	touch .scm-links
 
-gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
-  gw-core-utils-spec.scm .scm-links ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-          "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-           (primitive-load \"./gw-core-utils-spec.scm\") \
-           (gw:generate-wrapset \"gw-core-utils\")"
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = core-utils.scm
 
-BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
-CLEANFILES = $(BUILT_SOURCES) g-wrapped gnucash .scm-links \
-	${SCM_FILE_LINKS} gw-core-utils.html
+EXTRA_DIST = $(gncmod_DATA)
+BUILT_SOURCES = swig-core-utils.c
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links

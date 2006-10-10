@@ -13,7 +13,6 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
-(use-modules (g-wrapped gw-core-utils))
 (use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)

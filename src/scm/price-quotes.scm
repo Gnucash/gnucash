@@ -31,7 +31,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
-(use-modules (g-wrapped gw-core-utils))
+(use-modules (gnucash core-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
 
@@ -242,7 +242,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (g:find-program-in-path "gnc-fq-check"))
+  (g-find-program-in-path "gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program #f))
@@ -290,7 +290,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (g:find-program-in-path "gnc-fq-helper"))
+  (g-find-program-in-path "gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form

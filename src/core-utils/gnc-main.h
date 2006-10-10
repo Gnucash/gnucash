@@ -26,10 +26,10 @@
 
 #include <glib.h>
 
-void gnc_main_set_namespace_regexp(const char *str);
-const char *gnc_main_get_namespace_regexp(void);
+void gnc_main_set_namespace_regexp(const gchar *str);
+const gchar *gnc_main_get_namespace_regexp(void);
 
-int gnc_is_debugging(void);
-void gnc_set_debugging(int d);
+gboolean gnc_is_debugging(void);
+void gnc_set_debugging(gboolean d);
 
 #endif /* GNC_MAIN_H */

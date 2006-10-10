@@ -19,7 +19,6 @@
 
 (require 'sort)
 (require 'hash-table)
-(use-modules (g-wrapped gw-core-utils))
 
 ;; (define gnc:*double-entry-restriction*
 ;;   (gnc:make-config-var

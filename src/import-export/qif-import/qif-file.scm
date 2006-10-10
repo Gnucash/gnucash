@@ -11,7 +11,7 @@
 ;;  just store the fields "raw".
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (g-wrapped gw-core-utils))
+(use-modules (gnucash core-utils))
 
 (cond
  ((or (string=? "1.3.4" (version))
@@ -74,7 +74,7 @@
                  ;; pick the 1-char tag off from the remainder of the line 
                  (set! tag (string-ref line 0))
                  (set! value (substring line 1))
-		 (gnc:utf8-strip-invalid value)
+		 (gnc-utf8-strip-invalid value) ;; changes value in-place
                  
                  ;; now do something with the line 
                  (if
