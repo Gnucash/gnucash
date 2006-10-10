@@ -1,6 +1,7 @@
 (define-module (gnucash engine))
 
 (use-modules (g-wrap gw-wct))
+(use-modules (sw_engine))
 
 (use-modules (g-wrapped gw-engine))
 

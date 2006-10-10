@@ -41,6 +41,10 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gnc-session-scm.c \
   gncmod-engine.c \
+  swig-engine.c \
+  kvp-scm.c \
+  engine-helpers.c \
+  glib-helpers.c  \
   policy.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -182,6 +186,10 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
+	swig -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/lib/libqof/qof -o $@ $<
+
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
@@ -210,7 +218,7 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 
 BUILT_SOURCES = iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
-  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
+  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h swig-engine.c
 
 CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
