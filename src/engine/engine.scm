@@ -3,8 +3,6 @@
 (use-modules (g-wrap gw-wct))
 (use-modules (sw_engine))
 
-(use-modules (g-wrapped gw-engine))
-
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)
 (export GNC-RND-TRUNC)

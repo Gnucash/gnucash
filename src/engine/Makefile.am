@@ -1,7 +1,7 @@
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-engine.la libgw-engine.la libgw-kvp.la
+pkglib_LTLIBRARIES = libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
@@ -116,25 +116,6 @@ libgncmod_engine_la_LIBADD = \
   ${GNUCASH_ENGINE_BASE_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
-libgw_kvp_la_SOURCES = kvp-scm.c
-nodist_libgw_kvp_la_SOURCES = gw-kvp.c
-libgw_kvp_la_LDFLAGS = \
-  ${G_WRAP_LINK_ARGS} \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
-libgw_kvp_la_LIBADD = \
-  libgncmod-engine.la \
-  libgw-engine.la
-
-libgw_engine_la_SOURCES = engine-helpers.c glib-helpers.c
-nodist_libgw_engine_la_SOURCES = gw-engine.c
-libgw_engine_la_LDFLAGS = \
-  ${G_WRAP_LINK_ARGS} \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
-libgw_engine_la_LIBADD = \
-  libgncmod-engine.la
-
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = engine.scm 
 
@@ -144,14 +125,6 @@ gncscm_DATA = \
   engine-interface.scm \
   engine-utilities.scm \
   gnc-numeric.scm
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-engine-spec.scm \
-  gw-kvp-spec.scm
-nodist_gwmod_DATA = \
-  gw-engine.scm \
-  gw-kvp.scm
 
 EXTRA_DIST = \
   README.query-api \
@@ -163,12 +136,11 @@ EXTRA_DIST = \
   kvp_doc.txt \
   SX-book-p.h \
   ${gncmod_DATA} \
-  ${gncscm_DATA} \
-  ${gwmod_DATA}
+  ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
-SCM_FILE_LINKS = gw-engine-spec.scm gw-kvp-spec.scm iso-4217-currencies.scm
+SCM_FILE_LINKS = iso-4217-currencies.scm
 #For executing test cases
 SCM_FILE_LINKS += \
   ${gncmod_DATA} \
@@ -194,22 +166,6 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
-gw-engine.scm gw-engine.c gw-engine.h: \
-  .scm-links gw-engine-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (primitive-load \"./gw-engine-spec.scm\") \
-	 (gw:generate-wrapset \"gw-engine\")"
-
-gw-kvp.scm gw-kvp.c gw-kvp.h: \
-  .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (primitive-load \"./gw-kvp-spec.scm\") \
-	 (gw:generate-wrapset \"gw-kvp\")"
-
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -217,8 +173,7 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	mv $@.tmp $@
 
 BUILT_SOURCES = iso-4217-currencies.c \
-  gw-engine.scm gw-engine.c gw-engine.h \
-  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h swig-engine.c
+  gncla-dir.h swig-engine.c
 
-CLEANFILES = $(BUILT_SOURCES) gnucash g-wrapped .scm-links gncla-dir.h \
-	${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
+	${SCM_FILE_LINKS}

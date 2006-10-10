@@ -55,11 +55,6 @@ libgncmod_engine_LTX_gnc_module_init(int refcount)
   scm_c_eval_string("(use-modules (sw_engine))");
   scm_c_eval_string("(use-modules (gnucash engine))");
 
-  scm_c_eval_string("(use-modules (g-wrap gw-glib))");
-
-  scm_c_eval_string("(use-modules (g-wrapped gw-kvp))");
-  scm_c_eval_string("(use-modules (g-wrapped gw-engine))");
-
   return TRUE;
 }
 

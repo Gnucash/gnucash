@@ -26,8 +26,6 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/gnc-module/libgncmodule.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
-        ${top_builddir}/src/engine/libgw-engine.la \
-        ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         -lltdl \
 	-lpq

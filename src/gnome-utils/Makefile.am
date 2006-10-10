@@ -176,7 +176,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \

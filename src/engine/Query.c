@@ -534,22 +534,6 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
 }
 
 void
-xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
-			 GUID guid, QofQueryOp op)
-{
-  GSList *params = NULL;
-  GList *node;
-
-  for (node = param_list; node; node = node->next)
-    params = g_slist_prepend (params, node->data);
-
-  params = g_slist_reverse (params);
-  g_list_free (param_list);
-
-  qof_query_add_guid_match (q, params, &guid, op);
-}
-
-void
 xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
 		     QofQueryCompare how, QofIdType id_type,
 		     QofQueryOp op)

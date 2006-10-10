@@ -12,7 +12,6 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
