@@ -470,7 +470,7 @@ xaccGroupGetAccountList (const AccountGroup *grp)
   return grp->accounts;
 }
 
-GList *
+AccountList *
 xaccGroupGetAccountListSorted (const AccountGroup *grp)
 {
   if (!grp) return NULL;

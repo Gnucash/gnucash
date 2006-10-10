@@ -78,6 +78,7 @@
 #define GNC_COMMODITY_NS_AMEX   "AMEX"
 #define GNC_COMMODITY_NS_ASX    "ASX"
 
+typedef GList CommodityList;
 
 /** @name Commodity Quote Source functions 
  @{
@@ -807,8 +808,8 @@ guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
  *  argument was supplied, or the namespace could not be found.
  *
  *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
-					    const char * namespace);
+CommodityList * gnc_commodity_table_get_commodities(
+    const gnc_commodity_table * table, const char * namespace);
 
 /** This function returns a list of commodities for which price quotes
  *  should be retrieved.  It will scan the entire commodity table (or
@@ -827,7 +828,7 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
  *  quote retrieval.
  *
  *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_quotable_commodities(
+CommodityList * gnc_commodity_table_get_quotable_commodities(
     const gnc_commodity_table * table);
 
 /** Call a function once for each commodity in the commodity table.

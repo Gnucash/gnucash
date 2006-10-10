@@ -26,7 +26,6 @@
 #include <errno.h>
 #include <libguile.h>
 #include <string.h>
-#include <g-wrap-wct.h>
 
 #include "dialog-utils.h"
 #include "druid-gnc-xml-import.h"

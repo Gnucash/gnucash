@@ -143,9 +143,9 @@ gnc_glist_string_to_scm(GList *glist)
 
 /********************************************************************
  * gnc_scm_to_glist_string
- * i.e. (glist-of (<gw:mchars> calee-owned) callee-owned)
+ * i.e. (glist-of (<gw:mchars> callee-owned) callee-owned)
  * or equivalently
- * i.e. (glist-of (<gw:gchars> calee-owned) callee-owned)
+ * i.e. (glist-of (<gw:gchars> callee-owned) callee-owned)
  ********************************************************************/
 
 GList *
@@ -162,6 +162,22 @@ gnc_scm_to_glist_string(SCM list)
   }
 
   return g_list_reverse (glist);
+}
+
+GSList *
+gnc_scm_to_gslist_string(SCM list)
+{
+  GSList *gslist = NULL;
+
+  while (!SCM_NULLP (list))
+  {
+    const gchar * str = SCM_STRING_CHARS (SCM_CAR(list));
+    if (str)
+      gslist = g_slist_prepend (gslist, g_strdup (str));
+    list = SCM_CDR (list);
+  }
+
+  return g_slist_reverse (gslist);
 }
 
 /********************************************************************

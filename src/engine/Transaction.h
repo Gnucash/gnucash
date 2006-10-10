@@ -226,10 +226,6 @@ guint gnc_book_count_transactions(QofBook *book);
  */
 void          xaccTransSortSplits (Transaction *trans);
 
-/** Print the transaction out to the console. Used for debugging.
- */
-void          xaccTransDump (Transaction *trans, const char *tag);
-
 /** Set the  Transaction Type
  *
  * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */

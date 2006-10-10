@@ -551,7 +551,7 @@ gnc_query_path2scm (GSList *path)
   return scm_reverse (path_scm);
 }
 
-static GSList *
+GSList *
 gnc_query_scm2path (SCM path_scm)
 {
   GSList *path = NULL;

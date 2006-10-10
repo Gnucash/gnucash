@@ -558,10 +558,6 @@ SplitList* xaccAccountGetSplitList (const Account *account);
  *  in accfrom to accto. */
 void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
 
-/** \warning  Unimplemented */
-gpointer xaccAccountForEachSplit(Account *account, SplitCallback,
-                                 gpointer data);
-
 /** The xaccAccountForEachTransaction() routine will traverse all of
    the transactions in the given 'account' and call the callback
    function 'proc' on each transaction.  Processing will continue

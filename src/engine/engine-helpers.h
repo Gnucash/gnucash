@@ -53,6 +53,9 @@ SCM  gnc_guid2scm(GUID guid);
 GUID gnc_scm2guid(SCM guid_scm);
 int  gnc_guid_p(SCM guid_scm);
 
+/* for a list of strings */
+GSList * gnc_query_scm2path (SCM path_scm);
+
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
  * simply convert a query pointer to a g-wrapped query pointer! */
