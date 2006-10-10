@@ -30,19 +30,11 @@
 }
 
 // Temporary SWIG<->G-wrap converters for engine types
-%typemap(in) QofBook * "$1 = (QofBook *)gw_wcp_get_ptr($input);"
-%typemap(out) QofBook * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:Book*>"));
-}
 %typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
 %typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
 
 %typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
 %typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"
-%typemap(in) gnc_commodity * "$1 = (gnc_commodity *)gw_wcp_get_ptr($input);"
-%typemap(out) gnc_commodity * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:commodity*>"));
-}
 %typemap(in) Account * "$1 = (Account *)gw_wcp_get_ptr($input);"
 %typemap(out) Account * {
   $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:Account*>"));
@@ -50,20 +42,6 @@
 %typemap(in) AccountGroup * "$1 = (AccountGroup *)gw_wcp_get_ptr($input);"
 %typemap(out) AccountGroup * {
   $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:AccountGroup*>"));
-}
-%typemap(in) gnc_commodity_table * {
-  $1 = (gnc_commodity_table *)gw_wcp_get_ptr($input);
-}
-%typemap(out) gnc_commodity_table * {
-  $result = gw_wcp_assimilate_ptr($1,
-       scm_c_eval_string("<gnc:commodity-table*>"));
-}
-%typemap(in) gnc_commodity * {
-  $1 = (gnc_commodity *)gw_wcp_get_ptr($input);
-}
-%typemap(out) gnc_commodity * {
-  $result = gw_wcp_assimilate_ptr($1,
-       scm_c_eval_string("<gnc:commodity*>"));
 }
 
 // End of temporary typemaps.
@@ -121,9 +99,6 @@ typedef int time_t;
 time_t gnc_accounting_period_fiscal_start(void);
 time_t gnc_accounting_period_fiscal_end(void);
 
-//temporary, until QofIdType is swigified
-
-%typemap(in) QofIdType { $1 = gw_wcp_get_ptr($input); }
 SCM gnc_make_kvp_options(QofIdType id_type);
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 

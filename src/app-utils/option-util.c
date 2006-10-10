@@ -34,7 +34,6 @@
 #include "qof.h"
 #include "guile-mappings.h"
 
-#include <g-wrap-wct.h>
 #include "swig-runtime.h"
 
 /* TODO: 
@@ -302,8 +301,7 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
       return;
     }
   }
-
-  scm_slots = gw_wcp_assimilate_ptr (slots, scm_c_eval_string("<gnc:kvp-frame*>"));
+  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
 
   scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
 }
@@ -334,7 +332,7 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
     }
   }
 
-  scm_slots = gw_wcp_assimilate_ptr (slots, scm_c_eval_string("<gnc:kvp-frame*>"));
+  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("p_KvpFrame"), 0);
 
   scm_call_3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
 }
@@ -433,8 +431,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                        const char *section,
                                        const char *name)
 {
-  static SCM void_type = SCM_UNDEFINED;
-
   SCM register_proc;
   SCM arg;
   SCM args;
@@ -450,12 +446,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     return SCM_UNDEFINED;
   }
 
-  if(void_type == SCM_UNDEFINED) {
-    void_type = scm_c_eval_string("<gw:void*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(void_type != SCM_UNDEFINED) scm_gc_protect_object(void_type);
-  }
-
   /* Now build the args list for apply */
   args = SCM_EOL;
 
@@ -463,7 +453,7 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
   args = scm_cons(odb->guile_options, args);
 
   /* next the data */
-  arg = gw_wcp_assimilate_ptr(data, void_type);
+  arg = SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_void"), 0);
   args = scm_cons(arg, args);
 
   /* next the callback */

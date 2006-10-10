@@ -26,7 +26,7 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include <string.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -67,10 +67,12 @@ gnc_scm2printinfo(SCM info_scm)
   info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
 
   info_scm = SCM_CDR (info_scm);
-  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
+  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                         __FUNCTION__);
 
   info_scm = SCM_CDR (info_scm);
-  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
+  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                         __FUNCTION__);
 
   info_scm = SCM_CDR (info_scm);
   info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
@@ -139,9 +141,9 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
   source = gnc_commodity_get_quote_source (comm);
   name = gnc_quote_source_get_internal_name (source);
   tz = gnc_commodity_get_quote_tz (comm);
-  comm_scm = gw_wcp_assimilate_ptr (comm, scm_c_eval_string("<gnc:commodity*>"));
-  def_comm_scm = gw_wcp_assimilate_ptr (gnc_default_currency (),
-					scm_c_eval_string("<gnc:commodity*>"));
+  comm_scm = SWIG_NewPointerObj(comm, SWIG_TypeQuery("_p_gnc_commodity"), 0);
+  def_comm_scm = SWIG_NewPointerObj(gnc_default_currency (),
+                                    SWIG_TypeQuery("_p_gnc_commodity"), 0);
 
   if (tz)
     info_scm = scm_cons (scm_makfrom0str (tz), info_scm);

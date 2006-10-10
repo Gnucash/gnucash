@@ -16,15 +16,9 @@
 #include <gncBusGuile.h>
 #include "engine-helpers.h"
 #include "gncBusGuile.h"
-
-#include <g-wrap-wct.h> //Temporary. Adds no link dep?!?
 %}
 
 // Temporary SWIG<->G-wrap converters for engine types
-%typemap(in) QofBook * "$1 = (QofBook *)gw_wcp_get_ptr($input);"
-%typemap(out) QofBook * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:Book*>"));
-}
 %typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
 %typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
 

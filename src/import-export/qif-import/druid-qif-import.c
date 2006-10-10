@@ -1597,8 +1597,10 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   stocks = wind->new_stocks;
   while(!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F)) {
     comm_ptr_token = scm_call_2(hash_ref, wind->stock_hash, SCM_CAR(stocks));
-    commodity      = gw_wcp_get_ptr(comm_ptr_token);
-    
+    #define FUNC_NAME "make_qif_druid_page"
+    commodity      = SWIG_MustGetPtr(comm_ptr_token,
+                                     SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
+    #undef FUNC_NAME
     new_page = make_qif_druid_page(commodity);
 
     g_signal_connect(new_page->page, "next",
