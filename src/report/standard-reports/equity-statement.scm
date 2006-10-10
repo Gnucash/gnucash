@@ -129,9 +129,12 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+         (gnc:group-get-subaccounts (gnc-get-current-group))))
       #f #t))
     
     ;; all about currencies
@@ -237,14 +240,15 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-          (assoc-ref split-up-accounts 'asset))
+          (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
          (liability-accounts
-          (assoc-ref split-up-accounts 'liability))
+          (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
          (equity-accounts
-          (assoc-ref split-up-accounts 'equity))
+          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+
 	 ;; N.B.: equity-accounts will also contain drawing accounts
 	 ;; these must still be split-out and itemized separately
 	 (capital-accounts #f)

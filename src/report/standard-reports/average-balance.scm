@@ -71,9 +71,12 @@
                  ;; otherwise get some accounts -- here as an
                  ;; example we get the asset and liability stuff
                  (gnc:filter-accountlist-type
-                  '(bank cash credit asset liability payable receivable) 
-                  ;; or: '(bank cash checking savings stock
-                  ;; mutual-fund money-market)
+                  (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+                        ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+                        ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
+                  ;; or: (list ACCT-TYPE-BANK ACCT-TYPE-CASH
+                  ;; ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS ACCT-TYPE-STOCK
+                  ;; ACCT-TYPE-MUTUAL ACCT-TYPE-MONEYMRKT)
                   (gnc:group-get-account-list (gnc-get-current-group)))))))
       #f #t))
 

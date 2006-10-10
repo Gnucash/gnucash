@@ -188,8 +188,7 @@
     (gnc:option-value (get-op section name)))
   
   (define (split-account-type? split type)
-    (eq? type 
-         (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type (gnc:split-get-account split)) #f)))
+    (eq? type (gnc:account-get-type (gnc:split-get-account split))))
 
   (define (same-split? s1 s2)
     (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
@@ -345,8 +344,10 @@
 			  ;; currency and a txn-value for later computation
 			  (cond
 			   ((and (not (same-account? current (gnc:split-get-account s))) 
-				 (not (or(split-account-type? s 'expense)
-					 (split-account-type? s 'income))))
+				 (not (or (split-account-type?
+                                           s ACCT-TYPE-EXPENSE)
+					  (split-account-type?
+                                           s ACCT-TYPE-INCOME))))
 
 			    ;;only change the commod-currency if price failed
 			    (if (not price) (set! commod-currency (gnc:account-get-commodity (gnc:split-get-account s))))
@@ -409,10 +410,10 @@
 				      'add commod-currency
 				      (gnc:numeric-neg (gnc:split-get-value s))))))))
 			 
-			   ((split-account-type? s 'expense)
+			   ((split-account-type? s ACCT-TYPE-EXPENSE)
 			     (brokeragecoll 'add commod-currency (gnc:split-get-value s)))
 			   
-			   ((split-account-type? s 'income)
+			   ((split-account-type? s ACCT-TYPE-INCOME)
 			     (dividendcoll 'add commod-currency (gnc:split-get-value s)))
 			   )
 			  )

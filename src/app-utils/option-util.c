@@ -1024,19 +1024,12 @@ gnc_option_get_account_type_list(GNCOption *option)
 {
   SCM pair;
   SCM lst;
-  SCM conv_func;
   GList *type_list = NULL;
 
   initialize_getters();
 
   pair = scm_call_1(getters.option_data, option->guile_option);
   lst = SCM_CDR(pair);
-
-  conv_func = scm_c_eval_string ("gw:enum-<gnc:AccountType>-val->int");
-  if (!SCM_PROCEDUREP (conv_func)) {
-    PERR ("Cannot obtain conv_func");
-    return NULL;
-  }
 
   while (!SCM_NULLP (lst)) {
     GNCAccountType type;
@@ -1045,8 +1038,6 @@ gnc_option_get_account_type_list(GNCOption *option)
     /* Compute this item and the rest of the list */
     item = SCM_CAR (lst);
     lst = SCM_CDR (lst);
-
-    item = scm_call_1(conv_func, item);
 
     if (SCM_FALSEP (scm_integer_p (item))) {
       PERR ("Invalid type");

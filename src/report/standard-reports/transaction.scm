@@ -277,8 +277,11 @@
 
 (define account-types-to-reverse-assoc-list
   (list (cons 'none '())
-        (cons 'income-expense '(income expense))
-        (cons 'credit-accounts '(liability payable equity credit income))))
+        (cons 'income-expense
+              (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
+        (cons 'credit-accounts
+              (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-EQUITY
+                    ACCT-TYPE-CREDIT ACCT-TYPE-INCOME))))
 
 (define (used-date columns-used)
   (vector-ref columns-used 0))
@@ -414,8 +417,7 @@
 	 (dummy  (gnc:debug "split is originally" split))
          (parent (gnc:split-get-parent split))
          (account (gnc:split-get-account split))
-         (account-type (gw:enum-<gnc:AccountType>-val->sym
-                        (gnc:account-get-type account) #f))
+         (account-type (gnc:account-get-type account))
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc-default-currency)))
@@ -570,8 +572,11 @@
     ;; select, by default, all accounts...
     (lambda ()
       (gnc:filter-accountlist-type 
-       '(bank cash credit asset liability stock mutual-fund currency
-	      payable receivable equity income expense)
+       (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+             ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+             ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+             ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
        (gnc:group-get-subaccounts (gnc-get-current-group))))
     #f #t))
 

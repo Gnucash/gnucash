@@ -292,8 +292,7 @@
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
              (not (gnc:numeric-zero-p account-value)))
-        (let* ((type (gw:enum-<gnc:AccountType>-val->sym
-                      (gnc:account-get-type account) #f))
+        (let* ((type (gnc:account-get-type account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
                              (strftime "%d.%m.%Y" (localtime (car date)))
@@ -302,9 +301,9 @@
                                (strftime "%d.%m.%Y" (localtime (car x-date)))
                                #f))
                ;; Only formats 1,3 implemented now! Others are treated as 1.
-               (format (gnc:get-txf-format code (eq? type 'income)))
+               (format (gnc:get-txf-format code (eq? type ACCT-TYPE-INCOME)))
 	       (value (string-append 
-		       (if (eq? type 'income) ;; negate expenses. FIXME: Necessary?
+		       (if (eq? type ACCT-TYPE-INCOME) ;; negate expenses. FIXME: Necessary?
 			   ""
 			   "-")
 		       (number->string 
@@ -333,12 +332,12 @@
 					    (gnc:account-get-guid account)))
 				       "\n"))
 				     "<NONE> -- See the Terminal Output"))))
-               (action (if (eq? type 'income)
+               (action (if (eq? type ACCT-TYPE-INCOME)
                            (case code
                              ((N286 N488) "ReinvD")
                              (else "Ertraege"))
                            "Aufwendungen"))
-               (category-key (if (eq? type 'income)
+               (category-key (if (eq? type ACCT-TYPE-INCOME)
                                  (gnc:txf-get-category-key 
                                   txf-income-categories code)
                                  (gnc:txf-get-category-key
@@ -651,8 +650,7 @@
 	  (length accounts)))
 
     (define (handle-level-x-account level account)
-      (let ((type (gw:enum-<gnc:AccountType>-val->sym
-                   (gnc:account-get-type account) #f)))
+      (let ((type (gnc:account-get-type account)))
 	(set! work-done (+ 1 work-done))
 	(gnc:report-percent-done (* 100 (if (> work-to-do 0)
 					    (/ work-done work-to-do)
@@ -703,7 +701,7 @@
                                         #f))
                          (gnc:numeric-zero))
                        ;; make positive
-                       (if (eq? type 'income)
+                       (if (eq? type ACCT-TYPE-INCOME)
                            (gnc:numeric-neg account-balance)
                            account-balance)))
 

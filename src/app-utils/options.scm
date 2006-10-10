@@ -725,11 +725,12 @@
   (define (find-first-account)
     (define (find-first account-list)
       (if (null? account-list)
-	  #f
+	  '()
 	  (let* ((this-account (car account-list))
-		 (account-type (gw:enum-<gnc:AccountType>-val->sym
-				(gnc:account-get-type this-account) #f)))
-	    (if (if (null? acct-type-list) #t (member account-type acct-type-list))
+		 (account-type (gnc:account-get-type this-account)))
+	    (if (if (null? acct-type-list)
+                    #t
+                    (member account-type acct-type-list))
 		this-account
 		(find-first (cdr account-list))))))
 

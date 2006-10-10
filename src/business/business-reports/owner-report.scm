@@ -403,13 +403,16 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) GNC-OWNER-CUSTOMER (_ "Invoice") #f))
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
+                     (_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) GNC-OWNER-VENDOR (_ "Bill") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR
+                     (_ "Bill") #t))
 
 (define (employee-options-generator)
-  (options-generator '(payable) GNC-OWNER-EMPLOYEE (_ "Expense Report") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE
+                     (_ "Expense Report") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -625,7 +628,7 @@
 (define (find-first-account type)
   (define (find-first group num index)
     (if (>= index num)
-	#f ;; FIXME
+	'()
 	(let* ((this-account (gnc:group-get-account group index))
 	       (account-type (gnc:account-get-type this-account)))
 	  (if (eq? account-type type)
@@ -637,25 +640,25 @@
 			current-group)))
     (if (> num-accounts 0)
 	(find-first current-group num-accounts 0)
-	#f))) ;; FIXME
+	'())))
 
 (define (find-first-account-for-owner owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
-       (find-first-account 'receivable))
+       (find-first-account ACCT-TYPE-RECEIVABLE))
 
       ((eqv? type GNC-OWNER-VENDOR)
-       (find-first-account 'payable))
+       (find-first-account ACCT-TYPE-PAYABLE))
 
       ((eqv? type GNC-OWNER-EMPLOYEE)
-       (find-first-account 'payable))
+       (find-first-account ACCT-TYPE-PAYABLE))
 
       ((eqv? type GNC-OWNER-JOB)
        (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
 
       (else
-       #f))))  ;;FIXME: remember to convert
+       '()))))
 
 (gnc:define-report
  'version 1
@@ -725,10 +728,10 @@
     (gncOwnerDestroy temp-owner)
     res))
 
-(gnc:register-report-hook 'receivable #t
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t
 			  gnc:owner-report-create-internal)
 
-(gnc:register-report-hook 'payable #t
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #t
 			  gnc:owner-report-create-internal)
 
 (export gnc:owner-report-create)

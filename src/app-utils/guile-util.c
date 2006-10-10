@@ -1088,7 +1088,6 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
-  const char *type_string;
   const gchar *string;
   SCM result;
   SCM arg;
@@ -1101,9 +1100,7 @@ gnc_get_debit_string(GNCAccountType account_type)
   if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
     account_type = ACCT_TYPE_NONE;
 
-  type_string = xaccAccountTypeEnumAsString(account_type);
-
-  arg = scm_str2symbol(type_string);
+  arg = scm_long2num(account_type);
 
   result = scm_call_1(getters.debit_string, arg);
   if (!SCM_STRINGP(result))
@@ -1126,7 +1123,6 @@ gnc_get_debit_string(GNCAccountType account_type)
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
-  const char *type_string;
   const gchar *string;
   SCM result;
   SCM arg;
@@ -1139,9 +1135,7 @@ gnc_get_credit_string(GNCAccountType account_type)
   if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
     account_type = ACCT_TYPE_NONE;
 
-  type_string = xaccAccountTypeEnumAsString(account_type);
-
-  arg = scm_str2symbol(type_string);
+  arg = scm_long2num(account_type);
 
   result = scm_call_1(getters.credit_string, arg);
   if (!SCM_STRINGP(result))

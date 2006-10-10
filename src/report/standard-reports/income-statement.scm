@@ -157,7 +157,7 @@
       (lambda ()
 	(gnc:filter-accountlist-type
 	 ;; select, by default, only income and expense accounts
-	 '(income expense)
+	 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
 	 (gnc:group-get-subaccounts (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
@@ -334,11 +334,11 @@
 	 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
-	 (revenue-accounts (assoc-ref split-up-accounts 'income))
-	 (expense-accounts (assoc-ref split-up-accounts 'expense))
+	 (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
+	 (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
 	 
          (doc (gnc:make-html-document))
 	 ;; this can occasionally put extra (blank) columns in our

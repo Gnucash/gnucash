@@ -180,8 +180,11 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
 	 (gnc:group-get-subaccounts (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
@@ -343,14 +346,15 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-	  (assoc-ref split-up-accounts 'asset))
+          (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
          (liability-accounts
-	  (assoc-ref split-up-accounts 'liability))
-         (equity-accounts
-          (assoc-ref split-up-accounts 'equity))
+          (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
+         (equity-accounts
+          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+
 	 ;; (all-accounts (map (lambda (X) (cadr X)) split-up-accounts))
 	 ;; ^ will not do what we want
 	 (all-accounts
@@ -360,20 +364,20 @@
 	 ;; same for gross adjustment accounts...
 	 (split-up-ga-accounts (gnc:decompose-accountlist ga-accounts))
 	 (all-ga-accounts
-          (append (assoc-ref split-up-ga-accounts 'asset)
-                  (assoc-ref split-up-ga-accounts 'liability)
-                  (assoc-ref split-up-ga-accounts 'equity)
-                  (assoc-ref split-up-ga-accounts 'income)
-                  (assoc-ref split-up-ga-accounts 'expense)))
+          (append (assoc-ref split-up-ga-accounts ACCT-TYPE-ASSET)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-LIABILITY)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-EQUITY)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-EXPENSE)))
 	 (split-up-is-accounts (gnc:decompose-accountlist is-accounts))
 	 
 	 ;; same for income statement accounts...
 	 (all-is-accounts
-          (append (assoc-ref split-up-is-accounts 'asset)
-                  (assoc-ref split-up-is-accounts 'liability)
-                  (assoc-ref split-up-is-accounts 'equity)
-                  (assoc-ref split-up-is-accounts 'income)
-                  (assoc-ref split-up-is-accounts 'expense)))
+          (append (assoc-ref split-up-is-accounts ACCT-TYPE-ASSET)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-LIABILITY)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-EQUITY)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-EXPENSE)))
 	 
 	 (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters

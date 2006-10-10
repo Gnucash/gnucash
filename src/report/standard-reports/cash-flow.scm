@@ -91,7 +91,8 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type 
-        '(bank cash asset stock mutual-fund)
+        (ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
+                        ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
         (gnc:group-get-subaccounts (gnc-get-current-group))))
      #f)
     

@@ -255,14 +255,14 @@
              (process-datelist
               (if inc-exp? 
                   accounts
-                  (assoc-ref classified-accounts 'asset))
+                  (assoc-ref classified-accounts ACCT-TYPE-ASSET))
               dates-list #t))
        (gnc:report-percent-done 70)
        (set! liability-list
              (process-datelist
               (if inc-exp?
                   accounts
-                  (assoc-ref classified-accounts 'liability))
+                  (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))
               dates-list #f))
        (gnc:report-percent-done 80)
        (set! net-list

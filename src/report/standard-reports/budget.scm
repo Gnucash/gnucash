@@ -90,7 +90,8 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type
-        '(asset liability income expense)
+        (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY ACCT-TYPE-INCOME
+                          ACCT-TYPE-EXPENSE)
         (gnc:group-get-subaccounts (gnc-get-current-group))))
      #f)
 

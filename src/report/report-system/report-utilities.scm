@@ -52,40 +52,30 @@
 
 ;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)
-  ;; FYI: The val->sym function used to be called 
-  ;; gw:enum-GNCAccountType-val->sym
-  (let ((type (gw:enum-<gnc:AccountType>-val->sym
-               (gnc:account-get-type account)
-               #f)))
-    (member type '(stock mutual-fund currency))))
+  (let ((type (gnc:account-get-type account)))
+    (member type (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY))))
 
 ;; True if the account is of type stock or mutual-fund
 (define (gnc:account-is-stock? account)
-  (let ((type (gw:enum-<gnc:AccountType>-val->sym
-               (gnc:account-get-type account)
-               #f)))
-    (member type '(stock mutual-fund))))
+  (let ((type (gnc:account-get-type account)))
+    (member type (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))))
 
 ;; True if the account is of type income or expense
 
 (define (gnc:account-is-inc-exp? account)
-  (let ((type (gw:enum-<gnc:AccountType>-val->sym
-               (gnc:account-get-type account)
-               #f)))
-    (member type '(income expense))))
+  (let ((type (gnc:account-get-type account)))
+    (member type (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))))
 
 ;; Returns only those accounts out of the list <accounts> which have
 ;; one of the type identifiers in typelist.
 (define (gnc:filter-accountlist-type typelist accounts)
   (filter (lambda (a) 
-	    (member (gw:enum-<gnc:AccountType>-val->sym
-		     (gnc:account-get-type a) #f)
-		    typelist) )
+	    (member (gnc:account-get-type a) typelist))
 	  accounts))
 
 ;; Decompose a given list of accounts 'accounts' into an alist
 ;; according to their types. Each element of alist is a list, whose
-;; first element is the type-symbol, e.g. 'assets, and the rest (cdr)
+;; first element is the type, e.g. ACCT-TYPE-ASSET, and the rest (cdr)
 ;; of the element is the list of accounts which belong to that
 ;; category.
 (define (gnc:decompose-accountlist accounts)
@@ -93,13 +83,18 @@
 		    (car x)
 		    (gnc:filter-accountlist-type (cdr x) accounts)))
        (list
-	(cons 'asset
-	      '(asset bank cash checking savings money-market receivable
-		      stock mutual-fund currency))
-	(cons 'liability '(liability payable credit credit-line))
-	(cons 'equity '(equity))
-	(cons 'income '(income))
-	(cons 'expense '(expense)))))
+	(cons ACCT-TYPE-ASSET
+	      (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH
+                    ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS
+                    ACCT-TYPE-MONEYMRKT ACCT-TYPE-RECEIVABLE
+                    ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+                    ACCT-TYPE-CURRENCY))
+	(cons ACCT-TYPE-LIABILITY
+              (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+                    ACCT-TYPE-CREDITLINE))
+	(cons ACCT-TYPE-EQUITY (list ACCT-TYPE-EQUITY))
+	(cons ACCT-TYPE-INCOME (list ACCT-TYPE-INCOME))
+	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE)))))
 
 ;; Returns the name of the account type as a string, and in its plural
 ;; form (as opposed to gnc:account-get-type-string which gives the
@@ -107,23 +102,23 @@
 (define (gnc:account-get-type-string-plural type)
   (assoc-ref
    (list 
-    (cons 'bank (_ "Bank"))
-    (cons 'cash (_ "Cash"))
-    (cons 'credit (_ "Credits"))
-    (cons 'asset (_ "Assets"))
-    (cons 'liability (_ "Liabilities"))
-    (cons 'stock (_ "Stocks"))
-    (cons 'mutual-fund (_ "Mutual Funds"))
-    (cons 'currency (_ "Currencies"))
-    (cons 'income (_ "Income"))
-    (cons 'expense (_ "Expenses"))
-    (cons 'equity (_ "Equities"))
-    (cons 'checking (_ "Checking"))
-    (cons 'savings (_ "Savings"))
-    (cons 'money-market (_ "Money Market"))
-    (cons 'receivable (_ "Accounts Receivable"))
-    (cons 'payable (_ "Accounts Payable"))
-    (cons 'credit-line (_ "Credit Lines")))
+    (cons ACCT-TYPE-BANK (_ "Bank"))
+    (cons ACCT-TYPE-CASH (_ "Cash"))
+    (cons ACCT-TYPE-CREDIT (_ "Credits"))
+    (cons ACCT-TYPE-ASSET (_ "Assets"))
+    (cons ACCT-TYPE-LIABILITY (_ "Liabilities"))
+    (cons ACCT-TYPE-STOCK (_ "Stocks"))
+    (cons ACCT-TYPE-MUTUAL (_ "Mutual Funds"))
+    (cons ACCT-TYPE-CURRENCY (_ "Currencies"))
+    (cons ACCT-TYPE-INCOME (_ "Income"))
+    (cons ACCT-TYPE-EXPENSE (_ "Expenses"))
+    (cons ACCT-TYPE-EQUITY (_ "Equities"))
+    (cons ACCT-TYPE-CHECKING (_ "Checking"))
+    (cons ACCT-TYPE-SAVINGS (_ "Savings"))
+    (cons ACCT-TYPE-MONEYMRKT (_ "Money Market"))
+    (cons ACCT-TYPE-RECEIVABLE (_ "Accounts Receivable"))
+    (cons ACCT-TYPE-PAYABLE (_ "Accounts Payable"))
+    (cons ACCT-TYPE-CREDITLINE (_ "Credit Lines")))
    type))
 
 ;; Get the list of all different commodities that are used within the
@@ -549,7 +544,7 @@
 (define (gnc:accounts-get-comm-total-profit accounts 
 					    get-balance-fn)
   (gnc:accounts-get-balance-helper
-   (gnc:filter-accountlist-type '(income expense) accounts)
+   (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
    (lambda(x) #t)))
 
@@ -559,7 +554,7 @@
 (define (gnc:accounts-get-comm-total-income accounts 
 					    get-balance-fn)
   (gnc:accounts-get-balance-helper
-   (gnc:filter-accountlist-type '(income) accounts)
+   (gnc:filter-accountlist-type (list ACCT-TYPE-INCOME) accounts)
    get-balance-fn
    (lambda(x) #t)))
 
@@ -569,7 +564,7 @@
 (define (gnc:accounts-get-comm-total-expense accounts 
                                              get-balance-fn)
   (gnc:accounts-get-balance-helper
-   (gnc:filter-accountlist-type '(expense) accounts)
+   (gnc:filter-accountlist-type (list ACCT-TYPE-EXPENSE) accounts)
    get-balance-fn
    (lambda(x) #t)))
 

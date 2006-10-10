@@ -554,12 +554,15 @@ developing over time"))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income '(income) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense '(expense) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
   (list reportname-assets 
-        '(asset bank cash checking savings money-market receivable
-                stock mutual-fund currency)
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
         #f menuname-assets menutip-assets (lambda (x) #f))
   (list reportname-liabilities 
-        '(liability payable credit credit-line)
+        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+              ACCT-TYPE-CREDITLINE)
         #f menuname-liabilities menutip-liabilities (lambda (x) #t))))

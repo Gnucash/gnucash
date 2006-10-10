@@ -531,5 +531,5 @@
 
  (list 
   ;; reportname, account-types, menu-reportname, menu-tip
-  (list reportname-income '(income) menuname-income menutip-income)
-  (list reportname-expense '(expense) menuname-expense menutip-expense)))
+  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income menutip-income)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense menutip-expense)))
