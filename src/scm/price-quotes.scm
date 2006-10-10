@@ -736,30 +736,6 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                                    (lambda (x) (not (string? x)))
                                    prices)))))))
 
-(define (gnc:add-quotes-to-book-at-url url)
-  (let* ((session (gnc:url->loaded-session (gnc:get-current-session) url #f #f))
-         (quote-ok? #f))
-    (gnc:debug "in add-quotes-to-book-at-url")
-    (if session
-	(begin
-          (gnc:debug "about to call gnc:book-add-quotes")
-	  (set! quote-ok? (and (gnc:book-add-quotes #f
-				(gnc:session-get-book session))))
-
-          (gnc:debug "done gnc:book-add-quotes:" quote-ok?)
-	  (if (not quote-ok?) (gnc:error "book-add-quotes failed"))
-	  (gnc:session-save session)
-	  (if (not (eq? 'no-err
-			(gw:enum-<gnc:BackendError>-val->sym
-			 (gnc:session-get-error session) #f)))
-	      (set! quote-ok? #f))
-	  (if (not quote-ok?)
-	      (gnc:error "session-save failed " 
-                         (gnc:session-get-error session)))
-	  (gnc:session-destroy session))
-	(gnc:error "book-add-quotes unable to open file"))
-    quote-ok?))
-
 ; (define (get-1-quote exchange . items)
 ;   (let ((cmd (apply list 'fetch exchange items))
 ; 	(quoter (run-sub-process #f
