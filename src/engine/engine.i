@@ -236,7 +236,7 @@ gchar * gnc_build_book_path (const gchar *filename);
     path_scm = SCM_CDR (path_scm);
   }
 
-  $result = g_list_reverse (path);
+  $1 = g_list_reverse (path);
 }
 
 void gnc_quote_source_set_fq_installed (GList *sources_list);
