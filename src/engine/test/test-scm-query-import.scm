@@ -17,8 +17,8 @@
     
     (for-each
      (lambda (query-scm)
-	     (let* ((q (gnc:scm->query query-scm))
-		    (q2 (gnc:query->scm q)))
+	     (let* ((q (gnc-scm2query query-scm))
+		    (q2 (gnc-query2scm q)))
 	       (if (or (null? q) (not q))
 		   (begin
 		     (set! failures #t)

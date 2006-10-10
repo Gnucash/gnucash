@@ -40,15 +40,15 @@
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits 
 	 currency-accounts end-date-tp commodity)
-  (let ((query (gnc:malloc-query))
+  (let ((query (qof-query-create-for-splits))
 	(splits #f))
     
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (gnc:query-add-account-match query
+    (xaccQueryAddAccountMatch query
                                  currency-accounts
                                  QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair 
+    (xaccQueryAddDateMatchTS
      query #f end-date-tp #t end-date-tp QOF-QUERY-AND)
     
     ;; Get the query result, i.e. all splits in currency
@@ -72,8 +72,8 @@
 				   commodity trans-comm)
 				  (gnc-commodity-equiv
 				   commodity acc-comm)))))
-		  (gnc:query-get-splits query)))
-    (gnc:free-query query)
+		  (qof-query-run query)))
+    (qof-query-destroy query)
     splits))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up

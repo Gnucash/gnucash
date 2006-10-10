@@ -126,7 +126,7 @@
 
 
 (define (make-aging-table options query bucket-intervals reverse?)
-  (let ((lots (gnc:query-get-lots query QUERY-TXN-MATCH-ANY))
+  (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
 	(buckets (new-bucket-vector))
 	(payments (gnc-numeric-zero))
 	(currency (gnc-default-currency)) ;XXX
@@ -273,7 +273,7 @@
 
 
 (define (make-txn-table options query acc start-date end-date)
-  (let ((txns (gnc:query-get-transactions query QUERY-TXN-MATCH-ANY))
+  (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
 	(total (gnc-numeric-zero))
 	(currency (gnc-default-currency)) ;XXX
@@ -450,8 +450,8 @@
 	   OWNER-PARENTG)
      guid QOF-QUERY-OR)
 
-    (gnc:query-add-single-account-match q account QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair q #f end-date #t end-date QOF-QUERY-AND)
+    (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS q #f end-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     q))
 
@@ -534,7 +534,7 @@
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
-	 (query (gnc:malloc-query))
+	 (query (qof-query-create-for-splits))
 	 (account (opt-val owner-page acct-string))
 	 (owner (opt-val owner-page owner-string))
 	 (start-date (gnc:timepair-start-day-time 
@@ -622,7 +622,7 @@
 		   (_ "No valid %s selected.  Click on the Options button to select a company.")
 		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
 
-    (gnc:free-query query)
+    (qof-query-destroy query)
     document))
 
 (define (find-first-account type)

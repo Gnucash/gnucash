@@ -1090,16 +1090,16 @@
          default-value)
   (let* ((value (if (list? default-value)
                     default-value
-                    (gnc:query->scm default-value)))
+                    (gnc-query2scm default-value)))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name "" 'query #f
      (lambda () value)
-     (lambda (x) (set! value (if (list? x) x (gnc:query->scm x))))
+     (lambda (x) (set! value (if (list? x) x (gnc-query2scm x))))
      (lambda () (if (list? default-value)
                     default-value
-                    (gnc:query->scm default-value)))
+                    (gnc-query2scm default-value)))
      (gnc:restore-form-generator value->string)
      #f
      #f

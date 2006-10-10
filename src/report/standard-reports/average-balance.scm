@@ -314,7 +314,7 @@
     ;;(warn commodity-list)
 
     (if (not (null? accounts))
-        (let ((query (gnc:malloc-query))
+        (let ((query (qof-query-create-for-splits))
               (splits '())
               (data '()))
 
@@ -365,10 +365,10 @@
                       (delete-duplicates (append accounts subaccts)))))
 	  (gnc:report-percent-done 30)
 
-          (gnc:query-add-account-match query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+          (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
-          (gnc:query-add-date-match-timepair
+          (xaccQueryAddDateMatchTS
            query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
 				    (list SPLIT-TRANS TRANS-DATE-POSTED)
@@ -376,7 +376,7 @@
 				    '())
           
           ;; get the query results 
-          (set! splits (gnc:query-get-splits query))
+          (set! splits (qof-query-run query))
 	  (gnc:report-percent-done 40)
           
           ;; find the net starting balance for the set of accounts 

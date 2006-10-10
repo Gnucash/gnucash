@@ -498,21 +498,21 @@
              (gnc:group-get-comm-balance-at-date
               (gnc:account-get-children account) date)
              (gnc:make-commodity-collector)))
-	  (query (gnc:malloc-query))
+	  (query (qof-query-create-for-splits))
 	  (splits #f))
       
       (qof-query-set-book query (gnc-get-current-book))
-      (gnc:query-add-single-account-match query account QOF-QUERY-AND)
-      (gnc:query-add-date-match-timepair query #f date #t date QOF-QUERY-AND)
+      (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+      (xaccQueryAddDateMatchTS query #f date #t date QOF-QUERY-AND)
       (qof-query-set-sort-order query
 				(list SPLIT-TRANS TRANS-DATE-POSTED)
 				(list QUERY-DEFAULT-SORT)
 				'())
-      (gnc:query-set-sort-increasing query #t #t #t)
-      (gnc:query-set-max-results query 1)
+      (qof-query-set-sort-increasing query #t #t #t)
+      (qof-query-set-max-results query 1)
       
-      (set! splits (gnc:query-get-splits query))
-      (gnc:free-query query)
+      (set! splits (qof-query-run query))
+      (qof-query-destroy query)
 
       (if (and splits (not (null? splits)))
 	  (gnc-commodity-collector-add balance-collector
@@ -652,30 +652,30 @@
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
-  (let ((temp-query (gnc:malloc-query)))
+  (let ((temp-query (qof-query-create-for-splits)))
      (qof-query-set-book temp-query book)
      
-     (gnc:query-add-cleared-match
+     (xaccQueryAddClearedMatch
 	     temp-query
 	     CLEARED-VOIDED
 	     QOF-QUERY-AND)
 
-     (set! temp-query (gnc:query-invert temp-query))
+     (set! temp-query (qof-query-invert temp-query))
 
-     (set! query (gnc:query-merge query temp-query QOF-QUERY-AND))))
+     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
-  (let ((temp-query (gnc:malloc-query)))
+  (let ((temp-query (qof-query-create-for-splits)))
      (qof-query-set-book temp-query book)
      
-     (gnc:query-add-cleared-match
+     (xaccQueryAddClearedMatch
 	     temp-query
 	     CLEARED-VOIDED
 	     QOF-QUERY-AND)
 
-     (set! query (gnc:query-merge query temp-query QOF-QUERY-AND))))
+     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
 
 (define (gnc:split-voided? split)
   (let ((trans (gnc:split-get-parent split)))
@@ -712,7 +712,7 @@
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 (define (gnc:account-get-trans-type-balance-interval
 	 group type start-date-tp end-date-tp)
-  (let* ((query (gnc:malloc-query))
+  (let* ((query (qof-query-create-for-splits))
 	 (splits #f)
 	 (get-val (lambda (alist key)
 		    (let ((lst (assoc-ref alist key)))
@@ -724,15 +724,15 @@
 	 )
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (gnc:query-add-account-match query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair
+    (xaccQueryAddAccountMatch query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS
      query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (gnc:query-add-description-match
+    (xaccQueryAddDescriptionMatch
      query matchstr case-sens regexp QOF-QUERY-AND)
     
-    (set! splits (gnc:query-get-splits query))
+    (set! splits (qof-query-run query))
     (map (lambda (split)
 		(let* ((shares (gnc:split-get-amount split))
 		       (acct-comm (xaccAccountGetCommodity
@@ -743,7 +743,7 @@
 		)
 	 splits
 	 )
-    (gnc:free-query query)
+    (qof-query-destroy query)
     total
     )
   )
@@ -752,8 +752,8 @@
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
 	 group type start-date-tp end-date-tp)
-  (let* ((str-query (gnc:malloc-query))
-	 (sign-query (gnc:malloc-query))
+  (let* ((str-query (qof-query-create-for-splits))
+	 (sign-query (qof-query-create-for-splits))
 	 (total-query #f)
          (splits #f)
 	 (get-val (lambda (alist key)
@@ -769,28 +769,28 @@
     (qof-query-set-book sign-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
-    (gnc:query-add-account-match str-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (gnc:query-add-account-match sign-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair
+    (xaccQueryAddAccountMatch str-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch sign-query group QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS
      str-query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair
+    (xaccQueryAddDateMatchTS
      sign-query
      (and start-date-tp #t) start-date-tp
      (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (gnc:query-add-description-match
+    (xaccQueryAddDescriptionMatch
      str-query matchstr case-sens regexp QOF-QUERY-AND)
     (set! total-query
 	  ;; this is a tad inefficient, but its a simple way to accomplish
 	  ;; description match inversion...
 	  (if pos?
-	      (gnc:query-merge sign-query str-query QOF-QUERY-AND)
-	      (gnc:query-merge
-	       sign-query (gnc:query-invert str-query) QOF-QUERY-AND)
+	      (qof-query-merge sign-query str-query QOF-QUERY-AND)
+	      (qof-query-merge
+	       sign-query (qof-query-invert str-query) QOF-QUERY-AND)
 	      ))
     
-    (set! splits (gnc:query-get-splits total-query))
+    (set! splits (qof-query-run total-query))
     (map (lambda (split)
 	   (let* ((shares (gnc:split-get-amount split))
 		  (acct-comm (xaccAccountGetCommodity
@@ -803,7 +803,7 @@
 	   )
          splits
          )
-    (gnc:free-query total-query)
+    (qof-query-destroy total-query)
     total
     )
   )

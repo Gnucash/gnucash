@@ -306,12 +306,12 @@ more than one currency.  This report is not designed to cope with this possibili
     (gnc:debug "date" date)
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (gnc:query-add-single-account-match query account QOF-QUERY-AND)
-    (gnc:query-add-date-match-timepair query #t begindate #t date QOF-QUERY-AND)
+    (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS query #t begindate #t date QOF-QUERY-AND)
     (qof-query-set-sort-order query
 			      (list SPLIT-TRANS TRANS-DATE-POSTED)
 			      '() '())
-    (gnc:query-set-sort-increasing query #t #t #t)))
+    (qof-query-set-sort-increasing query #t #t #t)))
      
 
 (define (aging-options-generator options)
@@ -533,7 +533,7 @@ totals to report currency")
 	(exchange-fn (gnc:case-exchange-fn price-source report-currency report-date))
 	(total-collector-list (make-collector-list))
 	(table (gnc:make-html-table))
-	(query (gnc:malloc-query))
+	(query (qof-query-create-for-splits))
 	(company-list '())
 	(work-done 0)
 	(work-to-do 0)
@@ -562,7 +562,7 @@ totals to report currency")
 	(begin
 	  (setup-query query account report-date)
 	  ;; get the appropriate splits
-	  (let ((splits (gnc:query-get-splits query)))
+	  (let ((splits (qof-query-run query)))
 ;	    (gnc:debug "splits" splits)
 
 	    ;; build the table
@@ -644,7 +644,7 @@ totals to report currency")
 	 document
 	 (gnc:make-html-text
 	  (_ "No valid account selected.  Click on the Options button and select the account to use."))))
-    (gnc:free-query query)
+    (qof-query-destroy query)
     (gnc:report-finished)
     document))
 

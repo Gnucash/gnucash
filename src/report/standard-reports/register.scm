@@ -559,13 +559,13 @@
     (if invoice?
         (set! title (_ "Invoice")))
 
-    (set! query (gnc:scm->query query-scm))
+    (set! query (gnc-scm2query query-scm))
 
     (qof-query-set-book query (gnc-get-current-book))
 
     (set! splits (if journal?
-                     (gnc:query-get-splits-unique-trans query)
-                     (gnc:query-get-splits query)))
+                     (qof-query-run-unique-trans query)
+                     (qof-query-run query)))
 
     (set! table (make-split-table splits
                                   (gnc:report-options report-obj)
@@ -602,7 +602,7 @@
     (gnc:html-document-set-title! document title)
     (gnc:html-document-add-object! document table)
 
-    (gnc:free-query query)
+    (qof-query-destroy query)
 
     document))
 

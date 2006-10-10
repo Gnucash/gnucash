@@ -6,21 +6,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:group-get-transactions group)
-  (let ((query (gnc:malloc-query))
+  (let ((query (qof-query-create-for-splits))
         (xtns #f))
 
     (qof-query-set-book query (gnc:group-get-book group))
 
     ;; we want to find all transactions with every split inside the
     ;; account group.
-    (gnc:query-add-account-match query
+    (xaccQueryAddAccountMatch query
                                  (gnc:group-get-subaccounts group)
                                  QOF-GUID-MATCH-ANY QOF-QUERY-AND)
 
-    (set! xtns (gnc:query-get-transactions query QUERY-TXN-MATCH-ALL))
+    (set! xtns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ALL))
     
     ;; lose the query 
-    (gnc:free-query query)
+    (qof-query-destroy query)
     xtns))
 
 
@@ -51,7 +51,7 @@
     ;; match possibly similar transactions.
     (for-each
      (lambda (xtn) 
-       (let ((query (gnc:malloc-query)))         
+       (let ((query (qof-query-create-for-splits)))
 	 (set! work-done (+ 1 work-done))
 	 (if progress-dialog 
 	     (begin 
@@ -62,22 +62,22 @@
 	 (qof-query-set-book query (gnc:group-get-book old-group))
 
 	 ;; first, we want to find only transactions from the old group.
-	 (gnc:query-add-account-match query
+	 (xaccQueryAddAccountMatch query
 				      (gnc:group-get-subaccounts old-group)
 				      QOF-GUID-MATCH-ANY QOF-QUERY-AND)
          
          ;; the date should be close to the same.. +/- a week. 
          (let ((date (gnc:transaction-get-date-posted xtn)))               
-           (gnc:query-add-date-match-timepair
+           (xaccQueryAddDateMatchTS
             query #t (decdate date WeekDelta) #t (incdate date WeekDelta)
             QOF-QUERY-AND))
          
          ;; for each split in the transaction, add a term to match the 
          ;; properties of one split 
-         (let ((q-splits (gnc:malloc-query)))
+         (let ((q-splits (qof-query-create-for-splits)))
            (for-each 
             (lambda (split)
-              (let ((sq (gnc:malloc-query)))
+              (let ((sq (qof-query-create-for-splits)))
 		(qof-query-set-book sq (gnc:group-get-book old-group))
                 
                 ;; we want to match the account in the old group that
@@ -85,7 +85,7 @@
                 ;; there's not one (new account), the match will be NULL
                 ;; and we know the query won't find anything.  optimize
                 ;; this later.
-                (gnc:query-add-single-account-match 
+                (xaccQueryAddSingleAccountMatch
                  sq 
                  (gnc:get-account-from-full-name
                   old-group (gnc-account-get-full-name
@@ -95,7 +95,7 @@
                 ;; we want the value for the split to match the value
                 ;; the old-group split.  We should really check for
                 ;; fuzziness.
-                (gnc:query-add-value-match 
+                (xaccQueryAddValueMatch
                  sq (gnc:split-get-value split)
                  QOF-NUMERIC-MATCH-ANY QOF-COMPARE-EQUAL
                  QOF-QUERY-AND)
@@ -104,22 +104,22 @@
                 ;; is set up to match any split that matches any split
                 ;; in the current xtn; every split in an old transaction
                 ;; must pass that filter.
-                (let ((q-new (gnc:query-merge q-splits sq QOF-QUERY-OR)))
-                  (gnc:free-query q-splits)
-                  (gnc:free-query sq)
+                (let ((q-new (qof-query-merge q-splits sq QOF-QUERY-OR)))
+                  (qof-query-destroy q-splits)
+                  (qof-query-destroy sq)
                   (set! q-splits q-new))))
             (gnc:transaction-get-splits xtn))
            
            ;; now q-splits will match any split that is the same as one
            ;; split in the old-group xtn.  Merge it in.
-           (let ((q-new (gnc:query-merge query q-splits QOF-QUERY-AND)))
-             (gnc:free-query query)
-             (gnc:free-query q-splits)
+           (let ((q-new (qof-query-merge query q-splits QOF-QUERY-AND)))
+             (qof-query-destroy query)
+             (qof-query-destroy q-splits)
              (set! query q-new)))
          
          ;; now that we have built a query, get transactions in the old
          ;; account group that matches it.
-         (let ((old-xtns (gnc:query-get-transactions query QUERY-TXN-MATCH-ALL)))
+         (let ((old-xtns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ALL)))
            (set! old-xtns (map 
                            (lambda (elt)
                              (cons elt #f)) old-xtns))
@@ -128,7 +128,7 @@
            ;; along with the transaction
            (if (not (null? old-xtns))
                (set! matches (cons (cons xtn old-xtns) matches))))
-         (gnc:free-query query)))
+         (qof-query-destroy query)))
      new-xtns)
     
     ;; get rid of the progress dialog 

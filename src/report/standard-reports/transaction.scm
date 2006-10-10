@@ -1273,7 +1273,7 @@ Credit Card, and Income accounts")))))
         (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
 	(void-status (opt-val gnc:pagename-accounts optname-void-transactions))
         (splits '())
-        (query (gnc:malloc-query)))
+        (query (qof-query-create-for-splits)))
 
     ;;(gnc:warn "accts in trep-renderer:" c_account_1)
     ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
@@ -1282,17 +1282,17 @@ Credit Card, and Income accounts")))))
         (begin
           (qof-query-set-book query (gnc-get-current-book))
 	      ;;(gnc:warn "query is:" query)
-          (gnc:query-add-account-match query
+          (xaccQueryAddAccountMatch query
                                        c_account_1
                                        QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (gnc:query-add-date-match-timepair
+          (xaccQueryAddDateMatchTS
            query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
 				    (get-query-sortkey primary-key)
 				    (get-query-sortkey secondary-key)
 				    '())
 
-          (gnc:query-set-sort-increasing query
+          (qof-query-set-sort-increasing query
                                          (eq? primary-order 'ascend)
                                          (eq? secondary-order 'ascend)
                                          #t)
@@ -1304,7 +1304,7 @@ Credit Card, and Income accounts")))))
 	    (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
 	   (else #f))
 
-          (set! splits (gnc:query-get-splits query))
+          (set! splits (qof-query-run query))
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
@@ -1364,7 +1364,7 @@ Credit Card, and Income accounts")))))
                 (gnc:html-document-add-object!
                  document 
                  table)
-                (gnc:free-query query))
+                (qof-query-destroy query))
               ;; error condition: no splits found
               (let ((p (gnc:make-html-text)))
                 (gnc:html-text-append! 
