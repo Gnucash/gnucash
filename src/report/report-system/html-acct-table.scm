@@ -406,13 +406,7 @@
 ;;     account-commodity: commodity
 ;; 
 ;;         returns the default commodity of the account in the current
-;;         row, as returned by xaccAccountGetCommodity. the g-wrap
-;;         documentation string reads: "Get the commodity in which the
-;;         account is denominated." note: afaik, gnucash accounts can
-;;         only contain one commodity; but it's plausible that future
-;;         releases may permit mixed-commodity accounts, so it's
-;;         probably safest not to assume that an account contains only
-;;         its default commodity.
+;;         row, as returned by xaccAccountGetCommodity. 
 ;; 
 ;;     account-type: account_type
 ;; 

@@ -32,8 +32,6 @@
 #include "glib-helpers.h"
 
 
-/* These will eventually go into (g-wrapped glib). */
-
 static SCM
 glist_to_scm_list_helper(GList *glist, swig_type_info *wct)
 {
@@ -54,7 +52,7 @@ gnc_glist_to_scm_list(GList *glist, gchar *wct)
     return glist_to_scm_list_helper(glist, stype);
 }
 
-GList*
+GList *
 gnc_scm_list_to_glist(SCM rest)
 {
   GList *result = NULL;
@@ -70,7 +68,6 @@ gnc_scm_list_to_glist(SCM rest)
     scm_item = SCM_CAR(rest);
     rest = SCM_CDR(rest);
 
-    /* fixes a bug in g-wrap */
     if (scm_item == SCM_BOOL_F)
     {
       result = g_list_prepend(result, NULL);

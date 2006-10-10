@@ -149,8 +149,7 @@
     ;; This is an account list option. The user can select one
     ;; or (possibly) more accounts from the list of accounts
     ;; in the current file. Values are scheme handles to actual
-    ;; C pointers to accounts. They can be used in conjunction
-    ;; with the wrapped C functions in gnucash/src/g-wrap/gnc.gwp.
+    ;; C pointers to accounts. 
     ;; The #f value indicates that any account will be accepted.
     ;; Instead of a #f values, you could provide a function that
     ;; accepts a list of account values and returns a pair. If

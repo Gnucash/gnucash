@@ -35,7 +35,6 @@
 #include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-//#include "g-wrap-wct.h" //temp
 
 #include "search-core-type.h"
 #include "search-owner.h"

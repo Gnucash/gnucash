@@ -1,5 +1,5 @@
 /********************************************************************\
- * engine-helpers.h -- gnucash g-wrap helper functions              *
+ * engine-helpers.h -- gnucash engine helper functions              *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
@@ -58,7 +58,7 @@ GSList * gnc_query_scm2path (SCM path_scm);
 
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
- * simply convert a query pointer to a g-wrapped query pointer! */
+ * simply convert a query pointer to a guile query pointer! */
 SCM gnc_query2scm (Query * q);
 Query * gnc_scm2query (SCM query_scm);
 

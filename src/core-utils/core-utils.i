@@ -4,6 +4,8 @@
 #include <gnc-glib-utils.h>
 #include <gnc-main.h>
 #include <glib.h>
+
+SCM scm_init_sw_core_utils_module (void);
 %}
 
 typedef char gchar;

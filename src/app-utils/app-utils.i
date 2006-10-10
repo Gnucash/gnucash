@@ -13,6 +13,8 @@
 #include <gnc-component-manager.h>
 
 #include "engine-helpers.h"
+
+SCM scm_init_sw_app_utils_module (void);
 %}
 
 //%import "engine.i"

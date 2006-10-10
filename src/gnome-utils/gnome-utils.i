@@ -20,6 +20,8 @@
 #include <gnc-ui.h>
 #include <print-session.h>
 #include <gnc-splash.h>
+
+SCM scm_init_sw_gnome_utils_module (void);
 %}
 
 // Temporary SWIG<->G-wrap converters for engine types

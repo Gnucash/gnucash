@@ -1,5 +1,5 @@
 /********************************************************************\
- * engine-helpers.c -- gnucash g-wrap helper functions              *
+ * engine-helpers.c -- gnucash engine helper functions              *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *

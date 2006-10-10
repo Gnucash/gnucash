@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-helpers.c -- gnucash g-wrap helper functions                 *
+ * gnc-helpers.c -- gnucash app-util helper functions               *
  * Copyright (C) 2000 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -119,7 +119,7 @@ gnc_printinfo_p(SCM info_scm)
  * attempt to optimize the speed of price quote retrieval, this
  * routine only converts the fields that price-quotes.scm uses. Since
  * it converts these fields all at once, it should prevent multiple
- * transitions back and forth from Scheme to C (via g-wrap) to extract
+ * transitions back and forth from Scheme to C to extract
  * the data from a pointers to a gnc-commodity (the older method).
  * This is *not* a reversible conversion as it drops data.
  *

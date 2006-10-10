@@ -1,6 +1,8 @@
 %module sw_gnc_module
 %{
 #include <gnc-module.h>
+
+SCM scm_init_sw_gnc_module_module (void);
 %}
 
 typedef char gchar;

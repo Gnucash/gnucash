@@ -18,7 +18,8 @@
 #include <SX-book.h>
 #include <kvp-scm.h>
 #include "glib-helpers.h"
-#include "g-wrap-wct.h" //temp
+
+SCM scm_init_sw_engine_module (void);
 %}
 
 /* Not sure why SWIG doesn't figure this out. */
@@ -48,14 +49,6 @@ typedef int gint;
 
 %typemap(in) gnc_numeric " $1 = gnc_scm_to_numeric($input); "
 %typemap(out) gnc_numeric " $result = gnc_numeric_to_scm($1); "
-
-//JUST TEMPORARY FOR TESTING ACCTTYPE ONLY
-/*
-%typemap(in) Account * " $1 = gw_wcp_get_ptr($input); "
-%typemap(in) Transaction * " $1 = gw_wcp_get_ptr($input); "
-%typemap(in) Split * " $1 = gw_wcp_get_ptr($input); "
-%typemap(in) QofQuery * " $1 = gw_wcp_get_ptr($input); "
-*/
 
 %define GLIST_HELPER_INOUT(ListType, ElemSwigType)
 %typemap(in) ListType * {
@@ -89,63 +82,25 @@ typedef int gint;
 }
 %enddef
 
-%define GLIST_HELPER_INOUT_GWRAP(ListType, ElemGWrapTypeStr)
-%typemap(in) ListType * {
-  SCM list = $input;
-  GList *c_list = NULL;
-
-  while (!SCM_NULLP(list)) {
-        Account *p;
-
-        SCM p_scm = SCM_CAR(list);
-        if (SCM_FALSEP(p_scm) || SCM_NULLP(p_scm))
-           p = NULL;
-        else
-           p = gw_wcp_get_ptr(p_scm);
-
-        c_list = g_list_prepend(c_list, p);
-        list = SCM_CDR(list);
-  }
-
-  $1 = g_list_reverse(c_list);
-}
-%typemap(out) ListType * {
-  SCM list = SCM_EOL;
-  GList *node;
-
-  for (node = $1; node; node = node->next)
-    list = scm_cons(gw_wcp_assimilate_ptr(node->data,
-       scm_c_eval_string(ElemGWrapTypeStr)), list);
-
-  $result = scm_reverse(list);
-}
-%enddef
-
 GLIST_HELPER_INOUT(SplitList, SWIGTYPE_p_Split);
 GLIST_HELPER_INOUT(TransList, SWIGTYPE_p_Transaction);
 GLIST_HELPER_INOUT(LotList, SWIGTYPE_p_GNCLot);
 GLIST_HELPER_INOUT(AccountList, SWIGTYPE_p_Account);
-/*
-GLIST_HELPER_INOUT_GWRAP(SplitList, "<gnc:Split*>");
-GLIST_HELPER_INOUT_GWRAP(TransList, "<gnc:Transction*>");
-GLIST_HELPER_INOUT_GWRAP(LotList, "<gnc:Lot*>");
-GLIST_HELPER_INOUT_GWRAP(AccountList, "<gnc:Account*>");
-*/
 GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 // TODO: free PriceList?
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 
 %inline %{
-const GUID * gncSplitGetGUID(Split *x)
+static const GUID * gncSplitGetGUID(Split *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-const GUID * gncTransGetGUID(Transaction *x)
+static const GUID * gncTransGetGUID(Transaction *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-const GUID * gncAccountGetGUID(Account *x)
+static const GUID * gncAccountGetGUID(Account *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-const GUID * gncPriceGetGUID(GNCPrice *x)
+static const GUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
-const GUID * gncBudgetGetGUID(GncBudget *x)
+static const GUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 %}
 
@@ -185,7 +140,7 @@ const GUID * gncBudgetGetGUID(GncBudget *x)
 /* Parse the header file to generate wrappers */
 //#define QOF_ID_BOOK           "Book"
 %inline {
-  QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
+  static QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
 }
 
 %include <Split.h>
@@ -209,8 +164,8 @@ const char *qof_session_get_url (QofSession *session);
 const char *gnc_print_date (Timespec ts);
 
 %inline {
-QofQuery * qof_query_create_for_splits(void) {
-  qof_query_create_for(GNC_ID_SPLIT);
+static QofQuery * qof_query_create_for_splits(void) {
+  return qof_query_create_for(GNC_ID_SPLIT);
 }
 }
 %typemap(in) GSList * "$1 = gnc_query_scm2path($input);"
@@ -309,8 +264,8 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 %clear GSList *key_path;
 
 %inline %{
-KvpFrame * gnc_book_get_slots(QofBook *book) {
-   qof_instance_get_slots(QOF_INSTANCE(book));
+static KvpFrame * gnc_book_get_slots(QofBook *book) {
+   return qof_instance_get_slots(QOF_INSTANCE(book));
 }
 %}
 
