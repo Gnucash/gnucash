@@ -20,7 +20,7 @@
 (load-from-path "gnc-menu-extensions.scm")
 
 (define (gnc:kvp-option-dialog id-type slots title changed_cb)
-  (let* ((options (gnc:make-kvp-options id-type))
+  (let* ((options (gnc-make-kvp-options id-type))
 	 (optiondb (gnc-option-db-new options))
 	 (optionwin (gnc-options-dialog-new title)))
 

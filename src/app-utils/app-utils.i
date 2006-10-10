@@ -121,3 +121,9 @@ typedef int time_t;
 time_t gnc_accounting_period_fiscal_start(void);
 time_t gnc_accounting_period_fiscal_end(void);
 
+//temporary, until QofIdType is swigified
+
+%typemap(in) QofIdType { $1 = gw_wcp_get_ptr($input); }
+SCM gnc_make_kvp_options(QofIdType id_type);
+void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
+

@@ -238,16 +238,12 @@
 (export simple-obj-from-list)
 (export make-simple-obj)
 
-;; kvp-option-registry
-(export gnc:register-kvp-option-generator)
-(export gnc:unregister-kvp-option-generator)
-(export gnc:make-kvp-options)
+(define gnc:*kvp-option-path* '("options"))
 (export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")
-(load-from-path "kvp-option-registry.scm")
 (load-from-path "hooks.scm")
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")

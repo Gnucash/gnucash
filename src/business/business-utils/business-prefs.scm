@@ -83,4 +83,4 @@
     #f))
 )
 
-(gnc:register-kvp-option-generator gnc:id-book book-options-generator)
+(gnc-register-kvp-option-generator gnc:id-book book-options-generator)
