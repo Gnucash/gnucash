@@ -24,7 +24,7 @@
 ;;    summary to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc:get-current-book).
+;;    in (gnc-get-current-book).
 ;;    
 ;;    The variables in this code could use more consistent naming.
 ;;    
@@ -138,7 +138,7 @@
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
 
     ;; date at which to report balance
@@ -155,7 +155,7 @@
 	(gnc:filter-accountlist-type 
 	 '(bank cash credit asset liability stock mutual-fund currency
 		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+	 (gnc:group-get-subaccounts (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit

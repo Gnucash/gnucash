@@ -349,7 +349,7 @@
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Payable to")
      "ua1" (N_ "Display the Payable to: information") #t #f
-     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+     (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Payable to string" x))))
 
   (gnc:register-inv-option
@@ -362,7 +362,7 @@
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Company contact")
      "ub1" (N_ "Display the Company contact information") #t #f
-     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+     (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Company contact string" x))))
 
   (gnc:register-inv-option

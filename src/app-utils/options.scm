@@ -281,7 +281,7 @@
   (define (scm->currency currency)
     (if (string? currency)
         (gnc:commodity-table-lookup
-         (gnc:book-get-commodity-table (gnc:get-current-book))
+         (gnc:book-get-commodity-table (gnc-get-current-book))
          GNC_COMMODITY_NS_CURRENCY currency)
         currency))
 
@@ -316,10 +316,10 @@
 
   (define (guid->budget budget)
     (if (string? budget)
-        (gnc:budget-lookup budget (gnc:get-current-book))
+        (gnc:budget-lookup budget (gnc-get-current-book))
         budget))
 
-  (let* ((default-value (gnc:budget-get-default (gnc:get-current-book)))
+  (let* ((default-value (gnc:budget-get-default (gnc-get-current-book)))
          (value (budget->guid default-value))
          (option-set #f)
          (value->string (lambda ()
@@ -340,7 +340,7 @@
              (set! option-set #t)) ;; setter
      (lambda ()
        (guid->budget
-        (gnc:budget-get-default (gnc:get-current-book)))) ;; default-getter
+        (gnc:budget-get-default (gnc-get-current-book)))) ;; default-getter
      (gnc:restore-form-generator value->string) ;; ??
      (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
      (lambda (f p)
@@ -370,7 +370,7 @@
 
   (define (scm->commodity scm)
     (gnc:commodity-table-lookup
-     (gnc:book-get-commodity-table (gnc:get-current-book))
+     (gnc:book-get-commodity-table (gnc-get-current-book))
      (cadr scm) (caddr scm)))
 
    (let* ((value (commodity->scm default-value))
@@ -617,7 +617,7 @@
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc:get-current-book))
+        (gnc:account-lookup item (gnc-get-current-book))
         item))
 
   (let* ((option (map convert-to-guid (default-getter)))
@@ -641,7 +641,7 @@
        (set! account-list
              (filter (lambda (x) (if (string? x)
                                      (gnc:account-lookup
-                                      x (gnc:get-current-book))
+                                      x (gnc-get-current-book))
                                      x)) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
@@ -719,7 +719,7 @@
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc:get-current-book))
+        (gnc:account-lookup item (gnc-get-current-book))
         item))
 
   (define (find-first-account)
@@ -733,7 +733,7 @@
 		this-account
 		(find-first (cdr account-list))))))
 
-    (let* ((current-group (gnc:get-current-group))
+    (let* ((current-group (gnc-get-current-group))
 	   (account-list (gnc:group-get-subaccounts current-group)))
       (find-first account-list)))
 	   
@@ -1447,7 +1447,7 @@
   ((options 'register-callback) section name callback))
 
 (define (gnc:options-register-c-callback section name c-callback data options)
-  (let ((callback (lambda () (gnc:option-invoke-callback c-callback data))))
+  (let ((callback (lambda () (gncp-option-invoke-callback c-callback data))))
     ((options 'register-callback) section name callback)))
 
 (define (gnc:options-unregister-callback-id id options)
@@ -1507,7 +1507,7 @@
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each
    (lambda (option)
-     (gnc:option-db-register-option db_handle option))
+     (gnc-option-db-register-option db_handle option))
    options))
 
 (define (gnc:save-options options options-string file header truncate?)

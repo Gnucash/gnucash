@@ -152,12 +152,12 @@
 ;;         the commodity into which to convert any balances containing
 ;;         foreign currencies.  the balance will be converted using
 ;;         the exchange function exchange-fn. the default is the
-;;         currency returned by (gnc:default-report-currency).  [CAS:
+;;         currency returned by (gnc-default-report-currency).  [CAS:
 ;;         what if I don't want the report to have a
 ;;         "report-commodity"?  Say e.g. I want to show each account
 ;;         balance in its native commodity?  I can see the benefit of
 ;;         individual reports that have a report-commodity using
-;;         gnc:default-report-currency to set the default value for a
+;;         gnc-default-report-currency to set the default value for a
 ;;         report-commodity option.  But, with the default sucked in
 ;;         here, in what is supposed to be a more general api, means
 ;;         reports can't specify NO report-commodity. ]
@@ -557,8 +557,8 @@
   (string<? (gnc:account-get-name a)
 	    (gnc:account-get-name b)))
 (define (gnc:account-path-less-p a b)
-  (string<? (gnc:account-get-full-name a)
-	    (gnc:account-get-full-name b)))
+  (string<? (gnc-account-get-full-name a)
+	    (gnc-account-get-full-name b)))
 
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)
   ;; 
@@ -599,7 +599,7 @@
 	 (end-date (or (get-val env 'end-date)
 		       (cons 'absolute (cons (current-time) 0))))
 	 (report-commodity (or (get-val env 'report-commodity)
-			       (gnc:default-report-currency)))
+			       (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe
          ;; someone was thinking price-source?
 	 (exchange-fn (or (get-val env 'exchange-fn)
@@ -631,7 +631,7 @@
 				 )
 				))
 	 ;; local variables
-	 (toplvl-accts (gnc:group-get-account-list (gnc:get-current-group)))
+	 (toplvl-accts (gnc:group-get-account-list (gnc-get-current-group)))
 	 (acct-depth-reached 0)
 	 (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
 	 (disp-depth-reached 0)
@@ -720,7 +720,7 @@
 		  (account acct)
 		  (account-name (gnc:account-get-name acct))
 		  (account-code (gnc:account-get-code acct))
-		  (account-path (gnc:account-get-full-name acct))
+		  (account-path (gnc-account-get-full-name acct))
 		  (account-anchor (gnc:html-account-anchor acct))
 		  (account-parent (gnc:account-get-parent-account acct))
 		  (account-children subaccts)
@@ -1175,7 +1175,7 @@
 			       (or (if (equal? mode #t) 'show-balance mode)
 				   'show-balance)
 			       ))
-		  (reverse-balance (gnc:account-reverse-balance? acct))
+		  (reverse-balance (gnc-reverse-balance acct))
 		  (native-comm?
 		   (lambda (amt)
 		     (gnc:uniform-commodity? amt report-commodity)))

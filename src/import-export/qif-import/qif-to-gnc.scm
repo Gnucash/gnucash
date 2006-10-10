@@ -79,7 +79,7 @@
     ;; acct)
     (if (and existing-account (compatible? existing-account))
         existing-account 
-        (let ((new-acct (gnc:malloc-account (gnc:get-current-book)))
+        (let ((new-acct (gnc:malloc-account (gnc-get-current-book)))
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)
@@ -177,13 +177,13 @@
                                default-currency-name window)
   (gnc:backtrace-if-exception 
    (lambda ()
-     (let* ((old-group (gnc:get-current-group))
-            (new-group (gnc:malloc-account-group (gnc:get-current-book)))
+     (let* ((old-group (gnc-get-current-group))
+            (new-group (gnc:malloc-account-group (gnc-get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
             (separator (string-ref (gnc:account-separator-string) 0))
             (default-currency 
               (gnc:commodity-table-find-full 
-               (gnc:book-get-commodity-table (gnc:get-current-book))
+               (gnc:book-get-commodity-table (gnc-get-current-book))
                GNC_COMMODITY_NS_CURRENCY default-currency-name))
             (sorted-accounts-list '())
             (markable-xtns '())
@@ -334,12 +334,12 @@
                  (begin 
                    ;; create and fill in the GNC transaction
                    (let ((gnc-xtn (gnc:transaction-create
-                                   (gnc:get-current-book))))
+                                   (gnc-get-current-book))))
                      (gnc:transaction-begin-edit gnc-xtn)
 
                      ;; FIXME. This is probably wrong
                      (gnc:transaction-set-currency gnc-xtn
-                                                   (gnc:default-currency))
+                                                   (gnc-default-currency))
 
                      ;; build the transaction
                      (qif-import:qif-xtn-to-gnc-xtn 
@@ -367,7 +367,7 @@
                                        gnc-acct-hash 
                                        qif-acct-map qif-cat-map qif-memo-map)
   (let ((splits (qif-xtn:splits qif-xtn))
-        (gnc-near-split (gnc:split-create (gnc:get-current-book)))
+        (gnc-near-split (gnc:split-create (gnc-get-current-book)))
         (near-split-total (gnc:numeric-zero))
         (near-acct-info #f)
         (near-acct-name #f)
@@ -421,7 +421,7 @@
            (lambda (qif-split)
              (if (not (qif-split:mark qif-split))
                  (let ((gnc-far-split (gnc:split-create
-                                       (gnc:get-current-book)))
+                                       (gnc-get-current-book)))
                        (far-acct-info #f)
                        (far-acct-name #f)
                        (far-acct-type #f)
@@ -509,7 +509,7 @@
                (commission-amt (qif-xtn:commission qif-xtn))
                (commission-split #f)
                (defer-share-price #f)
-               (gnc-far-split (gnc:split-create (gnc:get-current-book))))
+               (gnc-far-split (gnc:split-create (gnc-get-current-book))))
           
           (if (not num-shares) (set! num-shares (gnc:numeric-zero)))
           (if (not share-price) (set! share-price (gnc:numeric-zero)))
@@ -625,7 +625,7 @@
           (if (and commission-amt commission-acct)
               (begin 
                 (set! commission-split (gnc:split-create
-                                        (gnc:get-current-book)))
+                                        (gnc-get-current-book)))
                 (gnc:split-set-value commission-split commission-amt)
                 (gnc:split-set-amount commission-split commission-amt)))
 

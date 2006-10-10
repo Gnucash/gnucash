@@ -140,7 +140,7 @@
            (if show-account-name
                  ;; display full account name?
                  (if show-account-full-name
-                      (gnc:account-get-full-name account)
+                      (gnc-account-get-full-name account)
                       (gnc:account-get-name account))
                  ""))))
 
@@ -418,7 +418,7 @@
                         (gnc:account-get-type account) #f))
          (currency (if account
                        (gnc:account-get-commodity account)
-                       (gnc:default-currency)))
+                       (gnc-default-currency)))
 	 (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
 			       (opt-val gnc:pagename-general optname-currency)
 			       currency))
@@ -545,7 +545,7 @@
     gnc:pagename-general optname-common-currency
     "e" (N_ "Convert all transactions into a common currency") #f
     #f
-    (lambda (x) (gnc:option-db-set-option-selectable-by-name
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		 gnc:*transaction-report-options*
 		 gnc:pagename-general
 		 optname-currency
@@ -572,7 +572,7 @@
       (gnc:filter-accountlist-type 
        '(bank cash credit asset liability stock mutual-fund currency
 	      payable receivable equity income expense)
-       (gnc:group-get-subaccounts (gnc:get-current-group))))
+       (gnc:group-get-subaccounts (gnc-get-current-group))))
     #f #t))
 
   (gnc:register-trep-option
@@ -583,9 +583,9 @@
       ;; FIXME : gnc:get-current-accounts disappeared.
       (let ((current-accounts '())
 	    (num-accounts (gnc:group-get-num-accounts
-			   (gnc:get-current-group)))
+			   (gnc-get-current-group)))
 	    (first-account (gnc:group-get-account
-			    (gnc:get-current-group) 0)))
+			    (gnc-get-current-group) 0)))
 	(cond ((not (null? current-accounts))
 	       (list (car current-accounts)))
 	      ((> num-accounts 0) (list first-account))
@@ -710,10 +710,10 @@
       'account-name
       key-choice-list #f
       (lambda (x)
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
          (and (member x subtotal-enabled) #t))
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          (if (member x date-sorting-types) #t #f)))))
     
@@ -761,10 +761,10 @@
       'register-order
       key-choice-list #f
       (lambda (x)
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-subtotal
          (and (member x subtotal-enabled) #t))
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
          (if (member x date-sorting-types) #t #f)))))
     
@@ -1213,7 +1213,7 @@ Credit Card, and Income accounts")))))
      3 2))
 
   (define (get-other-account-names account-list)
-    ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
+    ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
   (define (is-filter-member split account-list splits-ok?)
     (let ((fullname (gnc:split-get-corr-account-full-name split)))
@@ -1275,7 +1275,7 @@ Credit Card, and Income accounts")))))
 
     (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
-          (gnc:query-set-book query (gnc:get-current-book))
+          (gnc:query-set-book query (gnc-get-current-book))
 	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
                                        c_account_1
@@ -1294,9 +1294,9 @@ Credit Card, and Income accounts")))))
 
 	  (case void-status
 	   ((non-void-only) 
-	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book)))
+	    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
 	   ((void-only)
-	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
+	    (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
 	   (else #f))
 
           (set! splits (gnc:query-get-splits query))

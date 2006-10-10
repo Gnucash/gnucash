@@ -39,16 +39,16 @@
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
 (define (gnc:commodity-value->string pair)
-  (gnc:amount->string 
-   (cadr pair) (gnc:commodity-print-info (car pair) #t)))
+  (xaccPrintAmount
+   (cadr pair) (gnc-commodity-print-info (car pair) #t)))
 
 ;; Just for convenience. But in reports you should rather stick to the
 ;; style-info mechanism and simple plug the <gnc-monetary> into the
 ;; html-renderer.
 (define (gnc:monetary->string value)
-  (gnc:amount->string 
+  (xaccPrintAmount
    (gnc:gnc-monetary-amount value) 
-   (gnc:commodity-print-info (gnc:gnc-monetary-commodity value) #t)))
+   (gnc-commodity-print-info (gnc:gnc-monetary-commodity value) #t)))
 
 ;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)
@@ -152,7 +152,7 @@
 			(+ 1 (accounts-get-children-depth children)))))
 		accounts)))
   (accounts-get-children-depth 
-   (gnc:group-get-account-list (gnc:get-current-group))))
+   (gnc:group-get-account-list (gnc-get-current-group))))
 
 (define (gnc:split-get-corr-account-full-name split)
   (gnc:split-get-corr-account-full-name-internal split))
@@ -506,7 +506,7 @@
 	  (query (gnc:malloc-query))
 	  (splits #f))
       
-      (gnc:query-set-book query (gnc:get-current-book))
+      (gnc:query-set-book query (gnc-get-current-book))
       (gnc:query-add-single-account-match query account 'query-and)
       (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
       (gnc:query-set-sort-order query
@@ -527,7 +527,7 @@
 
 ;; Adds all accounts' balances, where the balances are determined with
 ;; the get-balance-fn. The reverse-balance-fn
-;; (e.g. gnc:account-reverse-balance?) should return #t if the
+;; (e.g. gnc-reverse-balance) should return #t if the
 ;; account's balance sign should get reversed. Returns a
 ;; commodity-collector.
 (define (gnc:accounts-get-balance-helper 
@@ -727,8 +727,8 @@
 	 (regexp (if (get-val type 'regexp) 1 0))
 	 (total (gnc:make-commodity-collector))
 	 )
-    (gnc:query-set-book query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (gnc:query-add-account-match query group 'guid-match-any 'query-and)
     (gnc:query-add-date-match-timepair
      query
@@ -770,10 +770,10 @@
 	 (pos? (if (get-val type 'positive) #t #f))
          (total (gnc:make-commodity-collector))
          )
-    (gnc:query-set-book str-query (gnc:get-current-book))
-    (gnc:query-set-book sign-query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! str-query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! sign-query (gnc:get-current-book))
+    (gnc:query-set-book str-query (gnc-get-current-book))
+    (gnc:query-set-book sign-query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
     (gnc:query-add-account-match str-query group 'guid-match-any 'query-and)
     (gnc:query-add-account-match sign-query group 'guid-match-any 'query-and)
     (gnc:query-add-date-match-timepair

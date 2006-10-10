@@ -110,7 +110,7 @@ balance at a given time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (gnc:group-get-subaccounts (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -201,7 +201,7 @@ balance at a given time"))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
                         (gnc:group-get-account-list 
-                         (gnc:get-current-group)))))
+                         (gnc-get-current-group)))))
 
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -227,7 +227,7 @@ balance at a given time"))
                            account-levels))
            (combined '())
            (other-anchor "")
-           (print-info (gnc:commodity-print-info report-currency #t)))
+           (print-info (gnc-commodity-print-info report-currency #t)))
 
       ;; Converts a commodity-collector into one single double
       ;; number, depending on the report currency and the
@@ -316,10 +316,10 @@ balance at a given time"))
 			 ((eq? sort-method 'alphabetical)
 			  (lambda (a b) 
 			    (string<? ((if show-fullname?
-					   gnc:account-get-full-name
+					   gnc-account-get-full-name
 					   gnc:account-get-name) (cadr a))
 				      ((if show-fullname?
-					   gnc:account-get-full-name
+					   gnc-account-get-full-name
 					   gnc:account-get-name) (cadr b)))))
 			 (else
 			  (lambda (a b) (> (car a) (car b)))))))
@@ -377,7 +377,7 @@ balance at a given time"))
                                  (list gnc:pagename-general 
                                        gnc:optname-reportname
                                        ((if show-fullname?
-                                            gnc:account-get-full-name
+                                            gnc-account-get-full-name
                                             gnc:account-get-name) acct))))))))
                    combined)))
               (gnc:html-piechart-set-button-1-slice-urls! 
@@ -410,7 +410,7 @@ balance at a given time"))
                            (let ((total (apply + (unzip1 combined))))
                              (sprintf
                               #f ": %s"
-                              (gnc:amount->string
+                              (xaccPrintAmount
                                (gnc:double-to-gnc-numeric
                                 total
                                 (gnc:commodity-get-fraction report-currency)
@@ -426,13 +426,13 @@ balance at a given time"))
                            (if (string? (cadr pair))
 			       (cadr pair)
 			       ((if show-fullname?
-				    gnc:account-get-full-name
+				    gnc-account-get-full-name
 				    gnc:account-get-name) (cadr pair)))
 			       'pre " " (_ "and") " " 'post)
 			   (if show-total?
 			       (string-append 
 				" - "
-				(gnc:amount->string
+				(xaccPrintAmount
 				 (gnc:double-to-gnc-numeric
 				  (car pair)
 				  (gnc:commodity-get-fraction report-currency)

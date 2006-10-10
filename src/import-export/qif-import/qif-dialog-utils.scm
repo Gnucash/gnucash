@@ -607,9 +607,9 @@
              (let* ((separator (string-ref (gnc:account-separator-string) 0))
                     (existing-gnc-acct 
                      (gnc:get-account-from-full-name 
-                      (gnc:get-current-group)
+                      (gnc-get-current-group)
                       (qif-map-entry:gnc-name map-entry)))
-		    (book (gnc:group-get-book (gnc:get-current-group)))
+		    (book (gnc:group-get-book (gnc-get-current-group)))
                     (existing-type 
                      (gnc:account-get-type existing-gnc-acct)))
                (if (and existing-gnc-acct 
@@ -709,11 +709,11 @@
        (set! accts 
              (cons 
               (cons (string-split 
-                     (gnc:account-get-full-name acct)
+                     (gnc-account-get-full-name acct)
                      separator)
                     #f)
               accts)))
-     (gnc:group-get-subaccounts (gnc:get-current-group)))
+     (gnc:group-get-subaccounts (gnc-get-current-group)))
 
     ;; now build a tree structure 
     (for-each 

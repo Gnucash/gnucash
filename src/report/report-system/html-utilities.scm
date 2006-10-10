@@ -429,7 +429,7 @@
 	(work-to-do 0)
 	(work-done 0)
 	(topl-accounts (gnc:group-get-account-list 
-			(gnc:get-current-group))))
+			(gnc-get-current-group))))
 
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
@@ -539,7 +539,7 @@
 			       (gnc:html-account-anchor acct)
 			       (gnc:account-get-commodity acct) 
 			       (my-get-balance acct)
-			       (gnc:account-reverse-balance? acct)
+			       (gnc-reverse-balance acct)
 			       (gnc:account-has-shares? acct)
 			       row-style row-style
 			       #f #f)
@@ -548,7 +548,7 @@
 	   (gnc:html-account-anchor acct)
 	   (gnc:sum-collector-commodity (my-get-balance acct) 
 					report-commodity exchange-fn)
-	   (gnc:account-reverse-balance? acct)
+	   (gnc-reverse-balance acct)
 	   row-style
 	       #f #f))))
   
@@ -627,7 +627,7 @@
 	       ;; includes the appropriate subaccounts.)
 	       (let ((subbalance (gnc:accounts-get-balance-helper 
 				  subaccounts my-get-balance 
-				  gnc:account-reverse-balance?)))
+				  gnc-reverse-balance)))
 		 (if thisbalance 
 		     (gnc:commodity-collector-merge subbalance thisbalance))
 		 subbalance)
@@ -662,7 +662,7 @@
 			       subaccts
 			       (gnc:accounts-get-balance-helper 
 				(list acct) my-get-balance-nosub 
-				gnc:account-reverse-balance?)
+				gnc-reverse-balance)
 			       show-parent-total?))))
 	   (sort-fn accnts)))))
 

@@ -74,7 +74,7 @@
                   '(bank cash credit asset liability payable receivable) 
                   ;; or: '(bank cash checking savings stock
                   ;; mutual-fund money-market)
-                  (gnc:group-get-account-list (gnc:get-current-group)))))))
+                  (gnc:group-get-account-list (gnc-get-current-group)))))))
       #f #t))
 
     ;; Display tab
@@ -337,11 +337,11 @@
 
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc:get-current-book))
+          (gnc:query-set-book query (gnc-get-current-book))
 
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+          (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
@@ -382,7 +382,7 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc:account-reverse-balance?))
+                 gnc-reverse-balance))
 	  (gnc:report-percent-done 50)
 
           (set! startbal 

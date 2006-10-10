@@ -88,7 +88,7 @@
                 (gnc:query-add-single-account-match 
                  sq 
                  (gnc:get-account-from-full-name
-                  old-group (gnc:account-get-full-name 
+                  old-group (gnc-account-get-full-name
                              (gnc:split-get-account split)))
                  'query-and)
                 

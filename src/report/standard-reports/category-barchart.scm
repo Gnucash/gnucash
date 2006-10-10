@@ -116,7 +116,7 @@ developing over time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (gnc:group-get-subaccounts (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type account-types accounts)))
@@ -213,7 +213,7 @@ developing over time"))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
                         (gnc:group-get-account-list 
-                         (gnc:get-current-group)))))
+                         (gnc-get-current-group)))))
     
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -375,10 +375,10 @@ developing over time"))
 			   ((eq? sort-method 'alphabetical)
 			    (lambda (a b) 
 			      (string<? ((if show-fullname?
-					     gnc:account-get-full-name
+					     gnc-account-get-full-name
 					     gnc:account-get-name) (car a))
 					((if show-fullname?
-					     gnc:account-get-full-name
+					     gnc-account-get-full-name
 					     gnc:account-get-name) (car b)))))
 			   (else
 			    (lambda (a b)
@@ -468,7 +468,7 @@ developing over time"))
                            (if (string? (car pair))
                                (car pair)
                                ((if show-fullname?
-                                    gnc:account-get-full-name
+                                    gnc-account-get-full-name
                                     gnc:account-get-name) (car pair)))
 			   'pre " " (_ "and") " " 'post))
                          all-data))
@@ -507,7 +507,7 @@ developing over time"))
                                (list gnc:pagename-general 
                                      gnc:optname-reportname
                                      ((if show-fullname?
-                                          gnc:account-get-full-name
+                                          gnc-account-get-full-name
                                           gnc:account-get-name) acct))))))))
                     all-data)))
                (gnc:html-barchart-set-button-1-bar-urls! 

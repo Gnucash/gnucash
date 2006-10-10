@@ -398,7 +398,7 @@
 
     (let* ((ct (gnc:book-get-commodity-table book))
 	   (big-list
-	    (gnc:commodity-table-get-quotable-commodities-info
+	    (gnc-commodity-table-get-quotable-commodities
 	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter

@@ -60,8 +60,8 @@
     ;; however, may be of issue here. Since I don't know if the
     ;; Register Report properly ignores voided transactions, I'll err
     ;; on the side of safety by excluding them from the query....
-    (gnc:query-set-book query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (gnc:query-set-sort-order query
 			      (list gnc:split-trans gnc:trans-date-posted)
 			      (list gnc:query-default-sort)
@@ -70,7 +70,7 @@
 
     (gnc:query-add-account-match
      query
-     (gnc:group-get-subaccounts (gnc:book-get-template-group (gnc:get-current-book)))
+     (gnc:group-get-subaccounts (gnc:book-get-template-group (gnc-get-current-book)))
      'guid-match-none
      'query-and)
 

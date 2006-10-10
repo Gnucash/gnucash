@@ -77,7 +77,7 @@
       pagename-price optname-price-commodity
       "e"
       (N_ "Calculate the price of this commodity.")
-      (gnc:locale-default-iso-currency-code)))
+      (gnc-locale-default-iso-currency-code)))
 
     (add-option
      (gnc:make-multichoice-option
@@ -167,7 +167,7 @@
          (chart (gnc:make-html-scatter))
          (currency-accounts 
           (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-                                           (gnc:get-current-group))))
+                                           (gnc-get-current-group))))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -229,7 +229,7 @@
                       (list (gnc:price-get-time p)
                             (gnc:price-get-value p)))
                     (gnc:pricedb-get-prices
-                     (gnc:book-get-pricedb (gnc:get-current-book))
+                     (gnc:book-get-pricedb (gnc-get-current-book))
                      price-commodity report-currency)))
               )))
 

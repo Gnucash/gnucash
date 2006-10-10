@@ -235,7 +235,7 @@
                                        (gnc:account-get-txf-code acc))
                                       "\" has duplicates in "
                                       (number->string cnt) " accounts:")
-                                     (map gnc:account-get-full-name 
+                                     (map gnc-account-get-full-name
                                           (cdr x))))
                              '())))
                      txf-dups-alist)))
@@ -288,7 +288,7 @@
             (make-sub-headers (- max-level 1)))))
 
 (define (render-txf-account account account-value d? date x? x-date)
-  (let* ((print-info (gnc:account-print-info account #t))
+  (let* ((print-info (gnc-account-print-info account #t))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
              (not (gnc:numeric-zero-p account-value)))
@@ -387,11 +387,11 @@
   (let* ((account-name (if txf-date	; special split
                            (strftime "%d.%m.%Y" (localtime (car txf-date)))
                            (if (or full-names (equal? level 1))
-                               (gnc:account-get-full-name account)
+                               (gnc-account-get-full-name account)
                                (gnc:account-get-name account))))
          (blue? (gnc:account-get-txf account))
-         (print-info (gnc:account-print-info account #f))
-         (value (gnc:amount->string lx-value print-info))
+         (print-info (gnc-account-print-info account #f))
+         (value (xaccPrintAmount lx-value print-info))
          (value-formatted (if (= 1 level)
                               (gnc:html-markup-b value)
                               value))
@@ -484,7 +484,7 @@
                                 valid-user-sel-accnts
                                 (validate (reverse 
                                            (gnc:group-get-account-list
-                                            (gnc:get-current-group))))))
+                                            (gnc-get-current-group))))))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -753,7 +753,7 @@
                                        (cons (current-time) 0))))))
 	  (tax-nr (or 
 		   (gnc:kvp-frame-get-slot-path
-		    (gnc:book-get-slots (gnc:get-current-book))
+		    (gnc:book-get-slots (gnc-get-current-book))
 		    (append gnc:*kvp-option-path*
 			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
 		   ""))

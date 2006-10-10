@@ -1289,7 +1289,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
     retval = scm_call_3(find_duplicates, 
-			scm_c_eval_string("(gnc:get-current-group)"),
+			scm_c_eval_string("(gnc-get-current-group)"),
 			wind->imported_account_group, window);
     gnc_unset_busy_cursor(NULL);
     
@@ -1861,7 +1861,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* actually add in the new transactions. */
   scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc:get-current-group)"),
+	     scm_c_eval_string("(gnc-get-current-group)"),
 	     wind->imported_account_group);
   
   gnc_resume_gui_refresh();

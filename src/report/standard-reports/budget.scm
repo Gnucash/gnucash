@@ -91,7 +91,7 @@
      (lambda ()
        (gnc:filter-accountlist-type
         '(asset liability income expense)
-        (gnc:group-get-subaccounts (gnc:get-current-group))))
+        (gnc:group-get-subaccounts (gnc-get-current-group))))
      #f)
 
     ;; Set the general page as default option tab
@@ -123,7 +123,7 @@
                                   budget acct period))
                     (act-val (gnc:make-gnc-monetary
                               comm numeric-val))
-                    (reverse-balance? (gnc:account-reverse-balance? acct))
+                    (reverse-balance? (gnc-reverse-balance acct))
                     )
 
                (cond (reverse-balance? (set! act-val
@@ -277,7 +277,7 @@
 
     ;; helper for sorting of account list
     (define (account-full-name<? a b)
-      (string<? (gnc:account-get-full-name a) (gnc:account-get-full-name b)))
+      (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
 
     ;; helper for account depth
     (define (account-get-depth account)

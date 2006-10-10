@@ -63,7 +63,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:get-current-book
+   'gnc-get-current-book
    '<gnc:Book*>
    "gnc_get_current_book"
    '()
@@ -88,7 +88,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:gettext-helper
+   'gnc-gettext-helper
    '(<gw:mchars> caller-owned const)
    "gnc_gettext_helper"
    '(((<gw:mchars> caller-owned const) str))
@@ -96,7 +96,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:option-db-new
+   'gnc-option-db-new
    '<gnc:OptionDB*>
    "gnc_option_db_new"
    '((<gw:scm> guile-options))
@@ -104,7 +104,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:option-db-destroy
+   'gnc-option-db-destroy
    '<gw:void>
    "gnc_option_db_destroy"
    '((<gnc:OptionDB*> option-db))
@@ -112,7 +112,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:option-db-set-option-selectable-by-name
+   'gnc-option-db-set-option-selectable-by-name
    '<gw:void>
    "gnc_option_db_set_option_selectable_by_name"
    '((<gw:scm> guile-options)
@@ -123,7 +123,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:default-currency
+   'gnc-default-currency
    '(<gnc:commodity*> const)
    "gnc_default_currency"
    '()
@@ -131,7 +131,7 @@
 
   (gw:wrap-function
    ws
-   'gnc:default-report-currency
+   'gnc-default-report-currency
    '(<gnc:commodity*> const)
    "gnc_default_report_currency"
    '()
@@ -149,7 +149,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:option-invoke-callback
+   'gncp_option_invoke_callback
    '<gw:void>
    "gncp_option_invoke_callback"
    '((<gnc:OptionChangeCallback> callback) (<gw:void*> data))
@@ -157,7 +157,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:option-db-register-option
+   'gnc-option-db-register-option
    '<gw:void>
    "gncp_option_db_register_option"
    '((<gw:int> db_handle) (<gw:scm> option))
@@ -181,7 +181,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:locale-default-iso-currency-code
+   'gnc-locale-default-iso-currency-code
    '(<gw:mchars> callee-owned const)
    "gnc_locale_default_iso_currency_code"
    '()
@@ -235,7 +235,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:account-get-full-name
+   'gnc-account-get-full-name
    '(<gw:mchars> caller-owned)
    "gnc_account_get_full_name"
    '((<gnc:Account*> account))
@@ -243,7 +243,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:default-print-info
+   'gnc-default-print-info
    '<gnc:print-amount-info-scm>
    "gnc_default_print_info"
    '((<gw:bool> use_symbol))
@@ -251,7 +251,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:commodity-print-info
+   'gnc-commodity-print-info
    '<gnc:print-amount-info-scm>
    "gnc_commodity_print_info"
    '((<gnc:commodity*> commodity) (<gw:bool> use_symbol))
@@ -259,7 +259,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:account-print-info
+   'gnc-account-print-info
    '<gnc:print-amount-info-scm>
    "gnc_account_print_info"
    '((<gnc:Account*> account) (<gw:bool> use_symbol))
@@ -283,7 +283,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:share-print-info-places
+   'gnc-share-print-info-places
    '<gnc:print-amount-info-scm>
    "gnc_share_print_info_places"
    '((<gw:int> decplaces))
@@ -307,7 +307,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:account-reverse-balance?
+   'gnc-reverse-balance
    '<gw:bool>
    "gnc_reverse_balance"
    '((<gnc:Account*> account))
@@ -315,7 +315,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:is-euro-currency
+   'gnc-is-euro-currency
    '<gw:bool>
    "gnc_is_euro_currency"
    '((<gnc:commodity*> currency))
@@ -331,7 +331,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:convert-to-euro
+   'gnc-convert-to-euro
    '<gnc:numeric>
    "gnc_convert_to_euro"
    '((<gnc:commodity*> currency) (<gnc:numeric> value))
@@ -339,7 +339,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:convert-from-euro
+   'gnc-convert-from-euro
    '<gnc:numeric>
    "gnc_convert_from_euro"
    '((<gnc:commodity*> currency) (<gnc:numeric> value))
@@ -371,7 +371,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:accounting-period-start
+   'gnc_accounting_period_fiscal_start
    '<gw:int>
    "gnc_accounting_period_fiscal_start"
    '()
@@ -379,7 +379,7 @@ determines formatting details.")
 
   (gw:wrap-function
    ws
-   'gnc:accounting-period-end
+   'gnc_accounting_period_fiscal_end
    '<gw:int>
    "gnc_accounting_period_fiscal_end"
    '()

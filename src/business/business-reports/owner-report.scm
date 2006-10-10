@@ -129,7 +129,7 @@
   (let ((lots (gnc:query-get-lots query 'query-txn-match-any))
 	(buckets (new-bucket-vector))
 	(payments (gnc:numeric-zero))
-	(currency (gnc:default-currency)) ;XXX
+	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table)))
 
     (define (in-interval this-date current-bucket)
@@ -276,7 +276,7 @@
   (let ((txns (gnc:query-get-transactions query 'query-txn-match-any))
 	(used-columns (build-column-used options))
 	(total (gnc:numeric-zero))
-	(currency (gnc:default-currency)) ;XXX
+	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table))
 	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
 						      "inv-str")))
@@ -449,7 +449,7 @@
 
     (gnc:query-add-single-account-match q account 'query-and)
     (gnc:query-add-date-match-timepair q #f end-date #t end-date 'query-and)
-    (gnc:query-set-book q (gnc:get-current-book))
+    (gnc:query-set-book q (gnc-get-current-book))
     q))
 
 (define (make-owner-table owner)
@@ -540,7 +540,7 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
+	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
 
@@ -632,7 +632,7 @@
 	      this-account
 	      (find-first group num (+ index 1))))))
 
-  (let* ((current-group (gnc:get-current-group))
+  (let* ((current-group (gnc-get-current-group))
 	 (num-accounts (gnc:group-get-num-accounts
 			current-group)))
     (if (> num-accounts 0)

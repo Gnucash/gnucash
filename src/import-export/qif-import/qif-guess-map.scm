@@ -110,7 +110,7 @@
                               (make-hash-table 20)))))
     
     ;; now build the list of all known account names 
-    (let* ((all-accounts (gnc:get-current-group))
+    (let* ((all-accounts (gnc-get-current-group))
            (all-account-info (extract-all-account-info all-accounts #f)))
       (set! results (cons all-account-info results)))
     results))
@@ -154,7 +154,7 @@
                  (mnemonic (caddr entry)))
              (hash-set! table name
                         (gnc:commodity-table-lookup
-                         (gnc:book-get-commodity-table (gnc:get-current-book))
+                         (gnc:book-get-commodity-table (gnc-get-current-book))
                          namespace mnemonic)))))
      commlist)
     table))

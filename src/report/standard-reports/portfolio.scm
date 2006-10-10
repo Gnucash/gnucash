@@ -73,7 +73,7 @@
       (N_ "Stock Accounts to report on")
       (lambda () (filter gnc:account-is-stock?
                          (gnc:group-get-subaccounts
-                          (gnc:get-current-group))))
+                          (gnc-get-current-group))))
       (lambda (accounts) (list  #t 
                                 (filter gnc:account-is-stock? accounts)))
       #t))
@@ -110,7 +110,7 @@
                                 exchange-fn price-fn include-empty collector)
 
    (let ((share-print-info
-	  (gnc:share-print-info-places
+	  (gnc-share-print-info-places
 	   (inexact->exact (get-option gnc:pagename-general
 				       optname-shares-digits)))))
 
@@ -142,7 +142,7 @@
 			      listing
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" 
-			       (gnc:amount->string units share-print-info))
+			       (xaccPrintAmount units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
 			       (gnc:html-price-anchor
@@ -192,7 +192,7 @@
                                 (append 
                                  (gnc:acccounts-get-all-subaccounts 
                                   accounts) accounts) currency))
-               (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
+               (pricedb (gnc:book-get-pricedb (gnc-get-current-book)))
 	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source

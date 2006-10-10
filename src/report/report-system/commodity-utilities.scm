@@ -43,8 +43,8 @@
   (let ((query (gnc:malloc-query))
 	(splits #f))
     
-    (gnc:query-set-book query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+    (gnc:query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (gnc:query-add-account-match query
                                  currency-accounts
                                  'guid-match-any 'query-and)
@@ -210,7 +210,7 @@
   (let ((currency-accounts 
 	 ;;(filter gnc:account-has-shares?  
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc:get-current-group)))
+	 (gnc:group-get-subaccounts (gnc-get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
@@ -311,7 +311,7 @@
   (let ((currency-accounts 
 	 ;;(filter gnc:account-has-shares? 
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc:get-current-group)))
+	 (gnc:group-get-subaccounts (gnc-get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
@@ -530,7 +530,7 @@
   (let ((curr-accounts 
 	 ;;(filter gnc:account-has-shares? ))
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc:get-current-group)))
+	 (gnc:group-get-subaccounts (gnc-get-current-group)))
 	;; sumlist: a multilevel alist. Each element has a commodity
 	;; as key, and another alist as a value. The value-alist's
 	;; elements consist of a commodity as a key, and a pair of two
@@ -642,14 +642,14 @@
 ;; doesn't check for it. Returns a <gnc-monetary>, or #f if at least
 ;; one of the currencies is not in the EURO.
 (define (gnc:exchange-by-euro foreign domestic date)
-  (and (gnc:is-euro-currency domestic)
-       (gnc:is-euro-currency (gnc:gnc-monetary-commodity foreign))
+  (and (gnc-is-euro-currency domestic)
+       (gnc-is-euro-currency (gnc:gnc-monetary-commodity foreign))
        ;; FIXME: implement the date check.
        (gnc:make-gnc-monetary
 	domestic
-	(gnc:convert-from-euro 
+	(gnc-convert-from-euro
 	 domestic
-	 (gnc:convert-to-euro (gnc:gnc-monetary-commodity foreign)
+	 (gnc-convert-to-euro (gnc:gnc-monetary-commodity foreign)
 			      (gnc:gnc-monetary-amount foreign))))))
 
 
@@ -752,7 +752,7 @@
 	   (gnc:make-gnc-monetary
 	    domestic
 	    (gnc:pricedb-convert-balance-latest-price
-             (gnc:book-get-pricedb (gnc:get-current-book))
+             (gnc:book-get-pricedb (gnc-get-current-book))
 	     (gnc:gnc-monetary-amount foreign)
 	     (gnc:gnc-monetary-commodity foreign)
 	     domestic)))
@@ -775,7 +775,7 @@
 	   (gnc:make-gnc-monetary
 	    domestic
 	    (gnc:pricedb-convert-balance-nearest-price
-             (gnc:book-get-pricedb (gnc:get-current-book))
+             (gnc:book-get-pricedb (gnc-get-current-book))
 	     (gnc:gnc-monetary-amount foreign)
 	     (gnc:gnc-monetary-commodity foreign)
 	     domestic (gnc:timepair-canonical-day-time date))))

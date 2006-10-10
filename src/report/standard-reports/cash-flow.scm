@@ -92,7 +92,7 @@
      (lambda ()
        (gnc:filter-accountlist-type 
         '(bank cash asset stock mutual-fund)
-        (gnc:group-get-subaccounts (gnc:get-current-group))))
+        (gnc:group-get-subaccounts (gnc-get-current-group))))
      #f)
     
     ;; Set the general page as default option tab
@@ -178,7 +178,7 @@
 
     ;; helper for sorting of account list
     (define (account-full-name<? a b)
-      (string<? (gnc:account-get-full-name a) (gnc:account-get-full-name b)))
+      (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
 
     ;; helper for account depth
     (define (account-get-depth account)
@@ -389,7 +389,7 @@
                                  (gnc:html-markup-anchor
                                    (gnc:account-anchor-text account)
                                    (if show-full-names?
-                                     (gnc:account-get-full-name account)
+                                     (gnc-account-get-full-name account)
                                      (gnc:account-get-name account))))))
                   
                   (set! account-disp-list (cons anchor account-disp-list))
@@ -438,7 +438,7 @@
                     (gnc:html-markup-anchor
                       (gnc:account-anchor-text acct)
                       (if show-full-names?
-                        (gnc:account-get-full-name acct)
+                        (gnc-account-get-full-name acct)
                         (gnc:account-get-name acct))))
                   (gnc:make-html-table-header-cell/markup
                    "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
@@ -483,7 +483,7 @@
                     (gnc:html-markup-anchor
                       (gnc:account-anchor-text acct)
                       (if show-full-names?
-                        (gnc:account-get-full-name acct)
+                        (gnc-account-get-full-name acct)
                         (gnc:account-get-name acct))))
                   (gnc:make-html-table-header-cell/markup
                    "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))

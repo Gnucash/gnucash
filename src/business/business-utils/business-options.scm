@@ -41,7 +41,7 @@
 
   (define (convert-to-invoice item)
     (if (string? item)
-        (gncInvoiceLookupFlip item (gnc:get-current-book))
+        (gncInvoiceLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -102,7 +102,7 @@
 
   (define (convert-to-customer item)
     (if (string? item)
-        (gncCustomerLookupFlip item (gnc:get-current-book))
+        (gncCustomerLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -163,7 +163,7 @@
 
   (define (convert-to-vendor item)
     (if (string? item)
-        (gncVendorLookupFlip item (gnc:get-current-book))
+        (gncVendorLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -224,7 +224,7 @@
 
   (define (convert-to-employee item)
     (if (string? item)
-        (gncEmployeeLookupFlip item (gnc:get-current-book))
+        (gncEmployeeLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -294,25 +294,25 @@
 	      ((eqv? type GNC-OWNER-CUSTOMER)
 	       (gncOwnerInitCustomer
 		option-value
-		(gncCustomerLookupFlip (cdr pair) (gnc:get-current-book)))
+		(gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
 	       option-value)
 
 	       ((eqv? type GNC-OWNER-VENDOR)
 		(gncOwnerInitVendor
 		 option-value
-		 (gncVendorLookupFlip (cdr pair) (gnc:get-current-book)))
+		 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
 	       ((eqv? type GNC-OWNER-EMPLOYEE)
 		(gncOwnerInitEmployee
 		 option-value
-		 (gncEmployeeLookupFlip (cdr pair) (gnc:get-current-book)))
+		 (gncEmployeeLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
 	       ((eqv? type GNC-OWNER-JOB)
 		(gncOwnerInitJob
 		 option-value
-		 (gncJobLookupFlip (cdr pair) (gnc:get-current-book)))
+		 (gncJobLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
 	       (else '())))
@@ -390,7 +390,7 @@
 
   (define (convert-to-taxtable item)
     (if (string? item)
-        (gncTaxTableLookupFlip item (gnc:get-current-book))
+        (gncTaxTableLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))

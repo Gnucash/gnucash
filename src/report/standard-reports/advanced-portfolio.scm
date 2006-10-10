@@ -152,7 +152,7 @@
       (N_ "Stock Accounts to report on")
       (lambda () (filter gnc:account-is-stock?
                          (gnc:group-get-subaccounts
-                          (gnc:get-current-group))))
+                          (gnc-get-current-group))))
       (lambda (accounts) (list  #t 
                                 (filter gnc:account-is-stock? accounts)))
       #t))
@@ -286,7 +286,7 @@
                                 total-gain total-ugain)
 
    (let ((share-print-info
-	  (gnc:share-print-info-places
+	  (gnc-share-print-info-places
 	   (inexact->exact (get-option gnc:pagename-display
       			       optname-shares-digits)))))
     
@@ -492,7 +492,7 @@
 	      (if show-symbol (append! activecols (list ticker-symbol)))
 	      (if show-listing (append! activecols (list listing)))
 	      (if show-shares (append! activecols (list (gnc:make-html-table-header-cell/markup
- 	        "number-cell" (gnc:amount->string units share-print-info)))))
+ 	        "number-cell" (xaccPrintAmount units share-print-info)))))
 	      (if show-price (append! activecols (list (gnc:make-html-table-header-cell/markup
 	        "number-cell"
 	        (if use-txn
@@ -592,7 +592,7 @@
     (if (not (null? accounts))
         ; at least 1 account selected
         (let* ((exchange-fn (gnc:case-exchange-fn price-source currency to-date))
-               (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
+               (pricedb (gnc:book-get-pricedb (gnc-get-current-book)))
                (price-fn
                 (case price-source
                   ((pricedb-latest) 

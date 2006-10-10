@@ -102,7 +102,7 @@
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (gnc:group-get-subaccounts (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -306,7 +306,7 @@
          
          (commodity-list #f)
          (exchange-fn #f)
-         (print-info (gnc:commodity-print-info report-currency #t))
+         (print-info (gnc-commodity-print-info report-currency #t))
         
          (beforebegindate (gnc:timepair-end-day-time 
                            (gnc:timepair-previous-day from-date-tp)))
@@ -315,7 +315,7 @@
          (topl-accounts (gnc:filter-accountlist-type 
                          account-types
                          (gnc:group-get-account-list 
-                          (gnc:get-current-group)))))
+                          (gnc-get-current-group)))))
     
     (define (monetary->double foreign-monetary date)
       (gnc:numeric-to-double
@@ -378,11 +378,11 @@
           
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc:get-current-book))
+          (gnc:query-set-book query (gnc-get-current-book))
           
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+          (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
@@ -423,7 +423,7 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc:account-reverse-balance?))
+                 gnc-reverse-balance))
 	  (gnc:report-percent-done 50)
           
           (set! startbal 
@@ -463,7 +463,7 @@
                                     (string-append
                                      (car p)
                                      " - "
-                                     (gnc:amount->string
+                                     (xaccPrintAmount
                                       (gnc:double-to-gnc-numeric
                                        (cadr p)
                                        (gnc:commodity-get-fraction report-currency)
@@ -488,7 +488,7 @@
                               (let ((total (apply + daily-totals)))
                                 (sprintf
                                  #f ": %s"
-                                 (gnc:amount->string
+                                 (xaccPrintAmount
                                   (gnc:double-to-gnc-numeric
                                    total
                                    (gnc:commodity-get-fraction report-currency)

@@ -391,7 +391,7 @@ new, totally cool report, consult the mailing list %s.")
 
         ;; Here we print the value of the number option formatted as
         ;; currency. When printing currency values, you should use
-        ;; the function (gnc:amount->string), which is defined in
+        ;; the function (xaccPrintAmount), which is defined in
         ;; report-utilities. This functions will format the number
         ;; appropriately in the current locale. Don't try to format
         ;; it yourself -- it will be wrong in other locales.
@@ -399,9 +399,9 @@ new, totally cool report, consult the mailing list %s.")
          (gnc:html-markup/format
           (_ "The number option formatted as currency is %s.")
           (gnc:html-markup-b
-           (gnc:amount->string
+           (xaccPrintAmount
             (gnc:make-gnc-numeric (inexact->exact num-val) 1)
-            (gnc:default-print-info #f)))))))
+            (gnc-default-print-info #f)))))))
 
       ;; you can add as many objects as you want.  Here's another 
       ;; one.  We'll make a single-column table of the selected list 
@@ -430,7 +430,7 @@ new, totally cool report, consult the mailing list %s.")
       ;; need to do is pass the HREF "gnc-register:account=My
       ;; Account Name" to html-markup-anchor.  The account name
       ;; passed must be the "full" account name that you get from
-      ;; gnc:account-get-full-name.  You should build this url using
+      ;; gnc-account-get-full-name.  You should build this url using
       ;; (gnc-build-url ...)
       ;;
       ;; html-markup-anchor takes the link to jump to as its first
@@ -449,7 +449,7 @@ new, totally cool report, consult the mailing list %s.")
                 (gnc:html-markup-anchor 
 		 (gnc-build-url URL-TYPE-REGISTER
 				     (string-append "account=" 
-						    (gnc:account-get-full-name
+						    (gnc-account-get-full-name
 						     acct))
 				     "")
                  (gnc:account-get-name acct)))

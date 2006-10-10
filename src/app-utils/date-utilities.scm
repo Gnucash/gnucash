@@ -454,10 +454,10 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-accounting-period)
-  (gnc:secs->timepair (gnc:accounting-period-start)))
+  (gnc:secs->timepair (gnc-accounting-period-fiscal-start)))
 
 (define (gnc:get-end-accounting-period)
-  (gnc:secs->timepair (gnc:accounting-period-end)))
+  (gnc:secs->timepair (gnc-accounting-period-fiscal-end)))
 
 (define (gnc:get-start-this-month)
   (let ((now (localtime (current-time))))

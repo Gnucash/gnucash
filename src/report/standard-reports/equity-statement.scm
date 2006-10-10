@@ -112,7 +112,7 @@
       (gnc:make-string-option
       (N_ "General") optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
@@ -131,7 +131,7 @@
 	(gnc:filter-accountlist-type 
 	 '(bank cash credit asset liability stock mutual-fund currency
 		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+	 (gnc:group-get-subaccounts (gnc-get-current-group))))
       #f #t))
     
     ;; all about currencies

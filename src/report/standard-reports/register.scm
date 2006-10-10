@@ -116,7 +116,7 @@
 (define (gnc:split-get-balance-display split)
   (let ((account (gnc:split-get-account split))
         (balance (gnc:split-get-balance split)))
-    (if (and account (gnc:account-reverse-balance? account))
+    (if (and account (gnc-reverse-balance account))
         (gnc:numeric-neg balance)
         balance)))
 
@@ -127,7 +127,7 @@
          (account (gnc:split-get-account split))
          (currency (if account
                        (gnc:account-get-commodity account)
-                       (gnc:default-currency)))
+                       (gnc-default-currency)))
          (damount (gnc:split-get-amount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
 
@@ -158,10 +158,10 @@
                         (let ((other-split
                                (gnc:split-get-other-split split)))
                           (if other-split
-                              (gnc:account-get-full-name
+                              (gnc-account-get-full-name
                                (gnc:split-get-account other-split))
                               (_ "-- Split Transaction --")))
-                        (gnc:account-get-full-name account))
+                        (gnc-account-get-full-name account))
                     " ")))
     (if (shares-col column-vector)
         (addto! row-contents
@@ -343,7 +343,7 @@
 
       (define (display-subtotal monetary)
         (if (amount-single-col used-columns)
-            (if (and leader (gnc:account-reverse-balance? leader))
+            (if (and leader (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
             (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount monetary))
@@ -561,7 +561,7 @@
 
     (set! query (gnc:scm->query query-scm))
 
-    (gnc:query-set-book query (gnc:get-current-book))
+    (gnc:query-set-book query (gnc-get-current-book))
 
     (set! splits (if journal?
                      (gnc:query-get-splits-unique-trans query)
