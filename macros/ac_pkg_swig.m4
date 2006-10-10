@@ -70,7 +70,7 @@ AC_DEFUN([AC_PROG_SWIG],[
                         if test $available_major -ne $required_major \
                                 -o $available_minor -ne $required_minor \
                                 -o $available_patch -lt $required_patch ; then
-                                AC_MSG_WARN([SWIG version >= $1 is required.  You have $swig_version.  You should look at http://www.swig.org])
+                                AC_MSG_ERROR([SWIG version >= $1 is required.  You have $swig_version.  You should look at http://www.swig.org])
                                 SWIG='echo "Error: SWIG version >= $1 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
                         else
                                 AC_MSG_NOTICE([SWIG executable is '$SWIG'])
@@ -78,7 +78,7 @@ AC_DEFUN([AC_PROG_SWIG],[
                                 AC_MSG_NOTICE([SWIG library directory is '$SWIG_LIB'])
                         fi
                 else
-                        AC_MSG_WARN([cannot determine SWIG version])
+                        AC_MSG_ERROR([cannot determine SWIG version])
                         SWIG='echo "Error: Cannot determine SWIG version.  You should look at http://www.swig.org" ; false'
                 fi
         fi
