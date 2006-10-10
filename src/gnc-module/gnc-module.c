@@ -15,7 +15,6 @@
 #include <dirent.h>
 
 #include "gnc-module.h"
-#include "gw-gnc-module.h"
 
 #ifndef lt_ptr
 # define lt_ptr lt_ptr_t
