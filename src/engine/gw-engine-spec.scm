@@ -1112,26 +1112,6 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
- 'gnc:group-staged-transaction-traversal
- '<gw:bool>
- "gnc_scmGroupStagedTransactionTraversal"
- '((<gnc:AccountGroup*> group)
-   (<gw:unsigned-int> stage)
-   (<gw:scm> thunk))
- "FIXME: For now, see Group.h for info...")
-
-(gw:wrap-function
- ws
- 'gnc:account-staged-transaction-traversal
- '<gw:bool>
- "gnc_scmAccountStagedTransactionTraversal"
- '((<gnc:Account*> account)
-   (<gw:unsigned-int> stage)
-   (<gw:scm> thunk))
- "FIXME: For now, see Group.h for info...")
-
-(gw:wrap-function
- ws
  'gnc:account-get-lot-list
  '(gw:glist-of <gnc:Lot*> callee-owned)
  "xaccAccountGetLotList"

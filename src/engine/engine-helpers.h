@@ -62,15 +62,6 @@ GSList * gnc_query_scm2path (SCM path_scm);
 SCM gnc_query2scm (Query * q);
 Query * gnc_scm2query (SCM query_scm);
 
-/* See Group.h for info about traversals. */
-
-gboolean gnc_scmGroupStagedTransactionTraversal(AccountGroup *grp,
-                                                unsigned int stage,
-                                                SCM thunk);
-
-gboolean gnc_scmAccountStagedTransactionTraversal(Account *a,
-                                                  unsigned int stage,
-                                                  SCM thunk);
 SCM gnc_gint64_to_scm(const gint64 x);
 gint64 gnc_scm_to_gint64(SCM num);
 int gnc_gh_gint64_p(SCM num);

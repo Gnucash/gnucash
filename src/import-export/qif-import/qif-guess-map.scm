@@ -163,7 +163,9 @@
   (let ((table '()))
     (hash-fold
      (lambda (key value p)
-       (if (and value (gw:wcp-is-of-type? <gnc:commodity*> value))
+       ;;FIXME: we used to type-check the values, like:
+       ;; (gw:wcp-is-of-type? <gnc:commodity*> value)
+       (if (and value #t)
            (set! table
                  (cons (list key 
                              (gnc:commodity-get-namespace value)
