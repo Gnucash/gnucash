@@ -1,7 +1,6 @@
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS}
 
@@ -15,24 +14,19 @@ noinst_HEADERS = \
   bar.h
 
 libgncmodbar_la_SOURCES=gnc-mod-bar.c
-nodist_libgncmodbar_la_SOURCES=bar-gwrap.c
 
 libgncmodbar_la_LIBADD=libbar.la \
-  $(G_WRAP_LINK_ARGS) \
   $(GLIB_LIBS)
 
+swig-bar.c: bar.i
+	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+
 EXTRA_DIST = \
-  bar-gwrap.scm \
+  bar.i \
   gnucash/bar.scm
 
-bar-gwrap.c bar-gwrap.h: bar-gwrap.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"${srcdir}/bar-gwrap.scm\") \
-	  (gw:generate-wrapset \"bar-gwrap\")"
-
-BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
-CLEANFILES = $(BUILT_SOURCES) bar-gwrap.html
+BUILT_SOURCES = swig-bar.c
+CLEANFILES = $(BUILT_SOURCES)
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:
