@@ -110,7 +110,7 @@ balance at a given time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -200,7 +200,7 @@ balance at a given time"))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (gnc:group-get-account-list 
+                        (xaccGroupGetAccountListSorted
                          (gnc-get-current-group)))))
 
     ;; Returns true if the account a was selected in the account
@@ -311,16 +311,16 @@ balance at a given time"))
 			(cond
 			 ((eq? sort-method 'acct-code)
 			  (lambda (a b) 
-			    (string<? (gnc:account-get-code (cadr a))
-				      (gnc:account-get-code (cadr b)))))
+			    (string<? (xaccAccountGetCode (cadr a))
+				      (xaccAccountGetCode (cadr b)))))
 			 ((eq? sort-method 'alphabetical)
 			  (lambda (a b) 
 			    (string<? ((if show-fullname?
 					   gnc-account-get-full-name
-					   gnc:account-get-name) (cadr a))
+					   xaccAccountGetName) (cadr a))
 				      ((if show-fullname?
 					   gnc-account-get-full-name
-					   gnc:account-get-name) (cadr b)))))
+					   xaccAccountGetName) (cadr b)))))
 			 (else
 			  (lambda (a b) (> (car a) (car b)))))))
 
@@ -378,7 +378,7 @@ balance at a given time"))
                                        gnc:optname-reportname
                                        ((if show-fullname?
                                             gnc-account-get-full-name
-                                            gnc:account-get-name) acct))))))))
+                                            xaccAccountGetName) acct))))))))
                    combined)))
               (gnc:html-piechart-set-button-1-slice-urls! 
                chart urls)
@@ -427,7 +427,7 @@ balance at a given time"))
 			       (cadr pair)
 			       ((if show-fullname?
 				    gnc-account-get-full-name
-				    gnc:account-get-name) (cadr pair)))
+				    xaccAccountGetName) (cadr pair)))
 			       'pre " " (_ "and") " " 'post)
 			   (if show-total?
 			       (string-append 

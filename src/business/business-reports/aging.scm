@@ -179,7 +179,7 @@
 			     reverse? show-zeros)
 
   (define (do-update value)
-    (let* ((transaction (gnc:split-get-parent split))
+    (let* ((transaction (xaccSplitGetParent split))
 	   (temp-owner (gncOwnerCreate))
 	   (owner (gnc:owner-from-split split temp-owner)))
 
@@ -187,7 +187,7 @@
        owner
        (let* ((guid (gncOwnerReturnGUID owner))
 	      (this-currency (xaccTransGetCurrency transaction))
-	      (this-date (gnc:transaction-get-date-posted transaction))
+	      (this-date (gnc-transaction-get-date-posted transaction))
 	      (company-info (hash-ref hash guid)))
 
 	 (gnc:debug "update-company-hash called")
@@ -227,9 +227,9 @@ more than one currency.  This report is not designed to cope with this possibili
   
   ;; figure out if this split is part of a closed lot
   ;; also save the split value...
-  (let* ((lot (gnc:split-get-lot split))
-	 (value (gnc:split-get-value split))
-	 (is-paid? (if (null? lot) #f (gnc:lot-closed? lot))))
+  (let* ((lot (xaccSplitGetLot split))
+	 (value (xaccSplitGetValue split))
+	 (is-paid? (if (null? lot) #f (gnc-lot-is-closed lot))))
 
     ;; if it's closed, then ignore it because it doesn't matter.
     ;; XXX: we _could_ just set the value to 0 in order to list
@@ -546,7 +546,7 @@ totals to report currency")
     (if account
         (begin
           (gnc:html-document-set-title!
-           document (string-append report-title ": " (gnc:account-get-name account)))
+           document (string-append report-title ": " (xaccAccountGetName account)))
           (gnc:html-document-set-headline! document
                                            (gnc:html-markup
                                             "!" 
@@ -554,7 +554,7 @@ totals to report currency")
                                             ": "
                                             (gnc:html-markup-anchor
                                              (gnc:account-anchor-text account)
-                                             (gnc:account-get-name account))))))
+                                             (xaccAccountGetName account))))))
 
     (gnc:html-table-set-col-headers! table heading-list)
 				     

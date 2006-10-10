@@ -116,7 +116,7 @@ developing over time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type account-types accounts)))
@@ -212,7 +212,7 @@ developing over time"))
         (chart (gnc:make-html-barchart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (gnc:group-get-account-list 
+                        (xaccGroupGetAccountListSorted
                          (gnc-get-current-group)))))
     
     ;; Returns true if the account a was selected in the account
@@ -370,16 +370,16 @@ developing over time"))
 			  (cond
 			   ((eq? sort-method 'acct-code)
 			    (lambda (a b) 
-			      (string<? (gnc:account-get-code (car a))
-					(gnc:account-get-code (car b)))))
+			      (string<? (xaccAccountGetCode (car a))
+					(xaccAccountGetCode (car b)))))
 			   ((eq? sort-method 'alphabetical)
 			    (lambda (a b) 
 			      (string<? ((if show-fullname?
 					     gnc-account-get-full-name
-					     gnc:account-get-name) (car a))
+					     xaccAccountGetName) (car a))
 					((if show-fullname?
 					     gnc-account-get-full-name
-					     gnc:account-get-name) (car b)))))
+					     xaccAccountGetName) (car b)))))
 			   (else
 			    (lambda (a b)
 			      (> (apply + (cadr a))
@@ -469,7 +469,7 @@ developing over time"))
                                (car pair)
                                ((if show-fullname?
                                     gnc-account-get-full-name
-                                    gnc:account-get-name) (car pair)))
+                                    xaccAccountGetName) (car pair)))
 			   'pre " " (_ "and") " " 'post))
                          all-data))
              (gnc:html-barchart-set-col-colors! 
@@ -508,7 +508,7 @@ developing over time"))
                                      gnc:optname-reportname
                                      ((if show-fullname?
                                           gnc-account-get-full-name
-                                          gnc:account-get-name) acct))))))))
+                                          xaccAccountGetName) acct))))))))
                     all-data)))
                (gnc:html-barchart-set-button-1-bar-urls! 
                 chart (append urls urls))

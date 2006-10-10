@@ -93,7 +93,7 @@
        (gnc:filter-accountlist-type 
         (ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
                         ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
-        (gnc:group-get-subaccounts (gnc-get-current-group))))
+        (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
      #f)
     
     ;; Set the general page as default option tab
@@ -151,10 +151,10 @@
 
     ;; is account in list of accounts?
     (define (same-account? a1 a2)
-      (string=? (gnc:account-get-guid a1) (gnc:account-get-guid a2)))
+      (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
 
     (define (same-split? s1 s2) 
-      (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
+      (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
 
     (define account-in-list?
       (lambda (account accounts)
@@ -184,7 +184,7 @@
     ;; helper for account depth
     (define (account-get-depth account)
       (define (account-get-depth-internal account-internal depth)
-        (let ((parent (gnc:account-get-parent-account account-internal)))
+        (let ((parent (xaccAccountGetParentAccount account-internal)))
           (if parent
             (account-get-depth-internal parent (+ depth 1))
             depth)))
@@ -251,7 +251,7 @@
               (if (not (null? accounts-internal))
                 (let* ((current (car accounts-internal))
                        (rest (cdr accounts-internal))
-                       (name (gnc:account-get-name current))
+                       (name (xaccAccountGetName current))
                        (curr-commodity (xaccAccountGetCommodity current))
                       )
 
@@ -261,19 +261,19 @@
                     (lambda (split)
 		      (set! work-done (+ 1 work-done))
 		      (gnc:report-percent-done (* 85 (/ work-done splits-to-do)))
-                      (let ((parent (gnc:split-get-parent split)))
-                        (if (and (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date-tp)
-                                 (gnc:timepair-ge (gnc:transaction-get-date-posted parent) from-date-tp))
-                          (let* ((parent-description (gnc:transaction-get-description parent))
+                      (let ((parent (xaccSplitGetParent split)))
+                        (if (and (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
+                                 (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))
+                          (let* ((parent-description (xaccTransGetDescription parent))
                                  (parent-currency (xaccTransGetCurrency parent)))
                             ;(gnc:debug parent-description
                             ;           " - " 
                             ;           (gnc-commodity-get-printname parent-currency))
                             (for-each
                               (lambda (s)
-                                (let* ((s-account (gnc:split-get-account s))
-                                       (s-amount (gnc:split-get-amount s))
-                                       (s-value (gnc:split-get-value s))
+                                (let* ((s-account (xaccSplitGetAccount s))
+                                       (s-amount (xaccSplitGetAmount s))
+                                       (s-value (xaccSplitGetValue s))
                                        (s-commodity (xaccAccountGetCommodity s-account)))
 				  ;; Check if this is a dangling split
 				  ;; and print a warning
@@ -281,9 +281,9 @@
 				      (display
 				       (string-append
 					"WARNING: s-account is NULL for split: "
-					(gnc:split-get-guid s) "\n")))
+					(gncSplitGetGUID s) "\n")))
 
-                                  ;(gnc:debug (gnc:account-get-name s-account))
+                                  ;(gnc:debug (xaccAccountGetName s-account))
                                   (if (and	 ;; make sure we don't have
 				       s-account ;;  any dangling splits
 				       (not (account-in-list? s-account accounts)))
@@ -307,7 +307,7 @@
 						  (let ((s-account-in-collector (cadr pair))
 							(s-report-value (to-report-currency parent-currency
 											    (gnc-numeric-neg s-value)
-											    (gnc:transaction-get-date-posted
+											    (gnc-transaction-get-date-posted
 											     parent))))
 						    (money-in-collector 'add report-currency s-report-value)
 						    (s-account-in-collector 'add report-currency s-report-value))
@@ -328,7 +328,7 @@
 						  (let ((s-account-out-collector (cadr pair))
 							(s-report-value (to-report-currency parent-currency
 											    s-value
-											    (gnc:transaction-get-date-posted
+											    (gnc-transaction-get-date-posted
 											     parent))))
 						    (money-out-collector 'add report-currency s-report-value)
 						    (s-account-out-collector 'add report-currency s-report-value))
@@ -339,13 +339,13 @@
 				      )
 				  )
 				)
-                              (gnc:transaction-get-splits parent)
+                              (xaccTransGetSplits parent)
                             )
                           )
                         )
                       )
                     )
-                    (gnc:account-get-split-list current)
+                    (xaccAccountGetSplitList current)
                   )
 
                   (calc-money-in-out-internal rest))))
@@ -391,7 +391,7 @@
                                    (gnc:account-anchor-text account)
                                    (if show-full-names?
                                      (gnc-account-get-full-name account)
-                                     (gnc:account-get-name account))))))
+                                     (xaccAccountGetName account))))))
                   
                   (set! account-disp-list (cons anchor account-disp-list))
                 )
@@ -440,7 +440,7 @@
                       (gnc:account-anchor-text acct)
                       (if show-full-names?
                         (gnc-account-get-full-name acct)
-                        (gnc:account-get-name acct))))
+                        (xaccAccountGetName acct))))
                   (gnc:make-html-table-header-cell/markup
                    "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
               )
@@ -485,7 +485,7 @@
                       (gnc:account-anchor-text acct)
                       (if show-full-names?
                         (gnc-account-get-full-name acct)
-                        (gnc:account-get-name acct))))
+                        (xaccAccountGetName acct))))
                   (gnc:make-html-table-header-cell/markup
                    "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))
               )

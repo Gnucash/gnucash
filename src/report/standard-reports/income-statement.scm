@@ -158,7 +158,7 @@
 	(gnc:filter-accountlist-type
 	 ;; select, by default, only income and expense accounts
 	 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (gnc:group-get-subaccounts (gnc-get-current-group))))
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit

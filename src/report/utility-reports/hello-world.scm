@@ -452,7 +452,7 @@ new, totally cool report, consult the mailing list %s.")
 						    (gnc-account-get-full-name
 						     acct))
 				     "")
-                 (gnc:account-get-name acct)))
+                 (xaccAccountGetName acct)))
               accounts))))
           (gnc:html-document-add-object!
            document

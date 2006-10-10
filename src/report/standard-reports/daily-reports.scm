@@ -102,7 +102,7 @@
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -170,8 +170,8 @@
     (define (get-split-value split date)
       (monetary->double
        (gnc:make-gnc-monetary
-        (xaccAccountGetCommodity (gnc:split-get-account split))
-        (gnc:split-get-amount split))
+        (xaccAccountGetCommodity (xaccSplitGetAccount split))
+        (xaccSplitGetAmount split))
        date))
     
     ;; calculate the statistics for one interval - returns a list 
@@ -206,14 +206,14 @@
 
         (define (split-recurse)
           (if (or (null? splits) (gnc:timepair-gt 
-                                  (gnc:transaction-get-date-posted 
-                                   (gnc:split-get-parent
+                                  (gnc-transaction-get-date-posted
+                                   (xaccSplitGetParent
                                     (car splits))) to)) 
               #f
               (let* 
                   ((split (car splits))
-                   (split-time (gnc:transaction-get-date-posted 
-                                (gnc:split-get-parent split)))
+                   (split-time (gnc-transaction-get-date-posted
+                                (xaccSplitGetParent split)))
                    ;; FIXME: Which date should we use here? The 'to'
                    ;; date? the 'split-time'?
                    (split-amt (get-split-value split split-time)))
@@ -314,7 +314,7 @@
          (chart (gnc:make-html-piechart))
          (topl-accounts (gnc:filter-accountlist-type 
                          account-types
-                         (gnc:group-get-account-list 
+                         (xaccGroupGetAccountListSorted
                           (gnc-get-current-group)))))
     
     (define (monetary->double foreign-monetary date)

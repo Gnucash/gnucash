@@ -88,18 +88,18 @@
     (equal? type GNC-AMT-TYPE-PERCENT)))
 
 (define (gnc:owner-from-split split result-owner)
-  (let* ((trans (gnc:split-get-parent split))
+  (let* ((trans (xaccSplitGetParent split))
 	 (invoice (gncInvoiceGetInvoiceFromTxn trans))
 	 (temp-owner (gncOwnerCreate))
 	 (owner #f))
 
     (if invoice
 	(set! owner (gncInvoiceGetOwner invoice))
-	(let ((split-list (gnc:transaction-get-splits trans)))
+	(let ((split-list (xaccTransGetSplits trans)))
 	  (define (check-splits splits)
 	    (if (and splits (not (null? splits)))
 		(let* ((split (car splits))
-		       (lot (gnc:split-get-lot split)))
+		       (lot (xaccSplitGetLot split)))
 		  (if lot
 		      (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
 			     (owner? (gnc:owner-get-owner-from-lot

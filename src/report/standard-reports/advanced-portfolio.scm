@@ -151,7 +151,7 @@
       "b"
       (N_ "Stock Accounts to report on")
       (lambda () (filter gnc:account-is-stock?
-                         (gnc:group-get-subaccounts
+                         (xaccGroupGetSubAccountsSorted
                           (gnc-get-current-group))))
       (lambda (accounts) (list  #t 
                                 (filter gnc:account-is-stock? accounts)))
@@ -188,13 +188,13 @@
     (gnc:option-value (get-op section name)))
   
   (define (split-account-type? split type)
-    (eq? type (xaccAccountGetType (gnc:split-get-account split))))
+    (eq? type (xaccAccountGetType (xaccSplitGetAccount split))))
 
   (define (same-split? s1 s2)
-    (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
+    (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
 
   (define (same-account? a1 a2)
-    (string=? (gnc:account-get-guid a1) (gnc:account-get-guid a2)))
+    (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
   
   ;; this builds a list for basis calculation and handles average, fifo and filo methods
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
@@ -294,7 +294,7 @@
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-                 (name (gnc:account-get-name current))
+                 (name (xaccAccountGetName current))
                  (commodity (xaccAccountGetCommodity current))
                  (ticker-symbol (gnc-commodity-get-mnemonic commodity))
                  (listing (gnc-commodity-get-namespace commodity))
@@ -335,33 +335,33 @@
 	     (lambda (split)
 	       (set! work-done (+ 1 work-done))
 	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-	       (let ((parent (gnc:split-get-parent split)))
-		 (if (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date)
+	       (let ((parent (xaccSplitGetParent split)))
+		 (if (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date)
 		     (begin
 		       (for-each
 			(lambda (s)
 			  ;; If this is an asset type account for buy or sell, then grab a 
 			  ;; currency and a txn-value for later computation
 			  (cond
-			   ((and (not (same-account? current (gnc:split-get-account s))) 
+			   ((and (not (same-account? current (xaccSplitGetAccount s)))
 				 (not (or (split-account-type?
                                            s ACCT-TYPE-EXPENSE)
 					  (split-account-type?
                                            s ACCT-TYPE-INCOME))))
 
 			    ;;only change the commod-currency if price failed
-			    (if (not price) (set! commod-currency (xaccAccountGetCommodity (gnc:split-get-account s))))
-			    (set! txn-value (gnc-numeric-abs (gnc:split-get-value s)));;FIXME use gnc:split-get-share-price
-			    (set! txn-date (gnc:transaction-get-date-posted parent))
+			    (if (not price) (set! commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+			    (set! txn-value (gnc-numeric-abs (xaccSplitGetValue s)));;FIXME use xaccSplitGetSharePrice
+			    (set! txn-date (gnc-transaction-get-date-posted parent))
 			    (set! pricing-txn parent)
 			    )
-			   ((same-account? current (gnc:split-get-account s))
-			    (set! txn-units (gnc:split-get-amount s)))
+			   ((same-account? current (xaccSplitGetAccount s))
+			    (set! txn-units (xaccSplitGetAmount s)))
 			    
 			      )
 			  )
 
-			(gnc:transaction-get-splits parent))
+			(xaccTransGetSplits parent))
 
 
 		       ;; go build the basis-list
@@ -376,54 +376,54 @@
 			(lambda (s)
 			  (cond
 			   ((same-split? s split) 
-;;                       (gnc:debug "amount " (gnc-numeric-to-double (gnc:split-get-amount s))
-;;                                  " acct " (gnc:account-get-name (gnc:split-get-account s)) )
-;;                       (gnc:debug "value " (gnc-numeric-to-double (gnc:split-get-value s))
+;;                       (gnc:debug "amount " (gnc-numeric-to-double (xaccSplitGetAmount s))
+;;                                  " acct " (xaccAccountGetName (xaccSplitGetAccount s)) )
+;;                       (gnc:debug "value " (gnc-numeric-to-double (xaccSplitGetValue s))
 ;;                                  " in " (gnc-commodity-get-printname commod-currency)
-;;                                  " from " (gnc:transaction-get-description (gnc:split-get-parent s)))
+;;                                  " from " (xaccTransGetDescription (xaccSplitGetParent s)))
 			    (cond
-			     ((or include-gains (not (gnc-numeric-zero-p (gnc:split-get-amount s))))
-			      (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
+			     ((or include-gains (not (gnc-numeric-zero-p (xaccSplitGetAmount s))))
+			      (unitscoll 'add commodity (xaccSplitGetAmount s)) ;; Is the stock transaction?
 ;; these lines do nothing, but are in a debug so I'm leaving it, just in case. asw.			     
 ;;			      (if (< 0 (gnc-numeric-to-double
-;;					(gnc:split-get-amount s)))
+;;					(xaccSplitGetAmount s)))
 
 
 ;;				  (set! totalunits
 ;;					(+ totalunits
-;;					   (gnc-numeric-to-double (gnc:split-get-amount s))))
+;;					   (gnc-numeric-to-double (xaccSplitGetAmount s))))
 ;;				  )
 
 
 ;;			      (set! totalunityears
 ;;				    (+ totalunityears 
-;;				       (* (gnc-numeric-to-double (gnc:split-get-amount s))
+;;				       (* (gnc-numeric-to-double (xaccSplitGetAmount s))
 ;;					  (gnc:date-year-delta 
-;;					   (car (gnc:transaction-get-date-posted parent))
+;;					   (car (gnc-transaction-get-date-posted parent))
 ;;					   (current-time))))) 
 			      (cond 
-			       ((gnc-numeric-negative-p (gnc:split-get-value s))
+			       ((gnc-numeric-negative-p (xaccSplitGetValue s))
 				(moneyoutcoll
 				 'add commod-currency
-				 (gnc-numeric-neg (gnc:split-get-value s))))
+				 (gnc-numeric-neg (xaccSplitGetValue s))))
 			       (else (moneyincoll 
 				      'add commod-currency
-				      (gnc-numeric-neg (gnc:split-get-value s))))))))
+				      (gnc-numeric-neg (xaccSplitGetValue s))))))))
 			 
 			   ((split-account-type? s ACCT-TYPE-EXPENSE)
-			     (brokeragecoll 'add commod-currency (gnc:split-get-value s)))
+			     (brokeragecoll 'add commod-currency (xaccSplitGetValue s)))
 			   
 			   ((split-account-type? s ACCT-TYPE-INCOME)
-			     (dividendcoll 'add commod-currency (gnc:split-get-value s)))
+			     (dividendcoll 'add commod-currency (xaccSplitGetValue s)))
 			   )
 			  )
-			(gnc:transaction-get-splits parent)
+			(xaccTransGetSplits parent)
 			)
 		       )
 		     )
 		 )
 	       )
-	     (gnc:account-get-split-list current)
+	     (xaccAccountGetSplitList current)
 	     )
 ;;          (gnc:debug "totalunits" totalunits)
 ;;          (gnc:debug "totalunityears" totalunityears)

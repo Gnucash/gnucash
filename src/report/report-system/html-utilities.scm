@@ -33,13 +33,13 @@
   (gnc-build-url URL-TYPE-REGISTER (string-append type guid) ""))
 
 (define (gnc:account-anchor-text acct)
-  (gnc:register-guid "acct-guid=" (gnc:account-get-guid acct)))
+  (gnc:register-guid "acct-guid=" (gncAccountGetGUID acct)))
 
 (define (gnc:split-anchor-text split)
-  (gnc:register-guid "split-guid=" (gnc:split-get-guid split)))
+  (gnc:register-guid "split-guid=" (gncSplitGetGUID split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (gnc:register-guid "trans-guid=" (gnc:transaction-get-guid trans)))
+  (gnc:register-guid "trans-guid=" (gncTransGetGUID trans)))
 
 (define (gnc:report-anchor-text report-id)
   (gnc-build-url URL-TYPE-REPORT
@@ -81,11 +81,11 @@
   (gnc:make-html-text (if acct
                           (gnc:html-markup-anchor
                            (gnc:account-anchor-text acct)
-                           (gnc:account-get-name acct))
+                           (xaccAccountGetName acct))
                           "")))
 
 (define (gnc:html-split-anchor split text)
-  (gnc:make-html-text (if (gnc:split-get-account split)
+  (gnc:make-html-text (if (xaccSplitGetAccount split)
                           (gnc:html-markup-anchor
                            (gnc:split-anchor-text split)
                            text)
@@ -428,7 +428,7 @@
   (let ((table (gnc:make-html-table))
 	(work-to-do 0)
 	(work-done 0)
-	(topl-accounts (gnc:group-get-account-list 
+	(topl-accounts (xaccGroupGetAccountListSorted
 			(gnc-get-current-group))))
 
     ;; The following functions are defined inside build-acct-table
@@ -464,7 +464,7 @@
 	    ;; account a is shown, i.e. (use-acct? a) == #t.
 	    (and (use-acct? a)
 		 (my-get-balance-nosub a)))
-	  (gnc:account-get-children account)))
+	  (xaccAccountGetChildren account)))
 	this-collector))
 
     ;; Use this account in the account hierarchy? Check against the
@@ -474,7 +474,7 @@
     (define (use-acct? a)
       (or (member a accounts)
 	  (and show-subaccts? 
-	       (let ((parent (gnc:account-get-parent-account a)))
+	       (let ((parent (xaccAccountGetParentAccount a)))
 		 (and parent
 		      (use-acct? parent))))))
 
@@ -491,8 +491,8 @@
     (define (sort-fn accts)
       (sort accts
 	    (lambda (a b) 
-	      (string<? (gnc:account-get-code a)
-			(gnc:account-get-code b)))))
+	      (string<? (xaccAccountGetCode a)
+			(xaccAccountGetCode b)))))
 
     ;; Remove the last appended row iff *all* its fields are empty
     ;; (==#f) or have an html-table-cell which in turn is empty

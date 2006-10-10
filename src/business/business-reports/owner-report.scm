@@ -155,7 +155,7 @@
 
     (for-each
      (lambda (lot)
-       (let* ((bal (gnc:lot-get-balance lot))
+       (let* ((bal (gnc-lot-get-balance lot))
 	      (invoice (gncInvoiceGetInvoiceFromLot lot))
 	      (post-date (gncInvoiceGetDatePosted invoice)))
 
@@ -192,11 +192,11 @@
 ;;
 (define (add-txn-row table txn acc column-vector odd-row? printed?
 		     inv-str reverse? start-date total)
-  (let* ((type (gnc:transaction-get-txn-type txn))
-	 (date (gnc:transaction-get-date-posted txn))
+  (let* ((type (xaccTransGetTxnType txn))
+	 (date (gnc-transaction-get-date-posted txn))
 	 (due-date #f)
-	 (value (gnc:transaction-get-account-value txn acc))
-	 (split (gnc:transaction-get-split txn 0))
+	 (value (xaccTransGetAccountValue txn acc))
+	 (split (xaccTransGetSplit txn 0))
 	 (invoice (gncInvoiceGetInvoiceFromTxn txn))
 	 (currency (xaccTransGetCurrency txn))
 	 (type-str
@@ -258,8 +258,8 @@
 	  (if invoice
 	      (set! due-date (gncInvoiceGetDateDue invoice)))
 
-	  (let ((row (make-row date due-date (gnc:transaction-get-num txn)
-			       type-str (gnc:split-get-memo split) value))
+	  (let ((row (make-row date due-date (xaccTransGetNum txn)
+			       type-str (xaccSplitGetMemo split) value))
 		(row-style (if odd-row? "normal-row" "alternate-row")))
 
 	    (gnc:html-table-append-row/markup! table row-style
@@ -288,13 +288,13 @@
      (make-heading-list used-columns))
 
     ; Order the transactions properly
-    (set! txns (sort txns (lambda (a b) (> 0 (gnc:transaction-order a b)))))
+    (set! txns (sort txns (lambda (a b) (> 0 (xaccTransOrder a b)))))
 
     (let ((printed? #f)
 	  (odd-row? #t))
       (for-each
        (lambda (txn)
-	 (let ((type (gnc:transaction-get-txn-type txn)))
+	 (let ((type (xaccTransGetTxnType txn)))
 	   (if
 	    (or (equal? type gnc:transaction-type-invoice)
 		(equal? type gnc:transaction-type-payment))
@@ -629,14 +629,14 @@
   (define (find-first group num index)
     (if (>= index num)
 	'()
-	(let* ((this-account (gnc:group-get-account group index))
+	(let* ((this-account (xaccGroupGetAccount group index))
 	       (account-type (xaccAccountGetType this-account)))
 	  (if (eq? account-type type)
 	      this-account
 	      (find-first group num (+ index 1))))))
 
   (let* ((current-group (gnc-get-current-group))
-	 (num-accounts (gnc:group-get-num-accounts
+	 (num-accounts (xaccGroupGetNumAccounts
 			current-group)))
     (if (> num-accounts 0)
 	(find-first current-group num-accounts 0)

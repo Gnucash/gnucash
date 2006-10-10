@@ -28,23 +28,23 @@
   (define (extract-all-account-info agroup root-name)
     (if (not agroup)
         '()
-        (let ((children-list (gnc:group-get-account-list agroup))
+        (let ((children-list (xaccGroupGetAccountListSorted agroup))
               (names '()))
           
           ;; now descend the tree of child accounts.
           (for-each 
            (lambda (child-acct)
-             (let* ((name (gnc:account-get-name child-acct))
+             (let* ((name (xaccAccountGetName child-acct))
                     (fullname 
                      (if (string? root-name)
                          (string-append root-name 
-                                        (gnc:account-separator-string)
+                                        (gnc-get-account-separator-string)
                                         name)
                          name)))
                (set! names 
                      (append (cons (list name fullname child-acct)
                                    (extract-all-account-info 
-                                    (gnc:account-get-children child-acct)
+                                    (xaccAccountGetChildren child-acct)
                                     fullname))
                              names))))
            children-list)

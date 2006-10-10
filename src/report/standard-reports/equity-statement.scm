@@ -134,7 +134,7 @@
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
                ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-         (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     
     ;; all about currencies

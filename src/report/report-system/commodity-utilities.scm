@@ -59,10 +59,10 @@
 		  ;; involved.
 		  (lambda (s) (let ((trans-comm
 				     (xaccTransGetCurrency
-				      (gnc:split-get-parent s)))
+				      (xaccSplitGetParent s)))
 				    (acc-comm
 				     (xaccAccountGetCommodity
-				      (gnc:split-get-account s))))
+				      (xaccSplitGetAccount s))))
 				(and
 				 (not (gnc-commodity-equiv
 				       trans-comm acc-comm))
@@ -86,8 +86,8 @@
 					end-date-tp commodity)
 	(lambda (a b)
 	  (gnc:timepair-lt 
-	   (gnc:transaction-get-date-posted (gnc:split-get-parent a))
-	   (gnc:transaction-get-date-posted (gnc:split-get-parent b))))))
+	   (gnc-transaction-get-date-posted (xaccSplitGetParent a))
+	   (gnc-transaction-get-date-posted (xaccSplitGetParent b))))))
 
 
 ;; Returns a list of all splits in the currency-accounts up to
@@ -131,15 +131,15 @@
      (map-in-order
       (lambda (a)
 	(let* ((transaction-comm (xaccTransGetCurrency
-				  (gnc:split-get-parent a)))
+				  (xaccSplitGetParent a)))
 	       (account-comm (xaccAccountGetCommodity
-			      (gnc:split-get-account a)))
+			      (xaccSplitGetAccount a)))
 	       (share-amount (gnc-numeric-abs
-			      (gnc:split-get-amount a)))
+			      (xaccSplitGetAmount a)))
 	       (value-amount (gnc-numeric-abs
-			      (gnc:split-get-value a)))
-	       (transaction-date (gnc:transaction-get-date-posted
-				  (gnc:split-get-parent a)))
+			      (xaccSplitGetValue a)))
+	       (transaction-date (gnc-transaction-get-date-posted
+				  (xaccSplitGetParent a)))
 	       (foreignlist
 		(if (gnc-commodity-equiv transaction-comm
 					  price-commodity)
@@ -210,7 +210,7 @@
   (let ((currency-accounts 
 	 ;;(filter gnc:account-has-shares?  
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc-get-current-group)))
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
@@ -239,15 +239,15 @@
    (map-in-order
     (lambda (a)
       (let* ((transaction-comm (xaccTransGetCurrency
-				(gnc:split-get-parent a)))
+				(xaccSplitGetParent a)))
 	     (account-comm (xaccAccountGetCommodity
-			    (gnc:split-get-account a)))
+			    (xaccSplitGetAccount a)))
 	     (share-amount (gnc-numeric-abs
-			    (gnc:split-get-amount a)))
+			    (xaccSplitGetAmount a)))
 	     (value-amount (gnc-numeric-abs
-			    (gnc:split-get-value a)))
-	     (transaction-date (gnc:transaction-get-date-posted
-				(gnc:split-get-parent a)))
+			    (xaccSplitGetValue a)))
+	     (transaction-date (gnc-transaction-get-date-posted
+				(xaccSplitGetParent a)))
 	     (foreignlist 
 	      (if (gnc-commodity-equiv transaction-comm price-commodity)
 		  (list account-comm
@@ -311,7 +311,7 @@
   (let ((currency-accounts 
 	 ;;(filter gnc:account-has-shares? 
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc-get-current-group)))
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group)))
 	(work-to-do (length commodity-list))
 	(work-done 0))
     (map
@@ -530,7 +530,7 @@
   (let ((curr-accounts 
 	 ;;(filter gnc:account-has-shares? ))
 	 ;; -- use all accounts, not only share accounts, since gnucash-1.7
-	 (gnc:group-get-subaccounts (gnc-get-current-group)))
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group)))
 	;; sumlist: a multilevel alist. Each element has a commodity
 	;; as key, and another alist as a value. The value-alist's
 	;; elements consist of a commodity as a key, and a pair of two
@@ -552,14 +552,14 @@
 	(for-each 
 	 (lambda (a)
 	   (let* ((transaction-comm (xaccTransGetCurrency
-				     (gnc:split-get-parent a)))
+				     (xaccSplitGetParent a)))
 		  (account-comm (xaccAccountGetCommodity
-				 (gnc:split-get-account a)))
+				 (xaccSplitGetAccount a)))
 		  ;; Always use the absolute value here.
 		  (share-amount (gnc-numeric-abs
-				 (gnc:split-get-amount a)))
+				 (xaccSplitGetAmount a)))
 		  (value-amount (gnc-numeric-abs
-				 (gnc:split-get-value a)))
+				 (xaccSplitGetValue a)))
 		  (tmp (assoc transaction-comm sumlist))
 		  (comm-list (if (not tmp) 
 				 (assoc account-comm sumlist)

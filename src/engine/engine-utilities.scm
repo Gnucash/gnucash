@@ -22,9 +22,9 @@
 ;; Copyright 2000 Rob Browning <rlb@cs.utexas.edu>
 
 (define (gnc:group-map-all-accounts thunk group)
-  (let ((accounts (or (gnc:group-get-subaccounts group) '())))
+  (let ((accounts (or (xaccGroupGetSubAccountsSorted group) '())))
     (map thunk accounts)))
 
 (define (gnc:group-map-accounts thunk group)
-  (let ((accounts (or (gnc:group-get-account-list group) '())))
+  (let ((accounts (or (xaccGroupGetAccountListSorted group) '())))
     (map thunk accounts)))

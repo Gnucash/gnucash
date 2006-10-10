@@ -432,10 +432,10 @@
 		  currency-totals)))
 
     (define (add-payment-row table used-columns split total-collector)
-      (let* ((t (gnc:split-get-parent split))
+      (let* ((t (xaccSplitGetParent split))
 	     (currency (xaccTransGetCurrency t))
 	     ;; XXX Need to know when to reverse the value
-	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
+	     (amt (gnc:make-gnc-monetary currency (xaccSplitGetValue split)))
 	     (payment-style "grand-total")
 	     (row '()))
 	
@@ -445,7 +445,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc-print-date (gnc:transaction-get-date-posted t))))
+		    (gnc-print-date (gnc-transaction-get-date-posted t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -489,7 +489,7 @@
 		 (lambda (acct value)
 		   (let ((collector (gnc:make-commodity-collector))
 			 (commodity (xaccAccountGetCommodity acct))
-			 (name (gnc:account-get-name acct)))
+			 (name (xaccAccountGetName acct)))
 		     (collector 'add commodity value)
 		     (add-subtotal-row table used-columns collector
 				       "grand-total" (string-expand
@@ -502,14 +502,14 @@
 
 	    (if (and show-payments lot)
 		(let ((splits (sort-list!
-			       (gnc:lot-get-splits lot)
+			       (gnc-lot-get-split-list lot)
 			       (lambda (s1 s2)
-				 (let ((t1 (gnc:split-get-parent s1))
-				       (t2 (gnc:split-get-parent s2)))
-				   (< (gnc:transaction-order t1 t2) 0))))))
+				 (let ((t1 (xaccSplitGetParent s1))
+				       (t2 (xaccSplitGetParent s2)))
+				   (< (xaccTransOrder t1 t2) 0))))))
 		  (for-each
 		   (lambda (split)
-		     (if (not (equal? (gnc:split-get-parent split) txn))
+		     (if (not (equal? (xaccSplitGetParent split) txn))
 			 (add-payment-row table used-columns
 					  split total-collector)))
 		   splits)))

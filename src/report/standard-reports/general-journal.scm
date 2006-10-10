@@ -70,7 +70,7 @@
 
     (xaccQueryAddAccountMatch
      query
-     (gnc:group-get-subaccounts (gnc-book-get-template-group (gnc-get-current-book)))
+     (xaccGroupGetSubAccountsSorted (gnc-book-get-template-group (gnc-get-current-book)))
      QOF-GUID-MATCH-NONE
      QOF-QUERY-AND)
 

@@ -92,7 +92,7 @@
        (gnc:filter-accountlist-type
         (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY ACCT-TYPE-INCOME
                           ACCT-TYPE-EXPENSE)
-        (gnc:group-get-subaccounts (gnc-get-current-group))))
+        (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
      #f)
 
     ;; Set the general page as default option tab
@@ -107,7 +107,7 @@
   (define (gnc:html-table-add-budget-line!
            html-table rownum colnum
            budget acct exchange-fn)
-    (let* ((num-periods (gnc:budget-get-num-periods budget))
+    (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
            )
       (while (< period num-periods)
@@ -115,12 +115,12 @@
                     (act-col (+ 1 bgt-col))
 
                     (comm (xaccAccountGetCommodity acct))
-                    (numeric-val (gnc:budget-get-account-period-value
+                    (numeric-val (gnc-budget-get-account-period-value
                                   budget acct period))
 
                     (bgt-val (gnc:make-gnc-monetary
                               comm numeric-val))
-                    (numeric-val (gnc:budget-get-account-period-actual-value
+                    (numeric-val (gnc-budget-get-account-period-actual-value
                                   budget acct period))
                     (act-val (gnc:make-gnc-monetary
                               comm numeric-val))
@@ -146,7 +146,7 @@
     )
   (define (gnc:html-table-add-budget-headers!
            html-table colnum budget)
-    (let* ((num-periods (gnc:budget-get-num-periods budget))
+    (let* ((num-periods (gnc-budget-get-num-periods budget))
            (period 0)
            )
 
@@ -158,7 +158,7 @@
       (while (< period num-periods)
              (let* ((bgt-col (+ (* period 2) colnum 1))
                     (act-col (+ 1 bgt-col))
-                    (date (gnc:budget-get-period-start-date budget period))
+                    (date (gnc-budget-get-period-start-date budget period))
                     )
                (gnc:html-table-set-cell!
                 html-table 0 bgt-col (gnc-print-date date))
@@ -250,10 +250,10 @@
 
     ;; is account in list of accounts?
     (define (same-account? a1 a2)
-      (string=? (gnc:account-get-guid a1) (gnc:account-get-guid a2)))
+      (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
 
     (define (same-split? s1 s2)
-      (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
+      (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
 
     (define account-in-list?
       (lambda (account accounts)
@@ -283,7 +283,7 @@
     ;; helper for account depth
     (define (account-get-depth account)
       (define (account-get-depth-internal account-internal depth)
-        (let ((parent (gnc:account-get-parent-account account-internal)))
+        (let ((parent (xaccAccountGetParentAccount account-internal)))
           (if parent
             (account-get-depth-internal parent (+ depth 1))
             depth)))
@@ -331,7 +331,7 @@
 
           (gnc:html-document-set-title!
            doc (sprintf #f (_ "%s - %s")
-                        report-name (gnc:budget-get-name budget)))
+                        report-name (gnc-budget-get-name budget)))
 
           (set! accounts (sort accounts account-full-name<?))
 

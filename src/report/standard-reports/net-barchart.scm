@@ -88,7 +88,7 @@
          (if inc-exp?
              gnc:account-is-inc-exp?
              (lambda (account) (not (gnc:account-is-inc-exp? account))))
-         (gnc:group-get-subaccounts (gnc-get-current-group))))
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       (lambda (accounts)
         (list #t
               (filter 

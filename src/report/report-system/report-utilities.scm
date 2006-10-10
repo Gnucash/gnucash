@@ -147,10 +147,10 @@
 			(+ 1 (accounts-get-children-depth children)))))
 		accounts)))
   (accounts-get-children-depth 
-   (gnc:group-get-account-list (gnc-get-current-group))))
+   (xaccGroupGetAccountListSorted (gnc-get-current-group))))
 
 (define (gnc:split-get-corr-account-full-name split)
-  (gnc:split-get-corr-account-full-name-internal split))
+  (xaccSplitGetCorrAccountFullName split))
 
 
 ;; get children that are the direct descendant of this acct
@@ -162,12 +162,12 @@
            (with-output-to-string (lambda () (write a2)))))
       (string=? a1-str a2-str)))
   
-  (let* ((group (gnc:account-get-children acct))
-         (children (gnc:group-get-subaccounts group))
+  (let* ((group (xaccAccountGetChildren acct))
+         (children (xaccGroupGetSubAccountsSorted group))
          (retval '()))
     (for-each 
      (lambda (child)
-       (if (acctptr-eq? acct (gnc:account-get-parent-account child))
+       (if (acctptr-eq? acct (xaccAccountGetParentAccount child))
            (begin 
              (set! retval (cons child retval)))))
      children)
@@ -175,15 +175,15 @@
 
 ;; get all children of this account 
 (define (gnc:account-get-all-subaccounts acct)
-  (let ((group (gnc:account-get-children acct)))
-    (gnc:group-get-subaccounts group)))
+  (let ((group (xaccAccountGetChildren acct)))
+    (xaccGroupGetSubAccountsSorted group)))
 
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
   (append-map 
    (lambda (a)
-     (gnc:group-get-subaccounts
-      (gnc:account-get-children a)))
+     (xaccGroupGetSubAccountsSorted
+      (xaccAccountGetChildren a)))
    accountlist))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
@@ -496,7 +496,7 @@
   (let ((balance-collector
          (if include-children?
              (gnc:group-get-comm-balance-at-date
-              (gnc:account-get-children account) date)
+              (xaccAccountGetChildren account) date)
              (gnc:make-commodity-collector)))
 	  (query (qof-query-create-for-splits))
 	  (splits #f))
@@ -517,7 +517,7 @@
       (if (and splits (not (null? splits)))
 	  (gnc-commodity-collector-add balance-collector
 				       (xaccAccountGetCommodity account)
-				       (gnc:split-get-balance (car splits))))
+				       (xaccSplitGetBalance (car splits))))
       balance-collector))
 
 ;; Adds all accounts' balances, where the balances are determined with
@@ -678,8 +678,8 @@
      (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
 
 (define (gnc:split-voided? split)
-  (let ((trans (gnc:split-get-parent split)))
-    (gnc:transaction-get-void-status trans)))
+  (let ((trans (xaccSplitGetParent split)))
+    (xaccTransGetVoidStatus trans)))
 
 (define (gnc:report-starting report-name)
   (gnc-window-show-progress (sprintf #f
@@ -704,7 +704,7 @@
 ;; function to count the total number of splits to be iterated
 (define (gnc:accounts-count-splits accounts)
   (if (not (null? accounts))
-      (+ (length (gnc:account-get-split-list (car accounts)))
+      (+ (length (xaccAccountGetSplitList (car accounts)))
 	 (gnc:accounts-count-splits (cdr accounts)))
       0))
 
@@ -734,9 +734,9 @@
     
     (set! splits (qof-query-run query))
     (map (lambda (split)
-		(let* ((shares (gnc:split-get-amount split))
+		(let* ((shares (xaccSplitGetAmount split))
 		       (acct-comm (xaccAccountGetCommodity
-				   (gnc:split-get-account split)))
+				   (xaccSplitGetAccount split)))
 		       )
 		  (gnc-commodity-collector-add total acct-comm shares)
 		  )
@@ -792,9 +792,9 @@
     
     (set! splits (qof-query-run total-query))
     (map (lambda (split)
-	   (let* ((shares (gnc:split-get-amount split))
+	   (let* ((shares (xaccSplitGetAmount split))
 		  (acct-comm (xaccAccountGetCommodity
-			      (gnc:split-get-account split)))
+			      (xaccSplitGetAccount split)))
 		  )
 	     (or (gnc-numeric-negative-p shares)
 		 (gnc-commodity-collector-add total acct-comm shares)

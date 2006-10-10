@@ -312,14 +312,14 @@
   (define (budget->guid budget)
     (if (string? budget)
         budget
-        (gnc:budget-get-guid budget)))
+        (gncBudgetGetGUID budget)))
 
   (define (guid->budget budget)
     (if (string? budget)
-        (gnc:budget-lookup budget (gnc-get-current-book))
+        (gnc-budget-lookup budget (gnc-get-current-book))
         budget))
 
-  (let* ((default-value (gnc:budget-get-default (gnc-get-current-book)))
+  (let* ((default-value (gnc-budget-get-default (gnc-get-current-book)))
          (value (budget->guid default-value))
          (option-set #f)
          (value->string (lambda ()
@@ -340,7 +340,7 @@
              (set! option-set #t)) ;; setter
      (lambda ()
        (guid->budget
-        (gnc:budget-get-default (gnc-get-current-book)))) ;; default-getter
+        (gnc-budget-get-default (gnc-get-current-book)))) ;; default-getter
      (gnc:restore-form-generator value->string) ;; ??
      (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
      (lambda (f p)
@@ -613,11 +613,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:account-get-guid item)))
+        (gncAccountGetGUID item)))
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc-get-current-book))
+        (xaccAccountLookup item (gnc-get-current-book))
         item))
 
   (let* ((option (map convert-to-guid (default-getter)))
@@ -640,7 +640,7 @@
        (if (not account-list) (set! account-list (default-getter)))
        (set! account-list
              (filter (lambda (x) (if (string? x)
-                                     (gnc:account-lookup
+                                     (xaccAccountLookup
                                       x (gnc-get-current-book))
                                      x)) account-list))
        (let* ((result (validator account-list))
@@ -715,11 +715,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:account-get-guid item)))
+        (gncAccountGetGUID item)))
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc-get-current-book))
+        (xaccAccountLookup item (gnc-get-current-book))
         item))
 
   (define (find-first-account)
@@ -735,7 +735,7 @@
 		(find-first (cdr account-list))))))
 
     (let* ((current-group (gnc-get-current-group))
-	   (account-list (gnc:group-get-subaccounts current-group)))
+	   (account-list (xaccGroupGetSubAccountsSorted current-group)))
       (find-first account-list)))
 	   
   (define (get-default)

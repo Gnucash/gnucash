@@ -62,8 +62,8 @@
         ;; write the file
         (let* ((name (simple-format #f "file:~A.gnc" filename)))
           (simple-format #t "using book name='~A'\n" name)
-          (gnc:group-concat-group (xaccGetAccountGroup book) group)
-	  (gnc:account-group-destroy group)
+          (xaccGroupConcatGroup (xaccGetAccountGroup book) group)
+	  (xaccAccountGroupDestroy group)
           (gnc:session-begin session name #t #t)
           (gnc:session-save session)
           (gnc:session-end session)

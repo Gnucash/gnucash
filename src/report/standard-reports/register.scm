@@ -114,8 +114,8 @@
     (reverse heading-list)))
 
 (define (gnc:split-get-balance-display split)
-  (let ((account (gnc:split-get-account split))
-        (balance (gnc:split-get-balance split)))
+  (let ((account (xaccSplitGetAccount split))
+        (balance (xaccSplitGetBalance split)))
     (if (and account (gnc-reverse-balance account))
         (gnc-numeric-neg balance)
         balance)))
@@ -123,56 +123,56 @@
 (define (add-split-row table split column-vector row-style
                        transaction-info? split-info? double?)
   (let* ((row-contents '())
-         (parent (gnc:split-get-parent split))
-         (account (gnc:split-get-account split))
+         (parent (xaccSplitGetParent split))
+         (account (xaccSplitGetAccount split))
          (currency (if account
                        (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
-         (damount (gnc:split-get-amount split))
+         (damount (xaccSplitGetAmount split))
          (split-value (gnc:make-gnc-monetary currency damount)))
 
     (if (date-col column-vector)
         (addto! row-contents
                 (if transaction-info?
                     (gnc-print-date
-                     (gnc:transaction-get-date-posted parent))
+                     (gnc-transaction-get-date-posted parent))
                     " ")))
     (if (num-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:transaction-get-num parent)
+                    (xaccTransGetNum parent)
                     (if split-info?
-                        (gnc:split-get-action split)
+                        (xaccSplitGetAction split)
                         " "))))
     (if (description-col column-vector)
         (addto! row-contents
                 (if transaction-info?
-                    (gnc:transaction-get-description parent)
+                    (xaccTransGetDescription parent)
                     (if split-info?
-                        (gnc:split-get-memo split)
+                        (xaccSplitGetMemo split)
                         " "))))
     (if (account-col column-vector)
         (addto! row-contents
                 (if split-info?
                     (if transaction-info?
                         (let ((other-split
-                               (gnc:split-get-other-split split)))
+                               (xaccSplitGetOtherSplit split)))
                           (if other-split
                               (gnc-account-get-full-name
-                               (gnc:split-get-account other-split))
+                               (xaccSplitGetAccount other-split))
                               (_ "-- Split Transaction --")))
                         (gnc-account-get-full-name account))
                     " ")))
     (if (shares-col column-vector)
         (addto! row-contents
                 (if split-info?
-                    (gnc:split-get-amount split)
+                    (xaccSplitGetAmount split)
                     " ")))
     (if (price-col column-vector)
         (addto! row-contents 
                 (if split-info?
                     (gnc:make-gnc-monetary
-                     currency (gnc:split-get-share-price split))
+                     currency (xaccSplitGetSharePrice split))
                     " ")))
     (if (amount-single-col column-vector)
         (addto! row-contents
@@ -228,7 +228,7 @@
             (addto! row-contents
                     (gnc:make-html-table-cell/size
                      1 (- (num-columns-required column-vector) count)
-                     (gnc:transaction-get-notes parent)))
+                     (xaccTransGetNotes parent)))
             (gnc:html-table-append-row/markup! table row-style
                                                (reverse row-contents)))))
     split-value))
@@ -373,14 +373,14 @@
 
   (define (add-other-split-rows split table used-columns row-style)
     (define (other-rows-driver split parent table used-columns i)
-      (let ((current (gnc:transaction-get-split parent i)))
+      (let ((current (xaccTransGetSplit parent i)))
         (if current
             (begin
               (add-split-row table current used-columns row-style #f #t #f)
               (other-rows-driver split parent table
                                  used-columns (+ i 1))))))
 
-    (other-rows-driver split (gnc:split-get-parent split)
+    (other-rows-driver split (xaccSplitGetParent split)
                        table used-columns 0))
 
   (define (do-rows-with-subtotals leader
@@ -452,7 +452,7 @@
 				  credit-collector))))
 
   (define (splits-leader splits)
-    (let ((accounts (map gnc:split-get-account splits)))
+    (let ((accounts (map xaccSplitGetAccount splits)))
       (if (null? accounts) #f
           (begin
             (set! accounts (cons (car accounts)

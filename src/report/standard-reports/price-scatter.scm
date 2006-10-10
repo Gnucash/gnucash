@@ -166,7 +166,7 @@
          (document (gnc:make-html-document))
          (chart (gnc:make-html-scatter))
          (currency-accounts 
-          (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+          (filter gnc:account-has-shares? (xaccGroupGetSubAccountsSorted
                                            (gnc-get-current-group))))
          (data '()))
 

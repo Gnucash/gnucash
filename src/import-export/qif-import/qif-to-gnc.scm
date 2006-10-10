@@ -15,11 +15,11 @@
 (define (qif-import:find-or-make-acct acct-info check-types? commodity
 				      check-commodity? default-currency
                                       gnc-acct-hash old-group new-group)
-  (let* ((separator (string-ref (gnc:account-separator-string) 0))
+  (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (gnc:get-account-from-full-name old-group gnc-name))
+          (xaccGetAccountFromFullName old-group gnc-name))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
@@ -38,12 +38,12 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (gnc:get-account-from-full-name old-group long-name)
+      (if (xaccGetAccountFromFullName old-group long-name)
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
-                    (gnc:get-account-from-full-name old-group test-name)))
+                    (xaccGetAccountFromFullName old-group test-name)))
               (if (and test-acct (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))
@@ -79,32 +79,32 @@
     ;; acct)
     (if (and existing-account (compatible? existing-account))
         existing-account 
-        (let ((new-acct (gnc:malloc-account (gnc-get-current-book)))
+        (let ((new-acct (xaccMallocAccount (gnc-get-current-book)))
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)
               (last-colon #f))
           (set! last-colon (string-rindex gnc-name separator))
           
-          (gnc:account-begin-edit new-acct)
+          (xaccAccountBeginEdit new-acct)
           
           ;; if this is a copy of an existing gnc account, copy the
           ;; account properties.  For incompatible existing accts,
           ;; we'll do something different later.
           (if same-gnc-account
               (begin 
-                (gnc:account-set-name 
-                 new-acct (gnc:account-get-name same-gnc-account))
-                (gnc:account-set-description
-                 new-acct (gnc:account-get-description same-gnc-account))
+                (xaccAccountSetName
+                 new-acct (xaccAccountGetName same-gnc-account))
+                (xaccAccountSetDescription
+                 new-acct (xaccAccountGetDescription same-gnc-account))
                 (xaccAccountSetType
                  new-acct (xaccAccountGetType same-gnc-account))
                 (xaccAccountSetCommodity
                  new-acct (xaccAccountGetCommodity same-gnc-account))
-                (gnc:account-set-notes 
-                 new-acct (gnc:account-get-notes same-gnc-account))
-                (gnc:account-set-code 
-                 new-acct (gnc:account-get-code same-gnc-account))))
+                (xaccAccountSetNotes
+                 new-acct (xaccAccountGetNotes same-gnc-account))
+                (xaccAccountSetCode
+                 new-acct (xaccAccountGetCode same-gnc-account))))
           
           ;; make sure that if this is a nested account foo:bar:baz,
           ;; foo:bar and foo exist also.
@@ -121,9 +121,9 @@
           (if make-new-acct
               (begin 
                 ;; set the name, description, etc.
-                (gnc:account-set-name new-acct acct-name)
+                (xaccAccountSetName new-acct acct-name)
                 (if (qif-map-entry:description acct-info)
-                    (gnc:account-set-description 
+                    (xaccAccountSetDescription
                      new-acct (qif-map-entry:description acct-info)))
                 (xaccAccountSetCommodity new-acct commodity)
                 
@@ -133,8 +133,8 @@
                 (if incompatible-acct
                     (let ((new-name (make-unique-name-variant 
                                      gnc-name acct-name)))
-                      (gnc:account-set-name new-acct new-name)
-                      (gnc:account-set-description 
+                      (xaccAccountSetName new-acct new-name)
+                      (xaccAccountSetDescription
                        new-acct 
                        (_ "QIF import: Name conflict with another account."))))
                 
@@ -142,7 +142,7 @@
                 (if (qif-map-entry:allowed-types acct-info)
                     (xaccAccountSetType
                      new-acct (car (qif-map-entry:allowed-types acct-info))))))
-          (gnc:account-commit-edit new-acct)
+          (xaccAccountCommitEdit new-acct)
 
           (if last-colon
               (let ((pinfo (make-qif-map-entry)))
@@ -157,8 +157,8 @@
                                    pinfo #t default-currency #f default-currency
                                    gnc-acct-hash old-group new-group))))
           (if parent-acct
-              (gnc:account-insert-subaccount parent-acct new-acct)
-              (gnc:group-insert-account new-group new-acct))
+              (xaccAccountInsertSubAccount parent-acct new-acct)
+              (xaccGroupInsertAccount new-group new-acct))
           
           (hash-set! gnc-acct-hash gnc-name new-acct)
           new-acct))))
@@ -178,9 +178,9 @@
   (gnc:backtrace-if-exception 
    (lambda ()
      (let* ((old-group (gnc-get-current-group))
-            (new-group (gnc:malloc-account-group (gnc-get-current-book)))
+            (new-group (xaccMallocAccountGroup (gnc-get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
-            (separator (string-ref (gnc:account-separator-string) 0))
+            (separator (string-ref (gnc-get-account-separator-string) 0))
             (default-currency 
               (gnc-commodity-table-find-full
                (gnc-commodity-table-get-table (gnc-get-current-book))
@@ -333,9 +333,9 @@
              (if (not (qif-xtn:mark xtn))
                  (begin 
                    ;; create and fill in the GNC transaction
-                   (let ((gnc-xtn (gnc:transaction-create
+                   (let ((gnc-xtn (xaccMallocTransaction
                                    (gnc-get-current-book))))
-                     (gnc:transaction-begin-edit gnc-xtn)
+                     (xaccTransBeginEdit gnc-xtn)
 
                      ;; FIXME. This is probably wrong
                      (xaccTransSetCurrency gnc-xtn
@@ -347,7 +347,7 @@
                       qif-acct-map qif-cat-map qif-memo-map)
                      
                      ;; rebalance and commit everything
-                     (gnc:transaction-commit-edit gnc-xtn)))))
+                     (xaccTransCommitEdit gnc-xtn)))))
            (qif-file:xtns qif-file)))
         sorted-qif-files-list)
        
@@ -367,7 +367,7 @@
                                        gnc-acct-hash 
                                        qif-acct-map qif-cat-map qif-memo-map)
   (let ((splits (qif-xtn:splits qif-xtn))
-        (gnc-near-split (gnc:split-create (gnc-get-current-book)))
+        (gnc-near-split (xaccMallocSplit (gnc-get-current-book)))
         (near-split-total (gnc-numeric-zero))
         (near-acct-info #f)
         (near-acct-name #f)
@@ -386,24 +386,24 @@
         (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
     
     ;; set properties of the whole transaction     
-    (apply gnc:transaction-set-date gnc-xtn (qif-xtn:date qif-xtn))
+    (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))
     
     ;; fixme: bug #105 
     (if qif-payee
-        (gnc:transaction-set-description gnc-xtn qif-payee))
+        (xaccTransactionSetDescription gnc-xtn qif-payee))
     (if qif-number
-        (gnc:transaction-set-xnum gnc-xtn qif-number))
+        (xaccTransSetNum gnc-xtn qif-number))
     (if qif-memo
 	(begin
-	  (gnc:split-set-memo gnc-near-split qif-memo)
+	  (xaccSplitSetMemo gnc-near-split qif-memo)
 	  (if (or (not qif-payee)
 		  (equal? qif-payee ""))
-	      (gnc:transaction-set-description gnc-xtn qif-memo))))
+	      (xaccTransactionSetDescription gnc-xtn qif-memo))))
     
     (if (eq? qif-cleared 'cleared)        
-        (gnc:split-set-reconcile gnc-near-split #\c))
+        (xaccSplitSetReconcile gnc-near-split #\c))
     (if (eq? qif-cleared 'reconciled)
-        (gnc:split-set-reconcile gnc-near-split #\y))
+        (xaccSplitSetReconcile gnc-near-split #\y))
     
     (if (not qif-security)
         (begin 
@@ -420,7 +420,7 @@
           (for-each 
            (lambda (qif-split)
              (if (not (qif-split:mark qif-split))
-                 (let ((gnc-far-split (gnc:split-create
+                 (let ((gnc-far-split (xaccMallocSplit
                                        (gnc-get-current-book)))
                        (far-acct-info #f)
                        (far-acct-name #f)
@@ -435,10 +435,10 @@
                    ;; files in multiple currencies by pulling the
                    ;; currency value from the file import.
                    (set! near-split-total (n+ near-split-total split-amt))
-                   (gnc:split-set-value gnc-far-split (n- split-amt))
-                   (gnc:split-set-amount gnc-far-split (n- split-amt))
+                   (xaccSplitSetValue gnc-far-split (n- split-amt))
+                   (xaccSplitSetAmount gnc-far-split (n- split-amt))
 
-                   (if memo (gnc:split-set-memo gnc-far-split memo))
+                   (if memo (xaccSplitSetMemo gnc-far-split memo))
                    
                    ;; figure out what the far acct is
                    (cond 
@@ -475,20 +475,20 @@
                    ;; set the reconcile status. 
                    (let ((cleared (qif-split:matching-cleared qif-split)))
                      (if (eq? 'cleared cleared)
-                         (gnc:split-set-reconcile gnc-far-split #\c))
+                         (xaccSplitSetReconcile gnc-far-split #\c))
                      (if (eq? 'reconciled cleared)
-                         (gnc:split-set-reconcile gnc-far-split #\y)))
+                         (xaccSplitSetReconcile gnc-far-split #\y)))
                    
                    ;; finally, plug the split into the account 
-                   (gnc:account-insert-split far-acct gnc-far-split)
-                   (gnc:transaction-append-split gnc-xtn gnc-far-split))))
+                   (xaccSplitSetAccount far-acct gnc-far-split)
+                   (xaccTransAppendSplit gnc-xtn gnc-far-split))))
            splits)
           
           ;; the value of the near split is the total of the far splits.
-          (gnc:split-set-value gnc-near-split near-split-total)
-          (gnc:split-set-amount gnc-near-split near-split-total)
-          (gnc:transaction-append-split gnc-xtn gnc-near-split)
-          (gnc:account-insert-split near-acct gnc-near-split))
+          (xaccSplitSetValue gnc-near-split near-split-total)
+          (xaccSplitSetAmount gnc-near-split near-split-total)
+          (xaccTransAppendSplit gnc-xtn gnc-near-split)
+          (xaccSplitSetAccount near-acct gnc-near-split))
         
         ;; STOCK TRANSACTIONS: the near/far accounts depend on the
         ;; "action" encoded in the Number field.  It's generally the
@@ -509,7 +509,7 @@
                (commission-amt (qif-xtn:commission qif-xtn))
                (commission-split #f)
                (defer-share-price #f)
-               (gnc-far-split (gnc:split-create (gnc-get-current-book))))
+               (gnc-far-split (xaccMallocSplit (gnc-get-current-book))))
           
           (if (not num-shares) (set! num-shares (gnc-numeric-zero)))
           (if (not share-price) (set! share-price (gnc-numeric-zero)))
@@ -550,45 +550,45 @@
           (case qif-action
             ((buy buyx reinvint reinvdiv reinvsg reinvsh reinvmd reinvlg)
              (if (not share-price) (set! share-price (gnc-numeric-zero)))
-             (gnc:split-set-amount gnc-near-split num-shares)
-             (gnc:split-set-value gnc-near-split split-amt)
-             (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
+             (xaccSplitSetAmount gnc-near-split num-shares)
+             (xaccSplitSetValue gnc-near-split split-amt)
+             (xaccSplitSetValue gnc-far-split (n- xtn-amt))
+             (xaccSplitSetAmount gnc-far-split (n- xtn-amt)))
             
             ((sell sellx) 
              (if (not share-price) (set! share-price (gnc-numeric-zero)))
-             (gnc:split-set-amount gnc-near-split (n- num-shares))
-             (gnc:split-set-value gnc-near-split (n- split-amt))
-             (gnc:split-set-value gnc-far-split xtn-amt)
-             (gnc:split-set-amount gnc-far-split xtn-amt))
+             (xaccSplitSetAmount gnc-near-split (n- num-shares))
+             (xaccSplitSetValue gnc-near-split (n- split-amt))
+             (xaccSplitSetValue gnc-far-split xtn-amt)
+             (xaccSplitSetAmount gnc-far-split xtn-amt))
             
             ((cgshort cgshortx cgmid cgmidx cglong cglongx intinc intincx 
                       div divx miscinc miscincx xin rtrncap rtrncapx)
-             (gnc:split-set-value gnc-near-split xtn-amt)
-             (gnc:split-set-amount gnc-near-split xtn-amt)
-             (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
+             (xaccSplitSetValue gnc-near-split xtn-amt)
+             (xaccSplitSetAmount gnc-near-split xtn-amt)
+             (xaccSplitSetValue gnc-far-split (n- xtn-amt))
+             (xaccSplitSetAmount gnc-far-split (n- xtn-amt)))
             
             ((xout miscexp miscexpx margint margintx)
-             (gnc:split-set-value gnc-near-split (n- xtn-amt))
-             (gnc:split-set-amount gnc-near-split (n- xtn-amt))
-             (gnc:split-set-value gnc-far-split  xtn-amt)
-             (gnc:split-set-amount gnc-far-split  xtn-amt))
+             (xaccSplitSetValue gnc-near-split (n- xtn-amt))
+             (xaccSplitSetAmount gnc-near-split (n- xtn-amt))
+             (xaccSplitSetValue gnc-far-split  xtn-amt)
+             (xaccSplitSetAmount gnc-far-split  xtn-amt))
             
             ((shrsin)
              ;; getting rid of the old equity-acct-per-stock trick.
              ;; you must now have a cash/basis value for the stock.
-             (gnc:split-set-amount gnc-near-split num-shares)
-             (gnc:split-set-value gnc-near-split split-amt)
-             (gnc:split-set-value gnc-far-split (n- xtn-amt))
-             (gnc:split-set-amount gnc-far-split (n- xtn-amt)))
+             (xaccSplitSetAmount gnc-near-split num-shares)
+             (xaccSplitSetValue gnc-near-split split-amt)
+             (xaccSplitSetValue gnc-far-split (n- xtn-amt))
+             (xaccSplitSetAmount gnc-far-split (n- xtn-amt)))
             
             ((shrsout)
              ;; shrsout is like shrsin             
-             (gnc:split-set-amount gnc-near-split (n- num-shares))
-             (gnc:split-set-value gnc-near-split (n- split-amt))
-             (gnc:split-set-value gnc-far-split xtn-amt)
-             (gnc:split-set-amount gnc-far-split xtn-amt))
+             (xaccSplitSetAmount gnc-near-split (n- num-shares))
+             (xaccSplitSetValue gnc-near-split (n- split-amt))
+             (xaccSplitSetValue gnc-far-split xtn-amt)
+             (xaccSplitSetAmount gnc-far-split xtn-amt))
             
             ;; stock splits: QIF just specifies the split ratio, not
             ;; the number of shares in and out, so we have to fetch
@@ -599,19 +599,19 @@
             ((stksplit)
              (let* ((splitratio (n/ num-shares (gnc-numeric-create 10 1)))
                     (in-shares 
-                     (gnc:account-get-balance near-acct))
+                     (xaccAccountGetBalance near-acct))
                     (out-shares (n* in-shares splitratio)))
-               (gnc:split-set-amount gnc-near-split out-shares)
-               (gnc:split-set-amount gnc-far-split (n- in-shares))
-               (gnc:split-set-value gnc-near-split (n- split-amt))
-               (gnc:split-set-value gnc-far-split split-amt))))
+               (xaccSplitSetAmount gnc-near-split out-shares)
+               (xaccSplitSetAmount gnc-far-split (n- in-shares))
+               (xaccSplitSetValue gnc-near-split (n- split-amt))
+               (xaccSplitSetValue gnc-far-split split-amt))))
           
           (let ((cleared (qif-split:matching-cleared 
                           (car (qif-xtn:splits qif-xtn)))))
             (if (eq? 'cleared cleared)
-                (gnc:split-set-reconcile gnc-far-split #\c))
+                (xaccSplitSetReconcile gnc-far-split #\c))
             (if (eq? 'reconciled cleared)
-                (gnc:split-set-reconcile gnc-far-split #\y)))
+                (xaccSplitSetReconcile gnc-far-split #\y)))
           
           (if qif-commission-acct
               (let* ((commission-acct-info 
@@ -624,23 +624,23 @@
           
           (if (and commission-amt commission-acct)
               (begin 
-                (set! commission-split (gnc:split-create
+                (set! commission-split (xaccMallocSplit
                                         (gnc-get-current-book)))
-                (gnc:split-set-value commission-split commission-amt)
-                (gnc:split-set-amount commission-split commission-amt)))
+                (xaccSplitSetValue commission-split commission-amt)
+                (xaccSplitSetAmount commission-split commission-amt)))
 
           (if (and qif-near-acct qif-far-acct)
               (begin 
-                (gnc:transaction-append-split gnc-xtn gnc-near-split)
-                (gnc:account-insert-split near-acct gnc-near-split)
+                (xaccTransAppendSplit gnc-xtn gnc-near-split)
+                (xaccSplitSetAccount near-acct gnc-near-split)
                 
-                (gnc:transaction-append-split gnc-xtn gnc-far-split)
-                (gnc:account-insert-split far-acct gnc-far-split)
+                (xaccTransAppendSplit gnc-xtn gnc-far-split)
+                (xaccSplitSetAccount far-acct gnc-far-split)
                 
                 (if commission-split
                     (begin 
-                      (gnc:transaction-append-split gnc-xtn commission-split)
-                      (gnc:account-insert-split commission-acct 
+                      (xaccTransAppendSplit gnc-xtn commission-split)
+                      (xaccSplitSetAccount commission-acct
                                                 commission-split)))))))
     ;; return the modified transaction (though it's ignored).
     gnc-xtn))

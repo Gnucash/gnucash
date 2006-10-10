@@ -268,17 +268,17 @@
 ;;     account-guid: guid
 ;; 
 ;;         the guid of the account in the current row, as returned by
-;;         gnc:account-get-guid.
+;;         gncAccountGetGUID.
 ;; 
 ;;     account-desc: string?
 ;; 
 ;;         the account description of the account in the current row,
-;;         as returned by gnc:account-get-description.
+;;         as returned by xaccAccountGetDescription.
 ;; 
 ;;     account-notes: string?
 ;; 
 ;;         the account notes of the account in the current row, as
-;;         returned by gnc:account-get-notes.
+;;         returned by xaccAccountGetNotes.
 ;; 
 ;;     account-path: string
 ;; 
@@ -295,7 +295,7 @@
 ;;     account-code: string
 ;; 
 ;;         the account of the account in the current row, as returned
-;;         by gnc:account-get-code.
+;;         by xaccAccountGetCode.
 ;; 
 ;;     account-anchor: text(maybe?)
 ;; 
@@ -551,11 +551,11 @@
 
 ;; some useful predicates to export
 (define (gnc:account-code-less-p a b)
-  (string<? (gnc:account-get-code a)
-	    (gnc:account-get-code b)))
+  (string<? (xaccAccountGetCode a)
+	    (xaccAccountGetCode b)))
 (define (gnc:account-name-less-p a b)
-  (string<? (gnc:account-get-name a)
-	    (gnc:account-get-name b)))
+  (string<? (xaccAccountGetName a)
+	    (xaccAccountGetName b)))
 (define (gnc:account-path-less-p a b)
   (string<? (gnc-account-get-full-name a)
 	    (gnc-account-get-full-name b)))
@@ -631,7 +631,7 @@
 				 )
 				))
 	 ;; local variables
-	 (toplvl-accts (gnc:group-get-account-list (gnc-get-current-group)))
+	 (toplvl-accts (xaccGroupGetAccountListSorted (gnc-get-current-group)))
 	 (acct-depth-reached 0)
 	 (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
 	 (disp-depth-reached 0)
@@ -703,7 +703,7 @@
 	      ;; account a is shown, i.e. (use-acct? a) == #t.
 	      (and (use-acct? a)
 		   (my-get-balance-nosub a start-date end-date)))
-	    (gnc:account-get-children account)))
+	    (xaccAccountGetChildren account)))
 	  this-collector))
 
       
@@ -718,11 +718,11 @@
 	   (let* ((subaccts (gnc:account-get-immediate-subaccounts acct))
 		  ;; assign output parameters
 		  (account acct)
-		  (account-name (gnc:account-get-name acct))
-		  (account-code (gnc:account-get-code acct))
+		  (account-name (xaccAccountGetName acct))
+		  (account-code (xaccAccountGetCode acct))
 		  (account-path (gnc-account-get-full-name acct))
 		  (account-anchor (gnc:html-account-anchor acct))
-		  (account-parent (gnc:account-get-parent-account acct))
+		  (account-parent (xaccAccountGetParentAccount acct))
 		  (account-children subaccts)
 		  (account-depth acct-depth)
 		  (logical-depth logi-depth)
@@ -732,9 +732,9 @@
 		  ;; called gnc:account-type-get-string
 		  (account-type-string (xaccAccountGetTypeStr
 					(xaccAccountGetType acct)))
-		  (account-guid (gnc:account-get-guid acct))
-		  (account-description (gnc:account-get-description acct))
-		  (account-notes (gnc:account-get-notes acct))
+		  (account-guid (gncAccountGetGUID acct))
+		  (account-description (xaccAccountGetDescription acct))
+		  (account-notes (xaccAccountGetNotes acct))
                   ;; These next two are commodity-collectors.
 		  (account-bal (my-get-balance-nosub
 				acct start-date end-date))
