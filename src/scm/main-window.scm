@@ -28,25 +28,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define (gnc:main-window-book-open-handler session)
-  (define (try-load file-suffix)
-    (let ((file (gnc:build-book-path file-suffix)))
-      ;; make sure the books directory is there 
-      (if (access? file F_OK)
-          (if (not (false-if-exception (primitive-load file)))
-              (begin
-                (gnc:warn "failure loading " file)
-                #f))
-          #f)))
-
-  (let* ((book-url (gnc:session-get-url session))
-	 (conf-file-name (gnc-html-encode-string book-url))
-	 (dead-reports '()))
-    (if conf-file-name 
-        (try-load conf-file-name))
-
-    ))
-
 (define (gnc:main-window-properties-cb)
   (let* ((book (gnc-get-current-book))
 	 (slots (gnc:book-get-slots book)))

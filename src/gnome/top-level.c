@@ -44,6 +44,7 @@
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
+#include "gfec.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-menu-additions.h" /* FIXME Remove this line*/
@@ -68,7 +69,6 @@
 #include "window-report.h"
 #include "gnc-window.h"
 #include "gnc-gkeyfile-utils.h"
-#include <g-wrap-wct.h>
 
 
 /** GLOBALS *********************************************************/
@@ -197,6 +197,20 @@ gnc_html_price_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
+static void
+gnc_main_window_book_open_handler(QofSession *session)
+{
+    gchar *filename, *statefile;
+
+    filename = gnc_html_encode_string(qof_session_get_url(session));
+    if (!filename) return;
+
+    statefile = gnc_build_book_path(filename);
+    g_free(filename);
+    gfec_try_load(statefile);
+    g_free(statefile);
+}
+
 /** Restore all persistent program state.  This function finds the
  *  "new" state file associated with a specific book guid.  It then
  *  iterates through this state information, calling a helper function
@@ -247,10 +261,8 @@ gnc_restore_all_state (gpointer session, gpointer unused)
         
 #if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
         /* See if there's an old style state file to be found */
-        scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
-                   (session ? gw_wcp_assimilate_ptr(
-                        session, scm_c_eval_string("<gnc:Session*>")) :
-                    SCM_BOOL_F));
+        gnc_main_window_book_open_handler(session);
+
         /* At this point the reports have only been loaded into
            memory.  Now we create their ui component. */
         gnc_reports_show_all(session);

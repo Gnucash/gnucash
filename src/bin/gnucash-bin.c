@@ -97,28 +97,6 @@ envt_override()
         help_path = path;
 }
 
-static int error_in_scm_eval = FALSE;
-
-static void
-error_handler(const char *msg)
-{
-    g_warning(msg);
-    error_in_scm_eval = TRUE;
-}
-
-static gboolean
-try_load(gchar *fn)
-{
-    g_message("looking for %s", fn);
-    if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
-        g_message("trying to load %s", fn);
-        error_in_scm_eval = FALSE;
-        gfec_eval_file(fn, error_handler);
-        return !error_in_scm_eval;
-    }
-    return FALSE;
-}
-
 static gboolean
 try_load_config_array(const gchar *fns[])
 {
@@ -127,7 +105,7 @@ try_load_config_array(const gchar *fns[])
 
     for (i = 0; fns[i]; i++) {
         filename = gnc_build_dotgnucash_path(fns[i]);
-        if (try_load(filename)) {
+        if (gfec_try_load(filename)) {
             g_free(filename);
             return TRUE;
         }
@@ -153,7 +131,7 @@ load_system_config(void)
 
     update_message("loading system configuration");
     system_config = g_build_filename(config_path, "config", NULL);
-    is_system_config_loaded = try_load(system_config);
+    is_system_config_loaded = gfec_try_load(system_config);
     g_free(system_config);
 }
 
