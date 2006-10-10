@@ -727,11 +727,11 @@
 		  (account-depth acct-depth)
 		  (logical-depth logi-depth)
 		  (account-commodity (gnc:account-get-commodity acct))
-		  (account-type (gnc:account-get-type acct))
-		  ;; N.B.: gnc:account-get-type-string really should be
+		  (account-type (xaccAccountGetType acct))
+		  ;; N.B.: xaccAccountGetTypeStr really should be
 		  ;; called gnc:account-type-get-string
-		  (account-type-string (gnc:account-get-type-string
-					(gnc:account-get-type acct)))
+		  (account-type-string (xaccAccountGetTypeStr
+					(xaccAccountGetType acct)))
 		  (account-guid (gnc:account-get-guid acct))
 		  (account-description (gnc:account-get-description acct))
 		  (account-notes (gnc:account-get-notes acct))

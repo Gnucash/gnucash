@@ -727,7 +727,7 @@
       (if (null? account-list)
 	  '()
 	  (let* ((this-account (car account-list))
-		 (account-type (gnc:account-get-type this-account)))
+		 (account-type (xaccAccountGetType this-account)))
 	    (if (if (null? acct-type-list)
                     #t
                     (member account-type acct-type-list))

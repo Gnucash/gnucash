@@ -611,7 +611,7 @@
                       (qif-map-entry:gnc-name map-entry)))
 		    (book (gnc:group-get-book (gnc-get-current-group)))
                     (existing-type 
-                     (gnc:account-get-type existing-gnc-acct)))
+                     (xaccAccountGetType existing-gnc-acct)))
                (if (and existing-gnc-acct 
                         (memv existing-type (list GNC-STOCK-TYPE 
                                                   GNC-MUTUAL-TYPE)))

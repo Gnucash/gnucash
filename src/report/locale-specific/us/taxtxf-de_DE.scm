@@ -292,7 +292,7 @@
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
              (not (gnc:numeric-zero-p account-value)))
-        (let* ((type (gnc:account-get-type account))
+        (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
                              (strftime "%d.%m.%Y" (localtime (car date)))
@@ -650,7 +650,7 @@
 	  (length accounts)))
 
     (define (handle-level-x-account level account)
-      (let ((type (gnc:account-get-type account)))
+      (let ((type (xaccAccountGetType account)))
 	(set! work-done (+ 1 work-done))
 	(gnc:report-percent-done (* 100 (if (> work-to-do 0)
 					    (/ work-done work-to-do)

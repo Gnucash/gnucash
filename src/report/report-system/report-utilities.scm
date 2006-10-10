@@ -52,25 +52,25 @@
 
 ;; True if the account is of type currency, stock, or mutual-fund
 (define (gnc:account-has-shares? account)
-  (let ((type (gnc:account-get-type account)))
+  (let ((type (xaccAccountGetType account)))
     (member type (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY))))
 
 ;; True if the account is of type stock or mutual-fund
 (define (gnc:account-is-stock? account)
-  (let ((type (gnc:account-get-type account)))
+  (let ((type (xaccAccountGetType account)))
     (member type (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))))
 
 ;; True if the account is of type income or expense
 
 (define (gnc:account-is-inc-exp? account)
-  (let ((type (gnc:account-get-type account)))
+  (let ((type (xaccAccountGetType account)))
     (member type (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))))
 
 ;; Returns only those accounts out of the list <accounts> which have
 ;; one of the type identifiers in typelist.
 (define (gnc:filter-accountlist-type typelist accounts)
   (filter (lambda (a) 
-	    (member (gnc:account-get-type a) typelist))
+	    (member (xaccAccountGetType a) typelist))
 	  accounts))
 
 ;; Decompose a given list of accounts 'accounts' into an alist
@@ -97,7 +97,7 @@
 	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE)))))
 
 ;; Returns the name of the account type as a string, and in its plural
-;; form (as opposed to gnc:account-get-type-string which gives the
+;; form (as opposed to xaccAccountGetTypeStr which gives the
 ;; singular form of the word).
 (define (gnc:account-get-type-string-plural type)
   (assoc-ref

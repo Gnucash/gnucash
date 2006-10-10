@@ -26,7 +26,7 @@
          (incompatible-acct #f))
     
     (define (compatible? account)
-      (let ((acc-type (gnc:account-get-type account))
+      (let ((acc-type (xaccAccountGetType account))
             (acc-commodity (gnc:account-get-commodity account)))
         (and
          (if check-types? 
@@ -61,7 +61,7 @@
               (set! make-new-acct #f)
               (set! incompatible-acct #f)
               (set! allowed-types 
-                    (list (gnc:account-get-type same-gnc-account))))
+                    (list (xaccAccountGetType same-gnc-account))))
             (begin 
               ;; there's an existing account with that name, so we
               ;; have to make a new acct with different properties and
@@ -97,8 +97,8 @@
                  new-acct (gnc:account-get-name same-gnc-account))
                 (gnc:account-set-description
                  new-acct (gnc:account-get-description same-gnc-account))
-                (gnc:account-set-type
-                 new-acct (gnc:account-get-type same-gnc-account))
+                (xaccAccountSetType
+                 new-acct (xaccAccountGetType same-gnc-account))
                 (gnc:account-set-commodity
                  new-acct (gnc:account-get-commodity same-gnc-account))
                 (gnc:account-set-notes 
@@ -140,7 +140,7 @@
                 
                 ;; set the account type.  this could be smarter. 
                 (if (qif-map-entry:allowed-types acct-info)
-                    (gnc:account-set-type 
+                    (xaccAccountSetType
                      new-acct (car (qif-map-entry:allowed-types acct-info))))))
           (gnc:account-commit-edit new-acct)
 
@@ -149,7 +149,7 @@
                 (qif-map-entry:set-qif-name! pinfo parent-name)
                 (qif-map-entry:set-gnc-name! pinfo parent-name)
                 (qif-map-entry:set-allowed-types! 
-                 acct-info (list (gnc:account-get-type new-acct)))
+                 acct-info (list (xaccAccountGetType new-acct)))
                 (qif-map-entry:set-allowed-types! 
                  pinfo (qif-map-entry:allowed-parent-types acct-info))
                 

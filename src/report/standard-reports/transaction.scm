@@ -417,7 +417,7 @@
 	 (dummy  (gnc:debug "split is originally" split))
          (parent (gnc:split-get-parent split))
          (account (gnc:split-get-account split))
-         (account-type (gnc:account-get-type account))
+         (account-type (xaccAccountGetType account))
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc-default-currency)))

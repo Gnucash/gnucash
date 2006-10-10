@@ -630,7 +630,7 @@
     (if (>= index num)
 	'()
 	(let* ((this-account (gnc:group-get-account group index))
-	       (account-type (gnc:account-get-type this-account)))
+	       (account-type (xaccAccountGetType this-account)))
 	  (if (eq? account-type type)
 	      this-account
 	      (find-first group num (+ index 1))))))

@@ -63,8 +63,8 @@
                (let ((gnc-type (qif-io:parse-acct-type type)))
                  (gnc:account-begin-edit gnc-acct)
                  (if gnc-type 
-                     (gnc:account-set-type gnc-acct gnc-type)
-                     (gnc:account-set-type gnc-acct GNC-BANK-TYPE))
+                     (xaccAccountSetType gnc-acct gnc-type)
+                     (xaccAccountSetType gnc-acct GNC-BANK-TYPE))
                  (if desc 
                      (gnc:account-set-description gnc-acct desc))
                  (gnc:account-commit-edit gnc-acct)))))
@@ -78,9 +78,9 @@
                  (gnc:account-begin-edit acct)
                  (gnc:account-set-commodity acct commodity)
                  (gnc:account-commit-edit acct))))
-         (let ((type (gnc:account-get-type acct)))
+         (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
-               (gnc:account-set-type acct GNC-BANK-TYPE)))
+               (xaccAccountSetType acct GNC-BANK-TYPE)))
          (gnc:group-insert-account group acct)
          #t) #t (qif-io:acct-table-accounts acct-table)))
 
@@ -98,9 +98,9 @@
                (begin 
                  (gnc:account-begin-edit gnc-acct)
                  (cond (income?
-                        (gnc:account-set-type gnc-acct GNC-INCOME-TYPE))
+                        (xaccAccountSetType gnc-acct GNC-INCOME-TYPE))
                        (#t
-                        (gnc:account-set-type gnc-acct GNC-EXPENSE-TYPE)))
+                        (xaccAccountSetType gnc-acct GNC-EXPENSE-TYPE)))
                  (gnc:account-set-description gnc-acct desc)
                  (gnc:account-commit-edit gnc-acct)))))
        (qif-io:file-categories qif-file))
@@ -113,9 +113,9 @@
                  (gnc:account-begin-edit acct)
                  (gnc:account-set-commodity acct commodity)
                  (gnc:account-commit-edit acct))))
-         (let ((type (gnc:account-get-type acct)))
+         (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
-               (gnc:account-set-type acct GNC-EXPENSE-TYPE)))
+               (xaccAccountSetType acct GNC-EXPENSE-TYPE)))
          (gnc:group-insert-account group acct)
          #t) #t (qif-io:acct-table-categories acct-table)))
 

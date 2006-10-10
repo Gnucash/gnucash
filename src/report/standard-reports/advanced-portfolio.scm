@@ -188,7 +188,7 @@
     (gnc:option-value (get-op section name)))
   
   (define (split-account-type? split type)
-    (eq? type (gnc:account-get-type (gnc:split-get-account split))))
+    (eq? type (xaccAccountGetType (gnc:split-get-account split))))
 
   (define (same-split? s1 s2)
     (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))

@@ -264,7 +264,7 @@
        (let ((acct-matches? #f))
          (for-each
           (lambda (type)
-            (if (= type (gnc:account-get-type (caddr gnc-acct)))
+            (if (= type (xaccAccountGetType (caddr gnc-acct)))
                 (set! acct-matches? #t)))
           allowed-types)
          (if acct-matches? 
@@ -285,7 +285,7 @@
     (if (not (null? matching-name-accts))
         (set! retval (list 
                       (cadr (car matching-name-accts))
-                      (list (gnc:account-get-type 
+                      (list (xaccAccountGetType
                              (caddr (car matching-name-accts))))))
         #f)
     retval))
