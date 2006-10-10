@@ -27,8 +27,8 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
-#include <g-wrap-wct.h>  // still needed for g-wrapped types
 #include <libguile.h>
+#include "swig-runtime.h"
 
 #include "gncObject.h"
 #include "QueryCore.h"
@@ -555,8 +555,6 @@ gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data)
   }
 }
 
-#include "swig-runtime.h"
-
 void
 gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
 {
@@ -736,7 +734,6 @@ void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data)
 void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
 {
   int id;
-  SCM qtype;
   SCM args;
   SCM func;
   SCM arg;
@@ -749,10 +746,10 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
   g_return_if_fail (SCM_PROCEDUREP (func));
 
   if (acc) {
-    qtype = scm_c_eval_string("<gnc:Account*>");
-    g_return_if_fail (qtype != SCM_UNDEFINED);
+    swig_type_info * qtype = SWIG_TypeQuery("_p_Account");
+    g_return_if_fail (qtype);
 
-    arg = gw_wcp_assimilate_ptr (acc, qtype);
+    arg = SWIG_NewPointerObj(acc, qtype, 0);
     g_return_if_fail (arg != SCM_UNDEFINED);
     args = scm_cons (arg, args);
   } else {

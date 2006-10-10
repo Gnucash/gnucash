@@ -25,28 +25,26 @@
 
 #include "gncBusGuile.h"
 #include "engine-helpers.h"
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
+#define FUNC_NAME __FUNCTION__
 
-static SCM
+static swig_type_info *
 get_acct_type ()
 {
-  static SCM account_type = SCM_UNDEFINED;
+  static swig_type_info * account_type = NULL;
 
-  if(account_type == SCM_UNDEFINED) {
-    account_type = scm_c_eval_string("<gnc:Account*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(account_type != SCM_UNDEFINED) scm_gc_protect_object(account_type);
-  }
+  if (!account_type)
+      account_type = SWIG_TypeQuery("_p_Account");
 
   return account_type;
 }
 
 int gnc_account_value_pointer_p (SCM arg)
 {
-  SCM account_type = get_acct_type();
+  swig_type_info * account_type = get_acct_type();
 
   return (SCM_CONSP (arg) &&
-	  gw_wcp_is_of_type_p(account_type, SCM_CAR (arg)) &&
+	  SWIG_IsPointerOfType(SCM_CAR (arg), account_type) &&
 	  gnc_numeric_p (SCM_CDR (arg)));
 }
 
@@ -55,15 +53,15 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
   GncAccountValue *res;
   Account *acc = NULL;
   gnc_numeric value;
-  SCM account_type = get_acct_type();
+  swig_type_info * account_type = get_acct_type();
   SCM val;
 
   /* Get the account */
   val = SCM_CAR (valuearg);
-  if (!gw_wcp_is_of_type_p (account_type, val))
+  if (!SWIG_IsPointerOfType (val, account_type))
     return NULL;
 
-  acc = gw_wcp_get_ptr (val);
+  acc = SWIG_MustGetPtr(val, account_type, 1, 0);
 
   /* Get the value */
   val = SCM_CDR (valuearg);
@@ -78,7 +76,7 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
 
 SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
 {
-  SCM account_type = get_acct_type();
+  swig_type_info * account_type = get_acct_type();
   gnc_commodity * com;
   gnc_numeric val;
 
@@ -88,6 +86,6 @@ SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
   val = gnc_numeric_convert (av->value, gnc_commodity_get_fraction (com),
 			     GNC_RND_ROUND);
 
-  return scm_cons (gw_wcp_assimilate_ptr (av->account, account_type),
+  return scm_cons (SWIG_NewPointerObj(av->account, account_type, 0),
 		   gnc_numeric_to_scm (val));
 }

@@ -27,11 +27,8 @@
 #include <glib.h>
 #include <libguile.h>
 
-SCM gnc_glist_to_scm_list(GList *glist, SCM wct);
+SCM gnc_glist_to_scm_list(GList *glist, gchar *wct);
 GList* gnc_scm_list_to_glist(SCM wcp_list);
-
-SCM gnc_glist_scm_map(SCM wct, SCM thunk, GList *glist);
-void gnc_glist_scm_for_each(SCM wct, SCM thunk, GList *glist);
 
 SCM     gnc_glist_string_to_scm(GList * list);
 GList * gnc_scm_to_glist_string(SCM list);

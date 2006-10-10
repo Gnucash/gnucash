@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-helpers.c -- gnucash g-wrap helper functions                 *
+ * gnc-helpers.c -- gnucash glib helper functions                   *
  * Copyright (C) 2000 Linas Vepstas                                 *
+ * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,31 +28,30 @@
 #include <glib.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-
-#include <g-wrap-wct.h>
-
+#include "swig-runtime.h"
 #include "glib-helpers.h"
 
 
 /* These will eventually go into (g-wrapped glib). */
 
 static SCM
-glist_to_scm_list_helper(GList *glist, SCM wct)
+glist_to_scm_list_helper(GList *glist, swig_type_info *wct)
 {
   SCM list = SCM_EOL;
   GList *node;
 
   for (node = glist; node; node = node->next)
-    list = scm_cons (gw_wcp_assimilate_ptr(node->data, wct), list);
+      list = scm_cons(SWIG_NewPointerObj(node->data, wct, 0), list);
 
   return scm_reverse (list);
 }
 
 SCM
-gnc_glist_to_scm_list(GList *glist, SCM wct)
+gnc_glist_to_scm_list(GList *glist, gchar *wct)
 {
-  SCM_ASSERT(gw_wct_p(wct), wct, SCM_ARG1, "gnc_glist_to_scm_list");
-  return(glist_to_scm_list_helper(glist, wct));
+    swig_type_info *stype = SWIG_TypeQuery(wct);
+    g_return_val_if_fail(stype, SCM_UNDEFINED);
+    return glist_to_scm_list_helper(glist, stype);
 }
 
 GList*
@@ -59,7 +59,8 @@ gnc_scm_list_to_glist(SCM rest)
 {
   GList *result = NULL;
   SCM scm_item;
-  
+
+  SWIG_GetModule(NULL); /* Work-around for SWIG bug. */
   SCM_ASSERT(SCM_LISTP(rest), rest, SCM_ARG1, "gnc_scm_list_to_glist");
 
   while(!SCM_NULLP(rest))
@@ -76,48 +77,16 @@ gnc_scm_list_to_glist(SCM rest)
     }
     else
     {
-      if (!gw_wcp_p(scm_item))
+      if (!SWIG_IsPointer(scm_item))
         scm_misc_error("gnc_scm_list_to_glist",
-                       "Item in list not a gw:wcp.", scm_item);
+                       "Item in list not a wcp.", scm_item);
       
-      item = gw_wcp_get_ptr(scm_item);
+      item = (void *)SWIG_PointerAddress(scm_item);
       result = g_list_prepend(result, item);
     }
   }
 
   return g_list_reverse(result);
-}
-
-static SCM
-glist_map_helper(GList *glist, SCM wct, SCM thunk)
-{
-  SCM list = SCM_EOL;
-  GList *node;
-
-  for (node = glist; node; node = node->next)
-    list = scm_cons (scm_call_1(thunk, gw_wcp_assimilate_ptr(node->data, wct)),
-		     list);
-
-  return scm_reverse (list);
-}
-
-SCM
-gnc_glist_scm_map(SCM wct, SCM thunk, GList* glist)
-{
-  SCM_ASSERT(gw_wct_p(wct), wct, SCM_ARG1, "gnc_glist_map");
-  SCM_ASSERT(SCM_PROCEDUREP(thunk), thunk, SCM_ARG2, "gnc_glist_scm_map");  
-  return(glist_map_helper(glist, wct, thunk));
-}
-
-void
-gnc_glist_scm_for_each(SCM wct, SCM thunk, GList *glist)
-{
-  GList *lp;
-  SCM_ASSERT(gw_wct_p(wct), wct, SCM_ARG1, "gnc_glist_map");
-  SCM_ASSERT(SCM_PROCEDUREP(thunk), thunk, SCM_ARG2, "gnc_glist_scm_for_each");  
-  for(lp = glist; lp; lp = lp->next) {
-    scm_call_1(thunk, gw_wcp_assimilate_ptr(lp->data, wct));
-  }
 }
 
 /********************************************************************

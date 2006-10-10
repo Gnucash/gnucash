@@ -49,7 +49,6 @@
 #include "guile-mappings.h"
 
 #include "swig-runtime.h"
-#include "g-wrap-wct.h" // still needed
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
@@ -1313,8 +1312,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
     while(!SCM_NULLP(retval)) {
       current_xtn = SCM_CAAR(retval);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
-
+      #define FUNC_NAME "xaccTransCountSplits"
+      gnc_xtn     = SWIG_MustGetPtr(current_xtn,
+                                    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+      #undef FUNC_NAME
       if(xaccTransCountSplits(gnc_xtn) > 2) {
         amount_str = _("(split)"); 
       }
@@ -1761,7 +1762,10 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
 
     while(!SCM_NULLP(possible_matches)) {
       current_xtn = SCM_CAR(possible_matches);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(SCM_CAR(current_xtn));
+      #define FUNC_NAME "make_qif_druid_page"
+      gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),
+                                    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+      #undef FUNC_NAME
       selected    = SCM_CDR(current_xtn);
       
       if(xaccTransCountSplits(gnc_xtn) > 2) {

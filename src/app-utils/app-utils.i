@@ -12,9 +12,10 @@
 #include <gnc-session.h>
 #include <gnc-component-manager.h>
 
-#include <g-wrap-wct.h> //Temporary. Adds no link dep?!?
 #include "engine-helpers.h"
 %}
+
+//%import "engine.i"
 
 %typemap(in) GNCPrintAmountInfo "$1 = gnc_scm2printinfo($input);"
 %typemap(out) GNCPrintAmountInfo "$result = gnc_printinfo2scm($1);"
@@ -35,14 +36,6 @@
 
 %typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
 %typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"
-%typemap(in) Account * "$1 = (Account *)gw_wcp_get_ptr($input);"
-%typemap(out) Account * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:Account*>"));
-}
-%typemap(in) AccountGroup * "$1 = (AccountGroup *)gw_wcp_get_ptr($input);"
-%typemap(out) AccountGroup * {
-  $result = gw_wcp_assimilate_ptr($1, scm_c_eval_string("<gnc:AccountGroup*>"));
-}
 
 // End of temporary typemaps.
 
