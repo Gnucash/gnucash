@@ -480,7 +480,6 @@ GNC_LIBEXECDIR='${libexecdir}/gnucash'
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
-GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
 GNC_MODULE_DIR='${pkglibdir}'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
@@ -489,7 +488,6 @@ AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
 AC_SUBST(GNC_UI_DIR)
-AC_SUBST(GNC_GWRAP_LIBDIR)
 AC_SUBST(GNC_INCLUDE_DIR)
 AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_MODULE_DIR)
@@ -1925,7 +1923,7 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgncmodule"
 
 GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${GUILE_INCS}"
 GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS}"
@@ -1971,9 +1969,6 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
-  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
-  #warnFLAGS="${warnFLAGS} -Wno-unused"
   CFLAGS="${CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
