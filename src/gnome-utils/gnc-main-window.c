@@ -778,7 +778,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   /* Save page ordering within the notebook. Use +1 notation so the
    * numbers in the page order match the page sections, at least for
    * the one window case. */
-  order = malloc(sizeof(gint) * num_pages);
+  order = g_malloc(sizeof(gint) * num_pages);
   for (i = 0; i < num_pages; i++) {
     gpointer page = g_list_nth_data(priv->usage_order, i);
     order[i] = g_list_index(priv->installed_pages, page) + 1;
