@@ -664,7 +664,7 @@ function inst_goffice() {
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
 	    ${LIBTOOLIZE} --force
-	    aclocal ${ACLOCAL_FLAGS}
+	    aclocal ${ACLOCAL_FLAGS} -I .
 	    automake
 	    autoconf
 	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
