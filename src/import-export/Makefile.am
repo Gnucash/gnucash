@@ -85,11 +85,10 @@ endif
 noinst_DATA = .scm-links
 
 .scm-links:
-	rm -f g-wrapped gnucash generic-import import-export
+	rm -f gnucash generic-import import-export
 	$(LN_S) -f . import-export
 	$(LN_S) -f . gnucash
 	$(LN_S) -f . generic-import
-	$(LN_S) -f . g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -97,5 +96,5 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-CLEANFILES = gnucash generic-import g-wrapped .scm-links import-export
+CLEANFILES = gnucash generic-import .scm-links import-export
 DISTCLEANFILES = ${SCM_FILE_LINKS}

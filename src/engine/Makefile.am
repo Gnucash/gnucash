@@ -148,9 +148,8 @@ SCM_FILE_LINKS += \
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
+	rm -f gnucash
 	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
