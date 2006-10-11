@@ -1,7 +1,6 @@
 TESTS = \
   test-link-module \
   test-load-module \
-  test-component-manager \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount
@@ -51,8 +50,7 @@ noinst_PROGRAMS = \
   test-print-queries
 
 EXTRA_DIST = \
-  test-load-module \
-  test-component-manager
+  test-load-module
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
