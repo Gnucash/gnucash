@@ -34,6 +34,8 @@
 
 #include "config.h"
 
+#include <libguile.h>
+#include <guile-mappings.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #ifndef HAVE_GLIB26

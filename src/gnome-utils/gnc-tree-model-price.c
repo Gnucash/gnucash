@@ -1515,7 +1515,7 @@ gnc_tree_model_price_event_handler (QofEntity *entity,
 	    return;
 	  }
 
-	  data = g_malloc(sizeof(*data));
+	  data = g_new0 (remove_data, 1);
 	  data->model = model;
 	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);
