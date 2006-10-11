@@ -676,20 +676,25 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
 	gnc_suspend_gui_refresh ();
 
+        /* We are guaranteed to be on the blank trans, so we can
+           discount the possibility that the current transaction is
+           being edited in another register. */
         /* now perform the completion */
-        if ((pending_trans != NULL) && (pending_trans != trans)) {
-            if (gnc_split_register_begin_edit_or_warn(info, trans))
-	    {
-	        gnc_resume_gui_refresh ();
-                return TRUE;
-	    }
-
-            if (xaccTransIsOpen (pending_trans))
-                xaccTransCommitEdit (pending_trans);
-            else g_assert_not_reached();
+        if (pending_trans != trans) {
+            if (!xaccTransIsOpen(trans))
+                xaccTransBeginEdit(trans);
+            /* This is now the pending transaction */
+            info->pending_trans_guid = *xaccTransGetGUID(trans);
+            if (pending_trans != NULL) {
+                if (xaccTransIsOpen (pending_trans))
+                    xaccTransCommitEdit (pending_trans);
+                else g_assert_not_reached();
+            }
         }
         g_assert(xaccTransIsOpen(trans));
-        pending_trans = trans;
+        pending_trans = xaccTransLookup(&info->pending_trans_guid,
+                                        gnc_get_current_book ());
+        g_assert(pending_trans == trans);
 
         gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
         blank_split = NULL;
