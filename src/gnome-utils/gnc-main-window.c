@@ -37,6 +37,8 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
