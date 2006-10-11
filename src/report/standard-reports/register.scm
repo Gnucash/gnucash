@@ -246,7 +246,7 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-reg-option
-   (gnc:make-query-option "__reg" "query" #f))
+   (gnc:make-query-option "__reg" "query" '()))
   (gnc:register-reg-option
    (gnc:make-internal-option "__reg" "journal" #f))
   (gnc:register-reg-option
