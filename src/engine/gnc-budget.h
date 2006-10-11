@@ -115,6 +115,11 @@ Timespec gnc_budget_get_period_start_date(GncBudget* budget, guint period_num);
 /* Period indices are zero-based. */
 void gnc_budget_set_account_period_value(
     GncBudget* budget, Account* account, guint period_num, gnc_numeric val);
+void gnc_budget_unset_account_period_value(
+    GncBudget* budget, Account* account, guint period_num);
+
+gboolean gnc_budget_is_account_period_value_set(
+    GncBudget *budget, Account *account, guint period_num);
 
 gnc_numeric gnc_budget_get_account_period_value(
     GncBudget *budget, Account *account, guint period_num);

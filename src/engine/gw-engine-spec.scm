@@ -2580,6 +2580,17 @@ the timepair representing midday on that day")
 
 (gw:wrap-function
  ws
+ 'gnc:budget-is-account-period-value-set
+ '<gw:bool>
+ "gnc_budget_is_account_period_value_set"
+ '((<gnc:Budget*> budget)
+   (<gnc:Account*> acct)
+   (<gw:unsigned-int> period_num)
+   )
+ "Determine if the given account and budget period has a budgeted value.")
+
+(gw:wrap-function
+ ws
  'gnc:budget-get-account-period-value
  '<gnc:numeric>
  "gnc_budget_get_account_period_value"

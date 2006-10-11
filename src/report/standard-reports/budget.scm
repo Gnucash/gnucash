@@ -114,15 +114,16 @@
                     (act-col (+ 1 bgt-col))
 
                     (comm (gnc:account-get-commodity acct))
+                    (bgt-unset? (not (gnc:budget-is-account-period-value-set 
+                                      budget acct period)))
                     (numeric-val (gnc:budget-get-account-period-value
                                   budget acct period))
 
-                    (bgt-val (gnc:make-gnc-monetary
-                              comm numeric-val))
+                    (bgt-val (if bgt-unset? "."
+                                 (gnc:make-gnc-monetary comm numeric-val)))
                     (numeric-val (gnc:budget-get-account-period-actual-value
                                   budget acct period))
-                    (act-val (gnc:make-gnc-monetary
-                              comm numeric-val))
+                    (act-val (gnc:make-gnc-monetary comm numeric-val))
                     (reverse-balance? (gnc:account-reverse-balance? acct))
                     )
 
