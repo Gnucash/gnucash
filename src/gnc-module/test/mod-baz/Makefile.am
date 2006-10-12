@@ -32,6 +32,7 @@ EXTRA_DIST = \
   baz.i \
   gnucash/baz.scm
 
+BUILT_SOURCES = swig-baz.c
 MAINTAINERCLEANFILES = swig-baz.c
 
 # Keep automake from generating install targets for test libs

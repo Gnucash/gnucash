@@ -29,6 +29,7 @@ EXTRA_DIST = \
 swig-foo.c: foo.i
 	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
+BUILT_SOURCES = swig-foo.c
 MAINTAINERCLEANFILES = swig-foo.c
 
 # Keep automake from generating install targets for test libs

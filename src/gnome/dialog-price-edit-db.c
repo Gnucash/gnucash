@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
-#include <guile-mappings.h>
+#include "guile-mappings.h"
 #include <time.h>
 
 #include "dialog-utils.h"

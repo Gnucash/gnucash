@@ -28,6 +28,7 @@ EXTRA_DIST = \
   bar.i \
   gnucash/bar.scm
 
+BUILT_SOURCES = swig-bar.c
 MAINTAINERCLEANFILES = swig-bar.c
 
 # Keep automake from generating install targets for test libs
