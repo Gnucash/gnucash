@@ -68,6 +68,7 @@ ui_DATA = \
 	gnc-plugin-page-report-ui.xml
 
 EXTRA_DIST = \
+  report-gnome.i \
   ${glade_DATA} \
   ${gncmod_DATA} \
   ${ui_DATA}
@@ -89,5 +90,5 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES = swig-report-gnome.c
-CLEANFILES = $(BUILT_SOURCES) gnucash report .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-report-gnome.c

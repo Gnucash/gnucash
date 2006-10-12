@@ -10,8 +10,11 @@ checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
 
 libfoo_la_SOURCES = foo.c
 
+# Make swig-foo.c for dist. It is an automatic dependency
+# of gnc-mod-foo.c
 noinst_HEADERS = \
-  foo.h
+  foo.h \
+  swig-foo.c
 
 libgncmodfoo_la_SOURCES = gnc-mod-foo.c
 
@@ -26,8 +29,7 @@ EXTRA_DIST = \
 swig-foo.c: foo.i
 	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
-BUILT_SOURCES = swig-foo.c
-CLEANFILES = $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = swig-foo.c
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

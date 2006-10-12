@@ -72,7 +72,7 @@ swig-business-core.c: business-core.i ${noinst_HEADERS}
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm
 
-EXTRA_DIST = ${gncmod_DATA}
+EXTRA_DIST = business-core.i ${gncmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
@@ -91,6 +91,5 @@ endif
 
 noinst_DATA = .scm-links
 
-BUILT_SOURCES = swig-business-core.c
-CLEANFILES = $(BUILT_SOURCES) \
-	gnucash .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-business-core.c

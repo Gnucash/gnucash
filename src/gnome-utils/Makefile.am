@@ -206,6 +206,7 @@ gncscm_DATA = gnc-menu-extensions.scm
 EXTRA_DIST = \
   gnc-dir.h.in \
   gnc-svninfo.h \
+  gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -285,8 +286,8 @@ endif
 
 noinst_DATA = .scm-links
 
-BUILT_SOURCES += swig-gnome-utils.c
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnome-utils.c
 
 #
 # I hate inconsistent standards. Autotools puts help files into

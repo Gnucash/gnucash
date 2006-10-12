@@ -12,8 +12,11 @@ checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
 libbaz_la_SOURCES = baz.c
 libbaz_la_LIBADD = ../mod-foo/libfoo.la
 
+# Make swig-baz.c for dist. It is an automatic dependency
+# of gnc-mod-baz.c
 noinst_HEADERS = \
-  baz.h
+  baz.h \
+  swig-baz.c
 
 libgncmodbaz_la_SOURCES = gnc-mod-baz.c
 
@@ -29,8 +32,7 @@ EXTRA_DIST = \
   baz.i \
   gnucash/baz.scm
 
-BUILT_SOURCES = swig-baz.c
-CLEANFILES = $(BUILT_SOURCES)
+MAINTAINERCLEANFILES = swig-baz.c
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

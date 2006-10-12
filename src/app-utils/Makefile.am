@@ -95,6 +95,7 @@ gncscm_DATA = \
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
+  app-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -115,5 +116,5 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES = swig-app-utils.c
-CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS} gnucash .scm-links
+CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
+MAINTAINERCLEANFILES = swig-app-utils.c

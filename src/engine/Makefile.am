@@ -135,6 +135,7 @@ EXTRA_DIST = \
   gncla-dir.h.in \
   kvp_doc.txt \
   SX-book-p.h \
+  engine.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -174,7 +175,8 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	mv $@.tmp $@
 
 BUILT_SOURCES = iso-4217-currencies.c \
-  gncla-dir.h swig-engine.c
+  gncla-dir.h
 
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-engine.c

@@ -93,7 +93,8 @@ swig-gnome.c: gnome.i ${noinst_HEADERS}
 	-I${top_srcdir}/src/engine -o $@ $<
 
 EXTRA_DIST = \
-  gnucash.desktop.in
+  gnucash.desktop.in \
+  gnome.i
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -137,6 +138,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES = swig-gnome.c
-CLEANFILES = $(BUILT_SOURCES) gnucash.desktop \
+CLEANFILES = gnucash.desktop \
 	gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnome.c

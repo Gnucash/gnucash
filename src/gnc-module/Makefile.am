@@ -30,7 +30,8 @@ swig-gnc-module.c: gnc-module.i
 	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 
 EXTRA_DIST = \
-  ${gncmod_DATA}
+  ${gncmod_DATA} \
+  gnc-module.i
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
@@ -47,6 +48,5 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-BUILT_SOURCES = swig-gnc-module.c
-CLEANFILES = $(BUILT_SOURCES) .scm-links gnucash \
-	${SCM_FILE_LINKS}
+CLEANFILES = .scm-links gnucash ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnc-module.c

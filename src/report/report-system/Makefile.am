@@ -69,7 +69,7 @@ endif
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
+EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA}
 
-BUILT_SOURCES = swig-report-system.c
-CLEANFILES = $(BUILT_SOURCES) gnucash report .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-report-system.c

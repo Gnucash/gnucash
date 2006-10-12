@@ -50,6 +50,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = tax-tables.glade
 
 EXTRA_DIST = \
+  dialog-tax-table.i \
   ${glade_DATA} \
   ${gncmod_DATA}
 
@@ -70,5 +71,5 @@ endif
 	touch .scm-links
 
 noinst_DATA = .scm-links
-BUILT_SOURCES = swig-dialog-tax-table.c
-CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-dialog-tax-table.c
