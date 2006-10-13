@@ -2181,8 +2181,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/network-utils/Makefile
           src/network-utils/test/Makefile
           src/optional/Makefile
-          src/optional/swig/Makefile
-          src/optional/swig/examples/Makefile
           src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
