@@ -33,13 +33,24 @@ AM_CFLAGS = \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+gncmod_DATA = core-utils.scm
+
+if GNUCASH_SEPARATE_BUILDDIR
+#Only needed when srcdir and builddir are different
+#for running
+SCM_FILE_LINKS = ${gncmod_DATA}
+endif
+
 .scm-links: 
 	rm -f gnucash
 	$(LN_S) -f . gnucash 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
-
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = core-utils.scm
 
 noinst_DATA = .scm-links
 EXTRA_DIST = $(gncmod_DATA) core-utils.i
