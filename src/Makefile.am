@@ -40,6 +40,12 @@ noinst_HEADERS = \
 
 bin_SCRIPTS = gnc-test-env
 
+if BUILDING_FROM_SVN
+swig-runtime.h:
+	$(SWIG) -guile -external-runtime $@
+endif
+MAINTAINERCLEANFILES = swig-runtime.h
+
 EXTRA_DIST = \
   README.modules \
   gnc-test-env \
