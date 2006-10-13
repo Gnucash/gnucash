@@ -50,9 +50,11 @@ libgncmod_report_gnome_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
+if BUILDING_FROM_SVN
 swig-report-gnome.c: report-gnome.i ${gncinclude_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/engine -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncmod_DATA = report-gnome.scm

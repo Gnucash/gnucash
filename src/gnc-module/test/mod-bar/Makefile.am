@@ -21,8 +21,10 @@ libgncmodbar_la_SOURCES=gnc-mod-bar.c
 libgncmodbar_la_LIBADD=libbar.la \
   $(GLIB_LIBS)
 
+if BUILDING_FROM_SVN
 swig-bar.c: bar.i
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 EXTRA_DIST = \
   bar.i \

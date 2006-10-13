@@ -24,8 +24,10 @@ noinst_HEADERS = \
   gnc-gobject-utils.h \
   gnc-gtk-utils.h
 
+if BUILDING_FROM_SVN
 swig-core-utils.c: core-utils.i
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 AM_CFLAGS = \
   ${GUILE_INCS} \

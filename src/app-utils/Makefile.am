@@ -75,9 +75,11 @@ libgncmod_app_utils_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
+if BUILDING_FROM_SVN
 swig-app-utils.c: app-utils.i ${gncinclude_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/engine -I${top_srcdir}/lib/libqof/qof -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 

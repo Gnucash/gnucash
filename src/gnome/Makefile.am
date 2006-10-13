@@ -88,9 +88,11 @@ noinst_HEADERS = \
   top-level.h \
   window-reconcile.h
 
+if BUILDING_FROM_SVN
 swig-gnome.c: gnome.i ${noinst_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/engine -o $@ $<
+endif
 
 EXTRA_DIST = \
   gnucash.desktop.in \

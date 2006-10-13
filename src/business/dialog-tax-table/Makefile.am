@@ -40,8 +40,10 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
+if BUILDING_FROM_SVN
 swig-dialog-tax-table.c: dialog-tax-table.i ${noinst_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = dialog-tax-table.scm

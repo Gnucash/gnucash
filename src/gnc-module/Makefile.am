@@ -26,8 +26,10 @@ gncinclude_HEADERS = \
 
 noinst_DATA = .scm-links
 
+if BUILDING_FROM_SVN
 swig-gnc-module.c: gnc-module.i
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 EXTRA_DIST = \
   ${gncmod_DATA} \

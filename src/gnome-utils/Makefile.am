@@ -193,9 +193,11 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GOFFICE_LIBS} \
   ${LIBXML2_LIBS}
 
+if BUILDING_FROM_SVN
 swig-gnome-utils.c: gnome-utils.i ${noinst_HEADERS} ${gncinclude_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src/engine -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnome-utils.scm 

@@ -17,8 +17,10 @@ libgncmod_report_system_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
+if BUILDING_FROM_SVN
 swig-report-system.c: report-system.i ${gncinclude_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

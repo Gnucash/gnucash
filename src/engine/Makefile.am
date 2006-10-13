@@ -160,9 +160,11 @@ endif
 
 noinst_DATA = .scm-links
 
+if BUILDING_FROM_SVN
 swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
-	swig -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/lib/libqof/qof -o $@ $<
+endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c

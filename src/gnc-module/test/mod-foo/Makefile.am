@@ -26,8 +26,10 @@ EXTRA_DIST = \
   foo.i \
   gnucash/foo.scm
 
+if BUILDING_FROM_SVN
 swig-foo.c: foo.i
-	swig -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 BUILT_SOURCES = swig-foo.c
 MAINTAINERCLEANFILES = swig-foo.c
