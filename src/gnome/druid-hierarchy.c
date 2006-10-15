@@ -43,7 +43,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-component-manager.h"
-#include "../gnome-utils/gnc-dir.h"
+#include "gnc-path.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui-util.h"
@@ -194,7 +194,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
 #endif
 
     i = strlen(locale);
-    ret = g_strdup_printf("%s/%s", top_dir, locale);
+    ret = g_build_filename(top_dir, locale, (char *)NULL);
 
     while (stat(ret, &buf) != 0)
     { 
@@ -202,12 +202,12 @@ gnc_get_ea_locale_dir(const char *top_dir)
 	if (i<1) 
 	{
 	    g_free(ret);
-	    ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+	    ret = g_build_filename(top_dir, default_locale, (char *)NULL);
 	    break;
 	}
 	locale[i] = '\0';
 	g_free(ret);
-	ret = g_strdup_printf("%s/%s", top_dir, locale);
+	ret = g_build_filename(top_dir, locale, (char *)NULL);
     }
     
     g_free(locale);
@@ -358,6 +358,7 @@ static void
 account_categories_tree_view_prepare (hierarchy_data  *data)
 {
 	GSList *list;
+	gchar *gnc_accounts_dir;
 	gchar *locale_dir;
 	GtkTreeView *tree_view;
 	GtkListStore *model;
@@ -366,9 +367,11 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	GtkTreeSelection *selection;
 	GtkTreePath *path;
 
-	locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
+	gnc_accounts_dir = gnc_path_get_accountsdir ();
+	locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
  	list = gnc_load_example_account_list (data->temporary,
 					      locale_dir);
+	g_free (gnc_accounts_dir);
 	g_free (locale_dir);
 
 	/* Prepare the account_categories GtkTreeView with a model and with some columns */
@@ -473,9 +476,13 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 
 	/* Add a new one if something selected */
 	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+		gchar *text2;
 		gtk_tree_model_get (model, &iter, COL_ACCOUNT, &gea, -1);
-		text = g_strdup_printf(_("<b>Accounts in '%s'</b>"), gea->title);
+		/* Translators: '%s' is the name of the selected account hierarchy template. */
+		text2 = g_strdup_printf(_("Accounts in '%s'"), gea->title);
+		text = g_strdup_printf("<b>%s</b>", text2);
 		gtk_label_set_markup(data->category_accounts_label, text);
+		g_free(text2);
 		g_free(text);
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, gea->long_description, -1);
@@ -490,8 +497,10 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
 		gtk_widget_show(GTK_WIDGET(tree_view));
 	} else {
-		gtk_label_set_markup(data->category_accounts_label,
-				     _("<b>Accounts in Category</b>"));
+		gchar *text;
+		text = g_strdup_printf ("<b>%s</b>", _("Accounts in Category"));
+		gtk_label_set_markup(data->category_accounts_label, text);
+		g_free (text);
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, "", -1);
 	}

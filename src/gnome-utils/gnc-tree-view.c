@@ -1191,7 +1191,8 @@ gnc_tree_view_remove_gconf(GncTreeView *view)
   }
 
   DEBUG("removing gconf notification");
-  gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section);
+  gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section,
+				GNC_TREE_VIEW_NAME);
   g_free(priv->gconf_section);
   priv->gconf_section = NULL;
   LEAVE(" ");
@@ -1228,7 +1229,8 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   priv->gconf_section = g_strdup(section);
   gnc_gconf_add_notification(G_OBJECT(view), section,
-			     gnc_tree_view_gconf_changed);
+			     gnc_tree_view_gconf_changed,
+			     GNC_TREE_VIEW_NAME);
 
   /* Catch changes to the sort column. Propagate to gconf. The key can
    * be set before the model, so the code must handle that case. */

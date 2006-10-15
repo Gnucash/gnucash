@@ -62,17 +62,4 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
-
-.scm-links: 
-	rm -f gnucash
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . register
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-noinst_DATA = .scm-links
-CLEANFILES = $(BUILT_SOURCES) gnucash register .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = $(BUILT_SOURCES)

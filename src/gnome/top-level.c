@@ -258,17 +258,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
 
     if (!keyfile) {
         gnc_main_window_restore_default_state();
-        
-#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
-        /* See if there's an old style state file to be found */
-        gnc_main_window_book_open_handler(session);
-
-        /* At this point the reports have only been loaded into
-           memory.  Now we create their ui component. */
-        gnc_reports_show_all(session);
-#endif
-        
-        LEAVE("old");
+        LEAVE("no state file");
         return;
     }
     

@@ -94,8 +94,9 @@ typedef struct _AccountWindow
   GtkWidget * commodity_edit;
   dialog_commodity_mode commodity_mode;
   GtkWidget * account_scu;
-  
-  GList * valid_types;
+
+  guint32 valid_types;
+  GNCAccountType preferred_account_type;
   GtkWidget * type_view;
   GtkTreeView * parent_tree;
 
@@ -129,13 +130,12 @@ typedef struct _RenumberDialog
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static int last_used_account_type = ACCT_TYPE_BANK;
+static GNCAccountType last_used_account_type = ACCT_TYPE_BANK;
 
 static GList *ac_destroy_cb_list = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_account_window_set_name (AccountWindow *aw);
-static void make_account_changes(GHashTable *change_type);
 
 void gnc_account_renumber_prefix_changed_cb (GtkEditable *editable, RenumberDialog *data);
 void gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
@@ -241,9 +241,6 @@ gnc_account_to_ui(AccountWindow *aw)
   flag = xaccAccountGetHidden (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->hidden_button),
                                 flag);
-
-  gtk_tree_view_collapse_all (aw->parent_tree);
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), account);
   LEAVE(" ");
 }
 
@@ -321,10 +318,17 @@ gnc_ui_to_account(AccountWindow *aw)
     return;
   }
 
+  if (aw->type != xaccAccountGetType (account)) {
+    /* Just refreshing won't work. */
+    aw_call_destroy_callbacks (account);
+  }
+
   xaccAccountBeginEdit (account);
 
   if (aw->type != xaccAccountGetType (account))
     xaccAccountSetType (account, aw->type);
+
+  last_used_account_type = aw->type;
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
   old_string = xaccAccountGetName (account);
@@ -436,15 +440,57 @@ gnc_ui_to_account(AccountWindow *aw)
 }
 
 
-static void 
-gnc_finish_ok (AccountWindow *aw,
-               GHashTable *change_type)
+static void
+set_children_types (Account *account, GNCAccountType type)
 {
-  ENTER("aw %p, hash table %p", aw, change_type);
+  AccountGroup *children;
+  GList *iter;
+
+  children = xaccAccountGetChildren (account);
+  if (children == NULL)
+    return;
+
+  for (iter=xaccGroupGetAccountList (children); iter; iter=iter->next) {
+    account = iter->data;
+    if (type == xaccAccountGetType(account))
+      continue;
+
+    /* Just refreshing won't work. */
+    aw_call_destroy_callbacks (account);
+
+    xaccAccountBeginEdit (account);
+    xaccAccountSetType (account, type);
+    xaccAccountCommitEdit (account);
+
+    set_children_types (account, type);
+  }
+}
+
+static void
+make_children_compatible (AccountWindow *aw)
+{
+  Account *account;
+
+  g_return_if_fail (aw);
+
+  account = aw_get_account (aw);
+  g_return_if_fail (account);
+
+  if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
+    return;
+
+  set_children_types (account, aw->type);
+}
+
+
+static void
+gnc_finish_ok (AccountWindow *aw)
+{
+  ENTER("aw %p", aw);
   gnc_suspend_gui_refresh ();
 
   /* make the account changes */
-  make_account_changes (change_type);
+  make_children_compatible (aw);
   gnc_ui_to_account (aw);
 
   gnc_resume_gui_refresh ();
@@ -494,141 +540,43 @@ gnc_finish_ok (AccountWindow *aw,
 }
 
 
-/* Record all of the children of the given account as needing their
- * type changed to the one specified. */
 static void
-gnc_change_account_types(GHashTable *change_type, Account *account,
-                         Account *except, GNCAccountType type)
+add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data)
 {
-  AccountGroup *children;
-  GList *list;
-  GList *node;
+  GtkExpander *expander = GTK_EXPANDER (object);
+  Account *account = data;
+  GtkWidget *scrolled_window;
+  GtkTreeView *view;
 
-  if ((change_type == NULL) || (account == NULL))
-    return;
+  if (gtk_expander_get_expanded (expander) &&
+      !gtk_bin_get_child (GTK_BIN (expander))) {
 
-  if (account == except)
-    return;
+    view = gnc_tree_view_account_new_with_group (
+      xaccAccountGetChildren (account), FALSE);
 
-  g_hash_table_insert(change_type, account, GINT_TO_POINTER(type));
+    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
+                                         GTK_SHADOW_IN);
+    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (view));
 
-  children = xaccAccountGetChildren(account);
-  if (children == NULL)
-    return;
-
-  list = xaccGroupGetAccountList (children);
-
-  for (node= list; node; node = node->next)
-  {
-    account = node->data;
-    gnc_change_account_types(change_type, account, except, type);
+    gtk_container_add (GTK_CONTAINER (expander), scrolled_window);
+    gtk_widget_show_all (scrolled_window);
   }
 }
 
-
-/* helper function to perform changes to accounts */
-static void
-change_func (gpointer key, gpointer value, gpointer unused)
-{
-  Account *account = key;
-  int type;
- 
-  if (account == NULL)
-    return;
-
-  xaccAccountBeginEdit(account);
-
-  type = GPOINTER_TO_INT(value);
-
-  if (type == xaccAccountGetType(account))
-    return;
-
-  /* Just refreshing won't work. */
-  aw_call_destroy_callbacks (account);
-
-  xaccAccountSetType(account, type);
-
-  xaccAccountCommitEdit(account);
-}
-
-
-/* Perform the changes to accounts dictated by the hash tables */
-static void
-make_account_changes(GHashTable *change_type)
-{
-  if (change_type != NULL)
-    g_hash_table_foreach(change_type, change_func, NULL);
-}
-
-
-typedef struct
-{
-  Account *account;
-  GtkListStore *list;
-  guint count;
-} FillStruct;
-
-static void
-fill_helper(gpointer key, gpointer value, gpointer data)
-{
-  Account *account = key;
-  FillStruct *fs = data;
-  gchar *full_name;
-  const gchar *account_field_name;
-  const gchar *account_field_value;
-  const gchar *value_str;
-  GtkTreeIter iter;
-
-  if (fs == NULL) return;
-  if (fs->account == account) return;
-
-  full_name = xaccAccountGetFullName(account);
-  account_field_name = _("Type");
-  account_field_value = xaccAccountGetTypeStr(xaccAccountGetType(account));
-  value_str = xaccAccountGetTypeStr(GPOINTER_TO_INT(value));
-
-  gtk_list_store_append(fs->list, &iter);
-  gtk_list_store_set(fs->list, &iter,
-		     ACCOUNT_COL_FULLNAME,  full_name,
-		     ACCOUNT_COL_FIELDNAME, account_field_name,
-		     ACCOUNT_COL_OLD_VALUE, account_field_value,
-		     ACCOUNT_COL_NEW_VALUE, value_str,
-		     -1);
-  g_free(full_name);
-  fs->count++;
-}
-
-static guint
-fill_list(Account *account, GtkListStore *list,
-          GHashTable *change)
-{
-  FillStruct fs;
-
-  if (change == NULL)
-    return 0;
-
-  fs.account = account;
-  fs.list = list;
-  fs.count = 0;
-
-  g_hash_table_foreach(change, fill_helper, &fs);
-
-  return fs.count;
-}
-
-
-/* Present a dialog of proposed account changes for the user's ok */
+/* Check whether there are children needing a type adjustment because of a
+   a change to an incompatible type (like after some reparenting) and let the
+   user decide whether he wants that */
 static gboolean
-extra_change_verify (AccountWindow *aw,
-                     GHashTable *change_type)
+verify_children_compatible (AccountWindow *aw)
 {
   Account *account;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkTreeView *view;
-  GtkListStore *store;
+  AccountGroup *children;
+  GtkWidget *dialog, *vbox, *hbox, *label, *expander;
+  gchar *str;
   gboolean result;
-  guint size;
 
   if (aw == NULL)
     return FALSE;
@@ -637,88 +585,88 @@ extra_change_verify (AccountWindow *aw,
   if (!account)
     return FALSE;
 
-  store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-			     G_TYPE_STRING, G_TYPE_STRING);
-
-  size = fill_list(account, GTK_LIST_STORE(store), change_type);
-
-  if (size == 0)
-  {
-    g_object_unref(store);
+  if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
     return TRUE;
-  }
 
-  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),
-				       ACCOUNT_COL_FULLNAME,
-				       GTK_SORT_ASCENDING);
+  children = xaccAccountGetChildren (account);
+  if (!children ||
+      !xaccGroupGetNumAccounts (children))
+    return TRUE;
 
-  view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
-  g_object_unref(store);
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Account"), renderer,
-						    "text", ACCOUNT_COL_FULLNAME,
-						    NULL);
-  gtk_tree_view_append_column(view, column);
+  dialog = gtk_dialog_new_with_buttons ("",
+                                        GTK_WINDOW(aw->dialog),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT |
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                        NULL);
 
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Field"), renderer,
-						    "text", ACCOUNT_COL_FIELDNAME,
-						    NULL);
-  gtk_tree_view_append_column(view, column);
+  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes(_("Old Value"), renderer,
-						    "text", ACCOUNT_COL_OLD_VALUE,
-						    NULL);
-  gtk_tree_view_append_column(view, column);
+  hbox = gtk_hbox_new (FALSE, 12);
+  vbox = gtk_vbox_new (FALSE, 12);
 
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes(_("New Value"), renderer,
-						    "text", ACCOUNT_COL_NEW_VALUE,
-						    NULL);
-  gtk_tree_view_append_column(view, column);
+  gtk_box_pack_start (
+    GTK_BOX (hbox),
+    gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG),
+    FALSE, FALSE, 0);
 
+  /* primary label */
+  label = gtk_label_new (_("Give the children the same type?"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   {
-    GtkWidget *dialog;
-    GtkWidget *scroll;
-    GtkWidget *label;
-    GtkWidget *frame;
-    GtkWidget *vbox;
+    gint size;
+    PangoFontDescription *font_desc;
 
-    dialog = gtk_dialog_new_with_buttons (_("Verify Changes"),
-		    			  GTK_WINDOW(aw->dialog),
-					  GTK_DIALOG_DESTROY_WITH_PARENT |
-					  GTK_DIALOG_MODAL,
-					  GTK_STOCK_OK, GTK_RESPONSE_OK,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  NULL);
-
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-    gtk_window_set_default_size (GTK_WINDOW (dialog), 0, 300);
-
-    vbox = GTK_DIALOG (dialog)->vbox;
-
-    label = gtk_label_new(_("The following changes must be made. Continue?"));
-    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-
-    frame = gtk_frame_new(NULL);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
-
-    scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
-                                   GTK_POLICY_NEVER, 
-                                   GTK_POLICY_AUTOMATIC);
-
-    gtk_container_add(GTK_CONTAINER(frame), scroll);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll), 5);
-    gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(view));
-
-    gtk_widget_show_all(vbox);
-
-    result = (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
-
-    gtk_widget_destroy(dialog);
+    size = pango_font_description_get_size (label->style->font_desc);
+    font_desc = pango_font_description_new ();
+    pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
+    pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
+    gtk_widget_modify_font (label, font_desc);
+    pango_font_description_free (font_desc);
   }
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+  /* secondary label */
+  str = g_strdup_printf (_("The children of the edited account have to be "
+                           "changed to type \"%s\" to make them compatible."),
+                         xaccAccountGetTypeStr (aw->type));
+  label = gtk_label_new (str);
+  g_free (str);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+  /* children */
+  expander = gtk_expander_new_with_mnemonic (_("_Show children accounts"));
+  gtk_expander_set_spacing (GTK_EXPANDER (expander), 6);
+  g_signal_connect (G_OBJECT (expander), "notify::expanded",
+                    G_CALLBACK (add_children_to_expander), account);
+  gtk_box_pack_start (GTK_BOX (vbox), expander, TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
+                      TRUE, TRUE, 0);
+
+  /* spacings */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14);
+  gtk_container_set_border_width (
+    GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+
+  gtk_widget_show_all (hbox);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  result = (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
+
+  gtk_widget_destroy(dialog);
 
   return result;
 }
@@ -810,6 +758,16 @@ gnc_common_ok (AccountWindow *aw)
     return FALSE;
   }
 
+  /* check whether the types of child and parent are compatible */
+  if (parent != aw->top_level_account &&
+      !xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
+    const char *message = _("The selected account type is incompatible with "
+                            "the one of the selected parent.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("incompatible types");
+    return FALSE;
+  }
+
   /* check for commodity */
   commodity = (gnc_commodity *)
     gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
@@ -827,17 +785,7 @@ gnc_common_ok (AccountWindow *aw)
 static void
 gnc_edit_account_ok(AccountWindow *aw)
 {
-  GHashTable *change_type;
-
-  gboolean change_children;
-  gboolean has_children;
-  gboolean change_all;
-
-  Account *new_parent;
   Account *account;
-  AccountGroup *children;
-
-  GNCAccountType current_type;
 
   ENTER("aw %p", aw);
 
@@ -852,73 +800,12 @@ gnc_edit_account_ok(AccountWindow *aw)
     return;
   }
 
-  change_type = g_hash_table_new (NULL, NULL);
-
-  children = xaccAccountGetChildren(account);
-  if (children == NULL)
-    has_children = FALSE;
-  else if (xaccGroupGetNumAccounts(children) == 0)
-    has_children = FALSE;
-  else
-    has_children = TRUE;
-
-  current_type = xaccAccountGetType(account);
-
-  /* If the account has children and the new type isn't compatible
-   * with the old type, the children's types must be changed. */
-  change_children = (has_children &&
-                     !xaccAccountTypesCompatible(current_type, aw->type));
-
-  /* If the new parent's type is not compatible with the new type,
-   * the whole sub-tree containing the account must be re-typed. */
-  new_parent = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-  if (new_parent != aw->top_level_account)
-  {
-    int parent_type;
-
-    parent_type = xaccAccountGetType(new_parent);
-
-    if (!xaccAccountTypesCompatible(parent_type, aw->type))
-      change_all = TRUE;
-    else
-      change_all = FALSE;
-  }
-  else
-    change_all = FALSE;
-
-  if (change_children)
-    gnc_change_account_types(change_type, account, NULL, aw->type);
-
-  if (change_all)
-  {
-    Account *ancestor;
-    Account *temp;
-
-    temp = new_parent;
-
-    do
-    {
-      ancestor = temp;
-      temp = xaccAccountGetParentAccount(ancestor);
-    } while (temp != NULL);
-
-    gnc_change_account_types(change_type, ancestor, account, aw->type);
-  }
-
-  if (!extra_change_verify(aw, change_type))
-  {
-    g_hash_table_destroy(change_type);
+  if (!verify_children_compatible (aw)) {
     LEAVE(" ");
     return;
   }
 
-  if (current_type != aw->type)
-    /* Just refreshing won't work. */
-    aw_call_destroy_callbacks (account);
-
-  gnc_finish_ok (aw, change_type);
-
-  g_hash_table_destroy (change_type);
+  gnc_finish_ok (aw);
   LEAVE(" ");
 }
 
@@ -927,8 +814,6 @@ static void
 gnc_new_account_ok (AccountWindow *aw)
 {
   gnc_numeric balance;
-  GHashTable *change_type;
-  Account *new_parent;
 
   ENTER("aw %p", aw);
 
@@ -972,41 +857,7 @@ gnc_new_account_ok (AccountWindow *aw)
     }
   }
 
-  /* If the new parent's type is not compatible with the new type,
-   * the whole sub-tree containing the account must be re-typed. */
-  change_type = g_hash_table_new (NULL, NULL);
-
-  new_parent = gnc_tree_view_account_get_selected_account (
-    GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-  if (new_parent != aw->top_level_account)
-  {
-    if (!xaccAccountTypesCompatible (xaccAccountGetType(new_parent),
-                                     aw->type))
-    {
-      Account *ancestor;
-      Account *temp;
-
-      temp = new_parent;
-      do
-      {
-        ancestor = temp;
-        temp = xaccAccountGetParentAccount (ancestor);
-      } while (temp != NULL);
-
-      gnc_change_account_types (change_type, ancestor, NULL, aw->type);
-
-      if (!extra_change_verify (aw, change_type))
-      {
-        g_hash_table_destroy (change_type);
-        LEAVE(" ");
-        return;
-      }
-    }
-  }
-
-  gnc_finish_ok (aw, change_type);
-
-  g_hash_table_destroy (change_type);
+  gnc_finish_ok (aw);
   LEAVE(" ");
 }
 
@@ -1104,9 +955,61 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
     aw->next_name = NULL;
   }
 
-  g_list_free (aw->valid_types);
   g_free (aw);
   LEAVE(" ");
+}
+
+static void
+gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
+{
+  AccountWindow *aw = data;
+  Account *parent_account;
+  guint32 types, old_types;
+  GtkTreeModel *type_model;
+  GtkTreeSelection *type_selection;
+  gboolean scroll_to = FALSE;
+
+  g_return_if_fail (aw);
+
+  parent_account = gnc_tree_view_account_get_selected_account (
+    GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  if (!parent_account)
+    return;
+
+  if (parent_account == aw->top_level_account) {
+    types = aw->valid_types;
+  } else {
+    types = aw->valid_types &
+      xaccAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
+  }
+
+  type_model = gtk_tree_view_get_model (GTK_TREE_VIEW (aw->type_view));
+  if (!type_model)
+    return;
+
+  if (aw->type != aw->preferred_account_type &&
+      (types & (1 << aw->preferred_account_type)) != 0) {
+    /* we can change back to the preferred account type */
+    aw->type = aw->preferred_account_type;
+    scroll_to = TRUE;
+  }
+  else if ((types & (1 << aw->type)) == 0) {
+    /* our type is invalid now */
+    aw->type = ACCT_TYPE_INVALID;
+  }
+  else {
+    /* no type change, but maybe list of valid types changed */
+    old_types = gnc_tree_model_account_types_get_mask (type_model);
+    if (old_types != types)
+      scroll_to = TRUE;
+  }
+
+  gnc_tree_model_account_types_set_mask (type_model, types);
+
+  if (scroll_to) {
+    type_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->type_view));
+    gnc_tree_model_account_types_set_selection(type_selection, 1 << aw->type);
+  }
 }
 
 static void
@@ -1125,7 +1028,7 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
     aw->type = ACCT_TYPE_INVALID;
   } else {
     aw->type = type_id;
-    last_used_account_type = type_id;
+    aw->preferred_account_type = type_id;
 
     gnc_account_commodity_from_type (aw, TRUE);
 
@@ -1143,18 +1046,6 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
   }
 }
 
-static GNCAccountType
-gnc_account_choose_new_acct_type (AccountWindow *aw)
-{
-  if (g_list_index (aw->valid_types, GINT_TO_POINTER(aw->type)) != -1)
-    return aw->type;
-
-  if (g_list_index (aw->valid_types, GINT_TO_POINTER(last_used_account_type)) != -1)
-    return last_used_account_type;
-
-  return ((GNCAccountType)(aw->valid_types->data));
-}
-
 static void
 gnc_account_type_view_create (AccountWindow *aw)
 {
@@ -1162,19 +1053,34 @@ gnc_account_type_view_create (AccountWindow *aw)
   GtkTreeSelection *selection;
   GtkCellRenderer *renderer;
   GtkTreeView *view;
-  GList *list;
-  guint32 types = 0;
 
-  if ((aw->dialog_type == NEW_ACCOUNT) && aw->valid_types)
-    aw->type = gnc_account_choose_new_acct_type (aw);
+  if (aw->valid_types == 0) {
+    /* no type restrictions, choose aw->type */
+    aw->valid_types = xaccAccountTypesValid () | (1 << aw->type);
+    aw->preferred_account_type = aw->type;
+  }
+  else if ((aw->valid_types & (1 << aw->type)) != 0) {
+    /* aw->type is valid */
+    aw->preferred_account_type = aw->type;
+  }
+  else if ((aw->valid_types & (1 << last_used_account_type)) != 0) {
+    /* last used account type is valid */
+    aw->type = last_used_account_type;
+    aw->preferred_account_type = last_used_account_type;
+  }
+  else {
+    /* choose first valid account type */
+    int i;
+    aw->preferred_account_type = aw->type;
+    aw->type = ACCT_TYPE_INVALID;
+    for (i=0; i<32; i++)
+      if ((aw->valid_types & (1 << i)) != 0) {
+        aw->type = i;
+        break;
+      }
+  }
 
-  if (aw->valid_types == NULL)
-      types = xaccAccountTypesValid () | (1 << aw->type);
-  else
-      for (list = aw->valid_types; list; list = list->next)
-          types |= (1 << GPOINTER_TO_INT(list->data));
-
-  model = gnc_tree_model_account_types_filter_using_mask (types);
+  model = gnc_tree_model_account_types_filter_using_mask (aw->valid_types);
 
   view = GTK_TREE_VIEW (aw->type_view);
   gtk_tree_view_set_model (view, model);
@@ -1190,7 +1096,7 @@ gnc_account_type_view_create (AccountWindow *aw)
   selection = gtk_tree_view_get_selection (view);
   g_signal_connect (G_OBJECT (selection), "changed",
 		    G_CALLBACK (gnc_account_type_changed_cb), aw);
-  
+
   gnc_tree_model_account_types_set_selection(selection, 1 << aw->type);
 }
 
@@ -1274,7 +1180,6 @@ opening_equity_cb (GtkWidget *w, gpointer data)
 static void
 gnc_account_window_create(AccountWindow *aw)
 {
-  GtkDialog *awd;
   GtkWidget *amount;
   GObject *awo;
   GtkWidget *box;
@@ -1287,7 +1192,6 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->dialog = glade_xml_get_widget (xml, "Account Dialog");
   awo = G_OBJECT (aw->dialog);
-  awd = GTK_DIALOG (awo);
 
   g_object_set_data (awo, "dialog_info", aw);
 
@@ -1332,6 +1236,9 @@ gnc_account_window_create(AccountWindow *aw)
   aw->parent_tree = gnc_tree_view_account_new(TRUE);
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
   gtk_widget_show(GTK_WIDGET(aw->parent_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
+  g_signal_connect (G_OBJECT (selection), "changed",
+                    G_CALLBACK (gnc_account_parent_changed_cb), aw);
   aw->top_level_account =
     gnc_tree_view_account_get_top_level (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree));
 
@@ -1523,12 +1430,16 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_commodity *commodity, *parent_commodity;
   AccountWindow *aw;
   Account *account;
+  GList *list;
 
   aw = g_new0 (AccountWindow, 1);
 
   aw->modal = modal;
   aw->dialog_type = NEW_ACCOUNT;
-  aw->valid_types = g_list_copy (valid_types);
+
+  aw->valid_types = 0;
+  for (list = valid_types; list; list = list->next)
+    aw->valid_types |= (1 << GPOINTER_TO_INT (list->data));
 
   account = xaccMallocAccount (gnc_get_current_book ());
   aw->account = *xaccAccountGetGUID (account);
@@ -1566,15 +1477,14 @@ gnc_ui_new_account_window_internal (Account *base_account,
                                     commodity);
   gnc_account_commodity_from_type (aw, FALSE);
 
-  gtk_widget_show (aw->dialog);
-
-  if (base_account == NULL) {
-	  base_account = aw->top_level_account;
-  }
+  if (base_account == NULL)
+    base_account = aw->top_level_account;
 
   gtk_tree_view_collapse_all (aw->parent_tree);
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree),
-					      base_account);
+  gnc_tree_view_account_set_selected_account (
+    GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), base_account);
+
+  gtk_widget_show (aw->dialog);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
@@ -1583,7 +1493,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
   aw->component_id = gnc_register_gui_component (DIALOG_NEW_ACCOUNT_CM_CLASS,
                                                  refresh_handler,
                                                  modal ? NULL : close_handler,
-						 aw);
+                                                 aw);
 
   gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
   gnc_gui_component_watch_entity_type (aw->component_id,
@@ -1651,10 +1561,11 @@ gnc_ui_new_accounts_from_name_window_with_types (const char *name,
   return gnc_ui_new_accounts_from_name_with_defaults(name, valid_types, NULL, NULL);
 }
 
-Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
-						       GList *valid_types,
-						       gnc_commodity * default_commodity,
-						       Account * parent)
+Account *
+gnc_ui_new_accounts_from_name_with_defaults (const char *name,
+                                             GList *valid_types,
+                                             gnc_commodity * default_commodity,
+                                             Account * parent)
 {
   AccountWindow *aw;
   Account *base_account = NULL;
@@ -1768,7 +1679,9 @@ gnc_ui_edit_account_window(Account *account)
   if (parent == NULL)
     parent = aw->top_level_account;
 
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent);
+  gtk_tree_view_collapse_all (aw->parent_tree);
+  gnc_tree_view_account_set_selected_account (
+    GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent);
 
   gnc_account_window_set_name (aw);
 
@@ -1816,16 +1729,7 @@ void
 gnc_ui_new_account_with_types( AccountGroup *unused,
                                GList *valid_types )
 {
-  GList *validTypesCopy = g_list_copy( valid_types );
-  AccountWindow *aw;
-
-  aw = gnc_ui_new_account_window_internal( NULL, NULL, validTypesCopy, NULL, FALSE );
-  if ( validTypesCopy != NULL ) {
-    /* Attach it with "[...]_full" so we can set the appropriate
-     * GtkDestroyNotify func. */
-    g_object_set_data_full( G_OBJECT(aw->dialog), "validTypesListCopy",
-			    validTypesCopy, (GDestroyNotify)g_list_free );
-  }
+  gnc_ui_new_account_window_internal( NULL, NULL, valid_types, NULL, FALSE );
 }
 
 /************************************************************

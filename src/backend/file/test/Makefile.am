@@ -62,7 +62,7 @@ test_string_converters_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   test-string-converters.c
-  
+
 test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
@@ -181,6 +181,8 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/backend/file \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
   --gnc-module-dir ${top_srcdir}/src/engine
 
 TESTS_ENVIRONMENT := \

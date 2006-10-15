@@ -33,7 +33,8 @@
 #include <libgnome/libgnome.h>
 #include "glib.h"
 #include "gnc-module.h"
-#include "i18n.h"
+#include "gnc-path.h"
+#include "binreloc.h"
 #include "gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
@@ -52,6 +53,11 @@
 #include "gnc-session.h"
 #include "engine-helpers.h"
 #include "swig-runtime.h"
+
+#ifdef HAVE_GETTEXT
+#  include <libintl.h>
+#  include <locale.h>
+#endif
 
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
@@ -83,8 +89,8 @@ gnc_print_unstable_message(void)
 /* Priority of paths: The default is set at build time.  It may be
    overridden by environment variables, which may, in turn, be
    overridden by command line options.  */
-static char *config_path = SYSCONFDIR;
-static char *share_path = DATADIR;
+static char *config_path = PKGSYSCONFDIR;
+static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
 
 static void
@@ -133,6 +139,7 @@ load_system_config(void)
     if (is_system_config_loaded) return;
 
     update_message("loading system configuration");
+    /* FIXME: use runtime paths from gnc-path.c here */
     system_config = g_build_filename(config_path, "config", NULL);
     is_system_config_loaded = gfec_try_load(system_config);
     g_free(system_config);
@@ -333,7 +340,6 @@ load_gnucash_modules()
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
-        { "gnucash/import-export/mt940", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/hbci", 0, TRUE },
         { "gnucash/report/report-system", 0, FALSE },
@@ -355,8 +361,14 @@ load_gnucash_modules()
             gnc_module_load(modules[i].name, modules[i].version);
     }
     if (!gnc_engine_is_initialized()) {
+#ifdef G_OS_WIN32
+        g_warning("GnuCash engine indicates it hasn't been initialized correctly. On Windows this mechanism is know not to work. Ignoring for now.\n");
+        /* See more detailed discussion here
+	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html */
+#else
         g_error("GnuCash engine failed to initialize.  Exiting.\n");
         exit(0);
+#endif
     }
 }
 
@@ -487,14 +499,22 @@ inner_main (void *closure, int argc, char **argv)
 
 int main(int argc, char ** argv)
 {
+    gchar *localedir;
+    GError *binreloc_error = NULL;
 
+    /* Init binreloc */
+    if (!gbr_init (&binreloc_error) ) {
+      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
+    }
+    localedir = gnc_path_get_localedir ();
 #ifdef HAVE_GETTEXT
     /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
        via gtk_init(). */
-    bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
-    textdomain (TEXT_DOMAIN);
-    bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
+    bindtextdomain (GETTEXT_PACKAGE, localedir);
+    textdomain (GETTEXT_PACKAGE);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
+    g_free (localedir);
 
     gnc_module_system_init();
     envt_override();
@@ -502,12 +522,24 @@ int main(int argc, char ** argv)
     gnc_print_unstable_message();
 
     if (add_quotes_file) {
+        gchar *prefix = gnc_path_get_prefix ();
+	gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
+	gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+	gchar *pkglibdir = gnc_path_get_pkglibdir ();
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
         gnome_program_init(
             "gnucash", VERSION, LIBGNOME_MODULE,
             argc, argv,
-            GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
+	    GNOME_PARAM_APP_PREFIX, prefix,
+	    GNOME_PARAM_APP_SYSCONFDIR, pkgsysconfdir,
+	    GNOME_PARAM_APP_DATADIR, pkgdatadir,
+	    GNOME_PARAM_APP_LIBDIR, pkglibdir,
+	    GNOME_PARAM_NONE);
+	g_free (prefix);
+	g_free (pkgsysconfdir);
+	g_free (pkgdatadir);
+	g_free (pkglibdir);
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }

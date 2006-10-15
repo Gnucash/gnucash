@@ -90,7 +90,9 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 /* Calls AB_BANKING_executeQueue with some supplementary stuff around
  * it: set the debugLevel, show the GNCInteractor, and do some error
  * checking. Returns TRUE upon success or FALSE if the calling dialog
- * should abort. */
+ * should abort. parent may be NULL, job may be NULL (although in this
+ * case no HBCI result codes can be checked!), inter may be NULL; api
+ * must not be NULL.  */
 gboolean
 gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 			AB_JOB *job, GNCInteractor *inter);

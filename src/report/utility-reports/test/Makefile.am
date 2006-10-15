@@ -21,7 +21,8 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --guile-load-dir ${top_srcdir}/src/report/report-system \
   --guile-load-dir ${top_srcdir}/src/report/utility-reports \
   --library-dir    ${top_builddir}/src/gnome-utils \
-  --library-dir    ${top_builddir}/src/gnome
+  --library-dir    ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/lib/libqof/qof
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

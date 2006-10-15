@@ -2,11 +2,10 @@
 SUBDIRS = . overrides test
 
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+  ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  -DPREFIX=\"${prefix}\" \
-  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
-  -DDATADIR=\"${GNC_SHAREDIR}\" \
-  -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -DPKGSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
@@ -31,35 +30,26 @@ ${top_builddir}/src/gnc-module/libgncmodule.la
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-BIN_DIR-@:${bindir}:g' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
+	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
+            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g' \
+	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
-
-BUILT_SOURCES = i18n.h
-
-i18n.h: i18n.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
-            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
-	mv $@.tmp $@
-
 
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-BIN_DIR-@:${bindir}:g' \
-	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
-	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
-	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
-	    -e "s:@-TOP_SRC_DIR-@:`pwd`/${top_srcdir}:g"
+	    -e 's#@-BIN_DIR-@#${bindir}#g' \
+	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
+	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
+            -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
+            -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
+	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g' \
+	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -87,7 +77,7 @@ bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrin
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in i18n.h.in \
+EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in \
 	gnucash.in gnucash-valgrind.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
@@ -104,6 +94,6 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 		${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's:@-GCONF_SCHEMA_FILE_DIR-@:${GCONF_SCHEMA_FILE_DIR}:g'
+	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@

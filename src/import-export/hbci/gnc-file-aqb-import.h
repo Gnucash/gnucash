@@ -17,18 +17,35 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
  /** @file
-     @brief mt940 import module interface
+     @brief dtaus import module interface
      *
-     gnc-mt940-import.h
+     gnc-dtaus-import.h
      @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#ifndef MT940_IMPORT_H
-#define MT940_IMPORT_H
+#ifndef DTAUS_IMPORT_H
+#define DTAUS_IMPORT_H
 
-/** The gnc_file_mt940_import() routine will pop up a standard file
- *     selection dialogue asking the user to pick an MT940 file. If one
- *     is selected then the MT940 file is opened and read. Its contents
+/** The gnc_file_dtaus_import() routine will pop up a standard file
+ *     selection dialogue asking the user to pick an DTAUS file. If one
+ *     is selected then the DTAUS file is opened and read. Its contents
  *     are merged into the existing session (if any). The current
- *     session continues to remain open for editing. */
-void              gnc_file_mt940_import (void);
+ *     session continues to remain open for editing.
+ *
+ * @param aqbanking_importername The aqbanking importer module that
+ * should be used. Possible values: "dtaus", "csv", "swift".
+ *
+ * @param aqbanking_profilename In aqbanking, each importer has one or
+ * more "profiles" that define the actual data fields that should be
+ * used. Possible values for swift: "swift-mt940" or "swift-mt942",
+ * but for all others: "default", or more precisely: Look into
+ * $datadir/aqbanking/imexporters and look into the "name" field of
+ * the foo.conf files.
+ *
+ * @param execute_transactions If TRUE, import the transactions and
+ * additionally send them as online jobs over aqbanking/HBCI. If
+ * FALSE, simply import the transactions and that's it.
+ */
+void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
+				const gchar *aqbanking_profilename,
+				gboolean execute_transactions);
 #endif

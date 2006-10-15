@@ -16,19 +16,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/general/warnings/close_last_window</key>
-      <applyto>/apps/gnucash/general/warnings/permanent/close_last_window</applyto>
-      <applyto>/apps/gnucash/general/warnings/temporary/close_last_window</applyto>
-      <owner>gnucash</owner>
-      <type>int</type>
-      <default>0</default>
-      <locale name="C">
-        <short>Exit GnuCash</short>
-        <long>This dialog is presented when you attempt to close the last GnuCash window.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnucash/general/warnings/mark_split_unreconciled</key>
       <applyto>/apps/gnucash/general/warnings/permanent/mark_split_unreconciled</applyto>
       <applyto>/apps/gnucash/general/warnings/temporary/mark_split_unreconciled</applyto>

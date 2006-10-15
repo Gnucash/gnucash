@@ -33,6 +33,7 @@
  * Copyright (c) 2001-2003 Linas Vepstas <linas@linas.org>
  */
 
+#include "config.h"
 #include "AccountP.h"
 #include "qof.h"
 #include "gnc-lot.h"

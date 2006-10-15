@@ -1,7 +1,7 @@
 SUBDIRS = . schemas qif qif-import \
-	${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
+	${OFX_DIR} ${HBCI_DIR} log-replay test
 DIST_SUBDIRS = schemas qif qif-import qif-io-core \
-	ofx hbci mt940 log-replay test
+	ofx hbci log-replay test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
@@ -48,6 +48,7 @@ libgncmod_generic_import_la_LIBADD = \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GLIB_LIBS}
 
 gladedir = ${GNC_GLADE_DIR}
@@ -74,27 +75,3 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   $(glade_DATA) \
   generic-import-design.txt
-
-if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = 
-#For executing test cases
-SCM_FILE_LINKS +=
-endif
-
-noinst_DATA = .scm-links
-
-.scm-links:
-	rm -f gnucash generic-import import-export
-	$(LN_S) -f . import-export
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . generic-import
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-CLEANFILES = gnucash generic-import .scm-links import-export
-DISTCLEANFILES = ${SCM_FILE_LINKS}

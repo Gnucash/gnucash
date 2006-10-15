@@ -22,11 +22,14 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <time.h>
 #include "qof.h"
+
+#include "glib-compat.h"
 
 #include "Account.h"
 #include "Group.h"
@@ -99,7 +102,7 @@ gnc_budget_new(QofBook *book)
     budget = g_new0(GncBudget, 1);
     qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
 
-    g_date_set_time(&date, time(NULL));
+    g_date_set_time_t(&date, time(NULL));
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
     recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 

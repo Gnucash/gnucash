@@ -382,7 +382,7 @@ void qof_backend_init(QofBackend *be);
 
 @return 'y' if book is open, otherwise 'n'.
 */
-gchar qof_book_get_open_marker(QofBook *book);
+gchar qof_book_get_open_marker(const QofBook *book);
 
 /** get the book version
 
@@ -391,13 +391,13 @@ used for tracking multiuser updates in backends.
 @return -1 if no book exists, 0 if the book is
 new, otherwise the book version number.
 */
-gint32 qof_book_get_version (QofBook *book);
+gint32 qof_book_get_version (const QofBook *book);
 
 /** get the book tag number
 
 used for kvp management in sql backends.
 */
-guint32 qof_book_get_idata (QofBook *book);
+guint32 qof_book_get_idata (const QofBook *book);
 
 void qof_book_set_version (QofBook *book, gint32 version);
 

@@ -37,6 +37,7 @@
 #include "import-account-matcher.h"
 #include "gnc-hbci-utils.h"
 
+#include "gnc-glib-utils.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -117,21 +118,25 @@ delete_initial_druid (HBCIInitialInfo *info)
 
 static gchar *gnc_hbci_account_longname(const AB_ACCOUNT *hacc)
 {
-  const char *bankname;
+  gchar *bankname;
+  gchar *result;
   const char *bankcode;
   g_assert(hacc);
-  bankname = AB_Account_GetBankName (hacc);
+  bankname = 
+    gnc_utf8_strip_invalid_strdup (AB_Account_GetBankName (hacc));
   bankcode = AB_Account_GetBankCode (hacc);
   /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-  if (bankname)
-    return g_strdup_printf(_("%s at %s (code %s)"),
+  if (strlen(bankname) > 0)
+    result = g_strdup_printf(_("%s at %s (code %s)"),
 			   AB_Account_GetAccountNumber (hacc),
 			   bankname,
 			   bankcode);
   else
-    return g_strdup_printf(_("%s at bank code %s"),
+    result = g_strdup_printf(_("%s at bank code %s"),
 			   AB_Account_GetAccountNumber (hacc),
 			   bankcode);
+  g_free (bankname);
+  return result;
 }
 
 

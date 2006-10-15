@@ -59,14 +59,15 @@ SCM_FILE_LINKS = \
 endif
 
 .scm-links:
-	rm -f gnucash report
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . report 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
+	mkdir -p  gnucash/report
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	touch .scm-links
 
 noinst_DATA = .scm-links

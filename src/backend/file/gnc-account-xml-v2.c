@@ -117,42 +117,6 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
     if(kf)
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string, kf);
-#if ((GNUCASH_MAJOR_VERSION == 1) && (GNUCASH_MINOR_VERSION < 10))
-	{
-	  /* Temporary backwards compatability hack. Create kvp slot
-	   * information for the stock quote data in case the user has
-	   * to fall back to the production code. */
-	  xmlNodePtr slot_node, val_node;
-	  gnc_commodity *com;
-	  gnc_quote_source *source;
-	  const gchar *tz;
-
-	  com = xaccAccountGetCommodity(act);
-	  if (com &&
-	      (!gnc_commodity_is_iso(com) ||
-	       xaccAccountGetType(act) == ACCT_TYPE_CURRENCY) &&
-	      gnc_commodity_get_quote_flag(com)) {
-	    if (!kvpnode)
-	      kvpnode= xmlNewNode(NULL, BAD_CAST act_slots_string);
-
-	    slot_node = xmlNewChild(kvpnode, NULL, BAD_CAST "slot", NULL);
-	    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", BAD_CAST "old-price-source");
-
-	    source = gnc_commodity_get_quote_source(com);
-	    val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value",
-				       BAD_CAST gnc_quote_source_get_old_internal_name(source));
-	    xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
-
-	    tz = gnc_commodity_get_quote_tz(com);
-	    if (tz) {
-	      slot_node = xmlNewChild(kvpnode, NULL, BAD_CAST "slot", NULL);
-	      xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", BAD_CAST "old-quote-tz");
-	      val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value", BAD_CAST tz);
-	      xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
-	    }
-	  }
-	}
-#endif
         if(kvpnode)
         {
             xmlAddChild(ret, kvpnode);

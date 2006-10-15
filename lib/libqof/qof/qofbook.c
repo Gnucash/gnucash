@@ -135,7 +135,7 @@ qof_book_destroy (QofBook *book)
 /* XXX this should probably be calling is_equal callbacks on gncObject */
 
 gboolean
-qof_book_equal (QofBook *book_1, QofBook *book_2)
+qof_book_equal (const QofBook *book_1, const QofBook *book_2)
 {
   if (book_1 == book_2) return TRUE;
   if (!book_1 || !book_2) return FALSE;
@@ -145,7 +145,7 @@ qof_book_equal (QofBook *book_1, QofBook *book_2)
 /* ====================================================================== */
 
 gboolean
-qof_book_not_saved (QofBook *book)
+qof_book_not_saved (const QofBook *book)
 {
   if (!book) return FALSE;
 
@@ -185,15 +185,16 @@ void qof_book_mark_dirty (QofBook *book)
 }
 
 void
-qof_book_print_dirty (QofBook *book)
+qof_book_print_dirty (const QofBook *book)
 {
   if (book->inst.dirty)
     printf("book is dirty.\n");
-  qof_book_foreach_collection(book, qof_collection_print_dirty, NULL);
+  qof_book_foreach_collection
+    (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
 }
 
 time_t
-qof_book_get_dirty_time (QofBook *book)
+qof_book_get_dirty_time (const QofBook *book)
 {
   return book->dirty_time;
 }
@@ -209,14 +210,14 @@ qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 /* getters */
 
 QofBackend * 
-qof_book_get_backend (QofBook *book)
+qof_book_get_backend (const QofBook *book)
 {
    if (!book) return NULL;
    return book->backend;
 }
 
 gboolean
-qof_book_shutting_down (QofBook *book)
+qof_book_shutting_down (const QofBook *book)
 {
   if (!book) return FALSE;
   return book->shutting_down;
@@ -262,7 +263,7 @@ qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFin
 }
 
 gpointer 
-qof_book_get_data (QofBook *book, const char *key)
+qof_book_get_data (const QofBook *book, const char *key)
 {
   if (!book || !key) return NULL;
   return g_hash_table_lookup (book->data_tables, (gpointer)key);
@@ -271,7 +272,7 @@ qof_book_get_data (QofBook *book, const char *key)
 /* ====================================================================== */
 
 QofCollection *
-qof_book_get_collection (QofBook *book, QofIdType entity_type)
+qof_book_get_collection (const QofBook *book, QofIdType entity_type)
 {
   QofCollection *col;
 
@@ -302,7 +303,7 @@ foreach_cb (gpointer key, gpointer item, gpointer arg)
 }
 
 void 
-qof_book_foreach_collection (QofBook *book, 
+qof_book_foreach_collection (const QofBook *book, 
                              QofCollectionForeachCB cb, gpointer user_data)
 {
   struct _iterate iter;
@@ -324,19 +325,19 @@ void qof_book_mark_closed (QofBook *book)
 	book->book_open = 'n';
 }
 
-gchar qof_book_get_open_marker(QofBook *book)
+gchar qof_book_get_open_marker(const QofBook *book)
 {
 	if(!book) { return 'n'; }
 	return book->book_open;
 }
 
-gint32 qof_book_get_version (QofBook *book)
+gint32 qof_book_get_version (const QofBook *book)
 {
 	if(!book) { return -1; }
 	return book->version;
 }
 
-guint32 qof_book_get_idata (QofBook *book)
+guint32 qof_book_get_idata (const QofBook *book)
 {
 	if(!book) { return 0; }
 	return book->idata;

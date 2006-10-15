@@ -221,7 +221,8 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
       break;
 
     case GTK_RESPONSE_OK:
-      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS,
+				    DIALOG_RESET_WARNINGS_CM_CLASS);
       gnc_reset_warnings_apply_changes(dialog);
       gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
       gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
@@ -230,7 +231,8 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
       break;
 
     default:
-      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS,
+				    DIALOG_RESET_WARNINGS_CM_CLASS);
       gnc_reset_warnings_revert_changes(dialog);
       gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
 					   dialog);
@@ -415,7 +417,8 @@ gnc_reset_warnings_dialog (GtkWidget *main_window)
   gnc_reset_warnings_update_widgets(dialog);
 
   gnc_gconf_add_notification(G_OBJECT(dialog), GCONF_WARNINGS,
-			     gnc_reset_warnings_gconf_changed);
+			     gnc_reset_warnings_gconf_changed,
+			     DIALOG_RESET_WARNINGS_CM_CLASS);
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
 

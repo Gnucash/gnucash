@@ -122,6 +122,7 @@ gnc_dpfg_next_glob(GNCDruidProvider* prov)
   return res;
 }
 
+#ifdef HAVE_GLOB_H
 static int
 gnc_dpfg_file_err(const char *path, int err)
 {
@@ -132,6 +133,7 @@ gnc_dpfg_file_err(const char *path, int err)
 
   return (res == GTK_RESPONSE_OK ? 0 : 1);
 }
+#endif
 
 /* Return TRUE if we have a valid file... */
 static gboolean

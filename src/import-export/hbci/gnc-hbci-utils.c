@@ -321,7 +321,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     return FALSE;
 #endif
   case AB_ERROR_NETWORK:
-    GNCInteractor_hide (inter);
+    if (inter) GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
        _("The server of your bank refused the HBCI connection. "
@@ -403,8 +403,9 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 			AB_JOB *job, GNCInteractor *inter)
 {
   int err;
-  int resultcode;
+  int resultcode = 3000; /* This code means: Warnings, but not errors */
   int be_verbose = FALSE;
+  g_assert (api);
 	  
   if (inter)
     GNCInteractor_show (inter);
@@ -434,7 +435,8 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     
   } while (gnc_hbci_Error_retry (parent, err, inter));
   
-  resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
+  if (job)
+    resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
   if (!hbci_Error_isOk(err)) {
 /*     char *errstr =  */
 /*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
@@ -443,8 +445,8 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 /*     HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor  */
 /* 				      (AB_BANKING_Hbci (api)), errstr); */
 /*     g_free (errstr); */
-    gnc_hbci_debug_outboxjob (job, TRUE);
-    GNCInteractor_show_nodelete (inter);
+    if (job) gnc_hbci_debug_outboxjob (job, TRUE);
+    if (inter) GNCInteractor_show_nodelete (inter);
     return FALSE;
   }
 

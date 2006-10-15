@@ -128,18 +128,5 @@ AM_CFLAGS = \
 # The line below breaks automake 1.5.  
 ##OMIT_DEPENDENCIES = gnc-dir.h
 
-noinst_DATA = .scm-links
-
-.scm-links: 
-	rm -f gnucash
-	$(LN_S) -f . gnucash 
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-CLEANFILES = gnucash.desktop \
-	gnucash .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = gnucash.desktop
 MAINTAINERCLEANFILES = swig-gnome.c

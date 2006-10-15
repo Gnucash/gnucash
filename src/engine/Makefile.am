@@ -28,6 +28,7 @@ libgncmod_engine_la_SOURCES = \
   Split.c \
   TransLog.c \
   Transaction.c \
+  binreloc.c \
   cap-gains.c \
   cashobjects.c \
   gnc-associate-account.c \
@@ -37,6 +38,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-filepath-utils.c \
   gnc-hooks.c \
   gnc-lot.c \
+  gnc-path.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
@@ -70,6 +72,7 @@ gncinclude_HEADERS = \
   Split.h \
   TransLog.h \
   Transaction.h \
+  binreloc.h \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
@@ -82,6 +85,7 @@ gncinclude_HEADERS = \
   gnc-event.h \
   gnc-filepath-utils.h \
   gnc-hooks.h \
+  gnc-path.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
@@ -113,7 +117,9 @@ libgncmod_engine_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
@@ -149,13 +155,14 @@ SCM_FILE_LINKS += \
 endif
 
 .scm-links: 
-	rm -f gnucash
-	$(LN_S) -f . gnucash 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
 noinst_DATA = .scm-links
@@ -170,10 +177,18 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
-gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
+gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's:@-libdir-@:${libdir}:g'
+		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
+		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
+		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
+		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
+		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
+		-e 's#@-libdir-@#${libdir}#g' \
+		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
+		-e 's#@-datadir-@#${datadir}#g' \
+		-e 's#@-prefix-@#${prefix}#g'
 	mv $@.tmp $@
 
 BUILT_SOURCES = iso-4217-currencies.c \

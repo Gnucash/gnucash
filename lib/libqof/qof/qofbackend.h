@@ -117,6 +117,7 @@ typedef enum {
   ERR_FILEIO_WRITE_ERROR,    /**< couldn't write to the file */
   ERR_FILEIO_READ_ERROR,     /**< Could not open the file for reading. */
   ERR_FILEIO_NO_ENCODING,    /**< file does not specify encoding */
+  ERR_FILEIO_FILE_EACCES,    /**< No read access permission for the given file */
 
   /* network errors */
   ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */
@@ -273,7 +274,7 @@ gboolean
 qof_load_backend_library(const gchar *directory, const gchar* module_name);
 
 /** \brief Retrieve the backend used by this book */
-QofBackend* qof_book_get_backend (QofBook *book);
+QofBackend* qof_book_get_backend (const QofBook *book);
 
 void qof_book_set_backend (QofBook *book, QofBackend *);
 

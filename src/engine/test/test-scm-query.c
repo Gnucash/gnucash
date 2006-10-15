@@ -1,4 +1,5 @@
 
+#include "config.h"
 #include <glib.h>
 #include <libguile.h>
 
