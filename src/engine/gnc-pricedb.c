@@ -458,7 +458,7 @@ price_list_is_duplicate( gpointer data, gpointer user_data )
 }
 
 gboolean
-gnc_price_list_insert(GList **prices, GNCPrice *p, gboolean check_dupl)
+gnc_price_list_insert(PriceList **prices, GNCPrice *p, gboolean check_dupl)
 {
   GList *result_list;
   PriceListIsDuplStruct* pStruct;
@@ -487,7 +487,7 @@ gnc_price_list_insert(GList **prices, GNCPrice *p, gboolean check_dupl)
 }
 
 gboolean
-gnc_price_list_remove(GList **prices, GNCPrice *p)
+gnc_price_list_remove(PriceList **prices, GNCPrice *p)
 {
   GList *result_list;
   GList *found_element;
@@ -512,14 +512,14 @@ price_list_destroy_helper(gpointer data, gpointer user_data)
 }
 
 void
-gnc_price_list_destroy(GList *prices)
+gnc_price_list_destroy(PriceList *prices)
 {
   g_list_foreach(prices, price_list_destroy_helper, NULL);
   g_list_free(prices);
 }
 
 gboolean
-gnc_price_list_equal(GList *prices1, GList *prices2)
+gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
 {
   GList *n1, *n2;
 
@@ -1117,7 +1117,7 @@ lookup_latest(gpointer key, gpointer val, gpointer user_data)
   gnc_price_list_insert(return_list, price_list->data, FALSE);
 }
 
-GList *
+PriceList *
 gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                        const gnc_commodity *commodity)
 {
@@ -1212,7 +1212,7 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
 }
 
 
-GList *
+PriceList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
                        const gnc_commodity *commodity,
                        const gnc_commodity *currency)
@@ -1258,7 +1258,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 }
 
 
-GList *
+PriceList *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
                        const gnc_commodity *c,
                        const gnc_commodity *currency,
@@ -1331,7 +1331,7 @@ lookup_day(gpointer key, gpointer val, gpointer user_data)
   }
 }
 
-GList *
+PriceList *
 gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
 				    const gnc_commodity *c,
                                     Timespec t)
@@ -1376,7 +1376,7 @@ gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
 }
 
 
-GList *
+PriceList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                            const gnc_commodity *c,
                            const gnc_commodity *currency,
@@ -1446,7 +1446,7 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
   }
 }
 
-GList *
+PriceList *
 gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
 					const gnc_commodity *c,
                                         Timespec t)
@@ -1706,7 +1706,7 @@ lookup_latest_before(gpointer key, gpointer val, gpointer user_data)
 }
 
 
-GList *
+PriceList *
 gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
                                                 const gnc_commodity *c,
                                                 Timespec t)
@@ -1749,7 +1749,7 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
 }
 
 
-GList *
+PriceList *
 gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
 					      gnc_commodity *c,
 					      Timespec t)

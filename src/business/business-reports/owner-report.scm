@@ -115,7 +115,7 @@
 
 (define num-buckets 4)
 (define (new-bucket-vector)
-  (make-vector num-buckets (gnc:numeric-zero)))
+  (make-vector num-buckets (gnc-numeric-zero)))
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
@@ -126,10 +126,10 @@
 
 
 (define (make-aging-table options query bucket-intervals reverse?)
-  (let ((lots (gnc:query-get-lots query 'query-txn-match-any))
+  (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
 	(buckets (new-bucket-vector))
-	(payments (gnc:numeric-zero))
-	(currency (gnc:default-currency)) ;XXX
+	(payments (gnc-numeric-zero))
+	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table)))
 
     (define (in-interval this-date current-bucket)
@@ -145,24 +145,24 @@
 
     (define (apply-invoice date value)
       (let* ((bucket-index (find-bucket 0 bucket-intervals date))
-	     (new-value (gnc:numeric-add-fixed
+	     (new-value (gnc-numeric-add-fixed
 			 value
 			 (vector-ref buckets bucket-index))))
 	(vector-set! buckets bucket-index new-value)))
 
     (define (apply-payment value)
-      (set! payments (gnc:numeric-add-fixed value payments)))
+      (set! payments (gnc-numeric-add-fixed value payments)))
 
     (for-each
      (lambda (lot)
-       (let* ((bal (gnc:lot-get-balance lot))
-	      (invoice (gnc:invoice-get-invoice-from-lot lot))
-	      (post-date (gnc:invoice-get-date-posted invoice)))
+       (let* ((bal (gnc-lot-get-balance lot))
+	      (invoice (gncInvoiceGetInvoiceFromLot lot))
+	      (post-date (gncInvoiceGetDatePosted invoice)))
 
-	 (if (not (gnc:numeric-zero-p bal))
+	 (if (not (gnc-numeric-zero-p bal))
 	     (begin
 	       (if reverse?
-		   (set! bal (gnc:numeric-neg bal)))
+		   (set! bal (gnc-numeric-neg bal)))
 	       (if invoice
 		   (begin
 		     (apply-invoice post-date bal))
@@ -192,13 +192,13 @@
 ;;
 (define (add-txn-row table txn acc column-vector odd-row? printed?
 		     inv-str reverse? start-date total)
-  (let* ((type (gnc:transaction-get-txn-type txn))
-	 (date (gnc:transaction-get-date-posted txn))
+  (let* ((type (xaccTransGetTxnType txn))
+	 (date (gnc-transaction-get-date-posted txn))
 	 (due-date #f)
-	 (value (gnc:transaction-get-account-value txn acc))
-	 (split (gnc:transaction-get-split txn 0))
-	 (invoice (gnc:invoice-get-invoice-from-txn txn))
-	 (currency (gnc:transaction-get-currency txn))
+	 (value (xaccTransGetAccountValue txn acc))
+	 (split (xaccTransGetSplit txn 0))
+	 (invoice (gncInvoiceGetInvoiceFromTxn txn))
+	 (currency (xaccTransGetCurrency txn))
 	 (type-str
 	  (cond
 	   ((equal? type gnc:transaction-type-invoice)
@@ -215,12 +215,12 @@
     (define (make-row date due-date num type-str memo value)
       (let ((row-contents '()))
 	(if (date-col column-vector)
-	    (addto! row-contents (gnc:print-date date)))
+	    (addto! row-contents (gnc-print-date date)))
 	(if (date-due-col column-vector)
 	    (addto! row-contents 
 		    (if (and due-date
 			     (not (equal? due-date (cons 0 0))))
-			(gnc:print-date due-date)
+			(gnc-print-date due-date)
 			"")))
 	(if (num-col column-vector)
 	    (addto! row-contents num))
@@ -236,7 +236,7 @@
 	row-contents))
 
     (if reverse?
-	(set! value (gnc:numeric-neg value)))
+	(set! value (gnc-numeric-neg value)))
 
     (if (gnc:timepair-later start-date date)
 	(begin
@@ -245,7 +245,7 @@
 	  (if (not printed?)
 	      (begin
 		(set! printed? #t)
-		(if (not (gnc:numeric-zero-p total))
+		(if (not (gnc-numeric-zero-p total))
 		    (let ((row (make-row start-date #f "" (_ "Balance") "" total))
 			  (row-style (if odd-row? "normal-row" "alternate-row")))
 		      (gnc:html-table-append-row/markup! table row-style
@@ -256,10 +256,10 @@
 	  
 	  ; Now print out the invoice row
 	  (if invoice
-	      (set! due-date (gnc:invoice-get-date-due invoice)))
+	      (set! due-date (gncInvoiceGetDateDue invoice)))
 
-	  (let ((row (make-row date due-date (gnc:transaction-get-num txn)
-			       type-str (gnc:split-get-memo split) value))
+	  (let ((row (make-row date due-date (xaccTransGetNum txn)
+			       type-str (xaccSplitGetMemo split) value))
 		(row-style (if odd-row? "normal-row" "alternate-row")))
 
 	    (gnc:html-table-append-row/markup! table row-style
@@ -273,10 +273,10 @@
 
 
 (define (make-txn-table options query acc start-date end-date)
-  (let ((txns (gnc:query-get-transactions query 'query-txn-match-any))
+  (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
-	(total (gnc:numeric-zero))
-	(currency (gnc:default-currency)) ;XXX
+	(total (gnc-numeric-zero))
+	(currency (gnc-default-currency)) ;XXX
 	(table (gnc:make-html-table))
 	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
 						      "inv-str")))
@@ -288,13 +288,13 @@
      (make-heading-list used-columns))
 
     ; Order the transactions properly
-    (set! txns (sort txns (lambda (a b) (> 0 (gnc:transaction-order a b)))))
+    (set! txns (sort txns (lambda (a b) (> 0 (xaccTransOrder a b)))))
 
     (let ((printed? #f)
 	  (odd-row? #t))
       (for-each
        (lambda (txn)
-	 (let ((type (gnc:transaction-get-txn-type txn)))
+	 (let ((type (xaccTransGetTxnType txn)))
 	   (if
 	    (or (equal? type gnc:transaction-type-invoice)
 		(equal? type gnc:transaction-type-payment))
@@ -302,7 +302,7 @@
 				       inv-str reverse? start-date total)))
 
 	      (set! printed? (car result))
-	      (set! total (gnc:numeric-add-fixed total (cadr result)))
+	      (set! total (gnc-numeric-add-fixed total (cadr result)))
 	      (set! odd-row? (caddr result))
 	      ))))
        txns))
@@ -312,7 +312,7 @@
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
 		    "total-label-cell"
-		    (if (gnc:numeric-negative-p total)
+		    (if (gnc-numeric-negative-p total)
 			(_ "Total Credit")
 			(_ "Total Due")))
 		   '())
@@ -348,7 +348,7 @@
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page owner-string "v"
 			  (N_ "The company for this report")
-			  (lambda () #f) #f owner-type))
+			  (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "owner-type" owner-type))
@@ -403,13 +403,16 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) 'gnc-owner-customer (_ "Invoice") #f))
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
+                     (_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) 'gnc-owner-vendor (_ "Bill") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR
+                     (_ "Bill") #t))
 
 (define (employee-options-generator)
-  (options-generator '(payable) 'gnc-owner-employee (_ "Expense Report") #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE
+                     (_ "Expense Report") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -430,26 +433,26 @@
   (line-helper (string->list string)))
 
 (define (setup-query q owner account end-date)
-  (let* ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+  (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
-    (gnc:query-add-guid-match
+    (qof-query-add-guid-match
      q 
-     (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
+     (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER
+	   OWNER-PARENTG)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
      q
-     (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
-     guid 'query-or)
-    (gnc:query-add-guid-match
+     (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
      q
-     (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
-	   gnc:owner-parentg)
-     guid 'query-or)
+     (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER
+	   OWNER-PARENTG)
+     guid QOF-QUERY-OR)
 
-    (gnc:query-add-single-account-match q account 'query-and)
-    (gnc:query-add-date-match-timepair q #f end-date #t end-date 'query-and)
-    (gnc:query-set-book q (gnc:get-current-book))
+    (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTS q #f end-date #t end-date QOF-QUERY-AND)
+    (qof-query-set-book q (gnc-get-current-book))
     q))
 
 (define (make-owner-table owner)
@@ -476,7 +479,7 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc:print-date date) #\space "&nbsp;"))))
+    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -491,11 +494,11 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc:book-get-slots book))
-	 (name (gnc:kvp-frame-get-slot-path
+	 (slots (gnc-book-get-slots book))
+	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (gnc:kvp-frame-get-slot-path
+	 (addy (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*)))))
 
@@ -531,7 +534,7 @@
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
-	 (query (gnc:malloc-query))
+	 (query (qof-query-create-for-splits))
 	 (account (opt-val owner-page acct-string))
 	 (owner (opt-val owner-page owner-string))
 	 (start-date (gnc:timepair-start-day-time 
@@ -540,28 +543,28 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
-	 (owner-type (opt-val "__reg" "owner-type"))
+	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+	 (type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
 
-    (case owner-type
-      ((gnc-owner-customer)
+    (cond
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (set! type-str (N_ "Customer")))
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (set! type-str (N_ "Vendor")))
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (set! type-str (N_ "Employee"))))
 
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
 
-    (if (gnc:owner-is-valid? owner)
+    (if (gncOwnerIsValid owner)
 	(begin
 	  (setup-query query owner account end-date)
 
 	  (gnc:html-document-set-title!
 	   document
-           (string-append (_ type-str ) " " (_ "Report:") " " (gnc:owner-get-name owner)))
+           (string-append (_ type-str ) " " (_ "Report:") " " (gncOwnerGetName owner)))
 
            (gnc:html-document-set-headline!
             document (gnc:html-markup
@@ -570,7 +573,7 @@
                       " " (_ "Report:") " "
                       (gnc:html-markup-anchor
                        (gnc:owner-anchor-text owner)
-                       (gnc:owner-get-name owner))))
+                       (gncOwnerGetName owner))))
 	  
 	  (if account
 	      (begin
@@ -603,9 +606,9 @@
 	    (string-append
 	     (_ "Date Range")
 	     ": "
-	     (gnc:print-date start-date)
+	     (gnc-print-date start-date)
 	     " - "
-	     (gnc:print-date end-date))))
+	     (gnc-print-date end-date))))
 
 	  (make-break! document)
 
@@ -619,45 +622,43 @@
 		   (_ "No valid %s selected.  Click on the Options button to select a company.")
 		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
 
-    (gnc:free-query query)
+    (qof-query-destroy query)
     document))
 
 (define (find-first-account type)
   (define (find-first group num index)
     (if (>= index num)
-	#f
-	(let* ((this-account (gnc:group-get-account group index))
-	       (account-type (gw:enum-<gnc:AccountType>-val->sym
-			      (gnc:account-get-type this-account) #f)))
+	'()
+	(let* ((this-account (xaccGroupGetAccount group index))
+	       (account-type (xaccAccountGetType this-account)))
 	  (if (eq? account-type type)
 	      this-account
 	      (find-first group num (+ index 1))))))
 
-  (let* ((current-group (gnc:get-current-group))
-	 (num-accounts (gnc:group-get-num-accounts
+  (let* ((current-group (gnc-get-current-group))
+	 (num-accounts (xaccGroupGetNumAccounts
 			current-group)))
     (if (> num-accounts 0)
 	(find-first current-group num-accounts 0)
-	#f)))
+	'())))
 
 (define (find-first-account-for-owner owner)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
-    (case type
-      ((gnc-owner-customer)
-       (find-first-account 'receivable))
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
+    (cond
+      ((eqv? type GNC-OWNER-CUSTOMER)
+       (find-first-account ACCT-TYPE-RECEIVABLE))
 
-      ((gnc-owner-vendor)
-       (find-first-account 'payable))
+      ((eqv? type GNC-OWNER-VENDOR)
+       (find-first-account ACCT-TYPE-PAYABLE))
 
-      ((gnc-owner-employee)
-       (find-first-account 'payable))
+      ((eqv? type GNC-OWNER-EMPLOYEE)
+       (find-first-account ACCT-TYPE-PAYABLE))
 
-      ((gnc-owner-job)
-       (find-first-account-for-owner (gnc:owner-get-end-owner owner)))
+      ((eqv? type GNC-OWNER-JOB)
+       (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
 
       (else
-       #f))))
+       '()))))
 
 (gnc:define-report
  'version 1
@@ -693,16 +694,15 @@
     (gnc:make-report report-name options)))
 
 (define (owner-report-create owner account)
-  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
-    (case type
-      ((gnc-owner-customer)
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
+    (cond
+      ((eqv? type GNC-OWNER-CUSTOMER)
        (owner-report-create-internal (N_ "Customer Report") owner account))
 
-      ((gnc-owner-vendor)
+      ((eqv? type GNC-OWNER-VENDOR)
        (owner-report-create-internal (N_ "Vendor Report") owner account))
 
-      ((gnc-owner-employee)
+      ((eqv? type GNC-OWNER-EMPLOYEE)
        (owner-report-create-internal (N_ "Employee Report") owner account))
 
       (else #f))))
@@ -718,20 +718,20 @@
 	 account split query journal? double? title
 	 debit-string credit-string)
 
-  (let* ((temp-owner (gnc:owner-create))
+  (let* ((temp-owner (gncOwnerCreate))
 	 (owner (gnc:owner-from-split split temp-owner))
 	 (res #f))
 
     (if owner
 	(set! res (gnc:owner-report-create owner account)))
 
-    (gnc:owner-destroy temp-owner)
+    (gncOwnerDestroy temp-owner)
     res))
 
-(gnc:register-report-hook 'receivable #t
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t
 			  gnc:owner-report-create-internal)
 
-(gnc:register-report-hook 'payable #t
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #t
 			  gnc:owner-report-create-internal)
 
 (export gnc:owner-report-create)

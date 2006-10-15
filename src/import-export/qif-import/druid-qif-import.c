@@ -48,7 +48,7 @@
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
@@ -460,7 +460,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
   SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
-  SCM window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -471,7 +470,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   /* get the file name */ 
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
-  window = gw_wcp_assimilate_ptr(wind->window, window_type);
+  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
 
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
@@ -1205,7 +1204,6 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
   SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
-  SCM   window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM   retval;
   SCM   current_xtn;
   SCM   window;
@@ -1260,7 +1258,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
-  window = gw_wcp_assimilate_ptr(wind->window, window_type);
+  window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
   retval = scm_apply(qif_to_gnc, 
 		     SCM_LIST7(wind->imported_files,
 			       wind->acct_map_info, 
@@ -1290,7 +1288,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
     retval = scm_call_3(find_duplicates, 
-			scm_c_eval_string("(gnc:get-current-group)"),
+			scm_c_eval_string("(gnc-get-current-group)"),
 			wind->imported_account_group, window);
     gnc_unset_busy_cursor(NULL);
     
@@ -1314,8 +1312,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
     while(!SCM_NULLP(retval)) {
       current_xtn = SCM_CAAR(retval);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
-
+      #define FUNC_NAME "xaccTransCountSplits"
+      gnc_xtn     = SWIG_MustGetPtr(current_xtn,
+                                    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+      #undef FUNC_NAME
       if(xaccTransCountSplits(gnc_xtn) > 2) {
         amount_str = _("(split)"); 
       }
@@ -1598,8 +1598,10 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   stocks = wind->new_stocks;
   while(!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F)) {
     comm_ptr_token = scm_call_2(hash_ref, wind->stock_hash, SCM_CAR(stocks));
-    commodity      = gw_wcp_get_ptr(comm_ptr_token);
-    
+    #define FUNC_NAME "make_qif_druid_page"
+    commodity      = SWIG_MustGetPtr(comm_ptr_token,
+                                     SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
+    #undef FUNC_NAME
     new_page = make_qif_druid_page(commodity);
 
     g_signal_connect(new_page->page, "next",
@@ -1760,7 +1762,10 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
 
     while(!SCM_NULLP(possible_matches)) {
       current_xtn = SCM_CAR(possible_matches);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(SCM_CAR(current_xtn));
+      #define FUNC_NAME "make_qif_druid_page"
+      gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),
+                                    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+      #undef FUNC_NAME
       selected    = SCM_CDR(current_xtn);
       
       if(xaccTransCountSplits(gnc_xtn) > 2) {
@@ -1862,7 +1867,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* actually add in the new transactions. */
   scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc:get-current-group)"),
+	     scm_c_eval_string("(gnc-get-current-group)"),
 	     wind->imported_account_group);
   
   gnc_resume_gui_refresh();

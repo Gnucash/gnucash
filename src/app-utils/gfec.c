@@ -163,3 +163,26 @@ gfec_apply(SCM proc, SCM arglist, gfec_error_handler error_handler)
 
   return result;
 }
+
+static int error_in_scm_eval = FALSE;
+
+static void
+error_handler(const char *msg)
+{
+    g_warning(msg);
+    error_in_scm_eval = TRUE;
+}
+
+gboolean
+gfec_try_load(gchar *fn)
+{
+    g_message("looking for %s", fn);
+    if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
+        g_message("trying to load %s", fn);
+        error_in_scm_eval = FALSE;
+        gfec_eval_file(fn, error_handler);
+        return !error_in_scm_eval;
+    }
+    return FALSE;
+}
+

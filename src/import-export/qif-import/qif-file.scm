@@ -11,7 +11,7 @@
 ;;  just store the fields "raw".
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (g-wrapped gw-core-utils))
+(use-modules (gnucash core-utils))
 
 (cond
  ((or (string=? "1.3.4" (version))
@@ -53,9 +53,9 @@
 
      (if (> file-size 10000)
          (begin
-           (set! progress-dialog (gnc:progress-dialog-new window #f))
-           (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
-           (gnc:progress-dialog-set-heading progress-dialog
+           (set! progress-dialog (gnc-progress-dialog-new window #f))
+           (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
+           (gnc-progress-dialog-set-heading progress-dialog
                                             (_ "Loading QIF file..."))))
 
      (with-input-from-file path
@@ -74,7 +74,7 @@
                  ;; pick the 1-char tag off from the remainder of the line 
                  (set! tag (string-ref line 0))
                  (set! value (substring line 1))
-		 (gnc:utf8-strip-invalid value)
+		 (gnc-utf8-strip-invalid value) ;; changes value in-place
                  
                  ;; now do something with the line 
                  (if
@@ -388,9 +388,9 @@
 		 ;; update the progress bar for each line read
 		 (if progress-dialog 
 		     (begin 
-		       (gnc:progress-dialog-set-value 
+		       (gnc-progress-dialog-set-value
 			progress-dialog (/ bytes-read file-size))
-		       (gnc:progress-dialog-update progress-dialog)))
+		       (gnc-progress-dialog-update progress-dialog)))
                  
                  ;; this is if we read a normal (non-null, non-eof) line...
                  (if (not heinous-error)
@@ -406,7 +406,7 @@
      (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
      (if progress-dialog
-         (gnc:progress-dialog-destroy progress-dialog))
+         (gnc-progress-dialog-destroy progress-dialog))
 
      return-val)))
 
@@ -520,7 +520,7 @@
      (and 
       ;; fields of categories. 
       (check-and-parse-field 
-       qif-cat:tax-class qif-cat:set-tax-class! gnc:numeric-equal
+       qif-cat:tax-class qif-cat:set-tax-class! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma)
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
@@ -528,7 +528,7 @@
        set-error 'tax-class)
       
       (check-and-parse-field 
-       qif-cat:budget-amt qif-cat:set-budget-amt! gnc:numeric-equal
+       qif-cat:budget-amt qif-cat:set-budget-amt! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
@@ -537,7 +537,7 @@
       
       ;; fields of accounts 
       (check-and-parse-field 
-       qif-acct:limit qif-acct:set-limit! gnc:numeric-equal
+       qif-acct:limit qif-acct:set-limit! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
@@ -545,7 +545,7 @@
        set-error 'limit)
       
       (check-and-parse-field 
-       qif-acct:budget qif-acct:set-budget! gnc:numeric-equal
+       qif-acct:budget qif-acct:set-budget! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
@@ -576,7 +576,7 @@
        qif-parse:parse-action-field (qif-file:xtns self) set-error)
       
       (check-and-parse-field 
-       qif-xtn:share-price qif-xtn:set-share-price! gnc:numeric-equal
+       qif-xtn:share-price qif-xtn:set-share-price! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -584,7 +584,7 @@
        set-error 'share-price)
       
       (check-and-parse-field 
-       qif-xtn:num-shares qif-xtn:set-num-shares! gnc:numeric-equal
+       qif-xtn:num-shares qif-xtn:set-num-shares! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -592,7 +592,7 @@
        set-error 'num-shares)
       
       (check-and-parse-field 
-       qif-xtn:commission qif-xtn:set-commission! gnc:numeric-equal
+       qif-xtn:commission qif-xtn:set-commission! gnc-numeric-equal
        qif-parse:check-number-format '(decimal comma) 
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
@@ -602,7 +602,7 @@
       ;; this one's a little tricky... it checks and sets all the 
       ;; split amounts for the transaction together.     
       (check-and-parse-field 
-       qif-xtn:split-amounts qif-xtn:set-split-amounts! gnc:numeric-equal
+       qif-xtn:split-amounts qif-xtn:set-split-amounts! gnc-numeric-equal
        qif-parse:check-number-formats '(decimal comma) 
        qif-parse:parse-numbers/format (qif-file:xtns self)
        qif-parse:print-numbers

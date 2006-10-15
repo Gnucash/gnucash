@@ -24,6 +24,8 @@
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
 
+(use-modules (gnucash main))
+
 (define (gnc:make-invoice-option
 	 section
 	 name
@@ -35,11 +37,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:invoice-get-guid item)))
+        (gncInvoiceReturnGUID item)))
 
   (define (convert-to-invoice item)
     (if (string? item)
-        (gnc:invoice-lookup item (gnc:get-current-book))
+        (gncInvoiceLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -71,9 +73,9 @@
 	     (gnc:error "Illegal invoice value set"))))
      (lambda () (convert-to-invoice (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -96,11 +98,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:customer-get-guid item)))
+        (gncCustomerReturnGUID item)))
 
   (define (convert-to-customer item)
     (if (string? item)
-        (gnc:customer-lookup item (gnc:get-current-book))
+        (gncCustomerLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -132,9 +134,9 @@
 	     (gnc:error "Illegal customer value set"))))
      (lambda () (convert-to-customer (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -157,11 +159,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:vendor-get-guid item)))
+        (gncVendorReturnGUID item)))
 
   (define (convert-to-vendor item)
     (if (string? item)
-        (gnc:vendor-lookup item (gnc:get-current-book))
+        (gncVendorLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -193,9 +195,9 @@
 	     (gnc:error "Illegal vendor value set"))))
      (lambda () (convert-to-vendor (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -218,11 +220,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:employee-get-guid item)))
+        (gncEmployeeReturnGUID item)))
 
   (define (convert-to-employee item)
     (if (string? item)
-        (gnc:employee-lookup item (gnc:get-current-book))
+        (gncEmployeeLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -254,9 +256,9 @@
 	     (gnc:error "Illegal employee value set"))))
      (lambda () (convert-to-employee (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -277,44 +279,43 @@
 	 value-validator
 	 owner-type)
 
-  (let ((option-value (gnc:owner-create)))
+  (let ((option-value (gncOwnerCreate)))
 
     (define (convert-to-pair item)
       (if (pair? item)
 	  item
-	  (cons (gw:enum-<gnc:GncOwnerType>-val->sym
-		 (gnc:owner-get-type item) #f)
-		(gnc:owner-get-guid item))))
+	  (cons (gncOwnerGetType item)
+		(gncOwnerReturnGUID item))))
 
     (define (convert-to-owner pair)
       (if (pair? pair)
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym (car pair) #f)))
-	    (case type
-	      ((gnc-owner-customer)
-	       (gnc:owner-init-customer
+	  (let ((type (car pair)))
+	    (cond
+	      ((eqv? type GNC-OWNER-CUSTOMER)
+	       (gncOwnerInitCustomer
 		option-value
-		(gnc:customer-lookup (cdr pair) (gnc:get-current-book)))
+		(gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
 	       option-value)
 
-	       ((gnc-owner-vendor)
-		(gnc:owner-init-vendor
+	       ((eqv? type GNC-OWNER-VENDOR)
+		(gncOwnerInitVendor
 		 option-value
-		 (gnc:vendor-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
-	       ((gnc-owner-employee)
-		(gnc:owner-init-employee
+	       ((eqv? type GNC-OWNER-EMPLOYEE)
+		(gncOwnerInitEmployee
 		 option-value
-		 (gnc:employee-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncEmployeeLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
-	       ((gnc-owner-job)
-		(gnc:owner-init-job
+	       ((eqv? type GNC-OWNER-JOB)
+		(gncOwnerInitJob
 		 option-value
-		 (gnc:job-lookup (cdr pair) (gnc:get-current-book)))
+		 (gncJobLookupFlip (cdr pair) (gnc-get-current-book)))
 		option-value)
 
-	       (else #f)))
+	       (else '())))
 	  pair))
 
     (let* ((option (convert-to-pair (default-getter)))
@@ -330,10 +331,9 @@
 	   (validator
 	    (if (not value-validator)
 		(lambda (owner)
-		  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-			       (if (pair? owner)
-				   (car owner)
-				   (gnc:owner-get-type owner)) #f)))
+		  (let ((type (if (pair? owner)
+                                  (car owner)
+                                  (gncOwnerGetType owner))))
 		    (if (equal? type owner-type)
 			(list #t owner)
 			(list #f "Owner-Type Mismatch"))))
@@ -356,13 +356,13 @@
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
        (lambda (f p)
-	 (gnc:kvp-frame-set-slot-path f (symbol->string (car option))
+	 (kvp-frame-set-slot-path-gslist f (symbol->string (car option))
 				      (append p '("type")))
-	 (gnc:kvp-frame-set-slot-path f (cdr option)
+	 (kvp-frame-set-slot-path-gslist f (cdr option)
 				      (append p '("value"))))
        (lambda (f p)
-	 (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
-	       (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
+	 (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
+	       (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
 	   (if (and t v (string? t) (string? v))
 	       (begin
 		 (set! option (cons (string->symbol t) v))
@@ -386,11 +386,11 @@
   (define (convert-to-guid item)
     (if (string? item)
         item
-        (gnc:taxtable-get-guid item)))
+        (gncTaxTableReturnGUID item)))
 
   (define (convert-to-taxtable item)
     (if (string? item)
-        (gnc:taxtable-lookup item (gnc:get-current-book))
+        (gncTaxTableLookupFlip item (gnc-get-current-book))
         item))
 
   (let* ((option (convert-to-guid (default-getter)))
@@ -422,9 +422,9 @@
 	     (gnc:error "Illegal taxtable value set"))))
      (lambda () (convert-to-taxtable (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
      (lambda (f p)
-       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)

@@ -31,8 +31,6 @@ CLEANFILES = guile
 gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-G_WRAP_MODULE_DIR-@#${G_WRAP_MODULE_DIR}#g' \
-	    -e 's#@-G_WRAP_LIB_DIR-@#${G_WRAP_LIB_DIR}#g' \
 	    -e 's#@-GNC_GUILE_MODULE_DIR-@#${GNC_SHAREDIR}/guile-modules#g' \
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
@@ -47,8 +45,6 @@ gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's#@-GNC_TEST_SRFI_LOAD_CMD-@#@GNC_TEST_SRFI_LOAD_CMD@#g' \
-	    -e 's#@-G_WRAP_MODULE_DIR-@#${G_WRAP_MODULE_DIR}#g' \
-	    -e 's#@-G_WRAP_LIB_DIR-@#${G_WRAP_LIB_DIR}#g' \
             -e 's#@-GNC_BUILDDIR-@#${PWD}/${top_builddir}#g' \
             -e 's#@-GNC_SRCDIR-@#${PWD}/${top_srcdir}#g'
 	mv $@.tmp $@

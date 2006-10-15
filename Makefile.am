@@ -48,7 +48,7 @@ EXTRA_DIST = \
   macros/as-scrub-include.m4 \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
-  macros/g-wrap.m4 \
+  macros/ac_pkg_swig.m4 \
   macros/gnome-guile-checks.m4 \
   macros/legacy_macros.m4 \
   po/gnucash.pot \

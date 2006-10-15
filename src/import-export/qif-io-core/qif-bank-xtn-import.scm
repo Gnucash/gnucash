@@ -35,7 +35,7 @@
 (define (qif-io:bank-xtn-import qif-xtn qif-file gnc-acct-info commodity)
   (let* ((format-info 
           (qif-io:file-bank-xtn-format qif-file))
-         (gnc-xtn (gnc:transaction-create (gnc:get-current-book)))
+         (gnc-xtn (xaccMallocTransaction (gnc-get-current-book)))
          (near-split-amt
           ;; the u-amount has a larger range and is more correct,
           ;; but is optional
@@ -54,40 +54,40 @@
              (acct-type (cdr acct-info))
              (acct (qif-io:acct-table-lookup 
                     gnc-acct-info acct-name acct-type))
-             (split (gnc:split-create (gnc:get-current-book))))
+             (split (xaccMallocSplit (gnc-get-current-book))))
         ;; make the account if necessary 
         (if (not acct)
             (begin 
-              (set! acct (gnc:malloc-account (gnc:get-current-book)))
-              (gnc:account-begin-edit acct)
-              (gnc:account-set-name acct acct-name)
-              (gnc:account-commit-edit acct)
+              (set! acct (xaccMallocAccount (gnc-get-current-book)))
+              (xaccAccountBeginEdit acct)
+              (xaccAccountSetName acct acct-name)
+              (xaccAccountCommitEdit acct)
               (qif-io:acct-table-insert! gnc-acct-info 
                                          acct-name acct-type acct)))
         ;; fill in the split 
-        (gnc:split-set-amount split amount)
-        (gnc:split-set-value split amount)
-        (gnc:split-set-memo split memo)
-        (gnc:split-set-reconcile split reconcile)
+        (xaccSplitSetAmount split amount)
+        (xaccSplitSetValue split amount)
+        (xaccSplitSetMemo split memo)
+        (xaccSplitSetReconcile split reconcile)
         
         ;; add it to the account and the transaction
-        (gnc:account-begin-edit acct)
-        (gnc:account-insert-split acct split)
-        (gnc:account-commit-edit acct)
-        (gnc:transaction-append-split gnc-xtn split)
+        (xaccAccountBeginEdit acct)
+        (xaccSplitSetAccount acct split)
+        (xaccAccountCommitEdit acct)
+        (xaccTransAppendSplit gnc-xtn split)
         split))
 
-    (gnc:transaction-begin-edit gnc-xtn)
-    (gnc:transaction-set-currency gnc-xtn commodity)
+    (xaccTransBeginEdit gnc-xtn)
+    (xaccTransSetCurrency gnc-xtn commodity)
 
     ;; set the transaction date, number and description 
     (let ((date (qif-io:parse-date/format 
                  (qif-io:bank-xtn-date qif-xtn) 
                  (qif-io:bank-xtn-date format-info))))
-      (apply gnc:transaction-set-date gnc-xtn date))    
+      (apply xaccTransSetDate gnc-xtn date))
     
-    (gnc:transaction-set-xnum gnc-xtn (qif-io:bank-xtn-number qif-xtn))
-    (gnc:transaction-set-description gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
+    (xaccTransSetNum gnc-xtn (qif-io:bank-xtn-number qif-xtn))
+    (xaccTransactionSetDescription gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
     
     ;; create the near split (the one that goes to the source-acct)
     (let* ((near-acct-name (qif-io:bank-xtn-source-acct qif-xtn)))
@@ -114,7 +114,7 @@
                   (if parsed-cat (list-ref parsed-cat 1) #f)))
             (add-split (cons acct-name 
                              (if acct-is-acct 'account 'category))
-                       (gnc:numeric-neg near-split-amt)
+                       (gnc-numeric-neg near-split-amt)
                        (qif-io:bank-xtn-memo qif-xtn) #\n))
           
           ;; split case: iterate over a list of qif splits and make a
@@ -136,11 +136,11 @@
                         (qif-io:split-amount split) amt-format)))
                  (add-split (cons acct-name 
                                   (if acct-is-acct 'account 'category))
-                            (gnc:numeric-neg amount)
+                            (gnc-numeric-neg amount)
                             (qif-io:split-memo split) #\n)))
              qif-splits))))
     
     ;; we're done.  
-    (gnc:transaction-commit-edit gnc-xtn)
+    (xaccTransCommitEdit gnc-xtn)
     gnc-xtn))
 

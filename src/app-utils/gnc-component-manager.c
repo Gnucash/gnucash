@@ -51,9 +51,6 @@ typedef struct
   GNCComponentCloseHandler close_handler;
   gpointer user_data;
 
-  SCM refresh_handler_scm;
-  SCM close_handler_scm;
-
   ComponentEventInfo watch_info;
 
   char *component_class;
@@ -404,9 +401,6 @@ gnc_register_gui_component_internal (const char * component_class)
   /* found one, add the handler */
   ci = g_new0 (ComponentInfo, 1);
 
-  ci->refresh_handler_scm = SCM_BOOL_F;
-  ci->close_handler_scm = SCM_BOOL_F;
-
   ci->watch_info.event_masks = g_hash_table_new (g_str_hash, g_str_equal);
   ci->watch_info.entity_events = guid_hash_table_new ();
 
@@ -449,32 +443,6 @@ gnc_register_gui_component (const char *component_class,
   ci->refresh_handler = refresh_handler;
   ci->close_handler = close_handler;
   ci->user_data = user_data;
-
-  return ci->component_id;
-}
-
-gint
-gnc_register_gui_component_scm (const char * component_class,
-                                SCM refresh_handler,
-                                SCM close_handler)
-{
-  ComponentInfo *ci;
-
-  /* sanity check */
-  if (!component_class)
-  {
-    PERR ("no class specified");
-    return NO_COMPONENT;
-  }
-
-  ci = gnc_register_gui_component_internal (component_class);
-  g_return_val_if_fail (ci, NO_COMPONENT);
-
-  ci->refresh_handler_scm = refresh_handler;
-  scm_gc_protect_object (refresh_handler);
-
-  ci->close_handler_scm = close_handler;
-  scm_gc_protect_object (close_handler);
 
   return ci->component_id;
 }
@@ -578,14 +546,6 @@ gnc_unregister_gui_component (gint component_id)
 
   g_free (ci->component_class);
   ci->component_class = NULL;
-
-  if (ci->refresh_handler_scm != SCM_BOOL_F)
-    scm_gc_unprotect_object (ci->refresh_handler_scm);
-  ci->refresh_handler_scm = SCM_BOOL_F;
-
-  if (ci->close_handler_scm != SCM_BOOL_F)
-    scm_gc_unprotect_object (ci->close_handler_scm);
-  ci->close_handler_scm = SCM_BOOL_F;
 
   g_free (ci);
 
@@ -745,8 +705,7 @@ gnc_gui_refresh_internal (gboolean force)
     if (!ci)
       continue;
 
-    if (!ci->refresh_handler &&
-        !SCM_PROCEDUREP (ci->refresh_handler_scm)) {
+    if (!ci->refresh_handler) {
 #if CM_DEBUG
       fprintf (stderr, "no handlers for %s:%d\n", ci->component_class, ci->component_id);
 #endif
@@ -760,11 +719,6 @@ gnc_gui_refresh_internal (gboolean force)
 	fprintf (stderr, "calling %s:%d C handler\n", ci->component_class, ci->component_id);
 #endif
         ci->refresh_handler (NULL, ci->user_data);
-      } else {
-#if CM_DEBUG
-	fprintf (stderr, "calling %s:%d SCM handler\n", ci->component_class, ci->component_id);
-#endif
-        scm_call_0 (ci->refresh_handler_scm);
       }
     }
     else if (changes_match (&ci->watch_info, &changes_backup))
@@ -774,11 +728,6 @@ gnc_gui_refresh_internal (gboolean force)
 	fprintf (stderr, "calling %s:%d C handler\n", ci->component_class, ci->component_id);
 #endif
         ci->refresh_handler (changes_backup.entity_events, ci->user_data);
-      } else {
-#if CM_DEBUG
-	fprintf (stderr, "calling %s:%d SCM handler\n", ci->component_class, ci->component_id);
-#endif
-        scm_call_0 (ci->refresh_handler_scm);
       }
     }
     else
@@ -827,14 +776,11 @@ gnc_close_gui_component (gint component_id)
     return;
   }
 
-  if (!ci->close_handler &&
-      !SCM_PROCEDUREP (ci->close_handler_scm))
+  if (!ci->close_handler)
     return;
 
   if (ci->close_handler)
     ci->close_handler (ci->user_data);
-  else
-    scm_call_0 (ci->close_handler_scm);
 }
 
 void

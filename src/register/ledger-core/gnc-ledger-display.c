@@ -196,7 +196,7 @@ static SplitRegisterStyle
 gnc_get_default_register_style (GNCAccountType type)
 {
   SplitRegisterStyle new_style = REG_STYLE_LEDGER;
-  char *style_string;
+  gchar *style_string;
 
   switch (type) {
 #if 0
@@ -215,9 +215,9 @@ gnc_get_default_register_style (GNCAccountType type)
       new_style = REG_STYLE_AUTO_LEDGER;
     else
       new_style = REG_STYLE_LEDGER;
-    
+
     if (style_string != NULL)
-      free(style_string);
+      g_free(style_string);
 
     break;
   }

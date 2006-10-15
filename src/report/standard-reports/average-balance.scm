@@ -71,10 +71,13 @@
                  ;; otherwise get some accounts -- here as an
                  ;; example we get the asset and liability stuff
                  (gnc:filter-accountlist-type
-                  '(bank cash credit asset liability payable receivable) 
-                  ;; or: '(bank cash checking savings stock
-                  ;; mutual-fund money-market)
-                  (gnc:group-get-account-list (gnc:get-current-group)))))))
+                  (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+                        ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+                        ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
+                  ;; or: (list ACCT-TYPE-BANK ACCT-TYPE-CASH
+                  ;; ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS ACCT-TYPE-STOCK
+                  ;; ACCT-TYPE-MUTUAL ACCT-TYPE-MONEYMRKT)
+                  (xaccGroupGetAccountListSorted (gnc-get-current-group)))))))
       #f #t))
 
     ;; Display tab
@@ -137,8 +140,8 @@
                         gain-loss-accum)
       (set! data-rows
             (cons 
-             (list (gnc:print-date interval-start)
-                   (gnc:print-date interval-end)
+             (list (gnc-print-date interval-start)
+                   (gnc-print-date interval-end)
                    (/ (stats-accum 'total #f)
                       (gnc:timepair-delta interval-start 
                                           interval-end))
@@ -156,8 +159,8 @@
     (define (get-split-value split date)
       (monetary->double
        (gnc:make-gnc-monetary
-        (gnc:account-get-commodity (gnc:split-get-account split))
-        (gnc:split-get-amount split))
+        (xaccAccountGetCommodity (xaccSplitGetAccount split))
+        (xaccSplitGetAmount split))
        date))
     
     ;; calculate the statistics for one interval - returns a list 
@@ -192,14 +195,14 @@
 
         (define (split-recurse)
           (if (or (null? splits) (gnc:timepair-gt 
-                                  (gnc:transaction-get-date-posted 
-                                   (gnc:split-get-parent
+                                  (gnc-transaction-get-date-posted
+                                   (xaccSplitGetParent
                                     (car splits))) to)) 
               #f
               (let* 
                   ((split (car splits))
-                   (split-time (gnc:transaction-get-date-posted 
-                                (gnc:split-get-parent split)))
+                   (split-time (gnc-transaction-get-date-posted
+                                (xaccSplitGetParent split)))
                    ;; FIXME: Which date should we use here? The 'to'
                    ;; date? the 'split-time'?
                    (split-amt (get-split-value split split-time)))
@@ -303,7 +306,7 @@
               (list-all-zeros? (cdr alist)))))
     
     (define (monetary->double foreign-monetary date)
-      (gnc:numeric-to-double
+      (gnc-numeric-to-double
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
 
@@ -311,7 +314,7 @@
     ;;(warn commodity-list)
 
     (if (not (null? accounts))
-        (let ((query (gnc:malloc-query))
+        (let ((query (qof-query-create-for-splits))
               (splits '())
               (data '()))
 
@@ -337,11 +340,11 @@
 
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-book query (gnc:get-current-book))
+          (qof-query-set-book query (gnc-get-current-book))
 
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
+          (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
@@ -362,18 +365,18 @@
                       (delete-duplicates (append accounts subaccts)))))
 	  (gnc:report-percent-done 30)
 
-          (gnc:query-add-account-match query accounts 'guid-match-any 'query-and)
+          (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
-          (gnc:query-add-date-match-timepair
-           query #t begindate #t enddate 'query-and)
-          (gnc:query-set-sort-order query
-				    (list gnc:split-trans gnc:trans-date-posted)
-				    (list gnc:query-default-sort)
+          (xaccQueryAddDateMatchTS
+           query #t begindate #t enddate QOF-QUERY-AND)
+          (qof-query-set-sort-order query
+				    (list SPLIT-TRANS TRANS-DATE-POSTED)
+				    (list QUERY-DEFAULT-SORT)
 				    '())
           
           ;; get the query results 
-          (set! splits (gnc:query-get-splits query))
+          (set! splits (qof-query-run query))
 	  (gnc:report-percent-done 40)
           
           ;; find the net starting balance for the set of accounts 
@@ -382,11 +385,11 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc:account-reverse-balance?))
+                 gnc-reverse-balance))
 	  (gnc:report-percent-done 50)
 
           (set! startbal 
-                (gnc:numeric-to-double
+                (gnc-numeric-to-double
                  (gnc:gnc-monetary-amount
                   (gnc:sum-collector-commodity 
                    startbal

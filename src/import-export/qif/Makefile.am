@@ -34,6 +34,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/import-export \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS} \
-  ${QOF_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS}
+  ${QOF_CFLAGS}
 

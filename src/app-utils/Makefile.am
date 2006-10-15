@@ -1,7 +1,7 @@
 SUBDIRS = . test
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-app-utils.la libgw-app-utils.la
+pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -10,13 +10,13 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GCONF_CFLAGS} \
   ${GTK_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
+  swig-app-utils.c \
   file-utils.c \
   gfec.c \
   gnc-account-merge.c \
@@ -67,27 +67,19 @@ gncinclude_HEADERS = \
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-libgw_app_utils_la_LIBADD = \
-  libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
-
-nodist_libgw_app_utils_la_SOURCES = gw-app-utils.c
+if BUILDING_FROM_SVN
+swig-app-utils.c: app-utils.i ${gncinclude_HEADERS}
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src/engine -I${top_srcdir}/lib/libqof/qof -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 
@@ -98,34 +90,27 @@ gncscm_DATA = \
   config-var.scm \
   date-utilities.scm \
   hooks.scm \
-  kvp-option-registry.scm \
   options.scm \
   prefs.scm \
   simple-obj.scm
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-app-utils-spec.scm
-nodist_gwmod_DATA = gw-app-utils.scm
-
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
+  app-utils.i \
   ${gncmod_DATA} \
-  ${gncscm_DATA} \
-  ${gwmod_DATA}
+  ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-app-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += \
+SCM_FILE_LINKS = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 endif
 
 .scm-links: 
-	$(RM) -rf gnucash g-wrapped
-	mkdir -p  gnucash g-wrapped
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -134,25 +119,5 @@ endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-clean-local:
-	$(RM) -rf gnucash g-wrapped
-
-.INTERMEDIATE: gwrap-files
-
-gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
-  gwrap-files
-
-gwrap-files: \
-  .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
-	  (primitive-load \"./gw-app-utils-spec.scm\") \
-	  (gw:generate-wrapset \"gw-app-utils\")"
-	touch $@
-	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
-
-BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-CLEANFILES = $(BUILT_SOURCES) ${SCM_FILE_LINKS}  \
-	.scm-links gw-app-utils.html
+CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
+MAINTAINERCLEANFILES = swig-app-utils.c

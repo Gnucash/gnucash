@@ -37,6 +37,8 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
@@ -84,6 +86,8 @@ enum {
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 #define KEY_TAB_POSITION	"tab_position"
+
+#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
 /* Static Globals *******************************************************/
 
@@ -774,7 +778,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   /* Save page ordering within the notebook. Use +1 notation so the
    * numbers in the page order match the page sections, at least for
    * the one window case. */
-  order = malloc(sizeof(gint) * num_pages);
+  order = g_malloc(sizeof(gint) * num_pages);
   for (i = 0; i < num_pages; i++) {
     gpointer page = g_list_nth_data(priv->usage_order, i);
     order[i] = g_list_index(priv->installed_pages, page) + 1;

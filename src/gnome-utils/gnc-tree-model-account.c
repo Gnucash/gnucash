@@ -330,7 +330,7 @@ iter_to_string (GtkTreeIter *iter)
 
   string = g_static_private_get (&gtmits_buffer_key);
   if (string == NULL) {
-    string = malloc(ITER_STRING_LEN + 1);
+    string = g_malloc(ITER_STRING_LEN + 1);
     g_static_private_set (&gtmits_buffer_key, string, g_free);
   }
 #else

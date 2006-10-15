@@ -72,8 +72,8 @@
       "b"
       (N_ "Stock Accounts to report on")
       (lambda () (filter gnc:account-is-stock?
-                         (gnc:group-get-subaccounts
-                          (gnc:get-current-group))))
+                         (xaccGroupGetSubAccountsSorted
+                          (gnc-get-current-group))))
       (lambda (accounts) (list  #t 
                                 (filter gnc:account-is-stock? accounts)))
       #t))
@@ -110,7 +110,7 @@
                                 exchange-fn price-fn include-empty collector)
 
    (let ((share-print-info
-	  (gnc:share-print-info-places
+	  (gnc-share-print-info-places
 	   (inexact->exact (get-option gnc:pagename-general
 				       optname-shares-digits)))))
 
@@ -119,9 +119,9 @@
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-                 (commodity (gnc:account-get-commodity current))
-                 (ticker-symbol (gnc:commodity-get-mnemonic commodity))
-                 (listing (gnc:commodity-get-namespace commodity))
+                 (commodity (xaccAccountGetCommodity current))
+                 (ticker-symbol (gnc-commodity-get-mnemonic commodity))
+                 (listing (gnc-commodity-get-namespace commodity))
                  (unit-collector (gnc:account-get-comm-balance-at-date
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
@@ -132,7 +132,7 @@
 
 	    (set! work-done (+ 1 work-done))
 	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-	    (if (or include-empty (not (gnc:numeric-zero-p units)))
+	    (if (or include-empty (not (gnc-numeric-zero-p units)))
 		(begin (collector 'add currency (gnc:gnc-monetary-amount value))
 		       (gnc:html-table-append-row/markup!
 			table
@@ -142,16 +142,16 @@
 			      listing
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" 
-			       (gnc:amount->string units share-print-info))
+			       (xaccPrintAmount units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
 			       (gnc:html-price-anchor
 				(car price-info)
-				(gnc:make-gnc-monetary (gnc:price-get-currency (car price-info))
-						       (gnc:price-get-value (car price-info)))))
+				(gnc:make-gnc-monetary (gnc-price-get-currency (car price-info))
+						       (gnc-price-get-value (car price-info)))))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
-		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc:numeric-to-double units)))
+		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc-numeric-to-double units)))
 		       ;;(display units) (newline)
 		       (table-add-stock-rows-internal rest (not odd-row?)))
 		(table-add-stock-rows-internal rest odd-row?)))))
@@ -184,7 +184,7 @@
     (gnc:html-document-set-title!
      document (string-append 
                report-title
-               (sprintf #f " %s" (gnc:print-date to-date))))
+               (sprintf #f " %s" (gnc-print-date to-date))))
 
     ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
@@ -192,7 +192,7 @@
                                 (append 
                                  (gnc:acccounts-get-all-subaccounts 
                                   accounts) accounts) currency))
-               (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
+               (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
 	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source
@@ -206,21 +206,21 @@
                   ((pricedb-latest) 
                    (lambda (foreign date) 
                      (let ((price
-                            (gnc:pricedb-lookup-latest-any-currency
+                            (gnc-pricedb-lookup-latest-any-currency
                              pricedb foreign)))
                        (if (and price (> (length price) 0))
-                           (let ((v (gnc:price-get-value (car price))))
+                           (let ((v (gnc-price-get-value (car price))))
                              (cons (car price) v))
-                           (cons #f (gnc:numeric-zero))))))
+                           (cons #f (gnc-numeric-zero))))))
                   ((pricedb-nearest) 
                    (lambda (foreign date) 
                      (let ((price
-                            (gnc:pricedb-lookup-nearest-in-time-any-currency 
-                             pricedb foreign (gnc:timepair-canonical-day-time date))))
+                            (gnc-pricedb-lookup-nearest-in-time-any-currency
+                             pricedb foreign (timespecCanonicalDayTime date))))
                        (if (and price (> (length price) 0))
-                           (let ((v (gnc:price-get-value (car price))))
+                           (let ((v (gnc-price-get-value (car price))))
                              (cons (car price) v))
-                           (cons #f (gnc:numeric-zero)))))))))
+                           (cons #f (gnc-numeric-zero)))))))))
           
           (gnc:html-table-set-col-headers!
            table

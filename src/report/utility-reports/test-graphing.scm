@@ -12,7 +12,7 @@
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (define (simple-pie-chart)
   (let ((chart (gnc:make-html-piechart)))

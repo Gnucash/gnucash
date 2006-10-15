@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>

@@ -14,8 +14,6 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
-  ../libgw-engine.la \
-  ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLIB_LIBS} \
@@ -54,12 +52,10 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
   --gnc-module-dir ${top_srcdir}/src/engine \
-  --guile-load-dir ${top_srcdir}/src/engine/test \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/lib/libqof/qof \
   --library-dir    ${top_builddir}/src/backend/file \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --guile-load-dir ${top_srcdir}/src/engine/test
 
 TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \

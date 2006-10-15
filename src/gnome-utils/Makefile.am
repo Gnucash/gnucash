@@ -1,7 +1,7 @@
 SUBDIRS = glade schemas . test ui
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
+pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 
@@ -21,7 +21,6 @@ AM_CFLAGS = \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
   ${GSF_CFLAGS}
@@ -92,6 +91,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   print-session.c \
   search-param.c \
   gnc-dialog.c \
+  swig-gnome-utils.c \
   window-main-summarybar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -168,7 +168,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
@@ -180,7 +179,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
@@ -190,19 +188,11 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
-nodist_libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
-libgw_gnome_utils_la_LIBADD = \
-  libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${QOF_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
-  ${GLIB_LIBS}
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnome-utils-spec.scm
-nodist_gwmod_DATA = gw-gnome-utils.scm
+if BUILDING_FROM_SVN
+swig-gnome-utils.c: gnome-utils.i ${noinst_HEADERS} ${gncinclude_HEADERS}
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src/engine -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnome-utils.scm 
@@ -212,7 +202,7 @@ gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
   gnc-svninfo.h \
-  ${gwmod_DATA} \
+  gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -266,17 +256,15 @@ _gnc-svninfo.h: Makefile
 BUILT_SOURCES = gnc-version.h
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnome-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += \
+SCM_FILE_LINKS = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 endif
 
 .scm-links: 
-	$(RM) -rf gnucash g-wrapped
-	mkdir -p  gnucash g-wrapped
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -285,29 +273,9 @@ endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-clean-local:
-	$(RM) -rf gnucash g-wrapped
-
-.INTERMEDIATE: gwrap-files
-
-gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
-  gwrap-files
-
-gwrap-files: \
-  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status Makefile
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
-	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
-	  (gw:generate-wrapset \"gw-gnome-utils\")"
-	touch $@
-	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
-
-BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = $(BUILT_SOURCES) .scm-links \
-	${SCM_FILE_LINKS} gw-gnome-utils.html
+noinst_DATA = .scm-links
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnome-utils.c
 
 # FIXME: Symlinking directories only works on non-win32.
 if !PLATFORM_WIN32

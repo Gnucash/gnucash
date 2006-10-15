@@ -108,8 +108,6 @@ void gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r);
 const Recurrence * gnc_budget_get_recurrence(GncBudget *budget);
 
 /** Set/Get the starting date of the Budget */
-void gnc_budget_set_start_date(GncBudget* budget, Timespec date);
-Timespec gnc_budget_get_start_date(GncBudget* budget);
 Timespec gnc_budget_get_period_start_date(GncBudget* budget, guint period_num);
 
 /* Period indices are zero-based. */
@@ -128,9 +126,6 @@ gnc_numeric gnc_budget_get_account_period_actual_value(
 
 /** Get the book that this budget is associated with. */
 QofBook* gnc_budget_get_book(GncBudget* budget);
-
-/* Caller owns the list of all budgets in the book. */
-GList* gnc_book_get_budgets(QofBook* book);
 
 /* Returns some budget in the book, or NULL. */
 GncBudget* gnc_budget_get_default(QofBook *book);

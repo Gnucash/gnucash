@@ -151,6 +151,19 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
 fi
 
+# test whether we are building directly from SVN/SVK
+${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
+if test $? = 0 ; then
+  BUILDING_FROM_SVN=yes
+
+  # We need at least version 1.3.28 of SWIG because
+  # that's when SWIG added %delobject
+  AC_PROG_SWIG(1.3.28)
+else
+  BUILDING_FROM_SVN=no
+fi
+AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
+
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
@@ -272,8 +285,7 @@ esac
 
 
 ### --------------------------------------------------------------------------
-### Guile and g-wrap version checks (should this be something other than
-### the Gnome check?)
+### Guile version checks (should this be something other than the Gnome check?)
 
 # If the user has given these values, cache them to override the
 # detected values.
@@ -296,9 +308,6 @@ fi
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
 
-### --------------------------------------------------------------------------
-### G-wrap (libraries and executable)
-
 AM_GUILE_VERSION_CHECK(1.6.0, , , [AC_MSG_ERROR([
 
   guile does not appear to be installed correctly, or is not in the
@@ -318,92 +327,10 @@ AM_GUILE_VERSION_CHECK(1.8.0, , [
   AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8 or better])
 ], )
 
-AM_PATH_GWRAP(1.3.3, , [AC_MSG_ERROR([
-
-  g-wrap does not appear to be installed correctly, or is not new
-  enough.  GnuCash requires at least version 1.3.3 to build,
-  and 1.9.6 to build cleanly with GCC4.  If you need to install g-wrap,
-  you can find it at http://www.nongnu.org/g-wrap/ .
-])])
-
-# Find out what the g-wrap compile and link flags are.
-AC_MSG_CHECKING(for g-wrap compile args)
-if test "x$G_WRAP_COMPILE_ARGS" = "x" ; then
-  G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
-fi
-AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
-
-AC_MSG_CHECKING(for g-wrap link args)
-if test "x$G_WRAP_LINK_ARGS" = "x" ; then
-  G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
-fi
-# Dear g-wrap: adding -L/usr/lib is very silly.  Do not do this.
-G_WRAP_LINK_ARGS=`echo ${G_WRAP_LINK_ARGS} | sed -e 's|-L/usr/lib ||'`
-AC_MSG_RESULT($G_WRAP_LINK_ARGS)
-
-AC_MSG_CHECKING(for g-wrap module directory)
-G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
-G_WRAP_LIB_DIR=`echo $G_WRAP_MODULE_DIR | sed -e 's|share/guile.*$|lib|'`
-AC_MSG_RESULT($G_WRAP_MODULE_DIR)
-
-AC_GWRAP_CHECK_GUILE($G_WRAP_MODULE_DIR)
-
-save_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $GUILE_INCS $G_WRAP_COMPILE_ARGS"
-AC_CHECK_HEADER(g-wrap-wct.h,,
-	[AC_MSG_ERROR([
-
-   cannot find g-wrap-wct.h where g-wrap claims it should be.
-   are you on Debian or Ubuntu and still using g-wrap 1.9.6-2?
-   See:  http://bugzilla.gnome.org/show_bug.cgi?id=330539
-
-])])
-CPPFLAGS=$save_CPPFLAGS
-
-AC_SUBST(G_WRAP_CONFIG)
-AC_SUBST(G_WRAP_COMPILE_ARGS)
-AC_SUBST(G_WRAP_LINK_ARGS)
-AC_SUBST(G_WRAP_MODULE_DIR)
-AC_SUBST(G_WRAP_LIB_DIR)
-
 AS_SCRUB_INCLUDE(CFLAGS)
 
-AC_MSG_CHECKING([for (g-wrap) guile module])
-if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
-        ${GUILE} -c "(use-modules (g-wrap))" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR([
-
-   Cannot find the (g-wrap) guile module.
-   Are you sure you have g-wrap compile-time environment installed?
-   See http://bugzilla.gnome.org/show_bug.cgi?id=347680
-
-])
-fi
-
-AC_MSG_CHECKING([for (g-wrap gw-glib-spec) guile module])
-if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
-        ${GUILE} -c "(use-modules (g-wrap gw-glib-spec))" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR([
-
-   Cannot find the (g-wrap gw-glib-spec) guile module.
-   Are you sure you have g-wrap installed with glib support?
-   See http://bugzilla.gnome.org/show_bug.cgi?id=347404
-
-])
-fi
-
 AC_MSG_CHECKING([for SLIB support])
-if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
-        ${GUILE} -c "(use-modules (ice-9 slib)) (require 'printf)" > /dev/null 2>&1
+if ${GUILE} -c "(use-modules (ice-9 slib)) (require 'printf)" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
 else
@@ -413,31 +340,6 @@ else
    See http://bugzilla.gnome.org/show_bug.cgi?id=347922
 
 ])
-fi
-
-AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
-if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
-        ${GUILE} -c "(use-modules (g-wrap gw-standard))" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
-  AC_MSG_CHECKING([for (g-wrap gw standard) guile module])
-  if LD_LIBRARY_PATH="${G_WRAP_LIB_DIR}:${LD_LIBRARY_PATH}" \
-    GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:${GUILE_LOAD_PATH}" \
-        ${GUILE} -c "(use-modules (g-wrap gw standard))" > /dev/null 2>&1
-  then
-    AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
-    AC_MSG_WARN([
-
-    Unable to find the g-wrap standard module, a.k.a. guile-g-wrap. 
-    You won't be able to run GnuCash without it!
-
-    ])
-  fi
 fi
 
 ### Check size of long_long - some guile's are broken.
@@ -648,7 +550,6 @@ GNC_LIBEXECDIR='${libexecdir}/gnucash'
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
-GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
 GNC_MODULE_DIR='${pkglibdir}'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
@@ -657,7 +558,6 @@ AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
 AC_SUBST(GNC_UI_DIR)
-AC_SUBST(GNC_GWRAP_LIBDIR)
 AC_SUBST(GNC_INCLUDE_DIR)
 AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_MODULE_DIR)
@@ -2050,10 +1950,10 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgncmodule"
 
-GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
-GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
+GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${GUILE_INCS}"
+GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS}"
 
 AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
 AC_SUBST(GNUCASH_ENGINE_LIBS)
@@ -2096,9 +1996,7 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
-  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
-  #warnFLAGS="${warnFLAGS} -Wno-unused"
+  CFLAGS="${CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -2106,8 +2004,7 @@ then
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
-  if test $? = 0
+  if test "x$BUILDING_FROM_SVN" = "xyes"
   then
     # This code is from SVN/SVK, so enable error-on-warning
     error_on_warning_as_default="yes"
@@ -2147,36 +2044,11 @@ then
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
 	# rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
 	warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	if test x$gwrap_major_version = x1 -a "$gwrap_minor_version" -lt 9 ; then
-	    # This is g-wrap 1.3 + gcc4.  Test error-on-warning
-            case "$gnc_error_on_warning" in
-	    auto)
-	      AC_MSG_ERROR([
-
-  Sorry, your current configuration will not compile.  You are
-  running g-wrap 1.3.x, GCC4, and --enable-error-on-warning, which
-  do not work together.  You have three options:  You can update
-  g-wrap to 1.9.6, you can downgrade gcc to GCC3, or you can
-  --disable-error-on-warning on the configure line.  We recommend
-  you update g-wrap to 1.9.6 so gnucash can compile cleanly on GCC4
-  You can find it at http://www.nongnu.org/g-wrap/ .
-
-])
-	      ;;
-	    yes)
-	      AC_MSG_WARN([
-
-  g-wrap 1.3.x and GCC4 may cause build problems.  You have been warned!
-
-])
-	      ;;
-	    esac
-	  fi
 	fi
      fi
   fi
 
-  CFLAGS="${CFLAGS} ${warnFLAGS}"
+  CFLAGS="${warnFLAGS} ${CFLAGS}"
 
 else
   warnFLAGS=none
@@ -2331,8 +2203,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/network-utils/Makefile
           src/network-utils/test/Makefile
           src/optional/Makefile
-          src/optional/swig/Makefile
-          src/optional/swig/examples/Makefile
           src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile

@@ -160,7 +160,7 @@
 	    (val (cdr item))
 	    (ref (hash-ref hash acct)))
 
-       (hash-set! hash acct (if ref (gnc:numeric-add-fixed ref val) val))))
+       (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
    values))
 
 (define (monetary-or-percent numeric currency entry-type)
@@ -173,54 +173,54 @@
   (let* ((row-contents '())
 	 (entry-value (gnc:make-gnc-monetary
 		       currency
-		       (gnc:entry-get-value entry invoice?)))
+		       (gncEntryReturnValue entry invoice?)))
 	 (entry-tax-value (gnc:make-gnc-monetary
 			   currency
-			   (gnc:entry-get-tax-value entry invoice?))))
+			   (gncEntryReturnTaxValue entry invoice?))))
 
     (if (date-col column-vector)
         (addto! row-contents
-                (gnc:print-date (gnc:entry-get-date entry))))
+                (gnc-print-date (gncEntryGetDate entry))))
 
     (if (description-col column-vector)
         (addto! row-contents
-		(gnc:entry-get-description entry)))
+		(gncEntryGetDescription entry)))
 
     (if (action-col column-vector)
         (addto! row-contents
-		(gnc:entry-get-action entry)))
+		(gncEntryGetAction entry)))
 
     (if (quantity-col column-vector)
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
-		 (gnc:entry-get-quantity entry))))
+		 (gncEntryGetQuantity entry))))
 
     (if (price-col column-vector)
 	(addto! row-contents
 		(gnc:make-html-table-cell/markup
 		 "number-cell"
 		 (gnc:make-gnc-monetary
-		  currency (if invoice? (gnc:entry-get-inv-price entry)
-			       (gnc:entry-get-bill-price entry))))))
+		  currency (if invoice? (gncEntryGetInvPrice entry)
+			       (gncEntryGetBillPrice entry))))))
 
     (if (discount-col column-vector)
 	(addto! row-contents
 		(if invoice?
 		    (gnc:make-html-table-cell/markup
 		     "number-cell"
-		     (monetary-or-percent (gnc:entry-get-inv-discount entry)
+		     (monetary-or-percent (gncEntryGetInvDiscount entry)
 					  currency
-					  (gnc:entry-get-inv-discount-type entry)))
+					  (gncEntryGetInvDiscountType entry)))
 		    "")))
 
     (if (tax-col column-vector)
 	(addto! row-contents
 		(if (if invoice?
-			(and (gnc:entry-get-inv-taxable entry)
-			     (gnc:entry-get-inv-tax-table entry))
-			(and (gnc:entry-get-bill-taxable entry)
-			     (gnc:entry-get-bill-tax-table entry)))
+			(and (gncEntryGetInvTaxable entry)
+			     (gncEntryGetInvTaxTable entry))
+			(and (gncEntryGetBillTaxable entry)
+			     (gncEntryGetBillTaxTable entry)))
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
@@ -251,7 +251,7 @@
 
   (gnc:register-inv-option
    (gnc:make-invoice-option invoice-page invoice-name "x" ""
-			    (lambda () #f) #f))
+			    (lambda () '()) #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -349,7 +349,7 @@
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Payable to")
      "ua1" (N_ "Display the Payable to: information") #t #f
-     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+     (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Payable to string" x))))
 
   (gnc:register-inv-option
@@ -362,7 +362,7 @@
    (gnc:make-complex-boolean-option
     (N_ "Display") (N_ "Company contact")
      "ub1" (N_ "Display the Company contact information") #t #f
-     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+     (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		  gnc:*report-options* "Display" "Company contact string" x))))
 
   (gnc:register-inv-option
@@ -389,9 +389,9 @@
 
   (let ((show-payments (opt-val "Display" "Payments"))
 	(display-all-taxes (opt-val "Display" "Individual Taxes"))
-	(lot (gnc:invoice-get-posted-lot invoice))
-	(txn (gnc:invoice-get-posted-txn invoice))
-	(currency (gnc:invoice-get-currency invoice))
+	(lot (gncInvoiceGetPostedLot invoice))
+	(txn (gncInvoiceGetPostedTxn invoice))
+	(currency (gncInvoiceGetCurrency invoice))
 	(entries-added 0))
 
     (define (colspan monetary used-columns)
@@ -405,7 +405,7 @@
 	  monetary
 	  (let ((amt (gnc:gnc-monetary-amount monetary)))
 	    (if amt
-		(if (gnc:numeric-negative-p amt)
+		(if (gnc-numeric-negative-p amt)
 		    (gnc:monetary-neg monetary)
 		    monetary)
 		monetary))))
@@ -432,10 +432,10 @@
 		  currency-totals)))
 
     (define (add-payment-row table used-columns split total-collector)
-      (let* ((t (gnc:split-get-parent split))
-	     (currency (gnc:transaction-get-currency t))
+      (let* ((t (xaccSplitGetParent split))
+	     (currency (xaccTransGetCurrency t))
 	     ;; XXX Need to know when to reverse the value
-	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
+	     (amt (gnc:make-gnc-monetary currency (xaccSplitGetValue split)))
 	     (payment-style "grand-total")
 	     (row '()))
 	
@@ -445,7 +445,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc:print-date (gnc:transaction-get-date-posted t))))
+		    (gnc-print-date (gnc-transaction-get-date-posted t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -488,8 +488,8 @@
 		(hash-for-each
 		 (lambda (acct value)
 		   (let ((collector (gnc:make-commodity-collector))
-			 (commodity (gnc:account-get-commodity acct))
-			 (name (gnc:account-get-name acct)))
+			 (commodity (xaccAccountGetCommodity acct))
+			 (name (xaccAccountGetName acct)))
 		     (collector 'add commodity value)
 		     (add-subtotal-row table used-columns collector
 				       "grand-total" (string-expand
@@ -502,14 +502,14 @@
 
 	    (if (and show-payments lot)
 		(let ((splits (sort-list!
-			       (gnc:lot-get-splits lot)
+			       (gnc-lot-get-split-list lot)
 			       (lambda (s1 s2)
-				 (let ((t1 (gnc:split-get-parent s1))
-				       (t2 (gnc:split-get-parent s2)))
-				   (< (gnc:transaction-order t1 t2) 0))))))
+				 (let ((t1 (xaccSplitGetParent s1))
+				       (t2 (xaccSplitGetParent s2)))
+				   (< (xaccTransOrder t1 t2) 0))))))
 		  (for-each
 		   (lambda (split)
-		     (if (not (equal? (gnc:split-get-parent split) txn))
+		     (if (not (equal? (xaccSplitGetParent split) txn))
 			 (add-payment-row table used-columns
 					  split total-collector)))
 		   splits)))
@@ -534,7 +534,7 @@
 					      invoice?)))
 
 	    (if display-all-taxes
-		(let ((tax-list (gnc:entry-get-tax-values current invoice?)))
+		(let ((tax-list (gncEntryReturnTaxValues current invoice?)))
 		  (update-account-hash acct-hash tax-list))
 		(tax-collector 'add
 			       (gnc:gnc-monetary-commodity (cdr entry-values))
@@ -569,7 +569,7 @@
     (let* ((table (gnc:make-html-table))
 	   (used-columns (build-column-used options))
 	   (width (num-columns-required used-columns))
-	   (entries (gnc:invoice-get-entries invoice))
+	   (entries (gncInvoiceGetEntries invoice))
 	   (totals (gnc:make-commodity-collector)))
 
       (gnc:html-table-set-col-headers!
@@ -628,7 +628,7 @@
      (list "<br>"))
     (for-each
      (lambda (order)
-       (let* ((reference (gnc:order-get-reference order)))
+       (let* ((reference (gncOrderGetReference order)))
 	 (if (and reference (> (string-length reference) 0))
 	     (gnc:html-table-append-row!
 	      table
@@ -649,7 +649,7 @@
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
     (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
-    ;;(string-expand (gnc:print-date date) #\space "&nbsp;")
+    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -665,26 +665,26 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (gnc:book-get-slots book))
-	 (name (gnc:kvp-frame-get-slot-path
+	 (slots (gnc-book-get-slots book))
+	 (name (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (gnc:kvp-frame-get-slot-path
+;;	 (contact (kvp-frame-get-slot-path-gslist
 ;;		slots (append gnc:*kvp-option-path*
 ;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (gnc:kvp-frame-get-slot-path
+	 (addy (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (gnc:kvp-frame-get-slot-path
+	 (id (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (gnc:kvp-frame-get-slot-path
+	 (phone (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (gnc:kvp-frame-get-slot-path
+	 (fax (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (gnc:kvp-frame-get-slot-path
+	 (url (kvp-frame-get-slot-path-gslist
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-url*))))
 	 (invoice-cell (gnc:make-html-table-cell))
@@ -757,7 +757,7 @@
 	 (table '())
 	 (orders '())
 	 (invoice (opt-val invoice-page invoice-name))
-	 (owner #f)
+	 (owner '())
 	 (references? (opt-val "Display" "References"))
 	 (title (_ "Invoice"))
 	 (invoice? #f))
@@ -768,26 +768,25 @@
 
     (if invoice
 	(begin
-	  (set! owner (gnc:invoice-get-owner invoice))
-	  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
-		       (gnc:owner-get-type 
-			(gnc:owner-get-end-owner owner)) #f)))
-	    (case type
-	      ((gnc-owner-customer)
+	  (set! owner (gncInvoiceGetOwner invoice))
+	  (let ((type (gncOwnerGetType
+                       (gncOwnerGetEndOwner owner))))
+	    (cond
+	      ((eqv? type GNC-OWNER-CUSTOMER)
 	       (set! invoice? #t))
-	      ((gnc-owner-vendor)
+	      ((eqv? type GNC-OWNER-VENDOR)
 	       (set! title (_ "Bill")))
-	      ((gnc-owner-employee)
+	      ((eqv? type GNC-OWNER-EMPLOYEE)
 	       (set! title (_ "Expense Voucher")))))
 	  (set! title (sprintf #f (_"%s #%d") title
-			       (gnc:invoice-get-id invoice)))))
+			       (gncInvoiceGetID invoice)))))
     ;; oli-custom - title redundant, "Invoice" moved to myname-table,
     ;; invoice number moved below
     ;;(gnc:html-document-set-title! document title)
 
     (if invoice
-	(let* ((book (gnc:invoice-get-book invoice))
-	      (slots (gnc:book-get-slots book))
+	(let* ((book (gncInvoiceGetBook invoice))
+	      (slots (gnc-book-get-slots book))
 	      (date-object #f)
 	      (helper-table (gnc:make-html-table)))
 	  (set! table (make-entry-table invoice
@@ -835,8 +834,8 @@
 	   'attribute (list "width" "100%"))
 
 	  (set! date-object (let ((date-table #f)
-		(post-date (gnc:invoice-get-date-posted invoice))
-		(due-date (gnc:invoice-get-date-due invoice)))
+		(post-date (gncInvoiceGetDatePosted invoice))
+		(due-date (gncInvoiceGetDateDue invoice)))
 
 	    (if (not (equal? post-date (cons 0 0)))
 		(begin
@@ -844,7 +843,7 @@
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
 		   date-table (list (sprintf #f (_ "Invoice&nbsp;#&nbsp;%d")
-                                             (gnc:invoice-get-id invoice))))
+                                             (gncInvoiceGetID invoice))))
 		  (make-date-row! date-table (_ "Invoice&nbsp;Date") post-date)
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
 		  date-table)
@@ -876,7 +875,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Billing ID")
-	      (let ((billing-id (gnc:invoice-get-billing-id invoice)))
+	      (let ((billing-id (gncInvoiceGetBillingID invoice)))
 		(if (and billing-id (> (string-length billing-id) 0))
 		    (begin
 		      (gnc:html-document-add-object!
@@ -888,8 +887,8 @@
 		      (make-break! document)))))
 
 	  (if (opt-val "Display" "Billing Terms")
-	      (let* ((term (gnc:invoice-get-terms invoice))
-		     (terms (gnc:bill-term-get-description term)))
+	      (let* ((term (gncInvoiceGetTerms invoice))
+		     (terms (gncBillTermGetDescription term)))
 		(if (and terms (> (string-length terms) 0))
 		    (gnc:html-document-add-object!
 		     document
@@ -906,7 +905,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Invoice Notes")
-	      (let ((notes (gnc:invoice-get-notes invoice)))
+	      (let ((notes (gncInvoiceGetNotes invoice)))
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
@@ -915,7 +914,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (gnc:kvp-frame-get-slot-path
+	      (let* ((name (kvp-frame-get-slot-path-gslist
 			    slots (append gnc:*kvp-option-path*
 					  (list gnc:*business-label*
 						gnc:*company-name*))))
@@ -930,7 +929,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (gnc:kvp-frame-get-slot-path
+	      (let* ((contact (kvp-frame-get-slot-path-gslist
 			       slots (append gnc:*kvp-option-path*
 					     (list gnc:*business-label*
 						   gnc:*company-contact*))))

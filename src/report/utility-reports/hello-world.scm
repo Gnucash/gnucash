@@ -12,7 +12,7 @@
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc:html-build-url
+(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
@@ -149,8 +149,7 @@
     ;; This is an account list option. The user can select one
     ;; or (possibly) more accounts from the list of accounts
     ;; in the current file. Values are scheme handles to actual
-    ;; C pointers to accounts. They can be used in conjunction
-    ;; with the wrapped C functions in gnucash/src/g-wrap/gnc.gwp.
+    ;; C pointers to accounts. 
     ;; The #f value indicates that any account will be accepted.
     ;; Instead of a #f values, you could provide a function that
     ;; accepts a list of account values and returns a pair. If
@@ -249,7 +248,7 @@ option like this.")
 
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
-    ;; gnc:print-date
+    ;; gnc-print-date
     (let ((time-string (strftime "%X" (localtime (current-time))))
           (date-string (strftime "%x" (localtime (car date-val))))
           (date-string2 (strftime "%x %X" (localtime (car date2-val))))
@@ -391,7 +390,7 @@ new, totally cool report, consult the mailing list %s.")
 
         ;; Here we print the value of the number option formatted as
         ;; currency. When printing currency values, you should use
-        ;; the function (gnc:amount->string), which is defined in
+        ;; the function (xaccPrintAmount), which is defined in
         ;; report-utilities. This functions will format the number
         ;; appropriately in the current locale. Don't try to format
         ;; it yourself -- it will be wrong in other locales.
@@ -399,9 +398,9 @@ new, totally cool report, consult the mailing list %s.")
          (gnc:html-markup/format
           (_ "The number option formatted as currency is %s.")
           (gnc:html-markup-b
-           (gnc:amount->string
+           (xaccPrintAmount
             (gnc:make-gnc-numeric (inexact->exact num-val) 1)
-            (gnc:default-print-info #f)))))))
+            (gnc-default-print-info #f)))))))
 
       ;; you can add as many objects as you want.  Here's another 
       ;; one.  We'll make a single-column table of the selected list 
@@ -430,8 +429,8 @@ new, totally cool report, consult the mailing list %s.")
       ;; need to do is pass the HREF "gnc-register:account=My
       ;; Account Name" to html-markup-anchor.  The account name
       ;; passed must be the "full" account name that you get from
-      ;; gnc:account-get-full-name.  You should build this url using
-      ;; (gnc:html-build-url ...)
+      ;; gnc-account-get-full-name.  You should build this url using
+      ;; (gnc-build-url ...)
       ;;
       ;; html-markup-anchor takes the link to jump to as its first
       ;; arg and then puts the remaining args in the body of the
@@ -447,12 +446,12 @@ new, totally cool report, consult the mailing list %s.")
              (map 
               (lambda (acct)
                 (gnc:html-markup-anchor 
-		 (gnc:html-build-url gnc:url-type-register
+		 (gnc-build-url URL-TYPE-REGISTER
 				     (string-append "account=" 
-						    (gnc:account-get-full-name
+						    (gnc-account-get-full-name
 						     acct))
-				     #f)
-                 (gnc:account-get-name acct)))
+				     "")
+                 (xaccAccountGetName acct)))
               accounts))))
           (gnc:html-document-add-object!
            document

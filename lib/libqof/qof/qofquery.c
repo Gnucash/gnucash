@@ -1253,7 +1253,7 @@ void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
 }
 
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
-                           const GUID *guid, QofQueryOp op)
+                               const GUID *guid, QofQueryOp op)
 {
   GList *g = NULL;
 

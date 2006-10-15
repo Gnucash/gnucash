@@ -13,8 +13,6 @@
 (use-modules (srfi srfi-19))
 (use-modules (gnucash gnc-module))
 
-(use-modules (g-wrap gw-glib))
-
 (require 'hash-table)
 
 (gnc:module-load "gnucash/engine" 0)
@@ -25,7 +23,7 @@
 (export gnc:get-match-commodity-splits)
 (export gnc:get-match-commodity-splits-sorted)
 (export gnc:get-all-commodity-splits )
-(export gnc:commodity-numeric->string)
+(export gnc-commodity-numeric->string)
 (export gnc:exchange-by-euro-numeric)
 (export gnc:get-commodity-totalavg-prices)
 (export gnc:get-commoditylist-totalavg-prices)
@@ -48,7 +46,7 @@
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:sum-collector-stocks)
-(export gnc:commodity-collector-contains-commodity?)
+(export gnc-commodity-collector-contains-commodity?)
 
 ;; options-utilities.scm 
 
@@ -441,7 +439,7 @@
 (export gnc:html-table-add-labeled-amount-line!)
 (export gnc:html-table-add-account-balances)
 (export gnc:second-html-build-acct-table)
-(export gnc:commodity-table)
+(export gnc-commodity-table)
 (export gnc:uniform-commodity?)
 
 ;; html-table.scm 
@@ -554,7 +552,7 @@
 
 (export list-ref-safe)
 (export list-set-safe!)
-(export gnc:commodity-value->string)
+(export gnc-commodity-value->string)
 (export gnc:monetary->string)
 (export gnc:account-has-shares?)
 (export gnc:account-is-stock?)
@@ -573,7 +571,7 @@
 (export gnc:make-value-collector)
 (export gnc:make-numeric-collector)
 (export gnc:make-commodity-collector)
-(export gnc:commodity-collector-commodity-count)
+(export gnc-commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-comm-balance-at-date)
 (export gnc:accounts-get-balance-helper)
@@ -595,7 +593,7 @@
 (export gnc:report-percent-done)
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)
-(export gnc:commodity-collector-allzero?)
+(export gnc-commodity-collector-allzero?)
 (export gnc:account-get-trans-type-balance-interval)
 (export gnc:account-get-pos-trans-total-interval)
 (export gnc:double-col)
@@ -616,4 +614,4 @@
 (load-from-path "report-utilities.scm")
 (load-from-path "report.scm")
 
-(gnc:hook-add-dangler gnc:*save-options-hook* gnc:save-style-sheet-options)
+(gnc-hook-add-scm-dangler HOOK-SAVE-OPTIONS gnc:save-style-sheet-options)

@@ -33,8 +33,7 @@
 #include <libguile.h>
 #include <sys/stat.h>
 
-#include <g-wrap-wct.h>
-
+#include "swig-runtime.h"
 #include "dialog-options.h"
 #include "file-utils.h"
 #include "gnc-gkeyfile-utils.h"
@@ -151,8 +150,10 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
 
   ptr = scm_call_1(get_editor, report);
   if(ptr != SCM_BOOL_F) {
-    GtkWindow * w = gw_wcp_get_ptr(ptr);
+    #define FUNC_NAME "gtk_window_present"
+    GtkWindow * w = SWIG_MustGetPtr(ptr, SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
     gtk_window_present(w);
+    #undef FUNC_NAME
     return NULL;
   }
   else {
@@ -173,7 +174,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     scm_gc_protect_object(prm->scm_options);
     scm_gc_protect_object(prm->cur_report);
     
-    gnc_build_options_dialog_contents(prm->win, prm->db);
+    gnc_options_dialog_build_contents(prm->win, prm->db);
     gnc_option_db_clean(prm->db);
 
     gnc_options_dialog_set_apply_cb(prm->win, 
@@ -192,9 +193,13 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
 void
 gnc_report_raise_editor(SCM report)
 {
-  SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
-  SCM editor = scm_call_1(get_editor, report);
-  gtk_window_present(gw_wcp_get_ptr(editor));
+    SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
+    SCM editor = scm_call_1(get_editor, report);
+    #define FUNC_NAME "gtk_window_present"
+    GtkWidget *w = SWIG_MustGetPtr(editor,
+                                   SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
+    #undef FUNC_NAME
+    gtk_window_present(GTK_WINDOW(w));
 }
 
 static gboolean
@@ -228,6 +233,7 @@ gnc_html_report_stream_cb (const char *location, char ** data, int *len)
   return ok;
 }
 
+/* TODO: unroll start_editor */
 static gboolean
 gnc_html_options_url_cb (const char *location, const char *label,
                          gboolean new_window, GNCURLResult *result)

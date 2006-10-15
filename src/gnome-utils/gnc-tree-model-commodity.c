@@ -305,7 +305,7 @@ iter_to_string (GtkTreeIter *iter)
 
   string = g_static_private_get (&gtmits_buffer_key);
   if (string == NULL) {
-    string = malloc(ITER_STRING_LEN + 1);
+    string = g_malloc(ITER_STRING_LEN + 1);
     g_static_private_set (&gtmits_buffer_key, string, g_free);
   }
 #else
@@ -1256,7 +1256,7 @@ gnc_tree_model_commodity_event_handler (QofEntity *entity,
 	    return;
 	  }
 
-	  data = malloc(sizeof(*data));
+	  data = g_new0 (remove_data, 1);
 	  data->model = model;
 	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);

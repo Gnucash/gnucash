@@ -49,7 +49,7 @@
      (gnc:make-account-sel-limited-option
       acc-page this-acc
       (N_ "The payable account you wish to examine") "zz"
-      #f #f '(payable)))
+      #f #f (list ACCT-TYPE-PAYABLE)))
 
     (aging-options-generator options)))
 
@@ -83,5 +83,5 @@
 	 debit-string credit-string)
   (payables-report-create-internal account))
 
-(gnc:register-report-hook 'payable #f
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #f
 			  gnc:payables-report-create-internal)

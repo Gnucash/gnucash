@@ -77,7 +77,7 @@
       pagename-price optname-price-commodity
       "e"
       (N_ "Calculate the price of this commodity.")
-      (gnc:locale-default-iso-currency-code)))
+      (gnc-locale-default-iso-currency-code)))
 
     (add-option
      (gnc:make-multichoice-option
@@ -166,8 +166,8 @@
          (document (gnc:make-html-document))
          (chart (gnc:make-html-scatter))
          (currency-accounts 
-          (filter gnc:account-has-shares? (gnc:group-get-subaccounts
-                                           (gnc:get-current-group))))
+          (filter gnc:account-has-shares? (xaccGroupGetSubAccountsSorted
+                                           (gnc-get-current-group))))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -182,12 +182,12 @@
      chart report-title)
     (gnc:html-scatter-set-subtitle!
      chart (string-append
-            (gnc:commodity-get-mnemonic price-commodity)
+            (gnc-commodity-get-mnemonic price-commodity)
             " - "
             (sprintf #f
                      (_ "%s to %s")
-                     (gnc:print-date from-date-tp) 
-                     (gnc:print-date to-date-tp))))
+                     (gnc-print-date from-date-tp)
+                     (gnc-print-date to-date-tp))))
     (gnc:html-scatter-set-width! chart width)
     (gnc:html-scatter-set-height! chart height)
     (gnc:html-scatter-set-marker! chart 
@@ -200,7 +200,7 @@
                                     ((filledsquare) "filled square")))
     (gnc:html-scatter-set-markercolor! chart mcolor)
     (gnc:html-scatter-set-y-axis-label!
-     chart (gnc:commodity-get-mnemonic report-currency))
+     chart (gnc-commodity-get-mnemonic report-currency))
     (gnc:html-scatter-set-x-axis-label!
      chart (case interval
              ((DayDelta) (N_ "Days"))
@@ -210,7 +210,7 @@
              ((YearDelta) (N_ "Years"))))
 
     (if 
-     (not (gnc:commodity-equiv? report-currency price-commodity))
+     (not (gnc-commodity-equiv report-currency price-commodity))
      (begin
        (if (not (null? currency-accounts))
            (set!
@@ -226,10 +226,10 @@
                 price-commodity report-currency))
               ((pricedb)
                (map (lambda (p)
-                      (list (gnc:price-get-time p)
-                            (gnc:price-get-value p)))
-                    (gnc:pricedb-get-prices
-                     (gnc:book-get-pricedb (gnc:get-current-book))
+                      (list (gnc-price-get-time p)
+                            (gnc-price-get-value p)))
+                    (gnc-pricedb-get-prices
+                     (gnc-pricedb-get-db (gnc-get-current-book))
                      price-commodity report-currency)))
               )))
 
@@ -242,14 +242,14 @@
 
        ;; some output
        ;;(warn "data" (map (lambda (x) (list
-       ;;			(gnc:print-date (car x))
-       ;;		(gnc:numeric-to-double (second x))))
+       ;;			(gnc-print-date (car x))
+       ;;		(gnc-numeric-to-double (second x))))
        ;; data))
        
        ;; convert the gnc:numeric's to doubles
        (set! data (map (lambda (x) 
                          (list (first x) 
-                               (gnc:numeric-to-double (second x))))
+                               (gnc-numeric-to-double (second x))))
                        data))
 
        ;; convert the dates to the weird x-axis scaling of the

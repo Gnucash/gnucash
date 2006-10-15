@@ -44,6 +44,7 @@
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
+#include "gfec.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-menu-additions.h" /* FIXME Remove this line*/
@@ -68,7 +69,6 @@
 #include "window-report.h"
 #include "gnc-window.h"
 #include "gnc-gkeyfile-utils.h"
-#include <g-wrap-wct.h>
 
 
 /** GLOBALS *********************************************************/
@@ -195,6 +195,20 @@ gnc_html_price_url_cb (const char *location, const char *label,
   }
 
   return TRUE;
+}
+
+static void
+gnc_main_window_book_open_handler(QofSession *session)
+{
+    gchar *filename, *statefile;
+
+    filename = gnc_html_encode_string(qof_session_get_url(session));
+    if (!filename) return;
+
+    statefile = gnc_build_book_path(filename);
+    g_free(filename);
+    gfec_try_load(statefile);
+    g_free(statefile);
 }
 
 /** Restore all persistent program state.  This function finds the

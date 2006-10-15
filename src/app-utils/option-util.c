@@ -34,7 +34,7 @@
 #include "qof.h"
 #include "guile-mappings.h"
 
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 /* TODO: 
 
@@ -267,23 +267,12 @@ gnc_option_db_find (SCM guile_options)
 
 /* Create an option DB for a particular data type */
 GNCOptionDB *
-gnc_option_db_new_for_type(SCM id_type)
+gnc_option_db_new_for_type(QofIdType id_type)
 {
-  static SCM make_option_proc = SCM_UNDEFINED;
   SCM options;
 
   if (!id_type) return NULL;
-
-  if (make_option_proc == SCM_UNDEFINED) {
-    make_option_proc = scm_c_eval_string("gnc:make-kvp-options");
-    if (!SCM_PROCEDUREP (make_option_proc)) {
-      PERR ("not a procedure\n");
-      make_option_proc = SCM_UNDEFINED;
-      return NULL;
-    }
-  }
-
-  options = scm_call_1 (make_option_proc, id_type);
+  options = gnc_make_kvp_options(id_type);
   return gnc_option_db_new (options);
 }
 
@@ -312,8 +301,7 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
       return;
     }
   }
-
-  scm_slots = gw_wcp_assimilate_ptr (slots, scm_c_eval_string("<gnc:kvp-frame*>"));
+  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
 
   scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
 }
@@ -344,7 +332,7 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots)
     }
   }
 
-  scm_slots = gw_wcp_assimilate_ptr (slots, scm_c_eval_string("<gnc:kvp-frame*>"));
+  scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("p_KvpFrame"), 0);
 
   scm_call_3 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path);
 }
@@ -443,9 +431,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
                                        const char *section,
                                        const char *name)
 {
-  static SCM void_type = SCM_UNDEFINED;
-  static SCM callback_type = SCM_UNDEFINED;
-
   SCM register_proc;
   SCM arg;
   SCM args;
@@ -461,18 +446,6 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
     return SCM_UNDEFINED;
   }
 
-  if(void_type == SCM_UNDEFINED) {
-    void_type = scm_c_eval_string("<gw:void*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(void_type != SCM_UNDEFINED) scm_gc_protect_object(void_type);
-  }
-  if(callback_type == SCM_UNDEFINED) {
-    callback_type = scm_c_eval_string("<gnc:OptionChangeCallback>");
-    /* don't really need this - types are bound globally anyway. */
-    if(callback_type != SCM_UNDEFINED)
-      scm_gc_protect_object(callback_type);
-  }
-
   /* Now build the args list for apply */
   args = SCM_EOL;
 
@@ -480,11 +453,12 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
   args = scm_cons(odb->guile_options, args);
 
   /* next the data */
-  arg = gw_wcp_assimilate_ptr(data, void_type);
+  arg = SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_void"), 0);
   args = scm_cons(arg, args);
 
   /* next the callback */
-  arg = gw_wcp_assimilate_ptr(callback, callback_type);
+  arg = SWIG_NewPointerObj(
+      callback, SWIG_TypeQuery("GNCOptionChangeCallback"), 0);
   args = scm_cons(arg, args);
 
   /* next the name */
@@ -1040,19 +1014,12 @@ gnc_option_get_account_type_list(GNCOption *option)
 {
   SCM pair;
   SCM lst;
-  SCM conv_func;
   GList *type_list = NULL;
 
   initialize_getters();
 
   pair = scm_call_1(getters.option_data, option->guile_option);
   lst = SCM_CDR(pair);
-
-  conv_func = scm_c_eval_string ("gw:enum-<gnc:AccountType>-val->int");
-  if (!SCM_PROCEDUREP (conv_func)) {
-    PERR ("Cannot obtain conv_func");
-    return NULL;
-  }
 
   while (!SCM_NULLP (lst)) {
     GNCAccountType type;
@@ -1061,8 +1028,6 @@ gnc_option_get_account_type_list(GNCOption *option)
     /* Compute this item and the rest of the list */
     item = SCM_CAR (lst);
     lst = SCM_CDR (lst);
-
-    item = scm_call_1(conv_func, item);
 
     if (SCM_FALSEP (scm_integer_p (item))) {
       PERR ("Invalid type");
@@ -1451,7 +1416,7 @@ gnc_option_db_clean(GNCOptionDB *odb)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
+gnc_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
 {
   GNCOptionDB *odb;
   GNCOption *option;
@@ -2815,4 +2780,52 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
   value = scm_cons(val, value);
 
   return value;
+}
+
+/* For now, this is global, just like when it was in guile.
+   But, it should be make per-book. */
+static GHashTable *kvp_registry = NULL;
+
+static void
+init_table(void)
+{
+    if (!kvp_registry)
+        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+/*
+ * the generator should be a procedure that takes one argument,
+ * an options object.  The procedure should fill in the options with
+ * its defined kvp options.
+ */
+void
+gnc_register_kvp_option_generator(QofIdType id_type, SCM generator)
+{
+    GList *list;
+    init_table();
+    list = g_hash_table_lookup(kvp_registry, id_type);
+    list = g_list_prepend(list, generator);
+    g_hash_table_insert(kvp_registry, (gpointer) id_type, list);
+    scm_gc_protect_object(generator);
+}
+
+
+/*  create a new options object for the requested type */
+SCM
+gnc_make_kvp_options(QofIdType id_type)
+{
+    GList *list, *p;
+    SCM gnc_new_options = SCM_UNDEFINED;
+    SCM options = SCM_UNDEFINED;
+
+    init_table();
+    list = g_hash_table_lookup(kvp_registry, id_type);
+    gnc_new_options = scm_c_eval_string("gnc:new-options");
+    options = scm_call_0(gnc_new_options);
+
+    for (p = list; p; p = p->next) {
+        SCM generator = p->data;
+        scm_call_1(generator, options);
+    }
+    return options;
 }

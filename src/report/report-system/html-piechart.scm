@@ -143,7 +143,7 @@
                   (let ((n (read)))
                     (if (number? n) (abs n) 0.0)))))
              ((gnc:gnc-numeric? elt)
-              (abs (gnc:numeric-to-double elt)))
+              (abs (gnc-numeric-to-double elt)))
              (#t 
               0.0)))
      nlist))

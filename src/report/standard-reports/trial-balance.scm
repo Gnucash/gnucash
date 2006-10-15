@@ -16,7 +16,7 @@
 ;;    balance to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc:get-current-book).
+;;    in (gnc-get-current-book).
 ;;    
 ;;    Progress bar functionality is currently mostly broken.
 ;;    
@@ -149,7 +149,7 @@
       (gnc:make-string-option
       (N_ "General") optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance
@@ -180,9 +180,12 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -343,14 +346,15 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-	  (assoc-ref split-up-accounts 'asset))
+          (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
          (liability-accounts
-	  (assoc-ref split-up-accounts 'liability))
-         (equity-accounts
-          (assoc-ref split-up-accounts 'equity))
+          (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
+         (equity-accounts
+          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+
 	 ;; (all-accounts (map (lambda (X) (cadr X)) split-up-accounts))
 	 ;; ^ will not do what we want
 	 (all-accounts
@@ -360,20 +364,20 @@
 	 ;; same for gross adjustment accounts...
 	 (split-up-ga-accounts (gnc:decompose-accountlist ga-accounts))
 	 (all-ga-accounts
-          (append (assoc-ref split-up-ga-accounts 'asset)
-                  (assoc-ref split-up-ga-accounts 'liability)
-                  (assoc-ref split-up-ga-accounts 'equity)
-                  (assoc-ref split-up-ga-accounts 'income)
-                  (assoc-ref split-up-ga-accounts 'expense)))
+          (append (assoc-ref split-up-ga-accounts ACCT-TYPE-ASSET)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-LIABILITY)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-EQUITY)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-ga-accounts ACCT-TYPE-EXPENSE)))
 	 (split-up-is-accounts (gnc:decompose-accountlist is-accounts))
 	 
 	 ;; same for income statement accounts...
 	 (all-is-accounts
-          (append (assoc-ref split-up-is-accounts 'asset)
-                  (assoc-ref split-up-is-accounts 'liability)
-                  (assoc-ref split-up-is-accounts 'equity)
-                  (assoc-ref split-up-is-accounts 'income)
-                  (assoc-ref split-up-is-accounts 'expense)))
+          (append (assoc-ref split-up-is-accounts ACCT-TYPE-ASSET)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-LIABILITY)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-EQUITY)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-is-accounts ACCT-TYPE-EXPENSE)))
 	 
 	 (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
@@ -383,8 +387,8 @@
 	 (period-for (if terse-period?
 			 (string-append " " (_ "for Period"))
 			 (sprintf #f (string-append ", " (_ "%s to %s"))
-				  (gnc:print-date start-date-printable)
-				  (gnc:print-date end-date-tp))
+				  (gnc-print-date start-date-printable)
+				  (gnc-print-date end-date-tp))
 			 ))
 	 )
     
@@ -392,12 +396,12 @@
      doc (if (equal? report-variant 'current)
 	     (sprintf #f (string-append "%s %s %s")
 		      company-name report-title
-		      (gnc:print-date end-date-tp))
+		      (gnc-print-date end-date-tp))
 	     (sprintf #f (string-append "%s %s "
 					(_ "For Period Covering %s to %s"))
 		      company-name report-title
-		      (gnc:print-date start-date-printable)
-		      (gnc:print-date end-date-tp))
+		      (gnc-print-date start-date-printable)
+		      (gnc-print-date end-date-tp))
 	     )
      )
     
@@ -483,7 +487,7 @@
 	  (define (tot-abs-amt-cell amt)
 	    (let* ((neg-amt (gnc:make-commodity-collector))
 		   (rv (report-val amt))
-		   (neg? (gnc:numeric-negative-p
+		   (neg? (gnc-numeric-negative-p
 			  (gnc:gnc-monetary-amount rv)))
 		   (cell #f)
 		   )
@@ -543,7 +547,7 @@
                                                 report-commodity
                                                 weighted-fn)))
 		 
-                 (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	    
             (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	    )
@@ -816,7 +820,7 @@
 	  ;; 
 	  ;; we omit unrealized gains from the balance report, if
 	  ;; zero, since they are not present on normal trial balances
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (let* ((ug-row (+ header-rows
 				 (gnc:html-acct-table-num-rows

@@ -48,7 +48,7 @@
 (define (general-journal-options-generator)
   
   (let* ((options (gnc:report-template-new-options/name regrptname))
-	 (query (gnc:malloc-query))
+	 (query (qof-query-create-for-splits))
 	 )
     
     (define (set-option! section name value)
@@ -60,19 +60,19 @@
     ;; however, may be of issue here. Since I don't know if the
     ;; Register Report properly ignores voided transactions, I'll err
     ;; on the side of safety by excluding them from the query....
-    (gnc:query-set-book query (gnc:get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
-    (gnc:query-set-sort-order query
-			      (list gnc:split-trans gnc:trans-date-posted)
-			      (list gnc:query-default-sort)
+    (qof-query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+    (qof-query-set-sort-order query
+			      (list SPLIT-TRANS TRANS-DATE-POSTED)
+			      (list QUERY-DEFAULT-SORT)
 			      '())
-    (gnc:query-set-sort-increasing query #t #t #t)
+    (qof-query-set-sort-increasing query #t #t #t)
 
-    (gnc:query-add-account-match
+    (xaccQueryAddAccountMatch
      query
-     (gnc:group-get-subaccounts (gnc:book-get-template-group (gnc:get-current-book)))
-     'guid-match-none
-     'query-and)
+     (xaccGroupGetSubAccountsSorted (gnc-book-get-template-group (gnc-get-current-book)))
+     QOF-GUID-MATCH-NONE
+     QOF-QUERY-AND)
 
     ;; set the "__reg" options required by the Register Report...
     (for-each
@@ -80,7 +80,7 @@
        (set-option! "__reg" (car l) (cadr l)))
      ;; One list per option here with: option-name, default-value
      (list
-      (list "query" (gnc:query->scm query)) ;; think this wants an scm...
+      (list "query" (gnc-query2scm query)) ;; think this wants an scm...
       (list "journal" #t)
       (list "double" #t)
       (list "debit-string" (_ "Debit"))

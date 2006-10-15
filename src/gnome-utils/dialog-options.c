@@ -31,7 +31,7 @@
 #endif
 #include <gdk/gdk.h>
 #include <glib/gi18n.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "gnc-tree-model-budget.h" //FIXME?
 #include "gnc-budget.h"
@@ -56,6 +56,7 @@
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
 
+#define FUNC_NAME __FUNCTION__
 /* TODO: clean up "register-stocks" junk
  */
 
@@ -1211,7 +1212,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
 
 /********************************************************************\
- * gnc_build_options_dialog_contents                                *
+ * gnc_options_dialog_build_contents                                *
  *   builds an options dialog given a property box and an options   *
  *   database                                                       *
  *                                                                  *
@@ -1220,7 +1221,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
+gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
                                   GNCOptionDB  *odb)
 {
   GNCOptionSection *section;
@@ -2367,11 +2368,11 @@ gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
   Account *acc = NULL;
 
   if (value != SCM_BOOL_F) {
-    if (!gw_wcp_p(value))
-      scm_misc_error("gnc_option_set_ui_value_account_sel",
-		     "Option Value not a gw:wcp.", value);
+    if (!SWIG_IsPointer(value))
+        scm_misc_error("gnc_option_set_ui_value_account_sel",
+                       "Option Value not a wcp.", value);
       
-    acc = gw_wcp_get_ptr(value);
+    acc = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p_Account"), 4, 0);
   }
 	
   gnc_account_sel_set_account (GNC_ACCOUNT_SEL(widget), acc);
@@ -2522,11 +2523,11 @@ static gboolean gnc_option_set_ui_value_budget(
     GtkTreeIter iter;
 
     if (value != SCM_BOOL_F) {
-        if (!gw_wcp_p(value))
+        if (!SWIG_IsPointer(value))
             scm_misc_error("gnc_option_set_ui_value_budget",
-                           "Option Value not a gw:wcp.", value);
+                           "Option Value not a wcp.", value);
 
-        bgt = gw_wcp_get_ptr(value);
+        bgt = SWIG_MustGetPtr(value, SWIG_TypeQuery("GncBudget *"), 4, 0);
         cb = GTK_COMBO_BOX(widget);
         tm = gtk_combo_box_get_model(cb);
         if (gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt))
@@ -2758,7 +2759,7 @@ gnc_option_get_ui_value_account_list (GNCOption *option, GtkWidget *widget)
   list = gnc_tree_view_account_get_selected_accounts (tree);
 
   /* handover list */
-  result = gnc_glist_to_scm_list(list, scm_c_eval_string("<gnc:Account*>"));
+  result = gnc_glist_to_scm_list(list, "_p_Account");
   g_list_free(list);
   return result;
 }
@@ -2775,7 +2776,7 @@ gnc_option_get_ui_value_account_sel (GNCOption *option, GtkWidget *widget)
   if (!acc)
     return SCM_BOOL_F;
 
-  return gw_wcp_assimilate_ptr(acc, scm_c_eval_string("<gnc:Account*>"));
+  return SWIG_NewPointerObj(acc, SWIG_TypeQuery("_p_Account"), 0);
 }
 
 static SCM
@@ -2795,7 +2796,7 @@ gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
     if (!bgt)
         return SCM_BOOL_F;
 
-    return gw_wcp_assimilate_ptr(bgt, scm_c_eval_string("<gnc:Budget*>"));
+    return SWIG_NewPointerObj(bgt, SWIG_TypeQuery("_p_gnc_budget_private"), 0);
 }
 
 static SCM
@@ -2999,7 +3000,7 @@ GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name)
 
 void gnc_options_ui_initialize (void)
 {
-
+  SWIG_GetModule(NULL); /* Work-around for SWIG bug. */
   //  gnc_options_register_stocks ();
   g_return_if_fail (optionTable == NULL);
   optionTable = g_hash_table_new (g_str_hash, g_str_equal);

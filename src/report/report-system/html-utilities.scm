@@ -30,26 +30,26 @@
       (list)))
 
 (define (gnc:register-guid type guid)
-  (gnc:html-build-url gnc:url-type-register (string-append type guid) #f))
+  (gnc-build-url URL-TYPE-REGISTER (string-append type guid) ""))
 
 (define (gnc:account-anchor-text acct)
-  (gnc:register-guid "acct-guid=" (gnc:account-get-guid acct)))
+  (gnc:register-guid "acct-guid=" (gncAccountGetGUID acct)))
 
 (define (gnc:split-anchor-text split)
-  (gnc:register-guid "split-guid=" (gnc:split-get-guid split)))
+  (gnc:register-guid "split-guid=" (gncSplitGetGUID split)))
 
 (define (gnc:transaction-anchor-text trans)
-  (gnc:register-guid "trans-guid=" (gnc:transaction-get-guid trans)))
+  (gnc:register-guid "trans-guid=" (gncTransGetGUID trans)))
 
 (define (gnc:report-anchor-text report-id)
-  (gnc:html-build-url gnc:url-type-report
+  (gnc-build-url URL-TYPE-REPORT
 		      (string-append "id=" (number->string report-id))
-		      #f))
+		      ""))
 
 (define (gnc:price-anchor-text price)
-  (gnc:html-build-url gnc:url-type-price
-		      (string-append "price-guid=" (gnc:price-get-guid price))
-		      #f))
+  (gnc-build-url URL-TYPE-PRICE
+		      (string-append "price-guid=" (gncPriceGetGUID price))
+		      ""))
 
 ;; Make a new report and return the anchor to it. The new report of
 ;; type 'reportname' will have the option values copied from
@@ -81,11 +81,11 @@
   (gnc:make-html-text (if acct
                           (gnc:html-markup-anchor
                            (gnc:account-anchor-text acct)
-                           (gnc:account-get-name acct))
+                           (xaccAccountGetName acct))
                           "")))
 
 (define (gnc:html-split-anchor split text)
-  (gnc:make-html-text (if (gnc:split-get-account split)
+  (gnc:make-html-text (if (xaccSplitGetAccount split)
                           (gnc:html-markup-anchor
                            (gnc:split-anchor-text split)
                            text)
@@ -102,7 +102,7 @@
                            (gnc:price-anchor-text price)
 			   (if value
 			       value
-			       (gnc:price-get-value price)))
+			       (gnc-price-get-value price)))
                           value)))
 
 (define (gnc:assign-colors num-colors)
@@ -266,13 +266,13 @@
     (if (and (not is-stock-account?)
 	     ;; FIXME: need to check whether we really have only one
 	     ;; foreign currency if is-stock-account==#t.
-	     (gnc:commodity-equiv? my-commodity report-commodity))
+	     (gnc-commodity-equiv my-commodity report-commodity))
 	;; usual case: the account balance in terms of report
 	;; commodity
 	(commodity-row-helper! 
 	 my-name #f
 	 (if balance 
-	     (gnc:commodity-collector-assoc 
+	     (gnc-commodity-collector-assoc
 	      balance report-commodity reverse-balance?)
 	     #f)
 	 main-row-style)
@@ -281,7 +281,7 @@
 	;; (loop below). Is also used if is-stock-account? is true.
 	(let ((my-balance 
 	       (if balance 
-		   (gnc:commodity-collector-assoc 
+		   (gnc-commodity-collector-assoc
 		    balance my-commodity reverse-balance?) #f)))
 	  (set! already-printed my-commodity)
 	  (commodity-row-helper! 
@@ -294,12 +294,12 @@
     ;; balance and its corresponding value in the
     ;; report-currency. One row for each non-report-currency. 
     (if (and balance (not is-stock-account?))
-	(gnc:commodity-collector-map
+	(gnc-commodity-collector-map
 	 balance 
 	 (lambda (curr val)
-	   (if (or (gnc:commodity-equiv? curr report-commodity)
+	   (if (or (gnc-commodity-equiv curr report-commodity)
 		   (and already-printed
-			(gnc:commodity-equiv? curr already-printed)))
+			(gnc-commodity-equiv curr already-printed)))
 	       '()
 	       (let ((bal 
 		      (if reverse-balance?
@@ -428,8 +428,8 @@
   (let ((table (gnc:make-html-table))
 	(work-to-do 0)
 	(work-done 0)
-	(topl-accounts (gnc:group-get-account-list 
-			(gnc:get-current-group))))
+	(topl-accounts (xaccGroupGetAccountListSorted
+			(gnc-get-current-group))))
 
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
@@ -456,7 +456,7 @@
       (let ((this-collector (my-get-balance-nosub account)))
 	(for-each 
 	 (lambda (x) (if x 
-			 (gnc:commodity-collector-merge 
+			 (gnc-commodity-collector-merge
 			  this-collector x )))
 	 (gnc:group-map-all-accounts
 	  (lambda (a)
@@ -464,7 +464,7 @@
 	    ;; account a is shown, i.e. (use-acct? a) == #t.
 	    (and (use-acct? a)
 		 (my-get-balance-nosub a)))
-	  (gnc:account-get-children account)))
+	  (xaccAccountGetChildren account)))
 	this-collector))
 
     ;; Use this account in the account hierarchy? Check against the
@@ -474,7 +474,7 @@
     (define (use-acct? a)
       (or (member a accounts)
 	  (and show-subaccts? 
-	       (let ((parent (gnc:account-get-parent-account a)))
+	       (let ((parent (xaccAccountGetParentAccount a)))
 		 (and parent
 		      (use-acct? parent))))))
 
@@ -482,7 +482,7 @@
     ;; preference.
     (define (show-acct? a)
       (and (or show-zero-entries?
-	       (not (gnc:commodity-collector-allzero? 
+	       (not (gnc-commodity-collector-allzero?
 		     (my-get-balance a))))
 	   (use-acct? a)))
 
@@ -491,8 +491,8 @@
     (define (sort-fn accts)
       (sort accts
 	    (lambda (a b) 
-	      (string<? (gnc:account-get-code a)
-			(gnc:account-get-code b)))))
+	      (string<? (xaccAccountGetCode a)
+			(xaccAccountGetCode b)))))
 
     ;; Remove the last appended row iff *all* its fields are empty
     ;; (==#f) or have an html-table-cell which in turn is empty
@@ -537,9 +537,9 @@
       (if show-other-curr?
 	  (add-commodity-rows! current-depth 
 			       (gnc:html-account-anchor acct)
-			       (gnc:account-get-commodity acct) 
+			       (xaccAccountGetCommodity acct)
 			       (my-get-balance acct)
-			       (gnc:account-reverse-balance? acct)
+			       (gnc-reverse-balance acct)
 			       (gnc:account-has-shares? acct)
 			       row-style row-style
 			       #f #f)
@@ -548,7 +548,7 @@
 	   (gnc:html-account-anchor acct)
 	   (gnc:sum-collector-commodity (my-get-balance acct) 
 					report-commodity exchange-fn)
-	   (gnc:account-reverse-balance? acct)
+	   (gnc-reverse-balance acct)
 	   row-style
 	       #f #f))))
   
@@ -627,9 +627,9 @@
 	       ;; includes the appropriate subaccounts.)
 	       (let ((subbalance (gnc:accounts-get-balance-helper 
 				  subaccounts my-get-balance 
-				  gnc:account-reverse-balance?)))
+				  gnc-reverse-balance)))
 		 (if thisbalance 
-		     (gnc:commodity-collector-merge subbalance thisbalance))
+		     (gnc-commodity-collector-merge subbalance thisbalance))
 		 subbalance)
 	       heading-style
 	       #t #f)))))
@@ -662,7 +662,7 @@
 			       subaccts
 			       (gnc:accounts-get-balance-helper 
 				(list acct) my-get-balance-nosub 
-				gnc:account-reverse-balance?)
+				gnc-reverse-balance)
 			       show-parent-total?))))
 	   (sort-fn accnts)))))
 
@@ -751,18 +751,18 @@
 		 ((exchanged 
 		   (exchange-fn 
 		    (gnc:make-gnc-monetary commodity 
-					   (gnc:numeric-create 1000 1))
+					   (gnc-numeric-create 1000 1))
 		    common-commodity)))
 	       (gnc:html-table-append-row! 
 		table
 		(list 
 		 (gnc:make-gnc-monetary commodity 
-					(gnc:numeric-create 1 1))
+					(gnc-numeric-create 1 1))
 		 (gnc:make-gnc-monetary
 		  common-commodity
-		  (gnc:numeric-div
+		  (gnc-numeric-div
 		   (gnc:gnc-monetary-amount exchanged)
-		   (gnc:numeric-create 1000 1)
+		   (gnc-numeric-create 1000 1)
 		   GNC-DENOM-AUTO 
 		   (logior (GNC-DENOM-SIGFIGS 6) 
 			   GNC-RND-ROUND)))))))
@@ -804,10 +804,10 @@
 	 p
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
-	   (gnc:html-build-url gnc:url-type-options
+	   (gnc-build-url URL-TYPE-OPTIONS
 			       (string-append "report-id="
 					      (sprintf #f "%a" report-id))
-			       #f)
+			       "")
 	   (_ "Edit report options")))))
     p))
 
@@ -828,10 +828,10 @@
 	 p 
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
-	   (gnc:html-build-url gnc:url-type-options
+	   (gnc-build-url URL-TYPE-OPTIONS
 			       (string-append "report-id="
 					      (sprintf #f "%a" report-id))
-			       #f)
+			       "")
 	   (_ "Edit report options")))))
     p))
 
@@ -850,9 +850,9 @@
 	 p 
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
-	   (gnc:html-build-url gnc:url-type-options
+	   (gnc-build-url URL-TYPE-OPTIONS
 			       (string-append "report-id="
 					      (sprintf #f "%a" report-id))
-			       #f)
+			       "")
 	   (_ "Edit report options")))))
     p))

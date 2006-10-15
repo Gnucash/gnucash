@@ -295,7 +295,8 @@ xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
 
 void
 xaccQueryAddStringMatch (Query* q, const char *matchstring,
-			 int case_sens, int use_regexp, QofQueryOp op,
+			 gboolean case_sens, gboolean use_regexp,
+                         QofQueryOp op,
 			 const char * path, ...)
 {
   QofQueryPredData *pred_data;
@@ -353,8 +354,8 @@ xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
 
 void
 xaccQueryAddDateMatchTS (Query * q, 
-			 int use_start, Timespec sts, 
-			 int use_end, Timespec ets,
+			 gboolean use_start, Timespec sts,
+			 gboolean use_end, Timespec ets,
 			 QofQueryOp op)
 {
   Query *tmp_q = NULL;
@@ -425,8 +426,8 @@ xaccQueryGetDateMatchTS (Query * q,
 
 void
 xaccQueryAddDateMatch(Query * q, 
-                      int use_start, int sday, int smonth, int syear,
-                      int use_end, int eday, int emonth, int eyear,
+                      gboolean use_start, int sday, int smonth, int syear,
+                      gboolean use_end, int eday, int emonth, int eyear,
                       QofQueryOp op) 
 {
   /* gcc -O3 will auto-inline this function, avoiding a call overhead */
@@ -444,9 +445,9 @@ xaccQueryAddDateMatch(Query * q,
 
 void
 xaccQueryAddDateMatchTT(Query * q, 
-                        int    use_start,
+                        gboolean use_start,
                         time_t stt,
-                        int    use_end,
+                        gboolean use_end,
                         time_t ett,
                         QofQueryOp op) 
 {
@@ -533,22 +534,6 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
 }
 
 void
-xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
-			 GUID guid, QofQueryOp op)
-{
-  GSList *params = NULL;
-  GList *node;
-
-  for (node = param_list; node; node = node->next)
-    params = g_slist_prepend (params, node->data);
-
-  params = g_slist_reverse (params);
-  g_list_free (param_list);
-
-  qof_query_add_guid_match (q, params, &guid, op);
-}
-
-void
 xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
 		     QofQueryCompare how, QofIdType id_type,
 		     QofQueryOp op)
@@ -625,5 +610,69 @@ xaccQueryGetLatestDateFound(Query * q)
   }
   return latest;
 }
+
+void
+xaccQueryAddDescriptionMatch(Query *q, const char *m, gboolean c, gboolean r,
+                             QofQueryOp o)
+{
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
+                             TRANS_DESCRIPTION, NULL);
+}
+
+void
+xaccQueryAddNumberMatch(Query *q, const char *m, gboolean c, gboolean r,
+                        QofQueryOp o)
+{
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_TRANS,
+                             TRANS_NUM, NULL);
+}
+
+void
+xaccQueryAddActionMatch(Query *q, const char *m, gboolean c, gboolean r,
+                        QofQueryOp o)
+{
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_ACTION, NULL);
+}
+
+void
+xaccQueryAddMemoMatch(Query *q, const char *m, gboolean c, gboolean r,
+                      QofQueryOp o)
+{
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (o), SPLIT_MEMO, NULL);
+}
+
+void
+xaccQueryAddValueMatch(Query *q, gnc_numeric amt, QofNumericMatch sgn,
+                       QofQueryCompare how, QofQueryOp op)
+{
+    xaccQueryAddNumericMatch ((q), (amt), (sgn), (how), (op),
+                              SPLIT_VALUE, NULL);
+}
+
+void
+xaccQueryAddSharePriceMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+                            QofQueryOp op)
+{
+    xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
+                              SPLIT_SHARE_PRICE, NULL);
+}
+
+void
+xaccQueryAddSharesMatch(Query *q, gnc_numeric amt, QofQueryCompare how,
+                        QofQueryOp op)
+{
+    xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
+                              SPLIT_AMOUNT, NULL);
+}
+
+void
+xaccQueryAddBalanceMatch(Query *q, QofQueryCompare bal, QofQueryOp op)
+{
+    xaccQueryAddNumericMatch(
+        (q), gnc_numeric_zero(), QOF_NUMERIC_MATCH_ANY,
+        ((bal) ? QOF_COMPARE_EQUAL : QOF_COMPARE_NEQ), (op),
+        SPLIT_TRANS, TRANS_IMBALANCE, NULL);
+}
+
 
 /* ======================== END OF FILE ======================= */

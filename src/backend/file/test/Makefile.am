@@ -62,7 +62,7 @@ test_string_converters_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   test-string-converters.c
-  
+
 test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
@@ -181,11 +181,9 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --gnc-module-dir ${top_srcdir}/src/engine \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --library-dir    ${top_builddir}/src/backend/file \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --gnc-module-dir ${top_srcdir}/src/engine
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
@@ -219,8 +217,6 @@ noinst_HEADERS = test-file-stuff.h
 LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/gnc-module/libgncmodule.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
-        ${top_builddir}/src/engine/libgw-engine.la \
-        ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libcore-utils.la \
         ./libgnc-test-file-stuff.la \

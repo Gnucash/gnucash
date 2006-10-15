@@ -50,6 +50,9 @@
 #include "gnc-plugin-file-history.h"
 #include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
+#include "gnc-session.h"
+#include "engine-helpers.h"
+#include "swig-runtime.h"
 
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
@@ -103,28 +106,6 @@ envt_override()
         help_path = path;
 }
 
-static int error_in_scm_eval = FALSE;
-
-static void
-error_handler(const char *msg)
-{
-    g_warning(msg);
-    error_in_scm_eval = TRUE;
-}
-
-static gboolean
-try_load(gchar *fn)
-{
-    g_message("looking for %s", fn);
-    if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
-        g_message("trying to load %s", fn);
-        error_in_scm_eval = FALSE;
-        gfec_eval_file(fn, error_handler);
-        return !error_in_scm_eval;
-    }
-    return FALSE;
-}
-
 static gboolean
 try_load_config_array(const gchar *fns[])
 {
@@ -133,7 +114,7 @@ try_load_config_array(const gchar *fns[])
 
     for (i = 0; fns[i]; i++) {
         filename = gnc_build_dotgnucash_path(fns[i]);
-        if (try_load(filename)) {
+        if (gfec_try_load(filename)) {
             g_free(filename);
             return TRUE;
         }
@@ -160,7 +141,7 @@ load_system_config(void)
     update_message("loading system configuration");
     /* FIXME: use runtime paths from gnc-path.c here */
     system_config = g_build_filename(config_path, "config", NULL);
-    is_system_config_loaded = try_load(system_config);
+    is_system_config_loaded = gfec_try_load(system_config);
     g_free(system_config);
 }
 
@@ -394,8 +375,9 @@ load_gnucash_modules()
 static void
 inner_main_add_price_quotes(void *closure, int argc, char **argv)
 {
-    SCM mod, add_quotes, scm_filename, scm_result;
-    
+    SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
+    QofSession *session;
+
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
@@ -404,22 +386,42 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     qof_event_suspend();
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
-    if (gnc_quote_source_fq_installed()) {
-      add_quotes = scm_c_eval_string("gnc:add-quotes-to-book-at-url");
-      scm_filename = scm_makfrom0str (add_quotes_file);
-      scm_result = scm_call_1(add_quotes, scm_filename);
+    if (!gnc_quote_source_fq_installed()) {
+        g_print(_("No quotes retrieved. Finance::Quote isn't "
+                  "installed properly.\n"));
+        goto fail;
+    }
 
-      if (!SCM_NFALSEP(scm_result)) {
+    add_quotes = scm_c_eval_string("gnc:book-add-quotes");
+    session = gnc_get_current_session();
+    if (!session) goto fail;
+
+    qof_session_begin(session, add_quotes_file, FALSE, FALSE);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_load(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    scm_book = gnc_book_to_scm(qof_session_get_book(session));
+    scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
+
+    qof_session_save(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_destroy(session);
+    if (!SCM_NFALSEP(scm_result)) {
         g_error("Failed to add quotes to %s.", add_quotes_file);
-        gnc_shutdown(1);
-      }
-    } else {
-      g_print(_("No quotes retrieved. Finance::Quote isn't installed properly.\n"));
+        goto fail;
     }
 
     qof_event_resume();
     gnc_shutdown(0);
     return;
+ fail:
+    if (session && qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        g_error("Session Error: %s", qof_session_get_error_message(session));
+    qof_event_resume();
+    gnc_shutdown(1);
 }
 
 static char *

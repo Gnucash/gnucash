@@ -22,7 +22,7 @@
 ;;    sheet to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc:get-current-book).
+;;    in (gnc-get-current-book).
 ;;    
 ;;    Line & column alignments still do not conform with
 ;;    textbook accounting practice (they're close though!).
@@ -156,7 +156,7 @@
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
@@ -177,9 +177,12 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -337,14 +340,14 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-	  (assoc-ref split-up-accounts 'asset))
+	  (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
          (liability-accounts
-	  (assoc-ref split-up-accounts 'liability))
-         (equity-accounts
-          (assoc-ref split-up-accounts 'equity))
+	  (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
+         (equity-accounts
+          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
 	 
          (doc (gnc:make-html-document))
 	 ;; this can occasionally put extra (blank) columns in our
@@ -366,7 +369,7 @@
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
-			(gnc:numeric-negative-p
+			(gnc-numeric-negative-p
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
@@ -406,7 +409,7 @@
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc:print-date date-tp))
+			(gnc-print-date date-tp))
      )
     
     (if (null? accounts)
@@ -520,7 +523,7 @@
                                                 report-commodity
                                                 weighted-fn)))
 		 
-                 (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	    
             (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	    )
@@ -641,13 +644,13 @@
 	  ;; we omit retianed earnings & unrealized gains
 	  ;; from the balance report, if zero, since they
 	  ;; are not present on normal balance sheets
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     retained-earnings))
 	       (add-subtotal-line right-table
 				  (_ "Retained Earnings")
 				  (_ "Retained Losses")
 				  retained-earnings))
-	  (and (not (gnc:commodity-collector-allzero?
+	  (and (not (gnc-commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (add-subtotal-line right-table
 				  (_ "Unrealized Gains")

@@ -1415,7 +1415,7 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
  * list commodities in a give namespace 
  ********************************************************************/
 
-GList * 
+CommodityList *
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * namespace) 
 {
@@ -1460,7 +1460,7 @@ get_quotables_helper2 (gnc_commodity *comm, gpointer data)
   return TRUE;
 }
 
-GList * 
+CommodityList *
 gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
 {
   gnc_commodity_namespace * ns = NULL;

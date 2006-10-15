@@ -38,13 +38,7 @@ libgncmod_report_system_LTX_gnc_module_description(void) {
   return g_strdup("Core components of GnuCash report generation system");
 }
 
-static void
-lmod(char * mn) 
-{
-  char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  scm_c_eval_string(form);
-  g_free(form);
-}
+extern SCM scm_init_sw_report_system_module(void);
 
 int
 libgncmod_report_system_LTX_gnc_module_init(int refcount) {
@@ -56,8 +50,9 @@ libgncmod_report_system_LTX_gnc_module_init(int refcount) {
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;
   }
+  scm_init_sw_report_system_module();
   
-  lmod("(gnucash report report-system)");
+  scm_c_eval_string("(use-modules (gnucash report report-system))");
 
   /* if this is the first time the module's being loaded, initialize
    * the relative date system */

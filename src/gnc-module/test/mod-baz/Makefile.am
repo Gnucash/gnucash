@@ -3,7 +3,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnc-module/test/mod-foo \
   ${GLIB_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
 
 PWD := $(shell pwd)
@@ -13,30 +12,30 @@ checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
 libbaz_la_SOURCES = baz.c
 libbaz_la_LIBADD = ../mod-foo/libfoo.la
 
+# Make swig-baz.c for dist. It is an automatic dependency
+# of gnc-mod-baz.c
 noinst_HEADERS = \
-  baz.h
+  baz.h \
+  swig-baz.c
 
 libgncmodbaz_la_SOURCES = gnc-mod-baz.c
-nodist_libgncmodbaz_la_SOURCES = baz-gwrap.c
 
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
   ../../libgncmodule.la \
-  $(G_WRAP_LINK_ARGS) \
   $(GLIB_LIBS)
 
+if BUILDING_FROM_SVN
+swig-baz.c: baz.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
+
 EXTRA_DIST = \
-  baz-gwrap.scm \
+  baz.i \
   gnucash/baz.scm
 
-baz-gwrap.c baz-gwrap.h: baz-gwrap.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"${srcdir}/baz-gwrap.scm\") \
-	  (gw:generate-wrapset \"baz-gwrap\")"
-
-BUILT_SOURCES = baz-gwrap.c baz-gwrap.h
-CLEANFILES = $(BUILT_SOURCES) baz-gwrap.html
+BUILT_SOURCES = swig-baz.c
+MAINTAINERCLEANFILES = swig-baz.c
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

@@ -69,7 +69,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \

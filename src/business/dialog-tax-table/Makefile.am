@@ -1,6 +1,6 @@
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la libgw-dialog-tax-table.la
+pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -17,10 +17,10 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
 
 libgncmod_dialog_tax_table_la_SOURCES = \
+  swig-dialog-tax-table.c \
   gncmod-dialog-tax-table.c \
   dialog-tax-table.c
 
@@ -36,22 +36,14 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
-nodist_libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
-
-libgw_dialog_tax_table_la_LIBADD = \
-  libgncmod-dialog-tax-table.la \
-  ${G_WRAP_LINK_ARGS}
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-dialog-tax-table-spec.scm
-nodist_gwmod_DATA = \
-  gw-dialog-tax-table.scm
+if BUILDING_FROM_SVN
+swig-dialog-tax-table.c: dialog-tax-table.i ${noinst_HEADERS}
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = dialog-tax-table.scm
@@ -60,21 +52,19 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = tax-tables.glade
 
 EXTRA_DIST = \
+  dialog-tax-table.i \
   ${glade_DATA} \
-  ${gwmod_DATA} \
   ${gncmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
-# for compline
-SCM_FILE_LINKS = gw-dialog-tax-table-spec.scm
 # for running
-SCM_FILE_LINKS += ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncmod_DATA}
 endif
 
 .scm-links: 
-	$(RM) -rf gnucash g-wrapped
-	mkdir -p  gnucash g-wrapped
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
@@ -83,29 +73,6 @@ endif
 	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-clean-local:
-	$(RM) -rf gnucash g-wrapped
-
-.INTERMEDIATE: gwrap-files
-
-gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
-  gwrap-files
-
-gwrap-files: \
-  .scm-links gw-dialog-tax-table-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (set! %load-path (cons \"../business-core\" %load-path)) \
-	 (set! %load-path (cons \"../../engine\" %load-path)) \
-	 (set! %load-path (cons \"../../app-utils\" %load-path)) \
-	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \
-	 (primitive-load \"./gw-dialog-tax-table-spec.scm\") \
-	 (gw:generate-wrapset \"gw-dialog-tax-table\")"
-	touch $@
-	( cd g-wrapped; $(LN_S) -f ../gw-*.scm . )
-
-BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
-	gw-dialog-tax-table.h
-CLEANFILES = $(BUILT_SOURCES) .scm-links \
-	${SCM_FILE_LINKS} gw-dialog-tax-table.html
+noinst_DATA = .scm-links
+CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-dialog-tax-table.c

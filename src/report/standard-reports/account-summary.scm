@@ -24,7 +24,7 @@
 ;;    summary to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc:get-current-book).
+;;    in (gnc-get-current-book).
 ;;    
 ;;    The variables in this code could use more consistent naming.
 ;;    
@@ -138,7 +138,7 @@
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
 
     ;; date at which to report balance
@@ -153,9 +153,12 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -321,7 +324,7 @@
     
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc:print-date date-tp))
+			(gnc-print-date date-tp))
      )
     
     (if (null? accounts)
@@ -376,11 +379,11 @@
 	  ;; accounts)...
 	  (split-up-accounts (gnc:decompose-accountlist accounts))
 	  (all-accounts
-	   (append (assoc-ref split-up-accounts 'income)
-		   (assoc-ref split-up-accounts 'expense)
-		   (assoc-ref split-up-accounts 'asset)
-		   (assoc-ref split-up-accounts 'liability)
-		   (assoc-ref split-up-accounts 'equity)
+	   (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+		   (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)
+		   (assoc-ref split-up-accounts ACCT-TYPE-ASSET)
+		   (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY)
+		   (assoc-ref split-up-accounts ACCT-TYPE-EQUITY)
 		   ))
 	  ;; (all-accounts (map (lambda (X) (cadr X)) split-up-accounts))
 	  ;; ^ will not do what we want
@@ -489,8 +492,8 @@
                 report-commodity exchange-fn 
                 (append-map
                  (lambda (a)
-                   (gnc:group-get-subaccounts
-                    (gnc:account-get-children a)))
+                   (xaccGroupGetSubAccountsSorted
+                    (xaccAccountGetChildren a)))
                  accounts))))
 	  )
 	)

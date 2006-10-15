@@ -112,7 +112,7 @@
       (gnc:make-string-option
       (N_ "General") optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
@@ -129,9 +129,12 @@
       opthelp-accounts
       (lambda ()
 	(gnc:filter-accountlist-type 
-	 '(bank cash credit asset liability stock mutual-fund currency
-		payable receivable equity income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+               ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+               ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+               ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     
     ;; all about currencies
@@ -237,14 +240,15 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-          (assoc-ref split-up-accounts 'asset))
+          (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
          (liability-accounts
-          (assoc-ref split-up-accounts 'liability))
+          (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
          (equity-accounts
-          (assoc-ref split-up-accounts 'equity))
+          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+
 	 ;; N.B.: equity-accounts will also contain drawing accounts
 	 ;; these must still be split-out and itemized separately
 	 (capital-accounts #f)
@@ -276,8 +280,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc:print-date start-date-printable)
-                  (gnc:print-date end-date-tp)))
+                  (gnc-print-date start-date-printable)
+                  (gnc-print-date end-date-tp)))
     
     (if (null? accounts)
 	
@@ -340,8 +344,8 @@
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc:print-date start-date-printable)
-					(gnc:print-date end-date-tp))
+					(gnc-print-date start-date-printable)
+					(gnc-print-date end-date-tp))
 			       ))
 	       )
 	  
@@ -351,7 +355,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc:numeric-negative-p
+			      (gnc-numeric-negative-p
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
@@ -367,7 +371,7 @@
 		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
 			     bal)
 			(and show-fcur?
-			     (gnc:commodity-table
+			     (gnc-commodity-table
 			      pos-bal report-commodity exchange-fn))
 			bal
 			))
@@ -409,7 +413,7 @@
 						  report-commodity
 						  weighted-fn)))
 		   
-		   (unrealized-gain (gnc:numeric-sub-fixed value cost)))
+		   (unrealized-gain (gnc-numeric-sub-fixed value cost)))
 	      
 	      (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	      unrealized-gain-collector
@@ -582,7 +586,7 @@
 	  (report-line
 	   build-table
 	   (string-append (_ "Capital") ", "
-			  (gnc:print-date start-date-printable))
+			  (gnc-print-date start-date-printable))
 	   #f start-total-equity
 	   1 start-exchange-fn #f "primary-subheading"
 	   )
@@ -607,7 +611,7 @@
 	   withdrawals
 	   0 end-exchange-fn #f #f
 	   )
-	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
+	  (or (gnc-commodity-collector-allzero? net-unrealized-gains)
 	      (report-line
 	       build-table 
 	       (_ "Unrealized Gains")
@@ -626,7 +630,7 @@
 	  (report-line
 	   build-table 
 	   (string-append (_ "Capital") ", "
-			  (gnc:print-date end-date-tp))
+			  (gnc-print-date end-date-tp))
 	   #f
 	   end-total-equity
 	   1 end-exchange-fn #f "primary-subheading"
@@ -639,8 +643,8 @@
           (and show-rates?
 	       (let* ((curr-tbl (gnc:make-html-table))
 		      (headers (list
-				(gnc:print-date start-date-printable)
-				(gnc:print-date end-date-tp)
+				(gnc-print-date start-date-printable)
+				(gnc-print-date end-date-tp)
 				)
 			       )
 		      (then (gnc:html-make-exchangerates

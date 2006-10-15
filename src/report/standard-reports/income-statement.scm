@@ -10,7 +10,7 @@
 ;;    statement to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
-;;    in (gnc:get-current-book).
+;;    in (gnc-get-current-book).
 ;;    
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
@@ -139,7 +139,7 @@
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
       "b" opthelp-party-name ""))
-    ;; this should default to company name in (gnc:get-current-book)
+    ;; this should default to company name in (gnc-get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
@@ -157,8 +157,8 @@
       (lambda ()
 	(gnc:filter-accountlist-type
 	 ;; select, by default, only income and expense accounts
-	 '(income expense)
-	 (gnc:group-get-subaccounts (gnc:get-current-group))))
+	 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -334,11 +334,11 @@
 	 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
-	 (revenue-accounts (assoc-ref split-up-accounts 'income))
-	 (expense-accounts (assoc-ref split-up-accounts 'expense))
+	 (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
+	 (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
          (income-expense-accounts
-          (append (assoc-ref split-up-accounts 'income)
-                  (assoc-ref split-up-accounts 'expense)))
+          (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
+                  (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
 	 
          (doc (gnc:make-html-document))
 	 ;; this can occasionally put extra (blank) columns in our
@@ -360,7 +360,7 @@
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
-			(gnc:numeric-negative-p
+			(gnc-numeric-negative-p
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
@@ -397,8 +397,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc:print-date start-date-printable)
-                  (gnc:print-date end-date-tp)))
+                  (gnc-print-date start-date-printable)
+                  (gnc-print-date end-date-tp)))
     
     (if (null? accounts)
 	
@@ -431,8 +431,8 @@
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc:print-date start-date-printable)
-					(gnc:print-date end-date-tp))
+					(gnc-print-date start-date-printable)
+					(gnc-print-date end-date-tp))
 			       )
 			   )
 	       )
@@ -443,7 +443,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc:numeric-negative-p
+			      (gnc-numeric-negative-p
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
@@ -459,7 +459,7 @@
 		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
 			     bal)
 			(and show-fcur?
-			     (gnc:commodity-table
+			     (gnc-commodity-table
 			      pos-bal report-commodity exchange-fn))
 			bal
 			))

@@ -175,9 +175,6 @@ void gnc_html_set_flyover_cb(gnc_html * html, GncHTMLFlyoverCB newwin_cb,
 void gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
                             gpointer data);
 
-GtkWidget   * gnc_html_get_container_widget(gnc_html * html);
-GtkWidget   * gnc_html_get_html_widget(gnc_html * html); 
-
 /* Initialize the html subsystem */
 void gnc_html_initialize (void);
 

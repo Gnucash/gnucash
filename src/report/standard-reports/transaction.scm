@@ -71,16 +71,16 @@
                            corresponding-acc-code))
 
 (define (split-account-full-name-same-p a b)
-  (= (gnc:split-compare-account-full-names a b) 0))
+  (= (xaccSplitCompareAccountFullNames a b) 0))
 
 (define (split-account-code-same-p a b)
-  (= (gnc:split-compare-account-codes a b) 0))
+  (= (xaccSplitCompareAccountCodes a b) 0))
 
 (define (split-same-corr-account-full-name-p a b)
-  (= (gnc:split-compare-other-account-full-names a b) 0))
+  (= (xaccSplitCompareOtherAccountFullNames a b) 0))
 
 (define (split-same-corr-account-code-p a b)
-  (= (gnc:split-compare-other-account-codes a b) 0))
+  (= (xaccSplitCompareOtherAccountCodes a b) 0))
 
 (define (timepair-same-year tp-a tp-b)
   (= (gnc:timepair-get-year tp-a)
@@ -97,18 +97,18 @@
           (gnc:timepair-get-month tp-b))))
 
 (define (split-same-month-p a b)
-  (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
-        (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
+  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
     (timepair-same-month tp-a tp-b)))
 
 (define (split-same-quarter-p a b)
-  (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
-        (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
+  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
     (timepair-same-quarter tp-a tp-b)))
 
 (define (split-same-year-p a b)
-  (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
-        (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
+  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
     (timepair-same-year tp-a tp-b)))
 
 (define (set-last-row-style! table tag . rest)
@@ -134,20 +134,20 @@
         (string-append 
            ;; display account code?
            (if show-account-code
-                 (string-append (gnc:account-get-code account) " ")
+                 (string-append (xaccAccountGetCode account) " ")
                  "")
            ;; display account name?
            (if show-account-name
                  ;; display full account name?
                  (if show-account-full-name
-                      (gnc:account-get-full-name account)
-                      (gnc:account-get-name account))
+                      (gnc-account-get-full-name account)
+                      (xaccAccountGetName account))
                  ""))))
 
 ;; render an account subheading - column-vector determines what is displayed
 (define (render-account-subheading
          split table width subheading-style column-vector)
-  (let ((account (gnc:split-get-account split)))
+  (let ((account (xaccSplitGetAccount split)))
     (add-subheading-row (gnc:make-html-text
                          (gnc:html-markup-anchor
                            (gnc:account-anchor-text account)
@@ -159,7 +159,7 @@
 
 (define (render-corresponding-account-subheading 
          split table width subheading-style column-vector)
-  (let ((account (gnc:split-get-account (gnc:split-get-other-split split))))
+  (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
     (add-subheading-row (gnc:make-html-text
                          (gnc:html-markup-anchor
                            (gnc:account-anchor-text account)
@@ -172,22 +172,22 @@
 (define (render-month-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-month-year-string
                       (gnc:timepair->date 
-                       (gnc:transaction-get-date-posted
-                        (gnc:split-get-parent split))))
+                       (gnc-transaction-get-date-posted
+                        (xaccSplitGetParent split))))
                      table width subheading-style))
 
 (define (render-quarter-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-quarter-year-string 
                       (gnc:timepair->date 
-                       (gnc:transaction-get-date-posted
-                        (gnc:split-get-parent split))))
+                       (gnc-transaction-get-date-posted
+                        (xaccSplitGetParent split))))
                      table width subheading-style))
 
 (define (render-year-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-year-string 
                       (gnc:timepair->date 
-                       (gnc:transaction-get-date-posted
-                        (gnc:split-get-parent split))))
+                       (gnc-transaction-get-date-posted
+                        (xaccSplitGetParent split))))
                       table width subheading-style))
 
 
@@ -227,7 +227,7 @@
 (define (render-account-subtotal 
          table width split total-collector subtotal-style column-vector export?)
     (add-subtotal-row table width 
-                      (total-string (account-namestring (gnc:split-get-account split)
+                      (total-string (account-namestring (xaccSplitGetAccount split)
                                                         (used-sort-account-code      column-vector)
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
@@ -236,8 +236,8 @@
 (define (render-corresponding-account-subtotal
          table width split total-collector subtotal-style column-vector export?)
     (add-subtotal-row table width
-                      (total-string (account-namestring (gnc:split-get-account 
-                                                          (gnc:split-get-other-split split))
+                      (total-string (account-namestring (xaccSplitGetAccount
+                                                          (xaccSplitGetOtherSplit split))
                                                         (used-sort-account-code      column-vector)
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
@@ -245,8 +245,8 @@
 
 (define (render-month-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
-                                 (gnc:split-get-parent split)))))
+  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+                                 (xaccSplitGetParent split)))))
     (add-subtotal-row table width 
                       (total-string (gnc:date-get-month-year-string tm))
                       total-collector subtotal-style export?)))
@@ -254,16 +254,16 @@
 
 (define (render-quarter-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
-                                 (gnc:split-get-parent split)))))
+  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+                                 (xaccSplitGetParent split)))))
     (add-subtotal-row table width 
                       (total-string (gnc:date-get-quarter-year-string tm))
                      total-collector subtotal-style export?)))
 
 (define (render-year-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
-                                 (gnc:split-get-parent split)))))
+  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+                                 (xaccSplitGetParent split)))))
     (add-subtotal-row table width 
                       (total-string (strftime "%Y" tm))
                       total-collector subtotal-style export?)))
@@ -277,8 +277,11 @@
 
 (define account-types-to-reverse-assoc-list
   (list (cons 'none '())
-        (cons 'income-expense '(income expense))
-        (cons 'credit-accounts '(liability payable equity credit income))))
+        (cons 'income-expense
+              (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
+        (cons 'credit-accounts
+              (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-EQUITY
+                    ACCT-TYPE-CREDIT ACCT-TYPE-INCOME))))
 
 (define (used-date columns-used)
   (vector-ref columns-used 0))
@@ -412,57 +415,56 @@
 
   (let* ((row-contents '())
 	 (dummy  (gnc:debug "split is originally" split))
-         (parent (gnc:split-get-parent split))
-         (account (gnc:split-get-account split))
-         (account-type (gw:enum-<gnc:AccountType>-val->sym
-                        (gnc:account-get-type account) #f))
+         (parent (xaccSplitGetParent split))
+         (account (xaccSplitGetAccount split))
+         (account-type (xaccAccountGetType account))
          (currency (if account
-                       (gnc:account-get-commodity account)
-                       (gnc:default-currency)))
+                       (xaccAccountGetCommodity account)
+                       (gnc-default-currency)))
 	 (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
 			       (opt-val gnc:pagename-general optname-currency)
 			       currency))
          (damount (if (gnc:split-voided? split)
-					 (gnc:split-void-former-amount split)
-					 (gnc:split-get-amount split)))
-	 (trans-date (gnc:transaction-get-date-posted parent))
+					 (xaccSplitVoidFormerAmount split)
+					 (xaccSplitGetAmount split)))
+	 (trans-date (gnc-transaction-get-date-posted parent))
 	 (split-value (gnc:exchange-by-pricedb-nearest
 		       (gnc:make-gnc-monetary 
 			currency
 			(if (member account-type account-types-to-reverse) 
-			    (gnc:numeric-neg damount)
+			    (gnc-numeric-neg damount)
 			    damount))
 		       report-currency
 		       ;; Use midday as the transaction time so it matches a price
 		       ;; on the same day.  Otherwise it uses midnight which will
 		       ;; likely match a price on the previous day
-		       (gnc:timepair-canonical-day-time trans-date))))
+		       (timespecCanonicalDayTime trans-date))))
     
     (if (used-date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:print-date (gnc:transaction-get-date-posted parent))
+                    (gnc-print-date (gnc-transaction-get-date-posted parent))
                     " ")))
     (if (used-reconciled-date column-vector)
         (addto! row-contents
-		(let ((date (gnc:split-get-reconciled-date split)))
+		(let ((date (gnc-split-get-date-reconciled split)))
 		  (if (equal? date (cons 0 0))
 		      " "
-		      (gnc:print-date date)))))
+		      (gnc-print-date date)))))
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:transaction-get-num parent)
+                    (xaccTransGetNum parent)
                     " ")))
     (if (used-description column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:transaction-get-description parent)
+                    (xaccTransGetDescription parent)
                     " ")))
     
     (if (used-memo column-vector)
         (addto! row-contents
-                (gnc:split-get-memo split)))
+                (xaccSplitGetMemo split)))
     
     (if (or (used-account-name column-vector) (used-account-code column-vector))
        (addto! row-contents (account-namestring account
@@ -471,31 +473,31 @@
                                                 (used-account-full-name column-vector))))
     
     (if (or (used-other-account-name column-vector) (used-other-account-code column-vector))
-       (addto! row-contents (account-namestring (gnc:split-get-account
-                                                   (gnc:split-get-other-split split))
+       (addto! row-contents (account-namestring (xaccSplitGetAccount
+                                                   (xaccSplitGetOtherSplit split))
                                                 (used-other-account-code      column-vector)
                                                 (used-other-account-name      column-vector)
                                                 (used-other-account-full-name column-vector))))
     
     (if (used-shares column-vector)
-        (addto! row-contents (gnc:split-get-amount split)))
+        (addto! row-contents (xaccSplitGetAmount split)))
     (if (used-price column-vector)
         (addto! 
          row-contents 
-         (gnc:make-gnc-monetary (gnc:transaction-get-currency parent)
-                                (gnc:split-get-share-price split))))
+         (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
+                                (xaccSplitGetSharePrice split))))
     (if (used-amount-single column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup "number-cell"
                                                  (gnc:html-transaction-anchor parent split-value))))
     (if (used-amount-double-positive column-vector)
-        (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (gnc:make-html-table-cell/markup "number-cell"
                                                      (gnc:html-transaction-anchor parent split-value)))
             (addto! row-contents " ")))
     (if (used-amount-double-negative column-vector)
-        (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+        (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
                      "number-cell" (gnc:html-transaction-anchor parent (gnc:monetary-neg split-value))))
@@ -503,12 +505,12 @@
     (if (used-running-balance column-vector)
 	(begin
 	  (gnc:debug "split is " split)
-	  (gnc:debug "split get balance:" (gnc:split-get-balance split))
+	  (gnc:debug "split get balance:" (xaccSplitGetBalance split))
 	  (addto! row-contents
 		  (gnc:make-html-table-cell/markup
 		   "number-cell"
 		   (gnc:make-gnc-monetary currency
-					  (gnc:split-get-balance split))))))
+					  (xaccSplitGetBalance split))))))
 	(gnc:html-table-append-row/markup! table row-style
                                        (reverse row-contents))
     split-value))
@@ -545,7 +547,7 @@
     gnc:pagename-general optname-common-currency
     "e" (N_ "Convert all transactions into a common currency") #f
     #f
-    (lambda (x) (gnc:option-db-set-option-selectable-by-name
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
 		 gnc:*transaction-report-options*
 		 gnc:pagename-general
 		 optname-currency
@@ -570,9 +572,12 @@
     ;; select, by default, all accounts...
     (lambda ()
       (gnc:filter-accountlist-type 
-       '(bank cash credit asset liability stock mutual-fund currency
-	      payable receivable equity income expense)
-       (gnc:group-get-subaccounts (gnc:get-current-group))))
+       (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
+             ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
+             ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
+             ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
+             ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+       (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
     #f #t))
 
   (gnc:register-trep-option
@@ -582,10 +587,10 @@
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
       (let ((current-accounts '())
-	    (num-accounts (gnc:group-get-num-accounts
-			   (gnc:get-current-group)))
-	    (first-account (gnc:group-get-account
-			    (gnc:get-current-group) 0)))
+	    (num-accounts (xaccGroupGetNumAccounts
+			   (gnc-get-current-group)))
+	    (first-account (xaccGroupGetAccount
+			    (gnc-get-current-group) 0)))
 	(cond ((not (null? current-accounts))
 	       (list (car current-accounts)))
 	      ((> num-accounts 0) (list first-account))
@@ -710,10 +715,10 @@
       'account-name
       key-choice-list #f
       (lambda (x)
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
          (and (member x subtotal-enabled) #t))
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          (if (member x date-sorting-types) #t #f)))))
     
@@ -761,10 +766,10 @@
       'register-order
       key-choice-list #f
       (lambda (x)
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-subtotal
          (and (member x subtotal-enabled) #t))
-        (gnc:option-db-set-option-selectable-by-name
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
          (if (member x date-sorting-types) #t #f)))))
     
@@ -848,8 +853,8 @@ Credit Card, and Income accounts")))))
 
 
 (define (display-date-interval begin end)
-  (let ((begin-string (gnc:print-date begin))
-        (end-string (gnc:print-date end)))
+  (let ((begin-string (gnc-print-date begin))
+        (end-string (gnc-print-date end)))
     (sprintf #f (_ "From %s To %s") begin-string end-string)))
 
 (define (get-primary-subtotal-style options)
@@ -917,7 +922,7 @@ Credit Card, and Income accounts")))))
   (define (add-other-split-rows split table used-columns
                                 row-style account-types-to-reverse)
     (define (other-rows-driver split parent table used-columns i)
-      (let ((current (gnc:transaction-get-split parent i)))
+      (let ((current (xaccTransGetSplit parent i)))
         (cond ((not current) #f)
               ((equal? current split)
                (other-rows-driver split parent table used-columns (+ i 1)))
@@ -927,7 +932,7 @@ Credit Card, and Income accounts")))))
                       (other-rows-driver split parent table used-columns
                                          (+ i 1)))))))
 
-    (other-rows-driver split (gnc:split-get-parent split)
+    (other-rows-driver split (xaccSplitGetParent split)
                        table used-columns 0))
 
   (define (do-rows-with-subtotals splits 
@@ -1114,43 +1119,43 @@ Credit Card, and Income accounts")))))
 ;;  (let* ((used-columns (build-column-used options))) ;; tpo: gives unbound variable options?
     (let* ((used-columns (build-column-used (gnc:report-options report-obj))))
       (list (cons 'account-name  (vector 
-                                  (list gnc:split-account-fullname)
+                                  (list SPLIT-ACCT-FULLNAME)
                                   split-account-full-name-same-p 
                                   render-account-subheading
                                   render-account-subtotal))
             (cons 'account-code  (vector 
-                                  (list gnc:split-account gnc:account-code)
+                                  (list SPLIT-ACCOUNT ACCOUNT-CODE-)
                                   split-account-code-same-p
                                   render-account-subheading
                                   render-account-subtotal))
             (cons 'exact-time    (vector
-                                  (list gnc:split-trans gnc:trans-date-posted)
+                                  (list SPLIT-TRANS TRANS-DATE-POSTED)
                                   #f #f #f))
             (cons 'date          (vector
-                                  (list gnc:split-trans gnc:trans-date-posted)
+                                  (list SPLIT-TRANS TRANS-DATE-POSTED)
                                   #f #f #f))
             (cons 'reconciled-date (vector
-                                  (list gnc:split-date-reconciled)
+                                  (list SPLIT-DATE-RECONCILED)
                                   #f #f #f))
             (cons 'register-order (vector
-                                  (list gnc:query-default-sort)
+                                  (list QUERY-DEFAULT-SORT)
                                   #f #f #f))
             (cons 'corresponding-acc-name
                                  (vector
-                                  (list gnc:split-corr-account-fullname)
+                                  (list SPLIT-CORR-ACCT-FULLNAME)
                                   split-same-corr-account-full-name-p 
                                   render-corresponding-account-subheading
                                   render-corresponding-account-subtotal))
             (cons 'corresponding-acc-code
                                  (vector
-                                  (list gnc:split-corr-account-code)
+                                  (list SPLIT-CORR-ACCT-CODE)
                                   split-same-corr-account-code-p 
                                   render-corresponding-account-subheading
                                   render-corresponding-account-subtotal))
-            (cons 'amount        (vector (list gnc:split-value) #f #f #f))
-            (cons 'description   (vector (list gnc:split-trans gnc:trans-desc) #f #f #f))
-            (cons 'number        (vector (list gnc:split-trans gnc:trans-num) #f #f #f))
-            (cons 'memo          (vector (list gnc:split-memo) #f #f #f))
+            (cons 'amount        (vector (list SPLIT-VALUE) #f #f #f))
+            (cons 'description   (vector (list SPLIT-TRANS TRANS-DESCRIPTION) #f #f #f))
+            (cons 'number        (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f))
+            (cons 'memo          (vector (list SPLIT-MEMO) #f #f #f))
             (cons 'none          (vector '() #f #f #f)))))
 
   (define date-comp-funcs-assoc-list
@@ -1213,7 +1218,7 @@ Credit Card, and Income accounts")))))
      3 2))
 
   (define (get-other-account-names account-list)
-    ( map (lambda (acct)  (gnc:account-get-full-name acct)) account-list))
+    ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
   (define (is-filter-member split account-list splits-ok?)
     (let ((fullname (gnc:split-get-corr-account-full-name split)))
@@ -1222,8 +1227,8 @@ Credit Card, and Income accounts")))))
 	  ;; Yep, this is a split transaction.
 
 	  (if splits-ok?
-	      (let* ((txn (gnc:split-get-parent split))
-		     (splits (gnc:transaction-get-splits txn)))
+	      (let* ((txn (xaccSplitGetParent split))
+		     (splits (xaccTransGetSplits txn)))
 
 		;; Walk through the list of splits.
 		;; if we reach the end, return #f
@@ -1234,7 +1239,7 @@ Credit Card, and Income accounts")))))
 		      #f
 		      (let* ((this (car splits))
 			     (rest (cdr splits))
-			     (acct (gnc:split-get-account this)))
+			     (acct (xaccSplitGetAccount this)))
 			(if (and (not (eq? this split))
 				 (member acct account-list))
 			    #t
@@ -1268,38 +1273,38 @@ Credit Card, and Income accounts")))))
         (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
 	(void-status (opt-val gnc:pagename-accounts optname-void-transactions))
         (splits '())
-        (query (gnc:malloc-query)))
+        (query (qof-query-create-for-splits)))
 
     ;;(gnc:warn "accts in trep-renderer:" c_account_1)
     ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
     (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
-          (gnc:query-set-book query (gnc:get-current-book))
+          (qof-query-set-book query (gnc-get-current-book))
 	      ;;(gnc:warn "query is:" query)
-          (gnc:query-add-account-match query
+          (xaccQueryAddAccountMatch query
                                        c_account_1
-                                       'guid-match-any 'query-and)
-          (gnc:query-add-date-match-timepair
-           query #t begindate #t enddate 'query-and)
-          (gnc:query-set-sort-order query
+                                       QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+          (xaccQueryAddDateMatchTS
+           query #t begindate #t enddate QOF-QUERY-AND)
+          (qof-query-set-sort-order query
 				    (get-query-sortkey primary-key)
 				    (get-query-sortkey secondary-key)
 				    '())
 
-          (gnc:query-set-sort-increasing query
+          (qof-query-set-sort-increasing query
                                          (eq? primary-order 'ascend)
                                          (eq? secondary-order 'ascend)
                                          #t)
 
 	  (case void-status
 	   ((non-void-only) 
-	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book)))
+	    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
 	   ((void-only)
-	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
+	    (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
 	   (else #f))
 
-          (set! splits (gnc:query-get-splits query))
+          (set! splits (qof-query-run query))
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
@@ -1359,7 +1364,7 @@ Credit Card, and Income accounts")))))
                 (gnc:html-document-add-object!
                  document 
                  table)
-                (gnc:free-query query))
+                (qof-query-destroy query))
               ;; error condition: no splits found
               (let ((p (gnc:make-html-text)))
                 (gnc:html-text-append! 

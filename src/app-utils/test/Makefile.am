@@ -1,7 +1,6 @@
 TESTS = \
   test-link-module \
   test-load-module \
-  test-component-manager \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount
@@ -22,15 +21,14 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/app-utils \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnome \
   --library-dir    ${top_builddir}/src/gnome-utils \
-  --library-dir    ${top_builddir}/src/gnome \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --library-dir    ${G_WRAP_LIB_DIR}
+  --library-dir    ${top_builddir}/src/gnome
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
@@ -39,7 +37,6 @@ LDADD = \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/gnc-module/libgncmodule.la \
    ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-   ${top_builddir}/src/engine/libgw-engine.la \
    ${top_builddir}/src/test-core/libgncmod-test.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
    ${top_builddir}/src/core-utils/libcore-utils.la \
@@ -55,8 +52,7 @@ noinst_PROGRAMS = \
   test-print-queries
 
 EXTRA_DIST = \
-  test-load-module \
-  test-component-manager
+  test-load-module
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

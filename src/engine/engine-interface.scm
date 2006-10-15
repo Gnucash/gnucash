@@ -95,15 +95,15 @@
 ;; for editing.
 (define (gnc:split->split-scm split use-cut-semantics?)
   (gnc:make-split-scm
-   (gnc:split-get-guid split)
-   (gnc:account-get-guid (gnc:split-get-account split))
-   (gnc:transaction-get-guid (gnc:split-get-parent split))
-   (gnc:split-get-memo split)
-   (gnc:split-get-action split)
-   (gnc:split-get-reconcile-state split)
-   (gnc:split-get-reconciled-date split)
-   (gnc:split-get-amount split)
-   (gnc:split-get-value split)))
+   (gncSplitGetGUID split)
+   (gncAccountGetGUID (xaccSplitGetAccount split))
+   (gncTransGetGUID (xaccSplitGetParent split))
+   (xaccSplitGetMemo split)
+   (xaccSplitGetAction split)
+   (xaccSplitGetReconcile split)
+   (gnc-split-get-date-reconciled split)
+   (xaccSplitGetAmount split)
+   (xaccSplitGetValue split)))
 
 ;; Copy a scheme representation of a split onto a C split.
 ;; If possible, insert the C split into the account of the
@@ -118,18 +118,18 @@
               (action   (gnc:split-scm-get-action split-scm))
               (amount   (gnc:split-scm-get-amount split-scm))
               (value    (gnc:split-scm-get-value split-scm)))
-          (if memo     (gnc:split-set-memo split memo))
-          (if action   (gnc:split-set-action split action))
-          (if amount   (gnc:split-set-amount split amount))
-          (if value    (gnc:split-set-value split value)))
-        (let ((account (gnc:account-lookup
+          (if memo     (xaccSplitSetMemo split memo))
+          (if action   (xaccSplitSetAction split action))
+          (if amount   (xaccSplitSetAmount split amount))
+          (if value    (xaccSplitSetValue split value)))
+        (let ((account (xaccAccountLookup
                         (gnc:split-scm-get-account-guid split-scm)
                         book)))
           (if account
               (begin
-                (gnc:account-begin-edit account)
-                (gnc:account-insert-split account split)
-                (gnc:account-commit-edit account)))))))
+                (xaccAccountBeginEdit account)
+                (xaccSplitSetAccount account split)
+                (xaccAccountCommitEdit account)))))))
 
 ;; Defines a scheme representation of a transaction.
 (define gnc:transaction-structure
@@ -218,23 +218,23 @@
 ;; a representation of it as a transaction-structure.
 (define (gnc:transaction->transaction-scm trans use-cut-semantics?)
   (define (trans-splits i)
-    (let ((split (gnc:transaction-get-split trans i)))
+    (let ((split (xaccTransGetSplit trans i)))
       (if (not split)
           '()
           (cons (gnc:split->split-scm split use-cut-semantics?)
                 (trans-splits (+ i 1))))))
   (gnc:make-transaction-scm
-   (gnc:transaction-get-guid trans)
-   (gnc:transaction-get-currency trans)
-   (gnc:transaction-get-date-entered trans)
+   (gncTransGetGUID trans)
+   (xaccTransGetCurrency trans)
+   (gnc-transaction-get-date-entered trans)
    (if use-cut-semantics?
-       (gnc:transaction-get-date-posted trans)
+       (gnc-transaction-get-date-posted trans)
        #f)
    (if use-cut-semantics?
-       (gnc:transaction-get-num trans)
+       (xaccTransGetNum trans)
        #f)
-   (gnc:transaction-get-description trans)
-   (gnc:transaction-get-notes trans)
+   (xaccTransGetDescription trans)
+   (xaccTransGetNotes trans)
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
@@ -246,8 +246,8 @@
       #f
       (begin
         ;; open the transaction for editing
-        (if (not (gnc:transaction-is-open trans))
-            (gnc:transaction-begin-edit trans))
+        (if (not (xaccTransIsOpen trans))
+            (xaccTransBeginEdit trans))
 
         ;; copy in the transaction values
         (let ((currency    (gnc:transaction-scm-get-currency trans-scm))
@@ -255,23 +255,23 @@
               (num         (gnc:transaction-scm-get-num trans-scm))
               (notes       (gnc:transaction-scm-get-notes trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
-          (if currency    (gnc:transaction-set-currency trans currency))
-          (if description (gnc:transaction-set-description trans description))
-          (if num         (gnc:transaction-set-xnum trans num))
-          (if notes       (gnc:transaction-set-notes trans notes))
-          (if date-posted (gnc:transaction-set-date-time-pair
+          (if currency    (xaccTransSetCurrency trans currency))
+          (if description (xaccTransactionSetDescription trans description))
+          (if num         (xaccTransSetNum trans num))
+          (if notes       (xaccTransSetNotes trans notes))
+          (if date-posted (gnc-transaction-set-date
                            trans date-posted)))
 
         ;; strip off the old splits
         (for-each (lambda (split)
-                    (gnc:split-destroy split)) 
-                  (gnc:transaction-get-splits trans))
+                    (xaccSplitDestroy split))
+                  (xaccTransGetSplits trans))
 
         ;; and put on the new ones! Please note they go in the *same*
         ;; order as in the original transaction. This is important.
         (for-each 
          (lambda (split-scm) 
-           (let* ((new-split (gnc:split-create book))
+           (let* ((new-split (xaccMallocSplit book))
                   (old-guid  (gnc:split-scm-get-account-guid split-scm))
                   (new-guid  (assoc-ref guid-mapping old-guid)))
              (if (not new-guid)
@@ -279,9 +279,9 @@
              (gnc:split-scm-set-account-guid split-scm new-guid)
              (gnc:split-scm-onto-split split-scm new-split book)
              (gnc:split-scm-set-account-guid split-scm old-guid)
-             (gnc:transaction-append-split trans new-split)))
+             (xaccTransAppendSplit trans new-split)))
          (gnc:transaction-scm-get-split-scms trans-scm))
         
         ;; close the transaction
         (if commit?
-            (gnc:transaction-commit-edit trans)))))
+            (xaccTransCommitEdit trans)))))

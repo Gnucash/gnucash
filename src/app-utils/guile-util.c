@@ -23,7 +23,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 #include <libguile.h>
 
 #include "qof.h"
@@ -367,7 +367,7 @@ gnc_scm_lookup(const char *module, const char *symbol)
 SCM
 gnc_copy_split(Split *split, gboolean use_cut_semantics)
 {
-  static SCM split_type = SCM_UNDEFINED;
+  static swig_type_info *split_type = NULL;
   SCM func;
   SCM arg;
 
@@ -378,13 +378,10 @@ gnc_copy_split(Split *split, gboolean use_cut_semantics)
   if (!SCM_PROCEDUREP(func))
     return SCM_UNDEFINED;
 
-  if(split_type == SCM_UNDEFINED) {
-    split_type = scm_c_eval_string("<gnc:Split*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(split_type != SCM_UNDEFINED) scm_gc_protect_object(split_type);
-  }
+  if (!split_type)
+      split_type = SWIG_TypeQuery("_p_Split");
 
-  arg = gw_wcp_assimilate_ptr(split, split_type);
+  arg = SWIG_NewPointerObj(split, split_type, 0);
 
   return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
 }
@@ -402,7 +399,7 @@ void
 gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
                               QofBook * book)
 {
-  static SCM split_type = SCM_UNDEFINED;
+  static swig_type_info *split_type = NULL;
   SCM result;
   SCM func;
   SCM arg;
@@ -427,13 +424,10 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
   if (!SCM_PROCEDUREP(func))
     return;
 
-  if(split_type == SCM_UNDEFINED) {
-    split_type = scm_c_eval_string("<gnc:Split*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(split_type != SCM_UNDEFINED) scm_gc_protect_object(split_type);
-  }
+  if (!split_type)
+      split_type = SWIG_TypeQuery("_p_Split");
 
-  arg = gw_wcp_assimilate_ptr(split, split_type);
+  arg = SWIG_NewPointerObj(split, split_type, 0);
 
   scm_call_3(func, split_scm, arg, gnc_book_to_scm (book));
 }
@@ -736,7 +730,7 @@ gnc_split_scm_get_value(SCM split_scm)
 SCM
 gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
 {
-  static SCM trans_type = SCM_UNDEFINED;
+  static swig_type_info *trans_type = NULL;
   SCM func;
   SCM arg;
 
@@ -747,13 +741,10 @@ gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics)
   if (!SCM_PROCEDUREP(func))
     return SCM_UNDEFINED;
 
-  if(trans_type == SCM_UNDEFINED) {
-    trans_type = scm_c_eval_string("<gnc:Transaction*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_UNDEFINED) scm_gc_protect_object(trans_type);
-  }
+  if (!trans_type)
+      trans_type = SWIG_TypeQuery("_p_Transaction");
 
-  arg = gw_wcp_assimilate_ptr(trans, trans_type);
+  arg = SWIG_NewPointerObj(trans, trans_type, 0);
 
   return scm_call_2(func, arg, SCM_BOOL(use_cut_semantics));
 }
@@ -798,7 +789,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                             gboolean do_commit,
                                             QofBook *book)
 {
-  static SCM trans_type = SCM_UNDEFINED;
+  static swig_type_info *trans_type = NULL;
   SCM result;
   SCM func;
   SCM arg;
@@ -823,13 +814,10 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
   if (!SCM_PROCEDUREP(func))
     return;
 
-  if(trans_type == SCM_UNDEFINED) {
-    trans_type = scm_c_eval_string("<gnc:Transaction*>");
-    /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_UNDEFINED) scm_gc_protect_object(trans_type);
-  }
+  if (!trans_type)
+      trans_type = SWIG_TypeQuery("_p_Transaction");
 
-  arg = gw_wcp_assimilate_ptr(trans, trans_type);
+  arg = SWIG_NewPointerObj(trans, trans_type, 0);
 
   if ((guid_1 == NULL) || (guid_2 == NULL))
   {
@@ -1088,7 +1076,6 @@ gnc_trans_scm_get_num_splits(SCM trans_scm)
 char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
-  const char *type_string;
   const gchar *string;
   SCM result;
   SCM arg;
@@ -1101,9 +1088,7 @@ gnc_get_debit_string(GNCAccountType account_type)
   if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
     account_type = ACCT_TYPE_NONE;
 
-  type_string = xaccAccountTypeEnumAsString(account_type);
-
-  arg = scm_str2symbol(type_string);
+  arg = scm_long2num(account_type);
 
   result = scm_call_1(getters.debit_string, arg);
   if (!SCM_STRINGP(result))
@@ -1126,7 +1111,6 @@ gnc_get_debit_string(GNCAccountType account_type)
 char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
-  const char *type_string;
   const gchar *string;
   SCM result;
   SCM arg;
@@ -1139,9 +1123,7 @@ gnc_get_credit_string(GNCAccountType account_type)
   if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
     account_type = ACCT_TYPE_NONE;
 
-  type_string = xaccAccountTypeEnumAsString(account_type);
-
-  arg = scm_str2symbol(type_string);
+  arg = scm_long2num(account_type);
 
   result = scm_call_1(getters.credit_string, arg);
   if (!SCM_STRINGP(result))

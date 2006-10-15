@@ -276,8 +276,6 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
  */
 void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 {
-  static SCM id_book = SCM_UNDEFINED;
-
   GncEntry *blank_entry, *find_entry;
   CursorBuffer *cursor_buffer;
   Table *table;
@@ -359,11 +357,8 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  break;
 	}
 
-	if (id_book == SCM_UNDEFINED)
-	  id_book = scm_c_eval_string ("gnc:id-book");
-
 	/* Compute the proper taxtable */
-	odb = gnc_option_db_new_for_type (id_book);
+	odb = gnc_option_db_new_for_type (GNC_ID_BOOK);
 	gnc_option_db_load_from_kvp (odb, gnc_book_get_slots (ledger->book));
 
 	switch (gncOwnerGetType (owner)) {

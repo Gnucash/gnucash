@@ -21,27 +21,10 @@
 
 ;; Copyright 2000 Rob Browning <rlb@cs.utexas.edu>
 
-(define (gnc:url->loaded-session session url ignore-lock? create-if-needed?)
-  ;; Return a <gnc:Book*> representing the data stored at the given
-  ;; url or #f on failure -- this should later be changed to returning
-  ;; the symbol representing the book error...  On success, the book
-  ;; will already be loaded.
-
-  (let* ((result (and session
-                      (gnc:session-begin session url
-                                         ignore-lock?
-                                         create-if-needed?)
-		      (eq? 'no-err (gw:enum-<gnc:BackendError>-val->sym
-				    (gnc:session-get-error session) #f))
-                      (gnc:session-load session)
-                      session)))
-    (or result
-        (begin (gnc:session-destroy session) #f))))
-
 (define (gnc:group-map-all-accounts thunk group)
-  (let ((accounts (or (gnc:group-get-subaccounts group) '())))
+  (let ((accounts (or (xaccGroupGetSubAccountsSorted group) '())))
     (map thunk accounts)))
 
 (define (gnc:group-map-accounts thunk group)
-  (let ((accounts (or (gnc:group-get-account-list group) '())))
+  (let ((accounts (or (xaccGroupGetAccountListSorted group) '())))
     (map thunk accounts)))
