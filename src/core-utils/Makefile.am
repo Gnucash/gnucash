@@ -26,7 +26,8 @@ noinst_HEADERS = \
 
 if BUILDING_FROM_SVN
 swig-core-utils.c: core-utils.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 AM_CFLAGS = \

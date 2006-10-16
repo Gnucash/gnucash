@@ -7,7 +7,7 @@
 SCM scm_init_sw_report_system_module (void);
 %}
 
-typedef int gint;
+%import "base-typemaps.i"
 
 SCM gnc_report_find(gint id);
 gint gnc_report_add(SCM report);

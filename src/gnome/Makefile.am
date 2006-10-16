@@ -89,9 +89,9 @@ noinst_HEADERS = \
   window-reconcile.h
 
 if BUILDING_FROM_SVN
-swig-gnome.c: gnome.i ${noinst_HEADERS}
+swig-gnome.c: gnome.i dialog-progress.h
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/engine -o $@ $<
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 EXTRA_DIST = \

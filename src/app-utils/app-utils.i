@@ -17,29 +17,7 @@
 SCM scm_init_sw_app_utils_module (void);
 %}
 
-//%import "engine.i"
-
-%typemap(in) GNCPrintAmountInfo "$1 = gnc_scm2printinfo($input);"
-%typemap(out) GNCPrintAmountInfo "$result = gnc_printinfo2scm($1);"
-
-%typemap(out) GncCommodityList {
-  SCM list = SCM_EOL;
-  GList *node;
-
-  for (node = $1; node; node = node->next)
-    list = scm_cons(gnc_quoteinfo2scm(node->data), list);
-
-  $result = scm_reverse(list);
-}
-
-// Temporary SWIG<->G-wrap converters for engine types
-%typemap(in) gboolean "$1 = SCM_NFALSEP($input) ? TRUE : FALSE;"
-%typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
-
-%typemap(in) gnc_numeric "$1 = gnc_scm_to_numeric($input);"
-%typemap(out) gnc_numeric "$result = gnc_numeric_to_scm($1);"
-
-// End of temporary typemaps.
+%import "base-typemaps.i"
 
 typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 typedef int GNCOptionDBHandle;
@@ -54,6 +32,16 @@ void gnc_option_db_destroy(GNCOptionDB *odb);
 
 void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
       const char *section, const char *name, gboolean selectable);
+
+%typemap(out) GncCommodityList {
+  SCM list = SCM_EOL;
+  GList *node;
+
+  for (node = $1; node; node = node->next)
+    list = scm_cons(gnc_quoteinfo2scm(node->data), list);
+
+  $result = scm_reverse(list);
+}
 
 %inline %{
 typedef GList GncCommodityList;
@@ -89,8 +77,6 @@ gnc_numeric gnc_convert_to_euro(const gnc_commodity * currency,
 gnc_numeric gnc_convert_from_euro(const gnc_commodity * currency,
         gnc_numeric value);
 
-
-typedef int time_t;
 time_t gnc_accounting_period_fiscal_start(void);
 time_t gnc_accounting_period_fiscal_end(void);
 

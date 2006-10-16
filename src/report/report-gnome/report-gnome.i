@@ -10,6 +10,8 @@
 SCM scm_init_sw_report_gnome_module (void);
 %}
 
+%import "base-typemaps.i"
+
 void gnc_report_raise_editor(SCM report);
 void gnc_main_window_open_report(int report_id, GncMainWindow *window);
 GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);

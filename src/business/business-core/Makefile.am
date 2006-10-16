@@ -68,7 +68,7 @@ libgncmod_business_core_la_LIBADD = \
 if BUILDING_FROM_SVN
 swig-business-core.c: business-core.i ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/engine -o $@ $<
+	-I${top_srcdir}/src -o $@ $<
 endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
