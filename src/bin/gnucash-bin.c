@@ -376,7 +376,7 @@ static void
 inner_main_add_price_quotes(void *closure, int argc, char **argv)
 {
     SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
-    QofSession *session;
+    QofSession *session = NULL;
 
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
