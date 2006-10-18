@@ -137,8 +137,8 @@ GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-3.12.0.zip"
 GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-dev-3.12.0.zip"
 GNOME_DIR=$GLOBAL_DIR\\gnome
 
-GWRAP_URL="http://download.savannah.gnu.org/releases/g-wrap/g-wrap-1.9.6.tar.gz"
-GWRAP_DIR=$GLOBAL_DIR\\g-wrap
+SWIG_URL="$SF_MIRROR/swig/swigwin-1.3.29.zip"
+SWIG_DIR=$GLOBAL_DIR\\swig
 
 AUTOCONF_URL="http://ftp.gnu.org/gnu/autoconf/autoconf-2.60.tar.bz2"
 AUTOMAKE_URL="http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.bz2"
@@ -180,7 +180,7 @@ add_step inst_pexports
 add_step inst_libxml2
 add_step inst_expat
 add_step inst_gnome
-add_step inst_gwrap
+add_step inst_swig
 add_step inst_autotools
 add_step inst_libgsf
 add_step inst_goffice

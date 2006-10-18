@@ -536,54 +536,22 @@ EOF
     quiet intltoolize --version || die "gnome not installed correctly"
 }
 
-function inst_gwrap() {
-    setup G-Wrap
-    _GWRAP_WFSDIR=`win_fs_path $GWRAP_DIR`
-    _GWRAP_UDIR=`unix_path $GWRAP_DIR`
-    add_to_env $_GWRAP_UDIR/bin PATH
-    add_to_env $_GWRAP_WFSDIR/share/guile/site GUILE_LOAD_PATH
-    if quiet g-wrap-config --version
+function inst_swig() {
+    setup Swig
+    _SWIG_UDIR=`unix_path $SWIG_DIR`
+    add_to_env $_SWIG_UDIR PATH
+    if quiet swig -version
     then
-        echo "g-wrap already installed.  skipping."
+        echo "swig already installed.  skipping."
     else
-        wget_unpacked $GWRAP_URL $DOWNLOAD_DIR $TMP_DIR
-        qpushd $TMP_UDIR/g-wrap-*
-            qpushd g-wrap
-                cp core-runtime.c core-runtime.c.bak
-                cat core-runtime.c.bak | sed '/vasprintf/d' > core-runtime.c
-            qpopd
-            cp configure configure.bak
-            cat configure.bak | sed 's,"glib","glib-2.0",g' > configure
-            ./configure ${HOST_XCOMPILE} \
-		CPPFLAGS="${GUILE_CPPFLAGS}" \
-		LDFLAGS="${GUILE_LDFLAGS}" \
-                --prefix=$_GWRAP_WFSDIR \
-                --with-modules-dir=`echo $GWRAP_DIR | sed 's#\\\\#\\\\\\\\#g'`\\\\share\\\\guile\\\\site
-            qpushd guile/g-wrap/gw
-                cp Makefile Makefile.bak
-                cat Makefile.bak | sed '/^libgw_guile_standard_la_LIBADD/s,$, ../../../libffi/libffi.la ../../../g-wrap/libgwrap-core-runtime.la,;/libgw_guile_gw_glib_la_LIBADD/s,$, ../../../g-wrap/libgwrap-core-runtime.la,' > Makefile
-                make standard.c gw-glib.c
-                cp standard.scm standard.scm.bak
-                cat standard.scm.bak | sed 's,"\(libgw-guile-standard\)","../lib/\1-0",' > standard.scm
-                cp gw-glib.scm gw-glib.scm.bak
-                cat gw-glib.scm.bak | sed 's,"\(libgw-guile-gw-glib\)","../lib/\1-0",' > gw-glib.scm
-            qpopd
-            qpushd guile/test
-                cp Makefile Makefile.bak
-                cat Makefile.bak | sed '/^std_libs/s,\\$, ../../libffi/libffi.la \\,' > Makefile
-            qpopd
-            make LDFLAGS="-no-undefined"
-	    qpushd guile/g-wrap
-		# Fix the filenames of the to be loaded DLLs
-		cp guile.scm guile.scm.bak
-		sed "s/slot-ref wrapset 'shlib-path) \"\\\\\"))/slot-ref wrapset 'shlib-path) \"-0\\\\\"))/" guile.scm.bak > guile.scm
-	    qpopd
-            make install
+        wget_unpacked $SWIG_URL $DOWNLOAD_DIR $SWIG_DIR
+        qpushd $SWIG_DIR
+            mv swigwin-* mydir
+            mv mydir/* .
+            rmdir mydir
         qpopd
-    fi    
-    add_to_env $_GWRAP_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    guile -c '(use-modules (srfi srfi-39))' &&
-    quiet g-wrap-config --version || die "g-wrap not installed correctly"
+    fi
+    quiet swig -version || die "swig unavailable"
 }
 
 function inst_autotools() {
@@ -714,14 +682,14 @@ function inst_svn() {
 function svn_up() {
     mkdir -p $REPOS_DIR
     qpushd $REPOS_DIR
-    # SVN-HEAD doesn't compile here because of missing SWIG
-    SVNREV_FLAG="-r15007"
+    # latest revision that should compile, use HEAD or vwxyz
+    SVN_REV="HEAD"
     if [ -x .svn ]; then
 	setup svn up
-	svn up ${SVNREV_FLAG}
+	svn up -r ${SVN_REV}
     else
 	setup svn co
-	svn co ${SVNREV_FLAG} $REPOS_URL .
+	svn co -r ${SVN_REV} $REPOS_URL .
     fi
     qpopd
 }
@@ -740,13 +708,6 @@ function inst_gnucash() {
 	export GUILE_INCS="${GUILE_CPPFLAGS}"
 	export BUILD_GUILE=yes
 	export name_build_guile=/usr/bin/guile-config
-	export G_WRAP_COMPILE_ARGS="-I${GWRAP_DIR}/include"
-	export G_WRAP_LINK_ARGS="-L${GWRAP_DIR}/lib -lgwrap-guile-runtime -lgwrap-core-runtime -lffi ${GUILE_LIBS}"
-    else
-	if grep -q "GUILE_LOAD_PATH.*:" configure.in; then
-        cp configure.in configure.in.bak
-        cat configure.in.bak | sed '/GUILE_LOAD_PATH/s,:,;,g' > configure.in
-	fi
     fi
     ./autogen.sh
     ./configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
@@ -759,11 +720,12 @@ function inst_gnucash() {
 	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
     # Windows DLLs don't need relinking
-    cp ltmain.sh ltmain.sh.bak ; grep -v "need_relink=yes" ltmain.sh.bak > ltmain.sh
-    cp libtool libtool.bak ; grep -v "need_relink=yes" libtool.bak > libtool
+    grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
+    grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
     # Exclude (for now) the test subdirectories from the build
     # because executable linking is so painfully slow on mingw
-    perl -pi.bak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+    perl -pi.instbak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+    find src -name Makefile.instbak -exec rm {} \;
 
     make
 
@@ -771,7 +733,7 @@ function inst_gnucash() {
     qpushd src/bin
     rm gnucash
     make PATH_SEPARATOR=";" \
-	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GWRAP_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
+	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
 	gnucash
     qpopd
 
@@ -795,10 +757,10 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd ${_GNUCASH_WFSDIR}/bin
-    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GWRAP_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
+    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
-    echo "set GUILE_LOAD_PATH=${GWRAP_DIR}\\share\\guile\\site;${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+    echo "set GUILE_LOAD_PATH=${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
     echo "set SCHEME_LIBRARY_PATH=${GUILE_DIR}\\share\\guile\\site\\slib\\" >> gnucash.bat
     echo "start gnucash-bin" >> gnucash.bat
     qpopd
