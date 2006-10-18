@@ -23,6 +23,7 @@ libgncmodbaz_la_SOURCES = gnc-mod-baz.c
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
   ../../libgncmodule.la \
+  $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
 if BUILDING_FROM_SVN

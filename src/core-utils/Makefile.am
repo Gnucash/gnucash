@@ -11,6 +11,7 @@ libcore_utils_la_SOURCES = \
   gnc-gtk-utils.c
 
 libcore_utils_la_LIBADD = \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
   ${GTK_LIBS}

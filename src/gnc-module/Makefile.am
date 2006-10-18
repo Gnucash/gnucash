@@ -12,7 +12,8 @@ libgncmodule_la_SOURCES = gnc-module.c swig-gnc-module.c
 
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
- ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/lib/libc/libc-missing.la \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   -lltdl
 

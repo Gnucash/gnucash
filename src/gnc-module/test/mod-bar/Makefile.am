@@ -19,6 +19,7 @@ noinst_HEADERS = \
 libgncmodbar_la_SOURCES=gnc-mod-bar.c
 
 libgncmodbar_la_LIBADD=libbar.la \
+  $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
 if BUILDING_FROM_SVN

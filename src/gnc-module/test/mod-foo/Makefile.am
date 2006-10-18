@@ -20,6 +20,7 @@ libgncmodfoo_la_SOURCES = gnc-mod-foo.c
 
 libgncmodfoo_la_LIBADD = \
   libfoo.la \
+  $(GUILE_LIBS) \
   $(GLIB_LIBS)
 
 EXTRA_DIST = \
