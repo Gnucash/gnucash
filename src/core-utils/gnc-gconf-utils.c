@@ -787,8 +787,8 @@ gnc_gconf_add_notification (GObject *object,
 	/*
 	 * Save the values needed to undo this later.
 	 */
-	client_tag = g_strdup_printf(CLIENT_TAG, section, whoami);
-	notify_tag = g_strdup_printf(NOTIFY_TAG, section, whoami);
+	client_tag = g_strdup_printf(CLIENT_TAG, section ? section:"", whoami);
+	notify_tag = g_strdup_printf(NOTIFY_TAG, section ? section:"", whoami);
 	g_object_set_data(object, client_tag, client);
 	g_object_set_data(object, notify_tag, GUINT_TO_POINTER(id));
 	g_free(notify_tag);
@@ -858,11 +858,11 @@ gnc_gconf_remove_notification (GObject *object,
 	/*
 	 * Remove any gconf notifications
 	 */
-	client_tag = g_strdup_printf(CLIENT_TAG, section, whoami);
+	client_tag = g_strdup_printf(CLIENT_TAG, section ? section:"", whoami);
 	client = g_object_get_data(object, client_tag);
 	path = gnc_gconf_section_name(section);
 	if (client) {
-	  notify_tag = g_strdup_printf(NOTIFY_TAG, section, whoami);
+	  notify_tag = g_strdup_printf(NOTIFY_TAG, section ? section:"", whoami);
 	  id = GPOINTER_TO_UINT(g_object_get_data(object, notify_tag));
 	  gconf_client_notify_remove(client, id);
 	  gconf_client_remove_dir(client, path, NULL);
