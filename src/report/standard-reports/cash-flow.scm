@@ -91,8 +91,8 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type 
-        (ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
-                        ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
+        (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
+              ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
      #f)
     
