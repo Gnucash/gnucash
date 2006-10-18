@@ -731,6 +731,9 @@ function inst_gnucash() {
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     qpushd $REPOS_DIR
+    # Necessary so that intltoolize doesn't come up with some
+    # foolish AC_CONFIG_AUX_DIR; bug#362006 
+    touch install-sh
     if test "x$cross_compile" = xyes ; then
 	# Set these variables manually because of cross-compiling
 	export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
