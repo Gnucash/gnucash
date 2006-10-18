@@ -714,12 +714,14 @@ function inst_svn() {
 function svn_up() {
     mkdir -p $REPOS_DIR
     qpushd $REPOS_DIR
+    # SVN-HEAD doesn't compile here because of missing SWIG
+    SVNREV_FLAG="-r15007"
     if [ -x .svn ]; then
 	setup svn up
-	svn up
+	svn up ${SVNREV_FLAG}
     else
 	setup svn co
-	svn co $REPOS_URL .
+	svn co ${SVNREV_FLAG} $REPOS_URL .
     fi
     qpopd
 }
