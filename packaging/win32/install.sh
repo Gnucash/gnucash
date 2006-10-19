@@ -761,7 +761,9 @@ function inst_gnucash() {
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
     echo "set GUILE_LOAD_PATH=${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
-    echo "set LTDL_LIBRARY_PATH=c:\\soft\\gnucash\\lib" >> gnucash.bat
+    # Really sure we don't need this?
+    #echo "set SCHEME_LIBRARY_PATH=${GUILE_DIR}\\share\\guile\\site\\slib\\" >> gnucash.bat
+    echo "set LTDL_LIBRARY_PATH=${GNUCASH_DIR}\\lib" >> gnucash.bat
     echo "start gnucash-bin" >> gnucash.bat
     qpopd
 }
