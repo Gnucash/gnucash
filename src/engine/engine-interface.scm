@@ -265,7 +265,7 @@
         ;; strip off the old splits
         (for-each (lambda (split)
                     (xaccSplitDestroy split))
-                  (xaccTransGetSplits trans))
+                  (xaccTransGetSplitList trans))
 
         ;; and put on the new ones! Please note they go in the *same*
         ;; order as in the original transaction. This is important.

@@ -95,7 +95,7 @@
 
     (if invoice
 	(set! owner (gncInvoiceGetOwner invoice))
-	(let ((split-list (xaccTransGetSplits trans)))
+	(let ((split-list (xaccTransGetSplitList trans)))
 	  (define (check-splits splits)
 	    (if (and splits (not (null? splits)))
 		(let* ((split (car splits))

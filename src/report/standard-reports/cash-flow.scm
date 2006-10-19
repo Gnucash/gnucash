@@ -339,7 +339,7 @@
 				      )
 				  )
 				)
-                              (xaccTransGetSplits parent)
+                              (xaccTransGetSplitList parent)
                             )
                           )
                         )

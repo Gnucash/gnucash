@@ -361,7 +361,7 @@
 			      )
 			  )
 
-			(xaccTransGetSplits parent))
+			(xaccTransGetSplitList parent))
 
 
 		       ;; go build the basis-list
@@ -417,7 +417,7 @@
 			     (dividendcoll 'add commod-currency (xaccSplitGetValue s)))
 			   )
 			  )
-			(xaccTransGetSplits parent)
+			(xaccTransGetSplitList parent)
 			)
 		       )
 		     )

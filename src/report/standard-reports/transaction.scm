@@ -1228,7 +1228,7 @@ Credit Card, and Income accounts")))))
 
 	  (if splits-ok?
 	      (let* ((txn (xaccSplitGetParent split))
-		     (splits (xaccTransGetSplits txn)))
+		     (splits (xaccTransGetSplitList txn)))
 
 		;; Walk through the list of splits.
 		;; if we reach the end, return #f

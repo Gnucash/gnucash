@@ -108,7 +108,7 @@
                   (qof-query-destroy q-splits)
                   (qof-query-destroy sq)
                   (set! q-splits q-new))))
-            (xaccTransGetSplits xtn))
+            (xaccTransGetSplitList xtn))
            
            ;; now q-splits will match any split that is the same as one
            ;; split in the old-group xtn.  Merge it in.
