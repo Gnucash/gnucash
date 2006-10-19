@@ -36,14 +36,6 @@ libgncmod_register_core_LTX_gnc_module_description(void) {
   return g_strdup("Toolkit-independent GUI for ledger-like table displays");
 }
 
-static void
-lmod(char * mn) 
-{
-  char * form = g_strdup_printf("(use-modules %s)\n", mn);
-  scm_c_eval_string(form);
-  g_free(form);
-}
-
 int
 libgncmod_register_core_LTX_gnc_module_init(int refcount)
 {
