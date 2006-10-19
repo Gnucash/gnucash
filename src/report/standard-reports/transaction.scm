@@ -923,7 +923,7 @@ Credit Card, and Income accounts")))))
                                 row-style account-types-to-reverse)
     (define (other-rows-driver split parent table used-columns i)
       (let ((current (xaccTransGetSplit parent i)))
-        (cond ((not current) #f)
+        (cond ((null? current) #f)
               ((equal? current split)
                (other-rows-driver split parent table used-columns (+ i 1)))
               (else (begin
@@ -1142,7 +1142,7 @@ Credit Card, and Income accounts")))))
                                   #f #f #f))
             (cons 'corresponding-acc-name
                                  (vector
-                                  (list SPLIT-CORR-ACCT-FULLNAME)
+                                  (list SPLIT-CORR-ACCT-NAME)
                                   split-same-corr-account-full-name-p 
                                   render-corresponding-account-subheading
                                   render-corresponding-account-subtotal))

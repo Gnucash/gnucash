@@ -219,7 +219,7 @@
 (define (gnc:transaction->transaction-scm trans use-cut-semantics?)
   (define (trans-splits i)
     (let ((split (xaccTransGetSplit trans i)))
-      (if (not split)
+      (if (null? split)
           '()
           (cons (gnc:split->split-scm split use-cut-semantics?)
                 (trans-splits (+ i 1))))))

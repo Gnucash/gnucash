@@ -374,7 +374,7 @@
   (define (add-other-split-rows split table used-columns row-style)
     (define (other-rows-driver split parent table used-columns i)
       (let ((current (xaccTransGetSplit parent i)))
-        (if current
+        (if (not (null? current))
             (begin
               (add-split-row table current used-columns row-style #f #t #f)
               (other-rows-driver split parent table
@@ -564,7 +564,7 @@
     (qof-query-set-book query (gnc-get-current-book))
 
     (set! splits (if journal?
-                     (qof-query-run-unique-trans query)
+                     (xaccQueryGetSplitsUniqueTrans query)
                      (qof-query-run query)))
 
     (set! table (make-split-table splits
