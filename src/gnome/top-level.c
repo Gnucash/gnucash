@@ -197,29 +197,10 @@ gnc_html_price_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
-static void
-gnc_main_window_book_open_handler(QofSession *session)
-{
-    gchar *filename, *statefile;
-
-    filename = gnc_html_encode_string(qof_session_get_url(session));
-    if (!filename) return;
-
-    statefile = gnc_build_book_path(filename);
-    g_free(filename);
-    gfec_try_load(statefile);
-    g_free(statefile);
-}
-
 /** Restore all persistent program state.  This function finds the
  *  "new" state file associated with a specific book guid.  It then
  *  iterates through this state information, calling a helper function
  *  to recreate each open window.
- *
- *  If the "new" state file cannot be found, this function will open
- *  an account tree window and then attempt to invoke the old gnucash
- *  1.x state routines.  This provides a fluid transition for users
- *  from the old to the new state systems.
  *
  *  @note The name of the state file is based on the name of the data
  *  file, not the path name of the data file.  If there are multiple
