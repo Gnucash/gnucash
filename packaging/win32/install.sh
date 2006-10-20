@@ -549,6 +549,7 @@ function inst_swig() {
             mv swigwin-* mydir
             mv mydir/* .
             rmdir mydir
+            rm INSTALL # bites with /bin/install
         qpopd
     fi
     quiet swig -version || die "swig unavailable"
