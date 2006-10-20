@@ -627,6 +627,7 @@ function inst_goffice() {
     then
 	echo "goffice already installed.  skipping."
     else
+	rm -rf $TMP_UDIR/goffice-*
 	wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
 	mydir=`pwd`
 	qpushd $TMP_UDIR/goffice-*
