@@ -16,7 +16,7 @@ esac
 
 ####  Load Custom.sh
 
-function add_step() { }
+function add_step() { echo "" >/dev/null; }
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 
