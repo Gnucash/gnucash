@@ -279,7 +279,7 @@
              (gnc:split-scm-set-account-guid split-scm new-guid)
              (gnc:split-scm-onto-split split-scm new-split book)
              (gnc:split-scm-set-account-guid split-scm old-guid)
-             (xaccTransAppendSplit trans new-split)))
+             (xaccSplitSetParent new-split trans)))
          (gnc:transaction-scm-get-split-scms trans-scm))
         
         ;; close the transaction

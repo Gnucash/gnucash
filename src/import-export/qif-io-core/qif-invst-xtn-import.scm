@@ -172,7 +172,7 @@
         (xaccAccountBeginEdit acct)
         (xaccSplitSetAccount split acct)
         (xaccAccountCommitEdit acct)
-        (xaccTransAppendSplit gnc-xtn split)
+        (xaccSplitSetParent split gnc-xtn)
         split))
 
     (define (lookup-balance acct-info)

@@ -481,13 +481,13 @@
                    
                    ;; finally, plug the split into the account 
                    (xaccSplitSetAccount gnc-far-split far-acct)
-                   (xaccTransAppendSplit gnc-xtn gnc-far-split))))
+                   (xaccSplitSetParent gnc-far-split gnc-xtn))))
            splits)
           
           ;; the value of the near split is the total of the far splits.
           (xaccSplitSetValue gnc-near-split near-split-total)
           (xaccSplitSetAmount gnc-near-split near-split-total)
-          (xaccTransAppendSplit gnc-xtn gnc-near-split)
+          (xaccSplitSetParent gnc-near-split gnc-xtn)
           (xaccSplitSetAccount gnc-near-split near-acct))
         
         ;; STOCK TRANSACTIONS: the near/far accounts depend on the
@@ -631,15 +631,15 @@
 
           (if (and qif-near-acct qif-far-acct)
               (begin 
-                (xaccTransAppendSplit gnc-xtn gnc-near-split)
+                (xaccSplitSetParent gnc-near-split gnc-xtn)
                 (xaccSplitSetAccount gnc-near-split near-acct)
                 
-                (xaccTransAppendSplit gnc-xtn gnc-far-split)
+                (xaccSplitSetParent gnc-far-split gnc-xtn)
                 (xaccSplitSetAccount gnc-far-split far-acct)
                 
                 (if commission-split
                     (begin 
-                      (xaccTransAppendSplit gnc-xtn commission-split)
+                      (xaccSplitSetParent commission-split gnc-xtn)
                       (xaccSplitSetAccount commission-split
                                            commission-acct)))))))
     ;; return the modified transaction (though it's ignored).

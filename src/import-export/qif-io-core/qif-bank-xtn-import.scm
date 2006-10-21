@@ -74,7 +74,7 @@
         (xaccAccountBeginEdit acct)
         (xaccSplitSetAccount split acct)
         (xaccAccountCommitEdit acct)
-        (xaccTransAppendSplit gnc-xtn split)
+        (xaccSplitSetParent split gnc-xtn)
         split))
 
     (xaccTransBeginEdit gnc-xtn)
