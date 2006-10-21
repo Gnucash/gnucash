@@ -128,7 +128,7 @@
           (if account
               (begin
                 (xaccAccountBeginEdit account)
-                (xaccSplitSetAccount account split)
+                (xaccSplitSetAccount split account)
                 (xaccAccountCommitEdit account)))))))
 
 ;; Defines a scheme representation of a transaction.

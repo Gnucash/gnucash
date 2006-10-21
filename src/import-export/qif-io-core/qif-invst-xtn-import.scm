@@ -170,7 +170,7 @@
         
         ;; add it to the account and the transaction
         (xaccAccountBeginEdit acct)
-        (xaccSplitSetAccount acct split)
+        (xaccSplitSetAccount split acct)
         (xaccAccountCommitEdit acct)
         (xaccTransAppendSplit gnc-xtn split)
         split))
