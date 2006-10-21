@@ -194,7 +194,7 @@
       (apply xaccTransSetDate gnc-xtn date))
     
     (xaccTransSetNum gnc-xtn (qif-io:invst-xtn-action qif-xtn))
-    (xaccTransactionSetDescription gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
+    (xaccTransSetDescription gnc-xtn (qif-io:invst-xtn-payee qif-xtn))
     
     ;; get the relevant info, including 'near-acct' and 'far-acct', 
     ;; the accounts affected by the transaction

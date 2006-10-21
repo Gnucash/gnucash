@@ -390,7 +390,7 @@
     
     ;; fixme: bug #105 
     (if qif-payee
-        (xaccTransactionSetDescription gnc-xtn qif-payee))
+        (xaccTransSetDescription gnc-xtn qif-payee))
     (if qif-number
         (xaccTransSetNum gnc-xtn qif-number))
     (if qif-memo
@@ -398,7 +398,7 @@
 	  (xaccSplitSetMemo gnc-near-split qif-memo)
 	  (if (or (not qif-payee)
 		  (equal? qif-payee ""))
-	      (xaccTransactionSetDescription gnc-xtn qif-memo))))
+	      (xaccTransSetDescription gnc-xtn qif-memo))))
     
     (if (eq? qif-cleared 'cleared)        
         (xaccSplitSetReconcile gnc-near-split #\c))

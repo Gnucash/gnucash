@@ -256,7 +256,7 @@
               (notes       (gnc:transaction-scm-get-notes trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
           (if currency    (xaccTransSetCurrency trans currency))
-          (if description (xaccTransactionSetDescription trans description))
+          (if description (xaccTransSetDescription trans description))
           (if num         (xaccTransSetNum trans num))
           (if notes       (xaccTransSetNotes trans notes))
           (if date-posted (gnc-transaction-set-date

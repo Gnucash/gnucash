@@ -87,7 +87,7 @@
       (apply xaccTransSetDate gnc-xtn date))
     
     (xaccTransSetNum gnc-xtn (qif-io:bank-xtn-number qif-xtn))
-    (xaccTransactionSetDescription gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
+    (xaccTransSetDescription gnc-xtn (qif-io:bank-xtn-payee qif-xtn))
     
     ;; create the near split (the one that goes to the source-acct)
     (let* ((near-acct-name (qif-io:bank-xtn-source-acct qif-xtn)))
