@@ -36,7 +36,7 @@ qpushd $basedir
 rm -rf regex readline indent guile pexports gnome swig autotools
 rm -rf libgsf goffice glade gnucash tmp
 
-rm -f /etc/profile.d/installer.in
+rm -f /etc/profile.d/installer.sh
 
 echo "Done"
 exit 0
