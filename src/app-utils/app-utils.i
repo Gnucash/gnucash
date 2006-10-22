@@ -33,7 +33,7 @@ void gnc_option_db_destroy(GNCOptionDB *odb);
 void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
       const char *section, const char *name, gboolean selectable);
 
-%typemap(out) GncCommodityList {
+%typemap(out) GncCommodityList * {
   SCM list = SCM_EOL;
   GList *node;
 
