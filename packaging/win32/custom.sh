@@ -67,7 +67,7 @@ ACTIVE_PERL_URL="http://downloads.activestate.com/ActivePerl/Windows/5.6/ActiveP
 ACTIVE_PERL_DIR=$GLOBAL_DIR\\active-perl
 
 GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/slib3a3.zip"
+SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
 GUILE_DIR=$GLOBAL_DIR\\guile
 
 OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-0_9_8d.exe"
