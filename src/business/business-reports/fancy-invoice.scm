@@ -551,7 +551,7 @@
 			     (gnc:gnc-monetary-commodity (cdr entry-values))
 			     (gnc:gnc-monetary-amount (cdr entry-values)))
 
-	    (let ((order (gnc:entry-get-order current)))
+	    (let ((order (gncEntryGetOrder current)))
 	      (if order (add-order order)))
 
 	    (set! entries-added (+ entries-added 1))
