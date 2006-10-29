@@ -242,7 +242,7 @@
 ;; used to use alternate account guids when creating splits.
 (define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping
                                               commit? book)
-  (if (not trans)
+  (if (null? trans)
       #f
       (begin
         ;; open the transaction for editing

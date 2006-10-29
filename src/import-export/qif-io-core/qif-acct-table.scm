@@ -108,7 +108,7 @@
       (hash-fold
        (lambda (name acct p)
          (let ((cmdty (xaccAccountGetCommodity acct)))
-           (if (not cmdty)
+           (if (null? cmdty)
                (begin 
                  (xaccAccountBeginEdit acct)
                  (xaccAccountSetCommodity acct commodity)

@@ -386,7 +386,7 @@
                            (set! heinous-error #t))))))
 
 		 ;; update the progress bar for each line read
-		 (if progress-dialog 
+		 (if (not (null? progress-dialog)) 
 		     (begin 
 		       (gnc-progress-dialog-set-value
 			progress-dialog (/ bytes-read file-size))
@@ -405,7 +405,7 @@
      ;; they were in the file.  This is important in a few cases. 
      (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
-     (if progress-dialog
+     (if (not (null? progress-dialog))
          (gnc-progress-dialog-destroy progress-dialog))
 
      return-val)))
