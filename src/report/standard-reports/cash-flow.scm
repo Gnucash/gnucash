@@ -185,7 +185,7 @@
     (define (account-get-depth account)
       (define (account-get-depth-internal account-internal depth)
         (let ((parent (xaccAccountGetParentAccount account-internal)))
-          (if parent
+          (if (not (null? parent))
             (account-get-depth-internal parent (+ depth 1))
             depth)))
       (account-get-depth-internal account 1))

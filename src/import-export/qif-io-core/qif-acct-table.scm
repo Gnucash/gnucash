@@ -59,7 +59,7 @@
                 (type (qif-io:account-type qif-acct))
                 (desc (qif-io:account-description qif-acct))
                 (gnc-acct (hash-ref qif-acct-table name)))
-           (if gnc-acct
+           (if (and gnc-acct (not (null? gnc-acct)))
                (let ((gnc-type (qif-io:parse-acct-type type)))
                  (xaccAccountBeginEdit gnc-acct)
                  (if gnc-type 
@@ -73,7 +73,7 @@
       (hash-fold
        (lambda (name acct p)
          (let ((cmdty (xaccAccountGetCommodity acct)))
-           (if (not cmdty)
+           (if (null? cmdty)
                (begin 
                  (xaccAccountBeginEdit acct)
                  (xaccAccountSetCommodity acct commodity)
@@ -94,7 +94,7 @@
                 (income? (qif-io:category-income-cat qif-cat))
                 (desc (qif-io:category-description qif-cat))
                 (gnc-acct (hash-ref qif-cat-table name)))
-           (if gnc-acct
+           (if (and gnc-acct (not (null? gnc-acct)))
                (begin 
                  (xaccAccountBeginEdit gnc-acct)
                  (cond (income?

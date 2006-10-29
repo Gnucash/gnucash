@@ -34,7 +34,7 @@
 ;; instead, this function's side-effect is to set the report's editor widget.
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
-    (if editor-widg
+    (if (and editor-widg (not (null? editor-widg)))
         (gnc-report-raise-editor report)
         (begin
           (if (gnc:report-options report) 

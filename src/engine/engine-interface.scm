@@ -111,7 +111,7 @@
 ;; status and date are not copied. The C split's guid is,
 ;; of course, unchanged.
 (define (gnc:split-scm-onto-split split-scm split book)
-  (if (not split)
+  (if (null? split)
       #f
       (begin
         (let ((memo     (gnc:split-scm-get-memo split-scm))
@@ -125,7 +125,7 @@
         (let ((account (xaccAccountLookup
                         (gnc:split-scm-get-account-guid split-scm)
                         book)))
-          (if account
+          (if (not (null? account))
               (begin
                 (xaccAccountBeginEdit account)
                 (xaccSplitSetAccount split account)

@@ -636,7 +636,7 @@
       (if (and references? (not (member o orders)))
 	  (addto! orders o)))
 
-    (if invoice
+    (if (not (null? invoice))
 	(begin
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncOwnerGetType
@@ -653,7 +653,7 @@
 
     (gnc:html-document-set-title! document title)
 
-    (if invoice
+    (if (not (null? invoice))
 	(let ((book (gncInvoiceGetBook invoice)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)

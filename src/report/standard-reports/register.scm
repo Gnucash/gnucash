@@ -116,7 +116,7 @@
 (define (gnc:split-get-balance-display split)
   (let ((account (xaccSplitGetAccount split))
         (balance (xaccSplitGetBalance split)))
-    (if (and account (gnc-reverse-balance account))
+    (if (and (not (null? account)) (gnc-reverse-balance account))
         (gnc-numeric-neg balance)
         balance)))
 
@@ -125,7 +125,7 @@
   (let* ((row-contents '())
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
-         (currency (if account
+         (currency (if (not (null? account))
                        (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
          (damount (xaccSplitGetAmount split))
@@ -157,7 +157,7 @@
                     (if transaction-info?
                         (let ((other-split
                                (xaccSplitGetOtherSplit split)))
-                          (if other-split
+                          (if (not (null? other-split))
                               (gnc-account-get-full-name
                                (xaccSplitGetAccount other-split))
                               (_ "-- Split Transaction --")))
@@ -343,7 +343,7 @@
 
       (define (display-subtotal monetary)
         (if (amount-single-col used-columns)
-            (if (and leader (gnc-reverse-balance leader))
+            (if (and (not (null? leader)) (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
             (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
@@ -453,11 +453,11 @@
 
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
-      (if (null? accounts) #f
+      (if (null? accounts) '()
           (begin
             (set! accounts (cons (car accounts)
                                  (delete (car accounts) (cdr accounts))))
-            (if (not (null? (cdr accounts))) #f
+            (if (not (null? (cdr accounts))) '()
                 (car accounts))))))
 
   (let* ((table (gnc:make-html-table))

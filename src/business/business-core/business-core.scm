@@ -91,20 +91,20 @@
   (let* ((trans (xaccSplitGetParent split))
 	 (invoice (gncInvoiceGetInvoiceFromTxn trans))
 	 (temp-owner (gncOwnerCreate))
-	 (owner #f))
+	 (owner '()))
 
-    (if invoice
+    (if (not (null? invoice))
 	(set! owner (gncInvoiceGetOwner invoice))
 	(let ((split-list (xaccTransGetSplitList trans)))
 	  (define (check-splits splits)
 	    (if (and splits (not (null? splits)))
 		(let* ((split (car splits))
 		       (lot (xaccSplitGetLot split)))
-		  (if lot
+		  (if (not (null? lot))
 		      (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
 			     (owner? (gnc:owner-get-owner-from-lot
 				      lot temp-owner)))
-			(if invoice
+			(if (not (null? invoice))
 			    (set! owner (gncInvoiceGetOwner invoice))
 			    (if owner?
 				(set! owner temp-owner)
@@ -112,14 +112,14 @@
 		      (check-splits (cdr splits))))))
 	  (check-splits split-list)))
 
-    (if owner
+    (if (not (null? owner))
 	(begin
 	  (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
 	  (gncOwnerDestroy temp-owner)
 	  result-owner)
 	(begin
 	  (gncOwnerDestroy temp-owner)
-	  #f)))) ;; FIXME!
+	  '()))))
 
 
 (export gnc:owner-get-address)

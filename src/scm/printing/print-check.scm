@@ -108,7 +108,7 @@
 	 (payee-stub-text "")
 	 (memo-stub-text ""))
 
-    (if ps
+    (if (not (null? ps))
      (begin
       (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 

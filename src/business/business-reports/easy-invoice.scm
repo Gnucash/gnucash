@@ -473,7 +473,7 @@
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
 
-	    (if (and show-payments lot)
+	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
 			       (gnc-lot-get-split-list lot)
 			       (lambda (s1 s2)
@@ -524,7 +524,7 @@
 			     (gnc:gnc-monetary-amount (cdr entry-values)))
 
 	    (let ((order (gncEntryGetOrder current)))
-	      (if order (add-order order)))
+	      (if (not (null? order)) (add-order order)))
 
 	    (do-rows-with-subtotals rest
 				    table
@@ -683,7 +683,7 @@
       (if (and references? (not (member o orders)))
 	  (addto! orders o)))
 
-    (if invoice
+    (if (not (null? invoice))
 	(begin
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncOwnerGetType
@@ -707,7 +707,7 @@
 
     (add-html! document "<tr><td align='left'>")
 
-    (if invoice
+    (if (not (null? invoice))
       (begin
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")

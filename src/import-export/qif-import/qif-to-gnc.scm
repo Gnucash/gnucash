@@ -38,13 +38,13 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (xaccGetAccountFromFullName old-group long-name)
+      (if (not (null? (xaccGetAccountFromFullName old-group long-name)))
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
                     (xaccGetAccountFromFullName old-group test-name)))
-              (if (and test-acct (not (compatible? test-acct)))
+              (if (and (not (null? test-acct)) (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))
           short-name))
@@ -53,7 +53,7 @@
     ;; if the name is in use but the commodity, or type are
     ;; incompatible, we need to create a new account with a modified
     ;; name.
-    (if same-gnc-account 
+    (if (and same-gnc-account (not (null? same-gnc-account))) 
         (if (compatible? same-gnc-account)
             (begin 
               ;; everything is ok, so we can just use the same
@@ -77,7 +77,8 @@
     ;; here, existing-account means a previously *created* account
     ;; (possibly a new account, possibly a copy of an existing gnucash
     ;; acct)
-    (if (and existing-account (compatible? existing-account))
+    (if (and (and existing-account (not (null? existing-account))) 
+             (compatible? existing-account))
         existing-account 
         (let ((new-acct (xaccMallocAccount (gnc-get-current-book)))
               (parent-acct #f)
@@ -91,7 +92,7 @@
           ;; if this is a copy of an existing gnc account, copy the
           ;; account properties.  For incompatible existing accts,
           ;; we'll do something different later.
-          (if same-gnc-account
+          (if (and same-gnc-account (not (null? same-gnc-account)))
               (begin 
                 (xaccAccountSetName
                  new-acct (xaccAccountGetName same-gnc-account))
@@ -156,7 +157,7 @@
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo #t default-currency #f default-currency
                                    gnc-acct-hash old-group new-group))))
-          (if parent-acct
+          (if (and parent-acct (not (null? parent-acct)))
               (xaccAccountInsertSubAccount parent-acct new-acct)
               (xaccGroupInsertAccount new-group new-acct))
           
@@ -308,7 +309,7 @@
            (let xloop ((xtn (car markable-xtns))
                        (rest (cdr markable-xtns)))
              (set! work-done (+ 1 work-done))
-             (if progress-dialog 
+             (if (not (null? progress-dialog)) 
                  (begin 
                    (gnc-progress-dialog-set-value
                     progress-dialog (/ work-done work-to-do))
@@ -325,7 +326,7 @@
           (for-each 
            (lambda (xtn)
              (set! work-done (+ 1 work-done))
-             (if progress-dialog 
+             (if (not (null? progress-dialog)) 
                  (begin 
                    (gnc-progress-dialog-set-value
                     progress-dialog (/ work-done work-to-do))
@@ -352,7 +353,7 @@
         sorted-qif-files-list)
        
        ;; get rid of the progress dialog 
-       (if progress-dialog
+       (if (not (null? progress-dialog))
            (gnc-progress-dialog-destroy progress-dialog))
        
        new-group))))

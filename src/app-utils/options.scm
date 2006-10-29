@@ -637,7 +637,8 @@
     (gnc:make-option
      section name sort-tag 'account-list documentation-string getter
      (lambda (account-list)
-       (if (not account-list) (set! account-list (default-getter)))
+       (if (or (not account-list) (null? account-list)) 
+           (set! account-list (default-getter)))
        (set! account-list
              (filter (lambda (x) (if (string? x)
                                      (xaccAccountLookup
@@ -760,7 +761,7 @@
     (gnc:make-option
      section name sort-tag 'account-sel documentation-string getter
      (lambda (account)
-       (if (not account) (set! account (get-default)))
+       (if (or (not account) (null? account)) (set! account (get-default)))
        (set! account (convert-to-account account))
        (let* ((result (validator account))
 	      (valid (car result))

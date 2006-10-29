@@ -163,7 +163,7 @@
 	     (begin
 	       (if reverse?
 		   (set! bal (gnc-numeric-neg bal)))
-	       (if invoice
+	       (if (not (null? invoice))
 		   (begin
 		     (apply-invoice post-date bal))
 		   (apply-payment bal))))))
@@ -202,7 +202,7 @@
 	 (type-str
 	  (cond
 	   ((equal? type gnc:transaction-type-invoice)
-	    (if invoice
+	    (if (not (null? invoice))
 		(gnc:make-html-text
 		 (gnc:html-markup-anchor
 		  (gnc:invoice-anchor-text invoice)
@@ -255,7 +255,7 @@
 		    )))
 	  
 	  ; Now print out the invoice row
-	  (if invoice
+	  (if (not (null? invoice))
 	      (set! due-date (gncInvoiceGetDateDue invoice)))
 
 	  (let ((row (make-row date due-date (xaccTransGetNum txn)
@@ -575,7 +575,7 @@
                        (gnc:owner-anchor-text owner)
                        (gncOwnerGetName owner))))
 	  
-	  (if account
+	  (if (not (null? account))
 	      (begin
 		(set! table (make-txn-table (gnc:report-options report-obj)
 					    query account start-date end-date))
@@ -709,7 +709,7 @@
 
 (define (gnc:owner-report-create owner account)
   ; Figure out an account to use if nothing exists here.
-  (if (not account)
+  (if (null? account)
       (set! account (find-first-account-for-owner owner)))
 
   (owner-report-create owner account))
@@ -722,7 +722,7 @@
 	 (owner (gnc:owner-from-split split temp-owner))
 	 (res #f))
 
-    (if owner
+    (if (not (null? owner))
 	(set! res (gnc:owner-report-create owner account)))
 
     (gncOwnerDestroy temp-owner)
