@@ -53,15 +53,13 @@ and other resources.
 g-wrap
 ------
 
-g-wrap is the tool used to automate the wrapping of C functions to
-make them callable from the guile code.  g-wrap is now maintained by
-Rob Browning and is available from ftp://ftp.gnucash.org/pub/g-wrap,
-or as a Debian package from http://www.cs.mu.oz.au/~rgmerk/software.
-Documentation in info format is distributed as part of the package.
-Available C functions are wrapped in gnucash/src/g-wrap/gnc.gwp.
-Pointers are wrapped using some stuff in
-gnucash/lib/g-wrap/guile/pointer.scm which is not documented but looks
-reasonably straightforward.
+Note: gwrap has been replaced by swig and dropped completely in
+SVN-trunk on 2006-10-20 and for gnucash-2.2.0.
+
+(Old info: g-wrap is the tool used to automate the wrapping of C
+functions to make them callable from the guile code.  g-wrap is
+now maintained by Rob Browning and is available from
+ftp://ftp.gnucash.org/pub/g-wrap )
 
 
 Garbage collection:
