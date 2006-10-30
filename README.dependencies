@@ -61,7 +61,6 @@ gconf2
 glib2
 gtk+2
 guile
-gwrap
 libart2
 libglade2
 libgnomeprint2.2
@@ -71,6 +70,10 @@ libgsf1
 libofx
 libxml2
 pango
+swig
+
+(Note: gwrap has been replaced by swig and dropped completely in
+SVN-trunk on 2006-10-20 and for gnucash-2.2.0.)
 
 
 libgoffice/libgsf details
@@ -223,6 +226,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libofx-0.8.0
     - libxml2-2.6.23
     - pango-1.10.2
+    - swig-1.3.27
   -  10.0 = 2005-10-06
     - aqbanking: not included; binary aqbanking-1.6.0 available at ftp://ftp.gwdg.de/linux/misc/suser-crauch/10.0/
     - cairo-1.0.0
@@ -239,6 +243,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libofx-0.7.0
     - libxml2-2.6.20
     - pango-1.10.0
+    - swig-1.3.24
   - *9.3  = 2005-04-15
     - aqbanking: not included, but binary aqbanking-1.6.0 provided by upstream
     - cairo-0.3.0
@@ -256,6 +261,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libofx-0.7.0
     - libxml2-2.6.17
     - pango-1.8.1
+    - swig-1.3.21
 - Fedora Core
   - *FC4 = 2005-06-13
     - aqbanking-1.0.4beta
