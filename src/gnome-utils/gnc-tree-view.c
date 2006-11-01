@@ -795,7 +795,7 @@ gnc_tree_view_column_visible (GncTreeView *view,
   gboolean visible;
   gchar *key;
 
-  ENTER("column %p, name %s", column, pref_name);
+  ENTER("column %p, name %s", column, pref_name ? pref_name : "(null)");
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   if (column) {
     if (g_object_get_data(G_OBJECT(column), ALWAYS_VISIBLE)) {
