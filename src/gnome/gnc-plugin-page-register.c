@@ -997,8 +997,8 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     acct_name = g_key_file_get_string(key_file, group_name,
 				      KEY_ACCOUNT_NAME, &error);
     book = qof_session_get_book(gnc_get_current_session());
-    account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-					 acct_name);
+    account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
+					      acct_name);
     g_free(acct_name);
     if (account == NULL) {
       LEAVE("Bad account name");
@@ -2577,7 +2577,7 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
 {
   GncPluginPageRegisterPrivate *priv;
   Query *query;
-  AccountGroup *root;
+  Account *root;
   Transaction *trans;
   SplitRegister *reg;
 
@@ -2600,7 +2600,7 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
   }
 
   gnc_suspend_gui_refresh();
-  root = gnc_get_current_group();
+  root = gnc_get_current_root_account();
   xaccTransScrubOrphans(trans);
   xaccTransScrubImbalance(trans, root, NULL);
   gnc_resume_gui_refresh();
@@ -2613,7 +2613,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
 {
   GncPluginPageRegisterPrivate *priv;
   Query *query;
-  AccountGroup *root;
+  Account *root;
   Transaction *trans;
   Split *split;
   GList *node;
@@ -2630,7 +2630,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
   }
 
   gnc_suspend_gui_refresh();
-  root = gnc_get_current_group();
+  root = gnc_get_current_root_account();
 
   for (node = xaccQueryGetSplits(query); node; node = node->next)
   {

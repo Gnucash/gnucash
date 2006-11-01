@@ -29,7 +29,6 @@
 #include <glib/gi18n.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
 #include "gnc-euro.h"
@@ -120,14 +119,13 @@ gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency, gint tot
  * @fixme Move this non-GUI code into the engine.
  **/
 static void
-gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
+gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
                          GNCSummarybarOptions options)
 {
   gnc_numeric start_amount;
   gnc_numeric start_amount_default_currency;
   gnc_numeric end_amount;
   gnc_numeric end_amount_default_currency;
-  AccountGroup *children;
   GNCAccountType account_type;  
   gnc_commodity * account_currency;
   gnc_commodity * euro_commodity;
@@ -135,21 +133,20 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   GNCCurrencyAcc *euro_accum = NULL;
   GNCCurrencyAcc *grand_total_accum = NULL;
   GNCCurrencyAcc *non_curr_accum = NULL;
-  GList *list;
-  GList *node;
+  GList *children, *node;
   gboolean non_currency = FALSE;
   Timespec end_timespec;
   Timespec start_timespec;
 
+  if (parent == NULL) return;
 
-  list = xaccGroupGetAccountList (group);
-  for (node = list; node; node = node->next)
+  children = gnc_account_get_children(parent);
+  for (node = children; node; node = g_list_next(node))
   {
     Account *account = node->data;
 
     account_type = xaccAccountGetType(account);
     account_currency = xaccAccountGetCommodity(account);
-    children = xaccAccountGetChildren(account);
 
     if(options.grand_total)
       grand_total_accum = gnc_ui_get_currency_accumulator(currency_list,
@@ -226,8 +223,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                              GNC_RND_ROUND);
 	}
 
-	if (children != NULL)
-	  gnc_ui_accounts_recurse(children, currency_list, options);
+	gnc_ui_accounts_recurse(account, currency_list, options);
 	break;
       case ACCT_TYPE_INCOME:
       case ACCT_TYPE_EXPENSE:
@@ -292,8 +288,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                              GNC_RND_ROUND);
 	}
 
-	if (children != NULL)
-	  gnc_ui_accounts_recurse(children, currency_list, options);
+	gnc_ui_accounts_recurse(account, currency_list, options);
 	break;
       case ACCT_TYPE_EQUITY:
         /* no-op, see comments at top about summing assets */
@@ -303,6 +298,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 	break;
     }
   }
+  g_list_free(children);
 }
 
 static char*
@@ -358,7 +354,7 @@ enum {
 static void
 gnc_main_window_summary_refresh (GNCMainSummary * summary)
 {
-  AccountGroup *group;
+  Account *root;
   char asset_string[256];
   char profit_string[256];
   GNCCurrencyAcc *currency_accum;
@@ -387,8 +383,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   gnc_ui_get_currency_accumulator (&currency_list, options.default_currency,
 				   TOTAL_SINGLE);
 
-  group = gnc_get_current_group ();
-  gnc_ui_accounts_recurse(group, &currency_list, options);
+  root = gnc_get_current_root_account ();
+  gnc_ui_accounts_recurse(root, &currency_list, options);
 
   {
     GtkTreeIter iter;

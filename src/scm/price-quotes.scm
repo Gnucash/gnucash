@@ -600,8 +600,7 @@
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 
-  (let* ((group (xaccGetAccountGroup book))
-         (fq-call-data (book->commodity->fq-call-data book))
+  (let* ((fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (apply append
                                (map fq-call-data->fq-calls fq-call-data))))

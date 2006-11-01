@@ -45,7 +45,6 @@
 
 #include "sixtp-dom-parsers.h"
 #include "qof.h"
-#include "Group.h"
 
 /* non-static because it's used in io-gncxml-v2.c */
 const gchar *gnc_v2_book_version_string = "2.0.0";
@@ -62,25 +61,22 @@ static QofLogModule log_module = GNC_MOD_IO;
 #ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
 
 static void
-append_group(xmlNodePtr parent, AccountGroup *grp)
+append_account_tree (xmlNodePtr parent, Account *account)
 {
-    GList *list;
-    GList *node;
+    GList *children, *node;
 
-    list = xaccGroupGetAccountList(grp);
-
-    for (node = list; node; node = node->next) {
+    children = gnc_account_get_children(account);
+    for (node = children; node; node = node->next) 
+    {
         xmlNodePtr accnode;
-        AccountGroup *newgrp;
+        Account *account;
 
-        accnode = gnc_account_dom_tree_create((Account*)(node->data), FALSE);
+	account = node->data;
+        accnode = gnc_account_dom_tree_create(account, FALSE);
         xmlAddChild (parent, accnode);
-
-        newgrp = xaccAccountGetChildren((Account*)(node->data));
-
-        if (newgrp)
-            append_group(accnode, newgrp);
+	append_account_tree(accnode, account);
     }
+    g_list_free(children);
 }
 
 static int
@@ -125,9 +121,10 @@ gnc_book_dom_tree_create(QofBook *book)
     xmlAddChild(ret, gnc_commodity_dom_tree_create(
                     gnc_book_get_commodity_table(book)));
     xmlAddChild(ret, gnc_pricedb_dom_tree_create(gnc_book_get_pricedb(book)));
-    append_group(ret, gnc_book_get_group(book));
+    append_account_tree (ret, gnc_book_get_root(book));
 
-    xaccGroupForEachTransaction(gnc_book_get_group(book), traverse_txns, ret);
+    xaccAccountTreeForEachTransaction (gnc_book_get_root_account(book),
+				       traverse_txns, ret);
 
     xmlAddChild(ret, gnc_freqSpec_dom_tree_create (book));
 

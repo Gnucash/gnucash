@@ -43,13 +43,13 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
-;; qif-io:acct-table-make-gnc-group
+;; qif-io:acct-table-make-gnc-acct-tree
 ;; fill in information for the gnucash accounts and organize them
 ;; in a group tree 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-io:acct-table-make-gnc-group acct-table qif-file commodity)
-  (let ((group (xaccMallocAccountGroup (gnc-get-current-book))))
+(define (qif-io:acct-table-make-gnc-acct-tree acct-table qif-file commodity)
+  (let ((root (xaccMallocAccount (gnc-get-current-book))))
     ;; poke through the qif-file accounts to see if any of them
     ;; show up in the data 
     (let ((qif-acct-table (qif-io:acct-table-accounts acct-table)))
@@ -81,7 +81,7 @@
          (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
                (xaccAccountSetType acct GNC-BANK-TYPE)))
-         (xaccGroupInsertAccount group acct)
+         (gnc-account-append-child root acct)
          #t) #t (qif-io:acct-table-accounts acct-table)))
 
     ;; now the categories 
@@ -116,11 +116,11 @@
          (let ((type (xaccAccountGetType acct)))
            (if (= type -1)
                (xaccAccountSetType acct GNC-EXPENSE-TYPE)))
-         (xaccGroupInsertAccount group acct)
+         (gnc-account-append-child root acct)
          #t) #t (qif-io:acct-table-categories acct-table)))
 
     ;; the securities 
 
     ;; the other brokerage-related accounts
 
-    group))
+    root))

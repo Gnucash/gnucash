@@ -577,7 +577,7 @@
              ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
              ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE
              ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-       (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+       (gnc-account-get-descendants (gnc-get-current-root-account))))
     #f #t))
 
   (gnc:register-trep-option
@@ -587,10 +587,9 @@
     (lambda ()
       ;; FIXME : gnc:get-current-accounts disappeared.
       (let ((current-accounts '())
-	    (num-accounts (xaccGroupGetNumAccounts
-			   (gnc-get-current-group)))
-	    (first-account (xaccGroupGetAccount
-			    (gnc-get-current-group) 0)))
+	    (root (gnc-get-current-root-account))
+	    (num-accounts (gnc-account-n-children root))
+	    (first-account (gnc-account-nth-child root 0)))
 	(cond ((not (null? current-accounts))
 	       (list (car current-accounts)))
 	      ((> num-accounts 0) (list first-account))

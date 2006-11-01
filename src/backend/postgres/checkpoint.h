@@ -35,7 +35,6 @@
 #define CHECKPOINT_H
 
 #include "Account.h"
-#include "Group.h"
 #include "qof.h"
 #include "Transaction.h"
 
@@ -79,8 +78,8 @@ typedef struct _checkpoint {
 
 void pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans);
 void pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts);
-void pgendGroupRecomputeAllCheckpoints (PGBackend *, AccountGroup *);
-void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, Timespec as_of_date);
+void pgendAccountTreeRecomputeAllCheckpoints (PGBackend *, Account *);
+void pgendAccountTreeGetAllBalances (PGBackend *, Account *, Timespec as_of_date);
 
 /* The pgendAccountGetBalance() routine goes to the sql database and finds the
  *    balance as of the 'as_of_date' argument. It sets the starting balance for 

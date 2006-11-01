@@ -43,7 +43,6 @@
 #include <gtk/gtk.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "QuickFill.h"
 
 typedef gboolean (*AccountBoolCB) (Account *, gpointer);
@@ -57,7 +56,7 @@ typedef gboolean (*AccountBoolCB) (Account *, gpointer);
  *  the quickfill.  The 'cb_data' is passed to the callback.
  *
  *  The quickfill is created only once; it is then stored with
- *  the QofBook that is the parent of the AccountGroup.  It is
+ *  the QofBook that is the parent of the root account.  It is
  *  automatically destroyed when the QofBook is destroyed.
  *
  *  Multiple, distinct quickfills, for different uses, are allowed. 
@@ -69,12 +68,12 @@ typedef gboolean (*AccountBoolCB) (Account *, gpointer);
  *  it).  This code does not currently listen to account-destroy
  *  events.
  */
-QuickFill * gnc_get_shared_account_name_quickfill (AccountGroup *group,
+QuickFill * gnc_get_shared_account_name_quickfill (Account *root,
                                                    const char * key,
                                                    AccountBoolCB skip_cb, 
                                                    gpointer cb_data);
 GtkListStore *
-gnc_get_shared_account_name_list_store (AccountGroup *group, 
+gnc_get_shared_account_name_list_store (Account *root,
 					const char * key, 
 					AccountBoolCB cb, gpointer cb_data);
 

@@ -365,14 +365,12 @@ test_transaction(void)
     for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
-        AccountGroup *grp;
         xmlNodePtr test_node;
         gnc_commodity *com;
         gchar *compare_msg;
         gchar *filename1;
         int fd;
 
-        grp = get_random_group(book);
         ran_trn = get_random_transaction(book);
         if(!ran_trn)
         {

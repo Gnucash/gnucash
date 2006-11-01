@@ -460,7 +460,7 @@ finish_helper(gpointer key, gpointer value, gpointer data)
 				   comm);
 
   /* now replace all the accounts using old_comm with new_comm */
-  accts = xaccGroupGetSubAccounts(gnc_get_current_group ());
+  accts = gnc_account_get_descendants(gnc_get_current_root_account ());
 
   for(node = accts; node; node = node->next)
   {
@@ -493,10 +493,10 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
 
   /* Fix account and transaction commodities */
-  xaccGroupScrubCommodities (gnc_get_current_group ());
+  xaccAccountTreeScrubCommodities (gnc_get_current_root_account ());
 
   /* Fix split amount/value */
-  xaccGroupScrubSplits (gnc_get_current_group ());
+  xaccAccountTreeScrubSplits (gnc_get_current_root_account ());
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);

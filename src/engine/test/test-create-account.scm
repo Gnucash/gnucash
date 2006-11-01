@@ -9,10 +9,10 @@
 
   (let* ((session (qof-session-new))
          (book (qof-session-get-book session))
-         (group (xaccMallocAccountGroup book))
+         (root (xaccMallocAccount book))
          (acct (xaccMallocAccount book)))
     (xaccAccountBeginEdit acct)
     (xaccAccountSetName acct "foo")
     (xaccAccountCommitEdit acct)
-    (xaccGroupInsertAccount group acct))
+    (gnc-account-append-child root acct))
   #t)

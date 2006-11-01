@@ -1504,7 +1504,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     return NULL;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
+  account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */

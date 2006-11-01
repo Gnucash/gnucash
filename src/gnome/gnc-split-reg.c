@@ -483,7 +483,7 @@ account_latest_price (Account *account)
   commodity = xaccAccountGetCommodity (account);
   currency = gnc_default_currency ();
 
-  book = xaccAccountGetBook (account);
+  book = gnc_account_get_book (account);
   pdb = gnc_book_get_pricedb (book);
 
   return gnc_pricedb_lookup_latest (pdb, commodity, currency);
@@ -501,7 +501,7 @@ account_latest_price_any_currency (Account *account)
   if (!account) return NULL;
   commodity = xaccAccountGetCommodity (account);
 
-  book = xaccAccountGetBook (account);
+  book = gnc_account_get_book (account);
   pdb = gnc_book_get_pricedb (book);
 
   price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);

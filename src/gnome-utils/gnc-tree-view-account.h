@@ -38,7 +38,6 @@
 #include <gtk/gtktreeview.h>
 #include "gnc-tree-view.h"
 
-#include "Group.h"
 #include "gnc-ui-util.h"
 #include "gnc-plugin-page.h"
 
@@ -132,8 +131,8 @@ GType gnc_tree_view_account_get_type (void);
  *
  *  @return A pointer to a new account tree view.
  */
-GtkTreeView *gnc_tree_view_account_new_with_group (AccountGroup *group, 
-                                                   gboolean show_root);
+GtkTreeView *gnc_tree_view_account_new_with_root (Account *root, 
+						  gboolean show_root);
 
 /** Create a new account tree view.  This view may or may not show a
  *  pseudo top-level account.  The gnucash engine does not have a
@@ -337,24 +336,6 @@ void gnc_tree_view_account_refilter (GncTreeViewAccount *view);
 gint gnc_tree_view_account_count_children (GncTreeViewAccount *view,
 					   Account *account);
 
-
-
-/** This function returns the account associated with the top level
- *  pseudo-account.  The gnucash engine does not have a single top
- *  level account (it has a list of top level accounts), but this code
- *  provides one so that it can be used with all parts of the gnucash
- *  gui.
- *
- *  @note It only makes sense to call this function when the account
- *  tree is created such that the "top level account" is visible.  At
- *  the time this was written, only the "New/Edit Account" dialog does
- *  that.
- *
- *  @param view A pointer to an account tree view.
- *
- *  @return The top-level pseudo-account.
- */
-Account * gnc_tree_view_account_get_top_level (GncTreeViewAccount *view);
 
 
 /** This function returns the account associated with the specified

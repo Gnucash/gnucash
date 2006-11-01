@@ -1262,7 +1262,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
 
   /* Compute the ancillary data */
-  book = xaccAccountGetBook (posted_acc);
+  book = gnc_account_get_book (posted_acc);
   name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
   commodity = gncOwnerGetCurrency (owner);
   reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);

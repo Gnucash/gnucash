@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "Group.h"
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-engine.h"
@@ -83,7 +82,7 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
     const char *name;
 
     name = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
-    account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
+    account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
   }
 
   if (!account)

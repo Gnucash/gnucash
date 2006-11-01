@@ -35,7 +35,7 @@ struct GncExampleAccount_struct
     gchar *title;
     gchar *filename;
     QofBook *book;
-    AccountGroup *group;
+    Account *root;
     gchar *short_description;
     gchar *long_description;
     gboolean exclude_from_select_all;

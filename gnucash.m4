@@ -83,7 +83,6 @@ dnl
 #include <stdlib.h>
 
 #include <gnc-engine.h>
-#include <Group.h>
 
 int
 main ()

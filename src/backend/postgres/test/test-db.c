@@ -251,14 +251,12 @@ test_access(DbInfo *dbinfo, gboolean multi_user)
     return TRUE;
 }
 
-static gpointer
+static void
 mark_account_commodities(Account * a, gpointer data)
 {
     GHashTable *hash = data;
 
     g_hash_table_insert(hash, xaccAccountGetCommodity(a), hash);
-
-    return NULL;
 }
 
 static int
@@ -311,10 +309,10 @@ remove_unneeded_commodities(QofSession * session)
 
     book = qof_session_get_book(session);
 
-    xaccGroupForEachAccount(gnc_book_get_group(book),
-                            mark_account_commodities, cdi.hash, TRUE);
+    gnc_account_foreach_descendant(gnc_book_get_root_account(book),
+                            mark_account_commodities, cdi.hash);
 
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
+    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
                                 mark_transaction_commodities, cdi.hash);
 
     gnc_pricedb_foreach_price(gnc_book_get_pricedb(book),
@@ -473,16 +471,16 @@ num_trans_helper(Transaction * trans, gpointer data)
 static int
 session_num_trans(QofSession * session)
 {
-    AccountGroup *group;
+    Account *root;
     QofBook *book;
     int num = 0;
 
     g_return_val_if_fail(session, 0);
 
     book = qof_session_get_book(session);
-    group = gnc_book_get_group(book);
+    root = gnc_book_get_root_account(book);
 
-    xaccGroupForEachTransaction(group, num_trans_helper, &num);
+    xaccAccountTreeForEachTransaction(root, num_trans_helper, &num);
 
     return num;
 }
@@ -626,7 +624,7 @@ compare_balances(QofSession * session_1, QofSession * session_2)
 
     ok = TRUE;
 
-    list = xaccGroupGetSubAccounts(gnc_book_get_group(book_1));
+    list = gnc_account_get_descendants(gnc_book_get_root_account(book_1));
     for (node = list; node; node = node->next) {
         Account *account_1 = node->data;
         Account *account_2;
@@ -677,21 +675,21 @@ static gboolean
 test_queries(QofSession * session_base, DbInfo *dbinfo)
 {
     QueryTestData qtd;
-    AccountGroup *group;
+    Account *root;
     QofBook *book;
     gboolean ok;
 
     g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, FALSE);
 
     book = qof_session_get_book(session_base);
-    group = gnc_book_get_group(book);
+    root = gnc_book_get_root_account(book);
 
     qtd.session_base = session_base;
     qtd.dbinfo = dbinfo;
     qtd.loaded = 0;
     qtd.total = 0;
 
-    ok = xaccGroupForEachTransaction(group, test_trans_query, &qtd);
+    ok = xaccAccountTreeForEachTransaction(root, test_trans_query, &qtd);
 
 #if 0
     g_warning("average percentage loaded = %3.2f%%",
@@ -708,8 +706,8 @@ typedef struct {
     QofBook *book_1;
     QofBook *book_2;
 
-    AccountGroup *group_1;
-    AccountGroup *group_2;
+    Account *root_1;
+    Account *root_2;
 
     GList *accounts_1;
     GList *accounts_2;
@@ -834,8 +832,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
 
     td.session_1 = session_base;
     td.book_1 = qof_session_get_book(session_base);
-    td.group_1 = gnc_book_get_group(td.book_1);
-    td.accounts_1 = xaccGroupGetSubAccounts(td.group_1);
+    td.root_1 = gnc_book_get_root_account(td.book_1);
+    td.accounts_1 = gnc_account_get_descendants(td.root_1);
 
     td.session_2 = qof_session_new();
 
@@ -845,12 +843,12 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
     multi_user_get_everything(td.session_2, NULL);
 
     td.book_2 = qof_session_get_book(td.session_2);
-    td.group_2 = gnc_book_get_group(td.book_2);
-    td.accounts_2 = xaccGroupGetSubAccounts(td.group_2);
+    td.root_2 = gnc_book_get_root_account(td.book_2);
+    td.accounts_2 = gnc_account_get_descendants(td.root_2);
 
     ok = TRUE;
     transes = NULL;
-    xaccGroupForEachTransaction(td.group_1, add_trans_helper, &transes);
+    xaccAccountTreeForEachTransaction(td.root_1, add_trans_helper, &transes);
     for (node = transes; node; node = node->next) {
         ok = test_trans_update(node->data, &td);
         if (!ok)
@@ -891,8 +889,8 @@ test_updates_2(QofSession * session_base, DbInfo *dbinfo)
 
         xaccAccountBeginEdit(account);
         xaccAccountBeginEdit(child);
-        xaccGroupInsertAccount(td.group_1, account);
-        xaccAccountInsertSubAccount(account, child);
+        gnc_account_append_child(td.root_1, account);
+        gnc_account_append_child(account, child);
         xaccAccountCommitEdit(child);
         xaccAccountCommitEdit(account);
 
@@ -1128,8 +1126,8 @@ main (int argc, char **argv)
     set_max_kvp_depth(3);
     set_max_kvp_frame_elements(3);
 
-    set_max_group_depth(3);
-    set_max_group_accounts(3);
+    set_max_account_tree_depth(3);
+    set_max_accounts_per_level(3);
 
     random_timespec_zero_nsec(TRUE);
 

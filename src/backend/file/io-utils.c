@@ -28,7 +28,6 @@
 
 #include <glib.h>
 
-#include "Group.h"
 #include "gnc-xml.h"
 #include "gnc-xml.h"
 #include "io-utils.h"
@@ -51,40 +50,36 @@ write_emacs_trailer(FILE *out)
     fprintf(out, emacs_trailer);
 }
 
-void
-write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
+static void
+write_one_account(FILE *out, Account *account, sixtp_gdv2 *gd)
 {
-    GList *list;
-    GList *node;
+    xmlNodePtr accnode;
 
-    list = xaccGroupGetAccountList(grp);
+    accnode = gnc_account_dom_tree_create(account, gd && gd->exporting);
 
-    for (node = list; node; node = node->next) 
-    {
-        xmlNodePtr accnode;
-        AccountGroup *newgrp;
-        
-        accnode = gnc_account_dom_tree_create((Account*)(node->data),
-                                              gd && gd->exporting);
+    xmlElemDump(out, NULL, accnode);
+    fprintf(out, "\n");
 
-        xmlElemDump(out, NULL, accnode);
-        fprintf(out, "\n");
+    xmlFreeNode(accnode);
+    gd->counter.accounts_loaded++;
+    run_callback(gd, "account");
+}
 
-        xmlFreeNode(accnode);
-        gd->counter.accounts_loaded++;
-        run_callback(gd, "account");
+void
+write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd)
+{
+    GList *descendants, *node;
 
-        newgrp = xaccAccountGetChildren((Account*)(node->data));
+    write_one_account(out, root, gd);
 
-        if (newgrp)
-        {
-            write_account_group(out, newgrp, gd);
-        }
-    }
+    descendants = gnc_account_get_descendants(root);
+    for (node = descendants; node; node = g_list_next(node)) 
+	write_one_account(out, node->data, gd);
+    g_list_free(descendants);
 }
 
 void
 write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
-    write_account_group(out, gnc_book_get_group(book), gd);
+    write_account_tree(out, gnc_book_get_root_account(book), gd);
 }

@@ -93,7 +93,7 @@
        (gnc:filter-accountlist-type 
         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
-        (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+        (gnc-account-get-descendants (gnc-get-current-root-account))))
      #f)
     
     ;; Set the general page as default option tab
@@ -184,7 +184,7 @@
     ;; helper for account depth
     (define (account-get-depth account)
       (define (account-get-depth-internal account-internal depth)
-        (let ((parent (xaccAccountGetParentAccount account-internal)))
+        (let ((parent (gnc-account-get-parent account-internal)))
           (if (not (null? parent))
             (account-get-depth-internal parent (+ depth 1))
             depth)))
@@ -194,7 +194,7 @@
       (apply max
 	     (map (lambda (acct)
 		    (let ((children 
-			   (gnc:account-get-immediate-subaccounts acct)))
+			   (gnc-account-get-children acct)))
 		      (if (null? children)
 			  1
 			  (+ 1 (accounts-get-children-depth children)))))
@@ -382,7 +382,7 @@
               (if (<= (account-get-depth account) tree-depth)
                 (let* ((anchor (gnc:html-markup/format
                                  (if (and (= (account-get-depth account) tree-depth)
-                                          (not (eq? (gnc:account-get-immediate-subaccounts account) '())))
+                                          (not (eq? (gnc-account-get-children account) '())))
                                    (if show-subaccts?
                                      (_ "%s and subaccounts")
                                      (_ "%s and selected subaccounts"))

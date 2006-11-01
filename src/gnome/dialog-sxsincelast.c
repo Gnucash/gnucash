@@ -56,7 +56,6 @@
 #include <limits.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "Query.h"
 #include "QueryNew.h"
 #include "SchedXaction.h"
@@ -2736,22 +2735,21 @@ create_transactions_on(SchedXaction *sx,
                        GList **creation_errors)
 {
         createData createUD;
-        AccountGroup *ag;
-        Account *acct;
+        Account *root, *acct;
         const char *id;
 
         if (tci) {
                 g_assert(g_date_compare(gd, tci->date) == 0);
         }
 
-        ag = gnc_book_get_template_group( gnc_get_current_book () );
+        root = gnc_book_get_template_root( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-        if ( !(ag && id) ) {
+        if ( !(root && id) ) {
                 return;
         }
         /* This looks strange but it's right.  The account is
            named after the guid string. */
-        acct = xaccGetAccountFromName( ag, id );
+        acct = gnc_account_lookup_by_name( root, id );
         if (!acct) {
                 return;
         }
@@ -2864,14 +2862,13 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 void
 sxsl_get_sx_vars( SchedXaction *sx, GHashTable *var_hash )
 {
-        AccountGroup *ag;
-        Account *acct;
+        Account *root, *acct;
         const char *id;
 
-        ag = gnc_book_get_template_group( gnc_get_current_book () );
+        root = gnc_book_get_template_root( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         /* Get account named after guid string. */
-        acct = xaccGetAccountFromName( ag, id );
+        acct = gnc_account_lookup_by_name( root, id );
         xaccAccountForEachTransaction(acct,
                                       _get_vars_helper,
                                       var_hash);
@@ -2972,17 +2969,16 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         /* Setup the query for the to-create register to only show the
          * transaction[s] associated with this lineitem. */
         {
-                AccountGroup *ag;
-                Account *acct;
+                Account *root, *acct;
                 Query *q;
                 const gchar *sxGUIDstr;
                 SplitRegister *sr;
 
                 q = xaccMallocQuery();
                 xaccQuerySetBook( q, gnc_get_current_book() );
-                ag = gnc_book_get_template_group( gnc_get_current_book() );
+                root = gnc_book_get_template_root( gnc_get_current_book() );
                 sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
-                acct = xaccGetAccountFromName( ag, sxGUIDstr );
+                acct = gnc_account_lookup_by_name( root, sxGUIDstr );
                 g_assert( acct != NULL );
                 xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
           

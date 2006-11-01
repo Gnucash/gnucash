@@ -36,8 +36,6 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"

@@ -110,7 +110,7 @@ balance at a given time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+         (gnc-account-get-descendants (gnc-get-current-root-account))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type
@@ -200,8 +200,8 @@ balance at a given time"))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (xaccGroupGetAccountListSorted
-                         (gnc-get-current-group)))))
+                        (gnc-account-get-children 
+                         (gnc-get-current-root-account)))))
 
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -223,7 +223,7 @@ balance at a given time"))
     (let* ((exchange-fn (gnc:case-exchange-fn 
                          price-source report-currency to-date-tp))
            (tree-depth (if (equal? account-levels 'all)
-                           (gnc:get-current-group-depth)
+                           (gnc:get-current-account-tree-depth)
                            account-levels))
            (combined '())
            (other-anchor "")
@@ -251,7 +251,7 @@ balance at a given time"))
 	      (for-each
 	       (lambda (a)
 		 (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
-						       (gnc:account-get-immediate-subaccounts a))))))
+						       (gnc-account-get-children a))))))
 	       accts)
 	      sum)
 	    (length (filter show-acct? accts))))
@@ -281,7 +281,7 @@ balance at a given time"))
                    (set! res (append
                               (traverse-accounts
                                (+ 1 current-depth)
-                               (gnc:account-get-immediate-subaccounts a))
+                               (gnc-account-get-children a))
                               res))))
                accts)
               res)
@@ -356,8 +356,7 @@ balance at a given time"))
                      (if (string? (cadr pair))
                          other-anchor
                          (let* ((acct (cadr pair))
-                                (subaccts 
-                                 (gnc:account-get-immediate-subaccounts acct)))
+                                (subaccts (gnc-account-get-children acct)))
                            (if (null? subaccts)
                                ;; if leaf-account, make this an anchor
                                ;; to the register.

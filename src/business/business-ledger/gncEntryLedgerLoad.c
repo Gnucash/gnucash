@@ -180,13 +180,13 @@ skip_income_acct_cb (Account *account, gpointer user_data)
 static void 
 load_xfer_type_cells (GncEntryLedger *ledger)
 {
-  AccountGroup *group;
+  Account *root;
   ComboCell *cell;
   QuickFill *qf=NULL;
   GtkListStore *store = NULL;
 
-  group = gnc_book_get_group (ledger->book);
-  if (group == NULL) return;
+  root = gnc_book_get_root_account (ledger->book);
+  if (root == NULL) return;
 
   /* Use a common, shared quickfill.  For the ORDER or INVOICE, 
    * ledgers, we don't want expense-type accounts in the menu.
@@ -198,9 +198,9 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
-      qf = gnc_get_shared_account_name_quickfill (group, IKEY, 
+      qf = gnc_get_shared_account_name_quickfill (root, IKEY, 
                                       skip_expense_acct_cb, NULL);
-      store = gnc_get_shared_account_name_list_store (group, IKEY,
+      store = gnc_get_shared_account_name_list_store (root, IKEY,
 						      skip_expense_acct_cb, NULL);
       break;
 
@@ -209,9 +209,9 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
-      qf = gnc_get_shared_account_name_quickfill (group, EKEY, 
+      qf = gnc_get_shared_account_name_quickfill (root, EKEY, 
                                       skip_income_acct_cb, NULL);
-      store = gnc_get_shared_account_name_list_store (group, EKEY,
+      store = gnc_get_shared_account_name_list_store (root, EKEY,
 						      skip_income_acct_cb, NULL);
       break;
   }

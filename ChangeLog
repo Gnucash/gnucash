@@ -1,3 +1,40 @@
+2006-10-31  David Hampton  <hampton@employees.org>
+
+	* Changes ported from the remove-group branch to the remove-group2
+	branch.  (The latter was pulled after the swig changeover.)
+
+2006-08-22  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-account-merge.c: Merge account trees properly.
+
+	* src/backend/file/io-gncxml-v2.c:
+	* src/engine/Account.c: Make sure the root account exists when the
+	code asks for it.  This works both for reading a new file and a
+	user performing File->New->New File.
+
+	* src/gnome-utils/gnc-tree-model-account.c: Fix a mistake in the
+	updated tree model.
+
+	* src/backend/file/gnc-account-xml-v2.c:
+	* src/backend/file/io-gncxml-v2.c:
+	* src/engine/Account.[ch]:
+	* src/engine/Scrub.c: Don't require the root account to have a
+	commodity.
+
+2006-08-21  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.[ch]:
+	* src/engine/SX-book.[ch]:
+	* src/engine/SX-book-p.h: Mark a couple of functions as static.
+
+	* numerous: Initial removal of the engine Group.h, GroupP.h, and
+	Group.c files.  This completely removes the AccountGroup data
+	structure.
+
+======================================================================
+	The remove-group2 branch ChangeLog is above this point.
+======================================================================
+	
 2006-10-09  Josh Sled <jsled@asynchronous.org>
 
 	* art/: Add, with 2.0 {banner,icon,logo,splash} art.

@@ -30,8 +30,8 @@
 #include <string.h>
 
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
+#include "Split.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-event.h"
 #include "gnc-glib-utils.h"
@@ -39,6 +39,8 @@
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 #include "policy.h"
+
+#define GNC_ID_ROOT_ACCOUNT        "RootAccount"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -100,7 +102,6 @@ G_INLINE_FUNC void mark_account (Account *acc);
 void
 mark_account (Account *acc)
 {
-  if (acc->parent) acc->parent->saved = FALSE;
   qof_instance_set_dirty(&acc->inst);
 }
 
@@ -151,6 +152,63 @@ xaccInitAccount (Account * acc, QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
+static Account * 
+gnc_coll_get_root_account (QofCollection *col)
+{
+  if (!col) return NULL;
+  return qof_collection_get_data (col);
+}
+
+static void
+gnc_coll_set_root_account (QofCollection *col, Account *root)
+{
+  Account *old_root;
+  if (!col) return;
+
+  old_root = gnc_coll_get_root_account (col);
+  if (old_root == root) return;
+
+  qof_collection_set_data (col, root);
+
+  if (old_root) {
+    xaccAccountBeginEdit (old_root);
+    xaccAccountDestroy (old_root);
+  }
+}
+
+Account *
+gnc_book_get_root_account (QofBook *book)
+{
+  QofCollection *col;
+  Account *root;
+
+  if (!book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+  root = gnc_coll_get_root_account (col);
+  if (root == NULL)
+    root = gnc_account_create_root(book);
+  return root;
+}
+
+void
+gnc_book_set_root_account (QofBook *book, Account *root)
+{
+  QofCollection *col;
+  if (!book) return;
+
+  if (root && gnc_account_get_book(root) != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+  gnc_coll_set_root_account (col, root);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 Account *
 xaccMallocAccount (QofBook *book)
 {
@@ -163,6 +221,19 @@ xaccMallocAccount (QofBook *book)
   qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return acc;
+}
+
+Account *
+gnc_account_create_root (QofBook *book)
+{
+  Account *root;
+
+  root = xaccMallocAccount(book);
+  xaccAccountBeginEdit(root);
+  root->type = ACCT_TYPE_ROOT;
+  xaccAccountCommitEdit(root);
+  gnc_book_set_root_account(book, root);
+  return root;
 }
 
 static Account *
@@ -222,6 +293,32 @@ xaccCloneAccountSimple (const Account *from, QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
+static void
+xaccFreeOneChildAccount (Account *acc, gpointer dummy)
+{
+    /* FIXME: this code is kind of hacky.  actually, all this code
+     * seems to assume that the account edit levels are all 1. */
+    if (acc->inst.editlevel == 0)
+      xaccAccountBeginEdit(acc);
+    xaccAccountDestroy(acc);
+}
+
+static void
+xaccFreeAccountChildren (Account *acc)
+{
+  GList *children;
+
+  /* Copy the list since it will be modified */
+  children = g_list_copy(acc->children);
+  g_list_foreach(children, (GFunc)xaccFreeOneChildAccount, NULL);
+  g_list_free(children);
+
+  /* The foreach should have removed all the children already. */
+  if (acc->children)
+    g_list_free(acc->children);
+  acc->children = NULL;
+}
+
 void
 xaccFreeAccount (Account *acc)
 {
@@ -237,8 +334,7 @@ xaccFreeAccount (Account *acc)
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
 
     /* First, recursively free children */
-    xaccFreeAccountGroup (acc->children);
-    acc->children = NULL;
+    xaccFreeAccountChildren(acc);
   }
 
   /* remove lots -- although these should be gone by now. */
@@ -329,7 +425,9 @@ static inline void on_err (QofInstance *inst, QofBackendError errcode)
 static inline void acc_free (QofInstance *inst)
 {
   Account *acc = (Account *) inst;
-  xaccGroupRemoveAccount(acc->parent, acc);
+
+  if (acc->parent)
+    gnc_account_remove_child(acc->parent, acc);
   xaccFreeAccount(acc);
 }
 
@@ -360,8 +458,7 @@ xaccAccountCommitEdit (Account *acc)
     acc->inst.editlevel++;
 
     /* First, recursively free children */
-    xaccFreeAccountGroup (acc->children);
-    acc->children = NULL;
+    xaccFreeAccountChildren(acc);
 
     PINFO ("freeing splits for account %p (%s)",
            acc, acc->accountName ? acc->accountName : "(null)");
@@ -431,6 +528,48 @@ xaccAccountGetVersion (const Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
+static gboolean
+xaccAcctChildrenEqual(const GList *na,
+		      const GList *nb,
+		      gboolean check_guids)
+{
+  if ((!na && nb) || (na && !nb))
+  {
+    PWARN ("only one has accounts");
+    return(FALSE);
+  }
+
+  while (na && nb)
+  {
+    Account *aa = na->data;
+    Account *ab = nb->data;
+
+    if (!xaccAccountEqual(aa, ab, check_guids))
+    {
+      char sa[GUID_ENCODING_LENGTH + 1];
+      char sb[GUID_ENCODING_LENGTH + 1];
+
+      guid_to_string_buff (xaccAccountGetGUID (aa), sa);
+      guid_to_string_buff (xaccAccountGetGUID (ab), sb);
+
+      PWARN ("accounts %s and %s differ", sa, sb);
+
+      return(FALSE);
+    }
+
+    na = na->next;
+    nb = nb->next;
+  }
+
+  if (na || nb)
+  {
+    PWARN ("different numbers of accounts");
+    return(FALSE);
+  }
+
+  return(TRUE);
+}
 
 gboolean
 xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
@@ -633,7 +772,7 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
     }
   }
 
-  if (!xaccGroupEqual(aa->children, ab->children, check_guids))
+  if (!xaccAcctChildrenEqual(aa->children, ab->children, check_guids))
   {
     PWARN ("children differ");
     return FALSE;
@@ -712,69 +851,23 @@ xaccAccountSetMark (Account *acc, short m)
 void
 xaccClearMark (Account *acc, short val)
 {
-  AccountGroup *topgrp;
+  Account *root;
 
   if (!acc) return;
-  topgrp = xaccAccountGetRoot (acc);
-
-  if (topgrp)
-  {
-    GList *list;
-    GList *node;
-
-    list = xaccGroupGetAccountList (topgrp);
-
-    for (node = list; node; node = node->next)
-    {
-      Account *account = node->data;
-
-      xaccClearMarkDown (account, val);
-    }
-  }
-  else
-    xaccClearMarkDown (acc, val);
+  root = gnc_account_get_root (acc);
+  xaccClearMarkDown (root ? root : acc, val);
 }
 
 void
 xaccClearMarkDown (Account *acc, short val)
 {
-  AccountGroup *children;
+  GList *node;
 
   if (!acc) return;
   acc->mark = val;
 
-  children = acc->children;
-  if (children)
-  {
-    GList *list;
-    GList *node;
-
-    list = xaccGroupGetAccountList (children);
-
-    for (node = list; node; node = node->next)
-    {
-      Account *account = node->data;
-
-      xaccClearMarkDown (account, val);
-    }
-  }
-}
-
-void
-xaccClearMarkDownGr (AccountGroup *grp, short val)
-{
-  GList *list;
-  GList *node;
-
-  if (!grp) return;
-
-  list = xaccGroupGetAccountList (grp);
-
-  for (node = list; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccClearMarkDown (account, val);
+  for (node = acc->children; node; node = node->next) {
+    xaccClearMarkDown (node->data, val);
   }
 }
 
@@ -996,20 +1089,20 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 
 
 int
-xaccAccountOrder (const Account **aa, const Account **ab) 
+xaccAccountOrder (const Account *aa, const Account *ab) 
 {
   char *da, *db;
   char *endptr = NULL;
   int ta, tb, result;
   long la, lb;
 
-  if ( (*aa) && !(*ab) ) return -1;
-  if ( !(*aa) && (*ab) ) return +1;
-  if ( !(*aa) && !(*ab) ) return 0;
+  if ( aa && !ab ) return -1;
+  if ( !aa && ab ) return +1;
+  if ( !aa && !ab ) return 0;
 
   /* sort on accountCode strings */
-  da = (*aa)->accountCode;
-  db = (*ab)->accountCode;
+  da = aa->accountCode;
+  db = ab->accountCode;
 
   /* If accountCodes are both base 36 integers do an integer sort */
   la = strtoul (da, &endptr, 36);
@@ -1036,22 +1129,28 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   }
 
   /* otherwise, sort on account type */
-  ta = (*aa)->type;
-  tb = (*ab)->type;
+  ta = aa->type;
+  tb = ab->type;
   ta = revorder[ta];
   tb = revorder[tb];
   if (ta < tb) return -1;
   if (ta > tb) return +1;
 
   /* otherwise, sort on accountName strings */
-  da = (*aa)->accountName;
-  db = (*ab)->accountName;
+  da = aa->accountName;
+  db = ab->accountName;
   result = safe_utf8_collate(da, db);
   if (result)
     return result;
 
   /* guarantee a stable sort */
-  return guid_compare (&((*aa)->inst.entity.guid), &((*ab)->inst.entity.guid));
+  return guid_compare (&(aa->inst.entity.guid), &(ab->inst.entity.guid));
+}
+
+static int
+qof_xaccAccountOrder (const Account **aa, const Account **ab)
+{
+  return xaccAccountOrder(*aa, *ab);
 }
 
 /********************************************************************\
@@ -1115,7 +1214,7 @@ qofAccountSetParent (Account *acc, QofEntity *parent)
 	parent_acc = (Account*)parent;
 	xaccAccountBeginEdit(acc);
 	xaccAccountBeginEdit(parent_acc);
-	xaccAccountInsertSubAccount(parent_acc, acc);
+	gnc_account_append_child(parent_acc, acc);
 	mark_account (parent_acc);
 	mark_account (acc);
 	xaccAccountCommitEdit(acc);
@@ -1258,29 +1357,383 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 /********************************************************************\
 \********************************************************************/
 
-AccountGroup *
-xaccAccountGetChildren (const Account *acc)
+void
+gnc_account_append_child (Account *new_parent, Account *child)
 {
-   return acc ? acc->children : NULL;
+  Account *old_parent;
+  QofCollection *col;
+
+  g_assert(new_parent);
+  g_assert(child);
+
+  old_parent = child->parent;
+  if (old_parent == new_parent)
+    return;
+
+  //  xaccAccountBeginEdit(new_parent);
+  xaccAccountBeginEdit(child);
+  if (old_parent) {
+    gnc_account_remove_child(old_parent, child);
+
+    if (old_parent->inst.book != new_parent->inst.book) {
+      /* hack alert -- this implementation is not exactly correct.
+       * If the entity tables are not identical, then the 'from' book 
+       * may have a different backend than the 'to' book.  This means
+       * that we should get the 'from' backend to destroy this account,
+       * and the 'to' backend to save it.  Right now, this is broken.
+       *  
+       * A 'correct' implementation similar to this is in Period.c
+       * except its for transactions ...
+       *
+       * Note also, we need to reparent the children to the new book as well.
+       */
+      PWARN ("reparenting accounts across books is not correctly supported\n");
+
+      qof_event_gen (&child->inst.entity, QOF_EVENT_DESTROY, NULL);
+      col = qof_book_get_collection (new_parent->inst.book, GNC_ID_ACCOUNT);
+      qof_collection_insert_entity (col, &child->inst.entity);
+      qof_event_gen (&child->inst.entity, QOF_EVENT_CREATE, NULL);
+    }
+  }
+  child->parent = new_parent;
+  new_parent->children = g_list_append(new_parent->children, child);
+  qof_instance_set_dirty(&new_parent->inst);
+  qof_instance_set_dirty(&child->inst);
+
+  /* Send events data. Warning: The call to commit_edit is also gpoing
+   * to send a MODIFY event. If the gtktreemodelfilter code gets the
+   * MODIFY before it gets the ADD, it gets very confused and thinks
+   * that two nodes have been added. */
+  qof_event_gen (&child->inst.entity, QOF_EVENT_ADD, NULL);
+  // qof_event_gen (&new_parent->inst.entity, QOF_EVENT_MODIFY, NULL);
+
+  xaccAccountCommitEdit (child);
+  //  xaccAccountCommitEdit(new_parent);
 }
 
-AccountGroup *
-xaccAccountGetParent (const Account *acc)
+void
+gnc_account_remove_child (Account *parent, Account *child)
+{
+  GncEventData ed;
+
+  if (!child) return;
+
+  /* Note this routine might be called on accounts which 
+   * are not yet parented. */
+  if (!parent) return;
+
+  if (child->parent != parent)
+  {
+    PERR ("account not a child of parent");
+    return;
+  }
+
+  /* Gather event data */
+  ed.node = parent;
+  ed.idx = g_list_index(parent->children, child);
+
+  parent->children = g_list_remove (parent->children, child);
+
+  /* Now send the event. */
+  qof_event_gen(&child->inst.entity, QOF_EVENT_REMOVE, &ed);
+
+  /* clear the account's parent pointer after REMOVE event generation. */
+  child->parent = NULL;
+
+  qof_event_gen (&parent->inst.entity, QOF_EVENT_MODIFY, NULL);
+}
+
+Account *
+gnc_account_get_parent (const Account *acc)
 {
    return acc ? acc->parent : NULL;
 }
 
 Account *
-xaccAccountGetParentAccount (const Account * acc)
+gnc_account_get_root (Account *acc)
 {
-  return acc ? xaccGroupGetParentAccount(acc->parent) : NULL;
+  if (!acc)
+    return NULL;
+
+  while (acc->parent) {
+    acc = acc->parent;
+  }
+
+  return acc;
+}
+
+gboolean
+gnc_account_is_root (const Account *account)
+{
+  return (account && account->parent == NULL);
 }
 
 GList *
-xaccAccountGetDescendants (const Account *acc)
+gnc_account_get_children (const Account *account)
 {
-   return acc ? xaccGroupGetSubAccounts(acc->children) : NULL;
+  return account ? g_list_copy(account->children) : NULL;
 }
+
+GList *
+gnc_account_get_children_sorted (const Account *account)
+{
+  if (!account || !account->children)
+    return NULL;
+  return g_list_sort(g_list_copy(account->children), (GCompareFunc)xaccAccountOrder);
+}
+
+gint
+gnc_account_n_children (const Account *account)
+{
+  return account ? g_list_length(account->children) : 0;
+}
+
+gint
+gnc_account_child_index (const Account *parent, const Account *child)
+{
+  return parent ? g_list_index(parent->children, child) : -1;
+}
+
+Account *
+gnc_account_nth_child (const Account *parent, gint num)
+{
+  return parent ? g_list_nth_data(parent->children, num) : NULL;
+}
+
+GList *
+gnc_account_get_descendants (const Account *account)
+{
+  GList *child, *descendants;
+
+  if (!account || !account->children)
+    return NULL;
+
+  descendants = NULL;
+  for (child = account->children; child; child = g_list_next(child)) {
+    descendants = g_list_append(descendants, child->data);
+    descendants = g_list_concat(descendants,
+				gnc_account_get_descendants(child->data));
+  }
+  return descendants;
+}
+
+GList *
+gnc_account_get_descendants_sorted (const Account *account)
+{
+  GList *child, *children, *descendants;
+
+  if (!account || !account->children)
+    return NULL;
+
+  descendants = NULL;
+  children = g_list_sort(g_list_copy(account->children), (GCompareFunc)xaccAccountOrder);
+  for (child = children; child; child = g_list_next(child)) {
+    descendants = g_list_append(descendants, child->data);
+    descendants = g_list_concat(descendants,
+				gnc_account_get_descendants(child->data));
+  }
+  g_list_free(children);
+  return descendants;
+}
+
+gint
+gnc_account_n_descendants (const Account *account)
+{
+  GList *node;
+  gint count = 0;
+
+  if (!account)
+    return 0;
+
+  for (node = account->children; node; node = g_list_next(node)) {
+    count += gnc_account_n_descendants(node->data) + 1;
+  }
+  return count;
+}
+
+gint
+gnc_account_get_depth (const Account *account)
+{
+  GList *node;
+  gint depth = 0, child_depth;
+
+  if (!account)
+    return 0;
+  if (!account->children)
+    return 1;
+
+  for (node = account->children; node; node = g_list_next(node)) {
+    child_depth = gnc_account_get_depth(node->data);
+    depth = MAX(depth, child_depth);
+  }
+  return depth + 1;
+}
+
+Account *
+gnc_account_lookup_by_name (const Account *parent, const char * name)
+{
+  Account *child, *result;
+  GList *node;
+
+  if (!parent) return NULL;
+  if (!name) return NULL;
+
+  /* first, look for accounts hanging off the current node */
+  for (node = parent->children; node; node = node->next)
+  {
+    child = node->data;
+    if (safe_strcmp(child->accountName, name) == 0)
+      return child;
+  }
+
+  /* if we are still here, then we haven't found the account yet.
+   * Recursively search each of the child accounts next */
+  for (node = parent->children; node; node = node->next)
+  {
+    child = node->data;
+    result = gnc_account_lookup_by_name (child, name);
+    if (result)
+      return result;
+  }
+
+  return NULL;
+}
+
+/********************************************************************\
+ * Fetch an account, given its full name                            *
+\********************************************************************/
+
+static Account *
+gnc_account_lookup_by_full_name_helper (const Account *parent,
+					gchar **names)
+{
+  Account *found;
+  GList *node;
+
+  g_return_val_if_fail(parent, NULL);
+  g_return_val_if_fail(names, NULL);
+
+  /* Look for the first name in the children. */
+  for (node = parent->children; node; node = node->next) {
+    Account *account = node->data;
+
+    if (safe_strcmp(account->accountName, names[0]) == 0) {
+      /* We found an account.  If the next entry is NULL, there is
+       * nothing left in the name, so just return the account. */
+      if (names[1] == NULL)
+	return account;
+
+      /* No children?  We're done. */
+      if (!account->children)
+	return NULL;
+
+      /* There's stuff left to search for.  Search recursively. */
+      found = gnc_account_lookup_by_full_name_helper(account, &names[1]);
+      if (found != NULL) {
+	return found;
+      }
+    }
+  }
+
+  return NULL;
+}
+
+
+Account *
+gnc_account_lookup_by_full_name (const Account *any_acc,
+				 const gchar *name)
+{
+  const Account *root;
+  Account *found;
+  gchar **names;
+
+  if (!any_acc) return NULL;
+  if (!name) return NULL;
+
+  root = any_acc;
+  while (root->parent)
+    root = root->parent;
+  names = g_strsplit(name, gnc_get_account_separator_string(), -1);
+  found = gnc_account_lookup_by_full_name_helper(root, names);
+  g_strfreev(names);
+  return found;
+}
+
+void
+gnc_account_foreach_child (const Account *acc,
+			   AccountCb thunk,
+			   gpointer user_data)
+{
+  GList *node;
+
+  if (!acc || !thunk) return;
+
+  for (node = acc->children; node; node = node->next) {
+    thunk (node->data, user_data);
+  }
+}
+
+gpointer
+gnc_account_foreach_child_until (const Account *acc,
+				 AccountCb2 thunk,
+				 gpointer user_data)
+{
+  GList *node;
+  gpointer result;
+
+  if (!acc || !thunk) return(NULL);
+
+  for (node = acc->children; node; node = node->next) {
+    result = thunk (node->data, user_data);
+    if (result)
+      return(result);
+  }
+
+  return(NULL);
+}
+
+void
+gnc_account_foreach_descendant (const Account *acc,
+				AccountCb thunk,
+				gpointer user_data)
+{
+  GList *node;
+  Account *child;
+
+  if (!acc || !thunk) return;
+
+  for (node = acc->children; node; node = node->next) {
+    child = node->data;
+    thunk(child, user_data);
+    gnc_account_foreach_descendant(child, thunk, user_data);
+  }
+}
+
+gpointer
+gnc_account_foreach_descendant_until (const Account *acc,
+				      AccountCb2 thunk,
+				      gpointer user_data)
+{
+  GList *node;
+  Account *child;
+  gpointer result;
+
+  if (!acc || !thunk) return(NULL);
+
+  for (node = acc->children; node; node = node->next) {
+    child = node->data;
+    result = thunk(child, user_data);
+    if (result)
+      return(result);
+
+    result = gnc_account_foreach_descendant_until(child, thunk, user_data);
+    if (result)
+      return(result);
+  }
+
+  return(NULL);
+}
+
 
 GNCAccountType
 xaccAccountGetType (const Account *acc)
@@ -1314,23 +1767,25 @@ xaccAccountGetFullName(const Account *account)
   gchar **names;
   int level;
 
-  if (account == NULL)
+  if (!account || !account->parent)
     return g_strdup("");
 
-  /* Figure out how much space is needed */
+  /* Figure out how much space is needed by counting the nodes up to
+   * the root. */
   level = 0;
-  for (a = account; a; a = xaccAccountGetParentAccount(a)) {
+  for (a = account; a; a = a->parent) {
     level++;
   }
 
-  /* Get all the pointers in the right order. */
-  names = g_malloc((level+1) * sizeof(gchar *));
-  names[level] = NULL;
-  for (a = account; a; a = xaccAccountGetParentAccount(a)) {
+  /* Get all the pointers in the right order. The root node "entry"
+   * becomes the terminating NULL pointer for the array of strings. */
+  names = g_malloc(level * sizeof(gchar *));
+  names[--level] = NULL;
+  for (a = account; level > 0; a = a->parent) {
     names[--level] = a->accountName;
   }
 
-  /* Build it */
+  /* Build the full name */
   fullname =  g_strjoinv(account_separator, names);
   g_free(names);
 
@@ -1551,7 +2006,7 @@ xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
       gnc_commodity_equiv (balance_currency, new_currency))
     return balance;
 
-  book = xaccGroupGetBook (xaccAccountGetRoot (acc));
+  book = gnc_account_get_book (acc);
   pdb = gnc_pricedb_get_db (book);
 
   balance = gnc_pricedb_convert_balance_latest_price(
@@ -1579,7 +2034,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
       gnc_commodity_equiv (balance_currency, new_currency))
     return balance;
 
-  book = xaccGroupGetBook (xaccAccountGetRoot (acc));
+  book = gnc_account_get_book (acc);
   pdb = gnc_book_get_pricedb (book);
 
   ts.tv_sec = date;
@@ -1639,34 +2094,33 @@ typedef struct
  * tree.  This function is called once per account, and sums up the
  * values of all these accounts.
  */
-static gpointer
+static void
 xaccAccountBalanceHelper (Account *acc, gpointer data)
 {
   CurrencyBalance *cb = data;
   gnc_numeric balance;
 
   if (!cb->fn || !cb->currency)
-    return NULL;
+    return;
   balance = xaccAccountGetXxxBalanceInCurrency (acc, cb->fn, cb->currency);
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
                                  GNC_HOW_RND_ROUND);
-  return NULL;
 }
-static gpointer
+
+static void
 xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
 {
     CurrencyBalance *cb = data;
     gnc_numeric balance;
 
-    g_return_val_if_fail (cb->asOfDateFn && cb->currency, NULL);
+    g_return_if_fail (cb->asOfDateFn && cb->currency);
 
     balance = xaccAccountGetXxxBalanceAsOfDateInCurrency (
         acc, cb->date, cb->asOfDateFn, cb->currency);
     cb->balance = gnc_numeric_add (cb->balance, balance,
                                    gnc_commodity_get_fraction (cb->currency),
                                    GNC_HOW_RND_ROUND);
-    return NULL;
 }
 
 
@@ -1700,8 +2154,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
   if (include_children) {
     CurrencyBalance cb = { report_commodity, balance, fn, NULL, 0 };
 
-    xaccGroupForEachAccount (acc->children, xaccAccountBalanceHelper,
-                             &cb, TRUE);
+    gnc_account_foreach_descendant (acc, xaccAccountBalanceHelper, &cb);
     balance = cb.balance;
   }
 
@@ -1727,8 +2180,7 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
   if (include_children) {
     CurrencyBalance cb = { report_commodity, balance, NULL, fn, date };
 
-    xaccGroupForEachAccount (acc->children,
-                             xaccAccountBalanceAsOfDateHelper, &cb, TRUE);
+    gnc_account_foreach_descendant (acc, xaccAccountBalanceAsOfDateHelper, &cb);
     balance = cb.balance;
   }
 
@@ -1974,7 +2426,7 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
   if (!acc) return PLACEHOLDER_NONE;
   if (xaccAccountGetPlaceholder(acc)) return PLACEHOLDER_THIS;
 
-  descendants = xaccGroupGetSubAccounts(acc->children);
+  descendants = gnc_account_get_descendants(acc);
   for (node = descendants; node; node = node->next) 
       if (xaccAccountGetPlaceholder((Account *) node->data)) {
           ret = PLACEHOLDER_CHILD;
@@ -2018,7 +2470,7 @@ xaccAccountIsHidden (const Account *acc)
   if (xaccAccountGetHidden(acc))
     return TRUE;
 
-  while ((acc = xaccAccountGetParentAccount(acc)) != NULL) {
+  while ((acc = acc->parent) != NULL) {
     if (xaccAccountGetHidden(acc))
       return TRUE;
   }
@@ -2036,7 +2488,7 @@ xaccAccountHasAncestor (const Account *acc, const Account * ancestor)
   if (!acc || !ancestor) return FALSE;
 
   while (parent && parent != ancestor)
-      parent = xaccAccountGetParentAccount(parent);
+      parent = parent->parent;
 
   return (parent == ancestor);
 }
@@ -2068,6 +2520,7 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
     GNC_RETURN_ENUM_AS_STRING(EQUITY);
     GNC_RETURN_ENUM_AS_STRING(RECEIVABLE);
     GNC_RETURN_ENUM_AS_STRING(PAYABLE);
+    GNC_RETURN_ENUM_AS_STRING(ROOT);
     GNC_RETURN_ENUM_AS_STRING(CHECKING);
     GNC_RETURN_ENUM_AS_STRING(SAVINGS);
     GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
@@ -2102,6 +2555,7 @@ xaccAccountStringToType(const char* str, GNCAccountType *type)
   GNC_RETURN_ON_MATCH(EQUITY);
   GNC_RETURN_ON_MATCH(RECEIVABLE);
   GNC_RETURN_ON_MATCH(PAYABLE);
+  GNC_RETURN_ON_MATCH(ROOT);
   GNC_RETURN_ON_MATCH(CHECKING);
   GNC_RETURN_ON_MATCH(SAVINGS);
   GNC_RETURN_ON_MATCH(MONEYMRKT);
@@ -2580,18 +3034,6 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-gint
-xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
-                              void *data) 
-{
-  if (!acc || !proc) return 0;
-  xaccAccountBeginStagedTransactionTraversals (acc);
-  return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 /* The caller of this function can get back one or both of the
  * matching split and transaction pointers, depending on whether
  * a valid pointer to the location to store those pointers is
@@ -2652,6 +3094,286 @@ xaccAccountFindTransByDesc(const Account *acc, const char *description)
 }
 
 /* ================================================================ */
+/* Concatenation, Mergeing functions                                */
+
+void
+gnc_account_join_children (Account *to_parent, Account *from_parent)
+{
+  GList *children, *node;
+
+  if (!to_parent || !from_parent) return;
+  if (!from_parent->children) return;
+
+  ENTER (" ");
+  children = g_list_copy(from_parent->children);
+  for (node = children; node; node = g_list_next(node))
+    gnc_account_append_child(to_parent, node->data);
+  g_list_free(children);
+  LEAVE (" ");
+}
+
+void
+gnc_account_copy_children (Account *to, Account *from)
+{
+   GList *node;
+   QofBook *to_book;
+
+   if (!to || !from) return;
+   if (!from->children) return;
+   to_book = gnc_account_get_book(to);
+   if (!to_book) return;
+
+   ENTER (" ");
+   xaccAccountBeginEdit(to);
+   xaccAccountBeginEdit(from);
+   for (node = from->children; node; node=node->next)
+   {
+      Account *to_acc, *from_acc = node->data;
+
+      /* This will copy the basic data and the KVP.  It will
+       * not copy any splits/transactions. It will gemini. */
+      to_acc = xaccCloneAccount (from_acc, to_book);
+
+      xaccAccountBeginEdit (to_acc);
+      to->children = g_list_append (to->children, to_acc);
+
+      to_acc->parent = to;
+      qof_instance_set_dirty(&to_acc->inst);
+
+      /* Copy child accounts too. */
+      if (from_acc->children)
+      {
+	gnc_account_copy_children(to_acc, from_acc);
+      }
+      xaccAccountCommitEdit (to_acc);
+      qof_event_gen (&to_acc->inst.entity, QOF_EVENT_CREATE, NULL);
+      /* DRH - Should this send ADD/REMOVE events */
+   }
+   xaccAccountCommitEdit(from);
+   xaccAccountCommitEdit(to);
+   LEAVE (" ");
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+gnc_account_merge_children (Account *parent)
+{
+  GList *node_a;
+  GList *node_b;
+
+  if (!parent) return;
+
+  for (node_a = parent->children; node_a; node_a = node_a->next)
+  {
+    Account *acc_a = node_a->data;
+
+    for (node_b = node_a->next; node_b; node_b = g_list_next(node_b))
+    {
+      Account *acc_b = node_b->data;
+
+      if (0 != safe_strcmp(acc_a->accountName, acc_b->accountName))
+	continue;
+      if (0 != safe_strcmp(acc_a->accountCode, acc_b->accountCode))
+	continue;
+      if (0 != safe_strcmp(acc_a->description, acc_b->description))
+	continue;
+      if (!gnc_commodity_equiv(acc_a->commodity, acc_b->commodity))
+	continue;
+      if (0 != safe_strcmp(xaccAccountGetNotes(acc_a),
+			   xaccAccountGetNotes(acc_b)))
+	continue;
+      if (acc_a->type != acc_b->type)
+	continue;
+
+      /* consolidate children */
+      if (acc_b->children) {
+	acc_a->children = g_list_concat(acc_a->children, acc_b->children);
+	acc_b->children = NULL;
+	qof_event_gen (&acc_a->inst.entity, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
+      }
+
+      /* recurse to do the children's children */
+      gnc_account_merge_children (acc_a);
+
+      /* consolidate transactions */
+      while (acc_b->splits)
+	xaccSplitSetAccount (acc_b->splits->data, acc_a);
+
+      /* move back one before removal. next iteration around the loop
+       * will get the node after node_b */
+      node_b = g_list_previous(node_b);
+
+      /* The destroy function will remove from list -- node_a is ok,
+       * it's before node_b */
+      xaccAccountBeginEdit (acc_b);
+      xaccAccountDestroy (acc_b);
+    }
+  }
+}
+
+/* ================================================================ */
+/* Transaction Traversal functions                                  */
+
+
+void
+xaccSplitsBeginStagedTransactionTraversals (GList *splits)
+{
+  GList *lp;
+
+  for (lp = splits; lp; lp = lp->next)
+  {
+    Split *s = lp->data;
+    Transaction *trans = s->parent;
+
+    if (trans)
+      trans->marker = 0;
+  }
+}
+
+/* original function */
+void
+xaccAccountBeginStagedTransactionTraversals (const Account *account)
+{
+  if (account)
+      xaccSplitsBeginStagedTransactionTraversals (account->splits);
+}
+
+gboolean
+xaccTransactionTraverse (Transaction *trans, int stage)
+{
+  if (trans == NULL) return FALSE;
+
+  if (trans->marker < stage)
+  {
+    trans->marker = stage;
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+gboolean
+xaccSplitTransactionTraverse (Split *split, int stage)
+{
+  if (split == NULL) return FALSE;
+
+  return xaccTransactionTraverse (split->parent, stage);
+}
+
+static void do_one_split (Split *s, gpointer data)
+{
+  Transaction *trans = s->parent;
+  trans->marker = 0;
+}
+
+static void do_one_account (Account *account, gpointer data)
+{
+  g_list_foreach(account->splits, (GFunc)do_one_split, NULL);
+}
+
+/* Replacement for xaccGroupBeginStagedTransactionTraversals */
+void
+gnc_account_tree_begin_staged_transaction_traversals (Account *account)
+{
+  GList *descendants;
+
+  descendants = gnc_account_get_descendants(account);
+  g_list_foreach(descendants, (GFunc)do_one_account, NULL);
+  g_list_free(descendants);
+}
+
+int
+xaccAccountStagedTransactionTraversal (const Account *acc,
+                                       unsigned int stage,
+                                       TransactionCallback thunk,
+                                       void *cb_data)
+{
+  GList *split_p;
+  Transaction *trans;
+  Split *s;
+  int retval;
+
+  if (!acc) return 0;
+
+  for(split_p = acc->splits; split_p; split_p = g_list_next(split_p)) {
+    s = split_p->data;
+    trans = s->parent;   
+    if (trans && (trans->marker < stage)) {
+      trans->marker = stage;
+      if (thunk) {
+        retval = thunk(trans, cb_data);
+        if (retval) return retval;
+      }
+    }
+  }
+
+  return 0;
+}
+
+int
+gnc_account_tree_staged_transaction_traversal (const Account *acc,
+					       unsigned int stage,
+					       TransactionCallback thunk,
+					       void *cb_data)
+{
+  GList *acc_p, *split_p;
+  Transaction *trans;
+  Split *s;
+  int retval;
+
+  if (!acc) return 0;
+
+  /* depth first traversal */
+  for (acc_p = acc->children; acc_p; acc_p = g_list_next(acc_p)) {
+    retval = gnc_account_tree_staged_transaction_traversal(acc_p->data, stage,
+						   thunk, cb_data);
+    if (retval) return retval;
+  }
+
+  /* Now this account */
+  for(split_p = acc->splits; split_p; split_p = g_list_next(split_p)) {
+    s = split_p->data;
+    trans = s->parent;   
+    if (trans && (trans->marker < stage)) {
+      trans->marker = stage;
+      if (thunk) {
+        retval = thunk(trans, cb_data);
+        if (retval) return retval;
+      }
+    }
+  }
+
+  return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccAccountTreeForEachTransaction (Account *acc,
+				   int (*proc)(Transaction *t, void *data),
+				   void *data)
+{
+  if (!acc || !proc) return 0;
+
+  gnc_account_tree_begin_staged_transaction_traversals (acc);
+  return gnc_account_tree_staged_transaction_traversal (acc, 42, proc, data);
+}
+
+
+gint
+xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
+                              void *data) 
+{
+  if (!acc || !proc) return 0;
+  xaccAccountBeginStagedTransactionTraversals (acc);
+  return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
+}
+
+/* ================================================================ */
 /* QofObject function implementation and registration */
 
 static QofObject account_object_def = {
@@ -2706,7 +3428,7 @@ gboolean xaccAccountRegister (void)
       (QofAccessFunc) xaccAccountGetNonStdSCU, 
       (QofSetterFunc) xaccAccountSetNonStdSCU },
     { ACCOUNT_PARENT, GNC_ID_ACCOUNT,
-      (QofAccessFunc) xaccAccountGetParentAccount, 
+      (QofAccessFunc) gnc_account_get_parent, 
       (QofSetterFunc) qofAccountSetParent },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, 
       (QofAccessFunc) qof_instance_get_book, NULL },
@@ -2717,7 +3439,7 @@ gboolean xaccAccountRegister (void)
     { NULL },
   };
 
-  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) xaccAccountOrder, params);
+  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) qof_xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

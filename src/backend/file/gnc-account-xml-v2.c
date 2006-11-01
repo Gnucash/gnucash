@@ -44,7 +44,6 @@
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
-#include "Group.h"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -77,6 +76,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
     kvp_frame *kf;
     xmlNodePtr ret;
     GList *n;
+    Account *parent;
 
     ENTER ("(account=%p)", act);
 
@@ -123,11 +123,11 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
         }
     }
 
-    if(xaccAccountGetParentAccount(act))
+    parent = gnc_account_get_parent(act);
+    if (parent)
     {
-        xmlAddChild(ret, guid_to_dom_tree(
-                     act_parent_string,
-                     xaccAccountGetGUID(xaccAccountGetParentAccount(act))));
+        xmlAddChild(ret, guid_to_dom_tree(act_parent_string,
+					  xaccAccountGetGUID(parent)));
     }
 
     n = xaccAccountGetLotList (act);
@@ -322,7 +322,7 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
       g_return_val_if_fail(parent, FALSE);
     }
 
-    xaccAccountInsertSubAccount(parent, pdata->account);
+    gnc_account_append_child(parent, pdata->account);
 
     g_free (gid);
 
@@ -405,10 +405,11 @@ gnc_account_end_handler(gpointer data_for_children,
                         gpointer *result, const gchar *tag)
 {
     int successful;
-    Account *acc;
+    Account *acc, *parent, *root;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
     QofBook *book = gdata->bookdata;
+    int type;
 
     successful = TRUE;
 
@@ -436,6 +437,21 @@ gnc_account_end_handler(gpointer data_for_children,
          * rebalances with #accounts rebalances at the end.  A BIG win!
          */
         xaccAccountBeginEdit(acc);
+
+	/* Backwards compatability.  If there's no parent, see if this
+	 * account is of type ROOT.  If not, find or create a ROOT
+	 * account and make that the parent. */
+        parent = gnc_account_get_parent(acc);
+        if (parent == NULL) {
+            type = xaccAccountGetType(acc);
+            if (type != ACCT_TYPE_ROOT) {
+                root = gnc_book_get_root_account(book);
+                if (root == NULL) {
+		  root = gnc_account_create_root(book);
+		}
+                gnc_account_append_child(root, acc);
+            }
+        }
     }
 
     xmlFreeNode(tree);

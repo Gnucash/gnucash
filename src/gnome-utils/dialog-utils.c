@@ -37,7 +37,6 @@
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
-#include "Group.h"
 #include "gnc-path.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
