@@ -152,7 +152,7 @@ druid_gconf_update_path (GError **error)
   fprintf(output, "\n######## The following lines were added by GnuCash. ########\n");
   if (!found_user_dir)
     fprintf(output, PATH_STRING1);
-  gconfdir = gnc_path_get_gconfdir ();
+  gconfdir = gnc_path_get_gconfdir (TRUE);
   fprintf(output, PATH_STRING2, gconfdir);
   g_free (gconfdir);
   fprintf(output,   "############## End of lines added by GnuCash. ##############\n");
@@ -287,7 +287,7 @@ druid_gconf_update_page_prepare (GnomeDruidPage *druidpage,
   GtkTextBuffer *textbuffer;
   GtkWidget *textview;
   gchar *msg;
-  gchar *gconfdir = gnc_path_get_gconfdir ();
+  gchar *gconfdir = gnc_path_get_gconfdir (TRUE);
 
   textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_text");
   textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
@@ -613,6 +613,25 @@ druid_gconf_install_check_schemas (void)
     gnc_gconf_unset_dir(GCONF_WARNINGS_TEMP, NULL);
     return;
   }
+
+#ifdef _WIN32
+  {
+    /* automatically update the search path on windows */
+    GError *error = NULL;
+    if (!druid_gconf_update_path (&error)) {
+      gnc_error_dialog (NULL, error->message);
+      g_error_free (error);
+      exit(42);
+    } else {
+      if (!g_spawn_command_line_sync("gconftool-2 --shutdown", NULL, NULL,
+				     NULL, &error)) {
+	gnc_warning_dialog(NULL, error->message);
+	g_error_free(error);
+      }
+      return;
+    }
+  }
+#endif /* _WIN32 */
 
   xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
   dialog = glade_xml_get_widget (xml, "GConf Query");

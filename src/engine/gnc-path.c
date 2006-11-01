@@ -121,11 +121,23 @@ gchar *gnc_path_get_accountsdir()
  * "$prefix/etc/gconf/gconf.xml.defaults".
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_gconfdir()
+gchar *gnc_path_get_gconfdir(gboolean force_slashes)
 {
   gchar *sysconfdir = gbr_find_etc_dir (SYSCONFDIR);
-  gchar *result = g_build_filename (sysconfdir, "gconf", 
-				    "gconf.xml.defaults", (char*)NULL);
+  gchar *separator = G_DIR_SEPARATOR_S;
+  gchar *result;
+
+  if (force_slashes) {
+    gchar **splitted;
+    splitted = g_strsplit (sysconfdir, "\\", -1);
+    g_free (sysconfdir);
+    sysconfdir = g_strjoinv ("/", splitted);
+    g_strfreev (splitted);
+    separator = "/";
+  }
+
+  result = g_build_path (separator, sysconfdir, "gconf", "gconf.xml.defaults",
+			 (gchar*)NULL);
   g_free (sysconfdir);
   //printf("Returning gconfdir %s\n", result);
   return result;
