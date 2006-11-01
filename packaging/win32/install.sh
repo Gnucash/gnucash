@@ -260,6 +260,49 @@ function inst_active_perl() {
     quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
 }
 
+function inst_autotools() {
+    setup Autotools
+    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
+    add_to_env $_AUTOTOOLS_UDIR/bin PATH
+    if quiet autoconf --help && quiet automake --help
+    then
+        echo "autoconf/automake already installed.  skipping."
+    else
+        wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
+        wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
+        qpushd $TMP_UDIR/autoconf-*
+            echo "building autoconf..."
+            ./configure --prefix=$_AUTOTOOLS_UDIR
+            make
+            make install
+        qpopd
+        qpushd $TMP_UDIR/automake-*
+            echo "building automake..."
+            ./configure --prefix=$_AUTOTOOLS_UDIR
+            make
+            make install
+        qpopd
+    fi
+    if quiet ${LIBTOOLIZE} --help 
+    then
+        echo "libtool/libtoolize already installed.  skipping."
+    else
+        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
+        qpushd $TMP_UDIR/libtool-*
+            echo "building libtool..."
+            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
+            make
+            make install
+        qpopd
+    fi
+    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
+    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
+    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
+    quiet autoconf --help &&
+    quiet automake --help &&
+    quiet ${LIBTOOLIZE} --help || die "autotools not installed correctly"
+}
+
 function inst_guile() {
     setup Guile
     _GUILE_WFSDIR=`win_fs_path $GUILE_DIR`
@@ -273,8 +316,10 @@ function inst_guile() {
         echo "guile and slib already installed.  skipping."
     else
         smart_wget $GUILE_URL $DOWNLOAD_DIR
+        _GUILE_BALL=$LAST_FILE
         smart_wget $SLIB_URL $DOWNLOAD_DIR
-        tar -xzpf $DOWNLOAD_UDIR/guile-*.tar.gz -C $TMP_UDIR
+        _SLIB_BALL=$LAST_FILE
+        tar -xzpf $_GUILE_BALL -C $TMP_UDIR
         qpushd $TMP_UDIR/guile-*
             qpushd ice-9
                 cp boot-9.scm boot-9.scm.bak
@@ -319,7 +364,7 @@ function inst_guile() {
         _GUILE_MAJOR=`echo $_GUILE_UDIR/share/guile/1.* | sed 's,.*/,,'`
 	_SLIB_DIR=$GUILE_DIR\\share\\guile\\$_GUILE_MAJOR
 	mkdir -p $_SLIB_DIR
-	unzip $DOWNLOAD_DIR/slib*.zip -d $_SLIB_DIR
+	unzip $_SLIB_BALL -d $_SLIB_DIR
 	qpushd $_SLIB_DIR/slib
 	    cp guile.init guile.init.bak
             sed '/lambda.*'"'"'unix/a\
@@ -555,49 +600,6 @@ function inst_swig() {
     quiet swig -version || die "swig unavailable"
 }
 
-function inst_autotools() {
-    setup Autotools
-    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
-    add_to_env $_AUTOTOOLS_UDIR/bin PATH
-    if quiet autoconf --help && quiet automake --help
-    then
-        echo "autoconf/automake already installed.  skipping."
-    else
-        wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
-        wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
-        qpushd $TMP_UDIR/autoconf-*
-            echo "building autoconf..."
-           ./configure --prefix=$_AUTOTOOLS_UDIR
-            make
-            make install
-        qpopd
-        qpushd $TMP_UDIR/automake-*
-            echo "building automake..."
-            ./configure --prefix=$_AUTOTOOLS_UDIR
-            make
-            make install
-        qpopd
-    fi
-    if quiet ${LIBTOOLIZE} --help 
-    then
-        echo "libtool/libtoolize already installed.  skipping."
-    else
-        wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
-        qpushd $TMP_UDIR/libtool-*
-            echo "building libtool..."
-            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
-            make
-            make install
-        qpopd
-    fi
-    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
-    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-    quiet autoconf --help &&
-    quiet automake --help &&
-    quiet ${LIBTOOLIZE} --help || die "autotools not installed correctly"
-}
-
 function inst_libgsf() {
     setup libGSF
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
@@ -609,9 +611,11 @@ function inst_libgsf() {
     else
 	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
 	qpushd $TMP_UDIR/libgsf-*
-	    ./configure ${HOST_XCOMPILE} --prefix=$_LIBGSF_UDIR \
-	    CPPFLAGS="${GNOME_CPPFLAGS}" \
-	    LDFLAGS="${GNOME_LDFLAGS}"
+	    ./configure ${HOST_XCOMPILE} \
+	        --prefix=$_LIBGSF_UDIR \
+	        --without-python \
+	        CPPFLAGS="${GNOME_CPPFLAGS}" \
+	        LDFLAGS="${GNOME_LDFLAGS}"
 	    make
 	    make install
 	qpopd
@@ -638,8 +642,8 @@ function inst_goffice() {
 	    automake
 	    autoconf
 	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-	    CPPFLAGS="${GNOME_CPPFLAGS}" \
-	    LDFLAGS="${GNOME_LDFLAGS}"
+	        CPPFLAGS="${GNOME_CPPFLAGS}" \
+	        LDFLAGS="${GNOME_LDFLAGS}"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    make
 	    make install
@@ -759,7 +763,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd ${_GNUCASH_WFSDIR}/bin
-    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin" > gnucash.bat
+    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
     echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
     echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
     echo "set GUILE_LOAD_PATH=${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
