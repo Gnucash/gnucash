@@ -48,7 +48,7 @@
           <menuitem name="ActionsSinceLastRun" action="ActionsSinceLastRunAction"/>
           <menuitem name="ActionsMortgageLoan" action="ActionsMortgageLoanAction"/>
         </menu>
-        <!-- menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/ -->
+        <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/>
       </placeholder>
     </menu>
   

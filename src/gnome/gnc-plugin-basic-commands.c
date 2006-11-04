@@ -74,9 +74,7 @@ static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWind
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
-#ifdef BOOK_CLOSING_WORKS
 static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
-#endif
 static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
@@ -140,11 +138,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
-#ifdef BOOK_CLOSING_WORKS
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
-#endif
 
   /* Tools menu */
 
@@ -475,13 +471,11 @@ gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActio
   gnc_ui_sx_loan_druid_create ();
 }
 
-#ifdef BOOK_CLOSING_WORKS
 static void
 gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data)
 {
   gnc_acct_period_dialog();
 }
-#endif
 
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
