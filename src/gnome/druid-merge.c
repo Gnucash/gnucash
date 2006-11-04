@@ -181,8 +181,8 @@ on_import_next (GnomeDruidPage  *gnomedruidpage,
 static void
 on_merge_cancel (GnomeDruid *gnomedruid, gpointer user_data)
 {
+	g_return_if_fail(mergeBook != NULL);
 	gnc_suspend_gui_refresh ();
-	g_return_if_fail(mergeData != NULL);
 	delete_merge_window();
 	qof_book_destroy(mergeBook);
 	qof_session_end(merge_session);	
