@@ -364,8 +364,9 @@ static void
 qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
 {
   QofSession *qsf_session, *first_session;
-  const gchar *filename;
+  const gchar *filename, *message, *error_message;
   QofBook *original;
+  QofBackendError err;
 
   ENTER (" ");
   qof_event_suspend();
@@ -376,6 +377,20 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
   qsf_session = qof_session_new();
   qof_session_begin(qsf_session, filename, TRUE, FALSE);
   qof_session_load(qsf_session, NULL);
+  err = qof_session_get_error(qsf_session);
+  if (err != ERR_BACKEND_NO_ERR) {
+    error_message = qof_session_get_error_message(qsf_session);
+    if (!error_message)
+	error_message = "";
+    message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
+    PERR("%s", message);
+    qof_session_destroy(qsf_session);
+    qof_event_resume();
+    gnc_error_dialog(gnc_ui_get_toplevel(), message);
+    LEAVE (" ");
+    return;
+  }
+
   qof_event_resume();
   gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
   LEAVE (" ");

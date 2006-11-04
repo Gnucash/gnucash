@@ -220,7 +220,7 @@ on_merge_finish (GnomeDruidPage  *gnomedruidpage,
 	gnc_suspend_gui_refresh ();
 	result = qof_book_merge_commit(mergeData);
 	if(result != 0) {
-		message = _("Error: the Commit operation failed.");
+		message = g_strdup_printf(_("Error: the Commit operation failed, error code %d."), result);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
 		gnc_error_dialog(top, message);
 	}
