@@ -83,6 +83,24 @@ function add_to_env() {
 }
 
 function prepare() {
+    # Necessary so that intltoolize doesn't come up with some
+    # foolish AC_CONFIG_AUX_DIR; bug#362006
+    # We cannot simply create install-sh in the repository, because
+    # this will confuse other parts of the tools
+    _REPOS_UDIR=`unix_path $REPOS_DIR`
+    level0=.
+    level1=$(basename ${_REPOS_UDIR})
+    level2=$(basename $(dirname ${_REPOS_UDIR}))"/"$level1
+    for mydir in $level0 $level1 $level2; do
+        if [ -f $mydir/gnucash.m4 ]; then
+            die "Do not save install.sh in the repository or one its parent directories"
+        fi
+    done
+    # Remove old empty install-sh files
+    if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh | wc -l)" -eq 0 ]; then
+        rm -f ${_REPOS_UDIR}/install-sh
+    fi
+
     mkdir -p $TMP_DIR
     mkdir -p $DOWNLOAD_DIR
     for _ENV in $ENV_VARS; do
@@ -705,9 +723,6 @@ function inst_gnucash() {
     _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     qpushd $REPOS_DIR
-    # Necessary so that intltoolize doesn't come up with some
-    # foolish AC_CONFIG_AUX_DIR; bug#362006 
-    touch install-sh
     if test "x$cross_compile" = xyes ; then
 	# Set these variables manually because of cross-compiling
 	export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
