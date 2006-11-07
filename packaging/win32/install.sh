@@ -29,6 +29,7 @@ SEPS_GUILE_CPPFLAGS=" "
 SEPS_GUILE_LDFLAGS=" "
 SEPS_INTLTOOL_PERL=" "
 SEPS_PATH=":"
+SEPS_PKG_CONFIG=":"
 SEPS_PKG_CONFIG_PATH=":"
 SEPS_READLINE_CPPFLAGS=" "
 SEPS_READLINE_LDFLAGS=" "
@@ -45,6 +46,7 @@ GUILE_CPPFLAGS \
 GUILE_LDFLAGS \
 INTLTOOL_PERL \
 PATH \
+PKG_CONFIG \
 PKG_CONFIG_PATH \
 READLINE_CPPFLAGS \
 READLINE_LDFLAGS \
@@ -498,6 +500,7 @@ function inst_gnome() {
     add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
         pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
@@ -567,6 +570,16 @@ function inst_gnome() {
                 qpopd
             fi
             [ -f bin/libintl-2.dll ] || cp bin/intl.dll bin/libintl-2.dll
+            # work around a bug in msys bash, adding 0x01 smilies
+            cat > bin/pkg-config-msys.sh <<EOF
+#!/bin/sh
+if pkg-config "\$@" > /dev/null 2>&1 ; then
+    res=true
+else
+    res=false
+fi
+pkg-config "\$@" | tr -d \\\\r && \$res
+EOF
             _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
             cat > lib/pkgconfig/freetype2.pc <<EOF
 prefix=/ignore
