@@ -2153,6 +2153,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/backend/file/test/Makefile
           src/backend/file/test/test-files/Makefile
           src/backend/file/test/test-files/xml2/Makefile
+		  src/backend/gda/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/bin/Makefile

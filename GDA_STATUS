@@ -1,0 +1,23 @@
+GDA backend status - Nov 7, 2006
+
+Building:
+- I am currently building with libgda 1.99.1 installed in /opt/libgda-1.99.1.
+This location is hard wired into src/backend/gda/Makefile.am as LIBGDA_DIR
+
+Execution:
+- A basic GDA backend framework now exists.  This framework accepts URLs of
+the form gda://DSN:USERNAME:PASSWORD.  "gda" is required.  "DSN" represents
+a dataset configured in ~/.libgda/config.  USERNAME and PASSWORD are not
+required but can be specified.
+
+- The backend assumes that the database already exists and tables are set up
+according to src/backend/gda/ddl/gnucash.ddl.  Note that
+src/backend/gda/ddl/business.ddl has not been tried yet, so there are no
+guarantees that any database will accept it.
+
+- The backend will save commodities and load them on startup.  However, they
+will not have the correct GUIDs.
+
+- The backend will save accounts and load them on startup.  Any information
+in slots is not saved or loaded.  Also, because of the commodity GUID issue
+above, accounts will not have the correct commodity.

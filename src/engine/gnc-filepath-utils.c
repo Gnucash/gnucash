@@ -298,6 +298,7 @@ xaccResolveURL (const char * pathfrag)
 
   if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
       !g_ascii_strncasecmp (pathfrag, "https://", 8)     ||
+	  !g_ascii_strncasecmp (pathfrag, "gda://", 6)		 ||
       !g_ascii_strncasecmp (pathfrag, "postgres://", 11))
   {
     return g_strdup(pathfrag);

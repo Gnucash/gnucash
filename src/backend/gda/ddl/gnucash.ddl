@@ -1,0 +1,10 @@
+source commodities.ddl
+source slots.ddl
+source accounts.ddl
+source lots.ddl
+source budgets.ddl
+source prices.ddl
+source freq_specs.ddl
+source sched_transactions.ddl
+source transactions.ddl
+source books.ddl

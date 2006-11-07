@@ -80,6 +80,7 @@ gnc_engine_init(int argc, char ** argv)
     gboolean required;
   } libs[] = {
     { GNC_LIB_NAME, TRUE },
+	{ "gnc-backend-gda", TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
     { "gnc-backend-postgres", FALSE },
     { NULL, FALSE } }, *lib;
