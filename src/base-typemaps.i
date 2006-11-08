@@ -20,6 +20,7 @@ typedef void * gpointer;
 typedef int gint;
 typedef int time_t;
 typedef unsigned int guint;
+typedef double gdouble;
 typedef char * URLType;
 typedef char gchar;
 
