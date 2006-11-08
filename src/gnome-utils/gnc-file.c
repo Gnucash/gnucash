@@ -839,7 +839,8 @@ gnc_file_open (void)
 
   lastfile = gnc_history_get_last();
   newfile = gnc_file_dialog (_("Open"), NULL, lastfile, GNC_FILE_DIALOG_OPEN);
-  g_free(lastfile);
+  if (lastfile)
+    g_free(lastfile);
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
