@@ -378,9 +378,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   char *file_name, *default_dir;
 
   /* Default to whatever's already present */
-  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
+  default_dir = gnc_get_default_directory(GCONF_SECTION);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "*.qif");
@@ -393,20 +391,20 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   /* Insure valid data, and something that can be freed. */
   if (new_file_name == NULL) {
     file_name = g_strdup(default_dir);
-  } else if (*new_file_name != '/') {
-    file_name = g_strdup_printf("%s%s", default_dir, new_file_name);
+  } else if (!g_path_is_absolute(new_file_name)) {
+    file_name = g_build_filename(default_dir, new_file_name);
     g_free(new_file_name);
   } else {
     file_name = new_file_name;
+    /* Update the working directory */
+    g_free(default_dir);
+    default_dir = g_path_get_dirname(file_name);
+    gnc_set_default_directory(GCONF_SECTION, default_dir);
   }
+  g_free(default_dir);
 
   /* set the filename entry for what was selected */
   gtk_entry_set_text(GTK_ENTRY(wind->filename_entry), file_name);
-
-  /* Update the working directory */
-  gnc_extract_directory(&default_dir, file_name);
-  gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
-  g_free(default_dir);
   g_free(file_name);
 }
 

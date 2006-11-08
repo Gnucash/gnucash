@@ -45,7 +45,6 @@
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
 
 #include "gnc-hbci-utils.h"
 #include "gnc-hbci-gettrans.h"
@@ -153,9 +152,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
   /* qof_log_check(MOD_IMPORT, QOF_LOG_TRACE); */
   DEBUG("gnc_file_dtaus_import(): Begin...\n");
 
-  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
+  default_dir = gnc_get_default_directory(GCONF_SECTION);
   selected_filename = gnc_file_dialog(_("Select an DTAUS file to process"),
 				      NULL,
 				      default_dir,
@@ -165,7 +162,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
   if(selected_filename!=NULL) {
     /* Remember the directory as the default. */
     default_dir = g_path_get_dirname(selected_filename);
-    gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
+    gnc_set_default_directory(GCONF_SECTION, default_dir);
     g_free(default_dir);
 
     /*strncpy(file,selected_filename, 255);*/
