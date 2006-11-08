@@ -392,7 +392,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   if (new_file_name == NULL) {
     file_name = g_strdup(default_dir);
   } else if (!g_path_is_absolute(new_file_name)) {
-    file_name = g_build_filename(default_dir, new_file_name);
+    file_name = g_build_filename(default_dir, new_file_name, NULL);
     g_free(new_file_name);
   } else {
     file_name = new_file_name;
