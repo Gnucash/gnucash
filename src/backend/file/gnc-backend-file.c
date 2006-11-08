@@ -83,7 +83,7 @@ static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     char pathbuf[PATH_MAX];
     char *path = NULL;
 #endif
@@ -132,7 +132,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
      * provides a better long-term solution.
      */
 
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
@@ -183,12 +183,12 @@ gnc_file_be_get_file_lock (FileBackend *be)
 
     return TRUE;
 
-#else /* ifndef _WIN32 */
+#else /* ifndef G_OS_WIN32 */
     /* On windows, there is no NFS and the open(,O_CREAT | O_EXCL)
        is sufficient for locking. */
     be->linkfile = NULL;
     return TRUE;
-#endif /* ifndef _WIN32 */
+#endif /* ifndef G_OS_WIN32 */
 }
 
 /* ================================================================= */

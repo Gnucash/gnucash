@@ -1239,7 +1239,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
   if (!use_gzip)
     return fopen(filename, perms);
 
-#ifdef _WIN32
+#ifdef G_OS_WIN32
   PWARN("Compression not implemented on Windows. Opening uncompressed file.");
   return fopen(filename, perms);
 

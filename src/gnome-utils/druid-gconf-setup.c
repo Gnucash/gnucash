@@ -614,7 +614,7 @@ druid_gconf_install_check_schemas (void)
     return;
   }
 
-#ifdef _WIN32
+#ifdef G_OS_WIN32
   {
     /* automatically update the search path on windows */
     GError *error = NULL;
@@ -631,7 +631,7 @@ druid_gconf_install_check_schemas (void)
       return;
     }
   }
-#endif /* _WIN32 */
+#endif /* G_OS_WIN32 */
 
   xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
   dialog = glade_xml_get_widget (xml, "GConf Query");
