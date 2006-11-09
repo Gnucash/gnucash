@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include <gconf/gconf.h>
 #ifdef HAVE_X11_XLIB_H
@@ -230,6 +231,12 @@ gnc_gnome_help (const char *file_name, const char *anchor)
     return;
 
   g_assert(error != NULL);
+  {
+    const gchar *message =
+      _("GnuCash could not find the files for the help documentation.  "
+	"This is likely because the 'gnucash-docs' package is not installed.");
+    gnc_error_dialog(NULL, message);
+  }
   PERR ("%s", error->message);
   g_error_free(error);
 }

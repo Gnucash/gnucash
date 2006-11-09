@@ -1,3 +1,9 @@
+2006-11-09  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-gnome-utils.c: Inform the user about
+	  'gnucash-docs' package when Help is selected with no
+	  content. Fixes #347102.
+
 2006-10-08  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
