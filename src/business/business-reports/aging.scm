@@ -183,8 +183,7 @@
 	   (temp-owner (gncOwnerCreate))
 	   (owner (gnc:owner-from-split split temp-owner)))
 
-      (if
-       owner
+      (if (not (null? owner))
        (let* ((guid (gncOwnerReturnGUID owner))
 	      (this-currency (xaccTransGetCurrency transaction))
 	      (this-date (gnc-transaction-get-date-posted transaction))
