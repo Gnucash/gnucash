@@ -67,6 +67,8 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+static void do_db_commodity( GncGdaBackend* be, QofInstance* inst, gboolean force_insert );
+
 /*
 -- Commodities table - stores currencies and stocks/mutual funds
 CREATE TABLE commodities (
@@ -86,80 +88,65 @@ CREATE TABLE commodities (
 );
 */
 /* ================================================================= */
+
 static gnc_commodity*
-load_commodity( QofBook* pBook, GdaDataModel* pModel, int row )
+load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
-	int numCols = gda_data_model_get_n_columns( pModel );
+	QofBook* pBook = be->primary_book;
 	int col;
 	const GValue* val;
 	gnc_commodity* pCommodity;
 	GUID guid;
-	const char* namespace = NULL;
-	const char* mnemonic = NULL;
-	const char* fullname = NULL;
-	const char* cusip = NULL;
+	const gchar* namespace = NULL;
+	const gchar* mnemonic = NULL;
+	const gchar* fullname = NULL;
+	const gchar* cusip = NULL;
 	int fraction = 1;
 	gboolean quote_flag = FALSE;
+	const gchar* quote_source_name = NULL;
 	gnc_quote_source* quote_source = NULL;
-	const char* quote_tz = NULL;
-	const char* s;
+	const gchar* quote_tz = NULL;
+	const gchar* s;
 
-	for( col = 0; col < numCols; col++ ) {
-		val = gda_data_model_get_value_at( pModel, col, row );
-		
-		switch( col ) {
-			case 0:	/* guid */
-				s = g_value_get_string( val );
-				string_to_guid( s, &guid );
-				break;
-			case 1: /* namespace */
-				namespace = g_value_get_string( val );
-				break;
-			case 2: /* mnemonic */
-				mnemonic = g_value_get_string( val );
-				break;
-			case 3: /* fullname */
-				fullname = g_value_get_string( val );
-				break;
-			case 4: /* cusip */
-				cusip = g_value_get_string( val );
-				break;
-			case 5: /* fraction */
-				fraction = g_value_get_int( val );
-				break;
-			case 6: /* use_quote_source */
-				quote_flag = g_value_get_boolean( val );
-				break;
-			case 7: /* quote_source */
-				quote_source = gnc_quote_source_lookup_by_internal( g_value_get_string( val ) );
-				break;
-			case 8: /* quote_tz */
-				quote_tz = g_value_get_string( val );
-				break;
-			default:	/* too many cols */
-				*(char*)0 = 0;
-		}
-	}
+	col_cvt_t col_conversion[] = {
+		{ "guid",				CT_GUID,	&guid },
+		{ "namespace",			CT_STRING,	&namespace },
+		{ "mnemonic",			CT_STRING,	&mnemonic },
+		{ "fullname",			CT_STRING,	&fullname },
+		{ "cusip",				CT_STRING,	&cusip },
+		{ "fraction",			CT_INT,		&fraction },
+		{ "use_quote_source",	CT_INT,		&quote_flag },
+		{ "quote_source",		CT_STRING,	&quote_source_name },
+		{ "quote_tz",			CT_STRING,	&quote_tz },
+		{ NULL }
+	};
 
-	pCommodity = gnc_commodity_new( pBook, fullname, namespace, mnemonic, cusip, fraction );
-	memcpy( &((QofInstance*)pCommodity)->entity.guid, &guid, sizeof( GUID ) );
+	gnc_gda_load_object( be, pModel, col_conversion, row );
+
+	pCommodity = gnc_commodity_new( pBook, fullname, namespace, mnemonic,
+									cusip, fraction );
 	gnc_commodity_set_quote_flag( pCommodity, quote_flag );
+	quote_source = gnc_quote_source_lookup_by_internal( quote_source_name );
 	gnc_commodity_set_quote_source( pCommodity, quote_source );
 	gnc_commodity_set_quote_tz( pCommodity, quote_tz );
+	qof_entity_set_guid( (QofEntity*)pCommodity, &guid );
 
 	return pCommodity;
 }
 
 static void
-load_commodities( GncGdaBackend* be, QofBook* pBook )
+load_commodities( GncGdaBackend* be )
 {
 	GError* error = NULL;
 
 	GdaQuery* query;
 	GdaObject* ret;
+	QofBook* pBook = be->primary_book;
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
 
-	query = gda_query_new_from_sql( be->pDict, "SELECT * FROM commodities", &error );
+	query = gda_query_new_from_sql( be->pDict,
+									"SELECT * FROM commodities",
+									&error );
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
 		return;
@@ -179,64 +166,57 @@ load_commodities( GncGdaBackend* be, QofBook* pBook )
 		for( r = 0; r < numRows; r++ ) {
 			gnc_commodity* c;
 
-			pCommodity = load_commodity( pBook, pModel, r );
+			pCommodity = load_commodity( be, pModel, r );
 
 			if( pCommodity != NULL ) {
-				gnc_commodity_table_insert( pTable, pCommodity );
+				GUID guid;
+
+				guid = *qof_entity_get_guid( (QofEntity*)pCommodity );
+				pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
+				qof_entity_set_guid( (QofEntity*)pCommodity, &guid );
 			}
 		}
 	}
 }
 /* ================================================================= */
-static gboolean
-commodity_exists_in_db( GncGdaBackend* be, const char* guid )
+static void
+do_db_commodity( GncGdaBackend* be, QofInstance* inst, gboolean force_insert )
 {
-	char cmdbuf[400];
-	int count;
+	gnc_commodity* pCommodity = (gnc_commodity*)inst;
+	const gchar* mnemonic = gnc_commodity_get_mnemonic(pCommodity);
+	const gchar* namespace = gnc_commodity_get_namespace(pCommodity);
+	const gchar* fullname = gnc_commodity_get_fullname(pCommodity);
+	const gchar* cusip = gnc_commodity_get_cusip(pCommodity);
+	int fraction = gnc_commodity_get_fraction(pCommodity);
+	const gchar* quote_source = gnc_quote_source_get_user_name(gnc_commodity_get_quote_source(pCommodity));
+	const gchar* quote_tz = gnc_commodity_get_quote_tz(pCommodity);
+	const GUID* guid = qof_instance_get_guid( inst );
+	gboolean quote_flag = gnc_commodity_get_quote_flag(pCommodity);
+	GdaQuery* pQuery;
 
-	sprintf( cmdbuf, "SELECT * FROM commodities WHERE guid='%s';", guid );
-	count = gnc_gda_execute_select_get_count( be, cmdbuf );
-	if( count == 0 ) {
-		return FALSE;
-	} else {
-		return TRUE;
-	}
+	col_cvt_t col_conversion_table[] = {
+		{ "guid",				CT_GUID,	&guid },
+		{ "namespace",			CT_STRING,	&namespace },
+		{ "mnemonic",			CT_STRING,	&mnemonic },
+		{ "fullname",			CT_STRING,	&fullname },
+		{ "cusip",				CT_STRING,	&cusip },
+		{ "fraction",			CT_INT,		&fraction },
+		{ "use_quote_source",	CT_INT,		&quote_flag },
+		{ "quote_source",		CT_STRING,	&quote_source },
+		{ "quote_tz",			CT_STRING,	&quote_tz },
+		{ NULL }
+	};
+
+	(void)gnc_gda_do_db_operation( be,
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						"commodities",
+						col_conversion_table );
 }
 
 static void
 commit_commodity( GncGdaBackend* be, QofInstance* inst )
 {
-	gnc_commodity* pCommodity = (gnc_commodity*)inst;
-	const char* mnemonic = gnc_commodity_get_mnemonic(pCommodity);
-	const char* namespace = gnc_commodity_get_namespace(pCommodity);
-	const char* fullname = gnc_commodity_get_fullname(pCommodity);
-	const char* cusip = gnc_commodity_get_cusip(pCommodity);
-	int fraction = gnc_commodity_get_fraction(pCommodity);
-	const char* quote_source = gnc_quote_source_get_user_name(gnc_commodity_get_quote_source(pCommodity));
-	const char* quote_tz = gnc_commodity_get_quote_tz(pCommodity);
-	char guid[GUID_ENCODING_LENGTH+1];
-	char cmdbuf[1000];
-	gboolean quote_flag = gnc_commodity_get_quote_flag(pCommodity);
-
-	guid_to_string_buff( qof_instance_get_guid( inst ), guid );
-
-	if( inst->do_free ) {
-		sprintf( cmdbuf, "DELETE FROM commodities WHERE guid='%s';\n", guid );
-		printf( "%s\n", cmdbuf );
-		gnc_gda_execute_sql( be, cmdbuf );
-	} else {
-		if( commodity_exists_in_db( be, guid ) ) {
-			sprintf( cmdbuf,
-				"UPDATE commodities set namespace='%s',mnemonic='%s',fullname='%s', cusip='%s',fraction=%d,use_quote_source=%d,quote_source='%s',quote_tz='%s' WHERE guid='%s';",
-			namespace, mnemonic, fullname, cusip, fraction, quote_flag, quote_source, quote_tz, guid );
-		} else {
-			sprintf( cmdbuf,
-				"INSERT INTO commodities VALUES('%s', '%s', '%s','%s','%s',%d,'%d','%s','%s')\n",
-				guid, namespace, mnemonic, fullname, cusip, fraction, quote_flag, quote_source, quote_tz );
-		}
-		printf( "%s\n", cmdbuf );
-		gnc_gda_execute_sql( be, cmdbuf );
-    }
+	do_db_commodity( be, inst, FALSE );
 }
 
 /* ================================================================= */

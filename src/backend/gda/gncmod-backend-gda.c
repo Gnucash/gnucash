@@ -25,19 +25,19 @@ int libgncmod_backend_gda_LTX_gnc_module_age      = 0;
 static GNCModule engine;
 
 /* forward references */
-char *libgncmod_backend_gda_LTX_gnc_module_path(void);
-char *libgncmod_backend_gda_LTX_gnc_module_description(void);
+gchar *libgncmod_backend_gda_LTX_gnc_module_path(void);
+gchar *libgncmod_backend_gda_LTX_gnc_module_description(void);
 int libgncmod_backend_gda_LTX_gnc_module_init(int refcount);
 int libgncmod_backend_gda_LTX_gnc_module_end(int refcount);
 
 
-char *
+gchar *
 libgncmod_backend_gda_LTX_gnc_module_path(void) 
 {
   return g_strdup("gnucash/backend/gda");
 }
 
-char * 
+gchar * 
 libgncmod_backend_gda_LTX_gnc_module_description(void) 
 {
   return g_strdup("The GDA/SQL backend for GnuCash");

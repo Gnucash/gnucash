@@ -21,3 +21,19 @@ will not have the correct GUIDs.
 - The backend will save accounts and load them on startup.  Any information
 in slots is not saved or loaded.  Also, because of the commodity GUID issue
 above, accounts will not have the correct commodity.
+
+TODO:
+
+- Create DB tables if they don't exist
+- gnc_numeric numerator/denominator are gint64, not int
+- Better representation for gnc_numeric - doesn't compare well
+- Map object->tables
+- queries
+- SQLite if just a "file"
+- Fix commodity handling
+- dates should be "date" not stored as string
+- slots
+- lots
+- transactions/splits
+- sched transactions
+- check for memory leaks

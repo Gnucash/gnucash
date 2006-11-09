@@ -2,9 +2,9 @@ CREATE TABLE prices (
 	guid char(32) NOT NULL,
 	commodity_guid char(32) NOT NULL,
 	currency_guid char(32) NOT NULL,
-	time date NOT NULL,
-	source text,
-	type text,
+	time varchar(40) NOT NULL,
+	source varchar(40),
+	type varchar(40),
 	value_num int,
 	value_denom int,
 

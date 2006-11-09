@@ -15,7 +15,7 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
-  -I/usr/include/libxml2 -I$(LIBGDA_DIR)
+  -I/usr/include/libxml2 -I$(LIBGDA_DIR)/include/libgda-1.99
 
 libgnc_backend_gda_la_SOURCES = \
   gnc-backend-gda.c \
@@ -43,4 +43,4 @@ libgnc_backend_gda_la_SOURCES = \
 
 libgnc_backend_gda_la_LDFLAGS = -module -avoid-version
 libgnc_backend_gda_la_LIBADD = \
-	-L$(LIBGDA_DIR) -lgda-3 -lgda_handlers-3 -lgda_sql_delimiter-3 -lglib-2.0 -lxslt -lxml2 -lz -lm
+	-L$(LIBGDA_DIR)/lib -lgda-3 -lgda_handlers-3 -lgda_sql_delimiter-3 -lglib-2.0 -lxslt -lxml2 -lz -lm

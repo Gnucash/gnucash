@@ -20,9 +20,6 @@
 \********************************************************************/
 /** @file gnc-backend-gda.c
  *  @brief load and save data to SQL 
- *  @author Copyright (c) 2000 Gnumatic Inc.
- *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
@@ -69,55 +66,114 @@
 #endif
 
 static const gchar* convert_search_obj( QofIdType objType );
+static void gnc_gda_init_object_handlers( void );
 
 /* callback structure */
 typedef struct {
 	gboolean ok;
 	GncGdaBackend* be;
 	QofInstance* inst;
-	QofBook* book;
 } gda_backend;
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ================================================================= */
 void
-gnc_gda_execute_sql( GncGdaBackend* be, const char* sql )
+gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel,
+					const col_cvt_t* table, int row )
+{
+	int col;
+	const GValue* val;
+	const gchar* s;
+	const GdaTimestamp* pTimestamp;
+	gchar *buf;
+	gint num;
+	gint denom;
+	GUID* guid;
+
+	for( col = 0; table[col].col_name != NULL; col++ ) {
+		if( table[col].col_type != CT_NUMERIC ) {
+			val = gda_data_model_get_value_at_col_name( pModel, table[col].col_name, row );
+		}
+		
+		switch( table[col].col_type ) {
+			case CT_STRING:
+				*(const gchar**)table[col].pData = g_value_get_string( val );
+				break;
+
+			case CT_INT:
+				*(gint*)table[col].pData = g_value_get_int( val );
+				break;
+
+			case CT_GUID:
+				s = g_value_get_string( val );
+				string_to_guid( s, (GUID*)table[col].pData );
+				break;
+				
+			case CT_DATE:
+				s = g_value_get_string( val );
+				*(Timespec*)table[col].pData = gnc_iso8601_to_timespec_gmt( s );
+				break;
+
+			case CT_NUMERIC:
+				buf = g_strdup_printf( "%s_num", table[col].col_name );
+				val = gda_data_model_get_value_at_col_name( pModel, buf, row );
+				g_free( buf );
+				num = g_value_get_int( val );
+				buf = g_strdup_printf( "%s_denom", table[col].col_name );
+				val = gda_data_model_get_value_at_col_name( pModel, buf, row );
+				g_free( buf );
+				denom = g_value_get_int( val );
+				*(gnc_numeric*)table[col].pData = gnc_numeric_create( num, denom );
+				break;
+
+			default:	/* undefined col */
+				g_assert( FALSE );
+		}
+	}
+}
+
+/* ================================================================= */
+GdaObject*
+gnc_gda_execute_query( GncGdaBackend* be, GdaQuery* query )
 {
 	GError* error = NULL;
 
-	GdaQuery* query;
 	GdaObject* ret;
 
-	query = gda_query_new_from_sql( be->pDict, sql, &error );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
 	ret = gda_query_execute( query, NULL, FALSE, &error );
 
 	if( error != NULL ) {
 		printf( "SQL error: %s\n", error->message );
 	}
+
+	return ret;
 }
 
-int
-gnc_gda_execute_select_get_count( GncGdaBackend* be, const char* sql )
+GdaObject*
+gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
 {
 	GError* error = NULL;
-	int count = 0;
 
 	GdaQuery* query;
-	GdaObject* ret;
 
 	query = gda_query_new_from_sql( be->pDict, sql, &error );
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
-		return 0;
+		return NULL;
 	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
+	return gnc_gda_execute_query( be, query );
+}
+
+int
+gnc_gda_execute_select_get_count( GncGdaBackend* be, const gchar* sql )
+{
+	GError* error = NULL;
+	int count = 0;
+
+	GdaObject* ret;
+
+	ret = gnc_gda_execute_sql( be, sql );
 	if( GDA_IS_DATA_MODEL(ret) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		count = gda_data_model_get_n_rows( pModel );
@@ -130,26 +186,230 @@ gnc_gda_execute_select_get_count( GncGdaBackend* be, const char* sql )
 	return count;
 }
 /* ================================================================= */
+static gchar*
+render_col_value( GncGdaBackend* be, const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gchar iso8601_buf[33];
+	gchar date_buf[33];
+	gnc_numeric v;
+	gnc_commodity* pCommodity;
+	const GUID* guid;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+
+	// CT_NUMERIC are special because they are actually stored as 2 cols
+	if( include_name && table_row->col_type != CT_NUMERIC ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	switch( table_row->col_type ) {
+		case CT_STRING:
+			if( *(char**)table_row->pData != NULL ) {
+				buf = g_strdup_printf( "%s%s'%s'",
+								col_name, equals,
+								*(gchar**)table_row->pData );
+			} else {
+				buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+			}
+			break;
+
+		case CT_GUID:
+			(void)guid_to_string_buff( *(GUID**)table_row->pData, guid_buf );
+			buf = g_strdup_printf( "%s%s'%s'", col_name, equals, guid_buf );
+			break;
+
+		case CT_DATE:
+			(void)gnc_timespec_to_iso8601_buff( *(Timespec*)table_row->pData,
+												iso8601_buf );
+			strncpy( date_buf, iso8601_buf, 4+1+2+1+2 );
+			buf = g_strdup_printf( "%s%s'%s'", col_name, equals, date_buf );
+			break;
+
+		case CT_INT:
+			buf = g_strdup_printf( "%s%s%d",
+									col_name, equals,
+									*(gint*)table_row->pData );
+			break;
+
+		case CT_NUMERIC:
+			v = *(gnc_numeric*)table_row->pData;
+			if( !include_name ) {
+				buf = g_strdup_printf( "%lld, %lld",
+								gnc_numeric_num( v ), gnc_numeric_denom( v ) );
+			} else {
+				buf = g_strdup_printf( "%s_num=%lld, %s_denom=%lld",
+						table_row->col_name, gnc_numeric_num( v ),
+						table_row->col_name, gnc_numeric_denom( v ) );
+			}
+			break;
+
+		default:
+			g_assert( FALSE );
+	}
+
+	return buf;
+}
+
+static gboolean
+object_exists_in_db( GncGdaBackend* be, const gchar* table_name, const col_cvt_t* table )
+{
+	gchar* sql;
+	int count;
+	gchar* key_value;
+
+	key_value = render_col_value( be, table, TRUE );
+
+	sql = g_strdup_printf( "SELECT * FROM %s WHERE %s;",
+							table_name, key_value );
+	g_free( key_value );
+
+	count = gnc_gda_execute_select_get_count( be, sql );
+	g_free( sql );
+	if( count == 0 ) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+}
+
+gboolean
+gnc_gda_do_db_operation( GncGdaBackend* be,
+						E_DB_OPERATION op,
+						const gchar* table_name,
+						const col_cvt_t* table )
+{
+	GdaQuery* pQuery;
+
+	if( op == OP_DB_ADD_OR_UPDATE ) {
+		if( object_exists_in_db( be, table_name, table ) ) {
+			pQuery = gnc_gda_build_update_query( be, table_name, table );
+		} else {
+			pQuery = gnc_gda_build_insert_query( be, table_name, table );
+		}
+	} else if( op == OP_DB_DELETE ) {
+		pQuery = gnc_gda_build_delete_query( be, table_name, table );
+	} else {
+		g_assert( FALSE );
+	}
+	if( pQuery != NULL ) {
+		gnc_gda_execute_query( be, pQuery );
+		g_object_unref( G_OBJECT(pQuery) );
+
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+GdaQuery*
+gnc_gda_build_insert_query( GncGdaBackend* be,
+							const gchar* table_name,
+							const col_cvt_t* table )
+{
+	char sql[1000];
+	GError* error = NULL;
+	GdaQuery* query;
+	int col;
+	gchar* col_value;
+
+	sprintf( sql, "INSERT INTO %s VALUES(", table_name );
+
+	for( col = 0; table[col].col_name != NULL; col++ ) {
+		if( col != 0 ) strcat( sql, "," );
+		col_value = render_col_value( be, &table[col], FALSE );
+		strcat( sql, col_value );
+		g_free( col_value );
+	}
+
+	strcat( sql, ");" );
+
+	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	if( query == NULL ) {
+		printf( "SQL error: %s\n", error->message );
+	}
+	return query;
+}
+
+GdaQuery*
+gnc_gda_build_update_query( GncGdaBackend* be,
+							const gchar* table_name,
+							const col_cvt_t* table )
+{
+	char sql[1000];
+	GError* error = NULL;
+	GdaQuery* query;
+	int col;
+	gchar* col_value;
+
+	sprintf( sql, "UPDATE %s SET ", table_name );
+
+	for( col = 1; table[col].col_name != NULL; col++ ) {
+		if( col != 1 ) strcat( sql, "," );
+
+		col_value = render_col_value( be, &table[col], TRUE );
+		strcat( sql, col_value );
+		g_free( col_value );
+	}
+
+	strcat( sql, " WHERE " );
+
+	col_value = render_col_value( be, &table[0], TRUE );
+	strcat( sql, col_value );
+	g_free( col_value );
+	strcat( sql, ";" );
+
+	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	if( query == NULL ) {
+		printf( "SQL error: %s\n", error->message );
+	}
+	return query;
+}
+
+GdaQuery*
+gnc_gda_build_delete_query( GncGdaBackend* be,
+							const gchar* table_name,
+							const col_cvt_t* table )
+{
+	gchar* sql;
+	GError* error = NULL;
+	GdaQuery* query;
+	gchar* col_value;
+
+	col_value = render_col_value( be, &table[0], TRUE );
+	sql = g_strdup_printf( "DELETE FROM %s WHERE %s;", table_name, col_value );
+	g_free( col_value );
+
+	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	g_free( sql );
+	if( query == NULL ) {
+		printf( "SQL error: %s\n", error->message );
+	}
+	return query;
+}
+
+/* ================================================================= */
 
 static void
 gnc_gda_session_begin(QofBackend *be_start, QofSession *session, 
-                   const char *book_id,
+                   const gchar *book_id,
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
     GncGdaBackend *be = (GncGdaBackend*) be_start;
 	GError* error = NULL;
 	gda_backend be_data;
-	char book_info[300];
-	char* dsn;
-	char* username;
-	char* password;
+	gchar* book_info;
+	gchar* dsn;
+	gchar* username;
+	gchar* password;
 
     ENTER (" ");
 
 	be->pClient = gda_client_new();
 
 	/* Split book_id into provider and connection string */
-	strcpy( book_info, book_id );
+	book_info = g_strdup( book_id );
 	dsn = strchr( book_info, ':' );
 	*dsn = '\0';
 	dsn += 3;
@@ -171,6 +431,7 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
 						username, password,
 						0,
 						&error );
+	g_free( book_info );
 
 	if( be->pConnection == NULL ) {
 		printf( "SQL error: %s\n", error->message );
@@ -221,7 +482,7 @@ gnc_gda_destroy_backend(QofBackend *be)
 /* ================================================================= */
 
 static void
-initial_load_cb( const char* type, gpointer data_p, gpointer be_data_p )
+initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
 	GncGdaDataType_t* pData = data_p;
 	gda_backend* be_data = be_data_p;
@@ -230,7 +491,7 @@ initial_load_cb( const char* type, gpointer data_p, gpointer be_data_p )
 	g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
 	if( pData->initial_load != NULL ) {
-		(pData->initial_load)( be_data->be, be_data->book );
+		(pData->initial_load)( be_data->be );
 	}
 }
 
@@ -242,13 +503,15 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 
     ENTER (" ");
 
+	g_assert( be->primary_book == NULL );
+	be->primary_book = book;
+
 	/* Load any initial stuff */
 	be->loading = TRUE;
 
 	be_data.ok = FALSE;
 	be_data.be = be;
 	be_data.inst = NULL;
-	be_data.book = book;
 	qof_object_foreach_backend( GNC_GDA_BACKEND, initial_load_cb, &be_data );
 
 	be->loading = FALSE;
@@ -282,7 +545,7 @@ gnc_gda_rollback_edit (QofBackend *be, QofInstance *inst)
 }
 
 static void
-commit_cb( const char* type, gpointer data_p, gpointer be_data_p )
+commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
 	GncGdaDataType_t* pData = data_p;
 	gda_backend* be_data = be_data_p;
@@ -324,7 +587,9 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 	qof_object_foreach_backend( GNC_GDA_BACKEND, commit_cb, &be_data );
 
 	if( !be_data.ok ) {
-		*(char*)0 = 0;
+		printf( "gnc_gda_commit_edit(): Unknown object type %s\n",
+				inst->entity.e_type );
+		return;
 	}
 
 	qof_instance_mark_clean( inst );
@@ -340,13 +605,13 @@ convert_search_obj( QofIdType objType )
 }
 
 static void
-handle_and_term( QofQueryTerm* pTerm, char* sql )
+handle_and_term( QofQueryTerm* pTerm, gchar* sql )
 {
 	GSList* pParamPath = qof_query_term_get_param_path( pTerm );
 	QofQueryPredData* pPredData = qof_query_term_get_pred_data( pTerm );
 	gboolean isInverted = qof_query_term_is_inverted( pTerm );
 	GSList* name;
-	char val[33];
+	gchar val[GUID_ENCODING_LENGTH+1];
 
 	strcat( sql, "(" );
 	if( isInverted ) {
@@ -417,7 +682,7 @@ handle_and_term( QofQueryTerm* pTerm, char* sql )
 		sprintf( val, "%d", pData->val );
 		strcat( sql, val );
 	} else {
-		*(char*)0 = '\0';
+		g_assert( FALSE );
 	}
 
 	strcat( sql, ")" );
@@ -429,7 +694,7 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
     GncGdaBackend *be = (GncGdaBackend*)pBEnd;
 	GList* pBookList;
 	QofIdType searchObj;
-	char sql[1000];
+	gchar sql[1000];
 
 	pBookList = qof_query_get_books( pQuery );
 	searchObj = qof_query_get_search_for( pQuery );
@@ -467,18 +732,18 @@ gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
 {
     GncGdaBackend *be = (GncGdaBackend*)pBEnd;
 
-	printf( "gda_free_query(): %s\n", (char*)pQuery );
+	printf( "gda_free_query(): %s\n", (gchar*)pQuery );
 }
 
 static void
 gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 {
     GncGdaBackend *be = (GncGdaBackend*)pBEnd;
-	printf( "gda_run_query(): %s\n", (char*)pQuery );
+	printf( "gda_run_query(): %s\n", (gchar*)pQuery );
 }
 
 /* ================================================================= */
-void
+static void
 gnc_gda_init_object_handlers( void )
 {
 	gnc_gda_init_commodity_handler();

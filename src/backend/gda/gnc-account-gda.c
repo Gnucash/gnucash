@@ -20,9 +20,6 @@
 \********************************************************************/
 /** @file gnc-account-gda.c
  *  @brief load and save data to SQL 
- *  @author Copyright (c) 2000 Gnumatic Inc.
- *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
@@ -62,72 +59,40 @@
 
 #include "gnc-account-gda.h"
 
-#ifndef HAVE_STRPTIME
-# include "strptime.h"
-#endif
-
-/* callback structure */
-typedef struct {
-	gboolean ok;
-	GdaConnection* pConnection;
-	QofInstance* inst;
-} gda_backend;
-
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ================================================================= */
 static Account*
-load_account( QofBook* pBook, GdaDataModel* pModel, int row )
+load_account( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
-	int numCols = gda_data_model_get_n_columns( pModel );
-	int col;
-	const GValue* val;
 	Account* pAccount;
 	GUID guid;
-	const char* name = NULL;
-	int type = ACCT_TYPE_INVALID;
+	const gchar* name = NULL;
+	gint type = ACCT_TYPE_INVALID;
 	GUID commodity_guid;
 	GUID parent_guid;
 	Account* pParent = NULL;
-	const char* code = NULL;
-	const char* description = NULL;
-	const char* s;
+	const gchar* code = NULL;
+	const gchar* description = NULL;
 	gnc_commodity* pCommodity;
+	QofBook* pBook = be->primary_book;
 
-	for( col = 0; col < numCols; col++ ) {
-		val = gda_data_model_get_value_at( pModel, col, row );
-		
-		switch( col ) {
-			case 0:	/* guid */
-				s = g_value_get_string( val );
-				string_to_guid( s, &guid );
-				break;
-			case 1: /* name */
-				name = g_value_get_string( val );
-				break;
-			case 2: /* type */
-				type = g_value_get_int( val );
-				break;
-			case 3: /* commodity_guid */
-				s = g_value_get_string( val );
-				string_to_guid( s, &commodity_guid );
-				pCommodity = gnc_commodity_find_commodity_by_guid( &commodity_guid, pBook );
-				break;
-			case 4: /* parent_guid */
-				s = g_value_get_string( val );
-				string_to_guid( s, &parent_guid );
-				pParent = xaccAccountLookup( &parent_guid, pBook );
-				break;
-			case 5: /* code */
-				code = g_value_get_string( val );
-				break;
-			case 6: /* description */
-				description = g_value_get_string( val );
-				break;
-			default:	/* too many cols */
-				*(char*)0 = 0;
-		}
-	}
+	col_cvt_t col_conversion_table[] =
+	{
+		{ "guid",				CT_GUID,	&guid },
+		{ "name",				CT_STRING,	&name },
+		{ "account_type_id",	CT_INT,		&type },
+		{ "commodity_guid",		CT_GUID,	&commodity_guid },
+		{ "parent_guid",		CT_GUID,	&parent_guid },
+		{ "code",				CT_STRING,	&code },
+		{ "description",		CT_STRING,	&description },
+		{ NULL }
+	};
+
+	gnc_gda_load_object( be, pModel, col_conversion_table, row );
+
+	pCommodity = gnc_commodity_find_commodity_by_guid( &commodity_guid, pBook );
+	pParent = xaccAccountLookup( &parent_guid, pBook );
 
 	pAccount = xaccMallocAccount( pBook );
 	xaccAccountSetGUID( pAccount, &guid );
@@ -145,12 +110,13 @@ load_account( QofBook* pBook, GdaDataModel* pModel, int row )
 }
 
 static void
-load_accounts( GncGdaBackend* be, QofBook* pBook )
+load_accounts( GncGdaBackend* be )
 {
 	GError* error = NULL;
 
 	GdaQuery* query;
 	GdaObject* ret;
+	QofBook* pBook = be->primary_book;
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
 
 	query = gda_query_new_from_sql( be->pDict, "SELECT * FROM accounts", &error );
@@ -172,7 +138,7 @@ load_accounts( GncGdaBackend* be, QofBook* pBook )
 
 		for( r = 0; r < numRows; r++ ) {
 
-			pAccount = load_account( pBook, pModel, r );
+			pAccount = load_account( be, pModel, r );
 
 			if( pAccount != NULL ) {
 				if( xaccAccountGetParent( pAccount ) == NULL ) {
@@ -186,21 +152,6 @@ load_accounts( GncGdaBackend* be, QofBook* pBook )
 }
 
 /* ================================================================= */
-static gboolean
-account_exists_in_db( GncGdaBackend* be, const char* guid )
-{
-	char cmdbuf[400];
-	int count;
-
-	sprintf( cmdbuf, "SELECT * FROM accounts WHERE guid='%s';", guid );
-	count = gnc_gda_execute_select_get_count( be, cmdbuf );
-	if( count == 0 ) {
-		return FALSE;
-	} else {
-		return TRUE;
-	}
-}
-
 static void
 commit_account( GncGdaBackend* be, QofInstance* inst )
 {
@@ -208,44 +159,39 @@ commit_account( GncGdaBackend* be, QofInstance* inst )
 	Account* pParent = xaccAccountGetParentAccount( pAcc );
 	gnc_commodity* c;
 	const GUID* guid = xaccAccountGetGUID( pAcc );
-	char guid_buf[GUID_ENCODING_LENGTH+1];
-	char commodity_guid_buf[GUID_ENCODING_LENGTH+1];
+	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	const GUID* commodity_guid;
 	const GUID* parent_guid;
-	char parent_guid_buf[GUID_ENCODING_LENGTH+1];
-	char cmdbuf[300];
-	const char* name = xaccAccountGetName(pAcc);
-	const char* code = xaccAccountGetCode(pAcc);
-	const char* description = xaccAccountGetDescription(pAcc);
+	const gchar* name = xaccAccountGetName(pAcc);
+	const gchar* code = xaccAccountGetCode(pAcc);
+	const gchar* description = xaccAccountGetDescription(pAcc);
 	GNCAccountType type = xaccAccountGetType(pAcc);
 
-	c = xaccAccountGetCommodity(pAcc);
+	col_cvt_t col_conversion_table[] =
+	{
+		{ "guid",				CT_GUID,	&guid },
+		{ "name",				CT_STRING,	&name },
+		{ "account_type_id",	CT_INT,		&type },
+		{ "commodity_guid",		CT_GUID,	&commodity_guid },
+		{ "parent_guid",		CT_GUID,	&parent_guid },
+		{ "code",				CT_STRING,	&code },
+		{ "description",		CT_STRING,	&description },
+		{ NULL }
+	};
 
-	(void)guid_to_string_buff( guid, guid_buf );
-	(void)guid_to_string_buff( qof_instance_get_guid( (QofInstance*)c ),
-								commodity_guid_buf );
+	c = xaccAccountGetCommodity(pAcc);
+	commodity_guid = qof_instance_get_guid( (QofInstance*)c );
+
 	if( pParent == NULL ) {
-		parent_guid_buf[0] = '\0';
+		parent_guid = NULL;
 	} else {
 		parent_guid = xaccAccountGetGUID( pParent );
-		(void)guid_to_string_buff( parent_guid, parent_guid_buf );
 	}
 
-	if( inst->do_free ) {
-		sprintf( cmdbuf, "DELETE FROM accounts WHERE guid='%s';", guid_buf );
-		printf( "%s\n", cmdbuf );
-		gnc_gda_execute_sql( be, cmdbuf );
-	} else {
-		if( account_exists_in_db( be, guid_buf ) ) {
-			sprintf( cmdbuf, "UPDATE accounts set name='%s',account_type_id=%d,commodity_guid='%s',parent_guid='%s',code='%s',description='%s' WHERE guid='%s';\n",
-				name, type, commodity_guid_buf, parent_guid_buf, code, description,
-				guid_buf );
-		} else {
-			sprintf( cmdbuf, "INSERT INTO accounts VALUES('%s','%s',%d,'%s','%s','%s','%s');\n",
-				guid_buf,name, type, commodity_guid_buf, parent_guid_buf, code, description );
-		}
-		printf( "%s\n", cmdbuf );
-		gnc_gda_execute_sql( be, cmdbuf );
-	}
+	(void)gnc_gda_do_db_operation( be,
+							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+							"accounts",
+							col_conversion_table );
 }
 
 /* ================================================================= */

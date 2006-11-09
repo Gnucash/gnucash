@@ -20,9 +20,6 @@
 \********************************************************************/
 /** @file gnc-price-gda.h
  *  @brief load and save data to SQL via libgda
- *  @author Copyright (c) 2000 Gnumatic Inc.
- *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
  *
  * This file implements the top-level QofBackend API for saving/
