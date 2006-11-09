@@ -3,8 +3,6 @@ SUBDIRS = .
 # Now a shared library AND a GModule
 lib_LTLIBRARIES = libgnc-backend-gda.la
 
-LIBGDA_DIR = /opt/libgda-1.99.1
-
 AM_CFLAGS = \
   -I.. -I../.. \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
@@ -15,7 +13,7 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS} \
-  -I/usr/include/libxml2 -I$(LIBGDA_DIR)/include/libgda-1.99
+  ${LIBGDA_CFLAGS}
 
 libgnc_backend_gda_la_SOURCES = \
   gnc-backend-gda.c \
@@ -43,4 +41,4 @@ libgnc_backend_gda_la_SOURCES = \
 
 libgnc_backend_gda_la_LDFLAGS = -module -avoid-version
 libgnc_backend_gda_la_LIBADD = \
-	-L$(LIBGDA_DIR)/lib -lgda-3 -lgda_handlers-3 -lgda_sql_delimiter-3 -lglib-2.0 -lxslt -lxml2 -lz -lm
+	${LIBGDA_LIBS}
