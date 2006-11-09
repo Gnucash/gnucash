@@ -29,37 +29,14 @@
 #include "config.h"
 
 #include <glib.h>
-#include <glib/gi18n.h>
-#include <libintl.h>
-#include <locale.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <dirent.h>
-#include <time.h>
 #include <libgda/libgda.h>
 
 #include "qof.h"
-#include "qofquery-p.h"
-#include "qofquerycore-p.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
-
-#include "gnc-filepath-utils.h"
 
 #include "gnc-backend-gda.h"
-#include "gnc-gconf-utils.h"
-
 #include "gnc-transaction-gda.h"
 
-#ifndef HAVE_STRPTIME
-# include "strptime.h"
-#endif
+#include "Transaction.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 

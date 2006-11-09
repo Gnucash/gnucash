@@ -29,20 +29,9 @@
 #include "config.h"
 
 #include <glib.h>
-#include <glib/gi18n.h>
-#include <libintl.h>
-#include <locale.h>
-#include <stdio.h>
-#include <limits.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <time.h>
 #include <libgda/libgda.h>
 
 #include "qof.h"
-#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
 #include "gnc-backend-gda.h"

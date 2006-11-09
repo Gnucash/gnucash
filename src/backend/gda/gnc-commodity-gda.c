@@ -32,42 +32,16 @@
 #include "config.h"
 
 #include <glib.h>
-#include <glib/gi18n.h>
-#include <libintl.h>
-#include <locale.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <dirent.h>
-#include <time.h>
 #include <libgda/libgda.h>
 
 #include "qof.h"
-#include "qofquery-p.h"
-#include "qofquerycore-p.h"
-#include "qofinstance-p.h"
-#include "TransLog.h"
-#include "gnc-engine.h"
-
-#include "gnc-filepath-utils.h"
 
 #include "gnc-backend-gda.h"
-#include "gnc-gconf-utils.h"
+#include "gnc-commodity.h"
 
 #include "gnc-commodity-gda.h"
 
-#ifndef HAVE_STRPTIME
-# include "strptime.h"
-#endif
-
 static QofLogModule log_module = GNC_MOD_BACKEND;
-
-static void do_db_commodity( GncGdaBackend* be, QofInstance* inst, gboolean force_insert );
 
 /*
 -- Commodities table - stores currencies and stocks/mutual funds
@@ -180,7 +154,7 @@ load_commodities( GncGdaBackend* be )
 }
 /* ================================================================= */
 static void
-do_db_commodity( GncGdaBackend* be, QofInstance* inst, gboolean force_insert )
+commit_commodity( GncGdaBackend* be, QofInstance* inst )
 {
 	gnc_commodity* pCommodity = (gnc_commodity*)inst;
 	const gchar* mnemonic = gnc_commodity_get_mnemonic(pCommodity);
@@ -211,12 +185,6 @@ do_db_commodity( GncGdaBackend* be, QofInstance* inst, gboolean force_insert )
 						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
 						"commodities",
 						col_conversion_table );
-}
-
-static void
-commit_commodity( GncGdaBackend* be, QofInstance* inst )
-{
-	do_db_commodity( be, inst, FALSE );
 }
 
 /* ================================================================= */
