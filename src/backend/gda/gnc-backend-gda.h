@@ -63,16 +63,28 @@ typedef struct
 
   void		(*commit)( GncGdaBackend* pBackend, QofInstance* inst );
   void		(*initial_load)( GncGdaBackend* pBackend );
+  void		(*create_tables)( GncGdaBackend* pBackend );
 } GncGdaDataType_t;
 
 // This is now a static inside the module
 //QofBackend * libgncmod_backend_gda_LTX_gnc_backend_new(void);
 
 // Type for conversion of db row to object.
+typedef gpointer (*GNC_GDA_FN_GETTER)( gpointer pObject );
+typedef void (*GNC_GDA_FN_SETTER)( gpointer pObject, gpointer pValue );
+
 typedef struct {
 	const gchar* col_name;
 	enum { CT_STRING, CT_GUID, CT_INT, CT_DATE, CT_NUMERIC } col_type;
-	gpointer pData;
+	gint size;
+#define COL_PKEY	0x01
+#define COL_NNUL	0x02
+#define COL_UNIQUE	0x04
+#define COL_AUTOINC	0x08
+	gint flags;
+	GNC_GDA_FN_GETTER getter;
+	GNC_GDA_FN_SETTER setter;
+	const char* param_name;
 } col_cvt_t;
 
 typedef enum { OP_DB_ADD_OR_UPDATE, OP_DB_DELETE } E_DB_OPERATION;
@@ -80,21 +92,33 @@ typedef enum { OP_DB_ADD_OR_UPDATE, OP_DB_DELETE } E_DB_OPERATION;
 gboolean gnc_gda_do_db_operation( GncGdaBackend* pBackend,
 									E_DB_OPERATION op,
 									const gchar* table_name,
+									QofIdTypeConst obj_name,
+									gpointer pObject,
 									const col_cvt_t* table );
 GdaQuery* gnc_gda_build_insert_query( GncGdaBackend* pBackend,
 									const gchar* table_name,
+									QofIdTypeConst obj_name,
+									gpointer pObject,
 									const col_cvt_t* table );
 GdaQuery* gnc_gda_build_update_query( GncGdaBackend* pBackend,
 									const gchar* table_name,
+									QofIdTypeConst obj_name,
+									gpointer pObject,
 									const col_cvt_t* table );
 GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 									const gchar* table_name,
+									QofIdTypeConst obj_name,
+									gpointer pObject,
 									const col_cvt_t* table );
 GdaObject* gnc_gda_execute_query( GncGdaBackend* pBackend, GdaQuery* pQuery );
 GdaObject* gnc_gda_execute_sql( GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( GncGdaBackend* pBackend, const gchar* sql );
-void gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel,
-							const col_cvt_t* table, int row );
+void gnc_gda_load_object( GdaDataModel* pModel, int row,
+						QofIdTypeConst obj_name, gpointer pObject,
+						const col_cvt_t* table );
+gboolean gnc_gda_create_table( GdaConnection* pConnection,
+						const gchar* table_name, col_cvt_t* col_table,
+						GError** error );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);

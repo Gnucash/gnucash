@@ -2,7 +2,8 @@ GDA backend status - Nov 7, 2006
 
 Building:
 - I am currently building with libgda 1.99.1 installed in /opt/libgda-1.99.1.
-This location is hard wired into src/backend/gda/Makefile.am as LIBGDA_DIR
+Configure.in will use pkg-config to set up the include and lib information.
+This cannot be overridden (yet) by any switch on the ./configure command.
 
 Execution:
 - A basic GDA backend framework now exists.  This framework accepts URLs of
@@ -10,30 +11,38 @@ the form gda://DSN:USERNAME:PASSWORD.  "gda" is required.  "DSN" represents
 a dataset configured in ~/.libgda/config.  USERNAME and PASSWORD are not
 required but can be specified.
 
-- The backend assumes that the database already exists and tables are set up
-according to src/backend/gda/ddl/gnucash.ddl.  Note that
-src/backend/gda/ddl/business.ddl has not been tried yet, so there are no
-guarantees that any database will accept it.
+- The backend assumes that the database already exists.  Tables will be
+created if they don't exist.  The ddl files in src/backend/gda/ddl are not
+up to date.  Note that src/backend/gda/ddl/business.ddl has not been tried
+yet, so there are no guarantees that any database will accept it.
 
-- The backend will save commodities and load them on startup.  However, they
-will not have the correct GUIDs.
+- The backend will save commodities and load them on startup.
 
 - The backend will save accounts and load them on startup.  Any information
-in slots is not saved or loaded.  Also, because of the commodity GUID issue
-above, accounts will not have the correct commodity.
+in slots is not saved or loaded.
+
+Functional Issues:
+- In the price editor dialog, if you press Add, the dialog commits a price
+with a NULL guid which is rejected by the db.
+
+- Account information in slots is not saved or restored
+
+- If you create a new account, the commodity with that account will be saved
+to the db.  If you create a new price, the commodity with that price will not
+be saved to the db if it doesn't already exist in the db.
+
+GDA backend implementation issues:
+- Should use GdaDataHandler for converting values -> SQL and getting values
+back from the db.  Need to reassess this if using GdaQuery.
 
 TODO:
 
-- Create DB tables if they don't exist
-- gnc_numeric numerator/denominator are gint64, not int
 - Better representation for gnc_numeric - doesn't compare well
-- Map object->tables
 - queries
 - SQLite if just a "file"
-- Fix commodity handling
-- dates should be "date" not stored as string
 - slots
 - lots
 - transactions/splits
 - sched transactions
 - check for memory leaks
+- add --with-libgda= configure option
