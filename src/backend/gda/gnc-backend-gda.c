@@ -123,7 +123,11 @@ render_string( QofIdTypeConst obj_name, gpointer pObject,
 	const gchar* col_name = "";
 	const gchar* equals = "";
 	QofAccessFunc getter;
-	const gchar* s;
+	gchar* s;
+	GdaDataHandler* pHandler = gda_handler_string_new();
+	GValue value;
+
+	memset( &value, 0, sizeof( value ) );
 
 	if( include_name ) {
 		col_name = table_row->col_name;
@@ -132,12 +136,16 @@ render_string( QofIdTypeConst obj_name, gpointer pObject,
 	if( table_row->param_name != NULL ) {
 		getter = qof_class_get_parameter_getter( obj_name,
 												table_row->param_name );
-		s = (*getter)( pObject, NULL );
+		s = (gchar*)(*getter)( pObject, NULL );
 	} else {
-		s = (*table_row->getter)( pObject );
+		s = (gchar*)(*table_row->getter)( pObject );
 	}
 	if( s ) {
-		buf = g_strdup_printf( "%s%s'%s'", col_name, equals, s );
+		g_value_init( &value, G_TYPE_STRING );
+		g_value_set_string( &value, s );
+		s = gda_data_handler_get_sql_from_value( pHandler, &value );
+		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
+		g_free( s );
 	} else {
 		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
 	}
