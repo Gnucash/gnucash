@@ -283,10 +283,14 @@ load_date( GdaDataModel* pModel, gint row,
 			const col_cvt_t* table )
 {
 	const GValue* val;
+	GDate* date;
 	Timespec ts;
 
 	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-	ts = gnc_iso8601_to_timespec_gmt( gda_value_stringify( val ) );
+	date = (GDate*)g_value_get_boxed( val );
+	ts = gnc_dmy2timespec( g_date_get_day( date ),
+							g_date_get_month( date ),
+							g_date_get_year( date ) );
 	(*setter)( pObject, &ts );
 }
 
@@ -996,7 +1000,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
 	printf( "gda_commit_edit(): %s dirty = %d, do_free=%d\n", inst->entity.e_type, inst->dirty, inst->do_free );
 
-	if( !inst->dirty ) return;
+	if( !inst->dirty && !inst->do_free ) return;
 
 	be_data.ok = FALSE;
 	be_data.be = be;
