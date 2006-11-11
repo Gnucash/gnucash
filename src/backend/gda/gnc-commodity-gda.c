@@ -49,30 +49,30 @@ static void set_quote_source_name( gpointer pObject, const gpointer pValue );
 #define TABLE_NAME "commodities"
 
 static col_cvt_t col_table[] = {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,
+	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,	NULL,
 			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
 			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
-	{ "namespace",		CT_STRING,	 40, COL_NNUL,
+	{ "namespace",		CT_STRING,	 40, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_namespace,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_namespace },
-	{ "mnemonic",		CT_STRING,	 40, COL_NNUL,
+	{ "mnemonic",		CT_STRING,	 40, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_mnemonic,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_mnemonic },
-	{ "fullname",		CT_STRING,	100, COL_NNUL,
+	{ "fullname",		CT_STRING,	100, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_fullname,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_fullname },
-	{ "cusip",			CT_STRING,	 50, COL_NNUL,
+	{ "cusip",			CT_STRING,	 50, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_cusip,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_cusip },
-	{ "fraction",		CT_INT,		  0, COL_NNUL,
+	{ "fraction",		CT_INT,		  0, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_fraction,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_fraction },
-	{ "quote_flag",		CT_INT,		  0, COL_NNUL,
+	{ "quote_flag",		CT_INT,		  0, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_flag,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_flag },
-	{ "quote_source",	CT_STRING,	 50, 0,
+	{ "quote_source",	CT_STRING,	 50, 0,	NULL,
 			get_quote_source_name, set_quote_source_name },
-	{ "quote_tz",		CT_STRING,	 50, 0,
+	{ "quote_tz",		CT_STRING,	 50, 0,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_tz,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_tz },
 	{ NULL }
@@ -163,15 +163,7 @@ load_commodities( GncGdaBackend* be )
 static void
 create_commodities_tables( GncGdaBackend* be )
 {
-	GdaDictTable* table;
-	GError* error = NULL;
-	GdaDictDatabase* db;
-	
-	db = gda_dict_get_database( be->pDict );
-	table = gda_dict_database_get_table_by_name( db, TABLE_NAME );
-	if( !GDA_IS_DICT_TABLE(table) ) {
-		gnc_gda_create_table( be->pConnection, TABLE_NAME, col_table, &error );
-	}
+	gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
 /* ================================================================= */

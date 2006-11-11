@@ -53,17 +53,18 @@ static void set_commodity( gpointer pObject, const gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,
+	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
 			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
 			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
-	{ "commodity_guid",	CT_GUID,	0, COL_NNUL, get_commodity, set_commodity },
-	{ "currency_guid",	CT_GUID,	0, COL_NNUL, get_currency, set_currency },
-	{ "date",			CT_DATE,	0, COL_NNUL, get_date, set_date },
-	{ "source",			CT_STRING,	50, 0,
-			NULL, NULL, PRICE_SOURCE },
-	{ "type",			CT_STRING,	50, 0,
-			NULL, NULL, PRICE_TYPE },
-	{ "value",			CT_NUMERIC,	COL_NNUL, 0, get_value, set_value },
+	{ "commodity_guid",	CT_GUID,	0, COL_NNUL, NULL,
+			get_commodity, set_commodity },
+	{ "currency_guid",	CT_GUID,	0, COL_NNUL, NULL,
+			get_currency, set_currency },
+	{ "date",			CT_TIMESPEC,	0, COL_NNUL, NULL,
+			get_date, set_date },
+	{ "source",			CT_STRING,	50, 0, PRICE_SOURCE },
+	{ "type",			CT_STRING,	50, 0, PRICE_TYPE },
+	{ "value",			CT_NUMERIC,	COL_NNUL, 0, NULL, get_value, set_value },
 	{ NULL }
 };
 
@@ -204,33 +205,10 @@ load_prices( GncGdaBackend* be )
 static void
 create_prices_tables( GncGdaBackend* be )
 {
-	GdaDictTable* table;
-	GError* error = NULL;
-	GdaDictDatabase* db;
-	
-	db = gda_dict_get_database( be->pDict );
-	table = gda_dict_database_get_table_by_name( db, TABLE_NAME );
-	if( !GDA_IS_DICT_TABLE(table) ) {
-		gnc_gda_create_table( be->pConnection, TABLE_NAME, col_table, &error );
-	}
+	gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
 /* ================================================================= */
-static gboolean
-price_exists_in_db( GncGdaBackend* be, const gchar* guid )
-{
-	gchar* cmdbuf;
-	int count;
-
-	cmdbuf = g_strdup_printf( "SELECT * FROM prices WHERE guid='%s';", guid );
-	count = gnc_gda_execute_select_get_count( be, cmdbuf );
-	g_free( cmdbuf );
-	if( count == 0 ) {
-		return FALSE;
-	} else {
-		return TRUE;
-	}
-}
 
 static void
 commit_price( GncGdaBackend* be, QofInstance* inst )

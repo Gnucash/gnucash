@@ -21,6 +21,7 @@ libgnc_backend_gda_la_SOURCES = \
   gnc-budget-gda.c \
   gnc-commodity-gda.c \
   gnc-price-gda.c \
+  gnc-slots-gda.c \
   gnc-transaction-gda.c
 
 #noinst_HEADERS = \

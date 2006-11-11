@@ -38,6 +38,7 @@
 #include "gnc-backend-gda.h"
 
 #include "gnc-account-gda.h"
+#include "gnc-slots-gda.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
@@ -50,21 +51,18 @@ static void set_parent( gpointer pObject, const gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,
+	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,	NULL,
 			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
 			(GNC_GDA_FN_SETTER)xaccAccountSetGUID },
-	{ "name",			CT_STRING,	 50, COL_NNUL,
-			NULL, NULL, ACCOUNT_NAME_ },
-	{ "account_type",	CT_INT,		  0, COL_NNUL,
+	{ "name",			CT_STRING,	 50, COL_NNUL,	ACCOUNT_NAME_ },
+	{ "account_type",	CT_INT,		  0, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)xaccAccountGetType,
 			(GNC_GDA_FN_SETTER)xaccAccountSetType },
-	{ "commodity_guid",	CT_GUID,	  0, COL_NNUL,
+	{ "commodity_guid",	CT_GUID,	  0, COL_NNUL,	NULL,
 			get_commodity, set_commodity },
-	{ "parent_guid",	CT_GUID,	  0, 0,	get_parent, set_parent },
-	{ "code",			CT_STRING,	100, 0,
-			NULL, NULL, ACCOUNT_CODE_ },
-	{ "description",	CT_STRING,	500, 0,
-			NULL, NULL, ACCOUNT_DESCRIPTION_ },
+	{ "parent_guid",	CT_GUID,	  0, 0,	NULL, get_parent, set_parent },
+	{ "code",			CT_STRING,	100, 0, 		ACCOUNT_CODE_ },
+	{ "description",	CT_STRING,	500, 0, 		ACCOUNT_DESCRIPTION_ },
 	{ NULL }
 };
 
@@ -129,6 +127,8 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row )
 
 	pAccount = xaccMallocAccount( be->primary_book );
 	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
+	gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
+							qof_instance_get_slots( (QofInstance*)pAccount ) );
 
 	return pAccount;
 }
@@ -144,7 +144,7 @@ load_accounts( GncGdaBackend* be )
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
 
 	buf = g_strdup_printf( "SELECT * FROM %s", TABLE_NAME );
-	query = gda_query_new_from_sql( be->pDict, "SELECT * FROM accounts", &error );
+	query = gda_query_new_from_sql( be->pDict, buf, &error );
 	g_free( buf );
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
@@ -181,15 +181,7 @@ load_accounts( GncGdaBackend* be )
 static void
 create_account_tables( GncGdaBackend* be )
 {
-	GdaDictTable* table;
-	GError* error = NULL;
-	GdaDictDatabase* db;
-	
-	db = gda_dict_get_database( be->pDict );
-	table = gda_dict_database_get_table_by_name( db, TABLE_NAME );
-	if( !GDA_IS_DICT_TABLE(table) ) {
-		gnc_gda_create_table( be->pConnection, TABLE_NAME, col_table, &error );
-	}
+	gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
 /* ================================================================= */
@@ -203,6 +195,10 @@ commit_account( GncGdaBackend* be, QofInstance* inst )
 							TABLE_NAME,
 							GNC_ID_ACCOUNT, pAcc,
 							col_table );
+
+	// Now, commit any slots
+	gnc_gda_slots_save( be, qof_instance_get_guid( inst ),
+						qof_instance_get_slots( inst ) );
 }
 
 /* ================================================================= */

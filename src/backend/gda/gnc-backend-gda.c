@@ -59,6 +59,7 @@
 #include "gnc-budget-gda.h"
 #include "gnc-commodity-gda.h"
 #include "gnc-price-gda.h"
+#include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
 
 #ifndef HAVE_STRPTIME
@@ -178,7 +179,11 @@ load_int( GdaDataModel* pModel, gint row,
 	gint int_value;
 
 	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-	int_value = g_value_get_int( val );
+	if( gda_value_is_null( val ) ) {
+		int_value = 0;
+	} else {
+		int_value = g_value_get_int( val );
+	}
 	(*setter)( pObject, (gpointer)int_value );
 }
 
@@ -215,6 +220,122 @@ create_int_col( GdaServerProvider* server, GdaConnection* cnn,
 
 static col_type_handler_t int_handler =
 		{ load_int, render_int, create_int_col };
+/* ----------------------------------------------------------------- */
+
+static void
+load_int64( GdaDataModel* pModel, gint row,
+			QofSetterFunc setter, gpointer pObject,
+			const col_cvt_t* table )
+{
+	const GValue* val;
+	gint64 i64_value;
+
+	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	if( gda_value_is_null( val ) ) {
+		(*setter)( pObject, NULL );
+	} else {	
+		i64_value = g_value_get_int64( val );
+		(*setter)( pObject, (gpointer)&i64_value );
+	}
+}
+
+static gchar*
+render_int64( QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+	gint64* pInt64;
+	gint64 i64_value;
+
+	if( include_name ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	pInt64 = (*table_row->getter)( pObject );
+	if( pInt64 != NULL ) {
+		i64_value = *pInt64;
+		buf = g_strdup_printf( "%s%s%lld", col_name, equals, i64_value );
+	} else {
+		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+	}
+
+	return buf;
+}
+
+static void
+create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
+			xmlNodePtr array_data, const col_cvt_t* table_row )
+{
+	const gchar* dbms_type;
+
+	dbms_type = gda_server_provider_get_default_dbms_type( server,
+														cnn, G_TYPE_INT64 );
+	add_table_column( server, cnn, array_data, table_row->col_name,
+					dbms_type, table_row->size, table_row->flags );
+}
+
+static col_type_handler_t int64_handler =
+		{ load_int64, render_int64, create_int64_col };
+/* ----------------------------------------------------------------- */
+
+static void
+load_double( GdaDataModel* pModel, gint row,
+			QofSetterFunc setter, gpointer pObject,
+			const col_cvt_t* table )
+{
+	const GValue* val;
+	gdouble d_value;
+
+	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	if( gda_value_is_null( val ) ) {
+		(*setter)( pObject, (gpointer)NULL );
+	} else {
+		d_value = g_value_get_double( val );
+		(*setter)( pObject, (gpointer)&d_value );
+	}
+}
+
+static gchar*
+render_double( QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+	gdouble* pDouble;
+	gdouble d_value;
+
+	if( include_name ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	pDouble = (*table_row->getter)( pObject );
+	if( pDouble != NULL ) {
+		d_value = *pDouble;
+		buf = g_strdup_printf( "%s%s%g", col_name, equals, d_value );
+	} else {
+		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+	}
+
+	return buf;
+}
+
+static void
+create_double_col( GdaServerProvider* server, GdaConnection* cnn,
+			xmlNodePtr array_data, const col_cvt_t* table_row )
+{
+	const gchar* dbms_type;
+
+	dbms_type = gda_server_provider_get_default_dbms_type( server,
+														cnn, G_TYPE_INT64 );
+	add_table_column( server, cnn, array_data, table_row->col_name,
+					dbms_type, table_row->size, table_row->flags );
+}
+
+static col_type_handler_t double_handler =
+		{ load_double, render_double, create_double_col };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -287,11 +408,15 @@ load_date( GdaDataModel* pModel, gint row,
 	Timespec ts;
 
 	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-	date = (GDate*)g_value_get_boxed( val );
-	ts = gnc_dmy2timespec( g_date_get_day( date ),
-							g_date_get_month( date ),
-							g_date_get_year( date ) );
-	(*setter)( pObject, &ts );
+	if( gda_value_is_null( val ) ) {
+		(*setter)( pObject, NULL );
+	} else {
+		date = (GDate*)g_value_get_boxed( val );
+		ts = gnc_dmy2timespec( g_date_get_day( date ),
+								g_date_get_month( date ),
+								g_date_get_year( date ) );
+		(*setter)( pObject, &ts );
+	}
 }
 
 static gchar*
@@ -303,16 +428,20 @@ render_date( QofIdTypeConst obj_name, gpointer pObject,
 	const gchar* equals = "";
 	gchar iso8601_buf[33];
 	gchar date_buf[33];
+	Timespec* pTimespec;
 
 	if( include_name ) {
 		col_name = table_row->col_name;
 		equals = "=";
 	}
-	(void)gnc_timespec_to_iso8601_buff(
-								*(Timespec*)(*table_row->getter)( pObject ),
-								iso8601_buf );
-	strncpy( date_buf, iso8601_buf, 4+1+2+1+2 );
-	buf = g_strdup_printf( "%s%s'%s'", col_name, equals, date_buf );
+	pTimespec = (Timespec*)(*table_row->getter)( pObject );
+	if( pTimespec != NULL ) {
+		(void)gnc_timespec_to_iso8601_buff( *pTimespec, iso8601_buf );
+		strncpy( date_buf, iso8601_buf, 4+1+2+1+2 );
+		buf = g_strdup_printf( "%s%s'%s'", col_name, equals, date_buf );
+	} else {
+		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+	}
 
 	return buf;
 }
@@ -341,17 +470,30 @@ load_numeric( GdaDataModel* pModel, gint row,
 	gchar* buf;
 	gint64 num, denom;
 	gnc_numeric n;
+	gboolean isNull = FALSE;
 
 	buf = g_strdup_printf( "%s_num", table->col_name );
 	val = gda_data_model_get_value_at_col_name( pModel, buf, row );
 	g_free( buf );
-	num = g_value_get_int64( val );
+	if( gda_value_is_null( val ) ) {
+		isNull = TRUE;
+	} else {
+		num = g_value_get_int64( val );
+	}
 	buf = g_strdup_printf( "%s_denom", table->col_name );
 	val = gda_data_model_get_value_at_col_name( pModel, buf, row );
 	g_free( buf );
-	denom = g_value_get_int64( val );
+	if( gda_value_is_null( val ) ) {
+		isNull = TRUE;
+	} else {
+		denom = g_value_get_int64( val );
+	}
 	n = gnc_numeric_create( num, denom );
-	(*setter)( pObject, &n );
+	if( isNull ) {
+		(*setter)( pObject, NULL );
+	} else {
+		(*setter)( pObject, &n );
+	}
 }
 
 static gchar*
@@ -359,16 +501,27 @@ render_numeric( QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, gboolean include_name )
 {
 	gchar* buf;
+	gnc_numeric* pNumeric;
 	gnc_numeric v;
 
-	v = *(gnc_numeric*)(*table_row->getter) (pObject );
-	if( !include_name ) {
-		buf = g_strdup_printf( "%lld, %lld",
+	pNumeric = (gnc_numeric*)(*table_row->getter) (pObject );
+	if( pNumeric != NULL ) {
+		v = *pNumeric;
+		if( include_name ) {
+			buf = g_strdup_printf( "%s_num=%lld, %s_denom=%lld",
+							table_row->col_name, gnc_numeric_num( v ),
+							table_row->col_name, gnc_numeric_denom( v ) );
+		} else {
+			buf = g_strdup_printf( "%lld, %lld",
 								gnc_numeric_num( v ), gnc_numeric_denom( v ) );
+		}
 	} else {
-		buf = g_strdup_printf( "%s_num=%lld, %s_denom=%lld",
-						table_row->col_name, gnc_numeric_num( v ),
-						table_row->col_name, gnc_numeric_denom( v ) );
+		if( include_name ) {
+			buf = g_strdup_printf( "%s_num=NULL, %s_denom=NULL",
+							table_row->col_name, table_row->col_name );
+		} else {
+			buf = g_strdup( "NULL" );
+		}
 	}
 
 	return buf;
@@ -411,11 +564,19 @@ get_handler( int col_type )
 			pHandler = &int_handler;
 			break;
 
+		case CT_INT64:
+			pHandler = &int64_handler;
+			break;
+
+		case CT_DOUBLE:
+			pHandler = &double_handler;
+			break;
+
 		case CT_GUID:
 			pHandler = &guid_handler;
 			break;
 				
-		case CT_DATE:
+		case CT_TIMESPEC:
 			pHandler = &date_handler;
 			break;
 
@@ -557,6 +718,8 @@ gnc_gda_do_db_operation( GncGdaBackend* be,
 		}
 	} else if( op == OP_DB_DELETE ) {
 		pQuery = gnc_gda_build_delete_query( be, table_name, obj_name, pObject, table );
+	} else if( op == OP_DB_ADD ) {
+		pQuery = gnc_gda_build_insert_query( be, table_name, obj_name, pObject, table );
 	} else {
 		g_assert( FALSE );
 	}
@@ -570,30 +733,34 @@ gnc_gda_do_db_operation( GncGdaBackend* be,
 	}
 }
 
+#define INITIAL_SQL_BUF_LEN 500
+
 GdaQuery*
 gnc_gda_build_insert_query( GncGdaBackend* be,
 							const gchar* table_name,
 							QofIdTypeConst obj_name, gpointer pObject,
 							const col_cvt_t* table )
 {
-	char sql[1000];
+	GString* sql;
 	GError* error = NULL;
 	GdaQuery* query;
 	int col;
 	gchar* col_value;
 
-	sprintf( sql, "INSERT INTO %s VALUES(", table_name );
+	sql = g_string_sized_new( INITIAL_SQL_BUF_LEN );
+	g_string_printf( sql, "INSERT INTO %s VALUES(", table_name );
 
 	for( col = 0; table[col].col_name != NULL; col++ ) {
-		if( col != 0 ) strcat( sql, "," );
+		if( col != 0 ) g_string_append( sql, "," );
 		col_value = render_col_value( obj_name, pObject, &table[col], FALSE );
-		strcat( sql, col_value );
+		g_string_append( sql, col_value );
 		g_free( col_value );
 	}
 
-	strcat( sql, ");" );
+	g_string_append( sql, ");" );
 
-	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	query = gda_query_new_from_sql( be->pDict, sql->str, &error );
+	g_string_free( sql, TRUE );
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
 	}
@@ -606,30 +773,32 @@ gnc_gda_build_update_query( GncGdaBackend* be,
 							QofIdTypeConst obj_name, gpointer pObject,
 							const col_cvt_t* table )
 {
-	char sql[1000];
+	GString* sql;
 	GError* error = NULL;
 	GdaQuery* query;
 	int col;
 	gchar* col_value;
 
-	sprintf( sql, "UPDATE %s SET ", table_name );
+	sql = g_string_sized_new( INITIAL_SQL_BUF_LEN );
+	g_string_printf( sql, "UPDATE %s SET ", table_name );
 
 	for( col = 1; table[col].col_name != NULL; col++ ) {
-		if( col != 1 ) strcat( sql, "," );
+		if( col != 1 ) g_string_append( sql, "," );
 
 		col_value = render_col_value( obj_name, pObject, &table[col], TRUE );
-		strcat( sql, col_value );
+		g_string_append( sql, col_value );
 		g_free( col_value );
 	}
 
-	strcat( sql, " WHERE " );
+	g_string_append( sql, " WHERE " );
 
 	col_value = render_col_value( obj_name, pObject, &table[0], TRUE );
-	strcat( sql, col_value );
+	g_string_append( sql, col_value );
 	g_free( col_value );
-	strcat( sql, ";" );
+	g_string_append( sql, ";" );
 
-	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	query = gda_query_new_from_sql( be->pDict, sql->str, &error );
+	g_string_free( sql, TRUE );
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
 	}
@@ -783,6 +952,22 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
 	return TRUE;
 }
 
+void gnc_gda_create_table_if_needed( GncGdaBackend* be,
+						const gchar* table_name, col_cvt_t* col_table )
+{
+	GdaDictTable* table;
+	GError* error = NULL;
+	GdaDictDatabase* db;
+	
+	db = gda_dict_get_database( be->pDict );
+	table = gda_dict_database_get_table_by_name( db, table_name );
+	if( !GDA_IS_DICT_TABLE(table) ) {
+		gnc_gda_create_table( be->pConnection, table_name, col_table, &error );
+		if( error != NULL ) {
+			printf( "Error creating table: %s\n", error->message );
+		}
+	}
+}
 /* ================================================================= */
 
 static void
@@ -1172,6 +1357,7 @@ gnc_gda_init_object_handlers( void )
 	gnc_gda_init_budget_handler();
 	gnc_gda_init_price_handler();
 	gnc_gda_init_transaction_handler();
+	gnc_gda_init_slots_handler();
 }
 
 /* ================================================================= */

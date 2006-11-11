@@ -40,7 +40,7 @@ TODO:
 - Better representation for gnc_numeric - doesn't compare well
 - queries
 - SQLite if just a "file"
-- slots
+- handle construction of path name for nested slots
 - lots
 - transactions/splits
 - sched transactions

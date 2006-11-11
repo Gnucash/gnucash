@@ -73,21 +73,35 @@ typedef struct
 typedef gpointer (*GNC_GDA_FN_GETTER)( gpointer pObject );
 typedef void (*GNC_GDA_FN_SETTER)( gpointer pObject, gpointer pValue );
 
+typedef enum {
+	CT_STRING,
+	CT_GUID,
+	CT_INT,
+	CT_INT64,
+	CT_TIMESPEC,
+	CT_NUMERIC,
+	CT_DOUBLE
+} E_COL_TYPE;
+
 typedef struct {
 	const gchar* col_name;
-	enum { CT_STRING, CT_GUID, CT_INT, CT_DATE, CT_NUMERIC } col_type;
+	E_COL_TYPE col_type;
 	gint size;
 #define COL_PKEY	0x01
 #define COL_NNUL	0x02
 #define COL_UNIQUE	0x04
 #define COL_AUTOINC	0x08
 	gint flags;
+	const char* param_name;		// If non null, use qof getter/setter
 	GNC_GDA_FN_GETTER getter;
 	GNC_GDA_FN_SETTER setter;
-	const char* param_name;
 } col_cvt_t;
 
-typedef enum { OP_DB_ADD_OR_UPDATE, OP_DB_DELETE } E_DB_OPERATION;
+typedef enum {
+	OP_DB_ADD,
+	OP_DB_ADD_OR_UPDATE,
+	OP_DB_DELETE
+} E_DB_OPERATION;
 
 gboolean gnc_gda_do_db_operation( GncGdaBackend* pBackend,
 									E_DB_OPERATION op,
@@ -119,6 +133,8 @@ void gnc_gda_load_object( GdaDataModel* pModel, int row,
 gboolean gnc_gda_create_table( GdaConnection* pConnection,
 						const gchar* table_name, col_cvt_t* col_table,
 						GError** error );
+void gnc_gda_create_table_if_needed( GncGdaBackend* be,
+						const gchar* table_name, col_cvt_t* col_table );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);
