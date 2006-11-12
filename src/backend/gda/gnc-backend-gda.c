@@ -438,6 +438,7 @@ render_date( QofIdTypeConst obj_name, gpointer pObject,
 	if( pTimespec != NULL ) {
 		(void)gnc_timespec_to_iso8601_buff( *pTimespec, iso8601_buf );
 		strncpy( date_buf, iso8601_buf, 4+1+2+1+2 );
+		date_buf[4+1+2+1+2] = '\0';
 		buf = g_strdup_printf( "%s%s'%s'", col_name, equals, date_buf );
 	} else {
 		buf = g_strdup_printf( "%s%sNULL", col_name, equals );

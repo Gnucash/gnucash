@@ -31,6 +31,8 @@ with a NULL guid which is rejected by the db.
 to the db.  If you create a new price, the commodity with that price will not
 be saved to the db if it doesn't already exist in the db.
 
+- Transactions and splits are saved but not yet restored via query
+
 GDA backend implementation issues:
 - Should use GdaDataHandler for converting values -> SQL and getting values
 back from the db.  Need to reassess this if using GdaQuery.
@@ -39,10 +41,11 @@ TODO:
 
 - Better representation for gnc_numeric - doesn't compare well
 - queries
+	- transactions/splits
 - SQLite if just a "file"
 - handle construction of path name for nested slots
 - lots
-- transactions/splits
 - sched transactions
 - check for memory leaks
 - add --with-libgda= configure option
+- business objects
