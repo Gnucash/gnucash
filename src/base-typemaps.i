@@ -25,7 +25,12 @@ typedef char * URLType;
 typedef char gchar;
 
 %typemap(newfree) gchar * "g_free($1);"
-
+%typemap (out) char * {
+  $result = scm_makfrom0str((const char *)$1);
+  if (!SCM_NFALSEP($result)) {
+    $result = scm_makstr(0, 0);
+  }
+}
 %typemap(in) GNCPrintAmountInfo "$1 = gnc_scm2printinfo($input);"
 %typemap(out) GNCPrintAmountInfo "$result = gnc_printinfo2scm($1);"
 
