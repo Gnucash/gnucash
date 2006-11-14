@@ -193,7 +193,7 @@
                    (lambda (a b)
                      (> (length (qif-file:xtns a)) 
                         (length (qif-file:xtns b))))))
-            (progress-dialog #f)
+            (progress-dialog '())
             (work-to-do 0)
             (work-done 0))
        

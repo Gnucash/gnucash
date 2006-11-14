@@ -35,7 +35,7 @@
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
   (let* ((new-xtns (gnc:group-get-transactions new-group))
-	 (progress-dialog #f)
+	 (progress-dialog '())
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
          (matches '()))    
