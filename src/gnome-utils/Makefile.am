@@ -189,7 +189,8 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h
+swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h \
+                    ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif

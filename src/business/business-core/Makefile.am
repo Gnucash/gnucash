@@ -66,7 +66,8 @@ libgncmod_business_core_la_LIBADD = \
 # business-core-helpers.c
 
 if BUILDING_FROM_SVN
-swig-business-core.c: business-core.i ${noinst_HEADERS}
+swig-business-core.c: business-core.i ${noinst_HEADERS} \
+                      ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif

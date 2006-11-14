@@ -89,7 +89,7 @@ noinst_HEADERS = \
   window-reconcile.h
 
 if BUILDING_FROM_SVN
-swig-gnome.c: gnome.i dialog-progress.h
+swig-gnome.c: gnome.i dialog-progress.h ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif

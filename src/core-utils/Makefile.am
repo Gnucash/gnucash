@@ -26,7 +26,7 @@ noinst_HEADERS = \
   gnc-gtk-utils.h
 
 if BUILDING_FROM_SVN
-swig-core-utils.c: core-utils.i
+swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
