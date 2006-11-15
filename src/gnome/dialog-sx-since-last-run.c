@@ -27,7 +27,6 @@
 
 #include "dialog-utils.h"
 #include "gnc-exp-parser.h"
-// #include "gnc-plugin-page-sx-list.h"
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 
@@ -982,6 +981,10 @@ gnc_ui_sx_since_last_run_dialog(GncSxSlrTreeModelAdapter *slr_model)
           col = gtk_tree_view_column_new_with_attributes("Instance State", renderer,
                                                          "text", SLR_MODEL_COL_INSTANCE_STATE,
                                                          "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
+                                                         // you might think only "sensitive" is required to
+                                                         // control the ability of the combo box to select
+                                                         // a new state, but you'd be wrong.
+                                                         "editable", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                                                          "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                                                          NULL);
           gtk_tree_view_append_column(dialog->instance_view, col);
