@@ -465,6 +465,14 @@ gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass)
      inst->qof_event_handler_id = qof_event_register_handler(_gnc_sx_instance_event_handler, inst);
 }
 
+static gint
+_gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, GncSxInstances *to_find)
+{
+     if (in_list_instances->sx == to_find->sx)
+          return 0;
+     return -1;
+}
+
 static void
 _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
@@ -484,7 +492,16 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           sx = GNC_SX(ent);
           if (event_type & QOF_EVENT_MODIFY)
           {
-               /* @re-generate instance, update*/
+               GncSxInstances *new_instances;
+               GList *link;
+
+               new_instances = _gnc_sx_gen_instances((gpointer)sx, &instances->range_end);
+
+               link = g_list_find_custom(instances->sx_instance_list, new_instances, (GCompareFunc)_gnc_sx_instance_find_by_sx);
+               g_assert(link != NULL);
+               // @fixme g_object_unref(link->data);
+               link->data = new_instances;
+               g_signal_emit_by_name(instances, "updated"); // , new_instances[->sx].
           }
           /* else { unsupported event type; ignore } */
      }
@@ -512,8 +529,9 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                {
                     g_signal_emit_by_name(instances, "removing", GUINT_TO_POINTER(GPOINTER_TO_UINT(((GncSxInstances*)sx_instance_to_remove)->sx)));
                     instances->sx_instance_list = g_list_remove(instances->sx_instance_list, sx_instance_to_remove);
-                    g_signal_emit_by_name(instances, "updated"); // @@fixme remove
+                    g_signal_emit_by_name(instances, "updated"); // @@fixme remove when callers support "removing"
                }
+               // @@fixme: uh, actually remove...?
                else { printf("err\n"); }
           }
           else if (event_type & GNC_EVENT_ITEM_ADDED)
@@ -523,7 +541,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                     = g_list_append(instances->sx_instance_list,
                                     (*_gnc_sx_gen_instances)((gpointer)sx, (gpointer)&instances->range_end));
                g_signal_emit_by_name(instances, "added", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
-               g_signal_emit_by_name(instances, "updated"); // @fixme remove
+               g_signal_emit_by_name(instances, "updated"); // @fixme remove when callers look for "added".
           }
           /* else { printf("unsupported event type [%d]\n", event_type); } */
      }
