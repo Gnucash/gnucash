@@ -192,13 +192,18 @@ static inline void commit_err (QofInstance *inst, QofBackendError errcode)
   PERR ("Failed to commit: %d", errcode);
 }
 
+static inline void commit_done(QofInstance *inst)
+{
+  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+}
+
 static inline void noop (QofInstance *inst) {}
 
 void
 gnc_sx_commit_edit (SchedXaction *sx)
 {
   if (!qof_commit_edit (QOF_INSTANCE(sx))) return;
-  qof_commit_edit_part2 (&sx->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&sx->inst, commit_err, commit_done, noop);
 }
 
 /* ============================================================ */
