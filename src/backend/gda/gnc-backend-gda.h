@@ -64,6 +64,9 @@ typedef struct
   void		(*commit)( GncGdaBackend* pBackend, QofInstance* inst );
   void		(*initial_load)( GncGdaBackend* pBackend );
   void		(*create_tables)( GncGdaBackend* pBackend );
+  gpointer	(*compile_query)( GncGdaBackend* pBackend, QofQuery* pQuery );
+  void		(*run_query)( GncGdaBackend* pBackend, gpointer pQuery );
+  void		(*free_query)( GncGdaBackend* pBackend, gpointer pQuery );
 } GncGdaDataType_t;
 
 // This is now a static inside the module
@@ -130,6 +133,10 @@ int gnc_gda_execute_select_get_count( GncGdaBackend* pBackend, const gchar* sql 
 void gnc_gda_load_object( GdaDataModel* pModel, int row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );
+gboolean gnc_gda_object_is_it_in_db( GncGdaBackend* be,
+									const gchar* table_name,
+									QofIdTypeConst obj_name, gpointer pObject,
+									const col_cvt_t* table );
 gboolean gnc_gda_create_table( GdaConnection* pConnection,
 						const gchar* table_name, col_cvt_t* col_table,
 						GError** error );

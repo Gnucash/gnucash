@@ -72,11 +72,19 @@ static void add_table_column( GdaServerProvider* server, GdaConnection* cnn,
 			xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
 			gint size, gint flags );
 
+typedef struct {
+	QofIdType searchObj;
+	gpointer pCompiledQuery;
+} gnc_gda_query_info;
+
 /* callback structure */
 typedef struct {
 	gboolean ok;
 	GncGdaBackend* be;
 	QofInstance* inst;
+	QofQuery* pQuery;
+	gpointer pCompiledQuery;
+	gnc_gda_query_info* pQueryInfo;
 } gda_backend;
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
@@ -678,8 +686,8 @@ render_col_value( QofIdTypeConst obj_name, gpointer pObject,
 	return buf;
 }
 
-static gboolean
-object_exists_in_db( GncGdaBackend* be, const gchar* table_name,
+gboolean
+gnc_gda_object_is_it_in_db( GncGdaBackend* be, const gchar* table_name,
 					QofIdTypeConst obj_name, gpointer pObject,
 					const col_cvt_t* table )
 {
@@ -712,7 +720,7 @@ gnc_gda_do_db_operation( GncGdaBackend* be,
 	GdaQuery* pQuery;
 
 	if( op == OP_DB_ADD_OR_UPDATE ) {
-		if( object_exists_in_db( be, table_name, obj_name, pObject, table ) ) {
+		if( gnc_gda_object_is_it_in_db( be, table_name, obj_name, pObject, table ) ) {
 			pQuery = gnc_gda_build_update_query( be, table_name, obj_name, pObject, table );
 		} else {
 			pQuery = gnc_gda_build_insert_query( be, table_name, obj_name, pObject, table );
@@ -1295,6 +1303,26 @@ handle_and_term( QofQueryTerm* pTerm, gchar* sql )
 	strcat( sql, ")" );
 }
 
+static void
+compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+{
+	GncGdaDataType_t* pData = data_p;
+	gda_backend* be_data = be_data_p;
+
+	g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+	g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+
+	g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
+	g_return_if_fail( !be_data->ok );
+
+	if( pData->compile_query != NULL ) {
+		be_data->pQueryInfo->pCompiledQuery = (pData->compile_query)(
+															be_data->be,
+															be_data->pQuery );
+		be_data->ok = TRUE;
+	}
+}
+
 static gpointer
 gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
 {
@@ -1302,9 +1330,26 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
 	GList* pBookList;
 	QofIdType searchObj;
 	gchar sql[1000];
+	gda_backend be_data;
+	gnc_gda_query_info* pQueryInfo;
+
+	searchObj = qof_query_get_search_for( pQuery );
+
+	pQueryInfo = g_malloc( sizeof( gnc_gda_query_info ) );
+
+	// Try various objects first
+	be_data.ok = FALSE;
+	be_data.be = be;
+	be_data.pQuery = pQuery;
+	pQueryInfo->searchObj = searchObj;
+	be_data.pQueryInfo = pQueryInfo;
+
+	qof_object_foreach_backend( GNC_GDA_BACKEND, compile_query_cb, &be_data );
+	if( be_data.ok ) {
+		return be_data.pQueryInfo;
+	}
 
 	pBookList = qof_query_get_books( pQuery );
-	searchObj = qof_query_get_search_for( pQuery );
 
 	/* Convert search object type to table name */
 	sprintf( sql, "SELECT * from %s", convert_search_obj( searchObj ) );
@@ -1331,22 +1376,92 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
 	}
 
 	printf( "Compiled: %s\n", sql );
-	return g_strdup( sql );
+	pQueryInfo->pCompiledQuery =  g_strdup( sql );
+
+	return pQueryInfo;
+}
+
+static void
+free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+{
+	GncGdaDataType_t* pData = data_p;
+	gda_backend* be_data = be_data_p;
+
+	g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+	g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+	g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
+
+	g_return_if_fail( !be_data->ok );
+
+	if( pData->free_query != NULL ) {
+		(pData->free_query)( be_data->be, be_data->pCompiledQuery );
+		be_data->ok = TRUE;
+	}
 }
 
 static void
 gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
 {
     GncGdaBackend *be = (GncGdaBackend*)pBEnd;
+	gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
+	gda_backend be_data;
 
-	printf( "gda_free_query(): %s\n", (gchar*)pQuery );
+	// Try various objects first
+	be_data.ok = FALSE;
+	be_data.be = be;
+	be_data.pCompiledQuery = pQuery;
+	be_data.pQueryInfo = pQueryInfo;
+
+	qof_object_foreach_backend( GNC_GDA_BACKEND, free_query_cb, &be_data );
+	if( be_data.ok ) {
+		return;
+	}
+
+	printf( "gda_free_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
+	g_free( pQueryInfo->pCompiledQuery );
+	g_free( pQueryInfo );
+}
+
+static void
+run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+{
+	GncGdaDataType_t* pData = data_p;
+	gda_backend* be_data = be_data_p;
+
+	g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+	g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+	g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
+
+	g_return_if_fail( !be_data->ok );
+
+	if( pData->run_query != NULL ) {
+		(pData->run_query)( be_data->be, be_data->pCompiledQuery );
+		be_data->ok = TRUE;
+	}
 }
 
 static void
 gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 {
     GncGdaBackend *be = (GncGdaBackend*)pBEnd;
-	printf( "gda_run_query(): %s\n", (gchar*)pQuery );
+	gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
+	gda_backend be_data;
+
+	be->loading = TRUE;
+
+	// Try various objects first
+	be_data.ok = FALSE;
+	be_data.be = be;
+	be_data.pCompiledQuery = pQueryInfo->pCompiledQuery;
+	be_data.pQueryInfo = pQueryInfo;
+
+	qof_object_foreach_backend( GNC_GDA_BACKEND, run_query_cb, &be_data );
+	be->loading = FALSE;
+	if( be_data.ok ) {
+		return;
+	}
+
+	printf( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
 }
 
 /* ================================================================= */
@@ -1403,6 +1518,26 @@ gnc_gda_backend_new(void)
     be->export = NULL;
 
 	gnc_be->primary_book = NULL;
+
+#if 0
+	{
+		QofCollection* col;
+		QofEntity e;
+		const GUID* g;
+		QofEntity* pEntity;
+		GUID g2;
+
+		col = qof_collection_new( "Test" );
+		qof_entity_init( &e, "Test", col );
+		g = qof_entity_get_guid( &e );
+		pEntity = qof_collection_lookup_entity( col, g );
+		g_assert( pEntity == &e );
+		guid_new( &g2 );
+		qof_entity_set_guid( &e, &g2 );
+		pEntity = qof_collection_lookup_entity( col, &g2 );
+		g_assert( pEntity == &e );
+	}
+#endif
 
 	return be;
 }

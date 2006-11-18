@@ -33,5 +33,6 @@
 #include <gmodule.h>
 
 void gnc_gda_init_commodity_handler( void );
+void gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity );
 
 #endif /* GNC_COMMODITY_GDA_H_ */

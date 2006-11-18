@@ -38,6 +38,7 @@
 #include "gnc-backend-gda.h"
 
 #include "gnc-account-gda.h"
+#include "gnc-commodity-gda.h"
 #include "gnc-slots-gda.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
@@ -121,11 +122,12 @@ set_parent( gpointer pObject, const gpointer pValue )
 }
 
 static Account*
-load_account( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
+			Account* pAccount )
 {
-	Account* pAccount;
-
-	pAccount = xaccMallocAccount( be->primary_book );
+	if( pAccount == NULL ) {
+		pAccount = xaccMallocAccount( be->primary_book );
+	}
 	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
 							qof_instance_get_slots( (QofInstance*)pAccount ) );
@@ -164,7 +166,7 @@ load_accounts( GncGdaBackend* be )
 
 		for( r = 0; r < numRows; r++ ) {
 
-			pAccount = load_account( be, pModel, r );
+			pAccount = load_account( be, pModel, r, NULL );
 
 			if( pAccount != NULL ) {
 				if( xaccAccountGetParent( pAccount ) == NULL ) {
@@ -189,6 +191,9 @@ static void
 commit_account( GncGdaBackend* be, QofInstance* inst )
 {
 	Account* pAcc = (Account*)inst;
+
+	// Ensure the commodity is in the db
+	gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 
 	(void)gnc_gda_do_db_operation( be,
 							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),

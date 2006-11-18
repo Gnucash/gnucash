@@ -36,6 +36,7 @@
 
 #include "gnc-backend-gda.h"
 
+#include "gnc-commodity-gda.h"
 #include "gnc-price-gda.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
@@ -150,11 +151,11 @@ set_commodity( gpointer pObject, const gpointer pValue )
 }
 
 static GNCPrice*
-load_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 {
-	GNCPrice* pPrice;
-
-	pPrice = gnc_price_create( be->primary_book );
+	if( pPrice == NULL ) {
+		pPrice = gnc_price_create( be->primary_book );
+	}
 
 	gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
 
@@ -192,7 +193,7 @@ load_prices( GncGdaBackend* be )
 
 		for( r = 0; r < numRows; r++ ) {
 
-			pPrice = load_price( be, pModel, r );
+			pPrice = load_price( be, pModel, r, NULL );
 
 			if( pPrice != NULL ) {
 				gnc_pricedb_add_price( pPriceDB, pPrice );
@@ -214,6 +215,10 @@ static void
 commit_price( GncGdaBackend* be, QofInstance* inst )
 {
 	GNCPrice* pPrice = (GNCPrice*)inst;
+
+	/* Ensure commodity and currency are in the db */
+	gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
+	gnc_gda_save_commodity( be, gnc_price_get_currency( pPrice ) );
 
 	(void)gnc_gda_do_db_operation( be,
 							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
