@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-08 11:47+0200\n"
-"PO-Revision-Date: 2006-10-03 21:50+0200\n"
+"PO-Revision-Date: 2006-11-18 19:45+0200\n"
 "Last-Translator: Fabrice Kurz <kurzf@voila.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2691,7 +2691,7 @@ msgstr "_Quantité"
 #: ../src/register/ledger-core/split-register.c:1693
 #: ../src/register/ledger-core/split-register.c:1695
 msgid "_Price"
-msgstr "_Prix"
+msgstr "_Cours"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:164
@@ -4739,7 +4739,7 @@ msgstr ""
 # messages-i18n.c:227
 #: ../src/gnome/glade/account.glade.h:40
 msgid "Interval:"
-msgstr " Interval : "
+msgstr "Interval : "
 
 #: ../src/gnome/glade/account.glade.h:41
 msgid "M_ove to:"
@@ -4801,7 +4801,7 @@ msgstr "Choisissez la devise utilisée pour les nouveaux comptes."
 # messages-i18n.c:318
 #: ../src/gnome/glade/account.glade.h:52
 msgid "Prefix:"
-msgstr "Prefixe :"
+msgstr "Préfixe :"
 
 #: ../src/gnome/glade/account.glade.h:53
 msgid ""
@@ -4821,7 +4821,7 @@ msgstr ""
 # po/guile_strings.txt:100
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Renumber sub-accounts"
-msgstr "Renuméroter les _sous-comptes"
+msgstr "Renuméroter les sous-comptes"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/gnome/glade/account.glade.h:59
@@ -10174,7 +10174,7 @@ msgid ""
 "code field of each child account with a newly generated code."
 msgstr ""
 "Renuméroter les sous-comptes directs de %s? Cela remplacera le code de tous "
-"les comptes fils par une nouveau code auto-généré."
+"les comptes fils par un nouveau code auto-généré."
 
 # src/gnome/dialog-qif-import.c:310
 #: ../src/gnome-utils/dialog-commodity.c:161
@@ -15726,7 +15726,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:1686
 #: ../src/register/ledger-core/split-register.c:1688
 msgid "_Shares"
-msgstr "_Titres :"
+msgstr "_Titres"
 
 # messages-i18n.c:256
 #: ../src/register/ledger-core/split-register.c:1686
