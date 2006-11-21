@@ -1,3 +1,8 @@
+2006-11-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-parse.scm:
+	  Don't have aktzu in the "case" twice.  Fixes #377519.
+
 2006-11-05  David Hampton  <hampton@employees.org>
 
 	* src/report/standard-reports/category-barchart.scm:
