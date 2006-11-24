@@ -1381,8 +1381,11 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
            g_assert_not_reached();
 
        if (trans == blank_trans) {
-           /* Don't begin editing the blank trans, because it's already open */
+           /* Don't begin editing the blank trans, because it's
+              already open, but mark it pending now. */
            g_assert(xaccTransIsOpen(blank_trans));
+           /* This is now the pending transaction */
+           info->pending_trans_guid = *xaccTransGetGUID(blank_trans);
        } else {
            PINFO("beginning edit of trans %p", trans);
            if (gnc_split_register_begin_edit_or_warn(info, trans))
