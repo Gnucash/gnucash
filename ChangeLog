@@ -20,6 +20,11 @@
 	* src/report/standard-reports/account-piecharts.scm: Fix some
 	scheme inexact errors.  Fixes 347462.
 
+2006-11-03  Andreas Köhler  <andi5.py@gmx.net>
+
+	Make gnc-dense-cal:month_name to use g_date_strftime instead of
+	strftime so that it returns a clean UTF-8 string.
+
 2006-10-10  Chris Shoemaker <chris.shoemaker@cox.net>
 
 	Ensure that the blank transaction is marked as the pending
