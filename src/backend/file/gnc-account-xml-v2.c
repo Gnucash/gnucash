@@ -229,7 +229,7 @@ static gboolean
 account_type_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
-    int type;
+    GNCAccountType type = BAD_TYPE;
     char *string;
 
     string = (char*) xmlNodeGetContent (node->xmlChildrenNode);

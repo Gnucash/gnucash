@@ -3,6 +3,11 @@
 	* src/import-export/qif-import/qif-parse.scm:
 	  Don't have aktzu in the "case" twice.  Fixes #377519.
 
+2006-11-13  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	Make the xml file read behavior less random for malformed account
+	input.
+
 2006-11-12  Christian Stimming  <stimming@tuhh.de>
 
 	Fix missing date when reconciling from HBCI #372929.
