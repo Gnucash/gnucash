@@ -4,6 +4,12 @@
 	  'gnucash-docs' package when Help is selected with no
 	  content. Fixes #347102.
 
+2006-11-05  David Hampton  <hampton@employees.org>
+
+	* src/report/standard-reports/category-barchart.scm:
+	* src/report/standard-reports/account-piecharts.scm: Fix some
+	scheme inexact errors.  Fixes 347462.
+
 2006-10-10  Chris Shoemaker <chris.shoemaker@cox.net>
 
 	Ensure that the blank transaction is marked as the pending
