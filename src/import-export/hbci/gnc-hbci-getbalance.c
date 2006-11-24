@@ -217,6 +217,10 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     ti=AB_Balance_GetTime(booked_grp);
     if (ti)
       booked_tt = GWEN_Time_toTime_t (ti);
+    else
+      /* No time found? Use today because the HBCI query asked for
+	 today's balance. */
+      booked_tt = gnc_timet_get_day_start(time(NULL));
     booked_val = AB_Balance_GetValue(booked_grp);
     if (booked_val)
       booked_value = AB_Value_GetValue (booked_val);

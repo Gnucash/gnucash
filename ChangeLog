@@ -1,3 +1,8 @@
+2006-11-12  Christian Stimming  <stimming@tuhh.de>
+
+	Fix missing date when reconciling from HBCI #372929.
+	as suggested by Konstantin Goudkov
+
 2006-11-09  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-gnome-utils.c: Inform the user about
