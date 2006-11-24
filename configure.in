@@ -836,10 +836,17 @@ AC_SUBST(HBCI_DIR)
 ### --------------------------------------------------------------------------
 ### i18n
 
+# This variable is set by GLIB_WITH_NLS, called through
+# AM_GLIB_GNU_GETTEXT above, and it is "lib" on e.g. windows
+if test "x$DATADIRNAME" = "x"; then
+  DATADIRNAME="share"
+  AC_SUBST(DATADIRNAME)
+fi
+
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH    specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="\${prefix}/share/locale")
+  LOCALE_DIR="\${prefix}/${DATADIRNAME}/locale")
 
 AC_SUBST(LOCALE_DIR)
 

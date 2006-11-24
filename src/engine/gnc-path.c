@@ -100,8 +100,11 @@ gchar *gnc_path_get_gladedir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir()
 {
-  //printf("Returning localedir %s\n", gbr_find_locale_dir (LOCALE_DIR));
-  return gbr_find_locale_dir (LOCALE_DIR);
+  gchar *prefix = gnc_path_get_prefix();
+  gchar *result = g_build_filename (prefix, LOCALE_DATADIRNAME, "locale", (char*)NULL);
+  g_free (prefix);
+  //printf("Returning localedir %s\n", result);
+  return result;
 }
 
 /** Returns the glade file path, usually

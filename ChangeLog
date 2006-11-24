@@ -1,3 +1,9 @@
+2006-11-24  Christian Stimming <stimming@tuhh.de>
+
+	* src/engine/gnc-path.c: Fix gnc_path_get_localedir() because
+	binreloc's implementation did not respect the choice of
+	DATADIRNAME from AM_GLIB_GNU_GETTEXT in configure.
+
 2006-11-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-parse.scm:
