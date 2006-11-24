@@ -56,7 +56,7 @@
 #define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define DESKTOP_GNOME_INTERFACE "desktop/gnome/interface"
 #define KEY_TOOLBAR_STYLE	"toolbar_style"
 #define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define KEY_LAST_PATH		"last_path"
@@ -767,8 +767,8 @@ void gnc_gconf_unset_dir (const gchar *section,
  *  'object' argument to this function as another of its arguments.
  *
  *  @param whoami A magic value that must match up this call to the
- *  corresponding call to gnc_gconf_remove_notification().  This value
- *  should be unique across all callers.
+ *  corresponding call to gnc_gconf_remove_notification().  The pair of
+ *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_add_notification (GObject *object,
 				 const gchar *section,
@@ -827,8 +827,8 @@ guint gnc_gconf_add_anon_notification (const gchar *section,
  *  notification function to remove from GConf.
  *
  *  @param whoami A magic value that must match up this call to the
- *  corresponding call to gnc_gconf_add_notification().  This value
- *  should be unique across all callers.
+ *  corresponding call to gnc_gconf_add_notification().  The pair of
+ *  section and whoami should be unique across all callers.
  */
 void gnc_gconf_remove_notification (GObject *object,
 				    const gchar *section,

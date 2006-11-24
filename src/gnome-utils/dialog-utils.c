@@ -50,9 +50,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define WINDOW_POSITION		"window_position"
 #define WINDOW_GEOMETRY		"window_geometry"
 
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#define KEY_TOOLBAR_STYLE	"toolbar_style"
-
 /* =========================================================== */
 
 static void

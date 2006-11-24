@@ -4,6 +4,18 @@
 	  'gnucash-docs' package when Help is selected with no
 	  content. Fixes #347102.
 
+2006-10-09  Andreas Köhler  <andi5.py@gmx.net>
+
+	Lessen restriction of the parameter whoami of the gnc_gconf_add/
+	remove_notification functions. Now the pair of section and whoami
+	has to be unique, as GncMainWindow adds notifications to two
+	different sections. Extends r14675.  Remove a superfluous leading
+	slash and doubly defined gconf key macros.
+
+	Correct gnc_gconf_add/remove_notification to avoid printf'ing NULL and
+	therefore crashes on Solaris and Windows. r14675 had fixed that, r14945
+	(me) undermined it though.   (#378881).
+
 2006-10-08  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
