@@ -63,6 +63,45 @@
 	therefore crashes on Solaris and Windows. r14675 had fixed that, r14945
 	(me) undermined it though.   (#378881).
 
+2006-09-26  Andreas Köhler  <andi5.py@gmx.net>
+
+	Handle type-compatibility when reparenting accounts: #344966.
+	
+	Add xaccAccountTypesCompatibleWith and change
+	xaccAccountTypesCompatible to use that.
+
+	Add gnc_tree_model_account_types_set_mask and bind mask to the
+	filter model instead using it as data of the filter function,
+	because those can only be set once per filter.
+
+	f_model is not always set in
+	gnc_tree_model_account_types_get_selection because of a bug in
+	gtk+ (#357791). Also add gnc_tree_model_account_types_get_mask.
+
+	Make the account type list in the account dialog dynamically
+	filtered based on compatibility to the parent account.
+
+	* add gnc_account_parent_changed_cb. Filter by valid_types & parent
+	  compatible types
+	* add aw->preferred_account_type to remember what we chose but may not
+	  work currently
+	* make valid_types a guint32 (was GList*)
+	* last_used_account_type is only set in gnc_ui_to_account
+
+	Free a list in import-account-matcher.c.
+
+	Ease account type changes in the account dialog after OK is
+	clicked.  Before, we did not enforce compatibility with the parent
+	account and suggested to change only children or children and all
+	parent accounts up to the top-level one. We do enforce it now and
+	only need to look at the children.
+
+	The filling of the hash of (children) account (type) changes has
+	been replaced by showing the user a filtered account tree and the
+	types are adjusted recursively once the user verified the change.
+
+	This is another attempt to resolve #344966.
+
 2006-10-08  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

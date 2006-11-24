@@ -35,6 +35,8 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 static GtkTreeModel *account_types_tree_model = NULL;
 
+#define TYPE_MASK "type-mask"
+
 /* Functions for the type system */
 static void
 gnc_tree_model_account_types_class_init (GncTreeModelAccountTypesClass *klass);
@@ -153,13 +155,15 @@ gnc_tree_model_account_types_master(void)
 
 
 static gboolean
-gnc_tree_model_account_types_is_valid (GtkTreeModel *model, 
+gnc_tree_model_account_types_is_valid (GtkTreeModel *model,
                                        GtkTreeIter *iter, gpointer data)
 {
     GNCAccountType type;
-    guint32 valid_types = GPOINTER_TO_UINT (data);
+    GObject *f_model = G_OBJECT (data);
+    guint32 valid_types = GPOINTER_TO_UINT (g_object_get_data (
+                                                f_model, TYPE_MASK));
 
-    gtk_tree_model_get (model, iter, 
+    gtk_tree_model_get (model, iter,
                         GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE, &type, -1);
     return (valid_types & (1 << type)) ? TRUE : FALSE;
 }
@@ -176,13 +180,32 @@ gnc_tree_model_account_types_filter_using_mask (guint32 types)
 {
     GtkTreeModel *f_model;
 
-    f_model = gtk_tree_model_filter_new(gnc_tree_model_account_types_master(), 
+    f_model = gtk_tree_model_filter_new (gnc_tree_model_account_types_master (),
                                         NULL);
+    g_object_set_data (G_OBJECT (f_model), TYPE_MASK, GUINT_TO_POINTER (types));
     gtk_tree_model_filter_set_visible_func (
         GTK_TREE_MODEL_FILTER (f_model), gnc_tree_model_account_types_is_valid,
-        GUINT_TO_POINTER (types), NULL);
+        f_model, NULL);
 
     return f_model;
+}
+
+void
+gnc_tree_model_account_types_set_mask (GtkTreeModel *f_model,
+                                       guint32 types)
+{
+    g_return_if_fail (f_model);
+
+    g_object_set_data (G_OBJECT (f_model), TYPE_MASK, GUINT_TO_POINTER (types));
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
+}
+
+guint32
+gnc_tree_model_account_types_get_mask (GtkTreeModel *f_model)
+{
+    g_return_val_if_fail (f_model, 0);
+
+    return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (f_model), TYPE_MASK));
 }
 
 guint32
@@ -221,7 +244,12 @@ gnc_tree_model_account_types_get_selection (GtkTreeSelection *sel)
     view = gtk_tree_selection_get_tree_view(sel);
     g_return_val_if_fail (view, 0);
 
+    /* circumvent a bug in gtk+ not always filling f_model */
+    f_model = NULL;
     list = gtk_tree_selection_get_selected_rows(sel, &f_model);
+    if (!f_model)
+      f_model = gtk_tree_view_get_model(view);
+
     model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     if (model != account_types_tree_model)
        PERR("TreeSelection's TreeModel is not the account-types Model");

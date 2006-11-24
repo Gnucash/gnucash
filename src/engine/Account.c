@@ -2177,49 +2177,52 @@ xaccAccountGetTypeFromStr (const gchar *str)
 /********************************************************************\
 \********************************************************************/
 
+guint32
+xaccAccountTypesCompatibleWith (GNCAccountType type)
+{
+  switch (type) {
+  case BANK:
+  case CASH:
+  case ASSET:
+  case STOCK:
+  case MUTUAL:
+  case CURRENCY:
+  case CREDIT:
+  case LIABILITY:
+  case RECEIVABLE:
+  case PAYABLE:
+    return
+      (1 << BANK)       |
+      (1 << CASH)       |
+      (1 << ASSET)      |
+      (1 << STOCK)      |
+      (1 << MUTUAL)     |
+      (1 << CURRENCY)   |
+      (1 << CREDIT)     |
+      (1 << LIABILITY)  |
+      (1 << RECEIVABLE) |
+      (1 << PAYABLE);
+  case INCOME:
+  case EXPENSE:
+    return
+      (1 << INCOME)     |
+      (1 << EXPENSE);
+  case EQUITY:
+    return
+      (1 << EQUITY);
+  default:
+    PERR("bad account type: %d", type);
+    return 0;
+  }
+}
+
 gboolean
 xaccAccountTypesCompatible (GNCAccountType parent_type,
                             GNCAccountType child_type)
 {
-  gboolean compatible = FALSE;
-
-  switch(parent_type)
-  {
-    case BANK:
-    case CASH: 
-    case ASSET:
-    case STOCK:
-    case MUTUAL:
-    case CURRENCY:
-    case CREDIT:
-    case LIABILITY:
-    case RECEIVABLE:
-    case PAYABLE:
-      compatible = ((child_type == BANK)     ||
-                    (child_type == CASH)     ||
-                    (child_type == ASSET)    ||
-                    (child_type == STOCK)    ||
-                    (child_type == MUTUAL)   ||
-                    (child_type == CURRENCY) ||
-                    (child_type == CREDIT)   ||
-                    (child_type == LIABILITY)||
-                    (child_type == RECEIVABLE)||
-                    (child_type == PAYABLE));
-      break;
-    case INCOME:
-    case EXPENSE:
-      compatible = ((child_type == INCOME) ||
-                    (child_type == EXPENSE));
-      break;
-    case EQUITY:
-      compatible = (child_type == EQUITY);
-      break;
-    default:
-      PERR("bad account type: %d", parent_type);
-      break;
-  }
-
-  return compatible;
+  return ((xaccAccountTypesCompatibleWith (parent_type) &
+           (1 << child_type))
+          != 0);
 }
 
 guint32
