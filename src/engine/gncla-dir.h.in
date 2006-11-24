@@ -30,7 +30,6 @@
 #define LIBDIR "@-libdir-@"
 #define PKGLIBDIR "@-pkglibdir-@"
 
-#define LOCALE_DIR  "@-LOCALE_DIR-@"
 #define LOCALE_DATADIRNAME "@-DATADIRNAME-@"
 
 #define GNC_ACCOUNTS_DIR "@-GNC_ACCOUNTS_DIR-@"

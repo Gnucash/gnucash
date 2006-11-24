@@ -837,18 +837,12 @@ AC_SUBST(HBCI_DIR)
 ### i18n
 
 # This variable is set by GLIB_WITH_NLS, called through
-# AM_GLIB_GNU_GETTEXT above, and it is "lib" on e.g. windows
+# AM_GLIB_GNU_GETTEXT above. Usually it is "share", but on some
+# platforms it is "lib". Make sure it is set.
 if test "x$DATADIRNAME" = "x"; then
   DATADIRNAME="share"
   AC_SUBST(DATADIRNAME)
 fi
-
-AC_ARG_WITH( locale-dir, 
-  [  --with-locale-dir=PATH    specify where to look for locale-specific information],
-  LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="\${prefix}/${DATADIRNAME}/locale")
-
-AC_SUBST(LOCALE_DIR)
 
 dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
 LANGINFO_D_FMT_CHECK

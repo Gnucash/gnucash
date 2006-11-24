@@ -181,7 +181,6 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
 		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
 		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
 		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
