@@ -48,31 +48,38 @@ static void set_quote_source_name( gpointer pObject, const gpointer pValue );
 
 #define COMMODITIES_TABLE "commodities"
 
+#define COMMODITY_MAX_NAMESPACE_LEN 40
+#define COMMODITY_MAX_MNEMONIC_LEN 40
+#define COMMODITY_MAX_FULLNAME_LEN 100
+#define COMMODITY_MAX_CUSIP_LEN 50
+#define COMMODITY_MAX_QUOTESOURCE_LEN 50
+#define COMMODITY_MAX_QUOTE_TZ_LEN 50
+
 static col_cvt_t col_table[] = {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,	NULL,
+	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
 			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
 			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
-	{ "namespace",		CT_STRING,	 40, COL_NNUL,	NULL,
+	{ "namespace",		CT_STRING,	COMMODITY_MAX_NAMESPACE_LEN, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_namespace,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_namespace },
-	{ "mnemonic",		CT_STRING,	 40, COL_NNUL,	NULL,
+	{ "mnemonic",		CT_STRING,	COMMODITY_MAX_MNEMONIC_LEN, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_mnemonic,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_mnemonic },
-	{ "fullname",		CT_STRING,	100, COL_NNUL,	NULL,
+	{ "fullname",		CT_STRING,	COMMODITY_MAX_FULLNAME_LEN, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_fullname,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_fullname },
-	{ "cusip",			CT_STRING,	 50, COL_NNUL,	NULL,
+	{ "cusip",			CT_STRING,	COMMODITY_MAX_CUSIP_LEN, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_cusip,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_cusip },
-	{ "fraction",		CT_INT,		  0, COL_NNUL,	NULL,
+	{ "fraction",		CT_INT,		0, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_fraction,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_fraction },
-	{ "quote_flag",		CT_INT,		  0, COL_NNUL,	NULL,
+	{ "quote_flag",		CT_INT,		0, COL_NNUL,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_flag,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_flag },
-	{ "quote_source",	CT_STRING,	 50, 0,	NULL,
+	{ "quote_source",	CT_STRING,	COMMODITY_MAX_QUOTESOURCE_LEN, 0,	NULL,
 			get_quote_source_name, set_quote_source_name },
-	{ "quote_tz",		CT_STRING,	 50, 0,	NULL,
+	{ "quote_tz",		CT_STRING,	COMMODITY_MAX_QUOTE_TZ_LEN, 0,	NULL,
 			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_tz,
 			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_tz },
 	{ NULL }
@@ -114,32 +121,21 @@ load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
 
 	gnc_gda_load_object( pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
 
+	qof_instance_mark_clean( (QofInstance*)pCommodity );
+
 	return pCommodity;
 }
 
 static void
 load_commodities( GncGdaBackend* be )
 {
-	GError* error = NULL;
 	gchar* buf;
-	GdaQuery* query;
 	GdaObject* ret;
-	QofBook* pBook = be->primary_book;
-	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
+	gnc_commodity_table* pTable = gnc_commodity_table_get_table( be->primary_book );
 
 	buf = g_strdup_printf( "SELECT * FROM %s", COMMODITIES_TABLE );
-	query = gda_query_new_from_sql( be->pDict, buf, &error );
+	ret = gnc_gda_execute_sql( be, buf );
 	g_free( buf );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
-
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );

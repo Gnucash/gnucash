@@ -83,7 +83,8 @@ typedef enum {
 	CT_INT64,
 	CT_TIMESPEC,
 	CT_NUMERIC,
-	CT_DOUBLE
+	CT_DOUBLE,
+	CT_BOOLEAN
 } E_COL_TYPE;
 
 typedef struct {

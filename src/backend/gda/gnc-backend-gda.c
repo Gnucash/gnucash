@@ -58,6 +58,7 @@
 #include "gnc-account-gda.h"
 #include "gnc-budget-gda.h"
 #include "gnc-commodity-gda.h"
+#include "gnc-lots-gda.h"
 #include "gnc-price-gda.h"
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
@@ -203,12 +204,19 @@ render_int( QofIdTypeConst obj_name, gpointer pObject,
 	const gchar* col_name = "";
 	const gchar* equals = "";
 	gint int_value;
+	QofAccessFunc getter;
 
 	if( include_name ) {
 		col_name = table_row->col_name;
 		equals = "=";
 	}
-	int_value = (gint)(*table_row->getter)( pObject );
+	if( table_row->param_name != NULL ) {
+		getter = qof_class_get_parameter_getter( obj_name,
+												table_row->param_name );
+		int_value = (gint)(*getter)( pObject, NULL );
+	} else {
+		int_value = (gint)(*table_row->getter)( pObject );
+	}
 	buf = g_strdup_printf( "%s%s%d", col_name, equals, int_value );
 
 	return buf;
@@ -1207,7 +1215,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 		return;
 	}
 
-	qof_instance_mark_clean( inst );
+	//qof_instance_mark_clean( inst );
 }
 /* ---------------------------------------------------------------------- */
 
@@ -1474,6 +1482,7 @@ gnc_gda_init_object_handlers( void )
 	gnc_gda_init_price_handler();
 	gnc_gda_init_transaction_handler();
 	gnc_gda_init_slots_handler();
+	gnc_gda_init_lot_handler();
 }
 
 /* ================================================================= */
@@ -1518,26 +1527,6 @@ gnc_gda_backend_new(void)
     be->export = NULL;
 
 	gnc_be->primary_book = NULL;
-
-#if 0
-	{
-		QofCollection* col;
-		QofEntity e;
-		const GUID* g;
-		QofEntity* pEntity;
-		GUID g2;
-
-		col = qof_collection_new( "Test" );
-		qof_entity_init( &e, "Test", col );
-		g = qof_entity_get_guid( &e );
-		pEntity = qof_collection_lookup_entity( col, g );
-		g_assert( pEntity == &e );
-		guid_new( &g2 );
-		qof_entity_set_guid( &e, &g2 );
-		pEntity = qof_collection_lookup_entity( col, &g2 );
-		g_assert( pEntity == &e );
-	}
-#endif
 
 	return be;
 }

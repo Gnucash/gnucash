@@ -49,25 +49,46 @@ static gpointer get_commodity( gpointer pObject );
 static void set_commodity( gpointer pObject, const gpointer pValue );
 static gpointer get_parent( gpointer pObject );
 static void set_parent( gpointer pObject, const gpointer pValue );
+static void retrieve_guid( gpointer pObject, const gpointer pValue );
+
+#define ACCOUNT_MAX_NAME_LEN 50
+#define ACCOUNT_MAX_TYPE_LEN 50
+#define ACCOUNT_MAX_CODE_LEN 100
+#define ACCOUNT_MAX_DESCRIPTION_LEN 500
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,	NULL,
+	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
 			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
 			(GNC_GDA_FN_SETTER)xaccAccountSetGUID },
-	{ "name",			CT_STRING,	 50, COL_NNUL,	ACCOUNT_NAME_ },
-	{ "account_type",	CT_INT,		  0, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)xaccAccountGetType,
-			(GNC_GDA_FN_SETTER)xaccAccountSetType },
-	{ "commodity_guid",	CT_GUID,	  0, COL_NNUL,	NULL,
+	{ "name",			CT_STRING,	ACCOUNT_MAX_NAME_LEN, COL_NNUL,	ACCOUNT_NAME_ },
+	{ "account_type",	CT_STRING,	ACCOUNT_MAX_TYPE_LEN, COL_NNUL,	ACCOUNT_TYPE_ },
+	{ "commodity_guid",	CT_GUID,	0, COL_NNUL,	NULL,
 			get_commodity, set_commodity },
-	{ "parent_guid",	CT_GUID,	  0, 0,	NULL, get_parent, set_parent },
-	{ "code",			CT_STRING,	100, 0, 		ACCOUNT_CODE_ },
-	{ "description",	CT_STRING,	500, 0, 		ACCOUNT_DESCRIPTION_ },
+	{ "parent_guid",	CT_GUID,	0, 0,	NULL, get_parent, set_parent },
+	{ "code",			CT_STRING,	ACCOUNT_MAX_CODE_LEN, 0,	ACCOUNT_CODE_ },
+	{ "description",	CT_STRING,	ACCOUNT_MAX_DESCRIPTION_LEN, 0,	ACCOUNT_DESCRIPTION_ },
 	{ NULL }
 };
 
+// Table to retrieve just the guid
+static col_cvt_t guid_table[] =
+{
+	{ "guid", CT_GUID, 0, 0, NULL, NULL, retrieve_guid },
+	{ NULL }
+};
+
+
 /* ================================================================= */
+static void 
+retrieve_guid( gpointer pObject, const gpointer pValue )
+{
+	GUID** ppGuid = (GUID**)pObject;
+	GUID* guid = (GUID*)pValue;
+
+	*ppGuid = guid;
+}
+
 static gpointer
 get_commodity( gpointer pObject )
 {
@@ -125,12 +146,23 @@ static Account*
 load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 			Account* pAccount )
 {
+	const GUID* guid;
+	GUID acc_guid;
+
+	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, &guid, guid_table );
+	acc_guid = *guid;
+
 	if( pAccount == NULL ) {
-		pAccount = xaccMallocAccount( be->primary_book );
+		pAccount = xaccAccountLookup( &acc_guid, be->primary_book );
+		if( pAccount == NULL ) {
+			pAccount = xaccMallocAccount( be->primary_book );
+		}
 	}
 	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
 							qof_instance_get_slots( (QofInstance*)pAccount ) );
+
+	qof_instance_mark_clean( (QofInstance*)pAccount );
 
 	return pAccount;
 }
@@ -138,26 +170,14 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 static void
 load_accounts( GncGdaBackend* be )
 {
-	GError* error = NULL;
 	gchar* buf;
-	GdaQuery* query;
 	GdaObject* ret;
 	QofBook* pBook = be->primary_book;
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
 
 	buf = g_strdup_printf( "SELECT * FROM %s", TABLE_NAME );
-	query = gda_query_new_from_sql( be->pDict, buf, &error );
+	ret = gnc_gda_execute_sql( be, buf );
 	g_free( buf );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
-
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );
@@ -191,6 +211,7 @@ static void
 commit_account( GncGdaBackend* be, QofInstance* inst )
 {
 	Account* pAcc = (Account*)inst;
+	const GUID* guid;
 
 	// Ensure the commodity is in the db
 	gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
@@ -201,9 +222,15 @@ commit_account( GncGdaBackend* be, QofInstance* inst )
 							GNC_ID_ACCOUNT, pAcc,
 							col_table );
 
+	// Delete old slot info
+	guid = qof_instance_get_guid( inst );
+
+	gnc_gda_slots_delete( be, guid );
+
 	// Now, commit any slots
-	gnc_gda_slots_save( be, qof_instance_get_guid( inst ),
-						qof_instance_get_slots( inst ) );
+	if( !inst->do_free ) {
+		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+	}
 }
 
 /* ================================================================= */

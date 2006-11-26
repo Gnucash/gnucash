@@ -61,23 +61,29 @@ static void set_guid( gpointer pObject, const gpointer pValue );
 static void retrieve_guid( gpointer pObject, const gpointer pValue );
 static gpointer get_tx_currency( gpointer pObject );
 static void set_tx_currency( gpointer pObject, const gpointer pValue );
+static gpointer get_tx_num( gpointer pObject );
+static void set_tx_num( gpointer pObject, const gpointer pValue );
 static gpointer get_tx_post_date( gpointer pObject );
 static void set_tx_post_date( gpointer pObject, const gpointer pValue );
 static gpointer get_tx_enter_date( gpointer pObject );
 static void set_tx_enter_date( gpointer pObject, const gpointer pValue );
 
+#define TX_MAX_NUM_LEN 50
+#define TX_MAX_DESCRIPTION_LEN 500
+
 static col_cvt_t tx_col_table[] =
 {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY, NULL,
+	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY, NULL,
 			get_guid, set_guid },
-	{ "currency_guid",	CT_GUID,	  0, COL_NNUL,	NULL,
+	{ "currency_guid",	CT_GUID,	0, COL_NNUL,	NULL,
 			get_tx_currency, set_tx_currency },
-	{ "num",			CT_STRING,	 50, COL_NNUL, TRANS_NUM },
-	{ "post_date",		CT_TIMESPEC,  0, COL_NNUL, NULL,
+	{ "num",			CT_STRING,	TX_MAX_NUM_LEN, COL_NNUL, NULL,
+			get_tx_num, set_tx_num },
+	{ "post_date",		CT_TIMESPEC, 0, COL_NNUL, NULL,
 			get_tx_post_date, set_tx_post_date },
-	{ "enter_date",		CT_TIMESPEC,  0, COL_NNUL, NULL,
+	{ "enter_date",		CT_TIMESPEC, 0, COL_NNUL, NULL,
 			get_tx_enter_date, set_tx_enter_date },
-	{ "description",	CT_STRING,	500, 0,	NULL,
+	{ "description",	CT_STRING,	TX_MAX_DESCRIPTION_LEN, 0,	NULL,
 			(GNC_GDA_FN_GETTER)xaccTransGetDescription,
 			(GNC_GDA_FN_SETTER)xaccTransSetDescription },
 	{ NULL }
@@ -103,23 +109,26 @@ static void set_split_quantity( gpointer pObject, const gpointer pValue );
 static gpointer get_split_account( gpointer pObject );
 static void set_split_account( gpointer pObject, const gpointer pValue );
 
+#define SPLIT_MAX_MEMO_LEN 50
+#define SPLIT_MAX_ACTION_LEN 50
+
 static col_cvt_t split_col_table[] =
 {
-	{ "guid",			CT_GUID,	  0, COL_NNUL|COL_PKEY,	NULL,
+	{ "guid",			CT_GUID,	 0, COL_NNUL|COL_PKEY,	NULL,
 			get_guid, set_guid },
-	{ "tx_guid",		CT_GUID,	  0, COL_NNUL,	NULL,
+	{ "tx_guid",		CT_GUID,	 0, COL_NNUL,	NULL,
 			get_split_tx_guid, set_split_tx_guid },
-	{ "memo",			CT_STRING,	 50, COL_NNUL,	SPLIT_MEMO },
-	{ "action",			CT_STRING,	 50, COL_NNUL,	SPLIT_ACTION },
-	{ "reconcile_state", CT_STRING,	  1, COL_NNUL,	NULL,
+	{ "memo",			CT_STRING,	 SPLIT_MAX_MEMO_LEN, COL_NNUL,	SPLIT_MEMO },
+	{ "action",			CT_STRING,	 SPLIT_MAX_ACTION_LEN, COL_NNUL,	SPLIT_ACTION },
+	{ "reconcile_state", CT_STRING,	 1, COL_NNUL,	NULL,
 			get_split_reconcile_state, set_split_reconcile_state },
-	{ "reconcile_date",	CT_TIMESPEC,  0, COL_NNUL,	NULL,
+	{ "reconcile_date",	CT_TIMESPEC, 0, COL_NNUL,	NULL,
 			get_split_reconcile_date, set_split_reconcile_date },
-	{ "value",			CT_NUMERIC,	  0, COL_NNUL,	NULL,
+	{ "value",			CT_NUMERIC,	 0, COL_NNUL,	NULL,
 			get_split_value, set_split_value },
-	{ "quantity",		CT_NUMERIC,	  0, COL_NNUL,	NULL,
+	{ "quantity",		CT_NUMERIC,	 0, COL_NNUL,	NULL,
 			get_split_quantity, set_split_quantity },
-	{ "account_guid",	CT_GUID,	  0, COL_NNUL,	NULL,
+	{ "account_guid",	CT_GUID,	 0, COL_NNUL,	NULL,
 			get_split_account, set_split_account },
 	{ NULL }
 };
@@ -174,6 +183,25 @@ set_tx_currency( gpointer pObject, const gpointer pValue )
 
 	pCurrency = gnc_commodity_find_commodity_by_guid( guid, pBook );
 	xaccTransSetCurrency( pTx, pCurrency );
+}
+
+static gpointer
+get_tx_num( gpointer pObject )
+{
+	Transaction* pTx = (Transaction*)pObject;
+	const gchar* s;
+
+	s = xaccTransGetNum( pTx );
+	return (gpointer)s;
+}
+
+static void 
+set_tx_num( gpointer pObject, const gpointer pValue )
+{
+	Transaction* pTx = (Transaction*)pObject;
+	const gchar* s = (const gchar*)pValue;
+
+	xaccTransSetNum( pTx, s );
 }
 
 static gpointer
@@ -352,33 +380,22 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 
 	g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
 
+	qof_instance_mark_clean( (QofInstance*)pSplit );
+
 	return pSplit;
 }
 
 static void
 load_splits( GncGdaBackend* be, const GUID* guid )
 {
-	GError* error = NULL;
 	gchar* buf;
-	GdaQuery* query;
 	GdaObject* ret;
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
 
 	guid_to_string_buff( guid, guid_buf );
 	buf = g_strdup_printf( "SELECT * FROM %s where tx_guid='%s'",
 						SPLIT_TABLE, guid_buf );
-	query = gda_query_new_from_sql( be->pDict, buf, &error );
-	g_free( buf );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
-
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
+	ret = gnc_gda_execute_sql( be, buf );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );
@@ -410,6 +427,8 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 	gnc_gda_slots_load( be, qof_instance_get_guid( (QofInstance*)pTx ),
 							qof_instance_get_slots( (QofInstance*)pTx ) );
 	load_splits( be, qof_instance_get_guid( (QofInstance*)pTx ) );
+
+	qof_instance_mark_clean( (QofInstance*)pTx );
 	xaccTransCommitEdit( pTx );
 
 	g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
@@ -490,20 +509,36 @@ create_transaction_tables( GncGdaBackend* be )
 }
 /* ================================================================= */
 static void
-delete_splits( GncGdaBackend* be, Transaction* pTx )
+delete_split_slots_cb( gpointer data, gpointer user_data )
 {
-	(void)gnc_gda_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
-								SPLIT_TABLE, pTx, guid_col_table );
+	split_info_t* split_info = (split_info_t*)user_data;
+	Split* pSplit = (Split*)data;
+
+	gnc_gda_slots_delete( split_info->be, qof_instance_get_guid( (QofInstance*)pSplit ) );
 }
 
 static void
-save_split( gpointer data, gpointer user_data )
+delete_splits( GncGdaBackend* be, Transaction* pTx )
+{
+	split_info_t split_info;
+
+	(void)gnc_gda_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
+								SPLIT_TABLE, pTx, guid_col_table );
+	split_info.be = be;
+
+	g_list_foreach( xaccTransGetSplitList( pTx ), delete_split_slots_cb, &split_info );
+}
+
+static void
+save_split_cb( gpointer data, gpointer user_data )
 {
 	split_info_t* split_info = (split_info_t*)user_data;
 	Split* pSplit = (Split*)data;
 
 	(void)gnc_gda_do_db_operation( split_info->be, OP_DB_ADD, SPLIT_TABLE,
 									GNC_ID_SPLIT, pSplit, split_col_table );
+	gnc_gda_slots_save( split_info->be, qof_instance_get_guid( (QofInstance*)pSplit ),
+							qof_instance_get_slots( (QofInstance*)pSplit ) );
 }
 
 static void
@@ -513,13 +548,14 @@ save_splits( GncGdaBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 
 	split_info.be = be;
 	split_info.guid = tx_guid;
-	g_list_foreach( pSplitList, save_split, &split_info );
+	g_list_foreach( pSplitList, save_split_cb, &split_info );
 }
 
 static void
 commit_transaction( GncGdaBackend* be, QofInstance* inst )
 {
 	Transaction* pTx = (Transaction*)inst;
+	const GUID* guid;
 
 	// Ensure the commodity is in the db
 	gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );
@@ -530,12 +566,17 @@ commit_transaction( GncGdaBackend* be, QofInstance* inst )
 							GNC_ID_TRANS, pTx,
 							tx_col_table );
 
-	// Delete any old splits for this transaction
+	guid = qof_instance_get_guid( inst );
+
+	// Delete any old slots and splits for this transaction
+	gnc_gda_slots_delete( be, guid );
 	delete_splits( be, pTx );
 
-	// Now, commit any slots
-	save_splits( be, qof_instance_get_guid( inst ),
-				xaccTransGetSplitList( pTx ) );
+	if( !inst->do_free ) {
+		// Now, commit any slots and splits
+		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+		save_splits( be, guid, xaccTransGetSplitList( pTx ) );
+	}
 }
 
 /* ================================================================= */

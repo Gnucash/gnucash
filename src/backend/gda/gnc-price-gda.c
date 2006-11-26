@@ -52,6 +52,9 @@ static void set_currency( gpointer pObject, const gpointer pValue );
 static gpointer get_commodity( gpointer pObject );
 static void set_commodity( gpointer pObject, const gpointer pValue );
 
+#define PRICE_MAX_SOURCE_LEN 50
+#define PRICE_MAX_TYPE_LEN 50
+
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
@@ -63,9 +66,9 @@ static col_cvt_t col_table[] =
 			get_currency, set_currency },
 	{ "date",			CT_TIMESPEC,	0, COL_NNUL, NULL,
 			get_date, set_date },
-	{ "source",			CT_STRING,	50, 0, PRICE_SOURCE },
-	{ "type",			CT_STRING,	50, 0, PRICE_TYPE },
-	{ "value",			CT_NUMERIC,	COL_NNUL, 0, NULL, get_value, set_value },
+	{ "source",			CT_STRING,	PRICE_MAX_SOURCE_LEN, 0, PRICE_SOURCE },
+	{ "type",			CT_STRING,	PRICE_MAX_TYPE_LEN, 0, PRICE_TYPE },
+	{ "value",			CT_NUMERIC,	0, COL_NNUL, NULL, get_value, set_value },
 	{ NULL }
 };
 
@@ -159,32 +162,22 @@ load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 
 	gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
 
+	qof_instance_mark_clean( (QofInstance*)pPrice );
+
 	return pPrice;
 }
 
 static void
 load_prices( GncGdaBackend* be )
 {
-	GError* error = NULL;
 	gchar* buf;
-	GdaQuery* query;
 	GdaObject* ret;
 	QofBook* pBook = be->primary_book;
 	GNCPriceDB* pPriceDB = gnc_book_get_pricedb( pBook );
 
 	buf = g_strdup_printf( "SELECT * FROM %s", TABLE_NAME );
-	query = gda_query_new_from_sql( be->pDict, buf, &error );
+	ret = gnc_gda_execute_sql( be, buf );
 	g_free( buf );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
-
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );
