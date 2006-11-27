@@ -28,10 +28,5 @@
 #define SYSCONFDIR "@-sysconfdir-@"
 
 #define LIBDIR "@-libdir-@"
-#define PKGLIBDIR "@-pkglibdir-@"
 
 #define LOCALE_DATADIRNAME "@-DATADIRNAME-@"
-
-#define GNC_ACCOUNTS_DIR "@-GNC_ACCOUNTS_DIR-@"
-#define GNC_GLADE_DIR "@-GNC_GLADE_DIR-@"
-#define GNC_GCONF_DIR "@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@"

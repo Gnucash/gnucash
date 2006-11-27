@@ -182,10 +182,6 @@ gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
-		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
-		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
-		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
-		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
 		-e 's#@-libdir-@#${libdir}#g' \
 		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
 		-e 's#@-datadir-@#${datadir}#g' \
