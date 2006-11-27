@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-23 13:13+0100\n"
-"PO-Revision-Date: 2006-11-23 13:20+0100\n"
+"POT-Creation-Date: 2006-11-27 10:48+0100\n"
+"PO-Revision-Date: 2006-11-27 11:03+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -102,14 +102,14 @@ msgstr "Gewinnrücklagen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../src/app-utils/gnc-ui-util.c:640 ../src/engine/Account.c:2142
-#: ../src/register/ledger-core/split-register.c:2048
+#: ../src/register/ledger-core/split-register.c:2051
 #: ../intl-scm/guile-strings.c:1836
 msgid "Equity"
 msgstr "Eigenkapital"
 
 #: ../src/app-utils/gnc-ui-util.c:700 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:905 ../src/gnome/glade/account.glade.h:48
-#: ../src/gnome-utils/dialog-account.c:267
+#: ../src/gnome-utils/dialog-account.c:264
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
 
@@ -118,7 +118,7 @@ msgstr "Anfangsbestand"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1099
-#: ../src/register/ledger-core/split-register.c:1898
+#: ../src/register/ledger-core/split-register.c:1901
 #: ../intl-scm/guile-strings.c:1268 ../intl-scm/guile-strings.c:1454
 #: ../intl-scm/guile-strings.c:2258 ../intl-scm/guile-strings.c:2570
 msgid "Debit"
@@ -129,10 +129,10 @@ msgstr "Soll"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1137
-#: ../src/register/ledger-core/split-register.c:1921
-#: ../src/register/ledger-core/split-register.c:1996
-#: ../src/register/ledger-core/split-register.c:2012
-#: ../src/register/ledger-core/split-register.c:2030
+#: ../src/register/ledger-core/split-register.c:1924
+#: ../src/register/ledger-core/split-register.c:1999
+#: ../src/register/ledger-core/split-register.c:2015
+#: ../src/register/ledger-core/split-register.c:2033
 #: ../intl-scm/guile-strings.c:1270 ../intl-scm/guile-strings.c:1456
 #: ../intl-scm/guile-strings.c:2260 ../intl-scm/guile-strings.c:2572
 msgid "Credit"
@@ -323,7 +323,7 @@ msgstr "Daten laden..."
 #: ../src/business/business-gnome/dialog-invoice.c:2495
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:316
-#: ../src/register/ledger-core/split-register.c:2027
+#: ../src/register/ledger-core/split-register.c:2030
 #: ../intl-scm/guile-strings.c:82 ../intl-scm/guile-strings.c:2654
 #: ../intl-scm/guile-strings.c:3366 ../intl-scm/guile-strings.c:3464
 #: ../intl-scm/guile-strings.c:3680 ../intl-scm/guile-strings.c:3910
@@ -377,9 +377,9 @@ msgstr "Automatische Buchung"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
 #: ../src/gnome/druid-loan.c:1780 ../src/gnome/druid-loan.c:2280
 #: ../src/gnome/druid-loan.c:2343 ../src/gnome/druid-loan.c:2357
-#: ../src/register/ledger-core/split-register.c:2023
-#: ../src/register/ledger-core/split-register.c:2028
-#: ../src/register/ledger-core/split-register.c:2037
+#: ../src/register/ledger-core/split-register.c:2026
+#: ../src/register/ledger-core/split-register.c:2031
+#: ../src/register/ledger-core/split-register.c:2040
 #: ../intl-scm/guile-strings.c:64 ../intl-scm/guile-strings.c:80
 #: ../intl-scm/guile-strings.c:110
 msgid "Payment"
@@ -583,7 +583,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1349
+#: ../src/gnome-utils/dialog-account.c:1295
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -722,7 +722,7 @@ msgstr "Benutzername"
 #: ../src/gnome/dialog-scheduledxaction.c:2573
 #: ../src/gnome/glade/sched-xact.glade.h:118
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:10
-#: ../src/gnome-utils/gnc-dense-cal.c:280
+#: ../src/gnome-utils/gnc-dense-cal.c:281
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:405
 #: ../intl-scm/guile-strings.c:3722
@@ -2416,8 +2416,8 @@ msgid "_Quantity"
 msgstr "_Anzahl"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:163
-#: ../src/register/ledger-core/split-register.c:1712
-#: ../src/register/ledger-core/split-register.c:1714
+#: ../src/register/ledger-core/split-register.c:1715
+#: ../src/register/ledger-core/split-register.c:1717
 msgid "_Price"
 msgstr "_Preis"
 
@@ -2600,13 +2600,13 @@ msgstr "ist nicht"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:81
 #: ../src/gnome-utils/dialog-transfer.c:1377
-#: ../src/register/ledger-core/split-register.c:1493
+#: ../src/register/ledger-core/split-register.c:1496
 #, c-format
 msgid "The account %s does not allow transactions."
 msgstr "Das Konto %s kann keine Buchungen enthalten."
 
 #: ../src/business/business-ledger/gncEntryLedger.c:82
-#: ../src/register/ledger-core/split-register.c:1494
+#: ../src/register/ledger-core/split-register.c:1497
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "Das Konto %s existiert nicht. Möchten Sie es erstellen?"
@@ -3122,7 +3122,7 @@ msgstr "Währung"
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
 #: ../src/engine/Account.c:2140
-#: ../src/register/ledger-core/split-register.c:2064
+#: ../src/register/ledger-core/split-register.c:2067
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:866
 #: ../intl-scm/guile-strings.c:1240
 msgid "Income"
@@ -3393,7 +3393,7 @@ msgstr "-- Mehrteilige Buchung --"
 #: ../src/engine/Split.c:1253 ../src/gnome/druid-stock-split.c:448
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:331
-#: ../src/register/ledger-core/split-register.c:2067
+#: ../src/register/ledger-core/split-register.c:2070
 #: ../intl-scm/guile-strings.c:2164
 msgid "Split"
 msgstr "Vollständig"
@@ -3476,8 +3476,7 @@ msgstr "Alle Konten"
 #. src/report/standard-reports/budget.scm
 #. src/business/business-reports/owner-report.scm
 #: ../src/gnome/dialog-find-transactions.c:103
-#: ../src/gnome/glade/stocks.glade.h:3 ../src/gnome-utils/dialog-account.c:647
-#: ../src/gnome-utils/gnc-icons.c:16
+#: ../src/gnome/glade/stocks.glade.h:3 ../src/gnome-utils/gnc-icons.c:16
 #: ../src/import-export/generic-import.glade.h:11
 #: ../src/import-export/hbci/gnc-hbci-utils.c:592
 #: ../src/import-export/qif-import/qif.glade.h:2
@@ -3949,7 +3948,7 @@ msgid "via Escrow account?"
 msgstr "über Treuhandkonto?"
 
 #: ../src/gnome/druid-loan.c:820
-#: ../src/register/ledger-core/split-register.c:2021
+#: ../src/register/ledger-core/split-register.c:2024
 msgid "Loan"
 msgstr "Darlehen"
 
@@ -3991,7 +3990,7 @@ msgstr "Endbetrag Kapital"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #: ../src/gnome/druid-loan.c:1782 ../src/gnome/druid-loan.c:2399
 #: ../src/import-export/qif/qif-defaults.c:130
-#: ../src/register/ledger-core/split-register.c:2029
+#: ../src/register/ledger-core/split-register.c:2032
 #: ../intl-scm/guile-strings.c:3074 ../intl-scm/guile-strings.c:3096
 msgid "Interest"
 msgstr "Zinsen"
@@ -4301,7 +4300,7 @@ msgid "M_ove to:"
 msgstr "_Verschieben nach:"
 
 #: ../src/gnome/glade/account.glade.h:42
-#: ../src/gnome-utils/dialog-account.c:1400
+#: ../src/gnome-utils/dialog-account.c:1346
 msgid "New Account"
 msgstr "_Neues Konto"
 
@@ -6119,7 +6118,7 @@ msgid "Forever"
 msgstr "Immer"
 
 #: ../src/gnome/glade/sched-xact.glade.h:87
-#: ../src/gnome-utils/gnc-dense-cal.c:281
+#: ../src/gnome-utils/gnc-dense-cal.c:282
 msgid "Frequency"
 msgstr "Häufigkeit"
 
@@ -7273,7 +7272,7 @@ msgid "Paste the clipboard content at the cursor position"
 msgstr "Zwischenablage an Cursor-Position einfügen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1387
+#: ../src/gnome-utils/dialog-account.c:1333
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
@@ -7390,7 +7389,7 @@ msgstr "_Vollständig"
 
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:326
-#: ../src/register/ledger-core/split-register.c:1998
+#: ../src/register/ledger-core/split-register.c:2001
 #: ../src/register/ledger-core/split-register-layout.c:571
 #: ../src/register/ledger-core/split-register-model.c:184
 #: ../intl-scm/guile-strings.c:2560
@@ -9141,57 +9140,61 @@ msgstr ""
 "Fehler beim Speichern des Status-file.\n"
 "  %s"
 
-#: ../src/gnome-utils/dialog-account.c:411
+#: ../src/gnome-utils/dialog-account.c:415
 msgid "Could not create opening balance."
 msgstr "Anfangsbestand kann nicht erstellt werden."
 
-#: ../src/gnome-utils/dialog-account.c:648
-msgid "Field"
-msgstr "Feld"
+#. primary label
+#: ../src/gnome-utils/dialog-account.c:607
+msgid "Give the children the same type?"
+msgstr "Soll die Kontoart der Unterkonten zur gleichen Kontoart geändert werden?"
 
-#: ../src/gnome-utils/dialog-account.c:649
-msgid "Old Value"
-msgstr "Alter Wert"
+#. secondary label
+#: ../src/gnome-utils/dialog-account.c:625
+#, c-format
+msgid ""
+"The children of the edited account have to be changed to type \"%s\" to make "
+"them compatible."
+msgstr "Die Kontoart der Unterkonten des aktuell bearbeiteten Kontos muss zur Kontoart »%s« geändert werden, damit die Kontoarten wieder zueinander passen."
 
-#: ../src/gnome-utils/dialog-account.c:650
-msgid "New Value"
-msgstr "Neuer Wert"
+#. children
+#: ../src/gnome-utils/dialog-account.c:636
+msgid "_Show children accounts"
+msgstr "_Unterkonten anzeigen"
 
-#: ../src/gnome-utils/dialog-account.c:676
-msgid "Verify Changes"
-msgstr "Änderungen überprüfen"
-
-#: ../src/gnome-utils/dialog-account.c:689
-msgid "The following changes must be made. Continue?"
-msgstr "Die folgenden Änderungen müssen gemacht werden. Fortsetzen?"
-
-#: ../src/gnome-utils/dialog-account.c:757
+#: ../src/gnome-utils/dialog-account.c:709
 msgid "The account must be given a name."
 msgstr "Das Konto muss einen Namen erhalten."
 
-#: ../src/gnome-utils/dialog-account.c:779
+#: ../src/gnome-utils/dialog-account.c:731
 msgid "There is already an account with that name."
 msgstr "Es gibt bereits ein Konto mit diesem Namen."
 
-#: ../src/gnome-utils/dialog-account.c:787
+#: ../src/gnome-utils/dialog-account.c:739
 msgid "You must choose a valid parent account."
 msgstr "Wählen Sie ein gültiges Hauptkonto"
 
-#: ../src/gnome-utils/dialog-account.c:795
+#: ../src/gnome-utils/dialog-account.c:747
 msgid "You must select an account type."
 msgstr "Wählen Sie eine Kontoart"
 
-#: ../src/gnome-utils/dialog-account.c:805
+#: ../src/gnome-utils/dialog-account.c:755
+msgid ""
+"The selected account type is incompatible with the one of the selected "
+"parent."
+msgstr "Die gewählte Kontoart passt nicht zu der Kontoart des Hauptkontos von diesem Konto."
+
+#: ../src/gnome-utils/dialog-account.c:766
 msgid "You must choose a commodity."
 msgstr "Sie müssen eine Währung/Aktie auswählen."
 
-#: ../src/gnome-utils/dialog-account.c:928
+#: ../src/gnome-utils/dialog-account.c:818
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Anfangsbestand angeben \n"
 "oder das Feld freilassen."
 
-#: ../src/gnome-utils/dialog-account.c:952
+#: ../src/gnome-utils/dialog-account.c:842
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -9199,12 +9202,12 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
-#: ../src/gnome-utils/dialog-account.c:1390
+#: ../src/gnome-utils/dialog-account.c:1336
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: ../src/gnome-utils/dialog-account.c:1898
+#: ../src/gnome-utils/dialog-account.c:1841
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
@@ -9436,19 +9439,19 @@ msgstr "Soll Betrag:"
 msgid "To Amount:"
 msgstr "zum Betrag:"
 
-#: ../src/gnome-utils/dialog-utils.c:959
+#: ../src/gnome-utils/dialog-utils.c:956
 msgid "Remember and don't _ask me again."
 msgstr "_Antwort speichern und nicht wieder anzeigen."
 
-#: ../src/gnome-utils/dialog-utils.c:960
+#: ../src/gnome-utils/dialog-utils.c:957
 msgid "Don't _tell me again."
 msgstr "_Nicht wieder anzeigen."
 
-#: ../src/gnome-utils/dialog-utils.c:963
+#: ../src/gnome-utils/dialog-utils.c:960
 msgid "Remember and don't ask me again this _session."
 msgstr "Antwort speichern und in _dieser Sitzung nicht wieder anzeigen."
 
-#: ../src/gnome-utils/dialog-utils.c:964
+#: ../src/gnome-utils/dialog-utils.c:961
 msgid "Don't tell me again this _session."
 msgstr "In dieser _Sitzung nicht wieder anzeigen."
 
@@ -10980,12 +10983,12 @@ msgstr "Kalender"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
-#: ../src/gnome-utils/gnc-dense-cal.c:286 ../intl-scm/guile-strings.c:400
+#: ../src/gnome-utils/gnc-dense-cal.c:287 ../intl-scm/guile-strings.c:400
 #: ../intl-scm/guile-strings.c:612
 msgid "Date: "
 msgstr "Datum:"
 
-#: ../src/gnome-utils/gnc-dense-cal.c:1065
+#: ../src/gnome-utils/gnc-dense-cal.c:1066
 msgid "(unnamed)"
 msgstr "(unbenannt)"
 
@@ -11434,7 +11437,10 @@ msgstr "Ansicht..."
 msgid ""
 "GnuCash could not find the files for the help documentation.  This is likely "
 "because the 'gnucash-docs' package is not installed."
-msgstr "Die Dateien für die Hilfe-Dokumentation konnten nicht gefunden werden. Das liegt vermutlich daran, dass das Paket »gnucash-docs« noch nicht installiert ist."
+msgstr ""
+"Die Dateien für die Hilfe-Dokumentation konnten nicht gefunden werden. Das "
+"liegt vermutlich daran, dass das Paket »gnucash-docs« noch nicht installiert "
+"ist."
 
 #: ../src/gnome-utils/gnc-html.c:107
 msgid "Not found"
@@ -12071,7 +12077,7 @@ msgstr "Aktie"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/gnome-utils/gnc-tree-view-price.c:465
-#: ../src/register/ledger-core/split-register.c:2055
+#: ../src/register/ledger-core/split-register.c:2058
 #: ../src/register/ledger-core/split-register-model.c:228
 #: ../intl-scm/guile-strings.c:1124 ../intl-scm/guile-strings.c:1198
 #: ../intl-scm/guile-strings.c:1284 ../intl-scm/guile-strings.c:1498
@@ -13101,7 +13107,7 @@ msgstr "Ausführliche _Fehlermeldungen"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #.
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:265
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:269
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "\n"
@@ -13117,7 +13123,7 @@ msgstr ""
 "können Sie im HBCI-Einrichtungs-Assistent eine höhere HBCI-Version "
 "auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:281
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:285
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -13126,14 +13132,14 @@ msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
 "Gebuchter Saldo des Kontos ist %s"
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:288
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:292
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
 msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
 "Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:293
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:297
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
@@ -13141,7 +13147,7 @@ msgstr ""
 "Dieser gebuchte Saldo stimmt mit dem aktuellen abgeglichenen Saldo Ihres "
 "Kontos überein."
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:307
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:311
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
@@ -13369,11 +13375,11 @@ msgstr "Ausführliche HBCI-Fehlermeldungen"
 msgid "Account ID"
 msgstr "Kontonummer"
 
-#: ../src/import-export/import-account-matcher.c:197
+#: ../src/import-export/import-account-matcher.c:198
 msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
-#: ../src/import-export/import-account-matcher.c:220
+#: ../src/import-export/import-account-matcher.c:221
 #, c-format
 msgid ""
 "The account %s is a placeholder account and does not allow transactions. "
@@ -14323,7 +14329,10 @@ msgstr "Bayes-Algorithmus verwenden"
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
-msgstr "Diese Buchung wird bereits von einem anderen Kontofenster aus bearbeitet. Bitte beenden Sie zuerst diese Bearbeitung, indem Sie in dem anderen Kontofenster »Eingabe« oder »Abbrechen« wählen. "
+msgstr ""
+"Diese Buchung wird bereits von einem anderen Kontofenster aus bearbeitet. "
+"Bitte beenden Sie zuerst diese Bearbeitung, indem Sie in dem anderen "
+"Kontofenster »Eingabe« oder »Abbrechen« wählen. "
 
 #: ../src/register/ledger-core/split-register.c:408
 msgid "Save transaction before duplicating?"
@@ -14353,11 +14362,11 @@ msgstr ""
 "Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. Möchten Sie "
 "das wirklich?"
 
-#: ../src/register/ledger-core/split-register.c:1697
+#: ../src/register/ledger-core/split-register.c:1700
 msgid "Recalculate Transaction"
 msgstr "Buchung neu berechnen"
 
-#: ../src/register/ledger-core/split-register.c:1698
+#: ../src/register/ledger-core/split-register.c:1701
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
@@ -14365,141 +14374,141 @@ msgstr ""
 "Die eingegebenen Werte für diese Buchung passen nicht zueinander. Welcher "
 "Wert soll neu berechnet werden?"
 
-#: ../src/register/ledger-core/split-register.c:1705
-#: ../src/register/ledger-core/split-register.c:1707
+#: ../src/register/ledger-core/split-register.c:1708
+#: ../src/register/ledger-core/split-register.c:1710
 msgid "_Shares"
 msgstr "_Anteile"
 
-#: ../src/register/ledger-core/split-register.c:1705
-#: ../src/register/ledger-core/split-register.c:1712
-#: ../src/register/ledger-core/split-register.c:1719
+#: ../src/register/ledger-core/split-register.c:1708
+#: ../src/register/ledger-core/split-register.c:1715
+#: ../src/register/ledger-core/split-register.c:1722
 msgid "Changed"
 msgstr "Geändert"
 
-#: ../src/register/ledger-core/split-register.c:1719
-#: ../src/register/ledger-core/split-register.c:1721
+#: ../src/register/ledger-core/split-register.c:1722
+#: ../src/register/ledger-core/split-register.c:1724
 msgid "_Value"
 msgstr "_Wert"
 
-#: ../src/register/ledger-core/split-register.c:1730
+#: ../src/register/ledger-core/split-register.c:1733
 msgid "_Recalculate"
 msgstr "_Berechnen"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:1983
+#: ../src/register/ledger-core/split-register.c:1986
 #: ../intl-scm/guile-strings.c:60
 msgid "Deposit"
 msgstr "Einzahlung"
 
-#: ../src/register/ledger-core/split-register.c:1984
+#: ../src/register/ledger-core/split-register.c:1987
 msgid "Withdraw"
 msgstr "Belastung"
 
-#: ../src/register/ledger-core/split-register.c:1985
+#: ../src/register/ledger-core/split-register.c:1988
 msgid "Check"
 msgstr "Scheck"
 
-#: ../src/register/ledger-core/split-register.c:1986
-#: ../src/register/ledger-core/split-register.c:2014
-#: ../src/register/ledger-core/split-register.c:2022
-#: ../src/register/ledger-core/split-register.c:2036
-#: ../src/register/ledger-core/split-register.c:2059
+#: ../src/register/ledger-core/split-register.c:1989
+#: ../src/register/ledger-core/split-register.c:2017
+#: ../src/register/ledger-core/split-register.c:2025
+#: ../src/register/ledger-core/split-register.c:2039
+#: ../src/register/ledger-core/split-register.c:2062
 msgid "Int"
 msgstr "Zins"
 
-#: ../src/register/ledger-core/split-register.c:1987
-#: ../src/register/ledger-core/split-register.c:2010
+#: ../src/register/ledger-core/split-register.c:1990
+#: ../src/register/ledger-core/split-register.c:2013
 msgid "ATM"
 msgstr "Geldautomat"
 
-#: ../src/register/ledger-core/split-register.c:1988
+#: ../src/register/ledger-core/split-register.c:1991
 msgid "Teller"
 msgstr "Bankschalter"
 
 #. Action: Point Of Sale
-#: ../src/register/ledger-core/split-register.c:1990
+#: ../src/register/ledger-core/split-register.c:1993
 msgid "POS"
 msgstr "Karten-Terminal"
 
-#: ../src/register/ledger-core/split-register.c:1991
+#: ../src/register/ledger-core/split-register.c:1994
 msgid "Phone"
 msgstr "Telefon"
 
-#: ../src/register/ledger-core/split-register.c:1992
-#: ../src/register/ledger-core/split-register.c:2015
+#: ../src/register/ledger-core/split-register.c:1995
+#: ../src/register/ledger-core/split-register.c:2018
 msgid "Online"
 msgstr "Online"
 
 #. Action: Automatic Deposit ?!?
-#: ../src/register/ledger-core/split-register.c:1994
+#: ../src/register/ledger-core/split-register.c:1997
 msgid "AutoDep"
 msgstr "Gutschrift"
 
-#: ../src/register/ledger-core/split-register.c:1995
+#: ../src/register/ledger-core/split-register.c:1998
 msgid "Wire"
 msgstr "Überweisung"
 
-#: ../src/register/ledger-core/split-register.c:1997
+#: ../src/register/ledger-core/split-register.c:2000
 msgid "Direct Debit"
 msgstr "Lastschrift"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2001
-#: ../src/register/ledger-core/split-register.c:2005
-#: ../src/register/ledger-core/split-register.c:2011
-#: ../src/register/ledger-core/split-register.c:2019
-#: ../src/register/ledger-core/split-register.c:2034
-#: ../src/register/ledger-core/split-register.c:2041
-#: ../src/register/ledger-core/split-register.c:2046
-#: ../src/register/ledger-core/split-register.c:2071
+#: ../src/register/ledger-core/split-register.c:2004
+#: ../src/register/ledger-core/split-register.c:2008
+#: ../src/register/ledger-core/split-register.c:2014
+#: ../src/register/ledger-core/split-register.c:2022
+#: ../src/register/ledger-core/split-register.c:2037
+#: ../src/register/ledger-core/split-register.c:2044
+#: ../src/register/ledger-core/split-register.c:2049
+#: ../src/register/ledger-core/split-register.c:2074
 #: ../intl-scm/guile-strings.c:70 ../intl-scm/guile-strings.c:72
 #: ../intl-scm/guile-strings.c:74
 msgid "Buy"
 msgstr "Kauf"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2002
-#: ../src/register/ledger-core/split-register.c:2006
-#: ../src/register/ledger-core/split-register.c:2016
-#: ../src/register/ledger-core/split-register.c:2020
-#: ../src/register/ledger-core/split-register.c:2035
-#: ../src/register/ledger-core/split-register.c:2042
-#: ../src/register/ledger-core/split-register.c:2047
-#: ../src/register/ledger-core/split-register.c:2072
+#: ../src/register/ledger-core/split-register.c:2005
+#: ../src/register/ledger-core/split-register.c:2009
+#: ../src/register/ledger-core/split-register.c:2019
+#: ../src/register/ledger-core/split-register.c:2023
+#: ../src/register/ledger-core/split-register.c:2038
+#: ../src/register/ledger-core/split-register.c:2045
+#: ../src/register/ledger-core/split-register.c:2050
+#: ../src/register/ledger-core/split-register.c:2075
 #: ../intl-scm/guile-strings.c:98 ../intl-scm/guile-strings.c:100
 #: ../intl-scm/guile-strings.c:102
 msgid "Sell"
 msgstr "Verkauf"
 
-#: ../src/register/ledger-core/split-register.c:2007
-#: ../src/register/ledger-core/split-register.c:2013
-#: ../src/register/ledger-core/split-register.c:2056
+#: ../src/register/ledger-core/split-register.c:2010
+#: ../src/register/ledger-core/split-register.c:2016
+#: ../src/register/ledger-core/split-register.c:2059
 msgid "Fee"
 msgstr "Gebühr"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2038
+#: ../src/register/ledger-core/split-register.c:2041
 #: ../intl-scm/guile-strings.c:106
 msgid "Rebate"
 msgstr "Rabatt"
 
 #. Action: Dividend
-#: ../src/register/ledger-core/split-register.c:2058
+#: ../src/register/ledger-core/split-register.c:2061
 msgid "Div"
 msgstr "Dividende"
 
 #. Action: Long Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2061
+#: ../src/register/ledger-core/split-register.c:2064
 msgid "LTCG"
 msgstr "Zinsen aus langfristigen Kapitalanlagen"
 
 #. Action: Short Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2063
+#: ../src/register/ledger-core/split-register.c:2066
 msgid "STCG"
 msgstr "Zinsen aus kurzfristigen Anlagen"
 
 #. Action: Distribution
-#: ../src/register/ledger-core/split-register.c:2066
+#: ../src/register/ledger-core/split-register.c:2069
 msgid "Dist"
 msgstr "Ausschüttung"
 
@@ -14531,18 +14540,18 @@ msgstr "Buchungsbetrag im _anderen Konto anpassen"
 msgid "_Rebalance"
 msgstr "_Anpassen"
 
-#: ../src/register/ledger-core/split-register-control.c:1038
+#: ../src/register/ledger-core/split-register-control.c:1043
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr ""
 "Sie müssen den Buchungssatz in die »Vollständig«-Ansicht aufklappen, um die "
 "Wechselkurse zu bearbeiten."
 
-#: ../src/register/ledger-core/split-register-control.c:1161
+#: ../src/register/ledger-core/split-register-control.c:1166
 msgid "Save the changed transaction?"
 msgstr "Geänderte Buchung speichern?"
 
-#: ../src/register/ledger-core/split-register-control.c:1163
+#: ../src/register/ledger-core/split-register-control.c:1168
 msgid ""
 "The current transaction has been changed.  Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -14552,19 +14561,19 @@ msgstr ""
 "abbrechen und zu der aktuellen Buchung zurückkehren, oder die Änderungen in "
 "dieser Buchung speichern?"
 
-#: ../src/register/ledger-core/split-register-control.c:1176
+#: ../src/register/ledger-core/split-register-control.c:1181
 msgid "_Discard Changes"
 msgstr "Änderungen ver_werfen"
 
-#: ../src/register/ledger-core/split-register-control.c:1178
+#: ../src/register/ledger-core/split-register-control.c:1183
 msgid "_Record Changes"
 msgstr "Änderungen _speichern"
 
-#: ../src/register/ledger-core/split-register-control.c:1459
+#: ../src/register/ledger-core/split-register-control.c:1464
 msgid "Mark split as unreconciled?"
 msgstr "Buchungsteil als nicht abgeglichen markieren?"
 
-#: ../src/register/ledger-core/split-register-control.c:1461
+#: ../src/register/ledger-core/split-register-control.c:1466
 msgid ""
 "You are about to mark a reconciled split as unreconciled.  Doing so might "
 "make future reconciliation difficult!  Continue with this change?"
@@ -14572,7 +14581,7 @@ msgstr ""
 "Wollen Sie diesen Buchungssatz wirklich als nicht abgeglichen markieren?  "
 "Dies kann das nächste Abgleichen erschweren.  Trotzdem fortsetzen?"
 
-#: ../src/register/ledger-core/split-register-control.c:1478
+#: ../src/register/ledger-core/split-register-control.c:1483
 msgid "_Unreconcile"
 msgstr "_Nicht abgeglichen"
 
