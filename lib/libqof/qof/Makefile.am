@@ -82,8 +82,6 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-QOFLIBdir = $(QOF_LIB_DIR)
-
 EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
@@ -91,7 +89,7 @@ EXTRA_DIST = \
 qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's#@-libdir-@#${QOFLIBdir}#g'
+                -e 's#@-libdir-@#${QOF_LIB_DIR}#g'
 	 mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
