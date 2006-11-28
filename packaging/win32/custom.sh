@@ -46,7 +46,7 @@ GNOME_MIRROR="ftp.gnome.org/pub/gnome"
 
 DTK_URL="$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
 
-MINGW_URL="$SF_MIRROR/mingw/MinGW-5.0.3.exe"
+MINGW_URL="$SF_MIRROR/mingw/MinGW-5.1.0.exe"
 MINGW_DIR=$GLOBAL_DIR\\mingw
 
 UNZIP_URL="$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
@@ -81,7 +81,7 @@ OPENSSL_DIR=$GLOBAL_DIR\\openssl
 PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
 PEXPORTS_DIR=$GLOBAL_DIR\\pexports
 
-LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.26.win32.zip"
+LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
 LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
 
 EXPAT_URL="ftp://ftp.jclark.com/pub/xml/expat.zip"
