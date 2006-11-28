@@ -179,7 +179,7 @@ function inst_dtk() {
             mv $file $_dst_file
         done
     fi
-    quiet ${_MSYS_UDIR}/perl --help || die "msys dtk not installed correctly"
+    quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
 }
 
 function inst_mingw() {
