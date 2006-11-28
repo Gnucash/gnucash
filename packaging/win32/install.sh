@@ -161,7 +161,8 @@ function inst_wget() {
 
 function inst_dtk() {
     setup MSYS DTK
-    if quiet perl --help
+    _MSYS_UDIR=`unix_path $MSYS_DIR`
+    if quiet ${_MSYS_UDIR}/perl --help
     then
         echo "msys dtk already installed.  skipping."
     else
@@ -178,7 +179,7 @@ function inst_dtk() {
             mv $file $_dst_file
         done
     fi
-    quiet perl --help || die "msys dtk not installed correctly"
+    quiet ${_MSYS_UDIR}/perl --help || die "msys dtk not installed correctly"
 }
 
 function inst_mingw() {
