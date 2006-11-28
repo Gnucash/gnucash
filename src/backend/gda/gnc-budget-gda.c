@@ -40,15 +40,23 @@
 #include "gnc-slots-gda.h"
 
 #include "gnc-budget.h"
+#include "Recurrence.h"
 
 #define BUDGET_TABLE "budgets"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static void retrieve_guid( gpointer pObject, const gpointer pValue );
+static gpointer get_recurrence_mult( gpointer pObject );
+static void set_recurrence_mult( gpointer pObject, const gpointer pValue );
+static gpointer get_recurrence_period_type( gpointer pObject );
+static void set_recurrence_period_type( gpointer pObject, const gpointer pValue );
+static gpointer get_recurrence_period_start( gpointer pObject );
+static void set_recurrence_period_start( gpointer pObject, const gpointer pValue );
 
 #define BUDGET_MAX_NAME_LEN 50
 #define BUDGET_MAX_DESCRIPTION_LEN 500
+#define BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN 50
 
 static col_cvt_t col_table[] =
 {
@@ -58,6 +66,12 @@ static col_cvt_t col_table[] =
 	{ "name",			CT_STRING,	BUDGET_MAX_NAME_LEN, COL_NNUL,	"name" },
 	{ "description",	CT_STRING,	BUDGET_MAX_DESCRIPTION_LEN, 0,	"description" },
 	{ "num_periods",	CT_INT,		0, COL_NNUL, "num_periods" },
+	{ "recurrence_mult", CT_INT,	0, COL_NNUL, NULL,
+			get_recurrence_mult, set_recurrence_mult },
+	{ "recurrence_period_type", CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN,
+			COL_NNUL, NULL, get_recurrence_period_type, set_recurrence_period_type },
+	{ "recurrence_period_start", CT_GDATE, 0, COL_NNUL, NULL,
+			get_recurrence_period_start, set_recurrence_period_start },
 	{ NULL }
 };
 
@@ -77,6 +91,66 @@ retrieve_guid( gpointer pObject, const gpointer pValue )
 	GUID* guid = (GUID*)pValue;
 
 	*ppGuid = guid;
+}
+
+static gpointer
+get_recurrence_mult( gpointer pObject )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	const Recurrence* r = gnc_budget_get_recurrence( budget );
+	guint m = r->mult;
+
+	return (gpointer)m;
+}
+
+static void
+set_recurrence_mult( gpointer pObject, gpointer pValue )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
+	guint m = (guint)pValue;
+
+	r->mult = m;
+}
+
+static gpointer
+get_recurrence_period_type( gpointer pObject )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	const Recurrence* r = gnc_budget_get_recurrence( budget );
+
+	return (gpointer)recurrencePeriodTypeToString(
+							recurrenceGetPeriodType( r ) );
+}
+
+static void
+set_recurrence_period_type( gpointer pObject, gpointer pValue )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
+
+	r->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
+}
+
+static gpointer
+get_recurrence_period_start( gpointer pObject )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	const Recurrence* r = gnc_budget_get_recurrence( budget );
+	static GDate date;
+
+	date = recurrenceGetDate( r );
+	return (gpointer)&date;
+}
+
+static void
+set_recurrence_period_start( gpointer pObject, gpointer pValue )
+{
+	GncBudget* budget = (GncBudget*)pObject;
+	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
+	GDate* date = (GDate*)pValue;
+
+	r->start = *date;
 }
 
 /* ================================================================= */

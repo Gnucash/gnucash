@@ -415,7 +415,7 @@ static col_type_handler_t guid_handler =
 		{ load_guid, render_guid, create_guid_col };
 /* ----------------------------------------------------------------- */
 static void
-load_date( GdaDataModel* pModel, gint row,
+load_timespec( GdaDataModel* pModel, gint row,
 			QofSetterFunc setter, gpointer pObject,
 			const col_cvt_t* table )
 {
@@ -436,7 +436,7 @@ load_date( GdaDataModel* pModel, gint row,
 }
 
 static gchar*
-render_date( QofIdTypeConst obj_name, gpointer pObject,
+render_timespec( QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, gboolean include_name )
 {
 	gchar* buf;
@@ -464,7 +464,7 @@ render_date( QofIdTypeConst obj_name, gpointer pObject,
 }
 
 static void
-create_date_col( GdaServerProvider* server, GdaConnection* cnn,
+create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
 			xmlNodePtr array_data, const col_cvt_t* table_row )
 {
 	const gchar* dbms_type;
@@ -475,8 +475,54 @@ create_date_col( GdaServerProvider* server, GdaConnection* cnn,
 					dbms_type, table_row->size, table_row->flags );
 }
 
+static col_type_handler_t timespec_handler =
+		{ load_timespec, render_timespec, create_timespec_col };
+/* ----------------------------------------------------------------- */
+static void
+load_date( GdaDataModel* pModel, gint row,
+			QofSetterFunc setter, gpointer pObject,
+			const col_cvt_t* table )
+{
+	const GValue* val;
+	GDate* date;
+
+	val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	if( gda_value_is_null( val ) ) {
+		(*setter)( pObject, NULL );
+	} else {
+		date = (GDate*)g_value_get_boxed( val );
+		(*setter)( pObject, date );
+	}
+}
+
+static gchar*
+render_date( QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+	GDate* date;
+
+	if( include_name ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	date = (GDate*)(*table_row->getter)( pObject );
+	if( date != NULL ) {
+		buf = g_strdup_printf( "%s%s'%d-%d-%d'", col_name, equals,
+									g_date_get_year( date ),
+									g_date_get_month( date ),
+									g_date_get_day( date ) );
+	} else {
+		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+	}
+
+	return buf;
+}
+
 static col_type_handler_t date_handler =
-		{ load_date, render_date, create_date_col };
+		{ load_date, render_date, create_timespec_col };
 /* ----------------------------------------------------------------- */
 static void
 load_numeric( GdaDataModel* pModel, gint row,
@@ -594,6 +640,10 @@ get_handler( int col_type )
 			break;
 				
 		case CT_TIMESPEC:
+			pHandler = &timespec_handler;
+			break;
+
+		case CT_GDATE:
 			pHandler = &date_handler;
 			break;
 

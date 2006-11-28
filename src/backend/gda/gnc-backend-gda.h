@@ -82,6 +82,7 @@ typedef enum {
 	CT_INT,
 	CT_INT64,
 	CT_TIMESPEC,
+	CT_GDATE,
 	CT_NUMERIC,
 	CT_DOUBLE,
 	CT_BOOLEAN
