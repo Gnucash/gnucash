@@ -170,14 +170,15 @@ load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 static void
 load_prices( GncGdaBackend* be )
 {
-	gchar* buf;
+	static GdaQuery* query;
 	GdaObject* ret;
 	QofBook* pBook = be->primary_book;
 	GNCPriceDB* pPriceDB = gnc_book_get_pricedb( pBook );
 
-	buf = g_strdup_printf( "SELECT * FROM %s", TABLE_NAME );
-	ret = gnc_gda_execute_sql( be, buf );
-	g_free( buf );
+	if( query == NULL ) {
+		query = gnc_gda_create_select_query( be, TABLE_NAME );
+	}
+	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );

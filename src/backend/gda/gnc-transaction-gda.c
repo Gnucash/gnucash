@@ -58,7 +58,6 @@ typedef struct {
 
 static gpointer get_guid( gpointer pObject );
 static void set_guid( gpointer pObject, const gpointer pValue );
-static void retrieve_guid( gpointer pObject, const gpointer pValue );
 static gpointer get_tx_currency( gpointer pObject );
 static void set_tx_currency( gpointer pObject, const gpointer pValue );
 static gpointer get_tx_num( gpointer pObject );
@@ -86,13 +85,6 @@ static col_cvt_t tx_col_table[] =
 	{ "description",	CT_STRING,	TX_MAX_DESCRIPTION_LEN, 0,	NULL,
 			(GNC_GDA_FN_GETTER)xaccTransGetDescription,
 			(GNC_GDA_FN_SETTER)xaccTransSetDescription },
-	{ NULL }
-};
-
-// Table to retrieve just the guid
-static col_cvt_t guid_table[] =
-{
-	{ "guid", CT_GUID, 0, 0, NULL, NULL, retrieve_guid },
 	{ NULL }
 };
 
@@ -153,15 +145,6 @@ set_guid( gpointer pObject, const gpointer pValue )
 	GUID* guid = (GUID*)pValue;
 
 	qof_entity_set_guid( pEntity, guid );
-}
-
-static void 
-retrieve_guid( gpointer pObject, const gpointer pValue )
-{
-	GUID** ppGuid = (GUID**)pObject;
-	GUID* guid = (GUID*)pValue;
-
-	*ppGuid = guid;
 }
 
 static gpointer
@@ -365,7 +348,7 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 	const GUID* guid;
 	GUID split_guid;
 
-	gnc_gda_load_object( pModel, row, GNC_ID_SPLIT, &guid, guid_table );
+	guid = gnc_gda_load_guid( pModel, row );
 	split_guid = *guid;
 
 	if( pSplit == NULL ) {
@@ -413,7 +396,7 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 	const GUID* guid;
 	GUID tx_guid;
 
-	gnc_gda_load_object( pModel, row, GNC_ID_TRANS, &guid, guid_table );
+	guid = gnc_gda_load_guid( pModel, row );
 	tx_guid = *guid;
 
 	if( pTx == NULL ) {

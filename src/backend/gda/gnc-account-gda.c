@@ -49,7 +49,6 @@ static gpointer get_commodity( gpointer pObject );
 static void set_commodity( gpointer pObject, const gpointer pValue );
 static gpointer get_parent( gpointer pObject );
 static void set_parent( gpointer pObject, const gpointer pValue );
-static void retrieve_guid( gpointer pObject, const gpointer pValue );
 
 #define ACCOUNT_MAX_NAME_LEN 50
 #define ACCOUNT_MAX_TYPE_LEN 50
@@ -71,24 +70,7 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-// Table to retrieve just the guid
-static col_cvt_t guid_table[] =
-{
-	{ "guid", CT_GUID, 0, 0, NULL, NULL, retrieve_guid },
-	{ NULL }
-};
-
-
 /* ================================================================= */
-static void 
-retrieve_guid( gpointer pObject, const gpointer pValue )
-{
-	GUID** ppGuid = (GUID**)pObject;
-	GUID* guid = (GUID*)pValue;
-
-	*ppGuid = guid;
-}
-
 static gpointer
 get_commodity( gpointer pObject )
 {
@@ -149,7 +131,7 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 	const GUID* guid;
 	GUID acc_guid;
 
-	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, &guid, guid_table );
+	guid = gnc_gda_load_guid( pModel, row );
 	acc_guid = *guid;
 
 	if( pAccount == NULL ) {
@@ -170,14 +152,17 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 static void
 load_accounts( GncGdaBackend* be )
 {
-	gchar* buf;
+	static GdaQuery* query = NULL;
 	GdaObject* ret;
 	QofBook* pBook = be->primary_book;
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
 
-	buf = g_strdup_printf( "SELECT * FROM %s", TABLE_NAME );
-	ret = gnc_gda_execute_sql( be, buf );
-	g_free( buf );
+	/* First time, create the query */
+	if( query == NULL ) {
+		query = gnc_gda_create_select_query( be, TABLE_NAME );
+	}
+
+	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );

@@ -41,6 +41,10 @@ struct GncGdaBackend_struct
   GdaConnection* pConnection;
   GdaDict* pDict;
 
+  GdaDataHandler* pStrHandler;
+  GdaDataHandler* pNumHandler;
+  GdaDataHandler* pDateHandler;
+
   QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
 };
@@ -144,6 +148,8 @@ gboolean gnc_gda_create_table( GdaConnection* pConnection,
 						GError** error );
 void gnc_gda_create_table_if_needed( GncGdaBackend* be,
 						const gchar* table_name, col_cvt_t* col_table );
+const GUID* gnc_gda_load_guid( GdaDataModel* pModel, int row );
+GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);

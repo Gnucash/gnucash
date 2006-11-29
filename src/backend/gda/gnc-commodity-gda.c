@@ -129,13 +129,14 @@ load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
 static void
 load_commodities( GncGdaBackend* be )
 {
-	gchar* buf;
+	static GdaQuery* query;
 	GdaObject* ret;
 	gnc_commodity_table* pTable = gnc_commodity_table_get_table( be->primary_book );
 
-	buf = g_strdup_printf( "SELECT * FROM %s", COMMODITIES_TABLE );
-	ret = gnc_gda_execute_sql( be, buf );
-	g_free( buf );
+	if( query == NULL ) {
+		query = gnc_gda_create_select_query( be, COMMODITIES_TABLE );
+	}
+	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
 		GdaDataModel* pModel = (GdaDataModel*)ret;
 		int numRows = gda_data_model_get_n_rows( pModel );

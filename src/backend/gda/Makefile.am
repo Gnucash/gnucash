@@ -22,6 +22,7 @@ libgnc_backend_gda_la_SOURCES = \
   gnc-commodity-gda.c \
   gnc-lots-gda.c \
   gnc-price-gda.c \
+  gnc-schedxaction-gda.c \
   gnc-slots-gda.c \
   gnc-transaction-gda.c
 
