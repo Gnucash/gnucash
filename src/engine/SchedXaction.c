@@ -187,12 +187,12 @@ gnc_sx_begin_edit (SchedXaction *sx)
   qof_begin_edit (&sx->inst);
 }
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
 
-static inline void noop (QofInstance *inst) {}
+static void noop (QofInstance *inst) {}
 
 void
 gnc_sx_commit_edit (SchedXaction *sx)

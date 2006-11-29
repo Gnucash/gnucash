@@ -508,14 +508,14 @@ void gncTaxTableBeginEdit (GncTaxTable *table)
   QOF_BEGIN_EDIT (&table->inst);
 }
 
-static inline void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
+static void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("TaxTable QofBackend Failure: %d", errcode);
 }
 
-static inline void gncTaxTableOnDone (QofInstance *inst) {}
+static void gncTaxTableOnDone (QofInstance *inst) {}
 
-static inline void table_free (QofInstance *inst)
+static void table_free (QofInstance *inst)
 {
   GncTaxTable *table = (GncTaxTable *) inst;
   gncTaxTableFree (table);
