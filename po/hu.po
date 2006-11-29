@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-11-27 10:48+0100\n"
-"PO-Revision-Date: 2006-08-06 18:10+0200\n"
+"PO-Revision-Date: 2006-11-28 22:39+0100\n"
 "Last-Translator: Sulyok Peti <peti@sulyok.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -4419,9 +4419,8 @@ msgid "_Move to:"
 msgstr "_Mozgatás:"
 
 #: ../src/gnome/glade/account.glade.h:83
-#, fuzzy
 msgid "_Renumber"
-msgstr "Szá_m"
+msgstr "Ú_jraszámozás"
 
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:260
@@ -7961,7 +7960,6 @@ msgid "How many days in advance to remind the user."
 msgstr "Hány nappal előre emlékeztesse a használót."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:3
-#, fuzzy
 msgid ""
 "If active, any newly created scheduled transaction will have its 'auto "
 "create' flag set active by default. The user can change this flag during "
@@ -7971,10 +7969,9 @@ msgstr ""
 "IGAZ-ra állítva alapértelmezésbe minden újonnan teremtett időzített "
 "tranzakcióra beállítják az „auto teremtés” jelzést. A használók "
 "megváltoztathatják ezt a tranzakció előtti jelzést tranzakció teremtésekor, "
-"vagy bármely későbbi időpontban a tranzakció szerkesztésekor."
+"vagy bármely későbbi időpontban az időzített tranzakció szerkesztésekor."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:4
-#, fuzzy
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -7984,8 +7981,8 @@ msgstr ""
 "IGAZ-ra állítva alapértelmezésbe minden újonnan teremtett időzített "
 "tranzakcióra beállítják a „emlékeztetés” jelzést. A használók "
 "megváltoztathatják ezt a tranzakció előtti jelzést tranzakció teremtésekor, "
-"vagy bármely későbbi időpontban a tranzakció szerkesztésekor. Ennek a "
-"beállításnak csak a auto_teremtés beállítás IGAZ értéke esetén van értelme."
+"vagy bármely későbbi időpontban az időzített tranzakció szerkesztésekor. Ennek "
+"a beállításnak csak a auto_teremtés beállítás IGAZ értéke esetén van értelme."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:5
 msgid "Set the \"auto create\" flag by default"
@@ -8000,7 +7997,6 @@ msgid "Show \"since last run\" dialog when a file is opened."
 msgstr "Az „Utolsó futás óta” ablak megjelenítése a fájl megnyitásakor."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in.h:8
-#, fuzzy
 msgid ""
 "This setting controls whether the scheduled transactions \"since last run\" "
 "dialog is shown automatically when a data file is opened. This includes the "
@@ -8009,8 +8005,8 @@ msgid ""
 msgstr ""
 "Megjelenjen-e az időzített tranzakciók „Utolsó futás óta” dialógusa, amikor "
 "adatfájlt megnyitnak. Ebbe beleértendő GnuCash indulása is, amikor a kezdő "
-"adatfájl nyílik. Az IGAZ érték jelenti a dialógus megjelenítését; a HAMIS "
-"érték esetén nem jelenik meg a dialógus."
+"adatfájl nyílik. Amikor ezen érték aktív a dialógus megjelenik, különben "
+"nem jelenik meg."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:1
 msgid ""
@@ -9011,9 +9007,8 @@ msgstr "Nem lehetett nyitóegyenleget létrehozni."
 
 #. primary label
 #: ../src/gnome-utils/dialog-account.c:607
-#, fuzzy
 msgid "Give the children the same type?"
-msgstr "Elmeti a jelenlegi tételt?"
+msgstr "A gyerekek típusa is ugyanez?"
 
 #. secondary label
 #: ../src/gnome-utils/dialog-account.c:625
@@ -9022,12 +9017,13 @@ msgid ""
 "The children of the edited account have to be changed to type \"%s\" to make "
 "them compatible."
 msgstr ""
+"A szerkesztett számla gyermekeit „%s” típusra kell változtatni, hogy "
+"kompatíbilis legyen."
 
 #. children
 #: ../src/gnome-utils/dialog-account.c:636
-#, fuzzy
 msgid "_Show children accounts"
-msgstr "_Rejtett számlák megjelenítése"
+msgstr "_Gyerekszámlák megjelenítése"
 
 #: ../src/gnome-utils/dialog-account.c:709
 msgid "The account must be given a name."
@@ -9050,6 +9046,7 @@ msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
 msgstr ""
+"A kiválasztott számla típusa nem kompatíbilis a kiválasztott szülőével."
 
 #: ../src/gnome-utils/dialog-account.c:766
 msgid "You must choose a commodity."
@@ -9392,10 +9389,26 @@ msgid ""
 "Press 'Forward' now to select the correct character encoding for your data "
 "file."
 msgstr ""
+"A betölteni kívánt fájl a GnuCash egy korábbi változatából való. A régi "
+"fájlformátum nem tartalmazta a használt betűkódolás részletes leírását. "
+"Ez azt jelenti, hogy az adatfájlokban lévő szövegeket többértelműen lehet "
+"beolvasni. Ez e többértelműség nem oldható fel önműködően, de az új GnuCash "
+"2.0.0 fájlformátum minden szükséges leírást tartalmaz, úgyhogy ezután már "
+"nem kell újra elvégezni e lépéseket.\n"
+"\n"
+"GnuCash megpróbálja kitalálni a helyes betűkódolást az adatfájlhoz. A "
+"következő lapon GnuCash megjeleníti a találgatás eredményét. Önnek kell "
+"ellenőriznie, hogy a szavak a várt módon tűnnek-e fel. Vagy minden jól néz "
+"ki, és egyszerűen „Tovább”-ot nyomhat; vagy a szavak váratlan betűket "
+"tartalmaznak, amely esetben más betűkódolást kell választania, hogy más "
+"eredményt lásson. Szerkesztheti is a kódolások listáját a megfelelő "
+"gombra kattintva.\n"
+"\n"
+"Nyomjon „Tovább”-ot az adatfájl helyes betűkódolásának kiválasztásához."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:209
 msgid "Ambiguous character encoding"
-msgstr ""
+msgstr "Többértelmű betűkódolás"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:212
 msgid ""
@@ -9896,7 +9909,6 @@ msgid "Choose a file to import"
 msgstr "Behozandó fájl kiválasztása"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:5
-#, fuzzy
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate GnuCash files.\n"
@@ -9908,7 +9920,7 @@ msgstr ""
 "Ez akkor szükséges, ha a számlák külön GnuCash-fájlokban vannak.\n"
 "\n"
 "Nyomjon „Tovább”-ot a fájlok betöltésének befejezéséhez és a \n"
-"továbblépéshez GnuCash XML importálási eljárásban. "
+"továbblépéshez GnuCash adatfájl importálási eljárásban. "
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:8
 msgid "Convert the file"
@@ -9927,19 +9939,16 @@ msgid "Edit the list of encodings"
 msgstr "Kódolások listájának szerkesztése"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
-#, fuzzy
 msgid "Finish GnuCash Datafile Import"
-msgstr "GnuCash XML import befejezése"
+msgstr "GnuCash adatfájl import befejezése"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
-#, fuzzy
 msgid "GnuCash Datafile Import Druid"
-msgstr "GnuCash XML import tündér"
+msgstr "GnuCash adatfájl import tündér"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
-#, fuzzy
 msgid "GnuCash data files you have loaded"
-msgstr "Betöltött GnuCash XML fájlok"
+msgstr "Betöltött GnuCash adatfájlok"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:15
 #: ../src/import-export/qif-import/qif.glade.h:48
@@ -11116,9 +11125,9 @@ msgstr ""
 "fájlra, és hogy van-e elég hely az elkészítéséhez."
 
 #: ../src/gnome-utils/gnc-file.c:451
-#, fuzzy, c-format
+#, c-format
 msgid "No read permission to read from file %s."
-msgstr "Önnek nincs hozzáférési joga %s fájlhoz:"
+msgstr "Önnek nincs olvasási joga %s fájlhoz:"
 
 #: ../src/gnome-utils/gnc-file.c:456
 msgid ""
@@ -11219,6 +11228,8 @@ msgid ""
 "GnuCash could not find the files for the help documentation.  This is likely "
 "because the 'gnucash-docs' package is not installed."
 msgstr ""
+"GnuCash nem találta a súgó dokumentáció fájljait. Valószínűleg azért, mert "
+"a „gnucash-docs” csomagot nem telepítették."
 
 #: ../src/gnome-utils/gnc-html.c:107
 msgid "Not found"
@@ -14048,6 +14059,7 @@ msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
 msgstr ""
+"E tranzakciót már szerkeszti egy másik regiszterben. Kérem először fejezze be azt!"
 
 #: ../src/register/ledger-core/split-register.c:408
 msgid "Save transaction before duplicating?"
@@ -18667,19 +18679,17 @@ msgstr "Kosár jelentés"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:2682
-#, fuzzy
 msgid "Bgt"
-msgstr "Kosár"
+msgstr "Ksr"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:2684
-#, fuzzy
 msgid "Act"
-msgstr "Művelet"
+msgstr "Műv"
 
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:2686
-#, fuzzy, c-format
+#, c-format
 msgid "%s: %s"
 msgstr "%s - %s"
 
@@ -20161,6 +20171,8 @@ msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"A számlák menü felhozásához a regiszterlap átvitel mezőjében nyomja meg "
+"a Menü gombot vagy a Ctrl-Le billentyűkombinációt!"
 
 #: ../doc/tip_of_the_day.list.in:76
 msgid ""
