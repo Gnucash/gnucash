@@ -3439,21 +3439,17 @@ gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 {
 	GncMainWindow *window;
 	GncMainWindowPrivate *priv;
-	GList *winp, *tmp;
-	GSList *widgetp, *toplevels;
+	GList *groupp, *groups, *winp, *tmp;
 	GtkWidget *close_button;
 
 	for (winp = active_windows; winp; winp = g_list_next(winp)) {
 	  window = winp->data;
 	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	  toplevels = gtk_ui_manager_get_toplevels(window->ui_merge,
-						   GTK_UI_MANAGER_MENUBAR |
-						   GTK_UI_MANAGER_TOOLBAR |
-						   GTK_UI_MANAGER_POPUP);
-	  for (widgetp = toplevels; widgetp; widgetp = g_slist_next(widgetp)) {
-	    gtk_widget_set_sensitive (widgetp->data, sensitive);
+
+	  groups = gtk_ui_manager_get_action_groups(window->ui_merge);
+	  for (groupp = groups; groupp; groupp = g_list_next(groupp)) {
+	    gtk_action_group_set_sensitive(GTK_ACTION_GROUP(groupp->data), sensitive);
 	  }
-	  g_slist_free(toplevels);
 
 	  for (tmp = priv->installed_pages; tmp; tmp = g_list_next(tmp)) {
 	    close_button = g_object_get_data(tmp->data, PLUGIN_PAGE_CLOSE_BUTTON);
