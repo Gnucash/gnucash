@@ -99,11 +99,15 @@ typedef gchar* (*GNC_GDA_RENDER_FN)( GncGdaBackend* be, QofIdTypeConst obj_name,
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
 						GdaConnection* cnn, xmlNodePtr array_data,
 						const col_cvt_t* table_row );
+typedef void (*GNC_GDA_GET_GVALUE_FN)( GncGdaBackend* be,
+				QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value );
 
 typedef struct {
 	GNC_GDA_LOAD_FN			load_fn;
 	GNC_GDA_RENDER_FN		render_fn;
 	GNC_GDA_CREATE_COL_FN	create_col_fn;
+	GNC_GDA_GET_GVALUE_FN	get_gvalue_fn;
 } col_type_handler_t;
 
 
@@ -126,23 +130,15 @@ load_string( GdaDataModel* pModel, gint row,
 	(*setter)( pObject, (const gpointer)s );
 }
 
-static gchar*
-render_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	QofAccessFunc getter;
 	gchar* s;
-	GValue value;
 
-	memset( &value, 0, sizeof( value ) );
+	memset( value, 0, sizeof( GValue ) );
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	if( table_row->param_name != NULL ) {
 		getter = qof_class_get_parameter_getter( obj_name,
 												table_row->param_name );
@@ -151,8 +147,27 @@ render_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 		s = (gchar*)(*table_row->getter)( pObject );
 	}
 	if( s ) {
-		g_value_init( &value, G_TYPE_STRING );
-		g_value_set_string( &value, s );
+		g_value_init( value, G_TYPE_STRING );
+		g_value_set_string( value, s );
+	}
+}
+
+static gchar*
+render_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+	gchar* s;
+	GValue value;
+
+	if( include_name ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	get_gvalue_string( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) == G_TYPE_STRING ) {
 		s = gda_data_handler_get_sql_from_value( be->pStrHandler, &value );
 		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
 		g_free( s );
@@ -176,7 +191,7 @@ create_string_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t string_handler
-	= { load_string, render_string, create_string_col };
+	= { load_string, render_string, create_string_col, get_gvalue_string };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -196,22 +211,13 @@ load_int( GdaDataModel* pModel, gint row,
 	(*setter)( pObject, (gpointer)int_value );
 }
 
-static gchar*
-render_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	gint int_value;
 	QofAccessFunc getter;
-	GValue value;
-	gchar* s;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	if( table_row->param_name != NULL ) {
 		getter = qof_class_get_parameter_getter( obj_name,
 												table_row->param_name );
@@ -219,12 +225,33 @@ render_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	} else {
 		int_value = (gint)(*table_row->getter)( pObject );
 	}
-	memset( &value, 0, sizeof( value ) );
-	g_value_init( &value, G_TYPE_INT );
-	g_value_set_int( &value, int_value );
-	s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
-	buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-	g_free( s );
+	memset( value, 0, sizeof( GValue ) );
+	g_value_init( value, G_TYPE_INT );
+	g_value_set_int( value, int_value );
+}
+
+static gchar*
+render_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, gboolean include_name )
+{
+	gchar* buf;
+	const gchar* col_name = "";
+	const gchar* equals = "";
+	GValue value;
+	gchar* s;
+
+	if( include_name ) {
+		col_name = table_row->col_name;
+		equals = "=";
+	}
+	get_gvalue_int( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) == G_TYPE_INT ) {
+		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
+		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
+		g_free( s );
+	} else {
+		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+	}
 
 	return buf;
 }
@@ -242,7 +269,7 @@ create_int_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t int_handler =
-		{ load_int, render_int, create_int_col };
+		{ load_int, render_int, create_int_col, get_gvalue_int };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -262,6 +289,24 @@ load_int64( GdaDataModel* pModel, gint row,
 	}
 }
 
+static void
+get_gvalue_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
+{
+	gint64* pInt64;
+	gint64 i64_value;
+
+	memset( value, 0, sizeof( GValue ) );
+	pInt64 = (*table_row->getter)( pObject );
+	if( pInt64 != NULL ) {
+		gchar* s;
+
+		i64_value = *pInt64;
+		g_value_init( value, G_TYPE_INT64 );
+		g_value_set_int64( value, i64_value );
+	}
+}
+
 static gchar*
 render_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, gboolean include_name )
@@ -269,22 +314,16 @@ render_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	gchar* buf;
 	const gchar* col_name = "";
 	const gchar* equals = "";
-	gint64* pInt64;
-	gint64 i64_value;
 	GValue value;
 
 	if( include_name ) {
 		col_name = table_row->col_name;
 		equals = "=";
 	}
-	pInt64 = (*table_row->getter)( pObject );
-	if( pInt64 != NULL ) {
+	get_gvalue_int64( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) == G_TYPE_INT64 ) {
 		gchar* s;
 
-		i64_value = *pInt64;
-		memset( &value, 0, sizeof( value ) );
-		g_value_init( &value, G_TYPE_INT64 );
-		g_value_set_int64( &value, i64_value );
 		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
 		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
 		g_free( s );
@@ -308,7 +347,7 @@ create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t int64_handler =
-		{ load_int64, render_int64, create_int64_col };
+		{ load_int64, render_int64, create_int64_col, get_gvalue_int64 };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -328,6 +367,23 @@ load_double( GdaDataModel* pModel, gint row,
 	}
 }
 
+static void
+get_gvalue_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
+{
+	gdouble* pDouble;
+	gdouble d_value;
+
+	memset( value, 0, sizeof( GValue ) );
+
+	pDouble = (*table_row->getter)( pObject );
+	if( pDouble != NULL ) {
+		d_value = *pDouble;
+		g_value_init( value, G_TYPE_DOUBLE );
+		g_value_set_double( value, d_value );
+	}
+}
+
 static gchar*
 render_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, gboolean include_name )
@@ -335,22 +391,16 @@ render_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	gchar* buf;
 	const gchar* col_name = "";
 	const gchar* equals = "";
-	gdouble* pDouble;
-	gdouble d_value;
 	GValue value;
 
 	if( include_name ) {
 		col_name = table_row->col_name;
 		equals = "=";
 	}
-	pDouble = (*table_row->getter)( pObject );
-	if( pDouble != NULL ) {
+	get_gvalue_double( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) == G_TYPE_DOUBLE ) {
 		gchar* s;
 
-		d_value = *pDouble;
-		memset( &value, 0, sizeof( value ) );
-		g_value_init( &value, G_TYPE_DOUBLE );
-		g_value_set_double( &value, d_value );
 		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
 		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
 		g_free( s );
@@ -374,7 +424,7 @@ create_double_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t double_handler =
-		{ load_double, render_double, create_double_col };
+		{ load_double, render_double, create_double_col, get_gvalue_double };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -396,6 +446,27 @@ load_guid( GdaDataModel* pModel, gint row,
 	(*setter)( pObject, (gpointer)pGuid );
 }
 
+static void
+get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
+{
+	const GUID* guid;
+	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
+	memset( value, 0, sizeof( GValue ) );
+
+	if( table_row->getter != NULL ) {
+		guid = (*table_row->getter)( pObject );
+	} else {
+		guid = NULL;
+	}
+	if( guid != NULL ) {
+		(void)guid_to_string_buff( guid, guid_buf );
+		g_value_init( value, G_TYPE_STRING );
+		g_value_set_string( value, guid_buf );
+	}
+}
+
 static gchar*
 render_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, gboolean include_name )
@@ -412,16 +483,8 @@ render_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 		col_name = table_row->col_name;
 		equals = "=";
 	}
-	if( table_row->getter != NULL ) {
-		guid = (*table_row->getter)( pObject );
-	} else {
-		guid = NULL;
-	}
-	if( guid != NULL ) {
-		(void)guid_to_string_buff( guid, guid_buf );
-		memset( &value, 0, sizeof( value ) );
-		g_value_init( &value, G_TYPE_STRING );
-		g_value_set_string( &value, guid_buf );
+	get_gvalue_guid( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) == G_TYPE_STRING ) {
 		s = gda_data_handler_get_sql_from_value( be->pStrHandler, &value );
 		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
 		g_free( s );
@@ -441,7 +504,7 @@ create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t guid_handler =
-		{ load_guid, render_guid, create_guid_col };
+		{ load_guid, render_guid, create_guid_col, get_gvalue_guid };
 /* ----------------------------------------------------------------- */
 static void
 load_timespec( GdaDataModel* pModel, gint row,
@@ -789,7 +852,6 @@ gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name )
 	GdaQuery* query;
 	GdaQueryTarget* target;
 	GdaQueryField* allFields;
-	GdaQueryField* key;
 
 	/* SELECT */
 	query = gda_query_new( be->pDict );
@@ -872,6 +934,16 @@ render_col_value( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 
 	buf = pHandler->render_fn( be, obj_name, pObject, table_row, include_name );
 	return buf;
+}
+
+static void
+get_col_gvalue( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
+{
+	col_type_handler_t* pHandler;
+	pHandler = get_handler( table_row->col_type );
+
+	pHandler->get_gvalue_fn( be, obj_name, pObject, table_row, value );
 }
 
 gboolean
@@ -1008,20 +1080,43 @@ gnc_gda_build_delete_query( GncGdaBackend* be,
 							QofIdTypeConst obj_name, gpointer pObject,
 							const col_cvt_t* table )
 {
-	gchar* sql;
-	GError* error = NULL;
 	GdaQuery* query;
-	gchar* col_value;
+	GdaQueryTarget* target;
+	GdaQueryCondition* cond;
+	GdaQueryField* key;
+	GdaQueryField* key_value;
+	GValue value;
 
-	col_value = render_col_value( be, obj_name, pObject, &table[0], TRUE );
-	sql = g_strdup_printf( "DELETE FROM %s WHERE %s;", table_name, col_value );
-	g_free( col_value );
+	/* DELETE */
+	query = gda_query_new( be->pDict );
+	gda_query_set_query_type( query, GDA_QUERY_TYPE_DELETE );
 
-	query = gda_query_new_from_sql( be->pDict, sql, &error );
-	g_free( sql );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
+	/* FROM */
+	target = gda_query_target_new( query, table_name );
+	gda_query_add_target( query, target, NULL );
+	g_object_unref( G_OBJECT(target) );
+
+	/* WHERE */
+	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_LEAF_EQUAL );
+	gda_query_set_condition( query, cond );
+	g_object_unref( G_OBJECT(cond) );
+
+	key = gda_query_field_field_new( query, table[0].col_name );
+	gda_query_field_set_visible( key, TRUE );
+	gda_query_condition_leaf_set_operator( cond,
+											GDA_QUERY_CONDITION_OP_LEFT,
+											GDA_QUERY_FIELD(key) );
+	g_object_unref( G_OBJECT(key) );
+
+	key_value = gda_query_field_value_new( query, G_TYPE_STRING );
+	gda_query_field_set_visible( key_value, TRUE );
+	gda_query_condition_leaf_set_operator( cond, GDA_QUERY_CONDITION_OP_RIGHT,
+												GDA_QUERY_FIELD(key_value) );
+	g_object_unref( G_OBJECT(key_value) );
+
+	get_col_gvalue( be, obj_name, pObject, &table[0], &value );
+	gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(key_value), &value );
+
 	return query;
 }
 

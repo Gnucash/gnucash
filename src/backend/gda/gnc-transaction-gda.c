@@ -552,13 +552,14 @@ commit_transaction( GncGdaBackend* be, QofInstance* inst )
 	guid = qof_instance_get_guid( inst );
 
 	// Delete any old slots and splits for this transaction
-	gnc_gda_slots_delete( be, guid );
 	delete_splits( be, pTx );
 
 	if( !inst->do_free ) {
 		// Now, commit any slots and splits
 		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
 		save_splits( be, guid, xaccTransGetSplitList( pTx ) );
+	} else {
+		gnc_gda_slots_delete( be, guid );
 	}
 }
 

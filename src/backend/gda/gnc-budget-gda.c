@@ -206,11 +206,11 @@ commit_budget( GncGdaBackend* be, QofInstance* inst )
 	// Delete old slot info
 	guid = qof_instance_get_guid( inst );
 
-	gnc_gda_slots_delete( be, guid );
-
 	// Now, commit any slots
 	if( !inst->do_free ) {
 		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+	} else {
+		gnc_gda_slots_delete( be, guid );
 	}
 }
 
