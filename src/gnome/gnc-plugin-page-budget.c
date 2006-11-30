@@ -737,7 +737,7 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
         return TRUE;
 
     ENTER(" ");
-	gnc_budget_begin_edit();
+	gnc_budget_begin_edit( priv->budget );
     name = gnc_dialog_get_string(d, "BudgetName");
     if (name) {
         gnc_budget_set_name(priv->budget, name);
@@ -757,7 +757,7 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
     r = gnc_recurrence_get(gr);
     gnc_budget_set_recurrence(priv->budget, r);
 
-	gnc_budget_commit_edit();
+	gnc_budget_commit_edit( priv->budget );
 
     LEAVE(" ");
     return TRUE;

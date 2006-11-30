@@ -77,13 +77,13 @@ gnc_budget_free(QofInstance *inst)
 
 static inline void noop (QofInstance *inst) {}
 
-static void
+void
 gnc_budget_begin_edit(GncBudget *bgt)
 {
     qof_begin_edit(QOF_INSTANCE(bgt));
 }
 
-static void
+void
 gnc_budget_commit_edit(GncBudget *bgt)
 {
     if (!qof_commit_edit(QOF_INSTANCE(bgt))) return;
