@@ -63,6 +63,7 @@ struct _QofSession
   /* Pointer to the backend that is actually used to move data
    * between the persistant store and the local engine.  */
   QofBackend *backend;
+  gint lock;
 };
 
 

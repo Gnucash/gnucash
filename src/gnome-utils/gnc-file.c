@@ -1157,5 +1157,6 @@ gnc_file_set_shutdown_callback (GNCShutdownCB cb)
 gboolean
 gnc_file_save_in_progress (void)
 {
-  return (save_in_progress > 0);
+    QofSession *session = gnc_get_current_session();
+    return (qof_session_save_in_progress(session) || save_in_progress > 0);
 }
