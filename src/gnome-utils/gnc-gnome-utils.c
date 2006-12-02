@@ -33,7 +33,6 @@
 
 #include "gnc-html-graph-gog.h"
 
-#include "argv-list-converters.h"
 #include "druid-gconf-setup.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"

@@ -29,7 +29,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
-  argv-list-converters.c \
   dialog-account.c \
   dialog-commodity.c \
   dialog-options.c \
@@ -157,7 +156,6 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
-  argv-list-converters.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
