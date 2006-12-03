@@ -16,6 +16,24 @@
 	forked gzip process is finished, and it only knows how to keep
 	track of one child pid at a time.
 
+	--
+
+	Factor out some quiting code from gnc_main_window_delete_event()
+	and gnc_main_window_cmd_file_quit().  The new implementation fixes
+	two bugs - one in each of the previous implementations.
+
+	The bug in the gnc_main_window_cmd_file_quit() code was a race
+	condition whereby one could quit the application without finishing
+	pending changes in pages.  This would happen if the began a save,
+	modified the page during the save, and then triggered the
+	File->Quit command before the save completed.  For the register
+	page, this sequence was possible, even though most of the UI
+	controls are disabled during save.
+
+	The bug in the gnc_main_window_delete_event() code was that it
+	didn't check for an in-progress save before prompting the user to
+	save a dirty book.
+
 2006-12-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	Save window size and position of the transfer dialog.
