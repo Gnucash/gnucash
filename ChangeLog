@@ -1,3 +1,7 @@
+2006-12-01  Andreas Köhler  <andi5.py@gmx.net>
+
+	Save window size and position of the transfer dialog.
+
 2006-11-29  Andreas Köhler  <andi5.py@gmx.net>
 
 	When progress bar is showing, do not make menus and toolbars
