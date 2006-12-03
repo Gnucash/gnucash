@@ -1,3 +1,21 @@
+2006-12-02  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	Fix bug #353450 - Crash on quit during save.
+
+	Add a lock to the QofSession object, and use it in
+	qof_session_save() to protect against re-entrance.
+
+	The lock always starts at 1 and is 0 while inside
+	qof_session_save().  If another call is made to qof_session_save()
+	while one is in progress, the lock will momentarily drop below 0
+	before returning to zero.
+
+	Note: The per-session nature of the lock would make it appear that
+	we support concurrent saving of different sessions.  In fact, we
+	do not, because the file backend blocks the main process until the
+	forked gzip process is finished, and it only knows how to keep
+	track of one child pid at a time.
+
 2006-12-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	Save window size and position of the transfer dialog.
