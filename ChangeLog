@@ -68,6 +68,9 @@
 	therefore crashes on Solaris and Windows. r14675 had fixed that, r14945
 	(me) undermined it though.   (#378881).
 
+	Remove "closing last window" confirmation dialog and corresponding
+	warning (reverting r14580). Fixes #355392.
+
 2006-09-26  Andreas Köhler  <andi5.py@gmx.net>
 
 	Handle type-compatibility when reparenting accounts: #344966.
