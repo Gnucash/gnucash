@@ -995,6 +995,25 @@ gnc_main_window_timed_quit (gpointer dummy)
 }
 
 static gboolean
+gnc_main_window_quit(GncMainWindow *window)
+{
+    QofSession *session;
+    gboolean needs_save, do_shutdown;
+
+    session = gnc_get_current_session();
+    needs_save = qof_book_not_saved(qof_session_get_book(session)) && 
+        !gnc_file_save_in_progress();
+    do_shutdown = !needs_save || 
+        (needs_save && !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
+
+    if (do_shutdown) {
+        g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
 			      GdkEvent *event,
 			      gpointer user_data)
@@ -1013,21 +1032,7 @@ gnc_main_window_delete_event (GtkWidget *window,
   if (g_list_length(active_windows) > 1)
     return FALSE;
 
-  session = gnc_get_current_session();
-  if (qof_book_not_saved(qof_session_get_book(session))) {
-    if (!gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
-      /* Tell gnucash to shutdown cleanly */
-      g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-      already_dead = TRUE;
-    }
-    /* Cancel the window deletion. It'll happen on the just queued shutdown. */
-    return TRUE;
-  }
-
-  /* Tell gnucash to shutdown cleanly */
-  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-  already_dead = TRUE;
-
+  already_dead = gnc_main_window_quit(GNC_MAIN_WINDOW(window));
   return TRUE;
 }
 
@@ -2958,25 +2963,12 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
-	QofSession *session;
+    QofSession *session;
 
-	if (gnc_file_save_in_progress()) {
-	  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-	  return;
-	}
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-	if (!gnc_main_window_all_finish_pending())
-	  return;
-
-	session = gnc_get_current_session();
-	if (qof_book_not_saved(qof_session_get_book(session))) {
-	  if (gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
-	    /* User canceled */
-	    return;
-	  }
-	}
-
-	gnc_shutdown (0);
+    gnc_main_window_quit(window);
 }
 
 static void
