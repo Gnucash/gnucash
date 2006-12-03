@@ -43,6 +43,7 @@
 	When progress bar is showing, do not make menus and toolbars
 	insensitive, but rather the underlying action groups. This way even
 	keyboard accelerators will not make sneaking calls while saving.
+	Fixes #381467.
 
 2006-11-29  Christian Stimming  <stimming@tuhh.de>
 
