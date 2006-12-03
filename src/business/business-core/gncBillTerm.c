@@ -406,13 +406,13 @@ static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
   PERR("BillTerm QofBackend Failure: %d", errcode);
 }
 
-static inline void bill_free (QofInstance *inst)
+static void bill_free (QofInstance *inst)
 {
   GncBillTerm *term = (GncBillTerm *) inst;
   gncBillTermFree(term);
 }
 
-static inline void on_done (QofInstance *inst) {}
+static void on_done (QofInstance *inst) {}
 
 void gncBillTermCommitEdit (GncBillTerm *term)
 {

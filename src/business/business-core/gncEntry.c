@@ -1169,14 +1169,14 @@ void gncEntryBeginEdit (GncEntry *entry)
   QOF_BEGIN_EDIT (&entry->inst);
 }
 
-static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
+static void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
 {
   PERR("Entry QofBackend Failure: %d", errcode);
 }
 
-static inline void gncEntryOnDone (QofInstance *inst) {}
+static void gncEntryOnDone (QofInstance *inst) {}
 
-static inline void entry_free (QofInstance *inst)
+static void entry_free (QofInstance *inst)
 {
   GncEntry *entry = (GncEntry *)inst;
   gncEntryFree (entry);

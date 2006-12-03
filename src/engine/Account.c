@@ -315,18 +315,18 @@ xaccAccountBeginEdit (Account *acc)
 	qof_begin_edit(&acc->inst);
 }
 
-static inline void on_done(QofInstance *inst) 
+static void on_done(QofInstance *inst) 
 {
     /* old event style */
     qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
 }
 
-static inline void on_err (QofInstance *inst, QofBackendError errcode)
+static void on_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR("commit error: %d", errcode);
 }
 
-static inline void acc_free (QofInstance *inst)
+static void acc_free (QofInstance *inst)
 {
   Account *acc = (Account *) inst;
   xaccGroupRemoveAccount(acc->parent, acc);

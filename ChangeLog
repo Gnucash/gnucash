@@ -1,3 +1,9 @@
+2006-11-29  Christian Stimming  <stimming@tuhh.de>
+
+	Replace 'static inline' by 'static' for functions that are used by
+	function pointers.  Fixes some compiler issues when building without
+	certain optimizations.
+
 2006-11-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-parse.scm:
