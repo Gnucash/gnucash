@@ -1,3 +1,9 @@
+2006-11-29  Andreas Köhler  <andi5.py@gmx.net>
+
+	When progress bar is showing, do not make menus and toolbars
+	insensitive, but rather the underlying action groups. This way even
+	keyboard accelerators will not make sneaking calls while saving.
+
 2006-11-29  Christian Stimming  <stimming@tuhh.de>
 
 	Replace 'static inline' by 'static' for functions that are used by
