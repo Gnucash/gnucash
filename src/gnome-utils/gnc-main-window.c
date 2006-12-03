@@ -1000,7 +1000,6 @@ gnc_main_window_delete_event (GtkWidget *window,
 			      gpointer user_data)
 {
   static gboolean already_dead = FALSE;
-  QofSession *session;
 
   if (already_dead)
     return TRUE;
@@ -2872,8 +2871,6 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
-    QofSession *session;
-
     if (!gnc_main_window_all_finish_pending())
         return;
 
