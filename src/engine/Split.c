@@ -1068,9 +1068,12 @@ xaccSplitConvertAmount (const Split *split, Account * account)
     const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
-        g_assert(gnc_commodity_equal(
-                     to_commodity, 
-                     xaccAccountGetCommodity(xaccSplitGetAccount(osplit))));
+        if (!gnc_commodity_equal(
+                to_commodity, 
+                xaccAccountGetCommodity(xaccSplitGetAccount(osplit)))) {
+            PERR("The split's amount can't be converted into this commodity.");
+            return gnc_numeric_zero();
+        }
     if (osplit)
       return gnc_numeric_neg (xaccSplitGetAmount (osplit));
   }
