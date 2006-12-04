@@ -1068,14 +1068,20 @@ xaccSplitConvertAmount (const Split *split, Account * account)
     const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
-        if (!gnc_commodity_equal(
-                to_commodity, 
-                xaccAccountGetCommodity(xaccSplitGetAccount(osplit)))) {
-            PERR("The split's amount can't be converted into this commodity.");
-            return gnc_numeric_zero();
+    {
+        gnc_commodity* split_comm =
+                     xaccAccountGetCommodity(xaccSplitGetAccount(osplit));
+        if (!gnc_commodity_equal(to_commodity, split_comm))
+	{
+          PERR("The split's (%s) amount can't be converted from %s into %s.",
+               guid_to_string(xaccSplitGetGUID(osplit)),
+               gnc_commodity_get_mnemonic(split_comm),
+               gnc_commodity_get_mnemonic(to_commodity)
+               );
+          return gnc_numeric_zero();
         }
-    if (osplit)
-      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+        return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+    }
   }
 
   /* ... otherwise, we need to compute the amount from the conversion
