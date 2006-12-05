@@ -1790,15 +1790,7 @@ process_auto_create_list(GList *autoCreateList, sxSinceLastData *sxsld, GList **
         toCreateTuple *tct;
         toCreateInstance *tci;
         GList *instances;
-        int count, total;
 
-        count = 0;
-        total = 0;
-        /* get an accurate count of how many SX instances we're going to
-         * create. */
-        for ( l = autoCreateList; l; l = l->next ) {
-                total += g_list_length( ((toCreateTuple*)l->data)->instanceList );
-        }
         gnc_suspend_gui_refresh();
 
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
