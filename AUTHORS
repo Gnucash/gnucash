@@ -222,6 +222,7 @@ Tomas Pospisek <tpo@spin.ch> Debian patches
 Paul Poulain <famille.p.poulain@free.fr> French translations
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
+Jerry Quinn <jlquinn@optonline.net> Bugfixes
 Andreas Rottmann <a.rottmann@gmx.at> fixes for g-wrap 1.9
 Betina Schmidt <betina-s@gmx.de> German account template
 Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
