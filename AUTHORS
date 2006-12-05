@@ -25,16 +25,14 @@ Jeremy Collins <jcollins@gnucash.org> publicized the GnoMoney project
    he put the selection of the name up to popular vote. We all learned
    that democracy is not a good way to pick names.) Jeremy registered 
    the domain name, and created and maintained the gnucash.org web site 
-   for years, and got the initial GTK/gnome code working. The newest 
-   website design is Jeremy's as well. 
+   for years, and got the initial GTK/gnome code working.
 
 Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
    and then after we added Perl support, dumped Perl in favor of 
-   Guile/Scheme support. Rob maintined the build infrastructure for a 
-   while, added user preferences, and re-wrote the reports in scheme. 
-   One of Rob's recent contributions is the change-over of the 
-   file-format to XML. He is now concentrating on scheme performance. 
-   He is the g-wrap guile wrapper maintainer. 
+   Guile/Scheme support. Rob added user preferences, re-wrote the
+   reports in scheme, and contributed the change-over of the
+   file-format to XML. He then concentrated on scheme performance and
+   has been the g-wrap guile wrapper maintainer.
 
 Dave Peticolas <dave@krondo.com> worked on most parts of Gnucash, especially
    the register and GUI.
@@ -52,12 +50,13 @@ James LewisMoss <dres@debian.org> design doc patches, XML refactoring,
    automated test suite, new file hierarchy import.
 
 Christian Stimming <stimming@tuhh.de> is a report-generating 
-   monster. He's been one of the largest contributors to the current report
-   infrastructure, creating many of the important reports. 
-   He has also contributed HBCI support.
+   monster. He's been one of the largest contributors to the report
+   infrastructure, creating many of the important reports initially. 
+   He has also contributed HBCI online banking support and manages
+   internationalization and translation.
 
 Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
-   and budgeting.
+   and budgeting. The current website design is his as well.
 
 Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    for Gnucash. This includes the Customer/Vendor database, Job tracking,
@@ -73,19 +72,23 @@ David Hampton <hampton@employees.org> is an all-around hacker. He
    hack obsessively on GnuCash. (Something in the name?)
 
 Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
-   Is currently writing new help and integrating and finishing a
-   concepts and tutorial written by Carol Champagne. Looks after
+   Improved the help and integrated and finished a concepts and
+   tutorial written by Carol Champagne. Looks after
    releasing new GnuCash versions and updating the website.
 
 Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
    for GnuCash and wrote the external libOFX library that it uses.
 
 Neil Williams <linux@codehelp.co.uk> finished conversion from GncBook
-   to QofBook and the separation of QoF into a standalone library.
-   Lots of Doxygen fixes and updates.
+   to QofBook and worked on the separation of QoF into a standalone
+   library. He also contributed lots of Doxygen fixes and updates.
 
 Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
-   for GnuCash. He is also an all around hacker.
+   for GnuCash. He replaced g-wrap by SWIG as GnuCash's guile wrapper
+   generator and is also an all around hacker.
+
+Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
+   especially for GUI code and other gtk related issues.
 
 Other Contributors:
 ----------------
@@ -160,7 +163,6 @@ Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
-Andreas Köhler <KoehlerAndreas@web.de> German translation
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Fabrice Kurz <kurzf@voila.fr> French translation
