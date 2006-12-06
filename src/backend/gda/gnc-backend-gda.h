@@ -136,6 +136,7 @@ GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 GdaObject* gnc_gda_execute_query( GncGdaBackend* pBackend, GdaQuery* pQuery );
 GdaObject* gnc_gda_execute_sql( GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( GncGdaBackend* pBackend, const gchar* sql );
+int gnc_gda_execute_query_get_count( GncGdaBackend* pBackend, GdaQuery* query );
 void gnc_gda_load_object( GdaDataModel* pModel, int row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );

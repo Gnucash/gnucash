@@ -94,24 +94,70 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 typedef void (*GNC_GDA_LOAD_FN)( GdaDataModel* pModel, gint row,
 								QofSetterFunc setter, gpointer pObject,
 								const col_cvt_t* table );
-typedef gchar* (*GNC_GDA_RENDER_FN)( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name );
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
 						GdaConnection* cnn, xmlNodePtr array_data,
 						const col_cvt_t* table_row );
-typedef void (*GNC_GDA_GET_GVALUE_FN)( GncGdaBackend* be,
+typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( GncGdaBackend* be,
 				QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, GValue* value );
+				const col_cvt_t* table_row, GdaQuery* query );
+typedef GdaQueryCondition* (*GNC_GDA_GET_GVALUE_COND_FN)( GncGdaBackend* be,
+				QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GdaQuery* query );
 
 typedef struct {
 	GNC_GDA_LOAD_FN			load_fn;
-	GNC_GDA_RENDER_FN		render_fn;
 	GNC_GDA_CREATE_COL_FN	create_col_fn;
-	GNC_GDA_GET_GVALUE_FN	get_gvalue_fn;
+	GNC_GDA_GET_GVALUE_QUERY_FN	get_gvalue_query_fn;
+	GNC_GDA_GET_GVALUE_COND_FN	get_gvalue_cond_fn;
 } col_type_handler_t;
 
 
 /* ================================================================= */
+static void
+add_field_to_query( GdaQuery* query, const gchar* col_name, const GValue* value )
+{
+	GdaQueryField* field;
+	GdaQueryField* field_value;
+
+	field = gda_query_field_field_new( query, col_name );
+	gda_query_field_set_visible( field, TRUE );
+
+	field_value = gda_query_field_value_new( query, G_VALUE_TYPE(value) );
+	gda_query_field_set_visible( field_value, TRUE );
+	gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(field_value), value );
+	g_object_set( field, "value-provider", field_value, NULL );
+	g_object_unref( G_OBJECT(field_value) );
+
+	gda_entity_add_field( GDA_ENTITY(query), GDA_ENTITY_FIELD(field) );
+	g_object_unref( G_OBJECT(field) );
+}
+
+static GdaQueryCondition*
+create_cond_from_field( GdaQuery* query, const gchar* col_name, const GValue* value )
+{
+	GdaQueryCondition* cond;
+	GdaQueryField* key;
+	GdaQueryField* key_value;
+
+	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_LEAF_EQUAL );
+
+	key = gda_query_field_field_new( query, col_name );
+	gda_query_field_set_visible( key, TRUE );
+	gda_query_condition_leaf_set_operator( cond,
+											GDA_QUERY_CONDITION_OP_LEFT,
+											GDA_QUERY_FIELD(key) );
+	g_object_unref( G_OBJECT(key) );
+
+	key_value = gda_query_field_value_new( query, G_VALUE_TYPE(value) );
+	gda_query_field_set_visible( key_value, TRUE );
+	gda_query_condition_leaf_set_operator( cond, GDA_QUERY_CONDITION_OP_RIGHT,
+												GDA_QUERY_FIELD(key_value) );
+	g_object_unref( G_OBJECT(key_value) );
+
+	gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(key_value), value );
+
+	return cond;
+}
 /* ----------------------------------------------------------------- */
 static void
 load_string( GdaDataModel* pModel, gint row,
@@ -131,14 +177,13 @@ load_string( GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, GValue* value )
+get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
 	QofAccessFunc getter;
 	gchar* s;
 
 	memset( value, 0, sizeof( GValue ) );
-
 	if( table_row->param_name != NULL ) {
 		getter = qof_class_get_parameter_getter( obj_name,
 												table_row->param_name );
@@ -152,30 +197,24 @@ get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	}
 }
 
-static gchar*
-render_string( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_string_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
-	gchar* s;
 	GValue value;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	get_gvalue_string( be, obj_name, pObject, table_row, &value );
-	if( G_VALUE_TYPE(&value) == G_TYPE_STRING ) {
-		s = gda_data_handler_get_sql_from_value( be->pStrHandler, &value );
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
-	}
+	add_field_to_query( query, table_row->col_name, &value );
+}
 
-	return buf;
+static GdaQueryCondition*
+get_gvalue_string_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_string( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -191,7 +230,8 @@ create_string_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t string_handler
-	= { load_string, render_string, create_string_col, get_gvalue_string };
+	= { load_string, create_string_col,
+		get_gvalue_string_for_query, get_gvalue_string_cond };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -212,11 +252,13 @@ load_int( GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, GValue* value )
+get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
 	gint int_value;
 	QofAccessFunc getter;
+
+	memset( value, 0, sizeof( GValue ) );
 
 	if( table_row->param_name != NULL ) {
 		getter = qof_class_get_parameter_getter( obj_name,
@@ -225,35 +267,28 @@ get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	} else {
 		int_value = (gint)(*table_row->getter)( pObject );
 	}
-	memset( value, 0, sizeof( GValue ) );
 	g_value_init( value, G_TYPE_INT );
 	g_value_set_int( value, int_value );
 }
 
-static gchar*
-render_int( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_int_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	GValue value;
-	gchar* s;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	get_gvalue_int( be, obj_name, pObject, table_row, &value );
-	if( G_VALUE_TYPE(&value) == G_TYPE_INT ) {
-		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
-	}
+	add_field_to_query( query, table_row->col_name, &value );
+}
 
-	return buf;
+static GdaQueryCondition*
+get_gvalue_int_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_int( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -269,7 +304,8 @@ create_int_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t int_handler =
-		{ load_int, render_int, create_int_col, get_gvalue_int };
+		{ load_int, create_int_col,
+			get_gvalue_int_for_query, get_gvalue_int_cond };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -307,31 +343,24 @@ get_gvalue_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	}
 }
 
-static gchar*
-render_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_int64_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	GValue value;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	get_gvalue_int64( be, obj_name, pObject, table_row, &value );
-	if( G_VALUE_TYPE(&value) == G_TYPE_INT64 ) {
-		gchar* s;
+	add_field_to_query( query, table_row->col_name, &value );
+}
 
-		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
-	}
+static GdaQueryCondition*
+get_gvalue_int64_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
 
-	return buf;
+	get_gvalue_int64( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -347,7 +376,8 @@ create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t int64_handler =
-		{ load_int64, render_int64, create_int64_col, get_gvalue_int64 };
+		{ load_int64, create_int64_col,
+			get_gvalue_int64_for_query, get_gvalue_int64_cond };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -384,31 +414,24 @@ get_gvalue_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	}
 }
 
-static gchar*
-render_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_double_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	GValue value;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	get_gvalue_double( be, obj_name, pObject, table_row, &value );
-	if( G_VALUE_TYPE(&value) == G_TYPE_DOUBLE ) {
-		gchar* s;
+	add_field_to_query( query, table_row->col_name, &value );
+}
 
-		s = gda_data_handler_get_sql_from_value( be->pNumHandler, &value );
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
-	}
+static GdaQueryCondition*
+get_gvalue_double_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
 
-	return buf;
+	get_gvalue_double( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -424,7 +447,8 @@ create_double_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t double_handler =
-		{ load_double, render_double, create_double_col, get_gvalue_double };
+		{ load_double, create_double_col,
+			get_gvalue_double_for_query, get_gvalue_double_cond };
 /* ----------------------------------------------------------------- */
 
 static void
@@ -467,32 +491,24 @@ get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 	}
 }
 
-static gchar*
-render_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
-	const GUID* guid;
-	gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	gchar* s;
 	GValue value;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
 	get_gvalue_guid( be, obj_name, pObject, table_row, &value );
-	if( G_VALUE_TYPE(&value) == G_TYPE_STRING ) {
-		s = gda_data_handler_get_sql_from_value( be->pStrHandler, &value );
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
-	}
+	add_field_to_query( query, table_row->col_name, &value );
+}
 
-	return buf;
+static GdaQueryCondition*
+get_gvalue_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_guid( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -504,7 +520,8 @@ create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t guid_handler =
-		{ load_guid, render_guid, create_guid_col, get_gvalue_guid };
+		{ load_guid, create_guid_col,
+			get_gvalue_guid_for_query, get_gvalue_guid_cond };
 /* ----------------------------------------------------------------- */
 static void
 load_timespec( GdaDataModel* pModel, gint row,
@@ -527,51 +544,48 @@ load_timespec( GdaDataModel* pModel, gint row,
 	}
 }
 
-static gchar*
-render_timespec( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_timespec( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
-	gchar iso8601_buf[33];
 	Timespec* pTimespec;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
+	memset( value, 0, sizeof( GValue ) );
+
 	pTimespec = (Timespec*)(*table_row->getter)( pObject );
 	if( pTimespec != NULL ) {
 		GDate* date;
 		gchar* s;
 		gint y, m, d;
-		GValue value;
+		gchar iso8601_buf[33];
 
 		date = g_date_new();
 		(void)gnc_timespec_to_iso8601_buff( *pTimespec, iso8601_buf );
 		sscanf( iso8601_buf, "%d-%d-%d", &y, &m, &d );
 		g_date_set_dmy( date, d, m, y );
-		memset( &value, 0, sizeof( value ) );
-		g_value_init( &value, G_TYPE_DATE );
-		g_value_set_boxed( &value, date );
-
-#if 0
-		s = gda_data_handler_get_sql_from_value( be->pDateHandler, &value );
-#else
-		s = g_strdup_printf( "'%d-%d-%d'",
-								g_date_get_year( date ),
-								g_date_get_month( date ),
-								g_date_get_day( date ) );
-#endif
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-		g_date_free( date );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+		g_value_init( value, G_TYPE_DATE );
+		g_value_set_boxed( value, date );
 	}
+}
 
-	return buf;
+static void
+get_gvalue_timespec_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_timespec( be, obj_name, pObject, table_row, &value );
+	add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_timespec_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_timespec( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -587,7 +601,8 @@ create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t timespec_handler =
-		{ load_timespec, render_timespec, create_timespec_col };
+		{ load_timespec, create_timespec_col,
+			get_gvalue_timespec_for_query, get_gvalue_timespec_cond };
 /* ----------------------------------------------------------------- */
 static void
 load_date( GdaDataModel* pModel, gint row,
@@ -606,46 +621,44 @@ load_date( GdaDataModel* pModel, gint row,
 	}
 }
 
-static gchar*
-render_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
+static void
+get_gvalue_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
 {
-	gchar* buf;
-	const gchar* col_name = "";
-	const gchar* equals = "";
 	GDate* date;
 
-	if( include_name ) {
-		col_name = table_row->col_name;
-		equals = "=";
-	}
+	memset( value, 0, sizeof( GValue ) );
+
 	date = (GDate*)(*table_row->getter)( pObject );
 	if( date != NULL ) {
-		gchar* s;
-		GValue value;
-
-		memset( &value, 0, sizeof( value ) );
-		g_value_init( &value, G_TYPE_DATE );
-		g_value_set_boxed( &value, date );
-#if 0
-		s = gda_data_handler_get_sql_from_value( be->pDateHandler, &value );
-#else
-		s = g_strdup_printf( "'%d-%d-%d'",
-								g_date_get_year( date ),
-								g_date_get_month( date ),
-								g_date_get_day( date ) );
-#endif
-		buf = g_strdup_printf( "%s%s%s", col_name, equals, s );
-		g_free( s );
-	} else {
-		buf = g_strdup_printf( "%s%sNULL", col_name, equals );
+		g_value_init( value, G_TYPE_DATE );
+		g_value_set_boxed( value, date );
 	}
+}
 
-	return buf;
+static void
+get_gvalue_date_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_date( be, obj_name, pObject, table_row, &value );
+	add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_date_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+
+	get_gvalue_date( be, obj_name, pObject, table_row, &value );
+	return create_cond_from_field( query, table_row->col_name, &value );
 }
 
 static col_type_handler_t date_handler =
-		{ load_date, render_date, create_timespec_col };
+		{ load_date, create_timespec_col,
+			get_gvalue_date_for_query, get_gvalue_date_cond };
 /* ----------------------------------------------------------------- */
 static void
 load_numeric( GdaDataModel* pModel, gint row,
@@ -680,6 +693,94 @@ load_numeric( GdaDataModel* pModel, gint row,
 	} else {
 		(*setter)( pObject, &n );
 	}
+}
+
+static void
+get_gvalue_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+				const col_cvt_t* table_row, GValue* value )
+{
+	gnc_numeric* n;
+
+	memset( value, 0, sizeof( GValue ) );
+
+	n = (gnc_numeric*)(*table_row->getter)( pObject );
+	if( n != NULL ) {
+		g_value_init( value, gnc_numeric_get_type() );
+		g_value_set_boxed( value, n );
+	}
+}
+
+static void
+get_gvalue_numeric_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+	GValue num_value;
+	GValue denom_value;
+	gnc_numeric* n;
+	gchar* s;
+
+	memset( &value, 0, sizeof( GValue ) );
+	memset( &num_value, 0, sizeof( GValue ) );
+	memset( &denom_value, 0, sizeof( GValue ) );
+
+	get_gvalue_numeric( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) != 0 ) {
+		n = g_value_get_boxed( &value );
+		g_value_init( &num_value, G_TYPE_INT64 );
+		g_value_set_int64( &num_value, gnc_numeric_num( *n ) );
+		g_value_init( &denom_value, G_TYPE_INT64 );
+		g_value_set_int64( &denom_value, gnc_numeric_denom( *n ) );
+	}
+
+	s = g_strdup_printf( "%s_num", table_row->col_name );
+	add_field_to_query( query, s, &num_value );
+	g_free( s );
+	s = g_strdup_printf( "%s_denom", table_row->col_name );
+	add_field_to_query( query, s, &denom_value );
+	g_free( s );
+}
+
+static GdaQueryCondition*
+get_gvalue_numeric_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+				gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+	GValue value;
+	GValue num_value;
+	GValue denom_value;
+	gnc_numeric* n;
+	gint64 num;
+	gint64 denom;
+	gchar* s;
+	GdaQueryCondition* num_cond;
+	GdaQueryCondition* denom_cond;
+	GdaQueryCondition* cond;
+
+	memset( &value, 0, sizeof( GValue ) );
+	memset( &num_value, 0, sizeof( GValue ) );
+	memset( &denom_value, 0, sizeof( GValue ) );
+
+	get_gvalue_numeric( be, obj_name, pObject, table_row, &value );
+	if( G_VALUE_TYPE(&value) != 0 ) {
+		n = g_value_get_boxed( &value );
+		g_value_init( &num_value, G_TYPE_INT64 );
+		g_value_set_int64( &num_value, gnc_numeric_num( *n ) );
+		g_value_init( &denom_value, G_TYPE_INT64 );
+		g_value_set_int64( &denom_value, gnc_numeric_denom( *n ) );
+	}
+
+	s = g_strdup_printf( "%s_num", table_row->col_name );
+	num_cond = create_cond_from_field( query, table_row->col_name, &value );
+	g_free( s );
+	s = g_strdup_printf( "%s_denom", table_row->col_name );
+	denom_cond = create_cond_from_field( query, table_row->col_name, &value );
+	g_free( s );
+
+	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_NODE_AND );
+	gda_query_condition_node_add_child( cond, num_cond, NULL );
+	gda_query_condition_node_add_child( cond, denom_cond, NULL );
+
+	return cond;
 }
 
 static gchar*
@@ -747,7 +848,8 @@ create_numeric_col( GdaServerProvider* server, GdaConnection* cnn,
 }
 
 static col_type_handler_t numeric_handler =
-		{ load_numeric, render_numeric, create_numeric_col };
+		{ load_numeric, create_numeric_col,
+			get_gvalue_numeric_for_query, get_gvalue_numeric_cond };
 /* ================================================================= */
 
 static col_type_handler_t*
@@ -923,27 +1025,49 @@ gnc_gda_execute_select_get_count( GncGdaBackend* be, const gchar* sql )
 
 	return count;
 }
-/* ================================================================= */
-static gchar*
-render_col_value( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
-{
-	gchar* buf;
-	col_type_handler_t* pHandler;
-	pHandler = get_handler( table_row->col_type );
 
-	buf = pHandler->render_fn( be, obj_name, pObject, table_row, include_name );
-	return buf;
+int
+gnc_gda_execute_query_get_count( GncGdaBackend* be, GdaQuery* query )
+{
+	int count = 0;
+
+	GdaObject* ret;
+
+	ret = gnc_gda_execute_query( be, query );
+	if( GDA_IS_DATA_MODEL(ret) ) {
+		GdaDataModel* pModel = (GdaDataModel*)ret;
+		count = gda_data_model_get_n_rows( pModel );
+	}
+
+	return count;
+}
+/* ================================================================= */
+static void
+get_col_gvalue_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+						gpointer pObject, const col_cvt_t* table_row,
+						GdaQuery* query )
+{
+	GValue value;
+	col_type_handler_t* pHandler;
+
+	pHandler = get_handler( table_row->col_type );
+	pHandler->get_gvalue_query_fn( be, obj_name, pObject, table_row, query );
 }
 
 static void
-get_col_gvalue( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, GValue* value )
+get_col_gvalue_for_condition( GncGdaBackend* be, QofIdTypeConst obj_name,
+						gpointer pObject, const col_cvt_t* table_row,
+						GdaQuery* query )
 {
+	GValue value;
 	col_type_handler_t* pHandler;
-	pHandler = get_handler( table_row->col_type );
+	GdaQueryCondition* cond;
 
-	pHandler->get_gvalue_fn( be, obj_name, pObject, table_row, value );
+	pHandler = get_handler( table_row->col_type );
+	cond = pHandler->get_gvalue_cond_fn( be, obj_name, pObject, table_row, query );
+
+	gda_query_set_condition( query, cond );
+	g_object_unref( G_OBJECT(cond) );
 }
 
 gboolean
@@ -951,18 +1075,17 @@ gnc_gda_object_is_it_in_db( GncGdaBackend* be, const gchar* table_name,
 					QofIdTypeConst obj_name, gpointer pObject,
 					const col_cvt_t* table )
 {
-	gchar* sql;
+	GdaQuery* query;
+	GValue value;
 	int count;
-	gchar* key_value;
 
-	key_value = render_col_value( be, obj_name, pObject, table, TRUE );
+	/* SELECT * FROM */
+	query = gnc_gda_create_select_query( be, table_name );
 
-	sql = g_strdup_printf( "SELECT * FROM %s WHERE %s;",
-							table_name, key_value );
-	g_free( key_value );
+	/* WHERE */
+	get_col_gvalue_for_condition( be, obj_name, pObject, &table[0], query );
 
-	count = gnc_gda_execute_select_get_count( be, sql );
-	g_free( sql );
+	count = gnc_gda_execute_query_get_count( be, query );
 	if( count == 0 ) {
 		return FALSE;
 	} else {
@@ -1010,10 +1133,12 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 							QofIdTypeConst obj_name, gpointer pObject,
 							const col_cvt_t* table )
 {
-	GString* sql;
-	GError* error = NULL;
 	GdaQuery* query;
 	int col;
+
+#if 0
+	GString* sql;
+	GError* error = NULL;
 	gchar* col_value;
 
 	sql = g_string_sized_new( INITIAL_SQL_BUF_LEN );
@@ -1033,6 +1158,23 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 	if( query == NULL ) {
 		printf( "SQL error: %s\n", error->message );
 	}
+#else
+	GdaQueryTarget* target;
+
+	/* INSERT */
+	query = gda_query_new( be->pDict );
+	gda_query_set_query_type( query, GDA_QUERY_TYPE_INSERT );
+
+	/* INTO */
+	target = gda_query_target_new( query, table_name );
+	gda_query_add_target( query, target, NULL );
+
+	/* VALUES */
+	for( col = 0; table[col].col_name != NULL; col++ ) {
+		get_col_gvalue_for_query( be, obj_name, pObject, &table[col], query );
+	}
+#endif
+
 	return query;
 }
 
@@ -1042,35 +1184,25 @@ gnc_gda_build_update_query( GncGdaBackend* be,
 							QofIdTypeConst obj_name, gpointer pObject,
 							const col_cvt_t* table )
 {
-	GString* sql;
-	GError* error = NULL;
 	GdaQuery* query;
 	int col;
-	gchar* col_value;
 
-	sql = g_string_sized_new( INITIAL_SQL_BUF_LEN );
-	g_string_printf( sql, "UPDATE %s SET ", table_name );
+	GdaQueryTarget* target;
 
+	/* UPDATE */
+	query = gda_query_new( be->pDict );
+	gda_query_set_query_type( query, GDA_QUERY_TYPE_UPDATE );
+	target = gda_query_target_new( query, table_name );
+	gda_query_add_target( query, target, NULL );
+
+	/* SET */
 	for( col = 1; table[col].col_name != NULL; col++ ) {
-		if( col != 1 ) g_string_append( sql, "," );
-
-		col_value = render_col_value( be, obj_name, pObject, &table[col], TRUE );
-		g_string_append( sql, col_value );
-		g_free( col_value );
+		get_col_gvalue_for_query( be, obj_name, pObject, &table[col], query );
 	}
 
-	g_string_append( sql, " WHERE " );
+	/* WHERE */
+	get_col_gvalue_for_condition( be, obj_name, pObject, &table[0], query );
 
-	col_value = render_col_value( be, obj_name, pObject, &table[0], TRUE );
-	g_string_append( sql, col_value );
-	g_free( col_value );
-	g_string_append( sql, ";" );
-
-	query = gda_query_new_from_sql( be->pDict, sql->str, &error );
-	g_string_free( sql, TRUE );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
 	return query;
 }
 
@@ -1082,10 +1214,8 @@ gnc_gda_build_delete_query( GncGdaBackend* be,
 {
 	GdaQuery* query;
 	GdaQueryTarget* target;
-	GdaQueryCondition* cond;
 	GdaQueryField* key;
 	GdaQueryField* key_value;
-	GValue value;
 
 	/* DELETE */
 	query = gda_query_new( be->pDict );
@@ -1097,25 +1227,7 @@ gnc_gda_build_delete_query( GncGdaBackend* be,
 	g_object_unref( G_OBJECT(target) );
 
 	/* WHERE */
-	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_LEAF_EQUAL );
-	gda_query_set_condition( query, cond );
-	g_object_unref( G_OBJECT(cond) );
-
-	key = gda_query_field_field_new( query, table[0].col_name );
-	gda_query_field_set_visible( key, TRUE );
-	gda_query_condition_leaf_set_operator( cond,
-											GDA_QUERY_CONDITION_OP_LEFT,
-											GDA_QUERY_FIELD(key) );
-	g_object_unref( G_OBJECT(key) );
-
-	key_value = gda_query_field_value_new( query, G_TYPE_STRING );
-	gda_query_field_set_visible( key_value, TRUE );
-	gda_query_condition_leaf_set_operator( cond, GDA_QUERY_CONDITION_OP_RIGHT,
-												GDA_QUERY_FIELD(key_value) );
-	g_object_unref( G_OBJECT(key_value) );
-
-	get_col_gvalue( be, obj_name, pObject, &table[0], &value );
-	gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(key_value), &value );
+	get_col_gvalue_for_condition( be, obj_name, pObject, &table[0], query );
 
 	return query;
 }
