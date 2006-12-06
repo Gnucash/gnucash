@@ -1052,7 +1052,7 @@ qof_session_begin (QofSession *session, const char * book_id,
           g_free(session->book_id);
           session->book_id = NULL;
           qof_session_push_error (session, err, msg);
-          LEAVE(" backend error %d %s", err, msg);
+          LEAVE(" backend error %d %s", err, msg ? msg : "(null)");
           return;
       }
       if (msg != NULL) 

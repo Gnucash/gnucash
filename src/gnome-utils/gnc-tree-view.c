@@ -803,7 +803,7 @@ gnc_tree_view_column_visible (GncTreeView *view,
       return TRUE;
     }
     pref_name = (gchar *)g_object_get_data(G_OBJECT(column), PREF_NAME);
-    DEBUG("pref_name is %s", pref_name);
+    DEBUG("pref_name is %s", pref_name ? pref_name : "(null)");
   }
 
   if (!pref_name) {
@@ -1433,7 +1433,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
       gtk_tree_view_column_set_visible(priv->column_menu_column, FALSE);
   }
   LEAVE("menu: show %d, section %s", priv->show_column_menu,
-	priv->gconf_section);
+	priv->gconf_section ? priv->gconf_section : "(null)");
 }
 
 /** This function is called to synchronize the checkbox on a menu item

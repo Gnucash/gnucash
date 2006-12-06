@@ -2007,6 +2007,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *image;
 	GList *tmp;
 
+	ENTER("window %p, page %p", window, page);
+
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
@@ -2108,6 +2110,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	 * Now install it all in the window.
 	 */
 	gnc_main_window_connect(window, page, tab_hbox, label);
+
+	LEAVE("");
 }
 
 

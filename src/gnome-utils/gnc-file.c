@@ -174,7 +174,7 @@ gnc_file_dialog (const char * title,
     file_name = g_strdup(internal_name);
   }
   gtk_widget_destroy(GTK_WIDGET(file_box));
-  LEAVE("%s", file_name);
+  LEAVE("%s", file_name ? file_name : "(null)");
   return file_name;
 }
 
