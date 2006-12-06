@@ -50,6 +50,8 @@ See \ref gncnumericexample
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
 
+#include <glib-object.h>
+
 struct _gnc_numeric 
 {
   gint64  num;
@@ -443,6 +445,13 @@ gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom,
 /** Return input after reducing it by Greated Common Factor (GCF) 
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric in);
+/** @} */
+
+/** @name GValue 
+  @{
+*/
+GType gnc_numeric_get_type( void );
+
 /** @} */
 
 /** @name Deprecated, backwards-compatible definitions 
