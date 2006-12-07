@@ -75,9 +75,9 @@ load_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
 
 	gnc_gda_load_object( pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	gnc_gda_slots_load( be, gnc_budget_get_guid( pBudget ),
-							qof_instance_get_slots( (QofInstance*)pBudget ) );
+							qof_instance_get_slots( QOF_INSTANCE(pBudget) ) );
 
-	qof_instance_mark_clean( (QofInstance*)pBudget );
+	qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
 
 #endif
 	return pSx;
@@ -95,7 +95,7 @@ load_sxes( GncGdaBackend* be )
 	ret = gnc_gda_execute_sql( be, buf );
 	g_free( buf );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 
@@ -124,10 +124,10 @@ commit_sx( GncGdaBackend* be, QofInstance* inst )
 	const GUID* guid;
 
 	(void)gnc_gda_do_db_operation( be,
-							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-							BUDGET_TABLE,
-							GNC_ID_BUDGET, pBudget,
-							col_table );
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						BUDGET_TABLE,
+						GNC_ID_BUDGET, pBudget,
+						col_table );
 
 	// Delete old slot info
 	guid = qof_instance_get_guid( inst );

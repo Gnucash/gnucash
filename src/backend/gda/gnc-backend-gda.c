@@ -30,18 +30,18 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libintl.h>
-#include <locale.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <dirent.h>
-#include <time.h>
+//#include <libintl.h>
+//#include <locale.h>
+//#include <stdio.h>
+//#include <fcntl.h>
+//#include <limits.h>
+//#include <sys/stat.h>
+//#include <sys/types.h>
+//#include <unistd.h>
+//#include <errno.h>
+//#include <string.h>
+//#include <dirent.h>
+//#include <time.h>
 #include <libgda/libgda.h>
 
 #include "qof.h"
@@ -50,7 +50,7 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 
-#include "gnc-filepath-utils.h"
+//#include "gnc-filepath-utils.h"
 
 #include "gnc-backend-gda.h"
 #include "gnc-gconf-utils.h"
@@ -64,9 +64,9 @@
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
 
-#ifndef HAVE_STRPTIME
-# include "strptime.h"
-#endif
+//#ifndef HAVE_STRPTIME
+//# include "strptime.h"
+//#endif
 
 static const gchar* convert_search_obj( QofIdType objType );
 static void gnc_gda_init_object_handlers( void );
@@ -132,8 +132,9 @@ add_field_to_query( GdaQuery* query, const gchar* col_name, const GValue* value 
 	g_object_unref( G_OBJECT(field) );
 }
 
-static GdaQueryCondition*
-create_cond_from_field( GdaQuery* query, const gchar* col_name, const GValue* value )
+GdaQueryCondition*
+gnc_gda_create_condition_from_field( GdaQuery* query, const gchar* col_name,
+								const GValue* value )
 {
 	GdaQueryCondition* cond;
 	GdaQueryField* key;
@@ -214,7 +215,8 @@ get_gvalue_string_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_string( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name,
+											&value );
 }
 
 static void
@@ -288,7 +290,7 @@ get_gvalue_int_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_int( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -360,7 +362,7 @@ get_gvalue_int64_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_int64( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -431,7 +433,7 @@ get_gvalue_double_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_double( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -508,7 +510,7 @@ get_gvalue_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_guid( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -537,10 +539,12 @@ load_timespec( GdaDataModel* pModel, gint row,
 		(*setter)( pObject, NULL );
 	} else {
 		date = (GDate*)g_value_get_boxed( val );
-		ts = gnc_dmy2timespec( g_date_get_day( date ),
+		if( date != NULL ) {
+			ts = gnc_dmy2timespec( g_date_get_day( date ),
 								g_date_get_month( date ),
 								g_date_get_year( date ) );
-		(*setter)( pObject, &ts );
+			(*setter)( pObject, &ts );
+		}
 	}
 }
 
@@ -585,7 +589,7 @@ get_gvalue_timespec_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_timespec( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static void
@@ -653,7 +657,7 @@ get_gvalue_date_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	GValue value;
 
 	get_gvalue_date( be, obj_name, pObject, table_row, &value );
-	return create_cond_from_field( query, table_row->col_name, &value );
+	return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
 
 static col_type_handler_t date_handler =
@@ -770,10 +774,10 @@ get_gvalue_numeric_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	}
 
 	s = g_strdup_printf( "%s_num", table_row->col_name );
-	num_cond = create_cond_from_field( query, table_row->col_name, &value );
+	num_cond = gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 	g_free( s );
 	s = g_strdup_printf( "%s_denom", table_row->col_name );
-	denom_cond = create_cond_from_field( query, table_row->col_name, &value );
+	denom_cond = gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 	g_free( s );
 
 	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_NODE_AND );
@@ -781,51 +785,6 @@ get_gvalue_numeric_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 	gda_query_condition_node_add_child( cond, denom_cond, NULL );
 
 	return cond;
-}
-
-static gchar*
-render_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
-				const col_cvt_t* table_row, gboolean include_name )
-{
-	gchar* buf;
-	gnc_numeric* pNumeric;
-	gnc_numeric v;
-
-	pNumeric = (gnc_numeric*)(*table_row->getter) (pObject );
-	if( pNumeric != NULL ) {
-		gchar* s_num;
-		gchar* s_denom;
-		GValue value_num;
-		GValue value_denom;
-
-		v = *pNumeric;
-		memset( &value_num, 0, sizeof( value_num ) );
-		g_value_init( &value_num, G_TYPE_INT64 );
-		g_value_set_int64( &value_num, gnc_numeric_num( v ) );
-		memset( &value_denom, 0, sizeof( value_denom ) );
-		g_value_init( &value_denom, G_TYPE_INT64 );
-		g_value_set_int64( &value_denom, gnc_numeric_denom( v ) );
-		s_num = gda_data_handler_get_sql_from_value( be->pNumHandler, &value_num );
-		s_denom = gda_data_handler_get_sql_from_value( be->pNumHandler, &value_denom );
-		if( include_name ) {
-			buf = g_strdup_printf( "%s_num=%s, %s_denom=%s",
-							table_row->col_name, s_num,
-							table_row->col_name, s_denom );
-		} else {
-			buf = g_strdup_printf( "%s, %s", s_num, s_denom );
-		}
-		g_free( s_num );
-		g_free( s_denom );
-	} else {
-		if( include_name ) {
-			buf = g_strdup_printf( "%s_num=NULL, %s_denom=NULL",
-							table_row->col_name, table_row->col_name );
-		} else {
-			buf = g_strdup( "NULL" );
-		}
-	}
-
-	return buf;
 }
 
 static void
@@ -1015,7 +974,7 @@ gnc_gda_execute_select_get_count( GncGdaBackend* be, const gchar* sql )
 
 	ret = gnc_gda_execute_sql( be, sql );
 	if( GDA_IS_DATA_MODEL(ret) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		count = gda_data_model_get_n_rows( pModel );
 	}
 
@@ -1035,7 +994,7 @@ gnc_gda_execute_query_get_count( GncGdaBackend* be, GdaQuery* query )
 
 	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL(ret) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		count = gda_data_model_get_n_rows( pModel );
 	}
 
@@ -1136,29 +1095,6 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 	GdaQuery* query;
 	int col;
 
-#if 0
-	GString* sql;
-	GError* error = NULL;
-	gchar* col_value;
-
-	sql = g_string_sized_new( INITIAL_SQL_BUF_LEN );
-	g_string_printf( sql, "INSERT INTO %s VALUES(", table_name );
-
-	for( col = 0; table[col].col_name != NULL; col++ ) {
-		if( col != 0 ) g_string_append( sql, "," );
-		col_value = render_col_value( be, obj_name, pObject, &table[col], FALSE );
-		g_string_append( sql, col_value );
-		g_free( col_value );
-	}
-
-	g_string_append( sql, ");" );
-
-	query = gda_query_new_from_sql( be->pDict, sql->str, &error );
-	g_string_free( sql, TRUE );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
-#else
 	GdaQueryTarget* target;
 
 	/* INSERT */
@@ -1173,7 +1109,6 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 	for( col = 0; table[col].col_name != NULL; col++ ) {
 		get_col_gvalue_for_query( be, obj_name, pObject, &table[col], query );
 	}
-#endif
 
 	return query;
 }
@@ -1855,7 +1790,10 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 	gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
 	gda_backend be_data;
 
+	g_return_if_fail( !be->in_query );
+
 	be->loading = TRUE;
+	be->in_query = TRUE;
 
 	// Try various objects first
 	be_data.ok = FALSE;
@@ -1865,6 +1803,7 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 
 	qof_object_foreach_backend( GNC_GDA_BACKEND, run_query_cb, &be_data );
 	be->loading = FALSE;
+	be->in_query = FALSE;
 	if( be_data.ok ) {
 		return;
 	}

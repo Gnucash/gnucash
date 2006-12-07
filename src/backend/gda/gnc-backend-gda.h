@@ -47,6 +47,7 @@ struct GncGdaBackend_struct
 
   QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
+  gboolean  in_query;
 };
 typedef struct GncGdaBackend_struct GncGdaBackend;
 
@@ -151,6 +152,9 @@ void gnc_gda_create_table_if_needed( GncGdaBackend* be,
 						const gchar* table_name, col_cvt_t* col_table );
 const GUID* gnc_gda_load_guid( GdaDataModel* pModel, int row );
 GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name );
+GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
+														const gchar* col_name,
+														const GValue* value );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);

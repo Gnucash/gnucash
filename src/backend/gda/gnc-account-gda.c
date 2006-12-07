@@ -74,17 +74,17 @@ static col_cvt_t col_table[] =
 static gpointer
 get_commodity( gpointer pObject )
 {
-	Account* pAccount = (Account*)pObject;
+	const Account* pAccount = GNC_ACCOUNT(pObject);
 
 	return (gpointer)qof_instance_get_guid(
-						(QofInstance*)xaccAccountGetCommodity( pAccount ) );
+						QOF_INSTANCE(xaccAccountGetCommodity( pAccount )) );
 }
 
 static void 
 set_commodity( gpointer pObject, const gpointer pValue )
 {
-	Account* pAccount = (Account*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pAccount );
+	Account* pAccount = GNC_ACCOUNT(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
 	gnc_commodity* pCommodity;
 	GUID* guid = (GUID*)pValue;
 
@@ -95,14 +95,14 @@ set_commodity( gpointer pObject, const gpointer pValue )
 static gpointer
 get_parent( gpointer pObject )
 {
-	const Account* pAccount = (const Account*)pObject;
-	Account* pParent = xaccAccountGetParentAccount( pAccount );
+	const Account* pAccount = GNC_ACCOUNT(pObject);
+	const Account* pParent = xaccAccountGetParentAccount( pAccount );
 	const GUID* parent_guid;
 
 	if( pParent == NULL ) {
 		parent_guid = NULL;
 	} else {
-		parent_guid = qof_instance_get_guid( (QofInstance*)pParent );
+		parent_guid = qof_instance_get_guid( QOF_INSTANCE(pParent) );
 	}
 
 	return (gpointer)parent_guid;
@@ -111,8 +111,8 @@ get_parent( gpointer pObject )
 static void 
 set_parent( gpointer pObject, const gpointer pValue )
 {
-	Account* pAccount = (Account*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pAccount );
+	Account* pAccount = GNC_ACCOUNT(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
 	GUID* guid = (GUID*)pValue;
 	Account* pParent;
 	
@@ -142,9 +142,9 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 	}
 	gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
-							qof_instance_get_slots( (QofInstance*)pAccount ) );
+							qof_instance_get_slots( QOF_INSTANCE(pAccount) ) );
 
-	qof_instance_mark_clean( (QofInstance*)pAccount );
+	qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
 
 	return pAccount;
 }
@@ -164,13 +164,12 @@ load_accounts( GncGdaBackend* be )
 
 	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 		Account* pAccount;
 
 		for( r = 0; r < numRows; r++ ) {
-
 			pAccount = load_account( be, pModel, r, NULL );
 
 			if( pAccount != NULL ) {
@@ -195,17 +194,17 @@ create_account_tables( GncGdaBackend* be )
 static void
 commit_account( GncGdaBackend* be, QofInstance* inst )
 {
-	Account* pAcc = (Account*)inst;
+	Account* pAcc = GNC_ACCOUNT(inst);
 	const GUID* guid;
 
 	// Ensure the commodity is in the db
 	gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 
 	(void)gnc_gda_do_db_operation( be,
-							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-							TABLE_NAME,
-							GNC_ID_ACCOUNT, pAcc,
-							col_table );
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						TABLE_NAME,
+						GNC_ID_ACCOUNT, pAcc,
+						col_table );
 
 	// Delete old slot info
 	guid = qof_instance_get_guid( inst );

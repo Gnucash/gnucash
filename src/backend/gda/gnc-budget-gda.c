@@ -77,7 +77,7 @@ static col_cvt_t col_table[] =
 static gpointer
 get_recurrence_mult( gpointer pObject )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );
 	guint m = r->mult;
 
@@ -87,7 +87,7 @@ get_recurrence_mult( gpointer pObject )
 static void
 set_recurrence_mult( gpointer pObject, gpointer pValue )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
 	guint m = (guint)pValue;
 
@@ -97,7 +97,7 @@ set_recurrence_mult( gpointer pObject, gpointer pValue )
 static gpointer
 get_recurrence_period_type( gpointer pObject )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );
 
 	return (gpointer)recurrencePeriodTypeToString(
@@ -107,7 +107,7 @@ get_recurrence_period_type( gpointer pObject )
 static void
 set_recurrence_period_type( gpointer pObject, gpointer pValue )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
 
 	r->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
@@ -116,7 +116,7 @@ set_recurrence_period_type( gpointer pObject, gpointer pValue )
 static gpointer
 get_recurrence_period_start( gpointer pObject )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );
 	static GDate date;
 
@@ -127,7 +127,7 @@ get_recurrence_period_start( gpointer pObject )
 static void
 set_recurrence_period_start( gpointer pObject, gpointer pValue )
 {
-	GncBudget* budget = (GncBudget*)pObject;
+	GncBudget* budget = GNC_BUDGET(pObject);
 	Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
 	GDate* date = (GDate*)pValue;
 
@@ -154,9 +154,9 @@ load_budget( GncGdaBackend* be, GdaDataModel* pModel, int row,
 
 	gnc_gda_load_object( pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	gnc_gda_slots_load( be, gnc_budget_get_guid( pBudget ),
-							qof_instance_get_slots( (QofInstance*)pBudget ) );
+							qof_instance_get_slots( QOF_INSTANCE(pBudget) ) );
 
-	qof_instance_mark_clean( (QofInstance*)pBudget );
+	qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
 
 	return pBudget;
 }
@@ -173,7 +173,7 @@ load_budgets( GncGdaBackend* be )
 	}
 	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 
@@ -194,14 +194,14 @@ create_budget_tables( GncGdaBackend* be )
 static void
 commit_budget( GncGdaBackend* be, QofInstance* inst )
 {
-	GncBudget* pBudget = (GncBudget*)inst;
+	GncBudget* pBudget = GNC_BUDGET(inst);
 	const GUID* guid;
 
 	(void)gnc_gda_do_db_operation( be,
-							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-							BUDGET_TABLE,
-							GNC_ID_BUDGET, pBudget,
-							col_table );
+						inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
+						BUDGET_TABLE,
+						GNC_ID_BUDGET, pBudget,
+						col_table );
 
 	// Delete old slot info
 	guid = qof_instance_get_guid( inst );

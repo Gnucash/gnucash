@@ -76,7 +76,7 @@ static col_cvt_t col_table[] =
 static gpointer
 get_value( gpointer pObject )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	const GNCPrice* pPrice = GNC_PRICE(pObject);
 	static gnc_numeric v;
 
 	v = gnc_price_get_value( pPrice );
@@ -86,7 +86,7 @@ get_value( gpointer pObject )
 static void
 set_value( gpointer pObject, const gpointer pValue )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	GNCPrice* pPrice = GNC_PRICE(pObject);
 	const gnc_numeric* pNumeric = (const gnc_numeric*)pValue;
 
 	gnc_price_set_value( pPrice, *pNumeric );
@@ -95,7 +95,7 @@ set_value( gpointer pObject, const gpointer pValue )
 static gpointer
 get_date( gpointer pObject )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	const GNCPrice* pPrice = GNC_PRICE(pObject);
 	static Timespec t;
 
 	t = gnc_price_get_time( pPrice );
@@ -105,7 +105,7 @@ get_date( gpointer pObject )
 static void
 set_date( gpointer pObject, const gpointer pValue )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	GNCPrice* pPrice = GNC_PRICE(pObject);
 	const Timespec* pTimespec = (const Timespec*)pValue;
 
 	gnc_price_set_time( pPrice, *pTimespec );
@@ -114,17 +114,17 @@ set_date( gpointer pObject, const gpointer pValue )
 static gpointer
 get_currency( gpointer pObject )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	const GNCPrice* pPrice = GNC_PRICE(pObject);
 
 	return (gpointer)qof_instance_get_guid(
-							(QofInstance*)gnc_price_get_currency( pPrice ) );
+							QOF_INSTANCE(gnc_price_get_currency( pPrice )) );
 }
 
 static void 
 set_currency( gpointer pObject, const gpointer pValue )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pPrice );
+	GNCPrice* pPrice = GNC_PRICE(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
 	gnc_commodity* pCurrency;
 	GUID* guid = (GUID*)pValue;
 
@@ -135,17 +135,17 @@ set_currency( gpointer pObject, const gpointer pValue )
 static gpointer
 get_commodity( gpointer pObject )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
+	const GNCPrice* pPrice = GNC_PRICE(pObject);
 
 	return (gpointer)qof_instance_get_guid(
-						(QofInstance*)gnc_price_get_commodity( pPrice ) );
+						QOF_INSTANCE(gnc_price_get_commodity( pPrice )) );
 }
 
 static void 
 set_commodity( gpointer pObject, const gpointer pValue )
 {
-	GNCPrice* pPrice = (GNCPrice*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pPrice );
+	GNCPrice* pPrice = GNC_PRICE(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
 	gnc_commodity* pCommodity;
 	GUID* guid = (GUID*)pValue;
 
@@ -162,7 +162,7 @@ load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 
 	gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
 
-	qof_instance_mark_clean( (QofInstance*)pPrice );
+	qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
 
 	return pPrice;
 }
@@ -180,13 +180,12 @@ load_prices( GncGdaBackend* be )
 	}
 	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 		GNCPrice* pPrice;
 
 		for( r = 0; r < numRows; r++ ) {
-
 			pPrice = load_price( be, pModel, r, NULL );
 
 			if( pPrice != NULL ) {
@@ -208,17 +207,17 @@ create_prices_tables( GncGdaBackend* be )
 static void
 commit_price( GncGdaBackend* be, QofInstance* inst )
 {
-	GNCPrice* pPrice = (GNCPrice*)inst;
+	GNCPrice* pPrice = GNC_PRICE(inst);
 
 	/* Ensure commodity and currency are in the db */
 	gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
 	gnc_gda_save_commodity( be, gnc_price_get_currency( pPrice ) );
 
 	(void)gnc_gda_do_db_operation( be,
-							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-							TABLE_NAME,
-							GNC_ID_PRICE, pPrice,
-							col_table );
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						TABLE_NAME,
+						GNC_ID_PRICE, pPrice,
+						col_table );
 }
 
 /* ================================================================= */

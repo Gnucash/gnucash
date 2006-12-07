@@ -135,13 +135,13 @@ static col_cvt_t guid_col_table[] =
 static gpointer
 get_guid( gpointer pObject )
 {
-	return (gpointer)qof_entity_get_guid( (QofEntity*)pObject );
+	return (gpointer)qof_entity_get_guid( QOF_ENTITY(pObject) );
 }
 
 static void 
 set_guid( gpointer pObject, const gpointer pValue )
 {
-	QofEntity* pEntity = (QofEntity*)pObject;
+	QofEntity* pEntity = QOF_ENTITY(pObject);
 	GUID* guid = (GUID*)pValue;
 
 	qof_entity_set_guid( pEntity, guid );
@@ -150,17 +150,17 @@ set_guid( gpointer pObject, const gpointer pValue )
 static gpointer
 get_tx_currency( gpointer pObject )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	const Transaction* pTx = GNC_TRANS(pObject);
 
 	return (gpointer)qof_instance_get_guid(
-						(QofInstance*)xaccTransGetCurrency( pTx ) );
+						QOF_INSTANCE(xaccTransGetCurrency( pTx )) );
 }
 
 static void 
 set_tx_currency( gpointer pObject, const gpointer pValue )
 {
-	Transaction* pTx = (Transaction*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pTx );
+	Transaction* pTx = GNC_TRANS(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pTx) );
 	gnc_commodity* pCurrency;
 	GUID* guid = (GUID*)pValue;
 
@@ -171,7 +171,7 @@ set_tx_currency( gpointer pObject, const gpointer pValue )
 static gpointer
 get_tx_num( gpointer pObject )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	const Transaction* pTx = GNC_TRANS(pObject);
 	const gchar* s;
 
 	s = xaccTransGetNum( pTx );
@@ -181,7 +181,7 @@ get_tx_num( gpointer pObject )
 static void 
 set_tx_num( gpointer pObject, const gpointer pValue )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	Transaction* pTx = GNC_TRANS(pObject);
 	const gchar* s = (const gchar*)pValue;
 
 	xaccTransSetNum( pTx, s );
@@ -190,7 +190,7 @@ set_tx_num( gpointer pObject, const gpointer pValue )
 static gpointer
 get_tx_post_date( gpointer pObject )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	const Transaction* pTx = GNC_TRANS(pObject);
 	static Timespec ts;
 
 	ts = xaccTransRetDatePostedTS( pTx );
@@ -200,7 +200,7 @@ get_tx_post_date( gpointer pObject )
 static void 
 set_tx_post_date( gpointer pObject, const gpointer pValue )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	Transaction* pTx = GNC_TRANS(pObject);
 	Timespec* pTS = (Timespec*)pValue;
 
 	xaccTransSetDatePostedTS( pTx, pTS );
@@ -209,7 +209,7 @@ set_tx_post_date( gpointer pObject, const gpointer pValue )
 static gpointer
 get_tx_enter_date( gpointer pObject )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	const Transaction* pTx = GNC_TRANS(pObject);
 	static Timespec ts;
 
 	ts = xaccTransRetDateEnteredTS( pTx );
@@ -219,7 +219,7 @@ get_tx_enter_date( gpointer pObject )
 static void 
 set_tx_enter_date( gpointer pObject, const gpointer pValue )
 {
-	Transaction* pTx = (Transaction*)pObject;
+	Transaction* pTx = GNC_TRANS(pObject);
 	Timespec* pTS = (Timespec*)pValue;
 
 	xaccTransSetDateEnteredTS( pTx, pTS );
@@ -228,17 +228,17 @@ set_tx_enter_date( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_tx_guid( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	Transaction* pTx = xaccSplitGetParent( pSplit );
 
-	return (gpointer)qof_instance_get_guid( (QofInstance*)pTx );
+	return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pTx) );
 }
 
 static void 
 set_split_tx_guid( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pSplit );
+	Split* pSplit = GNC_SPLIT(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
 	GUID* guid = (GUID*)pValue;
 	Transaction* pTx = xaccTransLookup( guid, pBook );
 
@@ -248,7 +248,7 @@ set_split_tx_guid( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_reconcile_state( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	static gchar c[2];
 
 	c[0] = xaccSplitGetReconcile( pSplit );
@@ -259,7 +259,7 @@ get_split_reconcile_state( gpointer pObject )
 static void 
 set_split_reconcile_state( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
+	Split* pSplit = GNC_SPLIT(pObject);
 	const gchar* s = (const gchar*)pValue;
 
 	xaccSplitSetReconcile( pSplit, s[0] );
@@ -268,7 +268,7 @@ set_split_reconcile_state( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_reconcile_date( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	static Timespec ts;
 
 	ts = xaccSplitRetDateReconciledTS( pSplit );
@@ -278,7 +278,7 @@ get_split_reconcile_date( gpointer pObject )
 static void 
 set_split_reconcile_date( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
+	Split* pSplit = GNC_SPLIT(pObject);
 	Timespec* pTS = (Timespec*)pValue;
 
 	xaccSplitSetDateReconciledTS( pSplit, pTS );
@@ -287,7 +287,7 @@ set_split_reconcile_date( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_value( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	static gnc_numeric v;
 
 	v = xaccSplitGetValue( pSplit );
@@ -297,7 +297,7 @@ get_split_value( gpointer pObject )
 static void 
 set_split_value( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
+	Split* pSplit = GNC_SPLIT(pObject);
 	gnc_numeric* pV = (gnc_numeric*)pValue;
 
 	xaccSplitSetValue( pSplit, *pV );
@@ -306,7 +306,7 @@ set_split_value( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_quantity( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	static gnc_numeric v;
 
 	v = xaccSplitGetAmount( pSplit );
@@ -316,7 +316,7 @@ get_split_quantity( gpointer pObject )
 static void 
 set_split_quantity( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
+	Split* pSplit = GNC_SPLIT(pObject);
 	gnc_numeric* pV = (gnc_numeric*)pValue;
 
 	xaccSplitSetAmount( pSplit, *pV );
@@ -325,17 +325,17 @@ set_split_quantity( gpointer pObject, const gpointer pValue )
 static gpointer
 get_split_account( gpointer pObject )
 {
-	Split* pSplit = (Split*)pObject;
+	const Split* pSplit = GNC_SPLIT(pObject);
 	Account* pAccount = xaccSplitGetAccount( pSplit );
 
-	return (gpointer)qof_instance_get_guid( (QofInstance*)pAccount );
+	return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pAccount) );
 }
 
 static void 
 set_split_account( gpointer pObject, const gpointer pValue )
 {
-	Split* pSplit = (Split*)pObject;
-	QofBook* pBook = qof_instance_get_book( (QofInstance*)pSplit );
+	Split* pSplit = GNC_SPLIT(pObject);
+	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
 	GUID* guid = (GUID*)pValue;
 	Account* pAccount = xaccAccountLookup( guid, pBook );
 
@@ -358,12 +358,12 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 		}
 	}
 	gnc_gda_load_object( pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
-	gnc_gda_slots_load( be, qof_instance_get_guid( (QofInstance*)pSplit ),
-							qof_instance_get_slots( (QofInstance*)pSplit ) );
+	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
+							qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
 
 	g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
 
-	qof_instance_mark_clean( (QofInstance*)pSplit );
+	qof_instance_mark_clean( QOF_INSTANCE(pSplit) );
 
 	return pSplit;
 }
@@ -371,16 +371,25 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 static void
 load_splits( GncGdaBackend* be, const GUID* guid )
 {
-	gchar* buf;
 	GdaObject* ret;
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	GdaQuery* query;
+	GdaQueryCondition* cond;
+	GValue value;
 
 	guid_to_string_buff( guid, guid_buf );
-	buf = g_strdup_printf( "SELECT * FROM %s where tx_guid='%s'",
-						SPLIT_TABLE, guid_buf );
-	ret = gnc_gda_execute_sql( be, buf );
+	memset( &value, 0, sizeof( GValue ) );
+	g_value_init( &value, G_TYPE_STRING );
+	g_value_set_string( &value, guid_buf );
+	query = gnc_gda_create_select_query( be, SPLIT_TABLE );
+	cond = gnc_gda_create_condition_from_field( query, "tx_guid", &value );
+	gda_query_set_condition( query, cond );
+	g_object_unref( G_OBJECT(cond) );
+
+	ret = gnc_gda_execute_query( be, query );
+	g_object_unref( G_OBJECT(query) );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 
@@ -407,11 +416,11 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 	}
 	xaccTransBeginEdit( pTx );
 	gnc_gda_load_object( pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
-	gnc_gda_slots_load( be, qof_instance_get_guid( (QofInstance*)pTx ),
-							qof_instance_get_slots( (QofInstance*)pTx ) );
-	load_splits( be, qof_instance_get_guid( (QofInstance*)pTx ) );
+	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ),
+							qof_instance_get_slots( QOF_INSTANCE(pTx) ) );
+	load_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
-	qof_instance_mark_clean( (QofInstance*)pTx );
+	qof_instance_mark_clean( QOF_INSTANCE(pTx) );
 	xaccTransCommitEdit( pTx );
 
 	g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
@@ -419,32 +428,28 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 	return pTx;
 }
 
+#if 0
 static void
 load_transactions( GncGdaBackend* be, const GUID* guid )
 {
-	GError* error = NULL;
-	gchar* buf;
 	GdaQuery* query;
 	GdaObject* ret;
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	GValue value;
+	GdaQueryCondition* cond;
 
 	guid_to_string_buff( guid, guid_buf );
-	buf = g_strdup_printf( "SELECT * FROM %s where guid='%s'",
-						TRANSACTION_TABLE, guid_buf );
-	query = gda_query_new_from_sql( be->pDict, buf, &error );
-	g_free( buf );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
+	memset( &value, 0, sizeof( GValue ) );
+	g_value_init( &value, G_TYPE_STRING );
+	g_value_set_string( &value, guid_buf );
+	query = gnc_gda_create_select_query( be, TRANSACTION_TABLE );
+	cond = gnc_gda_create_condition_from_field( query, "guid", &value );
+	gda_query_set_condition( query, cond );
+	g_object_unref( G_OBJECT(cond) );
 
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
+	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 
@@ -453,27 +458,16 @@ load_transactions( GncGdaBackend* be, const GUID* guid )
 		}
 	}
 }
+#endif
 
 static void
-query_transactions( GncGdaBackend* be, const gchar* sql )
+query_transactions( GncGdaBackend* be, GdaQuery* query )
 {
-	GError* error = NULL;
-	GdaQuery* query;
 	GdaObject* ret;
 
-	query = gda_query_new_from_sql( be->pDict, sql, &error );
-	if( query == NULL ) {
-		printf( "SQL error: %s\n", error->message );
-		return;
-	}
-	error = NULL;
-	ret = gda_query_execute( query, NULL, FALSE, &error );
-
-	if( error != NULL ) {
-		printf( "SQL error: %s\n", error->message );
-	}
+	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 
@@ -495,9 +489,10 @@ static void
 delete_split_slots_cb( gpointer data, gpointer user_data )
 {
 	split_info_t* split_info = (split_info_t*)user_data;
-	Split* pSplit = (Split*)data;
+	Split* pSplit = GNC_SPLIT(data);
 
-	gnc_gda_slots_delete( split_info->be, qof_instance_get_guid( (QofInstance*)pSplit ) );
+	gnc_gda_slots_delete( split_info->be,
+					qof_instance_get_guid( QOF_INSTANCE(pSplit) ) );
 }
 
 static void
@@ -516,12 +511,13 @@ static void
 save_split_cb( gpointer data, gpointer user_data )
 {
 	split_info_t* split_info = (split_info_t*)user_data;
-	Split* pSplit = (Split*)data;
+	Split* pSplit = GNC_SPLIT(data);
 
 	(void)gnc_gda_do_db_operation( split_info->be, OP_DB_ADD, SPLIT_TABLE,
 									GNC_ID_SPLIT, pSplit, split_col_table );
-	gnc_gda_slots_save( split_info->be, qof_instance_get_guid( (QofInstance*)pSplit ),
-							qof_instance_get_slots( (QofInstance*)pSplit ) );
+	gnc_gda_slots_save( split_info->be,
+							qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
+							qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
 }
 
 static void
@@ -537,17 +533,17 @@ save_splits( GncGdaBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 static void
 commit_transaction( GncGdaBackend* be, QofInstance* inst )
 {
-	Transaction* pTx = (Transaction*)inst;
+	Transaction* pTx = GNC_TRANS(inst);
 	const GUID* guid;
 
 	// Ensure the commodity is in the db
 	gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );
 
 	(void)gnc_gda_do_db_operation( be,
-							(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-							TRANSACTION_TABLE,
-							GNC_ID_TRANS, pTx,
-							tx_col_table );
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						TRANSACTION_TABLE,
+						GNC_ID_TRANS, pTx,
+						tx_col_table );
 
 	guid = qof_instance_get_guid( inst );
 
@@ -596,25 +592,110 @@ compile_split_query( GncGdaBackend* pBackend, QofQuery* pQuery )
 	const GUID* acct_guid;
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
 
+#if 1
 	acct_guid = get_guid_from_query( pQuery );
 	guid_to_string_buff( acct_guid, guid_buf );
 	buf = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (SELECT DISTINCT tx_guid FROM %s WHERE account_guid = '%s')",
 							TRANSACTION_TABLE, SPLIT_TABLE, guid_buf );
 	return buf;
+#else
+	GdaQuery* query;
+	GdaQuery* subQuery;
+	GdaQueryTarget* target;
+	GdaQueryField* allFields;
+	GdaQueryField* field;
+	GValue value;
+	GdaQueryCondition* cond;
+	GdaQueryField* key;
+	GdaQueryField* key_value;
+
+	acct_guid = get_guid_from_query( pQuery );
+	guid_to_string_buff( acct_guid, guid_buf );
+
+	/* Subquery */
+
+	/* SELECT */
+	subQuery = gda_query_new( pBackend->pDict );
+	gda_query_set_query_type( subQuery, GDA_QUERY_TYPE_SELECT );
+
+	/* FROM splits */
+	target = gda_query_target_new( subQuery, SPLIT_TABLE );
+	gda_query_add_target( subQuery, target, NULL );
+	g_object_unref( G_OBJECT(target) );
+
+	/* tx_guid */
+	field = gda_query_field_field_new( subQuery, "tx_guid" );
+	gda_query_field_set_visible( field, TRUE );
+	gda_entity_add_field( GDA_ENTITY(subQuery), GDA_ENTITY_FIELD(field) );
+	g_object_unref( G_OBJECT(field) );
+
+	/* WHERE */
+	memset( &value, 0, sizeof( GValue ) );
+	g_value_init( &value, G_TYPE_STRING );
+	g_value_set_string( &value, guid_buf );
+	cond = gnc_gda_create_condition_from_field( subQuery, "account_guid", &value );
+	gda_query_set_condition( subQuery, cond );
+	g_object_unref( G_OBJECT(cond) );
+
+	/* Main query */
+
+	/* SELECT * FROM transactions */
+	query = gnc_gda_create_select_query( pBackend, TRANSACTION_TABLE );
+	gda_query_add_sub_query( query, subQuery );
+	g_object_unref( G_OBJECT(subQuery) );
+
+	/* WHERE */
+	cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_LEAF_IN );
+	gda_query_set_condition( query, cond );
+	g_object_unref( G_OBJECT(cond) );
+
+	key = gda_query_field_field_new( query, "account_guid" );
+	gda_query_field_set_visible( key, TRUE );
+	gda_query_condition_leaf_set_operator( cond,
+											GDA_QUERY_CONDITION_OP_LEFT,
+											GDA_QUERY_FIELD(key) );
+	g_object_unref( G_OBJECT(key) );
+
+	key_value = gda_query_field_value_new( query, G_TYPE_STRING );
+	gda_query_field_set_visible( key_value, TRUE );
+	gda_query_field_value_set_is_parameter( GDA_QUERY_FIELD_VALUE(key_value), TRUE );
+
+	g_object_set( key_value, "value-provider", subQuery, NULL );
+	gda_query_condition_leaf_set_operator( cond, GDA_QUERY_CONDITION_OP_RIGHT,
+												GDA_QUERY_FIELD(key_value) );
+
+	return query;
+#endif
 }
 
 static void
-run_split_query( GncGdaBackend* pBackend, gpointer pQuery )
+run_split_query( GncGdaBackend* be, gpointer pQuery )
 {
+	GdaQuery* query;
+#if 1
+	GError* error = NULL;
 	const gchar* sql = (const gchar*)pQuery;
 
-	query_transactions( pBackend, sql );
+	query = gda_query_new_from_sql( be->pDict, sql, &error );
+	if( query == NULL ) {
+		printf( "SQL error: %s\n", error->message );
+		return;
+	}
+	error = NULL;
+#else
+	query = GDA_QUERY(pQuery);
+#endif
+	query_transactions( be, query );
 }
 
 static void
 free_split_query( GncGdaBackend* pBackend, gpointer pQuery )
 {
+#if 1
 	g_free( pQuery );
+#else
+	g_object_unref( G_OBJECT(pQuery) );
+#endif
 }
 
 /* ================================================================= */

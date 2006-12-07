@@ -90,7 +90,7 @@ static col_cvt_t col_table[] = {
 static gpointer
 get_quote_source_name( gpointer pObject )
 {
-	gnc_commodity* pCommodity = (gnc_commodity*)pObject;
+	const gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
 
 	return (gpointer)gnc_quote_source_get_internal_name(
 							gnc_commodity_get_quote_source(pCommodity));
@@ -99,7 +99,7 @@ get_quote_source_name( gpointer pObject )
 static void 
 set_quote_source_name( gpointer pObject, const gpointer pValue )
 {
-	gnc_commodity* pCommodity = (gnc_commodity*)pObject;
+	gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
 	const gchar* quote_source_name = (const gchar*)pValue;
 	gnc_quote_source* quote_source;
 
@@ -121,7 +121,7 @@ load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
 
 	gnc_gda_load_object( pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
 
-	qof_instance_mark_clean( (QofInstance*)pCommodity );
+	qof_instance_mark_clean( QOF_INSTANCE(pCommodity) );
 
 	return pCommodity;
 }
@@ -138,7 +138,7 @@ load_commodities( GncGdaBackend* be )
 	}
 	ret = gnc_gda_execute_query( be, query );
 	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = (GdaDataModel*)ret;
+		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
 		int numRows = gda_data_model_get_n_rows( pModel );
 		int r;
 		gnc_commodity* pCommodity;
@@ -151,9 +151,9 @@ load_commodities( GncGdaBackend* be )
 			if( pCommodity != NULL ) {
 				GUID guid;
 
-				guid = *qof_entity_get_guid( (QofEntity*)pCommodity );
+				guid = *qof_entity_get_guid( QOF_ENTITY(pCommodity) );
 				pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
-				qof_entity_set_guid( (QofEntity*)pCommodity, &guid );
+				qof_entity_set_guid( QOF_ENTITY(pCommodity), &guid );
 			}
 		}
 	}
@@ -186,7 +186,7 @@ is_commodity_in_db( GncGdaBackend* be, gnc_commodity* pCommodity )
 void gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
 {
 	if( !is_commodity_in_db( be, pCommodity ) ) {
-		commit_commodity( be, (QofInstance*)pCommodity );
+		commit_commodity( be, QOF_INSTANCE(pCommodity) );
 	}
 }
 
