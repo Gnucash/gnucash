@@ -64,6 +64,9 @@ gnc_numeric xaccSplitConvertAmount (const Split *split, Account * account);
  * Splits
  *-----------------------------------------------------------------------*/
 
+#define GNC_IS_SPLIT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SPLIT))
+#define GNC_SPLIT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SPLIT, Split))
+
 /** @name Split general getters/setters
 @{
 */
