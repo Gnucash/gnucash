@@ -35,6 +35,9 @@
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
 
+#include "Account.h"
+#include "Transaction.h"
+
 #include "gnc-backend-gda.h"
 #include "gnc-transaction-gda.h"
 #include "gnc-commodity.h"
@@ -42,9 +45,6 @@
 #include "gnc-slots-gda.h"
 
 #include "gnc-engine.h"
-
-#include "Account.h"
-#include "Transaction.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
@@ -357,6 +357,12 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 			pSplit = xaccMallocSplit( be->primary_book );
 		}
 	}
+
+	/* If the split is dirty, don't overwrite it */
+	if( qof_instance_is_dirty( QOF_INSTANCE(pSplit) ) ) {
+		return pSplit;
+	}
+
 	gnc_gda_load_object( pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
 	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
 							qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
@@ -508,16 +514,27 @@ delete_splits( GncGdaBackend* be, Transaction* pTx )
 }
 
 static void
+commit_split( GncGdaBackend* be, QofInstance* inst )
+{
+	Split* pSplit = GNC_SPLIT(inst);
+
+	(void)gnc_gda_do_db_operation( be,
+						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+						SPLIT_TABLE,
+						GNC_ID_SPLIT, pSplit,
+						split_col_table );
+	gnc_gda_slots_save( be,
+						qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
+						qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
+}
+
+static void
 save_split_cb( gpointer data, gpointer user_data )
 {
 	split_info_t* split_info = (split_info_t*)user_data;
 	Split* pSplit = GNC_SPLIT(data);
 
-	(void)gnc_gda_do_db_operation( split_info->be, OP_DB_ADD, SPLIT_TABLE,
-									GNC_ID_SPLIT, pSplit, split_col_table );
-	gnc_gda_slots_save( split_info->be,
-							qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
-							qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
+	commit_split( split_info->be, QOF_INSTANCE(pSplit) );
 }
 
 static void
@@ -556,6 +573,20 @@ commit_transaction( GncGdaBackend* be, QofInstance* inst )
 		save_splits( be, guid, xaccTransGetSplitList( pTx ) );
 	} else {
 		gnc_gda_slots_delete( be, guid );
+	}
+}
+
+void gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx )
+{
+	SplitList* splits;
+	Split* s;
+	QofBackend* qbe = (QofBackend*)be;
+	
+	splits = xaccTransGetSplitList( pTx );
+	for( ; splits != NULL; splits = splits->next ) {
+		s = GNC_SPLIT(splits->data);
+
+		qbe->commit( qbe, QOF_INSTANCE(s) );
 	}
 }
 
@@ -714,7 +745,7 @@ gnc_gda_init_transaction_handler( void )
 	{
 		GNC_GDA_BACKEND_VERSION,
 		GNC_ID_SPLIT,
-		NULL,						/* commit */
+		commit_split,				/* commit */
 		NULL,						/* initial_load */
 		NULL,						/* create tables */
 		compile_split_query,

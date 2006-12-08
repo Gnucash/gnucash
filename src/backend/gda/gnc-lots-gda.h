@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-transaction-gda.h: load and save data to SQL via libgda      *
+ * gnc-lots-gda.h: load and save data to SQL via libgda             *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-transaction-gda.h
+/** @file gnc-lots-gda.h
  *  @brief load and save data to SQL via libgda
  *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
  *
@@ -26,13 +26,12 @@
  * restoring data to/from an SQL database via libgda
  */
 
-#ifndef GNC_TRANSACTION_GDA_H_
-#define GNC_TRANSACTION_GDA_H_
+#ifndef GNC_LOT_GDA_H_
+#define GNC_LOT_GDA_H_
 
 #include "qof.h"
 #include <gmodule.h>
 
-void gnc_gda_init_transaction_handler( void );
-void gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx );
+void gnc_gda_init_lot_handler( void );
 
-#endif /* GNC_TRANSACTION_GDA_H_ */
+#endif /* GNC_LOT_GDA_H_ */

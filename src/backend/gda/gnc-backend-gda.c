@@ -30,18 +30,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-//#include <libintl.h>
-//#include <locale.h>
-//#include <stdio.h>
-//#include <fcntl.h>
-//#include <limits.h>
-//#include <sys/stat.h>
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <errno.h>
-//#include <string.h>
-//#include <dirent.h>
-//#include <time.h>
 #include <libgda/libgda.h>
 
 #include "qof.h"
@@ -49,8 +37,6 @@
 #include "qofquerycore-p.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
-
-//#include "gnc-filepath-utils.h"
 
 #include "gnc-backend-gda.h"
 #include "gnc-gconf-utils.h"
@@ -63,10 +49,6 @@
 #include "gnc-schedxaction-gda.h"
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
-
-//#ifndef HAVE_STRPTIME
-//# include "strptime.h"
-//#endif
 
 static const gchar* convert_search_obj( QofIdType objType );
 static void gnc_gda_init_object_handlers( void );
@@ -821,6 +803,7 @@ get_handler( int col_type )
 			pHandler = &string_handler;
 			break;
 
+		case CT_BOOLEAN:
 		case CT_INT:
 			pHandler = &int_handler;
 			break;
@@ -1537,6 +1520,10 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
 	printf( "gda_commit_edit(): %s dirty = %d, do_free=%d\n", inst->entity.e_type, inst->dirty, inst->do_free );
 
+	if( !inst->dirty && !inst->do_free && GNC_IS_TRANS(inst) ) {
+		gnc_gda_transaction_commit_splits( be, GNC_TRANS(inst) );
+	}
+
 	if( !inst->dirty && !inst->do_free ) return;
 
 	be_data.ok = FALSE;
@@ -1549,8 +1536,6 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 				inst->entity.e_type );
 		return;
 	}
-
-	//qof_instance_mark_clean( inst );
 }
 /* ---------------------------------------------------------------------- */
 
