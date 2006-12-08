@@ -39,6 +39,7 @@
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
+#include "Split.h"
 #include "SplitP.h"
 #include "TransLog.h"
 #include "cap-gains.h"

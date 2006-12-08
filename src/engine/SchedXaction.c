@@ -371,7 +371,7 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 }
 
 void
-xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {

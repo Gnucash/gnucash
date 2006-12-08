@@ -47,6 +47,9 @@
 */
 typedef struct gncp_SchedXaction SchedXaction;
 
+#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_SX_ID))
+#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_SX_ID, SchedXaction))
+
 /**
  * Creates and initializes a scheduled transaction.
 */
@@ -121,7 +124,7 @@ void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
-void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+void xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                     gboolean *outAutoCreate,
                                     gboolean *outNotify );
 void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
