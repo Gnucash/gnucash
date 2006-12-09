@@ -1,4 +1,4 @@
-GDA backend status - Nov 7, 2006
+GDA backend status - Dec 9, 2006
 
 Building:
 - I am currently building with libgda 1.99.1 installed in /opt/libgda-1.99.1.
@@ -12,40 +12,75 @@ a dataset configured in ~/.libgda/config.  USERNAME and PASSWORD are not
 required but can be specified.
 
 - The backend assumes that the database already exists.  Tables will be
-created if they don't exist.  The ddl files in src/backend/gda/ddl are not
-up to date.  Note that src/backend/gda/ddl/business.ddl has not been tried
-yet, so there are no guarantees that any database will accept it.
+created if they don't exist.  I have only tested with mysql.  In theory, other
+db engines supported by libgda should work correctly.
 
 - The backend will save commodities and load them on startup.
+- The backend will save accounts and load them on startup.  Accounts created
+for scheduled transactions will be loaded into the CoA.
+- The backend will save budgets and load them on startup.
+- The backend will save lots and load them on startup.
+- The backend will save prices and load them on startup.
 
-- The backend will save accounts and load them on startup.  Any information
-in slots is not saved or loaded.
+- Don't use scheduled transactions.  An account and a scheduled transaction
+will be saved.  Frequency info will not be saved/restored.  Other related info
+will not be saved/restored.
 
-Functional Issues:
-- In the price editor dialog, if you press Add, the dialog commits a price
-with a NULL guid which is rejected by the db.
+- Slots will be saved and restored for all objects.
 
-- Account information in slots is not saved or restored
+- When a register is opened, splits and transactions will be queried.  If a
+transaction is created or edited (I haven't tested deletion yet), the db is
+updated properly.
 
-- If you create a new account, the commodity with that account will be saved
-to the db.  If you create a new price, the commodity with that price will not
-be saved to the db if it doesn't already exist in the db.
+Libgda Issues:
+- There is a bug in libgda.  Dates are not saved.  libgda creates the SQL as
+'MM-DD-YYYY' instead of 'YYYY-MM-DD'.  MySQL doesn't complain, but stores the
+date as '0000-00-00'.  Fixed in libgda CVS.
 
-- Transactions and splits are saved but not yet restored via query
+GC and GDA Backend Issues:
+- To avoid having the backend commit everything twice (because of the Qof two
+phase commit protocol), saved objects are marked clean when committed.  To do
+this, I need to reach right into the QofInstance structure and clear the dirty
+flag.  There should be a better way to do this.  Note this also keeps the book
+from being marked dirty.  Q: If a db backend becomes the standard and xml
+is only for import/export, does the concept of clean/dirty disappear?
 
-GDA backend implementation issues:
-- Should use GdaDataHandler for converting values -> SQL and getting values
-back from the db.  Need to reassess this if using GdaQuery.
+- Recurrences are currently only used by budgets, and recurrence save/restore
+is included in the budget save/restore code.  If recurrences will eventually
+be used elsewhere in GC, recurrence save/restore code may need to be split out
+on its own (separate recurrences table?)
+
+- The backend has its own tables for objects which include db-related info.
+Can these be merged with the engine object tables?
+
+- When a price is committed, the priceDB is also committed.  Could there
+eventually be multiple priceDBs?  If not, the priceDB commit is just ignored.
+
+- Multiple books?  The old postgres backend had a books table.  If the new
+db should have one, accounts (and other objects) should have a book guid field.
+
+- If I try to "Save As" and type a url (e.g. gda://xxx), this gets converted
+to file:///home/phil/.../gda%3F%2A%2Axxx.  (I don't remember the % escapes 
+exactly, but you get the picture).  I tried adding
+gtk_file_chooser_set_local_only( file_box, FALSE) but that didn't help.
 
 TODO:
+- Add --with-libgda= configure option
 
-- Better representation for gnc_numeric - doesn't compare well
-- queries
-	- transactions/splits
-- SQLite if just a "file"
-- handle construction of path name for nested slots
-- lots
-- sched transactions
-- check for memory leaks
-- add --with-libgda= configure option
-- business objects
+- Business objects
+
+- Check for memory leaks
+
+- Better representation for gnc_numeric - doesn't compare well i.e. a query
+for splits where 'value > 20.00' will be difficult.  Maybe should convert
+gnc_numeric <-> double.
+
+- Queries - Split query is handled specially because it is quite involved.
+Only other query I've seen is by the business backend for invoices due soon.
+Generic query handler not built yet.
+
+- SQLite if just a "file".  If the file being opened is an SQLite db, should
+be handled properly.  If a file is saved as file://xxx, xxx should be created
+as a SQLite db.  Perhaps xml://  should be used for xml interchange format.
+
+- Finish scheduled transactions
