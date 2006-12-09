@@ -1031,6 +1031,8 @@ static
 void
 gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
 {
+		gnc_sx_begin_edit( sxed->sx );
+
         /* name */
         {
                 char *name;
@@ -1124,6 +1126,7 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                 xaccSchedXactionSetStartDate( sxed->sx, &gdate );
         }
 
+		gnc_sx_commit_edit( sxed->sx );
 }
 
 static void
