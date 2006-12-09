@@ -612,10 +612,17 @@ get_gvalue_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, GValue* value )
 {
 	GDate* date;
+	QofAccessFunc getter;
 
 	memset( value, 0, sizeof( GValue ) );
 
-	date = (GDate*)(*table_row->getter)( pObject );
+	if( table_row->param_name != NULL ) {
+		getter = qof_class_get_parameter_getter( obj_name,
+												table_row->param_name );
+		date = (GDate*)(*getter)( pObject, NULL );
+	} else {
+		date = (GDate*)(*table_row->getter)( pObject );
+	}
 	if( date != NULL ) {
 		g_value_init( value, G_TYPE_DATE );
 		g_value_set_boxed( value, date );
@@ -662,6 +669,7 @@ load_numeric( GdaDataModel* pModel, gint row,
 	g_free( buf );
 	if( gda_value_is_null( val ) ) {
 		isNull = TRUE;
+		num = 0;
 	} else {
 		num = g_value_get_int64( val );
 	}
@@ -670,6 +678,7 @@ load_numeric( GdaDataModel* pModel, gint row,
 	g_free( buf );
 	if( gda_value_is_null( val ) ) {
 		isNull = TRUE;
+		denom = 1;
 	} else {
 		denom = g_value_get_int64( val );
 	}
