@@ -1,9 +1,26 @@
 Version history:
 ------- -------
 
- 2.0.3 - ?? ??  2006
-	 o Translations:
-	 - Updated British English, French, German translation
+ 2.0.3 - 10 December 2006
+ 	 o Release of new stable version 2.0.3.
+	 o Core changes;
+	 - Fix for crashes on Solaris and Windows.
+	 - Fix for crash on quit during save.
+	 - Fix a bug so that blank transactions are marked as pending.
+	 - When progress bar is showing, do not make menus and toolbars
+	   insensitive, but rather the underlying action groups.
+	 - Save window size and position of the transfer dialog.
+	 o Scheduled Transactions changes;
+	 - Fix for UTF-8 bug in month name.
+	 o Import changes;
+	 - Fix missing date when reconciling from HBCI.
+	 o Reports changes;
+	 - Fix some scheme inexact errors.
+	 o Help changes;
+	 - Inform the user about 'gnucash-docs' package when Help is selected
+	   with no content.
+	 o Translations;
+	 - Updated British English, French, German translation.
 
  2.0.2 - 08 October 2006
  	 o Release of new stable version 2.0.2 
