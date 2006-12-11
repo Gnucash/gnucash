@@ -734,6 +734,11 @@ gnc_lconv_set_utf8 (char **p_value, char *default_value)
     *p_value = default_value;
 
   *p_value = g_locale_to_utf8 (*p_value, -1, NULL, NULL, NULL);
+  if (*p_value == NULL) {
+    // The g_locale_to_utf8 conversion failed. FIXME: Should we rather
+    // use an empty string instead of the default_value? Not sure.
+    *p_value = default_value;
+  }
   // FIXME: Do we really need to make a copy here ?
   //*p_value = g_strdup (*p_value);
 }
