@@ -151,21 +151,21 @@ typedef enum {
 
 /**
  * The states a to-be-created SX can be in...
- * TO_CREATE   : The SX is ready to be created, depending on variable-binding
+ * SX_TO_CREATE : The SX is ready to be created, depending on variable-binding
  *               requirements.
- * IGNORE      : Drop the SX on the floor forever.
- * POSTPONE    : Bring this SX up in the future, but we're not going to
+ * SX_IGNORE   : Drop the SX on the floor forever.
+ * SX_POSTPONE : Bring this SX up in the future, but we're not going to
  *               create it right now.
- * [MAX_STATE] : The maximum real value.
- * UNDEF       : Only used for prevState, to indicate that we haven't
+ * SX_[MAX_STATE] : The maximum real value.
+ * SX_UNDEF     : Only used for prevState, to indicate that we haven't
  *               processed this instance, yet.
  **/
 typedef enum {
-        TO_CREATE,
-        IGNORE,
-        POSTPONE,
-        MAX_STATE,
-        UNDEF
+        SX_TO_CREATE,
+        SX_IGNORE,
+        SX_POSTPONE,
+        SX_MAX_STATE,
+        SX_UNDEF
 } ToCreateState;
 
 typedef struct toCreateTuple_ {
@@ -1141,17 +1141,17 @@ sxsld_process_to_create_instance(sxSinceLastData *sxsld,
 
         /* Undo the previous work. */
         switch ( tci->prevState ) {
-        case IGNORE:
+        case SX_IGNORE:
                 switch ( tci->state ) {
-                case IGNORE:
+                case SX_IGNORE:
                         /* Keep ignoring. */
                         break;
-                case POSTPONE:
+                case SX_POSTPONE:
                         /* remove from postponed list. */
                         gnc_sx_remove_defer_instance( tci->parentTCT->sx,
                                                       tci->sxStateData );
                         break;
-                case TO_CREATE:
+                case SX_TO_CREATE:
                         /* del prev txns. */
                         sxsld_revert_to_create_txns( sxsld, tci );
                         break;
@@ -1159,20 +1159,20 @@ sxsld_process_to_create_instance(sxSinceLastData *sxsld,
                         g_assert( FALSE );
                 }
                 break;
-        case POSTPONE:
-                if ( tci->state != POSTPONE ) {
+        case SX_POSTPONE:
+                if ( tci->state != SX_POSTPONE ) {
                         /* remove from postponed list. */
                         gnc_sx_remove_defer_instance( tci->parentTCT->sx,
                                                       tci->sxStateData );
                 }
                 break;
-        case TO_CREATE:
-                if ( tci->state != TO_CREATE ) {
+        case SX_TO_CREATE:
+                if ( tci->state != SX_TO_CREATE ) {
                         /* del prev txns. */
                         sxsld_revert_to_create_txns( sxsld, tci );
                 }
                 break;
-        case UNDEF:
+        case SX_UNDEF:
                 /* Fine; do nothing. */
                 break;
         default:
@@ -1182,11 +1182,11 @@ sxsld_process_to_create_instance(sxSinceLastData *sxsld,
 
         /* Now, process the currently-requested state. */
         switch ( tci->state ) {
-        case IGNORE:
+        case SX_IGNORE:
                 /* Fine ... just ignore it. */
                 break;
-        case POSTPONE:
-                if ( tci->prevState == POSTPONE ) {
+        case SX_POSTPONE:
+                if ( tci->prevState == SX_POSTPONE ) {
                         break;
                 }
                 /* add to the postponed list. */
@@ -1199,7 +1199,7 @@ sxsld_process_to_create_instance(sxSinceLastData *sxsld,
                 }
                 gnc_sx_add_defer_instance( tci->parentTCT->sx, tci->sxStateData );
                 break;
-        case TO_CREATE:
+        case SX_TO_CREATE:
                 /* Go ahead and create... */
                 toRet = sxsld_create_to_create_txns(sxsld, tci, creation_errors);
                 break;
@@ -1238,7 +1238,7 @@ sxsld_process_to_create_instance(sxSinceLastData *sxsld,
                  * ignoring the first instance. We only want to incrment the
                  * counters for newly-discovered-as-to-be-created SXes.
                  */
-                if ( tci->origState == UNDEF ) {
+                if ( tci->origState == SX_UNDEF ) {
                         tmp = gnc_sx_get_instance_count( sx, NULL );
                         gnc_sx_set_instance_count( sx, tmp+1 );
                         if ( xaccSchedXactionHasOccurDef( sx ) ) {
@@ -1278,8 +1278,8 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
                       tcInstList = tcInstList->next ) {
                         tci = (toCreateInstance*)tcInstList->data;
 
-                        if ( tci->state == IGNORE
-                             || tci->state == POSTPONE ) {
+                        if ( tci->state == SX_IGNORE
+                             || tci->state == SX_POSTPONE ) {
                                 continue;
                         }
 
@@ -1506,10 +1506,10 @@ cancel_check( GnomeDruidPage *druid_page,
                               tciList;
                               tciList = tciList->next ) {
                                 tci = (toCreateInstance*)tciList->data;
-                                if ( tci->prevState == POSTPONE
-                                     && tci->origState    != POSTPONE ) {
+                                if ( tci->prevState == SX_POSTPONE
+                                     && tci->origState    != SX_POSTPONE ) {
                                         /* Any valid [non-null] 'prevState !=
-                                         * POSTPONE' sx temporal state
+                                         * SX_POSTPONE' sx temporal state
                                          * pointers will be destroyed at the
                                          * destruction of the dialog [the
                                          * non-cancel case], so if we need to
@@ -1720,9 +1720,9 @@ generate_instances(SchedXaction *sx,
                 tci->dirty     = FALSE;
                 tci->date      = g_date_new();
                 *tci->date     = gd;
-                tci->origState = UNDEF;
-                tci->state     = TO_CREATE;
-                tci->prevState = UNDEF;
+                tci->origState = SX_UNDEF;
+                tci->state     = SX_TO_CREATE;
+                tci->prevState = SX_UNDEF;
                 tci->sxStateData =
                         gnc_sx_clone_temporal_state( seqStateData );
                 *instanceList  = g_list_append( *instanceList, tci );
@@ -1854,7 +1854,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                         
 
                         switch ( tci->state ) {
-                        case TO_CREATE:
+                        case SX_TO_CREATE:
                             allVarsBound = TRUE;
                             g_hash_table_foreach( tci->varBindings,
                                                   andequal_numerics_set,
@@ -1864,10 +1864,10 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                                            : _( "Needs values for variables" ) /* NEEDS_BINDINGS_TEXT */
                                     );
                             break;
-                        case IGNORE:
+                        case SX_IGNORE:
                             rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
                             break;
-                        case POSTPONE:
+                        case SX_POSTPONE:
                             rowText[1] = _( "Postponed" ) /* POSTPONE_TEXT */ ;
                             break;
                         default:
@@ -2062,9 +2062,9 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                 tci->parentTCT   = tct;
                 tci->date        = g_date_new();
                 *tci->date       = *rit->occurDate;
-                tci->state       = TO_CREATE;
-                tci->prevState   = UNDEF;
-                tci->origState   = UNDEF;
+                tci->state       = SX_TO_CREATE;
+                tci->prevState   = SX_UNDEF;
+                tci->origState   = SX_UNDEF;
                 tci->varBindings = NULL;
                 tci->node        = NULL;
                 tci->sxStateData = rit->sxStateData;
@@ -2162,9 +2162,9 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                                         xaccSchedXactionGetNextInstance(
                                                 sx, tci->sxStateData );
                                 tci->dirty       = FALSE;
-                                tci->state       = POSTPONE;
-                                tci->prevState   = POSTPONE;
-                                tci->origState   = POSTPONE;
+                                tci->state       = SX_POSTPONE;
+                                tci->prevState   = SX_POSTPONE;
+                                tci->origState   = SX_POSTPONE;
 
                                 instanceList = g_list_append( instanceList, tci );
                                 tci = NULL;
@@ -3449,7 +3449,7 @@ sxsld_get_future_created_txn_count( sxSinceLastData *sxsld )
                         }
                         
                         switch ( tci->state ) {
-                        case TO_CREATE:
+                        case SX_TO_CREATE:
                                 /* We were postpone or ignore, before ... so
                                  * add the new txns in. */
 
@@ -3466,18 +3466,18 @@ sxsld_get_future_created_txn_count( sxSinceLastData *sxsld )
                                 g_list_free( txnSet );
                                 txnSet = NULL;
                                 break;
-                        case IGNORE:
-                        case POSTPONE:
+                        case SX_IGNORE:
+                        case SX_POSTPONE:
                                 /* We were {postpone,ignore} or to-create,
                                  * before, so either continue to ignore or
                                  * subtract out the txns. */
-                                if ( tci->prevState != TO_CREATE ) {
+                                if ( tci->prevState != SX_TO_CREATE ) {
                                         continue;
                                 }
                                 toRet -= g_list_length( tci->createdTxnGUIDs );
                                 break;
-                        case UNDEF:
-                        case MAX_STATE:
+                        case SX_UNDEF:
+                        case SX_MAX_STATE:
                                 g_assert( "We shouldn't see any of these." );
                                 break;
                         }
@@ -3511,7 +3511,7 @@ sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
         newCtreeText = "FIXME";
 
         switch ( newState ) {
-        case TO_CREATE:
+        case SX_TO_CREATE:
                 newSensitivity = TRUE;
                 {
                         gboolean allVarsBound = TRUE;
@@ -3525,11 +3525,11 @@ sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
                                          : _( NEEDS_BINDINGS_TEXT ) );
                 }
                 break;
-        case IGNORE:
+        case SX_IGNORE:
                 newSensitivity = FALSE;
                 newCtreeText = _( IGNORE_TEXT );
                 break;
-        case POSTPONE:
+        case SX_POSTPONE:
                 newSensitivity = FALSE;
                 newCtreeText = _( POSTPONE_TEXT );
                 break;
@@ -3929,8 +3929,8 @@ gnc_sxsld_free_tci( toCreateInstance *tci )
          * cancel-specific case handle that destruction [thus the
          * valid-pointer check].
          */
-        if ( tci->prevState      != POSTPONE
-             && tci->origState   != POSTPONE
+        if ( tci->prevState      != SX_POSTPONE
+             && tci->origState   != SX_POSTPONE
              && tci->sxStateData != NULL ) {
                 gnc_sx_destroy_temporal_state( tci->sxStateData );
                 tci->sxStateData = NULL;
