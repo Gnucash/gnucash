@@ -257,7 +257,6 @@ qof_query_string_predicate (QofQueryCompare how,
                             gboolean is_regex)
 {
   query_string_t pdata;
-  int rc;
 
   g_return_val_if_fail (str, NULL);
   g_return_val_if_fail (*str != '\0', NULL);
@@ -270,6 +269,7 @@ qof_query_string_predicate (QofQueryCompare how,
   pdata->matchstring = g_strdup (str);
 
   if (is_regex) {
+    int rc;
     int flags = REG_EXTENDED;
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
       flags |= REG_ICASE;
