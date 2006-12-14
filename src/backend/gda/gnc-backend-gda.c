@@ -142,6 +142,21 @@ gnc_gda_create_condition_from_field( GdaQuery* query, const gchar* col_name,
 	return cond;
 }
 /* ----------------------------------------------------------------- */
+static QofAccessFunc
+get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
+{
+	QofAccessFunc getter;
+
+	if( table_row->param_name != NULL ) {
+		getter = qof_class_get_parameter_getter( obj_name,
+												table_row->param_name );
+	} else {
+		getter = table_row->getter;
+	}
+
+	return getter;
+}
+
 static void
 load_string( GdaDataModel* pModel, gint row,
 			QofSetterFunc setter, gpointer pObject,
@@ -167,13 +182,8 @@ get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name,
 	gchar* s;
 
 	memset( value, 0, sizeof( GValue ) );
-	if( table_row->param_name != NULL ) {
-		getter = qof_class_get_parameter_getter( obj_name,
-												table_row->param_name );
-		s = (gchar*)(*getter)( pObject, NULL );
-	} else {
-		s = (gchar*)(*table_row->getter)( pObject );
-	}
+	getter = get_getter( obj_name, table_row );
+	s = (gchar*)(*getter)( pObject, NULL );
 	if( s ) {
 		g_value_init( value, G_TYPE_STRING );
 		g_value_set_string( value, s );
@@ -244,13 +254,8 @@ get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 	memset( value, 0, sizeof( GValue ) );
 
-	if( table_row->param_name != NULL ) {
-		getter = qof_class_get_parameter_getter( obj_name,
-												table_row->param_name );
-		int_value = (gint)(*getter)( pObject, NULL );
-	} else {
-		int_value = (gint)(*table_row->getter)( pObject );
-	}
+	getter = get_getter( obj_name, table_row );
+	int_value = (gint)(*getter)( pObject, NULL );
 	g_value_init( value, G_TYPE_INT );
 	g_value_set_int( value, int_value );
 }
@@ -315,9 +320,11 @@ get_gvalue_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 {
 	gint64* pInt64;
 	gint64 i64_value;
+	QofAccessFunc getter;
 
 	memset( value, 0, sizeof( GValue ) );
-	pInt64 = (*table_row->getter)( pObject );
+	getter = get_getter( obj_name, table_row );
+	pInt64 = (*getter)( pObject, NULL );
 	if( pInt64 != NULL ) {
 		gchar* s;
 
@@ -385,12 +392,14 @@ static void
 get_gvalue_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, GValue* value )
 {
+	QofAccessFunc getter;
 	gdouble* pDouble;
 	gdouble d_value;
 
 	memset( value, 0, sizeof( GValue ) );
 
-	pDouble = (*table_row->getter)( pObject );
+	getter = get_getter( obj_name, table_row );
+	pDouble = (*getter)( pObject, NULL );
 	if( pDouble != NULL ) {
 		d_value = *pDouble;
 		g_value_init( value, G_TYPE_DOUBLE );
@@ -458,16 +467,14 @@ static void
 get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, GValue* value )
 {
+	QofAccessFunc getter;
 	const GUID* guid;
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
 
 	memset( value, 0, sizeof( GValue ) );
 
-	if( table_row->getter != NULL ) {
-		guid = (*table_row->getter)( pObject );
-	} else {
-		guid = NULL;
-	}
+	getter = get_getter( obj_name, table_row );
+	guid = (*getter)( pObject, NULL );
 	if( guid != NULL ) {
 		(void)guid_to_string_buff( guid, guid_buf );
 		g_value_init( value, G_TYPE_STRING );
@@ -534,11 +541,13 @@ static void
 get_gvalue_timespec( GncGdaBackend* be, QofIdTypeConst obj_name,
 				gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
+	QofAccessFunc getter;
 	Timespec* pTimespec;
 
 	memset( value, 0, sizeof( GValue ) );
 
-	pTimespec = (Timespec*)(*table_row->getter)( pObject );
+	getter = get_getter( obj_name, table_row );
+	pTimespec = (Timespec*)(*getter)( pObject, NULL );
 	if( pTimespec != NULL ) {
 		GDate* date;
 		gchar* s;
@@ -603,7 +612,9 @@ load_date( GdaDataModel* pModel, gint row,
 		(*setter)( pObject, NULL );
 	} else {
 		date = (GDate*)g_value_get_boxed( val );
-		(*setter)( pObject, date );
+		if( date != NULL ) {
+			(*setter)( pObject, date );
+		}
 	}
 }
 
@@ -616,13 +627,8 @@ get_gvalue_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 
 	memset( value, 0, sizeof( GValue ) );
 
-	if( table_row->param_name != NULL ) {
-		getter = qof_class_get_parameter_getter( obj_name,
-												table_row->param_name );
-		date = (GDate*)(*getter)( pObject, NULL );
-	} else {
-		date = (GDate*)(*table_row->getter)( pObject );
-	}
+	getter = get_getter( obj_name, table_row );
+	date = (GDate*)(*getter)( pObject, NULL );
 	if( date != NULL ) {
 		g_value_init( value, G_TYPE_DATE );
 		g_value_set_boxed( value, date );
@@ -694,11 +700,13 @@ static void
 get_gvalue_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 				const col_cvt_t* table_row, GValue* value )
 {
+	QofAccessFunc getter;
 	gnc_numeric* n;
 
 	memset( value, 0, sizeof( GValue ) );
 
-	n = (gnc_numeric*)(*table_row->getter)( pObject );
+	getter = get_getter( obj_name, table_row );
+	n = (gnc_numeric*)(*getter)( pObject, NULL );
 	if( n != NULL ) {
 		g_value_init( value, gnc_numeric_get_type() );
 		g_value_set_boxed( value, n );
@@ -848,10 +856,10 @@ get_handler( int col_type )
 	return pHandler;
 }
 
-static void retrieve_guid( gpointer pObject, const gpointer pValue );
+static void retrieve_guid( gpointer pObject, gpointer pValue );
 
 static void 
-retrieve_guid( gpointer pObject, const gpointer pValue )
+retrieve_guid( gpointer pObject, gpointer pValue )
 {
 	GUID** ppGuid = (GUID**)pObject;
 	GUID* guid = (GUID*)pValue;
@@ -1204,40 +1212,41 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
 	GdaServerOperation *op;
 	GdaServerProvider *server;
 	
-	g_return_val_if_fail (GDA_IS_CONNECTION (cnn), FALSE);
-	g_return_val_if_fail (gda_connection_is_opened (cnn), FALSE);
+	g_return_val_if_fail( GDA_IS_CONNECTION(cnn), FALSE );
+	g_return_val_if_fail( gda_connection_is_opened(cnn), FALSE );
 	
-	server = gda_connection_get_provider_obj(cnn);
+	server = gda_connection_get_provider_obj( cnn );
 	
-	op = gda_server_provider_create_operation (server, cnn, 
-						   GDA_SERVER_OPERATION_CREATE_TABLE, NULL, error);
-	if (GDA_IS_SERVER_OPERATION (op)) {
+	op = gda_server_provider_create_operation( server, cnn, 
+						   GDA_SERVER_OPERATION_CREATE_TABLE, NULL, error );
+	if( GDA_IS_SERVER_OPERATION(op) ) {
 		gint col;
 		GType type;
 		xmlDocPtr parameters;
 		xmlNodePtr root;
 		xmlNodePtr table, op_data, array_data, array_row, array_value;
 		
-		if (table_name == NULL) {
-			g_message("Table name is NULL!");      
-			g_set_error (error, GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
-				    "Couldn't create table with a NULL string");
+		if( table_name == NULL ) {
+			g_message( "Table name is NULL!" );      
+			g_set_error( error,
+					GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
+				    "Couldn't create table with a NULL string" );
 			return FALSE;    
 		}
 		
 	
 		/* Initation of the xmlDoc */
-		parameters = xmlNewDoc ("1.0");
+		parameters = xmlNewDoc( "1.0" );
 		
-		root = xmlNewDocNode (parameters, NULL, "serv_op_data", NULL);
-		xmlDocSetRootElement (parameters, root);
-		table = xmlNewChild (root, NULL, "op_data", table_name);
-		xmlSetProp (table, "path", "/TABLE_DEF_P/TABLE_NAME");
+		root = xmlNewDocNode( parameters, NULL, "serv_op_data", NULL );
+		xmlDocSetRootElement( parameters, root );
+		table = xmlNewChild( root, NULL, "op_data", table_name );
+		xmlSetProp( table, "path", "/TABLE_DEF_P/TABLE_NAME" );
 
-		op_data = xmlNewChild (root, NULL, "op_data", NULL);
-		xmlSetProp (op_data, "path", "/FIELDS_A");
-		array_data = xmlNewChild (op_data, NULL, "gda_array_data", NULL);
-			
+		op_data = xmlNewChild( root, NULL, "op_data", NULL );
+		xmlSetProp( op_data, "path", "/FIELDS_A" );
+		array_data = xmlNewChild( op_data, NULL, "gda_array_data", NULL );
+
 		type = 0;
 		
 		for( col = 0; col_table[col].col_name != NULL; col++ ) {
@@ -1253,31 +1262,30 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
 			pHandler->create_col_fn( server, cnn, array_data, &col_table[col] );
 		}
 		
-		if (!gda_server_operation_load_data_from_xml (op, root, error)) {
+		if( !gda_server_operation_load_data_from_xml(op, root, error ) ) {
 			/* error */
-			g_set_error (error, GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
-				     "The XML operation doesn't exist or could't be loaded");
-			g_object_unref (op);
-			xmlFreeDoc(parameters);
+			g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
+				     "The XML operation doesn't exist or could't be loaded" );
+			g_object_unref( op );
+			xmlFreeDoc( parameters );
 			return FALSE;
-		}
-		else {
-			if (gda_server_provider_perform_operation (server, cnn, op, error)) {
+		} else {
+			if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
 				/* error */
-				g_set_error(error, GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
-					    "The Server couldn't perform the CREATE TABLE operation!");
-				g_object_unref (op);
-				xmlFreeDoc(parameters);
+				g_set_error( error,
+					GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
+					"The Server couldn't perform the CREATE TABLE operation!" );
+				g_object_unref( op );
+				xmlFreeDoc( parameters );
 				return FALSE;
 			}
 		}
-		
-		g_object_unref (op);
-		xmlFreeDoc(parameters);
-	}
-	else {
-		g_set_error(error, GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
-			    "The Server doesn't support the CREATE TABLE operation!");
+
+		g_object_unref( op );
+		xmlFreeDoc( parameters );
+	} else {
+		g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
+			    "The Server doesn't support the CREATE TABLE operation!" );
 		return FALSE;
 	}
 	return TRUE;
@@ -1545,6 +1553,9 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 				inst->entity.e_type );
 		return;
 	}
+
+	inst->dirty = FALSE;
+	qof_book_mark_saved( be->primary_book );
 }
 /* ---------------------------------------------------------------------- */
 
@@ -1789,6 +1800,8 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 	be->loading = TRUE;
 	be->in_query = TRUE;
 
+	qof_event_suspend();
+
 	// Try various objects first
 	be_data.ok = FALSE;
 	be_data.be = be;
@@ -1798,6 +1811,7 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 	qof_object_foreach_backend( GNC_GDA_BACKEND, run_query_cb, &be_data );
 	be->loading = FALSE;
 	be->in_query = FALSE;
+	qof_event_resume();
 	if( be_data.ok ) {
 		return;
 	}

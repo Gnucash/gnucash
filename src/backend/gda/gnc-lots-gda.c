@@ -43,16 +43,16 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "lots"
 
-static gpointer get_lot_account( gpointer pObject );
-static void set_lot_account( gpointer pObject, const gpointer pValue );
-static gpointer get_lot_is_closed( gpointer pObject );
-static void set_lot_is_closed( gpointer pObject, const gpointer pValue );
+static gpointer get_lot_account( gpointer pObject, const QofParam* param );
+static void set_lot_account( gpointer pObject, gpointer pValue );
+static gpointer get_lot_is_closed( gpointer pObject, const QofParam* param );
+static void set_lot_is_closed( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)qof_entity_set_guid },
 	{ "account_guid",	CT_GUID,	  0, COL_NNUL,	NULL,
 			get_lot_account, set_lot_account },
 	{ "is_closed",		CT_STRING,  1, COL_NNUL, NULL,
@@ -62,7 +62,7 @@ static col_cvt_t col_table[] =
 
 /* ================================================================= */
 static gpointer
-get_lot_account( gpointer pObject )
+get_lot_account( gpointer pObject, const QofParam* param )
 {
 	const GNCLot* lot = GNC_LOT(pObject);
 	const Account* pAccount = gnc_lot_get_account( lot );
@@ -71,7 +71,7 @@ get_lot_account( gpointer pObject )
 }
 
 static void 
-set_lot_account( gpointer pObject, const gpointer pValue )
+set_lot_account( gpointer pObject, gpointer pValue )
 {
 	GNCLot* lot = GNC_LOT(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
@@ -82,7 +82,7 @@ set_lot_account( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_lot_is_closed( gpointer pObject )
+get_lot_is_closed( gpointer pObject, const QofParam* param )
 {
 	GNCLot* lot = GNC_LOT(pObject);
 	static gboolean is_closed; 
@@ -92,7 +92,7 @@ get_lot_is_closed( gpointer pObject )
 }
 
 static void
-set_lot_is_closed( gpointer pObject, const gpointer pValue )
+set_lot_is_closed( gpointer pObject, gpointer pValue )
 {
 	GNCLot* lot = GNC_LOT(pObject);
 	const gboolean* pBoolean = (const gboolean*)pValue;

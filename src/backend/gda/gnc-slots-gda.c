@@ -51,26 +51,26 @@ typedef struct {
 	GString* path;
 } slot_info_t;
 
-static gpointer get_slot_id( gpointer pObject );
-static void set_slot_id( gpointer pObject, const gpointer pValue );
-static gpointer get_obj_guid( gpointer pObject );
-static void set_obj_guid( gpointer pObject, const gpointer pValue );
-static gpointer get_path( gpointer pObject );
-static void set_path( gpointer pObject, const gpointer pValue );
-static gpointer get_slot_type( gpointer pObject );
-static void set_slot_type( gpointer pObject, const gpointer pValue );
-static gpointer get_int64_val( gpointer pObject );
-static void set_int64_val( gpointer pObject, const gpointer pValue );
-static gpointer get_string_val( gpointer pObject );
-static void set_string_val( gpointer pObject, const gpointer pValue );
-static gpointer get_double_val( gpointer pObject );
-static void set_double_val( gpointer pObject, const gpointer pValue );
-static gpointer get_timespec_val( gpointer pObject );
-static void set_timespec_val( gpointer pObject, const gpointer pValue );
-static gpointer get_guid_val( gpointer pObject );
-static void set_guid_val( gpointer pObject, const gpointer pValue );
-static gpointer get_numeric_val( gpointer pObject );
-static void set_numeric_val( gpointer pObject, const gpointer pValue );
+static gpointer get_slot_id( gpointer pObject, const QofParam* param );
+static void set_slot_id( gpointer pObject, gpointer pValue );
+static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
+static void set_obj_guid( gpointer pObject, gpointer pValue );
+static gpointer get_path( gpointer pObject, const QofParam* param );
+static void set_path( gpointer pObject, gpointer pValue );
+static gpointer get_slot_type( gpointer pObject, const QofParam* param );
+static void set_slot_type( gpointer pObject, gpointer pValue );
+static gpointer get_int64_val( gpointer pObject, const QofParam* param );
+static void set_int64_val( gpointer pObject, gpointer pValue );
+static gpointer get_string_val( gpointer pObject, const QofParam* param );
+static void set_string_val( gpointer pObject, gpointer pValue );
+static gpointer get_double_val( gpointer pObject, const QofParam* param );
+static void set_double_val( gpointer pObject, gpointer pValue );
+static gpointer get_timespec_val( gpointer pObject, const QofParam* param );
+static void set_timespec_val( gpointer pObject, gpointer pValue );
+static gpointer get_guid_val( gpointer pObject, const QofParam* param );
+static void set_guid_val( gpointer pObject, gpointer pValue );
+static gpointer get_numeric_val( gpointer pObject, const QofParam* param );
+static void set_numeric_val( gpointer pObject, gpointer pValue );
 
 #define SLOT_MAX_PATHNAME_LEN 500
 #define SLOT_MAX_STRINGVAL_LEN 1000
@@ -112,7 +112,7 @@ static col_cvt_t guid_col_table[] =
 /* ================================================================= */
 
 static gpointer
-get_slot_id( gpointer pObject )
+get_slot_id( gpointer pObject, const QofParam* param )
 {
 	// Just need a 0 to force a new slot id
 	return (gpointer)0;
@@ -125,7 +125,7 @@ set_slot_id( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_obj_guid( gpointer pObject )
+get_obj_guid( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -139,7 +139,7 @@ set_obj_guid( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_path( gpointer pObject )
+get_path( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -155,7 +155,7 @@ set_path( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_slot_type( gpointer pObject )
+get_slot_type( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -171,7 +171,7 @@ set_slot_type( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_int64_val( gpointer pObject )
+get_int64_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 	static gint64 i64_val;
@@ -185,7 +185,7 @@ get_int64_val( gpointer pObject )
 }
 
 static void
-set_int64_val( gpointer pObject, const gpointer pValue )
+set_int64_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -195,7 +195,7 @@ set_int64_val( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_string_val( gpointer pObject )
+get_string_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -207,7 +207,7 @@ get_string_val( gpointer pObject )
 }
 
 static void
-set_string_val( gpointer pObject, const gpointer pValue )
+set_string_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -217,7 +217,7 @@ set_string_val( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_double_val( gpointer pObject )
+get_double_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 	static double d_val;
@@ -231,7 +231,7 @@ get_double_val( gpointer pObject )
 }
 
 static void
-set_double_val( gpointer pObject, const gpointer pValue )
+set_double_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -241,7 +241,7 @@ set_double_val( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_timespec_val( gpointer pObject )
+get_timespec_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 	static Timespec ts;
@@ -255,7 +255,7 @@ get_timespec_val( gpointer pObject )
 }
 
 static void
-set_timespec_val( gpointer pObject, const gpointer pValue )
+set_timespec_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -265,7 +265,7 @@ set_timespec_val( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_guid_val( gpointer pObject )
+get_guid_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -277,7 +277,7 @@ get_guid_val( gpointer pObject )
 }
 
 static void
-set_guid_val( gpointer pObject, const gpointer pValue )
+set_guid_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 
@@ -287,7 +287,7 @@ set_guid_val( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_numeric_val( gpointer pObject )
+get_numeric_val( gpointer pObject, const QofParam* param )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 	static gnc_numeric n_val;
@@ -301,7 +301,7 @@ get_numeric_val( gpointer pObject )
 }
 
 static void
-set_numeric_val( gpointer pObject, const gpointer pValue )
+set_numeric_val( gpointer pObject, gpointer pValue )
 {
 	slot_info_t* pInfo = (slot_info_t*)pObject;
 

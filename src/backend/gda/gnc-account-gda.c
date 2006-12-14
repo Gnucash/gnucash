@@ -45,10 +45,10 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "accounts"
 
-static gpointer get_commodity( gpointer pObject );
-static void set_commodity( gpointer pObject, const gpointer pValue );
-static gpointer get_parent( gpointer pObject );
-static void set_parent( gpointer pObject, const gpointer pValue );
+static gpointer get_commodity( gpointer pObject, const QofParam* );
+static void set_commodity( gpointer pObject, gpointer pValue );
+static gpointer get_parent( gpointer pObject, const QofParam* );
+static void set_parent( gpointer pObject, gpointer pValue );
 
 #define ACCOUNT_MAX_NAME_LEN 50
 #define ACCOUNT_MAX_TYPE_LEN 50
@@ -58,8 +58,8 @@ static void set_parent( gpointer pObject, const gpointer pValue );
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)xaccAccountSetGUID },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)xaccAccountSetGUID },
 	{ "name",			CT_STRING,	ACCOUNT_MAX_NAME_LEN, COL_NNUL,	ACCOUNT_NAME_ },
 	{ "account_type",	CT_STRING,	ACCOUNT_MAX_TYPE_LEN, COL_NNUL,	ACCOUNT_TYPE_ },
 	{ "commodity_guid",	CT_GUID,	0, COL_NNUL,	NULL,
@@ -72,7 +72,7 @@ static col_cvt_t col_table[] =
 
 /* ================================================================= */
 static gpointer
-get_commodity( gpointer pObject )
+get_commodity( gpointer pObject, const QofParam* param )
 {
 	const Account* pAccount = GNC_ACCOUNT(pObject);
 
@@ -81,7 +81,7 @@ get_commodity( gpointer pObject )
 }
 
 static void 
-set_commodity( gpointer pObject, const gpointer pValue )
+set_commodity( gpointer pObject, gpointer pValue )
 {
 	Account* pAccount = GNC_ACCOUNT(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
@@ -93,7 +93,7 @@ set_commodity( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_parent( gpointer pObject )
+get_parent( gpointer pObject, const QofParam* param )
 {
 	const Account* pAccount = GNC_ACCOUNT(pObject);
 	const Account* pParent = xaccAccountGetParentAccount( pAccount );
@@ -109,7 +109,7 @@ get_parent( gpointer pObject )
 }
 
 static void 
-set_parent( gpointer pObject, const gpointer pValue )
+set_parent( gpointer pObject, gpointer pValue )
 {
 	Account* pAccount = GNC_ACCOUNT(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );

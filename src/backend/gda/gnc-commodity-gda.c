@@ -43,8 +43,8 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gpointer get_quote_source_name( gpointer pObject );
-static void set_quote_source_name( gpointer pObject, const gpointer pValue );
+static gpointer get_quote_source_name( gpointer pObject, const QofParam* );
+static void set_quote_source_name( gpointer pObject, gpointer pValue );
 
 #define COMMODITIES_TABLE "commodities"
 
@@ -57,38 +57,38 @@ static void set_quote_source_name( gpointer pObject, const gpointer pValue );
 
 static col_cvt_t col_table[] = {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)qof_entity_set_guid },
 	{ "namespace",		CT_STRING,	COMMODITY_MAX_NAMESPACE_LEN, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_namespace,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_namespace },
+			(QofAccessFunc)gnc_commodity_get_namespace,
+			(QofSetterFunc)gnc_commodity_set_namespace },
 	{ "mnemonic",		CT_STRING,	COMMODITY_MAX_MNEMONIC_LEN, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_mnemonic,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_mnemonic },
+			(QofAccessFunc)gnc_commodity_get_mnemonic,
+			(QofSetterFunc)gnc_commodity_set_mnemonic },
 	{ "fullname",		CT_STRING,	COMMODITY_MAX_FULLNAME_LEN, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_fullname,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_fullname },
+			(QofAccessFunc)gnc_commodity_get_fullname,
+			(QofSetterFunc)gnc_commodity_set_fullname },
 	{ "cusip",			CT_STRING,	COMMODITY_MAX_CUSIP_LEN, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_cusip,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_cusip },
+			(QofAccessFunc)gnc_commodity_get_cusip,
+			(QofSetterFunc)gnc_commodity_set_cusip },
 	{ "fraction",		CT_INT,		0, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_fraction,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_fraction },
+			(QofAccessFunc)gnc_commodity_get_fraction,
+			(QofSetterFunc)gnc_commodity_set_fraction },
 	{ "quote_flag",		CT_INT,		0, COL_NNUL,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_flag,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_flag },
+			(QofAccessFunc)gnc_commodity_get_quote_flag,
+			(QofSetterFunc)gnc_commodity_set_quote_flag },
 	{ "quote_source",	CT_STRING,	COMMODITY_MAX_QUOTESOURCE_LEN, 0,	NULL,
 			get_quote_source_name, set_quote_source_name },
 	{ "quote_tz",		CT_STRING,	COMMODITY_MAX_QUOTE_TZ_LEN, 0,	NULL,
-			(GNC_GDA_FN_GETTER)gnc_commodity_get_quote_tz,
-			(GNC_GDA_FN_SETTER)gnc_commodity_set_quote_tz },
+			(QofAccessFunc)gnc_commodity_get_quote_tz,
+			(QofSetterFunc)gnc_commodity_set_quote_tz },
 	{ NULL }
 };
 
 /* ================================================================= */
 
 static gpointer
-get_quote_source_name( gpointer pObject )
+get_quote_source_name( gpointer pObject, const QofParam* param )
 {
 	const gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
 
@@ -97,7 +97,7 @@ get_quote_source_name( gpointer pObject )
 }
 
 static void 
-set_quote_source_name( gpointer pObject, const gpointer pValue )
+set_quote_source_name( gpointer pObject, gpointer pValue )
 {
 	gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
 	const gchar* quote_source_name = (const gchar*)pValue;

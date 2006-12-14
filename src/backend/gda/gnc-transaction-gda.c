@@ -56,16 +56,16 @@ typedef struct {
 	const GUID* guid;
 } split_info_t;
 
-static gpointer get_guid( gpointer pObject );
-static void set_guid( gpointer pObject, const gpointer pValue );
-static gpointer get_tx_currency( gpointer pObject );
-static void set_tx_currency( gpointer pObject, const gpointer pValue );
-static gpointer get_tx_num( gpointer pObject );
-static void set_tx_num( gpointer pObject, const gpointer pValue );
-static gpointer get_tx_post_date( gpointer pObject );
-static void set_tx_post_date( gpointer pObject, const gpointer pValue );
-static gpointer get_tx_enter_date( gpointer pObject );
-static void set_tx_enter_date( gpointer pObject, const gpointer pValue );
+static gpointer get_guid( gpointer pObject, const QofParam* param );
+static void set_guid( gpointer pObject, gpointer pValue );
+static gpointer get_tx_currency_guid( gpointer pObject, const QofParam* param );
+static void set_tx_currency_guid( gpointer pObject, gpointer pValue );
+static gpointer get_tx_num( gpointer pObject, const QofParam* param );
+static void set_tx_num( gpointer pObject, gpointer pValue );
+static gpointer get_tx_post_date( gpointer pObject, const QofParam* param );
+static void set_tx_post_date( gpointer pObject, gpointer pValue );
+static gpointer get_tx_enter_date( gpointer pObject, const QofParam* param );
+static void set_tx_enter_date( gpointer pObject, gpointer pValue );
 
 #define TX_MAX_NUM_LEN 50
 #define TX_MAX_DESCRIPTION_LEN 500
@@ -75,7 +75,7 @@ static col_cvt_t tx_col_table[] =
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY, NULL,
 			get_guid, set_guid },
 	{ "currency_guid",	CT_GUID,	0, COL_NNUL,	NULL,
-			get_tx_currency, set_tx_currency },
+			get_tx_currency_guid, set_tx_currency_guid },
 	{ "num",			CT_STRING,	TX_MAX_NUM_LEN, COL_NNUL, NULL,
 			get_tx_num, set_tx_num },
 	{ "post_date",		CT_TIMESPEC, 0, COL_NNUL, NULL,
@@ -83,23 +83,23 @@ static col_cvt_t tx_col_table[] =
 	{ "enter_date",		CT_TIMESPEC, 0, COL_NNUL, NULL,
 			get_tx_enter_date, set_tx_enter_date },
 	{ "description",	CT_STRING,	TX_MAX_DESCRIPTION_LEN, 0,	NULL,
-			(GNC_GDA_FN_GETTER)xaccTransGetDescription,
-			(GNC_GDA_FN_SETTER)xaccTransSetDescription },
+			(QofAccessFunc)xaccTransGetDescription,
+			(QofSetterFunc)xaccTransSetDescription },
 	{ NULL }
 };
 
-static gpointer get_split_tx_guid( gpointer pObject );
-static void set_split_tx_guid( gpointer pObject, const gpointer pValue );
-static gpointer get_split_reconcile_state( gpointer pObject );
-static void set_split_reconcile_state( gpointer pObject, const gpointer pValue );
-static gpointer get_split_reconcile_date( gpointer pObject );
-static void set_split_reconcile_date( gpointer pObject, const gpointer pValue );
-static gpointer get_split_value( gpointer pObject );
-static void set_split_value( gpointer pObject, const gpointer pValue );
-static gpointer get_split_quantity( gpointer pObject );
-static void set_split_quantity( gpointer pObject, const gpointer pValue );
-static gpointer get_split_account( gpointer pObject );
-static void set_split_account( gpointer pObject, const gpointer pValue );
+static gpointer get_split_tx_guid( gpointer pObject, const QofParam* param );
+static void set_split_tx_guid( gpointer pObject, gpointer pValue );
+static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* param );
+static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
+static gpointer get_split_reconcile_date( gpointer pObject, const QofParam* param );
+static void set_split_reconcile_date( gpointer pObject, gpointer pValue );
+static gpointer get_split_value( gpointer pObject, const QofParam* param );
+static void set_split_value( gpointer pObject, gpointer pValue );
+static gpointer get_split_quantity( gpointer pObject, const QofParam* param );
+static void set_split_quantity( gpointer pObject, gpointer pValue );
+static gpointer get_split_account_guid( gpointer pObject, const QofParam* param );
+static void set_split_account_guid( gpointer pObject, gpointer pValue );
 
 #define SPLIT_MAX_MEMO_LEN 50
 #define SPLIT_MAX_ACTION_LEN 50
@@ -121,7 +121,7 @@ static col_cvt_t split_col_table[] =
 	{ "quantity",		CT_NUMERIC,	 0, COL_NNUL,	NULL,
 			get_split_quantity, set_split_quantity },
 	{ "account_guid",	CT_GUID,	 0, COL_NNUL,	NULL,
-			get_split_account, set_split_account },
+			get_split_account_guid, set_split_account_guid },
 	{ NULL }
 };
 
@@ -133,13 +133,13 @@ static col_cvt_t guid_col_table[] =
 
 /* ================================================================= */
 static gpointer
-get_guid( gpointer pObject )
+get_guid( gpointer pObject, const QofParam* param )
 {
 	return (gpointer)qof_entity_get_guid( QOF_ENTITY(pObject) );
 }
 
 static void 
-set_guid( gpointer pObject, const gpointer pValue )
+set_guid( gpointer pObject, gpointer pValue )
 {
 	QofEntity* pEntity = QOF_ENTITY(pObject);
 	GUID* guid = (GUID*)pValue;
@@ -148,7 +148,7 @@ set_guid( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_tx_currency( gpointer pObject )
+get_tx_currency_guid( gpointer pObject, const QofParam* param )
 {
 	const Transaction* pTx = GNC_TRANS(pObject);
 
@@ -157,7 +157,7 @@ get_tx_currency( gpointer pObject )
 }
 
 static void 
-set_tx_currency( gpointer pObject, const gpointer pValue )
+set_tx_currency_guid( gpointer pObject, gpointer pValue )
 {
 	Transaction* pTx = GNC_TRANS(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pTx) );
@@ -169,7 +169,7 @@ set_tx_currency( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_tx_num( gpointer pObject )
+get_tx_num( gpointer pObject, const QofParam* param )
 {
 	const Transaction* pTx = GNC_TRANS(pObject);
 	const gchar* s;
@@ -179,7 +179,7 @@ get_tx_num( gpointer pObject )
 }
 
 static void 
-set_tx_num( gpointer pObject, const gpointer pValue )
+set_tx_num( gpointer pObject, gpointer pValue )
 {
 	Transaction* pTx = GNC_TRANS(pObject);
 	const gchar* s = (const gchar*)pValue;
@@ -188,7 +188,7 @@ set_tx_num( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_tx_post_date( gpointer pObject )
+get_tx_post_date( gpointer pObject, const QofParam* param )
 {
 	const Transaction* pTx = GNC_TRANS(pObject);
 	static Timespec ts;
@@ -198,7 +198,7 @@ get_tx_post_date( gpointer pObject )
 }
 
 static void 
-set_tx_post_date( gpointer pObject, const gpointer pValue )
+set_tx_post_date( gpointer pObject, gpointer pValue )
 {
 	Transaction* pTx = GNC_TRANS(pObject);
 	Timespec* pTS = (Timespec*)pValue;
@@ -207,7 +207,7 @@ set_tx_post_date( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_tx_enter_date( gpointer pObject )
+get_tx_enter_date( gpointer pObject, const QofParam* param )
 {
 	const Transaction* pTx = GNC_TRANS(pObject);
 	static Timespec ts;
@@ -217,7 +217,7 @@ get_tx_enter_date( gpointer pObject )
 }
 
 static void 
-set_tx_enter_date( gpointer pObject, const gpointer pValue )
+set_tx_enter_date( gpointer pObject, gpointer pValue )
 {
 	Transaction* pTx = GNC_TRANS(pObject);
 	Timespec* pTS = (Timespec*)pValue;
@@ -226,7 +226,7 @@ set_tx_enter_date( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_tx_guid( gpointer pObject )
+get_split_tx_guid( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	Transaction* pTx = xaccSplitGetParent( pSplit );
@@ -235,7 +235,7 @@ get_split_tx_guid( gpointer pObject )
 }
 
 static void 
-set_split_tx_guid( gpointer pObject, const gpointer pValue )
+set_split_tx_guid( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
@@ -246,7 +246,7 @@ set_split_tx_guid( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_reconcile_state( gpointer pObject )
+get_split_reconcile_state( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	static gchar c[2];
@@ -257,7 +257,7 @@ get_split_reconcile_state( gpointer pObject )
 }
 
 static void 
-set_split_reconcile_state( gpointer pObject, const gpointer pValue )
+set_split_reconcile_state( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	const gchar* s = (const gchar*)pValue;
@@ -266,7 +266,7 @@ set_split_reconcile_state( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_reconcile_date( gpointer pObject )
+get_split_reconcile_date( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	static Timespec ts;
@@ -276,7 +276,7 @@ get_split_reconcile_date( gpointer pObject )
 }
 
 static void 
-set_split_reconcile_date( gpointer pObject, const gpointer pValue )
+set_split_reconcile_date( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	Timespec* pTS = (Timespec*)pValue;
@@ -285,7 +285,7 @@ set_split_reconcile_date( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_value( gpointer pObject )
+get_split_value( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	static gnc_numeric v;
@@ -295,7 +295,7 @@ get_split_value( gpointer pObject )
 }
 
 static void 
-set_split_value( gpointer pObject, const gpointer pValue )
+set_split_value( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	gnc_numeric* pV = (gnc_numeric*)pValue;
@@ -304,7 +304,7 @@ set_split_value( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_quantity( gpointer pObject )
+get_split_quantity( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	static gnc_numeric v;
@@ -314,7 +314,7 @@ get_split_quantity( gpointer pObject )
 }
 
 static void 
-set_split_quantity( gpointer pObject, const gpointer pValue )
+set_split_quantity( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	gnc_numeric* pV = (gnc_numeric*)pValue;
@@ -323,7 +323,7 @@ set_split_quantity( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_split_account( gpointer pObject )
+get_split_account_guid( gpointer pObject, const QofParam* param )
 {
 	const Split* pSplit = GNC_SPLIT(pObject);
 	Account* pAccount = xaccSplitGetAccount( pSplit );
@@ -332,7 +332,7 @@ get_split_account( gpointer pObject )
 }
 
 static void 
-set_split_account( gpointer pObject, const gpointer pValue )
+set_split_account_guid( gpointer pObject, gpointer pValue )
 {
 	Split* pSplit = GNC_SPLIT(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
@@ -433,38 +433,6 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 
 	return pTx;
 }
-
-#if 0
-static void
-load_transactions( GncGdaBackend* be, const GUID* guid )
-{
-	GdaQuery* query;
-	GdaObject* ret;
-	gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	GValue value;
-	GdaQueryCondition* cond;
-
-	guid_to_string_buff( guid, guid_buf );
-	memset( &value, 0, sizeof( GValue ) );
-	g_value_init( &value, G_TYPE_STRING );
-	g_value_set_string( &value, guid_buf );
-	query = gnc_gda_create_select_query( be, TRANSACTION_TABLE );
-	cond = gnc_gda_create_condition_from_field( query, "guid", &value );
-	gda_query_set_condition( query, cond );
-	g_object_unref( G_OBJECT(cond) );
-
-	ret = gnc_gda_execute_query( be, query );
-	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-		int numRows = gda_data_model_get_n_rows( pModel );
-		int r;
-
-		for( r = 0; r < numRows; r++ ) {
-			load_tx( be, pModel, r, NULL );
-		}
-	}
-}
-#endif
 
 static void
 query_transactions( GncGdaBackend* be, GdaQuery* query )
@@ -568,9 +536,20 @@ commit_transaction( GncGdaBackend* be, QofInstance* inst )
 	delete_splits( be, pTx );
 
 	if( !inst->do_free ) {
+		SplitList* splits;
+
 		// Now, commit any slots and splits
 		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
-		save_splits( be, guid, xaccTransGetSplitList( pTx ) );
+		splits = xaccTransGetSplitList( pTx );
+		save_splits( be, guid, splits );
+
+		/* Mark the splits as clean */
+		splits = xaccTransGetSplitList( pTx );
+		for( ; splits != NULL; splits = splits->next ) {
+			QofInstance* inst = QOF_INSTANCE(splits->data);
+
+			inst->dirty = FALSE;
+		}
 	} else {
 		gnc_gda_slots_delete( be, guid );
 	}

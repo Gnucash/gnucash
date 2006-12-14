@@ -46,16 +46,16 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define SX_MAX_NAME_LEN 50
 
-static gpointer get_autocreate( gpointer pObject );
-static void set_autocreate( gpointer pObject, const gpointer pValue );
-static gpointer get_autonotify( gpointer pObject );
-static void set_autonotify( gpointer pObject, const gpointer pValue );
+static gpointer get_autocreate( gpointer pObject, const QofParam* param );
+static void set_autocreate( gpointer pObject, gpointer pValue );
+static gpointer get_autonotify( gpointer pObject, const QofParam* param );
+static void set_autonotify( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)qof_entity_set_guid },
 	{ "name",			CT_STRING, SX_MAX_NAME_LEN, COL_NNUL, GNC_SX_NAME },
 	{ "start_date",		CT_GDATE,	0, COL_NNUL, GNC_SX_START_DATE },
 	{ "last_occur",		CT_GDATE,	0, COL_NNUL, GNC_SX_LAST_DATE },
@@ -66,18 +66,18 @@ static col_cvt_t col_table[] =
 	{ "auto_notify",	CT_BOOLEAN,	0, COL_NNUL, NULL,
 			get_autonotify, set_autonotify },
 	{ "adv_creation",	CT_INT,		0, COL_NNUL, NULL,
-			(GNC_GDA_FN_GETTER)xaccSchedXactionGetAdvanceCreation,
-			(GNC_GDA_FN_SETTER)xaccSchedXactionSetAdvanceCreation },
+			(QofAccessFunc)xaccSchedXactionGetAdvanceCreation,
+			(QofSetterFunc)xaccSchedXactionSetAdvanceCreation },
 	{ "adv_notify",	CT_INT,		0, COL_NNUL, NULL,
-			(GNC_GDA_FN_GETTER)xaccSchedXactionGetAdvanceReminder,
-			(GNC_GDA_FN_SETTER)xaccSchedXactionSetAdvanceReminder },
+			(QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
+			(QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
 	{ NULL }
 };
 
 /* ================================================================= */
 
 static gpointer
-get_autocreate( gpointer pObject )
+get_autocreate( gpointer pObject, const QofParam* param )
 {
 	const SchedXaction* pSx = GNC_SX(pObject);
 	gboolean autoCreate;
@@ -88,7 +88,7 @@ get_autocreate( gpointer pObject )
 }
 
 static void 
-set_autocreate( gpointer pObject, const gpointer pValue )
+set_autocreate( gpointer pObject, gpointer pValue )
 {
 	SchedXaction* pSx = GNC_SX(pObject);
 	gboolean autoCreate;
@@ -100,7 +100,7 @@ set_autocreate( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_autonotify( gpointer pObject )
+get_autonotify( gpointer pObject, const QofParam* param )
 {
 	const SchedXaction* pSx = GNC_SX(pObject);
 	gboolean autoCreate;
@@ -111,7 +111,7 @@ get_autonotify( gpointer pObject )
 }
 
 static void 
-set_autonotify( gpointer pObject, const gpointer pValue )
+set_autonotify( gpointer pObject, gpointer pValue )
 {
 	SchedXaction* pSx = GNC_SX(pObject);
 	gboolean autoCreate;
@@ -137,7 +137,7 @@ load_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
 		pSx = xaccSchedXactionMalloc( be->primary_book );
 	}
 
-	gnc_gda_load_object( pModel, row, GNC_ID_SCHEDXACTION, pSx, col_table );
+	gnc_gda_load_object( pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_slots_load( be, qof_entity_get_guid( QOF_ENTITY(pSx) ),
 							qof_instance_get_slots( QOF_INSTANCE(pSx) ) );
 
@@ -185,7 +185,7 @@ commit_sx( GncGdaBackend* be, QofInstance* inst )
 	(void)gnc_gda_do_db_operation( be,
 						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
 						SCHEDXACTION_TABLE,
-						GNC_ID_SCHEDXACTION, pSx,
+						/*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx,
 						col_table );
 
 	// Delete old slot info

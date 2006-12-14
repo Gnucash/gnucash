@@ -45,12 +45,12 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gpointer get_recurrence_mult( gpointer pObject );
-static void set_recurrence_mult( gpointer pObject, const gpointer pValue );
-static gpointer get_recurrence_period_type( gpointer pObject );
-static void set_recurrence_period_type( gpointer pObject, const gpointer pValue );
-static gpointer get_recurrence_period_start( gpointer pObject );
-static void set_recurrence_period_start( gpointer pObject, const gpointer pValue );
+static gpointer get_recurrence_mult( gpointer pObject, const QofParam* );
+static void set_recurrence_mult( gpointer pObject, gpointer pValue );
+static gpointer get_recurrence_period_type( gpointer pObject, const QofParam* );
+static void set_recurrence_period_type( gpointer pObject, gpointer pValue );
+static gpointer get_recurrence_period_start( gpointer pObject, const QofParam* );
+static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
 #define BUDGET_MAX_NAME_LEN 50
 #define BUDGET_MAX_DESCRIPTION_LEN 500
@@ -59,8 +59,8 @@ static void set_recurrence_period_start( gpointer pObject, const gpointer pValue
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)qof_entity_set_guid },
 	{ "name",			CT_STRING,	BUDGET_MAX_NAME_LEN, COL_NNUL,	"name" },
 	{ "description",	CT_STRING,	BUDGET_MAX_DESCRIPTION_LEN, 0,	"description" },
 	{ "num_periods",	CT_INT,		0, COL_NNUL, "num_periods" },
@@ -75,7 +75,7 @@ static col_cvt_t col_table[] =
 
 /* ================================================================= */
 static gpointer
-get_recurrence_mult( gpointer pObject )
+get_recurrence_mult( gpointer pObject, const QofParam* param )
 {
 	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );
@@ -95,7 +95,7 @@ set_recurrence_mult( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_recurrence_period_type( gpointer pObject )
+get_recurrence_period_type( gpointer pObject, const QofParam* param )
 {
 	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );
@@ -114,7 +114,7 @@ set_recurrence_period_type( gpointer pObject, gpointer pValue )
 }
 
 static gpointer
-get_recurrence_period_start( gpointer pObject )
+get_recurrence_period_start( gpointer pObject, const QofParam* param )
 {
 	GncBudget* budget = GNC_BUDGET(pObject);
 	const Recurrence* r = gnc_budget_get_recurrence( budget );

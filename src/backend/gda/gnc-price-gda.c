@@ -43,14 +43,14 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "prices"
 
-static gpointer get_value( gpointer pObject );
-static void set_value( gpointer pObject, const gpointer pValue );
-static gpointer get_date( gpointer pObject );
-static void set_date( gpointer pObject, const gpointer pValue );
-static gpointer get_currency( gpointer pObject );
-static void set_currency( gpointer pObject, const gpointer pValue );
-static gpointer get_commodity( gpointer pObject );
-static void set_commodity( gpointer pObject, const gpointer pValue );
+static gpointer get_value( gpointer pObject, const QofParam* param );
+static void set_value( gpointer pObject, gpointer pValue );
+static gpointer get_date( gpointer pObject, const QofParam* param );
+static void set_date( gpointer pObject, gpointer pValue );
+static gpointer get_currency_guid( gpointer pObject, const QofParam* param );
+static void set_currency_guid( gpointer pObject, gpointer pValue );
+static gpointer get_commodity_guid( gpointer pObject, const QofParam* param );
+static void set_commodity_guid( gpointer pObject, gpointer pValue );
 
 #define PRICE_MAX_SOURCE_LEN 50
 #define PRICE_MAX_TYPE_LEN 50
@@ -58,12 +58,12 @@ static void set_commodity( gpointer pObject, const gpointer pValue );
 static col_cvt_t col_table[] =
 {
 	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(GNC_GDA_FN_GETTER)qof_entity_get_guid,
-			(GNC_GDA_FN_SETTER)qof_entity_set_guid },
+			(QofAccessFunc)qof_entity_get_guid,
+			(QofSetterFunc)qof_entity_set_guid },
 	{ "commodity_guid",	CT_GUID,	0, COL_NNUL, NULL,
-			get_commodity, set_commodity },
+			get_commodity_guid, set_commodity_guid },
 	{ "currency_guid",	CT_GUID,	0, COL_NNUL, NULL,
-			get_currency, set_currency },
+			get_currency_guid, set_currency_guid },
 	{ "date",			CT_TIMESPEC,	0, COL_NNUL, NULL,
 			get_date, set_date },
 	{ "source",			CT_STRING,	PRICE_MAX_SOURCE_LEN, 0, PRICE_SOURCE },
@@ -74,7 +74,7 @@ static col_cvt_t col_table[] =
 
 /* ================================================================= */
 static gpointer
-get_value( gpointer pObject )
+get_value( gpointer pObject, const QofParam* param )
 {
 	const GNCPrice* pPrice = GNC_PRICE(pObject);
 	static gnc_numeric v;
@@ -84,7 +84,7 @@ get_value( gpointer pObject )
 }
 
 static void
-set_value( gpointer pObject, const gpointer pValue )
+set_value( gpointer pObject, gpointer pValue )
 {
 	GNCPrice* pPrice = GNC_PRICE(pObject);
 	const gnc_numeric* pNumeric = (const gnc_numeric*)pValue;
@@ -93,7 +93,7 @@ set_value( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_date( gpointer pObject )
+get_date( gpointer pObject, const QofParam* param )
 {
 	const GNCPrice* pPrice = GNC_PRICE(pObject);
 	static Timespec t;
@@ -103,7 +103,7 @@ get_date( gpointer pObject )
 }
 
 static void
-set_date( gpointer pObject, const gpointer pValue )
+set_date( gpointer pObject, gpointer pValue )
 {
 	GNCPrice* pPrice = GNC_PRICE(pObject);
 	const Timespec* pTimespec = (const Timespec*)pValue;
@@ -112,7 +112,7 @@ set_date( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_currency( gpointer pObject )
+get_currency_guid( gpointer pObject, const QofParam* param )
 {
 	const GNCPrice* pPrice = GNC_PRICE(pObject);
 
@@ -121,7 +121,7 @@ get_currency( gpointer pObject )
 }
 
 static void 
-set_currency( gpointer pObject, const gpointer pValue )
+set_currency_guid( gpointer pObject, gpointer pValue )
 {
 	GNCPrice* pPrice = GNC_PRICE(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
@@ -133,7 +133,7 @@ set_currency( gpointer pObject, const gpointer pValue )
 }
 
 static gpointer
-get_commodity( gpointer pObject )
+get_commodity_guid( gpointer pObject, const QofParam* param )
 {
 	const GNCPrice* pPrice = GNC_PRICE(pObject);
 
@@ -142,7 +142,7 @@ get_commodity( gpointer pObject )
 }
 
 static void 
-set_commodity( gpointer pObject, const gpointer pValue )
+set_commodity_guid( gpointer pObject, gpointer pValue )
 {
 	GNCPrice* pPrice = GNC_PRICE(pObject);
 	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );

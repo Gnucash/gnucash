@@ -78,9 +78,6 @@ typedef struct
 //QofBackend * libgncmod_backend_gda_LTX_gnc_backend_new(void);
 
 // Type for conversion of db row to object.
-typedef gpointer (*GNC_GDA_FN_GETTER)( gpointer pObject );
-typedef void (*GNC_GDA_FN_SETTER)( gpointer pObject, gpointer pValue );
-
 typedef enum {
 	CT_STRING,
 	CT_GUID,
@@ -103,8 +100,8 @@ typedef struct {
 #define COL_AUTOINC	0x08
 	gint flags;
 	const char* param_name;		// If non null, use qof getter/setter
-	GNC_GDA_FN_GETTER getter;
-	GNC_GDA_FN_SETTER setter;
+	QofAccessFunc getter;
+	QofSetterFunc setter;
 } col_cvt_t;
 
 typedef enum {
