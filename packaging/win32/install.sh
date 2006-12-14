@@ -102,6 +102,15 @@ function prepare() {
     if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh | wc -l)" -eq 0 ]; then
         rm -f ${_REPOS_UDIR}/install-sh
     fi
+    # Partially remove RegEx-GNU if installed
+    _REGEX_UDIR=`unix_path $REGEX_DIR`
+    if [ -f ${_REGEX_UDIR}/contrib/regex-0.12-GnuWin32.README ]; then
+        qpushd ${_REGEX_UDIR}
+            rm -f bin/*regex*.dll
+            rm -f contrib/regex*
+            rm -f lib/*regex*
+        qpopd
+    fi
 
     mkdir -p $TMP_DIR
     mkdir -p $DOWNLOAD_DIR
@@ -216,7 +225,7 @@ function inst_unzip() {
 function inst_regex() {
     setup RegEx
     _REGEX_UDIR=`unix_path $REGEX_DIR`
-    add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
+    add_to_env -I$_REGEX_UDIR/include/rxspencer REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
     if quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
@@ -374,13 +383,8 @@ function inst_guile() {
 	      cp Makefile Makefile.bak
 	      cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
 	    qpopd
-	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex -no-undefined"
+	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex -no-undefined -avoid-version"
 	    make install
-	qpopd
-	qpushd $GUILE_DIR/bin
-	    mv libguilereadline-v-12-12.dll libguilereadline-v-12.dll
-	    mv libguile-srfi-srfi-4-v-1-1.dll libguile-srfi-srfi-4-v-1.dll
-	    mv libguile-srfi-srfi-13-14-v-1-1.dll libguile-srfi-srfi-13-14-v-1.dll
 	qpopd
         _GUILE_MAJOR=`echo $_GUILE_UDIR/share/guile/1.* | sed 's,.*/,,'`
 	_SLIB_DIR=$GUILE_DIR\\share\\guile\\$_GUILE_MAJOR
@@ -467,7 +471,7 @@ includedir=\${prefix}/include
 
 Name: libXML
 Version: $_LIBXML2_VERSION
-Description: libXML library version2.
+Description: libXML library version 2.
 Requires:
 Libs: -L\${libdir} -lxml2 -lz
 Cflags: -I\${includedir}
@@ -475,23 +479,6 @@ EOF
         qpopd
     fi
     quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
-}
-
-function inst_expat() {
-    setup Expat
-    _EXPAT_UDIR=`unix_path $EXPAT_DIR`
-    add_to_env $_EXPAT_UDIR/bin PATH
-    if quiet which xmlwf && test -f $_EXPAT_UDIR/bin/xmlwf.exe
-    then
-        echo "expat already installed.  skipping."
-    else
-        wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $EXPAT_DIR
-        qpushd $EXPAT_DIR
-            cp -r expat/* .
-            rm -rf expat
-        qpopd
-    fi
-    quiet which xmlwf || die "expat not installed correctly"
 }
 
 function inst_gnome() {
@@ -521,6 +508,7 @@ function inst_gnome() {
 	wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+	wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -570,7 +558,6 @@ function inst_gnome() {
                     mv libz.dll.a ../lib
                 qpopd
             fi
-            [ -f bin/libintl-2.dll ] || cp bin/intl.dll bin/libintl-2.dll
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
@@ -625,6 +612,7 @@ function inst_swig() {
         qpushd $SWIG_DIR
             mv swigwin-* mydir
             mv mydir/* .
+            mv mydir/.[A-Za-z]* . # hidden files
             rmdir mydir
             rm INSTALL # bites with /bin/install
         qpopd
