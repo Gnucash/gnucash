@@ -11,6 +11,7 @@ qpushd "$(dirname $(unix_path "$0"))"
 . custom.sh
 
 function prepare() {
+    DIST_DIR=${GNUCASH_DIR}\\dist
     DIST_UDIR=`unix_path $DIST_DIR`
     DIST_WFSDIR=`win_fs_path $DIST_DIR`
     TMP_UDIR=`unix_path $TMP_DIR`

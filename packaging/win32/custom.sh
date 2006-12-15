@@ -159,8 +159,6 @@ GLADE_DIR=$GLOBAL_DIR\\glade
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
-DIST_DIR=$GLOBAL_DIR\\dist
-
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
 if test x$cross_compile != xyes ; then

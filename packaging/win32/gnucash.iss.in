@@ -15,7 +15,7 @@ AppSupportURL=http://www.gnucash.org
 AppUpdatesURL=http://www.gnucash.org
 DefaultDirName={pf}\@PACKAGE@
 DefaultGroupName=GnuCash
-LicenseFile=..\..\COPYING
+LicenseFile=@prefix@\dist\share\@PACKAGE@\doc\COPYING
 Compression=lzma
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
@@ -28,8 +28,8 @@ Name: "custom"; Description: "{cm:CustomInstall}"; Flags: iscustom
 
 [Components]
 Name: "main"; Description: "{cm:MainFiles}"; Types: full custom; Flags: fixed
-Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
-Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
+;Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
+;Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
 
 [Tasks]
 Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
@@ -49,26 +49,26 @@ Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Files]
 ; The main executables and DLLs
-Source: "@prefix@\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash.bat'))
+; Note: The above AfterInstall function will create the 
+; gnucash.bat file on-the-fly by the Pascal script below.
 
-; The translations (no idea why mingw installs them in prefix/lib/locale)
-Source: "@prefix@\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+Source: "@prefix@\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
 
-; The account templates
-Source: "@prefix@\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
-
-; The loading shell script. It is post-processed by the Pascal script below.
-Source: "..\..\src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
+;; The translations (no idea why mingw installs them in prefix/lib/locale)
+;Source: "@prefix@\dist\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+;
+;; The account templates
+;Source: "@prefix@\dist\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
 
 ; And all the documentation
-Source: "..\..\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "..\..\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
-Source: "..\..\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "..\..\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
+Source: "@prefix@\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -85,7 +85,7 @@ Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "loc
 ; Delete the created config script on uninstall
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [UninstallDelete]
-Type: files; Name: "{app}\bin\gnucash"
+Type: files; Name: "{app}\bin\gnucash.bat"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; This large section is a Pascal scripting program that will modify
@@ -112,34 +112,25 @@ var
   Res: Boolean;
 begin
 
-  { Load the unchanged original file }
-  Res := LoadStringFromFile(Format('%s.in',[FileName]), FileString);
-  if Res = False then
-    MsgBox('Error on loading '+FileName+'.in for final adaptation', mbInformation, MB_OK);
-
-  { Insert the custom file header; #10 is the linefeed character }
-  Insert('#!/bin/sh '#10'dir="@prefix'+'@"'#10, FileString, 0);
-
   { Get the installation-specific paths }
-  appdir := MingwBacksl(ExpandConstant('{app}'));
-  libdir := appdir + '/lib';
-  pkglibdir := libdir + '/gnucash';
-  pkgdatadir := appdir + '/share/gnucash';
+  appdir := ExpandConstant('{app}');
+  libdir := appdir + '\lib';
+  pkglibdir := libdir + '\gnucash';
+  pkgdatadir := appdir + '\share\gnucash';
 
-  { Now make all the replacements }
-  { Explanation: StringChange(S,FromStr,ToStr): Change all occurances in S of FromStr to ToStr. }
-  StringChange(FileString, '@'+'-PATH_SEPARATOR-@', ';');
-  StringChange(FileString, '@'+'-BIN_DIR-@', appdir + '/bin');
-  StringChange(FileString, '@'+'-GNC_PKGLIB_INSTALLDIR-@', pkglibdir);
-  StringChange(FileString, '@'+'-GNC_MODULE_DIR-@', pkglibdir);
-  StringChange(FileString, '@'+'-GNC_LIB_INSTALLDIR-@', libdir);
-  StringChange(FileString, '@'+'-GNC_GUILE_MODULE_DIR-@', pkgdatadir + '/guile-modules');
-  StringChange(FileString, '@'+'-GNC_SCM_INSTALL_DIR-@', pkgdatadir + '/scm');
+  { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
+  FileString := 'set PATH=' + appdir + '\bin;' + libdir + '\bin;%PATH%'#13#10 ;
+
+  FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
+  FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
+  FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + datadir + '\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
+  FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
+  FileString := FileString + 'start gnucash-bin'#13#10 ;
 
   { Save the final file }
   Res := SaveStringToFile(FileName, FileString, False);
   if Res = False then
-    MsgBox('Error on saving '+FileName+' for final adaptation', mbInformation, MB_OK);
+    MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
 
 end;
 
