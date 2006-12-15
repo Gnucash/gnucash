@@ -21,6 +21,7 @@ SEPS_GUILE_LDFLAGS=" "
 SEPS_INTLTOOL_PERL=" "
 SEPS_PATH=":"
 SEPS_PKG_CONFIG=":"
+PKG_CONFIG=""
 SEPS_PKG_CONFIG_PATH=":"
 SEPS_READLINE_CPPFLAGS=" "
 SEPS_READLINE_LDFLAGS=" "
@@ -467,7 +468,7 @@ function inst_gnome() {
     add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
-        pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed.  skipping."
@@ -537,12 +538,12 @@ function inst_gnome() {
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
-if pkg-config "\$@" > /dev/null 2>&1 ; then
+if ${PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
     res=true
 else
     res=false
 fi
-pkg-config "\$@" | tr -d \\\\r && \$res
+${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
             cat > lib/pkgconfig/freetype2.pc <<EOF
@@ -572,7 +573,7 @@ EOF
 	#qpopd
     fi
     quiet gconftool-2 --version &&
-    pkg-config --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
     quiet intltoolize --version || die "gnome not installed correctly"
 }
 
@@ -601,7 +602,7 @@ function inst_libgsf() {
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     add_to_env $_LIBGSF_UDIR/bin PATH
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet pkg-config --exists libgsf-1 libgsf-gnome-1
+    if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1
     then
 	echo "libgsf already installed.  skipping."
     else
@@ -616,14 +617,14 @@ function inst_libgsf() {
 	    make install
 	qpopd
     fi
-    pkg-config --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
+    ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
 }
 
 function inst_goffice() {
     setup GOffice
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet pkg-config --exists libgoffice-0.3
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.3
     then
 	echo "goffice already installed.  skipping."
     else
@@ -645,7 +646,7 @@ function inst_goffice() {
 	    make install
 	qpopd
     fi
-    pkg-config --exists libgoffice-0.3 || die "goffice not installed correctly"
+    ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
 }
 
 function inst_glade() {
