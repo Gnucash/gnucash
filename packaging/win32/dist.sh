@@ -36,7 +36,7 @@ function dist_guile() {
     setup Guile
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/libguile{,-ltdl,-srfi}*dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -r $_GUILE_UDIR/share/guile $DIST_UDIR/share
 }
