@@ -20,7 +20,7 @@ Compression=lzma
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
-InfoAfterFile=README
+InfoAfterFile=@prefix@\dist\share\@PACKAGE@\doc\README
 
 [Types]
 Name: "full"; Description: "{cm:FullInstall}"
@@ -86,6 +86,8 @@ Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "loc
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [UninstallDelete]
 Type: files; Name: "{app}\bin\gnucash.bat"
+Type: filesandordirs; Name: "{app}\etc\gconf"
+Type: dirifempty; Name: "{app}\etc"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; This large section is a Pascal scripting program that will modify
