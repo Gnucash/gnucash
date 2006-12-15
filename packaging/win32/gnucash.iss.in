@@ -123,7 +123,7 @@ begin
 
   FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
   FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
-  FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + datadir + '\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
+  FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
   FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
   FileString := FileString + 'start gnucash-bin'#13#10 ;
 
