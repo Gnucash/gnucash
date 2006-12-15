@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-27 10:48+0100\n"
-"PO-Revision-Date: 2006-11-27 11:03+0100\n"
+"POT-Creation-Date: 2006-12-15 22:31+0100\n"
+"PO-Revision-Date: 2006-12-15 22:32+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1724,7 +1724,7 @@ msgid "Billing"
 msgstr "Rechnung ausstellen"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:7
-#: ../src/gnome-utils/dialog-transfer.c:1734
+#: ../src/gnome-utils/dialog-transfer.c:1736
 msgid "Credit Account"
 msgstr "Habenkonto"
 
@@ -2599,7 +2599,7 @@ msgid "is not"
 msgstr "ist nicht"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:81
-#: ../src/gnome-utils/dialog-transfer.c:1377
+#: ../src/gnome-utils/dialog-transfer.c:1378
 #: ../src/register/ledger-core/split-register.c:1496
 #, c-format
 msgid "The account %s does not allow transactions."
@@ -3561,7 +3561,7 @@ msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
 #: ../src/gnome/dialog-price-editor.c:190
-#: ../src/gnome-utils/dialog-transfer.c:1403
+#: ../src/gnome-utils/dialog-transfer.c:1404
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -4054,7 +4054,7 @@ msgid "Original data : %s\n"
 msgstr "Originaldaten : %s\n"
 
 #: ../src/gnome/druid-stock-split.c:268
-#: ../src/gnome-utils/dialog-transfer.c:541 ../src/gnome-utils/gnc-html.c:113
+#: ../src/gnome-utils/dialog-transfer.c:542 ../src/gnome-utils/gnc-html.c:113
 msgid "Error"
 msgstr "Fehler"
 
@@ -4167,7 +4167,7 @@ msgstr "<b>Standardwährung für neue Konten</b>"
 
 #: ../src/gnome/glade/account.glade.h:17
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Buchungen in Unterkonten"
+msgstr "<b>Buchungen in Unterkonten</b>"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "<b>Sub-accounts</b>"
@@ -7238,7 +7238,7 @@ msgstr "Sie müssen mindestens ein Konto auswählen, das geschätzt werden soll.
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:168
 msgid "_Print Check..."
-msgstr "_Scheck drucken..."
+msgstr "Schec_k drucken..."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:173
@@ -9147,7 +9147,8 @@ msgstr "Anfangsbestand kann nicht erstellt werden."
 #. primary label
 #: ../src/gnome-utils/dialog-account.c:607
 msgid "Give the children the same type?"
-msgstr "Soll die Kontoart der Unterkonten zur gleichen Kontoart geändert werden?"
+msgstr ""
+"Soll die Kontoart der Unterkonten zur gleichen Kontoart geändert werden?"
 
 #. secondary label
 #: ../src/gnome-utils/dialog-account.c:625
@@ -9155,7 +9156,9 @@ msgstr "Soll die Kontoart der Unterkonten zur gleichen Kontoart geändert werden
 msgid ""
 "The children of the edited account have to be changed to type \"%s\" to make "
 "them compatible."
-msgstr "Die Kontoart der Unterkonten des aktuell bearbeiteten Kontos muss zur Kontoart »%s« geändert werden, damit die Kontoarten wieder zueinander passen."
+msgstr ""
+"Die Kontoart der Unterkonten des aktuell bearbeiteten Kontos muss zur "
+"Kontoart »%s« geändert werden, damit die Kontoarten wieder zueinander passen."
 
 #. children
 #: ../src/gnome-utils/dialog-account.c:636
@@ -9182,7 +9185,9 @@ msgstr "Wählen Sie eine Kontoart"
 msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
-msgstr "Die gewählte Kontoart passt nicht zu der Kontoart des Hauptkontos von diesem Konto."
+msgstr ""
+"Die gewählte Kontoart passt nicht zu der Kontoart des Hauptkontos von diesem "
+"Konto."
 
 #: ../src/gnome-utils/dialog-account.c:766
 msgid "You must choose a commodity."
@@ -9381,11 +9386,11 @@ msgstr "Bild auswählen"
 msgid "Income%sSalary%sTaxable"
 msgstr "Erträge%sEinkommen%szu versteuern"
 
-#: ../src/gnome-utils/dialog-transfer.c:448
+#: ../src/gnome-utils/dialog-transfer.c:449
 msgid "Show the income and expense accounts"
 msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 
-#: ../src/gnome-utils/dialog-transfer.c:1356
+#: ../src/gnome-utils/dialog-transfer.c:1357
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
@@ -9393,11 +9398,11 @@ msgstr ""
 "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden soll. "
 "Andernfalls wird kein Buchungssatz gespeichert."
 
-#: ../src/gnome-utils/dialog-transfer.c:1366
+#: ../src/gnome-utils/dialog-transfer.c:1367
 msgid "You can't transfer from and to the same account!"
 msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
 
-#: ../src/gnome-utils/dialog-transfer.c:1392
+#: ../src/gnome-utils/dialog-transfer.c:1393
 msgid ""
 "You can't transfer from a non-currency account.  Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
@@ -9406,35 +9411,35 @@ msgstr ""
 "normaler Währung. Sie sollten Sie die Von/Nach-Konten vertauschen und den "
 "Betrag negativ eingeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1417
+#: ../src/gnome-utils/dialog-transfer.c:1418
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1432
+#: ../src/gnome-utils/dialog-transfer.c:1433
 msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1444
+#: ../src/gnome-utils/dialog-transfer.c:1445
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1738
+#: ../src/gnome-utils/dialog-transfer.c:1740
 msgid "Debit Account"
 msgstr "Sollkonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1755
+#: ../src/gnome-utils/dialog-transfer.c:1757
 msgid "Transfer From"
 msgstr "Herkunftskonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1759
+#: ../src/gnome-utils/dialog-transfer.c:1761
 msgid "Transfer To"
 msgstr "Buchen nach"
 
-#: ../src/gnome-utils/dialog-transfer.c:1820
+#: ../src/gnome-utils/dialog-transfer.c:1822
 msgid "Debit Amount:"
 msgstr "Soll Betrag:"
 
-#: ../src/gnome-utils/dialog-transfer.c:1824
+#: ../src/gnome-utils/dialog-transfer.c:1826
 #: ../src/gnome-utils/glade/transfer.glade.h:14
 msgid "To Amount:"
 msgstr "zum Betrag:"
@@ -11501,7 +11506,7 @@ msgstr "_Datei"
 
 #: ../src/gnome-utils/gnc-main-window.c:215
 msgid "Tra_nsaction"
-msgstr "_Buchung"
+msgstr "B_uchung"
 
 #: ../src/gnome-utils/gnc-main-window.c:216
 msgid "_Reports"
@@ -11735,47 +11740,35 @@ msgstr "<unbekannt>"
 msgid "Close _Without Saving"
 msgstr "Schließen _ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:987
-msgid "Quit GnuCash?"
-msgstr "GnuCash beenden?"
-
-#: ../src/gnome-utils/gnc-main-window.c:988
-msgid ""
-"You are attempting to close the last GnuCash window.  Doing so will quit the "
-"application.  Are you sure that this is what you want to do?"
-msgstr ""
-"Sie sind im Begriff, das letzte geöffnete GnuCash-Fenster zu schließen. Dies "
-"wird GnuCash beenden. Sind Sie sich sicher, dass Sie das wollen?"
-
-#: ../src/gnome-utils/gnc-main-window.c:1123
+#: ../src/gnome-utils/gnc-main-window.c:1104
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3219
+#: ../src/gnome-utils/gnc-main-window.c:3185
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3232
+#: ../src/gnome-utils/gnc-main-window.c:3198
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s  Dieses Programm wurde aus SVN r%s am %s erstellt."
 
-#: ../src/gnome-utils/gnc-main-window.c:3235
+#: ../src/gnome-utils/gnc-main-window.c:3201
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  Dieses Programm wurde aus r%s am %s erstellt."
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3247
-#: ../src/gnome-utils/gnc-main-window.c:3286
+#: ../src/gnome-utils/gnc-main-window.c:3213
+#: ../src/gnome-utils/gnc-main-window.c:3252
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3264
+#: ../src/gnome-utils/gnc-main-window.c:3230
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -15032,7 +15025,7 @@ msgstr "Fehlerhafte Berichts ID: %s"
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
 msgid "St_yle Sheets"
-msgstr "_Stilvorlagen"
+msgstr "Stil_vorlagen"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:50
 msgid "Edit report style sheets."
