@@ -2,21 +2,12 @@
 
 set -e
 
-function add_step() { steps=("${steps[@]}" "$@"); }
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
-
-# c:/dir/sub
-function win_fs_path() {
-    echo "$*" | sed 's,\\,/,g'
-}
-
-# /c/dir/sub
-function unix_path() {
-    echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'
-}
+function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
+. functions
 . custom.sh
 
 SEPS_ACLOCAL_FLAGS=" "
@@ -54,21 +45,6 @@ REGEX_CPPFLAGS \
 REGEX_LDFLAGS \
 "
 
-function setup() {
-    echo
-    echo "############################################################"
-    echo "###  $*"
-    echo "############################################################"
-}
-
-function die() {
-    echo
-    echo "!!! $* !!!"
-    echo "!!! ABORTING !!!"
-    exit -1
-}
-
-function quiet() { "$@" &>/dev/null; }
 function add_to_env() {
     _SEP=`eval echo '"$'"SEPS_$2"'"'`
     _ENV=`eval echo '"$'"$2"'"'`

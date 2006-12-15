@@ -1,0 +1,51 @@
+#!/bin/sh  # for emacs
+
+function add_step() { steps=("${steps[@]}" "$@"); }
+function quiet() { "$@" &>/dev/null; }
+
+# c:/dir/sub
+function win_fs_path() { echo "$*" | sed 's,\\,/,g'; }
+
+# usage:  smart_wget URL DESTDIR
+function smart_wget() {
+    _FILE=`basename $1`
+    _DLD=`unix_path $2`
+
+    # If the file already exists in the download directory ($2)
+    # then don't do anything.  But if it does NOT exist then
+    # download the file to the tmpdir and then when that completes
+    # move it to the dest dir.
+    if [ ! -f $_DLD/$_FILE ] ; then
+        wget --passive-ftp -c $1 -P $TMP_DIR
+        mv $TMP_UDIR/$_FILE $_DLD
+    fi
+    LAST_FILE=$_DLD/$_FILE
+}
+
+# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
+function wget_unpacked() {
+    smart_wget $1 $2
+    _UPD=`unix_path $3`
+    echo -n "Extracting ${LAST_FILE##*/} ... "
+    case $LAST_FILE in
+        *.zip)     unzip -q -o $LAST_FILE -d $_UPD;;
+        *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
+        *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
+        *)         die "Cannot unpack file $LAST_FILE!";;
+    esac
+    echo "done"
+}
+
+function setup() {
+    echo
+    echo "############################################################"
+    echo "###  $*"
+    echo "############################################################"
+}
+
+function die() {
+    echo
+    echo "!!! $* !!!"
+    echo "!!! ABORTING !!!"
+    exit -1
+}
