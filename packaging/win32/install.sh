@@ -202,7 +202,7 @@ function inst_unzip() {
 function inst_regex() {
     setup RegEx
     _REGEX_UDIR=`unix_path $REGEX_DIR`
-    add_to_env -I$_REGEX_UDIR/include/rxspencer REGEX_CPPFLAGS
+    add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
     if quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
@@ -467,6 +467,7 @@ function inst_gnome() {
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
+    _ORIG_PKG_CONFIG=$_GNOME_UDIR/bin/pkg-config
     if quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
         quiet intltoolize --version
@@ -538,12 +539,12 @@ function inst_gnome() {
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
-if ${PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
+if ${_ORIG_PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
     res=true
 else
     res=false
 fi
-${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
+${_ORIG_PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
             cat > lib/pkgconfig/freetype2.pc <<EOF
