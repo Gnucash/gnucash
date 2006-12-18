@@ -76,7 +76,7 @@ function prepare() {
         fi
     done
     # Remove old empty install-sh files
-    if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh | wc -l)" -eq 0 ]; then
+    if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh &>/dev/null | wc -l)" -eq 0 ]; then
         rm -f ${_REPOS_UDIR}/install-sh
     fi
     # Partially remove RegEx-GNU if installed
@@ -467,7 +467,6 @@ function inst_gnome() {
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
-    _ORIG_PKG_CONFIG=$_GNOME_UDIR/bin/pkg-config
     if quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
         quiet intltoolize --version
@@ -539,12 +538,13 @@ function inst_gnome() {
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
-if ${_ORIG_PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
+PKG_CONFIG="\$(dirname \$0)/pkg-config"
+if \${PKG_CONFIG} "\$@" > /dev/null 2>&1 ; then
     res=true
 else
     res=false
 fi
-${_ORIG_PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
+\${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
             _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
             cat > lib/pkgconfig/freetype2.pc <<EOF
