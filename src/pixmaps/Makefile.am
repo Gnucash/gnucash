@@ -28,15 +28,14 @@ gncpixmap_DATA = \
   gnc-sx-new.png \
   gnc-transfer-16.png \
   gnc-transfer.png \
+  gnucash-icon.ico \
   gnucash-icon.png \
   gnucash_splash.png \
   stock_split_title.png \
   stock_split_watermark.png
 
 gncicondir = ${datadir}/pixmaps
-gncicon_DATA = \
-  gnucash-icon.ico \
-  gnucash-icon.png
+gncicon_DATA = gnucash-icon.png
 
 EXTRA_DIST = \
   ${gncpixmap_DATA} ${gncicon_DATA}
