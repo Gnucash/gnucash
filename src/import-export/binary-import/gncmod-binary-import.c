@@ -1,13 +1,12 @@
 /*********************************************************************
  * gncmod-binary-import.c
  * module definition/initialization for importing gnucash binary files
- * 
- * Copyright (c) 2001 Linux Developers Group, Inc. 
+ *
+ * Copyright (c) 2001 Linux Developers Group, Inc.
  *********************************************************************/
 
 #include "config.h"
-#include <stdio.h>
-#include <glib.h>
+#include <gmodule.h>
 #include <libguile.h>
 
 #include "gnc-hooks.h"
@@ -16,32 +15,26 @@
 #include "druid-commodity.h"
 
 /* version of the gnc module system interface we require */
-int libgncmod_binary_import_LTX_gnc_module_system_interface = 0;
+int gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int libgncmod_binary_import_LTX_gnc_module_current  = 0;
-int libgncmod_binary_import_LTX_gnc_module_revision = 0;
-int libgncmod_binary_import_LTX_gnc_module_age      = 0;
-
-/* forward references */
-char *libgncmod_binary_import_LTX_gnc_module_path(void);
-char *libgncmod_binary_import_LTX_gnc_module_description(void);
-int libgncmod_binary_import_LTX_gnc_module_init(int refcount);
-int libgncmod_binary_import_LTX_gnc_module_end(int refcount);
+int gnc_module_current  = 0;
+int gnc_module_revision = 0;
+int gnc_module_age      = 0;
 
 
 char *
-libgncmod_binary_import_LTX_gnc_module_path(void) {
+gnc_module_path(void) {
   return g_strdup("gnucash/import-export/binary-import");
 }
 
-char * 
-libgncmod_binary_import_LTX_gnc_module_description(void) {
+char *
+gnc_module_description(void) {
   return g_strdup("Utilities importing GnuCash binary files");
 }
 
 int
-libgncmod_binary_import_LTX_gnc_module_init(int refcount) {
+gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
@@ -64,6 +57,6 @@ libgncmod_binary_import_LTX_gnc_module_init(int refcount) {
 }
 
 int
-libgncmod_binary_import_LTX_gnc_module_end(int refcount) {
+gnc_module_end(int refcount) {
   return TRUE;
 }
