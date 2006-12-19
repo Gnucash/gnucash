@@ -2216,7 +2216,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
-          dnl # src/report/report-gnome/test/Makefile
+          src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile

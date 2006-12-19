@@ -28,11 +28,10 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-baz \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/misc-mods \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/misc-mods
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
