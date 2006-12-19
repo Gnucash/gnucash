@@ -31,7 +31,8 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
-  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
+  --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

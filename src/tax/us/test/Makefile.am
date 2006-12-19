@@ -4,7 +4,8 @@ TESTS = test-link-module test-load-module
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/tax/us \
   --guile-load-dir ${top_builddir}/src/gnc-module \
-  --guile-load-dir ${top_builddir}/src/tax/us
+  --guile-load-dir ${top_builddir}/src/tax/us \
+  --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

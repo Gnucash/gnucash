@@ -8,7 +8,8 @@ TESTS =  \
 
 GNC_TEST_DEPS := \
   --guile-load-dir ${top_builddir}/src/gnc-module \
-  --gnc-module-dir ${top_builddir}/src/network-utils
+  --gnc-module-dir ${top_builddir}/src/network-utils \
+  --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

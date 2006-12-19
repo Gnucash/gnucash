@@ -22,7 +22,9 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/scm \
-  --guile-load-dir ${top_builddir}/src/app-utils
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

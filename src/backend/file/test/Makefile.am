@@ -178,7 +178,8 @@ TESTS = \
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --guile-load-dir ${top_builddir}/src/engine
+  --guile-load-dir ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/file
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
