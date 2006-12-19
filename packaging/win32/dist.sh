@@ -124,7 +124,7 @@ function dist_gnucash() {
     cp $_GNUCASH_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
     cp -r $_GNUCASH_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp $_GNUCASH_UDIR/lib/lib*.la $DIST_UDIR/lib
+    cp $_GNUCASH_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
     cp $_GNUCASH_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
     cp -r $_GNUCASH_UDIR/libexec $DIST_UDIR
