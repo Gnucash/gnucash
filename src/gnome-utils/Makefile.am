@@ -13,6 +13,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \

@@ -8,6 +8,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DPKGDATADIR=\"${GNC_SHAREDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \

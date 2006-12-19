@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-business-core.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} \

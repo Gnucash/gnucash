@@ -100,6 +100,7 @@ EXTRA_DIST = \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
