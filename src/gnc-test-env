@@ -3,8 +3,7 @@ exec guile -s $0 "$@"
 !#
 
 ;; Spit out the environment variable settings needed based on
-;; arguments listing gnc-module-dirs, guile-load-dirs, and
-;; library-dirs
+;; arguments listing gnc-module-dirs and guile-load-dirs
 
 (use-modules (srfi srfi-13) (srfi srfi-14)) ;; for string-tokenize
 (debug-enable 'backtrace)
@@ -21,13 +20,11 @@ exec guile -s $0 "$@"
 
 (define gnc-module-dirs '())
 (define guile-load-dirs '())
-(define library-dirs '())
 
 (define (usage-death)
   (display "Usage: gnc-test-env [ --no-exports ]\n")
   (display "                    [ (--gnc-module-dir dir | \n")
   (display "                       --guile-load-dir dir | \n")
-  (display "                       --library-dir dir) ... ]\n")
   (exit 1))
 
 (define (process-args! args)
@@ -40,13 +37,9 @@ exec guile -s $0 "$@"
      ((string=? "--guile-load-dir" (car rest))
       (set! guile-load-dirs (cons (cadr rest) guile-load-dirs))
       (loop (cddr rest)))
-     ((string=? "--library-dir" (car rest))
-      (set! library-dirs (cons (cadr rest) library-dirs))
-      (loop (cddr rest)))
      (else (usage-death))))
   (set! gnc-module-dirs (reverse gnc-module-dirs))
-  (set! guile-load-dirs (reverse guile-load-dirs))
-  (set! library-dirs (reverse library-dirs)))
+  (set! guile-load-dirs (reverse guile-load-dirs)))
 
 ;; The character set of everything except a directory separator as
 ;; necessary for string-tokenize below
@@ -84,32 +77,22 @@ exec guile -s $0 "$@"
 
 (process-args! args)
 
-(display "GNC_MODULE_PATH=${GNC_MODULE_PATH}:")
+(display "GNC_MODULE_PATH=\"${GNC_MODULE_PATH}")
+(display path-sep-str)
 (display (adapt-dirsep
-	  (string-join gnc-module-dirs
-		       ":")))
+	  (string-join (map
+			(lambda (dir)
+			  (string-append dir "/.libs"))
+			gnc-module-dirs)
+		       path-sep-str)))
+(display "\"")
 
 (display " GUILE_LOAD_PATH=\"${GUILE_LOAD_PATH}")
 (display path-sep-str)
 (display (adapt-dirsep
-	  (string-join (append gnc-module-dirs guile-load-dirs)
+	  (string-join guile-load-dirs
 		       path-sep-str)))
 (display "\"")
-
-(display " LD_LIBRARY_PATH=${LD_LIBRARY_PATH}")
-(display (adapt-dirsep
-	  (apply string-append
-		 (map
-		  (lambda (dir)
-		    (string-append ":" dir ":" dir "/.libs"))
-		  (append gnc-module-dirs library-dirs)))))
-
-(display " LTDL_LIBRARY_PATH=${LTDL_LIBRARY_PATH}")
-(display (apply string-append
-                (map
-                 (lambda (dir)
-                   (string-append ":" dir ":" dir "/.libs"))
-                 (append gnc-module-dirs library-dirs))))
 
 (if is-windows?
     (begin
@@ -124,9 +107,7 @@ exec guile -s $0 "$@"
     (begin
       (display "; ")
       (display " export GNC_MODULE_PATH;")
-      (display " export GUILE_LOAD_PATH;")
-      (display " export LD_LIBRARY_PATH;")
-      (display " export LTDL_LIBRARY_PATH;")))
+      (display " export GUILE_LOAD_PATH;")))
 
 ;; Local Variables:
 ;; mode: scheme
