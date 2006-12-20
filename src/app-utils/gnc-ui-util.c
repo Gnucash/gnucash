@@ -770,6 +770,7 @@ gnc_localeconv (void)
   gnc_lconv_set_utf8(&lc.mon_thousands_sep, ",");
   gnc_lconv_set_utf8(&lc.mon_grouping, "\003");
   gnc_lconv_set_utf8(&lc.negative_sign, "-");
+  gnc_lconv_set_utf8(&lc.positive_sign, "");
 
   gnc_lconv_set_char(&lc.frac_digits, 2);
   gnc_lconv_set_char(&lc.int_frac_digits, 2);
