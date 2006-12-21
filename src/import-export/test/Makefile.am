@@ -11,6 +11,7 @@ AM_CFLAGS = \
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
