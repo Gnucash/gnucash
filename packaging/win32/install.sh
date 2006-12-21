@@ -10,56 +10,22 @@ qpushd "$(dirname $(unix_path "$0"))"
 . functions
 . custom.sh
 
-SEPS_ACLOCAL_FLAGS=" "
-SEPS_AUTOTOOLS_CPPFLAGS=" "
-SEPS_AUTOTOOLS_LDFLAGS=" "
-SEPS_GNOME_CPPFLAGS=" "
-SEPS_GNOME_LDFLAGS=" "
-SEPS_GUILE_LOAD_PATH=";"
-SEPS_GUILE_CPPFLAGS=" "
-SEPS_GUILE_LDFLAGS=" "
-SEPS_INTLTOOL_PERL=" "
-SEPS_PATH=":"
-SEPS_PKG_CONFIG=":"
-PKG_CONFIG=""
-SEPS_PKG_CONFIG_PATH=":"
-SEPS_READLINE_CPPFLAGS=" "
-SEPS_READLINE_LDFLAGS=" "
-SEPS_REGEX_CPPFLAGS=" "
-SEPS_REGEX_LDFLAGS=" "
-ENV_VARS="\
-ACLOCAL_FLAGS \
-AUTOTOOLS_CPPFLAGS \
-AUTOTOOLS_LDFLAGS \
-GNOME_CPPFLAGS \
-GNOME_LDFLAGS \
-GUILE_LOAD_PATH \
-GUILE_CPPFLAGS \
-GUILE_LDFLAGS \
-INTLTOOL_PERL \
-PATH \
-PKG_CONFIG \
-PKG_CONFIG_PATH \
-READLINE_CPPFLAGS \
-READLINE_LDFLAGS \
-REGEX_CPPFLAGS \
-REGEX_LDFLAGS \
-"
-
-function add_to_env() {
-    _SEP=`eval echo '"$'"SEPS_$2"'"'`
-    _ENV=`eval echo '"$'"$2"'"'`
-    _SED=`eval echo '"s#.*'"${_SEP}$1${_SEP}"'.*##"'`
-    _TEST=`echo "${_SEP}${_ENV}${_SEP}" | sed "${_SED}"`
-    if [ "$_TEST" ]; then
-	if [ "$_ENV" ]; then
-	    eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
-	else
-	    eval "$2_ADDS"'="'"$1"'"'
-	fi
-	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
-    fi
-}
+register_env_var ACLOCAL_FLAGS " "
+register_env_var AUTOTOOLS_CPPFLAGS " "
+register_env_var AUTOTOOLS_LDFLAGS " "
+register_env_var GNOME_CPPFLAGS " "
+register_env_var GNOME_LDFLAGS " "
+register_env_var GUILE_LOAD_PATH ";"
+register_env_var GUILE_CPPFLAGS " "
+register_env_var GUILE_LDFLAGS " "
+register_env_var INTLTOOL_PERL " "
+register_env_var PATH ":"
+register_env_var PKG_CONFIG ":" ""
+register_env_var PKG_CONFIG_PATH ":"
+register_env_var READLINE_CPPFLAGS " "
+register_env_var READLINE_LDFLAGS " "
+register_env_var REGEX_CPPFLAGS " "
+register_env_var REGEX_LDFLAGS " "
 
 function prepare() {
     # Necessary so that intltoolize doesn't come up with some
@@ -91,43 +57,8 @@ function prepare() {
 
     mkdir -p $TMP_DIR
     mkdir -p $DOWNLOAD_DIR
-    for _ENV in $ENV_VARS; do
-	eval "${_ENV}_BASE"'=$'"${_ENV}"
-	eval "${_ENV}_ADDS="
-	eval export "${_ENV}"
-    done
     DOWNLOAD_UDIR=`unix_path $DOWNLOAD_DIR`
     TMP_UDIR=`unix_path $TMP_DIR`
-}
-
-# usage:  smart_wget URL DESTDIR
-function smart_wget() {
-    _FILE=`basename $1`
-    _DLD=`unix_path $2`
-
-    # If the file already exists in the download directory ($2)
-    # then don't do anything.  But if it does NOT exist then
-    # download the file to the tmpdir and then when that completes
-    # move it to the dest dir.
-    if [ ! -f $_DLD/$_FILE ] ; then
-	wget --passive-ftp -c $1 -P $TMP_DIR
-	mv $TMP_UDIR/$_FILE $_DLD
-    fi
-    LAST_FILE=$_DLD/$_FILE
-}
-
-# usage:  wget_unpacked URL DOWNLOAD_DIR UNPACK_DIR
-function wget_unpacked() {
-    smart_wget $1 $2
-    _UPD=`unix_path $3`
-    echo -n "Extracting ${LAST_FILE##*/} ... "
-    case $LAST_FILE in
-        *.zip)     unzip -q -o $LAST_FILE -d $_UPD;;
-        *.tar.gz)  tar -xzpf $LAST_FILE -C $_UPD;;
-        *.tar.bz2) tar -xjpf $LAST_FILE -C $_UPD;;
-        *)         die "Cannot unpack file $LAST_FILE!";;
-    esac
-    echo "done"
 }
 
 function inst_wget() {

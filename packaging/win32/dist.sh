@@ -10,6 +10,8 @@ qpushd "$(dirname $(unix_path "$0"))"
 . functions
 . custom.sh
 
+register_env_var PATH ":"
+
 function prepare() {
     DIST_DIR=${GNUCASH_DIR}\\dist
     DIST_UDIR=`unix_path $DIST_DIR`
@@ -18,6 +20,18 @@ function prepare() {
     if [ -x $DIST_DIR ]; then
         die "Please remove ${DIST_DIR} first"
     fi
+    _UNZIP_UDIR=`unix_path $UNZIP_DIR`
+    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
+    _GUILE_UDIR=`unix_path $GUILE_DIR`
+    _WIN_UDIR=`unix_path $WINDIR`
+    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
+    _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
+    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
+    _INNO_UDIR=`unix_path $INNO_DIR`
+    add_to_env $_UNZIP_UDIR/bin PATH # unzip
+    add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
 }
 
 function dist_regex() {
@@ -28,14 +42,12 @@ function dist_regex() {
 
 function dist_autotools() {
     setup Autotools
-    _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     mkdir -p $DIST_UDIR/bin
     cp $_AUTOTOOLS_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
 function dist_guile() {
     setup Guile
-    _GUILE_UDIR=`unix_path $GUILE_DIR`
     mkdir -p $DIST_UDIR/bin
     cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
@@ -45,21 +57,18 @@ function dist_guile() {
 
 function dist_openssl() {
     setup OpenSSL
-    _WIN_UDIR=`unix_path $WINDIR`
     mkdir -p $DIST_UDIR/bin
     cp $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
     setup LibXML2
-    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     mkdir -p $DIST_UDIR/bin
     cp $_LIBXML2_UDIR/bin/libxml2.dll $DIST_UDIR/bin
 }
 
 function dist_gnome() {
     setup Gnome platform
-    _GNOME_UDIR=`unix_path $GNOME_DIR`
     wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
@@ -96,7 +105,6 @@ function dist_gnome() {
 
 function dist_libgsf() {
     setup libGSF
-    _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     mkdir -p $DIST_UDIR/bin
     cp $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
@@ -107,7 +115,6 @@ function dist_libgsf() {
 
 function dist_goffice() {
     setup GOffice
-    _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     mkdir -p $DIST_UDIR/bin
     cp $_GOFFICE_UDIR/bin/libgoffice*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/lib
@@ -118,7 +125,6 @@ function dist_goffice() {
 
 function dist_gnucash() {
     setup GnuCash
-    _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     mkdir -p $DIST_UDIR/bin
     cp $_GNUCASH_UDIR/bin/* $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
@@ -142,7 +148,6 @@ function finish() {
         echo "done"
     done
 
-    _INNO_UDIR=`unix_path $INNO_DIR`
     echo "You can now run the Inno Setup Compiler for creating the setup.exe:"
     echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/packaging/win32/gnucash.iss
 }
