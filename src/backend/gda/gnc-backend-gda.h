@@ -41,10 +41,6 @@ struct GncGdaBackend_struct
   GdaConnection* pConnection;
   GdaDict* pDict;
 
-  GdaDataHandler* pStrHandler;
-  GdaDataHandler* pNumHandler;
-  GdaDataHandler* pDateHandler;
-
   QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
   gboolean  in_query;

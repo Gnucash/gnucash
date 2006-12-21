@@ -1391,10 +1391,6 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
 		printf( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
 	}
 
-	be->pStrHandler = gda_handler_string_new();
-	be->pNumHandler = gda_handler_numerical_new();
-	be->pDateHandler = gda_handler_time_new_no_locale();
-
     LEAVE (" ");
 }
 
@@ -1417,15 +1413,6 @@ gnc_gda_session_end(QofBackend *be_start)
 	if( be->pClient != NULL ) {
 		g_object_unref( G_OBJECT(be->pClient ) );
 		be->pClient = NULL;
-	}
-	if( be->pStrHandler != NULL ) {
-		g_object_unref( G_OBJECT(be->pStrHandler) );
-	}
-	if( be->pNumHandler != NULL ) {
-		g_object_unref( G_OBJECT(be->pNumHandler) );
-	}
-	if( be->pDateHandler != NULL ) {
-		g_object_unref( G_OBJECT(be->pDateHandler) );
 	}
 
     LEAVE (" ");
