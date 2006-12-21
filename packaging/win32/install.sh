@@ -689,7 +689,7 @@ function svn_up() {
     # latest revision that should compile, use HEAD or vwxyz
     SVN_REV="HEAD"
     if [ -x .svn ]; then
-	setup svn up
+	setup "svn update in ${REPOS_DIR}"
 	svn up -r ${SVN_REV}
     else
 	setup svn co
