@@ -6,9 +6,11 @@ GLOBAL_DIR=c:\\soft
 TMP_DIR=$GLOBAL_DIR\\tmp
 DOWNLOAD_DIR=$GLOBAL_DIR\\downloads
 
-REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
-REPOS_DIR=$GLOBAL_DIR\\repos
 GNUCASH_DIR=$GLOBAL_DIR\\gnucash
+REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
+REPOS_DIR=$GNUCASH_DIR\\repos
+BUILD_DIR=$GNUCASH_DIR\\build
+INSTALL_DIR=$GNUCASH_DIR\\inst
 
 ####
 cross_compile="no"
@@ -112,8 +114,8 @@ LIBART_LGPL_DEV_URL="$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.17.zip
 GTK_URL="$GNOME_WIN32_URL/gtk+/2.10/gtk+-2.10.6.zip"
 GTK_DEV_URL="$GNOME_WIN32_URL/gtk+/2.10/gtk+-dev-2.10.6.zip"
 INTLTOOL_URL="$GNOME_WIN32_URL/intltool/0.35/intltool-0.35.0.zip"
-ORBIT2_URL="$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-2.14.2.zip"
-ORBIT2_DEV_URL="$GNOME_WIN32_URL/ORBit2/2.14/ORBit2-dev-2.14.2.zip"
+ORBIT2_URL="$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-2.13.3.zip"
+ORBIT2_DEV_URL="$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-dev-2.13.3.zip"
 GAIL_URL="$GNOME_WIN32_URL/gail/1.9/gail-1.9.3.zip"
 GAIL_DEV_URL="$GNOME_WIN32_URL/gail/1.9/gail-dev-1.9.3.zip"
 POPT_URL="$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"

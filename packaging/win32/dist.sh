@@ -13,7 +13,8 @@ qpushd "$(dirname $(unix_path "$0"))"
 register_env_var PATH ":"
 
 function prepare() {
-    DIST_DIR=${GNUCASH_DIR}\\dist
+    # this directory is hardcoded in gnucash.iss.in
+    DIST_DIR=${INSTALL_DIR}\\..\\dist
     DIST_UDIR=`unix_path $DIST_DIR`
     DIST_WFSDIR=`win_fs_path $DIST_DIR`
     TMP_UDIR=`unix_path $TMP_DIR`
@@ -29,6 +30,8 @@ function prepare() {
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
+    _BUILD_UDIR=`unix_path $BUILD_DIR`
+    _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
@@ -126,17 +129,18 @@ function dist_goffice() {
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
-    cp $_GNUCASH_UDIR/bin/* $DIST_UDIR/bin
+    cp $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp $_GNUCASH_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
+    cp $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -r $_GNUCASH_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp $_GNUCASH_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
+    cp -r $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
+    cp $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
-    cp $_GNUCASH_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
-    cp -r $_GNUCASH_UDIR/libexec $DIST_UDIR
+    cp $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
+    cp -r $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
-    cp -r $_GNUCASH_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
+    cp -r $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
+    cp $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
 }
 
 function finish() {
@@ -149,7 +153,7 @@ function finish() {
     done
 
     echo "You can now run the Inno Setup Compiler for creating the setup.exe:"
-    echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/packaging/win32/gnucash.iss
+    echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
 }
 
 prepare

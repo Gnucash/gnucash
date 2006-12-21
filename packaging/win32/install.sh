@@ -55,10 +55,10 @@ function prepare() {
         qpopd
     fi
 
-    mkdir -p $TMP_DIR
-    mkdir -p $DOWNLOAD_DIR
     DOWNLOAD_UDIR=`unix_path $DOWNLOAD_DIR`
     TMP_UDIR=`unix_path $TMP_DIR`
+    mkdir -p $TMP_UDIR
+    mkdir -p $DOWNLOAD_UDIR
 }
 
 function inst_wget() {
@@ -68,7 +68,7 @@ function inst_wget() {
     then
         echo "already installed.  skipping."
     else
-        mkdir -p $WGET_DIR
+        mkdir -p $_WGET_UDIR
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $WGET_DIR
         cp $_WGET_UDIR/*/*/wget.exe $WGET_DIR
     fi
@@ -140,7 +140,7 @@ function inst_regex() {
     then
         echo "regex already installed.  skipping."
     else
-        mkdir -p $REGEX_DIR
+        mkdir -p $_REGEX_UDIR
         wget_unpacked $REGEX_BIN_URL $DOWNLOAD_DIR $REGEX_DIR
         wget_unpacked $REGEX_LIB_URL $DOWNLOAD_DIR $REGEX_DIR
     fi
@@ -157,7 +157,7 @@ function inst_readline() {
     then
         echo "readline already installed.  skipping."
     else
-        mkdir -p $READLINE_DIR
+        mkdir -p $_READLINE_UDIR
         wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
         wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
     fi
@@ -172,7 +172,7 @@ function inst_indent() {
     then
         echo "indent already installed.  skipping."
     else
-        mkdir -p $INDENT_DIR
+        mkdir -p $_INDENT_UDIR
         wget_unpacked $INDENT_BIN_URL $DOWNLOAD_DIR $INDENT_DIR
     fi
     quiet which indent || die "indent unavailable"
@@ -296,7 +296,7 @@ function inst_guile() {
 	qpopd
         _GUILE_MAJOR=`echo $_GUILE_UDIR/share/guile/1.* | sed 's,.*/,,'`
 	_SLIB_DIR=$GUILE_DIR\\share\\guile\\$_GUILE_MAJOR
-	mkdir -p $_SLIB_DIR
+	mkdir $_SLIB_DIR
 	unzip $_SLIB_BALL -d $_SLIB_DIR
 	qpushd $_SLIB_DIR/slib
 	    cp guile.init guile.init.bak
@@ -305,7 +305,7 @@ function inst_guile() {
 	qpopd
     fi
     if test x$cross_compile = xyes ; then
-	qpushd $GUILE_DIR/bin
+	qpushd $_GUILE_UDIR/bin
 	# The cross-compiling guile expects these program names
 	# for the build-time guile
 	ln -sf /usr/bin/guile-config mingw32-guile-config
@@ -404,7 +404,7 @@ function inst_gnome() {
     then
         echo "gnome packages installed.  skipping."
     else
-        mkdir -p $GNOME_DIR
+        mkdir -p $_GNOME_UDIR
 	wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -494,13 +494,13 @@ EOF
         qpopd
     fi
     if test x$cross_compile = xyes ; then
-        qpushd $GNOME_DIR/lib/pkgconfig
+        qpushd $_GNOME_UDIR/lib/pkgconfig
 	    perl -pi.bak -e"s!^prefix=.*\$!prefix=$GNOME_DIR!" *.pc
 	    #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
 	qpopd
 	# Latest gnome-dev packages don't ship with *.la files
 	# anymore. What do we do...?
-        #qpushd $GNOME_DIR/bin
+        #qpushd $_GNOME_UDIR/bin
 	#    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
 	#qpopd
     fi
@@ -631,7 +631,7 @@ function inst_svn() {
 }
 
 function svn_up() {
-    mkdir -p $REPOS_DIR
+    mkdir -p $_REPOS_UDIR
     qpushd $REPOS_DIR
     # latest revision that should compile, use HEAD or vwxyz
     SVN_REV="HEAD"
@@ -647,72 +647,77 @@ function svn_up() {
 
 function inst_gnucash() {
     setup GnuCash
-    _GNUCASH_WFSDIR=`win_fs_path $GNUCASH_DIR`
-    _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
+    _INSTALL_WFSDIR=`win_fs_path $INSTALL_DIR`
+    _INSTALL_UDIR=`unix_path $INSTALL_DIR`
+    _BUILD_UDIR=`unix_path $BUILD_DIR`
+    mkdir -p $_BUILD_UDIR
+
     qpushd $REPOS_DIR
-    if test "x$cross_compile" = xyes ; then
-	# Set these variables manually because of cross-compiling
-	export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
-	export GUILE_INCS="${GUILE_CPPFLAGS}"
-	export BUILD_GUILE=yes
-	export name_build_guile=/usr/bin/guile-config
-    fi
-    ./autogen.sh
-    ./configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
-	--prefix=$_GNUCASH_WFSDIR \
-	--enable-debug \
-	--enable-schemas-install=no \
-	--enable-binreloc \
-	CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
-	LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
-	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
-
-    # Windows DLLs don't need relinking
-    grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
-    grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
-    # Exclude (for now) the test subdirectories from the build
-    # because executable linking is so painfully slow on mingw
-    perl -pi.instbak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
-    find src -name Makefile.instbak -exec rm {} \;
-
-    make
-
-    # Try to fix the paths in the "gnucash" script
-    qpushd src/bin
-    rm gnucash
-    make PATH_SEPARATOR=";" \
-	bindir="${_GNUCASH_UDIR}/bin:${_GNUCASH_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
-	gnucash
+        if test "x$cross_compile" = xyes ; then
+            # Set these variables manually because of cross-compiling
+            export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
+            export GUILE_INCS="${GUILE_CPPFLAGS}"
+            export BUILD_GUILE=yes
+            export name_build_guile=/usr/bin/guile-config
+        fi
+        ./autogen.sh
+        # Windows DLLs don't need relinking
+        grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
 
-    make install
+    qpushd $BUILD_DIR
+        $_REPOS_UDIR/configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
+            --prefix=$_INSTALL_WFSDIR \
+            --enable-debug \
+            --enable-schemas-install=no \
+            --enable-binreloc \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
+            PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
+
+        # Windows DLLs don't need relinking
+        grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
+        # Exclude (for now) the test subdirectories from the build
+        # because executable linking is so painfully slow on mingw
+        perl -pi.instbak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
+        find src -name Makefile.instbak -exec rm {} \;
+
+        make
+
+        # Try to fix the paths in the "gnucash" script
+        qpushd src/bin
+            rm gnucash
+            make PATH_SEPARATOR=";" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
+                gnucash
+        qpopd
+
+        make install
     qpopd
 
-    qpushd ${_GNUCASH_WFSDIR}/lib/gnucash
-    # Remove the dependency_libs line from the installed .la files
-    # because otherwise loading the modules literally takes hours.
-    for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
+    qpushd $_INSTALL_UDIR/lib/gnucash
+        # Remove the dependency_libs line from the installed .la files
+        # because otherwise loading the modules literally takes hours.
+        for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
     qpopd
 
-    qpushd ${_GNUCASH_WFSDIR}/etc/gconf/schemas
-    for file in *.schemas; do
-        gconftool-2 \
-            --config-source=xml:merged:${_GNUCASH_WFSDIR}/etc/gconf/gconf.xml.defaults \
-            --install-schema-file $file
-    done
-    gconftool-2 --shutdown
+    qpushd $_INSTALL_UDIR/etc/gconf/schemas
+        for file in *.schemas; do
+            gconftool-2 \
+                --config-source=xml:merged:${_INSTALL_WFSDIR}/etc/gconf/gconf.xml.defaults \
+                --install-schema-file $file
+        done
+        gconftool-2 --shutdown
     qpopd
 
     # Create a startup script that works without the msys shell
-    qpushd ${_GNUCASH_WFSDIR}/bin
-    echo "set PATH=${GNUCASH_DIR}\\bin;${GNUCASH_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
-    echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
-    echo "set GNC_MODULE_PATH=${GNUCASH_DIR}\\lib\\gnucash" >> gnucash.bat
-    echo "set GUILE_LOAD_PATH=${GNUCASH_DIR}\\share\\gnucash\\guile-modules;${GNUCASH_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
-    # Really sure we don't need this?
-    #echo "set SCHEME_LIBRARY_PATH=${GUILE_DIR}\\share\\guile\\site\\slib\\" >> gnucash.bat
-    echo "set LTDL_LIBRARY_PATH=${GNUCASH_DIR}\\lib" >> gnucash.bat
-    echo "start gnucash-bin" >> gnucash.bat
+    qpushd $_INSTALL_UDIR}/bin
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
+        echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
+        echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
+        echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
+        echo "start gnucash-bin" >> gnucash.bat
     qpopd
 }
 
@@ -726,6 +731,7 @@ function finish() {
 		echo
 		echo "Environment variables changed, please do the following"
 		echo
+		[ -d /etc/profile.d ] || echo "mkdir -p /etc/profile.d"
 		_NEW=
 	    fi
 	    _VAL=`eval echo '"$'"${_ENV}_BASE"'"'`
