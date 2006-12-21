@@ -141,6 +141,10 @@ function finish() {
             --install-schema-file $file >/dev/null
         echo "done"
     done
+
+    _INNO_UDIR=`unix_path $INNO_DIR`
+    echo "You can now run the Inno Setup Compiler for creating the setup.exe:"
+    echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/packaging/win32/gnucash.iss
 }
 
 prepare

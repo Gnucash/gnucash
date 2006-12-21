@@ -156,6 +156,9 @@ GOFFICE_PATCH=`pwd`/goffice-0.3.0-patch.diff
 GLADE_URL="$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 GLADE_DIR=$GLOBAL_DIR\\glade
 
+INNO_URL="http://files.jrsoftware.org/ispack/ispack-5.1.9.exe"
+INNO_DIR=$GLOBAL_DIR\\inno
+
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
@@ -185,6 +188,9 @@ add_step inst_swig
 add_step inst_libgsf
 add_step inst_goffice
 #add_step inst_glade
+if test x$cross_compile != xyes ; then
+ add_step inst_inno
+fi
 add_step inst_svn
 add_step svn_up
 add_step inst_gnucash

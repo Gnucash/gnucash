@@ -669,6 +669,22 @@ function inst_glade() {
     quiet glade-3 --version || die "glade not installed correctly"
 }
 
+function inst_inno() {
+    setup Inno Setup Compiler
+    _INNO_UDIR=`unix_path $INNO_DIR`
+    add_to_env $_INNO_UDIR PATH
+    if quiet which iscc
+    then
+        echo "Inno Setup Compiler already installed.  Skipping."
+    else
+        smart_wget $INNO_URL $DOWNLOAD_DIR
+        echo "!!! When asked for the installation path, specify $INNO_DIR !!!"
+	echo "!!! Also, you can deselect all optional components."
+        $LAST_FILE
+    fi
+    quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
+}
+
 function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
@@ -770,6 +786,7 @@ function inst_gnucash() {
 }
 
 function finish() {
+    setup Finish...
     _NEW=x
     for _ENV in $ENV_VARS; do
 	_ADDS=`eval echo '"\$'"${_ENV}"'_ADDS"'`
