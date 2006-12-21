@@ -538,10 +538,16 @@ AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 
 ### -----------------------
 ### LIBGDA
-LIBGDA_LIBS=`$PKG_CONFIG --silence-errors --libs libgda-2.0`
-LIBGDA_CFLAGS=`$PKG_CONFIG --silence-errors --cflags libgda-2.0`
-AC_SUBST(LIBGDA_LIBS)
+LIBGDA_PACKAGE_NAME=libgda-2.0
+AC_ARG_WITH( libgda,
+  [  --with-libgda=PATH      specify where to look for libgda],
+  [ LIBGDA_PACKAGE_NAME=$with_libgda/lib/pkgconfig/${LIBGDA_PACKAGE_NAME}.pc ])
+#LIBGDA_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $LIBGDA_PACKAGE_NAME`
+#LIBGDA_LIBS=`$PKG_CONFIG --silence-errors --libs $LIBGDA_PACKAGE_NAME`
+LIBGDA_CFLAGS=`$PKG_CONFIG --cflags $LIBGDA_PACKAGE_NAME`
+LIBGDA_LIBS=`$PKG_CONFIG --libs $LIBGDA_PACKAGE_NAME`
 AC_SUBST(LIBGDA_CFLAGS)
+AC_SUBST(LIBGDA_LIBS)
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
