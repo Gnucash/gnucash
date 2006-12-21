@@ -40,6 +40,7 @@ function dist_guile() {
     cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
     cp -r $_GUILE_UDIR/share/guile $DIST_UDIR/share
+    [ -f $DIST_UDIR/share/guile/1.6/slibcat ] && rm $DIST_UDIR/share/guile/1.6/slibcat
 }
 
 function dist_openssl() {
