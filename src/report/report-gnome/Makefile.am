@@ -7,6 +7,7 @@ pkglib_LTLIBRARIES = libgncmod-report-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
