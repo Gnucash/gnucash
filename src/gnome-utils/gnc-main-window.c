@@ -3055,6 +3055,11 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
   ENTER(" ");
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   page = priv->current_page;
+  if (!page) {
+    LEAVE("No current page");
+    return;
+  }
+  
   tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
                                        page->notebook_page);
   children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
