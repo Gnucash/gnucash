@@ -152,6 +152,12 @@ function finish() {
         echo "done"
     done
 
+    # Strip redirections in distributed libtool .la files
+    for file in `find $DIST_UDIR/lib -name '*.la'`; do
+        cat $file | sed 's,^libdir=,#libdir=,' > $file.new
+        mv $file.new $file
+    done
+
     echo "You can now run the Inno Setup Compiler for creating the setup.exe:"
     echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
 }
