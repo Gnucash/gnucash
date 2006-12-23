@@ -46,28 +46,29 @@ function dist_regex() {
 function dist_autotools() {
     setup Autotools
     mkdir -p $DIST_UDIR/bin
-    cp $_AUTOTOOLS_UDIR/bin/*.dll $DIST_UDIR/bin
+    cp -a $_AUTOTOOLS_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
 function dist_guile() {
     setup Guile
     mkdir -p $DIST_UDIR/bin
     cp -a $_GUILE_UDIR/bin/libguile{.,-ltdl.,-srfi}*dll $DIST_UDIR/bin
+    cp -a $_GUILE_UDIR/bin/guile.exe $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/share
-    cp -r $_GUILE_UDIR/share/guile $DIST_UDIR/share
+    cp -a $_GUILE_UDIR/share/guile $DIST_UDIR/share
     [ -f $DIST_UDIR/share/guile/1.6/slibcat ] && rm $DIST_UDIR/share/guile/1.6/slibcat
 }
 
 function dist_openssl() {
     setup OpenSSL
     mkdir -p $DIST_UDIR/bin
-    cp $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
+    cp -a $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
     setup LibXML2
     mkdir -p $DIST_UDIR/bin
-    cp $_LIBXML2_UDIR/bin/libxml2.dll $DIST_UDIR/bin
+    cp -a $_LIBXML2_UDIR/bin/libxml2.dll $DIST_UDIR/bin
 }
 
 function dist_gnome() {
@@ -109,38 +110,38 @@ function dist_gnome() {
 function dist_libgsf() {
     setup libGSF
     mkdir -p $DIST_UDIR/bin
-    cp $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
+    cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp $_LIBGSF_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
+    cp -a $_LIBGSF_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -r $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
+    cp -a $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
 }
 
 function dist_goffice() {
     setup GOffice
     mkdir -p $DIST_UDIR/bin
-    cp $_GOFFICE_UDIR/bin/libgoffice*.dll $DIST_UDIR/bin
+    cp -a $_GOFFICE_UDIR/bin/libgoffice*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/lib
-    cp -r $_GOFFICE_UDIR/lib/{goffice,locale} $DIST_UDIR/lib
+    cp -a $_GOFFICE_UDIR/lib/{goffice,locale} $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/share
-    cp -r $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
+    cp -a $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
 }
 
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
-    cp $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
+    cp -a $_INSTALL_UDIR/bin/* $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
+    cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -r $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
-    cp $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
-    cp -r $_INSTALL_UDIR/libexec $DIST_UDIR
+    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
+    cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
-    cp -r $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
-    cp $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
+    cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
+    cp -a $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
 }
 
 function finish() {
