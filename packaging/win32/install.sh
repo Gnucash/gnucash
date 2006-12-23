@@ -294,9 +294,7 @@ function inst_guile() {
 	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex -no-undefined -avoid-version"
 	    make install
 	qpopd
-        _GUILE_MAJOR=`echo $_GUILE_UDIR/share/guile/1.* | sed 's,.*/,,'`
-	_SLIB_DIR=$GUILE_DIR\\share\\guile\\$_GUILE_MAJOR
-	mkdir $_SLIB_DIR
+	_SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
 	unzip $_SLIB_BALL -d $_SLIB_DIR
 	qpushd $_SLIB_DIR/slib
 	    cp guile.init guile.init.bak
