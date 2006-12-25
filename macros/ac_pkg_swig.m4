@@ -74,15 +74,16 @@ AC_DEFUN([AC_PROG_SWIG],[
                                 SWIG='echo "Error: SWIG version >= $1 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
                         else
                                 AC_MSG_NOTICE([SWIG executable is '$SWIG'])
-                                SWIG_LIB=`$SWIG -swiglib`
-                                AC_MSG_NOTICE([SWIG library directory is '$SWIG_LIB'])
+dnl We do not make use of SWIG_LIB and `$SWIG -swiglib` made problems on MinGW (output was two lines)
+dnl                                SWIG_LIB=`$SWIG -swiglib`
+dnl                                AC_MSG_NOTICE([SWIG library directory is '$SWIG_LIB'])
                         fi
                 else
                         AC_MSG_ERROR([cannot determine SWIG version])
                         SWIG='echo "Error: Cannot determine SWIG version.  You should look at http://www.swig.org" ; false'
                 fi
         fi
-        AC_SUBST([SWIG_LIB])
+dnl        AC_SUBST([SWIG_LIB])
 ])
 
 # SWIG_ENABLE_CXX()

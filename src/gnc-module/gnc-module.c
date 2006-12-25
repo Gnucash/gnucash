@@ -313,11 +313,11 @@ gnc_module_get_info(const char * fullpath)
       lt_ptr initfunc    = lt_dlsym(handle, "gnc_module_init");
       lt_ptr pathfunc    = lt_dlsym(handle, "gnc_module_path");
       lt_ptr descripfunc = lt_dlsym(handle, "gnc_module_description");
-      lt_ptr interface   = lt_dlsym(handle, "gnc_module_current");
+      lt_ptr iface       = lt_dlsym(handle, "gnc_module_current");
       lt_ptr revision    = lt_dlsym(handle, "gnc_module_revision");
       lt_ptr age         = lt_dlsym(handle, "gnc_module_age");
       
-      if (!(initfunc && pathfunc && descripfunc && interface &&
+      if (!(initfunc && pathfunc && descripfunc && iface &&
             revision && age)) {
           g_warning ("module '%s' does not match module signature\n",
                      fullpath);
@@ -333,7 +333,7 @@ gnc_module_get_info(const char * fullpath)
           info->module_path        = f_path();
           info->module_description = f_descrip();
           info->module_filepath    = g_strdup(fullpath);
-          info->module_interface   = *(int *)interface;
+          info->module_interface   = *(int *)iface;
           info->module_age         = *(int *)age;
           info->module_revision    = *(int *)revision;
           //printf("(init) closing %s\n", fullpath);
@@ -350,7 +350,7 @@ gnc_module_get_info(const char * fullpath)
  *************************************************************/
 
 static GNCModuleInfo * 
-gnc_module_locate(const gchar * module_name, int interface) 
+gnc_module_locate(const gchar * module_name, int iface) 
 {
   GNCModuleInfo * best    = NULL;
   GNCModuleInfo * current = NULL;
@@ -365,8 +365,8 @@ gnc_module_locate(const gchar * module_name, int interface)
   {
     current = lptr->data;
     if(!strcmp(module_name, current->module_path) &&
-       (interface >= (current->module_interface - current->module_age)) &&
-       (interface <= current->module_interface)) 
+       (iface >= (current->module_interface - current->module_age)) &&
+       (iface <= current->module_interface)) 
     {
       if(best) 
       {
@@ -397,9 +397,9 @@ list_loaded (gpointer k, gpointer v, gpointer data)
 }
 
 static GNCLoadedModule * 
-gnc_module_check_loaded(const char * module_name, gint interface) 
+gnc_module_check_loaded(const char * module_name, gint iface) 
 {
-  GNCModuleInfo * modinfo = gnc_module_locate(module_name, interface);
+  GNCModuleInfo * modinfo = gnc_module_locate(module_name, iface);
   GList * modules = NULL;
   GList * p = NULL;
   GNCLoadedModule * rv = NULL;
@@ -438,7 +438,7 @@ gnc_module_check_loaded(const char * module_name, gint interface)
  *************************************************************/
 
 static GNCModule 
-gnc_module_load_common(char * module_name, gint interface, gboolean optional)
+gnc_module_load_common(char * module_name, gint iface, gboolean optional)
 {
 
   GNCLoadedModule * info;
@@ -448,7 +448,7 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
     gnc_module_system_init();
   }
   
-  info = gnc_module_check_loaded(module_name, interface);
+  info = gnc_module_check_loaded(module_name, iface);
   
   /* if the module's already loaded, just increment its use count.
    * otherwise, load it and check for the initializer
@@ -478,7 +478,7 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
   }
   else 
   {
-    GNCModuleInfo * modinfo = gnc_module_locate(module_name, interface);
+    GNCModuleInfo * modinfo = gnc_module_locate(module_name, iface);
     lt_dlhandle   handle = NULL;
     
     //if(modinfo) 
@@ -526,7 +526,7 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
       g_warning ("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
       else g_warning (": could not locate %s interface v.%d\n",
-                      module_name, interface);
+                      module_name, iface);
       return NULL;
     }
     return NULL;
@@ -535,15 +535,15 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
 
 
 GNCModule 
-gnc_module_load(char * module_name, gint interface) 
+gnc_module_load(char * module_name, gint iface) 
 {
-  return gnc_module_load_common(module_name, interface, FALSE);
+  return gnc_module_load_common(module_name, iface, FALSE);
 }
 
 GNCModule 
-gnc_module_load_optional(char * module_name, gint interface) 
+gnc_module_load_optional(char * module_name, gint iface) 
 {
-  return gnc_module_load_common(module_name, interface, TRUE);
+  return gnc_module_load_common(module_name, iface, TRUE);
 }
 
 /*************************************************************

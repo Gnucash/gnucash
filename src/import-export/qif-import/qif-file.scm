@@ -40,16 +40,13 @@
           (tag #f)
           (value #f)
           (heinous-error #f)
-          (start-time #f)
-          (end-time #f)
           (delimiters (string #\cr #\nl))
-          (progress-dialog #f)
+          (progress-dialog '())
           (file-stats (stat path))
           (file-size (stat:size file-stats))
           (bytes-read 0))
 
      (qif-file:set-path! self path)
-     (set! start-time (gettimeofday))
 
      (if (> file-size 10000)
          (begin

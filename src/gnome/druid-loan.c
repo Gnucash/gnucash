@@ -122,7 +122,7 @@ static QofLogModule log_module = GNC_MOD_SX;
  * . param account selection should fill in orig/cur principal amounts from
  *   the books.
  * . initialize type freq to monthly.
- * . if LoanType <- !FIXED
+ * . if LoanType <- !GNC_FIXED
  *   . Frequency <- sensitive
  **/
 
@@ -179,18 +179,18 @@ typedef struct RepayOptUI_ {
 } RepayOptUIData;
 
 typedef enum {
-        FIXED = 0,
-        VARIABLE,
-        VARIABLE_3_1 = VARIABLE,
-        VARIABLE_5_1,
-        VARIABLE_7_1,
-        VARIABLE_10_1,
+        GNC_FIXED = 0,
+        GNC_VARIABLE,
+        GNC_VARIABLE_3_1 = GNC_VARIABLE,
+        GNC_VARIABLE_5_1,
+        GNC_VARIABLE_7_1,
+        GNC_VARIABLE_10_1,
         /* ... FIXME */
 } LoanType;
 
 typedef enum {
-        MONTHS = 0,
-        YEARS
+        GNC_MONTHS = 0,
+        GNC_YEARS
 } PeriodSize;
 
 /**
@@ -927,7 +927,7 @@ ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr )
         g_string_append_printf( gstr, "pmt( %.5f / 12 : %0.2f : %0.2f : 0 : 0 )",
                                 (ldd->ld.interestRate / 100),
                                 ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                                 gnc_numeric_to_double(ldd->ld.principal) );
 }
 
@@ -940,7 +940,7 @@ ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr )
         g_string_printf( gstr, "ppmt( %.5f / 12 : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
                          ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double(ldd->ld.principal));
 }
 
@@ -953,7 +953,7 @@ ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr )
         g_string_printf( gstr, "ipmt( %.5f / 12 : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
                          ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double( ldd->ld.principal ) );
 }
 
@@ -1053,7 +1053,7 @@ ld_prm_type_changed( GtkWidget *w, gpointer ud )
         ldd = (LoanDruidData*)ud;
         index = gtk_combo_box_get_active( ldd->prmType );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame),
-                                  index != FIXED );
+                                  index != GNC_FIXED );
 }
 
 static
@@ -1163,7 +1163,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
         ldd->ld.interestRate = gtk_spin_button_get_value( ldd->prmIrateSpin );
         ldd->ld.type = gtk_combo_box_get_active( ldd->prmType );
-        if ( ldd->ld.type != FIXED ) {
+        if ( ldd->ld.type != GNC_FIXED ) {
                 gnc_frequency_save_state( ldd->prmVarGncFreq,
                                           ldd->ld.loanFreq,
                                           ldd->ld.varStartDate );
@@ -1186,7 +1186,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         {
                 ldd->ld.perSize =
                         (gtk_combo_box_get_active( ldd->prmLengthType )
-                         == MONTHS) ? MONTHS : YEARS;
+                         == GNC_MONTHS) ? GNC_MONTHS : GNC_YEARS;
                 ldd->ld.numPer =
                         gtk_spin_button_get_value_as_int( ldd->prmLengthSpin );
                 ldd->ld.numMonRemain =
@@ -1205,7 +1205,7 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         gnc_amount_edit_set_amount( ldd->prmOrigPrincGAE, ldd->ld.principal );
         gtk_spin_button_set_value( ldd->prmIrateSpin, ldd->ld.interestRate );
         gtk_combo_box_set_active( ldd->prmType, ldd->ld.type );
-        if ( ldd->ld.type != FIXED ) {
+        if ( ldd->ld.type != GNC_FIXED ) {
                 gnc_frequency_setup( ldd->prmVarGncFreq,
                                      ldd->ld.loanFreq,
                                      ldd->ld.varStartDate );
@@ -2277,7 +2277,7 @@ ld_create_sxes( LoanDruidData *ldd )
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
         paymentSX->instNum =
-                (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
+                (ldd->ld.numPer * ( ldd->ld.perSize == GNC_YEARS ? 12 : 1 ))
                 - ldd->ld.numMonRemain + 1;
 
         paymentSX->mainTxn = gnc_ttinfo_malloc();
@@ -2564,7 +2564,7 @@ ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
         endDateMath = g_new0( struct tm, 1 );
         g_date_to_struct_tm( ldd->ld.startDate, endDateMath );
         monthsTotal = ( (ldd->ld.numPer - 1)
-                        * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+                        * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) );
         endDateMath->tm_mon += monthsTotal;
         g_date_set_time_t( end, mktime( endDateMath ) );
         g_free( endDateMath );

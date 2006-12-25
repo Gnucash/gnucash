@@ -422,18 +422,18 @@ void gncVendorBeginEdit (GncVendor *vendor)
   QOF_BEGIN_EDIT (&vendor->inst);
 }
 
-static inline void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
+static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
 {
   PERR("Vendor QofBackend Failure: %d", errcode);
 }
 
-static inline void gncVendorOnDone (QofInstance *inst)
+static void gncVendorOnDone (QofInstance *inst)
 {
   GncVendor *vendor = (GncVendor *) inst;
   gncAddressClearDirty (vendor->addr);
 }
 
-static inline void vendor_free (QofInstance *inst)
+static void vendor_free (QofInstance *inst)
 {
   GncVendor *vendor = (GncVendor *) inst;
   gncVendorFree (vendor);

@@ -43,7 +43,6 @@
 #include "qof.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 
 #define GCONF_SECTION "dialogs/log_replay"
@@ -515,9 +514,7 @@ void gnc_file_log_replay (void)
   qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
   ENTER(" ");
 
-  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
+  default_dir = gnc_get_default_directory(GCONF_SECTION);
 
   filter = gtk_file_filter_new();
   gtk_file_filter_set_name(filter, "*.log");
@@ -526,12 +523,14 @@ void gnc_file_log_replay (void)
 				      g_list_prepend(NULL, filter),
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
+  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
-      gnc_extract_directory(&default_dir, selected_filename);
-      gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
+      default_dir = g_path_get_dirname(selected_filename);
+      gnc_set_default_directory(GCONF_SECTION, default_dir);
+      g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
@@ -582,7 +581,6 @@ void gnc_file_log_replay (void)
       }
       g_free(selected_filename);
     }
-  g_free(default_dir);
 }
 
 

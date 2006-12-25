@@ -48,7 +48,7 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
@@ -74,7 +74,7 @@ gnc_budget_free(QofInstance *inst)
     g_free(budget);
 }
 
-static inline void noop (QofInstance *inst) {}
+static void noop (QofInstance *inst) {}
 
 static void
 gnc_budget_begin_edit(GncBudget *bgt)

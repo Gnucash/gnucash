@@ -254,14 +254,14 @@ void gncAddressBeginEdit (GncAddress *addr)
   qof_begin_edit (&addr->inst);
 }
 
-static inline void gncAddressOnError (QofInstance *inst, QofBackendError errcode)
+static void gncAddressOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Address QofBackend Failure: %d", errcode);
 }
   
-static inline void gncAddressOnDone (QofInstance *addr) { }
+static void gncAddressOnDone (QofInstance *addr) { }
 
-static inline void address_free (QofInstance *inst)
+static void address_free (QofInstance *inst)
 {
   GncAddress *addr = (GncAddress *) inst;
   gncAddressFree (addr);

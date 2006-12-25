@@ -1,213 +1,145 @@
-#######################################################################
-          Fichier README de Gnucash 1.5.x .
-
-NOTE: C'EST UNE VERSION DE DEVELOPPEMENT!!! CETTE VERSION N'A PAS
-ETE TESTEE CORRECTEMENT ET PEUT FAIRE ABSOLUMENT N'IMPORTE QUOI!  
-
-UTILISEZ LA A VOS PROPRES RISQUES (ET FAITES *BEAUCOUP* DE SAUVEGARDES)
-
-Si vous voulez quelque chose de plus testé, s'il vous plaît utilisez
-les series stables 1.4.
------------------------------------------------------------------------
+###########################################
+          GnuCash version  2.0.x
+-------------------------------------------
 
 #########
 Sommaire:
 ---------
 
   - Vue d'ensemble
-  - Mise à jour depuis la version 1.2.x
-  - Dépendences
+  - Mise à jour depuis la version 1.8.x
+  - Dépendances
   - Mise en route
   - Internationalisation
   - Compilation et installation
-  - OS supportés
-  - Sites additionnels de téléchargement
-  - Récupérer les sources avec CVS
+  - plates-formes supportées
+  - Sites de téléchargement miroirs
+  - Récupérer les sources avec SVN
   - Développement de GnuCash
 
-###############
-Vue d'ensemble
----------------
 
-GnuCash est un gestionnaire de finances personnelles.Une interface
-graphique d'enregistrement ressemblant au talon de votre chéquier
-vous permet d'entrer et de suivre vos comptes bancaires,actions,
-revenus et même les marchés des changes.  L'interface est conçu pour
-être simple et facile à utiliser, mais elle est adossée à
-des principes de comptabilité de la partie double pour
-s'assurer que les livres sont équilibrés.
+##############
+Vue d'ensemble
+--------------
+
+GnuCash est un gestionnaire de finances personnelles. Une interface graphique
+d'enregistrement ressemblant au talon de votre chéquier vous permet d'entrer et
+de suivre vos comptes bancaires, actions, revenus et même vos opérations
+boursières. L'interface est conçue pour être simple et facile à utiliser, mais
+elle est adossée aux principes de comptabilité de la partie double pour assurer
+l'équilibre des comptes.
 
 Quelques une de ces caractéristiques sont:
 
-  - Une interface facile à utiliser.  Si vous savez utiliser
-    le talon de votre chéquier, vous savez utiliser GnuCash.
-    Tapez directement dans le registre,
-    déplacez vous entre les champs, et utilisez quick-fill
-    (saisie rapide) pour compléter automatiquement la transaction.
-    L'interface est personalisable depuis l'application elle-même
-    (pas de fichiers de config à modifier :) ).
-  - Importation de fichiers Quicken: Importation de fichiers au format
-    QIF de Quicken.
-    Les fichiers QIF sont automatiquement fusionnés pour éliminer
-    les transactions dupliquées
-  - La fenêtre de rapprochement avec soldes actuels rapprochés et
-    pointés rend le rapprochement facile.
-  - Potefeuille d'actions/fonds de placements (SICAV et FCP en France):
-    Suivi d'actions individuellement (une par compte) ou dans un
-    portefeuille de comptes (un groupe de comptes qui peuvent
-    être affiché ensemble).
-  - Récupère les cours des actions et fonds communs (FCP et SICAV) depuis
-    différents sites web, met à jour automatiquement le porte-feuille
-    (plus de fonds étant ajouter régulièrement).
-  - Rapports: Affichent la feuille bilan , pertes et profits, évaluation du
-    portefeuille, rapports de transactions, ou suivi du solde du compte,
-    ou exportation de ceux-ci en HTML. Vous pouvez écrire votre propre
-    rapport personalisé si vous connaissez un peu Scheme. Les rapports
-    peuvent maintenant être réalisés sur une période comptable!
-  - Monnaies/devises multiples et Marché des changes:
-    De multiple monnaies sont supportées et peuvent être achetées
-    et vendus(faire du commerce avec elles). Les mouvements monétaires
-    entre comptes sont totallement équilibrés quand la partie double
-    est activée.
-    (Quelques aspects du support de multiples monnaies ne sont pas 
-    totallement implémentés.
-  - Tableau de comptes: Un compte maitre/principal peut avoir une arborescence
-    de comptes détaillés en desssous de lui. Celà permet d'avoir des types de
-    comptes similaires (par exemple Liquidités, Banque, Actions)
-    groupés dans un compte maitre (par exemple Avoirs).
-  - Transactions réparties: Une simple transaction peut être répartie
-    en plusieurs morceaux pour enregistrer les impôts, paiements, et
-    autres entrées composées.
-  - Partie double: Quand elle est activé, chaque transaction
-    doit débiter un compte et créditer un autre d'un montant équivalent.
-    Celà permet de s'assurer que les "livres sont équilibrés":
-    c'est à dire que la différence entre les revenus et les sorties est
-    exactement égale à la somme de tous les avoirs, qu'ils soit bancaire, 
-    liquidités, actions ou autre.
-  - Types de comptes Revenus/Dépenses (Catégories):  
-    Ils ne servent pas uniquement à catégoriser votre flux
-    de liquidités/argent, mais quand ils sont utilisés avec la fonction de
-    la partie double, ceux-ci peuvent fournir un état exact des pertes et
-    profits et donc du résultat de la période.
-  - Extrait de compte/grand livre: De multiples comptes peuvent être affichés
-     dans une fenêtre registre/d'enregistrement au même moment. Celà peut
-    faciliter l'ennui de la recherche/vérification des erreurs de
-    frappe/d'entrée.
-    Il fournit aussi une manière agréable de visualiser un porte-feuille de
-    beaucoup d'actions, en montrant toutes les transactions dans ce
-    portefeuille.
-  - Ecrit en C avec un support étendu de scheme via Guile.
-  - Le support de Perl est disponible en option pour les scripts fonctionnant
-    via SWIG.
-  - L'accès au fichier est verrouillé par un drapeau de sécurité réseau,
-    prévenant des dommages accidentels si plusieurs utilisateurs essaient
-    d'accéder au même fichier, même si le fichier est monté par NFS.
-  - Fournit un format de flux de données(byte-stream format), qui permet aux
-    comptes et groupes de comptes d'être transmi par d'autres processus
-    via pipes ou sockets.
-  - Chargement de la date au format européen, traductions française,
-    anglaise, allemande et suédoise.
+* Une interface facile à utiliser.  Si vous savez utiliser le talon de votre
+chéquier, vous savez utiliser GnuCash. Tapez directement dans le registre,
+déplacez vous entre les champs, et utilisez quick-fill (saisie rapide) pour
+compléter automatiquement la transaction. L'interface est personnalisable depuis
+l'application elle-même (pas de fichiers de config à modifier :) ).
+* Transactions récurrentes : GnuCash a la possibilité de générer automatiquement
+des transactions, de rappeler leur échéance, de proposer de la valider ou de la
+retarder et également de les supprimer après un certain temps.
+* Importation de fichiers OFX : GnuCash est le premier logiciel libre à
+supporter le protocole « Open Financial Exchange » qui est de plus en plus
+utilisé par les banques. Le développement du support OFX et HBCI a permis une
+amélioration du mécanisme permettant de retrouver des transactions homologues
+et les doublons.
+* Support de l'HBCI : GnuCash est le premier logiciel libre à supporter le
+protocole allemand d'opérations bancaires en ligne
+* Importation de fichiers Quicken: Importation de fichiers au format QIF de
+Quicken. Les fichiers QIF sont automatiquement fusionnés pour éliminer les
+transactions dupliquées.
+* La fenêtre de rapprochement avec les soldes actuels rapprochés et pointés rend
+le rapprochement facile.
+* Portefeuille d'actions/fonds de placements (SICAV et FCP en France): suivi
+d'actions individuellement (une par compte) ou dans un portefeuille de comptes
+(un groupe de comptes qui peuvent être affichés ensemble).
+* Récupération des cours des actions et fonds communs (FCP et SICAV) depuis
+différents sites Web, mise à jour automatique du portefeuille.
+* Rapports : affichent le bilan , les pertes et profits, évaluation du
+portefeuille, rapports de transactions, ou suivi du solde du compte, ou
+exportation de ceux-ci en HTML. Vous pouvez écrire votre propre rapport
+personnalisé si vous connaissez un peu le langage Scheme. Les rapports peuvent
+maintenant être réalisés sur une période comptable.
+* Monnaies/devises multiples et Marché des changes : de multiple monnaies sont
+supportées et peuvent être achetées et vendues (faire du commerce avec elles).
+Les mouvements monétaires entre comptes sont totalement équilibrés quand la
+partie double est activée. Les transferts en devises multiples sont supportés.
+* Tableau de comptes : un compte maître/principal peut avoir une arborescence
+de comptes détaillés en dessous de lui. Cela permet d'avoir des types de
+comptes similaires (par exemple Liquidités, Banque, Actions) groupés dans un
+compte maître (par exemple Avoirs).
+* Transactions réparties : une simple transaction peut être répartie en
+plusieurs morceaux pour enregistrer les impôts, paiements, et autres entrées
+composées.
+* Partie double: Quand elle est activée, chaque transaction doit débiter un
+compte et créditer un autre d'un montant équivalent. Cela permet de s'assurer
+que les "livres sont équilibrés" : c'est à dire que la différence entre les
+revenus et les sorties est exactement égale à la somme de tous les avoirs,
+qu'ils soient bancaire, liquidités, actions ou autre.
+* Types de comptes Revenus/Dépenses (Catégories) : ils ne servent pas uniquement
+à catégoriser votre flux de liquidités/argent, mais quand ils sont utilisés avec
+la fonction de la partie double, ceux-ci peuvent fournir un état exact des
+pertes et profits et donc du résultat de la période.
+* Extrait de compte/grand livre : de multiples comptes peuvent être affichés
+dans une fenêtre registre/d'enregistrement au même moment. Cela peut faciliter
+l'ennui de la recherche/vérification des erreurs de frappe/d'entrée. Il fournit
+aussi une manière agréable de visualiser un portefeuille de beaucoup d'actions,
+en montrant toutes les transactions dans ce portefeuille.
+* Écrit en C avec un support étendu de Scheme via Guile.
+* L'accès au fichier est verrouillé par un drapeau de sécurité réseau, prévenant
+des dommages accidentels si plusieurs utilisateurs essaient d'accéder au même
+fichier, même si le fichier est monté par NFS.
+* Fournit un format de flux de données (byte-stream format), qui permet aux
+comptes et groupes de comptes d'être transmis par d'autres processus via pipes
+ou sockets.
+* Chargement de la date au format européen, traductions diverses.
+* Nouveau manuel utilisateur : une toute nouvelle aide en ligne a été écrite :
+elle se focalise sur comment faire les actions en relation avec un tutoriel et
+un guide des concepts.
+* De nouveaux menus : les menus de GnuCash ont été revus pour se conformer aux
+principes d'interface de Gnome.
 
 
 Home Page:
 
 http://gnucash.org/ (site officiel - version anglaise)
-http://www.multimania.com/yleny/gnucash (version française)
 
 Binaires précompilés / exécutables:
 http://www.gnucash.org/pub/gnucash/
 
 Versions de développement:
-http://www.gnucash.org/source_code.php3
-
+http://www.gnucash.org/en/hacking.phtml
 
 ###################################
-Mise à jour depuis la version 1.2.x
+Mise à jour depuis la version 1.8.x
 -----------------------------------
 
-Il y a beaucoup, beaucoup de changements depuis la serie 1.2 - 
-donnez un coup d'oeil au fichier NEWS si vous voulez plus de détails.
-Toutefois, le plus important pour l'installation est que GnuCash
-maintenant requiert les librairies Gnome à la place de Motif, et guile
-est requis.  Regardez la section "dépendances" de ce fichier pour plus
-de détails. Le format de fichier n'a pas changé
-(mais faites une sauvegarde de vos données de toute façon . . . )
+Il y a beaucoup, beaucoup de changements depuis la série 1.8 -
+Jetez un coup d'oeil au fichier NEWS si vous voulez plus de détails.
 
-Nous espérons que vous vous amuserez avec toutes les nouvelles fonctionnalités!
+- GnuCash nécessite g-wrap version 1.3.4 ou supérieur. Consultez la section «
+Dépendances » pour plus de détails.
+
+- Les données ne sont plus accessibles à partir de la version 1.6 une fois de
+nouvelles fonctionnalités utilisées : il n'y a pas de compatibilité
+descendante. Sauvegardez vos données!!
+
+- La documentation de GnuCash est désormais déplacée dans un package séparé
+(gnucash-docs). si vous voyez un message du type « URL non trouvée », en
+cliquant un item du menu Aide, vous devrez installer la package gnucash-docs.
+
+Nous espérons que vous vous apprécierez toutes les nouvelles fonctionnalités!
 
 ############
-Dépendences
+Dépendances
 ------------
 
-Les packages suivants sont requis et doivent être installé pour faire
-fonctionner gnucash: 
+Les packages suivants sont requis et doivent être installés pour faire
+fonctionner GnuCash:
 
-guile   -- Fournit l'infrastructure du langage d'extension principal.
-           Il est utilisé intensivement par gnucash pour l'initialisation
-           et le démarrage.
-           Requiert la version 1.3 ou ultérieure/plus récente.
-           Le rpm guile-1.3-7 fonctionne.
+[Consultez le fichier README.dependencies]
 
-slib    -- librairies scheme pour guile. A besoin de slib2c4 ou ultérieure.
-
-libpng  -- librairie PNG(portable network graphics). N'importe quelle version.
-
-libjpeg -- librairie de chargement d'image JPEG. N'importe quelle version.
-
-libz    -- librairie de compression. N'importe quelle version.
-
-xpm     -- extension Pixmap pour X. N'importe quelle version.
-
-gnome-libs: la version 1.0.40 ou ultérieure/plus récente devrait fonctionner.
-            Ces librairies requièrent des librairies supportant de nombreuses
-	      autres, tel que gtk et glib.
-
-gnome-print: N'importe quelle version récente devrait fonctionner.
-
-gdk-pixbuf: N'importe quelle version devrait fonctionner.
-
-gtkhtml:   La version 0.4 ou ultérieure/plus récente devrait fonctionner.
-             Vous pouvez obtenir la dernière version de gtkhtml depuis
-	 Helix Code. (voir site ftp Gnome: ftp.gnome.org)
-	 Noter que celà à changé depuis la 1.4, qui utilisait la vieille
-	librairie gtkxmhtml.
-            Pour compiler les sources de GtkHTML-0.4, il faut gdk-pixbuf 0.7.0
-	(ou ultérieure), Bonobo 0.15 (ou ultérieure) et gnome-print 0.16
-	(ou ultérieure).
-
-Pour avoir la possibilité d'utiliser certaines fonctionnalitées de GnuCash,
-tel que les rapports et les téléchargements de cours d'actions par le réseau,
-vous devez avoir les packages suivant ci-dessous installés
-(en plus de ceux listés ci-dessus).
-
-Les RPM pour la plupart de ceux-ci peuvent être trouvés à
-  http://rufus.w3.org/linux/
-
-perl    -- A peu près n'importe quelle version de perl5 devrait fonctionner.
-           J'utilise perl-5.004 
-
-En plus, quelques modules perl ont besoin d'être installés:
-
-perl-LWP/libwww-perl-5.36
-perl-HTML/HTML-0.6
-perl-HTML/HTML-Parser-2.20
-        -- ces modules perl sont utilisés pour récupérer les cours des
-           actions et fonds de placements à partir d'internet. Vous pouvez
-	     récupérer ces RPMS à:
-           ftp://ftp.gnucash.org/pub/gnucash/binaries/RPMS
-           http://rufus.w3.org/linux/RPM/PByName.html
-           http://linas.org/linux/gnucash (en dernier recours)
-           ou les sources à
-           http://www.cpan.org/CPAN.html
-
- Si vous souhaitez utiliser le rapport de suivi du solde et avoir de superbes
- graphiques,
- vous aurez besoin d'installer:
-
-   gnuplot:  Un programme de dessin.
-	       Les RPM et debs sont disponible depuis les distributeurs
-	       Vous pouvez récupérer les sources depuis:
-             http://www.gnuplot.vt.edu/ 
 
 #############
 Mise en route
@@ -215,183 +147,102 @@ Mise en route
 
 Pour les détails d'invocation/de lancement de GnuCash, regardez les pages de
 man dans doc/gnucash.1.
-Bientôt, nous aurons aussi la possibilité de lancer gnucash --help, mais ce
-n'est pas encore fini ...
+Vous pouvez également taper gnucash --help sur la ligne de commande.
 
-Vous pouvez démarrer GnuCash en ligne de commande, avec "gnucash" ou "gnucash
-<nom du fichier>", où <nom du fichier> est un fichier de compte de GnuCash.
-Des exemples de comptes peuvent être trouvé dans le sous-répertoire "data".
-les fichiers *.dat sont les comptes de GnuCash qui peuvent être ouvert avec
-l'entrée du menu "Ouvrir fichier". Les fichiers *.qif sont des fichiers 
-au format d'importation Quicken qui peuvent être ouvert avec l'entrée du menu
-"Importer QIF".
+Vous pouvez démarrer GnuCash en ligne de commande, avec « gnucash » ou « gnucash
+<nom du fichier> », où <nom du fichier> est un fichier de données de GnuCash.
 
-GnuCash répond aux variables d'environnement suivantes:
+Des exemples de comptes peuvent être trouvés dans le sous-répertoire "data".
+Les fichiers *.xac sont les comptes de GnuCash qui peuvent être ouverts avec
+le menu « Fichier/Ouvrir ».
+Les fichiers *.qif sont des fichiers au format Quicken qui peuvent être ouverts
+par le menu « Fichier/Importer QIF ».
 
-  GNC_RUN_AS_SHELL - si activé, permet à GnuCash de s'ouvrir dans un shell
-  guile avec toutes les fonctions de gnucash chargées. Depuis là, vous pouvez
-  récupérer comportement du démarrage normal comme ceci:
-
-    GNC_RUN_AS_SHELL=t ./gnucash
-    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
-    guile> (gnc:load "startup.scm")
-    guile> (gnc:main)
-
-  C'est la même chose qui se passe si vous n'utilisez pas cette variable
-  d'environnement. Celà peut être utile quand vous essayez d'écrire et tester
-  de nouveaux fichiers .scm.
+GnuCash répond aux variables d'environnement suivantes :
 
   GNC_BOOTSTRAP_SCM - l'emplacement du code scheme initial de bootstrapping.
 
-  GNC_SCM_LOAD_PATH - une contrainte pour le chemin de chargement de scheme
-  pour GnuCash.Il devrait être une chaine représentant une liste scheme
-  appropriée. Chaque élément peut soit être une chaine représentant un
-  répertoire, soit le symbole par défaut qui s'étendra au chemin par défaut,
-  ou l'actuel qui s'étendra au chemin de chargement par défaut au moment où
-  il rencontre le symbole.
+  GUILE_LOAD_PATH - Pour surpasser le chemin de GnuCash utilisé pour le
+  chargement de fichiers Scheme. C'est une variable de la même forme que les
+  variables d'environnement PATH ou LIBRARY_PATH.
 
-  GNC_DEBUG - active la sortie de débogage. Celà vous permet d'activer
-  le débogage précédent dans le processus de démarrage que vous pouvez faire
-  avec --debug.
+  GNC_MODULE_PATH - Pour surpasser le chemin de GnuCash utilisé pour le
+  chargement de modules GnuCash. C'est une variable de la même forme que les
+  variables d'environnement PATH ou LIBRARY_PATH.
 
-Comme exemple, voici un script d'encapsulation (wrapper script) que nous
-utilisons pour vous permettre d'utiliser de lancer gnucash depuis le répertoire
-local:
-
-  #! /bin/sh
-
-  export G
-  
-  NC_BOOTSTRAP_SCM=./share/scm/bootstrap.scm
-  export GNC_SCM_LOAD_PATH='("./share/scm")'
-  export GNC_DEBUG=t
-
-  # Run whichever one was built last.
-  exec ./src/gnucash \
-    --debug \
-    --share-dir ./share \
-    --config-dir ./etc \
-    --doc-path '("./doc/html/C")' \
-    "$@"
+  GNC_DEBUG - active la sortie de débogage. Cela vous permet d'activer
+  le débogage dans le processus de démarrageplus rapidement qu'avec l'option
+  --debug.
 
 
 ###########################
 Internationalisation (i18n)
 ---------------------------
 
-Des catalogues de messages existent pour le français et l'allemand. Ceux-ci
-sont activés avec les variables d'environnement. Par example, 
+Des traductions (fichiers .po) existent pour différentes langues. Ceux-ci
+sont activés avec les variables d'environnement. Par exemple,
 
 En français, avec bash:
     export LANG=fr_FR
-    
+
 En français, avec tcsh:
     setenv LANG fr_FR
-    
+
 Pour la version allemande:
     export LANG=de_DE
-    
-
-Les autres locales qui devrait pour la plupart fonctionner, mais sont
-toujours en développement:
-
-en_US
-en_GB
-fr_CH
-de_CH
-
-(Gnucash utilise gettext maintenant, alors il faut utiliser
-les fichiers *.po , le traduire et le compiler par msgfmt.
-exemple: msgfmt fr.po --output=./gnucash.mo en ligne de commande
-dans /gnucash/po pour le fichier pour la france et copier gnucash.mo sur une
-redhat 6.1 GPL dans /usr/share/locale/fr/LC_MESSAGES et vous aurez vos menus
-et messages en français.)
 
 
-############################
-Compilation et installation:
-----------------------------
+###########################
+Compilation et installation
+---------------------------
 
-Ces étapes ne s'applique pas aux distributions de binaires; uniquement aux
-distributions de sources.
-
-Pour plus de détails sur le système de compilation, regardez
-doc/README.build-system.)
+[Pour plus de détails sur la compilation, lisez doc/README.build-system]
 
 GnuCash utilise GNU Automake pour traiter le processus de compilation, donc
 pour plus de détails, regardez les instructions générales dans INSTALL.
-(Notez que, pour avoir un ./configure fonctionnant, vous devrez lancer 
-./autogen.sh.)
-Ci-dessous nous détaillons les parties spécifiques de Gnucash.
-  
+
+Ci-dessous nous détaillons les parties spécifiques de GnuCash.
+
 
 Avant de compiler GnuCash, vous devrez obtenir et installer les packages
 suivants:
 
-libtool :  Utiliser pour compiler nos versions internes de g-wrap qui charge
-           nos encapsuleurs C avec guile.
-           Disponible à ftp://ftp.gnu.org/gnu.
-           Les RPMs et debs sont largement disponible avec la plupart des
+libtool : Disponible à ftp://ftp.gnu.org/gnu.
+          Les RPMs et debs sont largement disponibles avec la plupart des
 	     distributions.
 
-SWIG    : Utilisé pour autogénérer les encapsuleurs perl.
-           Disponible à www.swig.org
-           nécessite 1.1p5 ou ultérieure ...
-
 système de développement gnome: en-têtes (headers), librairies, etc.
-ibxml: disponible sur ftp.gnome.org
+
+libxml:   disponible sur ftp.gnome.org
 
 g-wrap  : Les RPM's, debs, et sources sont disponibles à
-	ftp://ftp.gnucash.org/pub/g-wrap.
-	Si vous utilisez guile version 1.4 ou ultérieure, vous avez besoin de
-	g-wrap 0.9.5 ou ultérieure. Si vous utilisez une précédente version
-	de guile, vous devrez utilisez g-wrap 0.9.4.
+	     http://www.gnucash.org/pub/g-wrap.
+	     vous devrez utilisez g-wrap 1.3.4 ou supérieur
 
-  texinfo: Si vous compilez le CVS, vous avez besoin du package GNU texinfo,
-	version 4.0 ou ultérieure.
+texinfo: Si vous compilez depuis svn, vous avez besoin du package GNU texinfo,
+	    version 4.0 ou ultérieure.
 
-  docbook: Pour compiler le manuel en ligne, vous aurez besoin des outils
-	docbook,  incluant jade et les feuillles de style (stylesheets) de docbook .
 
-	
-Ce que vous aurez besoin de récupérer et d'installer dans l'ordre pour être
-sûr que vous ayez tous ces éléments corectement installés pour votre
-système d'exploitation favorit en particulier variera, mais ici se trouve au
-moins une liste partielle de ce que vous aurez besoin pour les systèmes
-que nous connaissons:
+Ce que vous aurez besoin de récupérer et d'installer pour être sûr d'avoir
+tous ces éléments correctement installés dépendra de votre système
+d'exploitation , mais ici se trouve une liste partielle de ce que vous aurez
+besoin pour les systèmes que nous connaissons:
 
-  Debian/GNU/Linux:
+  Debian/GNU/Linux: (cf README.dependencies)
     actuel:
       libgnome-dev
-      libgtkhtml-dev (vous pouvez le récupérer depuis Helixcode, il n'est pas  
-      dans la Debian)
-      guile1.3
-      libguile6-dev
-      libguile6-slib
+      libgtkhtml-dev
+      guile1.4
+      libguile9-dev
+      libguile9-slib
 
-  RedHat:
-    ???
 
-GnuCash comprend quelques options de ./configure non-standard. Vous
-devriez lancer ./configure --help pour le résumé le plus à jour des options
-supportées, mais ici se trouvent quelques descriptions sétaillées de
-quelques-unes d'entre elles:
+GnuCash comprend quelques options non-standard de ./configure . Vous
+devriez lancer « ./configure --help » pour la liste la plus à jour des options
+supportées.
 
-  --enable-opt-style-install
-
-    Gnucash supporte deux types d'installation, la première est le style normal
-    /usr ou /usr/local/ , où les fichiers sont installés dans
-    /usr/bin /usr/lib, etc.  Celà se fait par défaut.
-
-    Le second style est le FSSTND, l'installation de style opt. Dans ce style,
-    tous les fichiers sont installés sous un sous-répertoire commun,souvent
-    dans /usr/local/opt, avec les exécutables allant dans
-    /usr/local/opt/foo/bin, les librairies allant dans /usr/local/opt/foo/lib,
-    etc.  Pour demander ce style d'installation, utilisez uniquement l'option 
-    --enable-opt-style-install de ./configure.
-
-Si seulement vous voulez q'une langue en particulier soit installée, vous
-pouvez mettre la variable d'environnement LINGUAS avant de lancer configure.
+Si vous voulez seulement qu'une langue en particulier soit installée, vous
+pouvez définir la variable d'environnement LINGUAS avant de lancer ./configure.
 Par exemple, pour installer seulement les traductions française, lancez
 
   $ export LINGUAS=fr
@@ -402,127 +253,94 @@ Si vous voulez être sûr que toutes les langues soit installées, lancez
   $ unset LINGUAS
   $ ./configure
 
-La dernière version 1.2 stable de GnuCash avait une interface utilisateur basée
-sur Motif, et il y avait aussi un expérimental, mais jamais terminé interface
-en QT.
-L'ensemble de ceux-ci ont été enlevé de l'arborescence des sources durant le
-processus de migration vers automake, mais quelqu'un qui est intéressé par la
-resurrection de ces parties peut facilement les retrouver dans le CVS.
-Notez que  tandis que vous avez besoin des librairies Gnome installées, vous 
-n'avez pas besoin d'avoir le bureau/interface Gnome.  
+Bien que vous ayez besoin des librairies Gnome installées, vous n'avez pas
+besoin d'utiliser le bureau/interface Gnome.
 
-Les destinations de lancement et d'installations sont séparées.  Le --prefix
-que vous spécifiez à configure détermine où les exécutables résultant seront
-regardé pour des choses au lancement.  Normallement celà détermine où un 
-"make install" mettra tous les fichiers.  Toutefois, automake aussi supporte la
-variable.  DESTDIR est utilisé durant l'étape `make install' pour relocaliser
-les objets d'installation dans un endroit prédisposé.  Chaque objet et chemin
-est préfixé avec la valeur de `DESTDIR' avant d'être copié dans l'endroit
-d'installation.
-Voici un exemple d'usage typique de DESTDIR:
+Les chemins de lancement et d'installations sont séparées.  Le --prefix que vous
+spécifiez à ./configure détermine le chemin où les exécutables chercheront des
+fichiers à leur lancement. Normalement, cela détermine où « make install »
+installera les fichiers. Cependant, automake supporte également des variables.
+DESTDIR est utilisée pendant le processus « make install » pour installer des
+objets dans un répertoire tampon. Chaque objet et chemin est préfixé avec la
+valeur de 'DESTDIR' avant d'être copié dans les répertoires d'installation.
 
-     make DESTDIR=/tmp/staging install
+   make DESTDIR=/tmp/staging install
 
-   Celà place les objets d'installation dans une arborescence de répertoire
-  construit  sous `/tmp/staging'.  Si `/gnu/bin/foo' et
-   `/gnu/share/aclocal/foo.m4' sont à être installés,
-   la commande ci-dessous devrait installer 
-`/tmp/staging/gnu/bin/foo' et `/tmp/staging/gnu/share/aclocal/foo.m4'.
+Cela place les objets d'installation dans une arborescence de répertoire
+construit  sous `/tmp/staging'.
+Si `/gnu/bin/foo' et /gnu/share/aclocal/foo.m4' doivent être installés, la
+commande ci-dessus installera `/tmp/staging/gnu/bin/foo' et
+`/tmp/staging/gnu/share/aclocal/foo.m4'.
 
 DESTDIR peut être utile quand on essaie de construire des images d'installation
 et des packages.
 
 
-###############
-Os supportés  :
----------------
-La version 1.5.X de GnuCash est connu pour fonctionner sur les systèmes
+########################
+Plates-formes supportées
+------------------------
+
+La version 2.0.x de GnuCash est réputer fonctionner sur les systèmes
 d'exploitation suivants:
 
-GNU/Linux             -- x86, Sparc, Alpha
+GNU/Linux            -- x86, Sparc, Alpha
 Solaris		      -- Sparc
-FreeBSD               -- x86
-OpenBSD               -- x86
+FreeBSD              -- x86
+OpenBSD              -- x86
+MacOS X		      -- PPC
 
-Les précédente versions sont  connu pour fonctionner sur les
-plateformes suivantes, mais leurs états actuels sont inconnus:
+Les précédentes versions étaient réputées fonctionner sur les plateformes
+suivantes :
 
-SGI IRIX              -- MIPS 
+SGI IRIX              -- MIPS
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 
-regardez à ftp://ftp.gnucash.org/pub/xacc (grande-bande passante)
-ou  http://linas.org/linux/gnucash (slow-www ) 
-pour les binaires précompilés ( mais *très vieilles*) pour ces plateformes.
+GnuCash peut probablement fonctionner avec la plupart des plateformes POSIX, si
+les librairies et les outils sont disponibles.
 
-Gnucash peut probablement être fait pour fonctionner avec la plupart des
-plateformes POSIX, si les les librairies fournies et les outils sont 
-disponibles.
 
-#####################################
-Sites additionnels de téléchargement:
--------------------------------------
+###############################
+Sites de téléchargement miroirs
+-------------------------------
 
-Vous pouvez aussi télécharger gnucash à partir de:
+Vous pouvez aussi télécharger GnuCash à partir de:
 
   - http://download.sourceforge.net/gnucash
-  - ftp://ftp.krondo.com
+
 
 Vous pouvez télécharger les packages Solaris de GnuCash à partir de:
 
   - http://www.unixrealm.com/downloads/
 
-Vous pouvez récupérer les packages Mandrake de GnuCash sur les sites Cooker de 
-Mandrake.
-
-Les binaires précompilés et les packages pré-requis peuvent être trouvé sur
-les sites suivants.Les versions de Gnucash ici sont toutes *extrêmement*
-vieilles, et sont en fait de l'ancêtre de gnucash : "x-accountant ou xacc".
-
-IBM AIX 4.1.5 
-      -- SMIT-installable images
-      -- warning, this is from the 1.0 series of xacc
-      http://www.bull.de/pub/
-      see also http://www-frec.bull.com/
-
-SCO OpenServer 5.0.4 
-      http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
-      -- warning, this is from the 1.0 series of xacc
+Vous pouvez récupérer les packages Mandriva de GnuCash sur les sites Cooker de
+Mandriva ou dans les dernières versions de la distribution)
 
 
-Unixware 7
-      -- use pkgadd to install
-      http://www.sco.com/skunkware/uw7/x11/apps/xacc/xacc.pkg.gz
+#####################################
+Récupérer les sources avec Subversion
+-------------------------------------
 
-SGI Irix
-      -- in SGI install format
-      -- warning, this is a very down-level version
-      http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
+Une version en lecture seule de l'arborescence Subversion est disponible à
+cette adresse :
 
-###############################
-Récupérer les sources avec CVS
--------------------------------
+	http://svn.gnucash.org/repo/gnucash/
 
-Une version en lecture-seule de l'arborescence de cvs tree est disponible
-sur le net.
-Pour y accéder, premièrement, loggger vous, comme ceci:
+Pour obtenir ce qui fut le CVS HEAD (et ce qui inclus maintenant ce qui était
+gnucash-gnome2-dev), vous devrez obtenir le svn TRUNK :
 
- cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+	svn checkout http://svn.gnucash.org/repo/gnucash/trunk gnucash
 
-Le mot de passe (password)est "guest"
+L'argument « gnucash » ci dessus peut être n'importe quel nom de répertoire sur
+votre disque local, et est optionnel. Si vous l'omettez, vous aurez un
+répertoire nommé « trunk » contenant les sources.
 
-Pour récupérer une copie des sources dans l'arborescence de développpement
-expérimental faites un
+Si vous voulez obtenir les derniers sources de la version 2.0.x, vous devrez
+les récupérer dans le branche 2.0, comme suit :
 
-cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD 
-gnucash
+	svn checkout http://svn.gnucash.org/repo/gnucash/branches/2.0 gnucash-2.0
 
-Pour récupérer une copie des sources de l'arborescence de la version de
-production stable gnucash-1.4, faites un
-
-cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r
-gnucash-1-4-branch gnucash
 
 ########################
 Développement de GnuCash
@@ -530,101 +348,27 @@ Développement de GnuCash
 Avant de démarrer à développer sur GnuCash, vous devriez faire les choses
 suivantes:
 
-1. lisez le fichier src/coding-style.txt pour apprendre les styles
-   de codage utilisés dans le code source de GnuCash.
+1. lisez le fichier src/doc/coding-style.txt pour apprendre les styles
+   de codage utilisés dans le code source de GnuCash. Lisez également
+   http://wiki.gnucash.org/wiki/Development
 
 2. Plusieurs des répertoires sous src contiennent des fichiers appellés
    design.txt qui expliquent beaucoup des aspects de la conception de GnuCash.
    Lisez les.
 
-3. Allez sur le site web de gnucash et survoler les archives de la liste de
-   courriers de développement de gnucash(development mailing list).
+3. Allez sur le site web de GnuCash et survoler les archives de la liste de
+   diffusion du développement de GnuCash (gnucash-devel).
 
-4. Rejoignez la liste de courriers de développement de gnucash(development
-   mailing list).
-   Regardez le site web de gnucash pour des détails sur comment faire celà.
+   4. Rejoignez la liste de diffusion de développement de GnuCash
+   (gnucash-devel). Regardez le site web de GnuCash pour des détails sur la
+   méthode pour y parvenir.
 
 
 Soumettre un patch
 
-Dès que vous avez fait un certain travail que vous aimeriez soumettre, vous
-avez besoin d'envoyer un patch. Il y a un script perl appelé make-gnucash-patch
-fourni avec la distribution que vous pouvez utiliser pour créer le patch.
-Ici, se trouve comment utiliser ce script perl.
+[Cette section a été transférée dans le fichier README.patches]
 
-Premièrement, configurer vos répertoires de développement comme ce qui suit:
+Lisez SVP ce fichier sur les méthodes utilisées pour transmettre un patch à
+l'équipe de développement de GnuCash.
 
-< Répertoire de développement maison (home) de GnuCash >
-    |
-    |---- < répertoire contenant les sources originales de GnuCash >
-    |
-    |---- < répertoire contenant vos sources modifiées de GnuCash >
-
-Un exemple concret de ces répertoires devrait être:
-
-/home/me/gnucash
-    |
-    |---- /home/me/gnucash/gnucash.pristine (sources originales)
-    |
-    |---- /home/me/gnucash/gnucash.mywork (sources originales + mes modifs)
-
-Copier le script make-gnucash-patch vers le répertoire de développement maison
-(/home/me/gnucash au-dessus). Maintenant metter les trois variables en haut
-de ce fichier pour refléter les noms de vos répertoires. Les noms donnés
-ci-dessous, vous devriez les utiliser
-
-  export GNC_MAKEPATCH_OLD_DIR=gnucash.pristine
-  export GNC_MAKEPATCH_NEW_DIR=gnucash.mywork
-  export GNC_MAKEPATCH_HOME_DIR=/home/me/gnucash
-
-Bien sûr avant de faire votre, soyez sûr *qu'ensemble* votre répertoire de
-travail et votre répertoire pristine sont synchroniser avec le cvs.
-Lancez 'cvs -z3 update -dP' dans l'ensemble des répertoires pour vous assurer
-que c'est le cas.
-La mise à jour depuis le cvs dans votre répertoire de travail
-peut causer les conflits dans un fichier.
-Vous devez résoudre ces conflits avant de faire un patch.
-
-
-Maintenant lancer le script. Notez que le script requiert les programmes
-'makepatch', 'gzip', 'diff', et 'uuencode' (et, bien sûr , 'perl')
-pour fonctionner. 
-
-Quand vous lancez le script, trois fichiers seront générés:
-
-  gnc.diff - Ce fichier est un fichier texte ascii contenant les différences
-             entre les sources originales et vos modifications. En bas de ce
-             fichier se trouve une liste de fichiers qui sont ajoutés,
-             changés, ou supprimés.
-
-             S'il vous plait examinez ce fichier (spéciallement la liste en 
-bas)
-             pour être sûr que tous vos changements (et pas d'autres 
-changements)
-             sont présent dans le fichier.
-
-             Ne pas soumettre ce fichier!
-
-  gnucash.diff.gz - C'est une version gzippé du fichier au-dessus.
-
-                    Ne pas soumettre ce fichier!
-
-  gnucash.diff.gz.uue - C'est une version uuencodée (ascii-encodé) 
-                        du fichier au-dessus.
-
-                        C'est le fichier à soumettre.
-
-Envoyez gnucash.diff.gz.uue à gnucash-patches@gnucash.org
-
-Merci par avance pour votre contribution!
-
-
-Traduction faite le 12/11/00 par Yannick LE NY
-Cette traduction n'est peut-etre plus à jour,
-donc référez vous au fichier README en anglais.
-Pour toutes remarques ou suggestions:
-y-le-ny@ifrance.com
-
-Local Variables:
-mode: text
-End:
+Merci,

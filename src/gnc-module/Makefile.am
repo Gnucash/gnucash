@@ -28,7 +28,7 @@ gncinclude_HEADERS = \
 noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
-swig-gnc-module.c: gnc-module.i
+swig-gnc-module.c: gnc-module.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif

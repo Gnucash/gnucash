@@ -336,14 +336,14 @@ void gncOrderBeginEdit (GncOrder *order)
   qof_begin_edit(&order->inst);
 }
 
-static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
+static void gncOrderOnError (QofInstance *order, QofBackendError errcode)
 {
   PERR("Order QofBackend Failure: %d", errcode);
 }
 
-static inline void gncOrderOnDone (QofInstance *order) {}
+static void gncOrderOnDone (QofInstance *order) {}
 
-static inline void order_free (QofInstance *inst)
+static void order_free (QofInstance *inst)
 {
   GncOrder *order = (GncOrder *) inst;
   gncOrderFree (order);

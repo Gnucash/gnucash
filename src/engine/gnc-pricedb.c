@@ -142,12 +142,12 @@ gnc_price_begin_edit (GNCPrice *p)
   QOF_BEGIN_EDIT (&p->inst);
 }
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
 
-static inline void noop (QofInstance *inst) {}
+static void noop (QofInstance *inst) {}
 
 void
 gnc_price_commit_edit (GNCPrice *p)

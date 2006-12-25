@@ -108,12 +108,12 @@ gnc_lot_begin_edit (GNCLot *lot)
   qof_begin_edit(&lot->inst);
 }
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
 
-static inline void noop (QofInstance *inst) {}
+static void noop (QofInstance *inst) {}
 
 void
 gnc_lot_commit_edit (GNCLot *lot)

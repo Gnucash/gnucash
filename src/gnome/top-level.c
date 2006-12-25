@@ -222,7 +222,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
     GError *error = NULL;
     
     url = qof_session_get_url(session);
-    ENTER("session %p (%s)", session, url);
+    ENTER("session %p (%s)", session, url ? url : "(null)");
     if (!url) {
         LEAVE("no url, nothing to do");
         return;
@@ -309,7 +309,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
     
     
     url = qof_session_get_url(session);
-    ENTER("session %p (%s)", session, url);
+    ENTER("session %p (%s)", session, url ? url : "(null)");
     if (!url) {
         LEAVE("no url, nothing to do");
         return;
