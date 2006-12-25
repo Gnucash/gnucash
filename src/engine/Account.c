@@ -168,6 +168,15 @@ gnc_coll_set_root_account (QofCollection *col, Account *root)
   old_root = gnc_coll_get_root_account (col);
   if (old_root == root) return;
 
+  /* If the new root is already linked into the tree somewhere, then
+   * remove it from its current position before adding it at the
+   * top. */
+  if (root->parent) {
+    xaccAccountBeginEdit(root);
+    gnc_account_remove_child(root->parent, root);
+    xaccAccountCommitEdit(root);
+  }
+    
   qof_collection_set_data (col, root);
 
   if (old_root) {
