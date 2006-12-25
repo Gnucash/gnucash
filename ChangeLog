@@ -1,3 +1,7 @@
+2006-12-25  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Correct account compatibility check with top level account. #389317
+
 2006-12-20  Benoit Grégoire <bock@step.polymtl.ca>
 
 	* src/import-export/test/Makefile.am:  Minor fix so build 
