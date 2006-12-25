@@ -437,7 +437,7 @@
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
 
-	    (if (and show-payments lot)
+	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
 			       (gnc-lot-get-split-list lot)
 			       (lambda (s1 s2)
@@ -488,7 +488,7 @@
 			     (gnc:gnc-monetary-amount (cdr entry-values)))
 
 	    (let ((order (gncEntryGetOrder current)))
-	      (if order (add-order order)))
+	      (if (not (null? order)) (add-order order)))
 
 	    (do-rows-with-subtotals rest
 				    table

@@ -180,8 +180,8 @@ on_import_next (GnomeDruidPage  *gnomedruidpage,
 static void
 on_merge_cancel (GnomeDruid *gnomedruid, gpointer user_data)
 {
+	g_return_if_fail(mergeBook != NULL);
 	gnc_suspend_gui_refresh ();
-	g_return_if_fail(mergeData != NULL);
 	delete_merge_window();
 	qof_book_destroy(mergeBook);
 	qof_session_end(merge_session);	
@@ -222,7 +222,7 @@ on_merge_finish (GnomeDruidPage  *gnomedruidpage,
 	gnc_suspend_gui_refresh ();
 	result = qof_book_merge_commit(mergeData);
 	if(result != 0) {
-		message = _("Error: the Commit operation failed.");
+		message = g_strdup_printf(_("Error: the Commit operation failed, error code %d."), result);
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
 		gnc_error_dialog(top, message);
 	}

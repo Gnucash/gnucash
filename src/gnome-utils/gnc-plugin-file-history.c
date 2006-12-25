@@ -251,17 +251,19 @@ gnc_history_generate_label (int index, const gchar *filename)
 	  dst += g_sprintf(result, "_%d ", (index + 1) % 10);
 
 	/* Find the filename portion of the path */
-	src = g_utf8_strrchr(filename, -1, '/');
-	src = g_utf8_next_char(src);
+	src = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
+	if (src) {
+	  src = g_utf8_next_char(src);
 
-	/* Fix up any underline characters so they aren't mistaken as
-	 * command accelerator keys. */
-	for ( ; *src; src = g_utf8_next_char(src)) {
-	  unichar = g_utf8_get_char(src);
-	  dst += g_unichar_to_utf8 (unichar, dst);
+	  /* Fix up any underline characters so they aren't mistaken as
+	   * command accelerator keys. */
+	  for ( ; *src; src = g_utf8_next_char(src)) {
+	    unichar = g_utf8_get_char(src);
+	    dst += g_unichar_to_utf8 (unichar, dst);
 
-	  if (unichar == '_')
-	    dst += g_unichar_to_utf8 ('_', dst);
+	    if (unichar == '_')
+	      dst += g_unichar_to_utf8 ('_', dst);
+	  }
 	}
 
 	*dst = '\0';

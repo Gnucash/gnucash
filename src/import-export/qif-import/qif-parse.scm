@@ -219,7 +219,7 @@
 ;           'expire)
 ;          ((grant)
 ;           'grant)
-          ((int intinc aktzu) ;; zinsen
+          ((int intinc) ;; zinsen
            'intinc)
           ((intx intincx)
            'intincx)

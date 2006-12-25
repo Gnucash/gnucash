@@ -344,18 +344,18 @@ void gncEmployeeBeginEdit (GncEmployee *employee)
   QOF_BEGIN_EDIT (&employee->inst);
 }
 
-static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
+static void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
 {
   PERR("Employee QofBackend Failure: %d", errcode);
 }
 
-static inline void gncEmployeeOnDone (QofInstance *inst)
+static void gncEmployeeOnDone (QofInstance *inst)
 {
   GncEmployee *employee = (GncEmployee *) inst;
   gncAddressClearDirty (employee->addr);
 }
 
-static inline void emp_free (QofInstance *inst)
+static void emp_free (QofInstance *inst)
 {
   GncEmployee *employee = (GncEmployee *) inst;
   gncEmployeeFree (employee);

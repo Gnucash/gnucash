@@ -35,6 +35,23 @@
 	The remove-group2 branch ChangeLog is above this point.
 ======================================================================
 	
+2006-11-24  Christian Stimming <stimming@tuhh.de>
+
+	* src/engine/gnc-path.c: Fix gnc_path_get_localedir() because
+	binreloc's implementation did not respect the choice of
+	DATADIRNAME from AM_GLIB_GNU_GETTEXT in configure.
+
+2006-11-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-parse.scm:
+	  Don't have aktzu in the "case" twice.  Fixes #377519.
+
+2006-11-05  David Hampton  <hampton@employees.org>
+
+	* src/report/standard-reports/category-barchart.scm:
+	* src/report/standard-reports/account-piecharts.scm: Fix some
+	scheme inexact errors.  Fixes 347462.
+
 2006-10-09  Josh Sled <jsled@asynchronous.org>
 
 	* art/: Add, with 2.0 {banner,icon,logo,splash} art.

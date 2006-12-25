@@ -434,19 +434,13 @@
 ;; marks the cursor busy during rendering; returns the html
 (define (gnc:report-run id)
   (let ((report (gnc-report-find id))
-	(start-time (gettimeofday))
 	(html #f))
     (gnc-set-busy-cursor '() #t)
     (gnc:backtrace-if-exception 
      (lambda ()
        (if report
 	   (begin 
-	     (set! html (gnc:report-render-html report #t))
-;;	     (display "total time to run report: ")
-;;	     (display (gnc:time-elapsed start-time (gettimeofday)))
-;;	     (newline)
-;;	     (display html) (newline)
-	     ))))
+	     (set! html (gnc:report-render-html report #t))))))
     (gnc-unset-busy-cursor '())
     html))
 

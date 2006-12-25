@@ -173,30 +173,22 @@ gnc_reverse_balance (const Account *account)
 }
 
 
-void
-gnc_init_default_directory (char **dirname)
+gchar *
+gnc_get_default_directory (const gchar *gconf_section)
 {
-  if (*dirname == NULL)
-    *dirname = g_strdup_printf("%s/", g_get_home_dir());
+  gchar *dir;
+
+  dir = gnc_gconf_get_string (gconf_section, KEY_LAST_PATH, NULL);
+  if (!dir)
+    dir = g_strdup (g_get_home_dir ());
+
+  return dir;
 }
 
 void
-gnc_extract_directory (char **dirname, const char *filename)
+gnc_set_default_directory (const gchar *gconf_section, const gchar *directory)
 {
-  char *tmp;
-
-  if (*dirname)
-    free(*dirname);
-
-  /* Parse out the directory. */
-  if ((filename == NULL) || (strrchr(filename, '/') == NULL)) {
-    *dirname = NULL;
-    return;
-  }
-
-  *dirname = g_strdup(filename);
-  tmp = strrchr(*dirname, '/');
-  *(tmp+1) = '\0';
+  gnc_gconf_set_string(gconf_section, KEY_LAST_PATH, directory, NULL);
 }
 
 QofBook *
@@ -737,6 +729,11 @@ gnc_lconv_set_utf8 (char **p_value, char *default_value)
     *p_value = default_value;
 
   *p_value = g_locale_to_utf8 (*p_value, -1, NULL, NULL, NULL);
+  if (*p_value == NULL) {
+    // The g_locale_to_utf8 conversion failed. FIXME: Should we rather
+    // use an empty string instead of the default_value? Not sure.
+    *p_value = default_value;
+  }
   // FIXME: Do we really need to make a copy here ?
   //*p_value = g_strdup (*p_value);
 }
@@ -768,6 +765,7 @@ gnc_localeconv (void)
   gnc_lconv_set_utf8(&lc.mon_thousands_sep, ",");
   gnc_lconv_set_utf8(&lc.mon_grouping, "\003");
   gnc_lconv_set_utf8(&lc.negative_sign, "-");
+  gnc_lconv_set_utf8(&lc.positive_sign, "");
 
   gnc_lconv_set_char(&lc.frac_digits, 2);
   gnc_lconv_set_char(&lc.int_frac_digits, 2);

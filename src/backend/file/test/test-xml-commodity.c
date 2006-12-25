@@ -178,7 +178,7 @@ test_generation(void)
         
         filename1 = g_strdup_printf("test_file_XXXXXX");
         
-        fd = mkstemp(filename1);
+        fd = g_mkstemp(filename1);
         
         write_dom_node_to_file(test_node, fd);
 

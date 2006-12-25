@@ -267,13 +267,13 @@ static void gncJobOnError (QofInstance *inst, QofBackendError errcode)
   PERR("Job QofBackend Failure: %d", errcode);
 }
 
-static inline void job_free (QofInstance *inst)
+static void job_free (QofInstance *inst)
 {
   GncJob *job = (GncJob *)inst;
   gncJobFree (job);
 }
 
-static inline void gncJobOnDone (QofInstance *qof) { }
+static void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {

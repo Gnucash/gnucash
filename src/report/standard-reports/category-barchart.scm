@@ -200,7 +200,8 @@ developing over time"))
         
         (stacked? (get-option gnc:pagename-display optname-stacked))
         (show-fullname? (get-option gnc:pagename-display optname-fullname))
-        (max-slices (get-option gnc:pagename-display optname-slices))
+        (max-slices (inexact->exact
+		     (get-option gnc:pagename-display optname-slices)))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
