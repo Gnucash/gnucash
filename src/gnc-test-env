@@ -104,6 +104,14 @@ exec guile -s $0 "$@"
 		    (string-append ":" dir ":" dir "/.libs"))
 		  (append gnc-module-dirs library-dirs)))))
 
+(display " DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}")
+(display (adapt-dirsep
+	  (apply string-append
+		 (map
+		  (lambda (dir)
+		    (string-append ":" dir ":" dir "/.libs"))
+		  (append gnc-module-dirs library-dirs)))))
+
 (display " LTDL_LIBRARY_PATH=${LTDL_LIBRARY_PATH}")
 (display (apply string-append
                 (map
@@ -126,6 +134,7 @@ exec guile -s $0 "$@"
       (display " export GNC_MODULE_PATH;")
       (display " export GUILE_LOAD_PATH;")
       (display " export LD_LIBRARY_PATH;")
+      (display " export DYLD_LIBRARY_PATH;")
       (display " export LTDL_LIBRARY_PATH;")))
 
 ;; Local Variables:
