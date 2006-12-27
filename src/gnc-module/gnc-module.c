@@ -208,7 +208,9 @@ gnc_module_system_refresh(void)
       while ((dent = readdir(d)) != NULL)
       {
         /* is the file a .la shared lib? */
-        if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX))
+        /* FIXME: remove/#ifdef hardcoded .dylib suffix */
+        if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX) ||
+            g_str_has_suffix(dent->d_name, ".dylib"))
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
