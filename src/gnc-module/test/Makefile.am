@@ -1,6 +1,8 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
-LDADD = ../libgncmodule.la ${GLIB_LIBS} -lltdl ${GUILE_LIBS}
+LDADD = ../libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${GLIB_LIBS} -lltdl ${GUILE_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -23,6 +25,7 @@ TESTS = \
   test-scm-init
 
 GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-foo \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
