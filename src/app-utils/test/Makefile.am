@@ -44,7 +44,7 @@ LDADD = \
    ${QOF_LIBS} \
    ${GCONF_LIBS}
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link-module \
   test-exp-parser \
   test-print-parse-amount \

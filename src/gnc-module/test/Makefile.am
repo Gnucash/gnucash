@@ -37,7 +37,7 @@ GNC_TEST_DEPS := \
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-load-c \
   test-modsysver \
   test-incompatdep \
