@@ -107,6 +107,15 @@ exec guile -s $0 "$@"
 		  library-dirs))))
 (display "\"")
 
+(display " DYLD_LIBRARY_PATH=\"${DYLD_LIBRARY_PATH}")
+(display (adapt-dirsep
+	  (apply string-append
+		 (map
+		  (lambda (dir)
+		    (string-append path-sep-str dir "/.libs"))
+		  library-dirs))))
+(display "\"")
+
 (if is-windows?
     (begin
       (display " PATH=${PATH}")
@@ -121,7 +130,8 @@ exec guile -s $0 "$@"
       (display "; ")
       (display " export GNC_MODULE_PATH;")
       (display " export GUILE_LOAD_PATH;")
-      (display " export LD_LIBRARY_PATH;")))
+      (display " export LD_LIBRARY_PATH;")
+      (display " export DYLD_LIBRARY_PATH;")))
 
 ;; Local Variables:
 ;; mode: scheme
