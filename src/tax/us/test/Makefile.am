@@ -2,6 +2,7 @@ TESTS = test-link-module test-load-module
 
 # Some of these dirs may not be needed anymore.
 GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
