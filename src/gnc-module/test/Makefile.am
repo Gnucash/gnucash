@@ -1,6 +1,6 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
-LDADD = ../libgncmodule.la ${GLIB_LIBS} -lltdl ${GUILE_LIBS}
+LDADD = ../libgncmodule.la ${GLIB_LIBS} ${GUILE_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -44,7 +44,7 @@ noinst_PROGRAMS = \
   test-agedver \
   test-dynload
 
-test_dynload_LDFLAGS = -lltdl ${GUILE_LIBS}
+test_dynload_LDFLAGS = ${GUILE_LIBS}
 
 EXTRA_DIST = \
   test-gwrapped-c \

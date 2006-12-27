@@ -15,8 +15,7 @@ LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
-  -lltdl
+  ${QOF_LIBS}
 
 TESTS = \
   test-load-module \

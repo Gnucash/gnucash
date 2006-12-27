@@ -25,8 +25,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-        -lltdl \
-	-lpq
+        -lpq
 
 test_db_SOURCES = \
   ${top_srcdir}/src/backend/postgres/PostgresBackend.c \

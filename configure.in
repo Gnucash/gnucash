@@ -146,11 +146,6 @@ if test x$am_cv_scanf_lld = "xno"; then
   fi
 fi
 
-AC_CHECK_HEADERS(ltdl.h)
-if test "x$ac_cv_header_ltdl_h" = xno; then
-  AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
-fi
-
 # test whether we are building directly from SVN/SVK
 ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
 if test $? = 0 ; then

@@ -17,8 +17,7 @@ LDADD = \
   ../test-core/libgncmod-test-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
-  -lltdl
+  ${QOF_LIBS}
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
