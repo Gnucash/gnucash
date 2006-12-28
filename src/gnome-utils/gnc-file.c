@@ -56,6 +56,15 @@ static GNCShutdownCB shutdown_cb = NULL;
 static gint save_in_progress = 0;
 
 
+typedef struct
+{
+  GtkFileSelection *file_box;
+  char *file_name;
+} FileBoxInfo;
+
+/* PROTOTYPES *******************************************************/
+static void store_filename (GtkWidget *w, gpointer data);
+
 /********************************************************************\
  * gnc_file_dialog                                                  * 
  *   Pops up a file selection dialog (either a "Save As" or an      * 
@@ -78,112 +87,137 @@ gnc_file_dialog (const char * title,
 		 GNCFileDialogType type
 		 )
 {
-  GtkWidget *file_box;
-  const char *internal_name;
-  char *file_name = NULL;
-  gchar * okbutton = GTK_STOCK_OPEN;
-  const gchar *ok_icon = NULL;
-  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN; 
-  gint response;
+  /* filebox information */
+  /* This can be allocated on the stack so long as the lifetime
+  ** of the dialog is limited to this function. */
+  FileBoxInfo fb_info = {NULL, NULL};
 
-  ENTER(" ");
+  ENTER("\n");
 
+  /* Create the dialog */
+  fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
+
+  /* Set dialog title, OK button and File Ops buttons according to type */
   switch (type) {
-	case GNC_FILE_DIALOG_OPEN:
-		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
-		  okbutton = GTK_STOCK_OPEN;
-		  if (title == NULL)
-			  title = _("Open");
-		  break;
-	case GNC_FILE_DIALOG_IMPORT:
-		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
-		  okbutton = _("_Import");
-		  if (title == NULL)
-			  title = _("Import");
-		  break;
-	case GNC_FILE_DIALOG_SAVE:
-		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
-		  okbutton = GTK_STOCK_SAVE;
-		  if (title == NULL)
-			  title = _("Save");
-		  break;
-	case GNC_FILE_DIALOG_EXPORT:
-		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
-		  okbutton = _("_Export");
-		  ok_icon = GTK_STOCK_CONVERT;
-		  if (title == NULL)
-			  title = _("Export");
-		  break;
-	
+    case GNC_FILE_DIALOG_OPEN:
+      /* change OK Button to Stock Open */
+      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), GTK_STOCK_OPEN);
+      gtk_button_set_use_stock(GTK_BUTTON(fb_info.file_box->ok_button), TRUE);
+
+      gtk_file_selection_hide_fileop_buttons(fb_info.file_box);
+
+      /* default title */
+      if (title == NULL)
+        title = _("Open");
+      break;
+
+    case GNC_FILE_DIALOG_IMPORT:
+      /* change OK Button to Import */
+      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), _("Import"));
+
+      gtk_file_selection_hide_fileop_buttons(fb_info.file_box);
+
+      /* default title */
+      if (title == NULL)
+        title = _("Import");
+      break;
+
+    case GNC_FILE_DIALOG_SAVE:
+      /* change OK Button to Stock Save */
+      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), GTK_STOCK_SAVE);
+      gtk_button_set_use_stock(GTK_BUTTON(fb_info.file_box->ok_button), TRUE);
+
+      /* default title */
+      if (title == NULL)
+        title = _("Save");
+      break;
+
+    case GNC_FILE_DIALOG_EXPORT:
+      /* change OK Button to Export */
+      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), _("Export"));
+
+      /* default title */
+      if (title == NULL)
+        title = _("Export");
+      break;
   }
 
-  file_box = gtk_file_chooser_dialog_new(
-			  title,
-			  NULL,
-			  action,
-			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			  NULL);
-  if (ok_icon)
-    gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
-  else
-    gtk_dialog_add_button(GTK_DIALOG(file_box),
-			  okbutton, GTK_RESPONSE_ACCEPT);
 
+  /* hack alert - this was filtering directory names as well as file
+   * names, so I think we should not do this by default (rgmerk) */
+  /* FIXME filters ignored. */
+#if 0
+  if (filter != NULL)
+    gtk_file_selection_complete(fb_info.file_box, filter);
+#endif
+
+
+  /* Set the starting_dir. */
   if (starting_dir) {
-    gchar *dir_name;
-
-    /* Ensure we have a directory name.  The set function fails otherwise. */
-    dir_name = g_path_get_dirname(starting_dir);
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box), dir_name);
-    g_free(dir_name);
+    /* NOTE: To set the directory only, this must have a trailing
+    ** /.  */
+    gtk_file_selection_set_filename(fb_info.file_box, starting_dir);
   }
 
-  gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
-  /*
-  gtk_window_set_transient_for(GTK_WINDOW(file_box),
-			       GTK_WINDOW(gnc_ui_get_toplevel()));
-  */
+  gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
+  gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
+                               GTK_WINDOW(gnc_ui_get_toplevel()));
 
-  if (filters != NULL)
-  {
-    GList* filter;
-    GtkFileFilter* all_filter = gtk_file_filter_new();
+  /* OK Button stores filename */
+  g_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
+                   "clicked", GTK_SIGNAL_FUNC(store_filename),
+                   (gpointer) &fb_info);
 
-    for (filter=filters; filter; filter=filter->next) {
-      g_return_val_if_fail(GTK_IS_FILE_FILTER(filter->data), NULL);
-      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box),
-				   GTK_FILE_FILTER (filter->data));
-    }
+  /* Ensure that the dialog box is destroyed when the user clicks a button. */
+  g_signal_connect_swapped(GTK_OBJECT(fb_info.file_box->ok_button),
+                   "clicked", G_CALLBACK (gtk_widget_destroy),
+                   fb_info.file_box);
 
-    gtk_file_filter_set_name (all_filter, _("All files"));
-    gtk_file_filter_add_pattern (all_filter, "*");
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), all_filter);
+  g_signal_connect_swapped(GTK_OBJECT(fb_info.file_box->cancel_button),
+                   "clicked", G_CALLBACK (gtk_widget_destroy),
+                   fb_info.file_box);
 
-    /* Note: You cannot set a file filter and pre-select a file name.
-     * The latter wins, and the filter ends up diabled.  Since we are
-     * only settin the starting directory for the chooser dialog,
-     * everything works as expected. */
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box),
-				 GTK_FILE_FILTER (filters->data));
-    g_list_free (filters);
-  }
+  g_signal_connect(GTK_OBJECT(fb_info.file_box), "delete_event",
+                   G_CALLBACK (gtk_widget_destroy),
+                   NULL);
 
-  response = gtk_dialog_run(GTK_DIALOG(file_box));
+  g_signal_connect(GTK_OBJECT(fb_info.file_box), "destroy_event",
+                   G_CALLBACK (gtk_widget_destroy),
+                   NULL);
 
-  if (response == GTK_RESPONSE_ACCEPT) {
-    /* look for constructs like postgres://foo */
-    internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
-    if (strstr (internal_name, "file://") == internal_name) {
-      /* nope, a local file name */
-      internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
-    }
-    file_name = g_strdup(internal_name);
-  }
-  gtk_widget_destroy(GTK_WIDGET(file_box));
-  LEAVE("%s", file_name);
-  return file_name;
+  gtk_dialog_run(GTK_DIALOG(fb_info.file_box));
+  LEAVE("\n");
+  return fb_info.file_name;
 }
 
+/********************************************************************\
+ * store_filename                                                   *
+ *   callback that saves the name of the file                       *
+ *                                                                  *
+ * Args:   w - the widget that called us                            *
+ *         data - pointer to filebox info structure                 *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+store_filename (GtkWidget *w, gpointer data)
+{
+  FileBoxInfo *fb_info = data;
+  GtkFileSelection *fs;
+  const gchar *file_name;
+
+  fs = GTK_FILE_SELECTION (fb_info->file_box);
+
+  file_name = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+
+  if (!strstr (file_name, "://"))
+    file_name = gtk_file_selection_get_filename (fb_info->file_box);
+
+  fb_info->file_name = g_strdup (file_name);
+}
+
+
+/********************************************************************\
+\********************************************************************/
 
 gboolean
 show_session_error (QofBackendError io_error,
