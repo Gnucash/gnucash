@@ -7,9 +7,9 @@ TESTS =  \
   test-load-module
 
 GNC_TEST_DEPS := \
-  --guile-load-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/network-utils \
-  --library-dir    ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
   --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \

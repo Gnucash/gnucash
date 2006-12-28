@@ -47,11 +47,13 @@ TESTS = \
   test-book-merge
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/gnc-module
+  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine
 
 TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \

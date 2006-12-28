@@ -31,7 +31,12 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
-  --guile-load-dir ${top_builddir}/src/business/business-core
+  --guile-load-dir ${top_builddir}/src/business/business-core \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/business/business-core
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
