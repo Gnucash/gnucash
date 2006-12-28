@@ -54,19 +54,21 @@ gnc_numeric_print(gnc_numeric in)
 
 /* ======================================================= */
 
+#define check_unary_op(eq,ex,a,i,e) check_unary_op_r(eq,ex,a,i,e,__LINE__)
 static void
-check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
-                gnc_numeric expected, 
-                gnc_numeric actual, 
-                gnc_numeric input, 
-                const char * errmsg)
+check_unary_op_r (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
+		  gnc_numeric expected, 
+		  gnc_numeric actual, 
+		  gnc_numeric input, 
+		  const char * errmsg,
+		  int line)
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
 	char *a = gnc_numeric_print (input);
 	char *str = g_strdup_printf (errmsg, e,r, a);
 	
-	do_test (eqtest(expected, actual), str);
+	do_test_call (eqtest(expected, actual), str, __FILE__, line);
 	
 	g_free (a);
 	g_free (r);
@@ -76,12 +78,14 @@ check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric),
 
 /* ======================================================= */
 
+#define check_binary_op(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__)
 static void
-check_binary_op (gnc_numeric expected, 
-                 gnc_numeric actual, 
-                 gnc_numeric input_a, 
-                 gnc_numeric input_b, 
-                 const char * errmsg)
+check_binary_op_r (gnc_numeric expected, 
+		   gnc_numeric actual, 
+		   gnc_numeric input_a, 
+		   gnc_numeric input_b, 
+		   const char * errmsg,
+		   int line)
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
@@ -89,7 +93,7 @@ check_binary_op (gnc_numeric expected,
 	char *b = gnc_numeric_print (input_b);
 	char *str = g_strdup_printf (errmsg, e,r,a,b);
 	
-	do_test (gnc_numeric_eq(expected, actual), str);
+	do_test_call (gnc_numeric_eq(expected, actual), str, __FILE__, line);
 	
 	g_free (a);
 	g_free (b);
