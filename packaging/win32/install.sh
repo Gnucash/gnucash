@@ -675,10 +675,6 @@ function inst_gnucash() {
 
         # Windows DLLs don't need relinking
         grep -v "need_relink=yes" libtool   > libtool.new   ; mv libtool.new   libtool
-        # Exclude (for now) the test subdirectories from the build
-        # because executable linking is so painfully slow on mingw
-        perl -pi.instbak -e's#^(SUBDIRS.* )test( .*)?$#\1\2#' `find src -name Makefile`
-        find src -name Makefile.instbak -exec rm {} \;
 
         make
 
