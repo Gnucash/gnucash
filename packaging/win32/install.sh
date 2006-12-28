@@ -648,6 +648,7 @@ function inst_gnucash() {
     _INSTALL_WFSDIR=`win_fs_path $INSTALL_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
+    _REL_REPOS_UDIR=`unix_path $REL_REPOS_DIR`
     mkdir -p $_BUILD_UDIR
 
     qpushd $REPOS_DIR
@@ -664,7 +665,7 @@ function inst_gnucash() {
     qpopd
 
     qpushd $BUILD_DIR
-        $_REPOS_UDIR/configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
+        $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \

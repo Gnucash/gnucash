@@ -9,6 +9,8 @@ DOWNLOAD_DIR=$GLOBAL_DIR\\downloads
 GNUCASH_DIR=$GLOBAL_DIR\\gnucash
 REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
 REPOS_DIR=$GNUCASH_DIR\\repos
+# keep this pointing from BUILD_DIR to REPOS_DIR
+REL_REPOS_DIR=..\\repos
 BUILD_DIR=$GNUCASH_DIR\\build
 INSTALL_DIR=$GNUCASH_DIR\\inst
 
