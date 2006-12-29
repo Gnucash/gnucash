@@ -538,16 +538,21 @@ AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 
 ### -----------------------
 ### LIBGDA
-LIBGDA_PACKAGE_NAME=libgda-2.0
-AC_ARG_WITH( libgda,
-  [  --with-libgda=PATH      specify where to look for libgda],
-  [ LIBGDA_PACKAGE_NAME=$with_libgda/lib/pkgconfig/${LIBGDA_PACKAGE_NAME}.pc ])
-#LIBGDA_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $LIBGDA_PACKAGE_NAME`
-#LIBGDA_LIBS=`$PKG_CONFIG --silence-errors --libs $LIBGDA_PACKAGE_NAME`
-LIBGDA_CFLAGS=`$PKG_CONFIG --cflags $LIBGDA_PACKAGE_NAME`
-LIBGDA_LIBS=`$PKG_CONFIG --libs $LIBGDA_PACKAGE_NAME`
+AC_ARG_ENABLE(gda, 
+  [  --disable-gda                build without the libgda backend],
+  [case "${enableval}" in
+     yes) want_gda=true ;;
+     no)  want_gda=false ;;
+     *) want_gda=true ;;
+   esac],[want_gda=true])
+if test x${want_gda} = xtrue
+then
+  PKG_CHECK_MODULES(LIBGDA, libgda-3.0 >= 2.99.2, [GDA_DIR=gda])
+fi
+AC_SUBST(GDA_DIR)
 AC_SUBST(LIBGDA_CFLAGS)
 AC_SUBST(LIBGDA_LIBS)
+
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
@@ -2276,6 +2281,9 @@ output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
 output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
 output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
 
+if test x${GDA_DIR} != x; then
+components="$components gda"
+fi
 if test x${SQL_DIR} != x; then
 components="$components sql"
 fi
