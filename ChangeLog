@@ -1,3 +1,8 @@
+2006-12-30  David Hampton  <hampton@employees.org>
+
+	* Save and restore the visibility of the toolbar, statusbar, and
+	  summarybar.  Fixes #106259.
+
 2006-12-30  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Avoid crash when renaming page in a page-less window by returning if
