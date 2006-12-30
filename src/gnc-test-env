@@ -79,12 +79,16 @@ exec guile -s $0 "$@"
                  library-dirs)))
 
 (display " DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}")
-(display (adapt-dirsep
-	  (apply string-append
-		 (map
-		  (lambda (dir)
-		    (string-append ":" dir ":" dir "/.libs"))
-		  (append gnc-module-dirs library-dirs)))))
+(display (apply string-append
+                (map
+                 (lambda (dir)
+                   (string-append ":" dir ":" dir "/.libs"))
+                 gnc-module-dirs)))
+(display (apply string-append
+                (map
+                 (lambda (dir)
+                   (string-append ":" dir ":" dir "/.libs"))
+                 library-dirs)))
 
 (display " LTDL_LIBRARY_PATH=${LTDL_LIBRARY_PATH}")
 (display (apply string-append
