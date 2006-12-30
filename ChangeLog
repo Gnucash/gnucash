@@ -1,3 +1,11 @@
+2006-12-30  Chris Shoemaker <chris.shoemaker@cox.net>
+
+	* Return zero instead of failing an assertion when the register
+	  asks a Split for its amount in a commodity that is not involved
+	  in the split's transaction.  This will prevent the crash in bug
+	  #379625, but doesn't solve the underlying problem, which is a
+	  bug in the register.
+
 2006-12-25  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Correct account compatibility check with top level account. #389317
