@@ -18,6 +18,9 @@
 	  SCM_EXACTP() This causes gnucash to crash on e.g. FC6 from the
 	  File Properties Menu.
 
+	* Make sure we set DYLD_LIBRARY_PATH in the test environment (for
+	  MacOS X)
+	
 2006-12-30  Christian Stimming  <stimming@tuhh.de>
 
 	* Check for potentially failed utf8 conversion of locale strings.
