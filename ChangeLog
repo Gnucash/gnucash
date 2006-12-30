@@ -1,3 +1,8 @@
+2006-12-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Avoid crash when renaming page in a page-less window by returning if
+	  there is no current page. Fixes #388841.
+
 2006-12-30  Derek Atkins  <derek@ihtfp.com>
 
 	* Load and store a commodity's KVP-frame (IFF it's non-empty).
