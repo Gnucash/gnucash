@@ -329,10 +329,22 @@ add128 (qofint128 a, qofint128 b)
 
 
 #ifdef TEST_128_BIT_MULT
+
+#ifdef HAVE_SCANF_LLD
+#define LLX "%llx"
+#elif HAVE_SCANF_QD
+#define LLX "%qx"
+#elif HAVE_SCANF_I64D
+#define LLX "%I64x"
+#else
+#error "Unknown 64-bit Hex code"
+#endif
+
 static void pr (gint64 a, gint64 b)
 {
    qofint128 prod = mult128 (a,b);
-   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " = %"
+	   G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " (0x" LLX " " LLX ") %hd\n",
 	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.isbig);
 }
 
@@ -341,7 +353,9 @@ static void prd (gint64 a, gint64 b, gint64 c)
    qofint128 prod = mult128 (a,b);
    qofint128 quot = div128 (prod, c);
    gint64 rem = rem128 (prod, c);
-   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " + %" G_GINT64_FORMAT " (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT
+	   " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " + %"
+	   G_GINT64_FORMAT " (0x" LLX " " LLX ") %hd\n",
 	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.isbig);
 }
 
@@ -398,7 +412,7 @@ int main ()
   for (i=0; i<20; i++) {
 
   quot = div128 (n, d);
-  printf ("%d result = %llx %llx\n", i, quot.hi, quot.lo);
+  printf ("%d result = " LLX " " LLX "\n", i, quot.hi, quot.lo);
     d >>=1;
     n = shift128 (n);
   }
