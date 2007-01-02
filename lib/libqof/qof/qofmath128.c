@@ -347,9 +347,15 @@ static void prd (gint64 a, gint64 b, gint64 c)
 
 int main ()
 {
+  gint64 x;
+  qofint128 n;
+  gint64 d;
+  qofint128 quot;
+  int i;
+
   pr (2,2);
 
-  gint64 x = 1<<30;
+  x = 1<<30;
   x <<= 2;
 
   pr (x,x);
@@ -366,7 +372,7 @@ int main ()
   pr (x,x);
   pr (x,-x);
 
-  pr (1000000, 10000000000000);
+  pr (1000000, G_GINT64_CONSTANT(10000000000000));
 
   prd (x,x,2);
   prd (x,x,3);
@@ -384,16 +390,14 @@ int main ()
   prd (1111,x,11);
 
   /* Really test division */
-  qofint128 n;
   n.hi = 0xdd91;
   n.lo = 0x6c5abefbb9e13480ULL;
 
-  gint64 d = 0x2ae79964d3ae1d04ULL;
+  d = 0x2ae79964d3ae1d04ULL;
   
-  int i;
   for (i=0; i<20; i++) {
 
-  qofint128 quot = div128 (n, d);
+  quot = div128 (n, d);
   printf ("%d result = %llx %llx\n", i, quot.hi, quot.lo);
     d >>=1;
     n = shift128 (n);
