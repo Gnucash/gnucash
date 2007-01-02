@@ -1,3 +1,8 @@
+2007-01-01  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 2.0.4
+
 2006-12-30  David Hampton  <hampton@employees.org>
 
 	* Save and restore the visibility of the toolbar, statusbar, and
