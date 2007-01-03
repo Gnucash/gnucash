@@ -8,7 +8,7 @@ TESTS =  \
 #TESTS_ENVIRONMENT := \
 #  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link-module
 
 test_link_module_SOURCES=test-link-module.c

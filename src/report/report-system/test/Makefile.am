@@ -18,6 +18,6 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 
-noinst_PROGRAMS = test-link-module
+check_PROGRAMS = test-link-module
 
 EXTRA_DIST = test-load-module

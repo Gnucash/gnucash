@@ -14,7 +14,7 @@ TESTS_ENVIRONMENT := \
   TEST_DB_SOCKET_DIR=`pwd`/gnc_test_db_sock \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-load-backend \
   test-db \
   test-escape \

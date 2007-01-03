@@ -48,6 +48,37 @@ function die() {
     exit -1
 }
 
+# usage: register_env_var NAME SEPARATOR [DEFAULT]
+function register_env_var() {
+    [ $# -ge 2 -a $# -le 3 ] || die hard
+    eval "SEPS_$1"'="'"$2"'"'
+    if [ $# -eq 3 ]; then
+        eval "$1_BASE=$3"
+    else
+        eval "$1_BASE"'=$'"$1"
+    fi
+    eval "$1_ADDS="
+    eval export "$1"
+    ENV_VARS="$ENV_VARS $1"
+}
+ENV_VARS=
+
+# usage: add_to_env VALUE NAME
+function add_to_env() {
+    _SEP=`eval echo '"$'"SEPS_$2"'"'`
+    _ENV=`eval echo '"$'"$2"'"'`
+    _SED=`eval echo '"s#.*'"${_SEP}$1${_SEP}"'.*##"'`
+    _TEST=`echo "${_SEP}${_ENV}${_SEP}" | sed "${_SED}"`
+    if [ "$_TEST" ]; then
+	if [ "$_ENV" ]; then
+	    eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
+	else
+	    eval "$2_ADDS"'="'"$1"'"'
+	fi
+	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
+    fi
+}
+
 
 ### Local Variables: ***
 ### mode: shell-script ***
