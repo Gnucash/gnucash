@@ -41,10 +41,10 @@ function prepare() {
             die "Do not save install.sh in the repository or one its parent directories"
         fi
     done
-    # Remove old empty install-sh files
-    if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh &>/dev/null | wc -l)" -eq 0 ]; then
-        rm -f ${_REPOS_UDIR}/install-sh
-    fi
+#     # Remove old empty install-sh files
+#     if [ -f ${_REPOS_UDIR}/install-sh -a "$(cat ${_REPOS_UDIR}/install-sh &>/dev/null | wc -l)" -eq 0 ]; then
+#         rm -f ${_REPOS_UDIR}/install-sh
+#     fi
     # Partially remove RegEx-GNU if installed
     _REGEX_UDIR=`unix_path $REGEX_DIR`
     if [ -f ${_REGEX_UDIR}/contrib/regex-0.12-GnuWin32.README ]; then
