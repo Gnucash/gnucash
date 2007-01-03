@@ -868,7 +868,7 @@ main (int argc, char **argv)
 		print_test_results();
 	}
 	qof_close();
-  return 0;
+  return get_rv();
 }
 
 /* ======================== END OF FILE ====================== */
