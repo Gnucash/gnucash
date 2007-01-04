@@ -1,5 +1,4 @@
 SUBDIRS = . test-core test 
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 

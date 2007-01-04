@@ -1,5 +1,4 @@
 SUBDIRS = . test file
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la
 

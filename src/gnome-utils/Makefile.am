@@ -1,5 +1,4 @@
 SUBDIRS = glade schemas . test ui
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
