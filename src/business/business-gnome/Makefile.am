@@ -67,7 +67,7 @@ noinst_HEADERS = \
 
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
-  ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/business/business-ledger/libgncmod-business-ledger.la \
   ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
