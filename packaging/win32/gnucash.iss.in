@@ -76,11 +76,11 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@P
 ; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Registry]
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletekey
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Delete the created config script on uninstall
@@ -89,6 +89,7 @@ Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "loc
 Type: files; Name: "{app}\bin\gnucash.bat"
 Type: files; Name: "{app}\bin\guile.bat"
 Type: files; Name: "{app}\share\guile\1.6\slibcat"
+Type: filesandordirs; Name: "{app}\share\guile"
 Type: filesandordirs; Name: "{app}\etc\gconf"
 Type: dirifempty; Name: "{app}\etc"
 
