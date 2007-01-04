@@ -159,8 +159,17 @@ function finish() {
         mv $file.new $file
     done
 
-    echo "You can now run the Inno Setup Compiler for creating the setup.exe:"
-    echo ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
+    echo "Now running the Inno Setup Compiler for creating the setup.exe"
+    ${_INNO_UDIR}/iscc ${_GNUCASH_UDIR}/gnucash.iss
+
+    # And changing output filename
+    SVN_REV=`grep GNUCASH_SVN_REV ${_BUILD_UDIR}/src/gnome-utils/gnc-svninfo.h | cut -d" " -f3 | cut -d\" -f2 `
+    SETUP_FILENAME="gnucash-2.0.99-svn-r${SVN_REV}-setup.exe"
+    qpushd ${_GNUCASH_UDIR}
+	mv gnucash-2.0.99-setup.exe ${SETUP_FILENAME}
+    qpopd
+    echo "Final resulting Setup program is:"
+    echo ${_GNUCASH_UDIR}/${SETUP_FILENAME}
 }
 
 prepare
