@@ -500,7 +500,7 @@
 		(add-subtotal-row table used-columns tax-collector
 				  "grand-total" (_ "Tax")))
 
-	    (if (and show-payments lot)
+	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
 			       (gnc-lot-get-split-list lot)
 			       (lambda (s1 s2)
@@ -551,8 +551,8 @@
 			     (gnc:gnc-monetary-commodity (cdr entry-values))
 			     (gnc:gnc-monetary-amount (cdr entry-values)))
 
-	    (let ((order (gnc:entry-get-order current)))
-	      (if order (add-order order)))
+	    (let ((order (gncEntryGetOrder current)))
+	      (if (not (null? order)) (add-order order)))
 
 	    (set! entries-added (+ entries-added 1))
 	    
@@ -766,7 +766,7 @@
       (if (and references? (not (member o orders)))
 	  (addto! orders o)))
 
-    (if invoice
+    (if (not (null? invoice))
 	(begin
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncOwnerGetType
@@ -784,7 +784,7 @@
     ;; invoice number moved below
     ;;(gnc:html-document-set-title! document title)
 
-    (if invoice
+    (if (not (null? invoice))
 	(let* ((book (gncInvoiceGetBook invoice))
 	      (slots (gnc-book-get-slots book))
 	      (date-object #f)

@@ -128,8 +128,8 @@
 
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code show-account-name show-account-full-name)
-  ;;# on multi-line splits we can get an empty (#f) account
-  (if (not account)
+  ;;# on multi-line splits we can get an empty ('()) account
+  (if (null? account)
         (_ "Split")
         (string-append 
            ;; display account code?
@@ -418,7 +418,7 @@
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
          (account-type (xaccAccountGetType account))
-         (currency (if account
+         (currency (if (not (null? account))
                        (xaccAccountGetCommodity account)
                        (gnc-default-currency)))
 	 (report-currency (if (opt-val gnc:pagename-general optname-common-currency)

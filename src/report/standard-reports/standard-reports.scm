@@ -61,7 +61,7 @@
     (gnc:debug "hash: " gnc:*register-report-hash*)
     (gnc:debug "split: " split)
     (if type-info
-	(if split
+	(if (not (null? split))
 	    (begin (gnc:debug "get-split...") (get-split type-info))
 	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
 	#f)))

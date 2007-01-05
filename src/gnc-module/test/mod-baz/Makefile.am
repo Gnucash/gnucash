@@ -6,10 +6,10 @@ AM_CFLAGS = \
   ${GUILE_INCS}
 
 PWD := $(shell pwd)
-checklibdir = ${PWD}
-checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
+check_LTLIBRARIES = libbaz.la libgncmodbaz.la
 
 libbaz_la_SOURCES = baz.c
+libbaz_la_LDFLAGS = -rpath ${PWD}
 libbaz_la_LIBADD = ../mod-foo/libfoo.la
 
 # Make swig-baz.c for dist. It is an automatic dependency
@@ -19,7 +19,7 @@ noinst_HEADERS = \
   swig-baz.c
 
 libgncmodbaz_la_SOURCES = gnc-mod-baz.c
-
+libgncmodbaz_la_LDFLAGS = -rpath ${PWD}
 libgncmodbaz_la_LIBADD = \
   libbaz.la \
   ../../libgncmodule.la \
@@ -37,7 +37,3 @@ EXTRA_DIST = \
 
 BUILT_SOURCES = swig-baz.c
 MAINTAINERCLEANFILES = swig-baz.c
-
-# Keep automake from generating install targets for test libs
-install-checklibLTLIBRARIES:
-uninstall-checklibLTLIBRARIES:

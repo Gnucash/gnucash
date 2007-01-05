@@ -8,7 +8,7 @@ TESTS_ENVIRONMENT= \
    LTDL_LIBRARY_PATH=.. \
    LD_LIBRARY_PATH=${top_builddir}/src/gnc-module:${top_builddir}/src/gnc-module/.libs:${top_builddir}/src/engine:${top_builddir}/src/engine/.libs:${top_builddir}/src/calculation:${top_builddir}/src/calculation/.libs:${top_builddir}/src/network-utils:${top_builddir}/src/network-utils/.libs
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link-module
 
 test_link_module_SOURCES=test-link-module.c

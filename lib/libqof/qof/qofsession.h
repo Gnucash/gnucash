@@ -222,6 +222,7 @@ const char * qof_session_get_url (QofSession *session);
  *    if any data in the session hasn't been saved to long-term storage.
  */
 gboolean qof_session_not_saved(QofSession *session);
+gboolean qof_session_save_in_progress(QofSession *session);
 
 /** Allows the backend to warn the user if a dataset already exists. */
 gboolean qof_session_save_may_clobber_data (QofSession *session);

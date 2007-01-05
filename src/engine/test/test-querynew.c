@@ -100,5 +100,5 @@ main (int argc, char **argv)
 	}
 	qof_close();
   print_test_results();
-  return 0;
+  return get_rv();
 }

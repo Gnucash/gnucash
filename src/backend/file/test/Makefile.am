@@ -191,13 +191,13 @@ TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_LTLIBRARIES = libgnc-test-file-stuff.la
+check_LTLIBRARIES = libgnc-test-file-stuff.la
 
 libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
 libgnc_test_file_stuff_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-date-converting \
   test-dom-converters1 \
   test-kvp-frames \

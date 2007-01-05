@@ -185,7 +185,7 @@
     (define (account-get-depth account)
       (define (account-get-depth-internal account-internal depth)
         (let ((parent (xaccAccountGetParentAccount account-internal)))
-          (if parent
+          (if (not (null? parent))
             (account-get-depth-internal parent (+ depth 1))
             depth)))
       (account-get-depth-internal account 1))
@@ -277,7 +277,7 @@
                                        (s-commodity (xaccAccountGetCommodity s-account)))
 				  ;; Check if this is a dangling split
 				  ;; and print a warning
-				  (if (not s-account)
+				  (if (null? s-account)
 				      (display
 				       (string-append
 					"WARNING: s-account is NULL for split: "
@@ -285,7 +285,7 @@
 
                                   ;(gnc:debug (xaccAccountGetName s-account))
                                   (if (and	 ;; make sure we don't have
-				       s-account ;;  any dangling splits
+				       (not (null? s-account)) ;;  any dangling splits
 				       (not (account-in-list? s-account accounts)))
 				      (if (not (split-in-list? s seen-split-list))
 					  (begin  

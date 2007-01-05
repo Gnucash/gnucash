@@ -61,7 +61,7 @@
     (gnc:make-option
      section name sort-tag 'invoice documentation-string getter
      (lambda (invoice) ;; setter
-       (if (not invoice) (set! invoice (default-getter)))
+       (if (null? invoice) (set! invoice (default-getter)))
        (set! invoice (convert-to-invoice invoice))
        (let* ((result (validator invoice))
 	      (valid (car result))
@@ -122,7 +122,7 @@
     (gnc:make-option
      section name sort-tag 'customer documentation-string getter
      (lambda (customer)
-       (if (not customer) (set! customer (default-getter)))
+       (if (null? customer) (set! customer (default-getter)))
        (set! customer (convert-to-customer customer))
        (let* ((result (validator customer))
 	      (valid (car result))
@@ -183,7 +183,7 @@
     (gnc:make-option
      section name sort-tag 'vendor documentation-string getter
      (lambda (vendor)
-       (if (not vendor) (set! vendor (default-getter)))
+       (if (null? vendor) (set! vendor (default-getter)))
        (set! vendor (convert-to-vendor vendor))
        (let* ((result (validator vendor))
 	      (valid (car result))
@@ -244,7 +244,7 @@
     (gnc:make-option
      section name sort-tag 'employee documentation-string getter
      (lambda (employee)
-       (if (not employee) (set! employee (default-getter)))
+       (if (null? employee) (set! employee (default-getter)))
        (set! employee (convert-to-employee employee))
        (let* ((result (validator employee))
 	      (valid (car result))
@@ -343,7 +343,7 @@
       (gnc:make-option
        section name sort-tag 'owner documentation-string getter
        (lambda (owner)
-	 (if (not owner) (set! owner (default-getter)))
+	 (if (null? owner) (set! owner (default-getter)))
 	 (set! owner (convert-to-owner owner))
 	 (let* ((result (validator owner))
 		(valid (car result))
@@ -410,7 +410,7 @@
     (gnc:make-option
      section name sort-tag 'taxtable documentation-string getter
      (lambda (taxtable)
-       (if (not taxtable) (set! taxtable (default-getter)))
+       (if (null? taxtable) (set! taxtable (default-getter)))
        (set! taxtable (convert-to-taxtable taxtable))
        (let* ((result (validator taxtable))
 	      (valid (car result))

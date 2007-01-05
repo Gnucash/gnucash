@@ -269,11 +269,17 @@ qof_query_string_predicate (QofQueryCompare how,
   pdata->matchstring = g_strdup (str);
 
   if (is_regex) {
+    int rc;
     int flags = REG_EXTENDED;
     if (options == QOF_STRING_MATCH_CASEINSENSITIVE)
       flags |= REG_ICASE;
 
-    regcomp(&pdata->compiled, str, flags);
+    rc = regcomp(&pdata->compiled, str, flags);
+    if (rc) {
+	g_free(pdata->matchstring);
+	g_free(pdata);
+	return NULL;
+    }
     pdata->is_regex = TRUE;
   }
 

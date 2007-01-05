@@ -403,6 +403,9 @@ static const gchar *multiple_page_actions[] = {
 #define WINDOW_GEOMETRY		"Window Geometry"
 #define WINDOW_POSITION		"Window Position"
 #define WINDOW_MAXIMIZED	"Window Maximized"
+#define TOOLBAR_VISIBLE		"Toolbar Visible"
+#define STATUSBAR_VISIBLE	"Statusbar Visible"
+#define SUMMARYBAR_VISIBLE	"Summarybar Visible"
 #define WINDOW_FIRSTPAGE	"First Page"
 #define WINDOW_PAGECOUNT	"Page Count"
 #define WINDOW_PAGEORDER	"Page Order"
@@ -511,9 +514,10 @@ static void
 gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
+  GtkAction *action;
   gint *pos, *geom, *order;
   gsize length;
-  gboolean max;
+  gboolean max, visible, desired_visibility;
   gchar *window_group;
   gint page_start, page_count, i;
   GError *error = NULL;
@@ -610,6 +614,46 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     error = NULL;
   } else if (max) {
     gtk_window_maximize(GTK_WINDOW(window));
+  }
+
+  /* Common view menu items */
+  action = gnc_main_window_find_action(window, "ViewToolbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      TOOLBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
+  }
+
+  action = gnc_main_window_find_action(window, "ViewSummaryAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      SUMMARYBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
+  }
+
+  action = gnc_main_window_find_action(window, "ViewStatusbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      STATUSBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
   }
 
   /* Now populate the window with pages. */
@@ -752,8 +796,9 @@ static void
 gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
+  GtkAction *action;
   gint i, num_pages, coords[4], *order;
-  gboolean maximized;
+  gboolean maximized, visible;
   gchar *window_group;
 
   /* Setup */
@@ -801,6 +846,20 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
 	coords[2], coords[3],
 	maximized ? "maximized" : "not maximized");
+
+  /* Common view menu items */
+  action = gnc_main_window_find_action(window, "ViewToolbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 TOOLBAR_VISIBLE, visible);
+  action = gnc_main_window_find_action(window, "ViewSummaryAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 SUMMARYBAR_VISIBLE, visible);
+  action = gnc_main_window_find_action(window, "ViewStatusbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 STATUSBAR_VISIBLE, visible);
 
   /* Save individual pages in this window */
   g_list_foreach(priv->installed_pages, (GFunc)gnc_main_window_save_page, data);
@@ -995,12 +1054,30 @@ gnc_main_window_timed_quit (gpointer dummy)
 }
 
 static gboolean
+gnc_main_window_quit(GncMainWindow *window)
+{
+    QofSession *session;
+    gboolean needs_save, do_shutdown;
+
+    session = gnc_get_current_session();
+    needs_save = qof_book_not_saved(qof_session_get_book(session)) && 
+        !gnc_file_save_in_progress();
+    do_shutdown = !needs_save || 
+        (needs_save && !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
+
+    if (do_shutdown) {
+        g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
 			      GdkEvent *event,
 			      gpointer user_data)
 {
   static gboolean already_dead = FALSE;
-  QofSession *session;
 
   if (already_dead)
     return TRUE;
@@ -1013,21 +1090,7 @@ gnc_main_window_delete_event (GtkWidget *window,
   if (g_list_length(active_windows) > 1)
     return FALSE;
 
-  session = gnc_get_current_session();
-  if (qof_book_not_saved(qof_session_get_book(session))) {
-    if (!gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
-      /* Tell gnucash to shutdown cleanly */
-      g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-      already_dead = TRUE;
-    }
-    /* Cancel the window deletion. It'll happen on the just queued shutdown. */
-    return TRUE;
-  }
-
-  /* Tell gnucash to shutdown cleanly */
-  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-  already_dead = TRUE;
-
+  already_dead = gnc_main_window_quit(GNC_MAIN_WINDOW(window));
   return TRUE;
 }
 
@@ -2003,6 +2066,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *image;
 	GList *tmp;
 
+	ENTER("window %p, page %p", window, page);
+
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
@@ -2104,6 +2169,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	 * Now install it all in the window.
 	 */
 	gnc_main_window_connect(window, page, tab_hbox, label);
+
+	LEAVE("");
 }
 
 
@@ -2958,25 +3025,10 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
-	QofSession *session;
+    if (!gnc_main_window_all_finish_pending())
+        return;
 
-	if (gnc_file_save_in_progress()) {
-	  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-	  return;
-	}
-
-	if (!gnc_main_window_all_finish_pending())
-	  return;
-
-	session = gnc_get_current_session();
-	if (qof_book_not_saved(qof_session_get_book(session))) {
-	  if (gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
-	    /* User canceled */
-	    return;
-	  }
-	}
-
-	gnc_shutdown (0);
+    gnc_main_window_quit(window);
 }
 
 static void
@@ -3062,6 +3114,11 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
   ENTER(" ");
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   page = priv->current_page;
+  if (!page) {
+    LEAVE("No current page");
+    return;
+  }
+  
   tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
                                        page->notebook_page);
   children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
@@ -3439,21 +3496,17 @@ gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 {
 	GncMainWindow *window;
 	GncMainWindowPrivate *priv;
-	GList *winp, *tmp;
-	GSList *widgetp, *toplevels;
+	GList *groupp, *groups, *winp, *tmp;
 	GtkWidget *close_button;
 
 	for (winp = active_windows; winp; winp = g_list_next(winp)) {
 	  window = winp->data;
 	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	  toplevels = gtk_ui_manager_get_toplevels(window->ui_merge,
-						   GTK_UI_MANAGER_MENUBAR |
-						   GTK_UI_MANAGER_TOOLBAR |
-						   GTK_UI_MANAGER_POPUP);
-	  for (widgetp = toplevels; widgetp; widgetp = g_slist_next(widgetp)) {
-	    gtk_widget_set_sensitive (widgetp->data, sensitive);
+
+	  groups = gtk_ui_manager_get_action_groups(window->ui_merge);
+	  for (groupp = groups; groupp; groupp = g_list_next(groupp)) {
+	    gtk_action_group_set_sensitive(GTK_ACTION_GROUP(groupp->data), sensitive);
 	  }
-	  g_slist_free(toplevels);
 
 	  for (tmp = priv->installed_pages; tmp; tmp = g_list_next(tmp)) {
 	    close_button = g_object_get_data(tmp->data, PLUGIN_PAGE_CLOSE_BUTTON);

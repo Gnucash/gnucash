@@ -82,7 +82,7 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.0.2",
+	    _("The last stable version was "), "GnuCash 2.0.3",
 	    _("The next stable version will be "), "GnuCash 2.2");
 }
 
@@ -361,14 +361,12 @@ load_gnucash_modules()
             gnc_module_load(modules[i].name, modules[i].version);
     }
     if (!gnc_engine_is_initialized()) {
-#ifdef G_OS_WIN32
-        g_warning("GnuCash engine indicates it hasn't been initialized correctly. On Windows this mechanism is know not to work. Ignoring for now.\n");
-        /* See more detailed discussion here
-	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html */
-#else
+        /* On Windows this check used to fail anyway, see
+	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
+	   but more recently it seems to work as expected
+	   again. 2006-12-20, cstim. */
         g_error("GnuCash engine failed to initialize.  Exiting.\n");
         exit(0);
-#endif
     }
 }
 

@@ -7,7 +7,7 @@ BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!
 USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS) 
 
 If you want something a bit more tested, please use the 
-1.8 stable series. 
+2.0 stable series. 
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +15,7 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 1.8.x
+  - Upgrading from 2.0.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -139,11 +139,13 @@ http://www.gnucash.org/en/hacking.phtml
 Upgrading from earlier versions
 -------------------------------
 
-There are many, many changes from the 1.8 series - have a look at the
+There are many changes from the 2.0 series - have a look at the
 NEWS file if you want more details. In particular:
 
-- GnuCash now requires g-wrap 1.3.4 or better. See the "dependencies"
-section of this file for more detail. 
+- GnuCash now uses SWIG 1.3.28 instead of g-wrap for the
+inter-language bindings. g-wrap has been dropped completely in
+gnucash 2.2.0. See the "dependencies" section of this file for
+more detail.
 
 - The data files are not able to be accessed by 1.6 once the new
 features are used and saved, i.e. they are not backwards-compatible! 
@@ -243,7 +245,7 @@ Building & Installing
 
 GnuCash uses GNU Automake to handle the build process, so for most of
 the details, see the generic instructions in INSTALL.  (If you are
-building directory from CVS, read the README.cvs for more instructions.)
+building directory from SVN, read the README.svn for more instructions.)
 Below we detail the GnuCash specific bits.
 
 Prior to building GnuCash, you will have to obtain and install the
@@ -257,11 +259,12 @@ following packages:
 
   libxml: available from ftp.gnome.org
 
-  g-wrap: RPM's, debs, and source available at 
-          http://www.gnucash.org/pub/g-wrap.
-          You should use g-wrap 1.3.4 or later.
+  SWIG: 1.3.28 or later is needed. See http://www.swig.org or
+    http://sourceforge.net/project/showfiles.php?group_id=1645
+    (Note: g-wrap has been dropped completely in gnucash 2.2.0 and
+    is no longer needed.)
 
-  texinfo: If you are building from CVS, you need the GNU texinfo
+  texinfo: If you are building from SVN, you need the GNU texinfo
            package, version 4.0 or later.
 
 What you'll need to get and install in order to make sure you have all
@@ -279,7 +282,7 @@ you'll need for the systems we know about:
 
 
   SuSE:
-    see README.dependencies and doc/build-suse.txt
+    see README.dependencies
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
@@ -365,7 +368,7 @@ You can download GnuCash Solaris packages from:
 
   - http://www.unixrealm.com/downloads/
 
-You can get GnuCash Mandrake packages on Mandrake Cooker sites.
+You can get GnuCash Mandrake packages on Mandriva Cooker sites.
 
 
 Precompiled binaries & pre-requisite packages can be found at the
@@ -436,7 +439,7 @@ Before you start developing GnuCash, you should do the following:
 
 Submitting a Patch:
 
-  This section has been removed to the file README.patches
+  This section has been moved to the file README.patches
 
   Please consult that file for details on using the script provided to make
   patches suitable for submitting to the GnuCash development team.

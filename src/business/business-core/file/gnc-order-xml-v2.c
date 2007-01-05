@@ -137,7 +137,7 @@ set_timespec(xmlNodePtr node, GncOrder* order,
   return TRUE;
 }
 
-static inline gboolean
+static gboolean
 order_guid_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata *pdata = order_pdata;

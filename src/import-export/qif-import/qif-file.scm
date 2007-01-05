@@ -40,16 +40,13 @@
           (tag #f)
           (value #f)
           (heinous-error #f)
-          (start-time #f)
-          (end-time #f)
           (delimiters (string #\cr #\nl))
-          (progress-dialog #f)
+          (progress-dialog '())
           (file-stats (stat path))
           (file-size (stat:size file-stats))
           (bytes-read 0))
 
      (qif-file:set-path! self path)
-     (set! start-time (gettimeofday))
 
      (if (> file-size 10000)
          (begin
@@ -386,7 +383,7 @@
                            (set! heinous-error #t))))))
 
 		 ;; update the progress bar for each line read
-		 (if progress-dialog 
+		 (if (not (null? progress-dialog)) 
 		     (begin 
 		       (gnc-progress-dialog-set-value
 			progress-dialog (/ bytes-read file-size))
@@ -405,7 +402,7 @@
      ;; they were in the file.  This is important in a few cases. 
      (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
-     (if progress-dialog
+     (if (not (null? progress-dialog))
          (gnc-progress-dialog-destroy progress-dialog))
 
      return-val)))

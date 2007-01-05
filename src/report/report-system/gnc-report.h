@@ -38,6 +38,7 @@ gboolean gnc_run_report_id_string (const char * id_string, char **data);
  **/
 gchar* gnc_report_name( SCM report );
 
+/* returns #f if the report id cannot be found */
 SCM gnc_report_find(gint id);
 void gnc_report_remove_by_id(gint id);
 gint gnc_report_add(SCM report);

@@ -180,8 +180,11 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
   int         found_protocol=0, found_path=0, found_label=0; 
   URLType     retval;   
 
-  DEBUG("parsing %s, base_location %s", url,
-	html ? html->base_location : "<null hmtl>");
+  DEBUG("parsing %s, base_location %s",
+        url ? url : "(null)",
+        html ? (html->base_location ? html->base_location
+                : "(null base_location)")
+        : "(null html)");
   regcomp(&compiled, uri_rexp, REG_EXTENDED);
 
   if(!regexec(&compiled, url, 6, match, 0)) {
@@ -558,7 +561,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   char * fdata = NULL;
   int fdata_len = 0;
 
-  DEBUG("type %s, location %s, label %s", type, location, label);
+  DEBUG("type %s, location %s, label %s", type ? type : "(null)",
+	location ? location : "(null)", label ? label : "(null)");
   if(!html) {
     return;
   }
@@ -1027,8 +1031,9 @@ gnc_html_show_url(gnc_html * html, URLType type,
       html->base_type = result.base_type;
       html->base_location =
 	    g_strdup (extract_base_name(result.base_type, new_location));
-      DEBUG("resetting base location to %s",  html->base_location);
-    
+      DEBUG("resetting base location to %s",
+	    html->base_location ? html->base_location : "(null)");
+
       stream = gtk_html_begin (GTK_HTML(html->html));
       gnc_html_load_to_stream (html, stream, result.url_type,
                                new_location, new_label);
@@ -1128,6 +1133,8 @@ gnc_html *
 gnc_html_new( GtkWindow *parent )
 {
   gnc_html * retval = g_new0(gnc_html, 1);
+
+  ENTER("parent %p", parent);
   
   retval->window    = GTK_WIDGET(parent);
   retval->container = gtk_scrolled_window_new(NULL, NULL);
@@ -1177,6 +1184,8 @@ gnc_html_new( GtkWindow *parent )
 		    retval);
   
   gtk_html_load_empty(GTK_HTML(retval->html));
+
+  LEAVE("retval %p", retval);
   
   return retval;
 }

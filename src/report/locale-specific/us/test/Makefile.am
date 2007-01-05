@@ -30,7 +30,7 @@ TESTS_ENVIRONMENT := \
 
 EXTRA_DIST = test-load-module
 
-noinst_PROGRAMS = test-link-module
+check_PROGRAMS = test-link-module
 
 testit:
 	${TESTS_ENVIRONMENT} gdb guile

@@ -35,7 +35,7 @@
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
   (let* ((new-xtns (gnc:group-get-transactions new-group))
-	 (progress-dialog #f)
+	 (progress-dialog '())
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
          (matches '()))    
@@ -53,7 +53,7 @@
      (lambda (xtn) 
        (let ((query (qof-query-create-for-splits)))
 	 (set! work-done (+ 1 work-done))
-	 (if progress-dialog 
+	 (if (not (null? progress-dialog)) 
 	     (begin 
 	       (gnc-progress-dialog-set-value
 		progress-dialog (/ work-done work-to-do))
@@ -132,7 +132,7 @@
      new-xtns)
     
     ;; get rid of the progress dialog 
-    (if progress-dialog
+    (if (not (null? progress-dialog))
 	(gnc-progress-dialog-destroy progress-dialog))
 
     ;; return the matches 

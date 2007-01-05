@@ -61,7 +61,7 @@ TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link \
   test-commodities \
   test-date \

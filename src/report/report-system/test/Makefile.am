@@ -29,6 +29,6 @@ TESTS_ENVIRONMENT := \
 
 LDADD = ../libgncmod-report-system.la 
 
-noinst_PROGRAMS = test-link-module 
+check_PROGRAMS = test-link-module 
 
 EXTRA_DIST = test-load-module

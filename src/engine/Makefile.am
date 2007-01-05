@@ -7,6 +7,7 @@ AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/core-utils \
 	-I${top_srcdir}/src \
+	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/business/business-core/ \
 	${QOF_CFLAGS} \
@@ -168,7 +169,8 @@ endif
 noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
-swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
+swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
+               ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
 endif
@@ -180,11 +182,7 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
-		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
-		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
-		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
-		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
+		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
 		-e 's#@-libdir-@#${libdir}#g' \
 		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
 		-e 's#@-datadir-@#${datadir}#g' \

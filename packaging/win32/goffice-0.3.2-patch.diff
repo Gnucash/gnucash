@@ -1,0 +1,91 @@
+diff -Nur goffice-0.3.2-old/goffice/Makefile.am goffice-0.3.2/goffice/Makefile.am
+--- goffice-0.3.2-old/goffice/Makefile.am	Tue Sep 19 16:06:53 2006
++++ goffice-0.3.2/goffice/Makefile.am	Mon Oct 30 15:47:16 2006
+@@ -31,7 +31,8 @@
+ libgoffice_0_la_DEPENDENCIES = goffice.def
+ libgoffice_0_la_LDFLAGS += -no-undefined -export-symbols goffice.def
+ if WITH_NATIVE_WIN32
+-libgoffice_0_la_LIBADD += -luuid -lhtmlhelp -lurlmon
++libgoffice_0_la_LDFLAGS += -no-undefined
++libgoffice_0_la_LIBADD += -luuid
+ endif
+ endif
+ 
+@@ -76,7 +77,7 @@
+ 	data/local.def drawing/local.def graph/local.def \
+ 	gtk/local.def ms-compat/local.def utils/local.def
+ 	echo EXPORTS > $@ && \
+-	cat $^ | sort >> $@
++	cat $^ | sort | sed '/^go_doc_mark_not_modified$$/d;/^go_plugin_init$$/d;/^go_plugin_shutdown$$/d' >> $@
+ 
+ if HAVE_LIBEXE
+ goffice_mslibdir = $(DESTDIR)$(libdir)
+diff -Nur goffice-0.3.2-old/goffice-win32.mk goffice-0.3.2/goffice-win32.mk
+--- goffice-0.3.2-old/goffice-win32.mk	Tue Sep 19 16:06:52 2006
++++ goffice-0.3.2/goffice-win32.mk	Mon Oct 30 15:50:27 2006
+@@ -16,7 +16,7 @@
+ 	  fi; \
+ 	done; \
+ 	cat $(top_builddir)/goffice/goffice-config.h $$hdrs_list | \
+-		sed -e 's/^#[ \t]*include[ \t]\+.*$$//g' | \
++		sed -e 's/^#[ 	]*include[ 	]\+.*$$//g' | \
+ 		$(CPP) $(AM_CPPFLAGS) "-DGO_VAR_DECL=__declspec(dllexport)" -P - > xgen-localdef.1 && \
+ 	perl $(top_srcdir)/dumpdef.pl \
+ 		xgen-localdef.1 > xgen-localdef.2 \
+diff -Nur goffice-0.3.2-old/gtk-doc.m4 goffice-0.3.2/gtk-doc.m4
+--- goffice-0.3.2-old/gtk-doc.m4	Thu Jan  1 00:00:00 1970
++++ goffice-0.3.2/gtk-doc.m4	Mon Oct 30 15:47:16 2006
+@@ -0,0 +1,53 @@
++dnl -*- mode: autoconf -*-
++
++# serial 1
++
++dnl Usage:
++dnl   GTK_DOC_CHECK([minimum-gtk-doc-version])
++AC_DEFUN([GTK_DOC_CHECK],
++[
++  AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
++  AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
++  dnl for overriding the documentation installation directory
++  AC_ARG_WITH(html-dir,
++    AC_HELP_STRING([--with-html-dir=PATH], [path to installed docs]),,
++    [with_html_dir='${datadir}/gtk-doc/html'])
++  HTML_DIR="$with_html_dir"
++  AC_SUBST(HTML_DIR)
++
++  dnl enable/disable documentation building
++  AC_ARG_ENABLE(gtk-doc,
++    AC_HELP_STRING([--enable-gtk-doc],
++                   [use gtk-doc to build documentation [default=no]]),,
++    enable_gtk_doc=no)
++
++  have_gtk_doc=no
++  if test x$enable_gtk_doc = xyes; then
++    if test -z "$PKG_CONFIG"; then
++      AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
++    fi
++    if test "$PKG_CONFIG" != "no" && $PKG_CONFIG --exists gtk-doc; then
++      have_gtk_doc=yes
++    fi
++
++  dnl do we want to do a version check?
++ifelse([$1],[],,
++    [gtk_doc_min_version=$1
++    if test "$have_gtk_doc" = yes; then
++      AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
++      if $PKG_CONFIG --atleast-version $gtk_doc_min_version gtk-doc; then
++        AC_MSG_RESULT(yes)
++      else
++        AC_MSG_RESULT(no)
++        have_gtk_doc=no
++      fi
++    fi
++])
++    if test "$have_gtk_doc" != yes; then
++      enable_gtk_doc=no
++    fi
++  fi
++
++  AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
++  AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, test -n "$LIBTOOL")
++])

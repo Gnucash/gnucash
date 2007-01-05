@@ -2,6 +2,7 @@ TESTS = test-link-module test-load-module
 
 # Some of these dirs may not be needed anymore.
 GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
@@ -23,6 +24,6 @@ TESTS_ENVIRONMENT := \
 
 EXTRA_DIST = test-load-module
 
-noinst_PROGRAMS=test-link-module 
+check_PROGRAMS=test-link-module 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD=../libgncmod-tax-us.la ${GUILE_LIBS} ${GLIB_LIBS}

@@ -183,8 +183,7 @@
 	   (temp-owner (gncOwnerCreate))
 	   (owner (gnc:owner-from-split split temp-owner)))
 
-      (if
-       owner
+      (if (not (null? owner))
        (let* ((guid (gncOwnerReturnGUID owner))
 	      (this-currency (xaccTransGetCurrency transaction))
 	      (this-date (gnc-transaction-get-date-posted transaction))
@@ -543,7 +542,7 @@ totals to report currency")
     ;; set default title
     (gnc:html-document-set-title! document report-title)
     ;; maybe redefine better...
-    (if account
+    (if (not (null? account))
         (begin
           (gnc:html-document-set-title!
            document (string-append report-title ": " (xaccAccountGetName account)))
@@ -558,7 +557,7 @@ totals to report currency")
 
     (gnc:html-table-set-col-headers! table heading-list)
 				     
-    (if account
+    (if (not (null? account))
 	(begin
 	  (setup-query query account report-date)
 	  ;; get the appropriate splits

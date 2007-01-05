@@ -56,7 +56,7 @@
                     gnc-acct-info acct-name acct-type))
              (split (xaccMallocSplit (gnc-get-current-book))))
         ;; make the account if necessary 
-        (if (not acct)
+        (if (or (not acct) (null? acct))
             (begin 
               (set! acct (xaccMallocAccount (gnc-get-current-book)))
               (xaccAccountBeginEdit acct)

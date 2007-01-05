@@ -197,6 +197,7 @@ qof_session_init (QofSession *session)
   session->books = g_list_append (NULL, qof_book_new ());
   session->book_id = NULL;
   session->backend = NULL;
+  session->lock = 1;
 
   qof_session_clear_error (session);
 }
@@ -1061,7 +1062,7 @@ qof_session_begin (QofSession *session, const char * book_id,
           g_free(session->book_id);
           session->book_id = NULL;
           qof_session_push_error (session, err, msg);
-          LEAVE(" backend error %d %s", err, msg);
+          LEAVE(" backend error %d %s", err, msg ? msg : "(null)");
           return;
       }
       if (msg != NULL) 
@@ -1203,8 +1204,10 @@ qof_session_save (QofSession *session,
 	int err;
 	gint num;
 	char *msg, *book_id;
-	
+
 	if (!session) return;
+	if (!g_atomic_int_dec_and_test(&session->lock))
+	    goto leave;
 	ENTER ("sess=%p book_id=%s", 
 		 session, session->book_id ? session->book_id : "(null)");
 	/* Partial book handling. */
@@ -1270,7 +1273,7 @@ qof_session_save (QofSession *session,
 						session->book_id = NULL;
 						qof_session_push_error (session, err, msg);
 						LEAVE("changed backend error %d", err);
-						return;
+						goto leave;
 					}
 					if (msg != NULL) 
 					{
@@ -1290,11 +1293,11 @@ qof_session_save (QofSession *session,
 				p = p->next;
 			}
 		}
-		if(!session->backend) 
+		if(!session->backend)
 		{
 			msg = g_strdup_printf("failed to load backend");
 			qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
-			return;
+			goto leave;
 		}
 	}
 	/* If there is a backend, and the backend is reachable
@@ -1318,7 +1321,8 @@ qof_session_save (QofSession *session,
 			if (be->sync)
 			{
 				(be->sync)(be, abook);
-				if (save_error_handler(be, session)) return;
+				if (save_error_handler(be, session)) 
+                                    goto leave;
 			}
 		}
 		/* If we got to here, then the backend saved everything 
@@ -1326,7 +1330,7 @@ qof_session_save (QofSession *session,
 		/* Return the book_id to previous value. */
 		qof_session_clear_error (session);
 		LEAVE("Success");
-		return;
+		goto leave;
 	}
 	else
 	{
@@ -1334,9 +1338,17 @@ qof_session_save (QofSession *session,
 		qof_session_push_error(session, ERR_BACKEND_NO_HANDLER, msg);
 	}
 	LEAVE("error -- No backend!");
+ leave:
+	g_atomic_int_inc(&session->lock);
+	return;
 }
 
 /* ====================================================================== */
+gboolean
+qof_session_save_in_progress(QofSession *session)
+{
+    return (session && g_atomic_int_get(&session->lock) != 1);
+}
 
 void
 qof_session_end (QofSession *session)
