@@ -207,8 +207,11 @@ gnc_module_system_refresh(void)
 
       while ((dent = readdir(d)) != NULL)
       {
-        /* is the file a .la shared lib? */
-        /* FIXME: remove/#ifdef hardcoded .dylib suffix */
+        /* is the file a loadable module? */
+
+        /* Gotcha: On MacOS, G_MODULE_SUFFIX is defined as "so", but if we do
+         * not build clean libtool modules with "-module", we get dynamic
+         * libraries ending on .dylib */
         if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX) ||
             g_str_has_suffix(dent->d_name, ".dylib"))
         {
