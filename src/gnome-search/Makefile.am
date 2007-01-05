@@ -10,7 +10,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
@@ -27,6 +26,7 @@ libgncmod_gnome_search_la_SOURCES = \
   search-account.c \
   search-boolean.c \
   search-core-type.c \
+  search-core-utils.c \
   search-date.c \
   search-double.c \
   search-int64.c \
@@ -43,6 +43,7 @@ noinst_HEADERS = \
   search-account.h \
   search-boolean.h \
   search-core-type.h \
+  search-core-utils.h \
   search-date.h \
   search-double.h \
   search-int64.h \
@@ -60,6 +61,7 @@ libgncmod_gnome_search_la_LIBADD = \
   ${GTKHTML_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
+  ${REGEX_LIBS} \
   ${QOF_LIBS} \
   ${GNOME_PRINT_LIBS}
 

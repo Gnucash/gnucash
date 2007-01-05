@@ -65,13 +65,13 @@ void          gnc_option_db_destroy(GNCOptionDB *odb);
 /* Create an option DB for a particular type, and save/load from a kvp.
  * This assumes the gnc:*kvp-option-path* location for the options
  * in the kvp.
- *
- * Note: the id_type MUST be a reference to the actual SCM
- * gnc:id-type.  Just wrapping the type in scheme is *NOT* sufficient.
  */
-GNCOptionDB * gnc_option_db_new_for_type(SCM id_type);
+GNCOptionDB * gnc_option_db_new_for_type(QofIdType id_type);
 void gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots);
 void gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots);
+
+void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
+SCM gnc_make_kvp_options(QofIdType id_type);
 
 void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionGetUIValue get_ui_value,
@@ -260,10 +260,10 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
 				    gboolean years, const char *custom);
 
 
-/* private */
-void gncp_option_db_register_option(GNCOptionDBHandle handle,
-                                    SCM guile_option);
+void gnc_option_db_register_option(GNCOptionDBHandle handle,
+                                   SCM guile_option);
 
+/* private */
 void gncp_option_invoke_callback(GNCOptionChangeCallback callback,
                                  gpointer data);
 

@@ -43,13 +43,13 @@
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
-SchedXactions * gnc_collection_get_schedxaction_list(QofCollection *col);
-GList * gnc_collection_get_schedxactions(QofCollection *col);
+SchedXactions * gnc_collection_get_schedxaction_list(const QofCollection *col);
+GList * gnc_collection_get_schedxactions(const QofCollection *col);
 GList * gnc_book_get_schedxactions(QofBook *book);
 
 /** Returns the template group from the book. **/
 AccountGroup * gnc_book_get_template_group(QofBook *book);
-AccountGroup * gnc_collection_get_template_group(QofCollection *col);
+AccountGroup * gnc_collection_get_template_group(const QofCollection *col);
 
 /** @return The list of SXes which reference the given Account. Caller should free this list. **/
 GList* gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct);

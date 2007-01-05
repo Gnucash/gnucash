@@ -1,8 +1,8 @@
 
 (define-module (gnucash app-utils))
-(use-modules (g-wrapped gw-app-utils))
+(use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/engine" 0)
@@ -125,7 +125,7 @@
 (export gnc:config-file-format-version)
 
 ;; gw-engine-spec.scm
-(re-export gnc:*save-options-hook*)
+(re-export HOOK-SAVE-OPTIONS)
 
 ;; date-utilities.scm
 
@@ -225,14 +225,9 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(re-export gnc:hook-define)
 (export gnc:hook-run-danglers)		;; from hooks.scm
-(re-export gnc:hook-add-dangler)
-(re-export gnc:hook-remove-dangler)
-(re-export gnc:*book-opened-hook*)
-(re-export gnc:*new-book-hook*)
-(re-export gnc:*book-closed-hook*)
-(re-export gnc:*report-hook*)
+(re-export gnc-hook-add-scm-dangler)
+(re-export HOOK-REPORT)
 
 ;; simple-obj
 (export make-simple-class)
@@ -243,16 +238,12 @@
 (export simple-obj-from-list)
 (export make-simple-obj)
 
-;; kvp-option-registry
-(export gnc:register-kvp-option-generator)
-(export gnc:unregister-kvp-option-generator)
-(export gnc:make-kvp-options)
+(define gnc:*kvp-option-path* '("options"))
 (export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
 (load-from-path "options.scm")
-(load-from-path "kvp-option-registry.scm")
 (load-from-path "hooks.scm")
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")

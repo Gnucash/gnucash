@@ -8,7 +8,7 @@ exec guile -s "$0"
 (if (gnc:module-load "gnucash/app-utils" 0)
     (begin    
       (if (and (procedure? gnc:error->string)
-               (procedure? gnc:guid-new)
+               (procedure? gnc-default-currency)
 	       (macro? N_)
 	       (string=? (N_ "foobar") "foobar"))
           (exit 0)

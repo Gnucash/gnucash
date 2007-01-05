@@ -38,6 +38,7 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 #define GCONF_SECTION			"dialogs/reset_warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS	"reset-warnings"
 #define GCONF_ENTRY_LIST		"gconf_entries"
+#define TIPS_STRING                     "tips"
 
 void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
@@ -220,7 +221,8 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
       break;
 
     case GTK_RESPONSE_OK:
-      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS,
+				    DIALOG_RESET_WARNINGS_CM_CLASS);
       gnc_reset_warnings_apply_changes(dialog);
       gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
       gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
@@ -229,7 +231,8 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
       break;
 
     default:
-      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS,
+				    DIALOG_RESET_WARNINGS_CM_CLASS);
       gnc_reset_warnings_revert_changes(dialog);
       gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
 					   dialog);
@@ -240,7 +243,7 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
 static void
 gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
 {
-  const gchar *name, *schema_name, *desc = NULL;
+  const gchar *name, *schema_name, *desc, *long_desc = NULL;
   GtkWidget *checkbox;
   GConfSchema *schema = NULL;
 
@@ -253,7 +256,17 @@ gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
     DEBUG("found schema %p", schema);
     desc = gconf_schema_get_short_desc(schema);
     DEBUG("description %s", desc);
+    long_desc = gconf_schema_get_long_desc(schema);
     checkbox = gtk_check_button_new_with_label(desc ? desc : name);
+    if (long_desc) {
+      GtkTooltips *tips;
+      tips = g_object_get_data(G_OBJECT(box), TIPS_STRING);
+      if (!tips) {
+        tips = gtk_tooltips_new();
+        g_object_set_data(G_OBJECT(box), TIPS_STRING, tips);
+      }
+      gtk_tooltips_set_tip(tips, checkbox, long_desc, NULL);
+    }
     gconf_schema_free(schema);
   } else {
     DEBUG("no schema");
@@ -404,7 +417,8 @@ gnc_reset_warnings_dialog (GtkWidget *main_window)
   gnc_reset_warnings_update_widgets(dialog);
 
   gnc_gconf_add_notification(G_OBJECT(dialog), GCONF_WARNINGS,
-			     gnc_reset_warnings_gconf_changed);
+			     gnc_reset_warnings_gconf_changed,
+			     DIALOG_RESET_WARNINGS_CM_CLASS);
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
 

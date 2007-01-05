@@ -42,7 +42,7 @@
 #define GNC_LIB_NAME "gnc-backend-file"
 
 /* gnc-backend-file location */
-#include "gncla-dir.h"
+#include "gnc-path.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -76,21 +76,25 @@ void
 gnc_engine_init(int argc, char ** argv)
 {
   static struct {
-    const gchar* dir;
     const gchar* lib;
     gboolean required;
   } libs[] = {
-    { GNC_LIBDIR, GNC_LIB_NAME, TRUE },
+    { GNC_LIB_NAME, TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
-    { GNC_LIBDIR, "gnc-backend-postgres", FALSE },
-    { NULL, NULL, FALSE } }, *lib;
+    { "gnc-backend-postgres", FALSE },
+    { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
+  gchar *tracefilename;
+  gchar *libdir;
 
   if (1 == engine_is_initialized) return;
 
   /* initialize logging to our file. */
-  qof_log_init_filename("/tmp/gnucash.trace");
+  tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
+				   (gchar *)NULL);
+  qof_log_init_filename(tracefilename);
+  g_free(tracefilename);
   /* Only set the core log_modules here the rest can be set locally.  */
   qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
   qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
@@ -103,15 +107,16 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  for (lib = libs; lib->dir && lib->lib ; lib++)
+  libdir = gnc_path_get_libdir ();
+  for (lib = libs; lib->lib ; lib++)
   {
-      if (qof_load_backend_library(lib->dir, lib->lib))
+      if (qof_load_backend_library(libdir, lib->lib))
       {
           engine_is_initialized = 1;
       }
       else
       {
-          g_message("failed to load %s from %s\n", lib->lib, lib->dir);
+	  g_message("failed to load %s from %s\n", lib->lib, libdir);
 	  /* If this is a required library, stop now! */
 	  if (lib->required)
 	  {
@@ -119,6 +124,7 @@ gnc_engine_init(int argc, char ** argv)
 	  }
       }
   }
+  g_free (libdir);
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

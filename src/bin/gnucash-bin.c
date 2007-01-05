@@ -33,7 +33,8 @@
 #include <libgnome/libgnome.h>
 #include "glib.h"
 #include "gnc-module.h"
-#include "i18n.h"
+#include "gnc-path.h"
+#include "binreloc.h"
 #include "gnc-version.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
@@ -49,6 +50,14 @@
 #include "gnc-plugin-file-history.h"
 #include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
+#include "gnc-session.h"
+#include "engine-helpers.h"
+#include "swig-runtime.h"
+
+#ifdef HAVE_GETTEXT
+#  include <libintl.h>
+#  include <locale.h>
+#endif
 
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
@@ -73,15 +82,15 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 1.8.12",
-	    _("The next stable version will be "), "GnuCash 2.0");
+	    _("The last stable version was "), "GnuCash 2.0.2",
+	    _("The next stable version will be "), "GnuCash 2.2");
 }
 
 /* Priority of paths: The default is set at build time.  It may be
    overridden by environment variables, which may, in turn, be
    overridden by command line options.  */
-static char *config_path = SYSCONFDIR;
-static char *share_path = DATADIR;
+static char *config_path = PKGSYSCONFDIR;
+static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
 
 static void
@@ -97,28 +106,6 @@ envt_override()
         help_path = path;
 }
 
-static int error_in_scm_eval = FALSE;
-
-static void
-error_handler(const char *msg)
-{
-    g_warning(msg);
-    error_in_scm_eval = TRUE;
-}
-
-static gboolean
-try_load(gchar *fn)
-{
-    g_message("looking for %s", fn);
-    if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
-        g_message("trying to load %s", fn);
-        error_in_scm_eval = FALSE;
-        gfec_eval_file(fn, error_handler);
-        return !error_in_scm_eval;
-    }
-    return FALSE;
-}
-
 static gboolean
 try_load_config_array(const gchar *fns[])
 {
@@ -127,7 +114,7 @@ try_load_config_array(const gchar *fns[])
 
     for (i = 0; fns[i]; i++) {
         filename = gnc_build_dotgnucash_path(fns[i]);
-        if (try_load(filename)) {
+        if (gfec_try_load(filename)) {
             g_free(filename);
             return TRUE;
         }
@@ -152,8 +139,9 @@ load_system_config(void)
     if (is_system_config_loaded) return;
 
     update_message("loading system configuration");
+    /* FIXME: use runtime paths from gnc-path.c here */
     system_config = g_build_filename(config_path, "config", NULL);
-    is_system_config_loaded = try_load(system_config);
+    is_system_config_loaded = gfec_try_load(system_config);
     g_free(system_config);
 }
 
@@ -352,7 +340,6 @@ load_gnucash_modules()
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
-        { "gnucash/import-export/mt940", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/hbci", 0, TRUE },
         { "gnucash/report/report-system", 0, FALSE },
@@ -374,16 +361,23 @@ load_gnucash_modules()
             gnc_module_load(modules[i].name, modules[i].version);
     }
     if (!gnc_engine_is_initialized()) {
+#ifdef G_OS_WIN32
+        g_warning("GnuCash engine indicates it hasn't been initialized correctly. On Windows this mechanism is know not to work. Ignoring for now.\n");
+        /* See more detailed discussion here
+	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html */
+#else
         g_error("GnuCash engine failed to initialize.  Exiting.\n");
         exit(0);
+#endif
     }
 }
 
 static void
 inner_main_add_price_quotes(void *closure, int argc, char **argv)
 {
-    SCM mod, add_quotes, scm_filename, scm_result;
-    
+    SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
+    QofSession *session = NULL;
+
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
@@ -392,22 +386,42 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     qof_event_suspend();
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
-    if (gnc_quote_source_fq_installed()) {
-      add_quotes = scm_c_eval_string("gnc:add-quotes-to-book-at-url");
-      scm_filename = scm_makfrom0str (add_quotes_file);
-      scm_result = scm_call_1(add_quotes, scm_filename);
+    if (!gnc_quote_source_fq_installed()) {
+        g_print(_("No quotes retrieved. Finance::Quote isn't "
+                  "installed properly.\n"));
+        goto fail;
+    }
 
-      if (!SCM_NFALSEP(scm_result)) {
+    add_quotes = scm_c_eval_string("gnc:book-add-quotes");
+    session = gnc_get_current_session();
+    if (!session) goto fail;
+
+    qof_session_begin(session, add_quotes_file, FALSE, FALSE);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_load(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    scm_book = gnc_book_to_scm(qof_session_get_book(session));
+    scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
+
+    qof_session_save(session, NULL);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_destroy(session);
+    if (!SCM_NFALSEP(scm_result)) {
         g_error("Failed to add quotes to %s.", add_quotes_file);
-        gnc_shutdown(1);
-      }
-    } else {
-      g_print(_("No quotes retrieved. Finance::Quote isn't installed properly.\n"));
+        goto fail;
     }
 
     qof_event_resume();
     gnc_shutdown(0);
     return;
+ fail:
+    if (session && qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        g_error("Session Error: %s", qof_session_get_error_message(session));
+    qof_event_resume();
+    gnc_shutdown(1);
 }
 
 static char *
@@ -485,14 +499,22 @@ inner_main (void *closure, int argc, char **argv)
 
 int main(int argc, char ** argv)
 {
+    gchar *localedir;
+    GError *binreloc_error = NULL;
 
+    /* Init binreloc */
+    if (!gbr_init (&binreloc_error) ) {
+      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
+    }
+    localedir = gnc_path_get_localedir ();
 #ifdef HAVE_GETTEXT
     /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
        via gtk_init(). */
-    bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
-    textdomain (TEXT_DOMAIN);
-    bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
+    bindtextdomain (GETTEXT_PACKAGE, localedir);
+    textdomain (GETTEXT_PACKAGE);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
+    g_free (localedir);
 
     gnc_module_system_init();
     envt_override();
@@ -500,12 +522,24 @@ int main(int argc, char ** argv)
     gnc_print_unstable_message();
 
     if (add_quotes_file) {
+        gchar *prefix = gnc_path_get_prefix ();
+	gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
+	gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+	gchar *pkglibdir = gnc_path_get_pkglibdir ();
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
         gnome_program_init(
             "gnucash", VERSION, LIBGNOME_MODULE,
             argc, argv,
-            GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
+	    GNOME_PARAM_APP_PREFIX, prefix,
+	    GNOME_PARAM_APP_SYSCONFDIR, pkgsysconfdir,
+	    GNOME_PARAM_APP_DATADIR, pkgdatadir,
+	    GNOME_PARAM_APP_LIBDIR, pkglibdir,
+	    GNOME_PARAM_NONE);
+	g_free (prefix);
+	g_free (pkgsysconfdir);
+	g_free (pkgdatadir);
+	g_free (pkglibdir);
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }

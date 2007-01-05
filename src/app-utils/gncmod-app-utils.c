@@ -57,6 +57,9 @@ app_utils_shutdown(void)
     gnc_hook_run(HOOK_SAVE_OPTIONS, NULL);
 }
 
+
+extern SCM scm_init_sw_app_utils_module(void);
+
 int
 libgncmod_app_utils_LTX_gnc_module_init(int refcount)
 {
@@ -70,9 +73,10 @@ libgncmod_app_utils_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  /* publish g-wrapped bindings */
+  scm_init_sw_app_utils_module();
+  /* publish swig bindings */
   /* load the scheme code */
-  lmod("(g-wrapped gw-app-utils)");
+  lmod("(sw_app_utils)");
   lmod("(gnucash app-utils)");
 
   if (refcount == 0) {

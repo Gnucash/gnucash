@@ -14,20 +14,24 @@ SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 .scm-links:
-	rm -f gnucash report
-	$(LN_S) -f . gnucash
-	$(LN_S) -f ${srcdir} report 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
+	mkdir -p  gnucash/report
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 	touch .scm-links
+
+clean-local:
+	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
   ${gncscmmod_DATA}
 
-CLEANFILES = gnucash report .scm-links
+CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}

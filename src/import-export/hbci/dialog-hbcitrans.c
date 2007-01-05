@@ -45,6 +45,7 @@
 
 #include "gtk-compat.h"
 #include "dialog-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-ui.h"
 #include "gnc-amount-edit.h"
 #include "dialog-transfer.h"
@@ -246,7 +247,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 		GList *templates)
 {
   GladeXML *xml;
-  const char *hbci_bankid, *hbci_bankname;
+  const char *hbci_bankid;
   HBCITransDialog *td;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
@@ -258,7 +259,6 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->trans_type = trans_type;
   g_assert (h_acc);
   hbci_bankid = AB_Account_GetBankCode(h_acc);
-  hbci_bankname = AB_Account_GetBankName(h_acc);
 #if HAVE_KTOBLZCHECK_H
   td->blzcheck = AccountNumberCheck_new();
 #endif
@@ -272,6 +272,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 				  GTK_WINDOW (parent));
   
   {
+    gchar *hbci_bankname, *hbci_ownername;
     GtkWidget *heading_label;
     GtkWidget *recp_name_heading;
     GtkWidget *recp_account_heading;
@@ -394,9 +395,16 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     /* Make this button insensitive since it's still unimplemented. */
     gtk_widget_destroy (exec_later_button);
     
+    /* aqbanking up to 2.3.0 did not guarantee the following strings
+       to be correct utf8; mentioned in bug#351371. */
+    hbci_bankname = 
+      gnc_utf8_strip_invalid_strdup (AB_Account_GetBankName(h_acc));
+    hbci_ownername = 
+      gnc_utf8_strip_invalid_strdup (AB_Account_GetOwnerName(h_acc));
+
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 
-			AB_Account_GetOwnerName (h_acc));
+			hbci_ownername);
     gtk_label_set_text (GTK_LABEL (orig_account_label), 
 			AB_Account_GetAccountNumber (h_acc));
     gtk_label_set_text (GTK_LABEL (orig_bankname_label), 
@@ -405,6 +413,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 			 _("(unknown)")));
     gtk_label_set_text (GTK_LABEL (orig_bankcode_label), 
 			hbci_bankid);
+    g_free (hbci_ownername);
+    g_free (hbci_bankname);
 
     /* fill list for choosing a transaction template */
      gtk_tree_view_set_headers_visible(td->template_gtktreeview, FALSE);
@@ -413,6 +423,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 						 G_TYPE_POINTER);
     gtk_tree_view_set_model(td->template_gtktreeview,
 			    GTK_TREE_MODEL(td->template_list_store));
+    g_object_unref(td->template_list_store);
     g_list_foreach(templates, fill_template_list_func, td->template_list_store);
 
     renderer = gtk_cell_renderer_text_new();
@@ -719,7 +730,7 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
 }
 
 AB_JOB *
-gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
+gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
 			      AB_ACCOUNT *h_acc, 
 			      GNC_HBCI_Transtype trans_type) 
 {
@@ -751,7 +762,7 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
 
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
+    AB_JobSingleDebitNote_SetTransaction(job, hbci_trans);
     break;
   case SINGLE_INTERNAL_TRANSFER:
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
@@ -760,12 +771,12 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
        ((AQBANKING_VERSION_MINOR == 6) && \
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
-    AB_JobInternalTransfer_SetTransaction(job, td->hbci_trans);
+    AB_JobInternalTransfer_SetTransaction(job, hbci_trans);
     break;
 #endif
   default:
   case SINGLE_TRANSFER:
-    AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
+    AB_JobSingleTransfer_SetTransaction(job, hbci_trans);
   };
 
   /* Add job to queue */
@@ -866,13 +877,26 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
   if (record) {
     const char *bankname = AccountNumberCheck_Record_bankName (record);
     GError *error = NULL;
+    const char *ktoblzcheck_encoding = 
+#ifdef KTOBLZCHECK_VERSION_MAJOR
+      /* This version number macro has been added in
+	 ktoblzcheck-1.10, but this function exists already since
+	 ktoblzcheck-1.7, so we're on the safe side. */
+      AccountNumberCheck_stringEncoding()
+#else
+      /* Every ktoblzcheck release before 1.10 is guaranteed to
+	 return strings only in ISO-8859-15. */
+      "ISO-8859-15"
+#endif
+      ;
     gchar *utf8_bankname = g_convert (bankname, strlen(bankname), 
-				      "UTF-8", "ISO-8859-15",
+				      "UTF-8", ktoblzcheck_encoding,
 				      NULL, NULL, &error);
     if (error != NULL) {
-      printf ("Error convertion bankname \"%s\" to UTF-8\n", bankname);
+      printf ("Error converting bankname \"%s\" to UTF-8\n", bankname);
       g_error_free (error);
-      utf8_bankname = g_strdup (bankname);
+      /* Conversion was erroneous, so don't use the string */
+      utf8_bankname = g_strdup (_("(unknown)"));
     }
     gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
 			(strlen(utf8_bankname)>0 ? 

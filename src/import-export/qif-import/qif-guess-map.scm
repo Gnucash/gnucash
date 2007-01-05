@@ -28,23 +28,23 @@
   (define (extract-all-account-info agroup root-name)
     (if (not agroup)
         '()
-        (let ((children-list (gnc:group-get-account-list agroup))
+        (let ((children-list (xaccGroupGetAccountListSorted agroup))
               (names '()))
           
           ;; now descend the tree of child accounts.
           (for-each 
            (lambda (child-acct)
-             (let* ((name (gnc:account-get-name child-acct))
+             (let* ((name (xaccAccountGetName child-acct))
                     (fullname 
                      (if (string? root-name)
                          (string-append root-name 
-                                        (gnc:account-separator-string)
+                                        (gnc-get-account-separator-string)
                                         name)
                          name)))
                (set! names 
                      (append (cons (list name fullname child-acct)
                                    (extract-all-account-info 
-                                    (gnc:account-get-children child-acct)
+                                    (xaccAccountGetChildren child-acct)
                                     fullname))
                              names))))
            children-list)
@@ -63,7 +63,7 @@
   ;;    (older saved prefs may not have this one)
   ;;  - a hash of QIF stock name to gnc-commodity*
   ;;    (older saved prefs may not have this one)
-  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map"))
+  (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map"))
          (results '()))
     
     ;; first, read the account map and category map from the 
@@ -110,7 +110,7 @@
                               (make-hash-table 20)))))
     
     ;; now build the list of all known account names 
-    (let* ((all-accounts (gnc:get-current-group))
+    (let* ((all-accounts (gnc-get-current-group))
            (all-account-info (extract-all-account-info all-accounts #f)))
       (set! results (cons all-account-info results)))
     results))
@@ -153,8 +153,8 @@
                  (namespace (cadr entry))
                  (mnemonic (caddr entry)))
              (hash-set! table name
-                        (gnc:commodity-table-lookup
-                         (gnc:book-get-commodity-table (gnc:get-current-book))
+                        (gnc-commodity-table-lookup
+                         (gnc-commodity-table-get-table (gnc-get-current-book))
                          namespace mnemonic)))))
      commlist)
     table))
@@ -163,11 +163,13 @@
   (let ((table '()))
     (hash-fold
      (lambda (key value p)
-       (if (and value (gw:wcp-is-of-type? <gnc:commodity*> value))
+       ;;FIXME: we used to type-check the values, like:
+       ;; (gw:wcp-is-of-type? <gnc:commodity*> value)
+       (if (and value #t)
            (set! table
                  (cons (list key 
-                             (gnc:commodity-get-namespace value)
-                             (gnc:commodity-get-mnemonic value))
+                             (gnc-commodity-get-namespace value)
+                             (gnc-commodity-get-mnemonic value))
                        table))
            (display "write-commodities: something funny in hash table.\n"))
        #f) #f hashtab)
@@ -175,7 +177,7 @@
 
 
 (define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
-  (let* ((pref-filename (gnc:build-dotgnucash-path "qif-accounts-map")))
+  (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map")))
     ;; does the file exist? if not, create it; in either case,
     ;; make sure it's a directory and we have write and execute 
     ;; permission. 
@@ -264,7 +266,7 @@
        (let ((acct-matches? #f))
          (for-each
           (lambda (type)
-            (if (= type (gnc:account-get-type (caddr gnc-acct)))
+            (if (= type (xaccAccountGetType (caddr gnc-acct)))
                 (set! acct-matches? #t)))
           allowed-types)
          (if acct-matches? 
@@ -285,7 +287,7 @@
     (if (not (null? matching-name-accts))
         (set! retval (list 
                       (cadr (car matching-name-accts))
-                      (list (gnc:account-get-type 
+                      (list (xaccAccountGetType
                              (caddr (car matching-name-accts))))))
         #f)
     retval))

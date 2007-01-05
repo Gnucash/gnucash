@@ -64,7 +64,7 @@ BUGS:
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-model-transaction.h"
 #include "gnc-tree-view-transaction.h"
-#include "gnctreemodelsort.h"
+//#include "gnctreemodelsort.h"
 
 #include "Account.h"
 #include "Transaction.h"
@@ -274,25 +274,25 @@ gnc_tree_view_transaction_dispose (GObject *object)
 static GncTreeModelTransaction *
 get_trans_model_from_view(GncTreeViewTransaction *tv)
 {
-    GncTreeModelSort *s_model = GNC_TREE_MODEL_SORT(
+    GtkTreeModelSort *s_model = GTK_TREE_MODEL_SORT(
         gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
-    return GNC_TREE_MODEL_TRANSACTION(gnc_tree_model_sort_get_model(s_model));
+    return GNC_TREE_MODEL_TRANSACTION(gtk_tree_model_sort_get_model(s_model));
 }
 
 static gboolean
 get_model_iter_from_view_string(GncTreeViewTransaction *tv,
                                 const gchar *path_string, GtkTreeIter *iter)
 {
-    GncTreeModelSort *s_model;
+    GtkTreeModelSort *s_model;
     GtkTreeIter s_iter;
 
-    s_model = GNC_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
+    s_model = GTK_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
     if (!gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(s_model),
                                              &s_iter, path_string)) {
         iter = NULL;
         return FALSE;
     }
-    gnc_tree_model_sort_convert_iter_to_child_iter(s_model, iter, &s_iter);
+    gtk_tree_model_sort_convert_iter_to_child_iter(s_model, iter, &s_iter);
     return TRUE;
 }
 
@@ -304,8 +304,8 @@ get_model_iter_from_selection(GncTreeViewTransaction *tv,
     GtkTreeIter s_iter;
 
     if (gtk_tree_selection_get_selected(sel, &s_model, &s_iter)) {
-        gnc_tree_model_sort_convert_iter_to_child_iter(
-            GNC_TREE_MODEL_SORT(s_model), iter, &s_iter);
+        gtk_tree_model_sort_convert_iter_to_child_iter(
+            GTK_TREE_MODEL_SORT(s_model), iter, &s_iter);
         return TRUE;
     }
     return FALSE;
@@ -347,11 +347,11 @@ gnc_tree_view_transaction_get_selected_trans(GncTreeViewTransaction *tv)
 static GtkTreePath *
 get_view_path_from_model_iter(GncTreeViewTransaction *tv, GtkTreeIter *iter)
 {
-    GncTreeModelSort *s_model;
+    GtkTreeModelSort *s_model;
     GtkTreeIter s_iter;
 
-    s_model = GNC_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
-    gnc_tree_model_sort_convert_child_iter_to_iter(s_model, &s_iter, iter);
+    s_model = GTK_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
+    gtk_tree_model_sort_convert_child_iter_to_iter(s_model, &s_iter, iter);
     return gtk_tree_model_get_path(GTK_TREE_MODEL(s_model), &s_iter);
 }
 
@@ -360,18 +360,18 @@ static gboolean
 get_model_iter_from_view_path(GncTreeViewTransaction *tv,
                               GtkTreePath *s_path, GtkTreeIter *iter)
 {
-    GncTreeModelSort *s_model;
+    GtkTreeModelSort *s_model;
     GtkTreeModel *model;
     GtkTreePath *path;
 
-    s_model = GNC_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
-    model = gnc_tree_model_sort_get_model(s_model);
+    s_model = GTK_TREE_MODEL_SORT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
+    model = gtk_tree_model_sort_get_model(s_model);
     if (!model) {
         iter = NULL;
         return FALSE;
     }
 
-    path = gnc_tree_model_sort_convert_path_to_child_path(s_model, s_path);
+    path = gtk_tree_model_sort_convert_path_to_child_path(s_model, s_path);
     if (gtk_tree_model_get_iter(model, iter, path)) {
         gtk_tree_path_free(path);
         return TRUE;
@@ -384,11 +384,11 @@ gnc_tree_view_transaction_separator(GtkTreeModel *tm, GtkTreeIter *s_iter,
                                     gpointer data)
 {
     GtkTreeIter iter;
-    GncTreeModelSort *tms = GNC_TREE_MODEL_SORT(tm);
+    GtkTreeModelSort *tms = GTK_TREE_MODEL_SORT(tm);
     GtkTreeModel *tmt;
 
-    gnc_tree_model_sort_convert_iter_to_child_iter(tms, &iter, s_iter);
-    tmt = gnc_tree_model_sort_get_model(tms);
+    gtk_tree_model_sort_convert_iter_to_child_iter(tms, &iter, s_iter);
+    tmt = gtk_tree_model_sort_get_model(tms);
     return FALSE;
     //return gnc_tree_model_transaction_separator(tmt, &iter, data);
 }
@@ -564,13 +564,13 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
 
     g_return_if_fail(GTK_TREE_VIEW_COLUMN(col));
     g_return_if_fail(GTK_CELL_RENDERER(cell));
-    g_return_if_fail(GNC_TREE_MODEL_SORT(s_model));
+    g_return_if_fail(GTK_TREE_MODEL_SORT(s_model));
 
     model = get_trans_model_from_view(tv);
     g_return_if_fail(model);
 
-    gnc_tree_model_sort_convert_iter_to_child_iter(
-        GNC_TREE_MODEL_SORT(s_model), &iter, s_iter);
+    gtk_tree_model_sort_convert_iter_to_child_iter(
+        GTK_TREE_MODEL_SORT(s_model), &iter, s_iter);
     viewcol = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell),
                                                 "view_column"));
     g_return_if_fail(gnc_tree_model_transaction_get_split_and_trans(
@@ -1551,7 +1551,7 @@ gnc_tree_view_transaction_new_with_model(GncTreeModelTransaction *model)
 
     tv = g_object_new(gnc_tree_view_transaction_get_type(), NULL);
 
-    s_model = gnc_tree_model_sort_new_with_model(GTK_TREE_MODEL(model));
+    s_model = gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(model));
     //g_object_unref(G_OBJECT(model));
     gnc_tree_view_set_model(GNC_TREE_VIEW(tv), s_model);
     g_object_unref(G_OBJECT(s_model));

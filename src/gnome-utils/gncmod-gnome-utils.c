@@ -57,6 +57,8 @@ lmod(char * mn)
   g_free(form);
 }
 
+extern SCM scm_init_sw_gnome_utils_module(void);
+
 int
 libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
@@ -79,8 +81,8 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
     return FALSE;
   }
 
-  /* publish g-wrapped bindings */
-  lmod("(g-wrapped gw-gnome-utils)");
+  scm_init_sw_gnome_utils_module();
+  lmod("(sw_gnome_utils)");
   lmod("(gnucash gnome-utils)");
   
   /* Initialize the options-ui database */

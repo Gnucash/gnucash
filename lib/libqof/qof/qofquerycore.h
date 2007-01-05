@@ -187,6 +187,14 @@ gboolean qof_query_date_predicate_get_date (QofQueryPredData *pd, Timespec *date
  */
 char * qof_query_core_to_string (QofType, gpointer object, QofParam *getter);
 
+/** Compare two parameter(strings) as if they are numbers!
+ *  the two objects, a and b, are the objects being compared
+ *  this_param is the QofParam for this parameter in the objects
+ */
+int qof_string_number_compare_func (gpointer a, gpointer b, gint options,
+                                    QofParam *this_param);
+
+
 #endif /* QOF_QUERYCORE_H */
 /* @} */
 /* @} */

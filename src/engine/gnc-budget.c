@@ -22,11 +22,14 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <time.h>
 #include "qof.h"
+
+#include "glib-compat.h"
 
 #include "Account.h"
 #include "Group.h"
@@ -99,7 +102,7 @@ gnc_budget_new(QofBook *book)
     budget = g_new0(GncBudget, 1);
     qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
 
-    g_date_set_time(&date, time(NULL));
+    g_date_set_time_t(&date, time(NULL));
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
     recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 
@@ -217,6 +220,31 @@ gnc_budget_get_num_periods(GncBudget* budget)
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
+gnc_budget_unset_account_period_value(GncBudget *budget, Account *account,
+                                    guint period_num)
+{
+    const GUID *guid;
+    KvpFrame *frame;
+    gchar path[BUF_SIZE];
+    gchar *bufend;
+
+    gnc_budget_begin_edit(budget);
+    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
+    guid = xaccAccountGetGUID(account);
+    bufend = guid_to_string_buff(guid, path);
+    g_sprintf(bufend, "/%d", period_num);
+
+    kvp_frame_set_value(frame, path, NULL);
+    qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
+
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+
+}
+
+/* period_num is zero-based */
+/* What happens when account is deleted, after we have an entry for it? */
+void
 gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
                                     guint period_num, gnc_numeric val)
 {
@@ -231,7 +259,10 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     bufend = guid_to_string_buff(guid, path);
     g_sprintf(bufend, "/%d", period_num);
 
-    kvp_frame_set_numeric(frame, path, val);
+    if (gnc_numeric_check(val))
+        kvp_frame_set_value(frame, path, NULL);
+    else
+        kvp_frame_set_numeric(frame, path, val);
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -272,7 +303,23 @@ xaccAccountChildrenHaveSameCommodity(Account *account)
 #endif
 
 
-/* Does not distinguish between unset and zero - returns zero either way. */
+gboolean
+gnc_budget_is_account_period_value_set(GncBudget *budget, Account *account,
+                                       guint period_num)
+{
+    gchar path[BUF_SIZE];
+    gchar *bufend;
+    KvpFrame *frame;
+
+    g_return_val_if_fail(GNC_IS_BUDGET(budget), FALSE);
+    g_return_val_if_fail(account, FALSE);
+
+    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
+    bufend = guid_to_string_buff(xaccAccountGetGUID(account), path);
+    g_sprintf(bufend, "/%d", period_num);
+    return (kvp_frame_get_value(frame, path) != NULL);
+}
+
 gnc_numeric
 gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
                                     guint period_num)
@@ -289,7 +336,9 @@ gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
     frame = qof_instance_get_slots(QOF_INSTANCE(budget));
     bufend = guid_to_string_buff(xaccAccountGetGUID(account), path);
     g_sprintf(bufend, "/%d", period_num);
-    numeric = kvp_frame_get_numeric(frame, path); /* Zero if unset */
+
+    numeric = kvp_frame_get_numeric(frame, path);
+    /* This still returns zero if unset, but callers can check for that. */
     return numeric;
 }
 

@@ -77,7 +77,7 @@ xaccMallocAccountGroup (QofBook *book)
 \********************************************************************/
 
 AccountGroup * 
-xaccCollGetAccountGroup (QofCollection *col)
+xaccCollGetAccountGroup (const QofCollection *col)
 {
   if (!col) return NULL;
   return qof_collection_get_data (col);
@@ -470,7 +470,7 @@ xaccGroupGetAccountList (const AccountGroup *grp)
   return grp->accounts;
 }
 
-GList *
+AccountList *
 xaccGroupGetAccountListSorted (const AccountGroup *grp)
 {
   if (!grp) return NULL;
@@ -893,6 +893,8 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
    if (!from->accounts || !to->book) return;
 
    ENTER (" ");
+   xaccAccountGroupBeginEdit(to);
+   xaccAccountGroupBeginEdit(from);
    for (node = from->accounts; node; node=node->next)
    {
       Account *to_acc, *from_acc = node->data;
@@ -926,6 +928,8 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccAccountGroupBeginEdit (to_acc->children);
       }
    }
+   xaccAccountGroupCommitEdit(from);
+   xaccAccountGroupCommitEdit(to);
    LEAVE (" ");
 }
 
@@ -1283,7 +1287,7 @@ group_book_end (QofBook *book)
 }
 
 static gboolean
-group_is_dirty (QofCollection *col)
+group_is_dirty (const QofCollection *col)
 {
   return xaccGroupNotSaved(xaccCollGetAccountGroup(col));
 }

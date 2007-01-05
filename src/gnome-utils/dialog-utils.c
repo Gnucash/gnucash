@@ -38,7 +38,7 @@
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "Group.h"
-#include "gnc-dir.h"
+#include "gnc-path.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
@@ -49,9 +49,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define WINDOW_POSITION		"window_position"
 #define WINDOW_GEOMETRY		"window_geometry"
-
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#define KEY_TOOLBAR_STYLE	"toolbar_style"
 
 /* =========================================================== */
 
@@ -810,6 +807,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
 {
   GladeXML *xml;
   char *fname;
+  gchar *gnc_glade_dir;
 
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (root != NULL, NULL);
@@ -820,7 +818,9 @@ gnc_glade_xml_new (const char *filename, const char *root)
     glade_inited = TRUE;
   }
 
-  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, (char *)NULL);
+  gnc_glade_dir = gnc_path_get_gladedir ();
+  fname = g_build_filename(gnc_glade_dir, filename, (char *)NULL);
+  g_free (gnc_glade_dir);
 
   xml = glade_xml_new (fname, root, NULL);
 

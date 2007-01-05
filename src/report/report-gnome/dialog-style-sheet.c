@@ -2,6 +2,7 @@
  * dialog-style-sheet.c -- window for configuring HTML style        *
  *                         sheets in GnuCash                        *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +30,7 @@
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 
@@ -145,7 +147,7 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
     scm_gc_protect_object(ssinfo->stylesheet);
     g_object_ref(gnc_options_dialog_widget(ssinfo->odialog));
 
-    gnc_build_options_dialog_contents(ssinfo->odialog, 
+    gnc_options_dialog_build_contents(ssinfo->odialog,
                                       ssinfo->odb);
     gnc_options_dialog_set_apply_cb(ssinfo->odialog, 
                                     gnc_style_sheet_options_apply_cb,
@@ -170,45 +172,45 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
   SCM              templates = scm_c_eval_string("(gnc:get-html-templates)");
   SCM              t_name = scm_c_eval_string("gnc:html-style-sheet-template-name");
   SCM              new_ss = SCM_BOOL_F;
-  GtkWidget        * template_entry;
-  GtkWidget        * name_entry;
   GtkWidget        * template_combo;
-  GList            * strings=NULL;
+  GtkTreeModel     * template_model;
+  GtkWidget        * name_entry;
   gint             dialog_retval;
-  const char       * template_str = NULL;
+  char             * template_str = NULL;
   const char       * name_str = NULL;
 
   /* get the new name for the style sheet */
   GladeXML *xml = gnc_glade_xml_new ("report.glade",
                                      "New Style Sheet Dialog");
   GtkWidget * dlg = glade_xml_get_widget (xml, "New Style Sheet Dialog");
-  template_entry = glade_xml_get_widget (xml, "template_entry");
-  template_combo = glade_xml_get_widget (xml, "template_combo");
+  template_combo = glade_xml_get_widget (xml, "template_combobox");
   name_entry     = glade_xml_get_widget (xml, "name_entry");
+
+  /* Erase the initial dummy entry. */
+  template_model = gtk_combo_box_get_model(GTK_COMBO_BOX(template_combo));
+  gtk_list_store_clear(GTK_LIST_STORE(template_model));
 
   /* put in the list of style sheet type names */
   for(; !SCM_NULLP(templates); templates=SCM_CDR(templates)) {
     SCM t = SCM_CAR(templates);
-    strings = g_list_append(strings, SCM_STRING_CHARS(scm_call_1(t_name, t)));
+    gtk_combo_box_append_text(GTK_COMBO_BOX(template_combo),
+			      SCM_STRING_CHARS(scm_call_1(t_name, t)));
   }
+  gtk_combo_box_set_active(GTK_COMBO_BOX(template_combo), 0);
   
-  gtk_combo_set_popdown_strings(GTK_COMBO(template_combo), strings);
-  
-  /* The strings on the list are const.  Just free the list. */
-  g_list_free(strings);
-
   /* get the name */
   gtk_window_set_transient_for (GTK_WINDOW(dlg), GTK_WINDOW(ssd->toplevel));
   dialog_retval = gtk_dialog_run(GTK_DIALOG(dlg));
 
   if(dialog_retval == GTK_RESPONSE_OK) {
-    template_str = gtk_entry_get_text(GTK_ENTRY(template_entry));
+    template_str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(template_combo));
     name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
     if(template_str && name_str) {
       new_ss = scm_call_2(make_ss, 
 			  scm_makfrom0str(template_str),
 			  scm_makfrom0str(name_str));
     }
+    g_free(template_str);
   }
 
   gtk_widget_destroy(dlg);
@@ -364,6 +366,7 @@ gnc_style_sheet_select_dialog_create(void)
   ss->list_view  = GTK_TREE_VIEW(glade_xml_get_widget (xml, "style_sheet_list_view"));
   ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
   gtk_tree_view_set_model(ss->list_view, GTK_TREE_MODEL(ss->list_store));
+  g_object_unref(ss->list_store);
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes(ss->list_view, -1,
 					      _("Style Sheet Name"), renderer,

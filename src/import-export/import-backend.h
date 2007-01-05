@@ -21,7 +21,8 @@
 /** @file import-backend.h
     @brief Generic importer backend interface
     @author Copyright (C) 2002 Benoit Grégoire
-	@author Christian Stimming
+    @author Christian Stimming
+    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
  
 #ifndef TRANSACTION_MATCHER_H
@@ -100,23 +101,25 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 				   GNCImportSettings *settings);
 
 /** This function is intended to be called when the importer dialog is
- * finished. It iterates through the GtkCList of imported transaction
- * * (i.e. the TransInfo as user_data in each row is considered) and
- * processes each ImportTransInfo according to its selected action:
+ * finished. It should be called once for each imported transaction
+ * and processes each ImportTransInfo according to its selected action:
  * For GNCImport_ADD, the transaction is added etc. etc. 
  *
  * Each succesful match is also stored in the given ImportMatchMap,
  * or, if that argument is NULL, in the ImportMatchMap of each
  * originating account.
  *
- * @param clist The GtkCList to iterate over.
- *
  * @param matchmap The ImportMatchMap where each match should be
  * stored. May be NULL, in which case the ImportMatchMap of each
- * account will be used. */
-void
-gnc_import_process_trans_clist (GtkCList *clist, 
-				GncImportMatchMap *matchmap);
+ * account will be used.
+ *
+ * @param trans_info The ImportTransInfo item to process.
+ *
+ * @return TRUE if the item has been processed.
+ */
+gboolean
+gnc_import_process_trans_item (GncImportMatchMap *matchmap,
+			       GNCImportTransInfo *trans_info);
 
 /** This function generates a new pixmap representing a match score.
     It is a series of vertical bars of different colors.  
@@ -131,7 +134,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
     @param widget The parent widget in which the pixmap will eventually
     be added.  Will be used to generate the colormap.
  */
-GdkPixmap* gen_probability_pixmap (gint score, 
+GdkPixbuf* gen_probability_pixbuf (gint score, 
 				   GNCImportSettings *settings,
 				   GtkWidget * widget);
 

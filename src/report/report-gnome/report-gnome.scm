@@ -13,8 +13,7 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
-(use-modules (g-wrapped gw-core-utils))
-(use-modules (g-wrapped gw-report-gnome))
+(use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -28,15 +27,15 @@
 ;; and returns a widget
 (define (gnc:report-options-editor report) 
   (if (equal? (gnc:report-type report) "Multicolumn View")
-      gnc:column-view-edit-options
-      gnc:default-options-editor))
+      gnc-column-view-edit-options
+      gnc-report-window-default-params-editor))
 
 ;; do not rely on the return value of this function - it has none.
 ;; instead, this function's side-effect is to set the report's editor widget.
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
-        (gnc:report-raise-editor report)
+        (gnc-report-raise-editor report)
         (begin
           (if (gnc:report-options report) 
               (begin 
@@ -45,7 +44,7 @@
                        (gnc:report-options report)
                        report))
                 (gnc:report-set-editor-widget! report editor-widg))
-              (gnc:warning-dialog #f (_ "This report has no options.")))))))
+              (gnc-warning-dialog '() (_ "This report has no options.")))))))
 
 (define (gnc:add-report-template-menu-items)
   (define *template-items* '())
@@ -79,8 +78,8 @@
                  (lambda (window)
                    (let ((report (gnc:make-report
                                   (gnc:report-template-name template))))
-                     (gnc:main-window-open-report report window)))))
-          (gnc:add-extension item))))
+                     (gnc-main-window-open-report report window)))))
+          (gnc-add-scm-extension item))))
 
   (define (add-template name template)
     (let ((menu-name (gnc:report-template-menu-name template)))
@@ -108,24 +107,24 @@
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  ;; (gnc:add-extension tax-menu)
-  (gnc:add-extension income-expense-menu)
-  (gnc:add-extension asset-liability-menu)
-  (gnc:add-extension utility-menu)
-  (gnc:add-extension custom-menu)
+  ;; (gnc-add-scm-extension tax-menu)
+  (gnc-add-scm-extension income-expense-menu)
+  (gnc-add-scm-extension asset-liability-menu)
+  (gnc-add-scm-extension utility-menu)
+  (gnc-add-scm-extension custom-menu)
 
   ;; run report-hook danglers
-  (gnc:hook-run-danglers gnc:*report-hook*)
+  (gnc:hook-run-danglers HOOK-REPORT)
 
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items)
 
   ;; the Welcome to GnuCash "extravaganza" report
-  (gnc:add-extension 
+  (gnc-add-scm-extension
    (gnc:make-menu-item 
     (N_ "Welcome Sample Report")
     (N_ "Welcome-to-GnuCash report screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
-      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
+      (gnc-main-window-open-report (gnc:make-welcome-report) window))))
 )

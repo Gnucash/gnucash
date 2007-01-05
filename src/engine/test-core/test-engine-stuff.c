@@ -1214,7 +1214,7 @@ get_random_account(QofBook *book)
     set_account_random_string_from_array(ret, xaccAccountSetName,
                                          sane_account_names);
 
-    tmp_int = get_random_int_in_range(BANK, NUM_ACCOUNT_TYPES - 1);
+    tmp_int = get_random_int_in_range(ACCT_TYPE_BANK, NUM_ACCOUNT_TYPES - 1);
     xaccAccountSetType(ret, tmp_int);
 
     set_account_random_string(ret, xaccAccountSetCode);
@@ -1247,7 +1247,7 @@ make_random_changes_to_account (QofBook *book, Account *account)
 
     set_account_random_string (account, xaccAccountSetName);
 
-    tmp_int = get_random_int_in_range (BANK, CREDITLINE);
+    tmp_int = get_random_int_in_range (ACCT_TYPE_BANK, ACCT_TYPE_CREDITLINE);
     xaccAccountSetType (account, tmp_int);
 
     set_account_random_string (account, xaccAccountSetCode);
@@ -1334,8 +1334,14 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
         } while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
     xaccSplitSetAmount(ret, amt);
+
+    /* Make sure val and amt have the same sign. Note that amt is
+       also allowed to be zero, because that is caused by a small
+       rate. */
     if (gnc_numeric_positive_p(val))
-        g_assert(gnc_numeric_positive_p(amt));
+        g_assert(!gnc_numeric_negative_p(amt)); /* non-negative amt */
+    else
+        g_assert(!gnc_numeric_positive_p(amt)); /* non-positive amt */
     
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
     xaccTransCommitEdit(trn);

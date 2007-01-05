@@ -1,15 +1,11 @@
 SUBDIRS = glade schemas . test ui
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
+pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 
 AM_CFLAGS = \
-  -DPREFIX=\"${prefix}\" \
-  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
-  -DDATADIR=\"${GNC_SHAREDIR}\" \
-  -DLIBDIR=\"${GNC_LIBDIR}\" \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
@@ -17,6 +13,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/lib/libc \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
@@ -24,14 +21,11 @@ AM_CFLAGS = \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
   ${GSF_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
-  gtktreedatalist.c \
-  gnctreemodelsort.c \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
@@ -99,12 +93,11 @@ libgncmod_gnome_utils_la_SOURCES = \
   print-session.c \
   search-param.c \
   gnc-dialog.c \
+  swig-gnome-utils.c \
   window-main-summarybar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  gtktreedatalist.h \
-  gnctreemodelsort.h \
   QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
@@ -169,51 +162,41 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   argv-list-converters.h \
-  gnc-dir.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
   gnc-druid-provider-multifile-gnome.h \
-  gnc-version.h \
-  gw-gnome-utils.h \
   search-param.h
 
 libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${GSF_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
+  ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
-libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
-libgw_gnome_utils_la_LIBADD = \
-  libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${QOF_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
-  ${GLIB_LIBS}
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm
+if BUILDING_FROM_SVN
+swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
+endif
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnome-utils.scm 
@@ -222,9 +205,8 @@ gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
-  gnc-dir.h.in \
   gnc-svninfo.h \
-  ${gwmod_DATA} \
+  gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
@@ -232,14 +214,6 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
-	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g' \
-	    -e 's:@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@:${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}:g'
-	mv $@.tmp $@
-
 gnc-version.h: _gnc-version.h
 	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h
@@ -283,42 +257,32 @@ _gnc-svninfo.h: Makefile
 		fi ; \
 	fi
 
-BUILT_SOURCES = gnc-dir.h gnc-version.h
+BUILT_SOURCES = gnc-version.h
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnome-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += \
+SCM_FILE_LINKS = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
-  .scm-links gw-gnome-utils-spec.scm ${top_builddir}/config.status Makefile
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (set! %load-path (cons \"${PWD}\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
-	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
-	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
-	  (gw:generate-wrapset \"gw-gnome-utils\")"
+noinst_DATA = .scm-links
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnome-utils.c
 
-BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = gnucash g-wrapped .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
-
+# FIXME: Symlinking directories only works on non-win32.
+if !PLATFORM_WIN32
 #
 # I hate inconsistent standards. Autotools puts help files into
 # ${datadir}/gnome/help/${program} while the gnome2 libraries expect
@@ -329,3 +293,4 @@ install-data-hook:
 
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
+endif

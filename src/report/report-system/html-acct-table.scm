@@ -152,12 +152,12 @@
 ;;         the commodity into which to convert any balances containing
 ;;         foreign currencies.  the balance will be converted using
 ;;         the exchange function exchange-fn. the default is the
-;;         currency returned by (gnc:default-report-currency).  [CAS:
+;;         currency returned by (gnc-default-report-currency).  [CAS:
 ;;         what if I don't want the report to have a
 ;;         "report-commodity"?  Say e.g. I want to show each account
 ;;         balance in its native commodity?  I can see the benefit of
 ;;         individual reports that have a report-commodity using
-;;         gnc:default-report-currency to set the default value for a
+;;         gnc-default-report-currency to set the default value for a
 ;;         report-commodity option.  But, with the default sucked in
 ;;         here, in what is supposed to be a more general api, means
 ;;         reports can't specify NO report-commodity. ]
@@ -268,17 +268,17 @@
 ;;     account-guid: guid
 ;; 
 ;;         the guid of the account in the current row, as returned by
-;;         gnc:account-get-guid.
+;;         gncAccountGetGUID.
 ;; 
 ;;     account-desc: string?
 ;; 
 ;;         the account description of the account in the current row,
-;;         as returned by gnc:account-get-description.
+;;         as returned by xaccAccountGetDescription.
 ;; 
 ;;     account-notes: string?
 ;; 
 ;;         the account notes of the account in the current row, as
-;;         returned by gnc:account-get-notes.
+;;         returned by xaccAccountGetNotes.
 ;; 
 ;;     account-path: string
 ;; 
@@ -295,7 +295,7 @@
 ;;     account-code: string
 ;; 
 ;;         the account of the account in the current row, as returned
-;;         by gnc:account-get-code.
+;;         by xaccAccountGetCode.
 ;; 
 ;;     account-anchor: text(maybe?)
 ;; 
@@ -406,13 +406,7 @@
 ;;     account-commodity: commodity
 ;; 
 ;;         returns the default commodity of the account in the current
-;;         row, as returned by gnc:account-get-commodity. the g-wrap
-;;         documentation string reads: "Get the commodity in which the
-;;         account is denominated." note: afaik, gnucash accounts can
-;;         only contain one commodity; but it's plausible that future
-;;         releases may permit mixed-commodity accounts, so it's
-;;         probably safest not to assume that an account contains only
-;;         its default commodity.
+;;         row, as returned by xaccAccountGetCommodity. 
 ;; 
 ;;     account-type: account_type
 ;; 
@@ -551,14 +545,14 @@
 
 ;; some useful predicates to export
 (define (gnc:account-code-less-p a b)
-  (string<? (gnc:account-get-code a)
-	    (gnc:account-get-code b)))
+  (string<? (xaccAccountGetCode a)
+	    (xaccAccountGetCode b)))
 (define (gnc:account-name-less-p a b)
-  (string<? (gnc:account-get-name a)
-	    (gnc:account-get-name b)))
+  (string<? (xaccAccountGetName a)
+	    (xaccAccountGetName b)))
 (define (gnc:account-path-less-p a b)
-  (string<? (gnc:account-get-full-name a)
-	    (gnc:account-get-full-name b)))
+  (string<? (gnc-account-get-full-name a)
+	    (gnc-account-get-full-name b)))
 
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)
   ;; 
@@ -599,7 +593,7 @@
 	 (end-date (or (get-val env 'end-date)
 		       (cons 'absolute (cons (current-time) 0))))
 	 (report-commodity (or (get-val env 'report-commodity)
-			       (gnc:default-report-currency)))
+			       (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe
          ;; someone was thinking price-source?
 	 (exchange-fn (or (get-val env 'exchange-fn)
@@ -631,7 +625,7 @@
 				 )
 				))
 	 ;; local variables
-	 (toplvl-accts (gnc:group-get-account-list (gnc:get-current-group)))
+	 (toplvl-accts (xaccGroupGetAccountListSorted (gnc-get-current-group)))
 	 (acct-depth-reached 0)
 	 (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
 	 (disp-depth-reached 0)
@@ -696,14 +690,14 @@
 	(let ((this-collector
 	       (my-get-balance-nosub account start-date end-date)))
 	  (for-each
-	   (lambda (x) (if x (gnc:commodity-collector-merge this-collector x)))
+	   (lambda (x) (if x (gnc-commodity-collector-merge this-collector x)))
 	   (gnc:group-map-all-accounts
 	    (lambda (a)
 	      ;; Important: Calculate the balance if and only if the
 	      ;; account a is shown, i.e. (use-acct? a) == #t.
 	      (and (use-acct? a)
 		   (my-get-balance-nosub a start-date end-date)))
-	    (gnc:account-get-children account)))
+	    (xaccAccountGetChildren account)))
 	  this-collector))
 
       
@@ -718,23 +712,23 @@
 	   (let* ((subaccts (gnc:account-get-immediate-subaccounts acct))
 		  ;; assign output parameters
 		  (account acct)
-		  (account-name (gnc:account-get-name acct))
-		  (account-code (gnc:account-get-code acct))
-		  (account-path (gnc:account-get-full-name acct))
+		  (account-name (xaccAccountGetName acct))
+		  (account-code (xaccAccountGetCode acct))
+		  (account-path (gnc-account-get-full-name acct))
 		  (account-anchor (gnc:html-account-anchor acct))
-		  (account-parent (gnc:account-get-parent-account acct))
+		  (account-parent (xaccAccountGetParentAccount acct))
 		  (account-children subaccts)
 		  (account-depth acct-depth)
 		  (logical-depth logi-depth)
-		  (account-commodity (gnc:account-get-commodity acct))
-		  (account-type (gnc:account-get-type acct))
-		  ;; N.B.: gnc:account-get-type-string really should be
+		  (account-commodity (xaccAccountGetCommodity acct))
+		  (account-type (xaccAccountGetType acct))
+		  ;; N.B.: xaccAccountGetTypeStr really should be
 		  ;; called gnc:account-type-get-string
-		  (account-type-string (gnc:account-get-type-string
-					(gnc:account-get-type acct)))
-		  (account-guid (gnc:account-get-guid acct))
-		  (account-description (gnc:account-get-description acct))
-		  (account-notes (gnc:account-get-notes acct))
+		  (account-type-string (xaccAccountGetTypeStr
+					(xaccAccountGetType acct)))
+		  (account-guid (gncAccountGetGUID acct))
+		  (account-description (xaccAccountGetDescription acct))
+		  (account-notes (xaccAccountGetNotes acct))
                   ;; These next two are commodity-collectors.
 		  (account-bal (my-get-balance-nosub
 				acct start-date end-date))
@@ -788,7 +782,7 @@
 	     (or (not (use-acct? acct))
 		 ;; ok, so we'll consider parent accounts with zero
 		 ;; recursive-bal to be zero balance leaf accounts
-		 (and (gnc:commodity-collector-allzero? recursive-bal)
+		 (and (gnc-commodity-collector-allzero? recursive-bal)
 		      (equal? zero-mode 'omit-leaf-acct))
 		 (begin
 		   (set! row-env
@@ -817,7 +811,7 @@
 	     (or (not (use-acct? acct))
 		 (not subtotal-mode)
 		 ;; ditto that remark concerning zero recursive-bal...
-		 (and (gnc:commodity-collector-allzero? recursive-bal)
+		 (and (gnc-commodity-collector-allzero? recursive-bal)
 		      (equal? zero-mode 'omit-leaf-acct))
 		 ;; ignore use-acct for subtotals...?
 		 ;; (not (use-acct? acct))
@@ -1058,7 +1052,7 @@
 	(gnc:html-table-append-row/markup! html-table row-markup row)
 	(gnc:html-table-append-row! html-table row))))
 
-(define (gnc:commodity-table amount report-commodity exchange-fn)
+(define (gnc-commodity-table amount report-commodity exchange-fn)
   ;; this creates a small two-column table listing each commodity
   ;; balance and its respective report balance.  note that this
   ;; shows report-commodity amounts twice: first as a commodity
@@ -1067,7 +1061,7 @@
   ;; readable.
   (let* ((table (gnc:make-html-table))
 	 )
-    (gnc:commodity-collector-map
+    (gnc-commodity-collector-map
      amount
      (lambda (curr val)
        (let ((bal (gnc:make-gnc-monetary curr val)))
@@ -1175,14 +1169,14 @@
 			       (or (if (equal? mode #t) 'show-balance mode)
 				   'show-balance)
 			       ))
-		  (reverse-balance (gnc:account-reverse-balance? acct))
+		  (reverse-balance (gnc-reverse-balance acct))
 		  (native-comm?
 		   (lambda (amt)
 		     (gnc:uniform-commodity? amt report-commodity)))
                   ;; amount is either a <gnc:monetary> or #f
 		  (amount (and comm-amt
 			       (if (and (equal? zero-mode 'omit-balance)
-                                        (gnc:commodity-collector-allzero?
+                                        (gnc-commodity-collector-allzero?
                                          comm-amt)
                                         )
 				   #f
@@ -1204,7 +1198,7 @@
                                                    (equal?
                                                     row-type 'account-row)
                                                    )
-                                              gnc:commodity-table
+                                              gnc-commodity-table
                                               gnc:sum-collector-commodity
                                               )
                                           amt
@@ -1216,7 +1210,7 @@
 ; 						  (equal?
 ; 						   row-type 'account-row)
 ; 						  )
-; 					     (gnc:commodity-table
+; 					     (gnc-commodity-table
 ; 					      amt
 ; 					      report-commodity
 ; 					      exchange-fn)

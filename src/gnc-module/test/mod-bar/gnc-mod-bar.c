@@ -6,8 +6,8 @@
 #include <glib.h>
 #include <libguile.h>
 
-#include "bar-gwrap.h"
 #include "gnc-module-api.h"
+#include "swig-bar.c"
 
 int libgncmodbar_LTX_gnc_module_system_interface = 0;
 
@@ -32,10 +32,11 @@ libgncmodbar_LTX_gnc_module_description(void) {
 
 int
 libgncmodbar_LTX_gnc_module_init(int refcount) {
-  /* publish the g-wrapped Scheme bindings for libbar */
-  gw_init_wrapset_bar_gwrap();
+  /* publish the wrapped Scheme bindings for libbar */
+  scm_init_sw_bar_module();
+  scm_c_eval_string("(use-modules (sw_bar))");
   
-  /* use the (bar) module */ 
+  /* use the Scheme "bar" module */
   scm_c_eval_string("(use-modules (gnucash bar))");
 
   return TRUE;

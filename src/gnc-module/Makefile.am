@@ -4,32 +4,21 @@ AM_CFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
-   ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
+   ${GLIB_CFLAGS} ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgncmodule.la 
-pkglib_LTLIBRARIES = libgw-gnc-module.la
 
-libgncmodule_la_SOURCES = gnc-module.c
+libgncmodule_la_SOURCES = gnc-module.c swig-gnc-module.c
 
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
-  ${G_WRAP_LINK_ARGS} \
- ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/lib/libc/libc-missing.la \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   -lltdl
 
-libgw_gnc_module_la_SOURCES = gw-gnc-module.c
-
-libgw_gnc_module_la_LIBADD = libgncmodule.la \
-  ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
-  ${GLIB_LIBS}
-
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnc-module.scm gw-gnc-module-spec.scm 
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -38,38 +27,31 @@ gncinclude_HEADERS = \
 
 noinst_DATA = .scm-links
 
-noinst_HEADERS = \
- gw-gnc-module.h
+if BUILDING_FROM_SVN
+swig-gnc-module.c: gnc-module.i
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
+endif
 
 EXTRA_DIST = \
   ${gncmod_DATA} \
-  ${gwmod_DATA}
+  gnc-module.i
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnc-module-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncmod_DATA}
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash
-	$(LN_S) -f . g-wrapped
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
 
-gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
-  .scm-links gw-gnc-module-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	  (primitive-load \"./gw-gnc-module-spec.scm\") \
-	  (gw:generate-wrapset \"gw-gnc-module\")"
-
-BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
-CLEANFILES = .scm-links g-wrapped gnucash
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc-module.html
+CLEANFILES = .scm-links gnucash ${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-gnc-module.c

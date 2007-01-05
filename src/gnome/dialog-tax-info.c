@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
+#include "guile-mappings.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -227,6 +228,7 @@ load_category_list (TaxInfoDialog *ti_dialog)
 
   view = GTK_TREE_VIEW(ti_dialog->txf_category_view);
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  g_object_ref(store);
   gtk_tree_view_set_model(view, NULL);
 
   gtk_list_store_clear(store);
@@ -244,6 +246,7 @@ load_category_list (TaxInfoDialog *ti_dialog)
   }
 
   gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
+  g_object_unref(store);
 }
 
 static void
@@ -472,7 +475,7 @@ tax_info_show_income_accounts (TaxInfoDialog *ti_dialog, gboolean show_income)
   ti_dialog->income = show_income;
 
   tree = GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview);
-  show_type = show_income ? INCOME : EXPENSE;
+  show_type = show_income ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE;
 
   gnc_tree_view_account_get_view_info (tree, &info);
 
@@ -521,7 +524,7 @@ gnc_tax_info_income_cb (GtkWidget *w, gpointer data)
 
   tax_info_show_income_accounts (ti_dialog, show_income);
 
-  ti_dialog->account_type = show_income ? INCOME : EXPENSE;
+  ti_dialog->account_type = show_income ? ACCT_TYPE_INCOME : ACCT_TYPE_EXPENSE;
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview));
 
   gnc_tax_info_update_accounts (ti_dialog);
@@ -668,7 +671,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
-  ti_dialog->account_type = EXPENSE;
+  ti_dialog->account_type = ACCT_TYPE_EXPENSE;
   ti_dialog->income_txf_infos = load_txf_info (TRUE);
   ti_dialog->expense_txf_infos = load_txf_info (FALSE);
 
@@ -703,21 +706,10 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text), GTK_WRAP_WORD);
     ti_dialog->txf_help_text = text;
 
-    /* set text height */
-    {
-      GtkStyle *style = gtk_widget_get_style (text);
-      GdkFont *font = NULL;
-
-      if (style != NULL)
-        font = gdk_font_from_description (style->font_desc);
-
-      if (font)
-        gtk_widget_set_size_request (text, -1, (font->ascent + font->descent) * 5 + 6);
-    }
-
     tree_view = GTK_TREE_VIEW(glade_xml_get_widget(xml, "txf_category_view"));
     store =  gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(tree_view, GTK_TREE_MODEL(store));
+    g_object_unref(store);
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes
       (_("Form"), renderer, "text", 0, NULL);

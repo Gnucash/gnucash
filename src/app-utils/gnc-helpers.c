@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-helpers.c -- gnucash g-wrap helper functions                 *
+ * gnc-helpers.c -- gnucash app-util helper functions               *
  * Copyright (C) 2000 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -26,7 +26,7 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include <string.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -67,10 +67,12 @@ gnc_scm2printinfo(SCM info_scm)
   info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
 
   info_scm = SCM_CDR (info_scm);
-  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
+  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                         __FUNCTION__);
 
   info_scm = SCM_CDR (info_scm);
-  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
+  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1,
+                                         __FUNCTION__);
 
   info_scm = SCM_CDR (info_scm);
   info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
@@ -117,7 +119,7 @@ gnc_printinfo_p(SCM info_scm)
  * attempt to optimize the speed of price quote retrieval, this
  * routine only converts the fields that price-quotes.scm uses. Since
  * it converts these fields all at once, it should prevent multiple
- * transitions back and forth from Scheme to C (via g-wrap) to extract
+ * transitions back and forth from Scheme to C to extract
  * the data from a pointers to a gnc-commodity (the older method).
  * This is *not* a reversible conversion as it drops data.
  *
@@ -139,9 +141,9 @@ gnc_quoteinfo2scm(gnc_commodity *comm)
   source = gnc_commodity_get_quote_source (comm);
   name = gnc_quote_source_get_internal_name (source);
   tz = gnc_commodity_get_quote_tz (comm);
-  comm_scm = gw_wcp_assimilate_ptr (comm, scm_c_eval_string("<gnc:commodity*>"));
-  def_comm_scm = gw_wcp_assimilate_ptr (gnc_default_currency (),
-					scm_c_eval_string("<gnc:commodity*>"));
+  comm_scm = SWIG_NewPointerObj(comm, SWIG_TypeQuery("_p_gnc_commodity"), 0);
+  def_comm_scm = SWIG_NewPointerObj(gnc_default_currency (),
+                                    SWIG_TypeQuery("_p_gnc_commodity"), 0);
 
   if (tz)
     info_scm = scm_cons (scm_makfrom0str (tz), info_scm);

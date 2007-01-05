@@ -124,7 +124,7 @@ xaccInitAccount (Account * acc, QofBook *book)
   acc->starting_cleared_balance = gnc_numeric_zero();
   acc->starting_reconciled_balance = gnc_numeric_zero();
 
-  acc->type = NO_TYPE;
+  acc->type = ACCT_TYPE_NONE;
 
   acc->accountName = CACHE_INSERT("");
   acc->accountCode = CACHE_INSERT("");
@@ -293,7 +293,7 @@ xaccFreeAccount (Account *acc)
   acc->cleared_balance = gnc_numeric_zero();
   acc->reconciled_balance = gnc_numeric_zero();
 
-  acc->type = NO_TYPE;
+  acc->type = ACCT_TYPE_NONE;
   acc->commodity = NULL;
 
   acc->version = 0;
@@ -988,8 +988,10 @@ xaccAccountSetStartingBalance(Account *acc,
  * order for report generation */
 
 static int typeorder[NUM_ACCOUNT_TYPES] = {
-     BANK, STOCK, MUTUAL, CURRENCY, CASH, ASSET, RECEIVABLE,
-     CREDIT, LIABILITY, PAYABLE, INCOME, EXPENSE, EQUITY };
+     ACCT_TYPE_BANK, ACCT_TYPE_STOCK, ACCT_TYPE_MUTUAL, ACCT_TYPE_CURRENCY,
+     ACCT_TYPE_CASH, ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE,
+     ACCT_TYPE_CREDIT, ACCT_TYPE_LIABILITY, ACCT_TYPE_PAYABLE,
+     ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY };
 
 static int revorder[NUM_ACCOUNT_TYPES] = {
      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -1271,7 +1273,7 @@ xaccAccountGetDescendants (const Account *acc)
 GNCAccountType
 xaccAccountGetType (const Account *acc)
 {
-   return acc ? acc->type : NO_TYPE;
+   return acc ? acc->type : ACCT_TYPE_NONE;
 }
 
 static const char*
@@ -1989,6 +1991,7 @@ xaccAccountSetHidden (Account *acc, gboolean val)
 {
   if (!acc) return;
   
+  xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, "hidden",
 			val ? "true" : NULL);
   mark_account (acc);
@@ -2032,14 +2035,14 @@ xaccAccountHasAncestor (const Account *acc, const Account * ancestor)
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
    SYNC! */
 
-#define GNC_RETURN_ENUM_AS_STRING(x) case (x): return #x;
+#define GNC_RETURN_ENUM_AS_STRING(x) case (ACCT_TYPE_ ## x): return #x;
 
 const char *
 xaccAccountTypeEnumAsString(GNCAccountType type) 
 {
   switch(type) 
   {
-    GNC_RETURN_ENUM_AS_STRING(NO_TYPE);
+    GNC_RETURN_ENUM_AS_STRING(NONE);
     GNC_RETURN_ENUM_AS_STRING(BANK);
     GNC_RETURN_ENUM_AS_STRING(CASH);
     GNC_RETURN_ENUM_AS_STRING(CREDIT);
@@ -2067,13 +2070,13 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
 #undef GNC_RETURN_ENUM_AS_STRING
 
 #define GNC_RETURN_ON_MATCH(x) \
-  if(safe_strcmp(#x, (str)) == 0) { *type = x; return(TRUE); }
+  if(safe_strcmp(#x, (str)) == 0) { *type = ACCT_TYPE_ ## x; return(TRUE); }
 
 gboolean
 xaccAccountStringToType(const char* str, GNCAccountType *type)
 {
 
-  GNC_RETURN_ON_MATCH(NO_TYPE);
+  GNC_RETURN_ON_MATCH(NONE);
   GNC_RETURN_ON_MATCH(BANK);
   GNC_RETURN_ON_MATCH(CASH);
   GNC_RETURN_ON_MATCH(CREDIT);
@@ -2107,7 +2110,7 @@ xaccAccountStringToEnum(const char* str)
   GNCAccountType type;
   gboolean rc;
   rc = xaccAccountStringToType(str, &type);
-  if (FALSE == rc) return BAD_TYPE;
+  if (FALSE == rc) return ACCT_TYPE_INVALID;
   return type;
 }
 
@@ -2157,63 +2160,66 @@ xaccAccountGetTypeFromStr (const gchar *str)
   PERR("asked to translate unknown account type string %s.\n",
        str ? str : "(null)");
 
-  return BAD_TYPE;
+  return ACCT_TYPE_INVALID;
 }
 
 
 /********************************************************************\
 \********************************************************************/
 
+guint32
+xaccAccountTypesCompatibleWith (GNCAccountType type)
+{
+  switch (type) {
+  case ACCT_TYPE_BANK:
+  case ACCT_TYPE_CASH:
+  case ACCT_TYPE_ASSET:
+  case ACCT_TYPE_STOCK:
+  case ACCT_TYPE_MUTUAL:
+  case ACCT_TYPE_CURRENCY:
+  case ACCT_TYPE_CREDIT:
+  case ACCT_TYPE_LIABILITY:
+  case ACCT_TYPE_RECEIVABLE:
+  case ACCT_TYPE_PAYABLE:
+    return
+      (1 << ACCT_TYPE_BANK)       |
+      (1 << ACCT_TYPE_CASH)       |
+      (1 << ACCT_TYPE_ASSET)      |
+      (1 << ACCT_TYPE_STOCK)      |
+      (1 << ACCT_TYPE_MUTUAL)     |
+      (1 << ACCT_TYPE_CURRENCY)   |
+      (1 << ACCT_TYPE_CREDIT)     |
+      (1 << ACCT_TYPE_LIABILITY)  |
+      (1 << ACCT_TYPE_RECEIVABLE) |
+      (1 << ACCT_TYPE_PAYABLE);
+  case ACCT_TYPE_INCOME:
+  case ACCT_TYPE_EXPENSE:
+    return
+      (1 << ACCT_TYPE_INCOME)     |
+      (1 << ACCT_TYPE_EXPENSE);
+  case ACCT_TYPE_EQUITY:
+    return
+      (1 << ACCT_TYPE_EQUITY);
+  default:
+    PERR("bad account type: %d", type);
+    return 0;
+  }
+}
+
 gboolean
 xaccAccountTypesCompatible (GNCAccountType parent_type,
                             GNCAccountType child_type)
 {
-  gboolean compatible = FALSE;
-
-  switch(parent_type)
-  {
-    case BANK:
-    case CASH: 
-    case ASSET:
-    case STOCK:
-    case MUTUAL:
-    case CURRENCY:
-    case CREDIT:
-    case LIABILITY:
-    case RECEIVABLE:
-    case PAYABLE:
-      compatible = ((child_type == BANK)     ||
-                    (child_type == CASH)     ||
-                    (child_type == ASSET)    ||
-                    (child_type == STOCK)    ||
-                    (child_type == MUTUAL)   ||
-                    (child_type == CURRENCY) ||
-                    (child_type == CREDIT)   ||
-                    (child_type == LIABILITY)||
-                    (child_type == RECEIVABLE)||
-                    (child_type == PAYABLE));
-      break;
-    case INCOME:
-    case EXPENSE:
-      compatible = ((child_type == INCOME) ||
-                    (child_type == EXPENSE));
-      break;
-    case EQUITY:
-      compatible = (child_type == EQUITY);
-      break;
-    default:
-      PERR("bad account type: %d", parent_type);
-      break;
-  }
-
-  return compatible;
+  return ((xaccAccountTypesCompatibleWith (parent_type) &
+           (1 << child_type))
+          != 0);
 }
 
 guint32
 xaccAccountTypesValid(void)
 {
     guint32 mask = (1 << NUM_ACCOUNT_TYPES) - 1;
-    mask &= ~(1 << CURRENCY);  /* DEPRECATED */
+    mask &= ~(1 << ACCT_TYPE_CURRENCY);  /* DEPRECATED */
 
     return mask;
 }
@@ -2223,8 +2229,8 @@ xaccAccountIsPriced(const Account *acc)
 {
     if (!acc) return FALSE;
 
-    return (acc->type == STOCK || acc->type == MUTUAL || 
-            acc->type == CURRENCY);
+    return (acc->type == ACCT_TYPE_STOCK || acc->type == ACCT_TYPE_MUTUAL || 
+            acc->type == ACCT_TYPE_CURRENCY);
 }
 
 /********************************************************************\

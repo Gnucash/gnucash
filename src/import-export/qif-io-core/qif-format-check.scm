@@ -143,14 +143,14 @@
     (qif-io:bank-xtn-set-t-amount! 
      bank-formats
      (check-field-formats 
-      qif-io:bank-xtn-t-amount gnc:numeric-equal
+      qif-io:bank-xtn-t-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-bank-xtns file)))
     
     (qif-io:bank-xtn-set-u-amount! 
      bank-formats
      (check-field-formats 
-      qif-io:bank-xtn-u-amount gnc:numeric-equal
+      qif-io:bank-xtn-u-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-bank-xtns file)))
     
@@ -162,7 +162,7 @@
       (qif-io:split-set-amount! 
        split
        (check-field-formats 
-        get-split-amounts gnc:numeric-equal
+        get-split-amounts gnc-numeric-equal
         qif-io:check-multi-number-format '(decimal comma)
         (qif-io:file-bank-xtns file)))
       (qif-io:bank-xtn-set-splits! bank-formats (list split)))
@@ -182,42 +182,42 @@
     (qif-io:invst-xtn-set-t-amount! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-t-amount gnc:numeric-equal
+      qif-io:invst-xtn-t-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     
     (qif-io:invst-xtn-set-u-amount! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-u-amount gnc:numeric-equal
+      qif-io:invst-xtn-u-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     
     (qif-io:invst-xtn-set-$-amount! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-$-amount gnc:numeric-equal
+      qif-io:invst-xtn-$-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     
     (qif-io:invst-xtn-set-share-amount! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-share-amount gnc:numeric-equal
+      qif-io:invst-xtn-share-amount gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     
     (qif-io:invst-xtn-set-share-price! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-share-price gnc:numeric-equal
+      qif-io:invst-xtn-share-price gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     
     (qif-io:invst-xtn-set-commission! 
      invst-formats
      (check-field-formats 
-      qif-io:invst-xtn-commission gnc:numeric-equal
+      qif-io:invst-xtn-commission gnc-numeric-equal
       qif-io:check-number-format '(decimal comma)
       (qif-io:file-invst-xtns file)))
     

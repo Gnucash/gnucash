@@ -178,7 +178,7 @@ gboolean qof_get_alt_dirty_mode (void);
 void qof_set_alt_dirty_mode (gboolean enabled);
 
 /** Return the GUID of this entity */
-const GUID * qof_entity_get_guid (QofEntity *);
+const GUID * qof_entity_get_guid (const QofEntity *);
 
 /** @name Collections of Entities 
  @{ */
@@ -187,22 +187,22 @@ const GUID * qof_entity_get_guid (QofEntity *);
 QofCollection * qof_collection_new (QofIdType type);
 
 /** return the number of entities in the collection. */
-guint qof_collection_count (QofCollection *col);
+guint qof_collection_count (const QofCollection *col);
 
 /** destroy the collection */
 void qof_collection_destroy (QofCollection *col);
 
 /** return the type that the collection stores */
-QofIdType qof_collection_get_type (QofCollection *);
+QofIdType qof_collection_get_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
-QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
+QofEntity * qof_collection_lookup_entity (const QofCollection *, const GUID *);
 
 /** Callback type for qof_entity_foreach */
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
-void qof_collection_foreach (QofCollection *, QofEntityForeachCB, 
+void qof_collection_foreach (const QofCollection *, QofEntityForeachCB, 
                              gpointer user_data);
 
 /** Store and retreive arbitrary object-defined data 
@@ -211,11 +211,11 @@ void qof_collection_foreach (QofCollection *, QofEntityForeachCB,
  * destroyed, so that the user has a chance to clean up anything
  * that was put in the 'data' member here.
  */
-gpointer qof_collection_get_data (QofCollection *col);
+gpointer qof_collection_get_data (const QofCollection *col);
 void qof_collection_set_data (QofCollection *col, gpointer user_data);
 
 /** Return value of 'dirty' flag on collection */
-gboolean qof_collection_is_dirty (QofCollection *col);
+gboolean qof_collection_is_dirty (const QofCollection *col);
 
 /** @name QOF_TYPE_COLLECT: Linking one entity to many of one type
 

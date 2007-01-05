@@ -79,28 +79,28 @@ qof_instance_release (QofInstance *inst)
 }
 
 const GUID *
-qof_instance_get_guid (QofInstance *inst)
+qof_instance_get_guid (const QofInstance *inst)
 {
 	if (!inst) return NULL;
 	return &inst->entity.guid;
 }
 
 QofBook *
-qof_instance_get_book (QofInstance *inst)
+qof_instance_get_book (const QofInstance *inst)
 {
 	if (!inst) return NULL;
 	return inst->book;
 }
 
 KvpFrame*
-qof_instance_get_slots (QofInstance *inst)
+qof_instance_get_slots (const QofInstance *inst)
 {
   if (!inst) return NULL;
   return inst->kvp_data;
 }
 
 Timespec
-qof_instance_get_last_update (QofInstance *inst)
+qof_instance_get_last_update (const QofInstance *inst)
 {
 	if (!inst)
 	{
@@ -111,7 +111,7 @@ qof_instance_get_last_update (QofInstance *inst)
 }
 
 int
-qof_instance_version_cmp (QofInstance *left, QofInstance *right)
+qof_instance_version_cmp (const QofInstance *left, const QofInstance *right)
 {
 	if (!left && !right) return 0;
 	if (!left) return -1;
@@ -124,7 +124,7 @@ qof_instance_version_cmp (QofInstance *left, QofInstance *right)
 }
 
 void
-qof_instance_print_dirty (QofEntity *entity, gpointer dummy)
+qof_instance_print_dirty (const QofEntity *entity, gpointer dummy)
 {
   QofInstance *inst = QOF_INSTANCE(entity);
 
@@ -160,14 +160,14 @@ qof_instance_set_dirty(QofInstance* inst)
 }
 
 gboolean
-qof_instance_check_edit(QofInstance *inst)
+qof_instance_check_edit(const  QofInstance *inst)
 {
 	if(inst->editlevel > 0) { return TRUE; }
 	return FALSE;
 }
 
 gboolean
-qof_instance_do_free(QofInstance *inst)
+qof_instance_do_free(const QofInstance *inst)
 {
 	return inst->do_free;
 }
@@ -211,7 +211,7 @@ qof_instance_set_last_update (QofInstance *inst, Timespec ts)
 /* ========================================================== */
 
 void
-qof_instance_gemini (QofInstance *to, QofInstance *from)
+qof_instance_gemini (QofInstance *to, const QofInstance *from)
 {
   time_t now;
 
@@ -234,7 +234,7 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
 }
 
 QofInstance *
-qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
+qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
 {
 	QofCollection *col;
 	KvpFrame *fr;

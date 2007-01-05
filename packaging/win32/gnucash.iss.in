@@ -1,0 +1,179 @@
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Input configuration for the Inno Setup Compiler
+; Copyright (c) 2004-2005 Christian Stimming <stimming@tuhh.de>
+;
+; Inno Setup Compiler: See http://www.jrsoftware.org/isdl.php
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Setup]
+; Using the name here directly because we want it capitalized
+AppName=GnuCash
+AppVerName=GnuCash @VERSION@
+AppPublisher=GnuCash Development Team
+AppPublisherURL=http://www.gnucash.org
+AppSupportURL=http://www.gnucash.org
+AppUpdatesURL=http://www.gnucash.org
+DefaultDirName={pf}\@PACKAGE@
+DefaultGroupName=GnuCash
+LicenseFile=..\..\COPYING
+Compression=lzma
+OutputDir=.
+OutputBaseFilename=@PACKAGE@-@VERSION@-setup
+UninstallFilesDir={app}\uninstall\@PACKAGE@
+InfoAfterFile=README
+
+[Types]
+Name: "full"; Description: "{cm:FullInstall}"
+Name: "custom"; Description: "{cm:CustomInstall}"; Flags: iscustom
+
+[Components]
+Name: "main"; Description: "{cm:MainFiles}"; Types: full custom; Flags: fixed
+Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
+Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
+
+[Tasks]
+Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
+
+[Icons]
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: menuicon
+Name: "{group}\Uninstall GnuCash"; Filename: "{uninstallexe}"; Tasks: menuicon
+Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: desktopicon
+
+[Run]
+Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; Flags: postinstall skipifsilent
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Here we configure the included files and the place of their
+; installation
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Files]
+; The main executables and DLLs
+Source: "@prefix@\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
+
+; The translations (no idea why mingw installs them in prefix/lib/locale)
+Source: "@prefix@\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+
+; The account templates
+Source: "@prefix@\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
+
+; The loading shell script. It is post-processed by the Pascal script below.
+Source: "..\..\src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
+
+; And all the documentation
+Source: "..\..\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "..\..\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
+Source: "..\..\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "..\..\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Registry]
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Delete the created config script on uninstall
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[UninstallDelete]
+Type: files; Name: "{app}\bin\gnucash"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; This large section is a Pascal scripting program that will modify
+; the gnucash shell script so that it then includes the
+; correct values according to our local installation. See
+; http://www.remobjects.com/?ps for a syntax reference.
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Code]
+function MingwBacksl(const S: String): String;
+begin
+  { Modify the path name S so that it can be used by MinGW }
+  if Length(ExtractFileDrive(S)) = 0 then
+    Result := S
+  else begin
+    Result := '/'+S;
+    StringChange(Result, ':\', '\');
+  end;
+  StringChange(Result, '\', '/');
+end;
+
+procedure MyAfterInstallConfig(FileName: String);
+var
+  FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
+  Res: Boolean;
+begin
+
+  { Load the unchanged original file }
+  Res := LoadStringFromFile(Format('%s.in',[FileName]), FileString);
+  if Res = False then
+    MsgBox('Error on loading '+FileName+'.in for final adaptation', mbInformation, MB_OK);
+
+  { Insert the custom file header; #10 is the linefeed character }
+  Insert('#!/bin/sh '#10'dir="@prefix'+'@"'#10, FileString, 0);
+
+  { Get the installation-specific paths }
+  appdir := MingwBacksl(ExpandConstant('{app}'));
+  libdir := appdir + '/lib';
+  pkglibdir := libdir + '/gnucash';
+  pkgdatadir := appdir + '/share/gnucash';
+
+  { Now make all the replacements }
+  { Explanation: StringChange(S,FromStr,ToStr): Change all occurances in S of FromStr to ToStr. }
+  StringChange(FileString, '@'+'-PATH_SEPARATOR-@', ';');
+  StringChange(FileString, '@'+'-BIN_DIR-@', appdir + '/bin');
+  StringChange(FileString, '@'+'-GNC_PKGLIB_INSTALLDIR-@', pkglibdir);
+  StringChange(FileString, '@'+'-GNC_MODULE_DIR-@', pkglibdir);
+  StringChange(FileString, '@'+'-GNC_LIB_INSTALLDIR-@', libdir);
+  StringChange(FileString, '@'+'-GNC_GUILE_MODULE_DIR-@', pkgdatadir + '/guile-modules');
+  StringChange(FileString, '@'+'-GNC_SCM_INSTALL_DIR-@', pkgdatadir + '/scm');
+
+  { Save the final file }
+  Res := SaveStringToFile(FileName, FileString, False);
+  if Res = False then
+    MsgBox('Error on saving '+FileName+' for final adaptation', mbInformation, MB_OK);
+
+end;
+
+
+[Languages]
+Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; These are only for improved text messages
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[Messages]
+
+[CustomMessages]
+; *** "Select Components" wizard page
+FullInstall=Full installation
+CustomInstall=Custom installation
+CreateDesktopIcon=Create a &desktop icon
+CreateMenuLink=Create a start menu link
+RunPrg=Run GnuCash now
+AdditionalIcons=Create these icons:
+
+MainFiles=GnuCash Program
+TranslFiles=Translation Files
+TemplFiles=Account Template Files
+
+de.FullInstall=Komplett-Installation
+de.CustomInstall=Benutzerdefiniert
+de.CreateDesktopIcon=Ein Icon auf dem Desktop erstellen
+de.CreateMenuLink=Eine Verknüpfung im Startmenü erstellen
+de.RunPrg=GnuCash jetzt starten
+de.AdditionalIcons=Folgende Icons erstellen:
+
+de.MainFiles=GnuCash Hauptprogramm
+de.TranslFiles=Deutsche Übersetzung
+de.TemplFiles=Beispiel-Kontenrahmen

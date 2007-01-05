@@ -60,7 +60,7 @@ AccountGroup * xaccGetAccountGroup (QofBook *book);
  * The xaccCollAccountGroup() routine will return the top-most
  * account group associated with the indicated collection.
  */
-AccountGroup * xaccCollGetAccountGroup (QofCollection *col);
+AccountGroup * xaccCollGetAccountGroup (const QofCollection *col);
 
 /** The xaccAccountDestroy() routine will destroy and free all 
  *    the data associated with this account group.  The group
@@ -215,7 +215,7 @@ AccountList * xaccGroupGetAccountList (const AccountGroup *grp);
  *    immediate children of the account group.  The returned list
  *    should be freed with g_list_free() when no longer needed.
  */
-GList * xaccGroupGetAccountListSorted (const AccountGroup *grp);
+AccountList * xaccGroupGetAccountListSorted (const AccountGroup *grp);
 
 /** The xaccGroupGetRoot() subroutine will find the topmost 
  *    (root) group to which this group belongs.

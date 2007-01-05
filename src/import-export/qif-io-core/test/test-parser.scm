@@ -54,7 +54,7 @@
   (let ((all-pass #t))
     (define (parse-number/format num fmt)
       (let* ((gncn (qif-io:parse-number/format num fmt))
-             (nstr (gnc:numeric-to-string gncn)))
+             (nstr (gnc-numeric-to-string gncn)))
         nstr))
     
     ;; test category reading 

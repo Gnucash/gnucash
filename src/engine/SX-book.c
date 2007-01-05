@@ -53,7 +53,7 @@ static QofLogModule log_module = GNC_MOD_SX;
 /* ====================================================================== */
 
 AccountGroup *
-gnc_collection_get_template_group( QofCollection *col )
+gnc_collection_get_template_group( const QofCollection *col )
 {
   return qof_collection_get_data (col);
 }
@@ -118,7 +118,7 @@ sxtg_book_end (QofBook *book)
 
 
 static gboolean
-sxtg_is_dirty(QofCollection *col)
+sxtg_is_dirty(const QofCollection *col)
 {
   return xaccGroupNotSaved(gnc_collection_get_template_group(col));
 }
@@ -145,13 +145,13 @@ static QofObject sxtg_object_def =
 /* ====================================================================== */
 
 SchedXactions *
-gnc_collection_get_schedxaction_list(QofCollection *col)
+gnc_collection_get_schedxaction_list(const QofCollection *col)
 {
   return qof_collection_get_data (col);
 }
 
 GList *
-gnc_collection_get_schedxactions(QofCollection *col)
+gnc_collection_get_schedxactions(const QofCollection *col)
 {
   SchedXactions *list;
   list = qof_collection_get_data (col);
@@ -236,7 +236,7 @@ book_sxns_mark_saved(QofCollection *col)
 }
 
 static gboolean
-book_sxlist_notsaved(QofCollection *col)
+book_sxlist_notsaved(const QofCollection *col)
 {
   GList *sxlist;
   SchedXactions *sxl;

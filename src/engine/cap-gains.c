@@ -191,7 +191,8 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
                                 const gnc_commodity *currency)
 {
    GNCLot *lot;
-   ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, sign.num, sign.denom);
+   ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, sign.num, 
+          sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
                    G_MAXUINT64, earliest_pred);
@@ -245,7 +246,7 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
-    xaccAccountSetType (acc, INCOME);
+    xaccAccountSetType (acc, ACCT_TYPE_INCOME);
     xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
     xaccAccountSetNotes (acc, 
          _("Realized Gains or Losses from "
@@ -681,8 +682,8 @@ xaccSplitGetGainsSourceSplit (const Split *split)
    if (!source_guid) return NULL;
 
    /* Both splits will be in the same collection, so search there. */
-   source_split = (Split*) qof_collection_lookup_entity (split->inst.entity.collection, 
-                                                         source_guid);
+   source_split = (Split*) qof_collection_lookup_entity(
+       split->inst.entity.collection, source_guid);
    PINFO ("split=%p has source-split=%p", split, source_split);
    return source_split;
 }
@@ -846,7 +847,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
                                 gnc_numeric_abs(split->amount)))
    {
       GList *n;
-      for (n=lot->splits; n; n=n->next) 
+      for (n = lot->splits; n; n = n->next) 
       {
          Split *s = n->data;
          PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
@@ -865,7 +866,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          gnc_numeric_negative_p(split->amount)))
    {
       GList *n;
-      for (n=lot->splits; n; n=n->next) 
+      for (n = lot->splits; n; n = n->next) 
       {
          Split *s = n->data;
          PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
@@ -1059,9 +1060,11 @@ xaccSplitGetCapGains(Split * split)
    if (!split) return gnc_numeric_zero();
    ENTER("(split=%p)", split);
 
-   if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+   if (GAINS_STATUS_UNKNOWN == split->gains) 
+       xaccSplitDetermineGainStatus(split);
    if ((split->gains & GAINS_STATUS_A_VDIRTY) || 
-       (split->gains_split && (split->gains_split->gains & GAINS_STATUS_A_VDIRTY)))
+       (split->gains_split && 
+        (split->gains_split->gains & GAINS_STATUS_A_VDIRTY)))
    {
       xaccSplitComputeCapGains (split, NULL);
    }
@@ -1096,12 +1099,13 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
 
    ENTER("(lot=%p)", lot);
    pcy = lot->account->policy;
-   for (node=lot->splits; node; node=node->next)
+   for (node = lot->splits; node; node = node->next)
    {
       Split *s = node->data;
       if (pcy->PolicyIsOpeningSplit(pcy,lot,s))
       {
-         if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus (s);
+         if (GAINS_STATUS_UNKNOWN == s->gains) 
+             xaccSplitDetermineGainStatus(s);
          if (s->gains & GAINS_STATUS_VDIRTY) 
          { 
             is_dirty = TRUE; 
@@ -1112,14 +1116,14 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
 
    if (is_dirty)
    {
-      for (node=lot->splits; node; node=node->next)
+      for (node = lot->splits; node; node = node->next)
       {
          Split *s = node->data;
          s->gains |= GAINS_STATUS_VDIRTY;
       }
    }
 
-   for (node=lot->splits; node; node=node->next)
+   for (node = lot->splits; node; node = node->next)
    {
       Split *s = node->data;
       xaccSplitComputeCapGains (s, gain_acc);

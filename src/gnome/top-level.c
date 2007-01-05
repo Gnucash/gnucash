@@ -44,6 +44,7 @@
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
+#include "gfec.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-menu-additions.h" /* FIXME Remove this line*/
@@ -69,7 +70,6 @@
 #include "window-report.h"
 #include "gnc-window.h"
 #include "gnc-gkeyfile-utils.h"
-#include <g-wrap-wct.h>
 
 
 /** GLOBALS *********************************************************/
@@ -94,7 +94,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
     entity = qof_collection_lookup_entity (col, &guid);                     \
     if (NULL == entity)                                                     \
     {                                                                       \
-      result->error_message = g_strdup_printf (_("Entity Not Found: %s"), location); \
+      result->error_message = g_strdup_printf (_("Entity Not Found: %s"),   \
+                                               location);                   \
       return FALSE;                                                         \
     }                                                                       \
 
@@ -202,11 +203,6 @@ gnc_html_price_url_cb (const char *location, const char *label,
  *  iterates through this state information, calling a helper function
  *  to recreate each open window.
  *
- *  If the "new" state file cannot be found, this function will open
- *  an account tree window and then attempt to invoke the old gnucash
- *  1.x state routines.  This provides a fluid transition for users
- *  from the old to the new state systems.
- *
  *  @note The name of the state file is based on the name of the data
  *  file, not the path name of the data file.  If there are multiple
  *  data files with the same name, the state files will be suffixed
@@ -244,19 +240,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
 
     if (!keyfile) {
         gnc_main_window_restore_default_state();
-        
-#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
-        /* See if there's an old style state file to be found */
-        scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
-                   (session ?
-                    gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-                    SCM_BOOL_F));
-        /* At this point the reports have only been loaded into
-           memory.  Now we create their ui component. */
-        gnc_reports_show_all(session);
-#endif
-        
-        LEAVE("old");
+        LEAVE("no state file");
         return;
     }
     

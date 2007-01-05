@@ -37,7 +37,7 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "guile-util.h"
 #include "gnc-engine.h"
@@ -184,21 +184,15 @@ gnc_plugin_menu_additions_new (void)
 static SCM
 gnc_main_window_to_scm (GncMainWindow *window)
 {
-  static SCM main_window_type = SCM_UNDEFINED;
+  static swig_type_info * main_window_type = NULL;
 
   if (!window)
     return SCM_BOOL_F;
 
-  if (main_window_type == SCM_UNDEFINED)
-  {
-    main_window_type = scm_c_eval_string ("<gnc:MainWindow*>");
+  if (!main_window_type)
+    main_window_type = SWIG_TypeQuery("_p_GncMainWindow");
 
-    /* don't really need this - types are bound globally anyway. */
-    if (main_window_type != SCM_UNDEFINED)
-      scm_gc_protect_object (main_window_type);
-  }
-  
-  return gw_wcp_assimilate_ptr ((void *)window, main_window_type);
+  return SWIG_NewPointerObj(window, main_window_type, 0);
 }
 
 

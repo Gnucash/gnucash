@@ -21,7 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
-(use-modules (g-wrapped gw-report-system)) 
+(use-modules (sw_report_system))
 
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
@@ -98,8 +98,10 @@
 	      (hash-set! *gnc:_report-templates_*
 			 (gnc:report-template-name report-rec) report-rec)
 	      (begin
-		(gnc:error (_ "Refusing to add custom report with the same name as an existing report."))
-		(gnc:error (_ "Please edit your saved-reports file and delete the section for: " name))
+		;; FIXME: We should pass the top-level window
+		;; instead of the '() to gnc-error-dialog, but I
+		;; have no idea where to get it from.
+		(gnc-error-dialog '() (string-append (_ "A custom report with this name already exists. Either rename the report to store it with a different name, or edit your saved-reports file and delete the section with the following name: ") name ))
 		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
@@ -264,7 +266,7 @@
                (cb r))))
        options))
 
-    (gnc:report-set-id! r (gnc:report-add r))
+    (gnc:report-set-id! r (gnc-report-add r))
     (gnc:report-id r))
   )
 
@@ -272,7 +274,7 @@
 (define (gnc:restore-report id template-name options)
   (let ((r ((record-constructor <report>)
             template-name id options #t #t #f #f)))
-    (gnc:report-add r))
+    (gnc-report-add r))
   )
 
 
@@ -390,7 +392,7 @@
     (gnc:report-type report))))
 
 (define gnc:current-saved-reports
-  (gnc:build-dotgnucash-path "saved-reports-2.0"))
+  (gnc-build-dotgnucash-path "saved-reports-2.0"))
 
 (define (gnc:report-save-to-savefile report)
   (let ((conf-file-name gnc:current-saved-reports))
@@ -431,10 +433,10 @@
 ;; looks up the report by id and renders it with gnc:report-render-html
 ;; marks the cursor busy during rendering; returns the html
 (define (gnc:report-run id)
-  (let ((report (gnc:find-report id))
+  (let ((report (gnc-report-find id))
 	(start-time (gettimeofday))
 	(html #f))
-    (gnc:set-busy-cursor #f #t)
+    (gnc-set-busy-cursor '() #t)
     (gnc:backtrace-if-exception 
      (lambda ()
        (if report
@@ -445,7 +447,7 @@
 ;;	     (newline)
 ;;	     (display html) (newline)
 	     ))))
-    (gnc:unset-busy-cursor #f)
+    (gnc-unset-busy-cursor '())
     html))
 
 

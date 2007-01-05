@@ -2,6 +2,7 @@
  * gnc-frequency.c -- GnuCash widget for frequency editing.         *
  * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -51,7 +52,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 static void gnc_frequency_class_init( GNCFrequencyClass *klass );
 
-static void freq_option_value_changed( GtkMenuShell *b, gpointer d );
+static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
 static void spin_changed_helper( GtkAdjustment *adj, gpointer d );
 
@@ -156,11 +157,11 @@ gnc_frequency_init( GNCFrequency *gf )
         GtkWidget   *o;
         GtkAdjustment  *adj;
 
-        static const struct optionMenuTuple {
+        static const struct comboBoxTuple {
                 char *name;
                 void (*fn)();
-        } optionMenus[] = {
-                { "freq_option",        freq_option_value_changed },
+        } comboBoxes[] = {
+                { "freq_combobox",      freq_combo_changed },
                 { "semimonthly_first",  semimonthly_sel_changed },
                 { "semimonthly_second", semimonthly_sel_changed },
                 { "monthly_day",        monthly_sel_changed },
@@ -191,8 +192,8 @@ gnc_frequency_init( GNCFrequency *gf )
         gf->gxml = gnc_glade_xml_new( "sched-xact.glade", "gncfreq_vbox" );
         o = glade_xml_get_widget( gf->gxml, "gncfreq_nb" );
         gf->nb = GTK_NOTEBOOK(o);
-        o = glade_xml_get_widget( gf->gxml, "freq_option" );
-        gf->freqOpt = GTK_OPTION_MENU(o);
+        o = glade_xml_get_widget( gf->gxml, "freq_combobox" );
+        gf->freqComboBox = GTK_COMBO_BOX(o);
         gf->startDate = GNC_DATE_EDIT(gnc_date_edit_new( time(NULL), FALSE, FALSE ));
         /* Add the new widget to the table. */
         {
@@ -206,17 +207,13 @@ gnc_frequency_init( GNCFrequency *gf )
         gf->vb = vb;
         gtk_container_add( GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb) );
 
-        /* initialize the option menus */
-        for ( i=0; optionMenus[i].name != NULL; i++ ) {
-                o = glade_xml_get_widget( gf->gxml, optionMenus[i].name );
-                gnc_option_menu_init( GTK_WIDGET(o) );
-                if ( optionMenus[i].fn != NULL ) {
-                        o = gtk_option_menu_get_menu(GTK_OPTION_MENU(o));
-                        /* FIXME: having the user-data be a struct of a
-                         * calendar name and the GNCFrequency would allow a
-                         * single callback fn */
-                        g_signal_connect( o, "selection-done",
-					  G_CALLBACK(optionMenus[i].fn), gf );
+        /* initialize the combo boxes */
+        for ( i=0; comboBoxes[i].name != NULL; i++ ) {
+                o = glade_xml_get_widget( gf->gxml, comboBoxes[i].name );
+		gtk_combo_box_set_active(GTK_COMBO_BOX(o), 0);
+                if ( comboBoxes[i].fn != NULL ) {
+                        g_signal_connect( o, "changed",
+					  G_CALLBACK(comboBoxes[i].fn), gf );
                 }
         }
 
@@ -281,7 +278,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
         g_assert( page != -1 );
 
         gtk_notebook_set_current_page( gf->nb, page );
-        gtk_option_menu_set_history( gf->freqOpt, page );
+        gtk_combo_box_set_active( gf->freqComboBox, page );
 
         switch ( uift ) 
         {
@@ -425,7 +422,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), monthlyMult );
                 /*  first date */
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o), firstDayOfMonth-1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o), firstDayOfMonth-1 );
                 /*  second date */
                 subFS = (FreqSpec*)(g_list_nth( list, 1 )->data);
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
@@ -434,7 +431,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                         PERR( "Inappropriate FreqSpec type\n" );
                         return;
                 }
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o), secondDayOfMonth-1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o), secondDayOfMonth-1 );
         }
         break;
         case UIFREQ_MONTHLY:
@@ -452,7 +449,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), monthlyMult );
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o), dayOfMonth-1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o), dayOfMonth-1 );
                 /*  set the day-of-month */
         }
         break;
@@ -544,9 +541,9 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o),
                                            (int)rint(floor(monthlyMult / 12)) );
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o), monthOffset );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o), monthOffset );
                 o = glade_xml_get_widget( gf->gxml, "yearly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o), dayOfMonth-1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o), dayOfMonth-1 );
         }
         break;
         default:
@@ -558,7 +555,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
         g_signal_emit_by_name( gf, "changed" );
 }
 
-static void
+void
 gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 {
    time_t secs;
@@ -581,7 +578,7 @@ gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
       g_assert( page != -1 );
    
       gtk_notebook_set_current_page( gf->nb, page );
-      gtk_option_menu_set_history( gf->freqOpt, page );
+      gtk_combo_box_set_active( gf->freqComboBox, page );
    }
 
    /* Setup the start date */
@@ -757,7 +754,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 tmpInt = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
 
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
-                day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+                day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 g_date_to_struct_tm( &gd, &stm);
                 if ( day >= stm.tm_mday ) {
@@ -771,7 +768,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 xaccFreqSpecCompositeAdd( fs, tmpFS );
 
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
-                day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+                day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 tmpTimeT = gnc_date_edit_get_date( gf->startDate );
                 g_date_set_time_t( &gd, tmpTimeT );
@@ -796,7 +793,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 g_date_to_struct_tm( &gd, &stm);
 
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
-                day = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
+                day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) ) + 1;
                 stm.tm_mday = day;
                 g_date_set_time_t( &gd, mktime( &stm ) );
                 xaccFreqSpecSetMonthly( fs, &gd, tmpInt );
@@ -857,7 +854,7 @@ monthly_sel_changed( GtkButton *b, gpointer d )
 
         o = glade_xml_get_widget( ((GNCFrequency*)d)->gxml,
                                   "monthly_day" );
-        dayOfMonth = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
+        dayOfMonth = gtk_combo_box_get_active( GTK_COMBO_BOX(o) ) + 1;
 
         tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
@@ -888,10 +885,10 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
         tmptm = localtime( &tmptt );
 
         o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
-        tmpint = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+        tmpint = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
         o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
-        if ( tmpint > gnc_option_menu_get_active( GTK_WIDGET(o) )+1 ) {
-                tmpint = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+        if ( tmpint > gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1 ) {
+                tmpint = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
         }
 
         tmptm->tm_mday = tmpint;
@@ -946,8 +943,8 @@ year_range_sels_changed( GNCFrequency *gf,
         time_t tmpTT;
         struct tm *tmpTm;
 
-        occur = gnc_option_menu_get_active( occurW );
-        day = gnc_option_menu_get_active( dayOfMonthW ) + 1;
+        occur = gtk_combo_box_get_active( GTK_COMBO_BOX(occurW) );
+        day = gtk_combo_box_get_active( GTK_COMBO_BOX(dayOfMonthW) ) + 1;
 
         tmpTT = gnc_date_edit_get_date( gf->startDate );
         tmpTm = localtime( &tmpTT );
@@ -975,9 +972,9 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         tmptm = localtime( &tmptt );
 
         o = glade_xml_get_widget( gf->gxml, "yearly_month" );
-        tmptm->tm_mon = gnc_option_menu_get_active( GTK_WIDGET(o) );
+        tmptm->tm_mon = gtk_combo_box_get_active( GTK_COMBO_BOX(o) );
         o = glade_xml_get_widget( gf->gxml, "yearly_day" );
-        tmptm->tm_mday = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+        tmptm->tm_mday = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
 
         /* FIXME: correct for
            option_menu_selected_day > min(31,correct_days_in_month)
@@ -1005,7 +1002,7 @@ static inline guint32 max( guint32 a, guint32 b )
 }
 
 static void
-freq_option_value_changed( GtkMenuShell *b, gpointer d )
+freq_combo_changed( GtkComboBox *b, gpointer d )
 {
         GNCFrequency *gf = (GNCFrequency*)d;
         int optIdx;
@@ -1015,7 +1012,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
         GtkWidget *o;
 
         /* Set the new page. */
-        optIdx = gnc_option_menu_get_active( GTK_WIDGET(((GNCFrequency*)d)->freqOpt) );
+        optIdx = gtk_combo_box_get_active( GTK_COMBO_BOX(((GNCFrequency*)d)->freqComboBox) );
         gtk_notebook_set_current_page( ((GNCFrequency*)d)->nb, optIdx );
 
         /* setup initial values for new page, as possible. */
@@ -1033,45 +1030,45 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
                 tmpTm->tm_mday += 14;
                 tmpDate = mktime( tmpTm );
                 tmpTm = localtime( &tmpDate );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             min( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  min( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             max( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  max( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
         }
         break;
         case UIFREQ_MONTHLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_QUARTERLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "quarterly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_TRI_ANUALLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "triyearly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_SEMI_YEARLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "semiyearly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_YEARLY:
                 /* on the <startdate_mon>, <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mon );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mon );
                 o = glade_xml_get_widget( gf->gxml, "yearly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday - 1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday - 1 );
                 break;
         default:
                 /* nuttin can be done, for whatever reason. */
@@ -1088,10 +1085,10 @@ year_range_menu_helper( GtkWidget *dayOptMenu,
 {
         struct tm  *tmpTm;
         tmpTm = localtime( &startDate );
-        gtk_option_menu_set_history( GTK_OPTION_MENU(occurOptMenu),
-                                     tmpTm->tm_mon % monthsInRange );
-        gtk_option_menu_set_history( GTK_OPTION_MENU(dayOptMenu),
-                                     tmpTm->tm_mday - 1 );
+        gtk_combo_box_set_active( GTK_COMBO_BOX(occurOptMenu),
+				  tmpTm->tm_mon % monthsInRange );
+        gtk_combo_box_set_active( GTK_COMBO_BOX(dayOptMenu),
+				   tmpTm->tm_mday - 1 );
 }
 
 static void
@@ -1125,23 +1122,23 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
         {
                 gint first_day;
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
-                first_day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
+                first_day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
-                if ( first_day < gnc_option_menu_get_active(
-                             GTK_WIDGET(o) )+1 ) {
+                if ( first_day < gtk_combo_box_get_active(
+                             GTK_COMBO_BOX(o) )+1 ) {
                         o = glade_xml_get_widget( gf->gxml,
                                                   "semimonthly_first" );
                 }
 
                 tmpTm = localtime( &dateFromGDE );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
                                              tmpTm->tm_mday-1 );
         }
         break;
         case UIFREQ_MONTHLY:
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 tmpTm = localtime( &dateFromGDE );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
                                              (tmpTm->tm_mday-1) );
                 break;
         case UIFREQ_QUARTERLY:
@@ -1168,11 +1165,11 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
         case UIFREQ_YEARLY:
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
                 tmpTm = localtime( &dateFromGDE );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mon );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mon );
                 o = glade_xml_get_widget( gf->gxml, "yearly_day" );
-                gtk_option_menu_set_history( GTK_OPTION_MENU(o),
-                                             tmpTm->tm_mday-1 );
+                gtk_combo_box_set_active( GTK_COMBO_BOX(o),
+					  tmpTm->tm_mday-1 );
                 break;
         default:
                 PERR( "unknown uift value %d\n", uift );

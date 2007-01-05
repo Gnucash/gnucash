@@ -7,7 +7,8 @@ AM_CFLAGS = \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   ${QOF_CFLAGS} \
   ${LIBXML2_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  -I$(top_srcdir)/lib/libc
 
 libgncqof_backend_qsf_la_SOURCES = \
   qsf-backend.c \
@@ -18,7 +19,9 @@ libgncqof_backend_qsf_la_LDFLAGS = -module -avoid-version
 libgncqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \
- ${LIBXML2_LIBS}
+ ${REGEX_LIBS} \
+ ${LIBXML2_LIBS} \
+ $(top_builddir)/lib/libc/libc-missing.la
 
 qsfschemadir = $(QOF_XML_DIR)
 qsfschema_DATA = \
@@ -36,10 +39,8 @@ EXTRA_DIST = \
 qsf-dir.h: qsf-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	        -e 's:@-QSF_SCHEMA_DIR-@:${QOF_XML_DIR}:g'
+	        -e 's#@-QSF_SCHEMA_DIR-@#${QOF_XML_DIR}#g'
 	mv $@.tmp $@
 
 BUILT_SOURCES = qsf-dir.h
-
-CONFIG_CLEAN_FILES = qsf-dir.h
-
+CLEANFILES = qsf-dir.h

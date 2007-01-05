@@ -1,6 +1,7 @@
 /********************************************************************
  * dialog-column-view.c -- editor for simple column view of reports *
  * Copyright (C) 2001 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,7 +25,7 @@
 
 #include <glib/gi18n.h>
 #include <libguile.h>
-#include <g-wrap-wct.h>
+#include "swig-runtime.h"
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
@@ -34,10 +35,24 @@
 #include "guile-mappings.h"
 #include "gnc-report.h"
 
+enum available_cols {
+  AVAILABLE_COL_NAME = 0,
+  AVAILABLE_COL_ROW,
+  NUM_AVAILABLE_COLS
+};
+
+enum contents_cols {
+  CONTENTS_COL_NAME = 0,
+  CONTENTS_COL_ROW,
+  CONTENTS_COL_REPORT_ROWS,
+  CONTENTS_COL_REPORT_COLS,
+  NUM_CONTENTS_COLS
+};
+
 struct gncp_column_view_edit {
   GNCOptionWin * optwin;
-  GtkCList  * available;
-  GtkCList  * contents; 
+  GtkTreeView  * available;
+  GtkTreeView  * contents; 
 
   SCM          options; 
   SCM          view;
@@ -49,7 +64,6 @@ struct gncp_column_view_edit {
   SCM       contents_list;
   int       contents_selected;
 };
-
 
 static void gnc_column_view_edit_add_cb(GtkButton * button,
                                         gpointer user_data);
@@ -99,10 +113,14 @@ update_display_lists(gnc_column_view_edit * view)
   SCM   contents = 
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
                                 SCM_BOOL_F);
-  SCM   this_report, this_name;
+  SCM   this_report;
   SCM   selection;
-  char  * name[3];
+  const gchar *name;
   int   row, i, id;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeSelection *tree_selection;
 
   /* Update the list of available reports (left selection box). */
   row = view->available_selected;
@@ -119,18 +137,25 @@ update_display_lists(gnc_column_view_edit * view)
   view->available_list = names;
   scm_gc_protect_object(view->available_list);
 
-  gtk_clist_freeze(view->available);
-  gtk_clist_clear(view->available);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view->available));
+  gtk_list_store_clear(store);
   if(SCM_LISTP(names)) {
     for(i = 0; !SCM_NULLP(names); names = SCM_CDR(names), i++) {
       if (SCM_EQUALP (SCM_CAR(names), selection))
         row = i;
-      name[0] = SCM_STRING_CHARS(scm_call_1(template_menu_name, SCM_CAR(names)));
-      gtk_clist_append(view->available, name);
+      name = SCM_STRING_CHARS(scm_call_1(template_menu_name, SCM_CAR(names)));
+      gtk_list_store_append(store, &iter);
+      gtk_list_store_set(store, &iter,
+			 AVAILABLE_COL_NAME, name,
+			 AVAILABLE_COL_ROW, i,
+			 -1);
     }
   }
-  gtk_clist_select_row(view->available, row, 0);
-  gtk_clist_thaw(view->available);
+  
+  tree_selection = gtk_tree_view_get_selection(view->available);
+  path = gtk_tree_path_new_from_indices(row, -1);
+  gtk_tree_selection_select_path(tree_selection, path);
+  gtk_tree_path_free(path);
 
 
   /* Update the list of selected reports (right selection box). */
@@ -148,8 +173,8 @@ update_display_lists(gnc_column_view_edit * view)
   view->contents_list = contents;
   scm_gc_protect_object(view->contents_list);
 
-  gtk_clist_freeze(view->contents);
-  gtk_clist_clear(view->contents);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view->contents));
+  gtk_list_store_clear(store);
   if(SCM_LISTP(contents)) {
     for(i = 0; !SCM_NULLP(contents); contents = SCM_CDR(contents), i++) {
       if (SCM_EQUALP (SCM_CAR(contents), selection))
@@ -157,37 +182,52 @@ update_display_lists(gnc_column_view_edit * view)
 
       id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, __FUNCTION__);
       this_report = gnc_report_find(id);
-      /* this_name = scm_call_1(report_name, this_report); */
-      this_name = scm_call_1(report_menu_name, this_report);
-      name[0] = g_strdup(SCM_STRING_CHARS(this_name));
-      name[1] = g_strdup_printf("%d", scm_num2int(SCM_CADR(SCM_CAR(contents)),
-						  SCM_ARG1, __FUNCTION__));
-      name[2] = g_strdup_printf("%d", scm_num2int(SCM_CADDR(SCM_CAR(contents)),
-						  SCM_ARG1, __FUNCTION__));
-      gtk_clist_append(view->contents, name);
-      g_free(name[0]);
-      g_free(name[1]);
-      g_free(name[2]);
+
+      gtk_list_store_append(store, &iter);
+      gtk_list_store_set
+	(store, &iter,
+	 CONTENTS_COL_NAME, SCM_STRING_CHARS(scm_call_1(report_menu_name,
+							this_report)),
+	 CONTENTS_COL_ROW, i,
+	 CONTENTS_COL_REPORT_COLS, scm_num2int(SCM_CADR(SCM_CAR(contents)),
+					       SCM_ARG1, __FUNCTION__),
+	 CONTENTS_COL_REPORT_ROWS, scm_num2int(SCM_CADDR(SCM_CAR(contents)),
+					       SCM_ARG1, __FUNCTION__),
+	 -1);
     }
   }
-  gtk_clist_select_row(view->contents, row, 0);
-  gtk_clist_thaw(view->contents);
+  
+  tree_selection = gtk_tree_view_get_selection(view->contents);
+  path = gtk_tree_path_new_from_indices(row, -1);
+  gtk_tree_selection_select_path(tree_selection, path);
+  //  gtk_tree_view_scroll_to_cell(view->contents, path, NULL, TRUE, 0.5, 0.0);
+  gtk_tree_path_free(path);
 }
 
 static void
-gnc_column_view_select_avail_cb(GtkCList * clist, gint row, gint col,
-                                GdkEvent * ev, gpointer data)
+gnc_column_view_select_avail_cb(GtkTreeSelection *selection,
+				gnc_column_view_edit *r)
 {
-  gnc_column_view_edit * r = data;
-  r->available_selected = row;  
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    gtk_tree_model_get(model, &iter,
+		       AVAILABLE_COL_ROW, &r->available_selected,
+		       -1);
 }
 
 static void
-gnc_column_view_select_contents_cb(GtkCList * clist, gint row, gint col,
-                                   GdkEvent * ev, gpointer data)
+gnc_column_view_select_contents_cb(GtkTreeSelection *selection,
+				   gnc_column_view_edit *r)
 {
-  gnc_column_view_edit * r = data;
-  r->contents_selected = row;  
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    gtk_tree_model_get(model, &iter,
+		       AVAILABLE_COL_ROW, &r->contents_selected,
+		       -1);
 }
 
 static void
@@ -223,11 +263,17 @@ gnc_column_view_edit_options(SCM options, SCM view)
   SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
   SCM ptr;
   GtkWidget * editor;
+  GtkListStore *store;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
 
   ptr = scm_call_1(get_editor, view);
   if(ptr != SCM_BOOL_F) {
-    GtkWindow * w = gw_wcp_get_ptr(ptr);
+#define FUNC_NAME "gtk_window_present"
+    GtkWindow * w = SWIG_MustGetPtr(ptr, SWIG_TypeQuery("_p_GtkWidget"), 1, 0);
     gtk_window_present(w);
+#undef FUNC_NAME
     return NULL;
   }
   else {
@@ -268,8 +314,8 @@ gnc_column_view_edit_options(SCM options, SCM view)
        G_CALLBACK (gnc_column_view_edit_size_cb), r);
 
     editor       = glade_xml_get_widget (xml, "view_contents_table");
-    r->available = GTK_CLIST (glade_xml_get_widget (xml, "available_list"));
-    r->contents  = GTK_CLIST (glade_xml_get_widget (xml, "contents_list"));
+    r->available = GTK_TREE_VIEW (glade_xml_get_widget (xml, "available_view"));
+    r->contents  = GTK_TREE_VIEW (glade_xml_get_widget (xml, "contents_view"));
     r->options   = options;
     r->view      = view;
     r->available_selected = 0;
@@ -278,12 +324,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     r->contents_list = SCM_EOL;
     r->odb       = gnc_option_db_new(r->options);
 
-    gtk_clist_set_column_auto_resize(r->available, 0, TRUE);
-    gtk_clist_set_column_auto_resize(r->contents, 0, TRUE);
-    gtk_clist_set_column_auto_resize(r->contents, 1, TRUE);
-    gtk_clist_set_column_auto_resize(r->contents, 2, TRUE);
-
-    gnc_build_options_dialog_contents(r->optwin, r->odb);
+    gnc_options_dialog_build_contents(r->optwin, r->odb);
 
     gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
                                           (r->optwin)),
@@ -295,15 +336,50 @@ gnc_column_view_edit_options(SCM options, SCM view)
     scm_gc_protect_object(r->available_list);
     scm_gc_protect_object(r->contents_list);
 
-    g_signal_connect(G_OBJECT(r->available), "select_row", 
-                     G_CALLBACK (gnc_column_view_select_avail_cb), (gpointer)r);
-    g_signal_connect(G_OBJECT(r->contents), "select_row", 
-                     G_CALLBACK (gnc_column_view_select_contents_cb), (gpointer)r);
+    /* Build the 'available' view */
+    store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_INT);
+    gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
+    g_object_unref(store);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes("", renderer,
+						      "text", AVAILABLE_COL_NAME,
+						      NULL);
+    gtk_tree_view_append_column(r->available, column);
+
+    selection = gtk_tree_view_get_selection(r->available);
+    g_signal_connect(selection, "changed",
+		     G_CALLBACK(gnc_column_view_select_avail_cb), r);
+
+    /* Build the 'contents' view */
+    store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
+				G_TYPE_INT, G_TYPE_INT);
+    gtk_tree_view_set_model(r->contents, GTK_TREE_MODEL(store));
+    g_object_unref(store);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Report"), renderer,
+						      "text", CONTENTS_COL_NAME,
+						      NULL);
+    gtk_tree_view_append_column(r->contents, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Cols"), renderer,
+						      "text", CONTENTS_COL_REPORT_COLS,
+						      NULL);
+    gtk_tree_view_append_column(r->contents, column);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Rows"), renderer,
+						      "text", CONTENTS_COL_REPORT_ROWS,
+						      NULL);
+    gtk_tree_view_append_column(r->contents, column);
+
+    selection = gtk_tree_view_get_selection(r->contents);
+    g_signal_connect(selection, "changed",
+		     G_CALLBACK(gnc_column_view_select_contents_cb), r);
 
     update_display_lists(r);
-
-    gtk_clist_column_titles_passive (r->available);
-    gtk_clist_column_titles_passive (r->contents);
 
     gnc_options_dialog_set_apply_cb(r->optwin, 
                                     gnc_column_view_edit_apply_cb, r);

@@ -45,7 +45,6 @@
 #define GCONF_SECTION 	       "dialogs/print_checks"
 #define KEY_CHECK_FORMAT       "check_format"
 #define KEY_CHECK_POSITION     "check_position"
-#define KEY_DATE_FORMAT        "date_format"
 #define KEY_DATE_FORMAT_USER   "date_format_custom"
 #define KEY_CUSTOM_PAYEE       "custom_payee"
 #define KEY_CUSTOM_DATE        "custom_date"

@@ -204,7 +204,8 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 }
 
 gboolean
-equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, QofBook *book)
+equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, 
+                             QofBook *book)
 {
     gnc_commodity *cmpcom;
 

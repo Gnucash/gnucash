@@ -1,10 +1,6 @@
 SUBDIRS = glade schemas ui
 
-lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
-
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
-#nodist_gwmod_DATA = gw-gnc.scm
+lib_LTLIBRARIES = libgncgnome.la
 
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
@@ -16,21 +12,14 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLADE_LIBS} \
-  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
-libgw_gnc_la_SOURCES = gw-gnc.c
-
-libgw_gnc_la_LDFLAGS =  \
-  ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
-libgw_gnc_la_LIBADD = libgncgnome.la
-
 libgncgnome_la_SOURCES = \
+  swig-gnome.c \
   dialog-chart-export.c  \
   dialog-commodities.c \
   dialog-fincalc.c \
@@ -98,16 +87,20 @@ noinst_HEADERS = \
   gnc-plugin-page-register.h \
   gnc-plugin-page-transactions.h \
   gnc-split-reg.h \
-  gw-gnc.h \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
-  window-reconcile.h \
-  gw-gnc.h
+  window-reconcile.h
+
+if BUILDING_FROM_SVN
+swig-gnome.c: gnome.i dialog-progress.h
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/src -o $@ $<
+endif
 
 EXTRA_DIST = \
   gnucash.desktop.in \
-  ${gwmod_DATA}
+  gnome.i
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -117,7 +110,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/register/ledger-core \
@@ -127,7 +119,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
-  ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
@@ -141,34 +132,5 @@ AM_CFLAGS = \
 # The line below breaks automake 1.5.  
 ##OMIT_DEPENDENCIES = gnc-dir.h
 
-noinst_DATA = .scm-links
-
-if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = gw-gnc-spec.scm
-endif
-
-.scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  $(LN_S) -f ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
-  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status Makefile
-	FLAVOR=gnome $(GUILE) -c \
-          "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-           (set! %load-path (cons \"../engine\" %load-path)) \
-           (set! %load-path (cons \"../app-utils\" %load-path)) \
-           (set! %load-path (cons \"../gnome-utils\" %load-path)) \
-           (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
-           (primitive-load \"./gw-gnc-spec.scm\") \
-           (gw:generate-wrapset \"gw-gnc\")"
-BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gnucash.desktop gnucash g-wrapped .scm-links
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc.html
+CLEANFILES = gnucash.desktop
+MAINTAINERCLEANFILES = swig-gnome.c

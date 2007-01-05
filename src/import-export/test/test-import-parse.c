@@ -22,6 +22,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include "config.h"
 #include <glib.h>
 #include <libguile.h>
 

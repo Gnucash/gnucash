@@ -904,7 +904,7 @@ gnc_tree_view_set_sort_order (GncTreeView *view,
     return;
   order = gnc_enum_from_nick(GTK_TYPE_SORT_TYPE, name, GTK_SORT_ASCENDING);
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
-					    &current, &order))
+					    &current, NULL))
       current = GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID;
   g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
@@ -1192,7 +1192,8 @@ gnc_tree_view_remove_gconf(GncTreeView *view)
   }
 
   DEBUG("removing gconf notification");
-  gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section);
+  gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section,
+				GNC_TREE_VIEW_NAME);
   g_free(priv->gconf_section);
   priv->gconf_section = NULL;
   LEAVE(" ");
@@ -1229,7 +1230,8 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   priv->gconf_section = g_strdup(section);
   gnc_gconf_add_notification(G_OBJECT(view), section,
-			     gnc_tree_view_gconf_changed);
+			     gnc_tree_view_gconf_changed,
+			     GNC_TREE_VIEW_NAME);
 
   /* Catch changes to the sort column. Propagate to gconf. The key can
    * be set before the model, so the code must handle that case. */

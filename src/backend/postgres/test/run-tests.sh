@@ -14,7 +14,7 @@ if ${srcdir}/db-control.sh create; then
 elif [ "${PGHOST}X" != "X" ]; then
 # This expects the logged in user to have authority
 # to create databases.
-    if [ "${PGPORT}X" == "X" ]; then
+    if [ "${PGPORT}X" = "X" ]; then
 	export PGPORT=5432
     fi
     ./test-db $PGHOST $PGPORT || EXIT_VALUE=1

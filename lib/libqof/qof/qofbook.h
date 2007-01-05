@@ -99,11 +99,11 @@ void qof_book_mark_closed (QofBook *book);
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */
-QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
+QofCollection  * qof_book_get_collection (const QofBook *, QofIdType);
 
 /** Invoke the indicated callback on each collection in the book. */
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
-void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
+void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
 
 /** Return The kvp data for the book.
  *  Note that the book KVP data is persistent, and is stored/retrieved
@@ -134,10 +134,10 @@ void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data,
                             QofBookFinalCB);
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
-gpointer qof_book_get_data (QofBook *book, const gchar *key);
+gpointer qof_book_get_data (const QofBook *book, const gchar *key);
 
 /** Is the book shutting down? */
-gboolean qof_book_shutting_down (QofBook *book);
+gboolean qof_book_shutting_down (const QofBook *book);
 
 /** qof_book_not_saved() will return TRUE if any
  *    data in the book hasn't been saved to long-term storage.
@@ -147,7 +147,7 @@ gboolean qof_book_shutting_down (QofBook *book);
  *    'dirty' flag.  Its up to the backend to periodically reset this
  *    flag, when it actually does save the data.)
  */
-gboolean qof_book_not_saved (QofBook *book);
+gboolean qof_book_not_saved (const QofBook *book);
 
 /** The qof_book_mark_saved() routine marks the book as having been
  *    saved (to a file, to a database). Used by backends to mark the
@@ -166,10 +166,10 @@ void qof_book_mark_dirty(QofBook *book);
  *    and all subsidiary structures, printing out which structures
  *    have been marked dirty.
  */
-void qof_book_print_dirty (QofBook *book);
+void qof_book_print_dirty (const QofBook *book);
 
 /** Retrieve the earliest modification time on the book. */
-time_t qof_book_get_dirty_time(QofBook *book);
+time_t qof_book_get_dirty_time(const QofBook *book);
 
 /** Set the function to call when a book transitions from clean to
  *    dirty, or vice versa.
@@ -183,7 +183,7 @@ void qof_book_kvp_changed (QofBook *book);
 /** The qof_book_equal() method returns TRUE if books are equal.
  * XXX this routine is broken, and does not currently compare data.
  */
-gboolean qof_book_equal (QofBook *book_1, QofBook *book_2);
+gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
 
 /** This will 'get and increment' the named counter for this book.
  * The return value is -1 on error or the incremented counter.

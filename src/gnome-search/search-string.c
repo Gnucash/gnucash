@@ -3,6 +3,8 @@
  *
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
@@ -29,6 +31,7 @@
 #include <regex.h>
 
 #include "search-string.h"
+#include "search-core-utils.h"
 #include "QueryCore.h"
 
 #define d(x)
@@ -235,13 +238,6 @@ toggle_changed (GtkToggleButton *button, GNCSearchString *fe)
 }
 
 static void
-option_changed (GtkWidget *widget, GNCSearchString *fe)
-{
-  fe->how = (GNCSearchString_Type)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static void
 entry_changed (GtkEntry *entry, GNCSearchString *fe)
 {
   const char *new;
@@ -251,49 +247,22 @@ entry_changed (GtkEntry *entry, GNCSearchString *fe)
 }
 
 static GtkWidget *
-add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       GNCSearchString_Type option)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
   GNCSearchString *fi = (GNCSearchString *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0;
+  GtkComboBox *combo;
 
-  menu = gtk_menu_new ();
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
 
-  item = add_menu_item (menu, fe, _("contains"), SEARCH_STRING_CONTAINS);
-  first = item;
+  gnc_combo_box_search_add(combo, _("contains"), SEARCH_STRING_CONTAINS);
+  gnc_combo_box_search_add(combo, _("matches regex"),
+				SEARCH_STRING_MATCHES_REGEX);
+  gnc_combo_box_search_add(combo, _("does not match regex"),
+				SEARCH_STRING_NOT_MATCHES_REGEX);
+  gnc_combo_box_search_changed(combo, &fi->how);
+  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : SEARCH_STRING_CONTAINS);
 
-  item = add_menu_item (menu, fe, _("does not contain"),
-			SEARCH_STRING_NOT_CONTAINS);
-  if (fi->how == SEARCH_STRING_NOT_CONTAINS) { current = 1; first = item; }
-
-  item = add_menu_item (menu, fe, _("matches regex"),
-			SEARCH_STRING_MATCHES_REGEX);
-  if (fi->how == SEARCH_STRING_MATCHES_REGEX) { current = 2; first = item; }
-
-  item = add_menu_item (menu, fe, _("does not match regex"),
-			SEARCH_STRING_NOT_MATCHES_REGEX);
-  if (fi->how == SEARCH_STRING_NOT_MATCHES_REGEX)
-    { current = 3; first = item; }
-
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
-
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
-
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static void

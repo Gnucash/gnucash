@@ -1,6 +1,6 @@
- N_( "Warning!! This is a DEVELOPMENT version of GnuCash. \ 
-It probably has lots of bugs and unstable features! \ 
-If you are looking for a stable personal finance application, \ 
+ N_( "Warning!! This is a DEVELOPMENT version of GnuCash. \
+It probably has lots of bugs and unstable features! \
+If you are looking for a stable personal finance application, \
 you should use the latest release of GnuCash 2.0.")
 
  N_( "The GnuCash online manual has lots of helpful information. \
@@ -57,6 +57,9 @@ Accounts -> Open Subaccounts from the menu.")
 decrement the selected date. You can use '+' and '-' to increment and \
 decrement check numbers as well.")
 
+ N_( "To switch between multiple tabs in the main window, press \
+Control+Alt+Page Up/Down.")
+
  N_( "In the reconcile window, you can press the spacebar to mark \
 transactions as reconciled.  You can also press Tab and Shift-Tab to \
 move between deposits and withdrawals.")
@@ -74,6 +77,9 @@ report.")
  N_( "Style Sheets affect how reports are displayed.  Choose \
 a style sheet for your report as a report option, and use \
 the Edit -> Style Sheets menu to customize style sheets.")
+
+ N_( "To raise the accounts menu in the transfer field of a register \
+page, press the Menu key or the Ctrl-Down key combination.")
 
  N_( "The GnuCash developers are easy to contact.  As well \
 as several mailing lists, you can chat to them live on IRC! \

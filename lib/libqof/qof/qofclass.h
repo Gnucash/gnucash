@@ -151,6 +151,14 @@ typedef gpointer (*QofAccessFunc)(gpointer object, const QofParam *param);
  */
 typedef void (*QofSetterFunc) (gpointer, gpointer);
 
+/* A callback for how to compare two (same-type) objects based on a
+ * common getter (parameter member), using the provided comparison
+ * options (which are the type-specific options).
+ */
+typedef gint (*QofCompareFunc) (gpointer a, gpointer b,
+                                gint compare_options,
+                                QofParam *getter);
+
 /** This structure is for each queriable parameter in an object
  *
  * -- param_name is the name of the parameter.
@@ -174,6 +182,7 @@ struct _QofParam
   QofType            param_type;
   QofAccessFunc      param_getfcn;
   QofSetterFunc      param_setfcn;
+  QofCompareFunc     param_compfcn;
   gpointer           param_userdata;
 };
 

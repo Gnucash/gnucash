@@ -89,7 +89,7 @@ void qof_object_book_end (QofBook *book)
 }
 
 gboolean 
-qof_object_is_dirty (QofBook *book)
+qof_object_is_dirty (const QofBook *book)
 {
   GList *l;
 

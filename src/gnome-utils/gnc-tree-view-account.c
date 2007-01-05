@@ -507,7 +507,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-  sample_type = xaccAccountGetTypeStr(CREDIT);
+  sample_type = xaccAccountGetTypeStr(ACCT_TYPE_CREDIT);
   sample_commodity = gnc_commodity_get_fullname(gnc_default_currency());
 
   priv->name_column 

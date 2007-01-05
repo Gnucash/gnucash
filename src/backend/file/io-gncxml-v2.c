@@ -121,20 +121,11 @@ static gboolean
 add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 {
     gnc_commodity_table *table;
-    Split *spl;
-    int i;
     
     table = gnc_book_get_commodity_table (data->book);
 
     xaccTransBeginEdit (trn);
     xaccTransScrubCurrency (trn);
-
-    for(i = 0, spl = xaccTransGetSplit(trn, i);
-        spl;
-        i++, spl = xaccTransGetSplit(trn, i))
-    {
-        xaccAccountInsertSplit(xaccSplitGetAccount(spl), spl);
-    }
     xaccTransCommitEdit (trn);
 
     data->counter.transactions_loaded++;

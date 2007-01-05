@@ -41,7 +41,7 @@
 
 
 ;; gettext functions
-(define gnc:gettext gnc:gettext-helper)
+(define gnc:gettext gnc-gettext-helper)
 (define gnc:_ gnc:gettext)
 (define _ gnc:gettext)
 (define-syntax N_

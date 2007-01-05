@@ -1,7 +1,7 @@
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-engine.la libgw-engine.la libgw-kvp.la
+pkglib_LTLIBRARIES = libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
@@ -28,6 +28,7 @@ libgncmod_engine_la_SOURCES = \
   Split.c \
   TransLog.c \
   Transaction.c \
+  binreloc.c \
   cap-gains.c \
   cashobjects.c \
   gnc-associate-account.c \
@@ -37,10 +38,15 @@ libgncmod_engine_la_SOURCES = \
   gnc-filepath-utils.c \
   gnc-hooks.c \
   gnc-lot.c \
+  gnc-path.c \
   gnc-pricedb.c \
   gnc-session.c \
   gnc-session-scm.c \
   gncmod-engine.c \
+  swig-engine.c \
+  kvp-scm.c \
+  engine-helpers.c \
+  glib-helpers.c  \
   policy.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -66,6 +72,7 @@ gncinclude_HEADERS = \
   Split.h \
   TransLog.h \
   Transaction.h \
+  binreloc.h \
   cap-gains.h \
   cashobjects.h \
   engine-helpers.h \
@@ -78,6 +85,7 @@ gncinclude_HEADERS = \
   gnc-event.h \
   gnc-filepath-utils.h \
   gnc-hooks.h \
+  gnc-path.h \
   gnc-pricedb.h \
   gnc-session.h \
   gnc-session-scm.h \
@@ -100,8 +108,6 @@ noinst_HEADERS = \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
-  gw-engine.h \
-  gw-kvp.h \
   policy-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
@@ -109,27 +115,12 @@ noinst_SCRIPTS = iso-currencies-to-c
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgncmodule.la \
   ../core-utils/libcore-utils.la \
-  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
   ${QOF_LIBS} \
+  ${REGEX_LIBS} \
   ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
-
-libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
-libgw_kvp_la_LDFLAGS = \
-  ${G_WRAP_LINK_ARGS} \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
-libgw_kvp_la_LIBADD = \
-  libgncmod-engine.la \
-  libgw-engine.la
-
-libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c glib-helpers.c
-libgw_engine_la_LDFLAGS = \
-  ${G_WRAP_LINK_ARGS} \
-  ${QOF_LIBS} \
-  ${GLIB_LIBS}
-libgw_engine_la_LIBADD = \
-  libgncmod-engine.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = engine.scm 
@@ -141,13 +132,6 @@ gncscm_DATA = \
   engine-utilities.scm \
   gnc-numeric.scm
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = \
-  gw-engine-spec.scm \
-  gw-engine.scm \
-  gw-kvp-spec.scm \
-  gw-kvp.scm
-
 EXTRA_DIST = \
   README.query-api \
   design.txt \
@@ -157,13 +141,13 @@ EXTRA_DIST = \
   gncla-dir.h.in \
   kvp_doc.txt \
   SX-book-p.h \
+  engine.i \
   ${gncmod_DATA} \
-  ${gncscm_DATA} \
-  ${gwmod_DATA}
+  ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
-SCM_FILE_LINKS = gw-engine-spec.scm gw-kvp-spec.scm iso-4217-currencies.scm
+SCM_FILE_LINKS = iso-4217-currencies.scm
 #For executing test cases
 SCM_FILE_LINKS += \
   ${gncmod_DATA} \
@@ -171,46 +155,45 @@ SCM_FILE_LINKS += \
 endif
 
 .scm-links: 
-	rm -f gnucash g-wrapped
-	$(LN_S) -f . gnucash 
-	$(LN_S) -f . g-wrapped 
+	$(RM) -rf gnucash
+	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
+	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 	touch .scm-links
+
+noinst_DATA = .scm-links
+
+if BUILDING_FROM_SVN
+swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
+	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
+endif
 
 iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 	-chmod u+x ${srcdir}/iso-currencies-to-c
 	GUILE_LOAD_PATH=@GNC_SRFI_LOAD_PATH@:${GUILE_LOAD_PATH} srcdir=${srcdir} ${srcdir}/iso-currencies-to-c
 
-gw-engine.scm gw-engine.c gw-engine.h: \
-  .scm-links gw-engine-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (primitive-load \"./gw-engine-spec.scm\") \
-	 (gw:generate-wrapset \"gw-engine\")"
-
-gw-kvp.scm gw-kvp.c gw-kvp.h: \
-  .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome $(GUILE) -c \
-	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
-	 (set! %load-path (cons \"${PWD}\" %load-path)) \
-	 (primitive-load \"./gw-kvp-spec.scm\") \
-	 (gw:generate-wrapset \"gw-kvp\")"
-
-BUILT_SOURCES = \
-  iso-4217-currencies.c \
-  gw-engine.scm gw-engine.c gw-engine.h \
-  gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
-
-CLEANFILES = gnucash g-wrapped .scm-links gncla-dir.h
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
-
-gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
+gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's:@-libdir-@:${libdir}:g'
+		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
+		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
+		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
+		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
+		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
+		-e 's#@-libdir-@#${libdir}#g' \
+		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
+		-e 's#@-datadir-@#${datadir}#g' \
+		-e 's#@-prefix-@#${prefix}#g'
 	mv $@.tmp $@
+
+BUILT_SOURCES = iso-4217-currencies.c \
+  gncla-dir.h
+
+CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
+	${SCM_FILE_LINKS}
+MAINTAINERCLEANFILES = swig-engine.c

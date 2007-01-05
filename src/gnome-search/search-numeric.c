@@ -3,6 +3,8 @@
  *
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
@@ -29,6 +31,7 @@
 #include "QueryCore.h"
 
 #include "search-numeric.h"
+#include "search-core-utils.h"
 
 #define d(x)
 
@@ -194,109 +197,62 @@ gncs_validate (GNCSearchCoreType *fe)
 }
 
 static void
-how_option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
-{
-  fe->how = (query_compare_t)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static void
-option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
-{
-  fe->option = (query_compare_t)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static void
 entry_changed (GNCAmountEdit *entry, GNCSearchNumeric *fe)
 {
   fe->value = gnc_amount_edit_get_amount (entry);
 }
 
 static GtkWidget *
-add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       query_compare_t option, GCallback fcn)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
-  g_signal_connect (G_OBJECT (item), "activate", fcn, user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-#define ADD_MENU_ITEM(cmp,str,op,fcn) { \
-	item = add_menu_item (menu, fe, str, op, fcn); \
-	if (cmp == op) { current = index; first = item; } \
-	index++; \
-} 
-
-static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
   GNCSearchNumericPrivate *priv;
-  GtkWidget *menu, *item, *first = NULL, *opmenu;
-  int current = 0, index = 0;
-
-  menu = gtk_menu_new ();
+  GtkComboBox *combo;
 
   priv = _PRIVATE(fi);
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("less than") : _("is less than")),
-		 COMPARE_LT, G_CALLBACK (how_option_changed));
-  first = item;			/* Force one */
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("less than or equal to") :
-			   _("is less than or equal to")),
-		 COMPARE_LTE, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("equal to") : _("equals")),
-		 COMPARE_EQUAL, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("not equal to") : _("does not equal")),
-		 COMPARE_NEQ, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("greater than") : _("is greater than")),
-		 COMPARE_GT, G_CALLBACK (how_option_changed));
-  ADD_MENU_ITEM (fi->how, (priv->is_debcred ?
-			   _("greater than or equal to") :
-			   _("is greater than or equal to")),
-		 COMPARE_GTE, G_CALLBACK (how_option_changed));
 
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("less than") : _("is less than")),
+			   COMPARE_LT);
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("less than or equal to") :
+				   _("is less than or equal to")),
+			   COMPARE_LTE);
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("equal to") : _("equals")),
+			   COMPARE_EQUAL);
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("not equal to") : _("does not equal")),
+			   COMPARE_NEQ);
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("greater than") : _("is greater than")),
+			   COMPARE_GT);
+  gnc_combo_box_search_add(combo, (priv->is_debcred ?
+				   _("greater than or equal to") :
+				   _("is greater than or equal to")),
+			   COMPARE_GTE);
 
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
+  gnc_combo_box_search_changed(combo, &fi->how);
+  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : COMPARE_LT);
 
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static GtkWidget *
 make_option_menu (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0, index = 0;
+  GtkComboBox *combo;
 
-  menu = gtk_menu_new ();
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+  gnc_combo_box_search_add(combo, _("has credits or debits"), NUMERIC_MATCH_ANY);
+  gnc_combo_box_search_add(combo, _("has debits"), NUMERIC_MATCH_DEBIT);
+  gnc_combo_box_search_add(combo, _("has credits"), NUMERIC_MATCH_CREDIT);
+  gnc_combo_box_search_changed(combo, &fi->option);
+  gnc_combo_box_search_set_active(combo, fi->option ? fi->option : NUMERIC_MATCH_ANY);
 
-  ADD_MENU_ITEM (fi->option, _("has credits or debits"), NUMERIC_MATCH_ANY,
-		G_CALLBACK (option_changed));
-  first = item;			/* Force one */
-  ADD_MENU_ITEM (fi->option, _("has debits"), NUMERIC_MATCH_DEBIT,
-		 G_CALLBACK (option_changed));
-  ADD_MENU_ITEM (fi->option, _("has credits"), NUMERIC_MATCH_CREDIT,
-		 G_CALLBACK (option_changed));
-
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
-
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
-
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static void

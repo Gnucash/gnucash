@@ -41,7 +41,7 @@ static gboolean qof_choice_is_initialized(void)
 	return TRUE;
 }
 
-gboolean qof_object_is_choice(QofIdType type)
+gboolean qof_object_is_choice(QofIdTypeConst type)
 {
 	gpointer value, check;
 
@@ -67,7 +67,9 @@ qof_choice_create(char* type)
 	return TRUE;
 }
 
-gboolean qof_choice_add_class(char* select, char* option, char* param_name)
+gboolean qof_choice_add_class(const char* select,
+			      char* option,
+			      char* param_name)
 {
 	GHashTable *param_table;
 	GList *option_list;
@@ -97,7 +99,9 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param)
 	return choices;
 }
 
-gboolean qof_choice_check(char* choice_obj, char *param_name, char* choice )
+gboolean qof_choice_check(const char* choice_obj,
+			  const char *param_name,
+			  const char* choice )
 {
 	GList *choices, *result;
 	GHashTable *param_table;

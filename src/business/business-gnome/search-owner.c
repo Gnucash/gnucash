@@ -3,6 +3,8 @@
  *
  *  Authors: Derek Atkins <warlord@MIT.EDU>
  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
@@ -32,6 +34,7 @@
 
 #include "business-gnome-utils.h"
 #include "search-owner.h"
+#include "search-core-utils.h"
 
 #define d(x)
 
@@ -199,11 +202,14 @@ set_owner_widget (GNCSearchOwner *fe)
 }
 
 static void
-type_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
+type_combo_changed (GtkWidget *widget, GNCSearchOwner *fe)
 {
   GNCSearchOwnerPrivate *priv;
-  GncOwnerType type = (GncOwnerType)
-    g_object_get_data (G_OBJECT (widget), "option");
+  GncOwnerType type;
+
+  g_return_if_fail(GTK_IS_COMBO_BOX(widget));
+
+  type = gnc_combo_box_search_get_active(GTK_COMBO_BOX(widget));
 
   /* If the type changed or if we don't have a type create the owner_choice */
   priv = GNC_SEARCH_OWNER_GET_PRIVATE(fe);
@@ -216,99 +222,43 @@ type_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
 }
 
 static GtkWidget *
-add_type_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-		    GncOwnerType type)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) type);
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (type_option_changed),
-		    user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-#define ADD_TYPE_MENU_ITEM(str,tp) { \
-	item = add_type_menu_item (menu, fe, str, tp); \
-	if (type == tp) { current = index; first = item; } \
-	index++; \
-} 
-
-static GtkWidget *
 make_type_menu (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
   GNCSearchOwnerPrivate *priv;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0, index = 0;
+  GtkComboBox *combo;
   GncOwnerType type;
-
-  menu = gtk_menu_new ();
 
   priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
   type = gncOwnerGetType (&(priv->owner));
 
-  ADD_TYPE_MENU_ITEM (_("Customer"), GNC_OWNER_CUSTOMER);
-  first = item;
-  ADD_TYPE_MENU_ITEM (_("Vendor"), GNC_OWNER_VENDOR);
-  ADD_TYPE_MENU_ITEM (_("Employee"), GNC_OWNER_EMPLOYEE);
-  ADD_TYPE_MENU_ITEM (_("Job"), GNC_OWNER_JOB);
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+  gnc_combo_box_search_add(combo, _("Customer"), GNC_OWNER_CUSTOMER);
+  gnc_combo_box_search_add(combo, _("Vendor"), GNC_OWNER_VENDOR);
+  gnc_combo_box_search_add(combo, _("Employee"), GNC_OWNER_EMPLOYEE);
+  gnc_combo_box_search_add(combo, _("Job"), GNC_OWNER_JOB);
 
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
+  g_signal_connect (combo, "changed", G_CALLBACK (type_combo_changed), fe);
+  gnc_combo_box_search_set_active(combo, type);
 
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
+  return GTK_WIDGET(combo);
 
-  return opmenu;
+
 }
-
-static void
-how_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
-{
-  fe->how = (query_compare_t)
-    g_object_get_data (G_OBJECT (widget), "option");
-}
-
-static GtkWidget *
-add_how_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       query_compare_t option)
-{
-  GtkWidget *item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (how_option_changed),
-		    user_data);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-#define ADD_HOW_MENU_ITEM(str,op) { \
-	item = add_how_menu_item (menu, fe, str, op); \
-	if (fi->how == op) { current = index; first = item; } \
-	index++; \
-} 
 
 static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
-  int current = 0, index = 0;
+  GtkComboBox *combo;
 
-  menu = gtk_menu_new ();
+  combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+  gnc_combo_box_search_add(combo, _("is"), GUID_MATCH_ANY);
+  gnc_combo_box_search_add(combo, _("is not"), GUID_MATCH_NONE);
+  gnc_combo_box_search_changed(combo, &fi->how);
+  gnc_combo_box_search_set_active(combo, fi->how ? fi->how : GUID_MATCH_ANY);
 
-  ADD_HOW_MENU_ITEM (_("is"), GUID_MATCH_ANY);
-  first = item;			/* Force one */
-  ADD_HOW_MENU_ITEM (_("is not"), GUID_MATCH_NONE);
-
-  opmenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
-
-  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
-
-  return opmenu;
+  return GTK_WIDGET(combo);
 }
 
 static GtkWidget *

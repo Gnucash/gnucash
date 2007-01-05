@@ -24,6 +24,10 @@ AC_INIT([gnucash], [2.0.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
+AC_CONFIG_HEADERS(gsf-config.h)
+AC_CONFIG_HEADERS(goffice-config.h)
+AC_CONFIG_HEADERS(goffice-features.h)
+
 # Initialize automake -- make sure we have at least version 1.9
 AM_INIT_AUTOMAKE(1.9)
 
@@ -101,13 +105,44 @@ AC_CHECK_FUNCS(setenv,,[
   ])
 ])
 
+##################################################
+# Check for win32 platform
+##################################################
+AC_MSG_CHECKING([for native Win32])
+case $host in
+  *-*-mingw*)
+    native_win32=yes
+    ;;
+  *)
+    native_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$native_win32])
+AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
+
+AC_MSG_CHECKING([for Win32 platform in general])
+case $host in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT($platform_win32)
+AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
+##################################################
+  
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 if test x$am_cv_scanf_lld = "xno"; then
   SCANF_QD_CHECK
 
-  if test x$am_cv_scanf_qs = "xno"; then
-    AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
+  if test x$am_cv_scanf_qd = "xno"; then
+    SCANF_I64D_CHECK
+    if test x$am_cv_scanf_i64d = "xno"; then
+      AC_MSG_ERROR([Cannot continue, no long long conversion support in scanf.])
+    fi
   fi
 fi
 
@@ -116,10 +151,26 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
 fi
 
+# test whether we are building directly from SVN/SVK
+${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
+if test $? = 0 ; then
+  BUILDING_FROM_SVN=yes
+
+  # We need at least version 1.3.28 of SWIG because
+  # that's when SWIG added %delobject
+  AC_PROG_SWIG(1.3.28)
+else
+  BUILDING_FROM_SVN=no
+fi
+AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
+
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
+
+# Init binreloc
+AM_BINRELOC
 
 ### --------------------------------------------------------------------------
 ### See if we have pkg-config
@@ -234,19 +285,28 @@ esac
 
 
 ### --------------------------------------------------------------------------
-### Guile and g-wrap version checks (should this be something other than
-### the Gnome check?)
+### Guile version checks (should this be something other than the Gnome check?)
 
+# If the user has given these values, cache them to override the
+# detected values.
+if test "x$GUILE_LIBS" != x; then
+  saved_GUILE_LIBS="$GUILE_LIBS"
+fi
+if test "x$GUILE_INCS" != x; then
+  saved_GUILE_INCS="$GUILE_INCS"
+fi
 GUILE_LIBS=""
 GNOME_CHECK_GUILE
+
+if test "x$saved_GUILE_LIBS" != x; then
+  GUILE_LIBS="$saved_GUILE_LIBS"
+fi
+if test "x$saved_GUILE_INCS" != x; then
+  GUILE_INCS="$saved_GUILE_INCS"
+fi
+
 AS_SCRUB_INCLUDE(GUILE_INCS)
 AC_SUBST(GUILE_LIBS)
-
-### --------------------------------------------------------------------------
-### G-wrap (libraries and executable)
-
-G_WRAP_COMPILE_ARGS=""
-G_WRAP_LINK_ARGS=""
 
 AM_GUILE_VERSION_CHECK(1.6.0, , , [AC_MSG_ERROR([
 
@@ -267,107 +327,19 @@ AM_GUILE_VERSION_CHECK(1.8.0, , [
   AC_DEFINE(HAVE_GUILE18,1,[System has guile 1.8 or better])
 ], )
 
-AM_PATH_GWRAP(1.3.3, , [AC_MSG_ERROR([
-
-  g-wrap does not appear to be installed correctly, or is not new
-  enough.  GnuCash requires at least version 1.3.3 to build,
-  and 1.9.6 to build cleanly with GCC4.  If you need to install g-wrap,
-  you can find it at http://www.nongnu.org/g-wrap/ .
-])])
-
-# Find out what the g-wrap compile and link flags are.
-AC_MSG_CHECKING(for g-wrap compile args)
-G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
-AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
-
-AC_MSG_CHECKING(for g-wrap link args)
-G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
-# Dear g-wrap: adding -L/usr/lib is very silly.  Do not do this.
-G_WRAP_LINK_ARGS=`echo ${G_WRAP_LINK_ARGS} | sed -e 's|-L/usr/lib ||'`
-AC_MSG_RESULT($G_WRAP_LINK_ARGS)
-
-AC_MSG_CHECKING(for g-wrap module directory)
-G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
-G_WRAP_LIB_DIR=`echo $G_WRAP_MODULE_DIR | sed -e 's|share/guile.*$|lib|'`
-AC_MSG_RESULT($G_WRAP_MODULE_DIR)
-
-AC_GWRAP_CHECK_GUILE($G_WRAP_MODULE_DIR)
-
-save_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $GUILE_INCS $G_WRAP_COMPILE_ARGS"
-AC_CHECK_HEADER(g-wrap-wct.h,,
-	[AC_MSG_ERROR([
-
-   cannot find g-wrap-wct.h where g-wrap claims it should be.
-   are you on Debian or Ubuntu and still using g-wrap 1.9.6-2?
-   See:  http://bugzilla.gnome.org/show_bug.cgi?id=330539
-
-])])
-CPPFLAGS=$save_CPPFLAGS
-
-AC_SUBST(G_WRAP_CONFIG)
-AC_SUBST(G_WRAP_COMPILE_ARGS)
-AC_SUBST(G_WRAP_LINK_ARGS)
-AC_SUBST(G_WRAP_MODULE_DIR)
-AC_SUBST(G_WRAP_LIB_DIR)
-
 AS_SCRUB_INCLUDE(CFLAGS)
 
-AC_MSG_CHECKING([for (g-wrap) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
-        ${GUILE} -c "(use-modules (g-wrap))" > /dev/null 2>&1
+AC_MSG_CHECKING([for SLIB support])
+if ${GUILE} -c "(use-modules (ice-9 slib)) (require 'printf)" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_ERROR([
 
-   Cannot find the (g-wrap) guile module.
-   Are you sure you have g-wrap compile-time environment installed?
-   See http://bugzilla.gnome.org/show_bug.cgi?id=347680
+   Cannot find SLIB.  Are you sure you have it installed?
+   See http://bugzilla.gnome.org/show_bug.cgi?id=347922
 
 ])
-fi
-
-AC_MSG_CHECKING([for (g-wrap gw-glib-spec) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
-        ${GUILE} -c "(use-modules (g-wrap gw-glib-spec))" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR([
-
-   Cannot find the (g-wrap gw-glib-spec) guile module.
-   Are you sure you have g-wrap installed with glib support?
-   See http://bugzilla.gnome.org/show_bug.cgi?id=347404
-
-])
-fi
-
-AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
-if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
-        ${GUILE} -c "(use-modules (g-wrap gw-standard))" > /dev/null 2>&1
-then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
-  AC_MSG_CHECKING([for (g-wrap gw standard) guile module])
-  if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
-    GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
-        ${GUILE} -c "(use-modules (g-wrap gw standard))" > /dev/null 2>&1
-  then
-    AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
-    AC_MSG_WARN([
-
-    Unable to find the g-wrap standard module, a.k.a. guile-g-wrap. 
-    You won't be able to run GnuCash without it!
-
-    ])
-  fi
 fi
 
 ### Check size of long_long - some guile's are broken.
@@ -387,6 +359,11 @@ AC_TRY_RUN([
 	       sizeof(gint64)))
 ],[
   AC_MSG_RESULT(no)
+],[
+  AC_MSG_RESULT(assuming yes)
+  AC_CHECK_LIB(guile, scm_long_long2num,
+               AC_DEFINE(GUILE_LONG_LONG_OK,1,is sizeof(long_long) >=
+	       sizeof(gint64)))
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 
@@ -406,6 +383,8 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(no)
   AC_MSG_ERROR(cannot continue, size of unsigned long too small.)
+],[
+  AC_MSG_RESULT(assuming yes)
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 
@@ -454,6 +433,9 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 ### look for gconf
 
 PKG_CHECK_MODULES(GCONF, gconf-2.0 >= "2.0")
+# Look up gconftool-2
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
+AC_SUBST(GCONFTOOL)
 AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(GCONF_LIBS)
 
@@ -568,7 +550,6 @@ GNC_LIBEXECDIR='${libexecdir}/gnucash'
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
-GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
 GNC_MODULE_DIR='${pkglibdir}'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
@@ -577,7 +558,6 @@ AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
 AC_SUBST(GNC_UI_DIR)
-AC_SUBST(GNC_GWRAP_LIBDIR)
 AC_SUBST(GNC_INCLUDE_DIR)
 AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_MODULE_DIR)
@@ -815,32 +795,10 @@ AC_SUBST(OFX_DIR)
 ### --------------------------------------------------------------------------
 ### MT940
 AC_ARG_ENABLE( mt940,
-  [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
+  [  --enable-mt940               Obsolete, included in --enable-hbci],
   if test "x$enableval" != "xno" ; then
-    MT940_DIR=mt940 ;
-    HBCI_DIR=hbci ;
+    AC_MSG_ERROR([--enable-mt940 is obsolete -- all functionality is already included in --enable-hbci])
   fi)
-if test x${MT940_DIR} = xmt940 ;
-then
-    AC_MSG_WARN([MT940 importing support is enabled but is totally experimental!])
-    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.3.0", [], [
-      # aqbanking-1.3.0 was released on 2005-08-11
-      AC_AQBANKING(1,3,0)
-      if test x${have_aqbanking} != xyes; 
-      then
-      	AC_MSG_ERROR([Could not find aqbanking. If you use --enable-mt940, you *have* to enable aqbanking.])
-      fi
-      HBCI_LIBS="${aqbanking_libs}"
-      HBCI_CFLAGS="${aqbanking_includes}"
-    ])
-    # Note: HBCI_LIBS is changed again below in the --enable-hbci
-    # section. So check for mt940 first and *not* the other way round!
-
-    AS_SCRUB_INCLUDE(HBCI_CFLAGS)
-    AC_SUBST(HBCI_LIBS)
-    AC_SUBST(HBCI_CFLAGS)
-fi
-AC_SUBST(MT940_DIR)
 
 ### --------------------------------------------------------------------------
 ### HBCI
@@ -852,8 +810,9 @@ AC_ARG_ENABLE( hbci,
 if test x${HBCI_DIR} = xhbci ;
 then
     # Check for Aqbanking library
-    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.0.0", [], [
-      AC_AQBANKING(1,0,0)
+    # aqbanking-1.6.0 was released on 2005-09-22
+    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.6.0", [], [
+      AC_AQBANKING(1,6,0)
       if test x${have_aqbanking} != xyes; 
       then
       	AC_MSG_ERROR([Could not find aqbanking. If you use --enable-hbci, you *have* to enable aqbanking.])
@@ -1176,6 +1135,18 @@ then
   AM_CONDITIONAL(HAVE_GTK26, test "x$HAVE_GTK26" = "xyes" )
   
   
+  AC_MSG_CHECKING(for GTK - version >= 2.10.0)
+  if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
+  then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(HAVE_GTK_2_10,1,[System has gtk 2.10.0 or better])
+    HAVE_GTK_2_10=yes
+  else
+    AC_MSG_RESULT(no)
+  fi
+  AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
+  
+  
   AC_MSG_CHECKING(for pango version >= 1.8.0)
   if $PKG_CONFIG 'pango >= 1.8.0'
   then
@@ -1212,20 +1183,38 @@ then
   AC_SUBST(GSF_LIBS)
   
   dnl $4=true => don't die if failure.
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
-  if $PKG_CONFIG --silence-errors 'libgoffice-1 >= 0.0.4'
+  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0,,true)
+  if $PKG_CONFIG --silence-errors 'libgoffice-0.3 >= 0.3.0'
   then
     AC_DEFINE(HAVE_GOFFICE,1,[System has goffice-0.0.4 or better])
     HAVE_GOFFICE=yes
   else
-    AC_MSG_RESULT(using internally-packaged goffice)
-    GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
-    GOFFICE_LIBS='${top_builddir}/lib/goffice-0.0.4/goffice/libgoffice-1.la'
-    HAVE_GOFFICE=no
+    AC_MSG_RESULT(no)
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
+    if $PKG_CONFIG --silence-errors 'libgoffice-1 >= 0.0.4'
+    then
+      AC_DEFINE(HAVE_GOFFICE,1,[System has goffice-0.0.4 or better])
+      HAVE_GOFFICE=yes
+    else
+      AC_MSG_RESULT(using internally-packaged goffice)
+      GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
+      GOFFICE_LIBS='${top_builddir}/lib/goffice-0.0.4/goffice/libgoffice-1.la'
+      HAVE_GOFFICE=no
+    fi
   fi
   AM_CONDITIONAL(HAVE_GOFFICE, test "x$HAVE_GOFFICE" = "xyes")
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
+  
+  ##################################################
+  # regex needs its own linker flag on win32 platform
+  ##################################################
+  if test "$platform_win32" = yes; then
+    REGEX_LIBS="-lregex"
+  else
+    REGEX_LIBS=""
+  fi
+  AC_SUBST(REGEX_LIBS)
   
   ### ------------------------------------------------------------------------
   ### Checks when building internal LIBGSF
@@ -1251,11 +1240,6 @@ then
   m4_eval(libgsf_version_major + libgsf_version_minor)[]dnl
 :libgsf_version_micro:libgsf_version_minor)
   dnl NOTE: Above line needs no leading whitespace!  --warlord
-  
-  dnl 2005-11-19,jsled, this doesn't seem to work... :(
-  dnl ifelse(x$HAVE_LIBGSF, xyes,,
-    AC_CONFIG_HEADERS(gsf-config.h)
-  dnl)
   
   AC_FUNC_FSEEKO
   AC_SYS_LARGEFILE
@@ -1361,30 +1345,6 @@ then
   	 AC_DEFINE([S_ISREG(m)], [(((m) & S_IFMT) == S_IFREG)])
   	 macro_s_isreg=no])
   AC_MSG_RESULT($macro_s_isreg)
-  
-  AC_MSG_CHECKING([for native Win32])
-  case $host in
-    *-*-mingw*)
-      native_win32=yes
-      ;;
-    *)
-      native_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT([$native_win32])
-  AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
-  
-  AC_MSG_CHECKING([for Win32 platform in general])
-  case $host in
-    *-*-mingw*|*-*-cygwin*)
-      platform_win32=yes
-      ;;
-    *)
-      platform_win32=no
-      ;;
-  esac
-  AC_MSG_RESULT($platform_win32)
-  AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
   
   ##################################################
   # Checks for gtk-doc and docbook-tools
@@ -1512,8 +1472,6 @@ then
   
   else
   
-  AM_CONDITIONAL(OS_WIN32, false)
-  AM_CONDITIONAL(PLATFORM_WIN32, false)
   # dnl AM_CONDITIONAL(GTK_DOC_INSTALLED, false)
   # dnl  AM_CONDITIONAL(ENABLE_GTK_DOC, false)
   # dnl  AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, false)
@@ -1546,13 +1504,6 @@ then
   m4_eval(goffice_version_epoch + goffice_version_major)[]dnl
 :goffice_version_minor:goffice_version_major)
   dnl NOTE: Above line needs no leading whitespace!  --warlord
-  
-  dnl This one is created by autoheader, ...
-  AC_CONFIG_HEADERS(goffice-config.h)
-  
-  dnl ... and this one is a small subset, maintained manually,
-  dnl which will be installed.
-  AC_CONFIG_HEADERS(goffice-features.h)
   dnl
   dnl Make sure these two won't clash.  Put the following to goffice-config.h:
   AH_BOTTOM([/* Don't include goffice-features.h, it's a subset of goffice-config.h. */
@@ -1887,11 +1838,10 @@ then
 else
   ### A bunch of am conditionals that need to be set
   AM_CONDITIONAL(HAVE_GTK26, false )
+  AM_CONDITIONAL(HAVE_GTK_2_10, false)
   AM_CONDITIONAL(HAVE_PANGO18, false )
   AM_CONDITIONAL(HAVE_LIBGSF, false)
   AM_CONDITIONAL(HAVE_GOFFICE, false)
-  AM_CONDITIONAL(OS_WIN32, false)
-  AM_CONDITIONAL(PLATFORM_WIN32, false)
   AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
   AM_CONDITIONAL(WITH_PYTHON, false)
 
@@ -2000,10 +1950,10 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} -L${GNC_GWRAP_LIBDIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgw-engine -lgw-kvp -lgncmodule"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgncmodule"
 
-GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}"
-GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS} ${GUILE_INCS}"
+GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${GUILE_INCS}"
+GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS}"
 
 AC_SUBST(GNUCASH_ENGINE_BASE_LIBS)
 AC_SUBST(GNUCASH_ENGINE_LIBS)
@@ -2046,9 +1996,7 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
-  # These two are because of g-wrap -- it can't avoid unused and uninitialized.
-  #warnFLAGS="${warnFLAGS} -Wno-uninitialized"
-  #warnFLAGS="${warnFLAGS} -Wno-unused"
+  CFLAGS="${CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -2056,8 +2004,7 @@ then
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
-  if test $? = 0
+  if test "x$BUILDING_FROM_SVN" = "xyes"
   then
     # This code is from SVN/SVK, so enable error-on-warning
     error_on_warning_as_default="yes"
@@ -2097,41 +2044,19 @@ then
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
 	# rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
 	warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"
-	if test x$gwrap_major_version = x1 -a "$gwrap_minor_version" -lt 9 ; then
-	    # This is g-wrap 1.3 + gcc4.  Test error-on-warning
-            case "$gnc_error_on_warning" in
-	    auto)
-	      AC_MSG_ERROR([
-
-  Sorry, your current configuration will not compile.  You are
-  running g-wrap 1.3.x, GCC4, and --enable-error-on-warning, which
-  do not work together.  You have three options:  You can update
-  g-wrap to 1.9.6, you can downgrade gcc to GCC3, or you can
-  --disable-error-on-warning on the configure line.  We recommend
-  you update g-wrap to 1.9.6 so gnucash can compile cleanly on GCC4
-  You can find it at http://www.nongnu.org/g-wrap/ .
-
-])
-	      ;;
-	    yes)
-	      AC_MSG_WARN([
-
-  g-wrap 1.3.x and GCC4 may cause build problems.  You have been warned!
-
-])
-	      ;;
-	    esac
-	  fi
 	fi
      fi
   fi
 
-  CFLAGS="${CFLAGS} ${warnFLAGS}"
+  CFLAGS="${warnFLAGS} ${CFLAGS}"
 
 else
   warnFLAGS=none
 fi
 AC_MSG_RESULT($warnFLAGS)
+
+# Extend LDFLAGS because libtool on Windows requires this argument
+LDFLAGS="${LDFLAGS} -no-undefined"
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
@@ -2219,6 +2144,7 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libqof/backend/Makefile
           lib/libqof/backend/file/Makefile
           packaging/Makefile
+	  packaging/win32/gnucash.iss
           src/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
@@ -2248,6 +2174,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/gnc-module/test/mod-baz/Makefile
           src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
+          src/gnome/gnucash.desktop.in
 	  src/gnome/glade/Makefile
 	  src/gnome/schemas/Makefile
 	  src/gnome/ui/Makefile
@@ -2268,7 +2195,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/schemas/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
-          src/import-export/mt940/Makefile
           src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
@@ -2277,8 +2203,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/network-utils/Makefile
           src/network-utils/test/Makefile
           src/optional/Makefile
-          src/optional/swig/Makefile
-          src/optional/swig/examples/Makefile
           src/optional/xsl/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
@@ -2347,9 +2271,6 @@ components="$components ofx"
 fi
 if test x${HBCI_DIR} != x; then
 components="$components hbci"
-fi
-if test x${MT940_DIR} != x; then
-components="$components mt940"
 fi
 
 AC_MSG_RESULT([

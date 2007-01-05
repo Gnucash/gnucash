@@ -43,6 +43,7 @@ typedef struct _gncInvoice GncInvoice;
 #include "gncEntry.h"
 #include "gncOwner.h"
 #include "gnc-lot.h"
+#include "qofbook.h"
 
 #define GNC_ID_INVOICE    "gncInvoice"
 #define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
@@ -108,7 +109,8 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
 
-GList * gncInvoiceGetEntries (GncInvoice *invoice);
+typedef GList EntryList;
+EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
 
 /** Post this invoice to an account.  Returns the new Transaction
  * that is tied to this invoice.   The transaction is set with
@@ -164,7 +166,6 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 #define gncInvoiceLookup(book,guid)    \
        QOF_BOOK_LOOKUP_ENTITY((book),(guid),GNC_ID_INVOICE, GncInvoice)
 
-gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
@@ -192,8 +193,9 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_FROM_LOT	"invoice-from-lot"
 #define INVOICE_FROM_TXN	"invoice-from-txn"
 
+QofBook *gncInvoiceGetBook(GncInvoice *x);
+
 /** deprecated functions */
-#define gncInvoiceGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))

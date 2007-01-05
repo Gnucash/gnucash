@@ -37,6 +37,8 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
@@ -83,6 +85,9 @@ enum {
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
+#define KEY_TAB_POSITION	"tab_position"
+
+#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
 /* Static Globals *******************************************************/
 
@@ -108,6 +113,9 @@ static void gnc_window_main_window_init (GncWindowIface *iface);
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
+#ifdef HAVE_GTK_2_10
+static void gnc_main_window_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint pos, GncMainWindow *window);
+#endif
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
@@ -423,7 +431,8 @@ typedef struct {
  *  @param data A data structure containing state about the
  *  window/page restoration process. */
 static void
-gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data)
+gnc_main_window_restore_page (GncMainWindow *window, 
+                              GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
@@ -432,10 +441,12 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
   GError *error = NULL;
 
   ENTER("window %p, data %p (key file %p, window %d, page start %d, page num %d)",
-	window, data, data->key_file, data->window_num, data->page_offset, data->page_num);
+	window, data, data->key_file, data->window_num, data->page_offset, 
+        data->page_num);
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-  page_group = g_strdup_printf(PAGE_STRING, data->page_offset + data->page_num);
+  page_group = g_strdup_printf(PAGE_STRING, 
+                               data->page_offset + data->page_num);
   page_type = g_key_file_get_string(data->key_file, page_group,
 				    PAGE_TYPE, &error);
   if (error) {
@@ -577,8 +588,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 	     (pos[0] > gdk_screen_width()) ||
 	     (pos[1] + (geom ? geom[1] : 0) < 0) ||
 	     (pos[1] > gdk_screen_height())) {
-    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
-	    pos[0], pos[1], geom[0], geom[1]);
+//    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
+//	    pos[0], pos[1], geom[0], geom[1]);
   } else {
     gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
     DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
@@ -767,7 +778,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   /* Save page ordering within the notebook. Use +1 notation so the
    * numbers in the page order match the page sections, at least for
    * the one window case. */
-  order = malloc(sizeof(gint) * num_pages);
+  order = g_malloc(sizeof(gint) * num_pages);
   for (i = 0; i < num_pages; i++) {
     gpointer page = g_list_nth_data(priv->usage_order, i);
     order[i] = g_list_index(priv->installed_pages, page) + 1;
@@ -990,13 +1001,6 @@ gnc_main_window_delete_event (GtkWidget *window,
 {
   static gboolean already_dead = FALSE;
   QofSession *session;
-  GtkWidget *dialog;
-  gint response;
-  const gchar *title = _("Quit GnuCash?");
-  const gchar *message =_("You are attempting to close the last "
-			  "GnuCash window.  Doing so will quit the "
-			  "application.  Are you sure that this is "
-			  "what you want to do?");
 
   if (already_dead)
     return TRUE;
@@ -1020,26 +1024,10 @@ gnc_main_window_delete_event (GtkWidget *window,
     return TRUE;
   }
 
-  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-				  GTK_DIALOG_MODAL,
-				  GTK_MESSAGE_WARNING,
-				  GTK_BUTTONS_NONE,
-				  "%s", title);
-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					   "%s", message);
-  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			 GTK_STOCK_QUIT, GTK_RESPONSE_OK,
-			 NULL);
-  gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy(dialog);
+  /* Tell gnucash to shutdown cleanly */
+  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+  already_dead = TRUE;
 
-  if (response == GTK_RESPONSE_OK) {
-    /* Tell gnucash to shutdown cleanly */
-    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
-    already_dead = TRUE;
-  }
   return TRUE;
 }
 
@@ -1820,8 +1808,10 @@ gnc_main_window_destroy (GtkObject *object)
 	  /* Update the "Windows" menu in all other windows */
 	  gnc_main_window_update_all_menu_items();
 
-	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
-	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL);
+	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
+					GNC_MAIN_WINDOW_NAME);
+	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL,
+					GNC_MAIN_WINDOW_NAME);
 
 	  qof_event_unregister_handler(priv->event_handler_id);
 	  priv->event_handler_id = 0;
@@ -1889,6 +1879,9 @@ gnc_main_window_connect (GncMainWindow *window,
 	priv->usage_order = g_list_prepend (priv->usage_order, page);
 	gtk_notebook_append_page_menu (notebook, page->notebook_page,
 				       tab_hbox, menu_label);
+#ifdef HAVE_GTK_2_10
+	gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
+#endif
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
 	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
@@ -2363,6 +2356,28 @@ gnc_main_window_update_toolbar (GncMainWindow *window)
 	LEAVE("");
 }
 
+static void
+gnc_main_window_update_tab_position (GncMainWindow *window)
+{
+	GtkPositionType position = GTK_POS_TOP;
+	gchar *conf_string;
+	GncMainWindowPrivate *priv;
+
+	ENTER ("window %p", window);
+	conf_string = gnc_gconf_get_string (GCONF_GENERAL,
+					    KEY_TAB_POSITION, NULL);
+	if (conf_string) {
+		position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
+					       conf_string, GTK_POS_TOP);
+		g_free (conf_string);
+	}
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (priv->notebook), position);
+
+	LEAVE ("");
+}
+
 /*
  * Based on code from Epiphany (src/ephy-window.c)
  */
@@ -2496,6 +2511,8 @@ gnc_main_window_gconf_changed (GConfClient *client,
 	  key_tail++;
 	if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {
 	  gnc_main_window_update_toolbar(window);
+	} else if (strcmp(key_tail, KEY_TAB_POSITION) == 0) {
+	  gnc_main_window_update_tab_position(window);
 	}
 }
 
@@ -2623,6 +2640,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (priv->notebook);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
+#ifdef HAVE_GTK_2_10
+	g_signal_connect (G_OBJECT (priv->notebook), "page-reordered",
+			  G_CALLBACK (gnc_main_window_page_reordered), window);
+#endif
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
@@ -2696,10 +2717,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_free(filename);
 
 	gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
-				   gnc_main_window_gconf_changed);
+				   gnc_main_window_gconf_changed,
+				   GNC_MAIN_WINDOW_NAME);
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-				   gnc_main_window_gconf_changed);
+				   gnc_main_window_gconf_changed,
+				   GNC_MAIN_WINDOW_NAME);
 	gnc_main_window_update_toolbar(window);
+	gnc_main_window_update_tab_position(window);
 
 	gnc_main_window_init_menu_updaters(window);
 
@@ -2842,6 +2866,46 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
 	LEAVE(" ");
 }
+
+#ifdef HAVE_GTK_2_10
+/** This function is invoked when a GtkNotebook tab gets reordered by
+ *  drag and drop. It adjusts the list installed_pages to reflect the new
+ *  ordering so that GnuCash saves and restores the tabs correctly.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_page_reordered (GtkNotebook *notebook,
+				GtkWidget *child,
+				guint pos,
+				GncMainWindow *window)
+{
+	GncMainWindowPrivate *priv;
+	GncPluginPage *page;
+	GList *old_link;
+
+	ENTER("Notebook %p, child %p, index %d, window %p",
+	       notebook, child, pos, window);
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+
+	if (!child) return;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+	page = g_object_get_data (G_OBJECT (child), PLUGIN_PAGE_LABEL);
+	if (!page) return;
+
+	old_link = g_list_find (priv->installed_pages, page);
+	if (!old_link) return;
+
+	priv->installed_pages = g_list_delete_link (priv->installed_pages,
+						    old_link);
+	priv->installed_pages = g_list_insert (priv->installed_pages,
+					       page, pos);
+
+	LEAVE(" ");
+}
+#endif
 
 static void
 gnc_main_window_plugin_added (GncPlugin *manager,

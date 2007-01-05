@@ -117,14 +117,14 @@ typedef struct _startRecnWindowData
  * change!  These macros define the account types for which an auto interest
  * xfer dialog could pop up, if the user's preferences allow it.
  */
-#define account_type_has_auto_interest_charge(type)  (((type) == CREDIT) || \
-                                                      ((type) == LIABILITY) ||\
-						      ((type) == PAYABLE))
+#define account_type_has_auto_interest_charge(type)  (((type) == ACCT_TYPE_CREDIT) || \
+                                                      ((type) == ACCT_TYPE_LIABILITY) ||\
+						      ((type) == ACCT_TYPE_PAYABLE))
 
-#define account_type_has_auto_interest_payment(type) (((type) == BANK)  || \
-                                                      ((type) == ASSET) || \
-                                                      ((type) == MUTUAL) || \
-						      ((type) == RECEIVABLE))
+#define account_type_has_auto_interest_payment(type) (((type) == ACCT_TYPE_BANK)  || \
+                                                      ((type) == ACCT_TYPE_ASSET) || \
+                                                      ((type) == ACCT_TYPE_MUTUAL) || \
+						      ((type) == ACCT_TYPE_RECEIVABLE))
 
 #define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \
@@ -980,7 +980,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   if (formal)
     title = _("Debits");
   else
-    title = gnc_get_debit_string(NO_TYPE);
+    title = gnc_get_debit_string(ACCT_TYPE_NONE);
 
   gtk_frame_set_label(GTK_FRAME(recnData->debit_frame), title);
 
@@ -990,7 +990,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   if (formal)
     title = _("Credits");
   else
-    title = gnc_get_credit_string(NO_TYPE);
+    title = gnc_get_credit_string(ACCT_TYPE_NONE);
 
   gtk_frame_set_label(GTK_FRAME(recnData->credit_frame), title);
 
@@ -1038,7 +1038,7 @@ gnc_reconcile_window_create_list_box(Account *account,
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
 				 GTK_POLICY_AUTOMATIC,
-				 GTK_POLICY_ALWAYS);
+				 GTK_POLICY_AUTOMATIC);
   gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
 
   gtk_container_add(GTK_CONTAINER(frame), scrollWin);
@@ -1228,7 +1228,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
 
-  xaccAccountTreeScrubLots (account);
+  // XXX: Lots are disabled.
+  //xaccAccountTreeScrubLots (account);
 
   gnc_resume_gui_refresh ();
 }
@@ -1607,7 +1608,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   {
     GtkWidget *frame = gtk_frame_new(NULL);
     GtkWidget *main_area = gtk_vbox_new(FALSE, 10);
-    GtkWidget *debcred_area = gtk_hbox_new(FALSE, 15);
+    GtkWidget *debcred_area = gtk_table_new(1, 2, TRUE);
     GtkWidget *debits_box;
     GtkWidget *credits_box;
 
@@ -1631,8 +1632,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     GNC_RECONCILE_LIST(recnData->credit)->sibling = GNC_RECONCILE_LIST(recnData->debit);
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(debcred_area), debits_box, TRUE, TRUE, 0);
-    gtk_box_pack_end(GTK_BOX(debcred_area), credits_box, TRUE, TRUE, 0);
+    gtk_table_set_col_spacings(GTK_TABLE(debcred_area), 15);
+    gtk_table_attach_defaults(GTK_TABLE(debcred_area), debits_box, 0, 1, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(debcred_area), credits_box, 1, 2, 0, 1);
 
     {
       GtkWidget *hbox, *title_vbox, *value_vbox;
@@ -1846,7 +1848,8 @@ find_payment_account(Account *account)
         continue;
 
       type = xaccAccountGetType(a);
-      if ((type == BANK) || (type == CASH) || (type == ASSET))
+      if ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
+	  (type == ACCT_TYPE_ASSET))
         return a;
     }
   }
@@ -1896,7 +1899,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
   xaccAccountSetReconcileLastDate (account, date);
 
   if (auto_payment &&
-      (xaccAccountGetType (account) == CREDIT) &&
+      (xaccAccountGetType (account) == ACCT_TYPE_CREDIT) &&
       (gnc_numeric_negative_p (recnData->new_ending)))
   {
     Account *payment_account;

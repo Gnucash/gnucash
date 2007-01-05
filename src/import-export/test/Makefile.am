@@ -14,6 +14,7 @@ LDADD = \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GLIB_LIBS} ${QOF_LIBS}
 
 TESTS = \
@@ -34,8 +35,7 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/app-utils \
   --gnc-module-dir ${top_srcdir}/src/gnome-utils \
-  --library-dir    ${G_WRAP_LIB_DIR} \
-  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/import-export

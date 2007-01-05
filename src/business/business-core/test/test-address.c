@@ -24,6 +24,7 @@
  *
  *********************************************************************/
 
+#include "config.h"
 #include <glib.h>
 #include "cashobjects.h"
 #include "gncAddressP.h"

@@ -9,13 +9,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#ifdef G_OS_WIN32
+# undef DLL_EXPORT /* Will cause warnings in ltdl.h if defined */
+# define LIBLTDL_DLL_IMPORT
+#endif
 #include <ltdl.h>
 #include <guile/gh.h>
 #include <sys/types.h>
 #include <dirent.h>
 
 #include "gnc-module.h"
-#include "gw-gnc-module.h"
 
 #ifndef lt_ptr
 # define lt_ptr lt_ptr_t
@@ -67,6 +70,13 @@ gnc_module_system_search_dirs(void)
   {
     switch(*cpos) 
     {
+#ifndef G_OS_WIN32
+    /* On windows, with '\' as the directory separator character,
+       this additional de-quoting will make every path processing
+       fail miserably. Anyway this should probably be thrown out
+       altogether, because this additional level of de-quoting
+       (after shell quoting) is completely unexpected and
+       uncommon. */
     case '\\':
       if(!escchar) 
       {
@@ -78,8 +88,10 @@ gnc_module_system_search_dirs(void)
         escchar = FALSE;
       }
       break;
+#endif
       
-    case ':':
+      /* This is ':' on UNIX machines and ';' under Windows. */
+    case G_SEARCHPATH_SEPARATOR:
       if(!escchar) 
       {
         list = g_list_append(list, token->str);
@@ -220,8 +232,8 @@ gnc_module_system_refresh(void)
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
-          fullpath = g_strdup_printf("%s/%s", (char *)(current->data), 
-                                     dent->d_name);
+          fullpath = g_build_filename((const gchar *)(current->data), 
+				      dent->d_name, (char*)NULL);
           info     = gnc_module_get_info(fullpath);
           
           if(info) 
