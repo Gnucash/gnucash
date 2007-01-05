@@ -1,8 +1,8 @@
 SUBDIRS = .
 
-pkglib_LTLIBRARIES = libgncmod-business-ledger.la
+pkglib_LTLIBRARIES = libgnc-business-ledger.la
 
-libgncmod_business_ledger_la_SOURCES = \
+libgnc_business_ledger_la_SOURCES = \
   gncEntryLedger.c \
   gncEntryLedgerControl.c \
   gncEntryLedgerDisplay.c \
@@ -17,7 +17,7 @@ noinst_HEADERS = \
   gncEntryLedgerLayout.h \
   gncEntryLedgerModel.h
 
-libgncmod_business_ledger_la_LIBADD = \
+libgnc_business_ledger_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-utils/libgncmod-business-utils.la \
   ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
