@@ -1,5 +1,3 @@
-PWD := $(shell pwd)
-
 pkglib_LTLIBRARIES = libgncmod-gnome-search.la
 
 AM_CFLAGS = \

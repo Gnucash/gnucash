@@ -1,7 +1,4 @@
-SUBDIRS = .
-# test -- removed 'test' from SUBDIRS by jsled 2004.05.02 .. I don't know how
-# to get the test-link-mumble to link correctly; plz assist.
-PWD := $(shell pwd)
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la
 

@@ -15,8 +15,7 @@ LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
-  -lltdl
+  ${QOF_LIBS}
 
 TESTS = \
   test-load-module \
@@ -28,13 +27,16 @@ TESTS = \
   test-vendor
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/business/business-core \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --gnc-module-dir ${top_srcdir}/src/engine
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/business/business-core
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

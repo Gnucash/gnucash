@@ -9,21 +9,18 @@ TESTS_GUI = test-gnc-recurrence test-gnc-dialog
 ##lib_LTLIBRARIES = libgncgnome.la
 
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
-  --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/calculation \
-  --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/gnome \
-  --gnc-module-dir ${top_builddir}/src/scm \
-  --guile-load-dir ${top_srcdir}/src/scm \
-  --guile-load-dir ${top_srcdir}/src/gnome \
-  --guile-load-dir ${top_srcdir}/src/engine \
-  --guile-load-dir ${top_srcdir}/src/app-utils \
-  --guile-load-dir ${top_srcdir}/src/gnome-utils \
-  --library-dir    ${top_srcdir}/src/gnome
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/lib/libqof/qof \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/file \
+  --library-dir    ${top_builddir}/src/network-utils \
+  --library-dir    ${top_builddir}/src/calculation \
+  --library-dir    ${top_builddir}/src/app-utils
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
@@ -53,12 +50,10 @@ test_gnc_dialog_LDADD = ${GNOME_LIBS} \
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
   ${GUILE_LIBS} \
-  ${top_builddir}/src/gnc-module/libgncmodule.la 
+  ${top_builddir}/src/gnc-module/libgncmodule.la
 
 EXTRA_DIST = \
   test-load-module
 
 testit:
 	libtool --mode execute gdb test-link-module
-
-

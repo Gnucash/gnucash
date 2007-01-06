@@ -14,8 +14,7 @@ libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS} \
-  -lltdl
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm

@@ -7,7 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/import-export \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GLIB_CFLAGS} 
+  ${GLIB_CFLAGS}
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
@@ -22,24 +22,19 @@ TESTS = \
   test-import-parse
 
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/import-export \
-  --gnc-module-dir ${top_builddir}/src/calculation \
-  --gnc-module-dir ${top_builddir}/src/gnome-utils \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --gnc-module-dir ${top_srcdir}/src/engine \
-  --gnc-module-dir ${top_srcdir}/src/app-utils \
-  --gnc-module-dir ${top_srcdir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/network-utils \
-  --gnc-module-dir ${top_builddir}/src/gnome \
+  --guile-load-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --guile-load-dir ${top_builddir}/src/scm \
-  --guile-load-dir ${top_srcdir}/src/scm \
-  --guile-load-dir ${top_srcdir}/src/import-export
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/file \
+  --library-dir    ${top_builddir}/src/network-utils \
+  --library-dir    ${top_builddir}/src/calculation \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/import-export
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})

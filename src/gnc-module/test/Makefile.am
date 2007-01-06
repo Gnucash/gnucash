@@ -1,8 +1,6 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
-LDADD = ../libgncmodule.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${GLIB_LIBS} -lltdl ${GUILE_LIBS}
+LDADD = ../libgncmodule.la ${GLIB_LIBS} ${GUILE_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -25,17 +23,20 @@ TESTS = \
   test-scm-init
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-foo \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-baz \
   --gnc-module-dir ${top_builddir}/src/gnc-module/test/misc-mods \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module/test/misc-mods
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
+  --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnc-module/test/mod-foo \
+  --library-dir    ${top_builddir}/src/gnc-module/test/mod-bar \
+  --library-dir    ${top_builddir}/src/gnc-module/test/mod-baz
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
@@ -47,7 +48,7 @@ check_PROGRAMS = \
   test-agedver \
   test-dynload
 
-test_dynload_LDFLAGS = -lltdl ${GUILE_LIBS}
+test_dynload_LDFLAGS = ${GUILE_LIBS}
 
 EXTRA_DIST = \
   test-gwrapped-c \

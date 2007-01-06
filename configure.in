@@ -146,11 +146,6 @@ if test x$am_cv_scanf_lld = "xno"; then
   fi
 fi
 
-AC_CHECK_HEADERS(ltdl.h)
-if test "x$ac_cv_header_ltdl_h" = xno; then
-  AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
-fi
-
 # test whether we are building directly from SVN/SVK
 ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
 if test $? = 0 ; then
@@ -2216,7 +2211,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
-          dnl # src/report/report-gnome/test/Makefile
+          src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile

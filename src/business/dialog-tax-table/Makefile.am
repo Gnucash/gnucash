@@ -1,5 +1,3 @@
-PWD := $(shell pwd)
-
 pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la
 
 AM_CFLAGS = \

@@ -177,13 +177,13 @@ TESTS = \
   test-xml2-is-file
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/backend/file \
+  --guile-load-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --gnc-module-dir ${top_srcdir}/src/engine
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/file
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \

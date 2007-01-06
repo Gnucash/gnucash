@@ -8,21 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <glib.h>
-#ifdef G_OS_WIN32
-# undef DLL_EXPORT /* Will cause warnings in ltdl.h if defined */
-# define LIBLTDL_DLL_IMPORT
-#endif
-#include <ltdl.h>
+#include <gmodule.h>
 #include <guile/gh.h>
 #include <sys/types.h>
 #include <dirent.h>
 
 #include "gnc-module.h"
-
-#ifndef lt_ptr
-# define lt_ptr lt_ptr_t
-#endif
 
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
@@ -36,12 +27,12 @@ typedef struct {
   int    module_revision;
 } GNCModuleInfo;
 
-typedef struct 
+typedef struct
 {
-  lt_dlhandle   handle;
+  GModule       * gmodule;
   gchar         * filename;
   int           load_count;
-  GNCModuleInfo * info;  
+  GNCModuleInfo * info;
   int           (* init_func)(int refcount);
 } GNCLoadedModule;
 
@@ -166,29 +157,21 @@ gnc_module_system_setup_load_path(void)
 
 /*************************************************************
  * gnc_module_system_init
- * initialize the module system 
+ * initialize the module system
  *************************************************************/
 
 void
-gnc_module_system_init(void) 
+gnc_module_system_init(void)
 {
-  if(loaded_modules == NULL) 
-  {
-    loaded_modules = g_hash_table_new(g_direct_hash, g_direct_equal);
-    
-    if(lt_dlinit() == 0)
-    {
-      gnc_module_system_setup_load_path();
-      
-      /* now crawl the GNC_MODULE_PATH to find likely libraries */
-      gnc_module_system_refresh();
-    }
-    else
-    {
-      /* FIXME: there's no way to report this error to the caller. */
-      g_warning ("gnc module system couldn't initialize libltdl");
-    }
-  }
+  if (loaded_modules)
+    return;
+
+  loaded_modules = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  gnc_module_system_setup_load_path();
+
+  /* now crawl the GNC_MODULE_PATH to find likely libraries */
+  gnc_module_system_refresh();
 }
 
 
@@ -218,17 +201,19 @@ gnc_module_system_refresh(void)
       DIR *d = opendir(current->data);
       struct dirent * dent = NULL;
       char * fullpath = NULL;
-      int namelen;
       GNCModuleInfo * info;
 
       if (!d) continue;
 
       while ((dent = readdir(d)) != NULL)
       {
-        namelen = strlen(dent->d_name);
-        
-        /* is the file a .la shared lib? */
-        if((namelen > 3) && (!strncmp(dent->d_name + namelen - 3, ".la", 3)))
+        /* is the file a loadable module? */
+
+        /* Gotcha: On MacOS, G_MODULE_SUFFIX is defined as "so", but if we do
+         * not build clean libtool modules with "-module", we get dynamic
+         * libraries ending on .dylib */
+        if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX) ||
+            g_str_has_suffix(dent->d_name, ".dylib"))
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
@@ -279,68 +264,62 @@ gnc_module_system_modinfo(void)
  *************************************************************/
 
 static GNCModuleInfo *
-gnc_module_get_info(const char * fullpath) 
+gnc_module_get_info(const char * fullpath)
 {
-  lt_dlhandle handle;
-  lt_ptr modsysver;
+  GModule *gmodule;
+  gpointer modsysver;
+  GNCModuleInfo *info = NULL;
+  gpointer initfunc, pathfunc, descripfunc, iface, revision, age;
+  gchar * (* f_path)(void);
+  gchar * (* f_descrip)(void);
 
-  //printf("(init) dlopening %s\n", fullpath);
-  handle = lt_dlopen(fullpath);
-  if (handle == NULL) {
-      g_warning ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
+/*   g_debug("(init) dlopening '%s'\n", fullpath); */
+  gmodule = g_module_open(fullpath, G_MODULE_BIND_MASK);
+  if (gmodule == NULL) {
+      g_warning("Failed to dlopen() '%s': %s\n", fullpath, g_module_error());
       return NULL;
   }
 
-  modsysver   = lt_dlsym(handle, "gnc_module_system_interface");
-    
   /* the modsysver tells us what the expected symbols and their
    * types are */
-  if (!modsysver) {
-      //printf("(init) closing %s\n", fullpath);
-      //lt_dlclose(handle);
-      return NULL;
+  if (!g_module_symbol(gmodule, "gnc_module_system_interface", &modsysver)) {
+/*       g_debug("Module '%s' does not contain 'gnc_module_system_interface'\n", */
+/*                 fullpath); */
+      goto get_info_close;
   }
 
   if (*(int *)modsysver != 0) {
-      /* unsupported module system interface version */
-      /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
-         fullpath); */
-      //lt_dlclose(handle);
-      return NULL;
+      g_warning("Module '%s' requires newer module system\n", fullpath);
+      goto get_info_close;
   }
 
-  {
-      lt_ptr initfunc    = lt_dlsym(handle, "gnc_module_init");
-      lt_ptr pathfunc    = lt_dlsym(handle, "gnc_module_path");
-      lt_ptr descripfunc = lt_dlsym(handle, "gnc_module_description");
-      lt_ptr iface       = lt_dlsym(handle, "gnc_module_current");
-      lt_ptr revision    = lt_dlsym(handle, "gnc_module_revision");
-      lt_ptr age         = lt_dlsym(handle, "gnc_module_age");
-      
-      if (!(initfunc && pathfunc && descripfunc && iface &&
-            revision && age)) {
-          g_warning ("module '%s' does not match module signature\n",
-                     fullpath);
-          //lt_dlclose(handle);
-          return NULL;
-      }
-
-      {
-          /* we have found a gnc_module. */
-          GNCModuleInfo * info = g_new0(GNCModuleInfo, 1);
-          char * (* f_path)(void) = pathfunc;
-          char * (* f_descrip)(void) = descripfunc;
-          info->module_path        = f_path();
-          info->module_description = f_descrip();
-          info->module_filepath    = g_strdup(fullpath);
-          info->module_interface   = *(int *)iface;
-          info->module_age         = *(int *)age;
-          info->module_revision    = *(int *)revision;
-          //printf("(init) closing %s\n", fullpath);
-          //lt_dlclose(handle);
-          return info;
-      }
+  if (!g_module_symbol(gmodule, "gnc_module_init", &initfunc) ||
+      !g_module_symbol(gmodule, "gnc_module_path", &pathfunc) ||
+      !g_module_symbol(gmodule, "gnc_module_description", &descripfunc) ||
+      !g_module_symbol(gmodule, "gnc_module_current", &iface) ||
+      !g_module_symbol(gmodule, "gnc_module_revision", &revision) ||
+      !g_module_symbol(gmodule, "gnc_module_age", &age)) {
+    g_warning("Module '%s' does not match module signature\n", fullpath);
+    goto get_info_close;
   }
+
+  /* we have found a gnc_module. */
+  info = g_new0(GNCModuleInfo, 1);
+  f_path                   = pathfunc;
+  f_descrip                = descripfunc;
+  info->module_path        = f_path();
+  info->module_description = f_descrip();
+  info->module_filepath    = g_strdup(fullpath);
+  info->module_interface   = *(int *)iface;
+  info->module_age         = *(int *)age;
+  info->module_revision    = *(int *)revision;
+
+
+get_info_close:
+/*   g_debug("(init) closing '%s'\n", fullpath); */
+  g_module_close(gmodule);
+
+  return info;
 }
 
 
@@ -396,32 +375,32 @@ list_loaded (gpointer k, gpointer v, gpointer data)
   *l = g_list_prepend(*l, v);
 }
 
-static GNCLoadedModule * 
-gnc_module_check_loaded(const char * module_name, gint iface) 
+static GNCLoadedModule *
+gnc_module_check_loaded(const char * module_name, gint iface)
 {
   GNCModuleInfo * modinfo = gnc_module_locate(module_name, iface);
   GList * modules = NULL;
   GList * p = NULL;
   GNCLoadedModule * rv = NULL;
 
-  if(modinfo == NULL) 
+  if (modinfo == NULL)
   {
     return NULL;
   }
-  
-  if(!loaded_modules) 
+
+  if (!loaded_modules)
   {
     gnc_module_system_init();
   }
-  
+
   /* turn the loaded-modules table into a list */
   g_hash_table_foreach(loaded_modules, list_loaded, &modules);
 
   /* walk the list to see if the file we want is already open */
-  for(p=modules; p; p=p->next) 
+  for (p=modules; p; p=p->next)
   {
     GNCLoadedModule * lm = p->data;
-    if(!strcmp(lm->filename, modinfo->module_filepath)) 
+    if (!strcmp(lm->filename, modinfo->module_filepath))
     {
       rv = lm;
       break;
@@ -434,33 +413,33 @@ gnc_module_check_loaded(const char * module_name, gint iface)
 
 /*************************************************************
  * gnc_module_load
- * Ensure that the module named by "module_name" is loaded. 
+ * Ensure that the module named by "module_name" is loaded.
  *************************************************************/
 
-static GNCModule 
+static GNCModule
 gnc_module_load_common(char * module_name, gint iface, gboolean optional)
 {
 
   GNCLoadedModule * info;
-  
-  if(!loaded_modules) 
+
+  if(!loaded_modules)
   {
     gnc_module_system_init();
   }
-  
+
   info = gnc_module_check_loaded(module_name, iface);
-  
+
   /* if the module's already loaded, just increment its use count.
    * otherwise, load it and check for the initializer
    * "gnc_module_init".  if we find that, assume it's a gnucash module
    * and run the function. */
 
-  if(info) 
+  if (info)
   {
     /* module already loaded ... call the init thunk */
-    if(info->init_func) 
+    if (info->init_func)
     {
-      if(info->init_func(info->load_count)) 
+      if (info->init_func(info->load_count))
       {
         info->load_count++;
         return info;
@@ -476,44 +455,47 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
       return NULL;
     }
   }
-  else 
+  else
   {
     GNCModuleInfo * modinfo = gnc_module_locate(module_name, iface);
-    lt_dlhandle   handle = NULL;
-    
-    //if(modinfo) 
-    //printf("(load) dlopening %s\n", modinfo->module_filepath);
+    GModule       * gmodule;
 
-    if(modinfo && ((handle = lt_dlopen(modinfo->module_filepath)) != NULL)) 
+/*     if (modinfo) */
+/*       g_debug("(init) loading '%s' from '%s'\n", module_name, */
+/*               modinfo->module_filepath); */
+
+    if (modinfo &&
+        ((gmodule = g_module_open(modinfo->module_filepath, 0))
+         != NULL))
     {
-      lt_ptr initfunc = lt_dlsym(handle, "gnc_module_init");
-      
-      if(initfunc) 
+      gpointer initfunc;
+
+      if (g_module_symbol(gmodule, "gnc_module_init", &initfunc))
       {
-        /* stick it in the hash table */ 
+        /* stick it in the hash table */
         info = g_new0(GNCLoadedModule, 1);
-        info->handle     = handle;
+        info->gmodule    = gmodule;
         info->filename   = g_strdup(modinfo->module_filepath);
         info->load_count = 1;
         info->init_func  = initfunc;
         g_hash_table_insert(loaded_modules, info, info);
-        
+
         /* now call its init function.  this should load any dependent
          * modules, too.  If it doesn't return TRUE unload the module. */
-        if(!info->init_func(0)) 
+        if (!info->init_func(0))
         {
           /* init failed. unload the module. */
           g_warning ("Initialization failed for module %s\n", module_name);
           g_hash_table_remove(loaded_modules, info);
           g_free(info->filename);
           g_free(info);
-          //lt_dlclose(handle);
+          /* g_module_close(module); */
           return NULL;
         }
 
         return info;
       }
-      else 
+      else
       {
         g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
                    modinfo->module_filepath);
@@ -524,7 +506,7 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
     else if (!optional)
     {
       g_warning ("Failed to open module %s", module_name);
-      if(modinfo) printf(": %s\n", lt_dlerror());
+      if(modinfo) printf(": %s\n", g_module_error());
       else g_warning (": could not locate %s interface v.%d\n",
                       module_name, iface);
       return NULL;
@@ -551,40 +533,40 @@ gnc_module_load_optional(char * module_name, gint iface)
  * unload a module (only actually unload it if the use count goes to 0)
  *************************************************************/
 
-int 
-gnc_module_unload(GNCModule module) 
+int
+gnc_module_unload(GNCModule module)
 {
   GNCLoadedModule * info;
- 
-  if(!loaded_modules) 
+
+  if(!loaded_modules)
   {
     gnc_module_system_init();
   }
-  
-  if((info = g_hash_table_lookup(loaded_modules, module)) != NULL) 
+
+  if ((info = g_hash_table_lookup(loaded_modules, module)) != NULL)
   {
-    lt_ptr unload_thunk = lt_dlsym(info->handle, "gnc_module_end");
-    int    unload_val = TRUE;
+    gpointer unload_thunk;
+    int unload_val = TRUE;
 
     info->load_count--;
-    if(unload_thunk) 
+    if (g_module_symbol(info->gmodule, "gnc_module_end", &unload_thunk))
     {
       int (* thunk)(int) = unload_thunk;
       unload_val = thunk(info->load_count);
     }
-    
+
     /* actually unload the module if necessary */
-    if(info->load_count == 0) 
+    if (info->load_count == 0)
     {
-      /* now close the module and free the struct */ 
-      //printf("(unload) closing %s\n", info->filename);
-      //lt_dlclose(info->handle);
+      /* now close the module and free the struct */
+      /* g_debug("(unload) closing %s\n", info->filename); */
+      /* g_module_close(info->gmodule); */
       g_hash_table_remove(loaded_modules, module);
       g_free(info);
     }
     return unload_val;
   }
-  else 
+  else
   {
     g_warning ("Failed to unload module %p (it is not loaded)\n", module);
     return 0;

@@ -4,8 +4,7 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ../libgncmod-engine.la \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
-  -lltdl
+  ${QOF_LIBS}
 
 libgncmod_test_engine_la_SOURCES = gncmod-test-engine.c test-engine-stuff.c
 libgncmod_test_engine_la_LDFLAGS = -module

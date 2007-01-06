@@ -50,7 +50,6 @@ BuildRequires: 	gtkhtml3-devel >= %{gtkhtml3_version}
 BuildRequires: 	bzip2-devel, expat-devel, guile-devel
 BuildRequires: 	libglade2-devel, libgsf-devel
 BuildRequires: 	libjpeg-devel, openssl-devel
-BuildRequires:  libtool-ltdl-devel
 
 %description
 GnuCash is a personal finance manager. A check-book like
