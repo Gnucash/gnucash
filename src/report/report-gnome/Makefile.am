@@ -35,6 +35,8 @@ gncinclude_HEADERS = \
   gnc-plugin-page-report.h \
   window-report.h
 
+libgncmod_report_gnome_la_LDFLAGS = -avoid-version
+
 libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

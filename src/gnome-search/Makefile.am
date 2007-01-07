@@ -49,6 +49,8 @@ noinst_HEADERS = \
   search-reconciled.h \
   search-string.h
 
+libgncmod_gnome_search_la_LDFLAGS = -avoid-version
+
 libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \

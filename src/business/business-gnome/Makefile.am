@@ -65,6 +65,8 @@ noinst_HEADERS = \
   gnc-plugin-page-invoice.h \
   search-owner.h
 
+libgncmod_business_gnome_la_LDFLAGS = -avoid-version
+
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \

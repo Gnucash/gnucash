@@ -9,7 +9,7 @@ libgncmod_stylesheets_la_SOURCES = \
 noinst_HEADERS = \
   gnc-plugin-stylesheets.h
 
-libgncmod_stylesheets_la_LDFLAGS=-module
+libgncmod_stylesheets_la_LDFLAGS = -module -avoid-version
 
 libgncmod_stylesheets_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \

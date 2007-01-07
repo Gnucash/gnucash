@@ -22,6 +22,8 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   gnc-http.h
 
+libgncmod_network_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GNOME_LIBS} ${QOF_LIBS}

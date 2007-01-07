@@ -162,6 +162,8 @@ noinst_HEADERS = \
   gnc-druid-provider-multifile-gnome.h \
   search-param.h
 
+libgncmod_gnome_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

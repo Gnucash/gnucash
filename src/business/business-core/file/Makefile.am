@@ -41,7 +41,7 @@ noinst_HEADERS = \
   gnc-vendor-xml-v2.h \
   xml-helpers.h
 
-libgncmod_business_backend_file_la_LDFLAGS = -module
+libgncmod_business_backend_file_la_LDFLAGS = -module -avoid-version
 
 libgncmod_business_backend_file_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \

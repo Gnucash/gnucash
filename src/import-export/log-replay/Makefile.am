@@ -11,6 +11,8 @@ noinst_HEADERS = \
   gnc-log-replay.h \
   gnc-plugin-log-replay.h
 
+libgncmod_log_replay_la_LDFLAGS = -avoid-version
+
 libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \

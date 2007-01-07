@@ -11,6 +11,8 @@ noinst_HEADERS = \
   gnc-ofx-import.h \
   gnc-plugin-ofx.h
 
+libgncmod_ofx_la_LDFLAGS = -avoid-version
+
 libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

@@ -64,6 +64,8 @@ gncinclude_HEADERS = \
   guile-util.h \
   option-util.h
 
+libgncmod_app_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

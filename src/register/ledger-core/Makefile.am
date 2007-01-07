@@ -23,6 +23,8 @@ noinst_HEADERS = \
   split-register-model-save.h \
   split-register-p.h
 
+libgncmod_ledger_core_la_LDFLAGS = -avoid-version
+
 libgncmod_ledger_core_la_LIBADD = \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \

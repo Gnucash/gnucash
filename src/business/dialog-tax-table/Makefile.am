@@ -25,6 +25,8 @@ libgncmod_dialog_tax_table_la_SOURCES = \
 noinst_HEADERS = \
   dialog-tax-table.h
 
+libgncmod_dialog_tax_table_la_LDFLAGS = -avoid-version
+
 libgncmod_dialog_tax_table_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

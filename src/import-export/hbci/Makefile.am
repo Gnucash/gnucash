@@ -42,6 +42,8 @@ noinst_HEADERS = \
   hbci-interaction.h \
   hbci-interactionP.h
 
+libgncmod_hbci_la_LDFLAGS = -avoid-version
+
 libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgnc-gnome.la \

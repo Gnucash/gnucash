@@ -2,6 +2,8 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-calculation.la
 
+libgncmod_calculation_la_LDFLAGS = -avoid-version
+
 libgncmod_calculation_la_LIBADD = \
   ${GLIB_LIBS} ${GUILE_LIBS} \
   ${QOF_LIBS}

@@ -9,7 +9,7 @@ libgncmod_utility_reports_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-libgncmod_utility_reports_la_LDFLAGS = -module
+libgncmod_utility_reports_la_LDFLAGS = -module -avoid-version
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

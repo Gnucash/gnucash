@@ -39,6 +39,8 @@ noinst_HEADERS = \
   import-utilities.h \
   gnc-import-format-gnome.h
 
+libgncmod_generic_import_la_LDFLAGS = -avoid-version
+
 libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \

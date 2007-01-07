@@ -3,7 +3,10 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-standard-reports.la
 
 libgncmod_standard_reports_la_SOURCES = \
-  gncmod-standard-reports.c 
+  gncmod-standard-reports.c
+
+libgncmod_standard_reports_la_LDFLAGS = -avoid-version
+
 libgncmod_standard_reports_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GUILE_LIBS} \
