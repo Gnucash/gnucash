@@ -1069,8 +1069,9 @@ g_module_check_init(GModule *module)
         prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_backend_new;
         prov->provider_free = gnc_provider_free;
-	prov->check_data_type = gnc_determine_file_type;
+        prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
+        g_module_make_resident (module);
         return NULL;
 }
 

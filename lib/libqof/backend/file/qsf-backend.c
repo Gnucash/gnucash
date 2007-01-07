@@ -1287,5 +1287,6 @@ g_module_check_init(GModule *module)
 	prov->check_data_type = qsf_determine_file_type;
 	prov->provider_free = qsf_provider_free;
 	qof_backend_register_provider (prov);
+	g_module_make_resident (module);
 	return NULL;
 }
