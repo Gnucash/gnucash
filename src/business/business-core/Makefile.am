@@ -14,7 +14,7 @@ AM_CFLAGS = \
 libgncmod_business_core_la_SOURCES = \
   swig-business-core.c \
   gncBusGuile.c \
-  businessmod-core.c \
+  gncmod-business-core.c \
   gncAddress.c \
   gncBillTerm.c \
   gncBusiness.c \

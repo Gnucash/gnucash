@@ -29,7 +29,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core
 
 libgncmod_business_gnome_la_SOURCES = \
-  businessmod-gnome.c \
   business-options-gnome.c \
   business-urls.c \
   business-gnome-utils.c \
@@ -45,6 +44,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-vendor.c \
   gnc-plugin-business.c \
   gnc-plugin-page-invoice.c \
+  gncmod-business-gnome.c \
   search-owner.c
 
 noinst_HEADERS = \
