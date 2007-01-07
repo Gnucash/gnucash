@@ -126,7 +126,7 @@ begin
 
   { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
   FileName := appdir + '\bin\gnucash.bat' ;
-  FileString := 'set PATH=' + appdir + '\bin;' + libdir + '\bin;%PATH%'#13#10 ;
+  FileString := 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
 
   FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
   FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;

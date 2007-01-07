@@ -683,7 +683,7 @@ function inst_gnucash() {
         qpushd src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib/bin:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin" \
                 gnucash
         qpopd
 
@@ -691,9 +691,15 @@ function inst_gnucash() {
     qpopd
 
     qpushd $_INSTALL_UDIR/lib/gnucash
-        # Remove the dependency_libs line from the installed .la files
-        # because otherwise loading the modules literally takes hours.
-        for A in *.la; do grep -v dependency_libs $A > tmp ; mv  tmp $A; done
+        # Move modules that are compiled without -module to lib/gnucash
+        mv ../bin/*.dll .
+
+        # In the installed .la files, remove the dependency_libs line and
+        # correct the 'dlname'. We do not use these files to dlopen the
+        # modules, so actually this is unneeded.
+        for A in *.la; do
+            sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
+        done
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -707,7 +713,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib\\bin;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat

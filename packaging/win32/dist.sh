@@ -134,10 +134,10 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/locale $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
-    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
+    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
@@ -152,9 +152,10 @@ function finish() {
             --install-schema-file $file >/dev/null
         echo "done"
     done
+    gconftool-2 --shutdown
 
     # Strip redirections in distributed libtool .la files
-    for file in `find $DIST_UDIR/lib -name '*.la'`; do
+    for file in $DIST_UDIR/lib/*.la; do
         cat $file | sed 's,^libdir=,#libdir=,' > $file.new
         mv $file.new $file
     done
