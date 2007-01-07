@@ -1,8 +1,8 @@
 SUBDIRS = glade schemas ui
 
-lib_LTLIBRARIES = libgncgnome.la
+lib_LTLIBRARIES = libgnc-gnome.la
 
-libgncgnome_la_LIBADD = \
+libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
@@ -14,11 +14,11 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
-libgncgnome_la_SOURCES = \
+libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
   dialog-chart-export.c  \
   dialog-commodities.c \

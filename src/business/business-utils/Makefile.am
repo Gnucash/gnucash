@@ -20,7 +20,7 @@ noinst_HEADERS = \
   business-options.h
 
 libgncmod_business_utils_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \

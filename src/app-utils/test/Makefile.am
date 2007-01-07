@@ -34,11 +34,11 @@ TESTS_ENVIRONMENT := \
 
 LDADD = \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/gnc-module/libgncmodule.la \
+   ${top_builddir}/src/gnc-module/libgnc-module.la \
    ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
    ${top_builddir}/src/test-core/libgncmod-test.la \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-   ${top_builddir}/src/core-utils/libcore-utils.la \
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${GUILE_LIBS} \
    ${QOF_LIBS} \
    ${GCONF_LIBS}

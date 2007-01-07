@@ -113,8 +113,8 @@ noinst_HEADERS = \
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LIBADD = \
-  ../gnc-module/libgncmodule.la \
-  ../core-utils/libcore-utils.la \
+  ../gnc-module/libgnc-module.la \
+  ../core-utils/libgnc-core-utils.la \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${REGEX_LIBS} \

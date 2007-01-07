@@ -1,6 +1,6 @@
 SUBDIRS = .
 
-pkglib_LTLIBRARIES = libgnc-business-ledger.la
+lib_LTLIBRARIES = libgnc-business-ledger.la
 
 libgnc_business_ledger_la_SOURCES = \
   gncEntryLedger.c \
@@ -26,7 +26,7 @@ libgnc_business_ledger_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \

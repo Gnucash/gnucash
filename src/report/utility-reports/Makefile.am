@@ -5,7 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-utility-reports.la
 libgncmod_utility_reports_la_SOURCES = \
   gncmod-utility-reports.c 
 libgncmod_utility_reports_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 

@@ -22,11 +22,11 @@ gnucash_bin_SOURCES = gnucash-bin.c
 gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
 ${QOF_LIBS} \
 ${top_builddir}/src/engine/libgncmod-engine.la \
-${top_builddir}/src/gnome/libgncgnome.la \
+${top_builddir}/src/gnome/libgnc-gnome.la \
 ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
 ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-${top_builddir}/src/core-utils/libcore-utils.la \
-${top_builddir}/src/gnc-module/libgncmodule.la
+${top_builddir}/src/core-utils/libgnc-core-utils.la \
+${top_builddir}/src/gnc-module/libgnc-module.la
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp

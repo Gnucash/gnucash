@@ -506,9 +506,9 @@ else
   AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
 fi
 if test x$QOF_XML_DIR = x; then
-	QOF_LIB_DIR='${libdir}'
+	QOF_LIB_DIR='${pkglibdir}'
 	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
-	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgncqof.la'
+	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgnc-qof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
 	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
@@ -1946,7 +1946,7 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgncmodule"
+GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgnc-module"
 
 GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${GUILE_INCS}"
 GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS}"

@@ -11,11 +11,11 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 LDADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
   ../test-core/libgncmod-test-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLIB_LIBS} \
   ${QOF_LIBS}
 

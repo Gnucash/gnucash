@@ -47,7 +47,7 @@ libgncmod_business_backend_file_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${LIBXML2_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}

@@ -56,7 +56,7 @@ noinst_HEADERS = \
   gncVendorP.h
 
 libgncmod_business_core_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \

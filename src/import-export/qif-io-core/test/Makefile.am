@@ -1,4 +1,4 @@
-LDADD=${top_builddir}/src/gnc-module/libgncmodule.la ${GLIB_LIBS}
+LDADD=${top_builddir}/src/gnc-module/libgnc-module.la ${GLIB_LIBS}
 
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS} 
 

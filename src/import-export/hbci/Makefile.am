@@ -44,12 +44,12 @@ noinst_HEADERS = \
 
 libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${top_builddir}/src/gnome/libgncgnome.la \
+  ${top_builddir}/src/gnome/libgnc-gnome.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \

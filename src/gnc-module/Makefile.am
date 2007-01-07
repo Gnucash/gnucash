@@ -6,12 +6,12 @@ AM_CFLAGS = \
    -I${top_srcdir}/src/core-utils \
    ${GLIB_CFLAGS} ${GUILE_INCS}
 
-lib_LTLIBRARIES = libgncmodule.la 
+lib_LTLIBRARIES = libgnc-module.la
 
-libgncmodule_la_SOURCES = gnc-module.c swig-gnc-module.c
+libgnc_module_la_SOURCES = gnc-module.c swig-gnc-module.c
 
-libgncmodule_la_LIBADD = \
-  ../core-utils/libcore-utils.la \
+libgnc_module_la_LIBADD = \
+  ../core-utils/libgnc-core-utils.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}

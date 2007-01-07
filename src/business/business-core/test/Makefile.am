@@ -10,7 +10,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} 
 
 LDADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-business-core.la \

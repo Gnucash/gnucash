@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = libcore-utils.la
+lib_LTLIBRARIES = libgnc-core-utils.la
 
-libcore_utils_la_SOURCES = \
+libgnc_core_utils_la_SOURCES = \
   gnc-main.c \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
@@ -10,7 +10,7 @@ libcore_utils_la_SOURCES = \
   swig-core-utils.c \
   gnc-gtk-utils.c
 
-libcore_utils_la_LIBADD = \
+libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \

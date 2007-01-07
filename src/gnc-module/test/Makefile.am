@@ -1,6 +1,6 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
-LDADD = ../libgncmodule.la ${GLIB_LIBS} ${GUILE_LIBS}
+LDADD = ../libgnc-module.la ${GLIB_LIBS} ${GUILE_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
