@@ -32,6 +32,7 @@ struct _GncSxListTreeModelAdapter
      GObject parent;
 
      /* protected */
+     gboolean disposed;
      GncSxInstanceModel *instances;
      GtkTreeStore *real;
 };
@@ -41,9 +42,13 @@ struct _GncSxListTreeModelAdapterClass
      GObjectClass parent;
 };
 
+static GObjectClass *parent_class = NULL;
+
 static void gnc_sx_list_tree_model_adapter_class_init(GncSxListTreeModelAdapterClass *klass);
 static void gnc_sx_list_tree_model_adapter_interface_init(gpointer g_iface, gpointer iface_data);
 static void gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass);
+static void gnc_sx_list_tree_model_adapter_dispose(GObject *obj);
+static void gnc_sx_list_tree_model_adapter_finalize(GObject *obj);
 
 GType
 gnc_sx_list_tree_model_adapter_get_type(void)
@@ -80,7 +85,13 @@ gnc_sx_list_tree_model_adapter_get_type(void)
 static void
 gnc_sx_list_tree_model_adapter_class_init(GncSxListTreeModelAdapterClass *klass)
 {
-     ; /* nop */
+     GObjectClass *obj_class = G_OBJECT_CLASS(klass);
+
+     parent_class = g_type_class_peek_parent(klass);
+
+     obj_class->dispose = gnc_sx_list_tree_model_adapter_dispose;
+     obj_class->finalize = gnc_sx_list_tree_model_adapter_finalize;
+
 }
 
 static GtkTreeModelFlags
@@ -309,10 +320,30 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
 }
 
 static void
-gsltma_updated_cb(GncSxInstanceModel *instances, gpointer user_data)
+gsltma_added_cb(GncSxInstanceModel *instances, SchedXaction *sx_added, gpointer user_data)
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-     printf("update\n");
+     printf("added\n");
+     gtk_tree_store_clear(model->real);
+     gsltma_populate_tree_store(model);
+}
+
+static void
+gsltma_updated_cb(GncSxInstanceModel *instances, SchedXaction *sx_updated, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     printf("sx list tree model adapter update\n");
+     gnc_sx_instance_model_update_sx_instances(instances, sx_updated);
+     gtk_tree_store_clear(model->real);
+     gsltma_populate_tree_store(model);
+}
+
+static void
+gsltma_removing_cb(GncSxInstanceModel *instances, SchedXaction *sx_removing, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     printf("removing\n");
+     gnc_sx_instance_model_remove_sx_instance(instances, sx_removing);
      gtk_tree_store_clear(model->real);
      gsltma_populate_tree_store(model);
 }
@@ -324,10 +355,13 @@ gnc_sx_list_tree_model_adapter_new(GncSxInstanceModel *instances)
 
      rtn = GNC_SX_LIST_TREE_MODEL_ADAPTER(g_object_new(GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER, NULL));
      rtn->instances = instances;
+     g_object_ref(G_OBJECT(rtn->instances));
 
      gsltma_populate_tree_store(rtn);
 
+     g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsltma_added_cb, (gpointer)rtn);
      g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsltma_updated_cb, (gpointer)rtn);
+     g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsltma_removing_cb, (gpointer)rtn);
 
      return rtn;
 }
@@ -350,4 +384,29 @@ gnc_sx_list_tree_model_adapter_get_sx_instances(GncSxListTreeModelAdapter *model
 
      gtk_tree_path_free(path);
      return (GncSxInstances*)g_list_nth_data(model->instances->sx_instance_list, index);
+}
+
+static void
+gnc_sx_list_tree_model_adapter_dispose(GObject *obj)
+{
+     GncSxListTreeModelAdapter *adapter;
+
+     g_return_if_fail(obj != NULL);
+     adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(obj);
+     g_return_if_fail(adapter->disposed);
+     adapter->disposed = TRUE;
+
+     g_object_unref(G_OBJECT(adapter->instances));
+     adapter->instances = NULL;
+     g_object_unref(G_OBJECT(adapter->real));
+     adapter->real = NULL;
+
+     G_OBJECT_CLASS(parent_class)->dispose(obj);
+}
+
+static void
+gnc_sx_list_tree_model_adapter_finalize(GObject *obj)
+{
+     g_return_if_fail(obj != NULL);
+     G_OBJECT_CLASS(parent_class)->finalize(obj);
 }

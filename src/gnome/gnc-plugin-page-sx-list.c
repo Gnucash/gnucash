@@ -71,6 +71,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 typedef struct GncPluginPageSxListPrivate
 {
+     gboolean disposed;
+
      GtkWidget* widget;
      gint gnc_component_id;
      gint gppsl_event_handler_id;
@@ -82,7 +84,6 @@ typedef struct GncPluginPageSxListPrivate
      GncSxInstanceModel* instances;
      GncSxListTreeModelAdapter* tree_model;
      GtkTreeView* tree_view;
-
 } GncPluginPageSxListPrivate;
 
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
@@ -96,7 +97,8 @@ static GObjectClass *parent_class = NULL;
 /* Plugin Actions */
 static void gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass);
 static void gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page);
-static void gnc_plugin_page_sx_list_finalize (GObject *object);
+static void gnc_plugin_page_sx_list_dispose(GObject *object);
+static void gnc_plugin_page_sx_list_finalize(GObject *object);
 
 static GtkWidget *gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page);
@@ -168,6 +170,7 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
 
      parent_class = g_type_class_peek_parent(klass);
 
+     object_class->dispose = gnc_plugin_page_sx_list_dispose;
      object_class->finalize = gnc_plugin_page_sx_list_finalize;
 
      gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
@@ -216,16 +219,51 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 }
 
 static void
+gnc_plugin_page_sx_list_dispose(GObject *object)
+{
+     GncPluginPageSxList *page;
+     GncPluginPageSxListPrivate *priv;
+
+     ENTER("object %p", object);
+
+     page = GNC_PLUGIN_PAGE_SX_LIST (object);
+     g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
+     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+     g_return_if_fail(priv != NULL);
+
+     g_return_if_fail(!priv->disposed);
+     priv->disposed = TRUE;
+     
+     qof_event_unregister_handler(priv->gppsl_event_handler_id);
+
+     g_object_unref(G_OBJECT(priv->dense_cal_model));
+     priv->dense_cal_model = NULL;
+     gtk_widget_unref(GTK_WIDGET(priv->gdcal));
+     priv->gdcal = NULL;
+     g_object_unref(G_OBJECT(priv->instances)); 
+     priv->instances = NULL;
+     g_object_unref(G_OBJECT(priv->tree_model));
+     priv->tree_model = NULL;
+
+     G_OBJECT_CLASS (parent_class)->dispose(object);
+     LEAVE(" ");
+}
+
+static void
 gnc_plugin_page_sx_list_finalize (GObject *object)
 {
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
 
      ENTER("object %p", object);
+
      page = GNC_PLUGIN_PAGE_SX_LIST (object);
-     g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST (page));
+     g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
      priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-     g_return_if_fail (priv != NULL);
+     g_return_if_fail(priv != NULL);
+
+     // by virtue of being a g_type_instance_..._private, does the private
+     // data get freed somewhere else?
 
      G_OBJECT_CLASS (parent_class)->finalize (object);
      LEAVE(" ");
@@ -360,6 +398,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
           priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
           priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
+          g_object_ref_sink(G_OBJECT(priv->gdcal));
           gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
           gnc_dense_cal_set_num_months(priv->gdcal, 12);
 
@@ -369,11 +408,11 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
      }
 
      priv->gppsl_event_handler_id = qof_event_register_handler(gppsl_event_handler, page);
-     gnc_register_gui_component("plugin-page-sx-list",
-                                gnc_plugin_page_sx_list_refresh_cb,
-                                gnc_plugin_page_sx_list_close_cb,
-                                page);
-
+     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
+                                                         gnc_plugin_page_sx_list_refresh_cb,
+                                                         gnc_plugin_page_sx_list_close_cb,
+                                                         page);
+     
      /* @@fixme */
      /* gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(priv->widget)); */
 
@@ -410,6 +449,7 @@ gppsl_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, g
         return; */
      /* - correlate SX to tree_store data */
      /* - update || add || remove */
+
      return;
 }
 

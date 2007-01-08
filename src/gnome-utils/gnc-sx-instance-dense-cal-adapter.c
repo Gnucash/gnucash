@@ -25,27 +25,38 @@
 #include "gnc-sx-instance-dense-cal-adapter.h"
 #include "gnc-dense-cal.h"
 
+static void gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj);
+static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj);
+
 static GList* gsidca_get_contained(GncDenseCalModel *model);
 static gchar* gsidca_get_name(GncDenseCalModel *model, guint tag);
 static gchar* gsidca_get_info(GncDenseCalModel *model, guint tag);
 static gint gsidca_get_instance_count(GncDenseCalModel *model, guint tag);
 static void gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
 
+static GObjectClass *parent_class = NULL;
+
 struct _GncSxInstanceDenseCalAdapterClass
 {
-  GObjectClass parent;
+     GObjectClass parent;
 };
 
 struct _GncSxInstanceDenseCalAdapter 
 {
-  GObject parent;
-  GncSxInstanceModel *instances;
+     GObject parent;
+     gboolean disposed;
+     GncSxInstanceModel *instances;
 };
 
 static void
 gnc_sx_instance_dense_cal_adapter_class_init(GncSxInstanceDenseCalAdapterClass *klass)
 {
-     ; /* nop */
+     GObjectClass *obj_class = G_OBJECT_CLASS(klass);
+
+     obj_class->dispose = gnc_sx_instance_dense_cal_adapter_dispose;
+     obj_class->finalize = gnc_sx_instance_dense_cal_adapter_finalize;
+
+     parent_class = g_type_class_peek_parent(klass);
 }
 
 static void
@@ -67,31 +78,29 @@ gnc_sx_instance_dense_cal_adapter_interface_init(gpointer g_iface, gpointer ifac
 }
 
 static void
-gsidca_instances_added_cb(GncSxInstanceModel *model, gpointer instance_added, gpointer user_data)
+gsidca_instances_added_cb(GncSxInstanceModel *model, SchedXaction *sx_added, gpointer user_data)
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
-     g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(instance_added));
+     printf("instance added\n");
+     g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(sx_added));
 }
 
 static void
-gsidca_instances_updated_cb(GncSxInstanceModel *model, gpointer user_data)
+gsidca_instances_updated_cb(GncSxInstanceModel *model, SchedXaction *sx_updated, gpointer user_data)
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
-     // @@fixme figure out which; emit appropriate signal.
-     GList *exposed_tags;
+     gnc_sx_instance_model_update_sx_instances(model, sx_updated);
      printf("instances updated\n");
-     for (exposed_tags = gsidca_get_contained(GNC_DENSE_CAL_MODEL(adapter)); exposed_tags != NULL; exposed_tags = exposed_tags->next)
-     {
-          g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT(exposed_tags->data));
-     }
+     g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT((gpointer)sx_updated));
 }
 
 static void
-gsidca_instances_removing_cb(GncSxInstanceModel *model, gpointer instance_to_be_removed, gpointer user_data)
+gsidca_instances_removing_cb(GncSxInstanceModel *model, SchedXaction *sx_to_be_removed, gpointer user_data)
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
      printf("removing instance...\n");
-     g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT(instance_to_be_removed));
+     g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT(sx_to_be_removed));
+     gnc_sx_instance_model_remove_sx_instance(model, sx_to_be_removed);
 }
 
 GncSxInstanceDenseCalAdapter*
@@ -99,6 +108,8 @@ gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances)
 {
      GncSxInstanceDenseCalAdapter *adapter = g_object_new(GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, NULL);
      adapter->instances = instances;
+     g_object_ref(G_OBJECT(adapter->instances));
+
      g_signal_connect(instances, "added", (GCallback)gsidca_instances_added_cb, adapter);
      g_signal_connect(instances, "updated", (GCallback)gsidca_instances_updated_cb, adapter);
      g_signal_connect(instances, "removing", (GCallback)gsidca_instances_removing_cb, adapter);
@@ -146,6 +157,7 @@ gsidca_find_sx_with_tag(gconstpointer list_data,
      return (GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)) == find_data ? 0 : 1);
 }
 
+// @@ fixme this list is leaked.
 static GList*
 gsidca_get_contained(GncDenseCalModel *model)
 {
@@ -216,4 +228,27 @@ gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDa
      g_date_valid(&inst->date);
      *date = inst->date;
      g_date_valid(date);
+}
+
+static void
+gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj)
+{
+     GncSxInstanceDenseCalAdapter *adapter;
+     g_return_if_fail(obj != NULL);
+     adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(obj);
+     // g_return_if_fail(!adapter->disposed);
+     if (adapter->disposed) return;
+     adapter->disposed = TRUE;
+
+     g_object_unref(G_OBJECT(adapter->instances));
+     adapter->instances = NULL;
+
+     G_OBJECT_CLASS(parent_class)->dispose(obj);
+}
+
+static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj)
+{
+     g_return_if_fail(obj != NULL);
+     // nop
+     G_OBJECT_CLASS(parent_class)->finalize(obj);
 }

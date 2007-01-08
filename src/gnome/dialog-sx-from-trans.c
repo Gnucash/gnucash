@@ -76,8 +76,7 @@ static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gp
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
 
 typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
-                                 * the numeric equivalences explicitly here
-                                 */
+                                 * the numeric equivalences explicitly here */
                FREQ_WEEKLY,
                FREQ_BIWEEKLY,
                FREQ_MONTHLY, 
@@ -109,9 +108,6 @@ typedef struct
 static void sxftd_update_example_cal( SXFromTransInfo *sxfti );
 static void sxftd_update_excal_adapt( GObject *o, gpointer ud );
 
-/* Stolen from jsled - nice and neat, actually (if a little light on 
- * for typechecking, but we'll be careful) . . . 
- */
 typedef struct
 {
   gchar *name;
@@ -119,10 +115,8 @@ typedef struct
   void (*handlerFn)();
 } widgetSignalHandlerTuple;
 
-
 static void sxftd_ok_clicked(SXFromTransInfo *sxfti);
 static void sxftd_advanced_clicked(SXFromTransInfo *sxfti);
-
 
 static void
 sxfti_attach_callbacks(SXFromTransInfo *sxfti)
@@ -136,7 +130,6 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
       { SXFTD_END_ON_DATE_BUTTON,   "clicked",      sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_BUTTON, "clicked",      sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_ENTRY,  "changed",      sxftd_update_excal_adapt },
-
       { NULL,                  NULL,      NULL }
     };
   
@@ -367,6 +360,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     w = GTK_WIDGET(glade_xml_get_widget( sxfti->gxml, SXFTD_EX_CAL_FRAME ));
     sxfti->dense_cal_model = gnc_dense_cal_store_new(num_marks);
     sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
+    g_object_ref_sink(sxfti->example_cal);
 
     g_assert( sxfti->example_cal );
     gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
@@ -632,15 +626,14 @@ sxftd_destroy( GtkWidget *w, gpointer user_data )
     sxfti->sx = NULL;
   }
 
+  g_object_unref(G_OBJECT(sxfti->dense_cal_model));
+  g_object_unref(G_OBJECT(sxfti->example_cal));
+
   /* FIXME: do we need to clean up the GladeXML pointer? */
 
   g_free(sxfti);
 }
 
-
-/**
- *
- **/
 static void
 gnc_sx_trans_window_response_cb (GtkDialog *dialog,
                                 gint response,
@@ -667,7 +660,6 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
 	}
 	LEAVE(" ");
 }
-
 
 /**
  * Update the example calendar; make sure to take into account the end
@@ -737,10 +729,6 @@ sxftd_update_excal_adapt( GObject *o, gpointer ud )
   sxftd_update_example_cal( sxfti );
 }
 
-
-/**
- *
- **/
 void
 gnc_sx_create_from_trans( Transaction *trans )
 {

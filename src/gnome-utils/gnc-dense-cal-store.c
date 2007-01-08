@@ -47,11 +47,26 @@ struct _GncDenseCalStoreClass
      GObjectClass parent_class;
 };
 
+static GObjectClass *parent_class = NULL;
+
+static void gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass);
+
+static void gnc_dense_cal_store_finalize(GObject *obj);
+
 static GList* gdcs_get_contained(GncDenseCalModel *model);
 static gchar* gdcs_get_name(GncDenseCalModel *model, guint tag);
 static gchar* gdcs_get_info(GncDenseCalModel *model, guint tag);
 static gint gdcs_get_instance_count(GncDenseCalModel *model, guint tag);
 static void gdcs_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
+
+static void
+gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass)
+{
+     GObjectClass *object_class = G_OBJECT_CLASS(klass);
+     parent_class = g_type_class_peek_parent(klass);
+     
+     object_class->finalize = gnc_dense_cal_store_finalize;
+}
 
 static void
 gnc_dense_cal_store_iface_init(gpointer g_iface, gpointer iface_data)
@@ -74,7 +89,7 @@ gnc_dense_cal_store_get_type(void)
                sizeof (GncDenseCalStoreClass),
                NULL,   /* base_init */
                NULL,   /* base_finalize */
-               NULL,   /* class_init */
+               (GClassInitFunc)gnc_dense_cal_store_class_init,   /* class_init */
                NULL,   /* class_finalize */
                NULL,   /* class_data */
                sizeof(GncDenseCalStore),
@@ -237,4 +252,38 @@ gdcs_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate
      // assert(tag == 1)
      // assert 0 < instance_index < model->num_marks;
      *date = *mdl->cal_marks[instance_index];
+}
+
+static void
+gnc_dense_cal_store_finalize(GObject *obj)
+{
+     GncDenseCalStore *store;
+     g_return_if_fail(obj != NULL);
+
+     store = GNC_DENSE_CAL_STORE(obj);
+
+     if (store->name != NULL)
+     {
+          g_free(store->name);
+          store->name = NULL;
+     }
+
+     if (store->info != NULL)
+     {
+          g_free(store->info);
+          store->info = NULL;
+     }
+
+     for (int i = 0; i < store->num_marks; i++)
+     {
+          g_free(store->cal_marks[i]);
+          store->cal_marks[i] = NULL;
+     }
+     if (store->cal_marks != NULL)
+     {
+          g_free(store->cal_marks);
+          store->cal_marks = NULL;
+     }
+
+     G_OBJECT_CLASS(parent_class)->finalize(obj);
 }

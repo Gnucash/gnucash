@@ -480,7 +480,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
                       summary.num_auto_create_no_notify_instances);
     }
   }
-  // @fixme g_object_unref(G_OBJECT(slr_model));
+  g_object_unref(G_OBJECT(slr_model));
 }
 
 static void

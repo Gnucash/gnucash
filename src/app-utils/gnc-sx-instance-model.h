@@ -40,14 +40,15 @@ G_BEGIN_DECLS
 typedef struct _GncSxInstanceModel
 {
      GObject parent;
+     gboolean disposed;
 
      /* private */
      gint qof_event_handler_id;
 
      /* signals */
-     /* void (*added)(GncSxInstance *sx); // gpointer user_data */
-     /* void (*removed)(GncSxInstance *sx); // gpointer user_data */
-     /* void (*changed)(GncSxInstance *inst); // gpointer user_data */
+     /* void (*added)(GncSxInstance *inst); // gpointer user_data */
+     /* void (*updated)(); // gpointer user_data */
+     /* void (*removing)(GncSxInstance *inst); // gpointer user_data */
 
      /* public */
      GDate range_end;
@@ -105,6 +106,15 @@ typedef struct _GncSxInstance
 GType gnc_sx_instance_model_get_type(void);
 
 GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
+
+/**
+ * Regenerates and updates the GncSxInstances* for the given SX.  Model
+ * consumers are probably going to call this in response to seeing the
+ * "update" signal, unless they need to be doing something else like
+ * finishing an iteration over an existing GncSxInstances*.
+ **/
+void gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
+void gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
 
 /** @return GList<GncSxVariable*> **/
 GList *gnc_sx_instance_get_variables(GncSxInstance *inst);

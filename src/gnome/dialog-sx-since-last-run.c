@@ -60,11 +60,16 @@ struct _GncSxSinceLastRunDialog
 
 /* ------------------------------------------------------------ */
 
+static GObjectClass *parent_class = NULL;
+
 struct _GncSxSlrTreeModelAdapter
 {
      GObject parent;
 
-     /* protected */
+     /* protected: */
+     gulong updated_cb_id;
+     gboolean disposed;
+
      GncSxInstanceModel *instances;
      GtkTreeStore *real;
 };
@@ -79,6 +84,8 @@ static void gnc_sx_slr_tree_model_adapter_class_init(GncSxSlrTreeModelAdapterCla
 static void gnc_sx_slr_tree_model_adapter_interface_init(gpointer g_iface, gpointer iface_data);
 static void gnc_sx_slr_tree_model_adapter_init(GTypeInstance *instance, gpointer klass);
 GncSxSlrTreeModelAdapter* gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances);
+static void gnc_sx_slr_tree_model_adapter_dispose(GObject *obj);
+static void gnc_sx_slr_tree_model_adapter_finalize(GObject *obj);
 
 GncSxInstances* gnc_sx_slr_tree_model_adapter_get_sx_instances(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter);
 static GncSxInstances* _gnc_sx_slr_tree_model_adapter_get_sx_instances(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, gboolean check_depth);
@@ -135,8 +142,8 @@ _var_numeric_to_string(gnc_numeric *value, GString **str)
 GType
 gnc_sx_slr_tree_model_adapter_get_type(void)
 {
-     static GType type = 0;
-     if (type == 0) {
+     static GType gsstma_type = 0;
+     if (gsstma_type == 0) {
           static const GTypeInfo info = {
                sizeof (GncSxSlrTreeModelAdapterClass),
                NULL,   /* base_init */
@@ -154,20 +161,27 @@ gnc_sx_slr_tree_model_adapter_get_type(void)
                NULL                /* interface_data */
           };
 
-          type = g_type_register_static (G_TYPE_OBJECT,
-                                         "GncSxSlrTreeModelAdapterType",
-                                         &info, 0);
-          g_type_add_interface_static(type,
+          gsstma_type = g_type_register_static (G_TYPE_OBJECT,
+                                                "GncSxSlrTreeModelAdapterType",
+                                                &info, 0);
+          g_type_add_interface_static(gsstma_type,
                                       GTK_TYPE_TREE_MODEL,
                                       &itreeModel_info);
      }
-     return type;
+     return gsstma_type;
 }
 
 static void
 gnc_sx_slr_tree_model_adapter_class_init(GncSxSlrTreeModelAdapterClass *klass)
 {
-     ; /* nop */
+     GObjectClass *obj_class;
+
+     parent_class = g_type_class_peek_parent(klass);
+
+     obj_class = G_OBJECT_CLASS(klass);
+
+     obj_class->dispose = gnc_sx_slr_tree_model_adapter_dispose;
+     obj_class->finalize = gnc_sx_slr_tree_model_adapter_finalize;
 }
 
 static GtkTreeModelFlags
@@ -716,15 +730,45 @@ gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance 
 }
 
 static void
-gsslrtma_updated_cb(GncSxInstanceModel *instances, gpointer user_data)
+gsslrtma_updated_cb(GncSxInstanceModel *instances, SchedXaction *updated_sx, gpointer user_data)
 {
      GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data); 
-     printf("update\n");
+     printf("gsslrtma update\n");
+
      // @@fixme: this should be better about, say, trying to match up changed
      // instance-state and variable-binding values.  More of a merge
      // operation than a replace...
+     
+     gnc_sx_instance_model_update_sx_instances(instances, updated_sx);
+
      gtk_tree_store_clear(model->real);
      gsslrtma_populate_tree_store(model);
+
+     // gtk_tree_view_expand_all(dialog->instance_view);
+}
+
+static void
+gnc_sx_slr_tree_model_adapter_dispose(GObject *obj)
+{
+     GncSxSlrTreeModelAdapter *adapter;
+     g_return_if_fail(obj != NULL);
+     adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER(obj);
+     g_return_if_fail(!adapter->disposed);
+     adapter->disposed = TRUE;
+     
+     g_object_unref(G_OBJECT(adapter->instances));
+     adapter->instances = NULL;
+     g_object_unref(G_OBJECT(adapter->real));
+     adapter->real = NULL;
+
+     G_OBJECT_CLASS(parent_class)->dispose(obj);
+}
+
+static void
+gnc_sx_slr_tree_model_adapter_finalize(GObject *obj)
+{
+     g_return_if_fail(obj != NULL);
+     G_OBJECT_CLASS(parent_class)->finalize(obj);
 }
 
 GncSxSlrTreeModelAdapter*
@@ -733,8 +777,11 @@ gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances)
      GncSxSlrTreeModelAdapter *rtn;
      rtn = GNC_SX_SLR_TREE_MODEL_ADAPTER(g_object_new(GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, NULL));
      rtn->instances = instances;
+     g_object_ref(G_OBJECT(rtn->instances));
      gsslrtma_populate_tree_store(rtn);
-     g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsslrtma_updated_cb, (gpointer)rtn);
+     g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
+     rtn->updated_cb_id = g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsslrtma_updated_cb, (gpointer)rtn);
+     g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
      return rtn;
 }
 
@@ -748,6 +795,7 @@ gnc_sx_get_slr_model()
      g_date_set_time_t(&now, time(NULL));
      instance_model = gnc_sx_get_instances(&now);
      slr_model = gnc_sx_slr_tree_model_adapter_new(instance_model);
+     g_object_unref(G_OBJECT(instance_model));
      return slr_model;
 }
 
@@ -847,7 +895,7 @@ gnc_sx_sxsincelast_book_opened(void)
                gnc_sx_slr_model_effect_change(slr_model, TRUE, NULL, NULL);
           }
      }
-     // @@fixme g_object_unref(G_OBJECT(slr_model))
+     g_object_unref(G_OBJECT(slr_model));
 }
 
 void
@@ -856,6 +904,7 @@ gnc_ui_sxsincelast_dialog_create(void)
      GncSxSlrTreeModelAdapter *slr_model = gnc_sx_get_slr_model();
      gnc_sx_slr_model_effect_change(slr_model, TRUE, NULL, NULL);
      gnc_ui_sx_since_last_run_dialog(slr_model);
+     g_object_unref(G_OBJECT(slr_model));
 }
 
 static void
@@ -943,6 +992,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxSlrTreeModelAdapter *slr_model)
      dialog->dialog = glade_xml_get_widget(glade, "since-last-run-dialog");
 
      dialog->editing_model = slr_model;
+     g_object_ref(G_OBJECT(dialog->editing_model));
      
      {
           GtkPaned *paned;
@@ -965,7 +1015,6 @@ gnc_ui_sx_since_last_run_dialog(GncSxSlrTreeModelAdapter *slr_model)
                                                          "text", SLR_MODEL_COL_NAME,
                                                          NULL);
           gtk_tree_view_append_column(dialog->instance_view, col);
-
 
           renderer = gtk_cell_renderer_combo_new();
           g_object_set(G_OBJECT(renderer),
@@ -1093,7 +1142,8 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
      case GTK_RESPONSE_CANCEL: 
      case GTK_RESPONSE_DELETE_EVENT:
           gtk_widget_destroy(GTK_WIDGET(dialog));
-          // @@fixme: destroy models, &c.
+          g_object_unref(G_OBJECT(app_dialog->editing_model));
+          app_dialog->editing_model = NULL;
           break;
      default:
           printf("unknown response id [%d]\n", response_id);
@@ -1422,7 +1472,7 @@ gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model,
 {
      GList *list;
 
-     // @@fixme engine event supression
+     g_signal_handler_block(model->instances, model->updated_cb_id);
 
      for (list = model->instances->sx_instance_list; list != NULL; list = list->next)
      {
@@ -1494,7 +1544,7 @@ gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model,
           xaccSchedXactionSetRemOccur(instances->sx, remain_occur_count);
      }
 
-     // @fixme: re-generate instance model, repopulate [?]
+     g_signal_handler_unblock(model->instances, model->updated_cb_id);
 }
 
 static void

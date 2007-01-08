@@ -37,7 +37,7 @@
  *   . color-per-marker (configurable)
  *   X all-or-nothing
  * \ handle errors properly
- * X mouse-over -> "hottip"
+ * X mouse-over -> "tool tip"
  * X rotated month labels
  * X weeksPerCol -> monthsPerCol
  **/
@@ -152,14 +152,10 @@ static void gdc_remove_markings(GncDenseCal *cal);
 
 static GtkWidgetClass *parent_class = NULL;
 
-/*static const gchar* MONTH_NAMES[] = {
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  };*/
 #define MONTH_NAME_BUFSIZE 5
 /* Takes the number of months since January, in the range 0 to
  * 11. Returns the abbreviated month name according to the current
- * locale. (i18n'd version of the above static character array.) */
+ * locale.
 static const gchar *month_name(int mon) 
 {
     static gchar buf[MONTH_NAME_BUFSIZE];
@@ -172,10 +168,6 @@ static const gchar *month_name(int mon)
     i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%b", &my_tm);
     return buf;
 }
-/* FIXME: i18n 
-   static const gchar *dayLabels[7] = {
-   "Su", "M", "Tu", "W", "Th", "F", "Sa"
-   };*/
 /* Takes the number of days since Sunday, in the range 0 to 6. Returns
  * the abbreviated weekday name according to the current locale. */
 static const gchar *day_label(int wday)
@@ -193,9 +185,8 @@ static const gchar *day_label(int wday)
     return buf;
 }
 
-
 GType
-gnc_dense_cal_get_type ()
+gnc_dense_cal_get_type()
 {
         static GType dense_cal_type = 0;
 
@@ -214,8 +205,8 @@ gnc_dense_cal_get_type ()
 		};
 
                 dense_cal_type = g_type_register_static(GTK_TYPE_WIDGET,
-						"GncDenseCal",
-						&dense_cal_info, 0);
+                                                        "GncDenseCal",
+                                                        &dense_cal_info, 0);
         }
 
         return dense_cal_type;
@@ -227,7 +218,7 @@ gnc_dense_cal_class_init (GncDenseCalClass *klass)
         GObjectClass *object_class;
         GtkWidgetClass *widget_class;
 
-        object_class =  G_OBJECT_CLASS (klass);
+        object_class = G_OBJECT_CLASS (klass);
         widget_class = GTK_WIDGET_CLASS (klass);
 
         parent_class = g_type_class_peek_parent (klass);
@@ -378,7 +369,6 @@ gnc_dense_cal_new(void)
 {
         GncDenseCal *dcal;
         dcal = g_object_new(GNC_TYPE_DENSE_CAL, NULL, NULL);
-
         return GTK_WIDGET (dcal);
 }
 
@@ -474,9 +464,8 @@ gnc_dense_cal_dispose (GObject *object)
 
         dcal = GNC_DENSE_CAL(object);
 
-	if(dcal->disposed)
-		return;
-
+	if (dcal->disposed)
+                return;
 	dcal->disposed = TRUE;
 
         if ( GTK_WIDGET_REALIZED( dcal->transPopup ) ) {
@@ -496,10 +485,12 @@ gnc_dense_cal_dispose (GObject *object)
 		gdk_font_unref( dcal->monthLabelFont );
 		dcal->monthLabelFont = NULL;
 	}
+
         if ( dcal->dayLabelFont ) {
 		gdk_font_unref( dcal->dayLabelFont );
 		dcal->dayLabelFont = NULL;
 	}
+
         /* month labels */
 	if ( dcal->monthLabels[0] ) {
         	for ( i=0; i < 12; i++ ) {
@@ -507,11 +498,12 @@ gnc_dense_cal_dispose (GObject *object)
                 	dcal->monthLabels[i] = NULL;
 		}
         }
-        /* mark data */
-        gdc_free_all_mark_data( dcal );
+        gdc_free_all_mark_data(dcal);
+
+        g_object_unref(G_OBJECT(dcal->model));
 
         if (G_OBJECT_CLASS (parent_class)->dispose)
-                (* G_OBJECT_CLASS (parent_class)->dispose) (object);
+             G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
 static void
@@ -524,7 +516,7 @@ gnc_dense_cal_finalize (GObject *object)
         dcal = GNC_DENSE_CAL(object);
 
         if (G_OBJECT_CLASS (parent_class)->finalize)
-                (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+             G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
 static void
@@ -1553,6 +1545,10 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
      name = gnc_dense_cal_model_get_name(cal->model, tag);
      info = gnc_dense_cal_model_get_info(cal->model, tag);
      num_marks = gnc_dense_cal_model_get_instance_count(cal->model, tag);
+
+     if (num_marks == 0)
+       return;
+
      dates = g_new0(GDate*, num_marks);
      for (idx = 0; idx < num_marks; idx++)
      {
@@ -1624,11 +1620,11 @@ gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model)
      if (cal->model != NULL)
      {
           gdc_remove_markings(cal);
-          // g_object_unref(cal->model);
+          g_object_unref(G_OBJECT(cal->model));
           cal->model = NULL;
      }
      cal->model = model;
-     //g_object_ref(model);
+     g_object_ref(G_OBJECT(model));
      g_signal_connect(G_OBJECT(cal->model), "added", (GCallback)gdc_model_added_cb, cal);
      g_signal_connect(G_OBJECT(cal->model), "update", (GCallback)gdc_model_update_cb, cal);
      g_signal_connect(G_OBJECT(cal->model), "removing", (GCallback)gdc_model_removing_cb, cal);

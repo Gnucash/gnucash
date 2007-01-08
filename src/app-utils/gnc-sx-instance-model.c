@@ -38,6 +38,8 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 
+static GObjectClass *parent_class = NULL;
+
 static void gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass);
 static void gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass);
 static GncSxInstanceModel* gnc_sx_instance_model_new(void);
@@ -401,21 +403,68 @@ gnc_sx_instance_model_get_type(void)
 }
 
 static void
-gnc_sx_instance_model_dispose (GObject *object)
+gnc_sx_instance_model_dispose(GObject *object)
 {
-     printf("dispose\n");
+     GncSxInstanceModel *model;
+     g_return_if_fail(object != NULL);
+     model = GNC_SX_INSTANCE_MODEL(object);
+
+     g_return_if_fail(!model->disposed);
+     model->disposed = TRUE;
+
+     qof_event_unregister_handler(model->qof_event_handler_id);
+
+     G_OBJECT_CLASS(parent_class)->dispose(object);
+}
+
+static void
+gnc_sx_instances_free(GncSxInstances *instances)
+{
+     GList *instance_iter;
+     for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
+     {
+          GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
+          // gnc_sx_instance_free(inst); {...
+
+          // @fixme:
+          // variable_bindings elts + map
+          // temporal_state (iff not postponed?)
+          // object itself
+          g_free(inst);
+     }
+     g_list_free(instances->list);
+     instances->list = NULL;
+
+     g_free(instances);
 }
 
 static void
 gnc_sx_instance_model_finalize (GObject *object)
 {
-     printf("finalize\n");
+     GncSxInstanceModel *model;
+     GList *sx_list_iter;
+
+     g_return_if_fail(object != NULL);
+
+     model = GNC_SX_INSTANCE_MODEL(object);
+     for (sx_list_iter = model->sx_instance_list; sx_list_iter != NULL; sx_list_iter = sx_list_iter->next)
+     {
+          GncSxInstances *instances = (GncSxInstances*)sx_list_iter->data;
+          gnc_sx_instances_free(instances);
+     }
+     g_list_free(model->sx_instance_list);
+     model->sx_instance_list = NULL;
+
+     G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
 static void
 gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
 {
      GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+     parent_class = g_type_class_peek_parent(klass);
+
      object_class->dispose = gnc_sx_instance_model_dispose;
      object_class->finalize = gnc_sx_instance_model_finalize;
 
@@ -438,9 +487,10 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
                        0, /* class offset */
                        NULL, /* accumulator */
                        NULL, /* accum data */
-                       g_cclosure_marshal_VOID__VOID,
+                       g_cclosure_marshal_VOID__POINTER,
                        G_TYPE_NONE,
-                       0, NULL);
+                       1,
+                       G_TYPE_POINTER);
 
      klass->added_signal_id =
           g_signal_new("added",
@@ -466,9 +516,9 @@ gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass)
 }
 
 static gint
-_gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, GncSxInstances *to_find)
+_gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_to_find)
 {
-     if (in_list_instances->sx == to_find->sx)
+     if (in_list_instances->sx == sx_to_find)
           return 0;
      return -1;
 }
@@ -489,19 +539,14 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
      if (GNC_IS_SX(ent))
      {
           SchedXaction *sx;
+          gboolean sx_is_in_model = FALSE;
+
           sx = GNC_SX(ent);
-          if (event_type & QOF_EVENT_MODIFY)
+          // only send `updated` if it's actually in the model
+          sx_is_in_model = (g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx) != NULL);
+          if (sx_is_in_model && event_type & QOF_EVENT_MODIFY)
           {
-               GncSxInstances *new_instances;
-               GList *link;
-
-               new_instances = _gnc_sx_gen_instances((gpointer)sx, &instances->range_end);
-
-               link = g_list_find_custom(instances->sx_instance_list, new_instances, (GCompareFunc)_gnc_sx_instance_find_by_sx);
-               g_assert(link != NULL);
-               // @fixme g_object_unref(link->data);
-               link->data = new_instances;
-               g_signal_emit_by_name(instances, "updated"); // , new_instances[->sx].
+               g_signal_emit_by_name(instances, "updated", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
           }
           /* else { unsupported event type; ignore } */
      }
@@ -513,36 +558,61 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           sxes = NULL;
           if (event_type & GNC_EVENT_ITEM_REMOVED)
           {
-               gpointer sx_instance_to_remove = NULL;
-               GList *list;
-
-               /* find, remove, update */
-               for (list = instances->sx_instance_list; list != NULL; list = list->next)
+               GList *instances_link;
+               instances_link = g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
+               if (instances_link != NULL)
                {
-                    if (sx == ((GncSxInstances*)list->data)->sx)
-                    {
-                         sx_instance_to_remove = list->data;
-                         break;
-                    }
+                    g_signal_emit_by_name(instances, "removing", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
                }
-               if (sx_instance_to_remove != NULL)
+               else
                {
-                    g_signal_emit_by_name(instances, "removing", GUINT_TO_POINTER(GPOINTER_TO_UINT(((GncSxInstances*)sx_instance_to_remove)->sx)));
-                    instances->sx_instance_list = g_list_remove(instances->sx_instance_list, sx_instance_to_remove);
-                    g_signal_emit_by_name(instances, "updated"); // @@fixme remove when callers support "removing"
+                    // @@ fixme:
+                    printf("err\n");
                }
-               // @@fixme: uh, actually remove...?
-               else { printf("err\n"); }
           }
           else if (event_type & GNC_EVENT_ITEM_ADDED)
           {
                /* generate instances, add to instance list, emit update. */
                instances->sx_instance_list
                     = g_list_append(instances->sx_instance_list,
-                                    (*_gnc_sx_gen_instances)((gpointer)sx, (gpointer)&instances->range_end));
+                                    _gnc_sx_gen_instances((gpointer)sx, (gpointer)&instances->range_end));
                g_signal_emit_by_name(instances, "added", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
-               g_signal_emit_by_name(instances, "updated"); // @fixme remove when callers look for "added".
           }
           /* else { printf("unsupported event type [%d]\n", event_type); } */
      }
+}
+
+void
+gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx)
+{
+     GncSxInstances *new_instances;
+     GList *link;
+
+     link = g_list_find_custom(model->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
+     if (link == NULL)
+     {
+          // @fixme: log/error
+          printf("couldn't find sx [%p]\n", sx);
+          return;
+     }
+     gnc_sx_instances_free((GncSxInstances*)link->data);
+
+     new_instances = _gnc_sx_gen_instances((gpointer)sx, &model->range_end);
+     link->data = new_instances;
+}
+
+void
+gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXaction *sx)
+{
+     GList *instance_link = NULL;
+
+     instance_link = g_list_find_custom(model->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
+     if (instance_link == NULL)
+     {
+          // @fixme: perr or something.
+          return;
+     }
+
+     model->sx_instance_list = g_list_remove(model->sx_instance_list, instance_link);
+     gnc_sx_instances_free((GncSxInstances*)instance_link->data);
 }

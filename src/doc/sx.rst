@@ -19,26 +19,39 @@ TODO
 ----------
 
 - meta
-  - [ ] move files around
+  - [x] move files around
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
 
 - core
   - [x] sx list -> qof collection
-  - [ ] sx engine events
+  - [/] sx engine events
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
-    - [ ] sx modified -- QOF_EVENT_MODIFY
+    - [x] sx modified -- QOF_EVENT_MODIFY
   - [ ] sx upcoming instance model
     - [ ] implement sort model
+  - [#] testing
+    - [x] open SLR dialog, create new SX, see it populated
+    - [x] open SX editor dialog, run SLR, see next-instance update
+    - [ ] unit testing
+
+- sx editor page
+  - [ ] make into split panel
+  - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 
 - gnc_dense_cal
+  - [ ] fix static variables that should be instance fields.
+  - [ ] remove clist usage
   - [ ] change number-of-month properties to display-named properties (width, length)
+  - [ ] better transient/floating window?
   - [x] set_model(GncTemporalInstancesModel *mdl)
     - [x] new interface creation.
     - [x] register callbacks for signals
+  - [ ] (re-format file)
 
 - sx-from-trans
-  - [ ] convert to GObject, hookup destroy/finalize
+  - [ ] convert to GObject
+  - [x] hookup destroy/finalize
 
 - use Recurrence instead of Freq Spec
   - [ ] XML migration, handling
@@ -48,24 +61,23 @@ TODO
   - [ ] add obsolete flag to SxInstanceModel
   - [x] add mutation support to sx instance model
     - [x] state machine
-  - [x] add variable state to sx instance model
+  - [/] add variable state to sx instance model
     - [ ] handle (hidden/system not for editing) variables.
   - [x] add sx_upcoming_instance_model()
-      - [ ] add effect_auto_create()
-  - [/] add some sort of "ready to go" flag and api
+      - [x] add effect_auto_create()
+  - [x] add some sort of "ready to go" flag and api
     - [x] variable setting, primarily
-  - [/] some sort of commit_changes()
-    - ??? does effect_auto_create() imply or need commit_changes()?
-  - [/] add variable table to instances
+  - [x] some sort of commit_changes()
+  - [x] add variable table to instances
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
 - destroy/cleanup
-  - [ ] GncSxInstanceModel
-  - [ ] GncSxSlr[Tree]Model[Adapter]
-  - [ ] GncSxList adapter
-  - [ ] GncPluginPageSxList
-  - ...
+  - notes
+    - dispose: should no longer hold references to other objects; callable
+      multiple times; chain up at end
+    - finalize: complete destruction; just before free; only called once;
+      chain up at end.
 
 Pedantic Todo
 ----------------------
