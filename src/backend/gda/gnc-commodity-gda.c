@@ -36,7 +36,7 @@
 
 #include "qof.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 #include "gnc-commodity.h"
 
 #include "gnc-commodity-gda.h"
@@ -120,6 +120,8 @@ load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
 	}
 
 	gnc_gda_load_object( pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
+	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pCommodity) ),
+							qof_instance_get_slots( QOF_INSTANCE(pCommodity) ) );
 
 	qof_instance_mark_clean( QOF_INSTANCE(pCommodity) );
 
@@ -169,11 +171,23 @@ create_commodities_tables( GncGdaBackend* be )
 static void
 commit_commodity( GncGdaBackend* be, QofInstance* inst )
 {
+	const GUID* guid;
+
 	(void)gnc_gda_do_db_operation( be,
 						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
 						COMMODITIES_TABLE,
 						GNC_ID_COMMODITY, (gnc_commodity*)inst,
 						col_table );
+
+	// Delete old slot info
+	guid = qof_instance_get_guid( inst );
+
+	// Now, commit or delete any slots
+	if( !inst->do_free ) {
+		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+	} else {
+		gnc_gda_slots_delete( be, guid );
+	}
 }
 
 static gboolean

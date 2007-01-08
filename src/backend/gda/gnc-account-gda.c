@@ -35,7 +35,7 @@
 #include "Group.h"
 #include "AccountP.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 
 #include "gnc-account-gda.h"
 #include "gnc-commodity-gda.h"

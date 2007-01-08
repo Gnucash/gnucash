@@ -33,7 +33,7 @@
 
 #include "qof.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 
 #include "gnc-schedxaction-gda.h"
 #include "gnc-slots-gda.h"

@@ -38,7 +38,7 @@
 #include "Account.h"
 #include "Transaction.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 #include "gnc-transaction-gda.h"
 #include "gnc-commodity.h"
 #include "gnc-commodity-gda.h"

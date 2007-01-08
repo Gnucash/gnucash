@@ -34,7 +34,7 @@
 #include "qof.h"
 #include "gnc-lot.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 #include "gnc-slots-gda.h"
 
 #include "gnc-lots-gda.h"

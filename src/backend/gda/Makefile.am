@@ -17,7 +17,9 @@ AM_CFLAGS = \
 
 libgnc_backend_gda_la_SOURCES = \
   gnc-backend-gda.c \
+  gnc-backend-util-gda.c \
   gnc-account-gda.c \
+  gnc-book-gda.c \
   gnc-budget-gda.c \
   gnc-commodity-gda.c \
   gnc-lots-gda.c \

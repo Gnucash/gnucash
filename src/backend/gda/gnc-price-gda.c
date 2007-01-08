@@ -34,7 +34,7 @@
 #include "qof.h"
 #include "gnc-pricedb.h"
 
-#include "gnc-backend-gda.h"
+#include "gnc-backend-util-gda.h"
 
 #include "gnc-commodity-gda.h"
 #include "gnc-price-gda.h"
