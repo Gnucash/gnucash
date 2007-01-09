@@ -100,7 +100,7 @@ gsidca_instances_removing_cb(GncSxInstanceModel *model, SchedXaction *sx_to_be_r
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
      printf("removing instance...\n");
      g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT(sx_to_be_removed));
-     gnc_sx_instance_model_remove_sx_instance(model, sx_to_be_removed);
+     gnc_sx_instance_model_remove_sx_instances(model, sx_to_be_removed);
 }
 
 GncSxInstanceDenseCalAdapter*

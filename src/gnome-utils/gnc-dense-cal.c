@@ -155,7 +155,7 @@ static GtkWidgetClass *parent_class = NULL;
 #define MONTH_NAME_BUFSIZE 5
 /* Takes the number of months since January, in the range 0 to
  * 11. Returns the abbreviated month name according to the current
- * locale.
+ * locale.*/
 static const gchar *month_name(int mon) 
 {
     static gchar buf[MONTH_NAME_BUFSIZE];
