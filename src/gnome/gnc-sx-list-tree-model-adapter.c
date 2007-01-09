@@ -343,7 +343,7 @@ gsltma_removing_cb(GncSxInstanceModel *instances, SchedXaction *sx_removing, gpo
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
      printf("removing\n");
-     gnc_sx_instance_model_remove_sx_instance(instances, sx_removing);
+     gnc_sx_instance_model_remove_sx_instances(instances, sx_removing);
      gtk_tree_store_clear(model->real);
      gsltma_populate_tree_store(model);
 }

@@ -779,9 +779,9 @@ gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances)
      rtn->instances = instances;
      g_object_ref(G_OBJECT(rtn->instances));
      gsslrtma_populate_tree_store(rtn);
-     g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
+     //g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
      rtn->updated_cb_id = g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsslrtma_updated_cb, (gpointer)rtn);
-     g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
+     //g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
      return rtn;
 }
 
