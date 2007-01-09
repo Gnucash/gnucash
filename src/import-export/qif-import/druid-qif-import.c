@@ -1135,7 +1135,7 @@ gnc_ui_qif_import_memo_line_select_cb(GtkTreeSelection *selection,
 				      gpointer          user_data)   
 {
   QIFImportWindow * wind = user_data;
-  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
+  select_line (wind, selection, wind->memo_display_info, wind->memo_map_info,
 	       update_memo_page);
 }
 
