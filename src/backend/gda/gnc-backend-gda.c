@@ -42,6 +42,7 @@
 #include "gnc-gconf-utils.h"
 
 #include "gnc-account-gda.h"
+#include "gnc-book-gda.h"
 #include "gnc-budget-gda.h"
 #include "gnc-commodity-gda.h"
 #include "gnc-lots-gda.h"
@@ -252,7 +253,7 @@ gnc_gda_sync_all(QofBackend* be, QofBook *book)
 	if( error != NULL ) {
 		printf( "SQL error: %s\n", error->message );
 	}
-	numTables = gda_data_model_get_num_rows( tables );
+	numTables = gda_data_model_get_n_rows( tables );
 	for( row = 0; row < numTables; row++ ) {
 		const GValue* row_value;
 		const gchar* table_name;
@@ -626,6 +627,7 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 static void
 gnc_gda_init_object_handlers( void )
 {
+	gnc_gda_init_book_handler();
 	gnc_gda_init_commodity_handler();
 	gnc_gda_init_account_handler();
 	gnc_gda_init_budget_handler();
