@@ -61,8 +61,8 @@ TODO
   - [ ] add obsolete flag to SxInstanceModel
   - [x] add mutation support to sx instance model
     - [x] state machine
-  - [/] add variable state to sx instance model
-    - [ ] handle (hidden/system not for editing) variables.
+  - [x] add variable state to sx instance model
+    - [x] handle (hidden/system not for editing) variables.
   - [x] add sx_upcoming_instance_model()
       - [x] add effect_auto_create()
   - [x] add some sort of "ready to go" flag and api
