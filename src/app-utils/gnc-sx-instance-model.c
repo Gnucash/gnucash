@@ -34,8 +34,8 @@
 #include "gnc-event.h"
 #include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
-#include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
+#include "gnc-sx-instance-model.h"
 #include "qof.h"
 
 static GObjectClass *parent_class = NULL;
@@ -129,6 +129,15 @@ gnc_sx_variable_new(gchar *name)
      var->name = name;
      var->value = gnc_numeric_error(GNC_ERROR_ARG);
      var->editable = TRUE;
+     return var;
+}
+
+GncSxVariable*
+gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable)
+{
+     GncSxVariable *var = gnc_sx_variable_new(name);
+     var->value = value;
+     var->editable = editable;
      return var;
 }
 
@@ -264,12 +273,23 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
           sxsl_get_sx_vars(parent->sx, parent->variable_names);
           g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
           parent->variable_names_parsed = TRUE;
-
-          // @@fixme: add sequence_num as `i`, non-editable
      }
 
      rtn->variable_bindings = g_hash_table_new(g_str_hash, g_str_equal);
      g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
+
+     {
+          int instance_i_value;
+          gnc_numeric i_num;
+          GncSxVariable *as_var;
+
+          instance_i_value = gnc_sx_get_instance_count(rtn->parent->sx, rtn->temporal_state);
+          i_num = gnc_numeric_create(instance_i_value, 1);
+          as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
+
+          g_hash_table_insert(rtn->variable_bindings, "i", as_var);
+     }
+
      return rtn;
 }
 
@@ -285,8 +305,8 @@ gnc_sx_instance_get_variables(GncSxInstance *inst)
 {
      GList *vars = NULL;
      g_hash_table_foreach(inst->variable_bindings, _build_list_from_hash_elts, &vars);
-     
      // @@fixme sort by name
+     // @@fixme make sure the returned list is freed by callers.
      return vars;
 }
 
@@ -418,19 +438,27 @@ gnc_sx_instance_model_dispose(GObject *object)
 }
 
 static void
+gnc_sx_instance_free(GncSxInstance *instance)
+{
+     // @fixme:
+     // variable_bindings elts + map
+     // temporal_state (iff not postponed?)
+     
+     g_free(instance);
+}
+
+static void
 gnc_sx_instances_free(GncSxInstances *instances)
 {
      GList *instance_iter;
+     // @fixme:
+     // variable_names
+     // sx = null
+
      for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
      {
           GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
-          // gnc_sx_instance_free(inst); {...
-
-          // @fixme:
-          // variable_bindings elts + map
-          // temporal_state (iff not postponed?)
-          // object itself
-          g_free(inst);
+          gnc_sx_instance_free(inst);
      }
      g_list_free(instances->list);
      instances->list = NULL;

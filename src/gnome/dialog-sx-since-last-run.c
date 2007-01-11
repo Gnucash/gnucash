@@ -486,6 +486,10 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                          {
                               GncSxVariable *var = (GncSxVariable*)var_iter->data;
                               GString *tmp_str;
+
+                              if (!var->editable)
+                                   continue;
+
                               if (gnc_numeric_check(var->value) == GNC_ERROR_OK)
                               {
                                    _var_numeric_to_string(&var->value, &tmp_str);
@@ -606,7 +610,19 @@ gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkT
 
      if (var_loc != NULL)
      {
-          *var_loc = (GncSxVariable*)g_list_nth_data(variables, variable_index);
+          // *var_loc = (GncSxVariable*)g_list_nth_data(variables, variable_index);
+          GList *list_iter = variables;
+          for (; list_iter != NULL; list_iter = list_iter->next)
+          {
+               GncSxVariable *var = (GncSxVariable*)list_iter->data;
+               if (!var->editable)
+                    continue;
+               if (variable_index-- == 0)
+               {
+                    *var_loc = var;
+                    break;
+               }
+          }
      }
 
      g_list_free(variables);
@@ -685,6 +701,25 @@ gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxIns
      }
 }
 
+/**
+ * Special-case list indexing that only refers to "editable" variables. :(
+ **/
+static gint
+_variable_list_index(GList *variables, GncSxVariable *variable)
+{
+     gint index = 0;
+     for (; variables != NULL; variables = variables->next)
+     {
+          GncSxVariable *var = (GncSxVariable*)variables->data;
+          if (!var->editable)
+               continue;
+          if (variable == var)
+               return index;
+          index++;
+     }
+     return -1;
+}
+
 static GtkTreePath*
 _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable)
 {
@@ -699,7 +734,7 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
      if (indices[1] == -1)
           return NULL;
      variables = gnc_sx_instance_get_variables(instance);
-     indices[2] = g_list_index(variables, variable);
+     indices[2] = _variable_list_index(variables, variable);
      g_list_free(variables);
      if (indices[2] == -1)
           return NULL;

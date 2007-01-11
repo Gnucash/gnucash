@@ -26,6 +26,7 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
+#include "gnc-numeric.h"
 #include "SchedXaction.h"
 
 G_BEGIN_DECLS
@@ -46,9 +47,9 @@ typedef struct _GncSxInstanceModel
      gint qof_event_handler_id;
 
      /* signals */
-     /* void (*added)(GncSxInstance *inst); // gpointer user_data */
-     /* void (*updated)(); // gpointer user_data */
-     /* void (*removing)(GncSxInstance *inst); // gpointer user_data */
+     /* void (*added)(SchedXaction *sx); // gpointer user_data */
+     /* void (*updated)(SchedXaction *sx); // gpointer user_data */
+     /* void (*removing)(SchedXaction *sx); // gpointer user_data */
 
      /* public */
      GDate range_end;
@@ -73,7 +74,7 @@ typedef struct _GncSxInstances
      GDate next_instance_date;
      
      /** GList<GncSxInstance*> **/
-     GList *list; // @fixme: s/list/?/
+     GList *list; /* @fixme: s/list/?/ */
 } GncSxInstances;
 
 typedef enum 
@@ -125,6 +126,8 @@ Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);
  * @return caller-owned.
  **/
 GHashTable* gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash);
+
+GncSxVariable* gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable);
 
 G_END_DECLS
 
