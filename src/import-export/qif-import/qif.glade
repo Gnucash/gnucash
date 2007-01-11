@@ -602,7 +602,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 	      <child>
 		<widget class="GtkLabel" id="label830">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">On the next page, the accounts in your QIF files and any stocks or mutual funds you own will be matched with GnuCash accounts. If a GnuCash account already exists with the same name, or a similar name and compatible type, that account will be used as a match; otherwise, GnuCash will create a new account with the same name and type as the QIF account. If you do not like the suggested GnuCash account, click to change it.
+		  <property name="label" translatable="yes">On the next page, the accounts in your QIF files and any stocks or mutual funds you own will be matched with GnuCash accounts. If a GnuCash account already exists with the same name, or a similar name and compatible type, that account will be used as a match; otherwise, GnuCash will create a new account with the same name and type as the QIF account. If you do not like the suggested GnuCash account, double-click to change it.
 
 Note that GnuCash will be creating many accounts that did not exist on your other personal finance program, including a separate account for each stock you own, separate accounts for the brokerage commissions, special &quot;Equity&quot; accounts (subaccounts of Retained Earnings, by default) which are the source of your opening balances, etc. All of these accounts will appear on the next page so you can change them if you want to, but it is safe to leave them alone.
 </property>
@@ -716,7 +716,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">GnuCash uses separate Income and Expense accounts rather than categories to classify your transactions. Each of the categories in your QIF file will be converted to a GnuCash account. 
 
-On the next page, you will have an opportunity to look at the suggested matches between QIF categories and GnuCash accounts. You may change matches that you do not like by clicking on the line containing the category name.
+On the next page, you will have an opportunity to look at the suggested matches between QIF categories and GnuCash accounts. You may change matches that you do not like by double-clicking on the line containing the category name.
 
 If you change your mind later, you can reorganize the account structure safely within GnuCash.</property>
 		  <property name="use_underline">False</property>
@@ -1041,7 +1041,7 @@ Check to see if there is an existing Type that is appropriate; if not, you can e
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">If you are importing a QIF file downloaded from a bank or other financial institution, some of the information in the QIF file may duplicate information already in your GnuCash accounts.  GnuCash will try to detect duplicates of existing transactions.  
 
-On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible  matches for the selected left-hand transaction are shown  to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by clicking in the &quot;Dup?&quot; column of the correct transaction.
+On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible  matches for the selected left-hand transaction are shown  to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the &quot;Dup?&quot; column of the correct transaction.
 
 You can control the rules used by GnuCash to find duplicate transactions in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
 

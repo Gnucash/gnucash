@@ -1020,7 +1020,6 @@ create_account_picker_view(GtkWidget *widget,
   GtkListStore *store;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
 
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -1049,8 +1048,7 @@ create_account_picker_view(GtkWidget *widget,
   gtk_tree_view_append_column(view, column);
 
   g_object_set_data(G_OBJECT(store), PREV_ROW, GINT_TO_POINTER(-1));
-  selection = gtk_tree_view_get_selection(view);
-  g_signal_connect(selection, "changed", callback, user_data);
+  g_signal_connect(view, "row-activated", G_CALLBACK(callback), user_data);
 }
 
 /********************************************************************
@@ -1070,14 +1068,11 @@ select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
   SCM   selected_acct;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gint row, prev_row;
+  gint row;
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
   gtk_tree_model_get(model, &iter, ACCOUNT_COL_INDEX, &row, -1);
-  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), PREV_ROW));
-  if (row == prev_row)
-    return;
   g_object_set_data(G_OBJECT(model), PREV_ROW, GINT_TO_POINTER(row));
   if (row == -1)
     return;
@@ -1101,10 +1096,16 @@ select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_account_line_select_cb(GtkTreeSelection *selection,
-					 gpointer          user_data)   
+gnc_ui_qif_import_account_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
   select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_accounts_page);
 }
@@ -1116,10 +1117,16 @@ gnc_ui_qif_import_account_line_select_cb(GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_category_line_select_cb(GtkTreeSelection *selection,
-					  gpointer          user_data)   
+gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
   select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_categories_page);
 }
@@ -1131,10 +1138,16 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_memo_line_select_cb(GtkTreeSelection *selection,
-				      gpointer          user_data)   
+gnc_ui_qif_import_memo_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
   select_line (wind, selection, wind->memo_display_info, wind->memo_map_info,
 	       update_memo_page);
 }
