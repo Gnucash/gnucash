@@ -192,14 +192,14 @@ run_test (void)
 int
 main (int argc, char **argv)
 {
-	qof_init();
-	if(cashobjects_register())
-	{
-  xaccLogDisable ();
-  run_test ();
-  success("transaction voiding seems OK");
-  print_test_results();
-	}
-	qof_close();
+  qof_init();
+  if(cashobjects_register())
+    {
+      xaccLogDisable ();
+      run_test ();
+      success("transaction voiding seems OK");
+      print_test_results();
+    }
+  qof_close();
   return 0;
 }
