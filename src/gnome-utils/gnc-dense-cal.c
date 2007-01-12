@@ -252,10 +252,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         {
                 GtkWidget *vbox, *hbox;
                 GtkWidget *l;
-                GtkCList *cl;
-                static gchar *CLIST_TITLES[2];
-		CLIST_TITLES[0] = _("Name");
-		CLIST_TITLES[1] = _("Frequency");
+                GtkListStore *tree_data;
+                GtkTreeView *tree_view;
 
                 vbox = gtk_vbox_new( FALSE, 5 );
                 hbox = gtk_hbox_new( FALSE, 5 );
@@ -269,11 +267,12 @@ gnc_dense_cal_init (GncDenseCal *dcal)
 
                 gtk_container_add( GTK_CONTAINER(vbox), gtk_hseparator_new() );
 
-                cl = GTK_CLIST(gtk_clist_new_with_titles(2, (gchar**)CLIST_TITLES));
-                gtk_clist_set_column_auto_resize( cl, 0, TRUE );
-                gtk_clist_set_column_auto_resize( cl, 1, TRUE );
-                g_object_set_data( G_OBJECT(dcal->transPopup), "clist", cl );
-                gtk_container_add( GTK_CONTAINER(vbox), GTK_WIDGET(cl) );
+                tree_data = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+                tree_view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(tree_data)));
+                gtk_tree_view_insert_column_with_attributes(tree_view, -1, _("Name"), gtk_cell_renderer_text_new(), "text", 0, NULL);
+                gtk_tree_view_insert_column_with_attributes(tree_view, -1, _("Frequency"), gtk_cell_renderer_text_new(), "text", 1, NULL);
+                g_object_set_data(G_OBJECT(dcal->transPopup), "model", tree_data);
+                gtk_container_add(GTK_CONTAINER(vbox), GTK_WIDGET(tree_view));
 
                 gtk_container_add( GTK_CONTAINER(dcal->transPopup), vbox );
 
@@ -1026,14 +1025,10 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
 
         if ( doc >= 0 ) {
                 GObject *o;
-                GtkCList *cl;
+                GtkListStore *model;
                 GList *l;
-                gchar *rowText[2];
-                gint row = 0;
-                gdc_mark_data *gdcmd;
 
-                w = GTK_WIDGET( g_object_get_data( G_OBJECT(dcal->transPopup),
-						   "dateLabel" ) );
+                w = GTK_WIDGET( g_object_get_data( G_OBJECT(dcal->transPopup), "dateLabel" ) );
                 date = g_date_new_dmy( 1, dcal->month, dcal->year );
                 g_date_add_days( date, doc );
 		/* Note: the ISO date format (%F or equivalently
@@ -1045,16 +1040,19 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
                 gtk_label_set_text( GTK_LABEL(w), strftimeBuf );
 
                 o = G_OBJECT(dcal->transPopup);
-                cl = GTK_CLIST( g_object_get_data(o, "clist" ) );
-                gtk_clist_clear( cl );
-                for ( l = dcal->marks[doc]; l; l = l->next ) {
-                        gdcmd = (gdc_mark_data*)l->data;
-                        rowText[0] = ( gdcmd->name ? gdcmd->name : _("(unnamed)") );
-                        rowText[1] = gdcmd->info;
-                        gtk_clist_insert( cl, row++, rowText );
+                model = GTK_LIST_STORE(g_object_get_data(o, "model"));
+                gtk_list_store_clear(model);
+                for (l = dcal->marks[doc]; l; l = l->next)
+                {
+                     GtkTreeIter iter;
+                     gdc_mark_data *gdcmd;
+
+                     gdcmd = (gdc_mark_data*)l->data;
+                     gtk_list_store_insert(model, &iter, INT_MAX);
+                     gtk_list_store_set(model, &iter, 0, (gdcmd->name ? gdcmd->name : _("(unnamed)")), 1, gdcmd->info, -1);
                 }
 
-                // FIXME: free 'date'?
+                g_date_free(date);
         }
 }
 
