@@ -4,8 +4,8 @@
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
+ * published by the Free Software Foundation, under version 2 of    *
+ * the License.                                                     *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -40,14 +40,16 @@ G_BEGIN_DECLS
 typedef struct _GncDenseCal        GncDenseCal;
 typedef struct _GncDenseCalClass   GncDenseCalClass;
 
-typedef struct _gdc_month_coords {
-        gint x, y;
+typedef struct _gdc_month_coords
+{
+     gint x, y;
 } gdc_month_coords;
 
-enum GDC_COLORS {
-  MONTH_THIS = 0,
-  MONTH_THAT,
-  MAX_COLORS
+enum GDC_COLORS
+{
+     MONTH_THIS = 0,
+     MONTH_THAT,
+     MAX_COLORS
 };
 
 struct _GncDenseCal
@@ -112,11 +114,11 @@ struct _GncDenseCalClass
      GtkWidgetClass parent_class;
 };
 
-typedef struct _gdc_mark_data {
+typedef struct _gdc_mark_data
+{
      gchar *name;
      gchar *info;
      guint tag;
-     /* GdkColor markStyle; */
      /**
       * A GList of the dcal->marks indexes containing this mark.
       **/
@@ -139,13 +141,6 @@ void gnc_dense_cal_set_months_per_col( GncDenseCal *dcal, guint monthsPerCol );
 guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
 GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 GDateYear gnc_dense_cal_get_year( GncDenseCal *dcal );
-
-#if 0
-guint gnc_dense_cal_mark( GncDenseCal *dcal,
-                          guint size, GDate **daysArray,
-                          gchar *name, gchar *info );
-void gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove );
-#endif // 0
 
 G_END_DECLS
 

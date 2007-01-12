@@ -41,13 +41,13 @@ TODO
 
 - gnc_dense_cal
   - [ ] fix static variables that should be instance fields.
-  - [ ] remove clist usage
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] better transient/floating window?
+  - [/] (re-format file)
   - [x] set_model(GncTemporalInstancesModel *mdl)
     - [x] new interface creation.
     - [x] register callbacks for signals
-  - [ ] (re-format file)
+  - [x] remove clist usage
 
 - sx-from-trans
   - [ ] convert to GObject
@@ -58,7 +58,7 @@ TODO
 
 - since-last-run
   - [x] add reminders, postponed to SxInstanceModel
-  - [ ] add obsolete flag to SxInstanceModel
+  - [ ] add obsolete flag to SxInstanceModel [?]
   - [x] add mutation support to sx instance model
     - [x] state machine
   - [x] add variable state to sx instance model
