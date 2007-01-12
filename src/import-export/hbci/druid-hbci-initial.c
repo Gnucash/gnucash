@@ -27,7 +27,9 @@
 #include <glib/gi18n.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -540,6 +542,20 @@ on_aqhbci_button (GtkButton *button,
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
+#ifdef G_OS_WIN32
+    /* FIXME: Use something different than fork() for the child
+       process here. See src/backend/file/io-gncxml-v2.c that has
+       the same problem. */
+    gnc_error_dialog
+      (info->window,
+       _("The Windows version of GnuCash does not (yet) have the "
+	 "capability to start the external program \"%s Setup Wizard\". "
+	 "Please start it yourself from the location \"%s\" "
+	 "before you continue."),
+       backend_name, wizard_path);
+    res = 0;
+#else
+    /* Normal non-Windows operating system */
     int wait_status;
     int wait_result = 0;
 
@@ -579,6 +595,7 @@ on_aqhbci_button (GtkButton *button,
 	AB_Banking_Init (info->api);
       }
     }
+#endif /* G_OS_WIN32 */
 
     if (res == 0) {
 #ifndef AQBANKING_WIZARD_ALLBACKENDS
