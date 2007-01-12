@@ -1,3 +1,11 @@
+2007-01-12  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Translate expenses in mortgage/loan druid. Fixes #393436.
+
+	* Actually translate "Remove Splits". The button label in the
+	warning dialog about reconciled splits when removing splits from a
+	transaction used N_ without gettext, so was untranslated.
+	
 2007-01-01  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
