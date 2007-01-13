@@ -359,9 +359,9 @@ on_accountlist_changed (GtkTreeSelection *selection,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+    /* printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
 	   AB_Account_GetAccountNumber(hbci_acc),
-	   old_value);
+	   old_value); */
 
     longname = gnc_hbci_account_longname(hbci_acc);
     if (AB_Account_GetCurrency (hbci_acc) && 
