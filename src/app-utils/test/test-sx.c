@@ -13,13 +13,14 @@ test_basic()
 {
      GncSxInstanceModel *model;
      GDate *yesterday, *range_end_tomorrow;
+     SchedXaction *foo;
 
      yesterday = g_date_new();
      g_date_clear(yesterday, 1);
      g_date_set_time_t(yesterday, time(NULL));
      g_date_subtract_days(yesterday, 1);
 
-     add_daily_sx("foo", yesterday, NULL, NULL);
+     foo = add_daily_sx("foo", yesterday, NULL, NULL);
 
      range_end_tomorrow = g_date_new();
      g_date_clear(range_end_tomorrow, 1);
@@ -42,6 +43,7 @@ test_basic()
      }
 
      g_object_unref(G_OBJECT(model));
+     remove_sx(foo);
 }
 
 static void
@@ -59,6 +61,44 @@ test_empty()
      success("empty");
 }
 
+static void
+test_once()
+{
+     SchedXaction *lonely;
+     GDate *when, *end;
+     int random_offset_within_one_year = 0;
+     GncSxInstanceModel *model;
+     GncSxInstances *instances;
+     GncSxInstance *instance;
+
+     when = g_date_new();
+     g_date_clear(when, 1);
+     g_date_set_time_t(when, time(NULL));
+     while (random_offset_within_one_year == 0)
+          random_offset_within_one_year = get_random_int_in_range(-365, 365);
+     g_date_add_days(when, random_offset_within_one_year);
+
+     end = g_date_new();
+     g_date_clear(end, 1);
+     g_date_set_time_t(end, time(NULL));
+     g_date_add_years(end, 1);
+
+     lonely = add_once_sx("once", when);
+
+     model = gnc_sx_get_instances(end);
+
+     do_test(g_list_length(model->sx_instance_list) == 1, "1 instances");
+     instances = (GncSxInstances*)model->sx_instance_list->data;
+     do_test(g_list_length(instances->list) == 1, "1 instance");
+     instance = (GncSxInstance*)instances->list->data;
+     do_test(g_date_compare(when, &instances->next_instance_date) == 0, "next instance is expected");
+     do_test(g_date_compare(when, &instance->date) == 0, "instance date is expected");
+
+     g_object_unref(model);
+     success("model unref");
+     remove_sx(lonely);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -67,6 +107,11 @@ main(int argc, char **argv)
      gnc_engine_init(0, NULL);
 
      test_empty();
+     {
+          int i;
+          for (i = 0; i < 10; i++)
+               test_once();
+     }
      test_basic();
 
      print_test_results();

@@ -2169,6 +2169,16 @@ daily_freq(GDate* start, int multiplier)
      return freq;
 }
 
+static FreqSpec*
+once_freq(GDate *when)
+{
+     QofBook *book = qof_session_get_book(gnc_get_current_session());
+     FreqSpec *freq = xaccFreqSpecMalloc(book);
+     xaccFreqSpecSetOnceDate(freq, when);
+     xaccFreqSpecSetUIType(freq, UIFREQ_ONCE);
+     return freq;
+}
+
 static SchedXaction*
 add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, FreqSpec *fs)
 {
@@ -2191,6 +2201,12 @@ SchedXaction*
 add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur)
 {
      return add_sx(name, start, end, last_occur, daily_freq(start, 1));
+}
+
+SchedXaction*
+add_once_sx(gchar *name, GDate *when)
+{
+     return add_sx(name, when, NULL, NULL, once_freq(when));
 }
 
 void
