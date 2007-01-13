@@ -93,21 +93,9 @@ void gnc_sx_slr_model_summarize(GncSxSlrTreeModelAdapter *model, GncSxSlrSummary
 
 void gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state);
 void gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value);
-
 void gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model, gboolean auto_create_only, GList **created_transaction_guids, GList **creation_errors);
 
 GtkTreeModel* gnc_sx_get_slr_state_model(void);
-
-typedef struct _GncSxSlrVariableNeeded
-{
-     GncSxInstance *instance;
-     GncSxVariable *variable;
-} GncSxSlrVariableNeeded;
-
-/**
- * @return Caller-owned GList<GncSxSlrVariableNeeded*>.
- **/
-GList* gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *model);
 
 #define GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER	      (gnc_sx_slr_tree_model_adapter_get_type ())
 #define GNC_SX_SLR_TREE_MODEL_ADAPTER(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_SLR_TREE_MODEL_ADAPTER, GncSxSlrTreeModelAdapter))
@@ -674,23 +662,7 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
 void
 gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value)
 {
-     GtkTreePath *path;
-     GtkTreeIter iter;
-     GString *tmp_str;
-
-     path = _get_path_for_variable(model, instance, variable);
-     if (path == NULL)
-          return;
-     gtk_tree_model_get_iter(GTK_TREE_MODEL(model), &iter, path);
-     
-     variable->value = *new_value;
-
-     _var_numeric_to_string(&variable->value, &tmp_str);
-     gtk_tree_store_set(model->real, &iter,
-                        SLR_MODEL_COL_VARAIBLE_VALUE, tmp_str->str,
-                        -1);
-     g_string_free(tmp_str, TRUE);
-     gtk_tree_path_free(path);
+     gnc_sx_instance_model_set_variable(model->instances, instance, variable, new_value);
 }
 
 static void
@@ -1050,6 +1022,12 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
      xaccFreeQuery(guid_query);
 }
 
+static GList*
+gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *editing_model)
+{
+     return gnc_sx_instance_model_check_variables(editing_model->instances);
+}
+
 static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
@@ -1068,13 +1046,13 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
                if (g_list_length(unbound_variables) > 0)
                {
                     // focus first variable
-                    GncSxSlrVariableNeeded *first_unbound;
+                    GncSxVariableNeeded *first_unbound;
                     GtkTreePath *variable_path;
                     GtkTreeViewColumn *variable_col;
                     gint variable_view_column = 2;
                     gboolean start_editing = TRUE;
 
-                    first_unbound = (GncSxSlrVariableNeeded*)unbound_variables->data;
+                    first_unbound = (GncSxVariableNeeded*)unbound_variables->data;
                     variable_path = _get_path_for_variable(app_dialog->editing_model, first_unbound->instance, first_unbound->variable);
                     variable_col = gtk_tree_view_get_column(app_dialog->instance_view, variable_view_column);
 
@@ -1125,43 +1103,3 @@ gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model,
      g_signal_handler_unblock(model->instances, model->updated_cb_id);
 }
 
-static void
-_list_from_hash_elts(gpointer key, gpointer value, GList **result_list)
-{
-     *result_list = g_list_append(*result_list, value);
-}
-
-GList*
-gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *model)
-{
-     GList *rtn = NULL;
-     GList *sx_iter, *inst_iter, *var_list = NULL, *var_iter;
-
-     for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
-     {
-          GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-          for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
-          {
-               GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
-
-               if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
-                    continue;
-
-               g_hash_table_foreach(inst->variable_bindings, (GHFunc)_list_from_hash_elts, &var_list);
-               for (var_iter = var_list; var_iter != NULL; var_iter = var_iter->next)
-               {
-                    GncSxVariable *var = (GncSxVariable*)var_iter->data;
-                    if (gnc_numeric_check(var->value) != GNC_ERROR_OK)
-                    {
-                         GncSxSlrVariableNeeded *need = g_new0(GncSxSlrVariableNeeded, 1);
-                         need->instance = inst;
-                         need->variable = var;
-                         rtn = g_list_append(rtn, need);
-                    }
-               }
-               g_list_free(var_list);
-               var_list = NULL;
-          }
-     }
-     return rtn;
-}

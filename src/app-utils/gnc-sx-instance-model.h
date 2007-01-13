@@ -104,6 +104,12 @@ typedef struct _GncSxInstance
      GHashTable *variable_bindings; /**< variable bindings. **/
 } GncSxInstance;
 
+typedef struct _GncSxVariableNeeded
+{
+     GncSxInstance *instance;
+     GncSxVariable *variable;
+} GncSxVariableNeeded;
+
 GType gnc_sx_instance_model_get_type(void);
 
 GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
@@ -128,11 +134,22 @@ Account* gnc_sx_get_template_transaction_account(SchedXaction *sx);
 GHashTable* gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash);
 
 GncSxVariable* gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable);
+void gnc_sx_variable_free(GncSxVariable *var);
 
 void gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
                                                  GncSxInstance *instance,
                                                  GncSxInstanceState new_state);
 
+void gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
+                                        GncSxInstance *instance,
+                                        GncSxVariable *variable,
+                                        gnc_numeric *new_value);
+
+/**
+ * @return List<GncSxVariableNeeded> of unbound {instance,variable} pairs;
+ * the caller owns the list and the items.
+ **/
+GList* gnc_sx_instance_model_check_variables(GncSxInstanceModel *model);
 void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                                          gboolean auto_create_only,
                                          GList **created_transaction_guids,
@@ -141,6 +158,7 @@ void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
 /* @@fixme names. */
 void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);
 int parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
+void randomize_variables(GHashTable *vars);
 
 G_END_DECLS
 

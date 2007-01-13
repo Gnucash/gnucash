@@ -23,6 +23,7 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
+#include <stdlib.h>
 
 #include "Account.h"
 #include "SX-book.h"
@@ -99,13 +100,14 @@ parse_vars_from_formula(const char *formula,
                         gnc_numeric *result)
 {
      gnc_numeric num;
-     char *errLoc;
+     char *errLoc = NULL;
      int toRet = 0;
      GHashTable *parser_vars;
 
      // convert var_hash -> variables for the parser.
      parser_vars = gnc_sx_instance_get_variables_for_parser(var_hash);
 
+     num = gnc_numeric_zero();
      if (!gnc_exp_parser_parse_separate_vars(formula, &num, &errLoc, parser_vars))
      {
           toRet = -1;
@@ -244,6 +246,27 @@ sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
      Account *sx_template_acct;
      sx_template_acct = gnc_sx_get_template_transaction_account(sx);
      xaccAccountForEachTransaction(sx_template_acct, _get_vars_helper, var_hash);
+}
+
+static void
+_set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_data)
+{
+     var->value = double_to_gnc_numeric(rand() + 2, 1,
+                                        GNC_NUMERIC_RND_MASK
+                                        | GNC_RND_FLOOR);
+}
+
+void
+gnc_sx_variable_free(GncSxVariable *var)
+{
+     // g_free(var->name);
+     g_free(var);
+}
+
+void
+randomize_variables(GHashTable *vars)
+{
+     g_hash_table_foreach(vars, (GHFunc)_set_var_to_random_value, NULL);
 }
 
 static void
@@ -1121,4 +1144,58 @@ gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
      }
 
      g_signal_emit_by_name(model, "updated", (gpointer)instance->parent->sx);
+}
+
+void
+gnc_sx_instance_model_set_variable(GncSxInstanceModel *model,
+                                   GncSxInstance *instance,
+                                   GncSxVariable *variable,
+                                   gnc_numeric *new_value)
+{
+
+     if (gnc_numeric_equal(variable->value, *new_value))
+          return;
+     variable->value = *new_value;
+     g_signal_emit_by_name(model, "updated", (gpointer)instance->parent->sx);
+}
+
+static void
+_list_from_hash_elts(gpointer key, gpointer value, GList **result_list)
+{
+     *result_list = g_list_append(*result_list, value);
+}
+
+GList*
+gnc_sx_instance_model_check_variables(GncSxInstanceModel *model)
+{
+     GList *rtn = NULL;
+     GList *sx_iter, *inst_iter, *var_list = NULL, *var_iter;
+
+     for (sx_iter = model->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
+     {
+          GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
+          for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+          {
+               GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
+
+               if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
+                    continue;
+
+               g_hash_table_foreach(inst->variable_bindings, (GHFunc)_list_from_hash_elts, &var_list);
+               for (var_iter = var_list; var_iter != NULL; var_iter = var_iter->next)
+               {
+                    GncSxVariable *var = (GncSxVariable*)var_iter->data;
+                    if (gnc_numeric_check(var->value) != GNC_ERROR_OK)
+                    {
+                         GncSxVariableNeeded *need = g_new0(GncSxVariableNeeded, 1);
+                         need->instance = inst;
+                         need->variable = var;
+                         rtn = g_list_append(rtn, need);
+                    }
+               }
+               g_list_free(var_list);
+               var_list = NULL;
+          }
+     }
+     return rtn;
 }

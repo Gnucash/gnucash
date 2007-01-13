@@ -37,9 +37,14 @@ TODO
   - [ ] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [ ] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
-- sx editor page
+- sx list page
   - [ ] make into split panel
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
+
+- sx editor
+  - [ ] clean up, reformat
+  - [ ] model-ize
+    - (check_consistent, especially...)
 
 - gnc_dense_cal
   - [ ] fix static variables that should be instance fields.
@@ -59,9 +64,11 @@ TODO
   - [ ] XML migration, handling
 
 - since-last-run
+  - [ ] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
-  - [ ] move variable-setting up to app-utils
+  - [x] move variable-setting up to app-utils
+  - [ ] move summarization up to app-utils
   - [x] add reminders, postponed to SxInstanceModel
   - [x] add mutation support to sx instance model
     - [x] state machine

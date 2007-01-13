@@ -157,9 +157,6 @@ static void set_endgroup_toggle_states( GncSxEditorDialog *sxed, EndType t );
 static void advance_toggle( GtkButton *b, GncSxEditorDialog *sxed );
 static gboolean gnc_sxed_check_consistent( GncSxEditorDialog *sxed );
 static gboolean gnc_sxed_check_changed( GncSxEditorDialog *sxed );
-static void free_keys_and_numerics_ea( gpointer key,
-                                       gpointer value,
-                                       gpointer user_data );
 static void gnc_sxed_save_sx( GncSxEditorDialog *sxed );
 static void gnc_sxed_freq_changed( GNCFrequency *gf, gpointer ud );
 static void sxed_excal_update_adapt( GtkObject *o, gpointer ud );
@@ -236,29 +233,6 @@ void
 editor_help_button_clicked(GtkButton *b, GncSxEditorDialog *sxed)
 {
 	gnc_gnome_help(HF_HELP, HL_SXEDITOR);
-}
-
-static void
-set_var_to_random_value( gpointer key, gpointer value, gpointer ud )
-{
-        if ( !value ) {
-                value = g_new0( gnc_numeric, 1 );
-        }
-        *(gnc_numeric*)value =
-                double_to_gnc_numeric( rand() + 2, 1,
-                                       GNC_NUMERIC_RND_MASK
-                                       | GNC_RND_FLOOR );
-        g_hash_table_insert( ud, key, value );
-}
-
-static
-void
-free_keys_and_numerics_ea( gpointer key, gpointer val, gpointer ud )
-{
-        g_assert( key );
-        g_assert( val );
-        g_free( (gchar*)key );
-        g_free( (gnc_numeric*)val );
 }
 
 static
@@ -599,8 +573,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
                 srand(time(NULL));
                 for ( i=0; i < numIters && !unbalanceable; i++ ) {
-                        g_hash_table_foreach( vars, set_var_to_random_value,
-                                              (gpointer)vars );
+                        randomize_variables(vars);
                         g_hash_table_foreach( txns, set_sums_to_zero, NULL );
                         tmp = gnc_numeric_zero();
 
@@ -702,16 +675,15 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 }
 
                 /* Subtract out pre-defined vars */
-                if ( g_hash_table_lookup_extended( vars, "i",
-                                                   &unusedKey,
-                                                   &unusedValue ) ) {
-                        ttVarCount -= 1;
+                if (g_hash_table_lookup_extended(vars, "i",
+                                                 &unusedKey,
+                                                 &unusedValue))
+                {
+                     ttVarCount -= 1;
                 }
 
-                g_hash_table_foreach( vars,
-                                      free_keys_and_numerics_ea,
-                                      NULL );
-                g_hash_table_destroy( vars );
+                g_hash_table_foreach(vars, (GHFunc)gnc_sx_variable_free, NULL);
+                g_hash_table_destroy(vars);
 
                 g_hash_table_foreach( txns, free_sums, NULL );
                 g_hash_table_destroy( txns );
