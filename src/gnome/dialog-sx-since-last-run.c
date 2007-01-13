@@ -31,10 +31,6 @@
 #include "dialog-sx-since-last-run.h"
 
 #include "gnc-ui-util.h"
-#include "Split.h"
-#include "Transaction.h"
-#include "Account.h"
-#include "Scrub.h"
 #include "Query.h"
 #include "QueryNew.h"
 #include "gnc-ledger-display.h"
@@ -44,11 +40,9 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 
-static QofLogModule log_module = GNC_MOD_GUI;
+// static QofLogModule log_module = GNC_MOD_GUI;
 
 #define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
-
-//typedef struct _GncSxSlrTreeModelAdapter GncSxSlrTreeModelAdapter;
 
 struct _GncSxSinceLastRunDialog
 {
@@ -632,73 +626,8 @@ gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkT
 void
 gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state)
 {
-     GtkTreePath *path;
-     GtkTreeIter iter;
-     GList *inst_iter;
-     int indices[2];
-
-     indices[0] = g_list_index(model->instances->sx_instance_list, instance->parent);
-     if (indices[0] == -1)
-          return;
-     indices[1] = g_list_index(instance->parent->list, instance);
-     if (indices[1] == -1)
-          return;
-     path = gtk_tree_path_new_from_indices(indices[0], indices[1], -1);
-     gtk_tree_model_get_iter(GTK_TREE_MODEL(model), &iter, path);
-     gtk_tree_path_free(path);
-
-     instance->state = new_state;
-
-     gtk_tree_store_set(model->real, &iter,
-                        SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[instance->state],
-                        SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, instance->state != SX_INSTANCE_STATE_CREATED,
-                        -1);
-
-     // ensure 'remind' constraints are met
-     inst_iter = g_list_find(instance->parent->list, instance);
-     g_assert(inst_iter != NULL);
-     if (instance->state != SX_INSTANCE_STATE_REMINDER)
-     {
-          // iterate backwards, making sure reminders are changed to 'postponed'
-          for (inst_iter = inst_iter->prev; inst_iter != NULL; inst_iter = inst_iter->prev)
-          {
-               GncSxInstance *prev_inst = (GncSxInstance*)inst_iter->data;
-               indices[1] -= 1;
-               if (prev_inst->state != SX_INSTANCE_STATE_REMINDER)
-                    continue;
-
-               prev_inst->state = SX_INSTANCE_STATE_POSTPONED;
-
-               path = gtk_tree_path_new_from_indices(indices[0], indices[1], -1);
-               gtk_tree_model_get_iter(GTK_TREE_MODEL(model), &iter, path);
-               gtk_tree_path_free(path);
-               gtk_tree_store_set(model->real, &iter,
-                                  SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[prev_inst->state],
-                                  SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, prev_inst->state != SX_INSTANCE_STATE_CREATED,
-                                  -1);
-          }
-     }
-     else
-     {
-          // iterate forward, make sure transactions are set to 'remind'
-          for (inst_iter = inst_iter->next; inst_iter != NULL; inst_iter = inst_iter->next)
-          {
-               GncSxInstance *next_inst = (GncSxInstance*)inst_iter->data;
-               indices[1] += 1;
-               if (next_inst->state == SX_INSTANCE_STATE_REMINDER)
-                    continue;
-
-               next_inst->state = SX_INSTANCE_STATE_REMINDER;
-
-               path = gtk_tree_path_new_from_indices(indices[0], indices[1], -1);
-               gtk_tree_model_get_iter(GTK_TREE_MODEL(model), &iter, path);
-               gtk_tree_path_free(path);
-               gtk_tree_store_set(model->real, &iter,
-                                  SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[next_inst->state],
-                                  SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, next_inst->state != SX_INSTANCE_STATE_CREATED,
-                                  -1);
-          }
-     }
+     // @fixme: pop this out a level.
+     gnc_sx_instance_model_change_instance_state(model->instances, instance, new_state);
 }
 
 /**
@@ -768,18 +697,12 @@ static void
 gsslrtma_updated_cb(GncSxInstanceModel *instances, SchedXaction *updated_sx, gpointer user_data)
 {
      GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data); 
-     printf("gsslrtma update\n");
 
-     // @@fixme: this should be better about, say, trying to match up changed
-     // instance-state and variable-binding values.  More of a merge
-     // operation than a replace...
-     
      gnc_sx_instance_model_update_sx_instances(instances, updated_sx);
 
+     // this can't be so heavyweight ... it should re-populate the tree store in-place.
      gtk_tree_store_clear(model->real);
      gsslrtma_populate_tree_store(model);
-
-     // gtk_tree_view_expand_all(dialog->instance_view);
 }
 
 static void
@@ -1187,314 +1110,6 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
      }
 }
 
-static void
-increment_sx_state(GncSxInstance *inst, GDate **last_occur_date, int *instance_count, int *remain_occur_count)
-{
-     if (!g_date_valid(*last_occur_date)
-         || (g_date_valid(*last_occur_date)
-             && g_date_compare(*last_occur_date, &inst->date) <= 0))
-     {
-          *last_occur_date = &inst->date;
-     }
-
-     *instance_count = gnc_sx_get_instance_count(inst->parent->sx, inst->temporal_state);
-
-     if (*remain_occur_count > 0)
-     {
-          *remain_occur_count -= 1;
-     }
-}
-
-typedef struct _SxTxnCreationData
-{
-     GncSxInstance *instance;
-     GList **created_txn_guids;
-     GList **creation_errors;
-} SxTxnCreationData;
-
-static gboolean
-_get_template_split_account(GncSxInstance *instance, Split *template_split, Account **split_acct, GList **creation_errors)
-{
-     GUID *acct_guid;
-     kvp_frame *split_kvpf;
-     kvp_value *kvp_val;
-
-     split_kvpf = xaccSplitGetSlots(template_split);
-     /* contains the guid of the split's actual account. */
-     kvp_val = kvp_frame_get_slot_path(split_kvpf,
-                                       GNC_SX_ID,
-                                       GNC_SX_ACCOUNT,
-                                       NULL);
-     if (kvp_val == NULL)
-     {
-          // @@fixme: this should be more of an assert...
-          GString *err = g_string_new("");
-          g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
-                          xaccSchedXactionGetName(instance->parent->sx));
-          *creation_errors = g_list_append(*creation_errors, err);
-          return FALSE;
-     }
-     acct_guid = kvp_value_get_guid( kvp_val );
-     *split_acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
-     if (*split_acct == NULL)
-     {
-          const char *guid_str;
-          GString *err;
-          guid_str = guid_to_string((const GUID*)acct_guid);
-          err = g_string_new("");
-          g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
-                          guid_str, xaccSchedXactionGetName(instance->parent->sx));
-          g_free((char*)guid_str);
-          *creation_errors = g_list_append(*creation_errors, err);
-          return FALSE;
-     }
-
-     return TRUE;
-}
-
-static void
-_get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
-{
-     kvp_frame *split_kvpf;
-     kvp_value *kvp_val;
-     char *formula_str, *parseErrorLoc;
-
-     split_kvpf = xaccSplitGetSlots(template_split);
-     kvp_val = kvp_frame_get_slot_path(split_kvpf,
-                                       GNC_SX_ID,
-                                       formula_key,
-                                       NULL);
-     formula_str = kvp_value_get_string(kvp_val);
-     if (formula_str != NULL && strlen(formula_str) != 0)
-     {
-          GHashTable *parser_vars = gnc_sx_instance_get_variables_for_parser(instance->variable_bindings);
-          if (!gnc_exp_parser_parse_separate_vars(formula_str,
-                                                  numeric,
-                                                  &parseErrorLoc,
-                                                  parser_vars))
-          {
-               GString *err = g_string_new("");
-               g_string_printf(err, "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s",
-                               xaccSchedXactionGetName(instance->parent->sx),
-                               formula_key,
-                               formula_str,
-                               parseErrorLoc,
-                               gnc_exp_parser_error_string());
-               *creation_errors = g_list_append(*creation_errors, err);
-          }
-          g_hash_table_destroy(parser_vars);
-     }
-}
-
-static void
-_get_credit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
-{
-     _get_sx_formula(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
-}
-
-static void
-_get_debit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
-{
-     _get_sx_formula(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
-}
-
-static gboolean
-create_each_transaction_helper(Transaction *template_txn, void *user_data)
-{
-     Transaction *new_txn;
-     GList *txn_splits, *template_splits;
-     Split *copying_split;
-     gnc_commodity *first_cmdty = NULL;
-     gboolean err_flag = FALSE;
-     SxTxnCreationData *creation_data;
-
-     creation_data = (SxTxnCreationData*)user_data;
-
-     /* FIXME: In general, this should [correctly] deal with errors such
-        as not finding the approrpiate Accounts and not being able to
-        parse the formula|credit/debit strings. */
-
-     new_txn = xaccTransClone(template_txn);
-     xaccTransBeginEdit(new_txn);
-
-     /* clear any copied KVP data */
-     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
-
-     xaccTransSetDate(new_txn,
-                      g_date_get_day(&creation_data->instance->date),
-                      g_date_get_month(&creation_data->instance->date),
-                      g_date_get_year(&creation_data->instance->date));
-        
-     /* the accounts and amounts are in the kvp_frames of the splits. */
-     template_splits = xaccTransGetSplitList(template_txn);
-     txn_splits = xaccTransGetSplitList(new_txn);
-     if ((template_splits == NULL) || (txn_splits == NULL))
-     {
-          PERR("\tseen transaction w/o splits. :(");
-          xaccTransDestroy(new_txn);
-          xaccTransCommitEdit(new_txn);
-          return FALSE;
-     }
-
-     for (;
-          txn_splits && template_splits;
-          txn_splits = txn_splits->next, template_splits = template_splits->next)
-     {
-          Split *template_split;
-          Account *split_acct;
-          gnc_commodity *split_cmdty = NULL;
-             
-          /* FIXME: Ick.  This assumes that the split lists will be ordered
-             identically. :( They are, but we'd rather not have to count on
-             it. --jsled */
-          template_split = (Split*)template_splits->data;
-          copying_split = (Split*)txn_splits->data;
-
-          /* clear out any copied Split frame data. */
-          qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
-
-          if (!_get_template_split_account(creation_data->instance, template_split, &split_acct, creation_data->creation_errors))
-          {
-               err_flag = TRUE;
-               break;
-          }
-             
-          split_cmdty = xaccAccountGetCommodity(split_acct);
-          if (first_cmdty == NULL)
-          {
-               first_cmdty = split_cmdty;
-               xaccTransSetCurrency(new_txn, first_cmdty);
-          }
-
-          xaccAccountBeginEdit(split_acct);
-          xaccAccountInsertSplit(split_acct, copying_split);
-
-          {
-               gnc_numeric credit_num, debit_num, final;
-               gint gncn_error;
-
-               credit_num = gnc_numeric_zero();
-               debit_num = gnc_numeric_zero();
-
-               _get_credit_formula(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
-               _get_debit_formula(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
-                       
-               final = gnc_numeric_sub_fixed( debit_num, credit_num );
-                        
-               gncn_error = gnc_numeric_check(final);
-               if (gncn_error != GNC_ERROR_OK) {
-                    GString *err = g_string_new("");
-                    g_string_printf(err, "Error %d in SX [%s] final gnc_numeric value, using 0 instead.", 
-                                    gncn_error,
-                                    xaccSchedXactionGetName(creation_data->instance->parent->sx));
-                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
-                    final = gnc_numeric_zero();
-               }
-
-               xaccSplitSetValue(copying_split, final);
-               if (! gnc_commodity_equal(split_cmdty, first_cmdty))
-               {
-                    GString *exchange_rate_var_name = g_string_sized_new(16);
-                    GncSxVariable *exchange_rate_var;
-                    gnc_numeric exchange_rate, amt;
-
-                    /*
-                      GNCPriceDB *price_db = gnc_pricedb_get_db(gnc_get_current_book());
-                      GNCPrice *price;
-
-                      price = gnc_pricedb_lookup_latest(price_db, first_cmdty, split_cmdty);
-                      if (price == NULL)
-                      {
-                      price = gnc_pricedb_lookup_latest(price_db, split_cmdty, first_cmdty);
-                      if (price == NULL)
-                      {
-                      GString *err = g_string_new("");
-                      g_string_printf(err, "could not find pricedb entry for commodity-pair (%s, %s).",
-                      gnc_commodity_get_mnemonic(first_cmdty),
-                      gnc_commodity_get_mnemonic(split_cmdty));
-                      exchange = gnc_numeric_create(1, 1);
-                      *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
-
-                      }
-                      else
-                      {
-                      exchange = gnc_numeric_div(gnc_numeric_create(1,1),
-                      gnc_price_get_value(price),
-                      1000, GNC_HOW_RND_ROUND);
-                      }
-                      }
-                      else
-                      {
-                      exchange = gnc_price_get_value(price);
-                      }
-                    */
-
-                    exchange_rate = gnc_numeric_zero();
-                    g_string_printf(exchange_rate_var_name, "%s -> %s",
-                                    gnc_commodity_get_mnemonic(split_cmdty),
-                                    gnc_commodity_get_mnemonic(first_cmdty));
-                    exchange_rate_var = (GncSxVariable*)g_hash_table_lookup(creation_data->instance->variable_bindings,
-                                                                            exchange_rate_var_name->str);
-                    if (exchange_rate_var != NULL)
-                    {
-                         exchange_rate = exchange_rate_var->value;
-                    }
-                    g_string_free(exchange_rate_var_name, TRUE);
-
-                    amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND);
-                    xaccSplitSetAmount(copying_split, amt);
-               }
-
-               xaccSplitScrub(copying_split);
-          }
-
-          xaccAccountCommitEdit(split_acct);
-     }
-
-     if (err_flag)
-     {
-          PERR("Some error in new transaction creation...");
-          xaccTransDestroy(new_txn);
-          xaccTransCommitEdit(new_txn);
-          return FALSE;
-     }
-
-     {
-          kvp_frame *txn_frame;
-          /* set a kvp-frame element in the transaction indicating and
-           * pointing-to the SX this was created from. */
-          txn_frame = xaccTransGetSlots(new_txn);
-          kvp_frame_set_guid(txn_frame, "from-sched-xaction", xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
-     }
-
-     xaccTransCommitEdit(new_txn);
-
-     if (creation_data->created_txn_guids != NULL)
-     {
-          *creation_data->created_txn_guids
-               = g_list_append(*(creation_data->created_txn_guids), (gpointer)xaccTransGetGUID(new_txn));
-     }
-
-     return TRUE;
-}
-
-static void
-create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_guids, GList **creation_errors)
-{
-     SxTxnCreationData creation_data;
-     Account *sx_template_account;
-
-     sx_template_account = gnc_sx_get_template_transaction_account(instance->parent->sx);
-
-     creation_data.instance = instance;
-     creation_data.created_txn_guids = created_txn_guids;
-     creation_data.creation_errors = creation_errors;
-
-     xaccAccountForEachTransaction(sx_template_account,
-                                   create_each_transaction_helper,
-                                   &creation_data);
-}
-
 /**
  * @param auto_create_only Will only affect auto-create transactions; the
  * rest of the state will be left alone.
@@ -1505,80 +1120,8 @@ gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model,
                                GList **created_transaction_guids,
                                GList **creation_errors)
 {
-     GList *list;
-
      g_signal_handler_block(model->instances, model->updated_cb_id);
-
-     for (list = model->instances->sx_instance_list; list != NULL; list = list->next)
-     {
-          GList *instance_list;
-          GncSxInstances *instances = (GncSxInstances*)list->data;
-          GDate *last_occur_date;
-          gint instance_count = 0;
-          gint remain_occur_count = 0;
-
-          last_occur_date = xaccSchedXactionGetLastOccurDate(instances->sx);
-          instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
-          remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
-
-          for (instance_list = instances->list; instance_list != NULL; instance_list = instance_list->next)
-          {
-               GncSxInstance *inst = (GncSxInstance*)instance_list->data;
-               gboolean sx_is_auto_create;
-
-               xaccSchedXactionGetAutoCreate(inst->parent->sx, &sx_is_auto_create, NULL);
-               if (auto_create_only && !sx_is_auto_create)
-               {
-                    if (inst->state != SX_INSTANCE_STATE_TO_CREATE)
-                    {
-                         break;
-                    }
-                    continue;
-               }
-
-               if (inst->orig_state == SX_INSTANCE_STATE_POSTPONED
-                   && inst->state != SX_INSTANCE_STATE_POSTPONED)
-               {
-                    // remove from postponed list
-                    g_assert(inst->temporal_state != NULL);
-                    gnc_sx_remove_defer_instance(inst->parent->sx, inst->temporal_state);
-               }
-
-               switch (inst->state)
-               {
-               case SX_INSTANCE_STATE_CREATED:
-                    // nop: we've already processed this.
-                    break;
-               case SX_INSTANCE_STATE_IGNORED:
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    break;
-               case SX_INSTANCE_STATE_POSTPONED:
-                    if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
-                    {
-                         gnc_sx_add_defer_instance(instances->sx, inst->temporal_state);
-                    }
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    break;
-               case SX_INSTANCE_STATE_TO_CREATE:
-                    create_transactions_for_instance(inst, created_transaction_guids, creation_errors);
-                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                    gnc_sx_slr_model_change_instance_state(model, inst, SX_INSTANCE_STATE_CREATED);
-                    break;
-               case SX_INSTANCE_STATE_REMINDER:
-                    // do nothing
-                    // assert no non-remind instances after this?
-                    break;
-               default:
-                    g_assert_not_reached();
-                    break;
-               }
-          }
-          
-          xaccSchedXactionSetLastOccurDate(instances->sx, last_occur_date);
-          gnc_sx_set_instance_count(instances->sx, instance_count);
-          xaccSchedXactionSetRemOccur(instances->sx, remain_occur_count);
-     }
-
+     gnc_sx_instance_model_effect_change(model->instances, auto_create_only, created_transaction_guids, creation_errors);
      g_signal_handler_unblock(model->instances, model->updated_cb_id);
 }
 

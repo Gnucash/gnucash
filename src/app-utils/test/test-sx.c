@@ -99,6 +99,41 @@ test_once()
      remove_sx(lonely);
 }
 
+static void
+test_state_changes()
+{
+     SchedXaction *foo;
+     GDate *start, *end;
+     GncSxInstanceModel *model;
+     GncSxInstances *insts;
+     GncSxInstance *inst;
+
+     start = g_date_new();
+     g_date_clear(start, 1);
+     g_date_set_time_t(start, time(NULL));
+     
+     end = g_date_new();
+     g_date_clear(end, 1);
+     g_date_set_time_t(end, time(NULL));
+     g_date_add_days(end, 1);
+
+     foo = add_daily_sx("foo", start, NULL, NULL);
+
+     model = gnc_sx_get_instances(end);
+
+     insts = (GncSxInstances*)model->sx_instance_list->data;
+     inst = (GncSxInstance*)insts->list->data;
+     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_REMINDER);
+     success("changed to reminder");
+     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_POSTPONED);
+     success("changed to postponed");
+     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_TO_CREATE);
+     success("changed to to-create");
+
+     g_object_unref(model);
+     remove_sx(foo);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -113,6 +148,7 @@ main(int argc, char **argv)
                test_once();
      }
      test_basic();
+     test_state_changes();
 
      print_test_results();
      exit(get_rv());

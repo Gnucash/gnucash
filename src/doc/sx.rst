@@ -25,7 +25,7 @@ TODO
 
 - core
   - [x] sx list -> qof collection
-  - [/] sx engine events
+  - [x] sx engine events
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
     - [x] sx modified -- QOF_EVENT_MODIFY
   - [/] sx upcoming instance model
@@ -52,15 +52,16 @@ TODO
   - [x] remove clist usage
 
 - sx-from-trans
-  - [ ] convert to GObject
+  - [?] convert to GObject
   - [x] hookup destroy/finalize
 
 - use Recurrence instead of Freq Spec
   - [ ] XML migration, handling
 
 - since-last-run
-  - [ ] move "effect_change" up to app-utils/, test.
-  - [?] add obsolete flag to SxInstanceModel
+  - [x] move "effect_change" up to app-utils/, test.
+  - [x] move state-change up to app-utils
+  - [ ] move variable-setting up to app-utils
   - [x] add reminders, postponed to SxInstanceModel
   - [x] add mutation support to sx instance model
     - [x] state machine
