@@ -28,12 +28,12 @@ TODO
   - [/] sx engine events
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
     - [x] sx modified -- QOF_EVENT_MODIFY
-  - [ ] sx upcoming instance model
+  - [/] sx upcoming instance model
     - [ ] implement sort model
   - [#] testing
     - [x] open SLR dialog, create new SX, see it populated
     - [x] open SX editor dialog, run SLR, see next-instance update
-    - [ ] unit testing
+    - [/] unit testing
 
 - sx editor page
   - [ ] make into split panel
@@ -42,7 +42,7 @@ TODO
 - gnc_dense_cal
   - [ ] fix static variables that should be instance fields.
   - [ ] change number-of-month properties to display-named properties (width, length)
-  - [ ] better transient/floating window?
+  - [?] better transient/floating window
   - [/] (re-format file)
   - [x] set_model(GncTemporalInstancesModel *mdl)
     - [x] new interface creation.
@@ -57,8 +57,9 @@ TODO
   - [ ] XML migration, handling
 
 - since-last-run
+  - [ ] move "effect_change" up to app-utils/, test.
+  - [?] add obsolete flag to SxInstanceModel
   - [x] add reminders, postponed to SxInstanceModel
-  - [ ] add obsolete flag to SxInstanceModel [?]
   - [x] add mutation support to sx instance model
     - [x] state machine
   - [x] add variable state to sx instance model
