@@ -806,7 +806,7 @@ if test x${HBCI_DIR} = xhbci ;
 then
     # Check for Aqbanking library
     # aqbanking-1.6.0 was released on 2005-09-22
-    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.6.0", [], [
+    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.6.0" gwenhywfar, [], [
       AC_AQBANKING(1,6,0)
       if test x${have_aqbanking} != xyes; 
       then
