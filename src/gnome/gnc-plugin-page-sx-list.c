@@ -75,7 +75,6 @@ typedef struct GncPluginPageSxListPrivate
 
      GtkWidget* widget;
      gint gnc_component_id;
-     gint gppsl_event_handler_id;
 
      GladeXML* gxml;
      GncSxInstanceDenseCalAdapter *dense_cal_model;
@@ -104,8 +103,6 @@ static GtkWidget *gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_p
 static void gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_sx_list_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
-
-static void gppsl_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
 
 static void gppsl_row_activated_cb(GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
 
@@ -234,8 +231,6 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
      g_return_if_fail(!priv->disposed);
      priv->disposed = TRUE;
      
-     qof_event_unregister_handler(priv->gppsl_event_handler_id);
-
      g_object_unref(G_OBJECT(priv->dense_cal_model));
      priv->dense_cal_model = NULL;
      gtk_widget_unref(GTK_WIDGET(priv->gdcal));
@@ -407,7 +402,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           gtk_widget_show_all(w);
      }
 
-     priv->gppsl_event_handler_id = qof_event_register_handler(gppsl_event_handler, page);
      priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",
                                                          gnc_plugin_page_sx_list_refresh_cb,
                                                          gnc_plugin_page_sx_list_close_cb,
@@ -440,17 +434,6 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
      }
 
      LEAVE("widget destroyed");
-}
-
-static void
-gppsl_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
-{
-     /* if (type != SX)
-        return; */
-     /* - correlate SX to tree_store data */
-     /* - update || add || remove */
-
-     return;
 }
 
 /**
