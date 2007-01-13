@@ -82,6 +82,13 @@ typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
  **/
 GList* gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data);
 
+/**
+ * Cut a GList into two parts; the {@param cut_point} is the beginning of the
+ * new list; {@param list} may need to be modified, but will be the list
+ * before the {@param cut_point}.
+ **/
+void gnc_g_list_cut(GList **list, GList *cut_point);
+
 /** @} */
 
 #endif /* GNC_GLIB_UTILS_H */
