@@ -26,7 +26,6 @@
     @{ */
 /** @brief Functions providing a list of scheduled transactions as a plugin page.
     @author Josh Sled <jsled@asynchronous.org>
-
 */
 
 #ifndef __GNC_PLUGIN_PAGE_SX_LIST_H
