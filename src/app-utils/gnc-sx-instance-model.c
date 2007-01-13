@@ -46,9 +46,7 @@ static GncSxInstanceModel* gnc_sx_instance_model_new(void);
 
 static GncSxInstance* gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num);
 
-static void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);
 static gint _get_vars_helper(Transaction *txn, void *var_hash_data);
-static int parse_vars_from_formula(const char *formula, GHashTable *varHash, gnc_numeric *result);
 
 static GncSxVariable* gnc_sx_variable_new(gchar *name);
 
@@ -92,7 +90,7 @@ gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash)
      return parser_vars;
 }
 
-static int
+int
 parse_vars_from_formula(const char *formula,
                         GHashTable *var_hash,
                         gnc_numeric *result)
@@ -237,7 +235,7 @@ gnc_sx_get_template_transaction_account(SchedXaction *sx)
      return sx_template_acct;
 }
 
-static void
+void
 sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
 {
      Account *sx_template_acct;
@@ -574,7 +572,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           sx_is_in_model = (g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx) != NULL);
           if (sx_is_in_model && event_type & QOF_EVENT_MODIFY)
           {
-               g_signal_emit_by_name(instances, "updated", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
+               g_signal_emit_by_name(instances, "updated", (gpointer)sx);
           }
           /* else { unsupported event type; ignore } */
      }
@@ -590,7 +588,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                instances_link = g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
                if (instances_link != NULL)
                {
-                    g_signal_emit_by_name(instances, "removing", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
+                    g_signal_emit_by_name(instances, "removing", (gpointer)sx);
                }
                else
                {
@@ -604,7 +602,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                instances->sx_instance_list
                     = g_list_append(instances->sx_instance_list,
                                     _gnc_sx_gen_instances((gpointer)sx, (gpointer)&instances->range_end));
-               g_signal_emit_by_name(instances, "added", GUINT_TO_POINTER(GPOINTER_TO_UINT(sx)));
+               g_signal_emit_by_name(instances, "added", (gpointer)sx);
           }
           /* else { printf("unsupported event type [%d]\n", event_type); } */
      }
@@ -637,10 +635,11 @@ gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXactio
      instance_link = g_list_find_custom(model->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
      if (instance_link == NULL)
      {
-          // @fixme: perr or something.
+          // @fixme: warn
+          // printf("instance not found!\n");
           return;
      }
 
-     model->sx_instance_list = g_list_remove(model->sx_instance_list, instance_link);
+     model->sx_instance_list = g_list_remove_link(model->sx_instance_list, instance_link);
      gnc_sx_instances_free((GncSxInstances*)instance_link->data);
 }

@@ -47,7 +47,7 @@
       "#include <gnc-plugin-account-tree.h>\n"
       "#include <gnc-splash.h>\n"
       "#include <dialog-sx-editor.h>\n"
-      "#include <dialog-sxsincelast.h>\n" )))
+      "#include <dialog-sx-since-last-run.h>\n" )))
 
   (gw:wrap-function
    ws

@@ -129,6 +129,10 @@ GHashTable* gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_ha
 
 GncSxVariable* gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable);
 
+/* @@fixme names. */
+void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);
+int parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
+
 G_END_DECLS
 
 #endif // _GNC_SX_INSTANCE_MODEL_H

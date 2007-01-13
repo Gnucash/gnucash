@@ -42,7 +42,6 @@ libgncgnome_la_SOURCES = \
   dialog-progress.c \
   dialog-sx-editor.c \
   dialog-sx-from-trans.c \
-  dialog-sxsincelast.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
   dialog-userpass.c \
@@ -83,7 +82,6 @@ noinst_HEADERS = \
   dialog-progress.h \
   dialog-sx-editor.h \
   dialog-sx-from-trans.h \
-  dialog-sxsincelast.h \
   dialog-sx-since-last-run.h \
   druid-acct-period.h \
   druid-hierarchy.h \
