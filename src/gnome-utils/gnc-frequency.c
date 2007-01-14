@@ -640,12 +640,12 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gint tmpInt;
         int i;
         GDate gd;
-        time_t tmpTimeT;
+        time_t start_tt;
 
-        tmpTimeT = gnc_date_edit_get_date( gf->startDate );
+        start_tt = gnc_date_edit_get_date( gf->startDate );
         if ( NULL != outDate ) 
         {
-                g_date_set_time_t( outDate, tmpTimeT );
+                g_date_set_time_t( outDate, start_tt );
         }
 
         if (NULL == fs) return;
@@ -658,7 +658,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gnc_suspend_gui_refresh();
 
         g_date_clear (&gd, 1);
-        g_date_set_time_t( &gd, tmpTimeT );
+        g_date_set_time_t( &gd, start_tt );
 
         /*uift = xaccFreqSpecGetUIType( fs );*/
         uift = PAGES[page].uiFTVal;
@@ -669,6 +669,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 /* hmmm... shouldn't really be allowed. */
                 break;
         case UIFREQ_ONCE:
+                xaccFreqSpecSetOnceDate(fs, &gd);
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
         case UIFREQ_DAILY:
@@ -773,8 +774,8 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
-                tmpTimeT = gnc_date_edit_get_date( gf->startDate );
-                g_date_set_time_t( &gd, tmpTimeT );
+                start_tt = gnc_date_edit_get_date( gf->startDate );
+                g_date_set_time_t( &gd, start_tt );
                 g_date_to_struct_tm( &gd, &stm);
                 if ( day >= stm.tm_mday ) {
                         /* next month */
