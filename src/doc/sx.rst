@@ -38,7 +38,7 @@ TODO
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
 - sx list page
-  - [ ] make into split panel
+  - [/] make into split panel
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 
 - sx editor
