@@ -2242,9 +2242,6 @@ AC_CONFIG_FILES(po/Makefile.in
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
 
-          dnl # we configure gnucash-config here because we *don't*
-          dnl # want variables to be fully expanded
-          gnucash-config
           ,
           dnl # commands go here, but we don't have any right now
 )

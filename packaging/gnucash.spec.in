@@ -206,7 +206,6 @@ fi
 %files devel
 %defattr(444,root,root,755)
 %{_includedir}/gnucash
-%{_datadir}/aclocal/gnucash.m4
 
 %if %{_with_ofx}
 %files ofx
