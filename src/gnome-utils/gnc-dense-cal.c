@@ -327,13 +327,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
      dcal->topPadding = 2;
 
      {
-          GDate *tmpDate;
-
-          tmpDate = g_date_new();
-          g_date_set_time_t(tmpDate, time(NULL));
-          gnc_dense_cal_set_month(dcal, g_date_get_month(tmpDate));
-          gnc_dense_cal_set_year(dcal, g_date_get_year(tmpDate));
-          g_date_free(tmpDate);
+          GDate now = g_date_new();
+          g_date_set_time_t(now, time(NULL));
+          gnc_dense_cal_set_month(dcal, g_date_get_month(now));
+          gnc_dense_cal_set_year(dcal, g_date_get_year(now));
+          g_date_free(now);
      }
 
      recompute_extents(dcal);
@@ -452,8 +450,8 @@ gnc_dense_cal_dispose (GObject *object)
 {
      int i;
      GncDenseCal *dcal;
-     g_return_if_fail (object != NULL);
-     g_return_if_fail (GNC_IS_DENSE_CAL (object));
+     g_return_if_fail(object != NULL);
+     g_return_if_fail(GNC_IS_DENSE_CAL(object));
 
      dcal = GNC_DENSE_CAL(object);
 
@@ -461,32 +459,38 @@ gnc_dense_cal_dispose (GObject *object)
           return;
      dcal->disposed = TRUE;
 
-     if (GTK_WIDGET_REALIZED(dcal->transPopup)) {
+     if (GTK_WIDGET_REALIZED(dcal->transPopup))
+     {
           gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
           gtk_widget_destroy(GTK_WIDGET(dcal->transPopup));
           dcal->transPopup = NULL;
      }
 
-     if (dcal->drawbuf) {
+     if (dcal->drawbuf)
+     {
           g_object_unref(dcal->drawbuf);
           dcal->drawbuf = NULL;
      }
 
      /* FIXME: we have a bunch of cleanup to do, here. */
      /* monthLabelFont, dayLabelFont */
-     if (dcal->monthLabelFont) {
+     if (dcal->monthLabelFont)
+     {
           gdk_font_unref(dcal->monthLabelFont);
           dcal->monthLabelFont = NULL;
      }
 
-     if (dcal->dayLabelFont) {
+     if (dcal->dayLabelFont)
+     {
           gdk_font_unref(dcal->dayLabelFont);
           dcal->dayLabelFont = NULL;
      }
 
      /* month labels */
-     if (dcal->monthLabels[0]) {
-          for (i=0; i < 12; i++) {
+     if (dcal->monthLabels[0])
+     {
+          for (i=0; i < 12; i++)
+          {
                g_object_unref(dcal->monthLabels[i]);
                dcal->monthLabels[i] = NULL;
           }

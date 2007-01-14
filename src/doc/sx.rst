@@ -47,7 +47,7 @@ TODO
     - (check_consistent, especially...)
 
 - gnc_dense_cal
-  - [ ] fix static variables that should be instance fields.
+  - [ ] font handling: gdk -> pango
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [?] better transient/floating window
   - [/] (re-format file)
