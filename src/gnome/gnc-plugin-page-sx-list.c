@@ -339,6 +339,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
      priv->widget = glade_xml_get_widget(priv->gxml, "sx-list-vbox");
 
      {
+          //gint half_way;
+          // half_way = plugin_page->notebook_page->allocation.height * 0.5;
+          // fixme; get a real value:
+          gtk_paned_set_position(GTK_PANED(priv->widget), 160);
+     }
+
+     {
           GDate end;
           g_date_clear(&end, 1);
           g_date_set_time_t(&end, time(NULL));
