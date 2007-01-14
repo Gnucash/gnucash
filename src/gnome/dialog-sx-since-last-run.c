@@ -393,10 +393,32 @@ gnc_sx_get_slr_state_model(void)
 }
 
 static void
+_consume_excess_rows(GtkTreeStore *store, int last_index, GtkTreeIter *parent_iter, GtkTreeIter *maybe_invalid_iter)
+{
+     if (last_index == -1)
+     {
+          // try to get whatever was there beforehand, if it exists
+          if (!gtk_tree_model_iter_children(GTK_TREE_MODEL(store), maybe_invalid_iter, parent_iter))
+               return;
+     }
+     else
+     {
+          // increment the iter, or bail out.
+          if (!gtk_tree_model_iter_next(GTK_TREE_MODEL(store), maybe_invalid_iter))
+               return;
+     }
+
+     // consume until we're done.
+     while (gtk_tree_store_remove(store, maybe_invalid_iter));
+}
+
+
+static void
 gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
 {
      GtkTreeIter sx_tree_iter;
      GList *sx_iter;
+     int instances_index = -1;
 
      for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
      {
@@ -426,7 +448,10 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
 
           qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
 
-          gtk_tree_store_append(model->real, &sx_tree_iter, NULL);
+          if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
+          {
+               gtk_tree_store_append(model->real, &sx_tree_iter, NULL);
+          }
           gtk_tree_store_set(model->real, &sx_tree_iter,
                              SLR_MODEL_COL_NAME, xaccSchedXactionGetName(instances->sx),
                              SLR_MODEL_COL_INSTANCE_STATE, NULL,
@@ -442,12 +467,17 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                GList *inst_iter;
                GtkTreeIter inst_tree_iter;
                char instance_date_buf[MAX_DATE_LENGTH+1];
+               int instance_index = -1;
 
                for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
                {
                     GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
                     qof_print_gdate(instance_date_buf, MAX_DATE_LENGTH, &inst->date);
-                    gtk_tree_store_append(model->real, &inst_tree_iter, &sx_tree_iter);
+
+                    if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &inst_tree_iter, &sx_tree_iter, ++instance_index))
+                    {
+                         gtk_tree_store_append(model->real, &inst_tree_iter, &sx_tree_iter);
+                    }
                     gtk_tree_store_set(model->real, &inst_tree_iter,
                                        SLR_MODEL_COL_NAME, instance_date_buf,
                                        SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[inst->state],
@@ -461,6 +491,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                     {
                          GList *vars = NULL, *var_iter;
                          GtkTreeIter var_tree_iter;
+                         gint visible_variable_index = -1;
 
                          vars = gnc_sx_instance_get_variables(inst);
                          for (var_iter = vars; var_iter != NULL; var_iter = var_iter->next)
@@ -479,7 +510,13 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                               {
                                    tmp_str = g_string_new("(need value)");
                               }
-                              gtk_tree_store_append(model->real, &var_tree_iter, &inst_tree_iter);
+
+                              if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real),
+                                                                 &var_tree_iter, &inst_tree_iter,
+                                                                 ++visible_variable_index))
+                              {
+                                   gtk_tree_store_append(model->real, &var_tree_iter, &inst_tree_iter);
+                              }
                               gtk_tree_store_set(model->real, &var_tree_iter,
                                                  SLR_MODEL_COL_NAME, var->name,
                                                  SLR_MODEL_COL_INSTANCE_STATE, NULL,
@@ -491,10 +528,16 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                               g_string_free(tmp_str, TRUE);
                          }
                          g_list_free(vars);
+
+                         _consume_excess_rows(model->real, visible_variable_index, &inst_tree_iter, &var_tree_iter);
                     }
                }
+               
+               // if there are more instance iters, remove
+               _consume_excess_rows(model->real, instance_index, &sx_tree_iter, &inst_tree_iter);
           }
      }
+     _consume_excess_rows(model->real, instances_index, NULL, &sx_tree_iter);
 }
 
 GncSxInstanceModel*
@@ -671,15 +714,42 @@ gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance 
 }
 
 static void
+gsslrtma_added_cb(GncSxInstanceModel *instances, SchedXaction *added_sx, gpointer user_data)
+{
+     GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data); 
+     // this is wasteful, but fine.
+     gsslrtma_populate_tree_store(model);
+}
+
+static void
 gsslrtma_updated_cb(GncSxInstanceModel *instances, SchedXaction *updated_sx, gpointer user_data)
 {
      GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data); 
-
      gnc_sx_instance_model_update_sx_instances(instances, updated_sx);
-
-     // this can't be so heavyweight ... it should re-populate the tree store in-place.
-     gtk_tree_store_clear(model->real);
      gsslrtma_populate_tree_store(model);
+}
+
+static void
+gsslrtma_removing_cb(GncSxInstanceModel *instances, SchedXaction *to_remove_sx, gpointer user_data)
+{
+     GncSxSlrTreeModelAdapter *model = GNC_SX_SLR_TREE_MODEL_ADAPTER(user_data); 
+     GtkTreeIter tree_iter;
+     GList *iter;
+     int index = 0;
+     // get index, create path, remove
+     for (iter = instances->sx_instance_list; iter != NULL; iter = iter->next, index++)
+     {
+          GncSxInstances *instances = (GncSxInstances*)iter->data;
+          if (instances->sx == to_remove_sx)
+               break;
+     }
+     if (iter == NULL)
+          return; // couldn't find sx in our model, which is weird.
+     if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &tree_iter, NULL, index))
+          return; // perr(couldn't get something that should exist.
+     gtk_tree_store_remove(model->real, &tree_iter);
+
+     gnc_sx_instance_model_remove_sx_instances(instances, to_remove_sx);
 }
 
 static void
@@ -714,9 +784,9 @@ gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances)
      rtn->instances = instances;
      g_object_ref(G_OBJECT(rtn->instances));
      gsslrtma_populate_tree_store(rtn);
-     //g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
+     g_signal_connect(G_OBJECT(rtn->instances), "added", (GCallback)gsslrtma_added_cb, (gpointer)rtn);
      rtn->updated_cb_id = g_signal_connect(G_OBJECT(rtn->instances), "updated", (GCallback)gsslrtma_updated_cb, (gpointer)rtn);
-     //g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
+     g_signal_connect(G_OBJECT(rtn->instances), "removing", (GCallback)gsslrtma_removing_cb, (gpointer)rtn);
      return rtn;
 }
 

@@ -54,7 +54,11 @@ TODO
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
 
 - bugs
-! - [ ] crash with two sx lists open and SX mutation [[[
+  - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+
+! - [ ] crash with two sx lists open and SX mutation
+    - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
+    [[[
     (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'
     sx list tree model adapter update
     
@@ -96,7 +100,7 @@ TODO
   - [ ] XML migration, handling
 
 - since-last-run
-! - [ ] rewrite adapter (re-)population logic
+! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
   - [x] move variable-setting up to app-utils
