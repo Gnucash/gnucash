@@ -559,6 +559,50 @@ test_composite (void)
    xaccFreqSpecFree(fs);
 }
 
+static void
+test_monthly_31st_bug_104844()
+{
+     gchar date_buf[128];
+     GDate start, next, expected;
+     FreqSpec *fs = xaccFreqSpecMalloc(book);
+
+     g_date_clear(&next, 1);
+
+     g_date_clear(&start, 1);
+     g_date_set_dmy(&start, 31, 1, 2003);
+     xaccFreqSpecSetMonthly(fs, &start, 1);
+
+     //g_date_add_days(&start, 1);
+     xaccFreqSpecGetNextInstance(fs, &start, &next);
+     g_date_clear(&expected, 1);
+     g_date_set_dmy(&expected, 28, 2, 2003);
+     g_date_strftime(date_buf, 128, "%c", &next);
+     do_test(g_date_compare(&expected, &next) == 0, date_buf);
+
+     start = next;
+     xaccFreqSpecGetNextInstance(fs, &start, &next);
+     g_date_set_dmy(&expected, 31, 3, 2003);
+     g_date_strftime(date_buf, 128, "%c", &next);
+     do_test(g_date_compare(&expected, &next) == 0, date_buf);
+
+     // test...
+     g_date_set_dmy(&start, 31, 1, 2003);
+     xaccFreqSpecSetMonthly(fs, &start, 1);
+     g_date_set_dmy(&start, 31, 1, 2007);
+     xaccFreqSpecGetNextInstance(fs, &start, &next);
+     g_date_set_dmy(&expected, 28, 2, 2007);
+     g_date_strftime(date_buf, 128, "%c", &next);
+     do_test(g_date_compare(&expected, &next) == 0, date_buf);
+
+     start = next;
+     xaccFreqSpecGetNextInstance(fs, &start, &next);
+     g_date_set_dmy(&expected, 31, 3, 2007);
+     g_date_strftime(date_buf, 128, "%c", &next);
+     do_test(g_date_compare(&expected, &next) == 0, date_buf);
+
+     xaccFreqSpecFree(fs);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -568,6 +612,9 @@ main (int argc, char **argv)
     g_return_val_if_fail(cashobjects_register(), -1);
     session = qof_session_new ();
     book = qof_session_get_book(session);
+
+    test_monthly_31st_bug_104844();
+
     test_once();
     test_caseA();
     test_daily();
@@ -575,6 +622,7 @@ main (int argc, char **argv)
     test_monthly();
     test_month_relative();
     test_composite();
+
     print_test_results();
     qof_session_end(session);
     qof_close();

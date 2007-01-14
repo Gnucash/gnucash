@@ -29,7 +29,7 @@ TODO
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
     - [x] sx modified -- QOF_EVENT_MODIFY
   - [/] sx upcoming instance model
-    - [ ] implement sort model
+!   - [ ] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
@@ -51,9 +51,16 @@ TODO
     - [ ] +autocreate, -notify, w/postponed
     - [ ] +autocreate, +notify, w/postponed
   - [ ] bugs
-    - [ ] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
-    - [ ] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
-    - [ ] With many auto-create transactions but none with notify option, "Auto-Created Transactions Notification" druid page lists every existing transaction - <http://bugzilla.gnome.org/show_bug.cgi?id=347116>
+    - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
+
+- bugs
+  - [ ] crash with two sx lists open and SX mutation [[[
+    (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'
+    sx list tree model adapter update
+    
+    (gnucash:17610): Gtk-CRITICAL **: gtk_tree_store_clear: assertion `GTK_IS_TREE_STORE (tree_store)' failed ]]]
+  - [ ] new file, monthly:31st, start=2/28/2007, create-in-advance=180; since-last-run, +review, Ok => no review.
+  - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
 
 - sx list page
   - [/] make into split panel
@@ -89,7 +96,7 @@ TODO
   - [ ] XML migration, handling
 
 - since-last-run
-  - [ ] rewrite adapter (re-)population logic
+! - [ ] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
   - [x] move variable-setting up to app-utils
@@ -239,7 +246,7 @@ counters for newly-discovered-as-to-be-created SXes."
 Bugs to close after merge
 --------------------------------------
 
-- Auto-Created Transactions Notification dialog shows MANY ... - http://bugzilla.gnome.org/show_bug.cgi?id=393381
+- With many auto-create transactions but none with notify option, "Auto-Created Transactions Notification" druid page lists every existing transaction - http://bugzilla.gnome.org/show_bug.cgi?id=347116
 - Since last run dialog does not allow for early finish, an... - http://bugzilla.gnome.org/show_bug.cgi?id=329384
 - Since Last Run druid changes data before Apply - http://bugzilla.gnome.org/show_bug.cgi?id=333849
 - Resize the "Since Last Run" window is incorrect - http://bugzilla.gnome.org/show_bug.cgi?id=353563
@@ -248,3 +255,5 @@ Bugs to close after merge
 - Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
 - Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
 - Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
+
+

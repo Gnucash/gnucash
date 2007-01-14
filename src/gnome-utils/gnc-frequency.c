@@ -791,15 +791,19 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         }
         case UIFREQ_MONTHLY:
         {
-                struct tm stm;
                 o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
                 tmpInt = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(o));
-                g_date_to_struct_tm( &gd, &stm);
 
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
-                stm.tm_mday = day;
-                g_date_set_time_t( &gd, mktime( &stm ) );
+                g_date_set_time_t(&gd, time(NULL));
+                g_date_set_month(&gd, 1);
+                g_date_set_day(&gd, day);
+                {
+                     gchar buf[128];
+                     g_date_strftime(buf, 127, "%c", &gd);
+                     printf("monthly date [%s]\n", buf);
+                }
                 xaccFreqSpecSetMonthly( fs, &gd, tmpInt );
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
