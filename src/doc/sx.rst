@@ -54,12 +54,12 @@ TODO
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
 
 - bugs
-  - [ ] crash with two sx lists open and SX mutation [[[
+! - [ ] crash with two sx lists open and SX mutation [[[
     (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'
     sx list tree model adapter update
     
     (gnucash:17610): Gtk-CRITICAL **: gtk_tree_store_clear: assertion `GTK_IS_TREE_STORE (tree_store)' failed ]]]
-  - [ ] new file, monthly:31st, start=2/28/2007, create-in-advance=180; since-last-run, +review, Ok => no review.
+
   - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
 
 - sx list page
@@ -255,5 +255,3 @@ Bugs to close after merge
 - Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
 - Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
 - Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
-
-
