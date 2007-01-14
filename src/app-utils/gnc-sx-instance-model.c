@@ -95,9 +95,9 @@ gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_hash)
 }
 
 int
-parse_vars_from_formula(const char *formula,
-                        GHashTable *var_hash,
-                        gnc_numeric *result)
+gnc_sx_parse_vars_from_formula(const char *formula,
+                               GHashTable *var_hash,
+                               gnc_numeric *result)
 {
      gnc_numeric num;
      char *errLoc = NULL;
@@ -205,7 +205,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
                str = kvp_value_get_string(kvp_val);
                if (str && strlen(str) != 0)
                {
-                    parse_vars_from_formula(str, var_hash, NULL);
+                    gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
                }
           }
 
@@ -218,7 +218,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
                str = kvp_value_get_string(kvp_val);
                if (str && strlen(str) != 0)
                {
-                    parse_vars_from_formula(str, var_hash, NULL);
+                    gnc_sx_parse_vars_from_formula(str, var_hash, NULL);
                }
           }
      }
@@ -241,7 +241,7 @@ gnc_sx_get_template_transaction_account(SchedXaction *sx)
 }
 
 void
-sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash)
+gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 {
      Account *sx_template_acct;
      sx_template_acct = gnc_sx_get_template_transaction_account(sx);
@@ -264,7 +264,7 @@ gnc_sx_variable_free(GncSxVariable *var)
 }
 
 void
-randomize_variables(GHashTable *vars)
+gnc_sx_randomize_variables(GHashTable *vars)
 {
      g_hash_table_foreach(vars, (GHFunc)_set_var_to_random_value, NULL);
 }
@@ -294,7 +294,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
      if (! parent->variable_names_parsed)
      {
           parent->variable_names = g_hash_table_new(g_str_hash, g_str_equal);
-          sxsl_get_sx_vars(parent->sx, parent->variable_names);
+          gnc_sx_get_variables(parent->sx, parent->variable_names);
           g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
           parent->variable_names_parsed = TRUE;
      }

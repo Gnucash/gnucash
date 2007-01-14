@@ -555,7 +555,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                 gnc_split_register_save ( gnc_ledger_display_get_split_register(sxed->ledger),
                                           FALSE );
                 /* numeric-formulas-get-balanced determination */
-                sxsl_get_sx_vars( sxed->sx, vars );
+                gnc_sx_get_variables( sxed->sx, vars );
 
                 ttVarCount = g_hash_table_size( vars );
                 if ( ttVarCount != 0 ) {
@@ -573,7 +573,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
                 srand(time(NULL));
                 for ( i=0; i < numIters && !unbalanceable; i++ ) {
-                        randomize_variables(vars);
+                        gnc_sx_randomize_variables(vars);
                         g_hash_table_foreach( txns, set_sums_to_zero, NULL );
                         tmp = gnc_numeric_zero();
 
@@ -623,7 +623,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                 if ( v
                                      && (str = kvp_value_get_string(v))
                                      && strlen( str ) != 0 ) {
-                                        if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                        if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
                                                 GString *errStr;
 
                                                 errStr = g_string_sized_new( 32 );
@@ -649,7 +649,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                 if ( v
                                      && (str = kvp_value_get_string(v))
                                      && strlen(str) != 0 ) {
-                                        if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
+                                        if ( gnc_sx_parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
                                                 GString *errStr;
 
                                                 errStr = g_string_sized_new( 32 );

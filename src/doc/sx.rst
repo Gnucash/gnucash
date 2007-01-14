@@ -34,8 +34,8 @@ TODO
     - [x] open SLR dialog, create new SX, see it populated
     - [x] open SX editor dialog, run SLR, see next-instance update
     - [/] unit testing
-  - [ ] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
-  - [ ] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
+  - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
+  - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
 - sx list page
   - [ ] make into split panel

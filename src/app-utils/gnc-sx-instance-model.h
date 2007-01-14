@@ -175,10 +175,9 @@ typedef struct _GncSxSummary
 void gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary);
 void gnc_sx_summary_print(GncSxSummary *summary);
 
-/* @@fixme names. */
-void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);
-int parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
-void randomize_variables(GHashTable *vars);
+void gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash);
+int gnc_sx_parse_vars_from_formula(const char *formula, GHashTable *var_hash, gnc_numeric *result);
+void gnc_sx_randomize_variables(GHashTable *vars);
 
 G_END_DECLS
 
