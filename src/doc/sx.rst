@@ -41,13 +41,15 @@ TODO
       - [ ] add instances
       - [ ] remove instances
       - [ ] make "weird"
-  - [ ] ensure variable consistency model is upheld.
+  - [x] ensure state consistency model is upheld
   - [ ] check variables-unbound logic
   - [ ] verify summary counts
   - [ ] check "since last run" states
     - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
+    - [ ] +autocreate, -notify, w/postponed
+    - [ ] +autocreate, +notify, w/postponed
   - [ ] bugs
     - [ ] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
     - [ ] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
@@ -55,6 +57,7 @@ TODO
 
 - sx list page
   - [/] make into split panel
+    - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 
 - sx editor
@@ -193,35 +196,6 @@ Definitions:
         instantiation of.
     created: the instance has been created in this interaction cycle.
 
-The SX need to store?
-- last state of *created* instance
-- postponed instance list
-
-There is a constraint around a sequence of upcoming instance states.  In
-short: the last-created state and a list of postponed instances are modeled,
-but upcoming reminders are not.  As such, a reminder can never be before any
-other (modeled) instance type.  For instance, the following sequences are
-disallowed:
-
-[...]
-remind    <- will be lost/skipped over; must be converted to `postponed`.
-to-create <- this will be the last-recorded state.
-[...]
-
-[...]
-remind    <- same as previous; will be lost/skipped; must be `postponed`.
-postponed
-[...]
-
-remind    <- same...
-ignore
-[...]
-
-
-As such, the SinceLastRun model will enforce that there are no previous
-`remind` instances at every state change.  They will be silently converted to
-`postponed`-state transactions.
-
 Formula Parsing
 ------------------------
 
@@ -231,7 +205,6 @@ A SXes formula is parsed in the context of:
 - the sequence number
 - the date of the transaction
 - a variable-binding table.
-
 
 Testing Notes
 ---------------------

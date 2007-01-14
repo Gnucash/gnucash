@@ -99,6 +99,12 @@ test_once()
      remove_sx(lonely);
 }
 
+static GncSxInstance*
+_nth_instance(GncSxInstances *instances, int i)
+{
+     return (GncSxInstance*)g_list_nth_data(instances->list, i);
+}
+
 static void
 test_state_changes()
 {
@@ -109,26 +115,62 @@ test_state_changes()
      GncSxInstance *inst;
 
      start = g_date_new();
-     g_date_clear(start, 1);
      g_date_set_time_t(start, time(NULL));
      
      end = g_date_new();
-     g_date_clear(end, 1);
      g_date_set_time_t(end, time(NULL));
-     g_date_add_days(end, 1);
+     g_date_add_days(end, 3);
 
      foo = add_daily_sx("foo", start, NULL, NULL);
-
      model = gnc_sx_get_instances(end);
 
-     insts = (GncSxInstances*)model->sx_instance_list->data;
-     inst = (GncSxInstance*)insts->list->data;
+     do_test(g_list_length(model->sx_instance_list) == 1, "one sx");
+     insts = (GncSxInstances*)g_list_nth_data(model->sx_instance_list, 0);
+     do_test(g_list_length(insts->list) == 4, "4 instances");
+
+     inst = _nth_instance(insts, 2);
+     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_TO_CREATE);
+     {
+          int i;
+          for (i = 0; i < 4; i++)
+          {
+               inst = _nth_instance(insts, i);
+               do_test(inst->state == SX_INSTANCE_STATE_TO_CREATE, "0 didn't change");
+          }
+          success("nothing else changed");
+     }
+
+     inst = _nth_instance(insts, 1);
+     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_POSTPONED);
+     {
+          int i;
+          inst = _nth_instance(insts, 1);
+          do_test(inst->state == SX_INSTANCE_STATE_POSTPONED, "as we said");
+          for (i = 0; i < 4; i++)
+          {
+               if (i == 1)
+                    continue; // skip
+               inst = _nth_instance(insts, i);
+               do_test(inst->state == SX_INSTANCE_STATE_TO_CREATE, "still to create");
+          }
+     }
+     success("postponed changed what it needed to");
+
+     inst = _nth_instance(insts, 1);
      gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_REMINDER);
      success("changed to reminder");
-     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_POSTPONED);
-     success("changed to postponed");
-     gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_TO_CREATE);
-     success("changed to to-create");
+     {
+          int i;
+          inst = _nth_instance(insts, 0);
+          do_test(inst->state == SX_INSTANCE_STATE_TO_CREATE, "left alone");
+          inst = _nth_instance(insts, 1);
+          do_test(inst->state == SX_INSTANCE_STATE_REMINDER, "as we asked for");
+          for (i = 2; i < 4; i++)
+          {
+               inst = _nth_instance(insts, i);
+               do_test(inst->state == SX_INSTANCE_STATE_REMINDER, "changed as well");
+          }
+     }
 
      g_object_unref(model);
      remove_sx(foo);

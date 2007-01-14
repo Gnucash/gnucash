@@ -702,6 +702,8 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
                for (new_iter_iter = new_iter; new_iter_iter != NULL; new_iter_iter = new_iter_iter->next)
                {
+                    GncSxInstance *inst = (GncSxInstance*)new_iter_iter->data;
+                    inst->parent = existing;
                     existing->list = g_list_append(existing->list, new_iter_iter->data);
                }
                g_list_free(new_iter);
@@ -1259,7 +1261,6 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
      summary->need_dialog
           = (summary->num_instances != 0
              && summary->num_auto_create_no_notify_instances != summary->num_instances);
-     
 }
 
 void

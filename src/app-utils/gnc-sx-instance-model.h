@@ -138,6 +138,32 @@ GHashTable* gnc_sx_instance_get_variables_for_parser(GHashTable *instance_var_ha
 GncSxVariable* gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable);
 void gnc_sx_variable_free(GncSxVariable *var);
 
+/**
+ * There is a constraint around a sequence of upcoming instance states.  In
+ * short: the last-created state and a list of postponed instances are modeled,
+ * but upcoming reminders are not.  As such, a reminder can never be before any
+ * other (modeled) instance type.  For instance, the following sequences are
+ * disallowed:
+ * 
+ * [...]
+ * remind    <- will be lost/skipped over; must be converted to `postponed`.
+ * to-create <- this will be the last-recorded state.
+ * [...]
+ * 
+ * [...]
+ * remind    <- same as previous; will be lost/skipped; must be `postponed`.
+ * postponed
+ * [...]
+ * 
+ * remind    <- same...
+ * ignore
+ * [...]
+ * 
+ * 
+ * As such, the SinceLastRun model will enforce that there are no previous
+ * `remind` instances at every state change.  They will be silently converted to
+ * `postponed`-state transactions.
+ **/
 void gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
                                                  GncSxInstance *instance,
                                                  GncSxInstanceState new_state);
