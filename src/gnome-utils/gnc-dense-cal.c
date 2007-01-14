@@ -327,7 +327,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
      dcal->topPadding = 2;
 
      {
-          GDate now = g_date_new();
+          GDate *now = g_date_new();
           g_date_set_time_t(now, time(NULL));
           gnc_dense_cal_set_month(dcal, g_date_get_month(now));
           gnc_dense_cal_set_year(dcal, g_date_get_year(now));
