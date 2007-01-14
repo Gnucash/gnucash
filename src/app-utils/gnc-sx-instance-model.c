@@ -401,6 +401,15 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
 }
 
 GncSxInstanceModel*
+gnc_sx_get_current_instances(void)
+{
+     GDate *now = g_date_new();
+     g_date_clear(now, 1);
+     g_date_set_time_t(now, time(NULL));
+     return gnc_sx_get_instances(now);
+}
+
+GncSxInstanceModel*
 gnc_sx_get_instances(GDate *range_end)
 {
      GncSxInstanceModel *instances;
@@ -1198,4 +1207,67 @@ gnc_sx_instance_model_check_variables(GncSxInstanceModel *model)
           }
      }
      return rtn;
+}
+
+void
+gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary)
+{
+     GList *sx_iter, *inst_iter;
+
+     g_return_if_fail(model != NULL);
+     g_return_if_fail(summary != NULL);
+
+     summary->need_dialog = FALSE;
+     summary->num_instances = 0;
+     summary->num_to_create_instances = 0;
+     summary->num_auto_create_instances = 0;
+     summary->num_auto_create_no_notify_instances = 0;
+
+     for (sx_iter = model->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
+     {
+          GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
+          gboolean sx_is_auto_create = FALSE, sx_notify = FALSE;
+          xaccSchedXactionGetAutoCreate(instances->sx, &sx_is_auto_create, &sx_notify);
+          for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+          {
+               GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
+               summary->num_instances++;
+
+               if (inst->state == SX_INSTANCE_STATE_TO_CREATE)
+               {
+                    if (sx_is_auto_create)
+                    {
+                         if (!sx_notify)
+                         {
+                              summary->num_auto_create_no_notify_instances++;
+                         }
+                         else
+                         {
+                              summary->num_auto_create_instances++;
+                         }
+                    }
+                    else
+                    {
+                         summary->num_to_create_instances++;
+                    }
+               }
+          }
+     }
+
+     // if all the instances are 'auto-create, no-notify', then we don't need
+     // the dialog.
+     summary->need_dialog
+          = (summary->num_instances != 0
+             && summary->num_auto_create_no_notify_instances != summary->num_instances);
+     
+}
+
+void
+gnc_sx_summary_print(GncSxSummary *summary)
+{
+     printf("num_instances: %d\n", summary->num_instances);
+     printf("num_to_create: %d\n", summary->num_to_create_instances);
+     printf("num_auto_create_instances: %d\n", summary->num_auto_create_instances);
+     printf("num_auto_create_no_notify_instances: %d\n", summary->num_auto_create_no_notify_instances);
+     printf("need dialog? %s\n", summary->need_dialog ? "true" : "false");
 }

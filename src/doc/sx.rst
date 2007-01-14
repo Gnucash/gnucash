@@ -68,7 +68,7 @@ TODO
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
   - [x] move variable-setting up to app-utils
-  - [ ] move summarization up to app-utils
+  - [x] move summarization up to app-utils
   - [x] add reminders, postponed to SxInstanceModel
   - [x] add mutation support to sx instance model
     - [x] state machine

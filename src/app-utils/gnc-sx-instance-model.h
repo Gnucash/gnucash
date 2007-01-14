@@ -112,6 +112,8 @@ typedef struct _GncSxVariableNeeded
 
 GType gnc_sx_instance_model_get_type(void);
 
+GncSxInstanceModel* gnc_sx_get_current_instances(void);
+
 GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
 
 /**
@@ -154,6 +156,24 @@ void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                                          gboolean auto_create_only,
                                          GList **created_transaction_guids,
                                          GList **creation_errors);
+
+typedef struct _GncSxSummary
+{
+     gboolean need_dialog; /**< If the dialog needs to be displayed. **/
+
+     gint num_instances; /**< The number of total instances (in any state). **/
+     gint num_to_create_instances; /**< The number of (not-auto-create) to-create instances. **/
+     gint num_auto_create_instances;  /**< The total number of auto-create instances. **/
+     gint num_auto_create_no_notify_instances; /**< The number of automatically-created instances that do no request notification. **/
+} GncSxSummary;
+
+/**
+ * @param summary Caller-provided, populated with a summarization of the
+ * state of the model.  Specifically, used to determine if there are SLR SXes
+ * that need either auto-creation or user-interaction.
+ **/
+void gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary);
+void gnc_sx_summary_print(GncSxSummary *summary);
 
 /* @@fixme names. */
 void sxsl_get_sx_vars(SchedXaction *sx, GHashTable *var_hash);

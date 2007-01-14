@@ -444,21 +444,21 @@ static void
 gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
 {
   GncMainWindow *window;
-  GncSxSlrTreeModelAdapter *slr_model;
-  GncSxSlrSummary summary;
+  GncSxInstanceModel *sx_instances;
+  GncSxSummary summary;
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
 	
   g_return_if_fail (data != NULL);
 
   window = data->window;
-
-  slr_model = gnc_sx_get_slr_model();
-  gnc_sx_slr_model_summarize(slr_model, &summary);
-  gnc_sx_slr_model_effect_change(slr_model, TRUE, NULL, NULL);
+  
+  sx_instances = gnc_sx_get_current_instances();
+  gnc_sx_instance_model_summarize(sx_instances, &summary);
+  gnc_sx_instance_model_effect_change(sx_instances, TRUE, NULL, NULL);
   if (summary.need_dialog)
   {
-    gnc_ui_sx_since_last_run_dialog(slr_model);
+    gnc_ui_sx_since_last_run_dialog(sx_instances);
   }
   else
   {
@@ -479,7 +479,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
                       summary.num_auto_create_no_notify_instances);
     }
   }
-  g_object_unref(G_OBJECT(slr_model));
+  g_object_unref(G_OBJECT(sx_instances));
 }
 
 static void
