@@ -157,5 +157,5 @@ main (int argc, char ** argv)
 
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

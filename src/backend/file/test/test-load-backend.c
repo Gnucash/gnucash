@@ -41,5 +41,5 @@ int main (int argc, char ** argv)
         " loading gnc-backend-file GModule failed");
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }
