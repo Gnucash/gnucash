@@ -1786,7 +1786,6 @@ _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
 static void
 process_auto_create_list(GList *autoCreateList, sxSinceLastData *sxsld, GList **creation_errors)
 {
-        GList *l;
         toCreateTuple *tct;
         toCreateInstance *tci;
         GList *instances;
