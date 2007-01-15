@@ -161,6 +161,7 @@ static RepayOptDataDefault REPAY_DEFAULTS[] = {
      /* { name, default txn memo, throughEscrowP, specSrcAcctP } */
      { N_("Taxes"),         N_("Tax Payment"),           TRUE,  FALSE },
      { N_("Insurance"),     N_("Insurance Payment"),     TRUE,  FALSE  },
+     /* Translators: PMI stands for Private Mortgage Insurance. */
      { N_("PMI"),           N_("PMI Payment"),           TRUE,  FALSE  },
      { N_("Other Expense"), N_("Miscellaneous Payment"), FALSE, FALSE },
      { NULL }
