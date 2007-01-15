@@ -170,10 +170,10 @@ void gnc_split_register_size_allocate (GtkWidget *widget,
 FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 
-guint
+GType
 gnc_split_reg_get_type( void )
 {
-  static guint gnc_split_reg_type = 0;
+  static GType gnc_split_reg_type = 0;
 
   if (!gnc_split_reg_type)
     {

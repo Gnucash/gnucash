@@ -82,7 +82,7 @@ struct _GNCQueryListClass
  *                public functions                         *
  ***********************************************************/
 
-GtkType gnc_query_list_get_type (void);
+GType gnc_query_list_get_type (void);
 
 /* The param_list remains owned by the caller but is used by the
  * query-list; do not destroy it until you destroy this query-list.
