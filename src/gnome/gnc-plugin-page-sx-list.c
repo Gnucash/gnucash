@@ -310,17 +310,6 @@ gppsl_selection_changed_cb(GtkTreeSelection *selection, gpointer user_data)
      gtk_action_set_sensitive(delete_action, selection_state);
 }
 
-#if 0
-static GtkTreeSortable*
-_setup_sortable_model(GtkTreeModel *model)
-{
-     GtkTreeModelSort *sortable;
-
-     sortable = gtk_tree_model_sort_new_with_model(model);
-     gtk_tree_model
-}
-#endif // 0
-
 static GtkWidget *
 gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
@@ -365,27 +354,30 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           GtkCellRenderer *renderer;
           GtkTreeViewColumn *column;
           GtkTreeSelection *selection;
-          //GtkTreeModel *sortable_model;
 
           priv->tree_model = gnc_sx_list_tree_model_adapter_new(priv->instances);
           priv->tree_view = GTK_TREE_VIEW(glade_xml_get_widget(priv->gxml, "sx_list"));
-          //sortable_model = _setup_sortable_model(GTK_TREE_MODEL(priv->tree_model));
-          gtk_tree_view_set_model(priv->tree_view, GTK_TREE_MODEL(priv->tree_model)); // GTK_TREE_MODEL(sortable_model));
+          gtk_tree_view_set_model(priv->tree_view, GTK_TREE_MODEL(priv->tree_model));
+          gtk_tree_view_set_headers_clickable(priv->tree_view, TRUE);
 
           renderer = gtk_cell_renderer_text_new();
-          column = gtk_tree_view_column_new_with_attributes("Name", renderer, "text", 0, NULL);
+          column = gtk_tree_view_column_new_with_attributes("Name", renderer, "text", SXLTMA_COL_NAME, NULL);
+          gtk_tree_view_column_set_sort_column_id(column, SXLTMA_COL_NAME);
           gtk_tree_view_append_column(priv->tree_view, column);
 
           renderer = gtk_cell_renderer_text_new();
-          column = gtk_tree_view_column_new_with_attributes("Frequency", renderer, "text", 1, NULL);
+          column = gtk_tree_view_column_new_with_attributes("Frequency", renderer, "text", SXLTMA_COL_FREQUENCY, NULL);
+          gtk_tree_view_column_set_sort_column_id(column, SXLTMA_COL_FREQUENCY);
           gtk_tree_view_append_column(priv->tree_view, column);
 
           renderer = gtk_cell_renderer_text_new();
-          column = gtk_tree_view_column_new_with_attributes("Last Occur", renderer, "text", 2, NULL);
+          column = gtk_tree_view_column_new_with_attributes("Last Occur", renderer, "text", SXLTMA_COL_LAST_OCCUR, NULL);
+          gtk_tree_view_column_set_sort_column_id(column, SXLTMA_COL_LAST_OCCUR);
           gtk_tree_view_append_column(priv->tree_view, column);
 
           renderer = gtk_cell_renderer_text_new();
-          column = gtk_tree_view_column_new_with_attributes("Next Occur", renderer, "text", 3, NULL);
+          column = gtk_tree_view_column_new_with_attributes("Next Occur", renderer, "text", SXLTMA_COL_NEXT_OCCUR, NULL);
+          gtk_tree_view_column_set_sort_column_id(column, SXLTMA_COL_NEXT_OCCUR);
           gtk_tree_view_append_column(priv->tree_view, column);
 
           selection = gtk_tree_view_get_selection(priv->tree_view);
@@ -629,81 +621,6 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
      g_list_free(selected_paths);
 }
-
-#if 0 /* compare/sort fns */
-static gint
-gnc_sxd_clist_compare_sx_name( GtkCList *cl, gconstpointer a, gconstpointer b )
-{
-        SchedXaction *sxa, *sxb;
-
-        sxa = (SchedXaction*)(((GtkCListRow*)a)->data);
-        sxb = (SchedXaction*)(((GtkCListRow*)b)->data);
-        g_assert( sxa || sxb );
-        if ( !sxa ) {
-                return 1;
-        }
-        if ( !sxb ) {
-                return -1;
-        }
-        return strcmp( xaccSchedXactionGetName( sxa ),
-                       xaccSchedXactionGetName( sxb ) );
-}
-
-static gint
-gnc_sxd_clist_compare_sx_freq( GtkCList *cl,
-                               gconstpointer a,
-                               gconstpointer b )
-{
-        SchedXaction *sxa, *sxb;
-
-        g_assert( a || b );
-        if ( !a ) return 1;
-        if ( !b ) return -1;
-        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
-        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
-        g_assert( sxa || sxb );
-        if ( !sxa ) return 1;
-        if ( !sxb ) return -1;
-        return gnc_freq_spec_compare( xaccSchedXactionGetFreqSpec( sxa ),
-                                      xaccSchedXactionGetFreqSpec( sxb ) );
-}
-
-static gint
-gnc_sxd_clist_compare_sx_next_occur( GtkCList *cl,
-                                     gconstpointer a,
-                                     gconstpointer b )
-{
-        SchedXaction *sxa, *sxb;
-        GDate gda, gdb;
-
-        sxa = (SchedXaction*)((GtkCListRow*)a)->data;
-        sxb = (SchedXaction*)((GtkCListRow*)b)->data;
-
-        g_assert( sxa || sxb );
-        if ( !sxa ) {
-                return 1;
-        }
-        if ( !sxb ) {
-                return -1;
-        }
-        g_assert( sxa && sxb );
-
-        gda = xaccSchedXactionGetNextInstance( sxa, NULL );
-        gdb = xaccSchedXactionGetNextInstance( sxb, NULL );
-
-        if ( ! ( g_date_valid(&gda) && g_date_valid(&gdb) ) ) {
-                return 0;
-        }
-        if ( !g_date_valid(&gda) ) {
-                return 1;
-        }
-        if ( !g_date_valid(&gdb) ) {
-                return -1;
-        }
-        return g_date_compare( &gda, &gdb );
-}
-
-#endif /* 0 - compare/sort fns */
 
 /** @} */
 /** @} */

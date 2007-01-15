@@ -34,7 +34,8 @@ struct _GncSxListTreeModelAdapter
      /* protected */
      gboolean disposed;
      GncSxInstanceModel *instances;
-     GtkTreeStore *real;
+     GtkTreeStore *orig;
+     GtkTreeModelSort *real;
 };
 
 struct _GncSxListTreeModelAdapterClass
@@ -45,10 +46,13 @@ struct _GncSxListTreeModelAdapterClass
 static GObjectClass *parent_class = NULL;
 
 static void gnc_sx_list_tree_model_adapter_class_init(GncSxListTreeModelAdapterClass *klass);
-static void gnc_sx_list_tree_model_adapter_interface_init(gpointer g_iface, gpointer iface_data);
+static void gsltma_tree_model_interface_init(gpointer g_iface, gpointer iface_data);
+static void gsltma_tree_sortable_interface_init(gpointer g_iface, gpointer iface_data);
 static void gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass);
 static void gnc_sx_list_tree_model_adapter_dispose(GObject *obj);
 static void gnc_sx_list_tree_model_adapter_finalize(GObject *obj);
+
+static GncSxInstances* gsltma_get_sx_instances_from_orig_iter(GncSxListTreeModelAdapter *model, GtkTreeIter *orig_iter);
 
 GType
 gnc_sx_list_tree_model_adapter_get_type(void)
@@ -66,8 +70,13 @@ gnc_sx_list_tree_model_adapter_get_type(void)
                0,      /* n_preallocs */
                (GInstanceInitFunc)gnc_sx_list_tree_model_adapter_init    /* instance_init */
           };
-          static const GInterfaceInfo itreeModel_info = {
-               (GInterfaceInitFunc) gnc_sx_list_tree_model_adapter_interface_init,    /* interface_init */
+          static const GInterfaceInfo itree_model_info = {
+               (GInterfaceInitFunc) gsltma_tree_model_interface_init,    /* interface_init */
+               NULL,               /* interface_finalize */
+               NULL                /* interface_data */
+          };
+          static const GInterfaceInfo itree_sortable_info = {
+               (GInterfaceInitFunc) gsltma_tree_sortable_interface_init,    /* interface_init */
                NULL,               /* interface_finalize */
                NULL                /* interface_data */
           };
@@ -77,7 +86,10 @@ gnc_sx_list_tree_model_adapter_get_type(void)
                                          &info, 0);
           g_type_add_interface_static(type,
                                       GTK_TYPE_TREE_MODEL,
-                                      &itreeModel_info);
+                                      &itree_model_info);
+          g_type_add_interface_static(type,
+                                      GTK_TYPE_TREE_SORTABLE,
+                                      &itree_sortable_info);
      }
      return type;
 }
@@ -197,7 +209,7 @@ gsltma_unref_node(GtkTreeModel *tree_model,
 }
 
 static void
-gnc_sx_list_tree_model_adapter_interface_init(gpointer g_iface, gpointer iface_data)
+gsltma_tree_model_interface_init(gpointer g_iface, gpointer iface_data)
 {
      GtkTreeModelIface *tree_model = (GtkTreeModelIface*)g_iface;
      tree_model->get_flags = gsltma_get_flags;
@@ -214,6 +226,72 @@ gnc_sx_list_tree_model_adapter_interface_init(gpointer g_iface, gpointer iface_d
      tree_model->iter_parent = gsltma_iter_parent;
      tree_model->ref_node = gsltma_ref_node;
      tree_model->unref_node = gsltma_unref_node;
+}
+
+static gboolean
+gsltma_get_sort_column_id(GtkTreeSortable        *sortable,
+                          gint                   *sort_column_id,
+                          GtkSortType            *order)
+{
+     return gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
+                                                 sort_column_id,
+                                                 order);
+}
+
+static void
+gsltma_set_sort_column_id(GtkTreeSortable        *sortable,
+                          gint                    sort_column_id,
+                          GtkSortType             order)
+{
+     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
+                                          sort_column_id,
+                                          order);
+}
+
+static void
+gsltma_set_sort_func(GtkTreeSortable        *sortable,
+                     gint                    sort_column_id,
+                     GtkTreeIterCompareFunc  func,
+                     gpointer                data,
+                     GtkDestroyNotify        destroy)
+{
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real), 
+                                     sort_column_id,
+                                     func,
+                                     data,
+                                     destroy);
+}
+
+static void
+gsltma_set_default_sort_func(GtkTreeSortable        *sortable,
+                             GtkTreeIterCompareFunc  func,
+                             gpointer                data,
+                             GtkDestroyNotify        destroy)
+{
+     gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real),
+                                             func, data, destroy);
+}
+
+static gboolean
+gsltma_has_default_sort_func(GtkTreeSortable        *sortable)
+{
+     return gtk_tree_sortable_has_default_sort_func(GTK_TREE_SORTABLE(GNC_SX_LIST_TREE_MODEL_ADAPTER(sortable)->real));
+}
+
+static void
+gsltma_tree_sortable_interface_init(gpointer g_iface, gpointer iface_data)
+{
+     GtkTreeSortableIface *tree_sortable = (GtkTreeSortableIface*)g_iface;
+     tree_sortable->get_sort_column_id = gsltma_get_sort_column_id;
+     tree_sortable->set_sort_column_id = gsltma_set_sort_column_id;
+     tree_sortable->set_sort_func = gsltma_set_sort_func;
+     tree_sortable->set_default_sort_func = gsltma_set_default_sort_func;
+     tree_sortable->has_default_sort_func = gsltma_has_default_sort_func;
+     tree_sortable->get_sort_column_id = gsltma_get_sort_column_id;
+     tree_sortable->set_sort_column_id = gsltma_set_sort_column_id;
+     tree_sortable->set_sort_func = gsltma_set_sort_func;
+     tree_sortable->set_default_sort_func = gsltma_set_default_sort_func;
+     tree_sortable->has_default_sort_func = gsltma_has_default_sort_func;
 }
 
 static void
@@ -262,16 +340,117 @@ gsltma_proxy_rows_reordered(GtkTreeModel *treemodel,
 }
 
 static void
+gsltma_proxy_sort_column_changed(GtkTreeSortable *sortable, gpointer user_data)
+{
+     g_signal_emit_by_name(user_data, "sort-column-changed");
+}
+
+static gint
+_name_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+     gint rtn;
+     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     GncSxInstances *a_inst, *b_inst;
+     gchar *a_caseless, *b_caseless;
+
+     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
+     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
+
+     if (a_inst == NULL && b_inst == NULL) return 0;
+     if (a_inst == NULL) return 1;
+     if (b_inst == NULL) return -1;
+
+     a_caseless = g_utf8_casefold(xaccSchedXactionGetName(a_inst->sx), -1);
+     b_caseless = g_utf8_casefold(xaccSchedXactionGetName(b_inst->sx), -1);
+     rtn = safe_strcmp(a_caseless, b_caseless);
+     g_free(a_caseless);
+     g_free(b_caseless);
+
+     return rtn;
+}
+
+static gint
+_freq_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     GncSxInstances *a_inst, *b_inst;
+
+     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
+     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
+     
+     if (a_inst == NULL && b_inst == NULL) return 0;
+     if (a_inst == NULL) return 1;
+     if (b_inst == NULL) return -1;
+
+     return gnc_freq_spec_compare(xaccSchedXactionGetFreqSpec(a_inst->sx),
+                                  xaccSchedXactionGetFreqSpec(b_inst->sx));
+}
+
+static gint
+_safe_invalidable_date_compare(GDate *a, GDate *b)
+{
+     if (!g_date_valid(a) && !g_date_valid(b))
+     {
+          return 0;
+     }
+     if (!g_date_valid(a))
+     {
+          return 1;
+     }
+     if (!g_date_valid(b))
+     {
+          return -1;
+     }
+     return g_date_compare(a, b);
+}
+
+static gint
+_last_occur_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     GncSxInstances *a_inst, *b_inst;
+
+     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
+     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
+
+     return _safe_invalidable_date_compare(xaccSchedXactionGetLastOccurDate(a_inst->sx),
+                                           xaccSchedXactionGetLastOccurDate(b_inst->sx));
+}
+
+static gint
+_next_occur_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     GncSxInstances *a_inst, *b_inst;
+
+     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
+     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
+
+     return _safe_invalidable_date_compare(&a_inst->next_instance_date,
+                                           &b_inst->next_instance_date);
+}
+
+static void
 gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 {
      GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(instance);
-     adapter->real = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+     adapter->orig = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+     adapter->real = GTK_TREE_MODEL_SORT(gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(adapter->orig)));
+
+     // setup sorting
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_NAME, _name_comparator, adapter, NULL);
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_FREQUENCY, _freq_comparator, adapter, NULL);
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_LAST_OCCUR, _last_occur_comparator, adapter, NULL);
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_NEXT_OCCUR, _next_occur_comparator, adapter, NULL);
+     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_NEXT_OCCUR, GTK_SORT_ASCENDING);
 
      g_signal_connect(adapter->real, "row-changed", G_CALLBACK(gsltma_proxy_row_changed), adapter);
      g_signal_connect(adapter->real, "row-deleted", G_CALLBACK(gsltma_proxy_row_deleted), adapter);
      g_signal_connect(adapter->real, "row-has-child-toggled", G_CALLBACK(gsltma_proxy_row_has_child_toggled), adapter);
      g_signal_connect(adapter->real, "row-inserted", G_CALLBACK(gsltma_proxy_row_inserted), adapter);
      g_signal_connect(adapter->real, "rows-reordered", G_CALLBACK(gsltma_proxy_rows_reordered), adapter);
+
+     g_signal_connect(adapter->real, "sort-column-changed", G_CALLBACK(gsltma_proxy_sort_column_changed), adapter);
 }
 
 static void
@@ -308,12 +487,12 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
 
           qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
 
-          gtk_tree_store_append(model->real, &iter, NULL);
-          gtk_tree_store_set(model->real, &iter,
-                             0, xaccSchedXactionGetName(instances->sx),
-                             1, frequency_str->str,
-                             2, last_occur_date_buf,
-                             3, next_occur_date_buf,
+          gtk_tree_store_append(model->orig, &iter, NULL);
+          gtk_tree_store_set(model->orig, &iter,
+                             SXLTMA_COL_NAME, xaccSchedXactionGetName(instances->sx),
+                             SXLTMA_COL_FREQUENCY, frequency_str->str,
+                             SXLTMA_COL_LAST_OCCUR, last_occur_date_buf,
+                             SXLTMA_COL_NEXT_OCCUR, next_occur_date_buf,
                              -1);
           g_string_free(frequency_str, TRUE);
      }
@@ -323,8 +502,7 @@ static void
 gsltma_added_cb(GncSxInstanceModel *instances, SchedXaction *sx_added, gpointer user_data)
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-     printf("added\n");
-     gtk_tree_store_clear(model->real);
+     gtk_tree_store_clear(model->orig);
      gsltma_populate_tree_store(model);
 }
 
@@ -332,9 +510,8 @@ static void
 gsltma_updated_cb(GncSxInstanceModel *instances, SchedXaction *sx_updated, gpointer user_data)
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-     printf("sx list tree model adapter update\n");
      gnc_sx_instance_model_update_sx_instances(instances, sx_updated);
-     gtk_tree_store_clear(model->real);
+     gtk_tree_store_clear(model->orig);
      gsltma_populate_tree_store(model);
 }
 
@@ -342,9 +519,8 @@ static void
 gsltma_removing_cb(GncSxInstanceModel *instances, SchedXaction *sx_removing, gpointer user_data)
 {
      GncSxListTreeModelAdapter *model = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
-     printf("removing\n");
      gnc_sx_instance_model_remove_sx_instances(instances, sx_removing);
-     gtk_tree_store_clear(model->real);
+     gtk_tree_store_clear(model->orig);
      gsltma_populate_tree_store(model);
 }
 
@@ -367,13 +543,13 @@ gnc_sx_list_tree_model_adapter_new(GncSxInstanceModel *instances)
 }
 
 GncSxInstances*
-gnc_sx_list_tree_model_adapter_get_sx_instances(GncSxListTreeModelAdapter *model, GtkTreeIter *iter)
+gsltma_get_sx_instances_from_orig_iter(GncSxListTreeModelAdapter *model, GtkTreeIter *orig_iter)
 {
      GtkTreePath *path;
      gint *indices;
      gint index;
 
-     path = gtk_tree_model_get_path(GTK_TREE_MODEL(model), iter);
+     path = gtk_tree_model_get_path(GTK_TREE_MODEL(model->orig), orig_iter);
      if (gtk_tree_path_get_depth(path) > 1)
      {
           gtk_tree_path_free(path);
@@ -384,6 +560,16 @@ gnc_sx_list_tree_model_adapter_get_sx_instances(GncSxListTreeModelAdapter *model
 
      gtk_tree_path_free(path);
      return (GncSxInstances*)g_list_nth_data(model->instances->sx_instance_list, index);
+}
+
+GncSxInstances*
+gnc_sx_list_tree_model_adapter_get_sx_instances(GncSxListTreeModelAdapter *model, GtkTreeIter *sort_iter)
+{
+     GtkTreeIter translated_iter;
+     gtk_tree_model_sort_convert_iter_to_child_iter(model->real,
+                                                    &translated_iter,
+                                                    sort_iter);
+     return gsltma_get_sx_instances_from_orig_iter(model, &translated_iter);
 }
 
 static void
@@ -400,6 +586,8 @@ gnc_sx_list_tree_model_adapter_dispose(GObject *obj)
      adapter->instances = NULL;
      g_object_unref(G_OBJECT(adapter->real));
      adapter->real = NULL;
+     g_object_unref(G_OBJECT(adapter->orig));
+     adapter->orig = NULL;
 
      G_OBJECT_CLASS(parent_class)->dispose(obj);
 }

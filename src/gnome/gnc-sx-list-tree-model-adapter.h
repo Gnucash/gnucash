@@ -41,6 +41,14 @@ G_BEGIN_DECLS
 typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
 typedef struct _GncSxListTreeModelAdapterClass GncSxListTreeModelAdapterClass;
 
+// model columns
+enum {
+     SXLTMA_COL_NAME = 0,
+     SXLTMA_COL_FREQUENCY,
+     SXLTMA_COL_LAST_OCCUR,
+     SXLTMA_COL_NEXT_OCCUR
+};
+
 GType gnc_sx_list_tree_model_adapter_get_type(void);
 GncSxListTreeModelAdapter* gnc_sx_list_tree_model_adapter_new(GncSxInstanceModel *instances);
 

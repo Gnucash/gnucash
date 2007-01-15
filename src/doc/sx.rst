@@ -28,8 +28,8 @@ TODO
   - [x] sx engine events
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
     - [x] sx modified -- QOF_EVENT_MODIFY
-  - [/] sx upcoming instance model
-!   - [ ] implement sort model
+  - [x] sx upcoming instance model
+!   - [x] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
@@ -67,6 +67,7 @@ TODO
   - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
 
 - sx list page
+  - [ ] use gnc-tree-view
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
