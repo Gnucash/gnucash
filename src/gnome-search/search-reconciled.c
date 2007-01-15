@@ -55,10 +55,10 @@ struct _GNCSearchReconciledPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-guint
+GType
 gnc_search_reconciled_get_type (void)
 {
-  static guint type = 0;
+  static GType type = 0;
 	
   if (!type) {
     GTypeInfo type_info = {
