@@ -47,7 +47,7 @@ struct _GNCSearchBooleanClass {
   /* signals */
 };
 
-GType		gnc_search_boolean_get_type	(void);
+guint		gnc_search_boolean_get_type	(void);
 GNCSearchBoolean	*gnc_search_boolean_new	(void);
 
 /* methods */

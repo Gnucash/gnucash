@@ -160,10 +160,10 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   date_picker_class->key_press_event = NULL;
 }
 
-GType
+GtkType
 gnc_date_picker_get_type (void)
 {
-  static GType gnc_date_picker_type = 0;
+  static GtkType gnc_date_picker_type = 0;
 
   if (gnc_date_picker_type == 0)
   {

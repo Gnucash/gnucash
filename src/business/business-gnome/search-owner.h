@@ -46,7 +46,7 @@ struct _GNCSearchOwnerClass {
   /* signals */
 };
 
-GType		gnc_search_owner_get_type	(void);
+guint		gnc_search_owner_get_type	(void);
 GNCSearchOwner	*gnc_search_owner_new	(void);
 
 /* methods */

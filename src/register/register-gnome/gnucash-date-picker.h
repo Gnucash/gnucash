@@ -38,7 +38,7 @@ typedef struct
 } GNCDatePicker;
 
 
-GType gnc_date_picker_get_type (void);
+GtkType gnc_date_picker_get_type (void);
 
 GnomeCanvasItem *gnc_date_picker_new (GnomeCanvasGroup *parent);
 

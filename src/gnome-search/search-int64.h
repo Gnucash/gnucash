@@ -47,7 +47,7 @@ struct _GNCSearchInt64Class {
   /* signals */
 };
 
-GType		gnc_search_int64_get_type	(void);
+guint		gnc_search_int64_get_type	(void);
 GNCSearchInt64	*gnc_search_int64_new	(void);
 
 /* methods */

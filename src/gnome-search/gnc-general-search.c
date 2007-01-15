@@ -80,10 +80,10 @@ static guint general_search_signals[LAST_SIGNAL];
  *
  * Returns the GtkType for the GNCGeneralSearch widget
  */
-GType
+guint
 gnc_general_search_get_type (void)
 {
-	static GType general_search_type = 0;
+	static guint general_search_type = 0;
 
 	if (!general_search_type){
 		static const GTypeInfo our_info = {

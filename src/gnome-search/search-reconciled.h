@@ -47,7 +47,7 @@ struct _GNCSearchReconciledClass {
   /* signals */
 };
 
-GType		gnc_search_reconciled_get_type	(void);
+guint		gnc_search_reconciled_get_type	(void);
 GNCSearchReconciled	*gnc_search_reconciled_new	(void);
 
 /* methods */
