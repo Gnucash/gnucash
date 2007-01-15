@@ -30,7 +30,7 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 int main (int argc, char ** argv)
 {

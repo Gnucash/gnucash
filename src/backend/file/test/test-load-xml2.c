@@ -48,7 +48,7 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 static void
 remove_files_pattern(const char *begining, const char *ending)
