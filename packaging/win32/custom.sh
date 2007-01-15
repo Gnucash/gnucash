@@ -166,6 +166,15 @@ INNO_DIR=$GLOBAL_DIR\\inno
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
+## online banking: gwenhywfar+aqbanking
+# Note: These versions are not yet released as of 2007-01-15
+GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.1.tar.gz"
+GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
+
+AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.5.tar.gz"
+AQBANKING_DIR=$GLOBAL_DIR\\aqbanking
+##
+
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
 if test x$cross_compile != xyes ; then
@@ -192,6 +201,10 @@ add_step inst_swig
 add_step inst_libgsf
 add_step inst_goffice
 #add_step inst_glade
+## Online banking:
+#add_step inst_gwenhywfar
+#add_step inst_aqbanking
+##
 if test x$cross_compile != xyes ; then
  add_step inst_inno
 fi

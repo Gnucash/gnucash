@@ -614,6 +614,53 @@ function inst_inno() {
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
+function inst_gwenhywfar() {
+    setup Gwenhywfar
+    _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
+    _OPENSSL_UDIR=`unix_path ${OPENSSL_DIR}`
+    add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
+    add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists gwenhywfar
+    then
+	echo "Gwenhywfar already installed. Skipping."
+    else
+	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+	qpushd $TMP_UDIR/gwenhywfar-*
+	    ./configure \
+		--with-openssl-includes=$_OPENSSL_UDIR/include \
+		--with-openssl-libs=$_OPENSSL_UDIR/lib \
+	        --prefix=$_GWENHYWFAR_UDIR \
+		LDFLAGS="${REGEX_LDFLAGS}"
+	    make
+	    make install
+	qpopd
+    fi
+    ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
+}
+
+function inst_aqbanking() {
+    setup AqBanking
+    _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
+    add_to_env ${_AQBANKING_UDIR}/bin PATH
+    add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists aqbanking
+    then
+	echo "AqBanking already installed. Skipping."
+    else
+	wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
+	qpushd $TMP_UDIR/aqbanking-*
+	    ./configure \
+		--with-gwen-dir=${_GWENHYWFAR_UDIR} \
+		--with-frontends="cbanking" \
+		--with-backends="aqdtaus aqhbci" \
+	        --prefix=${_AQBANKING_UDIR}
+	    make
+	    make install
+	qpopd
+    fi
+    ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
+}
+
 function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
@@ -651,6 +698,10 @@ function inst_gnucash() {
     _REL_REPOS_UDIR=`unix_path $REL_REPOS_DIR`
     mkdir -p $_BUILD_UDIR
 
+    AQBANKING_OPTIONS=""
+    # When aqbanking is enabled, uncomment this:
+    #AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
+
     qpushd $REPOS_DIR
         if test "x$cross_compile" = xyes ; then
             # Set these variables manually because of cross-compiling
@@ -669,6 +720,7 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
+	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
