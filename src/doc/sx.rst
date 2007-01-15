@@ -32,6 +32,7 @@ TODO
 !   - [x] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
+  - [ ] after updating/merging new instances, enforce state (+variable) consistency.
 
 - unit testing
   - [ ] model updating in the face of change
@@ -68,6 +69,7 @@ TODO
 
 - sx list page
   - [ ] use gnc-tree-view
+  - [ ] save/restore state
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
@@ -185,7 +187,7 @@ The new SLR dialog will have the following:
   - to-create
   - [obsolete SX]?
 
-There is no seperate to-review page, however the user may (optionally) want
+There is no separate to-review page, however the user may (optionally) want
 to see the created transactions.  This is done using the transaction-search
 functionality over the created transactions by ID.
 
@@ -229,12 +231,12 @@ Testing Notes
 
 dialog-sxsincelast.c:  ~L1241:
 "Handle an interesting corner case of postponing or
-ignoring the first instance. We only want to incrment the
+ignoring the first instance. We only want to increment the
 counters for newly-discovered-as-to-be-created SXes."
 
 - auto-create 
   - auto-create transactions can be created w/o user interaction
-    - their state is transitioned to 'created', which is not modifyable
+    - their state is transitioned to 'created', which is not modifiable
   
   - auto-create (+notify) transactions should be displayed, even if they are
     the only transactions created.
@@ -260,3 +262,51 @@ Bugs to close after merge
 - Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
 - Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
 - Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
+
+------------------------------------------------------------
+
+Release Notes
+=============
+
+Major overhaul
+--------------
+
+The core application-side SX code was overhauled for clarity, modularity, correctness, testability, &c.
+
+SXList Plugin Page
+-------------------
+
+The SX list and upcoming-instances calendar moved from a top-level window to being a plugin page in the normal application container.
+
+Since Last Run
+--------------
+
+The Since Last Run (SLR) dialog received a functional overhaul as well.  The previous druid-based approach led to a huge bookkeeping headache, as transitioning between pages required partially-processed SXes to be maintained and transactions to be created and destroyed.  As well, the multi-stage dialog approach was just too involved and ill-suited to the task at hand, especially as some stages were conditional on the state of the data.  It made me sad.
+
+The new Since Last Run dialog is a single treeview of upcoming instances and variable bindings.  There's a checkbox to have all created transactions presented after they are.
+
+It's easier to describe via screenshot: <http://asynchronous.org/tmp/sx-cleanup-eg.png>.
+
+Updating/signaling
+------------------
+
+Part of the overhaul is a better use of QOF and GObject signaling for updates.  The SX list and SLR update in response to changes in each other; for instance, you can change the frequency or start-range of an SX while the SLR dialog is open, and it will update in place.
+
+Known Issues
+------------
+
+(as of 2007-01-14)
+- The SX List plugin page doesn't save/restore its state.
+- Updating the variables in a formula with the SLR dialog open isn't consistent.
+- Closing an sx list plugin page leads to corrupted state.
+
+Licensing
+---------
+
+In new files (and old files related to this code that I hold copyright on), I've removed the "or any later version" clause.  I have problems licensing under a license that I haven't read, or that can change in ways I disagree with.  At some point I'll make this change for all source files I hold copyright on, and I intend to not use the clause on sources I (re)write in the future.
+
+
+Testing
+-------
+
+The key areas I think need testing are the new plugin page and the SLR dialog.  It, at least, shouldn't do anything worse than the 1.8/2.0 SX code. :)
