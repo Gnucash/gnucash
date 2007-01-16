@@ -566,8 +566,15 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        */
       if(SCM_LISTP(parse_return) && 
          (SCM_CAR(parse_return) == SCM_BOOL_T)) {
+	gint n_items;
 
-	gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
+	/* clear the combo box */
+	gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1);
+	n_items = gtk_tree_model_iter_n_children(
+	  gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo)), NULL);
+	while (n_items-- > 0)
+	  gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
+
 	if ((date_formats = scm_call_2(qif_file_parse_results,
 				       SCM_CDR(parse_return),
 				       scm_str2symbol("date"))) != SCM_BOOL_F) {
