@@ -625,10 +625,15 @@ function inst_gwenhywfar() {
 	echo "Gwenhywfar already installed. Skipping."
     else
 	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+	# Compiling gwenhywfar needs the openssl DLLs somewhere
+	# outside of WINDOWS_DIR:
+	_WIN_UDIR=`unix_path ${WINDIR}`
+	cp ${_WIN_UDIR}/system32/libssl32.dll ${_WIN_UDIR}/system32/libeay32.dll  ${_OPENSSL_UDIR}/lib || die "OpenSSL is not installed correctly."
 	qpushd $TMP_UDIR/gwenhywfar-*
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
-		--with-openssl-libs=$_OPENSSL_UDIR/lib \
+		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
+		ssl_lib="-leay32 -lssl32" \
 	        --prefix=$_GWENHYWFAR_UDIR \
 		LDFLAGS="${REGEX_LDFLAGS}"
 	    make
