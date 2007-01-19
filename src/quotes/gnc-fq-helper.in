@@ -361,12 +361,12 @@ while(<>) {
     %quote_data = $quoter->fetch($quote_method_name, @$symbols);
   }
 
-  if(!%quote_data) {
+  if (%quote_data) {
+    print schemify_quotes($symbols, \%quote_data);
+  } else {
     print "#f\n";
-    exit 1;
   }
 
-  print schemify_quotes($symbols, \%quote_data);
   STDOUT->flush();
 }
 
