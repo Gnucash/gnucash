@@ -63,8 +63,9 @@ function dist_guile() {
 
 function dist_openssl() {
     setup OpenSSL
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/lib{eay,ssl}*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
@@ -201,8 +202,8 @@ dist_libxml2
 dist_gnome
 dist_libgsf
 dist_goffice
-#dist_gwenhywfar
-#dist_aqbanking
+dist_gwenhywfar
+dist_aqbanking
 dist_gnucash
 finish
 qpopd

@@ -318,15 +318,23 @@ function inst_guile() {
 
 function inst_openssl() {
     setup OpenSSL
-    if [ -f $WINDIR\\system32\\libssl32.dll ]
-    then
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
+    if test -f $_OPENSSL_UDIR/unins000.exe ; then
+	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
+    fi
+    if [ -f $WINDIR\\system32\\libssl32.dll -o -f $WINDIR\\system32\\libeay32.dll ] ; then
+	die "You have uninstalled the wrong version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
+    fi
+
+    if test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a ; then
         echo "openssl already installed.  skipping."
     else
-        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
-	echo "!!! When asked for an installation path, specify $OPENSSL_DIR !!!"
-        $LAST_FILE
+	mkdir -p ${_OPENSSL_UDIR}
+	wget_unpacked $OPENSSL_BIN_URL $DOWNLOAD_DIR $OPENSSL_DIR
+	wget_unpacked $OPENSSL_LIB_URL $DOWNLOAD_DIR $OPENSSL_DIR
     fi
-    [ -f $WINDIR\\system32\\libssl32.dll ] || die "openssl not installed correctly"
+    test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a || die "openssl not installed correctly"
 }
 
 function inst_pexports() {
@@ -617,7 +625,6 @@ function inst_inno() {
 function inst_gwenhywfar() {
     setup Gwenhywfar
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
-    _OPENSSL_UDIR=`unix_path ${OPENSSL_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists gwenhywfar
@@ -633,7 +640,7 @@ function inst_gwenhywfar() {
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
 		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-		ssl_lib="-leay32 -lssl32" \
+		ssl_lib="-lcrypto -lssl" \
 	        --prefix=$_GWENHYWFAR_UDIR \
 		LDFLAGS="${REGEX_LDFLAGS}"
 	    make
@@ -703,9 +710,8 @@ function inst_gnucash() {
     _REL_REPOS_UDIR=`unix_path $REL_REPOS_DIR`
     mkdir -p $_BUILD_UDIR
 
-    AQBANKING_OPTIONS=""
     # When aqbanking is enabled, uncomment this:
-    #AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
+    AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
 
     qpushd $REPOS_DIR
         if test "x$cross_compile" = xyes ; then

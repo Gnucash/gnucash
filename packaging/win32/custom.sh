@@ -80,7 +80,8 @@ GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
 GUILE_DIR=$GLOBAL_DIR\\guile
 
-OPENSSL_URL="http://www.slproweb.com/download/Win32OpenSSL-0_9_8d.exe"
+OPENSSL_BIN_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-bin.zip"
+OPENSSL_LIB_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
 OPENSSL_DIR=$GLOBAL_DIR\\openssl
 
 PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
@@ -126,8 +127,8 @@ GCONF_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-2.14.0.zip"
 GCONF_DEV_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-dev-2.14.0.zip"
 LIBBONOBO_URL="$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-2.16.0.zip"
 LIBBONOBO_DEV_URL="$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-dev-2.16.0.zip"
-GNOME_VFS_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2.zip"
-GNOME_VFS_DEV_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2.zip"
+GNOME_VFS_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2-no-openssl.zip"
+GNOME_VFS_DEV_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2-no-openssl.zip"
 LIBGNOME_URL="$GNOME_WIN32_URL/libgnome/2.16/libgnome-2.16.0-1.zip"
 LIBGNOME_DEV_URL="$GNOME_WIN32_URL/libgnome/2.16/libgnome-dev-2.16.0.zip"
 LIBGNOMECANVAS_URL="$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-2.14.0.zip"
@@ -167,8 +168,7 @@ SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.e
 SVN_DIR=$GLOBAL_DIR\\svn
 
 ## online banking: gwenhywfar+aqbanking
-# Note: These versions are not yet released as of 2007-01-15
-GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.1.tar.gz"
+GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.2.tar.gz"
 GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
 
 AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.5.tar.gz"
@@ -202,8 +202,8 @@ add_step inst_libgsf
 add_step inst_goffice
 #add_step inst_glade
 ## Online banking:
-#add_step inst_gwenhywfar
-#add_step inst_aqbanking
+add_step inst_gwenhywfar
+add_step inst_aqbanking
 ##
 if test x$cross_compile != xyes ; then
  add_step inst_inno
