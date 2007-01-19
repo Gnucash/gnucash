@@ -1,11 +1,10 @@
 /********************************************************************\
- * dialog-scheduledxaction.h : dialogs for scheduled transactions   *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * dialog-sx-editor.h : dialog for scheduled transaction editing    *
+ * Copyright (C) 2001,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
+ * modify it under the terms of version 2 of the GNU General Public *
+ * License as published by the Free Software Foundation.            *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -20,8 +19,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_SCHEDULEDXACTION_H
-#define DIALOG_SCHEDULEDXACTION_H
+#ifndef DIALOG_SX_EDITOR_H
+#define DIALOG_SX_EDITOR_H
 
 #include "SchedXaction.h"
 
@@ -34,29 +33,12 @@
 #define KEY_CREATE_DAYS	"create_days"
 #define KEY_REMIND_DAYS	"remind_days"
 
-struct _SchedXactionDialog;
-struct _SchedXactionEditorDialog;
+typedef struct _GncSxEditorDialog GncSxEditorDialog;
 
-typedef struct _SchedXactionDialog SchedXactionDialog;
-typedef struct _SchedXactionEditorDialog SchedXactionEditorDialog;
+GncSxEditorDialog* gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
+                                                                 gboolean newSX);
 
-SchedXactionDialog * gnc_ui_scheduled_xaction_dialog_create(void);
-void gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd);
-#ifdef __GTK_CLIST_H__
-void row_select_handler( GtkCList *clist, gint row, gint col,
-                         GdkEventButton *event, gpointer d );
-void row_unselect_handler( GtkCList *clist, gint row, gint col,
-                         GdkEventButton *event, gpointer d );
-#endif
-
-void gnc_sxd_list_refresh( SchedXactionDialog *sxd );
-
-SchedXactionEditorDialog *
-gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
-					       SchedXaction *sx,
-                                               gboolean newSX );
-
-void gnc_ui_scheduled_xaction_editor_dialog_destroy( SchedXactionEditorDialog *sxd );
+void gnc_ui_scheduled_xaction_editor_dialog_destroy(GncSxEditorDialog *sxd);
 
 /**
  * Sets up a book opened hook.  The function called may open a "since

@@ -34,6 +34,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
+  gnc-sx-instance-model.c \
   gncmod-app-utils.c \
   gnc-ui-util.c \
   guile-util.c \
@@ -59,6 +60,7 @@ gncinclude_HEADERS = \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
   gnc-helpers.h \
+  gnc-sx-instance-model.h \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \

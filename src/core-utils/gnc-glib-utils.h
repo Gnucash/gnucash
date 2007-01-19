@@ -81,6 +81,19 @@ void gnc_utf8_strip_invalid (gchar *str);
  * caller. */
 gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
 
+typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
+
+/**
+ * @return Caller-owned GList* of results of apply `fn` to `list` in order.
+ **/
+GList* gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data);
+
+/**
+ * Cut a GList into two parts; the {@param cut_point} is the beginning of the
+ * new list; {@param list} may need to be modified, but will be the list
+ * before the {@param cut_point}.
+ **/
+void gnc_g_list_cut(GList **list, GList *cut_point);
 
 /** @} */
 

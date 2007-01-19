@@ -11,6 +11,7 @@
 #include "qof.h"
 #include "Query.h"
 #include "gnc-pricedb.h"
+#include "SchedXaction.h"
 
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
@@ -87,5 +88,9 @@ void make_random_changes_to_account (QofBook *book, Account *account);
 void make_random_changes_to_group (QofBook *book, AccountGroup *group);
 void make_random_changes_to_book (QofBook *book);
 void make_random_changes_to_session (QofSession *session);
+
+SchedXaction* add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur);
+SchedXaction* add_once_sx(gchar *name, GDate *when);
+void remove_sx(SchedXaction *sx);
 
 #endif

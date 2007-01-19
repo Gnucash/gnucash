@@ -30,6 +30,7 @@
  * @brief Anchor Scheduled Transaction info in a book.
  *        See src/doc/books.txt for design overview.
  * @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ * @author Copyright (c) 2006 Joshua Sled <jsled@asynchronous.org>
  * 
  * XXX currently, this is crufty, it should be modified to use
  * entities a bit more whole-heartedly than it does.
@@ -39,17 +40,28 @@
 #define GNC_SX_BOOK_H
 
 #include <glib.h>
+#include "SchedXaction.h"
 #include "qof.h"
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
-SchedXactions * gnc_collection_get_schedxaction_list(const QofCollection *col);
-GList * gnc_collection_get_schedxactions(const QofCollection *col);
-GList * gnc_book_get_schedxactions(QofBook *book);
+struct xaccSchedXactionsDef {
+  QofInstance inst;
+  GList* sx_list;
+  gboolean sx_notsaved;
+};
+
+#define GNC_IS_SXES(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SXES))
+#define GNC_SXES(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SXES, SchedXactions))
+
+SchedXactions* gnc_book_get_schedxactions(QofBook* book);
+
+void gnc_sxes_add_sx(SchedXactions* sxes, SchedXaction* sx);
+void gnc_sxes_del_sx(SchedXactions* sxes, SchedXaction* sx);
 
 /** Returns the template group from the book. **/
-AccountGroup * gnc_book_get_template_group(QofBook *book);
-AccountGroup * gnc_collection_get_template_group(const QofCollection *col);
+AccountGroup* gnc_book_get_template_group(QofBook* book);
+AccountGroup* gnc_collection_get_template_group(const QofCollection *col);
 
 /** @return The list of SXes which reference the given Account. Caller should free this list. **/
 GList* gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct);

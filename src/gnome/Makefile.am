@@ -29,11 +29,11 @@ libgnc_gnome_la_SOURCES = \
   dialog-price-edit-db.c \
   dialog-print-check.c \
   dialog-progress.c \
+  dialog-sx-editor.c \
   dialog-sx-from-trans.c \
-  dialog-sxsincelast.c \
+  dialog-sx-since-last-run.c \
   dialog-tax-info.c \
   dialog-userpass.c \
-  dialog-scheduledxaction.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-merge.c \
@@ -45,8 +45,10 @@ libgnc_gnome_la_SOURCES = \
   gnc-plugin-register.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
+  gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
+  gnc-sx-list-tree-model-adapter.c \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
@@ -67,9 +69,9 @@ noinst_HEADERS = \
   dialog-new-user.h \
   dialog-print-check.h \
   dialog-progress.h \
+  dialog-sx-editor.h \
   dialog-sx-from-trans.h \
-  dialog-sxsincelast.h \
-  dialog-scheduledxaction.h \
+  dialog-sx-since-last-run.h \
   druid-acct-period.h \
   druid-hierarchy.h \
   druid-merge.h \
@@ -81,8 +83,10 @@ noinst_HEADERS = \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
+  gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
+  gnc-sx-list-tree-model-adapter.h \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \

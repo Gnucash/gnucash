@@ -1,14 +1,11 @@
-#ifndef _DENSECAL_H_
-#define _DENSECAL_H_
-
 /********************************************************************\
  * gnc-dense-cal.h : a custom densely-dispalyed calendar widget     *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
+ * published by the Free Software Foundation, under version 2 of    *
+ * the License.                                                     *
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -23,14 +20,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <gdk/gdk.h>
-#include <gtk/gtkadjustment.h>
-#include <gtk/gtkwidget.h>
-#include <glib.h>
+#ifndef _GNC_DENSE_CAL_H
+#define _GNC_DENSE_CAL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include "config.h"
+
+#include <FreqSpec.h>
+#include <glib.h>
+#include "gnc-dense-cal-model.h"
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
 
 #define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ()) 
 #define GNC_DENSE_CAL(obj)          GTK_CHECK_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
@@ -40,92 +40,97 @@ extern "C" {
 typedef struct _GncDenseCal        GncDenseCal;
 typedef struct _GncDenseCalClass   GncDenseCalClass;
 
-typedef struct _gdc_month_coords {
-        gint x, y;
+typedef struct _gdc_month_coords
+{
+     gint x, y;
 } gdc_month_coords;
 
-enum GDC_COLORS {
-  MONTH_THIS = 0,
-  MONTH_THAT,
-  MAX_COLORS
+enum GDC_COLORS
+{
+     MONTH_THIS = 0,
+     MONTH_THAT,
+     MAX_COLORS
 };
 
 struct _GncDenseCal
 {
-        GtkWidget widget;
+     GtkWidget widget;
 
-        GdkPixmap *drawbuf;
+     GdkPixmap *drawbuf;
 
-        gboolean initialized;
+     gboolean initialized;
 
-        gboolean showPopup;
-        GtkWindow *transPopup;
+     gboolean showPopup;
+     GtkWindow *transPopup;
 
-        gint min_x_scale;
-        gint min_y_scale;
+     gint min_x_scale;
+     gint min_y_scale;
 
-        gint x_scale;
-        gint y_scale;
+     gint x_scale;
+     gint y_scale;
 
-        gint numMonths;
-        gint monthsPerCol;
-        gint num_weeks; /* computed */
+     gint numMonths;
+     gint monthsPerCol;
+     gint num_weeks; /* computed */
 
-        GDateMonth month;
-        gint year;
-        gint firstOfMonthOffset;
+     GDateMonth month;
+     gint year;
+     gint firstOfMonthOffset;
 
-        gint leftPadding;
-        gint topPadding;
+     gint leftPadding;
+     gint topPadding;
 
-        gboolean needInitMonthLabels;
-        gdc_month_coords monthPositions[12];
-        GdkFont *monthLabelFont;
-        GdkFont *dayLabelFont;
-        GdkPixmap *monthLabels[12];
+     gboolean needInitMonthLabels;
+     gdc_month_coords monthPositions[12];
+     GdkFont *monthLabelFont;
+     GdkFont *dayLabelFont;
+     GdkPixmap *monthLabels[12];
 
-        GdkColor weekColors[MAX_COLORS];
+     GdkColor weekColors[MAX_COLORS];
 
-        guint label_lbearing;
-        guint label_ascent;
-        guint label_width;
-        guint label_height;
-        guint dayLabelHeight;
+     guint label_lbearing;
+     guint label_ascent;
+     guint label_width;
+     guint label_height;
+     guint dayLabelHeight;
 
-        guint lastMarkTag;
+     GncDenseCalModel *model;
 
-        /**
-         * A GList of gdc_mark_data structs, one for each active/valid markTag.
-         **/
-        GList *markData;
-        int numMarks;
-        /* array of GList*s of per-cell markings. */
-        GList **marks;
+     guint lastMarkTag;
 
-	int disposed; /* private */
+     /**
+      * A GList of gdc_mark_data structs, one for each active/valid markTag.
+      **/
+     GList *markData;
+     int numMarks;
+     /* array of GList*s of per-cell markings. */
+     GList **marks;
+
+     int disposed; /* private */
 };
 
 struct _GncDenseCalClass
 {
-        GtkWidgetClass parent_class;
-        void (*marks_lost_cb)( GncDenseCal *dcal, gpointer user_data );
+     GtkWidgetClass parent_class;
 };
 
-typedef struct _gdc_mark_data {
-        gchar *name;
-        gchar *info;
-        guint tag;
-        /* GdkColor markStyle; */
-        /**
-         * A GList of the dcal->marks indexes containing this mark.
-         **/
-        GList *ourMarks;
+typedef struct _gdc_mark_data
+{
+     gchar *name;
+     gchar *info;
+     guint tag;
+     /**
+      * A GList of the dcal->marks indexes containing this mark.
+      **/
+     GList *ourMarks;
 } gdc_mark_data;
 
 GtkWidget*     gnc_dense_cal_new                    (void);
+GtkWidget*     gnc_dense_cal_new_with_model         (GncDenseCalModel *model);
 GType          gnc_dense_cal_get_type               (void);
 
-void gnc_dense_cal_set_month( GncDenseCal *dcal, GDateMonth mon );
+void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
+void gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon);
 /**
  * @param year Julian year: 2000 = 2000AD.
  **/
@@ -137,13 +142,6 @@ guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
 GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 GDateYear gnc_dense_cal_get_year( GncDenseCal *dcal );
 
-guint gnc_dense_cal_mark( GncDenseCal *dcal,
-                          guint size, GDate **daysArray,
-                          gchar *name, gchar *info );
-void gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove );
+G_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* _DENSECAL_H_ */
+#endif /* _GNC_DENSE_CAL_H */

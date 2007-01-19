@@ -49,6 +49,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-edit.c \
   gnc-date-format.c \
   gnc-dense-cal.c \
+  gnc-dense-cal-model.c \
+  gnc-dense-cal-store.c \
   gnc-druid-gnome.c \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
@@ -74,6 +76,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-period-select.c \
   gnc-query-list.c \
   gnc-splash.c \
+  gnc-sx-instance-dense-cal-adapter.c \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
@@ -117,6 +120,8 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-date-format.h \
   gnc-dense-cal.h \
+  gnc-dense-cal-model.h \
+  gnc-dense-cal-store.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
   gnc-file.h \
@@ -139,6 +144,7 @@ gncinclude_HEADERS = \
   gnc-period-select.h \
   gnc-query-list.h \
   gnc-splash.h \
+  gnc-sx-instance-dense-cal-adapter.h \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \

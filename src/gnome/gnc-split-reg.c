@@ -5,7 +5,7 @@
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,7 +37,7 @@
 #include "QueryNew.h"
 #include "SX-book.h"
 #include "dialog-account.h"
-#include "dialog-scheduledxaction.h"
+#include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -1227,7 +1227,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         GList *sxElts;
         
         /* Get the correct SX */
-        for ( sxElts = gnc_book_get_schedxactions( gnc_get_current_book() );
+        for ( sxElts = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
               (!theSX) && sxElts;
               sxElts = sxElts->next ) {
           SchedXaction *sx = (SchedXaction*)sxElts->data;
@@ -1237,8 +1237,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         }
 
         if ( theSX ) {
-          SchedXactionDialog *sxd = gnc_ui_scheduled_xaction_dialog_create();
-          gnc_ui_scheduled_xaction_editor_dialog_create( sxd, theSX, FALSE );
+          gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
           return;
         }
       }

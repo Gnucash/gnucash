@@ -35,7 +35,6 @@
 
 #include "SchedXaction.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "druid-utils.h"
 #include "gnc-book.h"
@@ -1982,7 +1981,8 @@ void
 ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
 {
         SchedXaction *sx;
-        GList *ttxnList, *sxList;
+        SchedXactions *sxes;
+        GList *ttxnList;
 
         sx = xaccSchedXactionMalloc( gnc_get_current_book() );
         xaccSchedXactionSetName( sx, tcSX->name );
@@ -2003,9 +2003,8 @@ ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
         xaccSchedXactionSetTemplateTrans( sx, ttxnList,
                                           gnc_get_current_book() );
 
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-        sxList = g_list_append( sxList, sx );
-        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        sxes = gnc_book_get_schedxactions(gnc_get_current_book());
+        gnc_sxes_add_sx(sxes, sx);
 
         g_list_free( ttxnList );
         ttxnList = NULL;

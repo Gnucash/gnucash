@@ -3,7 +3,8 @@ TESTS = \
   test-load-module \
   test-exp-parser \
   test-scm-query-string \
-  test-print-parse-amount
+  test-print-parse-amount \
+  test-sx
 
 test_exp_parser_SOURCES = \
   ${top_builddir}/src/core-utils/gnc-gconf-utils.c \
@@ -48,7 +49,8 @@ check_PROGRAMS = \
   test-exp-parser \
   test-print-parse-amount \
   test-scm-query-string \
-  test-print-queries
+  test-print-queries \
+  test-sx
 
 EXTRA_DIST = \
   test-load-module
