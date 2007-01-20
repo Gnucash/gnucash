@@ -70,9 +70,6 @@ TODO
   - [ ] <http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html>
     - [ ] sx-from-trans: "unknown get.type [3]"
 
-  - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
-
-
 - sx list page
 ! - [ ] use gnc-tree-view
 ! - [ ] save/restore state
@@ -252,20 +249,6 @@ counters for newly-discovered-as-to-be-created SXes."
     - only auto-create (+notify): SLR dialog, already created
     - others, auto-create (-notify): SLR dialog, incl. created 
     - others, auto-create (+notify): SLR dialog, incl. created
-
-Bugs to close after merge
---------------------------------------
-
-- With many auto-create transactions but none with notify option, "Auto-Created Transactions Notification" druid page lists every existing transaction - http://bugzilla.gnome.org/show_bug.cgi?id=347116
-- Since last run dialog does not allow for early finish, an... - http://bugzilla.gnome.org/show_bug.cgi?id=329384
-- Since Last Run druid changes data before Apply - http://bugzilla.gnome.org/show_bug.cgi?id=333849
-- Resize the "Since Last Run" window is incorrect - http://bugzilla.gnome.org/show_bug.cgi?id=353563
-- Transaction reminders page has slightly incorrect instructions - http://bugzilla.gnome.org/show_bug.cgi?id=331069
-- Transaction not highlighted in "Transaction Preparation" window - http://bugzilla.gnome.org/show_bug.cgi?id=342658
-- Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
-- Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
-- Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
-- Copy/paste in Transaction Review window replaces buffer on save - http://bugzilla.gnome.org/show_bug.cgi?id=380031
 
 ------------------------------------------------------------
 
