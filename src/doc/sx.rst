@@ -1,3 +1,5 @@
+-*- rst -*-
+
 Scheduled Transactions
 ===============================================================
 
@@ -262,6 +264,7 @@ Bugs to close after merge
 - Scrolling through variables list does not work - http://bugzilla.gnome.org/show_bug.cgi?id=343190
 - Gnucash thinks the file has changed after cancelling out of the Since Last Run dialog and making no changes - http://bugzilla.gnome.org/show_bug.cgi?id=344494
 - Transaction reminder with variable amount doesn't display value field - http://bugzilla.gnome.org/show_bug.cgi?id=147946
+- Copy/paste in Transaction Review window replaces buffer on save - http://bugzilla.gnome.org/show_bug.cgi?id=380031
 
 ------------------------------------------------------------
 
