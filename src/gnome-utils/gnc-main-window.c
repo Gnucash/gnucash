@@ -39,10 +39,6 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-#include "gtk-compat.h"
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -3278,7 +3274,6 @@ gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 	gnc_gnome_help (HF_HELP, NULL);
 }
 
-#ifdef HAVE_GTK26
 /** This is a helper function to find a data file and suck it into
  *  memory.
  *
@@ -3380,47 +3375,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	if (authors)     g_strfreev(authors);
 	g_object_unref (logo);
 }
-#else
-static void
-gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
-{
-	GtkWidget *about;
-	/* Translators: This is the "About" message. */
-	const gchar *message = _("The GnuCash personal finance manager.\n"
-				 "The GNU way to manage your money!\n"
-				 "http://www.gnucash.org/");
-	const gchar *copyright = "© 1998-2002 Linas Vepstas";
-	const gchar *authors[] = {
-		"Derek Atkins <derek@ihtfp.com>",
-		"Rob Browning <rlb@cs.utexas.edu>",
-		"Bill Gribble <grib@billgribble.com>",
-		"David Hampton <hampton@employees.org>",
-		"James LewisMoss <dres@debian.org>",
-		"Robert Graham Merkel <rgmerk@mira.net>",
-		"Dave Peticolas <dave@krondo.com>",
-		"Joshua Sled <jsled@asynchronous.org>",
-		"Christian Stimming <stimming@tuhh.de>",
-		"Linas Vepstas <linas@linas.org>",
-		NULL
-	};
-	const gchar *documenters[] = {
-		NULL
-	};
-	/* Translators: Insert your translator's credits here so that
-	   they will be shown in the "About" dialog. */
-	const gchar *translator_credits = _("translator_credits");
-	GdkPixbuf *logo;
-
-	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
-
-	about = gnome_about_new ("GnuCash", VERSION, copyright, message, authors, documenters,
-				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-				 logo);
-
-	g_object_unref (logo);
-	gtk_dialog_run (GTK_DIALOG (about));
-}
-#endif
 
 
 /************************************************************

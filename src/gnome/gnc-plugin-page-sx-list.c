@@ -39,9 +39,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glade/glade-xml.h>
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 #include "gnc-exp-parser.h"
 #include "gnc-engine.h"
 #include "Transaction.h"

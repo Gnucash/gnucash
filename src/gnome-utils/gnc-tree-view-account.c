@@ -28,10 +28,6 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 #include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-model-account-types.h"

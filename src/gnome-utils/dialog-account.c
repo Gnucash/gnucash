@@ -25,9 +25,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#ifndef HAVE_GLIB26
-#include "gutils26.h"
-#endif
 #include <glib/gi18n.h>
 #include <math.h>
 #include <string.h>

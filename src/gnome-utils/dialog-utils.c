@@ -905,16 +905,12 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
   GtkWidget *button;
 
   button = gtk_button_new_with_label(label);
-#ifdef HAVE_GTK26
   if (stock_id) {
     GtkWidget *image;
 
     image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image(GTK_BUTTON(button), image);
   }
-#else
-  gtk_button_set_use_underline(GTK_BUTTON(button), TRUE);
-#endif
   gtk_widget_show_all(button);
   gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }
@@ -983,61 +979,3 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
 
     return response;
 }
-
-#ifndef HAVE_GTK26
-
-/** Find the first GtkLabel in a container. When called on a gtk2.4
- *  message dialog, there is only one label in the dialog so theis
- *  should return it. */
-static void
-find_label (GtkWidget *widget, gpointer data)
-{
-  GtkWidget **label = data;
-
-  if (*label)
-    return;
-
-  if (GTK_IS_LABEL(widget)) {
-    *label = widget;
-    return;
-  }
-
-  if (GTK_IS_CONTAINER(widget)) {
-    gtk_container_foreach(GTK_CONTAINER(widget), find_label, data);
-  }
-}
-
-/** Mimic the gtk2.6 function to add secondary information to a
- *  message dialog. */
-void
-gtk_message_dialog_format_secondary_text(GtkMessageDialog *dialog,
-					 const gchar *format,
-					 ...)
-{
-  GtkWidget *label = NULL;
-  const gchar *current;
-  gchar *primary, *secondary;
-  va_list args;
-
-  gtk_container_foreach(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox),
-			find_label, &label);
-  if (!label)
-    return;
-
-  /* Get the current markup. */
-  current = gtk_label_get_label(GTK_LABEL(label));
-
-  /* Format the text to be added. */
-  va_start(args, format);
-  secondary = g_strdup_vprintf(format, args);
-  va_end(args);
-
-  /* Append the two strings, making the first one bold. */
-  primary = g_strdup_printf("<b>%s</b>\n\n%s", current, secondary);
-  gtk_label_set_markup(GTK_LABEL(label), primary);
-
-  g_free(primary);
-  g_free(secondary);
-}
-
-#endif

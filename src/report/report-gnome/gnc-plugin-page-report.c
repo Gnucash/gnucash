@@ -41,10 +41,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "gtk-compat.h"
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 #include <libguile.h>
 #include <sys/stat.h>
 #include <errno.h>

@@ -43,7 +43,6 @@
 #endif
 #include <iconv.h>
 
-#include "gtk-compat.h"
 #include "dialog-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-ui.h"
