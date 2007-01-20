@@ -355,7 +355,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           priv->tree_model = gnc_sx_list_tree_model_adapter_new(priv->instances);
           priv->tree_view = GTK_TREE_VIEW(glade_xml_get_widget(priv->gxml, "sx_list"));
           gtk_tree_view_set_model(priv->tree_view, GTK_TREE_MODEL(priv->tree_model));
-          gtk_tree_view_set_headers_clickable(priv->tree_view, TRUE);
 
           renderer = gtk_cell_renderer_text_new();
           column = gtk_tree_view_column_new_with_attributes("Name", renderer, "text", SXLTMA_COL_NAME, NULL);
