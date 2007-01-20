@@ -107,7 +107,7 @@ int
 main (int argc, char ** argv)
 {
     const char *location = getenv("GNC_TEST_FILES");
-    DIR *xml2_dir;
+    GDir *xml2_dir;
 
     g_type_init();
     qof_init();
@@ -122,38 +122,29 @@ main (int argc, char ** argv)
 
     xaccLogDisable();
     
-    if((xml2_dir = opendir(location)) == NULL)
+    if((xml2_dir = g_dir_open(location, 0, NULL)) == NULL)
     {
         failure("unable to open xml2 directory");
     }
     else
     {
-        struct dirent *entry;
+        const gchar *entry;
 
-        while((entry = readdir(xml2_dir)) != NULL)
+        while((entry = g_dir_read_name(xml2_dir)) != NULL)
         {
-            if(strstr(entry->d_name, ".gml2") != NULL)
+            if(g_str_has_suffix(entry, ".gml2"))
             {
-                struct stat file_info;
-                char *to_open = g_strdup_printf("%s/%s", location,
-                                                entry->d_name);
-                if(stat(to_open, &file_info) != 0)
+                gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
+                if(!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
-                    failure("unable to stat file");
-                }
-                else
-                {
-                    if(!S_ISDIR(file_info.st_mode))
-                    {
-                        test_load_file(to_open);
-                    }
+                    test_load_file(to_open);
                 }
                 g_free(to_open);
             }
         }
     }
 
-    closedir(xml2_dir);
+    g_dir_close(xml2_dir);
 
     print_test_results();
     qof_close();

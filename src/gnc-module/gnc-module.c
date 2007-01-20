@@ -198,27 +198,27 @@ gnc_module_system_refresh(void)
   /* look in each search directory */
   for(current = search_dirs; current; current = current->next) 
   {
-      DIR *d = opendir(current->data);
-      struct dirent * dent = NULL;
+      GDir *d = g_dir_open(current->data, 0,NULL);
+      const gchar *dent = NULL;
       char * fullpath = NULL;
       GNCModuleInfo * info;
 
       if (!d) continue;
 
-      while ((dent = readdir(d)) != NULL)
+      while ((dent = g_dir_read_name(d)) != NULL)
       {
         /* is the file a loadable module? */
 
         /* Gotcha: On MacOS, G_MODULE_SUFFIX is defined as "so", but if we do
          * not build clean libtool modules with "-module", we get dynamic
          * libraries ending on .dylib */
-        if (g_str_has_suffix(dent->d_name, "." G_MODULE_SUFFIX) ||
-            g_str_has_suffix(dent->d_name, ".dylib"))
+        if (g_str_has_suffix(dent, "." G_MODULE_SUFFIX) ||
+            g_str_has_suffix(dent, ".dylib"))
         {
           /* get the full path name, then dlopen the library and see
            * if it has the appropriate symbols to be a gnc_module */
-          fullpath = g_build_filename((const gchar *)(current->data), 
-				      dent->d_name, (char*)NULL);
+          fullpath = g_build_filename((const gchar *)(current->data),
+                                      dent, (char*)NULL);
           info     = gnc_module_get_info(fullpath);
           
           if(info) 
@@ -228,7 +228,7 @@ gnc_module_system_refresh(void)
           g_free(fullpath);
         }
       }
-      closedir(d);
+      g_dir_close(d);
 
   }
   /* free the search dir strings */

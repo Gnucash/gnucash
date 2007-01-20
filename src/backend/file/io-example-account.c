@@ -423,24 +423,14 @@ gnc_free_example_account_list(GSList *list)
     g_slist_free(list);
 }
 
-static gboolean
-is_directory(const gchar *filename)
-{
-    struct stat fileinfo;
-
-    stat(filename, &fileinfo);
-
-    return S_ISDIR(fileinfo.st_mode);
-}
-    
 GSList*
 gnc_load_example_account_list(QofBook *book, const char *dirname)
 {
     GSList *ret;
-    DIR *dir;
-    struct dirent *direntry;
+    GDir *dir;
+    const gchar *direntry;
 
-    dir = opendir(dirname);
+    dir = g_dir_open(dirname, 0, NULL);
 
     if(dir == NULL)
     {
@@ -449,13 +439,14 @@ gnc_load_example_account_list(QofBook *book, const char *dirname)
     
     ret = NULL;
 
-    for(direntry = readdir(dir); direntry != NULL; direntry = readdir(dir))
+    for(direntry = g_dir_read_name(dir); direntry != NULL;
+        direntry = g_dir_read_name(dir))
     {
         gchar *filename;
         GncExampleAccount *gea;
-        filename = g_strdup_printf("%s/%s", dirname, direntry->d_name);
+        filename = g_build_filename(dirname, direntry, (gchar*) NULL);
 
-        if(!is_directory(filename))
+        if(!g_file_test(filename, G_FILE_TEST_IS_DIR))
         {
             gea = gnc_read_example_account(book, filename);
 
@@ -463,14 +454,16 @@ gnc_load_example_account_list(QofBook *book, const char *dirname)
             {
                 g_free(filename);
                 gnc_free_example_account_list(ret);
+                g_dir_close(dir);
                 return NULL;
             }
-            
+
             ret = g_slist_append(ret, gea);
         }
-        
+
         g_free(filename);
     }
+    g_dir_close(dir);
 
     return ret;
 }

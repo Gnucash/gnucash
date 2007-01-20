@@ -68,7 +68,7 @@ guile_main (void *closure, int argc, char **argv)
 {
     const char *location = getenv("GNC_ACCOUNT_PATH");
     GSList *list = NULL;
-    DIR *ea_dir;
+    GDir *ea_dir;
     QofBook *book;
 
     if (!location)
@@ -81,37 +81,28 @@ guile_main (void *closure, int argc, char **argv)
 
     book = qof_book_new ();
 
-    if((ea_dir = opendir(location)) == NULL)
+    if((ea_dir = g_dir_open(location, 0, NULL)) == NULL)
     {
         failure("unable to open ea directory");
     }
     else
     {
-        struct dirent *entry;
+        const gchar *entry;
 
-        while((entry = readdir(ea_dir)) != NULL)
+        while((entry = g_dir_read_name(ea_dir)) != NULL)
         {
-            struct stat file_info;
-            if(strstr(entry->d_name, da_ending) != NULL)
+            if(g_str_has_suffix(entry, da_ending))
             {
-                char *to_open = g_strdup_printf("%s/%s", location,
-                                                entry->d_name);
-                if(stat(to_open, &file_info) != 0)
+                gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
+                if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
-                    failure("unable to stat file");
-                }
-                else
-                {
-                    if(!S_ISDIR(file_info.st_mode))
-                    {
-                        test_load_file(book, to_open);
-                    }
+                    test_load_file(book, to_open);
                 }
                 g_free(to_open);
             }
         }
     }
-    closedir(ea_dir);
+    g_dir_close(ea_dir);
     
     {
         list = gnc_load_example_account_list(book, location);

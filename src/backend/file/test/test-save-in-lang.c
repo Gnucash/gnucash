@@ -134,26 +134,26 @@ test_file(const char *filename)
 int
 main(int argc, char **argv)
 {
-    DIR *adir;
+    GDir *adir;
 
     gnc_engine_init(argc, argv);
     xaccLogDisable();
     
-    if((adir = opendir(test_dir)) == NULL)
+    if((adir = g_dir_open(test_dir, 0, NULL)) == NULL)
     {
-        failure_args("opendir", __FILE__, __LINE__,
+        failure_args("g_dir_open", __FILE__, __LINE__,
                      "couldn't open dir %s", test_dir);
     }
     else
     {
-        struct dirent *next_file;
+        const gchar *next_file;
 
-        while((next_file = readdir(adir)) != NULL)
+        while((next_file = g_dir_read_name(adir)) != NULL)
         {
             struct stat file_info;
             char* filename;
 
-            filename = g_strdup_printf("%s/%s", test_dir, next_file->d_name);
+            filename = g_strdup_printf("%s/%s", test_dir, next_file);
             
             if(stat(filename, &file_info) != 0)
             {
@@ -187,6 +187,7 @@ main(int argc, char **argv)
 
             g_free(filename);
         }
+        g_dir_close(adir);
     }
     
     print_test_results();

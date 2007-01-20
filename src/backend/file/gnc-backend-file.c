@@ -642,23 +642,18 @@ gnc_file_be_write_to_file(FileBackend *fbe,
 /* ================================================================= */
 
 static int
-gnc_file_be_select_files (const struct dirent *d)
+gnc_file_be_select_files (const gchar *d)
 {
-    int len = strlen(d->d_name) - 4;
-
-    if (len <= 0)
-        return(0);
-  
-    return((strcmp(d->d_name + len, ".LNK") == 0) ||
-           (strcmp(d->d_name + len, ".xac") == 0) ||
-           (strcmp(d->d_name + len, ".log") == 0));
+    return (g_str_has_suffix(d, ".LNK") ||
+            g_str_has_suffix(d, ".xac") ||
+            g_str_has_suffix(d, ".log"));
 }
 
 static void
 gnc_file_be_remove_old_files(FileBackend *be)
 {
-    struct dirent *dent;
-    DIR *dir;
+    const gchar *dent;
+    GDir *dir;
     struct stat lockstatbuf, statbuf;
     int pathlen;
     time_t now;
@@ -684,20 +679,20 @@ gnc_file_be_remove_old_files(FileBackend *be)
      * directory and then one pass over the 'matching' files. --
      * warlord@MIT.EDU 2002-05-06
      */
-    
-    dir = opendir (be->dirname);
+
+    dir = g_dir_open (be->dirname, 0, NULL);
     if (!dir)
         return;
 
     now = time(NULL);
-    while((dent = readdir(dir)) != NULL) {
+    while((dent = g_dir_read_name(dir)) != NULL) {
         char *name;
         int len;
 
         if (gnc_file_be_select_files (dent) == 0)
              continue;
 
-        name = g_build_filename(be->dirname, dent->d_name, (char*)NULL);
+        name = g_build_filename(be->dirname, dent, (gchar*)NULL);
         len = strlen(name) - 4;
 
         /* Is this file associated with the current data file */
@@ -743,7 +738,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
         }
         g_free(name);
     }
-    closedir (dir);
+    g_dir_close (dir);
 }
 
 static void
