@@ -34,7 +34,7 @@ TODO
 !   - [x] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
-  - [ ] after updating/merging new instances, enforce state (+variable) consistency.
+! - [ ] after updating/merging new instances, enforce state (+variable) consistency.
 
 - unit testing
   - [ ] model updating in the face of change
@@ -67,11 +67,15 @@ TODO
     
     (gnucash:17610): Gtk-CRITICAL **: gtk_tree_store_clear: assertion `GTK_IS_TREE_STORE (tree_store)' failed ]]]
 
+  - [ ] <http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html>
+    - [ ] sx-from-trans: "unknown get.type [3]"
+
   - [x] Scheduled Transactions on 31st/last put in following month - <http://bugzilla.gnome.org/show_bug.cgi?id=104844>
 
+
 - sx list page
-  - [ ] use gnc-tree-view
-  - [ ] save/restore state
+! - [ ] use gnc-tree-view
+! - [ ] save/restore state
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
@@ -85,7 +89,7 @@ TODO
   - [ ] clean up, reformat
 
 - gnc_dense_cal
-  - [ ] font handling: gdk -> pango
+! - [ ] font handling: gdk -> pango
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [?] better transient/floating window
   - [/] (re-format file)
@@ -102,7 +106,7 @@ TODO
   - [ ] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-  - [ ] XML migration, handling
+! - [ ] XML migration, handling
 
 - since-last-run
 ! - [x] rewrite adapter (re-)population logic
@@ -125,11 +129,8 @@ TODO
         using txn search.
 
 - destroy/cleanup
-  - notes
-    - dispose: should no longer hold references to other objects; callable
-      multiple times; chain up at end
-    - finalize: complete destruction; just before free; only called once;
-      chain up at end.
+  - dispose: break references; callable multiple times
+  - finalize: complete destruction; just before free; only called once
 
 Pedantic Todo
 ----------------------
@@ -307,7 +308,6 @@ Licensing
 ---------
 
 In new files (and old files related to this code that I hold copyright on), I've removed the "or any later version" clause.  I have problems licensing under a license that I haven't read, or that can change in ways I disagree with.  At some point I'll make this change for all source files I hold copyright on, and I intend to not use the clause on sources I (re)write in the future.
-
 
 Testing
 -------
