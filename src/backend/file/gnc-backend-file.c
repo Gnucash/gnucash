@@ -347,7 +347,7 @@ copy_file(const char *orig, const char *bkup)
     {
         return FALSE;
     }
-    bkup_fd = creat(bkup, 0600);
+    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL, 0600);
     if(bkup_fd == -1)
     {
         close(orig_fd);
