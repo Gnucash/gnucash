@@ -319,6 +319,7 @@ function inst_guile() {
 function inst_openssl() {
     setup OpenSSL
     _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
+    add_to_env $_OPENSSL_UDIR/bin PATH
     # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
     if test -f $_OPENSSL_UDIR/unins000.exe ; then
 	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
@@ -632,10 +633,6 @@ function inst_gwenhywfar() {
 	echo "Gwenhywfar already installed. Skipping."
     else
 	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
-	# Compiling gwenhywfar needs the openssl DLLs somewhere
-	# outside of WINDOWS_DIR:
-	_WIN_UDIR=`unix_path ${WINDIR}`
-	cp ${_WIN_UDIR}/system32/libssl32.dll ${_WIN_UDIR}/system32/libeay32.dll  ${_OPENSSL_UDIR}/lib || die "OpenSSL is not installed correctly."
 	qpushd $TMP_UDIR/gwenhywfar-*
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
