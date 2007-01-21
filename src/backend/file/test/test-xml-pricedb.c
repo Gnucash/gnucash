@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -116,7 +116,7 @@ test_db (int i, GNCPriceDB *db)
     }
   }
 
-  unlink (filename1);
+  g_unlink (filename1);
   g_free (filename1);
   xmlFreeNode (test_node);
 }

@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <libguile.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -90,7 +91,7 @@ gncReadFile (const char * file, char ** data)
   if (!filename) return 0;
 
   /* Open file: */
-  fd = open( filename, O_RDONLY );
+  fd = g_open( filename, O_RDONLY );
 
   g_free(filename); filename = NULL;
 

@@ -25,6 +25,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_SYS_WAIT_H
@@ -532,7 +533,7 @@ on_aqhbci_button (GtkButton *button,
 
   if (wizard_exists) {
     /* Really check whether the file exists */
-    int fd = open( wizard_path, O_RDONLY );
+    int fd = g_open( wizard_path, O_RDONLY );
     if ( fd == -1)
       wizard_exists = FALSE;
     else

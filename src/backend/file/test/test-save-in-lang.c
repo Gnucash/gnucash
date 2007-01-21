@@ -1,5 +1,6 @@
 #include "config.h"
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -153,9 +154,9 @@ main(int argc, char **argv)
             struct stat file_info;
             char* filename;
 
-            filename = g_strdup_printf("%s/%s", test_dir, next_file);
-            
-            if(stat(filename, &file_info) != 0)
+            filename = g_build_filename(test_dir, next_file, (gchar*) NULL);
+
+            if(g_stat(filename, &file_info) != 0)
             {
                 failure_args("stat", __FILE__, __LINE__,
                              "couldn't stat file %s: %s", filename,

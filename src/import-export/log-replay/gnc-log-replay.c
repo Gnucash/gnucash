@@ -27,7 +27,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 #include <sys/time.h>
 #include <libguile.h>
@@ -542,7 +542,7 @@ void gnc_file_log_replay (void)
 			 selected_filename);
       } else {
 	DEBUG("Opening selected file");
-	log_file = fopen(selected_filename, "r");
+	log_file = g_fopen(selected_filename, "r");
 	if(!log_file || ferror(log_file)!=0) {
 	  int err = errno;
 	  perror("File open failed");

@@ -27,7 +27,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 #include <sys/time.h>
 #include <fcntl.h>
@@ -169,7 +169,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
     DEBUG("Filename found: %s",selected_filename);
 
     DEBUG("Opening selected file");
-    dtaus_fd = open(selected_filename, O_RDONLY);
+    dtaus_fd = g_open(selected_filename, O_RDONLY);
     if (dtaus_fd == -1) {
       DEBUG("Could not open file %s", selected_filename);
       return;

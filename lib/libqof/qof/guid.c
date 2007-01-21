@@ -31,8 +31,8 @@
 #include <ctype.h>
 #include <dirent.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #ifdef HAVE_SYS_TIMES_H
@@ -206,7 +206,7 @@ init_from_file(const char *filename, size_t max_size)
   FILE *fp;
 
   memset(&stats, 0, sizeof(stats));
-  if (stat(filename, &stats) != 0)
+  if (g_stat(filename, &stats) != 0)
     return 0;
 
   md5_process_bytes(&stats, sizeof(stats), &guid_context);
@@ -215,7 +215,7 @@ init_from_file(const char *filename, size_t max_size)
   if (max_size <= 0)
     return total;
 
-  fp = fopen (filename, "r");
+  fp = g_fopen (filename, "r");
   if (fp == NULL)
     return total;
 
@@ -265,7 +265,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
       continue;
 
     memset(&stats, 0, sizeof(stats));
-    if (stat(filename, &stats) != 0)
+    if (g_stat(filename, &stats) != 0)
       continue;
     md5_process_bytes(&stats, sizeof(stats), &guid_context);
     total += sizeof(stats);
@@ -519,7 +519,7 @@ guid_new(GUID *guid)
   {
     FILE *fp;
 
-    fp = fopen ("/dev/urandom", "r");
+    fp = g_fopen ("/dev/urandom", "r");
     if (fp == NULL)
       return;
 

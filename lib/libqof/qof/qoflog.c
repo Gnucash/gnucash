@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #else
@@ -90,13 +91,13 @@ qof_log_init (void)
 {
    if(!fout) /* allow qof_log_set_file */
    {
-	   fout = fopen ("/tmp/qof.trace", "w");
+	   fout = g_fopen ("/tmp/qof.trace", "w");
    }
 
    if(!fout && (filename = (gchar *)g_malloc(MAX_TRACE_FILENAME))) {
       snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/qof.trace.%d", 
 	       getpid());
-      fout = fopen (filename, "w");
+      fout = g_fopen (filename, "w");
       g_free(filename);
    }
 
@@ -153,7 +154,7 @@ qof_log_init_filename (const gchar* logfilename)
 	else
 	{
 		filename = g_strdup(logfilename);
-		fout = fopen(filename, "w");
+		fout = g_fopen(filename, "w");
 	}
 	qof_log_init();
 }

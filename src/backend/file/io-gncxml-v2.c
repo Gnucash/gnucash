@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -1239,11 +1239,11 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
       use_gzip = TRUE;
 
   if (!use_gzip)
-    return fopen(filename, perms);
+    return g_fopen(filename, perms);
 
 #ifdef G_OS_WIN32
   PWARN("Compression not implemented on Windows. Opening uncompressed file.");
-  return fopen(filename, perms);
+  return g_fopen(filename, perms);
 
   /* Potential implementation: Windows doesn't have pipe(); use
      the g_spawn glib wrappers. */
@@ -1264,7 +1264,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 				   &child_stdin, NULL, NULL,
 				   &error) ) {
       PWARN("G_spawn call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
     /* FIXME: Now need to set up the child process to write to the
        file. */
@@ -1286,14 +1286,14 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 
     if (pipe(filedes) < 0) {
       PWARN("Pipe call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
 
     pid = fork();
     switch (pid) {
     case -1:
       PWARN("Fork call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
 
     case 0: /* child */ {
       char buffer[BUFLEN];
@@ -1405,7 +1405,7 @@ gnc_book_write_accounts_to_xml_file_v2(
 {
     FILE *out;
 
-    out = fopen(filename, "w");
+    out = g_fopen(filename, "w");
     if (out == NULL)
     {
         return FALSE;
@@ -1428,7 +1428,7 @@ static gboolean
 is_gzipped_file(const gchar *name)
 {
     unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
+    int fd = g_open(name, O_RDONLY);
 
     if (fd == -1) {
         return FALSE;

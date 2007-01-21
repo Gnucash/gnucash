@@ -41,6 +41,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <libguile.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -1312,7 +1313,7 @@ gnc_get_export_filename (SCM choice)
         if (!filepath)
                 return NULL;
 
-        rc = stat (filepath, &statbuf);
+        rc = g_stat (filepath, &statbuf);
 
         /* Check for an error that isn't a non-existant file. */
         if (rc != 0 && errno != ENOENT)

@@ -28,7 +28,6 @@
 
 #include "config.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -36,6 +35,7 @@
 #include <string.h>
 #include <glib.h>
 #include <glib-object.h>
+#include <glib/gstdio.h>
 
 #include "cashobjects.h"
 #include "Group.h"
@@ -63,9 +63,9 @@ remove_locks(const char *filename)
     
     {
         to_remove = g_strdup_printf("%s.LCK", filename);
-        if(stat(to_remove, &buf) != -1)
+        if(g_stat(to_remove, &buf) != -1)
         {
-            unlink(to_remove);
+            g_unlink(to_remove);
         }
         g_free(to_remove);
     }

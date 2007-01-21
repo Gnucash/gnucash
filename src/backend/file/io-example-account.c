@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "sixtp.h"
 
 #include "gnc-engine.h"
@@ -372,7 +373,7 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 {
     FILE *out;
 
-    out = fopen(filename, "w");
+    out = g_fopen(filename, "w");
     if (out == NULL)
     {
         return FALSE;

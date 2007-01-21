@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -473,7 +473,7 @@ test_transaction(void)
             /* sixtp_destroy(parser); */
         }
 
-        unlink(filename1);
+        g_unlink(filename1);
         g_free(filename1);
         really_get_rid_of_transaction(ran_trn);
         xmlFreeNode(test_node);

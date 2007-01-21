@@ -28,10 +28,10 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #include "gnc-engine.h"
 #include "sixtp-dom-parsers.h"
@@ -58,8 +58,8 @@ files_compare(const gchar* f1, const gchar* f2)
     int fd1, fd2;
     int amount_read1, amount_read2;
 
-    fd1 = open(f1, O_RDONLY);
-    fd2 = open(f2, O_RDONLY);
+    fd1 = g_open(f1, O_RDONLY);
+    fd2 = g_open(f2, O_RDONLY);
 
     do
     {
@@ -372,7 +372,7 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
     {
         struct stat file_info;
         const char *to_open = argv[count];
-        if(stat(to_open, &file_info) != 0)
+        if(g_stat(to_open, &file_info) != 0)
         {
             printf("cannot stat %s.\n", to_open);
             failure("unable to stat file");

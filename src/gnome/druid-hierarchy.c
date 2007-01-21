@@ -25,6 +25,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -202,7 +203,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
     i = strlen(locale);
     ret = g_build_filename(top_dir, locale, (char *)NULL);
 
-    while (stat(ret, &buf) != 0)
+    while (g_stat(ret, &buf) != 0)
     { 
 	i--;
 	if (i<1) 
