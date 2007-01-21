@@ -46,11 +46,11 @@ static GNCModuleInfo * gnc_module_get_info(const char * lib_path);
 static GList * 
 gnc_module_system_search_dirs(void) 
 {
-  char  * spath   = getenv("GNC_MODULE_PATH");
+  const char *spath = g_getenv("GNC_MODULE_PATH");
   GList * list    = NULL;
   GString * token = g_string_new(NULL);
   int   escchar   = 0;
-  char  * cpos;
+  const char *cpos;
 
   if(!spath) 
   {
@@ -127,13 +127,9 @@ gnc_module_system_setup_load_path(void)
 
   if(dirs)
   {
-    char *envt = getenv("LD_LIBRARY_PATH");
+    char *envt = g_strdup(g_getenv("LD_LIBRARY_PATH"));
     
-    if(envt)
-    {
-      envt = g_strdup(envt);
-    }
-    else
+    if(!envt)
     {
       envt = g_strdup("");
     }
@@ -147,7 +143,7 @@ gnc_module_system_setup_load_path(void)
     }
     g_list_free(dirs);
     
-    if (!g_setenv("LD_LIBRARY_PATH", envt, 1))
+    if (!g_setenv("LD_LIBRARY_PATH", envt, TRUE))
     {
       g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
     }

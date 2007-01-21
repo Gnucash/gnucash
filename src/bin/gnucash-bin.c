@@ -96,14 +96,14 @@ static char *help_path = GNC_HELPDIR;
 static void
 envt_override()
 {
-    char *path;
+    const char *path;
     
-    if ((path = getenv("GNC_CONFIG_PATH")))
-        config_path = path;
-    if ((path = getenv("GNC_SHARE_PATH")))
-        share_path = path;
-    if ((path = getenv("GNC_DOC_PATH")))
-        help_path = path;
+    if ((path = g_getenv("GNC_CONFIG_PATH")))
+        config_path = g_strdup(path);
+    if ((path = g_getenv("GNC_SHARE_PATH")))
+        share_path = g_strdup(path);
+    if ((path = g_getenv("GNC_DOC_PATH")))
+        help_path = g_strdup(path);
 }
 
 static gboolean

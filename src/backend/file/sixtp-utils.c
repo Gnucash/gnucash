@@ -388,16 +388,17 @@ gnc_timegm (struct tm *tm)
   time_t result;
   char *old_tz;
 
-  old_tz = getenv ("TZ");
+  old_tz = g_strdup(g_getenv ("TZ"));
   /* FIXME: there's no way to report this error to the caller. */
-  if (!g_setenv("TZ", "UTC", 1))
+  if (!g_setenv("TZ", "UTC", TRUE))
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if (!g_setenv("TZ", old_tz, 1))
+    if (!g_setenv("TZ", old_tz, TRUE))
       PERR ("couldn't switch the TZ back.");
+    g_free(old_tz);
   }
   else
   {

@@ -13,7 +13,7 @@
 int
 main(int argc, char **argv)
 {
-    const char *directory = getenv("GNC_TEST_FILES");
+    const char *directory = g_getenv("GNC_TEST_FILES");
     char *filename;
 
     if (!directory)

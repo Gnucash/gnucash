@@ -93,8 +93,8 @@ test_file(const char *filename)
             return g_strdup_printf("qof_session_load errorid %d", err);
         }
 
-        if (!g_setenv("LANG", possible_envs[i], 1))
-          return g_strdup_printf("setenv for LANG");
+        if (!g_setenv("LANG", possible_envs[i], TRUE))
+          return g_strdup("setenv for LANG");
 
         new_session = qof_session_new();
         
@@ -165,7 +165,7 @@ main(int argc, char **argv)
                 break;
             }
 
-            if (!g_setenv("LANG", base_env, 1))
+            if (!g_setenv("LANG", base_env, TRUE))
             {
               failure_args("setenv", __FILE__, __LINE__,
                            "setenv of LANG failed");

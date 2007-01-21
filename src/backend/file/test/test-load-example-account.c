@@ -66,7 +66,7 @@ test_load_file(QofBook *book, const char *filename)
 static void
 guile_main (void *closure, int argc, char **argv)
 {
-    const char *location = getenv("GNC_ACCOUNT_PATH");
+    const char *location = g_getenv("GNC_ACCOUNT_PATH");
     GSList *list = NULL;
     GDir *ea_dir;
     QofBook *book;

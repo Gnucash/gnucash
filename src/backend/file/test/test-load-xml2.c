@@ -85,7 +85,7 @@ test_load_file(const char *filename)
 
     remove_locks(filename);
 
-    ignore_lock = (safe_strcmp(getenv("SRCDIR"), ".") != 0);
+    ignore_lock = (safe_strcmp(g_getenv("SRCDIR"), ".") != 0);
     qof_session_begin(session, filename, ignore_lock, FALSE);
 
     qof_session_load(session, NULL);
@@ -106,7 +106,7 @@ test_load_file(const char *filename)
 int
 main (int argc, char ** argv)
 {
-    const char *location = getenv("GNC_TEST_FILES");
+    const char *location = g_getenv("GNC_TEST_FILES");
     GDir *xml2_dir;
 
     g_type_init();
