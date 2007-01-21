@@ -342,7 +342,7 @@ copy_file(const char *orig, const char *bkup)
     ssize_t count_write;
     ssize_t count_read;
 
-    orig_fd = g_open(orig, O_RDONLY);
+    orig_fd = g_open(orig, O_RDONLY, 0);
     if(orig_fd == -1)
     {
         return FALSE;

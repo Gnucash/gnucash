@@ -169,7 +169,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
     DEBUG("Filename found: %s",selected_filename);
 
     DEBUG("Opening selected file");
-    dtaus_fd = g_open(selected_filename, O_RDONLY);
+    dtaus_fd = g_open(selected_filename, O_RDONLY, 0);
     if (dtaus_fd == -1) {
       DEBUG("Could not open file %s", selected_filename);
       return;

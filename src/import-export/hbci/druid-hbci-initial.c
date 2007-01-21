@@ -533,7 +533,7 @@ on_aqhbci_button (GtkButton *button,
 
   if (wizard_exists) {
     /* Really check whether the file exists */
-    int fd = g_open( wizard_path, O_RDONLY );
+    int fd = g_open( wizard_path, O_RDONLY, 0 );
     if ( fd == -1)
       wizard_exists = FALSE;
     else

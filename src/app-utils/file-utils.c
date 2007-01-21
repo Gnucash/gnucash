@@ -91,7 +91,7 @@ gncReadFile (const char * file, char ** data)
   if (!filename) return 0;
 
   /* Open file: */
-  fd = g_open( filename, O_RDONLY );
+  fd = g_open( filename, O_RDONLY, 0 );
 
   g_free(filename); filename = NULL;
 

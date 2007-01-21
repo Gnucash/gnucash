@@ -58,8 +58,8 @@ files_compare(const gchar* f1, const gchar* f2)
     int fd1, fd2;
     int amount_read1, amount_read2;
 
-    fd1 = g_open(f1, O_RDONLY);
-    fd2 = g_open(f2, O_RDONLY);
+    fd1 = g_open(f1, O_RDONLY, 0);
+    fd2 = g_open(f2, O_RDONLY, 0);
 
     do
     {

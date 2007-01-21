@@ -1428,7 +1428,7 @@ static gboolean
 is_gzipped_file(const gchar *name)
 {
     unsigned char buf[2];
-    int fd = g_open(name, O_RDONLY);
+    int fd = g_open(name, O_RDONLY, 0);
 
     if (fd == -1) {
         return FALSE;
