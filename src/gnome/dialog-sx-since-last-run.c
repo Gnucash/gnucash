@@ -922,7 +922,6 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances)
      dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
      // gobject-2.10: g_object_ref_sink(G_OBJECT(dialog->editing_model));
      g_object_ref(G_OBJECT(dialog->editing_model));
-     gtk_object_sink(GTK_OBJECT(dialog->editing_model));
      
      {
           GtkPaned *paned;
