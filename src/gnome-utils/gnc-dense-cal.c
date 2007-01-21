@@ -147,16 +147,17 @@ static GtkWidgetClass *parent_class = NULL;
  * locale.*/
 static const gchar *month_name(int mon) 
 {
-        static gchar buf[MONTH_NAME_BUFSIZE];
-        GDate *date;
+     static gchar buf[MONTH_NAME_BUFSIZE];
+     GDate date;
 
-        memset(buf, 0, MONTH_NAME_BUFSIZE);
-        date = g_date_new();
-        g_date_set_month(date, mon);
-        g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", date);
-        g_date_free(date);
-
-        return buf;
+     memset(buf, 0, MONTH_NAME_BUFSIZE);
+     g_date_clear(&date, 1);
+     g_date_set_time_t(&date, time(NULL));
+     // g_date API is 1..12 (not 0..11)
+     g_date_set_month(&date, mon+1);
+     g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", &date);
+     
+     return buf;
 }
 /* Takes the number of days since Sunday, in the range 0 to 6. Returns
  * the abbreviated weekday name according to the current locale. */
@@ -303,8 +304,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
           {
                gint w, h;
                gdk_string_extents(dcal->monthLabelFont, month_name(i),
-                                   &lbearing, &rbearing, &width,
-                                   &ascent, &descent);
+                                  &lbearing, &rbearing, &width,
+                                  &ascent, &descent);
                w = rbearing - lbearing + 1;
                h = ascent + descent;
                maxLBearing = MAX(maxLBearing, ABS(lbearing));
