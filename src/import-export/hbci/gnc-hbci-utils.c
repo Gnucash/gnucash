@@ -315,7 +315,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("Unfortunately this HBCI job is not supported "
+       _("Unfortunately this Online Banking job is not supported "
 	 "by your bank or for your account. Aborting."));
     return FALSE;
 #endif
@@ -323,7 +323,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     if (inter) GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("The server of your bank refused the HBCI connection. "
+       _("The server of your bank refused the Online Banking connection. "
 	 "Please try again later. Aborting."));
     return FALSE;
       

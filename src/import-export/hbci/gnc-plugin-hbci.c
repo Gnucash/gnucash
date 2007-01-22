@@ -92,17 +92,17 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "OnlineActionsAction", NULL, N_("_Online Actions"), NULL, NULL, NULL },
 
   /* Menu Items */
-  { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
-    N_("Initial setup of HBCI/AqBanking access"),
+  { "HbciSetupAction", NULL, N_("_Online Banking Setup..."), NULL,
+    N_("Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
   { "HbciGetBalanceAction", NULL, N_("Get _Balance"), NULL,
-    N_("Get the account balance online through HBCI/AqBanking"),
+    N_("Get the account balance online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_balance) },
   { "HbciGetTransAction", NULL, N_("Get _Transactions..."), NULL,
-    N_("Get the transactions online through HBCI/AqBanking"),
+    N_("Get the transactions online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
   { "HbciIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
-    N_("Issue a new transaction online through HBCI"),
+    N_("Issue a new transaction online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
      ((AQBANKING_VERSION_MAJOR == 1) && \
@@ -111,11 +111,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
   { "HbciIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
-    N_("Issue a new bank-internal transaction online through HBCI/AqBanking"),
+    N_("Issue a new bank-internal transaction online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_inttransaction) },
 #endif
   { "HbciIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
-    N_("Issue a new direct debit note online through HBCI/AqBanking"),
+    N_("Issue a new direct debit note online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 
   /* File -> Import menu item */
@@ -132,10 +132,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
     N_("Import a CSV file into GnuCash"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_import) },
   { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
-    N_("Import a DTAUS file into GnuCash and send the transfers online through HBCI/AqBanking"),
+    N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_importsend) },
   { "CsvImportSendAction", GTK_STOCK_CONVERT, N_("Import CSV and s_end..."), NULL,
-    N_("Import a CSV file into GnuCash and send the transfers online through HBCI/AqBanking"),
+    N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_importsend) },
 
 };

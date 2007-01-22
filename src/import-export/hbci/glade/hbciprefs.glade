@@ -29,7 +29,7 @@
       <child>
 	<widget class="GtkLabel" id="label55">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">&lt;b&gt;HBCI&lt;/b&gt;</property>
+	  <property name="label" translatable="yes">&lt;b&gt;Online Banking&lt;/b&gt;</property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">True</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -53,7 +53,7 @@
       <child>
 	<widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/remember_pin">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">Remember the PIN for HBCI in memory during a session.</property>
+	  <property name="tooltip" translatable="yes">Remember the Online Banking PIN in memory during a session.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">Remember _PIN</property>
 	  <property name="use_underline">True</property>
@@ -77,7 +77,7 @@
       <child>
 	<widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/verbose_debug">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">Activate verbose debug messages for HBCI Online Banking.</property>
+	  <property name="tooltip" translatable="yes">Activate verbose debug messages for Online Banking.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">_Verbose debug messages</property>
 	  <property name="use_underline">True</property>

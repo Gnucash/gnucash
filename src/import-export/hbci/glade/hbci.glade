@@ -6,7 +6,7 @@
 
 <widget class="GtkWindow" id="HBCI Init Druid">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Initial HBCI Setup</property>
+  <property name="title" translatable="yes">Initial Online Banking Setup</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -31,21 +31,21 @@
 	<widget class="GnomeDruidPageEdge" id="druidpagestart1">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Initial HBCI Setup</property>
-	  <property name="text" translatable="yes">This druid helps you setting up your HBCI connection with your bank.
+	  <property name="title" translatable="yes">Initial Online Banking Setup</property>
+	  <property name="text" translatable="yes">This druid helps you setting up your Online Banking connection with your bank.
 
-You first need to apply for HBCI access at your bank. If your bank  decides to grant you HBCI access, the bank will send you a letter,  containing 
+You first need to apply for Online Banking access at your bank. If your bank  decides to grant you electronic access, they will send you a letter containing 
 
 * The bank code of your bank
 * The user ID that identifies you to your bank
-* The Internet address of your bank's HBCI server
-* Information about the cryptographic public key of your bank (&quot;Ini-Letter&quot;).
+* The Internet address of your bank's Online Banking server
+* For HBCI Online Banking, information about the cryptographic public key of your bank (&quot;Ini-Letter&quot;).
 
 This information will be needed in the following. Press &quot;Forward&quot; now.
 
-NOTE: NO WARRANTIES FOR ANYTHING. Some banks are running a poorly implemented HBCI. You should not rely on time-critical transfers through HBCI, since sometimes your bank does not give you correct feedback when a transfer has been rejected.
+NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.
 
-Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</property>
+Press &quot;Cancel&quot; if you do not wish to setup any Online Banking connection now.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#9999bfbf9999</property>
@@ -57,7 +57,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
       <child>
 	<widget class="GnomeDruidPageStandard" id="configfile_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Start AqHBCI Wizard</property>
+	  <property name="title" translatable="yes">Start Online Banking Wizard</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#9999bfbf9999</property>
 	  <property name="logo_background">#ffffffffffff</property>
@@ -85,7 +85,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 		      <child>
 			<widget class="GtkLabel" id="label8877441">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">The Setup of your HBCI connection is handled by the external program &quot;AqHBCI Setup Wizard&quot;. Please press the button below to start this program.	</property>
+			  <property name="label" translatable="yes">The Setup of your Online Banking connection is handled by the external program &quot;AqBanking Setup Wizard&quot;. Please press the button below to start this program.	</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -114,7 +114,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 			    <widget class="GtkButton" id="aqhbci_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Start AqHBCI Wizard</property>
+			      <property name="label" translatable="yes">Start AqBanking Wizard</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -142,7 +142,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 		  <child>
 		    <widget class="GtkLabel" id="label1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Start AqHBCI Setup Wizard</property>
+		      <property name="label" translatable="yes">Start AqBanking Setup Wizard</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -172,7 +172,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
       <child>
 	<widget class="GnomeDruidPageStandard" id="account_match_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Match HBCI accounts with GnuCash accounts</property>
+	  <property name="title" translatable="yes">Match Online Banking accounts with GnuCash accounts</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#9999bfbf9999</property>
 	  <property name="logo_background">#ffffffffffff</property>
@@ -220,7 +220,7 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 		  <child>
 		    <widget class="GtkLabel" id="label828">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Click on the line of a HBCI account name if you want to match it to a GnuCash account. Click &quot;Forward&quot; when all desired accounts are matching.</property>
+		      <property name="label" translatable="yes">Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click &quot;Forward&quot; when all desired accounts are matching.</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -253,10 +253,10 @@ Press &quot;Cancel&quot; if you do not wish to setup any HBCI connection now.</p
 	<widget class="GnomeDruidPageEdge" id="initial_finish_page">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
-	  <property name="title" translatable="yes">HBCI Setup Finished</property>
-	  <property name="text" translatable="yes">Now the setup for all HBCI accounts that are matching to a GnuCash account is finished. You can now invoke HBCI actions on those accounts.
+	  <property name="title" translatable="yes">Online Banking Setup Finished</property>
+	  <property name="text" translatable="yes">The setup for matching Online Banking accounts to GnuCash accounts is now finished.  You can now invoke Online Banking actions on those accounts.
 
-If you want to add another HBCI bank, user, or account, you can start this druid again anytime.
+If you want to add another bank, user, or account, you can start this druid again anytime.
 
 Press &quot;Apply&quot; now.</property>
 	  <property name="title_color">#ffffffffffff</property>
@@ -1347,7 +1347,7 @@ Press &quot;Apply&quot; now.</property>
 <widget class="GtkDialog" id="HBCI_connection_dialog">
   <property name="border_width">6</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">HBCI Connection Window</property>
+  <property name="title" translatable="yes">Online Banking Connection Window</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -2081,7 +2081,7 @@ Press &quot;Apply&quot; now.</property>
 
 <widget class="GtkDialog" id="HBCI_version_dialog">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">HBCI Version</property>
+  <property name="title" translatable="yes">Online Banking Version</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -2148,7 +2148,7 @@ Press &quot;Apply&quot; now.</property>
 	  <child>
 	    <widget class="GtkLabel" id="label8877436">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Choose a HBCI Version to use with the selected bank:</property>
+	      <property name="label" translatable="yes">Choose an Online Banking Version to use with the selected bank:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_CENTER</property>

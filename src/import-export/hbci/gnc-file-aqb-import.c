@@ -333,7 +333,7 @@ accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
 	 account */
       data->hbci_account = gnc_hbci_get_hbci_acc (data->ab, gnc_acc);
       if (data->hbci_account == NULL) {
-	gnc_error_dialog (NULL, _("No HBCI account found for this gnucash account. These transactions will not be executed by HBCI."));
+	gnc_error_dialog (NULL, _("No Online Banking account found for this gnucash account. These transactions will not be executed by Online Banking."));
       }
     }
     else {
@@ -385,7 +385,7 @@ translist_cb (const AB_TRANSACTION *element, void *user_data) {
 	     "of the job. It is not possible to execute this job. \n"
 	     "\n"
 	     "Most probable the bank does not support your chosen "
-	     "job or your HBCI account does not have the permission "
+	     "job or your Online Banking account does not have the permission "
 	     "to execute this job. More error messages might be "
 	     "visible on your console log.\n"
 	     "\n"
@@ -417,7 +417,7 @@ gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api,
     /* AB_BANKING_executeOutbox failed. */
     gnc_error_dialog (GNCInteractor_dialog (interactor),
 		      "%s",
-		      _("Executing the HBCI outbox failed. Please check the log window."));
+		      _("Executing the Online Banking outbox failed. Please check the log window."));
     GNCInteractor_show_nodelete(interactor);
 
     g_list_foreach (job_list, multijob_cb, GNCInteractor_dialog (interactor));

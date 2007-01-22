@@ -365,10 +365,13 @@ gnc_hbci_dialog_new (GtkWidget *parent,
       break;
     case SINGLE_DEBITNOTE:
       gtk_label_set_text (GTK_LABEL (heading_label), 
-			  /* Translators: Strings from this file are really only
-			   * needed inside Germany (HBCI is not supported anywhere
-			   * else). You may safely ignore strings from the
-			   * import-export/hbci subdirectory in other countries. */
+      /* Translators: Strings from this file are needed only in
+       * countries that have one of aqbanking's Online Banking
+       * techniques available. This is 'OFX DirectConnect'
+       * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+       * (Switzerland). If none of these techniques are available
+       * in your country, you may safely ignore strings from the
+       * import-export/hbci subdirectory. */
 			  _("Enter an Online Direct Debit Note"));
 
       gtk_label_set_text (GTK_LABEL (recp_name_heading),
