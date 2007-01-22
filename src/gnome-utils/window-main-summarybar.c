@@ -313,13 +313,13 @@ get_total_mode_label(const char *mnemonic, int total_mode)
   switch(total_mode)
   {
   case TOTAL_CURR_TOTAL:
-    label_str = g_strdup_printf( _("%s, total:"), mnemonic );
+    label_str = g_strdup_printf( _("%s, Total:"), mnemonic );
     break;
   case TOTAL_NON_CURR_TOTAL:
-    label_str = g_strdup_printf( _("%s, non currency commodities total:"), mnemonic );
+    label_str = g_strdup_printf( _("%s, Non Currency Commodities Total:"), mnemonic );
     break;
   case TOTAL_GRAND_TOTAL:
-    label_str = g_strdup_printf( _("%s, grand total:"), mnemonic );
+    label_str = g_strdup_printf( _("%s, Grand Total:"), mnemonic );
     break;
   case TOTAL_SINGLE:
   default:
