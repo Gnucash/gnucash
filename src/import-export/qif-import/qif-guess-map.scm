@@ -5,6 +5,8 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-13))
+
 (define GNC-BANK-TYPE 0)
 (define GNC-CASH-TYPE 1)
 (define GNC-ASSET-TYPE 2)
@@ -315,9 +317,8 @@
    ;; this happens if you have the same tree but a different 
    ;; top-level structure. (i.e. expenses:tax vs. QIF tax)
    (and (> (string-length qif-acct-name) 0)
-        (string-match (string-downcase qif-acct-name) 
-                      (string-downcase (cadr gnc-acct))))))
-
+        (string-contains (string-downcase (cadr gnc-acct))
+			 (string-downcase qif-acct-name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-new-acct
