@@ -39,6 +39,10 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 
+/* for gnc_gconf_ */
+#include "gnc-gconf-utils.h"
+#include "hbci-interaction.h"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnucash-hbci";
 
@@ -543,38 +547,50 @@ static void
 gnc_plugin_hbci_cmd_dtaus_importsend (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("dtaus", "default", TRUE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_DTAUS, NULL);
+  gnc_file_aqbanking_import ("dtaus", format ? format : "default", TRUE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_csv_importsend (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("csv", "default", TRUE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_CSV, NULL);
+  gnc_file_aqbanking_import ("csv", format ? format : "default", TRUE);
+  g_free (format);
 }
 
 static void
 gnc_plugin_hbci_cmd_mt940_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("swift", "swift-mt940", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_SWIFT940, NULL);
+  gnc_file_aqbanking_import ("swift", format ? format : "swift-mt940", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_mt942_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("swift", "swift-mt942", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_SWIFT942, NULL);
+  gnc_file_aqbanking_import ("swift", format ? format : "swift-mt942", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_dtaus_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("dtaus", "default", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_DTAUS, NULL);
+  gnc_file_aqbanking_import ("dtaus", format ? format : "default", FALSE);
+  g_free (format);
 }
 static void
 gnc_plugin_hbci_cmd_csv_import (GtkAction *action,
 				  GncMainWindowActionData *data)
 {
-  gnc_file_aqbanking_import ("csv", "default", FALSE);
+  char *format = gnc_gconf_get_string(GCONF_SECTION, KEY_FORMAT_CSV, NULL);
+  gnc_file_aqbanking_import ("csv", format ? format : "default", FALSE);
+  g_free (format);
 }
 /************************************************************
  *                    Plugin Bootstrapping                   *

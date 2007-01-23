@@ -34,9 +34,11 @@
  * @param aqbanking_importername The aqbanking importer module that
  * should be used. Possible values: "dtaus", "csv", "swift".
  *
- * @param aqbanking_profilename In aqbanking, each importer has one or
- * more "profiles" that define the actual data fields that should be
- * used. Possible values for swift: "swift-mt940" or "swift-mt942",
+ * @param aqbanking_formatname In aqbanking, each importer has one or
+ * more possible data formats available that define the actual data
+ * fields that should be used. In aqbanking, such a different format
+ * is called a "profile". 
+ * Possible values for swift: "swift-mt940" or "swift-mt942", 
  * but for all others: "default", or more precisely: Look into
  * $datadir/aqbanking/imexporters and look into the "name" field of
  * the foo.conf files.
@@ -46,6 +48,6 @@
  * FALSE, simply import the transactions and that's it.
  */
 void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
-				const gchar *aqbanking_profilename,
+				const gchar *aqbanking_formatname,
 				gboolean execute_transactions);
 #endif

@@ -75,5 +75,69 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_dtaus</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_dtaus</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>DTAUS import data format</short>
+        <long>
+	  This setting specifies the data format when importing DTAUS
+	  files.  The AqBanking library offers various import formats
+	  (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_csv</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_csv</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>CSV import data format</short>
+        <long>
+	  This setting specifies the data format when importing CSV
+	  files.  The AqBanking library offers various import formats
+	  (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_swift_mt940</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt940</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>SWIFT MT940 import data format</short>
+        <long>
+	  This setting specifies the data format when importing SWIFT
+	  MT940 files.  The AqBanking library offers various import
+	  formats (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/format_swift_mt942</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt942</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>SWIFT MT942 import data format</short>
+        <long>
+	  This setting specifies the data format when importing SWIFT
+	  MT942 files.  The AqBanking library offers various import
+	  formats (called "profiles") of which you can choose one here.
+	</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>
