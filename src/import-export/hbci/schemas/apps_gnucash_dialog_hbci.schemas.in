@@ -112,7 +112,7 @@
       <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt940</applyto>
       <owner>gnucash</owner>
       <type>string</type>
-      <default>default</default>
+      <default>swift-mt940</default>
       <locale name="C">
         <short>SWIFT MT940 import data format</short>
         <long>
@@ -128,7 +128,7 @@
       <applyto>/apps/gnucash/dialogs/import/hbci/format_swift_mt942</applyto>
       <owner>gnucash</owner>
       <type>string</type>
-      <default>default</default>
+      <default>swift-mt942</default>
       <locale name="C">
         <short>SWIFT MT942 import data format</short>
         <long>
