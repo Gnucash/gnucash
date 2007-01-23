@@ -231,23 +231,22 @@ set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb)
 static void
 set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
 {
-  GString *totalTitle;
-  GOData *titleScalar;
+  gchar *my_sub_title, *total_title;
+  GOData *title_scalar;
   GogObject *tmp;
 
-  totalTitle = g_string_sized_new(32);
-  g_string_printf(totalTitle, "%s", title);
-  if (sub_title != NULL)
-  {
-    g_string_append_printf(totalTitle, " (%s)", sub_title);
-  }
+  if (sub_title)
+    my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
+  else
+    my_sub_title = g_strdup("");
+
+  total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
 
   tmp = gog_object_add_by_name(chart, "Title", NULL);
-  titleScalar = go_data_scalar_str_new(totalTitle->str, FALSE);
-  gog_dataset_set_dim(GOG_DATASET(tmp), 0, titleScalar, NULL);
+  title_scalar = go_data_scalar_str_new(total_title, TRUE);
+  gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
 
-  // @@fixme -- record or ref the string for freeing...
-  g_string_free(totalTitle, FALSE);
+  g_free(my_sub_title);
 }
 
 static void
