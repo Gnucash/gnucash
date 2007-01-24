@@ -26,6 +26,7 @@
 
 #include <aqbanking/banking.h>
 #include <iconv.h>
+#include "gnc-hbci-utils.h"
 
 
 typedef enum {

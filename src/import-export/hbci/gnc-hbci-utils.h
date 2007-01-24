@@ -27,6 +27,19 @@
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
 #include <aqbanking/account.h>
+#include <aqbanking/version.h>
+#if AQBANKING_VERSION_MAJOR > 2
+# define AB_Value_GetValue AB_Value_GetValueAsDouble
+# define GWEN_TYPE_UINT32 uint32_t
+# define GWEN_LoggerLevelError GWEN_LoggerLevel_Error
+# define GWEN_LoggerLevelWarning  GWEN_LoggerLevel_Warning
+# define GWEN_LoggerLevelNotice  GWEN_LoggerLevel_Notice
+# define GWEN_LoggerLevelInfo  GWEN_LoggerLevel_Info
+# define GWEN_LoggerLevelDebug  GWEN_LoggerLevel_Debug
+# define AB_Banking_LogLevelVerbous GWEN_LoggerLevel_Verbous
+# define AB_Banking_LogLevelNotice GWEN_LoggerLevel_Notice
+# define AB_BANKING_LOGLEVEL GWEN_LOGGER_LEVEL
+#endif
 
 #include "gnc-ui.h"
 #include "Account.h"
