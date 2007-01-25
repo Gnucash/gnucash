@@ -39,6 +39,8 @@
 # define AB_Banking_LogLevelVerbous GWEN_LoggerLevel_Verbous
 # define AB_Banking_LogLevelNotice GWEN_LoggerLevel_Notice
 # define AB_BANKING_LOGLEVEL GWEN_LOGGER_LEVEL
+# define AB_Banking_new(arg1, arg2) AB_Banking_new(arg1, arg2, 0)
+# define AB_ERROR_FOUND GWEN_ERROR_FOUND
 #endif
 
 #include "gnc-ui.h"
