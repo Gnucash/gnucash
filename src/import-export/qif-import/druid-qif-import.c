@@ -449,6 +449,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   const char * path_to_load;
   const gchar * default_acctname = NULL;
+  int rv;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
@@ -476,7 +477,17 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     gnc_error_dialog(wind->window, _("Please select a file to load."));
     return TRUE;
   }
-  else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
+
+#ifdef G_OS_WIN32
+  {
+    wchar_t *wpath = g_utf8_to_utf16(path_to_load, -1, NULL, NULL, NULL);
+    rv = wpath ? _waccess(wpath, R_OK) : -1;
+    g_free(wpath);
+  }
+#else
+  rv = access(path_to_load, R_OK);
+#endif
+  if (rv < 0) {
     /* stay here if bad file */
     gnc_error_dialog(wind->window, 
 		     _("File not found or read permission denied. "

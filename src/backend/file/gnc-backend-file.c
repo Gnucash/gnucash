@@ -299,6 +299,7 @@ file_session_end(QofBackend *be_start)
 	    PWARN("Error on chmod(%s): %d: %s", be->lockfile,
 		  errno, strerror(errno) ? strerror(errno) : "");
 	}
+	g_free (wlock);
 #endif
 	rv = g_unlink (be->lockfile);
 	if (rv) {
