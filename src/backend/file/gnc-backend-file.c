@@ -288,7 +288,13 @@ file_session_end(QofBackend *be_start)
 #ifdef G_OS_WIN32
 	/* On windows, we need to allow write-access before
 	   g_unlink() can succeed */
-	rv = chmod (be->lockfile, S_IWRITE | S_IREAD);
+	wchar_t *wlock = g_utf8_to_utf16 (be->lockfile, -1, NULL, NULL, NULL);
+	if (wlock) {
+	    rv = _wchmod (wlock, _S_IWRITE);
+	} else {
+	    errno = EINVAL;
+	    rv = 1;
+	}
 	if (rv) {
 	    PWARN("Error on chmod(%s): %d: %s", be->lockfile,
 		  errno, strerror(errno) ? strerror(errno) : "");
