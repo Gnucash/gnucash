@@ -39,6 +39,9 @@ else
 fi
 ####
 
+# If "yes", build without optimizations (-O0) and ease debugging
+DISABLE_OPTIMIZATIONS=no
+
 MSYS_DIR=$GLOBAL_DIR\\msys
 
 WGET_DIR=$GLOBAL_DIR\\wget

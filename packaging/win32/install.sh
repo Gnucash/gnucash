@@ -59,6 +59,10 @@ function prepare() {
     TMP_UDIR=`unix_path $TMP_DIR`
     mkdir -p $TMP_UDIR
     mkdir -p $DOWNLOAD_UDIR
+
+    if [ "$DISABLE_OPTIMIZATIONS" = "yes" ]; then
+        export CFLAGS="$CFLAGS -O0"
+    fi
 }
 
 function inst_wget() {
@@ -228,7 +232,7 @@ function inst_autotools() {
         wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
         qpushd $TMP_UDIR/libtool-*
             echo "building libtool..."
-            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR
+            ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR --disable-static
             make
             make install
         qpopd
@@ -275,6 +279,7 @@ function inst_guile() {
                 touch upstream/ltdl.c.diff
             qpopd
             ./configure ${HOST_XCOMPILE} \
+                --disable-static \
 	        --disable-elisp \
 	        --disable-networking \
 	        --disable-dependency-tracking \
@@ -549,6 +554,7 @@ function inst_libgsf() {
 	qpushd $TMP_UDIR/libgsf-*
 	    ./configure ${HOST_XCOMPILE} \
 	        --prefix=$_LIBGSF_UDIR \
+                --disable-static \
 	        --without-python \
 	        CPPFLAGS="${GNOME_CPPFLAGS}" \
 	        LDFLAGS="${GNOME_LDFLAGS}"
