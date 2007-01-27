@@ -38,6 +38,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <glade/glade-xml.h>
 #include "gnc-exp-parser.h"
 #include "gnc-engine.h"

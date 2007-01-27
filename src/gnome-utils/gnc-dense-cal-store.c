@@ -23,6 +23,7 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
+#include "glib-compat.h"
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-dense-cal-store.h"
