@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include "gfileutils-2.8.h"
 
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
@@ -55,7 +56,7 @@
 #endif
 
 #include <glib/gstdio.h>
-
+#define _(String) (String)
 
 static gboolean
 rename_file (const char *old_name,

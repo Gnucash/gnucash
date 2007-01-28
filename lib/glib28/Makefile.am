@@ -1,8 +1,12 @@
 noinst_LTLIBRARIES = libgnc-glib.la
 
 DUMMYSRCS = dummy.c
-REALSRCS = gfileutils-2.8.c gwin32-2.8.c
-REALHDRS = gfileutils-2.8.h gstdio-2.8.h gwin32-2.8.h
+REALSRCS = gfileutils-2.8.c
+REALHDRS = gfileutils-2.8.h
+if PLATFORM_WIN32
+REALSRCS += gwin32-2.8.c
+REALHDRS += gstdio-2.8.h gwin32-2.8.h
+endif
 
 if HAVE_GLIB_2_8
 libgnc_glib_la_SOURCES = ${DUMMYSRCS}
