@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-15 22:31+0100\n"
-"PO-Revision-Date: 2006-12-15 22:32+0100\n"
+"POT-Creation-Date: 2007-01-28 21:36+0100\n"
+"PO-Revision-Date: 2007-01-28 21:44+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -583,7 +583,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1295
+#: ../src/gnome-utils/dialog-account.c:1296
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -722,7 +722,7 @@ msgstr "Benutzername"
 #: ../src/gnome/dialog-scheduledxaction.c:2573
 #: ../src/gnome/glade/sched-xact.glade.h:118
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:10
-#: ../src/gnome-utils/gnc-dense-cal.c:281
+#: ../src/gnome-utils/gnc-dense-cal.c:282
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:405
 #: ../intl-scm/guile-strings.c:3722
@@ -3384,13 +3384,13 @@ msgstr "Ausgleichskonto"
 
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1220 ../src/engine/Split.c:1237
+#: ../src/engine/Split.c:1229 ../src/engine/Split.c:1246
 #: ../intl-scm/guile-strings.c:2546 ../intl-scm/guile-strings.c:2568
 msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1253 ../src/gnome/druid-stock-split.c:448
+#: ../src/engine/Split.c:1262 ../src/gnome/druid-stock-split.c:448
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/register/ledger-core/split-register.c:2070
@@ -3891,6 +3891,39 @@ msgstr "Platzhalter"
 msgid "Use Existing"
 msgstr "Existierendes verwenden"
 
+#. { name, default txn memo, throughEscrowP, specSrcAcctP }
+#: ../src/gnome/druid-loan.c:152
+msgid "Taxes"
+msgstr "Steuern"
+
+#: ../src/gnome/druid-loan.c:152
+msgid "Tax Payment"
+msgstr "Steuern"
+
+#: ../src/gnome/druid-loan.c:153
+msgid "Insurance"
+msgstr "Versicherung"
+
+#: ../src/gnome/druid-loan.c:153
+msgid "Insurance Payment"
+msgstr "Versicherung"
+
+#: ../src/gnome/druid-loan.c:154
+msgid "PMI"
+msgstr "Hypothekenversicherung"
+
+#: ../src/gnome/druid-loan.c:154
+msgid "PMI Payment"
+msgstr "Hypothekenversicherung"
+
+#: ../src/gnome/druid-loan.c:155
+msgid "Other Expense"
+msgstr "Anderes"
+
+#: ../src/gnome/druid-loan.c:155
+msgid "Miscellaneous Payment"
+msgstr "Anderes"
+
 #: ../src/gnome/druid-loan.c:552
 msgid "Fixed"
 msgstr "Festverzinslich"
@@ -4300,7 +4333,7 @@ msgid "M_ove to:"
 msgstr "_Verschieben nach:"
 
 #: ../src/gnome/glade/account.glade.h:42
-#: ../src/gnome-utils/dialog-account.c:1346
+#: ../src/gnome-utils/dialog-account.c:1347
 msgid "New Account"
 msgstr "_Neues Konto"
 
@@ -6118,7 +6151,7 @@ msgid "Forever"
 msgstr "Immer"
 
 #: ../src/gnome/glade/sched-xact.glade.h:87
-#: ../src/gnome-utils/gnc-dense-cal.c:282
+#: ../src/gnome-utils/gnc-dense-cal.c:283
 msgid "Frequency"
 msgstr "Häufigkeit"
 
@@ -7272,7 +7305,7 @@ msgid "Paste the clipboard content at the cursor position"
 msgstr "Zwischenablage an Cursor-Position einfügen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1333
+#: ../src/gnome-utils/dialog-account.c:1334
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
@@ -9181,7 +9214,7 @@ msgstr "Wählen Sie ein gültiges Hauptkonto"
 msgid "You must select an account type."
 msgstr "Wählen Sie eine Kontoart"
 
-#: ../src/gnome-utils/dialog-account.c:755
+#: ../src/gnome-utils/dialog-account.c:756
 msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
@@ -9189,17 +9222,17 @@ msgstr ""
 "Die gewählte Kontoart passt nicht zu der Kontoart des Hauptkontos von diesem "
 "Konto."
 
-#: ../src/gnome-utils/dialog-account.c:766
+#: ../src/gnome-utils/dialog-account.c:767
 msgid "You must choose a commodity."
 msgstr "Sie müssen eine Währung/Aktie auswählen."
 
-#: ../src/gnome-utils/dialog-account.c:818
+#: ../src/gnome-utils/dialog-account.c:819
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Anfangsbestand angeben \n"
 "oder das Feld freilassen."
 
-#: ../src/gnome-utils/dialog-account.c:842
+#: ../src/gnome-utils/dialog-account.c:843
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -9207,12 +9240,12 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
-#: ../src/gnome-utils/dialog-account.c:1336
+#: ../src/gnome-utils/dialog-account.c:1337
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: ../src/gnome-utils/dialog-account.c:1841
+#: ../src/gnome-utils/dialog-account.c:1842
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
@@ -10988,12 +11021,12 @@ msgstr "Kalender"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
-#: ../src/gnome-utils/gnc-dense-cal.c:287 ../intl-scm/guile-strings.c:400
+#: ../src/gnome-utils/gnc-dense-cal.c:288 ../intl-scm/guile-strings.c:400
 #: ../intl-scm/guile-strings.c:612
 msgid "Date: "
 msgstr "Datum:"
 
-#: ../src/gnome-utils/gnc-dense-cal.c:1066
+#: ../src/gnome-utils/gnc-dense-cal.c:1067
 msgid "(unnamed)"
 msgstr "(unbenannt)"
 
@@ -11357,7 +11390,7 @@ msgstr "Ein unbekannter Eingabe/Ausgabefehler (%d) ist aufgetreten."
 msgid "Save changes to the file?"
 msgstr "Änderungen in Datei speichern?"
 
-#: ../src/gnome-utils/gnc-file.c:565 ../src/gnome-utils/gnc-main-window.c:892
+#: ../src/gnome-utils/gnc-file.c:565 ../src/gnome-utils/gnc-main-window.c:951
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
@@ -11727,48 +11760,48 @@ msgstr "Fenster _9"
 msgid "Window _0"
 msgstr "Fenster _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:889
+#: ../src/gnome-utils/gnc-main-window.c:948
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "Änderungen der Datei %s vor dem Schließen speichern?"
 
-#: ../src/gnome-utils/gnc-main-window.c:900
+#: ../src/gnome-utils/gnc-main-window.c:959
 msgid "<unknown>"
 msgstr "<unbekannt>"
 
-#: ../src/gnome-utils/gnc-main-window.c:916
+#: ../src/gnome-utils/gnc-main-window.c:975
 msgid "Close _Without Saving"
 msgstr "Schließen _ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:1104
+#: ../src/gnome-utils/gnc-main-window.c:1163
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3185
+#: ../src/gnome-utils/gnc-main-window.c:3249
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3198
+#: ../src/gnome-utils/gnc-main-window.c:3262
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s  Dieses Programm wurde aus SVN r%s am %s erstellt."
 
-#: ../src/gnome-utils/gnc-main-window.c:3201
+#: ../src/gnome-utils/gnc-main-window.c:3265
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  Dieses Programm wurde aus r%s am %s erstellt."
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3213
-#: ../src/gnome-utils/gnc-main-window.c:3252
+#: ../src/gnome-utils/gnc-main-window.c:3277
+#: ../src/gnome-utils/gnc-main-window.c:3316
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3230
+#: ../src/gnome-utils/gnc-main-window.c:3294
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
