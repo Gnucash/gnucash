@@ -48,7 +48,8 @@
 GKeyFile *
 gnc_key_file_load_from_file (const gchar *filename,
 			     gboolean ignore_error,
-			     gboolean return_empty_struct)
+			     gboolean return_empty_struct,
+			     GError **caller_error)
 {
   GKeyFile *key_file;
   GError *error = NULL;
@@ -73,7 +74,7 @@ gnc_key_file_load_from_file (const gchar *filename,
 
   if (!ignore_error)
     g_warning("Unable to read file %s: %s\n", filename, error->message);
-  g_error_free(error);
+  g_propagate_error(caller_error, error);
   return key_file;
 }
 

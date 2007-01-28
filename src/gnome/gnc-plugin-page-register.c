@@ -826,10 +826,10 @@ static const gchar *style_names[] = {
   NULL
 };
 
-#define KEY_REGISTER_TYPE	"Register Type"
-#define KEY_ACCOUNT_NAME	"Account Name"
-#define KEY_REGISTER_STYLE	"Register Style"
-#define KEY_DOUBLE_LINE		"Double Line Mode"
+#define KEY_REGISTER_TYPE	"RegisterType"
+#define KEY_ACCOUNT_NAME	"AccountName"
+#define KEY_REGISTER_STYLE	"RegisterStyle"
+#define KEY_DOUBLE_LINE		"DoubleLineMode"
 
 #define LABEL_ACCOUNT		"Account"
 #define LABEL_SUBACCOUNT	"SubAccount"

@@ -23,6 +23,9 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#ifndef HAVE_GLIB_2_8
+#include <gfileutils-2.8.h>
+#endif
 #include <libguile.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -167,6 +170,63 @@ gnc_getline (gchar **line, FILE *file)
 }
 
 
+/* Update one state file file to fit the new constraints introduced by
+ * glib 2.12.5.  Supposedly its always been illegal to use spaces in
+ * key names, but it was never a problem with earlier releases of
+ * glib. Glib 2.12.5 added hard enforcement of this rule, completely
+ * ignoring any key/value pair where the key name contained an
+ * "illegal" character.  Glib 2.12.7 relented and changed the hard
+ * failure to a warning, but the point has been made.  Spaces in key
+ * names must go.
+ */
+static gboolean
+gnc_update_state_file_keys(const gchar *filename)
+{
+  const gchar *eol;
+  gchar *contents, **lines, *line, **kv, **parts, *part, *newkey;
+  GError *error = NULL;
+  int i, j;
+
+  if (!g_file_get_contents(filename, &contents, NULL, &error)) {
+    DEBUG("Error reading state file: %s", error->message);
+    g_error_free(error);
+    return FALSE;
+  }
+
+  lines = g_strsplit(contents, "\n", -1);
+  g_free(contents);
+
+  /* Strip spaces from non-comment lines, and rewrite the new text
+   * over top of the old text.  The new line is guaranteed to be at
+   * most the same number of characters as the old. */
+  for (i = 0, line = lines[i++]; line; line = lines[i++]) {
+    if ((*line == '\0') || (*line == '#') || (*line == '[')) {
+      continue;
+    } else {
+      kv = g_strsplit(line, "=", 2);
+      parts = g_strsplit(kv[0], " ", -1);
+      for (j = 0, part = parts[j++]; part; part = parts[j++])
+	part[0] = g_ascii_toupper(part[0]);
+      newkey = g_strjoinv("", parts);
+      g_sprintf(line, "%s=%s", newkey, kv[1]);
+      g_free(newkey);
+      g_strfreev(parts);
+      g_strfreev(kv);
+    }
+  }
+
+  contents = g_strjoinv("\n", lines);
+  if (!g_file_set_contents(filename, contents, -1, &error)) {
+    DEBUG("Error writing state file: %s", error->message);
+    g_error_free(error);
+    g_free(contents);
+    return FALSE;
+  }
+
+  g_free(contents);
+  return TRUE;
+}
+
 /*  Find the state file that corresponds to this URL and guid.  The
  *  URL is used to compute the base name of the file (which will be in
  *  ~/.gnucash/books) and the guid is used to differentiate when the
@@ -179,6 +239,7 @@ gnc_find_state_file (const gchar *url,
   gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
   GKeyFile *key_file = NULL;
   GError *error = NULL;
+  gboolean do_increment;
   gint i;
 
   ENTER("url %s, guid %s", url, guid);
@@ -199,9 +260,24 @@ gnc_find_state_file (const gchar *url,
     else
       filename = g_strdup_printf("%s_%d", original, i);
     DEBUG("Trying %s", filename);
-    key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE);
+    key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, &error);
     DEBUG("Result %p", key_file);
 
+    if (error &&
+	(error->domain == G_KEY_FILE_ERROR) && 
+	(error->code == G_KEY_FILE_ERROR_PARSE)) {
+      /* Handle the case where glib was updated first, and is refusing
+       * to read old state files. */
+      if (gnc_update_state_file_keys(filename)) {
+	DEBUG("Trying %s again", filename);
+	key_file = gnc_key_file_load_from_file(filename, FALSE, FALSE, NULL);
+	DEBUG("Result %p", key_file);
+      }
+    }
+    if (error) {
+      g_error_free(error);
+      error = NULL;
+    }
     if (!key_file) {
       DEBUG("No key file by that name");
       break;
@@ -209,19 +285,35 @@ gnc_find_state_file (const gchar *url,
 
     file_guid = g_key_file_get_string(key_file,
 				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
-				      &error);
-    DEBUG("File GUID is %s", file_guid);
-    if (strcmp(guid, file_guid) == 0) {
+				      NULL);
+    DEBUG("%s is %s", STATE_FILE_BOOK_GUID,
+	  file_guid ? file_guid : "<not found>");
+    if (safe_strcmp(guid, file_guid) == 0) {
       DEBUG("Matched !!!");
       g_free(file_guid);
       break;
+    }
+
+    /* Handle the case where gnucash was updated first, and is trying
+     * to find new key names in an old state files. */
+    file_guid = g_key_file_get_string(key_file,
+				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID_OLD,
+				      NULL);
+    DEBUG("%s is %s", STATE_FILE_BOOK_GUID,
+	  file_guid ? file_guid : "<not found>");
+    if (safe_strcmp(guid, file_guid) == 0) {
+      DEBUG("Matched !!!");
+      do_increment = !gnc_update_state_file_keys(filename);
+    } else {
+      do_increment = TRUE;
     }
 
     DEBUG("Clean up this pass");
     g_free(file_guid);
     g_key_file_free(key_file);
     g_free(filename);
-    i++;
+    if (do_increment)
+      i++;
   }
 
   DEBUG("Clean up");
