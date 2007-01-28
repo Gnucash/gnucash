@@ -1,3 +1,7 @@
+2007-01-27  Andreas Köhler  <andi5.py@gmx.net>
+
+	Adjust box packing in payment dialog. Fix #393024.
+
 2007-01-12  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Translate expenses in mortgage/loan druid. Fixes #393436.
