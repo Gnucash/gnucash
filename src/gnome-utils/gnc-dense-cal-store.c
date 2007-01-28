@@ -187,7 +187,7 @@ gdcs_generic_update(GncDenseCalStore *trans, GDate *start, FreqSpec *fs)
           *trans->cal_marks[i++] = date;
           xaccFreqSpecGetNextInstance(fs, &date, &date);
      }
-     trans->num_real_marks = (i-1);
+     trans->num_real_marks = (i == 0 ? 0 : (i-1));
      g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
 }
 
