@@ -12,6 +12,10 @@
 
 	* Adjust box packing in payment dialog. Fix #393024.
 
+	* Use MAX_DATE_LENGTH+1 as length for some date buffers.
+	  Avoid memory corruption by reserving enough bytes on the stack for a
+	  date buffer. Patch by Richard Earnshaw <rearnsha@netbsd.org>.
+
 2007-01-12  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Translate expenses in mortgage/loan druid. Fixes #393436.
