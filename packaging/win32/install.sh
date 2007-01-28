@@ -137,6 +137,7 @@ function inst_unzip() {
 function inst_regex() {
     setup RegEx
     _REGEX_UDIR=`unix_path $REGEX_DIR`
+    add_to_env -lregex REGEX_LDFLAGS
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
@@ -145,10 +146,10 @@ function inst_regex() {
         echo "regex already installed.  skipping."
     else
         mkdir -p $_REGEX_UDIR
-        wget_unpacked $REGEX_BIN_URL $DOWNLOAD_DIR $REGEX_DIR
-        wget_unpacked $REGEX_LIB_URL $DOWNLOAD_DIR $REGEX_DIR
+        wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
+        wget_unpacked $REGEX_DEV_URL $DOWNLOAD_DIR $REGEX_DIR
     fi
-    quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile || die "regex not installed correctly"
+    quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
 }
 
 function inst_readline() {
@@ -288,7 +289,7 @@ function inst_guile() {
 	        -C --prefix=$_GUILE_WFSDIR \
 	        ac_cv_func_regcomp_rx=yes \
 	        CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS}" \
-	        LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex"
+	        LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS}"
 	    cp config.status config.status.bak
 	    cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
 	    ./config.status
@@ -296,7 +297,7 @@ function inst_guile() {
 	      cp Makefile Makefile.bak
 	      cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
 	    qpopd
-	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -lregex -no-undefined -avoid-version"
+	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -no-undefined -avoid-version"
 	    make install
 	qpopd
 	_SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
@@ -488,20 +489,6 @@ else
     res=false
 fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
-EOF
-            _FREETYPE_VERSION=`echo $FREETYPE_DEV_URL | sed 's#.*freetype-\(.*\)-lib.zip#\1#'`
-            cat > lib/pkgconfig/freetype2.pc <<EOF
-prefix=/ignore
-exec_prefix=\${prefix}
-libdir=\${exec_prefix}/lib
-includedir=\${prefix}/include
-
-Name: FreeType 2
-Description: A free, high-quality, and portable font engine.
-Version: $_FREETYPE_VERSION
-Requires:
-Libs: -L\${libdir} -lfreetype -lz
-Cflags: -I\${includedir}/freetype2
 EOF
         qpopd
     fi
