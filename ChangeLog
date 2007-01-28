@@ -1,6 +1,11 @@
+2007-01-27  David Hampton  <hampton@employees.org>
+
+	* Don't abort when F::Q fails to return a quote.  GnuCash may have
+	  more quote sources to query.  Fixes #387410.
+
 2007-01-27  Andreas Köhler  <andi5.py@gmx.net>
 
-	Adjust box packing in payment dialog. Fix #393024.
+	* Adjust box packing in payment dialog. Fix #393024.
 
 2007-01-12  Andreas Köhler  <andi5.py@gmx.net>
 
