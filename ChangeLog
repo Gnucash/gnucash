@@ -1,3 +1,8 @@
+2007-01-27  Joshua Sled  <jsled@asynchronous.org>
+
+	* Bug#394420: initialized dates still aren't valid; set to 'now'
+	  before manipulating.  Also: use correct month (!) :p
+
 2007-01-27  David Hampton  <hampton@employees.org>
 
 	* Don't abort when F::Q fails to return a quote.  GnuCash may have

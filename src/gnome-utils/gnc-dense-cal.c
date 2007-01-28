@@ -167,13 +167,14 @@ static GtkWidgetClass *parent_class = NULL;
 static const gchar *month_name(int mon) 
 {
         static gchar buf[MONTH_NAME_BUFSIZE];
-        GDate *date;
+        GDate date;
 
         memset(buf, 0, MONTH_NAME_BUFSIZE);
-        date = g_date_new();
-        g_date_set_month(date, mon);
-        g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", date);
-        g_date_free(date);
+        g_date_clear(&date, 1);
+	g_date_set_time_t(&date, time(NULL));
+	// g_date API is 1..12 (not 0..11)
+        g_date_set_month(&date, mon+1);
+        g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", &date);
 
         return buf;
 }
