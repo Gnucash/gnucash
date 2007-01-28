@@ -8,6 +8,12 @@
 	* Don't abort when F::Q fails to return a quote.  GnuCash may have
 	  more quote sources to query.  Fixes #387410.
 
+	* Make the dependency requirements consistent with the other
+	  gnc-fq-xxx programs.  This program does not use the additional
+	  requirements, but since its used as a diagnostic to find
+	  problems with gnucash, it should be helpful to have them listed
+	  here.
+
 2007-01-27  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Adjust box packing in payment dialog. Fix #393024.
