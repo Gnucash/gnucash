@@ -84,7 +84,7 @@ struct gnc_new_iso_code
   const char *old_code;
   const char *new_code;
 } gnc_new_iso_codes[] = {
-  {"RUB", "RUR"}, /* Russian Ruble */
+  {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
   {"ILS", "NIS"}, /* New Israeli Shekel */
