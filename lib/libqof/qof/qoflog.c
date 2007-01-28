@@ -34,6 +34,7 @@
 #warning unistd required.
 #endif
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 #include "qof.h"
@@ -44,9 +45,7 @@
 #define NUM_CLOCKS 10
 
 static FILE *fout = NULL;
-static gchar* filename = NULL;
 static gchar* function_buffer = NULL;
-static const int MAX_TRACE_FILENAME = 100;
 static GHashTable *log_table = NULL;
 static gint qof_log_num_spaces = 0;
 
@@ -89,16 +88,17 @@ fh_printer (const gchar     *log_domain,
 void 
 qof_log_init (void)
 {
+   gchar *tempfile = "/tmp/qof.trace.XXXXXX";
+   const gchar *fname = "/tmp/qof.trace";
+
    if(!fout) /* allow qof_log_set_file */
    {
-	   fout = g_fopen ("/tmp/qof.trace", "w");
-   }
-
-   if(!fout && (filename = (gchar *)g_malloc(MAX_TRACE_FILENAME))) {
-      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/qof.trace.%d", 
-	       getpid());
-      fout = g_fopen (filename, "w");
-      g_free(filename);
+       int fd;
+       if ((fd = mkstemp(tempfile)) != -1)
+       {
+	  rename(tempfile, fname);
+	  fout = fdopen(fd, "w");
+       }
    }
 
    if(!fout)
@@ -153,8 +153,19 @@ qof_log_init_filename (const gchar* logfilename)
 	}
 	else
 	{
-		filename = g_strdup(logfilename);
-		fout = g_fopen(filename, "w");
+	        gchar *fname = g_strconcat(logfilename, ".XXXXXX", NULL);
+		int fd;
+
+		if ((fd = mkstemp(fname)) != -1)
+		{
+                       rename(fname, logfilename);
+                       fout = fdopen(fd, "w");
+                }
+		else
+		{
+                       fout = stderr;
+		}
+		g_free(fname);
 	}
 	qof_log_init();
 }
@@ -163,7 +174,6 @@ void
 qof_log_shutdown (void)
 {
 	if(fout && fout != stderr) { fclose(fout); }
-	if(filename) { g_free(filename); }
 	if(function_buffer) { g_free(function_buffer); }
 	g_hash_table_destroy(log_table);
 }
