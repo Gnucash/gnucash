@@ -94,9 +94,9 @@ qof_log_init (void)
    if(!fout) /* allow qof_log_set_file */
    {
        int fd;
-       if ((fd = mkstemp(tempfile)) != -1)
+       if ((fd = g_mkstemp(tempfile)) != -1)
        {
-	  rename(tempfile, fname);
+	  g_rename(tempfile, fname);
 	  fout = fdopen(fd, "w");
        }
    }
@@ -156,9 +156,9 @@ qof_log_init_filename (const gchar* logfilename)
 	        gchar *fname = g_strconcat(logfilename, ".XXXXXX", NULL);
 		int fd;
 
-		if ((fd = mkstemp(fname)) != -1)
+		if ((fd = g_mkstemp(fname)) != -1)
 		{
-                       rename(fname, logfilename);
+                       g_rename(fname, logfilename);
                        fout = fdopen(fd, "w");
                 }
 		else
