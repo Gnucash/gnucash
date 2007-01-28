@@ -193,6 +193,25 @@ then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
+AC_MSG_CHECKING(for GLIB - version >= 2.8.0)
+if $PKG_CONFIG 'glib-2.0 >= 2.8.0'
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_GLIB_2_8,1,[System has glib 2.8.0 or better])
+  HAVE_GLIB_2_8=yes
+else
+  AC_MSG_RESULT(no)
+  if test "x${native_win32}" = "xyes"; then
+    AC_MSG_ERROR([*** GLIB >= 2.8 is required to build Gnucash on Windows.])
+  else
+    GLIB26_LIBS="$GLIB_LIBS"
+    GLIB_LIBS="\${top_builddir}/lib/glib28/libgnc-glib.la $GLIB_LIBS"
+    GLIB_CFLAGS="-I\${top_srcdir}/lib/glib28 $GLIB_CFLAGS"
+    AC_SUBST(GLIB26_LIBS)
+  fi
+fi
+AM_CONDITIONAL(HAVE_GLIB_2_8, test "x$HAVE_GLIB_2_8" = "xyes")
+
 AC_MSG_CHECKING(for GLIB - version >= 2.9.0)
 if $PKG_CONFIG 'glib-2.0 >= 2.9.0'
 then
@@ -2050,6 +2069,7 @@ AC_CONFIG_FILES(po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
+          lib/glib28/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
