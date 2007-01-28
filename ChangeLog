@@ -1,3 +1,11 @@
+2007-01-28  Derek Atkins  <derek@ihtfp.com>
+
+	* /tmp/qof.trace or /tmp/gnucash.trace is opened for writing directly.
+	  This could be a security issue if someone else, say, makes a symlink
+	  to somewhere else.  Instead, create a tempfile and then rename it
+	  into place which is safe against the symlink attack.
+	  Patch by Bill Nottingham <notting@redhat.com>
+
 2007-01-27  Derek Atkins  <derek@ihtfp.com>
 
 	* "string-match" uses regexp which can error out if a GNC Account
