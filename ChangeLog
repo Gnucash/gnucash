@@ -27,6 +27,19 @@
 	  Avoid memory corruption by reserving enough bytes on the stack for a
 	  date buffer. Patch by Richard Earnshaw <rearnsha@netbsd.org>.
 
+	* Use guiles native sort and record. Fix #373809.
+
+	  Slib 3a4 changed the way to determine whether to use natively
+	  supported features or the ones provided by slib. This leads to
+	  several problems:
+	  * some code creates a record with one implementation and code uses it
+	    with the other implementation
+	  * slibs sort does not seem to work with guile 1.6.8 arrays and even
+	    exposes a bug in those arrays
+
+Return to the status quo by removing all (require 'sort) and (require
+'record). GnuCash depends on Guile >= 1.6 which should feature that.
+
 2007-01-12  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Translate expenses in mortgage/loan druid. Fixes #393436.
