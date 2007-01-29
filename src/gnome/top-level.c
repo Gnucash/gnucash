@@ -271,7 +271,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
 #endif
     
     /* validate top level info */
-    file_guid = g_key_file_get_string(keyfile, STATE_FILE_TOP, 
+    file_guid = gnc_key_file_get_string(keyfile, STATE_FILE_TOP, 
                                       STATE_FILE_BOOK_GUID, &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",

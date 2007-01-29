@@ -38,6 +38,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
@@ -1703,7 +1704,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   GncOwner owner = { 0 };
 
   /* Get Invoice Type */
-  tmp_string = g_key_file_get_string(key_file, group_name,
+  tmp_string = gnc_key_file_get_string(key_file, group_name,
 				     KEY_INVOICE_TYPE, &error);
   if (error) {
     g_warning("Error reading group %s key %s: %s.",
@@ -1714,7 +1715,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   g_free(tmp_string);
 
   /* Get Invoice GUID */
-  tmp_string = g_key_file_get_string(key_file, group_name,
+  tmp_string = gnc_key_file_get_string(key_file, group_name,
 				     KEY_INVOICE_GUID, &error);
   if (error) {
     g_warning("Error reading group %s key %s: %s.",
@@ -1734,7 +1735,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   g_free(tmp_string);
 
   /* Get Owner Type */
-  owner_type = g_key_file_get_string(key_file, group_name,
+  owner_type = gnc_key_file_get_string(key_file, group_name,
 				     KEY_OWNER_TYPE, &error);
   if (error) {
     g_warning("Error reading group %s key %s: %s.",
@@ -1743,7 +1744,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   }
 
   /* Get Owner GUID */
-  tmp_string = g_key_file_get_string(key_file, group_name,
+  tmp_string = gnc_key_file_get_string(key_file, group_name,
 				     KEY_OWNER_GUID, &error);
   if (error) {
     g_warning("Error reading group %s key %s: %s.",

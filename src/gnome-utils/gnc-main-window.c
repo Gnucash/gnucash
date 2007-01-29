@@ -439,7 +439,7 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   page_group = g_strdup_printf(PAGE_STRING, data->page_offset + data->page_num);
-  page_type = g_key_file_get_string(data->key_file, page_group,
+  page_type = gnc_key_file_get_string(data->key_file, page_group,
 				    PAGE_TYPE, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -467,7 +467,7 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
       }
 
       /* Restore the page name */
-      name = g_key_file_get_string(data->key_file, page_group,
+      name = gnc_key_file_get_string(data->key_file, page_group,
 				       PAGE_NAME, &error);
       if (error) {
 	g_warning("error reading group %s key %s: %s",
@@ -517,7 +517,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
   /* Get this window's notebook info */
-  page_count = g_key_file_get_integer(data->key_file,
+  page_count = gnc_key_file_get_integer(data->key_file,
 				      window_group, WINDOW_PAGECOUNT, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -529,7 +529,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
      * check doesn't hurt anything. */
     goto cleanup;
   }
-  page_start = g_key_file_get_integer(data->key_file,
+  page_start = gnc_key_file_get_integer(data->key_file,
 				      window_group, WINDOW_FIRSTPAGE, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -550,7 +550,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
   /* Get the window coordinates, etc. */
-  pos = g_key_file_get_integer_list(data->key_file, window_group,
+  pos = gnc_key_file_get_integer_list(data->key_file, window_group,
 				    WINDOW_POSITION, &length, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -568,7 +568,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     g_free(pos);
   }
 
-  geom = g_key_file_get_integer_list(data->key_file, window_group,
+  geom = gnc_key_file_get_integer_list(data->key_file, window_group,
 				     WINDOW_GEOMETRY, &length, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -586,7 +586,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     g_free(geom);
   }
 
-  max = g_key_file_get_boolean(data->key_file, window_group,
+  max = gnc_key_file_get_boolean(data->key_file, window_group,
 			       WINDOW_MAXIMIZED, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -600,7 +600,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   /* Common view menu items */
   action = gnc_main_window_find_action(window, "ViewToolbarAction");
   visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+  desired_visibility = gnc_key_file_get_boolean(data->key_file, window_group,
 					      TOOLBAR_VISIBLE, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -613,7 +613,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
   action = gnc_main_window_find_action(window, "ViewSummaryAction");
   visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+  desired_visibility = gnc_key_file_get_boolean(data->key_file, window_group,
 					      SUMMARYBAR_VISIBLE, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -626,7 +626,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
   action = gnc_main_window_find_action(window, "ViewStatusbarAction");
   visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
-  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+  desired_visibility = gnc_key_file_get_boolean(data->key_file, window_group,
 					      STATUSBAR_VISIBLE, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -651,7 +651,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   /* Restore page ordering within the notebook. Use +1 notation so the
    * numbers in the page order match the page sections, at least for
    * the one window case. */
-  order = g_key_file_get_integer_list(data->key_file, window_group,
+  order = gnc_key_file_get_integer_list(data->key_file, window_group,
  				      WINDOW_PAGEORDER, &length, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",
@@ -697,7 +697,7 @@ gnc_main_window_restore_all_windows(const GKeyFile *keyfile)
   /* We use the same struct for reading and for writing, so we cast
      away the const. */
   data.key_file = (GKeyFile *) keyfile;
-  window_count = g_key_file_get_integer(data.key_file, STATE_FILE_TOP, 
+  window_count = gnc_key_file_get_integer(data.key_file, STATE_FILE_TOP, 
                                         WINDOW_COUNT, &error);
   if (error) {
     g_warning("error reading group %s key %s: %s",

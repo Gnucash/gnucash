@@ -146,5 +146,129 @@ gnc_key_file_save_to_file (const gchar *filename,
   return success;
 }
 
+
+/* Compatability functions to handle reading key names both with and
+ * without embedded spaces.  The 2.0 release uses names containing
+ * spaces, while 2.2 uses names without spaces. These functions allow
+ * you to fall back to using 2.0 after trying a 2.2 release.  */ 
+
+static gchar *
+gnc_key_file_translate_key (const gchar *key)
+{
+  gchar **parts, *part, *newkey;
+  gint j;
+
+  parts = g_strsplit(key, " ", -1);
+  for (j = 0, part = parts[j++]; part; part = parts[j++])
+    part[0] = g_ascii_toupper(part[0]);
+  newkey = g_strjoinv("", parts);
+  g_strfreev(parts);
+
+  return newkey;
+}
+
+
+gboolean
+gnc_key_file_get_boolean (GKeyFile *key_file,
+			  const gchar *group_name,
+			  const gchar *key,
+			  GError **error)
+{
+  gchar *new_key;
+  gboolean result;
+  GError *local_error = NULL;
+
+  result = g_key_file_get_boolean (key_file, group_name, key, &local_error);
+  if (local_error == NULL)
+    return result;
+  if ((local_error->domain == G_KEY_FILE_ERROR) &&
+      (local_error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)) {
+    g_clear_error(&local_error);
+    new_key = gnc_key_file_translate_key(key);
+    result = g_key_file_get_boolean (key_file, group_name, new_key, &local_error);
+    g_free(new_key);
+  }
+  if (local_error)
+    g_propagate_error(error, local_error);
+  return result;
+}
+
+gint
+gnc_key_file_get_integer (GKeyFile *key_file,
+			  const gchar *group_name,
+			  const gchar *key,
+			  GError **error)
+{
+  gchar *new_key;
+  gint result;
+  GError *local_error = NULL;
+
+  result = g_key_file_get_integer (key_file, group_name, key, &local_error);
+  if (local_error == NULL)
+    return result;
+  if ((local_error->domain == G_KEY_FILE_ERROR) &&
+      (local_error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)) {
+    g_clear_error(&local_error);
+    new_key = gnc_key_file_translate_key(key);
+    result = g_key_file_get_integer (key_file, group_name, new_key, &local_error);
+    g_free(new_key);
+  }
+  if (local_error)
+    g_propagate_error(error, local_error);
+  return result;
+}
+
+gint *
+gnc_key_file_get_integer_list (GKeyFile *key_file,
+			       const gchar *group_name,
+			       const gchar *key,
+			       gsize *length,
+			       GError **error)
+{
+  gchar *new_key;
+  gint *result;
+  GError *local_error = NULL;
+
+  result = g_key_file_get_integer_list (key_file, group_name, key, length, &local_error);
+  if (local_error == NULL)
+    return result;
+  if ((local_error->domain == G_KEY_FILE_ERROR) &&
+      (local_error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)) {
+    g_clear_error(&local_error);
+    new_key = gnc_key_file_translate_key(key);
+    result = g_key_file_get_integer_list (key_file, group_name, new_key, length, &local_error);
+    g_free(new_key);
+  }
+  if (local_error)
+    g_propagate_error(error, local_error);
+  return result;
+}
+
+gchar *
+gnc_key_file_get_string (GKeyFile *key_file,
+			 const gchar *group_name,
+			 const gchar *key,
+			 GError **error)
+{
+  gchar *new_key;
+  gchar *result;
+  GError *local_error = NULL;
+
+  result = g_key_file_get_string (key_file, group_name, key, &local_error);
+  if (local_error == NULL)
+    return result;
+  if ((local_error->domain == G_KEY_FILE_ERROR) &&
+      (local_error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)) {
+    g_clear_error(&local_error);
+    new_key = gnc_key_file_translate_key(key);
+    result = g_key_file_get_string (key_file, group_name, new_key, &local_error);
+    g_free(new_key);
+  }
+  if (local_error)
+    g_propagate_error(error, local_error);
+  return result;
+}
+
+
 /** @} */
 /** @} */

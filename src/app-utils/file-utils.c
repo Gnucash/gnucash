@@ -177,7 +177,6 @@ gnc_find_state_file (const gchar *url,
 {
   gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
   GKeyFile *key_file = NULL;
-  GError *error = NULL;
   gint i;
 
   ENTER("url %s, guid %s", url, guid);
@@ -206,11 +205,11 @@ gnc_find_state_file (const gchar *url,
       break;
     }
 
-    file_guid = g_key_file_get_string(key_file,
+    file_guid = gnc_key_file_get_string(key_file,
 				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
-				      &error);
+				      NULL);
     DEBUG("File GUID is %s", file_guid);
-    if (strcmp(guid, file_guid) == 0) {
+    if (safe_strcmp(guid, file_guid) == 0) {
       DEBUG("Matched !!!");
       g_free(file_guid);
       break;

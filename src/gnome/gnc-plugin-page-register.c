@@ -58,6 +58,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -931,7 +932,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
   /* Convert the style name to an index */
-  style_name = g_key_file_get_string(key_file, group_name,
+  style_name = gnc_key_file_get_string(key_file, group_name,
 				     KEY_REGISTER_STYLE, &error);
   for (i = 0 ; style_names[i]; i++) {
     if (g_ascii_strcasecmp(style_name, style_names[i]) == 0) {
@@ -950,7 +951,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
 
   /* Update the  double line action on this page */
   use_double_line =
-    g_key_file_get_boolean(key_file, group_name, KEY_DOUBLE_LINE, &error);
+    gnc_key_file_get_boolean(key_file, group_name, KEY_DOUBLE_LINE, &error);
   DEBUG("Setting double_line_mode: %d", use_double_line);
   action = gnc_plugin_page_get_action(page, "ViewStyleDoubleLineAction");
   gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), use_double_line);
@@ -985,14 +986,14 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
   ENTER("key_file %p, group_name %s", key_file, group_name);
 
   /* Create the new page. */
-  reg_type = g_key_file_get_string(key_file, group_name,
+  reg_type = gnc_key_file_get_string(key_file, group_name,
 					 KEY_REGISTER_TYPE, &error);
   DEBUG("Page type: %s", reg_type);
   if ((g_ascii_strcasecmp(reg_type, LABEL_ACCOUNT) == 0) ||
       (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0)) {
     include_subs = (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0);
     DEBUG("Include subs: %d", include_subs);
-    acct_name = g_key_file_get_string(key_file, group_name,
+    acct_name = gnc_key_file_get_string(key_file, group_name,
 				      KEY_ACCOUNT_NAME, &error);
     book = qof_session_get_book(gnc_get_current_session());
     account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),

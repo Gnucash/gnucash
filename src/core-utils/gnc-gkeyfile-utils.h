@@ -77,6 +77,31 @@ gboolean gnc_key_file_save_to_file (const gchar *file,
 				    GKeyFile *key_file,
 				    GError **error);
 
+
+
+/* Compatability functions to handle reading key names both with and
+ * without embedded spaces.  The 2.0 release uses names containing
+ * spaces, while 2.2 uses names without spaces. These functions allow
+ * you to fall back to using 2.0 after trying a 2.2 release.  */ 
+gboolean gnc_key_file_get_boolean (GKeyFile *key_file,
+				   const gchar *group_name,
+				   const gchar *key,
+				   GError **error);
+gint gnc_key_file_get_integer (GKeyFile *key_file,
+			       const gchar *group_name,
+			       const gchar *key,
+			       GError **error);
+gint *gnc_key_file_get_integer_list (GKeyFile *key_file,
+				     const gchar *group_name,
+				     const gchar *key,
+				     gsize *length,
+				     GError **error);
+gchar *gnc_key_file_get_string (GKeyFile *key_file,
+				const gchar *group_name,
+				const gchar *key,
+				GError **error);
+
+
 #endif /* GNC_GKEYFILE_UTILS_H */
 /** @} */
 /** @} */

@@ -48,6 +48,7 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
@@ -525,7 +526,7 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
     g_return_val_if_fail(group_name, NULL);
     ENTER("key_file %p, group_name %s", key_file, group_name);
 
-    guid_str = g_key_file_get_string(key_file, group_name, BUDGET_GUID, 
+    guid_str = gnc_key_file_get_string(key_file, group_name, BUDGET_GUID, 
                                      &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",

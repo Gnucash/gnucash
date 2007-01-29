@@ -43,6 +43,7 @@
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-hooks.h"
@@ -2054,7 +2055,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     gboolean show;	
 
     /* Filter information. Ignore missing keys. */
-    show = g_key_file_get_boolean(key_file, group_name, SHOW_HIDDEN, &error);
+    show = gnc_key_file_get_boolean(key_file, group_name, SHOW_HIDDEN, &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",
                   group_name, SHOW_HIDDEN, error->message);
@@ -2064,7 +2065,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     }
     fd->show_hidden = show;
     
-    show = g_key_file_get_boolean(key_file, group_name, SHOW_ZERO, &error);
+    show = gnc_key_file_get_boolean(key_file, group_name, SHOW_ZERO, &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",
                   group_name, SHOW_ZERO, error->message);
@@ -2074,7 +2075,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     }
     fd->show_zero_total = show;
     
-    i = g_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
+    i = gnc_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",
                   group_name, ACCT_TYPES, error->message);
@@ -2085,11 +2086,11 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     fd->visible_types = i;
     
     /* Expanded accounts. Skip if count key missing. */
-    count = g_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
+    count = gnc_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
     if (error == NULL) {
         for (i = 1; i <= count; i++) {
 	    key = g_strdup_printf(ACCT_OPEN, i);
-	    value = g_key_file_get_string(key_file, group_name, key, &error);
+	    value = gnc_key_file_get_string(key_file, group_name, key, &error);
 	    if (error) {
                 g_warning("error reading group %s key %s: %s",
                           group_name, key, error->message);
@@ -2107,7 +2108,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     }
     
     /* Selected account (if any) */
-    value = g_key_file_get_string(key_file, group_name, ACCT_SELECTED, NULL);
+    value = gnc_key_file_get_string(key_file, group_name, ACCT_SELECTED, NULL);
     if (value) {
         tree_restore_selected_row(view, value);
         g_free(value);

@@ -58,6 +58,7 @@
 #include "gnc-html-history.h"
 #include "gnc-html.h"
 #include "gnc-file.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-report.h"
@@ -646,6 +647,7 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
  *  options. */
 #define SCHEME_OPTIONS   "Scheme Options"
 #define SCHEME_OPTIONS_N "Scheme Options %d"
+#define SCHEME_OPTIONS_NEW "SchemeOptions"
 
 
 /** Save enough information about this report page that it can be
@@ -759,9 +761,10 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 	}
 
 	for (i = 0; i < num_keys; i++) {
-	  if (strncmp(keys[i], SCHEME_OPTIONS, strlen(SCHEME_OPTIONS)) != 0)
+	  if ((strncmp(keys[i], SCHEME_OPTIONS, strlen(SCHEME_OPTIONS)) != 0) &&
+	      (strncmp(keys[i], SCHEME_OPTIONS_NEW, strlen(SCHEME_OPTIONS_NEW)) != 0))
 	    continue;
-	  option_string = g_key_file_get_string(key_file, group_name,
+	  option_string = gnc_key_file_get_string(key_file, group_name,
 						keys[i], &error);
 	  if (error) {
 	    g_warning("error reading group %s key %s: %s",
@@ -780,7 +783,8 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 	  }
 
 	  if (final_id == SCM_BOOL_F) {
-	    if (strcmp(keys[i], SCHEME_OPTIONS) == 0) {
+	    if ((strcmp(keys[i], SCHEME_OPTIONS) == 0) ||
+		(strcmp(keys[i], SCHEME_OPTIONS_NEW) == 0)) {
 	      final_id = scm_id;
 	    }
 	  }
