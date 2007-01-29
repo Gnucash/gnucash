@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-28 21:37+0100\n"
-"PO-Revision-Date: 2007-01-28 22:07+0100\n"
+"PO-Revision-Date: 2007-01-29 15:00+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -11461,7 +11461,7 @@ msgstr "Es gab einen Fehler beim Öffnen der Datei. Möchten Sie fortfahren?"
 #: ../src/gnome-utils/gnc-file.c:402
 #, c-format
 msgid "There was an error parsing the file %s."
-msgstr "Beim Leser der Datei »%s« ist ein Fehler aufgetreten."
+msgstr "Beim Lesen der Datei »%s« ist ein Fehler aufgetreten."
 
 #: ../src/gnome-utils/gnc-file.c:407
 #, c-format
