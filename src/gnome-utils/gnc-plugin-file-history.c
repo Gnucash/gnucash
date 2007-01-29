@@ -435,7 +435,7 @@ gnc_plugin_history_list_from_gnucash1 (void)
   /* Copy the old values from the gnucash 1.x/gnome1 settings file to
    * the gnucash 2.x/gconf settings area.  */
   mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
-  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE, NULL);
+  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE);
   if (keyfile) {
     keys = g_key_file_get_keys(keyfile, GNOME1_HISTORY, NULL, NULL);
     if (keys) {

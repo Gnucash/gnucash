@@ -54,8 +54,7 @@
  */
 GKeyFile *gnc_key_file_load_from_file (const gchar *file,
 				       gboolean ignore_error,
-				       gboolean return_empty_struct,
-				       GError **caller_error);
+				       gboolean return_empty_struct);
 
 
 /** Write a key/value file from memory to disk.  If there is no data

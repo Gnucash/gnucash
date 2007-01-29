@@ -394,19 +394,19 @@ static const gchar *multiple_page_actions[] = {
 /************************************************************
  *                                                          *
  ************************************************************/
-#define WINDOW_COUNT		"WindowCount"
+#define WINDOW_COUNT		"Window Count"
 #define WINDOW_STRING		"Window %d"
-#define WINDOW_GEOMETRY		"WindowGeometry"
-#define WINDOW_POSITION		"WindowPosition"
-#define WINDOW_MAXIMIZED	"WindowMaximized"
-#define TOOLBAR_VISIBLE		"ToolbarVisible"
-#define STATUSBAR_VISIBLE	"StatusbarVisible"
-#define SUMMARYBAR_VISIBLE	"SummarybarVisible"
-#define WINDOW_FIRSTPAGE	"FirstPage"
-#define WINDOW_PAGECOUNT	"PageCount"
-#define WINDOW_PAGEORDER	"PageOrder"
-#define PAGE_TYPE		"PageType"
-#define PAGE_NAME		"PageName"
+#define WINDOW_GEOMETRY		"Window Geometry"
+#define WINDOW_POSITION		"Window Position"
+#define WINDOW_MAXIMIZED	"Window Maximized"
+#define TOOLBAR_VISIBLE		"Toolbar Visible"
+#define STATUSBAR_VISIBLE	"Statusbar Visible"
+#define SUMMARYBAR_VISIBLE	"Summarybar Visible"
+#define WINDOW_FIRSTPAGE	"First Page"
+#define WINDOW_PAGECOUNT	"Page Count"
+#define WINDOW_PAGEORDER	"Page Order"
+#define PAGE_TYPE		"Page Type"
+#define PAGE_NAME		"Page Name"
 #define PAGE_STRING		"Page %d"
 
 typedef struct {
