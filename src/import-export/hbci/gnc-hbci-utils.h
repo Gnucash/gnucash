@@ -27,6 +27,7 @@
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
 #include <aqbanking/account.h>
+#include <aqbanking/imexporter.h>
 #include <aqbanking/version.h>
 #if AQBANKING_VERSION_MAJOR > 2
 # define AB_Value_GetValue AB_Value_GetValueAsDouble
@@ -47,6 +48,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-book.h"
+#include "import-main-matcher.h"
 
 #include "hbci-interaction.h"
 
@@ -112,6 +114,49 @@ gboolean
 gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 			AB_JOB *job, GNCInteractor *inter);
 
+/* Calls AB_Banking_executeQueue() with some supplementary stuff
+ * around it: set the debugLevel, show the GNCInteractor, and do some
+ * error checking afterwards by checking each AB_JOB in
+ * job_list. Returns TRUE upon success or FALSE if the calling dialog
+ * should abort. parent may be NULL, job_list (a GList of AB_JOBs) may
+ * be NULL (although in this case no HBCI result codes can be
+ * checked!), inter may be NULL; api must not be NULL.  */
+gboolean 
+gnc_hbci_multijob_execute(GtkWidget *parent, AB_BANKING *api, 
+			  GList *job_list, GNCInteractor *inter);
+
+/**
+ * Imports the account/transaction/balance data of an aqbanking
+ * "imexporter-context" into the matching gnucash accounts, using the
+ * given importer_generic_gui. 
+ *
+ * If exec_as_jobs is TRUE, additionally queue each transaction as a
+ * new aqbanking online banking job.
+ *
+ * @param ab The AB_BANKING api object.
+ *
+ * @param ctx The "context" object that holds the actual transactions.
+ *
+ * @param importer_generic_gui The dialog which should display the
+ * to-be-imported transactions.
+ *
+ * @param exec_as_aqbanking_jobs If TRUE, additionally queue the
+ * imported transactions as online jobs over aqbanking/HBCI. If FALSE,
+ * just import the transactions and that's it.
+ *
+ * @return If exec_as_aqbanking_jobs was FALSE, this always returns
+ * NULL. Otherwise it returns a GList of the AB_JOBs that have been
+ * queued into aqbanking.
+ */
+GList *
+gnc_hbci_import_ctx(AB_BANKING *ab, AB_IMEXPORTER_CONTEXT *ctx,
+		    GNCImportMainMatcher *importer_generic_gui,
+		    gboolean exec_as_aqbanking_jobs);
+
+/** Clear all the AB_JOBs of the ab_job_list from aqbanking's
+ * queue. */
+void
+gnc_hbci_clearqueue(AB_BANKING *ab, GList *ab_job_list);
 
 /* Create the appropriate description field for a Gnucash Transaction
  * by the information given in the AB_TRANSACTION h_trans. The
@@ -127,6 +172,7 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans);
  * returned string must be g_free'd by the caller. If there was no
  * purpose, an empty (but allocated) string is returned. */
 char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans);
+
 /** Return the first customer that can act on the specified account,
     or NULL if none was found (and an error message is printed on
     stdout). */

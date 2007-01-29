@@ -25,17 +25,18 @@
 #ifndef DTAUS_IMPORT_H
 #define DTAUS_IMPORT_H
 
-/** The gnc_file_dtaus_import() routine will pop up a standard file
- *     selection dialogue asking the user to pick an DTAUS file. If one
- *     is selected then the DTAUS file is opened and read. Its contents
- *     are merged into the existing session (if any). The current
- *     session continues to remain open for editing.
+#include <glib.h>
+
+/** This routine will pop up a standard file selection dialog asking
+ * the user to pick a file to import. This file will be opened and
+ * read. Its contents will be imported into the current book, using
+ * the import matcher from import-main-matcher.h.
  *
  * @param aqbanking_importername The aqbanking importer module that
- * should be used. Possible values: "dtaus", "csv", "swift".
+ * should be used. Possible values: "dtaus", "csv", "swift", or more.
  *
  * @param aqbanking_formatname In aqbanking, each importer has one or
- * more possible data formats available that define the actual data
+ * more data formats available which define the actual data
  * fields that should be used. In aqbanking, such a different format
  * is called a "profile". 
  * Possible values for swift: "swift-mt940" or "swift-mt942", 
@@ -43,11 +44,13 @@
  * $datadir/aqbanking/imexporters and look into the "name" field of
  * the foo.conf files.
  *
- * @param execute_transactions If TRUE, import the transactions and
- * additionally send them as online jobs over aqbanking/HBCI. If
- * FALSE, simply import the transactions and that's it.
+ * @param exec_as_aqbanking_jobs If TRUE, additionally queue the
+ * imported transactions as online jobs over aqbanking/HBCI. If FALSE,
+ * just import the transactions and that's it.
  */
 void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
 				const gchar *aqbanking_formatname,
-				gboolean execute_transactions);
+				gboolean exec_as_aqbanking_jobs);
+
+
 #endif
