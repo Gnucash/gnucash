@@ -48,7 +48,7 @@ TODO
   - [ ] check variables-unbound logic
   - [ ] verify summary counts
   - [ ] check "since last run" states
-    - [ ] specious datafile dirty-ing?
+    - [ ] specious datafile dirty-ing
     - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
