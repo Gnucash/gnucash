@@ -1053,6 +1053,12 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
           gint instance_count = 0;
           gint remain_occur_count = 0;
 
+          // If there are no instances, then skip; specifically, skip
+          // re-setting SchedXaction fields, which will dirty the book
+          // spuriously.
+          if (g_list_length(instances->list) == 0)
+               continue;
+
           last_occur_date = xaccSchedXactionGetLastOccurDate(instances->sx);
           instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
           remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);

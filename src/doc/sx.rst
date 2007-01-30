@@ -48,6 +48,7 @@ TODO
   - [ ] check variables-unbound logic
   - [ ] verify summary counts
   - [ ] check "since last run" states
+    - [ ] specious datafile dirty-ing?
     - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
@@ -57,8 +58,6 @@ TODO
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
 
 - bugs
-  - [ ] specious datafile dirty-ing?
-
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
 ! - [ ] crash with two sx lists open and SX mutation
