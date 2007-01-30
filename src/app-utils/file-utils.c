@@ -211,7 +211,7 @@ gnc_find_state_file (const gchar *url,
 				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
 				      &error);
     DEBUG("File GUID is %s", file_guid);
-    if (strcmp(guid, file_guid) == 0) {
+    if (safe_strcmp(guid, file_guid) == 0) {
       DEBUG("Matched !!!");
       g_free(file_guid);
       break;
