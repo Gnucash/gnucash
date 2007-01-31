@@ -87,10 +87,10 @@ TODO
   - [ ] clean up, reformat
 
 - gnc_dense_cal
-! - [ ] font handling: gdk -> pango
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [?] better transient/floating window
   - [/] (re-format file)
+! - [x] font handling: gdk -> pango
   - [x] set_model(GncTemporalInstancesModel *mdl)
     - [x] new interface creation.
     - [x] register callbacks for signals

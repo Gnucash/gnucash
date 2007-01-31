@@ -80,16 +80,10 @@ struct _GncDenseCal
      gint leftPadding;
      gint topPadding;
 
-     gboolean needInitMonthLabels;
      gdc_month_coords monthPositions[12];
-     GdkFont *monthLabelFont;
-     GdkFont *dayLabelFont;
-     GdkPixmap *monthLabels[12];
 
      GdkColor weekColors[MAX_COLORS];
 
-     guint label_lbearing;
-     guint label_ascent;
      guint label_width;
      guint label_height;
      guint dayLabelHeight;

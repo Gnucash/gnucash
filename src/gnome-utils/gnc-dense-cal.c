@@ -74,25 +74,25 @@ static const gchar* MARK_COLOR = "Yellow";
 
 static QofLogModule log_module = GNC_MOD_SX;
 
-static void gnc_dense_cal_class_init (GncDenseCalClass *class);
-static void gnc_dense_cal_init (GncDenseCal *dcal);
-static void gnc_dense_cal_finalize (GObject *object);
-static void gnc_dense_cal_dispose (GObject *object);
-static void gnc_dense_cal_realize (GtkWidget *widget);
+static void gnc_dense_cal_class_init(GncDenseCalClass *class);
+static void gnc_dense_cal_init(GncDenseCal *dcal);
+static void gnc_dense_cal_finalize(GObject *object);
+static void gnc_dense_cal_dispose(GObject *object);
+static void gnc_dense_cal_realize(GtkWidget *widget);
 static void gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal);
-static gint gnc_dense_cal_expose(GtkWidget      *widget,
-                                  GdkEventExpose *event);
+static gint gnc_dense_cal_expose(GtkWidget *widget,
+                                 GdkEventExpose *event);
 
 static void gdc_reconfig(GncDenseCal *dcal);
 
 static void gdc_free_all_mark_data(GncDenseCal *dcal);
 
 static void gnc_dense_cal_size_request(GtkWidget      *widget,
-                                        GtkRequisition *requisition);
+                                       GtkRequisition *requisition);
 static void gnc_dense_cal_size_allocate(GtkWidget     *widget,
-                                         GtkAllocation *allocation);
+                                        GtkAllocation *allocation);
 static gint gnc_dense_cal_motion_notify(GtkWidget      *widget,
-                                         GdkEventMotion *event);
+                                        GdkEventMotion *event);
 static gint gnc_dense_cal_button_press(GtkWidget *widget,
                                         GdkEventButton *evt);
 
@@ -149,10 +149,13 @@ static const gchar *month_name(int mon)
 {
      static gchar buf[MONTH_NAME_BUFSIZE];
      GDate date;
+     gint arbitrary_year = 1977;
 
      memset(buf, 0, MONTH_NAME_BUFSIZE);
      g_date_clear(&date, 1);
-     g_date_set_time_t(&date, time(NULL));
+     
+     g_date_set_year(&date, arbitrary_year);
+     g_date_set_day(&date, 1);
      // g_date API is 1..12 (not 0..11)
      g_date_set_month(&date, mon+1);
      g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", &date);
@@ -280,44 +283,45 @@ gnc_dense_cal_init(GncDenseCal *dcal)
           /* FIXME : handle [more] properly */
           PERR("Error allocating colors\n");
      }
-     
+
      /* Deal with the various label sizes. */
      {
           gint i;
-          gint maxWidth, maxHeight, maxAscent, maxLBearing;
-          gint lbearing, rbearing, width, ascent, descent;
+          gint maxWidth, maxHeight;
+          gint width;
           GtkStyle *style;
+          PangoLayout *layout;
+          const PangoFontDescription *existing_font_desc;
+          PangoFontDescription *font_desc;
+          gint font_size;
+          gint font_size_reduction = 2; // pts
 
-          /* @FIXME: GNOME 2 port (rework the complete font code) */
+          layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+
           style = gtk_widget_get_style(GTK_WIDGET(dcal));
 
-          dcal->dayLabelFont = gtk_style_get_font(style);
-          gdk_font_ref(dcal->dayLabelFont);
-          g_assert(dcal->dayLabelFont);
-
-          dcal->monthLabelFont = gtk_style_get_font(style);
-          g_assert(dcal->monthLabelFont);
-          gdk_font_ref(dcal->monthLabelFont);
-
-          maxWidth = maxHeight = maxAscent = maxLBearing = 0;
+          font_desc = pango_font_description_copy(style->font_desc);
+          font_size = pango_font_description_get_size(font_desc);
+          font_size -= font_size_reduction * PANGO_SCALE;
+          pango_font_description_set_size(font_desc, font_size);
+          gtk_widget_modify_font(GTK_WIDGET(dcal), font_desc);
+          pango_font_description_free(font_desc);
+          
+          maxWidth = maxHeight = 0;
           for (i=0; i<12; i++)
           {
                gint w, h;
-               gdk_string_extents(dcal->monthLabelFont, month_name(i),
-                                  &lbearing, &rbearing, &width,
-                                  &ascent, &descent);
-               w = rbearing - lbearing + 1;
-               h = ascent + descent;
-               maxLBearing = MAX(maxLBearing, ABS(lbearing));
+               pango_layout_set_text(layout, month_name(i), -1);
+               pango_layout_get_pixel_size(layout, &w, &h);
                maxWidth = MAX(maxWidth, w);
                maxHeight = MAX(maxHeight, h);
-               maxAscent = MAX(maxAscent, ascent);
           }
-          dcal->label_width    = maxHeight + 1;
-          dcal->label_height   = maxWidth;
-          dcal->label_lbearing = maxLBearing;
-          dcal->label_ascent   = maxAscent;
-          dcal->needInitMonthLabels = TRUE;
+
+          // these two were reversed, before...
+          dcal->label_width    = maxWidth;
+          dcal->label_height   = maxHeight;
+          
+          g_object_unref(layout);
      }
 
      dcal->month = G_DATE_JANUARY;
@@ -342,15 +346,25 @@ gnc_dense_cal_init(GncDenseCal *dcal)
      /* Now that we're "sure" of our configuration, compute initial
       * scaling factors; will be increased when we're allocated enough
       * space to scale up. */
-     dcal->min_x_scale = dcal->x_scale =
-          MAX(gdk_string_width(dcal->monthLabelFont, "88"),
-              gdk_string_width(dcal->dayLabelFont, "88") + 2);
-     dcal->min_y_scale = dcal->y_scale =
-          MAX(floor((float)gdk_string_width(dcal->monthLabelFont,
-                                            "XXX")
-                    / 3.0),
-              gdk_string_height(dcal->dayLabelFont, "88") + 2);
-     dcal->dayLabelHeight = gdk_string_height(dcal->monthLabelFont, "88");
+     {
+          PangoLayout *layout;
+          int width_88, height_88;
+          int width_XXX, height_XXX;
+
+          layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+          pango_layout_set_text(layout, "88", -1);
+          pango_layout_get_pixel_size(layout, &width_88, &height_88);
+
+          pango_layout_set_text(layout, "XXX", -1);
+          pango_layout_get_pixel_size(layout, &width_XXX, &height_XXX);
+
+          dcal->min_x_scale = dcal->x_scale = width_88 + 2;
+          dcal->min_y_scale = dcal->y_scale = MAX(floor((float)width_XXX / 3.), height_88 + 2);
+               
+          dcal->dayLabelHeight = height_88;
+
+          g_object_unref(layout);
+     }
      dcal->initialized = TRUE;
 }
 
@@ -475,28 +489,7 @@ gnc_dense_cal_dispose (GObject *object)
      }
 
      /* FIXME: we have a bunch of cleanup to do, here. */
-     /* monthLabelFont, dayLabelFont */
-     if (dcal->monthLabelFont)
-     {
-          gdk_font_unref(dcal->monthLabelFont);
-          dcal->monthLabelFont = NULL;
-     }
 
-     if (dcal->dayLabelFont)
-     {
-          gdk_font_unref(dcal->dayLabelFont);
-          dcal->dayLabelFont = NULL;
-     }
-
-     /* month labels */
-     if (dcal->monthLabels[0])
-     {
-          for (i=0; i < 12; i++)
-          {
-               g_object_unref(dcal->monthLabels[i]);
-               dcal->monthLabels[i] = NULL;
-          }
-     }
      gdc_free_all_mark_data(dcal);
 
      g_object_unref(G_OBJECT(dcal->model));
@@ -759,11 +752,14 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
      GtkWidget *widget;
      gint i;
      int maxWidth;
+     PangoLayout *layout;
 
      widget = &dcal->widget;
 
      if (!dcal->drawbuf)
           return;
+
+     layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
 
      gdk_draw_rectangle(dcal->drawbuf,
                         widget->style->white_gc,
@@ -772,69 +768,6 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                         widget->allocation.width,
                         widget->allocation.height);
 
-
-     if (dcal->needInitMonthLabels)
-     {
-          /* Create the month labels */
-          gint i;
-          GdkPixmap *tmpPix;
-          GdkImage *tmpImg;
-          GdkGC *gc;
-          GdkColor black;
-
-          gc = widget->style->fg_gc[widget->state];
-          tmpPix = gdk_pixmap_new(NULL,
-                                  dcal->label_height,
-                                  dcal->label_width,
-                                  gdk_visual_get_system()->depth);
-          black.pixel = gdk_rgb_xpixel_from_rgb(0);
-          for (i=0; i<12; i++)
-          {
-               guint x,y;
-               /* these are going to be rotated, so transpose width
-                * and height */
-               dcal->monthLabels[i] =
-                    gdk_pixmap_new(widget->window,
-                                   dcal->label_width,
-                                   dcal->label_height, -1);
-               gdk_draw_rectangle(dcal->monthLabels[i],
-                                  widget->style->white_gc,
-                                  TRUE, 0, 0,
-                                  dcal->label_width,
-                                  dcal->label_height);
-
-               gdk_draw_rectangle(tmpPix,
-                                  widget->style->white_gc,
-                                  TRUE, 0, 0,
-                                  dcal->label_height,
-                                  dcal->label_width);
-
-               gdk_draw_string(tmpPix, dcal->monthLabelFont, gc,
-                               dcal->label_lbearing,
-                               dcal->label_ascent,
-                               month_name(i));
-
-               tmpImg = gdk_image_get(tmpPix, 0, 0,
-                                      dcal->label_height,
-                                      dcal->label_width);
-
-               /* now, (transpose the pixel matrix)==(do a 90-degree
-                * counter-clockwise rotation) */
-               for (x=0; x < dcal->label_height; x++)
-               {
-                    for (y=0; y < dcal->label_width; y++)
-                    {
-                         if (gdk_image_get_pixel(tmpImg, x, y) != black.pixel)
-                              continue;
-                         gdk_draw_point(dcal->monthLabels[i],
-                                        gc, y,
-                                        dcal->label_height - x);
-                    }
-               }
-               gdk_image_destroy(tmpImg);
-          }
-          dcal->needInitMonthLabels = FALSE;
-     }
 
      /* Fill in alternating month colors. */
      {
@@ -882,32 +815,57 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
           int i;
           int x1, x2, y1, y2;
           GdkColor markColor, black;
+          GdkGCValues current_values;
+
+          gdk_gc_get_values(widget->style->fg_gc[widget->state], &current_values);
 
           gdk_color_parse(MARK_COLOR, &markColor);
           gdk_colormap_alloc_color(gdk_colormap_get_system(), &markColor, TRUE, TRUE);
-          gdk_color_black(gdk_colormap_get_system(), &black);
 
-          /* FIXME: use a different GC for this */
           gdk_gc_set_foreground(widget->style->fg_gc[widget->state], &markColor);
           for (i=0; i<dcal->numMarks; i++)
           {
                if (dcal->marks[i] != NULL)
                {
+                    int w,h, x_offset, y_offset, circle_delta;
+
                     doc_coords(dcal, i, &x1, &y1, &x2, &y2);
-                    gdk_draw_rectangle(dcal->drawbuf,
-                                       widget->style->fg_gc[widget->state],
-                                       TRUE, x1, y1, (x2-x1), (y2-y1));
+                    w = x2 - x1;
+                    h = y2 - y1;
+
+                    x_offset = x1;
+                    y_offset = y1;
+
+                    circle_delta = ABS(w-h) / 2;
+                    if (w < h)
+                    {
+                         y_offset += circle_delta;
+                    }
+                    else
+                    {
+                         x_offset += circle_delta;
+                    }
+
+                    gdk_draw_arc(dcal->drawbuf,
+                                 widget->style->fg_gc[widget->state],
+                                 TRUE,
+                                 x_offset, y_offset, MIN(w,h), MIN(w,h),
+                                 0 * 64,
+                                 360 * 64);
                }
           }
-          gdk_gc_set_foreground(widget->style->fg_gc[widget->state], &black);
+
+          // reset to the previous foreground color.
+          gdk_gc_set_foreground(widget->style->fg_gc[widget->state], &current_values.foreground);
      }
 
      for (i=0; i < num_cols(dcal); i++)
      {
           gint x, y, w, h;
           gint j;
-
-          dcal->dayLabelHeight = gdk_string_height(dcal->monthLabelFont, "S");
+          
+          pango_layout_set_text(layout, "S", -1);
+          pango_layout_get_pixel_size(layout, NULL, &dcal->dayLabelHeight);
 
           x = dcal->leftPadding
                + (i * (col_width(dcal)+COL_BORDER_SIZE))
@@ -941,43 +899,58 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
           }
 
           /* draw the day labels */
-          maxWidth = gdk_string_width(dcal->monthLabelFont, "88");
+          pango_layout_set_text(layout, "88", -1);
+          pango_layout_get_pixel_size(layout, &maxWidth, NULL);
+          
           if (dcal->x_scale > maxWidth)
           {
                for (j=0; j<7; j++)
                {
-                    gint dx = x
+                    int day_label_width;
+                    gint label_x_offset, label_y_offset;
+
+                    pango_layout_set_text(layout, day_label(j), -1);
+                    pango_layout_get_pixel_size(layout, &day_label_width, NULL);
+                    label_x_offset = x
                          + (j * day_width(dcal))
                          + (day_width(dcal)/2)
-                         - (gdk_string_width(dcal->monthLabelFont,
-                                             day_label(j)) / 2);
-                    gint dy = y - 2;
-                    gdk_draw_string(dcal->drawbuf,
-                                    dcal->monthLabelFont,
-                                    widget->style->fg_gc[widget->state],
-                                    dx, dy, day_label(j));
+                         - (day_label_width / 2);
+                    label_y_offset = y - dcal->dayLabelHeight;
+                    pango_layout_set_text(layout, day_label(j), -1);
+                    gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf), widget->style->fg_gc[widget->state],
+                                    label_x_offset, label_y_offset,
+                                    layout);
+
                }
           }
      }
 
-     /* Try some pixmap copying for the month labels. */
+     /* Month labels. */
      {
-          gint i, idx;
+          gint i;
+          PangoMatrix matrix = PANGO_MATRIX_INIT;
+
+          pango_matrix_rotate(&matrix, 90.);
+          pango_context_set_matrix(gtk_widget_get_pango_context(GTK_WIDGET(dcal)), &matrix);
 
           for (i=0; i<12; i++)
           {
+               guint x, y, idx;
+
                if (dcal->monthPositions[i].x == -1)
                     break;
                idx = (dcal->month - 1 + i) % 12;
-               gdk_draw_drawable(GDK_DRAWABLE(dcal->drawbuf),
-                                 widget->style->fg_gc[widget->state],
-                                 GDK_DRAWABLE(dcal->monthLabels[idx]),
-                                 0, 0,
-                                 dcal->leftPadding
-                                 + dcal->monthPositions[i].x,
-                                 dcal->monthPositions[i].y,
-                                 dcal->label_width, dcal->label_height);
+               pango_layout_set_text(layout, month_name(i), -1);
+               gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf),
+                               widget->style->fg_gc[widget->state],
+                               dcal->leftPadding + dcal->monthPositions[i].x,
+                               dcal->monthPositions[i].y,
+                               layout);
           }
+
+          // reset rotation
+          pango_matrix_rotate(&matrix, -90.);
+          pango_context_set_matrix(gtk_widget_get_pango_context(GTK_WIDGET(dcal)), &matrix);
      }
 
      /* Try the per-day strings [dates] */
@@ -996,16 +969,15 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                doc_coords(dcal, doc, &x1, &y1, &x2, &y2);
                memset(dayNumBuf, 0, 3);
                snprintf(dayNumBuf, 3, "%d", g_date_get_day(&d));
-               numW = gdk_string_width(dcal->dayLabelFont, dayNumBuf);
-               numH = gdk_string_height(dcal->dayLabelFont, dayNumBuf);
+               pango_layout_set_text(layout, dayNumBuf, -1);
+               pango_layout_get_pixel_size(layout, &numW, &numH);
                w = (x2 - x1)+1;
                h = (y2 - y1)+1;
-               gdk_draw_string(dcal->drawbuf,
-                               dcal->dayLabelFont,
+               gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf),
                                widget->style->fg_gc[widget->state],
                                x1 + (w/2) - (numW/2),
-                               y1 + (h/2) + (numH/2),
-                               dayNumBuf);
+                               y1 + (h/2) - (numH/2),
+                               layout);
           }
      }
 
@@ -1272,7 +1244,6 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
 
      startD = g_date_new();
      endD = g_date_new();
-     // FIXME: clean these up?
 
      /* Calculate the number of weeks in the column before the month we're
       * interested in. */
@@ -1371,6 +1342,9 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
           *outList = g_list_append(*outList, (gpointer)rect);
           rect = NULL;
      }
+
+     g_date_free(startD);
+     g_date_free(endD);
 }
 
 /* FIXME: make this more like month_coords */
