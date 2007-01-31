@@ -636,7 +636,7 @@ check_mult_div (void)
 		gint64 ne;
 
 		/* avoid 0 */
-		if (nb == 0) { i--; continue; }
+		if (nb/4 == 0) { i--; continue; }
 
 		/* avoid overflow; */
 		na /= 2;
