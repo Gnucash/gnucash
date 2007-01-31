@@ -76,11 +76,31 @@ Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@P
 ; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Registry]
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+
+; Additionally, we have to install the paths for gwenhywfar
+Root: HKCU; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\38"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+
+; And we also need some registry keys for aqbanking
+Root: HKCU; Subkey: "Software\Aqbanking"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "providerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\providers"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "bankinfodir"; ValueData: "{app}\lib\aqbanking\plugins\16\bankinfo"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "importerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\imexporters"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Delete the created config script on uninstall
