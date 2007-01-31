@@ -41,8 +41,8 @@ function prepare() {
 
 function dist_regex() {
     setup RegEx
-    smart_wget $REGEX_BIN_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/regex.dll -d $DIST_DIR
+    smart_wget $REGEX_URL $DOWNLOAD_DIR
+    unzip -q $LAST_FILE bin/libgnurx-0.dll -d $DIST_DIR
 }
 
 function dist_autotools() {
