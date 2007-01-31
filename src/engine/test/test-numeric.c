@@ -221,6 +221,9 @@ check_equality_operator (void)
 		mult = rand() / 2;
 		numer = rand() / 2;
 
+		/* avoid 0 */
+		if (deno == 0 || mult == 0) { i--; continue; }
+
 		val = gnc_numeric_create (numer, deno);
 		mval = gnc_numeric_create (numer*mult, deno*mult);
 		
@@ -631,6 +634,9 @@ check_mult_div (void)
 		gint64 na = rand();
 		gint64 nb = rand();
 		gint64 ne;
+
+		/* avoid 0 */
+		if (nb == 0) { i--; continue; }
 
 		/* avoid overflow; */
 		na /= 2;
