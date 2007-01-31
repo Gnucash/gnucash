@@ -37,6 +37,15 @@ GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\
 GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/' ]`
 GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/' ]`
 
+# save any user/environment optimization flags before we muck with them in
+# --enable-debug:
+USER_OPTIMIZATION=""
+for flag in $CFLAGS; do
+  if test -z $(echo $flag | sed -e 's,-O.,,'); then
+    USER_OPTIMIZATION="$USER_OPTIMIZATION ${flag}"
+  fi
+done
+
 ##  Do this first, because the other tests depend on it:
 
 # Check for gcc and intltool (somehow breaks the suggested content
@@ -563,7 +572,10 @@ AC_SUBST(GNC_LIBEXECDIR)
 
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
-       CFLAGS="${CFLAGS} -g"
+       # remove any optimization flags...
+       CFLAGS=$(echo $CFLAGS | sed -e 's,-O.,,g')
+       # ...except for those the user wants.
+       CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
        LDFLAGS="${LDFLAGS} -g"
        AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
        AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory) )
