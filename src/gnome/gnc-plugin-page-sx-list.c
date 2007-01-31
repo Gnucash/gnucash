@@ -233,10 +233,10 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
      priv->dense_cal_model = NULL;
      gtk_widget_unref(GTK_WIDGET(priv->gdcal));
      priv->gdcal = NULL;
-     g_object_unref(G_OBJECT(priv->instances)); 
-     priv->instances = NULL;
      g_object_unref(G_OBJECT(priv->tree_model));
      priv->tree_model = NULL;
+     g_object_unref(G_OBJECT(priv->instances)); 
+     priv->instances = NULL;
 
      G_OBJECT_CLASS (parent_class)->dispose(object);
      LEAVE(" ");
@@ -390,8 +390,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
           priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
           // gobject-2.10: g_object_ref_sink(G_OBJECT(priv->gdcal));
-	  g_object_ref(G_OBJECT(priv->gdcal));
-	  gtk_object_sink(GTK_OBJECT(priv->gdcal));
+          g_object_ref(G_OBJECT(priv->gdcal));
+          gtk_object_sink(GTK_OBJECT(priv->gdcal));
+
           gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
           gnc_dense_cal_set_num_months(priv->gdcal, 12);
 
@@ -449,7 +450,7 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
 {
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
-	
+
      g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
      g_return_if_fail(key_file != NULL);
      g_return_if_fail(group_name != NULL);
@@ -482,7 +483,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 {
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
-	
+
      g_return_val_if_fail(key_file, NULL);
      g_return_val_if_fail(group_name, NULL);
      ENTER("key_file %p, group_name %s", key_file, group_name);

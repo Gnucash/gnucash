@@ -60,7 +60,7 @@ TODO
 - bugs
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
-! - [ ] crash with two sx lists open and SX mutation
+! - [x] crash with two sx lists open and SX mutation
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
     [[[
     (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'

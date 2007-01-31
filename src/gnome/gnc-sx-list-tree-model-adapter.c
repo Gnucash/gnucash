@@ -579,7 +579,8 @@ gnc_sx_list_tree_model_adapter_dispose(GObject *obj)
 
      g_return_if_fail(obj != NULL);
      adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(obj);
-     g_return_if_fail(adapter->disposed);
+
+     if (adapter->disposed) return;
      adapter->disposed = TRUE;
 
      g_object_unref(G_OBJECT(adapter->instances));
