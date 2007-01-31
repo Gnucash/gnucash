@@ -78,14 +78,16 @@ check_unary_op_r (gboolean (*eqtest) (gnc_numeric, gnc_numeric),
 
 /* ======================================================= */
 
-#define check_binary_op(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__)
+#define check_binary_op(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__,gnc_numeric_eq)
+#define check_binary_op_equal(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__,gnc_numeric_equal)
 static void
 check_binary_op_r (gnc_numeric expected, 
 		   gnc_numeric actual, 
 		   gnc_numeric input_a, 
 		   gnc_numeric input_b, 
 		   const char * errmsg,
-		   int line)
+		   int line,
+		   gboolean (*eq)(gnc_numeric, gnc_numeric))
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
@@ -93,7 +95,7 @@ check_binary_op_r (gnc_numeric expected,
 	char *b = gnc_numeric_print (input_b);
 	char *str = g_strdup_printf (errmsg, e,r,a,b);
 	
-	do_test_call (gnc_numeric_eq(expected, actual), str, __FILE__, line);
+	do_test_call ((eq)(expected, actual), str, __FILE__, line);
 	
 	g_free (a);
 	g_free (b);
@@ -638,7 +640,7 @@ check_mult_div (void)
 		a = gnc_numeric_create(na, deno);
 		b = gnc_numeric_create(nb, deno);
 
-		check_binary_op (gnc_numeric_create(ne,1), 
+		check_binary_op_equal (gnc_numeric_create(ne,1), 
 			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
@@ -655,7 +657,7 @@ check_mult_div (void)
 		/* Do some hokey random 128-bit division too */
 		b = gnc_numeric_create(deno, nb);
 
-		check_binary_op (gnc_numeric_create(ne,1), 
+		check_binary_op_equal (gnc_numeric_create(ne,1), 
 			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s / %s for div exact");
 
