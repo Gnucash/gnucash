@@ -381,35 +381,36 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
 
 #ifdef HAVE_TIMEGM
 #  define gnc_timegm timegm
-#else
+#else /* !HAVE_TIMEGM */
+
+/* This code originates from GLib 2.12, gtimer.c and works until the year 2100
+ * or the system-dependent maximal date that can be represented by a time_t,
+ * whatever comes first.  The old implementation called mktime after setting
+ * the environment variable TZ to UTC.  It did not work on Windows, at least.
+ */
+static const gint days_before[] = {
+  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
+};
+
 static time_t
 gnc_timegm (struct tm *tm)
 {
-  time_t result;
-  char *old_tz;
+  time_t retval;
+  if (tm->tm_mon < 0 || tm->tm_mon > 11)
+    return (time_t) -1;
 
-  old_tz = g_strdup(g_getenv ("TZ"));
-  /* FIXME: there's no way to report this error to the caller. */
-  if (!g_setenv("TZ", "UTC", TRUE))
-    PERR ("couldn't switch the TZ.");
-  result = mktime (tm);
-  if(old_tz)
-  {
-    /* FIXME: there's no way to report this error to the caller. */
-    if (!g_setenv("TZ", old_tz, TRUE))
-      PERR ("couldn't switch the TZ back.");
-    g_free(old_tz);
-  }
-  else
-  {
-    /* FIXME: there's no way to report this error to the caller. */
-    g_unsetenv("TZ");
-    if(errno != 0)
-      PERR ("couldn't restore the TZ to undefined.");
-  }
-  return result;
+  retval = (tm->tm_year - 70) * 365;
+  retval += (tm->tm_year - 68) / 4;
+  retval += days_before[tm->tm_mon] + tm->tm_mday - 1;
+
+  if (tm->tm_year % 4 == 0 && tm->tm_mon < 2)
+    retval -= 1;
+  
+  retval = ((((retval * 24) + tm->tm_hour) * 60) + tm->tm_min) * 60 + tm->tm_sec;
+
+  return retval;
 }
-#endif
+#endif /* HAVE_TIMEGM */
 
 
 /****************************************************************************/
