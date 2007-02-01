@@ -294,7 +294,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
           const PangoFontDescription *existing_font_desc;
           PangoFontDescription *font_desc;
           gint font_size;
-          gint font_size_reduction_pts = 1;
+          gint font_size_reduction_units = 1;
 
           layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
 
@@ -302,7 +302,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
           font_desc = pango_font_description_copy(style->font_desc);
           font_size = pango_font_description_get_size(font_desc);
-          font_size -= font_size_reduction_pts * PANGO_SCALE;
+          font_size -= font_size_reduction_units * PANGO_SCALE;
           pango_font_description_set_size(font_desc, font_size);
           gtk_widget_modify_font(GTK_WIDGET(dcal), font_desc);
           pango_font_description_free(font_desc);
