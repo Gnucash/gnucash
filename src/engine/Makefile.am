@@ -8,7 +8,6 @@ AM_CFLAGS = \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	-I${top_srcdir}/src/business/business-core/ \
 	${QOF_CFLAGS} \
 	${GNUCASH_ENGINE_CFLAGS}
 
