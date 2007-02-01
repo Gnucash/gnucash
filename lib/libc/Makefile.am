@@ -2,7 +2,7 @@ noinst_LTLIBRARIES = libc-missing.la
 
 # All header files must be listed.
 noinst_HEADERS = \
-  localtime_r.h setenv.h strptime.h
+  localtime_r.h setenv.h strptime.h pow.h
 
 # No sources should be listed.
 libc_missing_la_SOURCES = libc-missing-noop.c

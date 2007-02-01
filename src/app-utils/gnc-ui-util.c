@@ -30,6 +30,9 @@
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
+#ifdef G_OS_WIN32
+#include <pow.h>
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
