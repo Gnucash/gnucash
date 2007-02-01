@@ -124,6 +124,9 @@ void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
+gboolean xaccSchedXactionGetEnabled( SchedXaction *sx );
+void xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled );
+
 void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                     gboolean *outAutoCreate,
                                     gboolean *outNotify );

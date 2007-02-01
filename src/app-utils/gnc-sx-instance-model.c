@@ -413,20 +413,34 @@ gnc_sx_get_current_instances(void)
 GncSxInstanceModel*
 gnc_sx_get_instances(GDate *range_end)
 {
+     GList *enabled_sxes = NULL;
      GncSxInstanceModel *instances;
-     GList *sxes;
 
      g_assert(range_end != NULL);
      g_assert(g_date_valid(range_end));
 
+     {
+          GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+          GList *sx_iter = g_list_first(all_sxes);
+          
+          for (; sx_iter != NULL; sx_iter = sx_iter->next)
+          {
+               SchedXaction *sx = (SchedXaction*)sx_iter->data;
+               if (xaccSchedXactionGetEnabled(sx))
+               {
+                    enabled_sxes = g_list_append(enabled_sxes, sx);
+               }
+          }
+     }
+
      instances = gnc_sx_instance_model_new();
      instances->range_end = *range_end;
-     sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
-     instances->sx_instance_list = gnc_g_list_map(sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+     instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+
+     g_list_free(enabled_sxes);
 
      return instances;
 }
-
 static GncSxInstanceModel*
 gnc_sx_instance_model_new(void)
 {
@@ -585,6 +599,7 @@ _gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_
      return -1;
 }
 
+// @fixme: this needs to ignore non-enabled SXes
 static void
 _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {

@@ -493,9 +493,9 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   gnc_sx_set_instance_count( sx, 1 );
 
   /* Set the autocreate, days-in-advance and remind-in-advance values from
-     options. */
-  {
-    gboolean autoCreateState, notifyState;
+   * options. */
+  { 
+    gboolean autoCreateState, notifyState; 
     gint daysInAdvance;
 
     autoCreateState =

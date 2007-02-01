@@ -55,6 +55,7 @@ static QofLogModule log_module = GNC_MOD_SX;
  * <gnc:schedxaction version="1.0.0">
  *   <sx:id type="guid">...</sx:id>
  *   <sx:name>Rent</sx:name>
+ *   <sx:enabled>y</sx:enabled>
  *   <sx:autoCreate>y</sx:autoCreate>
  *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
  *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
@@ -117,6 +118,7 @@ static QofLogModule log_module = GNC_MOD_SX;
 
 #define SX_ID                   "sx:id"
 #define SX_NAME                 "sx:name"
+#define SX_ENABLED              "sx:enabled"
 #define SX_AUTOCREATE           "sx:autoCreate"
 #define SX_AUTOCREATE_NOTIFY    "sx:autoCreateNotify"
 #define SX_ADVANCE_CREATE_DAYS  "sx:advanceCreateDays"
@@ -163,6 +165,9 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                                   xaccSchedXactionGetGUID(sx)) );
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
+
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_ENABLED,
+                     BAD_CAST ( sx->enabled ? "y" : "n" ) );
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE,
                      BAD_CAST ( sx->autoCreateOption ? "y" : "n" ) );
@@ -280,6 +285,18 @@ sx_name_handler( xmlNodePtr node, gpointer sx_pdata )
     g_return_val_if_fail( tmp, FALSE );
     xaccSchedXactionSetName( sx, tmp );
     g_free( tmp );
+
+    return TRUE;
+}
+
+static gboolean
+sx_enabled_handler( xmlNodePtr node, gpointer sx_pdata )
+{
+    struct sx_pdata *pdata = sx_pdata;
+    SchedXaction *sx = pdata->sx;
+    gchar *tmp = dom_tree_to_text( node );
+
+    sx->enabled = (safe_strcmp( tmp, "y" ) == 0 ? TRUE : FALSE );
 
     return TRUE;
 }
@@ -561,6 +578,7 @@ sx_slots_handler( xmlNodePtr node, gpointer sx_pdata )
 struct dom_tree_handler sx_dom_handlers[] = {
     { SX_ID,                  sx_id_handler,         1, 0 },
     { SX_NAME,                sx_name_handler,       1, 0 },
+    { SX_ENABLED,             sx_enabled_handler,    0, 0 }, 
     { SX_AUTOCREATE,          sx_autoCreate_handler, 1, 0 },
     { SX_AUTOCREATE_NOTIFY,   sx_notify_handler,     1, 0 },
     { SX_ADVANCE_CREATE_DAYS, sx_advCreate_handler,  1, 0 },

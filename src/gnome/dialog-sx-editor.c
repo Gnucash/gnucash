@@ -73,6 +73,7 @@ static gint _sx_engine_event_handler_id = -1;
 #define SXED_WIN_PREFIX "sx_editor_win"
 #define SXED_NAME_ENTRY "sxe_name"
 #define SXED_LAST_OCCUR_LABEL "last_occur_label"
+#define ENABLED_OPT "enabled_opt"
 #define AUTOCREATE_OPT "autocreate_opt"
 #define NOTIFY_OPT "notify_opt"
 #define ADVANCE_OPT "advance_opt"
@@ -124,6 +125,7 @@ struct _GncSxEditorDialog
 
      GtkLabel *lastOccurLabel;
 
+     GtkToggleButton *enabledOpt;
      GtkToggleButton *autocreateOpt;
      GtkToggleButton *notifyOpt;
      GtkToggleButton *advanceOpt;
@@ -341,16 +343,29 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
 
         /* SX options [autocreate, notify, reminder, advance] */
         {
-                gboolean dlgAutoCreate, dlgNotify, sxAutoCreate, sxNotify;
+                gboolean dlgEnabled,
+                         dlgAutoCreate, 
+                         dlgNotify, 
+                         sxEnabled,
+                         sxAutoCreate, 
+                         sxNotify;
                 gint dlgAdvance, sxAdvance;
                 gint dlgRemind, sxRemind;
 
+                dlgEnabled =
+                        gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
+                                                                        enabledOpt) );
                 dlgAutoCreate =
                         gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
                                                                         autocreateOpt) );
                 dlgNotify =
                         gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->
                                                                         notifyOpt) );
+
+                sxEnabled = xaccSchedXactionGetEnabled( sxed->sx );
+                if ( ! ((dlgEnabled == sxEnabled)) ) {
+                        return TRUE;
+                }
 
                 xaccSchedXactionGetAutoCreate( sxed->sx, &sxAutoCreate, &sxNotify );
                 if ( ! ((dlgAutoCreate == sxAutoCreate)
@@ -909,6 +924,14 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
                 }
         }
 
+        /* Enabled states */
+        {
+                gboolean enabledState;
+
+                enabledState = gtk_toggle_button_get_active( sxed->enabledOpt );
+                xaccSchedXactionSetEnabled( sxed->sx, enabledState );
+        }
+
         /* Auto-create/notification states */
         {
                 gboolean autocreateState, notifyState;
@@ -959,6 +982,12 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         }
 
 }
+
+static void
+enabled_toggled( GtkObject *o, GncSxEditorDialog *sxed )
+{
+        return;
+} 
 
 static void
 autocreate_toggled( GtkObject *o, GncSxEditorDialog *sxed )
@@ -1053,6 +1082,8 @@ gnc_sxed_get_widgets( GncSxEditorDialog *sxed )
         sxed->nameEntry = GTK_EDITABLE(w);
         w = glade_xml_get_widget( sxed->gxml, SXED_LAST_OCCUR_LABEL );
         sxed->lastOccurLabel = GTK_LABEL(w);
+        w = glade_xml_get_widget( sxed->gxml, ENABLED_OPT );
+        sxed->enabledOpt = GTK_TOGGLE_BUTTON(w);
         w = glade_xml_get_widget( sxed->gxml, AUTOCREATE_OPT );
         sxed->autocreateOpt = GTK_TOGGLE_BUTTON(w);
         w = glade_xml_get_widget( sxed->gxml, NOTIFY_OPT );
@@ -1108,6 +1139,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
 
                 { REMAIN_SPIN ,     "value-changed", sxed_excal_update_adapt, NULL },
 
+                { ENABLED_OPT,      "toggled", enabled_toggled,              NULL },
                 { AUTOCREATE_OPT,   "toggled", autocreate_toggled,           NULL },
                 { ADVANCE_OPT,      "toggled", advance_toggle,               (gpointer)ADVANCE_DAYS_SPIN },
                 { REMIND_OPT,       "toggled", advance_toggle,               (gpointer)REMIND_DAYS_SPIN },
@@ -1300,7 +1332,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
         struct tm *tmpTm;
         GDate *gd;
         gint daysInAdvance;
-        gboolean autoCreateState, notifyState;
+        gboolean enabledState, autoCreateState, notifyState;
 
         name = xaccSchedXactionGetName(sxed->sx);
         if ( name != NULL ) {
@@ -1343,6 +1375,9 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
                 gtk_toggle_button_set_active( sxed->optEndNone, TRUE );
                 set_endgroup_toggle_states( sxed, END_NEVER );
         }
+
+        enabledState = xaccSchedXactionGetEnabled( sxed->sx );
+        gtk_toggle_button_set_active( sxed->enabledOpt, enabledState );
 
         /* Do auto-create/notify setup */
         if ( sxed->newsxP ) {

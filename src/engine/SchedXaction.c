@@ -60,6 +60,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    g_date_clear( &sx->start_date, 1 );
    g_date_clear( &sx->end_date, 1 );
 
+   sx->enabled = 1;
    sx->num_occurances_total = 0;
    sx->autoCreateOption = FALSE;
    sx->autoCreateNotify = FALSE;
@@ -371,6 +372,21 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 
   gnc_sx_begin_edit(sx);
   kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
+}
+
+gboolean
+xaccSchedXactionGetEnabled( SchedXaction *sx )
+{
+    return sx->enabled;
+}
+
+void
+xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled)
+{
+  gnc_sx_begin_edit(sx);
+  sx->enabled = newEnabled;
   qof_instance_set_dirty(&sx->inst);
   gnc_sx_commit_edit(sx);
 }
