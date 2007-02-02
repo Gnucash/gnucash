@@ -1,5 +1,8 @@
 2007-02-02  Christian Stimming <stimming@tuhh.de>
 
+	* accounts/fr_CA/*: Added Canadian French account templates by
+	Serge P. Leblanc.
+	
 	* po/fr.po: Updated French translation by Fabrice Kurz. 
 
 2007-01-28  Derek Atkins  <derek@ihtfp.com>
