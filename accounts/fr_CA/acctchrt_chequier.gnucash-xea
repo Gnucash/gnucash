@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Chéquier
+    </gnc-act:title>
+    <gnc-act:short-description>
+   Ensemble de comptes incontournables pour utiliser GnuCash.
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+	    Sélectionnez ce groupe de comptes si vous ne voulez suivre que le solde de votre compte en banque.  Si le besoin s'en fait sentir plus tard, vous pourrez commencer un suivi plus serré de vos revenus et dépenses en ajoutant de nouveaux groupes de comptes.
+    </gnc-act:long-description>
+    <gnc:account version="2.0.0">
+	    <act:name>Actif</act:name>
+	    <act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
+	    <act:type>ASSET</act:type>
+	    <act:commodity>
+		    <cmdty:space>ISO4217</cmdty:space>
+		    <cmdty:id>CAD</cmdty:id>
+	    </act:commodity>
+	    <act:commodity-scu>100</act:commodity-scu>
+	    <act:description>Actif</act:description>
+	    <act:slots>
+		    <slot>
+			    <slot:key>placeholder</slot:key>
+			    <slot:value type="string">true</slot:value>
+		    </slot>
+	    </act:slots>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+	    <act:name>Liquidités</act:name>
+	    <act:id type="guid">aa06af77140bb86a516c66e2d80ca64b</act:id>
+	    <act:type>ASSET</act:type>
+	    <act:commodity>
+		    <cmdty:space>ISO4217</cmdty:space>
+		    <cmdty:id>CAD</cmdty:id>
+	    </act:commodity>
+	    <act:commodity-scu>100</act:commodity-scu>
+	    <act:description>Liquidités ou actifs liquides</act:description>
+	    <act:slots>
+		    <slot>
+			    <slot:key>placeholder</slot:key>
+			    <slot:value type="string">true</slot:value>
+		    </slot>
+	    </act:slots>
+	    <act:parent type="guid">b14f810bdb0b57b77acf1a5db700068c</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+	    <act:name>Chèques</act:name>
+	    <act:id type="guid">bef57c492226d9c0fd9ded264f4b2c4c</act:id>
+	    <act:type>BANK</act:type>
+	    <act:commodity>
+		    <cmdty:space>ISO4217</cmdty:space>
+		    <cmdty:id>CAD</cmdty:id>
+	    </act:commodity>
+	    <act:commodity-scu>100</act:commodity-scu>
+	    <act:description>Compte chèques</act:description>
+	    <act:parent type="guid">aa06af77140bb86a516c66e2d80ca64b</act:parent>
+    </gnc:account>
+   	    <gnc:account version="2.0.0">
+		    <act:name>Capitaux propres</act:name>
+		    <act:id type="guid">7715b898a1079feb67f582f438c62177</act:id>
+		    <act:type>EQUITY</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Capitaux propres</act:description>
+		    <act:slots>
+			    <slot>
+				    <slot:key>placeholder</slot:key>
+				    <slot:value type="string">true</slot:value>
+			    </slot>
+		    </act:slots>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Ouverture</act:name>
+		    <act:id type="guid">7f794a970bc2c9c1def2d39238418718</act:id>
+		    <act:type>EQUITY</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Soldes d'ouverture des nouveaux comptes</act:description>
+		    <act:parent type="guid">7715b898a1079feb67f582f438c62177</act:parent>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Dépenses</act:name>
+		    <act:id type="guid">5882be9c31d58cc589c53f94d86f82da</act:id>
+		    <act:type>EXPENSE</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Dépenses</act:description>
+	    </gnc:account>
+	    <gnc:account version="2.0.0">
+		    <act:name>Revenus</act:name>
+		    <act:id type="guid">e5e6414e2da9abb0d11a675a1244e380</act:id>
+		    <act:type>INCOME</act:type>
+		    <act:commodity>
+			    <cmdty:space>ISO4217</cmdty:space>
+			    <cmdty:id>CAD</cmdty:id>
+		    </act:commodity>
+		    <act:commodity-scu>100</act:commodity-scu>
+		    <act:description>Revenus</act:description>
+	    </gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
