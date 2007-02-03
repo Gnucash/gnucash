@@ -2037,8 +2037,11 @@ else
 fi
 AC_MSG_RESULT($warnFLAGS)
 
-# Extend LDFLAGS because libtool on Windows requires this argument
-LDFLAGS="${LDFLAGS} -no-undefined"
+# Adjust CFLAGS and LDFLAGS on Windows
+if test "x${platform_win32}" = "xyes"; then
+  CFLAGS="${CFLAGS} -mms-bitfields"
+  LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
+fi
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
