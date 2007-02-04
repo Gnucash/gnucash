@@ -1299,7 +1299,16 @@ gnc_get_reconcile_info (Account *account,
     xaccAccountGetReconcileLastInterval (account, &months, &days);
 
     if (months) {
+      gboolean was_last_day_of_month = g_date_is_last_of_month(&date);
+
       g_date_add_months(&date, months);
+
+      /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/31 */ 
+      if (was_last_day_of_month)
+      {
+        g_date_set_day(&date, g_date_get_days_in_month(g_date_get_month(&date),
+                                                       g_date_get_year(&date)));
+      }
     } else {
       g_date_add_days(&date, days);
     }
