@@ -17,7 +17,7 @@ exec guile -s $0 "$@"
 (define is-windows?
   (let ((ostype (getenv "OSTYPE")))
     (and ostype
-	 (string=? ostype "msys"))))
+         (string=? ostype "msys"))))
 
 (define args (cdr (command-line)))
 (define display-exports? #t)
@@ -86,48 +86,34 @@ exec guile -s $0 "$@"
 
 (process-args! args)
 
-(display "GNC_MODULE_PATH=\"${GNC_MODULE_PATH}")
-(display (adapt-dirsep
-	  (apply string-append
-		 (map
-		  (lambda (dir)
-		    (string-append path-sep-str dir "/.libs"))
-		  gnc-module-dirs))))
-(display "\"")
+(define (get-dir-adder env-name dir-list item-suffix separator)
+  (string-append env-name "=\""
+                 (apply string-append
+                        (map
+                         (lambda (dir)
+                           (string-append dir item-suffix separator))
+                         dir-list))
+                 "${" env-name "}\" "))
 
-(display " GUILE_LOAD_PATH=\"${GUILE_LOAD_PATH}")
-(display (adapt-dirsep
-	  (string-join (append '("") guile-load-dirs)
-		       path-sep-str)))
-(display "\"")
+(display
+ (adapt-dirsep
+  (get-dir-adder "GNC_MODULE_PATH" gnc-module-dirs "/.libs" path-sep-str)))
 
-(display " LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}")
-(display (adapt-dirsep
-	  (apply string-append
-		 (map
-		  (lambda (dir)
-		    (string-append path-sep-str dir "/.libs"))
-		  library-dirs))))
-(display "\"")
+(display
+ (adapt-dirsep
+  (get-dir-adder "GUILE_LOAD_PATH" guile-load-dirs "" path-sep-str)))
 
-(display " DYLD_LIBRARY_PATH=\"${DYLD_LIBRARY_PATH}")
-(display (adapt-dirsep
-	  (apply string-append
-		 (map
-		  (lambda (dir)
-		    (string-append path-sep-str dir "/.libs"))
-		  library-dirs))))
-(display "\"")
+(display
+ (adapt-dirsep
+  (get-dir-adder "LD_LIBRARY_PATH" library-dirs "/.libs" path-sep-str)))
+
+(display
+ (adapt-dirsep
+  (get-dir-adder "DYLD_LIBRARY_PATH" library-dirs "/.libs" path-sep-str)))
 
 (if is-windows?
-    (begin
-      (display " PATH=\"${PATH}")
-      (display (apply string-append
-		      (map
-		       (lambda (dir)
-			 (string-append ":" dir "/.libs"))
-		       library-dirs)))
-      (display "\"")))
+    (display
+     (get-dir-adder "PATH" library-dirs "/.libs" ":")))
 
 (if display-exports?
     (begin
@@ -137,7 +123,7 @@ exec guile -s $0 "$@"
       (display " export LD_LIBRARY_PATH;")
       (display " export DYLD_LIBRARY_PATH;")
       (if is-windows?
-	  (display " export PATH;"))))
+          (display " export PATH;"))))
 
 ;; Local Variables:
 ;; mode: scheme
