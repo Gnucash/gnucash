@@ -1014,7 +1014,7 @@ gnc_backend_new(void)
 	be->load_config = NULL;
 	be->get_config = NULL;
 
-        be->export = gnc_file_be_write_accounts_to_file;
+    be->export = gnc_file_be_write_accounts_to_file;
 
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
@@ -1024,11 +1024,11 @@ gnc_backend_new(void)
 
 	gnc_be->primary_book = NULL;
 
-        gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
-        gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+    gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+    gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
 
-        gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
-        gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
+    gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
+    gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
 
 	return be;
 }
