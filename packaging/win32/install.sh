@@ -555,6 +555,7 @@ function inst_libgsf() {
 function inst_goffice() {
     setup GOffice
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists libgoffice-0.3
     then
