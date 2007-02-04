@@ -1,3 +1,12 @@
+2007-02-04  Andreas Köhler  <andi5.py@gmx.net>
+
+	Do not crash on delete_event in new user dialog. Fix #401484.
+
+	If the new user dialog is closed with the help of the window
+	manager, the delete_event is not handled and
+	g_assert_not_reached() is reached by the code. Treat it like a
+	click on "Cancel" instead.
+
 2007-02-02  Christian Stimming <stimming@tuhh.de>
 
 	* accounts/fr_CA/*: Added Canadian French account templates by
