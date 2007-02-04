@@ -700,6 +700,7 @@ function inst_gnucash() {
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _REL_REPOS_UDIR=`unix_path $REL_REPOS_DIR`
     mkdir -p $_BUILD_UDIR
+    add_to_env $_INSTALL_UDIR/bin PATH
 
     # When aqbanking is enabled, uncomment this:
     AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
