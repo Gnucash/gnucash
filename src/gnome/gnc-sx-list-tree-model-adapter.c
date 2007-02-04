@@ -454,6 +454,19 @@ gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 }
 
 static void
+_format_conditional_date(GDate *date, char *date_buf, int buf_max_length)
+{
+     if (date == NULL || !g_date_valid(date))
+     {
+          g_stpcpy(date_buf, "never");
+     }
+     else
+     {
+          qof_print_gdate(date_buf, buf_max_length, date);
+     }
+}
+
+static void
 gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
 {
      GtkTreeIter iter;
@@ -471,21 +484,10 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
           fs = xaccSchedXactionGetFreqSpec(instances->sx);
           xaccFreqSpecGetFreqStr(fs, frequency_str);
 
-          {
-               GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
-               if (last_occur == NULL || !g_date_valid(last_occur))
-               {
-                    g_stpcpy(last_occur_date_buf, "never");
-               }
-               else
-               {
-                    qof_print_gdate(last_occur_date_buf,
-                                    MAX_DATE_LENGTH,
-                                    last_occur);
-               }
-          }
-
-          qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
+          _format_conditional_date(xaccSchedXactionGetLastOccurDate(instances->sx),
+                                   last_occur_date_buf, MAX_DATE_LENGTH);
+          _format_conditional_date(&instances->next_instance_date,
+                                   next_occur_date_buf, MAX_DATE_LENGTH);
 
           gtk_tree_store_append(model->orig, &iter, NULL);
           gtk_tree_store_set(model->orig, &iter,
