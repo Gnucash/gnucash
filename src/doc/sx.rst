@@ -24,6 +24,7 @@ TODO
   - [x] move files around
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
+  - [ ] move documentation into doxygen comments, here and in sources.
 
 - core
   - [x] sx list -> qof collection
