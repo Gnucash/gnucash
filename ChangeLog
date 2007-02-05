@@ -1,5 +1,12 @@
 2007-02-04  Joshua Sled  <jsled@asynchronous.org>
 
+	Bug#168700: extension of fin.scm with cpd_{,i,p}pmt functions,
+	featuring variable compounding and consistent rounding functions.
+	Patch from Ludovic Nicolle <ludo_gnc@chezludo.com>, though moved
+	around in the file a bit.
+
+2007-02-04  Joshua Sled  <jsled@asynchronous.org>
+
 	Bug#372262: create the session with the file-creation option enabled.
 
 2007-02-04  Andreas Köhler  <andi5.py@gmx.net>
