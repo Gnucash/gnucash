@@ -203,6 +203,25 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libxml-2 libxml2_2.6.17-0ubuntu1_i386.deb
     - pango libpango1.0-0_1.8.1-0ubuntu2
 - Mandriva
+  -  2007.0 = 2007-01-03
+    [from ftp://ftp.proxad.net/pub/Distributions_Linux/MandrivaLinux/official/2007.0/i586/media/main/]
+    - aqbanking-2.2.1
+    - libcairo2-1.2.4
+    - gconf-2.14.0
+    - glib-2.12.3
+    - gtk+-2.10.3
+    - guile-1.6.8
+    - g-wrap-1.9.6
+    - libart-2.3.17
+    - libglade-2.6.0
+    - libgnomeprint-2.2-2.12.1
+    - libgnomeui-2.16.0
+    - libgsf-1.14.1
+    - libofx-0.8.0
+    - libxml-2.6.26
+    - pango-1.14.3
+    - libgtkhtml-3.8-3.12.0
+    Note: -devel packages for the libraries above must also be installed.
   -  2006 = 2005-10-06
     [from ftp://ftp.rutgers.edu/pub/Mandrakelinux/devel/2006.0/i586/media/main/]
     - aqbanking-1.2.0
