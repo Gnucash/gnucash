@@ -238,17 +238,10 @@ static gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
      SchedXactions *sxes;
-#if 0 // old
-     GList *list;
-     list = gnc_book_get_schedxactions (data->book);
-     list = g_list_append(list, sx);
-     gnc_book_set_schedxactions(data->book, list);
-#endif // 0
      sxes = gnc_book_get_schedxactions(data->book);
      gnc_sxes_add_sx(sxes, sx);
      data->counter.schedXactions_loaded++;
      run_callback(data, "schedXactions");
-     
      return TRUE;
 }
 
