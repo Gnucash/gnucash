@@ -170,6 +170,15 @@ INNO_DIR=$GLOBAL_DIR\\inno
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
+# OFX import in gnucash and ofx directconnect support for aqbanking
+OPENSP_URL="$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"
+OPENSP_DIR=$GLOBAL_DIR\\opensp
+OPENSP_PATCH=`pwd`/opensp-1.5.2-patch.diff
+
+LIBOFX_URL="$SF_MIRROR/libofx/libofx-0.8.3.tar.gz"
+LIBOFX_DIR=$GLOBAL_DIR\\libofx
+LIBOFX_PATCH=`pwd`/libofx-0.8.3-patch.diff
+
 ## online banking: gwenhywfar+aqbanking
 GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.2.tar.gz"
 GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
@@ -204,6 +213,8 @@ add_step inst_swig
 add_step inst_libgsf
 add_step inst_goffice
 #add_step inst_glade
+add_step inst_opensp
+add_step inst_libofx
 ## Online banking:
 add_step inst_gwenhywfar
 add_step inst_aqbanking

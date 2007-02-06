@@ -617,6 +617,56 @@ function inst_inno() {
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
+function inst_opensp() {
+    setup Opensp
+    _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
+    add_to_env ${_OPENSP_UDIR}/bin PATH
+    if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
+    then
+	echo "Opensp already installed. Skipping."
+    else
+	wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
+	qpushd $TMP_UDIR/OpenSP-*
+	    [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
+		patch -p0 < $OPENSP_PATCH
+	    automake lib/Makefile
+	    ./configure \
+	        --prefix=${_OPENSP_UDIR} \
+		--disable-doc-build --disable-static
+	    # The subdir "sx" needs to think we're in MSVC, but
+	    # all the rest builds fine without that define.
+	    make CPPFLAGS="-D_MSC_VER" -C sx || make
+	    make install
+	qpopd
+    fi
+    test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
+}
+
+function inst_libofx() {
+    setup Libofx
+    _LIBOFX_UDIR=`unix_path ${LIBOFX_DIR}`
+    add_to_env ${_LIBOFX_UDIR}/bin PATH
+    add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists libofx
+    then
+	echo "Libofx already installed. Skipping."
+    else
+	wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
+	qpushd $TMP_UDIR/libofx-*
+	    [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
+		patch -p0 < $LIBOFX_PATCH
+	    ./configure \
+	        --prefix=${_LIBOFX_UDIR} \
+		--with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
+		--with-opensp-libs=${_OPENSP_UDIR}/lib \
+		--disable-static
+	    make LDFLAGS="${LDFLAGS} -no-undefined"
+	    make install
+	qpopd
+    fi
+    quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
+}
+
 function inst_gwenhywfar() {
     setup Gwenhywfar
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
@@ -657,6 +707,7 @@ function inst_aqbanking() {
 		--with-frontends="cbanking" \
 		--with-backends="aqdtaus aqhbci" \
 	        --prefix=${_AQBANKING_UDIR}
+	    # With aqbanking-2.2.7, this will go as follows: --with-backends="aqdtaus aqhbci aqofxconnect" CPPFLAGS="-I${_LIBOFX_UDIR}/include LDFLAGS="-L${_LIBOFX_UDIR}/lib"
 	    make
 	    make install
 	qpopd
@@ -706,6 +757,7 @@ function inst_gnucash() {
     AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
     AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
+    LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
     qpushd $REPOS_DIR
         if test "x$cross_compile" = xyes ; then
@@ -725,6 +777,7 @@ function inst_gnucash() {
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
+	    ${LIBOFX_OPTIONS} \
 	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
