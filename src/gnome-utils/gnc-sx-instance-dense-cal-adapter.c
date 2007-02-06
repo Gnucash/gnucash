@@ -82,7 +82,10 @@ gsidca_instances_added_cb(GncSxInstanceModel *model, SchedXaction *sx_added, gpo
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
      printf("instance added\n");
-     g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(sx_added));
+     if (xaccSchedXactionGetEnabled(sx_added)) 
+     {
+          g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(sx_added));
+     }
 }
 
 static void
@@ -91,7 +94,14 @@ gsidca_instances_updated_cb(GncSxInstanceModel *model, SchedXaction *sx_updated,
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
      gnc_sx_instance_model_update_sx_instances(model, sx_updated);
      printf("instances updated\n");
-     g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT((gpointer)sx_updated));
+     if (xaccSchedXactionGetEnabled(sx_updated)) 
+     {
+          g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT((gpointer)sx_updated));
+     }
+     else
+     {
+          g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT((gpointer)sx_updated));
+     }
 }
 
 static void
@@ -167,7 +177,10 @@ gsidca_get_contained(GncDenseCalModel *model)
      for (sxes = adapter->instances->sx_instance_list; sxes != NULL; sxes = sxes->next)
      {
           GncSxInstances *sx_instances = (GncSxInstances*)sxes->data;
-          list = g_list_append(list, GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)));
+          if (xaccSchedXactionGetEnabled(sx_instances->sx)) 
+          {
+               list = g_list_append(list, GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)));
+          }
      }
      return list;
 }

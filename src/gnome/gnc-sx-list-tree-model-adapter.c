@@ -430,15 +430,30 @@ _next_occur_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpoi
                                            &b_inst->next_instance_date);
 }
 
+static gint
+_enabled_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+     GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(user_data);
+     GncSxInstances *a_inst, *b_inst;
+
+     a_inst = gsltma_get_sx_instances_from_orig_iter(adapter, a);
+     b_inst = gsltma_get_sx_instances_from_orig_iter(adapter, b);
+
+     if (xaccSchedXactionGetEnabled(a_inst->sx) && !xaccSchedXactionGetEnabled(b_inst->sx)) return 1;
+     if (!xaccSchedXactionGetEnabled(a_inst->sx) && xaccSchedXactionGetEnabled(b_inst->sx)) return -1;
+     return 0;
+}
+
 static void
 gnc_sx_list_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
 {
      GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(instance);
-     adapter->orig = gtk_tree_store_new(4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+     adapter->orig = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
      adapter->real = GTK_TREE_MODEL_SORT(gtk_tree_model_sort_new_with_model(GTK_TREE_MODEL(adapter->orig)));
 
      // setup sorting
      gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_NAME, _name_comparator, adapter, NULL);
+     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_ENABLED, _enabled_comparator, adapter, NULL);
      gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_FREQUENCY, _freq_comparator, adapter, NULL);
      gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_LAST_OCCUR, _last_occur_comparator, adapter, NULL);
      gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(adapter->real), SXLTMA_COL_NEXT_OCCUR, _next_occur_comparator, adapter, NULL);
@@ -492,6 +507,7 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
           gtk_tree_store_append(model->orig, &iter, NULL);
           gtk_tree_store_set(model->orig, &iter,
                              SXLTMA_COL_NAME, xaccSchedXactionGetName(instances->sx),
+                             SXLTMA_COL_ENABLED, xaccSchedXactionGetEnabled(instances->sx),
                              SXLTMA_COL_FREQUENCY, frequency_str->str,
                              SXLTMA_COL_LAST_OCCUR, last_occur_date_buf,
                              SXLTMA_COL_NEXT_OCCUR, next_occur_date_buf,
