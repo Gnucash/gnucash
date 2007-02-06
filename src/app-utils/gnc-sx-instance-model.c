@@ -407,22 +407,31 @@ gnc_sx_get_current_instances(void)
      GDate *now = g_date_new();
      g_date_clear(now, 1);
      g_date_set_time_t(now, time(NULL));
-     return gnc_sx_get_instances(now);
+     return gnc_sx_get_instances(now, FALSE);
 }
 
 GncSxInstanceModel*
-gnc_sx_get_instances(GDate *range_end)
+gnc_sx_get_instances(GDate *range_end, gboolean include_disabled)
 {
-     GList *enabled_sxes = NULL;
+     GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
      GncSxInstanceModel *instances;
 
      g_assert(range_end != NULL);
      g_assert(g_date_valid(range_end));
 
+     instances = gnc_sx_instance_model_new();
+     instances->include_disabled = include_disabled;
+     instances->range_end = *range_end;
+
+     if (include_disabled) 
      {
-          GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+          instances->sx_instance_list = gnc_g_list_map(all_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+     } 
+     else 
+     {
           GList *sx_iter = g_list_first(all_sxes);
-          
+          GList *enabled_sxes = NULL;
+
           for (; sx_iter != NULL; sx_iter = sx_iter->next)
           {
                SchedXaction *sx = (SchedXaction*)sx_iter->data;
@@ -431,13 +440,9 @@ gnc_sx_get_instances(GDate *range_end)
                     enabled_sxes = g_list_append(enabled_sxes, sx);
                }
           }
+          instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
+          g_list_free(enabled_sxes);
      }
-
-     instances = gnc_sx_instance_model_new();
-     instances->range_end = *range_end;
-     instances->sx_instance_list = gnc_g_list_map(enabled_sxes, (GncGMapFunc)_gnc_sx_gen_instances, range_end);
-
-     g_list_free(enabled_sxes);
 
      return instances;
 }
@@ -599,7 +604,6 @@ _gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_
      return -1;
 }
 
-// @fixme: this needs to ignore non-enabled SXes
 static void
 _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
@@ -621,9 +625,33 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           sx = GNC_SX(ent);
           // only send `updated` if it's actually in the model
           sx_is_in_model = (g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx) != NULL);
-          if (sx_is_in_model && event_type & QOF_EVENT_MODIFY)
+          if (event_type & QOF_EVENT_MODIFY)
           {
-               g_signal_emit_by_name(instances, "updated", (gpointer)sx);
+               if (sx_is_in_model)
+               {
+                    if (instances->include_disabled || xaccSchedXactionGetEnabled(sx))
+                    {
+                         g_signal_emit_by_name(instances, "updated", (gpointer)sx);
+                    }
+                    else
+                    {
+                         /* the sx was enabled but is now disabled */
+                         g_signal_emit_by_name(instances, "removing", (gpointer)sx);
+                    }
+               }
+               else
+               {
+                    /* determine if this is a legitimate SX or just a "one-off" / being created */
+                    GList *all_sxes = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
+                    if (g_list_find(all_sxes, sx) && (!instances->include_disabled && xaccSchedXactionGetEnabled(sx)))
+                    {
+                         /* it's moved from disabled to enabled, add the instances */
+                         instances->sx_instance_list
+                              = g_list_append(instances->sx_instance_list,
+                                              _gnc_sx_gen_instances((gpointer)sx, (gpointer)&instances->range_end));
+                         g_signal_emit_by_name(instances, "added", (gpointer)sx);
+                    }
+               }
           }
           /* else { unsupported event type; ignore } */
      }
@@ -641,19 +669,21 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                {
                     g_signal_emit_by_name(instances, "removing", (gpointer)sx);
                }
-               else
+               else if (instances->include_disabled)
                {
-                    // @@ fixme:
-                    printf("err\n");
+                   PWARN("Could not remove instances that do not exist in the model");
                }
           }
           else if (event_type & GNC_EVENT_ITEM_ADDED)
           {
-               /* generate instances, add to instance list, emit update. */
-               instances->sx_instance_list
-                    = g_list_append(instances->sx_instance_list,
-                                    _gnc_sx_gen_instances((gpointer)sx, (gpointer)&instances->range_end));
-               g_signal_emit_by_name(instances, "added", (gpointer)sx);
+               if (instances->include_disabled || xaccSchedXactionGetEnabled(sx))
+               {
+                    /* generate instances, add to instance list, emit update. */
+                    instances->sx_instance_list
+                         = g_list_append(instances->sx_instance_list,
+                                         _gnc_sx_gen_instances((gpointer)sx, (gpointer)&instances->range_end));
+                    g_signal_emit_by_name(instances, "added", (gpointer)sx);
+               }
           }
           /* else { printf("unsupported event type [%d]\n", event_type); } */
      }

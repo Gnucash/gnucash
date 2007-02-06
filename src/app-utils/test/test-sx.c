@@ -26,7 +26,7 @@ test_basic()
      g_date_clear(range_end_tomorrow, 1);
      g_date_set_time_t(range_end_tomorrow, time(NULL));
      g_date_add_days(range_end_tomorrow, 1);
-     model = gnc_sx_get_instances(range_end_tomorrow);
+     model = gnc_sx_get_instances(range_end_tomorrow, TRUE);
 
      {
           GncSxInstances *insts;
@@ -55,7 +55,7 @@ test_empty()
      GncSxInstanceModel *model;
 
      end = g_date_new_dmy(31, 12, way_in_the_future_year);
-     model = gnc_sx_get_instances(end);
+     model = gnc_sx_get_instances(end, TRUE);
      do_test(g_list_length(model->sx_instance_list) == 0, "no instances");
      g_object_unref(G_OBJECT(model));
      success("empty");
@@ -85,7 +85,7 @@ test_once()
 
      lonely = add_once_sx("once", when);
 
-     model = gnc_sx_get_instances(end);
+     model = gnc_sx_get_instances(end, TRUE);
 
      do_test(g_list_length(model->sx_instance_list) == 1, "1 instances");
      instances = (GncSxInstances*)model->sx_instance_list->data;
@@ -122,7 +122,7 @@ test_state_changes()
      g_date_add_days(end, 3);
 
      foo = add_daily_sx("foo", start, NULL, NULL);
-     model = gnc_sx_get_instances(end);
+     model = gnc_sx_get_instances(end, TRUE);
 
      do_test(g_list_length(model->sx_instance_list) == 1, "one sx");
      insts = (GncSxInstances*)g_list_nth_data(model->sx_instance_list, 0);

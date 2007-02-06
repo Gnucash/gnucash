@@ -53,6 +53,7 @@ typedef struct _GncSxInstanceModel
 
      /* public */
      GDate range_end;
+     gboolean include_disabled;
      GList *sx_instance_list; /* <GncSxInstances*> */
 } GncSxInstanceModel;
 
@@ -114,7 +115,7 @@ GType gnc_sx_instance_model_get_type(void);
 
 GncSxInstanceModel* gnc_sx_get_current_instances(void);
 
-GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end);
+GncSxInstanceModel* gnc_sx_get_instances(GDate *range_end, gboolean include_disabled);
 
 /**
  * Regenerates and updates the GncSxInstances* for the given SX.  Model

@@ -337,7 +337,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
           g_date_clear(&end, 1);
           g_date_set_time_t(&end, time(NULL));
           g_date_add_years(&end, 1);
-          priv->instances = GNC_SX_INSTANCE_MODEL(gnc_sx_get_instances(&end));
+          priv->instances = GNC_SX_INSTANCE_MODEL(gnc_sx_get_instances(&end, TRUE));
      }
 
      {

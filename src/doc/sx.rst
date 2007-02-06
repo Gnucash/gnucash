@@ -1,4 +1,4 @@
--*- rst -*-
+-*- mode: rst; buffer-file-coding-system: utf-8 -*-
 
 Scheduled Transactions
 ===============================================================
@@ -8,14 +8,14 @@ Overview
 
 - SX List
   - CRUD operations on SXes
-  - Show Next "year"s worth of SX instances
-    - gnc_sx_get_instances({now + 1yr})
+  - Show Next "year"s worth of enabled and disabled SX instances
+    - gnc_sx_get_instances({now + 1yr}, TRUE)
 
 - SX Editor
 
 - SinceLastRun
-  - Last .. present (+ create-in-advance, reminder) instances
-    - gnc_sx_get_instances(now)
+  - Last .. present (+ create-in-advance, reminder) enabled instances
+    - gnc_sx_get_instances(now, FALSE)
 
 TODO
 ----------
@@ -45,6 +45,7 @@ TODO
       - [ ] add instances
       - [ ] remove instances
       - [ ] make "weird"
+    - [ ] ± disabled flag
   - [x] ensure state consistency model is upheld
   - [ ] check variables-unbound logic
   - [ ] verify summary counts

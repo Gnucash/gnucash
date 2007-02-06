@@ -42,7 +42,7 @@ test()
      
      foo = add_daily_sx("foo", start, NULL, NULL);
 
-     model = gnc_sx_get_instances(end);
+     model = gnc_sx_get_instances(end, TRUE);
      setup_default_handlers(model);
 
      do_test(g_list_length(model->sx_instance_list) == 1, "1 instances");
