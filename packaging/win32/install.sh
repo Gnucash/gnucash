@@ -331,7 +331,7 @@ function inst_openssl() {
 	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
     fi
     if [ -f $WINDIR\\system32\\libssl32.dll -o -f $WINDIR\\system32\\libeay32.dll ] ; then
-	die "You have uninstalled the wrong version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
+	die "You have uninstalled the Win32OpenSSL-0_9_8d version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
     fi
 
     if test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a ; then
@@ -633,10 +633,12 @@ function inst_opensp() {
 	    ./configure \
 	        --prefix=${_OPENSP_UDIR} \
 		--disable-doc-build --disable-static
-	    # The subdir "sx" needs to think we're in MSVC, but
-	    # all the rest builds fine without that define.
-	    make CPPFLAGS="-D_MSC_VER" -C sx || make
-	    make install
+	    # On many windows machines, none of the programs will
+	    # build, but we only need the library, so ignore the rest.
+	    make all-am
+	    make -C lib
+	    make -i
+	    make -i install
 	qpopd
     fi
     test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
