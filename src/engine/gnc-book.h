@@ -15,3 +15,5 @@
 #define gnc_book_x qof_book_x
 #define gnc_book_x qof_book_x
 #define gnc_book_x qof_book_x
+
+#define GNC_BOOK(obj)     ((GNCBook*)(obj))
