@@ -213,12 +213,14 @@ function inst_autotools() {
     else
         wget_unpacked $AUTOCONF_URL $DOWNLOAD_DIR $TMP_DIR
         wget_unpacked $AUTOMAKE_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/autoconf-*
         qpushd $TMP_UDIR/autoconf-*
             echo "building autoconf..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
             make
             make install
         qpopd
+        assert_one_dir $TMP_UDIR/automake-*
         qpushd $TMP_UDIR/automake-*
             echo "building automake..."
             ./configure --prefix=$_AUTOTOOLS_UDIR
@@ -231,6 +233,7 @@ function inst_autotools() {
         echo "libtool/libtoolize already installed.  skipping."
     else
         wget_unpacked $LIBTOOL_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libtool-*
         qpushd $TMP_UDIR/libtool-*
             echo "building libtool..."
             ./configure ${HOST_XCOMPILE} --prefix=$_AUTOTOOLS_UDIR --disable-static
@@ -263,6 +266,7 @@ function inst_guile() {
         smart_wget $SLIB_URL $DOWNLOAD_DIR
         _SLIB_BALL=$LAST_FILE
         tar -xzpf $_GUILE_BALL -C $TMP_UDIR
+        assert_one_dir $TMP_UDIR/guile-*
         qpushd $TMP_UDIR/guile-*
             qpushd ice-9
                 cp boot-9.scm boot-9.scm.bak
@@ -538,6 +542,7 @@ function inst_libgsf() {
 	echo "libgsf already installed.  skipping."
     else
 	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/libgsf-*
 	qpushd $TMP_UDIR/libgsf-*
 	    ./configure ${HOST_XCOMPILE} \
 	        --prefix=$_LIBGSF_UDIR \
@@ -564,6 +569,7 @@ function inst_goffice() {
 	rm -rf $TMP_UDIR/goffice-*
 	wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
 	mydir=`pwd`
+	assert_one_dir $TMP_UDIR/goffice-*
 	qpushd $TMP_UDIR/goffice-*
 	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
 		patch -p1 < $GOFFICE_PATCH
@@ -592,6 +598,7 @@ function inst_glade() {
         echo "glade already installed.  skipping."
     else
         wget_unpacked $GLADE_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/glade3-*
         qpushd $TMP_UDIR/glade3-*
             ./configure ${HOST_XCOMPILE} --prefix=$_GLADE_WFSDIR
             make
@@ -626,6 +633,7 @@ function inst_opensp() {
 	echo "Opensp already installed. Skipping."
     else
 	wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/OpenSP-*
 	qpushd $TMP_UDIR/OpenSP-*
 	    [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
 		patch -p0 < $OPENSP_PATCH
@@ -654,6 +662,7 @@ function inst_libofx() {
 	echo "Libofx already installed. Skipping."
     else
 	wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/libofx-*
 	qpushd $TMP_UDIR/libofx-*
 	    [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
 		patch -p0 < $LIBOFX_PATCH
@@ -679,6 +688,7 @@ function inst_gwenhywfar() {
 	echo "Gwenhywfar already installed. Skipping."
     else
 	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/gwenhywfar-*
 	qpushd $TMP_UDIR/gwenhywfar-*
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
@@ -703,6 +713,7 @@ function inst_aqbanking() {
 	echo "AqBanking already installed. Skipping."
     else
 	wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/aqbanking-*
 	qpushd $TMP_UDIR/aqbanking-*
 	    ./configure \
 		--with-gwen-dir=${_GWENHYWFAR_UDIR} \
