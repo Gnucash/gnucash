@@ -708,7 +708,7 @@ function inst_aqbanking() {
 		--with-gwen-dir=${_GWENHYWFAR_UDIR} \
 		--with-frontends="cbanking" \
 		--with-backends="aqdtaus aqhbci aqofxconnect" \
-		CPPFLAGS="-I${_LIBOFX_UDIR}/include \
+		CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
 		LDFLAGS="-L${_LIBOFX_UDIR}/lib" \
 	        --prefix=${_AQBANKING_UDIR}
 	    make
