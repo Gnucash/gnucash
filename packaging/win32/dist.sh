@@ -29,6 +29,8 @@ function prepare() {
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _OPENSP_UDIR=`unix_path $OPENSP_DIR`
+    _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
@@ -130,6 +132,15 @@ function dist_goffice() {
     cp -a $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
 }
 
+function dist_libofx() {
+    setup OpenSP and LibOFX
+    cp -a ${_OPENSP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_OPENSP_UDIR}/share/OpenSP ${DIST_UDIR}/share
+    cp -a ${_LIBOFX_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
+}
+
 function dist_gwenhywfar() {
     setup gwenhywfar
     cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
@@ -202,6 +213,7 @@ dist_libxml2
 dist_gnome
 dist_libgsf
 dist_goffice
+dist_libofx
 dist_gwenhywfar
 dist_aqbanking
 dist_gnucash
