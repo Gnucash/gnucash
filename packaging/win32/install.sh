@@ -68,15 +68,15 @@ function prepare() {
 function inst_wget() {
     setup Wget
     _WGET_UDIR=`unix_path $WGET_DIR`
+    add_to_env $_WGET_UDIR/bin PATH
     if quiet $_WGET_UDIR/wget --version || quiet wget --version
     then
         echo "already installed.  skipping."
     else
-        mkdir -p $_WGET_UDIR
-        tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $WGET_DIR
-        cp $_WGET_UDIR/*/*/wget.exe $WGET_DIR
+        mkdir -p $_WGET_UDIR/bin
+        tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $_WGET_UDIR
+        cp $_WGET_UDIR/*/*/wget.exe $_WGET_UDIR/bin
     fi
-    add_to_env $_WGET_UDIR PATH
     quiet wget --version || die "wget unavailable"
 }
 
@@ -122,6 +122,7 @@ function inst_mingw() {
 function inst_unzip() {
     setup Unzip
     _UNZIP_UDIR=`unix_path $UNZIP_DIR`
+    add_to_env $_UNZIP_UDIR/bin PATH
     if quiet $_UNZIP_UDIR/bin/unzip --help || quiet unzip --help
     then
         echo "unzip already installed.  skipping."
@@ -130,7 +131,6 @@ function inst_unzip() {
         echo "!!! When asked for an installation path, specify $UNZIP_DIR !!!"
         $LAST_FILE
     fi
-    add_to_env $_UNZIP_UDIR/bin PATH
     quiet unzip --help || die "unzip unavailable"
 }
 
@@ -358,13 +358,12 @@ function inst_pexports() {
     else
         wget_unpacked $PEXPORTS_URL $DOWNLOAD_DIR $PEXPORTS_DIR
         qpushd $PEXPORTS_DIR
-	    mv pexports-* mydir
-	    mv mydir/* .
-	    rmdir mydir
+	    mkdir -p $_PEXPORTS_UDIR/bin
+	    cp pexports-*/bin/* $_PEXPORTS_UDIR/bin
 	    if test x$cross_compile = xyes ; then
-		cd src
+		cd pexports-*/src
 		make
-		cp pexports.exe ../bin/pexports
+		cp pexports.exe ../../bin/pexports
 	    fi
         qpopd
     fi

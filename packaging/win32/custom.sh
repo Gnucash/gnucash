@@ -44,7 +44,8 @@ DISABLE_OPTIMIZATIONS=no
 
 MSYS_DIR=$GLOBAL_DIR\\msys
 
-WGET_DIR=$GLOBAL_DIR\\wget
+# tools here means binaries runnable without other DLLs or data files
+WGET_DIR=$GLOBAL_DIR\\tools
 #WGET=
 
 SF_MIRROR="http://heanet.dl.sourceforge.net/sourceforge"
@@ -59,7 +60,7 @@ MINGW_URL="$SF_MIRROR/mingw/MinGW-5.1.0.exe"
 MINGW_DIR=$GLOBAL_DIR\\mingw
 
 UNZIP_URL="$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
-UNZIP_DIR=$GLOBAL_DIR\\unzip
+UNZIP_DIR=$GLOBAL_DIR\\tools
 
 # do not use regex-gnu or regex-spencer v3.8.g3, see bug #382852
 REGEX_URL="$GNOME_WIN32_DEPS_URL/libgnurx-2.5.zip"
@@ -71,7 +72,7 @@ READLINE_LIB_URL="$SF_MIRROR/gnuwin32/readline-5.0-lib.zip"
 READLINE_DIR=$GLOBAL_DIR\\readline
 
 INDENT_BIN_URL="$SF_MIRROR/gnuwin32/indent-2.2.9-bin.zip"
-INDENT_DIR=$GLOBAL_DIR\\indent
+INDENT_DIR=$GLOBAL_DIR\\tools
 
 ACTIVE_PERL_URL="http://downloads.activestate.com/ActivePerl/Windows/5.6/ActivePerl-5.6.1.638-MSWin32-x86.zip"
 ACTIVE_PERL_DIR=$GLOBAL_DIR\\active-perl
@@ -90,7 +91,7 @@ OPENSSL_LIB_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
 OPENSSL_DIR=$GLOBAL_DIR\\openssl
 
 PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
-PEXPORTS_DIR=$GLOBAL_DIR\\pexports
+PEXPORTS_DIR=$GLOBAL_DIR\\tools
 
 LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
 LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
