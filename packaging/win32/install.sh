@@ -670,6 +670,7 @@ function inst_libofx() {
 	        --prefix=${_LIBOFX_UDIR} \
 		--with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
 		--with-opensp-libs=${_OPENSP_UDIR}/lib \
+		CPPFLAGS="-DOS_WIN32" \
 		--disable-static
 	    make LDFLAGS="${LDFLAGS} -no-undefined"
 	    make install

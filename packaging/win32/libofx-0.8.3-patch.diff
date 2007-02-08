@@ -1,5 +1,6 @@
---- lib/ofx_preproc.cpp~	Tue Jan  9 02:38:33 2007
-+++ lib/ofx_preproc.cpp	Tue Feb  6 12:31:07 2007
+diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
+--- libofx-0.8.3/lib/ofx_preproc.cpp	Tue Jan  9 02:38:33 2007
++++ win32-libofx-0.8.3/lib/ofx_preproc.cpp	Thu Feb  8 13:53:59 2007
 @@ -20,6 +20,7 @@
  #include <iostream>
  #include <fstream>
@@ -8,20 +9,79 @@
  #include <stdio.h>
  #include <string>
  #include "ParserEventGeneratorKit.h"
-@@ -76,7 +77,7 @@
+@@ -51,6 +52,32 @@
+   "~/"};
+ const unsigned int READ_BUFFER_SIZE = 1024;
+ 
++#ifdef OS_WIN32
++# define DIR_SEPARATOR_S "\\"
++#else
++# define DIR_SEPARATOR_S "/"
++#endif
++// The filenames can get quite long on windows.
++#define TMPFILEBUFSIZE 120
++
++std::string get_tmp_dir()
++{
++  // Tries to mimic the behaviour of
++  // http://developer.gnome.org/doc/API/2.0/glib/glib-Miscellaneous-Utility-Functions.html#g-get-tmp-dir
++#ifdef OS_WIN32
++  char *var;
++  var = getenv("TMPDIR");
++  if (var) return var;
++  var = getenv("TMP");
++  if (var) return var;
++  var = getenv("TEMP");
++  if (var) return var;
++  return "C:\\";
++#else
++  return "/tmp";
++#endif
++}
++
+ /** @brief File pre-processing of OFX AND for OFC files 
+ *
+ * Takes care of comment striping, dtd locating, etc.
+@@ -66,7 +93,7 @@
+   char buffer[READ_BUFFER_SIZE];
+   string s_buffer;
+   char *filenames[3];
+-  char tmp_filename[50];
++  char tmp_filename[TMPFILEBUFSIZE];
+ 
+   libofx_context=(LibofxContext*)ctx;
+ 
+@@ -75,8 +102,10 @@
+     message_out(DEBUG, string("ofx_proc_file():Opening file: ")+ p_filename);
      
      input_file.open(p_filename);
-     strncpy(tmp_filename,"/tmp/libofxtmpXXXXXX",50);
+-    strncpy(tmp_filename,"/tmp/libofxtmpXXXXXX",50);
 -    mkstemp(tmp_filename);
++    std::string tmpdir = get_tmp_dir();
++    std::string tmpfiletemplate = tmpdir + DIR_SEPARATOR_S "libofxtmpXXXXXX";
++    strncpy(tmp_filename,tmpfiletemplate.c_str(),TMPFILEBUFSIZE);
 +    mktemp(tmp_filename);
      tmp_file.open(tmp_filename);
  
      message_out(DEBUG,"ofx_proc_file(): Creating temp file: "+string(tmp_filename));
-@@ -217,7 +218,7 @@
+@@ -203,7 +232,7 @@
+   ofstream tmp_file;
+   string s_buffer;
+   char *filenames[3];
+-  char tmp_filename[50];
++  char tmp_filename[TMPFILEBUFSIZE];
+   int pos;
+   LibofxContext *libofx_context;
+ 
+@@ -216,8 +245,10 @@
+   }
    s_buffer=string(s, size);
  
-   strncpy(tmp_filename,"/tmp/libofxtmpXXXXXX",50);
+-  strncpy(tmp_filename,"/tmp/libofxtmpXXXXXX",50);
 -  mkstemp(tmp_filename);
++  std::string tmpdir = get_tmp_dir();
++  std::string tmpfiletemplate = tmpdir + DIR_SEPARATOR_S "libofxtmpXXXXXX";
++  strncpy(tmp_filename,tmpfiletemplate.c_str(),TMPFILEBUFSIZE);
 +  mktemp(tmp_filename);
    tmp_file.open(tmp_filename);
  
