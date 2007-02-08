@@ -53,7 +53,6 @@
 #include "gnc-ui.h"
 #include "gnc-window.h"
 #include "gnc-session.h"
-
 #include "gnc-plugin-page-sx-list.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -221,6 +220,10 @@ GncPlugin *
 gnc_plugin_basic_commands_new (void)
 {
   GncPluginBasicCommands *plugin;
+
+  /* We just need to mention it, so the GType is registered and will be
+   * reflected during plugin-page restore. */
+  GNC_TYPE_PLUGIN_PAGE_SX_LIST;
 
   plugin = g_object_new (GNC_TYPE_PLUGIN_BASIC_COMMANDS, NULL);
 

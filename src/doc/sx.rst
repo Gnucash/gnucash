@@ -75,7 +75,7 @@ TODO
 
 - sx list page
 ! - [ ] use gnc-tree-view
-! - [ ] save/restore state
+! - [x] save/restore state
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
