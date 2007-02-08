@@ -165,6 +165,27 @@ if test $? = 0 ; then
   AC_PROG_SWIG(1.3.28)
 else
   BUILDING_FROM_SVN=no
+  # Make sure we've got swig-runtime.h and gnc-svninfo.h
+  AC_CHECK_FILE(${srcdir}/src/swig-runtime.h. [],
+	[AC_MSG_ERROR([
+
+It looks like you are NOT building from Subversion
+but I cannot find swig-runtime.h.  Check your PATH
+and make sure we can find svnversion in your PATH!
+Either that or contact gnucash-devel@gnucash.org because
+the tarball you downloaded is broken.
+
+	])])
+  AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h. [],
+	[AC_MSG_ERROR([
+
+It looks like you are NOT building from Subversion
+but I cannot find gnc-svninfo.h.  Check your PATH
+and make sure we can find svnversion in your PATH!
+Either that or contact gnucash-devel@gnucash.org because
+the tarball you downloaded is broken.
+
+	])])
 fi
 AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
 
