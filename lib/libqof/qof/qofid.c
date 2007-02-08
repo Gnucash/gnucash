@@ -33,90 +33,349 @@
 static QofLogModule log_module = QOF_MOD_ENGINE;
 static gboolean qof_alt_dirty_mode = FALSE;
 
-struct QofCollection_s
+/* GObject declarations */
+
+static void qof_collection_class_init(QofCollectionClass *klass);
+static void qof_collection_init(QofCollection *sp);
+static void qof_collection_finalize(GObject *object);
+
+struct _QofCollectionPrivate
 {
-  QofIdType    e_type;
+  GType		 type;
   gboolean     is_dirty;
   
   GHashTable * hash_of_entities;
-  gpointer     data;       /* place where object class can hang arbitrary data */
 };
 
-/* =============================================================== */
+typedef struct _QofCollectionSignal QofCollectionSignal;
+typedef enum _QofCollectionSignalType QofCollectionSignalType;
 
-gboolean
-qof_get_alt_dirty_mode (void)
+enum _QofCollectionSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
 {
-  return qof_alt_dirty_mode;
+        PROP_0,
+        PROP_TYPE
+};
+
+struct _QofCollectionSignal {
+	QofCollection *object;
+};
+
+static guint qof_collection_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+qof_collection_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (QofCollectionClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)qof_collection_class_init,
+			NULL,
+			NULL,
+			sizeof (QofCollection),
+			0,
+			(GInstanceInitFunc)qof_collection_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"QofCollection", &our_info, 0);
+	}
+
+	return type;
 }
 
-void
-qof_set_alt_dirty_mode (gboolean enabled)
+static void
+qof_collection_class_init(QofCollectionClass *klass)
 {
-  qof_alt_dirty_mode = enabled;
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = qof_collection_finalize;
+	object_class->set_property = qof_collection_set_property;
+    object_class->get_property = qof_collection_get_property;
+
+	/* Install properties */
+	
+	g_object_class_install_property (object_class, PROP_TYPE,
+					 g_param_spec_object ("type", _("Object's GType the Collection holds"), NULL,
+                                                              	G_TYPE_GTYPE,
+							       								(G_PARAM_READABLE | G_PARAM_WRITABLE |
+																			G_PARAM_CONSTRUCT_ONLY)));
+	/* Create signals here:*/
+ 	
 }
 
-/* =============================================================== */
-
-static void qof_collection_remove_entity (QofEntity *ent);
-
-void
-qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
+static void
+qof_collection_init(QofCollection *obj)
 {
-  g_return_if_fail (NULL != tab);
+	/* Initialize private members, etc. */
+  col->priv = g_new0 (QofCollectionPrivate, 1);
   
-  /* XXX We passed redundant info to this routine ... but I think that's
-   * OK, it might eliminate programming errors. */
-  if (safe_strcmp(tab->e_type, type))
-  {
-    PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
-    return;
-  }
-  ent->e_type = CACHE_INSERT (type);
-
-  do
-  {
-    guid_new(&ent->guid);
-
-    if (NULL == qof_collection_lookup_entity (tab, &ent->guid)) break;
-
-    PWARN("duplicate id created, trying again");
-  } while(1);
- 
-  ent->collection = tab;
-
-  qof_collection_insert_entity (tab, ent);
+  col->priv->type = G_TYPE_INVALID;
+  col->priv->hash_of_entities = g_hash_table_new (id_hash, id_compare);
 }
 
-void
-qof_entity_release (QofEntity *ent)
+static void
+qof_collection_finalize(GObject *object)
 {
-  if (!ent->collection) return;
-  qof_collection_remove_entity (ent);
-  CACHE_REMOVE (ent->e_type);
-  ent->e_type = NULL;
+	
+	/* Free private members, etc. */
+
+  g_hash_table_destroy(col->hash_of_entities);
+  col->type = G_TYPE_INVALID;
+  col->hash_of_entities = NULL;
+  
+	G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
+static void
+qof_collection_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	QofCollection *obj;
+	
+	obj = QOF_COLLECTION (object);
+	switch (param_id) {	
+		case PROP_TYPE:
+			if (obj->priv->hash_of_entities == NULL)
+			obj->priv->type =  g_value_get_gtype (value));
+			break;
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
 
-/* This is a restricted function, should be used only during 
- * read from file */
-void
-qof_entity_set_guid (QofEntity *ent, const GUID *guid)
+static void
+qof_collection_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  QofCollection *obj;
+  
+  obj = QOF_COLLECTION(object);
+
+  switch (property_id) {
+  case PROP_TYPE:
+  		g_value_set_int (value, obj->priv->type);
+  		break;
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+static guint id_hash (gconstpointer key);
+static gboolean id_compare(gconstpointer key_1, gconstpointer key_2);
+
+QofCollection *
+qof_collection_new (GType type)
 {
   QofCollection *col;
-  if (guid_equal (guid, &ent->guid)) return;
-
-  col = ent->collection;
-  qof_collection_remove_entity (ent);
-  ent->guid = *guid;
-  qof_collection_insert_entity (col, ent);
+  
+  g_return_val_if_fail (G_TYPE_IS_OBJECT (type));
+  
+  col = QOF_COLLECTION (g_object_new (QOF_TYPE_COLLECTION, "type", type));
+  
+  return col;
 }
 
-const GUID *
-qof_entity_get_guid (const QofEntity *ent)
+void
+qof_collection_destroy (QofCollection *col)
 {
-  if (!ent) return guid_null();
-  return &ent->guid;
+  g_return_if_fail (QOF_IS_COLLECTION (col));
+  
+  g_object_unref (col);
+}
+
+const GType
+qof_collection_get_g_type (const QofInstance *entity)
+{
+	return collection->priv->type;
+}
+
+
+void
+qof_collection_remove_element (QofCollection *coll, QofInstance *inst)
+{
+  QofInstance *obj;
+  
+  g_return_if_fail (QOF_IS_COLLECTION (coll) && QOF_IS_INSTANCE (inst));
+  
+  obj = qof_collection_get_element (coll, qof_collection_get_guid (inst));
+  
+  g_return_if_fail (QOF_IS_INSTANCE (col)); 
+  
+  g_hash_table_remove (col->priv->hash_of_entities, qof_instance_get_guid (inst));
+  
+  if (!qof_alt_dirty_mode)
+    qof_collection_mark_dirty (col);
+}
+
+
+gboolean
+qof_collection_add_element (QofCollection *coll, QofInstance *inst)
+{
+	
+	g_return_val_if_fail ( coll != NULL && 
+									!guid_equal(qof_instance_get_guid (inst), guid_null()) &&
+									qof_collection_lookup_element (coll, qof_instance_get_guid (inst)) == NULL &&
+									QOF_IS_INSTANCE (inst), 
+									FALSE);
+	
+	g_hash_table_insert (coll->hash_of_entities, qof_instance_get_guid (inst), inst);
+	
+	if (!qof_alt_dirty_mode)
+	  qof_collection_mark_dirty(coll);
+	  
+	return TRUE;
+}
+
+static void
+collection_merge_cb (QofInstance *ent, gpointer data)
+{
+	QofCollection *target;
+
+	target = (QofCollection*)data;
+	
+	qof_collection_add_element (target, ent);	
+}
+
+gboolean
+qof_collection_merge (QofCollection *target, QofCollection *merge)
+{
+	g_return_val_if_fail ( QOF_IS_COLLECTION (target) && QOF_IS_COLLECTION (merge), FALSE);
+	
+	g_return_val_if_fail (target->priv->type == merge->priv->type, FALSE);
+	
+	qof_collection_foreach(merge, collection_merge_cb, target);
+	
+	return TRUE;
+}
+
+static void
+collection_compare_cb (QofInstance *inst, gpointer user_data)
+{
+	QofCollection *target;
+	QofInstance *e;
+	gint value;
+	
+	g_return_if_fail (QOF_IS_INSTANCE (inst) && QOF_IS_COLLECTION (QOF_COLLECTION (user_data)));
+	
+	e = NULL;
+	
+	target = QOF_COLLECTION (user_data);
+	
+	value = *(gint*) g_object_get_data (G_OBJECT (target), "value");
+	
+	if (value != 0) { return; }
+	if (guid_equal(qof_instance_get_guid (inst), guid_null())) 
+	{
+		value = -1;
+		g_object_set_data (G_OBJECT (target), "value", &value);
+		return; 
+	}
+	
+	g_return_if_fail (target->type == G_OBJECT_TYPE (inst));
+	
+	e = qof_collection_lookup_element (target, qof_instance_get_guid (inst));
+	
+	if ( e == NULL )
+	{
+		value = 1;
+		g_object_set_data (G_OBJECT (target), "value", &value);
+		return;
+	}
+	else
+	{
+		value = 0;
+		g_object_set_data (G_OBJECT (target), "value", &value);
+		return;
+	}
+}
+
+gint
+qof_collection_compare (QofCollection *target, QofCollection *merge)
+{
+	gint value;
+
+	value = 0;
+	if (!target && !merge) { return 0; }
+	if (target == merge) { return 0; }
+	if (!target && merge) { return -1; }
+	if (target && !merge) { return 1; }
+	if(target->priv->type != merge->priv->type) { return -1; }
+	
+	g_object_set_data (G_OBJECT (target), "value", &value);
+
+	qof_collection_foreach(merge, collection_compare_cb, target);
+	
+	value = *(gint*) g_object_get_data(G_OBJECT (target), "value");
+	
+	if(value == 0) {
+		g_object_set_data (G_OBJECT (merge), "value", &value);
+		qof_collection_foreach(target, collection_compare_cb, merge);
+		value = *(gint*) g_object_get_data(G_OBJECT (merge), "value");
+	}
+	return value;
+}
+
+QofInstance *
+qof_collection_lookup_element (const QofCollection *col, const GUID * guid)
+{
+  QofInstance *inst;
+  
+  g_return_val_if_fail (QOF_IS_COLLECTION(col) && !guid_equal (guid, guid_null()), NULL);
+  
+  if (guid == NULL) return NULL;
+  
+  ent = g_hash_table_lookup (col->priv->hash_of_entities, guid);
+  
+  return ent;
+}
+
+QofCollection *
+qof_collection_from_glist (QofBook *book, GType type, GList *glist)
+{
+	QofCollection *coll;
+	QofInstance *ent;
+	GList *list;
+
+	coll = qof_collection_new (book, type);
+	
+	for(list = glist; list != NULL; list = list->next)
+	{
+		ent = (QofInstance*)list->data;
+		if(FALSE == qof_collection_add_element (coll, ent))
+		{
+			return NULL;
+		}
+	}
+	return coll;
+}
+
+guint
+qof_collection_count (const QofCollection *col)
+{
+	guint c;
+
+	c = g_hash_table_size (col->priv->hash_of_entities);
+	return c;
 }
 
 /* =============================================================== */
@@ -156,260 +415,80 @@ id_compare(gconstpointer key_1, gconstpointer key_2)
   return guid_equal (key_1, key_2);
 }
 
-QofCollection *
-qof_collection_new (QofIdType type)
-{
-  QofCollection *col;
-  col = g_new0(QofCollection, 1);
-  col->e_type = CACHE_INSERT (type);
-  col->hash_of_entities = g_hash_table_new (id_hash, id_compare);
-  col->data = NULL;
-  return col;
-}
-
-void
-qof_collection_destroy (QofCollection *col)
-{
-  CACHE_REMOVE (col->e_type);
-  g_hash_table_destroy(col->hash_of_entities);
-  col->e_type = NULL;
-  col->hash_of_entities = NULL;
-  col->data = NULL;   /** XXX there should be a destroy notifier for this */
-  g_free (col);
-}
-
-/* =============================================================== */
-/* getters */
-
-QofIdType
-qof_collection_get_type (const QofCollection *col)
-{
-  return col->e_type;
-}
-
-/* =============================================================== */
-
-static void
-qof_collection_remove_entity (QofEntity *ent)
-{
-  QofCollection *col;
-  if (!ent) return;
-  col = ent->collection;
-  if (!col) return;
-  g_hash_table_remove (col->hash_of_entities, &ent->guid);
-  if (!qof_alt_dirty_mode)
-    qof_collection_mark_dirty(col);
-  ent->collection = NULL;
-}
-
-void
-qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
-{
-  if (!col || !ent) return;
-  if (guid_equal(&ent->guid, guid_null())) return;
-  g_return_if_fail (col->e_type == ent->e_type);
-  qof_collection_remove_entity (ent);
-  g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
-  if (!qof_alt_dirty_mode)
-    qof_collection_mark_dirty(col);
-  ent->collection = col;
-}
-
-gboolean
-qof_collection_add_entity (QofCollection *coll, QofEntity *ent)
-{
-	QofEntity *e;
-
-	e = NULL;
-	if (!coll || !ent) { return FALSE; }
-	if (guid_equal(&ent->guid, guid_null())) { return FALSE; }
-	g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
-	e = qof_collection_lookup_entity(coll, &ent->guid);
-	if ( e != NULL ) { return FALSE; }
-	g_hash_table_insert (coll->hash_of_entities, &ent->guid, ent);
-	if (!qof_alt_dirty_mode)
-	  qof_collection_mark_dirty(coll);
-	return TRUE;
-}
-
-static void
-collection_merge_cb (QofEntity *ent, gpointer data)
-{
-	QofCollection *target;
-
-	target = (QofCollection*)data;
-	qof_collection_add_entity(target, ent);	
-}
-
-gboolean
-qof_collection_merge (QofCollection *target, QofCollection *merge)
-{
-	if(!target || !merge) { return FALSE; }
-	g_return_val_if_fail (target->e_type == merge->e_type, FALSE);
-	qof_collection_foreach(merge, collection_merge_cb, target);
-	return TRUE;
-}
-
-static void
-collection_compare_cb (QofEntity *ent, gpointer user_data)
-{
-	QofCollection *target;
-	QofEntity *e;
-	gint value;
-
-	e = NULL;
-	target = (QofCollection*)user_data;
-	if (!target || !ent) { return; }
-	value = *(gint*)qof_collection_get_data(target);
-	if (value != 0) { return; }
-	if (guid_equal(&ent->guid, guid_null())) 
-	{
-		value = -1;
-		qof_collection_set_data(target, &value);
-		return; 
-	}
-	g_return_if_fail (target->e_type == ent->e_type);
-	e = qof_collection_lookup_entity(target, &ent->guid);
-	if ( e == NULL )
-	{
-		value = 1;
-		qof_collection_set_data(target, &value);
-		return;
-	}
-	value = 0;
-	qof_collection_set_data(target, &value);
-}
-
-gint
-qof_collection_compare (QofCollection *target, QofCollection *merge)
-{
-	gint value;
-
-	value = 0;
-	if (!target && !merge) { return 0; }
-	if (target == merge) { return 0; }
-	if (!target && merge) { return -1; }
-	if (target && !merge) { return 1; }
-	if(target->e_type != merge->e_type) { return -1; }
-	qof_collection_set_data(target, &value);
-	qof_collection_foreach(merge, collection_compare_cb, target);
-	value = *(gint*)qof_collection_get_data(target);
-	if(value == 0) {
-		qof_collection_set_data(merge, &value);
-		qof_collection_foreach(target, collection_compare_cb, merge);
-		value = *(gint*)qof_collection_get_data(merge);
-	}
-	return value;
-}
-
-QofEntity *
-qof_collection_lookup_entity (const QofCollection *col, const GUID * guid)
-{
-  QofEntity *ent;
-  g_return_val_if_fail (col, NULL);
-  if (guid == NULL) return NULL;
-  ent = g_hash_table_lookup (col->hash_of_entities, guid);
-  return ent;
-}
-
-QofCollection *
-qof_collection_from_glist (QofIdType type, GList *glist)
-{
-	QofCollection *coll;
-	QofEntity *ent;
-	GList *list;
-
-	coll = qof_collection_new(type);
-	for(list = glist; list != NULL; list = list->next)
-	{
-		ent = (QofEntity*)list->data;
-		if(FALSE == qof_collection_add_entity(coll, ent))
-		{
-			return NULL;
-		}
-	}
-	return coll;
-}
-
-guint
-qof_collection_count (const QofCollection *col)
-{
-	guint c;
-
-	c = g_hash_table_size(col->hash_of_entities);
-	return c;
-}
 
 /* =============================================================== */
 
 gboolean 
 qof_collection_is_dirty (const QofCollection *col)
 {
-   return col ? col->is_dirty : FALSE;
+   return col ? col->priv->is_dirty : FALSE;
 }
 
 void 
 qof_collection_mark_clean (QofCollection *col)
 {
-   if (col) { col->is_dirty = FALSE; }
+   if (col) { col->priv->is_dirty = FALSE; }
 }
 
 void 
 qof_collection_mark_dirty (QofCollection *col)
 {
-   if (col) { col->is_dirty = TRUE; }
+   if (col) { 
+   		col->priv->is_dirty = TRUE;
+   		qof_collection_mark_dirty (col->priv->book);
+   	}
 }
 
 void
 qof_collection_print_dirty (const QofCollection *col, gpointer dummy)
 {
-  if (col->is_dirty)
-    printf("%s collection is dirty.\n", col->e_type);
-  qof_collection_foreach(col, (QofEntityForeachCB)qof_instance_print_dirty, NULL);
-}
-
-/* =============================================================== */
-
-gpointer 
-qof_collection_get_data (const QofCollection *col)
-{
-   return col ? col->data : NULL;
-}
-
-void 
-qof_collection_set_data (QofCollection *col, gpointer user_data)
-{
-   if (col) { col->data = user_data; }
+  if (col->priv->is_dirty)
+    printf("%s collection is dirty.\n", col->priv->e_type);
+  qof_collection_foreach(col, (QofInstanceForeachCB)qof_instance_print_dirty, NULL);
 }
 
 /* =============================================================== */
 
 struct _iterate {
-  QofEntityForeachCB      fcn;
+  QofInstanceForeachCB      fcn;
   gpointer                data;
 };
 
 static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
   struct _iterate *iter = arg;
-  QofEntity *ent = item;
+  QofInstance *ent = item;
 
   iter->fcn (ent, iter->data);
 }
 
 void
-qof_collection_foreach (const QofCollection *col, QofEntityForeachCB cb_func, 
+qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func, 
                         gpointer user_data)
 {
   struct _iterate iter;
 
-  g_return_if_fail (col);
+  g_return_if_fail (QOF_IS_COLLECTION (col));
   g_return_if_fail (cb_func);
 
   iter.fcn = cb_func;
   iter.data = user_data;
 
-  g_hash_table_foreach (col->hash_of_entities, foreach_cb, &iter);
+  g_hash_table_foreach (col->priv->hash_of_entities, foreach_cb, &iter);
+}
+
+/* =============================================================== */
+
+gboolean
+qof_get_alt_dirty_mode (void)
+{
+  return qof_alt_dirty_mode;
+}
+
+void
+qof_set_alt_dirty_mode (gboolean enabled)
+{
+  qof_alt_dirty_mode = enabled;
 }
 
 /* =============================================================== */

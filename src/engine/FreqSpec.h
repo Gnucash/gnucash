@@ -63,6 +63,14 @@
 #include <glib.h>
 #include "qof.h"
 
+#define GNC_TYPE_FREQ_SPEC         (gnc_freq_spec_get_type ())
+#define GNC_FREQ_SPEC(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_FREQ_SPEC, FreqSpec))
+#define GNC_FREQ_SPEC_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_FREQ_SPEC, ))
+#define GNC_IS_FREQ_SPEC(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_FREQ_SPEC))
+#define GNC_IS_FREQ_SPEC_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_FREQ_SPEC))
+#define GNC_FREQ_SPEC_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_FREQ_SPEC, FreqSpecClass))
+
+
 #define ENUM_LIST_TYPE(_) \
         _(INVALID,) \
         _(ONCE,) \
@@ -114,6 +122,8 @@ struct gncp_freq_spec;
 typedef struct gncp_freq_spec FreqSpec;
 
 /** PROTOTYPES ******************************************************/
+
+GType   gnc_freq_spec_get_type ();
 
 /**
  * Allocates memory for a FreqSpec and initializes it.

@@ -54,16 +54,42 @@ taxincluded, active and jobs are identical to ::GncVendor.
 @param	GncAddress *    shipaddr;
 
 */
-typedef struct _gncCustomer GncCustomer;
 
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
 
+/* GObject declarations */
+
+#define GNC_TYPE_CUSTOMER            (gnc_customer_get_type ())
+#define GNC_CUSTOMER(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_CUSTOMER, GncCustomer))
+#define GNC_CUSTOMER_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_CUSTOMER, GncCustomerClass))
+#define GNC_IS_CUSTOMER(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_CUSTOMER))
+#define GNC_IS_CUSTOMER_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_CUSTOMER))
+#define GNC_CUSTOMER_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_CUSTOMER, GncCustomerClass))
+
+
+typedef struct _GncCustomerClass GncCustomerClass;
+typedef struct _GncCustomerPrivate GncCustomerPrivate;
+typedef struct _GncCustomer GncCustomer;
+
+typedef struct _GncCustomer {
+	QofInstance inst;
+	GncCustomerPrivate *priv;
+};
+
+struct _GncCustomerClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_customer_get_type ();
+
+
 #define GNC_ID_CUSTOMER       "gncCustomer"
-#define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
-#define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
 /** @name Create/Destroy Functions 
  @{ */

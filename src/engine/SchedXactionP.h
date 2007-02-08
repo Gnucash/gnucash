@@ -47,7 +47,7 @@
  * We should be able to use the GeneralLedger [or, yet-another-subtype
  * of the internal ledger] for this editing.
  **/
-struct gncp_SchedXaction
+struct _GncScheduleAction
 {
   QofInstance     inst;
   gchar           *name;

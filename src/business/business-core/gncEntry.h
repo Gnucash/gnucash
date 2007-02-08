@@ -31,7 +31,35 @@
 #ifndef GNC_ENTRY_H_
 #define GNC_ENTRY_H_
 
-typedef struct _gncEntry GncEntry;
+/* GObject declarations */
+
+#define GNC_TYPE_ENTRY            (gnc_entry_get_type ())
+#define GNC_ENTRY(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ENTRY, GncEntry))
+#define GNC_ENTRY_CLASS (k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ENTRY, GncEntryClass))
+#define GNC_IS_ENTRY(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ENTRY))
+#define GNC_IS_ENTRY_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ENTRY))
+#define GNC_ENTRY_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ENTRY, GncEntryClass))
+
+
+typedef struct _GncEntryClass GncEntryClass;
+typedef struct _GncEntryPrivate GncEntryPrivate;
+typedef struct _GncEntry GncEntry;
+typedef struct GncEntry gncEntry; /* Dummy type for backward compatibility */
+
+typedef struct _GncEntry {
+	QofInstance inst;
+	GncEntryPrivate *priv;
+};
+
+struct _GncEntryClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_entry_get_type ();
+
 
 typedef enum {
   GNC_PAYMENT_CASH = 1,
@@ -53,8 +81,6 @@ typedef enum {
 #include "gncOwner.h"
 
 #define GNC_ID_ENTRY "gncEntry"
-#define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
-#define GNC_ENTRY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ENTRY, GncEntry))
 
 /** How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
@@ -64,7 +90,7 @@ typedef enum {
  * SAMETIME	pretax		pretax
  * POSTTAX	pretax+tax	pretax
  */
-
+term->inst
 const char * gncEntryDiscountHowToString (GncDiscountHow how);
 gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
 

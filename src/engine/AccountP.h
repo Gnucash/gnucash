@@ -53,7 +53,7 @@
 */
 
 /** \struct Account */
-struct account_s
+struct _Account
 {
   QofInstance inst;
 

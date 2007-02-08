@@ -39,8 +39,35 @@ typedef struct _gncVendor GncVendor;
 #include "gncJob.h"
 
 #define GNC_ID_VENDOR       "gncVendor"
-#define GNC_IS_VENDOR(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_VENDOR))
-#define GNC_VENDOR(obj)     (QOF_CHECK_CAST((obj), GNC_ID_VENDOR, GncVendor))
+
+/* GObject declarations */
+
+#define GNC_TYPE_VENDOR            (gnc_vendor_get_type ())
+#define GNC_VENDOR(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_VENDOR, GncVendor))
+#define GNC_VENDOR_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_VENDOR, GncVendorClass))
+#define GNC_IS_VENDOR(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_VENDOR))
+#define GNC_IS_VENDOR_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_VENDOR))
+#define GNC_VENDOR_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_VENDOR, GncVendorClass))
+
+
+typedef struct _GncVendorClass GncVendorClass;
+typedef struct _GncVendorPrivate GncVendorPrivate;
+typedef struct _GncVendor GncVendor;
+
+struct _GncVendor {
+	QofInstance inst;
+	GncVendorPrivate *priv;
+}
+
+struct _GncVendorClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_vendor_get_type ();
+
 
 /* Create/Destroy Functions */
 

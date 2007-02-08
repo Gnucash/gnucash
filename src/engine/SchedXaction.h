@@ -42,8 +42,30 @@
 #include "FreqSpec.h"
 #include "gnc-engine.h"
 
-#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
-#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
+/* GObject declarations */
+
+#define GNC_TYPE_SCHEDULE_ACTION            (qof_book_get_type ())
+#define GNC_SCHEDULE_ACTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SCHEDULE_ACTION, GncScheduleAction))
+#define GNC_SCHEDULE_ACTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SCHEDULE_ACTION, GncScheduleActionClass))
+#define GNC_IS_SCHEDULE_ACTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SCHEDULE_ACTION))
+#define GNC_IS_SCHEDULE_ACTION_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SCHEDULE_ACTION))
+#define GNC_SCHEDULE_ACTION_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SCHEDULE_ACTION, GncScheduleActionClass))
+
+
+typedef struct _GncScheduleActionClass GncScheduleActionClass;
+typedef struct _GncScheduleAction GncScheduleAction;
+typedef struct GncScheduleAction ShedXaction; /*  Dummy type for backward compatilibity */
+
+struct _GncScheduleActionClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_schedule_action_get_type ();
+
+/********************************************/
 
 /**
  * The SchedXaction data.

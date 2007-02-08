@@ -50,6 +50,129 @@
 
 #include "qofbackend-p.h"
 
+/* GObject declarations */
+
+static void gnc_transaction_class_init(GncTransactionClass *klass);
+static void gnc_transaction_init(GncTransaction *sp);
+static void gnc_transaction_finalize(GObject *object);
+
+struct _GncTransactionPrivate {
+	/* Private Members */
+};
+
+typedef struct _GncTransactionSignal GncTransactionSignal;
+typedef enum _GncTransactionSignalType GncTransactionSignalType;
+
+enum _GncTransactionSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncTransactionSignal {
+	GncTransaction *object;
+};
+
+static guint gnc_transaction_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_transaction_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncTransactionClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_transaction_class_init,
+			NULL,
+			NULL,
+			sizeof (GncTransaction),
+			0,
+			(GInstanceInitFunc)gnc_transaction_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncTransaction", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_transaction_class_init(GncTransactionClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_transaction_finalize;
+	object_class->set_property = gnc_transaction_set_property;
+    object_class->get_property = gnc_transaction_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_transaction_init(GncTransaction *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_transaction_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_transaction_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncTransaction *obj;
+	
+	obj = GNC_TRANSACTION (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_transaction_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncTransaction *obj;
+  
+  obj = GNC_TRANSACTION(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
  *
@@ -179,7 +302,7 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 
 void check_open (const Transaction *trans)
 {
-  if (trans && 0 >= trans->inst.editlevel)
+  if (trans && 0 >= qof_instance_get_edit_level (QOF_INSTANCE (trans)))
     PERR ("transaction %p not open for editing", trans);
 }
 /********************************************************************\
@@ -259,7 +382,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->orig = NULL;
 
   trans->idata = 0;
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
+  qof_instance_init (QOF_INSTANCE (trans), GNC_ID_TRANS, book);
   LEAVE (" ");
 }
 
@@ -273,9 +396,9 @@ xaccMallocTransaction (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  trans = g_new(Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
   xaccInitTransaction (trans, book);
-  qof_event_gen (&trans->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_ENTITY (trans), QOF_EVENT_CREATE, NULL);
 
   return trans;
 }
@@ -355,7 +478,7 @@ xaccDupeTransaction (const Transaction *t)
   Transaction *trans;
   GList *node;
 
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->num         = CACHE_INSERT (t->num);
   trans->description = CACHE_INSERT (t->description);
@@ -377,6 +500,7 @@ xaccDupeTransaction (const Transaction *t)
    * the cloned transaction as something official.  If we ever 
    * use this transaction, we'll have to fix this up.
    */
+   /* FIXME: Entity & Instance initialization must be in object's constructor*/
   trans->inst.entity.e_type = NULL;
   trans->inst.entity.guid = *guid_null();
   trans->inst.entity.collection = NULL;
@@ -400,7 +524,7 @@ xaccTransClone (const Transaction *t)
   GList *node;
 
   qof_event_suspend();
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
@@ -413,9 +537,8 @@ xaccTransClone (const Transaction *t)
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, t->inst.book);
-  kvp_frame_delete (trans->inst.kvp_data);
-  trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
+  qof_instance_init (QOF_INSTANCE(trans), GNC_ID_TRANS, t->inst.book);
+  qof_instance_set_kvp_data (QOF_INSTANCE (trans), qof_instance_get_kvp_data (t));
 
   xaccTransBeginEdit(trans);
   for (node = t->splits; node; node = node->next)
@@ -476,8 +599,7 @@ xaccFreeTransaction (Transaction *trans)
     trans->orig = NULL;
   }
 
-  qof_instance_release (&trans->inst);
-  g_free(trans);
+  qof_instance_release (QOF_INSTANCE (trans));
 
   LEAVE ("(addr=%p)", trans);
 }
@@ -824,9 +946,9 @@ void
 xaccTransBeginEdit (Transaction *trans)
 {
    if (!trans) return;
-   if (!qof_begin_edit(&trans->inst)) return;
+   if (!qof_begin_edit(QOF_INSTANCE (trans))) return;
 
-   if (qof_book_shutting_down(trans->inst.book)) return;
+   if (qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (trans)))) return;
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -845,9 +967,9 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
 
   if (!xaccTransGetReadOnly (trans) || 
-      qof_book_shutting_down(trans->inst.book)) {
+      qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (trans)))) {
       xaccTransBeginEdit(trans);
-      trans->inst.do_free = TRUE;
+      qof_instance_mark_free (QOF_INSTANCE (trans));
       xaccTransCommitEdit(trans);
   }
 }
@@ -876,7 +998,7 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
-  gboolean shutting_down = qof_book_shutting_down(trans->inst.book);
+  gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (trans)));
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
@@ -886,7 +1008,7 @@ do_destroy (Transaction *trans)
   if (!shutting_down)
     xaccTransWriteLog (trans, 'D');
 
-  qof_event_gen (&trans->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_ENTITY (trans), QOF_EVENT_DESTROY, NULL);
 
   /* We only own the splits that still think they belong to us. */
   trans->splits = g_list_copy(trans->splits);
@@ -935,6 +1057,7 @@ static void trans_on_error(Transaction *trans, QofBackendError errcode)
 static void trans_cleanup_commit(Transaction *trans)
 {
     GList *slist, *node;
+    gint editlevel;
 
     /* ------------------------------------------------- */
     /* Make sure all associated splits are in proper order
@@ -980,11 +1103,12 @@ static void trans_cleanup_commit(Transaction *trans)
     xaccTransSortSplits(trans);
 
     /* Put back to zero. */
-    trans->inst.editlevel--;
-    g_assert(trans->inst.editlevel == 0);
+    editlevel = qof_instance_get_edit_level (QOF_INSTANCE (trans));
+    editlevel--;
+    qof_instance_set_edit_level (QOF_INSTANCE (trans), editlevel);
 
     gen_event_trans (trans); //TODO: could be conditional
-    qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen (QOF_ENTITY (trans), QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -997,9 +1121,11 @@ xaccTransCommitEdit (Transaction *trans)
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
     * call to xaccTransCommitEdit. */
-   trans->inst.editlevel++;
-
-   if (was_trans_emptied(trans)) trans->inst.do_free = TRUE;
+   editlevel = qof_instance_get_edit_level (QOF_INSTANCE (trans));
+   editlevel++;
+   qof_instance_set_edit_level (QOF_INSTANCE (trans), editlevel);
+   
+   if (was_trans_emptied(trans)) qof_instance_mark_free (QOF_INSTANCE (trans), TRUE);
 
    /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
@@ -1010,7 +1136,7 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (!(trans->inst.do_free) && scrub_data && 
+   if (!qof_instance_do_free (QOF_INSTANCE (trans)) && scrub_data && 
        !qof_book_shutting_down(xaccTransGetBook(trans))) {
      /* If scrubbing gains recurses through here, don't call it again. */
      scrub_data = 0; 
@@ -1078,7 +1204,7 @@ xaccTransRollbackEdit (Transaction *trans)
    trans->date_entered = orig->date_entered;
    trans->date_posted = orig->date_posted;
    SWAP(trans->common_currency, orig->common_currency);
-   SWAP(trans->inst.kvp_data, orig->inst.kvp_data);
+   SWAP(qof_instance_get_kvp_data (QOF_INSTANCE (trans)), qof_instance_get_kvp_data (QOF_INSTANCE (orig)));
 
    /* The splits at the front of trans->splits are exactly the same
       splits as in the original, but some of them may have changed, so
@@ -1135,7 +1261,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
-   be = qof_book_get_backend (trans->inst.book);
+   be = qof_book_get_backend (qof_instance_get_book (QOF_INSTANCE (trans)));
    /** \todo Fix transrollbackedit in QOF so that rollback
    is exposed via the API. */
    if (be && be->rollback) 

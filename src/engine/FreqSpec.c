@@ -88,6 +88,129 @@
 #include "FreqSpecP.h"
 
 static QofLogModule log_module = GNC_MOD_SX;
+
+/* GObject */
+
+static void gnc_freq_spec_class_init(FreqSpecClass *klass);
+static void gnc_freq_spec_init(FreqSpec *sp);
+static void gnc_freq_spec_finalize(GObject *object);
+
+struct _FreqSpecPrivate {
+	/* Private Members */
+};
+
+typedef struct _FreqSpecSignal FreqSpecSignal;
+typedef enum _FreqSpecSignalType FreqSpecSignalType;
+
+enum _FreqSpecSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _FreqSpecSignal {
+	FreqSpec *object;
+};
+
+static guint gnc_freq_spec_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_freq_spec_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (FreqSpecClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_freq_spec_class_init,
+			NULL,
+			NULL,
+			sizeof (FreqSpec),
+			0,
+			(GInstanceInitFunc)gnc_freq_spec_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"FreqSpec", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_freq_spec_class_init(QofInstanceClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_freq_spec_finalize;
+	object_class->set_property = gnc_freq_spec_set_property;
+    object_class->get_property = gnc_freq_spec_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_freq_spec_init(FrecSpec *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_freq_spec_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_freq_spec_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	FreqSpec *obj;
+	
+	obj = GNC_FREQ_SPEC (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_freq_spec_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  FreqSpec *obj;
+  
+  obj = GNC_FREQ_SPEC(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
 /* 
  *  FIXME: should be in a header file
  */
@@ -172,7 +295,7 @@ xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
    g_return_if_fail (book);
 
    col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
+   qof_entity_init (QOF_ENTITY (fs), QOF_ID_FREQSPEC, col);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;
@@ -187,9 +310,11 @@ xaccFreqSpecMalloc(QofBook *book)
 
    g_return_val_if_fail (book, NULL);
 
-   fs = g_new0(FreqSpec, 1);
+   fs = GNC_FREQ_SPEC (g_object_new (GNC_TYPE_FREQ_SPEC, NULL));
    xaccFreqSpecInit( fs, book );
-   qof_event_gen( &fs->entity, QOF_EVENT_CREATE , NULL);
+   qof_event_gen( QOF_ENTITY (fs), QOF_EVENT_CREATE , NULL);
+   g_signal_emit_by_name ( QOF_ENTITY (fs), "created::detail");
+    
    return fs;
 }
 
@@ -224,7 +349,7 @@ xaccFreqSpecFree( FreqSpec *fs )
    xaccFreqSpecCleanUp( fs );
 
    qof_entity_release (&fs->entity);
-   g_free( fs );
+   // g_free( fs ); the qof_entity_realise function call g_object_unref
 }
 
 FreqType

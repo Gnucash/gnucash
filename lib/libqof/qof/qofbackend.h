@@ -216,6 +216,11 @@ typedef struct QofBackendOption_s {
 	gpointer   value;          /**< The value of the option. */
 }QofBackendOption;
 
+/** Register and lookup backend-specific data for this particular object */
+gboolean qof_backend_register (GType type,
+                                      const char *backend_name,
+                                      gpointer be_data);
+
 /** Initialise the backend_configuration */
 void qof_backend_prepare_frame(QofBackend *be);
 

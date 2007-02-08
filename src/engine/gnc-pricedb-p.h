@@ -30,7 +30,7 @@
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
-struct gnc_price_s
+struct _GncPrice
 {
   /* 'public' data fields */
   QofInstance inst;              /* globally unique object identifier */
@@ -51,7 +51,7 @@ struct gnc_price_s
 
 
 
-struct gnc_price_db_s
+struct _GncPriceDb
 {
   QofInstance inst;              /* globally unique object identifier */
   GHashTable *commodity_hash;

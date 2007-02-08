@@ -71,120 +71,53 @@
     @brief QOF entity type identification system 
     @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu> 
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 2007 Daniel Espinosa <esodan@gmail.com>
 */
 
 #include <string.h>
+#include <glib-object.h>
 #include "guid.h"
 
-/** QofIdType declaration */
-typedef const gchar * QofIdType;
-/** QofIdTypeConst declaration */
-typedef const gchar * QofIdTypeConst;
+
+/******************* QofCollection ****************/
+
+
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
 
-#define QOF_ID_NONE           NULL
-#define QOF_ID_NULL           "null"
+/* GObject declarations */
 
-#define QOF_ID_BOOK           "Book"
-#define QOF_ID_SESSION        "Session"
+#define QOF_TYPE_COLLECTION            (qof_collection_get_type ())
+#define QOF_COLLECTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), QOF_TYPE_COLLECTION, QofCollection))
+#define QOF_COLLECTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), QOF_TYPE_COLLECTION, QofCollectionClass))
+#define QOF_IS_COLLECTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_COLLECTION))
+#define QOF_IS_COLLECTION_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_COLLECTION))
+#define QOF_COLLECTION_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_COLLECTION, QofCollectionClass))
 
-/** simple,cheesy cast but holds water for now */
-#define QOF_ENTITY(object) ((QofEntity *)(object))
+typedef struct _QofCollectionClass QofCollectionClass;
+typedef struct _QofCollectionPrivate QofCollectionPrivate;
+typedef struct _QofCollection QofCollection;
 
-/** Inline string comparision; compiler will optimize away most of this */
-#define QSTRCMP(da,db) ({                \
-  gint val = 0;                          \
-  if ((da) && (db)) {                    \
-    if ((da) != (db)) {                  \
-      val = strcmp ((da), (db));         \
-    }                                    \
-  } else                                 \
-  if ((!(da)) && (db)) {                 \
-    val = -1;                            \
-  } else                                 \
-  if ((da) && (!(db))) {                 \
-    val = 1;                             \
-  }                                      \
-  val; /* block assumes value of last statement */  \
-})
-
-/** return TRUE if object is of the given type */
-#define QOF_CHECK_TYPE(obj,type) (((obj) != NULL) && \
-  (0 == QSTRCMP((type),(((QofEntity *)(obj))->e_type))))
-
-/** cast object to the indicated type,
-print error message if its bad  */
-#define QOF_CHECK_CAST(obj,e_type,c_type) (                   \
-  QOF_CHECK_TYPE((obj),(e_type)) ?                            \
-  (c_type *) (obj) :                                          \
-  (c_type *) ({                                               \
-     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,               \
-       "Error: Bad QofEntity at %s:%d", __FILE__, __LINE__);  \
-     (obj);                                                   \
-  }))
-
-/** QofEntity declaration */
-typedef struct QofEntity_s QofEntity;
-/** QofCollection declaration 
-
-@param e_type QofIdType
-@param is_dirty gboolean
-@param hash_of_entities GHashTable
-@param data gpointer, place where object class can hang arbitrary data
-
-*/
-typedef struct QofCollection_s QofCollection;
-
-/** QofEntity structure
-
-@param e_type 	Entity type
-@param guid		GUID for the entity
-@param collection	Entity collection
-*/
-
-struct QofEntity_s
+struct _QofCollection
 {
-	QofIdType        e_type;
-	GUID             guid;
-	QofCollection  * collection;
+	/* GObject Parent */
+   GObject parent;
+   QofCollectionPrivate *priv;
 };
 
-/** @name QOF Entity Initialization & Shutdown 
- @{ */
-/** Initialise the memory associated with an entity */
-void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
-                                                                                
-/** Release the data associated with this entity. Dont actually free
- * the memory associated with the instance. */
-void qof_entity_release (QofEntity *);
-/** @} */
 
-/** Is QOF operating in "alternate" dirty mode.  In normal mode,
- *  whenever an instance is dirtied, the collection (and therefore the
- *  book) is immediately marked as dirty.  In alternate mode, the
- *  collection is only marked dirty when a dirty instance is
- *  committed.  If a dirty instance is freed instead of committed, the
- *  dirty state of collection (and therefore the book) is never
- *  changed. */
-gboolean qof_get_alt_dirty_mode (void);
+struct _QofCollectionClass {
+	GObjectClass parent_class;
+	/* virtual table */
 
-/** Set QOF into "alternate" dirty mode.  In normal mode, whenever an
- *  instance is dirtied, the collection (and therefore the book) is
- *  immediately marked as dirty.  In alternate mode, the collection is
- *  only marked dirty when a dirty instance is committed.  If a dirty
- *  instance is freed instead of committed, the dirty state of
- *  collection (and therefore the book) is never changed. */
-void qof_set_alt_dirty_mode (gboolean enabled);
+	/* Add Signal Functions Here */
+};
 
-/** Return the GUID of this entity */
-const GUID * qof_entity_get_guid (const QofEntity *);
 
-/** @name Collections of Entities 
- @{ */
+GType qof_entity_get_type ();
 
 /** create a new collection of entities of type */
-QofCollection * qof_collection_new (QofIdType type);
+QofCollection * qof_collection_new (GType type);
 
 /** return the number of entities in the collection. */
 guint qof_collection_count (const QofCollection *col);
@@ -193,13 +126,10 @@ guint qof_collection_count (const QofCollection *col);
 void qof_collection_destroy (QofCollection *col);
 
 /** return the type that the collection stores */
-QofIdType qof_collection_get_type (const QofCollection *);
+GType qof_collection_get_g_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
-QofEntity * qof_collection_lookup_entity (const QofCollection *, const GUID *);
-
-/** Callback type for qof_entity_foreach */
-typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
+QofInstance * qof_collection_lookup_element (const QofCollection *, const GUID *);
 
 /** Call the callback for each entity in the collection. */
 void qof_collection_foreach (const QofCollection *, QofEntityForeachCB, 
@@ -238,7 +168,10 @@ by using ::qof_entity_insert_entity or ::qof_entity_remove_entity.
 
 */
 gboolean
-qof_collection_add_entity (QofCollection *coll, QofEntity *ent);
+qof_collection_add_element (QofCollection *coll, QofInstance *inst);
+
+gboolean
+qof_collection_remove_element (QofCollection *coll, QofInstance *ent);
 
 /** \brief Merge two QOF_TYPE_COLLECT of the same type.
 
@@ -279,6 +212,26 @@ qof_collection_compare (QofCollection *target, QofCollection *merge);
 */
 QofCollection*
 qof_collection_from_glist (QofIdType type, GList *glist);
+
+/******************************************************/
+
+/** Is QOF operating in "alternate" dirty mode.  In normal mode,
+ *  whenever an instance is dirtied, the collection (and therefore the
+ *  book) is immediately marked as dirty.  In alternate mode, the
+ *  collection is only marked dirty when a dirty instance is
+ *  committed.  If a dirty instance is freed instead of committed, the
+ *  dirty state of collection (and therefore the book) is never
+ *  changed. */
+gboolean qof_get_alt_dirty_mode (void);
+
+/** Set QOF into "alternate" dirty mode.  In normal mode, whenever an
+ *  instance is dirtied, the collection (and therefore the book) is
+ *  immediately marked as dirty.  In alternate mode, the collection is
+ *  only marked dirty when a dirty instance is committed.  If a dirty
+ *  instance is freed instead of committed, the dirty state of
+ *  collection (and therefore the book) is never changed. */
+void qof_set_alt_dirty_mode (gboolean enabled);
+
 
 /** @} */
 /** @} */

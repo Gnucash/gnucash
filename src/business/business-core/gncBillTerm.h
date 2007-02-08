@@ -37,9 +37,36 @@ typedef struct _gncBillTerm GncBillTerm;
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif
+
+/* GObject declarations */
+
+#define GNC_TYPE_BILL_TERM            (qof_book_get_type ())
+#define GNC_BILL_TERM(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_BILL_TERM, GncBillTerm))
+#define GNC_BILL_TERM_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_BILL_TERM, GncBillTermClass))
+#define GNC_IS_BILL_TERM(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_BILL_TERM))
+#define GNC_IS_BILL_TERM_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_BILL_TERM))
+#define GNC_BILL_TERM_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_BILL_TERM, GncBillTermClass))
+
+
+typedef struct _GncBillTermClass GncBillTermClass;
+typedef struct _GncBillTermPrivate GncBillTermPrivate;
+typedef struct _GncBillTerm GncBillTerm;
+
+struct _GncBillTerm {
+	QofInstance inst;
+	GncBillTermPrivate *priv;
+}
+
+struct _GncBillTermClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_bill_term_get_type ();
+
 #define GNC_ID_BILLTERM       "gncBillTerm"
-#define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
-#define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
 
 /** @name BillTerm parameter names
  @{ */

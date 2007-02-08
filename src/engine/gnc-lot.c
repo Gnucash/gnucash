@@ -50,6 +50,129 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_LOT;
 
+/* GObject declarations */
+
+static void gnc_lot_class_init(GncLotClass *klass);
+static void gnc_lot_init(GncLot *sp);
+static void gnc_lot_finalize(GObject *object);
+
+struct _GncLotPrivate {
+	/* Private Members */
+};
+
+typedef struct _GncLotSignal GncLotSignal;
+typedef enum _GncLotSignalType GncLotSignalType;
+
+enum _GncLotSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncLotSignal {
+	GncLot *object;
+};
+
+static guint gnc_lot_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_lot_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncLotClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_lot_class_init,
+			NULL,
+			NULL,
+			sizeof (GncLot),
+			0,
+			(GInstanceInitFunc)gnc_lot_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"GncLot", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_lot_class_init(GncLotClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_lot_finalize;
+	object_class->set_property = gnc_lot_set_property;
+    object_class->get_property = gnc_lot_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_lot_init(GncLot *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_lot_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_lot_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncLot *obj;
+	
+	obj = GNC_LOT (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_lot_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncLot *obj;
+  
+  obj = GNC_LOT(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
 /* ============================================================= */
 
 static void
@@ -71,7 +194,7 @@ gnc_lot_new (QofBook *book)
    GNCLot *lot;
    g_return_val_if_fail (book, NULL);
 
-   lot = g_new (GNCLot, 1);
+   lot = g_object_new (GNC_TYPE_LOT, NULL);
    gnc_lot_init (lot, book);
    qof_event_gen (&lot->inst.entity, QOF_EVENT_CREATE, NULL);
    return lot;
@@ -182,7 +305,7 @@ const char *
 gnc_lot_get_title (GNCLot *lot)
 {
    if (!lot) return NULL;
-   return kvp_frame_get_string (lot->inst.kvp_data, "/title");
+   return kvp_frame_get_string (qof_instance_get_kvp_data (QOF_INSTANCE (lot)), "/title");
 }
 
 const char * 

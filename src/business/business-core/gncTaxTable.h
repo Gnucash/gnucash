@@ -31,6 +31,35 @@
 #ifndef GNC_TAXTABLE_H_
 #define GNC_TAXTABLE_H_
 
+/* GObject declarations */
+
+#define GNC_TYPE_TAX_TABLE            (gnc_tax_table_get_type ())
+#define GNC_TAX_TABLE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TAX_TABLE, GncTaxTable))
+#define GNC_TAX_TABLE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TAX_TABLE, GncTaxTableClass))
+#define GNC_IS_TAX_TABLE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TAX_TABLE))
+#define GNC_IS_TAX_TABLE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TAX_TABLE))
+#define GNC_TAX_TABLE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TAX_TABLE, GncTaxTableClass))
+
+
+typedef struct _GncTaxTableClass GncTaxTableClass;
+typedef struct _GncTaxTablePrivate GncTaxTablePrivate;
+typedef struct _GncTaxTable GncTaxTable;
+
+struct _GncTaxTable {
+	QofInstance inst;
+	GncTablePrivate *priv;
+};
+
+struct _GncTaxTableClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_tax_table_get_type ();
+
+
 /** @struct GncTaxTable
 
 modtime is the internal date of the last modtime\n
@@ -70,8 +99,6 @@ typedef struct _gncAccountValue GncAccountValue;
 #endif
 
 #define GNC_ID_TAXTABLE       "gncTaxTable"
-#define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
-#define GNC_TAXTABLE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TAXTABLE, GncTaxTable))
 
 /**
  * How to interpret the amount.

@@ -42,25 +42,47 @@
 #include "qofbook.h"
 #include "qofid.h"
 
-/* --- type macros --- */
-/* cheesy, but will do for now, eventually should be more gtk-like, handle
- * thunks, etc.  */
-#define QOF_INSTANCE(object) ((QofInstance *)(object))
+/* GObject declarations */
 
-typedef struct QofInstance_s QofInstance;
+#define QOF_TYPE_INSTANCE            (qof_instance_get_type ())
+#define QOF_INSTANCE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), QOF_TYPE_INSTANCE, QofInstance))
+#define QOF_INSTANCE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), QOF_TYPE_INSTANCE, QofInstanceClass))
+#define QOF_IS_INSTANCE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_INSTANCE))
+#define QOF_IS_INSTANCE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
+#define QOF_INSTANCE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
 
-/** Initialise the memory associated with an instance */
-void qof_instance_init (QofInstance *, QofIdType, QofBook *);
 
-/** release the data associated with this instance. Dont actually free 
- * the memory associated with the instance. */
-void qof_instance_release (QofInstance *inst);
+typedef struct _QofInstanceClass QofInstanceClass;
+typedef struct _QofInstancePrivate QofInstancePrivate;
+typedef struct _QofInstance QofInstance;
+
+struct _QofInstance {
+	GObject object;
+	QofInstancePrivate *priv;
+};
+
+struct _QofInstanceClass {
+	GObjectClass parent_class;
+	/* virtual table */
+	 void                	(*foreach)			(const QofCollection *, QofEntityForeachCB, gpointer);
+	 const char *      (*printable)			(gpointer instance);
+	/* Add Signal Functions Here */
+};
+
+GType   qof_instance_get_type ();
 
 /** Return the book pointer */
 QofBook * qof_instance_get_book (const QofInstance *);
 
+QofCollection* qof_instance_get_collection (QofInstance *entity);
+
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (const QofInstance *);
+
+/** Set the ID of the entity, over-riding the previous ID. 
+ *  Very dangerous, use only for file i/o work. 
+ */
+void qof_entity_set_guid (QofInstance *inst, const GUID *guid);
 
 /** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (const QofInstance *);
@@ -90,7 +112,7 @@ gboolean qof_instance_is_dirty (QofInstance *);
 
 Sets this instance AND the collection as dirty.
 */
-void qof_instance_set_dirty(QofInstance* inst);
+void qof_instance_set_dirty(QofInstance* inst, gboolean value);
 
 gboolean qof_instance_check_edit(const QofInstance *inst);
 
@@ -126,6 +148,24 @@ void qof_instance_gemini (QofInstance *to, const QofInstance *from);
  *    routine uses the 'gemini' kvp values to do its work. 
  */
 QofInstance * qof_instance_lookup_twin (const QofInstance *src, QofBook *book);
+
+KvpFrame* qof_instance_get_kvp_data (const QofInstance *instance);
+void			qof_instance_set_kvp_data (QofInstance *instance, KvpFrame *data);
+
+gint		 	qof_instance_get_edit_level (const QofInstance *instance);
+void 		qof_instance_set_edit_level (QofInstance *instance, gint editlevel);
+
+#define qof_object_new_instance (type, book) g_object_new (type, "book", book, NULL)
+
+/** Callback type for qof_instance_foreach */
+typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
+
+#define qof_object_foreach (type, book, cb, data) qof_book_foreach_collection (book, type, cb, data)
+
+
+const char *      (*printable)			(gpointer instance);
+int                 		(*version_cmp)		(gpointer instance_left, gpointer instance_right);
+
 
 /* @} */
 /* @} */

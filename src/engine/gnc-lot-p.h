@@ -40,7 +40,7 @@
 #include "gnc-lot.h"
 #include "Account.h"
 
-struct gnc_lot_struct
+struct _GncLot
 {
   QofInstance inst;
 

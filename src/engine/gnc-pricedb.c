@@ -35,6 +35,130 @@ static QofLogModule log_module = GNC_MOD_PRICE;
 static gboolean add_price(GNCPriceDB *db, GNCPrice *p);
 static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
+/* GObject declarations */
+
+static void gnc_price_class_init(GncPriceDbClass *klass);
+static void gnc_price_init(GncPriceDb *sp);
+static void gnc_price_finalize(GObject *object);
+
+struct _GncPriceDbPrivate {
+	/* Private Members */
+};
+
+typedef struct _GncPriceDbSignal GncPriceDbSignal;
+typedef enum _GncPriceDbSignalType GncPriceDbSignalType;
+
+enum _GncPriceDbSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncPriceDbSignal {
+	GncPriceDb *object;
+};
+
+static guint gnc_price_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_price_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncPriceDbClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_price_class_init,
+			NULL,
+			NULL,
+			sizeof (GncPriceDb),
+			0,
+			(GInstanceInitFunc)gnc_price_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"GncPriceDb", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_price_class_init(GncPriceDbClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_price_finalize;
+	object_class->set_property = gnc_price_set_property;
+    object_class->get_property = gnc_price_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_price_init(GncPriceDb *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_price_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_price_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncPriceDb *obj;
+	
+	obj = GNC_PRICE_DB (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_price_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncPriceDb *obj;
+  
+  obj = GNC_PRICE_DB (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
+
 /* ==================================================================== */
 /* GNCPrice functions
  */
@@ -47,7 +171,7 @@ gnc_price_create (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  p = g_new0(GNCPrice, 1);
+  p = g_object_new (GNC_TYPE_PRICE, NULL);
 
   p->refcount = 1;
   p->version = 0;
@@ -72,8 +196,6 @@ gnc_price_destroy (GNCPrice *p)
   if(p->source) CACHE_REMOVE(p->source);
 
   qof_instance_release (&p->inst);
-  memset(p, 0, sizeof(GNCPrice));
-  g_free(p);
   LEAVE (" ");
 }
 
@@ -554,6 +676,130 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
    you want the prices for, and the second level key is the commodity
    that the value is expressed in terms of.
  */
+ 
+ /* GObject declarations */
+
+static void gnc_pricedb_class_init(GncPriceDbClass *klass);
+static void gnc_pricedb_init(GncPriceDb *sp);
+static void gnc_pricedb_finalize(GObject *object);
+
+struct _GncPriceDbPrivate {
+	/* Private Members */
+};
+
+typedef struct _GncPriceDbSignal GncPriceDbSignal;
+typedef enum _GncPriceDbSignalType GncPriceDbSignalType;
+
+enum _GncPriceDbSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncPriceDbSignal {
+	GncPriceDb *object;
+};
+
+static guint gnc_pricedb_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_pricedb_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncPriceDbClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_pricedb_class_init,
+			NULL,
+			NULL,
+			sizeof (GncPriceDb),
+			0,
+			(GInstanceInitFunc)gnc_pricedb_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"GncPriceDb", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_pricedb_class_init(GncPriceDbClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_pricedb_finalize;
+	object_class->set_property = gnc_pricedb_set_property;
+    object_class->get_property = gnc_pricedb_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_pricedb_init(GncPriceDb *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_pricedb_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_pricedb_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncPriceDb *obj;
+	
+	obj = GNC_PRICE_DB (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_pricedb_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncPriceDb *obj;
+  
+  obj = GNC_PRICE_DB (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+/********************/
 
 static GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
@@ -574,7 +820,7 @@ gnc_pricedb_create(QofBook * book)
     return result;
   }
 
-  result = g_new0(GNCPriceDB, 1);
+  result = g_object_new (GNC_TYPE_PRICE_DB, NULL);
   qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
   qof_collection_mark_clean(col);
 
@@ -632,7 +878,6 @@ gnc_pricedb_destroy(GNCPriceDB *db)
   g_hash_table_destroy (db->commodity_hash);
   db->commodity_hash = NULL;
   qof_instance_release (&db->inst);
-  g_free(db);
 }
 
 void

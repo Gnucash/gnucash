@@ -42,6 +42,130 @@
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
+/* GObject declarations */
+
+static void gnc_account_class_init(AccountClass *klass);
+static void gnc_account_init(Account *sp);
+static void gnc_account_finalize(GObject *object);
+
+struct _AccountPrivate {
+	/* Private Members */
+};
+
+typedef struct _AccountSignal AccountSignal;
+typedef enum _AccountSignalType AccountSignalType;
+
+enum _AccountSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _AccountSignal {
+	Account *object;
+};
+
+static guint gnc_account_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_account_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (AccountClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_account_class_init,
+			NULL,
+			NULL,
+			sizeof (Account),
+			0,
+			(GInstanceInitFunc)gnc_account_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncAccount", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_account_class_init(AccountClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_account_finalize;
+	object_class->set_property = gnc_account_set_property;
+    object_class->get_property = gnc_account_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_account_init(Account *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_account_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_account_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	Account *obj;
+	
+	obj = GNC_ACCOUNT (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_account_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  Account *obj;
+  
+  obj = GNC_ACCOUNT(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
+/***************************************************************/
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
 gunichar account_uc_separator = ':';
@@ -301,7 +425,7 @@ xaccFreeAccount (Account *acc)
   acc->sort_dirty = FALSE;
 
   qof_instance_release (&acc->inst);
-  g_free(acc);
+  //g_free(acc);
 }
 
 /********************************************************************\

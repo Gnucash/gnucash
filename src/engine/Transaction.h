@@ -92,9 +92,28 @@ Splits plus the value of all of its sub-Accounts.
 #include "gnc-engine.h"
 #include "Split.h"
 
-/* FIXME: These macros are not consistent with the type name */
-#define GNC_IS_TRANS(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TRANS))
-#define GNC_TRANS(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TRANS, Transaction))
+/* GObject declarations */
+
+#define GNC_TYPE_TRANSACTION            (qof_book_get_type ())
+#define GNC_TRANSACTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TRANSACTION, GncTransaction))
+#define GNC_TRANSACTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TRANSACTION, GncTransactionClass))
+#define GNC_IS_TRANSACTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TRANSACTION))
+#define GNC_IS_TRANSACTION_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TRANSACTION))
+#define GNC_TRANSACTION_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TRANSACTION, GncTransactionClass))
+
+
+typedef struct _GncTransactionClass GncTransactionClass;
+typedef struct _GncTransaction GncTransaction;
+typedef struct GncTransaction Transaction; /*  Dummy type for backward compatilibity */
+
+struct _GncTransactionClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_transaction_get_type ();
 
 /** @name Transaction Type field values
 @{

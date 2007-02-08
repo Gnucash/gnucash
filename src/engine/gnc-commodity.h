@@ -49,10 +49,65 @@
 #include <glib.h>
 #include "gnc-engine.h"
 
-#define GNC_IS_COMMODITY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY))
-#define GNC_COMMODITY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY, gnc_commodity))
-#define GNC_IS_COMMODITY_NAMESPACE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY_NAMESPACE))
-#define GNC_COMMODITY_NAMESPACE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY_NAMESPACE, gnc_commodity_namespace))
+/* GObject declarations for GncCommodity */
+
+#define GNC_TYPE_COMMODITY            (gnc_commodity_type ())
+#define GNC_COMMODITY(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY, GncCommodity))
+#define GNC_COMMODITY_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY, GncCommodityClass))
+#define GNC_IS_COMMODITY(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY))
+#define GNC_IS_COMMODITY_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY))
+#define GNC_COMMODITY_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY, GncCommodityClass))
+
+
+typedef struct _GncCommodityClass GncCommodityClass;
+typedef struct _GncCommodity GncCommodity;
+typedef struct _GncCommodityPrivate GncCommodityPrivate;
+typedef struct GncCommodityNamespace gnc_commodity; /*  Dummy type for backward compatilibity */
+
+struct _GncCommodity {
+    QofInstance instance;
+    GncCommodityPrivate *priv;
+};
+
+struct _GncCommodityClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_commodity_get_type ();
+
+/* GObject declarations */
+
+#define GNC_TYPE_COMMODITY_NAMESPACE            (gnc_commodity_namespace_get_type ())
+#define GNC_COMMODITY_NAMESPACE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespace))
+#define GNC_COMMODITY_NAMESPACE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
+#define GNC_IS_COMMODITY_NAMESPACE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_IS_COMMODITY_NAMESPACE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_COMMODITY_NAMESPACE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
+
+
+typedef struct _GncCommodityNamespaceClass GncCommodityNamespaceClass;
+typedef struct _GncCommodityNamespace GncCommodityNamespace;
+typedef struct _GncCommodityNamespacePrivate GncCommodityPrivate;
+typedef struct GncCommodityNamespace gnc_commodity_namespace; /*  Dummy type for backward compatilibity */
+
+struct _GncCommodityNamespace {
+    QofInstance instance;
+    GncCommodityNamespacePrivate *priv;
+};
+
+struct _GncCommodityNamespaceClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_commodity_namespace_get_type ();
+
+/******************************************************/
 
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 
@@ -252,7 +307,7 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *
  *  @param mnemonic An abbreviation for this stock.  For publicly
  *  traced stocks, this field should contain the stock ticker
- *  symbol. This field is used to get online price quotes, so it must
+ *  symbol. This field is used to get online price quotes, so it mustgnc_commodity
  *  match the stock ticker symbol used by the exchange where you want
  *  to get automatic stock quote updates.  E.G. ACME, ACME.US, etc.
  *

@@ -45,7 +45,150 @@
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 
-struct _gncCustomer
+/* GObject declarations */
+
+static void gnc_customer_class_init(GncCustomerClass *klass);
+static void gnc_customer_init(GncCustomer *sp);
+static void gnc_customer_finalize(GObject *object);
+
+
+typedef struct _GncCustomerSignal GncCustomerSignal;
+typedef enum _GncCustomerSignalType GncCustomerSignalType;
+
+struct _GncCustomerPrivate
+{
+  QofInstance     inst;
+
+  /* The following fields are identical to 'vendor' */
+  char *          id;
+  char *          name;
+  char *          notes;
+  GncBillTerm *   terms;
+  GncAddress *    addr;
+  gnc_commodity * currency;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
+  GncTaxIncluded  taxincluded;
+  gboolean        active;
+  GList *         jobs;
+
+  /* The following fields are unique to 'customer' */
+  gnc_numeric     credit;
+  gnc_numeric     discount;
+  GncAddress *    shipaddr;
+};
+
+enum _GncCustomerSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncCustomerSignal {
+	GncCustomer *object;
+};
+
+static guint gnc_customer_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_customer_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncCustomerClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_customer_class_init,
+			NULL,
+			NULL,
+			sizeof (GncCustomer),
+			0,
+			(GInstanceInitFunc)gnc_customer_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncCustomer", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_customer_class_init(GncCustomerClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_customer_finalize;
+	object_class->set_property = gnc_customer_set_property;
+    object_class->get_property = gnc_customer_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_customer_init(GncCustomer *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_customer_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_customer_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncCustomer *obj;
+	
+	obj = GNC_CUSTOMER (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_customer_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncCustomer *obj;
+  
+  obj = GNC_CUSTOMER (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
+struct _GncCustomerPrivate
 {
   QofInstance     inst;
 
@@ -92,21 +235,21 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   if (!book) return NULL;
 
   cust = g_new0 (GncCustomer, 1);
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  qof_instance_init (QOF_INSTANCE (cust), _GNC_MOD_NAME, book);
 
-  cust->id = CACHE_INSERT ("");
-  cust->name = CACHE_INSERT ("");
-  cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->inst.entity);
-  cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
-  cust->active = TRUE;
-  cust->jobs = NULL;
+  cust->priv->id = CACHE_INSERT ("");
+  cust->priv->name = CACHE_INSERT ("");
+  cust->priv->notes = CACHE_INSERT ("");
+  cust->priv->addr = gncAddressCreate (book, QOF_ENTITY (cust));
+  cust->priv->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
+  cust->priv->active = TRUE;
+  cust->priv->jobs = NULL;
 
-  cust->discount = gnc_numeric_zero();
-  cust->credit = gnc_numeric_zero();
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
+  cust->priv->discount = gnc_numeric_zero();
+  cust->priv->credit = gnc_numeric_zero();
+  cust->priv->shipaddr = gncAddressCreate (book, QOF_ENTITY (cust));
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_ENTITY (cust), QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -120,37 +263,37 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
 
   cust = g_new0 (GncCustomer, 1);
 
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
-  qof_instance_gemini (&cust->inst, &from->inst);
+  qof_instance_init (QOF_INSTANCE (cust), _GNC_MOD_NAME, book);
+  qof_instance_gemini (QOF_INSTANCE (cust), &from->inst);
 
-  cust->id = CACHE_INSERT (from->id);
-  cust->name = CACHE_INSERT (from->name);
-  cust->notes = CACHE_INSERT (from->notes);
-  cust->discount = from->discount;
-  cust->credit = from->credit;
-  cust->taxincluded = from->taxincluded;
-  cust->active = from->active;
-  cust->taxtable_override = from->taxtable_override;
+  cust->priv->id = CACHE_INSERT (from->id);
+  cust->priv->name = CACHE_INSERT (from->name);
+  cust->priv->notes = CACHE_INSERT (from->notes);
+  cust->priv->discount = from->discount;
+  cust->priv->credit = from->credit;
+  cust->priv->taxincluded = from->taxincluded;
+  cust->priv->active = from->active;
+  cust->priv->taxtable_override = from->taxtable_override;
 
-  cust->addr = gncCloneAddress (from->addr, &cust->inst.entity, book);
-  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst.entity, book);
+  cust->priv->addr = gncCloneAddress (from->addr, QOF_ENTITY (cust), book);
+  cust->priv->shipaddr = gncCloneAddress (from->shipaddr, QOF_ENTITY (cust), book);
 
   /* Find the matching currency in the new book, assumes
    * currency has already been copied into new book. */
-  cust->currency = gnc_commodity_obtain_twin (from->currency, book);
+  cust->priv->currency = gnc_commodity_obtain_twin (from->currency, book);
 
   /* Find the matching bill term, tax table in the new book */
-  cust->terms = gncBillTermObtainTwin(from->terms, book);
-  cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+  cust->priv->terms = gncBillTermObtainTwin(from->terms, book);
+  cust->priv->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
 
-  for (node=g_list_last(cust->jobs); node; node=node->next)
+  for (node=g_list_last(cust->priv->jobs); node; node=node->next)
   {
     GncJob *job = node->data;
     job = gncJobObtainTwin (job, book);
-    cust->jobs = g_list_prepend(cust->jobs, job);
+    cust->priv->jobs = g_list_prepend(cust->priv->jobs, job);
   }
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_ENTITY (cust), QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -158,8 +301,8 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
 void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
-  cust->inst.do_free = TRUE;
-  qof_instance_set_dirty (&cust->inst);
+  cust->priv->inst.do_free = TRUE;
+  qof_instance_set_dirty (QOF_INSTANCE (cust));
   gncCustomerCommitEdit (cust);
 }
 
@@ -167,22 +310,22 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_ENTITY (cust), QOF_EVENT_DESTROY, NULL);
 
-  CACHE_REMOVE (cust->id);
-  CACHE_REMOVE (cust->name);
-  CACHE_REMOVE (cust->notes);
-  gncAddressDestroy (cust->addr);
-  gncAddressDestroy (cust->shipaddr);
-  g_list_free (cust->jobs);
+  CACHE_REMOVE (cust->priv->id);
+  CACHE_REMOVE (cust->priv->name);
+  CACHE_REMOVE (cust->priv->notes);
+  gncAddressDestroy (cust->priv->addr);
+  gncAddressDestroy (cust->priv->shipaddr);
+  g_list_free (cust->priv->jobs);
 
-  if (cust->terms)
-    gncBillTermDecRef (cust->terms);
-  if (cust->taxtable) {
-    gncTaxTableDecRef (cust->taxtable);
+  if (cust->priv->terms)
+    gncBillTermDecRef (cust->priv->terms);
+  if (cust->priv->taxtable) {
+    gncTaxTableDecRef (cust->priv->taxtable);
   }
 
-  qof_instance_release (&cust->inst);
+  qof_instance_release (QOF_INSTANCE (cust));
   g_free (cust);
 }
 
@@ -217,7 +360,7 @@ void gncCustomerSetID (GncCustomer *cust, const char *id)
 {
   if (!cust) return;
   if (!id) return;
-  SET_STR(cust, cust->id, id);
+  SET_STR(cust, cust->priv->id, id);
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -226,7 +369,7 @@ void gncCustomerSetName (GncCustomer *cust, const char *name)
 {
   if (!cust) return;
   if (!name) return;
-  SET_STR(cust, cust->name, name);
+  SET_STR(cust, cust->priv->name, name);
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -235,7 +378,7 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
 {
   if (!cust) return;
   if (!notes) return;
-  SET_STR(cust, cust->notes, notes);
+  SET_STR(cust, cust->priv->notes, notes);
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -243,14 +386,14 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
 void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 {
   if (!cust) return;
-  if (cust->terms == terms) return;
+  if (cust->priv->terms == terms) return;
 
   gncCustomerBeginEdit (cust);
-  if (cust->terms)
-    gncBillTermDecRef (cust->terms);
-  cust->terms = terms;
-  if (cust->terms)
-    gncBillTermIncRef (cust->terms);
+  if (cust->priv->terms)
+    gncBillTermDecRef (cust->priv->terms);
+  cust->priv->terms = terms;
+  if (cust->priv->terms)
+    gncBillTermIncRef (cust->priv->terms);
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -258,9 +401,9 @@ void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 {
   if (!cust) return;
-  if (taxincl == cust->taxincluded) return;
+  if (taxincl == cust->priv->taxincluded) return;
   gncCustomerBeginEdit (cust);
-  cust->taxincluded = taxincl;
+  cust->priv->taxincluded = taxincl;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -268,9 +411,9 @@ void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 void gncCustomerSetActive (GncCustomer *cust, gboolean active)
 {
   if (!cust) return;
-  if (active == cust->active) return;
+  if (active == cust->priv->active) return;
   gncCustomerBeginEdit (cust);
-  cust->active = active;
+  cust->priv->active = active;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -278,9 +421,9 @@ void gncCustomerSetActive (GncCustomer *cust, gboolean active)
 void gncCustomerSetDiscount (GncCustomer *cust, gnc_numeric discount)
 {
   if (!cust) return;
-  if (gnc_numeric_equal (discount, cust->discount)) return;
+  if (gnc_numeric_equal (discount, cust->priv->discount)) return;
   gncCustomerBeginEdit (cust);
-  cust->discount = discount;
+  cust->priv->discount = discount;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -288,9 +431,9 @@ void gncCustomerSetDiscount (GncCustomer *cust, gnc_numeric discount)
 void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
 {
   if (!cust) return;
-  if (gnc_numeric_equal (credit, cust->credit)) return;
+  if (gnc_numeric_equal (credit, cust->priv->credit)) return;
   gncCustomerBeginEdit (cust);
-  cust->credit = credit;
+  cust->priv->credit = credit;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -298,9 +441,9 @@ void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
 void gncCustomerSetCurrency (GncCustomer *cust, gnc_commodity *currency)
 {
   if (!cust || !currency) return;
-  if (cust->currency && gnc_commodity_equal (cust->currency, currency)) return;
+  if (cust->priv->currency && gnc_commodity_equal (cust->priv->currency, currency)) return;
   gncCustomerBeginEdit (cust);
-  cust->currency = currency;
+  cust->priv->currency = currency;
   mark_customer (cust);
   gncCustomerCommitEdit (cust);
 }
@@ -336,11 +479,11 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
   if (!cust) return;
   if (!job) return;
 
-  if (g_list_index(cust->jobs, job) == -1)
-    cust->jobs = g_list_insert_sorted (cust->jobs, job,
+  if (g_list_index(cust->priv->jobs, job) == -1)
+    cust->priv->jobs = g_list_insert_sorted (cust->priv->jobs, job,
                                        (GCompareFunc)gncJobCompare);
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_ENTITY (cust), QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -350,19 +493,19 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
   if (!cust) return;
   if (!job) return;
 
-  node = g_list_find (cust->jobs, job);
+  node = g_list_find (cust->priv->jobs, job);
   if (!node) {
     /*    PERR ("split not in account"); */
   } else {
-    cust->jobs = g_list_remove_link (cust->jobs, node);
+    cust->priv->jobs = g_list_remove_link (cust->priv->jobs, node);
     g_list_free_1 (node);
   }
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_ENTITY (cust), QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  qof_begin_edit (&cust->inst);
+  qof_begin_edit (QOF_INSTANCE (cust));
 }
 
 static void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -373,8 +516,8 @@ static void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
 static void gncCustomerOnDone (QofInstance *inst)
 {
   GncCustomer *cust = (GncCustomer *) inst;
-  gncAddressClearDirty (cust->addr);
-  gncAddressClearDirty (cust->shipaddr);
+  gncAddressClearDirty (cust->priv->addr);
+  gncAddressClearDirty (cust->priv->shipaddr);
 }
 
 static void cust_free (QofInstance *inst)
@@ -386,7 +529,7 @@ static void cust_free (QofInstance *inst)
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
   if (!qof_commit_edit (QOF_INSTANCE(cust))) return;
-  qof_commit_edit_part2 (&cust->inst, gncCustomerOnError,
+  qof_commit_edit_part2 (QOF_INSTANCE (cust), gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }
 
@@ -396,19 +539,19 @@ void gncCustomerCommitEdit (GncCustomer *cust)
 const char * gncCustomerGetID (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->id;
+  return cust->priv->id;
 }
 
 const char * gncCustomerGetName (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->name;
+  return cust->priv->name;
 }
 
 GncAddress * gncCustomerGetAddr (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->addr;
+  return cust->priv->addr;
 }
 
 static void
@@ -418,10 +561,10 @@ qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent)
 
 	if(!cust || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
-	if(addr == cust->addr) { return; }
-	if(cust->addr != NULL) { gncAddressDestroy(cust->addr); }
+	if(addr == cust->priv->addr) { return; }
+	if(cust->priv->addr != NULL) { gncAddressDestroy(cust->priv->addr); }
 	gncCustomerBeginEdit(cust);
-	cust->addr = addr;
+	cust->priv->addr = addr;
 	gncCustomerCommitEdit(cust);
 }
 
@@ -432,59 +575,59 @@ qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent)
 
 	if(!cust || !ship_addr_ent) { return; }
 	ship_addr = (GncAddress*)ship_addr_ent;
-	if(ship_addr == cust->shipaddr) { return; }
-	if(cust->shipaddr != NULL) { gncAddressDestroy(cust->shipaddr); }
+	if(ship_addr == cust->priv->shipaddr) { return; }
+	if(cust->priv->shipaddr != NULL) { gncAddressDestroy(cust->priv->shipaddr); }
 	gncCustomerBeginEdit(cust);
-	cust->shipaddr = ship_addr;
+	cust->priv->shipaddr = ship_addr;
 	gncCustomerCommitEdit(cust);
 }
 
 GncAddress * gncCustomerGetShipAddr (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->shipaddr;
+  return cust->priv->shipaddr;
 }
 
 const char * gncCustomerGetNotes (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->notes;
+  return cust->priv->notes;
 }
 
 GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->terms;
+  return cust->priv->terms;
 }
 
 GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
 {
   if (!cust) return GNC_TAXINCLUDED_USEGLOBAL;
-  return cust->taxincluded;
+  return cust->priv->taxincluded;
 }
 
 gnc_commodity * gncCustomerGetCurrency (GncCustomer *cust)
 {
   if (!cust) return NULL;
-  return cust->currency;
+  return cust->priv->currency;
 }
 
 gboolean gncCustomerGetActive (GncCustomer *cust)
 {
   if (!cust) return FALSE;
-  return cust->active;
+  return cust->priv->active;
 }
 
 gnc_numeric gncCustomerGetDiscount (GncCustomer *cust)
 {
   if (!cust) return gnc_numeric_zero();
-  return cust->discount;
+  return cust->priv->discount;
 }
 
 gnc_numeric gncCustomerGetCredit (GncCustomer *cust)
 {
   if (!cust) return gnc_numeric_zero();
-  return cust->credit;
+  return cust->priv->credit;
 }
 
 gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer)
@@ -504,10 +647,10 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
   if (!cust) return NULL;
 
   if (show_all) {
-    return (g_list_copy (cust->jobs));
+    return (g_list_copy (cust->priv->jobs));
   } else {
     GList *list = NULL, *iterator;
-    for (iterator = cust->jobs; iterator; iterator=iterator->next) {
+    for (iterator = cust->priv->jobs; iterator; iterator=iterator->next) {
       GncJob *j = iterator->data;
       if (gncJobGetActive (j))
         list = g_list_append (list, j);
@@ -519,9 +662,9 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
-  return (qof_instance_is_dirty(&cust->inst) ||
-          gncAddressIsDirty (cust->addr) ||
-          gncAddressIsDirty (cust->shipaddr));
+  return (qof_instance_is_dirty(QOF_INSTANCE (cust)) ||
+          gncAddressIsDirty (cust->priv->addr) ||
+          gncAddressIsDirty (cust->priv->shipaddr));
 }
 
 /* Other functions */

@@ -48,6 +48,130 @@
 #include "gnc-lot.h"
 #include "gnc-event.h"
 
+/* GObject declarations */
+
+static void gnc_split_class_init(GncSplitClass *klass);
+static void gnc_split_init(GncSplit *sp);
+static void gnc_split_finalize(GObject *object);
+
+struct _GncSplitPrivate {
+	/* Private Members */
+};
+
+typedef struct _GncSplitSignal GncSplitSignal;
+typedef enum _GncSplitSignalType GncSplitSignalType;
+
+enum _GncSplitSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncSplitSignal {
+	GncSplit *object;
+};
+
+static guint gnc_split_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_split_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncSplitClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_split_class_init,
+			NULL,
+			NULL,
+			sizeof (GncSplit),
+			0,
+			(GInstanceInitFunc)gnc_split_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncSplit", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_split_class_init(GncSplitClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_split_finalize;
+	object_class->set_property = gnc_split_set_property;
+    object_class->get_property = gnc_split_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_split_init(GncSplit *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_split_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_split_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncSplit *obj;
+	
+	obj = GNC_SPLIT (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_split_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncSplit *obj;
+  
+  obj = GNC_SPLIT (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
+/********************************************************/
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";
 
@@ -88,7 +212,7 @@ xaccInitSplit(Split * split, QofBook *book)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, book);
+  qof_instance_init(QOF_INSTANCE (split), GNC_ID_SPLIT, book);
 }
 
 void
@@ -131,7 +255,7 @@ xaccMallocSplit(QofBook *book)
   Split *split;
   g_return_val_if_fail (book, NULL);
 
-  split = g_new0 (Split, 1);
+  split = g_object_new (GNC_TYPE_SPLIT, NULL);
   xaccInitSplit (split, book);
 
   return split;
@@ -149,7 +273,7 @@ xaccMallocSplit(QofBook *book)
 Split *
 xaccDupeSplit (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   /* Trash the entity table. We don't want to mistake the cloned
    * splits as something official.  If we ever use this split, we'll
@@ -188,7 +312,7 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitClone (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   split->parent              = NULL;
   split->memo                = CACHE_INSERT(s->memo);
@@ -205,7 +329,7 @@ xaccSplitClone (const Split *s)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, s->inst.book);
+  qof_instance_init(QOF_INSTANCE (split), GNC_ID_SPLIT, s->inst.book);
   kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
@@ -275,8 +399,7 @@ xaccFreeSplit (Split *split)
 
   // Is this right? 
   if (split->gains_split) split->gains_split->gains_split = NULL;
-  qof_instance_release(&split->inst);
-  g_free(split);
+  qof_instance_release(QOF_INSTANCE (split));
 }
 
 static void mark_acc(Account *acc)

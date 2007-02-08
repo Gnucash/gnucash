@@ -71,7 +71,7 @@
  * A "split" is more commonly referred to as an "entry" in a "transaction".
  */
 
-struct transaction_s
+struct _GncTransaction
 {
   QofInstance inst;     /* glbally unique id */
 

@@ -37,66 +37,301 @@
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
+/* GObject declarations */
+
+static void qof_instance_class_init(QofInstanceClass *klass);
+static void qof_instance_init(QofInstance *sp);
+static void qof_instance_finalize(GObject *object);
+
+struct _QofInstancePrivate
+{
+
+   /* The entity_table in which this instance is stored */
+   QofBook * book;
+
+  /* kvp_data is a key-value pair database for storing arbirtary
+   * information associated with this instance.  
+   * See src/engine/kvp_doc.txt for a list and description of the 
+   * important keys. */
+   KvpFrame *kvp_data;
+
+   /*  Timestamp used to track the last modification to this 
+    *  instance.  Typically used to compare two versions of the
+    *  same object, to see which is newer.  When used with the 
+    *  SQL backend, this field is reserved for SQL use, to compare
+    *  the version in local memory to the remote, server version.
+    */
+   Timespec last_update;
+
+   /*  Keep track of nesting level of begin/end edit calls */
+   gint    editlevel;
+
+   /*  In process of being destroyed */
+   gboolean  do_free;
+
+   /*  dirty/clean flag. If dirty, then this instance has been modified,
+    *  but has not yet been written out to storage (file/database)
+    */
+   gboolean  dirty;
+
+   /* True iff this instance has never been committed. */
+   gboolean infant;
+   
+   /* Unique identifier for this object */
+   GUID *guid;
+};
+
+typedef struct _QofInstanceSignal QofInstanceSignal;
+typedef enum _QofInstanceSignalType QofInstanceSignalType;
+
+enum _QofInstanceSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0,
+        PROP_BOOK
+};
+
+struct _QofInstanceSignal {
+	QofInstance *object;
+};
+
+static guint qof_instance_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+qof_instance_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (QofInstanceClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)qof_instance_class_init,
+			NULL,
+			NULL,
+			sizeof (QofInstance),
+			0,
+			(GInstanceInitFunc)qof_instance_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"QofInstance", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+qof_instance_class_init(QofInstanceClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = qof_instance_finalize;
+	object_class->set_property = qof_instance_set_property;
+    object_class->get_property = qof_instance_get_property;
+
+	/* Install properties */
+	g_object_class_install_property (object_class, PROP_BOOK,
+					 g_param_spec_object ("book", _("Book"), NULL,
+                                                              	QOF_TYPE_BOOK,
+							       								(G_PARAM_READABLE | G_PARAM_WRITABLE |
+																			G_PARAM_CONSTRUCT_ONLY)));
+
+	/* Create signals here:*/
+ 	
+}
+
+static void
+qof_instance_init(QofInstance *obj)
+{
+	/* Initialize private members, etc. */
+	inst->priv = g_new0 (QofInstancePrivate, 1);
+	
+	inst->priv->book = NULL;
+	inst->priv->kvp_data = kvp_frame_new();
+	inst->priv->last_update.tv_sec = 0;
+	inst->priv->last_update.tv_nsec = -1;
+	inst->priv->editlevel = 0;
+	inst->priv->do_free = FALSE;
+	inst->priv->dirty = FALSE;
+	inst->priv->infant = TRUE;
+	inst->priv->guid = NULL;
+}
+
+static void
+qof_instance_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	kvp_frame_delete (inst->priv->kvp_data);
+	inst->priv->kvp_data = NULL;
+	inst->priv->editlevel = 0;
+	inst->priv->do_free = FALSE;
+	inst->priv->dirty = FALSE;
+	qof_book_remove_element (QOF_INSTANCE (object));
+	
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+qof_instance_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	QofInstance *obj;
+	
+	obj = QOF_INSTANCE (object);
+	
+	switch (param_id) {		
+		case PROP_BOOK:
+			obj->priv->book = qof_instance_set_book (obj, QOF_BOOK (g_value_get_object (value)));
+			break;
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+qof_instance_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  QofInstance *obj;
+  
+  obj = QOF_INSTANCE(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARNinst->priv = g_new0 (QofInstancePrivate, 1);
+    break;
+  }
+}
+
+
+
+
 /* ========================================================== */
+
+void
+qof_instance_set_book (QofInstance *instance, QofBook *book)
+{
+	QofCollection *coll;
+		
+	g_return_if_fail (QOF_IS_BOOK (book));
+	
+	
+	if ( QOF_IS_BOOK (inst->book) && instance->priv->guid != NULL) 
+	{		
+		if (QOF_IS_INSTANCE (qof_book_get_element (inst->book, G_OBJECT_TYPE (instance), ent->priv->guid)))
+		{
+			qof_collection_remove_element (qof_book_get_collection (ent->priv->book, 
+																										G_OBJECT_TYPE (instance)), 
+																										instance);
+		}
+		inst->priv->book = book;
+	}
+	else
+	{
+		inst->priv->book = book;
+  	}
+  	
+  	if (inst->priv->guid == NULL )
+  	{
+  		GUID *guid;
+  		
+  		guid = NULL;
+  		
+  		do
+  		{
+   			 guid_new (guid);
+
+   			 if (NULL == qof_book_get_element (instance->priv->book, G_OBJECT_TYPE (instance), guid)) break;
+
+    		PWARN("duplicate id created, trying again");
+  		} while(1);
+  		
+  		inst->priv->guid = guid;
+  	}
+  	
+  	qof_book_insert_element (instance->priv->book, instance);
+}
+
+QofCollection* 
+qof_instance_get_collection (QofInstance *instance)
+{
+	return qof_book_get_collection (instance->priv->book, G_OBJECT_TYPE (instance));
+}
+
+/* This is a restricted function, should be used only during 
+ * read from file */
+void
+qof_instance_set_guid (QofInstance *inst, const GUID *guid)
+{
+  if (guid_equal (guid, inst->priv->guid)) return;
+
+  qof_book_remove_element (inst->priv->book, inst);
+  inst->priv->guid = guid;
+  qof_book_insert_element (inst->priv->book, inst);
+}
+
 
 QofInstance*
 qof_instance_create (QofIdType type, QofBook *book)
 {
 	QofInstance *inst;
 
-	inst = g_new0(QofInstance, 1);
-	qof_instance_init(inst, type, book);
+	inst = QOF_INSTANCE (g_object_new (QOF_TYPE_INSTANCE, "book", book, NULL));
+	
 	return inst;
 }
+
 
 void
 qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 {
-	QofCollection *col;
-
-	inst->book = book;
-	inst->kvp_data = kvp_frame_new();
-	inst->last_update.tv_sec = 0;
-	inst->last_update.tv_nsec = -1;
-	inst->editlevel = 0;
-	inst->do_free = FALSE;
-	inst->dirty = FALSE;
-	inst->infant = TRUE;
-
-	col = qof_book_get_collection (book, type);
-	qof_entity_init (&inst->entity, type, col);
+	
 }
 
 void
 qof_instance_release (QofInstance *inst)
 {
-	kvp_frame_delete (inst->kvp_data);
-	inst->kvp_data = NULL;
-	inst->editlevel = 0;
-	inst->do_free = FALSE;
-	inst->dirty = FALSE;
-	qof_entity_release (&inst->entity);
+	
 }
 
 const GUID *
 qof_instance_get_guid (const QofInstance *inst)
 {
-	if (!inst) return NULL;
-	return &inst->entity.guid;
+	g_return_value_if_fail (QOF_IS_INSTANCE(inst), NULL);
+	
+	return inst->priv->guid;
 }
 
 QofBook *
 qof_instance_get_book (const QofInstance *inst)
 {
 	if (!inst) return NULL;
-	return inst->book;
+	return inst->priv->book;
 }
 
 KvpFrame*
 qof_instance_get_slots (const QofInstance *inst)
 {
   if (!inst) return NULL;
-  return inst->kvp_data;
+  return inst->priv->kvp_data;
 }
 
 Timespec
@@ -107,7 +342,7 @@ qof_instance_get_last_update (const QofInstance *inst)
 		Timespec ts = {0,-1};
 		return ts;
 	}
-	return inst->last_update;
+	return inst->priv->last_update;
 }
 
 int
@@ -128,9 +363,9 @@ qof_instance_print_dirty (const QofEntity *entity, gpointer dummy)
 {
   QofInstance *inst = QOF_INSTANCE(entity);
 
-  if (inst->dirty)
-    printf("%s instance %s is dirty.\n", inst->entity.e_type,
-	   guid_to_string(&inst->entity.guid));
+  if (inst->priv->dirty)
+    printf("%s instance %s is dirty.\n", qof_entity_get_qof_type (QOF_ENTITY (inst),
+	   guid_to_string(qof_entity_get_guid (QOF_ENTITY (inst)))));
 }
 
 gboolean
@@ -140,42 +375,45 @@ qof_instance_is_dirty (QofInstance *inst)
 
 	if (!inst) { return FALSE; }
 	if (qof_get_alt_dirty_mode())
-	  return inst->dirty;
-	coll = inst->entity.collection;
-	if(qof_collection_is_dirty(coll)) { return inst->dirty; }
-	inst->dirty = FALSE;
+	  return inst->priv->dirty;
+	coll = qof_entity_get_collection (QOF_ENTITY (inst));
+	if(qof_collection_is_dirty(coll)) { return inst->priv->dirty; }
+	inst->priv->dirty = FALSE;
 	return FALSE;
 }
 
 void
-qof_instance_set_dirty(QofInstance* inst)
+qof_instance_set_dirty(QofInstance* inst, gboolean value)
 {
 	QofCollection *coll;
 
-	inst->dirty = TRUE;
-	if (!qof_get_alt_dirty_mode()) {
-	  coll = inst->entity.collection;
-	  qof_collection_mark_dirty(coll);
+	if (value) {
+		inst->priv->dirty = TRUE;
+		if (!qof_get_alt_dirty_mode()) {
+		  coll = qof_entity_get_collection (QOF_ENTITY (inst));
+		  qof_collection_mark_dirty(coll);
+		}
 	}
+	inst->priv->dirty = FALSE;
 }
 
 gboolean
 qof_instance_check_edit(const  QofInstance *inst)
 {
-	if(inst->editlevel > 0) { return TRUE; }
+	if(inst->priv->editlevel > 0) { return TRUE; }
 	return FALSE;
 }
 
 gboolean
 qof_instance_do_free(const QofInstance *inst)
 {
-	return inst->do_free;
+	return inst->priv->do_free;
 }
 
 void
 qof_instance_mark_free(QofInstance *inst)
 {
-	inst->do_free = TRUE;
+	inst->priv->do_free = TRUE;
 }
 
 /* ========================================================== */
@@ -185,27 +423,27 @@ void
 qof_instance_mark_clean (QofInstance *inst)
 {
   if(!inst) return;
-  inst->dirty = FALSE;
+  inst->priv->dirty = FALSE;
 }
 
 void
 qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
 {
   if (!inst) return;
-  if (inst->kvp_data && (inst->kvp_data != frm))
+  if (inst->priv->kvp_data && (inst->priv->kvp_data != frm))
   {
-    kvp_frame_delete(inst->kvp_data);
+    kvp_frame_delete(inst->priv->kvp_data);
   }
 
-  inst->dirty = TRUE;
-  inst->kvp_data = frm;
+  inst->priv->dirty = TRUE;
+  inst->priv->kvp_data = frm;
 }
 
 void
 qof_instance_set_last_update (QofInstance *inst, Timespec ts)
 {
   if (!inst) return;
-  inst->last_update = ts;
+  inst->priv->last_update = ts;
 }
 
 /* ========================================================== */
@@ -256,4 +494,29 @@ qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
 	return twin;
 }
 
+/* Gets the KvpFrame kvp data value stored in the instance */
+
+KvpFrame* 
+qof_instance_get_kvp_data (const QofInstance *instance)
+{
+	return instance->kvp_data;
+}
+
+void			
+qof_instance_set_kvp_data (QofInstance *instance, KvpFrame *data)
+{
+	kvp_frame_delete (instance->kvp_data);
+	instance->kvp_data = kvp_frame_copy (data);
+}
+
+/* Gets the Instance's Edit Level*/
+gint qof_instance_get_edit_level (const QofInstance *instance)
+{
+	return instance->editlevel;
+}
+
+void 		qof_instance_set_edit_level (QofInstance *instance, gint editlevel)
+{
+	instance->editlevel = editlevel;
+}
 /* ========================== END OF FILE ======================= */

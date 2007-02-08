@@ -29,6 +29,168 @@
 #include "test-stuff.h"
 #include "gnc-engine.h"
 
+/* GObject declarations */
+
+#define TEST_TYPE_OBJ            (test_obj_get_type ())
+#define TEST_OBJ(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), TEST_TYPE_OBJ, TestObj))
+#define TEST_OBJ_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), TEST_TYPE_OBJ, TestObjClass))
+#define TEST_IS_OBJ(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), TEST_TYPE_OBJ))
+#define TEST_IS_OBJ_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), TEST_TYPE_OBJ))
+#define TEST_OBJ_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), TEST_TYPE_OBJ, TestObjClass))
+
+
+typedef struct _TestObjClass TestObjClass;
+typedef struct _TestObj TestObj;
+
+/* simple object structure */
+typedef struct _obj
+{
+	QofInstance inst;
+	char     	*Name;
+	gnc_numeric	Amount;
+	const GUID 	*obj_guid;
+	Timespec 	date;
+	double 		discount; /* cheap pun, I know. */
+	gboolean 	active;
+	gint32   	version;
+	gint64 		minor;
+} myobj;
+
+struct _TestObjClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   test_obj_get_type ();
+
+/* GObject declarations */
+
+static void test_obj_class_init(TestObjClass *klass);
+static void test_obj_init(TestObj *sp);
+static void test_obj_finalize(GObject *object);
+
+struct _TestObjPrivate {
+	/* Private Members */
+};
+
+typedef struct _TestObjSignal TestObjSignal;
+typedef enum _TestObjSignalType TestObjSignalType;
+
+enum _TestObjSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _TestObjSignal {
+	TestObj *object;
+};
+
+static guint test_obj_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+test_obj_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (TestObjClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)test_obj_class_init,
+			NULL,
+			NULL,
+			sizeof (TestObj),
+			0,
+			(GInstanceInitFunc)test_obj_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"TestObj", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+test_obj_class_init(TestObjClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass)QofBook;
+	object_class->finalize = test_obj_finalize;
+	object_class->set_property = test_obj_set_property;
+    object_class->get_property = test_obj_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+test_obj_init(TestObj *obj)
+{
+	/* Initialize private members, etc. */QofBook
+}
+
+static void
+test_obj_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+test_obj_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	TestObj *obj;
+	
+	obj = QOF_BOOK (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+test_obj_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  TestObj *obj;
+  
+  obj = QOF_BOOK(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
+/**********************************/
+
+
 #define TEST_MODULE_NAME "book-merge-test"
 #define TEST_MODULE_DESC "Test Book Merge"
 #define OBJ_NAME "somename"
@@ -40,23 +202,11 @@
 #define OBJ_MINOR "tiny"
 #define OBJ_ACTIVE "ofcourse"
 
-static void test_rule_loop (QofBookMergeData*, QofBookMergeRule*, guint);
+static void test_rule_loop (TestObjMergeData*, TestObjMergeRule*, guint);
 static void test_merge (void);
 gboolean myobjRegister (void);
 
-/* simple object structure */
-typedef struct obj_s
-{
-	QofInstance inst;
-	char     	*Name;
-	gnc_numeric	Amount;
-	const GUID 	*obj_guid;
-	Timespec 	date;
-	double 		discount; /* cheap pun, I know. */
-	gboolean 	active;
-	gint32   	version;
-	gint64 		minor;
-}myobj;
+
 
 myobj* obj_create(QofBook*);
 
@@ -85,7 +235,7 @@ obj_create(QofBook *book)
 {
 	myobj *g;
 	g_return_val_if_fail(book, NULL);
-	g = g_new(myobj, 1);
+	g = g_object_new (TEST_TYPE_OBJ, NULL);
 	qof_instance_init (&g->inst, TEST_MODULE_NAME, book);
 	obj_setGUID(g,qof_instance_get_guid(&g->inst));
 	g->date.tv_nsec = 0;

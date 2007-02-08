@@ -38,6 +38,36 @@ static QofLogModule log_module = QOF_MOD_BACKEND;
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"
 
+static GHashTable *backend_data = NULL;
+
+gboolean qof_backend_register (GType type,
+                                   const char *backend_name,
+                                   gpointer be_data)
+{
+  GHashTable *ht;
+  g_return_val_if_fail (object_is_initialized, FALSE);
+
+  if (!type_name || *type_name == '\0' ||
+      !backend_name || *backend_name == '\0' ||
+      !be_data)
+    return FALSE;
+
+  ht = g_hash_table_lookup (backend_data, backend_name);
+
+  /* If it doesn't already exist, create a new table for this backend */
+  if (!ht) {
+    ht = g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_insert (backend_data, (char *)backend_name, ht);
+  }
+
+  /* Now insert the data */
+  g_hash_table_insert (ht, (char *)type_name, be_data);
+
+  return TRUE;
+}
+
+
+
 /* *******************************************************************\
  * error handling                                                   *
 \********************************************************************/

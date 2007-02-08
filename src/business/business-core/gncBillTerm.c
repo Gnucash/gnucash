@@ -33,10 +33,14 @@
 #include "gnc-engine.h"
 #include "gncBillTermP.h"
 
-struct _gncBillTerm 
-{
-  QofInstance     inst;
+/* GObject declarations */
 
+static void gnc_bill_term_class_init(GncBillTermClass *klass);
+static void gnc_bill_term_init(GncBillTerm *sp);
+static void gnc_bill_term_finalize(GObject *object);
+
+struct _GncBillTermPrivate 
+{
   /* 'visible' data fields directly manipulated by user */
   char *          name;
   char *          desc;
@@ -55,6 +59,120 @@ struct _gncBillTerm
   gboolean        invisible;
   GList *         children;    /* list of children for disconnection */
 };
+
+typedef struct _GncBillTermSignal GncBillTermSignal;
+typedef enum _GncBillTermSignalType GncBillTermSignalType;
+
+enum _GncBillTermSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncBillTermSignal {
+	GncBillTerm *object;
+};
+
+static guint gnc_bill_term_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_bill_term_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncBillTermClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_bill_term_class_init,
+			NULL,
+			NULL,
+			sizeof (GncBillTerm),
+			0,
+			(GInstanceInitFunc)gnc_bill_term_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncBillTerm", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_bill_term_class_init (GncBillTermClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_bill_term_finalize;
+	object_class->set_property = gnc_bill_term_set_property;
+    object_class->get_property = gnc_bill_term_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_bill_term_init (GncBillTerm *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_bill_term_finalize (GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_bill_term_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncBillTerm *obj;
+	
+	obj = GNC_BILL_TERM (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_bill_term_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncBillTerm *obj;
+  
+  obj = GNC_BILL_TERM (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+/*********************************************************************************************/
 
 struct _book_info 
 {
@@ -84,8 +202,8 @@ FROM_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)
 static inline void
 mark_term (GncBillTerm *term)
 {
-  qof_instance_set_dirty(&term->inst);
-  qof_event_gen (&term->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_instance_set_dirty(GNC_INSTANCE (term));
+  qof_event_gen (GNC_ENTITY (term), QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void maybe_resort_list (GncBillTerm *term)
@@ -93,14 +211,14 @@ static inline void maybe_resort_list (GncBillTerm *term)
   struct _book_info *bi;
 
   if (term->parent || term->invisible) return;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book (QOF_INSTANCE (term)), _GNC_MOD_NAME);
   bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
 }
 
 static inline void addObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book (QOF_INSTANCE (term)), _GNC_MOD_NAME);
   bi->terms = g_list_insert_sorted (bi->terms, term,
                                        (GCompareFunc)gncBillTermCompare);
 }
@@ -108,7 +226,7 @@ static inline void addObj (GncBillTerm *term)
 static inline void remObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book (QOF_INSTANCE (term)), _GNC_MOD_NAME);
   bi->terms = g_list_remove (bi->terms, term);
 }
 
@@ -134,13 +252,16 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
   GncBillTerm *term;
   if (!book) return NULL;
 
-  term = g_new0 (GncBillTerm, 1);
-  qof_instance_init(&term->inst, _GNC_MOD_NAME, book);
+  term = GNC_BILL_TERM (g_object_new (GNC_TYPE_BILL_TERM, NULL));
+  term->priv = g_new0 (GncBillTermPrivate, 1);
+  
+  qof_instance_init(GNC_INSTANCE (term), _GNC_MOD_NAME, book);
+  
   term->name = CACHE_INSERT ("");
   term->desc = CACHE_INSERT ("");
   term->discount = gnc_numeric_zero ();
   addObj (term);
-  qof_event_gen (&term->inst.entity,  QOF_EVENT_CREATE, NULL);
+  qof_event_gen (GNC_ENTITY (term),  QOF_EVENT_CREATE, NULL);
   return term;
 }
 
@@ -148,9 +269,9 @@ void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
   DEBUG("destroying bill term %s (%p)",
-	    guid_to_string(qof_instance_get_guid(&term->inst)), term);
-  term->inst.do_free = TRUE;
-  qof_instance_set_dirty (&term->inst);
+	    guid_to_string(qof_instance_get_guid(GNC_INSTANCE (term))), term);
+  qof_instance_mark_free (QOF_INSTANCE (term));
+  qof_instance_set_dirty (GNC_INSTANCE (term));
   gncBillTermCommitEdit (term);
 }
 
@@ -161,12 +282,12 @@ static void gncBillTermFree (GncBillTerm *term)
 
   if (!term) return;
 
-  qof_event_gen (&term->inst.entity,  QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (GNC_ENTITY (term),  QOF_EVENT_DESTROY, NULL);
   CACHE_REMOVE (term->name);
   CACHE_REMOVE (term->desc);
   remObj (term);
 
-  if (!term->inst.do_free)
+  if (!qof_instance_do_free (QOF_INSTANCE (term)))
     PERR("free a billterm without do_free set!");
 
   /* disconnect from parent */
@@ -180,8 +301,7 @@ static void gncBillTermFree (GncBillTerm *term)
   }
   g_list_free(term->children);
 
-  qof_instance_release(&term->inst);
-  g_free (term);
+  qof_instance_release(GNC_INSTANCE (term));
 }
 
 GncBillTerm *
@@ -193,8 +313,8 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   if (!book || !from) return NULL;
 
   term = g_new0 (GncBillTerm, 1);
-  qof_instance_init(&term->inst, _GNC_MOD_NAME, book);
-  qof_instance_gemini (&term->inst, &from->inst);
+  qof_instance_init(GNC_INSTANCE (term), _GNC_MOD_NAME, book);
+  qof_instance_gemini (GNC_INSTANCE (term), &from->inst);
 
   term->name = CACHE_INSERT (from->name);
   term->desc = CACHE_INSERT (from->desc);
@@ -228,7 +348,7 @@ gncCloneBillTerm (GncBillTerm *from, QofBook *book)
   }
 
   addObj (term);
-  qof_event_gen (&term->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (GNC_ENTITY (term), QOF_EVENT_CREATE, NULL);
   return term;
 }
 
@@ -398,7 +518,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  QOF_BEGIN_EDIT (&term->inst);
+  QOF_BEGIN_EDIT (GNC_INSTANCE (term));
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
@@ -417,7 +537,7 @@ static void on_done (QofInstance *inst) {}
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
   if (!qof_commit_edit (QOF_INSTANCE(term))) return;
-  qof_commit_edit_part2 (&term->inst, gncBillTermOnError,
+  qof_commit_edit_part2 (GNC_INSTANCE (term), gncBillTermOnError,
                          on_done, bill_free);
 }
 
@@ -501,7 +621,7 @@ static GncBillTerm *gncBillTermCopy (GncBillTerm *term)
   GncBillTerm *t;
 
   if (!term) return NULL;
-  t = gncBillTermCreate (term->inst.book);
+  t = gncBillTermCreate (qof_instance_get_book (QOF_INSTANCE (term)));
 
   gncBillTermBeginEdit(t);
 
@@ -569,7 +689,7 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b)
 gboolean gncBillTermIsDirty (GncBillTerm *term)
 {
   if (!term) return FALSE;
-  return term->inst.dirty;
+  return qof_instance_set_dirty (QOF_INSTANCE (term));
 }
 
 /********************************************************/

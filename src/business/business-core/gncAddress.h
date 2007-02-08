@@ -76,7 +76,35 @@ up to you to pass a suitable entity.
 @param	char*	fax number
 @param	char*	email address
 */
-typedef struct _gncAddress GncAddress;
+
+/* GObject declarations */
+
+#define GNC_TYPE_ADDRESS            (qof_book_get_type ())
+#define GNC_ADDRESS(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ADDRESS, GncAddress))
+#define GNC_ADDRESS_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ADDRESS, GncAddressClass))
+#define GNC_IS_ADDRESS(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ADDRESS))
+#define GNC_IS_ADDRESS_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ADDRESS))
+#define GNC_ADDRESS_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ADDRESS, GncAddressClass))
+
+
+typedef struct _GncAddressClass GncAddressClass;
+typedef struct _GncAddressPrivate GncAddressPrivate;
+typedef struct _GncAddress GncAddress;
+
+struct _GncAdress {
+	QofInstance inst;
+	GncAddressPrivate *priv;
+};
+
+struct _GncAddressClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   qof_book_get_type ();
+
 
 /** @name Create/Destroy functions 
  @{ */

@@ -30,6 +30,29 @@
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
+/* GObject declarations */
+
+#define TEST_TYPE_CHILD_OBJ            (test_child_obj_get_type ())
+#define QOF_BOOK(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), TEST_TYPE_CHILD_OBJ, TestChildObj))
+#define QOF_BOOK_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), TEST_TYPE_CHILD_OBJ, TestChildObjClass))
+#define TEST_IS_CHILD_OBJ(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), TEST_TYPE_CHILD_OBJ))
+#define TEST_IS_CHILD_OBJ_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), TEST_TYPE_CHILD_OBJ))
+#define TEST_CHILD_OBJ_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), TEST_TYPE_CHILD_OBJ, TestChildObjClass))
+
+
+typedef struct _TestChildObjClass TestChildObjClass;
+typedef struct _TestChildObj TestChildObj;
+
+struct _TestChildObjClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   test_child_obj_get_type ();
+
+
 #define GRAND_MODULE_NAME "recursive-grandparent"
 #define PARENT_MODULE_NAME "recursive-parent"
 #define CHILD_MODULE_NAME "recursive-child"
@@ -52,7 +75,7 @@
 static gboolean debug = FALSE;
 
 /* simple object structure */
-typedef struct child_s
+typedef struct _TestChildObj
 {
 	QofInstance inst;
 	gchar       *Name;
@@ -66,7 +89,7 @@ typedef struct child_s
 }mychild;
 
 /* simple object structure */
-typedef struct parent_s
+typedef struct _TestParentObj
 {
 	QofInstance inst;
 	mychild     *child;
@@ -81,7 +104,7 @@ typedef struct parent_s
 }myparent;
 
 	/* simple object structure */
-typedef struct grand_s
+typedef struct _TestGrandObj
 {
 	QofInstance  inst;
 	myparent     *child;
@@ -764,7 +787,7 @@ gboolean mychildRegister (void)
 	(QofSetterFunc)child_setActive },
     { OBJ_VERSION,  QOF_TYPE_INT32,   (QofAccessFunc)child_getVersion,  
 	(QofSetterFunc)child_setVersion },
-    { OBJ_MINOR,    QOF_TYPE_INT64,	  (QofAccessFunc)child_getMinor,	
+    { OBJ_Mqof_bookINOR,    QOF_TYPE_INT64,	  (QofAccessFunc)child_getMinor,	
 	(QofSetterFunc)child_setMinor },
     { OBJ_FLAG,     QOF_TYPE_CHAR,    (QofAccessFunc)child_getFlag,
 	(QofSetterFunc)child_setFlag },

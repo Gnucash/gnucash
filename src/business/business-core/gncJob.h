@@ -36,13 +36,40 @@ typedef struct _gncJob GncJob;
 #include "gncAddress.h"
 #include "gncOwner.h"
 
+/* GObject declarations */
+
+#define GNC_TYPE_JOB            (gnc_job_get_type ())
+#define GNC_JOB(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_JOB, GncJob))
+#define GNC_JOB_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_JOB, GncJobClass))
+#define GNC_IS_JOB(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_JOB))
+#define GNC_IS_JOB_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_JOB))
+#define GNC_JOB_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_JOB, GncJobClass))
+
+
+typedef struct _GncJobClass GncJobClass;
+typedef struct _GncJobPrivate GncJobPrivate;
+typedef struct _GncJob GncJob;
+
+struct _GncJob {
+	QofInstance inst;
+	GncJobPrivate *priv;
+};
+
+struct _GncJobClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_job_get_type ();
+
+
 #define GNC_ID_JOB "gncJob"
-#define GNC_IS_JOB(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_JOB))
-#define GNC_JOB(obj)     (QOF_CHECK_CAST((obj), GNC_ID_JOB, GncJob))
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (QofBook *book);
+GncJob *gncJobCreate (GncJob *book);
 void gncJobDestroy (GncJob *job);
 
 /** \name Set Functions

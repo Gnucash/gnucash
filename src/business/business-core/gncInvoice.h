@@ -36,18 +36,42 @@ transaction and lot for the posted invoice.
 #ifndef GNC_INVOICE_H_
 #define GNC_INVOICE_H_
 
-struct _gncInvoice;
-typedef struct _gncInvoice GncInvoice;
-
 #include "gncBillTerm.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
 #include "gnc-lot.h"
 #include "qofbook.h"
 
+/* GObject declarations */
+
+#define GNC_TYPE_INVOICE            (gnc_invoice_get_type ())
+#define GNC_INVOICE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_INVOICE, GncInvoice))
+#define GNC_INVOICE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_INVOICE, GncInvoiceClass))
+#define GNC_IS_INVOICE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_INVOICE))
+#define GNC_IS_INVOICE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_INVOICE))
+#define GNC_INVOICE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_INVOICE, GncInvoiceClass))
+
+
+typedef struct _GncInvoiceClass GncInvoiceClass;
+typedef struct _GncInvoicePrivate GncInvoicePrivate;
+typedef struct _GncInvoice GncInvoice;
+
+struct _GncInvoice {
+	QofInstance inst;
+	GncInvoicePrivate *priv;
+}
+
+struct _GncInvoiceClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_invoice_get_type ();
+
+
 #define GNC_ID_INVOICE    "gncInvoice"
-#define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
-#define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
 /** @name Create/Destroy Functions 
  @{ */

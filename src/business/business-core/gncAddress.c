@@ -33,10 +33,14 @@
 #include "gncAddressP.h"
 #include "gncCustomerP.h"
 
-struct _gncAddress 
-{
-  QofInstance inst;
+/* GObject declarations */
 
+static void gnc_address_class_init(GncAddressClass *klass);
+static void gnc_address_init(GncAddress *sp);
+static void gnc_address_finalize(GObject *object);
+
+struct _GncAddressPrivate
+{
   QofBook *	book;
   QofEntity * parent;
   gboolean	dirty;
@@ -49,6 +53,119 @@ struct _gncAddress
   char *	fax;
   char *	email;
 };
+
+typedef struct _GncAddressSignal GncAddressSignal;
+typedef enum _GncAddressSignalType GncAddressSignalType;
+
+enum _GncAddressSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncAddressSignal {
+	GncAddress *object;
+};
+
+static guint gnc_address_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_address_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncAddressClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_address_class_init,
+			NULL,
+			NULL,
+			sizeof (GncAddress),
+			0,
+			(GInstanceInitFunc)gnc_address_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"GncAddress", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_address_class_init(GncAddressClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_address_finalize;
+	object_class->set_property = gnc_address_set_property;
+    object_class->get_property = gnc_address_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+ 	
+}
+
+static void
+gnc_address_init(GncAddress *obj)
+{
+	/* Initialize private members, etc. */
+}
+
+static void
+gnc_address_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_address_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncAddress *obj;
+	
+	obj = GNC_ADDRESS (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_address_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncAddress *obj;
+  
+  obj = GNC_ADDRESS (object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
@@ -71,20 +188,22 @@ gncAddressCreate (QofBook *book, QofEntity *prnt)
 
   if (!book) return NULL;
 
-  addr = g_new0 (GncAddress, 1);
-  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
-  addr->book = book;
-  addr->dirty = FALSE;
-  addr->parent = prnt;
+  addr = GNC_ADDRESS (g_object_new (GNC_TYPE_ADDRESS, NULL));
+  addr->priv = g_new0 (GncAddressPrivate, 1);
+  
+  qof_instance_init(QOF_INSTANCE (addr), GNC_ID_ADDRESS, book);
+  addr->priv->book = book;
+  addr->priv->dirty = FALSE;
+  addr->priv->parent = prnt;
 
-  addr->name = CACHE_INSERT ("");
-  addr->addr1 = CACHE_INSERT ("");
-  addr->addr2 = CACHE_INSERT ("");
-  addr->addr3 = CACHE_INSERT ("");
-  addr->addr4 = CACHE_INSERT ("");
-  addr->phone = CACHE_INSERT ("");
-  addr->fax = CACHE_INSERT ("");
-  addr->email = CACHE_INSERT ("");
+  addr->priv->name = CACHE_INSERT ("");
+  addr->priv->addr1 = CACHE_INSERT ("");
+  addr->priv->addr2 = CACHE_INSERT ("");
+  addr->priv->addr3 = CACHE_INSERT ("");
+  addr->priv->addr4 = CACHE_INSERT ("");
+  addr->priv->phone = CACHE_INSERT ("");
+  addr->priv->fax = CACHE_INSERT ("");
+  addr->priv->email = CACHE_INSERT ("");
 
   return addr;
 }
@@ -100,7 +219,7 @@ static void
 qofAddressSetOwner(GncAddress *addr, QofEntity *ent)
 {
 	if(!addr || !ent) { return; }
-	if(addr->parent == NULL) { addr->parent = ent; }
+	if(addr->priv->parent == NULL) { addr->priv->parent = ent; }
 }
 
 static QofEntity*
@@ -108,7 +227,7 @@ qofAddressGetOwner(GncAddress *addr)
 {
 
 	if(!addr) { return NULL; }
-	return addr->parent;
+	return addr->priv->parent;
 }
 
 GncAddress * 
@@ -119,18 +238,18 @@ gncCloneAddress (GncAddress *from, QofEntity *new_parent, QofBook *book)
   if (!book) return NULL;
 
   addr = g_new0 (GncAddress, 1);
-  addr->book = book;
-  addr->dirty = TRUE;
-  addr->parent = new_parent;
+  addr->priv->book = book;
+  addr->priv->dirty = TRUE;
+  addr->priv->parent = new_parent;
 
-  addr->name = CACHE_INSERT (from->name);
-  addr->addr1 = CACHE_INSERT (from->addr1);
-  addr->addr2 = CACHE_INSERT (from->addr2);
-  addr->addr3 = CACHE_INSERT (from->addr3);
-  addr->addr4 = CACHE_INSERT (from->addr4);
-  addr->phone = CACHE_INSERT (from->phone);
-  addr->fax = CACHE_INSERT (from->fax);
-  addr->email = CACHE_INSERT (from->email);
+  addr->priv->name = CACHE_INSERT (from->name);
+  addr->priv->addr1 = CACHE_INSERT (from->addr1);
+  addr->priv->addr2 = CACHE_INSERT (from->addr2);
+  addr->priv->addr3 = CACHE_INSERT (from->addr3);
+  addr->priv->addr4 = CACHE_INSERT (from->addr4);
+  addr->priv->phone = CACHE_INSERT (from->phone);
+  addr->priv->fax = CACHE_INSERT (from->fax);
+  addr->priv->email = CACHE_INSERT (from->email);
 
   return addr;
 }
@@ -139,7 +258,7 @@ void
 gncAddressDestroy (GncAddress *addr)
 {
   if (!addr) return;
-  addr->inst.do_free = TRUE;
+  qof_instance_mark_free (QOF_INSTANCE (addr));
   gncAddressCommitEdit (addr);
 }
 
@@ -148,19 +267,18 @@ gncAddressFree (GncAddress *addr)
 {
   if (!addr) return;
 
-  qof_event_gen (&addr->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_ENTITY (addr), QOF_EVENT_DESTROY, NULL);
 
-  CACHE_REMOVE (addr->name);
-  CACHE_REMOVE (addr->addr1);
-  CACHE_REMOVE (addr->addr2);
-  CACHE_REMOVE (addr->addr3);
-  CACHE_REMOVE (addr->addr4);
-  CACHE_REMOVE (addr->phone);
-  CACHE_REMOVE (addr->fax);
-  CACHE_REMOVE (addr->email);
+  CACHE_REMOVE (addr->priv->name);
+  CACHE_REMOVE (addr->priv->addr1);
+  CACHE_REMOVE (addr->priv->addr2);
+  CACHE_REMOVE (addr->priv->addr3);
+  CACHE_REMOVE (addr->priv->addr4);
+  CACHE_REMOVE (addr->priv->phone);
+  CACHE_REMOVE (addr->priv->fax);
+  CACHE_REMOVE (addr->priv->email);
 
-  qof_instance_release (&addr->inst);
-  g_free (addr);
+  qof_instance_release (QOF_INSTANCE (addr));
 }
 
 
@@ -181,7 +299,7 @@ void gncAddressSetName (GncAddress *addr, const char *name)
 {
   if (!addr) return;
   if (!name) return;
-  SET_STR(addr, addr->name, name);
+  SET_STR(addr, addr->priv->name, name);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -190,7 +308,7 @@ void gncAddressSetAddr1 (GncAddress *addr, const char *addr1)
 {
   if (!addr) return;
   if (!addr1) return;
-  SET_STR(addr, addr->addr1, addr1);
+  SET_STR(addr, addr->priv->addr1, addr1);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -199,7 +317,7 @@ void gncAddressSetAddr2 (GncAddress *addr, const char *addr2)
 {
   if (!addr) return;
   if (!addr2) return;
-  SET_STR(addr, addr->addr2, addr2);
+  SET_STR(addr, addr->priv->addr2, addr2);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -208,7 +326,7 @@ void gncAddressSetAddr3 (GncAddress *addr, const char *addr3)
 {
   if (!addr) return;
   if (!addr3) return;
-  SET_STR(addr, addr->addr3, addr3);
+  SET_STR(addr, addr->priv->addr3, addr3);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -217,7 +335,7 @@ void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
 {
   if (!addr) return;
   if (!addr4) return;
-  SET_STR(addr, addr->addr4, addr4);
+  SET_STR(addr, addr->priv->addr4, addr4);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -226,7 +344,7 @@ void gncAddressSetPhone (GncAddress *addr, const char *phone)
 {
   if (!addr) return;
   if (!phone) return;
-  SET_STR(addr, addr->phone, phone);
+  SET_STR(addr, addr->priv->phone, phone);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -235,7 +353,7 @@ void gncAddressSetFax (GncAddress *addr, const char *fax)
 {
   if (!addr) return;
   if (!fax) return;
-  SET_STR(addr, addr->fax, fax);
+  SET_STR(addr, addr->priv->fax, fax);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
@@ -244,14 +362,14 @@ void gncAddressSetEmail (GncAddress *addr, const char *email)
 {
   if (!addr) return;
   if (!email) return;
-  SET_STR(addr, addr->email, email);
+  SET_STR(addr, addr->priv->email, email);
   mark_address (addr);
   gncAddressCommitEdit (addr);
 }
 
 void gncAddressBeginEdit (GncAddress *addr)
 {
-  qof_begin_edit (&addr->inst);
+  qof_begin_edit (QOF_INSTANCE (addr));
 }
 
 static void gncAddressOnError (QofInstance *inst, QofBackendError errcode)
@@ -270,7 +388,7 @@ static void address_free (QofInstance *inst)
 void gncAddressCommitEdit (GncAddress *addr)
 {
   if (!qof_commit_edit (QOF_INSTANCE(addr))) return;
-  qof_commit_edit_part2 (&addr->inst, gncAddressOnError,
+  qof_commit_edit_part2 (QOF_INSTANCE (addr), gncAddressOnError,
                          gncAddressOnDone, address_free);
 }
              
@@ -280,61 +398,61 @@ void gncAddressCommitEdit (GncAddress *addr)
 const char * gncAddressGetName (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->name;
+  return addr->priv->name;
 }
 
 const char * gncAddressGetAddr1 (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->addr1;
+  return addr->priv->addr1;
 }
 
 const char * gncAddressGetAddr2 (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->addr2;
+  return addr->priv->addr2;
 }
 
 const char * gncAddressGetAddr3 (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->addr3;
+  return addr->priv->addr3;
 }
 
 const char * gncAddressGetAddr4 (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->addr4;
+  return addr->priv->addr4;
 }
 
 const char * gncAddressGetPhone (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->phone;
+  return addr->priv->phone;
 }
 
 const char * gncAddressGetFax (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->fax;
+  return addr->priv->fax;
 }
 
 const char * gncAddressGetEmail (const GncAddress *addr)
 {
   if (!addr) return NULL;
-  return addr->email;
+  return addr->priv->email;
 }
 
 gboolean gncAddressIsDirty (const GncAddress *addr)
 {
   if (!addr) return FALSE;
-  return addr->dirty;
+  return addr->priv->dirty;
 }
 
 void gncAddressClearDirty (GncAddress *addr)
 {
   if (!addr) return;
-  addr->dirty = FALSE;
+  qof_instance_set_dirty (QOF_INSTANCE (addr), FALSE);
 }
 
 int gncAddressCompare (const GncAddress *a, const GncAddress *b)

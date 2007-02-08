@@ -28,6 +28,30 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+/**************************** GncPrice Object ****************/
+/* GObject declarations */
+
+#define GNC_TYPE_PRICE            (gnc_price_get_type ())
+#define GNC_PRICE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PRICE, GncPrice))
+#define GNC_PRICE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_PRICE, GncPriceClass))
+#define GNC_IS_PRICE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PRICE))
+#define GNC_IS_PRICE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_PRICE))
+#define GNC_PRICE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_PRICE, GncPriceClass))
+
+
+typedef struct _GncPriceClass GncPriceClass;
+typedef struct _GncPrice GncPrice;
+typedef struct GncPrice GNCPrice;  /* Dummy type for backward compatilibity */
+
+struct _GncPriceClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_price_get_type ();
+
 /** @addtogroup PriceDB
     @{ */
 /** @file gnc-pricedb.h
@@ -87,7 +111,7 @@
         that it can be properly translated. (There are unfortunately
         many strings in users databased, so this string must be
         translated on output instead of always being used intranslated
-        form.)
+        form.) 
 
       type: the type of quote - types possible right now are bid, ask,
         last, nav, and unknown.
@@ -245,7 +269,27 @@ gboolean gnc_price_list_equal(PriceList *prices1, PriceList *prices2);
   @{
 */
 /** Data type */
-typedef struct gnc_price_db_s GNCPriceDB;
+
+#define GNC_TYPE_PRICE_DB            (gnc_pricedb_get_type ())
+#define GNC_PRICE_DB(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PRICE_DB, GncPriceDb))
+#define GNC_PRICE_DB_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_PRICE_DB, GncPriceDbClass))
+#define GNC_IS_PRICE_DB(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PRICE_DB))
+#define GNC_IS_PRICE_DB_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_PRICE_DB))
+#define GNC_PRICE_DB_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_PRICE_DB, GncPriceDbClass))
+
+
+typedef struct _GncPriceDbClass GncPriceDbClass;
+typedef struct _GncPriceDb GncPriceDb;
+typedef struct GncPriceDb GNCPriceDB;  /* Dummy type for backward compatilibity */
+
+struct _GncPriceDbClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_pricedb_get_type ();
 
 /* XXX backwards-compat defines, remove these someday */
 #define gnc_book_get_pricedb  gnc_pricedb_get_db
