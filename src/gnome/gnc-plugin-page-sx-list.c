@@ -20,11 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/* todo:
- * - ui, actions, menus
- * - icon
- */
-
 /** @addtogroup ContentPlugins
     @{ */
 /** @addtogroup GncPluginPageSxList A SX List Plugin Page
