@@ -714,6 +714,7 @@ function inst_gwenhywfar() {
 		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
 		ssl_lib="-lcrypto -lssl" \
 	        --prefix=$_GWENHYWFAR_UDIR \
+	        CPPFLAGS="${REGEX_CPPFLAGS}" \
 		LDFLAGS="${REGEX_LDFLAGS}"
 	    make
 	    make install
