@@ -702,6 +702,7 @@ function inst_gwenhywfar() {
     _GWENHYWFAR_UDIR=`unix_path ${GWENHYWFAR_DIR}`
     add_to_env ${_GWENHYWFAR_UDIR}/bin PATH
     add_to_env ${_GWENHYWFAR_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gwenhywfar
     then
 	echo "Gwenhywfar already installed. Skipping."
@@ -728,6 +729,7 @@ function inst_aqbanking() {
     _AQBANKING_UDIR=`unix_path ${AQBANKING_DIR}`
     add_to_env ${_AQBANKING_UDIR}/bin PATH
     add_to_env ${_AQBANKING_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists aqbanking
     then
 	echo "AqBanking already installed. Skipping."
