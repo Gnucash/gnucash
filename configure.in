@@ -166,7 +166,7 @@ if test $? = 0 ; then
 else
   BUILDING_FROM_SVN=no
   # Make sure we've got swig-runtime.h and gnc-svninfo.h
-  AC_CHECK_FILE(${srcdir}/src/swig-runtime.h. [],
+  AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
 	[AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion
@@ -176,7 +176,7 @@ Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
 	])])
-  AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h. [],
+  AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h, [],
 	[AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion
