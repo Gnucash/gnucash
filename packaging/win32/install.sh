@@ -665,7 +665,7 @@ function inst_libofx() {
 	assert_one_dir $TMP_UDIR/libofx-*
 	qpushd $TMP_UDIR/libofx-*
 	    [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
-		patch -p0 < $LIBOFX_PATCH
+		patch -p1 < $LIBOFX_PATCH
 	    ./configure \
 	        --prefix=${_LIBOFX_UDIR} \
 		--with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
