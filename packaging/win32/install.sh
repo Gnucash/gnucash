@@ -370,6 +370,21 @@ function inst_pexports() {
     quiet which pexports || die "pexports unavailable"
 }
 
+function inst_exetype() {
+    setup exetype
+    _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
+    add_to_env $_EXETYPE_UDIR/bin PATH
+    if quiet which exetype
+    then
+        echo "exetype already installed.  skipping."
+    else
+        mkdir -p $_EXETYPE_UDIR/bin
+        cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+    fi
+    quiet which exetype || die "exetype unavailable"
+}
+
+
 function inst_libxml2() {
     setup LibXML2
     _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
@@ -481,6 +496,10 @@ function inst_gnome() {
                     ${DLLTOOL} -D zlib1.dll -d ../lib/zlib.def -l libz.dll.a
                     mv libz.dll.a ../lib
                 qpopd
+            fi
+            if [ ! -f libexec/gconfd-2.console.exe ]; then
+                cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
+                exetype libexec/gconfd-2.exe windows
             fi
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF

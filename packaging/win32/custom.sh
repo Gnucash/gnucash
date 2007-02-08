@@ -93,6 +93,9 @@ OPENSSL_DIR=$GLOBAL_DIR\\openssl
 PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
 PEXPORTS_DIR=$GLOBAL_DIR\\tools
 
+EXETYPE_SCRIPT=`pwd`/exetype.pl
+EXETYPE_DIR=$GLOBAL_DIR\\tools
+
 LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
 LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
 
@@ -208,6 +211,7 @@ if test x$cross_compile != xyes ; then
  add_step inst_openssl
 fi
 add_step inst_pexports
+add_step inst_exetype
 add_step inst_libxml2
 add_step inst_gnome
 add_step inst_swig
