@@ -25,6 +25,7 @@ TODO
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
   - [ ] move documentation into doxygen comments, here and in sources.
+  - [ ] printf -> logging
 
 - core
   - [x] sx list -> qof collection
@@ -58,6 +59,8 @@ TODO
     - [ ] +autocreate, +notify, w/postponed
   - [ ] bugs
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
+  - remove
+    - gtk-/display-using src/gnome-utils/test/test-sx.c
 
 - bugs
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
@@ -74,19 +77,19 @@ TODO
     - [ ] sx-from-trans: "unknown get.type [3]"
 
 - sx list page
-! - [ ] use gnc-tree-view
+! - [ ] use gnc-tree-view?
 ! - [x] save/restore state
+! - [ ] save/restore size
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 
 - sx editor
-  - [ ] clean up, reformat
+  - [ ] clean up source formatting
+  - [ ] re-layout dialog
+    - tabs: "overview", "frequency", "template transaction" [, "estimation"]
   - [ ] model-ize
     - (check_consistent, especially...)
-
-- gnc-frequency
-  - [ ] clean up, reformat
 
 - gnc_dense_cal
   - [ ] change number-of-month properties to display-named properties (width, length)
@@ -103,12 +106,17 @@ TODO
   - [x] hookup destroy/finalize
 
 - FreqSpec
-  - [ ] type+ui-type -> type
+  - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
 ! - [ ] XML migration, handling
+  - gnc-frequency
+!   - [ ] Use Recurrence
+!   - [ ] Support 'last-day-of-month'
+    - [ ] clean up, reformat
 
 - since-last-run
+! - [ ] save/restore dialog window size
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
@@ -128,7 +136,7 @@ TODO
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
-- destroy/cleanup
+- destroy/cleanup, notes:
   - dispose: break references; callable multiple times
   - finalize: complete destruction; just before free; only called once
 
