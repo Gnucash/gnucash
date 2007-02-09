@@ -327,6 +327,7 @@ main_window_to_account (GncMainWindow *window)
   GncPluginPage  *page;
   const gchar    *page_name;
   Account        *account = NULL;
+  const gchar    *account_name;
 
   ENTER("main window %p", window);
   if (!GNC_IS_MAIN_WINDOW(window)) { LEAVE(""); }
@@ -351,7 +352,8 @@ main_window_to_account (GncMainWindow *window)
   } else {
     account = NULL;
   }
-  LEAVE("account %s(%p)", xaccAccountGetName(account), account);
+  account_name = xaccAccountGetName (account);
+  LEAVE("account %s(%p)", account_name ? account_name : "(null)", account);
   return account;
 }
 
