@@ -76,3 +76,5 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   db-control.sh \
   run-tests.sh
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.pg\"

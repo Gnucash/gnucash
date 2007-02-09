@@ -72,3 +72,4 @@ glade_DATA = \
 EXTRA_DIST = \
   ${glade_DATA}
 
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui.search\"

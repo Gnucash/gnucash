@@ -245,7 +245,7 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
 {
   gnc_quote_source *new_source;
 
-  DEBUG("Creating new source %s", source_name);
+  DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
   new_source = malloc(sizeof(gnc_quote_source));
   new_source->supported = supported;
   new_source->type = SOURCE_UNKNOWN;
@@ -1257,7 +1257,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   if (!table) return NULL;
   if (!comm) return NULL;
 
-  ENTER ("(table=%p, comm=%p) %s %s", table, comm, comm->mnemonic, comm->fullname);
+  ENTER ("(table=%p, comm=%p) %s %s", table, comm,
+         (comm->mnemonic == NULL ? "(null)" : comm->mnemonic),
+         (comm->fullname == NULL ? "(null)" : comm->fullname));
   ns_name = gnc_commodity_namespace_get_name(comm->namespace);
   c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
 

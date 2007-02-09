@@ -28,3 +28,5 @@ libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GNOME_LIBS} ${QOF_LIBS}
 
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.net\"

@@ -297,3 +297,5 @@ install-data-hook:
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
 endif
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"

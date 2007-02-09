@@ -96,3 +96,5 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"

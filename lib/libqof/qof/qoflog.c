@@ -4,9 +4,10 @@
  *  Mon Nov 21 14:41:59 2005
  *  Author: Rob Clark (rclark@cs.hmc.edu)
  *  Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>
- *  Copyright  2005  Neil Williams
- *  linux@codehelp.co.uk
+ *  Copyright  2005  Neil Williams <linux@codehelp.co.uk>
+ *  Copyright 2007 Joshua Sled <jsled@asynchronous.org>
  *************************************************************************** */
+
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +38,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+
+#ifndef HAVE_LOCALTIME_R
+#include "localtime_r.h"
+#endif
+
 #include "qof.h"
 #include "qoflog.h"
 
@@ -46,19 +52,14 @@
 
 static FILE *fout = NULL;
 static gchar* function_buffer = NULL;
-static GHashTable *log_table = NULL;
 static gint qof_log_num_spaces = 0;
-
-/* uses the enum_as_string macro.
-Lookups are done on the string. */
-AS_STRING_FUNC(QofLogLevel, LOG_LEVEL_LIST)
-
-FROM_STRING_FUNC(QofLogLevel, LOG_LEVEL_LIST)
+static GHashTable *log_table = NULL;
+static GLogFunc previous_handler = NULL;
 
 void
 qof_log_add_indent(void)
 {
-	qof_log_num_spaces += QOF_LOG_INDENT_WIDTH;
+     qof_log_num_spaces += QOF_LOG_INDENT_WIDTH;
 }
 
 gint 
@@ -70,112 +71,180 @@ qof_log_get_indent(void)
 void
 qof_log_drop_indent(void)
 {
-	qof_log_num_spaces = (qof_log_num_spaces < QOF_LOG_INDENT_WIDTH) ?
-		0 : qof_log_num_spaces - QOF_LOG_INDENT_WIDTH;
+	qof_log_num_spaces
+         = (qof_log_num_spaces < QOF_LOG_INDENT_WIDTH)
+         ? 0
+         : qof_log_num_spaces - QOF_LOG_INDENT_WIDTH;
 }
 
-static void
-fh_printer (const gchar     *log_domain,
-            GLogLevelFlags  log_level,
-            const gchar     *message,
-            gpointer        user_data)
+void
+qof_log_set_file(FILE *outfile)
 {
-  FILE *fh = user_data;
-  fprintf (fh, "%*s%s\n", qof_log_num_spaces, "", message);
-  fflush(fh);
+     if (!outfile) { fout = stderr; return; }
+     fout = outfile;
 }
 
 void 
-qof_log_init (void)
+qof_log_init(void)
 {
-   gchar *tempfile = "/tmp/qof.trace.XXXXXX";
-   const gchar *fname = "/tmp/qof.trace";
-
-   if(!fout) /* allow qof_log_set_file */
-   {
-       int fd;
-       if ((fd = g_mkstemp(tempfile)) != -1)
-       {
-	  g_rename(tempfile, fname);
-	  fout = fdopen(fd, "w");
-       }
-   }
-
-   if(!fout)
-      fout = stderr;
-
-   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, fh_printer, fout);
-}
-
-void
-qof_log_set_level(QofLogModule log_module, QofLogLevel level)
-{
-	gchar* level_string;
-
-	if(!log_module || level == 0) { return; }
-	level_string = g_strdup(QofLogLevelasString(level));
-	if(!log_table)
-	{
-		log_table = g_hash_table_new(g_str_hash, g_str_equal);
-	}
-	g_hash_table_insert(log_table, (gpointer)log_module, level_string);
+     qof_log_init_filename(NULL);
 }
 
 static void
-log_module_foreach(gpointer key, gpointer value, gpointer data)
+log4glib_handler(const gchar     *log_domain,
+                 GLogLevelFlags  log_level,
+                 const gchar     *message,
+                 gpointer        user_data)
 {
-	g_hash_table_insert(log_table, key, data);
+     gboolean debug = FALSE;
+     GHashTable *log_levels = (GHashTable*)user_data;
+     gchar *domain_copy = g_strdup(log_domain == NULL ? "" : log_domain);
+     gchar *dot_pointer = domain_copy;
+     static const QofLogLevel default_log_thresh = QOF_LOG_WARNING;
+     QofLogLevel longest_match_level = default_log_thresh;
+
+     {
+          gpointer match_level;
+          if ((match_level = g_hash_table_lookup(log_levels, "")) != NULL)
+               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+     }
+
+     if (debug) { printf("trying [%s] (%d):", log_domain, g_hash_table_size(log_levels)); }
+     if (log_levels)
+     {
+          // e.g., "a.b.c" -> "a\0b.c" -> "a.b\0c", "a.b.c"
+          gpointer match_level;
+          while ((dot_pointer = g_strstr_len(dot_pointer, strlen(dot_pointer), ".")) != NULL)
+          {
+               *dot_pointer = '\0';
+               if (debug) { printf(" [%s]", domain_copy); }
+               if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
+               {
+                    longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+                    if (debug) printf("*");
+               }
+               *dot_pointer = '.';
+               dot_pointer++;
+          }
+
+          if (debug) { printf(" [%s]", domain_copy); }
+          if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
+          {
+               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+               if (debug) { printf("*"); }
+          }
+     }
+     if (debug) { printf(" found [%d]\n", longest_match_level); }
+     g_free(domain_copy);
+
+     if (log_level <= longest_match_level)
+     {
+          gboolean last_char_is_newline;
+          char timestamp_buf[10];
+          time_t now;
+          struct tm now_tm;
+          gchar *level_str = qof_log_level_to_string(log_level);
+          now = time(NULL);
+          localtime_r(&now, &now_tm);
+          strftime(timestamp_buf, 9, "%T", &now_tm);
+
+          fprintf(fout, "* %s %*s <%s> %*s%s%s",
+                  timestamp_buf,
+                  5, level_str,
+                  (log_domain == NULL ? "" : log_domain),
+                  0 /*qof_log_num_spaces*/, "",
+                  message,
+                  (g_str_has_suffix(message, "\n") ? "" : "\n"));
+          fflush(fout);
+     }
+
+     /* chain?  ignore?  Only chain if it's going to be quiet...
+     else
+     {
+          // chain
+          previous_handler(log_domain, log_level, message, NULL);
+     }
+     */
 }
 
 void
-qof_log_set_level_registered(QofLogLevel level)
+qof_log_init_filename(const gchar* log_filename)
 {
-	gchar* level_string;
+     if (log_table == NULL)
+          log_table = g_hash_table_new(g_str_hash, g_str_equal);
 
-	if(!log_table || level == 0) { return; }
-	level_string = g_strdup(QofLogLevelasString(level));
-	g_hash_table_foreach(log_table, log_module_foreach, level_string);
-}
+     // don't prevent multiple qof_log_init() calls to screw this up.
+     if (!log_filename && fout == NULL)
+     {
+          fout = stderr;
+     }
+     else
+     {
+          int fd;
+          gchar *fname;
 
-void
-qof_log_set_file (FILE *outfile)
-{
-   if(!outfile) { fout = stderr; return; }
-   fout = outfile;
-}
+          if (fout != NULL && fout != stderr && fout != stdout)
+               fclose(fout);
 
-void
-qof_log_init_filename (const gchar* logfilename)
-{
-	if(!logfilename)
-	{
-		fout = stderr;
-	}
-	else
-	{
-	        gchar *fname = g_strconcat(logfilename, ".XXXXXX", NULL);
-		int fd;
+          fname = g_strconcat(log_filename, ".XXXXXX", NULL);
 
-		if ((fd = g_mkstemp(fname)) != -1)
-		{
-                       g_rename(fname, logfilename);
-                       fout = fdopen(fd, "w");
-                }
-		else
-		{
-                       fout = stderr;
-		}
-		g_free(fname);
-	}
-	qof_log_init();
+          if ((fd = g_mkstemp(fname)) != -1)
+          {
+               g_rename(fname, log_filename);
+               fout = fdopen(fd, "w");
+          }
+          else
+          {
+               fout = stderr;
+          }
+          g_free(fname);
+     }
+
+     if (!fout)
+          fout = stderr;
+
+     // @@fixme really, the userdata is a struct { log_table, fout, previous_handler }
+     if (previous_handler == NULL)
+          previous_handler = g_log_set_default_handler(log4glib_handler, log_table);
 }
 
 void
 qof_log_shutdown (void)
 {
-	if(fout && fout != stderr) { fclose(fout); }
-	if(function_buffer) { g_free(function_buffer); }
-	g_hash_table_destroy(log_table);
+	if (fout && fout != stderr && fout != stdout)
+    {
+         fclose(fout);
+         fout == NULL;
+    }
+
+	if (function_buffer)
+    {
+         g_free(function_buffer);
+         function_buffer = NULL;
+    }
+
+    if (log_table != NULL)
+    {
+         g_hash_table_destroy(log_table);
+         log_table = NULL;
+    }
+
+    if (previous_handler != NULL)
+    {
+         g_log_set_default_handler(previous_handler, NULL);
+         previous_handler = NULL;
+    }
+}
+
+void
+qof_log_set_level(QofLogModule log_module, QofLogLevel level)
+{
+	if (!log_module || level == 0) { return; }
+	if (!log_table)
+	{
+		log_table = g_hash_table_new(g_str_hash, g_str_equal);
+	}
+	g_hash_table_insert(log_table, (gpointer)log_module, GINT_TO_POINTER((gint)level));
 }
 
 const char *
@@ -183,8 +252,8 @@ qof_log_prettify (const char *name)
 {
   gchar *p, *buffer;
   gint length;
-
-  if (!name) { return ""; }
+ 
+ if (!name) { return ""; }
   buffer = g_strndup(name, QOF_LOG_MAX_CHARS - 1);
   length = strlen(buffer);
   p = g_strstr_len(buffer, length, "(");
@@ -197,6 +266,52 @@ qof_log_prettify (const char *name)
   function_buffer = g_strdup(buffer);
   g_free(buffer);
   return function_buffer;
+}
+
+gboolean
+qof_log_check(QofLogModule log_module, QofLogLevel log_level)
+{
+	QofLogLevel level, maximum;
+	if (!log_table || log_module == NULL || log_level < 0) { return FALSE; }
+	maximum = GPOINTER_TO_INT(g_hash_table_lookup(log_table, log_module));
+	if (log_level <= maximum) { return TRUE; }
+	return FALSE;
+}
+
+void
+qof_log_set_default(QofLogLevel log_level)
+{
+    qof_log_set_level("", log_level);
+    qof_log_set_level("qof", log_level);
+}
+
+gchar*
+qof_log_level_to_string(QofLogLevel log_level)
+{
+     gchar *level_str = "unknw";
+     switch (log_level)
+     {
+     case G_LOG_LEVEL_ERROR:   level_str = "ERROR"; break;
+     case G_LOG_LEVEL_CRITICAL:level_str = "CRIT"; break;
+     case G_LOG_LEVEL_WARNING: level_str = "WARN"; break;
+     case G_LOG_LEVEL_MESSAGE: level_str = "MESSG"; break;
+     case G_LOG_LEVEL_INFO:    level_str = "INFO"; break;
+     case G_LOG_LEVEL_DEBUG:   level_str = "DEBUG"; break;
+     default:                  level_str = "OTHER"; break;
+     }
+     return level_str;
+}
+
+QofLogLevel
+qof_log_level_from_string(gchar *str)
+{
+     if (g_ascii_strncasecmp("error", str, 5) == 0) return QOF_LOG_FATAL;
+     if (g_ascii_strncasecmp("crit", str, 4) == 0) return QOF_LOG_ERROR;
+     if (g_ascii_strncasecmp("warn", str, 4) == 0) return QOF_LOG_WARNING;
+     if (g_ascii_strncasecmp("mess", str, 4) == 0) return G_LOG_LEVEL_MESSAGE;
+     if (g_ascii_strncasecmp("info", str, 4) == 0) return QOF_LOG_INFO;
+     if (g_ascii_strncasecmp("debug", str, 5) == 0) return QOF_LOG_DEBUG;
+     return QOF_LOG_DEBUG;
 }
 
 static
@@ -316,67 +431,3 @@ qof_report_clock_total (gint clockno,
   fprintf (fout, "\n");
   fflush (fout);
 }
-
-gboolean
-qof_log_check(QofLogModule log_module, QofLogLevel log_level)
-{
-	gchar* log_string;
-	QofLogLevel maximum; /* Any positive log_level less than this will be logged. */
-
-	log_string = NULL;
-	if (log_level > QOF_LOG_TRACE) log_level = QOF_LOG_TRACE;
-	if(!log_table || log_module == NULL || log_level < 0) { return FALSE; }
-	log_string = (gchar*)g_hash_table_lookup(log_table, log_module);
-	/* if log_module not found, do not log. */
-	if(!log_string) { return FALSE; }
-	maximum = QofLogLevelfromString(log_string);
-	if(log_level <= maximum) { return TRUE; }
-	return FALSE;
-}
-
-void qof_log_set_default(QofLogLevel log_level)
-{
-	qof_log_set_level(QOF_MOD_BACKEND, log_level);
-	qof_log_set_level(QOF_MOD_CLASS,   log_level);
-	qof_log_set_level(QOF_MOD_ENGINE,  log_level);
-	qof_log_set_level(QOF_MOD_OBJECT,  log_level);
-	qof_log_set_level(QOF_MOD_KVP,     log_level);
-	qof_log_set_level(QOF_MOD_MERGE,   log_level);
-	qof_log_set_level(QOF_MOD_QUERY,   log_level);
-	qof_log_set_level(QOF_MOD_SESSION, log_level);
-	qof_log_set_level(QOF_MOD_CHOICE,  log_level);
-	qof_log_set_level(QOF_MOD_UTIL,    log_level);
-}
-
-struct hash_s
-{
-	QofLogCB cb;
-	gpointer data;
-};
-
-static void hash_cb (gpointer key, gpointer value, gpointer data)
-{
-	struct hash_s *iter;
-
-	iter = (struct hash_s*)data;
-	if(!iter) { return; }
-	(iter->cb)(key, value, iter->data);
-}
-
-void qof_log_module_foreach(QofLogCB cb, gpointer data)
-{
-	struct hash_s iter;
-
-	if(!cb) { return; }
-	iter.cb = cb;
-	iter.data = data;
-	g_hash_table_foreach(log_table, hash_cb, (gpointer)&iter);
-}
-
-gint qof_log_module_count(void)
-{
-	if(!log_table) { return 0; }
-	return g_hash_table_size(log_table);
-}
-
-/* ************************ END OF FILE **************************** */

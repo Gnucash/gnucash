@@ -77,3 +77,5 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   $(glade_DATA) \
   generic-import-design.txt
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.i-e\"

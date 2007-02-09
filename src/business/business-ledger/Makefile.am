@@ -48,3 +48,5 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.ledger\"

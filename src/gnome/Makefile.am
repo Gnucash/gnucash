@@ -135,3 +135,5 @@ AM_CFLAGS = \
 
 CLEANFILES = gnucash.desktop
 MAINTAINERCLEANFILES = swig-gnome.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"

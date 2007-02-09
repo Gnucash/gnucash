@@ -71,3 +71,5 @@ libgncmod_backend_file_la_LIBADD = \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    libgnc-backend-file-utils.la \
    ${QOF_LIBS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.file\"

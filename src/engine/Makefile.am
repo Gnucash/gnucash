@@ -195,3 +195,5 @@ BUILT_SOURCES = iso-4217-currencies.c \
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-engine.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

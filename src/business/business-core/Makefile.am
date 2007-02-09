@@ -98,3 +98,5 @@ endif
 noinst_DATA = .scm-links
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-business-core.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.core\"

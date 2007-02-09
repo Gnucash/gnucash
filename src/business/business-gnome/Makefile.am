@@ -117,3 +117,5 @@ endif
 
 noinst_DATA = .scm-links
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.gnome\"

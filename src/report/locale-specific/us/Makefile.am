@@ -57,3 +57,5 @@ EXTRA_DIST = \
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.locale.us\"

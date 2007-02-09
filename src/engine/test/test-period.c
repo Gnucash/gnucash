@@ -119,8 +119,6 @@ run_test (void)
 
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
-  qof_log_set_file (stdout);
-  qof_log_set_level_registered (QOF_LOG_WARNING);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   equity, "this is opening balance dude");
 
@@ -141,10 +139,8 @@ main (int argc, char **argv)
     else num_trans = 120;
 
     qof_init();
-    gnc_log_default();
-    qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
-
     g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+
     if(cashobjects_register()) {
         srand(num_trans);
         run_test ();

@@ -20,7 +20,6 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
-
 #include "config.h"
 
 #include <stdlib.h>
@@ -71,7 +70,9 @@ static int gnucash_show_version;
 static const char *add_quotes_file;
 static int nofile;
 static const char *file_to_load;
-static int loglevel;
+// static int loglevel;
+static gchar **log_flags;
+static gchar *log_to_filename;
 
 static void
 gnc_print_unstable_message(void)
@@ -94,7 +95,7 @@ static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
 
 static void
-envt_override()
+environment_override()
 {
     const char *path;
     
@@ -202,22 +203,37 @@ gnucash_command_line(int *argc, char **argv)
     GOptionEntry options[] = {
         {"version", 'v', 0, G_OPTION_ARG_NONE, &gnucash_show_version,
          _("Show GnuCash version"), NULL},
+
         {"debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
          _("Enable debugging mode"), NULL},
+
+        {"log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
+         _("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
+         _("LOG")},
+
+        {"logto", '\0', 0, G_OPTION_ARG_STRING, &log_to_filename,
+         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."),
+         _("LOGTO")},
+
+#if 0
         {"loglevel", '\0', 0, G_OPTION_ARG_INT, &loglevel,
 	 /* Translators: This is the command line option autohelp
 	    text; see popt(3) */
-         _("Set the logging level from 0 (least) to 6 (most)"), 
+        _("Set the logging level from 0 (least) to 6 (most)"), 
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
          _("LOGLEVEL")},
+#endif // 0
+
         {"nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
          _("Do not load the last file opened"), NULL},
+
         {"config-path", '\0', 0, G_OPTION_ARG_STRING, &config_path,
          _("Set configuration path"),
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
 	 _("CONFIGPATH")},
+
         {"share-path", '\0', 0, G_OPTION_ARG_STRING, &share_path,
          _("Set shared data file search path"),
 	 /* Translators: Argument description for autohelp; see
@@ -386,7 +402,7 @@ inner_main (void *closure, int argc, char **argv)
     SCM main_mod;
     char* fn;
     GError *error = NULL;
- 
+
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
@@ -406,10 +422,6 @@ inner_main (void *closure, int argc, char **argv)
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */
     gnc_main_gui_init();
-
-    /* set a log level before trying to change it globally */
-    gnc_log_default();
-    qof_log_set_level_registered(loglevel);
 
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
@@ -444,7 +456,67 @@ inner_main (void *closure, int argc, char **argv)
     return;
 }
 
-int main(int argc, char ** argv)
+static void
+gnc_log_init()
+{
+     if (log_to_filename != NULL)
+     {
+          if (g_ascii_strcasecmp("stderr", log_to_filename) == 0)
+          {
+               qof_log_set_file(stderr);
+          }
+          else if (g_ascii_strcasecmp("stdout", log_to_filename) == 0)
+          {
+               qof_log_set_file(stdout);
+          }
+          else
+          {
+               qof_log_init_filename(log_to_filename);
+          }
+     }
+     else
+     {
+          /* initialize logging to our file. */
+          gchar *tracefilename;
+          tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
+                                           (gchar *)NULL);
+          qof_log_init_filename(tracefilename);
+          g_free(tracefilename);
+     }
+
+     // set a reasonable default.
+     qof_log_set_default(QOF_LOG_WARNING);
+
+     gnc_log_default();
+
+     if (log_flags != NULL)
+     {
+          int i = 0;
+          for (; log_flags[i] != NULL; i++)
+          {
+               QofLogLevel level;
+               gchar **parts = NULL;
+               gchar *logger_name = NULL;
+
+               gchar *log_opt = log_flags[i];
+               parts = g_strsplit(log_opt, "=", 2);
+               if (parts == NULL || parts[0] == NULL || parts[1] == NULL)
+               {
+                    g_warning("string [%s] not parseable", log_opt);
+                    continue;
+               }
+
+               logger_name = g_strdup(parts[0]);
+               level = qof_log_level_from_string(parts[1]);
+
+               qof_log_set_level(logger_name, level);
+               g_strfreev(parts);
+          }
+     }
+ }
+
+int
+main(int argc, char ** argv)
 {
     gchar *localedir;
     GError *binreloc_error = NULL;
@@ -463,16 +535,20 @@ int main(int argc, char ** argv)
 #endif
     g_free (localedir);
 
+    qof_log_init();
+    qof_log_set_default(QOF_LOG_INFO);
+ 
     gnc_module_system_init();
-    envt_override();
+    environment_override();
     gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
+    gnc_log_init();
 
     if (add_quotes_file) {
         gchar *prefix = gnc_path_get_prefix ();
-	gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
-	gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-	gchar *pkglibdir = gnc_path_get_pkglibdir ();
+        gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
+        gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+        gchar *pkglibdir = gnc_path_get_pkglibdir ();
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
         gnome_program_init(
@@ -483,10 +559,10 @@ int main(int argc, char ** argv)
 	    GNOME_PARAM_APP_DATADIR, pkgdatadir,
 	    GNOME_PARAM_APP_LIBDIR, pkglibdir,
 	    GNOME_PARAM_NONE);
-	g_free (prefix);
-	g_free (pkgsysconfdir);
-	g_free (pkgdatadir);
-	g_free (pkglibdir);
+        g_free (prefix);
+        g_free (pkgsysconfdir);
+        g_free (pkgdatadir);
+        g_free (pkglibdir);
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }

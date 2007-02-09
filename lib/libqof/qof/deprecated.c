@@ -31,23 +31,6 @@
    an initializer, and can't be declared with 'static' because that
    would give it internal linkage. (this is why it is deprecated) */
 gint __attribute__ ((unused)) gnc_trace_num_spaces = 0;
-void  gnc_log_init (void) { qof_log_init(); }
-void gnc_set_log_level(QofLogModule log_module, gncLogLevel level)
-{
-	qof_log_set_level(log_module, (QofLogLevel)level);
-}
-void gnc_set_log_level_global(gncLogLevel level)
-{
-	qof_log_set_level_registered((QofLogLevel)level);
-}
-void qof_log_set_level_global(QofLogLevel level)
-{
-	qof_log_set_level_registered((QofLogLevel)level);
-}
-void gnc_set_logfile (FILE *outfile)
-{
-	qof_log_set_file(outfile);
-}
 const char * gnc_log_prettify (const char *name)
 {
 	return qof_log_prettify(name);
