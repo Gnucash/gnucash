@@ -25,6 +25,7 @@ function prepare() {
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     _WIN_UDIR=`unix_path $WINDIR`
+    _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
     _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
@@ -39,6 +40,7 @@ function prepare() {
     _INNO_UDIR=`unix_path $INNO_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
+    add_to_env $_EXETYPE_UDIR/bin PATH # exetype
 }
 
 function dist_regex() {
@@ -184,6 +186,8 @@ function finish() {
         echo "done"
     done
     gconftool-2 --shutdown
+
+    exetype $DIST_UDIR/libexec/gconfd-2.exe windows
 
     # Strip redirections in distributed libtool .la files
     for file in $DIST_UDIR/lib/*.la; do
