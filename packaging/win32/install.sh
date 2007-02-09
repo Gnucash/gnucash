@@ -169,20 +169,6 @@ function inst_readline() {
     quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
 }
 
-function inst_indent() {
-    setup Indent
-    _INDENT_UDIR=`unix_path $INDENT_DIR`
-    add_to_env $_INDENT_UDIR/bin PATH
-    if quiet which indent
-    then
-        echo "indent already installed.  skipping."
-    else
-        mkdir -p $_INDENT_UDIR
-        wget_unpacked $INDENT_BIN_URL $DOWNLOAD_DIR $INDENT_DIR
-    fi
-    quiet which indent || die "indent unavailable"
-}
-
 function inst_active_perl() {
     setup ActivePerl \(intltool\)
     _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
@@ -718,6 +704,7 @@ function inst_gwenhywfar() {
 	        CPPFLAGS="${REGEX_CPPFLAGS}" \
 		LDFLAGS="${REGEX_LDFLAGS}"
 	    make
+	    make check
 	    make install
 	qpopd
     fi

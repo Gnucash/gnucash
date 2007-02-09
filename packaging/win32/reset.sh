@@ -33,7 +33,7 @@ qpushd "$(dirname $(unix_path "$0"))"
 basedir=`unix_path $GLOBAL_DIR`
 qpushd $basedir
 
-rm -rf regex readline indent guile pexports gnome swig autotools
+rm -rf regex readline guile pexports gnome swig autotools
 rm -rf libgsf goffice glade gnucash tmp
 
 rm -f /etc/profile.d/installer.sh
