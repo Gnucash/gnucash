@@ -60,21 +60,22 @@ TODO
   - [ ] bugs
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
   - remove
-    - gtk-/display-using src/gnome-utils/test/test-sx.c
+    - [ ] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
 ! - [x] crash with two sx lists open and SX mutation
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
-    [[[
-    (gnucash:17610): GLib-GObject-WARNING **: invalid unclassed pointer in cast to `GncSxListTreeModelAdapterType'
-    sx list tree model adapter update
-    
-    (gnucash:17610): Gtk-CRITICAL **: gtk_tree_store_clear: assertion `GTK_IS_TREE_STORE (tree_store)' failed ]]]
 
-  - [ ] <http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html>
-    - [ ] sx-from-trans: "unknown get.type [3]"
+  - [ ] sx-from-trans: "unknown get.type [3]" [dh20070120]_
+
+  - [ ] no way to clear a variable entry [ve20070209]_
+
+  - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+
+.. _[dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
+.. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
 
 - sx list page
 ! - [ ] use gnc-tree-view?
@@ -110,6 +111,7 @@ TODO
 
 - use Recurrence instead of FreqSpec
 ! - [ ] XML migration, handling
+  - [ ] remove FreqSpec code
   - gnc-frequency
 !   - [ ] Use Recurrence
 !   - [ ] Support 'last-day-of-month'
