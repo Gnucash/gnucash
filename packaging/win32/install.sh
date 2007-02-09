@@ -88,8 +88,7 @@ function inst_dtk() {
         echo "msys dtk already installed.  skipping."
     else
         smart_wget $DTK_URL $DOWNLOAD_DIR
-        echo "!!! When asked for an installation path, specify $MSYS_DIR !!!"
-        $LAST_FILE
+        $LAST_FILE //SP- //SILENT //DIR="$MSYS_DIR"
         for file in \
 	    /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
 	    /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,guile,libtool}
@@ -128,8 +127,7 @@ function inst_unzip() {
         echo "unzip already installed.  skipping."
     else
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
-        echo "!!! When asked for an installation path, specify $UNZIP_DIR !!!"
-        $LAST_FILE
+        $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
     fi
     quiet unzip --help || die "unzip unavailable"
 }
@@ -621,9 +619,7 @@ function inst_inno() {
         echo "Inno Setup Compiler already installed.  Skipping."
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
-        echo "!!! When asked for the installation path, specify $INNO_DIR !!!"
-	echo "!!! Also, you can deselect all optional components."
-        $LAST_FILE
+        $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
     fi
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
@@ -753,27 +749,29 @@ function inst_aqbanking() {
 	    if test x$aqbanking_with_qt = xyes; then
 		inst_qt4
 		_QTDIR=`unix_path ${QTDIR}`
+		_AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib"
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
 		    --with-frontends="cbanking qbanking" \
 		    --with-backends="aqdtaus aqhbci aqofxconnect" \
 		    CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
-		    LDFLAGS="-L${_LIBOFX_UDIR}/lib" \
+		    LDFLAGS="${_AQ_LDFLAGS}" \
 		    qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
 		    qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
 		    --prefix=${_AQBANKING_UDIR}
 		make qt4-port
 		make clean
 	    else
-	    ./configure \
-		--with-gwen-dir=${_GWENHYWFAR_UDIR} \
-		--with-frontends="cbanking" \
-		--with-backends="aqdtaus aqhbci aqofxconnect" \
-		CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
-		LDFLAGS="-L${_LIBOFX_UDIR}/lib" \
-	        --prefix=${_AQBANKING_UDIR}
+		_AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib"
+		./configure \
+		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+		    --with-frontends="cbanking" \
+		    --with-backends="aqdtaus aqhbci aqofxconnect" \
+		    CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
+		    LDFLAGS="${_AQ_LDFLAGS}" \
+	            --prefix=${_AQBANKING_UDIR}
 	    fi
-	    make LDFLAGS="${LDFLAGS} -no-undefined"
+	    make LDFLAGS="${_AQ_LDFLAGS} -no-undefined"
 	    make install
 	qpopd
     fi
@@ -789,8 +787,7 @@ function inst_svn() {
         echo "subversion already installed.  skipping."
     else
         smart_wget $SVN_URL $DOWNLOAD_DIR
-        echo "!!! When asked for an installation path, specify $SVN_DIR !!!"
-        $LAST_FILE
+        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
     fi
 }
 

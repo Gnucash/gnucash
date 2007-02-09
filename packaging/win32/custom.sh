@@ -166,7 +166,7 @@ GOFFICE_PATCH=`pwd`/goffice-0.3.0-patch.diff
 GLADE_URL="$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 GLADE_DIR=$GLOBAL_DIR\\glade
 
-INNO_URL="http://files.jrsoftware.org/ispack/ispack-5.1.9.exe"
+INNO_URL="http://files.jrsoftware.org/is/5/isetup-5.1.9.exe"
 INNO_DIR=$GLOBAL_DIR\\inno
 
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
