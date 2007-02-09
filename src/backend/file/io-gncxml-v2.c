@@ -410,20 +410,20 @@ gnc_counter_sixtp_parser_create(void)
 }
 
 static void
-print_counter_data(load_counter *data)
+debug_print_counter_data(load_counter *data)
 {
-    PINFO("Transactions: Total: %d, Loaded: %d",
-           data->transactions_total, data->transactions_loaded);
-    PINFO("Accounts: Total: %d, Loaded: %d",
-           data->accounts_total, data->accounts_loaded);
-    PINFO("Books: Total: %d, Loaded: %d",
-           data->books_total, data->books_loaded);
-    PINFO("Commodities: Total: %d, Loaded: %d",
-           data->commodities_total, data->commodities_loaded);
-    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
-           data->schedXactions_total, data->schedXactions_loaded);
-    PINFO("Budgets: Total: %d, Loaded: %d",
-	  data->budgets_total, data->budgets_loaded);
+    DEBUG("Transactions: Total: %d, Loaded: %d",
+          data->transactions_total, data->transactions_loaded);
+    DEBUG("Accounts: Total: %d, Loaded: %d",
+          data->accounts_total, data->accounts_loaded);
+    DEBUG("Books: Total: %d, Loaded: %d",
+          data->books_total, data->books_loaded);
+    DEBUG("Commodities: Total: %d, Loaded: %d",
+          data->commodities_total, data->commodities_loaded);
+    DEBUG("Scheduled Tansactions: Total: %d, Loaded: %d",
+          data->schedXactions_total, data->schedXactions_loaded);
+    DEBUG("Budgets: Total: %d, Loaded: %d",
+          data->budgets_total, data->budgets_loaded);
 }
 
 static void
@@ -728,7 +728,7 @@ qof_session_load_from_xml_file_v2_full(
         xaccEnableDataScrubbing();
         goto bail;
     }
-    DEBUGCMD (print_counter_data(&gd->counter));
+    debug_print_counter_data(&gd->counter);
 
     /* destroy the parser */
     sixtp_destroy (top_parser);

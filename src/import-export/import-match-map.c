@@ -484,7 +484,7 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
 	 string, which doesn't work in the kvp loopkup later. So we
 	 skip this case here. */
       if (!current_token->data || (*((char*)current_token->data) == '\0'))
-	continue;
+           continue;
 
       /* start off with no tokens for this account */
       token_count = 0;

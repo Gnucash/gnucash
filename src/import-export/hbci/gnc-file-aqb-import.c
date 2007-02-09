@@ -70,7 +70,6 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
   char *default_dir;
   int dtaus_fd;
 
-  /* qof_log_check(MOD_IMPORT, QOF_LOG_TRACE); */
   DEBUG("gnc_file_dtaus_import(): Begin...\n");
 
   default_dir = gnc_get_default_directory(GCONF_SECTION);

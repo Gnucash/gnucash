@@ -581,6 +581,7 @@ void gnc_file_log_replay (void)
       }
       g_free(selected_filename);
     }
+  LEAVE("");
 }
 
 

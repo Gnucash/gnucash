@@ -38,10 +38,7 @@ const char * gnc_log_prettify (const char *name)
 void gnc_start_clock (int a, QofLogModule b, gncLogLevel c,  const char *d, const char *e, ...) { }
 void gnc_report_clock (int a, QofLogModule b, gncLogLevel c, const char *d, const char *e, ...) { }
 void gnc_report_clock_total (int a, QofLogModule b, gncLogLevel c, const char *d, const char *e, ...) { }
-gboolean gnc_should_log(QofLogModule log_module, gncLogLevel log_level)
-{
-	return qof_log_check(log_module, log_level);
-}
+
 gint
 gnc_engine_register_event_handler (GNCEngineEventHandler handler,
                                    gpointer user_data)

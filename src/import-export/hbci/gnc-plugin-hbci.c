@@ -329,12 +329,15 @@ main_window_to_account (GncMainWindow *window)
   Account        *account = NULL;
 
   ENTER("main window %p", window);
+  if (!GNC_IS_MAIN_WINDOW(window)) { LEAVE(""); }
   g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), NULL);
 
   /* Ensure we are called from a register page. */
   page = gnc_main_window_get_current_page(window);
+  if (!GNC_IS_PLUGIN_PAGE(page)) { LEAVE(""); }
   g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
   page_name = gnc_plugin_page_get_plugin_name(page);
+  if (!g_return_val_if_fail(page_name)) { LEAVE(""); }
   g_return_val_if_fail (page_name, NULL);
 
   if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
@@ -384,8 +387,10 @@ gnc_plugin_hbci_main_window_page_added (GncMainWindow *window,
   const gchar    *page_name;
 
   ENTER("main window %p, page %p", window, page);
+  if (!GNC_IS_PLUGIN_PAGE(page)) { LEAVE(""); }
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   page_name = gnc_plugin_page_get_plugin_name(page);
+  if (!page_name) { LEAVE(""); }
   g_return_if_fail (page_name);
   if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page, adding signal");
@@ -409,8 +414,10 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   Account        *account;
 
   ENTER("main window %p, page %p", window, page);
+  if (!GNC_IS_MAIN_WINDOW (window)) { LEAVE(""); }
   g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
   action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
+  if (!GTK_IS_ACTION_GROUP (action_group)) { LEAVE(""); }
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   /* Reset everything to known state */

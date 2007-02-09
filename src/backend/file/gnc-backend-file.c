@@ -211,6 +211,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     if (NULL == be->fullpath)
     {
         qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+        LEAVE("");
         return;
     }
     be->be.fullpath = be->fullpath;
@@ -229,6 +230,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
 
@@ -240,6 +242,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
         if (rc == 0 && S_ISDIR(statbuf.st_mode))
@@ -251,6 +254,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
     }
@@ -264,6 +268,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     if (!ignore_lock && !gnc_file_be_get_file_lock (be))
     {
         g_free (be->lockfile); be->lockfile = NULL;
+        LEAVE("");
         return;
     }
 
@@ -290,13 +295,13 @@ file_session_end(QofBackend *be_start)
 #ifdef G_OS_WIN32
 	/* On windows, we need to allow write-access before
 	   g_unlink() can succeed */
-	rv = g_chmod (be->lockfile, S_IWRITE | S_IREAD);
+    	rv = g_chmod (be->lockfile, S_IWRITE | S_IREAD);
 #endif
-	rv = g_unlink (be->lockfile);
-	if (rv) {
-	    PWARN("Error on g_unlink(%s): %d: %s", be->lockfile,
-		  errno, strerror(errno) ? strerror(errno) : "");
-	}
+	    rv = g_unlink (be->lockfile);
+        if (rv) {
+             PWARN("Error on g_unlink(%s): %d: %s", be->lockfile,
+                   errno, strerror(errno) ? strerror(errno) : "");
+        }
     }
 
     g_free (be->dirname);
@@ -528,6 +533,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     if(!mktemp(tmp_name))
     {
         qof_backend_set_error(be, ERR_BACKEND_MISC);
+        LEAVE("");
         return FALSE;
     }
   
@@ -535,6 +541,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     {
         if(!gnc_file_be_backup_file(fbe))
         {
+            LEAVE("");
             return FALSE;
         }
     }
@@ -587,12 +594,14 @@ gnc_file_be_write_to_file(FileBackend *fbe,
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
         if(!gnc_int_link_or_make_backup(fbe, tmp_name, datafile))
         {
             qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
         if(g_unlink(tmp_name) != 0)
@@ -602,6 +611,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
         g_free(tmp_name);
@@ -633,8 +643,10 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             /* already in an error just flow on through */
         }
         g_free(tmp_name);
+        LEAVE("");
         return FALSE;
     }
+    LEAVE("");
     return TRUE;
 }
 

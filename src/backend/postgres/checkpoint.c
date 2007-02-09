@@ -456,9 +456,9 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    com = xaccAccountGetCommodity(acc);
    if (!com)
    {
-     PERR ("account %s has no commodity",
-           guid_to_string (xaccAccountGetGUID (acc)));
-     return;
+        PERR("account %s has no commodity",
+             guid_to_string (xaccAccountGetGUID (acc)));
+        return;
    }
 
    chk.commodity = gnc_commodity_get_unique_name(com);
@@ -475,13 +475,13 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    rec_b = chk.reconciled_balance;
    deno = gnc_commodity_get_fraction (com);
 
-   DEBUGCMD({
+   {
       char buf[80];
       gnc_timespec_to_iso8601_buff (chk.date_start, buf);
-      PINFO("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
-        xaccAccountGetDescription (acc), buf,
-        b, deno, cl_b, deno, rec_b, deno);
-     });
+      DEBUG("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
+            xaccAccountGetDescription (acc), buf,
+            b, deno, cl_b, deno, rec_b, deno);
+   }
 
    /* add up loose entries since the checkpoint */
    pgendAccountGetPartialBalance (be, &chk);
@@ -497,13 +497,13 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 
    xaccAccountSetStartingBalance (acc, baln, cleared_baln, reconciled_baln);
 
-   DEBUGCMD ({
-      char buf[80];
-      gnc_timespec_to_iso8601_buff (as_of_date, buf);
-      LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
-        xaccAccountGetDescription (acc), buf,
-        b, deno, cl_b, deno, rec_b, deno);
-     });
+   {
+        char buf[80];
+        gnc_timespec_to_iso8601_buff (as_of_date, buf);
+        LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
+              xaccAccountGetDescription (acc), buf,
+              b, deno, cl_b, deno, rec_b, deno);
+   }
 }
 
 /* ============================================================= */

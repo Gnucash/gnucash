@@ -509,7 +509,7 @@ test_raw_query(QofSession * session, Query * q)
     book = qof_session_get_book(session);
     be = (PGBackend *) qof_book_get_backend(book);
 
-    if (qof_log_check(log_module, QOF_LOG_DETAIL))
+    if (qof_log_check(log_module, QOF_LOG_DEBUG))
         qof_query_print(qn);
 
     sq = sqlQuery_new();

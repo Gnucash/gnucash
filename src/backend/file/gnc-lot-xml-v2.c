@@ -60,7 +60,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     xmlNodePtr ret;
     kvp_frame *kf;
 
-	 ENTER("(lot=%p)", lot);
+    ENTER("(lot=%p)", lot);
     ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
@@ -76,6 +76,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
         }
     }
 
+    LEAVE("");
     return ret;
 }
 
@@ -93,12 +94,13 @@ lot_id_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     GUID *guid;
 
-	 ENTER("(lot=%p)", pdata->lot);
+    ENTER("(lot=%p)", pdata->lot);
     guid = dom_tree_to_guid(node);
     gnc_lot_set_guid(pdata->lot, *guid);
 
     g_free(guid);
     
+    LEAVE("");
     return TRUE;
 }
 
@@ -108,12 +110,12 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     gboolean success;
 
-	 ENTER("(lot=%p)", pdata->lot);
+    ENTER("(lot=%p)", pdata->lot);
     success = dom_tree_to_kvp_frame_given
-      (node, gnc_lot_get_slots (pdata->lot));
+         (node, gnc_lot_get_slots (pdata->lot));
 
+    LEAVE("");
     g_return_val_if_fail(success, FALSE);
-    
     return TRUE;
 }
 
@@ -161,6 +163,7 @@ gnc_lot_end_handler(gpointer data_for_children,
 
     xmlFreeNode(tree);
 
+    LEAVE("");
     return lot != NULL;
 }
 
@@ -186,6 +189,7 @@ dom_tree_to_lot (xmlNodePtr node, QofBook *book)
         lot = NULL;
     }
 
+    LEAVE("");
     return lot;
 }
 

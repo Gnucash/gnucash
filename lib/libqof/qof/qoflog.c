@@ -57,19 +57,13 @@ static GHashTable *log_table = NULL;
 static GLogFunc previous_handler = NULL;
 
 void
-qof_log_add_indent(void)
+qof_log_indent(void)
 {
      qof_log_num_spaces += QOF_LOG_INDENT_WIDTH;
 }
 
-gint 
-qof_log_get_indent(void)
-{
-	return qof_log_num_spaces;
-}
-
 void
-qof_log_drop_indent(void)
+qof_log_dedent(void)
 {
 	qof_log_num_spaces
          = (qof_log_num_spaces < QOF_LOG_INDENT_WIDTH)
@@ -96,48 +90,9 @@ log4glib_handler(const gchar     *log_domain,
                  const gchar     *message,
                  gpointer        user_data)
 {
-     gboolean debug = FALSE;
-     GHashTable *log_levels = (GHashTable*)user_data;
-     gchar *domain_copy = g_strdup(log_domain == NULL ? "" : log_domain);
-     gchar *dot_pointer = domain_copy;
-     static const QofLogLevel default_log_thresh = QOF_LOG_WARNING;
-     QofLogLevel longest_match_level = default_log_thresh;
+     if (G_LIKELY(!qof_log_check(log_domain, log_level)))
+          return;
 
-     {
-          gpointer match_level;
-          if ((match_level = g_hash_table_lookup(log_levels, "")) != NULL)
-               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-     }
-
-     if (debug) { printf("trying [%s] (%d):", log_domain, g_hash_table_size(log_levels)); }
-     if (log_levels)
-     {
-          // e.g., "a.b.c" -> "a\0b.c" -> "a.b\0c", "a.b.c"
-          gpointer match_level;
-          while ((dot_pointer = g_strstr_len(dot_pointer, strlen(dot_pointer), ".")) != NULL)
-          {
-               *dot_pointer = '\0';
-               if (debug) { printf(" [%s]", domain_copy); }
-               if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
-               {
-                    longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-                    if (debug) printf("*");
-               }
-               *dot_pointer = '.';
-               dot_pointer++;
-          }
-
-          if (debug) { printf(" [%s]", domain_copy); }
-          if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
-          {
-               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-               if (debug) { printf("*"); }
-          }
-     }
-     if (debug) { printf(" found [%d]\n", longest_match_level); }
-     g_free(domain_copy);
-
-     if (log_level <= longest_match_level)
      {
           gboolean last_char_is_newline;
           char timestamp_buf[10];
@@ -152,7 +107,7 @@ log4glib_handler(const gchar     *log_domain,
                   timestamp_buf,
                   5, level_str,
                   (log_domain == NULL ? "" : log_domain),
-                  0 /*qof_log_num_spaces*/, "",
+                  qof_log_num_spaces, "",
                   message,
                   (g_str_has_suffix(message, "\n") ? "" : "\n"));
           fflush(fout);
@@ -269,13 +224,51 @@ qof_log_prettify (const char *name)
 }
 
 gboolean
-qof_log_check(QofLogModule log_module, QofLogLevel log_level)
+qof_log_check(QofLogModule log_domain, QofLogLevel log_level)
 {
-	QofLogLevel level, maximum;
-	if (!log_table || log_module == NULL || log_level < 0) { return FALSE; }
-	maximum = GPOINTER_TO_INT(g_hash_table_lookup(log_table, log_module));
-	if (log_level <= maximum) { return TRUE; }
-	return FALSE;
+//#define _QLC_DBG(x) x
+#define _QLC_DBG(x)
+     GHashTable *log_levels = log_table;
+     gchar *domain_copy = g_strdup(log_domain == NULL ? "" : log_domain);
+     gchar *dot_pointer = domain_copy;
+     static const QofLogLevel default_log_thresh = QOF_LOG_WARNING;
+     QofLogLevel longest_match_level = default_log_thresh;
+
+     {
+          gpointer match_level;
+          if ((match_level = g_hash_table_lookup(log_levels, "")) != NULL)
+               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+     }
+
+     _QLC_DBG({ printf("trying [%s] (%d):", log_domain, g_hash_table_size(log_levels)); });
+     if (G_LIKELY(log_levels))
+     {
+          // e.g., "a.b.c" -> "a\0b.c" -> "a.b\0c", "a.b.c"
+          gpointer match_level;
+          while ((dot_pointer = g_strstr_len(dot_pointer, strlen(dot_pointer), ".")) != NULL)
+          {
+               *dot_pointer = '\0';
+               _QLC_DBG({ printf(" [%s]", domain_copy); });
+               if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
+               {
+                    longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+                    _QLC_DBG(printf("*"););
+               }
+               *dot_pointer = '.';
+               dot_pointer++;
+          }
+
+          _QLC_DBG({ printf(" [%s]", domain_copy); });
+          if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
+          {
+               longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
+               _QLC_DBG({ printf("*"); });
+          }
+     }
+     _QLC_DBG({ printf(" found [%d]\n", longest_match_level); });
+     g_free(domain_copy);
+
+     return log_level <= longest_match_level;
 }
 
 void

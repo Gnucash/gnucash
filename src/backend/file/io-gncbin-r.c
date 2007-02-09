@@ -596,11 +596,12 @@ readGroup (QofBook *book, int fd, Account *aparent, int token)
 
   /* read numAccs */
   err = read( fd, &numAcc, sizeof(int) );
-  if( sizeof(int) != err ) 
-    {
-    xaccFreeAccountGroup (grp);
-    return NULL;
-    }
+  if ( sizeof(int) != err )
+  {
+     xaccFreeAccountGroup (grp);
+     LEAVE("");
+     return NULL;
+  }
   XACC_FLIP_INT (numAcc);
   
   DEBUG ("expecting %d accounts", numAcc);
@@ -610,8 +611,7 @@ readGroup (QofBook *book, int fd, Account *aparent, int token)
     {
     Account * acc = readAccount( book, fd, grp, token );
     if( NULL == acc ) {
-      PERR("Short group read: \n"
-           "\texpected %d, got %d accounts\n",numAcc,i);
+      PERR("Short group read: expected %d, got %d accounts\n",numAcc,i);
       break;
       }
     }
@@ -622,6 +622,7 @@ readGroup (QofBook *book, int fd, Account *aparent, int token)
   if (aparent) {
     aparent->children = grp;
   }
+  LEAVE("");
   return grp;
 }
 
@@ -651,7 +652,7 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
   /* version 1 does not store the account number */
   if (1 < token) {
     err = read( fd, &accID, sizeof(int) );
-    if( err != sizeof(int) ) { return NULL; }
+    if( err != sizeof(int) ) { LEAVE(""); return NULL; }
     XACC_FLIP_INT (accID);
     acc = locateAccount (accID, book);
     /* locateAccountAlways should always accounts that are open for
@@ -666,14 +667,14 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
     /* flags are now gone - if you need these, use kv pairs */
     char tmpflags;
     err = read( fd, &tmpflags, sizeof(char) );
-    if( err != sizeof(char) ) { return NULL; }
+    if( err != sizeof(char) ) { LEAVE(""); return NULL; }
   }
   
   /* if (9999>= token) */ {
     char ff_acctype;
     int acctype;
     err = read( fd, &(ff_acctype), sizeof(char) );
-    if( err != sizeof(char) ) { return NULL; }
+    if( err != sizeof(char) ) { LEAVE(""); return NULL; }
     switch (ff_acctype) {
       case FF_BANK: 		{ acctype = ACCT_TYPE_BANK; 		break; }
       case FF_CASH: 		{ acctype = ACCT_TYPE_CASH; 		break; }
@@ -690,31 +691,31 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
       case FF_MONEYMRKT: 	{ acctype = ACCT_TYPE_MONEYMRKT; 	break; }
       case FF_CREDITLINE: 	{ acctype = ACCT_TYPE_CREDITLINE; 	break; }
       case FF_CURRENCY: 	{ acctype = ACCT_TYPE_CURRENCY;		break; }
-      default: return NULL;
+      default: LEAVE(""); return NULL;
     }
     xaccAccountSetType (acc, acctype);
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp) return NULL;
+  if (NULL == tmp) { LEAVE(""); return NULL; }
   DEBUG ("reading acct %s", tmp);
   xaccAccountSetName (acc, tmp);
   g_free (tmp);
 
   if (8 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp) return NULL;
+     if (NULL == tmp) { LEAVE(""); return NULL; }
      xaccAccountSetCode (acc, tmp);
      g_free (tmp);
   }
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) return NULL;
+  if (NULL == tmp ) { LEAVE(""); return NULL; }
   xaccAccountSetDescription (acc, tmp);
   g_free (tmp);
   
   tmp = readString( fd, token );
-  if( NULL == tmp ) return NULL;
+  if (NULL == tmp ) { LEAVE(""); return NULL; }
   if(strlen(tmp) > 0) {
     xaccAccountSetNotes (acc, tmp);
   }
@@ -724,7 +725,7 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
    * in version 7 of the file format */
   if (7 <= token) {
      tmp = readString( fd, token );
-     if( NULL == tmp ) return NULL;
+     if( NULL == tmp ) { LEAVE(""); return NULL; }
      
      PINFO ("currency is %s", tmp);
      currency = gnc_commodity_import_legacy(book, tmp);
@@ -740,7 +741,7 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
              if (tmp) g_free (tmp);
 
              tmp = strdup (xaccAccountGetName (acc));
-             if (tmp == NULL) return NULL;
+             if (tmp == NULL) { LEAVE(""); return NULL; }
         }
      }
 
@@ -750,7 +751,8 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
 
      if(tmp) g_free (tmp);
   } 
-  else {
+  else
+  {
     /* set the default currency when importing old files */
     currency = gnc_commodity_import_legacy(book, DEFAULT_CURRENCY);
     DxaccAccountSetCurrency (acc, currency);
@@ -759,12 +761,13 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
   /* aux account info first appears in version ten files */
   if (10 <= token) {
     if(!readAccInfo(fd, acc, token)) {
+      LEAVE("");
       return(NULL);
     }
   }
 
   err = read( fd, &numTrans, sizeof(int) );
-  if( err != sizeof(int) ) { return NULL; }
+  if( err != sizeof(int) ) { LEAVE(""); return NULL; }
   XACC_FLIP_INT (numTrans);
   
   DEBUG ("expecting %d transactions", numTrans);
@@ -793,6 +796,7 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
     int numGrps;
     err = read( fd, &numGrps, sizeof(int) );
     if( err != sizeof(int) ) { 
+       LEAVE("");
        return NULL; 
     }
     XACC_FLIP_INT (numGrps);
@@ -803,6 +807,7 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
 
   xaccAccountCommitEdit (acc);
 
+  LEAVE("");
   return acc;
 }
 

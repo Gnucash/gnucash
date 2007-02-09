@@ -510,7 +510,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    qd.resolve_list = NULL;
 
    ENTER (" ");
-   if (!be) return;
+   if (!be) { LEAVE(""); return; }
 
    if (0 == ncalls) {
       START_CLOCK (9, "starting at level 0");
@@ -656,7 +656,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    qd.xaction_list = NULL;
 
    REPORT_CLOCK (9, "done gathering at call %d", call_count);
-   if (NULL == acct_list) return;
+   if (NULL == acct_list) { LEAVE(""); return; }
 
    /* OK, at this point, we have a list of accounts, including the 
     * date of the earliest split in that account.  Now, we need to 
@@ -2236,8 +2236,6 @@ pgend_session_begin (QofBackend *backend,
    g_free(url);
 
    /* ---------------------------------------------------------------- */
-
-   // DEBUGCMD (PQtrace(be->connection, stderr));
 
    /* set the datestyle to something we can parse */
    p = "SET DATESTYLE='ISO';";

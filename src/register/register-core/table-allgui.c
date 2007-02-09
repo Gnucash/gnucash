@@ -821,7 +821,6 @@ gnc_table_move_cursor_internal (Table *table,
     }
 
     LEAVE("out of bounds\n");
-
     return;
   }
 
@@ -1091,11 +1090,17 @@ gnc_table_enter_update (Table *table,
   /* OK, if there is a callback for this cell, call it */
   cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
   if (!cell)
-    return FALSE;
-
+  {
+       LEAVE("no cell");
+       return FALSE;
+  }
+    
   io_flags = gnc_table_get_io_flags (table, virt_loc);
   if (io_flags == XACC_CELL_ALLOW_READ_ONLY)
-    return FALSE;
+  {
+       LEAVE("read only cell");
+       return FALSE;
+  }
 
   enter = cell->enter_cell;
 
@@ -1127,7 +1132,6 @@ gnc_table_enter_update (Table *table,
     table->gui_handlers.redraw_help (table);
 
   LEAVE("return %d\n", can_edit);
-
   return can_edit;
 }
 
@@ -1156,7 +1160,10 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
   /* OK, if there is a callback for this cell, call it */
   cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
   if (!cell)
-    return;
+  {
+       LEAVE("no cell");
+       return;
+  }
 
   leave = cell->leave_cell;
 
@@ -1180,6 +1187,7 @@ gnc_table_leave_update (Table *table, VirtualLocation virt_loc)
 
     g_free (old_value);
   }
+  LEAVE("");
 }
 
 gboolean
@@ -1244,6 +1252,7 @@ gnc_table_modify_update (Table *table,
     if (cancelled)
       *cancelled = TRUE;
 
+    LEAVE("change cancelled");
     return NULL;
   }
 
@@ -1253,15 +1262,20 @@ gnc_table_modify_update (Table *table,
   /* OK, if there is a callback for this cell, call it */
   cell = gnc_cellblock_get_cell (cb, cell_row, cell_col);
   if (!cell)
-    return NULL;
+  {
+       LEAVE("no cell");
+       return NULL;
+  }
 
   mv = cell->modify_verify;
 
   old_value = g_strdup (cell->value);
 
   if (mv)
+  {
     mv (cell, change, change_len, newval, newval_len,
         cursor_position, start_selection, end_selection);
+  }
   else
   {
     gnc_basic_cell_set_value (cell, newval);
@@ -1327,7 +1341,10 @@ gnc_table_direct_update (Table *table,
   ENTER ("\n");
 
   if (cell->direct_update == NULL)
+  {
+    LEAVE("no direct update");
     return FALSE;
+  }
 
   old_value = g_strdup (cell->value);
 
@@ -1356,6 +1373,7 @@ gnc_table_direct_update (Table *table,
   if (table->gui_handlers.redraw_help)
     table->gui_handlers.redraw_help (table);
 
+  LEAVE("");
   return result;
 }
 
@@ -1704,6 +1722,7 @@ gnc_table_traverse_update(Table *table,
     PERR("destination (%d, %d) out of bounds (%d, %d)\n",
          dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col,
          table->num_virt_rows, table->num_virt_cols);
+    LEAVE("");
     return TRUE;
   }
 
@@ -1761,13 +1780,19 @@ gnc_table_traverse_update(Table *table,
       }
 
       if (!gnc_table_virtual_loc_valid(table, *dest_loc, FALSE))
-	return TRUE;
+      {
+           LEAVE("");
+           return TRUE;
+      }
 
       break;
 
     case GNC_TABLE_TRAVERSE_POINTER:
       if (!gnc_table_find_valid_cell_horiz(table, dest_loc, TRUE))
-        return TRUE;
+      {
+           LEAVE("");
+           return TRUE;
+      }
 
       break;
 

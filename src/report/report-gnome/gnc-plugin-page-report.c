@@ -457,6 +457,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 if (inst_report != SCM_BOOL_F) {
                         gnc_plugin_page_report_add_edited_report(priv, inst_report);
                 }
+                LEAVE("");
                 return;
         } else {
                 LEAVE( " unknown URL type [%s] location [%s]", type, location );

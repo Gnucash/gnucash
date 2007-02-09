@@ -67,7 +67,7 @@ build_acct_tree(struct _accountpickerdialog * picker)
   GtkTreeViewColumn *col;
 
   /* Build a new account tree */
-  TRACE("Begin");
+  DEBUG("Begin");
   account_tree = gnc_tree_view_account_new(FALSE);
   picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
   gtk_tree_view_set_headers_visible (account_tree, TRUE);

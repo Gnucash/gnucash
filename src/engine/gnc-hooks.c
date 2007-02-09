@@ -91,7 +91,7 @@ gnc_hook_lookup (const gchar *name)
 
   ENTER("name %s", name);
   if (gnc_hooks_list == NULL) {
-    LEAVE("no hook lists");
+    PINFO("no hook lists");
     gnc_hooks_init();
   }
 

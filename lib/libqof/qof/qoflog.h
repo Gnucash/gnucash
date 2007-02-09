@@ -45,26 +45,20 @@
   _(QOF_LOG_ERROR,   = G_LOG_LEVEL_CRITICAL)   \
   _(QOF_LOG_WARNING, = G_LOG_LEVEL_WARNING) \
   _(QOF_LOG_INFO,    = G_LOG_LEVEL_INFO)    \
-  _(QOF_LOG_DEBUG,   = G_LOG_LEVEL_DEBUG)   \
-  _(QOF_LOG_DETAIL,  = G_LOG_LEVEL_DEBUG)  \
-  _(QOF_LOG_TRACE,   = G_LOG_LEVEL_DEBUG)
+  _(QOF_LOG_DEBUG,   = G_LOG_LEVEL_DEBUG)
 
 DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST)
 
 gchar* qof_log_level_to_string(QofLogLevel lvl);
 QofLogLevel qof_log_level_from_string(gchar *str);
 
-/** indents once for each ENTER macro */
-void qof_log_add_indent(void);
-
-/** gets the running total of the indent */
-gint qof_log_get_indent(void);
+/** indents once for each ENTER macro **/
+void qof_log_indent(void);
 
 /**
- * drops back one indent for each LEAVE macro
- * indent is reset to zero if less than a single indent would exist.
+ * drops back one indent for each LEAVE macro, capped at 0.
  **/
-void qof_log_drop_indent(void);
+void qof_log_dedent(void);
 
 /**
  * Initialize the error logging subsystem.  Defaults to a level-threshold of
@@ -79,14 +73,11 @@ void qof_log_set_level(QofLogModule module, QofLogLevel level);
 
 /**
  * Specify an alternate log output, to pipe or file.
- * Needs to be called \b before qof_log_init()
- * \deprecated
  **/
 void qof_log_set_file (FILE *outfile);
 
 /**
  * Specify a filename for log output.
- * Calls qof_log_init() for you.
  **/
 void qof_log_init_filename (const gchar* logfilename);
 
@@ -143,30 +134,32 @@ typedef void (*QofLogCB) (QofLogModule log_module, QofLogLevel* log_level,
 
 /** Print a function entry debugging message */
 #define ENTER(format, args...) do { \
-    g_log (log_module, G_LOG_LEVEL_DEBUG, \
-      "[enter %s:%s()] " format, __FILE__, \
-      PRETTY_FUNC_NAME , ## args); \
-    qof_log_add_indent(); \
+    if (qof_log_check(log_module, G_LOG_LEVEL_DEBUG)) { \
+      g_log (log_module, G_LOG_LEVEL_DEBUG, \
+        "[enter %s:%s()] " format, __FILE__, \
+        PRETTY_FUNC_NAME , ## args); \
+      qof_log_indent(); \
+    } \
 } while (0)
+
+#define gnc_leave_return_val_if_fail(test, val) do { \
+  if (! (test)) { LEAVE(""); } \
+  g_return_val_if_fail(test, val); \
+} while (0);
+
+#define gnc_leave_return_if_fail(test) do { \
+  if (! (test)) { LEAVE(""); } \
+  g_return_if_fail(test); \
+} while (0);
 
 /** Print a function exit debugging message */
 #define LEAVE(format, args...) do { \
-    qof_log_drop_indent(); \
-    g_log (log_module, G_LOG_LEVEL_DEBUG, \
-      "[leave %s()] " format, \
-      PRETTY_FUNC_NAME , ## args); \
-} while (0)
-
-/** Print a function trace debugging message */
-#define TRACE(format, args...) do { \
-    g_log (log_module, G_LOG_LEVEL_DEBUG, \
-      "[trace %s()] " format, PRETTY_FUNC_NAME , ## args); \
-} while (0)
-
-#define DEBUGCMD(x) do {                            \
-  if (qof_log_check (log_module, QOF_LOG_DEBUG)) {  \
-		(x);                                        \
-	}                                               \
+    if (qof_log_check(log_module, G_LOG_LEVEL_DEBUG)) { \
+      qof_log_dedent(); \
+      g_log (log_module, G_LOG_LEVEL_DEBUG, \
+        "[leave %s()] " format, \
+        PRETTY_FUNC_NAME , ## args); \
+    } \
 } while (0)
 
 /* -------------------------------------------------------- */

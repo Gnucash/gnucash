@@ -163,6 +163,6 @@ void gnc_log_default(void)
 {
 	qof_log_set_default(QOF_LOG_WARNING);
     qof_log_set_level(GNC_MOD_ROOT, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_TRACE);
+	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
 }
 
