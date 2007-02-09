@@ -329,17 +329,19 @@ main_window_to_account (GncMainWindow *window)
   Account        *account = NULL;
 
   ENTER("main window %p", window);
-  g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), NULL);
+  g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), NULL);
 
   /* Ensure we are called from a register page. */
   page = gnc_main_window_get_current_page(window);
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
   page_name = gnc_plugin_page_get_plugin_name(page);
+  g_return_val_if_fail (page_name, NULL);
 
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
     account =
       gnc_plugin_page_register_get_account (GNC_PLUGIN_PAGE_REGISTER(page));
-  } else if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  } else if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     account =
       gnc_plugin_page_account_tree_get_current_account (GNC_PLUGIN_PAGE_ACCOUNT_TREE(page));
@@ -364,8 +366,11 @@ gnc_plugin_hbci_account_selected (GncPluginPage *plugin_page,
   GtkActionGroup *action_group;
   GncMainWindow  *window;
 
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
   window = GNC_MAIN_WINDOW(plugin_page->window);
+  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
   action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   gnc_plugin_update_actions(action_group, need_account_actions,
 			    "sensitive", account != NULL);
 }
@@ -379,8 +384,10 @@ gnc_plugin_hbci_main_window_page_added (GncMainWindow *window,
   const gchar    *page_name;
 
   ENTER("main window %p, page %p", window, page);
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   page_name = gnc_plugin_page_get_plugin_name(page);
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  g_return_if_fail (page_name);
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page, adding signal");
     g_signal_connect (G_OBJECT(page),
 		      "account_selected",
@@ -402,8 +409,9 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   Account        *account;
 
   ENTER("main window %p, page %p", window, page);
+  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
   action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
-  g_return_if_fail(action_group != NULL);
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   /* Reset everything to known state */
   gnc_plugin_update_actions(action_group, need_account_actions,
@@ -421,11 +429,12 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
 
   /* Selectively make items visible */
   page_name = gnc_plugin_page_get_plugin_name(page);
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
+  g_return_if_fail (page_name);
+  if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     gnc_plugin_update_actions(action_group, account_tree_actions,
 			      "visible", TRUE);
-  } else if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
+  } else if (safe_strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
     gnc_plugin_update_actions(action_group, register_actions,
 			      "visible", TRUE);
