@@ -472,8 +472,7 @@ free_sums( gpointer key,
   g_free( tcds );
 }
 
-static
-void
+static void
 check_credit_debit_balance( gpointer key,
                             gpointer val,
                             gpointer ud )
@@ -483,22 +482,25 @@ check_credit_debit_balance( gpointer key,
         *unbalanced |= !(gnc_numeric_zero_p(
                                  gnc_numeric_sub_fixed( tcds->debitSum,
                                                         tcds->creditSum ) ));
-        
-        if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
-                                                        tcds->creditSum ) ) ) {
-             g_debug( "%.8x | true [%s - %s = %s]",
-                      (unsigned int)key,
-                      gnc_numeric_to_string( tcds->debitSum ),
-                      gnc_numeric_to_string( tcds->creditSum ),
-                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                   tcds->creditSum )) );
-        } else {
-             g_debug( "%.8x | false [%s - %s = %s]",
-                      (unsigned int)key,
-                      gnc_numeric_to_string( tcds->debitSum ),
-                      gnc_numeric_to_string( tcds->creditSum ),
-                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                   tcds->creditSum )) );
+
+        if (qof_log_check(G_LOG_DOMAIN, QOF_LOG_DEBUG))
+        {
+             if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
+                                                             tcds->creditSum ) ) ) {
+                  g_debug( "%p | true [%s - %s = %s]",
+                           key,
+                           gnc_numeric_to_string( tcds->debitSum ),
+                           gnc_numeric_to_string( tcds->creditSum ),
+                           gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                        tcds->creditSum )) );
+             } else {
+                  g_debug( "%p | false [%s - %s = %s]",
+                           key,
+                           gnc_numeric_to_string( tcds->debitSum ),
+                           gnc_numeric_to_string( tcds->creditSum ),
+                           gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                        tcds->creditSum )) );
+             }
         }
 }
 
