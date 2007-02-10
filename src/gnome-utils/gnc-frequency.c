@@ -54,7 +54,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 
-static void gnc_frequency_class_init( GNCFrequencyClass *klass );
+static void gnc_frequency_class_init( GncFrequencyClass *klass );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -69,7 +69,7 @@ static void quarterly_sel_changed( GtkButton *b, gpointer d );
 static void triyearly_sel_changed( GtkButton *b, gpointer d );
 static void semiyearly_sel_changed( GtkButton *b, gpointer d );
 
-static void year_range_sels_changed( GNCFrequency *gf,
+static void year_range_sels_changed( GncFrequency *gf,
                                      int monthsInRange,
                                      GtkWidget *occurW,
                                      GtkWidget *dayOfMonthW );
@@ -115,19 +115,19 @@ gnc_frequency_get_type()
      static GType gncfreq_type = 0;
      if (gncfreq_type == 0) {
           static GTypeInfo gncfreq_info = {
-               sizeof(GNCFrequencyClass),
+               sizeof(GncFrequencyClass),
                NULL,
                NULL,
                (GClassInitFunc)gnc_frequency_class_init,
                NULL,
                NULL,
-               sizeof(GNCFrequency),
+               sizeof(GncFrequency),
                0,
                (GInstanceInitFunc)gnc_frequency_init
           };
                 
           gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
-                                                 "GNCFrequency",
+                                                 "GncFrequency",
                                                  &gncfreq_info, 0);
      }
 
@@ -135,7 +135,7 @@ gnc_frequency_get_type()
 }
 
 static void
-gnc_frequency_class_init( GNCFrequencyClass *klass )
+gnc_frequency_class_init( GncFrequencyClass *klass )
 {
         GObjectClass *object_class;
         
@@ -145,7 +145,7 @@ gnc_frequency_class_init( GNCFrequencyClass *klass )
          g_signal_new ("changed",
                        G_OBJECT_CLASS_TYPE (object_class),
                        G_SIGNAL_RUN_FIRST,
-                       G_STRUCT_OFFSET (GNCFrequencyClass, changed),
+                       G_STRUCT_OFFSET (GncFrequencyClass, changed),
                        NULL,
                        NULL,
                        g_cclosure_marshal_VOID__VOID,
@@ -154,7 +154,7 @@ gnc_frequency_class_init( GNCFrequencyClass *klass )
 }
 
 void
-gnc_frequency_init(GNCFrequency *gf)
+gnc_frequency_init(GncFrequency *gf)
 {
         int    i;
         GtkVBox  *vb;
@@ -250,7 +250,7 @@ gnc_frequency_init(GNCFrequency *gf)
 }
 
 static void
-do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
+do_frequency_setup( GncFrequency *gf, FreqSpec *fs, time_t *secs)
 {
         UIFreqType uift;
         int i, page;
@@ -546,7 +546,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 }
 
 void
-gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
+gnc_frequency_setup_default( GncFrequency *gf, FreqSpec *fs, GDate *date )
 {
    time_t secs;
 
@@ -587,7 +587,7 @@ gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 }
 
 void
-gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date )
+gnc_frequency_setup( GncFrequency *gf, FreqSpec *fs, GDate *date )
 {
    time_t secs;
 
@@ -610,14 +610,14 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 GtkWidget *
 gnc_frequency_new( FreqSpec *fs, GDate *date )
 {
-        GNCFrequency  *toRet;
+        GncFrequency  *toRet;
         toRet = g_object_new( gnc_frequency_get_type(), NULL );
         gnc_frequency_setup_default( toRet, fs, date );
         return GTK_WIDGET(toRet);
 }
 
 void
-gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
+gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate )
 {
         gint page;
         gint day;
@@ -830,7 +830,7 @@ spin_changed_helper( GtkAdjustment *adj, gpointer d )
 static void
 weekly_days_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
+        GncFrequency *gf;
 
         gf = GNC_FREQUENCY(d);
         g_signal_emit_by_name( gf, "changed" );
@@ -839,15 +839,15 @@ weekly_days_changed( GtkButton *b, gpointer d )
 static void
 monthly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         guint    dayOfMonth;
         struct tm  *tmptm;
         time_t    tmptt;
   
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
-        o = glade_xml_get_widget( ((GNCFrequency*)d)->gxml,
+        o = glade_xml_get_widget( ((GncFrequency*)d)->gxml,
                                   "monthly_day" );
         dayOfMonth = gtk_combo_box_get_active( GTK_COMBO_BOX(o) ) + 1;
 
@@ -868,13 +868,13 @@ monthly_sel_changed( GtkButton *b, gpointer d )
 static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         gint    tmpint;
         time_t    tmptt;
         struct tm  *tmptm;
 
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
@@ -901,8 +901,8 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
 static void
 quarterly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 3,
                                  glade_xml_get_widget( gf->gxml, "quarterly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "quarterly_day" ) );
@@ -911,8 +911,8 @@ quarterly_sel_changed( GtkButton *b, gpointer d )
 static void
 triyearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 4,
                                  glade_xml_get_widget( gf->gxml, "triyearly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "triyearly_day" ) );
@@ -921,15 +921,15 @@ triyearly_sel_changed( GtkButton *b, gpointer d )
 static void
 semiyearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 6,
                                  glade_xml_get_widget( gf->gxml, "semiyearly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "semiyearly_day" ) );
 }
 
 static void
-year_range_sels_changed( GNCFrequency *gf,
+year_range_sels_changed( GncFrequency *gf,
                          int monthsInRange,
                          GtkWidget *occurW,
                          GtkWidget *dayOfMonthW )
@@ -956,12 +956,12 @@ year_range_sels_changed( GNCFrequency *gf,
 static void
 yearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         time_t    tmptt;
         struct tm  *tmptm;
 
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
@@ -999,7 +999,7 @@ static inline guint32 maxn( guint32 a, guint32 b )
 static void
 freq_combo_changed( GtkComboBox *b, gpointer d )
 {
-        GNCFrequency *gf = (GNCFrequency*)d;
+        GncFrequency *gf = (GncFrequency*)d;
         int optIdx;
         UIFreqType uift;
         time_t startDate, tmpDate;
@@ -1007,8 +1007,8 @@ freq_combo_changed( GtkComboBox *b, gpointer d )
         GtkWidget *o;
 
         /* Set the new page. */
-        optIdx = gtk_combo_box_get_active( GTK_COMBO_BOX(((GNCFrequency*)d)->freqComboBox) );
-        gtk_notebook_set_current_page( ((GNCFrequency*)d)->nb, optIdx );
+        optIdx = gtk_combo_box_get_active( GTK_COMBO_BOX(((GncFrequency*)d)->freqComboBox) );
+        gtk_notebook_set_current_page( ((GncFrequency*)d)->nb, optIdx );
 
         /* setup initial values for new page, as possible. */
         uift = PAGES[optIdx].uiFTVal;
@@ -1089,14 +1089,14 @@ year_range_menu_helper( GtkWidget *dayOptMenu,
 static void
 start_date_changed( GNCDateEdit *gde, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         struct tm  *tmpTm;
         time_t    dateFromGDE;
         gint    page;
         UIFreqType  uift;
   
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         dateFromGDE = gnc_date_edit_get_date( gde );
 
@@ -1177,7 +1177,7 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
 /* Relabel some of the labels */
 
 void 
-gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
+gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt)
 {
    GtkLabel *lbl;
    if (!gf || !txt) return;
@@ -1186,7 +1186,7 @@ gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
 }
 
 void 
-gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt)
+gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt)
 {
    GtkLabel *lbl;
    if (!gf || !txt) return;

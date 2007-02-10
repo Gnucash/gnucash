@@ -120,7 +120,7 @@ struct _GncSxEditorDialog
      /* The various widgets in the dialog */
      GNCLedgerDisplay *ledger;
 
-     GNCFrequency *gncfreq;
+     GncFrequency *gncfreq;
      GncDenseCalStore *dense_cal_model;
      GncDenseCal *example_cal;
 
@@ -163,7 +163,7 @@ static void advance_toggle( GtkButton *b, GncSxEditorDialog *sxed );
 static gboolean gnc_sxed_check_consistent( GncSxEditorDialog *sxed );
 static gboolean gnc_sxed_check_changed( GncSxEditorDialog *sxed );
 static void gnc_sxed_save_sx( GncSxEditorDialog *sxed );
-static void gnc_sxed_freq_changed( GNCFrequency *gf, gpointer ud );
+static void gnc_sxed_freq_changed( GncFrequency *gf, gpointer ud );
 static void sxed_excal_update_adapt( GtkObject *o, gpointer ud );
 static void gnc_sxed_update_cal( GncSxEditorDialog *sxed );
 
@@ -1595,7 +1595,7 @@ gnc_sxed_update_cal( GncSxEditorDialog *sxed )
 
 static
 void
-gnc_sxed_freq_changed( GNCFrequency *gf, gpointer ud )
+gnc_sxed_freq_changed( GncFrequency *gf, gpointer ud )
 {
         gnc_sxed_update_cal( (GncSxEditorDialog*)ud );
 }

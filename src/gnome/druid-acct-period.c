@@ -61,7 +61,7 @@ typedef struct
   GnomeDruidPage *menu_page;
   GnomeDruidPage *book_page;
   GnomeDruidPage *finish_page;
-  GNCFrequency *period_menu;
+  GncFrequency *period_menu;
   GtkLabel  * period_remarks;
   GtkLabel  * close_results;
   GtkLabel  * book_details;
@@ -541,8 +541,8 @@ ap_druid_create (AcctPeriodInfo *info)
   xaccFreqSpecSetMonthly (info->period, &info->closing_date, 12);
   xaccFreqSpecSetUIType (info->period, UIFREQ_YEARLY);
 
-  info->period_menu = GNC_FREQUENCY (
-          gnc_frequency_new (info->period, &info->closing_date));
+  info->period_menu = GNC_FREQUENCY(
+          gnc_frequency_new(info->period, &info->closing_date));
 
   /* Change the text so that its more mainingful for this druid */
   gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
