@@ -70,7 +70,10 @@
 
 #define SXFTD_RESPONSE_ADVANCED 100 /* 'Advanced' button response code */
 
-static QofLogModule log_module = GNC_MOD_SX;
+static QofLogModule log_module = GNC_MOD_GUI_SX;
+
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN GNC_MOD_GUI_SX
 
 static void sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
@@ -326,9 +329,8 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     break;
 
   default:
-    PERR("Nonexistent frequency selected.  This is a bug.");
-    g_assert( FALSE );
-    break;
+       g_critical("nonexistent frequency selected");
+       break;
   }
 }
 
@@ -366,7 +368,7 @@ sxftd_init( SXFromTransInfo *sxfti )
     g_object_ref(G_OBJECT(sxfti->example_cal));
     gtk_object_sink(GTK_OBJECT(sxfti->example_cal));
 
-    g_assert( sxfti->example_cal );
+    g_assert(sxfti->example_cal);
     gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
     gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
     gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
@@ -541,10 +543,12 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
   guint sx_error = sxftd_compute_sx(sxfti);
 
   if (sx_error != 0
-      && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION) {
-    PERR( "Error in sxftd_compute_sx after ok_clicked [%d]", sx_error );
+      && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION)
+  {
+       g_critical("sxftd_compute_sx after ok_clicked [%d]", sx_error);
   }
-  else {
+  else
+  {
     if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
             gnc_error_dialog( gnc_ui_get_toplevel(), 
                               _( "The Scheduled Transaction is unbalanced. "
@@ -600,10 +604,10 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   if ( sx_error != 0
        && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
   {
-          // unbalanced-xaction is "okay", since this is also checked for by
-          // the advanced editor.
-          PWARN( "something bad happened in sxftd_compute_sx [%d]", sx_error );
-          return;
+       // unbalanced-xaction is "okay", since this is also checked for by
+       // the advanced editor.
+       g_warning("something bad happened in sxftd_compute_sx [%d]", sx_error);
+       return;
   }
   gtk_widget_hide( sxfti->dialog );
   /* force a gui update. */
@@ -644,20 +648,20 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
 	SXFromTransInfo *sxfti = (SXFromTransInfo *)data;
 
 	ENTER(" dialog %p, response %d, sx %p", dialog, response, sxfti);
-        switch (response) {
-                case GTK_RESPONSE_OK:
-                        DEBUG(" OK");
-			sxftd_ok_clicked(sxfti);
-			break;
-		case SXFTD_RESPONSE_ADVANCED:
-			DEBUG(" ADVANCED");
-			sxftd_advanced_clicked(sxfti);
-			break;
-                case GTK_RESPONSE_CANCEL:
-                default:
-                        DEBUG(" CANCEL");
-			sxftd_close(sxfti, TRUE);
-                        break;
+    switch (response) {
+    case GTK_RESPONSE_OK:
+         g_debug(" OK");
+         sxftd_ok_clicked(sxfti);
+         break;
+    case SXFTD_RESPONSE_ADVANCED:
+         g_debug(" ADVANCED");
+         sxftd_advanced_clicked(sxfti);
+         break;
+    case GTK_RESPONSE_CANCEL:
+    default:
+         g_debug(" CANCEL");
+         sxftd_close(sxfti, TRUE);
+         break;
 
 	}
 	LEAVE(" ");
@@ -708,7 +712,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     gnc_dense_cal_store_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
     break;
   default:
-    printf("unknown get.type [%d]\n", get.type);
+    g_warning("unknown get.type [%d]\n", get.type);
     break;
   }
 
@@ -760,7 +764,7 @@ gnc_sx_create_from_trans( Transaction *trans )
           }
           else
           {
-                  PERR( "Error in sxftd_init: %d", errno );
+               g_error("sxftd_init: %d", errno);
           }
   }
 

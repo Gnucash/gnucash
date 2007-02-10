@@ -41,7 +41,10 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.engine.sx"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 /* Local Prototypes *****/
 
@@ -190,7 +193,7 @@ gnc_sx_begin_edit (SchedXaction *sx)
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
-  PERR ("Failed to commit: %d", errcode);
+     g_critical("Failed to commit: %d", errcode);
 }
 
 static void commit_done(QofInstance *inst)
@@ -491,14 +494,14 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
    if ( xaccSchedXactionHasEndDate( sx ) ) {
       GDate *end_date = xaccSchedXactionGetEndDate( sx );
       if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-         PINFO( "next_occur past end date" );
+         g_debug("next_occur past end date");
          g_date_clear( &next_occur, 1 );
       }
    } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
       if ( stateData ) {
          temporalStateData *tsd = (temporalStateData*)stateData;
          if ( tsd->num_occur_rem == 0 ) {
-            PINFO( "no more occurances remain" );
+            g_debug("no more occurances remain");
             g_date_clear( &next_occur, 1 );
          }
       } else {

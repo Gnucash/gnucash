@@ -55,6 +55,7 @@
 #define GNC_MOD_IO        "gnc.io"
 #define GNC_MOD_BOOK      "gnc.book-period"
 #define GNC_MOD_GUI       "gnc.gui"
+#define GNC_MOD_GUI_SX    "gnc.gui.sx"
 #define GNC_MOD_GUILE     "gnc.guile"
 #define GNC_MOD_LEDGER    "gnc.ledger"
 #define GNC_MOD_REGISTER  "gnc.register"

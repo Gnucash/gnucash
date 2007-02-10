@@ -93,8 +93,8 @@ gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
 
   if (templateGroup && templateGroup->book != book)
   {
-     PERR ("cannot mix and match books freely!");
-     return;
+       g_critical("cannot mix and match books freely!");
+       return;
   }
 
   col = qof_book_get_collection (book, GNC_ID_SXTG);

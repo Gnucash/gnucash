@@ -52,7 +52,7 @@ test_once (void)
             "once off" );
       }
    }
-   fprintf (stdout, " FreqSpec: Single test OK, continuing . . . \r");
+   fprintf(stdout, " FreqSpec: Single test OK, continuing . . . \r");
    fflush(stdout);
    xaccFreqSpecFree(fs);
 }

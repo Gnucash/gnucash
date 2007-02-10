@@ -73,6 +73,8 @@ static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 static const gchar* MARK_COLOR = "Yellow";
 
 static QofLogModule log_module = GNC_MOD_SX;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.gui.dense-cal"
 
 static void gnc_dense_cal_class_init(GncDenseCalClass *class);
 static void gnc_dense_cal_init(GncDenseCal *dcal);
@@ -280,8 +282,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
                                    MAX_COLORS, TRUE, TRUE,
                                    &colorAllocSuccess) > 0)
      {
-          /* FIXME : handle [more] properly */
-          PERR("Error allocating colors\n");
+          g_error("error allocating colors");
      }
 
      /* Deal with the various label sizes. */
@@ -574,7 +575,7 @@ gnc_dense_cal_size_request(GtkWidget *widget,
      GncDenseCal *dcal = GNC_DENSE_CAL(widget);
      if (!dcal->initialized)
      {
-          PERR("Uninitialized size request\n");
+          g_warning("Uninitialized size request\n");
           requisition->width  = DENSE_CAL_DEFAULT_WIDTH;
           requisition->height = DENSE_CAL_DEFAULT_HEIGHT;
           return;
@@ -1411,30 +1412,21 @@ wheres_this(GncDenseCal *dcal, int x, int y)
 
      if ((x < 0) || (y < 0))
      {
-          /* DEBUG("x(%d) or y(%d) < 0", x, y); */
           return -1;
      }
      if ((x >= GTK_WIDGET(dcal)->allocation.width)
          || (y >= GTK_WIDGET(dcal)->allocation.height))
      {
-          /*DEBUG("x(%d) > allocation.width(%d) or y(%d) > allocation->height(%d)",
-            x, y,
-            GTK_WIDGET(dcal)->allocation.width,
-            GTK_WIDGET(dcal)->allocation.height);*/
           return -1;
      }
 
      /* "outside of displayed table" check */
      if (x >= (num_cols(dcal) * (col_width(dcal) + COL_BORDER_SIZE)))
      {
-          /*DEBUG("x(%d) > (col_width(%d) * num_cols(%d))",
-            x, col_width(dcal), num_cols(dcal));*/
           return -1;
      }
      if (y >= col_height(dcal))
      {
-          /*DEBUG("y(%d) > col_height(%d)",
-            y, col_height(dcal));*/
           return -1;
      }
         
@@ -1445,19 +1437,16 @@ wheres_this(GncDenseCal *dcal, int x, int y)
      x -= dcal->label_width;
      if (x < 0)
      {
-          /* DEBUG("X is over the label.");*/
           return -1;
      }
      if (x >= day_width(dcal) * 7)
      {
-          /*DEBUG("X is in the col_border space.");*/
           return -1;
      }
 
      y -= dcal->dayLabelHeight;
      if (y < 0)
      {
-          /*DEBUG("Y is over the label.");*/
           return -1;
      }
 
@@ -1472,7 +1461,6 @@ wheres_this(GncDenseCal *dcal, int x, int y)
      {
           if (dayCol < 0)
           {
-               /*DEBUG("Before the beginning of the first month.");*/
                return -1;
           }
      }
@@ -1485,8 +1473,6 @@ wheres_this(GncDenseCal *dcal, int x, int y)
           g_date_add_months(&ccd, (colNum+1) * dcal->monthsPerCol);
           if (g_date_get_julian(&d) >= g_date_get_julian(&ccd))
           {
-               /*DEBUG("%d outside of column range [%d]",
-                 g_date_get_julian(&d), g_date_get_julian(&ccd));*/
                return -1;
           }
      }
@@ -1498,7 +1484,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
      if (g_date_get_julian(&d) >= g_date_get_julian(&startD))
      {
           /* we're past the end of the displayed calendar, thus -1 */
-          DEBUG("%d >= %d", g_date_get_julian(&d), g_date_get_julian(&startD));
+          g_debug("%d >= %d", g_date_get_julian(&d), g_date_get_julian(&startD));
           return -1;
      }
 
@@ -1587,7 +1573,7 @@ static void
 gdc_model_added_cb(GncDenseCalModel *model, guint added_tag, gpointer user_data)
 {
      GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-     printf("gdc_model_added_cb update\n");
+     g_debug("gdc_model_added_cb update\n");
      gdc_add_tag_markings(cal, added_tag);
 } 
 
@@ -1595,7 +1581,7 @@ static void
 gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_data)
 {
      GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-     printf("gdc_model_update_cb update for tag [%d]\n", update_tag);
+     g_debug("gdc_model_update_cb update for tag [%d]\n", update_tag);
      gdc_mark_remove(cal, update_tag);
      gdc_add_tag_markings(cal, update_tag);
 }
@@ -1604,7 +1590,7 @@ static void
 gdc_model_removing_cb(GncDenseCalModel *model, guint remove_tag, gpointer user_data)
 {
      GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-     printf("gdc_model_removing_cb update [%d]\n", remove_tag);
+     g_debug("gdc_model_removing_cb update [%d]\n", remove_tag);
      gdc_mark_remove(cal, remove_tag);
 }
 
@@ -1644,7 +1630,7 @@ gdc_mark_add(GncDenseCal *dcal,
 
      if (size == 0)
      {
-          PERR("0 size not allowed\n");
+          g_error("0 size not allowed\n");
           return;
      }
 
@@ -1657,7 +1643,7 @@ gdc_mark_add(GncDenseCal *dcal,
           newMark->info = g_strdup(info);
      newMark->tag = tag;
      newMark->ourMarks = NULL;
-     printf("saving mark with tag [%d]\n", newMark->tag);
+     g_debug("saving mark with tag [%d]\n", newMark->tag);
 
      for (i=0; i<size; i++)
      {
@@ -1690,7 +1676,7 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove)
      /* Ignore non-realistic marks */
      if ((gint)mark_to_remove == -1)
      {
-          DEBUG("mark_to_remove = -1");
+          g_debug("mark_to_remove = -1");
           return;
      }
 
@@ -1703,12 +1689,12 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove)
      }
      if (iter == NULL)
      {
-          DEBUG("couldn't find tag [%d]", mark_to_remove);
+          g_warning("couldn't find tag [%d]", mark_to_remove);
           return;
      }
      if (mark_data == NULL)
      {
-          DEBUG("mark_data == null");
+          g_debug("mark_data == null");
           return;
      }
 

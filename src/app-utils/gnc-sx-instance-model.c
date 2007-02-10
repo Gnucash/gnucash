@@ -41,7 +41,10 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.app-util.sx"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 static GObjectClass *parent_class = NULL;
 
@@ -671,7 +674,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                }
                else if (instances->include_disabled)
                {
-                   PWARN("Could not remove instances that do not exist in the model");
+                    g_warning("could not remove instances that do not exist in the model");
                }
           }
           else if (event_type & GNC_EVENT_ITEM_ADDED)
@@ -685,7 +688,7 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
                     g_signal_emit_by_name(instances, "added", (gpointer)sx);
                }
           }
-          /* else { printf("unsupported event type [%d]\n", event_type); } */
+          /* else { g_critical("unsupported event type [%d]\n", event_type); } */
      }
 }
 
@@ -698,8 +701,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
      link = g_list_find_custom(model->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
      if (link == NULL)
      {
-          // @fixme: log/error
-          printf("couldn't find sx [%p]\n", sx);
+          g_critical("couldn't find sx [%p]\n", sx);
           return;
      }
 
@@ -766,8 +768,7 @@ gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXactio
      instance_link = g_list_find_custom(model->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx);
      if (instance_link == NULL)
      {
-          // @fixme: warn
-          // printf("instance not found!\n");
+          g_warning("instance not found!\n");
           return;
      }
 
@@ -918,7 +919,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
      txn_splits = xaccTransGetSplitList(new_txn);
      if ((template_splits == NULL) || (txn_splits == NULL))
      {
-          PERR("\tseen transaction w/o splits. :(");
+          g_critical("transaction w/o splits for sx [%s]",
+                     xaccSchedXactionGetName(creation_data->instance->parent->sx));
           xaccTransDestroy(new_txn);
           xaccTransCommitEdit(new_txn);
           return FALSE;
@@ -1041,7 +1043,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
      if (err_flag)
      {
-          PERR("Some error in new transaction creation...");
+          g_critical("new transaction creation sx [%s]",
+                     xaccSchedXactionGetName(creation_data->instance->parent->sx));
           xaccTransDestroy(new_txn);
           xaccTransCommitEdit(new_txn);
           return FALSE;
@@ -1318,9 +1321,9 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
 void
 gnc_sx_summary_print(GncSxSummary *summary)
 {
-     printf("num_instances: %d\n", summary->num_instances);
-     printf("num_to_create: %d\n", summary->num_to_create_instances);
-     printf("num_auto_create_instances: %d\n", summary->num_auto_create_instances);
-     printf("num_auto_create_no_notify_instances: %d\n", summary->num_auto_create_no_notify_instances);
-     printf("need dialog? %s\n", summary->need_dialog ? "true" : "false");
+     g_message("num_instances: %d", summary->num_instances);
+     g_message("num_to_create: %d", summary->num_to_create_instances);
+     g_message("num_auto_create_instances: %d", summary->num_auto_create_instances);
+     g_message("num_auto_create_no_notify_instances: %d", summary->num_auto_create_no_notify_instances);
+     g_message("need dialog? %s", summary->need_dialog ? "true" : "false");
 }

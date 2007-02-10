@@ -40,7 +40,8 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 
-// static QofLogModule log_module = GNC_MOD_GUI;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.gui.sx.slr"
 
 #define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
 
@@ -853,21 +854,21 @@ instance_state_changed_cb(GtkCellRendererText *cell,
      }
      if (i == SX_INSTANCE_STATE_CREATED)
      {
-          printf("unknown value [%s]\n", value);
+          g_warning("unknown value [%s]", value);
           return;
      }
      new_state = i;
 
      if (!gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(dialog->editing_model), &tree_iter, path))
      {
-          printf("unknown path [%s]\n", path);
+          g_warning("unknown path [%s]", path);
           return;
      }
 
      inst = gnc_sx_slr_model_get_instance(dialog->editing_model, &tree_iter);
      if (inst == NULL)
      {
-          printf("invalid path [%s]\n", path);
+          g_warning("invalid path [%s]", path);
           return;
      }
 
@@ -886,23 +887,23 @@ variable_value_changed_cb(GtkCellRendererText *cell,
      gnc_numeric parsed_num;
      char *endStr = NULL;
 
-     printf("variable to [%s] at path [%s]\n", value, path);
+     g_debug("variable to [%s] at path [%s]", value, path);
      if (!gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(dialog->editing_model), &tree_iter, path))
      {
-          printf("invalid path [%s]\n", path);
+          g_warning("invalid path [%s]", path);
           return;
      }
 
      if (!gnc_sx_slr_model_get_instance_and_variable(dialog->editing_model, &tree_iter, &inst, &var))
      {
-          printf("path [%s] doesn't correspond to a valid variable\n", path);
+          g_critical("path [%s] doesn't correspond to a valid variable", path);
           return;
      }
 
      if (!xaccParseAmount(value, TRUE, &parsed_num, &endStr)
          || gnc_numeric_check(parsed_num) != GNC_ERROR_OK)
      {
-          printf("@@fixme: better parse error handling\n");
+          g_critical("@@fixme: better parse error handling");
           // @fixme: set location (back) to "(need value)"
           return;
      }
@@ -1041,7 +1042,7 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
           {
                GList *unbound_variables;
                unbound_variables = gnc_sx_slr_model_check_variables(app_dialog->editing_model);
-               printf("%d variables unbound\n", g_list_length(unbound_variables));
+               g_message("%d variables unbound", g_list_length(unbound_variables));
                if (g_list_length(unbound_variables) > 0)
                {
                     // focus first variable
@@ -1081,8 +1082,7 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
           app_dialog->editing_model = NULL;
           break;
      default:
-          printf("unknown response id [%d]\n", response_id);
-          g_assert_not_reached();
+          g_error("unknown response id [%d]", response_id);
           break;
      }
 }

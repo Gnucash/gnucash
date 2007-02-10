@@ -57,7 +57,10 @@
 #include "dialog-sx-editor.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+static QofLogModule log_module = "gnc.gui.plugin-page";
+
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"
@@ -180,7 +183,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
      GncPluginPageSxListPrivate *priv;
      GncPluginPage *parent;
 
-     ENTER("page %p", plugin_page);
      priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
 
      /* Init parent declared variables */
@@ -203,9 +205,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
                                   gnc_plugin_page_sx_list_n_actions,
                                   plugin_page);
      /* gnc_plugin_init_short_names (action_group, toolbar_labels); */
-
-     LEAVE("page %p, priv %p, action group %p",
-           plugin_page, priv, action_group);
 }
 
 static void
@@ -213,8 +212,6 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
 {
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
-
-     ENTER("object %p", object);
 
      page = GNC_PLUGIN_PAGE_SX_LIST (object);
      g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
@@ -234,7 +231,6 @@ gnc_plugin_page_sx_list_dispose(GObject *object)
      priv->instances = NULL;
 
      G_OBJECT_CLASS (parent_class)->dispose(object);
-     LEAVE(" ");
 }
 
 static void
@@ -242,8 +238,6 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
 {
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
-
-     ENTER("object %p", object);
 
      page = GNC_PLUGIN_PAGE_SX_LIST (object);
      g_return_if_fail(GNC_IS_PLUGIN_PAGE_SX_LIST (page));
@@ -254,7 +248,6 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
      // data get freed somewhere else?
 
      G_OBJECT_CLASS (parent_class)->finalize (object);
-     LEAVE(" ");
 }
 
 /* Virtual Functions */
@@ -309,13 +302,10 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
 
-     ENTER("page %p", plugin_page);
      page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
      priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
-     if (priv->widget != NULL) {
-          LEAVE("widget = %p", priv->widget);
+     if (priv->widget != NULL)
           return priv->widget;
-     }
 
      priv->gxml = gnc_glade_xml_new("sched-xact.glade", "sx-list-vbox");
      priv->widget = glade_xml_get_widget(priv->gxml, "sx-list-vbox");
@@ -418,7 +408,6 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
      GncPluginPageSxList *page;
      GncPluginPageSxListPrivate *priv;
 
-     ENTER("page %p", plugin_page);
      page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
      priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
@@ -431,8 +420,6 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
           gnc_unregister_gui_component(priv->gnc_component_id);
           priv->gnc_component_id = 0;
      }
-
-     LEAVE("widget destroyed");
 }
 
 /**
@@ -455,9 +442,6 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
      g_return_if_fail(key_file != NULL);
      g_return_if_fail(group_name != NULL);
 
-     ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
-           group_name);
-
      page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
      priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
@@ -465,7 +449,6 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
      gnc_tree_view_account_save(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
                                 &priv->fd, key_file, group_name);
 #endif /* 0 */
-     LEAVE(" ");
 }
 
 /**
@@ -486,7 +469,6 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
      g_return_val_if_fail(key_file, NULL);
      g_return_val_if_fail(group_name, NULL);
-     ENTER("key_file %p, group_name %s", key_file, group_name);
 
      /* Create the new page. */
      page = GNC_PLUGIN_PAGE_SX_LIST(gnc_plugin_page_sx_list_new());
@@ -499,7 +481,6 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
      gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
                                    &priv->fd, key_file, group_name);
 #endif /* 0 */
-     LEAVE(" ");
      return GNC_PLUGIN_PAGE(page);
 }
 
@@ -554,7 +535,7 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
      selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
      if (g_list_length(selected_paths) == 0)
      {
-          PERR("no selection edit.");
+          g_warning("no selection edit.");
           return;
      }
 
@@ -604,7 +585,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
      selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
      if (g_list_length(selected_paths) == 0)
      {
-          PERR("no selection for delete.");
+          g_warning("no selection for delete.");
           return;
      }
 
@@ -613,7 +594,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
           GList *list;
           for (list = to_delete; list != NULL; list = list->next)
           {
-               DEBUG("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
+               g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
           }
      }
      g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);

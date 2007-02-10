@@ -21,11 +21,11 @@ TODO
 ----------
 
 - meta
-  - [x] move files around
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
   - [ ] move documentation into doxygen comments, here and in sources.
-  - [ ] printf -> logging
+  - [x] move files around
+  - [x] printf -> logging
 
 - core
   - [x] sx list -> qof collection

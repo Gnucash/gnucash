@@ -64,7 +64,10 @@
 #include <langinfo.h>
 #endif
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.gui.sx.editor"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 static gint _sx_engine_event_handler_id = -1;
 
@@ -480,25 +483,23 @@ check_credit_debit_balance( gpointer key,
         *unbalanced |= !(gnc_numeric_zero_p(
                                  gnc_numeric_sub_fixed( tcds->debitSum,
                                                         tcds->creditSum ) ));
-#if GNC_DEBUG
-
+        
         if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
                                                         tcds->creditSum ) ) ) {
-                DEBUG( "%.8x | true [%s - %s = %s]",
-                        (unsigned int)key,
-                        gnc_numeric_to_string( tcds->debitSum ),
-                        gnc_numeric_to_string( tcds->creditSum ),
-                        gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                     tcds->creditSum )) );
+             g_debug( "%.8x | true [%s - %s = %s]",
+                      (unsigned int)key,
+                      gnc_numeric_to_string( tcds->debitSum ),
+                      gnc_numeric_to_string( tcds->creditSum ),
+                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                   tcds->creditSum )) );
         } else {
-                DEBUG( "%.8x | false [%s - %s = %s]",
-                        (unsigned int)key,
-                        gnc_numeric_to_string( tcds->debitSum ),
-                        gnc_numeric_to_string( tcds->creditSum ),
-                        gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
-                                                                     tcds->creditSum )) );
+             g_debug( "%.8x | false [%s - %s = %s]",
+                      (unsigned int)key,
+                      gnc_numeric_to_string( tcds->debitSum ),
+                      gnc_numeric_to_string( tcds->creditSum ),
+                      gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                   tcds->creditSum )) );
         }
-#endif /* GNC_DEBUG */
 }
 
 /**
@@ -920,7 +921,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
                         g_date_clear( &gdate, 1 );
                         xaccSchedXactionSetEndDate( sxed->sx, &gdate );
                 } else {
-                        PERR( "No valid end specified\n" );
+                        g_critical("no valid end specified\n");
                 }
         }
 
@@ -975,7 +976,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
                 str = g_string_new( "" );
                 xaccFreqSpecGetFreqStr( fs, str );
-                DEBUG( "fs: %s", str->str );
+                g_debug("fs: %s", str->str);
 
                 /* now that we have it, set the start date */
                 xaccSchedXactionSetStartDate( sxed->sx, &gdate );
@@ -1008,8 +1009,8 @@ advance_toggle( GtkButton *o, GncSxEditorDialog *sxed )
         spinName = (gchar*)g_object_get_data( G_OBJECT(o), "whichOneAmI" );
         spin = glade_xml_get_widget( sxed->gxml, spinName );
         if ( !spin ) {
-                PERR( "Error getting widget with name \"%s\"", spinName );
-                return;
+             g_critical("Error getting widget with name \"%s\"", spinName);
+             return;
         }
         gtk_widget_set_sensitive( spin,
                                   gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) );
@@ -1151,7 +1152,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
                                              editor_component_sx_equality,
                                              sx );
         if ( dlgExists != NULL ) {
-                DEBUG( "dialog already exists; using that one." );
+                g_debug( "dialog already exists; using that one." );
                 sxed = (GncSxEditorDialog*)dlgExists->data;
                 gtk_window_present( GTK_WINDOW(sxed->dialog) );
                 g_list_free( dlgExists );
@@ -1477,7 +1478,7 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
                 set_endgroup_toggle_states( sxed, END_OCCUR );
                 break;
         default:
-                g_error( "Unknown id %d", id );
+                g_critical( "Unknown id %d", id );
                 break;
         }
 

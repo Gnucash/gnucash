@@ -25,6 +25,9 @@
 #include "gnc-sx-instance-dense-cal-adapter.h"
 #include "gnc-dense-cal.h"
 
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.gui.sx.adapter.sx-dense-cal"
+
 static void gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj);
 static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj);
 
@@ -81,7 +84,7 @@ static void
 gsidca_instances_added_cb(GncSxInstanceModel *model, SchedXaction *sx_added, gpointer user_data)
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
-     printf("instance added\n");
+     g_debug("instance added\n");
      if (xaccSchedXactionGetEnabled(sx_added)) 
      {
           g_signal_emit_by_name(adapter, "added", GPOINTER_TO_UINT(sx_added));
@@ -93,7 +96,7 @@ gsidca_instances_updated_cb(GncSxInstanceModel *model, SchedXaction *sx_updated,
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
      gnc_sx_instance_model_update_sx_instances(model, sx_updated);
-     printf("instances updated\n");
+     g_debug("instances updated\n");
      if (xaccSchedXactionGetEnabled(sx_updated)) 
      {
           g_signal_emit_by_name(adapter, "update", GPOINTER_TO_UINT((gpointer)sx_updated));
@@ -108,7 +111,7 @@ static void
 gsidca_instances_removing_cb(GncSxInstanceModel *model, SchedXaction *sx_to_be_removed, gpointer user_data)
 {
      GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(user_data);
-     printf("removing instance...\n");
+     g_debug("removing instance...\n");
      g_signal_emit_by_name(adapter, "removing", GPOINTER_TO_UINT(sx_to_be_removed));
      gnc_sx_instance_model_remove_sx_instances(model, sx_to_be_removed);
 }
