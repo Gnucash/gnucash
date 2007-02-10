@@ -81,6 +81,26 @@ void qof_log_set_file (FILE *outfile);
  **/
 void qof_log_init_filename (const gchar* logfilename);
 
+/**
+ * If {@param log_to_filename} is "stderr" or "stdout" (exactly,
+ * case-insensitive), then those special files are used; otherwise, the
+ * literal filename as given, as {@link qof_log_init_filename}.
+ **/
+void qof_log_init_filename_special(const char *log_to_filename);
+
+/** Parse a log-configuration file.  A GKeyFile-format file of the schema::
+ *
+ *      [levels] 
+ *      # log.ger.path=level
+ *      gnc.engine.sx=debug
+ *      gnc.gui.sx=debug
+ *      gnc.gui.freqspec=debug
+ *      [output]
+ *      # to=["stderr"|"stdout"|filename]
+ *      to=stderr
+ **/
+void qof_log_parse_log_config(const char *filename);
+
 /** Be nice, close the logfile if possible. */
 void qof_log_shutdown (void);
 

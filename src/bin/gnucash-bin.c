@@ -461,18 +461,7 @@ gnc_log_init()
 {
      if (log_to_filename != NULL)
      {
-          if (g_ascii_strcasecmp("stderr", log_to_filename) == 0)
-          {
-               qof_log_set_file(stderr);
-          }
-          else if (g_ascii_strcasecmp("stdout", log_to_filename) == 0)
-          {
-               qof_log_set_file(stdout);
-          }
-          else
-          {
-               qof_log_init_filename(log_to_filename);
-          }
+          qof_log_init_filename_special(log_to_filename);
      }
      else
      {
@@ -512,6 +501,14 @@ gnc_log_init()
                qof_log_set_level(logger_name, level);
                g_strfreev(parts);
           }
+     }
+
+     {
+          gchar *log_config_filename;
+          log_config_filename = gnc_build_dotgnucash_path("log.conf");
+          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
+               qof_log_parse_log_config(log_config_filename);
+          g_free(log_config_filename);
      }
  }
 

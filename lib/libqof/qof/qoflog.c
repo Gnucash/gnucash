@@ -39,6 +39,9 @@
 #include <string.h>
 #include <sys/time.h>
 
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "qof.log"
+
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
@@ -221,6 +224,92 @@ qof_log_prettify (const char *name)
   function_buffer = g_strdup(buffer);
   g_free(buffer);
   return function_buffer;
+}
+
+void
+qof_log_init_filename_special(const char *log_to_filename)
+{
+     if (g_ascii_strcasecmp("stderr", log_to_filename) == 0)
+     {
+          qof_log_set_file(stderr);
+     }
+     else if (g_ascii_strcasecmp("stdout", log_to_filename) == 0)
+     {
+          qof_log_set_file(stdout);
+     }
+     else
+     {
+          qof_log_init_filename(log_to_filename);
+     }
+}
+
+void
+qof_log_parse_log_config(const char *filename)
+{
+     const gchar *levels_group = "levels", *output_group = "output";
+     GError *err;
+     GKeyFile *conf = g_key_file_new();
+
+     if (!g_key_file_load_from_file(conf, filename, G_KEY_FILE_NONE, &err))
+     {
+          g_warning("unable to parse [%s]: %s", filename, err->message);
+          g_error_free(err);
+          return;
+     }
+
+     g_debug("parsing log config from [%s]", filename);
+     if (g_key_file_has_group(conf, levels_group))
+     {
+          int num_levels;
+          int key_idx;
+          gchar **levels;
+
+          levels = g_key_file_get_keys(conf, levels_group, &num_levels, NULL);
+
+          for (key_idx = 0; key_idx < num_levels && levels[key_idx] != NULL; key_idx++)
+          {
+               QofLogLevel level;
+               gchar *logger_name = NULL, *level_str = NULL;
+
+               logger_name = g_strdup(levels[key_idx]);
+               level_str = g_key_file_get_string(conf, levels_group, logger_name, NULL);
+               level = qof_log_level_from_string(level_str);
+
+               g_debug("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
+               qof_log_set_level(logger_name, level);
+
+               g_free(level_str);
+          }
+          g_strfreev(levels);
+     }
+
+     if (g_key_file_has_group(conf, levels_group))
+     {
+          int num_outputs;
+          int output_idx;
+          gchar **outputs;
+          
+          outputs = g_key_file_get_keys(conf, output_group, &num_outputs, NULL);
+          for (output_idx = 0; output_idx < num_outputs && outputs[output_idx] != NULL; output_idx++)
+          {
+               gchar *key = outputs[output_idx];
+               gchar *value;
+
+               if (g_ascii_strcasecmp("to", key) != 0)
+               {
+                    g_warning("unknown key [%s] in [outputs], skipping", key);
+                    continue;
+               }
+
+               value = g_key_file_get_string(conf, output_group, key, NULL);
+               g_debug("setting [output].to=[%s]", value);
+               qof_log_init_filename_special(value);
+               g_free(value);
+          }
+          g_strfreev(outputs);
+     }
+
+     g_key_file_free(conf);
 }
 
 gboolean
