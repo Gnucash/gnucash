@@ -260,7 +260,7 @@ qof_log_parse_log_config(const char *filename)
      g_debug("parsing log config from [%s]", filename);
      if (g_key_file_has_group(conf, levels_group))
      {
-          int num_levels;
+          gsize num_levels;
           int key_idx;
           gchar **levels;
 
@@ -285,7 +285,7 @@ qof_log_parse_log_config(const char *filename)
 
      if (g_key_file_has_group(conf, levels_group))
      {
-          int num_outputs;
+          gsize num_outputs;
           int output_idx;
           gchar **outputs;
           
