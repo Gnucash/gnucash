@@ -283,7 +283,7 @@ qof_log_parse_log_config(const char *filename)
           g_strfreev(levels);
      }
 
-     if (g_key_file_has_group(conf, levels_group))
+     if (g_key_file_has_group(conf, output_group))
      {
           gsize num_outputs;
           int output_idx;
