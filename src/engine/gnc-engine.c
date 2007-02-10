@@ -105,11 +105,11 @@ gnc_engine_init(int argc, char ** argv)
       }
       else
       {
-          g_message("failed to load %s from %s\n", lib->lib, pkglibdir);
+          g_warning("failed to load %s from %s\n", lib->lib, pkglibdir);
           /* If this is a required library, stop now! */
           if (lib->required)
           {
-              g_message("required library %s not found.\n", lib->lib);
+              g_critical("required library %s not found.\n", lib->lib);
           }
       }
   }
