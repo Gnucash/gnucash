@@ -862,15 +862,17 @@ function inst_gnucash() {
         make install
     qpopd
 
-    qpushd $_INSTALL_UDIR/lib/gnucash
-        # Move modules that are compiled without -module to lib/gnucash
-        mv ../bin/*.dll .
-
-        # In the installed .la files, remove the dependency_libs line and
-        # correct the 'dlname'. We do not use these files to dlopen the
-        # modules, so actually this is unneeded.
-        for A in *.la; do
+    qpushd $_INSTALL_UDIR/lib
+        # Move modules that are compiled without -module to lib/gnucash and
+        # correct the 'dlname' in the libtool archives. We do not use these
+        # files to dlopen the modules, so actually this is unneeded.
+        # Also, in all installed .la files, remove the dependency_libs line
+        mv bin/*.dll gnucash || true
+        for A in gnucash/*.la; do
             sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
+        done
+        for A in *.la; do
+            sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
     qpopd
 
