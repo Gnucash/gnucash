@@ -268,7 +268,7 @@ gnc_hook_run (const gchar *name, gpointer data)
 {
   GncHook *hook;
 
-  ENTER("list %s, data %p", name, data);
+  ENTER("list %s, data %p", (name == NULL ? "(null)" : name), data);
   hook = gnc_hook_lookup(name);
   if (!hook) {
     LEAVE("No such hook list");
