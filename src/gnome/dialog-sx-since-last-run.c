@@ -903,8 +903,19 @@ variable_value_changed_cb(GtkCellRendererText *cell,
      if (!xaccParseAmount(value, TRUE, &parsed_num, &endStr)
          || gnc_numeric_check(parsed_num) != GNC_ERROR_OK)
      {
-          g_critical("@@fixme: better parse error handling");
-          // @fixme: set location (back) to "(need value)"
+          gchar *value_copy = g_strdup(value);
+          g_debug("value=[%s] endStr[%s]", value, endStr);
+          if (strlen(g_strstrip(value_copy)) == 0)
+          {
+               gnc_numeric invalid_num = gnc_numeric_error(GNC_ERROR_ARG);
+               // @fixme? Change to gnc_sx_slr_model_clear_variable(...)?
+               gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &invalid_num);
+          }
+          else
+          {
+               g_warning("error parsing value [%s]", value);
+          }
+          g_free(value_copy);
           return;
      }
      gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &parsed_num);

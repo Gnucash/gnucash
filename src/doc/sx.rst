@@ -65,25 +65,25 @@ TODO
 - bugs
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
+  - [ ] sx-from-trans: "unknown get.type [3]" [dh20070120]_
+
+  - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+
 ! - [x] crash with two sx lists open and SX mutation
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
 
-  - [ ] sx-from-trans: "unknown get.type [3]" [dh20070120]_
-
-  - [ ] no way to clear a variable entry [ve20070209]_
-
-  - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+  - [x] no way to clear a variable entry [ve20070209]_
 
 .. _[dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
 .. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
 
 - sx list page
 ! - [ ] use gnc-tree-view?
-! - [x] save/restore state
 ! - [ ] save/restore size
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
+! - [x] save/restore state
 
 - sx editor
   - [ ] clean up source formatting
