@@ -66,13 +66,12 @@ static int is_development_version = FALSE;
 #endif
 
 /* Command-line option variables */
-static int gnucash_show_version;
-static const char *add_quotes_file;
-static int nofile;
-static const char *file_to_load;
-// static int loglevel;
-static gchar **log_flags;
-static gchar *log_to_filename;
+static int gnucash_show_version = 0;
+static const char *add_quotes_file = NULL;
+static int nofile = 0;
+static const char *file_to_load = NULL;
+static gchar **log_flags = NULL;
+static gchar *log_to_filename = NULL;
 
 static void
 gnc_print_unstable_message(void)
@@ -263,24 +262,33 @@ gnucash_command_line(int *argc, char **argv)
     context = g_option_context_new (" [datafile]");
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
-    g_option_context_parse (context, argc, &argv, &error);
+    if (!g_option_context_parse (context, argc, &argv, &error))
+    {
+         g_error("error parsing command line args: %s", error->message);
+    }
     g_option_context_free (context);
+    if (error)
+        g_error_free(error);
 
     if (*argc > 0)
       file_to_load = argv[1];
 
     if (gnucash_show_version) {
         if (is_development_version)
-	  /* Translators: %s is the version number */
-	  g_print(_("GnuCash %s development version"), VERSION);
-	else
-	  /* Translators: %s is the version number */
-	  g_print(_("GnuCash %s"), VERSION);
-	g_print("\n");
-	/* Translators: 1st %s is the build date; 2nd %s is the SVN
-	   revision number */
+        {
+             /* Translators: %s is the version number */
+             g_print(_("GnuCash %s development version"), VERSION);
+        }
+        else
+        {
+             /* Translators: %s is the version number */
+             g_print(_("GnuCash %s"), VERSION);
+        }
+        g_print("\n");
+        /* Translators: 1st %s is the build date; 2nd %s is the SVN
+           revision number */
         g_print(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
-	g_print("\n");
+        g_print("\n");
         exit(0);
     }
 
