@@ -131,12 +131,7 @@ qof_log_init_filename(const gchar* log_filename)
      if (log_table == NULL)
           log_table = g_hash_table_new(g_str_hash, g_str_equal);
 
-     // don't prevent multiple qof_log_init() calls to screw this up.
-     if (!log_filename && fout == NULL)
-     {
-          fout = stderr;
-     }
-     else
+     if (log_filename)
      {
           int fd;
           gchar *fname;
@@ -172,7 +167,7 @@ qof_log_shutdown (void)
 	if (fout && fout != stderr && fout != stdout)
     {
          fclose(fout);
-         fout == NULL;
+         fout = NULL;
     }
 
 	if (function_buffer)
