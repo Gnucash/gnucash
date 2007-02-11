@@ -374,8 +374,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 
 	gnc_accounts_dir = gnc_path_get_accountsdir ();
 	locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
- 	list = gnc_load_example_account_list (data->temporary,
-					      locale_dir);
+ 	list = gnc_load_example_account_list (locale_dir);
 	g_free (gnc_accounts_dir);
 	g_free (locale_dir);
 
@@ -455,7 +454,6 @@ on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
 
     /* Build the categories tree if necessary */
     gnc_suspend_gui_refresh ();
-    data->temporary = qof_book_new();
     account_categories_tree_view_prepare (data);
     gnc_resume_gui_refresh ();
   }
@@ -999,7 +997,6 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
         account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
 
         delete_our_account_tree (data);
-        qof_book_destroy(data->temporary);
 
         when_completed = data->when_completed;
 	g_free(data);
