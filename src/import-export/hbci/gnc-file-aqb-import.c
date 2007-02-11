@@ -111,7 +111,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
       /* Get API */
       ab = gnc_AB_BANKING_new_currentbook (NULL, &interactor);
       if (ab == NULL) {
-	printf("gnc_file_dtaus_import: Couldn't get HBCI API. Nothing will happen.\n");
+	g_message("gnc_file_dtaus_import: Couldn't get HBCI API. Nothing will happen.\n");
 	return;
       }
       g_assert (interactor);
@@ -140,9 +140,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
 	dbProfile=GWEN_DB_GetNextGroup(dbProfile);
       }
       if (!dbProfile) {
-	DEBUG("Profile \"%s\" for importer \"%s\" not found",
-	      profileName, importerName);
-	printf("Profile \"%s\" for importer \"%s\" not found\n",
+	g_warning("Profile \"%s\" for importer \"%s\" not found\n",
 	      profileName, importerName);
 	/* For debugging: Print those available names that have been found. */
 	dbProfile=GWEN_DB_GetFirstGroup(dbProfiles);
@@ -150,7 +148,7 @@ void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
 	  const char *name;
 	  name=GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
 	  g_assert(name);
-	  printf("Only found profile \"%s\"\n", name);
+	  g_warning("Only found profile \"%s\"\n", name);
 	  dbProfile=GWEN_DB_GetNextGroup(dbProfile);
 	}
 	return;

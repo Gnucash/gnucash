@@ -364,7 +364,7 @@ static int inputBoxCB(AB_BANKING *ab,
 
     if (newPin) {
       if (!hideInput)
-	printf("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
+	g_warning("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
       retval = gnc_hbci_get_initial_password (data->parent,
 					      title,
 					      text,
@@ -651,7 +651,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
   if (result<1 || result>3) {
-    printf("messageBoxCB: Bad result %d", result);
+    g_warning("messageBoxCB: Bad result %d", result);
     result = 0;
   }
   g_free(title);
@@ -816,7 +816,7 @@ on_button_clicked (GtkButton *button,
       /*GNCInteractor_hide (data);*/
     }
   } else {
-    printf("on_button_clicked: Oops, unknown button: %s\n",
+    g_critical("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
   }
   /* Let the widgets be redrawn */

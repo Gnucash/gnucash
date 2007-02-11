@@ -60,7 +60,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
   /* Get API */
   api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
-    printf("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
+    g_message("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
     return;
   }
   g_assert (interactor);
@@ -68,7 +68,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
-    printf("gnc_hbci_maketrans: No HBCI account found. Nothing will happen.\n");
+    g_warning("gnc_hbci_maketrans: No HBCI account found. Nothing will happen.\n");
     return;
   }
   /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
@@ -193,7 +193,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* If we wanted to do something here with the gnc txn, we could. */
     /*if (result >= 0) {
       Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
-      printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
+      g_message("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
       xaccTransGetDescription(gtrans));
       }*/
 

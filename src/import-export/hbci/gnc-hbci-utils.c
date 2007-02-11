@@ -122,7 +122,7 @@ AB_BANKING * gnc_AB_BANKING_new_currentbook (GtkWidget *parent,
     {
       int r = AB_Banking_Init(api);
       if (r != 0)
-	printf("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
+	g_critical("gnc_AB_BANKING_new: Warning: Error %d on AB_Banking_init\n", r);
     }
     
     gnc_hbci_inter = gnc_AB_BANKING_interactors (api, parent);
@@ -200,10 +200,10 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 
     if (!hbci_acc && bankcode && (strlen(bankcode)>0) &&
 	accountid && (strlen(accountid) > 0)) {
-      /* printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid); */
+      g_message("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid);
       hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
     }
-    /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
+    /* g_message("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc); */
     return hbci_acc;
   } else if (bankcode && (strlen(bankcode)>0) && accountid && (strlen(accountid) > 0)) {
     hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
@@ -217,7 +217,7 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 static void *
 print_list_int_cb (int value, void *user_data)
 {
-  printf("%d, ", value);
+  g_warning("%d, ", value);
   return NULL;
 }
 static void 
@@ -225,7 +225,7 @@ print_list_int (const list_int *list)
 {
   g_assert(list);
   list_int_foreach (list, &print_list_int_cb, NULL);
-  printf ("\n");
+  g_warning ("\n");
 }
 static void *
 get_resultcode_error_cb (int value, void *user_data)
@@ -250,28 +250,22 @@ get_resultcode_error (const list_int *list)
 int
 gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 {
-/*   list_int *list; */
-/*   const char *msg; */
   int cause = 0;
   AB_JOB_STATUS jobstatus;
   
   g_assert (job);
-/*   if (AB_JOB_status (job) != HBCI_JOB_STATUS_DONE) */
-/*     return; */
-/*   if (AB_JOB_result (job) != HBCI_JOB_RESULT_FAILED) */
-/*     return; */
 
   if (verbose) {
-    printf("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
+    g_warning("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
-    printf(", result: %s", AB_Job_GetResultText(job));
-    printf("\n");
+    g_warning(", result: %s", AB_Job_GetResultText(job));
+    g_warning("\n");
   }
 
   jobstatus = AB_Job_GetStatus (job);
   if (jobstatus == AB_Job_StatusError) {
     if (!verbose)
-      printf("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
+      g_warning("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
 	     AB_Job_Type2Char(AB_Job_GetType(job)),
 	     AB_Job_GetResultText(job));
     cause = 9000;
@@ -288,7 +282,7 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
     cause = get_resultcode_error (list);
 
     if (verbose) {
-      printf("OutboxJob resultcodes: ");
+      g_warning("OutboxJob resultcodes: ");
       print_list_int (list);
 
       switch (cause) {
@@ -307,11 +301,11 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
       default:
 	msg = "Unknown";
       }
-      printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
+      g_warning("Probable cause of error was: code %d, msg: %s\n", cause, msg);
     }
   } else {
     if (verbose)
-      printf("OutboxJob's resultCodes list has zero length.\n");
+      g_warning("OutboxJob's resultCodes list has zero length.\n");
   }
   list_int_delete (list);
 #endif
@@ -364,7 +358,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
   case AB_ERROR_FILE_NOT_FOUND:
-    /*     printf("gnc_hbci_Error_feedback: File not found error.\n"); */
+    /*     g_warning("gnc_hbci_Error_feedback: File not found error.\n"); */
     return FALSE;
   case AB_ERROR_NO_CARD:
     return gnc_verify_dialog (parent,
@@ -499,13 +493,6 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   if (job)
     resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
   if (!hbci_Error_isOk(err)) {
-/*     char *errstr =  */
-/*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
-/* 		      hbci_Error_message (err)); */
-/*     printf("%s\n", errstr); */
-/*     HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor  */
-/* 				      (AB_BANKING_Hbci (api)), errstr); */
-/*     g_free (errstr); */
     if (job) gnc_hbci_debug_outboxjob (job, TRUE);
     if (inter) GNCInteractor_show_nodelete (inter);
     return FALSE;
@@ -516,11 +503,10 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     return TRUE;
   }
   else {
-/*     printf("gnc_AB_BANKING_execute: Some message at executeQueue: %s", */
-/* 	   hbci_Error_message (err)); */
+    g_message("gnc_AB_BANKING_execute: Some error at executeQueue.");
     GNCInteractor_show_nodelete (inter);
     return TRUE; /* <- This used to be a FALSE but this was probably
-		  * as wrong as it could get. @§%$! */
+		  * as wrong as it could get. @%$! */
   }
 }
 
@@ -579,7 +565,7 @@ void multijob_cb (gpointer element, gpointer user_data)
 			AB_Transaction_GetRemoteAccountNumber (h_trans),
 			descr_name,
 			value);
-      printf ("%s", errortext);
+      g_warning ("%s", errortext);
       gnc_error_dialog (parent, "%s", errortext);
       g_free (errortext);
       g_free (descr_name);

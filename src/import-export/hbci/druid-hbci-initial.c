@@ -212,9 +212,9 @@ update_accountlist (HBCIInitialInfo *info)
 			      update_accountlist_acc_cb,
 			      info);
   else
-    printf("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
+    g_warning("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
 
-  /* printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
+  /* g_message("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
 
   if (path) {
     gtk_tree_selection_select_path(selection, path);
@@ -360,7 +360,7 @@ on_accountlist_changed (GtkTreeSelection *selection,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    /* printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+    /* g_message("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
 	   AB_Account_GetAccountNumber(hbci_acc),
 	   old_value); */
 
@@ -574,13 +574,13 @@ on_aqhbci_button (GtkButton *button,
       pid = fork();
       switch (pid) {
       case -1:
-	printf("Fork call failed. Cannot start AqBanking setup wizard.");
+	g_critical("Fork call failed. Cannot start AqBanking setup wizard.");
 	res = -1;
 	AB_Banking_Init (info->api);
 	break;
       case 0: /* child */
 	execl(wizard_path, wizard_path, NULL);
-	printf("Fork call failed. Cannot start AqBanking setup wizard.");
+	g_critical("Fork call failed. Cannot start AqBanking setup wizard.");
 	_exit(0);
       default: /* parent */
 	res = 0;
@@ -605,12 +605,12 @@ on_aqhbci_button (GtkButton *button,
       if ((res == 0) || (res == AB_ERROR_FOUND))
 	druid_enable_next_button(info);
       else {
-	printf("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
+	g_warning("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
 	druid_disable_next_button(info);
       }
     }
     else {
-      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
+      g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
 	(info->window,
 	 _("The external program \"AqBanking Setup Wizard\" failed "
@@ -620,7 +620,7 @@ on_aqhbci_button (GtkButton *button,
       druid_disable_next_button(info);
     }
   } else {
-    printf("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
+    g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
     gnc_error_dialog
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
