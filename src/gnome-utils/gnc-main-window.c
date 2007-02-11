@@ -2740,26 +2740,26 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	priv->action_group = gtk_action_group_new ("MainWindowActions");
 	gnc_gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
-				      gnc_menu_n_actions, window);
+                                  gnc_menu_n_actions, window);
 	gtk_action_group_add_toggle_actions (priv->action_group, 
-					     toggle_actions, n_toggle_actions, 
-					     window);
+                                         toggle_actions, n_toggle_actions, 
+                                         window);
 	gtk_action_group_add_radio_actions (priv->action_group,
-					    radio_entries, n_radio_entries,
-					    0,
-					    G_CALLBACK(gnc_main_window_cmd_window_raise),
-					    window);
+                                        radio_entries, n_radio_entries,
+                                        0,
+                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                        window);
 	gnc_plugin_update_actions(priv->action_group,
-				  initially_insensitive_actions,
-				  "sensitive", FALSE);
+                              initially_insensitive_actions,
+                              "sensitive", FALSE);
 	gnc_plugin_update_actions(priv->action_group,
-				  always_insensitive_actions,
-				  "sensitive", FALSE);
+                              always_insensitive_actions,
+                              "sensitive", FALSE);
 	gnc_plugin_update_actions(priv->action_group,
-				  always_hidden_actions,
-				  "visible", FALSE);
+                              always_hidden_actions,
+                              "visible", FALSE);
 	gnc_plugin_set_important_actions (priv->action_group,
-					  gnc_menu_important_actions);
+                                      gnc_menu_important_actions);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
@@ -2767,7 +2767,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	/* Use the "connect-proxy" signal for tooltip display in the
 	   status bar */
 	g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
-			  G_CALLBACK (connect_proxy), priv->statusbar);
+                      G_CALLBACK (connect_proxy), priv->statusbar);
 
 	filename = gnc_gnome_locate_ui_file("gnc-main-window-ui.xml");
 
@@ -2779,47 +2779,47 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_assert(merge_id || error);
 	if (merge_id) {
 	  gtk_window_add_accel_group (GTK_WINDOW (window),
-				      gtk_ui_manager_get_accel_group(window->ui_merge));
+                                  gtk_ui_manager_get_accel_group(window->ui_merge));
 	  gtk_ui_manager_ensure_update (window->ui_merge);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     filename, error->message);
+                 filename, error->message);
 	  g_error_free(error);
 	  g_assert(merge_id != 0);
 	}
 	g_free(filename);
 
 	gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
-				   gnc_main_window_gconf_changed,
-				   GNC_MAIN_WINDOW_NAME);
+                               gnc_main_window_gconf_changed,
+                               GNC_MAIN_WINDOW_NAME);
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-				   gnc_main_window_gconf_changed,
-				   GNC_MAIN_WINDOW_NAME);
+                               gnc_main_window_gconf_changed,
+                               GNC_MAIN_WINDOW_NAME);
 	gnc_main_window_update_toolbar(window);
 	gnc_main_window_update_tab_position(window);
 
 	gnc_main_window_init_menu_updaters(window);
 
-        /* Testing */
+    /* Testing */
 	/* Now update the "eXtensions" menu */
-	if (!gnc_is_debugging()) {
+	if (!gnc_is_extra_enabled()) {
 	  GtkAction*  action;
 
 	  action = gtk_action_group_get_action(priv->action_group, 
-                                               "ExtensionsAction");
+                                           "ExtensionsAction");
 	  gtk_action_set_visible(action, FALSE);
 	}
 
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();
 	plugins = gnc_plugin_manager_get_plugins (manager);
-        g_list_foreach (plugins, gnc_main_window_add_plugin, window);
-        g_list_free (plugins);
+    g_list_foreach (plugins, gnc_main_window_add_plugin, window);
+    g_list_free (plugins);
 
 	g_signal_connect (G_OBJECT (manager), "plugin-added",
-			  G_CALLBACK (gnc_main_window_plugin_added), window);
+                      G_CALLBACK (gnc_main_window_plugin_added), window);
 	g_signal_connect (G_OBJECT (manager), "plugin-removed",
-			  G_CALLBACK (gnc_main_window_plugin_removed), window);
+                      G_CALLBACK (gnc_main_window_plugin_removed), window);
 
 	LEAVE(" ");
 }

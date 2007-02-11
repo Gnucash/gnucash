@@ -195,7 +195,7 @@ static void
 gnucash_command_line(int *argc, char **argv)
 {
     char *p;
-    int debugging = 0;
+    int debugging = 0, extra = 0;
     char *namespace_regexp = NULL;
     GError *error = NULL;
     GOptionContext *context;
@@ -204,20 +204,22 @@ gnucash_command_line(int *argc, char **argv)
          _("Show GnuCash version"), NULL},
 
         {"debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-         _("Enable debugging mode"), NULL},
+         _("Enable debugging mode: increasing logging to provide deep detail."), NULL},
+
+        {"extra", '\0', 0, G_OPTION_ARG_NONE, &extra,
+         _("Enable extra/development/debugging features."), NULL},
 
         {"log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
          _("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
-         _("LOG")},
+         NULL},
 
         {"logto", '\0', 0, G_OPTION_ARG_STRING, &log_to_filename,
          _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."),
-         _("LOGTO")},
+         NULL},
 
 #if 0
         {"loglevel", '\0', 0, G_OPTION_ARG_INT, &loglevel,
-	 /* Translators: This is the command line option autohelp
-	    text; see popt(3) */
+	 /* Translators: This is the command line option autohelp text; see popt(3) */
         _("Set the logging level from 0 (least) to 6 (most)"), 
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
@@ -229,9 +231,9 @@ gnucash_command_line(int *argc, char **argv)
 
         {"config-path", '\0', 0, G_OPTION_ARG_STRING, &config_path,
          _("Set configuration path"),
-	 /* Translators: Argument description for autohelp; see
-	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-	 _("CONFIGPATH")},
+         /* Translators: Argument description for autohelp; see
+            http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+         _("CONFIGPATH")},
 
         {"share-path", '\0', 0, G_OPTION_ARG_STRING, &share_path,
          _("Set shared data file search path"),
@@ -268,10 +270,10 @@ gnucash_command_line(int *argc, char **argv)
     }
     g_option_context_free (context);
     if (error)
-        g_error_free(error);
+         g_error_free(error);
 
     if (*argc > 0)
-      file_to_load = argv[1];
+         file_to_load = argv[1];
 
     if (gnucash_show_version) {
         if (is_development_version)
@@ -292,7 +294,10 @@ gnucash_command_line(int *argc, char **argv)
         exit(0);
     }
 
+    gnc_set_extra(extra);
+
     gnc_set_debugging(debugging);
+
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
 }
@@ -448,8 +453,9 @@ inner_main (void *closure, int argc, char **argv)
         gnc_file_open_file(fn);
         g_free(fn);
     } 
-    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error) &&
-             !error) {
+    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error)
+             && !error)
+    {
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
@@ -485,6 +491,13 @@ gnc_log_init()
      qof_log_set_default(QOF_LOG_WARNING);
 
      gnc_log_default();
+
+     if (gnc_is_debugging())
+     {
+          qof_log_set_level("", QOF_LOG_INFO);
+          qof_log_set_level("qof", QOF_LOG_INFO);
+          qof_log_set_level("gnc", QOF_LOG_INFO);
+     }
 
      if (log_flags != NULL)
      {
