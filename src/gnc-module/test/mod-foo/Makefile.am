@@ -5,10 +5,10 @@ AM_CFLAGS=\
   ${GLIB_CFLAGS}
 
 PWD := $(shell pwd)
-checklibdir=${PWD}
-checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
+check_LTLIBRARIES=libfoo.la libgncmodfoo.la
 
 libfoo_la_SOURCES = foo.c
+libfoo_la_LDFLAGS = -rpath ${PWD}
 
 # Make swig-foo.c for dist. It is an automatic dependency
 # of gnc-mod-foo.c
@@ -17,7 +17,7 @@ noinst_HEADERS = \
   swig-foo.c
 
 libgncmodfoo_la_SOURCES = gnc-mod-foo.c
-
+libgncmodfoo_la_LDFLAGS = -rpath ${PWD}
 libgncmodfoo_la_LIBADD = \
   libfoo.la \
   $(GUILE_LIBS) \
@@ -34,7 +34,3 @@ endif
 
 BUILT_SOURCES = swig-foo.c
 MAINTAINERCLEANFILES = swig-foo.c
-
-# Keep automake from generating install targets for test libs
-install-checklibLTLIBRARIES:
-uninstall-checklibLTLIBRARIES:

@@ -135,12 +135,17 @@ ACLOCAL="$program"
   DIE=1
 }
 
+# On MacOS, libtoolize is installed as glibtoolize, so handle that here.
 (${LIBTOOLIZE} --version) < /dev/null > /dev/null 2>&1 || {
-  echo
-  echo "**Error**: You must have \`libtoolize' installed to compile GnuCash."
-  echo "Download the appropriate package for your distribution,"
-  echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
-  DIE=1
+  LIBTOOLIZE=glibtoolize
+  (${LIBTOOLIZE} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`libtoolize' installed to compile GnuCash."
+    echo "Could not find either \`libtoolize' or \'glibtoolize'."
+    echo "Download the appropriate package for your distribution,"
+    echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
+    DIE=1
+  }
 }
 
 (${AUTOMAKE} --version) < /dev/null > /dev/null 2>&1 || {

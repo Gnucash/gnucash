@@ -79,6 +79,9 @@ function add_to_env() {
     fi
 }
 
+function assert_one_dir() {
+    [ -d $@ ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
+}
 
 ### Local Variables: ***
 ### mode: shell-script ***

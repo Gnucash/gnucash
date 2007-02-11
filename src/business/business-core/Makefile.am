@@ -1,5 +1,4 @@
 SUBDIRS = . test file
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la
 
@@ -15,7 +14,7 @@ AM_CFLAGS = \
 libgncmod_business_core_la_SOURCES = \
   swig-business-core.c \
   gncBusGuile.c \
-  businessmod-core.c \
+  gncmod-business-core.c \
   gncAddress.c \
   gncBillTerm.c \
   gncBusiness.c \
@@ -56,8 +55,10 @@ noinst_HEADERS = \
   gncVendor.h \
   gncVendorP.h
 
+libgncmod_business_core_la_LDFLAGS = -avoid-version
+
 libgncmod_business_core_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \
@@ -97,3 +98,5 @@ endif
 noinst_DATA = .scm-links
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-business-core.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.core\"

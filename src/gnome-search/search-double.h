@@ -47,7 +47,7 @@ struct _GNCSearchDoubleClass {
   /* signals */
 };
 
-guint		gnc_search_double_get_type	(void);
+GType		gnc_search_double_get_type	(void);
 GNCSearchDouble	*gnc_search_double_new	(void);
 
 /* methods */

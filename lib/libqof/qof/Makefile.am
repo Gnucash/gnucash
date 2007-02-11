@@ -1,7 +1,7 @@
-lib_LTLIBRARIES = libgncqof.la
+lib_LTLIBRARIES = libgnc-qof.la
 
-libgncqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
-libgncqof_la_LIBADD= \
+libgnc_qof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgnc_qof_la_LIBADD= \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
@@ -10,7 +10,7 @@ AM_CFLAGS = \
   $(GLIB_CFLAGS) \
   -I$(top_srcdir)/lib/libc
 
-libgncqof_la_SOURCES =  \
+libgnc_qof_la_SOURCES =  \
    deprecated.c      \
    gnc-date.c        \
    gnc-numeric.c     \
@@ -94,3 +94,13 @@ qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 
 BUILT_SOURCES = qofla-dir.h
 CLEANFILES = $(BUILT_SOURCES)
+
+## For testing the qofmath128 routines
+# run "make check" (to build the test program) and then run test-qofmath
+check_PROGRAMS = test-qofmath
+test_qofmath_SOURCES=gnc-numeric.c
+test_qofmath_CPPFLAGS=$(libgnc_qof_la_CPPFLAGS) -DTEST_128_BIT_MULT
+test_qofmath_LDFLAGS=$(libgnc_qof_la_LDFLAGS)
+test_qofmath_LDADD=$(libgnc_qof_la_LIBADD)
+
+INCLUDES = -DG_LOG_DOMAIN=\"qof\"

@@ -41,10 +41,6 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtktogglebutton.h>
 
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 const struct {
 	char const *name;
 	GogAxisSet const axis_set;

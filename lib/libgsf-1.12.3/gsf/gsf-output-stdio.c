@@ -24,11 +24,7 @@
 #include <gsf/gsf-output-impl.h>
 #include <gsf/gsf-impl-utils.h>
 #include <gsf/gsf-utils.h>
-#ifdef HAVE_GLIB26
 #include <glib/gstdio.h>
-#else
-#include "glib24_26-compat.h"
-#endif // HAVE_GLIB26
 
 #include <stdio.h>
 #include <string.h>

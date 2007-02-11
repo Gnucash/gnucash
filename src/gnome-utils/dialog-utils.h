@@ -152,11 +152,4 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
 gint
 gnc_dialog_run(GtkDialog *dialog, const gchar *gconf_key);
 
-#ifndef HAVE_GTK26
-void
-gtk_message_dialog_format_secondary_text(GtkMessageDialog *dialog,
-					 const gchar *message_format,
-					 ...) G_GNUC_PRINTF (2, 3);
-#endif
-
 #endif

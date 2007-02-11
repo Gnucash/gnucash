@@ -54,7 +54,7 @@ struct _GNCSearchStringClass {
   /* signals */
 };
 
-guint		gnc_search_string_get_type	(void);
+GType		gnc_search_string_get_type	(void);
 GNCSearchString	*gnc_search_string_new	(void);
 
 /* methods */

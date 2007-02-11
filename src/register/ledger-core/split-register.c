@@ -1375,7 +1375,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        // FIXME: For that matter, how could an open pending
        // transaction ever not be the current trans?
        if (xaccTransIsOpen (pending_trans)) {
-           g_message("Impossible? commiting pending %p", pending_trans);
+           g_warning("Impossible? commiting pending %p", pending_trans);
            xaccTransCommitEdit (pending_trans);
        } else if (pending_trans) 
            g_assert_not_reached();

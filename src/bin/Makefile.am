@@ -22,11 +22,11 @@ gnucash_bin_SOURCES = gnucash-bin.c
 gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
 ${QOF_LIBS} \
 ${top_builddir}/src/engine/libgncmod-engine.la \
-${top_builddir}/src/gnome/libgncgnome.la \
+${top_builddir}/src/gnome/libgnc-gnome.la \
 ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
 ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-${top_builddir}/src/core-utils/libcore-utils.la \
-${top_builddir}/src/gnc-module/libgncmodule.la
+${top_builddir}/src/core-utils/libgnc-core-utils.la \
+${top_builddir}/src/gnc-module/libgnc-module.la
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
@@ -36,8 +36,7 @@ gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
             -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g' \
-	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g'
+	    -e 's#@-PATH_SEPARATOR-@#${PATH_SEPARATOR}#g'
 	mv $@.tmp $@
 	chmod u+x $@
 
@@ -49,7 +48,6 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
             -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g' \
 	    -e "s#@-TOP_SRC_DIR-@#`pwd`/${top_srcdir}#g"
 	mv $@.tmp $@
 	chmod u+x $@
@@ -98,3 +96,5 @@ update-gnucash-gconf: update-gnucash-gconf.in \
 	    -e 's#@-GCONF_SCHEMA_FILE_DIR-@#${GCONF_SCHEMA_FILE_DIR}#g'
 	mv $@.tmp $@
 	chmod +x $@
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.bin\"

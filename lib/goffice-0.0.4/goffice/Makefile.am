@@ -26,16 +26,10 @@ CLEANFILES = $(BUILT_SOURCES)
 libgoffice_1_la_SOURCES = 	\
 	goffice.c		\
 	goffice-priv.h
-if !HAVE_GLIB26
-  libgoffice_1_la_SOURCES += glib24_26-compat.c
-endif
 
 libgoffice_1_ladir = $(goffice_include_dir)
 noinst_HEADERS = 	\
 	goffice.h
-if !HAVE_GLIB26
-  noinst_HEADERS += glib24_26-compat.h
-endif
 
 # Depends on this Makefile, because it uses make variables.
 goffice-paths.h: Makefile

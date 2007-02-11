@@ -103,7 +103,7 @@
 #include "deprecated.h"
 
 /** allow easy logging of QSF debug messages */
-#define QOF_MOD_QSF "gncqof-backend-qsf"
+#define QOF_MOD_QSF "qof.backend.qsf"
 /** allow easy loading of the QSF backend */
 #define QSF_BACKEND_LIB "gncqof-backend-qsf"
 

@@ -60,7 +60,7 @@ main(int argc, char **argv)
 {
     parse_file("test-dom-parser1-1.xml", get_parser1_1_parser1());
     parse_file("test-dom-parser1-1.xml", get_parser1_1_parser2());
-    exit(0);
+    exit(get_rv());
 }
 
 static void

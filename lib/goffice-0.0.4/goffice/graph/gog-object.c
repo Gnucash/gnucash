@@ -39,10 +39,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkwidget.h>
 
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 GogEditor *
 gog_editor_new (void)
 {

@@ -39,7 +39,10 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.engine.sx"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 /* Local Prototypes *****/
 
@@ -58,6 +61,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    g_date_clear( &sx->start_date, 1 );
    g_date_clear( &sx->end_date, 1 );
 
+   sx->enabled = 1;
    sx->num_occurances_total = 0;
    sx->autoCreateOption = FALSE;
    sx->autoCreateNotify = FALSE;
@@ -187,16 +191,21 @@ gnc_sx_begin_edit (SchedXaction *sx)
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
-  PERR ("Failed to commit: %d", errcode);
+     g_critical("Failed to commit: %d", errcode);
 }
 
-static void noop (QofInstance *inst) {}
+static void commit_done(QofInstance *inst)
+{
+  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+}
+
+static void noop(QofInstance *inst) {}
 
 void
 gnc_sx_commit_edit (SchedXaction *sx)
 {
   if (!qof_commit_edit (QOF_INSTANCE(sx))) return;
-  qof_commit_edit_part2 (&sx->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&sx->inst, commit_err, commit_done, noop);
 }
 
 /* ============================================================ */
@@ -368,13 +377,30 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
   gnc_sx_commit_edit(sx);
 }
 
+gboolean
+xaccSchedXactionGetEnabled( SchedXaction *sx )
+{
+    return sx->enabled;
+}
+
+void
+xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled)
+{
+  gnc_sx_begin_edit(sx);
+  sx->enabled = newEnabled;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
+}
+
 void
 xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
-  *outAutoCreate = sx->autoCreateOption;
-  *outNotify     = sx->autoCreateNotify;
+  if (outAutoCreate != NULL)
+    *outAutoCreate = sx->autoCreateOption;
+  if (outNotify != NULL)
+    *outNotify     = sx->autoCreateNotify;
   return;
 }
 
@@ -466,14 +492,14 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
    if ( xaccSchedXactionHasEndDate( sx ) ) {
       GDate *end_date = xaccSchedXactionGetEndDate( sx );
       if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-         PINFO( "next_occur past end date" );
+         g_debug("next_occur past end date");
          g_date_clear( &next_occur, 1 );
       }
    } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
       if ( stateData ) {
          temporalStateData *tsd = (temporalStateData*)stateData;
          if ( tsd->num_occur_rem == 0 ) {
-            PINFO( "no more occurances remain" );
+            g_debug("no more occurances remain");
             g_date_clear( &next_occur, 1 );
          }
       } else {

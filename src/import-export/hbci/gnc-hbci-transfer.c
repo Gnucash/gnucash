@@ -137,7 +137,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		 "of the job. It is not possible to execute this job. \n"
 		 "\n"
 		 "Most probable the bank does not support your chosen "
-		 "job or your HBCI account does not have the permission "
+		 "job or your Online Banking account does not have the permission "
 		 "to execute this job. More error messages might be "
 		 "visible on your console log.\n"
 		 "\n"
@@ -247,12 +247,12 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
   
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Direct Debit Note"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Direct Debit Note"));
   case SINGLE_INTERNAL_TRANSFER:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Bank-Internal Transfer"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Bank-Internal Transfer"));
   case SINGLE_TRANSFER:
   default:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Transaction"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Transaction"));
   }
       
   /* Amount */

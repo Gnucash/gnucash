@@ -1196,10 +1196,13 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <glib.h>
 #include <math.h>
+#ifdef G_OS_WIN32
+#include <pow.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
-#include <glib.h>
 
 #define FIN_STATICS
 #include "finvar.h"

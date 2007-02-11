@@ -15,7 +15,6 @@ everything you need to build gnucash.
 	libgnomeui-devel
 	libgsf-devel
 	libjpeg-devel
-	libtool-ltdl-devel
 	openssl-devel
 
 If you are compiling with the --enable-ofx or --enable-hbci flags,

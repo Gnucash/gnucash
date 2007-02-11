@@ -39,12 +39,14 @@ noinst_HEADERS = \
   import-utilities.h \
   gnc-import-format-gnome.h
 
+libgncmod_generic_import_la_LDFLAGS = -avoid-version
+
 libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
@@ -75,3 +77,5 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   $(glade_DATA) \
   generic-import-design.txt
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.i-e\"

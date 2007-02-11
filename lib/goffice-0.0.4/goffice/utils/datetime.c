@@ -14,10 +14,6 @@
 
 #include <math.h>
 
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 #define SECS_PER_DAY (24 * 60 * 60)
 #define HALF_SEC (0.5 / SECS_PER_DAY)
 

@@ -722,7 +722,7 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Invoices to XML"), NULL, 
-			"/tmp/qsf-invoices.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -757,7 +757,7 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Customers to XML"), NULL, 
-			"/tmp/qsf-customers.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -789,7 +789,7 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Vendors to XML"), NULL, 
-			"/tmp/qsf-vendors.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
@@ -821,7 +821,7 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 	chart_session = qof_session_new();
 	success = FALSE;
 	filename = gnc_file_dialog(_("Export Employees to XML"), NULL, 
-			"/tmp/qsf-employee.xml", GNC_FILE_DIALOG_EXPORT);
+			NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		qof_session_begin(chart_session, filename, TRUE, TRUE);

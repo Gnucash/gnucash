@@ -5,11 +5,11 @@ pkglib_LTLIBRARIES = libgncmod-utility-reports.la
 libgncmod_utility_reports_la_SOURCES = \
   gncmod-utility-reports.c 
 libgncmod_utility_reports_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-libgncmod_utility_reports_la_LDFLAGS = -module
+libgncmod_utility_reports_la_LDFLAGS = -module -avoid-version
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -52,3 +52,5 @@ EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.util\"

@@ -4,7 +4,7 @@
 #   gnc-svnversion <srcdir>
 #
 # Prints the revision number to stdout and exits 0 on success
-# exits with errorcode 1 if we're not in an svn or svk checkout
+# exits with errorcode 1 if we're not in an svn, svk or git checkout
 #
 # Written By:  Derek Atkins <derek@ihtfp.com>
 #
@@ -40,8 +40,21 @@ then
   exit $?
 fi
 
-# If we get here then this is NOT an svn checkout.  Maybe it's
-# SVK?  First, check if we've got 'svk' in the path.  If not,
+# If we get here then this is NOT an svn checkout.
+
+# Maybe it's git?
+if test -d "${real_srcdir}"/.git
+then
+  githead=`git --git-dir "${real_srcdir}"/.git rev-parse HEAD 2>/dev/null`
+  if test $? = 0 ; then
+    echo $githead
+    exit 0
+  else
+    exit 1
+  fi
+fi
+
+# Maybe it's SVK?  First, check if we've got 'svk' in the path.  If not,
 # then exit with an error code of 1..
 which svk >/dev/null 2>&1
 if test $? != 0 ; then exit 1 ; fi

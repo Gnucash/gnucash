@@ -177,13 +177,13 @@ TESTS = \
   test-xml2-is-file
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/core-utils \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
-  --gnc-module-dir ${top_srcdir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/backend/file \
+  --guile-load-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --gnc-module-dir ${top_srcdir}/src/engine
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/backend/file
 
 TESTS_ENVIRONMENT := \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
@@ -191,13 +191,13 @@ TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_LTLIBRARIES = libgnc-test-file-stuff.la
+check_LTLIBRARIES = libgnc-test-file-stuff.la
 
 libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
 libgnc_test_file_stuff_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-date-converting \
   test-dom-converters1 \
   test-kvp-frames \
@@ -215,10 +215,10 @@ noinst_PROGRAMS = \
 noinst_HEADERS = test-file-stuff.h
 
 LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
-        ${top_builddir}/src/gnc-module/libgncmodule.la \
+        ${top_builddir}/src/gnc-module/libgnc-module.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-        ${top_builddir}/src/core-utils/libcore-utils.la \
+        ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
         ${QOF_LIBS} \
@@ -244,3 +244,5 @@ EXTRA_DIST = \
   test-dom-parser1.c \
   test-real-data.sh \
   test-xml2-is-file.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.file\"

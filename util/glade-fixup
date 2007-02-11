@@ -15,12 +15,25 @@ else
 fi
 
 find ${SEARCHDIRS} -name \*.glade | xargs \
-  sed -i -e '/name="focus_on_map"/d' \
-         -e '/name="ellipsize"/d' \
-         -e '/name="width_chars"/d' \
-         -e '/name="single_line_mode"/d' \
-         -e '/name="urgency_hint"/d' \
-         -e '/name="hover_expand"/d' \
-         -e '/name="hover_selection"/d' \
-         -e '/name="add_tearoffs"/d' \
-         -e '/name="angle"/d'
+  sed -i -e '/name="urgency_hint"/d' \
+         -e '/name="pack_direction"/d' \
+         -e '/name="child_pack_direction"/d'
+
+# GTK 2.6 (now allowed)
+#	add_tearoffs
+#	angle
+#	ellipsize
+#	focus_on_map
+#	hover_expand
+#	hover_selection
+#	single_line_mode
+#	width_chars
+#
+# GTK 2.8
+#	child_pack_direction
+#	pack_direction
+#	urgency_hint
+#
+# GTK 2.10
+#	(none)
+#

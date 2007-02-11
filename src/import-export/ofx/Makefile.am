@@ -11,13 +11,15 @@ noinst_HEADERS = \
   gnc-ofx-import.h \
   gnc-plugin-ofx.h
 
+libgncmod_ofx_la_LDFLAGS = -avoid-version
+
 libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${LIBOFX_LIBS}
@@ -44,3 +46,5 @@ ui_DATA = \
 	gnc-plugin-ofx-ui.xml
 
 EXTRA_DIST = $(ui_DATA)
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.ofx\"

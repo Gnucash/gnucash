@@ -39,6 +39,7 @@ if ($( != 0) {
 }
 
 CPAN::Shell->install('LWP');
+CPAN::Shell->install('Date::Manip');
 CPAN::Shell->install('HTML::Parser');
 CPAN::Shell->install('HTML::TableExtract');
 CPAN::Shell->install('Crypt::SSLeay');

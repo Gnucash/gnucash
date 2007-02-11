@@ -182,19 +182,12 @@ static gboolean
 make_absolute (PangoAttribute *attr, gpointer user_data)
 {
 	DrawTextContext *draw_context = user_data;
-#if HAVE_PANGO18
 	if (attr->klass->type == PANGO_ATTR_SIZE &&
 	    ! ((PangoAttrSize *) attr)->absolute) {
 		PangoAttrSize *size_attr = (PangoAttrSize *) attr;
 		size_attr->size = GO_PT_TO_UN ((long long) size_attr->size) / draw_context->renderer->priv->y_units_per_pixel;
 		size_attr->absolute = TRUE;
 	}
-#else
-	if (attr->klass->type == PANGO_ATTR_SIZE) {
-		PangoAttrInt *size_attr = (PangoAttrInt *) attr;
-		size_attr->value = GO_PT_TO_UN ((long long) size_attr->value) / draw_context->renderer->priv->y_units_per_pixel;
-	}
-#endif // HAVE_PANGO18
 	return FALSE;
 }
 

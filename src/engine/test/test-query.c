@@ -109,5 +109,5 @@ main (int argc, char **argv)
 
  cleanup:
   qof_close();
-  return 0;
+  return get_rv();
 }

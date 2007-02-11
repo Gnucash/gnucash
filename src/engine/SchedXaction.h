@@ -42,6 +42,9 @@
 #include "FreqSpec.h"
 #include "gnc-engine.h"
 
+#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
+#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
+
 /**
  * The SchedXaction data.
 */
@@ -121,6 +124,9 @@ void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 GList *xaccSchedXactionGetSplits( SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
+gboolean xaccSchedXactionGetEnabled( SchedXaction *sx );
+void xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled );
+
 void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                     gboolean *outAutoCreate,
                                     gboolean *outNotify );
@@ -196,7 +202,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 
  This is a date-sorted state-data instance list.
  The list should not be modified by the caller; use the
- gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
+ gnc_sx_{add,remove}_defer_instance() functions to modify the list.
 */
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 

@@ -126,8 +126,8 @@ gnc_tree_view_price_finalize (GObject *object)
   GncTreeViewPricePrivate *priv;
 
   ENTER("view %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
+  gnc_leave_return_if_fail (object != NULL);
+  gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
   view = GNC_TREE_VIEW_PRICE (object);
   priv = GNC_TREE_VIEW_PRICE_GET_PRIVATE (view);
@@ -143,8 +143,8 @@ gnc_tree_view_price_destroy (GtkObject *object)
   GncTreeViewPrice *view;
 
   ENTER("view %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
+  gnc_leave_return_if_fail (object != NULL);
+  gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
   view = GNC_TREE_VIEW_PRICE (object);
 

@@ -384,7 +384,10 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 	page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 	if (priv->widget != NULL)
+    {
+        LEAVE("");
 		return priv->widget;
+    }
 
 	priv->widget = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (priv->widget);
@@ -407,6 +410,7 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 				     gnc_plugin_page_invoice_refresh_cb,
 				     NULL, page);
 
+    LEAVE("");
 	return priv->widget;
 }
 
@@ -421,7 +425,10 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
 	if (priv->widget == NULL)
+    {
+        LEAVE("");
 		return;
+    }
 
 	if (priv->component_manager_id) {
 	  gnc_unregister_gui_component(priv->component_manager_id);
@@ -431,6 +438,7 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 	gtk_widget_hide(priv->widget);
 	gnc_invoice_window_destroy_cb(priv->widget, priv->iw);
 	priv->widget = NULL;
+    LEAVE("");
 }
 
 /** Save enough information about this invoice page that it can be
@@ -460,7 +468,7 @@ gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page,
 	invoice = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice);
 
-        gnc_invoice_save_page(priv->iw, key_file, group_name);
+    gnc_invoice_save_page(priv->iw, key_file, group_name);
 	LEAVE(" ");
 }
 
@@ -487,7 +495,7 @@ gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
 	ENTER("key_file %p, group_name %s", key_file, group_name);
 
 	/* Create the new page. */
-        page = gnc_invoice_recreate_page(key_file, group_name);
+    page = gnc_invoice_recreate_page(key_file, group_name);
 
 	LEAVE(" ");
 	return page;
@@ -645,12 +653,15 @@ gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
   invoice_sort_type_t value;
 
   ENTER("(action %p, radio action %p, plugin_page %p)",
-	action, current, plugin_page);
+        action, current, plugin_page);
+  LEAVE("g_return testing...");
 
   g_return_if_fail(GTK_IS_ACTION(action));
   g_return_if_fail(GTK_IS_RADIO_ACTION(current));
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
+  ENTER("...passed (action %p, radio action %p, plugin_page %p)",
+        action, current, plugin_page);
   priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
   value = gtk_radio_action_get_current_value(current);
   gnc_invoice_window_sort (priv->iw, value);

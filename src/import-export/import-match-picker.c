@@ -287,6 +287,17 @@ match_transaction_changed_cb (GtkTreeSelection *selection,
 }
 
 static void
+match_transaction_row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+				    GtkTreeViewColumn *column,
+				    GNCImportMatchPicker *matcher)
+{
+  g_return_if_fail (matcher && matcher->transaction_matcher);
+
+  gtk_dialog_response (GTK_DIALOG (matcher->transaction_matcher),
+		       GTK_RESPONSE_OK);
+}
+
+static void
 add_column(GtkTreeView *view, const gchar *title, int col_num)
 {
   GtkCellRenderer *renderer;
@@ -367,6 +378,8 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
   selection = gtk_tree_view_get_selection(view);
   g_signal_connect(selection, "changed",
 		   G_CALLBACK(match_transaction_changed_cb), matcher);
+  g_signal_connect(view, "row-activated",
+		   G_CALLBACK(match_transaction_row_activated_cb), matcher);
 }
 
 /********************************************************************\

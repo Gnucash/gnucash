@@ -37,7 +37,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -97,7 +97,7 @@ gnc_key_file_save_to_file (const gchar *filename,
 
   contents = g_key_file_to_data(key_file, NULL, NULL);
   length = strlen(contents);
-  fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+  fd = g_open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
   if (fd == -1) {
     if (error) {
       *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 

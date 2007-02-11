@@ -36,9 +36,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 

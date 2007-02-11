@@ -5,10 +5,10 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 PWD := $(shell pwd)
-checklibdir=${PWD}
-checklib_LTLIBRARIES = libbar.la libgncmodbar.la
+check_LTLIBRARIES = libbar.la libgncmodbar.la
 
 libbar_la_SOURCES = bar.c
+libbar_la_LDFLAGS = -rpath ${PWD}
 
 # Make swig-bar.c for dist. It is an automatic dependency
 # of gnc-mod-bar.c
@@ -17,7 +17,7 @@ noinst_HEADERS = \
   swig-bar.c
 
 libgncmodbar_la_SOURCES=gnc-mod-bar.c
-
+libgncmodbar_la_LDFLAGS=-rpath ${PWD}
 libgncmodbar_la_LIBADD=libbar.la \
   $(GUILE_LIBS) \
   $(GLIB_LIBS)
@@ -33,7 +33,3 @@ EXTRA_DIST = \
 
 BUILT_SOURCES = swig-bar.c
 MAINTAINERCLEANFILES = swig-bar.c
-
-# Keep automake from generating install targets for test libs
-install-checklibLTLIBRARIES:
-uninstall-checklibLTLIBRARIES:

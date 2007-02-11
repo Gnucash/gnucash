@@ -5,7 +5,7 @@ exec guile -s "$0"
 (debug-enable 'debug)
 (debug-enable 'backtrace)
 
-(debug-set! stack 5000000)
+(debug-set! stack 500000)
 (debug-set! maxdepth 10000)
 
 (display "  testing report module load ... ")

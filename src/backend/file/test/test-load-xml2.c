@@ -28,7 +28,6 @@
 
 #include "config.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -36,6 +35,7 @@
 #include <string.h>
 #include <glib.h>
 #include <glib-object.h>
+#include <glib/gstdio.h>
 
 #include "cashobjects.h"
 #include "TransLog.h"
@@ -47,7 +47,7 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 static void
 remove_files_pattern(const char *begining, const char *ending)
@@ -62,9 +62,9 @@ remove_locks(const char *filename)
     
     {
         to_remove = g_strdup_printf("%s.LCK", filename);
-        if(stat(to_remove, &buf) != -1)
+        if(g_stat(to_remove, &buf) != -1)
         {
-            unlink(to_remove);
+            g_unlink(to_remove);
         }
         g_free(to_remove);
     }
@@ -84,7 +84,7 @@ test_load_file(const char *filename)
 
     remove_locks(filename);
 
-    ignore_lock = (safe_strcmp(getenv("SRCDIR"), ".") != 0);
+    ignore_lock = (safe_strcmp(g_getenv("SRCDIR"), ".") != 0);
     qof_session_begin(session, filename, ignore_lock, FALSE);
 
     qof_session_load(session, NULL);
@@ -105,8 +105,8 @@ test_load_file(const char *filename)
 int
 main (int argc, char ** argv)
 {
-    const char *location = getenv("GNC_TEST_FILES");
-    DIR *xml2_dir;
+    const char *location = g_getenv("GNC_TEST_FILES");
+    GDir *xml2_dir;
 
     g_type_init();
     qof_init();
@@ -121,40 +121,31 @@ main (int argc, char ** argv)
 
     xaccLogDisable();
     
-    if((xml2_dir = opendir(location)) == NULL)
+    if((xml2_dir = g_dir_open(location, 0, NULL)) == NULL)
     {
         failure("unable to open xml2 directory");
     }
     else
     {
-        struct dirent *entry;
+        const gchar *entry;
 
-        while((entry = readdir(xml2_dir)) != NULL)
+        while((entry = g_dir_read_name(xml2_dir)) != NULL)
         {
-            if(strstr(entry->d_name, ".gml2") != NULL)
+            if(g_str_has_suffix(entry, ".gml2"))
             {
-                struct stat file_info;
-                char *to_open = g_strdup_printf("%s/%s", location,
-                                                entry->d_name);
-                if(stat(to_open, &file_info) != 0)
+                gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
+                if(!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
-                    failure("unable to stat file");
-                }
-                else
-                {
-                    if(!S_ISDIR(file_info.st_mode))
-                    {
-                        test_load_file(to_open);
-                    }
+                    test_load_file(to_open);
                 }
                 g_free(to_open);
             }
         }
     }
 
-    closedir(xml2_dir);
+    g_dir_close(xml2_dir);
 
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

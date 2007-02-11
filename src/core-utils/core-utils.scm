@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash core-utils))
-(load-extension "libcore-utils" "scm_init_sw_core_utils_module")
+(load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")
 (use-modules (sw_core_utils))
 
 (re-export gnc-is-debugging)

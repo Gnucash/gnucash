@@ -23,7 +23,7 @@
 //#include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -175,7 +175,7 @@ int main (int argc, char **argv) {
 	  printf("usage:\n\tcsv2glist fname.csv\n");
      }
 
-     fp = fopen (argv[1], "r");
+     fp = g_fopen (argv[1], "r");
      if (fp == NULL) return 1;
 
      parsed_csv = gnc_csv_parse(fp);

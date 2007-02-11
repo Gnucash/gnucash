@@ -215,6 +215,7 @@ test_kvp_xml_stuff(void)
 int
 main(int argc, char** argv)
 {
+    qof_init();
     test_kvp_create_delete();
     test_kvp_printing();
     test_kvp_frames1();

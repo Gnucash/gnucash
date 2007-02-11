@@ -889,7 +889,7 @@ gnc_file_export_file(const char * newfile)
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
   new_session = qof_session_new ();
-  qof_session_begin (new_session, newfile, FALSE, FALSE);
+  qof_session_begin (new_session, newfile, FALSE, TRUE);
 
   io_err = qof_session_get_error (new_session);
 

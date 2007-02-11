@@ -33,6 +33,8 @@
 #include <stdlib.h> 
 #include <math.h>
 
+#include <errno.h>
+
 #include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
@@ -655,22 +657,41 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       
       /* Check number heuristics */  
       if(strlen(xaccTransGetNum(new_trans))!=0)
-	{     
-	  if((strcmp(xaccTransGetNum (new_trans),
-		     xaccTransGetNum(xaccSplitGetParent(split)))
-	      ==0))
-	    {	
-	      /*An exact match of the Check number gives a +4 */
-	      prob = prob+4;
-	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
-	    }
-	  else if(strlen(xaccTransGetNum(new_trans)) > 0 &&
-		  strlen(xaccTransGetNum(xaccSplitGetParent(split))) > 0)
-	    {
-	      /* If both number are not empty yet do not match, add a little extre penality */
-	      prob = prob-2;
-	    }
-	}
+        { 
+          long new_trans_number, split_number;
+          const gchar *new_trans_str, *split_str;
+          char *endptr;
+          gboolean conversion_ok = TRUE;
+          
+          new_trans_str = xaccTransGetNum (new_trans);
+          /* To distinguish success/failure after strtol call */
+          errno = 0;
+          new_trans_number = strtol(new_trans_str, &endptr, 10);
+          /* Possible addressed problems: over/underflow, only non
+	     numbers on string and string empty */
+          if (errno || endptr == new_trans_str) 
+	    conversion_ok = FALSE;
+            
+          split_str = xaccTransGetNum (xaccSplitGetParent (split));
+          errno = 0;
+          split_number = strtol(split_str, &endptr, 10);
+          if (errno || endptr == split_str) 
+	    conversion_ok = FALSE;
+            
+          if ( (conversion_ok && (split_number == new_trans_number)) || 
+	       (safe_strcmp(new_trans_str, split_str) == 0) )
+            {  
+              /*An exact match of the Check number gives a +4 */
+              prob += 4;
+              /*DEBUG("heuristics:  probability + 4 (Check number)");*/
+            }
+          else if(strlen(new_trans_str) > 0 && strlen(split_str) > 0)
+            {
+              /* If both number are not empty yet do not match, add a
+		 little extra penality */
+              prob -= 2;
+            }
+        }
       
       /* Memo heuristics */  
       if(strlen(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)))!=0)

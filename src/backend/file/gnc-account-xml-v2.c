@@ -142,7 +142,8 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
           xmlAddChild(toaddto, gnc_lot_dom_tree_create(lot));
        }
     }
-    
+
+    LEAVE("");
     return ret;
 }
 

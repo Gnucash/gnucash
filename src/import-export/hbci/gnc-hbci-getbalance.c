@@ -261,16 +261,20 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 				      GTK_MESSAGE_INFO,
 				      GTK_BUTTONS_OK,
 				      "%s",
-	 /* Translators: Strings from this file are really only
-	  * needed inside Germany (HBCI is not supported anywhere
-	  * else). You may safely ignore strings from the
-	  * import-export/hbci subdirectory in other countries.
-	  */
-	 _("The downloaded HBCI Balance was zero.\n\n"
+      /* Translators: Strings from this file are needed only in
+       * countries that have one of aqbanking's Online Banking
+       * techniques available. This is 'OFX DirectConnect'
+       * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+       * (Switzerland). If none of these techniques are available
+       * in your country, you may safely ignore strings from the
+       * import-export/hbci subdirectory. */
+	 _("The downloaded Online Banking Balance was zero.\n\n"
 	   "Either this is the correct balance, or your bank does not "
-	   "support Balance download in this HBCI version. In the latter "
-	   "case you should choose a higher HBCI version number in the HBCI "
-	   "Setup. After that, try again to download the HBCI Balance."));
+	   "support Balance download in this Online Banking version. "
+	   "In the latter case you should choose a different "
+	   "Online Banking version number in the Online Banking "
+	   "(AqBanking or HBCI) Setup. After that, try again to "
+	   "download the Online Banking Balance."));
       gtk_dialog_run(GTK_DIALOG(dialog));
       gtk_widget_destroy(GTK_WIDGET(dialog));
       dialogres = FALSE;
@@ -282,7 +286,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       char *booked_str = gnc_AB_VALUE_toReadableString (booked_val);
       char *message1 = g_strdup_printf
 	(
-	 _("Result of HBCI job: \n"
+	 _("Result of Online Banking job: \n"
 	   "Account booked balance is %s"),
 	 booked_str);
       char *message2 = 

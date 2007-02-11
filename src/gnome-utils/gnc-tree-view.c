@@ -1918,7 +1918,6 @@ gnc_tree_view_add_text_column (GncTreeView *view,
   return column;
 }
 
-#if HAVE_GTK26
 GtkTreeViewColumn *
 gnc_tree_view_add_combo_column (GncTreeView *view,
                                 const gchar *column_title,
@@ -1976,7 +1975,6 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
   gnc_tree_view_append_column (view, column);
   return column;
 }
-#endif
 
 GtkCellRenderer *
 gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column)

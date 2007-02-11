@@ -1,6 +1,6 @@
 /********************************************************************\
  * gnc-frequency.c -- GnuCash widget for frequency editing.         *
- * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2001,2002,2007 Joshua Sled <jsled@asynchronous.org>*
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
@@ -38,7 +38,10 @@
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.gui.frequency"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 /** Private Defs ********************/
 
@@ -51,7 +54,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 
-static void gnc_frequency_class_init( GNCFrequencyClass *klass );
+static void gnc_frequency_class_init( GncFrequencyClass *klass );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -66,7 +69,7 @@ static void quarterly_sel_changed( GtkButton *b, gpointer d );
 static void triyearly_sel_changed( GtkButton *b, gpointer d );
 static void semiyearly_sel_changed( GtkButton *b, gpointer d );
 
-static void year_range_sels_changed( GNCFrequency *gf,
+static void year_range_sels_changed( GncFrequency *gf,
                                      int monthsInRange,
                                      GtkWidget *occurW,
                                      GtkWidget *dayOfMonthW );
@@ -109,49 +112,49 @@ static const char *CHECKBOX_NAMES[] = {
 GType
 gnc_frequency_get_type()
 {
-	static GType gncfreq_type = 0;
-        if (gncfreq_type == 0) {
-                static GTypeInfo gncfreq_info = {
-			sizeof(GNCFrequencyClass),
-			NULL,
-			NULL,
-			(GClassInitFunc)gnc_frequency_class_init,
-			NULL,
-			NULL,
-			sizeof(GNCFrequency),
-			0,
-			(GInstanceInitFunc)gnc_frequency_init
-		};
+     static GType gncfreq_type = 0;
+     if (gncfreq_type == 0) {
+          static GTypeInfo gncfreq_info = {
+               sizeof(GncFrequencyClass),
+               NULL,
+               NULL,
+               (GClassInitFunc)gnc_frequency_class_init,
+               NULL,
+               NULL,
+               sizeof(GncFrequency),
+               0,
+               (GInstanceInitFunc)gnc_frequency_init
+          };
+                
+          gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                 "GncFrequency",
+                                                 &gncfreq_info, 0);
+     }
 
-                gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
-						       "GNCFrequency",
-						       &gncfreq_info, 0);
-        }
-
-	return gncfreq_type;
+     return gncfreq_type;
 }
 
 static void
-gnc_frequency_class_init( GNCFrequencyClass *klass )
+gnc_frequency_class_init( GncFrequencyClass *klass )
 {
-	GObjectClass *object_class;
-	
-	object_class = G_OBJECT_CLASS (klass);
+        GObjectClass *object_class;
+        
+        object_class = G_OBJECT_CLASS (klass);
 
-        gnc_frequency_signals[GNCFREQ_CHANGED] =
-		g_signal_new ("changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GNCFrequencyClass, changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+    gnc_frequency_signals[GNCFREQ_CHANGED] =
+         g_signal_new ("changed",
+                       G_OBJECT_CLASS_TYPE (object_class),
+                       G_SIGNAL_RUN_FIRST,
+                       G_STRUCT_OFFSET (GncFrequencyClass, changed),
+                       NULL,
+                       NULL,
+                       g_cclosure_marshal_VOID__VOID,
+                       G_TYPE_NONE,
+                       0);
 }
 
 void
-gnc_frequency_init( GNCFrequency *gf )
+gnc_frequency_init(GncFrequency *gf)
 {
         int    i;
         GtkVBox  *vb;
@@ -211,10 +214,10 @@ gnc_frequency_init( GNCFrequency *gf )
         /* initialize the combo boxes */
         for ( i=0; comboBoxes[i].name != NULL; i++ ) {
                 o = glade_xml_get_widget( gf->gxml, comboBoxes[i].name );
-		gtk_combo_box_set_active(GTK_COMBO_BOX(o), 0);
+                gtk_combo_box_set_active(GTK_COMBO_BOX(o), 0);
                 if ( comboBoxes[i].fn != NULL ) {
                         g_signal_connect( o, "changed",
-					  G_CALLBACK(comboBoxes[i].fn), gf );
+                                          G_CALLBACK(comboBoxes[i].fn), gf );
                 }
         }
 
@@ -227,7 +230,7 @@ gnc_frequency_init( GNCFrequency *gf )
                                           spinVals[i].name );
                         adj = gtk_spin_button_get_adjustment( GTK_SPIN_BUTTON(o) );
                         g_signal_connect( adj, "value_changed",
-					  G_CALLBACK(spinVals[i].fn), gf );
+                                          G_CALLBACK(spinVals[i].fn), gf );
                 }
         }
 
@@ -235,19 +238,19 @@ gnc_frequency_init( GNCFrequency *gf )
         for ( i=0; i<7; i++ ) {
                 o = glade_xml_get_widget( gf->gxml, CHECKBOX_NAMES[i] );
                 g_signal_connect( o, "clicked",
-				  G_CALLBACK(weekly_days_changed), gf );
+                                  G_CALLBACK(weekly_days_changed), gf );
         }
 
         gtk_widget_show_all( GTK_WIDGET(&gf->widget) );
 
         /* respond to start date changes */
         g_signal_connect( gf->startDate, "date_changed",
-			  G_CALLBACK(start_date_changed), gf );
+                          G_CALLBACK(start_date_changed), gf );
 
 }
 
 static void
-do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
+do_frequency_setup( GncFrequency *gf, FreqSpec *fs, time_t *secs)
 {
         UIFreqType uift;
         int i, page;
@@ -291,10 +294,9 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 struct tm stm;
                 /* set the date */
                 if ( xaccFreqSpecGetOnce( fs, &theDate ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d vs. FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d vs. FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ));
+                     return;
                 }
                 g_date_to_struct_tm( &theDate, &stm );
                 gnc_date_edit_set_time( gf->startDate, mktime(&stm) );
@@ -305,10 +307,9 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 GtkWidget *o;
                 int dailyMult = -1;
                 if ( xaccFreqSpecGetDaily( fs, &dailyMult ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d vs. FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d vs. FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 o = glade_xml_get_widget( gf->gxml, "daily_spin" );
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON( o ), dailyMult );
@@ -324,15 +325,14 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 /*  set the mult */
                 fsList = xaccFreqSpecCompositeGet( fs );
                 if ( g_list_length( fsList ) != 5 ) {
-                        PERR( "Invalid Daily[M-F] FreqSpec" );
-                        return;
+                     g_warning("Invalid Daily[M-F] FreqSpec");
+                     return;
                 }
                 subFS = (FreqSpec*)fsList->data;
                 if ( xaccFreqSpecGetWeekly( subFS, &weekMult, &dayOfWeek ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d vs. FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d vs. FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 o = glade_xml_get_widget( gf->gxml, "dailymf_spin" );
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), weekMult );
@@ -352,43 +352,39 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                         subFS = (FreqSpec*)(list->data);
                         if ( weeklyMult == -1 ) {
                                 if ( subFS == NULL ) {
-                                        PERR( "subFS is null\n" );
-                                        return;
+                                     g_critical("subFS is null");
+                                     return;
                                 }
                                 if ( xaccFreqSpecGetWeekly( subFS,
                                                             &weeklyMult,
                                                             &dayOfWeek ) < 0 ) {
-                                        PERR( "Inappropriate FreqSpec type "
-                                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                                              uift, xaccFreqSpecGetUIType( fs ) );
-                                        return;
+                                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                                               uift, xaccFreqSpecGetUIType( fs ) );
+                                     return;
                                 }
                         } else {
                                 int otherWeeklyMult = -1;
 
                                 if ( subFS == NULL ) {
-                                        PERR( "subFS is null\n" );
-                                        return;
+                                     g_critical("subFS is null");
+                                     return;
                                 }
                                 if ( xaccFreqSpecGetWeekly( subFS,
                                                             &otherWeeklyMult,
                                                             &dayOfWeek ) < 0 ) {
-                                        PERR( "Inappropriate FreqSpec type "
-                                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                                              uift, xaccFreqSpecGetUIType( fs ) );
-                                        return;
+                                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                                               uift, xaccFreqSpecGetUIType( fs ) );
+                                     return;
                                 }
                                 if ( weeklyMult != otherWeeklyMult ) {
-                                        PERR( "Inconsistent weekly FreqSpec "
-                                              "multipliers seen "
-                                              "[first: %d vs. other: %d]\n",
-                                              weeklyMult, otherWeeklyMult );
-                                        return;
+                                     g_warning("Inconsistent weekly FreqSpec multipliers seen [first: %d vs. other: %d]",
+                                               weeklyMult, otherWeeklyMult );
+                                     return;
                                 }
                         }
                         if ( dayOfWeek > 6 ) {
-                                PERR( "dayOfWeek > 6 [%d]", dayOfWeek );
-                                return;
+                             g_warning( "dayOfWeek > 6 [%d]", dayOfWeek );
+                             return;
                         }
                         str = CHECKBOX_NAMES[dayOfWeek];
                         o = glade_xml_get_widget( gf->gxml, str );
@@ -415,10 +411,9 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 subFS = (FreqSpec*)(g_list_nth( list, 0 )->data);
                 if ( xaccFreqSpecGetMonthly( subFS, &monthlyMult,
                                              &firstDayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), monthlyMult );
                 /*  first date */
@@ -429,8 +424,8 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 if ( xaccFreqSpecGetMonthly( subFS, &monthlyMult,
                                              &secondDayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type\n" );
-                        return;
+                     g_warning( "Inappropriate FreqSpec type" );
+                     return;
                 }
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o), secondDayOfMonth-1 );
         }
@@ -442,10 +437,9 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 
                 if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                              &dayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
                 gtk_spin_button_set_value( GTK_SPIN_BUTTON(o), monthlyMult );
@@ -460,14 +454,13 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 
                 if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                              &dayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 if ( monthlyMult != 3 ) {
-                        PERR( "monthly multiplier != 3 [=%d]", monthlyMult );
-                        return;
+                     g_warning("monthly multiplier != 3 [=%d]", monthlyMult);
+                     return;
                 }
                 year_range_menu_helper( glade_xml_get_widget( gf->gxml,
                                                               "quarterly_day" ),
@@ -482,14 +475,13 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 
                 if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                              &dayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 if ( monthlyMult != 4 ) {
-                        PERR( "Month-multiplier != 4 [=%d]", monthlyMult );
-                        return;
+                     g_warning("Month-multiplier != 4 [=%d]", monthlyMult);
+                     return;
                 }
                 year_range_menu_helper( glade_xml_get_widget( gf->gxml,
                                                               "triyearly_day" ),
@@ -504,14 +496,13 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 
                 if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                              &dayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 if ( monthlyMult != 6 ) {
-                        PERR( "month-mult != 6 [=%d]", monthlyMult );
-                        return;
+                     g_warning( "month-mult != 6 [=%d]", monthlyMult );
+                     return;
                 }
                 year_range_menu_helper( glade_xml_get_widget( gf->gxml,
                                                               "semiyearly_day" ),
@@ -527,14 +518,13 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
 
                 if ( xaccFreqSpecGetMonthly( fs, &monthlyMult,
                                              &dayOfMonth, &monthOffset ) < 0 ) {
-                        PERR( "Inappropriate FreqSpec type "
-                              "[gnc-frequency: %d, FreqSpec: %d]\n",
-                              uift, xaccFreqSpecGetUIType( fs ) );
-                        return;
+                     g_warning("Inappropriate FreqSpec type [gnc-frequency: %d, FreqSpec: %d]",
+                               uift, xaccFreqSpecGetUIType( fs ) );
+                     return;
                 }
                 if ( (monthlyMult % 12) != 0) {
-                        PERR( "monthly-mult %% 12 != 0 [=%d]", ( monthlyMult % 12 ) );
-                        return;
+                     g_warning( "monthly-mult %% 12 != 0 [=%d]", ( monthlyMult % 12 ) );
+                     return;
                 }
 
                 /* set the mult */
@@ -548,16 +538,15 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
         }
         break;
         default:
-                PERR( "unknown ui freq type %d [%d, %s]\n",
-                      uift, __LINE__, __FILE__ );
-                break;
+             g_critical( "unknown ui freq type %d", uift);
+             break;
         }
 
         g_signal_emit_by_name( gf, "changed" );
 }
 
 void
-gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
+gnc_frequency_setup_default( GncFrequency *gf, FreqSpec *fs, GDate *date )
 {
    time_t secs;
 
@@ -598,7 +587,7 @@ gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 }
 
 void
-gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date )
+gnc_frequency_setup( GncFrequency *gf, FreqSpec *fs, GDate *date )
 {
    time_t secs;
 
@@ -621,14 +610,14 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date )
 GtkWidget *
 gnc_frequency_new( FreqSpec *fs, GDate *date )
 {
-        GNCFrequency  *toRet;
+        GncFrequency  *toRet;
         toRet = g_object_new( gnc_frequency_get_type(), NULL );
         gnc_frequency_setup_default( toRet, fs, date );
         return GTK_WIDGET(toRet);
 }
 
 void
-gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
+gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate )
 {
         gint page;
         gint day;
@@ -638,12 +627,12 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gint tmpInt;
         int i;
         GDate gd;
-        time_t tmpTimeT;
+        time_t start_tt;
 
-        tmpTimeT = gnc_date_edit_get_date( gf->startDate );
+        start_tt = gnc_date_edit_get_date( gf->startDate );
         if ( NULL != outDate ) 
         {
-                g_date_set_time_t( outDate, tmpTimeT );
+                g_date_set_time_t( outDate, start_tt );
         }
 
         if (NULL == fs) return;
@@ -656,7 +645,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gnc_suspend_gui_refresh();
 
         g_date_clear (&gd, 1);
-        g_date_set_time_t( &gd, tmpTimeT );
+        g_date_set_time_t( &gd, start_tt );
 
         /*uift = xaccFreqSpecGetUIType( fs );*/
         uift = PAGES[page].uiFTVal;
@@ -664,9 +653,11 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         /* Based on value, parse widget values into FreqSpec */
         switch ( uift ) {
         case UIFREQ_NONE:
-                /* hmmm... shouldn't really be allowed. */
+                xaccFreqSpecSetNone(fs);
+                xaccFreqSpecSetUIType(fs, UIFREQ_NONE);
                 break;
         case UIFREQ_ONCE:
+                xaccFreqSpecSetOnceDate(fs, &gd);
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
         case UIFREQ_DAILY:
@@ -771,8 +762,8 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
-                tmpTimeT = gnc_date_edit_get_date( gf->startDate );
-                g_date_set_time_t( &gd, tmpTimeT );
+                start_tt = gnc_date_edit_get_date( gf->startDate );
+                g_date_set_time_t( &gd, start_tt );
                 g_date_to_struct_tm( &gd, &stm);
                 if ( day >= stm.tm_mday ) {
                         /* next month */
@@ -788,15 +779,19 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         }
         case UIFREQ_MONTHLY:
         {
-                struct tm stm;
                 o = glade_xml_get_widget( gf->gxml, "monthly_spin" );
                 tmpInt = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(o));
-                g_date_to_struct_tm( &gd, &stm);
 
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 day = gtk_combo_box_get_active( GTK_COMBO_BOX(o) ) + 1;
-                stm.tm_mday = day;
-                g_date_set_time_t( &gd, mktime( &stm ) );
+                g_date_set_time_t(&gd, time(NULL));
+                g_date_set_month(&gd, 1);
+                g_date_set_day(&gd, day);
+                {
+                     gchar buf[128];
+                     g_date_strftime(buf, 127, "%c", &gd);
+                     g_debug("monthly date [%s]\n", buf);
+                }
                 xaccFreqSpecSetMonthly( fs, &gd, tmpInt );
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
@@ -820,9 +815,8 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 xaccFreqSpecSetUIType( fs, uift );
                 break;
         default:
-                PERR( "Unknown UIFreqType %d [%d, %s]\n",
-                      uift, __LINE__, __FILE__ );
-                break;
+             g_critical("Unknown UIFreqType %d", uift);
+             break;
         }
         gnc_resume_gui_refresh();
 }
@@ -836,7 +830,7 @@ spin_changed_helper( GtkAdjustment *adj, gpointer d )
 static void
 weekly_days_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
+        GncFrequency *gf;
 
         gf = GNC_FREQUENCY(d);
         g_signal_emit_by_name( gf, "changed" );
@@ -845,15 +839,15 @@ weekly_days_changed( GtkButton *b, gpointer d )
 static void
 monthly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         guint    dayOfMonth;
         struct tm  *tmptm;
         time_t    tmptt;
   
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
-        o = glade_xml_get_widget( ((GNCFrequency*)d)->gxml,
+        o = glade_xml_get_widget( ((GncFrequency*)d)->gxml,
                                   "monthly_day" );
         dayOfMonth = gtk_combo_box_get_active( GTK_COMBO_BOX(o) ) + 1;
 
@@ -874,13 +868,13 @@ monthly_sel_changed( GtkButton *b, gpointer d )
 static void
 semimonthly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         gint    tmpint;
         time_t    tmptt;
         struct tm  *tmptm;
 
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
@@ -907,8 +901,8 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
 static void
 quarterly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 3,
                                  glade_xml_get_widget( gf->gxml, "quarterly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "quarterly_day" ) );
@@ -917,8 +911,8 @@ quarterly_sel_changed( GtkButton *b, gpointer d )
 static void
 triyearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 4,
                                  glade_xml_get_widget( gf->gxml, "triyearly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "triyearly_day" ) );
@@ -927,15 +921,15 @@ triyearly_sel_changed( GtkButton *b, gpointer d )
 static void
 semiyearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency *gf;
-        gf = (GNCFrequency*)d;
+        GncFrequency *gf;
+        gf = (GncFrequency*)d;
         year_range_sels_changed( gf, 6,
                                  glade_xml_get_widget( gf->gxml, "semiyearly_occur" ),
                                  glade_xml_get_widget( gf->gxml, "semiyearly_day" ) );
 }
 
 static void
-year_range_sels_changed( GNCFrequency *gf,
+year_range_sels_changed( GncFrequency *gf,
                          int monthsInRange,
                          GtkWidget *occurW,
                          GtkWidget *dayOfMonthW )
@@ -962,12 +956,12 @@ year_range_sels_changed( GNCFrequency *gf,
 static void
 yearly_sel_changed( GtkButton *b, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         time_t    tmptt;
         struct tm  *tmptm;
 
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         tmptt = gnc_date_edit_get_date( gf->startDate );
         tmptm = localtime( &tmptt );
@@ -1005,7 +999,7 @@ static inline guint32 maxn( guint32 a, guint32 b )
 static void
 freq_combo_changed( GtkComboBox *b, gpointer d )
 {
-        GNCFrequency *gf = (GNCFrequency*)d;
+        GncFrequency *gf = (GncFrequency*)d;
         int optIdx;
         UIFreqType uift;
         time_t startDate, tmpDate;
@@ -1013,8 +1007,8 @@ freq_combo_changed( GtkComboBox *b, gpointer d )
         GtkWidget *o;
 
         /* Set the new page. */
-        optIdx = gtk_combo_box_get_active( GTK_COMBO_BOX(((GNCFrequency*)d)->freqComboBox) );
-        gtk_notebook_set_current_page( ((GNCFrequency*)d)->nb, optIdx );
+        optIdx = gtk_combo_box_get_active( GTK_COMBO_BOX(((GncFrequency*)d)->freqComboBox) );
+        gtk_notebook_set_current_page( ((GncFrequency*)d)->nb, optIdx );
 
         /* setup initial values for new page, as possible. */
         uift = PAGES[optIdx].uiFTVal;
@@ -1032,44 +1026,44 @@ freq_combo_changed( GtkComboBox *b, gpointer d )
                 tmpDate = mktime( tmpTm );
                 tmpTm = localtime( &tmpDate );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  minn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+                                          minn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
                 o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  maxn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
+                                          maxn( tmpTm->tm_mday, tmpDayOfMonth ) - 1 );
         }
         break;
         case UIFREQ_MONTHLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday - 1 );
+                                          tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_QUARTERLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "quarterly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday - 1 );
+                                          tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_TRI_ANUALLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "triyearly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday - 1 );
+                                          tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_SEMI_YEARLY:
                 /* on the <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "semiyearly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday - 1 );
+                                          tmpTm->tm_mday - 1 );
                 break;
         case UIFREQ_YEARLY:
                 /* on the <startdate_mon>, <startdate_dom> */
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mon );
+                                          tmpTm->tm_mon );
                 o = glade_xml_get_widget( gf->gxml, "yearly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday - 1 );
+                                          tmpTm->tm_mday - 1 );
                 break;
         default:
                 /* nuttin can be done, for whatever reason. */
@@ -1087,22 +1081,22 @@ year_range_menu_helper( GtkWidget *dayOptMenu,
         struct tm  *tmpTm;
         tmpTm = localtime( &startDate );
         gtk_combo_box_set_active( GTK_COMBO_BOX(occurOptMenu),
-				  tmpTm->tm_mon % monthsInRange );
+                                  tmpTm->tm_mon % monthsInRange );
         gtk_combo_box_set_active( GTK_COMBO_BOX(dayOptMenu),
-				   tmpTm->tm_mday - 1 );
+                                   tmpTm->tm_mday - 1 );
 }
 
 static void
 start_date_changed( GNCDateEdit *gde, gpointer d )
 {
-        GNCFrequency  *gf;
+        GncFrequency  *gf;
         GtkWidget  *o;
         struct tm  *tmpTm;
         time_t    dateFromGDE;
         gint    page;
         UIFreqType  uift;
   
-        gf = (GNCFrequency*)d;
+        gf = (GncFrequency*)d;
 
         dateFromGDE = gnc_date_edit_get_date( gde );
 
@@ -1167,14 +1161,14 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
                 o = glade_xml_get_widget( gf->gxml, "yearly_month" );
                 tmpTm = localtime( &dateFromGDE );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mon );
+                                          tmpTm->tm_mon );
                 o = glade_xml_get_widget( gf->gxml, "yearly_day" );
                 gtk_combo_box_set_active( GTK_COMBO_BOX(o),
-					  tmpTm->tm_mday-1 );
+                                          tmpTm->tm_mday-1 );
                 break;
         default:
-                PERR( "unknown uift value %d\n", uift );
-                break;
+             g_critical("unknown uift value %d", uift);
+             break;
         }
         g_signal_emit_by_name( gf, "changed" );
 }
@@ -1183,19 +1177,19 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
 /* Relabel some of the labels */
 
 void 
-gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
+gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt)
 {
    GtkLabel *lbl;
-	if (!gf || !txt) return;
+   if (!gf || !txt) return;
    lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "freq label"));
    gtk_label_set_text (lbl, txt);
 }
 
 void 
-gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt)
+gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt)
 {
    GtkLabel *lbl;
-	if (!gf || !txt) return;
+   if (!gf || !txt) return;
    lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "startdate label"));
    gtk_label_set_text (lbl, txt);
 }

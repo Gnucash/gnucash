@@ -12,6 +12,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2006 \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
@@ -23,9 +24,6 @@ dist_doc_DATA = \
   README \
   README.patches \
   README.dependencies
-
-m4datadir = $(datadir)/aclocal
-m4data_DATA = gnucash.m4
 
 # All the other files that go in the distribution tarfile that aren't
 # included some other way...
@@ -40,8 +38,6 @@ m4data_DATA = gnucash.m4
 
 EXTRA_DIST = \
   gnucash.lsm \
-  gnucash.m4 \
-  gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
@@ -78,10 +74,6 @@ EXTRA_DIST = \
   intltool-merge.in \
   intltool-update.in \
   util/gnc-svnversion
-
-bin_SCRIPTS = gnucash-config
-
-CLEANFILES = gnucash-config
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -205,6 +197,6 @@ intl-scm/guile-strings.c:
 SVN = svn
 XSLTPROC = xsltproc
 ChangeLog.svn:
-	$(SVN) log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
+	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
 	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@

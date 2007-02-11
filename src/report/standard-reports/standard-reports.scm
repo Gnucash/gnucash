@@ -13,7 +13,6 @@
 (export gnc:register-report-hook)
 
 (require 'hash-table)
-(require 'record)
 
 (define gnc:*register-report-hash* (make-hash-table 23))
 

@@ -8,8 +8,6 @@
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
-(require 'record)
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define-macro (addto! alist element)

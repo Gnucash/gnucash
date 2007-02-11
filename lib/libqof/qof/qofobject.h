@@ -58,7 +58,7 @@
  */
 #define QOF_OBJECT_VERSION 3
 
-#define QOF_MOD_OBJECT "qof-object"
+#define QOF_MOD_OBJECT "qof.object"
 
 typedef struct _QofObject QofObject;
 typedef void (*QofForeachCB) (gpointer obj, gpointer user_data);

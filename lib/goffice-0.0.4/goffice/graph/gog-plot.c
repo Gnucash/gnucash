@@ -43,10 +43,6 @@
 #include <gsf/gsf-impl-utils.h>
 #include <string.h>
 
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 #define GOG_PLOT_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GOG_PLOT_TYPE, GogPlotClass))
 
 enum {

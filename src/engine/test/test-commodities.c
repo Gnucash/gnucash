@@ -43,7 +43,7 @@ test_commodity(void)
         com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0);
 
         gnc_commodity_destroy(com);
-	qof_book_destroy (book);
+        qof_book_destroy (book);
 
         success("commodity new and destroy");
     }
@@ -184,15 +184,15 @@ test_commodity(void)
 int
 main (int argc, char **argv)
 {
-    guid_init ();
-    qof_object_initialize ();
-    qof_query_init ();
+    qof_init();
+
     qof_book_register ();
     gnc_commodity_table_register();
+
     test_commodity();
+
     print_test_results();
-    qof_query_shutdown();
-    guid_shutdown();
-    qof_object_shutdown ();
+
+    qof_close();
     return get_rv();
 }

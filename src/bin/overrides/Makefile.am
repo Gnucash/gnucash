@@ -35,7 +35,6 @@ gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	    -e 's#@-GNC_SCM_INSTALL_DIR-@#${GNC_SCM_INSTALL_DIR}#g' \
             -e 's#@-GNC_LIB_INSTALLDIR-@#${libdir}#' \
             -e 's#@-GNC_PKGLIB_INSTALLDIR-@#${pkglibdir}#g' \
-	    -e 's#@-GNC_MODULE_DIR-@#${GNC_MODULE_DIR}#g' \
             -e 's#@-GNC_SCRIPT_OVERRIDE_DIR-@#${gncoverridedir}#g'
 	mv $@.tmp $@
 	chmod u+x $@

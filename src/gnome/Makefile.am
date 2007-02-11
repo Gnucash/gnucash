@@ -1,8 +1,8 @@
 SUBDIRS = glade schemas ui
 
-lib_LTLIBRARIES = libgncgnome.la
+lib_LTLIBRARIES = libgnc-gnome.la
 
-libgncgnome_la_LIBADD = \
+libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
@@ -14,11 +14,11 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
-libgncgnome_la_SOURCES = \
+libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
   dialog-chart-export.c  \
   dialog-commodities.c \
@@ -29,11 +29,11 @@ libgncgnome_la_SOURCES = \
   dialog-price-edit-db.c \
   dialog-print-check.c \
   dialog-progress.c \
+  dialog-sx-editor.c \
   dialog-sx-from-trans.c \
-  dialog-sxsincelast.c \
+  dialog-sx-since-last-run.c \
   dialog-tax-info.c \
   dialog-userpass.c \
-  dialog-scheduledxaction.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-merge.c \
@@ -45,8 +45,10 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-register.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-budget.c \
+  gnc-plugin-page-sx-list.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
+  gnc-sx-list-tree-model-adapter.c \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
@@ -67,9 +69,9 @@ noinst_HEADERS = \
   dialog-new-user.h \
   dialog-print-check.h \
   dialog-progress.h \
+  dialog-sx-editor.h \
   dialog-sx-from-trans.h \
-  dialog-sxsincelast.h \
-  dialog-scheduledxaction.h \
+  dialog-sx-since-last-run.h \
   druid-acct-period.h \
   druid-hierarchy.h \
   druid-merge.h \
@@ -81,8 +83,10 @@ noinst_HEADERS = \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-budget.h \
+  gnc-plugin-page-sx-list.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
+  gnc-sx-list-tree-model-adapter.h \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
@@ -131,3 +135,5 @@ AM_CFLAGS = \
 
 CLEANFILES = gnucash.desktop
 MAINTAINERCLEANFILES = swig-gnome.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"
