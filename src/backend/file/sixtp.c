@@ -34,7 +34,10 @@
 #include "sixtp-parsers.h"
 #include "sixtp-stack.h"
 
-static QofLogModule log_module = GNC_MOD_IO;
+#define LOG_MOD "gnc.backend.file.sixtp"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 /************************************************************************/
 gboolean
@@ -160,7 +163,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
     
     if(!tochange)
     {
-        PWARN("Null tochange passed");
+        g_warning("Null tochange passed");
         return NULL;
     }
 
@@ -220,7 +223,7 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
 
         default:
             va_end(ap);
-            PERR("Bogus sixtp type %d", type);
+            g_critical("Bogus sixtp type %d", type);
             if(cleanup)
             {
                 sixtp_destroy(tochange);
@@ -254,20 +257,19 @@ sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data)
   gpointer lookup_key;
   gpointer lookup_value;
 
-  PINFO ("Killing sixtp child under key <%s>",
-         key ? (char *) key : "(null)");
+  g_debug("Killing sixtp child under key <%s>", key ? (char *) key : "(null)");
   g_free(key);
 
   if(!corpses) 
   {
-    PERR("no corpses in sixtp_destroy_child <%s>",
-         key ? (char *) key : "(null)");
+    g_critical("no corpses in sixtp_destroy_child <%s>",
+               key ? (char *) key : "(null)");
     return;
   }
   if(!child) 
   {
-    PERR("no child in sixtp_destroy_child <%s>",
-         key ? (char *) key : "");
+    g_critical("no child in sixtp_destroy_child <%s>",
+               key ? (char *) key : "");
     return;
   }
 
@@ -337,7 +339,7 @@ sixtp_add_some_sub_parsers(sixtp *tochange, int cleanup, ...)
         handler = va_arg(ap, sixtp*);
         if(!handler)
         {
-            PWARN("Handler for tag %s is null",
+            g_warning("Handler for tag %s is null",
                       tag ? tag : "(null)");
 
             if(cleanup)
@@ -400,8 +402,8 @@ sixtp_sax_start_handler(void *user_data,
           (gpointer) &next_parser_tag, (gpointer) &next_parser);
       if(!lookup_success) 
       {
-          PERR("Tag <%s> not allowed in current context.",
-               name ? (char *) name : "(null)");
+          g_critical("Tag <%s> not allowed in current context.",
+                     name ? (char *) name : "(null)");
           pdata->parsing_ok = FALSE;
 	  next_parser = pdata->bad_xml_parser;
       }
@@ -504,7 +506,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
      necessary? */
   if(safe_strcmp(current_frame->tag, (gchar*) name) != 0) 
   {
-    PWARN ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
+    g_warning("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
     pdata->parsing_ok = FALSE;
 
     /* See if we're just off by one and try to recover */
@@ -512,7 +514,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
       pdata->stack = sixtp_pop_and_destroy_frame(pdata->stack);
       current_frame = (sixtp_stack_frame *) pdata->stack->data;
       parent_frame = (sixtp_stack_frame *) pdata->stack->next->data;
-      PWARN ("found matching start <%s> tag up one level", name);
+      g_warning("found matching start <%s> tag up one level", name);
     }
   }
   
@@ -548,8 +550,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
   /* grab it before it goes away - we own the reference */
   end_tag = current_frame->tag;
 
-  PINFO("Finished with end of <%s>",
-        end_tag ? end_tag : "(null)");
+  g_debug("Finished with end of <%s>", end_tag ? end_tag : "(null)");
 
   /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -612,7 +613,7 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data)
   GSList *lp;
   GSList **stack = &(sax_data->stack);
 
-  PERR("parse failed at:");
+  g_critical("parse failed at:");
   sixtp_print_frame_stack(sax_data->stack, stderr);
 
   while(*stack) 
@@ -689,7 +690,7 @@ sixtp_parse_file_common(sixtp *sixtp,
 
     if(!(ctxt = sixtp_context_new(sixtp, global_data, data_for_top_level)))
     {
-        PERR("sixtp_context_new returned null");
+        g_critical("sixtp_context_new returned null");
         return FALSE;
     }
 
@@ -761,12 +762,12 @@ sixtp_parse_push (sixtp *sixtp,
     xmlParserCtxtPtr xml_context;
 
     if (!push_handler) {
-        PERR("No push handler specified");
+        g_critical("No push handler specified");
         return FALSE;
     }
 
     if (!(ctxt = sixtp_context_new(sixtp, global_data, data_for_top_level))) {
-        PERR("sixtp_context_new returned null");
+        g_critical("sixtp_context_new returned null");
         return FALSE;
     }
 
