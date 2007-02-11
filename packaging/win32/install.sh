@@ -707,6 +707,27 @@ function inst_gwenhywfar() {
     ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
 }
 
+function inst_ktoblzcheck() {
+    setup Ktoblzcheck
+    # Out of convenience ktoblzcheck is being installed into
+    # GWENHYWFAR_DIR
+    if quiet ${PKG_CONFIG} --exists ktoblzcheck
+    then
+	echo "Ktoblzcheck already installed. Skipping."
+    else
+	wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
+	assert_one_dir $TMP_UDIR/ktoblzcheck-*
+	qpushd $TMP_UDIR/ktoblzcheck-*
+	    ./configure \
+	        --prefix=$_GWENHYWFAR_UDIR
+	    make
+	    make check
+	    make install
+	qpopd
+    fi
+    ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
+}
+
 function inst_qt4() {
     # This section is not a full install, but the .la creation is
     # already useful in itself and that's why it has already been

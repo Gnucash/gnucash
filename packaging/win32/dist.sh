@@ -151,6 +151,12 @@ function dist_gwenhywfar() {
     cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
 }
 
+function dist_ktoblzcheck() {
+    setup ktoblzcheck
+    # dll is already copied in dist_gwenhywfar
+    cp -a ${_GWENHYWFAR_UDIR}/share/ktoblzcheck ${DIST_UDIR}/share
+}
+
 function dist_aqbanking() {
     setup aqbanking
     cp -a ${_AQBANKING_UDIR}/bin/*.exe ${DIST_UDIR}/bin
