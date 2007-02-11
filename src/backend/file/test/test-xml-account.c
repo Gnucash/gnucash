@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -273,7 +273,7 @@ test_account(int i, Account *test_act)
     }
         
 
-    unlink(filename1);
+    g_unlink(filename1);
     g_free(filename1);
     xmlFreeNode(test_node);
 }
@@ -369,5 +369,5 @@ main (int argc, char ** argv)
     qof_session_destroy(session);        
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

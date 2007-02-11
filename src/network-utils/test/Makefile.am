@@ -7,14 +7,16 @@ TESTS =  \
   test-load-module
 
 GNC_TEST_DEPS := \
-  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/network-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/lib/libqof/qof \
-  --gnc-module-dir ${top_builddir}/src/network-utils
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link-module
 
 test_link_module_SOURCES=test-link-module.c

@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <libguile.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -90,7 +91,7 @@ gncReadFile (const char * file, char ** data)
   if (!filename) return 0;
 
   /* Open file: */
-  fd = open( filename, O_RDONLY );
+  fd = g_open( filename, O_RDONLY, 0 );
 
   g_free(filename); filename = NULL;
 
@@ -210,7 +211,7 @@ gnc_find_state_file (const gchar *url,
 				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
 				      &error);
     DEBUG("File GUID is %s", file_guid);
-    if (strcmp(guid, file_guid) == 0) {
+    if (safe_strcmp(guid, file_guid) == 0) {
       DEBUG("Matched !!!");
       g_free(file_guid);
       break;

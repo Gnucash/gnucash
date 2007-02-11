@@ -35,11 +35,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
-#ifdef HAVE_GLIB26
 #include <glib/gstdio.h>
-#else
-#define g_mkdir(a,b) mkdir(a,b)
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -63,8 +59,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 static void 
 MakeHomeDir (void) 
 {
-  int rc;
-  struct stat statbuf;
   const gchar *home;
   char *path;
   char *data;
@@ -75,19 +69,15 @@ MakeHomeDir (void)
 
   path = g_build_filename(home, ".gnucash", (gchar *)NULL);
 
-  rc = stat (path, &statbuf);
-  if (rc)
+  if (!g_file_test(path, G_FILE_TEST_EXISTS))
   {
-    /* assume that the stat failed only because the dir is absent,
-     * and not because its read-protected or other error.
-     * Go ahead and make it. Don't bother much with checking mkdir 
+    /* Go ahead and make it. Don't bother much with checking mkdir 
      * for errors; seems pointless. */
     g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
   }
 
   data = g_build_filename (path, "data", (gchar *)NULL);
-  rc = stat (data, &statbuf);
-  if (rc)
+  if (!g_file_test(data, G_FILE_TEST_EXISTS))
     g_mkdir (data, S_IRWXU);
 
   g_free (path);
@@ -186,7 +176,6 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
 char * 
 xaccResolveFilePath (const char * filefrag)
 {
-  struct stat statbuf;
   char pathbuf[PATH_MAX];
   pathGenerator gens[4];
   char *filefrag_dup;
@@ -230,8 +219,7 @@ xaccResolveFilePath (const char * filefrag)
       {
 	  gchar *fullpath = g_build_filename(pathbuf, filefrag, (gchar *)NULL);
 
-	  int rc = stat (fullpath, &statbuf);
-	  if ((!rc) && (S_ISREG(statbuf.st_mode)))
+	  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
 	  {
 	      return fullpath;
           }
@@ -318,7 +306,7 @@ gnc_validate_directory (const gchar *dirname)
   struct stat statbuf;
   gint rc;
 
-  rc = stat (dirname, &statbuf);
+  rc = g_stat (dirname, &statbuf);
   if (rc) {
     switch (errno) {
     case ENOENT:
@@ -332,7 +320,7 @@ gnc_validate_directory (const gchar *dirname)
 		  dirname, strerror(errno), errno);
 	exit(1);
       }
-      stat (dirname, &statbuf);
+      g_stat (dirname, &statbuf);
       break;
 
     case EACCES:

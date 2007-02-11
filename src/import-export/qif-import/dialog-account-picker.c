@@ -211,6 +211,16 @@ gnc_ui_qif_account_picker_changed_cb (GtkTreeSelection *selection,
   }
 }
 
+static void
+gnc_ui_qif_account_picker_row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+					    GtkTreeViewColumn *column,
+					    gpointer user_data)
+{
+  QIFAccountPickerDialog *wind = user_data;
+  g_return_if_fail (wind);
+
+  gtk_dialog_response (GTK_DIALOG (wind->dialog), GTK_RESPONSE_OK);
+}
 
 static int
 gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data)
@@ -291,6 +301,9 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     selection = gtk_tree_view_get_selection(wind->treeview);
     g_signal_connect(selection, "changed",
 		     G_CALLBACK(gnc_ui_qif_account_picker_changed_cb), wind);
+    g_signal_connect(wind->treeview, "row-activated",
+		     G_CALLBACK(gnc_ui_qif_account_picker_row_activated_cb),
+		     wind);
   }
 
   g_signal_connect_after(wind->dialog, "map",

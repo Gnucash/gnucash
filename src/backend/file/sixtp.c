@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -843,7 +844,7 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag,
   g_return_val_if_fail(filename, FALSE);
   g_return_val_if_fail(first_tag, FALSE);
 
-  f = fopen(filename, "r");
+  f = g_fopen(filename, "r");
   if (f == NULL) {
     return FALSE;
   }

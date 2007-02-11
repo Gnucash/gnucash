@@ -209,10 +209,22 @@ test_parser (void)
 }
 
 static void
+test_variable_expressions()
+{
+  gnc_numeric num;
+  gchar *errLoc = NULL;
+  GHashTable *vars = g_hash_table_new(g_str_hash, g_str_equal);
+  do_test(gnc_exp_parser_parse_separate_vars("123 + a", &num, &errLoc, vars), "parsing");
+  do_test(g_hash_table_size(vars) == 1, "'a' is the variable; good job, gnc-exp-parser!");
+  success("variable found");
+}
+
+static void
 real_main (void *closure, int argc, char **argv)
 {
   /* set_should_print_success (TRUE); */
   test_parser();
+  test_variable_expressions();
   print_test_results();
   exit(get_rv());
 }

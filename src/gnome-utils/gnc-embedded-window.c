@@ -134,12 +134,12 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
 {
   GncEmbeddedWindowPrivate *priv;
 
-  ENTER("window %p, page %p", window, page);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (window));
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   g_return_if_fail (priv->page == NULL);
 
+  ENTER("window %p, page %p", window, page);
   priv->page = page;
   page->window = GTK_WIDGET(window);
   page->notebook_page = gnc_plugin_page_create_widget (page);
@@ -159,11 +159,12 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
 {
   GncEmbeddedWindowPrivate *priv;
 
-  ENTER("window %p, page %p", window, page);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (window));
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   g_return_if_fail (priv->page == page);
+
+  ENTER("window %p, page %p", window, page);
 
   if (!page->notebook_page) {
     LEAVE("no displayed widget");
@@ -248,10 +249,10 @@ gnc_embedded_window_finalize (GObject *object)
   GncEmbeddedWindow *window;
   GncEmbeddedWindowPrivate *priv;
 
-  ENTER("object %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
+  ENTER("object %p", object);
   window = GNC_EMBEDDED_WINDOW (object);
   priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
 
@@ -271,10 +272,10 @@ gnc_embedded_window_dispose (GObject *object)
   GncEmbeddedWindow *window;
   GncEmbeddedWindowPrivate *priv;
 
-  ENTER("object %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
+  ENTER("object %p", object);
   window = GNC_EMBEDDED_WINDOW (object);
   priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   if (priv->page) {
@@ -382,7 +383,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
     g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
 	       ui_fullname, error->message);
     g_error_free(error);
-    g_free(ui_fullname);
+    g_free(ui_fullname); 
     LEAVE("window %p", window);
     return window;
   }

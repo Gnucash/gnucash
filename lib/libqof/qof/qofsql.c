@@ -884,7 +884,7 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 
 	qof_query_set_book (query->qof_query, query->book);
     /* Maybe log this sucker */
-    if (gnc_should_log (log_module, GNC_LOG_DETAIL)) 
+    if (qof_should_log (log_module, QOF_LOG_DEBUG)) 
 	{
 		qof_query_print (query->qof_query);
 	}
@@ -911,7 +911,7 @@ qof_sql_query_rerun (QofSqlQuery *query)
 	qof_query_set_book (query->qof_query, query->book);
 
     /* Maybe log this sucker */
-    if (gnc_should_log (log_module, GNC_LOG_DETAIL)) 
+    if (qof_should_log (log_module, QOF_LOG_DEBUG)) 
 	{
 		qof_query_print (query->qof_query);
 	}

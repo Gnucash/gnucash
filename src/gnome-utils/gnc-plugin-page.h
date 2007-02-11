@@ -50,10 +50,6 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 
 /** The instance data structure for a content plugin. */
 typedef struct GncPluginPage {

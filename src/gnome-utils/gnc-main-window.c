@@ -39,10 +39,6 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-#include "gtk-compat.h"
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -403,6 +399,9 @@ static const gchar *multiple_page_actions[] = {
 #define WINDOW_GEOMETRY		"Window Geometry"
 #define WINDOW_POSITION		"Window Position"
 #define WINDOW_MAXIMIZED	"Window Maximized"
+#define TOOLBAR_VISIBLE		"Toolbar Visible"
+#define STATUSBAR_VISIBLE	"Statusbar Visible"
+#define SUMMARYBAR_VISIBLE	"Summarybar Visible"
 #define WINDOW_FIRSTPAGE	"First Page"
 #define WINDOW_PAGECOUNT	"Page Count"
 #define WINDOW_PAGEORDER	"Page Order"
@@ -511,9 +510,10 @@ static void
 gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
+  GtkAction *action;
   gint *pos, *geom, *order;
   gsize length;
-  gboolean max;
+  gboolean max, visible, desired_visibility;
   gchar *window_group;
   gint page_start, page_count, i;
   GError *error = NULL;
@@ -610,6 +610,46 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     error = NULL;
   } else if (max) {
     gtk_window_maximize(GTK_WINDOW(window));
+  }
+
+  /* Common view menu items */
+  action = gnc_main_window_find_action(window, "ViewToolbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      TOOLBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
+  }
+
+  action = gnc_main_window_find_action(window, "ViewSummaryAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      SUMMARYBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
+  }
+
+  action = gnc_main_window_find_action(window, "ViewStatusbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  desired_visibility = g_key_file_get_boolean(data->key_file, window_group,
+					      STATUSBAR_VISIBLE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, TOOLBAR_VISIBLE, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (visible != desired_visibility) {
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action),desired_visibility);
   }
 
   /* Now populate the window with pages. */
@@ -752,8 +792,9 @@ static void
 gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
+  GtkAction *action;
   gint i, num_pages, coords[4], *order;
-  gboolean maximized;
+  gboolean maximized, visible;
   gchar *window_group;
 
   /* Setup */
@@ -801,6 +842,20 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
 	coords[2], coords[3],
 	maximized ? "maximized" : "not maximized");
+
+  /* Common view menu items */
+  action = gnc_main_window_find_action(window, "ViewToolbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 TOOLBAR_VISIBLE, visible);
+  action = gnc_main_window_find_action(window, "ViewSummaryAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 SUMMARYBAR_VISIBLE, visible);
+  action = gnc_main_window_find_action(window, "ViewStatusbarAction");
+  visible = gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+  g_key_file_set_boolean(data->key_file, window_group,
+			 STATUSBAR_VISIBLE, visible);
 
   /* Save individual pages in this window */
   g_list_foreach(priv->installed_pages, (GFunc)gnc_main_window_save_page, data);
@@ -3219,7 +3274,6 @@ gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 	gnc_gnome_help (HF_HELP, NULL);
 }
 
-#ifdef HAVE_GTK26
 /** This is a helper function to find a data file and suck it into
  *  memory.
  *
@@ -3321,47 +3375,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	if (authors)     g_strfreev(authors);
 	g_object_unref (logo);
 }
-#else
-static void
-gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
-{
-	GtkWidget *about;
-	/* Translators: This is the "About" message. */
-	const gchar *message = _("The GnuCash personal finance manager.\n"
-				 "The GNU way to manage your money!\n"
-				 "http://www.gnucash.org/");
-	const gchar *copyright = "© 1998-2002 Linas Vepstas";
-	const gchar *authors[] = {
-		"Derek Atkins <derek@ihtfp.com>",
-		"Rob Browning <rlb@cs.utexas.edu>",
-		"Bill Gribble <grib@billgribble.com>",
-		"David Hampton <hampton@employees.org>",
-		"James LewisMoss <dres@debian.org>",
-		"Robert Graham Merkel <rgmerk@mira.net>",
-		"Dave Peticolas <dave@krondo.com>",
-		"Joshua Sled <jsled@asynchronous.org>",
-		"Christian Stimming <stimming@tuhh.de>",
-		"Linas Vepstas <linas@linas.org>",
-		NULL
-	};
-	const gchar *documenters[] = {
-		NULL
-	};
-	/* Translators: Insert your translator's credits here so that
-	   they will be shown in the "About" dialog. */
-	const gchar *translator_credits = _("translator_credits");
-	GdkPixbuf *logo;
-
-	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
-
-	about = gnome_about_new ("GnuCash", VERSION, copyright, message, authors, documenters,
-				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-				 logo);
-
-	g_object_unref (logo);
-	gtk_dialog_run (GTK_DIALOG (about));
-}
-#endif
 
 
 /************************************************************

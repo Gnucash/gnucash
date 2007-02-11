@@ -41,10 +41,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "gtk-compat.h"
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
+#include <glib/gstdio.h>
 #include <libguile.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -460,6 +457,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 if (inst_report != SCM_BOOL_F) {
                         gnc_plugin_page_report_add_edited_report(priv, inst_report);
                 }
+                LEAVE("");
                 return;
         } else {
                 LEAVE( " unknown URL type [%s] location [%s]", type, location );
@@ -1316,7 +1314,7 @@ gnc_get_export_filename (SCM choice)
         if (!filepath)
                 return NULL;
 
-        rc = stat (filepath, &statbuf);
+        rc = g_stat (filepath, &statbuf);
 
         /* Check for an error that isn't a non-existant file. */
         if (rc != 0 && errno != ENOENT)

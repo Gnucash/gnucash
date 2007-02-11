@@ -37,6 +37,15 @@ GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\
 GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/' ]`
 GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/' ]`
 
+# save any user/environment optimization flags before we muck with them in
+# --enable-debug:
+USER_OPTIMIZATION=""
+for flag in $CFLAGS; do
+  if test -z $(echo $flag | sed -e 's,-O.,,'); then
+    USER_OPTIMIZATION="$USER_OPTIMIZATION ${flag}"
+  fi
+done
+
 ##  Do this first, because the other tests depend on it:
 
 # Check for gcc and intltool (somehow breaks the suggested content
@@ -146,11 +155,6 @@ if test x$am_cv_scanf_lld = "xno"; then
   fi
 fi
 
-AC_CHECK_HEADERS(ltdl.h)
-if test "x$ac_cv_header_ltdl_h" = xno; then
-  AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
-fi
-
 # test whether we are building directly from SVN/SVK
 ${srcdir}/util/gnc-svnversion ${srcdir} >/dev/null 2>&1
 if test $? = 0 ; then
@@ -161,6 +165,27 @@ if test $? = 0 ; then
   AC_PROG_SWIG(1.3.28)
 else
   BUILDING_FROM_SVN=no
+  # Make sure we've got swig-runtime.h and gnc-svninfo.h
+  AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
+	[AC_MSG_ERROR([
+
+It looks like you are NOT building from Subversion
+but I cannot find swig-runtime.h.  Check your PATH
+and make sure we can find svnversion in your PATH!
+Either that or contact gnucash-devel@gnucash.org because
+the tarball you downloaded is broken.
+
+	])])
+  AC_CHECK_FILE(${srcdir}/src/gnome-utils/gnc-svninfo.h, [],
+	[AC_MSG_ERROR([
+
+It looks like you are NOT building from Subversion
+but I cannot find gnc-svninfo.h.  Check your PATH
+and make sure we can find svnversion in your PATH!
+Either that or contact gnucash-devel@gnucash.org because
+the tarball you downloaded is broken.
+
+	])])
 fi
 AM_CONDITIONAL(BUILDING_FROM_SVN, test "x$BUILDING_FROM_SVN" = "xyes")
 
@@ -187,8 +212,8 @@ fi
 ### --------------------------------------------------------------------------
 ### Glib checks..
 
-AM_PATH_GLIB_2_0(2.4.0,,AC_MSG_ERROR([
-*** GLIB >= 2.4 is required to build Gnucash; please make sure you have the
+AM_PATH_GLIB_2_0(2.6.0,,AC_MSG_ERROR([
+*** GLIB >= 2.6 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
 	gthread gobject gmodule)
@@ -198,20 +223,24 @@ then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
-AC_MSG_CHECKING(for GLIB - version >= 2.6.0)
-if $PKG_CONFIG 'glib-2.0 >= 2.6.0'
+AC_MSG_CHECKING(for GLIB - version >= 2.8.0)
+if $PKG_CONFIG 'glib-2.0 >= 2.8.0'
 then
   AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_GLIB26,1,[System has glib 2.6.0 or better])
-  HAVE_GLIB26=yes
+  AC_DEFINE(HAVE_GLIB_2_8,1,[System has glib 2.8.0 or better])
+  HAVE_GLIB_2_8=yes
 else
-  GLIB24_LIBS="$GLIB_LIBS"
-  GLIB_LIBS="\${top_builddir}/lib/glib26/libgncglib.la $GLIB_LIBS"
-  GLIB_CFLAGS="-I\${top_srcdir}/lib/glib26 $GLIB_CFLAGS"
   AC_MSG_RESULT(no)
-  AC_SUBST(GLIB24_LIBS)
+  if test "x${native_win32}" = "xyes"; then
+    AC_MSG_ERROR([*** GLIB >= 2.8 is required to build Gnucash on Windows.])
+  else
+    GLIB26_LIBS="$GLIB_LIBS"
+    GLIB_LIBS="\${top_builddir}/lib/glib28/libgnc-glib.la $GLIB_LIBS"
+    GLIB_CFLAGS="-I\${top_srcdir}/lib/glib28 $GLIB_CFLAGS"
+    AC_SUBST(GLIB26_LIBS)
+  fi
 fi
-AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
+AM_CONDITIONAL(HAVE_GLIB_2_8, test "x$HAVE_GLIB_2_8" = "xyes")
 
 AC_MSG_CHECKING(for GLIB - version >= 2.9.0)
 if $PKG_CONFIG 'glib-2.0 >= 2.9.0'
@@ -511,9 +540,9 @@ else
   AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
 fi
 if test x$QOF_XML_DIR = x; then
-	QOF_LIB_DIR='${libdir}'
+	QOF_LIB_DIR='${pkglibdir}'
 	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
-	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgncqof.la'
+	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgnc-qof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
 	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
@@ -542,7 +571,6 @@ AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
 GNC_CONFIGDIR='${sysconfdir}/gnucash'
 GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
 GNC_INCLUDE_DIR='${includedir}/gnucash'
-GNC_LIBDIR='${pkglibdir}'
 GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
 GNC_SHAREDIR='${pkgdatadir}'
 GNC_LIBEXECDIR='${libexecdir}/gnucash'
@@ -550,7 +578,6 @@ GNC_LIBEXECDIR='${libexecdir}/gnucash'
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
-GNC_MODULE_DIR='${pkglibdir}'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
 AC_SUBST(GNC_ACCOUNTS_DIR)
@@ -559,8 +586,6 @@ AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
 AC_SUBST(GNC_UI_DIR)
 AC_SUBST(GNC_INCLUDE_DIR)
-AC_SUBST(GNC_LIBDIR)
-AC_SUBST(GNC_MODULE_DIR)
 AC_SUBST(GNC_PIXMAP_DIR)
 AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
@@ -568,7 +593,10 @@ AC_SUBST(GNC_LIBEXECDIR)
 
 AC_ARG_ENABLE( debug,
   [  --enable-debug               compile with debugging flags set],
-       CFLAGS="${CFLAGS} -g"
+       # remove any optimization flags...
+       CFLAGS=$(echo $CFLAGS | sed -e 's,-O.,,g')
+       # ...except for those the user wants.
+       CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
        LDFLAGS="${LDFLAGS} -g"
        AC_DEFINE(DEBUG_MEMORY,1,Enable debug memory),
        AC_DEFINE(DEBUG_MEMORY,0,Enable debug memory) )
@@ -811,7 +839,7 @@ if test x${HBCI_DIR} = xhbci ;
 then
     # Check for Aqbanking library
     # aqbanking-1.6.0 was released on 2005-09-22
-    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.6.0", [], [
+    PKG_CHECK_MODULES(HBCI, aqbanking >= "1.6.0" gwenhywfar, [], [
       AC_AQBANKING(1,6,0)
       if test x${have_aqbanking} != xyes; 
       then
@@ -1023,7 +1051,7 @@ then
     fi
     GNOME_COMPILE_WARNINGS
 
-    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4)
+    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.6)
     AS_SCRUB_INCLUDE(GTK_CFLAGS)
     AC_SUBST(GTK_CFLAGS)
     AC_SUBST(GTK_LIBS)
@@ -1124,18 +1152,6 @@ fi
 ### Only test this if we're building the GUI
 if test x${gnc_build_gui} = xtrue ;
 then
-  AC_MSG_CHECKING(for GTK - version >= 2.6.0)
-  if $PKG_CONFIG 'gtk+-2.0 >= 2.6.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_GTK26,1,[System has gtk 2.6.0 or better])
-    HAVE_GTK26=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
-  AM_CONDITIONAL(HAVE_GTK26, test "x$HAVE_GTK26" = "xyes" )
-  
-  
   AC_MSG_CHECKING(for GTK - version >= 2.10.0)
   if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
   then
@@ -1146,18 +1162,6 @@ then
     AC_MSG_RESULT(no)
   fi
   AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
-  
-  
-  AC_MSG_CHECKING(for pango version >= 1.8.0)
-  if $PKG_CONFIG 'pango >= 1.8.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_PANGO18,1,[System has pango 1.8.0 or better])
-    HAVE_PANGO18=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
-  AM_CONDITIONAL(HAVE_PANGO18, test "x$HAVE_PANGO18" = "xyes" )
   
   
   dnl @@fixme 
@@ -1254,8 +1258,8 @@ then
   ])
   dnl Modules common to libgsf and libgsf-gnome
   libgsf_reqs="
-      gobject-2.0 >= 2.4.0
-      glib-2.0 >= 2.4.0
+      gobject-2.0 >= 2.6.0
+      glib-2.0 >= 2.6.0
       libxml-2.0 >= 2.4.16
   "
   dnl Modules required for libgsf-gnome
@@ -1532,15 +1536,15 @@ then
   dnl *****************************
   #	libgsf-1		>= 1.12.2
   goffice_reqs="
-  	glib-2.0		>= 2.4.7
-  	gobject-2.0		>= 2.4.7
-  	gmodule-2.0		>= 2.4.7
+  	glib-2.0		>= 2.6.4
+  	gobject-2.0		>= 2.6.4
+  	gmodule-2.0		>= 2.6.4
   	libxml-2.0		>= 2.4.12
-  	pango			>= 1.6.0
-  	pangoft2		>= 1.6.0
+  	pango			>= 1.8.1
+  	pangoft2		>= 1.8.1
   "
   goffice_gtk_reqs="
-  	gtk+-2.0		>= 2.4.13
+  	gtk+-2.0		>= 2.6.0
   	libglade-2.0		>= 2.3.6
   	libgnomeprint-2.2	>= 2.8.0
   	libart-2.0		>= 2.3.11
@@ -1838,9 +1842,7 @@ then
   ### ------------------------------------------------------------------------
 else
   ### A bunch of am conditionals that need to be set
-  AM_CONDITIONAL(HAVE_GTK26, false )
   AM_CONDITIONAL(HAVE_GTK_2_10, false)
-  AM_CONDITIONAL(HAVE_PANGO18, false )
   AM_CONDITIONAL(HAVE_LIBGSF, false)
   AM_CONDITIONAL(HAVE_GOFFICE, false)
   AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
@@ -1951,7 +1953,7 @@ AC_SUBST(LC_MESSAGES_ENUM)
 ### GnuCash flags and libs configuration
 
 GNUCASH_ENGINE_BASE_LIBS="${GLIB_LIBS}"
-GNUCASH_ENGINE_LIBS="-L${GNC_MODULE_DIR} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgncmodule"
+GNUCASH_ENGINE_LIBS="-L${pkglibdir} ${GNUCASH_ENGINE_BASE_LIBS} ${GUILE_LIBS} -lgncmod-engine -lgnc-module"
 
 GNUCASH_ENGINE_BASE_CFLAGS="-DGNUCASH ${GLIB_CFLAGS} ${GUILE_INCS}"
 GNUCASH_ENGINE_CFLAGS="${GNUCASH_ENGINE_BASE_CFLAGS}"
@@ -2056,8 +2058,11 @@ else
 fi
 AC_MSG_RESULT($warnFLAGS)
 
-# Extend LDFLAGS because libtool on Windows requires this argument
-LDFLAGS="${LDFLAGS} -no-undefined"
+# Adjust CFLAGS and LDFLAGS on Windows
+if test "x${platform_win32}" = "xyes"; then
+  CFLAGS="${CFLAGS} -mms-bitfields"
+  LDFLAGS="${LDFLAGS} -no-undefined -mwindows"
+fi
 
 ### --------------------------------------------------------------------------
 ### Adjustments -- especially executables that aren't generated via
@@ -2087,6 +2092,7 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/de_DE/Makefile
           accounts/el_GR/Makefile
           accounts/es_ES/Makefile
+          accounts/fr_CA/Makefile
           accounts/fr_CH/Makefile
           accounts/fr_FR/Makefile
           accounts/hu_HU/Makefile
@@ -2100,7 +2106,7 @@ AC_CONFIG_FILES(po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
-          lib/glib26/Makefile
+          lib/glib28/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
@@ -2216,7 +2222,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
-          dnl # src/report/report-gnome/test/Makefile
+          src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile
@@ -2251,9 +2257,6 @@ AC_CONFIG_FILES(po/Makefile.in
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
 
-          dnl # we configure gnucash-config here because we *don't*
-          dnl # want variables to be fully expanded
-          gnucash-config
           ,
           dnl # commands go here, but we don't have any right now
 )

@@ -60,7 +60,7 @@ test_qif(void)
 {
   QifContext ctx, file;
   char *filename;
-  const char *location = getenv("GNC_TEST_FILES");
+  const char *location = g_getenv("GNC_TEST_FILES");
   int i;
 
   ctx = qif_context_new();

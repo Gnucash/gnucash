@@ -31,7 +31,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gtk-compat.h"
 #include <glib/gi18n.h>
 
 #include "Scrub.h"
@@ -1285,30 +1284,36 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  GDate date;
   time_t today;
   struct tm tm;
+
+  g_date_clear(&date, 1);
 
   if (xaccAccountGetReconcileLastDate (account, statement_date))
   {
     int months = 1, days = 0;
 
-    tm = * localtime (statement_date);
+    g_date_set_time_t(&date, *statement_date);
 
-    /* How far should the date be moved?  Args unchanged on failure. */
     xaccAccountGetReconcileLastInterval (account, &months, &days);
 
     if (months) {
-      /*
-       * Add in the months and normalize
-       */
-      date_add_months(&tm, months, TRUE);
+      gboolean was_last_day_of_month = g_date_is_last_of_month(&date);
+
+      g_date_add_months(&date, months);
+
+      /* Track last day of the month, i.e. 1/31 -> 2/28 -> 3/31 */ 
+      if (was_last_day_of_month)
+      {
+        g_date_set_day(&date, g_date_get_days_in_month(g_date_get_month(&date),
+                                                       g_date_get_year(&date)));
+      }
     } else {
-      /*
-       * Add in the days (weeks if multiple of seven).
-       */
-      tm.tm_mday += days;
+      g_date_add_days(&date, days);
     }
-    tm.tm_isdst = -1;
+
+    g_date_to_struct_tm(&date, &tm);
     gnc_tm_set_day_end (&tm);
     *statement_date = mktime (&tm);
 

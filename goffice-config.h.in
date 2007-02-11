@@ -1,12 +1,5 @@
 /* goffice/goffice-config.h.in.  Generated from configure.in by autoheader.  */
 
-/* Conditionally include >2.4 pieces we use. */
-#undef HAVE_GLIB26
-#undef HAVE_GTK26
-
-/* Conditionally work around exposed-in-1.8-functionality. */
-#undef HAVE_PANGO18
-
 /* always defined to indicate that i18n is enabled */
 #undef ENABLE_NLS
 

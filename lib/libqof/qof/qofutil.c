@@ -545,6 +545,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 void
 qof_init (void)
 {
+    qof_log_init();
 	qof_util_get_string_cache ();
 	guid_init ();
 	qof_object_initialize ();
@@ -559,6 +560,7 @@ qof_close(void)
 	qof_object_shutdown ();
 	guid_shutdown ();
 	qof_util_string_cache_destroy ();
+    qof_log_shutdown();
 }
 
 /* ************************ END OF FILE ***************************** */

@@ -356,17 +356,20 @@ gnc_plugin_add_actions (GtkUIManager *ui_merge,
 	gchar *pathname;
 	gint merge_id;
 	
-	ENTER("ui_merge %p, action_group %p, filename %s",
-	      ui_merge, action_group, filename);
 	g_return_val_if_fail (ui_merge, 0);
 	g_return_val_if_fail (action_group, 0);
 	g_return_val_if_fail (filename, 0);
 
+	ENTER("ui_merge %p, action_group %p, filename %s",
+	      ui_merge, action_group, filename);
 	gtk_ui_manager_insert_action_group (ui_merge, action_group, 0);
 
 	pathname = gnc_gnome_locate_ui_file (filename);
 	if (pathname == NULL)
-	  return 0;
+    {
+      LEAVE("fail");
+      return 0;
+    }
 
 	merge_id = gtk_ui_manager_add_ui_from_file (ui_merge, pathname, &error);
 	DEBUG("merge_id is %d", merge_id);

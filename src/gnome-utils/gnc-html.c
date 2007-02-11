@@ -29,6 +29,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -1290,7 +1291,7 @@ gnc_html_copy(gnc_html *html)
 static gboolean 
 raw_html_receiver (gpointer     engine,
                    const gchar *data,
-                   guint        len,
+                   size_t        len,
                    gpointer     user_data)
 {
   FILE *fh = (FILE *) user_data;
@@ -1311,7 +1312,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
   g_return_val_if_fail (html != NULL, FALSE);
   g_return_val_if_fail (filepath != NULL, FALSE);
 
-  fh = fopen (filepath, "w");
+  fh = g_fopen (filepath, "w");
   if (!fh)
     return FALSE;
 

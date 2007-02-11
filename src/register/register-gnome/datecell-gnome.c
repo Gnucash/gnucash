@@ -46,7 +46,7 @@
 #include "gnucash-sheet.h"
 
 
-#define DATE_BUF 30
+#define DATE_BUF (MAX_DATE_LENGTH+1)
 
 typedef struct _PopBox
 {

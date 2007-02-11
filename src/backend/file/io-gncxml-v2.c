@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -247,16 +247,12 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 static gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
-    GList *list;
-
-    list = gnc_book_get_schedxactions (data->book);
-    list = g_list_append(list, sx);
-
-    gnc_book_set_schedxactions(data->book, list);
-    data->counter.schedXactions_loaded++;
-    run_callback(data, "schedXactions");
-
-    return TRUE;
+     SchedXactions *sxes;
+     sxes = gnc_book_get_schedxactions(data->book);
+     gnc_sxes_add_sx(sxes, sx);
+     data->counter.schedXactions_loaded++;
+     run_callback(data, "schedXactions");
+     return TRUE;
 }
 
 static gboolean
@@ -420,20 +416,20 @@ gnc_counter_sixtp_parser_create(void)
 }
 
 static void
-print_counter_data(load_counter *data)
+debug_print_counter_data(load_counter *data)
 {
-    PINFO("Transactions: Total: %d, Loaded: %d",
-           data->transactions_total, data->transactions_loaded);
-    PINFO("Accounts: Total: %d, Loaded: %d",
-           data->accounts_total, data->accounts_loaded);
-    PINFO("Books: Total: %d, Loaded: %d",
-           data->books_total, data->books_loaded);
-    PINFO("Commodities: Total: %d, Loaded: %d",
-           data->commodities_total, data->commodities_loaded);
-    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
-           data->schedXactions_total, data->schedXactions_loaded);
-    PINFO("Budgets: Total: %d, Loaded: %d",
-	  data->budgets_total, data->budgets_loaded);
+    DEBUG("Transactions: Total: %d, Loaded: %d",
+          data->transactions_total, data->transactions_loaded);
+    DEBUG("Accounts: Total: %d, Loaded: %d",
+          data->accounts_total, data->accounts_loaded);
+    DEBUG("Books: Total: %d, Loaded: %d",
+          data->books_total, data->books_loaded);
+    DEBUG("Commodities: Total: %d, Loaded: %d",
+          data->commodities_total, data->commodities_loaded);
+    DEBUG("Scheduled Tansactions: Total: %d, Loaded: %d",
+          data->schedXactions_total, data->schedXactions_loaded);
+    DEBUG("Budgets: Total: %d, Loaded: %d",
+          data->budgets_total, data->budgets_loaded);
 }
 
 static void
@@ -738,7 +734,7 @@ qof_session_load_from_xml_file_v2_full(
         xaccEnableDataScrubbing();
         goto bail;
     }
-    DEBUGCMD (print_counter_data(&gd->counter));
+    debug_print_counter_data(&gd->counter);
 
     /* destroy the parser */
     sixtp_destroy (top_parser);
@@ -940,7 +936,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  "transaction",
                  gnc_book_count_transactions(book),
                  "schedxaction",
-                 g_list_length( gnc_book_get_schedxactions(book) ),
+                 g_list_length(gnc_book_get_schedxactions(book)->sx_list),
 		 "budget", qof_collection_count(
                      qof_book_get_collection(book, GNC_ID_BUDGET)),
 		 NULL);
@@ -1075,25 +1071,24 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 static void
 write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
-    GList *schedXactions;
-    SchedXaction *tmpSX;
-    xmlNodePtr node;
+     GList *schedXactions;
+     SchedXaction *tmpSX;
+     xmlNodePtr node;
+     
+     schedXactions = gnc_book_get_schedxactions(book)->sx_list;
 
-    /* get list of scheduled transactions from QofBook */
-    schedXactions = gnc_book_get_schedxactions( book );
+     if ( schedXactions == NULL )
+          return;
 
-    if ( schedXactions == NULL )
-        return;
-
-    do {
-        tmpSX = schedXactions->data;
-        node = gnc_schedXaction_dom_tree_create( tmpSX );
-        xmlElemDump( out, NULL, node );
-        fprintf( out, "\n" );
-        xmlFreeNode( node );
-        gd->counter.schedXactions_loaded++;
-        run_callback(gd, "schedXactions");
-    } while ( (schedXactions = schedXactions->next) );
+     do {
+          tmpSX = schedXactions->data;
+          node = gnc_schedXaction_dom_tree_create( tmpSX );
+          xmlElemDump( out, NULL, node );
+          fprintf( out, "\n" );
+          xmlFreeNode( node );
+          gd->counter.schedXactions_loaded++;
+          run_callback(gd, "schedXactions");
+     } while ( (schedXactions = schedXactions->next) );
 }
 
 static void
@@ -1183,7 +1178,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
       gnc_account_n_descendants(gnc_book_get_root_account(book));
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
-      g_list_length( gnc_book_get_schedxactions(book));
+      g_list_length(gnc_book_get_schedxactions(book)->sx_list);
     gd->counter.budgets_total = qof_collection_count(
         qof_book_get_collection(book, GNC_ID_BUDGET));
 
@@ -1245,11 +1240,11 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
       use_gzip = TRUE;
 
   if (!use_gzip)
-    return fopen(filename, perms);
+    return g_fopen(filename, perms);
 
 #ifdef G_OS_WIN32
   PWARN("Compression not implemented on Windows. Opening uncompressed file.");
-  return fopen(filename, perms);
+  return g_fopen(filename, perms);
 
   /* Potential implementation: Windows doesn't have pipe(); use
      the g_spawn glib wrappers. */
@@ -1270,7 +1265,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 				   &child_stdin, NULL, NULL,
 				   &error) ) {
       PWARN("G_spawn call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
     /* FIXME: Now need to set up the child process to write to the
        file. */
@@ -1292,14 +1287,14 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 
     if (pipe(filedes) < 0) {
       PWARN("Pipe call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
 
     pid = fork();
     switch (pid) {
     case -1:
       PWARN("Fork call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
 
     case 0: /* child */ {
       char buffer[BUFLEN];
@@ -1411,7 +1406,7 @@ gnc_book_write_accounts_to_xml_file_v2(
 {
     FILE *out;
 
-    out = fopen(filename, "w");
+    out = g_fopen(filename, "w");
     if (out == NULL)
     {
         return FALSE;
@@ -1434,7 +1429,7 @@ static gboolean
 is_gzipped_file(const gchar *name)
 {
     unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
+    int fd = g_open(name, O_RDONLY, 0);
 
     if (fd == -1) {
         return FALSE;

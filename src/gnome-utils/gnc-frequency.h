@@ -29,17 +29,17 @@
 #include "FreqSpec.h"
 
 #define GNC_TYPE_FREQUENCY	  (gnc_frequency_get_type())
-#define GNC_FREQUENCY(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_FREQUENCY, GNCFrequency)
-#define GNC_FREQENCY_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_FREQUENCY, GNCFrequency)
+#define GNC_FREQUENCY(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_FREQUENCY, GncFrequency)
+#define GNC_FREQENCY_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_FREQUENCY, GncFrequency)
 #define GNC_IS_FREQUENCY(obj)     G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_FREQUENCY)
 
 /**
- * A GNCFrequency is a VBox containing a scrollable GtkNotebook [and other
+ * A GncFrequency is a VBox containing a scrollable GtkNotebook [and other
  * widgets] which allows the user to specify the frequency [of a scheduled
  * transaction or budgeting category, for instance], manipulating a FreqSpec
  * object in the process.
  **/
-typedef struct _GNCFrequency 
+typedef struct _GncFrequency 
 {
 	GtkVBox	        widget;
 
@@ -48,14 +48,14 @@ typedef struct _GNCFrequency
 	GtkComboBox     *freqComboBox;
 	GNCDateEdit     *startDate;
 	GladeXML        *gxml;
-} GNCFrequency;
+} GncFrequency;
 
-typedef struct _GNCFrequencyClass
+typedef struct _GncFrequencyClass
 {
 	GtkVBoxClass parent_class;
 
-	void (*changed) (GNCFrequency *gf);
-} GNCFrequencyClass;
+	void (*changed) (GncFrequency *gf);
+} GncFrequencyClass;
 
 struct pageDataTuple 
 {
@@ -67,42 +67,41 @@ struct pageDataTuple
 GType gnc_frequency_get_type( void );
 
 /**
- * Create a new freq spec widget.
+ * Create a new GncFrequencey widget.
  * The menus and panels will be initialized to correspond to the
  * settings in the FreqSpec, and the date window will show the 
  * indicated date.  Either or both may be NULL.
  * For the default freq spec widget, use 'NULL'.
  **/
-GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *date );
-void gnc_frequency_init( GNCFrequency *gf );
+GtkWidget* gnc_frequency_new(FreqSpec *fs, GDate *start_date);
+void gnc_frequency_init( GncFrequency *gf );
 
 /**
- * Change the given GNCFrequency with the given FreqSpec and GDate.  
+ * Change the given GncFrequency with the given FreqSpec and GDate.  
  * If the FreqSpec is NULL, then no change is made to the widget menus.
  * If the date is NULL, then no change is made to the widget date field.
  **/
-void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date );
+void gnc_frequency_setup( GncFrequency *gf, FreqSpec *fs, GDate *date );
 
 /**
  * Saves the state of the GNCFrequenecy widget.
  * Updates the given FreqSpec if it's not NULL.
  * Places the date in outDate, if it's not NULL.
  **/
-void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate);
+void gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate);
 
 /**
  * Set the label text for the frequency option menu.  In the current
  * implementation, the default label text is "Frequency:"
  */
-void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt);
+void gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt);
 
 /**
  * Set the label text for the date entry widget. In the current
  * impelmentation, the default label text is "Start Date:"
  */
-void gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt);
+void gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt);
 
-void
-gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date );
+void gnc_frequency_setup_default( GncFrequency *gf, FreqSpec *fs, GDate *date );
 
 #endif /* !defined( GNC_FREQUENCY_H ) */

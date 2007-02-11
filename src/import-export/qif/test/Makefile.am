@@ -11,7 +11,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} 
 
 LDADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../../libgncmod-generic-import.la \
   ../libgncmod-qif.la \
@@ -46,7 +46,7 @@ TESTS_ENVIRONMENT := \
   GNC_TEST_FILES=${srcdir}/test-files \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link \
   test-qif
 

@@ -37,10 +37,6 @@
 #ifndef GNC_GKEYFILE_UTILS_H
 #define GNC_GKEYFILE_UTILS_H
 
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 
 /** Open and read a key/value file from disk into memory.
  *

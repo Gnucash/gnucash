@@ -58,10 +58,10 @@ struct _GNCSearchStringPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-guint
+GType
 gnc_search_string_get_type (void)
 {
-  static guint type = 0;
+  static GType type = 0;
 	
   if (!type) {
     GTypeInfo type_info = {

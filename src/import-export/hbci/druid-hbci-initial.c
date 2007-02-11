@@ -25,9 +25,12 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
+#ifdef HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -357,9 +360,9 @@ on_accountlist_changed (GtkTreeSelection *selection,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+    /* printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
 	   AB_Account_GetAccountNumber(hbci_acc),
-	   old_value);
+	   old_value); */
 
     longname = gnc_hbci_account_longname(hbci_acc);
     if (AB_Account_GetCurrency (hbci_acc) && 
@@ -420,10 +423,10 @@ on_aqhbci_button (GtkButton *button,
 
   /* This is the point where we look for and start an external
      application shipped with aqhbci that contains the setup druid for
-     HBCI related stuff. It requires qt (but not kde). This
+     AqBanking related stuff. It requires qt (but not kde). This
      application contains the very verbose step-by-step setup wizard
-     for the HBCI account, and the application is shared with other
-     AqBanking-based financial managers that offer the HBCI features
+     for the AqBanking account, and the application is shared with other
+     AqBanking-based financial managers that offer the AqBanking features
      (e.g. KMyMoney). See gnucash-devel discussion here
      https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
   */
@@ -530,7 +533,7 @@ on_aqhbci_button (GtkButton *button,
 
   if (wizard_exists) {
     /* Really check whether the file exists */
-    int fd = open( wizard_path, O_RDONLY );
+    int fd = g_open( wizard_path, O_RDONLY, 0 );
     if ( fd == -1)
       wizard_exists = FALSE;
     else
@@ -540,6 +543,20 @@ on_aqhbci_button (GtkButton *button,
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
+#ifdef G_OS_WIN32
+    /* FIXME: Use something different than fork() for the child
+       process here. See src/backend/file/io-gncxml-v2.c that has
+       the same problem. */
+    gnc_error_dialog
+      (info->window,
+       _("The Windows version of GnuCash does not (yet) have the "
+	 "capability to start the external program \"%s Setup Wizard\". "
+	 "Please start it yourself from the location \"%s\" "
+	 "before you continue."),
+       backend_name, wizard_path);
+    res = 0;
+#else
+    /* Normal non-Windows operating system */
     int wait_status;
     int wait_result = 0;
 
@@ -557,13 +574,13 @@ on_aqhbci_button (GtkButton *button,
       pid = fork();
       switch (pid) {
       case -1:
-	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
+	printf("Fork call failed. Cannot start AqBanking setup wizard.");
 	res = -1;
 	AB_Banking_Init (info->api);
 	break;
       case 0: /* child */
 	execl(wizard_path, wizard_path, NULL);
-	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
+	printf("Fork call failed. Cannot start AqBanking setup wizard.");
 	_exit(0);
       default: /* parent */
 	res = 0;
@@ -579,6 +596,7 @@ on_aqhbci_button (GtkButton *button,
 	AB_Banking_Init (info->api);
       }
     }
+#endif /* G_OS_WIN32 */
 
     if (res == 0) {
 #ifndef AQBANKING_WIZARD_ALLBACKENDS
@@ -595,13 +613,10 @@ on_aqhbci_button (GtkButton *button,
       printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
 	(info->window,
-       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-	 _("The external program \"%s Setup Wizard\" returned a nonzero "
-	   "exit code which means it has not been finished successfully. "
-	   "The further HBCI setup can only be finished if the %s "
-	   "Setup Wizard is run successfully. Please try to start and "
-	   "successfully finish the %s Setup Wizard program again."),
-	 backend_name, backend_name, backend_name);
+	 _("The external program \"AqBanking Setup Wizard\" failed "
+	   "to run successfully.  Online Banking can only be setup "
+	   "if this wizard has run successfully.  "
+	   "Please try running the \"AqBanking Setup Wizard\" again."));
       druid_disable_next_button(info);
     }
   } else {
@@ -609,10 +624,12 @@ on_aqhbci_button (GtkButton *button,
     gnc_error_dialog
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-       _("The external program \"%s Setup Wizard\" has not been found. \n\n"
-	 "The package aqbanking is supposed to install the program "
-	 "\"%s-qt3-wizard\". Please check your installation of aqbanking."),
-       backend_name, backend_name);
+       _("The external program \"AqBanking Setup Wizard\" has not "
+	 "been found. \n\n"
+	 "The aqbanking package should include the "
+	 "program \"qt3-wizard\".  Please check your installation to "
+	 "ensure this program is present.  On some distributions this "
+	 "may require installing additional packages."));
     druid_disable_next_button(info);
   }
   g_free (backend_name);
@@ -672,14 +689,14 @@ void gnc_hbci_initial_druid (void)
     g_object_unref(info->accountstore);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("HBCI account name"),
+    column = gtk_tree_view_column_new_with_attributes(_("Online Banking Account Name"),
 						      renderer,
 						      "text", ACCOUNT_LIST_COL_HBCI_NAME,
 						      NULL);
     gtk_tree_view_append_column(info->accountview, column);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"),
+    column = gtk_tree_view_column_new_with_attributes(_("GnuCash Account Name"),
 						      renderer,
 						      "text", ACCOUNT_LIST_COL_GNC_NAME,
 						      NULL);

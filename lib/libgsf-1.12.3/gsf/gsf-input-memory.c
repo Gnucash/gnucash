@@ -26,11 +26,7 @@
 #include <gsf/gsf-impl-utils.h>
 #include <gsf/gsf-utils.h>
 #include <gsf/gsf-shared-memory.h>
-#ifdef HAVE_GLIB26
 #include <glib/gstdio.h>
-#else
-#include "glib24_26-compat.h"
-#endif // HAVE_GLIB26
 
 #ifdef HAVE_MMAP
 

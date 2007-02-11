@@ -68,6 +68,7 @@ struct gncp_SchedXaction
   /* the current instance-count of the SX. */
   gint            instance_num;
   
+  gboolean        enabled;
   gboolean        autoCreateOption;
   gboolean        autoCreateNotify;
   gint            advanceCreateDays;

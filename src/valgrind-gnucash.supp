@@ -49,12 +49,6 @@
 }
 
 {
-   libltdl.so.3(Value1)
-   Memcheck:Value1
-   obj:/usr/lib/libltdl.so.3
-}
-
-{
    libglib-1.2.so.0(Value4)
    Memcheck:Value4
    fun:g_hash_table_lookup

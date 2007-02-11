@@ -17,10 +17,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 #define CC2XML(s) ((xmlChar const *)(s))
 #define CXML2C(s) ((char const *)(s))
 

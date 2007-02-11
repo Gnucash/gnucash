@@ -48,15 +48,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#ifndef HAVE_GTK26
-// +jsled: maybe not needed due to cascading imports under gtk+-2.6?
-#include <gtk/gtkimage.h>
-#endif
-
-#ifndef HAVE_GLIB26
-#include "goffice/glib24_26-compat.h"
-#endif
-
 #define PREVIEW_HSIZE 150
 #define PREVIEW_VSIZE 150
 

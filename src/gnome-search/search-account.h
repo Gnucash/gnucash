@@ -46,7 +46,7 @@ struct _GNCSearchAccountClass {
   /* signals */
 };
 
-guint		gnc_search_account_get_type	(void);
+GType		gnc_search_account_get_type	(void);
 GNCSearchAccount	*gnc_search_account_new	(void);
 GNCSearchAccount	*gnc_search_account_matchall_new	(void);
 

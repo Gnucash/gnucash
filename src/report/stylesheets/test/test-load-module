@@ -1,4 +1,4 @@
-#! /bin/bash 
+#! /bin/sh 
 exec guile -s "$0"
 !#
 

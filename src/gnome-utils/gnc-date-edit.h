@@ -28,7 +28,6 @@
   @NOTATION@
  */
 
-
 #ifndef GNC_DATE_EDIT_H
 #define GNC_DATE_EDIT_H 
 
