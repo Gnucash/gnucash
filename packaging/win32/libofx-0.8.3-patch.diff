@@ -1,15 +1,22 @@
 diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
 --- libofx-0.8.3/lib/ofx_preproc.cpp	Tue Jan  9 02:38:33 2007
 +++ win32-libofx-0.8.3/lib/ofx_preproc.cpp	Thu Feb  8 13:53:59 2007
-@@ -20,6 +20,7 @@
+@@ -20,8 +20,14 @@
  #include <iostream>
  #include <fstream>
  #include <stdlib.h>
 +#include <io.h> // for mktemp() on win32/mingw
  #include <stdio.h>
  #include <string>
++#ifdef OS_WIN32
++#include <windows.h> // for GetModuleFileName()
++#undef ERROR
++#undef DELETE
++#endif
  #include "ParserEventGeneratorKit.h"
-@@ -51,6 +52,32 @@
+ #include "libofx.h"
+ #include "messages.hh"
+@@ -51,6 +57,57 @@
    "~/"};
  const unsigned int READ_BUFFER_SIZE = 1024;
  
@@ -39,10 +46,35 @@ diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
 +#endif
 +}
 +
++#ifdef OS_WIN32
++std::string get_dtd_installation_directory()
++{
++  // Partial implementation of 
++  // http://developer.gnome.org/doc/API/2.0/glib/glib-Windows-Compatibility-Functions.html#g-win32-get-package-installation-directory
++  char ch_fn[MAX_PATH], *p;
++  std::string str_fn;
++
++  if (!GetModuleFileName(NULL, ch_fn, MAX_PATH)) return "";
++
++  if ((p = strrchr(ch_fn, '\\')) != NULL)
++    *p = '\0';
++
++  p = strrchr(ch_fn, '\\');
++  if (p && (_stricmp(p+1, "bin") == 0 ||
++            _stricmp(p+1, "lib") == 0))
++    *p = '\0';
++
++  str_fn = ch_fn;
++  str_fn += "\\share\\libofx\\dtd\\";
++
++  return str_fn;
++}
++#endif
++
  /** @brief File pre-processing of OFX AND for OFC files 
  *
  * Takes care of comment striping, dtd locating, etc.
-@@ -66,7 +93,7 @@
+@@ -66,7 +123,7 @@
    char buffer[READ_BUFFER_SIZE];
    string s_buffer;
    char *filenames[3];
@@ -51,7 +83,7 @@ diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
  
    libofx_context=(LibofxContext*)ctx;
  
-@@ -75,8 +102,10 @@
+@@ -75,8 +132,10 @@
      message_out(DEBUG, string("ofx_proc_file():Opening file: ")+ p_filename);
      
      input_file.open(p_filename);
@@ -64,7 +96,7 @@ diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
      tmp_file.open(tmp_filename);
  
      message_out(DEBUG,"ofx_proc_file(): Creating temp file: "+string(tmp_filename));
-@@ -203,7 +232,7 @@
+@@ -203,7 +262,7 @@
    ofstream tmp_file;
    string s_buffer;
    char *filenames[3];
@@ -73,7 +105,7 @@ diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
    int pos;
    LibofxContext *libofx_context;
  
-@@ -216,8 +245,10 @@
+@@ -216,8 +275,10 @@
    }
    s_buffer=string(s, size);
  
@@ -86,3 +118,22 @@ diff -ur libofx-0.8.3/lib/ofx_preproc.cpp win32-libofx-0.8.3/lib/ofx_preproc.cpp
    tmp_file.open(tmp_filename);
  
    message_out(DEBUG,"ofx_proc_file(): Creating temp file: "+string(tmp_filename));
+@@ -439,8 +500,16 @@
+   string dtd_path_filename;
+   bool dtd_found=false;
+ 
+-  for(i=0;i<DTD_SEARCH_PATH_NUM&&dtd_found==false;i++){
+-    dtd_path_filename=DTD_SEARCH_PATH[i];
++  for(i=-1;i<DTD_SEARCH_PATH_NUM&&dtd_found==false;i++){
++    if (i==-1) {
++#ifdef OS_WIN32
++      dtd_path_filename=get_dtd_installation_directory();
++#else
++      continue;
++#endif
++    } else {
++      dtd_path_filename=DTD_SEARCH_PATH[i];
++    }
+     dtd_path_filename.append(dtd_filename);
+     dtd_file.clear();
+     dtd_file.open(dtd_path_filename.c_str());
