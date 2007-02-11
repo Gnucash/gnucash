@@ -1894,8 +1894,18 @@ GncMainWindow *
 gnc_main_window_new (void)
 {
 	GncMainWindow *window;
+	gncUIWidget old_window;
 
 	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
+	old_window = gnc_ui_get_toplevel();
+	if (old_window) {
+	  gint width, height;
+	  gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
+	  gtk_window_resize (GTK_WINDOW (window), width, height);
+	  if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
+	       & GDK_WINDOW_STATE_MAXIMIZED) != 0)
+	    gtk_window_maximize (GTK_WINDOW (window));
+	}
 	active_windows = g_list_append (active_windows, window);
 	gnc_main_window_update_all_menu_items();
 	return window;
@@ -3381,15 +3391,19 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
  *                                                          *
  ************************************************************/
 
-/** Get a pointer to a top level window... any top level window.  This
- *  function just returns a pointer to the first window.
+/** Get a pointer to the first active top level window or NULL
+ *  if there is none.
  *
  *  @return A pointer to a GtkWindow object. */
 gncUIWidget
 gnc_ui_get_toplevel (void)
 {
-  if (active_windows)
-    return active_windows->data;
+  GList *window;
+
+  for (window=active_windows; window; window=window->next)
+    if (gtk_window_is_active (GTK_WINDOW (window->data)))
+      return window->data;
+
   return NULL;
 }
 
