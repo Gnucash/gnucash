@@ -61,7 +61,7 @@ function prepare() {
     mkdir -p $DOWNLOAD_UDIR
 
     if [ "$DISABLE_OPTIMIZATIONS" = "yes" ]; then
-        export CFLAGS="$CFLAGS -O0"
+        export CFLAGS="$CFLAGS -g -O0"
     fi
 }
 
