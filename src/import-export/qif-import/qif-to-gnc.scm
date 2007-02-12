@@ -19,7 +19,7 @@
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (xaccGetAccountFromFullName old-group gnc-name))
+          (gnc-account-lookup-by-full-name old-root gnc-name))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
@@ -38,13 +38,13 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (xaccGetAccountFromFullName old-group long-name)
+      (if (not (null? (gnc-account-lookup-by-full-name old-root long-name)))
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
-                    (xaccGetAccountFromFullName old-group test-name)))
-              (if (and test-acct (not (compatible? test-acct)))
+                    (gnc-account-lookup-by-full-name old-root test-name)))
+              (if (and (not (null? test-acct)) (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))
           short-name))
@@ -156,9 +156,9 @@
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo #t default-currency #f default-currency
                                    gnc-acct-hash old-root new-root))))
-          (if parent-acct
-              (xaccAccountInsertSubAccount parent-acct new-acct)
-              (xaccGroupInsertAccount new-group new-acct))
+          (if (and parent-acct (not (null? parent-acct)))
+              (gnc-account-append-child parent-acct new-acct)
+              (gnc-account-append-child new-root new-acct))
           
           (hash-set! gnc-acct-hash gnc-name new-acct)
           new-acct))))

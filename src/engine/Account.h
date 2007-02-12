@@ -237,6 +237,7 @@ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
 /** @name Account general setters/getters 
  @{ */
 
+QofBook *gnc_account_get_book(const Account *account);
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
 /** Set the account's name */

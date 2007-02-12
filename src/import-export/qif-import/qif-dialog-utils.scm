@@ -606,8 +606,8 @@
               (not (hash-ref stock-hash stock-name)))
              (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
                     (existing-gnc-acct 
-                     (xaccGetAccountFromFullName
-                      (gnc-get-current-group)
+                     (gnc-account-lookup-by-full-name 
+                      (gnc-get-current-root-account)
                       (qif-map-entry:gnc-name map-entry)))
 		    (book (xaccGroupGetBook (gnc-get-current-group)))
                     (existing-type 
