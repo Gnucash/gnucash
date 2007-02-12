@@ -32,6 +32,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 
 #include "Scrub.h"
 #include "Scrub3.h"

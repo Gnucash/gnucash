@@ -1,5 +1,6 @@
 #include "config.h"
 #include <glib.h>
+#include "glib-compat.h"
 #include "qof.h"
 #include "gnc-engine.h"
 #include "gnc-sx-instance-model.h"
