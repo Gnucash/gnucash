@@ -87,7 +87,7 @@
                 ;; query won't find anything.  optimize this later.
                 (xaccQueryAddSingleAccountMatch
                  sq 
-                 (gnc-get-account-from-full-name
+                 (gnc-account-lookup-by-full-name
                   old-root (gnc-account-get-full-name
                              (xaccSplitGetAccount split)))
                  QOF-QUERY-AND)
@@ -158,7 +158,7 @@
 
 (define (gnc:account-tree-catenate-and-merge old-root new-root)
   ;; stuff the new accounts into the old account tree and merge the accounts
-  (gnc:account-join-children old-root new-root)
-  (gnc:account-begin-edit new-root)
-  (gnc:account-destroy new-root)
-  (gnc:account-merge-children old-root))
+  (gnc-account-join-children old-root new-root)
+  (xaccAccountBeginEdit new-root)
+  (xaccAccountDestroy new-root)
+  (gnc-account-merge-children old-root))

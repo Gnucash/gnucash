@@ -606,7 +606,7 @@
               (not (hash-ref stock-hash stock-name)))
              (let* ((separator (string-ref (gnc-get-account-separator-string) 0))
                     (existing-gnc-acct 
-                     (gnc-get-account-from-full-name 
+                     (gnc-account-lookup-by-full-name 
                       (gnc-get-current-root-account)
                       (qif-map-entry:gnc-name map-entry)))
 		    (book (gnc-account-get-book (gnc:get-current-root-account)))

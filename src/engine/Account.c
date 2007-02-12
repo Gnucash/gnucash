@@ -149,6 +149,12 @@ xaccInitAccount (Account * acc, QofBook *book)
   LEAVE ("account=%p\n", acc);
 }
 
+QofBook *
+gnc_account_get_book(const Account *account)
+{
+  return qof_instance_get_book(QOF_INSTANCE(account));
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -3169,8 +3175,7 @@ gnc_account_copy_children (Account *to, Account *from)
 void 
 gnc_account_merge_children (Account *parent)
 {
-  GList *node_a;
-  GList *node_b;
+  GList *node_a, *node_b, *work, *worker;
 
   if (!parent) return;
 
@@ -3198,8 +3203,11 @@ gnc_account_merge_children (Account *parent)
 
       /* consolidate children */
       if (acc_b->children) {
-	acc_a->children = g_list_concat(acc_a->children, acc_b->children);
-	acc_b->children = NULL;
+	work = g_list_copy(acc_b->children);
+	for (worker = work; worker; worker = g_list_next(worker))
+	  gnc_account_append_child (acc_a, (Account *)worker->data);
+	g_list_free(work);
+
 	qof_event_gen (&acc_a->inst.entity, QOF_EVENT_MODIFY, NULL);
 	qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
       }

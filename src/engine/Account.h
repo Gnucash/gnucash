@@ -216,7 +216,6 @@ Account *gnc_book_get_root_account(QofBook *book);
 void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @deprecated */
-#define gnc_account_get_book(X)   qof_instance_get_book(QOF_INSTANCE(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
 #define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 
@@ -233,6 +232,7 @@ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
 /** @name Account general setters/getters 
  @{ */
 
+QofBook *gnc_account_get_book(const Account *account);
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
 /** Set the account's name */
