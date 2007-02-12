@@ -185,7 +185,7 @@ LIBOFX_PATCH=`pwd`/libofx-0.8.3-patch.diff
 GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.3.tar.gz"
 GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
 
-KTOBLZCHECK="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.12.tar.gz"
+KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.12.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.7.tar.gz"
@@ -222,7 +222,7 @@ add_step inst_opensp
 add_step inst_libofx
 ## Online banking:
 add_step inst_gwenhywfar
-#add_step inst_ktoblzcheck
+add_step inst_ktoblzcheck
 add_step inst_aqbanking
 ##
 if test x$cross_compile != xyes ; then

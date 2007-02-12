@@ -19,6 +19,8 @@ register_env_var GUILE_LOAD_PATH ";"
 register_env_var GUILE_CPPFLAGS " "
 register_env_var GUILE_LDFLAGS " "
 register_env_var INTLTOOL_PERL " "
+register_env_var KTOBLZCHECK_CPPFLAGS " "
+register_env_var KTOBLZCHECK_LDFLAGS " "
 register_env_var PATH ":"
 register_env_var PKG_CONFIG ":" ""
 register_env_var PKG_CONFIG_PATH ":"
@@ -719,12 +721,14 @@ function inst_ktoblzcheck() {
 	assert_one_dir $TMP_UDIR/ktoblzcheck-*
 	qpushd $TMP_UDIR/ktoblzcheck-*
 	    ./configure \
-	        --prefix=$_GWENHYWFAR_UDIR
+	        --prefix=${_GWENHYWFAR_UDIR}
 	    make
 	    make check
 	    make install
 	qpopd
     fi
+    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
+    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
 }
 
@@ -767,15 +771,16 @@ function inst_aqbanking() {
 	wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
 	assert_one_dir $TMP_UDIR/aqbanking-*
 	qpushd $TMP_UDIR/aqbanking-*
+	    _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS}"
+	    _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
 	    if test x$aqbanking_with_qt = xyes; then
 		inst_qt4
 		_QTDIR=`unix_path ${QTDIR}`
-		_AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib"
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
 		    --with-frontends="cbanking qbanking" \
 		    --with-backends="aqdtaus aqhbci aqofxconnect" \
-		    CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
+		    CPPFLAGS="${_AQ_CPPFLAGS}" \
 		    LDFLAGS="${_AQ_LDFLAGS}" \
 		    qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
 		    qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
@@ -783,12 +788,11 @@ function inst_aqbanking() {
 		make qt4-port
 		make clean
 	    else
-		_AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib"
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
 		    --with-frontends="cbanking" \
 		    --with-backends="aqdtaus aqhbci aqofxconnect" \
-		    CPPFLAGS="-I${_LIBOFX_UDIR}/include" \
+		    CPPFLAGS="${_AQ_CPPFLAGS}" \
 		    LDFLAGS="${_AQ_LDFLAGS}" \
 	            --prefix=${_AQBANKING_UDIR}
 	    fi
@@ -863,8 +867,8 @@ function inst_gnucash() {
 	    ${LIBOFX_OPTIONS} \
 	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} -D_WIN32" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS}" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         # Windows DLLs don't need relinking
