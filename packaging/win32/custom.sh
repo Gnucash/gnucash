@@ -188,7 +188,7 @@ GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
 KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.12.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.7.tar.gz"
+AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.8.tar.gz"
 AQBANKING_DIR=$GLOBAL_DIR\\aqbanking
 ##
 

@@ -796,7 +796,7 @@ function inst_aqbanking() {
 		    LDFLAGS="${_AQ_LDFLAGS}" \
 	            --prefix=${_AQBANKING_UDIR}
 	    fi
-	    make LDFLAGS="${_AQ_LDFLAGS} -no-undefined"
+	    make
 	    make install
 	qpopd
     fi
