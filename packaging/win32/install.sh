@@ -799,6 +799,10 @@ function inst_aqbanking() {
 	    make
 	    make install
 	qpopd
+	qpushd ${_AQBANKING_UDIR}/bin
+	    exetype aqbanking-tool.exe console
+	    exetype aqhbci-tool.exe console
+	qpopd
     fi
     ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
 }
