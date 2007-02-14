@@ -1,11 +1,10 @@
-/***************************************************************************
- *            qof-log.h
- *
- *  Author: Rob Clark (rclark@cs.hmc.edu)
- *  Copyright (C) 1998-2003 Linas Vepstas <linas@linas.org>
- *  Copyright  2005  Neil Williams <linux@codehelp.co.uk>
- *  Copyright 2007 Joshua Sled <jsled@asynchronous.org>
- ****************************************************************************/
+/* qof-log.h
+ * Author: Rob Clark <rclark@cs.hmc.edu>
+ * Copyright (C) 1998-2003 Linas Vepstas <linas@linas.org>
+ * Copyright 2005 Neil Williams <linux@codehelp.co.uk>
+ * Copyright 2007 Joshua Sled <jsled@asynchronous.org>
+ */
+
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +22,49 @@
  *  02110-1301,  USA
  */
 
-/** @addtogroup Trace
-    @{ */
-
-/** @file qoflog.h 
- *  @brief QOF error logging and tracing facility 
-*/
+/**
+ * @addtogroup Logging
+ * @{
+ * @ingroup QOF
+ * @brief Logging and tracing facility.
+ * @sa "Logging overhaul" announcement <http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019836.html>
+ * 
+ * qof_log_init(void) installs a handler that interprets the "log_domain"
+ * as a "."-separated path.  Log level thresholds can be set for each level
+ * in the tree.  When a message is logged, the longest level match is
+ * found, and used as the threshold.
+ *
+ * For instance, we can set the levels as such:
+ * @verbatim
+   "qof"                        = WARN
+   "gnc"                        = WARN
+   "gnc.ui"                     = INFO
+   "gnc.ui.plugin-page.sx-list" = DEBUG
+ @endverbatim
+ *
+ * When code in the log_module of "gnc.import" attempts to log at DEBUG
+ * (let's say), the handler will attempt to match the log domain to
+ * successively-longer paths: first "", then "gnc", then "gnc.import".  Given
+ * the settings above, the path "gnc" will match -- at a level of "WARN" --
+ * and the DEBUG-level log will be rejected.  When code in the log domain of
+ * "gnc.ui.plugin-page.sx-list" logs at DEBUG, however, it will match at
+ * DEBUG, and be allowed.
+ *
+ * The current log format is as above:
+ *
+ * @verbatim
+     * [timestamp] [level] <[log-domain]> [message]
+ @endverbatim
+ *
+ * The timestamp and level are constant width (level is 5 characters).  The
+ * log domain is re-iterated, which gives some context, but could become
+ * annoying if they get long.
+ * 
+ * Trailing newlines (e.g. <tt>PINFO("...\n", ...)</tt>) are removed; the logger
+ * will newline separate output.
+ *
+ * @see qof_log_parse_log_config(const char*)
+ **/
 
 #ifndef _QOF_LOG_H
 #define _QOF_LOG_H
@@ -52,11 +88,11 @@ DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST)
 gchar* qof_log_level_to_string(QofLogLevel lvl);
 QofLogLevel qof_log_level_from_string(gchar *str);
 
-/** indents once for each ENTER macro **/
+/** Indents one level; see ENTER macro. **/
 void qof_log_indent(void);
 
 /**
- * drops back one indent for each LEAVE macro, capped at 0.
+ * De-dent one level, capped at 0; see LEAVE macro.
  **/
 void qof_log_dedent(void);
 
@@ -66,38 +102,34 @@ void qof_log_dedent(void);
  **/
 void qof_log_init (void);
 
-/**
- * Set the logging level of the given log_module.
- **/
+/** Set the logging level of the given log_module. **/
 void qof_log_set_level(QofLogModule module, QofLogLevel level);
 
-/**
- * Specify an alternate log output, to pipe or file.
- **/
+/** Specify an alternate log output, to pipe or file. **/
 void qof_log_set_file (FILE *outfile);
 
-/**
- * Specify a filename for log output.
- **/
+/** Specify a filename for log output. **/
 void qof_log_init_filename (const gchar* logfilename);
 
 /**
- * If {@param log_to_filename} is "stderr" or "stdout" (exactly,
+ * If @a log_to_filename is "stderr" or "stdout" (exactly,
  * case-insensitive), then those special files are used; otherwise, the
- * literal filename as given, as {@link qof_log_init_filename}.
+ * literal filename as given, as qof_log_init_filename(gchar*)
  **/
 void qof_log_init_filename_special(const char *log_to_filename);
 
-/** Parse a log-configuration file.  A GKeyFile-format file of the schema::
- *
- *      [levels] 
- *      # log.ger.path=level
- *      gnc.engine.sx=debug
- *      gnc.gui.sx=debug
- *      gnc.gui.freqspec=debug
- *      [output]
- *      # to=["stderr"|"stdout"|filename]
- *      to=stderr
+/**
+ * Parse a log-configuration file.  A GKeyFile-format file of the schema:
+ * @verbatim
+    [levels] 
+    # log.ger.path=level
+    gnc.engine.sx=debug
+    gnc.gui.sx=debug
+    gnc.gui.freqspec=debug
+    [output]
+    # to=["stderr"|"stdout"|filename]
+    to=stderr
+ @endverbatim
  **/
 void qof_log_parse_log_config(const char *filename);
 
@@ -105,20 +137,18 @@ void qof_log_parse_log_config(const char *filename);
 void qof_log_shutdown (void);
 
 /**
- * qof_log_prettify() cleans up subroutine names. AIX/xlC has the habit
- * of printing signatures not names; clean this up. On other operating
- * systems, truncate name to QOF_LOG_MAX_CHARS chars.
+ * Cleans up subroutine names. AIX/xlC has the habit of printing signatures
+ * not names; clean this up. On other operating systems, truncate name to
+ * QOF_LOG_MAX_CHARS chars.
  **/
 const gchar * qof_log_prettify (const gchar *name);
 
-/** Do not log log_modules that have not been enabled. */
+/** Check to see if the given @a log_module is configured to log at the given
+ * @a log_level.  This implements the "log.path.hierarchy" logic. **/
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
 
-/** Set the default QOF log_modules to the log level. */
+/** Set the default level for QOF-related log paths. **/
 void qof_log_set_default(QofLogLevel log_level);
-
-typedef void (*QofLogCB) (QofLogModule log_module, QofLogLevel* log_level, 
-			gpointer user_data);
 
 #define PRETTY_FUNC_NAME qof_log_prettify(__FUNCTION__)
 
@@ -162,17 +192,19 @@ typedef void (*QofLogCB) (QofLogModule log_module, QofLogLevel* log_level,
     } \
 } while (0)
 
+/** Replacement for @c g_return_val_if_fail, but calls LEAVE if the test fails. **/
 #define gnc_leave_return_val_if_fail(test, val) do { \
   if (! (test)) { LEAVE(""); } \
   g_return_val_if_fail(test, val); \
 } while (0);
 
+/** Replacement for @c g_return_if_fail, but calls LEAVE if the test fails. **/
 #define gnc_leave_return_if_fail(test) do { \
   if (! (test)) { LEAVE(""); } \
   g_return_if_fail(test); \
 } while (0);
 
-/** Print a function exit debugging message */
+/** Print a function exit debugging message. **/
 #define LEAVE(format, args...) do { \
     if (qof_log_check(log_module, G_LOG_LEVEL_DEBUG)) { \
       qof_log_dedent(); \

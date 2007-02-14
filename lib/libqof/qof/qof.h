@@ -54,10 +54,6 @@
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
 */
-/**
-    @addtogroup Trace Trace: Error Reporting and Debugging
-    @ingroup QOF
-*/
 /** @addtogroup Event Event: QOF event handlers.
 	@ingroup QOF
 */
