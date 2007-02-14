@@ -86,6 +86,7 @@ typedef enum _QofInstanceSignalType QofInstanceSignalType;
 
 enum _QofInstanceSignalType {
 	/* Signals */
+	COMMITED,
 	LAST_SIGNAL
 };
 
@@ -146,6 +147,14 @@ qof_instance_class_init(QofInstanceClass *klass)
 																			G_PARAM_CONSTRUCT_ONLY)));
 
 	/* Create signals here:*/
+	
+	qof_instance_signals[COMMITED] =
+			g_signal_new ("commited",
+				      GNC_TYPE_INSTANCE,
+				      G_SIGNAL_RUN_LAST,
+				      NULL, NULL, NULL,
+				      g_cclosure_marshal_VOID__VOID,
+				      G_TYPE_NONE, 0, NULL);
  	
 }
 
@@ -214,6 +223,9 @@ qof_instance_get_property (GObject      *object,
   obj = QOF_INSTANCE(object);
 
   switch (property_id) {
+  case PROP_BOOK:
+  	g_value_set_object (value, obj->priv->book);
+  	break;
   default:
     /* We don't have any other property... */
     G_OBJECT_WARNinst->priv = g_new0 (QofInstancePrivate, 1);
@@ -290,33 +302,29 @@ qof_instance_set_guid (QofInstance *inst, const GUID *guid)
 
 
 QofInstance*
-qof_instance_create (QofIdType type, QofBook *book)
+qof_instance_create (GType type, QofBook *book)
 {
 	QofInstance *inst;
 
-	inst = QOF_INSTANCE (g_object_new (QOF_TYPE_INSTANCE, "book", book, NULL));
+	inst = QOF_INSTANCE (g_object_new (type, "book", book, NULL));
 	
 	return inst;
 }
 
 
 void
-qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
+qof_instance_destroy (QofInstance *inst)
 {
-	
-}
-
-void
-qof_instance_release (QofInstance *inst)
-{
-	
+	qof_instance_begin_edit (inst);
+	qof_instance_commit_edit (inst);
+	g_object_unref (G_OBJECT (inst));
 }
 
 const GUID *
 qof_instance_get_guid (const QofInstance *inst)
 {
 	g_return_value_if_fail (QOF_IS_INSTANCE(inst), NULL);
-	
+
 	return inst->priv->guid;
 }
 
@@ -519,4 +527,104 @@ void 		qof_instance_set_edit_level (QofInstance *instance, gint editlevel)
 {
 	instance->editlevel = editlevel;
 }
+
+const char* qof_instance_printable (QofInstance *inst)
+{
+	g_return_if_fail (QOF_IS_INSTANCE (inst));
+	
+	if (QOF_INSTANCE_GET_CLASS (inst)->printable)
+		(QOF_INSTANCE_GET_CLASS (inst)->printable) (inst);
+	else
+		g_warning ("%s() method not supported\n", __FUNCTION__);
+}
+
+gboolean
+qof_instance_begin_edit (QofInstance *inst, GError **error)
+{
+  QofBackend * be;
+
+  g_return_val_if_fail (QOF_IS_INSTANCE (inst),FALSE);
+  
+  inst->priv->editlevel++;
+  
+  g_return_val_if_fail (1 < inst->priv->editlevel), FALSE);
+  
+  if (0 >= inst->editlevel) 
+      inst->editlevel = 1;
+
+  be = qof_book_get_backend (inst->priv->book);
+  
+  if (QOF_IS_BACKEND (be) && qof_backend_begin_exists(be))
+      qof_backend_run_begin (be, inst, error);
+  else
+      inst->priv->dirty = TRUE; 
+  
+  return TRUE;
+}
+
+gboolean 
+qof_instance_commit_edit (QofInstance *inst, GError **error)
+{
+  QofBackend * be;
+  gboolean dirty;
+
+  g_return_val_if_fail(QOF_IS_INSTANCE(inst), FALSE);
+  
+  inst->priv->editlevel--;
+  
+  dirty = inst->dirty;
+  
+  if (0 < inst->priv->editlevel) return FALSE;
+
+  if ((0 == inst->priv->editlevel) && inst->priv->dirty)
+  {
+    be = qof_book_get_backend (inst->priv->book);
+    
+    if (be && qof_backend_commit_exists(be)) {
+
+        qof_backend_run_commit(be, inst, &error);
+        
+        if (error) {
+            /* XXX Should perform a rollback here */
+            inst->do_free = FALSE;
+
+            return FALSE;
+        }   
+        /* XXX the backend commit code should clear dirty!! */
+        inst->dirty = FALSE;
+    
+    }
+  }
+  
+    if (dirty && qof_get_alt_dirty_mode() && 
+        !(inst->priv->infant && inst->priv->do_free)) {
+        /* TODO: mark the book dirty using the QofBook API instead the Collection API
+        	may be qof_book_mark_dirty (QofBook, GType) the you will mark the book and the
+        	collection with that GType
+        */
+      qof_collection_mark_dirty(qof_book_get_collection(inst->priv->book, 	G_TYPE_OBJECT(inst)));
+      qof_book_mark_dirty(inst->priv->book);
+    }
+    
+    inst->infant = FALSE;
+    
+    if (0 > inst->priv->editlevel) { 
+      
+      PERR ("unbalanced call - resetting (was %d)", inst->priv->editlevel);
+      
+      inst->priv->editlevel = 0;
+      if (error)
+      {
+      		g_set_error (error, QOF_BACKEND_ERROR, QOF_BACKEND_UNBALANCED_CALL_ERROR, 
+				   				 "unbalanced call - EditLevel set to 0 (last value %d)", inst->priv->editlevel);
+	  }
+	  
+	  return FALSE;
+  	}  
+    
+    return TRUE;
+
+}
+
+
 /* ========================== END OF FILE ======================= */

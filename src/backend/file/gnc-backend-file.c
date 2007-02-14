@@ -796,7 +796,7 @@ build_period_filepath (FileBackend *fbe, QofBook *book)
 }
 
 static void
-file_begin_edit (QofBackend *be, QofInstance *inst)
+file_begin_edit (QofBackend *be, QofInstance *inst, GError **error)
 {
     if (0) build_period_filepath(0, 0);
 #if BORKEN_FOR_NOW
@@ -824,7 +824,7 @@ file_begin_edit (QofBackend *be, QofInstance *inst)
 }
 
 static void
-file_rollback_edit (QofBackend *be, QofInstance *inst)
+file_rollback_edit (QofBackend *be, QofInstance *inst, GError **error)
 {
 #if BORKEN_FOR_NOW
     QofBook *book = gp;
@@ -835,7 +835,7 @@ file_rollback_edit (QofBackend *be, QofInstance *inst)
 }
 
 static void
-file_commit_edit (QofBackend *be, QofInstance *inst)
+file_commit_edit (QofBackend *be, QofInstance *inst, GError **error)
 {
 #if BORKEN_FOR_NOW
     FileBackend *fbe = (FileBackend *) be;

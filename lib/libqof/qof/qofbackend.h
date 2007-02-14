@@ -48,10 +48,14 @@
 
 #define QOF_MOD_BACKEND "qof-backend"
 
+extern GQuark qof_backend_error_quark (void);
+#define QOF_BACKEND_ERROR qof_backend_error_quark ()
+
 /** \brief The errors that can be reported to the GUI & other front-end users
  *  \warning (GnuCash) If you modify QofBackendError, please update 
  *   src/engine/gw-engine-spec.scm 
 */
+
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_HANDLER,   /**< no backend handler found for this access method (ENOSYS) */
@@ -137,6 +141,7 @@ typedef enum {
   ERR_RPC_BAD_VERSION,          /**< RPC Version Mismatch */
   ERR_RPC_FAILED,               /**< Operation failed */
   ERR_RPC_NOT_ADDED,            /**< object not added */
+  QOF_BACKEND_UNBALANCED_CALL_ERROR
 } QofBackendError;
 
 /**
@@ -169,11 +174,11 @@ These function replaces those calls to allow the macros to be
 used when QOF is built as a library. */
 //@{
 
-void qof_backend_run_begin(QofBackend *be, QofInstance *inst);
+void qof_backend_run_begin(QofBackend *be, QofInstance *inst, GError **error);
 
 gboolean qof_backend_begin_exists(QofBackend *be);
 
-void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
+void qof_backend_run_commit(QofBackend *be, QofInstance *inst, GError **error);
 
 gboolean qof_backend_commit_exists(QofBackend *be);
 //@}
@@ -181,11 +186,12 @@ gboolean qof_backend_commit_exists(QofBackend *be);
 /** The qof_backend_set_error() routine pushes an error code onto the error
  *  stack. (FIXME: the stack is 1 deep in current implementation).
  */
-void qof_backend_set_error (QofBackend *be, QofBackendError err);
+//void qof_backend_set_error (QofBackend *be, QofBackendError err);
 
 /** The qof_backend_get_error() routine pops an error code off the error stack.
+ 	YOU NEED TO PASS A GError* pointer to get the errors in each call
  */
-QofBackendError qof_backend_get_error (QofBackend *be);
+//QofBackendError qof_backend_get_error (QofBackend *be);
 
 /** @name Backend Configuration using KVP
 

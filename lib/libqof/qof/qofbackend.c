@@ -33,6 +33,14 @@
 #include "qof.h"
 #include "qofbackend-p.h"
 
+GQuark qof_backend_error_quark (void)
+{
+	static GQuark quark;
+	if (!quark)
+		quark = g_quark_from_static_string ("qof_backend_error");
+	return quark;
+}
+
 static QofLogModule log_module = QOF_MOD_BACKEND;
 
 #define QOF_CONFIG_DESC    "desc"
@@ -71,6 +79,11 @@ gboolean qof_backend_register (GType type,
 /* *******************************************************************\
  * error handling                                                   *
 \********************************************************************/
+
+
+/*
+	THE ERROR HANDLING WILL BE USING GERROR, THIS FUNCTIONS ARE DEPRECATED
+*/
 
 void 
 qof_backend_set_error (QofBackend *be, QofBackendError err)
@@ -175,11 +188,11 @@ qof_backend_init(QofBackend *be)
 }
 
 void
-qof_backend_run_begin(QofBackend *be, QofInstance *inst)
+qof_backend_run_begin(QofBackend *be, QofInstance *inst, GError *error)
 {
 	if(!be || !inst) { return; }
 	if(!be->begin) { return; }
-	(be->begin) (be, inst);
+	(be->begin) (be, inst, error);
 }
 
 gboolean
@@ -190,11 +203,11 @@ qof_backend_begin_exists(QofBackend *be)
 }
 
 void
-qof_backend_run_commit(QofBackend *be, QofInstance *inst)
+qof_backend_run_commit(QofBackend *be, QofInstance *inst, GError *error)
 {
 	if(!be || !inst) { return; }
 	if(!be->commit) { return; }
-	(be->commit) (be, inst);
+	(be->commit) (be, inst, error);
 }
 
 /* =========== Backend Configuration ================ */

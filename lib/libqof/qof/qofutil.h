@@ -297,96 +297,9 @@ gpointer qof_util_string_cache_insert(gconstpointer key);
 
 #define QOF_CACHE_NEW(void) qof_util_string_cache_insert("")
 
-/** begin_edit helper
- *
- * @param  inst: an instance of QofInstance
- *
- * The caller should use this macro first and then perform any other operations.
- 
- Uses newly created functions to allow the macro to be used
- when QOF is linked as a library. qofbackend-p.h is a private header.
- */
+#define qof_begin_edit(inst) qof_instance_begin_edit (QOF_INSTANCE(inst), NULL)
 
-#define QOF_BEGIN_EDIT(inst)                                        \
-  if (!(inst)) return;                                              \
-                                                                    \
-  (inst)->editlevel++;                                              \
-  if (1 < (inst)->editlevel) return;                                \
-                                                                    \
-  if (0 >= (inst)->editlevel)                                       \
-  {                                                                 \
-    PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
-    (inst)->editlevel = 1;                                          \
-  }                                                                 \
-  ENTER ("(inst=%p)", (inst));                                      \
-                                                                    \
-  /* See if there's a backend.  If there is, invoke it. */          \
-  {                                                                 \
-    QofBackend * be;                                                \
-    be = qof_book_get_backend ((inst)->book);                       \
-      if (be && qof_backend_begin_exists(be)) {                     \
-         qof_backend_run_begin(be, (inst));                         \
-    } else {                                                        \
-      /* We tried and failed to start transaction! */               \
-      (inst)->dirty = TRUE;                                         \
-    }                                                               \
-  }                                                                 \
-  LEAVE (" ");
-
-/** \brief function version of QOF_BEGIN_EDIT
-
-The macro cannot be used in a function that returns a value,
-this function can be used instead.
-*/
-gboolean qof_begin_edit(QofInstance *inst);
-
-/**
- * commit_edit helpers
- *
- * The caller should call PART1 as the first thing, then 
- * perform any local operations prior to calling the backend.
- * Then call PART2.  
- */
-
-/**
- * part1 -- deal with the editlevel
- * 
- * @param inst: an instance of QofInstance
- */
-
-#define QOF_COMMIT_EDIT_PART1(inst) {                            \
-  if (!(inst)) return;                                           \
-                                                                 \
-  (inst)->editlevel--;                                           \
-  if (0 < (inst)->editlevel) return;                             \
-                                                                 \
-  /* The pricedb suffers from delayed update...     */          \
-  /* This may be setting a bad precedent for other types, I fear. */ \
-  /* Other types probably really should handle begin like this. */ \
-  if ((0 == (inst)->editlevel) && (inst)->dirty)                   \
-  {                                                              \
-    QofBackend * be;                                             \
-    be = qof_book_get_backend ((inst)->book);                    \
-    if (be && qof_backend_commit_exists(be)) {                   \
-        qof_backend_run_commit(be, (inst));                      \
-    }                                                            \
-    (inst)->editlevel = 0;                                       \
-  }                                                              \
-  if (0 > (inst)->editlevel)                                     \
-  {                                                              \
-    PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
-    (inst)->editlevel = 0;                                       \
-  }                                                              \
-  ENTER ("(inst=%p) dirty=%d do-free=%d",                        \
-            (inst), (inst)->dirty, (inst)->do_free);             \
-}
-
-/** \brief function version of QOF_COMMIT_EDIT_PART1
-
-The macro cannot be used in a function that returns a value,
-this function can be used instead. Only Part1 is implemented.
-*/
-gboolean qof_commit_edit(QofInstance *inst);
+#define qof_commit_edit(inst) qof_instance_commit_edit (QOF_INSTANCE(inst), NULL)
 
 /**
  * part2 -- deal with the backend

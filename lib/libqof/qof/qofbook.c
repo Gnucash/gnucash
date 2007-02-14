@@ -341,7 +341,7 @@ void qof_book_mark_dirty (QofBook *book)
 {
   gboolean was_dirty;
 
-  if (!book) return;
+  g_return_if_fail (QOF_IS_BOOK(book));
 
   was_dirty = book->inst.dirty;
   book->inst.dirty = TRUE;
@@ -501,6 +501,10 @@ foreach_cb (gpointer key, gpointer item, gpointer arg)
 
   iter->fn (col, iter->data);
 }
+
+/** Invoke the indicated callback on each collection in the book. */
+typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
+void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
 
 void 
 qof_book_foreach_collection (const QofBook *book, 

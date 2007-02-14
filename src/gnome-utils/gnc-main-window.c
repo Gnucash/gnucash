@@ -1240,6 +1240,7 @@ gnc_main_window_attach_to_book (QofSession *session)
   g_return_if_fail(session);
 
   book = qof_session_get_book(session);
+  /* TODO: attach a callback to the set dirty event */
   qof_book_set_dirty_cb(book, gnc_main_window_book_dirty_cb, NULL);
 }
 

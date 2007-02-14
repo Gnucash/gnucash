@@ -686,7 +686,7 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_instance_mark_clean(QOF_INSTANCE(s));
+    qof_instance_mark_clean (QOF_INSTANCE(s));
 
     /* This is because Splits don't call qof_commit_edit(). */
     qof_instance_set_dirty(QOF_INSTANCE(s->parent));

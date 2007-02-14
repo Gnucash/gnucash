@@ -35,6 +35,7 @@
  *
  * @author Copyright (c) 1998, 1999, 2001, 2003 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
+ * @author Copyright (c) 2007 Daniel Espinosa Ortiz <esodan@gmail.com>
  */
 
 #ifndef QOF_BOOK_H
@@ -85,7 +86,7 @@ typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
 
 /** Register the book object with the QOF object system. */
-gboolean qof_book_register (void);
+//gboolean qof_book_register (void);
 
 /** Allocate, initialise and return a new QofBook.  Books contain references
  *  to all of the top-level object containers. */
@@ -93,7 +94,8 @@ QofBook * qof_book_new (void);
 
 /** End any editing sessions associated with book, and free all memory
     associated with it. */
-void      qof_book_destroy (QofBook *book);
+//void      qof_book_destroy (QofBook *book);
+#define qof_book_destroy (b) g_object_unref (b)
 
 /** Close a book to editing.
 
@@ -121,7 +123,13 @@ QofCollection  * qof_book_get_collection (const QofBook *, GType);
 typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
 void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
 
+/** Callback type for qof_instance_foreach */
+typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
+
 void qof_book_foreach (const QofBook *book, GType type, QofInstanceForeachCB func, gpointer data);
+
+/* Deprecated */
+#define qof_object_foreach(type, book, cb, data) qof_book_foreach (book, type, cb, data)
 
 /** Return The kvp data for the book.
  *  Note that the book KVP data is persistent, and is stored/retrieved
@@ -177,7 +185,8 @@ void qof_book_mark_saved(QofBook *book);
  *    modified. It can be used by frontend when the used has made a
  *    change at the book level.
  */
-void qof_book_mark_dirty(QofBook *book);
+//void qof_book_mark_dirty(QofBook *book);
+#define qof_book_mark_dirty(b) qof_instance_set_dirty (QOF_INSTANCE (b), 	TRUE)	
 
 /** This debugging function can be used to traverse the book structure
  *    and all subsidiary structures, printing out which structures
@@ -190,8 +199,10 @@ time_t qof_book_get_dirty_time(const QofBook *book);
 
 /** Set the function to call when a book transitions from clean to
  *    dirty, or vice versa.
+ 
+ * TODO: TOBE IMPLEMENTED AS A SIGNAL, AND ATTACHED THE CB TO THIS EVENT
  */
-void qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data);
+void qof_book_set_dirty_cb (QofBook *book, QofBookDirtyCB cb, gpointer user_data);
 
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */
@@ -214,8 +225,7 @@ gboolean qof_book_insert_object (QofBook *book, QofInstance *inst);
 
 QofInstance qof_book_get_object (QofBook *book, GType type, GUID *guid);
 
-/** deprecated */
-#define qof_book_get_guid(X) qof_instance_get_guid (QOF_INSTANCE(X))
+
 
 #endif /* QOF_BOOK_H */
 /** @} */

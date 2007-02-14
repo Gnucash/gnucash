@@ -34,7 +34,6 @@
 #define QOF_OBJECT_P_H_
 
 #include "qofbook.h"
-#include "qofobject.h"
 
 /** To be called from within the book */
 void qof_object_book_begin (QofBook *book);

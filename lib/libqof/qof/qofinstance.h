@@ -65,7 +65,9 @@ struct _QofInstanceClass {
 	GObjectClass parent_class;
 	/* virtual table */
 	 void                	(*foreach)			(const QofCollection *, QofEntityForeachCB, gpointer);
-	 const char *      (*printable)			(gpointer instance);
+	 const char *      (*to_string)			(gpointer instance);
+	 void					(*commit)			(QofInstance* instance);
+	 void					
 	/* Add Signal Functions Here */
 };
 
@@ -86,6 +88,7 @@ void qof_entity_set_guid (QofInstance *inst, const GUID *guid);
 
 /** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (const QofInstance *);
+
 
 /** Return the last time this instance was modified.  If QofInstances
  *  are used with the QofObject storage backends, then the instance
@@ -120,7 +123,11 @@ gboolean qof_instance_do_free(const QofInstance *inst);
 
 void qof_instance_mark_free(QofInstance *inst);
 
-QofInstance* qof_instance_create (QofIdType type, QofBook *book);
+QofInstance* qof_instance_create (GType type, QofBook *book);
+
+void qof_instance_destroy (QofInstance *inst);
+
+#define qof_instance_release(instance) qof_instance_destroy(instance)
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the
@@ -157,15 +164,15 @@ void 		qof_instance_set_edit_level (QofInstance *instance, gint editlevel);
 
 #define qof_object_new_instance (type, book) g_object_new (type, "book", book, NULL)
 
-/** Callback type for qof_instance_foreach */
-typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
+const char *      qof_instance_to_string			(QofInstance *instance);
 
-#define qof_object_foreach (type, book, cb, data) qof_book_foreach_collection (book, type, cb, data)
+#define qof_object_printable (type, instance) qof_instance_to_string (instance)
 
+gboolean qof_instance_begin_edit (QofInstance *inst, GError *error);
 
-const char *      (*printable)			(gpointer instance);
-int                 		(*version_cmp)		(gpointer instance_left, gpointer instance_right);
+gboolean qof_instance_commit_edit(QofInstance *inst, GError *error);
 
+gboolean qof_instance_destroy (QofInstance *inst);
 
 /* @} */
 /* @} */

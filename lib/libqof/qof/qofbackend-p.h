@@ -295,9 +295,9 @@ struct QofBackend_s
 
   void (*load) (QofBackend *, QofBook *);
 
-  void (*begin) (QofBackend *, QofInstance *);
-  void (*commit) (QofBackend *, QofInstance *);
-  void (*rollback) (QofBackend *, QofInstance *);
+  void (*begin) (QofBackend *, QofInstance *, GError**);
+  void (*commit) (QofBackend *, QofInstance *, GError**);
+  void (*rollback) (QofBackend *, QofInstance *, GError**);
 
   gpointer (*compile_query) (QofBackend *, QofQuery *);
   void (*free_query) (QofBackend *, gpointer);
@@ -328,9 +328,6 @@ struct QofBackend_s
    * data loss, otherwise FALSE.
    */
   gboolean (*save_may_clobber_data) (QofBackend *);
-
-  QofBackendError last_err;
-  char * error_msg;
 
   KvpFrame* backend_configuration;
   gint config_count;

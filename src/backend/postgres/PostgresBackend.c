@@ -1630,7 +1630,7 @@ pgendDoSync (QofBackend *bend, QofBook *book)
 }
 
 static void
-pgend_do_begin (QofBackend *bend, QofInstance *inst)
+pgend_do_begin (QofBackend *bend, QofInstance *inst, GError **error)
 {
   PGBackend *be = (PGBackend*)bend;
   QofIdTypeConst type = inst->entity.e_type;
@@ -1656,7 +1656,7 @@ pgend_do_begin (QofBackend *bend, QofInstance *inst)
 }
 
 static void
-pgend_do_commit (QofBackend *bend, QofInstance *inst)
+pgend_do_commit (QofBackend *bend, QofInstance *inst, GError **error)
 {
   PGBackend *be = (PGBackend*)bend;
   QofIdTypeConst type = inst->entity.e_type;
@@ -1692,7 +1692,7 @@ pgend_do_commit (QofBackend *bend, QofInstance *inst)
 }
 
 static void
-pgend_do_rollback (QofBackend *bend, QofInstance *inst)
+pgend_do_rollback (QofBackend *bend, QofInstance *inst, GError **error)
 {
   PGBackend *be = (PGBackend*)bend;
   QofIdTypeConst type = inst->entity.e_type;

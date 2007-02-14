@@ -58,10 +58,18 @@
 #define GNC_ACCOUNT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
 
 
-typedef struct _AccountClass AccountClass;
-typedef struct _Account Account;
+typedef struct _GncAccountClass GncAccountClass;
+typedef struct _GncAccount GncAccount;
+typedef struct _GncAccountPrivate GncAccountPrivate;
 
-struct _AccountClass {
+typedef GncAccount GncAccount; //  Backward compatibility
+
+struct _GncAccount {
+	QofInstance inst;
+	GncAccountPrivate *priv;
+};
+
+struct _GncAccountClass {
 	QofInstanceClass parent_class;
 	/* virtual table */
 
@@ -75,11 +83,11 @@ GType   gnc_account_get_type ();
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
-    const Account *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 
 typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
-    Account *account, time_t date);
+    GncAccount *account, time_t date);
 
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
@@ -162,7 +170,9 @@ typedef enum
  @{ */
 
 /** Constructor */
-Account * xaccMallocAccount (QofBook *book);
+GncAccount * gnc_account_new (QofBook *book);
+
+#define xaccMallocAccount(book) gnc_account_new(book)
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
  *    except that it also also places a pair of GUID-pointers
@@ -170,7 +180,7 @@ Account * xaccMallocAccount (QofBook *book);
  *    The guid pointers are stored under the under the kvp
  *    path "gemini".  
  */
-Account * xaccCloneAccount (const Account *from, QofBook *book);
+GncAccount * xaccCloneAccount (const GncAccount *from, QofBook *book);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
@@ -182,23 +192,24 @@ Account * xaccCloneAccount (const Account *from, QofBook *book);
  *  Note that this routines does *NOT* use the 'gemini' kvp value 
  *  to indicate where it was copied from.
  */
-Account * xaccCloneAccountSimple (const Account *from, QofBook *book);
+GncAccount * xaccCloneAccountSimple (const GncAccount *from, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
  *    a two-phase-commit wrapper for account updates. */ 
-void xaccAccountBeginEdit (Account *account);
+#define xaccAccountBeginEdit(account) qof_instance_begin_edit(QOF_INSTANCE(account))
 
 /** ThexaccAccountCommitEdit() subroutine is the second phase of
  *    a two-phase-commit wrapper for account updates. */ 
-void xaccAccountCommitEdit (Account *account);
+#define xaccAccountCommitEdit(account) qof_instance_commit_edit(QOF_INSTANCE(account))
 
 /** The xaccAccountDestroy() routine can be used to get rid of an
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.*/
-void xaccAccountDestroy (Account *account);
+void gnc_account_destroy (GncAccount *account);
+#define xaccAccountDestroy(account) gnc_account_destroy(account)
 
 /** Compare two accounts for equality - this is a deep compare. */
-gboolean xaccAccountEqual(const Account *a, const Account* b, 
+gboolean xaccAccountEqual(const GncAccount *a, const GncAccount* b, 
                           gboolean check_guids);
 
 /** The xaccAccountOrder() subroutine defines a sorting order 
@@ -209,7 +220,7 @@ gboolean xaccAccountEqual(const Account *a, const Account* b,
  *    the account codes are compared, and if these are equal, then 
  *    account types, and, if these are equal, the account names.
  */
-int xaccAccountOrder (const Account **account_1, const Account **account_2);
+int xaccAccountOrder (const GncAccount **account_1, const GncAccount **account_2);
 
 /** @} */
 
@@ -234,7 +245,7 @@ void gnc_set_account_separator (const gchar *separator);
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
-Account * xaccAccountLookup (const GUID *guid, QofBook *book);
+#define xaccAccountLookup (guid, book) qof_book_get_object (book, GNC_TYPE_ACCOUNT, guid)
 #define xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
 /** @} */
@@ -245,32 +256,32 @@ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
  @{ */
 
 /** Set the account's type */
-void xaccAccountSetType (Account *account, GNCAccountType);
+void xaccAccountSetType (GncAccount *account, GNCAccountType);
 /** Set the account's name */
-void xaccAccountSetName (Account *account, const char *name);
+void xaccAccountSetName (GncAccount *account, const char *name);
 /** Set the account's accounting code */
-void xaccAccountSetCode (Account *account, const char *code);
+void xaccAccountSetCode (GncAccount *account, const char *code);
 /** Set the account's description */
-void xaccAccountSetDescription (Account *account, const char *desc);
+void xaccAccountSetDescription (GncAccount *account, const char *desc);
 /** Set the account's notes */
-void xaccAccountSetNotes (Account *account, const char *notes);
-/** Set the last num field of an Account */
-void xaccAccountSetLastNum (Account *account, const char *num);
+void xaccAccountSetNotes (GncAccount *account, const char *notes);
+/** Set the last num field of an GncAccount */
+void xaccAccountSetLastNum (GncAccount *account, const char *num);
 /** Get the account's type */
-GNCAccountType xaccAccountGetType (const Account *account);
+GNCAccountType xaccAccountGetType (const GncAccount *account);
 /** Is the account a stock, mutual fund or currency? */
-gboolean xaccAccountIsPriced(const Account *acc);
+gboolean xaccAccountIsPriced(const GncAccount *acc);
 
 /** Get the account's name */
-const char * xaccAccountGetName (const Account *account);
+const char * xaccAccountGetName (const GncAccount *account);
 /** Get the account's accounting code */
-const char * xaccAccountGetCode (const Account *account);
+const char * xaccAccountGetCode (const GncAccount *account);
 /** Get the account's description */
-const char * xaccAccountGetDescription (const Account *account);
+const char * xaccAccountGetDescription (const GncAccount *account);
 /** Get the account's notes */
-const char * xaccAccountGetNotes (const Account *account);
-/** Get the last num field of an Account */
-const char * xaccAccountGetLastNum (const Account *account);
+const char * xaccAccountGetNotes (const GncAccount *account);
+/** Get the last num field of an GncAccount */
+const char * xaccAccountGetLastNum (const GncAccount *account);
 
 /** The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be
@@ -285,7 +296,7 @@ const char * xaccAccountGetLastNum (const Account *account);
  * hack alert -- since it breaks the rule of string allocation, maybe this
  * routine should not be in this library, but some utility library?
  */
-char * xaccAccountGetFullName (const Account *account);
+char * xaccAccountGetFullName (const GncAccount *account);
 
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
@@ -293,26 +304,26 @@ char * xaccAccountGetFullName (const Account *account);
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
-void dxaccAccountSetPriceSrc (Account *account, const char *src);
+void dxaccAccountSetPriceSrc (GncAccount *account, const char *src);
 /** Get a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
  *  for more information.
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
-const char * dxaccAccountGetPriceSrc (const Account *account);
+const char * dxaccAccountGetPriceSrc (const GncAccount *account);
 
 /** Returns a per-account flag: Prior to reconciling an account which
     charges or pays interest, this flag tells whether to prompt the
     user to enter a transaction for the interest charge or
     payment. This per-account flag overrides the global preference. */
-gboolean xaccAccountGetAutoInterestXfer (const Account *account, 
+gboolean xaccAccountGetAutoInterestXfer (const GncAccount *account, 
                                          gboolean default_value);
 /** Sets a per-account flag: Prior to reconciling an account which
     charges or pays interest, this flag tells whether to prompt the
     user to enter a transaction for the interest charge or
     payment. This per-account flag overrides the global preference. */
-void xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
+void xaccAccountSetAutoInterestXfer (GncAccount *account, gboolean value);
 /** @} */
 
 /** @name Account Commodity setters/getters
@@ -347,13 +358,13 @@ void xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 */
 
 /** Set the account's commodity */
-void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
+void xaccAccountSetCommodity (GncAccount *account, gnc_commodity *comm);
 
 /** @deprecated do not use */
 #define DxaccAccountSetSecurity xaccAccountSetCommodity
 
 /** Get the account's commodity  */
-gnc_commodity * xaccAccountGetCommodity (const Account *account);
+gnc_commodity * xaccAccountGetCommodity (const GncAccount *account);
 
 /** @deprecated do not use */
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
@@ -362,27 +373,27 @@ gnc_commodity * xaccAccountGetCommodity (const Account *account);
  *   set for the account, that is returned; else the default SCU for
  *   the account commodity is returned.
  */
-int xaccAccountGetCommoditySCU (const Account *account);
+int xaccAccountGetCommoditySCU (const GncAccount *account);
 
 /** Return the 'internal' SCU setting.  This returns the over-ride
  *   SCU for the account (which might not be set, and might be zero).  */
-int xaccAccountGetCommoditySCUi (const Account *account);
+int xaccAccountGetCommoditySCUi (const GncAccount *account);
 
 /** Set the SCU for the account. Normally, this routine is not
  *   required, as the default SCU for an account is given by its
  *   commodity.
  */
-void xaccAccountSetCommoditySCU (Account *account, int frac);
+void xaccAccountSetCommoditySCU (GncAccount *account, int frac);
 
 /** @deprecated -- do not use for future development */
 #define xaccAccountSetCommoditySCUandFlag xaccAccountSetCommoditySCU 
 
 /** Set the flag indicating that this account uses a non-standard SCU. */
-void xaccAccountSetNonStdSCU (Account *account, gboolean flag);
+void xaccAccountSetNonStdSCU (GncAccount *account, gboolean flag);
 
 /** Return boolean, indicating whether this account uses a 
  *   non-standard SCU. */ 
-gboolean  xaccAccountGetNonStdSCU (const Account *account);
+gboolean  xaccAccountGetNonStdSCU (const GncAccount *account);
 /**@}*/
 
 
@@ -391,17 +402,17 @@ gboolean  xaccAccountGetNonStdSCU (const Account *account);
 */
 /** Get the current balance of the account, which may include future
     splits */
-gnc_numeric xaccAccountGetBalance (const Account *account);
+gnc_numeric xaccAccountGetBalance (const GncAccount *account);
 /** Get the current balance of the account, only including cleared
     transactions */
-gnc_numeric xaccAccountGetClearedBalance (const Account *account);
+gnc_numeric xaccAccountGetClearedBalance (const GncAccount *account);
 /** Get the current balance of the account, only including reconciled
     transactions */
-gnc_numeric xaccAccountGetReconciledBalance (const Account *account);
-gnc_numeric xaccAccountGetPresentBalance (const Account *account);
-gnc_numeric xaccAccountGetProjectedMinimumBalance (const Account *account);
+gnc_numeric xaccAccountGetReconciledBalance (const GncAccount *account);
+gnc_numeric xaccAccountGetPresentBalance (const GncAccount *account);
+gnc_numeric xaccAccountGetProjectedMinimumBalance (const GncAccount *account);
 /** Get the balance of the account as of the date specified */
-gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account, 
+gnc_numeric xaccAccountGetBalanceAsOfDate (GncAccount *account, 
                                            time_t date);
 
 /* These two functions convert a given balance from one commodity to
@@ -414,50 +425,50 @@ gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account,
    probably some better place for them, but where?  gnc-commodity.h?
 */
 gnc_numeric xaccAccountConvertBalanceToCurrency(
-    const Account *account, /* for book */
+    const GncAccount *account, /* for book */
     gnc_numeric balance,
     const gnc_commodity *balance_currency,
     const gnc_commodity *new_currency);
 gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
-    const Account *account, /* for book */
+    const GncAccount *account, /* for book */
     gnc_numeric balance, gnc_commodity *balance_currency,
     gnc_commodity *new_currency, time_t date);
 
 /* These functions get some type of balance in the desired commodity.
    'report_commodity' may be NULL to use the account's commodity. */
 gnc_numeric xaccAccountGetBalanceInCurrency (
-    const Account *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetClearedBalanceInCurrency (
-    const Account *account, const gnc_commodity *report_commodity, 
+    const GncAccount *account, const gnc_commodity *report_commodity, 
     gboolean include_children);
 gnc_numeric xaccAccountGetReconciledBalanceInCurrency (
-    const Account *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetPresentBalanceInCurrency (
-    const Account *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
-    const Account *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 
 /* This function gets the balance as of the given date in the desired
    commodity. */
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
-    Account *account, time_t date, gnc_commodity *report_commodity,
+    GncAccount *account, time_t date, gnc_commodity *report_commodity,
     gboolean include_children);
 
 gnc_numeric xaccAccountGetBalanceChangeForPeriod (
-    Account *acc, time_t date1, time_t date2, gboolean recurse);
+    GncAccount *acc, time_t date1, time_t date2, gboolean recurse);
 
 /** @} */
 
-/** @name Account Children and Parents. 
+/** @name GncAccount Children and Parents. 
 
  * The set of accounts is represented as a doubly-linked tree, so that given 
  * any account, both its parent and its children can be easily found.  
  * To make the management of sets of accounts easier, an account does not
- * directly point at its children, but rather at an 'Account Group' that
+ * directly point at its children, but rather at an 'GncAccount Group' that
  * stores the children.  At the top of the tree heirarchy lies a single
  * root node, the root account group.
  * 
@@ -468,11 +479,11 @@ gnc_numeric xaccAccountGetBalanceChangeForPeriod (
 
 /** This routine returns the group holding the set of subaccounts 
  * for this account.  */
-AccountGroup * xaccAccountGetChildren (const Account *account);
+AccountGroup * xaccAccountGetChildren (const GncAccount *account);
 
 /** This routine returns the group which contains this account.
  */
-AccountGroup * xaccAccountGetParent (const Account *account);
+AccountGroup * xaccAccountGetParent (const GncAccount *account);
 
 /** This routine returns the parent of the group that is the parent
  * of this account.  It is equivalent to the nested call
@@ -480,7 +491,7 @@ AccountGroup * xaccAccountGetParent (const Account *account);
  * Note that if the account is in the root group node, then its
  * parent will be NULL.
  */
-Account * xaccAccountGetParentAccount (const Account *account);
+GncAccount * xaccAccountGetParentAccount (const GncAccount *account);
 
 /** This routine returns a flat list of all of the accounts
  * that are descendents of this account.  This includes not
@@ -491,20 +502,20 @@ Account * xaccAccountGetParentAccount (const Account *account);
  * The returned list should be freed with g_list_free() when 
  * no longer needed.
  */
-GList * xaccAccountGetDescendants (const Account *account);
+GList * xaccAccountGetDescendants (const GncAccount *account);
 
 /** DOCUMENT ME! */
-void xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+void xaccAccountSetReconcileChildrenStatus(GncAccount *account, gboolean status);
 
 /** DOCUMENT ME! */
-gboolean xaccAccountGetReconcileChildrenStatus(const Account *account);
+gboolean xaccAccountGetReconcileChildrenStatus(const GncAccount *account);
 
 /** Returns true if the account is 'ancestor' or has 'ancestor' as an
  *  ancestor.  An ancestor account may be the accounts parent, its
  *  parent's parent, its parent's parent's parent, etc.  Returns false
  *  if either one is NULL.
  */
-gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
+gboolean xaccAccountHasAncestor(const GncAccount *acc, const GncAccount *ancestor);
 
 #define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
@@ -560,7 +571,7 @@ guint32 xaccAccountTypesValid(void);
 
 /* ------------------ */
 
-/** @name Account split/transaction list management 
+/** @name GncAccount split/transaction list management 
 @{
 */
 /** The xaccAccountInsertSplit() method will insert the indicated
@@ -576,11 +587,11 @@ guint32 xaccAccountTypesValid(void);
  *    structure.  Note that some routines (such as xaccAccountRemoveSplit())
  *    modify this list directly, and could leave you with a corrupted 
  *    pointer. */
-SplitList* xaccAccountGetSplitList (const Account *account);
+SplitList* xaccAccountGetSplitList (const GncAccount *account);
 
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
  *  in accfrom to accto. */
-void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
+void xaccAccountMoveAllSplits (GncAccount *accfrom, GncAccount *accto);
 
 /** The xaccAccountForEachTransaction() routine will traverse all of
    the transactions in the given 'account' and call the callback
@@ -606,23 +617,23 @@ void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
    it will not traverse transactions present only in the remote
    database.
 */
-gint xaccAccountForEachTransaction(const Account *account,
+gint xaccAccountForEachTransaction(const GncAccount *account,
                                    TransactionCallback proc,
                                    void *data);
 
 /** Returns a pointer to the transaction, not a copy. */
-Transaction * xaccAccountFindTransByDesc(const Account *account, 
+Transaction * xaccAccountFindTransByDesc(const GncAccount *account, 
                                          const char *description);
 
 /** Returns a pointer to the split, not a copy. */
-Split * xaccAccountFindSplitByDesc(const Account *account, 
+Split * xaccAccountFindSplitByDesc(const GncAccount *account, 
                                    const char *description);
 
 /*@}*/
 
 /* ------------------ */
 
-/** @name Account lots 
+/** @name GncAccount lots 
 @{
 */
 /** The xaccAccountInsertLot() method will register the indicated lot 
@@ -630,8 +641,8 @@ Split * xaccAccountFindSplitByDesc(const Account *account,
  *    belong to this account.  If the lot is already in another account,
  *    the lot, and all of the splits in it, will be moved from that
  *    account to this account. */
-void xaccAccountInsertLot (Account *, GNCLot *);
-void xaccAccountRemoveLot (Account *, GNCLot *);
+void xaccAccountInsertLot (GncAccount *, GNCLot *);
+void xaccAccountRemoveLot (GncAccount *, GNCLot *);
 
 /** The xaccAccountGetLotList() routine returns a pointer to the GList of
  *    the lots in this account.  
@@ -640,7 +651,7 @@ void xaccAccountRemoveLot (Account *, GNCLot *);
  *    structure.  Note that some routines (such as xaccAccountRemoveLot())
  *    modify this list directly, and could leave you with a corrupted 
  *    pointer. */
-LotList* xaccAccountGetLotList (const Account *account);
+LotList* xaccAccountGetLotList (const GncAccount *account);
 
 /** The xaccAccountForEachLot() method will apply the function 'proc'
  *    to each lot in the account.  If 'proc' returns a non-NULL value,
@@ -649,7 +660,7 @@ LotList* xaccAccountGetLotList (const Account *account);
  *    the Lots will be traversed.
  */
 gpointer xaccAccountForEachLot(
-    const Account *acc,
+    const GncAccount *acc,
     gpointer (*proc)(GNCLot *lot, gpointer user_data), gpointer user_data);
 
 
@@ -658,7 +669,7 @@ gpointer xaccAccountForEachLot(
  * If sort_func is NULL, then the returned list has no particular order.
  * The caller must free to returned list.
  */
-LotList * xaccAccountFindOpenLots (const Account *acc,
+LotList * xaccAccountFindOpenLots (const GncAccount *acc,
 				   gboolean (*match_func)(GNCLot *lot,
 							  gpointer user_data),
 				   gpointer user_data, GCompareFunc sort_func);
@@ -666,37 +677,37 @@ LotList * xaccAccountFindOpenLots (const Account *acc,
 /** @} */
 /* ------------------ */
 
-/** @name Account Reconciliation information getters/setters 
+/** @name GncAccount Reconciliation information getters/setters 
 @{
 */
 /** DOCUMENT ME! */
-gboolean xaccAccountGetReconcileLastDate (const Account *account,
+gboolean xaccAccountGetReconcileLastDate (const GncAccount *account,
                                           time_t *last_date);
 /** DOCUMENT ME! */
-void xaccAccountSetReconcileLastDate (Account *account, time_t last_date);
+void xaccAccountSetReconcileLastDate (GncAccount *account, time_t last_date);
 
 /** DOCUMENT ME! */
-gboolean xaccAccountGetReconcileLastInterval (const Account *account,
+gboolean xaccAccountGetReconcileLastInterval (const GncAccount *account,
                                               int *months, int *days);
 /** DOCUMENT ME! */
-void xaccAccountSetReconcileLastInterval (Account *account,
+void xaccAccountSetReconcileLastInterval (GncAccount *account,
                                           int months, int days);
 /** DOCUMENT ME! */
-gboolean xaccAccountGetReconcilePostponeDate (const Account *account,
+gboolean xaccAccountGetReconcilePostponeDate (const GncAccount *account,
                                               time_t *postpone_date);
 /** DOCUMENT ME! */
-void xaccAccountSetReconcilePostponeDate (Account *account, 
+void xaccAccountSetReconcilePostponeDate (GncAccount *account, 
                                           time_t postpone_date);
 
 /** DOCUMENT ME! */
-gboolean xaccAccountGetReconcilePostponeBalance (const Account *account,
+gboolean xaccAccountGetReconcilePostponeBalance (const GncAccount *account,
                                                  gnc_numeric *balance);
 /** DOCUMENT ME! */
-void xaccAccountSetReconcilePostponeBalance (Account *account,
+void xaccAccountSetReconcilePostponeBalance (GncAccount *account,
                                              gnc_numeric balance);
 
 /** DOCUMENT ME! */
-void xaccAccountClearReconcilePostpone (Account *account);
+void xaccAccountClearReconcilePostpone (GncAccount *account);
 /** @} */
 
 
@@ -708,7 +719,7 @@ typedef enum
   PLACEHOLDER_CHILD,
   } GNCPlaceholderType;
 
-/** @name Account Placeholder flag 
+/** @name GncAccount Placeholder flag 
  @{
 */
 
@@ -718,7 +729,7 @@ typedef enum
  *  @param acc The account whose flag should be retrieved.
  *
  *  @return The current state of the account's "placeholder" flag. */
-gboolean xaccAccountGetPlaceholder (const Account *account);
+gboolean xaccAccountGetPlaceholder (const GncAccount *account);
 
 /** Set the "placeholder" flag for an account.  If this flag is set
  *  then the account may not be modified by the user.
@@ -726,17 +737,17 @@ gboolean xaccAccountGetPlaceholder (const Account *account);
  *  @param acc The account whose flag should be retrieved.
  *
  *  @param val The new state for the account's "placeholder" flag. */
-void xaccAccountSetPlaceholder (Account *account, gboolean option);
+void xaccAccountSetPlaceholder (GncAccount *account, gboolean option);
 
 /** Returns PLACEHOLDER_NONE if account is NULL or neither account nor
  *  any descendent of account is a placeholder.  If account is a
  *  placeholder, returns PLACEHOLDER_THIS.  Otherwise, if any
  *  descendant of account is a placeholder, return PLACEHOLDER_CHILD.
  */
-GNCPlaceholderType xaccAccountGetDescendantPlaceholder(const Account *account);
+GNCPlaceholderType xaccAccountGetDescendantPlaceholder(const GncAccount *account);
 /** @} */
 
-/** @name Account Hidden flag 
+/** @name GncAccount Hidden flag 
  @{
 */
 
@@ -747,7 +758,7 @@ GNCPlaceholderType xaccAccountGetDescendantPlaceholder(const Account *account);
  *  @param acc The account whose flag should be retrieved.
  *
  *  @return The current state of the account's "hidden" flag. */
-gboolean xaccAccountGetHidden (const Account *acc);
+gboolean xaccAccountGetHidden (const GncAccount *acc);
 
 /** Set the "hidden" flag for an account.  If this flag is set then
  *  the account (and any children) will be hidden from the user unless
@@ -756,7 +767,7 @@ gboolean xaccAccountGetHidden (const Account *acc);
  *  @param acc The account whose flag should be retrieved.
  *
  *  @param val The new state for the account's "hidden" flag. */
-void xaccAccountSetHidden (Account *acc, gboolean val);
+void xaccAccountSetHidden (GncAccount *acc, gboolean val);
 
 /** Should this account be "hidden".  If this flag is set for this
  *  account (or any parent account) then the account should be hidden
@@ -767,29 +778,29 @@ void xaccAccountSetHidden (Account *acc, gboolean val);
  *  @param acc The account whose flag should be retrieved.
  *
  *  @return Whether or not this account should be "hidden". */
-gboolean xaccAccountIsHidden (const Account *acc);
+gboolean xaccAccountIsHidden (const GncAccount *acc);
 /** @} */
 
-/** @name Account Tax related getters/setters
+/** @name GncAccount Tax related getters/setters
  @{
 */
 
 /** DOCUMENT ME! */
-gboolean xaccAccountGetTaxRelated (const Account *account);
+gboolean xaccAccountGetTaxRelated (const GncAccount *account);
 /** DOCUMENT ME! */
-void xaccAccountSetTaxRelated (Account *account, gboolean tax_related);
+void xaccAccountSetTaxRelated (GncAccount *account, gboolean tax_related);
 /** DOCUMENT ME! */
-const char * xaccAccountGetTaxUSCode (const Account *account);
+const char * xaccAccountGetTaxUSCode (const GncAccount *account);
 /** DOCUMENT ME! */
-void xaccAccountSetTaxUSCode (Account *account, const char *code);
+void xaccAccountSetTaxUSCode (GncAccount *account, const char *code);
 /** DOCUMENT ME! */
-const char * xaccAccountGetTaxUSPayerNameSource (const Account *account);
+const char * xaccAccountGetTaxUSPayerNameSource (const GncAccount *account);
 /** DOCUMENT ME! */
-void xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source);
+void xaccAccountSetTaxUSPayerNameSource (GncAccount *account, const char *source);
 /** @} */
 
 
-/** @name Account marking 
+/** @name GncAccount marking 
 @{
 */
 /** Set a mark on the account.  The meaning of this mark is
@@ -798,18 +809,18 @@ void xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source);
  * over the account tree.  The mark is *not* stored in the database/file
  * format.  When accounts are newly created, the mark is set to zero.
  */
-void xaccAccountSetMark (Account *account, short mark); 
+void xaccAccountSetMark (GncAccount *account, short mark); 
 
 /** Get the mark set by xaccAccountSetMark */
-short xaccAccountGetMark (const Account *account);
+short xaccAccountGetMark (const GncAccount *account);
 
 /** The xaccClearMark will find the topmost group, and clear the mark in
  * the entire group tree.  */
-void xaccClearMark (Account *account, short val);
+void xaccClearMark (GncAccount *account, short val);
 
 /** The xaccClearMarkDown will clear the mark only in this and in
  * sub-accounts.*/
-void xaccClearMarkDown (Account *account, short val);
+void xaccClearMarkDown (GncAccount *account, short val);
 /** Will clear the mark for all the accounts of the AccountGroup .*/
 void xaccClearMarkDownGr (AccountGroup *group, short val);
 /** @} */
@@ -824,12 +835,12 @@ void xaccClearMarkDownGr (AccountGroup *group, short val);
  * it.
  *
  * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
+void DxaccAccountSetCurrency (GncAccount *account, gnc_commodity *currency);
 
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
-gnc_commodity * DxaccAccountGetCurrency (const Account *account);
+gnc_commodity * DxaccAccountGetCurrency (const GncAccount *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
@@ -838,18 +849,18 @@ gnc_commodity * DxaccAccountGetCurrency (const Account *account);
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
 
-void dxaccAccountSetQuoteTZ (Account *account, const char *tz);
+void dxaccAccountSetQuoteTZ (GncAccount *account, const char *tz);
 /** Get the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
  *  don't label their output, so the user has to specify this bit.
  *
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
-const char * dxaccAccountGetQuoteTZ (const Account *account);
+const char * dxaccAccountGetQuoteTZ (const GncAccount *account);
 /** @} */
 
 
-/** @name Account parameter names 
+/** @name GncAccount parameter names 
  @{
 */
 #define ACCOUNT_KVP			"kvp"

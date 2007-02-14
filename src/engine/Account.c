@@ -42,20 +42,99 @@
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
+static gulong commit_event_handler = 0;
+
+static void gnc_account_bring_uptodate (GncAccount *acc);
 /* GObject declarations */
 
-static void gnc_account_class_init(AccountClass *klass);
-static void gnc_account_init(Account *sp);
+static void gnc_account_class_init(GncAccountClass *klass);
+static void gnc_account_init(GncAccount *sp);
 static void gnc_account_finalize(GObject *object);
 
-struct _AccountPrivate {
-	/* Private Members */
+/** \struct Account */
+struct _GncAccountPrivate
+{
+
+  /* The accountName is an arbitrary string assigned by the user. 
+   * It is intended to a short, 5 to 30 character long string that
+   * is displayed by the GUI as the account mnemonic. 
+   */
+  char     *accountName;
+
+  /* The accountCode is an arbitrary string assigned by the user.
+   * It is intended to be reporting code that is a synonym for the 
+   * accountName. Typically, it will be a numeric value that follows 
+   * the numbering assignments commonly used by accountants, such 
+   * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
+   * for detail accounts.
+   */
+  char     *accountCode;
+
+  /* The description is an arbitrary string assigned by the user. 
+   * It is intended to be a longer, 1-5 sentence description of what
+   * this account is all about.
+   */
+  char     *description;
+
+  /* The type field is the account type, picked from the enumerated
+   * list that includes ACCT_TYPE_BANK, ACCT_TYPE_STOCK,
+   * ACCT_TYPE_CREDIT, ACCT_TYPE_INCOME, etc.  Its intended use is to
+   * be a hint to the GUI as to how to display and format the
+   * transaction data.
+   */
+  GNCAccountType type;
+
+  /* 
+   * The commodity field denotes the kind of 'stuff' stored 
+   * in this account.  The 'amount' field of a split indicates
+   * how much of the 'stuff' there is.
+   */
+  gnc_commodity * commodity;
+  int commodity_scu;
+  gboolean non_standard_scu;
+
+  /* The parent and children pointers are used to implement an account
+   * hierarchy, of accounts that have sub-accounts ("detail accounts").
+   */
+  AccountGroup *parent;    /* back-pointer to parent */
+  AccountGroup *children;  /* pointer to sub-accounts */
+
+  /* protected data, cached parameters */
+  gnc_numeric starting_balance;
+  gnc_numeric starting_cleared_balance;
+  gnc_numeric starting_reconciled_balance;
+
+  gnc_numeric balance;
+  gnc_numeric cleared_balance;
+  gnc_numeric reconciled_balance;
+
+  /* version number, used for tracking multiuser updates */
+  gint32 version;
+  guint32  version_check;  /* data aging timestamp */
+
+  SplitList *splits;       /* list of split pointers */
+  LotList   *lots;         /* list of lot pointers */
+
+  /* Cached pointer to policy method */
+  GNCPolicy *policy;
+
+  gboolean balance_dirty;  /* balances in splits incorrect */
+  gboolean sort_dirty;     /* sort order of splits is bad */
+
+  /* The "mark" flag can be used by the user to mark this account
+   * in any way desired.  Handy for specialty traversals of the 
+   * account tree. */
+  short mark;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-typedef struct _AccountSignal AccountSignal;
-typedef enum _AccountSignalType AccountSignalType;
+typedef struct _GncAccountSignal GncAccountSignal;
+typedef enum _GncAccountSignalType GncAccountSignalType;
 
-enum _AccountSignalType {
+enum _GncAccountSignalType {
 	/* Signals */
 	LAST_SIGNAL
 };
@@ -66,8 +145,8 @@ enum
         PROP_0
 };
 
-struct _AccountSignal {
-	Account *object;
+struct _GncAccountSignal {
+	GncAccount *object;
 };
 
 static guint gnc_account_signals[LAST_SIGNAL] = { 0 };
@@ -80,13 +159,13 @@ gnc_account_get_type()
 
 	if(type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (AccountClass),
+			sizeof (GncAccountClass),
 			NULL,
 			NULL,
 			(GClassInitFunc)gnc_account_class_init,
 			NULL,
 			NULL,
-			sizeof (Account),
+			sizeof (GncAccount),
 			0,
 			(GInstanceInitFunc)gnc_account_init,
 		};
@@ -99,7 +178,7 @@ gnc_account_get_type()
 }
 
 static void
-gnc_account_class_init(AccountClass *klass)
+gnc_account_class_init(GncAccountClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -111,20 +190,112 @@ gnc_account_class_init(AccountClass *klass)
 	/* Install properties */
 	
 	/* Create signals here:*/
+	
+	
  	
 }
 
 static void
-gnc_account_init(Account *obj)
+gnc_account_init(GncAccount *obj)
 {
 	/* Initialize private members, etc. */
+  acc->priv = g_new0 (GncAccountPrivate, 1);
+  
+  acc->priv->parent   = NULL;
+  acc->priv->children = NULL;
+
+  acc->priv->balance = gnc_numeric_zero();
+  acc->priv->cleared_balance = gnc_numeric_zero();
+  acc->priv->reconciled_balance = gnc_numeric_zero();
+
+  acc->priv->starting_balance = gnc_numeric_zero();
+  acc->priv->starting_cleared_balance = gnc_numeric_zero();
+  acc->priv->starting_reconciled_balance = gnc_numeric_zero();
+
+  acc->priv->type = ACCT_TYPE_NONE;
+
+  acc->priv->accountName = NULL;
+  acc->priv->accountCode = NULL;
+  acc->priv->description = NULL;
+
+  acc->priv->idata = 0;
+
+  acc->priv->commodity = NULL;
+  acc->priv->commodity_scu = 0;
+  acc->priv->non_standard_scu = FALSE;
+
+  acc->priv->splits = NULL;
+  acc->priv->lots = NULL;
+  acc->priv->policy = xaccGetFIFOPolicy();
+
+  acc->priv->version = 0;
+  acc->priv->version_check = 0;
+  acc->priv->balance_dirty = FALSE;
+  acc->priv->sort_dirty = FALSE;
+
+  commit_event_handler = g_signal_connect (obj, "commit", G_CALLBACK (gnc_account_bring_uptodate), obj, NULL);
 }
 
 static void
 gnc_account_finalize(GObject *object)
 {
-	
-	/* Free private members, etc. */
+		
+	GList *lp, *slist;
+    QofCollection *col;
+
+    /* First, recursively free children */
+    xaccFreeAccountGroup (acc);
+    acc->priv->children = NULL;
+
+    PINFO ("freeing splits for account %p (%s)",
+           acc, acc->priv->accountName ? acc->priv->accountName : "(null)");
+
+    slist = g_list_copy (acc->priv->splits);
+    
+    for (lp = slist; lp; lp = lp->next)
+    {
+      Split *s;
+      s = lp->data;
+      gnc_split_destroy ((GncSplit*) s);
+    }
+    
+    g_list_free(slist); 
+    
+    if (!qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (acc)))) {
+      col = qof_instance_get_collection (QOF_INSTANCE(acc));
+      qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
+    }
+
+    for (lp = acc->priv->lots; lp; lp = lp->next)
+    {
+      GNCLot *lot = lp->data;
+      gnc_lot_destroy (lot);
+    }
+    g_list_free (acc->priv->lots);
+    acc->priv->lots = NULL;
+
+	xaccGroupRemoveAccount(acc->priv->parent, acc);
+
+  if (acc->priv->accountName) g_free (acc->priv->accountName);
+  if (acc->priv->accountCode) g_free (acc->priv->accountCode);
+  if (acc->priv->description) g_free (acc->priv->description);
+
+  acc->priv->commodity = NULL;
+  acc->priv->parent = NULL;
+  acc->priv->children = NULL;
+
+  acc->priv->balance  = gnc_numeric_zero();
+  acc->priv->cleared_balance = gnc_numeric_zero();
+  acc->priv->reconciled_balance = gnc_numeric_zero();
+
+  acc->priv->type = ACCT_TYPE_NONE;
+  acc->priv->commodity = NULL;
+
+  acc->priv->version = 0;
+  acc->priv->balance_dirty = FALSE;
+  acc->priv->sort_dirty = FALSE;
+  
+  g_signal_handler_disconnect (object, commit_event_handler);
 	
 	G_OBJECT_CLASS(parent_class)->finalize(object);
 }
@@ -135,7 +306,7 @@ gnc_account_set_property (GObject *object,
 				  const GValue *value,
 				  GParamSpec *pspec)
 {
-	Account *obj;
+	GncAccount *obj;
 	
 	obj = GNC_ACCOUNT (object);
 	switch (param_id) {		
@@ -152,7 +323,7 @@ gnc_account_get_property (GObject      *object,
                         GValue       *value,
                         GParamSpec   *pspec)
 {
-  Account *obj;
+  GncAccount *obj;
   
   obj = GNC_ACCOUNT(object);
 
@@ -169,16 +340,6 @@ gnc_account_get_property (GObject      *object,
 /* The Canonical Account Separator.  Pre-Initialized. */
 static gchar account_separator[8] = ".";
 gunichar account_uc_separator = ':';
-
-/********************************************************************\
- * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend to!  These functions perform actions on the        *
- * account data structure, in order to encapsulate the knowledge    *
- * of the internals of the Account in one file.                     *
-\********************************************************************/
-
-static void xaccAccountBringUpToDate (Account *acc);
-
 
 /********************************************************************\
  * gnc_get_account_separator                                        *
@@ -220,84 +381,44 @@ gnc_set_account_separator (const gchar *separator)
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void mark_account (Account *acc);
+G_INLINE_FUNC void mark_account (GncAccount *acc);
 void
-mark_account (Account *acc)
+mark_account (GncAccount *acc)
 {
-  if (acc->parent) acc->parent->saved = FALSE;
-  qof_instance_set_dirty(&acc->inst);
+  if (acc->priv->parent) acc->priv->parent->saved = FALSE;
+  qof_instance_set_dirty(QOF_INSTANCE (acc));
 }
 
 /********************************************************************\
 \********************************************************************/
 
-static void
-xaccInitAccount (Account * acc, QofBook *book)
-{
-  ENTER ("book=%p\n", book);
-  qof_instance_init (&acc->inst, GNC_ID_ACCOUNT, book);
-
-  acc->parent   = NULL;
-  acc->children = NULL;
-
-  acc->balance = gnc_numeric_zero();
-  acc->cleared_balance = gnc_numeric_zero();
-  acc->reconciled_balance = gnc_numeric_zero();
-
-  acc->starting_balance = gnc_numeric_zero();
-  acc->starting_cleared_balance = gnc_numeric_zero();
-  acc->starting_reconciled_balance = gnc_numeric_zero();
-
-  acc->type = ACCT_TYPE_NONE;
-
-  acc->accountName = CACHE_INSERT("");
-  acc->accountCode = CACHE_INSERT("");
-  acc->description = CACHE_INSERT("");
-
-  acc->idata = 0;
-
-  acc->commodity = NULL;
-  acc->commodity_scu = 0;
-  acc->non_standard_scu = FALSE;
-
-  acc->splits = NULL;
-  acc->lots = NULL;
-  acc->policy = xaccGetFIFOPolicy();
-
-  acc->version = 0;
-  acc->version_check = 0;
-  acc->balance_dirty = FALSE;
-  acc->sort_dirty = FALSE;
-
-  LEAVE ("account=%p\n", acc);
-}
 
 /********************************************************************\
 \********************************************************************/
 
-Account *
-xaccMallocAccount (QofBook *book)
+GncAccount *
+gnc_account_new (QofBook *book)
 {
-  Account *acc;
+  GncAccount *acc;
 
   g_return_val_if_fail (book, NULL);
 
-  acc = g_new (Account, 1);
-  xaccInitAccount (acc, book);
+  acc = GNC_ACCOUNT (g_object_new (GNC_TYPE_ACCOUNT, "book", book, NULL));
+
   qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return acc;
 }
 
-static Account *
-xaccCloneAccountCommon(const Account *from, QofBook *book)
+static GncAccount *
+xaccCloneAccountCommon(const GncAccount *from, QofBook *book)
 {
-    Account *ret;
+    GncAccount *ret;
 
     if (!from || !book) return NULL;
     ENTER (" ");
 
-    ret = g_new (Account, 1);
+    ret = GNC_ACCOUNT (g_object_new (GNC_TYPE_ACCOUNT, "book", book, NULL));
     g_return_val_if_fail (ret, NULL);
 
     xaccInitAccount (ret, book);
@@ -325,138 +446,28 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     return ret;
 }
 
-Account *
-xaccCloneAccount (const Account *from, QofBook *book)
+GncAccount *
+xaccCloneAccount (const GncAccount *from, QofBook *book)
 {
-    Account *ret = xaccCloneAccountCommon(from, book);
+    GncAccount *ret = xaccCloneAccountCommon(from, book);
     qof_instance_gemini (&ret->inst, (QofInstance *) &from->inst);
     g_assert (ret ==
-              (Account*) qof_instance_lookup_twin (QOF_INSTANCE(from), book));
+              (GncAccount*) qof_instance_lookup_twin (QOF_INSTANCE(from), book));
     return ret;
 }
 
-Account *
-xaccCloneAccountSimple (const Account *from, QofBook *book)
+GncAccount *
+xaccCloneAccountSimple (const GncAccount *from, QofBook *book)
 {
-    Account *ret = xaccCloneAccountCommon(from, book);    
+    GncAccount *ret = xaccCloneAccountCommon(from, book);    
     qof_instance_set_dirty(&ret->inst);
     return ret;
 }
 
 /********************************************************************\
-\********************************************************************/
-
-void
-xaccFreeAccount (Account *acc)
-{
-  GList *lp;
-
-  if (!acc) return;
-
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
-
-  if (acc->children) 
-  {
-    PERR (" instead of calling xaccFreeAccount(), please call \n"
-          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
-
-    /* First, recursively free children */
-    xaccFreeAccountGroup (acc->children);
-    acc->children = NULL;
-  }
-
-  /* remove lots -- although these should be gone by now. */
-  if (acc->lots)
-  {
-    PERR (" instead of calling xaccFreeAccount(), please call \n"
-          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
-  
-    for (lp=acc->lots; lp; lp=lp->next)
-    {
-      GNCLot *lot = lp->data;
-      gnc_lot_destroy (lot);
-    }
-    g_list_free (acc->lots);
-    acc->lots = NULL;
-  }
-
-  /* Next, clean up the splits */
-  /* NB there shouldn't be any splits by now ... they should 
-   * have been all been freed by CommitEdit().  We can remove this
-   * check once we know the warning isn't occurring any more. */
-  if (acc->splits) 
-  {
-    GList *slist;
-    PERR (" instead of calling xaccFreeAccount(), please call \n"
-          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
-  
-    acc->inst.editlevel = 0;
-
-    slist = g_list_copy(acc->splits);
-    for (lp = slist; lp; lp = lp->next) {
-      Split *s = (Split *) lp->data;
-      g_assert(xaccSplitGetAccount(s) == acc);
-      xaccSplitDestroy (s);
-    }
-    g_list_free(slist);
-    g_assert(acc->splits == NULL);
-  }
-
-  CACHE_REPLACE(acc->accountName, NULL);
-  CACHE_REPLACE(acc->accountCode, NULL);
-  CACHE_REPLACE(acc->description, NULL);
-
-  /* zero out values, just in case stray 
-   * pointers are pointing here. */
-
-  acc->commodity = NULL;
-  acc->parent = NULL;
-  acc->children = NULL;
-
-  acc->balance  = gnc_numeric_zero();
-  acc->cleared_balance = gnc_numeric_zero();
-  acc->reconciled_balance = gnc_numeric_zero();
-
-  acc->type = ACCT_TYPE_NONE;
-  acc->commodity = NULL;
-
-  acc->version = 0;
-  acc->balance_dirty = FALSE;
-  acc->sort_dirty = FALSE;
-
-  qof_instance_release (&acc->inst);
-  //g_free(acc);
-}
-
-/********************************************************************\
  * transactional routines
 \********************************************************************/
-
-void 
-xaccAccountBeginEdit (Account *acc) 
-{
-	g_return_if_fail(acc);
-	qof_begin_edit(&acc->inst);
-}
-
-static void on_done(QofInstance *inst) 
-{
-    /* old event style */
-    qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
-}
-
-static void on_err (QofInstance *inst, QofBackendError errcode)
-{
-  PERR("commit error: %d", errcode);
-}
-
-static void acc_free (QofInstance *inst)
-{
-  Account *acc = (Account *) inst;
-  xaccGroupRemoveAccount(acc->parent, acc);
-  xaccFreeAccount(acc);
-}
-
+/*TODO: Move this code */
 static void
 destroy_pending_splits_for_account(QofEntity *ent, gpointer acc)
 {
@@ -468,96 +479,34 @@ destroy_pending_splits_for_account(QofEntity *ent, gpointer acc)
             xaccSplitDestroy(split);
 }
 
+
 void 
-xaccAccountCommitEdit (Account *acc) 
+gnc_account_destroy (GncAccount *acc) 
 {
-  g_return_if_fail(acc);
-  if (!qof_commit_edit(&acc->inst)) return;
-
-  /* If marked for deletion, get rid of subaccounts first,
-   * and then the splits ... */
-  if (acc->inst.do_free)
-  {
-    GList *lp, *slist;
-    QofCollection *col;
- 
-    acc->inst.editlevel++;
-
-    /* First, recursively free children */
-    xaccFreeAccountGroup (acc->children);
-    acc->children = NULL;
-
-    PINFO ("freeing splits for account %p (%s)",
-           acc, acc->accountName ? acc->accountName : "(null)");
-
-    slist = g_list_copy(acc->splits);
-    for (lp = slist; lp; lp = lp->next)
-    {
-      Split *s = lp->data;
-      xaccSplitDestroy (s);
-    }
-    g_list_free(slist); 
-    /* It turns out there's a case where this assertion does not hold:
-       When the user tries to delete an Imbalance account, while also
-       deleting all the splits in it.  The splits will just get
-       recreated and put right back into the same account!
-
-       g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
-    */
-
-    if (!qof_book_shutting_down(acc->inst.book)) {
-      col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
-      qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
-    }
-
-    /* the lots should be empty by now */
-    for (lp = acc->lots; lp; lp = lp->next)
-    {
-      GNCLot *lot = lp->data;
-      gnc_lot_destroy (lot);
-    }
-    g_list_free (acc->lots);
-    acc->lots = NULL;
-
-    qof_instance_set_dirty(&acc->inst);
-    acc->inst.editlevel--;
-  }
-  else 
-  {
-    xaccAccountBringUpToDate(acc);
-  }
-
-  qof_commit_edit_part2(&acc->inst, on_err, on_done, acc_free);
+  qof_instance_mark_free (QOF_INSTANCE (acc));
+  qof_instance_destroy (QOF_INSTANCE (acc));
+    qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
 }
 
 void 
-xaccAccountDestroy (Account *acc) 
+xaccAccountSetVersion (GncAccount *acc, gint32 vers)
 {
   if (!acc) return;
-  acc->inst.do_free = TRUE;
-
-  xaccAccountCommitEdit (acc);
-}
-
-void 
-xaccAccountSetVersion (Account *acc, gint32 vers)
-{
-  if (!acc) return;
-  acc->version = vers;
+  acc->priv->version = vers;
 }
 
 gint32 
-xaccAccountGetVersion (const Account *acc)
+xaccAccountGetVersion (const GncAccount *acc)
 {
   if (!acc) return 0;
-  return (acc->version);
+  return (acc->priv->version);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
+xaccAccountEqual(const GncAccount *aa, const GncAccount *ab, gboolean check_guids)
 {
   if(!aa && !ab) return TRUE;
 
@@ -769,19 +718,20 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
 /********************************************************************\
 \********************************************************************/
 void
-xaccAccountSortSplits (Account *acc, gboolean force)
+xaccAccountSortSplits (GncAccount *acc, gboolean force)
 {
-  if (!acc || !acc->sort_dirty || (!force && acc->inst.editlevel > 0)) return;
+  if (!acc || !acc->priv->sort_dirty || (!force && qof_instance_get_edit_level (QOF_INSTANCE (acc) > 0)) return;
 
-  acc->splits = g_list_sort(acc->splits, (GCompareFunc)xaccSplitDateOrder);
-  acc->sort_dirty = FALSE;
-  acc->balance_dirty = TRUE;
+  acc->priv->splits = g_list_sort(acc->priv->splits, (GCompareFunc)xaccSplitDateOrder);
+  acc->priv->sort_dirty = FALSE;
+  acc->priv->balance_dirty = TRUE;
 }
 
+/* TODO: Call this function as callback when  an event commit is emitted */
 static void
-xaccAccountBringUpToDate(Account *acc) 
+gnc_account_bring_uptodate (GncAccount *acc) 
 {
-  if (!acc) return;
+  g_return_if_fail (GNC_IS_ACCOUNT (acc));
 
   /* if a re-sort happens here, then everything will update, so the
      cost basis and balance calls are no-ops */
@@ -792,49 +742,21 @@ xaccAccountBringUpToDate(Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-void 
-xaccAccountSetGUID (Account *acc, const GUID *guid)
-{
-  if (!acc || !guid) return;
-
-  /* XXX this looks fishy and weird to me ... */
-  PINFO("acct=%p", acc);
-  xaccAccountBeginEdit (acc);
-  qof_entity_set_guid (&acc->inst.entity, guid);
-  qof_instance_set_dirty(&acc->inst);
-  xaccAccountCommitEdit (acc);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Account *
-xaccAccountLookup (const GUID *guid, QofBook *book)
-{
-  QofCollection *col;
-  if (!guid || !book) return NULL;
-  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
-  return (Account *) qof_collection_lookup_entity (col, guid);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 short
-xaccAccountGetMark (const Account *acc)
+xaccAccountGetMark (const GncAccount *acc)
 {
-  return acc ? acc->mark : 0;
+  return acc ? acc->priv->mark : 0;
 }
 
 void
-xaccAccountSetMark (Account *acc, short m)
+xaccAccountSetMark (GncAccount *acc, short m)
 {
   if (acc) 
-      acc->mark = m;
+      acc->priv->mark = m;
 }
 
 void
-xaccClearMark (Account *acc, short val)
+xaccClearMark (GncAccount *acc, short val)
 {
   AccountGroup *topgrp;
 
@@ -850,7 +772,7 @@ xaccClearMark (Account *acc, short val)
 
     for (node = list; node; node = node->next)
     {
-      Account *account = node->data;
+      GncAccount *account = node->data;
 
       xaccClearMarkDown (account, val);
     }
@@ -860,14 +782,14 @@ xaccClearMark (Account *acc, short val)
 }
 
 void
-xaccClearMarkDown (Account *acc, short val)
+xaccClearMarkDown (GncAccount *acc, short val)
 {
   AccountGroup *children;
 
   if (!acc) return;
-  acc->mark = val;
+  acc->priv->mark = val;
 
-  children = acc->children;
+  children = acc->priv->children;
   if (children)
   {
     GList *list;
@@ -877,7 +799,7 @@ xaccClearMarkDown (Account *acc, short val)
 
     for (node = list; node; node = node->next)
     {
-      Account *account = node->data;
+      GncAccount *account = node->data;
 
       xaccClearMarkDown (account, val);
     }
@@ -896,7 +818,7 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 
   for (node = list; node; node = node->next)
   {
-    Account *account = node->data;
+    GncAccount *account = node->data;
 
     xaccClearMarkDown (account, val);
   }
@@ -906,19 +828,19 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 \********************************************************************/
 
 void
-xaccAccountRemoveLot (Account *acc, GNCLot *lot)
+xaccAccountRemoveLot (GncAccount *acc, GNCLot *lot)
 {
-    if (!acc || !lot || !acc->lots) return;
+    if (!acc || !lot || !acc->priv->lots) return;
     ENTER ("(acc=%p, lot=%p)", acc, lot);
 
-    acc->lots = g_list_remove (acc->lots, lot);
+    acc->priv->lots = g_list_remove (acc->priv->lots, lot);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
 void
-xaccAccountInsertLot (Account *acc, GNCLot *lot)
+xaccAccountInsertLot (GncAccount *acc, GNCLot *lot)
 {
-   Account * old_acc = NULL;
+   GncAccount * old_acc = NULL;
 
    if (!acc || !lot || lot->account == acc) return;
    ENTER ("(acc=%p, lot=%p)", acc, lot);
@@ -927,10 +849,10 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    /* pull it out of the old account */
    if (lot->account) {
       old_acc = lot->account;
-      old_acc->lots = g_list_remove (old_acc->lots, lot);
+      old_acc->priv->lots = g_list_remove (old_acc->priv->lots, lot);
    }
 
-   acc->lots = g_list_prepend (acc->lots, lot);
+   acc->priv->lots = g_list_prepend (acc->priv->lots, lot);
    lot->account = acc;
 
    /* Don't move the splits to the new account.  The caller will do this
@@ -950,7 +872,7 @@ xaccPreSplitMove (Split *split, gpointer dummy)
 }
 
 static void
-xaccPostSplitMove (Split *split, Account *accto)
+xaccPostSplitMove (Split *split, GncAccount *accto)
 {
   Transaction *trans;
 
@@ -961,7 +883,7 @@ xaccPostSplitMove (Split *split, Account *accto)
 }
 
 void
-xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
+xaccAccountMoveAllSplits (GncAccount *accfrom, GncAccount *accto)
 {
   /* Handle special cases. */
   if (!accfrom || !accto || !accfrom->splits || accfrom == accto) return;
@@ -1031,7 +953,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 \********************************************************************/
 
 void
-xaccAccountRecomputeBalance (Account * acc)
+xaccAccountRecomputeBalance (GncAccount * acc)
 {
   gnc_numeric  balance;
   gnc_numeric  cleared_balance; 
@@ -1040,18 +962,18 @@ xaccAccountRecomputeBalance (Account * acc)
   GList *lp;
 
   if (NULL == acc) return;
-  if (acc->inst.editlevel > 0) return;
-  if (!acc->balance_dirty) return;
-  if (acc->inst.do_free) return;
-  if (qof_book_shutting_down(acc->inst.book)) return;
+  if (qof_instance_get_edit_level (QOF_INSTANCE (acc)) > 0) return;
+  if (!acc->priv->balance_dirty) return;
+  if (qof_instance_do_free(QOF_INSTANCE (acc))) return;
+  if (qof_book_shutting_down(qof_instance_get_book(QOF_INSTANCE (acc)))) return;
 
-  balance            = acc->starting_balance;
-  cleared_balance    = acc->starting_cleared_balance;
-  reconciled_balance = acc->starting_reconciled_balance;
+  balance            = acc->priv->starting_balance;
+  cleared_balance    = acc->priv->starting_cleared_balance;
+  reconciled_balance = acc->priv->starting_reconciled_balance;
 
   PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
-	 acc->accountName, balance.num, balance.denom);
-  for(lp = acc->splits; lp; lp = lp->next) 
+	 acc->priv->accountName, balance.num, balance.denom);
+  for(lp = acc->priv->splits; lp; lp = lp->next) 
   {
     Split *split = (Split *) lp->data;
     gnc_numeric amt = xaccSplitGetAmount (split);
@@ -1077,11 +999,11 @@ xaccAccountRecomputeBalance (Account * acc)
     last_split = split;
   }
 
-  acc->balance = balance;
-  acc->cleared_balance = cleared_balance;
-  acc->reconciled_balance = reconciled_balance;
+  acc->priv->balance = balance;
+  acc->priv->cleared_balance = cleared_balance;
+  acc->priv->reconciled_balance = reconciled_balance;
 
-  acc->balance_dirty = FALSE;
+  acc->priv->balance_dirty = FALSE;
 
 }
 
@@ -1089,18 +1011,18 @@ xaccAccountRecomputeBalance (Account * acc)
 \********************************************************************/
 
 void 
-xaccAccountSetStartingBalance(Account *acc,
+xaccAccountSetStartingBalance(GncAccount *acc,
                               const gnc_numeric start_baln,
                               const gnc_numeric start_cleared_baln,
                               const gnc_numeric start_reconciled_baln)  
 {
   if (!acc) return;
 
-  acc->starting_balance = start_baln;
-  acc->starting_cleared_balance = start_cleared_baln;
-  acc->starting_reconciled_balance = start_reconciled_baln;
+  acc->priv->starting_balance = start_baln;
+  acc->priv->starting_cleared_balance = start_cleared_baln;
+  acc->priv->starting_reconciled_balance = start_reconciled_baln;
 
-  acc->balance_dirty = TRUE;
+  acc->priv->balance_dirty = TRUE;
 }
 
 /********************************************************************\
@@ -1120,7 +1042,7 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 
 
 int
-xaccAccountOrder (const Account **aa, const Account **ab) 
+xaccAccountOrder (const GncAccount **aa, const GncAccount **ab) 
 {
   char *da, *db;
   char *endptr = NULL;
@@ -1182,113 +1104,125 @@ xaccAccountOrder (const Account **aa, const Account **ab)
 \********************************************************************/
 
 void 
-xaccAccountSetType (Account *acc, GNCAccountType tip) 
+xaccAccountSetType (GncAccount *acc, GNCAccountType tip) 
 {
   /* refuse invalid account types, and don't bother if not new type. */
-  if (!acc || NUM_ACCOUNT_TYPES <= tip || acc->type == tip) return;
+  if (!acc || NUM_ACCOUNT_TYPES <= tip || acc->priv->type == tip) return;
 
   xaccAccountBeginEdit(acc);
-  acc->type = tip;
-  acc->balance_dirty = TRUE; /* new type may affect balance computation */
+  acc->priv->type = tip;
+  acc->priv->balance_dirty = TRUE; /* new type may affect balance computation */
   mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
 
 void 
-xaccAccountSetName (Account *acc, const char *str) 
+xaccAccountSetName (GncAccount *acc, const char *str) 
 {
-   if (!acc || !str || str == acc->accountName) return;
+   if (!acc || !str || str == acc->priv->accountName) return;
 
-   xaccAccountBeginEdit(acc);
-   CACHE_REPLACE(acc->accountName, str);
+   qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
+   
+   if(acc->priv->accountName) g_free(acc->priv->accountName);
+   
+   acc->priv->accountName = g_strdup (str);
+   	
    mark_account (acc);
    
-   xaccAccountCommitEdit(acc);
+   qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
 }
 
 void 
-xaccAccountSetCode (Account *acc, const char *str) 
+xaccAccountSetCode (GncAccount *acc, const char *str) 
 {
    if (!acc || !str || str == acc->accountCode) return;
 
-   xaccAccountBeginEdit(acc);
-   CACHE_REPLACE(acc->accountCode, str);
+   qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
+   
+   if(acc->priv->accountCode) g_free(acc->priv->accountCode);
+   
+   acc->priv->accountCode = g_strdup (str);
+   
    mark_account (acc);
 
-   xaccAccountCommitEdit(acc);
+   qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
 }
 
 void
-xaccAccountSetDescription (Account *acc, const char *str) 
+xaccAccountSetDescription (GncAccount *acc, const char *str) 
 {
    if (!acc || !str || str == acc->description) return;
 
-   xaccAccountBeginEdit(acc);
-   CACHE_REPLACE(acc->description, str);
+   qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
+   
+   if(acc->priv->description) g_free(acc->priv->description);
+   
+   acc->priv->description = g_strdup (str);
+   
    mark_account (acc);
    
-   xaccAccountCommitEdit(acc);
+   qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
 }
 
 static void
-qofAccountSetParent (Account *acc, QofEntity *parent) 
+qofAccountSetParent (GncAccount *acc, QofEntity *parent) 
 {
-	Account *parent_acc;
+	GncAccount *parent_acc;
 	
 	if (!acc || !parent) return;
-	parent_acc = (Account*)parent;
-	xaccAccountBeginEdit(acc);
-	xaccAccountBeginEdit(parent_acc);
+	parent_acc = (GncAccount*)parent;
+	qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
+	qof_instance_begin_edit (QOF_INSTANCE (parent_acc), NULL);
 	xaccAccountInsertSubAccount(parent_acc, acc);
 	mark_account (parent_acc);
 	mark_account (acc);
-	xaccAccountCommitEdit(acc);
-	xaccAccountCommitEdit(parent_acc);
+	qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
+	qof_instance_commit_edit (QOF_INSTANCE (parent_acc), NULL);
 }
 
 void
-xaccAccountSetNotes (Account *acc, const char *str) 
+xaccAccountSetNotes (GncAccount *acc, const char *str) 
 {
   if (!acc) return;
 
-  xaccAccountBeginEdit(acc);
+  qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
   if (str) {
     gchar *tmp = g_strstrip(g_strdup(str));
-    kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", 
+    kvp_frame_set_slot_nc(qof_instance_get_slots (QOF_INSTANCE (acc)), "notes", 
 			  strlen(tmp) ? kvp_value_new_string(tmp) : NULL);
     g_free(tmp);
   } else {
-    kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", NULL);
+    kvp_frame_set_slot_nc(qof_instance_get_slots (QOF_INSTANCE (acc)), "notes", NULL);
   }
   mark_account(acc);
-  xaccAccountCommitEdit(acc);
+  qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
 }
 
 void 
-xaccAccountSetCommodity (Account * acc, gnc_commodity * com) 
+xaccAccountSetCommodity (GncAccount * acc, gnc_commodity * com) 
 {
   GList *lp;
   if (!acc || !com || com == acc->commodity) return;
 
-  xaccAccountBeginEdit(acc);
+  qof_instance_begin_edit (QOF_INSTANCE (acc), NULL);
 
-  acc->commodity = com;
-  acc->commodity_scu = gnc_commodity_get_fraction(com);
-  acc->non_standard_scu = FALSE;
+  acc->priv->commodity = com;
+  acc->priv->commodity_scu = gnc_commodity_get_fraction(com);
+  acc->priv->non_standard_scu = FALSE;
 
   /* iterate over splits */
-  for (lp = acc->splits; lp; lp = lp->next)
+  for (lp = acc->priv->splits; lp; lp = lp->next)
   {
       Split *s = (Split *) lp->data;
       Transaction *trans = xaccSplitGetParent (s);
 
-      xaccTransBeginEdit (trans);
+      qof_instance_begin_edit (QOF_INSTANCE (trans), NULL);xaccTransBeginEdit (trans);
       xaccSplitSetAmount (s, xaccSplitGetAmount(s));
       xaccTransCommitEdit (trans);
   }
 
-  acc->sort_dirty = TRUE;  /* Not needed. */
-  acc->balance_dirty = TRUE;
+  acc->priv->sort_dirty = TRUE;  /* Not needed. */
+  acc->priv->balance_dirty = TRUE;
   mark_account (acc);
 
   if (gnc_commodity_is_iso(com)) {
@@ -1298,7 +1232,7 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
     gnc_commodity_set_quote_source(com, 
         gnc_commodity_get_default_quote_source(com));
   }
-  xaccAccountCommitEdit(acc);
+  qof_instance_commit_edit (QOF_INSTANCE (acc), NULL);
 }
 
 /*
@@ -1308,12 +1242,12 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
  * to mismatched values in the past.
  */
 void
-xaccAccountSetCommoditySCU (Account *acc, int scu)
+xaccAccountSetCommoditySCU (GncAccount *acc, int scu)
 {
   if (!acc) return;
 
   xaccAccountBeginEdit(acc);
-  acc->commodity_scu = scu;
+  acc->priv->commodity_scu = scu;
   if (scu != gnc_commodity_get_fraction(acc->commodity))
       acc->non_standard_scu = TRUE;
   mark_account(acc);
@@ -1321,13 +1255,13 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
 }
 
 int
-xaccAccountGetCommoditySCUi (const Account * acc)
+xaccAccountGetCommoditySCUi (const GncAccount * acc)
 {
   return acc ? acc->commodity_scu : 0;
 }
 
 int
-xaccAccountGetCommoditySCU (const Account * acc)
+xaccAccountGetCommoditySCU (const GncAccount * acc)
 {
   if (!acc) return 0;
 
@@ -1337,7 +1271,7 @@ xaccAccountGetCommoditySCU (const Account * acc)
 }
 
 void
-xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
+xaccAccountSetNonStdSCU (GncAccount *acc, gboolean flag)
 {
   if (!acc || acc->non_standard_scu == flag) return;
 
@@ -1348,7 +1282,7 @@ xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
 }
 
 gboolean
-xaccAccountGetNonStdSCU (const Account * acc)
+xaccAccountGetNonStdSCU (const GncAccount * acc)
 {
   return acc ? acc->non_standard_scu : 0;
 }
@@ -1358,7 +1292,7 @@ xaccAccountGetNonStdSCU (const Account * acc)
 /* below follow the old, deprecated currency/security routines. */
 
 void 
-DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
+DxaccAccountSetCurrency (GncAccount * acc, gnc_commodity * currency)
 {
   const char *string;
   gnc_commodity *commodity;
@@ -1383,57 +1317,57 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 \********************************************************************/
 
 AccountGroup *
-xaccAccountGetChildren (const Account *acc)
+xaccAccountGetChildren (const GncAccount *acc)
 {
    return acc ? acc->children : NULL;
 }
 
 AccountGroup *
-xaccAccountGetParent (const Account *acc)
+xaccAccountGetParent (const GncAccount *acc)
 {
    return acc ? acc->parent : NULL;
 }
 
-Account *
-xaccAccountGetParentAccount (const Account * acc)
+GncAccount *
+xaccAccountGetParentAccount (const GncAccount * acc)
 {
   return acc ? xaccGroupGetParentAccount(acc->parent) : NULL;
 }
 
 GList *
-xaccAccountGetDescendants (const Account *acc)
+xaccAccountGetDescendants (const GncAccount *acc)
 {
    return acc ? xaccGroupGetSubAccounts(acc->children) : NULL;
 }
 
 GNCAccountType
-xaccAccountGetType (const Account *acc)
+xaccAccountGetType (const GncAccount *acc)
 {
    return acc ? acc->type : ACCT_TYPE_NONE;
 }
 
 static const char*
-qofAccountGetTypeString (const Account *acc)
+qofAccountGetTypeString (const GncAccount *acc)
 {
    return acc ? xaccAccountTypeEnumAsString(acc->type) : NULL;
 }
 
 static void
-qofAccountSetType (Account *acc, const char *type_string)
+qofAccountSetType (GncAccount *acc, const char *type_string)
 {
    xaccAccountSetType(acc, xaccAccountStringToEnum(type_string));
 }
 
 const char *
-xaccAccountGetName (const Account *acc)
+xaccAccountGetName (const GncAccount *acc)
 {
    return acc ? acc->accountName : NULL;
 }
 
 char *
-xaccAccountGetFullName(const Account *account)
+xaccAccountGetFullName(const GncAccount *account)
 {
-  const Account *a;
+  const GncAccount *a;
   char *fullname;
   gchar **names;
   int level;
@@ -1462,25 +1396,25 @@ xaccAccountGetFullName(const Account *account)
 }
 
 const char *
-xaccAccountGetCode (const Account *acc)
+xaccAccountGetCode (const GncAccount *acc)
 {
    return acc ? acc->accountCode : NULL;
 }
 
 const char * 
-xaccAccountGetDescription (const Account *acc)
+xaccAccountGetDescription (const GncAccount *acc)
 {
    return acc ? acc->description : NULL;
 }
 
 const char * 
-xaccAccountGetNotes (const Account *acc) 
+xaccAccountGetNotes (const GncAccount *acc) 
 {
    return acc ? kvp_frame_get_string(acc->inst.kvp_data, "notes") : NULL;
 }
 
 gnc_commodity * 
-DxaccAccountGetCurrency (const Account *acc)
+DxaccAccountGetCurrency (const GncAccount *acc)
 {
   KvpValue *v;
   const char *s;
@@ -1500,31 +1434,31 @@ DxaccAccountGetCurrency (const Account *acc)
 }
 
 gnc_commodity * 
-xaccAccountGetCommodity (const Account *acc)
+xaccAccountGetCommodity (const GncAccount *acc)
 {
   return acc ? acc->commodity : NULL;
 }
 
 gnc_numeric
-xaccAccountGetBalance (const Account *acc) 
+xaccAccountGetBalance (const GncAccount *acc) 
 {
   return acc ? acc->balance : gnc_numeric_zero();
 }
 
 gnc_numeric
-xaccAccountGetClearedBalance (const Account *acc)
+xaccAccountGetClearedBalance (const GncAccount *acc)
 {
   return acc ? acc->cleared_balance : gnc_numeric_zero();
 }
 
 gnc_numeric
-xaccAccountGetReconciledBalance (const Account *acc)
+xaccAccountGetReconciledBalance (const GncAccount *acc)
 {
   return acc ? acc->reconciled_balance : gnc_numeric_zero();
 }
 
 gnc_numeric
-xaccAccountGetProjectedMinimumBalance (const Account *acc)
+xaccAccountGetProjectedMinimumBalance (const GncAccount *acc)
 {
   GList *node;
   time_t today;
@@ -1558,7 +1492,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 \********************************************************************/
 
 gnc_numeric
-xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
+xaccAccountGetBalanceAsOfDate (GncAccount *acc, time_t date)
 {
   /* Ideally this could use xaccAccountForEachSplit, but
    * it doesn't exist yet and I'm uncertain of exactly how
@@ -1633,7 +1567,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
  * one that walks from the tail of the split list.
  */
 gnc_numeric
-xaccAccountGetPresentBalance (const Account *acc)
+xaccAccountGetPresentBalance (const GncAccount *acc)
 {
   GList *node;
   time_t today;
@@ -1663,7 +1597,7 @@ xaccAccountGetPresentBalance (const Account *acc)
  * Convert a balance from one currency to another.
  */
 gnc_numeric
-xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
+xaccAccountConvertBalanceToCurrency(const GncAccount *acc, /* for book */
 				    gnc_numeric balance,
 				    const gnc_commodity *balance_currency,
 				    const gnc_commodity *new_currency)
@@ -1689,7 +1623,7 @@ xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
  * a given date.
  */
 gnc_numeric
-xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
+xaccAccountConvertBalanceToCurrencyAsOfDate(const GncAccount *acc, /* for book */
 					    gnc_numeric balance,
 					    gnc_commodity *balance_currency,
 					    gnc_commodity *new_currency,
@@ -1721,7 +1655,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
  * currency.
  */
 static gnc_numeric
-xaccAccountGetXxxBalanceInCurrency (const Account *acc,
+xaccAccountGetXxxBalanceInCurrency (const GncAccount *acc,
 				    xaccGetBalanceFn fn,
 				    const gnc_commodity *report_currency)
 {
@@ -1736,7 +1670,7 @@ xaccAccountGetXxxBalanceInCurrency (const Account *acc,
 }
 
 static gnc_numeric
-xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
+xaccAccountGetXxxBalanceAsOfDateInCurrency(GncAccount *acc, time_t date,
                                            xaccGetBalanceAsOfDateFn fn,
                                            const gnc_commodity *report_commodity)
 {
@@ -1764,7 +1698,7 @@ typedef struct
  * values of all these accounts.
  */
 static gpointer
-xaccAccountBalanceHelper (Account *acc, gpointer data)
+xaccAccountBalanceHelper (GncAccount *acc, gpointer data)
 {
   CurrencyBalance *cb = data;
   gnc_numeric balance;
@@ -1778,7 +1712,7 @@ xaccAccountBalanceHelper (Account *acc, gpointer data)
   return NULL;
 }
 static gpointer
-xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
+xaccAccountBalanceAsOfDateHelper (GncAccount *acc, gpointer data)
 {
     CurrencyBalance *cb = data;
     gnc_numeric balance;
@@ -1806,7 +1740,7 @@ xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
  * If 'include_children' is FALSE, this function doesn't recurse at all.
  */
 static gnc_numeric
-xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
+xaccAccountGetXxxBalanceInCurrencyRecursive (const GncAccount *acc,
 					     xaccGetBalanceFn fn,
 					     const gnc_commodity *report_commodity,
 					     gboolean include_children)
@@ -1834,7 +1768,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
-    Account *acc, time_t date, xaccGetBalanceAsOfDateFn fn,
+    GncAccount *acc, time_t date, xaccGetBalanceAsOfDateFn fn,
     gnc_commodity *report_commodity, gboolean include_children)
 {
   gnc_numeric balance;
@@ -1860,7 +1794,7 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
 }
 
 gnc_numeric
-xaccAccountGetBalanceInCurrency (const Account *acc, 
+xaccAccountGetBalanceInCurrency (const GncAccount *acc, 
                                  const gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
@@ -1873,7 +1807,7 @@ xaccAccountGetBalanceInCurrency (const Account *acc,
 
 
 gnc_numeric
-xaccAccountGetClearedBalanceInCurrency (const Account *acc,
+xaccAccountGetClearedBalanceInCurrency (const GncAccount *acc,
                                         const gnc_commodity *report_commodity,
                                         gboolean include_children)
 {
@@ -1884,7 +1818,7 @@ xaccAccountGetClearedBalanceInCurrency (const Account *acc,
 
 
 gnc_numeric
-xaccAccountGetReconciledBalanceInCurrency (const Account *acc,
+xaccAccountGetReconciledBalanceInCurrency (const GncAccount *acc,
                                            const gnc_commodity *report_commodity,
                                            gboolean include_children)
 {
@@ -1894,7 +1828,7 @@ xaccAccountGetReconciledBalanceInCurrency (const Account *acc,
 }
 
 gnc_numeric
-xaccAccountGetPresentBalanceInCurrency (const Account *acc,
+xaccAccountGetPresentBalanceInCurrency (const GncAccount *acc,
 					const gnc_commodity *report_commodity,
 					gboolean include_children)
 {
@@ -1905,7 +1839,7 @@ xaccAccountGetPresentBalanceInCurrency (const Account *acc,
 
 gnc_numeric
 xaccAccountGetProjectedMinimumBalanceInCurrency (
-    const Account *acc, 
+    const GncAccount *acc, 
     const gnc_commodity *report_commodity,
     gboolean include_children)
 {
@@ -1916,7 +1850,7 @@ xaccAccountGetProjectedMinimumBalanceInCurrency (
 
 gnc_numeric
 xaccAccountGetBalanceAsOfDateInCurrency(
-    Account *acc, time_t date, gnc_commodity *report_commodity,
+    GncAccount *acc, time_t date, gnc_commodity *report_commodity,
     gboolean include_children)
 {
     return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
@@ -1925,7 +1859,7 @@ xaccAccountGetBalanceAsOfDateInCurrency(
 }
 
 gnc_numeric
-xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboolean recurse)
+xaccAccountGetBalanceChangeForPeriod (GncAccount *acc, time_t t1, time_t t2, gboolean recurse)
 {
   gnc_numeric b1, b2;  
 
@@ -1939,19 +1873,19 @@ xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboole
 \********************************************************************/
 
 SplitList *
-xaccAccountGetSplitList (const Account *acc) 
+xaccAccountGetSplitList (const GncAccount *acc) 
 {
   return acc ? acc->splits : NULL;
 }
 
 LotList *
-xaccAccountGetLotList (const Account *acc) 
+xaccAccountGetLotList (const GncAccount *acc) 
 {
   return acc ? acc->lots : NULL;
 }
 
 LotList *
-xaccAccountFindOpenLots (const Account *acc,
+xaccAccountFindOpenLots (const GncAccount *acc,
                          gboolean (*match_func)(GNCLot *lot,
                                                 gpointer user_data),
                          gpointer user_data, GCompareFunc sort_func)
@@ -1984,7 +1918,7 @@ xaccAccountFindOpenLots (const Account *acc,
 }
 
 gpointer
-xaccAccountForEachLot(const Account *acc, 
+xaccAccountForEachLot(const GncAccount *acc, 
                       gpointer (*proc)(GNCLot *lot, void *data), void *data) 
 {
   LotList *node;
@@ -2004,13 +1938,13 @@ xaccAccountForEachLot(const Account *acc,
 
 /* These functions use interchange gint64 and gboolean.  Is that right? */
 gboolean
-xaccAccountGetTaxRelated (const Account *acc)
+xaccAccountGetTaxRelated (const GncAccount *acc)
 {
   return acc ? kvp_frame_get_gint64(acc->inst.kvp_data, "tax-related") : FALSE;
 }
 
 void
-xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
+xaccAccountSetTaxRelated (GncAccount *acc, gboolean tax_related)
 {
   KvpValue *new_value;
 
@@ -2029,13 +1963,13 @@ xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 }
 
 const char *
-xaccAccountGetTaxUSCode (const Account *acc)
+xaccAccountGetTaxUSCode (const GncAccount *acc)
 {
   return acc ? kvp_frame_get_string(acc->inst.kvp_data, "tax-US/code") : NULL;
 }
 
 void
-xaccAccountSetTaxUSCode (Account *acc, const char *code)
+xaccAccountSetTaxUSCode (GncAccount *acc, const char *code)
 {
   if (!acc) return;
 
@@ -2046,14 +1980,14 @@ xaccAccountSetTaxUSCode (Account *acc, const char *code)
 }
 
 const char *
-xaccAccountGetTaxUSPayerNameSource (const Account *acc)
+xaccAccountGetTaxUSPayerNameSource (const GncAccount *acc)
 {
   return acc ? kvp_frame_get_string(acc->inst.kvp_data, 
                                     "tax-US/payer-name-source") : NULL;
 }
 
 void
-xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
+xaccAccountSetTaxUSPayerNameSource (GncAccount *acc, const char *source)
 {
   if (!acc) return;
 
@@ -2068,7 +2002,7 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 \********************************************************************/
 
 gboolean
-xaccAccountGetPlaceholder (const Account *acc)
+xaccAccountGetPlaceholder (const GncAccount *acc)
 {
   const char *str;
   if (!acc) return FALSE;
@@ -2078,7 +2012,7 @@ xaccAccountGetPlaceholder (const Account *acc)
 }
 
 void
-xaccAccountSetPlaceholder (Account *acc, gboolean val)
+xaccAccountSetPlaceholder (GncAccount *acc, gboolean val)
 {
   if (!acc) return;
   
@@ -2090,7 +2024,7 @@ xaccAccountSetPlaceholder (Account *acc, gboolean val)
 }
 
 GNCPlaceholderType
-xaccAccountGetDescendantPlaceholder (const Account *acc)
+xaccAccountGetDescendantPlaceholder (const GncAccount *acc)
 {
   GList *descendants, *node;
   GNCPlaceholderType ret = PLACEHOLDER_NONE;
@@ -2100,7 +2034,7 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 
   descendants = xaccGroupGetSubAccounts(acc->children);
   for (node = descendants; node; node = node->next) 
-      if (xaccAccountGetPlaceholder((Account *) node->data)) {
+      if (xaccAccountGetPlaceholder((GncAccount *) node->data)) {
           ret = PLACEHOLDER_CHILD;
           break;
       }
@@ -2113,7 +2047,7 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 \********************************************************************/
 
 gboolean
-xaccAccountGetHidden (const Account *acc)
+xaccAccountGetHidden (const GncAccount *acc)
 {
   const char *str;
   if (!acc) return FALSE;
@@ -2123,7 +2057,7 @@ xaccAccountGetHidden (const Account *acc)
 }
 
 void
-xaccAccountSetHidden (Account *acc, gboolean val)
+xaccAccountSetHidden (GncAccount *acc, gboolean val)
 {
   if (!acc) return;
   
@@ -2135,7 +2069,7 @@ xaccAccountSetHidden (Account *acc, gboolean val)
 }
 
 gboolean
-xaccAccountIsHidden (const Account *acc)
+xaccAccountIsHidden (const GncAccount *acc)
 {
   if (!acc)
     return FALSE;
@@ -2153,9 +2087,9 @@ xaccAccountIsHidden (const Account *acc)
 \********************************************************************/
 
 gboolean
-xaccAccountHasAncestor (const Account *acc, const Account * ancestor)
+xaccAccountHasAncestor (const GncAccount *acc, const GncAccount * ancestor)
 {
-  const Account *parent = acc;
+  const GncAccount *parent = acc;
 
   if (!acc || !ancestor) return FALSE;
 
@@ -2361,7 +2295,7 @@ xaccAccountTypesValid(void)
 }
 
 gboolean
-xaccAccountIsPriced(const Account *acc)
+xaccAccountIsPriced(const GncAccount *acc)
 {
     if (!acc) return FALSE;
 
@@ -2373,7 +2307,7 @@ xaccAccountIsPriced(const Account *acc)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileLastDate (const Account *acc, time_t *last_date)
+xaccAccountGetReconcileLastDate (const GncAccount *acc, time_t *last_date)
 {
   KvpValue *v;
 
@@ -2394,7 +2328,7 @@ xaccAccountGetReconcileLastDate (const Account *acc, time_t *last_date)
 \********************************************************************/
 
 void
-xaccAccountSetReconcileLastDate (Account *acc, time_t last_date)
+xaccAccountSetReconcileLastDate (GncAccount *acc, time_t last_date)
 {
   if (!acc) return;
 
@@ -2409,7 +2343,7 @@ xaccAccountSetReconcileLastDate (Account *acc, time_t last_date)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileLastInterval (const Account *acc, 
+xaccAccountGetReconcileLastInterval (const GncAccount *acc, 
                                      int *months, int *days)
 {
   KvpValue *v1, *v2;
@@ -2435,7 +2369,7 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
 \********************************************************************/
 
 void
-xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
+xaccAccountSetReconcileLastInterval (GncAccount *acc, int months, int days)
 {
   KvpFrame *frame;
   if (!acc) return;
@@ -2457,7 +2391,7 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcilePostponeDate (const Account *acc, time_t *postpone_date)
+xaccAccountGetReconcilePostponeDate (const GncAccount *acc, time_t *postpone_date)
 {
   KvpValue *v;
 
@@ -2477,7 +2411,7 @@ xaccAccountGetReconcilePostponeDate (const Account *acc, time_t *postpone_date)
 \********************************************************************/
 
 void
-xaccAccountSetReconcilePostponeDate (Account *acc, time_t postpone_date)
+xaccAccountSetReconcilePostponeDate (GncAccount *acc, time_t postpone_date)
 {
   if (!acc) return;
 
@@ -2494,7 +2428,7 @@ xaccAccountSetReconcilePostponeDate (Account *acc, time_t postpone_date)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcilePostponeBalance (const Account *acc, 
+xaccAccountGetReconcilePostponeBalance (const GncAccount *acc, 
                                         gnc_numeric *balance)
 {
   KvpValue *v;
@@ -2516,7 +2450,7 @@ xaccAccountGetReconcilePostponeBalance (const Account *acc,
 \********************************************************************/
 
 void
-xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
+xaccAccountSetReconcilePostponeBalance (GncAccount *acc, gnc_numeric balance)
 {
   if (!acc) return;
 
@@ -2532,7 +2466,7 @@ xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
 \********************************************************************/
 
 void
-xaccAccountClearReconcilePostpone (Account *acc)
+xaccAccountClearReconcilePostpone (GncAccount *acc)
 {
   if (!acc) return;
 
@@ -2550,7 +2484,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
  * If it is not defined for the account, return the default value.
  */
 gboolean
-xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
+xaccAccountGetAutoInterestXfer (const GncAccount *acc, gboolean default_value)
 {
   const char *str = NULL;
   if (!acc) return default_value;
@@ -2564,7 +2498,7 @@ xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 \********************************************************************/
 
 void
-xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
+xaccAccountSetAutoInterestXfer (GncAccount *acc, gboolean option)
 {
   if (!acc) return;
 
@@ -2581,7 +2515,7 @@ xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
 \********************************************************************/
 
 const char *
-xaccAccountGetLastNum (const Account *acc)
+xaccAccountGetLastNum (const GncAccount *acc)
 {
   return acc ? kvp_frame_get_string(acc->inst.kvp_data, "last-num") : NULL;
 }
@@ -2590,7 +2524,7 @@ xaccAccountGetLastNum (const Account *acc)
 \********************************************************************/
 
 void
-xaccAccountSetLastNum (Account *acc, const char *num)
+xaccAccountSetLastNum (GncAccount *acc, const char *num)
 {
   if (!acc) return;
 
@@ -2604,7 +2538,7 @@ xaccAccountSetLastNum (Account *acc, const char *num)
 \********************************************************************/
 
 void
-dxaccAccountSetPriceSrc(Account *acc, const char *src)
+dxaccAccountSetPriceSrc(GncAccount *acc, const char *src)
 {
   if (!acc) return;
 
@@ -2624,7 +2558,7 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
 \********************************************************************/
 
 const char*
-dxaccAccountGetPriceSrc(const Account *acc) 
+dxaccAccountGetPriceSrc(const GncAccount *acc) 
 {
   if(!acc) return NULL;
 
@@ -2640,7 +2574,7 @@ dxaccAccountGetPriceSrc(const Account *acc)
 \********************************************************************/
 
 void
-dxaccAccountSetQuoteTZ(Account *acc, const char *tz) 
+dxaccAccountSetQuoteTZ(GncAccount *acc, const char *tz) 
 {
   if (!acc) return;
 
@@ -2659,7 +2593,7 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 \********************************************************************/
 
 const char*
-dxaccAccountGetQuoteTZ(const Account *acc) 
+dxaccAccountGetQuoteTZ(const GncAccount *acc) 
 {
   if (!acc) return NULL;
 
@@ -2674,7 +2608,7 @@ dxaccAccountGetQuoteTZ(const Account *acc)
 \********************************************************************/
 
 void
-xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
+xaccAccountSetReconcileChildrenStatus(GncAccount *acc, gboolean status)
 { 
   if (!acc) return;
   
@@ -2691,7 +2625,7 @@ xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileChildrenStatus(const Account *acc)
+xaccAccountGetReconcileChildrenStatus(const GncAccount *acc)
 {
   /* access the account's kvp-data for status and return that, if no value
    * is found then we can assume not to include the children, that being
@@ -2705,7 +2639,7 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
 \********************************************************************/
 
 gint
-xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
+xaccAccountForEachTransaction(const GncAccount *acc, TransactionCallback proc,
                               void *data) 
 {
   if (!acc || !proc) return 0;
@@ -2722,7 +2656,7 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
  * passed.
  */
 static void
-finder_help_function(const Account *acc, const char *description,
+finder_help_function(const GncAccount *acc, const char *description,
                      Split **split, Transaction **trans )
 {
   GList *slp;
@@ -2751,7 +2685,7 @@ finder_help_function(const Account *acc, const char *description,
 }
 
 Split *
-xaccAccountFindSplitByDesc(const Account *acc, const char *description)
+xaccAccountFindSplitByDesc(const GncAccount *acc, const char *description)
 {
   Split *split;
 
@@ -2766,7 +2700,7 @@ xaccAccountFindSplitByDesc(const Account *acc, const char *description)
  * auto-filling in registers with a default leading account. The
  * dest_trans is a transaction used for currency checking. */
 Transaction *
-xaccAccountFindTransByDesc(const Account *acc, const char *description)
+xaccAccountFindTransByDesc(const GncAccount *acc, const char *description)
 {
   Transaction *trans;
 
@@ -2781,7 +2715,7 @@ xaccAccountFindTransByDesc(const Account *acc, const char *description)
 static QofObject account_object_def = {
   interface_version:     QOF_OBJECT_VERSION,
   e_type:                GNC_ID_ACCOUNT,
-  type_label:            "Account",
+  type_label:            "GncAccount",
   create:                (gpointer)xaccMallocAccount,
   book_begin:            NULL,
   book_end:              NULL,
