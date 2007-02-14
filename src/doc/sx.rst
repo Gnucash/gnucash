@@ -63,11 +63,11 @@ TODO
     - [ ] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
-  - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
-
   - [ ] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 
   - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+
+  - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
 ! - [x] crash with two sx lists open and SX mutation
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
@@ -94,6 +94,7 @@ TODO
 
 - gnc_dense_cal
   - [ ] change number-of-month properties to display-named properties (width, length)
+  - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
   - [/] (re-format file)
 ! - [x] font handling: gdk -> pango
@@ -112,6 +113,8 @@ TODO
 - use Recurrence instead of FreqSpec
 ! - [ ] XML migration, handling
   - [ ] remove FreqSpec code
+    - [ ] SX code
+    - [ ] src/gnome/druid-acct-period.c
   - gnc-frequency
 !   - [ ] Use Recurrence
 !   - [ ] Support 'last-day-of-month'
@@ -119,6 +122,7 @@ TODO
 
 - since-last-run
 ! - [ ] save/restore dialog window size
+  - [ ] "reminder" instances show number of days until due
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
