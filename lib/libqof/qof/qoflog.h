@@ -63,6 +63,21 @@
  * Trailing newlines (e.g. <tt>PINFO("...\n", ...)</tt>) are removed; the logger
  * will newline separate output.
  *
+ * @section best Best Practices
+ *
+ * Code should:
+ *
+ * @li Define both <tt>static QofLogModule log_module</tt> and <tt>#define
+ *   G_LOG_DOMAIN</tt> to the same value.
+ * @li Define a logical, specific path as the log domain;
+ *   @c "gnc.gui.plugin-pages.sx-list" or
+ *   @c "gnc.register.gnome.cell.quickfill" are
+ *   good examples.
+ * @li Use glib-provided @c g_debug(...), @c g_message(...),
+ *   @c g_warning(...), @c g_critical(...) and
+ *   @c g_error(...) functions in preference to the historical qof/gnc @c
+ *   PINFO, @c PERR (&c.) macros
+ *
  * @see qof_log_parse_log_config(const char*)
  **/
 
