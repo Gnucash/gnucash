@@ -36,7 +36,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 all:
 
 doc: doxygen.cfg
-	echo "doc: " && pwd && 	echo "distdir: " && echo $(distdir)
+	@echo "doc: " $$(pwd) && echo "distdir: " $$(echo $(distdir))
 	rm -rf html refman.pdf
 	$(DOXYGEN) doxygen.cfg
 #	$(MAKE) -C latex/ 
