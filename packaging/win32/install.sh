@@ -172,19 +172,12 @@ function inst_readline() {
 function inst_active_perl() {
     setup ActivePerl \(intltool\)
     _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
-    add_to_env $_ACTIVE_PERL_WFSDIR/bin/perl INTLTOOL_PERL
+    add_to_env $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
     if quiet $INTLTOOL_PERL --help
     then
         echo "ActivePerl already installed.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
-        # this is the first of several bad hacks
-        # it would be much more natural to have a sort of -p flag like for `patch'
-        # please deuglify me
-        qpushd $ACTIVE_PERL_DIR
-            cp -r ActivePerl/Perl/* .
-            rm -rf ActivePerl
-        qpopd
     fi
     quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
 }
