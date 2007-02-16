@@ -43,7 +43,7 @@ function setup() {
 
 function die() {
     echo
-    echo "!!! $* !!!"
+    [ "$*" ] && echo "!!! $* !!!"
     echo "!!! ABORTING !!!"
     exit -1
 }
@@ -76,6 +76,22 @@ function add_to_env() {
 	    eval "$2_ADDS"'="'"$1"'"'
 	fi
 	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
+    fi
+}
+
+# usage: set_env_or_die VALUE NAME
+function set_env_or_die() {
+    _OLDADDS=`eval echo '"$'"$2_ADDS"'"'`
+    add_to_env "$1" "$2"
+    _NEWADDS=`eval echo '"$'"$2_ADDS"'"'`
+    if [ "$_OLDADDS" != "$_NEWADDS" ]; then
+        _BASE=`eval echo '"$'"$2_BASE"'"'`
+        if [ "$_BASE" ]; then
+            _ENV=`eval echo '"$'"$2"'"'`
+            echo "Must not overwrite environment variable '$2' (${_OLDADDS}${_BASE}) by '$1'."
+            echo "Try to remove the offending installed software or unset the variable."
+            die
+        fi
     fi
 }
 

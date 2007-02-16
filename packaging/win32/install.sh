@@ -172,7 +172,7 @@ function inst_readline() {
 function inst_active_perl() {
     setup ActivePerl \(intltool\)
     _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
-    add_to_env $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
+    set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
     if quiet $INTLTOOL_PERL --help
     then
         echo "ActivePerl already installed.  skipping."
