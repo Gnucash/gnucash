@@ -80,7 +80,7 @@ function add_to_env() {
 }
 
 function assert_one_dir() {
-    [ -d $@ ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
+    quiet [ -d "$@" ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
 }
 
 ### Local Variables: ***
