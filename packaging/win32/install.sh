@@ -730,7 +730,8 @@ function inst_qt4() {
     # already useful in itself and that's why it has already been
     # added.
 
-    _QTDIR=`unix_path ${QTDIR}`
+    export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
+    _QTDIR=$QTDIR
     # This section creates .la files for the Qt-4 DLLs so that
     # libtool correctly links to the DLLs.
     if test ! -f ${_QTDIR}/lib/libQtCore4.la ; then
@@ -768,7 +769,6 @@ function inst_aqbanking() {
 	    _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
 	    if test x$aqbanking_with_qt = xyes; then
 		inst_qt4
-		_QTDIR=`unix_path ${QTDIR}`
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
 		    --with-frontends="cbanking qbanking" \
