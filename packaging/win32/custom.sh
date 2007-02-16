@@ -182,7 +182,7 @@ LIBOFX_DIR=$GLOBAL_DIR\\libofx
 LIBOFX_PATCH=`pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.3.tar.gz"
+GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.4.tar.gz"
 GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
 
 KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.12.tar.gz"
