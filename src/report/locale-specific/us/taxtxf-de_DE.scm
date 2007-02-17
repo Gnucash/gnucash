@@ -460,7 +460,7 @@
               gen)	       		; no kids, return input
           (apply max (gnc:account-map-children
                       (lambda (x) (num-generations x (+ 1 gen)))
-                      children)))))
+                      account)))))
 
   (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 

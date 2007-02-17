@@ -463,7 +463,7 @@
       (if include-children?
 	  (for-each 
 	   (lambda (x) 
-	     (gnc:commodity-collector-merge balance-collector x))
+	     (gnc-commodity-collector-merge balance-collector x))
 	   (gnc:account-map-descendants
 	    (lambda (child)
 	      (gnc:account-get-comm-balance-at-date child date #f))

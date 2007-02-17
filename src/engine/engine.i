@@ -86,9 +86,13 @@ functions. */
 %include <Split.h>
 %include <engine-helpers.h>
 AccountList * gnc_account_get_children (const Account *account);
+AccountList * gnc_account_get_children_sorted (const Account *account);
 AccountList * gnc_account_get_descendants (const Account *account);
+AccountList * gnc_account_get_descendants_sorted (const Account *account);
 %ignore gnc_account_get_children;
+%ignore gnc_account_get_children_sorted;
 %ignore gnc_account_get_descendants;
+%ignore gnc_account_get_descendants_sorted;
 %include <Account.h>
 %include <Transaction.h>
 %include <gnc-pricedb.h>
