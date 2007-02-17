@@ -107,11 +107,6 @@ Root: HKCU; Subkey: "Software\AqHbci"; ValueType: none; Flags: uninsdeletekeyife
 Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
 
-; And also a key for ktoblzcheck
-Root: HKCU; Subkey: "Software\Ktoblzcheck"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Ktoblzcheck\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: "Software\Ktoblzcheck\Paths"; ValueType: string; ValueName: "datadir"; ValueData: "{app}\share\ktoblzcheck"
-
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Delete the created config script on uninstall

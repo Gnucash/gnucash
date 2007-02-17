@@ -909,7 +909,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat

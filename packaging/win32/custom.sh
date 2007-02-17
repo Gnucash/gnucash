@@ -185,7 +185,7 @@ LIBOFX_PATCH=`pwd`/libofx-0.8.3-patch.diff
 GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.4.tar.gz"
 GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
 
-KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.12.tar.gz"
+KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
 AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.8.tar.gz"
