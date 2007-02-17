@@ -1,11 +1,10 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-ledger-core.la
+pkglib_LTLIBRARIES = libgnc-ledger-core.la
 
-libgncmod_ledger_core_la_SOURCES = \
+libgnc_ledger_core_la_SOURCES = \
   dialog-dup-trans.c \
   gnc-ledger-display.c \
-  gncmod-ledger-core.c \
   split-register.c \
   split-register-control.c \
   split-register-layout.c \
@@ -23,11 +22,11 @@ noinst_HEADERS = \
   split-register-model-save.h \
   split-register-p.h
 
-libgncmod_ledger_core_la_LDFLAGS = -avoid-version
+libgnc_ledger_core_la_LDFLAGS = -avoid-version
 
-libgncmod_ledger_core_la_LIBADD = \
-  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
-  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+libgnc_ledger_core_la_LIBADD = \
+  ${top_builddir}/src/register/register-gnome/libgnc-register-gnome.la \
+  ${top_builddir}/src/register/register-core/libgnc-register-core.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

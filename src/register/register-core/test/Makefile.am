@@ -15,7 +15,7 @@ test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ../libgncmod-register-core.la
+  ../libgnc-register-core.la
 
 #EXTRA_DIST = test-load-module
 

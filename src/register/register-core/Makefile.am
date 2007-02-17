@@ -1,10 +1,10 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-register-core.la
+pkglib_LTLIBRARIES = libgnc-register-core.la
 
-libgncmod_register_core_la_LDFLAGS = -avoid-version
+libgnc_register_core_la_LDFLAGS = -avoid-version
 
-libgncmod_register_core_la_LIBADD = \
+libgnc_register_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -12,8 +12,7 @@ libgncmod_register_core_la_LIBADD = \
   ${GUILE_LIBS} \
   ${QOF_LIBS} ${GLIB_LIBS}
 
-libgncmod_register_core_la_SOURCES = \
-  gncmod-register-core.c \
+libgnc_register_core_la_SOURCES = \
   basiccell.c \
   cell-factory.c \
   cellblock.c \

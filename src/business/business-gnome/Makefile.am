@@ -71,8 +71,8 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
   ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
-  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/register/register-core/libgnc-register-core.la \
+  ${top_builddir}/src/register/register-gnome/libgnc-register-gnome.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

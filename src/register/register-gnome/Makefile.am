@@ -1,11 +1,11 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-register-gnome.la
+pkglib_LTLIBRARIES = libgnc-register-gnome.la
 
-libgncmod_register_gnome_la_LDFLAGS = -avoid-version
+libgnc_register_gnome_la_LDFLAGS = -avoid-version
 
-libgncmod_register_gnome_la_LIBADD = \
-  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+libgnc_register_gnome_la_LIBADD = \
+  ${top_builddir}/src/register/register-core/libgnc-register-core.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -15,8 +15,8 @@ libgncmod_register_gnome_la_LIBADD = \
   ${QOF_LIBS} \
   ${GNOME_LIBS}
 
-libgncmod_register_gnome_la_SOURCES = \
-  gncmod-register-gnome.c \
+libgnc_register_gnome_la_SOURCES = \
+  gnc-register-gnome.c \
   combocell-gnome.c \
   datecell-gnome.c \
   formulacell-gnome.c \
@@ -35,6 +35,7 @@ libgncmod_register_gnome_la_SOURCES = \
   table-gnome.c 
 
 noinst_HEADERS = \
+  gnc-register-gnome.h \
   formulacell-gnome.h \
   gnucash-color.h \
   gnucash-cursor.h \

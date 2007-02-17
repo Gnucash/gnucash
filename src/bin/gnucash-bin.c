@@ -49,6 +49,7 @@
 #include "gnc-plugin-file-history.h"
 #include "gnc-gconf-utils.h"
 #include "dialog-new-user.h"
+#include "gnc-register-gnome.h"
 #include "gnc-session.h"
 #include "engine-helpers.h"
 #include "swig-runtime.h"
@@ -310,12 +311,10 @@ load_gnucash_modules()
         gchar * name;
         int version;
         gboolean optional;
-    } modules[] = {
+    } modules[] = { 
         { "gnucash/app-utils", 0, FALSE },
-        { "gnucash/engine", 0, FALSE },
-        { "gnucash/register/ledger-core", 0, FALSE },
-        { "gnucash/register/register-core", 0, FALSE },
-        { "gnucash/register/register-gnome", 0, FALSE },
+        { "gnucash/engine", 0, FALSE }, 
+        { "gnucash/gnome-utils", 0, FALSE }, 
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
@@ -328,7 +327,7 @@ load_gnucash_modules()
         { "gnucash/report/report-gnome", 0, FALSE },
         { "gnucash/business-gnome", 0, TRUE }
     };
-    
+
     /* module initializations go here */
     len = sizeof(modules) / sizeof(*modules);
     for (i = 0; i < len; i++) {
@@ -338,6 +337,15 @@ load_gnucash_modules()
         else
             gnc_module_load(modules[i].name, modules[i].version);
     }
+
+    /* FIXME
+     * This is here to aid in the de-module-ification of:
+     * gnucash-register-gnome. This initialization should go somewhere else
+     */
+    if (gnc_register_gnome_init()) {
+        g_error("Gnucash gnome register failed to initialize");
+    }
+
     if (!gnc_engine_is_initialized()) {
         /* On Windows this check used to fail anyway, see
 	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
