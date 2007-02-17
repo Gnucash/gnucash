@@ -338,11 +338,12 @@ load_gnucash_modules()
             gnc_module_load(modules[i].name, modules[i].version);
     }
 
-    /* FIXME
+    /* FIXME (module-cleanup)
      * This is here to aid in the de-module-ification of:
      * gnucash-register-gnome. This initialization should go somewhere else
      */
-    if (gnc_register_gnome_init()) {
+    /* gnucash/register/register-gnome*/
+    if (!gnc_register_gnome_init()) {
         g_error("Gnucash gnome register failed to initialize");
     }
 
