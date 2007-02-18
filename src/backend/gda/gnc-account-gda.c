@@ -197,23 +197,26 @@ commit_account( GncGdaBackend* be, QofInstance* inst )
 	Account* pAcc = GNC_ACCOUNT(inst);
 	const GUID* guid;
 
-	// Ensure the commodity is in the db
-	gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
+	// If there is no commodity yet, this might be because a new account name has been entered directly
+	// into the register and an account window will be opened.  The account info is not complete yet,
+	// but the name has been set, triggering this commit
+	if( xaccAccountGetCommodity( pAcc ) != NULL ) {
+		// Ensure the commodity is in the db
+		gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 
-	(void)gnc_gda_do_db_operation( be,
+		(void)gnc_gda_do_db_operation( be,
 						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
 						TABLE_NAME,
 						GNC_ID_ACCOUNT, pAcc,
 						col_table );
 
-	// Delete old slot info
-	guid = qof_instance_get_guid( inst );
-
-	// Now, commit or delete any slots
-	if( !inst->do_free ) {
-		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
-	} else {
-		gnc_gda_slots_delete( be, guid );
+		// Now, commit or delete any slots
+		guid = qof_instance_get_guid( inst );
+		if( !inst->do_free ) {
+			gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+		} else {
+			gnc_gda_slots_delete( be, guid );
+		}
 	}
 }
 
