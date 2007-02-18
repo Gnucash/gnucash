@@ -63,11 +63,11 @@ TODO
     - [ ] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
-  - [ ] sx-from-trans: "unknown get.type [3]" [dh20070120]_
-
   - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
 
   - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+
+  - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 
 ! - [x] crash with two sx lists open and SX mutation
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.

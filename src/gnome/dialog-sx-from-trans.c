@@ -188,10 +188,18 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     guint n_occs;
     w = glade_xml_get_widget(sxfti->gxml, SXFTD_N_OCCURRENCES_ENTRY);
     text = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
-    
-    n_occs = strtoul(text, &endptr, 10);
-    if ( !endptr ) {
-      n_occs = -1;
+
+    if (text == NULL || strlen(text) == 0)
+    {
+        n_occs = 0;
+    }
+    else
+    {
+        n_occs = strtoul(text, &endptr, 10);
+        if ( !endptr )
+        {
+            n_occs = -1;
+        }
     }
 
     g_free(text);
