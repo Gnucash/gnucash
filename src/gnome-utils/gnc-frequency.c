@@ -261,23 +261,6 @@ do_frequency_setup(GncFrequency *gf, FreqSpec *fs, time_t *secs)
          * don't change any other settings.  */
         if (NULL == fs) return;
 
-#if 0        
-        uift = xaccFreqSpecGetUIType( fs );
-        page = -1;
-        for ( i=0; i < UIFREQ_NUM_UI_FREQSPECS+1; i++ ) 
-        {
-                if ( PAGES[i].uiFTVal == uift ) 
-                {
-                         page = PAGES[i].idx;
-                         break;
-                }
-        }
-        g_assert( page != -1 );
-
-        gtk_notebook_set_current_page( gf->nb, page );
-        gtk_combo_box_set_active( gf->freqComboBox, page );
-#endif // 0
-
         switch ( uift ) 
         {
         case UIFREQ_NONE:
@@ -948,8 +931,7 @@ _test_for_weekly_multiple(GList *recurrences)
     for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
     {
         Recurrence *r = (Recurrence*)r_iter->data;
-
-        if (!(recurrenceGetPeriodType(r) == PERIOD_WEEK))
+        if (recurrenceGetPeriodType(r) != PERIOD_WEEK)
         {
             return FALSE;
         }
@@ -1017,18 +999,22 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
      {
          if (_test_for_weekly_multiple(recurrences))
          {
+             gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
+             gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
+
              for (; recurrences != NULL; recurrences = recurrences->next)
              {
                  _setup_weekly_recurrence(gf, (Recurrence*)recurrences->data);
              }
-             gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
          }
          else if (_test_for_semi_monthly(recurrences))
          {
              Recurrence *first, *second;
              GtkWidget *multiplier_spin;
              GtkWidget *dom_combobox;
+
+             gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
+             gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
 
              first = (Recurrence*)g_list_nth_data(recurrences, 0);
              second = (Recurrence*)g_list_nth_data(recurrences, 1);
@@ -1041,8 +1027,6 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
              dom_combobox = glade_xml_get_widget(gf->gxml, "semimonthly_second");
              gtk_combo_box_set_active(GTK_COMBO_BOX(dom_combobox), _get_monthly_combobox_index(second));
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_SEMI_MONTHLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_SEMI_MONTHLY);
          }
          else
          {
@@ -1064,26 +1048,28 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
                  g_date_strftime(recur_date_str, 127, "%x", &recurrence_date);
                  g_critical("start_date [%s] != recurrence_date [%s]", start_date_str, recur_date_str);
              }
-
              gtk_notebook_set_current_page(gf->nb, PAGE_ONCE);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_ONCE);
+
          } break;
          case PERIOD_DAY: {
              guint multiplier;
              GtkWidget *spin_button;
+
+             gtk_notebook_set_current_page(gf->nb, PAGE_DAILY);
+             gtk_combo_box_set_active(gf->freqComboBox, PAGE_DAILY);
+
              multiplier = recurrenceGetMultiplier(r);
              spin_button = glade_xml_get_widget(gf->gxml, "daily_spin");
              gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin_button), multiplier);
              made_changes = TRUE;
 
-             gtk_notebook_set_current_page(gf->nb, PAGE_DAILY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_DAILY);
          } break;
          case PERIOD_WEEK: {
-             _setup_weekly_recurrence(gf, r);
-
              gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
+
+             _setup_weekly_recurrence(gf, r);
          } break;
          case PERIOD_END_OF_MONTH:
          case PERIOD_MONTH:
@@ -1094,6 +1080,9 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
              GDate recurrence_day;
              int day_of_month_index;
              
+             gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
+             gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
+
              multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
              multiplier = recurrenceGetMultiplier(r);
              if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
@@ -1103,9 +1092,6 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
              day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
              
              gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
-
-             gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
-             gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
          } break; 
          case PERIOD_NTH_WEEKDAY:
              g_critical("unhandled period type [%d]", recurrenceGetPeriodType(r));
