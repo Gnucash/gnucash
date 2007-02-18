@@ -135,6 +135,7 @@ typedef struct
         gint64                day;          /* monthly or month-relative */
         gint64                occurrence;   /* month-relative */
         GList                *list;         /* composite */
+        UIFreqType            uift;
 } fsParseData;
 
 static void
@@ -302,6 +303,7 @@ fs_uift_handler( xmlNodePtr node, gpointer data)
         for ( i=0; (tmp = uiFreqTypeStrs[i].str) != NULL; i++ ) {
                 if ( safe_strcmp( nodeTxt, tmp ) == 0 ) {
                         xaccFreqSpecSetUIType( fspd->fs, uiFreqTypeStrs[i].uift );
+                        fspd->uift = uiFreqTypeStrs[i].uift;
                         g_free( nodeTxt );
                         return TRUE;
                 }
@@ -436,14 +438,6 @@ struct dom_tree_handler fs_union_dom_handlers[] = {
         { NULL, NULL, 0, 0 },
 };
 
-static void
-compute_date(fsParseData *parsed, GDate *date)
-{
-     g_date_clear(date, 1);
-     g_date_set_dmy(date, 1, 1, 1970);
-     g_date_add_days(date, parsed->offset);
-}
-
 static gboolean
 fs_none_handler( xmlNodePtr node, gpointer data )
 {
@@ -472,7 +466,6 @@ fs_once_handler( xmlNodePtr node, gpointer data )
                 return FALSE;
         recurrenceSet(fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day);
         
-
         fspd->fs->type         = ONCE;
         fspd->fs->s.once.date  = fspd->once_day;
         return TRUE;
@@ -488,7 +481,8 @@ fs_daily_handler(xmlNodePtr node, gpointer data)
         if (!successful)
              return FALSE;
 
-        compute_date(fspd, &offset_date);
+        g_date_clear(&offset_date, 1);
+        g_date_set_julian(&offset_date, fspd->offset);
         recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
 
         fspd->fs->type                      = DAILY;
@@ -510,8 +504,9 @@ fs_weekly_handler( xmlNodePtr node, gpointer data )
         if ( !successful )
                 return FALSE;
 
-        compute_date(fspd, &offset_date);
-        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
+        g_date_clear(&offset_date, 1);
+        g_date_set_julian(&offset_date, fspd->offset);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_WEEK, &offset_date);
 
         fspd->fs->type                       = WEEKLY;
         fspd->fs->s.weekly.interval_weeks    = fspd->interval;
@@ -532,10 +527,21 @@ fs_monthly_handler( xmlNodePtr node, gpointer data)
                                              fspd );
         if ( !successful )
                 return FALSE;
-        compute_date(fspd, &offset_date);
 
+
+        g_date_clear(&offset_date, 1);
+        g_date_set_julian(&offset_date, 1);
+        g_date_add_months(&offset_date, fspd->offset);
         g_date_set_day(&offset_date, fspd->day);
-        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_MONTH, &offset_date);
+        if (fspd->uift == UIFREQ_ONCE)
+        {
+            // hack...
+            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_ONCE, &offset_date);
+        }
+        else
+        {
+            recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_MONTH, &offset_date);
+        }
         
         fspd->fs->type                        = MONTHLY;
         fspd->fs->s.monthly.interval_months   = fspd->interval;

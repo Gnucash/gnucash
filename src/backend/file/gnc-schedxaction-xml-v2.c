@@ -287,11 +287,10 @@ sx_name_handler( xmlNodePtr node, gpointer sx_pdata )
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
     gchar *tmp = dom_tree_to_text( node );
-
+    g_debug("sx named [%s]", tmp);
     g_return_val_if_fail( tmp, FALSE );
     xaccSchedXactionSetName( sx, tmp );
     g_free( tmp );
-
     return TRUE;
 }
 
@@ -431,13 +430,20 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     g_return_val_if_fail( node, FALSE );
 
     xaccSchedXactionSetFreqSpec(sx, dom_tree_to_freqSpec(node, pdata->book));
-    
+
     schedule = dom_tree_freqSpec_to_recurrences(node, pdata->book);
     gnc_sx_set_schedule(sx, schedule);
-    for (; schedule != NULL; schedule = schedule->next)
+    g_debug("parsed from freqspec [%s]", recurrenceListToString(schedule));
+    if (g_list_length(schedule) == 1
+        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
     {
-        g_debug("parsed from freqspec [%s]", recurrenceToString((Recurrence*)schedule->data));
+        char date_buf[128];
+        Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
+        g_date_strftime(date_buf, 127, "%x", xaccSchedXactionGetStartDate(sx));
+        recurrenceSet(fixup, 1, PERIOD_ONCE, xaccSchedXactionGetStartDate(sx));
+        g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
     }
+
     pdata->saw_freqspec = TRUE;
 
     return TRUE;

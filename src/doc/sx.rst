@@ -113,14 +113,16 @@ TODO
 - use Recurrence instead of FreqSpec
 ! - [ ] XML migration, handling
     - xml:freqSpec -> obj:Recurrence
-      - [ ] none (Recurrence doesn't support)
+      - [x] none (Recurrence doesn't support)
       - [x] once
+        - [x] if once, fix Recurrence date to be SX start date. :p
       - [x] daily
-      - [ ] daily [m-f] (composite)
+      - [x] daily [m-f] (composite)
       - [x] weekly, single
-      - [ ] weekly, multiple (composite)
+      - [x] weekly, multiple (composite)
       - [x] monthly (+quarterly, tri-anually, semi-annually, yearly)
-      - [ ] semi-monthly (composite)
+      - [x] semi-monthly (composite)
+    - [ ] write Recurrences into new-version SX
   - gnc-frequency
 !   - [x] Support Recurrence
       - [x] in
