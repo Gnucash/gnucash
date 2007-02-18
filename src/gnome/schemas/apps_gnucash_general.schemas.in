@@ -495,8 +495,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/dev/allow_file_incompatability</key>
-      <applyto>/apps/gnucash/dev/allow_file_incompatability</applyto>
+      <key>/schemas/apps/gnucash/dev/allow_file_incompatibility</key>
+      <applyto>/apps/gnucash/dev/allow_file_incompatibility</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>false</default>
