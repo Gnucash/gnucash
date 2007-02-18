@@ -125,6 +125,9 @@ typedef struct
         FreqSpec        *fs;              /* FreqSpec we're parsing into. */
         QofBook         *book;            /* Book we're loading into. */
 
+        Recurrence *recurrence;
+        GList *recurrence_list;
+
         /* fields used in the union of unions... :) */
         GDate                 once_day;     /* once */
         gint64                interval;     /* all [except once] */
@@ -140,6 +143,8 @@ fspd_init( fsParseData *fspd )
         fspd->fs      = NULL;
         fspd->list    = NULL;
         fspd->book    = NULL;
+        fspd->recurrence = g_new0(Recurrence, 1);
+        fspd->recurrence_list = NULL;
         fspd->interval
                 = fspd->offset
                 = fspd->day
@@ -399,10 +404,24 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
         FreqSpec        *fs;
+        GList *recurrences;
+
         fs = dom_tree_to_freqSpec( node, fspd->book );
         if ( fs == NULL )
                 return FALSE;
         fspd->list = g_list_append( fspd->list, fs );
+
+        recurrences = dom_tree_freqSpec_to_recurrences(node, fspd->book);
+        if (recurrences == NULL)
+                return FALSE;
+
+        {
+            GList *r_iter;
+            for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
+            {
+                fspd->recurrence_list = g_list_append(fspd->recurrence_list, r_iter->data);
+            }
+        }
         return TRUE;
 }
 
@@ -417,8 +436,15 @@ struct dom_tree_handler fs_union_dom_handlers[] = {
         { NULL, NULL, 0, 0 },
 };
 
-static
-gboolean
+static void
+compute_date(fsParseData *parsed, GDate *date)
+{
+     g_date_clear(date, 1);
+     g_date_set_dmy(date, 1, 1, 1970);
+     g_date_add_days(date, parsed->offset);
+}
+
+static gboolean
 fs_none_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
@@ -444,22 +470,27 @@ fs_once_handler( xmlNodePtr node, gpointer data )
                                              fspd );
         if ( !successful )
                 return FALSE;
+        recurrenceSet(fspd->recurrence, 0, PERIOD_ONCE, &fspd->once_day);
+        
+
         fspd->fs->type         = ONCE;
         fspd->fs->s.once.date  = fspd->once_day;
         return TRUE;
 }
 
-static
-gboolean
-fs_daily_handler( xmlNodePtr node, gpointer data)
+static gboolean
+fs_daily_handler(xmlNodePtr node, gpointer data)
 {
         fsParseData *fspd = data;
+        GDate offset_date;
         gboolean        successful;
-        successful = dom_tree_generic_parse( node,
-                                             fs_union_dom_handlers,
-                                             fspd );
-        if ( !successful )
-                return FALSE;
+        successful = dom_tree_generic_parse(node, fs_union_dom_handlers, fspd );
+        if (!successful)
+             return FALSE;
+
+        compute_date(fspd, &offset_date);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
+
         fspd->fs->type                      = DAILY;
         fspd->fs->s.daily.interval_days     = fspd->interval;
         fspd->fs->s.daily.offset_from_epoch = fspd->offset;
@@ -471,15 +502,21 @@ gboolean
 fs_weekly_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
+        GDate offset_date;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
                                              fspd );
         if ( !successful )
                 return FALSE;
+
+        compute_date(fspd, &offset_date);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
+
         fspd->fs->type                       = WEEKLY;
         fspd->fs->s.weekly.interval_weeks    = fspd->interval;
         fspd->fs->s.weekly.offset_from_epoch = fspd->offset;
+
         return TRUE;
 }
 
@@ -488,16 +525,23 @@ gboolean
 fs_monthly_handler( xmlNodePtr node, gpointer data)
 {
         fsParseData *fspd = data;
+        GDate offset_date;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
                                              fspd );
         if ( !successful )
                 return FALSE;
+        compute_date(fspd, &offset_date);
+
+        g_date_set_day(&offset_date, fspd->day);
+        recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_MONTH, &offset_date);
+        
         fspd->fs->type                        = MONTHLY;
         fspd->fs->s.monthly.interval_months   = fspd->interval;
         fspd->fs->s.monthly.offset_from_epoch = fspd->offset;
         fspd->fs->s.monthly.day_of_month      = fspd->day;
+
         return successful;
 }
 
@@ -505,19 +549,8 @@ static
 gboolean
 fs_month_relative_handler( xmlNodePtr node, gpointer data)
 {
-        fsParseData *fspd = data;
-        gboolean        successful;
-        successful = dom_tree_generic_parse( node,
-                                             fs_union_dom_handlers,
-                                             fspd );
-        if ( !successful )
-                return FALSE;
-        fspd->fs->type                               = MONTH_RELATIVE;
-        fspd->fs->s.month_relative.interval_months   = fspd->interval;
-        fspd->fs->s.month_relative.offset_from_epoch = fspd->offset;
-        fspd->fs->s.month_relative.weekday           = fspd->day;
-        fspd->fs->s.month_relative.occurrence        = fspd->occurrence;
-        return TRUE;
+        g_critical("this was never supported, how is it in the datafile?");
+        return FALSE;
 }
 
 static
@@ -544,6 +577,7 @@ fs_composite_handler( xmlNodePtr node, gpointer data)
                 return FALSE;
         fspd->fs->type                  = COMPOSITE;
         fspd->fs->s.composites.subSpecs = fspd->list;
+
         return TRUE;
 }
 
@@ -604,21 +638,40 @@ gnc_freqSpec_sixtp_parser_create(void)
     return sixtp_dom_parser_new( gnc_freqSpec_end_handler, NULL, NULL );
 }
 
+static void
+common_parse(fsParseData *fspd, xmlNodePtr node, QofBook *book)
+{
+    gboolean        successful;
+
+    fspd->book = book;
+    fspd->fs = xaccFreqSpecMalloc(book);
+    successful = dom_tree_generic_parse( node, fs_dom_handlers, fspd );
+    if (!successful)
+    {
+        xmlElemDump(stdout, NULL, node);
+        xaccFreqSpecFree( fspd->fs );
+        fspd->fs = NULL;
+    }
+}
+
+GList*
+dom_tree_freqSpec_to_recurrences(xmlNodePtr node, QofBook *book)
+{
+    fsParseData        fspd;
+    fspd_init( &fspd );
+    common_parse(&fspd, node, book);
+    if (fspd.recurrence_list == NULL)
+    {
+        fspd.recurrence_list = g_list_append(fspd.recurrence_list, fspd.recurrence);
+    }
+    return fspd.recurrence_list;
+}
+
 FreqSpec*
 dom_tree_to_freqSpec(xmlNodePtr node, QofBook *book)
 {
-    gboolean        successful;
     fsParseData        fspd;
-
     fspd_init( &fspd );
-    fspd.book = book;
-
-    fspd.fs = xaccFreqSpecMalloc(book);
-    successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );
-    if ( !successful ) {
-        xmlElemDump(stdout, NULL, node);
-        xaccFreqSpecFree( fspd.fs );
-        fspd.fs = NULL;
-    }
+    common_parse(&fspd, node, book);
     return fspd.fs;
 }

@@ -74,6 +74,7 @@ test_xml_account_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
@@ -92,6 +93,7 @@ test_xml_commodity_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
@@ -110,6 +112,7 @@ test_xml_pricedb_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \

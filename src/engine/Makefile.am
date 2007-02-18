@@ -97,7 +97,6 @@ noinst_HEADERS = \
   FreqSpecP.h \
   GroupP.h \
   QueryP.h \
-  SchedXactionP.h \
   ScrubP.h \
   SplitP.h \
   SX-book.h \

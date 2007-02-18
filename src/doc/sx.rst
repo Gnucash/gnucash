@@ -112,17 +112,38 @@ TODO
 
 - use Recurrence instead of FreqSpec
 ! - [ ] XML migration, handling
+    - xml:freqSpec -> obj:Recurrence
+      - [ ] none (Recurrence doesn't support)
+      - [x] once
+      - [x] daily
+      - [ ] daily [m-f] (composite)
+      - [x] weekly, single
+      - [ ] weekly, multiple (composite)
+      - [x] monthly (+quarterly, tri-anually, semi-annually, yearly)
+      - [ ] semi-monthly (composite)
+  - gnc-frequency
+!   - [x] Support Recurrence
+      - [x] in
+      - [x] out
+!   - [x] Support 'last-day-of-month'
+    - [x] simplify
+      - [x] remove daily [m-f] (-> weekly)
+      - [x] remove biweekly page (-> weekly)
+      - [x] remove > monthly pages (-> monthly)
+    - [ ] clean up, reformat source
+  - dialog-sx-editor
+    - [ ] gnc_sxed_check_changed
+    - [ ] gnc_sxed_check_consistent
+    - [ ] gnc_sxed_update_cal
+    - [x] gnc_sxed_save_sx
   - [ ] remove FreqSpec code
     - [ ] SX code
     - [ ] src/gnome/druid-acct-period.c
-  - gnc-frequency
-!   - [ ] Use Recurrence
-!   - [ ] Support 'last-day-of-month'
-    - [ ] clean up, reformat
 
 - since-last-run
 ! - [ ] save/restore dialog window size
   - [ ] "reminder" instances show number of days until due
+  - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils

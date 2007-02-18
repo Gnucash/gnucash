@@ -34,7 +34,6 @@
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
-#include "SchedXactionP.h"
 #include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
 

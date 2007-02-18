@@ -1,6 +1,6 @@
 /********************************************************************\
  * SchedXaction.c -- Scheduled Transaction implementation.          *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001,2007 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,7 +37,6 @@
 #include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
-#include "SchedXactionP.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
 
@@ -57,6 +56,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
+   sx->schedule = NULL;
    sx->freq = xaccFreqSpecMalloc(book);
 
    g_date_clear( &sx->last_date, 1 );
@@ -74,13 +74,12 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   /* THREAD-UNSAFE */
    xaccAccountSetName( sx->template_acct,
                        guid_to_string( &sx->inst.entity.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,
-			 "template", "template",
+                         "template", "template",
                          "template", "template", 1 ) );
    xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
    ag = gnc_book_get_template_group( book );
@@ -110,7 +109,6 @@ sxprivTransMapDelete( gpointer data, gpointer user_data )
   xaccTransCommitEdit( t );
   return;
 }
-
 
 static void
 delete_template_trans(SchedXaction *sx)
@@ -230,6 +228,22 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
    gnc_sx_commit_edit(sx);
 }
 
+GList*
+gnc_sx_get_schedule(SchedXaction *sx)
+{
+   return sx->schedule;
+}
+
+void
+gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
+{
+   g_return_if_fail(sx && schedule);
+   gnc_sx_begin_edit(sx);
+   sx->schedule = schedule;
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
+}
+
 gchar *
 xaccSchedXactionGetName( SchedXaction *sx )
 {
@@ -287,7 +301,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
      * This warning is only human readable - the caller
      * doesn't know the call failed.  This is bad
      */
-    PWARN( "New end date before start date" ); 
+    g_critical("New end date before start date"); 
     return;
   }
 
@@ -346,7 +360,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
   /* FIXME This condition can be tightened up */
   if ( numRemain > sx->num_occurances_total ) 
   {
-    PWARN("The number remaining is greater than the total occurrences");
+    g_warning("The number remaining is greater than the total occurrences");
   }
   else
   {

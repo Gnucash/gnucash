@@ -40,15 +40,78 @@
 #include <glib.h>
 #include "qof.h"
 #include "FreqSpec.h"
+#include "Recurrence.h"
 #include "gnc-engine.h"
 
 #define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
 #define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
 
+typedef struct _SchedXaction SchedXaction;
+
 /**
- * The SchedXaction data.
-*/
-typedef struct gncp_SchedXaction SchedXaction;
+ * A single scheduled transaction.
+ *
+ * Scheduled transactions have a list of transactions, and a frequency
+ * [and associated date anchors] with which they are scheduled.
+ *
+ * Things that make sense to have in a template transaction:
+ *   [not] Date [though eventually some/multiple template transactions
+ *               might have relative dates].
+ *   Memo
+ *   Account
+ *   Funds In/Out... or an expr involving 'amt' [A, x, y, a?] for
+ *     variable expenses.
+ *
+ * Template transactions are instantiated by:
+ *  . copying the fields of the template
+ *  . setting the date to the calculated "due" date.
+ *
+ * We should be able to use the GeneralLedger [or, yet-another-subtype
+ * of the internal ledger] for this editing.
+ **/
+struct _SchedXaction
+{
+  QofInstance     inst;
+  gchar           *name;
+
+  GList           *schedule;
+  FreqSpec        *freq;
+  
+  GDate           last_date;
+  
+  GDate           start_date;
+  /* if end_date is invalid, then no end. */
+  GDate           end_date;
+
+  /* if num_occurances_total == 0, then no limit */
+  gint            num_occurances_total;
+  /* reminaing occurances are as-of the 'last_date'. */
+  gint            num_occurances_remain;
+
+  /* the current instance-count of the SX. */
+  gint            instance_num;
+  
+  gboolean        enabled;
+  gboolean        autoCreateOption;
+  gboolean        autoCreateNotify;
+  gint            advanceCreateDays;
+  gint            advanceRemindDays;
+ 
+  Account        *template_acct;
+  
+  /** The list of deferred SX instances.  This list is of temporalStateData
+   * instances.  */
+  GList /* <temporalStateData*> */ *deferredList;
+};
+
+/** Just the variable temporal bits from the SX structure. */
+typedef struct _temporalStateData {
+  GDate last_date;
+  gint num_occur_rem;
+  gint num_inst;
+} temporalStateData;
+
+#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
 
 /**
  * Creates and initializes a scheduled transaction.
@@ -62,6 +125,11 @@ void xaccSchedXactionFree( SchedXaction *sx );
 
 void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);
+
+/** @return GList<Recurrence*> **/
+GList* gnc_sx_get_schedule(SchedXaction *sx);
+/** @param[in] schedule A GList<Recurrence*> **/
+void gnc_sx_set_schedule(SchedXaction *sx, GList *schedule);
 
 FreqSpec *xaccSchedXactionGetFreqSpec( SchedXaction *sx );
 /**
@@ -162,7 +230,7 @@ void *gnc_sx_clone_temporal_state( void *stateData );
 /** @} */
 
 /** \brief Returns the next occurance of a scheduled transaction.
-
+ *
  *   If the transaction hasn't occured, then it's based off the start date.
  * Otherwise, it's based off the last-occurance date.
  *

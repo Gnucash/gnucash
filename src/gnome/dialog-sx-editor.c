@@ -972,6 +972,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
                 FreqSpec *fs;
                 GDate gdate;
                 GString *str;
+                GList *schedule = NULL;
 
                 fs = xaccSchedXactionGetFreqSpec( sxed->sx );
                 gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
@@ -980,10 +981,13 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
                 xaccFreqSpecGetFreqStr( fs, str );
                 g_debug("fs: %s", str->str);
 
+                gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
+                gnc_sx_set_schedule(sxed->sx, schedule);
+                g_debug("recurrences parsed [%s]", recurrenceListToString(schedule));
+
                 /* now that we have it, set the start date */
                 xaccSchedXactionSetStartDate( sxed->sx, &gdate );
         }
-
 }
 
 static void
@@ -1259,10 +1263,13 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
         GtkBox *b;
 
         b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "gncfreq_hbox" ));
-        sxed->gncfreq =
+        /*sxed->gncfreq =
                 GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx),
-                                                  xaccSchedXactionGetStartDate(sxed->sx) ) );
-        g_assert( sxed->gncfreq );
+                xaccSchedXactionGetStartDate(sxed->sx) ) );*/
+        sxed->gncfreq =
+             GNC_FREQUENCY(gnc_frequency_new_from_recurrence(gnc_sx_get_schedule(sxed->sx),
+                                                             xaccSchedXactionGetStartDate(sxed->sx)));
+        g_assert(sxed->gncfreq);
         g_signal_connect( sxed->gncfreq, "changed",
                           G_CALLBACK(gnc_sxed_freq_changed),
                           sxed );
