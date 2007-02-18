@@ -261,6 +261,7 @@ do_frequency_setup(GncFrequency *gf, FreqSpec *fs, time_t *secs)
          * don't change any other settings.  */
         if (NULL == fs) return;
 
+        uift = xaccFreqSpecGetUIType(fs);
         switch ( uift ) 
         {
         case UIFREQ_NONE:
@@ -605,7 +606,7 @@ gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate )
                 if (day > 30)
                 {
                     g_critical("freq spec doesn't support last-day-of-month");
-                    break;
+                    day = 30;
                 }
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 g_date_to_struct_tm( &gd, &stm);
@@ -624,7 +625,7 @@ gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate )
                 if (day > 30)
                 {
                     g_critical("freq spec doesn't support last-day-of-month");
-                    break;
+                    day = 30;
                 }
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 start_tt = gnc_date_edit_get_date( gf->startDate );
@@ -652,6 +653,7 @@ gnc_frequency_save_state( GncFrequency *gf, FreqSpec *fs, GDate *outDate )
                 if (day > 30)
                 {
                     g_critical("freq spec doesn't support last-day-of-month");
+                    day = 30;
                 }
                 g_date_set_time_t(&gd, time(NULL));
                 g_date_set_month(&gd, 1);
