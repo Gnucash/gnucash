@@ -1,3 +1,7 @@
+2007-02-18  Derek Atkins  <derek@ihtfp.com>
+
+	The New Turkish Lira changes from TRL to TRY in 2005.  Fix #408442.
+
 2007-02-18  Andreas Köhler  <andi5.py@gmx.net>
 
 	Make new windows the same size as the active one. Fix #341968.
