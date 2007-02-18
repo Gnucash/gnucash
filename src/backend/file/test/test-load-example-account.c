@@ -93,7 +93,7 @@ guile_main (void *closure, int argc, char **argv)
                 gchar *to_open = g_build_filename(location, entry, (gchar*)NULL);
                 if (!g_file_test(to_open, G_FILE_TEST_IS_DIR))
                 {
-                    test_load_file(book, to_open);
+                    test_load_file(to_open);
                 }
                 g_free(to_open);
             }

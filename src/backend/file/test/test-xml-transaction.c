@@ -365,12 +365,16 @@ test_transaction(void)
     for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
+        Account *root;
         xmlNodePtr test_node;
         gnc_commodity *com;
         gchar *compare_msg;
         gchar *filename1;
         int fd;
 
+	/* The next line exists for its side effect of creating the
+	 * account tree. */
+	root = get_random_account_tree(book);
         ran_trn = get_random_transaction(book);
         if(!ran_trn)
         {

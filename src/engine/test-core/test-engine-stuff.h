@@ -42,7 +42,7 @@ void set_max_accounts_per_level (gint max_accounts);
 GNCPrice * get_random_price(QofBook *book);
 gboolean make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
 GNCPriceDB * get_random_pricedb(QofBook *book);
-Account * get_random_accounts(QofBook * book);
+Account * get_random_account_tree(QofBook * book);
 Account* get_random_account(QofBook * book);
 Split* get_random_split(QofBook *book, Account *account, Transaction *trn);
 Transaction* get_random_transaction(QofBook *book);
