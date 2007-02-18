@@ -868,7 +868,7 @@ make_random_account_tree (QofBook *book, Account *root)
 }
 
 Account *
-get_random_accounts (QofBook *book)
+get_random_account_tree (QofBook *book)
 {
   Account * root;
 
@@ -1855,7 +1855,7 @@ get_random_book (void)
 
   book = qof_book_new ();
 
-  get_random_accounts (book);
+  get_random_account_tree (book);
   get_random_pricedb (book);
 
   return book;
@@ -1871,7 +1871,7 @@ get_random_session (void)
 
   book = qof_session_get_book (session);
 
-  get_random_accounts (book);
+  get_random_account_tree (book);
   get_random_pricedb (book);
 
   return session;

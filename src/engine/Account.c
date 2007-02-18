@@ -246,6 +246,7 @@ gnc_account_create_root (QofBook *book)
   root = xaccMallocAccount(book);
   xaccAccountBeginEdit(root);
   root->type = ACCT_TYPE_ROOT;
+  CACHE_REPLACE(root->accountName, _("Root Account"));
   xaccAccountCommitEdit(root);
   gnc_book_set_root_account(book, root);
   return root;
