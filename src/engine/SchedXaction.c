@@ -502,7 +502,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
       }
    }
 
-   xaccFreqSpecGetNextInstance( sx->freq, &last_occur, &next_occur );
+   recurrenceListNextInstance(sx->schedule, &last_occur, &next_occur);
 
    /* out-of-bounds check */
    if ( xaccSchedXactionHasEndDate( sx ) ) {
@@ -551,7 +551,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
       g_date_subtract_days( &prev_occur, 1 );
    }
 
-   xaccFreqSpecGetNextInstance( sx->freq, &prev_occur, &next_occur );
+   recurrenceListNextInstance(sx->schedule, &prev_occur, &next_occur);
 
    if ( xaccSchedXactionHasEndDate( sx ) ) {
       GDate *end_date;
