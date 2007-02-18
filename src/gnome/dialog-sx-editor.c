@@ -165,7 +165,7 @@ static gboolean gnc_sxed_check_changed( GncSxEditorDialog *sxed );
 static void gnc_sxed_save_sx( GncSxEditorDialog *sxed );
 static void gnc_sxed_freq_changed( GncFrequency *gf, gpointer ud );
 static void sxed_excal_update_adapt( GtkObject *o, gpointer ud );
-static void gnc_sxed_update_cal( GncSxEditorDialog *sxed );
+static void gnc_sxed_update_cal(GncSxEditorDialog *sxed);
 
 static void gnc_sxed_reg_check_close(GncSxEditorDialog *sxed);
 
@@ -1453,7 +1453,7 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
         }
 
         /* Update the example cal */
-        gnc_sxed_update_cal( sxed );
+        gnc_sxed_update_cal(sxed);
 }
 
 static
@@ -1491,7 +1491,7 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
                 break;
         }
 
-        gnc_sxed_update_cal( sxed );
+        gnc_sxed_update_cal(sxed);
 }
 
 /********************************************************************\
@@ -1538,82 +1538,80 @@ editor_component_sx_equality( gpointer find_data,
 
 typedef enum { NO_END, DATE_END, COUNT_END } END_TYPE;
 
-static
-void
-gnc_sxed_update_cal( GncSxEditorDialog *sxed )
+static void
+gnc_sxed_update_cal(GncSxEditorDialog *sxed)
 {
-        FreqSpec *fs;
-        GDate start_date;
+    GList *recurrences = NULL;
+    GDate start_date, first_date;
 
-        g_date_clear(&start_date, 1);
+    g_date_clear(&start_date, 1);
 
-        fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &start_date );
-        g_date_subtract_days( &start_date, 1 );
-        xaccFreqSpecGetNextInstance( fs, &start_date, &start_date );
+    gnc_frequency_save_to_recurrence(sxed->gncfreq, &recurrences, &start_date);
+    g_date_subtract_days(&start_date, 1);
+    recurrenceListNextInstance(recurrences, &start_date, &first_date);
 
-        /* Deal with the fact that this SX may have been run before [the
-         * calendar should only show upcoming instances]... */
+    /* Deal with the fact that this SX may have been run before [the
+     * calendar should only show upcoming instances]... */
+    {
+        GDate *last_sx_inst;
+
+        last_sx_inst = xaccSchedXactionGetLastOccurDate(sxed->sx);
+        if (g_date_valid(last_sx_inst)
+            && g_date_valid(&first_date)
+            && g_date_compare(last_sx_inst, &first_date) != 0)
         {
-             GDate *lastInst;
+            start_date = *last_sx_inst;
+            recurrenceListNextInstance(recurrences, &start_date, &first_date);
+        }
+    }
 
-             lastInst = xaccSchedXactionGetLastOccurDate( sxed->sx );
-             if ( g_date_valid( lastInst )
-                  && g_date_valid( &start_date )
-                  && g_date_compare( lastInst, &start_date ) != 0 ) {
-                  start_date = *lastInst;
-                  xaccFreqSpecGetNextInstance(fs, &start_date, &start_date);
-             }
-        }
+    if (!g_date_valid(&first_date))
+    {
+        /* Nothing to do. */
+        gnc_dense_cal_store_clear(sxed->dense_cal_model);
+        goto cleanup;
+    }
 
-        if (!g_date_valid(&start_date))
-        {
-             /* Nothing to do. */
-             gnc_dense_cal_store_clear(sxed->dense_cal_model);
-             xaccFreqSpecFree(fs);
-             return;
-        }
+    gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
+    gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
 
-        gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&start_date));
-        gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&start_date));
+    /* figure out the end restriction */
+    if (gtk_toggle_button_get_active(sxed->optEndDate))
+    {
+        GDate end_date;
+        g_date_set_time_t(&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
+        gnc_dense_cal_store_update_recurrences_date_end(sxed->dense_cal_model, &first_date, recurrences, &end_date);
+    }
+    else if (gtk_toggle_button_get_active(sxed->optEndNone))
+    {
+        gnc_dense_cal_store_update_recurrences_no_end(sxed->dense_cal_model, &first_date, recurrences);
+    }
+    else if (gtk_toggle_button_get_active(sxed->optEndCount))
+    {
+        gint num_remain
+            = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
+        gnc_dense_cal_store_update_recurrences_count_end(sxed->dense_cal_model, &first_date, recurrences, num_remain);
+    }
+    else
+    {
+        g_error("unknown end condition");
+    }
 
-        /* figure out the end restriction */
-        if (gtk_toggle_button_get_active(sxed->optEndDate))
-        {
-             GDate end_date;
-             g_date_set_time_t(&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
-             gnc_dense_cal_store_update_date_end(sxed->dense_cal_model, &start_date, fs, &end_date);
-        }
-        else if (gtk_toggle_button_get_active(sxed->optEndNone))
-        {
-             gnc_dense_cal_store_update_no_end(sxed->dense_cal_model, &start_date, fs);
-        }
-        else if (gtk_toggle_button_get_active(sxed->optEndCount))
-        {
-             gint num_remain
-                  = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
-             gnc_dense_cal_store_update_count_end(sxed->dense_cal_model, &start_date, fs, num_remain);
-        }
-        else
-        {
-             g_assert( FALSE );
-        }
-
-        xaccFreqSpecFree( fs );
+cleanup:
+    g_list_foreach(recurrences, (GFunc)g_free, NULL);
+    g_list_free(recurrences);
 }
 
-static
-void
-gnc_sxed_freq_changed( GncFrequency *gf, gpointer ud )
+static void
+gnc_sxed_freq_changed(GncFrequency *gf, gpointer ud)
 {
-        gnc_sxed_update_cal( (GncSxEditorDialog*)ud );
+    gnc_sxed_update_cal((GncSxEditorDialog*)ud);
 }
 
-static
-void
-sxed_excal_update_adapt( GtkObject *o, gpointer ud )
+static void
+sxed_excal_update_adapt(GtkObject *o, gpointer ud)
 {
-        gnc_sxed_update_cal( (GncSxEditorDialog*)ud );
+    gnc_sxed_update_cal((GncSxEditorDialog*)ud);
 }
 
 void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);

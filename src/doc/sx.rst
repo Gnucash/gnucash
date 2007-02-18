@@ -136,7 +136,7 @@ TODO
   - dialog-sx-editor
     - [ ] gnc_sxed_check_changed
     - [ ] gnc_sxed_check_consistent
-    - [ ] gnc_sxed_update_cal
+    - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx
   - [ ] remove FreqSpec code
     - [ ] SX code
