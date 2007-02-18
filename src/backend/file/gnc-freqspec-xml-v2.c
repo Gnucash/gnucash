@@ -146,6 +146,7 @@ fspd_init( fsParseData *fspd )
         fspd->book    = NULL;
         fspd->recurrence = g_new0(Recurrence, 1);
         fspd->recurrence_list = NULL;
+        fspd->uift = UIFREQ_NONE;
         fspd->interval
                 = fspd->offset
                 = fspd->day
@@ -421,7 +422,15 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
             GList *r_iter;
             for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
             {
-                fspd->recurrence_list = g_list_append(fspd->recurrence_list, r_iter->data);
+                Recurrence *r = (Recurrence*)r_iter->data;
+                GDate recurrence_date;
+                if (fspd->uift == UIFREQ_SEMI_MONTHLY)
+                {
+                    // complementry hack around 'once' freqspects not being valid. :/
+                    recurrence_date = recurrenceGetDate(r);
+                    recurrenceSet(r, recurrenceGetMultiplier(r), PERIOD_MONTH, &recurrence_date);
+                }
+                fspd->recurrence_list = g_list_append(fspd->recurrence_list, r);
             }
         }
         return TRUE;
