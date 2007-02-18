@@ -111,7 +111,7 @@ TODO
   - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-! - [ ] XML migration, handling
+! - [x] XML migration, handling
     - xml:freqSpec -> obj:Recurrence
       - [x] none (Recurrence doesn't support)
       - [x] once
@@ -122,7 +122,7 @@ TODO
       - [x] weekly, multiple (composite)
       - [x] monthly (+quarterly, tri-anually, semi-annually, yearly)
       - [x] semi-monthly (composite)
-    - [ ] write Recurrences into new-version SX
+    - [x] write Recurrences into new-version SX
   - gnc-frequency
 !   - [x] Support Recurrence
       - [x] in

@@ -45,6 +45,8 @@
 
 #include "sixtp-dom-parsers.h"
 
+#include "gnc-gconf-utils.h"
+
 #define LOG_MOD "gnc.backend.file.sx"
 static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
@@ -156,13 +158,27 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     GDate	*date;
     gint        instCount;
     const GUID        *templ_acc_guid;
+    gboolean allow_incompat = FALSE;
+    GError *err = NULL;
+
+    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatability", &err);
+    if (err != NULL)
+    {
+        g_warning("error getting gconf value [%s]", err->message);
+        g_error_free(err);
+        allow_incompat = FALSE;
+    }
+    g_debug("allow_incompatability: [%s]", allow_incompat ? "true" : "false");
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
     ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
 
-    xmlSetProp( ret, BAD_CAST "version", BAD_CAST schedxaction_version_string );
+    if (allow_incompat)
+        xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version2_string);
+    else
+        xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version_string);
 
     xmlAddChild( ret,
                  guid_to_dom_tree(SX_ID,
@@ -170,15 +186,18 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
 
-    xmlNewTextChild( ret, NULL, BAD_CAST SX_ENABLED,
-                     BAD_CAST ( sx->enabled ? "y" : "n" ) );
+    if (allow_incompat)
+    {
+        xmlNewTextChild( ret, NULL, BAD_CAST SX_ENABLED,
+                         BAD_CAST ( sx->enabled ? "y" : "n" ) );
+    }
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE,
                      BAD_CAST ( sx->autoCreateOption ? "y" : "n" ) );
     xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE_NOTIFY,
                      BAD_CAST ( sx->autoCreateNotify ? "y" : "n" ) );
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_CREATE_DAYS,
-                                     sx->advanceCreateDays));
+                                      sx->advanceCreateDays));
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
                                      sx->advanceRemindDays));
 
@@ -212,7 +231,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlAddChild( ret, 
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
-				  
+
     /* output freq spec */
     fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
     xmlAddChild( fsNode,
@@ -220,6 +239,17 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                          xaccSchedXactionGetFreqSpec(sx)) );
     xmlAddChild( ret, fsNode );
 
+    if (allow_incompat)
+    {
+        xmlNodePtr schedule_node = xmlNewNode(NULL, "sx:schedule");
+        GList *schedule = gnc_sx_get_schedule(sx);
+        for (; schedule != NULL; schedule = schedule->next)
+        {
+            xmlAddChild(schedule_node, recurrence_to_dom_tree("gnc:recurrence", (Recurrence*)schedule->data));
+        }
+        xmlAddChild(ret, schedule_node);
+    }
+				  
     /* Output deferred-instance list. */
     {
             xmlNodePtr instNode;
@@ -450,20 +480,36 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 }
 
 static gboolean
+sx_schedule_recurrence_handler(xmlNodePtr node, gpointer parsing_data)
+{
+    GList **schedule = (GList**)parsing_data;
+    Recurrence *r = dom_tree_to_recurrence(node);
+    g_return_val_if_fail(r, FALSE);
+    g_debug("parsed recurrence [%s]", recurrenceToString(r));
+    *schedule = g_list_append(*schedule, r);
+    return TRUE;
+}
+
+struct dom_tree_handler sx_recurrence_list_handlers[] = {
+    { "gnc:recurrence", sx_schedule_recurrence_handler, 0, 0 },
+    { NULL, NULL, 0, 0 }
+};
+
+static gboolean
 sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 {
-     struct sx_pdata *parsing_data = _pdata;
-     GList *schedule;
+    struct sx_pdata *parsing_data = _pdata;
+    GList *schedule = NULL;
      
-     g_return_val_if_fail(node, FALSE);
+    g_return_val_if_fail(node, FALSE);
 
-     //schedule = dom_tree_to_recurrence(node);
-     //g_return_val_if_fail(schedule, FALSE);
-     
-     //gnc_sx_set_schedule(parsing_data->sx, schedule);
-     parsing_data->saw_recurrence = TRUE;
-
-     return TRUE;
+    if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
+        return FALSE;
+    g_return_val_if_fail(schedule, FALSE);
+    g_debug("setting freshly-parsed schedule: [%s]", recurrenceListToString(schedule));
+    gnc_sx_set_schedule(parsing_data->sx, schedule);
+    parsing_data->saw_recurrence = TRUE;
+    return TRUE;
 }
 
 static

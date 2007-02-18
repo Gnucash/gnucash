@@ -494,5 +494,16 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dev/allow_file_incompatability</key>
+      <applyto>/apps/gnucash/dev/allow_file_incompatability</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If gnucash should allow file incompatability.  If true, then gnucash will (be allowed to) intentionally break file compatability with old versions.</short>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>
