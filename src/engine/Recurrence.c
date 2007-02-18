@@ -137,8 +137,10 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
     const GDate *start;
     guint mult;
 
-    g_return_if_fail(r && ref);
-    g_return_if_fail(g_date_valid(&r->start) && g_date_valid(ref));
+    g_return_if_fail(r);
+    g_return_if_fail(ref);
+    g_return_if_fail(g_date_valid(&r->start));
+    g_return_if_fail(g_date_valid(ref));
 
     /* If the ref date comes before the start date then the next
        occurrence is always the start date, and we're done. */
