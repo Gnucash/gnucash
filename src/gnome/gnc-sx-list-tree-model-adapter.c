@@ -490,14 +490,11 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
      for (list = model->instances->sx_instance_list; list != NULL; list = list->next)
      {
           GncSxInstances *instances = (GncSxInstances*)list->data;
-          FreqSpec *fs;
-          GString *frequency_str;
+          gchar *frequency_str;
           char last_occur_date_buf[MAX_DATE_LENGTH+1];
           char next_occur_date_buf[MAX_DATE_LENGTH+1];
 
-          frequency_str = g_string_sized_new(32);
-          fs = xaccSchedXactionGetFreqSpec(instances->sx);
-          xaccFreqSpecGetFreqStr(fs, frequency_str);
+          frequency_str = recurrenceListToString(gnc_sx_get_schedule(instances->sx));
 
           _format_conditional_date(xaccSchedXactionGetLastOccurDate(instances->sx),
                                    last_occur_date_buf, MAX_DATE_LENGTH);
@@ -508,11 +505,11 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
           gtk_tree_store_set(model->orig, &iter,
                              SXLTMA_COL_NAME, xaccSchedXactionGetName(instances->sx),
                              SXLTMA_COL_ENABLED, xaccSchedXactionGetEnabled(instances->sx),
-                             SXLTMA_COL_FREQUENCY, frequency_str->str,
+                             SXLTMA_COL_FREQUENCY, frequency_str,
                              SXLTMA_COL_LAST_OCCUR, last_occur_date_buf,
                              SXLTMA_COL_NEXT_OCCUR, next_occur_date_buf,
                              -1);
-          g_string_free(frequency_str, TRUE);
+          g_free(frequency_str);
      }
 }
 
