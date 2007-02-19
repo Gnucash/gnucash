@@ -33,100 +33,100 @@ static guint gnc_dense_cal_model_signals[LAST_SIGNAL] = { 0 };
 static void
 gnc_dense_cal_model_base_init(gpointer g_class)
 {
-     static gboolean initialized = FALSE;
+    static gboolean initialized = FALSE;
      
-     if (!initialized)
-     {
-          gnc_dense_cal_model_signals[GDCM_ADDED]
-               = g_signal_new("added",
-                              G_TYPE_FROM_CLASS(g_class),
-                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                              0 /* default offset */,
-                              NULL /* accumulator */,
-                              NULL /* accum. data */,
-                              g_cclosure_marshal_VOID__UINT,
-                              G_TYPE_NONE /* return */,
-                              1 /* n_params */,
-                              G_TYPE_UINT /* param types */
-                    );
+    if (!initialized)
+    {
+        gnc_dense_cal_model_signals[GDCM_ADDED]
+            = g_signal_new("added",
+                           G_TYPE_FROM_CLASS(g_class),
+                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                           0 /* default offset */,
+                           NULL /* accumulator */,
+                           NULL /* accum. data */,
+                           g_cclosure_marshal_VOID__UINT,
+                           G_TYPE_NONE /* return */,
+                           1 /* n_params */,
+                           G_TYPE_UINT /* param types */
+                );
 
-          gnc_dense_cal_model_signals[GDCM_UPDATE]
-               = g_signal_new("update",
-                              G_TYPE_FROM_CLASS(g_class),
-                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                              0 /* default offset */,
-                              NULL /* accumulator */,
-                              NULL /* accum. data */,
-                              g_cclosure_marshal_VOID__UINT,
-                              G_TYPE_NONE /* return */,
-                              1 /* n_params */,
-                              G_TYPE_UINT /* param types */
-                    );
+        gnc_dense_cal_model_signals[GDCM_UPDATE]
+            = g_signal_new("update",
+                           G_TYPE_FROM_CLASS(g_class),
+                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                           0 /* default offset */,
+                           NULL /* accumulator */,
+                           NULL /* accum. data */,
+                           g_cclosure_marshal_VOID__UINT,
+                           G_TYPE_NONE /* return */,
+                           1 /* n_params */,
+                           G_TYPE_UINT /* param types */
+                );
 
-          gnc_dense_cal_model_signals[GDCM_REMOVE]
-               = g_signal_new("removing",
-                              G_TYPE_FROM_CLASS(g_class),
-                              G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                              0 /* default offset */,
-                              NULL /* accumulator */,
-                              NULL /* accum. data */,
-                              g_cclosure_marshal_VOID__UINT,
-                              G_TYPE_NONE /* return */,
-                              1 /* n_params */,
-                              G_TYPE_UINT /* param types */
-                    );
+        gnc_dense_cal_model_signals[GDCM_REMOVE]
+            = g_signal_new("removing",
+                           G_TYPE_FROM_CLASS(g_class),
+                           G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                           0 /* default offset */,
+                           NULL /* accumulator */,
+                           NULL /* accum. data */,
+                           g_cclosure_marshal_VOID__UINT,
+                           G_TYPE_NONE /* return */,
+                           1 /* n_params */,
+                           G_TYPE_UINT /* param types */
+                );
 
-          initialized = TRUE;
-     }
+        initialized = TRUE;
+    }
 }
 
 GType
 gnc_dense_cal_model_get_type(void)
 {
-     static GType type = 0;
-     if (type == 0) {
-          static const GTypeInfo info = {
-               sizeof(GncDenseCalModelIface),
-               gnc_dense_cal_model_base_init,   /* base_init */
-               NULL,   /* base_finalize */
-               NULL,   /* class_init */
-               NULL,   /* class_finalize */
-               NULL,   /* class_data */
-               0,
-               0,      /* n_preallocs */
-               NULL    /* instance_init */
-          };
-          type = g_type_register_static(G_TYPE_INTERFACE, "GncDenseCalModel", &info, 0);
-     }
-     return type;
+    static GType type = 0;
+    if (type == 0) {
+        static const GTypeInfo info = {
+            sizeof(GncDenseCalModelIface),
+            gnc_dense_cal_model_base_init,   /* base_init */
+            NULL,   /* base_finalize */
+            NULL,   /* class_init */
+            NULL,   /* class_finalize */
+            NULL,   /* class_data */
+            0,
+            0,      /* n_preallocs */
+            NULL    /* instance_init */
+        };
+        type = g_type_register_static(G_TYPE_INTERFACE, "GncDenseCalModel", &info, 0);
+    }
+    return type;
 }
 
 GList*
 gnc_dense_cal_model_get_contained(GncDenseCalModel *model)
 {
-     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_contained)(model);
+    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_contained)(model);
 }
 
 gchar*
 gnc_dense_cal_model_get_name(GncDenseCalModel *model, guint tag)
 {
-     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_name)(model, tag);
+    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_name)(model, tag);
 }
 
 gchar*
 gnc_dense_cal_model_get_info(GncDenseCalModel *model, guint tag)
 {
-     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_info)(model, tag);
+    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_info)(model, tag);
 }
 
 gint
 gnc_dense_cal_model_get_instance_count(GncDenseCalModel *model, guint tag)
 {
-     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance_count)(model, tag);
+    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance_count)(model, tag);
 }
 
 void
 gnc_dense_cal_model_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date)
 {
-     return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance)(model, tag, instance_index, date);
+    return (*GNC_DENSE_CAL_MODEL_GET_INTERFACE(model)->get_instance)(model, tag, instance_index, date);
 }

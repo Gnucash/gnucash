@@ -226,27 +226,27 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
 GList*
 gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 {
-     GList *rtn = NULL;
-     for (; list != NULL; list = list->next)
-     {
-          rtn = g_list_append(rtn, (*fn)(list->data, user_data));
-     }
-     return rtn;
+  GList *rtn = NULL;
+  for (; list != NULL; list = list->next)
+  {
+    rtn = g_list_append(rtn, (*fn)(list->data, user_data));
+  }
+  return rtn;
 }
 
 void
 gnc_g_list_cut(GList **list, GList *cut_point)
 {
-     if (list == NULL || *list == NULL)
-          return;
+  if (list == NULL || *list == NULL)
+    return;
 
-     // if it's the first element.
-     if (cut_point->prev == NULL)
-     {
-          *list = NULL;
-          return;
-     }
+  // if it's the first element.
+  if (cut_point->prev == NULL)
+  {
+    *list = NULL;
+    return;
+  }
 
-     cut_point->prev->next = NULL;
-     cut_point->prev = NULL;
+  cut_point->prev->next = NULL;
+  cut_point->prev = NULL;
 }

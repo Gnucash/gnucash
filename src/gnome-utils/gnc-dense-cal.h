@@ -42,7 +42,7 @@ typedef struct _GncDenseCalClass   GncDenseCalClass;
 
 typedef struct _gdc_month_coords
 {
-     gint x, y;
+    gint x, y;
 } gdc_month_coords;
 
 enum GDC_COLORS
@@ -84,39 +84,39 @@ struct _GncDenseCal
 
      GdkColor weekColors[MAX_COLORS];
 
-     guint label_width;
-     guint label_height;
-     guint dayLabelHeight;
+    guint label_width;
+    guint label_height;
+    guint dayLabelHeight;
 
-     GncDenseCalModel *model;
+    GncDenseCalModel *model;
 
-     guint lastMarkTag;
+    guint lastMarkTag;
 
-     /**
-      * A GList of gdc_mark_data structs, one for each active/valid markTag.
-      **/
-     GList *markData;
-     int numMarks;
-     /* array of GList*s of per-cell markings. */
-     GList **marks;
+    /**
+     * A GList of gdc_mark_data structs, one for each active/valid markTag.
+     **/
+    GList *markData;
+    int numMarks;
+    /* array of GList*s of per-cell markings. */
+    GList **marks;
 
-     int disposed; /* private */
+    int disposed; /* private */
 };
 
 struct _GncDenseCalClass
 {
-     GtkWidgetClass parent_class;
+    GtkWidgetClass parent_class;
 };
 
 typedef struct _gdc_mark_data
 {
-     gchar *name;
-     gchar *info;
-     guint tag;
-     /**
-      * A GList of the dcal->marks indexes containing this mark.
-      **/
-     GList *ourMarks;
+    gchar *name;
+    gchar *info;
+    guint tag;
+    /**
+     * A GList of the dcal->marks indexes containing this mark.
+     **/
+    GList *ourMarks;
 } gdc_mark_data;
 
 GtkWidget*     gnc_dense_cal_new                    (void);

@@ -84,14 +84,14 @@ gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
 typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
 
 /**
- * @return Caller-owned GList* of results of apply `fn` to `list` in order.
+ * @return Caller-owned GList* of results of apply @a fn to @a list in order.
  **/
 GList* gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data);
 
 /**
- * Cut a GList into two parts; the {@param cut_point} is the beginning of the
- * new list; {@param list} may need to be modified, but will be the list
- * before the {@param cut_point}.
+ * Cut a GList into two parts; the @a cut_point is the beginning of the
+ * new list; @a list may need to be modified, but will be the list
+ * before the @a cut_point.
  **/
 void gnc_g_list_cut(GList **list, GList *cut_point);
 

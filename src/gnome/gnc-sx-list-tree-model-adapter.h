@@ -43,11 +43,11 @@ typedef struct _GncSxListTreeModelAdapterClass GncSxListTreeModelAdapterClass;
 
 // model columns
 enum {
-     SXLTMA_COL_NAME = 0,
-     SXLTMA_COL_ENABLED,
-     SXLTMA_COL_FREQUENCY,
-     SXLTMA_COL_LAST_OCCUR,
-     SXLTMA_COL_NEXT_OCCUR
+    SXLTMA_COL_NAME = 0,
+    SXLTMA_COL_ENABLED,
+    SXLTMA_COL_FREQUENCY,
+    SXLTMA_COL_LAST_OCCUR,
+    SXLTMA_COL_NEXT_OCCUR
 };
 
 GType gnc_sx_list_tree_model_adapter_get_type(void);

@@ -53,12 +53,12 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 typedef struct
 {
-     GncPluginPage gnc_plugin_page;
+    GncPluginPage gnc_plugin_page;
 } GncPluginPageSxList;
 
 typedef struct
 {
-     GncPluginPageClass gnc_plugin_page;
+    GncPluginPageClass gnc_plugin_page;
 } GncPluginPageSxListClass;
 
 /* function prototypes */

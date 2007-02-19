@@ -75,40 +75,40 @@ typedef struct _GncSxInstances
      GDate next_instance_date;
      
      /** GList<GncSxInstance*> **/
-     GList *list; /* @fixme: s/list/?/ */
+    GList *list; /* @fixme: s/list/?/ */
 } GncSxInstances;
 
 typedef enum 
 {
-     SX_INSTANCE_STATE_IGNORED,
-     SX_INSTANCE_STATE_POSTPONED,
-     SX_INSTANCE_STATE_TO_CREATE,
-     SX_INSTANCE_STATE_REMINDER,
-     SX_INSTANCE_STATE_CREATED,
-     SX_INSTANCE_STATE_MAX_STATE
+    SX_INSTANCE_STATE_IGNORED,
+    SX_INSTANCE_STATE_POSTPONED,
+    SX_INSTANCE_STATE_TO_CREATE,
+    SX_INSTANCE_STATE_REMINDER,
+    SX_INSTANCE_STATE_CREATED,
+    SX_INSTANCE_STATE_MAX_STATE
 } GncSxInstanceState;
 
 typedef struct _GncSxVariable
 {
-     gchar *name;
-     gnc_numeric value; /**< only numeric values are supported. **/
-     gboolean editable;
+    gchar *name;
+    gnc_numeric value; /**< only numeric values are supported. **/
+    gboolean editable;
 } GncSxVariable;
 
 typedef struct _GncSxInstance
 {
-     GncSxInstances *parent; /**< the parent instances collection. **/
-     void *temporal_state; /**< the sx creation temporal state. **/
-     GncSxInstanceState orig_state; /**< the original state at generation time. **/
-     GncSxInstanceState state; /**< the current state of the instance (during editing) **/
-     GDate date; /**< the instance date. **/
-     GHashTable *variable_bindings; /**< variable bindings. **/
+    GncSxInstances *parent; /**< the parent instances collection. **/
+    void *temporal_state; /**< the sx creation temporal state. **/
+    GncSxInstanceState orig_state; /**< the original state at generation time. **/
+    GncSxInstanceState state; /**< the current state of the instance (during editing) **/
+    GDate date; /**< the instance date. **/
+    GHashTable *variable_bindings; /**< variable bindings. **/
 } GncSxInstance;
 
 typedef struct _GncSxVariableNeeded
 {
-     GncSxInstance *instance;
-     GncSxVariable *variable;
+    GncSxInstance *instance;
+    GncSxVariable *variable;
 } GncSxVariableNeeded;
 
 GType gnc_sx_instance_model_get_type(void);
@@ -186,12 +186,12 @@ void gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
 
 typedef struct _GncSxSummary
 {
-     gboolean need_dialog; /**< If the dialog needs to be displayed. **/
+    gboolean need_dialog; /**< If the dialog needs to be displayed. **/
 
-     gint num_instances; /**< The number of total instances (in any state). **/
-     gint num_to_create_instances; /**< The number of (not-auto-create) to-create instances. **/
-     gint num_auto_create_instances;  /**< The total number of auto-create instances. **/
-     gint num_auto_create_no_notify_instances; /**< The number of automatically-created instances that do no request notification. **/
+    gint num_instances; /**< The number of total instances (in any state). **/
+    gint num_to_create_instances; /**< The number of (not-auto-create) to-create instances. **/
+    gint num_auto_create_instances;  /**< The total number of auto-create instances. **/
+    gint num_auto_create_no_notify_instances; /**< The number of automatically-created instances that do no request notification. **/
 } GncSxSummary;
 
 /**
