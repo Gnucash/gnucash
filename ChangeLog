@@ -1,3 +1,8 @@
+2007-02-18  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 2.0.5
+
 2007-02-18  Derek Atkins  <derek@ihtfp.com>
 
 	The New Turkish Lira changes from TRL to TRY in 2005.  Fix #408442.

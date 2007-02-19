@@ -1,6 +1,20 @@
 Version history:
 ------- -------
 
+ 2.0.5 - 18 February 2007
+ 	 o Release of new stable version 2.0.5.
+	 o Fix some strings not being translated.
+	 o Use guiles native sort and record.
+	 o Adjust how payment dialog resizes.
+	 o Don't abort when F::Q fails to return a quote.
+	 o Change Russian Ruble from RUR to RUB.
+	 o Fix security problem with tmp filesystem and symlink attack.
+	 o Add French and Canadian French translation updates.
+	 o Do not crash on delete_event in new user dialog.
+	 o Add sanity checks when accessing GncPluginPage.
+	 o Make new windows the same size as the active one.
+	 o The New Turkish Lira changed from TRL to TRY in 2005.
+
  2.0.4 - 1 January 2007
  	 o Release of new stable version 2.0.4.
 	 o Correct account compatibility check with top level account.
