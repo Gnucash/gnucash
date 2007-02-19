@@ -990,6 +990,8 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances)
     }
 
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
+
+    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog->dialog));
      
     gtk_widget_show_all(dialog->dialog);
 
@@ -1080,6 +1082,7 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     /* FALLTHROUGH */
     case GTK_RESPONSE_CANCEL: 
     case GTK_RESPONSE_DELETE_EVENT:
+        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(app_dialog->dialog));
         gtk_widget_destroy(GTK_WIDGET(dialog));
         g_object_unref(G_OBJECT(app_dialog->editing_model));
         app_dialog->editing_model = NULL;

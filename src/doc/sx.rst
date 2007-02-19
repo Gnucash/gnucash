@@ -143,9 +143,9 @@ TODO
     - [ ] src/gnome/druid-acct-period.c
 
 - since-last-run
-! - [ ] save/restore dialog window size
   - [ ] "reminder" instances show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
+! - [x] save/restore dialog window size
   - [x] remove split pane
   - [x] "auto" scrollbars
 ! - [x] rewrite adapter (re-)population logic
