@@ -166,4 +166,8 @@ gboolean recurrenceListIsWeeklyMultiple(GList *recurrences);
  **/
 gchar *recurrenceListToCompactString(GList *recurrence_list);
 
+/** @return integer representing the relationship between @a a and @a b, with the semantics of qsort. **/
+int recurrenceCmp(Recurrence *a, Recurrence *b);
+int recurrenceListCmp(GList *a, GList *b);
+
 #endif  /* RECURRENCE_H */

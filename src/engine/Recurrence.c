@@ -577,3 +577,90 @@ rtn:
     return g_string_free(buf, FALSE);
 }
 
+/**
+ * The ordering, in increasing degrees of frequent-ness:
+ *
+ *   day < week < {nth-weekday < month < end-month, last_weekday} < year < once
+ *
+ * all the monthly types are basically together, but are broken down
+ * internally cause they have to be ordered somehow.
+ **/
+static int cmp_order_indexes[] =
+{
+    6, // PERIOD_ONCE
+    1, // PERIOD_DAY
+    2, // PERIOD_WEEK
+    // 3, // "semi-monthly" ... Note that this isn't presently used, just the
+    //    // way the code worked out. :(
+    4, // PERIOD_MONTH
+    4, // PERIOD_END_OF_MONTH
+    4, // PERIOD_NTH_WEEKDAY
+    4, // PERIOD_LAST_WEEKDAY
+    5, // PERIOD_YEAR
+};
+
+static int cmp_monthly_order_indexes[] =
+{
+    -1, // PERIOD_ONCE
+    -1, // PERIOD_DAY
+    -1, // PERIOD_WEEK
+    2, // PERIOD_MONTH
+    3, // PERIOD_END_OF_MONTH
+    1, // PERIOD_NTH_WEEKDAY
+    4, // PERIOD_LAST_WEEKDAY
+    -1, // PERIOD_YEAR
+};
+
+int
+recurrenceCmp(Recurrence *a, Recurrence *b)
+{
+    PeriodType period_a, period_b;
+    int a_order_index, b_order_index;
+
+    g_return_val_if_fail(a != NULL && b != NULL, 0);
+    g_return_val_if_fail(a != NULL, 1);
+    g_return_val_if_fail(b != NULL, -1);
+
+    period_a = recurrenceGetPeriodType(a);
+    period_b = recurrenceGetPeriodType(b);
+
+    a_order_index = cmp_order_indexes[period_a];
+    b_order_index = cmp_order_indexes[period_b];
+    if (a_order_index != b_order_index)
+    {
+        return a_order_index - b_order_index;
+    }
+    else if (a_order_index == cmp_order_indexes[PERIOD_MONTH])
+    {
+        // re-order intra-month options:
+        a_order_index = cmp_monthly_order_indexes[period_a];
+        b_order_index = cmp_monthly_order_indexes[period_b];
+        g_assert(a_order_index != -1 && b_order_index != -1);
+        if (a_order_index != b_order_index)
+            return a_order_index - b_order_index;
+    }
+    /* else { the basic periods are equal; compare the multipliers } */
+
+    {
+        int a_mult, b_mult;
+        a_mult = recurrenceGetMultiplier(a);
+        b_mult = recurrenceGetMultiplier(b);
+
+        return a_mult - b_mult;
+    }
+}
+
+int
+recurrenceListCmp(GList *a, GList *b)
+{
+    Recurrence *most_freq_a, *most_freq_b;
+
+    g_return_val_if_fail(g_list_length(a) != 0 && g_list_length(b) != 0, 0);
+    g_return_val_if_fail(g_list_length(a) != 0, -1);
+    g_return_val_if_fail(g_list_length(b) != 0, 1);
+
+    most_freq_a = (Recurrence*)g_list_nth_data(g_list_sort(a, (GCompareFunc)recurrenceCmp), 0);
+    most_freq_b = (Recurrence*)g_list_nth_data(g_list_sort(b, (GCompareFunc)recurrenceCmp), 0);
+
+    return recurrenceCmp(most_freq_a, most_freq_b);
+}

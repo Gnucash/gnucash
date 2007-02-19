@@ -138,7 +138,7 @@ TODO
     - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx
   - sx list
-    - [ ] recurrence_cmp(...)
+    - [x] recurrence_cmp(...)
     - [x] More compact recurrenceListToString(...).
   - [ ] remove FreqSpec code
     - [ ] SX code

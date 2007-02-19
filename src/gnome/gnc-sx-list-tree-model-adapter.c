@@ -382,8 +382,7 @@ _freq_comparator(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer u
     if (a_inst == NULL) return 1;
     if (b_inst == NULL) return -1;
 
-    return gnc_freq_spec_compare(xaccSchedXactionGetFreqSpec(a_inst->sx),
-                                 xaccSchedXactionGetFreqSpec(b_inst->sx));
+    return recurrenceListCmp(gnc_sx_get_schedule(a_inst->sx), gnc_sx_get_schedule(b_inst->sx));
 }
 
 static gint
