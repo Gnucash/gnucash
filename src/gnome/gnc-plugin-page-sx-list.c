@@ -396,9 +396,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                                         gnc_plugin_page_sx_list_close_cb,
                                                         page);
      
-    /* @@fixme */
-    /* gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(priv->widget)); */
-
     return priv->widget;
 }
 
