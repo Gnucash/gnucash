@@ -60,7 +60,7 @@ TODO
   - [ ] bugs
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
   - remove
-    - [ ] display-using src/gnome-utils/test/test-sx.c
+    - [x] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
   - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
@@ -79,7 +79,6 @@ TODO
 
 - sx list page
 ! - [ ] use gnc-tree-view?
-! - [ ] save/restore size
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
@@ -138,6 +137,8 @@ TODO
     - [ ] gnc_sxed_check_consistent
     - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx
+  - gnc-instances
+    - [ ] More compact recurrenceListToString(...).
   - [ ] remove FreqSpec code
     - [ ] SX code
     - [ ] src/gnome/druid-acct-period.c

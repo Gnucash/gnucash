@@ -1,5 +1,5 @@
 TESTS =  \
-  test-link-module test-load-module test-sx
+  test-link-module test-load-module
 
 # The following tests are nice, but have absolutely no place in an
 # automated testing system.
@@ -27,7 +27,7 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
-  test-link-module test-gnc-recurrence test-gnc-dialog test-sx
+  test-link-module test-gnc-recurrence test-gnc-dialog
 
 INCLUDES= \
   -I${top_srcdir}/src \
