@@ -36,6 +36,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "FreqSpec.h"
+#include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 
@@ -2165,28 +2166,26 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   return q;
 }
 
-static FreqSpec*
+static Recurrence*
 daily_freq(GDate* start, int multiplier)
 {
      QofBook *book = qof_session_get_book(gnc_get_current_session());
-     FreqSpec *freq = xaccFreqSpecMalloc(book);
-     xaccFreqSpecSetDaily(freq, start, multiplier);
-     xaccFreqSpecSetUIType(freq, UIFREQ_DAILY);
-     return freq;
+     Recurrence *r = g_new0(Recurrence, 1);
+     recurrenceSet(r, multiplier, PERIOD_DAY, start);
+     return r;
 }
 
-static FreqSpec*
+static Recurrence*
 once_freq(GDate *when)
 {
      QofBook *book = qof_session_get_book(gnc_get_current_session());
-     FreqSpec *freq = xaccFreqSpecMalloc(book);
-     xaccFreqSpecSetOnceDate(freq, when);
-     xaccFreqSpecSetUIType(freq, UIFREQ_ONCE);
-     return freq;
+     Recurrence *r = g_new0(Recurrence, 1);
+     recurrenceSet(r, 1, PERIOD_ONCE, when);
+     return r;
 }
 
 static SchedXaction*
-add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, FreqSpec *fs)
+add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, Recurrence *r)
 {
      QofBook *book = qof_session_get_book(gnc_get_current_session());
      SchedXaction *sx = xaccSchedXactionMalloc(book);
@@ -2196,7 +2195,11 @@ add_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur, FreqSpec *fs)
           xaccSchedXactionSetEndDate(sx, end);
      if (last_occur != NULL)
           xaccSchedXactionSetLastOccurDate(sx, last_occur);
-     xaccSchedXactionSetFreqSpec(sx, fs);
+     {
+         GList *recurrences = NULL;
+         recurrences = g_list_append(recurrences, r);
+         gnc_sx_set_schedule(sx, recurrences);
+     }
 
      gnc_sxes_add_sx(gnc_book_get_schedxactions(book), sx);
 
