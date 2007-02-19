@@ -935,13 +935,6 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances)
     // gobject-2.10: g_object_ref_sink(G_OBJECT(dialog->editing_model));
     g_object_ref(G_OBJECT(dialog->editing_model));
      
-    {
-        GtkPaned *paned;
-
-        paned = GTK_PANED(glade_xml_get_widget(glade, "paned"));
-        gtk_paned_set_position(paned, 240);
-    }
-
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(glade_xml_get_widget(glade, "review_txn_toggle"));
      
     {

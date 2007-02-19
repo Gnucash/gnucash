@@ -86,7 +86,7 @@ TODO
 ! - [x] save/restore state
 
 - sx editor
-  - [ ] clean up source formatting
+  - [/] clean up source formatting
   - [ ] re-layout dialog
     - tabs: "overview", "frequency", "template transaction" [, "estimation"]
   - [ ] model-ize
@@ -132,7 +132,7 @@ TODO
       - [x] remove daily [m-f] (-> weekly)
       - [x] remove biweekly page (-> weekly)
       - [x] remove > monthly pages (-> monthly)
-    - [ ] clean up, reformat source
+    - [x] clean up, reformat source
   - dialog-sx-editor
     - [ ] gnc_sxed_check_changed
     - [ ] gnc_sxed_check_consistent
@@ -146,8 +146,8 @@ TODO
 ! - [ ] save/restore dialog window size
   - [ ] "reminder" instances show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
-  - [ ] remove split pane
-  - [ ] "auto" scrollbars
+  - [x] remove split pane
+  - [x] "auto" scrollbars
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
