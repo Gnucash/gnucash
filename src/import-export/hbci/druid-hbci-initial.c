@@ -87,6 +87,11 @@ struct _hbciinitialinfo
 
 };
 
+/* Is TRUE as long as the druid is opened and running. Is being
+   used to catch a window close event during waiting for a child
+   process. */
+static gboolean hbci_druid_is_active = FALSE;
+
 static void
 reset_initial_info (HBCIInitialInfo *info)
 {
@@ -115,6 +120,7 @@ delete_initial_druid (HBCIInitialInfo *info)
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
 
+  hbci_druid_is_active = FALSE;
   g_free (info);
 }
 
@@ -585,6 +591,7 @@ on_aqhbci_button (GtkButton *button,
       default: /* parent */
 	res = 0;
 	/* wait until child is finished */
+	hbci_druid_is_active = TRUE;
 	while (wait_result == 0) {
 	  gtk_main_iteration();
 	  wait_result = waitpid(pid, &wait_status, WNOHANG);
@@ -592,6 +599,12 @@ on_aqhbci_button (GtkButton *button,
 	    res = WEXITSTATUS(wait_status);
 	  else
 	    res = -8;
+	}
+	if (!hbci_druid_is_active) {
+	  /* Just in case the druid has been canceled in the meantime. */
+	  g_free (backend_name);
+	  GWEN_Buffer_free(buf);
+	  return;
 	}
 	AB_Banking_Init (info->api);
       }
