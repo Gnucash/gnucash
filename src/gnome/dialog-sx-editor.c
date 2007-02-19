@@ -515,7 +515,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
     gboolean multi_commodity = FALSE;
     gnc_commodity *base_cmdty = NULL;
     gint ttVarCount, splitCount;
-    FreqSpec *fs;
+    GList *schedule = NULL;
 
     /* Do checks on validity and such, interrupting the user if
      * things aren't right.
@@ -798,7 +798,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
     /* deal with time. */
     {
-        GDate startDate, endDate, nextDate;
+        GDate startDate, endDate, nextDate, now;
 
         if ( !gtk_toggle_button_get_active(sxed->optEndDate)
              && !gtk_toggle_button_get_active(sxed->optEndCount)
@@ -839,6 +839,9 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
         }
 
+        g_date_clear(&now, 1);
+        g_date_set_time_t(&now, time(NULL));
+
         g_date_clear( &endDate, 1 );
         if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
             g_date_set_time_t( &endDate,
@@ -846,30 +849,25 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
                                                        endDateEntry ) );
         }
 
-        /* Now, see if the user is attempting to create a SX that can't exist
-         * [will never run]. */
+        g_date_clear(&nextDate, 1);
+        gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &startDate);
+        if (g_list_length(schedule) > 0)
+        {
+            g_date_subtract_days(&startDate, 1);
+            recurrenceListNextInstance(schedule, &startDate, &nextDate);
+            g_list_free(schedule);
+        }
 
-        /* get the frequency spec data */
-        fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &startDate );
-        /* Replicate just a smidgen of the code in the SX
-         * ...GetNextInstance routine */
-        g_date_subtract_days( &startDate, 1 );
-        xaccFreqSpecGetNextInstance( fs, &startDate, &nextDate );
-        xaccFreqSpecFree( fs );
-
-        if ( !g_date_valid( &nextDate )
-             || (g_date_valid( &endDate )
-                 && (g_date_compare( &nextDate, &endDate ) > 0)) ) {
+        if (!g_date_valid(&nextDate)
+            || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0))
+            || (g_date_compare(&nextDate, &now) < 0))
+        {
             const char *invalid_sx_check_msg =
-                _( "You have attempted to create a Scheduled "
-                   "Transaction which will never run. Do you "
-                   "really want to do this?" );
-            if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
-                                      invalid_sx_check_msg) ) {
-                        
+                _("You have attempted to create a Scheduled "
+                  "Transaction which will never run. Do you "
+                  "really want to do this?");
+            if (!gnc_verify_dialog(sxed->dialog, FALSE, invalid_sx_check_msg))
                 return FALSE;
-            }
         }
     }
     return TRUE;

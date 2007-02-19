@@ -1116,9 +1116,9 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
 
     switch (page_index)
     {
-    case PAGE_NONE:
-        g_critical("recurrence can't support none");
-        break;
+    case PAGE_NONE: {
+        // empty-recurrence list ~~ none.
+    } break;
     case PAGE_ONCE: {
         Recurrence *r = g_new0(Recurrence, 1);
         recurrenceSet(r, 1, PERIOD_ONCE, &start_date);
