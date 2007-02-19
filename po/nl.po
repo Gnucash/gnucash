@@ -9518,7 +9518,7 @@ msgid ""
 msgstr ""
 "Het bestand is succesvol geladen. Wanneer u klikt op 'Toepassen' wordt het bewaard "
 "en opnieuw geladen in het hoofdvenster. Zo heeft u met een werkend bestand als "
-"backup in dezelfde map.\n"
+"backup in dezelfde map."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:228
 msgid "Unicode"
