@@ -146,6 +146,8 @@ TODO
 ! - [ ] save/restore dialog window size
   - [ ] "reminder" instances show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
+  - [ ] remove split pane
+  - [ ] "auto" scrollbars
 ! - [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
