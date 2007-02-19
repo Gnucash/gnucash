@@ -142,7 +142,10 @@ TODO
     - [x] More compact recurrenceListToString(...).
   - [ ] remove FreqSpec code
     - [ ] SX code
-    - [ ] src/gnome/druid-acct-period.c
+    - [x] src/gnome/druid-acct-period.c
+
+- gnc_frequency
+  - [ ] support nth-weekday Recurrence period.
 
 - since-last-run
   - [ ] "reminder" instances show number of days until due

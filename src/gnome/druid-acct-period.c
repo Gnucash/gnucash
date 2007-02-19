@@ -28,7 +28,7 @@
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 
-#include "FreqSpec.h"
+#include "Recurrence.h"
 #include "Group.h"
 #include "Period.h"
 #include "Query.h"
@@ -72,7 +72,7 @@ typedef struct
   char * earliest_str;
   GDate closing_date;
   GDate prev_closing_date;
-  FreqSpec *period;
+  GList *period;
   int close_status;
 
 } AcctPeriodInfo;
@@ -183,7 +183,7 @@ ap_window_destroy_cb (GtkObject *object, gpointer data)
   gnc_unregister_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
 
   // do we need gnc_frequency_destroy or is this automatic ??
-  xaccFreqSpecFree (info->period);
+  recurrenceListFree(&info->period);
   g_free (info->earliest_str);
   g_free (info);
 }
@@ -216,7 +216,9 @@ prepare_remarks (AcctPeriodInfo *info)
   ENTER ("info=%p", info);
 
   /* Pull info from widget, push into freq spec */
-  gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  //gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  recurrenceListFree(&info->period);
+  gnc_frequency_save_to_recurrence(info->period_menu, &info->period, &info->closing_date);
 
   /* Count the number of periods that would be generated. */
   g_date_clear (&period_begin, 1);
@@ -234,7 +236,7 @@ prepare_remarks (AcctPeriodInfo *info)
                       g_date_get_day(&period_end),
                       g_date_get_year(&period_end));
     period_begin = period_end;
-    xaccFreqSpecGetNextInstance (info->period, &period_begin, &period_end);
+    recurrenceListNextInstance(info->period, &period_begin, &period_end);
   } 
 
   /* Display the results */
@@ -269,7 +271,9 @@ show_book_details (AcctPeriodInfo *info)
   info->close_status = -1;
 
   /* Pull info from widget, push into freq spec */
-  gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  //gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  recurrenceListFree(&info->period);
+  gnc_frequency_save_to_recurrence(info->period_menu, &info->period, &info->closing_date);
 
   qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
                            g_date_get_day(&info->closing_date),
@@ -349,7 +353,9 @@ ap_validate_menu (GnomeDruidPage *druidpage,
   ENTER("info=%p", info);
 
   /* Pull info from widget, push into freq spec */
-  gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  //gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  recurrenceListFree(&info->period);
+  gnc_frequency_save_to_recurrence(info->period_menu, &info->period, &info->closing_date);
 
   if (0 <= g_date_compare(&info->prev_closing_date, &info->closing_date))
   {
@@ -459,7 +465,7 @@ ap_close_period (GnomeDruidPage *druidpage,
 
   /* Find the next closing date ... */
   info->prev_closing_date = info->closing_date;
-  xaccFreqSpecGetNextInstance (info->period, &info->prev_closing_date, &info->closing_date);
+  recurrenceListNextInstance(info->period, &info->prev_closing_date, &info->closing_date);
 
   /* If the next closing date is in the future, then we are done. */
   if (time(NULL) < gnc_timet_get_day_end_gdate (&info->closing_date))
@@ -537,12 +543,15 @@ ap_druid_create (AcctPeriodInfo *info)
   info->prev_closing_date = info->closing_date;
   g_date_add_years (&info->closing_date, 1);
 
-  info->period = xaccFreqSpecMalloc( gnc_get_current_book() );
-  xaccFreqSpecSetMonthly (info->period, &info->closing_date, 12);
-  xaccFreqSpecSetUIType (info->period, UIFREQ_YEARLY);
+  {
+      Recurrence *r = g_new0(Recurrence, 1);
+      recurrenceSet(r, 1, PERIOD_MONTH, &info->closing_date);
+      info->period = NULL;
+      info->period = g_list_append(info->period, r);
+  }
 
   info->period_menu = GNC_FREQUENCY(
-          gnc_frequency_new(info->period, &info->closing_date));
+          gnc_frequency_new_from_recurrence(info->period, &info->closing_date));
 
   /* Change the text so that its more mainingful for this druid */
   gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
