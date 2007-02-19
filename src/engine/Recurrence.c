@@ -664,3 +664,11 @@ recurrenceListCmp(GList *a, GList *b)
 
     return recurrenceCmp(most_freq_a, most_freq_b);
 }
+
+void
+recurrenceListFree(GList **recurrences)
+{
+    g_list_foreach(*recurrences, (GFunc)g_free, NULL);
+    g_list_free(*recurrences);
+    *recurrences = NULL;
+}

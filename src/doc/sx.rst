@@ -133,7 +133,7 @@ TODO
       - [x] remove > monthly pages (-> monthly)
     - [x] clean up, reformat source
   - dialog-sx-editor
-    - [ ] gnc_sxed_check_changed
+    - [x] gnc_sxed_check_changed
     - [x] gnc_sxed_check_consistent
     - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx

@@ -222,11 +222,13 @@ sxed_confirmed_cancel(GncSxEditorDialog *sxed)
     return TRUE;
 }
 
-static
-void
+static void
 editor_cancel_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
 {
     /* close */
+    if (!sxed_confirmed_cancel(sxed))
+        return;
+
     gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                      sxed );
 }
@@ -270,8 +272,7 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
  * @return TRUE if this is a 'new' SX, or if the SX has changed from it's
  *   previous configuration.
  **/
-static
-gboolean
+static gboolean
 gnc_sxed_check_changed( GncSxEditorDialog *sxed )
 {
     if ( sxed->newsxP )
@@ -398,35 +399,28 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         }
     }
 
-    /* FS, startdate */
     {
-        FreqSpec *dlgFS, *sxFS;
-        GDate dlgStartDate, sxStartDate;
-        GString *dlgFSstr, *sxFSstr;
-        gboolean fsStrCmpResult;
+        GList *dialog_schedule = NULL;
+        GDate dialog_start_date, sx_start_date;
+        gchar *dialog_schedule_str, *sx_schedule_str;
+        gboolean schedules_are_the_same, start_dates_are_the_same;
 
-        dlgFS = xaccFreqSpecMalloc( gnc_get_current_book() );
-        /* save gncFreq data */
-        gnc_frequency_save_state( sxed->gncfreq, dlgFS, &dlgStartDate );
-        dlgFSstr = g_string_sized_new( 16 );
-        xaccFreqSpecGetFreqStr( dlgFS, dlgFSstr );
-        /* get SX startdate/fs data */
-        sxStartDate = *xaccSchedXactionGetStartDate( sxed->sx );
-        sxFS = xaccSchedXactionGetFreqSpec( sxed->sx );
-        sxFSstr = g_string_sized_new( 16 );
-        xaccFreqSpecGetFreqStr( sxFS, sxFSstr );
-        /* compare */
+        g_date_clear(&dialog_start_date, 1);
+        gnc_frequency_save_to_recurrence(sxed->gncfreq, &dialog_schedule, &dialog_start_date);
+        dialog_schedule_str = recurrenceListToString(dialog_schedule);
+        recurrenceListFree(&dialog_schedule);
 
-        fsStrCmpResult = /* lame version of comparison */
-            (strcmp( dlgFSstr->str, sxFSstr->str) != 0);
-        g_string_free( dlgFSstr, TRUE );
-        g_string_free( sxFSstr, TRUE );
-        xaccFreqSpecFree( dlgFS );
+        sx_start_date = *xaccSchedXactionGetStartDate(sxed->sx);
+        sx_schedule_str = recurrenceListToString(gnc_sx_get_schedule(sxed->sx));
 
-        if ( (g_date_compare(&dlgStartDate, &sxStartDate) != 0)
-             ||  fsStrCmpResult ) {
+        schedules_are_the_same = (strcmp(dialog_schedule_str, sx_schedule_str) == 0);
+        g_free(dialog_schedule_str);
+        g_free(sx_schedule_str);
+
+        start_dates_are_the_same = (g_date_compare(&dialog_start_date, &sx_start_date) == 0);
+
+        if (!schedules_are_the_same || !start_dates_are_the_same)
             return TRUE;
-        }
     }
 
     /* template transactions */
@@ -798,7 +792,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
     /* deal with time. */
     {
-        GDate startDate, endDate, nextDate, now;
+        GDate startDate, endDate, nextDate;
 
         if ( !gtk_toggle_button_get_active(sxed->optEndDate)
              && !gtk_toggle_button_get_active(sxed->optEndCount)
@@ -839,9 +833,6 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 
         }
 
-        g_date_clear(&now, 1);
-        g_date_set_time_t(&now, time(NULL));
-
         g_date_clear( &endDate, 1 );
         if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
             g_date_set_time_t( &endDate,
@@ -855,12 +846,11 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         {
             g_date_subtract_days(&startDate, 1);
             recurrenceListNextInstance(schedule, &startDate, &nextDate);
-            g_list_free(schedule);
         }
+        recurrenceListFree(&schedule);
 
         if (!g_date_valid(&nextDate)
-            || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0))
-            || (g_date_compare(&nextDate, &now) < 0))
+            || (g_date_valid(&endDate) && (g_date_compare(&nextDate, &endDate) > 0)))
         {
             const char *invalid_sx_check_msg =
                 _("You have attempted to create a Scheduled "
@@ -977,11 +967,16 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
         str = g_string_new( "" );
         xaccFreqSpecGetFreqStr( fs, str );
-        g_debug("fs: %s", str->str);
+        g_debug("freq spec: %s", str->str);
+        g_string_free(str, TRUE);
 
         gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
         gnc_sx_set_schedule(sxed->sx, schedule);
-        g_debug("recurrences parsed [%s]", recurrenceListToString(schedule));
+        {
+            gchar *recurrence_str = recurrenceListToCompactString(schedule);
+            g_debug("recurrences parsed [%s]", recurrence_str);
+            g_free(recurrence_str);
+        }
 
         /* now that we have it, set the start date */
         xaccSchedXactionSetStartDate( sxed->sx, &gdate );
@@ -1261,9 +1256,6 @@ schedXact_editor_create_freq_sel( GncSxEditorDialog *sxed )
     GtkBox *b;
 
     b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "gncfreq_hbox" ));
-    /*sxed->gncfreq =
-      GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx),
-      xaccSchedXactionGetStartDate(sxed->sx) ) );*/
     sxed->gncfreq =
         GNC_FREQUENCY(gnc_frequency_new_from_recurrence(gnc_sx_get_schedule(sxed->sx),
                                                         xaccSchedXactionGetStartDate(sxed->sx)));
@@ -1596,8 +1588,7 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     }
 
 cleanup:
-    g_list_foreach(recurrences, (GFunc)g_free, NULL);
-    g_list_free(recurrences);
+    recurrenceListFree(&recurrences);
 }
 
 static void

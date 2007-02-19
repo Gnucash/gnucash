@@ -170,4 +170,6 @@ gchar *recurrenceListToCompactString(GList *recurrence_list);
 int recurrenceCmp(Recurrence *a, Recurrence *b);
 int recurrenceListCmp(GList *a, GList *b);
 
+void recurrenceListFree(GList **recurrence);
+
 #endif  /* RECURRENCE_H */
