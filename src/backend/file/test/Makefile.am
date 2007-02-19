@@ -240,7 +240,8 @@ AM_CFLAGS = \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${GUILE_INCS}
+  ${GUILE_INCS} \
+  ${GCONF_CFLAGS}
 
 EXTRA_DIST = \
   grab-types.pl \
