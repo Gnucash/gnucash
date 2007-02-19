@@ -896,51 +896,6 @@ gnc_frequency_new_from_recurrence(GList *recurrences, GDate *start_date)
     return GTK_WIDGET(toRet);
 }
 
-static gboolean
-_test_for_semi_monthly(GList *recurrences)
-{
-    if (g_list_length(recurrences) != 2)
-        return FALSE;
-
-    // should be a "semi-monthly":
-    {
-        Recurrence *first = (Recurrence*)g_list_nth_data(recurrences, 0);
-        Recurrence *second = (Recurrence*)g_list_nth_data(recurrences, 1);
-        PeriodType first_period, second_period;
-        first_period = recurrenceGetPeriodType(first);
-        second_period = recurrenceGetPeriodType(second);
-             
-        if (!((first_period == PERIOD_MONTH
-               || first_period == PERIOD_END_OF_MONTH
-               || first_period == PERIOD_LAST_WEEKDAY)
-              && (second_period == PERIOD_MONTH
-                  || second_period == PERIOD_END_OF_MONTH
-                  || second_period == PERIOD_LAST_WEEKDAY)))
-        {
-            /*g_error("unknown 2-recurrence composite with period_types first [%d] second [%d]",
-              first_period, second_periodD);*/
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
-static gboolean
-_test_for_weekly_multiple(GList *recurrences)
-{
-    GList *r_iter;
-   
-    for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
-    {
-        Recurrence *r = (Recurrence*)r_iter->data;
-        if (recurrenceGetPeriodType(r) != PERIOD_WEEK)
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 static void
 _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
 {
@@ -999,7 +954,7 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
 
      if (g_list_length(recurrences) > 1)
      {
-         if (_test_for_weekly_multiple(recurrences))
+         if (recurrenceListIsWeeklyMultiple(recurrences))
          {
              gtk_notebook_set_current_page(gf->nb, PAGE_WEEKLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_WEEKLY);
@@ -1009,7 +964,7 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
                  _setup_weekly_recurrence(gf, (Recurrence*)recurrences->data);
              }
          }
-         else if (_test_for_semi_monthly(recurrences))
+         else if (recurrenceListIsSemiMonthly(recurrences))
          {
              Recurrence *first, *second;
              GtkWidget *multiplier_spin;

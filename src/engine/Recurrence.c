@@ -21,6 +21,7 @@
 #include "config.h"
 #include <time.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <string.h>
 #include "Recurrence.h"
@@ -30,7 +31,10 @@
 #include "gnc-gdate-utils.h"
 #include "Account.h"
 
-static QofLogModule log_module = GNC_MOD_ENGINE;
+#define LOG_MOD "gnc.engine.recurrence"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 static GDate invalid_gdate;
 
@@ -318,12 +322,12 @@ recurrenceListToString(const GList *r)
 
     str = g_string_new("");
     for(iter = r; iter; iter = iter->next){
+        if (iter != r)
+            g_string_append(str, " + ");
         s = recurrenceToString((Recurrence *)iter->data);
         g_string_append(str, s);
-        g_string_append(str, " + ");
         g_free(s);
     }
-    g_string_truncate(str, str->len - 3); /* kill the last " + " */
     return g_string_free(str, FALSE);
 }
 
@@ -343,3 +347,233 @@ recurrencePeriodTypeFromString(const gchar *str)
             return i;
     return -1;
 }
+
+gboolean
+recurrenceListIsSemiMonthly(GList *recurrences)
+{
+    if (g_list_length(recurrences) != 2)
+        return FALSE;
+
+    // should be a "semi-monthly":
+    {
+        Recurrence *first = (Recurrence*)g_list_nth_data(recurrences, 0);
+        Recurrence *second = (Recurrence*)g_list_nth_data(recurrences, 1);
+        PeriodType first_period, second_period;
+        first_period = recurrenceGetPeriodType(first);
+        second_period = recurrenceGetPeriodType(second);
+             
+        if (!((first_period == PERIOD_MONTH
+               || first_period == PERIOD_END_OF_MONTH
+               || first_period == PERIOD_LAST_WEEKDAY)
+              && (second_period == PERIOD_MONTH
+                  || second_period == PERIOD_END_OF_MONTH
+                  || second_period == PERIOD_LAST_WEEKDAY)))
+        {
+            /*g_error("unknown 2-recurrence composite with period_types first [%d] second [%d]",
+              first_period, second_periodD);*/
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+gboolean
+recurrenceListIsWeeklyMultiple(GList *recurrences)
+{
+    GList *r_iter;
+   
+    for (r_iter = recurrences; r_iter != NULL; r_iter = r_iter->next)
+    {
+        Recurrence *r = (Recurrence*)r_iter->data;
+        if (recurrenceGetPeriodType(r) != PERIOD_WEEK)
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+/**
+ * Localized DOW abbrev.
+ * @fixme - ripped from gnc-dense-cal.c; there can be only one. :p
+ * @param dow struct tm semantics: 0=sunday .. 6=saturday
+ **/
+static void
+_dow_abbrev(gchar *buf, int buf_len, int dow)
+{
+    struct tm my_tm;
+    int i;
+    
+    memset(buf, 0, buf_len);
+    memset(&my_tm, 0, sizeof(struct tm));
+    my_tm.tm_wday = dow;
+    i = strftime(buf, buf_len - 1, "%a", &my_tm);
+    buf[i] = 0;
+}
+
+static void
+_weekly_list_to_compact_string(GList *rs, GString *buf)
+{
+    int dow_idx;
+    char dow_present_bits = 0;
+    int multiplier = -1;
+    for (; rs != NULL; rs = rs->next)
+    {
+        Recurrence *r = (Recurrence*)rs->data;
+        GDate date = recurrenceGetDate(r);
+        GDateWeekday dow = g_date_get_weekday(&date);
+        if (dow == G_DATE_BAD_WEEKDAY)
+        {
+            g_critical("bad weekday pretty-printing recurrence");
+            continue;
+        }
+        dow_present_bits |= (1 << (dow % 7));
+        // broken, @fixme.
+        multiplier = recurrenceGetMultiplier(r);
+    }
+    g_string_printf(buf, _("Weekly"));
+    if (multiplier > 1)
+    {
+        /* translators: %u is the recurrence multipler. */
+        g_string_append_printf(buf, _(" (x%u)"), multiplier);
+    }
+    g_string_append_printf(buf, ": ");
+
+    // @@fixme: this is only Sunday-started weeks. :/
+    for (dow_idx = 0; dow_idx < 7; dow_idx++)
+    {
+        if ((dow_present_bits & (1 << dow_idx)) != 0)
+        {
+            gchar dbuf[10];
+            _dow_abbrev(dbuf, 10, dow_idx);
+            g_string_append_printf(buf, "%c", dbuf[0]);
+        }
+        else
+        {
+            g_string_append_printf(buf, "-");
+        }
+    }
+}
+
+static void
+_monthly_append_when(Recurrence *r, GString *buf)
+{
+    GDate date = recurrenceGetDate(r);
+    if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
+    {
+        gint abbrev_day_name_bufsize = 10;
+        gchar day_name_buf[abbrev_day_name_bufsize];
+                
+        _dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
+            
+        /* translators: %s is an already-localized form of the day of the week. */
+        g_string_append_printf(buf, _("last %s"), day_name_buf);
+    }
+    else
+    {
+        /* translators: %u is the day of month */
+        g_string_append_printf(buf, "%u", g_date_get_day(&date));
+    }
+}
+
+gchar*
+recurrenceListToCompactString(GList *rs)
+{
+    GString *buf = g_string_sized_new(16);
+
+    if (g_list_length(rs) == 0)
+    {
+        g_string_printf(buf, _("None"));
+        goto rtn;
+    }
+
+    if (g_list_length(rs) > 1)
+    {
+        if (recurrenceListIsWeeklyMultiple(rs))
+        {
+            _weekly_list_to_compact_string(rs, buf);
+        }
+        else if (recurrenceListIsSemiMonthly(rs))
+        {
+            Recurrence *first, *second;
+            first = (Recurrence*)g_list_nth_data(rs, 0);
+            second = (Recurrence*)g_list_nth_data(rs, 1);
+            if (recurrenceGetMultiplier(first) != recurrenceGetMultiplier(second))
+            {
+                g_warning("lying about non-equal semi-monthly recurrence multiplier: %d vs. %d",
+                          recurrenceGetMultiplier(first), recurrenceGetMultiplier(second));
+            }
+
+            g_string_printf(buf, _("Semi-monthly "));
+            if (recurrenceGetMultiplier(first) > 1)
+            {
+                /* translators: %u is the recurrence multiplier */
+                g_string_append_printf(buf, _(" (x%u)"), recurrenceGetMultiplier(first));
+            }
+            g_string_append_printf(buf, _(": "));
+            _monthly_append_when(first, buf);
+            g_string_append_printf(buf, ", ");
+            _monthly_append_when(second, buf);
+        }
+        else
+        {
+            /* translators: %d is the number of Recurrences in the list. */
+            g_string_printf(buf, _("Unknown, %d-size list."), g_list_length(rs));
+        }
+    }
+    else
+    {
+        Recurrence *r = (Recurrence*)g_list_nth_data(rs, 0);
+        guint multiplier = recurrenceGetMultiplier(r);
+        GDate date = recurrenceGetDate(r);
+
+        switch (recurrenceGetPeriodType(r))
+        {
+        case PERIOD_ONCE: {
+            g_string_printf(buf, _("Once"));
+        } break;
+        case PERIOD_DAY: {
+            g_string_printf(buf, _("Daily"));
+            if (multiplier > 1)
+            {
+                /* translators: %u is the number of intervals */
+                g_string_append_printf(buf, _(" (x%u)"), multiplier);
+            }
+        } break;
+        case PERIOD_WEEK: {
+            _weekly_list_to_compact_string(rs, buf);
+        } break;
+        case PERIOD_MONTH:
+        case PERIOD_END_OF_MONTH:
+        case PERIOD_LAST_WEEKDAY: {
+            g_string_printf(buf, _("Monthly"));
+            if (multiplier > 1)
+            {
+                /* translators: %u is the recurrence multipler. */
+                g_string_append_printf(buf, _(" (x%u)"), multiplier);
+            }
+            g_string_append_printf(buf, _(": "));
+            _monthly_append_when(r, buf);
+        } break;
+        case PERIOD_NTH_WEEKDAY: {
+            g_warning("nth weekday unhandled");
+            g_string_printf(buf, "@fixme: nth weekday");
+        } break;
+        case PERIOD_YEAR: {
+            g_string_printf(buf, _("Yearly"));
+            if (multiplier > 1)
+            {
+                /* translators: %u is the recurrence multiplier. */
+                g_string_append_printf(buf, _(" (x%u)"), multiplier);
+            }
+        } break;
+        default:
+            g_error("unknown Recurrnce period %d", recurrenceGetPeriodType(r));
+            break;
+        }
+    }
+
+rtn:
+    return g_string_free(buf, FALSE);
+}
+

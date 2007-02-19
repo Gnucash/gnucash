@@ -137,8 +137,9 @@ TODO
     - [ ] gnc_sxed_check_consistent
     - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx
-  - gnc-instances
-    - [ ] More compact recurrenceListToString(...).
+  - sx list
+    - [ ] recurrence_cmp(...)
+    - [x] More compact recurrenceListToString(...).
   - [ ] remove FreqSpec code
     - [ ] SX code
     - [ ] src/gnome/druid-acct-period.c

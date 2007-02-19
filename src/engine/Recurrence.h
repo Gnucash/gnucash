@@ -128,12 +128,14 @@ void recurrenceNthInstance(const Recurrence *r, guint n, GDate *date);
    of the nth instance of the recurrence. Also zero-based. */
 time_t recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
 
-/* Get the amount that an Account's value changed between the
-   beginning and end of the nth instance of the recurrence. */
+/**
+ * @return the amount that an Account's value changed between the beginning
+ * and end of the nth instance of the Recurrence.
+ **/
 gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r, 
                                             Account *acct, guint n);
 
-/* Get the earliest of the next occurances -- a "composite" recurrence */
+/** @return the earliest of the next occurances -- a "composite" recurrence **/
 void recurrenceListNextInstance(const GList *r, const GDate *refDate,
                                 GDate *nextDate);
 
@@ -144,5 +146,24 @@ PeriodType recurrencePeriodTypeFromString(const gchar *str);
 /* For debugging.  Caller owns the returned string.  Not intl. */
 gchar *recurrenceToString(const Recurrence *r);
 gchar *recurrenceListToString(const GList *rlist);
+
+/** @return True if the recurrence list is a common "semi-monthly" recurrence. **/
+gboolean recurrenceListIsSemiMonthly(GList *recurrences);
+/** @return True if the recurrence list is a common "weekly" recurrence. **/
+gboolean recurrenceListIsWeeklyMultiple(GList *recurrences);
+
+/**
+ * Pretty-print an intentionally-short summary of the period of a (GList of)
+ * Recurrences, as might be commonly-created by the GncFrequency widget.  In
+ * particular, this routine expects most lists to contain a single
+ * Recurrence, but also anticipates 2 "composite" scenarios:
+ *
+ * @li A list of N PERIOD_WEEK Recurrences.
+ * @li A list of 2 PERIOD_MONTH or PERIOD_LAST_WEEKDAY Recurrences,
+ *   representing a Semi-Monthly period.
+ *
+ * @return A caller-owned string.
+ **/
+gchar *recurrenceListToCompactString(GList *recurrence_list);
 
 #endif  /* RECURRENCE_H */

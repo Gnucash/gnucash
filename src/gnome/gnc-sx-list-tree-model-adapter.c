@@ -494,7 +494,7 @@ gsltma_populate_tree_store(GncSxListTreeModelAdapter *model)
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
         char next_occur_date_buf[MAX_DATE_LENGTH+1];
 
-        frequency_str = recurrenceListToString(gnc_sx_get_schedule(instances->sx));
+        frequency_str = recurrenceListToCompactString(gnc_sx_get_schedule(instances->sx));
 
         _format_conditional_date(xaccSchedXactionGetLastOccurDate(instances->sx),
                                  last_occur_date_buf, MAX_DATE_LENGTH);
