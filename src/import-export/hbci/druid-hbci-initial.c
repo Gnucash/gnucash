@@ -402,8 +402,19 @@ on_accountlist_changed (GtkTreeSelection *selection,
 
 
 
+static void
+on_child_exit (GPid pid, gint status, gpointer data)
+{
+  gint *data_status = data;
+#ifdef G_OS_WIN32
+  *data_status = status;
+#else
+  *data_status = WEXITSTATUS (status);
+#endif
 
-
+  g_spawn_close_pid (pid);
+  gtk_main_quit ();
+}
 
 
 #if (AQBANKING_VERSION_MAJOR > 1) || \
@@ -549,23 +560,6 @@ on_aqhbci_button (GtkButton *button,
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
-#ifdef G_OS_WIN32
-    /* FIXME: Use something different than fork() for the child
-       process here. See src/backend/file/io-gncxml-v2.c that has
-       the same problem. */
-    gnc_error_dialog
-      (info->window,
-       _("The Windows version of GnuCash does not (yet) have the "
-	 "capability to start the external program \"%s Setup Wizard\". "
-	 "Please start it yourself from the location \"%s\" "
-	 "before you continue."),
-       backend_name, wizard_path);
-    res = 0;
-#else
-    /* Normal non-Windows operating system */
-    int wait_status;
-    int wait_result = 0;
-
     /* Call the qt wizard. See the note above about why this approach
        is chosen. */
 
@@ -574,42 +568,37 @@ on_aqhbci_button (GtkButton *button,
     if (info->gnc_hash != NULL)
       g_hash_table_destroy (info->gnc_hash);
     info->gnc_hash = NULL;
-    /* In gtk2, this would be g_spawn_async or similar. */
+
     {
-      pid_t pid;
-      pid = fork();
-      switch (pid) {
-      case -1:
-	g_critical("Fork call failed. Cannot start AqBanking setup wizard.");
+      GPid pid;
+      GError *error = NULL;
+      gchar *argv[2];
+      gboolean spawned;
+
+      argv[0] = g_strdup (wizard_path);
+      argv[1] = NULL;
+      spawned = g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+			       NULL, NULL, &pid, &error);
+      g_free (argv[0]);
+
+      if (!spawned) {
+	g_critical("Could not start AqBanking setup wizard: %s",
+		   error->message ? error->message : "(null)");
+	g_error_free (error);
 	res = -1;
-	AB_Banking_Init (info->api);
-	break;
-      case 0: /* child */
-	execl(wizard_path, wizard_path, NULL);
-	g_critical("Fork call failed. Cannot start AqBanking setup wizard.");
-	_exit(0);
-      default: /* parent */
-	res = 0;
-	/* wait until child is finished */
+      } else {
+	g_child_watch_add (pid, on_child_exit, &res);
 	hbci_druid_is_active = TRUE;
-	while (wait_result == 0) {
-	  gtk_main_iteration();
-	  wait_result = waitpid(pid, &wait_status, WNOHANG);
-	  if ((wait_result == pid) && WIFEXITED(wait_status))
-	    res = WEXITSTATUS(wait_status);
-	  else
-	    res = -8;
-	}
+	gtk_main ();
 	if (!hbci_druid_is_active) {
 	  /* Just in case the druid has been canceled in the meantime. */
 	  g_free (backend_name);
 	  GWEN_Buffer_free(buf);
 	  return;
 	}
-	AB_Banking_Init (info->api);
       }
+      AB_Banking_Init (info->api);
     }
-#endif /* G_OS_WIN32 */
 
     if (res == 0) {
 #ifndef AQBANKING_WIZARD_ALLBACKENDS
