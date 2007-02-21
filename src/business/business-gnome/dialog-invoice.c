@@ -2275,7 +2275,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   }
   if (emp_params == NULL) {
     emp_params = gnc_search_param_prepend (emp_params,
-					   _("Voucher Owner"), type,
+					   _("Voucher Owner"), NULL, type,
 					   INVOICE_OWNER, NULL);
     emp_params = gnc_search_param_prepend (emp_params,
 					   _("Voucher Notes"), NULL, type,
