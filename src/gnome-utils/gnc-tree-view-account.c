@@ -286,7 +286,7 @@ sort_by_string (GtkTreeModel *f_model,
   result = safe_utf8_collate(str1, str2);
   if (result != 0)
     return result;
-  return xaccAccountOrder(&account1, &account2);
+  return xaccAccountOrder(account1, account2);
 }
 
 static gint
@@ -300,7 +300,7 @@ sort_by_code (GtkTreeModel *f_model,
   sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
 
   /* Default ordering uses this column first. */
-  return xaccAccountOrder(&account_a, &account_b);
+  return xaccAccountOrder(account_a, account_b);
 }
 
 static gint
@@ -325,7 +325,7 @@ sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
   result = gnc_numeric_compare(balance_a, balance_b);
   if (result != 0)
     return result;
-  return xaccAccountOrder(&account_a, &account_b);
+  return xaccAccountOrder(account_a, account_b);
 }
 
 static gint
@@ -408,7 +408,7 @@ sort_by_placeholder (GtkTreeModel *f_model,
     return -1;
   else if (flag_a < flag_b)
     return 1;
-  return xaccAccountOrder(&account_a, &account_b);
+  return xaccAccountOrder(account_a, account_b);
 }
 
 static gint
@@ -434,7 +434,7 @@ sort_by_xxx_period_value (GtkTreeModel *f_model,
   result = gnc_numeric_compare(b1, b2);
   if (result != 0)
     return result;
-  return xaccAccountOrder((const Account **)&acct1, (const Account **)&acct2);
+  return xaccAccountOrder(acct1, acct2);
 }
 
 static gint

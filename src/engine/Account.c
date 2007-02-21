@@ -996,20 +996,20 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 
 
 int
-xaccAccountOrder (const Account **aa, const Account **ab) 
+xaccAccountOrder (const Account *aa, const Account *ab) 
 {
   char *da, *db;
   char *endptr = NULL;
   int ta, tb, result;
   long la, lb;
 
-  if ( (*aa) && !(*ab) ) return -1;
-  if ( !(*aa) && (*ab) ) return +1;
-  if ( !(*aa) && !(*ab) ) return 0;
+  if ( aa && !ab ) return -1;
+  if ( !aa && ab ) return +1;
+  if ( !aa && !ab ) return 0;
 
   /* sort on accountCode strings */
-  da = (*aa)->accountCode;
-  db = (*ab)->accountCode;
+  da = aa->accountCode;
+  db = ab->accountCode;
 
   /* If accountCodes are both base 36 integers do an integer sort */
   la = strtoul (da, &endptr, 36);
@@ -1036,22 +1036,28 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   }
 
   /* otherwise, sort on account type */
-  ta = (*aa)->type;
-  tb = (*ab)->type;
+  ta = aa->type;
+  tb = ab->type;
   ta = revorder[ta];
   tb = revorder[tb];
   if (ta < tb) return -1;
   if (ta > tb) return +1;
 
   /* otherwise, sort on accountName strings */
-  da = (*aa)->accountName;
-  db = (*ab)->accountName;
+  da = aa->accountName;
+  db = ab->accountName;
   result = safe_utf8_collate(da, db);
   if (result)
     return result;
 
   /* guarantee a stable sort */
-  return guid_compare (&((*aa)->inst.entity.guid), &((*ab)->inst.entity.guid));
+  return guid_compare (&(aa->inst.entity.guid), &(ab->inst.entity.guid));
+}
+
+static int
+qof_xaccAccountOrder (const Account **aa, const Account **ab)
+{
+  return xaccAccountOrder(*aa, *ab);
 }
 
 /********************************************************************\
@@ -2717,7 +2723,7 @@ gboolean xaccAccountRegister (void)
     { NULL },
   };
 
-  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) xaccAccountOrder, params);
+  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) qof_xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

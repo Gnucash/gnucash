@@ -188,7 +188,7 @@ gboolean xaccAccountEqual(const Account *a, const Account* b,
  *    the account codes are compared, and if these are equal, then 
  *    account types, and, if these are equal, the account names.
  */
-int xaccAccountOrder (const Account **account_1, const Account **account_2);
+int xaccAccountOrder (const Account *account_1, const Account *account_2);
 
 /** @} */
 
