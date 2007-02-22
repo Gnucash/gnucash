@@ -59,7 +59,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 #define LOG_MOD "gnc.gui.plugin-page.sx-list"
-static QofLogModule log_module = LOG_MOD
+static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN LOG_MOD
 
@@ -448,15 +448,17 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
     gboolean new_sx_flag = TRUE;
 
     new_sx = xaccSchedXactionMalloc(gnc_get_current_book());
-    /* Give decent initial FreqSpec for SX */
-    fs = xaccSchedXactionGetFreqSpec(new_sx);
     {
-        GDate *now;
-        now = g_date_new();
-        g_date_set_time_t(now, time(NULL));
-        xaccFreqSpecSetMonthly(fs, now, 1);
-        xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
-        g_date_free(now);
+        GDate now;
+        Recurrence *r = g_new0(Recurrence, 1);
+        GList *schedule;
+        
+        g_date_clear(&now, 1);
+        g_date_set_time_t(&now, time(NULL));
+        recurrenceSet(r, 1, PERIOD_MONTH, &now);
+        schedule = gnc_sx_get_schedule(new_sx);
+        schedule = g_list_append(schedule, r);
+        gnc_sx_set_schedule(new_sx, schedule);
     }
     gnc_ui_scheduled_xaction_editor_dialog_create(new_sx, new_sx_flag);
 }
