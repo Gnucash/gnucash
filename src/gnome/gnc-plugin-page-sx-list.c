@@ -468,10 +468,10 @@ _edit_sx(gpointer data, gpointer user_data)
     gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
 }
 
-static gpointer
-_argument_reorder_fn(gpointer data, gpointer user_data)
+static SchedXaction*
+_argument_reorder_fn(GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
 {
-    return gnc_tree_view_sx_list_get_sx_from_path((GncTreeViewSxList*)user_data, (GtkTreePath*)data);
+    return gnc_tree_view_sx_list_get_sx_from_path(user_tree_view, list_path_data);
 }
 
 static void
