@@ -65,7 +65,8 @@ TODO
 
 - sx list page
   - [/] make into split panel
-    - [ ] fix slider position
+    - [ ] fix default slider position
+    - [ ] conf-save slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 ! - [x] use gnc-tree-view
 ! - [x] save/restore state
@@ -119,7 +120,7 @@ TODO
       - [x] remove > monthly pages (-> monthly)
     - [x] clean up, reformat source
   - gnc-plugin-page-sx-list
-    - [ ] gnc_plugin_page_sx_list_cmd_new
+    - [x] gnc_plugin_page_sx_list_cmd_new
   - dialog-sx-editor
     - [x] gnc_sxed_check_changed
     - [x] gnc_sxed_check_consistent
