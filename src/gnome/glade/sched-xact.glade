@@ -5579,13 +5579,13 @@ Custom</property>
 	      <property name="right_padding">0</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox123">
+		<widget class="GtkHBox" id="hbox">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">12</property>
 
 		  <child>
-		    <widget class="GtkScrolledWindow" id="scrolledwindow1">
+		    <widget class="GtkScrolledWindow" id="sx-list-tree-view-container">
 		      <property name="visible">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -5593,14 +5593,7 @@ Custom</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="sx_list">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="headers_visible">True</property>
-			  <property name="rules_hint">False</property>
-			  <property name="reorderable">True</property>
-			  <property name="enable_search">True</property>
-			</widget>
+			<placeholder/>
 		      </child>
 		    </widget>
 		    <packing>

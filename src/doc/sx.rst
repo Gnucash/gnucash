@@ -3,20 +3,6 @@
 Scheduled Transactions
 ===============================================================
 
-Overview
---------------
-
-- SX List
-  - CRUD operations on SXes
-  - Show Next "year"s worth of enabled and disabled SX instances
-    - gnc_sx_get_instances({now + 1yr}, TRUE)
-
-- SX Editor
-
-- SinceLastRun
-  - Last .. present (+ create-in-advance, reminder) enabled instances
-    - gnc_sx_get_instances(now, FALSE)
-
 TODO
 ----------
 
@@ -78,10 +64,10 @@ TODO
 .. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
 
 - sx list page
-! - [ ] use gnc-tree-view?
   - [/] make into split panel
     - [ ] fix slider position
   - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
+! - [x] use gnc-tree-view
 ! - [x] save/restore state
 
 - sx editor
@@ -132,6 +118,8 @@ TODO
       - [x] remove biweekly page (-> weekly)
       - [x] remove > monthly pages (-> monthly)
     - [x] clean up, reformat source
+  - gnc-plugin-page-sx-list
+    - [ ] gnc_plugin_page_sx_list_cmd_new
   - dialog-sx-editor
     - [x] gnc_sxed_check_changed
     - [x] gnc_sxed_check_consistent
