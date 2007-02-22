@@ -439,7 +439,6 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
     return GNC_PLUGIN_PAGE(page);
 }
 
-
 static void
 gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
 {
@@ -469,6 +468,12 @@ _edit_sx(gpointer data, gpointer user_data)
     gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
 }
 
+static gpointer
+_argument_reorder_fn(gpointer data, gpointer user_data)
+{
+    return gnc_tree_view_sx_list_get_sx_from_path((GncTreeViewSxList*)user_data, (GtkTreePath*)data);
+}
+
 static void
 gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
 {
@@ -486,7 +491,7 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
     }
 
     to_edit = gnc_g_list_map(selected_paths,
-                             (GncGMapFunc)gnc_tree_view_sx_list_get_sx_from_path,
+                             (GncGMapFunc)_argument_reorder_fn,
                              priv->tree_view);
     g_list_foreach(to_edit, (GFunc)_edit_sx, NULL);
     g_list_free(to_edit);
@@ -538,7 +543,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     }
 
     to_delete = gnc_g_list_map(selected_paths,
-                               (GncGMapFunc)gnc_tree_view_sx_list_get_sx_from_path,
+                               (GncGMapFunc)_argument_reorder_fn,
                                priv->tree_view);
     {
         GList *list;
