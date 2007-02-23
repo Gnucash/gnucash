@@ -1004,7 +1004,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	format = _("All of its subaccounts will be deleted.");
 	lines[++i] = g_strdup_printf("%s", format);
 	if (dta) {
-	  name = xaccAccountGetFullName(ta);
+	  name = xaccAccountGetFullName(dta);
 	  format = _("All sub-account transactions will be moved to "
 		     "the account %s.");
 	  lines[++i] = g_strdup_printf(format, name);
