@@ -1037,6 +1037,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     gtk_widget_destroy(dialog);
 
     if (GTK_RESPONSE_ACCEPT == response) {
+      gnc_set_busy_cursor(NULL, TRUE);
       gnc_suspend_gui_refresh ();
       xaccAccountBeginEdit (account);
       if (NULL != daa) {
@@ -1064,6 +1065,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
        */
       xaccAccountDestroy (account);
       gnc_resume_gui_refresh ();
+      gnc_unset_busy_cursor(NULL);
     }
   }
   g_free(acct_name);
