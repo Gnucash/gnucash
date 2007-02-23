@@ -11,6 +11,12 @@
     </gnc-act:long-description>    
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>20. Jahresüberschuss/Jahresfehlbetrag</act:name>
   <act:id type="new">00363fa6340f307005ba0d755a738cd6</act:id>
   <act:type>ASSET</act:type>
@@ -34,6 +40,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aktiva</act:name>
@@ -51,6 +58,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A. Anlagevermögen:</act:name>
@@ -2046,6 +2054,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A. Eigenkapital</act:name>
@@ -3333,6 +3342,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzerlöse</act:name>
@@ -3534,6 +3544,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
@@ -3583,6 +3594,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
@@ -3654,6 +3666,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Außerordentliche Erträge</act:name>
@@ -3704,6 +3717,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bestandsveränderungen</act:name>
@@ -3750,6 +3764,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. sonstige betriebliche Erträge</act:name>
@@ -3774,6 +3789,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige betriebliche Erträge</act:name>
@@ -4034,6 +4050,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
@@ -4105,6 +4122,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>13. Zinsen und ähnliche Aufwendungen</act:name>
@@ -4129,6 +4147,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon an verbundene Unternehmen</act:name>
@@ -4246,6 +4265,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>16. außerordentliche Aufwendungen</act:name>
@@ -4270,6 +4290,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Außerordentliche Aufwendungen</act:name>
@@ -4321,6 +4342,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>18. Steuern vom Einkommen und vom Ertrag</act:name>
@@ -4345,6 +4367,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Körperschaftsteuer</act:name>
@@ -4501,6 +4524,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Steuern</act:name>
@@ -4591,6 +4615,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) Aufwendungen für Roh-, Hilfs- und Betriebsstoffe und für bezogene Waren</act:name>
@@ -4787,6 +4812,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) Löhne und Gehälter</act:name>
@@ -5130,6 +5156,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) auf immaterielle Vermögensgegenstände des Anlagevermögens und Sachanlagen</act:name>
@@ -5345,6 +5372,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige betriebliche Aufwendungen</act:name>
@@ -6659,6 +6687,7 @@
       <slot:value type="frame"/>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Saldenvorträge Sachkonten</act:name>

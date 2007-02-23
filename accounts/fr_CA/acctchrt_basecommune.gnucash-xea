@@ -10,6 +10,12 @@
 		</gnc-act:long-description>    
 		<gnc-act:start-selected>1</gnc-act:start-selected>
 		<gnc:account version="2.0.0">
+			<act:name>Root Account</act:name>
+			<act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+			<act:type>ROOT</act:type>
+			<act:commodity-scu>0</act:commodity-scu>
+		</gnc:account>
+		<gnc:account version="2.0.0">
 			<act:name>Actif</act:name>
 			<act:id type="guid">b14f810bdb0b57b77acf1a5db700068c</act:id>
 			<act:type>ASSET</act:type>
@@ -19,6 +25,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Actif</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>
@@ -90,6 +97,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Passif</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>
@@ -131,6 +139,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Revenus</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>
@@ -214,6 +223,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Dépenses</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>
@@ -711,6 +721,7 @@
 			</act:commodity>
 			<act:commodity-scu>100</act:commodity-scu>
 			<act:description>Capitaux propres</act:description>
+			<act:parent type="guid">1972cce2e2364f95b2b0bc014502661d</act:parent>
 			<act:slots>
 				<slot>
 					<slot:key>placeholder</slot:key>

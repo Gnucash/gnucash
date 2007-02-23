@@ -11,6 +11,12 @@
   </gnc-act:long-description>
   <gnc-act:start-selected>0</gnc-act:start-selected>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>100 KASA</act:name>
   <act:id type="new">d7ed89788e0d79481613caaacc07214a</act:id>
   <act:type>CASH</act:type>
@@ -30,6 +36,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>101 ALINAN &#199;EKLER</act:name>
@@ -51,6 +58,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>102 BANKALAR</act:name>
@@ -72,6 +80,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>103 VER. &#199;EKLER ve &#214;DE. EM&#221;R. (-)</act:name>
@@ -93,6 +102,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>108 D&#221;&#208;ER HAZIR DE&#208;.</act:name>
@@ -114,6 +124,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>110 H&#221;SSE SENETLER&#221;</act:name>
@@ -135,6 +146,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>111 &#214;ZEL KES. TAH. SEN. ve BONO.</act:name>
@@ -156,6 +168,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>112 KAMU KES. TAH. SEN. ve BONO.</act:name>
@@ -177,6 +190,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>118 D&#221;&#208;ER MEN. KIYMETLER</act:name>
@@ -198,6 +212,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>119 MEN. KIYM. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -219,6 +234,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>120 ALICILAR</act:name>
@@ -240,6 +256,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>121 ALACAK SENETLER&#221;</act:name>
@@ -261,6 +278,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>122 ALACAK SENETLER&#221; REES. (-)</act:name>
@@ -282,6 +300,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>126 VER. DEPOZ&#221;TO ve TEM&#221;N.</act:name>
@@ -303,6 +322,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>127 D&#221;&#208;ER T&#221;C. ALACAKLAR</act:name>
@@ -324,6 +344,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>128 &#222;&#220;P. T&#221;C. ALACAKLAR</act:name>
@@ -345,6 +366,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>129 &#222;&#220;P. T&#221;C. ALACAKLAR KAR&#222;. (-)</act:name>
@@ -366,6 +388,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>131 ORTAKL. ALACAKLAR</act:name>
@@ -387,6 +410,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>132 &#221;&#222;T&#221;RAK. ALACAKLAR</act:name>
@@ -408,6 +432,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>133 BA&#208;LI ORTAKLIK. ALACAKLAR</act:name>
@@ -429,6 +454,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>135 PERSONELDEN ALACAKLAR</act:name>
@@ -450,6 +476,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>136 D&#221;&#208;ER &#199;E&#222;. ALACAKLAR</act:name>
@@ -471,6 +498,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>137 D&#221;&#208;ER ALACAK SEN. REES. (-)</act:name>
@@ -492,6 +520,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>138 &#222;&#220;P. D&#221;&#208;ER ALACAK.</act:name>
@@ -513,6 +542,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>139 &#222;&#220;P. D&#221;&#208;ER ALACAK. KAR&#222;. (-)</act:name>
@@ -534,6 +564,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>150 &#221;LK MADDE ve MALZEME</act:name>
@@ -555,6 +586,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>151 YARI MAMUL. - &#220;RET&#221;M</act:name>
@@ -576,6 +608,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>152 MAMULLER</act:name>
@@ -597,6 +630,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>153 T&#221;CAR&#221; MALLAR</act:name>
@@ -618,6 +652,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>157 D&#221;&#208;ER STOKLAR</act:name>
@@ -639,6 +674,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>158 STOK DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -660,6 +696,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>159 VER. S&#221;PAR&#221;&#222; AVANS.</act:name>
@@ -681,6 +718,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>170 Y.Y. &#221;N&#222;. ve ONAR. MAAL&#221;YET.</act:name>
@@ -702,6 +740,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>179 TA&#222;ERON. VER. AVANSLAR</act:name>
@@ -723,6 +762,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>180 GEL. AYLARA A&#221;T G&#221;DERLER</act:name>
@@ -744,6 +784,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>181 GEL&#221;R TAHAKKUKLARI</act:name>
@@ -765,6 +806,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>190 DEVREDEN KDV</act:name>
@@ -786,6 +828,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>191 &#221;ND&#221;R&#221;LECEK KDV</act:name>
@@ -807,6 +850,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>192 D&#221;&#208;ER KDV</act:name>
@@ -828,6 +872,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>193 PE&#222;. &#214;DE. VERG. ve FONLAR</act:name>
@@ -849,6 +894,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>195 &#221;&#222; AVANSLARI</act:name>
@@ -870,6 +916,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>196 PERSONEL AVANSLARI</act:name>
@@ -891,6 +938,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>197 SAYIM ve TESEL. NOKS.</act:name>
@@ -912,6 +960,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>198 D&#221;&#208;ER &#199;E&#222;. D&#214;N. VARLIK.</act:name>
@@ -933,6 +982,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>199 D&#221;&#208;ER D&#214;N. VARLIK. KAR&#222;. (-)</act:name>
@@ -954,6 +1004,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>220 ALICILAR</act:name>
@@ -975,6 +1026,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>221 ALACAK SENETLER&#221;</act:name>
@@ -996,6 +1048,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>222 ALACAK SENETLER&#221; REES. (-)</act:name>
@@ -1017,6 +1070,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>226 VER. DEPOZ&#221;TO ve TEM&#221;N.</act:name>
@@ -1038,6 +1092,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>229 &#222;&#220;P. T&#221;C. ALACAKLAR KAR&#222;. (-)</act:name>
@@ -1059,6 +1114,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>231 ORTAKL. ALACAKLAR</act:name>
@@ -1080,6 +1136,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>232 &#221;&#222;T&#221;RAKL. ALACAKLAR</act:name>
@@ -1101,6 +1158,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>233 BA&#208;LI ORTAKL. ALACAKLAR</act:name>
@@ -1122,6 +1180,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>235 PERSONELDEN ALACAKLAR</act:name>
@@ -1143,6 +1202,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>236 D&#221;&#208;ER &#199;E&#222;. ALACAKLAR</act:name>
@@ -1164,6 +1224,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>237 D&#221;&#208;ER ALACAK SEN. REES. (-)</act:name>
@@ -1185,6 +1246,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>239 &#222;&#220;P. D&#221;&#208;ER ALACAK. KAR&#222;. (-)</act:name>
@@ -1206,6 +1268,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>240 BA&#208;LI MEN. KIYMETLER</act:name>
@@ -1227,6 +1290,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>241 BA&#208;. MEN. KIYM. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -1248,6 +1312,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>242 &#221;&#222;T&#221;RAKLER</act:name>
@@ -1269,6 +1334,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>243 &#221;&#222;T&#221;RAKLERE SERMAYE TAAH. (-)</act:name>
@@ -1290,6 +1356,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>244 &#221;&#222;T. SERM. PAY. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -1311,6 +1378,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>245 BA&#208;LI ORTAKLIKLAR</act:name>
@@ -1332,6 +1400,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>246 BA&#208;. ORTAKL. SERM. TAAH. (-)</act:name>
@@ -1353,6 +1422,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>247 BA&#208;. ORT. SERM. PAY. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -1374,6 +1444,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>248 D&#221;&#208;. MAL&#221; DURAN VARLIK.</act:name>
@@ -1395,6 +1466,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>249 D&#221;&#208;. MAL&#221; DURAN VARLIK. KAR&#222;. (-)</act:name>
@@ -1416,6 +1488,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>250 ARAZ&#221; ve ARSALAR</act:name>
@@ -1437,6 +1510,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>251 YER ALTI ve YER &#220;ST&#220; D&#220;ZEN.</act:name>
@@ -1458,6 +1532,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>252 B&#221;NALAR</act:name>
@@ -1479,6 +1554,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>253 TES&#221;S, MAK. ve C&#221;HAZLAR</act:name>
@@ -1500,6 +1576,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>254 TA&#222;ITLAR</act:name>
@@ -1521,6 +1598,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>255 DEM&#221;RBA&#222;LAR</act:name>
@@ -1542,6 +1620,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>256 D&#221;&#208;. MADD&#221; DURAN VARLIK.</act:name>
@@ -1563,6 +1642,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>257 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
@@ -1584,6 +1664,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>258 YAPILM. OLAN YATIRIMLAR</act:name>
@@ -1605,6 +1686,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>259 VER&#221;LEN AVANSLAR</act:name>
@@ -1626,6 +1708,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>260 HAKLAR</act:name>
@@ -1647,6 +1730,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>261 &#222;EREF&#221;YE</act:name>
@@ -1668,6 +1752,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>262 KUR. ve &#214;RG&#220;T. G&#221;DERLER&#221;</act:name>
@@ -1689,6 +1774,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>263 ARA&#222;. ve GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
@@ -1710,6 +1796,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>264 &#214;ZEL MAL&#221;YETLER</act:name>
@@ -1731,6 +1818,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>267 D&#221;&#208;. MADD&#221; OLM. DURAN VARLIK.</act:name>
@@ -1752,6 +1840,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>268 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
@@ -1773,6 +1862,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>269 VER&#221;LEN AVANSLAR</act:name>
@@ -1794,6 +1884,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>271 ARAMA G&#221;DERLER&#221;</act:name>
@@ -1815,6 +1906,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>272 HAZ. ve GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
@@ -1836,6 +1928,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>277 D&#221;&#208;. &#214;ZEL T&#220;KEN. TAB&#221; VARLIK.</act:name>
@@ -1857,6 +1950,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>278 B&#221;R&#221;KM&#221;&#222; T&#220;KEN. PAYLARI (-)</act:name>
@@ -1878,6 +1972,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>279 VER&#221;LEN AVANSLAR</act:name>
@@ -1899,6 +1994,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>280 GEL. YILLARA A&#221;T G&#221;DERLER</act:name>
@@ -1920,6 +2016,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>281 GEL&#221;R TAHAKKUKLARI</act:name>
@@ -1941,6 +2038,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>291 GEL. YILLARDA &#221;ND. KDV</act:name>
@@ -1962,6 +2060,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>292 D&#221;&#208;ER KDV</act:name>
@@ -1983,6 +2082,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>293 GEL. YILLAR &#221;HT&#221;. STOK.</act:name>
@@ -2004,6 +2104,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>294 ELDEN &#199;IK. STOK. ve MAD. DUR. VARLIK.</act:name>
@@ -2025,6 +2126,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>295 PE&#222;&#221;N &#214;DE. VERG&#221;. ve FONLAR</act:name>
@@ -2046,6 +2148,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>297 D&#221;&#208;. &#199;E&#222;. DURAN VARLIK.</act:name>
@@ -2067,6 +2170,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>298 STOK DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
@@ -2088,6 +2192,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>299 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
@@ -2109,6 +2214,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>300 BANKA KRED&#221;LER&#221;</act:name>
@@ -2130,6 +2236,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>303 UZ. VAD. KRED. ANAP. TAK. ve FA&#221;Z.</act:name>
@@ -2151,6 +2258,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>304 TAHV. ANAP. BOR&#199; TAK. ve FA&#221;Z.</act:name>
@@ -2172,6 +2280,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>305 &#199;IKA. BONO. ve SENETLER</act:name>
@@ -2193,6 +2302,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>306 &#199;IKA. D&#221;&#208;. MEN. KIYMETLER</act:name>
@@ -2214,6 +2324,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>308 MEN. KIYM. &#221;HRA&#199; FARKI (-)</act:name>
@@ -2235,6 +2346,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>309 D&#221;&#208;. MAL&#221; BOR&#199;LAR</act:name>
@@ -2256,6 +2368,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>320 SATICILAR</act:name>
@@ -2277,6 +2390,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>321 BOR&#199; SENETLER&#221;</act:name>
@@ -2298,6 +2412,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>322 BOR&#199; SENETLER&#221; REES. (-)</act:name>
@@ -2319,6 +2434,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>326 ALINAN DEPOZ&#221;TO ve TEM&#221;N.</act:name>
@@ -2340,6 +2456,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>329 D&#221;&#208;ER T&#221;C. BOR&#199;LAR</act:name>
@@ -2361,6 +2478,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>331 ORTAKL. BOR&#199;LAR</act:name>
@@ -2382,6 +2500,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>332 &#221;&#222;T&#221;RAK. BOR&#199;LAR</act:name>
@@ -2403,6 +2522,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>333 BA&#208;LI ORTAKL. BOR&#199;LAR</act:name>
@@ -2424,6 +2544,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>335 PERSONELE BOR&#199;LAR</act:name>
@@ -2445,6 +2566,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>336 D&#221;&#208;ER &#199;E&#222;. BOR&#199;LAR</act:name>
@@ -2466,6 +2588,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>337 D&#221;&#208;ER BOR&#199; SEN. REES. (-)</act:name>
@@ -2487,6 +2610,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>340 ALINAN S&#221;PAR&#221;&#222; AVANSLARI</act:name>
@@ -2508,6 +2632,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>349 ALINAN D&#221;&#208;ER AVANSLAR</act:name>
@@ -2529,6 +2654,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>350 Y.Y. &#221;N&#222;. ve ONAR. HAKED. BEDEL.</act:name>
@@ -2550,6 +2676,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>360 &#214;DENECEK VERG&#221; ve FONLAR</act:name>
@@ -2575,6 +2702,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>361 &#214;DENECEK SOSYAL G&#220;V.</act:name>
@@ -2600,6 +2728,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>368 VAD. GE&#199;. ERT. TAK. VERG&#221; ve D&#221;&#208;. Y&#220;K.</act:name>
@@ -2625,6 +2754,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>369 &#214;DENECEK D&#221;&#208;. Y&#220;K.</act:name>
@@ -2650,6 +2780,7 @@
       <slot:value type="integer">1</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>370 D&#214;N. K&#194;RI VERG&#221; ve D&#221;&#208;. YAS. Y&#220;K. KAR&#222;.</act:name>
@@ -2671,6 +2802,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>371 D&#214;N. K&#194;R. PE&#222;. &#214;DE. VERG&#221; ve D&#221;&#208;. Y&#220;K.</act:name>
@@ -2692,6 +2824,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>372 KIDEM TAZM&#221;N. KAR&#222;.</act:name>
@@ -2713,6 +2846,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>373 MAL&#221;YET G&#221;DER. KAR&#222;.</act:name>
@@ -2734,6 +2868,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>379 D&#221;&#208;. BOR&#199; ve G&#221;DER KAR&#222;.</act:name>
@@ -2755,6 +2890,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>380 GEL. AYLARA A&#221;T GEL&#221;RLER</act:name>
@@ -2776,6 +2912,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>381 G&#221;DER TAHAKKULARI</act:name>
@@ -2797,6 +2934,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>391 HESAPLANAN KDV</act:name>
@@ -2818,6 +2956,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>392 D&#221;&#208;ER KDV</act:name>
@@ -2839,6 +2978,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>393 MERKEZ ve &#222;B. CAR&#221; HESABI</act:name>
@@ -2860,6 +3000,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>397 SAYIM ve TESELL&#220;M FAZLA.</act:name>
@@ -2881,6 +3022,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>399 D&#221;&#208;ER &#199;E&#222;. YAB. KAYNAKLAR</act:name>
@@ -2902,6 +3044,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>400 BANKA KRED&#221;LER&#221;</act:name>
@@ -2923,6 +3066,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>405 &#199;IKA. TAHV&#221;LLER</act:name>
@@ -2944,6 +3088,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>407 &#199;IKA. D&#221;&#208;. MEN. KIYMETLER</act:name>
@@ -2965,6 +3110,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>408 MEN. KIYM. &#221;HRA&#199; FARK. (-)</act:name>
@@ -2986,6 +3132,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>409 D&#221;&#208;. MAL&#221; BOR&#199;LAR</act:name>
@@ -3007,6 +3154,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>420 SATICILAR</act:name>
@@ -3028,6 +3176,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>421 BOR&#199; SENETLER&#221;</act:name>
@@ -3049,6 +3198,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>422 BOR&#199; SENETLER&#221; REES. (-)</act:name>
@@ -3070,6 +3220,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>426 ALINAN DEPOZ&#221;TO ve TEM&#221;N.</act:name>
@@ -3091,6 +3242,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>429 D&#221;&#208;ER T&#221;C. BOR&#199;LAR</act:name>
@@ -3112,6 +3264,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>431 ORTAKL. BOR&#199;LAR</act:name>
@@ -3133,6 +3286,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>432 &#221;&#222;T&#221;RAKL. BOR&#199;LAR</act:name>
@@ -3154,6 +3308,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>433 BA&#208;LI ORTAKLIK. BOR&#199;LAR</act:name>
@@ -3175,6 +3330,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>436 D&#221;&#208;ER &#199;E&#222;. BOR&#199;LAR</act:name>
@@ -3196,6 +3352,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>437 D&#221;&#208;ER BOR&#199; SEN. REES. (-)</act:name>
@@ -3217,6 +3374,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>438 KAMUYA OLAN ERT. TAK. BOR&#199;LAR</act:name>
@@ -3238,6 +3396,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>440 ALINAN S&#221;PAR&#221;&#222; AVANS.</act:name>
@@ -3259,6 +3418,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>449 ALINAN G&#221;DER AVANS.</act:name>
@@ -3280,6 +3440,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>472 KIDEM TAZM&#221;NATI KAR&#222;.</act:name>
@@ -3301,6 +3462,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>479 D&#221;&#208;. BOR&#199; ve G&#221;DER KAR&#222;.</act:name>
@@ -3322,6 +3484,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>480 GEL. YIL. A&#221;T GEL&#221;RLER</act:name>
@@ -3343,6 +3506,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>481 G&#221;DER TAHAKKUKLARI</act:name>
@@ -3364,6 +3528,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>492 GEL. YIL. ERT. TERK&#221;N ED&#221;L. KDV</act:name>
@@ -3385,6 +3550,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>493 TES&#221;SE KATILMA PAYLARI</act:name>
@@ -3406,6 +3572,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>499 D&#221;&#208;. &#199;E&#222;. UZUN VAD. YAB. KAYNAK.</act:name>
@@ -3427,6 +3594,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>500 SERMAYE</act:name>
@@ -3448,6 +3616,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A&#231;&#253;l&#253;&#254; Bakiyeleri</act:name>
@@ -3491,6 +3660,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>520 H&#221;SSE SEN. &#221;HRA&#199; PR&#221;M.</act:name>
@@ -3512,6 +3682,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>521 H&#221;SSE SEN. &#221;PTAL K&#194;RLARI</act:name>
@@ -3533,6 +3704,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>522 M.D.V. YEN&#221;DEN DE&#208;ER. ARTI&#222;.</act:name>
@@ -3554,6 +3726,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>523 &#221;&#222;T&#221;RAK. YEN&#221;DEN DE&#208;ER. ARTI&#222;.</act:name>
@@ -3575,6 +3748,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>524 MAL&#221;YET ARTI&#222;. FONU</act:name>
@@ -3596,6 +3770,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>529 D&#221;&#208;ER SERMAYE YEDEK.</act:name>
@@ -3617,6 +3792,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>540 YASAL YEDEKLER</act:name>
@@ -3638,6 +3814,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>541 STAT&#220; YEDEKLER&#221;</act:name>
@@ -3659,6 +3836,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>542 OLA&#208;AN&#220;ST&#220; YEDEKLER</act:name>
@@ -3680,6 +3858,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>548 D&#221;&#208;ER K&#194;R YEDEKLER&#221;</act:name>
@@ -3701,6 +3880,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>549 &#214;ZEL FONLAR</act:name>
@@ -3722,6 +3902,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>570 GE&#199;M&#221;&#222; YILLAR K&#194;RLARI</act:name>
@@ -3743,6 +3924,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>580 GE&#199;M&#221;&#222; YILLAR ZARARLARI (-)</act:name>
@@ -3764,6 +3946,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>590 D&#214;NEM NET K&#194;RI</act:name>
@@ -3785,6 +3968,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>591 D&#214;NEM NET ZARARI (-)</act:name>
@@ -3806,6 +3990,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>600 YURT&#221;&#199;&#221; SATI&#222;LAR</act:name>
@@ -3827,6 +4012,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>601 YURTDI&#222;I SATI&#222;LAR</act:name>
@@ -3848,6 +4034,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>602 D&#221;&#208;ER GEL&#221;RLER</act:name>
@@ -3869,6 +4056,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>610 SATI&#222;TAN &#221;ADELER (-)</act:name>
@@ -3890,6 +4078,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>611 SATI&#222; &#221;SKONTOLARI (-)</act:name>
@@ -3911,6 +4100,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>612 D&#221;&#208;ER &#221;ND&#221;R&#221;MLER (-)</act:name>
@@ -3932,6 +4122,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>620 SATILAN MAMUL. MAL&#221;YET&#221; (-)</act:name>
@@ -3953,6 +4144,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>621 SATILAN T&#221;C. MAL. MAL&#221;YET&#221; (-)</act:name>
@@ -3974,6 +4166,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>622 SATILAN H&#221;ZMET MAL&#221;YET&#221; (-)</act:name>
@@ -3995,6 +4188,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>623 D&#221;&#208;ER SATI&#222;. MAL&#221;YET&#221; (-)</act:name>
@@ -4016,6 +4210,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>630 ARA&#222;. GEL&#221;&#222;. G&#221;DERLER&#221; (-)</act:name>
@@ -4037,6 +4232,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>631 PAZ. SATI&#222; DA&#208;IT. G&#221;DERLER&#221; (-)</act:name>
@@ -4058,6 +4254,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>632 GENEL Y&#214;N. G&#221;DERLER&#221; (-)</act:name>
@@ -4079,6 +4276,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>640 &#221;&#222;T&#221;RAK. TEMETT&#220; GEL&#221;RLER&#221;</act:name>
@@ -4100,6 +4298,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>641 BA&#208;LI ORTAKL. TEMETT&#220; GEL&#221;R.</act:name>
@@ -4121,6 +4320,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>642 FA&#221;Z GEL&#221;RLER&#221;</act:name>
@@ -4142,6 +4342,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>643 KOM&#221;SYON GEL&#221;RLER&#221;</act:name>
@@ -4163,6 +4364,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>644 KONUSU KALMAYAN KAR&#222;.</act:name>
@@ -4184,6 +4386,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>645 MEN. KIYM. SATI&#222; K&#194;RLARI</act:name>
@@ -4205,6 +4408,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>646 KAMB&#221;YO K&#194;RLARI</act:name>
@@ -4226,6 +4430,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>647 REES. FA&#221;Z GEL&#221;RLER&#221;</act:name>
@@ -4247,6 +4452,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>649 D&#221;&#208;. OLA&#208;AN GEL&#221;R ve K&#194;RLAR</act:name>
@@ -4268,6 +4474,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>653 KOM&#221;SYON G&#221;DERLER&#221; (-)</act:name>
@@ -4289,6 +4496,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>654 KAR&#222;ILIK G&#221;DERLER&#221; (-)</act:name>
@@ -4310,6 +4518,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>655 MEN. KIYM. SATI&#222; ZARAR. (-)</act:name>
@@ -4331,6 +4540,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>656 KAMB&#221;YO ZARARLARI (-)</act:name>
@@ -4352,6 +4562,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>657 REES. FA&#221;Z G&#221;DERLER&#221; (-)</act:name>
@@ -4373,6 +4584,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>659 D&#221;&#208;. OLA&#208;AN G&#221;DER ve ZARAR. (-)</act:name>
@@ -4394,6 +4606,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>660 KISA VADE. BOR&#199;L. G&#221;DERLER&#221; (-)</act:name>
@@ -4415,6 +4628,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>661 UZUN VADE. BOR&#199;L. G&#221;DERLER&#221; (-)</act:name>
@@ -4436,6 +4650,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>671 &#214;NC. D&#214;NEM GEL&#221;R ve K&#194;RLAR</act:name>
@@ -4457,6 +4672,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>679 D&#221;&#208;. OLA&#208;ANDI&#222;I GEL&#221;R ve K&#194;RLAR</act:name>
@@ -4478,6 +4694,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>680 &#199;ALI&#222;M. KISIM G&#221;DER ve ZARAR. (-)</act:name>
@@ -4499,6 +4716,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>681 &#214;NC. D&#214;NEM G&#221;DER ve ZARAR. (-)</act:name>
@@ -4520,6 +4738,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>689 D&#221;&#208;. OLA&#208;ANDI&#222;I G&#221;DER ve ZARAR. (-)</act:name>
@@ -4541,6 +4760,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>690 D&#214;NEM K&#194;RI veya ZARARI</act:name>
@@ -4562,6 +4782,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>691 D&#214;N. K&#194;RI VRG. D&#221;&#208;. YAS. Y&#220;K. KAR&#222;. (-)</act:name>
@@ -4583,6 +4804,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>692 D&#214;NEM NET K&#194;RI veya ZARARI</act:name>
@@ -4604,6 +4826,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>700 MAL&#221;. MUH. BA&#208;LA. HESABI</act:name>
@@ -4625,6 +4848,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>701 MAL&#221;. MUH. YANSIT. HESABI</act:name>
@@ -4646,6 +4870,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>710 D&#221;R. &#221;LK MADDE ve MALZ. G&#221;DERLER&#221;</act:name>
@@ -4667,6 +4892,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>711 D&#221;R. &#221;LK MADDE ve MALZ. YANS. HES.</act:name>
@@ -4688,6 +4914,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>712 D&#221;R. &#221;LK MADDE ve MALZ. F&#221;YAT FARKI</act:name>
@@ -4709,6 +4936,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>713 D&#221;R. &#221;LK MADDE ve MALZ. M&#221;K. FARKI</act:name>
@@ -4730,6 +4958,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>720 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K G&#221;DERLER&#221;</act:name>
@@ -4751,6 +4980,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>721 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K G&#221;DERLER&#221; YANS. HES.</act:name>
@@ -4772,6 +5002,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>722 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K &#220;CRET FARKLARI</act:name>
@@ -4793,6 +5024,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>723 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K S&#220;RE FARKLARI</act:name>
@@ -4814,6 +5046,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>730 GEN. &#220;RET&#221;M G&#221;DERLER&#221;</act:name>
@@ -4835,6 +5068,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>731 GEN. &#220;RET&#221;M G&#221;DER. YANS. HES.</act:name>
@@ -4856,6 +5090,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>732 GEN. &#220;RET&#221;M G&#221;DER. B&#220;T&#199;E FARK.</act:name>
@@ -4877,6 +5112,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>733 GEN. &#220;RET&#221;M G&#221;DER. VER&#221;ML. FARK.</act:name>
@@ -4898,6 +5134,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>734 GEN. &#220;RET&#221;M G&#221;DER. KAPAS. FARK.</act:name>
@@ -4919,6 +5156,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>740 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221;</act:name>
@@ -4940,6 +5178,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>741 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221; YANS. HES.</act:name>
@@ -4961,6 +5200,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>742 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221; FARK HES.</act:name>
@@ -4982,6 +5222,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>750 ARA&#222;. GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
@@ -5003,6 +5244,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>751 ARA&#222;. GEL&#221;&#222;. G&#221;DER. YANS. HES.</act:name>
@@ -5024,6 +5266,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>752 ARA&#222;. GEL&#221;&#222;. G&#221;DER FARKLARI</act:name>
@@ -5045,6 +5288,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>760 PAZ. SAT. DA&#208;. G&#221;DERLER&#221;</act:name>
@@ -5066,6 +5310,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>761 PAZ. SAT. DA&#208;. G&#221;DER. YANS. HES.</act:name>
@@ -5087,6 +5332,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>762 PAZ. SAT. DA&#208;. G&#221;DER. FARK HES.</act:name>
@@ -5108,6 +5354,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>770 GEN. Y&#214;NET. G&#221;DERLER&#221;</act:name>
@@ -5129,6 +5376,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>771 GEN. Y&#214;NET. G&#221;DER. YANS. HES.</act:name>
@@ -5150,6 +5398,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>772 GEN. Y&#214;NET. G&#221;DER. FARK. HES.</act:name>
@@ -5171,6 +5420,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>780 F&#221;NANSMAN G&#221;DERLER&#221;</act:name>
@@ -5192,6 +5442,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>781 F&#221;NANSMAN G&#221;DER. YANS. HES.</act:name>
@@ -5213,6 +5464,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>782 F&#221;NANSMAN G&#221;DER. FARK HES.</act:name>
@@ -5234,6 +5486,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>790 &#221;LK MADDE ve MALZ. G&#221;DERLER&#221;</act:name>
@@ -5255,6 +5508,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>791 &#221;&#222;&#199;&#221; &#220;CRET ve G&#221;DERLER&#221;</act:name>
@@ -5276,6 +5530,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>792 MEMUR &#220;CRET ve G&#221;DERLER&#221;</act:name>
@@ -5297,6 +5552,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>793 DI&#222;. SA&#208;LA. FAYDA ve H&#221;Z.</act:name>
@@ -5318,6 +5574,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>794 &#199;E&#222;&#221;TL&#221; G&#221;DERLER</act:name>
@@ -5339,6 +5596,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>795 VERG&#221;, RES&#221;M ve HAR&#199;LAR</act:name>
@@ -5360,6 +5618,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>796 AMORT&#221;S. ve T&#220;KEN. PAYL.</act:name>
@@ -5381,6 +5640,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>797 F&#221;NANSMAN G&#221;DERLER&#221;</act:name>
@@ -5402,6 +5662,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>798 G&#221;DER &#199;E&#222;&#221;TLER&#221; YANS. HES.</act:name>
@@ -5423,6 +5684,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>799 &#220;RET&#221;M MAL&#221;YET HESABI</act:name>
@@ -5444,6 +5706,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 </gnc-account-example>
 
