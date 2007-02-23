@@ -92,7 +92,7 @@
        (gnc:filter-accountlist-type 
         (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-ASSET
               ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL)
-        (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+        (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
     
     ;; Set the general page as default option tab
@@ -181,19 +181,10 @@
       (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
 
     ;; helper for account depth
-    (define (account-get-depth account)
-      (define (account-get-depth-internal account-internal depth)
-        (let ((parent (xaccAccountGetParentAccount account-internal)))
-          (if (not (null? parent))
-            (account-get-depth-internal parent (+ depth 1))
-            depth)))
-      (account-get-depth-internal account 1))
-
     (define (accounts-get-children-depth accounts)
       (apply max
 	     (map (lambda (acct)
-		    (let ((children 
-			   (gnc:account-get-immediate-subaccounts acct)))
+		    (let ((children (gnc-account-get-children acct)))
 		      (if (null? children)
 			  1
 			  (+ 1 (accounts-get-children-depth children)))))
@@ -378,10 +369,10 @@
             (lambda (account)
               (set! work-done (+ 1 work-done))
               (gnc:report-percent-done (+ 85 (* 5 (/ work-done work-to-do))))
-              (if (<= (account-get-depth account) tree-depth)
+              (if (<= (gnc-account-get-current-depth account) tree-depth)
                 (let* ((anchor (gnc:html-markup/format
-                                 (if (and (= (account-get-depth account) tree-depth)
-                                          (not (eq? (gnc:account-get-immediate-subaccounts account) '())))
+                                 (if (and (= (gnc-account-get-current-depth account) tree-depth)
+                                          (not (eq? (gnc-account-get-children account) '())))
                                    (if show-subaccts?
                                      (_ "%s and subaccounts")
                                      (_ "%s and selected subaccounts"))

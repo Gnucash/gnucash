@@ -26,7 +26,6 @@
 #include <glib.h>
 #include <string.h>
 
-#include "Group.h"
 #include "SX-book.h"
 
 #include "gnc-xml-helper.h"
@@ -757,7 +756,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     /* FIXME: this should be removed somewhere near 1.8 release time. */
     if ( sx->template_acct == NULL )
     {
-            AccountGroup *ag = NULL;
+            Account *ra = NULL;
             const char *id = NULL;
             Account *acct = NULL;
             sixtp_gdv2 *sixdata = gdata->parsedata;
@@ -768,18 +767,18 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             /* We're dealing with a pre-200107<near-end-of-month> rgmerk
                change re: storing template accounts. */
             /* Fix: get account with name of our GUID from the template
-               accounts group.  Make that our template_acct pointer. */
+               accounts.  Make that our template_acct pointer. */
             /* THREAD-UNSAFE */
             id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
-            ag = gnc_book_get_template_group(book);
-            if ( ag == NULL )
+            ra = gnc_book_get_template_root(book);
+            if ( ra == NULL )
             {
-                    g_warning( "Error getting template account group from being-parsed Book." );
+                    g_warning( "Error getting template root account from being-parsed Book." );
                     xmlFreeNode( tree );
                     return FALSE;
             }
-            acct = xaccGetAccountFromName(ag, id);
-            if (acct == NULL)
+            acct = gnc_account_lookup_by_name( ra, id );
+            if ( acct == NULL )
             {
                     g_warning("no template account with name [%s]", id);
                     xmlFreeNode( tree );
@@ -892,9 +891,9 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         txd.accts = NULL;
         txd.transactions = NULL;
 
-        /* the DOM tree will have an account tree [the template group
-           and account] and a list of transactions [which will be
-           members of the template account].
+        /* the DOM tree will have an account tree [the template
+           accounts] and a list of transactions [which will be members
+           of the template account].
 
            we want to parse through the dom trees for each, placing
            the null-parent account in the book's template-group slot,

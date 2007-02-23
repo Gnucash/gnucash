@@ -28,7 +28,6 @@
 #include <time.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "Period.h"
 #include "qof.h"
 #include "test-stuff.h"
@@ -43,9 +42,8 @@ run_test (void)
   QofBackendError io_err;
   QofSession *session;
   QofBook *openbook, *closedbook;
-  AccountGroup *grp;
-  AccountList *acclist, *anode;
-  Account * acc = NULL;
+  GList *acclist, *anode;
+  Account *root, *acc = NULL;
   SplitList *splist;
   Split *sfirst, *slast;
   Transaction *tfirst, *tlast;
@@ -72,9 +70,9 @@ run_test (void)
 
   add_random_transactions_to_book (openbook, 12);
 
-  grp = gnc_book_get_group (openbook);
+  root = gnc_book_get_root_account(openbook);
 
-  acclist = xaccGroupGetSubAccounts (grp);
+  acclist = gnc_account_get_descendants (root);
   for (anode=acclist; anode; anode=anode->next)
   {
     int ns;
@@ -83,6 +81,7 @@ run_test (void)
     if (2 <= ns) break;
     acc = NULL;
   }
+  g_list_free(acclist);
 
   if(!acc)
   {

@@ -131,7 +131,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  gnc_utf8_strip_invalid(data.memo);
 
 	/********** Create the transaction and setup transaction data ************/
-	book = xaccAccountGetBook(account);
+	book = gnc_account_get_book(account);
 	transaction = xaccMallocTransaction(book);
 	xaccTransBeginEdit(transaction);
 	

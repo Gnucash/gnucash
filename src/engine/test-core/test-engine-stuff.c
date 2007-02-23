@@ -29,8 +29,6 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "Transaction.h"
@@ -50,8 +48,8 @@ static GHashTable *exclude_kvp_types = NULL;
 static gint kvp_max_depth = 5;
 static gint kvp_frame_max_elements = 10;
 
-static gint max_group_depth = 1;
-static gint max_group_accounts = 3;
+static gint max_tree_depth = 1;
+static gint max_level_accounts = 3;
 static gint max_total_accounts = 10;
 static gint max_trans_num = 1000;
 static gint total_num_accounts = 0;
@@ -74,15 +72,15 @@ gboolean gnc_engine_debug_random = FALSE;
 /* Set control parameters governing the run. */
 
 void
-set_max_group_depth (gint max_group_depth_in)
+set_max_account_tree_depth (gint max_tree_depth_in)
 {
-  max_group_depth = MAX (max_group_depth_in, 1);
+  max_tree_depth = MAX (max_tree_depth_in, 1);
 }
 
 void
-set_max_group_accounts (gint max_group_accounts_in)
+set_max_accounts_per_level (gint max_level_accounts_in)
 {
-  max_group_accounts = MAX (max_group_accounts_in, 1);
+  max_level_accounts = MAX (max_level_accounts_in, 1);
 }
 
 void
@@ -843,7 +841,7 @@ account_add_subaccounts (QofBook *book, Account *account, int depth)
   {
     Account *sub = get_random_account (book);
 
-    xaccAccountInsertSubAccount (account, sub);
+    gnc_account_append_child (account, sub);
 
     total_num_accounts ++;
     if (total_num_accounts > max_total_accounts) return;
@@ -853,64 +851,40 @@ account_add_subaccounts (QofBook *book, Account *account, int depth)
 }
 
 static void
-make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
-{
-  int num_accounts;
-
-  g_return_if_fail (book);
-  g_return_if_fail (group);
-
-  if (depth <= 0)
-    return;
-
-  num_accounts = get_random_int_in_range (1, max_group_accounts);
-
-  while (num_accounts-- > 0)
-  {
-    Account *account = get_random_account (book);
-
-    xaccGroupInsertAccount (group, account);
-    total_num_accounts++;
-
-    account_add_subaccounts (book, account, depth - 1);
-  }
-}
-
-static void
-make_random_group (QofBook *book, AccountGroup *group)
+make_random_account_tree (QofBook *book, Account *root)
 {
   int depth;
 
   g_return_if_fail (book);
-  g_return_if_fail (group);
+  g_return_if_fail (root);
 
   total_num_accounts = 0;
-  depth = get_random_int_in_range (1, max_group_depth);
+  depth = get_random_int_in_range (1, max_tree_depth);
 
-  make_random_group_depth (book, group, depth);
+  account_add_subaccounts (book, root, depth);
 
   /* Make sure we have at least two accounts! */
   if (total_num_accounts <= 1)
-    make_random_group_depth (book, group, 1);
+    account_add_subaccounts (book, root, 1);
 }
 
-AccountGroup *
-get_random_group (QofBook *book)
+Account *
+get_random_account_tree (QofBook *book)
 {
-  AccountGroup * group;
+  Account * root;
 
   g_return_val_if_fail (book, NULL);
 
-  group = xaccGetAccountGroup (book);
-  if (!group)
+  root = gnc_book_get_root_account (book);
+  if (!root)
   {
-    group = xaccMallocAccountGroup (book);
-    xaccSetAccountGroup (book, group);
+    root = xaccMallocAccount (book);
+    gnc_book_set_root_account (book, root);
   }
 
-  make_random_group (book, group);
+  make_random_account_tree (book, root);
 
-  return group;
+  return root;
 }
 
 /* ================================================================= */
@@ -1078,7 +1052,7 @@ add_trans_helper (Transaction *trans, gpointer data)
 }
 
 void
-make_random_changes_to_group (QofBook *book, AccountGroup *group)
+make_random_changes_to_level (QofBook *book, Account *parent)
 {
   Account *new_account;
   Account *account;
@@ -1087,24 +1061,24 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
   GList *splits;
   GList *node;
 
-  g_return_if_fail (group && book);
+  g_return_if_fail (parent && book);
 
-  accounts = xaccGroupGetSubAccounts (group);
+  accounts = gnc_account_get_descendants (parent);
 
   /* Add a new account */
   new_account = get_random_account (book);
 
   if (get_random_boolean () || !accounts)
-    xaccGroupInsertAccount (group, new_account);
+    gnc_account_append_child (parent, new_account);
   else
   {
     account = get_random_list_element (accounts);
 
-    xaccAccountInsertSubAccount (account, new_account);
+    gnc_account_append_child (account, new_account);
   }
 
   g_list_free (accounts);
-  accounts = xaccGroupGetSubAccounts (group);
+  accounts = gnc_account_get_descendants (parent);
 
   /* Add some new transactions */
   add_random_transactions_to_book (book, get_random_int_in_range (1, 6));
@@ -1120,7 +1094,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
 
   /* Mess with the transactions & splits */
   transes = NULL;
-  xaccGroupForEachTransaction (group, add_trans_helper, &transes);
+  xaccAccountTreeForEachTransaction (parent, add_trans_helper, &transes);
 
   for (node = transes; node; node = node->next)
   {
@@ -1166,7 +1140,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
   g_list_free (splits);
   g_list_free (accounts);
 
-  accounts = xaccGroupGetSubAccounts (group);
+  accounts = gnc_account_get_descendants (parent);
 
   /* move some accounts around */
   if (accounts && (g_list_length (accounts) > 1))
@@ -1186,7 +1160,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
 
       if (!a2)
       {
-        xaccGroupInsertAccount (group, a1);
+        gnc_account_append_child (parent, a1);
         continue;
       }
 
@@ -1198,7 +1172,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
         continue;
       }
 
-      xaccAccountInsertSubAccount (a2, a1);
+      gnc_account_append_child (a2, a1);
     }
   }
 
@@ -1208,8 +1182,7 @@ make_random_changes_to_group (QofBook *book, AccountGroup *group)
 Account*
 get_random_account(QofBook *book)
 {
-    AccountGroup *grp;
-    Account *ret;
+    Account *root, *ret;
     int tmp_int;
 
     ret = xaccMallocAccount(book);
@@ -1229,13 +1202,13 @@ get_random_account(QofBook *book)
 
     xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
 
-    grp = xaccGetAccountGroup (book);
-    if (!grp) 
+    root = gnc_book_get_root_account (book);
+    if (!root) 
     {
-        grp = xaccMallocAccountGroup (book);
-        xaccSetAccountGroup (book, grp);
+        root = xaccMallocAccount (book);
+        gnc_book_set_root_account (book, root);
     }
-    xaccGroupInsertAccount (grp, ret);
+    gnc_account_append_child (root, ret);
     xaccAccountCommitEdit(ret);
 
     return ret;
@@ -1435,7 +1408,7 @@ get_random_transaction_with_currency(QofBook *book,
     numstr = g_new0(gchar, 10);
     if (!account_list) 
     {
-      account_list = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
+      account_list = gnc_account_get_descendants (gnc_book_get_root_account (book));
     }
 
     /* Gotta have at least two different accounts */
@@ -1883,7 +1856,7 @@ get_random_book (void)
 
   book = qof_book_new ();
 
-  get_random_group (book);
+  get_random_account_tree (book);
   get_random_pricedb (book);
 
   return book;
@@ -1899,7 +1872,7 @@ get_random_session (void)
 
   book = qof_session_get_book (session);
 
-  get_random_group (book);
+  get_random_account_tree (book);
   get_random_pricedb (book);
 
   return session;
@@ -1915,7 +1888,7 @@ add_random_transactions_to_book (QofBook *book, gint num_transactions)
 
   g_return_if_fail (book);
 
-  accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
+  accounts = gnc_account_get_descendants (gnc_book_get_root_account (book));
   g_return_if_fail (accounts);
 
   table = gnc_commodity_table_get_table (book);
@@ -1936,7 +1909,7 @@ make_random_changes_to_book (QofBook *book)
 {
   g_return_if_fail (book);
 
-  make_random_changes_to_group (book, xaccGetAccountGroup (book));
+  make_random_changes_to_level (book, gnc_book_get_root_account (book));
   make_random_changes_to_pricedb (book, gnc_pricedb_get_db (book));
 
 #if 0

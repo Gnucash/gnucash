@@ -452,16 +452,6 @@ void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 \********************************************************************/
 
 
-/** The xaccGetAccountByName() is a convenience routine that 
- *  is essentially identical to xaccGetPeerAccountFromName(),
- *  except that it accepts the handy transaction as root.*/
-Account * xaccGetAccountByName (const Transaction *trans, const char *name);
-/** The xaccGetAccountByFullName routine is similar to xaccGetAccountByName, but uses
- *  full names using the given separator.*/
-Account * xaccGetAccountByFullName (const Transaction *trans,
-                                    const char *name);
-
-
 /** @name Transaction voiding
 @{
 */

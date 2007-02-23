@@ -38,7 +38,6 @@
 #include <glib/gstdio.h>
 
 #include "cashobjects.h"
-#include "Group.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-backend-file.h"
@@ -78,7 +77,7 @@ test_load_file(const char *filename)
 {
     QofSession *session;
     QofBook *book;
-    AccountGroup *grp;
+    Account *root;
     gboolean ignore_lock;
 
     session = qof_session_new();
@@ -91,9 +90,9 @@ test_load_file(const char *filename)
     qof_session_load(session, NULL);
     book = qof_session_get_book (session);
 
-    grp = xaccGetAccountGroup(book);
-    do_test (xaccGroupGetBook (grp) == book,
-             "book and group don't match");
+    root = gnc_book_get_root_account(book);
+    do_test (gnc_account_get_book (root) == book,
+             "book and root account don't match");
 
     do_test_args(qof_session_get_error(session) == ERR_BACKEND_NO_ERR,
                  "session load xml2", __FILE__, __LINE__, 

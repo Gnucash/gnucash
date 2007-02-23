@@ -65,6 +65,6 @@
 (export qif-dialog:make-category-display)
 (export qif-dialog:make-memo-display)
 
-(export gnc:group-find-duplicates)
-(export gnc:group-catenate-and-merge)
+(export gnc:account-tree-find-duplicates)
+(export gnc:account-tree-catenate-and-merge)
 (export gnc:prune-matching-transactions)

@@ -1399,7 +1399,7 @@ recn_set_watches (RecnWindow *recnData)
 
   include_children = xaccAccountGetReconcileChildrenStatus(account);
   if (include_children)
-    accounts = xaccAccountGetDescendants(account);
+    accounts = gnc_account_get_descendants(account);
 
   /* match the account */
   accounts = g_list_prepend (accounts, account);

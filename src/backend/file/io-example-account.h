@@ -35,7 +35,7 @@ struct GncExampleAccount_struct
     gchar *title;
     gchar *filename;
     QofBook *book;
-    AccountGroup *group;
+    Account *root;
     gchar *short_description;
     gchar *long_description;
     gboolean exclude_from_select_all;
@@ -47,13 +47,11 @@ void gnc_destroy_example_account(GncExampleAccount *gea);
 
 gboolean gnc_write_example_account(GncExampleAccount *gea,
                                    const gchar *filename);
-GncExampleAccount *gnc_read_example_account(QofBook *book,
-                                            const gchar *filename);
+GncExampleAccount *gnc_read_example_account(const gchar *filename);
 
 
 void gnc_free_example_account_list(GSList *list);
-GSList* gnc_load_example_account_list(QofBook *book,
-                                      const char *dirname);
+GSList* gnc_load_example_account_list(const char *dirname);
 
 gboolean gnc_is_example_account_xml(const gchar *name);
 

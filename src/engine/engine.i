@@ -4,7 +4,6 @@
 #include <config.h>
 #include <glib.h>
 #include <qof.h>
-#include <Group.h>
 #include <Query.h>
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
@@ -61,9 +60,6 @@ functions currently used in guile, but not all the functions that are
 wrapped.  So, we should contract the interface to wrap only the used
 functions. */
 
-%newobject xaccGroupGetSubAccountsSorted;
-%newobject xaccGroupGetAccountListSorted;
-
 %delobject gnc_price_list_destroy;
 %newobject gnc_pricedb_lookup_latest_any_currency;
 
@@ -89,14 +85,20 @@ functions. */
 
 %include <Split.h>
 %include <engine-helpers.h>
+AccountList * gnc_account_get_children (const Account *account);
+AccountList * gnc_account_get_children_sorted (const Account *account);
+AccountList * gnc_account_get_descendants (const Account *account);
+AccountList * gnc_account_get_descendants_sorted (const Account *account);
+%ignore gnc_account_get_children;
+%ignore gnc_account_get_children_sorted;
+%ignore gnc_account_get_descendants;
+%ignore gnc_account_get_descendants_sorted;
 %include <Account.h>
 %include <Transaction.h>
 %include <gnc-pricedb.h>
 
 QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
-
-%include <Group.h>
 
 // TODO: Maybe unroll
 void qof_book_kvp_changed (QofBook *book);
@@ -194,7 +196,7 @@ void gnc_hook_add_scm_dangler (const gchar *name, SCM proc);
 void gnc_hook_run (const gchar *name, gpointer data);
 %include <gnc-hooks.h>
 
-AccountGroup * gnc_book_get_template_group(QofBook *book);
+Account * gnc_book_get_template_root(QofBook *book);
 
 // KVP stuff
 %typemap(in) KvpValue * " $1 = gnc_scm_to_kvp_value_ptr($input); "

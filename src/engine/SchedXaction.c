@@ -32,8 +32,6 @@
 #include "FreqSpec.h"
 #include "Account.h"
 #include "gnc-book.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
@@ -52,7 +50,7 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
-   AccountGroup        *ag;
+   Account        *ra;
 
    qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
@@ -82,8 +80,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
                          "template", "template",
                          "template", "template", 1 ) );
    xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
-   ag = gnc_book_get_template_group( book );
-   xaccGroupInsertAccount( ag, sx->template_acct );
+   ra = gnc_book_get_template_root( book );
+   gnc_account_append_child( ra, sx->template_acct );
 }
 
 SchedXaction*

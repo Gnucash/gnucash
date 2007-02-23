@@ -735,8 +735,8 @@
 		this-account
 		(find-first (cdr account-list))))))
 
-    (let* ((current-group (gnc-get-current-group))
-	   (account-list (xaccGroupGetSubAccountsSorted current-group)))
+    (let* ((current-root (gnc-get-current-root-account))
+	   (account-list (gnc-account-get-descendants-sorted current-root)))
       (find-first account-list)))
 	   
   (define (get-default)

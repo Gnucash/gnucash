@@ -158,7 +158,7 @@
 	(gnc:filter-accountlist-type
 	 ;; select, by default, only income and expense accounts
 	 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -347,7 +347,7 @@
 	 ;; is the only simple way to ensure that both tables
 	 ;; (revenue, expense) have the same width.
          (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-group-depth) 
+                         (gnc:get-current-account-tree-depth) 
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
@@ -411,7 +411,7 @@
          (gnc:html-make-no-account-warning 
 	  reportname (gnc:report-id report-obj)))
 	
-        ;; Get all the balances for each account group.
+        ;; Get all the balances for each of the account types.
         (let* ((revenue-closing #f)
 	       (expense-closing #f)
 	       (neg-revenue-total #f)

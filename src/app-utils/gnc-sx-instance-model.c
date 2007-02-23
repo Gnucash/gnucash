@@ -233,14 +233,13 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 Account*
 gnc_sx_get_template_transaction_account(SchedXaction *sx)
 {
-    AccountGroup *template_group;
-    Account *sx_template_acct;
+    Account *template_root, *sx_template_acct;
     const char *sx_guid_str;
 
-    template_group = gnc_book_get_template_group(gnc_get_current_book());
+    template_root = gnc_book_get_template_root(gnc_get_current_book());
     sx_guid_str = guid_to_string(xaccSchedXactionGetGUID(sx));
     /* Get account named after guid string. */
-    sx_template_acct = xaccGetAccountFromName(template_group, sx_guid_str);
+    sx_template_acct = gnc_account_lookup_by_name(template_root, sx_guid_str);
     return sx_template_acct;
 }
 

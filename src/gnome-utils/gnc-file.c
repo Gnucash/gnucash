@@ -738,7 +738,7 @@ gnc_post_file_open (const char * filename)
 
   if (!uh_oh)
   {
-    AccountGroup *new_group;
+    Account *new_root;
 
     char * logpath = xaccResolveFilePath(newfile);
     PINFO ("logpath=%s", logpath ? logpath : "(null)");
@@ -770,12 +770,12 @@ gnc_post_file_open (const char * filename)
 
     uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
 
-    new_group = gnc_book_get_group (qof_session_get_book (new_session));
-    if (uh_oh) new_group = NULL;
+    new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
+    if (uh_oh) new_root = NULL;
 
     /* Umm, came up empty-handed, but no error: 
      * The backend forgot to set an error. So make one up. */
-    if (!uh_oh && !new_group) 
+    if (!uh_oh && !new_root) 
     {
       uh_oh = show_session_error (ERR_BACKEND_MISC, newfile,
 				  GNC_FILE_DIALOG_OPEN);
@@ -791,11 +791,11 @@ gnc_post_file_open (const char * filename)
     qof_session_destroy (new_session);
     xaccLogEnable();
 
-    /* well, no matter what, I think it's a good idea to have a
-     * topgroup around.  For example, early in the gnucash startup
+    /* well, no matter what, I think it's a good idea to have a root
+     * account around.  For example, early in the gnucash startup
      * sequence, the user opens a file; if this open fails for any
-     * reason, we don't want to leave them high & dry without a
-     * topgroup, because if the user continues, then bad things will
+     * reason, we don't want to leave them high & dry without a root
+     * account, because if the user continues, then bad things will
      * happen. */
     gnc_get_current_session ();
 

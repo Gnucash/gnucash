@@ -15,7 +15,6 @@ libgncmod_engine_la_SOURCES = \
   Account.c \
   FreqSpec.c \
   Recurrence.c \
-  Group.c \
   Period.c \
   Query.c \
   SchedXaction.c \
@@ -56,7 +55,6 @@ gncinclude_HEADERS = \
   FreqSpec.h \
   Recurrence.h \
   GNCId.h \
-  Group.h \
   Period.h \
   SchedXaction.h \
   SX-book.h \
@@ -95,7 +93,6 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   AccountP.h \
   FreqSpecP.h \
-  GroupP.h \
   QueryP.h \
   ScrubP.h \
   SplitP.h \

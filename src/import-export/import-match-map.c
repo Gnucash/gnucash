@@ -31,7 +31,6 @@
 #include <string.h>
 #include <glib.h>
 #include "import-match-map.h"
-#include "Group.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
 
@@ -66,7 +65,7 @@ gnc_imap_create_from_frame (kvp_frame *frame, Account *acc, GNCBook *book)
    * marking dirtiness
    */
   if (acc)
-    book = xaccAccountGetBook (acc);
+    book = gnc_account_get_book (acc);
   imap->acc = acc;
   imap->book = book;
   
@@ -442,8 +441,8 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
     {
       PINFO("found match");
       LEAVE(" ");
-      return xaccGetAccountFromFullName(gnc_book_get_group(imap->book),
-					account_i.account_name);
+      return gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
+                                             account_i.account_name);
     }
 
   PINFO("no match");

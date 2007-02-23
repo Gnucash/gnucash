@@ -29,7 +29,6 @@
 #include "glib-compat.h"
 
 #include "Recurrence.h"
-#include "Group.h"
 #include "Period.h"
 #include "Query.h"
 #include "Scrub.h"
@@ -284,7 +283,7 @@ show_book_details (AcctPeriodInfo *info)
   ntrans = get_num_xactions_before_date(currbook,
                    gnc_timet_get_day_end_gdate (&info->closing_date));
 
-  nacc = xaccGroupGetNumSubAccounts (xaccGetAccountGroup (currbook));
+  nacc = gnc_account_n_descendants (gnc_book_get_root_account (currbook));
 
   /* Display the book info */
   period_text = 
@@ -396,11 +395,11 @@ ap_show_book (GnomeDruidPage *druidpage,
 static void
 scrub_all(void)
 {
-  AccountGroup *group = gnc_get_current_group ();
-  xaccGroupScrubOrphans (group);
-  xaccGroupScrubImbalance (group);
+  Account *root = gnc_get_current_root_account ();
+  xaccAccountTreeScrubOrphans (root);
+  xaccAccountTreeScrubImbalance (root);
   // XXX: Lots are disabled
-  //xaccGroupScrubLots (group);
+  // xaccAccountTreeScrubLots (root);
 }
 
 /* =============================================================== */

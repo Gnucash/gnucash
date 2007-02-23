@@ -91,7 +91,7 @@
        (gnc:filter-accountlist-type
         (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY ACCT-TYPE-INCOME
                           ACCT-TYPE-EXPENSE)
-        (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+        (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
 
     ;; Set the general page as default option tab
@@ -281,19 +281,10 @@
       (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
 
     ;; helper for account depth
-    (define (account-get-depth account)
-      (define (account-get-depth-internal account-internal depth)
-        (let ((parent (xaccAccountGetParentAccount account-internal)))
-          (if (not (null? parent))
-            (account-get-depth-internal parent (+ depth 1))
-            depth)))
-      (account-get-depth-internal account 1))
-
     (define (accounts-get-children-depth accounts)
       (apply max
 	     (map (lambda (acct)
-		    (let ((children
-			   (gnc:account-get-immediate-subaccounts acct)))
+		    (let ((children (gnc-account-get-children acct)))
 		      (if (null? children)
 			  1
 			  (+ 1 (accounts-get-children-depth children)))))

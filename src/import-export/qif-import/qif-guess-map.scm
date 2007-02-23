@@ -27,10 +27,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:load-map-prefs)
-  (define (extract-all-account-info agroup root-name)
-    (if (null? agroup)
+  (define (extract-all-account-info an-account root-name)
+    (if (null? an-account)
         '()
-        (let ((children-list (xaccGroupGetAccountListSorted agroup))
+        (let ((children-list (gnc-account-get-children-sorted an-account))
               (names '()))
           
           ;; now descend the tree of child accounts.
@@ -45,9 +45,7 @@
                          name)))
                (set! names 
                      (append (cons (list name fullname child-acct)
-                                   (extract-all-account-info 
-                                    (xaccAccountGetChildren child-acct)
-                                    fullname))
+                                   (extract-all-account-info child-acct fullname))
                              names))))
            children-list)
           names)))
@@ -112,7 +110,7 @@
                               (make-hash-table 20)))))
     
     ;; now build the list of all known account names 
-    (let* ((all-accounts (gnc-get-current-group))
+    (let* ((all-accounts (gnc-get-current-root-account))
            (all-account-info (extract-all-account-info all-accounts #f)))
       (set! results (cons all-account-info results)))
     results))

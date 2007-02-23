@@ -169,12 +169,12 @@ Account * gnc_import_select_account(gncUIWidget parent,
   /*DEBUG("Looking for account with online_id: %s", account_online_id_value);*/
   if(account_online_id_value!=NULL)
     {
-      retval = xaccGroupForEachAccount(gnc_get_current_group (),
+      retval =
+	gnc_account_foreach_descendant_until(gnc_get_current_root_account (),
 				       test_acct_online_id_match,
 				       /* This argument will only be
 					  used as a "const char*" */
-				       (void*)account_online_id_value,
-				       TRUE);
+				       (void*)account_online_id_value);
     }
   if(retval==NULL && auto_create != 0)
     {

@@ -62,16 +62,11 @@ gboolean xaccScrubLot (GNCLot *lot);
  *    lot structure, and the cap-gains for an account are in good 
  *    order.
  *
- * The xaccGroupScrubLots() routine walks the account tree, and invokes 
- *    xaccAccountScrubLots() on all accounts that are trading accounts.
- * The xaccAccountTreeScrubLots() does the same.
- *
  * Most GUI routines will want to use one of these xacc[*]ScrubLots()
  * routines, instead of the various component routines, since it will 
  * usually makes sense to work only with these high-level routines.
  */
 void xaccAccountScrubLots (Account *acc);
-void xaccGroupScrubLots (AccountGroup *grp);
 void xaccAccountTreeScrubLots (Account *acc);
 
 /** @} */

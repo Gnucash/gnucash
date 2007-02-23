@@ -39,8 +39,8 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "Group.h"
-#include "GroupP.h"
+#include "Account.h"
+#include "Split.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
@@ -53,52 +53,54 @@ static QofLogModule log_module = GNC_MOD_SX;
 
 /* ====================================================================== */
 
-AccountGroup *
-gnc_collection_get_template_group( const QofCollection *col )
+static Account *
+gnc_collection_get_template_root( const QofCollection *col )
 {
   return qof_collection_get_data (col);
 }
 
-AccountGroup *
-gnc_book_get_template_group( QofBook *book )
+Account *
+gnc_book_get_template_root( QofBook *book )
 {
   QofCollection *col;
   if (!book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_SXTG);
-  return gnc_collection_get_template_group (col);
+  return gnc_collection_get_template_root (col);
 }
 
-void
-gnc_collection_set_template_group (QofCollection *col,
-                                   AccountGroup *templateGroup)
+static void
+gnc_collection_set_template_root (QofCollection *col,
+                                  Account *templateRoot)
 {
-  AccountGroup *old_grp;
+  Account *old_root;
   if (!col) return;
 
-  old_grp = gnc_collection_get_template_group (col);
-  if (old_grp == templateGroup) return;
+  old_root = gnc_collection_get_template_root (col);
+  if (old_root == templateRoot) return;
 
-  qof_collection_set_data (col, templateGroup);
+  qof_collection_set_data (col, templateRoot);
 
-  xaccAccountGroupBeginEdit (old_grp);
-  xaccAccountGroupDestroy (old_grp);
+  if (old_root) {
+    xaccAccountBeginEdit (old_root);
+    xaccAccountDestroy (old_root);
+  }
 }
 
 
 void
-gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
+gnc_book_set_template_root (QofBook *book, Account *templateRoot)
 {
   QofCollection *col;
   if (!book) return;
 
-  if (templateGroup && templateGroup->book != book)
+  if (templateRoot && gnc_account_get_book(templateRoot) != book)
   {
        g_critical("cannot mix and match books freely!");
        return;
   }
 
   col = qof_book_get_collection (book, GNC_ID_SXTG);
-  gnc_collection_set_template_group (col, templateGroup);
+  gnc_collection_set_template_root (col, templateRoot);
 }
 
 
@@ -108,25 +110,53 @@ gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
 static void 
 sxtg_book_begin (QofBook *book)
 {
-  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
+  Account *root;
+
+  root = xaccMallocAccount(book);
+  xaccAccountBeginEdit(root);
+  xaccAccountSetType(root, ACCT_TYPE_ROOT);
+  xaccAccountCommitEdit(root);
+  gnc_book_set_template_root (book, root);
 }
 
 static void 
 sxtg_book_end (QofBook *book)
 {
-  gnc_book_set_template_group (book, NULL);
+  gnc_book_set_template_root (book, NULL);
 }
 
 static gboolean
 sxtg_is_dirty(const QofCollection *col)
 {
-  return xaccGroupNotSaved(gnc_collection_get_template_group(col));
+  Account *root;
+  GList *descendants, *node;
+  gboolean dirty = FALSE;
+
+  root = gnc_collection_get_template_root(col);
+  descendants = gnc_account_get_descendants(root);
+  for (node = descendants; node; node = g_list_next(node)) {
+    if (qof_instance_is_dirty(node->data)) {
+      dirty = TRUE;
+      break;
+    }
+  }
+  g_list_free(descendants);
+
+  return dirty;
 }
   
 static void
 sxtg_mark_clean(QofCollection *col)
 {
-  xaccGroupMarkSaved(gnc_collection_get_template_group(col));
+  Account *root;
+  GList *descendants;
+
+  root = gnc_collection_get_template_root(col);
+  qof_collection_mark_clean(col);
+
+  descendants = gnc_account_get_descendants(root);
+  g_list_foreach(descendants, (GFunc)qof_instance_mark_clean, NULL);
+  g_list_free(descendants);
 }
 
 static QofObject sxtg_object_def = 

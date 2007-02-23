@@ -256,7 +256,7 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 
   gnc_acc = data->gnc_acc;
   g_assert(gnc_acc);
-  book = xaccAccountGetBook(gnc_acc);
+  book = gnc_account_get_book(gnc_acc);
 
   /* Create new gnucash transaction for the given hbci one */
   gnc_trans = xaccMallocTransaction(book);

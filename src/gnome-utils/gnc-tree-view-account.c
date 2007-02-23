@@ -34,7 +34,6 @@
 #include "gnc-tree-view-account.h"
 
 #include "Account.h"
-#include "Group.h"
 #include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -66,8 +65,6 @@ static void gtva_currency_changed_cb (void);
 static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
-
-static Account *gtva_get_top_level_from_model (GtkTreeModel *s_model);
 
 static void gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
                                                  GtkTreeViewColumn *column,
@@ -466,7 +463,7 @@ sort_by_total_period_value (GtkTreeModel *f_model,
  * model.
  */
 GtkTreeView *
-gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
+gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 {
   GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
@@ -482,7 +479,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
 
   /* Create/get a pointer to the existing model for this set of books. */
-  model = gnc_tree_model_account_new (group);
+  model = gnc_tree_model_account_new (root);
 
   /* Set up the view private filter layer on the common model. */
   if (!show_root)
@@ -679,10 +676,10 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 GtkTreeView *
 gnc_tree_view_account_new (gboolean show_root)
 {
-  AccountGroup *group;
+  Account *root;
 
-  group = gnc_book_get_group (gnc_get_current_book ());
-  return gnc_tree_view_account_new_with_group (group, show_root);
+  root = gnc_book_get_root_account (gnc_get_current_book ());
+  return gnc_tree_view_account_new_with_root (root, show_root);
 }
 
 /************************************************************/
@@ -946,34 +943,6 @@ gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
 /************************************************************/
 /*           Account Tree View Get/Set Functions            */
 /************************************************************/
-
-static Account *
-gtva_get_top_level_from_model (GtkTreeModel *s_model)
-{
-  GtkTreeModel *model, *f_model;
-
-  g_return_val_if_fail (GTK_TREE_MODEL_SORT (s_model), NULL);
-
-  f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
-  model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model));
-
-  return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT (model));
-}
-
-/*
- * Return the account associated with the top level pseudo-account for
- * the tree.
- */
-Account *
-gnc_tree_view_account_get_top_level (GncTreeViewAccount *view)
-{
-  GtkTreeModel *s_model;
-
-  g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
-  s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
-
-  return gtva_get_top_level_from_model (s_model);
-}
 
 /*
  * Retrieve the selected account from an account tree view.  The
@@ -2011,8 +1980,8 @@ tree_restore_expanded_row (GncTreeViewAccount *view,
   QofBook *book;
 
   book = qof_session_get_book(gnc_get_current_session());
-  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-				       account_name);
+  account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
+                                            account_name);
   if (account)
     gnc_tree_view_account_expand_to_account(view, account);
 }
@@ -2033,8 +2002,8 @@ tree_restore_selected_row (GncTreeViewAccount *view,
   QofBook *book;
 
   book = qof_session_get_book(gnc_get_current_session());
-  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-				       account_name);
+  account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
+					    account_name);
   if (account)
       gnc_tree_view_account_set_selected_account(view, account);
 }
@@ -2117,12 +2086,12 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
 void
 gnc_tree_view_account_name_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_name)
 {
-  // check for accounts with the same name in our parent's group.
+  // check for accounts with the same name among our parent's children.
   // should probably factor this consistency check out to the account
-  // itself... or maybe the account group.
+  // itself....
   {
-    AccountGroup *parent = xaccAccountGetParent(account);
-    Account *existing = xaccGetAccountFromName(parent, new_name);
+    Account *parent = gnc_account_get_parent(account);
+    Account *existing = gnc_account_lookup_by_name(parent, new_name);
     if (existing != NULL && existing != account)
     {
       PERR("account with the same name [%s] already exists.", new_name);

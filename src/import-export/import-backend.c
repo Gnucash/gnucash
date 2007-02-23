@@ -866,7 +866,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 	    /* Create the 'other' split. */
 	    Split *split = 
 	      xaccMallocSplit
-	      (xaccAccountGetBook
+	      (gnc_account_get_book
 	       (gnc_import_TransInfo_get_destacc (trans_info)));
 	    xaccTransAppendSplit
 	      (gnc_import_TransInfo_get_trans (trans_info), split);

@@ -35,8 +35,6 @@
 #include "gnc-xml-helper.h"
 #include "Account.h"
 #include "AccountP.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Query.h"
 #include "QueryP.h"
 #include "Scrub.h"
@@ -95,8 +93,8 @@ typedef struct {
   /* The book */
   QofBook *book;
 
-  /* The account group */
-  AccountGroup *account_group;
+  /* The root account */
+  Account *root_account;
 
   /* The pricedb */
   GNCPriceDB *pricedb;
@@ -222,7 +220,7 @@ gnc_version_parser_new(void)
    -----------
    start: NA
    before-child: make sure we don't get two ledger-data's (not allowed ATM).
-   after-child: if a ledger-data child, parse_data->account_group = *result.
+   after-child: if a ledger-data child, parse_data->root_account = *result.
    characters: allow_and_ignore_only_whitespace
 
    Similarly, only one query is allowed ... 
@@ -252,7 +250,7 @@ gnc_parser_before_child_handler(gpointer data_for_children,
   g_return_val_if_fail(pstatus, FALSE);
 
   if(strcmp(child_tag, "ledger-data") == 0) {
-    if(pstatus->account_group) {
+    if(pstatus->root_account) {
       return(FALSE);
     }
   }
@@ -283,7 +281,7 @@ gnc_parser_after_child_handler(gpointer data_for_children,
   {
     g_return_val_if_fail(child_result, FALSE);
     g_return_val_if_fail(child_result->data, FALSE);
-    pstatus->account_group = (AccountGroup *) child_result->data;
+    pstatus->root_account = (Account *) child_result->data;
     child_result->should_cleanup = FALSE;
   }
 
@@ -345,7 +343,7 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 
   global_parse_status->seen_version = FALSE;
   global_parse_status->gnc_parser = gnc_pr;
-  global_parse_status->account_group = NULL;
+  global_parse_status->root_account = NULL;
   global_parse_status->pricedb = NULL;
   //  global_parse_status->query = NULL;
   global_parse_status->error = GNC_PARSE_ERR_NONE;
@@ -362,6 +360,7 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
   gpointer parse_result = NULL;
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
+  Account *root;
 
   global_parse_status.book = book;
   g_return_val_if_fail(book, FALSE);
@@ -382,15 +381,16 @@ qof_session_load_from_xml_file(QofBook *book, const char *filename)
 
   if(parse_ok) 
   {
-    if(!global_parse_status.account_group) return FALSE;
+    if(!global_parse_status.root_account) return FALSE;
 
-    xaccSetAccountGroup(book, global_parse_status.account_group);
+    root = global_parse_status.root_account;
+    gnc_book_set_root_account(book, root);
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (gnc_book_get_group(book));
+    xaccAccountTreeScrubCommodities (root);
 
     /* Fix split amount/value */
-    xaccGroupScrubSplits (gnc_book_get_group(book));
+    xaccAccountTreeScrubSplits (root);
 
     return(TRUE);
   } else {
@@ -1079,18 +1079,18 @@ kvp_frame_parser_new(void)
 /****************************************************************************/
 /* <ledger-data> (parent <gnc-data>)
 
-   On failure or on normal cleanup, the account group will be killed,
+   On failure or on normal cleanup, the root account will be killed,
    so if you want it, you better set should_cleanup to false
 
    input: NA
-   to-children-via-*result: new AccountGroup*
-   returns: an AccountGroup*
-   start: creates the account group and puts it into *result
+   to-children-via-*result: new root Account*
+   returns: an Account*
+   start: creates the root account and puts it into *result
    characters: NA
-   end: finishes up the account group and leaves it in result.
-   cleanup-result: deletes the account group (use should_cleanup to avoid).
+   end: finishes up the root account and leaves it in result.
+   cleanup-result: deletes the root account (use should_cleanup to avoid).
    cleanup-chars: NA
-   fail: deletes the account group in *result.
+   fail: deletes the root account in *result.
    result-fail: same as cleanup-result.
    chars-fail: NA
 
@@ -1103,16 +1103,16 @@ ledger_data_start_handler(GSList* sibling_data, gpointer parent_data,
                           gpointer *result, const gchar *tag, gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  AccountGroup *ag;
+  Account *ra;
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
-  ag = xaccMallocAccountGroup(pstatus->book);
+  ra = xaccMallocAccount(pstatus->book);
 
-  g_return_val_if_fail(ag, FALSE);
+  g_return_val_if_fail(ra, FALSE);
 
-  *data_for_children = ag;
-  return(ag != NULL);
+  *data_for_children = ra;
+  return(ra != NULL);
 }
 
 static gboolean
@@ -1154,23 +1154,21 @@ ledger_data_end_handler(gpointer data_for_children,
                         gpointer *result, const gchar *tag)
 {
   
-  AccountGroup *ag = (AccountGroup *) data_for_children;
+  Account *ra = (Account *) data_for_children;
+  GList *descendants;
 
-  g_return_val_if_fail(ag, FALSE);
+  g_return_val_if_fail(ra, FALSE);
 
-  /* mark the newly read group as saved, since the act of putting 
-   * it together will have caused it to be marked up as not-saved. 
-   */
-  xaccGroupMarkSaved (ag);
-
-  /* commit all groups, this completes the BeginEdit started when the
+  /* commit all accounts, this completes the BeginEdit started when the
    * account_end_handler finished reading the account.
    */
-  xaccAccountGroupCommitEdit (ag);
+  descendants = gnc_account_get_descendants(ra);
+  g_list_foreach(descendants, (GFunc)xaccAccountCommitEdit, NULL);
+  g_list_free(descendants);
 
   xaccLogEnable();
 
-  *result = ag;
+  *result = ra;
   return(TRUE);
 }
 
@@ -1183,22 +1181,22 @@ ledger_data_fail_handler(gpointer data_for_children,
                          gpointer *result,
                          const gchar *tag)
 {
-  AccountGroup *ag = (AccountGroup *) data_for_children;
-  if(ag) 
+  Account *account = (Account *) data_for_children;
+  if (account)
   {
-    xaccAccountGroupBeginEdit(ag);
-    xaccAccountGroupDestroy(ag);
+    xaccAccountBeginEdit(account);
+    xaccAccountDestroy(account);
   }
 }
 
 static void
 ledger_data_result_cleanup(sixtp_child_result *cr)
 {
-  AccountGroup *ag = (AccountGroup *) cr->data;
-  if(ag) 
+  Account *account = (Account *) cr->data;
+  if (account)
   {
-    xaccAccountGroupBeginEdit(ag);
-    xaccAccountGroupDestroy(ag);
+    xaccAccountBeginEdit(account);
+    xaccAccountDestroy(account);
   }
 }
 
@@ -1245,9 +1243,9 @@ ledger_data_parser_new(void)
    to its children.  It generates no data of its own, so it doesn't
    need any cleanup.
 
-   input: AccountGroup*
+   input: Account*
 
-   to-children-via-*result: AccountGroup*
+   to-children-via-*result: Account*
 
    returns: NA
    
@@ -1291,7 +1289,7 @@ account_start_handler(GSList* sibling_data,
    if the resultant account is OK, and if so, we add it to the
    ledger-data's account group.
  
-   input: AccountGroup*
+   input: Account*
    to-children-via-*result: new Account*
    returns: NA
    start: create new Account*, and leave in for children.
@@ -1331,20 +1329,18 @@ account_restore_end_handler(gpointer data_for_children,
                             gpointer parent_data, gpointer global_data,
                             gpointer *result, const gchar *tag)
 {
-  AccountGroup *ag = (AccountGroup *) parent_data;
+  Account *parent = (Account *) parent_data;
   Account *acc = (Account *) *result;
-  AccountGroup *parent_ag;
 
-  g_return_val_if_fail((ag && acc), FALSE);
+  g_return_val_if_fail((parent && acc), FALSE);
 
   /* CHECKME: do we need to xaccAccountRecomputeBalance(acc) here? */
   xaccAccountCommitEdit(acc);
 
   /* If the account doesn't have a parent yet, just cram it into the
      top level */
-  parent_ag = xaccAccountGetParent(acc);
-
-  if(!parent_ag) xaccGroupInsertAccount(ag, acc);
+  if (!gnc_account_get_parent(acc))
+    gnc_account_append_child(parent, acc);
 
   *result = NULL;
 
@@ -1713,7 +1709,7 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   
   g_return_val_if_fail(parent, FALSE);
 
-  xaccAccountInsertSubAccount(parent, acc);
+  gnc_account_append_child(parent, acc);
 
   return(TRUE);
 }
@@ -2682,9 +2678,9 @@ query_server_parser_new (void)
    to its children.  It generates no data of its own, so it doesn't
    need any cleanup.
 
-   input: AccountGroup*
+   input: Account*
 
-   to-children-via-*result: AccountGroup*
+   to-children-via-*result: Account*
 
    returns: NA
    
@@ -2724,7 +2720,7 @@ transaction_start_handler(GSList* sibling_data, gpointer parent_data,
    see if the resultant account is OK, and if so, we add it to the
    ledger-data's account group.
  
-   from parent: AccountGroup*
+   from parent: Account*
 
    for children: new Transaction*
 
@@ -2772,11 +2768,11 @@ txn_restore_end_handler(gpointer data_for_children,
                         gpointer parent_data, gpointer global_data,
                         gpointer *result, const gchar *tag)
 {
-  AccountGroup *ag = (AccountGroup *) parent_data;
+  Account *parent = (Account *) parent_data;
   Transaction *trans = (Transaction *) data_for_children;
 
   g_return_val_if_fail(trans, FALSE);
-  if(!ag) {
+  if (!parent) {
     xaccTransDestroy(trans);
     xaccTransCommitEdit(trans);
     return(FALSE);

@@ -144,7 +144,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
 
   include_children = xaccAccountGetReconcileChildrenStatus(account);
   if (include_children)
-    accounts = xaccAccountGetDescendants(account);
+    accounts = gnc_account_get_descendants(account);
 
   /* match the account */
   accounts = g_list_prepend (accounts, account);
@@ -290,7 +290,6 @@ gnc_reconcile_list_toggle_split(GNCReconcileList *list, Split *split)
 static void
 gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Split *split)
 {
-  AccountGroup *account_group;
   GList *child_accounts, *node;
   Transaction *transaction;
 
@@ -301,8 +300,7 @@ gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Spl
    *
    * For each of these splits toggle them all to the same state.
    */
-  account_group = xaccAccountGetChildren(account);
-  child_accounts = xaccGroupGetSubAccounts(account_group);
+  child_accounts = gnc_account_get_descendants(account);
   child_accounts = g_list_prepend(child_accounts, account);
   transaction = xaccSplitGetParent(split);
   for(node = xaccTransGetSplitList(transaction); node; node = node->next)
@@ -331,6 +329,7 @@ gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Spl
     }
     gnc_reconcile_list_toggle_split(current_list, other_split);
   }
+  g_list_free(child_accounts);
 }
 
 static void

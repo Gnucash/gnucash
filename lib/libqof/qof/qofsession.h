@@ -229,7 +229,7 @@ gboolean qof_session_save_may_clobber_data (QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
- *    more than a write to the file of the current AccountGroup & etc.
+ *    more than a write to the file of the current Accounts & etc.
  *    For the SQL backend, this is typically a no-op (since all data
  *    has already been written out to the database.
  */

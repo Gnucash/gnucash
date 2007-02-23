@@ -34,8 +34,6 @@
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Scrub.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
@@ -163,6 +161,8 @@ static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     gnc_commodity_table *table;
+    Account *parent, *root;
+    int type;
 
     table = gnc_book_get_commodity_table (data->book);
 
@@ -180,10 +180,20 @@ add_account_local(sixtp_gdv2 *data, Account *act)
     xaccAccountScrubCommodity (act);
     xaccAccountScrubKvp (act);
 
-    if(!xaccAccountGetParent(act))
-    {
-        xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
+    /* Backwards compatability.  If there's no parent, see if this
+     * account is of type ROOT.  If not, find or create a ROOT
+     * account and make that the parent. */
+    type = xaccAccountGetType(act);
+    if (type == ACCT_TYPE_ROOT) {
+      gnc_book_set_root_account(data->book, act);
+    } else {
+      parent = gnc_account_get_parent(act);
+      if (parent == NULL) {
+	root = gnc_book_get_root_account(data->book);
+	gnc_account_append_child(root, act);
+      }
     }
+
     data->counter.accounts_loaded++;
     run_callback(data, "account");
 
@@ -251,7 +261,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
 {
     GList *n;
     Account *tmpAcct;
-    AccountGroup *acctGroup = NULL;
+    Account *acctRoot = NULL;
     QofBook *book;
 
     book = data->book;
@@ -260,22 +270,20 @@ add_template_transaction_local( sixtp_gdv2 *data,
     /* . template accounts. */
     /* . transactions in those accounts. */
     for ( n = txd->accts; n; n = n->next ) {
-        if ( xaccAccountGetParent( (Account*)n->data ) == NULL ) {
+        if ( gnc_account_get_parent( (Account*)n->data ) == NULL ) {
             /* remove the gnc_book_init-created account of the same name */
-            acctGroup =
-            gnc_book_get_template_group(book);
-            tmpAcct =
-            xaccGetAccountFromName( acctGroup,
+            acctRoot = gnc_book_get_template_root(book);
+            tmpAcct = gnc_account_lookup_by_name( acctRoot,
                                     xaccAccountGetName( (Account*)n->data ) );
             if ( tmpAcct != NULL ) {
 /* XXX hack alert FIXME .... Should this be 'Remove', or 'Destroy'?
  * If we just remove, then this seems to be a memory leak to me, since
  * it is never reparented.  Shouldn't it be a Destroy ???
  */
-                xaccGroupRemoveAccount( acctGroup, tmpAcct );
+                gnc_account_remove_child( acctRoot, tmpAcct );
             }
 
-            xaccGroupInsertAccount( acctGroup, (Account*)n->data );
+            gnc_account_append_child( acctRoot, (Account*)n->data );
         }
 
     }
@@ -284,8 +292,6 @@ add_template_transaction_local( sixtp_gdv2 *data,
         /* insert transactions into accounts */
         add_transaction_local( data, (Transaction*)n->data );
     }
-
-    xaccAccountGroupCommitEdit (acctGroup);
 
     return TRUE;
 }
@@ -638,7 +644,7 @@ qof_session_load_from_xml_file_v2_full(
     FileBackend *fbe, QofBook *book,
     sixtp_push_handler push_handler, gpointer push_user_data)
 {
-    AccountGroup *grp;
+    Account *root;
     QofBackend *be = &fbe->be;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
@@ -745,19 +751,21 @@ qof_session_load_from_xml_file_v2_full(
     qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* fix price quote sources */
-    grp = gnc_book_get_group(book);
-    xaccGroupScrubQuoteSources (grp, gnc_book_get_commodity_table(book));
+    root = gnc_book_get_root_account(book);
+    xaccAccountTreeScrubQuoteSources (root, gnc_book_get_commodity_table(book));
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (grp);
+    xaccAccountTreeScrubCommodities (root);
 
     /* Fix split amount/value */
-    xaccGroupScrubSplits (grp);
+    xaccAccountTreeScrubSplits (root);
 
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
-    xaccAccountGroupCommitEdit (grp);
+    gnc_account_foreach_descendant(root,
+				   (AccountCb) xaccAccountCommitEdit,
+				   NULL);
 
     /* start logging again */
     xaccLogEnable ();
@@ -924,7 +932,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
                  "transaction",
                  gnc_book_count_transactions(book),
                  "schedxaction",
@@ -1036,26 +1044,26 @@ write_transactions(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     be_data.out = out;
     be_data.gd = gd;
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                xml_add_trn_data,
-                                (gpointer) &be_data);
+    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
+				      xml_add_trn_data,
+				      (gpointer) &be_data);
 }
 
 static void
 write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 {
-    AccountGroup *ag;
+    Account *ra;
     struct file_backend be_data;
 
     be_data.out = out;
     be_data.gd = gd;
 
-    ag = gnc_book_get_template_group(book);
-    if ( xaccGroupGetNumSubAccounts(ag) > 0 )
+    ra = gnc_book_get_template_root(book);
+    if ( gnc_account_n_descendants(ra) > 0 )
     {
         fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_group( out, ag, gd );
-        xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)&be_data );
+        write_account_tree( out, ra, gd );
+        xaccAccountTreeForEachTransaction( ra, xml_add_trn_data, (gpointer)&be_data );
         fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
     }
 }
@@ -1167,7 +1175,7 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
     gd->counter.accounts_total = 1 + 
-      xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
+      gnc_account_n_descendants(gnc_book_get_root_account(book));
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
       g_list_length(gnc_book_get_schedxactions(book)->sx_list);
@@ -1189,14 +1197,14 @@ gboolean
 gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *out)
 {
     gnc_commodity_table *table;
-    AccountGroup *grp;
+    Account *root;
     int ncom, nacc;
     sixtp_gdv2 *gd;
 
     if (!out) return FALSE;
 
-    grp = gnc_book_get_group(book);
-    nacc = 1 + xaccGroupGetNumSubAccounts(grp);
+    root = gnc_book_get_root_account(book);
+    nacc = 1 + gnc_account_n_descendants(root);
 
     table = gnc_book_get_commodity_table(book);
     ncom = gnc_commodity_table_get_size(table);

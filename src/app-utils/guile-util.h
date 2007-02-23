@@ -29,7 +29,7 @@
 
 #include "gnc-book.h"
 #include "qof.h"
-#include "Group.h"
+#include "Account.h"
 
 
 /* Helpful functions for calling functions that return

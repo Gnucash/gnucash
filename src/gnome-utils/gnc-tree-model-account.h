@@ -39,7 +39,7 @@
 #include <gtk/gtktreemodel.h>
 #include "gnc-tree-model.h"
 
-#include "Group.h"
+#include "Account.h"
 
 G_BEGIN_DECLS
 
@@ -124,27 +124,12 @@ GType gnc_tree_model_account_get_type (void);
  *
  *  @param group The account group to put at the top level of the tree
  *  hierarchy. */
-GtkTreeModel *gnc_tree_model_account_new (AccountGroup *group);
+GtkTreeModel *gnc_tree_model_account_new (Account *root);
 /** @} */
 
 
 /** @name Account Tree Model Get/Set Functions 
   @{ */
-
-/** This function returns the account associated with the top level
- *  pseudo-account.  The gnucash engine does not have a single top
- *  level account (it has a list of top level accounts), but this code
- *  provides one so that it can be used with all parts of the gnucash
- *  gui.
- *
- *  @internal This function should only be called from gnc-tree-view-account.c.
- *
- *  @param account_view A pointer to an account tree view.
- *
- *  @return The top-level pseudo-account.
- */
-Account *gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model);
-
 
 /** Convert a model/iter pair to a gnucash account.  This routine should
  *  only be called from an account tree view filter function.  The

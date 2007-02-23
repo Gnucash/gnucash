@@ -542,7 +542,7 @@ gnc_plugin_page_invoice_cmd_new_account (GtkAction *action,
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
   ENTER("(action %p, plugin_page %p)", action, plugin_page);
-  gnc_ui_new_account_window (NULL);
+  gnc_ui_new_account_window (gnc_get_current_book(), NULL);
   LEAVE(" ");
 }
 

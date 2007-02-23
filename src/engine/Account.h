@@ -32,8 +32,7 @@
     (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
     anything added to the commodity table.
 
-    Accounts can be arranged in a hierarchical tree. The nodes of the tree
-    are called "Account Groups" (@pxref{Account Groups}). By accounting
+    Accounts can be arranged in a hierarchical tree.  By accounting
     convention, the value of an Account is equal to the value of all of its
     Splits plus the value of all of its sub-Accounts.
     @{ */
@@ -56,6 +55,9 @@ typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
 
 typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
     Account *account, time_t date);
+
+typedef void (*AccountCb)(Account *a, gpointer data);
+typedef gpointer (*AccountCb2)(Account *a, gpointer data);
 
 #define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
 #define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
@@ -121,17 +123,19 @@ typedef enum
 
   ACCT_TYPE_PAYABLE = 12,  /**< A/P account type */
 
-  NUM_ACCOUNT_TYPES = 13,  /**< stop here; the following types
+  ACCT_TYPE_ROOT = 13, /**< The hidden root account of an account tree. */
+
+  NUM_ACCOUNT_TYPES = 14,  /**< stop here; the following types
 			    * just aren't ready for prime time */
   
   /* bank account types */
-  ACCT_TYPE_CHECKING = 13, /**< bank account type -- don't use this
+  ACCT_TYPE_CHECKING = 14, /**< bank account type -- don't use this
 			    *   for now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_SAVINGS = 14, /**< bank account type -- don't use this for
+  ACCT_TYPE_SAVINGS = 15, /**< bank account type -- don't use this for
 			   *   now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_MONEYMRKT = 15, /**< bank account type -- don't use this
+  ACCT_TYPE_MONEYMRKT = 16, /**< bank account type -- don't use this
 			     *   for now, see NUM_ACCOUNT_TYPES  */
-  ACCT_TYPE_CREDITLINE = 16, /**< line of credit -- don't use this for
+  ACCT_TYPE_CREDITLINE = 17, /**< line of credit -- don't use this for
 			      *   now, see NUM_ACCOUNT_TYPES  */
 } GNCAccountType;
 
@@ -142,6 +146,9 @@ typedef enum
 
 /** Constructor */
 Account * xaccMallocAccount (QofBook *book);
+
+/** Create a new root level account.  */
+Account * gnc_account_create_root (QofBook *book);
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
  *    except that it also also places a pair of GUID-pointers
@@ -205,8 +212,10 @@ const gchar *gnc_get_account_separator_string (void);
 gunichar gnc_get_account_separator (void);
 void gnc_set_account_separator (const gchar *separator);
 
+Account *gnc_book_get_root_account(QofBook *book);
+void gnc_book_set_root_account(QofBook *book, Account *root);
+
 /** @deprecated */
-#define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
 #define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 
@@ -223,6 +232,7 @@ Account * xaccAccountLookup (const GUID *guid, QofBook *book);
 /** @name Account general setters/getters 
  @{ */
 
+QofBook *gnc_account_get_book(const Account *account);
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
 /** Set the account's name */
@@ -445,32 +455,278 @@ gnc_numeric xaccAccountGetBalanceChangeForPeriod (
  @{
 */
 
-/** This routine returns the group holding the set of subaccounts 
- * for this account.  */
-AccountGroup * xaccAccountGetChildren (const Account *account);
-
-/** This routine returns the group which contains this account.
- */
-AccountGroup * xaccAccountGetParent (const Account *account);
-
-/** This routine returns the parent of the group that is the parent
- * of this account.  It is equivalent to the nested call
- * xaccGroupGetParentAccount (xaccAccountGetParent ())
- * Note that if the account is in the root group node, then its
- * parent will be NULL.
- */
-Account * xaccAccountGetParentAccount (const Account *account);
-
-/** This routine returns a flat list of all of the accounts
- * that are descendents of this account.  This includes not
- * only the the children, but the children of the children, etc.
- * This routine is equivalent to the nested calls
- * xaccGroupGetSubAccounts (xaccAccountGetChildren())
+/** This function will remove from the child account any pre-existing
+ *  parent relationship, and will then add the account as a child of
+ *  the new parent.  The exception to this is when the old and new
+ *  parent accounts are the same, in which case this function does
+ *  nothing.
  *
- * The returned list should be freed with g_list_free() when 
- * no longer needed.
+ *  If the child account belongs to a different book than the
+ *  specified new parent account, the child will be removed from the
+ *  other book (and thus, the other book's entity tables, generating a
+ *  destroy event), and will be added to the new book (generating a
+ *  create event).
+ *
+ *  @param new_parent The new parent account to which the child should
+ *  be attached.
+ *
+ *  @param child The account to attach.
  */
-GList * xaccAccountGetDescendants (const Account *account);
+void gnc_account_append_child (Account *new_parent, Account *child);
+
+/** This function will remove the speified child account from the
+ *  specified parent account. It will NOT free the associated memory
+ *  or otherwise alter the account: the account can now be reparented
+ *  to a new location.  Note, however, that it will mark the old
+ *  parents as having been modified.
+ *
+ *  @param parent The parent account from which the child should be
+ *  removed.
+ *
+ *  @param child The child account to remove. */
+void gnc_account_remove_child (Account *parent, Account *child);
+
+/** This routine returns a pointer to the parent of the specified
+ *  account.  If the account has no parent, i.e it is either the root
+ *  node or is a disconnected account, then its parent will be NULL.
+ *
+ *  @param account A pointer to any exiting account.
+ *
+ *  @return A pointer to the parent account node, or NULL if there is
+ *  no parent account. */
+Account * gnc_account_get_parent (const Account *account);
+
+/** This routine returns the root account of the account tree that the
+ *  specified account belongs to.  It is the equivalent of repeatedly
+ *  calling the gnc_account_get_parent() routine until that routine
+ *  returns NULL.
+ *
+ *  @param account A pointer to any existing account.
+ *
+ *  @return The root node of the account tree to which this account
+ *  belongs.  NULL if the account is not part of any account tree. */
+Account * gnc_account_get_root (Account *account);
+
+/** This routine indicates whether the spcified account is the root
+ *  node of an account tree.
+ *
+ *  @param account A pointer to any account.
+ *
+ *  @return TRUE if this account is of type ROOT.  FALSE otherwise. */
+gboolean gnc_account_is_root (const Account *account);
+
+/** This routine returns a GList of all children of the specified
+ *  account.  This function only returns the immediate children of the
+ *  specified account.  For a list of all descendant accounts, use the
+ *  gnc_account_get_descendants() function.
+ *
+ *  @param account The account whose children should be returned.
+ *
+ *  @return A GList of account pointers, or NULL if there are no
+ *  children. It is the callers responsibility to free any returned
+ *  list with the g_list_free() function. */
+GList *gnc_account_get_children (const Account *account);
+GList *gnc_account_get_children_sorted (const Account *account);
+
+/** Return the number of children of the specified account.  The
+ *  returned number does not include the account itself.
+ *
+ *  @param account The account to query.
+ *
+ *  @return The number of children of the specified account. */
+gint gnc_account_n_children (const Account *account);
+
+/** Return the index of the specified child within the list of the
+ *  parent's children.  The first child index is 0.  This function
+ *  returns -1 if the parent account is NULL of if the specified child
+ *  does not belong to the parent account.
+ *
+ *  @param parent The parent account to check.
+ *
+ *  @param child The child account to find.
+ *
+ *  @return The index of the child account within the specified
+ *  parent, or -1. */
+gint gnc_account_child_index (const Account *parent, const Account *child);
+
+/** Return the n'th child account of the specified parent account.  If
+ *  the parent account is not specified or the child index number is
+ *  invalid, this function returns NULL.
+ *
+ *  @param parent The parent account to check.
+ *
+ *  @param num The index number of the child account that should be
+ *  returned.
+ *
+ *  @return A pointer to the specified child account, or NULL */
+Account *gnc_account_nth_child (const Account *parent, gint num);
+
+/** This routine returns a flat list of all of the accounts that are
+ *  descendants of the specified account.  This includes not only the
+ *  the children, but the children of the children, etc. For a list of
+ *  only the immediate child accounts, use the
+ *  gnc_account_get_children() function.  Within each set of child
+ *  accounts, the accounts returned by this function are unordered.
+ *  For a list of descendants where each set of children is sorted via
+ *  the standard account sort function, use the
+ *  gnc_account_get_descendants_sorted() function.
+ *
+ *  @param account The account whose descendants should be returned.
+ *
+ *  @return A GList of account pointers, or NULL if there are no
+ *  descendants. It is the callers responsibility to free any returned
+ *  list with the g_list_free() function. */
+GList * gnc_account_get_descendants (const Account *account);
+
+/** This function returns a GList containing all the descendants of
+ *  the specified account, sorted at each level.  This includes not
+ *  only the the children, but the children of the children, etc.
+ *  Within each set of child accounts, the accounts returned by this
+ *  function are ordered via the standard account sort function.  For
+ *  a list of descendants where each set of children is unordered, use
+ *  the gnc_account_get_descendants() function.
+ *
+ *  Note: Use this function where the results are intended for display
+ *  to the user.  If the results are internal to GnuCash or will be
+ *  resorted at som later point in time you should use the
+ *  gnc_account_get_descendants() function.
+ *
+ *  @param account The account whose descendants should be returned.
+ *
+ *  @return A GList of account pointers, or NULL if there are no
+ *  descendants. It is the callers responsibility to free any returned
+ *  list with the g_list_free() function. */
+GList *gnc_account_get_descendants_sorted (const Account *account);
+
+/** Return the number of descendants of the specified account.  The
+ *  returned number does not include the account itself.
+ *
+ *  @param account The account to query.
+ *
+ *  @return The number of descendants of the specified account. */
+gint gnc_account_n_descendants (const Account *account);
+
+/** Return the number of levels of this account below the root
+ *  account.
+ *
+ *  @param account The account to query.
+ *
+ *  @return The number of levels below the root. */
+gint gnc_account_get_current_depth (const Account *account);
+
+/** Return the number of levels of descendants accounts below the
+ *  specified account.  The returned number does not include the
+ *  specifed account itself.
+ *
+ *  @param account The account to query.
+ *
+ *  @return The number of levels of descendants. */
+gint gnc_account_get_tree_depth (const Account *account);
+
+/** @name ForEach
+ @{
+*/
+
+/** This method will traverse the immediate children of this accounts,
+ *  calling 'func' on each account.  This function traverses all
+ *  children nodes.  To traverse only a subset of the child nodes use
+ *  the gnc_account_foreach_child_until() function.
+ *
+ *  @param account A pointer to the account on whose children the
+ *  function should be called.
+ *
+ *  @param func A function taking two arguments, an Account and a
+ *  gpointer.
+ *
+ *  @param user_data This data will be passed to each call of func. */
+void gnc_account_foreach_child (const Account *account,
+				AccountCb func, gpointer user_data);
+
+/** This method will traverse the immediate children of this accounts,
+ *  calling 'func' on each account.  Traversal will stop when func
+ *  returns a non-null value, and the routine will return with that
+ *  value.  Therefore, this function will return null iff func returns
+ *  null for every account.  For a simpler function that always
+ *  traverses all children nodes, use the gnc_account_foreach_child()
+ *  function.
+ *
+ *  @param account A pointer to the account on whose children the
+ *  function should be called.
+ *
+ *  @param func A function taking two arguments, an Account and a
+ *  gpointer.
+ *
+ *  @param user_data This data will be passed to each call of func. */
+gpointer gnc_account_foreach_child_until (const Account *account,
+					  AccountCb2 func, gpointer user_data);
+
+
+/** This method will traverse all children of this accounts and their
+ *  descendants, calling 'func' on each account.  This function
+ *  traverses all descendant nodes.  To traverse only a subset of the
+ *  descendant nodes use the gnc_account_foreach_descendant_until()
+ *  function.
+ *
+ *  @param account A pointer to the account on whose descendants the
+ *  function should be called.
+ *
+ *  @param func A function taking two arguments, an Account and a
+ *  gpointer.
+ *
+ *  @param user_data This data will be passed to each call of func. */
+void gnc_account_foreach_descendant (const Account *account,
+				     AccountCb func, gpointer user_data);
+
+/** This method will traverse all children of this accounts and their
+ *  descendants, calling 'func' on each account.  Traversal will stop
+ *  when func returns a non-null value, and the routine will return
+ *  with that value.  Therefore, this function will return null iff
+ *  func returns null for every account.  For a simpler function that
+ *  always traverses all children nodes, use the
+ *  gnc_account_foreach_descendant() function.
+ *
+ *  @param account A pointer to the account on whose descendants the
+ *  function should be called.
+ *
+ *  @param func A function taking two arguments, an Account and a
+ *  gpointer.
+ *
+ *  @param user_data This data will be passed to each call of func. */
+gpointer gnc_account_foreach_descendant_until (const Account *account,
+					       AccountCb2 func, gpointer user_data);
+
+
+/** @} */
+
+/** @name Concatenation, Merging
+ @{
+*/
+
+/** The gnc_account_join_children() subroutine will move (reparent)
+ *  all child accounts from the from_parent account to the to_parent
+ *  account, preserving the account heirarchy.  It will also take care
+ *  that the moved accounts will have the to_parent's book parent
+ *  as well.
+ */
+void gnc_account_join_children (Account *to_parent, Account *from_parent);
+
+/** The gnc_account_copy_children() subroutine will copy all child
+ *  accounts from the "src" account to the "dest" account, preserving
+ *  the account heirarchy.  It will also take care that the moved
+ *  accounts will have the "dest" account's book parent as well.  This
+ *  routine will *NOT* copy any splits/transactions.  It will copy the
+ *  KVP trees in each account.
+ */
+void gnc_account_copy_children (Account *dest, Account *src);
+
+/** The gnc_account_merge_children() subroutine will go through an
+ *  account, merging all child accounts that have the same name and
+ *  description.  This function is useful when importing Quicken(TM)
+ *  files.
+ */
+void gnc_account_merge_children (Account *parent);
+
+/** @} */
 
 /** DOCUMENT ME! */
 void xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
@@ -489,6 +745,28 @@ gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
 
 /** @} */
 
+/** @name Getting Accounts and Subaccounts by Name
+ @{
+*/
+/** The gnc_account_lookup_by_name() subroutine fetches the account by
+ *  name from the descendants of the specified account.  The immediate
+ *  children are searched first.  If there is no match,, then a
+ *  recursive search of all descendants is performed looking for a
+ *  match.
+ *
+ *  @return A pointer to the account with the specified name, or NULL
+ *  if the account was not found.
+ */
+Account *gnc_account_lookup_by_name (const Account *parent, const char *name);
+
+/** The gnc_account_lookup_full_name() subroutine works like
+ *  gnc_account_lookup_by_name, but uses fully-qualified names using the
+ *  given separator.
+ */
+Account *gnc_account_lookup_by_full_name (const Account *any_account,
+					  const gchar *name);
+
+/** @} */
 
 /* ------------------ */
 
@@ -694,7 +972,7 @@ typedef enum
 /** Get the "placeholder" flag for an account.  If this flag is set
  *  then the account may not be modified by the user.
  *
- *  @param acc The account whose flag should be retrieved.
+ *  @param account The account whose flag should be retrieved.
  *
  *  @return The current state of the account's "placeholder" flag. */
 gboolean xaccAccountGetPlaceholder (const Account *account);
@@ -702,13 +980,13 @@ gboolean xaccAccountGetPlaceholder (const Account *account);
 /** Set the "placeholder" flag for an account.  If this flag is set
  *  then the account may not be modified by the user.
  *
- *  @param acc The account whose flag should be retrieved.
+ *  @param account The account whose flag should be retrieved.
  *
  *  @param val The new state for the account's "placeholder" flag. */
-void xaccAccountSetPlaceholder (Account *account, gboolean option);
+void xaccAccountSetPlaceholder (Account *account, gboolean val);
 
 /** Returns PLACEHOLDER_NONE if account is NULL or neither account nor
- *  any descendent of account is a placeholder.  If account is a
+ *  any descendant of account is a placeholder.  If account is a
  *  placeholder, returns PLACEHOLDER_THIS.  Otherwise, if any
  *  descendant of account is a placeholder, return PLACEHOLDER_CHILD.
  */
@@ -782,15 +1060,149 @@ void xaccAccountSetMark (Account *account, short mark);
 /** Get the mark set by xaccAccountSetMark */
 short xaccAccountGetMark (const Account *account);
 
-/** The xaccClearMark will find the topmost group, and clear the mark in
- * the entire group tree.  */
+/** The xaccClearMark will find the root account, and clear the mark in
+ * the entire account tree.  */
 void xaccClearMark (Account *account, short val);
 
 /** The xaccClearMarkDown will clear the mark only in this and in
  * sub-accounts.*/
 void xaccClearMarkDown (Account *account, short val);
-/** Will clear the mark for all the accounts of the AccountGroup .*/
-void xaccClearMarkDownGr (AccountGroup *group, short val);
+/** @} */
+
+/** @name Staged Traversal
+
+ * The following functions provide support for "staged traversals"
+ * over all of the transactions in an account or group.  The idea
+ * is to be able to perform a sequence of traversals ("stages"),
+ * and perform an operation on each transaction exactly once 
+ * for that stage.  
+ *
+ * Only transactions whose current "stage" is less than the
+ * stage of the current traversal will be affected, and they will
+ * be "brought up" to the current stage when they are processed.
+ *
+ * For example, you could perform a stage 1 traversal of all the
+ * transactions in an account, and then perform a stage 1 traversal of
+ * the transactions in a second account.  Presuming the traversal of
+ * the first account didn't abort prematurely, any transactions shared
+ * by both accounts would be ignored during the traversal of the
+ * second account since they had been processed while traversing the
+ * first account.
+ *
+ * However, if you had traversed the second account using a stage 
+ * of 2, then all the transactions in the second account would have 
+ * been processed.
+ *
+ * Traversal can be aborted by having the callback function return
+ * a non-zero value.  The traversal is aborted immediately, and the 
+ * non-zero value is returned.  Note that an aborted traversal can 
+ * be restarted; no information is lost due to an abort.
+ *
+ * The initial impetus for this particular approach came from
+ * generalizing a mark/sweep practice that was already being
+ * used in FileIO.c.
+ *
+ * Note that currently, there is a hard limit of 256 stages, which
+ * can be changed by enlarging "marker" in the transaction struct.
+ *
+ @{
+*/
+/** gnc_account_tree_begin_staged_transaction_traversals()
+ *  resets the traversal marker inside every transactions of every
+ *  account in the account tree originating with the specified node.
+ *  This is done so that a new sequence of staged traversals can
+ *  begin.
+ */
+void gnc_account_tree_begin_staged_transaction_traversals(Account *acc);
+
+/** xaccSplitsBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the list.
+ */
+void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
+
+/** xaccAccountBeginStagedTransactionTraversals() resets the traversal
+ *    marker for each transaction which is a parent of one of the
+ *    splits in the account.
+ */
+void xaccAccountBeginStagedTransactionTraversals(const Account *account);
+
+/** xaccTransactionTraverse() checks the stage of the given transaction.
+ *    If the transaction hasn't reached the given stage, the transaction
+ *    is updated to that stage and the function returns TRUE. Otherwise
+ *    no change is made and the function returns FALSE.
+ */
+gboolean xaccTransactionTraverse(Transaction *trans, int stage);
+
+/** xaccSplitTransactionTraverse() behaves as above using the parent of
+ *    the given split.
+ */
+gboolean xaccSplitTransactionTraverse(Split *split, int stage);
+
+/** xaccAccountStagedTransactionTraversal() calls thunk on each
+ *    transaction in the account whose current marker is less than the
+ *    given `stage' and updates each transaction's marker to be `stage'.
+ *    The traversal will stop if thunk() returns a non-zero value.
+ *    xaccAccountStagedTransactionTraversal() function will return zero
+ *    or the non-zero value returned by thunk().
+ *    This API does not handle handle recursive traversals.
+ *
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that. 
+ */
+
+int xaccAccountStagedTransactionTraversal(const Account *a,
+                                          unsigned int stage,
+                                          TransactionCallback thunk,
+                                          void *data);
+
+/** gnc_account_tree_staged_transaction_traversal() calls thunk on each
+ *    transaction in the group whose current marker is less than the
+ *    given `stage' and updates each transaction's marker to be `stage'.
+ *    The traversal will stop if thunk() returns a non-zero value.
+ *    gnc_account_tree_staged_transaction_traversal() function will return zero 
+ *    or the non-zero value returned by thunk().  This
+ *    API does not handle handle recursive traversals.
+ *
+ *    Currently the result of adding or removing transactions during
+ *    a traversal is undefined, so don't do that.
+ */
+
+int gnc_account_tree_staged_transaction_traversal(const Account *account,
+						  unsigned int stage,
+						  TransactionCallback thunk,
+						  void *data);
+
+/** Traverse all of the transactions in the given account group.
+   Continue processing IFF proc returns 0. This function
+   will descend recursively to traverse transactions in the
+   children of the accounts in the group.
+
+   Proc will be called exactly once for each transaction that is
+   pointed to by at least one split in any account in the hierarchy
+   topped by the root Account acc.
+
+   The result of this function will be 0 IFF every relevant
+   transaction was traversed exactly once; otherwise, the return
+   value is the last non-zero value returned by the callback.
+
+   Note that the traversal occurs only over the transactions that
+   are locally cached in the local gnucash engine.  If the gnucash
+   engine is attached to a remote database, the database may contain
+   (many) transactions that are not mirrored in the local cache.
+   This routine will not cause an SQL database query to be performed;
+   it will not traverse transactions present only in the remote
+   database.
+
+   Note that this routine is just a trivial wrapper for 
+   
+   gnc_account_tree_begin_staged_transaction_traversals(g);
+   gnc_account_tree_staged_transaction_traversal(g, 42, proc, data);
+ */
+
+int xaccAccountTreeForEachTransaction(Account *acc, 
+				      TransactionCallback proc, void *data);
+
 /** @} */
 
 

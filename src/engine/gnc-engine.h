@@ -94,7 +94,6 @@
 #define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
-#define GNC_ID_GROUP          "AccountGroup"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_PERIOD         "Period"
 #define GNC_ID_PRICE          "Price"
@@ -132,10 +131,6 @@
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
 typedef struct account_s             Account;
-
-/** @brief A group of accounts in Gnucash. 
-*/
-typedef struct account_group_s       AccountGroup;
 
 /** @brief Split in Gnucash. 
  * A "split" is more commonly refered to as a "entry" in a

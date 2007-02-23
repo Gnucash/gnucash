@@ -81,7 +81,7 @@ void gnc_ui_qsf_import_merge_druid(QofSession *original, QofSession *import);
 /** \brief 	gncCommodity is not QOF enabled, need to set a default commodity before the merge */
 void currency_transfer_cb ( QofEntity* ent, gpointer user_data);
 
-/** \brief workaround for AccountGroup not being fully QOF enabled. */
+/** \brief workaround for AccountGroup not being fully QOF enabled. Eh? */
 void reference_parent_cb ( QofEntity* ent, gpointer user_data);
 
 /** @} */

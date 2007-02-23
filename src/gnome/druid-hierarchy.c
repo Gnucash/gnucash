@@ -30,7 +30,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "Group.h"
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
@@ -89,7 +88,7 @@ typedef struct {
   /** Map<Account*,gnc_numeric*> **/
   GHashTable *balance_hash;
 
-  AccountGroup *our_final_group;
+  Account *our_account_tree;
   QofBook *temporary;
 
   gboolean account_list_added;
@@ -376,8 +375,7 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 
 	gnc_accounts_dir = gnc_path_get_accountsdir ();
 	locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
- 	list = gnc_load_example_account_list (data->temporary,
-					      locale_dir);
+ 	list = gnc_load_example_account_list (locale_dir);
 	g_free (gnc_accounts_dir);
 	g_free (locale_dir);
 
@@ -457,7 +455,6 @@ on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
 
     /* Build the categories tree if necessary */
     gnc_suspend_gui_refresh ();
-    data->temporary = qof_book_new();
     account_categories_tree_view_prepare (data);
     gnc_resume_gui_refresh ();
   }
@@ -494,7 +491,7 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, gea->long_description, -1);
 
-		tree_view = gnc_tree_view_account_new_with_group (gea->group, FALSE);
+		tree_view = gnc_tree_view_account_new_with_root (gea->root, FALSE);
 		/* Override the normal fixed (user settable) sizing */
 		column = gtk_tree_view_get_column(GTK_TREE_VIEW(tree_view), 0);
 		gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
@@ -556,13 +553,13 @@ clear_all_clicked (GtkButton       *button,
  ************************************************************/
 
 static void
-delete_our_final_group (hierarchy_data *data)
+delete_our_account_tree (hierarchy_data *data)
 {
-  if (data->our_final_group != NULL)
+  if (data->our_account_tree != NULL)
   {
-    xaccAccountGroupBeginEdit (data->our_final_group);
-    xaccAccountGroupDestroy (data->our_final_group);
-    data->our_final_group = NULL;
+    xaccAccountBeginEdit (data->our_account_tree);
+    xaccAccountDestroy (data->our_account_tree);
+    data->our_account_tree = NULL;
   }
 }
 
@@ -580,27 +577,27 @@ clone_account (const Account* from, gnc_commodity *com)
 
 struct add_group_data_struct
 {
-  AccountGroup *to;
+  Account *to;
   Account *parent;
   gnc_commodity *com;
 };
 
-static gpointer
+static void
 add_groups_for_each (Account *toadd, gpointer data)
 {
   struct add_group_data_struct *dadata = data;
   Account *foundact;
     
-  foundact = xaccGetAccountFromName (dadata->to, xaccAccountGetName(toadd));
+  foundact = gnc_account_lookup_by_name(dadata->to, xaccAccountGetName(toadd));
 
   if (!foundact)
   {
     foundact = clone_account (toadd, dadata->com);
 
     if (dadata->to)
-      xaccGroupInsertAccount (dadata->to, foundact);
+      gnc_account_append_child (dadata->to, foundact);
     else if (dadata->parent)
-      xaccAccountInsertSubAccount (dadata->parent, foundact);
+      gnc_account_append_child (dadata->parent, foundact);
     else
     {
       g_warning ("add_groups_for_each: no valid parent");
@@ -608,47 +605,42 @@ add_groups_for_each (Account *toadd, gpointer data)
   }
 
   {
-    AccountGroup *addgrp = xaccAccountGetChildren (toadd);
-
-    if (xaccGroupGetNumAccounts(addgrp) > 0)
+    if (gnc_account_n_children(toadd) > 0)
     {
       struct add_group_data_struct downdata;
 
-      downdata.to = xaccAccountGetChildren(foundact);
+      downdata.to = foundact;
       downdata.parent = foundact;
       downdata.com = dadata->com;
 
-      xaccGroupForEachAccount (addgrp, add_groups_for_each,
-                               &downdata, FALSE);
+      gnc_account_foreach_child (toadd, add_groups_for_each, &downdata);
     }
   }
-
-  return NULL;
 }
 
 static void
-add_groups_to_with_random_guids (AccountGroup *into, AccountGroup *from,
-                                 gnc_commodity *com)
+add_new_accounts_with_random_guids (Account *into, Account *from,
+                                    gnc_commodity *com)
 {
   struct add_group_data_struct data;
   data.to = into;
   data.parent = NULL;
   data.com = com;
     
-  xaccGroupForEachAccount (from, add_groups_for_each, &data, FALSE);
+  gnc_account_foreach_child (from, add_groups_for_each, &data);
 }
 
-static AccountGroup *
-hierarchy_merge_groups (GSList *dalist, gnc_commodity *com)
+static Account *
+hierarchy_merge_accounts (GSList *dalist, gnc_commodity *com)
 {
   GSList *mark;
-  AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_book ());
+  Account *ret = xaccMallocAccount (gnc_get_current_book ());
 
   for (mark = dalist; mark; mark = mark->next)
   {
     GncExampleAccount *xea = mark->data;
 
-    add_groups_to_with_random_guids (ret, xea->group, com);
+    add_new_accounts_with_random_guids (ret, xea->root, com);
   }
 
   return ret;
@@ -719,7 +711,7 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 	  string=_("zero");
 	} else {
           GncAccountMergeDisposition disp;
-          disp = determine_merge_disposition(gnc_book_get_group(gnc_get_current_book()), account);
+          disp = determine_merge_disposition(gnc_book_get_root_account(gnc_get_current_book()), account);
           if (disp == GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW)
           {
                   allow_value = !xaccAccountGetPlaceholder(account);
@@ -772,22 +764,22 @@ placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
                             GtkTreeIter *iter,
                             gpointer user_data)
 {
-	Account *account;
+	Account *account, *root;
 	gboolean willbe_placeholder = FALSE;
         GncAccountMergeDisposition disp;
 
 	g_return_if_fail (GTK_TREE_MODEL (model));
 	account = gnc_tree_view_account_get_account_from_iter (model, iter);
-        disp = determine_merge_disposition(gnc_book_get_group(gnc_get_current_book()), account);
+        root = gnc_book_get_root_account(gnc_get_current_book());
+        disp = determine_merge_disposition(root, account);
         switch (disp)
         {
         case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING: {
                 /* find the existing account, do whatever it is. */
                 gchar *full_name;
                 Account *existing_acct;
-                AccountGroup *root_group = gnc_book_get_group(gnc_get_current_book());
                 full_name = xaccAccountGetFullName(account);
-                existing_acct = xaccGetAccountFromFullName(root_group, full_name);
+                existing_acct = gnc_account_lookup_by_full_name(root, full_name);
                 willbe_placeholder = xaccAccountGetPlaceholder(existing_acct);
                 g_free(full_name);
         } break;
@@ -808,7 +800,7 @@ use_existing_account_data_func(GtkTreeViewColumn *tree_column,
                                gpointer user_data)
 {
   Account *new_acct;
-  AccountGroup *real_root;
+  Account *real_root;
   GncAccountMergeDisposition disposition;
   char *to_user = "(error; unknown condition)";
 
@@ -820,7 +812,7 @@ use_existing_account_data_func(GtkTreeViewColumn *tree_column,
     return;
   }
 
-  real_root = gnc_book_get_group(gnc_get_current_book());
+  real_root = gnc_book_get_root_account(gnc_get_current_book());
   disposition = determine_merge_disposition(real_root, new_acct);
   switch (disposition)
   {
@@ -859,18 +851,18 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
     gtk_widget_destroy(GTK_WIDGET(data->final_account_tree));
     data->final_account_tree = NULL;
   }
-  delete_our_final_group (data);
+  delete_our_account_tree (data);
 
 
   /* Build a new account list */
   actlist = get_selected_account_list (data->categories_tree);
   com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
-  data->our_final_group = hierarchy_merge_groups (actlist, com);
+  data->our_account_tree = hierarchy_merge_accounts (actlist, com);
 
 
   /* Now build a new account tree */
   data->final_account_tree
-    = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_group (data->our_final_group, FALSE));
+    = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_root (data->our_account_tree, FALSE));
   tree_view = GTK_TREE_VIEW(data->final_account_tree);
   gnc_tree_view_account_set_name_edited(data->final_account_tree,
                                         gnc_tree_view_account_name_edited_cb);
@@ -928,7 +920,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   }
 
   // only in the case where there *are* existing accounts...
-  if (xaccGroupGetNumSubAccounts(gnc_book_get_group(gnc_get_current_book())) > 0)
+  if (gnc_account_n_descendants(gnc_book_get_root_account(gnc_get_current_book())) > 0)
   {
     GList *renderers;
     column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(tree_view),
@@ -961,13 +953,13 @@ on_cancel (GnomeDruid      *gnomedruid,
 {
   gnc_suspend_gui_refresh ();
   delete_hierarchy_dialog (data);
-  delete_our_final_group (data);
+  delete_our_account_tree (data);
   gncp_new_user_finish ();
   g_free(data);
   gnc_resume_gui_refresh ();
 }
 
-static gpointer
+static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
   gnc_numeric balance;
@@ -978,8 +970,6 @@ starting_balance_helper (Account *account, hierarchy_data *data)
   if (!gnc_numeric_zero_p (balance))
     gnc_account_create_opening_balance (account, balance, time (NULL),
                                         gnc_get_current_book ());
-
-  return NULL;
 }
 
 void
@@ -990,11 +980,11 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
         GncHierarchyDruidFinishedCallback when_completed;
 	ENTER (" ");
 
-	if (data->our_final_group)
+	if (data->our_account_tree)
         {
-	  xaccGroupForEachAccount (data->our_final_group,
-                                   (AccountCallback)starting_balance_helper,
-				   data, TRUE);
+	  gnc_account_foreach_descendant (data->our_account_tree,
+					  (AccountCb)starting_balance_helper,
+					  data);
         }
 
         // delete before we suspend GUI events, and then muck with the model,
@@ -1005,10 +995,9 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 
 	gnc_suspend_gui_refresh ();
 
-        account_group_merge(gnc_get_current_group(), data->our_final_group);
+        account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
 
-        delete_our_final_group (data);
-        qof_book_destroy(data->temporary);
+        delete_our_account_tree (data);
 
         when_completed = data->when_completed;
 	g_free(data);

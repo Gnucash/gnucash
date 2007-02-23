@@ -28,7 +28,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "Group.h"
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
@@ -318,7 +317,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
   /* Figure out if anything is set in the combo */
   text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo));
 
-  list = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+  list = gnc_account_get_descendants (gnc_book_get_root_account (book));
 
   /* Clear the existing list */
   entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo)));

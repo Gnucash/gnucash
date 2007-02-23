@@ -44,7 +44,6 @@
 #include <gtkhtml/gtkhtml-embedded.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"

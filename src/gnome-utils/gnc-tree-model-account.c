@@ -32,7 +32,6 @@
 #include "gnc-tree-model-account.h"
 #include "gnc-component-manager.h"
 #include "Account.h"
-#include "Group.h"
 #include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
@@ -84,10 +83,6 @@ static gboolean	gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 						    GtkTreeIter *iter,
     						    GtkTreeIter *child);
 
-/** Helper Functions ****************************************************/
-static void gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
-						 Account *toplevel);
-
 /** Component Manager Callback ******************************************/
 static void gnc_tree_model_account_event_handler (QofEntity *entity,
 						  QofEventId event_type,
@@ -98,8 +93,7 @@ static void gnc_tree_model_account_event_handler (QofEntity *entity,
 typedef struct GncTreeModelAccountPrivate
 {
 	QofBook *book;
-	AccountGroup *root;
-	Account *toplevel;
+	Account *root;
 	gint event_handler_id;
 	const gchar *negative_color;
 } GncTreeModelAccountPrivate;
@@ -208,7 +202,6 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 	priv->book = NULL;
 	priv->root = NULL;
-	priv->toplevel = NULL;
 	priv->negative_color = red ? "red" : "black";
 
 	gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
@@ -277,18 +270,18 @@ gnc_tree_model_account_dispose (GObject *object)
 /************************************************************/
 
 GtkTreeModel *
-gnc_tree_model_account_new (AccountGroup *group)
+gnc_tree_model_account_new (Account *root)
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
 	const GList *item;
 	
-	ENTER("group %p", group);
+	ENTER("root %p", root);
 	item = gnc_gobject_tracking_get_list(GNC_TREE_MODEL_ACCOUNT_NAME);
 	for ( ; item; item = g_list_next(item)) {
 		model = (GncTreeModelAccount *)item->data;
 		priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-		if (priv->root == group) {
+		if (priv->root == root) {
 			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
@@ -300,14 +293,7 @@ gnc_tree_model_account_new (AccountGroup *group)
 
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 	priv->book = gnc_get_current_book();
-	priv->root = group;
-
-	{
-	  Account *account;
-
-	  account = xaccMallocAccount(priv->book);
-	  gnc_tree_model_account_set_toplevel (model, account);
-	}
+	priv->root = root;
 
 	priv->event_handler_id = qof_event_register_handler
 	  ((QofEventHandler)gnc_tree_model_account_event_handler, model);
@@ -443,9 +429,8 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccountPrivate *priv;
 	GncTreeModelAccount *model;
-	Account *account = NULL;
-	AccountGroup *group = NULL, *children;
-	gint i = 0, *indices;
+	Account *account, *parent;
+	gint i, *indices;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
@@ -457,55 +442,36 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
 
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	if (priv->toplevel != NULL) {
-		if (gtk_tree_path_get_depth (path) > 1) {
-			i++;
-		} else {
 
-			iter->user_data = priv->toplevel;
-			iter->user_data2 = NULL;
-			iter->user_data3 = GINT_TO_POINTER (0);
-			iter->stamp = model->stamp;
-
-			LEAVE("iter (1) %s", iter_to_string(iter));
-			return TRUE;
-		}
-	}
-
-	if (priv->root == NULL) {
-		LEAVE("failed (2)");
+	if (gtk_tree_path_get_depth (path) <= 0) {
+		LEAVE("bad depth");
 		return FALSE;
 	}
-
-	children = priv->root;
 
 	indices = gtk_tree_path_get_indices (path);
-	for (; i < gtk_tree_path_get_depth (path); i++) {
-		group = children;
-		if (indices[i] >= xaccGroupGetNumAccounts (group)) {
-			iter->stamp = 0;
-
-			LEAVE("failed (3)");
-			return FALSE;
-		}
-
-		account = xaccGroupGetAccount (group, indices[i]);
-		children = xaccAccountGetChildren (account);
+	if (indices[0] != 0) {
+		LEAVE("bad root index");
+		return FALSE;
 	}
 
-	if (account == NULL || group == NULL) {
-		iter->stamp = 0;
-
-		LEAVE("failed (4)");
-		return FALSE;
+	parent = NULL;
+	account = priv->root;
+	for (i = 1; i < gtk_tree_path_get_depth (path); i++) {
+		parent = account;
+		account = gnc_account_nth_child(parent, indices[i]);
+		if (account == NULL) {
+			iter->stamp = 0;
+			LEAVE("bad index");
+			return FALSE;
+		}
 	}
 
 	iter->stamp = model->stamp;
 	iter->user_data = account;
-	iter->user_data2 = group;
+	iter->user_data2 = parent;
 	iter->user_data3 = GINT_TO_POINTER (indices[i - 1]);
 
-	LEAVE("iter (5) %s", iter_to_string(iter));
+	LEAVE("iter %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -515,11 +481,9 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	GncTreeModelAccountPrivate *priv;
-	Account *account;
-	AccountGroup *group;
+	Account *account, *parent;
 	GtkTreePath *path;
 	gint i;
-	gboolean found, finished = FALSE;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 	g_return_val_if_fail (iter != NULL, NULL);
@@ -535,49 +499,23 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 	}
 
 	account = (Account *) iter->user_data;
-	group = (AccountGroup *) iter->user_data2;
+	parent = (Account *) iter->user_data2;
 
 	path = gtk_tree_path_new ();
-
-	if (priv->toplevel != NULL) {
-		if (account == priv->toplevel) {
-			gtk_tree_path_append_index (path, 0);
-
-			{
-			  gchar *path_string = gtk_tree_path_to_string(path);
-			  LEAVE("path (2) %s", path_string);
-			  g_free(path_string);
-			}
-			return path;
-		}
-	}
-
-	do {
-		found = FALSE;
-		for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
-			if (xaccGroupGetAccount (group, i) == account) {
-				found = TRUE;
-				if (group == priv->root)
-					finished = TRUE;
-				break;
-			}
-		}
-
-		if (!found) {
+	while (parent) {
+		i = gnc_account_child_index(parent, account);
+		if (i == -1) {
 			gtk_tree_path_free (path);
 			LEAVE("failed (3)");
 			return NULL;
 		}
-
 		gtk_tree_path_prepend_index (path, i);
+		account = parent;
+		parent = gnc_account_get_parent(account);
+	};
 
-		account = xaccAccountGetParentAccount (account);
-		group = xaccAccountGetParent (account);
-	} while (!finished);
-
-	if (priv->toplevel != NULL) {
-		gtk_tree_path_prepend_index (path, 0);
-	}
+	/* Add the root node. */
+	gtk_tree_path_prepend_index (path, 0);
 
 	{
 	  gchar *path_string = gtk_tree_path_to_string(path);
@@ -612,7 +550,7 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
   gnc_numeric b3;  
 
   priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-  if (acct == priv->toplevel)
+  if (acct == priv->root)
     return g_strdup("");
 
   t1 = gnc_accounting_period_fiscal_start();
@@ -657,7 +595,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 	switch (column) {
 		case GNC_TREE_MODEL_ACCOUNT_COL_NAME:
 			g_value_init (value, G_TYPE_STRING);
-			if (account == priv->toplevel)
+			if (account == priv->root)
 			  g_value_set_string (value, _("New top level account"));
 			else
 			  g_value_set_string (value, xaccAccountGetName (account));
@@ -855,8 +793,7 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	GncTreeModelAccountPrivate *priv;
-	Account *account;
-	AccountGroup *group;
+	Account *account, *parent;
 	gint i;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
@@ -867,23 +804,17 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 	ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
 
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	if (iter->user_data == priv->toplevel) {
-		iter->stamp = 0;
-		LEAVE("failed (1)");
-		return FALSE;
+
+	parent = (Account *) iter->user_data2;
+	if (parent == NULL) {
+	  /* This is the root. There is no next. */
+	  LEAVE("at root");
+	  return FALSE;
 	}
 
-	group = (AccountGroup *) iter->user_data2;
+	/* Get the *next* sibling account. */
 	i = GPOINTER_TO_INT (iter->user_data3);
-
-	if (i > xaccGroupGetNumAccounts (group) - 2) {
-		iter->stamp = 0;
-		LEAVE("failed (2)");
-		return FALSE;
-	}
-
-	account = xaccGroupGetAccount (group, i + 1);
-
+	account = gnc_account_nth_child (parent, i + 1);
 	if (account == NULL) {
 		iter->stamp = 0;
 		LEAVE("failed (3)");
@@ -891,7 +822,7 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 	}
 
 	iter->user_data = account;
-	iter->user_data2 = group;
+	iter->user_data2 = parent;
 	iter->user_data3 = GINT_TO_POINTER (i + 1);
 
 	LEAVE("iter %s", iter_to_string(iter));
@@ -901,80 +832,50 @@ gnc_tree_model_account_iter_next (GtkTreeModel *tree_model,
 static gboolean
 gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 				      GtkTreeIter *iter,
-				      GtkTreeIter *parent)
+				      GtkTreeIter *parent_iter)
 {
 	GncTreeModelAccountPrivate *priv;
 	GncTreeModelAccount *model;
-	Account *account;
-	AccountGroup *group;
+	Account *account, *parent;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
     ENTER("model %p, iter %p (to be filed in), parent %s",
-          tree_model, iter, (parent ? iter_to_string(parent) : "(null)"));
+          tree_model, iter, (parent_iter ? iter_to_string(parent_iter) : "(null)"));
 
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-	if (priv->toplevel != NULL) {
-		if (parent == NULL) {
-			iter->user_data = priv->toplevel;
-			iter->user_data2 = NULL;
-			iter->user_data3 = GINT_TO_POINTER (0);
-			iter->stamp = model->stamp;
-			LEAVE("iter (1) %s", iter_to_string(iter));
-			return TRUE;
-		} else if (parent->user_data == priv->toplevel) {
-			parent = NULL;
-		}
-	}
-
-	if (priv->root == NULL || 
-            xaccGroupGetNumAccounts (priv->root) == 0) {
+	if (priv->root == NULL) {
 		iter->stamp = 0;
-		LEAVE("failed (either no group or group has no accounts)");
+		LEAVE("failed (no root)");
 		return FALSE;
 	}
 
-    if (parent == NULL) {
-        account = xaccGroupGetAccount (priv->root, 0);
-        
-        if (account == NULL) {
-             iter->stamp = 0;
-             LEAVE("failed (couldn't get account from group)");
-             return FALSE;
-        }
-
-		iter->user_data = account;
-		iter->user_data2 = priv->root;
-		iter->user_data3 = GINT_TO_POINTER (0);
-		iter->stamp = model->stamp;
-		LEAVE("iter (2) %s", iter_to_string(iter));
-		return TRUE;	
+	/* Special case when no parent supplied. */
+	if (!parent_iter) {
+	  iter->user_data = priv->root;
+	  iter->user_data2 = NULL;
+	  iter->user_data3 = GINT_TO_POINTER (0);
+	  iter->stamp = model->stamp;
+	  LEAVE("iter (2) %s", iter_to_string(iter));
+	  return TRUE;
 	}
 
-	gnc_leave_return_val_if_fail (parent != NULL, FALSE);
-	gnc_leave_return_val_if_fail (parent->user_data != NULL, FALSE);
-	gnc_leave_return_val_if_fail (parent->stamp == model->stamp, FALSE);	
+	gnc_leave_return_val_if_fail (parent_iter != NULL, FALSE);
+	gnc_leave_return_val_if_fail (parent_iter->user_data != NULL, FALSE);
+	gnc_leave_return_val_if_fail (parent_iter->stamp == model->stamp, FALSE);	
 
-	group = xaccAccountGetChildren ((Account *) parent->user_data);
+	parent = (Account *)parent_iter->user_data;
+	account = gnc_account_nth_child (parent, 0);
 
-	if (group == NULL || xaccGroupGetNumAccounts (group) == 0) {
-		iter->stamp = 0;
-		LEAVE("failed (children group was %s)", 
-                      group ? "empty" : "null");
-		return FALSE;
-	}
-
-	account = xaccGroupGetAccount (group, 0);
-	
 	if (account == NULL) {
 		iter->stamp = 0;
-		LEAVE("failed (group's account is null)");
+		LEAVE("failed (child account is null)");
 		return FALSE;
 	}
 
 	iter->user_data = account;
-	iter->user_data2 = group;
+	iter->user_data2 = parent;
 	iter->user_data3 = GINT_TO_POINTER (0);
 	iter->stamp = model->stamp;
 	LEAVE("iter (3) %s", iter_to_string(iter));
@@ -987,7 +888,7 @@ gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
-	AccountGroup *group;
+	Account *account;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 
@@ -1000,19 +901,14 @@ gnc_tree_model_account_iter_has_child (GtkTreeModel *tree_model,
 	gnc_leave_return_val_if_fail (iter->user_data != NULL, FALSE);
 	gnc_leave_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
-	if (iter->user_data == priv->toplevel) {
-		group = priv->root;
-	} else {
-		group = xaccAccountGetChildren ((Account *) iter->user_data);
+	account = (Account *) iter->user_data;
+	if (gnc_account_n_children(account) > 0) {
+		LEAVE("yes");
+		return TRUE;
 	}
 
-	if (group == NULL || xaccGroupGetNumAccounts (group) == 0) {
-		LEAVE("no");
-		return FALSE;
-	}
-
-	LEAVE("yes");
-	return TRUE;
+	LEAVE("no");
+	return FALSE;
 }
 
 static int
@@ -1021,7 +917,7 @@ gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
-	AccountGroup *group;
+	gint num;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
 	ENTER("model %p, iter %s", tree_model, iter_to_string(iter));
@@ -1030,49 +926,40 @@ gnc_tree_model_account_iter_n_children (GtkTreeModel *tree_model,
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
 	if (iter == NULL) {
-		if (priv->toplevel != NULL) {
-			LEAVE("count is 1");
-			return 1;
-		} else {
-			LEAVE("count is %d", xaccGroupGetNumAccounts (priv->root));
-			return xaccGroupGetNumAccounts (priv->root);
-		}
+		/* How many children does the invisible root node
+		 * have. One! Its the real root account node. */
+		LEAVE("count is 1");
+		return 1;
 	}
 
 	gnc_leave_return_val_if_fail (iter != NULL, FALSE);
 	gnc_leave_return_val_if_fail (iter->user_data != NULL, FALSE);
 	gnc_leave_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
-	if (priv->toplevel == iter->user_data) {
-		group = priv->root;
-	} else {
-		group = xaccAccountGetChildren ((Account *) iter->user_data);
-	}
-
-	LEAVE("count is %d", xaccGroupGetNumAccounts (group));
-	return xaccGroupGetNumAccounts (group);
+	num = gnc_account_n_children(iter->user_data);
+	LEAVE("count is %d", num);
+	return num;
 }
 
 static gboolean
 gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 				       GtkTreeIter *iter,
-				       GtkTreeIter *parent,
+				       GtkTreeIter *parent_iter,
 				       int n)
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
-	Account *account;
-	AccountGroup *group;
+	Account *account, *parent;
 
-	if (parent) {
+	if (parent_iter) {
 	  gchar *parent_string;
-	  parent_string = strdup(iter_to_string(parent));
-	  ENTER("model %p, iter %s, parent %s, n %d",
+	  parent_string = strdup(iter_to_string(parent_iter));
+	  ENTER("model %p, iter %s, parent_iter %s, n %d",
 		tree_model, iter_to_string(iter),
 		parent_string, n);
 	  g_free(parent_string);
 	} else {
-	  ENTER("model %p, iter %s, parent (null), n %d",
+	  ENTER("model %p, iter %s, parent_iter (null), n %d",
 		tree_model, iter_to_string(iter), n);
 	}
 	gnc_leave_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (tree_model), FALSE);
@@ -1080,66 +967,37 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
 	model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-	if (parent == NULL) {
-		if (priv->toplevel != NULL) {
-			if (n > 0) {
-				iter->stamp = 0;
-				LEAVE("failed (1)");
-				return FALSE;
-			} else {
-				iter->user_data = priv->toplevel;
-				iter->user_data2 = NULL;
-				iter->user_data3 = GINT_TO_POINTER (0);
-				iter->stamp = model->stamp;
-				LEAVE("iter (1) %s", iter_to_string(iter));
-				return TRUE;
-			}
-		}
+	/* Special case when no parent supplied. */
+	if (!parent_iter) {
+	  if (n != 0) {
+	    LEAVE("bad root index");
+	    return FALSE;
+	  }
 
-		account = xaccGroupGetAccount (priv->root, n);
-
-		if (account == NULL) {
-			iter->stamp = 0;
-			LEAVE("failed (2)");			
-			return FALSE;
-		}
-
-		iter->user_data = account;
-		iter->user_data2 = priv->root;
-		iter->user_data3 = GINT_TO_POINTER (n);
-		iter->stamp = model->stamp;
-		LEAVE("iter (2) %s", iter_to_string(iter));
-		return TRUE;
+	  iter->user_data = priv->root;
+	  iter->user_data2 = NULL;
+	  iter->user_data3 = GINT_TO_POINTER (0);
+	  iter->stamp = model->stamp;
+	  LEAVE("root %s", iter_to_string(iter));
+	  return TRUE;
 	}
 
-	gnc_leave_return_val_if_fail (parent->user_data != NULL, FALSE);
-	gnc_leave_return_val_if_fail (parent->stamp == model->stamp, FALSE);
+	gnc_leave_return_val_if_fail (parent_iter->user_data != NULL, FALSE);
+	gnc_leave_return_val_if_fail (parent_iter->stamp == model->stamp, FALSE);
 
-	if (priv->toplevel == parent->user_data) {
-		group = priv->root;
-	} else {
-		group = xaccAccountGetChildren ((Account *) parent->user_data);
-	}
-
-	if (group == NULL || xaccGroupGetNumAccounts (group) <= n) {
-		iter->stamp = 0;
-		LEAVE("failed (3)");
-		return FALSE;
-	}
-
-	account = xaccGroupGetAccount (group, n);
-	
+	parent = (Account *)parent_iter->user_data;
+	account = gnc_account_nth_child(parent, n);
 	if (account == NULL) {
 		iter->stamp = 0;
-		LEAVE("failed (4)");
+		LEAVE("failed (2)");			
 		return FALSE;
 	}
 
 	iter->user_data = account;
-	iter->user_data2 = group;
+	iter->user_data2 = parent;
 	iter->user_data3 = GINT_TO_POINTER (n);
 	iter->stamp = model->stamp;
-	LEAVE("iter (3) %s", iter_to_string(iter));
+	LEAVE("iter (2) %s", iter_to_string(iter));
 	return TRUE;
 }
 
@@ -1150,8 +1008,7 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
-	Account *account;
-	AccountGroup *group;
+	Account *account, *parent;
 	gint i;
 
 	if (child) {
@@ -1176,151 +1033,29 @@ gnc_tree_model_account_iter_parent (GtkTreeModel *tree_model,
 	gnc_leave_return_val_if_fail (child->stamp == model->stamp, FALSE);
 
 	account = (Account *) child->user_data;
-
-	if (account == priv->toplevel) {
+	account = gnc_account_get_parent(account);
+	if (account == NULL) {
+		/* Can't go up from the root node */
 		iter->stamp = 0;
 		LEAVE("failed (1)");
 		return FALSE;
 	}
 
-	account = xaccAccountGetParentAccount (account);
-	group = xaccAccountGetParent (account);
-
-	if (account == NULL || group == NULL) {
-		if (priv->toplevel != NULL) {
-			iter->user_data = priv->toplevel;
-			iter->user_data2 = NULL;
-			iter->user_data3 = GINT_TO_POINTER (0);
-			iter->stamp = model->stamp;
-			LEAVE("iter (1) %s", iter_to_string(iter));
-			return TRUE;
-		} else {
-			iter->stamp = 0;
-			LEAVE("failed (2)");
-			return FALSE;
-		}
-	}
-
-	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
-		if (xaccGroupGetAccount (group, i) == account) {
-			iter->user_data = account;
-			iter->user_data2 = group;
-			iter->user_data3 = GINT_TO_POINTER (i);
-			iter->stamp = model->stamp;
-			LEAVE("iter (2) %s", iter_to_string(iter));
-			return TRUE;	
-		}
-	}
-
-	if (priv->toplevel != NULL) {
-		iter->user_data = priv->toplevel;
-		iter->user_data2 = NULL;
-		iter->user_data3 = GINT_TO_POINTER (0);
-		iter->stamp = model->stamp;
-		LEAVE("iter (3) %s", iter_to_string(iter));
-		return TRUE;
-	}
-	iter->stamp = 0;
-	LEAVE("failed (3)");
-	return FALSE;
-}
-
-
-/************************************************************/
-/*             Account Tree View Root Functions             */
-/************************************************************/
-
-static gpointer
-account_row_inserted (Account *account,
-		      gpointer data)
-{
-	GtkTreePath *path;
-	GtkTreeIter iter;
-
-	ENTER("account %p (%s), model %p",
-	      account, xaccAccountGetName(account), data);
-	if (!gnc_tree_model_account_get_iter_from_account
-            (GNC_TREE_MODEL_ACCOUNT (data), account, &iter))
-    {
-         LEAVE("");
-         return NULL;
-    }
-
-	path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
-
-	gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
-
-	gtk_tree_path_free (path);
-
-	LEAVE(" ");
-	return NULL;
-}
-
-/*
- * Gets the top node of the model.  This node is for a pseudo-account
- * that lives above the main level accounts in the engine.
- */
-Account *
-gnc_tree_model_account_get_toplevel (GncTreeModelAccount *model)
-{
-	GncTreeModelAccountPrivate *priv;
-
-	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
-
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	return priv->toplevel;
-}
-
-/*
- * Add a new top node to the model.  This node is for a pseudo-account
- * that lives above the main level accounts in the engine.
- */
-static void
-gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
-                                     Account *toplevel)
-{
-	GncTreeModelAccountPrivate *priv;
-	GtkTreePath *path;
-	gint i;
-	GtkTreeIter iter;
-
-	ENTER("model %p, toplevel %p", model, toplevel);
-	gnc_leave_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
-
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	DEBUG("old toplevel %p", priv->toplevel);
-	if (priv->toplevel != NULL) {
-            /* CAS: this can't happen because we only set toplevel on
-             * new tree models. */
-		path = gtk_tree_path_new_first ();
-		gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		gtk_tree_path_free (path);
+	parent = gnc_account_get_parent(account);
+	if (parent == NULL) {
+		/* Now at the root. */
+		i = 0;
 	} else {
-            /* CAS: I think this is bogus for the same reason - we'll
-             * have no rows, so why are we emitting a bunch of
-             * "row_deleted" signals when no rows can exist? */
-		path = gtk_tree_path_new_first ();
-		for (i = 0; i < xaccGroupGetNumAccounts (priv->root); i++) {
-			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-		}
-		gtk_tree_path_free (path);
+		i = gnc_account_child_index(parent, account);
 	}
-
-	DEBUG("set new toplevel %p", toplevel);
-	priv->toplevel = toplevel;
-
-	if (priv->toplevel != NULL) {
-		path = gtk_tree_path_new_first ();
-		if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-		  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-		gtk_tree_path_free (path);
-	}
-
-	if (priv->root != NULL) {
-		xaccGroupForEachAccount (priv->root, account_row_inserted, model, TRUE);
-	}
-	LEAVE("new toplevel %p", priv->root);
+	iter->user_data = account;
+	iter->user_data2 = parent;
+	iter->user_data3 = GINT_TO_POINTER (i);
+	iter->stamp = model->stamp;
+	LEAVE("iter (2) %s", iter_to_string(iter));
+	return TRUE;	
 }
+
 
 /************************************************************/
 /*            Account Tree View Filter Functions            */
@@ -1353,8 +1088,7 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 					      GtkTreeIter *iter)
 {
 	GncTreeModelAccountPrivate *priv;
-	AccountGroup *group;
-	gboolean found = FALSE;
+	Account *parent;
 	gint i;
 	
 	ENTER("model %p, account %p, iter %p", model, account, iter);
@@ -1366,32 +1100,24 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	iter->stamp = model->stamp;
 
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	if (account == priv->toplevel) {
+	if (account == priv->root) {
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
-		LEAVE("Matched top level");
+		LEAVE("Matched root");
 		return TRUE;
 	}
 
-	if (priv->root != xaccAccountGetRoot (account)) {
+	if (priv->root != gnc_account_get_root (account)) {
 		LEAVE("Root doesn't match");
 		return FALSE;
 	}
 
-	group = xaccAccountGetParent (account);
-	DEBUG("Looking through %d accounts at this level", 
-              xaccGroupGetNumAccounts (group));
-	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
-		if (xaccGroupGetAccount (group, i) == account) {
-			found = TRUE;
-			break;
-		}
-	}
-
-	iter->user_data2 = group;
+	parent = gnc_account_get_parent(account);
+	i = gnc_account_child_index(parent, account);
+	iter->user_data2 = parent;
 	iter->user_data3 = GINT_TO_POINTER (i);
 	LEAVE("iter %s", iter_to_string(iter));
-	return found;
+	return (i != -1);
 }
 
 /*
@@ -1443,9 +1169,16 @@ propagate_change(GtkTreeModel *model, GtkTreePath *path, gint toggle_if_num)
 {
     GtkTreeIter iter;
 
-    /* Immediate parent */
-    if (gtk_tree_path_up(path) && 
-        gtk_tree_model_get_iter(model, &iter, path)) {
+    /* Already at the invisible root node? */
+    if (!gtk_tree_path_up(path))
+      return;
+
+    /* Did we just move up to the invisible root node? */
+    if (gtk_tree_path_get_depth(path) == 0)
+      return;
+
+    /* Handle the immediate parent */
+    if (gtk_tree_model_get_iter(model, &iter, path)) {
         gtk_tree_model_row_changed(model, path, &iter);
         if (gtk_tree_model_iter_n_children(model, &iter) == toggle_if_num)
             gtk_tree_model_row_has_child_toggled(model, path, &iter);
@@ -1507,11 +1240,11 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
   priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
   account = GNC_ACCOUNT(entity);
-  if (xaccAccountGetBook(account) != priv->book) {
+  if (gnc_account_get_book(account) != priv->book) {
       LEAVE("not in this book");
       return;
   }
-  if (xaccAccountGetRoot(account) != priv->root) {
+  if (gnc_account_get_root(account) != priv->root) {
       LEAVE("not in this model");
       return;
   }
@@ -1537,7 +1270,7 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
     case QOF_EVENT_REMOVE:
       if (!ed) /* Required for a remove. */
            break;
-      parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->toplevel;
+      parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->root;
       parent_name = ed->node ? xaccAccountGetName(parent) : "Root";
       DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
       path = gnc_tree_model_account_get_path_from_account(model, parent);

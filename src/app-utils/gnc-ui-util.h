@@ -36,7 +36,6 @@
 #include <locale.h>
 
 #include "Account.h"
-#include "Group.h"
 #include "qof.h"
 
 
@@ -55,7 +54,7 @@ void gnc_set_default_directory (const gchar *gconf_section,
 
 /* Engine enhancements & i18n ***************************************/
 QofBook * gnc_get_current_book (void);
-AccountGroup * gnc_get_current_group (void);
+Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
 /*
@@ -162,10 +161,9 @@ typedef enum
   NUM_EQUITY_TYPES
 } GNCEquityType;
 
-Account * gnc_find_or_create_equity_account (AccountGroup *group,
+Account * gnc_find_or_create_equity_account (QofBook *book,
                                              GNCEquityType equity_type,
-                                             gnc_commodity *currency,
-                                             QofBook *book);
+                                             gnc_commodity *currency);
 gboolean gnc_account_create_opening_balance (Account *account,
                                              gnc_numeric balance,
                                              time_t date,
