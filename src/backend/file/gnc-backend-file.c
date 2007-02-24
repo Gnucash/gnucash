@@ -553,7 +553,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         if(rc == 0)
         {
             /* Use the permissions from the original data file */
-            if(chmod(tmp_name, statbuf.st_mode) != 0)
+            if(g_chmod(tmp_name, statbuf.st_mode) != 0)
             {
 	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
 		/* Even if the chmod did fail, the save
