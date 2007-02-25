@@ -11,6 +11,7 @@
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
 #include <gnc-component-manager.h>
+#include <guile-util.h>
 
 #include "engine-helpers.h"
 
@@ -83,3 +84,23 @@ time_t gnc_accounting_period_fiscal_end(void);
 SCM gnc_make_kvp_options(QofIdType id_type);
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 
+%typemap(in) GList * {
+  SCM path_scm = $input;
+  GList *path = NULL;
+  while (!SCM_NULLP (path_scm))
+  {
+    SCM key_scm = SCM_CAR (path_scm);
+    char *key;
+    if (!SCM_STRINGP (key_scm))
+      break;
+    key = g_strdup (SCM_STRING_CHARS (key_scm));
+    path = g_list_prepend (path, key);
+    path_scm = SCM_CDR (path_scm);
+  }
+  $1 = g_list_reverse (path);
+}
+Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
+%clear GList *;
+
+gint gnc_process_get_fd(const Process *proc, const guint std_fd);
+void gnc_detach_process(Process *proc, const gboolean kill_it);

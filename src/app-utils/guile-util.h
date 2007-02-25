@@ -103,4 +103,40 @@ char * gnc_get_credit_string(GNCAccountType account_type);
  *  comments. */
 gchar *gnc_guile_strip_comments (const gchar *text);
 
+/** An opaque process structure returned by gnc_spawn_process_async. */
+typedef struct _Process Process;
+
+/** Wraps g_spawn_async_with_pipes minimally.  Use gnc_process_get_fd to access
+ *  the file descriptors to the child.  To close them them and free the memory
+ *  allocated for the process once it has exited, call gnc_detach_process.
+ *
+ *  @param argl A list of null-terminated strings used as arguments for spawning,
+ *  i.e. "perl" "-w" "my-perl-script".  Will be freed inside.
+ *
+ *  @param search_path Determines whether the first element of argl will be
+ *  looked for in the user's PATH.
+ *
+ *  @return A pointer to a structure representing the process or NULL on failure.
+ */
+Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
+
+/** Accesses a given process structure and returns the file descriptor connected
+ *  to the childs stdin, stdout or stderr.
+ *
+ *  @param proc A process structure returned by gnc_spawn_process_async.
+ *
+ *  @param std_fd 0, 1 or 2.
+ *
+ *  @return The file descriptor to write to the child on 0, or read from the
+ *  childs output or error on 1 or 2, resp. */
+gint gnc_process_get_fd(const Process *proc, const gint std_fd);
+
+/** Close the file descriptors to a given process and declare it as detached.  If
+ *  it is both dead and detached, the allocated memory will be freed.
+ *
+ *  @param proc A process structure returned by gnc_spawn_process_async.
+ *
+ *  @param kill_it If TRUE, kill the process. */
+void gnc_detach_process(Process *proc, const gboolean kill_it);
+
 #endif
