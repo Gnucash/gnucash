@@ -77,14 +77,11 @@ gnc_module_init(int refcount)
   if (!gnc_module_load ("gnucash/business-core", 0)) {
     return FALSE;
   }
-  /* We also depend on app-utils, gnome-utils, and gnome-search modules */
+  /* We also depend on app-utils, and gnome-utils modules */
   if (!gnc_module_load ("gnucash/app-utils", 0)) {
     return FALSE;
   }
   if (!gnc_module_load ("gnucash/gnome-utils", 0)) {
-    return FALSE;
-  }
-  if (!gnc_module_load ("gnucash/gnome-search", 0)) {
     return FALSE;
   }
   if (!gnc_module_load ("gnucash/report/report-gnome", 0)) {

@@ -1,4 +1,4 @@
-pkglib_LTLIBRARIES = libgncmod-gnome-search.la
+pkglib_LTLIBRARIES = libgnc-gnome-search.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -17,8 +17,7 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GNOME_PRINT_CFLAGS}
 
-libgncmod_gnome_search_la_SOURCES = \
-  gncmod-gnome-search.c \
+libgnc_gnome_search_la_SOURCES = \
   gnc-general-search.c \
   dialog-search.c \
   search-account.c \
@@ -49,9 +48,9 @@ noinst_HEADERS = \
   search-reconciled.h \
   search-string.h
 
-libgncmod_gnome_search_la_LDFLAGS = -avoid-version
+libgnc_gnome_search_la_LDFLAGS = -avoid-version
 
-libgncmod_gnome_search_la_LIBADD = \
+libgnc_gnome_search_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \

@@ -8,7 +8,7 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/register/register-core/libgnc-register-core.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/gnome-search/libgnc-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
