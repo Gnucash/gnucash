@@ -49,9 +49,9 @@ TODO
     - [x] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
-  - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+! - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
 
-  - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
   - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 
