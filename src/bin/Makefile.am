@@ -16,6 +16,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/gnome \
   -I${top_builddir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-gnome \
+  -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/gnc-module
 
 bin_PROGRAMS = gnucash-bin

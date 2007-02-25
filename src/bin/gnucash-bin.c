@@ -53,6 +53,7 @@
 #include "gnc-session.h"
 #include "engine-helpers.h"
 #include "swig-runtime.h"
+#include "search-core-type.h"
 
 #ifdef HAVE_GETTEXT
 #  include <libintl.h>
@@ -346,6 +347,10 @@ load_gnucash_modules()
     if (!gnc_register_gnome_init()) {
         g_error("Gnucash gnome register failed to initialize");
     }
+
+    /* gnucash/gnome-search */
+    gnc_search_core_initialize();
+    gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL);
 
     if (!gnc_engine_is_initialized()) {
         /* On Windows this check used to fail anyway, see

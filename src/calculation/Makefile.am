@@ -1,17 +1,16 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-calculation.la
+pkglib_LTLIBRARIES = libgnc-calculation.la
 
-libgncmod_calculation_la_LDFLAGS = -avoid-version
+libgnc_calculation_la_LDFLAGS = -avoid-version
 
-libgncmod_calculation_la_LIBADD = \
+libgnc_calculation_la_LIBADD = \
   ${GLIB_LIBS} ${GUILE_LIBS} \
   ${QOF_LIBS}
 
-libgncmod_calculation_la_SOURCES = \
+libgnc_calculation_la_SOURCES = \
   expression_parser.c \
-  fin.c \
-  gncmod-calculation.c
+  fin.c
 
 noinst_HEADERS = \
   finvar.h \
@@ -31,7 +30,6 @@ EXTRA_DIST = \
 AM_CFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
-  -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}

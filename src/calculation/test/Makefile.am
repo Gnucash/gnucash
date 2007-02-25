@@ -4,6 +4,6 @@ check_PROGRAMS=test-link
 
 test_link_SOURCES=test-link.c
 test_link_LDADD= \
-  ../libgncmod-calculation.la \
+  ../libgnc-calculation.la \
   ${GLIB_LIBS} \
   -lgmodule-2.0
