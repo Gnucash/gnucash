@@ -556,11 +556,12 @@ main(int argc, char ** argv)
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);
  
-    gnc_module_system_init();
     environment_override();
     gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
     gnc_log_init();
+
+    gnc_module_system_init();
 
     if (add_quotes_file) {
         gchar *prefix = gnc_path_get_prefix ();
