@@ -581,6 +581,29 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       } /* check Transaction_purpose */
     }
 
+    {
+      char *othername = gnc_hbci_getremotename (td->hbci_trans);
+      if (!othername || (strlen (othername) == 0)) {
+	gtk_widget_show_all (td->dialog); 
+	values_ok = !gnc_verify_dialog
+	  (GTK_WIDGET (td->dialog),
+	   TRUE,
+	   "%s",
+	   _("You did not enter a recipient name.  A recipient name is "
+	     "required for an online transfer.\n"
+	     "\n"
+	     "Do you want to enter the job again?"));
+	if (othername)
+	  g_free (othername);
+	if (values_ok) {
+	  AB_Transaction_free (td->hbci_trans);
+	  td->hbci_trans = NULL;
+	  return GTK_RESPONSE_CANCEL;
+	}
+	continue;
+      } /* check Recipient Name (in aqbanking: Remote Name) */
+    }
+
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
     /*if (td->trans_type == SINGLE_DEBITNOTE)
