@@ -23,16 +23,16 @@ provide an attractive user interface, and has extensive online help.
 Show
 .B GnuCash
 version
-.IP --usage
-Show
-.B GnuCash
-usage information
 .IP --help
 Show this help message
 .IP --debug
-Enable debugging mode
-.IP "--loglevel LOGLEVEL"
-Set the logging level from 0 (least) to 6 (most)
+Enable debugging mode: increasing logging to provide deep detail.
+.IP --extra
+Enable extra/development/debugging features.
+.IP --log
+Log level overrides, of the form "log.ger.path={debug,info,warn,crit,error}"
+.IP --logto
+File to log into; defaults to "/tmp/gnucash.trace"; can be "stderr" or "stdout".
 .IP --nofile
 Do not load the last file opened
 .IP "--config-dir CONFIGDIR"
@@ -43,18 +43,10 @@ Set shared directory
 Set the search path for .scm files
 .IP "--doc-path DOCPATH"
 Set the search path for documentation files
-.IP --evaluate
-Evaluate the guile command
-.IP "--load FILE"
-Load the given .scm file
 .IP "--add-price-quotes FILE"
 Add price quotes to the given data file
-.IP --load-user-config
-Load the user configuration
-.IP --load-system-config
-Load the system configuration
-.IP --rpc-server
-Run the RPC Server
+.IP --namespace=REGEXP
+Regular expression determining which namespace commodities will be retrieved.
 .SH FILES
 .I ~/.gnucash/config.auto
 .RS

@@ -266,7 +266,7 @@ gnucash_command_line(int *argc, char **argv)
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
     if (!g_option_context_parse (context, argc, &argv, &error))
     {
-         g_error("error parsing command line args: %s", error->message);
+         g_error("Error parsing command line arguments: [%s]; try `gnucash --help` for available options.", error->message);
     }
     g_option_context_free (context);
     if (error)
