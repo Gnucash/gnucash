@@ -448,19 +448,21 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
   GncMainWindow *window;
   GncSxInstanceModel *sx_instances;
   GncSxSummary summary;
+  GList *auto_created_txns = NULL;
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
 	
   g_return_if_fail (data != NULL);
 
   window = data->window;
-  
+
   sx_instances = gnc_sx_get_current_instances();
   gnc_sx_instance_model_summarize(sx_instances, &summary);
-  gnc_sx_instance_model_effect_change(sx_instances, TRUE, NULL, NULL);
+  gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
   if (summary.need_dialog)
   {
-    gnc_ui_sx_since_last_run_dialog(sx_instances);
+    gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
+    auto_created_txns = NULL;
   }
   else
   {
@@ -481,6 +483,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
                       summary.num_auto_create_no_notify_instances);
     }
   }
+  g_list_free(auto_created_txns);
   g_object_unref(G_OBJECT(sx_instances));
 }
 

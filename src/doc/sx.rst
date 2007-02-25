@@ -49,9 +49,14 @@ TODO
     - [x] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
-! - [ ] auto-create (+notify) txns not in review list. [ve20070209]_
+
+! - [ ] parse from 1.8 file doesn't setup start date correctly;
+    daily-auto-yes-notify.xac has start date of 2006-09-26, but new TXN is
+    for $today.
 
 ! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+
+! - [x] auto-create (+notify) txns not in review list. [ve20070209]_
 
   - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 

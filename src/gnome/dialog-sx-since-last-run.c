@@ -51,6 +51,7 @@ struct _GncSxSinceLastRunDialog
     GncSxSlrTreeModelAdapter *editing_model;
     GtkTreeView *instance_view;
     GtkToggleButton *review_created_txns_toggle;
+    GList *created_txns;
 };
 
 /* ------------------------------------------------------------ */
@@ -794,6 +795,7 @@ gnc_sx_slr_tree_model_adapter_new(GncSxInstanceModel *instances)
 void
 gnc_sx_sxsincelast_book_opened(void)
 {
+    GList *auto_created_txns = NULL;
     GncSxInstanceModel *inst_model;
     GncSxSummary summary;
 
@@ -803,11 +805,12 @@ gnc_sx_sxsincelast_book_opened(void)
     inst_model = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(inst_model, &summary);
     gnc_sx_summary_print(&summary);
-    gnc_sx_instance_model_effect_change(inst_model, TRUE, NULL, NULL);
+    gnc_sx_instance_model_effect_change(inst_model, TRUE, &auto_created_txns, NULL);
 
     if (summary.need_dialog)
     {
-        gnc_ui_sx_since_last_run_dialog(inst_model);
+        gnc_ui_sx_since_last_run_dialog(inst_model, auto_created_txns);
+        auto_created_txns = NULL;
     }
     else
     {
@@ -824,16 +827,8 @@ gnc_sx_sxsincelast_book_opened(void)
                  summary.num_auto_create_no_notify_instances);
         }
     }
+    g_list_free(auto_created_txns);
     g_object_unref(G_OBJECT(inst_model));
-}
-
-void
-gnc_ui_sxsincelast_dialog_create(void)
-{
-    GncSxInstanceModel *model = gnc_sx_get_current_instances();
-    gnc_sx_instance_model_effect_change(model, TRUE, NULL, NULL);
-    gnc_ui_sx_since_last_run_dialog(model);
-    g_object_unref(G_OBJECT(model));
 }
 
 static void
@@ -922,7 +917,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
 }
 
 GncSxSinceLastRunDialog*
-gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances)
+gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
     GncSxSinceLastRunDialog *dialog;
     GladeXML *glade;
@@ -936,6 +931,8 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances)
     g_object_ref(G_OBJECT(dialog->editing_model));
      
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(glade_xml_get_widget(glade, "review_txn_toggle"));
+
+    dialog->created_txns = auto_created_txn_guids;
      
     {
         GtkCellRenderer *renderer;
@@ -1070,15 +1067,18 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
         }
     }
     gnc_suspend_gui_refresh();
-    gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &created_txns, NULL);
+    gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, NULL);
     gnc_resume_gui_refresh();
     if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
-        && g_list_length(created_txns) > 0)
+        && g_list_length(app_dialog->created_txns) > 0)
     {
-        _show_created_transactions(app_dialog, created_txns);
+
+        _show_created_transactions(app_dialog, app_dialog->created_txns);
     }
-    g_list_free(created_txns);
-    created_txns = NULL;
+    g_list_foreach(app_dialog->created_txns, (GFunc)guid_free, NULL);
+    g_list_free(app_dialog->created_txns);
+    app_dialog->created_txns = NULL;
+
     /* FALLTHROUGH */
     case GTK_RESPONSE_CANCEL: 
     case GTK_RESPONSE_DELETE_EVENT:
