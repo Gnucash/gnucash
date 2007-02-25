@@ -719,7 +719,7 @@ gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data)
 {
   gnc_html * gnchtml = (gnc_html *) data;
 
-  DEBUG("Rollover %s", url);
+  DEBUG("Rollover %s", url ? url : "(null)");
   g_free(gnchtml->current_link);
   gnchtml->current_link = g_strdup(url);
   if(gnchtml->flyover_cb) {
