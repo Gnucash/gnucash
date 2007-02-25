@@ -48,7 +48,6 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
-#include "gnc-http.h"
 #include "gnc-html-history.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
@@ -64,7 +63,7 @@ struct gnc_html_struct {
   URLType     base_type;           /* base of URL (path - filename) */
   gchar       * base_location;
 
-  gnc_http    * http;              /* handles HTTP requests */ 
+    //gnc_http    * http;              /* handles HTTP requests */ 
   GHashTable  * request_info;      /* hash uri to GList of GtkHTMLStream * */
 
   /* callbacks */
@@ -540,9 +539,7 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
   g_hash_table_insert(html->request_info, uri, handles);
   
   if(need_request) {
-    gnc_set_busy_cursor (html->html, FALSE);
-    gnc_http_start_request(html->http, uri, gnc_html_http_request_cb, 
-                           (gpointer)html);
+      g_critical("we've not supported network requests for years");
   }
 }
 
@@ -897,13 +894,8 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   DEBUG(" ");
   form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
-  
-  if(!strcasecmp(method, "get")) {
-    gnc_html_generic_get_submit(gnchtml, action, form_data);
-  }
-  else if(!strcasecmp(method, "post")) {
-    gnc_html_generic_post_submit(gnchtml, action, form_data);
-  }
+
+  g_critical("form submission hasn't been supported in years.");
   
   g_free(location);
   g_free(label);
@@ -1148,7 +1140,7 @@ gnc_html_new( GtkWindow *parent )
                     GTK_WIDGET(retval->html));
 
   retval->request_info = g_hash_table_new(g_str_hash, g_str_equal);
-  retval->http         = gnc_http_new();
+  //retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
   g_object_ref (retval->container);
@@ -1208,7 +1200,7 @@ void
 gnc_html_cancel(gnc_html * html)
 {
   /* remove our own references to requests */ 
-  gnc_http_cancel_requests(html->http);
+    //gnc_http_cancel_requests(html->http);
   
   g_hash_table_foreach_remove(html->request_info, html_cancel_helper, NULL);
 }
@@ -1611,95 +1603,4 @@ gnc_html_escape_newlines(const gchar * in)
   out = escaped->str;
   g_string_free(escaped, FALSE);
   return out;
-}
-
-
-/********************************************************************
- * gnc_html_generic_get_submit() : normal 'get' submit method. 
- ********************************************************************/
-
-void
-gnc_html_generic_get_submit(gnc_html * html, const char * action, 
-                            GHashTable * form_data)
-{
-  URLType type;
-  char    * location = NULL;
-  char    * label = NULL;
-  char    * fullurl = NULL;
-  char    * encoded = gnc_html_pack_form_data(form_data);
-
-  type    = gnc_html_parse_url(html, action, &location, &label);
-  fullurl = g_strconcat(location, "?", encoded, NULL);
-  gnc_html_show_url(html, type, fullurl, label, 0);
-
-  g_free(encoded);
-  g_free(location);
-  g_free(label);
-  g_free(fullurl);
-}
-
-
-/********************************************************************
- * gnc_html_generic_post_submit() : normal 'post' submit method. 
- ********************************************************************/
-
-void
-gnc_html_generic_post_submit(gnc_html * html, const char * action, 
-                             GHashTable * form_data)
-{
-  char * encoded = gnc_html_pack_form_data(form_data);
-  char * copy = strdup(encoded);
-  gnc_http_start_post(html->http, action, 
-                      "application/x-www-form-urlencoded",
-                      copy, strlen(copy), 
-                      gnc_html_http_request_cb, html);
-  g_free(encoded);
-}
-
-
-/********************************************************************
- * gnc_html_multipart_post_submit() : this is really sort of useless
- * but I'll make it better later.  It's useless because FTMP CGI/php
- * don't properly decode the urlencoded values.
- ********************************************************************/
-
-static void
-multipart_post_helper(gpointer key, gpointer val, 
-                      gpointer user_data)
-{
-  char * old_str = *(char **)user_data;
-  char * new_str = 
-    g_strconcat(old_str,
-                "--XXXgncXXX\r\n",
-                "Content-Disposition: form-data; name=\"",
-                (char *)key, "\"\r\n\r\n",
-                (char *)val, "\r\n",
-                NULL);
-  *(char **)user_data = new_str;
-  g_free(old_str);
-}
-
-
-void
-gnc_html_multipart_post_submit(gnc_html * html, const char * action, 
-                               GHashTable * form_data)
-{
-
-  char * htmlstr = g_strdup("");
-  char * next_htmlstr;
-
-  /* encode the arguments from the hash table */
-  g_hash_table_foreach(form_data, multipart_post_helper, &htmlstr);
-  
-  /* add the closing boundary marker */
-  next_htmlstr = g_strconcat(htmlstr, "--XXXgncXXX--\r\n", NULL);
-  g_free(htmlstr);
-  htmlstr = next_htmlstr;
-  next_htmlstr = NULL;
-  gnc_http_start_post(html->http, action, 
-                      "multipart/form-data; boundary=XXXgncXXX",
-                      htmlstr, strlen(htmlstr), 
-                      gnc_html_http_request_cb, html);
-
-  g_free(htmlstr);
 }

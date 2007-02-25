@@ -36,7 +36,6 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_srcdir}/src/app-utils \
   --gnc-module-dir ${top_srcdir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/gnome \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/import-export \
