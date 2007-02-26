@@ -442,7 +442,6 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 static void
 gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
 {
-    FreqSpec *fs;
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
 

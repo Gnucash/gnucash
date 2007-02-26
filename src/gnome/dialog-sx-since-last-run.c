@@ -1033,7 +1033,6 @@ gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *editing_model)
 static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
-    GList *created_txns = NULL;
     switch (response_id)
     {
     case GTK_RESPONSE_OK:

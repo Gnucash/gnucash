@@ -64,19 +64,6 @@ static void weekly_days_changed( GtkButton *b, gpointer d );
 
 static void monthly_sel_changed( GtkButton *b, gpointer d );
 static void semimonthly_sel_changed( GtkButton *b, gpointer d );
-static void yearly_sel_changed( GtkButton *b, gpointer d );
-static void quarterly_sel_changed( GtkButton *b, gpointer d );
-static void triyearly_sel_changed( GtkButton *b, gpointer d );
-static void semiyearly_sel_changed( GtkButton *b, gpointer d );
-
-static void year_range_sels_changed( GncFrequency *gf,
-                                     int monthsInRange,
-                                     GtkWidget *occurW,
-                                     GtkWidget *dayOfMonthW );
-static void year_range_menu_helper( GtkWidget *dayOptMenu,
-                                    GtkWidget *occurOptMenu,
-                                    gint monthsInRange,
-                                    time_t date );
 
 /** Static Inits ********************/
 
@@ -245,7 +232,6 @@ static void
 do_frequency_setup(GncFrequency *gf, FreqSpec *fs, time_t *secs)
 {
         UIFreqType uift;
-        int i, page;
 
         /* Set the start date, but only if present. */
         if (secs)
@@ -892,8 +878,6 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
          case PERIOD_LAST_WEEKDAY: {
              guint multiplier;
              GtkWidget *multipler_spin, *day_of_month;
-             GDate recurrence_day;
-             int day_of_month_index;
              
              multipler_spin = glade_xml_get_widget(gf->gxml, "monthly_spin");
              multiplier = recurrenceGetMultiplier(r);
