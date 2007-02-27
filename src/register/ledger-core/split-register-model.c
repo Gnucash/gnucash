@@ -1902,6 +1902,10 @@ gnc_split_register_model_add_hooks (gpointer unused)
   gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
 				gnc_split_register_colorize_negative,
 				NULL);
+  /* Get the initial value */
+  use_red_for_negative = gnc_gconf_get_bool(GCONF_GENERAL, 
+                                            KEY_NEGATIVE_IN_RED, 
+                                            NULL);
   return NULL;
 }
 
