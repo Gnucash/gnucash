@@ -803,7 +803,7 @@ function inst_aqbanking() {
 function inst_svn() {
     setup Subversion
     _SVN_UDIR=`unix_path $SVN_DIR`
-    export PATH="$_SVN_UDIR/bin:$PATH"
+    add_to_env $_SVN_UDIR/bin PATH
     if quiet svn --version
     then
         echo "subversion already installed.  skipping."
