@@ -118,6 +118,8 @@ typedef struct _temporalStateData {
 */
 SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 
+void sx_set_template_account (SchedXaction *sx, Account *account);
+
 /**
  * Cleans up and frees a SchedXaction and it's associated data.
 */

@@ -615,13 +615,15 @@ sx_templ_acct_handler( xmlNodePtr node, gpointer sx_pdata)
   struct sx_pdata *pdata = sx_pdata;
   SchedXaction *sx = pdata->sx;
   GUID *templ_acct_guid = dom_tree_to_guid(node);
+  Account *account;
 
   if (!templ_acct_guid)
   {
     return FALSE;
   }
 
-  sx->template_acct = xaccAccountLookup(templ_acct_guid, pdata->book);
+  account = xaccAccountLookup(templ_acct_guid, pdata->book);
+  sx_set_template_account(sx, account);
   g_free(templ_acct_guid);
 
   return TRUE;

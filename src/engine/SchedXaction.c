@@ -138,6 +138,20 @@ delete_template_trans(SchedXaction *sx)
   
   return;
 }
+
+void
+sx_set_template_account (SchedXaction *sx, Account *account)
+{
+  Account *old;
+
+  old = sx->template_acct;
+  sx->template_acct = account;
+  if (old) {
+    xaccAccountBeginEdit(old);
+    xaccAccountDestroy(old);
+  }
+}
+
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
