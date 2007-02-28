@@ -730,39 +730,6 @@ then
 	LIBOFX_CFLAGS="-I${OFXPREFIX}/include"
     fi
 
-    ### Check libofx version
-    # Obtain version string
-    AC_MSG_CHECKING(for libofx version >= 0.7.0)
-    if test x${OFXPREFIX} = x ; then
-	ofx_version_output=`ofxdump --version`
-    else
-	ofx_version_output=`${OFXPREFIX}/bin/ofxdump --version`
-    fi
-    # Extract version number; output format changed from 0.6.x to 0.7.x
-    LIBOFX_VERSION=`echo ${ofx_version_output} | sed 's/\([[^0-9]]*\)\([[0-9]]*\.\)/\2/' `
-    LIBOFX_VERSION_MAJOR=`echo ${LIBOFX_VERSION} | cut -d. -f1`
-    LIBOFX_VERSION_MINOR=`echo ${LIBOFX_VERSION} | cut -d. -f2`
-    # Make sure the numbers are not empty
-    if test x${LIBOFX_VERSION_MAJOR} = x ; then
-	LIBOFX_VERSION_MAJOR=0
-    fi
-    if test x${LIBOFX_VERSION_MINOR} = x ; then
-	LIBOFX_VERSION_MINOR=0
-    fi
-    # Now check for >= 0.7.x or >= 1.x.x
-    if test "${LIBOFX_VERSION_MAJOR}" -ge 1 -o \
-	     "${LIBOFX_VERSION_MINOR}" -ge 7; then
-	# This is libofx >= 0.7.x
-	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
-    else
-        if test x${want_ofx} = xyes ; then
-	    AC_MSG_ERROR([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
-        else
-	    AC_MSG_RESULT([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
-            want_ofx=no
-        fi
-    fi
-
     if test "x${want_ofx}" != xno ; then
         # Version number verified. Now check header files.
         AC_MSG_CHECKING(for libofx/libofx.h)
