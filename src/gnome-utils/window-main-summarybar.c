@@ -434,6 +434,14 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(summary->totals_combo), 0);
   }
+
+  /* Free the list we created for this */
+  for (current = g_list_first(currency_list);
+       current;
+       current = g_list_next(current)) {
+    g_free(current->data);
+  }
+  g_list_free(currency_list);
 }
 
 static void
