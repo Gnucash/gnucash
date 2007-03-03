@@ -567,11 +567,10 @@ equity_base_name (GNCEquityType equity_type)
 }
 
 Account *
-gnc_find_or_create_equity_account (QofBook *book,
+gnc_find_or_create_equity_account (Account *root,
                                    GNCEquityType equity_type,
                                    gnc_commodity *currency)
 {
-  Account *root;
   Account *parent;
   Account *account;
   gboolean name_exists;
@@ -582,11 +581,10 @@ gnc_find_or_create_equity_account (QofBook *book,
   g_return_val_if_fail (equity_type >= 0, NULL);
   g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
   g_return_val_if_fail (currency != NULL, NULL);
-  g_return_val_if_fail (book != NULL, NULL);
+  g_return_val_if_fail (root != NULL, NULL);
 
   base_name = equity_base_name (equity_type);
 
-  root = gnc_book_get_root_account(book);
   account = gnc_account_lookup_by_name(root, base_name);
   if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
@@ -638,7 +636,7 @@ gnc_find_or_create_equity_account (QofBook *book,
     parent = root;
   g_assert(parent);
 
-  account = xaccMallocAccount (book);
+  account = xaccMallocAccount (gnc_account_get_book(root));
 
   xaccAccountBeginEdit (account);
 
@@ -673,7 +671,7 @@ gnc_account_create_opening_balance (Account *account,
   g_return_val_if_fail (account != NULL, FALSE);
 
   equity_account =
-    gnc_find_or_create_equity_account (book,
+    gnc_find_or_create_equity_account (gnc_account_get_root(account),
                                        EQUITY_OPENING_BALANCE,
                                        xaccAccountGetCommodity (account));
   if (!equity_account)
