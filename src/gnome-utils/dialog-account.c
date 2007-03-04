@@ -466,6 +466,9 @@ make_children_compatible (AccountWindow *aw)
 
   g_return_if_fail (aw);
 
+  if (aw->dialog_type == NEW_ACCOUNT)
+      return;
+
   account = aw_get_account (aw);
   g_return_if_fail (account);
 
