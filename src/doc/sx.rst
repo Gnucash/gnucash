@@ -56,6 +56,8 @@ TODO
 
 ! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
+  - [ ] created/review txns disappear, eventual crash [ve20070303]_
+
 ! - [x] auto-create (+notify) txns not in review list. [ve20070209]_
 
   - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
@@ -67,6 +69,7 @@ TODO
 
 .. _[dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
 .. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
+.. _[ve20070303]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
 
 - sx list page
   - [/] make into split panel
