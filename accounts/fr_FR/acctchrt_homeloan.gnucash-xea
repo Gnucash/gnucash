@@ -10,6 +10,12 @@
     Vous devriez sélectionner cet ensemble de comptes si vous avez un emprunt immobilier(Hypothèque d'un emprunt, Hypothèque sur des intérêts).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Passif</act:name>
   <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>
   <act:type>LIABILITY</act:type>
@@ -18,6 +24,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Passif</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Emprunts</act:name>
@@ -50,6 +57,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:currency>
   <act:description>Dépenses</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Intérêts</act:name>

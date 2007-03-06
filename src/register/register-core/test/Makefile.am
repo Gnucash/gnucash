@@ -2,11 +2,11 @@ TESTS =  \
   test-link-module
 #  test-load-module
 
-TESTS_ENVIRONMENT= \
-   GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
-   GUILE_LOAD_PATH=../../engine:..:../../gnc-module:${top_srcdir}/lib \
-   LTDL_LIBRARY_PATH=.. \
-   LD_LIBRARY_PATH=${top_builddir}/src/gnc-module:${top_builddir}/src/gnc-module/.libs:${top_builddir}/src/engine:${top_builddir}/src/engine/.libs:${top_builddir}/src/calculation:${top_builddir}/src/calculation/.libs:${top_builddir}/src/network-utils:${top_builddir}/src/network-utils/.libs
+#GNC_TEST_DEPS := \
+#
+
+#TESTS_ENVIRONMENT := \
+#  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 check_PROGRAMS = \
   test-link-module

@@ -90,7 +90,7 @@ static struct dom_tree_handler recurrence_dom_handlers[] = {
     { NULL, NULL, 0, 0 }
 };
 
-Recurrence *
+Recurrence*
 dom_tree_to_recurrence(xmlNodePtr node)
 {
     gboolean successful;

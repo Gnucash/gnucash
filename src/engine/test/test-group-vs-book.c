@@ -25,34 +25,30 @@
 #include <glib.h>
 #include "qof.h"
 #include "cashobjects.h"
-#include "Group.h"
-#include "GroupP.h"
+#include "Account.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
 static gboolean
-group_has_book (AccountGroup *group, QofBook *book)
+account_tree_has_book (Account *parent, QofBook *book)
 {
-  GList *node;
+  GList *children, *node;
 
-  if (!group)
+  if (!parent)
     return (book == NULL);
 
-  if (xaccGroupGetBook (group) != book)
+  if (gnc_account_get_book(parent) != book)
     return FALSE;
 
-  for (node = xaccGroupGetAccountList (group); node; node = node->next)
+  children = gnc_account_get_children(parent);
+  for (node = children; node; node = node->next)
   {
-    AccountGroup *children = xaccAccountGetChildren (node->data);
-
-    if (!children)
-      continue;
-
-    if (!group_has_book (children, book))
+    if (!account_tree_has_book (node->data, book))
       return FALSE;
   }
+  g_list_free(children);
 
   return TRUE;
 }
@@ -61,8 +57,8 @@ group_has_book (AccountGroup *group, QofBook *book)
 static void
 run_test (void)
 {
-  AccountGroup *group1;
-  AccountGroup *group2;
+  Account *root1;
+  Account *root2;
   Account *account1;
   Account *account2;
   QofBook *book;
@@ -74,16 +70,16 @@ run_test (void)
     exit(get_rv());
   }
 
-  group1 = get_random_group (book);
-  if(!group1)
+  root1 = get_random_account (book);
+  if(!root1)
   {
-    failure("group1 not created");
+    failure("root1 not created");
     exit(get_rv());
   }
 
-  if (!group_has_book (group1, book))
+  if (!account_tree_has_book (root1, book))
   {
-    failure("new group has wrong book");
+    failure("new root has wrong book");
     exit(get_rv());
   }
 
@@ -93,34 +89,34 @@ run_test (void)
    * interface. the maintenance of the correct
    * book pointers is important for correct
    * engine operation. */
-  xaccSetAccountGroup (book, group1);
-  if (!group_has_book (group1, book))
+  gnc_book_set_root_account (book, root1);
+  if (!account_tree_has_book (root1, book))
   {
-    failure("xaccSetAccountGroup didn't take");
+    failure("gnc_book_set_root_account didn't take");
     exit(get_rv());
   }
 
-  group2 = get_random_group (book);
-  if(!group2)
+  root2 = get_random_account (book);
+  if(!root2)
   {
-    failure("group2 not created");
+    failure("root2 not created");
     exit(get_rv());
   }
 
-  xaccSetAccountGroup (book, group2);
+  gnc_book_set_root_account (book, root2);
 
 #if 0
   /* a group cannot have a 'null' book; this test is nonsense. */
-  if (!group_has_book (group1, NULL))
+  if (!account_tree_has_book (root1, NULL))
   {
-    failure("xaccSetAccountGroup didn't clear old");
+    failure("gnc_book_set_root_account didn't clear old");
     exit(get_rv());
   }
 #endif
 
-  if (!group_has_book (group2, book))
+  if (!account_tree_has_book (root2, book))
   {
-    failure("xaccSetAccountGroup didn't take");
+    failure("gnc_book_set_root_account didn't take");
     exit(get_rv());
   }
 
@@ -131,8 +127,8 @@ run_test (void)
     exit(get_rv());
   }
 
-  xaccGroupInsertAccount (group2, account1);
-  if (group2 != xaccAccountGetParent (account1))
+  gnc_account_append_child (root2, account1);
+  if (root2 != gnc_account_get_parent (account1))
   {
     failure("group insert account didn't work");
     exit(get_rv());
@@ -145,15 +141,15 @@ run_test (void)
     exit(get_rv());
   }
 
-  xaccAccountInsertSubAccount (account1, account2);
-  if (!group_has_book (xaccAccountGetParent (account2), book))
+  gnc_account_append_child (account1, account2);
+  if (!account_tree_has_book (gnc_account_get_parent (account2), book))
   {
     failure("account2 has wrong book");
     exit(get_rv());
   }
 
-  xaccGroupRemoveAccount (group2, account1);
-  if (xaccAccountGetParent (account1) != NULL)
+  gnc_account_remove_child (root2, account1);
+  if (gnc_account_get_parent (account1) != NULL)
   {
     failure("remove group didn't take");
     exit(get_rv());

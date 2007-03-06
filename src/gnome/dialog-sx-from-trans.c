@@ -25,26 +25,25 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include "glib-compat.h"
-
-#include "gnc-engine.h"
-#include "SX-book.h"
-#include "SX-book-p.h"
-#include "SX-ttinfo.h"
-#include "SchedXaction.h"
-#include "gnc-component-manager.h"
-#include "dialog-scheduledxaction.h"
+#include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
+#include "glib-compat.h"
+#include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "qof.h"
-#include "gnc-gconf-utils.h"
-#include "gnc-ui.h"
-#include "gnc-ui-util.h"
+#include "gnc-dense-cal-store.h"
 #include "gnc-dense-cal.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "qof.h"
+#include "SchedXaction.h"
+#include "SX-book.h"
+#include "SX-ttinfo.h"
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <stdlib.h>
 
 #define SX_GLADE_FILE "sched-xact.glade"
 #define SXFTD_DIALOG_GLADE_NAME "sx_from_real_trans"
@@ -71,18 +70,18 @@
 
 #define SXFTD_RESPONSE_ADVANCED 100 /* 'Advanced' button response code */
 
-static QofLogModule log_module = GNC_MOD_SX;
+static QofLogModule log_module = GNC_MOD_GUI_SX;
+
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN GNC_MOD_GUI_SX
 
 static void sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
 
 static void sxftd_destroy( GtkWidget *w, gpointer user_data );
 
-typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } endType;
-
 typedef enum { FREQ_DAILY = 0,  /* I know the =0 is redundant, but I'm using
-                                 * the numeric equivalences explicitly here
-                                 */
+                                 * the numeric equivalences explicitly here */
                FREQ_WEEKLY,
                FREQ_BIWEEKLY,
                FREQ_MONTHLY, 
@@ -97,11 +96,8 @@ typedef struct
   Transaction *trans;
   SchedXaction *sx;
 
+  GncDenseCalStore *dense_cal_model;
   GncDenseCal *example_cal;
-  /** Storage for the maximum possible number of marks we could put on the
-   *  calendar. */
-  GDate **cal_marks;
-  gint mark_id;
 
   GNCDateEdit *startDateGDE, *endDateGDE;
 
@@ -109,7 +105,7 @@ typedef struct
 
 typedef struct
 {
-  endType type;
+  gdcs_end_type type;
   GDate end_date;
   guint n_occurrences;
 } getEndTuple;
@@ -117,9 +113,6 @@ typedef struct
 static void sxftd_update_example_cal( SXFromTransInfo *sxfti );
 static void sxftd_update_excal_adapt( GObject *o, gpointer ud );
 
-/* Stolen from jsled - nice and neat, actually (if a little light on 
- * for typechecking, but we'll be careful) . . . 
- */
 typedef struct
 {
   gchar *name;
@@ -127,10 +120,8 @@ typedef struct
   void (*handlerFn)();
 } widgetSignalHandlerTuple;
 
-
 static void sxftd_ok_clicked(SXFromTransInfo *sxfti);
 static void sxftd_advanced_clicked(SXFromTransInfo *sxfti);
-
 
 static void
 sxfti_attach_callbacks(SXFromTransInfo *sxfti)
@@ -144,7 +135,6 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
       { SXFTD_END_ON_DATE_BUTTON,   "clicked",      sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_BUTTON, "clicked",      sxftd_update_excal_adapt },
       { SXFTD_N_OCCURRENCES_ENTRY,  "changed",      sxftd_update_excal_adapt },
-
       { NULL,                  NULL,      NULL }
     };
   
@@ -198,10 +188,18 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     guint n_occs;
     w = glade_xml_get_widget(sxfti->gxml, SXFTD_N_OCCURRENCES_ENTRY);
     text = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
-    
-    n_occs = strtoul(text, &endptr, 10);
-    if ( !endptr ) {
-      n_occs = -1;
+
+    if (text == NULL || strlen(text) == 0)
+    {
+        n_occs = 0;
+    }
+    else
+    {
+        n_occs = strtoul(text, &endptr, 10);
+        if ( !endptr )
+        {
+            n_occs = -1;
+        }
     }
 
     g_free(text);
@@ -339,9 +337,8 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     break;
 
   default:
-    PERR("Nonexistent frequency selected.  This is a bug.");
-    g_assert( FALSE );
-    break;
+       g_critical("nonexistent frequency selected");
+       break;
   }
 }
 
@@ -370,20 +367,19 @@ sxftd_init( SXFromTransInfo *sxfti )
 
   /* Setup the example calendar and related data structures. */
   {
-    int i;
+    int num_marks = SXFTD_EXCAL_NUM_MONTHS * 31;
 
     w = GTK_WIDGET(glade_xml_get_widget( sxfti->gxml, SXFTD_EX_CAL_FRAME ));
-    sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new());
-    g_assert( sxfti->example_cal );
+    sxfti->dense_cal_model = gnc_dense_cal_store_new(num_marks);
+    sxfti->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(sxfti->dense_cal_model)));
+    // gobject-2.10: g_object_ref_sink(sxfti->example_cal);
+    g_object_ref(G_OBJECT(sxfti->example_cal));
+    gtk_object_sink(GTK_OBJECT(sxfti->example_cal));
+
+    g_assert(sxfti->example_cal);
     gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
     gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
     gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
-
-    sxfti->mark_id = -1;
-    sxfti->cal_marks = g_new0( GDate*, (SXFTD_EXCAL_NUM_MONTHS * 31) );
-    for ( i=0; i < SXFTD_EXCAL_NUM_MONTHS * 31; i++ ) {
-      sxfti->cal_marks[i] = g_date_new();
-    }
   }
 
   /* Setup the start and end dates as GNCDateEdits */
@@ -507,9 +503,9 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   gnc_sx_set_instance_count( sx, 1 );
 
   /* Set the autocreate, days-in-advance and remind-in-advance values from
-     options. */
-  {
-    gboolean autoCreateState, notifyState;
+   * options. */
+  { 
+    gboolean autoCreateState, notifyState; 
     gint daysInAdvance;
 
     autoCreateState =
@@ -551,31 +547,24 @@ static void
 sxftd_ok_clicked(SXFromTransInfo *sxfti)
 {
   QofBook *book;
-  GList *sx_list;
+  SchedXactions *sxes;
   guint sx_error = sxftd_compute_sx(sxfti);
 
   if (sx_error != 0
-      && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION) {
-    PERR( "Error in sxftd_compute_sx after ok_clicked [%d]", sx_error );
+      && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION)
+  {
+       g_critical("sxftd_compute_sx after ok_clicked [%d]", sx_error);
   }
-  else {
-    SchedXactionDialog *sxd;
-
+  else
+  {
     if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION ) {
             gnc_error_dialog( gnc_ui_get_toplevel(), 
                               _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
     }
     book = gnc_get_current_book ();
-    sx_list = gnc_book_get_schedxactions(book);
-    sx_list = g_list_append(sx_list, sxfti->sx);
-    gnc_book_set_schedxactions(book, sx_list);
-    sxd = (SchedXactionDialog*)
-            gnc_find_first_gui_component(
-                    DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
-    if ( sxd ) {
-      gnc_sxd_list_refresh( sxd );
-    }
+    sxes = gnc_book_get_schedxactions(book);
+    gnc_sxes_add_sx(sxes, sxfti->sx);
   }
 
   sxftd_close(sxfti, FALSE);
@@ -617,27 +606,24 @@ static void
 sxftd_advanced_clicked(SXFromTransInfo *sxfti)
 {
   guint sx_error = sxftd_compute_sx(sxfti);
-  SchedXactionDialog *adv_dlg;
-  SchedXactionEditorDialog *adv_edit_dlg;
+  GncSxEditorDialog *adv_edit_dlg;
   GMainContext *context;
 
   if ( sx_error != 0
        && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
   {
-          // unbalanced-xaction is "okay", since this is also checked for by
-          // the advanced editor.
-          PWARN( "something bad happened in sxftd_compute_sx [%d]", sx_error );
-          return;
+       // unbalanced-xaction is "okay", since this is also checked for by
+       // the advanced editor.
+       g_warning("something bad happened in sxftd_compute_sx [%d]", sx_error);
+       return;
   }
   gtk_widget_hide( sxfti->dialog );
   /* force a gui update. */
   context = g_main_context_default();
   while (g_main_context_iteration(context, FALSE));
 
-  adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
   adv_edit_dlg =
-    gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
-                                                  sxfti->sx,
+    gnc_ui_scheduled_xaction_editor_dialog_create(sxfti->sx,
                                                   TRUE /* newSX */);
   /* close ourself, since advanced editing entails us, and there are sync
    * issues otherwise. */
@@ -647,28 +633,21 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
 static void
 sxftd_destroy( GtkWidget *w, gpointer user_data )
 {
-  int i;
   SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
 
-  for ( i=0; i<SXFTD_EXCAL_NUM_MONTHS*31; i++ ) {
-    g_date_free( sxfti->cal_marks[i] );
-  }
-  g_free( sxfti->cal_marks );
-    
   if ( sxfti->sx ) {
     xaccSchedXactionFree(sxfti->sx);
     sxfti->sx = NULL;
   }
+
+  g_object_unref(G_OBJECT(sxfti->dense_cal_model));
+  g_object_unref(G_OBJECT(sxfti->example_cal));
 
   /* FIXME: do we need to clean up the GladeXML pointer? */
 
   g_free(sxfti);
 }
 
-
-/**
- *
- **/
 static void
 gnc_sx_trans_window_response_cb (GtkDialog *dialog,
                                 gint response,
@@ -677,25 +656,24 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
 	SXFromTransInfo *sxfti = (SXFromTransInfo *)data;
 
 	ENTER(" dialog %p, response %d, sx %p", dialog, response, sxfti);
-        switch (response) {
-                case GTK_RESPONSE_OK:
-                        DEBUG(" OK");
-			sxftd_ok_clicked(sxfti);
-			break;
-		case SXFTD_RESPONSE_ADVANCED:
-			DEBUG(" ADVANCED");
-			sxftd_advanced_clicked(sxfti);
-			break;
-                case GTK_RESPONSE_CANCEL:
-                default:
-                        DEBUG(" CANCEL");
-			sxftd_close(sxfti, TRUE);
-                        break;
+    switch (response) {
+    case GTK_RESPONSE_OK:
+         g_debug(" OK");
+         sxftd_ok_clicked(sxfti);
+         break;
+    case SXFTD_RESPONSE_ADVANCED:
+         g_debug(" ADVANCED");
+         sxftd_advanced_clicked(sxfti);
+         break;
+    case GTK_RESPONSE_CANCEL:
+    default:
+         g_debug(" CANCEL");
+         sxftd_close(sxfti, TRUE);
+         break;
 
 	}
 	LEAVE(" ");
 }
-
 
 /**
  * Update the example calendar; make sure to take into account the end
@@ -707,11 +685,8 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   struct tm *tmpTm;
   time_t tmp_tt;
   GDate date, startDate;
-  unsigned int i;
   FreqSpec *fs;
   getEndTuple get;
-  gchar *name;
-  GString *info;
 
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
@@ -733,42 +708,26 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   xaccFreqSpecGetNextInstance( fs, &date, &date );
   startDate = date;
 
-  i = 0;
-  while ( (i < (SXFTD_EXCAL_NUM_MONTHS * 31))
-          && g_date_valid( &date )
-          /* Do checking against end restriction. */
-          && ( ( get.type == NEVER_END )
-               || ( get.type == END_ON_DATE
-                    && g_date_compare( &date, &(get.end_date) ) <= 0 )
-               || ( get.type == END_AFTER_N_OCCS
-                    && i < get.n_occurrences ) ) ) {
+  switch (get.type)
+  {
+  case NEVER_END:
+    gnc_dense_cal_store_update_no_end(sxfti->dense_cal_model, &startDate, fs);
+    break;
+  case END_ON_DATE:
+    gnc_dense_cal_store_update_date_end(sxfti->dense_cal_model, &startDate, fs, &get.end_date);
+    break;
+  case END_AFTER_N_OCCS:
+    gnc_dense_cal_store_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
+    break;
+  default:
+    g_warning("unknown get.type [%d]\n", get.type);
+    break;
+  }
 
-    *sxfti->cal_marks[i++] = date;
-    xaccFreqSpecGetNextInstance( fs, &date, &date );
-  }
-  /* remove old marks */
-  if ( sxfti->mark_id != -1 ) {
-    gnc_dense_cal_mark_remove( sxfti->example_cal, sxfti->mark_id );
-    sxfti->mark_id = -1;
-  }
-  if ( i > 0 ) {
-    GtkWidget *w;
-    gnc_dense_cal_set_month( sxfti->example_cal,
-                             g_date_get_month( &startDate ) );
-    gnc_dense_cal_set_year( sxfti->example_cal,
-                            g_date_get_year( &startDate ) );
-    w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
-    name = gtk_editable_get_chars( GTK_EDITABLE(w), 0, -1 );
-    info = g_string_sized_new( 16 );
-    xaccFreqSpecGetFreqStr( fs, info );
-    sxfti->mark_id =
-      gnc_dense_cal_mark( sxfti->example_cal,
-                          i, sxfti->cal_marks,
-                          name, info->str );
-    gtk_widget_queue_draw( GTK_WIDGET(sxfti->example_cal) );
-    g_free( name );
-    g_string_free( info, TRUE );
-  }
+  gnc_dense_cal_set_month( sxfti->example_cal,
+                           g_date_get_month( &startDate ) );
+  gnc_dense_cal_set_year( sxfti->example_cal,
+                          g_date_get_year( &startDate ) );
 
   xaccFreqSpecFree( fs );
 }
@@ -784,10 +743,6 @@ sxftd_update_excal_adapt( GObject *o, gpointer ud )
   sxftd_update_example_cal( sxfti );
 }
 
-
-/**
- *
- **/
 void
 gnc_sx_create_from_trans( Transaction *trans )
 {
@@ -817,7 +772,7 @@ gnc_sx_create_from_trans( Transaction *trans )
           }
           else
           {
-                  PERR( "Error in sxftd_init: %d", errno );
+               g_error("sxftd_init: %d", errno);
           }
   }
 

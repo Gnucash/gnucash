@@ -43,7 +43,6 @@
 #endif
 #include <iconv.h>
 
-#include "gtk-compat.h"
 #include "dialog-utils.h"
 #include "gnc-glib-utils.h"
 #include "gnc-ui.h"
@@ -366,10 +365,13 @@ gnc_hbci_dialog_new (GtkWidget *parent,
       break;
     case SINGLE_DEBITNOTE:
       gtk_label_set_text (GTK_LABEL (heading_label), 
-			  /* Translators: Strings from this file are really only
-			   * needed inside Germany (HBCI is not supported anywhere
-			   * else). You may safely ignore strings from the
-			   * import-export/hbci subdirectory in other countries. */
+      /* Translators: Strings from this file are needed only in
+       * countries that have one of aqbanking's Online Banking
+       * techniques available. This is 'OFX DirectConnect'
+       * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+       * (Switzerland). If none of these techniques are available
+       * in your country, you may safely ignore strings from the
+       * import-export/hbci subdirectory. */
 			  _("Enter an Online Direct Debit Note"));
 
       gtk_label_set_text (GTK_LABEL (recp_name_heading),
@@ -388,7 +390,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
       break;
 
     default:
-      printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+      g_critical("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
 	     trans_type);
     }
     
@@ -482,7 +484,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
   {
     AB_JOB *job = AB_JobSingleTransfer_new((AB_ACCOUNT *)h_acc);
     if (AB_Job_CheckAvailability(job)) {
-      printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+      g_warning("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
       return GTK_RESPONSE_CANCEL;
     }
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
@@ -515,7 +517,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 
     /* Now run the dialog until it gets closed by a button press. */
     result = gtk_dialog_run (GTK_DIALOG (td->dialog));
-    /* printf("hbci_trans: result button was %d.\n", result); */
+    /* g_message("hbci_trans: result button was %d.\n", result); */
 
     /* The dialog gets hidden anyway as soon as any button is pressed. */
     gtk_widget_hide_all (td->dialog);
@@ -579,6 +581,29 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       } /* check Transaction_purpose */
     }
 
+    {
+      char *othername = gnc_hbci_getremotename (td->hbci_trans);
+      if (!othername || (strlen (othername) == 0)) {
+	gtk_widget_show_all (td->dialog); 
+	values_ok = !gnc_verify_dialog
+	  (GTK_WIDGET (td->dialog),
+	   TRUE,
+	   "%s",
+	   _("You did not enter a recipient name.  A recipient name is "
+	     "required for an online transfer.\n"
+	     "\n"
+	     "Do you want to enter the job again?"));
+	if (othername)
+	  g_free (othername);
+	if (values_ok) {
+	  AB_Transaction_free (td->hbci_trans);
+	  td->hbci_trans = NULL;
+	  return GTK_RESPONSE_CANCEL;
+	}
+	continue;
+      } /* check Recipient Name (in aqbanking: Remote Name) */
+    }
+
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
     /*if (td->trans_type == SINGLE_DEBITNOTE)
@@ -621,11 +646,11 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
 	
   AB_Transaction_SetRemoteBankCode
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
-  /* printf("Got otherBankCode %s.\n",
+  /* g_message("Got otherBankCode %s.\n",
      AB_Transaction_otherBankCode (trans)); */
   AB_Transaction_SetRemoteAccountNumber
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)));
-  /* printf("Got otherAccountId %s.\n",
+  /* g_message("Got otherAccountId %s.\n",
      AB_Transaction_otherAccountId (trans)); */
   AB_Transaction_SetRemoteCountry (trans, "DE");
 
@@ -756,7 +781,7 @@ gnc_hbci_trans_dialog_enqueue(const AB_TRANSACTION *hbci_trans, AB_BANKING *api,
     job = AB_JobSingleTransfer_new(h_acc);
   };
   if (AB_Job_CheckAvailability(job)) {
-    printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
+    g_warning("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
     return NULL;
   }
 
@@ -893,7 +918,7 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
 				      "UTF-8", ktoblzcheck_encoding,
 				      NULL, NULL, &error);
     if (error != NULL) {
-      printf ("Error converting bankname \"%s\" to UTF-8\n", bankname);
+      g_critical ("Error converting bankname \"%s\" to UTF-8\n", bankname);
       g_error_free (error);
       /* Conversion was erroneous, so don't use the string */
       utf8_bankname = g_strdup (_("(unknown)"));

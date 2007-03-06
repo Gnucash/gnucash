@@ -40,9 +40,8 @@
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Period.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -432,29 +431,19 @@ trans_list_preen_open_lots (TransList *trans_list)
 /* clear the markers for the above routines */
 
 static void
-clear_markers (AccountGroup *grp)
+clear_markers (Account *account, gpointer dummy)
 {
-   GList *node;
+  GList *lp;
 
-   if (!grp) return;
-                                                                                
-   for (node = grp->accounts; node; node = node->next)
-   {
-      Account *account = node->data;
-      GList *lp;
-                                                                                
-      /* recursively do sub-accounts */
-      clear_markers (account->children);
-                                                                                
-      for (lp = account->splits; lp; lp = lp->next)
-      {
-        Split *s = lp->data;
-        Transaction *trans = s->parent;
-        GNCLot *lot = s->lot;
-        trans->marker = 0;
-        if (lot) lot->marker = 0;
-      }
-   }
+  if (!account) return;
+
+  for (lp = xaccAccountGetSplitList(account); lp; lp = lp->next) {
+    Split *s = lp->data;
+    Transaction *trans = s->parent;
+    GNCLot *lot = s->lot;
+    trans->marker = 0;
+    if (lot) lot->marker = 0;
+  }
 }
 
 /* ================================================================ */
@@ -526,7 +515,7 @@ void
 gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
    gnc_commodity_table *src_tbl, *dst_tbl;
-   AccountGroup *src_grp, *dst_grp;
+   Account *src_root, *dst_root;
    time_t now;
    TransList *trans_list, *tnode;
    LotList *lot_list, *lnode;
@@ -552,18 +541,18 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write an account-group merge 
     * routine, and it is not needed for the current usage. */
-   src_grp = xaccGetAccountGroup (src_book);
-   dst_grp = xaccGetAccountGroup (dest_book);
-   xaccGroupCopyGroup (dst_grp, src_grp);
+   src_root = gnc_book_get_root_account (src_book);
+   dst_root = gnc_book_get_root_account (dest_book);
+   gnc_account_copy_children (dst_root, src_root);
 
    /* Next, run the query */
-   xaccAccountGroupBeginEdit (dst_grp);
-   xaccAccountGroupBeginEdit (src_grp);
+   xaccAccountBeginEdit (dst_root);
+   xaccAccountBeginEdit (src_root);
    qof_query_set_book (query, src_book);
    trans_list = qof_query_run (query);
 
    /* Preen: remove open lots/ open trnasactions */
-   clear_markers (src_grp);
+   gnc_account_foreach_descendant(src_root, clear_markers, NULL);
    trans_list = trans_list_preen_open_lots (trans_list);
    lot_list = create_lot_list_from_trans_list (trans_list);
    lot_list = lot_list_preen_open_lots (lot_list);
@@ -583,8 +572,8 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
       gnc_book_insert_trans (dest_book, trans);
    }
 
-   xaccAccountGroupCommitEdit (src_grp);
-   xaccAccountGroupCommitEdit (dst_grp);
+   xaccAccountCommitEdit (src_root);
+   xaccAccountCommitEdit (dst_root);
 
    /* Make note of the sibling books */
    now = time(0);
@@ -603,41 +592,37 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 static Account *
 find_nearest_equity_acct (Account *acc)
 {
-   AccountList *acc_list, *node;
-   AccountGroup *parent;
-   Account *next_up, *candidate;
+   QofBook *book;
+   GList *acc_list, *node;
+   Account *parent, *root, *candidate;
 
-   /* See if we can find an equity account that is peered to this account */
-   parent = xaccAccountGetParent (acc);
+   parent = gnc_account_get_parent (acc);
    g_return_val_if_fail (parent, NULL);
 
-   acc_list = xaccGroupGetAccountList (parent);
-   for (node=acc_list; node; node=node->next)
-   {
-      candidate = (Account *) node->data;
-      if ((ACCT_TYPE_EQUITY == xaccAccountGetType (candidate)) &&
-          gnc_commodity_equiv(xaccAccountGetCommodity(acc),
-                              xaccAccountGetCommodity(candidate)))
-      {
+   /* See if we can find an equity account that is peered to this
+    * account. If not, check succssively higher levels. */
+   while (parent != NULL) {
+     acc_list = gnc_account_get_children(parent);
+     for (node=acc_list; node; node=node->next) {
+       candidate = (Account *) node->data;
+       if ((ACCT_TYPE_EQUITY == xaccAccountGetType (candidate)) &&
+	   gnc_commodity_equiv(xaccAccountGetCommodity(acc),
+			       xaccAccountGetCommodity(candidate))) {
          return candidate;
-      }
+       }
+     }
+     g_list_free(acc_list);
+     parent = gnc_account_get_parent (parent);
    }
 
-   /* If we got to here, we did not find a peer equity account. 
-    * So go up one layer, and look there */
-   next_up = xaccGroupGetParentAccount (parent);
-   if (next_up) 
-   {
-      candidate = find_nearest_equity_acct (next_up);
-      if (candidate) return candidate;
-   }
-
-   /* If we got to here, then we are at the top group, and there is no 
+   /* If we got to here, then we are at the root account, and there is no 
     * equity account to be found.  So we need to create one. */
-   
-   candidate = xaccMallocAccount (xaccGroupGetBook(parent));
+
+   book = gnc_account_get_book(acc);
+   root = gnc_book_get_root_account(book);
+   candidate = xaccMallocAccount (book);
    xaccAccountBeginEdit (candidate);
-   xaccGroupInsertAccount (parent, candidate);
+   gnc_account_append_child (root, candidate);
    xaccAccountSetType (candidate, ACCT_TYPE_EQUITY);
    xaccAccountSetName (candidate, xaccAccountGetTypeStr(ACCT_TYPE_EQUITY));
    xaccAccountSetCommodity (candidate, xaccAccountGetCommodity(acc));
@@ -650,28 +635,27 @@ find_nearest_equity_acct (Account *acc)
 /* Traverse all accounts, get account balances */
 
 static void
-add_closing_balances (AccountGroup *closed_grp, 
+add_closing_balances (Account *parent, 
                       QofBook *open_book,
                       QofBook *closed_book,
                       Account *equity_account,
                       Timespec *post_date, Timespec *date_entered, 
                       const char *desc)
 {
-   AccountList *acc_list, *node;
+   GList *acc_list, *node;
 
-   if (!closed_grp) return;
+   if (!parent) return;
 
    ENTER (" enter=%s post=%s desc=%s", gnc_print_date(*date_entered),
        gnc_print_date (*post_date), desc);
    xaccAccountBeginEdit (equity_account);
 
    /* Walk accounts in closed book */
-   acc_list = xaccGroupGetAccountList (closed_grp);
+   acc_list = gnc_account_get_children(parent);
    for (node=acc_list; node; node=node->next)
    {
       KvpFrame *cwd;
       Account *twin;
-      AccountGroup *childs;
       Account * candidate = (Account *) node->data;
       GNCAccountType tip = xaccAccountGetType (candidate);
 
@@ -774,16 +758,16 @@ add_closing_balances (AccountGroup *closed_grp,
       xaccAccountCommitEdit (twin);
 
       /* Recurse down to the children */
-      childs = xaccAccountGetChildren(candidate);
-      if (childs) 
+      if (gnc_account_n_children(candidate) > 0) 
       {
          PINFO ("add closing baln to subaccts of %s", 
                  candidate->description);
-         add_closing_balances (childs, open_book, closed_book,
+         add_closing_balances (candidate, open_book, closed_book,
                           equity_account,
                           post_date, date_entered, desc);
       }
    }
+   g_list_free(acc_list);
    xaccAccountCommitEdit (equity_account);
    LEAVE (" ");
 }
@@ -884,7 +868,7 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */
-   add_closing_balances (xaccGetAccountGroup(closing_book), 
+   add_closing_balances (gnc_book_get_root_account(closing_book), 
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);

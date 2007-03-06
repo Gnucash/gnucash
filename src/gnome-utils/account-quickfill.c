@@ -54,7 +54,7 @@ typedef struct {
   gboolean load_list_store;
   GtkListStore *list_store;
   QofBook *book;
-  AccountGroup *group;
+  Account *root;
   gint  listener;
   AccountBoolCB dont_add_cb;
   gpointer dont_add_data;
@@ -105,7 +105,7 @@ shared_quickfill_find_accounts (GtkTreeModel *model,
 
 
 /* Splat the account name into the shared quickfill object */
-static gpointer
+static void
 load_shared_qf_cb (Account *account, gpointer data)
 {
   QFB *qfb = data;
@@ -115,11 +115,11 @@ load_shared_qf_cb (Account *account, gpointer data)
   if (qfb->dont_add_cb)
   {
      gboolean skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
-     if (skip) return NULL;
+     if (skip) return;
   }
 
   name = xaccAccountGetFullName (account);
-  if (NULL == name) return NULL;
+  if (NULL == name) return;
   gnc_quickfill_insert (qfb->qf, name, QUICKFILL_ALPHA);
   if (qfb->load_list_store) {
     gtk_list_store_append (qfb->list_store, &iter);
@@ -129,8 +129,6 @@ load_shared_qf_cb (Account *account, gpointer data)
 			-1);
   }
   g_free(name);
-
-  return NULL;
 }
 
 static void
@@ -142,7 +140,7 @@ shared_quickfill_gconf_changed (GConfEntry *entry, gpointer user_data)
   gnc_quickfill_purge(qfb->qf);
   gtk_list_store_clear(qfb->list_store);
   qfb->load_list_store = TRUE;
-  xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+  gnc_account_foreach_descendant(qfb->root, load_shared_qf_cb, qfb);
   qfb->load_list_store = FALSE;
 }
 
@@ -151,7 +149,7 @@ shared_quickfill_gconf_changed (GConfEntry *entry, gpointer user_data)
  * Essentially same loop as in gnc_load_xfer_cell() above.
  */
 static QFB *
-build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
+build_shared_quickfill (QofBook *book, Account *root, const char * key,
                         AccountBoolCB cb, gpointer data)
 {
   QFB *qfb;
@@ -159,7 +157,7 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   qfb = g_new0(QFB, 1);
   qfb->qf = gnc_quickfill_new ();
   qfb->book = book;
-  qfb->group = group;
+  qfb->root = root;
   qfb->listener = 0;
   qfb->dont_add_cb = cb;
   qfb->dont_add_data = data;
@@ -171,7 +169,7 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
 				shared_quickfill_gconf_changed,
 				qfb);
 
-  xaccGroupForEachAccount (group, load_shared_qf_cb, qfb, TRUE);
+  gnc_account_foreach_descendant(root, load_shared_qf_cb, qfb);
   qfb->load_list_store = FALSE;
 
   qfb->listener = 
@@ -183,36 +181,36 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
 }
 
 QuickFill *
-gnc_get_shared_account_name_quickfill (AccountGroup *group, 
+gnc_get_shared_account_name_quickfill (Account *root, 
                                        const char * key, 
                                        AccountBoolCB cb, gpointer cb_data)
 {
   QFB *qfb;
   QofBook *book;
 
-  book = xaccGroupGetBook (group);
+  book = gnc_account_get_book (root);
   qfb = qof_book_get_data (book, key);
 
   if (qfb) return qfb->qf;
 
-  qfb = build_shared_quickfill (book, group, key, cb, cb_data);
+  qfb = build_shared_quickfill (book, root, key, cb, cb_data);
   return qfb->qf;
 }
 
 GtkListStore *
-gnc_get_shared_account_name_list_store (AccountGroup *group, 
+gnc_get_shared_account_name_list_store (Account *root, 
 					const char * key, 
 					AccountBoolCB cb, gpointer cb_data)
 {
   QFB *qfb;
   QofBook *book;
 
-  book = xaccGroupGetBook (group);
+  book = gnc_account_get_book (root);
   qfb = qof_book_get_data (book, key);
 
   if (qfb) return qfb->list_store;
 
-  qfb = build_shared_quickfill (book, group, key, cb, cb_data);
+  qfb = build_shared_quickfill (book, root, key, cb, cb_data);
   return qfb->list_store;
 }
 
@@ -245,8 +243,8 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
   ENTER("entity %p, event type %x, user data %p, ecent data %p",
 	entity, event_type, user_data, event_data);
 
-  if (xaccAccountGetRoot(account) != qfb->group) {
-       LEAVE("root group mismatch");
+  if (gnc_account_get_root(account) != qfb->root) {
+       LEAVE("root account mismatch");
     return;
   }
 
@@ -262,7 +260,7 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
 
       /* Find the account (and all its descendants) in the model.  The
        * full name of all these accounts has changed. */
-      data.accounts = xaccAccountGetDescendants(account);
+      data.accounts = gnc_account_get_descendants(account);
       data.accounts = g_list_prepend(data.accounts, account);
       gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
 			     shared_quickfill_find_accounts, &data);
@@ -313,7 +311,7 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
 
       /* Remove from qf */
       gnc_quickfill_purge(qfb->qf);
-      xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+      gnc_account_foreach_descendant(qfb->root, load_shared_qf_cb, qfb);
 
       /* Does the account exist in the model? */
       data.accounts = g_list_append(NULL, account);

@@ -5,16 +5,16 @@
 ;;;  Copyright 2001 Bill Gribble <grib@billgribble.com> 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:group-get-transactions group)
+(define (gnc:account-tree-get-transactions root)
   (let ((query (qof-query-create-for-splits))
         (xtns #f))
 
-    (qof-query-set-book query (xaccGroupGetBook group))
+    (qof-query-set-book query (gnc-account-get-book root))
 
     ;; we want to find all transactions with every split inside the
     ;; account group.
     (xaccQueryAddAccountMatch query
-                                 (xaccGroupGetSubAccountsSorted group)
+                                 (gnc-account-get-descendants-sorted root)
                                  QOF-GUID-MATCH-ANY QOF-QUERY-AND)
 
     (set! xtns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ALL))
@@ -25,16 +25,16 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  gnc:group-find-duplicates 
+;;  gnc:account-tree-find-duplicates 
 ;;  detect redundant splits/xtns from 'new' and return 
 ;;  them in a list. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:group-find-duplicates old-group new-group window)
+(define (gnc:account-tree-find-duplicates old-root new-root window)
   ;; get all the transactions in the new group, then iterate over them
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
-  (let* ((new-xtns (gnc:group-get-transactions new-group))
+  (let* ((new-xtns (gnc:account-tree-get-transactions new-root))
 	 (progress-dialog '())
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
@@ -47,7 +47,7 @@
 	  (gnc-progress-dialog-set-heading progress-dialog
 					   (_ "Finding duplicate transactions..."))))
 
-    ;; for each transaction in the new group, build a query that could
+    ;; for each transaction in the new account tree, build a query that could
     ;; match possibly similar transactions.
     (for-each
      (lambda (xtn) 
@@ -59,11 +59,11 @@
 		progress-dialog (/ work-done work-to-do))
 	       (gnc-progress-dialog-update progress-dialog)))
 
-	 (qof-query-set-book query (xaccGroupGetBook old-group))
+	 (qof-query-set-book query (gnc-account-get-book old-root))
 
 	 ;; first, we want to find only transactions from the old group.
 	 (xaccQueryAddAccountMatch query
-				      (xaccGroupGetSubAccountsSorted old-group)
+				      (gnc-account-get-descendants-sorted old-root)
 				      QOF-GUID-MATCH-ANY QOF-QUERY-AND)
          
          ;; the date should be close to the same.. +/- a week. 
@@ -78,22 +78,22 @@
            (for-each 
             (lambda (split)
               (let ((sq (qof-query-create-for-splits)))
-		(qof-query-set-book sq (xaccGroupGetBook old-group))
+		(qof-query-set-book sq (gnc-account-get-book old-root))
                 
-                ;; we want to match the account in the old group that
-                ;; has the same name as an account in the new group.  If
-                ;; there's not one (new account), the match will be NULL
-                ;; and we know the query won't find anything.  optimize
-                ;; this later.
+                ;; we want to match the account in the old account
+                ;; tree that has the same name as an account in the
+                ;; new account tree.  If there's not one (new
+                ;; account), the match will be NULL and we know the
+                ;; query won't find anything.  optimize this later.
                 (xaccQueryAddSingleAccountMatch
                  sq 
-                 (xaccGetAccountFromFullName
-                  old-group (gnc-account-get-full-name
+                 (gnc-account-lookup-by-full-name
+                  old-root (gnc-account-get-full-name
                              (xaccSplitGetAccount split)))
                  QOF-QUERY-AND)
                 
                 ;; we want the value for the split to match the value
-                ;; the old-group split.  We should really check for
+                ;; the old-root split.  We should really check for
                 ;; fuzziness.
                 (xaccQueryAddValueMatch
                  sq (xaccSplitGetValue split)
@@ -111,14 +111,14 @@
             (xaccTransGetSplitList xtn))
            
            ;; now q-splits will match any split that is the same as one
-           ;; split in the old-group xtn.  Merge it in.
+           ;; split in the old-root xtn.  Merge it in.
            (let ((q-new (qof-query-merge query q-splits QOF-QUERY-AND)))
              (qof-query-destroy query)
              (qof-query-destroy q-splits)
              (set! query q-new)))
          
          ;; now that we have built a query, get transactions in the old
-         ;; account group that matches it.
+         ;; account tree that matches it.
          (let ((old-xtns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ALL)))
            (set! old-xtns (map 
                            (lambda (elt)
@@ -156,9 +156,9 @@
              (xaccTransCommitEdit new-xtn)))))
    match-list))
 
-(define (gnc:group-catenate-and-merge old-group new-group)
-  ;; stuff the new accounts into the old group and merge the accounts
-  (xaccGroupConcatGroup old-group new-group)
-  (xaccAccountGroupBeginEdit new-group)
-  (xaccAccountGroupDestroy new-group)
-  (xaccGroupMergeAccounts old-group))
+(define (gnc:account-tree-catenate-and-merge old-root new-root)
+  ;; stuff the new accounts into the old account tree and merge the accounts
+  (gnc-account-join-children old-root new-root)
+  (xaccAccountBeginEdit new-root)
+  (xaccAccountDestroy new-root)
+  (gnc-account-merge-children old-root))

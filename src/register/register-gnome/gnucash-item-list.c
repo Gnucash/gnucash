@@ -35,7 +35,6 @@
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"
 #include "gnucash-scrolled-window.h"
-#include "gtk-compat.h"
 
 /* Item list signals */
 enum {

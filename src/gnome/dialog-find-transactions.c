@@ -141,8 +141,8 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 
     /* In lieu of not "mis-using" some portion of the infrastructure by writing
      * a bunch of new code, we just filter out the accounts of the template
-     * transactions.  While these are in a seperate AccountGroup just for this
-     * reason, the query engine makes no distinction between AccountGroups.
+     * transactions.  While these are in a seperate Account trees just for this
+     * reason, the query engine makes no distinction between Account trees.
      * See Gnome Bug 86302.
      * 	-- jsled 
      *
@@ -152,15 +152,15 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
      * key in the KVP frame of the split.
      */
     {
-      AccountGroup *tAG;
-      AccountList *al;
+      Account *tRoot;
+      GList *al;
     
-      tAG = gnc_book_get_template_group( gnc_get_current_book() );
-      al = xaccGroupGetSubAccounts( tAG );
+      tRoot = gnc_book_get_template_root( gnc_get_current_book() );
+      al = gnc_account_get_descendants( tRoot );
       xaccQueryAddAccountMatch( start_q, al, GUID_MATCH_NONE, QUERY_AND );
       g_list_free (al);
       al = NULL;
-      tAG = NULL;
+      tRoot = NULL;
     }
 
     ftd->q = start_q;		/* save this to destroy it later */

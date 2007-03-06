@@ -421,12 +421,9 @@ xaccGroupGetSubAccounts (const AccountGroup *grp)
 static int
 group_sort_helper (gconstpointer a, gconstpointer b)
 {
-  const Account *aa = (const Account *) a;
-  const Account *bb = (const Account *) b;
-
-  /* xaccAccountOrder returns > 1 if aa should come after bb.
+  /* xaccAccountOrder returns > 1 if a should come after b.
    * This funciton is building a reversed list. */
-  return xaccAccountOrder (&aa, &bb);
+  return xaccAccountOrder ((const Account *) a, (const Account *) b);
 }
 
 static void

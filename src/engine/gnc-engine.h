@@ -41,28 +41,30 @@
 
 /** \name QofLogModule identifiers */
 // @{
-#define GNC_MOD_ENGINE    "gnucash-engine-objects"
-#define GNC_MOD_ACCOUNT   "gnucash-account"
-#define GNC_MOD_SX        "gnucash-schedX"
-#define GNC_MOD_QUERY     "gnucash-query"
-#define GNC_MOD_SCRUB     "gnucash-scrub"
-#define GNC_MOD_LOT       "gnucash-lots"
-#define GNC_MOD_COMMODITY "gnucash-commodity"
-#define GNC_MOD_BACKEND   "gnucash-backend-general"
-#define GNC_MOD_PRICE     "gnucash-pricedb"
-#define GNC_MOD_BUSINESS  "gnucash-business"
-#define GNC_MOD_IO        "gnucash-inputoutput"
-#define GNC_MOD_BOOK      "gnucash-book-period"
-#define GNC_MOD_GUI       "gnucash-gui"
-#define GNC_MOD_GUILE     "gnucash-guile"
-#define GNC_MOD_LEDGER    "gnucash-ledger"
-#define GNC_MOD_REGISTER  "gnucash-register"
-#define GNC_MOD_HTML      "gnucash-html"
-#define GNC_MOD_PREFS     "gnucash-preferences"
-#define GNC_MOD_IMPORT    "gnucash-import-export"
-#define GNC_MOD_DRUID     "gnucash-druids"
-#define GNC_MOD_TEST      "gnucash-tests"
-#define GNC_MOD_BUDGET    "gnucash-budget"
+#define GNC_MOD_ROOT      "gnc"
+#define GNC_MOD_ENGINE    "gnc.engine"
+#define GNC_MOD_ACCOUNT   "gnc.account"
+#define GNC_MOD_SX        "gnc.engine.sx"
+#define GNC_MOD_QUERY     "gnc.query"
+#define GNC_MOD_SCRUB     "gnc.scrub"
+#define GNC_MOD_LOT       "gnc.lots"
+#define GNC_MOD_COMMODITY "gnc.commodity"
+#define GNC_MOD_BACKEND   "gnc.backend"
+#define GNC_MOD_PRICE     "gnc.pricedb"
+#define GNC_MOD_BUSINESS  "gnc.business"
+#define GNC_MOD_IO        "gnc.io"
+#define GNC_MOD_BOOK      "gnc.book-period"
+#define GNC_MOD_GUI       "gnc.gui"
+#define GNC_MOD_GUI_SX    "gnc.gui.sx"
+#define GNC_MOD_GUILE     "gnc.guile"
+#define GNC_MOD_LEDGER    "gnc.ledger"
+#define GNC_MOD_REGISTER  "gnc.register"
+#define GNC_MOD_HTML      "gnc.html"
+#define GNC_MOD_PREFS     "gnc.pref"
+#define GNC_MOD_IMPORT    "gnc.import"
+#define GNC_MOD_DRUID     "gnc.druids"
+#define GNC_MOD_TEST      "gnc.tests"
+#define GNC_MOD_BUDGET    "gnc.budget"
 //@}
 
 /** @brief IDENTIFIERS
@@ -92,14 +94,14 @@
 #define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
-#define GNC_ID_GROUP          "AccountGroup"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_PERIOD         "Period"
 #define GNC_ID_PRICE          "Price"
 #define GNC_ID_PRICEDB        "PriceDB"
 #define GNC_ID_SPLIT          "Split"
-#define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_BUDGET         "Budget"
+#define GNC_ID_SCHEDXACTION   "SchedXaction"
+#define GNC_ID_SXES           "SchedXactions"
 #define GNC_ID_SXTG           "SXTGroup"
 #define GNC_ID_SXTT           "SXTTrans"
 #define GNC_ID_TRANS          "Trans"
@@ -129,10 +131,6 @@
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
 typedef struct account_s             Account;
-
-/** @brief A group of accounts in Gnucash. 
-*/
-typedef struct account_group_s       AccountGroup;
 
 /** @brief Split in Gnucash. 
  * A "split" is more commonly refered to as a "entry" in a

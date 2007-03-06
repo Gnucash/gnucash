@@ -23,12 +23,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_GTK26 
 #include <gtk/gtk.h>
-#else
-#undef GNOME_DISABLE_DEPRECATED
-#include <gnome.h>
-#endif
 #include <gdk/gdk.h>
 #include <glib/gi18n.h>
 #include "swig-runtime.h"
@@ -221,7 +216,6 @@ gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
   return;
 }
 
-#ifdef HAVE_GTK26
 static void
 gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 				    GNCOption *option)
@@ -269,14 +263,6 @@ gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
     return;
   g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
 }
-#else
-static void
-gnc_image_option_clear_selection_cb (GtkButton *button,
-				     GtkEntry *entry)
-{
-   gtk_entry_set_text(entry, "");
-}
-#endif
 
 /********************************************************************\
  * gnc_option_set_ui_value_internal                                 *
@@ -1999,9 +1985,6 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkWidget *label;
   GtkWidget *button;
-#ifndef HAVE_GTK26
-  GtkWidget *entry;
-#endif
   gchar *colon_name;
 
   ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
@@ -2015,7 +1998,6 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   button = gtk_button_new_with_label(_("Clear"));
   gtk_tooltips_set_tip(tooltips, button, _("Clear any selected image file."), NULL);
 
-#ifdef HAVE_GTK26
   value = gtk_file_chooser_button_new(_("Select image"),
 				      GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_tooltips_set_tip(tooltips, value, _("Select an image file."), NULL);
@@ -2031,19 +2013,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_image_option_update_preview_cb), option);
   g_signal_connect_swapped(G_OBJECT (button), "clicked",
 		   G_CALLBACK(gtk_file_chooser_unselect_all), value);
-#else
-  value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
-				 FALSE);
-  gtk_tooltips_set_tip(tooltips, value, _("Select an image file."), NULL);
-  gnome_pixmap_entry_set_preview(GNOME_PIXMAP_ENTRY(value), FALSE);
 
-  entry = gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY(value));
-  g_signal_connect(G_OBJECT (entry), "changed",
-		   G_CALLBACK(gnc_option_changed_widget_cb), option);
-  g_signal_connect(G_OBJECT (button), "clicked",
-		   G_CALLBACK(gnc_image_option_clear_selection_cb), entry);
-#endif
-    
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
 
@@ -2490,7 +2460,6 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
-#ifdef HAVE_GTK26
       gchar *test;
       DEBUG("string = %s", string);
       gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(widget), string);
@@ -2499,12 +2468,6 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 			     g_strdup(string), g_free);
       DEBUG("Set %s, retrieved %s", string, test);
       gnc_image_option_update_preview_cb(GTK_FILE_CHOOSER(widget), option);
-#else
-      GtkEntry *entry;
-      DEBUG("string = %s", string);
-      entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
-      gtk_entry_set_text(entry, string);
-#endif
     }
     LEAVE("FALSE");
     return FALSE;
@@ -2880,7 +2843,6 @@ gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 {
-#ifdef HAVE_GTK26
   gchar *string;
   SCM result;
 
@@ -2890,12 +2852,6 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
   if (string)
     g_free(string);
   return result;
-#else
-  GnomePixmapEntry * p = GNOME_PIXMAP_ENTRY(widget);
-  char             * string = gnome_pixmap_entry_get_filename(p);
-
-  return (scm_makfrom0str(string ? string : ""));
-#endif
 }
 
 static SCM

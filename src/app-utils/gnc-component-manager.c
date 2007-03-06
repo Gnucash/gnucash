@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 
-#include "Group.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-ui-util.h"

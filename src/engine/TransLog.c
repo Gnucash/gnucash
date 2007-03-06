@@ -25,11 +25,10 @@
 
 #include <errno.h>
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 
 #include "Account.h"
-#include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -157,7 +156,7 @@ xaccOpenLog (void)
 
    filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
 
-   trans_log = fopen (filename, "a");
+   trans_log = g_fopen (filename, "a");
    if (!trans_log) {
       int norr = errno;
       printf ("Error: xaccOpenLog(): cannot open journal \n"

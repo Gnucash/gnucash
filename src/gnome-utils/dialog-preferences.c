@@ -196,7 +196,6 @@ gnc_preferences_add_page_internal (const gchar *filename,
   ENTER("file %s, widget %s, tab %s full page %d",
 	filename, widgetname, tabname, full_page);
 
-
   add_in = g_malloc(sizeof(addition));
   if (add_in == NULL) {
     g_critical("Unable to allocate memory.\n");
@@ -243,6 +242,7 @@ gnc_preferences_add_page_internal (const gchar *filename,
     g_free(add_in->widgetname);
     g_free(add_in->tabname);
     g_free(add_in);
+    LEAVE("err");
     return;
   } else {
     add_ins = g_slist_append(add_ins, add_in);
@@ -468,6 +468,7 @@ gnc_preferences_build_page (gpointer data,
     g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
 	       "be added to the preferences dialog.",
 	       add_in->widgetname, add_in->filename);
+    LEAVE("");
     return;
   }
   g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
@@ -475,6 +476,7 @@ gnc_preferences_build_page (gpointer data,
     g_critical("The table %s in file %s does not have four columns.  It cannot "
 	       "be added to the preferences dialog.",
 	       add_in->widgetname, add_in->filename);
+    LEAVE("");
     return;
   }
 
@@ -1493,8 +1495,8 @@ gnc_preferences_gconf_changed (GConfClient *client,
       DEBUG("bad value");
       widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
       if (widget) {
-	DEBUG("forcing %s", gtk_widget_get_name(widget));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+           DEBUG("forcing %s", gtk_widget_get_name(widget));
+           gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
       }
       g_free(group_name);
       g_free(name);

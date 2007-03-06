@@ -26,8 +26,11 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#ifndef HAVE_GLIB_2_8
+#include <gstdio-2.8.h>
+#endif
 #include <libguile.h>
-#include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
 
@@ -116,7 +119,7 @@ struct _qifimportwindow {
   SCM       new_stocks;
   SCM       ticker_map;
 
-  SCM       imported_account_group;
+  SCM       imported_account_tree;
   SCM       match_transactions;
   int       selected_transaction;
 };
@@ -189,7 +192,7 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   scm_gc_unprotect_object(window->stock_hash);
   scm_gc_unprotect_object(window->new_stocks);
   scm_gc_unprotect_object(window->ticker_map);
-  scm_gc_unprotect_object(window->imported_account_group);
+  scm_gc_unprotect_object(window->imported_account_tree);
   scm_gc_unprotect_object(window->match_transactions);
 
   g_free(window);
@@ -449,6 +452,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   const char * path_to_load;
   const gchar * default_acctname = NULL;
+  int rv;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
@@ -476,7 +480,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     gnc_error_dialog(wind->window, _("Please select a file to load."));
     return TRUE;
   }
-  else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
+  else if (g_access(path_to_load, R_OK) < 0) {
     /* stay here if bad file */
     gnc_error_dialog(wind->window, 
 		     _("File not found or read permission denied. "
@@ -566,8 +570,15 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        */
       if(SCM_LISTP(parse_return) && 
          (SCM_CAR(parse_return) == SCM_BOOL_T)) {
+	gint n_items;
 
-	gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
+	/* clear the combo box */
+	gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), -1);
+	n_items = gtk_tree_model_iter_n_children(
+	  gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo)), NULL);
+	while (n_items-- > 0)
+	  gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
+
 	if ((date_formats = scm_call_2(qif_file_parse_results,
 				       SCM_CDR(parse_return),
 				       scm_str2symbol("date"))) != SCM_BOOL_F) {
@@ -1020,7 +1031,6 @@ create_account_picker_view(GtkWidget *widget,
   GtkListStore *store;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
 
   store = gtk_list_store_new(NUM_ACCOUNT_COLS, G_TYPE_INT, G_TYPE_STRING,
 			     G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -1049,8 +1059,7 @@ create_account_picker_view(GtkWidget *widget,
   gtk_tree_view_append_column(view, column);
 
   g_object_set_data(G_OBJECT(store), PREV_ROW, GINT_TO_POINTER(-1));
-  selection = gtk_tree_view_get_selection(view);
-  g_signal_connect(selection, "changed", callback, user_data);
+  g_signal_connect(view, "row-activated", G_CALLBACK(callback), user_data);
 }
 
 /********************************************************************
@@ -1070,14 +1079,11 @@ select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
   SCM   selected_acct;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gint row, prev_row;
+  gint row;
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
   gtk_tree_model_get(model, &iter, ACCOUNT_COL_INDEX, &row, -1);
-  prev_row = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), PREV_ROW));
-  if (row == prev_row)
-    return;
   g_object_set_data(G_OBJECT(model), PREV_ROW, GINT_TO_POINTER(row));
   if (row == -1)
     return;
@@ -1101,10 +1107,16 @@ select_line (QIFImportWindow *wind, GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_account_line_select_cb(GtkTreeSelection *selection,
-					 gpointer          user_data)   
+gnc_ui_qif_import_account_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
   select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_accounts_page);
 }
@@ -1116,10 +1128,16 @@ gnc_ui_qif_import_account_line_select_cb(GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_category_line_select_cb(GtkTreeSelection *selection,
-					  gpointer          user_data)   
+gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
   select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
 	       update_categories_page);
 }
@@ -1131,11 +1149,17 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeSelection *selection,
  ********************************************************************/
 
 static void
-gnc_ui_qif_import_memo_line_select_cb(GtkTreeSelection *selection,
-				      gpointer          user_data)   
+gnc_ui_qif_import_memo_line_select_cb(GtkTreeView *view, GtkTreePath *path,
+					 GtkTreeViewColumn *column,
+					 gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
-  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
+  QIFImportWindow *wind = user_data;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (view && wind);
+  selection = gtk_tree_view_get_selection (view);
+
+  select_line (wind, selection, wind->memo_display_info, wind->memo_map_info,
 	       update_memo_page);
 }
 
@@ -1201,7 +1225,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 {
 
   SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
-  SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
+  SCM   find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
   SCM   retval;
   SCM   current_xtn;
   SCM   window;
@@ -1246,8 +1270,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     g_free(namespace);
   }
 
-  /* call a scheme function to do the work.  The return value is an
-   * account group containing all the new accounts and transactions */
+  /* call a scheme function to do the work.  The return value is the
+   * root account of an account tree containing all the new accounts
+   * and transactions */
   window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
   retval = scm_apply(qif_to_gnc, 
 		     SCM_LIST7(wind->imported_files,
@@ -1266,20 +1291,20 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 		     _("An error occurred while importing "
 		       "QIF transactions into GnuCash. Your "
 		       "accounts are unchanged."));    
-    scm_gc_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = SCM_BOOL_F;
-    scm_gc_protect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_tree);
+    wind->imported_account_tree = SCM_BOOL_F;
+    scm_gc_protect_object(wind->imported_account_tree);
   }
   else {
-    scm_gc_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = retval;
-    scm_gc_protect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_tree);
+    wind->imported_account_tree = retval;
+    scm_gc_protect_object(wind->imported_account_tree);
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
     retval = scm_call_3(find_duplicates, 
-			scm_c_eval_string("(gnc-get-current-group)"),
-			wind->imported_account_group, window);
+			scm_c_eval_string("(gnc-get-current-root-account)"),
+			wind->imported_account_tree, window);
     gnc_unset_busy_cursor(NULL);
     
     scm_gc_unprotect_object(wind->match_transactions);
@@ -1843,7 +1868,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 {
   
   SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
-  SCM   cat_and_merge = scm_c_eval_string("gnc:group-catenate-and-merge");
+  SCM   cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
   SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
   
   QIFImportWindow * wind = user_data;
@@ -1857,8 +1882,8 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* actually add in the new transactions. */
   scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc-get-current-group)"),
-	     wind->imported_account_group);
+	     scm_c_eval_string("(gnc-get-current-root-account)"),
+	     wind->imported_account_tree);
   
   gnc_resume_gui_refresh();
   
@@ -2046,7 +2071,7 @@ gnc_ui_qif_import_druid_make(void)
   retval->stock_hash        =  SCM_BOOL_F;
   retval->new_stocks        =  SCM_BOOL_F;
   retval->ticker_map        =  SCM_BOOL_F;
-  retval->imported_account_group   = SCM_BOOL_F;
+  retval->imported_account_tree   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
   retval->selected_transaction = 0;
   
@@ -2211,7 +2236,7 @@ gnc_ui_qif_import_druid_make(void)
   scm_gc_protect_object(retval->stock_hash);
   scm_gc_protect_object(retval->new_stocks);
   scm_gc_protect_object(retval->ticker_map);
-  scm_gc_protect_object(retval->imported_account_group);
+  scm_gc_protect_object(retval->imported_account_tree);
   scm_gc_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */

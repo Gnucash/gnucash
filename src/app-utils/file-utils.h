@@ -30,9 +30,6 @@
 #define GNC_FILE_UTILS_H
 
 #include <stdio.h>		/* for FILE* */
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 
 char * gncFindFile (const char * filename);
 

@@ -10,6 +10,12 @@
     You would want to select this set of accounts if you have a working spouse (salary (spouse), taxes (spouse)).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Income</act:name>
   <act:id type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>
   <act:type>INCOME</act:type>
@@ -24,6 +30,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salary (Spouse)</act:name>
@@ -51,6 +58,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Taxes (Spouse)</act:name>

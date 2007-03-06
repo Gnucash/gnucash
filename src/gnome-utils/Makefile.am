@@ -1,5 +1,4 @@
 SUBDIRS = glade schemas . test ui
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -10,7 +9,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
@@ -50,6 +48,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-edit.c \
   gnc-date-format.c \
   gnc-dense-cal.c \
+  gnc-dense-cal-model.c \
+  gnc-dense-cal-store.c \
   gnc-druid-gnome.c \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
@@ -75,6 +75,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-period-select.c \
   gnc-query-list.c \
   gnc-splash.c \
+  gnc-sx-instance-dense-cal-adapter.c \
+  gnc-sx-list-tree-model-adapter.c \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
@@ -86,6 +88,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-view-commodity.c \
   gnc-tree-view-price.c \
   gnc-tree-view-transaction.c \
+  gnc-tree-view-sx-list.c \
   gnc-tree-view.c \
   gnc-window.c \
   gncmod-gnome-utils.c \
@@ -120,6 +123,8 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-date-format.h \
   gnc-dense-cal.h \
+  gnc-dense-cal-model.h \
+  gnc-dense-cal-store.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
   gnc-file.h \
@@ -142,6 +147,8 @@ gncinclude_HEADERS = \
   gnc-period-select.h \
   gnc-query-list.h \
   gnc-splash.h \
+  gnc-sx-instance-dense-cal-adapter.h \
+  gnc-sx-list-tree-model-adapter.h \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
@@ -153,6 +160,7 @@ gncinclude_HEADERS = \
   gnc-tree-view-commodity.h \
   gnc-tree-view-price.h \
   gnc-tree-view-transaction.h \
+  gnc-tree-view-sx-list.h \
   gnc-tree-view.h \
   gnc-window.h \
   misc-gnome-utils.h \
@@ -167,13 +175,14 @@ noinst_HEADERS = \
   gnc-druid-provider-multifile-gnome.h \
   search-param.h
 
+libgncmod_gnome_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_gnome_utils_la_LIBADD = \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
@@ -294,3 +303,5 @@ install-data-hook:
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
 endif
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"

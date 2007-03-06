@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-model-transaction.h -- GtkTreeModel implementation to   *
  *                        display Transactions in a GtkTreeView.    *
- * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
+ * Copyright (C) 2006-2007 Chris Shoemaker <c.shoemaker@cox.net>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -315,8 +315,7 @@
 	       (payer-src (gnc:account-get-txf-payer-source account))
                (account-name (let* ((named-acct
 				    (if (eq? payer-src 'parent)
-					(xaccGroupGetParentAccount
-					 (xaccAccountGetParent account))
+					(gnc-account-get-parent account)
 					account))
 				    (name (xaccAccountGetName named-acct)))
 			       (if name
@@ -434,9 +433,7 @@
             (if (xaccAccountGetTaxRelated a)
                 #t
                 ;; check children
-                (if (null? (validate
-                            (xaccGroupGetSubAccountsSorted
-                             (xaccAccountGetChildren a))))
+                (if (null? (validate (gnc-account-get-descendants a)))
                     #f
                     #t)))
           accounts))
@@ -454,15 +451,14 @@
 
   ;; the number of account generations: children, grandchildren etc.
   (define (num-generations account gen)
-    (let ((children (xaccAccountGetChildren account)))
-      (if (eq? (xaccGroupGetNumAccounts children) 0)
-          (if (and (xaccAccountGetTaxRelated account)
-                   (txf-special-split? (gnc:account-get-txf-code account)))
-              (+ gen 1)		; Est Fed Tax has a extra generation
-              gen)	       		; no kids, return input
-          (apply max (gnc:group-map-accounts
-                      (lambda (x) (num-generations x (+ 1 gen)))
-                      children)))))
+    (if (eq? (gnc-account-n-children account) 0)
+	(if (and (xaccAccountGetTaxRelated account)
+		 (txf-special-split? (gnc:account-get-txf-code account)))
+	    (+ gen 1)		; Est Fed Tax has a extra generation
+	    gen)	       		; no kids, return input
+	(apply max (gnc:account-map-children
+		    (lambda (x) (num-generations x (+ 1 gen)))
+		    account))))
 
   (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 
@@ -482,8 +478,8 @@
          (selected-accounts (if (not (null? user-sel-accnts))
                                 valid-user-sel-accnts
                                 (validate (reverse 
-                                           (xaccGroupGetAccountListSorted
-                                            (gnc-get-current-group))))))
+                                           (gnc-account-get-children-sorted
+                                            (gnc-get-current-root-account))))))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -643,7 +639,7 @@
 	    (for-each (lambda (x)
 		   (if (gnc:account-is-inc-exp? x)
 		       (set! sum (+ sum (+ 1 (count-accounts (+ 1 level)
-							     (gnc:account-get-immediate-subaccounts x)))))
+							     (gnc-account-get-children x)))))
 		       0))
 		 accounts)
 	    sum)
@@ -656,7 +652,7 @@
 					    (/ work-done work-to-do)
 					    1)))
         (if (gnc:account-is-inc-exp? account)
-            (let* ((children (xaccAccountGetChildren account))
+            (let* ((children (gnc-account-get-children-sorted account))
                    (to-special #f)	; clear special-splits-period
                    (from-special #f)
                    (childrens-output 
@@ -679,8 +675,7 @@
                                (if (>= max-level (+ 1 level))
                                    (handle-level-x-account (+ 1 level) x)
                                    '()))
-                             (reverse 
-                              (xaccGroupGetAccountListSorted children)))))
+                             (reverse children))))
 
                    (account-balance 
                     (if (xaccAccountGetTaxRelated account)

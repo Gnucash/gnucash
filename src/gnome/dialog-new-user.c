@@ -99,6 +99,7 @@ gnc_ui_new_user_dialog (void)
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   switch (result) {
 	  case GTK_RESPONSE_CANCEL:
+	  case GTK_RESPONSE_DELETE_EVENT:
 		gnc_ui_new_user_cancel_dialog ();
 		break;
 	  case GTK_RESPONSE_OK:

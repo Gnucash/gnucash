@@ -6,7 +6,7 @@
 /********************************************************************\
  * gnc-tree-model-transaction.c -- GtkTreeModel implementation to   *
  *                        display Transactions in a GtkTreeView.    *
- * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
+ * Copyright (C) 2006-2007 Chris Shoemaker <c.shoemaker@cox.net>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -405,7 +405,7 @@ gnc_tree_model_transaction_get_value (GtkTreeModel *tm, GtkTreeIter *iter,
     const GUID * guid;
     GList *node;
 
-    TRACE("model %p, iter %s, col %d", tm, iter_to_string(iter), column);
+    DEBUG("model %p, iter %s, col %d", tm, iter_to_string(iter), column);
     g_assert(VALID_ITER(model, iter));
 
     is_split = IS_SPLIT(iter);
@@ -466,7 +466,7 @@ gnc_tree_model_transaction_get_iter(GtkTreeModel *tm, GtkTreeIter *iter,
     gint depth, *indices, flags;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_TRANSACTION (tm), FALSE);
-    TRACE("model %p, path %s", tm, gtk_tree_path_to_string(path));
+    DEBUG("model %p, path %s", tm, gtk_tree_path_to_string(path));
 
     depth = gtk_tree_path_get_depth(path);
     indices = gtk_tree_path_get_indices (path);

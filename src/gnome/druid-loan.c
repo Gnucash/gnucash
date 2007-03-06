@@ -35,7 +35,6 @@
 
 #include "SchedXaction.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "druid-utils.h"
 #include "gnc-book.h"
@@ -159,10 +158,11 @@ typedef struct RepayOptDataDefault_ {
 
 static RepayOptDataDefault REPAY_DEFAULTS[] = {
      /* { name, default txn memo, throughEscrowP, specSrcAcctP } */
-     { "Taxes",         "Tax Payment",           TRUE,  FALSE },
-     { "Insurance",     "Insurance Payment",     TRUE,  FALSE  },
-     { "PMI",           "PMI Payment",           TRUE,  FALSE  },
-     { "Other Expense", "Miscellaneous Payment", FALSE, FALSE },
+     { N_("Taxes"),         N_("Tax Payment"),           TRUE,  FALSE },
+     { N_("Insurance"),     N_("Insurance Payment"),     TRUE,  FALSE  },
+     /* Translators: PMI stands for Private Mortgage Insurance. */
+     { N_("PMI"),           N_("PMI Payment"),           TRUE,  FALSE  },
+     { N_("Other Expense"), N_("Miscellaneous Payment"), FALSE, FALSE },
      { NULL }
 };
 
@@ -263,7 +263,7 @@ typedef struct LoanDruidData_ {
         GtkSpinButton *prmIrateSpin;
         GtkComboBox   *prmType;
         GtkFrame      *prmVarFrame;
-        GNCFrequency  *prmVarGncFreq;
+        GncFrequency  *prmVarGncFreq;
         GNCDateEdit   *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
         GtkComboBox   *prmLengthType;
@@ -283,7 +283,7 @@ typedef struct LoanDruidData_ {
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
         GtkFrame      *repFreqFrame;
-        GNCFrequency  *repGncFreq;
+        GncFrequency  *repGncFreq;
 
         /* pay = payment[s] */
         GtkEntry         *payTxnName;
@@ -301,7 +301,7 @@ typedef struct LoanDruidData_ {
         GtkRadioButton   *payTxnFreqPartRb;
         GtkRadioButton   *payTxnFreqUniqRb;
         GtkAlignment     *payFreqAlign;
-        GNCFrequency     *payGncFreq;
+        GncFrequency     *payGncFreq;
 
         /* rev = review */
         GtkComboBox       *revRangeOpt;
@@ -823,9 +823,9 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
                         = g_new0( RepayOptData, 1 );
 
                 optData->enabled        = FALSE;
-                optData->name           = g_strdup( REPAY_DEFAULTS[i].name );
-                optData->txnMemo        = g_strdup( REPAY_DEFAULTS[i].
-                                                    defaultTxnMemo );
+                optData->name           = g_strdup( _(REPAY_DEFAULTS[i].name) );
+                optData->txnMemo        = g_strdup( _(REPAY_DEFAULTS[i].
+                                                      defaultTxnMemo) );
                 optData->amount         = 0.0;
                 optData->throughEscrowP = REPAY_DEFAULTS[i].escrowDefault;
                 optData->specSrcAcctP   = REPAY_DEFAULTS[i].specSrcAcctDefault;
@@ -1981,7 +1981,8 @@ void
 ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
 {
         SchedXaction *sx;
-        GList *ttxnList, *sxList;
+        SchedXactions *sxes;
+        GList *ttxnList;
 
         sx = xaccSchedXactionMalloc( gnc_get_current_book() );
         xaccSchedXactionSetName( sx, tcSX->name );
@@ -2002,9 +2003,8 @@ ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
         xaccSchedXactionSetTemplateTrans( sx, ttxnList,
                                           gnc_get_current_book() );
 
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-        sxList = g_list_append( sxList, sx );
-        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        sxes = gnc_book_get_schedxactions(gnc_get_current_book());
+        gnc_sxes_add_sx(sxes, sx);
 
         g_list_free( ttxnList );
         ttxnList = NULL;

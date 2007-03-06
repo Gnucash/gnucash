@@ -36,7 +36,6 @@
 
 #include "Split.h"
 #include "AccountP.h"
-#include "Group.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
@@ -729,7 +728,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
   xaccTransCommitEdit(s->parent);
-
+  LEAVE("");
 }
 
 void 

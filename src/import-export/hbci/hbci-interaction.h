@@ -29,6 +29,10 @@
 #define KEY_CLOSE_ON_FINISH "close_on_finish"
 #define KEY_REMEMBER_PIN    "remember_pin"
 #define KEY_VERBOSE_DEBUG   "verbose_debug"
+#define KEY_FORMAT_DTAUS    "format_dtaus"
+#define KEY_FORMAT_CSV      "format_csv"
+#define KEY_FORMAT_SWIFT940 "format_swift_mt940"
+#define KEY_FORMAT_SWIFT942 "format_swift_mt942"
 
 typedef struct _inter_data GNCInteractor;
 

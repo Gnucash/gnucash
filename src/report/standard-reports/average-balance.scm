@@ -77,7 +77,7 @@
                   ;; or: (list ACCT-TYPE-BANK ACCT-TYPE-CASH
                   ;; ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS ACCT-TYPE-STOCK
                   ;; ACCT-TYPE-MUTUAL ACCT-TYPE-MONEYMRKT)
-                  (xaccGroupGetAccountListSorted (gnc-get-current-group)))))))
+                  (gnc-account-get-children-sorted (gnc-get-current-root-account)))))))
       #f #t))
 
     ;; Display tab
@@ -353,7 +353,7 @@
                 (for-each 
                  (lambda (acct)
                    (let ((this-acct-subs 
-                          (gnc:account-get-all-subaccounts acct)))
+                          (gnc-account-get-descendants-sorted acct)))
                      (if (list? this-acct-subs)
                          (set! subaccts 
                                (append subaccts this-acct-subs)))))

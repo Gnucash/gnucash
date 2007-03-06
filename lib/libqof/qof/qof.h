@@ -54,10 +54,6 @@
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
 */
-/**
-    @addtogroup Trace Trace: Error Reporting and Debugging
-    @ingroup QOF
-*/
 /** @addtogroup Event Event: QOF event handlers.
 	@ingroup QOF
 */
@@ -103,7 +99,7 @@
 #include "deprecated.h"
 
 /** allow easy logging of QSF debug messages */
-#define QOF_MOD_QSF "gncqof-backend-qsf"
+#define QOF_MOD_QSF "qof.backend.qsf"
 /** allow easy loading of the QSF backend */
 #define QSF_BACKEND_LIB "gncqof-backend-qsf"
 

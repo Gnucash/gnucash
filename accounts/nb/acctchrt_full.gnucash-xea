@@ -7,6 +7,12 @@
      Full chart of accounts contains all default accounts.
     </gnc-act:short-description>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">c942789c77cfdd65bc6e4c12900f0805</act:id>
   <act:type>ASSET</act:type>
@@ -15,6 +21,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Assets</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Current Assets</act:name>
@@ -334,6 +341,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Liabilities</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
@@ -421,6 +429,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Income</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bonus</act:name>
@@ -574,6 +583,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Expenses</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Adjustment</act:name>
@@ -1266,6 +1276,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Equity</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Opening Balances</act:name>

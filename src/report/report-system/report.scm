@@ -395,11 +395,18 @@
   (gnc-build-dotgnucash-path "saved-reports-2.0"))
 
 (define (gnc:report-save-to-savefile report)
-  (let ((conf-file-name gnc:current-saved-reports))
-    ;;(display conf-file-name)
-    (display (gnc:report-generate-saved-forms report)
-	     (open-file conf-file-name "a"))
-    (force-output)))
+  (let* ((conf-file-name gnc:current-saved-reports)
+         (saved-form (gnc:report-generate-saved-forms report))
+         ;; Immediate evaluate the saved form to both load it into the
+         ;; runtime, but also so we can check if it's "allowed" to actually
+         ;; be written to the saved reports file by inspecting the result.
+         ;; #Bug#342206.
+         (save-result (eval-string saved-form)))
+    (if (record? save-result)
+        (begin
+          (display saved-form
+                   (open-file conf-file-name "a"))
+          (force-output)))))
 
 ;; gets the renderer from the report template;
 ;; gets the stylesheet from the report;

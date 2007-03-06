@@ -92,13 +92,13 @@ static void test_querynew (void)
 int
 main (int argc, char **argv)
 {
-	qof_init();
-	if(cashobjects_register()) {
-  test_query_core();
-  test_class();
-  test_querynew();
-	}
-	qof_close();
-  print_test_results();
-  return get_rv();
+     qof_init();
+     if(cashobjects_register()) {
+          test_query_core();
+          test_class();
+          test_querynew();
+     }
+     qof_close();
+     print_test_results();
+     return get_rv();
 }

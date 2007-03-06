@@ -33,7 +33,7 @@
 #include "gnc-engine.h"
 
 /* Utility to make account by name.  Not for public use. */
-Account * xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, 
+Account * xaccScrubUtilityGetOrMakeAccount (Account *root, 
        gnc_commodity * currency, const char *name_root);
 
 

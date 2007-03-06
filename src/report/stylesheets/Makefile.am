@@ -9,13 +9,13 @@ libgncmod_stylesheets_la_SOURCES = \
 noinst_HEADERS = \
   gnc-plugin-stylesheets.h
 
-libgncmod_stylesheets_la_LDFLAGS=-module
+libgncmod_stylesheets_la_LDFLAGS = -module -avoid-version
 
 libgncmod_stylesheets_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
@@ -69,3 +69,5 @@ EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.core\"

@@ -1,6 +1,7 @@
 /** \page loanhandling Handling loan repayment in GnuCash::Scheduled Transactions
+\sa The original email thread at <http://lists.gnucash.org/pipermail/gnucash-devel/2002-July/006438.html>.
 
-July, 2002 - jsled@asychronous.org
+July, 2002 - jsled@asynchronous.org
 
 API: \ref SchedXaction
 

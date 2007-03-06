@@ -9,7 +9,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 
 ;; We do this initialization here because src/gnome isn't a real module.
-(load-extension "libgncgnome" "scm_init_sw_gnome_module")
+(load-extension "libgnc-gnome" "scm_init_sw_gnome_module")
 (use-modules (sw_gnome))
 
 (use-modules (gnucash gnc-module))
@@ -65,6 +65,6 @@
 (export qif-dialog:make-category-display)
 (export qif-dialog:make-memo-display)
 
-(export gnc:group-find-duplicates)
-(export gnc:group-catenate-and-merge)
+(export gnc:account-tree-find-duplicates)
+(export gnc:account-tree-catenate-and-merge)
 (export gnc:prune-matching-transactions)

@@ -4,7 +4,6 @@
 #define GNC_ACCOUNT_MERGE_H
 
 #include "Account.h"
-#include "Group.h"
 
 typedef enum {
   GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING,
@@ -18,8 +17,8 @@ typedef struct _merge_error {
 } GncAccountMergeError;
 
 GncAccountMergeDisposition determine_account_merge_disposition(Account *existing_acct, Account *new_acct);
-GncAccountMergeDisposition determine_merge_disposition(AccountGroup *existing_root, Account *new_acct);
+GncAccountMergeDisposition determine_merge_disposition(Account *existing_root, Account *new_acct);
 
-void account_group_merge(AccountGroup *existing_grp, AccountGroup *new_grp);
+void account_trees_merge(Account *existing_root, Account *new_accts_root);
 
 #endif /* GNC_ACCOUNT_MERGE_H */

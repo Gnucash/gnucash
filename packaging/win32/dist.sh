@@ -25,22 +25,28 @@ function prepare() {
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     _WIN_UDIR=`unix_path $WINDIR`
+    _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
     _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
+    _OPENSP_UDIR=`unix_path $OPENSP_DIR`
+    _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
+    _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
+    _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
     add_to_env $_UNZIP_UDIR/bin PATH # unzip
     add_to_env $_GNOME_UDIR/bin PATH # gconftool-2
+    add_to_env $_EXETYPE_UDIR/bin PATH # exetype
 }
 
 function dist_regex() {
     setup RegEx
-    smart_wget $REGEX_BIN_URL $DOWNLOAD_DIR
-    unzip -q $LAST_FILE bin/regex.dll -d $DIST_DIR
+    smart_wget $REGEX_URL $DOWNLOAD_DIR
+    unzip -q $LAST_FILE bin/libgnurx-0.dll -d $DIST_DIR
 }
 
 function dist_autotools() {
@@ -61,8 +67,9 @@ function dist_guile() {
 
 function dist_openssl() {
     setup OpenSSL
+    _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_WIN_UDIR/system32/lib{eay,ssl}*.dll $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/lib{eay,ssl}*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
@@ -127,6 +134,38 @@ function dist_goffice() {
     cp -a $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
 }
 
+function dist_libofx() {
+    setup OpenSP and LibOFX
+    cp -a ${_OPENSP_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_OPENSP_UDIR}/share/OpenSP ${DIST_UDIR}/share
+    cp -a ${_LIBOFX_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_LIBOFX_UDIR}/share/libofx ${DIST_UDIR}/share
+}
+
+function dist_gwenhywfar() {
+    setup gwenhywfar
+    cp -a ${_GWENHYWFAR_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    mkdir -p ${DIST_UDIR}/etc
+    cp -a ${_GWENHYWFAR_UDIR}/etc/* ${DIST_UDIR}/etc
+    cp -a ${_GWENHYWFAR_UDIR}/lib/gwenhywfar ${DIST_UDIR}/lib
+}
+
+function dist_ktoblzcheck() {
+    setup ktoblzcheck
+    # dll is already copied in dist_gwenhywfar
+    cp -a ${_GWENHYWFAR_UDIR}/share/ktoblzcheck ${DIST_UDIR}/share
+}
+
+function dist_aqbanking() {
+    setup aqbanking
+    cp -a ${_AQBANKING_UDIR}/bin/*.exe ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/bin/*.dll ${DIST_UDIR}/bin
+    cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
+    cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
+    cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+}
+
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
@@ -134,10 +173,10 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/{bin,locale} $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/lib*.{dll,la} $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/locale $DIST_UDIR/lib
+    cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
-    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.{dll,la} $DIST_UDIR/lib/gnucash
+    cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
@@ -152,9 +191,12 @@ function finish() {
             --install-schema-file $file >/dev/null
         echo "done"
     done
+    gconftool-2 --shutdown
+
+    exetype $DIST_UDIR/libexec/gconfd-2.exe windows
 
     # Strip redirections in distributed libtool .la files
-    for file in `find $DIST_UDIR/lib -name '*.la'`; do
+    for file in $DIST_UDIR/lib/*.la; do
         cat $file | sed 's,^libdir=,#libdir=,' > $file.new
         mv $file.new $file
     done
@@ -181,6 +223,9 @@ dist_libxml2
 dist_gnome
 dist_libgsf
 dist_goffice
+dist_libofx
+dist_gwenhywfar
+dist_aqbanking
 dist_gnucash
 finish
 qpopd

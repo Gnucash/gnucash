@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -34,8 +34,6 @@
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "Scrub.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
@@ -83,16 +81,28 @@ static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     gnc_commodity_table *table;
+    Account *parent, *root;
+    int type;
 
     table = gnc_book_get_commodity_table (data->book);
 
     xaccAccountScrubCommodity (act);
     xaccAccountScrubKvp (act);
 
-    if(!xaccAccountGetParent(act))
-    {
-        xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
+    /* Backwards compatability.  If there's no parent, see if this
+     * account is of type ROOT.  If not, find or create a ROOT
+     * account and make that the parent. */
+    type = xaccAccountGetType(act);
+    if (type == ACCT_TYPE_ROOT) {
+      gnc_book_set_root_account(data->book, act);
+    } else {
+      parent = gnc_account_get_parent(act);
+      if (parent == NULL) {
+	root = gnc_book_get_root_account(data->book);
+	gnc_account_append_child(root, act);
+      }
     }
+
     data->counter.accounts_loaded++;
     run_callback(data, "account");
 
@@ -136,16 +146,12 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
 static gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
-    GList *list;
-
-    list = gnc_book_get_schedxactions (data->book);
-    list = g_list_append(list, sx);
-
-    gnc_book_set_schedxactions(data->book, list);
-    data->counter.schedXactions_loaded++;
-    run_callback(data, "schedXactions");
-
-    return TRUE;
+     SchedXactions *sxes;
+     sxes = gnc_book_get_schedxactions(data->book);
+     gnc_sxes_add_sx(sxes, sx);
+     data->counter.schedXactions_loaded++;
+     run_callback(data, "schedXactions");
+     return TRUE;
 }
 
 static gboolean
@@ -154,7 +160,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
 {
     GList *n;
     Account *tmpAcct;
-    AccountGroup *acctGroup = NULL;
+    Account *acctRoot = NULL;
     QofBook *book;
 
     book = data->book;
@@ -163,22 +169,20 @@ add_template_transaction_local( sixtp_gdv2 *data,
     /* . template accounts. */
     /* . transactions in those accounts. */
     for ( n = txd->accts; n; n = n->next ) {
-        if ( xaccAccountGetParent( (Account*)n->data ) == NULL ) {
+        if ( gnc_account_get_parent( (Account*)n->data ) == NULL ) {
             /* remove the gnc_book_init-created account of the same name */
-            acctGroup =
-            gnc_book_get_template_group(book);
-            tmpAcct =
-            xaccGetAccountFromName( acctGroup,
+            acctRoot = gnc_book_get_template_root(book);
+            tmpAcct = gnc_account_lookup_by_name( acctRoot,
                                     xaccAccountGetName( (Account*)n->data ) );
             if ( tmpAcct != NULL ) {
 /* XXX hack alert FIXME .... Should this be 'Remove', or 'Destroy'?
  * If we just remove, then this seems to be a memory leak to me, since
  * it is never reparented.  Shouldn't it be a Destroy ???
  */
-                xaccGroupRemoveAccount( acctGroup, tmpAcct );
+                gnc_account_remove_child( acctRoot, tmpAcct );
             }
 
-            xaccGroupInsertAccount( acctGroup, (Account*)n->data );
+            gnc_account_append_child( acctRoot, (Account*)n->data );
         }
 
     }
@@ -187,8 +191,6 @@ add_template_transaction_local( sixtp_gdv2 *data,
         /* insert transactions into accounts */
         add_transaction_local( data, (Transaction*)n->data );
     }
-
-    xaccAccountGroupCommitEdit (acctGroup);
 
     return TRUE;
 }
@@ -313,20 +315,20 @@ gnc_counter_sixtp_parser_create(void)
 }
 
 static void
-print_counter_data(load_counter *data)
+debug_print_counter_data(load_counter *data)
 {
-    PINFO("Transactions: Total: %d, Loaded: %d",
-           data->transactions_total, data->transactions_loaded);
-    PINFO("Accounts: Total: %d, Loaded: %d",
-           data->accounts_total, data->accounts_loaded);
-    PINFO("Books: Total: %d, Loaded: %d",
-           data->books_total, data->books_loaded);
-    PINFO("Commodities: Total: %d, Loaded: %d",
-           data->commodities_total, data->commodities_loaded);
-    PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
-           data->schedXactions_total, data->schedXactions_loaded);
-    PINFO("Budgets: Total: %d, Loaded: %d",
-	  data->budgets_total, data->budgets_loaded);
+    DEBUG("Transactions: Total: %d, Loaded: %d",
+          data->transactions_total, data->transactions_loaded);
+    DEBUG("Accounts: Total: %d, Loaded: %d",
+          data->accounts_total, data->accounts_loaded);
+    DEBUG("Books: Total: %d, Loaded: %d",
+          data->books_total, data->books_loaded);
+    DEBUG("Commodities: Total: %d, Loaded: %d",
+          data->commodities_total, data->commodities_loaded);
+    DEBUG("Scheduled Tansactions: Total: %d, Loaded: %d",
+          data->schedXactions_total, data->schedXactions_loaded);
+    DEBUG("Budgets: Total: %d, Loaded: %d",
+          data->budgets_total, data->budgets_loaded);
 }
 
 static void
@@ -541,7 +543,7 @@ qof_session_load_from_xml_file_v2_full(
     FileBackend *fbe, QofBook *book,
     sixtp_push_handler push_handler, gpointer push_user_data)
 {
-    AccountGroup *grp;
+    Account *root;
     QofBackend *be = &fbe->be;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
@@ -631,7 +633,7 @@ qof_session_load_from_xml_file_v2_full(
         xaccEnableDataScrubbing();
         goto bail;
     }
-    DEBUGCMD (print_counter_data(&gd->counter));
+    debug_print_counter_data(&gd->counter);
 
     /* destroy the parser */
     sixtp_destroy (top_parser);
@@ -648,19 +650,21 @@ qof_session_load_from_xml_file_v2_full(
     qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* fix price quote sources */
-    grp = gnc_book_get_group(book);
-    xaccGroupScrubQuoteSources (grp, gnc_book_get_commodity_table(book));
+    root = gnc_book_get_root_account(book);
+    xaccAccountTreeScrubQuoteSources (root, gnc_book_get_commodity_table(book));
 
     /* Fix account and transaction commodities */
-    xaccGroupScrubCommodities (grp);
+    xaccAccountTreeScrubCommodities (root);
 
     /* Fix split amount/value */
-    xaccGroupScrubSplits (grp);
+    xaccAccountTreeScrubSplits (root);
 
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
-    xaccAccountGroupCommitEdit (grp);
+    gnc_account_foreach_descendant(root,
+				   (AccountCb) xaccAccountCommitEdit,
+				   NULL);
 
     /* start logging again */
     xaccLogEnable ();
@@ -827,11 +831,11 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  gnc_commodity_table_get_size(
                      gnc_book_get_commodity_table(book)),
                  "account",
-                 1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
+                 1 + gnc_account_n_descendants(gnc_book_get_root_account(book)),
                  "transaction",
                  gnc_book_count_transactions(book),
                  "schedxaction",
-                 g_list_length( gnc_book_get_schedxactions(book) ),
+                 g_list_length(gnc_book_get_schedxactions(book)->sx_list),
 		 "budget", qof_collection_count(
                      qof_book_get_collection(book, GNC_ID_BUDGET)),
 		 NULL);
@@ -939,26 +943,26 @@ write_transactions(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     be_data.out = out;
     be_data.gd = gd;
-    xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                xml_add_trn_data,
-                                (gpointer) &be_data);
+    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
+				      xml_add_trn_data,
+				      (gpointer) &be_data);
 }
 
 static void
 write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 {
-    AccountGroup *ag;
+    Account *ra;
     struct file_backend be_data;
 
     be_data.out = out;
     be_data.gd = gd;
 
-    ag = gnc_book_get_template_group(book);
-    if ( xaccGroupGetNumSubAccounts(ag) > 0 )
+    ra = gnc_book_get_template_root(book);
+    if ( gnc_account_n_descendants(ra) > 0 )
     {
         fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_group( out, ag, gd );
-        xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)&be_data );
+        write_account_tree( out, ra, gd );
+        xaccAccountTreeForEachTransaction( ra, xml_add_trn_data, (gpointer)&be_data );
         fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
     }
 }
@@ -966,25 +970,24 @@ write_template_transaction_data( FILE *out, QofBook *book, sixtp_gdv2 *gd )
 static void
 write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
-    GList *schedXactions;
-    SchedXaction *tmpSX;
-    xmlNodePtr node;
+     GList *schedXactions;
+     SchedXaction *tmpSX;
+     xmlNodePtr node;
+     
+     schedXactions = gnc_book_get_schedxactions(book)->sx_list;
 
-    /* get list of scheduled transactions from QofBook */
-    schedXactions = gnc_book_get_schedxactions( book );
+     if ( schedXactions == NULL )
+          return;
 
-    if ( schedXactions == NULL )
-        return;
-
-    do {
-        tmpSX = schedXactions->data;
-        node = gnc_schedXaction_dom_tree_create( tmpSX );
-        xmlElemDump( out, NULL, node );
-        fprintf( out, "\n" );
-        xmlFreeNode( node );
-        gd->counter.schedXactions_loaded++;
-        run_callback(gd, "schedXactions");
-    } while ( (schedXactions = schedXactions->next) );
+     do {
+          tmpSX = schedXactions->data;
+          node = gnc_schedXaction_dom_tree_create( tmpSX );
+          xmlElemDump( out, NULL, node );
+          fprintf( out, "\n" );
+          xmlFreeNode( node );
+          gd->counter.schedXactions_loaded++;
+          run_callback(gd, "schedXactions");
+     } while ( (schedXactions = schedXactions->next) );
 }
 
 static void
@@ -1071,10 +1074,10 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
     gd->counter.accounts_total = 1 + 
-      xaccGroupGetNumSubAccounts(gnc_book_get_group(book));
+      gnc_account_n_descendants(gnc_book_get_root_account(book));
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
-      g_list_length( gnc_book_get_schedxactions(book));
+      g_list_length(gnc_book_get_schedxactions(book)->sx_list);
     gd->counter.budgets_total = qof_collection_count(
         qof_book_get_collection(book, GNC_ID_BUDGET));
 
@@ -1093,14 +1096,14 @@ gboolean
 gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *out)
 {
     gnc_commodity_table *table;
-    AccountGroup *grp;
+    Account *root;
     int ncom, nacc;
     sixtp_gdv2 *gd;
 
     if (!out) return FALSE;
 
-    grp = gnc_book_get_group(book);
-    nacc = 1 + xaccGroupGetNumSubAccounts(grp);
+    root = gnc_book_get_root_account(book);
+    nacc = 1 + gnc_account_n_descendants(root);
 
     table = gnc_book_get_commodity_table(book);
     ncom = gnc_commodity_table_get_size(table);
@@ -1136,11 +1139,11 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
       use_gzip = TRUE;
 
   if (!use_gzip)
-    return fopen(filename, perms);
+    return g_fopen(filename, perms);
 
 #ifdef G_OS_WIN32
   PWARN("Compression not implemented on Windows. Opening uncompressed file.");
-  return fopen(filename, perms);
+  return g_fopen(filename, perms);
 
   /* Potential implementation: Windows doesn't have pipe(); use
      the g_spawn glib wrappers. */
@@ -1161,7 +1164,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 				   &child_stdin, NULL, NULL,
 				   &error) ) {
       PWARN("G_spawn call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
     /* FIXME: Now need to set up the child process to write to the
        file. */
@@ -1183,14 +1186,14 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
 
     if (pipe(filedes) < 0) {
       PWARN("Pipe call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
     }
 
     pid = fork();
     switch (pid) {
     case -1:
       PWARN("Fork call failed. Opening uncompressed file.");
-      return fopen(filename, perms);
+      return g_fopen(filename, perms);
 
     case 0: /* child */ {
       char buffer[BUFLEN];
@@ -1302,7 +1305,7 @@ gnc_book_write_accounts_to_xml_file_v2(
 {
     FILE *out;
 
-    out = fopen(filename, "w");
+    out = g_fopen(filename, "w");
     if (out == NULL)
     {
         return FALSE;
@@ -1325,7 +1328,7 @@ static gboolean
 is_gzipped_file(const gchar *name)
 {
     unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
+    int fd = g_open(name, O_RDONLY, 0);
 
     if (fd == -1) {
         return FALSE;

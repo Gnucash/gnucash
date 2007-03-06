@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
@@ -53,6 +52,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     int default_value;
     Account *default_account;
     Account *other_account;
+    Account *root;
     GList *radio_list = NULL;
     const char *title   = _("Rebalance Transaction");
     const char *message = _("The current transaction is not balanced.");
@@ -133,6 +133,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 
     g_list_free (radio_list);
 
+    root = gnc_account_get_root(default_account);
     switch (choice)
     {
       default:
@@ -140,17 +141,15 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
         break;
 
       case 1:
-        xaccTransScrubImbalance (trans, gnc_get_current_group (), NULL);
+        xaccTransScrubImbalance (trans, root, NULL);
         break;
 
       case 2:
-        xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 default_account);
+        xaccTransScrubImbalance (trans, root, default_account);
         break;
 
       case 3:
-        xaccTransScrubImbalance (trans, gnc_get_current_group (),
-                                 other_account);
+        xaccTransScrubImbalance (trans, root, other_account);
         break;
     }
 

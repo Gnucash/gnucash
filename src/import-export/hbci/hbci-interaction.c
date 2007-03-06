@@ -44,6 +44,31 @@
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
 
+#include <aqbanking/version.h>
+#if AQBANKING_VERSION_MAJOR > 2
+# include <gwenhywfar/gui.h>
+# define AB_Banking_SetMessageBoxFn GWEN_Gui_SetMessageBoxFn
+# define AB_Banking_SetInputBoxFn GWEN_Gui_SetInputBoxFn
+# define AB_Banking_SetShowBoxFn GWEN_Gui_SetShowBoxFn
+# define AB_Banking_SetHideBoxFn GWEN_Gui_SetHideBoxFn
+# define AB_Banking_SetProgressStartFn GWEN_Gui_SetProgressStartFn
+# define AB_Banking_SetProgressAdvanceFn GWEN_Gui_SetProgressAdvanceFn
+# define AB_Banking_SetProgressLogFn GWEN_Gui_SetProgressLogFn
+# define AB_Banking_SetProgressEndFn GWEN_Gui_SetProgressEndFn
+# define AB_Banking_SetGetTanFn GWEN_Gui_SetGetTanFn
+# define AB_BANKING_MSG_FLAGS_TYPE_ERROR GWEN_GUI_MSG_FLAGS_TYPE_ERROR
+# define AB_BANKING_INPUT_FLAGS_CONFIRM GWEN_GUI_INPUT_FLAGS_CONFIRM
+# define AB_BANKING_INPUT_FLAGS_SHOW GWEN_GUI_INPUT_FLAGS_SHOW
+# define AB_BANKING_PROGRESS_NONE GWEN_GUI_PROGRESS_NONE
+# define AB_Banking_GetUserData(arg) GWEN_INHERIT_GETDATA(GWEN_GUI, GNCInteractor, arg)
+# define AB_Banking_SetUserData(arg1, arg2)
+/* Note about other changes: Replace callback object AB_BANKING by
+   GWEN_GUI, to be created by GWEN_GUI_new; replace GetTan
+   callback by watching for INPUT_FLAGS_TAN in InputBox(). */
+#endif
+
+GWEN_INHERIT(AB_BANKING, GNCInteractor)
+
 #define GCONF_SECTION_CONNECTION GCONF_SECTION "/connection_dialog"
 
 gchar *gnc__extractText(const char *text);
@@ -339,7 +364,7 @@ static int inputBoxCB(AB_BANKING *ab,
 
     if (newPin) {
       if (!hideInput)
-	printf("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
+	g_warning("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
       retval = gnc_hbci_get_initial_password (data->parent,
 					      title,
 					      text,
@@ -503,7 +528,12 @@ static int keepAlive(void *user_data)
 }
 
 
-static void destr(void *bp, void *user_data)
+#ifndef GWENHYWFAR_CB
+/* Has been introduced in gwenhywfar>=2.4.1 for callback function
+   decoration on win32, but is empty everywhere else. */
+# define GWENHYWFAR_CB
+#endif
+static void GWENHYWFAR_CB destr(void *bp, void *user_data)
 {
   GNCInteractor *data = user_data;
   if (data == NULL)
@@ -621,7 +651,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
   if (result<1 || result>3) {
-    printf("messageBoxCB: Bad result %d", result);
+    g_warning("messageBoxCB: Bad result %d", result);
     result = 0;
   }
   g_free(title);
@@ -786,7 +816,7 @@ on_button_clicked (GtkButton *button,
       /*GNCInteractor_hide (data);*/
     }
   } else {
-    printf("on_button_clicked: Oops, unknown button: %s\n",
+    g_critical("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
   }
   /* Let the widgets be redrawn */
@@ -794,7 +824,6 @@ on_button_clicked (GtkButton *button,
   while (g_main_context_iteration(context, FALSE));
 }
 
-GWEN_INHERIT(AB_BANKING, GNCInteractor)
 
 /********************************************************
  * Constructor 

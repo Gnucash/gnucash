@@ -22,12 +22,18 @@
 \********************************************************************/
 
 #include "config.h"
+#include <errno.h>
 #include <stdio.h>
+#include <signal.h>
 #include <string.h>
 
 #include "gnc-glib-utils.h"
 
-int 
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
+
+int
 safe_utf8_collate (const char * da, const char * db)
 {
   if (da && !(*da))
@@ -221,4 +227,70 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
   gchar *result = g_strdup (str);
   gnc_utf8_strip_invalid (result);
   return result;
+}
+
+GList*
+gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
+{
+  GList *rtn = NULL;
+  for (; list != NULL; list = list->next)
+  {
+    rtn = g_list_append(rtn, (*fn)(list->data, user_data));
+  }
+  return rtn;
+}
+
+void
+gnc_g_list_cut(GList **list, GList *cut_point)
+{
+  if (list == NULL || *list == NULL)
+    return;
+
+  // if it's the first element.
+  if (cut_point->prev == NULL)
+  {
+    *list = NULL;
+    return;
+  }
+
+  cut_point->prev->next = NULL;
+  cut_point->prev = NULL;
+}
+
+void
+gnc_scm_log_warn(const gchar *msg)
+{
+    g_log("gnc.scm", G_LOG_LEVEL_WARNING, msg);
+}
+
+void
+gnc_scm_log_error(const gchar *msg)
+{
+    g_log("gnc.scm", G_LOG_LEVEL_CRITICAL, msg);
+}
+
+void
+gnc_scm_log_msg(const gchar *msg)
+{
+    g_log("gnc.scm", G_LOG_LEVEL_MESSAGE, msg);
+}
+
+void
+gnc_scm_log_debug(const gchar *msg)
+{
+    g_log("gnc.scm", G_LOG_LEVEL_DEBUG, msg);
+}
+
+void gnc_gpid_kill(GPid pid)
+{
+#ifdef G_OS_WIN32
+    if (!TerminateProcess((HANDLE) pid, 0)) {
+        gchar *msg = g_win32_error_message(GetLastError());
+        g_warning("Could not kill child process: %s", msg ? msg : "(null)");
+    }
+#else /* !G_OS_WIN32 */
+    if (kill(pid, SIGKILL)) {
+        g_warning("Could not kill child process: %s", g_strerror(errno));
+    }
+#endif /* G_OS_WIN32 */
 }

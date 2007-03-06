@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -201,7 +201,7 @@ test_generation(void)
             /* sixtp_destroy(parser); */
         }
 
-        unlink(filename1);
+        g_unlink(filename1);
         g_free(filename1);
         gnc_commodity_destroy(ran_com);
         xmlFreeNode(test_node);

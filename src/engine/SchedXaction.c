@@ -1,6 +1,6 @@
 /********************************************************************\
  * SchedXaction.c -- Scheduled Transaction implementation.          *
- * Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2001,2007 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -32,16 +32,16 @@
 #include "FreqSpec.h"
 #include "Account.h"
 #include "gnc-book.h"
-#include "Group.h"
-#include "GroupP.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
-#include "SchedXactionP.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#define LOG_MOD "gnc.engine.sx"
+static QofLogModule log_module = LOG_MOD;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN LOG_MOD
 
 /* Local Prototypes *****/
 
@@ -50,16 +50,18 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
-   AccountGroup        *ag;
+   Account        *ra;
 
    qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
+   sx->schedule = NULL;
    sx->freq = xaccFreqSpecMalloc(book);
 
    g_date_clear( &sx->last_date, 1 );
    g_date_clear( &sx->start_date, 1 );
    g_date_clear( &sx->end_date, 1 );
 
+   sx->enabled = 1;
    sx->num_occurances_total = 0;
    sx->autoCreateOption = FALSE;
    sx->autoCreateNotify = FALSE;
@@ -70,16 +72,15 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   /* THREAD-UNSAFE */
    xaccAccountSetName( sx->template_acct,
                        guid_to_string( &sx->inst.entity.guid ));
    xaccAccountSetCommodity(
       sx->template_acct,
       gnc_commodity_new( book,
-			 "template", "template") );
+                         "template", "template") );
    xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
-   ag = gnc_book_get_template_group( book );
-   xaccGroupInsertAccount( ag, sx->template_acct );
+   ra = gnc_book_get_template_root( book );
+   gnc_account_append_child( ra, sx->template_acct );
 }
 
 SchedXaction*
@@ -105,7 +106,6 @@ sxprivTransMapDelete( gpointer data, gpointer user_data )
   xaccTransCommitEdit( t );
   return;
 }
-
 
 static void
 delete_template_trans(SchedXaction *sx)
@@ -137,6 +137,20 @@ delete_template_trans(SchedXaction *sx)
   
   return;
 }
+
+void
+sx_set_template_account (SchedXaction *sx, Account *account)
+{
+  Account *old;
+
+  old = sx->template_acct;
+  sx->template_acct = account;
+  if (old) {
+    xaccAccountBeginEdit(old);
+    xaccAccountDestroy(old);
+  }
+}
+
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
@@ -188,16 +202,21 @@ gnc_sx_begin_edit (SchedXaction *sx)
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
-  PERR ("Failed to commit: %d", errcode);
+     g_critical("Failed to commit: %d", errcode);
 }
 
-static void noop (QofInstance *inst) {}
+static void commit_done(QofInstance *inst)
+{
+  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+}
+
+static void noop(QofInstance *inst) {}
 
 void
 gnc_sx_commit_edit (SchedXaction *sx)
 {
   if (!qof_commit_edit (QOF_INSTANCE(sx))) return;
-  qof_commit_edit_part2 (&sx->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&sx->inst, commit_err, commit_done, noop);
 }
 
 /* ============================================================ */
@@ -216,6 +235,22 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
    gnc_sx_begin_edit(sx);
    xaccFreqSpecFree( sx->freq );
    sx->freq = fs;
+   qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
+}
+
+GList*
+gnc_sx_get_schedule(SchedXaction *sx)
+{
+   return sx->schedule;
+}
+
+void
+gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
+{
+   g_return_if_fail(sx && schedule);
+   gnc_sx_begin_edit(sx);
+   sx->schedule = schedule;
    qof_instance_set_dirty(&sx->inst);
    gnc_sx_commit_edit(sx);
 }
@@ -277,7 +312,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
      * This warning is only human readable - the caller
      * doesn't know the call failed.  This is bad
      */
-    PWARN( "New end date before start date" ); 
+    g_critical("New end date before start date"); 
     return;
   }
 
@@ -336,7 +371,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
   /* FIXME This condition can be tightened up */
   if ( numRemain > sx->num_occurances_total ) 
   {
-    PWARN("The number remaining is greater than the total occurrences");
+    g_warning("The number remaining is greater than the total occurrences");
   }
   else
   {
@@ -369,13 +404,30 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
   gnc_sx_commit_edit(sx);
 }
 
+gboolean
+xaccSchedXactionGetEnabled( SchedXaction *sx )
+{
+    return sx->enabled;
+}
+
+void
+xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled)
+{
+  gnc_sx_begin_edit(sx);
+  sx->enabled = newEnabled;
+  qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
+}
+
 void
 xaccSchedXactionGetAutoCreate( SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
-  *outAutoCreate = sx->autoCreateOption;
-  *outNotify     = sx->autoCreateNotify;
+  if (outAutoCreate != NULL)
+    *outAutoCreate = sx->autoCreateOption;
+  if (outNotify != NULL)
+    *outNotify     = sx->autoCreateNotify;
   return;
 }
 
@@ -461,20 +513,20 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
       }
    }
 
-   xaccFreqSpecGetNextInstance( sx->freq, &last_occur, &next_occur );
+   recurrenceListNextInstance(sx->schedule, &last_occur, &next_occur);
 
    /* out-of-bounds check */
    if ( xaccSchedXactionHasEndDate( sx ) ) {
       GDate *end_date = xaccSchedXactionGetEndDate( sx );
       if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-         PINFO( "next_occur past end date" );
+         g_debug("next_occur past end date");
          g_date_clear( &next_occur, 1 );
       }
    } else if ( xaccSchedXactionHasOccurDef( sx ) ) {
       if ( stateData ) {
          temporalStateData *tsd = (temporalStateData*)stateData;
          if ( tsd->num_occur_rem == 0 ) {
-            PINFO( "no more occurances remain" );
+            g_debug("no more occurances remain");
             g_date_clear( &next_occur, 1 );
          }
       } else {
@@ -510,7 +562,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
       g_date_subtract_days( &prev_occur, 1 );
    }
 
-   xaccFreqSpecGetNextInstance( sx->freq, &prev_occur, &next_occur );
+   recurrenceListNextInstance(sx->schedule, &prev_occur, &next_occur);
 
    if ( xaccSchedXactionHasEndDate( sx ) ) {
       GDate *end_date;

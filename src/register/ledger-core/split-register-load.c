@@ -24,7 +24,6 @@
 
 #include "config.h"
 
-#include "Group.h"
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
@@ -579,20 +578,19 @@ skip_cb (Account *account, gpointer x)
 static void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
-  AccountGroup *group;
+  Account *root;
   QuickFill *qf;
   ComboCell *cell;
   GtkListStore *store;
 
-  group = xaccAccountGetRoot(base_account);
-  if (group == NULL)
-    group = gnc_get_current_group();
-
-  if (group == NULL)
+  root = gnc_account_get_root(base_account);
+  if (root == NULL)
+    root = gnc_get_current_root_account();
+  if (root == NULL)
     return;
 
-  qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
-  store = gnc_get_shared_account_name_list_store (group, QKEY, skip_cb, NULL);
+  qf = gnc_get_shared_account_name_quickfill (root, QKEY, skip_cb, NULL);
+  store = gnc_get_shared_account_name_list_store (root, QKEY, skip_cb, NULL);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);

@@ -11,6 +11,12 @@
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Aktiven</act:name>
   <act:id type="new">de55a3419ae28ee9ab7ad78bdd197fc4</act:id>
   <act:type>ASSET</act:type>
@@ -21,6 +27,7 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1</act:code>
   <act:description>1</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umlaufverm&#246;gen</act:name>
@@ -1804,6 +1811,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fremdkapital kurzfristig</act:name>
@@ -3252,6 +3260,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Produktionsertrag</act:name>
@@ -4125,6 +4134,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Materialaufwand</act:name>
@@ -5044,6 +5054,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personalaufwand Produktion</act:name>
@@ -6055,6 +6066,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Raumaufwand</act:name>
@@ -8101,6 +8113,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erfolg aus Nebenbetrieben</act:name>
@@ -8560,6 +8573,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ausserordentlicher Erfolg</act:name>
@@ -8996,6 +9010,7 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erfolgsrechnung</act:name>

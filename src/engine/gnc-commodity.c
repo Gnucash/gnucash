@@ -84,11 +84,12 @@ struct gnc_new_iso_code
   const char *old_code;
   const char *new_code;
 } gnc_new_iso_codes[] = {
-  {"RUB", "RUR"}, /* Russian Ruble */
+  {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
   {"ILS", "NIS"}, /* New Israeli Shekel */
   {"MXP", "MXN"}, /* Mexican (Nuevo) Peso */
+  {"TRL", "TRY"}, /* New Turkish Lira: changed 2005 */
 
   /* Only add currencies to this table when the old currency no longer
    * exists in the file iso-4217-currencies.scm */
@@ -249,7 +250,7 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
 {
   gnc_quote_source *new_source;
 
-  DEBUG("Creating new source %s", source_name);
+  DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
   new_source = malloc(sizeof(gnc_quote_source));
   new_source->supported = supported;
   new_source->type = SOURCE_UNKNOWN;
@@ -1221,7 +1222,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   if (!table) return NULL;
   if (!comm) return NULL;
 
-  ENTER ("(table=%p, comm=%p) %s %s", table, comm, comm->mnemonic, comm->fullname);
+  ENTER ("(table=%p, comm=%p) %s %s", table, comm,
+         (comm->mnemonic == NULL ? "(null)" : comm->mnemonic),
+         (comm->fullname == NULL ? "(null)" : comm->fullname));
   ns_name = gnc_commodity_namespace_get_name(comm->namespace);
   c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
 

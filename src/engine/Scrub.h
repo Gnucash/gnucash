@@ -50,7 +50,6 @@
 #ifndef XACC_SCRUB_H
 #define XACC_SCRUB_H
 
-#include "Group.h"
 #include "gnc-engine.h"
 
 /** @name Double-Entry Scrubbing
@@ -85,11 +84,6 @@ void xaccAccountScrubOrphans (Account *acc);
  */
 void xaccAccountTreeScrubOrphans (Account *acc);
 
-/** The xaccGroupScrubOrphans() method performs this scrub for the 
- *    child accounts of this group. 
- */
-void xaccGroupScrubOrphans (AccountGroup *grp);
-
 /** The xaccSplitScrub method ensures that if this split has the same
  *   commodity and currency, then it will have the same amount and value.  
  *   If the commoidty is the currency, the split->amount is set to the 
@@ -106,18 +100,16 @@ void xaccSplitScrub (Split *split);
 void xaccTransScrubSplits (Transaction *trans);
 void xaccAccountScrubSplits (Account *account);
 void xaccAccountTreeScrubSplits (Account *account);
-void xaccGroupScrubSplits (AccountGroup *group);
 
 /** The xaccScrubImbalance() method searches for transactions that do
  *    not balance to zero. If any such transactions are found, a split
  *    is created to offset this amount and is added to an "imbalance"
  *    account.
  */
-void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
+void xaccTransScrubImbalance (Transaction *trans, Account *root,
                               Account *parent);
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
-void xaccGroupScrubImbalance (AccountGroup *grp);
 
 /** The xaccTransScrubCurrency method fixes transactions without a
  * common_currency by using the old account currency and security
@@ -137,9 +129,10 @@ void xaccTransScrubCurrencyFromSplits(Transaction *trans);
  * a commodity by using the old account currency and security. */
 void xaccAccountScrubCommodity (Account *account);
 
-/** The xaccGroupScrubCommodities will scrub the currency/commodity
- * of all accounts & transactions in the group. */
-void xaccGroupScrubCommodities (AccountGroup *group);
+/** The xaccAccountTreeScrubCommodities will scrub the
+ * currency/commodity of all accounts & transactions in the specified
+ * account or any child account. */
+void xaccAccountTreeScrubCommodities (Account *acc);
 
 /** This routine will migrate the information about price quote
  *  sources from the account data structures to the commodity data
@@ -148,13 +141,13 @@ void xaccGroupScrubCommodities (AccountGroup *group);
  *  out as part of the account.  Just in case anyone needs to fall
  *  back from CVS to a production version of code.
  *
- *  @param group A pointer to the account group containing all
+ *  @param acc A pointer to the root account containing all
  *  accounts in the current book.
  *
  *  @param table A pointer to the commodity table for the current
  *  book.
  */
-void xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table);
+void xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table);
 
 void xaccAccountScrubKvp (Account *account);
 

@@ -81,10 +81,10 @@ static void gnc_query_list_size_allocate_cb(GtkWidget *w,
 
 static void gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column);
 
-GtkType
+GType
 gnc_query_list_get_type (void)
 {
-  static GtkType gnc_query_list_type = 0;
+  static GType gnc_query_list_type = 0;
 
   if (!gnc_query_list_type)
   {

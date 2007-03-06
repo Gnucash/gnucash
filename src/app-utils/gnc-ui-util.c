@@ -30,6 +30,9 @@
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
+#ifdef G_OS_WIN32
+#include <pow.h>
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,7 +48,6 @@
 #include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
-#include "Group.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
 #include "gnc-session.h"
@@ -198,10 +200,10 @@ gnc_get_current_book (void)
   return qof_session_get_book (gnc_get_current_session ());
 }
 
-AccountGroup *
-gnc_get_current_group (void)
+Account *
+gnc_get_current_root_account (void)
 {
-  return gnc_book_get_group (gnc_get_current_book ());
+  return gnc_book_get_root_account (gnc_get_current_book ());
 }
 
 gnc_commodity_table *
@@ -366,11 +368,9 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
 
   if (include_children)
   {
-    AccountGroup *children_group;
     GList *children, *node;
 
-    children_group = xaccAccountGetChildren (account);
-    children = xaccGroupGetSubAccounts (children_group);
+    children = gnc_account_get_descendants(account);
 
     for (node = children; node; node = node->next)
     {
@@ -385,6 +385,8 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
         child_balance, child_currency, currency);
       balance = gnc_numeric_add_fixed (balance, child_balance);
     }
+
+    g_list_free(children);
   }
 
   /* reverse sign if needed */
@@ -565,10 +567,9 @@ equity_base_name (GNCEquityType equity_type)
 }
 
 Account *
-gnc_find_or_create_equity_account (AccountGroup *group,
+gnc_find_or_create_equity_account (Account *root,
                                    GNCEquityType equity_type,
-                                   gnc_commodity *currency,
-                                   QofBook *book)
+                                   gnc_commodity *currency)
 {
   Account *parent;
   Account *account;
@@ -580,11 +581,11 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   g_return_val_if_fail (equity_type >= 0, NULL);
   g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
   g_return_val_if_fail (currency != NULL, NULL);
-  g_return_val_if_fail (group != NULL, NULL);
+  g_return_val_if_fail (root != NULL, NULL);
 
   base_name = equity_base_name (equity_type);
 
-  account = xaccGetAccountFromName (group, base_name);
+  account = gnc_account_lookup_by_name(root, base_name);
   if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
@@ -592,7 +593,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   {
     base_name = base_name && *base_name ? _(base_name) : "";
 
-    account = xaccGetAccountFromName (group, base_name);
+    account = gnc_account_lookup_by_name(root, base_name);
     if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
       account = NULL;
   }
@@ -605,7 +606,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   name = g_strconcat (base_name, " - ",
                       gnc_commodity_get_mnemonic (currency), NULL);
-  account = xaccGetAccountFromName (group, name);
+  account = gnc_account_lookup_by_name(root, name);
   if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
@@ -630,11 +631,12 @@ gnc_find_or_create_equity_account (AccountGroup *group,
     name = g_strdup (base_name);
   }
 
-  parent = xaccGetAccountFromName (group, _("Equity"));
+  parent = gnc_account_lookup_by_name(root, _("Equity"));
   if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
-    parent = NULL;
+    parent = root;
+  g_assert(parent);
 
-  account = xaccMallocAccount (book);
+  account = xaccMallocAccount (gnc_account_get_book(root));
 
   xaccAccountBeginEdit (account);
 
@@ -642,14 +644,9 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   xaccAccountSetType (account, ACCT_TYPE_EQUITY);
   xaccAccountSetCommodity (account, currency);
 
-  if (parent)
-  {
-    xaccAccountBeginEdit (parent);
-    xaccAccountInsertSubAccount (parent, account);
-    xaccAccountCommitEdit (parent);
-  }
-  else
-    xaccGroupInsertAccount (group, account);
+  xaccAccountBeginEdit (parent);
+  gnc_account_append_child (parent, account);
+  xaccAccountCommitEdit (parent);
 
   xaccAccountCommitEdit (account);
 
@@ -674,10 +671,9 @@ gnc_account_create_opening_balance (Account *account,
   g_return_val_if_fail (account != NULL, FALSE);
 
   equity_account =
-    gnc_find_or_create_equity_account (xaccAccountGetRoot (account),
+    gnc_find_or_create_equity_account (gnc_account_get_root(account),
                                        EQUITY_OPENING_BALANCE,
-                                       xaccAccountGetCommodity (account),
-                                       book);
+                                       xaccAccountGetCommodity (account));
   if (!equity_account)
     return FALSE;
 
@@ -729,18 +725,34 @@ static void
 gnc_lconv_set_utf8 (char **p_value, char *default_value)
 {
   char *value = *p_value;
+  *p_value = NULL;
 
   if ((value == NULL) || (value[0] == 0))
-    *p_value = default_value;
+    value = default_value;
 
-  *p_value = g_locale_to_utf8 (*p_value, -1, NULL, NULL, NULL);
+#ifdef G_OS_WIN32
+  {
+    /* get number of resulting wide characters */
+    size_t count = mbstowcs (NULL, value, 0);
+    if (count > 0) {
+      /* malloc and convert */
+      wchar_t *wvalue = g_malloc ((count+1) * sizeof(wchar_t));
+      count = mbstowcs (wvalue, value, count+1);
+      if (count > 0) {
+        *p_value = g_utf16_to_utf8 (wvalue, -1, NULL, NULL, NULL);
+      }
+      g_free (wvalue);
+    }
+  }
+#else /* !G_OS_WIN32 */
+  *p_value = g_locale_to_utf8 (value, -1, NULL, NULL, NULL);
+#endif
+  
   if (*p_value == NULL) {
     // The g_locale_to_utf8 conversion failed. FIXME: Should we rather
     // use an empty string instead of the default_value? Not sure.
     *p_value = default_value;
   }
-  // FIXME: Do we really need to make a copy here ?
-  //*p_value = g_strdup (*p_value);
 }
 
 static void

@@ -60,7 +60,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
   /* Get API */
   api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
-    printf("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
+    g_message("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
     return;
   }
   g_assert (interactor);
@@ -68,7 +68,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
-    printf("gnc_hbci_maketrans: No HBCI account found. Nothing will happen.\n");
+    g_warning("gnc_hbci_maketrans: No HBCI account found. Nothing will happen.\n");
     return;
   }
   /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
@@ -78,7 +78,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     GList *template_list = 
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
-	( xaccAccountGetBook(gnc_acc)));
+	( gnc_account_get_book(gnc_acc)));
     int result;
     gboolean successful = FALSE;
     HBCITransDialog *td;
@@ -137,7 +137,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		 "of the job. It is not possible to execute this job. \n"
 		 "\n"
 		 "Most probable the bank does not support your chosen "
-		 "job or your HBCI account does not have the permission "
+		 "job or your Online Banking account does not have the permission "
 		 "to execute this job. More error messages might be "
 		 "visible on your console log.\n"
 		 "\n"
@@ -193,7 +193,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* If we wanted to do something here with the gnc txn, we could. */
     /*if (result >= 0) {
       Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
-      printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
+      g_message("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
       xaccTransGetDescription(gtrans));
       }*/
 
@@ -224,7 +224,7 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
       g_list_length(template_list),
       kvp_value_glist_to_string(kvp_list));*/
     gnc_hbci_set_book_template_list
-      (xaccAccountGetBook(gnc_acc), kvp_list);
+      (gnc_account_get_book(gnc_acc), kvp_list);
   }
 }
 
@@ -247,12 +247,12 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
   
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Direct Debit Note"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Direct Debit Note"));
   case SINGLE_INTERNAL_TRANSFER:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Bank-Internal Transfer"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Bank-Internal Transfer"));
   case SINGLE_TRANSFER:
   default:
-    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Transaction"));
+    gnc_xfer_dialog_set_title (transdialog, _("Online Banking Transaction"));
   }
       
   /* Amount */

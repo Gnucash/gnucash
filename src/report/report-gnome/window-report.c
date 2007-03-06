@@ -61,26 +61,6 @@ reportWindow(int report_id)
   gnc_unset_busy_cursor (NULL);
 }
 
-void
-gnc_print_report (int report_id)
-{
-  gnc_html *html;
-  char * location;
-
-  html = gnc_html_new( GTK_WINDOW(gnc_ui_get_toplevel()) );
-
-  gnc_set_busy_cursor (NULL, TRUE);
-  location = g_strdup_printf("id=%d", report_id);  
-  gnc_html_show_url(html, URL_TYPE_REPORT, location, NULL, FALSE);
-  g_free(location);
-  gnc_unset_busy_cursor (NULL);
-
-  gnc_html_print (html);
-
-  gnc_html_destroy (html);
-}
-
-
 /********************************************************************
  * default parameters editor handling 
  ********************************************************************/
@@ -331,55 +311,4 @@ gnc_report_init (void)
   gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
   gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
   gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
-}
-
-
-void
-gnc_reports_show_all(QofSession *session)
-{
-  GKeyFile *keyfile;
-  const gchar *home, *url;
-  gchar *encoded_url, *mdi_file, *mdi_group, *value;
-  gchar **keys, **key;
-  gint report_id;
-
-  url = qof_session_get_url(session);
-  if (!url)
-    return;
-  encoded_url = gnc_html_encode_string(url);
-  if (!encoded_url)
-    return;
-
-  home = g_get_home_dir();
-  if (!home) {
-    g_free(encoded_url);
-    return;
-  }
-
-  mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
-  mdi_group = g_strdup_printf("MDI : %s", encoded_url);
-
-  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE);
-  if (keyfile) {
-    keys = g_key_file_get_keys(keyfile, mdi_group, NULL, NULL);
-    if (keys) {
-      for (key = keys; *key; key++) {
-	if (!strncmp(*key, MDI_CHILD_CONFIG, sizeof(MDI_CHILD_CONFIG)))
-	  continue;
-	value = g_key_file_get_string(keyfile, mdi_group, *key, NULL);
-	if (!value)
-	  continue;
-	if (sscanf(value, "gnc-report:id=%d", &report_id) == 1) {
-	  gnc_main_window_open_report(report_id, NULL);
-	}
-	g_free(value);
-      }
-      g_strfreev(keys);
-    }
-    g_key_file_free(keyfile);
-  }
-
-  g_free(mdi_file);
-  g_free(mdi_group);
-  g_free(encoded_url);
 }

@@ -39,10 +39,6 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-#include "gtk-compat.h"
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -1898,8 +1894,18 @@ GncMainWindow *
 gnc_main_window_new (void)
 {
 	GncMainWindow *window;
+	gncUIWidget old_window;
 
 	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
+	old_window = gnc_ui_get_toplevel();
+	if (old_window) {
+	  gint width, height;
+	  gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
+	  gtk_window_resize (GTK_WINDOW (window), width, height);
+	  if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
+	       & GDK_WINDOW_STATE_MAXIMIZED) != 0)
+	    gtk_window_maximize (GTK_WINDOW (window));
+	}
 	active_windows = g_list_append (active_windows, window);
 	gnc_main_window_update_all_menu_items();
 	return window;
@@ -2734,26 +2740,26 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	priv->action_group = gtk_action_group_new ("MainWindowActions");
 	gnc_gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
-				      gnc_menu_n_actions, window);
+                                  gnc_menu_n_actions, window);
 	gtk_action_group_add_toggle_actions (priv->action_group, 
-					     toggle_actions, n_toggle_actions, 
-					     window);
+                                         toggle_actions, n_toggle_actions, 
+                                         window);
 	gtk_action_group_add_radio_actions (priv->action_group,
-					    radio_entries, n_radio_entries,
-					    0,
-					    G_CALLBACK(gnc_main_window_cmd_window_raise),
-					    window);
+                                        radio_entries, n_radio_entries,
+                                        0,
+                                        G_CALLBACK(gnc_main_window_cmd_window_raise),
+                                        window);
 	gnc_plugin_update_actions(priv->action_group,
-				  initially_insensitive_actions,
-				  "sensitive", FALSE);
+                              initially_insensitive_actions,
+                              "sensitive", FALSE);
 	gnc_plugin_update_actions(priv->action_group,
-				  always_insensitive_actions,
-				  "sensitive", FALSE);
+                              always_insensitive_actions,
+                              "sensitive", FALSE);
 	gnc_plugin_update_actions(priv->action_group,
-				  always_hidden_actions,
-				  "visible", FALSE);
+                              always_hidden_actions,
+                              "visible", FALSE);
 	gnc_plugin_set_important_actions (priv->action_group,
-					  gnc_menu_important_actions);
+                                      gnc_menu_important_actions);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
@@ -2761,7 +2767,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	/* Use the "connect-proxy" signal for tooltip display in the
 	   status bar */
 	g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
-			  G_CALLBACK (connect_proxy), priv->statusbar);
+                      G_CALLBACK (connect_proxy), priv->statusbar);
 
 	filename = gnc_gnome_locate_ui_file("gnc-main-window-ui.xml");
 
@@ -2773,47 +2779,47 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_assert(merge_id || error);
 	if (merge_id) {
 	  gtk_window_add_accel_group (GTK_WINDOW (window),
-				      gtk_ui_manager_get_accel_group(window->ui_merge));
+                                  gtk_ui_manager_get_accel_group(window->ui_merge));
 	  gtk_ui_manager_ensure_update (window->ui_merge);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
-		     filename, error->message);
+                 filename, error->message);
 	  g_error_free(error);
 	  g_assert(merge_id != 0);
 	}
 	g_free(filename);
 
 	gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
-				   gnc_main_window_gconf_changed,
-				   GNC_MAIN_WINDOW_NAME);
+                               gnc_main_window_gconf_changed,
+                               GNC_MAIN_WINDOW_NAME);
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
-				   gnc_main_window_gconf_changed,
-				   GNC_MAIN_WINDOW_NAME);
+                               gnc_main_window_gconf_changed,
+                               GNC_MAIN_WINDOW_NAME);
 	gnc_main_window_update_toolbar(window);
 	gnc_main_window_update_tab_position(window);
 
 	gnc_main_window_init_menu_updaters(window);
 
-        /* Testing */
+    /* Testing */
 	/* Now update the "eXtensions" menu */
-	if (!gnc_is_debugging()) {
+	if (!gnc_is_extra_enabled()) {
 	  GtkAction*  action;
 
 	  action = gtk_action_group_get_action(priv->action_group, 
-                                               "ExtensionsAction");
+                                           "ExtensionsAction");
 	  gtk_action_set_visible(action, FALSE);
 	}
 
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();
 	plugins = gnc_plugin_manager_get_plugins (manager);
-        g_list_foreach (plugins, gnc_main_window_add_plugin, window);
-        g_list_free (plugins);
+    g_list_foreach (plugins, gnc_main_window_add_plugin, window);
+    g_list_free (plugins);
 
 	g_signal_connect (G_OBJECT (manager), "plugin-added",
-			  G_CALLBACK (gnc_main_window_plugin_added), window);
+                      G_CALLBACK (gnc_main_window_plugin_added), window);
 	g_signal_connect (G_OBJECT (manager), "plugin-removed",
-			  G_CALLBACK (gnc_main_window_plugin_removed), window);
+                      G_CALLBACK (gnc_main_window_plugin_removed), window);
 
 	LEAVE(" ");
 }
@@ -3278,7 +3284,6 @@ gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 	gnc_gnome_help (HF_HELP, NULL);
 }
 
-#ifdef HAVE_GTK26
 /** This is a helper function to find a data file and suck it into
  *  memory.
  *
@@ -3380,62 +3385,25 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	if (authors)     g_strfreev(authors);
 	g_object_unref (logo);
 }
-#else
-static void
-gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
-{
-	GtkWidget *about;
-	/* Translators: This is the "About" message. */
-	const gchar *message = _("The GnuCash personal finance manager.\n"
-				 "The GNU way to manage your money!\n"
-				 "http://www.gnucash.org/");
-	const gchar *copyright = "© 1998-2002 Linas Vepstas";
-	const gchar *authors[] = {
-		"Derek Atkins <derek@ihtfp.com>",
-		"Rob Browning <rlb@cs.utexas.edu>",
-		"Bill Gribble <grib@billgribble.com>",
-		"David Hampton <hampton@employees.org>",
-		"James LewisMoss <dres@debian.org>",
-		"Robert Graham Merkel <rgmerk@mira.net>",
-		"Dave Peticolas <dave@krondo.com>",
-		"Joshua Sled <jsled@asynchronous.org>",
-		"Christian Stimming <stimming@tuhh.de>",
-		"Linas Vepstas <linas@linas.org>",
-		NULL
-	};
-	const gchar *documenters[] = {
-		NULL
-	};
-	/* Translators: Insert your translator's credits here so that
-	   they will be shown in the "About" dialog. */
-	const gchar *translator_credits = _("translator_credits");
-	GdkPixbuf *logo;
-
-	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
-
-	about = gnome_about_new ("GnuCash", VERSION, copyright, message, authors, documenters,
-				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-				 logo);
-
-	g_object_unref (logo);
-	gtk_dialog_run (GTK_DIALOG (about));
-}
-#endif
 
 
 /************************************************************
  *                                                          *
  ************************************************************/
 
-/** Get a pointer to a top level window... any top level window.  This
- *  function just returns a pointer to the first window.
+/** Get a pointer to the first active top level window or NULL
+ *  if there is none.
  *
  *  @return A pointer to a GtkWindow object. */
 gncUIWidget
 gnc_ui_get_toplevel (void)
 {
-  if (active_windows)
-    return active_windows->data;
+  GList *window;
+
+  for (window=active_windows; window; window=window->next)
+    if (gtk_window_is_active (GTK_WINDOW (window->data)))
+      return window->data;
+
   return NULL;
 }
 

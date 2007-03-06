@@ -37,7 +37,6 @@
 #include <gmodule.h>
 #include <libpq-fe.h>
 
-#include "Group.h"
 #include "qof.h"
 #include "Transaction.h"
 

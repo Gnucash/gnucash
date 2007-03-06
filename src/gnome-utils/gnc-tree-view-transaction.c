@@ -31,7 +31,7 @@ BUGS:
 /********************************************************************\
  * gnc-tree-view-transaction.c -- GtkTreeView implementation to     *
  *                        display Transactions in a GtkTreeView.    *
- * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
+ * Copyright (C) 2006-2007 Chris Shoemaker <c.shoemaker@cox.net>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1482,12 +1482,12 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
             //FIXME: we need to store a ref to the f_model?
             GtkTreeModel *acc_model, *f_model;
             GtkTreePath *virtual_root_path = NULL;
-            AccountGroup *grp;
+            Account *root;
 
-            grp = gnc_book_get_group(tv->priv->book);
+            root = gnc_book_get_root_account(tv->priv->book);
 
-            acc_model = gnc_tree_model_account_new (grp);
-            virtual_root_path = gtk_tree_path_new_first ();
+            acc_model = gnc_tree_model_account_new(root);
+            virtual_root_path = gtk_tree_path_new_first();
             f_model = gtk_tree_model_filter_new (acc_model, virtual_root_path);
             g_object_unref(G_OBJECT(acc_model));
             gtk_tree_path_free(virtual_root_path);

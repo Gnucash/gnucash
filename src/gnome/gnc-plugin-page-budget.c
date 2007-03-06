@@ -39,10 +39,6 @@
 #include <glade/glade.h>
 #include "gnc-date-edit.h"
 
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 #include "gnc-plugin-page-register.h"
 #include "gnc-budget.h"
 

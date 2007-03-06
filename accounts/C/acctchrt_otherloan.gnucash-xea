@@ -10,6 +10,12 @@
     You would want to select this set of accounts if you have something other than a home loan (other loan, other loan interest).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
   <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
   <act:type>LIABILITY</act:type>
@@ -24,6 +30,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Loans</act:name>
@@ -41,6 +48,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Loan</act:name>
@@ -68,6 +76,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>

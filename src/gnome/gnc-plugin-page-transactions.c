@@ -1,7 +1,7 @@
 /*
  * gnc-plugin-page-transactions.c --
  *
- * Copyright (C) 2005-2006 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2005-2007 Chris Shoemaker <c.shoemaker@cox.net>
  *   (based on gnc-plugin-page-account-tree.c)
  *
  * This program is free software; you can redistribute it and/or
@@ -29,10 +29,6 @@
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 #include "gnc-date-edit.h"
-
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 
 #include "dialog-options.h"
 #include "dialog-account.h"

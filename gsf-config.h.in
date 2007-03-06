@@ -9,9 +9,6 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #undef HAVE_BIND_TEXTDOMAIN_CODESET
 
-/* Conditionally include glib-2.0 > 2.4 functionality. */
-#undef HAVE_GLIB26
-
 /* Is bzip2 available and enabled */
 #undef HAVE_BZ2
 

@@ -42,7 +42,6 @@
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
-#include "Group.h"
 
 static QofLogModule log_module = GNC_MOD_IO;
 
