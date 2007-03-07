@@ -100,7 +100,7 @@ traverse_txns (Transaction *txn, gpointer data)
 xmlNodePtr
 gnc_book_dom_tree_create(QofBook *book)
 {
-    xmlNodePtr ret, rootAccNode;
+    xmlNodePtr ret;
     gboolean allow_incompat;
     GError *err = NULL;
 

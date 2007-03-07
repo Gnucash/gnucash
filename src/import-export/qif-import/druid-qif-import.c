@@ -452,7 +452,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   const char * path_to_load;
   const gchar * default_acctname = NULL;
-  int rv;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");

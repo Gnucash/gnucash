@@ -1413,7 +1413,6 @@ gnc_ui_new_account_window_internal (QofBook *book,
   gnc_commodity *commodity, *parent_commodity;
   AccountWindow *aw;
   Account *account;
-  GList *list;
 
   g_return_val_if_fail(book, NULL);
 

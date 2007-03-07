@@ -142,7 +142,6 @@ GtkTreeView*
 gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
 {
     GncTreeView *view;
-    GtkTreeModel *model;
     GtkTreeViewColumn *col;
     GncTreeViewSxListPrivate *priv;
 
