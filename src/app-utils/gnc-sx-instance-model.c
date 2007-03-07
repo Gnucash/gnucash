@@ -41,10 +41,8 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 
-#define LOG_MOD "gnc.app-util.sx"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.app-util.sx"
 
 static GObjectClass *parent_class = NULL;
 

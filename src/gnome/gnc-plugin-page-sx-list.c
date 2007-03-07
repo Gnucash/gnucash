@@ -57,11 +57,8 @@
 #include "gnc-book.h"
 #include "dialog-sx-editor.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-#define LOG_MOD "gnc.gui.plugin-page.sx-list"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"

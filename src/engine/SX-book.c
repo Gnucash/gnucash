@@ -46,7 +46,8 @@
 #include "SX-book-p.h"
 #include "gnc-event.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.engine.sx"
 
 /* XXX this whole file is crufty, it doesn't really use entities
  * in the most efficient/best way */

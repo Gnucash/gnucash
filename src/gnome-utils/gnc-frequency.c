@@ -38,10 +38,8 @@
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
 
-#define LOG_MOD "gnc.gui.frequency"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.frequency"
 
 /** Private Defs ********************/
 

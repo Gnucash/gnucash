@@ -64,10 +64,8 @@
 #include <langinfo.h>
 #endif
 
-#define LOG_MOD "gnc.gui.sx.editor"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.sx.editor"
 
 static gint _sx_engine_event_handler_id = -1;
 
