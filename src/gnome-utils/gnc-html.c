@@ -107,15 +107,6 @@ static char error_404_title[] = N_("Not found");
 static char error_404_body[] = 
 N_("The specified URL could not be loaded.");
 
-static char error_format[] = 
-"<html><body><h3>%s</h3><p>%s</p>\n<p>%s:</p><p>";
-static char error_title[] = N_("Error");
-static char error_body1[] = 
-N_("There was an error loading the specified URL.");
-static char error_body2[] = N_("Error message");
-static char error_end[] = "</body></html>";
-
-
 static char * 
 extract_machine_name(const gchar * path)
 {
@@ -420,106 +411,10 @@ https_allowed()
   return TRUE;
 }
 
-
-
-/************************************************************
- * gnc_html_http_request_cb: fires when an HTTP request is completed.
- * this is when it's time to load the data into the GtkHTML widget. 
- ************************************************************/
-
-static void
-gnc_html_http_request_cb(const gchar * uri, int completed_ok, 
-                         const gchar * body, gint body_len, 
-                         gpointer user_data)
-{
-  gnc_html * html = user_data; 
-  URLType  type;
-  char     * location = NULL;
-  char     * label    = NULL;
-  GList    * handles  = NULL;
-  GList    * current;
-  gpointer loc_tmp, handles_tmp;
-  
-  DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
-  g_hash_table_lookup_extended(html->request_info, uri, 
-                               &loc_tmp, &handles_tmp );
-
-  location = loc_tmp;
-  handles  = handles_tmp;
-  
-  /* handles will be NULL for an HTTP POST transaction, where we are
-   * displaying the reply data. */
-  if(!handles) {    
-    GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
-    if(completed_ok) {
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-    }
-    else {
-      char *data;
-
-      data = g_strdup_printf(error_format, 
-			     _(error_title), _(error_body1), _(error_body2));
-      gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
-      g_free (data);
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-      gtk_html_write(GTK_HTML(html->html), handle,
-                     error_end, strlen(error_end));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
-    }
-  }
-  /* otherwise, it's a normal SUBMIT transaction */ 
-  else {
-    /* before writing to the handles, make sure any new traffic won't
-     * see them while we're working */
-    g_hash_table_remove(html->request_info, uri);
-    g_free(location);
-    location = NULL;
-
-    for(current = handles; current; current = current->next) {
-      /* request completed OK... write the HTML to the handles that
-       * asked for that URI. */
-      if(completed_ok) {
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data),
-                       body, body_len);
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_OK);
-        type = gnc_html_parse_url(html, uri, &location, &label);
-        if(label) {
-          gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-        }
-        g_free(location);
-        g_free(label);
-        location = label = NULL;
-      }
-      /* request failed... body is the ghttp error text. */
-      else {
-        char *data;
-
-	data = g_strdup_printf(error_format, 
-			       _(error_title), _(error_body1), _(error_body2));
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       data, strlen(data));
-	g_free (data);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       body, body_len);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       error_end, strlen(error_end));
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_ERROR);
-      }
-    }
-    g_list_free(handles);    
-  }
-
-  gnc_unset_busy_cursor (html->html);
-}
-
-
 /************************************************************
  * gnc_html_start_request: starts the gnc-http object working on an
  * http/https request.
  ************************************************************/
-
 static void 
 gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
 {
