@@ -491,7 +491,7 @@ fs_daily_handler(xmlNodePtr node, gpointer data)
              return FALSE;
 
         g_date_clear(&offset_date, 1);
-        g_date_set_julian(&offset_date, fspd->offset);
+        g_date_set_julian(&offset_date, fspd->offset == 0 ? 7 : fspd->offset);
         recurrenceSet(fspd->recurrence, fspd->interval, PERIOD_DAY, &offset_date);
 
         fspd->fs->type                      = DAILY;
