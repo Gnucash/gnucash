@@ -43,7 +43,6 @@
 #include <goffice/graph/gog-series.h>
 #include <goffice/utils/go-color.h>
 #include <goffice/graph/gog-data-set.h>
-#include <goffice/graph/gog-renderer-svg.h>
 #include <goffice/data/go-data-simple.h>
 #include <goffice/app/go-plugin.h>
 #include <goffice/app/go-plugin-loader-module.h>
@@ -170,18 +169,6 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   // update requests back to the graph widget, a-la the foo-canvas that
   // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update (GOG_OBJECT (graph));
-
-#if 0
-  // example SVG use.  Also, nice for debugging.
-  {
-    GsfOutput *mem;
-    gboolean output;
-
-    mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
-    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
-  }
-#endif // 0
 
   pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
 						       "model", graph,
