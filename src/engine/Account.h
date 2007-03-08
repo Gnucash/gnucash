@@ -48,48 +48,19 @@
 #include "qof.h"
 #include "gnc-engine.h"
 
-/* GObject declarations */
-
-#define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
-#define GNC_ACCOUNT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT, Account))
-#define GNC_ACCOUNT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ACCOUNT, AccountClass))
-#define GNC_IS_ACCOUNT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT))
-#define GNC_IS_ACCOUNT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT))
-#define GNC_ACCOUNT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
-
-
-typedef struct _GncAccountClass GncAccountClass;
-typedef struct _GncAccount GncAccount;
-typedef struct _GncAccountPrivate GncAccountPrivate;
-
-typedef GncAccount GncAccount; //  Backward compatibility
-
-struct _GncAccount {
-	QofInstance inst;
-	GncAccountPrivate *priv;
-};
-
-struct _GncAccountClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_account_get_type ();
 
 /*************************************************************/
 
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
-    const GncAccount *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const GncCommodity *report_commodity,
     gboolean include_children);
 
 typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
     GncAccount *account, time_t date);
 
-/** The account types are used to determine how the transaction data
+/** The account types are used to determine how the GncTransaction data
  * in the account is displayed.   These values can be safely changed
  * from one release to the next.  Note that if values are added,
  * the file IO translation routines need to be updated. Note 
@@ -172,7 +143,8 @@ typedef enum
 /** Constructor */
 GncAccount * gnc_account_new (QofBook *book);
 
-#define xaccMallocAccount(book) gnc_account_new(book)
+/* Deprecated */
+GncAccount *xaccMallocAccount (QofBook *book);
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
  *    except that it also also places a pair of GUID-pointers
@@ -185,7 +157,7 @@ GncAccount * xaccCloneAccount (const GncAccount *from, QofBook *book);
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
  *  the account type, name, description, and the kvp values;
- *  it does not copy splits/transactions.  The book should have 
+ *  it does not copy splits/GncTransactions.  The book should have 
  *  a commodity table in it that has commodities with the same
  *  unique name as the ones being copied in the account (the 
  *  commodities in the clone will be those from the book).
@@ -195,18 +167,24 @@ GncAccount * xaccCloneAccount (const GncAccount *from, QofBook *book);
 GncAccount * xaccCloneAccountSimple (const GncAccount *from, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
- *    a two-phase-commit wrapper for account updates. */ 
-#define xaccAccountBeginEdit(account) qof_instance_begin_edit(QOF_INSTANCE(account))
+ *    a two-phase-commit wrapper for account updates. 
+ *		A wrapper of  qof_instance_begin_edit
+ */ 
+ 
+gboolean xaccAccountBeginEdit(GncAccount *acc);
 
 /** ThexaccAccountCommitEdit() subroutine is the second phase of
- *    a two-phase-commit wrapper for account updates. */ 
-#define xaccAccountCommitEdit(account) qof_instance_commit_edit(QOF_INSTANCE(account))
+ *    a two-phase-commit wrapper for account updates. 
+ *		A wrapper of  qof_instance_commit_edit
+ */ 
+gboolean xaccAccountCommitEdit (GncAccount *acc);
 
 /** The xaccAccountDestroy() routine can be used to get rid of an
  *    account.  The account should have been opened for editing 
  *    (by calling xaccAccountBeginEdit()) before calling this routine.*/
-void gnc_account_destroy (GncAccount *account);
-#define xaccAccountDestroy(account) gnc_account_destroy(account)
+void gnc_account_destroy (GncAccount *acc);
+/* A wraper for gnc_account_destroy */
+void xaccAccountDestroy(GncAccount *acc);
 
 /** Compare two accounts for equality - this is a deep compare. */
 gboolean xaccAccountEqual(const GncAccount *a, const GncAccount* b, 
@@ -315,19 +293,19 @@ const char * dxaccAccountGetPriceSrc (const GncAccount *account);
 
 /** Returns a per-account flag: Prior to reconciling an account which
     charges or pays interest, this flag tells whether to prompt the
-    user to enter a transaction for the interest charge or
+    user to enter a GncTransaction for the interest charge or
     payment. This per-account flag overrides the global preference. */
 gboolean xaccAccountGetAutoInterestXfer (const GncAccount *account, 
                                          gboolean default_value);
 /** Sets a per-account flag: Prior to reconciling an account which
     charges or pays interest, this flag tells whether to prompt the
-    user to enter a transaction for the interest charge or
+    user to enter a GncTransaction for the interest charge or
     payment. This per-account flag overrides the global preference. */
 void xaccAccountSetAutoInterestXfer (GncAccount *account, gboolean value);
 /** @} */
 
 /** @name Account Commodity setters/getters
-
+#include "Transaction.h"
  *   Accounts are used to store an amount of 'something', that 'something'
  *   is called the 'commodity'.  An account can only hold one kind of
  *   commodity.  The following are used to get and set the commodity,
@@ -336,10 +314,10 @@ void xaccAccountSetAutoInterestXfer (GncAccount *account, gboolean value);
  * Note that when we say that a 'split' holds an 'amount', that amount
  *   is denominated in the account commodity.  Do not confuse 'amount'
  *   and 'value'.  The 'value' of a split is the value of the amount
- *   expressed in the currency of the transaction.  Thus, for example,
+ *   expressed in the currency of the GncTransaction.  Thus, for example,
  *   the 'amount' may be 12 apples, where the account commodity is
  *   'apples'.  The value of these 12 apples may be 12 dollars, where 
- *   the transaction currency is 'dollars'.
+ *   the GncTransaction currency is 'dollars'.
  *
  * The SCU is the 'Smallest Commodity Unit', signifying the smallest
  *   non-zero amount that can be stored in the account.  It is 
@@ -358,13 +336,13 @@ void xaccAccountSetAutoInterestXfer (GncAccount *account, gboolean value);
 */
 
 /** Set the account's commodity */
-void xaccAccountSetCommodity (GncAccount *account, gnc_commodity *comm);
+void xaccAccountSetCommodity (GncAccount *account, GncCommodity *comm);
 
 /** @deprecated do not use */
 #define DxaccAccountSetSecurity xaccAccountSetCommodity
 
 /** Get the account's commodity  */
-gnc_commodity * xaccAccountGetCommodity (const GncAccount *account);
+GncCommodity * xaccAccountGetCommodity (const GncAccount *account);
 
 /** @deprecated do not use */
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
@@ -404,10 +382,10 @@ gboolean  xaccAccountGetNonStdSCU (const GncAccount *account);
     splits */
 gnc_numeric xaccAccountGetBalance (const GncAccount *account);
 /** Get the current balance of the account, only including cleared
-    transactions */
+    GncTransactions */
 gnc_numeric xaccAccountGetClearedBalance (const GncAccount *account);
 /** Get the current balance of the account, only including reconciled
-    transactions */
+    GncTransactions */
 gnc_numeric xaccAccountGetReconciledBalance (const GncAccount *account);
 gnc_numeric xaccAccountGetPresentBalance (const GncAccount *account);
 gnc_numeric xaccAccountGetProjectedMinimumBalance (const GncAccount *account);
@@ -427,35 +405,35 @@ gnc_numeric xaccAccountGetBalanceAsOfDate (GncAccount *account,
 gnc_numeric xaccAccountConvertBalanceToCurrency(
     const GncAccount *account, /* for book */
     gnc_numeric balance,
-    const gnc_commodity *balance_currency,
-    const gnc_commodity *new_currency);
+    const GncCommodity *balance_currency,
+    const GncCommodity *new_currency);
 gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
     const GncAccount *account, /* for book */
-    gnc_numeric balance, gnc_commodity *balance_currency,
-    gnc_commodity *new_currency, time_t date);
+    gnc_numeric balance, GncCommodity *balance_currency,
+    GncCommodity *new_currency, time_t date);
 
 /* These functions get some type of balance in the desired commodity.
    'report_commodity' may be NULL to use the account's commodity. */
 gnc_numeric xaccAccountGetBalanceInCurrency (
-    const GncAccount *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const GncCommodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetClearedBalanceInCurrency (
-    const GncAccount *account, const gnc_commodity *report_commodity, 
+    const GncAccount *account, const GncCommodity *report_commodity, 
     gboolean include_children);
 gnc_numeric xaccAccountGetReconciledBalanceInCurrency (
-    const GncAccount *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const GncCommodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetPresentBalanceInCurrency (
-    const GncAccount *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const GncCommodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
-    const GncAccount *account, const gnc_commodity *report_commodity,
+    const GncAccount *account, const GncCommodity *report_commodity,
     gboolean include_children);
 
 /* This function gets the balance as of the given date in the desired
    commodity. */
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
-    GncAccount *account, time_t date, gnc_commodity *report_commodity,
+    GncAccount *account, time_t date, GncCommodity *report_commodity,
     gboolean include_children);
 
 gnc_numeric xaccAccountGetBalanceChangeForPeriod (
@@ -571,7 +549,7 @@ guint32 xaccAccountTypesValid(void);
 
 /* ------------------ */
 
-/** @name GncAccount split/transaction list management 
+/** @name GncAccount split/GncTransaction list management 
 @{
 */
 /** The xaccAccountInsertSplit() method will insert the indicated
@@ -593,37 +571,37 @@ SplitList* xaccAccountGetSplitList (const GncAccount *account);
  *  in accfrom to accto. */
 void xaccAccountMoveAllSplits (GncAccount *accfrom, GncAccount *accto);
 
-/** The xaccAccountForEachTransaction() routine will traverse all of
-   the transactions in the given 'account' and call the callback
-   function 'proc' on each transaction.  Processing will continue
+/** The xaccAccountForEachGncTransaction() routine will traverse all of
+   the GncTransactions in the given 'account' and call the callback
+   function 'proc' on each GncTransaction.  Processing will continue
    if-and-only-if 'proc' returns 0. The user data pointer
    'data' will be passed on to the callback function 'proc'.
 
-   This function does not descend recursively to traverse transactions
+   This function does not descend recursively to traverse GncTransactions
    in child accounts.
 
-   'proc' will be called exactly once for each transaction that is
+   'proc' will be called exactly once for each GncTransaction that is
    pointed to by at least one split in the given account.
 
    The result of this function will be 0 if-and-only-if
-   every relevant transaction was traversed exactly once. 
+   every relevant GncTransaction was traversed exactly once. 
    Else the return value is the last non-zero value returned by proc.
 
-   Note that the traversal occurs only over the transactions that 
+   Note that the traversal occurs only over the GncTransactions that 
    are locally cached in the local gnucash engine.  If the gnucash 
    engine is attached to a remote database, the database may contain
-   (many) transactions that are not mirrored in the local cache.
+   (many) GncTransactions that are not mirrored in the local cache.
    This routine will not cause an SQL database query to be performed;
-   it will not traverse transactions present only in the remote
+   it will not traverse GncTransactions present only in the remote
    database.
 */
 gint xaccAccountForEachTransaction(const GncAccount *account,
                                    TransactionCallback proc,
                                    void *data);
 
-/** Returns a pointer to the transaction, not a copy. */
-Transaction * xaccAccountFindTransByDesc(const GncAccount *account, 
-                                         const char *description);
+/** Returns a pointer to the GncTransaction, not a copy. */
+GncTransaction* xaccAccountFindTransByDesc(const GncAccount *account, 
+                                         const gchar *description);
 
 /** Returns a pointer to the split, not a copy. */
 Split * xaccAccountFindSplitByDesc(const GncAccount *account, 
@@ -641,8 +619,8 @@ Split * xaccAccountFindSplitByDesc(const GncAccount *account,
  *    belong to this account.  If the lot is already in another account,
  *    the lot, and all of the splits in it, will be moved from that
  *    account to this account. */
-void xaccAccountInsertLot (GncAccount *, GNCLot *);
-void xaccAccountRemoveLot (GncAccount *, GNCLot *);
+void xaccAccountInsertLot (GncAccount *, GncLot *);
+void xaccAccountRemoveLot (GncAccount *, GncLot *);
 
 /** The xaccAccountGetLotList() routine returns a pointer to the GList of
  *    the lots in this account.  
@@ -661,7 +639,7 @@ LotList* xaccAccountGetLotList (const GncAccount *account);
  */
 gpointer xaccAccountForEachLot(
     const GncAccount *acc,
-    gpointer (*proc)(GNCLot *lot, gpointer user_data), gpointer user_data);
+    gpointer (*proc)(GncLot *lot, gpointer user_data), gpointer user_data);
 
 
 /** Find a list of open lots that match the match_func.  Sort according
@@ -670,7 +648,7 @@ gpointer xaccAccountForEachLot(
  * The caller must free to returned list.
  */
 LotList * xaccAccountFindOpenLots (const GncAccount *acc,
-				   gboolean (*match_func)(GNCLot *lot,
+				   gboolean (*match_func)(GncLot *lot,
 							  gpointer user_data),
 				   gpointer user_data, GCompareFunc sort_func);
 
@@ -834,13 +812,13 @@ void xaccClearMarkDownGr (AccountGroup *group, short val);
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it.
  *
- * These two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetCurrency (GncAccount *account, gnc_commodity *currency);
+ * These two funcs take control of their GncCommodity args. Don't free */
+void DxaccAccountSetCurrency (GncAccount *account, GncCommodity *currency);
 
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
-gnc_commodity * DxaccAccountGetCurrency (const GncAccount *account);
+GncCommodity * DxaccAccountGetCurrency (const GncAccount *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
@@ -857,6 +835,13 @@ void dxaccAccountSetQuoteTZ (GncAccount *account, const char *tz);
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
 const char * dxaccAccountGetQuoteTZ (const GncAccount *account);
+
+AccountGroup* gnc_account_get_children (GncAccount* acc);
+void           gnc_account_set_children (GncAccount* acc, AccountGroup *grp);
+
+AccountGroup* gnc_account_get_parent (GncAccount* acc);
+void           gnc_account_set_parent (GncAccount* acc, AccountGroup *grp);
+
 /** @} */
 
 

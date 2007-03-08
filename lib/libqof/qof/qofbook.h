@@ -41,8 +41,11 @@
 #ifndef QOF_BOOK_H
 #define QOF_BOOK_H
 
-#include "qofid.h"
 #include "kvp_frame.h"
+#include <glib-object.h>
+#include "qofinstance.h"
+
+
 
 /* GObject declarations */
 
@@ -56,7 +59,11 @@
 
 typedef struct _QofBookClass QofBookClass;
 typedef struct _QofBookPrivate QofBookPrivate;
+
+#ifndef QOF_BOOK_DEFINED
+#define QOF_BOOK_DEFINED
 typedef struct _QofBook QofBook;
+#endif
 
 struct _QofBook {
 	QofInstance inst;
@@ -70,7 +77,7 @@ struct _QofBookClass {
 	/* Add Signal Functions Here */
 };
 
-GType   qof_book_get_type ();
+GType   qof_book_get_type (void);
 
 
 /** @brief Encapsulates all the information about a dataset
@@ -95,7 +102,7 @@ QofBook * qof_book_new (void);
 /** End any editing sessions associated with book, and free all memory
     associated with it. */
 //void      qof_book_destroy (QofBook *book);
-#define qof_book_destroy (b) g_object_unref (b)
+#define qof_book_destroy(b) g_object_unref (b)
 
 /** Close a book to editing.
 
@@ -103,6 +110,8 @@ It is up to the application to check this flag,
 and once marked closed, books cannnot be marked as open.
 */
 void qof_book_mark_closed (QofBook *book);
+
+gboolean qof_book_is_open (QofBook *book);
 
 /** Return The table of entities of the given type.
  *
@@ -117,28 +126,18 @@ void qof_book_mark_closed (QofBook *book);
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */
-QofCollection  * qof_book_get_collection (const QofBook *, GType);
+QofCollection* qof_book_get_collection (const QofBook *book, GType type);
 
 /** Invoke the indicated callback on each collection in the book. */
-typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
-void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
+typedef void (*QofCollectionForeachCB) (QofCollection *col, gpointer user_data);
+void qof_book_foreach_collection (const QofBook *book, QofCollectionForeachCB func, gpointer user_data);
 
 /** Callback type for qof_instance_foreach */
-typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
+typedef void (*QofBookForeachCB) (QofBook *book, gpointer user_data);
 
-void qof_book_foreach (const QofBook *book, GType type, QofInstanceForeachCB func, gpointer data);
+void qof_book_foreach (const QofBook *book, GType type, QofInstanceForeachCB cb, gpointer user_data);
 
-/* Deprecated */
-#define qof_object_foreach(type, book, cb, data) qof_book_foreach (book, type, cb, data)
-
-/** Return The kvp data for the book.
- *  Note that the book KVP data is persistent, and is stored/retrieved
- *  from the file/database.  Thus, the book KVP is the correct place to
- *  store data that needs to be persistent accross sessions (or shared
- *  between multiple users).  To store application runtime data, use
- *  qof_book_set_data() instead.
- */
-#define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
+#define qof_object_foreach(t, b, f, d) qof_book_foreach(b, t, f, d);
 
 /** The qof_book_set_data() allows arbitrary pointers to structs
  *    to be stored in QofBook. This is the "preferred" method for
@@ -185,8 +184,7 @@ void qof_book_mark_saved(QofBook *book);
  *    modified. It can be used by frontend when the used has made a
  *    change at the book level.
  */
-//void qof_book_mark_dirty(QofBook *book);
-#define qof_book_mark_dirty(b) qof_instance_set_dirty (QOF_INSTANCE (b), 	TRUE)	
+void qof_book_mark_dirty(QofBook *book);
 
 /** This debugging function can be used to traverse the book structure
  *    and all subsidiary structures, printing out which structures
@@ -219,11 +217,11 @@ gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
 gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
 
-gboolean qof_book_remove_object (QofBook *book, QofInstance *inst);
+gboolean qof_book_remove_element (QofBook *book, QofInstance *inst);
 
-gboolean qof_book_insert_object (QofBook *book, QofInstance *inst);
+gboolean qof_book_insert_element (QofBook *book, QofInstance *inst);
 
-QofInstance qof_book_get_object (QofBook *book, GType type, GUID *guid);
+QofInstance* qof_book_get_element (QofBook *book, GType type, GUID *guid);
 
 
 

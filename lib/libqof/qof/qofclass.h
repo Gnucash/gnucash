@@ -82,18 +82,19 @@ single reference between two known objects.
  @{
  */
 
-#define QOF_TYPE_STRING    "string"
-#define QOF_TYPE_DATE      "date"
-#define QOF_TYPE_NUMERIC   "numeric"
-#define QOF_TYPE_DEBCRED   "debcred"
-#define QOF_TYPE_GUID      "guid"
-#define QOF_TYPE_INT32     "gint32"
-#define QOF_TYPE_INT64     "gint64"
-#define QOF_TYPE_DOUBLE    "double"
-#define QOF_TYPE_BOOLEAN   "boolean"
-#define QOF_TYPE_KVP       "kvp"
-#define QOF_TYPE_CHAR      "character"
-#define QOF_TYPE_COLLECT   "collection" /**< secondary collections
+#define QOF_TYPE_STRING    G_TYPE_CHAR
+#define QOF_TYPE_DATE      G_TYPE_DATE
+#define QOF_TYPE_NUMERIC   GNC_TYPE_NUMERIC  
+#define QOF_TYPE_DEBCRED   GNC_TYPE_NUMERIC  // Used in Split, QofQuery, Session and Util to get a gnc_numeric, then asigned to this type
+#define QOF_TYPE_GUID      GNC_TYPE_GUID
+#define QOF_TYPE_INT32     G_TYPE_INT
+#define QOF_TYPE_INT64     G_TYPE_INT64
+#define QOF_TYPE_DOUBLE    G_TYPE_DOUBLE
+#define QOF_TYPE_BOOLEAN   G_TYPE_BOOLEAN
+#define QOF_TYPE_KVP       GNC_TYPE_KVP_FRAME
+#define QOF_TYPE_CHAR      G_TYPE_CHAR
+#define QOF_TYPE_CHOICE    G_TYPE_GTYPE  // FIXME
+#define QOF_TYPE_COLLECT   QOF_TYPE_COLLECTION /**< secondary collections
 are used for one-to-many references between entities and are
 implemented using ::QofCollection.
 These are \b NOT the same as the main collections in the QofBook.
@@ -123,7 +124,7 @@ n.b. Always subject to each collection holding only one type at runtime.
 */
 /** @} */
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
-typedef const char * QofType;
+typedef GType QofType;
 
 typedef struct _QofParam QofParam;
 
@@ -178,7 +179,7 @@ typedef gint (*QofCompareFunc) (gpointer a, gpointer b,
  */
 struct _QofParam 
 {
-  const char       * param_name;
+  const gchar       * param_name;
   QofType            param_type;
   QofAccessFunc      param_getfcn;
   QofSetterFunc      param_setfcn;
@@ -232,19 +233,19 @@ gboolean qof_class_is_registered (QofIdTypeConst obj_name);
 
 /** Return the core datatype of the specified object's parameter */
 QofType qof_class_get_parameter_type (QofIdTypeConst obj_name,
-                                      const char *param_name);
+                                      const gchar* param_name);
 
 /** Return the registered Parameter Definition for the requested parameter */
 const QofParam * qof_class_get_parameter (QofIdTypeConst obj_name,
-                                          const char *parameter);
+                                          const gchar* parameter);
 
 /** Return the object's parameter getter function */
 QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
-                                              const char *parameter);
+                                              const gchar* parameter);
 
 /** Return the object's parameter setter function */
 QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
-                                              const char *parameter);
+                                              const gchar* parameter);
 
 /** Type definition for the class callback function. */
 typedef void (*QofClassForeachCB) (QofIdTypeConst, gpointer);

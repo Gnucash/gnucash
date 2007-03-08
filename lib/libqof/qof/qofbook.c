@@ -42,17 +42,25 @@
 #include "qof.h"
 #include "qofevent-p.h"
 #include "qofbackend-p.h"
+#include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
 //#include "qofobject-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
+static void coll_destroy(gpointer col);
+static void book_final (gpointer key, gpointer value, gpointer booq);
+
+
 /* GObject declarations */
 
 static void qof_book_class_init(QofBookClass *klass);
-static void qof_book_init(QofBook *sp);
+static void qof_book_init(QofBook *book);
 static void qof_book_finalize(GObject *object);
+static void qof_book_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void qof_book_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
 
 /* Book structure */
 struct _QofBookPrivate
@@ -87,8 +95,9 @@ struct _QofBookPrivate
   /* state flag: 'y' means 'open for editing',
    * 'n' means 'book is closed'
    * xxxxx shouldn't this be replaced by the instance editlevel ???
+   * Why this isn't a gboolean??????? well changing... :-)
    */
-  char book_open;
+  gboolean book_open;
 
   /* a flag denoting whether the book is closing down, used to
    * help the QOF objects shut down cleanly without maintaining
@@ -116,6 +125,7 @@ typedef enum _QofBookSignalType QofBookSignalType;
 
 enum _QofBookSignalType {
 	/* Signals */
+	FIRST_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -133,7 +143,7 @@ static guint qof_book_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-qof_book_get_type()
+qof_book_get_type(void)
 {
 	static GType type = 0;
 
@@ -174,44 +184,48 @@ qof_book_class_init(QofBookClass *klass)
 }
 
 static void
-qof_book_init(QofBook *obj)
+qof_book_init(QofBook *book)
 {
+  
 	/* Initialize private members, etc. */
 
-  book->hash_of_collections = g_hash_table_new_full(
+  book->priv->hash_of_collections = g_hash_table_new_full(
       g_int_hash, g_int_equal, NULL,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
-  book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
-  book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
+  book->priv->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+  book->priv->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
   
-  book->book_open = 'y';
-  book->version = 0;
-  book->idata = 0;
+  book->priv->book_open = TRUE;
+  book->priv->version = 0;
+  book->priv->idata = 0;
 
 }
 
 static void
 qof_book_finalize(GObject *object)
 {
+	QofBook *book;
+	
+	book = QOF_BOOK (object);
 	
 	/* Free private members, etc. */
 
-  book->shutting_down = TRUE;
-  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL); // signal emit with confirmation?
+  book->priv->shutting_down = TRUE;
+  qof_event_force ((QofEntity*) QOF_INSTANCE (object), QOF_EVENT_DESTROY, NULL); // signal emit with confirmation?
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
    */
-  g_hash_table_foreach (book->data_table_finalizers, book_final, book);
+  g_hash_table_foreach (book->priv->data_table_finalizers, book_final, book);
 
-  g_hash_table_destroy (book->data_table_finalizers);
-  book->data_table_finalizers = NULL;
-  g_hash_table_destroy (book->data_tables);
-  book->data_tables = NULL;
+  g_hash_table_destroy (book->priv->data_table_finalizers);
+  book->priv->data_table_finalizers = NULL;
+  g_hash_table_destroy (book->priv->data_tables);
+  book->priv->data_tables = NULL;
 
-  g_hash_table_destroy (book->hash_of_collections);
-  book->hash_of_collections = NULL;
+  g_hash_table_destroy (book->priv->hash_of_collections);
+  book->priv->hash_of_collections = NULL;
 
 	G_OBJECT_CLASS(parent_class)->finalize(object);
 }
@@ -228,7 +242,7 @@ qof_book_set_property (GObject *object,
 	switch (param_id) {		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
     	break;
 	}
 }
@@ -260,10 +274,6 @@ static void coll_destroy(gpointer col)
   qof_collection_destroy((QofCollection *) col);
 }
 
-static void
-qof_book_init (QofBook *book)
-{
-  }
 
 QofBook *
 qof_book_new (void)
@@ -273,11 +283,14 @@ qof_book_new (void)
   ENTER (" ");
   book = QOF_BOOK (g_object_new (QOF_TYPE_BOOK, NULL));
   
-  qof_object_book_begin (book);
-
-  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
+  /* FIXME: If book needs KvpFrame, a GUID, but why needs a pointer to himself? */
   
-  g_signal_emit_by_name ( QOF_ENTITY (book), "created");
+  qof_instance_set_book (QOF_INSTANCE (book), book);
+  
+
+  qof_event_gen ((QofEntity*) QOF_INSTANCE (book), QOF_EVENT_CREATE, NULL);
+  
+  g_signal_emit_by_name ( QOF_INSTANCE (book), "created");
   
   LEAVE ("book=%p", book);
   return book;
@@ -289,15 +302,10 @@ book_final (gpointer key, gpointer value, gpointer booq)
   QofBookFinalCB cb = value;
   QofBook *book = booq;
 
-  gpointer user_data = g_hash_table_lookup (book->data_tables, key);
+  gpointer user_data = g_hash_table_lookup (book->priv->data_tables, key);
   (*cb) (book, key, user_data);
 }
 
-void
-qof_book_destroy (QofBook *book) 
-{
-  g_object_unref (G_OBJECT (book));
-}
 
 /* ====================================================================== */
 /* XXX this should probably be calling is_equal callbacks on gncObject */
@@ -317,7 +325,7 @@ qof_book_not_saved (const QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->inst.dirty || qof_object_is_dirty (book));
+  return (qof_instance_is_dirty ( QOF_INSTANCE (book)));
 }
 
 void
@@ -327,35 +335,37 @@ qof_book_mark_saved (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = FALSE;
-  book->dirty_time = 0;
-  qof_object_mark_clean (book);
+  was_dirty = qof_instance_is_dirty (QOF_INSTANCE (book));
+  
+  qof_instance_set_dirty (QOF_INSTANCE (book), TRUE);
+  book->priv->dirty_time = 0;
+  qof_instance_mark_clean (QOF_INSTANCE (book));
   if (was_dirty) {
-    if (book->dirty_cb)
-      book->dirty_cb(book, FALSE, book->dirty_data);
+    if (book->priv->dirty_cb)
+      book->priv->dirty_cb(book, FALSE, book->priv->dirty_data);
   }
 }
 
-void qof_book_mark_dirty (QofBook *book)
+void 
+qof_book_mark_dirty (QofBook *book)
 {
   gboolean was_dirty;
 
   g_return_if_fail (QOF_IS_BOOK(book));
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = TRUE;
+  was_dirty = qof_instance_is_dirty (QOF_INSTANCE (book));
+  qof_instance_set_dirty (QOF_INSTANCE (book), TRUE);
   if (!was_dirty) {
-    book->dirty_time = time(NULL);
-    if (book->dirty_cb)
-      book->dirty_cb(book, TRUE, book->dirty_data);
+    book->priv->dirty_time = time(NULL);
+    if (book->priv->dirty_cb)
+      book->priv->dirty_cb(book, TRUE, book->priv->dirty_data);
   }
 }
 
 void
 qof_book_print_dirty (const QofBook *book)
 {
-  if (book->inst.dirty)
+  if (qof_instance_is_dirty (QOF_INSTANCE (book)))
     printf("book is dirty.\n");
   qof_book_foreach_collection
     (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
@@ -364,14 +374,14 @@ qof_book_print_dirty (const QofBook *book)
 time_t
 qof_book_get_dirty_time (const QofBook *book)
 {
-  return book->dirty_time;
+  return book->priv->dirty_time;
 }
 
 void
 qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 {
-  book->dirty_data = user_data;
-  book->dirty_cb = cb;
+  book->priv->dirty_data = user_data;
+  book->priv->dirty_cb = cb;
 }
 
 /* ====================================================================== */
@@ -381,14 +391,14 @@ QofBackend *
 qof_book_get_backend (const QofBook *book)
 {
    if (!book) return NULL;
-   return book->backend;
+   return book->priv->backend;
 }
 
 gboolean
 qof_book_shutting_down (const QofBook *book)
 {
   if (!book) return FALSE;
-  return book->shutting_down;
+  return book->priv->shutting_down;
 }
 
 /* ====================================================================== */
@@ -399,7 +409,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 {
   if (!book) return;
   ENTER ("book=%p be=%p", book, be);
-  book->backend = be;
+  book->priv->backend = be;
   LEAVE (" ");
 }
 
@@ -412,30 +422,35 @@ void qof_book_kvp_changed (QofBook *book)
 
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
 /* XXX if data is NULL, we should remove the key from the hash table!
- */
+
+** DEPRECATED FUNCTIONS: use the GObject functions: g_object_set_data, g_object_set_data_full and g_object_get_data
+
 void 
 qof_book_set_data (QofBook *book, const char *key, gpointer data)
 {
   if (!book || !key) return;
-  g_hash_table_insert (book->data_tables, (gpointer)key, data);
+  g_hash_table_insert (book->priv->data_tables, (gpointer)key, data);
 }
 
 void 
 qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB cb)
 {
-  if (!book || !key) return;
-  g_hash_table_insert (book->data_tables, (gpointer)key, data);
+  g_return_if_fail (QOF_IS_BOOK(book) && key);
+  
+  g_hash_table_insert (book->priv->data_tables, (gpointer)key, data);
 
   if (!cb) return;
-  g_hash_table_insert (book->data_table_finalizers, (gpointer)key, cb);
+  g_hash_table_insert (book->priv->data_table_finalizers, (gpointer)key, cb);
 }
 
 gpointer 
 qof_book_get_data (const QofBook *book, const char *key)
 {
   if (!book || !key) return NULL;
-  return g_hash_table_lookup (book->data_tables, (gpointer)key);
+  return g_hash_table_lookup (book->priv->data_tables, (gpointer)key);
 }
+*/
+
 
 /* ====================================================================== */
 
@@ -446,12 +461,12 @@ qof_book_get_collection (const QofBook *book, GType type)
 
   g_return_val_if_fail (QOF_IS_BOOK (book) || G_TYPE_IS_OBJECT (type), NULL);
 
-  col = g_hash_table_lookup (book->hash_of_collections, type);
+  col = g_hash_table_lookup (book->priv->hash_of_collections, GINT_TO_POINTER (type));
   
   if (!QOF_IS_COLLECTION(col)) {
       col = qof_collection_new (type);
-      g_hash_table_insert(book->hash_of_collections,
-          								type, col);
+      g_hash_table_insert(book->priv->hash_of_collections,
+          								GINT_TO_POINTER (type), col);
   }
   return col;
 }
@@ -479,7 +494,7 @@ qof_book_insert_element (QofBook *book, QofInstance *inst)
 	QofCollection *coll;
 	gboolean res;
 	
-	g_return_val_if_fail (QOF_IS_BOOK (book) && QOF_IS_INSTANCE (inst));
+	g_return_val_if_fail (QOF_IS_BOOK (book) && QOF_IS_INSTANCE (inst), FALSE);
 	
 	coll = qof_book_get_collection (book, G_OBJECT_TYPE (inst));
 	
@@ -487,6 +502,17 @@ qof_book_insert_element (QofBook *book, QofInstance *inst)
 	
 	return res;
 }
+
+QofInstance*
+qof_book_get_element (QofBook *book, GType type, GUID *guid)
+{
+  QofCollection *col;
+  
+  col = qof_book_get_collection (book, type);
+  
+  return qof_collection_lookup_element (col, (const GUID*) guid);
+}
+
 
 struct _iterate {
   QofCollectionForeachCB  fn;
@@ -502,10 +528,6 @@ foreach_cb (gpointer key, gpointer item, gpointer arg)
   iter->fn (col, iter->data);
 }
 
-/** Invoke the indicated callback on each collection in the book. */
-typedef void (*QofCollectionForeachCB) (QofCollection *, gpointer user_data);
-void qof_book_foreach_collection (const QofBook *, QofCollectionForeachCB, gpointer);
-
 void 
 qof_book_foreach_collection (const QofBook *book, 
                              QofCollectionForeachCB cb, gpointer user_data)
@@ -518,7 +540,7 @@ qof_book_foreach_collection (const QofBook *book,
   iter.fn = cb;
   iter.data = user_data;
 
-  g_hash_table_foreach (book->hash_of_collections, foreach_cb, &iter);
+  g_hash_table_foreach (book->priv->hash_of_collections, foreach_cb, &iter);
 }
 
 void
@@ -528,6 +550,7 @@ qof_book_foreach (const QofBook *book, GType type, QofInstanceForeachCB cb, gpoi
 	
 	col = qof_book_get_collection (book, type);
 	
+	/* By default execute cb in all the objects in the collection holding this object type */
 	qof_collection_foreach (col, cb, user_data);
 }
 
@@ -536,15 +559,16 @@ qof_book_foreach (const QofBook *book, GType type, QofInstanceForeachCB cb, gpoi
 void qof_book_mark_closed (QofBook *book)
 {
 	if(!book) { return; }
-	book->book_open = 'n';
+	book->priv->book_open = 'n';
 }
 
-gchar qof_book_get_open_marker (const QofBook *book)
+gboolean 
+qof_book_is_open (QofBook *book)
 {
 	if(!QOF_IS_BOOK(book))
-		return 'n';
+		return FALSE;
 	else
-		return book->book_open;
+		return book->priv->book_open;
 }
 
 gint32 qof_book_get_version (const QofBook *book)
@@ -552,7 +576,7 @@ gint32 qof_book_get_version (const QofBook *book)
 	if(!QOF_IS_BOOK (book)) 
 		return -1;
 	else
-		return book->version;
+		return book->priv->version;
 }
 
 guint32 qof_book_get_idata (const QofBook *book)
@@ -560,21 +584,21 @@ guint32 qof_book_get_idata (const QofBook *book)
 	if(!QOF_IS_BOOK (book)) 
 		return 0;
 	else
-		return book->idata;
+		return book->priv->idata;
 }
 
 void qof_book_set_version (QofBook *book, gint32 version)
 {
 	g_return_if_fail (QOF_IS_BOOK (book) && version < 0);
 	
-	book->version = version;
+	book->priv->version = version;
 }
 
 void qof_book_set_idata(QofBook *book, guint32 idata)
 {
 	g_return_if_fail (QOF_IS_BOOK (book) && idata < 0);
 	
-	book->idata = idata;
+	book->priv->idata = idata;
 }
 
 gint64
@@ -596,7 +620,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
   }
 
   /* If we've got a backend with a counter method, call it */
-  be = book->backend;
+  be = book->priv->backend;
   if (be && be->counter)
     return ((be->counter)(be, counter_name));
 
@@ -630,10 +654,12 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 }
 
 /* QofObject function implementation and registration */
+/* FIXME: This is broken for now; see if you can register param by param a qof_class; 
+ * or see if we can avoid to use this registration (GObject gives the GObjectClass framework)
 gboolean qof_book_register (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };
@@ -642,5 +668,6 @@ gboolean qof_book_register (void)
 
   return TRUE;
 }
+*/
 
 /* ========================== END OF FILE =============================== */

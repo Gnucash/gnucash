@@ -328,6 +328,8 @@ struct QofBackend_s
    * data loss, otherwise FALSE.
    */
   gboolean (*save_may_clobber_data) (QofBackend *);
+  
+  GError *error;
 
   KvpFrame* backend_configuration;
   gint config_count;
@@ -371,7 +373,7 @@ void qof_backend_set_message(QofBackend *be, const char *format, ...);
 /** The qof_backend_get_message() pops the error message string from
  *  the Backend.  This string should be freed with g_free().
  */
-char * qof_backend_get_message(QofBackend *be);
+gchar * qof_backend_get_message(QofBackend *be);
 
 void qof_backend_init(QofBackend *be);
 

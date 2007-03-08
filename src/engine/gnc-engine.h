@@ -87,23 +87,23 @@
 #define GNC_ID_SESSION        QOF_ID_SESSION
 #define GNC_ID_NULL           QOF_ID_NULL
 
-#define GNC_ID_ACCOUNT        "Account"
-#define GNC_ID_COMMODITY      "Commodity"
-#define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
-#define GNC_ID_COMMODITY_TABLE "CommodityTable"
-#define GNC_ID_FREQSPEC       "FreqSpec"
-#define GNC_ID_GROUP          "AccountGroup"
-#define GNC_ID_LOT            "Lot"
-#define GNC_ID_PERIOD         "Period"
-#define GNC_ID_PRICE          "Price"
-#define GNC_ID_PRICEDB        "PriceDB"
-#define GNC_ID_SPLIT          "Split"
-#define GNC_ID_BUDGET         "Budget"
-#define GNC_ID_SCHEDXACTION   "SchedXaction"
-#define GNC_ID_SXES           "SchedXactions"
-#define GNC_ID_SXTG           "SXTGroup"
-#define GNC_ID_SXTT           "SXTTrans"
-#define GNC_ID_TRANS          "Trans"
+#define GNC_ID_ACCOUNT        GNC_TYPE_ACCOUNT
+#define GNC_ID_COMMODITY      GNC_TYPE_COMMODITY
+#define GNC_ID_COMMODITY_NAMESPACE GNC_TYPE_COMMODITY_NAMESPACE
+#define GNC_ID_COMMODITY_TABLE GNC_TYPE_COMMODITY_TABLE
+#define GNC_ID_FREQSPEC       GNC_TYPE_FREQ_SPEC 
+#define GNC_ID_GROUP          GNC_TYPE_ACCOUNT_GROUP
+#define GNC_ID_LOT            GNC_TYPE_LOT
+#define GNC_ID_PERIOD         "Period" /* Broken QofIdType: actually comented out */
+#define GNC_ID_PRICE          GNC_TYPE_PRICE
+#define GNC_ID_PRICEDB        GNC_TYPE_PRICE_DB
+#define GNC_ID_SPLIT          GNC_TYPE_SPLIT
+#define GNC_ID_BUDGET         GNC_TYPE_BUDGET
+#define GNC_ID_SCHEDXACTION   GNC_TYPE_SCHEDULE_ACTION
+#define GNC_ID_SXES           GNC_TYPE_SCHEDULE_ACTIONS
+#define GNC_ID_SXTG           G_TYPE_CHAR /* FIXME: Use a diferent way to store hash for SchedXaction gruops */
+#define GNC_ID_SXTT           G_TYPE_NONE  /* FIXME: This type isn't used any plase or a kind of object */
+#define GNC_ID_TRANS          GNC_TYPE_TRANSACTION
 
 /* TYPES **********************************************************/
 
@@ -129,11 +129,66 @@
  * defined in the private header AccountP.h, but no one outside the
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
-typedef struct account_s             Account;
+//typedef struct account_s             Account;
 
-/** @brief A group of accounts in Gnucash. 
+
+/* GObject declarations */
+
+#define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
+#define GNC_ACCOUNT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT, Account))
+#define GNC_ACCOUNT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ACCOUNT, AccountClass))
+#define GNC_IS_ACCOUNT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT))
+#define GNC_IS_ACCOUNT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT))
+#define GNC_ACCOUNT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
+
+
+typedef struct _GncAccountClass GncAccountClass;
+typedef struct _GncAccount GncAccount;
+typedef struct _GncAccountPrivate GncAccountPrivate;
+
+#define Account GncAccount //  Backward compatibility
+
+struct _GncAccount {
+	QofInstance inst;
+	GncAccountPrivate *priv;
+};
+
+struct _GncAccountClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_account_get_type (void);
+
+/** @brief A group of accountsin Gnucash. 
 */
-typedef struct account_group_s       AccountGroup;
+//typedef struct account_group_s       AccountGroup;
+/* GObject declarations */
+
+#define GNC_TYPE_ACCOUNT_GROUP            (gnc_account_group_get_type ())
+#define GNC_ACCOUNT_GROUP(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT_GROUP, AccountGroup))
+#define GNC_ACCOUNT_GROUP_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ACCOUNT_GROUP, GncAccountGroupClass))
+#define GNC_IS_ACCOUNT_GROUP(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT_GROUP))
+#define GNC_IS_ACCOUNT_GROUP_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT_GROUP))
+#define GNC_ACCOUNT_GROUP_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT_GROUP, GncAccountGroupClass))
+
+
+typedef struct _GncAccountGroupClass GncAccountGroupClass;
+typedef struct _GncAccountGroupPrivate GncAccountGroupPrivate;
+typedef struct _GncAccountGroup AccountGroup;
+
+
+struct _GncAccountGroupClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_account_group_get_type (void);
+
 
 /** @brief Split in Gnucash. 
  * A "split" is more commonly refered to as a "entry" in a
@@ -145,7 +200,29 @@ typedef struct account_group_s       AccountGroup;
  * in the private header TransactionP.h, but no one outside the engine
  * should include that file. Instead, access that data only through
  * the functions in Transaction.h .*/
-typedef struct split_s               Split;
+//typedef struct split_s               Split;
+/* GObject declarations */
+
+#define GNC_TYPE_SPLIT            (gnc_split_get_type ())
+#define GNC_SPLIT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SPLIT, GncSplit))
+#define GNC_SPLIT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SPLIT, GncSplitClass))
+#define GNC_IS_SPLIT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SPLIT))
+#define GNC_IS_SPLIT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SPLIT))
+#define GNC_SPLIT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SPLIT, GncSplitClass))
+
+
+typedef struct _GncSplitClass GncSplitClass;
+typedef struct _GncSplit GncSplit;
+typedef GncSplit Split; /*  Dummy type for backward compatilibity */
+
+struct _GncSplitClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_split_get_type (void);
 
 /** @brief Transaction in Gnucash.  
  * A Transaction is a piece of business done; the transfer of money
@@ -156,7 +233,33 @@ typedef struct split_s               Split;
  * defined in the private header TransactionP.h, but no one outside
  * the engine should include that file. Instead, access that data only
  * through the functions in Transaction.h .*/
-typedef struct transaction_s         Transaction;
+//typedef struct transaction_s         Transaction;
+
+/* GObject declarations */
+
+#define GNC_TYPE_TRANSACTION            (qof_book_get_type ())
+#define GNC_TRANSACTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TRANSACTION, GncTransaction))
+#define GNC_TRANSACTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TRANSACTION, GncTransactionClass))
+#define GNC_IS_TRANSACTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TRANSACTION))
+#define GNC_IS_TRANSACTION_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TRANSACTION))
+#define GNC_TRANSACTION_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TRANSACTION, GncTransactionClass))
+
+
+typedef struct _GncTransactionClass GncTransactionClass;
+typedef struct _GncTransaction GncTransaction;
+typedef struct _GncTransactionPrivate GncTransactionPrivate;
+typedef struct GncTransaction Transaction; /*  Dummy type for backward compatilibity */
+
+struct _GncTransactionClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+
+GType   gnc_transaction_get_type (void);
+
 
 /** @brief An article that is bought and sold. 
  * A Commodity is the most general term of what an account keeps track
@@ -172,10 +275,68 @@ typedef struct transaction_s         Transaction;
  * This is the typename for a gnc_commodity. The actual structure is
  * defined in a private source file. For accessing that data, only use
  * the functions in gnc-commodity.h .*/
-typedef struct gnc_commodity_s       gnc_commodity;
+//typedef struct gnc_commodity_s       gnc_commodity;
+/* GObject declarations for GncCommodity */
+
+#define GNC_TYPE_COMMODITY            (gnc_commodity_type ())
+#define GNC_COMMODITY(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY, GncCommodity))
+#define GNC_COMMODITY_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY, GncCommodityClass))
+#define GNC_IS_COMMODITY(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY))
+#define GNC_IS_COMMODITY_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY))
+#define GNC_COMMODITY_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY, GncCommodityClass))
+
+
+typedef struct _GncCommodityClass GncCommodityClass;
+typedef struct _GncCommodity GncCommodity;
+typedef struct _GncCommodityPrivate GncCommodityPrivate;
+typedef GncCommodity gnc_commodity; /*  Dummy type for backward compatilibity */
+
+struct _GncCommodity {
+    QofInstance instance;
+    GncCommodityPrivate *priv;
+};
+
+struct _GncCommodityClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_commodity_get_type (void);
+
+
 
 /** @brief A gnc_commodity_namespace is an collection of commodities. */
-typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
+//typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
+/* GObject declarations */
+
+#define GNC_TYPE_COMMODITY_NAMESPACE            (gnc_commodity_namespace_get_type ())
+#define GNC_COMMODITY_NAMESPACE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespace))
+#define GNC_COMMODITY_NAMESPACE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
+#define GNC_IS_COMMODITY_NAMESPACE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_IS_COMMODITY_NAMESPACE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY_NAMESPACE))
+#define GNC_COMMODITY_NAMESPACE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
+
+
+typedef struct _GncCommodityNamespaceClass GncCommodityNamespaceClass;
+typedef struct _GncCommodityNamespace GncCommodityNamespace;
+typedef struct _GncCommodityNamespacePrivate GncCommodityNamespacePrivate;
+typedef struct GncCommodityNamespace gnc_commodity_namespace; /*  Dummy type for backward compatilibity */
+
+struct _GncCommodityNamespace {
+    QofInstance instance;
+    GncCommodityNamespacePrivate *priv;
+};
+
+struct _GncCommodityNamespaceClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_commodity_namespace_get_type (void);
 
 /** @brief A gnc_commodity_table is a database of commodity info. */
 typedef struct gnc_commodity_table_s gnc_commodity_table;
@@ -189,18 +350,40 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
  *
  * See the file src/doc/lots.txt for implmentation overview.
  */
-typedef struct gnc_lot_struct        GNCLot;
+//typedef struct gnc_lot_struct        GNCLot;
+/* GObject declarations */
+
+#define GNC_TYPE_LOT            (gnc_lot_get_type ())
+#define GNC_LOT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_LOT, GncLot))
+#define GNC_LOT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_LOT, GncLotClass))
+#define GNC_IS_LOT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_LOT))
+#define GNC_IS_LOT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_LOT))
+#define GNC_LOT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_LOT, GncLotClass))
+
+
+typedef struct _GncLotClass GncLotClass;
+typedef struct _GncLot GncLot;
+#define  GNCLot GncLot /* Dummy type for backward compatilibity */
+
+struct _GncLotClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_lot_get_type (void);
 
 /** @brief Price of commodity on a given date.
  * A GNCPrice encapsulates price information: the cost of a commodity
  * expressed as a currency, on a given date.  It also holds info about 
  * the provenance of the price: where it came from, its general validity.
  */
-typedef struct gnc_price_s           GNCPrice;
+//typedef struct gnc_price_s           GNCPrice;
 typedef struct gnc_quote_source_s    gnc_quote_source;
 
-#define GNC_IS_PRICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_PRICE))
-#define GNC_PRICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_PRICE, GNCPrice))
+//#define GNC_IS_PRICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_PRICE))
+//#define GNC_PRICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_PRICE, GNCPrice))
 
 /** GList of Account */
 typedef GList                  AccountList;

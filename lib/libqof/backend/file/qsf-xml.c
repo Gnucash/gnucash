@@ -242,7 +242,7 @@ gboolean is_qsf_object_be(qsf_param *params)
 		return FALSE;
 	}
 	/* skip validation if is_our_qsf_object has already been called. */
-	if(ERR_QSF_INVALID_OBJ == qof_backend_get_error(params->be)) { return FALSE; }
+	if(ERR_QSF_INVALID_OBJ == qof_backend_get_error_code (params->be)) { return FALSE; }
 	if(params->file_type == QSF_UNDEF)
 	{
 		doc = xmlParseFile(path);
@@ -262,7 +262,7 @@ gboolean is_qsf_object_be(qsf_param *params)
 	{
         QofBackendError err;
 		result = is_qsf_object_with_map_be(maps->data, params);
-        err = qof_backend_get_error(params->be);
+        err = qof_backend_get_error_code (params->be);
         if((err == ERR_BACKEND_NO_ERR) && result) 
         {
             params->map_path = maps->data;
@@ -315,7 +315,7 @@ qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 		params->object_set = object_set;
 		object_set->object_count = 0;
 		object_set->parameters = g_hash_table_new(g_str_hash, g_str_equal);
-		object_set->object_type = g_strdup((gchar*)xmlGetProp(child, 
+		object_set->object_type = g_type_from_name ((gchar*)xmlGetProp(child, 
 			BAD_CAST QSF_OBJECT_TYPE));
 		object_count_s = g_strdup((gchar*)xmlGetProp(child, 
 			BAD_CAST QSF_OBJECT_COUNT));
@@ -355,7 +355,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 			DEBUG (" trying to set book GUID");
 			buffer = g_strdup((gchar*)xmlNodeGetContent(child_node));
 			g_return_if_fail(TRUE == string_to_guid(buffer, &book_guid));
-			qof_entity_set_guid((QofEntity*)params->book, &book_guid);
+			qof_instance_set_guid((QofInstance*)params->book, &book_guid);
 			xmlNewChild(params->output_node, params->qsf_ns, 
 			BAD_CAST QSF_BOOK_GUID, BAD_CAST buffer);
 			g_free(buffer);

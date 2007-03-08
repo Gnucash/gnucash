@@ -117,13 +117,21 @@ FROM_STRING_DEC(UIFreqType, ENUM_LIST_UI)
  * Forward declaration of FreqSpec type for storing
  * date repetition information. This is an opaque type.
  */
+typedef struct _GncFreqSpecClass GncFreqSpecClass;
 
 struct gncp_freq_spec;
 typedef struct gncp_freq_spec FreqSpec;
 
+struct _GncFreqSpecClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
 /** PROTOTYPES ******************************************************/
 
-GType   gnc_freq_spec_get_type ();
+GType   gnc_freq_spec_get_type (void);
 
 /**
  * Allocates memory for a FreqSpec and initializes it.
@@ -281,7 +289,7 @@ case, where the xacc.. function uses a *int, QOF uses the int.
 In keeping with the rest of QOF, dates are handled as Timespec.
 @{
 */
-#define QOF_ID_FREQSPEC       "FreqSpec"
+#define QOF_ID_FREQSPEC       GNC_TYPE_FREQ_SPEC
 #define FS_UI_TYPE            "fs-frequency"
 #define FS_REPEAT             "fs-repeat"
 #define FS_BASE_DATE          "fs-initial-date"

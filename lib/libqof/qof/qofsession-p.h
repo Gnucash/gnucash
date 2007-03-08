@@ -37,8 +37,11 @@ struct _QofSession
   /* This is just a "fake" entry point to allow me to pass a Session as
    * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
    * THAT IS VALID IS E_TYPE!
+   *
    */
-  QofEntity entity;
+  /* FIXME: if not an entity where is used as an entity????
+  * QofInstance entity;
+  */
 
   /* A book holds pointers to the various types of datasets.
    * A session may have multiple books. */

@@ -57,8 +57,8 @@ qof_class_init(void)
   if (initialized) return;
   initialized = TRUE;
 
-  classTable = g_hash_table_new (g_str_hash, g_str_equal);
-  sortTable = g_hash_table_new (g_str_hash, g_str_equal);
+  classTable = g_hash_table_new (g_int_hash, g_int_equal);
+  sortTable = g_hash_table_new (g_int_hash, g_int_equal);
 }
 
 void
@@ -75,8 +75,7 @@ qof_class_shutdown (void)
 QofSortFunc
 qof_class_get_default_sort (QofIdTypeConst obj_name)
 {
-  if (!obj_name) return NULL;
-  return g_hash_table_lookup (sortTable, obj_name);
+  return g_hash_table_lookup (sortTable, GINT_TO_POINTER (obj_name));
 }
 
 /* *******************************************************************/
@@ -90,21 +89,20 @@ qof_class_register (QofIdTypeConst obj_name,
   GHashTable *ht;
   int i;
 
-  if (!obj_name) return;
   if (!check_init()) return;
 
   if (default_sort_function)
   {
-    g_hash_table_insert (sortTable, (char *)obj_name, default_sort_function);
+    g_hash_table_insert (sortTable, GINT_TO_POINTER (obj_name), default_sort_function);
   }
 
-  ht = g_hash_table_lookup (classTable, obj_name);
+  ht = g_hash_table_lookup (classTable, GINT_TO_POINTER (obj_name));
 
   /* If it doesn't already exist, create a new table for this object */
   if (!ht)
   {
     ht = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_insert (classTable, (char *)obj_name, ht);
+    g_hash_table_insert (classTable, GINT_TO_POINTER (obj_name), ht);
   }
 
   /* At least right now, we allow dummy, parameterless objects,
@@ -115,36 +113,35 @@ qof_class_register (QofIdTypeConst obj_name,
   {
     for (i = 0; params[i].param_name; i++)
       g_hash_table_insert (ht,
-               (char *)params[i].param_name,
-               (gpointer)&(params[i]));
+               (gpointer) (params[i].param_name),
+               (gpointer) &(params[i]));
   }
 }
 
 gboolean
 qof_class_is_registered (QofIdTypeConst obj_name)
 {
-  if (!obj_name) return FALSE;
   if (!check_init()) return FALSE;
 
-  if (g_hash_table_lookup (classTable, obj_name)) return TRUE;
+  if (g_hash_table_lookup (classTable, GINT_TO_POINTER (obj_name))) return TRUE;
 
   return FALSE;
 }
 
 const QofParam *
 qof_class_get_parameter (QofIdTypeConst obj_name,
-                          const char *parameter)
+                          const gchar* parameter)
 {
   GHashTable *ht;
 
-  g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
   if (!check_init()) return NULL;
 
-  ht = g_hash_table_lookup (classTable, obj_name);
+  ht = g_hash_table_lookup (classTable, GINT_TO_POINTER (obj_name));
+
   if (!ht)
   {
-    PWARN ("no object of type %s", obj_name);
+    PWARN ("no object of type %s", g_type_name (obj_name));
     return NULL;
   }
 
@@ -153,11 +150,10 @@ qof_class_get_parameter (QofIdTypeConst obj_name,
 
 QofAccessFunc
 qof_class_get_parameter_getter (QofIdTypeConst obj_name,
-                                 const char *parameter)
+                                 const gchar* parameter)
 {
   const QofParam *prm;
 
-  g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
   prm = qof_class_get_parameter (obj_name, parameter);
@@ -169,11 +165,10 @@ qof_class_get_parameter_getter (QofIdTypeConst obj_name,
 
 QofSetterFunc
 qof_class_get_parameter_setter (QofIdTypeConst obj_name,
-                                 const char *parameter)
+                                 const gchar* parameter)
 {
   const QofParam *prm;
 
-  g_return_val_if_fail (obj_name, NULL);
   g_return_val_if_fail (parameter, NULL);
 
   prm = qof_class_get_parameter (obj_name, parameter);
@@ -185,14 +180,12 @@ qof_class_get_parameter_setter (QofIdTypeConst obj_name,
 
 QofType
 qof_class_get_parameter_type (QofIdTypeConst obj_name,
-                               const char *param_name)
+                               const gchar* param_name)
 {
   const QofParam *prm;
 
-  if (!obj_name || !param_name) return NULL;
-
   prm = qof_class_get_parameter (obj_name, param_name);
-  if (!prm) return NULL;
+  if (!prm) return G_TYPE_INVALID;
 
   return (prm->param_type);
 }
@@ -208,7 +201,7 @@ static void
 class_foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
   struct class_iterate *iter = arg;
-  QofIdTypeConst id = key;
+  QofIdTypeConst id = GPOINTER_TO_INT (key);
 
   iter->fcn (id, iter->data);
 }
@@ -250,9 +243,9 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
   struct parm_iterate iter;
   GHashTable *param_ht;
 
-  if (!obj_name || !cb) return;
+  if (!cb) return;
   if (!classTable) return;
-  param_ht = g_hash_table_lookup (classTable, obj_name);
+  param_ht = g_hash_table_lookup (classTable, GINT_TO_POINTER (obj_name));
   if (!param_ht) return;
 
   iter.fcn = cb;
@@ -273,18 +266,18 @@ find_reference_param_cb(QofParam *param, gpointer user_data)
 
 	b = (struct param_ref_list*)user_data;
 	if((param->param_getfcn == NULL)||(param->param_setfcn == NULL)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_STRING)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DATE)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_CHAR)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DEBCRED)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_GUID)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT32)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT64)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DOUBLE)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_KVP)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_TYPE_BOOLEAN)) { return; }
-	if(0 == safe_strcmp(param->param_type, QOF_ID_BOOK)) { return; }
+	if((param->param_type == QOF_TYPE_STRING)) { return; }
+	if((param->param_type == QOF_TYPE_NUMERIC)) { return; }
+	if((param->param_type == QOF_TYPE_DATE)) { return; }
+	if((param->param_type == QOF_TYPE_CHAR)) { return; }
+	if((param->param_type == QOF_TYPE_DEBCRED)) { return; }
+	if((param->param_type == QOF_TYPE_GUID)) { return; }
+	if((param->param_type == QOF_TYPE_INT32)) { return; }
+	if((param->param_type == QOF_TYPE_INT64)) { return; }
+	if((param->param_type == QOF_TYPE_DOUBLE)) { return; }
+	if((param->param_type == QOF_TYPE_KVP)) { return; }
+	if((param->param_type == QOF_TYPE_BOOLEAN)) { return; }
+	if((param->param_type == QOF_ID_BOOK)) { return; }
 	b->list = g_list_append(b->list, param);
 }
 

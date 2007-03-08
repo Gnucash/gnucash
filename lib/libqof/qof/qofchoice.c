@@ -35,7 +35,7 @@ static gboolean qof_choice_is_initialized(void)
 {
 	if(!qof_choice_table)
 	{
-		qof_choice_table = g_hash_table_new(g_str_hash, g_str_equal);
+		qof_choice_table = g_hash_table_new(g_int_hash, g_int_equal);
 	}
 	if(!qof_choice_table) { return FALSE; }
 	return TRUE;
@@ -48,26 +48,25 @@ gboolean qof_object_is_choice(QofIdTypeConst type)
 	value = NULL;
 	check = NULL;
 	if(!qof_choice_is_initialized()) { return FALSE; }
-	g_return_val_if_fail(type != NULL, FALSE);
-	value = g_hash_table_lookup(qof_choice_table, type);
+
+	value = g_hash_table_lookup(qof_choice_table, GINT_TO_POINTER(type));
 	if((GHashTable*)value) { return TRUE; }
-	DEBUG (" QOF_TYPE_CHOICE setup failed for %s\n", type);
+	DEBUG (" QOF_TYPE_CHOICE setup failed for %s\n", g_type_name(type));
 	return FALSE;
 }
 
 gboolean
-qof_choice_create(char* type)
+qof_choice_create(QofIdType type)
 {
 	GHashTable *param_table;
 
-	g_return_val_if_fail(type != NULL, FALSE);
 	g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
 	param_table = g_hash_table_new(g_str_hash, g_str_equal);
-	g_hash_table_insert(qof_choice_table, type, param_table);
+	g_hash_table_insert(qof_choice_table, GINT_TO_POINTER(type), param_table);
 	return TRUE;
 }
 
-gboolean qof_choice_add_class(const char* select,
+gboolean qof_choice_add_class(QofIdType select,
 			      char* option,
 			      char* param_name)
 {
@@ -76,9 +75,9 @@ gboolean qof_choice_add_class(const char* select,
 
 	option_list = NULL;
 	param_table = NULL;
-	g_return_val_if_fail(select != NULL, FALSE);
+	
 	g_return_val_if_fail(qof_object_is_choice(select), FALSE);
-	param_table = (GHashTable*)g_hash_table_lookup(qof_choice_table, select);
+	param_table = (GHashTable*)g_hash_table_lookup(qof_choice_table, GINT_TO_POINTER(select));
 	g_return_val_if_fail(param_table, FALSE);
 	option_list = (GList*)g_hash_table_lookup(param_table, param_name);
 	option_list = g_list_append(option_list, option);
@@ -91,15 +90,14 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param)
 	GList *choices;
 	GHashTable *param_table;
 
-	g_return_val_if_fail(type != NULL, NULL);
 	g_return_val_if_fail(qof_choice_is_initialized() == TRUE, FALSE);
 	choices = NULL;
-	param_table = g_hash_table_lookup(qof_choice_table, type);
+	param_table = g_hash_table_lookup(qof_choice_table, GINT_TO_POINTER(type));
 	choices = g_hash_table_lookup(param_table, param->param_name);
 	return choices;
 }
 
-gboolean qof_choice_check(const char* choice_obj,
+gboolean qof_choice_check(QofIdType choice_obj,
 			  const char *param_name,
 			  const char* choice )
 {
@@ -108,7 +106,7 @@ gboolean qof_choice_check(const char* choice_obj,
 
 	choices = result = NULL;
 	g_return_val_if_fail(qof_object_is_choice(choice_obj), FALSE);
-	param_table = g_hash_table_lookup(qof_choice_table, choice_obj);
+	param_table = g_hash_table_lookup(qof_choice_table, GINT_TO_POINTER(choice_obj));
 	choices = g_hash_table_lookup(param_table, param_name);
 	result = g_list_find(choices, choice);
 	if(!result) { return FALSE; }

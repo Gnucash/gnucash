@@ -48,6 +48,136 @@
 
 static QofLogModule log_module = GNC_MOD_SX;
 
+/* GObject declarations */
+
+static void gnc_schedule_actions_class_init(GncScheduleActionsClass *klass);
+static void gnc_schedule_actions_init(GncScheduleActions *sp);
+static void gnc_schedule_actions_finalize(GObject *object);
+
+struct _GncScheduleActionsPrivate
+{
+
+};
+
+typedef struct _GncScheduleActionsSignal GncScheduleActionsSignal;
+typedef enum _GncScheduleActionsSignalType GncScheduleActionsSignalType;
+
+enum _GncScheduleActionsSignalType {
+	/* Signals */
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncScheduleActionsSignal {
+	GncScheduleActions *object;
+};
+
+static guint gnc_schedule_actions_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_schedule_actions_get_type()
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncScheduleActionsClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_schedule_actions_class_init,
+			NULL,
+			NULL,
+			sizeof (GncScheduleActions),
+			0,
+			(GInstanceInitFunc)gnc_schedule_actions_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_ENTITY, 
+			"GncScheduleActions", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_schedule_actions_class_init(GncScheduleActionsClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_schedule_actions_finalize;
+	object_class->set_property = gnc_schedule_actions_set_property;
+    object_class->get_property = gnc_schedule_actions_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+	
+				      
+}
+
+static void
+gnc_schedule_actions_init(GncScheduleActions *obj)
+{
+	/* Initialize private members, etc. */
+	
+}
+
+static void
+gnc_schedule_actions_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_schedule_actions_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	GncScheduleActions *obj;
+	
+	obj = GNC_SCHEDULE_ACTIONS (object);
+	
+	switch (param_id) {		
+		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_schedule_actions_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GncScheduleActions *obj;
+  
+  obj = GNC_SCHEDULE_ACTIONS(object);
+
+  switch (property_id) {
+  
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
 /* XXX this whole file is crufty, it doesn't really use entities
  * in the most efficient/best way */
 
@@ -166,7 +296,7 @@ gnc_sxes_add_sx(SchedXactions *sxes, SchedXaction *sx)
   if (g_list_find(sxes->sx_list, sx) != NULL)
     return;
   sxes->sx_list = g_list_append(sxes->sx_list, sx);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
+  qof_event_gen(QOF_INSTANCE (sxes), GNC_EVENT_ITEM_ADDED, (gpointer)sx);
 }
 
 void
@@ -177,7 +307,7 @@ gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
   if (to_remove == NULL)
     return;
   sxes->sx_list = g_list_delete_link(sxes->sx_list, to_remove);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
+  qof_event_gen(QOF_INSTANCE (sxes), GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
 }
 
 /* ====================================================================== */
@@ -197,8 +327,7 @@ book_sxes_setup(QofBook *book)
      SchedXactions *sxes;
 
      col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
-     sxes = g_new (SchedXactions, 1);
-     qof_instance_init(&sxes->inst, GNC_ID_SXES, book);
+     sxes = g_object_new (GNC_TYPE_SCHEDULE_ACTIONS, "book", book);
      sxes->sx_list = NULL;
      sxes->sx_notsaved = TRUE;
      qof_collection_set_data(col, sxes);

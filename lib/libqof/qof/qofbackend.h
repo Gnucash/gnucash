@@ -186,12 +186,17 @@ gboolean qof_backend_commit_exists(QofBackend *be);
 /** The qof_backend_set_error() routine pushes an error code onto the error
  *  stack. (FIXME: the stack is 1 deep in current implementation).
  */
-//void qof_backend_set_error (QofBackend *be, QofBackendError err);
+void qof_backend_set_error (QofBackend *be, QofBackendError err);
 
 /** The qof_backend_get_error() routine pops an error code off the error stack.
  	YOU NEED TO PASS A GError* pointer to get the errors in each call
  */
-//QofBackendError qof_backend_get_error (QofBackend *be);
+GError* qof_backend_get_error (QofBackend *be);
+
+QofBackendError qof_backend_get_error_code (QofBackend *be);
+
+void qof_backend_error_free (QofBackend *be);
+
 
 /** @name Backend Configuration using KVP
 

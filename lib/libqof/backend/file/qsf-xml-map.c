@@ -100,16 +100,16 @@ qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid)
 	}
 	if(qsf_is_element(child, ns, MAP_OBJECT_TAG)) {
 		match = NULL;
-		obj_type = xmlGetProp(child, BAD_CAST MAP_TYPE_ATTR);
-		match = BAD_CAST g_hash_table_lookup( valid->validation_table, obj_type);
+		obj_type = g_type_from_name (xmlGetProp(child, BAD_CAST MAP_TYPE_ATTR));
+		match = BAD_CAST g_hash_table_lookup( valid->validation_table, GINT_TO_POINTER (obj_type));
 		if(match) {
 			valid->map_calculated_count++;
 			if(TRUE == qof_class_is_registered((QofIdTypeConst) obj_type))
 			{
 				valid->qof_registered_count++;
-				PINFO (" %s is to be calculated", obj_type);
+				PINFO (" %s is to be calculated", g_type_name (obj_type));
 			}
-			else { PINFO (" %s to be mapped", obj_type); }
+			else { PINFO (" %s to be mapped", g_type_name (obj_type)); }
 		}
 	}
 }
@@ -340,7 +340,7 @@ qsf_map_default_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params )
         iterate = xmlGetProp(child, MAP_ITERATE_ATTR);
         if(qof_util_bool_to_int(iterate) == 1) 
         {
-            params->qof_foreach = xmlGetProp(child, BAD_CAST MAP_E_TYPE);
+            params->qof_foreach = g_type_from_name (xmlGetProp(child, BAD_CAST MAP_E_TYPE));
         }
 		if(NULL == g_hash_table_lookup(params->qsf_define_hash,
 			xmlGetProp(child, BAD_CAST MAP_E_TYPE)))
@@ -646,7 +646,10 @@ qsf_add_object_tag(qsf_param *params, gint count)
 static gint
 identify_source_func(gconstpointer qsf_object, gconstpointer map)
 {
-	return safe_strcmp(((qsf_objects*)qsf_object)->object_type, (QofIdType)map);
+	if(((qsf_objects*)qsf_object)->object_type == (QofIdType) map)
+	  return TRUE;
+	else
+	  return FALSE;
 }
 
 static void
@@ -739,13 +742,13 @@ qsf_map_object_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 static void
 iterator_cb(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 {
-	gchar *object_name;
+	QofIdType object_name;
 
 	/* count the number of iterators in the QSF file */
 	if(qsf_is_element(child, ns, QSF_OBJECT_TAG))
 	{
-		object_name = xmlGetProp(child, QSF_OBJECT_TYPE);
-		if(0 == safe_strcmp(object_name, params->qof_foreach))
+		object_name = g_type_from_name (xmlGetProp(child, g_type_name (QSF_OBJECT_TYPE)));
+		if(object_name == params->qof_foreach)
 		{
 			params->foreach_limit++;
 		}
@@ -793,8 +796,8 @@ qsf_object_convert(xmlDocPtr mapDoc, xmlNodePtr qsf_root, qsf_param *params)
 
 			params->lister = NULL;
 			/* cur_node describes the target object */
-			if(!qof_class_is_registered(BAD_CAST 
-				xmlGetProp(cur_node, MAP_TYPE_ATTR))) { continue; }
+			if(!qof_class_is_registered(g_type_from_name (BAD_CAST 
+				xmlGetProp(cur_node, MAP_TYPE_ATTR)))) { continue; }
 			qsf_add_object_tag(params, params->count);
 			params->count++;
 			iter.ns = params->map_ns;

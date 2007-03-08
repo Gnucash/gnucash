@@ -65,10 +65,26 @@
 #include "gnc-numeric.h"
 #include "guid.h"
 
+
+
 #define QOF_MOD_KVP "qof-kvp"
+
+#define GNC_TYPE_BINARY (gnc_binary_get_type())
+#define GNC_TYPE_GLIST (gnc_glist_get_type())
+
+
+GType gnc_binary_get_type (void);
+GType gnc_glist_get_type (void);
 
 /** Opaque frame structure */
 typedef struct _KvpFrame KvpFrame;
+
+#define GNC_TYPE_KVP_FRAME (gnc_kvp_frame_get_type())
+#define GNC_VALUE_HOLDS_KVP_FRAME(value) G_VALUE_HOLDS(value, GNC_TYPE_KVP_FRAME)
+
+
+GType 											gnc_kvp_frame_get_type (void);
+G_CONST_RETURN KvpFrame*		gnc_value_get_kvp_frame (const GValue *value);
 
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */

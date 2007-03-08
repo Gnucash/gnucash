@@ -81,7 +81,7 @@ MAX_DATE_LENGTH itself is defined in gnc-date.h */
 					described by this QSF object file */
 #define QSF_BOOK_COUNT	"count"     /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object"    /**< Second level child: object tag */
-#define QSF_OBJECT_TYPE	"type"      /**< QSF parameter name for object type specifiers */
+#define QSF_OBJECT_TYPE	G_TYPE_GTYPE      /**< QSF parameter name for object type specifiers */
 #define QSF_OBJECT_COUNT "count"    /**< Sequential counter for each QSF object
 					in this file */
 #define QSF_XML_VERSION  "1.0"      /**< The current XML version. */
@@ -358,11 +358,11 @@ typedef struct qsf_metadata
 	xmlNodePtr book_node;        /**< Node for the book. */
 	xmlNodePtr lister;           /**< Comparison node for map defaults. */
 	xmlNsPtr qsf_ns, map_ns;     /**< Separate namespaces for QSF objects and QSF maps. */
-	const gchar *qof_type;       /**< Holds details of the QOF_TYPE */
+	QofIdType qof_type;       /**< Holds details of the QOF_TYPE */
 	QofIdType qof_obj_type;	     /**< current QofObject type (e_type) for the parameters. */
 	QofIdType qof_foreach;       /**< How to iterate over hierarchical entities. */
 	gint foreach_limit;          /**< How many iterations are found in the QSF */
-	QofEntity *qsf_ent;          /**< Current entity in the book. */
+	QofInstance *qsf_ent;          /**< Current entity in the book. */
 	QofBackend *be;              /**< the current QofBackend for this operation. */
 	gboolean knowntype;          /**< detect references by comparing with known QOF types. */
 	QofParam *qof_param;         /**< used by kvp to handle the frame hash table */

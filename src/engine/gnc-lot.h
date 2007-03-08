@@ -63,31 +63,6 @@
 #include "qof.h"
 #include "gnc-lot-p.h"
 
-/* GObject declarations */
-
-#define GNC_TYPE_LOT            (gnc_lot_get_type ())
-#define GNC_LOT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_LOT, GncLot))
-#define GNC_LOT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_LOT, GncLotClass))
-#define QOF_IS_INSTANCE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_LOT))
-#define QOF_IS_INSTANCE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_LOT))
-#define GNC_LOT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_LOT, GncLotClass))
-
-
-typedef struct _GncLotClass GncLotClass;
-typedef struct _GncLot GncLot;
-typedef struct GncLot GNCLot; /* Dummy type for backward compatilibity */
-
-struct _GncLotClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_lot_get_type ();
-
-
-
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
 
@@ -119,7 +94,7 @@ gint gnc_lot_count_splits (GNCLot *);
 
 /** The gnc_lot_get_account() routine returns the account with which 
  *    this lot is associated. */
-Account * gnc_lot_get_account (GNCLot *);
+GncAccount * gnc_lot_get_account (GNCLot *);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot. 
  *    The commodity in which this balance is expressed is the commodity 

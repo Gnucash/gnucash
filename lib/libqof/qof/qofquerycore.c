@@ -54,41 +54,41 @@ static QueryPredDataFree qof_query_predicate_free (QofType type);
 
 /* Core Type Predicate helpers */
 typedef const char * (*query_string_getter) (gpointer, QofParam *);
-static const char * query_string_type = QOF_TYPE_STRING;
+#define query_string_type QOF_TYPE_STRING
 
 typedef Timespec (*query_date_getter) (gpointer, QofParam *);
-static const char * query_date_type = QOF_TYPE_DATE;
+#define query_date_type QOF_TYPE_DATE
 
 typedef gnc_numeric (*query_numeric_getter) (gpointer, QofParam *);
-static const char * query_numeric_type = QOF_TYPE_NUMERIC;
+#define  query_numeric_type QOF_TYPE_NUMERIC
 
 typedef GList * (*query_glist_getter) (gpointer, QofParam *);
 typedef const GUID * (*query_guid_getter) (gpointer, QofParam *);
-static const char * query_guid_type = QOF_TYPE_GUID;
+#define query_guid_type QOF_TYPE_GUID
 
 typedef gint32 (*query_int32_getter) (gpointer, QofParam *);
-static const char * query_int32_type = QOF_TYPE_INT32;
+#define query_int32_type QOF_TYPE_INT32
 
 typedef gint64 (*query_int64_getter) (gpointer, QofParam *);
-static const char * query_int64_type = QOF_TYPE_INT64;
+#define query_int64_type QOF_TYPE_INT64
 
 typedef double (*query_double_getter) (gpointer, QofParam *);
-static const char * query_double_type = QOF_TYPE_DOUBLE;
+#define query_double_type QOF_TYPE_DOUBLE
 
 typedef gboolean (*query_boolean_getter) (gpointer, QofParam *);
-static const char * query_boolean_type = QOF_TYPE_BOOLEAN;
+#define query_boolean_type QOF_TYPE_BOOLEAN
 
 typedef char (*query_char_getter) (gpointer, QofParam *);
-static const char * query_char_type = QOF_TYPE_CHAR;
+#define query_char_type QOF_TYPE_CHAR
 
 typedef KvpFrame * (*query_kvp_getter) (gpointer, QofParam *);
-static const char * query_kvp_type = QOF_TYPE_KVP;
+#define query_kvp_type QOF_TYPE_KVP
 
 typedef QofCollection * (*query_collect_getter) (gpointer, QofParam*);
-static const char * query_collect_type = QOF_TYPE_COLLECT;
+#define query_collect_type QOF_TYPE_COLLECT
 
 typedef const GUID * (*query_choice_getter) (gpointer, QofParam *);
-static const char * query_choice_type = QOF_TYPE_CHOICE;
+#define query_choice_type QOF_TYPE_CHOICE
 
 /* Tables for predicate storage and lookup */
 static gboolean initialized = FALSE;
@@ -102,23 +102,20 @@ static GHashTable *predEqualTable = NULL;
 #define COMPARE_ERROR -3
 #define PREDICATE_ERROR -2
 
-#define VERIFY_PDATA(str) { \
+#define VERIFY_PDATA(type) { \
         g_return_if_fail (pd != NULL); \
-        g_return_if_fail (pd->type_name == str || \
-                        !safe_strcmp (str, pd->type_name)); \
+        g_return_if_fail (pd->type_name == type); \
 }
-#define VERIFY_PDATA_R(str) { \
+#define VERIFY_PDATA_R(type) { \
         g_return_val_if_fail (pd != NULL, NULL); \
-        g_return_val_if_fail (pd->type_name == str || \
-                                !safe_strcmp (str, pd->type_name), \
+        g_return_val_if_fail (pd->type_name == type, \
                                 NULL); \
 }
-#define VERIFY_PREDICATE(str) { \
+#define VERIFY_PREDICATE(type) { \
         g_return_val_if_fail (getter != NULL, PREDICATE_ERROR); \
         g_return_val_if_fail (getter->param_getfcn != NULL, PREDICATE_ERROR); \
         g_return_val_if_fail (pd != NULL, PREDICATE_ERROR); \
-        g_return_val_if_fail (pd->type_name == str || \
-                                !safe_strcmp (str, pd->type_name), \
+        g_return_val_if_fail (pd->type_name == type, \
                                 PREDICATE_ERROR); \
 }
 
@@ -1450,13 +1447,13 @@ collect_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 }
 
 static void
-query_collect_cb(QofEntity* ent, gpointer user_data)
+query_collect_cb(QofInstance* inst, gpointer user_data)
 {
 	query_coll_t pdata;
 	GUID *guid;
 
 	guid = guid_malloc();
-	guid = (GUID*)qof_entity_get_guid(ent);
+	guid = (GUID*)qof_instance_get_guid(inst);
 	pdata = (query_coll_t)user_data;
 	pdata->guids = g_list_append(pdata->guids, guid);
 }
@@ -1660,7 +1657,7 @@ qof_query_register_core_object (QofType core_name,
                                 QueryPredicateEqual pred_equal)
 {
   g_return_if_fail (core_name);
-  g_return_if_fail (*core_name != '\0');
+  g_return_if_fail (core_name != G_TYPE_INVALID);
 
   if (pred)
     g_hash_table_insert (predTable, (char *)core_name, pred);
@@ -1752,7 +1749,7 @@ qof_query_copy_predicate (QofType type)
 {
   QueryPredicateCopyFunc rc;
   g_return_val_if_fail (type, NULL);
-  rc = g_hash_table_lookup (copyTable, type);
+  rc = g_hash_table_lookup (copyTable, GINT_TO_POINTER (type));
   return rc;
 }
 
@@ -1760,7 +1757,7 @@ static QueryPredDataFree
 qof_query_predicate_free (QofType type)
 {
   g_return_val_if_fail (type, NULL);
-  return g_hash_table_lookup (freeTable, type);
+  return g_hash_table_lookup (freeTable, GINT_TO_POINTER (type));
 }
 
 /********************************************************************/
@@ -1773,12 +1770,12 @@ void qof_query_core_init (void)
   initialized = TRUE;
 
   /* Create the tables */
-  predTable = g_hash_table_new (g_str_hash, g_str_equal);
-  cmpTable = g_hash_table_new (g_str_hash, g_str_equal);
-  copyTable = g_hash_table_new (g_str_hash, g_str_equal);
-  freeTable = g_hash_table_new (g_str_hash, g_str_equal);
-  toStringTable = g_hash_table_new (g_str_hash, g_str_equal);
-  predEqualTable = g_hash_table_new (g_str_hash, g_str_equal);
+  predTable = g_hash_table_new (g_int_hash, g_int_equal);
+  cmpTable = g_hash_table_new (g_int_hash, g_int_equal);
+  copyTable = g_hash_table_new (g_int_hash, g_int_equal);
+  freeTable = g_hash_table_new (g_int_hash, g_int_equal);
+  toStringTable = g_hash_table_new (g_int_hash, g_int_equal);
+  predEqualTable = g_hash_table_new (g_int_hash, g_int_equal);
 
   init_tables ();
 }
@@ -1800,14 +1797,14 @@ QofQueryPredicateFunc
 qof_query_core_get_predicate (QofType type)
 {
   g_return_val_if_fail (type, NULL);
-  return g_hash_table_lookup (predTable, type);
+  return g_hash_table_lookup (predTable, GINT_TO_POINTER (type));
 }
 
 QofCompareFunc
 qof_query_core_get_compare (QofType type)
 {
   g_return_val_if_fail (type, NULL);
-  return g_hash_table_lookup (cmpTable, type);
+  return g_hash_table_lookup (cmpTable, GINT_TO_POINTER (type));
 }
 
 void
@@ -1844,7 +1841,7 @@ qof_query_core_to_string (QofType type, gpointer object,
   g_return_val_if_fail (object, NULL);
   g_return_val_if_fail (getter, NULL);
 
-  toString = g_hash_table_lookup (toStringTable, type);
+  toString = g_hash_table_lookup (toStringTable, GINT_TO_POINTER (type));
   g_return_val_if_fail (toString, NULL);
 
   return toString (object, getter);
@@ -1859,9 +1856,9 @@ qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
   if (!p1 || !p2) return FALSE;
 
   if (p1->how != p2->how) return FALSE;
-  if (safe_strcmp (p1->type_name, p2->type_name)) return FALSE;
+  if (p1->type_name != p2->type_name) return FALSE;
 
-  pred_equal = g_hash_table_lookup (predEqualTable, p1->type_name);
+  pred_equal = g_hash_table_lookup (predEqualTable, GINT_TO_POINTER (p1->type_name));
   g_return_val_if_fail (pred_equal, FALSE);
 
   return pred_equal (p1, p2);

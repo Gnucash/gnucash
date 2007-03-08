@@ -49,8 +49,18 @@ See \ref gncnumericexample
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
+#include <glib-object.h>
 
-struct _gnc_numeric 
+#define GNC_TYPE_NUMERIC (gnc_numeric_get_type())
+#define GNC_VALUE_HOLDS_NUMERIC(value) G_VALUE_HOLDS(value, GNC_TYPE_NUMERIC)
+
+
+typedef struct _GncNumeric GncNumeric;
+
+GType 												gnc_numeric_get_type (void);
+G_CONST_RETURN GncNumeric*		gnc_value_get_numeric (const GValue *value);
+
+struct _GncNumeric
 {
   gint64  num;
   gint64  denom;
@@ -59,7 +69,7 @@ struct _gnc_numeric
 /** @brief An rational-number type
  *
  * This is a rational number, defined by numerator and denominator. */
-typedef struct _gnc_numeric gnc_numeric;
+typedef GncNumeric gnc_numeric;//Backward compatibility
 
 /** @name Arguments Standard Arguments to most functions
 
@@ -238,8 +248,8 @@ typedef enum {
 */
 /** Make a gnc_numeric from numerator and denominator */
 static inline 
-gnc_numeric gnc_numeric_create(gint64 num, gint64 denom) {
-  gnc_numeric out;
+GncNumeric gnc_numeric_create(gint64 num, gint64 denom) {
+  GncNumeric out;
   out.num = num;
   out.denom = denom;
   return out;
@@ -247,7 +257,7 @@ gnc_numeric gnc_numeric_create(gint64 num, gint64 denom) {
 
 /** create a zero-value gnc_numeric */
 static inline
-gnc_numeric gnc_numeric_zero(void) { return gnc_numeric_create(0, 1); }
+GncNumeric gnc_numeric_zero(void) { return gnc_numeric_create(0, 1); }
 
 /** Convert a floating-point number to a gnc_numeric. 
  *  Both 'denom' and 'how' are used as in arithmetic, 
@@ -273,10 +283,10 @@ gnc_numeric gnc_numeric_error(GNCNumericErrorCode error_code);
 */
 /** Return numerator */
 static inline 
-gint64 gnc_numeric_num(gnc_numeric a) { return a.num; }
+gint64 gnc_numeric_num(GncNumeric a) { return a.num; }
 /** Return denominator */
 static inline 
-gint64 gnc_numeric_denom(gnc_numeric a) { return a.denom; }
+gint64 gnc_numeric_denom(GncNumeric a) { return a.denom; }
 
 /** Convert numeric to floating-point value. */
 gdouble      gnc_numeric_to_double(gnc_numeric in);
@@ -377,7 +387,7 @@ gnc_numeric gnc_numeric_abs(gnc_numeric a);
  *                        GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
  */
 static inline
-gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) {
+GncNumeric gnc_numeric_add_fixed(GncNumeric a, GncNumeric b) {
    return gnc_numeric_add(a, b, GNC_DENOM_AUTO,
                          GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
 }
@@ -387,7 +397,7 @@ gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) {
  *                        GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
  */
 static inline 
-gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
+GncNumeric gnc_numeric_sub_fixed(GncNumeric a, GncNumeric b) {
   return gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
                          GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
 }

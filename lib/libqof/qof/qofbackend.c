@@ -46,111 +46,6 @@ static QofLogModule log_module = QOF_MOD_BACKEND;
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"
 
-static GHashTable *backend_data = NULL;
-
-gboolean qof_backend_register (GType type,
-                                   const char *backend_name,
-                                   gpointer be_data)
-{
-  GHashTable *ht;
-  g_return_val_if_fail (object_is_initialized, FALSE);
-
-  if (!type_name || *type_name == '\0' ||
-      !backend_name || *backend_name == '\0' ||
-      !be_data)
-    return FALSE;
-
-  ht = g_hash_table_lookup (backend_data, backend_name);
-
-  /* If it doesn't already exist, create a new table for this backend */
-  if (!ht) {
-    ht = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_insert (backend_data, (char *)backend_name, ht);
-  }
-
-  /* Now insert the data */
-  g_hash_table_insert (ht, (char *)type_name, be_data);
-
-  return TRUE;
-}
-
-
-
-/* *******************************************************************\
- * error handling                                                   *
-\********************************************************************/
-
-
-/*
-	THE ERROR HANDLING WILL BE USING GERROR, THIS FUNCTIONS ARE DEPRECATED
-*/
-
-void 
-qof_backend_set_error (QofBackend *be, QofBackendError err)
-{
-   if (!be) return;
-
-   /* use stack-push semantics. Only the earliest error counts */
-   if (ERR_BACKEND_NO_ERR != be->last_err) return;
-   be->last_err = err;
-}
-
-QofBackendError 
-qof_backend_get_error (QofBackend *be)
-{
-   QofBackendError err;
-   if (!be) return ERR_BACKEND_NO_BACKEND;
-
-   /* use 'stack-pop' semantics */
-   err = be->last_err;
-   be->last_err = ERR_BACKEND_NO_ERR;
-   return err;
-}
-
-void
-qof_backend_set_message (QofBackend *be, const char *format, ...) 
-{
-   va_list args;
-   char * buffer;
-   
-   if (!be) return;
-  
-   /* If there's already something here, free it */
-   if (be->error_msg) g_free(be->error_msg);
-
-   if (!format) {
-       be->error_msg = NULL;
-       return;
-   }
-
-   va_start(args, format);
-   buffer = (char *)g_strdup_vprintf(format, args);
-   va_end(args);
-
-   be->error_msg = buffer;
-}
-
-char *
-qof_backend_get_message (QofBackend *be) 
-{
-   char * msg;
-   
-   if (!be) return g_strdup("ERR_BACKEND_NO_BACKEND");
-   if (!be->error_msg) return NULL;
-
-   /* 
-    * Just return the contents of the error_msg and then set it to
-    * NULL. This is necessary, because the Backends don't seem to
-    * have a destroy_backend function to take care of freeing stuff
-    * up. The calling function should free the copy.
-    * Also, this is consistent with the qof_backend_get_error() popping.
-    */
-
-   msg = be->error_msg;
-   be->error_msg = NULL;
-   return msg;
-}
-
 /***********************************************************************/
 /* Get a clean backend */
 void
@@ -176,9 +71,6 @@ qof_backend_init(QofBackend *be)
     be->events_pending = NULL;
     be->process_events = NULL;
 
-    be->last_err = ERR_BACKEND_NO_ERR;
-    if (be->error_msg) g_free (be->error_msg);
-    be->error_msg = NULL;
     be->percentage = NULL;
     be->backend_configuration = kvp_frame_new();
 
@@ -188,7 +80,7 @@ qof_backend_init(QofBackend *be)
 }
 
 void
-qof_backend_run_begin(QofBackend *be, QofInstance *inst, GError *error)
+qof_backend_run_begin(QofBackend *be, QofInstance *inst, GError **error)
 {
 	if(!be || !inst) { return; }
 	if(!be->begin) { return; }
@@ -203,7 +95,7 @@ qof_backend_begin_exists(QofBackend *be)
 }
 
 void
-qof_backend_run_commit(QofBackend *be, QofInstance *inst, GError *error)
+qof_backend_run_commit(QofBackend *be, QofInstance *inst, GError **error)
 {
 	if(!be || !inst) { return; }
 	if(!be->commit) { return; }
@@ -443,6 +335,42 @@ qof_load_backend_library (const char *directory, const char* module_name)
 	/* the module should have done that already in g_module_check_init */
 	g_module_make_resident(backend);
 	return TRUE;
+}
+
+GError* 
+qof_backend_get_error (QofBackend *be)
+{
+  if (be->error)
+    return be->error;
+  else
+    return NULL;
+}
+
+
+QofBackendError 
+qof_backend_get_error_code (QofBackend *be)
+{
+  if (be->error)
+    return be->error->code;
+  else
+    return ERR_BACKEND_NO_ERR;
+}
+
+
+void 
+qof_backend_error_free (QofBackend *be)
+{
+  if(be->error)
+    g_error_free (be->error);
+}
+
+void
+qof_backend_set_error (QofBackend *be, QofBackendError code)
+{
+  g_return_if_fail (code == ERR_BACKEND_NO_ERR);
+  
+  /*FIXME: Add conditionals to set error messages depending on error's code */  
+  be->error = g_error_new (QOF_BACKEND_ERROR, code, "BackendError");
 }
 
 /************************* END OF FILE ********************************/

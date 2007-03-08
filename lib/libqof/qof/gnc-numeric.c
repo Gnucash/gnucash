@@ -33,6 +33,96 @@
 #include "gnc-numeric.h"
 #include "qofmath128.c"
 
+/***************************/
+static gpointer
+gnc_numeric_copy (gpointer boxed)
+{
+	GncNumeric *src = (GncNumeric*) boxed;
+	GncNumeric *copy = NULL;
+
+	g_return_val_if_fail (src, NULL);
+
+	copy = g_new0 (GncNumeric, 1);
+	copy->num = src->num;
+	copy->denom = src->denom;
+	
+	return copy;
+}
+
+
+static void 
+string_to_numeric (const GValue *src, GValue *dest) 
+{
+	/* FIXME: add more checks*/
+	GncNumeric *numeric;
+	const gchar *as_string;
+	
+	g_return_if_fail (G_VALUE_HOLDS_STRING (src) &&
+			  GNC_VALUE_HOLDS_NUMERIC (dest));
+	
+	as_string = g_value_get_string (src);
+	
+	numeric = g_new0 (GncNumeric, 1);
+	string_to_gnc_numeric(as_string, numeric);
+	
+	g_value_take_boxed (dest, numeric);
+}
+
+static void 
+numeric_to_string (const GValue *src, GValue *dest) 
+{
+	gchar *str;
+	
+	g_return_if_fail (G_VALUE_HOLDS_STRING (dest) &&
+			  GNC_VALUE_HOLDS_NUMERIC (src));
+	
+	str = gnc_numeric_to_string(*gnc_value_get_numeric (src));
+	
+	g_value_set_string (dest, str);
+}
+
+GType
+gnc_numeric_get_type (void)
+{
+	static GType type = 0;
+	
+	if (G_UNLIKELY (type == 0)) {
+		type = g_boxed_type_register_static ("GncNumeric",
+						     (GBoxedCopyFunc) gnc_numeric_copy,
+						     NULL);
+		
+		g_value_register_transform_func (G_TYPE_STRING,
+						 type,
+						 string_to_numeric);
+		
+		g_value_register_transform_func (type, 
+						 G_TYPE_STRING,
+						 numeric_to_string);
+	}
+	
+	return type;
+}
+
+
+/**
+ * gnc_value_get_numeric
+ * @value: a #GValue whose value we want to get.
+ *
+ * Returns: the value stored in @value.
+ */
+G_CONST_RETURN GncNumeric *
+gnc_value_get_numeric (const GValue *value)
+{
+	GncNumeric *val;
+
+	g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
+	g_return_val_if_fail (GNC_VALUE_HOLDS_NUMERIC (value), NULL);
+
+	val = (GncNumeric*) g_value_get_boxed (value);
+
+	return val;
+}
+
 /* static short module = MOD_ENGINE; */
 
 /* =============================================================== */

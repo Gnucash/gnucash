@@ -422,14 +422,14 @@ compile_params (GSList *param_list, QofIdType start_obj,
   const QofParam *objDef = NULL;
   GSList *fcns = NULL;
 
-  ENTER ("param_list=%p id=%s", param_list, start_obj);
+  ENTER ("param_list=%p id=%s", param_list, g_type_name(start_obj));
   g_return_val_if_fail (param_list, NULL);
   g_return_val_if_fail (start_obj, NULL);
   g_return_val_if_fail (final, NULL);
 
   for (; param_list; param_list = param_list->next) 
   {
-    QofIdType param_name = param_list->data;
+    gchar* param_name = param_list->data; /*FIXME: Convert to QofParam pointer instead */
     objDef = qof_class_get_parameter (start_obj, param_name);
 
     /* If it doesn't exist, then we've reached the end */
@@ -454,7 +454,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
 {
   const QofParam *resObj = NULL;
 
-  ENTER ("sort=%p id=%s params=%p", sort, obj, sort->param_list);
+  ENTER ("sort=%p id=%s params=%p", sort, g_type_name(obj), sort->param_list);
   sort->use_default = FALSE;
 
   g_slist_free (sort->param_fcns);
@@ -489,7 +489,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
   {
     sort->use_default = TRUE;
   }
-  LEAVE ("sort=%p id=%s", sort, obj);
+  LEAVE ("sort=%p id=%s", sort, g_type_name(obj));
 }
 
 static void compile_terms (QofQuery *q)
@@ -533,7 +533,7 @@ static void compile_terms (QofQuery *q)
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
     QofBook *book = node->data;
-    QofBackend *be = book->backend;
+    QofBackend *be = qof_book_get_backend (book);
 
     if (be && be->compile_query) {
       gpointer result = (be->compile_query)(be, q);
@@ -595,7 +595,7 @@ static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
   QofBook* book = key;
-  QofBackend* be = book->backend;
+  QofBackend* be = qof_book_get_backend (book);
 
   if (be && be->free_query)
     (be->free_query)(be, value);
@@ -785,6 +785,7 @@ static GList * qof_query_run_internal (QofQuery *q,
 static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
 {
   GList *node;
+  QofCollection *col;
 
   (void)cb_arg; /* unused */
   g_return_if_fail(qcb);
@@ -792,7 +793,7 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
   for (node=qcb->query->books; node; node=node->next) 
   {
     QofBook *book = node->data;
-    QofBackend *be = book->backend;
+    QofBackend *be = qof_book_get_backend (book);
 
     /* run the query in the backend */
     if (be) 
@@ -807,8 +808,9 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
     }
 
     /* And then iterate over all the objects */
-    qof_object_foreach (qcb->query->search_for, book,
-			(QofEntityForeachCB) check_item_cb, qcb);
+    col = qof_book_get_collection (book, qcb->query->search_for);
+    
+    qof_collection_foreach (col, (QofInstanceForeachCB) check_item_cb,  qcb);
   }
 }
 
@@ -835,8 +837,7 @@ qof_query_run_subquery (QofQuery *subq, const QofQuery* primaryq)
   /* Make sure we're searching for the same thing */
   g_return_val_if_fail (subq->search_for, NULL);
   g_return_val_if_fail (primaryq->search_for, NULL);
-  g_return_val_if_fail(!safe_strcmp(subq->search_for, primaryq->search_for),
-		       NULL);
+  g_return_val_if_fail(!subq->search_for == primaryq->search_for, NULL);
 
   /* Perform the subquery */
   return qof_query_run_internal(subq, qof_query_run_subq_cb,
@@ -869,6 +870,7 @@ QofQuery * qof_query_create (void)
 {
   QofQuery *qp = g_new0 (QofQuery, 1);
   qp->be_compiled = g_hash_table_new (g_direct_hash, g_direct_equal);
+  qp->search_for = G_TYPE_INVALID;
   query_init (qp, NULL);
   return qp;
 }
@@ -878,7 +880,7 @@ void qof_query_search_for (QofQuery *q, QofIdTypeConst obj_type)
   if (!q || !obj_type)
     return;
 
-  if (safe_strcmp (q->search_for, obj_type)) {
+  if (q->search_for == obj_type) {
     q->search_for = (QofIdType) obj_type;
     q->changed = 1;
   }
@@ -1086,7 +1088,9 @@ qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
   if(!q2) return q1;
 
   if (q1->search_for && q2->search_for)
-    g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
+    g_return_val_if_fail ((q1->search_for == q2->search_for) 
+                          || q1->search_for == G_TYPE_INVALID
+                          || q2->search_for == G_TYPE_INVALID,
                           NULL);
 
   search_for = (q1->search_for ? q1->search_for : q2->search_for);
@@ -1277,10 +1281,10 @@ void qof_query_set_book (QofQuery *q, QofBook *book)
   if (g_list_index (q->books, book) == -1)
     q->books = g_list_prepend (q->books, book);
 
-  slist = g_slist_prepend (slist, QOF_PARAM_GUID);
-  slist = g_slist_prepend (slist, QOF_PARAM_BOOK);
+  slist = g_slist_prepend (slist, GINT_TO_POINTER (QOF_PARAM_GUID));
+  slist = g_slist_prepend (slist, GINT_TO_POINTER (QOF_PARAM_BOOK));
   qof_query_add_guid_match (q, slist,
-                        qof_book_get_guid(book), QOF_QUERY_AND);
+                        qof_instance_get_guid(QOF_INSTANCE (book)), QOF_QUERY_AND);
 }
 
 GList * qof_query_get_books (QofQuery *q)
@@ -1324,7 +1328,7 @@ int qof_query_get_max_results (QofQuery *q)
 
 QofIdType qof_query_get_search_for (QofQuery *q)
 {
-  if (!q) return NULL;
+  if (!q) return G_TYPE_INVALID;
   return q->search_for;
 }
 
@@ -1542,7 +1546,7 @@ qof_query_printSearchFor (QofQuery * query, GList * output)
 
   searchFor = qof_query_get_search_for (query);
   gs = g_string_new ("Query Object Type: ");
-  g_string_append (gs, (NULL == searchFor)? "(null)" : searchFor);
+  g_string_append (gs, (G_TYPE_INVALID == searchFor)? "(null)" : g_type_name (searchFor));
   output = g_list_append (output, gs);
 
   return output;
@@ -1604,7 +1608,7 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
     if (gsl) g_string_append_printf (gs, " Param: ");
     for (n=gsl; n; n = n->next)
     {
-      QofIdType param_name = n->data;
+      gchar* param_name = n->data;
       if (gsl != n) g_string_append_printf (gs, " ");
       g_string_append_printf (gs, "%s", param_name);
     }
@@ -1683,8 +1687,8 @@ qof_query_printPredData (QofQueryPredData *pd, GList *lst)
   g_string_append (gs, (gchar *) pd->type_name);
 
   /* Char Predicate and GUID predicate don't use the 'how' field. */
-  if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
-      safe_strcmp (pd->type_name, QOF_TYPE_GUID))
+  if ((pd->type_name == QOF_TYPE_CHAR) &&
+      (pd->type_name == QOF_TYPE_GUID))
   {
     g_string_append_printf (gs, " how: %s",
                        qof_query_printStringForHow (pd->how));
@@ -1728,7 +1732,7 @@ static void
 qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
+  if (pd->type_name == QOF_TYPE_GUID)
   {
     GList *node;
     query_guid_t pdata = (query_guid_t) pd;
@@ -1742,7 +1746,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     }
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
+  if (pd->type_name == QOF_TYPE_STRING)
   {
     query_string_t pdata = (query_string_t) pd;
     g_string_append_printf (gs, " Match type %s",
@@ -1752,7 +1756,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        pdata->matchstring);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
+  if (pd->type_name == QOF_TYPE_NUMERIC)
   {
     query_numeric_t pdata = (query_numeric_t) pd;
     g_string_append_printf (gs, " Match type %s",
@@ -1761,7 +1765,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        gnc_num_dbg_to_string (pdata->amount));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
+  if (pd->type_name == QOF_TYPE_KVP)
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
@@ -1774,25 +1778,25 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                          kvp_value_to_string (pdata->value));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
+  if (pd->type_name == QOF_TYPE_INT64)
   {
     query_int64_t pdata = (query_int64_t) pd;
     g_string_append_printf (gs, " int64: %" G_GINT64_FORMAT, pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
+  if (pd->type_name == QOF_TYPE_INT32)
   {
     query_int32_t pdata = (query_int32_t) pd;
     g_string_append_printf (gs, " int32: %d", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
+  if (pd->type_name == QOF_TYPE_DOUBLE)
   {
     query_double_t pdata = (query_double_t) pd;
     g_string_append_printf (gs, " double: %.18g", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
+  if (pd->type_name == QOF_TYPE_DATE)
   {
     query_date_t pdata = (query_date_t) pd;
     g_string_append_printf (gs, " Match type %s",
@@ -1800,7 +1804,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_append_printf (gs, " query_date: %s", gnc_print_date (pdata->date));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
+  if (pd->type_name, QOF_TYPE_CHAR)
   {
     query_char_t pdata = (query_char_t) pd;
     g_string_append_printf (gs, " Match type %s",
@@ -1808,7 +1812,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_append_printf (gs, " char list: %s", pdata->char_list);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN))
+  if (pd->type_name == QOF_TYPE_BOOLEAN)
   {
     query_boolean_t pdata = (query_boolean_t) pd;
     g_string_append_printf (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");

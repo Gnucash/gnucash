@@ -36,6 +36,144 @@
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+/* GObject declarations */
+
+static void gnc_account_group_class_init(GncAccountGroupClass *klass);
+static void gnc_account_group_init(AccountGroup *grp);
+static void gnc_account_group_finalize(GObject *object);
+static void gnc_account_group_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_account_group_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+struct _GncAccountGroupPrivate
+{
+
+};
+
+typedef struct _GncAccountGroupSignal GncAccountGroupSignal;
+typedef enum _GncAccountGroupSignalType GncAccountGroupSignalType;
+
+enum _GncAccountGroupSignalType {
+	/* Signals */
+	FIRST_SIGNAL,
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncAccountGroupSignal {
+	AccountGroup *object;
+};
+
+static guint gnc_account_group_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_account_group_get_type(void)
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncAccountGroupClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_account_group_class_init,
+			NULL,
+			NULL,
+			sizeof (AccountGroup),
+			0,
+			(GInstanceInitFunc)gnc_account_group_init,
+		};
+
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
+			"AccountGroup", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_account_group_class_init(GncAccountGroupClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_account_group_finalize;
+	object_class->set_property = gnc_account_group_set_property;
+    object_class->get_property = gnc_account_group_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+	
+	
+}
+
+static void
+gnc_account_group_init(AccountGroup *grp)
+{
+	/* Initialize private members, etc. */
+	grp->saved       = 1;
+
+  grp->parent      = NULL;
+  grp->accounts    = NULL;
+
+/*  qof_instance_get_book (QOF_INSTANCE (grp))        = book; This isn't needed */
+  grp->editlevel   = 0;
+}
+
+static void
+gnc_account_group_finalize(GObject *object)
+{
+	
+	/* Free private members, etc. */
+	
+	G_OBJECT_CLASS(parent_class)->finalize(object);
+}
+
+static void
+gnc_account_group_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	AccountGroup *obj;
+	
+	obj = GNC_ACCOUNT_GROUP (object);
+	
+	switch (param_id) {		
+		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_account_group_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  AccountGroup *obj;
+  
+  obj = GNC_ACCOUNT_GROUP(object);
+
+  switch (property_id) {
+  
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
+
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend to!  These functions perform actions on the        *
@@ -49,13 +187,7 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 static void
 xaccInitializeAccountGroup (AccountGroup *grp, QofBook *book)
 {
-  grp->saved       = 1;
-
-  grp->parent      = NULL;
-  grp->accounts    = NULL;
-
-  grp->book        = book;
-  grp->editlevel   = 0;
+  
 }
 
 /********************************************************************\
@@ -67,10 +199,9 @@ xaccMallocAccountGroup (QofBook *book)
   AccountGroup *grp;
   g_return_val_if_fail (book, NULL);
 
-  grp = g_new (AccountGroup, 1);
-  xaccInitializeAccountGroup (grp, book);
+  grp = GNC_ACCOUNT_GROUP (g_object_new (GNC_TYPE_ACCOUNT_GROUP, "book", book));
 
-  return grp;
+  return (AccountGroup*) grp;
 }
 
 /********************************************************************\
@@ -80,7 +211,7 @@ AccountGroup *
 xaccCollGetAccountGroup (const QofCollection *col)
 {
   if (!col) return NULL;
-  return qof_collection_get_data (col);
+  return GNC_ACCOUNT_GROUP (qof_collection_get_data (col));
 }
 
 void
@@ -113,7 +244,7 @@ xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
   QofCollection *col;
   if (!book) return;
 
-  if (grp && grp->book != book)
+  if (grp && qof_instance_get_book (QOF_INSTANCE (grp)) != book)
   {
      PERR ("cannot mix and match books freely!");
      return;
@@ -161,8 +292,8 @@ xaccGroupEqual(const AccountGroup *ga,
       char sa[GUID_ENCODING_LENGTH + 1];
       char sb[GUID_ENCODING_LENGTH + 1];
 
-      guid_to_string_buff (xaccAccountGetGUID (aa), sa);
-      guid_to_string_buff (xaccAccountGetGUID (ab), sb);
+      guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (aa)), sa);
+      guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (ab)), sb);
 
       PWARN ("accounts %s and %s differ", sa, sb);
 
@@ -198,7 +329,7 @@ xaccAccountGroupBeginEdit (AccountGroup *grp)
     Account *account = node->data;
 
     xaccAccountBeginEdit (account);
-    xaccAccountGroupBeginEdit (account->children);
+    xaccAccountGroupBeginEdit (gnc_account_get_children (account));
   }
 }
 
@@ -216,7 +347,7 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccAccountGroupCommitEdit (account->children);
+    xaccAccountGroupCommitEdit (gnc_account_get_children (account));
     xaccAccountCommitEdit (account);
   }
   grp->editlevel--;
@@ -235,8 +366,8 @@ xaccGroupMarkDoFree (AccountGroup *grp)
   for (node = grp->accounts; node; node = node->next)
   {
     Account *account = node->data;
-    account->inst.do_free = TRUE;
-    xaccGroupMarkDoFree (account->children); 
+    qof_instace_do_free ((const QofInstance*) QOF_INSTANCE (account));
+    xaccGroupMarkDoFree (gnc_account_get_children (account)); 
   }
 }
 
@@ -254,11 +385,12 @@ QofBook *
 xaccGroupGetBook (const AccountGroup *group)
 {
   if (!group) return NULL;
-  return group->book;
+  return qof_instance_get_book (QOF_INSTANCE (group));
 }
 
 /********************************************************************\
 \********************************************************************/
+
 
 void
 xaccFreeAccountGroup (AccountGroup *grp)
@@ -287,24 +419,24 @@ xaccFreeAccountGroup (AccountGroup *grp)
       /* FIXME: this and the same code below is kind of hacky.
        *        actually, all this code seems to assume that
        *        the account edit levels are all 1. */
-      if (account->inst.editlevel == 0)
+      if (qof_instance_get_edit_level (QOF_INSTANCE (account)) == 0)
         xaccAccountBeginEdit (account);
 
       xaccAccountDestroy (account);
     }
     account = grp->accounts->data;
-    if (account->inst.editlevel == 0) 
+    if (qof_instance_get_edit_level (QOF_INSTANCE (account)) == 0) 
       xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
 
     if (!root_grp) return;
   }
 
-  if (grp->parent) grp->parent->children = NULL;
+  if (grp->parent) gnc_account_set_children (grp->parent, NULL);
 
   grp->parent   = NULL;
 
-  g_free (grp);
+  qof_instance_release ();
 }
 
 /********************************************************************\
@@ -323,7 +455,7 @@ xaccGroupMarkSaved (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccGroupMarkSaved (account->children); 
+    xaccGroupMarkSaved (gnc_account_get_children (account)); 
   }
 }
 
@@ -354,7 +486,7 @@ xaccGroupNotSaved (const AccountGroup *grp)
   {
     Account *account = node->data;
 
-    if (xaccGroupNotSaved (account->children))
+    if (xaccGroupNotSaved (gnc_account_get_children (account)))
       return TRUE;
   }
 
@@ -379,7 +511,7 @@ xaccGroupGetNumSubAccounts (const AccountGroup *grp)
   {
     Account *account = node->data;
 
-    num_acc += xaccGroupGetNumSubAccounts (account->children);
+    num_acc += xaccGroupGetNumSubAccounts (gnc_account_get_children (account));
   }
 
   return num_acc;
@@ -402,7 +534,7 @@ xaccPrependAccounts (const AccountGroup *grp, GList **accounts_p)
 
     *accounts_p = g_list_prepend (*accounts_p, account);
 
-    xaccPrependAccounts (account->children, accounts_p);
+    xaccPrependAccounts (gnc_account_get_children (account), accounts_p);
   }
 }
 
@@ -445,7 +577,7 @@ xaccPrependAccountsSorted (const AccountGroup *grp, GList **accounts_p)
 
     *accounts_p = g_list_prepend (*accounts_p, account);
 
-    xaccPrependAccountsSorted (account->children, accounts_p);
+    xaccPrependAccountsSorted (gnc_account_get_children (account), accounts_p);
   }
   g_list_free(tmp_list);
 }
@@ -540,7 +672,7 @@ xaccGetAccountFromName (const AccountGroup *grp, const char * name)
     Account *account = node->data;
     Account *acc;
 
-    acc = xaccGetAccountFromName (account->children, name);
+    acc = xaccGetAccountFromName (gnc_account_get_children (account), name);
     if (acc)
       return acc;
   }
@@ -588,13 +720,13 @@ xaccGetAccountFromFullNameHelper (const AccountGroup *grp,
 	}
 
 	/* No children?  We're done. */
-	if (!account->children) {
+	if (!gnc_account_get_children (account)) {
 	  found = NULL;
 	  goto done;
 	}
 
 	/* There's stuff left to search for.  Search recursively. */
-	found = xaccGetAccountFromFullNameHelper(account->children, &names[1]);
+	found = xaccGetAccountFromFullNameHelper(gnc_account_get_children (account), &names[1]);
 	if (found != NULL) {
 	  goto done;
 	}
@@ -792,7 +924,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
-  if (!grp || !grp->book) return;
+  if (!grp || !qof_instance_get_book (QOF_INSTANCE (grp))) return;
   if (!acc) return;
 
   ENTER("group %p, account %p named %s", grp, acc, xaccAccountGetName(acc));
@@ -809,7 +941,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
       xaccGroupRemoveAccount (acc->parent, acc);
 
       /* switch over between books, if needed */
-      if (grp->book != acc->inst.book)
+      if (qof_instance_get_book (QOF_INSTANCE (grp)) != acc->inst.book)
       {
          QofCollection *col;
 // xxxxxxxxxxxxxxxxxxxxxxx
@@ -827,7 +959,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
          PWARN ("reparenting accounts across books is not correctly supported\n");
 
          qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
-         col = qof_book_get_collection (grp->book, GNC_ID_ACCOUNT);
+         col = qof_book_get_collection (qof_instance_get_book (QOF_INSTANCE (grp)), GNC_ID_ACCOUNT);
          qof_collection_insert_entity (col, &acc->inst.entity);
          qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
       }
@@ -1052,7 +1184,7 @@ xaccGroupGetDepth (const AccountGroup *grp)
   {
     Account *account = node->data;
 
-    depth = xaccGroupGetDepth (account->children);
+    depth = xaccGroupGetDepth (gnc_account_get_children (account));
 
     if (depth > maxdepth)
       maxdepth = depth;
@@ -1122,7 +1254,7 @@ xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp)
     GList *lp;
 
     /* recursively do sub-accounts */
-    xaccGroupBeginStagedTransactionTraversals (account->children);
+    xaccGroupBeginStagedTransactionTraversals (gnc_account_get_children (account));
 
     for (lp = account->splits; lp; lp = lp->next)
     {
@@ -1179,7 +1311,7 @@ xaccGroupStagedTransactionTraversal (AccountGroup *grp,
     int retval;
 
     /* recursively do sub-accounts */
-    retval = xaccGroupStagedTransactionTraversal (account->children, stage,
+    retval = xaccGroupStagedTransactionTraversal (gnc_account_get_children (account), stage,
                                                   callback, cb_data);
     if (retval) return retval;
 
@@ -1251,7 +1383,7 @@ xaccGroupForEachAccount (AccountGroup *grp,
       return(result);
 
     if(deeply)
-        result = xaccGroupForEachAccount (account->children,
+        result = xaccGroupForEachAccount (gnc_account_get_children (account),
                                           thunk, data, TRUE);
 
     if (result)
@@ -1261,14 +1393,25 @@ xaccGroupForEachAccount (AccountGroup *grp,
   return(NULL);
 }
 
+gboolean 
+gnc_account_group_is_saved (AccountGroup *g)
+{
+  return g->saved;
+};
+void      
+gnc_account_group_set_saved (AccountGroup *g)
+{
+  g->saved = TRUE;
+}
+
 /* ============================================================== */
 
 QofBackend *
 xaccGroupGetBackend (const AccountGroup *grp)
 {
   grp = xaccGroupGetRoot (grp);
-  if (!grp || !grp->book) return NULL;
-  return qof_book_get_backend(grp->book);
+  if (!grp || !qof_instance_get_book (QOF_INSTANCE (grp))) return NULL;
+  return qof_book_get_backend(qof_instance_get_book (QOF_INSTANCE (grp)));
 }
 
 /* ============================================================== */
@@ -1297,6 +1440,8 @@ group_mark_clean(QofCollection *col)
 {
   xaccGroupMarkSaved(xaccCollGetAccountGroup(col));
 }
+/*
+BROKEN CODE
 
 static QofObject group_object_def = 
 {
@@ -1318,5 +1463,5 @@ xaccGroupRegister (void)
 {
   return qof_object_register (&group_object_def);
 }
-
+*/
 /* ========================= END OF FILE ======================== */

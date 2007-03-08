@@ -80,6 +80,7 @@
 #include "glib-compat.h"
 #include <string.h>
 #include <time.h>
+#include "gnc-engine.h"
 
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
@@ -91,9 +92,12 @@ static QofLogModule log_module = GNC_MOD_SX;
 
 /* GObject */
 
-static void gnc_freq_spec_class_init(FreqSpecClass *klass);
-static void gnc_freq_spec_init(FreqSpec *sp);
+static void gnc_freq_spec_class_init(GncFreqSpecClass *klass);
+static void gnc_freq_spec_init(FreqSpec *fs);
 static void gnc_freq_spec_finalize(GObject *object);
+static void gnc_freq_spec_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_freq_spec_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
 
 struct _FreqSpecPrivate {
 	/* Private Members */
@@ -104,6 +108,7 @@ typedef enum _FreqSpecSignalType FreqSpecSignalType;
 
 enum _FreqSpecSignalType {
 	/* Signals */
+	FIRST_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -121,13 +126,13 @@ static guint gnc_freq_spec_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-gnc_freq_spec_get_type()
+gnc_freq_spec_get_type(void)
 {
 	static GType type = 0;
 
 	if(type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (FreqSpecClass),
+			sizeof (GncFreqSpecClass),
 			NULL,
 			NULL,
 			(GClassInitFunc)gnc_freq_spec_class_init,
@@ -138,7 +143,7 @@ gnc_freq_spec_get_type()
 			(GInstanceInitFunc)gnc_freq_spec_init,
 		};
 
-		type = g_type_register_static(QOF_TYPE_ENTITY, 
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
 			"FreqSpec", &our_info, 0);
 	}
 
@@ -146,7 +151,7 @@ gnc_freq_spec_get_type()
 }
 
 static void
-gnc_freq_spec_class_init(QofInstanceClass *klass)
+gnc_freq_spec_class_init(GncFreqSpecClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -162,9 +167,12 @@ gnc_freq_spec_class_init(QofInstanceClass *klass)
 }
 
 static void
-gnc_freq_spec_init(FrecSpec *obj)
+gnc_freq_spec_init(FreqSpec *fs)
 {
 	/* Initialize private members, etc. */
+	fs->type = INVALID;
+  fs->uift = UIFREQ_ONCE;
+  memset( &(fs->s), 0, sizeof(fs->s) );
 }
 
 static void
@@ -188,7 +196,7 @@ gnc_freq_spec_set_property (GObject *object,
 	switch (param_id) {		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
     	break;
 	}
 }
@@ -290,17 +298,7 @@ get_abbrev_month_name(guint month)
 static void
 xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 {
-   QofCollection *col;
-   g_return_if_fail( fs );
-   g_return_if_fail (book);
-
-   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
-   qof_entity_init (QOF_ENTITY (fs), QOF_ID_FREQSPEC, col);
-
-   fs->type = INVALID;
-   fs->uift = UIFREQ_ONCE;
-
-   memset( &(fs->s), 0, sizeof(fs->s) );
+   
 }
 
 FreqSpec*
@@ -311,9 +309,9 @@ xaccFreqSpecMalloc(QofBook *book)
    g_return_val_if_fail (book, NULL);
 
    fs = GNC_FREQ_SPEC (g_object_new (GNC_TYPE_FREQ_SPEC, NULL));
-   xaccFreqSpecInit( fs, book );
-   qof_event_gen( QOF_ENTITY (fs), QOF_EVENT_CREATE , NULL);
-   g_signal_emit_by_name ( QOF_ENTITY (fs), "created::detail");
+   
+   qof_event_gen( QOF_INSTANCE (fs), QOF_EVENT_CREATE , NULL);
+   g_signal_emit_by_name ( QOF_INSTANCE (fs), "created::detail");
     
    return fs;
 }
@@ -345,10 +343,10 @@ void
 xaccFreqSpecFree( FreqSpec *fs )
 {
    if ( fs == NULL ) return;
-   qof_event_gen( &fs->entity, QOF_EVENT_DESTROY , NULL);
+   qof_event_gen( QOF_INSTANCE (fs), QOF_EVENT_DESTROY , NULL);
    xaccFreqSpecCleanUp( fs );
 
-   qof_entity_release (&fs->entity);
+   qof_entity_release (fs);
    // g_free( fs ); the qof_entity_realise function call g_object_unref
 }
 
@@ -1439,6 +1437,7 @@ qofFreqSpecSetRepeat(FreqSpec *fs, gint value)
 	qofFreqSpecCalculate(fs, value);
 }
 
+/*BROKEN CODE
 static QofObject FreqSpecDesc = 
 {
 	interface_version : QOF_OBJECT_VERSION,
@@ -1469,3 +1468,4 @@ gboolean FreqSpecRegister (void)
 	qof_class_register(QOF_ID_FREQSPEC, (QofSortFunc)gnc_freq_spec_compare, params);
 	return qof_object_register(&FreqSpecDesc);
 }
+*/

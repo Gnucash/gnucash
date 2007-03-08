@@ -67,7 +67,7 @@ static guint gnc_price_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-gnc_price_get_type()
+gnc_price_get_gtype()
 {
 	static GType type = 0;
 

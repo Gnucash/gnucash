@@ -60,6 +60,103 @@ static struct md5_ctx guid_context;
 static GMemChunk *guid_memchunk = NULL;
 #endif
 
+/***************************/
+static gpointer
+gnc_guid_copy (gpointer boxed)
+{
+	GUID *src = (GUID*) boxed;
+	GUID *copy = NULL;
+
+	g_return_val_if_fail (src, NULL);
+
+	
+	copy = g_memdup (src, sizeof (GUID));
+	
+	return copy;
+}
+
+static void
+gnc_guid_free (gpointer boxed)
+{
+  GUID *guid = (GUID*) boxed;
+  guid_free (guid);
+}
+
+static void 
+gnc_string_to_guid (const GValue *src, GValue *dest) 
+{
+	/* FIXME: add more checks*/
+	GUID *guid;
+	const gchar *as_string;
+	
+	g_return_if_fail (G_VALUE_HOLDS_STRING (src) &&
+			  GNC_VALUE_HOLDS_GUID (dest));
+	
+	as_string = g_value_get_string (src);
+	
+	guid = g_new0 (GUID, 1);
+	string_to_guid(as_string, guid);	
+	
+	g_value_take_boxed (dest, guid);
+}
+
+static void 
+gnc_guid_to_string (const GValue *src, GValue *dest) 
+{
+	const gchar *str;
+	
+	g_return_if_fail (G_VALUE_HOLDS_STRING (dest) &&
+			  GNC_VALUE_HOLDS_GUID (src));
+	
+	str = guid_to_string(gnc_value_get_guid (src));
+	
+	g_value_set_string (dest, str);
+}
+
+GType
+gnc_guid_get_type (void)
+{
+	static GType type = 0;
+	
+	if (G_UNLIKELY (type == 0)) {
+		type = g_boxed_type_register_static ("GUID",
+						     (GBoxedCopyFunc) gnc_guid_copy,
+						     (GBoxedFreeFunc) gnc_guid_free);
+		
+		g_value_register_transform_func (G_TYPE_STRING,
+						 type,
+						 gnc_string_to_guid);
+		
+		g_value_register_transform_func (type, 
+						 G_TYPE_STRING,
+						 gnc_guid_to_string);
+	}
+	
+	return type;
+}
+
+
+/**
+ * gnc_value_get_guid
+ * @value: a #GValue whose value we want to get.
+ *
+ * Returns: the value stored in @value.
+ */
+G_CONST_RETURN GUID*
+gnc_value_get_guid (const GValue *value)
+{
+	GUID *val;
+
+	g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
+	g_return_val_if_fail (GNC_VALUE_HOLDS_GUID (value), NULL);
+
+	val = (GUID*) g_value_get_boxed (value);
+
+	return val;
+}
+
+
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 

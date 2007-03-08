@@ -39,6 +39,8 @@
 #include "qof.h"
 #include "Account.h"
 
+
+
 /* PROTOTYPES ******************************************************/
 /** @name Constructors, Destructors 
  @{
@@ -432,6 +434,10 @@ int xaccAccountStagedTransactionTraversal(const Account *a,
 
 int xaccGroupForEachTransaction(AccountGroup *g, 
                                 TransactionCallback proc, void *data);
+                                
+                                
+gboolean gnc_account_group_is_saved (AccountGroup *g);
+void      gnc_account_group_set_saved (AccountGroup *g);
 
 /** @} */
 #endif /* XACC_ACCOUNT_GROUP_H */

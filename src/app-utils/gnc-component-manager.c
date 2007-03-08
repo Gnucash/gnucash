@@ -242,9 +242,8 @@ add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
   mask = g_hash_table_lookup (cei->event_masks, entity_type);
   if (!mask)
   {
-    char * key = qof_util_string_cache_insert ((gpointer) entity_type);
     mask = g_new0 (QofEventId, 1);
-    g_hash_table_insert (cei->event_masks, key, mask);
+    g_hash_table_insert (cei->event_masks, entity_type, mask);
   }
 
   if (or_in)
@@ -259,7 +258,7 @@ gnc_cm_event_handler (QofEntity *entity,
                       gpointer user_data,
 		      gpointer event_data)
 {
-  const GUID *guid = qof_entity_get_guid(entity);
+  const GUID *guid = qof_instance_get_guid(entity);
 #if CM_DEBUG
   fprintf (stderr, "event_handler: event %d, entity %p, guid %s\n", event_type,
 	   entity, guid);
@@ -274,7 +273,7 @@ gnc_cm_event_handler (QofEntity *entity,
     add_event_type (&changes, GNC_ID_TRANS, QOF_EVENT_MODIFY, TRUE);
   }
   else
-    add_event_type (&changes, entity->e_type, event_type, TRUE);
+    add_event_type (&changes, G_OBJECT_TYPE (entity), event_type, TRUE);
 
   got_events = TRUE;
 
@@ -293,10 +292,10 @@ gnc_component_manager_init (void)
     return;
   }
 
-  changes.event_masks = g_hash_table_new (g_str_hash, g_str_equal);
+  changes.event_masks = g_hash_table_new (g_int_hash, g_int_equal);
   changes.entity_events = guid_hash_table_new ();
 
-  changes_backup.event_masks = g_hash_table_new (g_str_hash, g_str_equal);
+  changes_backup.event_masks = g_hash_table_new (g_int_hash, g_int_equal);
   changes_backup.entity_events = guid_hash_table_new ();
 
   handler_id = qof_event_register_handler (gnc_cm_event_handler, NULL);

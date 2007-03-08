@@ -1123,7 +1123,7 @@ gnc_main_window_event_handler (QofEntity *entity,  QofEventId event_type,
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(user_data));
 
 	/* soft failures */
-	if (!QOF_CHECK_TYPE(entity, QOF_ID_BOOK))
+	if (!QOF_IS_BOOK (entity))
 	  return;
 	if (event_type !=  QOF_EVENT_DESTROY)
 	  return;
@@ -1139,7 +1139,7 @@ gnc_main_window_event_handler (QofEntity *entity,  QofEventId event_type,
 	for (item = priv->installed_pages; item; item = next) {
 	  next = g_list_next(item);
 	  page = GNC_PLUGIN_PAGE(item->data);
-	  if (gnc_plugin_page_has_book (page, (QofBook *)entity))
+	  if (gnc_plugin_page_has_book (page, QOF_BOOK (entity)))
               gnc_main_window_close_page (page);
 	}
 	LEAVE(" ");

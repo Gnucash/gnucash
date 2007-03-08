@@ -21,6 +21,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
+  /* DEPRECATED FILE
+ THIS FILE ISN'T USED ANY WHERE
+ */
+ 
 #ifndef _QOFREFERENCE_H
 #define _QOFREFERENCE_H
 
@@ -102,7 +106,7 @@ It is used by the entity copy functions and by the QSF backend.
 Creates a GList stored in the Book hashtable to contain
 repeated references for a single entity.
 */
-typedef struct qof_entity_reference {
+typedef struct qof_instance_reference {
 	QofIdType       choice_type;/**< Used when the reference is a QOF_TYPE_CHOICE type
 	- stores the actual type of the reference from the list of available choices. */
 	QofIdType       type;       /**< The type of the original entity -
@@ -111,8 +115,8 @@ typedef struct qof_entity_reference {
 	GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
 	const QofParam  *param;      /**< The parameter of the original entity to use 
 	to get or set the reference. */
-	const GUID      *ent_guid;   /**< The GUID of the original entity. */
-}QofEntityReference;
+	const GUID      *inst_guid;   /**< The GUID of the original entity. */
+}QofInstanceReference;
 
 /** \brief Adds a new reference to the partial book data hash.
 
@@ -122,7 +126,7 @@ If the book is not already marked as partial, it will be marked as
 partial.
 */
 void
-qof_session_update_reference_list(QofSession *session, QofEntityReference *reference);
+qof_session_update_reference_list(QofSession *session, QofInstanceReference *reference);
 
 /** Used as the key value for the QofBook data hash.
  *
@@ -201,8 +205,8 @@ the integrity of the partial book during sequential copy operations.
 
 @return FALSE on error, otherwise a pointer to the QofEntityReference.
 */
-QofEntityReference*
-qof_entity_get_reference_from(QofEntity *ent, const QofParam *param);
+QofInstanceReference*
+qof_instance_get_reference_from(QofInstance *inst, const QofParam *param);
 
 /** @} */
 /** @} */

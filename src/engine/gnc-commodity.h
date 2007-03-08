@@ -49,64 +49,6 @@
 #include <glib.h>
 #include "gnc-engine.h"
 
-/* GObject declarations for GncCommodity */
-
-#define GNC_TYPE_COMMODITY            (gnc_commodity_type ())
-#define GNC_COMMODITY(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY, GncCommodity))
-#define GNC_COMMODITY_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY, GncCommodityClass))
-#define GNC_IS_COMMODITY(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY))
-#define GNC_IS_COMMODITY_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY))
-#define GNC_COMMODITY_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY, GncCommodityClass))
-
-
-typedef struct _GncCommodityClass GncCommodityClass;
-typedef struct _GncCommodity GncCommodity;
-typedef struct _GncCommodityPrivate GncCommodityPrivate;
-typedef struct GncCommodityNamespace gnc_commodity; /*  Dummy type for backward compatilibity */
-
-struct _GncCommodity {
-    QofInstance instance;
-    GncCommodityPrivate *priv;
-};
-
-struct _GncCommodityClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_commodity_get_type ();
-
-/* GObject declarations */
-
-#define GNC_TYPE_COMMODITY_NAMESPACE            (gnc_commodity_namespace_get_type ())
-#define GNC_COMMODITY_NAMESPACE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespace))
-#define GNC_COMMODITY_NAMESPACE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
-#define GNC_IS_COMMODITY_NAMESPACE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY_NAMESPACE))
-#define GNC_IS_COMMODITY_NAMESPACE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_COMMODITY_NAMESPACE))
-#define GNC_COMMODITY_NAMESPACE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_COMMODITY_NAMESPACE, GncCommodityNamespaceClass))
-
-
-typedef struct _GncCommodityNamespaceClass GncCommodityNamespaceClass;
-typedef struct _GncCommodityNamespace GncCommodityNamespace;
-typedef struct _GncCommodityNamespacePrivate GncCommodityPrivate;
-typedef struct GncCommodityNamespace gnc_commodity_namespace; /*  Dummy type for backward compatilibity */
-
-struct _GncCommodityNamespace {
-    QofInstance instance;
-    GncCommodityNamespacePrivate *priv;
-};
-
-struct _GncCommodityNamespaceClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_commodity_namespace_get_type ();
-
 /******************************************************/
 
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
@@ -322,7 +264,7 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *
  *  @return A pointer to the new commodity.
  */
-gnc_commodity * gnc_commodity_new(QofBook *book,
+GncCommodity * gnc_commodity_new(QofBook *book,
 				  const char * fullname, 
                                   const char * namespace,
                                   const char * mnemonic,
@@ -334,13 +276,13 @@ gnc_commodity * gnc_commodity_new(QofBook *book,
  *  commodity is referenced anywhere.
  *  @param cm The commodity to destroy.
  */
-void  gnc_commodity_destroy(gnc_commodity * cm);
+void  gnc_commodity_destroy(GncCommodity * cm);
 
 /** Copy src into dest */
-void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
+void  gnc_commodity_copy(GncCommodity * dest, GncCommodity *src);
 
 /** allocate and copy */
-gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
+GncCommodity * gnc_commodity_clone(GncCommodity *src);
 /** @} */
 
 
@@ -358,7 +300,7 @@ gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
  *  @return A pointer to the mnemonic for this commodity.  This string
  *  is owned by the engine and should not be freed by the caller.
  */
-const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
+const char * gnc_commodity_get_mnemonic(const GncCommodity * cm);
 
 /** Retrieve the namespace for the specified commodity.  This will be
  *  a pointer to a null terminated string of the form "AMEX",
@@ -369,7 +311,7 @@ const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
  *  @return A pointer to the namespace for this commodity.  This string
  *  is owned by the engine and should not be freed by the caller.
  */
-const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
+const char * gnc_commodity_get_namespace(const GncCommodity * cm);
 
 /** Retrieve the namespace for the specified commodity.  This will be
  *  a pointer to a null terminated string of the form "AMEX",
@@ -383,7 +325,7 @@ const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
  *  @return A pointer to the namespace for this commodity.  This string
  *  is owned by the engine and should not be freed by the caller.
  */
-const char * gnc_commodity_get_namespace_compat(const gnc_commodity * cm);
+const char * gnc_commodity_get_namespace_compat(const GncCommodity * cm);
 
 /** Retrieve the namespace data strucure for the specified commodity.
  *  This will be a pointer to another data structure.
@@ -393,7 +335,7 @@ const char * gnc_commodity_get_namespace_compat(const gnc_commodity * cm);
  *  @return A pointer to the namespace data structure for this
  *  commodity.
  */
-gnc_commodity_namespace *gnc_commodity_get_namespace_ds(const gnc_commodity * cm);
+gnc_commodity_namespace *gnc_commodity_get_namespace_ds(const GncCommodity * cm);
 
 /** Retrieve the full name for the specified commodity.  This will be
  *  a pointer to a null terminated string of the form "Acme Systems,
@@ -404,7 +346,7 @@ gnc_commodity_namespace *gnc_commodity_get_namespace_ds(const gnc_commodity * cm
  *  @return A pointer to the full name for this commodity.  This string
  *  is owned by the engine and should not be freed by the caller.
  */
-const char * gnc_commodity_get_fullname(const gnc_commodity * cm);
+const char * gnc_commodity_get_fullname(const GncCommodity * cm);
 
 /** Retrieve the 'print' name for the specified commodity.  This will
  *  be a pointer to a null terminated string of the form "Acme
@@ -416,7 +358,7 @@ const char * gnc_commodity_get_fullname(const gnc_commodity * cm);
  *  string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char * gnc_commodity_get_printname(const gnc_commodity * cm);
+const char * gnc_commodity_get_printname(const GncCommodity * cm);
 
 /** Retrieve the 'exchange code' for the specified commodity.  This
  *  will be a pointer to a null terminated string of the form
@@ -433,7 +375,7 @@ const char * gnc_commodity_get_printname(const gnc_commodity * cm);
  *  string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char * gnc_commodity_get_cusip(const gnc_commodity * cm);
+const char * gnc_commodity_get_cusip(const GncCommodity * cm);
 
 /** Retrieve the 'unique' name for the specified commodity.  This will
  *  be a pointer to a null terminated string of the form "AMEX::ACME",
@@ -446,7 +388,7 @@ const char * gnc_commodity_get_cusip(const gnc_commodity * cm);
  *  string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
+const char * gnc_commodity_get_unique_name(const GncCommodity * cm);
 
 /** Retrieve the fraction for the specified commodity.  This will be
  *  an integer value specifying the number of fractional units that
@@ -458,7 +400,7 @@ const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
  *  @return The number of fractional units that one of these
  *  commodities can be divided into.
  */
-int     gnc_commodity_get_fraction(const gnc_commodity * cm);
+int     gnc_commodity_get_fraction(const GncCommodity * cm);
 
 /** Retrieve the 'mark' field for the specified commodity.
  *
@@ -468,7 +410,7 @@ int     gnc_commodity_get_fraction(const gnc_commodity * cm);
  *
  *  @return The value of the mark field.
  */
-gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
+gint16  gnc_commodity_get_mark(const GncCommodity * cm);
 
 /** Retrieve the automatic price quote flag for the specified
  *  commodity.  This flag indicates whether stock quotes should be
@@ -479,7 +421,7 @@ gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
  *  @return TRUE if quotes should be pulled for this commodity, FALSE
  *  otherwise.
  */
-gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
+gboolean    gnc_commodity_get_quote_flag(const GncCommodity *cm);
 
 /** Retrieve the automatic price quote source for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -489,8 +431,8 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *
  *  @return A pointer to the price quote source for this commodity.
  */
-gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
-gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
+gnc_quote_source* gnc_commodity_get_quote_source(const GncCommodity *cm);
+gnc_quote_source* gnc_commodity_get_default_quote_source(const GncCommodity *cm);
 
 /** Retrieve the automatic price quote timezone for the specified
  *  commodity.  This will be a pointer to a null terminated string of
@@ -502,7 +444,7 @@ gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm
  *  This string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
+const char* gnc_commodity_get_quote_tz(const GncCommodity *cm);
 /** @} */
 
 
@@ -521,7 +463,7 @@ const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
+void  gnc_commodity_set_mnemonic(GncCommodity * cm, const char * mnemonic);
 
 /** Set the namespace for the specified commodity.  This should be a
  *  pointer to a null terminated string of the form "AMEX", "NASDAQ",
@@ -533,7 +475,7 @@ void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
+void  gnc_commodity_set_namespace(GncCommodity * cm, const char * namespace);
 
 /** Set the full name for the specified commodity.  This should be
  *  a pointer to a null terminated string of the form "Acme Systems,
@@ -545,7 +487,7 @@ void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname);
+void  gnc_commodity_set_fullname(GncCommodity * cm, const char * fullname);
 
 /** Set the 'exchange code' for the specified commodity.  This should
  *  be a pointer to a null terminated string of the form "AXQ14728",
@@ -561,7 +503,7 @@ void  gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname);
  *  data for this commodity.  This string belongs to the caller and
  *  will be duplicated by the engine.
  */
-void  gnc_commodity_set_cusip(gnc_commodity * cm, const char * cusip);
+void  gnc_commodity_set_cusip(GncCommodity * cm, const char * cusip);
 
 /** Set the fraction for the specified commodity.  This should be
  *  an integer value specifying the number of fractional units that
@@ -573,7 +515,7 @@ void  gnc_commodity_set_cusip(gnc_commodity * cm, const char * cusip);
  *  @param smallest_fraction The number of fractional units that one of
  *  these commodities can be divided into.
  */
-void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
+void  gnc_commodity_set_fraction(GncCommodity * cm, int smallest_fraction);
 
 /** Set the automatic price quote flag for the specified commodity.
  *  This flag indicates whether stock quotes should be retrieved for
@@ -584,7 +526,7 @@ void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
  *  @param flag TRUE if quotes should be pulled for this commodity, FALSE
  *  otherwise.
  */
-void  gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag);
+void  gnc_commodity_set_quote_flag(GncCommodity *cm, const gboolean flag);
 
 /** Set the automatic price quote source for the specified commodity.
  *  This should be a pointer to a null terminated string of the form
@@ -595,7 +537,7 @@ void  gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag);
  *
  *  @param src A pointer to the price quote source for this commodity.
  */
-void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
+void  gnc_commodity_set_quote_source(GncCommodity *cm, gnc_quote_source *src);
 
 /** Set the automatic price quote timezone for the specified
  *  commodity.  This should be a pointer to a null terminated string
@@ -608,7 +550,7 @@ void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
-void  gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz);
+void  gnc_commodity_set_quote_tz(GncCommodity *cm, const char *tz);
 /** @} */
 
 
@@ -623,13 +565,13 @@ void  gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz);
  *  exchanges, may have different fullnames, and may have different
  *  fractions.
  */
-gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
+gboolean gnc_commodity_equiv(const GncCommodity * a, const GncCommodity * b);
 
 /** This routine returns TRUE if the two commodities are equal.
  *  Commodities are equal if they have the same namespace, mnemonic,
  *  fullname, exchange private code and fraction.
  */
-gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
+gboolean gnc_commodity_equal(const GncCommodity * a, const GncCommodity * b);
 /** @} */
 
 
@@ -650,7 +592,7 @@ gboolean gnc_commodity_namespace_is_iso(const char *namespace);
  *  @param cm The commodity to check.
  *
  *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
-gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
+gboolean gnc_commodity_is_iso(const GncCommodity * cm);
 
 /** Checks to see if the specified commodity is an ISO 4217 recognized
  * currency or a legacy currency.
@@ -658,7 +600,7 @@ gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
  *  @param cm The commodity to check.
  *
  *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
-gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
+gboolean gnc_commodity_is_currency(const GncCommodity *cm);
 
 /** @} */
 
@@ -687,17 +629,17 @@ void gnc_commodity_table_copy(gnc_commodity_table *dest,
 /** @name Commodity Table Lookup functions
 @{
 */
-gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
+GncCommodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
                                            const char * namespace, 
                                            const char * mnemonic);
-gnc_commodity *
+GncCommodity *
 gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
                                   const char * unique_name);
-gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
+GncCommodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);
 
-gnc_commodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
+GncCommodity * gnc_commodity_find_commodity_by_guid(const GUID *guid, QofBook *book);
 gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid, QofBook *book);
 
 /** @} */
@@ -721,8 +663,8 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
  *  @note The commodity pointer passed to this function should not be
  *  used after its return, as it may have been destroyed.  Use the
  *  return value which is guaranteed to be valid. */
-gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
-                                           gnc_commodity * comm);
+GncCommodity * gnc_commodity_table_insert(gnc_commodity_table * table,
+                                           GncCommodity * comm);
 
 /** Remove a commodity from the commodity table. If the commodity to
  *  remove doesn't exist, nothing happens.
@@ -731,7 +673,7 @@ gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
  *
  *  @param comm A pointer to the commodity to remove. */
 void gnc_commodity_table_remove(gnc_commodity_table * table,
-				gnc_commodity * comm);
+				GncCommodity * comm);
 
 /** Add all the standard namespaces and currencies to the commodity
  *  table.  This routine creates the namespaces for the NYSE, NASDAQ,
@@ -897,7 +839,7 @@ CommodityList * gnc_commodity_table_get_quotable_commodities(
  *  @param user_data A pointer that is passed into the function
  *  unchanged by the table walk routine. */
 gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table,
-                                       gboolean (*f)(gnc_commodity *cm,
+                                       gboolean (*f)(GncCommodity *cm,
                                                      gpointer user_data),
                                        gpointer user_data);
 /** @} */
@@ -916,7 +858,7 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
  *
  *  @param mark The new value of the mark field.
  */
-void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
+void  gnc_commodity_set_mark(GncCommodity * cm, gint16 mark);
 
 /** You proably shouldn't be using gnc_commodity_table_new() directly,
  * its for internal use only. You should probably be using
@@ -930,7 +872,7 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
  *   the indicated book.  This routine is primarily useful for setting
  *   up clones of things across multiple books.
  */
-gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
+GncCommodity * gnc_commodity_obtain_twin (GncCommodity *from, QofBook *book);
 
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the
@@ -938,8 +880,8 @@ gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
  */
 gboolean gnc_commodity_table_register (void);
 
-void gnc_commodity_begin_edit (gnc_commodity *cm);
-void gnc_commodity_commit_edit (gnc_commodity *cm);
+void gnc_commodity_begin_edit (GncCommodity *cm);
+void gnc_commodity_commit_edit (GncCommodity *cm);
 		  
 /** @} */
 

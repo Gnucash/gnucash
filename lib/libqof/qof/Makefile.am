@@ -21,7 +21,7 @@ libgnc_qof_la_SOURCES =  \
    qofbackend.c      \
    qofclass.c        \
    qofchoice.c       \
-   qofid.c           \
+   qofid.c   \
    qofinstance.c     \
    qofquery.c        \
    qofbook.c         \
@@ -51,7 +51,7 @@ qofinclude_HEADERS = \
    qofchoice.h       \
    qofevent.h        \
    qofgobj.h         \
-   qofid.h           \
+   qofid.h   \
    qofid-p.h         \
    qofinstance-p.h   \
    qofinstance.h     \

@@ -73,7 +73,7 @@
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
     @author Copyright (C) 2007 Daniel Espinosa <esodan@gmail.com>
 */
-
+#include "qofinstance.h"
 #include <string.h>
 #include <glib-object.h>
 #include "guid.h"
@@ -84,6 +84,17 @@
 
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
+
+/** QofIdType declaration */
+typedef GType QofIdType;
+/** QofIdTypeConst declaration */
+typedef GType QofIdTypeConst;
+
+#define QOF_ID_NONE           G_TYPE_NONE
+#define QOF_ID_NULL           G_TYPE_INVALID
+#define QOF_ID_BOOK           QOF_TYPE_BOOK
+#define QOF_ID_SESSION        "Session"
+
 
 /* GObject declarations */
 
@@ -114,7 +125,7 @@ struct _QofCollectionClass {
 };
 
 
-GType qof_entity_get_type ();
+GType qof_collection_get_type (void);
 
 /** create a new collection of entities of type */
 QofCollection * qof_collection_new (GType type);
@@ -122,17 +133,17 @@ QofCollection * qof_collection_new (GType type);
 /** return the number of entities in the collection. */
 guint qof_collection_count (const QofCollection *col);
 
-/** destroy the collection */
 void qof_collection_destroy (QofCollection *col);
 
 /** return the type that the collection stores */
-GType qof_collection_get_g_type (const QofCollection *);
+GType qof_collection_get_g_type (const QofCollection *col);
+
 
 /** Find the entity going only from its guid */
-QofInstance * qof_collection_lookup_element (const QofCollection *, const GUID *);
+QofInstance* qof_collection_lookup_element (const QofCollection *col, const GUID *guid);
 
 /** Call the callback for each entity in the collection. */
-void qof_collection_foreach (const QofCollection *, QofEntityForeachCB, 
+void qof_collection_foreach (QofCollection *col, QofInstanceForeachCB cb_func, 
                              gpointer user_data);
 
 /** Store and retreive arbitrary object-defined data 
@@ -141,8 +152,8 @@ void qof_collection_foreach (const QofCollection *, QofEntityForeachCB,
  * destroyed, so that the user has a chance to clean up anything
  * that was put in the 'data' member here.
  */
-gpointer qof_collection_get_data (const QofCollection *col);
-void qof_collection_set_data (QofCollection *col, gpointer user_data);
+#define qof_collection_get_data(col) (g_object_get_data(G_OBJECT(col), "SOME_DATA"))
+#define qof_collection_set_data(col, user_data) (g_object_set_data(G_OBJECT(col), "SOME_DATA", user_data))
 
 /** Return value of 'dirty' flag on collection */
 gboolean qof_collection_is_dirty (const QofCollection *col);
@@ -167,19 +178,18 @@ will not be removed from the original collection as they would
 by using ::qof_entity_insert_entity or ::qof_entity_remove_entity. 
 
 */
-gboolean
-qof_collection_add_element (QofCollection *coll, QofInstance *inst);
+gboolean qof_collection_add_element (QofCollection *coll, QofInstance *inst);
 
-gboolean
-qof_collection_remove_element (QofCollection *coll, QofInstance *ent);
+gboolean qof_collection_remove_element (QofCollection *coll, QofInstance *inst);
 
-/** \brief Merge two QOF_TYPE_COLLECT of the same type.
+
+/* \brief Merge two QOF_TYPE_COLLECT of the same type.
 
 \note \b NOT the same as the main collections in the book.
 
 QOF_TYPE_COLLECT uses a secondary collection, independent of
 those in the book. Entities will not be removed from the
-original collection as when using ::qof_entity_insert_entity
+original collection as when using ::qof_instance_insert_entity
 or ::qof_entity_remove_entity.
 
 */
@@ -211,7 +221,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge);
 	on success.
 */
 QofCollection*
-qof_collection_from_glist (QofIdType type, GList *glist);
+qof_collection_from_glist (QofBook *book, GType      type, GList *glist);
 
 /******************************************************/
 

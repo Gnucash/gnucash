@@ -84,6 +84,7 @@ and include all specified fields. Remember to use gmtime() NOT localtime()!
 
 #define QOF_UTC_DATE_FORMAT     "%Y-%m-%dT%H:%M:%SZ"
 
+
 /** Enum for determining a date format */
 typedef enum
 {

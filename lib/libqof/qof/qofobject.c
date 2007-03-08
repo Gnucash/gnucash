@@ -38,12 +38,13 @@ static GList *object_modules = NULL;
 static GList *book_list = NULL;
 static GHashTable *backend_data = NULL;
 
+/* DEPRACATED use g_object_new see qofinstance.h
 gpointer
 qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
 {
   const QofObject *obj;
 
-  if (!type_name) return NULL;
+  if (type_name == G_TYPE_INVALID) return NULL;
 
   obj = qof_object_lookup (type_name);
   if (!obj) return NULL;
@@ -53,6 +54,7 @@ qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
 
   return NULL;
 }
+*/
 
 void qof_object_book_begin (QofBook *book)
 {
@@ -146,14 +148,14 @@ qof_object_compliance (QofIdTypeConst type_name, gboolean warn)
 	if((obj->create == NULL)||(obj->foreach == NULL)){
 		if(warn) 
 		{
-			PINFO (" Object type %s is not fully QOF compliant", obj->e_type);
+			PINFO (" Object type %s is not fully QOF compliant", g_type_name (obj->e_type));
 		}
 		return FALSE;
 	}
 	return TRUE;
 }
 
-
+/* DEPRACATED see qofinstance.h
 void 
 qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
                     QofEntityForeachCB cb, gpointer user_data)
@@ -179,6 +181,8 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
   return;
 }
 
+
+
 const char *
 qof_object_printable (QofIdTypeConst type_name, gpointer obj)
 {
@@ -194,7 +198,7 @@ qof_object_printable (QofIdTypeConst type_name, gpointer obj)
 
   return NULL;
 }
-
+*/
 const char * qof_object_get_type_label (QofIdTypeConst type_name)
 {
   const QofObject *obj;
@@ -213,10 +217,10 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
   return TRUE;
 }
 
+
 /* INITIALIZATION and PRIVATE FUNCTIONS */
 
-void qof_object_initialize (void)
-{
+void qof_object_initialize (void){
   if (object_is_initialized) return;
   backend_data = g_hash_table_new (g_str_hash, g_str_equal);
   object_is_initialized = TRUE;
@@ -275,7 +279,7 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
 
   for (iter = object_modules; iter; iter = iter->next) {
     obj = iter->data;
-    if (!safe_strcmp (obj->e_type, name))
+    if (obj->e_type == name)
       return obj;
   }
   return NULL;
@@ -288,7 +292,7 @@ gboolean qof_object_register_backend (QofIdTypeConst type_name,
   GHashTable *ht;
   g_return_val_if_fail (object_is_initialized, FALSE);
 
-  if (!type_name || *type_name == '\0' ||
+  if (!type_name || type_name == G_TYPE_INVALID ||
       !backend_name || *backend_name == '\0' ||
       !be_data)
     return FALSE;
@@ -297,12 +301,12 @@ gboolean qof_object_register_backend (QofIdTypeConst type_name,
 
   /* If it doesn't already exist, create a new table for this backend */
   if (!ht) {
-    ht = g_hash_table_new (g_str_hash, g_str_equal);
+    ht = g_hash_table_new (g_int_hash, g_int_equal);
     g_hash_table_insert (backend_data, (char *)backend_name, ht);
   }
 
   /* Now insert the data */
-  g_hash_table_insert (ht, (char *)type_name, be_data);
+  g_hash_table_insert (ht, GINT_TO_POINTER (type_name), be_data);
 
   return TRUE;
 }
@@ -312,7 +316,7 @@ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
 {
   GHashTable *ht;
 
-  if (!type_name || *type_name == '\0' ||
+  if (!type_name || type_name == G_TYPE_INVALID ||
       !backend_name || *backend_name == '\0')
     return NULL;
 
@@ -320,7 +324,7 @@ gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
   if (!ht)
     return NULL;
 
-  return g_hash_table_lookup (ht, (char *)type_name);
+  return g_hash_table_lookup (ht, GINT_TO_POINTER (type_name));
 }
 
 struct foreach_data {
@@ -330,7 +334,7 @@ struct foreach_data {
 
 static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
 {
-  char *data_type = key;
+  GType data_type = GPOINTER_TO_INT(key);
   struct foreach_data *cb_data = arg;
 
   g_return_if_fail (key && be_item && arg);

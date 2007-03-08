@@ -74,7 +74,7 @@ struct _GncSplit
 
   Account *acc;              /* back-pointer to debited/credited account  */
   Account *orig_acc;
-  GNCLot *lot;               /* back-pointer to debited/credited lot */
+  GncLot *lot;               /* back-pointer to debited/credited lot */
 
   Transaction *parent;       /* parent of split                           */
   Transaction *orig_parent;

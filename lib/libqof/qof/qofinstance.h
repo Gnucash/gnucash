@@ -36,11 +36,15 @@
 #ifndef QOF_INSTANCE_H
 #define QOF_INSTANCE_H
 
+#include <glib-object.h>
 #include "guid.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
+
+#ifndef QOF_BOOK_H
+#define QOF_BOOK_DEFINED
+typedef struct _QofBook QofBook;
+#endif
 
 /* GObject declarations */
 
@@ -51,40 +55,46 @@
 #define QOF_IS_INSTANCE_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
 #define QOF_INSTANCE_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
 
-
 typedef struct _QofInstanceClass QofInstanceClass;
 typedef struct _QofInstancePrivate QofInstancePrivate;
 typedef struct _QofInstance QofInstance;
+#define QofEntity QofInstance /* Backward compatibility, the QofEntity is now "part" of QofInstance */
 
 struct _QofInstance {
 	GObject object;
 	QofInstancePrivate *priv;
 };
 
+typedef void (*QofInstanceForeachCB) (QofInstance *inst, gpointer user_data);
+
+typedef QofInstanceForeachCB QofEntityForeachCB; /* Backward compatibility */
+
 struct _QofInstanceClass {
 	GObjectClass parent_class;
 	/* virtual table */
-	 void                	(*foreach)			(const QofCollection *, QofEntityForeachCB, gpointer);
-	 const char *      (*to_string)			(gpointer instance);
-	 void					(*commit)			(QofInstance* instance);
-	 void					
+	 void        (*foreach) 			(QofInstance *inst, QofInstanceForeachCB cb_func, gpointer user_data);
+	 gchar*      (*to_string)			(gpointer instance);
 	/* Add Signal Functions Here */
 };
 
-GType   qof_instance_get_type ();
+GType   qof_instance_get_type (void);
+
+
+
 
 /** Return the book pointer */
-QofBook * qof_instance_get_book (const QofInstance *);
+QofBook * qof_instance_get_book (const QofInstance *inst);
+void      qof_instance_set_book (QofInstance *inst, QofBook *book);
 
-QofCollection* qof_instance_get_collection (QofInstance *entity);
+#define qof_instance_get_collection(o) qof_book_get_collection(qof_instance_get_book(o), G_OBJECT_TYPE(o))
 
 /** Return the GUID of this instance */
-const GUID * qof_instance_get_guid (const QofInstance *);
+GUID* qof_instance_get_guid (QofInstance *inst);
 
 /** Set the ID of the entity, over-riding the previous ID. 
  *  Very dangerous, use only for file i/o work. 
  */
-void qof_entity_set_guid (QofInstance *inst, const GUID *guid);
+void qof_instance_set_guid (QofInstance *inst, GUID *guid);
 
 /** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (const QofInstance *);
@@ -106,7 +116,7 @@ Timespec qof_instance_get_last_update (const QofInstance *inst);
  */
 int qof_instance_version_cmp (const QofInstance *left, const QofInstance *right);
 
-void qof_instance_print_dirty (const QofEntity *entity, gpointer dummy);
+void qof_instance_print_dirty (QofInstance *inst, gpointer dummy);
 
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
@@ -125,9 +135,11 @@ void qof_instance_mark_free(QofInstance *inst);
 
 QofInstance* qof_instance_create (GType type, QofBook *book);
 
-void qof_instance_destroy (QofInstance *inst);
+gboolean qof_instance_destroy (QofInstance *inst, GError **error);
 
-#define qof_instance_release(instance) qof_instance_destroy(instance)
+void qof_instance_release (QofInstance *instance);
+
+#define qof_entity_release(obj) qof_instance_release (QOF_INSTANCE (obj))
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the
@@ -158,21 +170,35 @@ QofInstance * qof_instance_lookup_twin (const QofInstance *src, QofBook *book);
 
 KvpFrame* qof_instance_get_kvp_data (const QofInstance *instance);
 void			qof_instance_set_kvp_data (QofInstance *instance, KvpFrame *data);
+void      qof_instance_delete_kvp_data (QofInstance *inst);
 
 gint		 	qof_instance_get_edit_level (const QofInstance *instance);
 void 		qof_instance_set_edit_level (QofInstance *instance, gint editlevel);
 
-#define qof_object_new_instance (type, book) g_object_new (type, "book", book, NULL)
+#define qof_object_new_instance(type, book) g_object_new (type, "book", book, NULL)
 
-const char *      qof_instance_to_string			(QofInstance *instance);
+void    qof_instance_foreach			(QofInstance *inst, QofInstanceForeachCB cb_func, gpointer user_data);
 
-#define qof_object_printable (type, instance) qof_instance_to_string (instance)
 
-gboolean qof_instance_begin_edit (QofInstance *inst, GError *error);
+gchar *      qof_instance_to_string			(QofInstance *instance);
 
-gboolean qof_instance_commit_edit(QofInstance *inst, GError *error);
+#define qof_object_printable(type, instance) qof_instance_to_string (instance)
 
-gboolean qof_instance_destroy (QofInstance *inst);
+gboolean qof_instance_begin_edit (QofInstance *inst, GError **error);
+
+gboolean qof_instance_commit_edit(QofInstance *inst, GError **error);
+
+
+/** Return The kvp data for the book.
+ *  Note that the book KVP data is persistent, and is stored/retrieved
+ *  from the file/database.  Thus, the book KVP is the correct place to
+ *  store data that needs to be persistent accross sessions (or shared
+ *  between multiple users).  To store application runtime data, use
+ *  qof_book_set_data() instead.
+
+		DEPRECATED: use qof_instance_get_slots instead
+ */
+#define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
 
 /* @} */
 /* @} */

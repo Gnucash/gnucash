@@ -39,30 +39,8 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-
-/* GObject declarations */
-
-#define GNC_TYPE_SPLIT            (gnc_split_get_type ())
-#define GNC_SPLIT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SPLIT, GncSplit))
-#define GNC_SPLIT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SPLIT, GncSplitClass))
-#define GNC_IS_SPLIT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SPLIT))
-#define GNC_IS_SPLIT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SPLIT))
-#define GNC_SPLIT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SPLIT, GncSplitClass))
-
-
-typedef struct _GncSplitClass GncSplitClass;
-typedef struct _GncSplit GncSplit;
-typedef struct GncSplit Split; /*  Dummy type for backward compatilibity */
-
-struct _GncSplitClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_split_get_type ();
-
+#include "Account.h"
+#include "Transaction.h"
 
 /** @name Split Reconciled field values
 
@@ -83,7 +61,7 @@ GType   gnc_split_get_type ();
  * in particular we want to convert the Split to be in to_commodity.
  * Returns the amount.
  */
-gnc_numeric xaccSplitConvertAmount (const Split *split, Account * account);
+gnc_numeric xaccSplitConvertAmount (const Split *split, GncAccount * account);
 
 /*-----------------------------------------------------------------------
  * Splits
@@ -127,8 +105,8 @@ QofBook *   xaccSplitGetBook (const Split *split);
 
 /** Returns the account of this split, which was set through
  * xaccAccountInsertSplit(). */
-Account *     xaccSplitGetAccount (const Split *split);
-void xaccSplitSetAccount (Split *s, Account *acc);
+GncAccount *     xaccSplitGetAccount (const Split *split);
+void xaccSplitSetAccount (Split *s, GncAccount *acc);
 
 /** Returns the parent transaction of the split. */
 Transaction * xaccSplitGetParent (const Split *split);

@@ -43,16 +43,39 @@
 #include "SchedXaction.h"
 #include "qof.h"
 
-typedef struct xaccSchedXactionsDef SchedXactions;
+/* GObject declarations */
 
-struct xaccSchedXactionsDef {
-  QofInstance inst;
+#define GNC_TYPE_SCHEDULE_ACTIONS            (gnc_schedule_actions_get_type ())
+#define GNC_SCHEDULE_ACTIONS(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SCHEDULE_ACTIONS, GncScheduleActions))
+#define GNC_SCHEDULE_ACTIONS_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SCHEDULE_ACTIONS, GncScheduleActionsClass))
+#define GNC_IS_SCHEDULE_ACTIONS(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SCHEDULE_ACTIONS))
+#define GNC_IS_SCHEDULE_ACTIONS_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SCHEDULE_ACTIONS))
+#define GNC_SCHEDULE_ACTIONS_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SCHEDULE_ACTIONS, GncScheduleActionsClass))
+
+
+typedef struct _GncScheduleActionsClass GncScheduleActionsClass;
+typedef struct _GncScheduleActionsPrivate GncScheduleActionsPrivate;
+typedef struct _GncScheduleActions GncScheduleActions;
+typedef struct GncScheduleActions SchedXactions ; /* Backward compatibility*/
+
+struct _GncScheduleActions {
+	QofInstance inst;
   GList* sx_list;
   gboolean sx_notsaved;
 };
 
-#define GNC_IS_SXES(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SXES))
-#define GNC_SXES(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SXES, SchedXactions))
+struct _GncScheduleActionsClass {
+	QofInstanceClass parent_class;
+	/* virtual table */
+	 
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_schedule_actions_get_type ();
+
+
+#define GNC_IS_SXES(obj)  GNC_IS_SCHEDULE_ACTIONS(o)
+#define GNC_SXES(obj)     GNC_SCHEDULE_ACTIONS(o)
 
 SchedXactions* gnc_book_get_schedxactions(QofBook* book);
 

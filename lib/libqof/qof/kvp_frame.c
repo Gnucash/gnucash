@@ -67,10 +67,151 @@ struct _KvpValue
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_KVP;
 
+/********************************************
+ * Binary Type register
+*********************************************/
+
+static gpointer
+gnc_binary_copy (gpointer boxed)
+{
+	KvpValueBinaryData *src = (KvpValueBinaryData*) boxed;
+	KvpValueBinaryData *copy = NULL;
+
+	g_return_val_if_fail (src, NULL);
+
+	copy = g_new0 (KvpValueBinaryData, 1);
+	copy->data = g_memdup (src->data, src->datasize);
+	copy->datasize = src->datasize;
+	
+	return copy;
+}
+
+static void
+gnc_binary_free (gpointer boxed)
+{
+  KvpValueBinaryData *binary = (KvpValueBinaryData*) boxed;
+  
+  g_free (binary->data);
+  g_free (binary);
+}
+
+GType
+gnc_binary_get_type (void)
+{
+	static GType type = 0;
+	
+	if (G_UNLIKELY (type == 0)) {
+		type = g_boxed_type_register_static ("GncBinary",
+						     (GBoxedCopyFunc) gnc_binary_copy,
+						     (GBoxedFreeFunc) gnc_binary_free);
+	}
+	
+	return type;
+}
+
+/********************************************
+ * GList Type register
+*********************************************/
+
+static gpointer
+gnc_glist_copy (gpointer boxed)
+{
+	GList *src = (GList*) boxed;
+	GList *copy = NULL;
+
+	g_return_val_if_fail (src, NULL);
+
+	copy = g_list_copy (src);
+	
+	return copy;
+}
+
+static void
+gnc_glist_free (gpointer boxed)
+{
+  GList *list = (GList*) boxed;
+  
+  g_list_free (list);
+}
+
+GType
+gnc_glist_get_type (void)
+{
+	static GType type = 0;
+	
+	if (G_UNLIKELY (type == 0)) {
+		type = g_boxed_type_register_static ("GncGList",
+						     (GBoxedCopyFunc) gnc_glist_copy,
+						     (GBoxedFreeFunc) gnc_glist_free);
+	}
+	
+	return type;
+}
+
+
 /* *******************************************************************
  * KvpFrame functions
  ********************************************************************/
 
+static gpointer
+gnc_kvp_frame_copy (gpointer boxed)
+{
+	KvpFrame *src = (KvpFrame*) boxed;
+	KvpFrame *copy = NULL;
+
+	g_return_val_if_fail (src, NULL);
+
+	copy = kvp_frame_copy(src);;
+	
+	return copy;
+}
+
+static void
+gnc_kvp_frame_free (gpointer boxed)
+{
+	KvpFrame *frame = (KvpFrame*) boxed;
+	
+	g_return_if_fail (frame);
+	
+	kvp_frame_delete (frame);
+}
+
+GType
+gnc_kvp_frame_get_type (void)
+{
+	static GType type = 0;
+	
+	if (G_UNLIKELY (type == 0)) {
+		type = g_boxed_type_register_static ("KvpFrame",
+						     (GBoxedCopyFunc) gnc_kvp_frame_copy,
+						     (GBoxedFreeFunc) gnc_kvp_frame_free);
+	}
+	
+	return type;
+}
+
+
+/**
+ * gnc_value_get_numeric
+ * @value: a #GValue whose value we want to get.
+ *
+ * Returns: the value stored in @value.
+ */
+G_CONST_RETURN KvpFrame*
+gnc_value_get_kvp_frame (const GValue *value)
+{
+	KvpFrame *val;
+
+	g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
+	g_return_val_if_fail (GNC_VALUE_HOLDS_KVP_FRAME (value), NULL);
+
+	val = (KvpFrame*) g_value_get_boxed (value);
+
+	return val;
+}
+
+
+/***/
 static guint 
 kvp_hash_func(gconstpointer v) 
 {

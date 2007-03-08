@@ -20,37 +20,37 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Transaction Financial Transactions
-    A good overview of transactions, splits and accounts can be 
+    A good overview of transactions, splits and GncAccounts can be 
     found in the texinfo documentation, together with an overview of
     how to use this API.
 
 Splits, or "Ledger Entries" are the fundamental
-accounting units. Each Split consists of an amount (number of dollar
+GncAccounting units. Each Split consists of an amount (number of dollar
 bills, number of shares, etc.), the value of that amount expressed in
 a (possibly) different currency than the amount, a Memo, a pointer to
-the parent Transaction, a pointer to the debited Account, a reconciled
+the parent Transaction, a pointer to the debited GncAccount, a reconciled
 flag and timestamp, an "Action" field, and a key-value frame which can
 store arbitrary data.
                                                                               
-Transactions embody the notion of "double entry" accounting. 
+Transactions embody the notion of "double entry" GncAccounting. 
 A Transaction consists of a date, a description, an ID number, 
 a list of one or more Splits, and a key-value frame.  The transaction
 also specifies the currency with which all of the splits will be valued.
 When double-entry rules are enforced, the sum total value of the splits 
 are zero.  If there are only two splits, then the value of one must be 
-positive, the other negative: this denotes that one account is debited, 
+positive, the other negative: this denotes that one GncAccount is debited, 
 and another is credited by an equal amount.  By forcing the value of the
 splits to always 'add up' to zero, we can guarantee that the balances
-of the accounts are always correctly balanced.
+of the GncAccounts are always correctly balanced.
 
-The engine does not enforce double-entry accounting, but provides an API
+The engine does not enforce double-entry GncAccounting, but provides an API
 to enable user-code to find unbalanced transactions and 'repair' them so
 that they are in balance. 
 
 Note the sum of the values of Splits in a Transaction is always computed
 with respect to a currency; thus splits can be balanced even when they
 are in different currencies, as long as they share a common currency.
-This feature allows currency-trading accounts to be established.
+This feature allows currency-trading GncAccounts to be established.
                                                                               
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
@@ -59,22 +59,22 @@ enforced by the engine. The engine user cannnot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
-Splits are grouped into Accounts which are also known
-as "Ledgers" in accounting practice. Each Account consists of a list of
-Splits that debit that Account. To ensure consistency, if a Split points
-to an Account, then the Account must point to the Split, and vice-versa.
-A Split can belong to at most one Account. Besides merely containing a
-list of Splits, the Account structure also gives the Account a name, a
+Splits are grouped into GncAccounts which are also known
+as "Ledgers" in GncAccounting practice. Each GncAccount consists of a list of
+Splits that debit that GncAccount. To ensure consistency, if a Split points
+to an GncAccount, then the GncAccount must point to the Split, and vice-versa.
+A Split can belong to at most one GncAccount. Besides merely containing a
+list of Splits, the GncAccount structure also gives the GncAccount a name, a
 code number, description and notes fields, a key-value frame, a pointer
-to the commodity that is used for all splits in this account. The
+to the commodity that is used for all splits in this GncAccount. The
 commodity can be the name of anything traded and tradable: a stock 
 (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or anything
 added to the commodity table.  
 
-Accounts can be arranged in a hierarchical tree. The nodes of the tree
-are called "Account Groups". By accounting
-convention, the value of an Account is equal to the value of all of its
-Splits plus the value of all of its sub-Accounts.
+GncAccounts can be arranged in a hierarchical tree. The nodes of the tree
+are called "GncAccount Groups". By GncAccounting
+convention, the value of an GncAccount is equal to the value of all of its
+Splits plus the value of all of its sub-GncAccounts.
 
     @{ */
 /** @file Transaction.h 
@@ -91,29 +91,8 @@ Splits plus the value of all of its sub-Accounts.
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "Split.h"
+#include "Account.h"
 
-/* GObject declarations */
-
-#define GNC_TYPE_TRANSACTION            (qof_book_get_type ())
-#define GNC_TRANSACTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TRANSACTION, GncTransaction))
-#define GNC_TRANSACTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TRANSACTION, GncTransactionClass))
-#define GNC_IS_TRANSACTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TRANSACTION))
-#define GNC_IS_TRANSACTION_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TRANSACTION))
-#define GNC_TRANSACTION_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TRANSACTION, GncTransactionClass))
-
-
-typedef struct _GncTransactionClass GncTransactionClass;
-typedef struct _GncTransaction GncTransaction;
-typedef struct GncTransaction Transaction; /*  Dummy type for backward compatilibity */
-
-struct _GncTransactionClass {
-	QofInstanceClass parent_class;
-	/* virtual table */
-
-	/* Add Signal Functions Here */
-};
-
-GType   gnc_transaction_get_type ();
 
 /** @name Transaction Type field values
 @{
@@ -137,7 +116,7 @@ Transaction * xaccMallocTransaction (QofBook *book);
 
 /**
  The xaccTransDestroy() method will remove all 
- of the splits from each of their accounts, free the memory
+ of the splits from each of their GncAccounts, free the memory
  associated with them.  This routine must be followed by either
  an xaccTransCommitEdit(), in which case the transaction 
  memory will be freed, or by xaccTransRollbackEdit(), in which 
@@ -166,7 +145,7 @@ Transaction * xaccTransClone (const Transaction *t);
  *
  * @param check_balances If TRUE, when checking splits also compare
  * balances between the two splits.  Balances are recalculated
- * whenever a split is added or removed from an account, so YMMV on
+ * whenever a split is added or removed from an GncAccount, so YMMV on
  * whether this should be set.
  *
  * @param assume_ordered If TRUE, assume that the splits in each
@@ -215,7 +194,7 @@ Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
 Split * xaccTransFindSplitByAccount(const Transaction *trans, 
-                                    const Account *acc);
+                                    const GncAccount *acc);
 
 /** The xaccTransScrubGains() routine performs a number of cleanup
  *  functions on the indicated transaction, with the end-goal of
@@ -224,7 +203,7 @@ Split * xaccTransFindSplitByAccount(const Transaction *trans,
  *  assignments of all the splits are good, and that the lots 
  *  balance appropriately.
  */
-void xaccTransScrubGains (Transaction *trans, Account *gain_acc);
+void xaccTransScrubGains (Transaction *trans, GncAccount *gain_acc);
 
 
 /** \warning XXX FIXME 
@@ -315,15 +294,15 @@ int           xaccTransCountSplits (const Transaction *trans);
 /** FIXME: document me */
 gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
 /** FIXME: document me */
-gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
-						     const Account *account);
+gboolean      xaccTransHasReconciledSplitsByGncAccount (const Transaction *trans,
+						     const GncAccount *GncAccount);
 
 /** FIXME: document me */
 gboolean      xaccTransHasSplitsInState (const Transaction *trans, const char state);
 /** FIXME: document me */
-gboolean      xaccTransHasSplitsInStateByAccount (const Transaction *trans,
+gboolean      xaccTransHasSplitsInStateByGncAccount (const Transaction *trans,
 						  const char state,
-						  const Account *account);
+						  const GncAccount *GncAccount);
 
 
 /** Returns the valuation commodity of this transaction.
@@ -348,32 +327,32 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
  * method. */
 gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 
-/** The xaccTransGetAccountValue() method returns the total value applied
- *  to a particular account.  In some cases there may be multiple Splits
- *  in a single Transaction applied to one account (in particular when
+/** The xaccTransGetGncAccountValue() method returns the total value applied
+ *  to a particular GncAccount.  In some cases there may be multiple Splits
+ *  in a single Transaction applied to one GncAccount (in particular when
  *  trying to balance Lots) -- this function is just a convienience to
  *  view everything at once.
  */
-gnc_numeric xaccTransGetAccountValue (const Transaction *trans, 
-				      const Account *account);
+gnc_numeric xaccTransGetGncAccountValue (const Transaction *trans, 
+				      const GncAccount *GncAccount);
 
-/** Same as xaccTransGetAccountValue, but uses the Account's commodity. */
-gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
-                                       const Account *account);
+/** Same as xaccTransGetGncAccountValue, but uses the GncAccount's commodity. */
+gnc_numeric xaccTransGetGncAccountAmount (const Transaction *trans,
+                                       const GncAccount *GncAccount);
 
-/* Compute the conversion rate for the transaction to this account.
+/* Compute the conversion rate for the transaction to this GncAccount.
  * Any "split value" (which is in the transaction currency),
  * multiplied by this conversion rate, will give you the value you
- * should display for this account.
+ * should display for this GncAccount.
  *
  * If 'acc' is NULL, return unity.
  */
-gnc_numeric xaccTransGetAccountConvRate(Transaction *txn, Account *acc);
+gnc_numeric xaccTransGetGncAccountConvRate(Transaction *txn, GncAccount *acc);
 
-/** Get the account balance for the specified account after the last
+/** Get the GncAccount balance for the specified GncAccount after the last
     split in the specified transaction. */
-gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
-                                        const Account *account);
+gnc_numeric xaccTransGetGncAccountBalance (const Transaction *trans,
+                                        const GncAccount *GncAccount);
 
 /**
  * The xaccTransOrder(ta,tb) method is useful for sorting.
@@ -471,13 +450,13 @@ void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 \********************************************************************/
 
 
-/** The xaccGetAccountByName() is a convenience routine that 
- *  is essentially identical to xaccGetPeerAccountFromName(),
+/** The xaccGetGncAccountByName() is a convenience routine that 
+ *  is essentially identical to xaccGetPeerGncAccountFromName(),
  *  except that it accepts the handy transaction as root.*/
-Account * xaccGetAccountByName (const Transaction *trans, const char *name);
-/** The xaccGetAccountByFullName routine is similar to xaccGetAccountByName, but uses
+GncAccount * xaccGetGncAccountByName (const Transaction *trans, const char *name);
+/** The xaccGetGncAccountByFullName routine is similar to xaccGetGncAccountByName, but uses
  *  full names using the given separator.*/
-Account * xaccGetAccountByFullName (const Transaction *trans,
+GncAccount * xaccGetGncAccountByFullName (const Transaction *trans,
                                     const char *name);
 
 
@@ -508,7 +487,7 @@ void xaccTransUnvoid(Transaction *transaction);
 /** xaccTransReverse creates a Transaction that reverses the given
  *  tranaction by inverting all the numerical values in the given
  *  transaction.  This function cancels out the effect of an earlier
- *  transaction.  This will be needed by write only accounts as a way
+ *  transaction.  This will be needed by write only GncAccounts as a way
  *  to void a previous transaction (since you can't alter the existing
  *  transaction).
  *

@@ -25,6 +25,7 @@
 #define GUID_H 
 
 #include <stddef.h>
+#include <glib-object.h>
 
 /** @addtogroup Entity
     @{ */
@@ -57,6 +58,14 @@ typedef union _GUID
   gint __align_me; /* this just ensures that GUIDs are 32-bit
                    * aligned on systems that need them to be. */
 } GUID;
+
+
+#define GNC_TYPE_GUID (gnc_guid_get_type())
+#define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
+
+GType 									gnc_guid_get_type (void);
+G_CONST_RETURN GUID*		gnc_value_get_guid (const GValue *value);
+
 
 
 /** number of characters needed to encode a guid as a string

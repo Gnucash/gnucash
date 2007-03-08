@@ -48,6 +48,7 @@
 #ifndef QOF_OBJECT_H_
 #define QOF_OBJECT_H_
 
+#include <glib.h>
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofchoice.h"
@@ -139,7 +140,7 @@ const QofObject * qof_object_lookup (QofIdTypeConst type_name);
  *  instance.  This routine just calls the (*new) callback on the object
  *  definition.  
  */
-gpointer qof_object_new_instance (QofIdTypeConst type_name, QofBook *book);
+/* gpointer qof_object_new_instance (QofIdTypeConst type_name, QofBook *book); */
 
 /** Get the printable label for a type.  This label is *not*
  * translated; you must use _() on it if you want a translated version.
@@ -147,7 +148,7 @@ gpointer qof_object_new_instance (QofIdTypeConst type_name, QofBook *book);
 const char * qof_object_get_type_label (QofIdTypeConst type_name);
 
 /** @return a Human-readable string name for an instance */
-const char * qof_object_printable (QofIdTypeConst type_name, gpointer instance);
+/* const char * qof_object_printable (QofIdTypeConst type_name, gpointer instance); */
 
 /** Invoke the callback 'cb' on every object class definition.
  *  The user_data pointer is passed back to the callback.
@@ -159,8 +160,8 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
  *  identifies a colllection of instances; thus the callback will 
  *  be invoked only for those instances stored in the book.
  */
-void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                         QofEntityForeachCB cb, gpointer user_data);
+/*void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
+                         QofEntityForeachCB cb, gpointer user_data);*/
 
 /** Register and lookup backend-specific data for this particular object */
 gboolean qof_object_register_backend (QofIdTypeConst type_name,

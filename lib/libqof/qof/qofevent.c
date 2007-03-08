@@ -231,15 +231,7 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
     HandlerInfo *hi = node->data;
 
     next_node = node->next;
-#ifndef QOF_DISABLE_DEPRECATED
-    if ((hi->old_handler) && (use_old_handlers))
-    {
-      PINFO(" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
-            hi->old_handler);
-      hi->old_handler ((GUID *)&entity->guid, entity->e_type,
-                       event_id, hi->user_data);
-    }
-#endif
+
     if (hi->handler)
     {
       PINFO("id=%d hi=%p han=%p data=%p", hi->handler_id, hi, 
@@ -296,6 +288,7 @@ qof_event_gen (QofEntity *entity, QofEventId event_id, gpointer event_data)
 }
 
 /* deprecated */
+/*
 void 
 qof_event_generate (const GUID *guid, QofIdType e_type, 
 					QofEventId event_id)
@@ -304,8 +297,9 @@ qof_event_generate (const GUID *guid, QofIdType e_type,
   ent.guid = *guid;
   ent.e_type = e_type;
   if (suspend_counter) return;
-  /* caution: this is an incomplete entity! */
+  // caution: this is an incomplete entity!
   qof_event_generate_internal (&ent, event_id, NULL);
 }
+*/
 
 /* =========================== END OF FILE ======================= */

@@ -50,6 +50,13 @@
 
 #include "qofbackend-p.h"
 
+static gulong begin_commit_event_handler = 0;
+static gulong begin_edit_event_handler = 0;
+
+static void gnc_transaction_on_begin_commit_edit (GncTransaction *trans);
+static void gnc_transaction_on_begin_edit (GncAccount *acc)
+
+
 /* GObject declarations */
 
 static void gnc_transaction_class_init(GncTransactionClass *klass);
@@ -126,6 +133,31 @@ static void
 gnc_transaction_init(GncTransaction *obj)
 {
 	/* Initialize private members, etc. */
+	ENTER ("trans=%p", trans);
+  /* Fill in some sane defaults */
+  trans->num         = CACHE_INSERT("");
+  trans->description = CACHE_INSERT("");
+
+  trans->common_currency = NULL;
+  trans->splits = NULL;
+
+  trans->date_entered.tv_sec  = 0;
+  trans->date_entered.tv_nsec = 0;
+
+  trans->date_posted.tv_sec  = 0;
+  trans->date_posted.tv_nsec = 0;
+
+  trans->version = 0;
+  trans->version_check = 0;
+  trans->marker = 0;
+  trans->orig = NULL;
+
+  trans->idata = 0;
+  
+  begin_commit_event_handler = g_signal_connect (obj, "commit:beginning", G_CALLBACK (gnc_transaction_on_begin_commit), obj, NULL);
+  begin_edit_event_handler = g_signal_connect (obj, "begin-edit", G_CALLBACK (gnc_transaction_on_begin_edit), obj, NULL);
+  
+  LEAVE (" ");
 }
 
 static void
@@ -133,6 +165,46 @@ gnc_transaction_finalize(GObject *object)
 {
 	
 	/* Free private members, etc. */
+	GList *node;
+
+  ENTER ("(addr=%p)", trans);
+  if (((char *) 1) == trans->num)
+  {
+    PERR ("double-free %p", trans);
+    LEAVE (" ");
+    return;
+  }
+
+  /* free up the destination splits */
+  for (node = trans->splits; node; node = node->next)
+    xaccFreeSplit (node->data);
+  g_list_free (trans->splits);
+  trans->splits = NULL;
+
+  /* free up transaction strings */
+  CACHE_REMOVE(trans->num);
+  CACHE_REMOVE(trans->description);
+
+  /* Just in case someone looks up freed memory ... */
+  trans->num         = (char *) 1;
+  trans->description = NULL;
+
+  trans->date_entered.tv_sec = 0;
+  trans->date_entered.tv_nsec = 0;
+  trans->date_posted.tv_sec = 0;
+  trans->date_posted.tv_nsec = 0;
+  trans->version = 0;
+
+  if (trans->orig)
+  {
+    xaccFreeTransaction (trans->orig);
+    trans->orig = NULL;
+  }
+
+  LEAVE ("(addr=%p)", trans);
+	
+	g_signal_handler_disconnect (object, begin_commit_event_handler);
+	g_signal_handler_disconnect (object, begin_edit_event_handler);
 	
 	G_OBJECT_CLASS(parent_class)->finalize(object);
 }
@@ -362,28 +434,7 @@ void gen_event_trans (Transaction *trans)
 static void
 xaccInitTransaction (Transaction * trans, QofBook *book)
 {
-  ENTER ("trans=%p", trans);
-  /* Fill in some sane defaults */
-  trans->num         = CACHE_INSERT("");
-  trans->description = CACHE_INSERT("");
-
-  trans->common_currency = NULL;
-  trans->splits = NULL;
-
-  trans->date_entered.tv_sec  = 0;
-  trans->date_entered.tv_nsec = 0;
-
-  trans->date_posted.tv_sec  = 0;
-  trans->date_posted.tv_nsec = 0;
-
-  trans->version = 0;
-  trans->version_check = 0;
-  trans->marker = 0;
-  trans->orig = NULL;
-
-  trans->idata = 0;
-  qof_instance_init (QOF_INSTANCE (trans), GNC_ID_TRANS, book);
-  LEAVE (" ");
+  
 }
 
 /********************************************************************\
@@ -396,8 +447,8 @@ xaccMallocTransaction (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
-  xaccInitTransaction (trans, book);
+  trans = GNC_TRANSACTION (g_object_new (GNC_TYPE_TRANSACTION, NULL));
+  
   qof_event_gen (QOF_ENTITY (trans), QOF_EVENT_CREATE, NULL);
 
   return trans;
@@ -477,7 +528,8 @@ xaccDupeTransaction (const Transaction *t)
 {
   Transaction *trans;
   GList *node;
-
+  
+  /* This will create a Transaction object  with a guid set to NULL */
   trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->num         = CACHE_INSERT (t->num);
@@ -496,18 +548,8 @@ xaccDupeTransaction (const Transaction *t)
 
   trans->common_currency = t->common_currency;
 
-  /* Trash the guid and entity table. We don't want to mistake 
-   * the cloned transaction as something official.  If we ever 
-   * use this transaction, we'll have to fix this up.
-   */
-   /* FIXME: Entity & Instance initialization must be in object's constructor*/
-  trans->inst.entity.e_type = NULL;
-  trans->inst.entity.guid = *guid_null();
-  trans->inst.entity.collection = NULL;
-  trans->inst.book = t->inst.book;
-  trans->inst.editlevel = 0;
-  trans->inst.do_free = FALSE;
-  trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
+  qof_instance_set_kvp_data (QOF_INSTANCE (trans), qof_instance_get_kvp_data (QOF_INSTANCE (trans)));
+  
 
   return trans;
 }
@@ -524,7 +566,7 @@ xaccTransClone (const Transaction *t)
   GList *node;
 
   qof_event_suspend();
-  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, "book", qof_instance_get_book (QOF_INSTANCE (t)));
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
@@ -537,10 +579,10 @@ xaccTransClone (const Transaction *t)
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_instance_init (QOF_INSTANCE(trans), GNC_ID_TRANS, t->inst.book);
   qof_instance_set_kvp_data (QOF_INSTANCE (trans), qof_instance_get_kvp_data (t));
 
-  xaccTransBeginEdit(trans);
+  qof_instance_begin_edit (QOF_INSTANCE (trans));
+  
   for (node = t->splits; node; node = node->next)
   {
     split = xaccSplitClone(node->data);
@@ -548,6 +590,8 @@ xaccTransClone (const Transaction *t)
     trans->splits = g_list_append (trans->splits, split);
   }
   qof_instance_set_dirty(QOF_INSTANCE(trans));
+  
+  qof_instance_commi_edit (QOF_INSTANCE (trans));
   xaccTransCommitEdit(trans);
   qof_event_resume();
 
@@ -561,47 +605,7 @@ xaccTransClone (const Transaction *t)
 static void
 xaccFreeTransaction (Transaction *trans)
 {
-  GList *node;
-
-  if (!trans) return;
-
-  ENTER ("(addr=%p)", trans);
-  if (((char *) 1) == trans->num)
-  {
-    PERR ("double-free %p", trans);
-    LEAVE (" ");
-    return;
-  }
-
-  /* free up the destination splits */
-  for (node = trans->splits; node; node = node->next)
-    xaccFreeSplit (node->data);
-  g_list_free (trans->splits);
-  trans->splits = NULL;
-
-  /* free up transaction strings */
-  CACHE_REMOVE(trans->num);
-  CACHE_REMOVE(trans->description);
-
-  /* Just in case someone looks up freed memory ... */
-  trans->num         = (char *) 1;
-  trans->description = NULL;
-
-  trans->date_entered.tv_sec = 0;
-  trans->date_entered.tv_nsec = 0;
-  trans->date_posted.tv_sec = 0;
-  trans->date_posted.tv_nsec = 0;
-  trans->version = 0;
-
-  if (trans->orig)
-  {
-    xaccFreeTransaction (trans->orig);
-    trans->orig = NULL;
-  }
-
-  qof_instance_release (QOF_INSTANCE (trans));
-
-  LEAVE ("(addr=%p)", trans);
+  g_object_unref (G_OBJECT (trans));
 }
 
 /********************************************************************
@@ -767,10 +771,9 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
 Transaction *
 xaccTransLookup (const GUID *guid, QofBook *book)
 {
-  QofCollection *col;
-  if (!guid || !book) return NULL;
-  col = qof_book_get_collection (book, GNC_ID_TRANS);
-  return (Transaction *) qof_collection_lookup_entity (col, guid);
+  g_return_if_fail (!guid || QOF_IS_BOOK (book));
+  
+  return GNC_TRANSACTION (qof_book_get_object (book, GNC_TYPE_TRANSACTION, guid));
 }
 
 /********************************************************************\
@@ -945,13 +948,16 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   if (!trans) return;
-   if (!qof_begin_edit(QOF_INSTANCE (trans))) return;
+   return qof_instance_begin_edit (QOF_INSTANCE (trans));   
+}
 
-   if (qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (trans)))) return;
+static void
+gnc_transaction_on_begin_edit (GncAccount *acc, gpointer user_data) 
+{
+  g_return_if_fail (GNC_IS_TRANSACTION (acc));
 
-   xaccOpenLog ();
-   xaccTransWriteLog (trans, 'B');
+  xaccOpenLog ();
+  xaccTransWriteLog (trans, 'B');
 
    /* Make a clone of the transaction; we will use this 
     * in case we need to roll-back the edit. */
@@ -964,13 +970,14 @@ xaccTransBeginEdit (Transaction *trans)
 void
 xaccTransDestroy (Transaction *trans)
 {
-  if (!trans) return;
-
+  g_return_if_fail (GNC_IS_TRANSACTION (trans));
+ 
   if (!xaccTransGetReadOnly (trans) || 
       qof_book_shutting_down(qof_instance_get_book (QOF_INSTANCE (trans)))) {
       xaccTransBeginEdit(trans);
       qof_instance_mark_free (QOF_INSTANCE (trans));
       xaccTransCommitEdit(trans);
+      g_object_unref (G_OBJECT (trans));
   }
 }
 
@@ -1111,23 +1118,13 @@ static void trans_cleanup_commit(Transaction *trans)
     qof_event_gen (QOF_ENTITY (trans), QOF_EVENT_MODIFY, NULL);
 }
 
-void
-xaccTransCommitEdit (Transaction *trans)
+/* Callback for the "commited" event */
+static void
+gnc_transaction_on_begin_commit (GncTransaction *trans, gpointer user_data)
 {
-   if (!trans) return;
-
-   if (!qof_commit_edit (QOF_INSTANCE(trans))) return;
-
-   /* We increment this for the duration of the call
-    * so other functions don't result in a recursive
-    * call to xaccTransCommitEdit. */
-   editlevel = qof_instance_get_edit_level (QOF_INSTANCE (trans));
-   editlevel++;
-   qof_instance_set_edit_level (QOF_INSTANCE (trans), editlevel);
-   
-   if (was_trans_emptied(trans)) qof_instance_mark_free (QOF_INSTANCE (trans), TRUE);
-
-   /* Before commiting the transaction, we're gonna enforce certain
+	 if (was_trans_emptied(trans)) qof_instance_mark_free (QOF_INSTANCE (trans), TRUE);
+	 
+	 /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
     * and the balanced lot constraints.  These constraints might 
     * change the number of splits in this transaction, and the 
@@ -1167,12 +1164,15 @@ xaccTransCommitEdit (Transaction *trans)
       trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
    }
 
-   qof_commit_edit_part2(QOF_INSTANCE(trans),
-                         (void (*) (QofInstance *, QofBackendError))
-                         trans_on_error,
-                         (void (*) (QofInstance *)) trans_cleanup_commit,
-                         (void (*) (QofInstance *)) do_destroy);
-   LEAVE ("(trans=%p)", trans);
+}
+
+void
+xaccTransCommitEdit (Transaction *trans)
+{
+   g_return_if_fail (GNC_IS_TRANSACTION (trans));
+   
+   qof_instance_commit_edit (QOF_INSTANCE (trans));
+   
 }
 
 #define SWAP(a, b) do { gpointer tmp = (a); (a) = (b); (b) = tmp; } while (0);

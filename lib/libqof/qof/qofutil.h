@@ -38,7 +38,6 @@
 #include "qofutil.h"
 #include "qofbackend.h"
 #include "qofclass.h"
-#include "qofbook.h"
 #include "qofinstance.h"
 
 /** Do not use these for printf, only scanf */
@@ -235,7 +234,7 @@ gint qof_util_bool_to_int (const gchar * val);
 
 The returned string must be freed by the caller.
 */
-gchar* qof_util_param_as_string(QofEntity *ent, QofParam *param);
+gchar* qof_util_param_as_string(QofInstance *ent, QofParam *param);
 
 /** The QOF String Cache:
  *

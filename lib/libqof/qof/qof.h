@@ -77,7 +77,7 @@
 /** @} */
 
 #include <glib.h>
-#include "qofid.h"
+#include "qofinstance.h"
 #include "qoflog.h"
 #include "gnc-date.h"
 #include "gnc-numeric.h"
@@ -101,6 +101,7 @@
 #include "qofbookmerge.h"
 #include "qofreference.h"
 #include "deprecated.h"
+
 
 /** allow easy logging of QSF debug messages */
 #define QOF_MOD_QSF "gncqof-backend-qsf"

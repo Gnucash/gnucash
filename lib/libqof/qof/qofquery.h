@@ -78,6 +78,7 @@ probably optimize.
 #include "qofbook.h"
 #include "qofquerycore.h"
 #include "qofchoice.h"
+#include "qofid.h"
 
 #define QOF_MOD_QUERY "qof-query"
 
@@ -100,11 +101,11 @@ typedef enum {
 #define QUERY_DEFAULT_SORT      "QofQueryDefaultSort"
 
 /** "Known" Object Parameters -- all objects must support these */
-#define QOF_PARAM_BOOK    "book"
-#define QOF_PARAM_GUID    "guid"
+#define QOF_PARAM_BOOK    QOF_TYPE_BOOK
+#define QOF_PARAM_GUID    GNC_TYPE_GUID
 
 /** "Known" Object Parameters -- some objects might support these */
-#define QOF_PARAM_KVP     "kvp" 
+#define QOF_PARAM_KVP     GNC_TYPE_KVP_FRAME
 #define QOF_PARAM_ACTIVE  "active" 
 #define QOF_PARAM_VERSION "version" 
 

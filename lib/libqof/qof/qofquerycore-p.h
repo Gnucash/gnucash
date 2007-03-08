@@ -46,8 +46,8 @@ typedef gint (*QofQueryPredicateFunc) (gpointer object,
 			       QofQueryPredData *pdata);
 
 /* Lookup functions */
-QofQueryPredicateFunc qof_query_core_get_predicate (gchar const *type);
-QofCompareFunc qof_query_core_get_compare (gchar const *type);
+QofQueryPredicateFunc qof_query_core_get_predicate (QofType type);
+QofCompareFunc qof_query_core_get_compare (QofType type);
 
 /* Compare two predicates */
 gboolean qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2);

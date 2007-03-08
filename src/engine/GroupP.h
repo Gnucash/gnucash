@@ -40,16 +40,17 @@
 #include "Transaction.h"
 
 /** STRUCTS *********************************************************/
-struct account_group_s
+struct _GncAccountGroup
 {
+  QofInstance inst;
   /* The flags: */
-  unsigned int saved : 1;
+  gboolean saved : TRUE;
 
   Account *parent;         /* back-pointer to parent */
 
   AccountList *accounts;   /* list of account pointers */
 
-  QofBook *book;           /* The book which this group belongs to */
+/*  QofBook *book; */           /* The book which this group belongs to NOT NEEDED becouse this is a QofInstance object*/
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;

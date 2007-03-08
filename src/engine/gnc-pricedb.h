@@ -31,7 +31,7 @@
 /**************************** GncPrice Object ****************/
 /* GObject declarations */
 
-#define GNC_TYPE_PRICE            (gnc_price_get_type ())
+#define GNC_TYPE_PRICE            (gnc_price_get_gtype ())
 #define GNC_PRICE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PRICE, GncPrice))
 #define GNC_PRICE_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_PRICE, GncPriceClass))
 #define GNC_IS_PRICE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PRICE))
@@ -50,7 +50,7 @@ struct _GncPriceClass {
 	/* Add Signal Functions Here */
 };
 
-GType   gnc_price_get_type ();
+GType   gnc_price_get_gtype ();
 
 /** @addtogroup PriceDB
     @{ */

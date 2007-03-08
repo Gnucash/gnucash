@@ -1,3 +1,8 @@
+2007-03-03  Daniel Espinosa <esodan@gmail.com>
+  * lib/libqof/qof: 
+  * src/engine/:
+  First milestone to use GObject in QOF and GC's objects
+  
 2006-11-24  Christian Stimming <stimming@tuhh.de>
 
 	* src/engine/gnc-path.c: Fix gnc_path_get_localedir() because

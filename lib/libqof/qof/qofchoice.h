@@ -99,8 +99,6 @@ the object must return a single entity matching one of the choice types.
 @{
 */
 
-/** \brief Identify an object as containing a choice. */
-#define QOF_TYPE_CHOICE "choice"
 
 /** \brief Does this object contain a choice parameter?
 
@@ -116,7 +114,7 @@ registered using the object definition, otherwise FALSE.
 gboolean qof_object_is_choice(QofIdTypeConst type);
 
 /** \brief Set an object as using QOF_TYPE_CHOICE. */
-gboolean  qof_choice_create(char* type);
+gboolean  qof_choice_create(QofIdType type);
 
 /** \brief Add the choices for this parameter to the object.
 
@@ -127,7 +125,7 @@ gboolean  qof_choice_create(char* type);
 @return FALSE if object is not a choice object or on error
 	otherwise TRUE.
 */
-gboolean qof_choice_add_class(const char* choice, char* add, char* param_name);
+gboolean qof_choice_add_class(QofIdType select, char* add, char* param_name);
 
 /** \brief Return the list of all object types usable with this parameter.
 
@@ -150,7 +148,7 @@ GList* qof_object_get_choices(QofIdType type, QofParam *param);
 @return TRUE if choice is found in the list of allowed choices for
 this parameter of this object. Otherwise, FALSE
 */
-gboolean qof_choice_check(const char* choice_obj,
+gboolean qof_choice_check(QofIdType choice_obj,
 			  const char *param_name,
 			  const char* choice);
 /** @} */
