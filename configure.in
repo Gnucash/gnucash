@@ -1822,6 +1822,9 @@ else
 fi
 ### End of gui-only checks
 
+### CAS: I don't know what the real min is.  This is just what I have.
+PKG_CHECK_MODULES(LIBPLANNER, libplanner-1 >= 0.14)
+
 ###-------------------------------------------------------------------------
 ### Selectively disable deprecated bits of glib/gdk/gtk/gnome
 ###-------------------------------------------------------------------------

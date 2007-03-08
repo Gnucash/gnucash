@@ -22,9 +22,14 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${GOFFICE_CFLAGS} \
+  ${LIBPLANNER_CFLAGS} \
   ${GSF_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
+  planner-marshal.c \
+  planner-popup-entry.c \
+  planner-cell-renderer-popup.c \
+  planner-cell-renderer-date.c \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
@@ -101,6 +106,10 @@ libgncmod_gnome_utils_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  planner-marshal.h \
+  planner-popup-entry.h \
+  planner-cell-renderer-popup.h \
+  planner-cell-renderer-date.h \
   QuickFill.h \
   account-quickfill.h \
   dialog-account.h \
@@ -198,6 +207,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
+  ${LIBPLANNER_LIBS} \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
@@ -305,3 +315,14 @@ uninstall-hook:
 endif
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"
+
+planner-marshal.h: Makefile.am planner-marshal.list
+	$(GLIB_GENMARSHAL) --prefix=planner_marshal $(srcdir)/planner-marshal.list --header > xgen-gmh \
+	&& (cmp -s xgen-gmh planner-marshal.h || cp xgen-gmh planner-marshal.h) \
+	&& rm -f xgen-gmh xgen-gmh~
+
+planner-marshal.c: Makefile.am planner-marshal.list
+	(echo "#include \"planner-marshal.h\""; $(GLIB_GENMARSHAL) --prefix=planner_marshal $(srcdir)/planner-marshal.list --body) > xgen-gmc \
+	&& cp xgen-gmc planner-marshal.c \
+	&& rm -f xgen-gmc xgen-gmc~
+
