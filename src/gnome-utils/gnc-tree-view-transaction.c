@@ -138,10 +138,10 @@ static ColDef all_tree_view_transaction_columns[] = {
      gtvt_edited_cb, NULL, gtmt_sort_by_date},
     {COL_NUM, GNC_TREE_MODEL_TRANSACTION_COL_NUM,
      "Num", "num", "0000xx", -1,
-     gtvt_edited_cb, NULL, NULL},
+     gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_DESCRIPTION, GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION,
      "Description", "description", "xxxxxxxxxxxxxxxxxxx", -1,
-     gtvt_edited_cb, NULL, NULL},
+     gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_ACCOUNT, -1,
      "Transfer", "transfer", "xxxxxxxxxxxxxxxxxxx", -1,
      NULL /*FIXME?*/, start_edit, NULL},
@@ -998,8 +998,17 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
     switch (viewcol) {
     case COL_DATE:
         if (is_trans) {
-            //TimeSpec ts;
-            //xaccTransSetDatePostedTS (trans, &ts);
+            GDate date;
+            g_date_set_parse(&date, new_text);
+            if (g_date_valid(&date)) {
+                begin_edit(tv, split, trans);
+                g_print(new_text);
+                xaccTransSetDate(trans, g_date_get_day(&date), 
+                                 g_date_get_month(&date), 
+                                 g_date_get_year(&date));
+            } else {
+                PERR("invalid date `%s`", new_text);
+            }
         }
         break;
     case COL_NUM: // aka "ACTION"
@@ -1023,9 +1032,10 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
             xaccTransSetDescription(trans, new_text);
         break;
     case COL_NOTES:
-        if (is_trans)
+        if (is_trans) {
             begin_edit(tv, split, trans);
             xaccTransSetNotes(trans, new_text);
+        }
         break;
     case COL_AMOUNT:
     case COL_RATE:
@@ -1497,6 +1507,10 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
                 f_model, GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                 def.sort_fn);
             g_object_unref(G_OBJECT(f_model));
+        } else if (col_list[i] == COL_DATE) {
+            col = gnc_tree_view_add_calendar_column (
+                GNC_TREE_VIEW(tv), def.title, def.pref_name, NULL, def.sizer,
+                def.modelcol, def.visibility_model_col, def.sort_fn);
         } else {
             col = gnc_tree_view_add_text_column (
                 GNC_TREE_VIEW(tv), def.title, def.pref_name, NULL, def.sizer,
@@ -1566,6 +1580,8 @@ gnc_tree_view_transaction_new_with_model(GncTreeModelTransaction *model)
 }
 
 /* CONTROL */
+
+/* For handling keynav */
 static gboolean
 gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
 {

@@ -189,6 +189,15 @@ gnc_tree_view_add_text_column (GncTreeView *view,
 			       gint model_data_column,
 			       gint model_visibility_column,
 			       GtkTreeIterCompareFunc column_sort_fn);
+GtkTreeViewColumn *
+gnc_tree_view_add_calendar_column (GncTreeView *view,
+                                   const gchar *column_title,
+                                   const gchar *pref_name,
+                                   const gchar *stock_icon_name,
+                                   const gchar *sizing_text,
+                                   gint model_data_column,
+                                   gint model_visibility_column,
+                                   GtkTreeIterCompareFunc column_sort_fn);
 
 /** This function adds a new combobox column to a GncTreeView base
  *  view.  The parameters it takes in common with
