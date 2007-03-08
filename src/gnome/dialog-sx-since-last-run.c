@@ -1071,10 +1071,8 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
         && g_list_length(app_dialog->created_txns) > 0)
     {
-
         _show_created_transactions(app_dialog, app_dialog->created_txns);
     }
-    g_list_foreach(app_dialog->created_txns, (GFunc)guid_free, NULL);
     g_list_free(app_dialog->created_txns);
     app_dialog->created_txns = NULL;
 

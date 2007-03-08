@@ -56,7 +56,7 @@ TODO
 
 ! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
-  - [ ] created/review txns disappear, eventual crash [ve20070303]_
+  - [x] created/review txns disappear, eventual crash [ve20070303]_
 
 ! - [x] auto-create (+notify) txns not in review list. [ve20070209]_
 
@@ -105,7 +105,7 @@ TODO
   - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-  - [ ] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
+! - [ ] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
 ! - [x] XML migration, handling
     - xml:freqSpec -> obj:Recurrence
       - [x] none (Recurrence doesn't support)
