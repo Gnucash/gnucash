@@ -38,6 +38,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "qof.h"
+#include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
@@ -287,54 +288,44 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 }
 
 static void
-sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
+sxftd_update_schedule( SXFromTransInfo *sxfti, GDate *date, GList **recurrences)
 {
   gint index;
   GtkWidget *w;
-  FreqSpec *tmpfs;
 
   /* Note that we make the start date the *NEXT* instance, not the
    * present one. */
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_COMBO_BOX);
   index = gtk_combo_box_get_active(GTK_COMBO_BOX(w));
 
-  switch(index)
+  switch (index)
   {
-  case FREQ_DAILY:
-    xaccFreqSpecSetDaily(fs, date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_DAILY);
-    break;
+  case FREQ_DAILY: {
+      Recurrence *r = g_new0(Recurrence, 1);
+      recurrenceSet(r, 1, PERIOD_DAY, date);
+      *recurrences = g_list_append(*recurrences, r);
+    } break;
 
   case FREQ_WEEKLY:
-    tmpfs = xaccFreqSpecMalloc(gnc_get_current_book ());
-    xaccFreqSpecSetComposite(fs);
-    xaccFreqSpecSetWeekly(tmpfs, date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
-    xaccFreqSpecCompositeAdd(fs,tmpfs);
-    break;
-
-  case FREQ_BIWEEKLY:
-    tmpfs = xaccFreqSpecMalloc( gnc_get_current_book() );
-    xaccFreqSpecSetComposite( fs );
-    xaccFreqSpecSetWeekly( tmpfs, date, 2 );
-    xaccFreqSpecSetUIType( fs, UIFREQ_BI_WEEKLY );
-    xaccFreqSpecCompositeAdd( fs, tmpfs );
-    break;
+  case FREQ_BIWEEKLY: {
+      Recurrence *r = g_new0(Recurrence, 1);
+      int mult = (index == FREQ_BIWEEKLY ? 2 : 1);
+      recurrenceSet(r, mult, PERIOD_WEEK, date);
+      *recurrences = g_list_append(*recurrences, r);
+  } break;
 
   case FREQ_MONTHLY:
-    xaccFreqSpecSetMonthly(fs, date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
-    break;
-
   case FREQ_QUARTERLY:
-    xaccFreqSpecSetMonthly(fs, date, 3);
-    xaccFreqSpecSetUIType(fs, UIFREQ_QUARTERLY);
-    break;
-
-  case FREQ_ANNUALLY:
-    xaccFreqSpecSetMonthly(fs, date, 12);
-    xaccFreqSpecSetUIType(fs, UIFREQ_YEARLY);
-    break;
+  case FREQ_ANNUALLY: {
+      Recurrence *r = g_new0(Recurrence, 1);
+      int mult = (index == FREQ_MONTHLY
+                  ? 1
+                  : (index == FREQ_QUARTERLY
+                     ? 3
+                     : 12));
+      recurrenceSet(r, mult, PERIOD_MONTH, date);
+      *recurrences = g_list_append(*recurrences, r);
+  } break;
 
   default:
        g_critical("nonexistent frequency selected");
@@ -348,7 +339,7 @@ sxftd_init( SXFromTransInfo *sxfti )
   GtkWidget *w;
   const char *transName;
   gint pos;
-  FreqSpec *fs;
+  GList *schedule = NULL;
   time_t start_tt;
   struct tm *tmpTm;
   GDate date, nextDate;
@@ -427,9 +418,9 @@ sxftd_init( SXFromTransInfo *sxfti )
   g_signal_connect( w, "changed",
                     G_CALLBACK(sxftd_freq_combo_changed),
                     sxfti );
-  fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-  sxftd_update_fs( sxfti, &date, fs );
-  xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
+  sxftd_update_schedule( sxfti, &date, &schedule);
+  recurrenceListNextInstance(schedule, &date, &nextDate);
+  recurrenceListFree(&schedule);
 
   tmpTm = g_new0( struct tm, 1 );
   g_date_to_struct_tm( &nextDate, tmpTm );
@@ -457,7 +448,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   GtkWidget *w;
   gchar *name;
   GDate date;
-  FreqSpec *fs;
+  GList *schedule = NULL;
   getEndTuple end_info;
   guint sxftd_errno = 0; /* 0 == OK, > 0 means dialog needs to be run again */
 
@@ -473,11 +464,10 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
 
   g_date_set_time_t( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
  
-  fs = xaccFreqSpecMalloc(gnc_get_current_book ());
-  sxftd_update_fs( sxfti, &date, fs );
+  sxftd_update_schedule(sxfti, &date, &schedule);
   if (sxftd_errno == 0) {
-    xaccSchedXactionSetFreqSpec( sx, fs);
-    xaccSchedXactionSetStartDate( sx, &date );
+      gnc_sx_set_schedule(sx, schedule);
+      xaccSchedXactionSetStartDate( sx, &date );
   }
 
   end_info = sxftd_get_end_info(sxfti);
@@ -583,14 +573,14 @@ sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
   GDate date, nextDate;
   time_t tmp_tt;
   struct tm *tmpTm;
-  FreqSpec *fs;
+  GList *schedule = NULL;
 
   tmp_tt = xaccTransGetDate( sxfti->trans );
   g_date_set_time_t( &date, tmp_tt );
-  
-  fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-  sxftd_update_fs( sxfti, &date, fs );
-  xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
+
+  g_date_clear(&nextDate, 1);
+  sxftd_update_schedule(sxfti, &date, &schedule);
+  recurrenceListNextInstance(schedule, &date, &nextDate);
 
   tmpTm = g_new0( struct tm, 1 );
   g_date_to_struct_tm( &nextDate, tmpTm );
@@ -598,7 +588,7 @@ sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
   g_free( tmpTm );
   gnc_date_edit_set_time( sxfti->startDateGDE, tmp_tt );
 
-  xaccFreqSpecFree( fs );
+  recurrenceListFree(&schedule);
   sxftd_update_example_cal( sxfti );
 }
 
@@ -684,11 +674,10 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
 {
   struct tm *tmpTm;
   time_t tmp_tt;
-  GDate date, startDate;
-  FreqSpec *fs;
+  GDate date, startDate, nextDate;
+  GList *schedule = NULL;
   getEndTuple get;
 
-  fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
 
   tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
@@ -700,38 +689,36 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   g_date_set_year( &date, tmpTm->tm_year+1900 );
   g_free( tmpTm );
 
-  sxftd_update_fs( sxfti, &date, fs );
+  sxftd_update_schedule(sxfti, &date, &schedule);
 
   /* go one day before what's in the box so we can get the correct start
    * date. */
   g_date_subtract_days(&date, 1);
-  xaccFreqSpecGetNextInstance( fs, &date, &date );
+  g_date_clear(&nextDate, 1);
+  recurrenceListNextInstance(schedule, &date, &nextDate);
   startDate = date;
 
   switch (get.type)
   {
   case NEVER_END:
-    gnc_dense_cal_store_update_no_end(sxfti->dense_cal_model, &startDate, fs);
+    gnc_dense_cal_store_update_recurrences_no_end(sxfti->dense_cal_model, &startDate, schedule);
     break;
   case END_ON_DATE:
-    gnc_dense_cal_store_update_date_end(sxfti->dense_cal_model, &startDate, fs, &get.end_date);
+    gnc_dense_cal_store_update_recurrences_date_end(sxfti->dense_cal_model, &startDate, schedule, &get.end_date);
     break;
   case END_AFTER_N_OCCS:
-    gnc_dense_cal_store_update_count_end(sxfti->dense_cal_model, &startDate, fs, get.n_occurrences);
+    gnc_dense_cal_store_update_recurrences_count_end(sxfti->dense_cal_model, &startDate, schedule, get.n_occurrences);
     break;
   default:
-    g_warning("unknown get.type [%d]\n", get.type);
+      g_warning("unknown get.type [%d]\n", get.type);
     break;
   }
 
-  gnc_dense_cal_set_month( sxfti->example_cal,
-                           g_date_get_month( &startDate ) );
-  gnc_dense_cal_set_year( sxfti->example_cal,
-                          g_date_get_year( &startDate ) );
-
-  xaccFreqSpecFree( fs );
+  gnc_dense_cal_set_month( sxfti->example_cal, g_date_get_month( &startDate ) );
+  gnc_dense_cal_set_year( sxfti->example_cal, g_date_get_year( &startDate ) );
+  
+  recurrenceListFree(&schedule);
 }
-
 
 /**
  * Callback to update the calendar

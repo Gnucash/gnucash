@@ -105,7 +105,8 @@ TODO
   - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-! - [ ] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
+! - [ ] load druid
+! - [x] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
 ! - [x] XML migration, handling
     - xml:freqSpec -> obj:Recurrence
       - [x] none (Recurrence doesn't support)
