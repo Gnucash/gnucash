@@ -69,25 +69,17 @@ Scheme:
 Dave Peticolas <dave@krondo.com>
 August 22, 2000
 
-=====================================================================
+==============
 TIPS AND HINTS
-=====================================================================
+==============
 
-Starting Gnucash from the build tree:
--------------------------------------
-
-Getting Trace Messages From GnuCash:
+Starting Gnucash from the build tree
 ------------------------------------
-Note that piping stdout from gnucash to a file causes gnucash to crash.
-Don't know why, this is a bug that needs to be fixed.  Here's another
-way to get trace messages into a file:
+Don't.  --prefix your build into /opt/gnc/svn/ (or some such).
 
--- edit src/engine/gnc-engine.c and find the call to qof_log_set_level
-   for the module you are intersted in.  Adjust the log level
-   appropriately.
--- edit the call to qof_log_file_init() in this same file to change
-   where you want messages to go to.
-
+Getting Trace Messages From GnuCash
+-----------------------------------
+See the doxygen comments in lib/libqof/qof/qoflog.h (and .c)
 
 Starting GnuCash in GDB
 -----------------------
