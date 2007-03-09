@@ -1560,6 +1560,13 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         goto cleanup;
     }
 
+    gnc_dense_cal_store_update_name(sxed->dense_cal_model, xaccSchedXactionGetName(sxed->sx));
+    {
+        gchar *schedule_desc = recurrenceListToCompactString(recurrences);
+        gnc_dense_cal_store_update_info(sxed->dense_cal_model, schedule_desc);
+        g_free(schedule_desc);
+    }
+
     gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
     gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
 
