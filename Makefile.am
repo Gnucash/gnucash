@@ -6,7 +6,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles lib/.links
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 dist_doc_DATA = \
   AUTHORS \
@@ -94,21 +94,11 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-lib/.links: 
-	rm -f goffice gsf
-if !HAVE_GOFFICE
-	$(LN_S) -f . goffice
-endif
-if !HAVE_LIBGSF
-	$(LN_S) -f $(srcdir)/lib/libgsf-1.12.3/gsf gsf
-endif
-	touch lib/.links
-
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice gsf lib/.links po/POTFILES.in
+  po/POTFILES.in
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files

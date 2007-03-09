@@ -46,8 +46,6 @@
 #include <goffice/data/go-data-simple.h>
 #include <goffice/app/go-plugin.h>
 #include <goffice/app/go-plugin-loader-module.h>
-#include <gsf/gsf.h>
-#include <gsf/gsf-output-memory.h>
 
 /**
  * TODO:
