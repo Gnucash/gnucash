@@ -72,7 +72,6 @@ static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
 static const gchar* MARK_COLOR = "Yellow";
 
-static QofLogModule log_module = GNC_MOD_SX;
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.dense-cal"
 
@@ -289,10 +288,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     {
         gint i;
         gint maxWidth, maxHeight;
-        gint width;
         GtkStyle *style;
         PangoLayout *layout;
-        const PangoFontDescription *existing_font_desc;
         PangoFontDescription *font_desc;
         gint font_size;
         gint font_size_reduction_units = 1;
@@ -465,7 +462,6 @@ gnc_dense_cal_get_year(GncDenseCal *dcal)
 static void
 gnc_dense_cal_dispose (GObject *object)
 {
-    int i;
     GncDenseCal *dcal;
     g_return_if_fail(object != NULL);
     g_return_if_fail(GNC_IS_DENSE_CAL(object));
@@ -815,7 +811,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     {
         int i;
         int x1, x2, y1, y2;
-        GdkColor markColor, black;
+        GdkColor markColor;
         GdkGCValues current_values;
 
         gdk_gc_get_values(widget->style->fg_gc[widget->state], &current_values);
@@ -936,12 +932,12 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
         for (i=0; i<12; i++)
         {
-            guint x, y, idx;
+            guint idx;
 
             if (dcal->monthPositions[i].x == -1)
                 break;
             idx = (dcal->month - 1 + i) % 12;
-            pango_layout_set_text(layout, month_name(i), -1);
+            pango_layout_set_text(layout, month_name(idx), -1);
             gdk_draw_layout(GDK_DRAWABLE(dcal->drawbuf),
                             widget->style->fg_gc[widget->state],
                             dcal->leftPadding + dcal->monthPositions[i].x,
