@@ -35,7 +35,11 @@
 #include <goffice/goffice.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#include <goffice/graph/gog-renderer-pixbuf.h>
+#ifdef GOFFICE_WITH_CAIRO
+#    include <goffice/graph/gog-renderer-cairo.h>
+#else
+#    include <goffice/graph/gog-renderer-pixbuf.h>
+#endif
 #include <goffice/graph/gog-renderer-gnome-print.h>
 #include <goffice/graph/gog-style.h>
 #include <goffice/graph/gog-styled-object.h>
@@ -158,7 +162,11 @@ static void
 add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
   GtkWidget *widget;
+#ifdef GOFFICE_WITH_CAIRO
+  GogRendererCairo *cairo_renderer;
+#else
   GogRendererPixbuf *pixbuf_renderer;
+#endif
   GdkPixbuf *buf;
   gboolean update_status;
 
@@ -168,12 +176,22 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update (GOG_OBJECT (graph));
 
+#ifdef GOFFICE_WITH_CAIRO
+  cairo_renderer = GOG_RENDERER_CAIRO (g_object_new (GOG_RENDERER_CAIRO_TYPE,
+						     "model", graph,
+						     NULL));
+  update_status = gog_renderer_cairo_update (cairo_renderer,
+					     eb->width, eb->height, 1.0);
+  buf = gog_renderer_cairo_get_pixbuf (cairo_renderer);
+#else
   pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
 						       "model", graph,
 						       NULL));
   update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
 					      eb->width, eb->height, 1.0);
   buf = gog_renderer_pixbuf_get (pixbuf_renderer);
+#endif /* GOFFICE_WITH_CAIRO */
+
   widget = gtk_image_new_from_pixbuf (buf);
   gtk_widget_set_size_request (widget, eb->width, eb->height);
   gtk_widget_show_all (widget);

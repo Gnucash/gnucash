@@ -1138,6 +1138,12 @@ then
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
 
+  saved_CPPFLAGS="${CPPFLAGS}"
+  CPPFLAGS="${GOFFICE_CFLAGS} ${CPPFLAGS}"
+  AC_CHECK_HEADER(goffice/graph/gog-renderer-cairo.h,
+    [AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])])
+  CPPFLAGS="${saved_CPPFLAGS}"
+
   ##################################################
   # regex needs its own linker flag on win32 platform
   ##################################################
