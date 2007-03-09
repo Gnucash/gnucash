@@ -105,7 +105,7 @@ TODO
   - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-! - [ ] load druid
+! - [x] load druid
 ! - [x] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
 ! - [x] XML migration, handling
     - xml:freqSpec -> obj:Recurrence
@@ -141,6 +141,10 @@ TODO
     - [x] More compact recurrenceListToString(...).
   - [ ] remove FreqSpec code
     - [ ] SX code
+      - [ ] engine
+      - [ ] backend
+      - [ ] gnc-frequency
+      - [ ] gnc-dense-cal-store
     - [x] src/gnome/druid-acct-period.c
 
 - gnc_frequency
