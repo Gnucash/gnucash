@@ -456,9 +456,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
 
   /* get the name */
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_NAME_ENTRY);
-  
   name = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
-
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
@@ -697,6 +695,23 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   g_date_clear(&nextDate, 1);
   recurrenceListNextInstance(schedule, &date, &nextDate);
   startDate = date;
+
+  {
+      GtkWidget *w;
+      gchar *name;
+      /* get the name */
+      w = glade_xml_get_widget(sxfti->gxml, SXFTD_NAME_ENTRY);
+      name = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
+      gnc_dense_cal_store_update_name(sxfti->dense_cal_model, name);
+      g_free(name);
+  }
+
+  {
+      gchar *schedule_desc;
+      schedule_desc = recurrenceListToCompactString(schedule);
+      gnc_dense_cal_store_update_info(sxfti->dense_cal_model, schedule_desc);
+      g_free(schedule_desc);
+  }
 
   switch (get.type)
   {
