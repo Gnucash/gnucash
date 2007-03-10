@@ -155,13 +155,16 @@ GNOME_DIR=$GLOBAL_DIR\\gnome
 SWIG_URL="$SF_MIRROR/swig/swigwin-1.3.31.zip"
 SWIG_DIR=$GLOBAL_DIR\\swig
 
+PCRE_BIN_URL="$SF_MIRROR/gnuwin32/pcre-6.4-1-bin.zip"
+PCRE_LIB_URL="$SF_MIRROR/gnuwin32/pcre-6.4-1-lib.zip"
+PCRE_DIR=$GLOBAL_DIR\\pcre
+
 LIBGSF_URL="$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.3.tar.bz2"
 LIBGSF_DIR=$GLOBAL_DIR\\libgsf
 
-# do not update this if you are unwilling to hack gnc-html-graph-gog.c
-GOFFICE_URL="$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.0.tar.bz2"
+GOFFICE_URL="$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.7.tar.bz2"
 GOFFICE_DIR=$GLOBAL_DIR\\goffice
-GOFFICE_PATCH=`pwd`/goffice-0.3.0-patch.diff
+GOFFICE_PATCH=`pwd`/goffice-0.3.7-patch.diff
 
 GLADE_URL="$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 GLADE_DIR=$GLOBAL_DIR\\glade
@@ -215,6 +218,7 @@ add_step inst_exetype
 add_step inst_libxml2
 add_step inst_gnome
 add_step inst_swig
+add_step inst_pcre
 add_step inst_libgsf
 add_step inst_goffice
 #add_step inst_glade

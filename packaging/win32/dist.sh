@@ -28,6 +28,7 @@ function prepare() {
     _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
     _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     _OPENSP_UDIR=`unix_path $OPENSP_DIR`
@@ -112,6 +113,12 @@ function dist_gnome() {
     wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
+}
+
+function dist_pcre() {
+    setup pcre
+    mkdir -p $DIST_UDIR/bin
+    cp -a $_PCRE_UDIR/bin/pcre3.dll $DIST_UDIR/bin
 }
 
 function dist_libgsf() {
@@ -221,6 +228,7 @@ dist_guile
 dist_openssl
 dist_libxml2
 dist_gnome
+dist_pcre
 dist_libgsf
 dist_goffice
 dist_libofx

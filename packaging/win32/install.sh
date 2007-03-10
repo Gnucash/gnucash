@@ -22,6 +22,8 @@ register_env_var INTLTOOL_PERL " "
 register_env_var KTOBLZCHECK_CPPFLAGS " "
 register_env_var KTOBLZCHECK_LDFLAGS " "
 register_env_var PATH ":"
+register_env_var PCRE_CPPFLAGS " "
+register_env_var PCRE_LDFLAGS " "
 register_env_var PKG_CONFIG ":" ""
 register_env_var PKG_CONFIG_PATH ":"
 register_env_var READLINE_CPPFLAGS " "
@@ -529,6 +531,23 @@ function inst_swig() {
     quiet swig -version || die "swig unavailable"
 }
 
+function inst_pcre() {
+    setup pcre
+    _PCRE_UDIR=`unix_path $PCRE_DIR`
+    add_to_env -I$_PCRE_UDIR/include PCRE_CPPFLAGS
+    add_to_env -L$_PCRE_UDIR/lib PCRE_LDFLAGS
+    add_to_env $_PCRE_UDIR/bin PATH
+    if quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile
+    then
+        echo "pcre already installed.  skipping."
+    else
+        mkdir -p $_PCRE_UDIR
+        wget_unpacked $PCRE_BIN_URL $DOWNLOAD_DIR $PCRE_DIR
+        wget_unpacked $PCRE_LIB_URL $DOWNLOAD_DIR $PCRE_DIR
+    fi
+    quiet ${LD} $PCRE_LDFLAGS -lpcre -o $TMP_UDIR/ofile || die "pcre not installed correctly"
+}
+
 function inst_libgsf() {
     setup libGSF
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
@@ -575,8 +594,8 @@ function inst_goffice() {
 	    automake
 	    autoconf
 	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-	        CPPFLAGS="${GNOME_CPPFLAGS}" \
-	        LDFLAGS="${GNOME_LDFLAGS}"
+	        CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
+	        LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    make
 	    make install
@@ -877,7 +896,7 @@ function inst_gnucash() {
         qpushd src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin" \
                 gnucash
         qpopd
 
@@ -909,7 +928,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat

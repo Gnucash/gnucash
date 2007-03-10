@@ -1,7 +1,7 @@
-diff -Nur goffice-0.3.2-old/goffice/Makefile.am goffice-0.3.2/goffice/Makefile.am
---- goffice-0.3.2-old/goffice/Makefile.am	Tue Sep 19 16:06:53 2006
-+++ goffice-0.3.2/goffice/Makefile.am	Mon Oct 30 15:47:16 2006
-@@ -31,7 +31,8 @@
+diff -Nur goffice-0.3.7-old/goffice/Makefile.am goffice-0.3.7/goffice/Makefile.am
+--- goffice-0.3.7-old/goffice/Makefile.am	Thu Mar  1 23:32:46 2007
++++ goffice-0.3.7/goffice/Makefile.am	Sat Mar 10 16:05:03 2007
+@@ -24,7 +24,8 @@
  libgoffice_0_la_DEPENDENCIES = goffice.def
  libgoffice_0_la_LDFLAGS += -no-undefined -export-symbols goffice.def
  if WITH_NATIVE_WIN32
@@ -11,7 +11,7 @@ diff -Nur goffice-0.3.2-old/goffice/Makefile.am goffice-0.3.2/goffice/Makefile.a
  endif
  endif
  
-@@ -76,7 +77,7 @@
+@@ -69,7 +70,7 @@
  	data/local.def drawing/local.def graph/local.def \
  	gtk/local.def ms-compat/local.def utils/local.def
  	echo EXPORTS > $@ && \
@@ -20,9 +20,9 @@ diff -Nur goffice-0.3.2-old/goffice/Makefile.am goffice-0.3.2/goffice/Makefile.a
  
  if HAVE_LIBEXE
  goffice_mslibdir = $(DESTDIR)$(libdir)
-diff -Nur goffice-0.3.2-old/goffice-win32.mk goffice-0.3.2/goffice-win32.mk
---- goffice-0.3.2-old/goffice-win32.mk	Tue Sep 19 16:06:52 2006
-+++ goffice-0.3.2/goffice-win32.mk	Mon Oct 30 15:50:27 2006
+diff -Nur goffice-0.3.7-old/goffice-win32.mk goffice-0.3.7/goffice-win32.mk
+--- goffice-0.3.7-old/goffice-win32.mk	Mon Jan  1 02:38:17 2007
++++ goffice-0.3.7/goffice-win32.mk	Sat Mar 10 16:05:03 2007
 @@ -16,7 +16,7 @@
  	  fi; \
  	done; \
@@ -32,9 +32,9 @@ diff -Nur goffice-0.3.2-old/goffice-win32.mk goffice-0.3.2/goffice-win32.mk
  		$(CPP) $(AM_CPPFLAGS) "-DGO_VAR_DECL=__declspec(dllexport)" -P - > xgen-localdef.1 && \
  	perl $(top_srcdir)/dumpdef.pl \
  		xgen-localdef.1 > xgen-localdef.2 \
-diff -Nur goffice-0.3.2-old/gtk-doc.m4 goffice-0.3.2/gtk-doc.m4
---- goffice-0.3.2-old/gtk-doc.m4	Thu Jan  1 00:00:00 1970
-+++ goffice-0.3.2/gtk-doc.m4	Mon Oct 30 15:47:16 2006
+diff -Nur goffice-0.3.7-old/gtk-doc.m4 goffice-0.3.7/gtk-doc.m4
+--- goffice-0.3.7-old/gtk-doc.m4	Thu Jan  1 00:00:00 1970
++++ goffice-0.3.7/gtk-doc.m4	Sat Mar 10 16:05:03 2007
 @@ -0,0 +1,53 @@
 +dnl -*- mode: autoconf -*-
 +
