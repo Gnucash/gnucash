@@ -596,6 +596,7 @@ function inst_goffice() {
 	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
 	        CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
 	        LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
+	    [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
 	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
 	    make
 	    make install
