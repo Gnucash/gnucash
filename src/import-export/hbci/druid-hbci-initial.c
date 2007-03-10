@@ -48,12 +48,14 @@
 #include "gnc-html.h"
 //#include "import-account-matcher.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 
 #include <aqbanking/banking.h>
 #include <aqbanking/version.h>
 #include <gwenhywfar/stringlist.h>
 #include <gwenhywfar/version.h>
 
+#define DRUID_HBCI_IMPORT_CM_CLASS "druid-hbci-import"
 /* #define DEFAULT_HBCI_VERSION 201 */
 
 enum account_list_cols {
@@ -111,6 +113,8 @@ static void
 delete_initial_druid (HBCIInitialInfo *info)
 {
   if (info == NULL) return;
+
+  gnc_unregister_gui_component_by_data(DRUID_HBCI_IMPORT_CM_CLASS, info);
 
   reset_initial_info (info);
   
@@ -279,8 +283,7 @@ static gboolean banking_has_accounts(AB_BANKING *banking)
 
 
 static void
-on_cancel (GnomeDruid *gnomedruid,
-	   gpointer user_data)
+cm_close_handler(gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
 
@@ -288,6 +291,13 @@ on_cancel (GnomeDruid *gnomedruid,
   /* probably not saving because of 'cancel', but for now we save too */
   gnc_AB_BANKING_fini (info->api);
   delete_initial_druid(info);
+}
+
+static void
+on_cancel (GnomeDruid *gnomedruid,
+	   gpointer user_data)
+{
+  cm_close_handler(user_data);
 }
 
 static void
@@ -650,6 +660,7 @@ void gnc_hbci_initial_druid (void)
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
+  gint component_id;
   
   info = g_new0 (HBCIInitialInfo, 1);
 
@@ -719,6 +730,10 @@ void gnc_hbci_initial_druid (void)
 		      G_CALLBACK (on_accountlist_prepare), info);
   }
 
+  component_id = gnc_register_gui_component(DRUID_HBCI_IMPORT_CM_CLASS,
+					    NULL, cm_close_handler,
+					    info);
+  gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
   /*g_signal_connect (dialog, "destroy",*/
   /*                  G_CALLBACK(gnc_hierarchy_destroy_cb), NULL);*/
