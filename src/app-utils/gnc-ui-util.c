@@ -1651,7 +1651,8 @@ number_to_words(gdouble val, gint64 denom)
 
   int_string = integer_to_words(int_part);
   full_string =
-    g_strdup_printf(_("%s and %lld/%lld"), int_string, frac_part, denom);
+    g_strdup_printf(_("%s and %" G_GINT64_FORMAT "/%" G_GINT64_FORMAT),
+		    int_string, frac_part, denom);
   g_free(int_string);
   return full_string;
 }
