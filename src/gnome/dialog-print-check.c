@@ -29,6 +29,8 @@
 #include <libguile.h>
 #include <locale.h>
 
+#include "glib-compat.h"
+
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
@@ -1242,7 +1244,7 @@ draw_page_items(GncPrintContext * context,
         switch (item->type) {
             case DATE:
                 date = g_date_new();
-                g_date_set_time(date, pcd->date);
+                g_date_set_time_t(date, pcd->date);
                 date_format =
                     gnc_date_format_get_custom(GNC_DATE_FORMAT
                                                (pcd->date_format));
@@ -1469,7 +1471,7 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     item.x = multip * gtk_spin_button_get_value(pcd->date_x);
     item.y = multip * gtk_spin_button_get_value(pcd->date_y);
     date = g_date_new();
-    g_date_set_time(date, pcd->date);
+    g_date_set_time_t(date, pcd->date);
     date_format = gnc_date_format_get_custom(GNC_DATE_FORMAT(pcd->date_format));
     g_date_strftime(buf, 100, date_format, date);
     draw_text(context, buf, &item, desc);

@@ -38,6 +38,17 @@
 #define GNC_GKEYFILE_UTILS_H
 
 
+#ifndef HAVE_GLIB_2_12
+gdouble
+g_key_file_get_double (GKeyFile *key_file, const gchar *group_name,
+                       const gchar *key, GError **error);
+
+gdouble*
+g_key_file_get_double_list (GKeyFile *key_file, const gchar *group_name,
+                            const gchar *key, gsize *length, GError **error);
+#endif
+
+
 /** Open and read a key/value file from disk into memory.
  *
  *  @param file The name of the file to load.  This should be a fully

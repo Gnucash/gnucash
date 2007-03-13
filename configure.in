@@ -247,6 +247,18 @@ then
 else
   AC_MSG_RESULT(no)
 fi
+
+AC_MSG_CHECKING(for GLIB - version >= 2.12.0)
+if $PKG_CONFIG 'glib-2.0 >= 2.12.0'
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_GLIB_2_12,1,[System has glib 2.12.0 or better])
+  HAVE_GLIB_2_12=yes
+else
+  AC_MSG_RESULT(no)
+fi
+AM_CONDITIONAL(HAVE_GLIB_2_8, test "x$HAVE_GLIB_2_8" = "xyes")
+
 AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.11.0)])
 if $PKG_CONFIG 'glib-2.0 >= 2.11.0'
 then
