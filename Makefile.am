@@ -1,5 +1,5 @@
 
-SUBDIRS = . doc lib src intl-scm packaging po accounts
+SUBDIRS = . doc lib src intl-scm packaging po accounts checks
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 

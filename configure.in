@@ -572,11 +572,13 @@ GNC_SHAREDIR='${pkgdatadir}'
 GNC_LIBEXECDIR='${libexecdir}/gnucash'
 
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
+GNC_CHECKS_DIR='${GNC_SHAREDIR}/checks'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
 GNC_UI_DIR='${GNC_SHAREDIR}/ui'
 GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
 AC_SUBST(GNC_ACCOUNTS_DIR)
+AC_SUBST(GNC_CHECKS_DIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
@@ -1401,6 +1403,7 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           accounts/tr_TR/Makefile
+          checks/Makefile
           doc/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
@@ -1497,7 +1500,6 @@ AC_CONFIG_FILES(po/Makefile.in
           src/report/utility-reports/test/Makefile
           src/scm/Makefile
           src/scm/gnumeric/Makefile
-          src/scm/printing/Makefile
           src/tax/Makefile
           src/tax/us/Makefile
           src/tax/us/test/Makefile

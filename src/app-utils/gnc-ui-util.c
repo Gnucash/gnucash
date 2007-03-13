@@ -1569,6 +1569,113 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 
 
 /********************************************************************\
+ ********************************************************************/
+
+#define FUDGE .00001
+
+static gchar *small_numbers[] = {
+  N_("Zero"), N_("One"), N_("Two"), N_("Three"), N_("Four"),
+  N_("Five"), N_("Six"), N_("Seven"), N_("Eight"), N_("Nine"),
+  N_("Ten"), N_("Eleven"), N_("Twelve"), N_("Thirteen"), N_("Fourteen"),
+  N_("Fifteen"), N_("Sixteen"), N_("Seventeen"), N_("Eighteen"), N_("Nineteen"),
+  N_("Twenty")};
+static gchar *medium_numbers[] = {
+  N_("Zero"), N_("Ten"), N_("Twenty"), N_("Thirty"), N_("Forty"),
+  N_("Fifty"), N_("Sixty"), N_("Seventy"), N_("Eighty"), N_("Ninety")};
+static gchar *big_numbers[] = {
+  N_("Hundred"), N_("Thousand"), N_("Million"), N_("Billion"),
+  N_("Trillion"), N_("Quadrillion"), N_("Quintillion")};
+
+static gchar *
+integer_to_words(gint64 val)
+{
+  gint64 log_val, pow_val, this_part;
+  GString *result;
+  gchar *tmp;
+
+  if (val == 0)
+    return g_strdup("zero");
+  if (val < 0)
+    val = -val;
+
+  result = g_string_sized_new(100);
+
+  while (val >= 1000) {
+    log_val = log10(val) / 3 + FUDGE;
+    pow_val = exp10(log_val * 3) + FUDGE;
+    this_part = val / pow_val;
+    val -= this_part * pow_val;
+    tmp = integer_to_words(this_part);
+    g_string_append_printf(result, "%s %s ", tmp,
+                           gettext(big_numbers[log_val]));
+    g_free(tmp);
+  }
+
+  if (val >= 100) {
+    this_part = val / 100;
+    val -= this_part * 100;
+    g_string_append_printf(result, "%s %s ",
+                           gettext(small_numbers[this_part]),
+                           gettext(big_numbers[0]));
+  }
+
+  if (val > 20) {
+    this_part = val / 10;
+    val -= this_part * 10;
+    g_string_append(result, gettext(medium_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  if (val > 0) {
+    this_part = val;
+    val -= this_part;
+    g_string_append(result, gettext(small_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  result = g_string_truncate(result, result->len - 1);
+  return g_string_free(result, FALSE);
+}
+
+gchar *
+number_to_words(gdouble val, gint64 denom)
+{
+  gint64 int_part, frac_part;
+  gchar *int_string, *full_string;
+
+  if (val < 0) val = -val;
+  if (denom < 0) denom = -denom;
+
+  int_part = trunc(val);
+  frac_part = round((val - int_part) * denom);
+
+  int_string = integer_to_words(int_part);
+  full_string =
+    g_strdup_printf(_("%s and %lld/%lld"), int_string, frac_part, denom);
+  g_free(int_string);
+  return full_string;
+}
+
+gchar *
+numeric_to_words(gnc_numeric val)
+{
+  return number_to_words(gnc_numeric_to_double(val),
+                         gnc_numeric_denom(val));
+}
+
+const gchar *
+printable_value (gdouble val, gint denom)
+{
+  GNCPrintAmountInfo info;
+  gnc_numeric num;
+
+  num = gnc_numeric_create(round(val * denom), denom);
+  info = gnc_share_print_info_places(log10(denom));
+  return xaccPrintAmount (num, info);
+}
+
+
+/********************************************************************\
  * xaccParseAmount                                                  *
  *   parses amount strings using locale data                        *
  *                                                                  *

@@ -1,0 +1,17 @@
+
+checksdir = ${GNC_CHECKS_DIR}
+
+if HAVE_GTK_2_10
+checks_DATA = \
+	deluxe.chk \
+	quicken.chk \
+	quicken_wallet.chk
+else
+checks_DATA = \
+	gnomeprint/deluxe.chk \
+	gnomeprint/quicken.chk \
+	gnomeprint/quicken_wallet.chk
+endif
+
+EXTRA_DIST = \
+  ${checks_DATA}

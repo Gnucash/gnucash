@@ -275,6 +275,9 @@ GNCPrintAmountInfo gnc_integral_print_info (void);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
+const gchar *printable_value(gdouble val, gint denom);
+gchar *number_to_words(gdouble val, gint64 denom);
+gchar *numeric_to_words(gnc_numeric val);
 
 /* xaccParseAmount parses in_str to obtain a numeric result. The
  *   routine will parse as much of in_str as it can to obtain a single

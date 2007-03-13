@@ -70,6 +70,9 @@ GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 
+gchar *number_to_words(gdouble val, gint64 denom);
+const gchar *printable_value (gdouble val, gint denom);
+
 gboolean gnc_reverse_balance (const Account *account);
 
 gboolean gnc_is_euro_currency(const gnc_commodity * currency);
