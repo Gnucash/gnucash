@@ -355,7 +355,7 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
    case QOF_DATE_FORMAT_UTC:
     return "%Y-%m-%dT%H:%M:%SZ";
    case QOF_DATE_FORMAT_ISO:
-    return "%y-%m-%d";
+    return "%Y-%m-%d";
    case QOF_DATE_FORMAT_LOCALE:
    default:
     return GNC_D_FMT;
@@ -382,7 +382,7 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
    case QOF_DATE_FORMAT_UTC:
     return "%Y-%m-%dT%H:%M:%SZ";
    case QOF_DATE_FORMAT_ISO:
-    return "%y-%b-%d";
+    return "%Y-%b-%d";
    case QOF_DATE_FORMAT_LOCALE:
    default:
     return GNC_D_FMT;
