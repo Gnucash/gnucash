@@ -1602,7 +1602,7 @@ integer_to_words(gint64 val)
 
   while (val >= 1000) {
     log_val = log10(val) / 3 + FUDGE;
-    pow_val = exp10(log_val * 3) + FUDGE;
+    pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
     this_part = val / pow_val;
     val -= this_part * pow_val;
     tmp = integer_to_words(this_part);
