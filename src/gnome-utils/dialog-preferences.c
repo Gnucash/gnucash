@@ -1055,7 +1055,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
   name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
   text = gnc_gconf_get_string(name, NULL, NULL);
   gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
-  DEBUG(" Entry %s set to '%s'", name, text);
+  DEBUG(" Entry %s set to '%s'", name?name:"(null)", text?text:"(null)");
   g_signal_connect(G_OBJECT(entry), "changed",
 		   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
