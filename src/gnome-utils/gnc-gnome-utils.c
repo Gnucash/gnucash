@@ -53,6 +53,9 @@
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
+#ifdef G_OS_WIN32
+#    include "gnc-help-utils.h"
+#endif
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
@@ -232,6 +235,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   return;
 }
 
+#ifndef G_OS_WIN32
 void
 gnc_gnome_help (const char *file_name, const char *anchor)
 {
@@ -251,6 +255,37 @@ gnc_gnome_help (const char *file_name, const char *anchor)
   PERR ("%s", error->message);
   g_error_free(error);
 }
+
+#else /* G_OS_WIN32 */
+void
+gnc_gnome_help (const char *file_name, const char *anchor)
+{
+  const gchar * const *lang;
+  gchar *pkgdatadir, *fullpath, *found = NULL;
+  
+  pkgdatadir = gnc_path_get_pkgdatadir ();
+  for (lang=g_get_language_names (); *lang; lang++) {
+    fullpath = g_build_filename (pkgdatadir, "help", *lang, file_name,
+                                 (gchar*) NULL);
+    if (g_file_test (fullpath, G_FILE_TEST_IS_REGULAR)) {
+      found = g_strdup (fullpath);
+      g_free (fullpath);
+      break;
+    }
+    g_free (fullpath);
+  }
+  g_free (pkgdatadir);
+
+  if (!found) {
+    const gchar *message =
+      _("GnuCash could not find the files for the help documentation.");
+    gnc_error_dialog (NULL, message);
+  } else {
+    gnc_show_htmlhelp (found, anchor);
+  }
+  g_free (found);
+}
+#endif
 
 /********************************************************************\
  * gnc_gnome_get_pixmap                                             *

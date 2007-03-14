@@ -39,8 +39,13 @@
 
 
 /** Help Files ******************************************************/
-#define HF_GUIDE             "gnucash-guide.xml"
-#define HF_HELP              "gnucash-help.xml"
+#ifdef G_OS_WIN32
+#    define HF_GUIDE         "gnucash-guide.chm"
+#    define HF_HELP          "gnucash-help.chm"
+#else
+#    define HF_GUIDE         "gnucash-guide.xml"
+#    define HF_HELP          "gnucash-help.xml"
+#endif
 
 /** Links in the Help Files *****************************************/
 #define HL_USAGE             "usage"

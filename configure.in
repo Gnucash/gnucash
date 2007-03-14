@@ -136,6 +136,12 @@ case $host in
 esac
 AC_MSG_RESULT($platform_win32)
 AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
+
+if test "x$native_win32" = "xyes" ; then
+  HTMLHELP_LIBS=
+  AC_CHECK_HEADERS(htmlhelp.h,[HTMLHELP_LIBS=-lhtmlhelp],,[#include <windows.h>])
+  AC_SUBST(HTMLHELP_LIBS)
+fi
 ##################################################
   
 STRUCT_TM_GMTOFF_CHECK
