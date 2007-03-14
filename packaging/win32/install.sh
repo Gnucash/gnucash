@@ -18,6 +18,8 @@ register_env_var GNOME_LDFLAGS " "
 register_env_var GUILE_LOAD_PATH ";"
 register_env_var GUILE_CPPFLAGS " "
 register_env_var GUILE_LDFLAGS " "
+register_env_var HH_CPPFLAGS " "
+register_env_var HH_LDFLAGS " "
 register_env_var INTLTOOL_PERL " "
 register_env_var KTOBLZCHECK_CPPFLAGS " "
 register_env_var KTOBLZCHECK_LDFLAGS " "
@@ -143,7 +145,7 @@ function inst_regex() {
     add_to_env -I$_REGEX_UDIR/include REGEX_CPPFLAGS
     add_to_env -L$_REGEX_UDIR/lib REGEX_LDFLAGS
     add_to_env $_REGEX_UDIR/bin PATH
-    if quiet ${LD} $REGEX_LDFLAGS -lregex -o $TMP_UDIR/ofile
+    if quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile
     then
         echo "regex already installed.  skipping."
     else
@@ -329,26 +331,17 @@ function inst_openssl() {
     test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a || die "openssl not installed correctly"
 }
 
-function inst_pexports() {
-    setup pexports
-    _PEXPORTS_UDIR=`unix_path $PEXPORTS_DIR`
-    add_to_env $_PEXPORTS_UDIR/bin PATH
-    if quiet which pexports
+function inst_mingwutils() {
+    setup MinGW-Utils
+    _MINGW_UTILS_UDIR=`unix_path $MINGW_UTILS_DIR`
+    add_to_env $_MINGW_UTILS_UDIR/bin PATH
+    if quiet which pexports && quiet which reimp
     then
-        echo "pexports already installed.  skipping."
+        echo "mingw-utils already installed.  skipping."
     else
-        wget_unpacked $PEXPORTS_URL $DOWNLOAD_DIR $PEXPORTS_DIR
-        qpushd $PEXPORTS_DIR
-	    mkdir -p $_PEXPORTS_UDIR/bin
-	    cp pexports-*/bin/* $_PEXPORTS_UDIR/bin
-	    if test x$cross_compile = xyes ; then
-		cd pexports-*/src
-		make
-		cp pexports.exe ../../bin/pexports
-	    fi
-        qpopd
+        wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
     fi
-    quiet which pexports || die "pexports unavailable"
+    (quiet which pexports && quiet which reimp) || die "pexports unavailable"
 }
 
 function inst_exetype() {
@@ -373,8 +366,12 @@ function inst_libxml2() {
     then
         echo "libxml2 already installed.  skipping."
     else
+        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXML2_DIR
         wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $LIBXML2_DIR
         qpushd $LIBXML2_DIR
+            mv libxslt-* mydir
+            cp -r mydir/* .
+            rm -rf mydir
             mv libxml2-* mydir
             cp -r mydir/* .
             rm -rf mydir
@@ -639,6 +636,30 @@ function inst_inno() {
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
+function inst_hh() {
+    setup HTML Help Workshop
+    _HH_UDIR=`unix_path $HH_DIR`
+    add_to_env -I$_HH_UDIR/include HH_CPPFLAGS
+    add_to_env -L$_HH_UDIR/lib HH_LDFLAGS
+    add_to_env $_HH_UDIR PATH
+    if quiet ${LD} $HH_LDFLAGS -lhtmlhelp -o $TMP_UDIR/ofile
+    then
+        echo "html help workshop already installed.  skipping."
+    else
+        smart_wget $HH_URL $DOWNLOAD_DIR
+        echo "!!! When asked for an installation path, specify $HH_DIR !!!"
+        $LAST_FILE
+        qpushd $HH_DIR/lib
+           _HHCTRL_OCX=$(which hhctrl.ocx || true)
+           [ "$_HHCTRL_OCX" ] || die "Did not find hhctrl.ocx"
+           pexports -h ../include/htmlhelp.h $_HHCTRL_OCX > htmlhelp.def
+           ${DLLTOOL} -k -d htmlhelp.def -l libhtmlhelp.a
+           mv htmlhelp.lib htmlhelp.lib.bak
+        qpopd
+    fi
+    quiet ${LD} $HH_LDFLAGS -lhtmlhelp -o $TMP_UDIR/ofile || die "html help workshop not installed correctly"
+}
+
 function inst_opensp() {
     setup Opensp
     _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
@@ -884,8 +905,8 @@ function inst_gnucash() {
 	    ${LIBOFX_OPTIONS} \
 	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
-            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} -D_WIN32" \
-            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS}" \
+            CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
+            LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"
 
         # Windows DLLs don't need relinking
@@ -935,6 +956,62 @@ function inst_gnucash() {
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
         echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
         echo "start gnucash-bin" >> gnucash.bat
+    qpopd
+}
+
+function make_chm() {
+    _CHM_TYPE=$1
+    _CHM_LANG=$2
+    echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
+    qpushd $_CHM_TYPE/$_CHM_LANG
+        xsltproc ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        count=0
+        echo >> htmlhelp.hhp
+        echo "[ALIAS]" >> htmlhelp.hhp
+        echo "IDH_0=index.html" >> htmlhelp.hhp
+        echo "#define IDH_0 0" > mymaps
+        echo "[Map]" > htmlhelp.hhmap
+        echo "Searching for anchors ..."
+        for id in `cat *.xml | sed '/sect.*id=/!d;s,.*id=["'\'']\([^"'\'']*\)["'\''].*,\1,'` ; do
+            files=`grep -l "[\"']${id}[\"']" *.html` || continue
+            echo "IDH_$((++count))=${files}#${id}" >> htmlhelp.hhp
+            echo "#define IDH_${count} ${count}" >> mymaps
+            echo "${id}=${count}" >> htmlhelp.hhmap
+        done
+        echo >> htmlhelp.hhp
+        echo "[MAP]" >> htmlhelp.hhp
+        cat mymaps >> htmlhelp.hhp
+        rm mymaps
+        hhc htmlhelp.hhp || true
+        mv -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
+        mv -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
+    qpopd
+}
+
+function inst_docs() {
+    _DOCS_UDIR=`unix_path $DOCS_DIR`
+    if [ ! -d $_DOCS_UDIR/docbook-xsl ] ; then
+        wget_unpacked $DOCBOOK_XSL_URL $DOWNLOAD_DIR $DOCS_DIR
+        mv $_DOCS_UDIR/docbook-xsl-* $_DOCS_UDIR/docbook-xsl
+    fi
+    mkdir -p $_DOCS_UDIR/repos
+    qpushd $DOCS_DIR/repos
+        # latest revision that should compile, use HEAD or vwxyz
+        SVN_REV="HEAD"
+        if [ -x .svn ]; then
+            setup "SVN update of docs"
+            svn up -r ${SVN_REV}
+        else
+            setup "SVN checkout of docs"
+            svn co -r ${SVN_REV} $DOCS_URL .
+        fi
+        setup docs
+        _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
+        mkdir -p $_DOCS_INST_UDIR/{C,de_DE}
+        make_chm guide C
+        make_chm guide de_DE
+        make_chm help C
+        make_chm help de_DE
     qpopd
 }
 

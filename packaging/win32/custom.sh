@@ -88,13 +88,14 @@ OPENSSL_BIN_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-bin.zip"
 OPENSSL_LIB_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
 OPENSSL_DIR=$GLOBAL_DIR\\openssl
 
-PEXPORTS_URL="http://www.emmestech.com/software/cygwin/pexports-0.43/pexports-0.43.zip"
-PEXPORTS_DIR=$TOOLS_DIR
+MINGW_UTILS_URL="$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
+MINGW_UTILS_DIR=$TOOLS_DIR
 
 EXETYPE_SCRIPT=`pwd`/exetype.pl
 EXETYPE_DIR=$TOOLS_DIR
 
 LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
+LIBXSLT_URL="http://www.zlatkovic.com/pub/libxml/libxslt-1.1.19.win32.zip"
 LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
 
 GETTEXT_URL="$GNOME_WIN32_DEPS_URL/gettext-0.14.5.zip"
@@ -172,6 +173,9 @@ GLADE_DIR=$GLOBAL_DIR\\glade
 INNO_URL="http://files.jrsoftware.org/is/5/isetup-5.1.9.exe"
 INNO_DIR=$GLOBAL_DIR\\inno
 
+HH_URL="http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
+HH_DIR=$GLOBAL_DIR\\hh
+
 SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
 SVN_DIR=$GLOBAL_DIR\\svn
 
@@ -193,6 +197,10 @@ KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
 
 AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
 AQBANKING_DIR=$GLOBAL_DIR\\aqbanking
+
+DOCBOOK_XSL_URL="$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
+DOCS_URL="http://svn.gnucash.org/repo/gnucash-docs/trunk"
+DOCS_DIR=$GLOBAL_DIR\\gnucash-docs
 ##
 
 # There is no reason to ever need to comment these out!
@@ -213,7 +221,7 @@ add_step inst_guile
 if test x$cross_compile != xyes ; then
  add_step inst_openssl
 fi
-add_step inst_pexports
+add_step inst_mingwutils
 add_step inst_exetype
 add_step inst_libxml2
 add_step inst_gnome
@@ -231,7 +239,9 @@ add_step inst_aqbanking
 ##
 if test x$cross_compile != xyes ; then
  add_step inst_inno
+ add_step inst_hh
 fi
 add_step inst_svn
 add_step svn_up
 add_step inst_gnucash
+add_step inst_docs
