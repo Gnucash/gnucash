@@ -1805,10 +1805,6 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
   SplitRegister * reg;
   Split         * split;
   Transaction   * trans;
-  const char    * payee;
-  const char    * memo;
-  gnc_numeric   amount;
-  time_t        date;
 
 
   ENTER("(action %p, plugin_page %p)", action, plugin_page);
@@ -1822,15 +1818,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
 
   if(split && trans)
   {
-    payee  = xaccTransGetDescription(trans);
-    memo   = xaccTransGetNotes(trans);
-    if (memo == NULL)
-      memo = "";
-    amount = xaccSplitGetAmount(split);
-    amount = gnc_numeric_abs (amount);
-    date   = xaccTransGetDate(trans);
-
-    gnc_ui_print_check_dialog_create(plugin_page, payee, amount, date, memo);
+    gnc_ui_print_check_dialog_create(plugin_page, split);
   }
   LEAVE(" ");
 }

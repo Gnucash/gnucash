@@ -45,6 +45,8 @@
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
+#include "Split.h"
+#include "Transaction.h"
 
 #define USE_GTKPRINT HAVE_GTK_2_10
 
@@ -113,8 +115,13 @@ void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
         _(PAYEE,) \
         _(DATE,) \
         _(NOTES,) \
+        _(CHECK_NUMBER,) \
+                  \
+        _(MEMO,) \
+        _(ACTION,) \
         _(AMOUNT_NUMBER,) \
         _(AMOUNT_WORDS,) \
+                         \
         _(TEXT,) \
         _(PICTURE,)
 
@@ -193,10 +200,7 @@ struct _print_check_dialog {
   GtkWindow * caller_window;
 
   GncPluginPageRegister *plugin_page;
-  const char    *payee;
-  gnc_numeric    amount;
-  time_t         date;
-  const char    *notes;
+  Split *split;
 
   GtkWidget * format_combobox;
   gint format_max;
@@ -837,10 +841,7 @@ read_formats(PrintCheckDialog * pcd)
 
 void
 gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
-				 const char    *payee,
-				 gnc_numeric    amount,
-				 time_t         date,
-				 const char    *notes)
+                                 Split *split)
 {
   PrintCheckDialog * pcd;
   GladeXML *xml;
@@ -851,10 +852,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 
   pcd = g_new0(PrintCheckDialog, 1);
   pcd->plugin_page = plugin_page;
-  pcd->payee = payee;
-  pcd->amount = amount;
-  pcd->date = date;
-  pcd->notes = notes;
+  pcd->split = split;
 
   xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
@@ -1071,10 +1069,42 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
 }
 
 
+#if USE_GTKPRINT
+/** Find and load the specified image.  If the specified filename isn't an
+ *  absolute path name, this code will also look in the gnucash system check
+ *  format directory, and then in the user's private check format
+ *  directory.
+ *
+ *  NOTE: The gtk_image_new_from_file() function never fails.  If it can't
+ *  find the specified file, it returs the "broken image" icon.  This function
+ *  takes advantage of that.
+*/
+static GtkWidget *
+read_image (const gchar *filename)
+{
+    GtkWidget *image;
+    gchar *pkgdatadir, *dirname, *tmp_name;
+
+    if (filename[0] == '/')
+        return gtk_image_new_from_file(filename);
+
+    pkgdatadir = gnc_path_get_pkgdatadir();
+    tmp_name = g_build_filename(pkgdatadir, CHECK_FMT_DIR, filename, (char *)NULL);
+    if (!g_file_exists(tmp_name)) {
+        g_free(tmp_name);
+	dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
+	tmp_name = g_build_filename(dirname, filename, (char *)NULL);
+	g_free(dirname);
+    }
+    image = gtk_image_new_from_file(tmp_name);
+    g_free(tmp_name);
+    return image;
+}
+
+
 /** Print a single image to the printed page.  This picture will be scaled
  *  down to fit in the specified size rectangle.  Scaling is done with the
  *  proportions locked 1:1 so as not to distort the image. */
-#if USE_GTKPRINT
 static void
 draw_picture(GtkPrintContext * context, check_item_t * data)
 {
@@ -1088,8 +1118,17 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
     cairo_save(cr);
 
     /* Get the picture. */
-    image = GTK_IMAGE(gtk_image_new_from_file(data->filename));
+    image = GTK_IMAGE(read_image(data->filename));
     pixbuf = gtk_image_get_pixbuf(image);
+    if (pixbuf) {
+        g_object_ref(pixbuf);
+    } else {
+        g_warning("Filename '%s' cannot be read or understood.",
+                  data->filename);
+        pixbuf = gtk_widget_render_icon(GTK_WIDGET(image),
+                                        GTK_STOCK_MISSING_IMAGE,
+                                        -1, NULL);
+    }
     pix_w = gdk_pixbuf_get_width(pixbuf);
     pix_h = gdk_pixbuf_get_height(pixbuf);
 
@@ -1124,6 +1163,7 @@ draw_picture(GtkPrintContext * context, check_item_t * data)
     } else {
         gdk_cairo_set_source_pixbuf(cr, pixbuf, data->x, data->y - pix_h);
     }
+    g_object_unref(pixbuf);
     cairo_paint(cr);
 
     /* Clean up after ourselves */
@@ -1226,14 +1266,21 @@ draw_page_items(GncPrintContext * context,
                 gint page_nr, check_format_t * format, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
-    PangoFontDescription *default_desc, *date_desc;
+    PangoFontDescription *default_desc;
+    Transaction *trans;
+    gnc_numeric amount;
     GNCPrintAmountInfo info;
     const gchar *date_format;
     gchar *text = NULL, buf[100];
     GSList *elem;
-    check_item_t *item, date_item;
+    check_item_t *item;
     gdouble width;
     GDate *date;
+
+    trans = xaccSplitGetParent(pcd->split);
+    /* This was valid when the check printing dialog was instantiated. */
+    g_return_if_fail(trans);
+    amount = gnc_numeric_abs(xaccSplitGetAmount(pcd->split));
 
     default_desc = pango_font_description_from_string(format->font);
 
@@ -1244,7 +1291,7 @@ draw_page_items(GncPrintContext * context,
         switch (item->type) {
             case DATE:
                 date = g_date_new();
-                g_date_set_time_t(date, pcd->date);
+                g_date_set_time_t(date, xaccTransGetDate(trans));
                 date_format =
                     gnc_date_format_get_custom(GNC_DATE_FORMAT
                                                (pcd->date_format));
@@ -1255,21 +1302,33 @@ draw_page_items(GncPrintContext * context,
                 break;
 
             case PAYEE:
-                draw_text(context, pcd->payee, item, default_desc);
+                draw_text(context, xaccTransGetDescription(trans), item, default_desc);
                 break;
 
             case NOTES:
-                draw_text(context, pcd->notes, item, default_desc);
+                draw_text(context, xaccTransGetNotes(trans), item, default_desc);
+                break;
+
+            case MEMO:
+                draw_text(context, xaccSplitGetMemo(pcd->split), item, default_desc);
+                break;
+
+            case ACTION:
+                draw_text(context, xaccSplitGetAction(pcd->split), item, default_desc);
+                break;
+
+            case CHECK_NUMBER:
+                draw_text(context, xaccTransGetNum(trans), item, default_desc);
                 break;
 
             case AMOUNT_NUMBER:
                 info = gnc_default_print_info(FALSE);
-                draw_text(context, xaccPrintAmount(pcd->amount, info),
+                draw_text(context, xaccPrintAmount(amount, info),
                           item, default_desc);
                 break;
 
             case AMOUNT_WORDS:
-                text = numeric_to_words(pcd->amount);
+                text = numeric_to_words(amount);
                 draw_text(context, text, item, default_desc);
                 g_free(text);
                 break;
@@ -1434,6 +1493,8 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     GNCPrintAmountInfo info;
     PangoFontDescription *desc;
+    Transaction *trans;
+    gnc_numeric amount;
 #if USE_GTKPRINT
     cairo_t *cr;
 #endif
@@ -1442,6 +1503,10 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     check_item_t item = { 0 };
     gdouble x, y, multip, degrees;
     GDate *date;
+
+    trans = xaccSplitGetParent(pcd->split);
+    /* This was valid when the check printing dialog was instantiated. */
+    g_return_if_fail(trans);
 
     desc = pango_font_description_from_string("sans 12");
 
@@ -1466,12 +1531,12 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
 
     item.x = multip * gtk_spin_button_get_value(pcd->payee_x);
     item.y = multip * gtk_spin_button_get_value(pcd->payee_y);
-    draw_text(context, pcd->payee, &item, desc);
+    draw_text(context, xaccTransGetDescription(trans), &item, desc);
 
     item.x = multip * gtk_spin_button_get_value(pcd->date_x);
     item.y = multip * gtk_spin_button_get_value(pcd->date_y);
     date = g_date_new();
-    g_date_set_time_t(date, pcd->date);
+    g_date_set_time_t(date, xaccTransGetDate(trans));
     date_format = gnc_date_format_get_custom(GNC_DATE_FORMAT(pcd->date_format));
     g_date_strftime(buf, 100, date_format, date);
     draw_text(context, buf, &item, desc);
@@ -1480,17 +1545,18 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     item.x = multip * gtk_spin_button_get_value(pcd->words_x);
     item.y = multip * gtk_spin_button_get_value(pcd->words_y);
     info = gnc_default_print_info(FALSE);
-    draw_text(context, xaccPrintAmount(pcd->amount, info), &item, desc);
+    amount = gnc_numeric_abs(xaccSplitGetAmount(pcd->split));
+    draw_text(context, xaccPrintAmount(amount, info), &item, desc);
 
     item.x = multip * gtk_spin_button_get_value(pcd->number_x);
     item.y = multip * gtk_spin_button_get_value(pcd->number_y);
-    text = numeric_to_words(pcd->amount);
+    text = numeric_to_words(amount);
     draw_text(context, text, &item, desc);
     g_free(text);
 
     item.x = multip * gtk_spin_button_get_value(pcd->notes_x);
     item.y = multip * gtk_spin_button_get_value(pcd->notes_y);
-    draw_text(context, pcd->notes, &item, desc);
+    draw_text(context, xaccTransGetNotes(trans), &item, desc);
 
     pango_font_description_free(desc);
 }
