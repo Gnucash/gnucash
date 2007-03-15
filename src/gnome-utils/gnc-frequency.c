@@ -930,8 +930,9 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     }
     else
     {
+        int month_with_31_days = 1; // january
         GDate *day_of_month = g_date_new_julian(g_date_get_julian(start_date));
-        g_date_set_month(day_of_month, 1);
+        g_date_set_month(day_of_month, month_with_31_days);
         g_date_set_day(day_of_month, day_of_month_index + 1);
         recurrenceSet(r, multiplier, PERIOD_MONTH, day_of_month);
     }
@@ -974,7 +975,7 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
         int checkbox_idx;
         for (checkbox_idx = 0; CHECKBOX_NAMES[checkbox_idx] != NULL; checkbox_idx++)
         {
-            GDate *day_of_week_date;
+            GDate *day_of_week_aligned_date;
             Recurrence *r;
             const char *day_widget_name = CHECKBOX_NAMES[checkbox_idx];
             GtkWidget *weekday_checkbox = glade_xml_get_widget(gf->gxml, day_widget_name);
@@ -982,14 +983,13 @@ gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDate *o
             if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(weekday_checkbox)))
                 continue;
 
-            day_of_week_date = g_date_new_julian(g_date_get_julian(&start_date));
+            day_of_week_aligned_date = g_date_new_julian(g_date_get_julian(&start_date));
             // increment until we align on the DOW.
-            g_date_set_day(day_of_week_date, 1);
-            while ((g_date_get_weekday(day_of_week_date) % 7) != checkbox_idx)
-                g_date_add_days(day_of_week_date, 1);
+            while ((g_date_get_weekday(day_of_week_aligned_date) % 7) != checkbox_idx)
+                g_date_add_days(day_of_week_aligned_date, 1);
 
             r = g_new0(Recurrence, 1);
-            recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_date);
+            recurrenceSet(r, multiplier, PERIOD_WEEK, day_of_week_aligned_date);
             
             *recurrences = g_list_append(*recurrences, r);
         }
