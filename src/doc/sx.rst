@@ -50,11 +50,13 @@ TODO
 
 - bugs
 
-! - [ ] parse from 1.8 file doesn't setup start date correctly;
+! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+
+! - [x] parse from 1.8 file doesn't setup start date correctly;
     daily-auto-yes-notify.xac has start date of 2006-09-26, but new TXN is
     for $today.
 
-! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+    - [x] this causes phantom "SX has been changed, confirm cancel?" problems.
 
   - [x] created/review txns disappear, eventual crash [ve20070303]_
 

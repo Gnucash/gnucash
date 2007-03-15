@@ -447,6 +447,54 @@ sx_end_handler( xmlNodePtr node, gpointer sx_pdata )
     return sx_set_date( node, sx, xaccSchedXactionSetEndDate );
 }
 
+static void
+_fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
+{
+    GList *iter;
+    for (iter = schedule; iter != NULL; iter = iter->next) {
+        Recurrence *r;
+        GDate start, next;
+
+        r = (Recurrence*)iter->data;
+
+        start = *sx_start_date;
+        g_date_subtract_days(&start, 1);
+
+        g_date_clear(&next, 1);
+
+        recurrenceNextInstance(r, &start, &next);
+
+        if (recurrenceGetPeriodType(r) == PERIOD_MONTH)
+            g_date_set_month(&next, 1);
+
+        {
+            gchar date_str[128];
+            gchar *sched_str;
+
+            g_date_strftime(date_str, 127, "%x", &next);
+            sched_str = recurrenceToString(r);
+            g_debug("setting recurrence [%s] start date to [%s]",
+                    sched_str, date_str);
+            g_free(sched_str);
+        }
+
+        recurrenceSet(r,
+                      recurrenceGetMultiplier(r),
+                      recurrenceGetPeriodType(r), 
+                      &next);
+    }
+
+    if (g_list_length(schedule) == 1
+        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
+    {
+        char date_buf[128];
+        Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
+        g_date_strftime(date_buf, 127, "%x", sx_start_date);
+        recurrenceSet(fixup, 1, PERIOD_ONCE, sx_start_date);
+        g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
+    }
+}
+
 static gboolean
 sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 {
@@ -461,16 +509,8 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     schedule = dom_tree_freqSpec_to_recurrences(node, pdata->book);
     gnc_sx_set_schedule(sx, schedule);
     g_debug("parsed from freqspec [%s]", recurrenceListToString(schedule));
-    if (g_list_length(schedule) == 1
-        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
-    {
-        char date_buf[128];
-        Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
-        g_date_strftime(date_buf, 127, "%x", xaccSchedXactionGetStartDate(sx));
-        recurrenceSet(fixup, 1, PERIOD_ONCE, xaccSchedXactionGetStartDate(sx));
-        g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
-    }
 
+    _fixup_recurrence_start_dates(xaccSchedXactionGetStartDate(sx), schedule);
     pdata->saw_freqspec = TRUE;
 
     return TRUE;
