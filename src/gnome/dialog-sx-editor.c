@@ -411,6 +411,9 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         sx_start_date = *xaccSchedXactionGetStartDate(sxed->sx);
         sx_schedule_str = recurrenceListToString(gnc_sx_get_schedule(sxed->sx));
 
+        g_debug("dialog schedule [%s], sx schedule [%s]",
+                dialog_schedule_str, sx_schedule_str);
+
         schedules_are_the_same = (strcmp(dialog_schedule_str, sx_schedule_str) == 0);
         g_free(dialog_schedule_str);
         g_free(sx_schedule_str);
