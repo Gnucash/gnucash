@@ -163,7 +163,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
 				 GSList *param_path)
 {
   GNCSearchParamPrivate *priv;
-  GNCIdTypeConst type = NULL;
+  GNCIdTypeConst type = (gchar*) g_type_name (G_TYPE_INVALID);
   GSList *converters = NULL;
 
   g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
@@ -178,7 +178,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
   for (; param_path; param_path = param_path->next) {
     GNCIdType param_name = param_path->data;
     const QueryObjectDef *objDef =
-      gncQueryObjectGetParameter (search_type, param_name);
+      gncQueryObjectGetParameter (g_type_from_name (search_type), param_name);
 
     /* If it doesn't exist, then we've reached the end */
     if (objDef == NULL)
@@ -188,7 +188,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
     converters = g_slist_prepend (converters, (gpointer) objDef);
 
     /* And reset for the next parameter */
-    type = search_type = objDef->param_type;
+    type = search_type = (gchar*) g_type_name (objDef->param_type);
   }
 
   /* Save the type */
@@ -208,7 +208,7 @@ gnc_search_param_override_param_type (GNCSearchParam *param,
   GNCSearchParamPrivate *priv;
 
   g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
-  g_return_if_fail (param_type != NULL && *param_type != '\0');
+  g_return_if_fail (param_type != G_TYPE_INVALID);
 
   priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
   priv->type = param_type;
@@ -242,10 +242,10 @@ gnc_search_param_get_param_type (GNCSearchParam *param)
 {
   GNCSearchParamPrivate *priv;
 
-  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), (gchar*) g_type_name (G_TYPE_INVALID));
 
   priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
-  return priv->type;
+  return (gchar*) priv->type;
 }
 
 void
@@ -291,7 +291,7 @@ gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
   a_priv = GNC_SEARCH_PARAM_GET_PRIVATE(a);
   b_priv = GNC_SEARCH_PARAM_GET_PRIVATE(b);
   if (a_priv->type == b_priv->type || 
-      !safe_strcmp (a_priv->type, b_priv->type))
+      (a_priv->type == b_priv->type))
     return TRUE;
 
   return FALSE;
@@ -384,7 +384,7 @@ gnc_search_param_set_param_fcn (GNCSearchParam *param,
   GNCSearchParamPrivate *priv;
 
   g_return_if_fail (param);
-  g_return_if_fail (param_type && *param_type);
+  g_return_if_fail (param_type != G_TYPE_INVALID);
   g_return_if_fail (fcn);
   g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
 

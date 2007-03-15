@@ -47,6 +47,7 @@
 #define XACC_ACCOUNT_H
 #include "qof.h"
 #include "gnc-engine.h"
+#include "policy.h"
 
 
 /*************************************************************/
@@ -217,13 +218,13 @@ void gnc_set_account_separator (const gchar *separator);
 
 /** @deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
-#define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccAccountGetGUID(X)     qof_instance_get_guid(QOF_INSTANCE(X))
+#define xaccAccountReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
-#define xaccAccountLookup (guid, book) qof_book_get_object (book, GNC_TYPE_ACCOUNT, guid)
+#define xaccAccountLookup(guid, book) GNC_ACCOUNT (qof_book_get_element (book, GNC_TYPE_ACCOUNT, guid))
 #define xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
 /** @} */
@@ -841,6 +842,19 @@ void           gnc_account_set_children (GncAccount* acc, AccountGroup *grp);
 
 AccountGroup* gnc_account_get_parent (GncAccount* acc);
 void           gnc_account_set_parent (GncAccount* acc, AccountGroup *grp);
+
+void          gnc_account_set_sort_dirty (GncAccount *acc, gboolean val);
+gboolean      gnc_account_get_sort_dirty (GncAccount *acc);
+
+
+void          gnc_account_set_balance_dirty (GncAccount *acc, gboolean val);
+gboolean      gnc_account_get_balance_dirty (GncAccount *acc);
+
+void          gnc_account_set_policy (GncAccount *acc, GNCPolicy *policy);
+GNCPolicy*    gnc_account_get_policy (GncAccount *acc);
+
+void           gnc_account_set_commodity (GncAccount *acc, gnc_commodity *commodity);
+gnc_commodity* gnc_account_get_commodity (GncAccount *acc);
 
 /** @} */
 

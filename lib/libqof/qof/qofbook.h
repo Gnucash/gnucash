@@ -223,7 +223,7 @@ gboolean qof_book_insert_element (QofBook *book, QofInstance *inst);
 
 QofInstance* qof_book_get_element (QofBook *book, GType type, GUID *guid);
 
-
+#define qof_book_get_guid(b) qof_instance_get_guid(QOF_INSTANCE(b))
 
 #endif /* QOF_BOOK_H */
 /** @} */

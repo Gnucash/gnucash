@@ -73,7 +73,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    if (!trans || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (trans->inst.book == book) return;
+   if (qof_instance_get_book (QOF_INSTANCE (trans)) == book) return;
 
    ENTER ("trans=%p %s", trans, trans->description);
    newtrans = xaccDupeTransaction (trans);
@@ -90,8 +90,8 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    /* Fiddle the transaction into place in the new book */
    col = qof_book_get_collection (book, GNC_ID_TRANS);
-   qof_collection_insert_entity (col, &newtrans->inst.entity);
-   newtrans->inst.book = book;
+   qof_collection_insert_entity (col, QOF_INSTANCE (newtrans));
+   qof_instance_set_book (QOF_INSTANCE (newtrans), book);
 
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
    xaccTransBeginEdit (newtrans);
@@ -101,8 +101,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      s->inst.book = book;
-      qof_collection_insert_entity(col, &s->inst.entity);
+     qof_instance_set_book (QOF_INSTANCE (s), book);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -113,13 +112,13 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       else
       {
         xaccAccountInsertSplit (twin, s);
-        twin->balance_dirty = TRUE;
-        twin->sort_dirty = TRUE;
+        gnc_account_set_balance_dirty (twin, TRUE);
+        gnc_account_set_sort_dirty (twin, TRUE);
       }
    }
 
    xaccTransCommitEdit (newtrans);
-   qof_event_gen (&newtrans->inst.entity, QOF_EVENT_CREATE, NULL);
+   qof_event_gen (QOF_INSTANCE (newtrans), QOF_EVENT_CREATE, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 
@@ -137,11 +136,11 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    if (!trans || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (trans->inst.book == book) return;
+   if (qof_instance_get_book (QOF_INSTANCE (trans)) == book) return;
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (qof_book_get_backend(book) != qof_book_get_backend(trans->inst.book))
+   if (qof_book_get_backend(book) != qof_book_get_backend(qof_instance_get_book (QOF_INSTANCE (trans))))
    {
       gnc_book_insert_trans_clobber (book, trans);
       return;
@@ -152,8 +151,8 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    xaccTransBeginEdit (trans);
 
    col = qof_book_get_collection (book, GNC_ID_TRANS);
-   trans->inst.book = book;
-   qof_collection_insert_entity (col, &trans->inst.entity);
+   qof_instance_set_book (QOF_INSTANCE (trans), book);
+   qof_collection_insert_entity (col, QOF_INSTANCE (trans)); // This operation isn't needed becouse set_book does this
 
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
    for (node = trans->splits; node; node = node->next)
@@ -162,10 +161,10 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* Move the splits over (only if they haven't already been moved). */
-      if (s->inst.book != book)
+      if (qof_instance_get_book (QOF_INSTANCE (s)) != book)
       {
-         s->inst.book = book;
-         qof_collection_insert_entity (col, &s->inst.entity);
+         qof_instance_set_book (QOF_INSTANCE (s), book);
+         qof_collection_insert_entity (col, QOF_INSTANCE (s));
       }
 
       /* Find the twin account, and re-parent to that. */
@@ -180,14 +179,14 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
         if (s->acc != twin)
         {
            xaccAccountInsertSplit (twin, s);
-           twin->balance_dirty = TRUE;
-           twin->sort_dirty = TRUE;
+           gnc_account_set_balance_dirty (twin, TRUE);
+           gnc_account_set_sort_dirty (twin, TRUE);
         }
       }
    }
 
    xaccTransCommitEdit (trans);
-   qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (QOF_INSTANCE (trans), QOF_EVENT_MODIFY, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 
@@ -228,18 +227,18 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    ENTER ("lot=%p", lot);
 
    col = qof_book_get_collection (book, GNC_ID_LOT);
-   lot->inst.book = book;
-   qof_collection_insert_entity (col, &lot->inst.entity);
+   qof_instance_set_book (QOF_INSTANCE (lot), book);
+   qof_collection_insert_entity (col, QOF_INSTANCE (lot)); // don't need it
 
    /* Move the splits over (only if they haven't already been moved). */
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
    for (snode = lot->splits; snode; snode=snode->next)
    {
       Split *s = snode->data;
-      if (s->inst.book != book)
+      if (qof_instance_get_book (QOF_INSTANCE (s)) != book)
       {
-         s->inst.book = book;
-         qof_collection_insert_entity (col, &s->inst.entity);
+         qof_instance_set_book (QOF_INSTANCE (s), book);
+         qof_collection_insert_entity (col, QOF_INSTANCE (s));
       }
    }
 
@@ -264,11 +263,11 @@ gnc_book_insert_price (QofBook *book, GNCPrice *pr)
    if (!pr || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (pr->inst.book == book) return;
+   if (qof_instance_get_book (QOF_INSTANCE (pr)) == book) return;
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (qof_book_get_backend(book) != qof_book_get_backend(pr->inst.book))
+   if (qof_book_get_backend(book) != qof_book_get_backend(qof_instance_get_book (QOF_INSTANCE (pr))))
    {
       gnc_book_insert_price_clobber (book, pr);
       return;
@@ -280,8 +279,8 @@ gnc_book_insert_price (QofBook *book, GNCPrice *pr)
    gnc_price_begin_edit (pr);
 
    col = qof_book_get_collection (book, GNC_ID_PRICE);
-   pr->inst.book = book;
-   qof_collection_insert_entity (col, &pr->inst.entity);
+   qof_instance_set_book (QOF_INSTANCE (pr), book);
+   qof_collection_insert_entity (col, QOF_INSTANCE (pr)); // don't need it
 
    gnc_pricedb_remove_price (pr->db, pr);
    gnc_pricedb_add_price (gnc_pricedb_get_db (book), pr);
@@ -444,9 +443,9 @@ clear_markers (AccountGroup *grp)
       GList *lp;
                                                                                 
       /* recursively do sub-accounts */
-      clear_markers (account->children);
+      clear_markers (gnc_account_get_children (account));
                                                                                 
-      for (lp = account->splits; lp; lp = lp->next)
+      for (lp = xaccAccountGetSplitList(account); lp; lp = lp->next)
       {
         Split *s = lp->data;
         Transaction *trans = s->parent;
@@ -541,7 +540,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
     * and it is not needed for the current usage. */
    kvp_frame_delete (qof_book_get_slots(dest_book));
    book_inst = (QofInstance*)dest_book;
-   book_inst->kvp_data = kvp_frame_copy (qof_book_get_slots(src_book));
+   qof_instance_set_kvp_data (QOF_INSTANCE (book_inst), qof_book_get_slots(src_book));
 
    /* Next, copy the commodity tables */
    src_tbl = gnc_commodity_table_get_table (src_book);
@@ -589,7 +588,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    /* Make note of the sibling books */
    now = time(0);
    gnc_kvp_bag_add (qof_book_get_slots(src_book), "gemini", now, 
-                          "book_guid", qof_book_get_guid(dest_book),
+                          "book_guid", qof_instance_get_guid(QOF_INSTANCE (dest_book)),
                            NULL);
    gnc_kvp_bag_add (qof_book_get_slots(dest_book), "gemini", now, 
                           "book_guid", qof_book_get_guid(src_book),
@@ -684,9 +683,9 @@ add_closing_balances (AccountGroup *closed_grp,
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
-      kvp_frame_set_guid (cwd, "/book/prev-book", qof_book_get_guid(closed_book));
+      kvp_frame_set_guid (cwd, "/book/prev-book", qof_instance_get_guid(QOF_INSTANCE (closed_book)));
 
-      xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
+      xaccAccountSetSlots_nc (twin, qof_instance_get_kvp_data (QOF_INSTANCE (twin)));
       
       /* -------------------------------- */
       /* Add KVP to closed account, indicating where 
@@ -696,7 +695,7 @@ add_closing_balances (AccountGroup *closed_grp,
       kvp_frame_set_guid (cwd, "/book/next-book", qof_book_get_guid(open_book));
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
-      xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
+      xaccAccountSetSlots_nc (candidate, qof_instance_get_kvp_data (QOF_INSTANCE (candidate)));
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
@@ -778,7 +777,7 @@ add_closing_balances (AccountGroup *closed_grp,
       if (childs) 
       {
          PINFO ("add closing baln to subaccts of %s", 
-                 candidate->description);
+                 xaccAccountGetDescription((const GncAccount*) candidate));
          add_closing_balances (childs, open_book, closed_book,
                           equity_account,
                           post_date, date_entered, desc);

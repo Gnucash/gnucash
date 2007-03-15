@@ -486,13 +486,81 @@ xaccCloneAccountSimple (const GncAccount *from, QofBook *book)
 AccountGroup* 
 gnc_account_get_children (GncAccount* acc)
 {
+  g_return_val_if_fail (GNC_IS_ACCOUNT (acc), NULL);
   return acc->priv->children;
 }
 
-AccountGroup* 
+void 
 gnc_account_set_children (GncAccount* acc, AccountGroup *grp)
 {
+  g_return_if_fail (GNC_IS_ACCOUNT (acc));
   acc->priv->children = grp;
+}
+
+AccountGroup* 
+gnc_account_get_parent (GncAccount* acc)
+{
+  g_return_val_if_fail (GNC_IS_ACCOUNT (acc), NULL);
+  return acc->priv->parent;
+}
+
+void 
+gnc_account_set_parent (GncAccount* acc, AccountGroup *grp)
+{
+  g_return_if_fail (GNC_IS_ACCOUNT (acc));
+  acc->priv->parent = grp;
+}
+
+void
+gnc_account_set_sort_dirty (GncAccount *acc, gboolean val)
+{
+  g_return_if_fail (GNC_IS_ACCOUNT (acc));
+  acc->priv->sort_dirty = val;
+}
+
+gboolean
+gnc_account_get_sort_dirty (GncAccount *acc)
+{
+  g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
+  return acc->priv->sort_dirty;
+}
+
+
+void
+gnc_account_set_balance_dirty (GncAccount *acc, gboolean val)
+{
+  g_return_if_fail (GNC_IS_ACCOUNT (acc));
+  acc->priv->balance_dirty = val;
+}
+
+gboolean
+gnc_account_get_balance_dirty (GncAccount *acc)
+{
+  g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
+  return acc->priv->balance_dirty;
+}
+
+void
+gnc_account_set_policy (GncAccount *acc, GNCPolicy *policy)
+{
+  acc->priv->policy = policy;
+}
+
+GNCPolicy*
+gnc_account_get_policy (GncAccount *acc)
+{
+  return acc->priv->policy;
+}
+
+void
+gnc_account_set_commodity (GncAccount *acc, gnc_commodity *commodity)
+{
+  acc->priv->commodity = commodity;
+}
+gnc_commodity*
+gnc_account_get_commodity (GncAccount *acc)
+{
+  return acc->priv->commodity;
 }
 
 /********************************************************************\
@@ -1660,7 +1728,7 @@ xaccAccountConvertBalanceToCurrency(const GncAccount *acc, /* for book */
       gnc_commodity_equiv (balance_currency, new_currency))
     return balance;
 
-  book = xaccGroupGetBook (xaccAccountGetRoot (acc));
+  book = xaccGroupGetBook (xaccAccountGetRoot ((GncAccount*)acc));
   pdb = gnc_pricedb_get_db (book);
 
   balance = gnc_pricedb_convert_balance_latest_price(
@@ -1688,7 +1756,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const GncAccount *acc, /* for book *
       gnc_commodity_equiv (balance_currency, new_currency))
     return balance;
 
-  book = xaccGroupGetBook (xaccAccountGetRoot (acc));
+  book = xaccGroupGetBook (xaccAccountGetRoot ((GncAccount*)acc));
   pdb = gnc_book_get_pricedb (book);
 
   ts.tv_sec = date;

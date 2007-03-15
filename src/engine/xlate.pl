@@ -195,13 +195,13 @@ foreach (@files)
 		s/GNCEntityTable/QofEntityTable/g;
 		s/xaccGUIDTypeEntityTable/qof_guid_type/g;
 
-		s/xaccEntityTableNew/qof_entity_new/g;
-		s/xaccEntityTableDestroy/qof_entity_destroy/g;
-		s/xaccGUIDNewEntityTable/qof_entity_guid_new/g;
-		s/xaccLookupEntity/qof_entity_lookup/g;
-		s/xaccStoreEntity/qof_entity_store/g;
-		s/xaccRemoveEntity/qof_entity_remove/g;
-		s/xaccForeachEntity/qof_entity_foreach/g;
+		s/xaccEntityTableNew/qof_instancenew/g;
+		s/xaccEntityTableDestroy/qof_instancedestroy/g;
+		s/xaccGUIDNewEntityTable/qof_instanceguid_new/g;
+		s/xaccLookupEntity/qof_instancelookup/g;
+		s/xaccStoreEntity/qof_instancestore/g;
+		s/xaccRemoveEntity/qof_instanceremove/g;
+		s/xaccForeachEntity/qof_instanceforeach/g;
 
 		s/foreachObjectCB/QofEntityForeachCB/g;
 		s/GNC_OBJECT_VERSION/QOF_OBJECT_VERSION/g;

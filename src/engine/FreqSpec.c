@@ -346,8 +346,8 @@ xaccFreqSpecFree( FreqSpec *fs )
    qof_event_gen( QOF_INSTANCE (fs), QOF_EVENT_DESTROY , NULL);
    xaccFreqSpecCleanUp( fs );
 
-   qof_entity_release (fs);
-   // g_free( fs ); the qof_entity_realise function call g_object_unref
+   qof_instancerelease (fs);
+   // g_free( fs ); the qof_instancerealise function call g_object_unref
 }
 
 FreqType

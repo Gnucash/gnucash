@@ -2803,9 +2803,9 @@ gnc_register_kvp_option_generator(QofIdType id_type, SCM generator)
 {
     GList *list;
     init_table();
-    list = g_hash_table_lookup(kvp_registry, id_type);
+    list = g_hash_table_lookup(kvp_registry, GINT_TO_POINTER (id_type));
     list = g_list_prepend(list, generator);
-    g_hash_table_insert(kvp_registry, (gpointer) id_type, list);
+    g_hash_table_insert(kvp_registry, GINT_TO_POINTER (id_type), list);
     scm_gc_protect_object(generator);
 }
 
@@ -2819,7 +2819,7 @@ gnc_make_kvp_options(QofIdType id_type)
     SCM options = SCM_UNDEFINED;
 
     init_table();
-    list = g_hash_table_lookup(kvp_registry, id_type);
+    list = g_hash_table_lookup(kvp_registry, GINT_TO_POINTER (id_type));
     gnc_new_options = scm_c_eval_string("gnc:new-options");
     options = scm_call_0(gnc_new_options);
 

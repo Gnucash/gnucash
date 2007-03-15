@@ -485,9 +485,9 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 /** @} */
 
 /** \deprecated */
-#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSplitGetGUID(X)      qof_instance_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccSplitReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 #endif /* XACC_SPLIT_H */
 /** @} */

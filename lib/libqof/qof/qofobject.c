@@ -334,7 +334,7 @@ struct foreach_data {
 
 static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
 {
-  GType data_type = GPOINTER_TO_INT(key);
+  const gchar *data_type =  (const gchar*) key;
   struct foreach_data *cb_data = arg;
 
   g_return_if_fail (key && be_item && arg);

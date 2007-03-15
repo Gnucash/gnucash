@@ -366,7 +366,7 @@ xaccGroupMarkDoFree (AccountGroup *grp)
   for (node = grp->accounts; node; node = node->next)
   {
     Account *account = node->data;
-    qof_instace_do_free ((const QofInstance*) QOF_INSTANCE (account));
+    qof_instance_do_free ((const QofInstance*) QOF_INSTANCE (account));
     xaccGroupMarkDoFree (gnc_account_get_children (account)); 
   }
 }
@@ -436,7 +436,7 @@ xaccFreeAccountGroup (AccountGroup *grp)
 
   grp->parent   = NULL;
 
-  qof_instance_release ();
+  qof_instance_release (QOF_INSTANCE (grp));
 }
 
 /********************************************************************\
@@ -629,7 +629,7 @@ xaccGroupGetRoot (const AccountGroup * grp)
     parent_acc = grp->parent;
 
     if (parent_acc)
-      grp = parent_acc->parent;
+      grp = gnc_account_get_parent (parent_acc);
     else
       grp = NULL;
   }
@@ -638,9 +638,9 @@ xaccGroupGetRoot (const AccountGroup * grp)
 }
 
 AccountGroup *
-xaccAccountGetRoot (const Account * acc) 
+xaccAccountGetRoot (GncAccount * acc) 
 {
-  return acc ? xaccGroupGetRoot (acc->parent) : NULL;
+  return acc ? xaccGroupGetRoot (gnc_account_get_parent (acc)) : NULL;
 }
 
 /********************************************************************\
@@ -794,7 +794,7 @@ xaccGetPeerAccountFromName (const Account *acc, const char * name)
   if (!name) return NULL;
 
   /* first, find the root of the account group structure */
-  root = xaccAccountGetRoot (acc);
+  root = xaccAccountGetRoot ((GncAccount*)acc);
 
   /* now search all accounts hanging off the root */
   peer_acc = xaccGetAccountFromName (root, name);
@@ -816,7 +816,7 @@ xaccGetPeerAccountFromFullName (const Account *acc, const char * name)
   if (!name) return NULL;
 
   /* first, find the root of the account group structure */
-  root = xaccAccountGetRoot (acc);
+  root = xaccAccountGetRoot ((GncAccount*)acc);
 
   /* now search all acounts hanging off the root */
   peer_acc = xaccGetAccountFromFullName (root, name);
@@ -835,19 +835,19 @@ xaccAccountRemoveGroup (Account *acc)
   /* if this group has no parent, it must be the topgroup */
   if (!acc) return;
 
-  grp = acc->children;
+  grp = gnc_account_get_children (acc);
 
   if (grp) grp->parent = NULL;
-  acc->children = NULL;
+  gnc_account_set_children (acc, NULL);
 
   /* make sure that the parent of the group is marked 
    * as having been modified. */
-  grp = acc->parent;
+  grp = gnc_account_get_parent (acc);
   if (!grp) return;
 
   grp->saved = 0;
 
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -864,7 +864,7 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
    * are not yet parented. */
   if (!grp) return;
 
-  if (acc->parent != grp)
+  if (gnc_account_get_parent (acc) != grp)
   {
     PERR ("account not in group");
     return;
@@ -877,10 +877,10 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
   grp->accounts = g_list_remove (grp->accounts, acc);
 
   /* Now send the event. */
-  qof_event_gen(&acc->inst.entity, QOF_EVENT_REMOVE, &ed);
+  qof_event_gen(QOF_INSTANCE (acc), QOF_EVENT_REMOVE, &ed);
 
   /* clear the account's group pointer after REMOVE event generation. */
-  acc->parent = NULL;
+  gnc_account_set_parent (acc, NULL);
 
   grp->saved = 0;
 
@@ -892,30 +892,30 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void
-xaccAccountInsertSubAccount (Account *adult, Account *child)
+xaccAccountInsertSubAccount (GncAccount *adult, GncAccount *child)
 {
   if (!adult) return;
 
   /* if a container for the children doesn't yet exist, add it */
-  if (adult->children == NULL)
-    adult->children = xaccMallocAccountGroup (adult->inst.book);
+  if (gnc_account_get_children (adult) == NULL)
+    gnc_account_set_children(adult, xaccMallocAccountGroup (qof_instance_get_book (QOF_INSTANCE (adult))));
 
   /* set back-pointer to parent */
-  adult->children->parent = adult;
+  (gnc_account_get_children (adult))->parent = adult;
 
   /* allow side-effect of creating a child-less account group */
   if (!child) return;
 
-  xaccGroupInsertAccount (adult->children, child);
+  xaccGroupInsertAccount (gnc_account_get_children (adult), child);
 
-  qof_event_gen (&adult->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (adult), QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -932,16 +932,16 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
    * the sort order to be checked. */
-  if (acc->parent != grp)
+  if (gnc_account_get_parent (acc) != grp)
   {
     xaccAccountBeginEdit (acc);
 
-    if (acc->parent) 
+    if (gnc_account_get_parent (acc)) 
     {
-      xaccGroupRemoveAccount (acc->parent, acc);
+      xaccGroupRemoveAccount (gnc_account_get_parent (acc), acc);
 
       /* switch over between books, if needed */
-      if (qof_instance_get_book (QOF_INSTANCE (grp)) != acc->inst.book)
+      if (qof_instance_get_book (QOF_INSTANCE (grp)) != qof_instance_get_book (QOF_INSTANCE (acc)))
       {
          QofCollection *col;
 // xxxxxxxxxxxxxxxxxxxxxxx
@@ -958,28 +958,28 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           */
          PWARN ("reparenting accounts across books is not correctly supported\n");
 
-         qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
+         qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_DESTROY, NULL);
          col = qof_book_get_collection (qof_instance_get_book (QOF_INSTANCE (grp)), GNC_ID_ACCOUNT);
-         qof_collection_insert_entity (col, &acc->inst.entity);
-         qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
+         qof_collection_insert_entity (col, QOF_INSTANCE (acc));
+         qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_CREATE, NULL);
       }
     }
 
     /* set back-pointer to the account's parent */
-    acc->parent = grp;
+    gnc_account_set_parent (acc, grp);
 
     grp->accounts = g_list_append (grp->accounts, acc);
 
     /* Gather event data */
-    qof_event_gen (&acc->inst.entity, QOF_EVENT_ADD, NULL);
+    qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_ADD, NULL);
 
-    qof_instance_set_dirty(&acc->inst);
+    qof_instance_set_dirty(QOF_INSTANCE (acc), TRUE);
     xaccAccountCommitEdit (acc);
   }
 
   grp->saved = 0;
 
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (acc), QOF_EVENT_MODIFY, NULL);
   LEAVE(" ");
 }
 
@@ -1022,7 +1022,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
    int i;
    GList *node;
    if (!to || !from) return;
-   if (!from->accounts || !to->book) return;
+   if (!from->accounts || !qof_instance_get_book (QOF_INSTANCE (to))) return;
 
    ENTER (" ");
    xaccAccountGroupBeginEdit(to);
@@ -1033,23 +1033,23 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
 
       /* This will copy the basic data and the KVP.  It will
        * not copy any splits/transactions. It will gemini. */
-      to_acc = xaccCloneAccount (from_acc, to->book);
+      to_acc = xaccCloneAccount (from_acc, qof_instance_get_book (QOF_INSTANCE (to)));
 
       xaccAccountBeginEdit (to_acc);
       to->accounts = g_list_append (to->accounts, to_acc);
 
-      to_acc->parent = to;
-      qof_instance_set_dirty(&to_acc->inst);
+      gnc_account_set_parent (to_acc, to);
+      qof_instance_set_dirty(QOF_INSTANCE (to_acc), TRUE);
 
       /* Copy child accounts too. */
-      if (from_acc->children)
+      if (gnc_account_get_children (from_acc))
       {
-         to_acc->children = xaccMallocAccountGroup (to->book);
-         to_acc->children->parent = to_acc;
-         xaccGroupCopyGroup (to_acc->children, from_acc->children);
+         gnc_account_set_children (to_acc, xaccMallocAccountGroup (qof_instance_get_book (QOF_INSTANCE (to))));
+         (gnc_account_get_children (to_acc))->parent = to_acc;
+         xaccGroupCopyGroup (gnc_account_get_children (to_acc), gnc_account_get_children (from_acc));
       }
       xaccAccountCommitEdit (to_acc);
-      qof_event_gen (&to_acc->inst.entity, QOF_EVENT_CREATE, NULL);
+      qof_event_gen (QOF_INSTANCE (to_acc), QOF_EVENT_CREATE, NULL);
 
       /* make sure that we have a symmetric, uniform number of 
        * begin-edits, so that subsequent GroupCommitEdit's 
@@ -1057,7 +1057,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
       for (i=0; i<to->editlevel; i++)
       {
          xaccAccountBeginEdit (to_acc);
-         xaccAccountGroupBeginEdit (to_acc->children);
+         xaccAccountGroupBeginEdit (gnc_account_get_children (to_acc));
       }
    }
    xaccAccountGroupCommitEdit(from);
@@ -1099,25 +1099,25 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         AccountGroup *ga, *gb;
 
         /* consolidate children */
-        ga = (AccountGroup *) acc_a->children;
-        gb = (AccountGroup *) acc_b->children;
+        ga = (AccountGroup *) gnc_account_get_children (acc_a);
+        gb = (AccountGroup *) gnc_account_get_children (acc_b);
 
         if (gb)
         {
           if (!ga)
           {
-            acc_a->children = gb;
+            gnc_account_set_children (acc_a, gb);
             gb->parent = acc_a;
-            acc_b->children = NULL;
+            gnc_account_set_children (acc_b, NULL);
 
-            qof_event_gen (&acc_a->inst.entity, QOF_EVENT_MODIFY, NULL);
-            qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
+            qof_event_gen (QOF_INSTANCE (acc_a), QOF_EVENT_MODIFY, NULL);
+            qof_event_gen (QOF_INSTANCE (acc_b), QOF_EVENT_MODIFY, NULL);
           }
           else
           {
             xaccGroupConcatGroup (ga, gb);
-            acc_b->children = NULL;
-            qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
+            gnc_account_set_children (acc_b, NULL);
+            qof_event_gen (QOF_INSTANCE (acc_b), QOF_EVENT_MODIFY, NULL);
           }
         }
 
@@ -1125,8 +1125,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         xaccGroupMergeAccounts (ga);
 
         /* consolidate transactions */
-        while (acc_b->splits)
-          xaccSplitSetAccount (acc_b->splits->data, acc_a);
+        while (xaccAccountGetSplitList(acc_b))
+          xaccSplitSetAccount ((xaccAccountGetSplitList (acc_b))->data, acc_a);
 
         /* move back one before removal */
         node_b = node_b->prev;
@@ -1216,7 +1216,7 @@ void
 xaccAccountBeginStagedTransactionTraversals (const Account *account)
 {
   if (account)
-      xaccSplitsBeginStagedTransactionTraversals (account->splits);
+      xaccSplitsBeginStagedTransactionTraversals (xaccAccountGetSplitList(account));
 }
 
 gboolean
@@ -1256,7 +1256,7 @@ xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp)
     /* recursively do sub-accounts */
     xaccGroupBeginStagedTransactionTraversals (gnc_account_get_children (account));
 
-    for (lp = account->splits; lp; lp = lp->next)
+    for (lp = xaccAccountGetSplitList(account); lp; lp = lp->next)
     {
       Split *s = lp->data;
       Transaction *trans = s->parent;
@@ -1275,7 +1275,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
   GList *lp;
   if (!acc) return 0;
 
-  for(lp = acc->splits; lp; lp = lp->next)
+  for(lp = xaccAccountGetSplitList(acc); lp; lp = lp->next)
   {
     Split *s = (Split *) lp->data;
     Transaction *trans = s->parent;   

@@ -87,6 +87,6 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
-#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
+#define xaccSchedXactionSetGUID(X,G) qof_instance_set_guid(QOF_INSTANCE(X),(G))
 
 #endif /* XACC_SCHEDXACTION_P_H */

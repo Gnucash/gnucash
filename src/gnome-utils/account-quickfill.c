@@ -61,7 +61,7 @@ typedef struct {
 } QFB;
 
 static void 
-shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
+shared_quickfill_destroy (gpointer user_data)
 {
   QFB *qfb = user_data;
   gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,

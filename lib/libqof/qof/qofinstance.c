@@ -103,7 +103,8 @@ enum _QofInstanceSignalType {
 enum
 {
         PROP_0,
-        PROP_BOOK
+        PROP_BOOK,
+        PROP_GUID
 };
 
 struct _QofInstanceSignal {
@@ -153,7 +154,10 @@ qof_instance_class_init(QofInstanceClass *klass)
 					 g_param_spec_object ("book", NULL, _("Book"), QOF_TYPE_BOOK,
 							       								(G_PARAM_READABLE | G_PARAM_WRITABLE |
 																			G_PARAM_CONSTRUCT_ONLY)));
-
+  
+  g_object_class_install_property (object_class, PROP_GUID,
+					 g_param_spec_object ("guid", NULL, _("GUID"), QOF_TYPE_GUID,
+							       								(G_PARAM_READABLE | G_PARAM_WRITABLE)));
 	/* Create signals here:*/
 	
 	qof_instance_signals[COMMITED] =
@@ -253,6 +257,9 @@ qof_instance_get_property (GObject      *object,
   case PROP_BOOK:
   	g_value_set_object (value, obj->priv->book);
   	break;
+  case PROP_GUID:
+    g_value_set_boxed (value, obj->priv->guid);
+    break;
   default:
     /* We don't have any other property... */
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
@@ -470,6 +477,18 @@ void
 qof_instance_mark_free(QofInstance *inst)
 {
 	inst->priv->do_free = TRUE;
+}
+
+gboolean 
+qof_instance_get_do_free (QofInstance *inst)
+{
+  return inst->priv->do_free;
+}
+
+void
+qof_instance_set_do_free (QofInstance *inst, gboolean val)
+{
+  inst->priv->do_free = val;
 }
 
 /* ========================================================== */

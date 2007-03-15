@@ -289,7 +289,7 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 
 	g_return_val_if_fail (type && label && search_cb, NULL);
 
-	get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
+	get_guid = qof_class_get_parameter (g_type_from_name (type), g_type_name (QOF_PARAM_GUID));
 	g_return_val_if_fail (get_guid, NULL);
 
 	gsl = g_object_new (GNC_TYPE_GENERAL_SEARCH, NULL);

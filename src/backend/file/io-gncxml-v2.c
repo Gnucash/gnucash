@@ -305,12 +305,12 @@ add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
 }
 
 static void
-do_counter_cb (const char *type, gpointer data_p, gpointer be_data_p)
+do_counter_cb (const gchar *type, gpointer data_p, gpointer be_data_p)
 {
   GncXmlDataType_t *data = data_p;
   struct file_backend *be_data = be_data_p;
 
-  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (type != G_TYPE_INVALID && data && be_data);
   g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
 
   if (be_data->ok == TRUE)

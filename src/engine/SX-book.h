@@ -56,7 +56,7 @@
 typedef struct _GncScheduleActionsClass GncScheduleActionsClass;
 typedef struct _GncScheduleActionsPrivate GncScheduleActionsPrivate;
 typedef struct _GncScheduleActions GncScheduleActions;
-typedef struct GncScheduleActions SchedXactions ; /* Backward compatibility*/
+typedef GncScheduleActions SchedXactions ; /* Backward compatibility*/
 
 struct _GncScheduleActions {
 	QofInstance inst;
@@ -71,7 +71,7 @@ struct _GncScheduleActionsClass {
 	/* Add Signal Functions Here */
 };
 
-GType   gnc_schedule_actions_get_type ();
+GType   gnc_schedule_actions_get_type (void);
 
 
 #define GNC_IS_SXES(obj)  GNC_IS_SCHEDULE_ACTIONS(o)

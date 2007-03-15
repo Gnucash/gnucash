@@ -40,16 +40,19 @@ static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 static void gnc_price_class_init(GncPriceDbClass *klass);
 static void gnc_price_init(GncPriceDb *sp);
 static void gnc_price_finalize(GObject *object);
+static void gnc_price_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_price_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
-struct _GncPriceDbPrivate {
+struct _GncPricePrivate {
 	/* Private Members */
 };
 
-typedef struct _GncPriceDbSignal GncPriceDbSignal;
-typedef enum _GncPriceDbSignalType GncPriceDbSignalType;
+typedef struct _GncPriceSignal GncPriceSignal;
+typedef enum _GncPriceSignalType GncPriceSignalType;
 
-enum _GncPriceDbSignalType {
+enum _GncPriceSignalType {
 	/* Signals */
+	FIRST_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -59,7 +62,7 @@ enum
         PROP_0
 };
 
-struct _GncPriceDbSignal {
+struct _GncPriceSignal {
 	GncPriceDb *object;
 };
 
@@ -67,7 +70,7 @@ static guint gnc_price_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-gnc_price_get_gtype()
+gnc_price_get_gtype (void)
 {
 	static GType type = 0;
 
@@ -84,7 +87,7 @@ gnc_price_get_gtype()
 			(GInstanceInitFunc)gnc_price_init,
 		};
 
-		type = g_type_register_static(QOF_TYPE_ENTITY, 
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
 			"GncPriceDb", &our_info, 0);
 	}
 
@@ -134,7 +137,7 @@ gnc_price_set_property (GObject *object,
 	switch (param_id) {		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
     	break;
 	}
 }
@@ -180,8 +183,7 @@ gnc_price_create (QofBook *book)
   p->type = NULL;
   p->source = NULL;
 
-  qof_instance_init (&p->inst, GNC_ID_PRICE, book);
-  qof_event_gen (&p->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (p), QOF_EVENT_CREATE, NULL);
 
   return p;
 }
@@ -190,7 +192,7 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  qof_event_gen (&p->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (p), QOF_EVENT_DESTROY, NULL);
 
   if(p->type) CACHE_REMOVE(p->type);
   if(p->source) CACHE_REMOVE(p->source);
@@ -261,7 +263,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
 void
 gnc_price_begin_edit (GNCPrice *p)
 {
-  QOF_BEGIN_EDIT (&p->inst);
+  qof_begin_edit (QOF_INSTANCE (p));
 }
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
@@ -283,14 +285,14 @@ gnc_price_commit_edit (GNCPrice *p)
 void
 gnc_pricedb_begin_edit (GNCPriceDB *pdb)
 {
-  QOF_BEGIN_EDIT (&pdb->inst);
+  qof_instance_begin_edit (QOF_INSTANCE (pdb), NULL);
 }
 
 void
 gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 {
   if (!qof_commit_edit (QOF_INSTANCE(pdb))) return;
-  qof_commit_edit_part2 (&pdb->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (QOF_INSTANCE (pdb), commit_err, noop, noop);
 }
 
 /* ==================================================================== */
@@ -299,7 +301,7 @@ gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 static void
 gnc_price_set_dirty (GNCPrice *p)
 {
-  qof_instance_set_dirty(&p->inst);
+  qof_instance_set_dirty(QOF_INSTANCE (p), TRUE);
 }
 
 void
@@ -431,7 +433,7 @@ gnc_price_lookup (const GUID *guid, QofBook *book)
 
   if (!guid || !book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_PRICE);
-  return (GNCPrice *) qof_collection_lookup_entity (col, guid);
+  return (GNCPrice *) qof_collection_lookup_element (col, guid);
 }
 
 gnc_commodity *
@@ -682,6 +684,8 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
 static void gnc_pricedb_class_init(GncPriceDbClass *klass);
 static void gnc_pricedb_init(GncPriceDb *sp);
 static void gnc_pricedb_finalize(GObject *object);
+static void gnc_pricedb_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_pricedb_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 struct _GncPriceDbPrivate {
 	/* Private Members */
@@ -692,13 +696,14 @@ typedef enum _GncPriceDbSignalType GncPriceDbSignalType;
 
 enum _GncPriceDbSignalType {
 	/* Signals */
-	LAST_SIGNAL
+	FIRST_SIGNAL2,
+	LAST_SIGNAL2
 };
 
 /* properties */
 enum
 {
-        PROP_0
+        PROP_0_2
 };
 
 struct _GncPriceDbSignal {
@@ -706,10 +711,10 @@ struct _GncPriceDbSignal {
 };
 
 static guint gnc_pricedb_signals[LAST_SIGNAL] = { 0 };
-static GObjectClass *parent_class = NULL;
+static GObjectClass *parent_class2 = NULL;
 
 GType
-gnc_pricedb_get_type()
+gnc_pricedb_get_type(void)
 {
 	static GType type = 0;
 
@@ -726,7 +731,7 @@ gnc_pricedb_get_type()
 			(GInstanceInitFunc)gnc_pricedb_init,
 		};
 
-		type = g_type_register_static(QOF_TYPE_ENTITY, 
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
 			"GncPriceDb", &our_info, 0);
 	}
 
@@ -738,7 +743,7 @@ gnc_pricedb_class_init(GncPriceDbClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-	parent_class = g_type_class_peek_parent(klass);
+	parent_class2 = g_type_class_peek_parent(klass);
 	object_class->finalize = gnc_pricedb_finalize;
 	object_class->set_property = gnc_pricedb_set_property;
     object_class->get_property = gnc_pricedb_get_property;
@@ -776,7 +781,7 @@ gnc_pricedb_set_property (GObject *object,
 	switch (param_id) {		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
     	break;
 	}
 }
@@ -821,7 +826,7 @@ gnc_pricedb_create(QofBook * book)
   }
 
   result = g_object_new (GNC_TYPE_PRICE_DB, NULL);
-  qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
+
   qof_collection_mark_clean(col);
 
   /** \todo This leaks result when the collection is destroyed.  When
@@ -1023,9 +1028,9 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
   if(!db || !p) return FALSE;
   ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)));
 
-  if (db->inst.book != p->inst.book)
+  if (qof_instance_get_book (QOF_INSTANCE (db)) != qof_instance_get_book (QOF_INSTANCE (p)))
   {
      PERR ("attempted to mix up prices across different books");
 	 LEAVE (" ");
@@ -1065,10 +1070,10 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
-  qof_event_gen (&p->inst.entity, QOF_EVENT_ADD, NULL);
+  qof_event_gen (QOF_INSTANCE (p), QOF_EVENT_ADD, NULL);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
-         db, p, p->inst.dirty, p->inst.do_free,
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)),
          gnc_commodity_get_namespace(p->commodity),
          gnc_commodity_get_mnemonic(p->commodity),
          currency_hash);
@@ -1083,7 +1088,7 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   if(!db || !p) return FALSE;
 
   ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)));
 
   if (FALSE == add_price(db, p)) 
   {
@@ -1092,11 +1097,11 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   }
 
   gnc_pricedb_begin_edit(db);
-  qof_instance_set_dirty(&db->inst);
+  qof_instance_set_dirty(QOF_INSTANCE (db), TRUE);
   gnc_pricedb_commit_edit(db);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)));
 
   return TRUE;
 }
@@ -1115,7 +1120,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
 
   if(!db || !p) return FALSE;
   ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)));
 
   commodity = gnc_price_get_commodity(p);
   if(!commodity) { LEAVE (" no commodity"); return FALSE; }
@@ -1130,7 +1135,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) { LEAVE (" no currency hash"); return FALSE; }
 
-  qof_event_gen (&p->inst.entity, QOF_EVENT_REMOVE, NULL);
+  qof_event_gen (QOF_INSTANCE (p), QOF_EVENT_REMOVE, NULL);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {
@@ -1169,17 +1174,17 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   gboolean rc;
   if(!db || !p) return FALSE;
   ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+         db, p, qof_instance_is_dirty (QOF_INSTANCE (p)), qof_instance_get_do_free (QOF_INSTANCE (p)));
 
   gnc_price_ref(p);
   rc = remove_price (db, p, TRUE);
   gnc_pricedb_begin_edit(db);
-  qof_instance_set_dirty(&db->inst);
+  qof_instance_set_dirty(QOF_INSTANCE (db), TRUE);
   gnc_pricedb_commit_edit(db);
 
   /* invoke the backend to delete this price */
   gnc_price_begin_edit (p);
-  p->inst.do_free = TRUE;
+  qof_instance_set_do_free (QOF_INSTANCE (p), TRUE);
   gnc_price_commit_edit (p);
   p->db = NULL;
   gnc_price_unref(p);
@@ -2632,14 +2637,17 @@ price_foreach(const QofCollection *col, QofEntityForeachCB cb, gpointer data)
 }
 
 /* ==================================================================== */
-
+/*
 static const char *
 price_printable(gpointer obj)
 {
   GNCPrice *pr = obj;
   gnc_commodity *commodity;
   gnc_commodity *currency;
-  static char buff[2048];  /* nasty static OK for printing */
+  
+   ******nasty static OK for printing****
+  
+  static char buff[2048];  
   char *val, *da;
 
   if(!pr) return "";
@@ -2708,5 +2716,5 @@ gnc_pricedb_register (void)
     return FALSE;
   return qof_object_register (&pricedb_object_def);
 }
-
+*/
 /* ========================= END OF FILE ============================== */

@@ -63,11 +63,11 @@ xaccAccountAssignLots (Account *acc)
 
    if (!acc) return;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("acc=%s", xaccAccountGetName(acc));
    xaccAccountBeginEdit (acc);
 
 restart_loop:
-   for (node=acc->splits; node; node=node->next)
+   for (node=xaccAccountGetSplitList (acc); node; node=node->next)
    {
       Split * split = node->data;
 
@@ -81,7 +81,7 @@ restart_loop:
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("acc=%s", xaccAccountGetName (acc));
 }
 
 /* ============================================================== */
@@ -102,9 +102,9 @@ xaccLotFill (GNCLot *lot)
 
    if (!lot) return;
    acc = lot->account;
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy (acc);
 
-   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName (acc));
 
    /* If balance already zero, we have nothing to do. */
    if (gnc_lot_is_closed (lot)) return;
@@ -142,7 +142,7 @@ xaccLotFill (GNCLot *lot)
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName (acc));
 }
 
 /* ============================================================== */
@@ -232,7 +232,7 @@ is_subsplit (Split *split)
    g_return_val_if_fail (split->parent, FALSE);
 
    /* If there are no sub-splits, then there's nothing to do. */
-   kval = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
+   kval = kvp_frame_get_slot (qof_instance_get_kvp_data (QOF_INSTANCE (split)), "lot-split");
    if (!kval) return FALSE;  
 
    return TRUE;
@@ -320,27 +320,27 @@ remove_guids (Split *sa, Split *sb)
    KvpFrame *ksub;
 
    /* Find and remove the matching guid's */
-   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
-                    "peer_guid", &sb->inst.entity.guid);
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (qof_instance_get_kvp_data (QOF_INSTANCE (sa)), "lot-split",
+                    "peer_guid", qof_instance_get_guid (QOF_INSTANCE (sb)));
    if (ksub) 
    {
-      gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
+      gnc_kvp_bag_remove_frame (qof_instance_get_kvp_data (QOF_INSTANCE (sa)), "lot-split", ksub);
       kvp_frame_delete (ksub);
    }
 
    /* Now do it in the other direction */
-   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
-                    "peer_guid", &sa->inst.entity.guid);
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (qof_instance_get_kvp_data (QOF_INSTANCE (sb)), "lot-split",
+                    "peer_guid", qof_instance_get_guid (QOF_INSTANCE (sa)));
    if (ksub) 
    {
-      gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
+      gnc_kvp_bag_remove_frame (qof_instance_get_kvp_data (QOF_INSTANCE (sb)), "lot-split", ksub);
       kvp_frame_delete (ksub);
    }
 
    /* Finally, merge b's lot-splits, if any, into a's */
    /* This is an important step, if it got busted into many pieces. */
-   gnc_kvp_bag_merge (sa->inst.kvp_data, "lot-split",
-                      sb->inst.kvp_data, "lot-split");
+   gnc_kvp_bag_merge (qof_instance_get_kvp_data (QOF_INSTANCE (sa)), "lot-split",
+                      qof_instance_get_kvp_data (QOF_INSTANCE (sb)), "lot-split");
 }
 
 /* The merge_splits() routine causes the amount & value of sb 
@@ -413,7 +413,7 @@ restart:
       Split *s = node->data;
       if (xaccSplitGetLot (s) != lot) continue;
       if (s == split) continue;
-      if (s->inst.do_free) continue;
+      if (qof_instance_do_free (QOF_INSTANCE (s))) continue;
 
       /* OK, this split is in the same lot (and thus same account)
        * as the indicated split.  Make sure it is really a subsplit
@@ -423,8 +423,8 @@ restart:
        * example.  Only worry about adjacent sub-splits.  By 
        * repeatedly merging adjacent subsplits, we'll get the non-
        * adjacent ones too. */
-      if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                    "peer_guid", &s->inst.entity.guid) == NULL)
+      if (gnc_kvp_bag_find_by_guid (qof_instance_get_kvp_data (QOF_INSTANCE (split)), "lot-split",
+                                    "peer_guid", qof_instance_get_guid (QOF_INSTANCE (s))) == NULL)
          continue;
          
       merge_splits (split, s);

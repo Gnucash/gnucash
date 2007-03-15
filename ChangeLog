@@ -4868,8 +4868,8 @@ r13313 | chris | 2006-02-19 21:58:29 -0500 (Sun, 19 Feb 2006) | 1 line
 	* qof/qof.h : Create reference group in doxygen and
 	export qofreference.h into the API.
 	* qof/qof/qofsession.c : Set QOF_TYPE_COLLECT as registered
-	type and move qof_entity_get_reference_from to new file.
-	* qof/qof/qofsession.h : Move qof_entity_get_reference_from
+	type and move qof_instanceget_reference_from to new file.
+	* qof/qof/qofsession.h : Move qof_instanceget_reference_from
 	to new file: qofreference.c|h.
 	* qof/qofreference.c : New file to handle reference related
 	code.

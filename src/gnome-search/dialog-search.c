@@ -189,7 +189,7 @@ gnc_search_dialog_double_click_entry (GNCQueryList *list, gpointer item,
     /* Select the time */
     gnc_search_dialog_select_cb (NULL, sw);
   else if (sw->buttons)
-    /* Call the first button (usually view/edit) */
+    /* Call the first button (uSPLIT_ACCOUNT_GUIDsually view/edit) */
     gnc_search_callback_button_execute (sw->buttons, sw);
 }
 #endif
@@ -349,7 +349,7 @@ search_update_query (GNCSearchWindow *sw)
 
   /* Make sure we supply a book! */
   if (sw->start_q == NULL) {
-    sw->start_q = gncQueryCreateFor (sw->search_for);
+    sw->start_q = gncQueryCreateFor (g_type_from_name (sw->search_for));
     gncQuerySetBook (sw->start_q, gnc_get_current_book ());
   } else {
     /* We've got a query -- purge it of any "active" parameters */
@@ -357,7 +357,7 @@ search_update_query (GNCSearchWindow *sw)
   }
 
   /* Now create a new query to work from */
-  q = gncQueryCreateFor (sw->search_for);
+  q = gncQueryCreateFor (g_type_from_name (sw->search_for));
 
   /* Walk the list of criteria */
   for (node = sw->crit_list; node; node = node->next) {
@@ -488,14 +488,14 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
     if (!sw->q) {
       if (!sw->start_q) {
-        sw->start_q = gncQueryCreateFor (sw->search_for);
+        sw->start_q = gncQueryCreateFor (g_type_from_name (sw->search_for));
         gncQuerySetBook (sw->start_q, gnc_get_current_book ());
       }
       sw->q = gncQueryCopy (sw->start_q);
       op = QUERY_AND;
     }
 
-    gncQueryAddGUIDMatch (sw->q, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+    gncQueryAddGUIDMatch (sw->q, g_slist_prepend (NULL, GINT_TO_POINTER (QUERY_PARAM_GUID)),
 			  guid, op);
 
     /* Watch this entity so we'll refresh once it's actually changed */
@@ -791,7 +791,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   if (sw->type_label)
     type_label = sw->type_label;
   else
-    type_label = _(gncObjectGetTypeLabel (sw->search_for));
+    type_label = _(gncObjectGetTypeLabel (g_type_from_name (sw->search_for)));
   gtk_label_set_text (GTK_LABEL (label), type_label);
 
   /* Set the 'add criterion' button */
@@ -826,7 +826,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   /* Figure out if we this object-type has an "active" parameter, and
    * if not, then set the active-check button insensitive
    */
-  if (gncQueryObjectGetParameter (sw->search_for, QUERY_PARAM_ACTIVE) == NULL)
+  if (gncQueryObjectGetParameter (g_type_from_name (sw->search_for), QUERY_PARAM_ACTIVE) == NULL)
     gtk_widget_set_sensitive (sw->active_only_check, FALSE);
 
   /* Deal with the cancel button */
@@ -920,7 +920,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
   g_return_val_if_fail (obj_type, NULL);
-  g_return_val_if_fail (*obj_type != '\0', NULL);
+  g_return_val_if_fail (obj_type != G_TYPE_INVALID, NULL);
   g_return_val_if_fail (param_list, NULL);
 
   /* Make sure the caller supplies callbacks xor result_callback */
@@ -942,7 +942,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
   sw->type_label = type_label;
 
   /* Grab the get_guid function */
-  sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);
+  sw->get_guid = qof_class_get_parameter (g_type_from_name (sw->search_for), g_type_name (QOF_PARAM_GUID));
   if (start_query)
     sw->start_q = gncQueryCopy (start_query);
   sw->q = show_start_query;
@@ -1019,7 +1019,7 @@ get_params_list (GNCIdTypeConst type)
 				   ACCOUNT_MATCH_ALL_TYPE,
 				   type, SPLIT_TRANS, TRANS_SPLITLIST,
 				   SPLIT_ACCOUNT_GUID, NULL);
-  list = gnc_search_param_prepend (list, "Split Account", GNC_ID_ACCOUNT,
+  list = gnc_search_param_prepend (list, "Split Account", (gchar*) g_type_name (GNC_ID_ACCOUNT),
 				   type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
 				   NULL);
   list = gnc_search_param_prepend (list, "Split->Txn->Void?", NULL, type,
@@ -1077,12 +1077,12 @@ gnc_search_dialog_test (void)
   };
 
   if (params == NULL)
-    params = get_params_list (GNC_ID_SPLIT);
+    params = get_params_list ((gchar*) g_type_name (GNC_ID_SPLIT));
 
   if (display == NULL)
-    display = get_display_list (GNC_ID_SPLIT);
+    display = get_display_list ((gchar*) g_type_name (GNC_ID_SPLIT));
 
-  sw = gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
+  sw = gnc_search_dialog_create ((gchar*) g_type_name (GNC_ID_SPLIT), _("Find Transaction"),
 				 params, display,
 				 NULL, NULL, buttons, NULL, NULL, NULL, NULL,
 				 NULL, NULL);

@@ -250,12 +250,12 @@ xaccSplitScrub (Split *split)
   /* If the account doesn't have a commodity, 
    * we should attempt to fix that first. 
   */
-  if (!account->commodity)
+  if (!xaccAccountGetCommodity((const GncAccount*)account))
   {
     xaccAccountScrubCommodity (account);
   }
-  if (!account->commodity || 
-      !gnc_commodity_equiv (account->commodity, currency))
+  if (!xaccAccountGetCommodity((const GncAccount*)account) || 
+      !gnc_commodity_equiv (xaccAccountGetCommodity((const GncAccount*)account), currency))
   {
     LEAVE ("(split=%p) inequiv currency", split);
     return;
@@ -439,7 +439,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   /* Put split into account before setting split value */
   if (!balance_split)
   {
-    balance_split = xaccMallocSplit (trans->inst.book);
+    balance_split = xaccMallocSplit (qof_instance_get_book (QOF_INSTANCE (trans)));
 
     xaccTransBeginEdit (trans);
     xaccSplitSetParent(balance_split, trans);
@@ -616,7 +616,7 @@ xaccTransScrubCurrency (Transaction *trans)
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
   
-  currency = xaccTransFindOldCommonCurrency (trans, trans->inst.book);
+  currency = xaccTransFindOldCommonCurrency (trans, qof_instance_get_book (QOF_INSTANCE (trans)));
   if (currency)
   {
     xaccTransBeginEdit (trans);
@@ -647,7 +647,8 @@ xaccTransScrubCurrency (Transaction *trans)
         else
         {
           PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"", 
-              split->memo, split->acc->accountName, gnc_commodity_get_mnemonic (split->acc->commodity));
+              split->memo, xaccAccountGetName((const GncAccount*) split->acc), 
+              gnc_commodity_get_mnemonic (xaccAccountGetCommodity ((const GncAccount*) split->acc)));
         }
       }
     }
@@ -731,7 +732,7 @@ xaccAccountScrubCommodity (Account *account)
     return;
   }
 
-  PERR ("Account \"%s\" does not have a commodity!", account->accountName);
+  PERR ("Account \"%s\" does not have a commodity!", xaccAccountGetName ((const GncAccount*) account));
 }
 
 /* ================================================================ */
@@ -741,10 +742,10 @@ xaccAccountDeleteOldData (Account *account)
 {
   if (!account) return;
 
-  kvp_frame_set_slot_nc (account->inst.kvp_data, "old-currency", NULL);
-  kvp_frame_set_slot_nc (account->inst.kvp_data, "old-security", NULL);
-  kvp_frame_set_slot_nc (account->inst.kvp_data, "old-currency-scu", NULL);
-  kvp_frame_set_slot_nc (account->inst.kvp_data, "old-security-scu", NULL);
+  kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "old-currency", NULL);
+  kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "old-security", NULL);
+  kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "old-currency-scu", NULL);
+  kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "old-security-scu", NULL);
 }
 
 static int
@@ -853,21 +854,21 @@ xaccAccountScrubKvp (Account *account)
 
   if (!account) return;
 
-  str = kvp_frame_get_string(account->inst.kvp_data, "notes");
+  str = kvp_frame_get_string(qof_instance_get_kvp_data (QOF_INSTANCE (account)), "notes");
   if (str) {
     str2 = g_strstrip(g_strdup(str));
     if (strlen(str2) == 0)
-      kvp_frame_set_slot_nc (account->inst.kvp_data, "notes", NULL);
+      kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "notes", NULL);
     g_free(str2);
   }
 
-  str = kvp_frame_get_string(account->inst.kvp_data, "placeholder");
+  str = kvp_frame_get_string(qof_instance_get_kvp_data (QOF_INSTANCE (account)), "placeholder");
   if (str && strcmp(str, "false") == 0)
-    kvp_frame_set_slot_nc (account->inst.kvp_data, "placeholder", NULL);
+    kvp_frame_set_slot_nc (qof_instance_get_kvp_data (QOF_INSTANCE (account)), "placeholder", NULL);
 
-  frame = kvp_frame_get_frame(account->inst.kvp_data, "hbci");
+  frame = kvp_frame_get_frame(qof_instance_get_kvp_data (QOF_INSTANCE (account)), "hbci");
   if (frame && kvp_frame_is_empty(frame)) {
-    kvp_frame_set_frame_nc(account->inst.kvp_data, "hbci", NULL);
+    kvp_frame_set_frame_nc(qof_instance_get_kvp_data (QOF_INSTANCE (account)), "hbci", NULL);
   }
 }
 
@@ -898,7 +899,7 @@ xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
   if (acc == NULL)
   {
     /* Guess not. We'll have to build one. */
-    acc = xaccMallocAccount (root->book);
+    acc = xaccMallocAccount (qof_instance_get_book (QOF_INSTANCE (root)));
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);

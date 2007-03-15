@@ -365,7 +365,7 @@ gnc_scm2kvp_match_where (SCM where_scm)
   const gchar *where;
 
   if (!SCM_LISTP (where_scm))
-    return NULL;
+    return G_TYPE_INVALID;
 
   where = SCM_SYMBOL_CHARS (SCM_CAR(where_scm));
 
@@ -377,7 +377,7 @@ gnc_scm2kvp_match_where (SCM where_scm)
     res = GNC_ID_ACCOUNT;
   else {
     PINFO ("Unknown kvp-match-where: %s", where);
-    res = NULL;
+    res = G_TYPE_INVALID;
   }
   return res;
 }
@@ -781,63 +781,63 @@ gnc_queryterm2scm (QofQueryTerm *qt)
   qt_scm = scm_cons (SCM_BOOL (qof_query_term_is_inverted (qt)), qt_scm);
 
   pd = qof_query_term_get_pred_data (qt);
-  qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
+  qt_scm = scm_cons (scm_str2symbol (g_type_name (pd->type_name)), qt_scm);
   qt_scm = scm_cons (scm_long2num (pd->how), qt_scm);
 
-  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING)) {
+  if (pd->type_name == QOF_TYPE_STRING) {
     query_string_t pdata = (query_string_t) pd;
 
     qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
     qt_scm = scm_cons (scm_makfrom0str (pdata->matchstring), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE)) {
+  } else if (pd->type_name == QOF_TYPE_DATE) {
     query_date_t pdata = (query_date_t) pd;
 
     qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_timespec2timepair (pdata->date), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC)) {
+  } else if (pd->type_name == QOF_TYPE_NUMERIC) {
     query_numeric_t pdata = (query_numeric_t) pd;
 
     qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_query_numeric2scm (pdata->amount), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID)) {
+  } else if (pd->type_name == QOF_TYPE_GUID) {
     query_guid_t pdata = (query_guid_t) pd;
 
     qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (gnc_guid_glist2scm (pdata->guids), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64)) {
+  } else if (pd->type_name == QOF_TYPE_INT64) {
     query_int64_t pdata = (query_int64_t) pd;
 
     qt_scm = scm_cons (gnc_gint64_to_scm (pdata->val), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE)) {
+  } else if (pd->type_name == QOF_TYPE_DOUBLE) {
     query_double_t pdata = (query_double_t) pd;
 
     qt_scm = scm_cons (scm_make_real (pdata->val), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN)) {
+  } else if (pd->type_name == QOF_TYPE_BOOLEAN) {
     query_boolean_t pdata = (query_boolean_t) pd;
 
     qt_scm = scm_cons (SCM_BOOL (pdata->val), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR)) {
+  } else if (pd->type_name == QOF_TYPE_CHAR) {
     query_char_t pdata = (query_char_t) pd;
 
     qt_scm = scm_cons (scm_long2num (pdata->options), qt_scm);
     qt_scm = scm_cons (scm_makfrom0str (pdata->char_list), qt_scm);
 
-  } else if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP)) {
+  } else if (pd->type_name == QOF_TYPE_KVP) {
     query_kvp_t pdata = (query_kvp_t) pd;
 
     qt_scm = scm_cons (gnc_query_path2scm (pdata->path), qt_scm);
     qt_scm = scm_cons (gnc_kvp_value2scm (pdata->value), qt_scm);
 
   } else {
-    PWARN ("query core type %s not supported", pd->type_name);
+    PWARN ("query core type %s not supported", g_type_name (pd->type_name));
     return SCM_BOOL_F;
   }
 
@@ -850,7 +850,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
   QofQuery *q = NULL;
   QofQueryPredData *pd = NULL;
   SCM scm;
-  const gchar *type = NULL;
+  GType type = G_TYPE_INVALID;
   GSList *path = NULL;
   gboolean inverted = FALSE;
   QofQueryCompare compare_how;
@@ -878,7 +878,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
     qt_scm = SCM_CDR (qt_scm);
     if (!SCM_SYMBOLP (scm))
       break;
-    type = SCM_SYMBOL_CHARS (scm);
+    type = g_type_from_name (SCM_SYMBOL_CHARS (scm));
 
     /* QofCompareFunc */
     scm = SCM_CAR (qt_scm);
@@ -889,7 +889,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
     /* Now compute the predicate */
 
-    if (!safe_strcmp (type, QOF_TYPE_STRING)) 
+    if (type == QOF_TYPE_STRING) 
     {
       QofStringMatch options;
       gboolean is_regex;
@@ -914,7 +914,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       pd = qof_query_string_predicate (compare_how, matchstring,
                                     options, is_regex);
     } 
-    else if (!safe_strcmp (type, QOF_TYPE_DATE)) 
+    else if (type == QOF_TYPE_DATE) 
     {
       QofDateMatch options;
       Timespec date;
@@ -933,7 +933,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_date_predicate (compare_how, options, date);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_NUMERIC)) {
+    } else if (type == QOF_TYPE_NUMERIC) {
       QofNumericMatch options;
       gnc_numeric val;
 
@@ -951,7 +951,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_numeric_predicate (compare_how, options, val);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_GUID)) {
+    } else if (type == QOF_TYPE_GUID) {
       QofGuidMatch options;
       GList *guids;
 
@@ -971,7 +971,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       gnc_guid_glist_free (guids);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_INT64)) {
+    } else if (type == QOF_TYPE_INT64) {
       gint64 val;
 
       scm = SCM_CAR (qt_scm);
@@ -982,7 +982,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_int64_predicate (compare_how, val);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_DOUBLE)) {
+    } else if (type == QOF_TYPE_DOUBLE) {
       double val;
 
       scm = SCM_CAR (qt_scm);
@@ -993,7 +993,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_double_predicate (compare_how, val);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_BOOLEAN)) {
+    } else if (type == QOF_TYPE_BOOLEAN) {
       gboolean val;
 
       scm = SCM_CAR (qt_scm);
@@ -1004,7 +1004,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_boolean_predicate (compare_how, val);
 
-    } else if (!safe_strcmp (type, QOF_TYPE_CHAR)) {
+    } else if (type == QOF_TYPE_CHAR) {
       QofCharMatch options;
       const gchar *char_list;
 
@@ -1022,7 +1022,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
 
       pd = qof_query_char_predicate (options, char_list);
     } 
-    else if (!safe_strcmp (type, QOF_TYPE_KVP)) 
+    else if (type == QOF_TYPE_KVP) 
     {
       GSList *kvp_path;
       KvpValue *value;
@@ -1046,7 +1046,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       kvp_value_delete (value);
       
     } else {
-      PWARN ("query core type %s not supported", type);
+      PWARN ("query core type %s not supported", g_type_name (type));
       break;
     }
 
@@ -1331,7 +1331,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       /* id type */
       scm = SCM_CAR (query_term_scm);
       query_term_scm = SCM_CDR (query_term_scm);
-      id_type = g_strdup (SCM_STRING_CHARS (scm));
+      id_type = g_type_from_name (SCM_STRING_CHARS (scm));
 
       xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
       ok = TRUE;
@@ -1616,7 +1616,7 @@ gnc_query2scm (QofQuery *q)
   query_scm = scm_cons (pair, query_scm);
 
   /* search-for */
-  pair = scm_cons (scm_str2symbol (qof_query_get_search_for (q)), SCM_EOL);
+  pair = scm_cons (scm_str2symbol (g_type_name (qof_query_get_search_for (q))), SCM_EOL);
   pair = scm_cons (scm_str2symbol ("search-for"), pair);
   query_scm = scm_cons (pair, query_scm);
 
@@ -1939,7 +1939,7 @@ gnc_scm2query_v2 (SCM query_scm)
 #endif
 
   if (ok && search_for) {
-    qof_query_search_for (q, search_for);
+    qof_query_search_for (q, g_type_from_name (search_for));
     qof_query_set_sort_order (q, sp1, sp2, sp3);
     qof_query_set_sort_options (q, so1, so2, so3);
     qof_query_set_sort_increasing (q, si1, si2, si3);

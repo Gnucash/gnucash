@@ -804,7 +804,7 @@ file_begin_edit (QofBackend *be, QofInstance *inst, GError **error)
     QofBook *book = gp;
     const char * filepath;
 
-    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
+    QofIdTypeConst typ = QOF_INSTANCE(inst)->e_type;
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);

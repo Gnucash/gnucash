@@ -134,7 +134,7 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
   /* cache the function to get the guid of this query type */
   priv = GNC_QUERY_LIST_GET_PRIVATE(list);
   priv->get_guid =
-    qof_class_get_parameter (qof_query_get_search_for(query), QOF_PARAM_GUID);
+    qof_class_get_parameter (qof_query_get_search_for(query), g_type_name (QOF_PARAM_GUID));
 
   /* Initialize the CList */
   gnc_query_list_init_clist(list);
@@ -187,10 +187,10 @@ update_booleans (GNCQueryList *list, gint row)
   for (i = 0, node = list->column_params; node; node = node->next, i++)
   {
     GNCSearchParam *param = node->data;
-    const char *type = gnc_search_param_get_param_type (param);
+    QofIdType type = g_type_from_name (gnc_search_param_get_param_type (param));
 
     /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-    if (safe_strcmp (type, QUERYCORE_BOOLEAN))
+    if ( type == QUERYCORE_BOOLEAN)
       continue;
 
     result = (gboolean) GPOINTER_TO_INT(gnc_search_param_compute_value(param, entry));
@@ -696,9 +696,9 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
    * debred column, then invert the sort order.
    */
   if (list->numeric_inv_sort) {
-    const char *type = gnc_search_param_get_param_type (param);
-    if (!safe_strcmp(type, QUERYCORE_NUMERIC) ||
-	!safe_strcmp(type, QUERYCORE_DEBCRED))
+    QofIdType type = g_type_from_name (gnc_search_param_get_param_type (param));
+    if ((type == QUERYCORE_NUMERIC) ||
+	      (type == QUERYCORE_DEBCRED))
       sort_order = !sort_order;
   }
 
@@ -800,11 +800,11 @@ gnc_query_list_fill(GNCQueryList *list)
     {
       GNCSearchParam *param = node->data;
       GSList *converters = gnc_search_param_get_converters (param);
-      const char *type = gnc_search_param_get_param_type (param);
+      QofIdType type = g_type_from_name (gnc_search_param_get_param_type (param));
       gpointer res = item->data;
 
       /* if this is a boolean, ignore it now -- we'll use a checkmark later */
-      if (!safe_strcmp (type, QUERYCORE_BOOLEAN)) {
+      if ( type == QUERYCORE_BOOLEAN) {
         strings[i++] = g_strdup("");
         continue;
       }
@@ -820,8 +820,8 @@ gnc_query_list_fill(GNCQueryList *list)
       }
 
       /* Now convert this to a text value for the row */
-      if (!safe_strcmp(type, QUERYCORE_DEBCRED) ||
-          !safe_strcmp(type, QUERYCORE_NUMERIC))
+      if (type == QUERYCORE_DEBCRED ||
+          type == QUERYCORE_NUMERIC)
       {
         gnc_numeric (*nfcn)(gpointer, QofParam *) = 
                 (gnc_numeric(*)(gpointer, QofParam *))(qp->param_getfcn);

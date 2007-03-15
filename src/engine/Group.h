@@ -165,7 +165,7 @@ void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 /** The xaccAccountInsertSubAccount() does the same, except that
  *    the parent is specified as an account.
  */
-void    xaccAccountInsertSubAccount (Account *parent, Account *child);
+void    xaccAccountInsertSubAccount (GncAccount *parent, GncAccount *child);
 /** @} */
 
 /** @name Counting the Size and Depth of the Account Tree
@@ -227,7 +227,7 @@ AccountGroup * xaccGroupGetRoot (const AccountGroup *grp);
 /** The xaccGetAccountRoot() subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-AccountGroup * xaccAccountGetRoot (const Account *account);
+AccountGroup * xaccAccountGetRoot (GncAccount *account);
 
 /** The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.

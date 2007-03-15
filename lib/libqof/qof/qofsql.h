@@ -62,7 +62,7 @@ search loop, aka a 'join', which is not currently supported in the
 underlying QofQuery code.
 
 However, by repeating queries and adding the entities to a new session using
-::qof_entity_copy_list, a series of queries can be added to a single
+::qof_instancecopy_list, a series of queries can be added to a single
 book. e.g. You can insert multiple entities and save out as a QSF XML
 file or use multiple SELECT queries to build a precise list - this
 can be used to replicate most of the functionality of a SQL join.

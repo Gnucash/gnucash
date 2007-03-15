@@ -54,6 +54,6 @@ GncOrder * gncCloneOrder (GncOrder *from, QofBook *);
  */
 GncOrder * gncOrderObtainTwin (GncOrder *from, QofBook *book);
 
-#define gncOrderSetGUID(O,G) qof_entity_set_guid(QOF_ENTITY(O),(G))
+#define gncOrderSetGUID(O,G) qof_instance_set_guid(QOF_INSTANCE(O),(G))
 
 #endif /* GNC_ORDERP_H_ */

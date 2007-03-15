@@ -297,7 +297,7 @@ gnc_tracking_find_expense_accounts(Account *stock_account,
   kvpd_on_account_list = kvp_frame_get_slot(account_frame,
 					    expense_to_key[category]);
 
-  return de_kvp_account_list(kvpd_on_account_list, stock_account->inst.book);
+  return de_kvp_account_list(kvpd_on_account_list, qof_instance_get_book (QOF_INSTANCE (stock_account)));
 }
 
 /*********************************************************************\
@@ -329,7 +329,7 @@ gnc_tracking_find_income_accounts(Account *stock_account,
   kvpd_on_account_list = kvp_frame_get_slot(income_acc_frame,
 					    income_to_key[category]);
   
-  return de_kvp_account_list(kvpd_on_account_list, stock_account->inst.book);
+  return de_kvp_account_list(kvpd_on_account_list, qof_instance_get_book (QOF_INSTANCE (stock_account)));
 }
 
 /*********************************************************************\
@@ -440,7 +440,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 
   inc_or_expense_account_guid = xaccAccountGetGUID(inc_or_expense_account);
   stock_account = xaccAccountLookup
-    (stock_account_guid, inc_or_expense_account->inst.book);
+    ((GUID*) stock_account_guid, qof_instance_get_book (QOF_INSTANCE (inc_or_expense_account)));
 
   stock_account_kvpframe = xaccAccountGetSlots(stock_account);
 

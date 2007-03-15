@@ -53,6 +53,8 @@ static QofLogModule log_module = GNC_MOD_SX;
 static void gnc_schedule_actions_class_init(GncScheduleActionsClass *klass);
 static void gnc_schedule_actions_init(GncScheduleActions *sp);
 static void gnc_schedule_actions_finalize(GObject *object);
+static void gnc_schedule_actions_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_schedule_actions_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 struct _GncScheduleActionsPrivate
 {
@@ -64,6 +66,7 @@ typedef enum _GncScheduleActionsSignalType GncScheduleActionsSignalType;
 
 enum _GncScheduleActionsSignalType {
 	/* Signals */
+	FIRS_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -81,7 +84,7 @@ static guint gnc_schedule_actions_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-gnc_schedule_actions_get_type()
+gnc_schedule_actions_get_type(void)
 {
 	static GType type = 0;
 
@@ -98,7 +101,7 @@ gnc_schedule_actions_get_type()
 			(GInstanceInitFunc)gnc_schedule_actions_init,
 		};
 
-		type = g_type_register_static(QOF_TYPE_ENTITY, 
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
 			"GncScheduleActions", &our_info, 0);
 	}
 
@@ -153,7 +156,7 @@ gnc_schedule_actions_set_property (GObject *object,
 		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
     	break;
 	}
 }
@@ -221,7 +224,7 @@ gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
   QofCollection *col;
   if (!book) return;
 
-  if (templateGroup && templateGroup->book != book)
+  if (templateGroup && qof_instance_get_book (QOF_INSTANCE (templateGroup)) != book)
   {
      PERR ("cannot mix and match books freely!");
      return;
@@ -369,6 +372,8 @@ book_sxlist_notsaved(const QofCollection *col)
   return FALSE;
 }
 
+/*
+BROKEN CODE
 static QofObject sxes_object_def =
 {
   interface_version: QOF_OBJECT_VERSION,
@@ -399,6 +404,7 @@ static QofObject sxtt_object_def =
   version_cmp:       NULL,
 };
 
+
 gboolean 
 gnc_sxtt_register (void)
 {
@@ -408,6 +414,7 @@ gnc_sxtt_register (void)
     return FALSE;
   return qof_object_register(&sxtt_object_def);
 }
+*/
 
 GList*
 gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)

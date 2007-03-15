@@ -4988,7 +4988,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	QOF objects, whether or not any specific object exists in the book.
 	* src/engine/qofbackend.h: Adding a further QSF error code for
 	when a GUID string has been mangled and fails to convert to a GUID.
-	* src/engine/qofsession.c: Adding qof_entity_copy routines to
+	* src/engine/qofsession.c: Adding qof_instancecopy routines to
 	copy single, lists or collections of entities between session books.
 	Note: Each function creates a partial QofBook! Only certain backends
 	{QSF} can handle partial books! Use for data export.

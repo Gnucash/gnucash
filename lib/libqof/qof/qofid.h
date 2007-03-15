@@ -175,7 +175,7 @@ of one object type as references of another entity.
 Entities can be
 freely added and merged across these secondary collections, they
 will not be removed from the original collection as they would
-by using ::qof_entity_insert_entity or ::qof_entity_remove_entity. 
+by using ::qof_instanceinsert_entity or ::qof_instanceremove_entity. 
 
 */
 gboolean qof_collection_add_element (QofCollection *coll, QofInstance *inst);
@@ -190,7 +190,7 @@ gboolean qof_collection_remove_element (QofCollection *coll, QofInstance *inst);
 QOF_TYPE_COLLECT uses a secondary collection, independent of
 those in the book. Entities will not be removed from the
 original collection as when using ::qof_instance_insert_entity
-or ::qof_entity_remove_entity.
+or ::qof_instanceremove_entity.
 
 */
 gboolean

@@ -186,8 +186,8 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {
-  qof_instance_set_dirty(QOF_ENTITY (vendor));
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_MODIFY, NULL);
+  qof_instance_set_dirty(QOF_INSTANCE (vendor));
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -200,17 +200,17 @@ GncVendor *gncVendorCreate (QofBook *book)
   if (!book) return NULL;
 
   vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (QOF_ENTITY (vendor), _GNC_MOD_NAME, book);
+  qof_instance_init (QOF_INSTANCE (vendor), _GNC_MOD_NAME, book);
   
   vendor->priv->id = CACHE_INSERT ("");
   vendor->priv->name = CACHE_INSERT ("");
   vendor->priv->notes = CACHE_INSERT ("");
-  vendor->priv->addr = gncAddressCreate (book, QOF_ENTITY (vendor));
+  vendor->priv->addr = gncAddressCreate (book, QOF_INSTANCE (vendor));
   vendor->priv->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->priv->active = TRUE;
   vendor->priv->jobs = NULL;
 
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -226,7 +226,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (vendor->priv->id);
   CACHE_REMOVE (vendor->priv->name);
@@ -239,7 +239,7 @@ static void gncVendorFree (GncVendor *vendor)
   if (vendor->priv->taxtable)
     gncTaxTableDecRef (vendor->priv->taxtable);
 
-  qof_instance_release (QOF_ENTITY (vendor));
+  qof_instance_release (QOF_INSTANCE (vendor));
 
 }
 
@@ -254,13 +254,13 @@ gncCloneVendor (GncVendor *from, QofBook *book)
   vendor = GNC_VENDOR ( g_object_new (GNC_TYPE_VENDOR, NULL));
   vendor->priv = g_new0 (GncVendorPrivate, 1);
   
-  qof_instance_init (QOF_ENTITY (vendor), _GNC_MOD_NAME, book);
-  qof_instance_gemini (QOF_ENTITY (vendor), &from->inst);
+  qof_instance_init (QOF_INSTANCE (vendor), _GNC_MOD_NAME, book);
+  qof_instance_gemini (QOF_INSTANCE (vendor), &from->inst);
   
   vendor->priv->id = CACHE_INSERT (from->id);
   vendor->priv->name = CACHE_INSERT (from->name);
   vendor->priv->notes = CACHE_INSERT (from->notes);
-  vendor->priv->addr = gncCloneAddress (from->addr, QOF_ENTITY (vendor), book);
+  vendor->priv->addr = gncCloneAddress (from->addr, QOF_INSTANCE (vendor), book);
   vendor->priv->taxincluded = from->taxincluded;
   vendor->priv->taxtable_override = from->taxtable_override;
   vendor->priv->active = from->active;
@@ -281,7 +281,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
     vendor->priv->jobs = g_list_prepend(vendor->priv->jobs, job);
   }
 
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -516,7 +516,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->priv->jobs = g_list_insert_sorted (vendor->priv->jobs, job,
                                          (GCompareFunc)gncJobCompare);
 
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -534,12 +534,12 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  qof_event_gen (QOF_ENTITY (vendor), QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (vendor), QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  QOF_BEGIN_EDIT (QOF_ENTITY (vendor));
+  QOF_BEGIN_EDIT (QOF_INSTANCE (vendor));
 }
 
 static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
@@ -562,7 +562,7 @@ static void vendor_free (QofInstance *inst)
 void gncVendorCommitEdit (GncVendor *vendor)
 {
   if (!qof_commit_edit (QOF_INSTANCE(vendor))) return;
-  qof_commit_edit_part2 (QOF_ENTITY (vendor), gncVendorOnError,
+  qof_commit_edit_part2 (QOF_INSTANCE (vendor), gncVendorOnError,
                          gncVendorOnDone, vendor_free);
 }
 

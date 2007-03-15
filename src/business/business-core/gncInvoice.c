@@ -207,7 +207,7 @@ static void
 mark_invoice (GncInvoice *invoice)
 {
   qof_instance_set_dirty(QOF_INSTANCE (invoice));
-  qof_event_gen (QOF_ENTITY (invoice), QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (invoice), QOF_EVENT_MODIFY, NULL);
 }
 
 QofBook * gncInvoiceGetBook(GncInvoice *x)
@@ -236,7 +236,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
   invoice->priv->to_charge_amount = gnc_numeric_zero();
 
-  qof_event_gen (QOF_ENTITY (invoice), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (invoice), QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }
@@ -252,7 +252,7 @@ static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
-  qof_event_gen (QOF_ENTITY (invoice), QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (invoice), QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (invoice->priv->id);
   CACHE_REMOVE (invoice->priv->notes);
@@ -317,7 +317,7 @@ XXX not done */
   GNCLot *	posted_lot;
 #endif
 
-  qof_event_gen (QOF_ENTITY (invoice), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (invoice), QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }

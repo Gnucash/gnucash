@@ -70,7 +70,7 @@ gains_possible (GNCLot *lot)
   if (!node) return FALSE;
   split = node->data;
 
-  comeq = gnc_commodity_equiv (acc->commodity, split->parent->common_currency);
+  comeq = gnc_commodity_equiv (xaccAccountGetCommodity (acc), split->parent->common_currency);
   return (FALSE == comeq);
 }
 
@@ -93,7 +93,7 @@ xaccScrubLot (GNCLot *lot)
   ENTER ("(lot=%p) %s", lot, gnc_lot_get_title(lot));
 
   acc = gnc_lot_get_account (lot);
-  pcy = acc->policy;
+  pcy = gnc_account_get_policy (acc);
   xaccAccountBeginEdit(acc);
   xaccScrubMergeLotSubSplits (lot);
 
@@ -161,17 +161,17 @@ xaccAccountScrubLots (Account *acc)
   if (!acc) return;
   if (FALSE == xaccAccountHasTrades (acc)) return;
                                                                                 
-  ENTER ("(acc=%s)", acc->accountName);
+  ENTER ("(acc=%s)", xaccAccountGetName (acc));
   xaccAccountBeginEdit(acc);
   xaccAccountAssignLots (acc);
 
-  for (node = acc->lots; node; node=node->next)
+  for (node = xaccAccountGetLotList (acc); node; node=node->next)
   {
     GNCLot *lot = node->data;
     xaccScrubLot (lot);
   }
   xaccAccountCommitEdit(acc);
-  LEAVE ("(acc=%s)", acc->accountName);
+  LEAVE ("(acc=%s)", xaccAccountGetName (acc));
 }
 
 /* ============================================================== */
@@ -196,7 +196,7 @@ xaccAccountTreeScrubLots (Account *acc)
 {
    if (!acc) return;
 
-   xaccGroupScrubLots (acc->children);
+   xaccGroupScrubLots (gnc_account_get_children (acc));
    xaccAccountScrubLots (acc);
 }
 

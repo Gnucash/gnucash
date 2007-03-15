@@ -633,10 +633,10 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 /*			reference_type = xmlGetProp(node, QSF_OBJECT_TYPE);
 		if(0 == safe_strcmp(QOF_PARAM_GUID, reference_type)) 
 		{
-			qof_entity_set_guid(qsf_ent, cm_guid);
+			qof_instance_set_guid(qsf_ent, cm_guid);
 		}
 		else {
-			reference = qof_entity_get_reference_from(qsf_ent, cm_param);
+			reference = qof_instanceget_reference_from(qsf_ent, cm_param);
 			if(reference) {
 				params->referenceList = g_list_append(params->referenceList, reference);
 			}

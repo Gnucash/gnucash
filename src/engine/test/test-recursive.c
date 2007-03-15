@@ -968,7 +968,7 @@ test_recursion (QofSession *original, guint counter)
 	copy = qof_session_new();
 	if(debug) { qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); }
 	/* TODO: implement QOF_TYPE_CHOICE testing. */
-	qof_entity_copy_coll_r(copy, grand_coll);
+	qof_instancecopy_coll_r(copy, grand_coll);
 	/* test the original */
 	qof_object_foreach(GRAND_MODULE_NAME, book, check_cb, &c);
 	book = qof_session_get_book(copy);

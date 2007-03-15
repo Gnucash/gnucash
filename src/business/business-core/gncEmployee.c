@@ -183,7 +183,7 @@ G_INLINE_FUNC void mark_employee (GncEmployee *employee);
 void mark_employee (GncEmployee *employee)
 {
   qof_instance_set_dirty(QOF_INSTANCE (employee));
-  qof_event_gen (QOF_ENTITY (employee), QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (employee), QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -204,12 +204,12 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->priv->username = CACHE_INSERT ("");
   employee->priv->language = CACHE_INSERT ("");
   employee->priv->acl = CACHE_INSERT ("");
-  employee->priv->addr = gncAddressCreate (book, QOF_ENTITY (employee));
+  employee->priv->addr = gncAddressCreate (book, QOF_INSTANCE (employee));
   employee->priv->workday = gnc_numeric_zero();
   employee->priv->rate = gnc_numeric_zero();
   employee->priv->active = TRUE;
   
-  qof_event_gen (QOF_ENTITY (employee), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (employee), QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -225,7 +225,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  qof_event_gen (QOF_ENTITY (employee), QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (employee), QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (employee->priv->id);
   CACHE_REMOVE (employee->priv->username);
@@ -250,7 +250,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->priv->username = CACHE_INSERT (from->username);
   employee->priv->language = CACHE_INSERT (from->language);
   employee->priv->acl = CACHE_INSERT (from->acl);
-  employee->priv->addr = gncCloneAddress (from->addr, QOF_ENTITY (employee), book);
+  employee->priv->addr = gncCloneAddress (from->addr, QOF_INSTANCE (employee), book);
   employee->priv->workday = from->workday;
   employee->priv->rate = from->rate;
   employee->priv->active = from->active;
@@ -258,7 +258,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->priv->ccard_acc = 
      GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
   
-  qof_event_gen (QOF_ENTITY (employee), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (employee), QOF_EVENT_CREATE, NULL);
 
   return employee;
 }

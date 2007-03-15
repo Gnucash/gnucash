@@ -595,15 +595,15 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
      //   (gnc_collection_get_schedxaction_list(book), GNC_EVENT_ITEM_REMOVED)
      //   (GNC_IS_SX(ent), QOF_EVENT_MODIFIED)
      // } */
-     if (!(GNC_IS_SX(ent) || GNC_IS_SXES(ent)))
+     if (!(GNC_IS_SCHEDULE_ACTION (ent) || GNC_IS_SCHEDULE_ACTIONS (ent)))
           return;
 
-     if (GNC_IS_SX(ent))
+     if (GNC_IS_SCHEDULE_ACTION(ent))
      {
           SchedXaction *sx;
           gboolean sx_is_in_model = FALSE;
 
-          sx = GNC_SX(ent);
+          sx = GNC_SCHEDULE_ACTION(ent);
           // only send `updated` if it's actually in the model
           sx_is_in_model = (g_list_find_custom(instances->sx_instance_list, sx, (GCompareFunc)_gnc_sx_instance_find_by_sx) != NULL);
           if (sx_is_in_model && event_type & QOF_EVENT_MODIFY)
@@ -612,10 +612,10 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
           }
           /* else { unsupported event type; ignore } */
      }
-     else if (GNC_IS_SXES(ent))
+     else if (GNC_SCHEDULE_ACTIONS (ent))
      {
-          SchedXactions *sxes = GNC_SXES(ent);
-          SchedXaction *sx = GNC_SX(evt_data);
+          SchedXactions *sxes = GNC_SCHEDULE_ACTIONS (ent);
+          SchedXaction *sx = GNC_SCHEDULE_ACTION (evt_data);
 
           sxes = NULL;
           if (event_type & GNC_EVENT_ITEM_REMOVED)

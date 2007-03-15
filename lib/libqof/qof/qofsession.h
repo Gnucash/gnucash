@@ -292,7 +292,7 @@ the GUID of the source entity.
 with the same GUID already, otherwise TRUE.
 */
 
-gboolean qof_entity_copy_to_session(QofSession* new_session, QofInstance* original);
+gboolean qof_instancecopy_to_session(QofSession* new_session, QofInstance* original);
 
 /** @brief Copy a GList of entities to another session
 
@@ -312,7 +312,7 @@ unique, the list can be copied.
 with the same GUID. Otherwise TRUE.
 
 */
-gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list);
+gboolean qof_instancecopy_list(QofSession *new_session, GList *entity_list);
 
 /** @brief Copy a QofCollection of entities.
 
@@ -327,12 +327,12 @@ no support for handling collisions - instead, use \ref BookMerge
 with the same GUID. Otherwise TRUE.
 */
 
-gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll);
+gboolean qof_instancecopy_coll(QofSession *new_session, QofCollection *entity_coll);
 
 /** \brief Recursively copy a collection of entities to a session.
 
 \note This function creates a <b>partial QofBook</b>. See 
-::qof_entity_copy_to_session for more information.
+::qof_instancecopy_to_session for more information.
 
 The QofBook in the new_session must \b not contain any entities
 with the same GUID as any entities to be copied - there is
@@ -358,7 +358,7 @@ one of the references fails to copy.
 
 */
 gboolean
-qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll);
+qof_instancecopy_coll_r(QofSession *new_session, QofCollection *coll);
 
 /** \brief Recursively copy a single entity to a new session.
 
@@ -369,7 +369,7 @@ copied.
 
 This is a deep copy - all parameters of all referenced entities are copied. If 
 the top level entity has no references, this is identical to 
-::qof_entity_copy_to_session.
+::qof_instancecopy_to_session.
 
 @param ent A single entity that may or may not have references.
 
@@ -380,7 +380,7 @@ the top level entity has no references, this is identical to
 one of the references fails to copy.
 */
 gboolean
-qof_entity_copy_one_r(QofSession *new_session, QofInstance *ent);
+qof_instancecopy_one_r(QofSession *new_session, QofInstance *ent);
 
 /** @} 
 */

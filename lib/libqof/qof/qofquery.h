@@ -126,7 +126,7 @@ void qof_query_shutdown (void);
 /** \name Low-Level API Functions */
 // @{
 
-GSList * qof_query_build_param_list (char const *param, ...);
+GSList * qof_query_build_param_list (const gchar *param, ...);
 
 /** Create a new query.  
  *  Before running the query, a 'search-for' type must be set

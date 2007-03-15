@@ -267,7 +267,7 @@ gncAddressFree (GncAddress *addr)
 {
   if (!addr) return;
 
-  qof_event_gen (QOF_ENTITY (addr), QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (addr), QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (addr->priv->name);
   CACHE_REMOVE (addr->priv->addr1);

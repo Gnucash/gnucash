@@ -64,7 +64,7 @@
 typedef struct _QofObject QofObject;
 typedef void (*QofForeachCB) (gpointer obj, gpointer user_data);
 typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
-typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
+typedef void (*QofForeachBackendTypeCB) (const gchar *type,
                                       gpointer backend_data,
                                       gpointer user_data);
 

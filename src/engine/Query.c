@@ -521,14 +521,14 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
   if (!q || !guid || !id_type)
     return;
 
-  if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = qof_query_build_param_list (QOF_PARAM_GUID, NULL);
-  else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+  if (id_type == GNC_ID_SPLIT) 
+    param_list = qof_query_build_param_list (g_type_name (QOF_PARAM_GUID), NULL);
+  else if (id_type == GNC_ID_TRANS)
     param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_PARAM_GUID, NULL);
-  else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+  else if (id_type == GNC_ID_ACCOUNT)
     param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, NULL);
   else
-    PERR ("Invalid match type: %s", id_type);
+    PERR ("Invalid match type: %s", g_type_name (id_type));
 
   qof_query_add_guid_match (q, param_list, guid, op);
 }
@@ -548,14 +548,14 @@ xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
   if (!pred_data)
     return;
 
-  if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
+  if (id_type == GNC_ID_SPLIT) 
     param_list = qof_query_build_param_list (SPLIT_KVP, NULL);
-  else if (!safe_strcmp (id_type, GNC_ID_TRANS))
+  else if (id_type == GNC_ID_TRANS)
     param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_KVP, NULL);
-  else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
+  else if (id_type == GNC_ID_ACCOUNT)
     param_list = qof_query_build_param_list (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
   else
-    PERR ("Invalid match type: %s", id_type);
+    PERR ("Invalid match type: %s", g_type_name (id_type));
 
   qof_query_add_term (q, param_list, pred_data, op);
 }

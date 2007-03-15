@@ -65,10 +65,6 @@
 #define __GNC_BUDGET_H__
 
 #include <glib.h>
-
-/** The budget data.*/
-typedef struct gnc_budget_private GncBudget;
-
 #include "qof.h"
 #include "Account.h"
 #include "Recurrence.h"
@@ -99,7 +95,7 @@ struct _GncBudgetClass {
 	/* Add Signal Functions Here */
 };
 
-GType   gnc_budget_get_type ();
+GType   gnc_budget_get_type (void);
 
 
 #define GNC_BUDGET_MAX_NUM_PERIODS_DIGITS 3 // max num periods == 999
@@ -116,7 +112,7 @@ void gnc_budget_destroy(GncBudget* budget);
 
 const GUID* gnc_budget_get_guid(GncBudget* budget);
 #define gnc_budget_return_guid(X) \
-  (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+  (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 /** Set/Get the name of the Budget */
 void gnc_budget_set_name(GncBudget* budget, const gchar* name);

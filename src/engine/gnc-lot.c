@@ -55,6 +55,8 @@ static QofLogModule log_module = GNC_MOD_LOT;
 static void gnc_lot_class_init(GncLotClass *klass);
 static void gnc_lot_init(GncLot *sp);
 static void gnc_lot_finalize(GObject *object);
+static void gnc_lot_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_lot_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 struct _GncLotPrivate {
 	/* Private Members */
@@ -65,6 +67,7 @@ typedef enum _GncLotSignalType GncLotSignalType;
 
 enum _GncLotSignalType {
 	/* Signals */
+	FIRST_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -82,7 +85,7 @@ static guint gnc_lot_signals[LAST_SIGNAL] = { 0 };
 static GObjectClass *parent_class = NULL;
 
 GType
-gnc_lot_get_type()
+gnc_lot_get_type(void)
 {
 	static GType type = 0;
 
@@ -99,7 +102,7 @@ gnc_lot_get_type()
 			(GInstanceInitFunc)gnc_lot_init,
 		};
 
-		type = g_type_register_static(QOF_TYPE_ENTITY, 
+		type = g_type_register_static(QOF_TYPE_INSTANCE, 
 			"GncLot", &our_info, 0);
 	}
 
@@ -123,9 +126,13 @@ gnc_lot_class_init(GncLotClass *klass)
 }
 
 static void
-gnc_lot_init(GncLot *obj)
+gnc_lot_init(GncLot *lot)
 {
 	/* Initialize private members, etc. */
+   lot->account = NULL;
+   lot->splits = NULL;
+   lot->is_closed = -1;
+   lot->marker = 0;
 }
 
 static void
@@ -149,7 +156,7 @@ gnc_lot_set_property (GObject *object,
 	switch (param_id) {		
 		default:
    			/* We don't have any other property... */
-    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
     	break;
 	}
 }
@@ -175,18 +182,6 @@ gnc_lot_get_property (GObject      *object,
 
 /* ============================================================= */
 
-static void
-gnc_lot_init (GNCLot *lot, QofBook *book)
-{
-   ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->account = NULL;
-   lot->splits = NULL;
-   lot->is_closed = -1;
-   lot->marker = 0;
-  
-   qof_instance_init(&lot->inst, GNC_ID_LOT, book);
-   LEAVE ("(lot=%p, book=%p)", lot, book);
-}
 
 GNCLot *
 gnc_lot_new (QofBook *book)
@@ -195,8 +190,8 @@ gnc_lot_new (QofBook *book)
    g_return_val_if_fail (book, NULL);
 
    lot = g_object_new (GNC_TYPE_LOT, NULL);
-   gnc_lot_init (lot, book);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_CREATE, NULL);
+
+   qof_event_gen (QOF_INSTANCE (lot), QOF_EVENT_CREATE, NULL);
    return lot;
 }
 
@@ -207,7 +202,7 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_DESTROY, NULL);
+   qof_event_gen (QOF_INSTANCE (lot), QOF_EVENT_DESTROY, NULL);
 
    
    for (node=lot->splits; node; node=node->next)
@@ -253,7 +248,7 @@ gnc_lot_lookup (const GUID *guid, QofBook *book)
   QofCollection *col;
   if (!guid || !book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_LOT);
-  return (GNCLot *) qof_collection_lookup_entity (col, guid);
+  return (GNCLot *) qof_collection_lookup_element (col, guid);
 }
 
 QofBook *
@@ -312,7 +307,7 @@ const char *
 gnc_lot_get_notes (GNCLot *lot)
 {
    if (!lot) return NULL;
-   return kvp_frame_get_string (lot->inst.kvp_data, "/notes");
+   return kvp_frame_get_string (qof_instance_get_kvp_data (QOF_INSTANCE (lot)), "/notes");
 }
 
 void
@@ -320,8 +315,8 @@ gnc_lot_set_title (GNCLot *lot, const char *str)
 {
    if (!lot) return;
    qof_begin_edit(QOF_INSTANCE(lot));
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
-   kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
+   qof_instance_set_dirty(QOF_INSTANCE(lot), TRUE);
+   kvp_frame_set_str (qof_instance_get_kvp_data (QOF_INSTANCE (lot)), "/title", str);
    gnc_lot_commit_edit(lot);
 }
 
@@ -330,8 +325,8 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
    if (!lot) return;
    gnc_lot_begin_edit(lot);
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
-   kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
+   qof_instance_set_dirty(QOF_INSTANCE(lot), TRUE);
+   kvp_frame_set_str (qof_instance_get_kvp_data (QOF_INSTANCE (lot)), "/notes", str);
    gnc_lot_commit_edit(lot);
 }
 
@@ -432,7 +427,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
         gnc_num_dbg_to_string (split->value));
    gnc_lot_begin_edit(lot);
    acc = xaccSplitGetAccount (split);
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot), TRUE);
    if (NULL == lot->account)
    {
       xaccAccountInsertLot (acc, lot);
@@ -463,7 +458,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    lot->is_closed = -1;
    gnc_lot_commit_edit(lot);
 
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (QOF_INSTANCE (lot), QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -473,7 +468,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 
    ENTER ("(lot=%p, split=%p)", lot, split);
    gnc_lot_begin_edit(lot);
-   qof_instance_set_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot), TRUE);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
    lot->is_closed = -1;   /* force an is-closed computation */
@@ -484,7 +479,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       lot->account = NULL;
    }
    gnc_lot_commit_edit(lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (QOF_INSTANCE (lot), QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -549,7 +544,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
 }
 
 /* ============================================================= */
-
+/*
 static QofObject gncLotDesc =
 {
     interface_version:  QOF_OBJECT_VERSION,
@@ -576,7 +571,7 @@ gboolean gnc_lot_register (void)
           (QofAccessFunc) gnc_lot_get_notes, 
           (QofSetterFunc) gnc_lot_set_notes },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, 
-          (QofAccessFunc) qof_entity_get_guid, NULL },
+          (QofAccessFunc) qof_instance_get_guid, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, 
           (QofAccessFunc) gnc_lot_get_book, NULL },
         { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, 
@@ -589,5 +584,5 @@ gboolean gnc_lot_register (void)
     qof_class_register (GNC_ID_LOT, NULL, params);
     return qof_object_register(&gncLotDesc);
 }
-
+*/
 /* ========================== END OF FILE ========================= */

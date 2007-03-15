@@ -306,7 +306,7 @@ qof_session_get_url (QofSession *session)
 
 /* =============================================================== */
 
-typedef struct qof_entity_copy_data {
+typedef struct qof_instancecopy_data {
 	QofInstance *from;
 	QofInstance *to;
 	QofParam  *param;
@@ -342,7 +342,7 @@ qof_session_update_reference_list(QofSession *session, QofInstanceReference *ref
 }
 
 static void
-qof_entity_param_cb(QofParam *param, gpointer data)
+qof_instanceparam_cb(QofParam *param, gpointer data)
 {
 	QofInstanceCopyData *qecd;
 
@@ -387,7 +387,7 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
 }
 
 static void
-qof_entity_foreach_copy(gpointer data, gpointer user_data)
+qof_instanceforeach_copy(gpointer data, gpointer user_data)
 {
 	QofInstance          *importEnt, *targetEnt/*, *referenceEnt*/;
 	QofInstanceCopyData 	*context;
@@ -526,7 +526,7 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 }
 
 static gboolean
-qof_entity_guid_match(QofSession *new_session, QofInstance *original)
+qof_instanceguid_match(QofSession *new_session, QofInstance *original)
 {
 	QofInstance *copy;
 	const GUID *g;
@@ -547,7 +547,7 @@ qof_entity_guid_match(QofSession *new_session, QofInstance *original)
 }
 
 static void
-qof_entity_list_foreach(gpointer data, gpointer user_data)
+qof_instancelist_foreach(gpointer data, gpointer user_data)
 {
 	QofInstanceCopyData *qecd;
 	QofInstance *original;
@@ -559,7 +559,7 @@ qof_entity_list_foreach(gpointer data, gpointer user_data)
 	original = (QofInstance*)data;
 	g_return_if_fail(user_data != NULL);
 	qecd = (QofInstanceCopyData*)user_data;
-	if(qof_entity_guid_match(qecd->new_session, original)) { return; }
+	if(qof_instanceguid_match(qecd->new_session, original)) { return; }
 	qecd->from = original;
 	if(!qof_object_compliance(G_OBJECT_TYPE (G_OBJECT (original)), FALSE)) 
 	{
@@ -581,14 +581,14 @@ qof_entity_list_foreach(gpointer data, gpointer user_data)
 		g_slist_free(qecd->param_list);
 		qecd->param_list = NULL;
 	}
-	qof_class_param_foreach(G_OBJECT_TYPE (G_OBJECT (original)), qof_entity_param_cb, qecd);
+	qof_class_param_foreach(G_OBJECT_TYPE (G_OBJECT (original)), qof_instanceparam_cb, qecd);
 	qof_begin_edit(inst);
-	g_slist_foreach(qecd->param_list, qof_entity_foreach_copy, qecd);
+	g_slist_foreach(qecd->param_list, qof_instanceforeach_copy, qecd);
 	qof_commit_edit(inst);
 }
 
 static void
-qof_entity_coll_foreach(QofInstance *original, gpointer user_data)
+qof_instancecoll_foreach(QofInstance *original, gpointer user_data)
 {
 	QofInstanceCopyData *qecd;
 	const GUID *g;
@@ -607,7 +607,7 @@ qof_entity_coll_foreach(QofInstance *original, gpointer user_data)
 }
 
 static void
-qof_entity_coll_copy(QofInstance *original, gpointer user_data)
+qof_instancecoll_copy(QofInstance *original, gpointer user_data)
 {
 	QofInstanceCopyData *qecd;
 	QofBook *book;
@@ -624,19 +624,19 @@ qof_entity_coll_copy(QofInstance *original, gpointer user_data)
 	g = qof_instance_get_guid(original);
 	qof_instance_set_guid(qecd->to, g);
 	qof_begin_edit(inst);
-	g_slist_foreach(qecd->param_list, qof_entity_foreach_copy, qecd);
+	g_slist_foreach(qecd->param_list, qof_instanceforeach_copy, qecd);
 	qof_commit_edit(inst);
 }
 
 gboolean 
-qof_entity_copy_to_session(QofSession* new_session, QofInstance* original)
+qof_instancecopy_to_session(QofSession* new_session, QofInstance* original)
 {
 	QofInstanceCopyData qecd;
 	QofInstance *inst;
 	QofBook *book;
 
 	if(!new_session || !original) { return FALSE; }
-	if(qof_entity_guid_match(new_session, original)) { return FALSE; }
+	if(qof_instanceguid_match(new_session, original)) { return FALSE; }
 	if(!qof_object_compliance(G_OBJECT_TYPE (G_OBJECT (original)), TRUE)) { return FALSE; }
 	qof_event_suspend();
 	qecd.param_list = NULL;
@@ -648,16 +648,16 @@ qof_entity_copy_to_session(QofSession* new_session, QofInstance* original)
 	qecd.from = original;
 	qof_instance_set_guid(qecd.to, qof_instance_get_guid(original));
 	qof_begin_edit(inst);
-	qof_class_param_foreach(G_OBJECT_TYPE (G_OBJECT (original)), qof_entity_param_cb, &qecd);
+	qof_class_param_foreach(G_OBJECT_TYPE (G_OBJECT (original)), qof_instanceparam_cb, &qecd);
 	qof_commit_edit(inst);
 	if(g_slist_length(qecd.param_list) == 0) { return FALSE; }
-	g_slist_foreach(qecd.param_list, qof_entity_foreach_copy, &qecd);
+	g_slist_foreach(qecd.param_list, qof_instanceforeach_copy, &qecd);
 	g_slist_free(qecd.param_list);
 	qof_event_resume();
 	return TRUE;
 }
 
-gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
+gboolean qof_instancecopy_list(QofSession *new_session, GList *entity_list)
 {
 	QofInstanceCopyData *qecd;
 
@@ -668,7 +668,7 @@ gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
 	qecd->param_list = NULL;
 	qecd->new_session = new_session;
 	qof_book_set_partial(qof_session_get_book(new_session));
-	g_list_foreach(entity_list, qof_entity_list_foreach, qecd);
+	g_list_foreach(entity_list, qof_instancelist_foreach, qecd);
 	qof_event_resume();
 	if(qecd->error) 
 	{ 
@@ -680,7 +680,7 @@ gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
 }
 
 gboolean 
-qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll)
+qof_instancecopy_coll(QofSession *new_session, QofCollection *entity_coll)
 {
 	QofInstanceCopyData qecd;
 
@@ -690,10 +690,10 @@ qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll)
 	qecd.param_list = NULL;
 	qecd.new_session = new_session;
 	qof_book_set_partial(qof_session_get_book(qecd.new_session));
-	qof_collection_foreach(entity_coll, qof_entity_coll_foreach, &qecd);
+	qof_collection_foreach(entity_coll, qof_instancecoll_foreach, &qecd);
 	qof_class_param_foreach(qof_collection_get_g_type(entity_coll), 
-		qof_entity_param_cb, &qecd);
-	qof_collection_foreach(entity_coll, qof_entity_coll_copy, &qecd);
+		qof_instanceparam_cb, &qecd);
+	qof_collection_foreach(entity_coll, qof_instancecoll_copy, &qecd);
 	if(qecd.param_list != NULL) { g_slist_free(qecd.param_list); }
 	qof_event_resume();
 	return TRUE;
@@ -715,7 +715,7 @@ recurse_collection_cb (QofInstance *ent, gpointer user_data)
 	if(user_data == NULL) { return; }
 	store = (struct recurse_s*)user_data;
 	if(!ent || !store) { return; }
-	store->success = qof_entity_copy_to_session(store->session, ent);
+	store->success = qof_instancecopy_to_session(store->session, ent);
 	if(store->success) {
 	store->ent_list = g_list_append(store->ent_list, ent);
 	}
@@ -760,7 +760,7 @@ recurse_ent_cb(QofInstance *ent, gpointer user_data)
 		ref_ent = (QofInstance*)ref_param->param_getfcn(ent, ref_param);
 		if((ref_ent)&&(G_OBJECT_TYPE (G_OBJECT (ref_ent))))
 		{
-			store->success = qof_entity_copy_to_session(session, ref_ent);
+			store->success = qof_instancecopy_to_session(session, ref_ent);
 			if(store->success) { ent_list = g_list_append(ent_list, ref_ent); }
 		}
 	}
@@ -777,7 +777,7 @@ recurse_ent_cb(QofInstance *ent, gpointer user_data)
 			ref_ent = ref_param->param_getfcn(child_ent, ref_param);
 			if(ref_ent != NULL)
 			{
-				success = qof_entity_copy_to_session(session, ref_ent);
+				success = qof_instancecopy_to_session(session, ref_ent);
 				if(success) { child_list = g_list_append(child_list, ref_ent); }
 			}
 		}
@@ -795,14 +795,14 @@ recurse_ent_cb(QofInstance *ent, gpointer user_data)
 			child_ent = ref_param->param_getfcn(ref_ent, ref_param);
 			if(child_ent != NULL)
 			{
-				qof_entity_copy_to_session(session, child_ent);
+				qof_instancecopy_to_session(session, child_ent);
 			}
 		}
 	}
 }
 
 gboolean
-qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll)
+qof_instancecopy_coll_r(QofSession *new_session, QofCollection *coll)
 {
 	struct recurse_s store;
 	gboolean success;
@@ -813,12 +813,12 @@ qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll)
 	store.success = success;
 	store.ent_list = NULL;
 	store.ref_list = qof_class_get_referenceList(qof_collection_get_g_type(coll));
-	success = qof_entity_copy_coll(new_session, coll);
+	success = qof_instancecopy_coll(new_session, coll);
 	if(success){ qof_collection_foreach(coll, recurse_ent_cb, &store); }
 	return success;
 }
 
-gboolean qof_entity_copy_one_r(QofSession *new_session, QofInstance *ent)
+gboolean qof_instancecopy_one_r(QofSession *new_session, QofInstance *ent)
 {
 	struct recurse_s store;
 	QofCollection *coll;
@@ -829,7 +829,7 @@ gboolean qof_entity_copy_one_r(QofSession *new_session, QofInstance *ent)
 	success = TRUE;
 	store.success = success;
 	store.ref_list = qof_class_get_referenceList(G_OBJECT_TYPE (G_OBJECT (ent)));
-	success = qof_entity_copy_to_session(new_session, ent);
+	success = qof_instancecopy_to_session(new_session, ent);
 	if(success == TRUE) {
 		coll = qof_book_get_collection(qof_session_get_book(new_session), G_OBJECT_TYPE (G_OBJECT (ent)));
 		if(coll) { qof_collection_foreach(coll, recurse_ent_cb, &store); }

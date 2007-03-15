@@ -133,13 +133,17 @@ gboolean qof_instance_do_free(const QofInstance *inst);
 
 void qof_instance_mark_free(QofInstance *inst);
 
+gboolean qof_instance_get_do_free (QofInstance *inst);
+
+void     qof_instance_set_do_free (QofInstance *inst, gboolean val);
+
 QofInstance* qof_instance_create (GType type, QofBook *book);
 
 gboolean qof_instance_destroy (QofInstance *inst, GError **error);
 
 void qof_instance_release (QofInstance *instance);
 
-#define qof_entity_release(obj) qof_instance_release (QOF_INSTANCE (obj))
+#define qof_instancerelease(obj) qof_instance_release (QOF_INSTANCE (obj))
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the

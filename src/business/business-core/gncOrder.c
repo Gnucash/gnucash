@@ -187,7 +187,7 @@ G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
   qof_instance_set_dirty(QOF_INSTANCE (order));
-  qof_event_gen (QOF_ENTITY (order), QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (QOF_INSTANCE (order), QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
@@ -210,7 +210,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->priv->active = TRUE;
 
-  qof_event_gen (QOF_ENTITY (order), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (order), QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -226,7 +226,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  qof_event_gen (QOF_ENTITY (order), QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (QOF_INSTANCE (order), QOF_EVENT_DESTROY, NULL);
 
   g_list_free (order->priv->entries);
   CACHE_REMOVE (order->priv->id);
@@ -270,7 +270,7 @@ gncCloneOrder (GncOrder *from, QofBook *book)
     order->priv->entries = g_list_prepend (order->priv->entries, entry);
   }
 
-  qof_event_gen (QOF_ENTITY (order), QOF_EVENT_CREATE, NULL);
+  qof_event_gen (QOF_INSTANCE (order), QOF_EVENT_CREATE, NULL);
 
   return order;
 }

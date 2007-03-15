@@ -325,7 +325,7 @@ The next mergeEnt may be a much better match for that targetEnt and the target_t
 is designed to solve the issues that result from this conflict. The previous match
 must be re-assigned because if two mergeEnt's are matched with only one targetEnt,
 data loss \b WILL follow. Equally, the current mergeEnt must replace the previous
-one as it is a better match. qof_entity_rating holds the details required to identify
+one as it is a better match. qof_instancerating holds the details required to identify
 the correct mergeEnt to be re-assigned and these mergeEnt entities are therefore
 orphaned - to be re-matched later.
 

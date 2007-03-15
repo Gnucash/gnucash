@@ -37,6 +37,7 @@
 #define GNC_ENGINE_H
 
 #include <glib.h>
+#include <glib-object.h>
 #include "qof.h"
 
 /** \name QofLogModule identifiers */
@@ -237,7 +238,7 @@ GType   gnc_split_get_type (void);
 
 /* GObject declarations */
 
-#define GNC_TYPE_TRANSACTION            (qof_book_get_type ())
+#define GNC_TYPE_TRANSACTION            (gnc_transaction_get_type ())
 #define GNC_TRANSACTION(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TRANSACTION, GncTransaction))
 #define GNC_TRANSACTION_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TRANSACTION, GncTransactionClass))
 #define GNC_IS_TRANSACTION(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TRANSACTION))
@@ -248,7 +249,7 @@ GType   gnc_split_get_type (void);
 typedef struct _GncTransactionClass GncTransactionClass;
 typedef struct _GncTransaction GncTransaction;
 typedef struct _GncTransactionPrivate GncTransactionPrivate;
-typedef struct GncTransaction Transaction; /*  Dummy type for backward compatilibity */
+typedef GncTransaction Transaction; /*  Dummy type for backward compatilibity */
 
 struct _GncTransactionClass {
 	QofInstanceClass parent_class;
@@ -278,7 +279,7 @@ GType   gnc_transaction_get_type (void);
 //typedef struct gnc_commodity_s       gnc_commodity;
 /* GObject declarations for GncCommodity */
 
-#define GNC_TYPE_COMMODITY            (gnc_commodity_type ())
+#define GNC_TYPE_COMMODITY            (gnc_commodity_get_type ())
 #define GNC_COMMODITY(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_COMMODITY, GncCommodity))
 #define GNC_COMMODITY_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_COMMODITY, GncCommodityClass))
 #define GNC_IS_COMMODITY(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_COMMODITY))
@@ -322,7 +323,7 @@ GType   gnc_commodity_get_type (void);
 typedef struct _GncCommodityNamespaceClass GncCommodityNamespaceClass;
 typedef struct _GncCommodityNamespace GncCommodityNamespace;
 typedef struct _GncCommodityNamespacePrivate GncCommodityNamespacePrivate;
-typedef struct GncCommodityNamespace gnc_commodity_namespace; /*  Dummy type for backward compatilibity */
+typedef GncCommodityNamespace gnc_commodity_namespace; /*  Dummy type for backward compatilibity */
 
 struct _GncCommodityNamespace {
     QofInstance instance;
@@ -364,6 +365,7 @@ typedef struct gnc_commodity_table_s gnc_commodity_table;
 typedef struct _GncLotClass GncLotClass;
 typedef struct _GncLot GncLot;
 #define  GNCLot GncLot /* Dummy type for backward compatilibity */
+
 
 struct _GncLotClass {
 	QofInstanceClass parent_class;

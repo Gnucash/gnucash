@@ -41,7 +41,7 @@
 
 typedef struct _GncPriceClass GncPriceClass;
 typedef struct _GncPrice GncPrice;
-typedef struct GncPrice GNCPrice;  /* Dummy type for backward compatilibity */
+typedef GncPrice GNCPrice;  /* Dummy type for backward compatilibity */
 
 struct _GncPriceClass {
 	QofInstanceClass parent_class;
@@ -50,7 +50,7 @@ struct _GncPriceClass {
 	/* Add Signal Functions Here */
 };
 
-GType   gnc_price_get_gtype ();
+GType   gnc_price_get_gtype (void);
 
 /** @addtogroup PriceDB
     @{ */
@@ -221,8 +221,8 @@ gnc_numeric     gnc_price_get_value(GNCPrice *p);
 gint32          gnc_price_get_version(GNCPrice *p);
 gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
-#define gnc_price_get_guid(X)    qof_entity_get_guid(QOF_ENTITY(X))
-#define gnc_price_return_guid(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define gnc_price_get_guid(X)    qof_instance_get_guid(QOF_INSTANCE(X))
+#define gnc_price_return_guid(X) (*(qof_instance_get_guid(QOF_INSTANCE(X))))
 #define gnc_price_get_book(X)    qof_instance_get_book(QOF_INSTANCE(X))
 /**  @} */
 
@@ -280,7 +280,7 @@ gboolean gnc_price_list_equal(PriceList *prices1, PriceList *prices2);
 
 typedef struct _GncPriceDbClass GncPriceDbClass;
 typedef struct _GncPriceDb GncPriceDb;
-typedef struct GncPriceDb GNCPriceDB;  /* Dummy type for backward compatilibity */
+typedef GncPriceDb GNCPriceDB;  /* Dummy type for backward compatilibity */
 
 struct _GncPriceDbClass {
 	QofInstanceClass parent_class;
@@ -289,7 +289,7 @@ struct _GncPriceDbClass {
 	/* Add Signal Functions Here */
 };
 
-GType   gnc_pricedb_get_type ();
+GType   gnc_pricedb_get_type (void);
 
 /* XXX backwards-compat defines, remove these someday */
 #define gnc_book_get_pricedb  gnc_pricedb_get_db
