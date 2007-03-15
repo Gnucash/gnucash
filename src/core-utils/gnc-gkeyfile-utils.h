@@ -43,9 +43,15 @@ gdouble
 g_key_file_get_double (GKeyFile *key_file, const gchar *group_name,
                        const gchar *key, GError **error);
 
+void
+g_key_file_set_double  (GKeyFile *key_file, const gchar *group_name,
+                        const gchar *key, gdouble value);
 gdouble*
 g_key_file_get_double_list (GKeyFile *key_file, const gchar *group_name,
                             const gchar *key, gsize *length, GError **error);
+void
+g_key_file_set_double_list (GKeyFile *key_file, const gchar *group_name, 
+                            const gchar *key, gdouble list[], gsize length);
 #endif
 
 

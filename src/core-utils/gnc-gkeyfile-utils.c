@@ -163,6 +163,20 @@ g_key_file_get_double (GKeyFile *key_file, const gchar *group_name,
   return double_value;
 }
 
+void
+g_key_file_set_double  (GKeyFile    *key_file,
+                        const gchar *group_name,
+                        const gchar *key,
+                        gdouble      value)
+{
+  gchar result[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_return_if_fail (key_file != NULL);
+
+  g_ascii_dtostr (result, sizeof (result), value);
+  g_key_file_set_value (key_file, group_name, key, result);
+}
+
 gdouble*
 g_key_file_get_double_list (GKeyFile *key_file,
                             const gchar *group_name,
@@ -211,6 +225,34 @@ g_key_file_get_double_list (GKeyFile *key_file,
     *length = num_doubles;
 
   return double_values;
+}
+
+void
+g_key_file_set_double_list (GKeyFile     *key_file,
+			    const gchar  *group_name,
+			    const gchar  *key,
+			    gdouble       list[],
+			    gsize         length)
+{
+  GString *values;
+  gsize i;
+
+  g_return_if_fail (key_file != NULL);
+  g_return_if_fail (list != NULL);
+
+  values = g_string_sized_new (length * 16);
+  for (i = 0; i < length; i++)
+    {
+      gchar result[G_ASCII_DTOSTR_BUF_SIZE];
+
+      g_ascii_dtostr( result, sizeof (result), list[i] );
+
+      g_string_append (values, result);
+      g_string_append_c (values, ';');
+    }
+
+  g_key_file_set_value (key_file, group_name, key, values->str);
+  g_string_free (values, TRUE);
 }
 /**********************************************************************
  *

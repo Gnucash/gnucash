@@ -376,7 +376,7 @@ gnc_validate_directory (const gchar *dirname)
 const gchar *
 gnc_dotgnucash_dir (void)
 {
-  static gchar *dotgnucash = NULL, *books_dir;
+  static gchar *dotgnucash = NULL, *tmp_dir;
   const gchar *home;
 
   if (dotgnucash)
@@ -393,9 +393,12 @@ gnc_dotgnucash_dir (void)
   gnc_validate_directory(dotgnucash);
 
   /* Since we're in code that is only executed once.... */
-  books_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
-  gnc_validate_directory(books_dir);
-  g_free(books_dir);
+  tmp_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
+  tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
 
   return dotgnucash;
 }

@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <libguile.h>
 #include <locale.h>
+#include <math.h>
 
 #include "glib-compat.h"
 
@@ -68,9 +69,11 @@
 #define KEY_SHOW_DATE_FMT      "show_date_format"
 
 
-#define DEFAULT_FONT "sans 12"
-#define CHECK_FMT_DIR "checks"
-#define DEGREES_TO_RADIANS (G_PI / 180.0)
+#define DEFAULT_FONT            "sans 12"
+#define CHECK_FMT_DIR           "checks"
+#define CUSTOM_CHECK_NAME       "custom.chk"
+#define CHECK_NAME_FILTER       "*.chk"
+#define DEGREES_TO_RADIANS      (G_PI / 180.0)
 
 #define KF_GROUP_TOP       "Top"
 #define KF_GROUP_POS       "Check Positions"
@@ -104,6 +107,7 @@ void gnc_print_check_position_changed(GtkComboBox *widget, PrintCheckDialog * pc
 static void gnc_ui_print_save_dialog(PrintCheckDialog * pcd);
 static void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
 void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
+void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd);
 
 
 /** This enum defines the types of items that gnucash knows how to
@@ -128,6 +132,8 @@ void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
 DEFINE_ENUM(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 FROM_STRING_DEC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 FROM_STRING_FUNC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
+AS_STRING_DEC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
+AS_STRING_FUNC(CheckItemType, ENUM_CHECK_ITEM_TYPE)
 
 /** This data structure describes a single item printed on a check.
  *  It is build from a description in a text file. */
@@ -366,6 +372,137 @@ pcd_get_custom_multip(PrintCheckDialog * pcd)
         case 3:
             return 1.0;         /* points */
     }
+}
+
+
+/** Save a coordinate pair into a check description file.  This function
+ *  extracts the values from the spin buttons, adjusts them for the units
+ *  multiplies (inch, pixel, etc), and then adds them to the gKeyFile. */
+static void
+pcd_key_file_save_xy (GKeyFile *key_file, const gchar *group_name,
+                      const gchar *key_name, gdouble multip,
+                      GtkSpinButton *spin0, GtkSpinButton *spin1)
+{
+    gdouble dd[2];
+
+    dd[0] = multip * gtk_spin_button_get_value(spin0);
+    dd[1] = multip * gtk_spin_button_get_value(spin1);
+    /* Clip the numbers to three decimal places. */
+    dd[0] = round(dd[0] * 1000) / 1000;
+    dd[1] = round(dd[1] * 1000) / 1000;
+    g_key_file_set_double_list(key_file, group_name, key_name, dd, 2);
+}
+
+
+/** Save the information about a single printed item into a check description
+ *  file.  This function uses a helper function to extracts and save the item
+ *  coordinates. */
+static void
+pcd_key_file_save_item_xy (GKeyFile *key_file, int index,
+                           CheckItemType type, gdouble multip,
+                           GtkSpinButton *spin0, GtkSpinButton *spin1)
+{
+    gchar *key;
+    key = g_strdup_printf("Type_%d", index);
+    g_key_file_set_string(key_file, KF_GROUP_ITEMS, key,
+                          CheckItemTypeasString(type));
+    g_free(key);
+    key = g_strdup_printf("Coords_%d", index);
+    pcd_key_file_save_xy(key_file, KF_GROUP_ITEMS, key, multip, spin0, spin1);
+    g_free(key);
+}
+
+
+/** Save all of the information from the custom check dialog into a check
+ *  description file. */
+static void
+pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
+{
+    GKeyFile *key_file;
+    GError *error = NULL;
+    GtkWidget *dialog;
+    gdouble multip;
+    gint i = 0;
+
+    multip = pcd_get_custom_multip(pcd);
+
+    key_file = g_key_file_new();
+    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE,
+                          _("Custom Check"));
+    g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, FALSE);
+    g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_BOXES, FALSE);
+    g_key_file_set_double(key_file, KF_GROUP_TOP, KF_KEY_ROTATION,
+                          gtk_spin_button_get_value(pcd->check_rotation));
+    pcd_key_file_save_xy(key_file, KF_GROUP_TOP, KF_KEY_TRANSLATION, multip,
+                         pcd->translation_x, pcd->translation_y);
+
+    pcd_key_file_save_item_xy(key_file, i++, PAYEE, multip,
+                              pcd->payee_x, pcd->payee_y);
+    pcd_key_file_save_item_xy(key_file, i++, DATE, multip,
+                              pcd->date_x, pcd->date_y);
+    pcd_key_file_save_item_xy(key_file, i++, AMOUNT_WORDS, multip,
+                              pcd->words_x, pcd->words_y);
+    pcd_key_file_save_item_xy(key_file, i++, AMOUNT_NUMBER, multip,
+                              pcd->number_x, pcd->number_y);
+    pcd_key_file_save_item_xy(key_file, i++, NOTES, multip,
+                              pcd->notes_x, pcd->notes_y);
+
+    if (!gnc_key_file_save_to_file(filename, key_file, &error)) {
+        dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_CLOSE,
+                                        _("Cannot save check format file."));
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                                                 error->message);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        g_error_free(error);
+    }
+}
+
+
+/** This function is called when the user clicks the "save format" button in
+ *  the check printing dialog.  It presents another dialog to the user to get
+ *  the filename for saving the data. */
+void
+gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd)
+{
+    GtkFileChooser *chooser;
+    GtkFileFilter *filter;
+    GtkWidget *dialog;
+    gchar *check_dir, *filename;
+
+    dialog = gtk_file_chooser_dialog_new(_("Save Check Description"),
+                                         GTK_WINDOW(pcd->dialog),
+                                         GTK_FILE_CHOOSER_ACTION_SAVE,
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+    chooser = GTK_FILE_CHOOSER(dialog);
+
+    check_dir = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR, NULL);
+    gtk_file_chooser_set_current_folder(chooser, check_dir);
+    gtk_file_chooser_set_current_name(chooser, CUSTOM_CHECK_NAME);
+    g_free(check_dir);
+
+    filter = gtk_file_filter_new();
+    gtk_file_filter_set_name(filter, CHECK_NAME_FILTER);
+    gtk_file_filter_add_pattern(filter, CHECK_NAME_FILTER);
+    gtk_file_chooser_add_filter(chooser, filter);
+
+    filter = gtk_file_filter_new();
+    gtk_file_filter_set_name(filter, _("All Files"));
+    gtk_file_filter_add_pattern(filter, "*");
+    gtk_file_chooser_add_filter(chooser, filter);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        pcd_save_custom_data(pcd, filename);
+        g_free(filename);
+    }
+
+    gtk_widget_destroy (dialog);
 }
 
 
