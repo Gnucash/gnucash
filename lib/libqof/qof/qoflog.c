@@ -97,7 +97,6 @@ log4glib_handler(const gchar     *log_domain,
           return;
 
      {
-          gboolean last_char_is_newline;
           char timestamp_buf[10];
           time_t now;
           struct tm now_tm;

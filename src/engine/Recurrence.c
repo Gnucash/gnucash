@@ -525,7 +525,6 @@ recurrenceListToCompactString(GList *rs)
     {
         Recurrence *r = (Recurrence*)g_list_nth_data(rs, 0);
         guint multiplier = recurrenceGetMultiplier(r);
-        GDate date = recurrenceGetDate(r);
 
         switch (recurrenceGetPeriodType(r))
         {

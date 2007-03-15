@@ -2142,7 +2142,6 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 static Recurrence*
 daily_freq(GDate* start, int multiplier)
 {
-     QofBook *book = qof_session_get_book(gnc_get_current_session());
      Recurrence *r = g_new0(Recurrence, 1);
      recurrenceSet(r, multiplier, PERIOD_DAY, start);
      return r;
@@ -2151,7 +2150,6 @@ daily_freq(GDate* start, int multiplier)
 static Recurrence*
 once_freq(GDate *when)
 {
-     QofBook *book = qof_session_get_book(gnc_get_current_session());
      Recurrence *r = g_new0(Recurrence, 1);
      recurrenceSet(r, 1, PERIOD_ONCE, when);
      return r;

@@ -87,10 +87,8 @@
 
 #include "FreqSpecP.h"
 
-#define LOG_MOD "gnc.engine.freqspec"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.engine.freqspec"
 
 /* 
  *  FIXME: should be in a header file
