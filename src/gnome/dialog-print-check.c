@@ -1222,7 +1222,7 @@ read_image (const gchar *filename)
     GtkWidget *image;
     gchar *pkgdatadir, *dirname, *tmp_name;
 
-    if (filename[0] == '/')
+    if (g_path_is_absolute(filename))
         return gtk_image_new_from_file(filename);
 
     pkgdatadir = gnc_path_get_pkgdatadir();
