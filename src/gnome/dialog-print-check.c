@@ -59,7 +59,7 @@
 #define KEY_CUSTOM_DATE        "custom_date"
 #define KEY_CUSTOM_WORDS       "custom_amount_words"
 #define KEY_CUSTOM_NUMBER      "custom_amount_number"
-#define KEY_CUSTOM_MEMO        "custom_memo"
+#define KEY_CUSTOM_NOTES       "custom_memo" /* historically misnamed */
 #define KEY_CUSTOM_TRANSLATION "custom_translation"
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
@@ -112,7 +112,7 @@ void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
         _(NONE,) \
         _(PAYEE,) \
         _(DATE,) \
-        _(MEMO,) \
+        _(NOTES,) \
         _(AMOUNT_NUMBER,) \
         _(AMOUNT_WORDS,) \
         _(TEXT,) \
@@ -196,7 +196,7 @@ struct _print_check_dialog {
   const char    *payee;
   gnc_numeric    amount;
   time_t         date;
-  const char    *memo;
+  const char    *notes;
 
   GtkWidget * format_combobox;
   gint format_max;
@@ -207,7 +207,7 @@ struct _print_check_dialog {
   GtkSpinButton * date_x,   * date_y;
   GtkSpinButton * words_x,  * words_y;
   GtkSpinButton * number_x, * number_y;
-  GtkSpinButton * memo_x,   * memo_y;
+  GtkSpinButton * notes_x,   * notes_y;
   GtkSpinButton * translation_x, * translation_y;
   GtkSpinButton * check_rotation;
   GtkWidget * translation_label;
@@ -284,9 +284,9 @@ gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER,
 		  gtk_spin_button_get_value(pcd->number_x),
 		  gtk_spin_button_get_value(pcd->number_y));
-  save_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO,
-		  gtk_spin_button_get_value(pcd->memo_x),
-		  gtk_spin_button_get_value(pcd->memo_y));
+  save_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES,
+		  gtk_spin_button_get_value(pcd->notes_x),
+		  gtk_spin_button_get_value(pcd->notes_y));
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
 		  gtk_spin_button_get_value(pcd->translation_x),
 		  gtk_spin_button_get_value(pcd->translation_y));
@@ -333,9 +333,9 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_NUMBER, &x, &y);
   gtk_spin_button_set_value(pcd->number_x, x);
   gtk_spin_button_set_value(pcd->number_y, y);
-  get_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO, &x, &y);
-  gtk_spin_button_set_value(pcd->memo_x, x);
-  gtk_spin_button_set_value(pcd->memo_y, y);
+  get_float_pair(GCONF_SECTION, KEY_CUSTOM_NOTES, &x, &y);
+  gtk_spin_button_set_value(pcd->notes_x, x);
+  gtk_spin_button_set_value(pcd->notes_y, y);
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION, &x, &y);
   gtk_spin_button_set_value(pcd->translation_x, x);
   gtk_spin_button_set_value(pcd->translation_y, y);
@@ -840,7 +840,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 				 const char    *payee,
 				 gnc_numeric    amount,
 				 time_t         date,
-				 const char    *memo)
+				 const char    *notes)
 {
   PrintCheckDialog * pcd;
   GladeXML *xml;
@@ -854,7 +854,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   pcd->payee = payee;
   pcd->amount = amount;
   pcd->date = date;
-  pcd->memo = memo;
+  pcd->notes = notes;
 
   xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
@@ -881,8 +881,8 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_x_entry"));
   pcd->number_y =
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
-  pcd->memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_x_entry"));
-  pcd->memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_y_entry"));
+  pcd->notes_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_x_entry"));
+  pcd->notes_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "notes_y_entry"));
   pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
   pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
   pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
@@ -1258,8 +1258,8 @@ draw_page_items(GncPrintContext * context,
                 draw_text(context, pcd->payee, item, default_desc);
                 break;
 
-            case MEMO:
-                draw_text(context, pcd->memo, item, default_desc);
+            case NOTES:
+                draw_text(context, pcd->notes, item, default_desc);
                 break;
 
             case AMOUNT_NUMBER:
@@ -1488,9 +1488,9 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     draw_text(context, text, &item, desc);
     g_free(text);
 
-    item.x = multip * gtk_spin_button_get_value(pcd->memo_x);
-    item.y = multip * gtk_spin_button_get_value(pcd->memo_y);
-    draw_text(context, pcd->memo, &item, desc);
+    item.x = multip * gtk_spin_button_get_value(pcd->notes_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->notes_y);
+    draw_text(context, pcd->notes, &item, desc);
 
     pango_font_description_free(desc);
 }

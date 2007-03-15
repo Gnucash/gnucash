@@ -24,7 +24,7 @@ Coords_3 = 518.0;137.0
 Type_4 = DATE
 Coords_4 = 504.0;151.0
 
-Type_5 = MEMO
+Type_5 = NOTES
 Coords_5 = 216.0;37.0
 
 Type_6 = DATE
@@ -36,5 +36,5 @@ Coords_7 = 26.0;126.0
 Type_8 = AMOUNT_NUMBER
 Coords_8 = 50.0;90.0
 
-Type_9 = MEMO
+Type_9 = NOTES
 Coords_9 = 28.0;65.0
