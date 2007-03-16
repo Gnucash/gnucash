@@ -23,14 +23,14 @@
 #include "config.h"
 #include <glib.h>
 
-#ifdef HAVE_HTMLHELP_H
+#ifdef HAVE_HTMLHELPW
 #    include <windows.h>
 #    include <htmlhelp.h>
 #endif
 
 #include "gnc-help-utils.h"
 
-#ifdef HAVE_HTMLHELP_H
+#ifdef HAVE_HTMLHELPW
 
 static GHashTable *
 parse_hhmap_file(const gchar *chmfile)
@@ -129,7 +129,7 @@ gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
     g_free(wpath);
 }
 
-#else /* !HAVE_HTMLHELP_H */
+#else /* !HAVE_HTMLHELPW */
 void
 gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
 {
@@ -148,4 +148,4 @@ gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor)
 
     g_free(argv[1]);
 }
-#endif /* HAVE_HTMLHELP_H */
+#endif /* HAVE_HTMLHELPW */

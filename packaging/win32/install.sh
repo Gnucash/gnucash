@@ -341,7 +341,7 @@ function inst_mingwutils() {
     else
         wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
     fi
-    (quiet which pexports && quiet which reimp) || die "pexports unavailable"
+    (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
 }
 
 function inst_exetype() {
@@ -636,13 +636,27 @@ function inst_inno() {
     quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
+function test_for_hh() {
+    qpushd $TMP_UDIR
+        cat > ofile.c <<EOF
+#include <windows.h>
+#include <htmlhelp.h>
+int main(int argc, char **argv) {
+  HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);
+  return 0;
+}
+EOF
+        gcc -o ofile.exe ofile.c $HH_CPPFLAGS $HH_LDFLAGS -lhtmlhelp || return 1
+    qpopd
+}
+
 function inst_hh() {
     setup HTML Help Workshop
     _HH_UDIR=`unix_path $HH_DIR`
     add_to_env -I$_HH_UDIR/include HH_CPPFLAGS
     add_to_env -L$_HH_UDIR/lib HH_LDFLAGS
     add_to_env $_HH_UDIR PATH
-    if quiet ${LD} $HH_LDFLAGS -lhtmlhelp -o $TMP_UDIR/ofile
+    if quiet test_for_hh
     then
         echo "html help workshop already installed.  skipping."
     else
@@ -657,7 +671,7 @@ function inst_hh() {
            mv htmlhelp.lib htmlhelp.lib.bak
         qpopd
     fi
-    quiet ${LD} $HH_LDFLAGS -lhtmlhelp -o $TMP_UDIR/ofile || die "html help workshop not installed correctly"
+    quiet test_for_hh || die "html help workshop not installed correctly"
 }
 
 function inst_opensp() {
@@ -983,8 +997,8 @@ function make_chm() {
         cat mymaps >> htmlhelp.hhp
         rm mymaps
         hhc htmlhelp.hhp || true
-        mv -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
-        mv -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
+        cp -fv htmlhelp.chm $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.chm
+        cp -fv htmlhelp.hhmap $_DOCS_INST_UDIR/$_CHM_LANG/gnucash-$_CHM_TYPE.hhmap
     qpopd
 }
 

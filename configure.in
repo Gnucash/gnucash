@@ -139,7 +139,18 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
 
 if test "x$native_win32" = "xyes" ; then
   HTMLHELP_LIBS=
-  AC_CHECK_HEADERS(htmlhelp.h,[HTMLHELP_LIBS=-lhtmlhelp],,[#include <windows.h>])
+  AC_MSG_CHECKING(for HtmlHelpW)
+  saved_LIBS="${LIBS}"
+  LIBS="${LIBS} -lhtmlhelp"
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <windows.h>
+  #include <htmlhelp.h>]], [HtmlHelpW(0, (wchar_t*)"", HH_HELP_CONTEXT, 0);])], [
+    AC_MSG_RESULT(yes)
+    HTMLHELP_LIBS=-lhtmlhelp
+    AC_DEFINE(HAVE_HTMLHELPW,1,[System has HtmlHelpW])
+  ], [
+    AC_MSG_RESULT(no)
+  ])
+  LIBS="${saved_LIBS}"
   AC_SUBST(HTMLHELP_LIBS)
 fi
 ##################################################
