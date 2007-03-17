@@ -46,6 +46,32 @@
 #define XACC_ACCOUNT_H
 #include "qof.h"
 #include "gnc-engine.h"
+#include <glib-object.h>
+
+/* GObject declarations */
+
+#define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
+#define GNC_ACCOUNT(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT, Account))
+#define GNC_ACCOUNT_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ACCOUNT, AccountClass))
+#define GNC_IS_ACCOUNT(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT))
+#define GNC_IS_ACCOUNT_CLASS(k)     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT))
+#define GNC_ACCOUNT_GET_CLASS(o)    (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
+
+
+typedef struct _GncAccountClass GncAccountClass;
+//typedef struct _GncAccount Account;
+typedef struct _GncAccountPrivate GncAccountPrivate;
+
+struct _GncAccountClass {
+	GObjectClass parent_class;
+	/* virtual table */
+
+	/* Add Signal Functions Here */
+};
+
+GType   gnc_account_get_type (void);
+
+/*******/
 
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
@@ -58,9 +84,6 @@ typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
 
 typedef void (*AccountCb)(Account *a, gpointer data);
 typedef gpointer (*AccountCb2)(Account *a, gpointer data);
-
-#define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
-#define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
 
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed

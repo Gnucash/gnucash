@@ -53,8 +53,10 @@
 */
 
 /** \struct Account */
-struct account_s
+struct _GncAccount
 {
+  GObject object;
+  
   QofInstance inst;
 
   /* The accountName is an arbitrary string assigned by the user. 

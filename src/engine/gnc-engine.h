@@ -130,7 +130,7 @@
  * defined in the private header AccountP.h, but no one outside the
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
-typedef struct account_s             Account;
+typedef struct _GncAccount             Account;
 
 /** @brief Split in Gnucash. 
  * A "split" is more commonly refered to as a "entry" in a

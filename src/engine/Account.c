@@ -48,6 +48,130 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 static gchar account_separator[8] = ".";
 gunichar account_uc_separator = ':';
 
+/* GObject declarations */
+
+static void gnc_account_class_init(GncAccountClass *klass);
+static void gnc_account_init(Account *sp);
+static void gnc_account_finalize(GObject *object);
+static void gnc_account_set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+static void gnc_account_get_property (GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+struct _GncAccountPrivate
+{
+
+};
+
+typedef struct _GncAccountSignal GncAccountSignal;
+typedef enum _GncAccountSignalType GncAccountSignalType;
+
+enum _GncAccountSignalType {
+	/* Signals */
+	FIRST_SIGNAL,
+	LAST_SIGNAL
+};
+
+/* properties */
+enum
+{
+        PROP_0
+};
+
+struct _GncAccountSignal {
+	Account *object;
+};
+
+static guint gnc_account_signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_account_get_type(void)
+{
+	static GType type = 0;
+
+	if(type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncAccountClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_account_class_init,
+			NULL,
+			NULL,
+			sizeof (Account),
+			0,
+			(GInstanceInitFunc)gnc_account_init,
+		};
+
+		type = g_type_register_static(G_TYPE_OBJECT, 
+			"GncAccount", &our_info, 0);
+	}
+
+	return type;
+}
+
+static void
+gnc_account_class_init(GncAccountClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+
+	parent_class = g_type_class_peek_parent(klass);
+	object_class->finalize = gnc_account_finalize;
+	object_class->set_property = gnc_account_set_property;
+    object_class->get_property = gnc_account_get_property;
+
+	/* Install properties */
+	
+	/* Create signals here:*/
+	
+	
+ 	
+}
+
+static void
+gnc_account_init(Account *acc)
+{
+
+}
+
+static void
+gnc_account_finalize(GObject *object)
+{
+
+}
+
+static void
+gnc_account_set_property (GObject *object,
+				  guint param_id,
+				  const GValue *value,
+				  GParamSpec *pspec)
+{
+	Account *obj;
+	
+	obj = GNC_ACCOUNT (object);
+	switch (param_id) {		
+		default:
+   			/* We don't have any other property... */
+    		G_OBJECT_WARN_INVALID_PROPERTY_ID(object,param_id,pspec);
+    	break;
+	}
+}
+
+static void
+gnc_account_get_property (GObject      *object,
+                        guint         property_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  Account *obj;
+  
+  obj = GNC_ACCOUNT(object);
+
+  switch (property_id) {
+  default:
+    /* We don't have any other property... */
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object,property_id,pspec);
+    break;
+  }
+}
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend to!  These functions perform actions on the        *
