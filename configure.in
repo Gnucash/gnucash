@@ -1127,6 +1127,7 @@ then
         AC_MSG_NOTICE([Found libgtkhtml-3.14, but goffice lacks a cairo renderer])
       else
         gtkhtml=1
+        AC_DEFINE(GTKHTML_USES_GTKPRINT,1,[GtkHTML uses GtkPrint for printing operations])
       fi
     ], [gtkhtml=0])
     if test x$gtkhtml = x0

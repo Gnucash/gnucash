@@ -1210,6 +1210,38 @@ gnc_html_export(gnc_html * html, const char *filepath)
   return TRUE;
 }
 
+#if GTKHTML_USES_GTKPRINT
+
+static void
+draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
+             gint page_nr, gpointer user_data)
+{
+    gnc_html *html = user_data;
+
+    gtk_html_print_page((GtkHTML*) html->html, context);
+}
+
+void
+gnc_html_print(gnc_html *html)
+{
+    GtkPrintOperation *print;
+    GtkPrintOperationResult res;
+
+    print = gtk_print_operation_new();
+    gnc_restore_print_settings(print);
+    gtk_print_operation_set_n_pages(print, 1);
+    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
+
+    res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                  GTK_WINDOW(html->window), NULL);
+
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
+        gnc_save_print_settings(print);
+
+    g_object_unref(print);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 void
 gnc_html_print(gnc_html * html)
 {
@@ -1224,6 +1256,7 @@ gnc_html_print(gnc_html * html)
   gtk_html_print(GTK_HTML(html->html), ps->context);
   gnc_print_session_done(ps);
 }
+#endif /* GTKHTML_USES_GTKPRINT */
 
 gnc_html_history * 
 gnc_html_get_history(gnc_html * html)

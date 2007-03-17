@@ -82,6 +82,23 @@ void gnc_print_session_destroy(PrintSession * ps);
  */
 void gnc_print_session_done(PrintSession * ps);
 
+
+#if HAVE_GTK_2_10
+/** Get the print settings of a given GtkPrintOperation and store them in a
+ *  static variable.  Previous values will be overwritten.
+ *
+ *  @param print A pointer to a print operation.
+ */
+void gnc_save_print_settings(GtkPrintOperation *print);
+
+/** After a previous call to gnc_save_print_settings, set the print settings of a
+ *  given GtkPrintOperation to the stored value.  Otherwise, do nothing.
+ *
+ *  @param print A pointer to a print operation.
+ */
+void gnc_restore_print_settings(GtkPrintOperation *print);
+#endif
+
 /** @} */
 /** @} */
 

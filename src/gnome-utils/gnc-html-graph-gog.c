@@ -67,7 +67,11 @@ static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
+#else
 static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
+#endif
 
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
 
@@ -552,6 +556,23 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   return TRUE;
 }
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void
+draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
+{
+  GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
+  GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
+                                        "cairo", cr, "is-vector", TRUE, NULL);
+
+  /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
+  cairo_scale(cr, 0.5, 0.5);
+
+  cairo_translate(cr, 0, -eb->height);
+  gog_renderer_cairo_update(rend, eb->width, eb->height, 1.0);
+  g_object_unref(rend);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
 {
@@ -563,3 +584,4 @@ draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
   gnome_print_translate (context, 0, eb->height);
   gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
 }
+#endif /* GTKHTML_USES_GTKPRINT */

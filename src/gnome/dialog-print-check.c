@@ -94,7 +94,6 @@
 
 #if USE_GTKPRINT
 #    define GncPrintContext GtkPrintContext
-static GtkPrintSettings *settings = NULL;
 #else
 #    define GncPrintContext GnomePrintContext
 #endif
@@ -1744,8 +1743,7 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 
     print = gtk_print_operation_new();
 
-    if (settings != NULL)
-        gtk_print_operation_set_print_settings(print, settings);
+    gnc_restore_print_settings(print);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_use_full_page(print, TRUE);
     g_signal_connect(print, "begin_print", G_CALLBACK(begin_print), NULL);
@@ -1755,11 +1753,8 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
                                   GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                   pcd->caller_window, NULL);
 
-    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
-        if (settings != NULL)
-            g_object_unref(settings);
-        settings = g_object_ref(gtk_print_operation_get_print_settings(print));
-    }
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
+        gnc_save_print_settings(print);
 
     g_object_unref(print);
 }
