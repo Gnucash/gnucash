@@ -36,6 +36,7 @@ AC_DEFUN([PKG_CHECK_MODULES], [
             $1_LIBS=`$PKG_CONFIG --libs "$2"`
             AC_MSG_RESULT($$1_LIBS)
         else
+            AC_MSG_RESULT(no)
             $1_CFLAGS=""
             $1_LIBS=""
             ## If we have a custom action on failure, don't print errors, but 

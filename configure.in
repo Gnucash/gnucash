@@ -1100,9 +1100,7 @@ then
     AC_SUBST(GLADE_LIBS)
 
     PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
-      AC_MSG_RESULT(no)
       PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
-        AC_MSG_RESULT(no)
         AC_MSG_ERROR([Cannot find libgoffice.])
       ])
     ])
