@@ -137,6 +137,13 @@ esac
 AC_MSG_RESULT($platform_win32)
 AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform_win32" = "xyes")
 
+if test "$platform_win32" = yes; then
+  REGEX_LIBS="-lregex"
+else
+  REGEX_LIBS=""
+fi
+AC_SUBST(REGEX_LIBS)
+
 if test "x$native_win32" = "xyes" ; then
   HTMLHELP_LIBS=
   AC_MSG_CHECKING(for HtmlHelpW)
@@ -1052,6 +1059,17 @@ then
     HAVE_UNTESTED_GDK=yes
     HAVE_UNTESTED_GTK=yes
 
+    AC_MSG_CHECKING(for GTK - version >= 2.10.0)
+    if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
+    then
+      AC_MSG_RESULT(yes)
+      AC_DEFINE(HAVE_GTK_2_10,1,[System has gtk 2.10.0 or better])
+      HAVE_GTK_2_10=yes
+    else
+      AC_MSG_RESULT(no)
+    fi
+    AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
+
     PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
@@ -1081,21 +1099,49 @@ then
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
 
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
+      AC_MSG_RESULT(no)
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR([Cannot find libgoffice.])
+      ])
+    ])
+    AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
+    AC_SUBST(GOFFICE_CFLAGS)
+    AC_SUBST(GOFFICE_LIBS)
+
+    saved_CPPFLAGS="${CPPFLAGS}"
+    CPPFLAGS="${GOFFICE_CFLAGS} ${CPPFLAGS}"
+    AC_CHECK_HEADER(goffice/graph/gog-renderer-cairo.h, [
+      AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
+      goffice_with_cairo=yes
+    ], [
+      goffice_with_cairo=no
+    ])
+    CPPFLAGS="${saved_CPPFLAGS}"
+
     # check for gtkhtml 3.x versions.
     gtkhtml=0
-    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1] , [gtkhtml=0])
+    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
+      if test "x$HAVE_GTK_2_10" != "xyes"; then
+        AC_MSG_NOTICE([Found libgtkhtml-3.14, but not gtk+-2.0 >= 2.10])
+      elif test "x$goffice_with_cairo" != "xyes"; then
+        AC_MSG_NOTICE([Found libgtkhtml-3.14, but goffice lacks a cairo renderer])
+      else
+        gtkhtml=1
+      fi
+    ], [gtkhtml=0])
     if test x$gtkhtml = x0
-      then
-    	PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 , [gtkhtml=1] , [gtkhtml=0])
-    	if test x$gtkhtml = x0
-    	  then
-    	     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , [gtkhtml=1] , [gtkhtml=0])
-    	     if test x$gtkhtml = x0
-    	       then 
-    	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1],
-                                    AC_MSG_ERROR([Could not find a working gtkhtml version (need 3.1, 3.2, 3.6, or 3.8)]))
-    	    fi
-    	fi
+    then
+      PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1], [
+        PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 , [gtkhtml=1], [
+          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , [gtkhtml=1], [
+            PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1], [
+              AC_MSG_ERROR([Could not find a working gtkhtml version (need 3.1, 3.2, 3.6, 3.8 or 3.14)])
+            ])
+          ])
+        ])
+      ])
     fi
     AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
 dnl if Mac OSX, also scrub /sw/include
@@ -1139,53 +1185,7 @@ else
      # We should always see these errors...
      CFLAGS="${CFLAGS} -Wall"
   fi
-fi
 
-### ------------------------------------------------------------------------
-### GOG/goffice, etc...
-### Only test this if we're building the GUI
-if test x${gnc_build_gui} = xtrue ;
-then
-  AC_MSG_CHECKING(for GTK - version >= 2.10.0)
-  if $PKG_CONFIG 'gtk+-2.0 >= 2.10.0'
-  then
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_GTK_2_10,1,[System has gtk 2.10.0 or better])
-    HAVE_GTK_2_10=yes
-  else
-    AC_MSG_RESULT(no)
-  fi
-  AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
-
-  dnl $4=true => don't die if failure.
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
-    AC_MSG_RESULT(no)
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
-      AC_MSG_RESULT(no)
-      AC_MSG_ERROR([Cannot find libgoffice.])
-    ])
-  ])
-  AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
-  AC_SUBST(GOFFICE_CFLAGS)
-  AC_SUBST(GOFFICE_LIBS)
-
-  saved_CPPFLAGS="${CPPFLAGS}"
-  CPPFLAGS="${GOFFICE_CFLAGS} ${CPPFLAGS}"
-  AC_CHECK_HEADER(goffice/graph/gog-renderer-cairo.h,
-    [AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])])
-  CPPFLAGS="${saved_CPPFLAGS}"
-
-  ##################################################
-  # regex needs its own linker flag on win32 platform
-  ##################################################
-  if test "$platform_win32" = yes; then
-    REGEX_LIBS="-lregex"
-  else
-    REGEX_LIBS=""
-  fi
-  AC_SUBST(REGEX_LIBS)
-
-else
   ### AM conditionals that need to be set
   AM_CONDITIONAL(HAVE_GTK_2_10, false)
 fi
