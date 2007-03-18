@@ -105,35 +105,3 @@ gnc_print_session_done(PrintSession * ps)
       break;
   }
 }
-
-#ifdef HAVE_GTK_2_10
-
-static GtkPrintSettings *print_settings = NULL;
-G_LOCK_DEFINE_STATIC(print_settings);
-
-void
-gnc_save_print_settings(GtkPrintOperation *print)
-{
-    g_return_if_fail(print);
-
-    G_LOCK(print_settings);
-    if (print_settings)
-        g_object_unref(print_settings);
-
-    print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
-    G_UNLOCK(print_settings);
-}
-
-void
-gnc_restore_print_settings(GtkPrintOperation *print)
-{
-    g_return_if_fail(print);
-
-    G_LOCK(print_settings);
-    if (print_settings)
-        gtk_print_operation_set_print_settings(print, print_settings);
-
-    G_UNLOCK(print_settings);
-}
-
-#endif /* HAVE_GTK_2_10 */

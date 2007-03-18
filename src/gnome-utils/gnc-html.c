@@ -107,6 +107,12 @@ static char error_404_title[] = N_("Not found");
 static char error_404_body[] = 
 N_("The specified URL could not be loaded.");
 
+#ifdef GTKHTML_USES_GTKPRINT
+static GtkPrintSettings *print_settings = NULL;
+G_LOCK_DEFINE_STATIC(print_settings);
+#endif
+
+
 static char * 
 extract_machine_name(const gchar * path)
 {
@@ -1210,8 +1216,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
   return TRUE;
 }
 
-#if GTKHTML_USES_GTKPRINT
-
+#ifdef GTKHTML_USES_GTKPRINT
 static void
 draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
              gint page_nr, gpointer user_data)
@@ -1228,15 +1233,25 @@ gnc_html_print(gnc_html *html)
     GtkPrintOperationResult res;
 
     print = gtk_print_operation_new();
-    gnc_restore_print_settings(print);
+
+    G_LOCK(print_settings);
+    if (print_settings)
+        gtk_print_operation_set_print_settings(print, print_settings);
+    G_UNLOCK(print_settings);
+
     gtk_print_operation_set_n_pages(print, 1);
     g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
 
     res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
                                   GTK_WINDOW(html->window), NULL);
 
-    if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
-        gnc_save_print_settings(print);
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
+        G_LOCK(print_settings);
+        if (print_settings)
+            g_object_unref(print_settings);
+        print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
+        G_UNLOCK(print_settings);
+    }
 
     g_object_unref(print);
 }
