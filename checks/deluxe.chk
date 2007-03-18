@@ -1,9 +1,10 @@
 [Top]
+Guid = 54a0fef9-0b7e-462b-8af3-a5f4f328f7bc
 Title = Deluxe(tm) Personal Checks US-Letter
 Rotation = -90.0
 Translation = 4;492
-Show_Grid = 0
-Show_Boxes = 0
+Show_Grid = false
+Show_Boxes = false
 
 [Check Items]
 Type_1 = PAYEE

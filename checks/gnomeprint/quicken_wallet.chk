@@ -1,9 +1,10 @@
 [Top]
+Guid = 617da3b6-21d8-4340-af07-6a4f38bdeb3f
 Title = Quicken(tm) Wallet Checks w/ side stub
 Rotation = 0.0
 Translation = 0.0;0.0
-Show_Grid = 0
-Show_Boxes = 0
+Show_Grid = false
+Show_Boxes = false
 
 [Check Positions]
 Height = 204.0

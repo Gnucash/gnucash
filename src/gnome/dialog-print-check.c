@@ -55,6 +55,7 @@
 #define G_LOG_DOMAIN "gnc.printing.checks"
 
 #define GCONF_SECTION 	       "dialogs/print_checks"
+#define KEY_CHECK_FORMAT_GUID  "check_format_guid"
 #define KEY_CHECK_FORMAT       "check_format"
 #define KEY_CHECK_POSITION     "check_position"
 #define KEY_DATE_FORMAT_USER   "date_format_custom"
@@ -78,6 +79,7 @@
 #define KF_GROUP_TOP       "Top"
 #define KF_GROUP_POS       "Check Positions"
 #define KF_GROUP_ITEMS     "Check Items"
+#define KF_KEY_GUID        "Guid"
 #define KF_KEY_TITLE       "Title"
 #define KF_KEY_ROTATION    "Rotation"
 #define KF_KEY_TRANSLATION "Translation"
@@ -92,10 +94,25 @@
 #define KF_KEY_TEXT        "Text"
 #define KF_KEY_FILENAME    "Filename"
 
+/**< This enum specifies the columns used in the check format combobox. */
+typedef enum format_combo_col_t {
+    COL_NAME = 0,               /**< This column holds a copy of the check
+                                 *   format name and is what is displayed to
+                                 *   the user in the combobox. It is NULL for
+                                 *   separator lines. */
+    COL_DATA,                   /**< This column holds a pointer to the check
+                                 *   format data read in from a file.  It is
+                                 *   NULL for the custom check format and for
+                                 *   separator lines. */
+    COL_SEP,                    /**< This column contains the value TRUE if
+                                 *   this enry specifies a separator line. */
+} format_combo_col;
+
 #if USE_GTKPRINT
 #    define GncPrintContext GtkPrintContext
 #else
 #    define GncPrintContext GnomePrintContext
+#    define GNOMEPRINT_CLIP_EXTRA 2
 #endif
 
 
@@ -103,9 +120,6 @@
 void gnc_ui_print_check_response_cb(GtkDialog * dialog, gint response, PrintCheckDialog * pcd);
 void gnc_print_check_format_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
 void gnc_print_check_position_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
-static void gnc_ui_print_save_dialog(PrintCheckDialog * pcd);
-static void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
-void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
 void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd);
 
 
@@ -171,6 +185,13 @@ typedef struct _check_item {
  *  description in a text file. */
 typedef struct _check_format {
 
+    gchar *guid;                /**< Unique identifier for this format. */
+
+    const gchar *group;         /**< The group where this format was found. */
+
+    gchar *filename;            /**< The name of the file from which this data
+                                 *   was read.  */
+
     gchar *title;               /**< Title of this check format. Displayed to
                                  *   user in the dialog box. */
 
@@ -227,9 +248,42 @@ struct _print_check_dialog {
 
   gchar *format_string;
 
-  GSList *formats_list;
   check_format_t *selected_format;
 };
+
+
+/**< This function walks ths list of available check formats looking for a
+ * specific format as specified by guid number.  If found, a pointer to the
+ * check format is returned to the caller.  Additionally, if the caller passed
+ * a pointer to a GtkTreeIter, then the iter for that entry will also be
+ * returned. */
+static check_format_t *
+find_existing_format (GtkListStore *store, gchar *guid, GtkTreeIter *iter_out)
+{
+    GtkTreeIter iter;
+    check_format_t *format;
+
+    g_return_val_if_fail(store, NULL);
+    g_return_val_if_fail(guid, NULL);
+
+    if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
+        return NULL;
+
+    do {
+        gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
+                           COL_DATA, &format, -1);
+        if (format == NULL)
+            continue;
+        if (strcmp(format->guid, guid) != 0)
+            continue;
+
+        if (iter_out)
+          *iter_out = iter;
+        return format;
+    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
+
+    return NULL;
+}
 
 
 static void
@@ -263,12 +317,20 @@ get_float_pair (const char *section, const char *key, double *a, double *b)
 static void
 gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
 {
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  check_format_t *check;
   const gchar *format;
   gint active;
 
   /* Options page */
-  active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->format_combobox));
-  gnc_gconf_set_int(GCONF_SECTION, KEY_CHECK_FORMAT, active, NULL);
+  if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox),
+                                    &iter)) {
+      model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+      gtk_tree_model_get(model, &iter, COL_DATA, &check, -1);
+      gnc_gconf_set_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID,
+                           check ? check->guid : "custom", NULL);
+  }
   active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
   gnc_gconf_set_int(GCONF_SECTION, KEY_CHECK_POSITION, active, NULL);
   active = gnc_date_format_get_format (GNC_DATE_FORMAT(pcd->date_format));
@@ -306,16 +368,29 @@ gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
   gnc_gconf_set_int(GCONF_SECTION, KEY_CUSTOM_UNITS, active, NULL);
 }
 
-void
+static void
 gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
 {
-  gchar *format;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gchar *format, *guid;
   gdouble x, y;
   gint active;
 
   /* Options page */
-  active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_FORMAT, NULL);
-  gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), active);
+  guid = gnc_gconf_get_string(GCONF_SECTION, KEY_CHECK_FORMAT_GUID, NULL);
+  if (guid == NULL) {
+      active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_FORMAT, NULL);
+      gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), active);
+  } else if (strcmp(guid, "custom") == 0) {
+      gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
+                               pcd->format_max - 1);
+  } else {
+      model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+      if (find_existing_format(GTK_LIST_STORE(model), guid, &iter)) {
+          gtk_combo_box_set_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &iter);
+      }
+  }
   active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_POSITION, NULL);
   gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), active);
   active = gnc_gconf_get_int(GCONF_SECTION, KEY_DATE_FORMAT, NULL);
@@ -422,10 +497,15 @@ pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
     GtkWidget *dialog;
     gdouble multip;
     gint i = 0;
+    GUID guid;
+    char buf[GUID_ENCODING_LENGTH+1];
 
     multip = pcd_get_custom_multip(pcd);
 
     key_file = g_key_file_new();
+    guid_new(&guid);
+    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_GUID,
+                          guid_to_string_buff(&guid, buf));
     g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE,
                           _("Custom Check"));
     g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, FALSE);
@@ -777,9 +857,23 @@ format_read_general_info(const gchar * file,
                          GKeyFile * key_file, check_format_t * format)
 {
     GError *error = NULL;
+    gchar **parts;
     gchar *value;
     double *dd;
     gsize dd_len;
+
+    value = g_key_file_get_string(key_file, KF_GROUP_TOP, KF_KEY_GUID, &error);
+    if (error) {
+        g_warning("Check file %s, group %s, key %s, error: %s",
+                  file, KF_GROUP_TOP, KF_KEY_GUID, error->message);
+        g_error_free(error);
+        return FALSE;
+    }
+    parts = g_strsplit(value, "-", -1);
+    format->guid = g_strjoinv("", parts);
+    g_strfreev(parts);
+    g_debug("Check file %s, group %s, key %s, value: %s",
+            file, KF_GROUP_TOP, KF_KEY_GUID, format->guid);
 
     format->title =
         g_key_file_get_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE, &error);
@@ -882,6 +976,8 @@ format_read_general_info(const gchar * file,
 static void
 free_check_format(check_format_t * data)
 {
+    g_free(data->guid);
+    g_free(data->filename);
     g_free(data->title);
     g_free(data->font);
     g_slist_foreach(data->positions, (GFunc) free_check_position, NULL);
@@ -895,8 +991,8 @@ free_check_format(check_format_t * data)
 /** Read a single check format file and append the resulting format to the
  *  list of all known formats.  This function calls other functions to read
  *  each section of the data file. */
-static void
-read_one_check_format(PrintCheckDialog * pcd,
+static check_format_t *
+read_one_check_format(PrintCheckDialog * pcd, const gchar *groupname,
                       const gchar * dirname, const gchar * file)
 {
     gchar *pathname;
@@ -908,10 +1004,12 @@ read_one_check_format(PrintCheckDialog * pcd,
     g_free(pathname);
     if (!key_file) {
         g_warning("Check file %s, cannot load file", file);
-        return;
+        return NULL;
     }
 
     format = g_new0(check_format_t, 1);
+    format->group = groupname;
+    format->filename = g_strdup(file);
     if (format_read_general_info(file, key_file, format)) {
         format->positions = format_read_multicheck_info(file, key_file, format);
         format->items = format_read_item_placement(file, key_file, format);
@@ -921,10 +1019,10 @@ read_one_check_format(PrintCheckDialog * pcd,
     if ((NULL == format->title) || (NULL == format->items)) {
         g_warning("Check file %s, no items read. Dropping file.", file);
         free_check_format(format);
-        return;
+        return NULL;
     }
 
-    pcd->formats_list = g_slist_append(pcd->formats_list, format);
+    return format;
 }
 
 
@@ -932,20 +1030,59 @@ read_one_check_format(PrintCheckDialog * pcd,
  *  then calling a helper function to read and parse the check format withing
  *  the file. */
 static void
-read_one_check_directory(PrintCheckDialog * pcd, const gchar * dirname)
+read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
+                         const gchar *groupname, const gchar * dirname)
 {
+    check_format_t *format, *existing;
     GDir *dir;
     const gchar *filename;
+    GtkTreeIter iter;
+    GtkWidget *dialog;
+    gboolean found = FALSE;
 
     dir = g_dir_open(dirname, 0, NULL);
-    if (dir) {
-        while ((filename = g_dir_read_name(dir)) != NULL) {
-            if (g_str_has_prefix(filename, "#"))
-                continue;
-            if (g_str_has_suffix(filename, ".chk"))
-                read_one_check_format(pcd, dirname, filename);
+    if (dir == NULL)
+        return;
+
+    while ((filename = g_dir_read_name(dir)) != NULL) {
+        if (g_str_has_prefix(filename, "#"))
+            continue;
+        if (!g_str_has_suffix(filename, ".chk"))
+            continue;
+
+        format = read_one_check_format(pcd, groupname, dirname, filename);
+        if (NULL == format)
+            continue;
+
+        existing = find_existing_format(store, format->guid, NULL);
+        if (existing) {
+            dialog = gtk_message_dialog_new
+                (GTK_WINDOW(pcd->dialog),
+                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+                 _("There is a duplicate check format file."));
+            gtk_message_dialog_format_secondary_text
+                (GTK_MESSAGE_DIALOG(dialog),
+                 _("The guids in the %s check format file '%s' and "
+                   "the %s check format file '%s' match."),
+                 existing->group, existing->filename,
+                 format->group, format->filename);
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+        } else {
+            gtk_list_store_append(store, &iter);
+            gtk_list_store_set(store, &iter, COL_NAME, format->title,
+                               COL_DATA, format, -1);
+            found = TRUE;
         }
-        g_dir_close(dir);
+    }
+    g_dir_close(dir);
+
+    /* If any files were added to the list, add a separator between
+     *  this group and the next. */
+    if (found) {
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, COL_SEP, TRUE, -1);
     }
 }
 
@@ -954,19 +1091,29 @@ read_one_check_directory(PrintCheckDialog * pcd, const gchar * dirname)
  *  for check files, and then looks in the user's .gnucash directory for any
  *  custom check files. */
 static void
-read_formats(PrintCheckDialog * pcd)
+read_formats(PrintCheckDialog * pcd, GtkListStore *store)
 {
     gchar *dirname, *pkgdatadir;
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, (char *)NULL);
-    read_one_check_directory(pcd, dirname);
+    read_one_check_directory(pcd, store, _("application"), dirname);
     g_free(dirname);
     g_free(pkgdatadir);
 
     dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
-    read_one_check_directory(pcd, dirname);
+    read_one_check_directory(pcd, store, _("user"), dirname);
     g_free(dirname);
+}
+
+
+static gboolean
+format_is_a_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+    gboolean separator;
+
+    gtk_tree_model_get(model, iter, COL_SEP, &separator, -1);
+    return separator;
 }
 
 
@@ -983,8 +1130,8 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   GladeXML *xml;
   GtkWidget *table;
   GtkWindow *window;
-  GSList *elem;
   GtkListStore *store;
+  GtkTreeIter iter;
 
   pcd = g_new0(PrintCheckDialog, 1);
   pcd->plugin_page = plugin_page;
@@ -995,8 +1142,6 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 
   pcd->xml = xml;
   pcd->dialog = glade_xml_get_widget (xml, "Print Check Dialog");
-
-  read_formats(pcd);
 
   /* now pick out the relevant child widgets */
   pcd->format_combobox = glade_xml_get_widget (xml, "check_format_combobox");
@@ -1034,15 +1179,15 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 2, 7);
 
   /* Update the combo boxes bases on the available check formats */
-  store = gtk_list_store_new (1, G_TYPE_STRING);
+  store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+  read_formats(pcd, store);
+  gtk_list_store_append(store, &iter);
+  gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
+  pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store),NULL);
   gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
                           GTK_TREE_MODEL(store));
-  for (elem = pcd->formats_list; elem; elem = g_slist_next(elem)) {
-    gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->format_combobox),
-                              ((check_format_t*)elem->data)->title);
-  }
-  gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->format_combobox), _("Custom"));
-  pcd->format_max = g_slist_length(pcd->formats_list); /* -1 for 0 base, +1 for custom entry*/
+  gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
+                                       format_is_a_separator, NULL, NULL);
 
 #if USE_GTKPRINT
   gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
@@ -1139,7 +1284,7 @@ draw_grid(GncPrintContext * context, gint width, gint height)
     cairo_restore(cr);
     g_object_unref(layout);
 #else
-    gnome_print_gsave(context);
+    gnome_print_grestore(context);
 #endif
 }
 
@@ -1197,9 +1342,30 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     g_object_unref(layout);
     return width;
 #else
+    gdouble x0, x1, y0, y1;
+
+    /* Clip text to the enclosing rectangle */
+    gnome_print_gsave(context);
+    if (data->w && data->h) {
+        g_debug("Text clip rectangle, coords %f,%f, size %f,%f",
+                data->x, data->y - data->h, data->w, data->h);
+        x0 = data->x - GNOMEPRINT_CLIP_EXTRA;
+        x1 = data->x + data->w + GNOMEPRINT_CLIP_EXTRA;
+        y0 = data->y - GNOMEPRINT_CLIP_EXTRA;
+        y1 = data->y + data->h + GNOMEPRINT_CLIP_EXTRA;
+        gnome_print_moveto(context, x0, y0);
+        gnome_print_lineto(context, x0, y1);
+        gnome_print_lineto(context, x1, y1);
+        gnome_print_lineto(context, x1, y0);
+        gnome_print_lineto(context, x0, y0);
+        gnome_print_clip(context);
+    }
+
+    /* Draw the text */
     g_debug("Text move to %f,%f, print '%s'", data->x, data->y, text);
     gnome_print_moveto(context, data->x, data->y);
     gnome_print_show(context, text);
+    gnome_print_grestore(context);
     return 0.0;
 #endif
 }
@@ -1480,7 +1646,7 @@ draw_page_items(GncPrintContext * context,
 #endif
 
             default:
-                text = g_strdup_printf("(unknown check field %d)", item->type);
+                text = g_strdup_printf("(unknown check field, type %d)", item->type);
                 draw_text(context, text, item, default_desc);
                 g_free(text);
         }
@@ -1811,25 +1977,31 @@ void
 gnc_print_check_format_changed (GtkComboBox *widget,
                                 PrintCheckDialog * pcd)
 {
-  GtkListStore *store;
+  GtkListStore *p_store;
+  GtkTreeModel *f_model;
+  GtkTreeIter f_iter;
   gboolean sensitive;
-  gint fnum, pnum;
+  gint pnum;
   check_format_t *format;
+  gboolean separator;
   GSList *elem;
 
-  fnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->format_combobox));
-  if (-1 == fnum)
+  if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &f_iter))
     return;
+  f_model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+  gtk_tree_model_get(f_model, &f_iter, COL_DATA, &format, COL_SEP, &separator, -1);
+  if (separator)
+    return;
+
   pnum = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
 
   /* Update the positions combobox */
-  format = g_slist_nth_data(pcd->formats_list, fnum);
   pcd->selected_format = format;
   g_signal_handlers_block_by_func(pcd->position_combobox,
                                   gnc_print_check_position_changed, pcd);
-  store = gtk_list_store_new (1, G_TYPE_STRING);
+  p_store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->position_combobox),
-                          GTK_TREE_MODEL(store));
+                          GTK_TREE_MODEL(p_store));
   if (format) {
     pcd->position_max = g_slist_length(format->positions); /* -1 for 0 base, +1 for custom entry */
     for (elem = format->positions; elem; elem = g_slist_next(elem)) {
@@ -1849,7 +2021,7 @@ gnc_print_check_format_changed (GtkComboBox *widget,
   gtk_widget_set_sensitive(GTK_WIDGET(pcd->position_combobox), sensitive);
   
   /* Update the custom page */
-  sensitive = (fnum == pcd->format_max);
+  sensitive = (!separator && !format);
   gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
 			gnc_print_check_set_sensitive,
 			GINT_TO_POINTER(sensitive));
@@ -1882,7 +2054,5 @@ gnc_ui_print_check_response_cb(GtkDialog * dialog,
 
   gtk_widget_destroy(pcd->dialog);
   g_object_unref(pcd->xml);
-  g_slist_foreach(pcd->formats_list, (GFunc)free_check_format, NULL);
-  g_slist_free(pcd->formats_list);
   g_free(pcd);
 }

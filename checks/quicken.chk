@@ -1,9 +1,10 @@
 [Top]
+Guid = 67b144d1-96a5-48d5-9337-0e1083bbf229
 Title = Quicken/QuickBooks (tm) US-Letter
 Rotation = 0.0
 Translation = 0.0;4.0
-Show_Grid = 0
-Show_Boxes = 0
+Show_Grid = false
+Show_Boxes = false
 
 [Check Positions]
 Height = 252.0
