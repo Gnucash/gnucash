@@ -73,9 +73,9 @@ August 22, 2000
 TIPS AND HINTS
 ==============
 
-Starting Gnucash from the build tree
+Starting GnuCash from the build tree
 ------------------------------------
-Don't.  --prefix your build into /opt/gnc/svn/ (or some such).
+This is known to not work very well.  Instead, `--prefix` your build into /opt/gnc/svn/ (or some such).
 
 Getting Trace Messages From GnuCash
 -----------------------------------
