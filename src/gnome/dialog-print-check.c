@@ -1335,7 +1335,8 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     }
 
     /* Draw the text */
-    g_debug("Text move to %f,%f, print '%s'", data->x, data->y, text);
+    g_debug("Text move to %f,%f, print '%s'", data->x, data->y,
+            text ? text : "(null)");
     cairo_move_to(cr, data->x, data->y - height);
     pango_cairo_show_layout(cr, layout);
 
@@ -1364,7 +1365,8 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     }
 
     /* Draw the text */
-    g_debug("Text move to %f,%f, print '%s'", data->x, data->y, text);
+    g_debug("Text move to %f,%f, print '%s'", data->x, data->y,
+            text ? text : "(null)");
     gnome_print_moveto(context, data->x, data->y);
     gnome_print_show(context, text);
     gnome_print_grestore(context);
