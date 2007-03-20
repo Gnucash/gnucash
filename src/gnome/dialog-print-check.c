@@ -87,7 +87,7 @@
 #define KF_KEY_ALIGN       "Align"
 #define KF_KEY_SHOW_GRID   "Show_Grid"
 #define KF_KEY_SHOW_BOXES  "Show_Boxes"
-#define KF_KEY_NAME        "Name"
+#define KF_KEY_NAMES       "Names"
 #define KF_KEY_HEIGHT      "Height"
 #define KF_KEY_TYPE        "Type"
 #define KF_KEY_COORDS      "Coords"
@@ -798,8 +798,9 @@ format_read_multicheck_info(const gchar * file,
 {
     GError *error = NULL;
     GSList *list = NULL;
-    gchar *key, *name;
-    int i;
+    gchar *key, **names;
+    gsize length;
+    gint i;
 
     key = g_strdup_printf("%s", KF_KEY_HEIGHT);
     format->height = g_key_file_get_double(key_file, KF_GROUP_POS, key, &error);
@@ -813,32 +814,30 @@ format_read_multicheck_info(const gchar * file,
             g_warning("Check file %s, error reading group %s, key %s: %s",
                       file, KF_GROUP_POS, key, error->message);
             g_free(key);
-            return list;
+            return NULL;
         }
     }
 
-    for (i = 1;; i++) {
-        key = g_strdup_printf("%s_%d", KF_KEY_NAME, i);
-        name = g_key_file_get_string(key_file, KF_GROUP_POS, key, &error);
-        if (error) {
-            if ((error->domain == G_KEY_FILE_ERROR)
-                && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
-                    || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND))) {
-                /* This is the expected exit from this function. */
-                g_free(key);
-                return list;
-            }
-            g_warning("Check file %s, error reading group %s, key %s: %s",
-                      file, KF_GROUP_POS, key, error->message);
-            g_free(key);
-            return list;
+    names = g_key_file_get_string_list(key_file, KF_GROUP_POS, KF_KEY_NAMES,
+                                       &length, &error);
+    if (error) {
+        if ((error->domain == G_KEY_FILE_ERROR)
+            && ((error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+                || (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND))) {
+          /* This is the expected exit from this function. */
+          g_free(key);
+          return NULL;
         }
+        g_warning("Check file %s, error reading group %s, key %s: %s",
+                  file, KF_GROUP_POS, key, error->message);
         g_free(key);
-
-        list = g_slist_append(list, name);
+        return list;
     }
 
-    /* Should never be reached. */
+    for (i = 0; i < length; i++)
+      list = g_slist_append(list, g_strdup(names[i]));
+
+    g_strfreev(names);
     return list;
 }
 

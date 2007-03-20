@@ -8,9 +8,7 @@ Show_Boxes = false
 
 [Check Positions]
 Height = 204.0
-Name_1 = Top
-Name_2 = Middle
-Name_3 = Bottom
+Names = Top;Middle;Bottom
 
 [Check Items]
 Type_1 = PAYEE
