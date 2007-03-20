@@ -40,7 +40,9 @@
 #else
 #    include <goffice/graph/gog-renderer-pixbuf.h>
 #endif
-#include <goffice/graph/gog-renderer-gnome-print.h>
+#ifndef GTKHTML_USES_GTKPRINT
+#    include <goffice/graph/gog-renderer-gnome-print.h>
+#endif
 #include <goffice/graph/gog-style.h>
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>

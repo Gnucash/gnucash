@@ -24,6 +24,8 @@
 #ifndef PRINT_SESSION_H
 #define PRINT_SESSION_H
 
+#ifndef GTKHTML_USES_GTKPRINT
+
 /** @addtogroup Printing
     @{ */
 /** @file print-session.h
@@ -84,5 +86,7 @@ void gnc_print_session_done(PrintSession * ps);
 
 /** @} */
 /** @} */
+
+#endif /* GTKHTML_USES_GTKPRINT */
 
 #endif

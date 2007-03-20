@@ -16,7 +16,6 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
@@ -90,7 +89,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
-  print-session.c \
   search-param.c \
   gnc-dialog.c \
   swig-gnome-utils.c \
@@ -181,7 +179,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
@@ -195,7 +192,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h \
+swig-gnome-utils.c: gnome-utils.i gnc-html.h \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
@@ -212,6 +209,14 @@ EXTRA_DIST = \
   gnome-utils.i \
   ${gncmod_DATA} \
   ${gncscm_DATA}
+
+if GTKHTML_USES_GTKPRINT
+  EXTRA_DIST += print-session.c
+else
+  AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
+  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS} \
+  libgncmod_gnome_utils_la_SOURCES += print-session.c
+endif
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

@@ -118,7 +118,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
   ${GNOME_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \

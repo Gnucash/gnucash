@@ -14,8 +14,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${QOF_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS}
+  ${QOF_CFLAGS}
 
 libgncmod_gnome_search_la_SOURCES = \
   gncmod-gnome-search.c \
@@ -62,8 +61,7 @@ libgncmod_gnome_search_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${REGEX_LIBS} \
-  ${QOF_LIBS} \
-  ${GNOME_PRINT_LIBS}
+  ${QOF_LIBS}
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \

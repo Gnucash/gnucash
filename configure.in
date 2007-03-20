@@ -1089,11 +1089,6 @@ then
     AC_SUBST(GDK_PIXBUF_CFLAGS)
     AC_SUBST(GDK_PIXBUF_LIBS)
 
-    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2 libgnomeprintui-2.2)
-    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
-    AC_SUBST(GNOME_PRINT_CFLAGS)
-    AC_SUBST(GNOME_PRINT_LIBS)
-
     PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_CFLAGS)
@@ -1118,7 +1113,7 @@ then
     ])
     CPPFLAGS="${saved_CPPFLAGS}"
 
-    # check for gtkhtml 3.x versions.
+    # check for gtkhtml >= 3.14 with gtkprint support
     gtkhtml=0
     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
       if test "x$HAVE_GTK_2_10" != "xyes"; then
@@ -1130,6 +1125,9 @@ then
         AC_DEFINE(GTKHTML_USES_GTKPRINT,1,[GtkHTML uses GtkPrint for printing operations])
       fi
     ], [gtkhtml=0])
+    AM_CONDITIONAL(GTKHTML_USES_GTKPRINT,test "x$gtkhtml" = "x1")
+
+    # fallback to older gtkhtml versions and gnomeprint
     if test x$gtkhtml = x0
     then
       PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1], [
@@ -1141,6 +1139,11 @@ then
           ])
         ])
       ])
+
+      PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2 libgnomeprintui-2.2)
+      AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+      AC_SUBST(GNOME_PRINT_CFLAGS)
+      AC_SUBST(GNOME_PRINT_LIBS)
     fi
     AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
 dnl if Mac OSX, also scrub /sw/include
