@@ -391,6 +391,8 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
       model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
       if (find_existing_format(GTK_LIST_STORE(model), guid, &iter)) {
           gtk_combo_box_set_active_iter(GTK_COMBO_BOX(pcd->format_combobox), &iter);
+      } else {
+          gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox), 0);
       }
   }
   active = gnc_gconf_get_int(GCONF_SECTION, KEY_CHECK_POSITION, NULL);
