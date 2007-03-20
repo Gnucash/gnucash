@@ -214,7 +214,7 @@ if GTKHTML_USES_GTKPRINT
   EXTRA_DIST += print-session.c
 else
   AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
-  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS} \
+  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
   libgncmod_gnome_utils_la_SOURCES += print-session.c
 endif
 
