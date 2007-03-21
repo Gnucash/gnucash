@@ -646,7 +646,7 @@ int main(int argc, char **argv) {
   return 0;
 }
 EOF
-        gcc -o ofile.exe ofile.c $HH_CPPFLAGS $HH_LDFLAGS -lhtmlhelp || return 1
+        gcc -shared -o ofile.dll ofile.c $HH_CPPFLAGS $HH_LDFLAGS -lhtmlhelp || return 1
     qpopd
 }
 
