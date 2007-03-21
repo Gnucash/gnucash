@@ -9,7 +9,8 @@ AM_CFLAGS = \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
 	${QOF_CFLAGS} \
-	${GNUCASH_ENGINE_CFLAGS}
+	${GLIB_CFLAGS} \
+	${GUILE_INCS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -115,7 +116,7 @@ libgncmod_engine_la_LIBADD = \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${REGEX_LIBS} \
-  ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
