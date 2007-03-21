@@ -382,14 +382,17 @@ gnc_dotgnucash_dir (void)
   if (dotgnucash)
     return dotgnucash;
 
-  home = g_get_home_dir();
-  if (!home) {
-    g_warning("Cannot find home directory. Using tmp directory instead.");
-    home = g_get_tmp_dir();
-  }
-  g_assert(home);
+  dotgnucash = g_strdup(g_getenv("GNC_DOT_DIR"));
+  if (!dotgnucash) {
+    home = g_get_home_dir();
+    if (!home) {
+      g_warning("Cannot find home directory. Using tmp directory instead.");
+      home = g_get_tmp_dir();
+    }
+    g_assert(home);
 
-  dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+    dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+  }
   gnc_validate_directory(dotgnucash);
 
   /* Since we're in code that is only executed once.... */
