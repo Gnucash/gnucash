@@ -663,12 +663,14 @@ function inst_hh() {
         smart_wget $HH_URL $DOWNLOAD_DIR
         echo "!!! When asked for an installation path, specify $HH_DIR !!!"
         $LAST_FILE
-        qpushd $HH_DIR/lib
+        qpushd $HH_DIR
            _HHCTRL_OCX=$(which hhctrl.ocx || true)
            [ "$_HHCTRL_OCX" ] || die "Did not find hhctrl.ocx"
-           pexports -h ../include/htmlhelp.h $_HHCTRL_OCX > htmlhelp.def
-           ${DLLTOOL} -k -d htmlhelp.def -l libhtmlhelp.a
-           mv htmlhelp.lib htmlhelp.lib.bak
+           pexports -h include/htmlhelp.h $_HHCTRL_OCX > lib/htmlhelp.def
+           qpushd lib
+               ${DLLTOOL} -k -d htmlhelp.def -l libhtmlhelp.a
+               mv htmlhelp.lib htmlhelp.lib.bak
+           qpopd
         qpopd
     fi
     quiet test_for_hh || die "html help workshop not installed correctly"
