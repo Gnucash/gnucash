@@ -342,15 +342,20 @@ copy_file(const char *orig, const char *bkup)
     char buf[buf_size];
     int orig_fd;
     int bkup_fd;
+    int flags=0;
     ssize_t count_write;
     ssize_t count_read;
 
-    orig_fd = g_open(orig, O_RDONLY, 0);
+#ifdef G_OS_WIN32
+    flags = O_BINARY;
+#endif
+
+    orig_fd = g_open(orig, O_RDONLY | flags, 0);
     if(orig_fd == -1)
     {
         return FALSE;
     }
-    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL, 0600);
+    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | flags, 0600);
     if(bkup_fd == -1)
     {
         close(orig_fd);

@@ -30,6 +30,7 @@
 #ifdef HAVE_X11_XLIB_H
 # include <X11/Xlib.h>
 #endif
+#include <libxml/xmlIO.h>
 
 #include "gnc-html-graph-gog.h"
 
@@ -215,6 +216,11 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   g_free (pkgsysconfdir);
   g_free (pkgdatadir);
   g_free (pkglibdir);
+
+#ifdef G_OS_WIN32
+  /* workaround for bug #421792 */
+  xmlCleanupInputCallbacks();
+#endif
 
   /* initialization required for gtkhtml */
   gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());

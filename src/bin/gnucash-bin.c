@@ -539,6 +539,10 @@ main(int argc, char ** argv)
     gchar *localedir;
     GError *binreloc_error = NULL;
 
+#if defined(G_OS_WIN32) || (defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE))
+    g_thread_init(NULL);
+#endif
+
     /* Init binreloc */
     if (!gbr_init (&binreloc_error) ) {
       printf("main: Error on gbr_init: %s\n", binreloc_error->message);

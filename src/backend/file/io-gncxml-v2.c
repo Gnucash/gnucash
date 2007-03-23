@@ -52,6 +52,17 @@
 
 static QofLogModule log_module = GNC_MOD_IO;
 
+/* map pointers, e.g. of type FILE*, to GThreads */
+static GHashTable *threads = NULL;
+G_LOCK_DEFINE_STATIC(threads);
+
+typedef struct {
+  gint fd;
+  gchar *filename;
+  gchar *perms;
+  gboolean compress;
+} gz_thread_params_t;
+
 static pid_t gzip_child_pid = 0;
 
 /* Callback structure */
@@ -1232,6 +1243,64 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
 
 #define BUFLEN 4096
 
+/* Compress or decompress function that is to be run in a separate thread.
+ * Returns 1 on success or 0 otherwise, stuffed into a pointer type. */
+static gpointer
+gz_thread_func(gz_thread_params_t *params)
+{
+    gchar buffer[BUFLEN];
+    guint bytes;
+    gssize written;
+    gzFile *file;
+    gint success = 0;
+
+#ifdef G_OS_WIN32
+    {
+        gchar *conv_name = g_win32_locale_filename_from_utf8(params->filename);
+        gchar *perms;
+
+        if (!conv_name) {
+            g_warning("Could not convert '%s' to system codepage",
+                      params->filename);
+            goto cleanup_gz_thread_func;
+        }
+
+        if (strchr(params->perms, 'b'))
+            perms = g_strdup(params->perms);
+        else
+            perms = g_strdup_printf("%cb%s", *params->perms, params->perms + 1);
+
+        file = gzopen(conv_name, perms);
+        g_free(perms);
+        g_free(conv_name);
+    }
+#else /* !G_OS_WIN32 */
+    file = gzopen(params->filename, params->perms);
+#endif /* G_OS_WIN32 */
+
+    if (file == NULL) {
+        g_warning("Child threads gzopen failed");
+        goto cleanup_gz_thread_func;
+    }
+
+    if (params->compress)
+        while ((bytes = read(params->fd, buffer, BUFLEN)) > 0)
+            gzwrite(file, buffer, bytes);
+    else
+        while ((bytes = gzread(file, buffer, BUFLEN)) > 0)
+            written = write(params->fd, buffer, bytes);
+
+    gzclose(file);
+    success = 1;
+
+cleanup_gz_thread_func:
+    g_free(params->filename);
+    g_free(params->perms);
+    g_free(params);
+
+    return GINT_TO_POINTER(success);
+}
+
 static FILE *
 try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
              gboolean compress)
@@ -1242,42 +1311,60 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
   if (!use_gzip)
     return g_fopen(filename, perms);
 
-#ifdef G_OS_WIN32
-  PWARN("Compression not implemented on Windows. Opening uncompressed file.");
-  return g_fopen(filename, perms);
+  if (g_thread_supported()) {
+    /* use threads */
 
-  /* Potential implementation: Windows doesn't have pipe(); use
-     the g_spawn glib wrappers. */
-  {
-    /* Start gzip from a command line, not by fork(). */
-    gchar *argv[] = {compress ? "gzip" : "gunzip",
-                     NULL};
-    GPid child_pid;
-    GError *error;
-    int child_stdin;
+    int filedes[2];
+    GThread *thread;
+    GError *error = NULL;
+    gz_thread_params_t *params;
+    FILE *file;
 
-    g_assert_not_reached(); /* Not yet correctly implemented. */
-
-    if ( !g_spawn_async_with_pipes(NULL, argv,
-				   NULL, G_SPAWN_SEARCH_PATH,
-				   NULL, NULL, 
-				   &child_pid,
-				   &child_stdin, NULL, NULL,
-				   &error) ) {
-      PWARN("G_spawn call failed. Opening uncompressed file.");
+    if (pipe(filedes) < 0) {
+      g_warning("Pipe call failed. Opening uncompressed file.");
       return g_fopen(filename, perms);
     }
-    /* FIXME: Now need to set up the child process to write to the
-       file. */
 
-    return fdopen(child_stdin, compress ? "w" : "r");
+    params = g_new(gz_thread_params_t, 1);
+    params->fd = filedes[compress ? 0 : 1];
+    params->filename = g_strdup(filename);
+    params->perms = g_strdup(perms);
+    params->compress = compress;
 
-    /* Eventually the GPid must be cleanup up, but not here? */
-    /* g_spawn_close_pid(child_pid); */
-  }
+    thread = g_thread_create((GThreadFunc) gz_thread_func, params, TRUE, &error);
+    if (!thread) {
+      g_warning("Could not create thread for (de)compression: %s",
+                error->message);
+      g_error_free(error);
+      g_free(params->filename);
+      g_free(params->perms);
+      g_free(params);
+      close(filedes[0]);
+      close(filedes[1]);
+
+      return g_fopen(filename, perms);
+    }
+
+    if (compress)
+      file = fdopen(filedes[1], "w");
+    else
+      file = fdopen(filedes[0], "r");
+
+    G_LOCK(threads);
+    if (!threads)
+      threads = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+    g_hash_table_insert(threads, file, thread);
+    G_UNLOCK(threads);
+
+    return file;
+
+  } else {
+#ifdef G_OS_WIN32
+    g_assert_not_reached();
 #else
-  {
-    /* Normal Posix platform (non-windows) */
+    /* use fork */
+
     int filedes[2];
     pid_t pid;
 
@@ -1338,30 +1425,42 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
         return fdopen(filedes[0], "r");
       }
     }
+#endif /* G_OS_WIN32 */
   }
-#endif
 }
 
 static gboolean
-wait_for_gzip()
+wait_for_gzip(FILE *file)
 {
-    pid_t retval;
+    if (g_thread_supported()) {
+        gboolean retval = TRUE;
 
-    if (gzip_child_pid == 0)
-        return TRUE;
+        G_LOCK(threads);
+        if (threads) {
+            GThread *thread = g_hash_table_lookup(threads, file);
+            if (thread) {
+                g_hash_table_remove(threads, file);
+                retval = GPOINTER_TO_INT(g_thread_join(thread));
+            }
+        }
+        G_UNLOCK(threads);
+        return retval;
+
+    } else {
+        pid_t retval;
+
+        if (gzip_child_pid == 0)
+            return TRUE;
 
 #ifdef HAVE_SYS_WAIT_H
-    retval = waitpid(gzip_child_pid, NULL, WUNTRACED);
+        retval = waitpid(gzip_child_pid, NULL, WUNTRACED);
 #else
-    /* FIXME: Windows doesn't have waitpid. According to glib's
-       g_spawn_async_with_pipes(), we should use one of the
-       g_spawn functions and some Win32-API WaitFor*() function
-       here. For now, we ignore that race condition. */
-    retval = 1;
+        retval = 1;
 #endif
-    gzip_child_pid = 0;
+        gzip_child_pid = 0;
 
-    return retval != -1;
+        return retval != -1;
+    }
 }
 
 gboolean
@@ -1388,7 +1487,7 @@ gnc_book_write_to_xml_file_v2(
     }
 
     if (compress)
-        return wait_for_gzip();
+        return wait_for_gzip(out);
 
     return TRUE;
 }
@@ -1459,7 +1558,19 @@ gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
         char first_chunk[256];
         int num_read;
 
+#ifdef G_OS_WIN32
+        {
+            gchar *conv_name = g_win32_locale_filename_from_utf8(name);
+            if (!conv_name)
+                g_warning("Could not convert '%s' to system codepage", name);
+            else {
+                file = gzopen(conv_name, "rb");
+                g_free(conv_name);
+            }
+        }
+#else
         file = gzopen(name, "r");
+#endif
         if (file == NULL)
             return FALSE;
 
@@ -1704,8 +1815,11 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
         g_hash_table_destroy(processed);
     if (ascii)
         g_free(ascii);
-    if (file)
+    if (file) {
         fclose(file);
+        if (is_compressed)
+            wait_for_gzip(file);
+    }
 
     return (clean_return) ? n_impossible : -1;
 }
@@ -1821,8 +1935,11 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
         g_string_free(output, TRUE);
     if (ascii != (GIConv) -1)
         g_iconv_close(ascii);
-    if (file)
+    if (file) {
         fclose(file);
+        if (is_compressed)
+            wait_for_gzip(file);
+    }
 }
 
 gboolean
