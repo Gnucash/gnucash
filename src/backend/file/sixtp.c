@@ -727,7 +727,21 @@ sixtp_parse_file(sixtp *sixtp,
                  gpointer *parse_result) 
 {
     gboolean ret;
-    xmlParserCtxtPtr context = xmlCreateFileParserCtxt( filename );
+    xmlParserCtxtPtr context;
+
+#ifdef G_OS_WIN32
+    {
+        gchar *conv_name = g_win32_locale_filename_from_utf8(filename);
+        if (!conv_name) {
+            g_warning("Could not convert '%s' to system codepage", filename);
+            return FALSE;
+        }
+        context = xmlCreateFileParserCtxt(conv_name);
+        g_free(conv_name);
+    }
+#else
+    context = xmlCreateFileParserCtxt(filename);
+#endif
     ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
                                   global_data, parse_result);
     return ret;
