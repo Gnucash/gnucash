@@ -408,7 +408,7 @@ function inst_gnome() {
     add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
-        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&
         quiet intltoolize --version
     then
         echo "gnome packages installed.  skipping."
@@ -463,8 +463,6 @@ function inst_gnome() {
 	wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
 	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         qpushd $GNOME_DIR
@@ -479,6 +477,8 @@ function inst_gnome() {
                 cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
                 exetype libexec/gconfd-2.exe windows
             fi
+            sed 's#gtk+-unix-print-2.0 >= [0-9\.]* *##' lib/pkgconfig/libgtkhtml-3.14.pc > tmp
+            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc
             # work around a bug in msys bash, adding 0x01 smilies
             cat > bin/pkg-config-msys.sh <<EOF
 #!/bin/sh
@@ -504,7 +504,7 @@ EOF
 	#qpopd
     fi
     quiet gconftool-2 --version &&
-    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&
+    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&
     quiet intltoolize --version || die "gnome not installed correctly"
 }
 
