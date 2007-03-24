@@ -67,7 +67,8 @@
 #define KEY_CUSTOM_TRANSLATION "custom_translation"
 #define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
-#define KEY_SHOW_DATE_FMT      "show_date_format"
+#define KEY_PRINT_DATE_FMT     "print_date_format"
+#define KEY_DEFAULT_FONT       "default_font"
 
 
 #define DEFAULT_FONT            "sans 12"
@@ -248,7 +249,7 @@ struct _print_check_dialog {
 
   GtkWidget * date_format;
 
-  gchar *format_string;
+  gchar *default_font;
 
   check_format_t *selected_format;
 };
@@ -929,7 +930,6 @@ format_read_general_info(const gchar * file,
               && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)))
             g_warning("Check file %s, group %s, key %s, error: %s",
                       file, KF_GROUP_TOP, KF_KEY_FONT, error->message);
-        format->font = g_strdup(DEFAULT_FONT);
         g_clear_error(&error);
     }
 
@@ -1135,6 +1135,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   GtkWindow *window;
   GtkListStore *store;
   GtkTreeIter iter;
+  gchar *font;
 
   pcd = g_new0(PrintCheckDialog, 1);
   pcd->plugin_page = plugin_page;
@@ -1181,6 +1182,10 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   pcd->date_format = gnc_date_format_new_without_label();
   gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 2, 7);
 
+  /* Default font (set in preferences) */
+  font = gnc_gconf_get_string(GCONF_SECTION, KEY_DEFAULT_FONT, NULL);
+  pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
+
   /* Update the combo boxes bases on the available check formats */
   store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
   read_formats(pcd, store);
@@ -1211,7 +1216,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 /** Draw a grid pattern on the page to be printed.  This grid is helpful when
  *  figuring out the offsets for where to print various items on the page. */
 static void
-draw_grid(GncPrintContext * context, gint width, gint height)
+draw_grid(GncPrintContext * context, gint width, gint height, const gchar *font)
 {
     const double dash_pattern[2] = { 1.0, 5.0 };
 #if USE_GTKPRINT
@@ -1225,7 +1230,7 @@ draw_grid(GncPrintContext * context, gint width, gint height)
 #if USE_GTKPRINT
     /* Initialize for printing text */
     layout = gtk_print_context_create_pango_layout(context);
-    desc = pango_font_description_from_string("sans 12");
+    desc = pango_font_description_from_string(font);
     pango_layout_set_font_description(layout, desc);
     pango_font_description_free(desc);
     pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
@@ -1508,7 +1513,7 @@ draw_date_format(GncPrintContext * context, const gchar *date_format,
     GString *cdn_fmt;
 
     thislocale = setlocale(LC_ALL, NULL);
-    if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_SHOW_DATE_FMT, NULL))
+    if (!gnc_gconf_get_bool(GCONF_SECTION, KEY_PRINT_DATE_FMT, NULL))
         return;
 
     date_desc = pango_font_description_copy_static(default_desc);
@@ -1589,7 +1594,10 @@ draw_page_items(GncPrintContext * context,
     g_return_if_fail(trans);
     amount = gnc_numeric_abs(xaccSplitGetAmount(pcd->split));
 
-    default_desc = pango_font_description_from_string(format->font);
+    if (format->font)
+        default_desc = pango_font_description_from_string(format->font);
+    else
+        default_desc = pango_font_description_from_string(pcd->default_font);
 
     /* Now put the actual data onto the page. */
     for (elem = format->items; elem; elem = g_slist_next(elem)) {
@@ -1712,7 +1720,8 @@ draw_page_format(GncPrintContext * context,
     if (format->show_grid) {
         draw_grid(context,
                   gtk_print_context_get_width(context),
-                  gtk_print_context_get_height(context));
+                  gtk_print_context_get_height(context),
+                  pcd->default_font);
     }
 
     /* Translate all subsequent check items if requested. */
@@ -1761,7 +1770,7 @@ draw_page_format(PrintSession * ps, check_format_t * format, gpointer user_data)
 
     /* The grid is useful when determining check layouts */
     if (format->show_grid) {
-        draw_grid(ps->context, width, height);
+        draw_grid(ps->context, width, height, pcd->default_font);
     }
 
     /* Translate all subsequent check items if requested. */
@@ -1815,7 +1824,7 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     /* This was valid when the check printing dialog was instantiated. */
     g_return_if_fail(trans);
 
-    desc = pango_font_description_from_string("sans 12");
+    desc = pango_font_description_from_string(pcd->default_font);
 
     multip = pcd_get_custom_multip(pcd);
     degrees = gtk_spin_button_get_value(pcd->check_rotation);
@@ -1945,9 +1954,14 @@ static void
 gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
 {
   PrintSession *ps;
+  GnomeFont *oldfont;
   check_format_t *format;
 
   ps = gnc_print_session_create(TRUE);
+  oldfont = ps->default_font;
+  ps->default_font = gnome_font_find_closest_from_full_name(pcd->default_font);
+  gnome_print_setfont(ps->context, ps->default_font);
+  g_object_unref(oldfont);
 
   format = pcd->selected_format;
   if (format) {
@@ -2068,5 +2082,6 @@ gnc_ui_print_check_response_cb(GtkDialog * dialog,
 
   gtk_widget_destroy(pcd->dialog);
   g_object_unref(pcd->xml);
+  g_free(pcd->default_font);
   g_free(pcd);
 }
