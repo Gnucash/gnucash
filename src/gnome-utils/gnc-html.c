@@ -1239,6 +1239,8 @@ gnc_html_print(gnc_html *html)
         gtk_print_operation_set_print_settings(print, print_settings);
     G_UNLOCK(print_settings);
 
+    gtk_print_operation_set_use_full_page(print, FALSE);
+    gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
     gtk_print_operation_set_n_pages(print, 1);
     g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
 
