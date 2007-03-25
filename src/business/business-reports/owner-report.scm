@@ -201,14 +201,14 @@
 	 (currency (xaccTransGetCurrency txn))
 	 (type-str
 	  (cond
-	   ((equal? type gnc:transaction-type-invoice)
+	   ((equal? type TXN-TYPE-INVOICE)
 	    (if (not (null? invoice))
 		(gnc:make-html-text
 		 (gnc:html-markup-anchor
 		  (gnc:invoice-anchor-text invoice)
 		  inv-str))
 		inv-str))
-	   ((equal? type gnc:transaction-type-payment) (_ "Payment, thank you"))
+	   ((equal? type TXN-TYPE-PAYMENT) (_ "Payment, thank you"))
 	   (else (_ "Unknown"))))
 	 )
 
@@ -296,8 +296,8 @@
        (lambda (txn)
 	 (let ((type (xaccTransGetTxnType txn)))
 	   (if
-	    (or (equal? type gnc:transaction-type-invoice)
-		(equal? type gnc:transaction-type-payment))
+	    (or (equal? type TXN-TYPE-INVOICE)
+		(equal? type TXN-TYPE-PAYMENT))
 	    (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
 				       inv-str reverse? start-date total)))
 
