@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include "sixtp.h"
 
@@ -149,6 +150,11 @@ add_account_local(GncExampleAccount *gea, Account *act)
     }
     else if (!gnc_account_get_parent(act))
     {
+        if (!gea->root) {
+            g_warning(_("The example account file should declared a ROOT "
+                        "account before declaring any other accounts."));
+            gea->root = gnc_book_get_root_account(gea->book);
+        }
         gnc_account_append_child(gea->root, act);
     }
 }
@@ -450,6 +456,9 @@ gnc_load_example_account_list(const char *dirname)
     {
         gchar *filename;
         GncExampleAccount *gea;
+        if (!g_str_has_suffix(direntry, "xea"))
+          continue;
+
         filename = g_build_filename(dirname, direntry, (gchar*) NULL);
 
         if(!g_file_test(filename, G_FILE_TEST_IS_DIR))
