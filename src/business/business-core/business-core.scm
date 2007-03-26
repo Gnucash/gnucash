@@ -102,7 +102,7 @@
 		       (lot (xaccSplitGetLot split)))
 		  (if (not (null? lot))
 		      (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
-			     (owner? (gnc:owner-get-owner-from-lot
+			     (owner? (gncOwnerGetOwnerFromLot
 				      lot temp-owner)))
 			(if (not (null? invoice))
 			    (set! owner (gncInvoiceGetOwner invoice))
