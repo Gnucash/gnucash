@@ -81,6 +81,7 @@ enum {
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
+#define KEY_TAB_NEXT_RECENT	"tab_next_recent"
 #define KEY_TAB_POSITION	"tab_position"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
@@ -2006,11 +2007,13 @@ gnc_main_window_disconnect (GncMainWindow *window,
 
 	/* Switch to the last recently used page */
 	notebook = GTK_NOTEBOOK (priv->notebook);
-	new_page = g_list_nth_data (priv->usage_order, 0);
-	if (new_page) {
-	  page_num =  gtk_notebook_page_num(notebook, new_page->notebook_page);
-	  gtk_notebook_set_current_page(notebook, page_num);
-	}
+        if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_TAB_NEXT_RECENT, NULL)) {
+            new_page = g_list_nth_data (priv->usage_order, 0);
+            if (new_page) {
+                page_num =  gtk_notebook_page_num(notebook, new_page->notebook_page);
+                gtk_notebook_set_current_page(notebook, page_num);
+            }
+        }
 
 	/* Remove the page from the notebook */
 	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
