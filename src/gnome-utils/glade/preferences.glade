@@ -2274,22 +2274,39 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkFontButton" id="gconf/dialogs/print_checks/default_font">
+		<widget class="GtkAlignment" id="alignment7">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="show_style">True</property>
-		  <property name="show_size">True</property>
-		  <property name="use_font">False</property>
-		  <property name="use_size">False</property>
-		  <property name="focus_on_click">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">1</property>
+		  <property name="yscale">1</property>
+		  <property name="top_padding">0</property>
+		  <property name="bottom_padding">0</property>
+		  <property name="left_padding">12</property>
+		  <property name="right_padding">0</property>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="gconf/dialogs/print_checks/print_date_format">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Below the actual date, print the format of that date in 8 point type.</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Print _date format</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		    </widget>
+		  </child>
 		</widget>
 		<packing>
-		  <property name="left_attach">1</property>
+		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">2</property>
-		  <property name="bottom_attach">3</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
 		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
@@ -2308,7 +2325,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label116">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Default _Font:</property>
+		      <property name="label" translatable="yes">Default _font:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2329,15 +2346,35 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
-		  <property name="top_attach">2</property>
-		  <property name="bottom_attach">3</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="GtkAlignment" id="alignment7">
+		<widget class="GtkFontButton" id="gconf/dialogs/print_checks/default_font">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="show_style">True</property>
+		  <property name="show_size">True</property>
+		  <property name="use_font">False</property>
+		  <property name="use_size">False</property>
+		  <property name="focus_on_click">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment8">
 		  <property name="visible">True</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -2349,11 +2386,11 @@
 		  <property name="right_padding">0</property>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="gconf/dialogs/print_checks/print_date_format">
+		    <widget class="GtkCheckButton" id="gconf/dialogs/print_checks/blocking_chars">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Below the actual date, print the format of that date in 8 point type.</property>
+		      <property name="tooltip" translatable="yes">Print '***' before and after each text field on the check.</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Print _Date Format</property>
+		      <property name="label" translatable="yes">Print _blocking chars</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -2366,8 +2403,8 @@
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">4</property>
-		  <property name="top_attach">1</property>
-		  <property name="bottom_attach">2</property>
+		  <property name="top_attach">2</property>
+		  <property name="bottom_attach">3</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
 		</packing>

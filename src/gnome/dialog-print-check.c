@@ -1,7 +1,7 @@
 /********************************************************************\
  * dialog-print-check.c : dialog to control check printing.         *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
- * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2006,2007 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -69,6 +69,7 @@
 #define KEY_CUSTOM_UNITS       "custom_units"
 #define KEY_PRINT_DATE_FMT     "print_date_format"
 #define KEY_DEFAULT_FONT       "default_font"
+#define KEY_BLOCKING_CHARS     "blocking_chars"
 
 
 #define DEFAULT_FONT            "sans 12"
@@ -1311,6 +1312,10 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     cairo_t *cr;
     gint layout_height, layout_width;
     gdouble width, height;
+    gchar *new_text;
+
+    if ((NULL == text) || (strlen(text) == 0))
+      return 0.0;
 
     /* Initialize for printing text */
     layout = gtk_print_context_create_pango_layout(context);
@@ -1324,7 +1329,13 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     pango_layout_set_alignment(layout,
                                data->w ? data->align : PANGO_ALIGN_LEFT);
     pango_layout_set_width(layout, data->w ? data->w * PANGO_SCALE : -1);
-    pango_layout_set_text(layout, text, -1);
+    if (gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL)) {
+        new_text = g_strdup_printf("***%s***", text);
+        pango_layout_set_text(layout, new_text, -1);
+        g_free(new_text);
+    } else {
+        pango_layout_set_text(layout, text, -1);
+    }
     pango_layout_get_size(layout, &layout_width, &layout_height);
     width = (gdouble) layout_width / PANGO_SCALE;
     height = (gdouble) layout_height / PANGO_SCALE;
@@ -1352,6 +1363,10 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     return width;
 #else
     gdouble x0, x1, y0, y1;
+    gchar *new_text;
+
+    if ((NULL == text) || (strlen(text) == 0))
+      return 0.0;
 
     /* Clip text to the enclosing rectangle */
     gnome_print_gsave(context);
@@ -1374,7 +1389,13 @@ draw_text(GncPrintContext * context, const gchar * text, check_item_t * data,
     g_debug("Text move to %f,%f, print '%s'", data->x, data->y,
             text ? text : "(null)");
     gnome_print_moveto(context, data->x, data->y);
-    gnome_print_show(context, text);
+    if (gnc_gconf_get_bool(GCONF_SECTION, KEY_BLOCKING_CHARS, NULL)) {
+        new_text = g_strdup_printf("***%s***", text);
+        gnome_print_show(context, new_text);
+        g_free(new_text);
+    } else {
+        gnome_print_show(context, text);
+    }
     gnome_print_grestore(context);
     return 0.0;
 #endif
