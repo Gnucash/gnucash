@@ -58,6 +58,8 @@
 #  include <locale.h>
 #endif
 
+#define APP_GNUCASH "/apps/gnucash"
+
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
@@ -92,6 +94,7 @@ gnc_print_unstable_message(void)
 static char *config_path = PKGSYSCONFDIR;
 static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
+static char *gconf_path = APP_GNUCASH;
 
 static void
 environment_override()
@@ -104,6 +107,8 @@ environment_override()
         share_path = g_strdup(path);
     if ((path = g_getenv("GNC_DOC_PATH")))
         help_path = g_strdup(path);
+    if ((path = g_getenv("GNC_GCONF_PATH")))
+        gconf_path = g_strdup(path);
 }
 
 static gboolean
@@ -245,6 +250,11 @@ gnucash_command_line(int *argc, char **argv)
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
 	 _("DOCPATH")},
+        {"gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
+         _("Set the prefix path for gconf queries"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("GCONFPATH")},
         {"add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
          _("Add price quotes to given GnuCash datafile"),
 	 /* Translators: Argument description for autohelp; see
@@ -295,7 +305,7 @@ gnucash_command_line(int *argc, char **argv)
     }
 
     gnc_set_extra(extra);
-
+    gnc_set_gconf_path(gconf_path);
     gnc_set_debugging(debugging);
 
     if (namespace_regexp)
