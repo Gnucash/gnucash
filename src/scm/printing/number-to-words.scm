@@ -57,9 +57,8 @@
                                     (+ .00001 (expt 10 (* 3 log-val)))))))
              (that-part (remainder val 
                                    (inexact->exact  
-                                    (+ .00001 
-                                       (truncate 
-                                        (expt 10 (* 3 log-val))))))))
+                                    (truncate 
+                                     (+ .00001 (expt 10 (* 3 log-val))))))))
         (if (> this-part 0)
             (set! current-string 
                   (string-append (integer-to-words this-part) 
