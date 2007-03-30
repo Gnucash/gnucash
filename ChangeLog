@@ -1,3 +1,53 @@
+2007-03-30  Christian Stimming <stimming@tuhh.de>
+
+	* Implement some initial gnc_component_manager registering for the hbci dialogs. Partially fixes bug#409324.
+
+2007-03-30  Andreas Köhler  <andi5.py@gmx.net>
+	
+	* On creating a new account, do not check account types of children.
+
+	* In that situation, the current accounts type is invalid, so calling
+	  xaccAccountTypesCompatible against the chosen type will log an error.
+	  Because of the apparent lack of children there is no real problem, so
+	  just skip the test.
+
+2007-03-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Patch from Mike Alexander to fix a memory leak in the summary bar.
+	  #413568.
+
+	* When gnc_main_window_summary_refresh is called to update the
+	  summary bar at the bottom of the main window, it gets a GList to
+	  manage the various currencies involved.  It never frees this
+	  list so each call leaks some memory.
+
+2007-03-30  David Hampton  <hampton@employees.org>
+
+	* Guile 1.8 seems to be pickier about inexact->exact producing integer
+	  numbers.
+
+2007-03-30  David Hampton  <hampton@employees.org>
+
+	* When deleting an account, correctly display the new account to which
+	  transactions will be moved.
+
+2007-03-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Reenable search for Voucher Owner.  Fixes #410511.
+
+	* In the "Find Expense Voucher" search dialog one cannot search for
+	  voucher owners because of this typo.
+
+2007-03-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Fix crash if OB setup druid gets closed while waiting for the
+	  wizard.  #409319.
+
+	* In the online banking setup druid the process is forked for
+	  executing the AqBanking Qt wizard. While waiting for it, the
+	  user can cancel the druid in an inner main loop, but the code
+	  once returned does not know that and crashes. Patch by cstim.
+
 2007-02-18  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
