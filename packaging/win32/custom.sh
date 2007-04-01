@@ -147,8 +147,12 @@ LIBGLADE_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-2.6.0.zip"
 LIBGLADE_DEV_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-dev-2.6.0.zip"
 LIBGNOMEPRINT_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-2.12.1.zip"
 LIBGNOMEPRINT_DEV_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-dev-2.12.1.zip"
-GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-3.14.0.zip"
-GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-dev-3.14.0.zip"
+LIBGNOMEPRINTUI_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-2.12.1.zip"  # gnomeprint
+LIBGNOMEPRINTUI_DEV_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-dev-2.12.1.zip"  # gnomeprint
+GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-3.12.2.zip"  # gnomeprint
+GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-dev-3.12.2.zip"  # gnomeprint
+#GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-3.14.0.zip"  # not gnomeprint
+#GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-dev-3.14.0.zip"  # not gnomeprint
 GNOME_DIR=$GLOBAL_DIR\\gnome
 
 SWIG_URL="$SF_MIRROR/swig/swigwin-1.3.31.zip"
