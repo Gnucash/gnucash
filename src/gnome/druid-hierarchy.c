@@ -754,7 +754,7 @@ balance_cell_edited (GtkCellRendererText *cell,
 	  g_object_set (G_OBJECT(cell), "text", "", NULL);
 	}
 	set_final_balance (data->balance_hash, account, amount);
-	qof_event_gen ((QofEntity*)account, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (QOF_ENTITY(account), QOF_EVENT_MODIFY, NULL);
 }
 
 static void

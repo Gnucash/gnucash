@@ -290,14 +290,14 @@ pgendProcessEvents (QofBackend *bend)
 
                /* if the remote user created an account, mirror it here */
                acc = pgendCopyAccountToEngine (be, &(ev->guid));
-               ent = (QofEntity*)acc;
+               ent = QOF_ENTITY(acc);
                break;
             }
             case QOF_EVENT_DESTROY: {
                Account * acc = pgendAccountLookup (be, &(ev->guid));
                xaccAccountBeginEdit (acc);
                xaccAccountDestroy (acc);
-               ent = (QofEntity*)acc;
+               ent = QOF_ENTITY(acc);
                break;
             }
          }
@@ -319,7 +319,7 @@ pgendProcessEvents (QofBackend *bend)
                /* don't mirror transaction creations. If a register needs
                 * it, it will do a query. */
                trans = pgendTransLookup (be, &(ev->guid));
-               ent = (QofEntity*)trans;
+               ent = QOF_ENTITY(trans);
                PINFO ("create transaction");
                break;
 			}
@@ -327,7 +327,7 @@ pgendProcessEvents (QofBackend *bend)
                Transaction *trans;
                trans = pgendTransLookup (be, &(ev->guid));
                pgendCopyTransactionToEngine (be, &(ev->guid));
-               ent = (QofEntity*)trans;
+               ent = QOF_ENTITY(trans);
                break;
 			}
             case QOF_EVENT_DESTROY: {
@@ -336,7 +336,7 @@ pgendProcessEvents (QofBackend *bend)
                /* mark trans for freeing */
                xaccTransDestroy (trans);
                xaccTransCommitEdit (trans);
-               ent = (QofEntity*)trans;
+               ent = QOF_ENTITY(trans);
                break;
             }
          }

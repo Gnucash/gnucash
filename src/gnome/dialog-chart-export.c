@@ -151,7 +151,7 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccSplitSetValue (split, balance);
 	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		ent_ref = qof_entity_get_reference_from(QOF_ENTITY(split), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}
@@ -168,14 +168,14 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccAccountCommitEdit (acc_ent);
 	ref = qof_class_get_referenceList(GNC_ID_TRANS);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)trans, ref->data);
+		ent_ref = qof_entity_get_reference_from(QOF_ENTITY(trans), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}
 	g_list_free(ref);
 	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		ent_ref = qof_entity_get_reference_from(QOF_ENTITY(split), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}

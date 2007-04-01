@@ -83,14 +83,14 @@ typedef const gchar * QofIdTypeConst;
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
 
+/* Forward declaration for later */
+typedef struct QofInstance_s QofInstance;
+
 #define QOF_ID_NONE           NULL
 #define QOF_ID_NULL           "null"
 
 #define QOF_ID_BOOK           "Book"
 #define QOF_ID_SESSION        "Session"
-
-/** simple,cheesy cast but holds water for now */
-#define QOF_ENTITY(object) ((QofEntity *)(object))
 
 /** Inline string comparision; compiler will optimize away most of this */
 #define QSTRCMP(da,db) ({                \
@@ -124,8 +124,6 @@ print error message if its bad  */
      (obj);                                                   \
   }))
 
-/** QofEntity declaration */
-typedef struct QofEntity_s QofEntity;
 /** QofCollection declaration 
 
 @param e_type QofIdType
@@ -135,20 +133,6 @@ typedef struct QofEntity_s QofEntity;
 
 */
 typedef struct QofCollection_s QofCollection;
-
-/** QofEntity structure
-
-@param e_type 	Entity type
-@param guid		GUID for the entity
-@param collection	Entity collection
-*/
-
-struct QofEntity_s
-{
-	QofIdType        e_type;
-	GUID             guid;
-	QofCollection  * collection;
-};
 
 /** @name QOF Entity Initialization & Shutdown 
  @{ */
@@ -198,7 +182,7 @@ QofIdType qof_collection_get_type (const QofCollection *);
 /** Find the entity going only from its guid */
 QofEntity * qof_collection_lookup_entity (const QofCollection *, const GUID *);
 
-/** Callback type for qof_entity_foreach */
+/** Callback type for qof_collection_foreach */
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
@@ -239,6 +223,8 @@ by using ::qof_entity_insert_entity or ::qof_entity_remove_entity.
 */
 gboolean
 qof_collection_add_entity (QofCollection *coll, QofEntity *ent);
+
+void qof_collection_remove_entity (QofEntity *ent);
 
 /** \brief Merge two QOF_TYPE_COLLECT of the same type.
 

@@ -39,6 +39,67 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /* ========================================================== */
 
+static void
+qof_int_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
+{
+  g_return_if_fail (NULL != tab);
+  
+  /* XXX We passed redundant info to this routine ... but I think that's
+   * OK, it might eliminate programming errors. */
+  if (safe_strcmp(tab->e_type, type))
+  {
+    PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
+    return;
+  }
+  ent->e_type = CACHE_INSERT (type);
+
+  do
+   {
+    guid_new(&ent->guid);
+
+    if (NULL == qof_collection_lookup_entity (tab, &ent->guid)) break;
+
+    PWARN("duplicate id created, trying again");
+  } while(1);
+ 
+  ent->collection = tab;
+
+  qof_collection_insert_entity (tab, ent);
+}
+
+void
+qof_int_entity_release (QofEntity *ent)
+{
+  if (!ent->collection) return;
+  qof_collection_remove_entity (ent);
+  CACHE_REMOVE (ent->e_type);
+  ent->e_type = NULL;
+}
+
+
+/* This is a restricted function, should be used only during 
+ * read from file */
+void
+qof_entity_set_guid (QofEntity *ent, const GUID *guid)
+{
+  QofCollection *col;
+  if (guid_equal (guid, &ent->guid)) return;
+
+  col = ent->collection;
+  qof_collection_remove_entity (ent);
+  ent->guid = *guid;
+  qof_collection_insert_entity (col, ent);
+}
+
+const GUID *
+qof_entity_get_guid (const QofEntity *ent)
+{
+  if (!ent) return guid_null();
+  return &ent->guid;
+}
+
+/* ========================================================== */
+
 QofInstance*
 qof_instance_create (QofIdType type, QofBook *book)
 {
@@ -48,6 +109,8 @@ qof_instance_create (QofIdType type, QofBook *book)
 	qof_instance_init(inst, type, book);
 	return inst;
 }
+
+
 
 void
 qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
@@ -64,7 +127,7 @@ qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 	inst->infant = TRUE;
 
 	col = qof_book_get_collection (book, type);
-	qof_entity_init (&inst->entity, type, col);
+	qof_int_entity_init (&inst->entity, type, col);
 }
 
 void
@@ -75,7 +138,7 @@ qof_instance_release (QofInstance *inst)
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
-	qof_entity_release (&inst->entity);
+	qof_int_entity_release (&inst->entity);
 }
 
 const GUID *

@@ -258,7 +258,7 @@ grand_getDescend(mygrand *g)
 	col = qof_collection_new(CHILD_MODULE_NAME);
 	for(list = g_list_copy(g->descend);list;list=list->next)
 	{
-		ent = (QofEntity*)list->data;
+		ent = QOF_ENTITY(list->data);
 		if(!ent) { break; }
 		do_test(0 == safe_strcmp(ent->e_type, CHILD_MODULE_NAME), "wrong entity");
 		qof_collection_add_entity(col, ent);
@@ -871,7 +871,7 @@ create_data (QofSession *original, guint counter)
 			{
 				QofEntity *ent;
 
-				ent = (QofEntity*)child1;
+				ent = QOF_ENTITY(child1);
 				qof_collection_add_entity(coll, ent);
 				grand_setDescend(grand1, coll);
 				qof_collection_destroy(coll);
@@ -913,7 +913,7 @@ check_cb (QofEntity *ent, gpointer data)
 	c->collect = qof_collection_count(coll);
 	if(c->book) { qof_book_set_references(c->book); }
 	param = qof_class_get_parameter(GRAND_MODULE_NAME, OBJ_RELATIVE);
-	parent = (QofEntity*)param->param_getfcn(ent, param);
+	parent = QOF_ENTITY(param->param_getfcn(ent, param));
 	testp = grand_getChild((mygrand*)ent);
 	/* not all grandparents have family so just keep count. */
 	if(!parent) { c->nulls++; return; }

@@ -154,19 +154,19 @@ qofOwnerGetOwner (GncOwner *owner)
 			break;
 		}
 		case GNC_OWNER_CUSTOMER : {
-			ent = (QofEntity*)owner->owner.customer;
+			ent = QOF_ENTITY(owner->owner.customer);
 			break;
 		}
 		case GNC_OWNER_JOB : {
-			ent = (QofEntity*)owner->owner.job;
+			ent = QOF_ENTITY(owner->owner.job);
 			break;
 		}
 		case GNC_OWNER_VENDOR : {
-			ent = (QofEntity*)owner->owner.vendor;
+			ent = QOF_ENTITY(owner->owner.vendor);
 			break;
 		}
 		case GNC_OWNER_EMPLOYEE : {
-			ent = (QofEntity*)owner->owner.employee;
+			ent = QOF_ENTITY(owner->owner.employee);
 			break;
 		}
 	}

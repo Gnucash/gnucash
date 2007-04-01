@@ -319,7 +319,7 @@ static QofEntity*
 qofJobGetOwner (GncJob *job)
 {
 	if(!job) { return NULL; }
-	return (QofEntity*)qofOwnerGetOwner(&job->owner);
+	return QOF_ENTITY(qofOwnerGetOwner(&job->owner));
 }
 
 /* Other functions */

@@ -514,7 +514,7 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 		registered_type = TRUE;
 	}
 	if(registered_type == FALSE) {
-/*		referenceEnt = (QofEntity*)cm_param->param_getfcn(importEnt, cm_param);
+/*		referenceEnt = QOF_ENTITY(cm_param->param_getfcn(importEnt, cm_param));
 		if(!referenceEnt) { return; }
 		if(!referenceEnt->e_type) { return; }*/
 		reference = qof_entity_get_reference_from(importEnt, cm_param);
@@ -555,7 +555,7 @@ qof_entity_list_foreach(gpointer data, gpointer user_data)
 	const GUID *g;
 	
 	g_return_if_fail(data != NULL);
-	original = (QofEntity*)data;
+	original = QOF_ENTITY(data);
 	g_return_if_fail(user_data != NULL);
 	qecd = (QofEntityCopyData*)user_data;
 	if(qof_entity_guid_match(qecd->new_session, original)) { return; }
@@ -756,7 +756,7 @@ recurse_ent_cb(QofEntity *ent, gpointer user_data)
 			}
 			continue;
 		}
-		ref_ent = (QofEntity*)ref_param->param_getfcn(ent, ref_param);
+		ref_ent = QOF_ENTITY(ref_param->param_getfcn(ent, ref_param));
 		if((ref_ent)&&(ref_ent->e_type))
 		{
 			store->success = qof_entity_copy_to_session(session, ref_ent);
@@ -766,7 +766,7 @@ recurse_ent_cb(QofEntity *ent, gpointer user_data)
 	for(i = ent_list; i != NULL; i = i->next)
 	{
 		if(i->data == NULL) { continue; }
-		child_ent = (QofEntity*)i->data;
+		child_ent = QOF_ENTITY(i->data);
 		if(child_ent == NULL) { continue; }
 		ref_list = qof_class_get_referenceList(child_ent->e_type);
 		for(j = ref_list; j != NULL; j = j->next)
@@ -784,7 +784,7 @@ recurse_ent_cb(QofEntity *ent, gpointer user_data)
 	for(i = child_list; i != NULL; i = i->next)
 	{
 		if(i->data == NULL) { continue; }
-		ref_ent = (QofEntity*)i->data;
+		ref_ent = QOF_ENTITY(i->data);
 		if(ref_ent == NULL) { continue; }
 		ref_list = qof_class_get_referenceList(ref_ent->e_type);
 		for(j = ref_list; j != NULL; j = j->next)

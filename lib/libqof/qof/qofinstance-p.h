@@ -40,7 +40,9 @@
 struct QofInstance_s
 {
    /* Globally unique id identifying this instance */
-   QofEntity entity;
+   QofIdType        e_type;		   /**<	Entity type */
+   GUID             guid;		   /**< GUID for the entity */
+   QofCollection  * collection;		   /**< Entity collection */
 
    /* The entity_table in which this instance is stored */
    QofBook * book;

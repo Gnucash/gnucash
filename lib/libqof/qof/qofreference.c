@@ -122,7 +122,7 @@ create_reference(QofEntity *ent, const QofParam *param)
 	char                cm_sa[GUID_ENCODING_LENGTH + 1];
 	gchar              *cm_string;
 
-	ref_ent = (QofEntity*)param->param_getfcn(ent, param);
+	ref_ent = QOF_ENTITY(param->param_getfcn(ent, param));
 	if(!ref_ent) { return NULL; }
 	reference = g_new0(QofEntityReference, 1);
 	reference->type = ent->e_type;

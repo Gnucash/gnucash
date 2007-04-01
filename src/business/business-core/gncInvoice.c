@@ -463,14 +463,14 @@ static QofEntity*
 qofInvoiceGetOwner (GncInvoice *invoice)
 {
 	if(!invoice) { return NULL; }
-	return (QofEntity*)&invoice->owner;
+	return QOF_ENTITY(&invoice->owner);
 }
 
 static QofEntity*
 qofInvoiceGetBillTo (GncInvoice *invoice)
 {
 	if(!invoice) { return NULL; }
-	return (QofEntity*)&invoice->billto;
+	return QOF_ENTITY(&invoice->billto);
 }
 
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
@@ -660,7 +660,7 @@ qofInvoiceGetEntries (GncInvoice *invoice)
 	entry_coll = qof_collection_new(GNC_ID_ENTRY);
 	for(list = gncInvoiceGetEntries(invoice); list != NULL; list = list->next)
 	{
-		entry = (QofEntity*)list->data;
+		entry = QOF_ENTITY(list->data);
 		qof_collection_add_entity(entry_coll, entry);
 	}
 	return entry_coll;

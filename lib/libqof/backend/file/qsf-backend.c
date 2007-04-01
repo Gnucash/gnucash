@@ -739,7 +739,7 @@ reference_list_lookup(gpointer data, gpointer user_data)
 		g_free(ref_name);
 	}
 	else {
-		ent = (QofEntity*)ref_param->param_getfcn(ent, ref_param);
+		ent = QOF_ENTITY(ref_param->param_getfcn(ent, ref_param));
 		if(!ent) { return; }
 		if((0 == safe_strcmp(ref_param->param_type, QOF_TYPE_COLLECT)) ||
 			(0 == safe_strcmp(ref_param->param_type, QOF_TYPE_CHOICE)))
@@ -827,7 +827,7 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_CHOICE))
 		{
 			/** \todo use the reference list here. */
-			choice_ent = (QofEntity*)qof_param->param_getfcn(ent, qof_param);
+			choice_ent = QOF_ENTITY(qof_param->param_getfcn(ent, qof_param));
 			if(!choice_ent) {
 				param_list = g_slist_next(param_list);
 				continue;
