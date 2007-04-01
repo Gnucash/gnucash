@@ -73,7 +73,7 @@ gnc_lot_new (QofBook *book)
 
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_CREATE, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_CREATE, NULL);
    return lot;
 }
 
@@ -84,7 +84,7 @@ gnc_lot_destroy (GNCLot *lot)
    if (!lot) return;
    
    ENTER ("(lot=%p)", lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_DESTROY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_DESTROY, NULL);
 
    
    for (node=lot->splits; node; node=node->next)
@@ -340,7 +340,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    lot->is_closed = -1;
    gnc_lot_commit_edit(lot);
 
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -361,7 +361,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       lot->account = NULL;
    }
    gnc_lot_commit_edit(lot);
-   qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -453,7 +453,7 @@ gboolean gnc_lot_register (void)
           (QofAccessFunc) gnc_lot_get_notes, 
           (QofSetterFunc) gnc_lot_set_notes },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, 
-          (QofAccessFunc) qof_entity_get_guid, NULL },
+          (QofAccessFunc) qof_instance_get_guid, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, 
           (QofAccessFunc) gnc_lot_get_book, NULL },
         { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, 

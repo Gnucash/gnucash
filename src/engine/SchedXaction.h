@@ -111,7 +111,7 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
-#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
+#define xaccSchedXactionSetGUID(X,G) qof_instance_set_guid(QOF_INSTANCE(X),(G))
 
 /**
  * Creates and initializes a scheduled transaction.
@@ -297,7 +297,7 @@ gboolean SXRegister (void);
 /** \deprecated */
 #define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSchedXactionGetGUID(X) qof_instance_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 

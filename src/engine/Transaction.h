@@ -550,9 +550,9 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 /** \deprecated */
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccTransGetGUID(X)      qof_instance_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccTransReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 /** \deprecated */
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 

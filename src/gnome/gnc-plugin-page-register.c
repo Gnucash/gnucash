@@ -149,7 +149,7 @@ static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer u
 
 static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
 static void gppr_account_destroy_cb (Account *account);
-static void gnc_plugin_page_register_event_handler (QofEntity *entity,
+static void gnc_plugin_page_register_event_handler (QofInstance *entity,
 						    QofEventId event_type,
 						    GncPluginPageRegister *page,
 						    GncEventData *ed);
@@ -2837,7 +2837,7 @@ gppr_account_destroy_cb (Account *account)
  *  @param ed
  */
 static void
-gnc_plugin_page_register_event_handler (QofEntity *entity,
+gnc_plugin_page_register_event_handler (QofInstance *entity,
 					QofEventId event_type,
 					GncPluginPageRegister *page,
 					GncEventData *ed)

@@ -64,7 +64,7 @@ GncBillTerm * gncCloneBillTerm (GncBillTerm *from, QofBook *);
  */
 GncBillTerm * gncBillTermObtainTwin (GncBillTerm *from, QofBook *book);
 
-#define gncBillTermSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
+#define gncBillTermSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 
 #endif /* GNC_BILLTERMP_H_ */

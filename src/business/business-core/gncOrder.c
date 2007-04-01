@@ -71,7 +71,7 @@ G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
   qof_instance_set_dirty(&order->inst);
-  qof_event_gen (&order->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
@@ -92,7 +92,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -108,7 +108,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_DESTROY, NULL);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
@@ -152,7 +152,7 @@ gncCloneOrder (GncOrder *from, QofBook *book)
     order->entries = g_list_prepend (order->entries, entry);
   }
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -373,7 +373,7 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   compare = timespec_cmp (&(a->closed), &(b->closed));
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
+  return guid_compare (&(a->inst.guid), &(b->inst.guid));
 }
 
 /* =========================================================== */

@@ -38,7 +38,7 @@ struct _gncAddress
   QofInstance inst;
 
   QofBook *	book;
-  QofEntity * parent;
+  QofInstance * parent;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -65,7 +65,7 @@ void mark_address (GncAddress *address)
 /* Create/Destroy functions */
 
 GncAddress * 
-gncAddressCreate (QofBook *book, QofEntity *prnt)
+gncAddressCreate (QofBook *book, QofInstance *prnt)
 {
   GncAddress *addr;
 
@@ -97,13 +97,13 @@ qofAddressCreate (QofBook *book)
 }
 
 static void
-qofAddressSetOwner(GncAddress *addr, QofEntity *ent)
+qofAddressSetOwner(GncAddress *addr, QofInstance *ent)
 {
 	if(!addr || !ent) { return; }
 	if(addr->parent == NULL) { addr->parent = ent; }
 }
 
-static QofEntity*
+static QofInstance*
 qofAddressGetOwner(GncAddress *addr)
 {
 
@@ -112,7 +112,7 @@ qofAddressGetOwner(GncAddress *addr)
 }
 
 GncAddress * 
-gncCloneAddress (GncAddress *from, QofEntity *new_parent, QofBook *book)
+gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book)
 {
   GncAddress *addr;
 
@@ -148,7 +148,7 @@ gncAddressFree (GncAddress *addr)
 {
   if (!addr) return;
 
-  qof_event_gen (&addr->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&addr->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (addr->name);
   CACHE_REMOVE (addr->addr1);

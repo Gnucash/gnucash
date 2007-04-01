@@ -71,7 +71,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
    xaccAccountSetName( sx->template_acct,
-                       guid_to_string( &sx->inst.entity.guid ));
+                       guid_to_string( &sx->inst.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,
@@ -91,7 +91,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
    sx = g_new0( SchedXaction, 1 );
    xaccSchedXactionInit( sx, book );
-   qof_event_gen( &sx->inst.entity, QOF_EVENT_CREATE , NULL);
+   qof_event_gen( &sx->inst, QOF_EVENT_CREATE , NULL);
 
    return sx;
 }
@@ -158,7 +158,7 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  qof_event_gen( &sx->inst.entity, QOF_EVENT_DESTROY , NULL);
+  qof_event_gen( &sx->inst, QOF_EVENT_DESTROY , NULL);
   
   if ( sx->name )
     g_free( sx->name );
@@ -206,7 +206,7 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 
 static void commit_done(QofInstance *inst)
 {
-  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static void noop(QofInstance *inst) {}

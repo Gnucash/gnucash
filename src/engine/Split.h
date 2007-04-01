@@ -72,7 +72,7 @@ gnc_numeric xaccSplitConvertAmount (const Split *split, Account * account);
 Split       * xaccMallocSplit (QofBook *book);
 
 /* Reinit a previously malloc'd split. Split remains in the book it
-   was already in, and the QofEntity portions also remain unchanged.
+   was already in, and the QofInstance portions also remain unchanged.
    It's basically the data elements that are reverted to default
    values. */
 void xaccSplitReinit(Split * split);
@@ -482,9 +482,9 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 /** @} */
 
 /** \deprecated */
-#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSplitGetGUID(X)      qof_instance_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccSplitReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 #endif /* XACC_SPLIT_H */
 /** @} */

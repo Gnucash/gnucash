@@ -104,7 +104,7 @@ gint gnc_engine_register_event_handler (GNCEngineEventHandler handler,
 /** \deprecated use qof_event_unregister_handler instead. */
 void gnc_engine_unregister_event_handler (gint handler_id);
 /** \deprecated use qof_event_gen instead. */
-void gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type);
+void gnc_engine_gen_event (QofInstance *entity, GNCEngineEventType event_type);
 /** \deprecated use qof_event_suspend instead. */
 void gnc_engine_suspend_events (void);
 /** \deprecated use qof_event_resume instead. */

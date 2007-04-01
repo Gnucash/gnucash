@@ -865,7 +865,7 @@ static void write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
-static void write_budget (QofEntity *ent, gpointer data);
+static void write_budget (QofInstance *ent, gpointer data);
 
 static void
 write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -1103,7 +1103,7 @@ write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
 }
 
 static void
-write_budget (QofEntity *ent, gpointer data)
+write_budget (QofInstance *ent, gpointer data)
 {
     xmlNodePtr node;
     struct file_backend* be = data;

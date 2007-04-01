@@ -1659,7 +1659,7 @@ _open_editors(GtkDialog *dialog, gint response_code, gpointer data)
 }
 
 static void
-_sx_engine_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_sx_engine_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     Account *acct;
     QofBook *book;

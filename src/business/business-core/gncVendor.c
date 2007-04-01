@@ -68,7 +68,7 @@ G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {
   qof_instance_set_dirty(&vendor->inst);
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -86,12 +86,12 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->inst.entity);
+  vendor->addr = gncAddressCreate (book, &vendor->inst);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -107,7 +107,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -140,7 +140,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
   vendor->id = CACHE_INSERT (from->id);
   vendor->name = CACHE_INSERT (from->name);
   vendor->notes = CACHE_INSERT (from->notes);
-  vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
+  vendor->addr = gncCloneAddress (from->addr, &vendor->inst, book);
   vendor->taxincluded = from->taxincluded;
   vendor->taxtable_override = from->taxtable_override;
   vendor->active = from->active;
@@ -161,7 +161,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
     vendor->jobs = g_list_prepend(vendor->jobs, job);
   }
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -293,7 +293,7 @@ void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
 }
 
 static void
-qofVendorSetAddr (GncVendor *vendor, QofEntity *addr_ent)
+qofVendorSetAddr (GncVendor *vendor, QofInstance *addr_ent)
 {
 	GncAddress *addr;
 
@@ -396,7 +396,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
                                          (GCompareFunc)gncJobCompare);
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -414,7 +414,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)

@@ -56,7 +56,7 @@ static gint _get_vars_helper(Transaction *txn, void *var_hash_data);
 
 static GncSxVariable* gnc_sx_variable_new(gchar *name);
 
-static void _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
+static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
 
 /* ------------------------------------------------------------ */
 
@@ -605,7 +605,7 @@ _gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_
 }
 
 static void
-_gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     GncSxInstanceModel *instances = GNC_SX_INSTANCE_MODEL(user_data);
 

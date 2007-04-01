@@ -138,10 +138,10 @@ qofOwnerGetType(GncOwner *owner)
 	return type;
 }
 
-QofEntity*
+QofInstance*
 qofOwnerGetOwner (GncOwner *owner)
 {
-	QofEntity *ent;
+	QofInstance *ent;
 
 	if(!owner) { return NULL; }
 	ent = NULL;
@@ -154,19 +154,19 @@ qofOwnerGetOwner (GncOwner *owner)
 			break;
 		}
 		case GNC_OWNER_CUSTOMER : {
-			ent = QOF_ENTITY(owner->owner.customer);
+			ent = QOF_INSTANCE(owner->owner.customer);
 			break;
 		}
 		case GNC_OWNER_JOB : {
-			ent = QOF_ENTITY(owner->owner.job);
+			ent = QOF_INSTANCE(owner->owner.job);
 			break;
 		}
 		case GNC_OWNER_VENDOR : {
-			ent = QOF_ENTITY(owner->owner.vendor);
+			ent = QOF_INSTANCE(owner->owner.vendor);
 			break;
 		}
 		case GNC_OWNER_EMPLOYEE : {
-			ent = QOF_ENTITY(owner->owner.employee);
+			ent = QOF_INSTANCE(owner->owner.employee);
 			break;
 		}
 	}
@@ -174,7 +174,7 @@ qofOwnerGetOwner (GncOwner *owner)
 }
 
 void
-qofOwnerSetEntity (GncOwner *owner, QofEntity *ent)
+qofOwnerSetEntity (GncOwner *owner, QofInstance *ent)
 {
 	if(!owner || !ent) { return; }
 	if(0 == safe_strcmp(ent->e_type, GNC_ID_CUSTOMER))

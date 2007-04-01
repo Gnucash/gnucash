@@ -57,7 +57,7 @@ gnc_price_create (QofBook *book)
   p->source = NULL;
 
   qof_instance_init (&p->inst, GNC_ID_PRICE, book);
-  qof_event_gen (&p->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_CREATE, NULL);
 
   return p;
 }
@@ -66,7 +66,7 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  qof_event_gen (&p->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_DESTROY, NULL);
 
   if(p->type) CACHE_REMOVE(p->type);
   if(p->source) CACHE_REMOVE(p->source);
@@ -820,7 +820,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
-  qof_event_gen (&p->inst.entity, QOF_EVENT_ADD, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
          db, p, p->inst.dirty, p->inst.do_free,
@@ -885,7 +885,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) { LEAVE (" no currency hash"); return FALSE; }
 
-  qof_event_gen (&p->inst.entity, QOF_EVENT_REMOVE, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_REMOVE, NULL);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {
@@ -2376,7 +2376,7 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void
-price_foreach(const QofCollection *col, QofEntityForeachCB cb, gpointer data)
+price_foreach(const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
 {
   GNCPriceDB *db;
 

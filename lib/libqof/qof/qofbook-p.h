@@ -115,10 +115,10 @@ void qof_book_set_backend (QofBook *book, QofBackend *be);
 /* Register books with the engine */
 gboolean qof_book_register (void);
 
-/** @deprecated use qof_entity_set_guid instead but only in
+/** @deprecated use qof_instance_set_guid instead but only in
 backends (when reading the GUID from the data source). */
 #define qof_book_set_guid(book,guid)    \
-         qof_entity_set_guid(QOF_ENTITY(book), guid)
+         qof_instance_set_guid(QOF_INSTANCE(book), guid)
 
 /* @} */
 /* @} */

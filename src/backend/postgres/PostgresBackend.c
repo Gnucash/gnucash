@@ -184,7 +184,7 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
 
 struct _iter {
   const GUID *guid;
-  QofEntity *ent;
+  QofInstance *ent;
 };
 
 static void
@@ -1627,7 +1627,7 @@ static void
 pgend_do_begin (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   // if (!safe_strcmp (type, GNC_ID_PERIOD))
@@ -1653,7 +1653,7 @@ static void
 pgend_do_commit (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   // if (!safe_strcmp (type, GNC_ID_PERIOD))
@@ -1689,7 +1689,7 @@ static void
 pgend_do_rollback (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   switch (be->session_mode) {

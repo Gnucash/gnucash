@@ -197,7 +197,7 @@ gnc_sxes_add_sx(SchedXactions *sxes, SchedXaction *sx)
   if (g_list_find(sxes->sx_list, sx) != NULL)
     return;
   sxes->sx_list = g_list_append(sxes->sx_list, sx);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
+  qof_event_gen(&sxes->inst, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
 }
 
 void
@@ -208,7 +208,7 @@ gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
   if (to_remove == NULL)
     return;
   sxes->sx_list = g_list_delete_link(sxes->sx_list, to_remove);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
+  qof_event_gen(&sxes->inst, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
 }
 
 /* ====================================================================== */

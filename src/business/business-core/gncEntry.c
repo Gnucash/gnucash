@@ -169,7 +169,7 @@ G_INLINE_FUNC void mark_entry (GncEntry *entry);
 void mark_entry (GncEntry *entry)
 {
   qof_instance_set_dirty(&entry->inst);
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================ */
@@ -203,7 +203,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_CREATE, NULL);
 
   return entry;
 }
@@ -219,7 +219,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -1209,7 +1209,7 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   compare = safe_strcmp (a->action, b->action);
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
+  return guid_compare (&(a->inst.guid), &(b->inst.guid));
 }
 
 /* ============================================================= */

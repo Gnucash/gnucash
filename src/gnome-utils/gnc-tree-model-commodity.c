@@ -82,7 +82,7 @@ static gboolean	gnc_tree_model_commodity_iter_nth_child (GtkTreeModel *tree_mode
 static gboolean	gnc_tree_model_commodity_iter_parent (GtkTreeModel *tree_model,
 						      GtkTreeIter *iter,
     						      GtkTreeIter *child);
-static void gnc_tree_model_commodity_event_handler (QofEntity *entity,
+static void gnc_tree_model_commodity_event_handler (QofInstance *entity,
 						    QofEventId event_type,
 						    gpointer user_data,
 						    gpointer event_data);
@@ -1212,7 +1212,7 @@ gnc_tree_model_commodity_do_deletions (gpointer unused)
  *  @param event_data A pointer to additional data about this event.
  */
 static void
-gnc_tree_model_commodity_event_handler (QofEntity *entity,
+gnc_tree_model_commodity_event_handler (QofInstance *entity,
 					QofEventId event_type,
 					gpointer user_data,
 					gpointer event_data)

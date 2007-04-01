@@ -60,7 +60,7 @@ struct gnc_lot_struct
   unsigned char marker;
 };
 
-#define gnc_lot_set_guid(L,G)  qof_entity_set_guid(QOF_ENTITY(L),&(G))
+#define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
 /* Register with the Query engine */
 gboolean gnc_lot_register (void);

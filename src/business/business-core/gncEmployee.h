@@ -60,7 +60,7 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
-void qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent);
+void qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent);
 
 /** @} */
 
@@ -101,9 +101,9 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee);
 #define EMPLOYEE_CC    "credit_card_account"
 
 /** deprecated routines */
-#define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))
+#define gncEmployeeGetGUID(E) qof_instance_get_guid(QOF_INSTANCE(E))
 #define gncEmployeeGetBook(E) qof_instance_get_book(QOF_INSTANCE(E))
-#define gncEmployeeRetGUID(E) (E ? *(qof_entity_get_guid(QOF_ENTITY(E))) : *(guid_null()))
+#define gncEmployeeRetGUID(E) (E ? *(qof_instance_get_guid(QOF_INSTANCE(E))) : *(guid_null()))
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 
 #endif /* GNC_EMPLOYEE_H_ */

@@ -86,7 +86,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -108,7 +108,7 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_force (&book->inst, QOF_EVENT_DESTROY, NULL);
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
@@ -411,7 +411,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gboolean qof_book_register (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };

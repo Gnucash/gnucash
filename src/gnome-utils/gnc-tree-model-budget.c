@@ -31,7 +31,7 @@
 #include "gnc-ui-util.h"
 
 /* Add the new budget object to the tree model.  */
-static void add_budget_to_model(QofEntity* data, gpointer user_data )
+static void add_budget_to_model(QofInstance* data, gpointer user_data )
 {
     GtkTreeIter iter;
     GncBudget* budget = GNC_BUDGET(data);

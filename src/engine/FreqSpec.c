@@ -168,12 +168,10 @@ get_abbrev_month_name(guint month)
 static void
 xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 {
-   QofCollection *col;
    g_return_if_fail( fs );
    g_return_if_fail (book);
 
-   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
+   qof_instance_init (&fs->entity, QOF_ID_FREQSPEC, book);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;
@@ -224,7 +222,7 @@ xaccFreqSpecFree( FreqSpec *fs )
    qof_event_gen( &fs->entity, QOF_EVENT_DESTROY , NULL);
    xaccFreqSpecCleanUp( fs );
 
-   qof_entity_release (&fs->entity);
+   qof_instance_release (&fs->entity);
    g_free( fs );
 }
 

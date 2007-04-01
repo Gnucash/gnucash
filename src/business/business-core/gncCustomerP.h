@@ -53,6 +53,6 @@ GncCustomer * gncCloneCustomer (GncCustomer *from,  QofBook *book);
  */
 GncCustomer * gncCustomerObtainTwin (GncCustomer *from, QofBook *book);
 
-#define gncCustomerSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
+#define gncCustomerSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_CUSTOMERP_H_ */

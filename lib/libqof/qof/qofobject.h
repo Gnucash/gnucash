@@ -104,7 +104,7 @@ struct _QofObject
    *  provide this routine, as without it, little of interest can 
     * be done.
    */
-  void                (*foreach)(const QofCollection *, QofEntityForeachCB, gpointer);
+  void                (*foreach)(const QofCollection *, QofInstanceForeachCB, gpointer);
 
   /** Given a particular item of this type, return a printable string. 
    */
@@ -160,7 +160,7 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
  *  be invoked only for those instances stored in the book.
  */
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                         QofEntityForeachCB cb, gpointer user_data);
+                         QofInstanceForeachCB cb, gpointer user_data);
 
 /** Register and lookup backend-specific data for this particular object */
 gboolean qof_object_register_backend (QofIdTypeConst type_name,

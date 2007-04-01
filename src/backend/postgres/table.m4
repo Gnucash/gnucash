@@ -13,7 +13,7 @@ define(`account', `gncAccount, Account, Account, a,
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
        iguid,          , int32,  ptr->idata,
-       bookGUID,       , GUID *, qof_entity_get_guid((QofEntity*)gnc_account_get_book(ptr)),
+       bookGUID,       , GUID *, qof_instance_get_guid((QofInstance*)gnc_account_get_book(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(gnc_account_get_parent(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
@@ -362,7 +362,7 @@ define(`compare_version',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@) WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
+   p = guid_to_string_buff (qof_instance_get_guid(QOF_INSTANCE(ptr)), p);
    p = stpcpy (p, "''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));
@@ -392,7 +392,7 @@ define(`is_deleted',
 
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT version FROM tablename($@)" "Trail WHERE key_fieldname($@) = ''`");
-   p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
+   p = guid_to_string_buff (qof_instance_get_guid(QOF_INSTANCE(ptr)), p);
    p = stpcpy (p, "''` AND change = ''`d''`;");
    SEND_QUERY (be,be->buff, -1);
    sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));

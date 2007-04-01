@@ -182,7 +182,7 @@ grand_create(QofBook *book)
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
 	g->descend = NULL;
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -203,7 +203,7 @@ parent_create(QofBook *book)
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -223,12 +223,12 @@ child_create(QofBook *book)
 	g->flag = get_random_character();
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
-	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
+	qof_event_gen(&g->inst, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
 static void
-descend_cb (QofEntity *ent, gpointer user_data)
+descend_cb (QofInstance *ent, gpointer user_data)
 {
 	mygrand *g = (mygrand*)user_data;
 
@@ -251,14 +251,14 @@ static QofCollection*
 grand_getDescend(mygrand *g)
 {
 	QofCollection *col;
-	QofEntity *ent;
+	QofInstance *ent;
 	GList *list;
 
 	g_return_val_if_fail(g, NULL);
 	col = qof_collection_new(CHILD_MODULE_NAME);
 	for(list = g_list_copy(g->descend);list;list=list->next)
 	{
-		ent = QOF_ENTITY(list->data);
+		ent = QOF_INSTANCE(list->data);
 		if(!ent) { break; }
 		do_test(0 == safe_strcmp(ent->e_type, CHILD_MODULE_NAME), "wrong entity");
 		qof_collection_add_entity(col, ent);
@@ -869,9 +869,9 @@ create_data (QofSession *original, guint counter)
 			do_test((coll != NULL), "grandparent not valid");
 			if(coll)
 			{
-				QofEntity *ent;
+				QofInstance *ent;
 
-				ent = QOF_ENTITY(child1);
+				ent = QOF_INSTANCE(child1);
 				qof_collection_add_entity(coll, ent);
 				grand_setDescend(grand1, coll);
 				qof_collection_destroy(coll);
@@ -891,9 +891,9 @@ struct tally
 };
 
 static void
-check_cb (QofEntity *ent, gpointer data)
+check_cb (QofInstance *ent, gpointer data)
 {
-	QofEntity *parent, *child;
+	QofInstance *parent, *child;
 	QofCollection *coll;
 	struct tally *c;
 	const QofParam *param;
@@ -913,7 +913,7 @@ check_cb (QofEntity *ent, gpointer data)
 	c->collect = qof_collection_count(coll);
 	if(c->book) { qof_book_set_references(c->book); }
 	param = qof_class_get_parameter(GRAND_MODULE_NAME, OBJ_RELATIVE);
-	parent = QOF_ENTITY(param->param_getfcn(ent, param));
+	parent = QOF_INSTANCE(param->param_getfcn(ent, param));
 	testp = grand_getChild((mygrand*)ent);
 	/* not all grandparents have family so just keep count. */
 	if(!parent) { c->nulls++; return; }
@@ -945,7 +945,7 @@ test_recursion (QofSession *original, guint counter)
 	copy = qof_session_new();
 	if(debug) { qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); }
 	/* TODO: implement QOF_TYPE_CHOICE testing. */
-	qof_entity_copy_coll_r(copy, grand_coll);
+	qof_instance_copy_coll_r(copy, grand_coll);
 	/* test the original */
 	qof_object_foreach(GRAND_MODULE_NAME, book, check_cb, &c);
 	book = qof_session_get_book(copy);

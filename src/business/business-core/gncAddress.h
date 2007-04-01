@@ -65,7 +65,7 @@ up to you to pass a suitable entity.
 
 @param  QofInstance The address instance.
 @param	QofBook*	  Copy of the book pointer.
-@param	QofEntity* parent entity.
+@param	QofInstance* parent entity.
 @param	gboolean	dirty flag
 @param	char*	name of addressee
 @param	char*	first line of address
@@ -80,7 +80,7 @@ typedef struct _gncAddress GncAddress;
 
 /** @name Create/Destroy functions 
  @{ */
-GncAddress *gncAddressCreate (QofBook *book, QofEntity *parent);
+GncAddress *gncAddressCreate (QofBook *book, QofInstance *parent);
 void gncAddressDestroy (GncAddress *addr);
 void gncAddressBeginEdit (GncAddress *addr);
 void gncAddressCommitEdit (GncAddress *addr);

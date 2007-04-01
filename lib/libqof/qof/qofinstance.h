@@ -22,7 +22,7 @@
 /** @addtogroup Entity
     @{ */
 /** @addtogroup Instance
-    Qof Instances are a derived type of QofEntity.  The Instance
+    Qof Instances are a derived type of QofInstance.  The Instance
     adds some common features and functions that most objects
     will want to use.
 
@@ -47,7 +47,7 @@
  * thunks, etc.  */
 #define QOF_INSTANCE(object) ((QofInstance *)(object))
 
-typedef struct QofInstance_s QofInstance;
+/*typedef struct QofInstance_s QofInstance;*/
 
 /** Initialise the memory associated with an instance */
 void qof_instance_init (QofInstance *, QofIdType, QofBook *);
@@ -81,7 +81,7 @@ Timespec qof_instance_get_last_update (const QofInstance *inst);
  */
 int qof_instance_version_cmp (const QofInstance *left, const QofInstance *right);
 
-void qof_instance_print_dirty (const QofEntity *entity, gpointer dummy);
+void qof_instance_print_dirty (const QofInstance *entity, gpointer dummy);
 
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);

@@ -62,7 +62,7 @@ G_INLINE_FUNC void mark_employee (GncEmployee *employee);
 void mark_employee (GncEmployee *employee)
 {
   qof_instance_set_dirty(&employee->inst);
-  qof_event_gen (&employee->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&employee->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -81,12 +81,12 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book, &employee->inst.entity);
+  employee->addr = gncAddressCreate (book, &employee->inst);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&employee->inst, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -102,7 +102,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  qof_event_gen (&employee->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&employee->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);
@@ -128,7 +128,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->username = CACHE_INSERT (from->username);
   employee->language = CACHE_INSERT (from->language);
   employee->acl = CACHE_INSERT (from->acl);
-  employee->addr = gncCloneAddress (from->addr, &employee->inst.entity, book);
+  employee->addr = gncCloneAddress (from->addr, &employee->inst, book);
   employee->workday = from->workday;
   employee->rate = from->rate;
   employee->active = from->active;
@@ -136,7 +136,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->ccard_acc = 
      GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
   
-  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&employee->inst, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -258,7 +258,7 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
 }
 
 void
-qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent)
+qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent)
 {
 	GncAddress *addr;
 

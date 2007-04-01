@@ -38,7 +38,7 @@ test_string_fcn (GncAddress *address, const char *message,
 static void
 test_address (void)
 {
-  QofEntity ent;
+  QofInstance ent;
   GncAddress *address;
   QofBook *book = qof_book_new ();
 

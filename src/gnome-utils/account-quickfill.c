@@ -31,7 +31,7 @@
 static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
-static void listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
+static void listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 					gpointer user_data, gpointer event_data);
 
 /* Column indices for the list store */
@@ -219,7 +219,7 @@ gnc_get_shared_account_name_list_store (Account *root,
  * for account modification events, and add new accounts.
  */
 static void
-listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
+listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 			    gpointer user_data, gpointer event_data)
 {
   QFB *qfb = user_data;

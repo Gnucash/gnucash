@@ -53,7 +53,7 @@ run_test (void)
   int i;
   QofSession *sess;
   QofBook *book;
-  QofEntity *eblk;
+  QofInstance *eblk;
   QofCollection *col;
   QofIdType type;
 
@@ -65,10 +65,10 @@ run_test (void)
   type = qof_collection_get_type (col);
   
 #define NENT 500123
-  eblk = g_new0(QofEntity, NENT);
+  eblk = g_new0(QofInstance, NENT);
   for (i=0; i<NENT; i++)
   {
-    QofEntity *ent = &eblk[i];
+    QofInstance *ent = &eblk[i];
     guid_new(&ent->guid);
     do_test ((NULL == qof_collection_lookup_entity (col, &ent->guid)),
 						  "duplicate guid");

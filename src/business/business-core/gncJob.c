@@ -57,7 +57,7 @@ G_INLINE_FUNC void mark_job (GncJob *job);
 void mark_job (GncJob *job)
 {
   qof_instance_set_dirty(&job->inst);
-  qof_event_gen (&job->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&job->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================== */
@@ -78,7 +78,7 @@ GncJob *gncJobCreate (QofBook *book)
   job->active = TRUE;
 
   /* GncOwner not initialized */
-  qof_event_gen (&job->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&job->inst, QOF_EVENT_CREATE, NULL);
 
   return job;
 }
@@ -101,7 +101,7 @@ gncCloneJob (GncJob *from, QofBook *book)
 
   job->owner = gncCloneOwner(&from->owner, book);
 
-  qof_event_gen (&job->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&job->inst, QOF_EVENT_CREATE, NULL);
                                                                                 
   return job;
 }
@@ -117,7 +117,7 @@ static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
-  qof_event_gen (&job->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&job->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);
@@ -248,7 +248,7 @@ void gncJobSetActive (GncJob *job, gboolean active)
 }
 
 static void
-qofJobSetOwner (GncJob *job, QofEntity *ent)
+qofJobSetOwner (GncJob *job, QofInstance *ent)
 {
 	if(!job || !ent) { return; }
 	qof_begin_edit(&job->inst);
@@ -315,11 +315,11 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-static QofEntity*
+static QofInstance*
 qofJobGetOwner (GncJob *job)
 {
 	if(!job) { return NULL; }
-	return QOF_ENTITY(qofOwnerGetOwner(&job->owner));
+	return QOF_INSTANCE(qofOwnerGetOwner(&job->owner));
 }
 
 /* Other functions */

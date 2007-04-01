@@ -319,7 +319,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Find and remove the matching guid's */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
-                    "peer_guid", &sb->inst.entity.guid);
+                    "peer_guid", &sb->inst.guid);
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
@@ -328,7 +328,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Now do it in the other direction */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
-                    "peer_guid", &sa->inst.entity.guid);
+                    "peer_guid", &sa->inst.guid);
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
@@ -422,7 +422,7 @@ restart:
        * repeatedly merging adjacent subsplits, we'll get the non-
        * adjacent ones too. */
       if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                    "peer_guid", &s->inst.entity.guid) == NULL)
+                                    "peer_guid", &s->inst.guid) == NULL)
          continue;
          
       merge_splits (split, s);

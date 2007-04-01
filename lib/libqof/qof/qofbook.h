@@ -50,7 +50,7 @@
 
 /** Lookup an entity by guid, returning pointer to the entity */
 #define QOF_BOOK_LOOKUP_ENTITY(book,guid,e_type,c_type) ({  \
-  QofEntity *val = NULL;                                    \
+  QofInstance *val = NULL;                                    \
   if (guid && book) {                                       \
     QofCollection *col;                                     \
     col = qof_book_get_collection (book, e_type);           \
@@ -191,7 +191,7 @@ gboolean qof_book_equal (const QofBook *book_1, const QofBook *book_2);
 gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
 /** deprecated */
-#define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
+#define qof_book_get_guid(X) qof_instance_get_guid (QOF_INSTANCE(X))
 
 #endif /* QOF_BOOK_H */
 /** @} */
