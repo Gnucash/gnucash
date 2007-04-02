@@ -79,10 +79,12 @@ enum {
 #define PLUGIN_PAGE_LABEL "plugin-page"
 
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
+#define PLUGIN_PAGE_TAB_LABEL    "label"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 #define KEY_TAB_NEXT_RECENT	"tab_next_recent"
 #define KEY_TAB_POSITION	"tab_position"
+#define KEY_TAB_WIDTH           "tab_width"
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
@@ -392,6 +394,11 @@ static const gchar *multiple_page_actions[] = {
 };
 
 
+/* This data structure holds the tooltops for all notebook tabs.
+ * Typically these are used to provide the full path of a register
+ * page. */
+static GtkTooltips *tips = NULL;
+
 /************************************************************
  *                                                          *
  ************************************************************/
@@ -417,6 +424,29 @@ typedef struct {
   gint page_num;
   gint page_offset;
 } GncMainWindowSaveData;
+
+
+/*  Iterator function to walk all pages in all windows, calling the
+ *  specified function for each page. */
+void
+gnc_main_window_foreach_page (GncMainWindowPageFunc fn, gpointer user_data)
+{
+  GncMainWindowPrivate *priv;
+  GncMainWindow *window;
+  GncPluginPage *page;
+  GList *w, *p;
+
+  ENTER(" ");
+  for (w = active_windows; w; w = g_list_next(w)) {
+    window = w->data;
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    for (p = priv->installed_pages; p; p = g_list_next(p)) {
+      page = p->data;
+      fn(page, user_data);
+    }
+  }
+  LEAVE(" ");
+}
 
 
 /** Restore a single page to a window.  This function calls a page
@@ -1445,9 +1475,10 @@ gnc_main_window_update_all_menu_items (void)
  *  or not the close button should be visible.
  */
 static void
-gnc_main_window_update_tabs_one_page (GncPluginPage *page,
-				      gboolean *new_value)
+gnc_main_window_update_tab_close_one_page (GncPluginPage *page,
+                                           gpointer user_data)
 {
+  gboolean *new_value = user_data;
   GtkWidget * close_button;
 
   ENTER("page %p, visible %d", page, *new_value);
@@ -1465,35 +1496,9 @@ gnc_main_window_update_tabs_one_page (GncPluginPage *page,
 }
 
 
-/** Show/hide the close box on all pages in a given window.  This
- *  function calls the gnc_main_window_update_tabs_one_page() for each
- *  page in the window.
- *
- *  @internal
- *
- *  @param window The GncMainWindow whose notebook tabs should be
- *  updated.
- *
- *  @param new_value A pointer to the boolean that indicates whether
- *  or not the close button should be visible.
- */
-static void
-gnc_main_window_update_tabs_one_window (GncMainWindow *window, gboolean *new_value)
-{
-  GncMainWindowPrivate *priv;
-
-  ENTER("window %p, visible %d", window, *new_value);
-  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-  g_list_foreach(priv->installed_pages,
-		 (GFunc)gnc_main_window_update_tabs_one_page,
-		 new_value);
-  LEAVE(" ");
-}
-
-
-/** Show/hide the close box on all pages in all windows.  This
- *  function calls the gnc_main_window_update_tabs_one_window() for
- *  each open window in the application.
+/** Show/hide the close box on all pages in all windows.  This function
+ *  calls gnc_main_window_update_tab_close() for each plugin page in the
+ *  application.
  *
  *  @internal
  *
@@ -1503,14 +1508,76 @@ gnc_main_window_update_tabs_one_window (GncMainWindow *window, gboolean *new_val
  *  @param user_data Unused.
  */
 static void
-gnc_main_window_update_tabs (GConfEntry *entry, gpointer user_data)
+gnc_main_window_update_tab_close (GConfEntry *entry, gpointer user_data)
 {
   gboolean new_value;
 
   ENTER(" ");
   new_value = gconf_value_get_bool(entry->value);
-  g_list_foreach(active_windows,
-		 (GFunc)gnc_main_window_update_tabs_one_window,
+  gnc_main_window_foreach_page(
+		 gnc_main_window_update_tab_close_one_page,
+		 &new_value);
+  LEAVE(" ");
+}
+
+
+/** Update the width of the label in the tab of a notebook page.  This
+ *  function adjusts both the width and the ellipsize mode so that the tab
+ *  label looks correct.  The special check for a zero value handles the
+ *  case where a user hasn't set a tab width and the gconf default isn't
+ *  detected.
+ *
+ *  @internal
+ *
+ *  @param page The GncPluginPage whose notebook tab should be updated.
+ *
+ *  @param new_value The new width of the label in the tab.
+ */
+static void
+gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
+                                           gpointer user_data)
+{
+  gint *new_value = user_data;
+  GtkWidget *label;
+
+  ENTER("page %p, visible %d", page, *new_value);
+  label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
+  if (!label) {
+    LEAVE("no label");
+    return;
+  }
+
+  if (*new_value != 0) {
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
+    gtk_label_set_max_width_chars(GTK_LABEL(label), *new_value);
+  } else {
+    gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
+    gtk_label_set_max_width_chars(GTK_LABEL(label), 100);
+  }
+  LEAVE(" ");
+}
+
+
+/** Update the tab label width in all pages in all windows.  This function
+ *  calls gnc_main_window_update_tab_width() for each plugin page in the
+ *  application.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the GConfEntry which describes the new
+ *  size of the tab label width.
+ *
+ *  @param user_data Unused.
+ */
+static void
+gnc_main_window_update_tab_width (GConfEntry *entry, gpointer user_data)
+{
+  gint new_value;
+
+  ENTER(" ");
+  new_value = gconf_value_get_float(entry->value);
+  gnc_main_window_foreach_page(
+		 gnc_main_window_update_tab_width_one_page,
 		 &new_value);
   LEAVE(" ");
 }
@@ -1538,8 +1605,8 @@ main_window_find_tab_items (GncMainWindow *window,
   children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
   for (tmp = children; tmp; tmp = g_list_next(tmp)) {
     widget = tmp->data;
-    if (GTK_IS_LABEL(widget)) {
-      *label_p = widget;
+    if (GTK_IS_EVENT_BOX(widget)) {
+      *label_p = gtk_bin_get_child(GTK_BIN(widget));
     } else if (GTK_IS_ENTRY(widget)) {
       *entry_p = widget;
     }
@@ -1771,12 +1838,17 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 			G_TYPE_OBJECT);
 
 	gnc_gconf_general_register_cb (KEY_SHOW_CLOSE_BUTTON,
-				       gnc_main_window_update_tabs,
+				       gnc_main_window_update_tab_close,
+				       NULL);
+	gnc_gconf_general_register_cb (KEY_TAB_WIDTH,
+				       gnc_main_window_update_tab_width,
 				       NULL);
 	gnc_hook_add_dangler(HOOK_BOOK_SAVED,
 			     (GFunc)gnc_main_window_update_all_titles, NULL);
 	gnc_hook_add_dangler(HOOK_BOOK_OPENED,
 			     (GFunc)gnc_main_window_attach_to_book, NULL);
+
+        tips = gtk_tooltips_new();
 }
 
 
@@ -2070,10 +2142,11 @@ gnc_main_window_open_page (GncMainWindow *window,
 {
 	GncMainWindowPrivate *priv;
 	GtkWidget *tab_hbox;
-	GtkWidget *label, *entry;
-	const gchar *icon;
+	GtkWidget *label, *entry, *event_box;
+	const gchar *icon, *text;
 	GtkWidget *image;
 	GList *tmp;
+	gint width;
 
 	ENTER("window %p, page %p", window, page);
 
@@ -2112,9 +2185,15 @@ gnc_main_window_open_page (GncMainWindow *window,
 	/*
 	 * The page tab.
 	 */
+        width = gnc_gconf_get_float(GCONF_GENERAL, KEY_TAB_WIDTH, NULL);
 	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
 	label = gtk_label_new (gnc_plugin_page_get_page_name(page));
+        if (width != 0) {
+          gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
+          gtk_label_set_max_width_chars(GTK_LABEL(label), width);
+        }
 	gtk_widget_show (label);
+        g_object_set_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
 	tab_hbox = gtk_hbox_new (FALSE, 6);
 	gtk_widget_show (tab_hbox);
@@ -2125,8 +2204,17 @@ gnc_main_window_open_page (GncMainWindow *window,
 		gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
 	} 
 
-	gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
-  
+        event_box = gtk_event_box_new();
+        gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
+        gtk_widget_show(event_box);
+        gtk_container_add(GTK_CONTAINER(event_box), label);
+	gtk_box_pack_start (GTK_BOX (tab_hbox), event_box, TRUE, TRUE, 0);
+
+        text = gnc_plugin_page_get_page_long_name(page);
+        if (text) {
+          gtk_tooltips_set_tip(tips, event_box, text, NULL);
+        }
+
 	entry = gtk_entry_new();
 	gtk_widget_hide (entry);
 	gtk_box_pack_start (GTK_BOX (tab_hbox), entry, TRUE, TRUE, 0);

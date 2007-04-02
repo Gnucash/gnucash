@@ -95,6 +95,7 @@ static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboo
 static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page);
 
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
@@ -453,6 +454,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
 	gnc_plugin_page_set_page_name(plugin_page, label);
 	g_free(label);
+
+	label = gnc_plugin_page_register_get_long_name(plugin_page);
+        gnc_plugin_page_set_page_long_name(plugin_page, label);
+        g_free(label);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);
@@ -1152,6 +1157,37 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
+}
+
+static gchar *
+gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GNCLedgerDisplayType ledger_type;
+  	GNCLedgerDisplay *ld;
+	SplitRegister *reg;
+	Account *leader;
+
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+	ld = priv->ledger;
+	reg = gnc_ledger_display_get_split_register (ld);
+	ledger_type = gnc_ledger_display_type (ld);
+	leader = gnc_ledger_display_leader (ld);
+
+	switch (ledger_type) {
+	 case LD_SINGLE:
+	  return g_strdup(xaccAccountGetFullName (leader));
+
+	 case LD_SUBACCOUNT:
+	  return g_strdup_printf("%s+", xaccAccountGetFullName (leader));
+
+	 default:
+	  break;
+	}
+
+        return NULL;
 }
 
 /************************************************************/

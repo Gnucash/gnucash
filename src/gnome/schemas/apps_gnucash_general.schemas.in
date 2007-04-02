@@ -185,6 +185,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/tab_width</key>
+      <applyto>/apps/gnucash/general/tab_width</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>30.0</default>
+      <locale name="C">
+        <short>Width of notebook tabs</short>
+        <long>
+	  This key specifies the maximum width of notebook tabs.
+	  If the text in the tab is longer than this value (the test
+	  is approximate) then the tab label will have the middle cut
+	  and replaced with an ellipsis.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/currency_choice</key>
       <applyto>/apps/gnucash/general/currency_choice</applyto>
       <owner>gnucash</owner>

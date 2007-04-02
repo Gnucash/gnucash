@@ -95,6 +95,7 @@ typedef struct _GncPluginPagePrivate
 	gboolean use_new_window;
 
 	gchar *page_name;
+	gchar *page_long_name;
 	gchar *uri;
 	gchar *statusbar_text;
 } GncPluginPagePrivate;
@@ -766,6 +767,38 @@ gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
   if (klass->page_name_changed) {
     klass->page_name_changed(page, name);
   }
+}
+
+
+/*  Retrieve the long name of this page.  This is the string used in
+ *  the tooltip that is attached to the pate name in the notebook
+ *  tab. */
+const gchar *
+gnc_plugin_page_get_page_long_name (GncPluginPage *page)
+{
+  GncPluginPagePrivate *priv;
+
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  return priv->page_long_name;
+}
+
+
+/*  Set the long name of this page.  This is the string used in the
+ *  tooltip that is attached to the pate name in the notebook tab. */
+void
+gnc_plugin_page_set_page_long_name (GncPluginPage *page, const gchar *name)
+{
+  GncPluginPagePrivate *priv;
+  GncPluginPageClass *klass;
+
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  if (priv->page_long_name)
+    g_free(priv->page_long_name);
+  priv->page_long_name = g_strdup(name);
 }
 
 
