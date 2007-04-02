@@ -569,7 +569,6 @@ gnc_prefs_font_button_user_cb (GtkFontButton *fb,
                                gpointer user_data)
 {
   const gchar *key, *font;
-  time_t time;
 
   g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
   key = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;

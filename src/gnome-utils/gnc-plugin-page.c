@@ -791,7 +791,6 @@ void
 gnc_plugin_page_set_page_long_name (GncPluginPage *page, const gchar *name)
 {
   GncPluginPagePrivate *priv;
-  GncPluginPageClass *klass;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
