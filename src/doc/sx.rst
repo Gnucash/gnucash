@@ -14,6 +14,8 @@ TODO
   - [x] printf -> logging
 
 - core
+! - [ ] @fixme-s
+! - [ ] after updating/merging new instances, ensure sx-instance-state consistency
   - [x] sx list -> qof collection
   - [x] sx engine events
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
@@ -22,7 +24,6 @@ TODO
 !   - [x] implement sort model
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
-! - [ ] after updating/merging new instances, enforce state (+variable) consistency.
 
 - unit testing
   - [ ] model updating in the face of change
@@ -50,7 +51,7 @@ TODO
 
 - bugs
 
-! - [ ] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+! - [x] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
 ! - [x] parse from 1.8 file doesn't setup start date correctly;
     daily-auto-yes-notify.xac has start date of 2006-09-26, but new TXN is

@@ -257,6 +257,15 @@ _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_da
                                        | GNC_RND_FLOOR);
 }
 
+static GncSxVariable*
+gnc_sx_variable_new_copy(GncSxVariable *to_copy)
+{
+    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
+    var->value = to_copy->value;
+    var->editable = to_copy->editable;
+    return var;
+}
+
 void
 gnc_sx_variable_free(GncSxVariable *var)
 {
@@ -275,9 +284,7 @@ _clone_sx_var_hash_entry(gpointer key, gpointer value, gpointer user_data)
 {
     GHashTable *to = (GHashTable*)user_data;
     GncSxVariable *to_copy = (GncSxVariable*)value;
-    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
-    var->value = to_copy->value;
-    var->editable = to_copy->editable;
+    GncSxVariable *var = gnc_sx_variable_new_copy(to_copy);
     g_hash_table_insert(to, key, var);
 }
 
@@ -689,6 +696,24 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
     }
 }
 
+typedef struct _HashListPair
+{
+    GHashTable *hash;
+    GList *list;
+} HashListPair;
+
+static void
+_find_unreferenced_vars(gchar *key,
+                        gpointer value,
+                        HashListPair *cb_pair)
+{
+    if (!g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
+    {
+        g_debug("variable [%s] not found", key);
+        cb_pair->list = g_list_append(cb_pair->list, key);
+    }
+}
+
 void
 gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx)
 {
@@ -706,7 +731,6 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
     existing = (GncSxInstances*)link->data;
     new_instances = _gnc_sx_gen_instances((gpointer)sx, &model->range_end);
     existing->sx = new_instances->sx;
-    // @fixme: variable names stuff
     existing->next_instance_date = new_instances->next_instance_date;
     {
         GList *existing_iter, *new_iter;
@@ -752,6 +776,57 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
                 existing->list = g_list_append(existing->list, new_iter_iter->data);
             }
             g_list_free(new_iter);
+        }
+    }
+
+    // handle variables
+    {
+        HashListPair removed_cb_data, added_cb_data;
+        GList *removed_var_names = NULL, *added_var_names = NULL;
+        GList *inst_iter = NULL;
+
+        removed_cb_data.hash = new_instances->variable_names;
+        removed_cb_data.list = NULL;
+        g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
+        removed_var_names = removed_cb_data.list;
+        g_debug("%d removed variables", g_list_length(removed_var_names));
+
+        added_cb_data.hash = existing->variable_names;
+        added_cb_data.list = NULL;
+        g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
+        added_var_names = added_cb_data.list;
+        g_debug("%d added variables", g_list_length(added_var_names));
+
+        g_hash_table_destroy(existing->variable_names);
+        existing->variable_names = new_instances->variable_names;
+        new_instances->variable_names = NULL;
+
+        for (inst_iter = existing->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        {
+            GList *var_iter;
+            GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
+            
+            for (var_iter = removed_var_names; var_iter != NULL; var_iter = var_iter->next)
+            {
+                gchar *to_remove_key = (gchar*)var_iter->data;
+                g_hash_table_remove(inst->variable_bindings, to_remove_key);
+            }
+
+            for (var_iter = added_var_names; var_iter != NULL; var_iter = var_iter->next)
+            {
+                gchar *to_add_key = (gchar*)var_iter->data;
+                if (!g_hash_table_lookup_extended(
+                        inst->variable_bindings, to_add_key, NULL, NULL))
+                {
+                    GncSxVariable *parent_var
+                        = g_hash_table_lookup(existing->variable_names, to_add_key);
+                    GncSxVariable *var_copy;
+
+                    g_assert(parent_var != NULL);
+                    var_copy = gnc_sx_variable_new_copy(parent_var);
+                    g_hash_table_insert(inst->variable_bindings, to_add_key, var_copy);
+                }
+            }
         }
     }
     gnc_sx_instances_free(new_instances);
