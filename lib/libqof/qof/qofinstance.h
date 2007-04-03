@@ -41,20 +41,69 @@
 #include "kvp_frame.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qof-gobject.h"
 
 /* --- type macros --- */
 /* cheesy, but will do for now, eventually should be more gtk-like, handle
  * thunks, etc.  */
 #define QOF_INSTANCE(object) ((QofInstance *)(object))
 
-/*typedef struct QofInstance_s QofInstance;*/
+struct QofInstance_s
+{
+   GObject object;
+
+   /* Globally unique id identifying this instance */
+   QofIdType        e_type;		   /**<	Entity type */
+   GUID             guid;		   /**< GUID for the entity */
+   QofCollection  * collection;		   /**< Entity collection */
+
+   /* The entity_table in which this instance is stored */
+   QofBook * book;
+
+  /* kvp_data is a key-value pair database for storing arbirtary
+   * information associated with this instance.  
+   * See src/engine/kvp_doc.txt for a list and description of the 
+   * important keys. */
+   KvpFrame *kvp_data;
+
+   /*  Timestamp used to track the last modification to this 
+    *  instance.  Typically used to compare two versions of the
+    *  same object, to see which is newer.  When used with the 
+    *  SQL backend, this field is reserved for SQL use, to compare
+    *  the version in local memory to the remote, server version.
+    */
+   Timespec last_update;
+
+   /*  Keep track of nesting level of begin/end edit calls */
+   int    editlevel;
+
+   /*  In process of being destroyed */
+   gboolean  do_free;
+
+   /*  dirty/clean flag. If dirty, then this instance has been modified,
+    *  but has not yet been written out to storage (file/database)
+    */
+   gboolean  dirty;
+
+   /* True iff this instance has never been committed. */
+   gboolean infant;
+};
+
+struct _QofInstanceClass
+{
+   GObjectClass parent_class;
+};
+
+/** Return the GType of a QofInstance */
+GType qof_instance_get_type();
 
 /** Initialise the memory associated with an instance */
+#if 1
 void qof_instance_init (QofInstance *, QofIdType, QofBook *);
-
-/** release the data associated with this instance. Dont actually free 
- * the memory associated with the instance. */
-void qof_instance_release (QofInstance *inst);
+void qof_instance_release (QofInstance *);
+#else
+void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
+#endif
 
 /** Return the book pointer */
 QofBook * qof_instance_get_book (const QofInstance *);
