@@ -48,6 +48,8 @@
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
+QOF_GOBJECT_IMPL(qof_book, QofBook, QOF_TYPE_INSTANCE);
+
 /* ====================================================================== */
 /* constructor / destructor */
 
@@ -66,7 +68,7 @@ qof_book_init (QofBook *book)
       (GDestroyNotify)qof_util_string_cache_remove,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
-  qof_instance_init (&book->inst, QOF_ID_BOOK, book);
+  qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
   book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
@@ -82,8 +84,7 @@ qof_book_new (void)
   QofBook *book;
 
   ENTER (" ");
-  book = g_new0(QofBook, 1);
-  qof_book_init(book);
+  book = g_object_new(QOF_TYPE_BOOK, NULL);
   qof_object_book_begin (book);
 
   qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
@@ -99,6 +100,11 @@ book_final (gpointer key, gpointer value, gpointer booq)
 
   gpointer user_data = g_hash_table_lookup (book->data_tables, key);
   (*cb) (book, key, user_data);
+}
+
+static void
+qof_book_finalize_real (GObject *bookp)
+{
 }
 
 void
@@ -122,12 +128,12 @@ qof_book_destroy (QofBook *book)
   g_hash_table_destroy (book->data_tables);
   book->data_tables = NULL;
 
-  qof_instance_release (&book->inst);
+  /* qof_instance_release (&book->inst); */
 
   g_hash_table_destroy (book->hash_of_collections);
   book->hash_of_collections = NULL;
 
-  g_free (book);
+  g_object_unref (book);
   LEAVE ("book=%p", book);
 }
 

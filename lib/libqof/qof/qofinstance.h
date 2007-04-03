@@ -37,12 +37,15 @@
 #define QOF_INSTANCE_H
 
 typedef struct _QofInstanceClass QofInstanceClass;
+typedef struct QofInstance_s QofInstance;
+
+/** \brief QofBook reference */
+typedef struct _QofBook       QofBook;
 
 #include "qofid.h"
 #include "guid.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
-#include "qofbook.h"
 #include "qof-gobject.h"
 
 /* --- type macros --- */

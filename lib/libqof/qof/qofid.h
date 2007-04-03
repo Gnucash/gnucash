@@ -83,8 +83,9 @@ typedef const gchar * QofIdTypeConst;
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
 
-/* Forward declaration for later */
-typedef struct QofInstance_s QofInstance;
+typedef struct QofCollection_s QofCollection;
+
+#include "qofinstance.h"
 
 #define QOF_ID_NONE           NULL
 #define QOF_ID_NULL           "null"
@@ -133,8 +134,6 @@ print error message if its bad  */
 @param data gpointer, place where object class can hang arbitrary data
 
 */
-typedef struct QofCollection_s QofCollection;
-
 void qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab);
 void qof_entity_release (QofInstance *ent);
 void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
