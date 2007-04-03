@@ -36,17 +36,27 @@
 #ifndef QOF_INSTANCE_H
 #define QOF_INSTANCE_H
 
+typedef struct _QofInstanceClass QofInstanceClass;
+
+#include "qofid.h"
 #include "guid.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
-#include "qofid.h"
 #include "qof-gobject.h"
 
 /* --- type macros --- */
-/* cheesy, but will do for now, eventually should be more gtk-like, handle
- * thunks, etc.  */
-#define QOF_INSTANCE(object) ((QofInstance *)(object))
+#define QOF_TYPE_INSTANCE            (qof_instance_get_type ())
+#define QOF_INSTANCE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), QOF_TYPE_INSTANCE, QofInstance))
+#define QOF_INSTANCE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), QOF_TYPE_INSTANCE, QofInstanceClass))
+#define QOF_IS_INSTANCE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_INSTANCE))
+#define QOF_IS_INSTANCE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
+#define QOF_INSTANCE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
 
 struct QofInstance_s
 {
@@ -95,15 +105,10 @@ struct _QofInstanceClass
 };
 
 /** Return the GType of a QofInstance */
-GType qof_instance_get_type();
+GType qof_instance_get_type(void);
 
-/** Initialise the memory associated with an instance */
-#if 1
-void qof_instance_init (QofInstance *, QofIdType, QofBook *);
-void qof_instance_release (QofInstance *);
-#else
+/** Initialise the settings associated with an instance */
 void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
-#endif
 
 /** Return the book pointer */
 QofBook * qof_instance_get_book (const QofInstance *);
@@ -149,8 +154,6 @@ gboolean qof_instance_check_edit(const QofInstance *inst);
 gboolean qof_instance_do_free(const QofInstance *inst);
 
 void qof_instance_mark_free(QofInstance *inst);
-
-QofInstance* qof_instance_create (QofIdType type, QofBook *book);
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the

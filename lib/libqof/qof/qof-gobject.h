@@ -33,7 +33,8 @@
  * for the QofInstance type you would need to define the following
  * macros:
  *
- * #define #define QOF_INSTANCE(o)      \
+ * #define QOF_TYPE_INSTANCE            (qof_instance_get_type ())
+ * #define QOF_INSTANCE(o)              \
  *    (G_TYPE_CHECK_INSTANCE_CAST ((o), QOF_TYPE_INSTANCE, QofInstance))
  * #define QOF_INSTANCE_CLASS(k)        \
  *    (G_TYPE_CHECK_CLASS_CAST((k), QOF_TYPE_INSTANCE, QofInstanceClass))
@@ -47,7 +48,7 @@
  * @param type_name    The function type_name for this type
  */
 #define QOF_GOBJECT_DECL(type_name)		\
-  GType type_name##_get_type();
+  GType type_name##_get_type(void);
 
 /**
  * The following macros are for convenience in your QOF object
@@ -67,10 +68,11 @@
   }
 
 #define QOF_GOBJECT_FINALIZE(type_name)					\
+  static void type_name##_finalize_real(GObject* object);		\
   static void type_name##_finalize(GObject *object)			\
   {									\
     type_name##_finalize_real(object);					\
-    G_OBJECT_CLASS(type_name##parent_class)->finalize(object);		\
+    G_OBJECT_CLASS(type_name##_parent_class)->finalize(object);		\
   }
 
 #define QOF_GOBJECT_IMPL_WITH_CODE(type_name, TypeName, TYPE_PARENT, CODE) \

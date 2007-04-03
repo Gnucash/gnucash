@@ -39,24 +39,12 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /* ========================================================== */
 
-QofInstance*
-qof_instance_create (QofIdType type, QofBook *book)
+QOF_GOBJECT_IMPL(qof_instance, QofInstance, G_TYPE_OBJECT);
+
+static void
+qof_instance_init (QofInstance *inst)
 {
-	QofInstance *inst;
-
-	inst = g_new0(QofInstance, 1);
-	qof_instance_init(inst, type, book);
-	return inst;
-}
-
-
-
-void
-qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
-{
-	QofCollection *col;
-
-	inst->book = book;
+	inst->book = NULL;
 	inst->kvp_data = kvp_frame_new();
 	inst->last_update.tv_sec = 0;
 	inst->last_update.tv_nsec = -1;
@@ -64,14 +52,25 @@ qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
 	inst->infant = TRUE;
+}
 
+void
+qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
+{
+	QofCollection *col;
+	g_return_if_fail(QOF_IS_INSTANCE(inst));
+	g_return_if_fail(!inst->book);
+
+	inst->book = book;
 	col = qof_book_get_collection (book, type);
 	qof_entity_init (inst, type, col);
 }
 
-void
-qof_instance_release (QofInstance *inst)
+static void
+qof_instance_finalize_real (GObject *instp)
 {
+	QofInstance* inst = QOF_INSTANCE(instp);
+
 	kvp_frame_delete (inst->kvp_data);
 	inst->kvp_data = NULL;
 	inst->editlevel = 0;
