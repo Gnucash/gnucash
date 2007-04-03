@@ -108,11 +108,23 @@ mark_account (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+QOF_GOBJECT_IMPL(gnc_account, Account, QOF_TYPE_INSTANCE);
+
+static void
+gnc_account_init(Account* acc)
+{
+}
+
+static void
+gnc_account_finalize_real(GObject* acctp)
+{
+}
+
 static void
 xaccInitAccount (Account * acc, QofBook *book)
 {
   ENTER ("book=%p\n", book);
-  qof_instance_init (&acc->inst, GNC_ID_ACCOUNT, book);
+  qof_instance_init_data (&acc->inst, GNC_ID_ACCOUNT, book);
 
   acc->parent   = NULL;
   acc->children = NULL;
@@ -231,7 +243,7 @@ xaccMallocAccount (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  acc = g_new (Account, 1);
+  acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
   xaccInitAccount (acc, book);
   qof_event_gen (&acc->inst, QOF_EVENT_CREATE, NULL);
 
@@ -260,7 +272,7 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     if (!from || !book) return NULL;
     ENTER (" ");
 
-    ret = g_new (Account, 1);
+    ret = g_object_new (GNC_TYPE_ACCOUNT, NULL);
     g_return_val_if_fail (ret, NULL);
 
     xaccInitAccount (ret, book);
@@ -412,8 +424,8 @@ xaccFreeAccount (Account *acc)
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
-  qof_instance_release (&acc->inst);
-  g_free(acc);
+  /* qof_instance_release (&acc->inst); */
+  g_object_unref(acc);
 }
 
 /********************************************************************\

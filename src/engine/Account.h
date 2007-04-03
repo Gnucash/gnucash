@@ -59,8 +59,21 @@ typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
 typedef void (*AccountCb)(Account *a, gpointer data);
 typedef gpointer (*AccountCb2)(Account *a, gpointer data);
 
-#define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
-#define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
+typedef struct _AccountClass AccountClass;
+
+/* --- type macros --- */
+#define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
+#define GNC_ACCOUNT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT, Account))
+#define GNC_ACCOUNT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ACCOUNT, AccountClass))
+#define GNC_IS_ACCOUNT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT))
+#define GNC_IS_ACCOUNT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT))
+#define GNC_ACCOUNT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ACCOUNT, AccountClass))
+GType gnc_account_get_type(void);
 
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
