@@ -1,3 +1,8 @@
+2007-04-03  Christian Stimming  <stimming@tuhh.de>
+
+	* po/uk.po: Almost complete Ukrainian translation by Maxim
+	V. Dziumanenko
+
 2007-03-30  Christian Stimming <stimming@tuhh.de>
 
 	* Implement some initial gnc_component_manager registering for the hbci dialogs. Partially fixes bug#409324.
