@@ -1,0 +1,81 @@
+/* 
+ * qof-win32.c
+ *
+ * Copyright (C) 2007 Andreas Koehler <andi5.py@gmx.net>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of version 2 of the GNU General Public
+ * License as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, contact:
+ *
+ * Free Software Foundation           Voice:  +1-617-542-5942
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
+ */
+
+#include "config.h"
+
+#include <glib.h>
+#include "gnc-date-p.h"
+#include <windows.h>
+
+gchar *
+qof_time_format_from_utf8(const gchar *utf8_format)
+{
+    gunichar2 *utf16_format;
+    gchar *retval;
+    gsize count;
+
+    utf16_format = g_utf8_to_utf16(utf8_format, -1, NULL, NULL, NULL);
+    if (!utf16_format)
+        return NULL;
+
+    /* get number of resulting wide characters */
+    count = wcstombs(NULL, utf16_format, 0);
+    if (count <= 0)
+        return NULL;
+
+    /* malloc and convert */
+    retval = g_malloc((count+1) * sizeof(gchar));
+    count = wcstombs(retval, utf16_format, count+1);
+    g_free(utf16_format);
+    if (count <= 0) {
+        g_free(retval);
+        return NULL;
+    }
+
+    return retval;
+}
+
+gchar *
+qof_formatted_time_to_utf8(const gchar *locale_string)
+{
+    gunichar2 *utf16_string;
+    gchar *retval;
+    gsize count;
+
+    /* get number of resulting wide characters */
+    count = mbstowcs(NULL, locale_string, 0);
+    if (count <= 0)
+        return NULL;
+
+    /* malloc and convert */
+    utf16_string = g_malloc((count+1) * sizeof(gunichar2));
+    count = mbstowcs(utf16_string, locale_string, count+1);
+    if (count <= 0) {
+        g_free(utf16_string);
+        return NULL;
+    }
+
+    retval = g_utf16_to_utf8(utf16_string, -1, NULL, NULL, NULL);
+    g_free(utf16_string);
+
+    return retval;
+}

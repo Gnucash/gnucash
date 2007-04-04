@@ -39,6 +39,7 @@ qofincludedir = ${pkgincludedir}
 qofinclude_HEADERS = \
    deprecated.h      \
    gnc-date.h        \
+   gnc-date-p.h      \
    gnc-numeric.h     \
    guid.h            \
    kvp_frame.h       \
@@ -85,6 +86,12 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
+
+if OS_WIN32
+libgnc_qof_la_SOURCES += qof-win32.c
+else
+EXTRA_DIST += qof-win32.c
+endif
 
 qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp

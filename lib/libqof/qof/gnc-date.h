@@ -328,6 +328,35 @@ gchar dateSeparator(void);
  * itself, instead of depending on the routines here.
  */
 
+/** qof_format_time takes a format specification in UTF-8 and a broken-down time,
+ *  tries to call strftime with a sufficiently large buffer and, if successful,
+ *  return a newly allocated string in UTF-8 for the printing result.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return A newly allocated string on success, or NULL otherwise.
+ */
+gchar *qof_format_time(const gchar *format, const struct tm *tm);
+
+/** qof_strftime calls qof_format_time to print a given time and afterwards tries
+ *  to put the result into a buffer of fixed size.
+ *
+ *  @param buf A buffer.
+ *
+ *  @param max The size of buf in bytes.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return The number of characters written, not include the null byte, if the
+ *  complete string, including the null byte, fits into the buffer.  Otherwise 0.
+ */
+gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
+                   const struct tm *tm);
+
 /** qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string
  *    representation

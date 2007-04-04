@@ -46,7 +46,7 @@
 
 #include <glib.h>
 
-#include "gnc-date.h"
+#include "gnc-date-p.h"
 #include "qof.h"
 
 #ifndef HAVE_STRPTIME
@@ -439,7 +439,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
         gnc_tm_set_day_start (&tm_str);
 	t = mktime (&tm_str);
 	localtime_r (&t, &tm_str);
-        flen = strftime (buff, len, GNC_D_FMT, &tm_str);
+        flen = qof_strftime (buff, len, GNC_D_FMT, &tm_str);
        if (flen != 0)
          break;
       }
@@ -618,12 +618,12 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 	case QOF_DATE_FORMAT_UTC:
 	{
 		gtm = *gmtime (&secs);
-		flen = strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+		flen = qof_strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
 		break;
 	}
     case QOF_DATE_FORMAT_LOCALE:
       {
-        flen = strftime (buff, len, GNC_D_T_FMT, &ltm);
+        flen = qof_strftime (buff, len, GNC_D_T_FMT, &ltm);
       }
       break;
 
@@ -645,11 +645,11 @@ qof_print_time_buff (char * buff, size_t len, time_t secs)
 	if(dateFormat == QOF_DATE_FORMAT_UTC)
 	{
 		gtm = *gmtime (&secs);
-		flen = strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+		flen = qof_strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
 		return flen;
 	}
 	ltm = *localtime (&secs);
-	flen = strftime (buff, len, GNC_T_FMT, &ltm);
+	flen = qof_strftime (buff, len, GNC_T_FMT, &ltm);
 	
 	return flen;
 }
@@ -909,7 +909,7 @@ char dateSeparator (void)
 
         secs = time(NULL);
         localtime_r(&secs, &tm);
-        strftime(string, sizeof(string), GNC_D_FMT, &tm);
+        qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
 
         for (s = string; s != '\0'; s++)
           if (!isdigit(*s))
@@ -919,6 +919,127 @@ char dateSeparator (void)
 
   return '\0';
 }
+
+
+#ifndef G_OS_WIN32
+gchar *
+qof_time_format_from_utf8(const gchar *utf8_format)
+{
+    gchar *retval;
+    GError *error = NULL;
+
+    retval = g_locale_from_utf8(utf8_format, -1, NULL, NULL, &error);
+
+    if (!retval) {
+        g_warning("Could not convert format '%s' from UTF-8: %s", utf8_format,
+                  error->message);
+        g_error_free(error);
+    }
+    return retval;
+}
+
+gchar *
+qof_formatted_time_to_utf8(const gchar *locale_string)
+{
+    gchar *retval;
+    GError *error = NULL;
+
+    retval = g_locale_to_utf8(locale_string, -1, NULL, NULL, &error);
+
+    if (!retval) {
+        g_warning("Could not convert '%s' to UTF-8: %s", locale_string,
+                  error->message);
+        g_error_free(error);
+    }
+    return retval;
+}
+#endif /* G_OS_WIN32 */
+
+gchar *
+qof_format_time(const gchar *format, const struct tm *tm)
+{
+    gchar *locale_format, *tmpbuf, *retval;
+    gsize tmplen, tmpbufsize;
+
+    g_return_val_if_fail(format, 0);
+    g_return_val_if_fail(tm, 0);
+
+    locale_format = qof_time_format_from_utf8(format);
+    if (!locale_format)
+        return NULL;
+
+    tmpbufsize = MAX(128, strlen(locale_format) * 2);
+    while (TRUE) {
+        tmpbuf = g_malloc(tmpbufsize);
+
+        /* Set the first byte to something other than '\0', to be able to
+         * recognize whether strftime actually failed or just returned "".
+         */
+        tmpbuf[0] = '\1';
+        tmplen = strftime(tmpbuf, tmpbufsize, locale_format, tm);
+
+        if (tmplen == 0 && tmpbuf[0] != '\0') {
+            g_free(tmpbuf);
+            tmpbufsize *= 2;
+
+            if (tmpbufsize > 65536) {
+                g_warning("Maximum buffer size for qof_format_time "
+                          "exceeded: giving up");
+                g_free(locale_format);
+
+                return NULL;
+            }
+        } else {
+            break;
+        }
+    }
+    g_free(locale_format);
+
+    retval = qof_formatted_time_to_utf8(tmpbuf);
+    g_free(tmpbuf);
+
+    return retval;
+}
+
+gsize
+qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
+{
+    gsize convlen, retval;
+    gchar *convbuf;
+    GError *error = NULL;
+
+    g_return_val_if_fail(buf, 0);
+    g_return_val_if_fail(max > 0, 0);
+    g_return_val_if_fail(format, 0);
+    g_return_val_if_fail(tm, 0);
+
+    convbuf = qof_format_time(format, tm);
+    if (!convbuf) {
+        buf[0] = '\0';
+        return 0;
+    }
+
+    convlen = strlen(convbuf);
+
+    if (max <= convlen) {
+        /* Ensure only whole characters are copied into the buffer. */
+        gchar *end = g_utf8_find_prev_char(convbuf, convbuf + max);
+        g_assert(end != NULL);
+        convlen = end - convbuf;
+
+        /* Return 0 because the buffer isn't large enough. */
+        retval = 0;
+    } else {
+        retval = convlen;
+    }
+
+    memcpy(buf, convbuf, convlen);
+    buf[convlen] = '\0';
+    g_free(convbuf);
+
+    return retval;
+}
+
 
 /********************************************************************\
 \********************************************************************/
