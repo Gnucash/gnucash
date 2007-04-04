@@ -1853,12 +1853,12 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
   LEAVE(" ");
 }
 
-#define ACCT_COUNT    "Number of Open Accounts"
-#define ACCT_OPEN     "Open Account %d"
-#define ACCT_SELECTED "Selected Account"
-#define SHOW_HIDDEN   "Show Hidden"
-#define SHOW_ZERO     "Show Zero Total"
-#define ACCT_TYPES    "Account Types"
+#define ACCT_COUNT    "NumberOfOpenAccounts"
+#define ACCT_OPEN     "OpenAccount%d"
+#define ACCT_SELECTED "SelectedAccount"
+#define SHOW_HIDDEN   "ShowHidden"
+#define SHOW_ZERO     "ShowZeroTotal"
+#define ACCT_TYPES    "AccountTypes"
 
 typedef struct foo {
   GKeyFile *key_file;

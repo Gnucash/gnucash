@@ -1004,7 +1004,7 @@ read_one_check_format(PrintCheckDialog * pcd, const gchar *groupname,
     check_format_t *format;
 
     pathname = g_build_filename(dirname, file, (char *)NULL);
-    key_file = gnc_key_file_load_from_file(pathname, FALSE, FALSE);
+    key_file = gnc_key_file_load_from_file(pathname, FALSE, FALSE, NULL);
     g_free(pathname);
     if (!key_file) {
         g_warning("Check file %s, cannot load file", file);

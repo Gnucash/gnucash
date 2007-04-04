@@ -86,7 +86,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
 
   if ( addPredefined ) {
     filename = gnc_exp_parser_filname();
-    key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE);
+    key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE, NULL);
     if (key_file) {
       keys = g_key_file_get_keys(key_file, GROUP_NAME, NULL, NULL);
       for (key = keys; key && *key; key++) {

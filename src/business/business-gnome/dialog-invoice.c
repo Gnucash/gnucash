@@ -1676,10 +1676,10 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   return iw;
 }
 
-#define KEY_INVOICE_TYPE	"Invoice Type"
-#define KEY_INVOICE_GUID	"Invoice GUID"
-#define KEY_OWNER_TYPE		"Owner Type"
-#define KEY_OWNER_GUID		"Owner GUID"
+#define KEY_INVOICE_TYPE        "InvoiceType"
+#define KEY_INVOICE_GUID        "InvoiceGUID"
+#define KEY_OWNER_TYPE          "OwnerType"
+#define KEY_OWNER_GUID          "OwnerGUID"
 
 GncPluginPage *
 gnc_invoice_recreate_page (GKeyFile *key_file,
