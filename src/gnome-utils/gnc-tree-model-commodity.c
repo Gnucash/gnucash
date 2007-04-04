@@ -1062,29 +1062,28 @@ static void
 gnc_tree_model_commodity_path_added (GncTreeModelCommodity *model,
 				     GtkTreeIter *iter)
 {
-  gnc_commodity_namespace *namespace;
   GtkTreePath *path;
-  GtkTreeIter ns_iter;
-  GList *list;
+  GtkTreeModel *tree_model;
+  GtkTreeIter tmp_iter;
 
   ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(iter));
+  tree_model = GTK_TREE_MODEL(model);
 
-  if (iter->user_data == ITER_IS_COMMODITY) {
-    /* Reach out and touch the namespace first */
-    gnc_tree_model_commodity_iter_parent (GTK_TREE_MODEL(model), &ns_iter, iter);
-    namespace = gnc_tree_model_commodity_get_namespace (model, &ns_iter);
-    list = gnc_commodity_namespace_get_commodity_list(namespace);
-    if (g_list_length(list) == 1) {
-      path = gnc_tree_model_commodity_get_path (GTK_TREE_MODEL(model), &ns_iter);
-      gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &ns_iter);
-      gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &ns_iter);
-      gtk_tree_path_free(path);
-    }
+  /* For either namespace or commodity */
+  path = gnc_tree_model_commodity_get_path(tree_model, iter);
+  gtk_tree_model_row_inserted(tree_model, path, iter);
+
+  /*  */
+  gtk_tree_path_up(path);
+  while (gtk_tree_path_get_depth(path) != 0) {
+      if (gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
+          gtk_tree_model_row_changed(tree_model, path, &tmp_iter);
+          if (gtk_tree_model_iter_n_children(tree_model, &tmp_iter) == 1) {
+              gtk_tree_model_row_has_child_toggled(tree_model, path, &tmp_iter);
+          }
+      }
+      gtk_tree_path_up(path);
   }
-
-  /* Now for either namespace or commodity */
-  path = gnc_tree_model_commodity_get_path (GTK_TREE_MODEL(model), iter);
-  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, iter);
   gtk_tree_path_free(path);
 
   do {
@@ -1110,13 +1109,16 @@ gnc_tree_model_commodity_path_added (GncTreeModelCommodity *model,
  */
 static void
 gnc_tree_model_commodity_path_deleted (GncTreeModelCommodity *model,
-				       GtkTreePath *path)
+				       GtkTreePath *path_in)
 {
   gnc_commodity_namespace *namespace;
+  GtkTreePath *path;
   GtkTreeIter iter;
   GList *list;
   gint depth;
+  gboolean del_row = TRUE;
 
+  path = gtk_tree_path_copy(path_in);
   debug_path(ENTER, path);
 
   depth = gtk_tree_path_get_depth(path);
@@ -1134,10 +1136,17 @@ gnc_tree_model_commodity_path_deleted (GncTreeModelCommodity *model,
            list = gnc_commodity_namespace_get_commodity_list(namespace);
            if (g_list_length(list) == 0) {
                 gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
+                del_row = FALSE;
            }
       }
     }
   }
+  gtk_tree_path_free(path);
+
+  /* Delete the row, if it hasn't already been deleted by an update of
+   * the parent row. */
+  if (del_row)
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path_in);
 
   do {
     model->stamp++;
@@ -1173,7 +1182,6 @@ gnc_tree_model_commodity_do_deletions (gpointer unused)
     data = iter->data;
     pending_removals = g_slist_delete_link (pending_removals, iter);
 
-    gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
     gnc_tree_model_commodity_path_deleted (data->model, data->path);
     gtk_tree_path_free(data->path);
     g_free(data);
