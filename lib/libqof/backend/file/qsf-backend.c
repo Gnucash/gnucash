@@ -188,10 +188,10 @@ qsf_param_init(qsf_param *params)
 	qsf_time_now_t = time(NULL);
 	qsf_ts = g_new(Timespec, 1);
 	timespecFromTime_t(qsf_ts, qsf_time_now_t);
-	strftime(qsf_enquiry_date, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(&qsf_time_now_t));
-	strftime(qsf_time_match, QSF_DATE_LENGTH, qsf_time_precision, gmtime(&qsf_time_now_t));
-	strftime(qsf_time_string, QSF_DATE_LENGTH, "%F", gmtime(&qsf_time_now_t));
-	strftime(qsf_time_now, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(&qsf_time_now_t));
+	qof_strftime(qsf_enquiry_date, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(&qsf_time_now_t));
+	qof_strftime(qsf_time_match, QSF_DATE_LENGTH, qsf_time_precision, gmtime(&qsf_time_now_t));
+	qof_strftime(qsf_time_string, QSF_DATE_LENGTH, "%F", gmtime(&qsf_time_now_t));
+	qof_strftime(qsf_time_now, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(&qsf_time_now_t));
 	g_hash_table_insert(params->qsf_default_hash, "qsf_enquiry_date", qsf_enquiry_date);
 	g_hash_table_insert(params->qsf_default_hash, "qsf_time_now", &qsf_time_now_t);
 	g_hash_table_insert(params->qsf_default_hash, "qsf_time_string", qsf_time_string);

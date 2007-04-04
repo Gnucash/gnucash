@@ -415,7 +415,7 @@ TransactionGetTokens(GNCImportTransInfo *info)
    */
   transtime = xaccTransGetDate(transaction);
   tm_struct = gmtime(&transtime);
-  if(!strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct))
+  if(!qof_strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct))
     {
       PERR("TransactionGetTokens: error, strftime failed\n");
     }

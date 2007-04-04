@@ -103,7 +103,7 @@ log4glib_handler(const gchar     *log_domain,
           gchar *level_str = qof_log_level_to_string(log_level);
           now = time(NULL);
           localtime_r(&now, &now_tm);
-          strftime(timestamp_buf, 9, "%T", &now_tm);
+          qof_strftime(timestamp_buf, 9, "%T", &now_tm);
 
           fprintf(fout, "* %s %*s <%s> %*s%s%s",
                   timestamp_buf,

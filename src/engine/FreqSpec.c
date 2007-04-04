@@ -131,7 +131,7 @@ get_wday_name(guint day)
   struct tm t;
   memset( &t, 0, sizeof( t ) );
   t.tm_wday = day;
-  strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
+  qof_strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
   return wday_name;
 }
  
@@ -142,7 +142,7 @@ get_full_month_name(guint month)
   static gchar month_name[WDAY_BUF_WIDTH];
   struct tm t;
   t.tm_mon = month;
-  strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
+  qof_strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
   return month_name;
 }
 #endif
@@ -154,7 +154,7 @@ get_abbrev_month_name(guint month)
   struct tm t;
   memset( &t, 0, sizeof( t ) );
   t.tm_mon = month;
-  strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
+  qof_strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
   return month_name;
 }
 

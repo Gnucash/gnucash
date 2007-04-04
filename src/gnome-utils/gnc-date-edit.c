@@ -331,9 +331,9 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 		hit = g_new (hour_info_t, 1);
 
 		if (gde->flags & GNC_DATE_EDIT_24_HR)
-			strftime (buffer, sizeof (buffer), "%H:00", mtm);
+			qof_strftime (buffer, sizeof (buffer), "%H:00", mtm);
 		else
-			strftime (buffer, sizeof (buffer), "%I:00 %p ", mtm);
+			qof_strftime (buffer, sizeof (buffer), "%I:00 %p ", mtm);
 		hit->hour = g_strdup (buffer);
 		hit->gde  = gde;
 
@@ -355,11 +355,11 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 			mtm->tm_min = j;
 			hit = g_new (hour_info_t, 1);
 			if (gde->flags & GNC_DATE_EDIT_24_HR)
-				strftime (buffer, sizeof (buffer),
-                                          "%H:%M", mtm);
+				qof_strftime (buffer, sizeof (buffer),
+					      "%H:%M", mtm);
 			else
-				strftime (buffer, sizeof (buffer),
-                                          "%I:%M %p", mtm);
+				qof_strftime (buffer, sizeof (buffer),
+					      "%I:%M %p", mtm);
 			hit->hour = g_strdup (buffer);
 			hit->gde  = gde;
 
@@ -505,9 +505,9 @@ gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm)
 
 	/* Set the time */
 	if (gde->flags & GNC_DATE_EDIT_24_HR)
-		strftime (buffer, sizeof (buffer), "%H:%M", mytm);
+		qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
 	else
-		strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
+		qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
 	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
 }
 

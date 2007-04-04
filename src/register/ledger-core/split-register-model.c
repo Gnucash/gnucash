@@ -789,7 +789,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
   tm = localtime (&tt);
 
-  strftime (string, sizeof (string), "%A %d %B %Y", tm);
+  qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
 
   return g_strdup (string);
 }

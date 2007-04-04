@@ -845,7 +845,7 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 			date_getter = (Timespec (*)(QofEntity*, QofParam*))qtparam->param_getfcn;
 			param_ts = date_getter(qtEnt, qtparam);
 			param_t = timespecToTime_t(param_ts);
-			strftime(param_date, QOF_DATE_STRING_LENGTH, QOF_UTC_DATE_FORMAT, gmtime(&param_t));
+			qof_strftime(param_date, QOF_DATE_STRING_LENGTH, QOF_UTC_DATE_FORMAT, gmtime(&param_t));
 			param_string = g_strdup(param_date);
 			return param_string;
 		}

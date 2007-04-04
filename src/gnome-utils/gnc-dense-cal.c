@@ -176,7 +176,7 @@ static const gchar *day_label(int wday)
     memset(buf, 0, MONTH_NAME_BUFSIZE);
     memset(&my_tm, 0, sizeof(struct tm));
     my_tm.tm_wday = wday;
-    i = strftime (buf, MONTH_NAME_BUFSIZE-1, "%a", &my_tm);
+    i = qof_strftime (buf, MONTH_NAME_BUFSIZE-1, "%a", &my_tm);
     /* Wild hack to use only the first two letters */
     buf[2]='\0';
     return buf;

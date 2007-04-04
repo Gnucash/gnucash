@@ -426,7 +426,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 			date_getter = (Timespec (*)(QofEntity*, QofParam*))param->param_getfcn;
 			param_ts = date_getter(ent, param);
 			param_t = timespecToTime_t(param_ts);
-			strftime(param_date, MAX_DATE_LENGTH, 
+			qof_strftime(param_date, MAX_DATE_LENGTH, 
                 QOF_UTC_DATE_FORMAT, gmtime(&param_t));
 			param_string = g_strdup(param_date);
             known_type = TRUE;
