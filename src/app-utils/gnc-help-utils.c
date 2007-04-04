@@ -35,7 +35,7 @@
 static GHashTable *
 parse_hhmap_file(const gchar *chmfile)
 {
-	gchar *mapfile = NULL, *dot;
+    gchar *mapfile = NULL, *dot;
     GKeyFile *keyfile = NULL;
     GError *error = NULL;
     gchar **keys = NULL, **key;

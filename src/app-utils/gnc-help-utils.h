@@ -23,14 +23,14 @@
 #ifndef __GNC_HELP_UTILS_H__
 #define __GNC_HELP_UTILS_H__
 
-#include "config.h"
-#include <glibconfig.h>
-
-#ifdef G_OS_WIN32
-
-void
-gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor);
-
-#endif /* G_OS_WIN32 */
+/** Launch HTML Help Viewer and open a given CHM file.  Use HtmlHelpW
+ *  if available, or fallback to spawning hh.exe.  Possibly scroll to a
+ *  given anchor within the document.
+ *
+ *  @param chmfile The name of CHM help file to be opened.
+ *
+ *  @param anchor The anchor the help browser should scroll to.
+ */
+void gnc_show_htmlhelp(const gchar *chmfile, const gchar *anchor);
 
 #endif /* __GNC_HELP_UTILS_H__ */
