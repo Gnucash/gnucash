@@ -126,17 +126,19 @@ GtkWidget*     gnc_dense_cal_new_with_model         (GncDenseCalModel *model);
 GType          gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
+
 void gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon);
+GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 /**
  * @param year Julian year: 2000 = 2000AD.
  **/
 void gnc_dense_cal_set_year( GncDenseCal *dcal, guint year );
-void gnc_dense_cal_set_num_months( GncDenseCal *dcal, guint num_months );
-void gnc_dense_cal_set_months_per_col( GncDenseCal *dcal, guint monthsPerCol );
-
-guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
-GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 GDateYear gnc_dense_cal_get_year( GncDenseCal *dcal );
+
+void gnc_dense_cal_set_num_months( GncDenseCal *dcal, guint num_months );
+guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
+
+void gnc_dense_cal_set_months_per_col( GncDenseCal *dcal, guint monthsPerCol );
 
 G_END_DECLS
 

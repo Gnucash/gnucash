@@ -538,17 +538,17 @@ gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
     }
 }
 
+guint
+gnc_dense_cal_get_num_months(GncDenseCal *dcal)
+{
+    return dcal->numMonths;
+}
+
 void
 gnc_dense_cal_set_months_per_col(GncDenseCal *dcal, guint monthsPerCol)
 {
     dcal->monthsPerCol = monthsPerCol;
     recompute_x_y_scales(dcal);
-}
-
-guint
-gnc_dense_cal_get_num_months(GncDenseCal *dcal)
-{
-    return dcal->numMonths;
 }
 
 GDateMonth

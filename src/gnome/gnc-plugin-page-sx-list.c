@@ -405,6 +405,9 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+
+    g_key_file_set_integer(key_file, group_name, "dense_cal_num_months",
+                           gnc_dense_cal_get_num_months(priv->gdcal)); 
 }
 
 /**
@@ -432,6 +435,15 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
     /* Install it now so we can them manipulate the created widget */
     gnc_main_window_open_page(GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
+
+    {
+        GError *err = NULL;
+        gint num_months = g_key_file_get_integer(key_file, group_name, "dense_cal_num_months", &err);
+        if (err == NULL)
+            gnc_dense_cal_set_num_months(priv->gdcal, num_months);
+        else
+            g_error_free(err);
+    }
 
     return GNC_PLUGIN_PAGE(page);
 }
