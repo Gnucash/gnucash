@@ -370,59 +370,25 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 Split *
 gnc_lot_get_earliest_split (GNCLot *lot)
 {
-   SplitList *node;
-   Timespec ts;
-   Split *earliest = NULL;
-
-   ts.tv_sec = ((long long) ULONG_MAX);
-   ts.tv_nsec = 0;
-   if (!lot) return NULL;
-
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      Transaction *trans = s->parent;
-      if (!trans) continue;
-      if ((ts.tv_sec > trans->date_posted.tv_sec) ||
-          ((ts.tv_sec == trans->date_posted.tv_sec) &&
-           (ts.tv_nsec > trans->date_posted.tv_nsec)))
-          
-      {
-         ts = trans->date_posted;
-         earliest = s;
-      }
-   }
-
-   return earliest;
+  if (! lot->splits)
+    return NULL;
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitDateOrder);
+  return lot->splits->data;
 }
 
 Split *
 gnc_lot_get_latest_split (GNCLot *lot)
 {
-   SplitList *node;
-   Timespec ts;
-   Split *latest = NULL;
+  SplitList *node;
 
-   ts.tv_sec = 0;
-   ts.tv_nsec = 0;
-   if (!lot) return NULL;
+  if (! lot->splits)
+    return NULL;
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitDateOrder);
 
-   for (node=lot->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      Transaction *trans = s->parent;
-      if (!trans) continue;
-      if ((ts.tv_sec < trans->date_posted.tv_sec) ||
-          ((ts.tv_sec == trans->date_posted.tv_sec) &&
-           (ts.tv_nsec < trans->date_posted.tv_nsec)))
-          
-      {
-         ts = trans->date_posted;
-         latest = s;
-      }
-   }
+  for (node = lot->splits; node->next; node = node->next)
+    ;
 
-   return latest;
+  return node->data;
 }
 
 /* ============================================================= */
