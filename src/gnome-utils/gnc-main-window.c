@@ -993,10 +993,14 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   const gchar *filename, *tmp;
   const gchar *title = _("Save changes to file %s before closing?");
   /* This should be the same message as in gnc-file.c */
-  const gchar *message =
+  const gchar *message_mins =
     _("If you don't save, changes from the past %d minutes will be discarded.");
+  const gchar *message_hours =
+    _("If you don't save, changes from the past %d hours and %d minutes will be discarded.");
+  const gchar *message_days =
+    _("If you don't save, changes from the past %d days and %d hours will be discarded.");
   time_t oldest_change;
-  gint minutes;
+  gint minutes, hours, days;
 
   session = gnc_get_current_session();
   book = qof_session_get_book(session);
@@ -1014,9 +1018,20 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 				  filename);
   oldest_change = qof_book_get_dirty_time(book);
   minutes = (time(NULL) - oldest_change) / 60 + 1;
-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					   message, minutes);
-
+  hours = minutes / 60;
+  minutes = minutes % 60;
+  days = hours / 24;
+  hours = hours % 24;
+  if (days > 0) {
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                                               message_days, days, hours);
+  } else if (hours > 0) {
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                                               message_hours, hours, minutes);
+  } else {
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                                               message_mins, minutes);
+  }
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			 _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
