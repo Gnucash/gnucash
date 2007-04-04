@@ -78,7 +78,6 @@ TODO
   - [/] make into split panel
     - [ ] fix default slider position
     - [ ] conf-save slider position
-  - [ ] {0, 1, 2, 4, 8, 12} month selection for dense calendar
 ! - [x] use gnc-tree-view
 ! - [x] save/restore state
 
@@ -90,6 +89,9 @@ TODO
     - (check_consistent, especially...)
 
 - gnc_dense_cal
+  - [/] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar
+    - [ ] conf-save value
+  - [ ] start-of-week := {sun,mon} (via locale)
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
