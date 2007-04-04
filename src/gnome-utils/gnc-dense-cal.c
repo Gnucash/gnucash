@@ -30,6 +30,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <stdlib.h>
 
 /**
  * Marking ...
@@ -274,11 +275,15 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     {
         GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 0));
+        GtkAlignment *label_align;
         GtkLabel *label;
+        float right_align = 1.0, mid_align = 0.5, fill_x = 0.0, fill_y = 1.0;
 
         label = GTK_LABEL(gtk_label_new(_("View:")));
-        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(label), FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), TRUE, FALSE, 0);
+        label_align = GTK_ALIGNMENT(gtk_alignment_new(right_align, mid_align, fill_x, fill_y));
+        gtk_container_add(GTK_CONTAINER(label_align), GTK_WIDGET(label));
+        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(label_align), TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
         
         gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(hbox), FALSE, FALSE, 0);
     }
@@ -490,14 +495,38 @@ gnc_dense_cal_set_year(GncDenseCal *dcal, guint year)
 void
 gnc_dense_cal_set_num_months(GncDenseCal *dcal, guint num_months)
 {
-    /* @@fixme
-    g_signal_handlers_block_by_func(dcal->view_options, _gdc_view_option_changed, dcal);
     {
-    // find closest list value to num_months
-    // set iter on view
+        GtkListStore *options = _gdc_get_view_options();
+        GtkTreeIter view_opts_iter, iter_closest_to_req;
+        int closest_index_distance = G_MAXINT;
+
+        // find closest list value to num_months
+        if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(options), &view_opts_iter))
+        {
+            g_critical("no view options?");
+            return;
+        }
+        
+        do
+        {
+            gint months_val, delta_months;
+
+            gtk_tree_model_get(GTK_TREE_MODEL(options), &view_opts_iter, VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val, -1);
+            delta_months = abs(months_val - num_months);
+            if (delta_months < closest_index_distance)
+            {
+                iter_closest_to_req = view_opts_iter;
+                closest_index_distance = delta_months;
+            }
+        } while (closest_index_distance != 0
+                 && (gtk_tree_model_iter_next(GTK_TREE_MODEL(options), &view_opts_iter)));
+
+        // set iter on view
+        g_signal_handlers_block_by_func(dcal->view_options, _gdc_view_option_changed, dcal);
+        gtk_combo_box_set_active_iter(GTK_COMBO_BOX(dcal->view_options), &iter_closest_to_req);
+        g_signal_handlers_unblock_by_func(dcal->view_options, _gdc_view_option_changed, dcal);
     }
-    g_signal_handlers_unblock_by_func(dcal->view_options, _gdc_view_option_changed, dcal);
-    */
+
     dcal->numMonths = num_months;
     recompute_extents(dcal);
     recompute_mark_storage(dcal);
