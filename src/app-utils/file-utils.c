@@ -193,7 +193,7 @@ gnc_update_state_file_keys(const gchar *filename)
     return FALSE;
   }
 
-  lines = g_strsplit(contents, "\n", -1);
+  lines = g_strsplit_set(contents, "\r\n", -1);
   g_free(contents);
 
   /* Strip spaces from non-comment lines, and rewrite the new text
@@ -208,7 +208,7 @@ gnc_update_state_file_keys(const gchar *filename)
       for (j = 0, part = parts[j++]; part; part = parts[j++])
 	part[0] = g_ascii_toupper(part[0]);
       newkey = g_strjoinv("", parts);
-      g_sprintf(line, "%s=%s", newkey, kv[1]);
+      g_sprintf(line, "%s=%s", newkey, kv[1] ? kv[1] : "");
       g_free(newkey);
       g_strfreev(parts);
       g_strfreev(kv);
@@ -286,7 +286,7 @@ gnc_find_state_file (const gchar *url,
     file_guid = g_key_file_get_string(key_file,
 				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
 				      NULL);
-    DEBUG("File GUID is %s", file_guid);
+    DEBUG("File GUID is %s", file_guid ? file_guid : "<not found>");
     if (safe_strcmp(guid, file_guid) == 0) {
       DEBUG("Matched !!!");
       g_free(file_guid);
