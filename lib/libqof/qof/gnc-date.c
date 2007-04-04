@@ -1006,7 +1006,6 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 {
     gsize convlen, retval;
     gchar *convbuf;
-    GError *error = NULL;
 
     g_return_val_if_fail(buf, 0);
     g_return_val_if_fail(max > 0, 0);

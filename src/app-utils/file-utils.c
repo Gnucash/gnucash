@@ -182,7 +182,6 @@ gnc_getline (gchar **line, FILE *file)
 static gboolean
 gnc_update_state_file_keys(const gchar *filename)
 {
-  const gchar *eol;
   gchar *contents, **lines, *line, **kv, **parts, *part, *newkey;
   GError *error = NULL;
   int i, j;
