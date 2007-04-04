@@ -1229,7 +1229,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
   xaccAccountTreeScrubImbalance (account);
 
   // XXX: Lots are disabled.
-  //xaccAccountTreeScrubLots (account);
+  if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+      xaccAccountTreeScrubLots(account);
 
   gnc_resume_gui_refresh ();
 }
