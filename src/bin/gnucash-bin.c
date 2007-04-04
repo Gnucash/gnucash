@@ -549,9 +549,10 @@ main(int argc, char ** argv)
     gchar *localedir;
     GError *binreloc_error = NULL;
 
-#if defined(G_OS_WIN32) || (defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE))
-    g_thread_init(NULL);
+#if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
+#    error "No GLib thread implementation available!"
 #endif
+    g_thread_init(NULL);
 
     /* Init binreloc */
     if (!gbr_init (&binreloc_error) ) {

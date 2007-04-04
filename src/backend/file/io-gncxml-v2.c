@@ -28,9 +28,6 @@
 #include <unistd.h>
 #include <zlib.h>
 #include <errno.h>
-#ifdef HAVE_SYS_WAIT_H
-# include <sys/wait.h>
-#endif
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
@@ -62,8 +59,6 @@ typedef struct {
   gchar *perms;
   gboolean compress;
 } gz_thread_params_t;
-
-static pid_t gzip_child_pid = 0;
 
 /* Callback structure */
 struct file_backend {
@@ -1311,9 +1306,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
   if (!use_gzip)
     return g_fopen(filename, perms);
 
-  if (g_thread_supported()) {
-    /* use threads */
-
+  {
     int filedes[2];
     GThread *thread;
     GError *error = NULL;
@@ -1358,109 +1351,25 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     G_UNLOCK(threads);
 
     return file;
-
-  } else {
-#ifdef G_OS_WIN32
-    g_assert_not_reached();
-#else
-    /* use fork */
-
-    int filedes[2];
-    pid_t pid;
-
-    /* avoid reading from file that is still being written to
-       by a child process */
-    g_assert(gzip_child_pid == 0);
-
-    if (pipe(filedes) < 0) {
-      PWARN("Pipe call failed. Opening uncompressed file.");
-      return g_fopen(filename, perms);
-    }
-
-    pid = fork();
-    switch (pid) {
-    case -1:
-      PWARN("Fork call failed. Opening uncompressed file.");
-      return g_fopen(filename, perms);
-
-    case 0: /* child */ {
-      char buffer[BUFLEN];
-      unsigned bytes;
-      ssize_t written;
-      gzFile *file;
-
-      file = gzopen(filename, perms);
-      if (file == NULL) {
-        PWARN("child gzopen failed\n");
-        exit(0);
-      }
-      if (compress) {
-        close(filedes[1]);
-        while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
-          gzwrite(file, buffer, bytes);
-      }
-      else
-      {
-        close(filedes[0]);
-        while ((bytes = gzread(file, buffer, BUFLEN)) > 0)
-          written = write(filedes[1], buffer, bytes);
-      }
-      gzclose(file);
-      _exit(0);
-    }
-
-    default: /* parent */
-      if (compress) {
-        /* the calling code must wait_for_gzip() */
-        gzip_child_pid = pid;
-      }
-      sleep(2);
-      if (compress) {
-        close(filedes[0]);
-        return fdopen(filedes[1], "w");
-      }
-      else
-      {
-        close(filedes[1]);
-        return fdopen(filedes[0], "r");
-      }
-    }
-#endif /* G_OS_WIN32 */
   }
 }
 
 static gboolean
 wait_for_gzip(FILE *file)
 {
-    if (g_thread_supported()) {
-        gboolean retval = TRUE;
+    gboolean retval = TRUE;
 
-        G_LOCK(threads);
-        if (threads) {
-            GThread *thread = g_hash_table_lookup(threads, file);
-            if (thread) {
-                g_hash_table_remove(threads, file);
-                retval = GPOINTER_TO_INT(g_thread_join(thread));
-            }
+    G_LOCK(threads);
+    if (threads) {
+        GThread *thread = g_hash_table_lookup(threads, file);
+        if (thread) {
+            g_hash_table_remove(threads, file);
+            retval = GPOINTER_TO_INT(g_thread_join(thread));
         }
-        G_UNLOCK(threads);
-        return retval;
-
-    } else {
-        pid_t retval;
-
-        if (gzip_child_pid == 0)
-            return TRUE;
-
-#ifdef HAVE_SYS_WAIT_H
-        retval = waitpid(gzip_child_pid, NULL, WUNTRACED);
-#else
-        retval = 1;
-#endif
-        gzip_child_pid = 0;
-
-        return retval != -1;
     }
+    G_UNLOCK(threads);
+
+    return retval;
 }
 
 gboolean
