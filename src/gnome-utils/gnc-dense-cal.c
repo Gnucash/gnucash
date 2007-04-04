@@ -89,10 +89,9 @@ static void gdc_reconfig(GncDenseCal *dcal);
 
 static void gdc_free_all_mark_data(GncDenseCal *dcal);
 
-#if 0
-static void gnc_dense_cal_size_request(GtkWidget      *widget,
-                                       GtkRequisition *requisition);
-#endif // 0o
+static void _gdc_compute_min_size(GncDenseCal *dcal,
+                                  guint *min_width, guint *min_height);
+static void _gdc_set_cal_min_size_req(GncDenseCal *dcal);
 static gint gnc_dense_cal_motion_notify(GtkWidget      *widget,
                                         GdkEventMotion *event);
 static gint gnc_dense_cal_button_press(GtkWidget *widget,
@@ -289,8 +288,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     }
 
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
-    // @@fixme gtk_widget_set_size_request(...) : real min size.
-    gtk_widget_set_size_request(GTK_WIDGET(dcal->cal_drawing_area), 100, 200);
     gtk_widget_add_events(GTK_WIDGET(dcal->cal_drawing_area), (GDK_EXPOSURE_MASK
                                                                | GDK_BUTTON_PRESS_MASK
                                                                | GDK_BUTTON_RELEASE_MASK
@@ -408,15 +405,15 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     recompute_extents(dcal);
     recompute_mark_storage(dcal);
 
-    /* Now that we're "sure" of our configuration, compute initial
-     * scaling factors; will be increased when we're allocated enough
-     * space to scale up. */
+    /* Compute initial scaling factors; will be increased when we're
+     * allocated enough space to scale up. */
     {
         PangoLayout *layout;
         int width_88, height_88;
         int width_XXX, height_XXX;
 
         layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+
         pango_layout_set_text(layout, "88", -1);
         pango_layout_get_pixel_size(layout, &width_88, &height_88);
 
@@ -436,6 +433,15 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     gtk_widget_pop_composite_child();
 
     gtk_widget_show_all(GTK_WIDGET(dcal));
+}
+
+static void
+_gdc_set_cal_min_size_req(GncDenseCal *dcal)
+{
+    guint min_width, min_height;
+
+    _gdc_compute_min_size(dcal, &min_width, &min_height);
+    gtk_widget_set_size_request(GTK_WIDGET(dcal->cal_drawing_area), min_width, min_height);
 }
 
 GtkWidget*
@@ -652,32 +658,28 @@ gdc_reconfig(GncDenseCal *dcal)
     gnc_dense_cal_draw_to_buffer(dcal);
 }
 
-#if 0
 static void 
-gnc_dense_cal_size_request(GtkWidget *widget,
-                           GtkRequisition *requisition)
+_gdc_compute_min_size(GncDenseCal *dcal, guint *min_width, guint *min_height)
 {
-    GncDenseCal *dcal = GNC_DENSE_CAL(widget);
-    if (!dcal->initialized)
+    if (min_width != NULL)
     {
-        g_warning("Uninitialized size request\n");
-        requisition->width  = DENSE_CAL_DEFAULT_WIDTH;
-        requisition->height = DENSE_CAL_DEFAULT_HEIGHT;
-        return;
+        *min_width =
+            (dcal->leftPadding * 2)
+            + (num_cols(dcal)* (col_width_at(dcal, dcal->min_x_scale)
+                                + dcal->label_width))
+            + ((num_cols(dcal)-1) * COL_BORDER_SIZE);
     }
-    requisition->width =
-        (dcal->leftPadding * 2)
-        + (num_cols(dcal)* (col_width_at(dcal, dcal->min_x_scale)
-                            + dcal->label_width))
-        + ((num_cols(dcal)-1) * COL_BORDER_SIZE);
-    requisition->height =
-        (dcal->topPadding * 2)
-        + MINOR_BORDER_SIZE
-        + dcal->dayLabelHeight
-        + (num_weeks_per_col(dcal)
-           * week_height_at(dcal, dcal->min_y_scale));
+
+    if (min_height != NULL)
+    {
+        *min_height=
+            (dcal->topPadding * 2)
+            + MINOR_BORDER_SIZE
+            + dcal->dayLabelHeight
+            + (num_weeks_per_col(dcal)
+               * week_height_at(dcal, dcal->min_y_scale));
+    }
 }
-#endif // 0
 
 static void
 recompute_x_y_scales(GncDenseCal *dcal)
@@ -718,6 +720,8 @@ recompute_x_y_scales(GncDenseCal *dcal)
                                * MINOR_BORDER_SIZE))
                            / denom);
     dcal->y_scale = MAX(dcal->y_scale, dcal->min_y_scale);
+
+    _gdc_set_cal_min_size_req(dcal);
 }
 
 static void
