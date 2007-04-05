@@ -48,6 +48,24 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
+struct _GncBudgetClass
+{
+  QofInstanceClass parent_class;
+};
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_budget, GncBudget, QOF_TYPE_INSTANCE);
+
+static void
+gnc_budget_init(GncBudget* budget)
+{
+}
+
+static void
+gnc_budget_finalize_real(GObject* budgetp)
+{
+}
+
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
@@ -70,8 +88,8 @@ gnc_budget_free(QofInstance *inst)
     CACHE_REMOVE(budget->name);
     CACHE_REMOVE(budget->description);
 
-    qof_instance_release (&budget->inst);
-    g_free(budget);
+    /* qof_instance_release (&budget->inst); */
+    g_object_unref(budget);
 }
 
 static void noop (QofInstance *inst) {}
@@ -98,8 +116,8 @@ gnc_budget_new(QofBook *book)
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
-    budget = g_new0(GncBudget, 1);
-    qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
+    budget = g_object_new(GNC_TYPE_BUDGET, NULL);
+    qof_instance_init_data (&budget->inst, GNC_ID_BUDGET, book);
 
     g_date_set_time_t(&date, time(NULL));
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
