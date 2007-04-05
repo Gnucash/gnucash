@@ -230,6 +230,20 @@ void gen_event_trans (Transaction *trans)
 #endif
 }
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_transaction, Transaction, QOF_TYPE_INSTANCE);
+
+static void
+gnc_transaction_init(Transaction* txn)
+{
+}
+
+static void
+gnc_transaction_finalize_real(GObject* txnp)
+{
+}
+
+
 /********************************************************************\
  * xaccInitTransaction
  * Initialize a transaction structure
@@ -258,7 +272,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->orig = NULL;
 
   trans->idata = 0;
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, book);
   LEAVE (" ");
 }
 
@@ -272,7 +286,7 @@ xaccMallocTransaction (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  trans = g_new(Transaction, 1);
+  trans = g_object_new(GNC_TYPE_TRANSACTION, NULL);
   xaccInitTransaction (trans, book);
   qof_event_gen (&trans->inst, QOF_EVENT_CREATE, NULL);
 
@@ -354,7 +368,7 @@ xaccDupeTransaction (const Transaction *t)
   Transaction *trans;
   GList *node;
 
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->num         = CACHE_INSERT (t->num);
   trans->description = CACHE_INSERT (t->description);
@@ -399,7 +413,7 @@ xaccTransClone (const Transaction *t)
   GList *node;
 
   qof_event_suspend();
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
@@ -412,7 +426,7 @@ xaccTransClone (const Transaction *t)
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, t->inst.book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, t->inst.book);
   kvp_frame_delete (trans->inst.kvp_data);
   trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
 
@@ -475,8 +489,8 @@ xaccFreeTransaction (Transaction *trans)
     trans->orig = NULL;
   }
 
-  qof_instance_release (&trans->inst);
-  g_free(trans);
+  /* qof_instance_release (&trans->inst); */
+  g_object_unref(trans);
 
   LEAVE ("(addr=%p)", trans);
 }

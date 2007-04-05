@@ -108,6 +108,7 @@ mark_account (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+/* GObject Initialization */
 QOF_GOBJECT_IMPL(gnc_account, Account, QOF_TYPE_INSTANCE);
 
 static void
