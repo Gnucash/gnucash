@@ -214,6 +214,19 @@ gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
 /* ====================================================================== */
 /* SX-trans stuff */
 
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_schedxactions, SchedXactions, QOF_TYPE_INSTANCE);
+
+static void
+gnc_schedxactions_init(SchedXactions* fs)
+{
+}
+
+static void
+gnc_schedxactions_finalize_real(GObject* fsp)
+{
+}
+
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
 {
@@ -228,11 +241,14 @@ book_sxes_setup(QofBook *book)
      SchedXactions *sxes;
 
      col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
-     sxes = g_new (SchedXactions, 1);
-     qof_instance_init(&sxes->inst, GNC_ID_SXES, book);
+     sxes = g_object_new (GNC_TYPE_SCHEDXACTIONS, NULL);
+     g_assert(sxes);
+     qof_instance_init_data(&sxes->inst, GNC_ID_SXES, book);
      sxes->sx_list = NULL;
      sxes->sx_notsaved = TRUE;
      qof_collection_set_data(col, sxes);
+
+     /* XXX: FIXME:  MEMORY LEAK.  This object is never freed. */
 }
 
 static void
