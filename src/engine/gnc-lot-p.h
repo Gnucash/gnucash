@@ -60,6 +60,11 @@ struct gnc_lot_struct
   unsigned char marker;
 };
 
+struct _GncLotClass
+{
+  QofInstanceClass parent_class;
+};
+
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
 /* Register with the Query engine */

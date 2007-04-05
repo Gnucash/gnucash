@@ -52,8 +52,21 @@ static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================= */
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_lot, GNCLot, QOF_TYPE_INSTANCE);
+
 static void
-gnc_lot_init (GNCLot *lot, QofBook *book)
+gnc_lot_init(GNCLot* lot)
+{
+}
+
+static void
+gnc_lot_finalize_real(GObject* lotp)
+{
+}
+
+static void
+gnc_lot_init_data (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->account = NULL;
@@ -61,7 +74,7 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->is_closed = -1;
    lot->marker = 0;
   
-   qof_instance_init(&lot->inst, GNC_ID_LOT, book);
+   qof_instance_init_data(&lot->inst, GNC_ID_LOT, book);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -71,8 +84,8 @@ gnc_lot_new (QofBook *book)
    GNCLot *lot;
    g_return_val_if_fail (book, NULL);
 
-   lot = g_new (GNCLot, 1);
-   gnc_lot_init (lot, book);
+   lot = g_object_new (GNC_TYPE_LOT, NULL);
+   gnc_lot_init_data (lot, book);
    qof_event_gen (&lot->inst, QOF_EVENT_CREATE, NULL);
    return lot;
 }
@@ -96,8 +109,8 @@ gnc_lot_destroy (GNCLot *lot)
    
    lot->account = NULL;
    lot->is_closed = TRUE;
-   qof_instance_release (&lot->inst);
-   g_free (lot);
+   /* qof_instance_release (&lot->inst); */
+   g_object_unref (lot);
 }
 
 /* ============================================================= */

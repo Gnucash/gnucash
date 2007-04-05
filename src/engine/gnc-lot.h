@@ -59,8 +59,25 @@
 #ifndef GNC_LOT_H
 #define GNC_LOT_H
 
+typedef struct _GncLotClass GNCLotClass;
+
 #include "qof.h"
 #include "gnc-lot-p.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_LOT            (gnc_lot_get_type ())
+#define GNC_LOT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_LOT, GNCLot))
+#define GNC_LOT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_LOT, GNCLotClass))
+#define GNC_IS_LOT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_LOT))
+#define GNC_IS_LOT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_LOT))
+#define GNC_LOT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_LOT, GNCLotClass))
+GType gnc_lot_get_type(void);
+
 
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
