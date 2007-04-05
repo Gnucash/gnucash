@@ -297,7 +297,8 @@ gnc_history_update_action (GncMainWindow *window,
 	gchar *action_name, *label_name, *old_filename;
 	gint limit;
 
-	ENTER("window %p, index %d, filename %s", window, index, filename);
+	ENTER("window %p, index %d, filename %s", window, index,
+	      filename ? filename : "(null)");
 	/* Get the action group */
 	action_group =
 	  gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
