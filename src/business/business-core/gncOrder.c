@@ -53,6 +53,11 @@ struct _gncOrder
   Timespec 	closed;
 };
 
+struct _gncOrderClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
@@ -75,16 +80,28 @@ void mark_order (GncOrder *order)
 }
 
 /* =============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_order, GncOrder, QOF_TYPE_INSTANCE);
 
+static void
+gnc_order_init(GncOrder* order)
+{
+}
+
+static void
+gnc_order_finalize_real(GObject* orderp)
+{
+}
+
+/* Create/Destroy Functions */
 GncOrder *gncOrderCreate (QofBook *book)
 {
   GncOrder *order;
 
   if (!book) return NULL;
 
-  order = g_new0 (GncOrder, 1);
-  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  order = g_object_new (GNC_TYPE_ORDER, NULL);
+  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
 
   order->id = CACHE_INSERT ("");
   order->notes = CACHE_INSERT ("");
@@ -117,8 +134,8 @@ static void gncOrderFree (GncOrder *order)
 
   if (order->printname) g_free (order->printname);
 
-  qof_instance_release (&order->inst);
-  g_free (order);
+  /* qof_instance_release (&order->inst); */
+  g_object_unref (order);
 }
 
 GncOrder *
@@ -129,8 +146,8 @@ gncCloneOrder (GncOrder *from, QofBook *book)
 
   if (!book) return NULL;
 
-  order = g_new0 (GncOrder, 1);
-  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  order = g_object_new (GNC_TYPE_ORDER, NULL);
+  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&order->inst, &from->inst);
 
   order->id = CACHE_INSERT (from->id);
