@@ -69,6 +69,11 @@ struct _gncInvoice
   GNCLot      *posted_lot;
 };
 
+struct _gncInvoiceClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
@@ -100,16 +105,28 @@ QofBook * gncInvoiceGetBook(GncInvoice *x)
 }
 
 /* ================================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_invoice, GncInvoice, QOF_TYPE_INSTANCE);
 
+static void
+gnc_invoice_init(GncInvoice* inv)
+{
+}
+
+static void
+gnc_invoice_finalize_real(GObject* invp)
+{
+}
+
+/* Create/Destroy Functions */
 GncInvoice *gncInvoiceCreate (QofBook *book)
 {
   GncInvoice *invoice;
 
   if (!book) return NULL;
 
-  invoice = g_new0 (GncInvoice, 1);
-  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
+  invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+  qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
@@ -148,8 +165,8 @@ static void gncInvoiceFree (GncInvoice *invoice)
   if (invoice->terms)
     gncBillTermDecRef (invoice->terms);
 
-  qof_instance_release (&invoice->inst);
-  g_free (invoice);
+  /* qof_instance_release (&invoice->inst); */
+  g_object_unref (invoice);
 }
 
 GncInvoice *
@@ -160,8 +177,8 @@ gncCloneInvoice (GncInvoice *from, QofBook *book)
 
   if (!book) return NULL;
 
-  invoice = g_new0 (GncInvoice, 1);
-  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
+  invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+  qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
   invoice->id = CACHE_INSERT (from->id);
   invoice->notes = CACHE_INSERT (from->notes);
