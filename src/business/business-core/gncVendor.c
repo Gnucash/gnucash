@@ -57,6 +57,11 @@ struct _gncVendor
   GList *         jobs;
 };
 
+struct _gncVendorClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_VENDOR
@@ -72,16 +77,28 @@ void mark_vendor (GncVendor *vendor)
 }
 
 /* ============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_vendor, GncVendor, QOF_TYPE_INSTANCE);
 
+static void
+gnc_vendor_init(GncVendor* vendor)
+{
+}
+
+static void
+gnc_vendor_finalize_real(GObject* vendorp)
+{
+}
+
+/* Create/Destroy Functions */
 GncVendor *gncVendorCreate (QofBook *book)
 {
   GncVendor *vendor;
 
   if (!book) return NULL;
 
-  vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
+  qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
   
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
@@ -120,8 +137,8 @@ static void gncVendorFree (GncVendor *vendor)
   if (vendor->taxtable)
     gncTaxTableDecRef (vendor->taxtable);
 
-  qof_instance_release (&vendor->inst);
-  g_free (vendor);
+  /* qof_instance_release (&vendor->inst); */
+  g_object_unref (vendor);
 }
 
 /** Create a copy of a vendor, placing the copy into a new book. */
@@ -133,8 +150,8 @@ gncCloneVendor (GncVendor *from, QofBook *book)
 
   if (!book) return NULL;
 
-  vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
+  qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&vendor->inst, &from->inst);
   
   vendor->id = CACHE_INSERT (from->id);
