@@ -48,6 +48,11 @@ struct _gncTaxTable
   GList *         children;     /* list of children for disconnection */
 };
 
+struct _gncTaxTableClass
+{
+  QofInstanceClass parent_class;
+};
+
 struct _gncTaxTableEntry 
 {
   GncTaxTable *   table;
@@ -200,16 +205,28 @@ gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child)
 }
 
 /* =============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_taxtable, GncTaxTable, QOF_TYPE_INSTANCE);
 
+static void
+gnc_taxtable_init(GncTaxTable* tt)
+{
+}
+
+static void
+gnc_taxtable_finalize_real(GObject* ttp)
+{
+}
+
+/* Create/Destroy Functions */
 GncTaxTable * 
 gncTaxTableCreate (QofBook *book)
 {
   GncTaxTable *table;
   if (!book) return NULL;
 
-  table = g_new0 (GncTaxTable, 1);
-  qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
+  table = g_object_new (GNC_TYPE_TAXTABLE, NULL);
+  qof_instance_init_data (&table->inst, _GNC_MOD_NAME, book);
   table->name = CACHE_INSERT ("");
   addObj (table);
   qof_event_gen (&table->inst, QOF_EVENT_CREATE, NULL);
@@ -224,8 +241,8 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   GncTaxTable *table;
   if (!book) return NULL;
 
-  table = g_new0 (GncTaxTable, 1);
-  qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
+  table = g_object_new (GNC_TYPE_TAXTABLE, NULL);
+  qof_instance_init_data (&table->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&table->inst, &from->inst);
   
   table->name = CACHE_INSERT (from->name);
@@ -323,8 +340,8 @@ gncTaxTableFree (GncTaxTable *table)
   }
   g_list_free(table->children);
 
-  qof_instance_release (&table->inst);
-  g_free (table);
+  /* qof_instance_release (&table->inst); */
+  g_object_unref (table);
 }
 
 /* =============================================================== */
