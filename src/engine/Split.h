@@ -34,10 +34,27 @@
 #ifndef XACC_SPLIT_H
 #define XACC_SPLIT_H
 
+typedef struct _SplitClass SplitClass;
+
 #include <time.h>
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_SPLIT            (gnc_split_get_type ())
+#define GNC_SPLIT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SPLIT, Split))
+#define GNC_SPLIT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SPLIT, SplitClass))
+#define GNC_IS_SPLIT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SPLIT))
+#define GNC_IS_SPLIT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SPLIT))
+#define GNC_SPLIT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SPLIT, SplitClass))
+GType gnc_split_get_type(void);
+
 
 /** @name Split Reconciled field values
 

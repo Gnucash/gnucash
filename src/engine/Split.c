@@ -55,6 +55,19 @@ const char *void_former_val_str = "void-former-value";
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_split, Split, QOF_TYPE_INSTANCE);
+
+static void
+gnc_split_init(Split* acc)
+{
+}
+
+static void
+gnc_split_finalize_real(GObject* acctp)
+{
+}
+
 /********************************************************************\
  * xaccInitSplit
  * Initialize a Split structure
@@ -87,7 +100,7 @@ xaccInitSplit(Split * split, QofBook *book)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, book);
+  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, book);
 }
 
 void
@@ -130,7 +143,7 @@ xaccMallocSplit(QofBook *book)
   Split *split;
   g_return_val_if_fail (book, NULL);
 
-  split = g_new0 (Split, 1);
+  split = g_object_new (GNC_TYPE_SPLIT, NULL);
   xaccInitSplit (split, book);
 
   return split;
@@ -148,7 +161,7 @@ xaccMallocSplit(QofBook *book)
 Split *
 xaccDupeSplit (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   /* Trash the entity table. We don't want to mistake the cloned
    * splits as something official.  If we ever use this split, we'll
@@ -187,7 +200,7 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitClone (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   split->parent              = NULL;
   split->memo                = CACHE_INSERT(s->memo);
@@ -204,7 +217,7 @@ xaccSplitClone (const Split *s)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, s->inst.book);
+  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, s->inst.book);
   kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
@@ -274,8 +287,8 @@ xaccFreeSplit (Split *split)
 
   // Is this right? 
   if (split->gains_split) split->gains_split->gains_split = NULL;
-  qof_instance_release(&split->inst);
-  g_free(split);
+  /* qof_instance_release(&split->inst); */
+  g_object_unref(split);
 }
 
 static void mark_acc(Account *acc)
