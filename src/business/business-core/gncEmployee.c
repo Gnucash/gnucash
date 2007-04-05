@@ -54,6 +54,11 @@ struct _gncEmployee
   Account *        ccard_acc;
 };
 
+struct _gncEmployeeClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_EMPLOYEE
@@ -66,16 +71,28 @@ void mark_employee (GncEmployee *employee)
 }
 
 /* ============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_employee, GncEmployee, QOF_TYPE_INSTANCE);
 
+static void
+gnc_employee_init(GncEmployee* emp)
+{
+}
+
+static void
+gnc_employee_finalize_real(GObject* empp)
+{
+}
+
+/* Create/Destroy Functions */
 GncEmployee *gncEmployeeCreate (QofBook *book)
 {
   GncEmployee *employee;
 
   if (!book) return NULL;
 
-  employee = g_new0 (GncEmployee, 1);
-  qof_instance_init (&employee->inst, _GNC_MOD_NAME, book);
+  employee = g_object_new (GNC_TYPE_EMPLOYEE, NULL);
+  qof_instance_init_data (&employee->inst, _GNC_MOD_NAME, book);
   
   employee->id = CACHE_INSERT ("");
   employee->username = CACHE_INSERT ("");
@@ -110,8 +127,8 @@ static void gncEmployeeFree (GncEmployee *employee)
   CACHE_REMOVE (employee->acl);
   gncAddressDestroy (employee->addr);
 
-  qof_instance_release (&employee->inst);
-  g_free (employee);
+  /* qof_instance_release (&employee->inst); */
+  g_object_unref (employee);
 }
 
 GncEmployee *
@@ -120,8 +137,8 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   GncEmployee *employee;
   if (!book || !from) return NULL;
 
-  employee = g_new0 (GncEmployee, 1);
-  qof_instance_init(&employee->inst, _GNC_MOD_NAME, book);
+  employee = g_object_new (GNC_TYPE_EMPLOYEE, NULL);
+  qof_instance_init_data(&employee->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&employee->inst, &from->inst);
 
   employee->id = CACHE_INSERT (from->id);

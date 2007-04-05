@@ -32,13 +32,26 @@
 #define GNC_EMPLOYEE_H_
 
 typedef struct _gncEmployee GncEmployee;
+typedef struct _gncEmployeeClass GncEmployeeClass;
 
 #include "gncAddress.h"
 #include "Account.h"
 
 #define GNC_ID_EMPLOYEE "gncEmployee"
-#define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
-#define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
+
+/* --- type macros --- */
+#define GNC_TYPE_EMPLOYEE            (gnc_employee_get_type ())
+#define GNC_EMPLOYEE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_EMPLOYEE, GncEmployee))
+#define GNC_EMPLOYEE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_EMPLOYEE, GncEmployeeClass))
+#define GNC_IS_EMPLOYEE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_EMPLOYEE))
+#define GNC_IS_EMPLOYEE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_EMPLOYEE))
+#define GNC_EMPLOYEE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_EMPLOYEE, GncEmployeeClass))
+GType gnc_employee_get_type(void);
 
 /** @name Create/Destroy Functions 
  @{ */
