@@ -430,7 +430,21 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     dcal->initialized = TRUE;
 
-    dcal->week_starts_monday = 1;
+
+    dcal->week_starts_monday = 0;
+    {
+        gchar **parts;
+        parts = g_strsplit(dgettext("gtk20", "calendar:week_start:0"),
+                           ":", 3);
+        if (parts[0] != NULL
+            && parts[1] != NULL
+            && parts[2] != NULL)
+        {
+            if (strcmp("1", parts[2]) == 0)
+                dcal->week_starts_monday = 1;
+        }
+        g_strfreev(parts);
+    }
 
     gtk_widget_pop_composite_child();
 
