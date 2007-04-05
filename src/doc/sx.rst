@@ -93,7 +93,7 @@ TODO
     - [x] conf-save value
   - [ ] code cleanup
     - [x] min-size
-  - [/] start-of-week := {sun,mon} (via locale)
+  - [x] start-of-week := {sun,mon} (via locale)
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
