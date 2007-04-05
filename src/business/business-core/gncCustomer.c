@@ -68,6 +68,11 @@ struct _gncCustomer
   GncAddress *    shipaddr;
 };
 
+struct _gncCustomerClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_CUSTOMER
@@ -83,16 +88,29 @@ void mark_customer (GncCustomer *customer)
 }
 
 /* ============================================================== */
-/* Create/Destroy Functions */
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_customer, GncCustomer, QOF_TYPE_INSTANCE);
+
+static void
+gnc_customer_init(GncCustomer* cust)
+{
+}
+
+static void
+gnc_customer_finalize_real(GObject* custp)
+{
+}
+
+/* Create/Destroy Functions */
 GncCustomer *gncCustomerCreate (QofBook *book)
 {
   GncCustomer *cust;
 
   if (!book) return NULL;
 
-  cust = g_new0 (GncCustomer, 1);
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
+  qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
 
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
@@ -118,9 +136,9 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   GList *node;
   GncCustomer *cust;
 
-  cust = g_new0 (GncCustomer, 1);
+  cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
 
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&cust->inst, &from->inst);
 
   cust->id = CACHE_INSERT (from->id);
@@ -182,8 +200,8 @@ static void gncCustomerFree (GncCustomer *cust)
     gncTaxTableDecRef (cust->taxtable);
   }
 
-  qof_instance_release (&cust->inst);
-  g_free (cust);
+  /* qof_instance_release (&cust->inst); */
+  g_object_unref (cust);
 }
 
 GncCustomer *
