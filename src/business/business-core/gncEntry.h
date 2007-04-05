@@ -32,6 +32,7 @@
 #define GNC_ENTRY_H_
 
 typedef struct _gncEntry GncEntry;
+typedef struct _gncEntryClass GncEntryClass;
 
 typedef enum {
   GNC_PAYMENT_CASH = 1,
@@ -53,8 +54,20 @@ typedef enum {
 #include "gncOwner.h"
 
 #define GNC_ID_ENTRY "gncEntry"
-#define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))
-#define GNC_ENTRY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ENTRY, GncEntry))
+
+/* --- type macros --- */
+#define GNC_TYPE_ENTRY            (gnc_entry_get_type ())
+#define GNC_ENTRY(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ENTRY, GncEntry))
+#define GNC_ENTRY_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ENTRY, GncEntryClass))
+#define GNC_IS_ENTRY(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ENTRY))
+#define GNC_IS_ENTRY_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ENTRY))
+#define GNC_ENTRY_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ENTRY, GncEntryClass))
+GType gnc_entry_get_type(void);
 
 /** How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
