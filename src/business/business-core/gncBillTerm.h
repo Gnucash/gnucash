@@ -32,14 +32,27 @@
 #define GNC_BILLTERM_H_
 
 typedef struct _gncBillTerm GncBillTerm;
+typedef struct _gncBillTermClass GncBillTermClass;
 
 #include "qof.h"
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif
 #define GNC_ID_BILLTERM       "gncBillTerm"
-#define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
-#define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
+
+/* --- type macros --- */
+#define GNC_TYPE_BILLTERM            (gnc_billterm_get_type ())
+#define GNC_BILLTERM(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_BILLTERM, GncBillTerm))
+#define GNC_BILLTERM_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_BILLTERM, GncBillTermClass))
+#define GNC_IS_BILLTERM(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_BILLTERM))
+#define GNC_IS_BILLTERM_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_BILLTERM))
+#define GNC_BILLTERM_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_BILLTERM, GncBillTermClass))
+GType gnc_billterm_get_type(void);
 
 /** @name BillTerm parameter names
  @{ */

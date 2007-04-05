@@ -137,6 +137,7 @@ gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book)
   if (!book) return NULL;
 
   addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
+  qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
   addr->book = book;
   addr->dirty = TRUE;
   addr->parent = new_parent;
