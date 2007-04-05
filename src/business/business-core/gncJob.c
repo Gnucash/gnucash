@@ -46,6 +46,11 @@ struct _gncJob
   gboolean      active;
 };
 
+struct _gncJobClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_JOB
@@ -61,16 +66,28 @@ void mark_job (GncJob *job)
 }
 
 /* ================================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_job, GncJob, QOF_TYPE_INSTANCE);
 
+static void
+gnc_job_init(GncJob* job)
+{
+}
+
+static void
+gnc_job_finalize_real(GObject* jobp)
+{
+}
+
+/* Create/Destroy Functions */
 GncJob *gncJobCreate (QofBook *book)
 {
   GncJob *job;
 
   if (!book) return NULL;
 
-  job = g_new0 (GncJob, 1);
-  qof_instance_init (&job->inst, _GNC_MOD_NAME, book);
+  job = g_object_new (GNC_TYPE_JOB, NULL);
+  qof_instance_init_data (&job->inst, _GNC_MOD_NAME, book);
 
   job->id = CACHE_INSERT ("");
   job->name = CACHE_INSERT ("");
@@ -90,8 +107,8 @@ gncCloneJob (GncJob *from, QofBook *book)
                                                                                 
   if (!book) return NULL;
                                                                                 
-  job = g_new0 (GncJob, 1);
-  qof_instance_init (&job->inst, _GNC_MOD_NAME, book);
+  job = g_object_new (GNC_TYPE_JOB, NULL);
+  qof_instance_init_data (&job->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&job->inst, &from->inst);
                                                                                 
   job->id = CACHE_INSERT (from->id);
@@ -134,8 +151,8 @@ static void gncJobFree (GncJob *job)
     break;
   }
 
-  qof_instance_release (&job->inst);
-  g_free (job);
+  /* qof_instance_release (&job->inst); */
+  g_object_unref (job);
 }
 
 GncJob *
