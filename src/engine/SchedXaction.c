@@ -45,12 +45,25 @@
 
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_schedxaction, SchedXaction, QOF_TYPE_INSTANCE);
+
+static void
+gnc_schedxaction_init(SchedXaction* fs)
+{
+}
+
+static void
+gnc_schedxaction_finalize_real(GObject* fsp)
+{
+}
+
 static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    Account        *ra;
 
-   qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
+   qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    sx->schedule = NULL;
    sx->freq = xaccFreqSpecMalloc(book);
@@ -89,7 +102,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
    g_return_val_if_fail (book, NULL);
 
-   sx = g_new0( SchedXaction, 1 );
+   sx = g_object_new(GNC_TYPE_SCHEDXACTION, NULL);
    xaccSchedXactionInit( sx, book );
    qof_event_gen( &sx->inst, QOF_EVENT_CREATE , NULL);
 
@@ -187,8 +200,8 @@ xaccSchedXactionFree( SchedXaction *sx )
           sx->deferredList = NULL;
   }
   
-  qof_instance_release (&sx->inst);
-  g_free( sx );
+  /* qof_instance_release (&sx->inst); */
+  g_object_unref( sx );
 }
 
 /* ============================================================ */
