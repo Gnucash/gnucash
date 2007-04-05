@@ -91,4 +91,9 @@ struct gncp_freq_spec
         gint            value;
 };
 
+struct _FreqSpecClass
+{
+  QofInstanceClass	parent_class;
+};
+
 #endif /* XACC_FREQSPECP_H */

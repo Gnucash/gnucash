@@ -59,9 +59,26 @@
 #ifndef XACC_FREQSPEC_H
 #define XACC_FREQSPEC_H
 
+typedef struct _FreqSpecClass FreqSpecClass;
+
 #include "gnc-engine.h"
 #include <glib.h>
 #include "qof.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_FREQSPEC            (gnc_freqspec_get_type ())
+#define GNC_FREQSPEC(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_FREQSPEC, FreqSpec))
+#define GNC_FREQSPEC_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_FREQSPEC, FreqSpecClass))
+#define GNC_IS_FREQSPEC(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_FREQSPEC))
+#define GNC_IS_FREQSPEC_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_FREQSPEC))
+#define GNC_FREQSPEC_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_FREQSPEC, FreqSpecClass))
+GType gnc_freqspec_get_type(void);
+
 
 #define ENUM_LIST_TYPE(_) \
         _(INVALID,) \
