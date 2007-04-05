@@ -77,6 +77,21 @@ up to you to pass a suitable entity.
 @param	char*	email address
 */
 typedef struct _gncAddress GncAddress;
+typedef struct _gncAddressClass GncAddressClass;
+
+/* --- type macros --- */
+#define GNC_TYPE_ADDRESS            (gnc_address_get_type ())
+#define GNC_ADDRESS(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ADDRESS, GncAddress))
+#define GNC_ADDRESS_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_ADDRESS, GncAddressClass))
+#define GNC_IS_ADDRESS(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ADDRESS))
+#define GNC_IS_ADDRESS_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ADDRESS))
+#define GNC_ADDRESS_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_ADDRESS, GncAddressClass))
+GType gnc_address_get_type(void);
 
 /** @name Create/Destroy functions 
  @{ */

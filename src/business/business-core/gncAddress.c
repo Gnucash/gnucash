@@ -50,6 +50,11 @@ struct _gncAddress
   char *	email;
 };
 
+struct _gncAddressClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
@@ -62,6 +67,19 @@ void mark_address (GncAddress *address)
   qof_event_gen (address->parent, QOF_EVENT_MODIFY, NULL);
 }
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_address, GncAddress, QOF_TYPE_INSTANCE);
+
+static void
+gnc_address_init(GncAddress* addr)
+{
+}
+
+static void
+gnc_address_finalize_real(GObject* addrp)
+{
+}
+
 /* Create/Destroy functions */
 
 GncAddress * 
@@ -71,8 +89,8 @@ gncAddressCreate (QofBook *book, QofInstance *prnt)
 
   if (!book) return NULL;
 
-  addr = g_new0 (GncAddress, 1);
-  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
+  addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
+  qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
   addr->book = book;
   addr->dirty = FALSE;
   addr->parent = prnt;
@@ -118,7 +136,7 @@ gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book)
 
   if (!book) return NULL;
 
-  addr = g_new0 (GncAddress, 1);
+  addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
   addr->book = book;
   addr->dirty = TRUE;
   addr->parent = new_parent;
@@ -159,8 +177,8 @@ gncAddressFree (GncAddress *addr)
   CACHE_REMOVE (addr->fax);
   CACHE_REMOVE (addr->email);
 
-  qof_instance_release (&addr->inst);
-  g_free (addr);
+  /* qof_instance_release (&addr->inst); */
+  g_object_unref (addr);
 }
 
 
