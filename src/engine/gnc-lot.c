@@ -61,6 +61,11 @@ gnc_lot_init(GNCLot* lot)
 }
 
 static void
+gnc_lot_dispose_real (GObject *lotp)
+{
+}
+
+static void
 gnc_lot_finalize_real(GObject* lotp)
 {
 }

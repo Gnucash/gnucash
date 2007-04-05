@@ -103,6 +103,11 @@ book_final (gpointer key, gpointer value, gpointer booq)
 }
 
 static void
+qof_book_dispose_real (GObject *bookp)
+{
+}
+
+static void
 qof_book_finalize_real (GObject *bookp)
 {
 }

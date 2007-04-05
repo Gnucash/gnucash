@@ -239,6 +239,11 @@ gnc_transaction_init(Transaction* txn)
 }
 
 static void
+gnc_transaction_dispose_real (GObject *txnp)
+{
+}
+
+static void
 gnc_transaction_finalize_real(GObject* txnp)
 {
 }

@@ -76,6 +76,11 @@ gnc_address_init(GncAddress* addr)
 }
 
 static void
+gnc_address_dispose_real (GObject *addrp)
+{
+}
+
+static void
 gnc_address_finalize_real(GObject* addrp)
 {
 }

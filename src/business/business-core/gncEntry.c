@@ -187,6 +187,11 @@ gnc_entry_init(GncEntry* entry)
 }
 
 static void
+gnc_entry_dispose_real (GObject *entryp)
+{
+}
+
+static void
 gnc_entry_finalize_real(GObject* entryp)
 {
 }

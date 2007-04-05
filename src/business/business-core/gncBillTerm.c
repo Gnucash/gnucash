@@ -142,6 +142,11 @@ gnc_billterm_init(GncBillTerm* bt)
 }
 
 static void
+gnc_billterm_dispose_real (GObject *btp)
+{
+}
+
+static void
 gnc_billterm_finalize_real(GObject* btp)
 {
 }

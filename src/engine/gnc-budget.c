@@ -62,6 +62,11 @@ gnc_budget_init(GncBudget* budget)
 }
 
 static void
+gnc_budget_dispose_real (GObject *budgetp)
+{
+}
+
+static void
 gnc_budget_finalize_real(GObject* budgetp)
 {
 }

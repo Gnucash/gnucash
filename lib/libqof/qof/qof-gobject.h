@@ -57,14 +57,24 @@
  */
 
 #define QOF_GOBJECT_GET_TYPE(TypeName, type_name, TYPE_PARENT, CODE)	\
-  static void type_name##_finalize(GObject *object);			\
   G_DEFINE_TYPE_WITH_CODE(TypeName, type_name, TYPE_PARENT, CODE);
 
 #define QOF_GOBJECT_CLASS_INIT(type_name, TypeName)			\
+  static void type_name##_dispose(GObject *object);			\
+  static void type_name##_finalize(GObject *object);			\
   static void type_name##_class_init(TypeName##Class *klass)		\
   {									\
     GObjectClass *object_class = G_OBJECT_CLASS(klass);			\
+    object_class->dispose = type_name##_dispose;			\
     object_class->finalize = type_name##_finalize;			\
+  }
+
+#define QOF_GOBJECT_DISPOSE(type_name)					\
+  static void type_name##_dispose_real(GObject* object);		\
+  static void type_name##_dispose(GObject *object)			\
+  {									\
+    type_name##_dispose_real(object);					\
+    G_OBJECT_CLASS(type_name##_parent_class)->dispose(object);		\
   }
 
 #define QOF_GOBJECT_FINALIZE(type_name)					\
@@ -78,6 +88,7 @@
 #define QOF_GOBJECT_IMPL_WITH_CODE(type_name, TypeName, TYPE_PARENT, CODE) \
   QOF_GOBJECT_GET_TYPE(TypeName, type_name, TYPE_PARENT, CODE);		\
   QOF_GOBJECT_CLASS_INIT(type_name, TypeName);				\
+  QOF_GOBJECT_DISPOSE(type_name);					\
   QOF_GOBJECT_FINALIZE(type_name);
 
 #define QOF_GOBJECT_IMPL(type_name, TypeName, TYPE_PARENT) \

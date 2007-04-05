@@ -98,6 +98,11 @@ gnc_customer_init(GncCustomer* cust)
 }
 
 static void
+gnc_customer_dispose_real (GObject *custp)
+{
+}
+
+static void
 gnc_customer_finalize_real(GObject* custp)
 {
 }

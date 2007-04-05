@@ -49,12 +49,17 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 QOF_GOBJECT_IMPL(gnc_schedxaction, SchedXaction, QOF_TYPE_INSTANCE);
 
 static void
-gnc_schedxaction_init(SchedXaction* fs)
+gnc_schedxaction_init(SchedXaction* sx)
 {
 }
 
 static void
-gnc_schedxaction_finalize_real(GObject* fsp)
+gnc_schedxaction_dispose_real (GObject *sxp)
+{
+}
+
+static void
+gnc_schedxaction_finalize_real(GObject* sxp)
 {
 }
 

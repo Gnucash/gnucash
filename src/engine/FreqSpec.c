@@ -167,6 +167,11 @@ gnc_freqspec_init(FreqSpec* fs)
 }
 
 static void
+gnc_freqspec_dispose_real (GObject *fsp)
+{
+}
+
+static void
 gnc_freqspec_finalize_real(GObject* fsp)
 {
 }

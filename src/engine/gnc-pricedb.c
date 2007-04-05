@@ -44,6 +44,11 @@ gnc_price_init(GNCPrice* price)
 }
 
 static void
+gnc_price_dispose_real (GObject *pricep)
+{
+}
+
+static void
 gnc_price_finalize_real(GObject* pricep)
 {
 }
@@ -572,6 +577,11 @@ QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE);
 
 static void
 gnc_pricedb_init(GNCPriceDB* pdb)
+{
+}
+
+static void
+gnc_pricedb_dispose_real (GObject *pdbp)
 {
 }
 

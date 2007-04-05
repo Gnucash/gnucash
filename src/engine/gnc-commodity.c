@@ -542,6 +542,11 @@ gnc_commodity_init(gnc_commodity* com)
 }
 
 static void
+gnc_commodity_dispose_real (GObject *nsp)
+{
+}
+
+static void
 gnc_commodity_finalize_real(GObject* comp)
 {
 }
@@ -1538,6 +1543,11 @@ QOF_GOBJECT_IMPL(gnc_commodity_namespace, gnc_commodity_namespace, QOF_TYPE_INST
 
 static void
 gnc_commodity_namespace_init(gnc_commodity_namespace* ns)
+{
+}
+
+static void
+gnc_commodity_namespace_dispose_real (GObject *nsp)
 {
 }
 

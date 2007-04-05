@@ -214,6 +214,11 @@ gnc_taxtable_init(GncTaxTable* tt)
 }
 
 static void
+gnc_taxtable_dispose_real (GObject *ttp)
+{
+}
+
+static void
 gnc_taxtable_finalize_real(GObject* ttp)
 {
 }

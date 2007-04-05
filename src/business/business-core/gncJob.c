@@ -75,6 +75,11 @@ gnc_job_init(GncJob* job)
 }
 
 static void
+gnc_job_dispose_real (GObject *jobp)
+{
+}
+
+static void
 gnc_job_finalize_real(GObject* jobp)
 {
 }

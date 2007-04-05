@@ -86,6 +86,11 @@ gnc_vendor_init(GncVendor* vendor)
 }
 
 static void
+gnc_vendor_dispose_real (GObject *vendorp)
+{
+}
+
+static void
 gnc_vendor_finalize_real(GObject* vendorp)
 {
 }

@@ -59,12 +59,17 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 QOF_GOBJECT_IMPL(gnc_split, Split, QOF_TYPE_INSTANCE);
 
 static void
-gnc_split_init(Split* acc)
+gnc_split_init(Split* split)
 {
 }
 
 static void
-gnc_split_finalize_real(GObject* acctp)
+gnc_split_dispose_real (GObject *splitp)
+{
+}
+
+static void
+gnc_split_finalize_real(GObject* splitp)
 {
 }
 

@@ -80,6 +80,11 @@ gnc_employee_init(GncEmployee* emp)
 }
 
 static void
+gnc_employee_dispose_real (GObject *empp)
+{
+}
+
+static void
 gnc_employee_finalize_real(GObject* empp)
 {
 }

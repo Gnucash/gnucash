@@ -89,6 +89,11 @@ gnc_order_init(GncOrder* order)
 }
 
 static void
+gnc_order_dispose_real (GObject *orderp)
+{
+}
+
+static void
 gnc_order_finalize_real(GObject* orderp)
 {
 }

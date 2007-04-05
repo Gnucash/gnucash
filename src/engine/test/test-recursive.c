@@ -230,6 +230,11 @@ gnc_mychild_init(mychild* obj)
 }
 
 static void
+gnc_mychild_dispose_real (GObject *objp)
+{
+}
+
+static void
 gnc_mychild_finalize_real(GObject* objp)
 {
 }
@@ -243,6 +248,11 @@ gnc_myparent_init(myparent* obj)
 }
 
 static void
+gnc_myparent_dispose_real (GObject *objp)
+{
+}
+
+static void
 gnc_myparent_finalize_real(GObject* objp)
 {
 }
@@ -252,6 +262,11 @@ QOF_GOBJECT_IMPL(gnc_mygrand, mygrand, QOF_TYPE_INSTANCE);
 
 static void
 gnc_mygrand_init(mygrand* obj)
+{
+}
+
+static void
+gnc_mygrand_dispose_real (GObject *objp)
 {
 }
 

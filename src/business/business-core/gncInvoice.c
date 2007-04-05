@@ -114,6 +114,11 @@ gnc_invoice_init(GncInvoice* inv)
 }
 
 static void
+gnc_invoice_dispose_real (GObject *invp)
+{
+}
+
+static void
 gnc_invoice_finalize_real(GObject* invp)
 {
 }

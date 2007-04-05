@@ -108,6 +108,11 @@ gnc_myobj_init(myobj* obj)
 }
 
 static void
+gnc_myobj_dispose_real (GObject *objp)
+{
+}
+
+static void
 gnc_myobj_finalize_real(GObject* objp)
 {
 }

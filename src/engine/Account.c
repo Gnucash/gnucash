@@ -117,6 +117,11 @@ gnc_account_init(Account* acc)
 }
 
 static void
+gnc_account_dispose_real (GObject *acctp)
+{
+}
+
+static void
 gnc_account_finalize_real(GObject* acctp)
 {
 }
