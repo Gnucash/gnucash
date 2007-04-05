@@ -545,7 +545,8 @@ qof_util_param_as_string(QofInstance *ent, QofParam *param)
 void
 qof_init (void)
 {
-    qof_log_init();
+	g_type_init();
+	qof_log_init();
 	qof_util_get_string_cache ();
 	guid_init ();
 	qof_object_initialize ();

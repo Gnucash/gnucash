@@ -39,7 +39,16 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /* ========================================================== */
 
-QOF_GOBJECT_IMPL(qof_instance, QofInstance, G_TYPE_OBJECT);
+QOF_GOBJECT_GET_TYPE(QofInstance, qof_instance, G_TYPE_OBJECT, {});
+QOF_GOBJECT_FINALIZE(qof_instance);
+
+static void qof_instance_dispose(GObject*);
+static void qof_instance_class_init(QofInstanceClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    object_class->finalize = qof_instance_finalize;
+    object_class->dispose = qof_instance_dispose;
+}
 
 static void
 qof_instance_init (QofInstance *inst)
@@ -67,6 +76,14 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 }
 
 static void
+qof_instance_dispose (GObject *instp)
+{
+	QofInstance* inst = QOF_INSTANCE(instp);
+	qof_entity_release (inst);
+	G_OBJECT_CLASS(qof_instance_parent_class)->dispose(instp);
+}
+
+static void
 qof_instance_finalize_real (GObject *instp)
 {
 	QofInstance* inst = QOF_INSTANCE(instp);
@@ -76,7 +93,6 @@ qof_instance_finalize_real (GObject *instp)
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
-	qof_entity_release (inst);
 }
 
 const GUID *

@@ -110,6 +110,8 @@ qof_book_finalize_real (GObject *bookp)
 void
 qof_book_destroy (QofBook *book) 
 {
+  GHashTable* cols;
+
   if (!book) return;
   ENTER ("book=%p", book);
 
@@ -130,10 +132,16 @@ qof_book_destroy (QofBook *book)
 
   /* qof_instance_release (&book->inst); */
 
-  g_hash_table_destroy (book->hash_of_collections);
+  /* Note: we need to save this hashtable until after we remove ourself
+   * from it, otherwise we'll crash in our dispose() function when we
+   * DO remove ourself from the collection but the collection had already
+   * been destroyed.
+   */
+  cols = book->hash_of_collections;
+  g_object_unref (book);
+  g_hash_table_destroy (cols);
   book->hash_of_collections = NULL;
 
-  g_object_unref (book);
   LEAVE ("book=%p", book);
 }
 

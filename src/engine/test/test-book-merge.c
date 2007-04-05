@@ -58,6 +58,11 @@ typedef struct obj_s
 	gint64 		minor;
 }myobj;
 
+typedef struct objclass_s
+{
+  QofInstanceClass parent_class;
+} myobjClass;
+
 myobj* obj_create(QofBook*);
 
 /* obvious setter functions */
@@ -80,13 +85,40 @@ gboolean	obj_getActive(myobj*);
 gint32		obj_getVersion(myobj*);
 gint64		obj_getMinor(myobj*);
 
+/* --- type macros --- */
+#define GNC_TYPE_MYOBJ            (gnc_myobj_get_type ())
+#define GNC_MYOBJ(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_MYOBJ, myobj))
+#define GNC_MYOBJ_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_MYOBJ, myobjClass))
+#define GNC_IS_MYOBJ(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_MYOBJ))
+#define GNC_IS_MYOBJ_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_MYOBJ))
+#define GNC_MYOBJ_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_MYOBJ, myobjClass))
+GType gnc_myobj_get_type(void);
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_myobj, myobj, QOF_TYPE_INSTANCE);
+
+static void
+gnc_myobj_init(myobj* obj)
+{
+}
+
+static void
+gnc_myobj_finalize_real(GObject* objp)
+{
+}
+
 myobj*
 obj_create(QofBook *book)
 {
 	myobj *g;
 	g_return_val_if_fail(book, NULL);
-	g = g_new(myobj, 1);
-	qof_instance_init (&g->inst, TEST_MODULE_NAME, book);
+	g = g_object_new(GNC_TYPE_MYOBJ, NULL);
+	qof_instance_init_data (&g->inst, TEST_MODULE_NAME, book);
 	obj_setGUID(g,qof_instance_get_guid(&g->inst));
 	g->date.tv_nsec = 0;
 	g->date.tv_sec = 0;
@@ -279,9 +311,9 @@ test_merge (void)
 
 	/* import book objects - tests used */
 	do_test ((NULL != import), "#2 import book is NULL");
-	import_obj = g_new(myobj, 1);
+	import_obj = g_object_new(GNC_TYPE_MYOBJ, NULL);
 	do_test ((NULL != import_obj), "#3 new object create");
-	qof_instance_init (&import_obj->inst, TEST_MODULE_NAME, import);
+	qof_instance_init_data (&import_obj->inst, TEST_MODULE_NAME, import);
 	do_test ((NULL != &import_obj->inst), "#4 instance init");
 	obj_setGUID(import_obj,qof_instance_get_guid(&import_obj->inst));
 	do_test ((NULL != &import_obj->obj_guid), "#5 guid set");
@@ -310,8 +342,8 @@ test_merge (void)
 	minor = 3;
 
 	/* second import object - test results would be the same, so not tested. */
-	new_obj = g_new(myobj, 1);
-	qof_instance_init (&new_obj->inst, TEST_MODULE_NAME, import);
+	new_obj = g_object_new(GNC_TYPE_MYOBJ, NULL);
+	qof_instance_init_data (&new_obj->inst, TEST_MODULE_NAME, import);
 	obj_setGUID(new_obj,qof_instance_get_guid(&new_obj->inst));
 	qof_event_gen (&new_obj->inst, QOF_EVENT_CREATE, NULL);
 	obj_setName(new_obj, import_init);
@@ -330,8 +362,8 @@ test_merge (void)
 	tc.tv_nsec = 0;
 
 	/* target object - test results would be the same, so not tested. */
-	target_obj = g_new(myobj, 1);
-	qof_instance_init (&target_obj->inst, TEST_MODULE_NAME, target);
+	target_obj = g_object_new(GNC_TYPE_MYOBJ, NULL);
+	qof_instance_init_data (&target_obj->inst, TEST_MODULE_NAME, target);
 	obj_setGUID(target_obj,qof_instance_get_guid(&target_obj->inst));
 	qof_event_gen (&target_obj->inst, QOF_EVENT_CREATE, NULL);
 	obj_setName(target_obj, target_init);

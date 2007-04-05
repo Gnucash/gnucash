@@ -1533,6 +1533,19 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
  * add an empty namespace if it does not exist 
  ********************************************************************/
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_commodity_namespace, gnc_commodity_namespace, QOF_TYPE_INSTANCE);
+
+static void
+gnc_commodity_namespace_init(gnc_commodity_namespace* ns)
+{
+}
+
+static void
+gnc_commodity_namespace_finalize_real(GObject* nsp)
+{
+}
+
 gnc_commodity_namespace * 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
                                   const char * namespace,
