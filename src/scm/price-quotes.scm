@@ -585,7 +585,7 @@
                   (gnc-price-set-currency gnc-price currency)
                   (gnc-price-set-time gnc-price gnc-time)
                   (gnc-price-set-source gnc-price "Finance::Quote")
-                  (gnc-price-set-type gnc-price price-type)
+                  (gnc-price-set-typestr gnc-price price-type)
                   (gnc-price-set-value gnc-price price)
                   gnc-price))))))
 

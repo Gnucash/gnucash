@@ -329,8 +329,8 @@ sort_by_type (GtkTreeModel *f_model,
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  result = safe_utf8_collate (gnc_price_get_type (price_a),
-			      gnc_price_get_type (price_b));
+  result = safe_utf8_collate (gnc_price_get_typestr (price_a),
+			      gnc_price_get_typestr (price_b));
   if (result != 0)
     return result;
 

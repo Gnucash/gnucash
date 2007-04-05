@@ -662,7 +662,7 @@ make_random_changes_to_price (QofBook *book, GNCPrice *p)
   g_free (string);
 
   string = get_random_string ();
-  gnc_price_set_type (p, string);
+  gnc_price_set_typestr (p, string);
   g_free (string);
 
   gnc_price_set_value (p, get_random_gnc_numeric ());

@@ -307,7 +307,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_set_time (pr, ts);
 
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
-   gnc_price_set_type (pr, DB_GET_VAL("type",j));
+   gnc_price_set_typestr (pr, DB_GET_VAL("type",j));
 
    num = strtoll (DB_GET_VAL("valueNum", j), NULL, 0);
    denom = strtoll (DB_GET_VAL("valueDenom", j), NULL, 0);

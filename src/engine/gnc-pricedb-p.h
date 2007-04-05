@@ -49,13 +49,21 @@ struct gnc_price_s
   guint32  refcount;             /* garbage collection reference count */
 };
 
-
+struct _GncPriceClass
+{
+  QofInstanceClass parent_class;
+};
 
 struct gnc_price_db_s
 {
   QofInstance inst;              /* globally unique object identifier */
   GHashTable *commodity_hash;
   gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
+};
+
+struct _GncPriceDBClass
+{
+  QofInstanceClass parent_class;
 };
 
 /* These structs define the kind of price lookup being done

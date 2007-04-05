@@ -712,7 +712,7 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 			break;
 		case GNC_TREE_MODEL_PRICE_COL_TYPE:
 			g_value_init (value, G_TYPE_STRING);
-			g_value_set_string (value, gnc_price_get_type (price));
+			g_value_set_string (value, gnc_price_get_typestr (price));
 			break;
 		case GNC_TREE_MODEL_PRICE_COL_VALUE:
 			g_value_init (value, G_TYPE_STRING);
