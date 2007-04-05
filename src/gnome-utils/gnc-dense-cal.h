@@ -94,6 +94,8 @@ struct _GncDenseCal
 
     guint lastMarkTag;
 
+    gint week_starts_monday;
+
     /**
      * A GList of gdc_mark_data structs, one for each active/valid markTag.
      **/
