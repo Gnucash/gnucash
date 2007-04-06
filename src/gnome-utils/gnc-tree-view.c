@@ -1363,8 +1363,12 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
   /* Create the menu if we don't have one already */
   if (!priv->column_menu) {
     priv->column_menu = gtk_menu_new();
+#ifdef HAVE_GTK_2_10
+    g_object_ref_sink(priv->column_menu);
+#else
     g_object_ref(priv->column_menu);
     gtk_object_sink(GTK_OBJECT(priv->column_menu));
+#endif
   }
 
   /* Create the check menu item */

@@ -1044,8 +1044,12 @@ gnc_html_new( GtkWindow *parent )
   //retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(retval->container);
+#else
   g_object_ref (retval->container);
   gtk_object_sink (GTK_OBJECT (retval->container));
+#endif
 
   /* signals */
   g_signal_connect(retval->html, "url_requested",

@@ -549,8 +549,12 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
   box->sheet = sheet;
   box->item_edit = item_edit;
   box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(box->date_picker);
+#else
   g_object_ref (box->date_picker);
   gtk_object_sink (GTK_OBJECT(box->date_picker));
+#endif
 
   /* to mark cell as realized, remove the realize method */
   cell->cell.gui_realize = NULL;
