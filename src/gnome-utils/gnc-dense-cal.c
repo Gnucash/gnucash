@@ -1660,7 +1660,7 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
     num_marks = gnc_dense_cal_model_get_instance_count(cal->model, tag);
 
     if (num_marks == 0)
-        return;
+        goto cleanup;
 
     dates = g_new0(GDate*, num_marks);
     for (idx = 0; idx < num_marks; idx++)
@@ -1676,6 +1676,9 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
         g_date_free(dates[idx]);
     }
     g_free(dates);
+
+cleanup:
+    g_free(info);
 }
 
 static void
@@ -1688,6 +1691,7 @@ gdc_add_markings(GncDenseCal *cal)
         guint tag = GPOINTER_TO_UINT(tags->data);
         gdc_add_tag_markings(cal, tag);
     }
+    // @fixme: list cleanup
 }
 
 static void
@@ -1700,6 +1704,7 @@ gdc_remove_markings(GncDenseCal *cal)
         guint tag = GPOINTER_TO_UINT(tags->data);
         gdc_mark_remove(cal, tag);
     }
+    // @fixme: list cleanup
 }
 
 static void

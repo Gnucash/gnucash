@@ -206,7 +206,6 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
     // g_list_find(instances->sxes, {sx_to_tag, tag}).get_freq_spec().get_freq_str();
     FreqSpec *spec;
     GString *info;
-    gchar *info_str;
     GncSxInstances *insts
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
@@ -214,9 +213,7 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
     spec = xaccSchedXactionGetFreqSpec(insts->sx);
     info = g_string_sized_new(16);
     xaccFreqSpecGetFreqStr(spec, info);
-    info_str = info->str; // @fixme leaked... :/
-    g_string_free(info, FALSE);
-    return info_str;
+    return g_string_free(info, FALSE);
 }
 
 static gint
