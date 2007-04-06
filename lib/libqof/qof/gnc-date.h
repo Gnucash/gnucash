@@ -564,6 +564,14 @@ time_t gnc_timet_get_today_end(void);
  *  @note The caller owns this buffer and must free it when done. */
 char * xaccDateUtilGetStampNow (void);
 
+#define MIN_BUF_LEN 10
+/**
+ * Localized DOW abbreviation.
+ * @param buf_len at least MIN_BUF_LEN
+ * @param dow struct tm semantics: 0=sunday .. 6=saturday
+ **/
+void gnc_dow_abbrev(gchar *buf, int buf_len, int dow);
+
 //@}
 //@}
 #endif /* GNC_DATE_H */

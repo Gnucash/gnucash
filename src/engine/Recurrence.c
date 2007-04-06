@@ -393,24 +393,6 @@ recurrenceListIsWeeklyMultiple(GList *recurrences)
     return TRUE;
 }
 
-/**
- * Localized DOW abbrev.
- * @fixme - ripped from gnc-dense-cal.c; there can be only one. :p
- * @param dow struct tm semantics: 0=sunday .. 6=saturday
- **/
-static void
-_dow_abbrev(gchar *buf, int buf_len, int dow)
-{
-    struct tm my_tm;
-    int i;
-    
-    memset(buf, 0, buf_len);
-    memset(&my_tm, 0, sizeof(struct tm));
-    my_tm.tm_wday = dow;
-    i = qof_strftime(buf, buf_len - 1, "%a", &my_tm);
-    buf[i] = 0;
-}
-
 static void
 _weekly_list_to_compact_string(GList *rs, GString *buf)
 {
@@ -428,7 +410,9 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
             continue;
         }
         dow_present_bits |= (1 << (dow % 7));
-        // broken, @fixme.
+
+        // there's not necessarily a single multiplier, but for all intents
+        // and purposes this will be fine.
         multiplier = recurrenceGetMultiplier(r);
     }
     g_string_printf(buf, _("Weekly"));
@@ -445,7 +429,7 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
         if ((dow_present_bits & (1 << dow_idx)) != 0)
         {
             gchar dbuf[10];
-            _dow_abbrev(dbuf, 10, dow_idx);
+            gnc_dow_abbrev(dbuf, 9, dow_idx);
             g_string_append_printf(buf, "%c", dbuf[0]);
         }
         else
@@ -462,9 +446,9 @@ _monthly_append_when(Recurrence *r, GString *buf)
     if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
     {
         gint abbrev_day_name_bufsize = 10;
-        gchar day_name_buf[abbrev_day_name_bufsize];
+        gchar day_name_buf[abbrev_day_name_bufsize+1];
                 
-        _dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
+        gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
             
         /* translators: %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("last %s"), day_name_buf);

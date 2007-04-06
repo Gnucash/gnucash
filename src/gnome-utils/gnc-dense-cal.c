@@ -145,10 +145,12 @@ static void gdc_remove_markings(GncDenseCal *cal);
 static GObject *parent_class = NULL;
 
 #define MONTH_NAME_BUFSIZE 5
+
 /* Takes the number of months since January, in the range 0 to
  * 11. Returns the abbreviated month name according to the current
  * locale.*/
-static const gchar *month_name(int mon) 
+static const gchar*
+month_name(int mon) 
 {
     static gchar buf[MONTH_NAME_BUFSIZE];
     GDate date;
@@ -165,21 +167,15 @@ static const gchar *month_name(int mon)
      
     return buf;
 }
+
 /* Takes the number of days since Sunday, in the range 0 to 6. Returns
  * the abbreviated weekday name according to the current locale. */
-static const gchar *day_label(int wday)
+static void
+day_label(gchar *buf, int buf_len, int dow)
 {
-    static gchar buf[MONTH_NAME_BUFSIZE];
-    struct tm my_tm;
-    int i;
-    
-    memset(buf, 0, MONTH_NAME_BUFSIZE);
-    memset(&my_tm, 0, sizeof(struct tm));
-    my_tm.tm_wday = wday;
-    i = qof_strftime (buf, MONTH_NAME_BUFSIZE-1, "%a", &my_tm);
+    gnc_dow_abbrev(buf, buf_len, dow);
     /* Wild hack to use only the first two letters */
     buf[2]='\0';
-    return buf;
 }
 
 GType
@@ -992,9 +988,10 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             {
                 int day_label_width;
                 gint label_x_offset, label_y_offset;
-                const gchar *day_label_str;
+                gint day_label_str_len = 3;
+                gchar day_label_str[day_label_str_len+1];
 
-                day_label_str = day_label((j + dcal->week_starts_monday) % 7);
+                day_label(day_label_str, day_label_str_len, (j + dcal->week_starts_monday) % 7);
                 pango_layout_set_text(layout, day_label_str, -1);
                 pango_layout_get_pixel_size(layout, &day_label_width, NULL);
                 label_x_offset = x
