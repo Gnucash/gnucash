@@ -525,7 +525,7 @@ xaccSplitCommitEdit(Split *s)
         if (!g_list_find(acc->splits, s)) {
             if (acc->inst.editlevel == 0) {
                 acc->splits = g_list_insert_sorted(
-                    acc->splits, s, (GCompareFunc)xaccSplitDateOrder);
+                    acc->splits, s, (GCompareFunc)xaccSplitOrder);
             } else {
                 acc->splits = g_list_prepend(acc->splits, s);
                 acc->sort_dirty = TRUE;
@@ -1126,8 +1126,8 @@ xaccSplitDestroy (Split *split)
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccSplitDateOrder (const Split *sa, const Split *sb)
+gint
+xaccSplitOrder (const Split *sa, const Split *sb)
 {
   int retval;
   int comp;
@@ -1177,6 +1177,30 @@ xaccSplitDateOrder (const Split *sa, const Split *sb)
 
   return 0;
 }
+
+gint
+xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
+{
+  Transaction *ta, *tb;
+
+  if (sa == sb) return 0;
+  /* nothing is always less than something */
+  if (!sa && sb) return -1;
+  if (sa && !sb) return +1;
+
+  ta = sa->parent;
+  tb = sb->parent;
+  if ( ta && !tb ) return -1;
+  if ( !ta && tb ) return +1;
+  if ( !ta && !tb ) return 0;
+
+  /* if dates differ, return */
+  DATE_CMP(ta,tb,date_posted);
+
+  /* If the dates are the same, do not change the order */
+  return -1;
+}
+
 
 static gboolean
 get_corr_account_split(const Split *sa, const Split **retval)
@@ -1843,7 +1867,7 @@ gboolean xaccSplitRegister (void)
     { NULL },
   };
 
-  qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitDateOrder, params);
+  qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitOrder, params);
   qof_class_register (SPLIT_ACCT_FULLNAME,
                       (QofSortFunc)xaccSplitCompareAccountFullNames, NULL);
   qof_class_register (SPLIT_CORR_ACCT_NAME,

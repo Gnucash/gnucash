@@ -804,7 +804,7 @@ xaccAccountSortSplits (Account *acc, gboolean force)
 {
   if (!acc || !acc->sort_dirty || (!force && acc->inst.editlevel > 0)) return;
 
-  acc->splits = g_list_sort(acc->splits, (GCompareFunc)xaccSplitDateOrder);
+  acc->splits = g_list_sort(acc->splits, (GCompareFunc)xaccSplitOrder);
   acc->sort_dirty = FALSE;
   acc->balance_dirty = TRUE;
 }

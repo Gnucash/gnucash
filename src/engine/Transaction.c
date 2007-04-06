@@ -777,7 +777,7 @@ xaccTransGetAccountBalance (const Transaction *trans,
 
     /* This test needs to correspond to the comparison function used when
        sorting the splits for computing the running balance. */
-    if (xaccSplitDateOrder (last_split, split) < 0)
+    if (xaccSplitOrder (last_split, split) < 0)
       last_split = split;
   }
 

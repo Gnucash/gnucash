@@ -348,7 +348,7 @@ const char *xaccSplitGetType(const Split *s);
 void xaccSplitMakeStockSplit(Split *s);
 
 /**
- * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
+ * The xaccSplitOrder(sa,sb) method is useful for sorting.
  *    if sa and sb have different transactions, return their xaccTransOrder
  *    return a negative value if split sa has a smaller currency-value than sb,
  *    return a positive value if split sa has a larger currency-value than sb,
@@ -359,7 +359,8 @@ void xaccSplitMakeStockSplit(Split *s);
  *    Then it compares the reconciled flags, then the reconciled dates,
  *    Finally, it returns zero if all of the above match.
  */
-int  xaccSplitDateOrder (const Split *sa, const Split *sb);
+gint xaccSplitOrder (const Split *sa, const Split *sb);
+gint xaccSplitOrderDateOnly (const Split *sa, const Split *sb);
 
 
 /*

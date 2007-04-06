@@ -375,7 +375,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
 {
   if (! lot->splits)
     return NULL;
-  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitDateOrder);
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
   return lot->splits->data;
 }
 
@@ -386,7 +386,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
   if (! lot->splits)
     return NULL;
-  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitDateOrder);
+  lot->splits = g_list_sort (lot->splits, (GCompareFunc) xaccSplitOrderDateOnly);
 
   for (node = lot->splits; node->next; node = node->next)
     ;
