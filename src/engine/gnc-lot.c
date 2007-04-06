@@ -321,11 +321,13 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
             "\tlot account=\'%s\', split account=\'%s\'\n",
             xaccAccountGetName(lot->account), xaccAccountGetName (acc));
       gnc_lot_commit_edit(lot);
+      LEAVE("different accounts");
       return;
    }
 
    if (lot == split->lot) {
         gnc_lot_commit_edit(lot);
+        LEAVE("already in lot");
 	return; /* handle not-uncommon no-op */
    }
    if (split->lot)
@@ -341,6 +343,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    gnc_lot_commit_edit(lot);
 
    qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+   LEAVE("added to lot");
 }
 
 void

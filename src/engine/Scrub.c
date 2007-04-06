@@ -173,7 +173,10 @@ xaccSplitScrub (Split *split)
   ENTER ("(split=%p)", split);
 
   trans = xaccSplitGetParent (split);
-  if (!trans) return;
+  if (!trans) {
+    LEAVE("no trans");
+    return;
+  }
 
   account = xaccSplitGetAccount (split);
 
@@ -193,6 +196,7 @@ xaccSplitScrub (Split *split)
   if (!account) 
   {
     PINFO ("Free Floating Transaction!");
+    LEAVE ("no account");
     return;  
   }
 
@@ -232,6 +236,7 @@ xaccSplitScrub (Split *split)
 
   if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND))
   {
+    LEAVE("(split=%p) different values", split);
     return;
   }
 

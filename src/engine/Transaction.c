@@ -990,8 +990,12 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    if (!trans) return;
+   ENTER ("(trans=%p)", trans);
 
-   if (!qof_commit_edit (QOF_INSTANCE(trans))) return;
+   if (!qof_commit_edit (QOF_INSTANCE(trans))) {
+       LEAVE("editlevel non-zero");
+       return;
+   }
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
