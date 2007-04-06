@@ -396,14 +396,6 @@ const char * gnc_print_date(Timespec ts);
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
 
-/** The qof_print_hours_elapsed_buff() routine will print the 'secs' argument
- *    as HH:MM, and will print the seconds if show_secs is true.  
- *    Thus, for example, secs=3599 will print as 0:59
- *    Returns the number of bytes copied.
- */
-size_t qof_print_hours_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-
 /** The qof_print_time_buff() routine prints only the hour-part of the date.
  *    Thus, if secs is  ...
  *    Returns the number of bytes printed.
