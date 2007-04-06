@@ -541,7 +541,6 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
 
-    /* @@fixme -- add (suppressible?) confirmation dialog */
     selection = gtk_tree_view_get_selection(priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
     if (g_list_length(selected_paths) == 0)
