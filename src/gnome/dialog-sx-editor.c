@@ -1236,6 +1236,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
     /* Do not call show_all here. Screws up the gtkuimanager code */
     gtk_widget_show(sxed->dialog);
 
+    gtk_notebook_set_page(
+        GTK_NOTEBOOK(glade_xml_get_widget(sxed->gxml, "editor_notebook")), 0);
+
     /* Refresh the cal and the ledger */
     gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
     gnc_ledger_display_refresh( sxed->ledger );
