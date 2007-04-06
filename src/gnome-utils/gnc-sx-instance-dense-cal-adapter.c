@@ -170,7 +170,6 @@ gsidca_find_sx_with_tag(gconstpointer list_data,
     return (GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)) == find_data ? 0 : 1);
 }
 
-// @@ fixme this list is leaked.
 static GList*
 gsidca_get_contained(GncDenseCalModel *model)
 {

@@ -1691,7 +1691,7 @@ gdc_add_markings(GncDenseCal *cal)
         guint tag = GPOINTER_TO_UINT(tags->data);
         gdc_add_tag_markings(cal, tag);
     }
-    // @fixme: list cleanup
+    g_list_free(tags);
 }
 
 static void
@@ -1704,7 +1704,7 @@ gdc_remove_markings(GncDenseCal *cal)
         guint tag = GPOINTER_TO_UINT(tags->data);
         gdc_mark_remove(cal, tag);
     }
-    // @fixme: list cleanup
+    g_list_free(tags);
 }
 
 static void
