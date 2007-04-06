@@ -92,8 +92,6 @@ static GncSxInstance* _gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *m
 /** @return false if the iter is not actaully an GncSxInstance's variable. **/
 gboolean gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, GncSxInstance **instance_loc, GncSxVariable **var_loc);
 
-void gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state);
-void gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value);
 void gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model, gboolean auto_create_only, GList **created_transaction_guids, GList **creation_errors);
 
 GtkTreeModel* gnc_sx_get_slr_state_model(void);
@@ -661,13 +659,6 @@ gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkT
     return TRUE;
 }
 
-void
-gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state)
-{
-    // @fixme: pop this out a level.
-    gnc_sx_instance_model_change_instance_state(model->instances, instance, new_state);
-}
-
 /**
  * Special-case list indexing that only refers to "editable" variables. :(
  **/
@@ -707,12 +698,6 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
         return NULL;
     path = gtk_tree_path_new_from_indices(indices[0], indices[1], indices[2], -1);
     return path;
-}
-
-void
-gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value)
-{
-    gnc_sx_instance_model_set_variable(model->instances, instance, variable, new_value);
 }
 
 static void
@@ -867,7 +852,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
         return;
     }
 
-    gnc_sx_slr_model_change_instance_state(dialog->editing_model, inst, new_state);
+    gnc_sx_instance_model_change_instance_state(dialog->editing_model->instances, inst, new_state);
 }
 
 static void
@@ -903,8 +888,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
         if (strlen(g_strstrip(value_copy)) == 0)
         {
             gnc_numeric invalid_num = gnc_numeric_error(GNC_ERROR_ARG);
-            // @fixme? Change to gnc_sx_slr_model_clear_variable(...)?
-            gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &invalid_num);
+            gnc_sx_instance_model_set_variable(dialog->editing_model->instances, inst, var, &invalid_num);
         }
         else
         {
@@ -913,7 +897,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
         g_free(value_copy);
         return;
     }
-    gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &parsed_num);
+    gnc_sx_instance_model_set_variable(dialog->editing_model->instances, inst, var, &parsed_num);
 }
 
 GncSxSinceLastRunDialog*
@@ -1024,12 +1008,6 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     xaccFreeQuery(guid_query);
 }
 
-static GList*
-gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *editing_model)
-{
-    return gnc_sx_instance_model_check_variables(editing_model->instances);
-}
-
 static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
@@ -1037,12 +1015,12 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     {
     case GTK_RESPONSE_OK:
         // @@fixme validate current state(GError *errs);
-        // - instance state constraints
-        // - required variable binding
-        // - ability to create transactions
+        // - [ ] instance state constraints
+        // - [x] required variable binding
+        // - [?] ability to create transactions
     {
         GList *unbound_variables;
-        unbound_variables = gnc_sx_slr_model_check_variables(app_dialog->editing_model);
+        unbound_variables = gnc_sx_instance_model_check_variables(app_dialog->editing_model->instances);
         g_message("%d variables unbound", g_list_length(unbound_variables));
         if (g_list_length(unbound_variables) > 0)
         {
