@@ -251,7 +251,7 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
     gnc_sxed_save_sx( sxed );
 
     /* add to list */
-    // @@fixme -- forget 'new'-flag: check for existance.
+    // @@fixme -- forget 'new'-flag: check for existance of the SX [?]
     if ( sxed->newsxP ) {
         book = gnc_get_current_book ();
         sxes = gnc_book_get_schedxactions(book);
