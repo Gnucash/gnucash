@@ -744,8 +744,8 @@ balance_cell_edited (GtkCellRendererText *cell,
 
 	account = gnc_tree_view_account_get_selected_account(data->final_account_tree);
 	if (account == NULL) {
-	  printf("Account is null\n");
-	  return;
+      g_critical("account is null");
+      return;
 	}
 
 	error_loc = NULL;
