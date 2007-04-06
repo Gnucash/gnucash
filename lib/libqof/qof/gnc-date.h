@@ -412,12 +412,6 @@ size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboole
 size_t qof_print_time_buff (char * buff, size_t len, time_t secs);
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
 
-/** The qof_is_same_day() routine returns 0 if both times are in the 
- * same day.
- */
-
-gboolean qof_is_same_day (time_t, time_t);
-
 /* ------------------------------------------------------------------ */
 /** The xaccDateUtilGetStamp() routine will take the given time in
  *  seconds and return a buffer containing a textual for the date.

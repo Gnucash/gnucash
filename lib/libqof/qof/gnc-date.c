@@ -656,21 +656,6 @@ qof_print_time_buff (char * buff, size_t len, time_t secs)
 
 /* ============================================================== */
 
-int
-qof_is_same_day (time_t ta, time_t tb)
-{
-  struct tm lta, ltb;
-  lta = *localtime (&ta);
-  ltb = *localtime (&tb);
-  if (lta.tm_year == ltb.tm_year)
-  {
-    return (ltb.tm_yday - lta.tm_yday);
-  }
-  return (ltb.tm_year - lta.tm_year)*365;  /* very approximate */
-}
-
-/* ============================================================== */
-
 /* Convert a string into  day, month and year integers
 
     Convert a string into  day / month / year integers according to
