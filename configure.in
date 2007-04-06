@@ -286,8 +286,8 @@ else
 fi
 AM_CONDITIONAL(HAVE_GLIB_2_8, test "x$HAVE_GLIB_2_8" = "xyes")
 
-AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.11.0)])
-if $PKG_CONFIG 'glib-2.0 >= 2.11.0'
+AC_MSG_CHECKING([for untested GLIB versions (glib >= 2.13.0)])
+if $PKG_CONFIG 'glib-2.0 >= 2.13.0'
 then
   AC_MSG_RESULT(yes)
   HAVE_UNTESTED_GLIB=yes
@@ -1059,7 +1059,6 @@ then
     AS_SCRUB_INCLUDE(GTK_CFLAGS)
     AC_SUBST(GTK_CFLAGS)
     AC_SUBST(GTK_LIBS)
-    HAVE_UNTESTED_GDK=yes
     HAVE_UNTESTED_GTK=yes
 
     AC_MSG_CHECKING(for GTK - version >= 2.10.0)
@@ -1073,13 +1072,20 @@ then
     fi
     AM_CONDITIONAL(HAVE_GTK_2_10, test "x$HAVE_GTK_2_10" = "xyes" )
 
+    AC_MSG_CHECKING([for untested GDK versions (gdk > 2.11.0)])
+    if $PKG_CONFIG 'gtk+-2.0 > 2.11.0'
+    then
+      AC_MSG_RESULT(yes)
+      HAVE_UNTESTED_GDK=yes
+    fi
+
     PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
     AC_SUBST(GNOME_LIBS)
 
-    AC_MSG_CHECKING([for untested GNOME versions (libgnome >= 2.15.0)])
-    if $PKG_CONFIG 'libgnome-2.0 >= 2.15.0'
+    AC_MSG_CHECKING([for untested GNOME versions (libgnome >= 2.19.0)])
+    if $PKG_CONFIG 'libgnome-2.0 >= 2.19.0'
     then
       AC_MSG_RESULT(yes)
       HAVE_UNTESTED_GNOME=yes

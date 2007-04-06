@@ -891,7 +891,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             g_list_free(mcList);
         }
 
-        gdk_gc_destroy(gc);
+        g_object_unref(gc);
     }
 
     /* Hilight the marked days. */

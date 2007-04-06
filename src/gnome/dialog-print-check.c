@@ -1423,7 +1423,7 @@ read_image (const gchar *filename)
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     tmp_name = g_build_filename(pkgdatadir, CHECK_FMT_DIR, filename, (char *)NULL);
-    if (!g_file_exists(tmp_name)) {
+    if (!g_file_test(tmp_name, G_FILE_TEST_EXISTS)) {
         g_free(tmp_name);
 	dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
 	tmp_name = g_build_filename(dirname, filename, (char *)NULL);
