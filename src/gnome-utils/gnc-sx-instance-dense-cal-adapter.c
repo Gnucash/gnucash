@@ -225,7 +225,7 @@ gsidca_get_instance_count(GncDenseCalModel *model, guint tag)
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return 0;
-    return g_list_length(insts->list);
+    return g_list_length(insts->instance_list);
 }
 
 static void
@@ -237,7 +237,7 @@ gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDa
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return;
-    inst = (GncSxInstance*)g_list_nth_data(insts->list, instance_index);
+    inst = (GncSxInstance*)g_list_nth_data(insts->instance_list, instance_index);
     g_date_valid(&inst->date);
     *date = inst->date;
     g_date_valid(date);

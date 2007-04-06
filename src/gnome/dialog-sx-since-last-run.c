@@ -469,7 +469,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
             char instance_date_buf[MAX_DATE_LENGTH+1];
             int instance_index = -1;
 
-            for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+            for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
             {
                 GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
                 qof_print_gdate(instance_date_buf, MAX_DATE_LENGTH, &inst->date);
@@ -594,12 +594,12 @@ _gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *model, GtkTreeIter *ite
     gtk_tree_path_free(path);
 
     instances = (GncSxInstances*)g_list_nth_data(model->instances->sx_instance_list, instances_index);
-    if (instance_index < 0 || instance_index >= g_list_length(instances->list))
+    if (instance_index < 0 || instance_index >= g_list_length(instances->instance_list))
     {
         return NULL;
     }
 
-    return (GncSxInstance*)g_list_nth_data(instances->list, instance_index);
+    return (GncSxInstance*)g_list_nth_data(instances->instance_list, instance_index);
 }
 
 gboolean
@@ -688,7 +688,7 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
     indices[0] = g_list_index(model->instances->sx_instance_list, instance->parent);
     if (indices[0] == -1)
         return NULL;
-    indices[1] = g_list_index(instance->parent->list, instance);
+    indices[1] = g_list_index(instance->parent->instance_list, instance);
     if (indices[1] == -1)
         return NULL;
     variables = gnc_sx_instance_get_variables(instance);
