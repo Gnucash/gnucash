@@ -301,13 +301,13 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     if (! parent->variable_names_parsed)
     {
-        parent->variable_names = g_hash_table_new(g_str_hash, g_str_equal);
+        parent->variable_names = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
         gnc_sx_get_variables(parent->sx, parent->variable_names);
         g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
         parent->variable_names_parsed = TRUE;
     }
 
-    rtn->variable_bindings = g_hash_table_new(g_str_hash, g_str_equal);
+    rtn->variable_bindings = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
 
     {
@@ -498,9 +498,10 @@ gnc_sx_instance_model_dispose(GObject *object)
 static void
 gnc_sx_instance_free(GncSxInstance *instance)
 {
-    // @fixme:
-    // variable_bindings elts + map
-    // temporal_state (iff not postponed?)
+    gnc_sx_destroy_temporal_state(instance->temporal_state);
+
+    g_hash_table_destroy(instance->variable_bindings);
+    instance->variable_bindings = NULL;
      
     g_free(instance);
 }
@@ -509,9 +510,11 @@ static void
 gnc_sx_instances_free(GncSxInstances *instances)
 {
     GList *instance_iter;
-    // @fixme:
-    // variable_names
-    // sx = null
+
+    g_hash_table_destroy(instances->variable_names);
+    instances->variable_names = NULL;
+
+    instances->sx = NULL;
 
     for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
     {
