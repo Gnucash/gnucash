@@ -53,6 +53,11 @@ struct _gncOrder
   Timespec 	closed;
 };
 
+struct _gncOrderClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
@@ -71,20 +76,37 @@ G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
   qof_instance_set_dirty(&order->inst);
-  qof_event_gen (&order->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_order, GncOrder, QOF_TYPE_INSTANCE);
 
+static void
+gnc_order_init(GncOrder* order)
+{
+}
+
+static void
+gnc_order_dispose_real (GObject *orderp)
+{
+}
+
+static void
+gnc_order_finalize_real(GObject* orderp)
+{
+}
+
+/* Create/Destroy Functions */
 GncOrder *gncOrderCreate (QofBook *book)
 {
   GncOrder *order;
 
   if (!book) return NULL;
 
-  order = g_new0 (GncOrder, 1);
-  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  order = g_object_new (GNC_TYPE_ORDER, NULL);
+  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
 
   order->id = CACHE_INSERT ("");
   order->notes = CACHE_INSERT ("");
@@ -92,7 +114,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -108,7 +130,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_DESTROY, NULL);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
@@ -117,8 +139,8 @@ static void gncOrderFree (GncOrder *order)
 
   if (order->printname) g_free (order->printname);
 
-  qof_instance_release (&order->inst);
-  g_free (order);
+  /* qof_instance_release (&order->inst); */
+  g_object_unref (order);
 }
 
 GncOrder *
@@ -129,8 +151,8 @@ gncCloneOrder (GncOrder *from, QofBook *book)
 
   if (!book) return NULL;
 
-  order = g_new0 (GncOrder, 1);
-  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  order = g_object_new (GNC_TYPE_ORDER, NULL);
+  qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&order->inst, &from->inst);
 
   order->id = CACHE_INSERT (from->id);
@@ -152,7 +174,7 @@ gncCloneOrder (GncOrder *from, QofBook *book)
     order->entries = g_list_prepend (order->entries, entry);
   }
 
-  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&order->inst, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -373,7 +395,7 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   compare = timespec_cmp (&(a->closed), &(b->closed));
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
+  return guid_compare (&(a->inst.guid), &(b->inst.guid));
 }
 
 /* =========================================================== */

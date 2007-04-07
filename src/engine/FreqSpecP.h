@@ -37,7 +37,7 @@ Currently the only files which include this file are:
 
 struct gncp_freq_spec 
 {
-        QofEntity       entity;
+        QofInstance       entity;
         FreqType        type;
         UIFreqType      uift;
         union u {
@@ -89,6 +89,11 @@ struct gncp_freq_spec
         } s;
         /* temporary storage for QOF */
         gint            value;
+};
+
+struct _FreqSpecClass
+{
+  QofInstanceClass	parent_class;
 };
 
 #endif /* XACC_FREQSPECP_H */

@@ -63,6 +63,11 @@ struct gnc_commodity_s
   char    * quote_tz;
 };
 
+struct _GncCommodityClass
+{
+  QofInstanceClass parent_class;
+};
+
 struct gnc_commodity_namespace_s 
 {
   QofInstance inst;
@@ -71,6 +76,11 @@ struct gnc_commodity_namespace_s
   gboolean     iso4217;
   GHashTable * cm_table;
   GList      * cm_list;
+};
+
+struct _GncCommodityNamespaceClass
+{
+  QofInstanceClass parent_class;
 };
 
 struct gnc_commodity_table_s 
@@ -499,7 +509,7 @@ static void
 mark_commodity_dirty (gnc_commodity *cm)
 {
   qof_instance_set_dirty(&cm->inst);
-  qof_event_gen (&cm->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&cm->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static void
@@ -523,15 +533,33 @@ reset_unique_name(gnc_commodity *com)
                                        com->mnemonic ? com->mnemonic : "");
 }
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_commodity, gnc_commodity, QOF_TYPE_INSTANCE);
+
+static void
+gnc_commodity_init(gnc_commodity* com)
+{
+}
+
+static void
+gnc_commodity_dispose_real (GObject *nsp)
+{
+}
+
+static void
+gnc_commodity_finalize_real(GObject* comp)
+{
+}
+
 gnc_commodity *
 gnc_commodity_new(QofBook *book, const char * fullname, 
                   const char * namespace, const char * mnemonic, 
                   const char * cusip, int fraction)
 {
-  gnc_commodity * retval = g_new0(gnc_commodity, 1);
+  gnc_commodity * retval = g_object_new(GNC_TYPE_COMMODITY, NULL);
   gnc_commodity_table *table;
 
-  qof_instance_init (&retval->inst, GNC_ID_COMMODITY, book);
+  qof_instance_init_data (&retval->inst, GNC_ID_COMMODITY, book);
   table = gnc_commodity_table_get_table(book);
   if (namespace) {
     retval->namespace = gnc_commodity_table_find_namespace(table, namespace);
@@ -554,7 +582,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   reset_unique_name(retval);
   if (gnc_commodity_namespace_is_iso(namespace))
     retval->quote_source = gnc_quote_source_lookup_by_internal("currency");
-  qof_event_gen (&retval->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&retval->inst, QOF_EVENT_CREATE, NULL);
 
   return retval;
 }
@@ -575,7 +603,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
   table = gnc_commodity_table_get_table(book);
   gnc_commodity_table_remove(table, cm);
 
-  qof_event_gen (&cm->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&cm->inst, QOF_EVENT_DESTROY, NULL);
 
   /* Set at creation */
   CACHE_REMOVE (cm->fullname);
@@ -596,8 +624,8 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   cm->mark = 0;
 
-  qof_instance_release (&cm->inst);
-  g_free(cm);
+  /* qof_instance_release (&cm->inst); */
+  g_object_unref(cm);
 }
 
 void
@@ -615,7 +643,8 @@ gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
 gnc_commodity *
 gnc_commodity_clone(gnc_commodity *src)
 {
-  gnc_commodity * dest = g_new0(gnc_commodity, 1);
+  gnc_commodity * dest = g_object_new(GNC_TYPE_COMMODITY, NULL);
+  /* qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, src->inst.book); */
 
   dest->fullname = CACHE_INSERT(src->fullname);
   dest->mnemonic = CACHE_INSERT(src->mnemonic);
@@ -1285,7 +1314,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
                       (gpointer)comm);
   nsp->cm_list = g_list_append(nsp->cm_list, comm);
 
-  qof_event_gen (&comm->inst.entity, QOF_EVENT_ADD, NULL);
+  qof_event_gen (&comm->inst, QOF_EVENT_ADD, NULL);
   LEAVE ("(table=%p, comm=%p)", table, comm);
   return comm;
 }
@@ -1310,7 +1339,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
   c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
   if (c != comm) return;
 
-  qof_event_gen (&comm->inst.entity, QOF_EVENT_REMOVE, NULL);
+  qof_event_gen (&comm->inst, QOF_EVENT_REMOVE, NULL);
 
   nsp = gnc_commodity_table_find_namespace(table, ns_name);
   if (!nsp) return;
@@ -1509,6 +1538,24 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
  * add an empty namespace if it does not exist 
  ********************************************************************/
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_commodity_namespace, gnc_commodity_namespace, QOF_TYPE_INSTANCE);
+
+static void
+gnc_commodity_namespace_init(gnc_commodity_namespace* ns)
+{
+}
+
+static void
+gnc_commodity_namespace_dispose_real (GObject *nsp)
+{
+}
+
+static void
+gnc_commodity_namespace_finalize_real(GObject* nsp)
+{
+}
+
 gnc_commodity_namespace * 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
                                   const char * namespace,
@@ -1522,18 +1569,18 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   ns = gnc_commodity_table_find_namespace(table, namespace);
   if(!ns) 
   {
-    ns = g_new0(gnc_commodity_namespace, 1);
+    ns = g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, NULL);
     ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
     ns->name = CACHE_INSERT((gpointer)namespace);
     ns->iso4217 = gnc_commodity_namespace_is_iso(namespace);
-    qof_instance_init (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
-    qof_event_gen (&ns->inst.entity, QOF_EVENT_CREATE, NULL);
+    qof_instance_init_data (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
+    qof_event_gen (&ns->inst, QOF_EVENT_CREATE, NULL);
     
     g_hash_table_insert(table->ns_table,
 			(gpointer) ns->name, 
 			(gpointer) ns);
     table->ns_list = g_list_append(table->ns_list, ns);
-    qof_event_gen (&ns->inst.entity, QOF_EVENT_ADD, NULL);
+    qof_event_gen (&ns->inst, QOF_EVENT_ADD, NULL);
   }
   return ns;
 }
@@ -1597,7 +1644,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   if (!ns)
     return;
 
-  qof_event_gen (&ns->inst.entity, QOF_EVENT_REMOVE, NULL);
+  qof_event_gen (&ns->inst, QOF_EVENT_REMOVE, NULL);
   g_hash_table_remove(table->ns_table, namespace);
   table->ns_list = g_list_remove(table->ns_list, ns);
 
@@ -1608,9 +1655,9 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   g_hash_table_destroy(ns->cm_table);
   CACHE_REMOVE(ns->name);
 
-  qof_event_gen (&ns->inst.entity, QOF_EVENT_DESTROY, NULL);
-  qof_instance_release(&ns->inst);
-  g_free(ns);
+  qof_event_gen (&ns->inst, QOF_EVENT_DESTROY, NULL);
+  /* qof_instance_release(&ns->inst); */
+  g_object_unref(ns);
 }
 
 /********************************************************************

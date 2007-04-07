@@ -69,6 +69,11 @@ struct _gncInvoice
   GNCLot      *posted_lot;
 };
 
+struct _gncInvoiceClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
@@ -91,7 +96,7 @@ static void
 mark_invoice (GncInvoice *invoice)
 {
   qof_instance_set_dirty(&invoice->inst);
-  qof_event_gen (&invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&invoice->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 QofBook * gncInvoiceGetBook(GncInvoice *x)
@@ -100,16 +105,33 @@ QofBook * gncInvoiceGetBook(GncInvoice *x)
 }
 
 /* ================================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_invoice, GncInvoice, QOF_TYPE_INSTANCE);
 
+static void
+gnc_invoice_init(GncInvoice* inv)
+{
+}
+
+static void
+gnc_invoice_dispose_real (GObject *invp)
+{
+}
+
+static void
+gnc_invoice_finalize_real(GObject* invp)
+{
+}
+
+/* Create/Destroy Functions */
 GncInvoice *gncInvoiceCreate (QofBook *book)
 {
   GncInvoice *invoice;
 
   if (!book) return NULL;
 
-  invoice = g_new0 (GncInvoice, 1);
-  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
+  invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+  qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
@@ -120,7 +142,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
   invoice->to_charge_amount = gnc_numeric_zero();
 
-  qof_event_gen (&invoice->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&invoice->inst, QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }
@@ -136,7 +158,7 @@ static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
-  qof_event_gen (&invoice->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&invoice->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
@@ -148,8 +170,8 @@ static void gncInvoiceFree (GncInvoice *invoice)
   if (invoice->terms)
     gncBillTermDecRef (invoice->terms);
 
-  qof_instance_release (&invoice->inst);
-  g_free (invoice);
+  /* qof_instance_release (&invoice->inst); */
+  g_object_unref (invoice);
 }
 
 GncInvoice *
@@ -160,8 +182,8 @@ gncCloneInvoice (GncInvoice *from, QofBook *book)
 
   if (!book) return NULL;
 
-  invoice = g_new0 (GncInvoice, 1);
-  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
+  invoice = g_object_new (GNC_TYPE_INVOICE, NULL);
+  qof_instance_init_data (&invoice->inst, _GNC_MOD_NAME, book);
 
   invoice->id = CACHE_INSERT (from->id);
   invoice->notes = CACHE_INSERT (from->notes);
@@ -199,7 +221,7 @@ XXX not done */
   GNCLot *	posted_lot;
 #endif
 
-  qof_event_gen (&invoice->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&invoice->inst, QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }
@@ -241,7 +263,7 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 }
 
 static void
-qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent)
+qofInvoiceSetOwner (GncInvoice *invoice, QofInstance *ent)
 {
 	if(!invoice || !ent) { return; }
 	gncInvoiceBeginEdit (invoice);
@@ -251,7 +273,7 @@ qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent)
 }
 
 static void
-qofInvoiceSetBillTo (GncInvoice *invoice, QofEntity *ent)
+qofInvoiceSetBillTo (GncInvoice *invoice, QofInstance *ent)
 {
 	if(!invoice || !ent) { return; }
 	gncInvoiceBeginEdit (invoice);
@@ -459,18 +481,18 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
   return &invoice->owner;
 }
 
-static QofEntity*
+static QofInstance*
 qofInvoiceGetOwner (GncInvoice *invoice)
 {
 	if(!invoice) { return NULL; }
-	return (QofEntity*)&invoice->owner;
+	return QOF_INSTANCE(&invoice->owner);
 }
 
-static QofEntity*
+static QofInstance*
 qofInvoiceGetBillTo (GncInvoice *invoice)
 {
 	if(!invoice) { return NULL; }
-	return (QofEntity*)&invoice->billto;
+	return QOF_INSTANCE(&invoice->billto);
 }
 
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
@@ -655,19 +677,19 @@ qofInvoiceGetEntries (GncInvoice *invoice)
 {
 	QofCollection *entry_coll;
 	GList         *list;
-	QofEntity     *entry;
+	QofInstance     *entry;
 
 	entry_coll = qof_collection_new(GNC_ID_ENTRY);
 	for(list = gncInvoiceGetEntries(invoice); list != NULL; list = list->next)
 	{
-		entry = (QofEntity*)list->data;
+		entry = QOF_INSTANCE(list->data);
 		qof_collection_add_entity(entry_coll, entry);
 	}
 	return entry_coll;
 }
 
 static void
-qofInvoiceEntryCB (QofEntity *ent, gpointer user_data)
+qofInvoiceEntryCB (QofInstance *ent, gpointer user_data)
 {
 	GncInvoice *invoice;
 
@@ -1385,7 +1407,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
     /* Now send an event for the invoice so it gets updated as paid */
     this_invoice = gncInvoiceGetInvoiceFromLot(lot);
     if (this_invoice)
-      qof_event_gen (&this_invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
+      qof_event_gen (&this_invoice->inst, QOF_EVENT_MODIFY, NULL);
 
     if (gnc_numeric_zero_p (amount))
       break;
@@ -1482,7 +1504,7 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
+  return guid_compare (&(a->inst.guid), &(b->inst.guid));
 }
 
 /* ============================================================= */

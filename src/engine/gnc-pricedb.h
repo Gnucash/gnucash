@@ -23,10 +23,42 @@
 #ifndef GNC_PRICEDB_H
 #define GNC_PRICEDB_H
 
+typedef struct _GncPriceClass GNCPriceClass;
+typedef struct _GncPriceDBClass GNCPriceDBClass;
+
 #include <stdio.h>
 #include "qof.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_PRICE            (gnc_price_get_type ())
+#define GNC_PRICE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PRICE, GNCPrice))
+#define GNC_PRICE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_PRICE, GNCPriceClass))
+#define GNC_IS_PRICE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PRICE))
+#define GNC_IS_PRICE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_PRICE))
+#define GNC_PRICE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_PRICE, GNCPriceClass))
+GType gnc_price_get_type(void);
+
+/* --- type macros --- */
+#define GNC_TYPE_PRICEDB            (gnc_pricedb_get_type ())
+#define GNC_PRICEDB(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PRICEDB, GNCPriceDB))
+#define GNC_PRICEDB_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_PRICEDB, GNCPriceDBClass))
+#define GNC_IS_PRICEDB(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PRICEDB))
+#define GNC_IS_PRICEDB_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_PRICEDB))
+#define GNC_PRICEDB_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_PRICEDB, GNCPriceDBClass))
+GType gnc_pricedb_get_type(void);
+
 
 /** @addtogroup PriceDB
     @{ */
@@ -150,7 +182,7 @@ GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
    around (i.e. increase its reference count by 1). */
 void      gnc_price_ref(GNCPrice *p);
 
-/** gnc_price_ref - indicate you're finished with a price
+/** gnc_price_unref - indicate you're finished with a price
    (i.e. decrease its reference count by 1). */
 void      gnc_price_unref(GNCPrice *p);
 /**  @} */
@@ -176,7 +208,7 @@ void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_time(GNCPrice *p, Timespec t);
 void gnc_price_set_source(GNCPrice *p, const char *source);
-void gnc_price_set_type(GNCPrice *p, const char* type);
+void gnc_price_set_typestr(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 void gnc_price_set_version(GNCPrice *p, gint32 versn);
 /**  @} */
@@ -192,13 +224,13 @@ gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
 const char *    gnc_price_get_source(GNCPrice *p);
-const char *    gnc_price_get_type(GNCPrice *p);
+const char *    gnc_price_get_typestr(GNCPrice *p);
 gnc_numeric     gnc_price_get_value(GNCPrice *p);
 gint32          gnc_price_get_version(GNCPrice *p);
 gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
-#define gnc_price_get_guid(X)    qof_entity_get_guid(QOF_ENTITY(X))
-#define gnc_price_return_guid(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define gnc_price_get_guid(X)    qof_instance_get_guid(QOF_INSTANCE(X))
+#define gnc_price_return_guid(X) (*(qof_instance_get_guid(QOF_INSTANCE(X))))
 #define gnc_price_get_book(X)    qof_instance_get_book(QOF_INSTANCE(X))
 /**  @} */
 

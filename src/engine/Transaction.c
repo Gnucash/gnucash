@@ -219,16 +219,35 @@ void gen_event_trans (Transaction *trans)
     Account *account = s->acc;
     GNCLot *lot = s->lot;
     if (account)
-      qof_event_gen (&account->inst.entity, GNC_EVENT_ITEM_CHANGED, s);
+      qof_event_gen (&account->inst, GNC_EVENT_ITEM_CHANGED, s);
 
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
-      qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+      qof_event_gen (&lot->inst, QOF_EVENT_MODIFY, NULL);
     }
   }
 #endif
 }
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_transaction, Transaction, QOF_TYPE_INSTANCE);
+
+static void
+gnc_transaction_init(Transaction* txn)
+{
+}
+
+static void
+gnc_transaction_dispose_real (GObject *txnp)
+{
+}
+
+static void
+gnc_transaction_finalize_real(GObject* txnp)
+{
+}
+
 
 /********************************************************************\
  * xaccInitTransaction
@@ -258,7 +277,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->orig = NULL;
 
   trans->idata = 0;
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, book);
   LEAVE (" ");
 }
 
@@ -272,9 +291,9 @@ xaccMallocTransaction (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  trans = g_new(Transaction, 1);
+  trans = g_object_new(GNC_TYPE_TRANSACTION, NULL);
   xaccInitTransaction (trans, book);
-  qof_event_gen (&trans->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&trans->inst, QOF_EVENT_CREATE, NULL);
 
   return trans;
 }
@@ -354,7 +373,7 @@ xaccDupeTransaction (const Transaction *t)
   Transaction *trans;
   GList *node;
 
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->num         = CACHE_INSERT (t->num);
   trans->description = CACHE_INSERT (t->description);
@@ -376,9 +395,9 @@ xaccDupeTransaction (const Transaction *t)
    * the cloned transaction as something official.  If we ever 
    * use this transaction, we'll have to fix this up.
    */
-  trans->inst.entity.e_type = NULL;
-  trans->inst.entity.guid = *guid_null();
-  trans->inst.entity.collection = NULL;
+  trans->inst.e_type = NULL;
+  trans->inst.guid = *guid_null();
+  trans->inst.collection = NULL;
   trans->inst.book = t->inst.book;
   trans->inst.editlevel = 0;
   trans->inst.do_free = FALSE;
@@ -399,7 +418,7 @@ xaccTransClone (const Transaction *t)
   GList *node;
 
   qof_event_suspend();
-  trans = g_new0 (Transaction, 1);
+  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
@@ -412,7 +431,7 @@ xaccTransClone (const Transaction *t)
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_instance_init (&trans->inst, GNC_ID_TRANS, t->inst.book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, t->inst.book);
   kvp_frame_delete (trans->inst.kvp_data);
   trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
 
@@ -475,8 +494,8 @@ xaccFreeTransaction (Transaction *trans)
     trans->orig = NULL;
   }
 
-  qof_instance_release (&trans->inst);
-  g_free(trans);
+  /* qof_instance_release (&trans->inst); */
+  g_object_unref(trans);
 
   LEAVE ("(addr=%p)", trans);
 }
@@ -522,7 +541,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
   if (ta == tb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(ta->inst.entity.guid), &(tb->inst.entity.guid)))
+    if (!guid_equal(&(ta->inst.guid), &(tb->inst.guid)))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -885,7 +904,7 @@ do_destroy (Transaction *trans)
   if (!shutting_down)
     xaccTransWriteLog (trans, 'D');
 
-  qof_event_gen (&trans->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&trans->inst, QOF_EVENT_DESTROY, NULL);
 
   /* We only own the splits that still think they belong to us. */
   trans->splits = g_list_copy(trans->splits);
@@ -953,14 +972,14 @@ static void trans_cleanup_commit(Transaction *trans)
             ed.node = trans;
             ed.idx = g_list_index(trans->splits, s);
             trans->splits = g_list_remove(trans->splits, s);
-            qof_event_gen(&s->inst.entity, QOF_EVENT_REMOVE, &ed);
+            qof_event_gen(&s->inst, QOF_EVENT_REMOVE, &ed);
         }
 
         if (s->parent == trans) {
             /* Split was either added, destroyed or just changed */
             if (s->inst.do_free)
-                qof_event_gen(&s->inst.entity, QOF_EVENT_DESTROY, NULL);
-            else qof_event_gen(&s->inst.entity, QOF_EVENT_MODIFY, NULL);
+                qof_event_gen(&s->inst, QOF_EVENT_DESTROY, NULL);
+            else qof_event_gen(&s->inst, QOF_EVENT_MODIFY, NULL);
             xaccSplitCommitEdit(s);
         }
     }
@@ -983,7 +1002,7 @@ static void trans_cleanup_commit(Transaction *trans)
     g_assert(trans->inst.editlevel == 0);
 
     gen_event_trans (trans); //TODO: could be conditional
-    qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen (&trans->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -1246,7 +1265,7 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
     return retval;
 
   /* else, sort on guid - keeps sort stable. */
-  return guid_compare(&(ta->inst.entity.guid), &(tb->inst.entity.guid));
+  return guid_compare(&(ta->inst.guid), &(tb->inst.guid));
 }
 
 /********************************************************************\
@@ -1972,7 +1991,7 @@ gboolean xaccTransRegister (void)
     { QOF_PARAM_BOOK, QOF_ID_BOOK,      
       (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID,    
-      (QofAccessFunc)qof_entity_get_guid, NULL },
+      (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

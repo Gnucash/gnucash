@@ -57,6 +57,11 @@ struct _gncVendor
   GList *         jobs;
 };
 
+struct _gncVendorClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_VENDOR
@@ -68,30 +73,47 @@ G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {
   qof_instance_set_dirty(&vendor->inst);
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_vendor, GncVendor, QOF_TYPE_INSTANCE);
 
+static void
+gnc_vendor_init(GncVendor* vendor)
+{
+}
+
+static void
+gnc_vendor_dispose_real (GObject *vendorp)
+{
+}
+
+static void
+gnc_vendor_finalize_real(GObject* vendorp)
+{
+}
+
+/* Create/Destroy Functions */
 GncVendor *gncVendorCreate (QofBook *book)
 {
   GncVendor *vendor;
 
   if (!book) return NULL;
 
-  vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
+  qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
   
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->inst.entity);
+  vendor->addr = gncAddressCreate (book, &vendor->inst);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -107,7 +129,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -120,8 +142,8 @@ static void gncVendorFree (GncVendor *vendor)
   if (vendor->taxtable)
     gncTaxTableDecRef (vendor->taxtable);
 
-  qof_instance_release (&vendor->inst);
-  g_free (vendor);
+  /* qof_instance_release (&vendor->inst); */
+  g_object_unref (vendor);
 }
 
 /** Create a copy of a vendor, placing the copy into a new book. */
@@ -133,14 +155,14 @@ gncCloneVendor (GncVendor *from, QofBook *book)
 
   if (!book) return NULL;
 
-  vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
+  qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&vendor->inst, &from->inst);
   
   vendor->id = CACHE_INSERT (from->id);
   vendor->name = CACHE_INSERT (from->name);
   vendor->notes = CACHE_INSERT (from->notes);
-  vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
+  vendor->addr = gncCloneAddress (from->addr, &vendor->inst, book);
   vendor->taxincluded = from->taxincluded;
   vendor->taxtable_override = from->taxtable_override;
   vendor->active = from->active;
@@ -161,7 +183,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
     vendor->jobs = g_list_prepend(vendor->jobs, job);
   }
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -293,7 +315,7 @@ void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
 }
 
 static void
-qofVendorSetAddr (GncVendor *vendor, QofEntity *addr_ent)
+qofVendorSetAddr (GncVendor *vendor, QofInstance *addr_ent)
 {
 	GncAddress *addr;
 
@@ -396,7 +418,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
                                          (GCompareFunc)gncJobCompare);
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -414,7 +436,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&vendor->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)

@@ -58,10 +58,8 @@ qof_set_alt_dirty_mode (gboolean enabled)
 
 /* =============================================================== */
 
-static void qof_collection_remove_entity (QofEntity *ent);
-
 void
-qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
+qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab)
 {
   g_return_if_fail (NULL != tab);
   
@@ -75,7 +73,7 @@ qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
   ent->e_type = CACHE_INSERT (type);
 
   do
-  {
+   {
     guid_new(&ent->guid);
 
     if (NULL == qof_collection_lookup_entity (tab, &ent->guid)) break;
@@ -89,7 +87,7 @@ qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
 }
 
 void
-qof_entity_release (QofEntity *ent)
+qof_entity_release (QofInstance *ent)
 {
   if (!ent->collection) return;
   qof_collection_remove_entity (ent);
@@ -101,7 +99,7 @@ qof_entity_release (QofEntity *ent)
 /* This is a restricted function, should be used only during 
  * read from file */
 void
-qof_entity_set_guid (QofEntity *ent, const GUID *guid)
+qof_instance_set_guid (QofInstance *ent, const GUID *guid)
 {
   QofCollection *col;
   if (guid_equal (guid, &ent->guid)) return;
@@ -110,13 +108,6 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
   qof_collection_remove_entity (ent);
   ent->guid = *guid;
   qof_collection_insert_entity (col, ent);
-}
-
-const GUID *
-qof_entity_get_guid (const QofEntity *ent)
-{
-  if (!ent) return guid_null();
-  return &ent->guid;
 }
 
 /* =============================================================== */
@@ -189,8 +180,8 @@ qof_collection_get_type (const QofCollection *col)
 
 /* =============================================================== */
 
-static void
-qof_collection_remove_entity (QofEntity *ent)
+void
+qof_collection_remove_entity (QofInstance *ent)
 {
   QofCollection *col;
   if (!ent) return;
@@ -203,7 +194,7 @@ qof_collection_remove_entity (QofEntity *ent)
 }
 
 void
-qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
+qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
 {
   if (!col || !ent) return;
   if (guid_equal(&ent->guid, guid_null())) return;
@@ -216,9 +207,9 @@ qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
 }
 
 gboolean
-qof_collection_add_entity (QofCollection *coll, QofEntity *ent)
+qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
 {
-	QofEntity *e;
+	QofInstance *e;
 
 	e = NULL;
 	if (!coll || !ent) { return FALSE; }
@@ -233,7 +224,7 @@ qof_collection_add_entity (QofCollection *coll, QofEntity *ent)
 }
 
 static void
-collection_merge_cb (QofEntity *ent, gpointer data)
+collection_merge_cb (QofInstance *ent, gpointer data)
 {
 	QofCollection *target;
 
@@ -251,10 +242,10 @@ qof_collection_merge (QofCollection *target, QofCollection *merge)
 }
 
 static void
-collection_compare_cb (QofEntity *ent, gpointer user_data)
+collection_compare_cb (QofInstance *ent, gpointer user_data)
 {
 	QofCollection *target;
-	QofEntity *e;
+	QofInstance *e;
 	gint value;
 
 	e = NULL;
@@ -302,10 +293,10 @@ qof_collection_compare (QofCollection *target, QofCollection *merge)
 	return value;
 }
 
-QofEntity *
+QofInstance *
 qof_collection_lookup_entity (const QofCollection *col, const GUID * guid)
 {
-  QofEntity *ent;
+  QofInstance *ent;
   g_return_val_if_fail (col, NULL);
   if (guid == NULL) return NULL;
   ent = g_hash_table_lookup (col->hash_of_entities, guid);
@@ -316,13 +307,13 @@ QofCollection *
 qof_collection_from_glist (QofIdType type, GList *glist)
 {
 	QofCollection *coll;
-	QofEntity *ent;
+	QofInstance *ent;
 	GList *list;
 
 	coll = qof_collection_new(type);
 	for(list = glist; list != NULL; list = list->next)
 	{
-		ent = (QofEntity*)list->data;
+		ent = QOF_INSTANCE(list->data);
 		if(FALSE == qof_collection_add_entity(coll, ent))
 		{
 			return NULL;
@@ -365,7 +356,7 @@ qof_collection_print_dirty (const QofCollection *col, gpointer dummy)
 {
   if (col->is_dirty)
     printf("%s collection is dirty.\n", col->e_type);
-  qof_collection_foreach(col, (QofEntityForeachCB)qof_instance_print_dirty, NULL);
+  qof_collection_foreach(col, (QofInstanceForeachCB)qof_instance_print_dirty, NULL);
 }
 
 /* =============================================================== */
@@ -385,20 +376,20 @@ qof_collection_set_data (QofCollection *col, gpointer user_data)
 /* =============================================================== */
 
 struct _iterate {
-  QofEntityForeachCB      fcn;
+  QofInstanceForeachCB      fcn;
   gpointer                data;
 };
 
 static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 {
   struct _iterate *iter = arg;
-  QofEntity *ent = item;
+  QofInstance *ent = item;
 
   iter->fcn (ent, iter->data);
 }
 
 void
-qof_collection_foreach (const QofCollection *col, QofEntityForeachCB cb_func, 
+qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func, 
                         gpointer user_data)
 {
   struct _iterate iter;

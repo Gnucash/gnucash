@@ -659,7 +659,7 @@ xaccSplitGetCapGainsSplit (const Split *split)
 
    /* Both splits will be in the same collection, so search there. */
    gains_split = (Split*) qof_collection_lookup_entity (
-       split->inst.entity.collection, gains_guid);
+       split->inst.collection, gains_guid);
    PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }
@@ -682,7 +682,7 @@ xaccSplitGetGainsSourceSplit (const Split *split)
 
    /* Both splits will be in the same collection, so search there. */
    source_split = (Split*) qof_collection_lookup_entity(
-       split->inst.entity.collection, source_guid);
+       split->inst.collection, source_guid);
    PINFO ("split=%p has source-split=%p", split, source_split);
    return source_split;
 }

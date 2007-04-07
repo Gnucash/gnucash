@@ -139,7 +139,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("bookGuid",j), &guid);
 
-   qof_entity_set_guid ((QofEntity*)book, &guid);
+   qof_instance_set_guid (QOF_INSTANCE(book), &guid);
 
    if((DB_GET_VAL("book_open",j))[0] == 'n')
    {
@@ -208,14 +208,14 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    for (node=blist; node; node=node->next)
    {
       book = node->data;
-      if (guid_equal (qof_entity_get_guid((QofEntity*)book), &guid)) break;
+      if (guid_equal (qof_instance_get_guid(QOF_INSTANCE(book)), &guid)) break;
       book = NULL;
    }
    
    if (!book) 
    {
       book = qof_book_new();
-      qof_entity_set_guid ((QofEntity*)book, &guid);
+      qof_instance_set_guid (QOF_INSTANCE(book), &guid);
    }
 
    if((DB_GET_VAL("book_open",j))[0] == 'n')

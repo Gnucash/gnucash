@@ -355,7 +355,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 			DEBUG (" trying to set book GUID");
 			buffer = g_strdup((gchar*)xmlNodeGetContent(child_node));
 			g_return_if_fail(TRUE == string_to_guid(buffer, &book_guid));
-			qof_entity_set_guid((QofEntity*)params->book, &book_guid);
+			qof_instance_set_guid(QOF_INSTANCE(params->book), &book_guid);
 			xmlNewChild(params->output_node, params->qsf_ns, 
 			BAD_CAST QSF_BOOK_GUID, BAD_CAST buffer);
 			g_free(buffer);

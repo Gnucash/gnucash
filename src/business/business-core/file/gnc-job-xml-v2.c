@@ -288,7 +288,7 @@ job_should_be_saved (GncJob *job)
 }
 
 static void
-do_count (QofEntity * job_p, gpointer count_p)
+do_count (QofInstance * job_p, gpointer count_p)
 {
   int *count = count_p;
   if (job_should_be_saved ((GncJob *)job_p))
@@ -304,7 +304,7 @@ job_get_count (QofBook *book)
 }
 
 static void
-xml_add_job (QofEntity * job_p, gpointer out_p)
+xml_add_job (QofInstance * job_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncJob *job = (GncJob *) job_p;

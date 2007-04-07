@@ -49,13 +49,21 @@ struct gnc_price_s
   guint32  refcount;             /* garbage collection reference count */
 };
 
-
+struct _GncPriceClass
+{
+  QofInstanceClass parent_class;
+};
 
 struct gnc_price_db_s
 {
   QofInstance inst;              /* globally unique object identifier */
   GHashTable *commodity_hash;
   gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
+};
+
+struct _GncPriceDBClass
+{
+  QofInstanceClass parent_class;
 };
 
 /* These structs define the kind of price lookup being done
@@ -88,7 +96,7 @@ typedef struct gnc_price_lookup_helper_s
   Timespec time;
 } GNCPriceLookupHelper;
 
-#define  gnc_price_set_guid(P,G)  qof_entity_set_guid(QOF_ENTITY(P),(G))
+#define  gnc_price_set_guid(P,G)  qof_instance_set_guid(QOF_INSTANCE(P),(G))
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *old_c,
                                           gnc_commodity *new_c);

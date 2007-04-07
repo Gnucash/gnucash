@@ -131,11 +131,16 @@ struct split_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
+struct _SplitClass
+{
+  QofInstanceClass parent_class;
+};
+
 
 /* Set the split's GUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never
  * call this on an existing split! */
-#define xaccSplitSetGUID(s,g) qof_entity_set_guid(QOF_ENTITY(s),g)
+#define xaccSplitSetGUID(s,g) qof_instance_set_guid(QOF_INSTANCE(s),g)
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't

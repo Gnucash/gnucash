@@ -22,7 +22,7 @@
 /** @addtogroup Entity
     @{ */
 /** @addtogroup Instance
-    Qof Instances are a derived type of QofEntity.  The Instance
+    Qof Instances are a derived type of QofInstance.  The Instance
     adds some common features and functions that most objects
     will want to use.
 
@@ -36,25 +36,82 @@
 #ifndef QOF_INSTANCE_H
 #define QOF_INSTANCE_H
 
+typedef struct _QofInstanceClass QofInstanceClass;
+typedef struct QofInstance_s QofInstance;
+
+/** \brief QofBook reference */
+typedef struct _QofBook       QofBook;
+
+#include "qofid.h"
 #include "guid.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof-gobject.h"
 
 /* --- type macros --- */
-/* cheesy, but will do for now, eventually should be more gtk-like, handle
- * thunks, etc.  */
-#define QOF_INSTANCE(object) ((QofInstance *)(object))
+#define QOF_TYPE_INSTANCE            (qof_instance_get_type ())
+#define QOF_INSTANCE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), QOF_TYPE_INSTANCE, QofInstance))
+#define QOF_INSTANCE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), QOF_TYPE_INSTANCE, QofInstanceClass))
+#define QOF_IS_INSTANCE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), QOF_TYPE_INSTANCE))
+#define QOF_IS_INSTANCE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), QOF_TYPE_INSTANCE))
+#define QOF_INSTANCE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), QOF_TYPE_INSTANCE, QofInstanceClass))
 
-typedef struct QofInstance_s QofInstance;
+struct QofInstance_s
+{
+   GObject object;
 
-/** Initialise the memory associated with an instance */
-void qof_instance_init (QofInstance *, QofIdType, QofBook *);
+   /* Globally unique id identifying this instance */
+   QofIdType        e_type;		   /**<	Entity type */
+   GUID             guid;		   /**< GUID for the entity */
+   QofCollection  * collection;		   /**< Entity collection */
 
-/** release the data associated with this instance. Dont actually free 
- * the memory associated with the instance. */
-void qof_instance_release (QofInstance *inst);
+   /* The entity_table in which this instance is stored */
+   QofBook * book;
+
+  /* kvp_data is a key-value pair database for storing arbirtary
+   * information associated with this instance.  
+   * See src/engine/kvp_doc.txt for a list and description of the 
+   * important keys. */
+   KvpFrame *kvp_data;
+
+   /*  Timestamp used to track the last modification to this 
+    *  instance.  Typically used to compare two versions of the
+    *  same object, to see which is newer.  When used with the 
+    *  SQL backend, this field is reserved for SQL use, to compare
+    *  the version in local memory to the remote, server version.
+    */
+   Timespec last_update;
+
+   /*  Keep track of nesting level of begin/end edit calls */
+   int    editlevel;
+
+   /*  In process of being destroyed */
+   gboolean  do_free;
+
+   /*  dirty/clean flag. If dirty, then this instance has been modified,
+    *  but has not yet been written out to storage (file/database)
+    */
+   gboolean  dirty;
+
+   /* True iff this instance has never been committed. */
+   gboolean infant;
+};
+
+struct _QofInstanceClass
+{
+   GObjectClass parent_class;
+};
+
+/** Return the GType of a QofInstance */
+GType qof_instance_get_type(void);
+
+/** Initialise the settings associated with an instance */
+void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
 
 /** Return the book pointer */
 QofBook * qof_instance_get_book (const QofInstance *);
@@ -81,7 +138,7 @@ Timespec qof_instance_get_last_update (const QofInstance *inst);
  */
 int qof_instance_version_cmp (const QofInstance *left, const QofInstance *right);
 
-void qof_instance_print_dirty (const QofEntity *entity, gpointer dummy);
+void qof_instance_print_dirty (const QofInstance *entity, gpointer dummy);
 
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
@@ -100,8 +157,6 @@ gboolean qof_instance_check_edit(const QofInstance *inst);
 gboolean qof_instance_do_free(const QofInstance *inst);
 
 void qof_instance_mark_free(QofInstance *inst);
-
-QofInstance* qof_instance_create (QofIdType type, QofBook *book);
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the

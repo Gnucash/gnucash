@@ -197,7 +197,7 @@ gnc_sxes_add_sx(SchedXactions *sxes, SchedXaction *sx)
   if (g_list_find(sxes->sx_list, sx) != NULL)
     return;
   sxes->sx_list = g_list_append(sxes->sx_list, sx);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
+  qof_event_gen(&sxes->inst, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
 }
 
 void
@@ -208,11 +208,29 @@ gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
   if (to_remove == NULL)
     return;
   sxes->sx_list = g_list_delete_link(sxes->sx_list, to_remove);
-  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
+  qof_event_gen(&sxes->inst, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
 }
 
 /* ====================================================================== */
 /* SX-trans stuff */
+
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_schedxactions, SchedXactions, QOF_TYPE_INSTANCE);
+
+static void
+gnc_schedxactions_init(SchedXactions* sxs)
+{
+}
+
+static void
+gnc_schedxactions_dispose_real (GObject *sxsp)
+{
+}
+
+static void
+gnc_schedxactions_finalize_real(GObject* sxsp)
+{
+}
 
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
@@ -228,11 +246,14 @@ book_sxes_setup(QofBook *book)
      SchedXactions *sxes;
 
      col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
-     sxes = g_new (SchedXactions, 1);
-     qof_instance_init(&sxes->inst, GNC_ID_SXES, book);
+     sxes = g_object_new (GNC_TYPE_SCHEDXACTIONS, NULL);
+     g_assert(sxes);
+     qof_instance_init_data(&sxes->inst, GNC_ID_SXES, book);
      sxes->sx_list = NULL;
      sxes->sx_notsaved = TRUE;
      qof_collection_set_data(col, sxes);
+
+     /* XXX: FIXME:  MEMORY LEAK.  This object is never freed. */
 }
 
 static void

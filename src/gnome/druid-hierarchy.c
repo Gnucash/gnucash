@@ -763,7 +763,7 @@ balance_cell_edited (GtkCellRendererText *cell,
         amount = gnc_numeric_convert(amount, account_cmdty_fraction, GNC_RND_ROUND);
     }
 	set_final_balance (data->balance_hash, account, amount);
-	qof_event_gen ((QofEntity*)account, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, NULL);
 }
 
 static void

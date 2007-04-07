@@ -45,12 +45,30 @@
 
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_schedxaction, SchedXaction, QOF_TYPE_INSTANCE);
+
+static void
+gnc_schedxaction_init(SchedXaction* sx)
+{
+}
+
+static void
+gnc_schedxaction_dispose_real (GObject *sxp)
+{
+}
+
+static void
+gnc_schedxaction_finalize_real(GObject* sxp)
+{
+}
+
 static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    Account        *ra;
 
-   qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
+   qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    sx->schedule = NULL;
    sx->freq = xaccFreqSpecMalloc(book);
@@ -71,7 +89,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
    xaccAccountSetName( sx->template_acct,
-                       guid_to_string( &sx->inst.entity.guid ));
+                       guid_to_string( &sx->inst.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,
@@ -89,9 +107,9 @@ xaccSchedXactionMalloc(QofBook *book)
 
    g_return_val_if_fail (book, NULL);
 
-   sx = g_new0( SchedXaction, 1 );
+   sx = g_object_new(GNC_TYPE_SCHEDXACTION, NULL);
    xaccSchedXactionInit( sx, book );
-   qof_event_gen( &sx->inst.entity, QOF_EVENT_CREATE , NULL);
+   qof_event_gen( &sx->inst, QOF_EVENT_CREATE , NULL);
 
    return sx;
 }
@@ -158,7 +176,7 @@ xaccSchedXactionFree( SchedXaction *sx )
   if ( sx == NULL ) return;
   
   xaccFreqSpecFree( sx->freq );
-  qof_event_gen( &sx->inst.entity, QOF_EVENT_DESTROY , NULL);
+  qof_event_gen( &sx->inst, QOF_EVENT_DESTROY , NULL);
   
   if ( sx->name )
     g_free( sx->name );
@@ -187,8 +205,8 @@ xaccSchedXactionFree( SchedXaction *sx )
           sx->deferredList = NULL;
   }
   
-  qof_instance_release (&sx->inst);
-  g_free( sx );
+  /* qof_instance_release (&sx->inst); */
+  g_object_unref( sx );
 }
 
 /* ============================================================ */
@@ -206,7 +224,7 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 
 static void commit_done(QofInstance *inst)
 {
-  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static void noop(QofInstance *inst) {}

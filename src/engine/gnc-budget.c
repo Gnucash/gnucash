@@ -48,6 +48,29 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
+struct _GncBudgetClass
+{
+  QofInstanceClass parent_class;
+};
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_budget, GncBudget, QOF_TYPE_INSTANCE);
+
+static void
+gnc_budget_init(GncBudget* budget)
+{
+}
+
+static void
+gnc_budget_dispose_real (GObject *budgetp)
+{
+}
+
+static void
+gnc_budget_finalize_real(GObject* budgetp)
+{
+}
+
 static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
@@ -65,13 +88,13 @@ gnc_budget_free(QofInstance *inst)
     /* We first send the message that this object is about to be
      * destroyed so that any GUI elements can remove it before it is
      * actually gone. */
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_DESTROY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_DESTROY, NULL);
 
     CACHE_REMOVE(budget->name);
     CACHE_REMOVE(budget->description);
 
-    qof_instance_release (&budget->inst);
-    g_free(budget);
+    /* qof_instance_release (&budget->inst); */
+    g_object_unref(budget);
 }
 
 static void noop (QofInstance *inst) {}
@@ -98,8 +121,8 @@ gnc_budget_new(QofBook *book)
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
-    budget = g_new0(GncBudget, 1);
-    qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
+    budget = g_object_new(GNC_TYPE_BUDGET, NULL);
+    qof_instance_init_data (&budget->inst, GNC_ID_BUDGET, book);
 
     g_date_set_time_t(&date, time(NULL));
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
@@ -109,7 +132,7 @@ gnc_budget_new(QofBook *book)
     gnc_budget_set_description(budget, "");
     gnc_budget_set_num_periods(budget, 12);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_CREATE , NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_CREATE , NULL);
 
     LEAVE(" ");
     return budget;
@@ -135,7 +158,7 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -156,7 +179,7 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -175,7 +198,7 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen(&budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen(&budget->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 const Recurrence *
@@ -190,7 +213,7 @@ gnc_budget_get_guid(GncBudget* budget)
 {
     g_return_val_if_fail(budget, NULL);
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
-    return qof_entity_get_guid(QOF_ENTITY(budget));
+    return qof_instance_get_guid(QOF_INSTANCE(budget));
 }
 
 void
@@ -203,7 +226,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 guint
@@ -237,7 +260,7 @@ gnc_budget_unset_account_period_value(GncBudget *budget, Account *account,
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 
 }
 
@@ -265,7 +288,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
 
 }
 
@@ -377,7 +400,7 @@ gnc_budget_lookup (const GUID *guid, QofBook *book)
     return GNC_BUDGET(qof_collection_lookup_entity (col, guid));
 }
 
-static void just_get_one(QofEntity *ent, gpointer data)
+static void just_get_one(QofInstance *ent, gpointer data)
 {
     GncBudget **bgt = (GncBudget**)data;
     if (bgt && !*bgt) *bgt = GNC_BUDGET(ent);

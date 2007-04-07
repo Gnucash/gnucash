@@ -35,6 +35,24 @@ static QofLogModule log_module = GNC_MOD_PRICE;
 static gboolean add_price(GNCPriceDB *db, GNCPrice *p);
 static gboolean remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup);
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_price, GNCPrice, QOF_TYPE_INSTANCE);
+
+static void
+gnc_price_init(GNCPrice* price)
+{
+}
+
+static void
+gnc_price_dispose_real (GObject *pricep)
+{
+}
+
+static void
+gnc_price_finalize_real(GObject* pricep)
+{
+}
+
 /* ==================================================================== */
 /* GNCPrice functions
  */
@@ -47,7 +65,7 @@ gnc_price_create (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  p = g_new0(GNCPrice, 1);
+  p = g_object_new(GNC_TYPE_PRICE, NULL);
 
   p->refcount = 1;
   p->version = 0;
@@ -56,8 +74,8 @@ gnc_price_create (QofBook *book)
   p->type = NULL;
   p->source = NULL;
 
-  qof_instance_init (&p->inst, GNC_ID_PRICE, book);
-  qof_event_gen (&p->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_instance_init_data (&p->inst, GNC_ID_PRICE, book);
+  qof_event_gen (&p->inst, QOF_EVENT_CREATE, NULL);
 
   return p;
 }
@@ -66,14 +84,13 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  qof_event_gen (&p->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_DESTROY, NULL);
 
   if(p->type) CACHE_REMOVE(p->type);
   if(p->source) CACHE_REMOVE(p->source);
 
-  qof_instance_release (&p->inst);
-  memset(p, 0, sizeof(GNCPrice));
-  g_free(p);
+  /* qof_instance_release (&p->inst); */
+  g_object_unref(p);
   LEAVE (" ");
 }
 
@@ -126,7 +143,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
   gnc_price_set_commodity(new_p, gnc_price_get_commodity(p));
   gnc_price_set_time(new_p, gnc_price_get_time(p));
   gnc_price_set_source(new_p, gnc_price_get_source(p));
-  gnc_price_set_type(new_p, gnc_price_get_type(p));
+  gnc_price_set_typestr(new_p, gnc_price_get_typestr(p));
   gnc_price_set_value(new_p, gnc_price_get_value(p));
   gnc_price_set_currency(new_p, gnc_price_get_currency(p));
   gnc_price_commit_edit(new_p);
@@ -261,7 +278,7 @@ gnc_price_set_source(GNCPrice *p, const char *s)
 }
 
 void
-gnc_price_set_type(GNCPrice *p, const char* type)
+gnc_price_set_typestr(GNCPrice *p, const char* type)
 {
   if(!p) return;
   if(safe_strcmp(p->type, type) != 0)
@@ -339,7 +356,7 @@ gnc_price_get_source(GNCPrice *p)
 }
 
 const char *
-gnc_price_get_type(GNCPrice *p)
+gnc_price_get_typestr(GNCPrice *p)
 {
   if(!p) return NULL;
   return p->type;
@@ -396,8 +413,8 @@ gnc_price_equal (GNCPrice *p1, GNCPrice *p2)
                    gnc_price_get_source (p2)) != 0)
     return FALSE;
 
-  if (safe_strcmp (gnc_price_get_type (p1),
-                   gnc_price_get_type (p2)) != 0)
+  if (safe_strcmp (gnc_price_get_typestr (p1),
+                   gnc_price_get_typestr (p2)) != 0)
     return FALSE;
 
   if (!gnc_numeric_eq (gnc_price_get_value (p1),
@@ -555,6 +572,24 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
    that the value is expressed in terms of.
  */
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE);
+
+static void
+gnc_pricedb_init(GNCPriceDB* pdb)
+{
+}
+
+static void
+gnc_pricedb_dispose_real (GObject *pdbp)
+{
+}
+
+static void
+gnc_pricedb_finalize_real(GObject* pdbp)
+{
+}
+
 static GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
 {
@@ -574,8 +609,8 @@ gnc_pricedb_create(QofBook * book)
     return result;
   }
 
-  result = g_new0(GNCPriceDB, 1);
-  qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
+  result = g_object_new(GNC_TYPE_PRICEDB, NULL);
+  qof_instance_init_data (&result->inst, GNC_ID_PRICEDB, book);
   qof_collection_mark_clean(col);
 
   /** \todo This leaks result when the collection is destroyed.  When
@@ -631,8 +666,8 @@ gnc_pricedb_destroy(GNCPriceDB *db)
   }
   g_hash_table_destroy (db->commodity_hash);
   db->commodity_hash = NULL;
-  qof_instance_release (&db->inst);
-  g_free(db);
+  /* qof_instance_release (&db->inst); */
+  g_object_unref(db);
 }
 
 void
@@ -820,7 +855,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
-  qof_event_gen (&p->inst.entity, QOF_EVENT_ADD, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
          db, p, p->inst.dirty, p->inst.do_free,
@@ -885,7 +920,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) { LEAVE (" no currency hash"); return FALSE; }
 
-  qof_event_gen (&p->inst.entity, QOF_EVENT_REMOVE, NULL);
+  qof_event_gen (&p->inst, QOF_EVENT_REMOVE, NULL);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {
@@ -2268,7 +2303,7 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
   str = gnc_price_get_source(p);
   str = str ? str : "(null)";
   fprintf(f, "%s  %s\n", istr, str);
-  str = gnc_price_get_type(p);
+  str = gnc_price_get_typestr(p);
   str = str ? str : "(null)";
   fprintf(f, "%s  %s\n", istr, str);
   fprintf(f, "%s  %g\n", istr, gnc_numeric_to_double(gnc_price_get_value(p)));
@@ -2376,7 +2411,7 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void
-price_foreach(const QofCollection *col, QofEntityForeachCB cb, gpointer data)
+price_foreach(const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
 {
   GNCPriceDB *db;
 
@@ -2452,7 +2487,7 @@ gnc_pricedb_register (void)
     { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency, (QofSetterFunc)gnc_price_set_currency },
     { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time, (QofSetterFunc)gnc_price_set_time },
     { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source, (QofSetterFunc)gnc_price_set_source },
-    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type, (QofSetterFunc)gnc_price_set_type },
+    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_typestr, (QofSetterFunc)gnc_price_set_typestr },
     { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value, (QofSetterFunc)gnc_price_set_value },
     { NULL },
   };

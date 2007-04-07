@@ -108,11 +108,29 @@ mark_account (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_account, Account, QOF_TYPE_INSTANCE);
+
+static void
+gnc_account_init(Account* acc)
+{
+}
+
+static void
+gnc_account_dispose_real (GObject *acctp)
+{
+}
+
+static void
+gnc_account_finalize_real(GObject* acctp)
+{
+}
+
 static void
 xaccInitAccount (Account * acc, QofBook *book)
 {
   ENTER ("book=%p\n", book);
-  qof_instance_init (&acc->inst, GNC_ID_ACCOUNT, book);
+  qof_instance_init_data (&acc->inst, GNC_ID_ACCOUNT, book);
 
   acc->parent   = NULL;
   acc->children = NULL;
@@ -231,9 +249,9 @@ xaccMallocAccount (QofBook *book)
 
   g_return_val_if_fail (book, NULL);
 
-  acc = g_new (Account, 1);
+  acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
   xaccInitAccount (acc, book);
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&acc->inst, QOF_EVENT_CREATE, NULL);
 
   return acc;
 }
@@ -260,7 +278,7 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     if (!from || !book) return NULL;
     ENTER (" ");
 
-    ret = g_new (Account, 1);
+    ret = g_object_new (GNC_TYPE_ACCOUNT, NULL);
     g_return_val_if_fail (ret, NULL);
 
     xaccInitAccount (ret, book);
@@ -342,7 +360,7 @@ xaccFreeAccount (Account *acc)
 
   if (!acc) return;
 
-  qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&acc->inst, QOF_EVENT_DESTROY, NULL);
 
   if (acc->children) 
   {
@@ -412,8 +430,8 @@ xaccFreeAccount (Account *acc)
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
-  qof_instance_release (&acc->inst);
-  g_free(acc);
+  /* qof_instance_release (&acc->inst); */
+  g_object_unref(acc);
 }
 
 /********************************************************************\
@@ -430,7 +448,7 @@ xaccAccountBeginEdit (Account *acc)
 static void on_done(QofInstance *inst) 
 {
     /* old event style */
-    qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen (inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static void on_err (QofInstance *inst, QofBackendError errcode)
@@ -448,7 +466,7 @@ static void acc_free (QofInstance *inst)
 }
 
 static void
-destroy_pending_splits_for_account(QofEntity *ent, gpointer acc)
+destroy_pending_splits_for_account(QofInstance *ent, gpointer acc)
 {
     Transaction *trans = (Transaction *) ent;
     Split *split;
@@ -629,7 +647,7 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
   }
 
   if(check_guids) {
-    if(!guid_equal(&aa->inst.entity.guid, &ab->inst.entity.guid))
+    if(!guid_equal(&aa->inst.guid, &ab->inst.guid))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -831,7 +849,7 @@ xaccAccountSetGUID (Account *acc, const GUID *guid)
   /* XXX this looks fishy and weird to me ... */
   PINFO("acct=%p", acc);
   xaccAccountBeginEdit (acc);
-  qof_entity_set_guid (&acc->inst.entity, guid);
+  qof_instance_set_guid (&acc->inst, guid);
   qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit (acc);
 }
@@ -1160,7 +1178,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     return result;
 
   /* guarantee a stable sort */
-  return guid_compare (&(aa->inst.entity.guid), &(ab->inst.entity.guid));
+  return guid_compare (&(aa->inst.guid), &(ab->inst.guid));
 }
 
 static int
@@ -1222,7 +1240,7 @@ xaccAccountSetDescription (Account *acc, const char *str)
 }
 
 static void
-qofAccountSetParent (Account *acc, QofEntity *parent) 
+qofAccountSetParent (Account *acc, QofInstance *parent) 
 {
 	Account *parent_acc;
 	
@@ -1405,10 +1423,10 @@ gnc_account_append_child (Account *new_parent, Account *child)
        */
       PWARN ("reparenting accounts across books is not correctly supported\n");
 
-      qof_event_gen (&child->inst.entity, QOF_EVENT_DESTROY, NULL);
+      qof_event_gen (&child->inst, QOF_EVENT_DESTROY, NULL);
       col = qof_book_get_collection (new_parent->inst.book, GNC_ID_ACCOUNT);
-      qof_collection_insert_entity (col, &child->inst.entity);
-      qof_event_gen (&child->inst.entity, QOF_EVENT_CREATE, NULL);
+      qof_collection_insert_entity (col, &child->inst);
+      qof_event_gen (&child->inst, QOF_EVENT_CREATE, NULL);
     }
   }
   child->parent = new_parent;
@@ -1420,8 +1438,8 @@ gnc_account_append_child (Account *new_parent, Account *child)
    * to send a MODIFY event. If the gtktreemodelfilter code gets the
    * MODIFY before it gets the ADD, it gets very confused and thinks
    * that two nodes have been added. */
-  qof_event_gen (&child->inst.entity, QOF_EVENT_ADD, NULL);
-  // qof_event_gen (&new_parent->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&child->inst, QOF_EVENT_ADD, NULL);
+  // qof_event_gen (&new_parent->inst, QOF_EVENT_MODIFY, NULL);
 
   xaccAccountCommitEdit (child);
   //  xaccAccountCommitEdit(new_parent);
@@ -1451,12 +1469,12 @@ gnc_account_remove_child (Account *parent, Account *child)
   parent->children = g_list_remove (parent->children, child);
 
   /* Now send the event. */
-  qof_event_gen(&child->inst.entity, QOF_EVENT_REMOVE, &ed);
+  qof_event_gen(&child->inst, QOF_EVENT_REMOVE, &ed);
 
   /* clear the account's parent pointer after REMOVE event generation. */
   child->parent = NULL;
 
-  qof_event_gen (&parent->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&parent->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 Account *
@@ -3178,7 +3196,7 @@ gnc_account_copy_children (Account *to, Account *from)
 	gnc_account_copy_children(to_acc, from_acc);
       }
       xaccAccountCommitEdit (to_acc);
-      qof_event_gen (&to_acc->inst.entity, QOF_EVENT_CREATE, NULL);
+      qof_event_gen (&to_acc->inst, QOF_EVENT_CREATE, NULL);
       /* DRH - Should this send ADD/REMOVE events */
    }
    xaccAccountCommitEdit(from);
@@ -3225,8 +3243,8 @@ gnc_account_merge_children (Account *parent)
 	  gnc_account_append_child (acc_a, (Account *)worker->data);
 	g_list_free(work);
 
-	qof_event_gen (&acc_a->inst.entity, QOF_EVENT_MODIFY, NULL);
-	qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (&acc_a->inst, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (&acc_b->inst, QOF_EVENT_MODIFY, NULL);
       }
 
       /* recurse to do the children's children */

@@ -196,9 +196,6 @@ typedef struct gnc_lot_struct        GNCLot;
 typedef struct gnc_price_s           GNCPrice;
 typedef struct gnc_quote_source_s    gnc_quote_source;
 
-#define GNC_IS_PRICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_PRICE))
-#define GNC_PRICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_PRICE, GNCPrice))
-
 /** GList of Account */
 typedef GList                  AccountList;
 /** GList of GNCLots */

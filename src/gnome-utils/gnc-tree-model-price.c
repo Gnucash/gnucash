@@ -101,7 +101,7 @@ static gboolean	gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 static gboolean	gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 						  GtkTreeIter *iter,
 						  GtkTreeIter *child);
-static void gnc_tree_model_price_event_handler (QofEntity *entity,
+static void gnc_tree_model_price_event_handler (QofInstance *entity,
 						QofEventId event_type,
 						gpointer user_data,
 						gpointer event_data);
@@ -712,7 +712,7 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 			break;
 		case GNC_TREE_MODEL_PRICE_COL_TYPE:
 			g_value_init (value, G_TYPE_STRING);
-			g_value_set_string (value, gnc_price_get_type (price));
+			g_value_set_string (value, gnc_price_get_typestr (price));
 			break;
 		case GNC_TREE_MODEL_PRICE_COL_VALUE:
 			g_value_init (value, G_TYPE_STRING);
@@ -1443,7 +1443,7 @@ gnc_tree_model_price_do_deletions (gpointer unused)
  *  @param event_data A pointer to additional data about this event.
  */
 static void
-gnc_tree_model_price_event_handler (QofEntity *entity,
+gnc_tree_model_price_event_handler (QofInstance *entity,
 				    QofEventId event_type,
 				    gpointer user_data,
 				    gpointer event_data)

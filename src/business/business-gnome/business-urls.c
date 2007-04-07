@@ -79,7 +79,7 @@ static gboolean
 customerCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
 {
-  QofEntity *entity;
+  QofInstance *entity;
   GncCustomer *customer;
 
   /* href="...:customer=<guid>" */
@@ -94,7 +94,7 @@ static gboolean
 vendorCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
 {
-  QofEntity *entity;
+  QofInstance *entity;
   GncVendor *vendor;
 
   /* href="...:vendor=<guid>" */
@@ -109,7 +109,7 @@ static gboolean
 employeeCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
 {
-  QofEntity *entity;
+  QofInstance *entity;
   GncEmployee *employee;
 
   /* href="...:employee=<guid>" */
@@ -125,7 +125,7 @@ static gboolean
 invoiceCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
 {
-  QofEntity *entity;
+  QofInstance *entity;
   GncInvoice *invoice;
 
   /* href="...:invoice=<guid>" */
@@ -141,7 +141,7 @@ static gboolean
 jobCB (const char *location, const char *label,
            gboolean new_window, GNCURLResult * result)
 {
-  QofEntity *entity;
+  QofInstance *entity;
   GncJob *job;
 
   /* href="...:job=<guid>" */

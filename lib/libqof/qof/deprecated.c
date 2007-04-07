@@ -57,7 +57,7 @@ void gnc_engine_resume_events (void)
 {
 	qof_event_resume();
 }
-void gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
+void gnc_engine_gen_event (QofInstance *entity, GNCEngineEventType event_type)
 {
 	qof_event_gen(entity, event_type, NULL);
 }
