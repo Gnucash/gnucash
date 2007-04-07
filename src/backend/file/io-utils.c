@@ -28,10 +28,10 @@
 
 #include <glib.h>
 
-#include "Group.h"
 #include "gnc-xml.h"
 #include "gnc-xml.h"
 #include "io-utils.h"
+#include "gnc-gconf-utils.h"
 
 /*
   <!-- Local variables: -->
@@ -51,40 +51,52 @@ write_emacs_trailer(FILE *out)
     fprintf(out, emacs_trailer);
 }
 
-void
-write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
+static void
+write_one_account(FILE *out,
+                  Account *account,
+                  sixtp_gdv2 *gd,
+                  gboolean allow_incompat)
 {
-    GList *list;
-    GList *node;
+    xmlNodePtr accnode;
 
-    list = xaccGroupGetAccountList(grp);
+    accnode =
+      gnc_account_dom_tree_create(account, gd && gd->exporting, allow_incompat);
 
-    for (node = list; node; node = node->next) 
+    xmlElemDump(out, NULL, accnode);
+    fprintf(out, "\n");
+
+    xmlFreeNode(accnode);
+    gd->counter.accounts_loaded++;
+    run_callback(gd, "account");
+}
+
+void
+write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd)
+{
+    GList *descendants, *node;
+    gboolean allow_incompat = FALSE;
+    GError *err = NULL;
+
+    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
+    if (err != NULL)
     {
-        xmlNodePtr accnode;
-        AccountGroup *newgrp;
-        
-        accnode = gnc_account_dom_tree_create((Account*)(node->data),
-                                              gd && gd->exporting);
-
-        xmlElemDump(out, NULL, accnode);
-        fprintf(out, "\n");
-
-        xmlFreeNode(accnode);
-        gd->counter.accounts_loaded++;
-        run_callback(gd, "account");
-
-        newgrp = xaccAccountGetChildren((Account*)(node->data));
-
-        if (newgrp)
-        {
-            write_account_group(out, newgrp, gd);
-        }
+        g_warning("error getting gconf value [%s]", err->message);
+        g_error_free(err);
+        allow_incompat = FALSE;
     }
+    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+
+    if (allow_incompat)
+      write_one_account(out, root, gd, allow_incompat);
+
+    descendants = gnc_account_get_descendants(root);
+    for (node = descendants; node; node = g_list_next(node)) 
+      write_one_account(out, node->data, gd, allow_incompat);
+    g_list_free(descendants);
 }
 
 void
 write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 {
-    write_account_group(out, gnc_book_get_group(book), gd);
+    write_account_tree(out, gnc_book_get_root_account(book), gd);
 }

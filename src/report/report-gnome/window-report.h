@@ -39,12 +39,9 @@ GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
 // [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
 // scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
 void       reportWindow(int id);
-// window-register; scm-exposed
-void       gnc_print_report (int report_id);
 // scm-exposed; ~priv
 void       gnc_report_raise_editor(SCM report);
 // module[/plugin]-init
 void       gnc_report_init (void);
 
-void       gnc_reports_show_all (QofSession *session);
 #endif

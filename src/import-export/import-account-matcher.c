@@ -67,7 +67,7 @@ build_acct_tree(struct _accountpickerdialog * picker)
   GtkTreeViewColumn *col;
 
   /* Build a new account tree */
-  TRACE("Begin");
+  DEBUG("Begin");
   account_tree = gnc_tree_view_account_new(FALSE);
   picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
   gtk_tree_view_set_headers_visible (account_tree, TRUE);
@@ -111,6 +111,17 @@ gnc_import_add_account(struct _accountpickerdialog * picker)
 							      selected_account);
   g_list_free(valid_types);
   gnc_tree_view_account_set_selected_account(picker->account_tree, new_account);
+}
+
+/* When user double-clicks an account */
+static void
+account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
+			      GtkTreeViewColumn *column,
+			      struct _accountpickerdialog *picker)
+{
+  g_return_if_fail(picker && picker->dialog);
+
+  gtk_dialog_response(GTK_DIALOG(picker->dialog), GTK_RESPONSE_OK);
 }
 
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
@@ -158,12 +169,12 @@ Account * gnc_import_select_account(gncUIWidget parent,
   /*DEBUG("Looking for account with online_id: %s", account_online_id_value);*/
   if(account_online_id_value!=NULL)
     {
-      retval = xaccGroupForEachAccount(gnc_get_current_group (),
+      retval =
+	gnc_account_foreach_descendant_until(gnc_get_current_root_account (),
 				       test_acct_online_id_match,
 				       /* This argument will only be
 					  used as a "const char*" */
-				       (void*)account_online_id_value,
-				       TRUE);
+				       (void*)account_online_id_value);
     }
   if(retval==NULL && auto_create != 0)
     {
@@ -207,6 +218,8 @@ Account * gnc_import_select_account(gncUIWidget parent,
       gnc_tree_view_account_set_selected_account(picker->account_tree, default_selection);
 
       gtk_window_set_modal(GTK_WINDOW(picker->dialog), TRUE);
+      g_signal_connect(picker->account_tree, "row-activated",
+		       G_CALLBACK(account_tree_row_activated_cb), picker);
       do {
 	response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
 	switch (response) {

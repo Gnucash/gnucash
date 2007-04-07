@@ -30,8 +30,8 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-(use-modules (sw_gnome_utils)) ;; for gnucash-ui-is-running
 
+(gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 (gnc:module-load "gnucash/app-utils" 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -602,8 +602,7 @@
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 
-  (let* ((group (xaccGetAccountGroup book))
-         (fq-call-data (book->commodity->fq-call-data book))
+  (let* ((fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (apply append
                                (map fq-call-data->fq-calls fq-call-data))))
@@ -755,5 +754,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
   (let ((sources (gnc:fq-check-sources)))
     (if (list? sources)
 	(begin
+      (simple-format #t "Found Finance::Quote version ~A" (car sources))
+      (newline)
 	  (gnc:msg "Found Finance::Quote version " (car sources))
 	  (gnc-quote-source-set-fq-installed (cdr sources))))))

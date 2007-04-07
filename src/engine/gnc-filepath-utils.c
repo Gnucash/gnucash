@@ -35,11 +35,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
-#ifdef HAVE_GLIB26
 #include <glib/gstdio.h>
-#else
-#define g_mkdir(a,b) mkdir(a,b)
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -63,8 +59,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 static void 
 MakeHomeDir (void) 
 {
-  int rc;
-  struct stat statbuf;
   const gchar *home;
   char *path;
   char *data;
@@ -75,19 +69,15 @@ MakeHomeDir (void)
 
   path = g_build_filename(home, ".gnucash", (gchar *)NULL);
 
-  rc = stat (path, &statbuf);
-  if (rc)
+  if (!g_file_test(path, G_FILE_TEST_EXISTS))
   {
-    /* assume that the stat failed only because the dir is absent,
-     * and not because its read-protected or other error.
-     * Go ahead and make it. Don't bother much with checking mkdir 
+    /* Go ahead and make it. Don't bother much with checking mkdir 
      * for errors; seems pointless. */
     g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
   }
 
   data = g_build_filename (path, "data", (gchar *)NULL);
-  rc = stat (data, &statbuf);
-  if (rc)
+  if (!g_file_test(data, G_FILE_TEST_EXISTS))
     g_mkdir (data, S_IRWXU);
 
   g_free (path);
@@ -186,7 +176,6 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
 char * 
 xaccResolveFilePath (const char * filefrag)
 {
-  struct stat statbuf;
   char pathbuf[PATH_MAX];
   pathGenerator gens[4];
   char *filefrag_dup;
@@ -230,8 +219,7 @@ xaccResolveFilePath (const char * filefrag)
       {
 	  gchar *fullpath = g_build_filename(pathbuf, filefrag, (gchar *)NULL);
 
-	  int rc = stat (fullpath, &statbuf);
-	  if ((!rc) && (S_ISREG(statbuf.st_mode)))
+	  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
 	  {
 	      return fullpath;
           }
@@ -298,7 +286,7 @@ xaccResolveURL (const char * pathfrag)
 
   if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
       !g_ascii_strncasecmp (pathfrag, "https://", 8)     ||
-	  !g_ascii_strncasecmp (pathfrag, "gda://", 6)		 ||
+      !g_ascii_strncasecmp (pathfrag, "gda://", 6)		 ||
       !g_ascii_strncasecmp (pathfrag, "postgres://", 11))
   {
     return g_strdup(pathfrag);
@@ -319,7 +307,7 @@ gnc_validate_directory (const gchar *dirname)
   struct stat statbuf;
   gint rc;
 
-  rc = stat (dirname, &statbuf);
+  rc = g_stat (dirname, &statbuf);
   if (rc) {
     switch (errno) {
     case ENOENT:
@@ -333,7 +321,7 @@ gnc_validate_directory (const gchar *dirname)
 		  dirname, strerror(errno), errno);
 	exit(1);
       }
-      stat (dirname, &statbuf);
+      g_stat (dirname, &statbuf);
       break;
 
     case EACCES:
@@ -389,26 +377,32 @@ gnc_validate_directory (const gchar *dirname)
 const gchar *
 gnc_dotgnucash_dir (void)
 {
-  static gchar *dotgnucash = NULL, *books_dir;
+  static gchar *dotgnucash = NULL, *tmp_dir;
   const gchar *home;
 
   if (dotgnucash)
     return dotgnucash;
 
-  home = g_get_home_dir();
-  if (!home) {
-    g_warning("Cannot find home directory. Using tmp directory instead.");
-    home = g_get_tmp_dir();
-  }
-  g_assert(home);
+  dotgnucash = g_strdup(g_getenv("GNC_DOT_DIR"));
+  if (!dotgnucash) {
+    home = g_get_home_dir();
+    if (!home) {
+      g_warning("Cannot find home directory. Using tmp directory instead.");
+      home = g_get_tmp_dir();
+    }
+    g_assert(home);
 
-  dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+    dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+  }
   gnc_validate_directory(dotgnucash);
 
   /* Since we're in code that is only executed once.... */
-  books_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
-  gnc_validate_directory(books_dir);
-  g_free(books_dir);
+  tmp_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
+  tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
+  gnc_validate_directory(tmp_dir);
+  g_free(tmp_dir);
 
   return dotgnucash;
 }

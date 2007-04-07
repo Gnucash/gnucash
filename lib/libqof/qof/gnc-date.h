@@ -243,28 +243,6 @@ gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
  * routine might return incorrect values for dates before 1970.  */
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
-/** \brief Add a number of days to a Timespec and normalise.
-
-Together with qof_date_add_months, replaces date_add_months.
-
-\return FALSE on error, otherwise TRUE.
-*/
-gboolean qof_date_add_days(Timespec *ts, gint days);
-
-/** \brief Add a number of months to a Timespec and normalise.
-
-Optionally track the last day of the month so that adding one
-month to 31st January returns 28th February (29th in a leap year)
-and adding three months returns 30th April.
-
-\return FALSE on error, otherwise TRUE.
-*/
-gboolean qof_date_add_months(Timespec *ts, gint months, gboolean track_last_day);
-
-/** \deprecated Add a number of months to a time value and normalize.  Optionally
- * also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/31. */
-void date_add_months (struct tm *tm, gint months, gboolean track_last_day);
-
 /** \warning hack alert XXX FIXME -- these date routines return incorrect
  * values for dates before 1970.  Most of them are good only up 
  * till 2038.  This needs fixing ... 
@@ -349,6 +327,35 @@ gchar dateSeparator(void);
  * so on.  If a file-io thing needs date handling, it should do it
  * itself, instead of depending on the routines here.
  */
+
+/** qof_format_time takes a format specification in UTF-8 and a broken-down time,
+ *  tries to call strftime with a sufficiently large buffer and, if successful,
+ *  return a newly allocated string in UTF-8 for the printing result.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return A newly allocated string on success, or NULL otherwise.
+ */
+gchar *qof_format_time(const gchar *format, const struct tm *tm);
+
+/** qof_strftime calls qof_format_time to print a given time and afterwards tries
+ *  to put the result into a buffer of fixed size.
+ *
+ *  @param buf A buffer.
+ *
+ *  @param max The size of buf in bytes.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return The number of characters written, not include the null byte, if the
+ *  complete string, including the null byte, fits into the buffer.  Otherwise 0.
+ */
+gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
+                   const struct tm *tm);
 
 /** qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string

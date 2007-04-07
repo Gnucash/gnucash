@@ -125,10 +125,10 @@ gnc_tree_view_commodity_finalize (GObject *object)
   GncTreeViewCommodity *view;
   GncTreeViewCommodityPrivate *priv;
 
-  ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
+  ENTER("view %p", object);
   view = GNC_TREE_VIEW_COMMODITY (object);
   priv = GNC_TREE_VIEW_COMMODITY_GET_PRIVATE (view);
 
@@ -142,10 +142,10 @@ gnc_tree_view_commodity_destroy (GtkObject *object)
 {
   GncTreeViewCommodity *view;
 
-  ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
+  ENTER("view %p", object);
   view = GNC_TREE_VIEW_COMMODITY (object);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -697,11 +697,11 @@ gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
   GtkTreeModel *f_model, *s_model;
   filter_user_data *fd = data;
 
-  ENTER("view %p, ns func %p, cm func %p, data %p, destroy %p",
-	view, ns_func, cm_func, data, destroy);
-
   g_return_if_fail(GNC_IS_TREE_VIEW_COMMODITY(view));
   g_return_if_fail((ns_func != NULL) || (cm_func != NULL));
+
+  ENTER("view %p, ns func %p, cm func %p, data %p, destroy %p",
+	view, ns_func, cm_func, data, destroy);
 
   fd = g_malloc(sizeof(filter_user_data));
   fd->user_ns_fn   = ns_func;
@@ -730,10 +730,9 @@ gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view)
 {
   GtkTreeModel *f_model, *s_model;
 
-  ENTER("view %p", view);
-
   g_return_if_fail(GNC_IS_TREE_VIEW_COMMODITY(view));
 
+  ENTER("view %p", view);
   s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
@@ -758,10 +757,10 @@ gnc_tree_view_commodity_get_commodity_from_path (GncTreeViewCommodity *view,
     GtkTreeIter iter;
     gnc_commodity *commodity;
 
-    ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
     g_return_val_if_fail (s_path != NULL, NULL);
 
+    ENTER("view %p", view);
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     f_path = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), s_path);
     if (!f_path) {
@@ -802,8 +801,9 @@ gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
     GtkTreeIter iter, f_iter, s_iter;
     gnc_commodity *commodity;
 
-    ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
+
+    ENTER("view %p", view);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
     if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter)) {
@@ -845,7 +845,10 @@ gnc_tree_view_commodity_set_selected_commodity (GncTreeViewCommodity *view,
   gtk_tree_selection_unselect_all (selection);
 
   if (commodity == NULL)
+  {
+    LEAVE("");
     return;
+  }
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
@@ -1016,9 +1019,9 @@ gnc_tree_view_commodity_get_cursor_account (GncTreeViewCommodity *view)
     GtkTreePath *s_path;
     gnc_commodity *commodity;
 
-    ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
 
+    ENTER("view %p", view);
     s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
     gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &s_path, NULL);
     if (s_path) {

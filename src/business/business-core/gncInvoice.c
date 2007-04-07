@@ -1262,7 +1262,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
   g_return_val_if_fail (owner->owner.undefined != NULL, NULL);
 
   /* Compute the ancillary data */
-  book = xaccAccountGetBook (posted_acc);
+  book = gnc_account_get_book (posted_acc);
   name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
   commodity = gncOwnerGetCurrency (owner);
   reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
@@ -1445,14 +1445,14 @@ void gncInvoiceBeginEdit (GncInvoice *invoice)
   QOF_BEGIN_EDIT (&invoice->inst);
 }
 
-static inline void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
+static void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Invoice QofBackend Failure: %d", errcode);
 }
 
-static inline void gncInvoiceOnDone (QofInstance *invoice) { }
+static void gncInvoiceOnDone (QofInstance *invoice) { }
 
-static inline void invoice_free (QofInstance *inst)
+static void invoice_free (QofInstance *inst)
 {
   GncInvoice *invoice = (GncInvoice *) inst;
   gncInvoiceFree (invoice);

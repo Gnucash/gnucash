@@ -103,7 +103,7 @@
 #include "qofclass.h"
 #include "qofobject.h"
 
-#define QOF_MOD_SESSION "qof-session"
+#define QOF_MOD_SESSION "qof.session"
 
 /* PROTOTYPES ******************************************************/
 
@@ -222,13 +222,14 @@ const char * qof_session_get_url (QofSession *session);
  *    if any data in the session hasn't been saved to long-term storage.
  */
 gboolean qof_session_not_saved(QofSession *session);
+gboolean qof_session_save_in_progress(QofSession *session);
 
 /** Allows the backend to warn the user if a dataset already exists. */
 gboolean qof_session_save_may_clobber_data (QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
- *    more than a write to the file of the current AccountGroup & etc.
+ *    more than a write to the file of the current Accounts & etc.
  *    For the SQL backend, this is typically a no-op (since all data
  *    has already been written out to the database.
  */

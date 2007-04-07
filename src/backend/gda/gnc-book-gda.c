@@ -47,102 +47,102 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(QofAccessFunc)qof_entity_get_guid,
-			(QofSetterFunc)qof_entity_set_guid },
-	{ NULL }
+    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
+            (QofAccessFunc)qof_entity_get_guid,
+            (QofSetterFunc)qof_entity_set_guid },
+    { NULL }
 };
 
 /* ================================================================= */
 static GNCBook*
 load_book( GncGdaBackend* be, GdaDataModel* pModel, int row,
-			GNCBook* pBook )
+            GNCBook* pBook )
 {
-	const GUID* guid;
-	GUID book_guid;
+    const GUID* guid;
+    GUID book_guid;
 
-	guid = gnc_gda_load_guid( pModel, row );
-	book_guid = *guid;
+    guid = gnc_gda_load_guid( pModel, row );
+    book_guid = *guid;
 
-	if( pBook == NULL ) {
-		pBook = gnc_book_new();
-	}
+    if( pBook == NULL ) {
+        pBook = gnc_book_new();
+    }
 
-	gnc_gda_load_object( pModel, row, GNC_ID_BOOK, pBook, col_table );
-	gnc_gda_slots_load( be, gnc_book_get_guid( pBook ),
-							qof_instance_get_slots( QOF_INSTANCE(pBook) ) );
+    gnc_gda_load_object( pModel, row, GNC_ID_BOOK, pBook, col_table );
+    gnc_gda_slots_load( be, gnc_book_get_guid( pBook ),
+                            qof_instance_get_slots( QOF_INSTANCE(pBook) ) );
 
-	qof_instance_mark_clean( QOF_INSTANCE(pBook) );
+    qof_instance_mark_clean( QOF_INSTANCE(pBook) );
 
-	return pBook;
+    return pBook;
 }
 
 static void
 load_books( GncGdaBackend* be )
 {
-	static GdaQuery* query;
-	GdaObject* ret;
-	QofBook* pBook = be->primary_book;
+    static GdaQuery* query;
+    GdaObject* ret;
+    QofBook* pBook = be->primary_book;
 
-	if( query == NULL ) {
-		query = gnc_gda_create_select_query( be, BOOK_TABLE );
-	}
-	ret = gnc_gda_execute_query( be, query );
-	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-		int numRows = gda_data_model_get_n_rows( pModel );
-		int r;
+    if( query == NULL ) {
+        query = gnc_gda_create_select_query( be, BOOK_TABLE );
+    }
+    ret = gnc_gda_execute_query( be, query );
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
 
-		for( r = 0; r < numRows; r++ ) {
-			(void)load_book( be, pModel, r, NULL );
-		}
-	}
+        for( r = 0; r < numRows; r++ ) {
+            (void)load_book( be, pModel, r, NULL );
+        }
+    }
 }
 
 /* ================================================================= */
 static void
 create_book_tables( GncGdaBackend* be )
 {
-	gnc_gda_create_table_if_needed( be, BOOK_TABLE, col_table );
+    gnc_gda_create_table_if_needed( be, BOOK_TABLE, col_table );
 }
 
 /* ================================================================= */
 static void
 commit_book( GncGdaBackend* be, QofInstance* inst )
 {
-	GNCBook* pBook = GNC_BOOK(inst);
-	const GUID* guid;
+    GNCBook* pBook = GNC_BOOK(inst);
+    const GUID* guid;
 
-	(void)gnc_gda_do_db_operation( be,
-						inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
-						BOOK_TABLE,
-						GNC_ID_BOOK, pBook,
-						col_table );
+    (void)gnc_gda_do_db_operation( be,
+                        inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
+                        BOOK_TABLE,
+                        GNC_ID_BOOK, pBook,
+                        col_table );
 
-	// Delete old slot info
-	guid = qof_instance_get_guid( inst );
+    // Delete old slot info
+    guid = qof_instance_get_guid( inst );
 
-	// Now, commit any slots
-	if( !inst->do_free ) {
-		gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
-	} else {
-		gnc_gda_slots_delete( be, guid );
-	}
+    // Now, commit any slots
+    if( !inst->do_free ) {
+        gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
+    } else {
+        gnc_gda_slots_delete( be, guid );
+    }
 }
 
 /* ================================================================= */
 void
 gnc_gda_init_book_handler( void )
 {
-	static GncGdaDataType_t be_data =
-	{
-		GNC_GDA_BACKEND_VERSION,
-		GNC_ID_BOOK,
-		commit_book,				/* commit */
-		load_books,					/* initial_load */
-		create_book_tables			/* create_tables */
-	};
+    static GncGdaDataType_t be_data =
+    {
+        GNC_GDA_BACKEND_VERSION,
+        GNC_ID_BOOK,
+        commit_book,                /* commit */
+        load_books,                    /* initial_load */
+        create_book_tables            /* create_tables */
+    };
 
-	qof_object_register_backend( GNC_ID_BOOK, GNC_GDA_BACKEND, &be_data );
+    qof_object_register_backend( GNC_ID_BOOK, GNC_GDA_BACKEND, &be_data );
 }
 /* ========================== END OF FILE ===================== */

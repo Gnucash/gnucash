@@ -15,12 +15,12 @@ AppSupportURL=http://www.gnucash.org
 AppUpdatesURL=http://www.gnucash.org
 DefaultDirName={pf}\@PACKAGE@
 DefaultGroupName=GnuCash
-LicenseFile=..\..\COPYING
+LicenseFile=@prefix@\..\dist\share\@PACKAGE@\doc\COPYING
 Compression=lzma
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
-InfoAfterFile=README
+InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README
 
 [Types]
 Name: "full"; Description: "{cm:FullInstall}"
@@ -28,20 +28,21 @@ Name: "custom"; Description: "{cm:CustomInstall}"; Flags: iscustom
 
 [Components]
 Name: "main"; Description: "{cm:MainFiles}"; Types: full custom; Flags: fixed
-Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
-Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
+;Name: "translations"; Description: "{cm:TranslFiles}"; Types: full
+;Name: "templates"; Description: "{cm:TemplFiles}"; Types: full
 
 [Tasks]
 Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Icons]
-Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: menuicon
+Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon
 Name: "{group}\Uninstall GnuCash"; Filename: "{uninstallexe}"; Tasks: menuicon
-Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\pixmaps\gnucash-icon.png"; Tasks: desktopicon
+Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; Flags: postinstall skipifsilent
+Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
@@ -49,43 +50,74 @@ Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Files]
 ; The main executables and DLLs
-Source: "@prefix@\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
-Source: "@prefix@\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallConfig()
+; Note: The above AfterInstall function will create the 
+; gnucash.bat file on-the-fly by the Pascal script below.
 
-; The translations (no idea why mingw installs them in prefix/lib/locale)
-Source: "@prefix@\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+Source: "@prefix@\..\dist\etc\*"; DestDir: "{app}\etc"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
+Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
 
-; The account templates
-Source: "@prefix@\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
-
-; The loading shell script. It is post-processed by the Pascal script below.
-Source: "..\..\src\bin\gnucash.in"; DestDir: "{app}\bin"; Components: main; AfterInstall: MyAfterInstallConfig(ExpandConstant('{app}\bin\gnucash'))
+;; The translations (no idea why mingw installs them in prefix/lib/locale)
+;Source: "@prefix@\..\dist\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
+;
+;; The account templates
+;Source: "@prefix@\..\dist\share\gnucash\accounts\*"; DestDir: "{app}\share\gnucash\accounts"; Flags: recursesubdirs; Components: templates
 
 ; And all the documentation
-Source: "..\..\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "..\..\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
-Source: "..\..\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
-Source: "..\..\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Define the registry keys Setup should create (HKCU = HKEY_CURRENT_USER)
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Registry]
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"
-Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"
+Root: HKCU; Subkey: "Software\GnuCash"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "pkglibdir"; ValueData: "{app}\lib\@PACKAGE@"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\GnuCash\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+
+; Additionally, we have to install the paths for gwenhywfar
+Root: HKCU; Subkey: "Software\Gwenhywfar"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "prefix"; ValueData: "{app}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "libdir"; ValueData: "{app}\lib"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "plugindir"; ValueData: "{app}\lib\gwenhywfar\plugins\38"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Gwenhywfar\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\share\locale"; Flags: uninsdeletevalue
+
+; And we also need some registry keys for aqbanking
+Root: HKCU; Subkey: "Software\Aqbanking"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "providerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\providers"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "bankinfodir"; ValueData: "{app}\lib\aqbanking\plugins\16\bankinfo"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "importerdir"; ValueData: "{app}\lib\aqbanking\plugins\16\imexporters"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+
+; And even one for aqhbci
+Root: HKCU; Subkey: "Software\AqHbci"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
+
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Delete the created config script on uninstall
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [UninstallDelete]
-Type: files; Name: "{app}\bin\gnucash"
+Type: files; Name: "{app}\bin\gnucash.bat"
+Type: files; Name: "{app}\bin\guile.bat"
+Type: files; Name: "{app}\share\guile\1.6\slibcat"
+Type: filesandordirs; Name: "{app}\share\guile"
+Type: filesandordirs; Name: "{app}\etc\gconf"
+Type: dirifempty; Name: "{app}\etc"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; This large section is a Pascal scripting program that will modify
@@ -106,40 +138,39 @@ begin
   StringChange(Result, '\', '/');
 end;
 
-procedure MyAfterInstallConfig(FileName: String);
+procedure MyAfterInstallConfig();
 var
-  FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
+  FileName, FileString, appdir, libdir, pkglibdir, pkgdatadir: String;
   Res: Boolean;
 begin
 
-  { Load the unchanged original file }
-  Res := LoadStringFromFile(Format('%s.in',[FileName]), FileString);
-  if Res = False then
-    MsgBox('Error on loading '+FileName+'.in for final adaptation', mbInformation, MB_OK);
-
-  { Insert the custom file header; #10 is the linefeed character }
-  Insert('#!/bin/sh '#10'dir="@prefix'+'@"'#10, FileString, 0);
-
   { Get the installation-specific paths }
-  appdir := MingwBacksl(ExpandConstant('{app}'));
-  libdir := appdir + '/lib';
-  pkglibdir := libdir + '/gnucash';
-  pkgdatadir := appdir + '/share/gnucash';
+  appdir := ExpandConstant('{app}');
+  libdir := appdir + '\lib';
+  pkglibdir := libdir + '\gnucash';
+  pkgdatadir := appdir + '\share\gnucash';
 
-  { Now make all the replacements }
-  { Explanation: StringChange(S,FromStr,ToStr): Change all occurances in S of FromStr to ToStr. }
-  StringChange(FileString, '@'+'-PATH_SEPARATOR-@', ';');
-  StringChange(FileString, '@'+'-BIN_DIR-@', appdir + '/bin');
-  StringChange(FileString, '@'+'-GNC_PKGLIB_INSTALLDIR-@', pkglibdir);
-  StringChange(FileString, '@'+'-GNC_MODULE_DIR-@', pkglibdir);
-  StringChange(FileString, '@'+'-GNC_LIB_INSTALLDIR-@', libdir);
-  StringChange(FileString, '@'+'-GNC_GUILE_MODULE_DIR-@', pkgdatadir + '/guile-modules');
-  StringChange(FileString, '@'+'-GNC_SCM_INSTALL_DIR-@', pkgdatadir + '/scm');
+  { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
+  FileName := appdir + '\bin\gnucash.bat' ;
+  FileString := 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
+
+  FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
+  FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
+  FileString := FileString + 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
+  FileString := FileString + 'set LTDL_LIBRARY_PATH=' + libdir + ''#13#10 ;
+  FileString := FileString + 'start gnucash-bin'#13#10 ;
 
   { Save the final file }
   Res := SaveStringToFile(FileName, FileString, False);
   if Res = False then
-    MsgBox('Error on saving '+FileName+' for final adaptation', mbInformation, MB_OK);
+    MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
+
+  FileName := appdir + '\bin\guile.bat' ;
+  FileString := 'set GUILE_LOAD_PATH=' + pkgdatadir + '\guile-modules;' + pkgdatadir + '\scm;' + appdir + '\share\guile\1.6;%GUILE_LOAD_PATH%'#13#10 ;
+  FileString := FileString + 'start guile.exe %*'#13#10 ;
+  Res := SaveStringToFile(FileName, FileString, False);
+  if Res = False then
+    MsgBox('Error on saving '+FileName+' for completing the installation', mbInformation, MB_OK);
 
 end;
 

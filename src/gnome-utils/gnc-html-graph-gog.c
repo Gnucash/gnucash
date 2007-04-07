@@ -35,20 +35,23 @@
 #include <goffice/goffice.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
-#include <goffice/graph/gog-renderer-pixbuf.h>
-#include <goffice/graph/gog-renderer-gnome-print.h>
+#ifdef GOFFICE_WITH_CAIRO
+#    include <goffice/graph/gog-renderer-cairo.h>
+#else
+#    include <goffice/graph/gog-renderer-pixbuf.h>
+#endif
+#ifndef GTKHTML_USES_GTKPRINT
+#    include <goffice/graph/gog-renderer-gnome-print.h>
+#endif
 #include <goffice/graph/gog-style.h>
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
 #include <goffice/utils/go-color.h>
 #include <goffice/graph/gog-data-set.h>
-#include <goffice/graph/gog-renderer-svg.h>
 #include <goffice/data/go-data-simple.h>
 #include <goffice/app/go-plugin.h>
 #include <goffice/app/go-plugin-loader-module.h>
-#include <gsf/gsf.h>
-#include <gsf/gsf-output-memory.h>
 
 /**
  * TODO:
@@ -59,13 +62,18 @@
  * - general graph cleanup
  **/
 
-static QofLogModule log_module = GNC_MOD_GUI;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.gui.html.graph.gog"
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer graph);
+#else
 static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
+#endif
 
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
 
@@ -81,7 +89,7 @@ void
 gnc_html_graph_gog_init(void)
 {
 
-  PINFO( "init gog graphing" );
+  g_debug( "init gog graphing" );
   
   libgoffice_init();
   
@@ -160,7 +168,11 @@ static void
 add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
   GtkWidget *widget;
+#ifdef GOFFICE_WITH_CAIRO
+  GogRendererCairo *cairo_renderer;
+#else
   GogRendererPixbuf *pixbuf_renderer;
+#endif
   GdkPixbuf *buf;
   gboolean update_status;
 
@@ -170,24 +182,22 @@ add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
   // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update (GOG_OBJECT (graph));
 
-#if 0
-  // example SVG use.  Also, nice for debugging.
-  {
-    GsfOutput *mem;
-    gboolean output;
-
-    mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
-    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
-  }
-#endif // 0
-
+#ifdef GOFFICE_WITH_CAIRO
+  cairo_renderer = GOG_RENDERER_CAIRO (g_object_new (GOG_RENDERER_CAIRO_TYPE,
+						     "model", graph,
+						     NULL));
+  update_status = gog_renderer_cairo_update (cairo_renderer,
+					     eb->width, eb->height, 1.0);
+  buf = gog_renderer_cairo_get_pixbuf (cairo_renderer);
+#else
   pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
 						       "model", graph,
 						       NULL));
   update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
 					      eb->width, eb->height, 1.0);
   buf = gog_renderer_pixbuf_get (pixbuf_renderer);
+#endif /* GOFFICE_WITH_CAIRO */
+
   widget = gtk_image_new_from_pixbuf (buf);
   gtk_widget_set_size_request (widget, eb->width, eb->height);
   gtk_widget_show_all (widget);
@@ -231,23 +241,22 @@ set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb)
 static void
 set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
 {
-  GString *totalTitle;
-  GOData *titleScalar;
+  gchar *my_sub_title, *total_title;
+  GOData *title_scalar;
   GogObject *tmp;
 
-  totalTitle = g_string_sized_new(32);
-  g_string_printf(totalTitle, "%s", title);
-  if (sub_title != NULL)
-  {
-    g_string_append_printf(totalTitle, " (%s)", sub_title);
-  }
+  if (sub_title)
+    my_sub_title = g_strdup_printf("%s(%s)", title ? " " : "", sub_title);
+  else
+    my_sub_title = g_strdup("");
+
+  total_title = g_strdup_printf("%s%s", title ? title : "", my_sub_title);
 
   tmp = gog_object_add_by_name(chart, "Title", NULL);
-  titleScalar = go_data_scalar_str_new(totalTitle->str, FALSE);
-  gog_dataset_set_dim(GOG_DATASET(tmp), 0, titleScalar, NULL);
+  title_scalar = go_data_scalar_str_new(total_title, TRUE);
+  gog_dataset_set_dim(GOG_DATASET(tmp), 0, title_scalar, NULL);
 
-  // @@fixme -- record or ref the string for freeing...
-  g_string_free(totalTitle, FALSE);
+  g_free(my_sub_title);
 }
 
 static void
@@ -442,7 +451,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
                 //"vary_style_by_element",	TRUE,
                 "type",                         bar_type,
                 "overlap_percentage",           bar_overlap, 
-		NULL);
+                NULL);
   label_data = go_data_vector_str_new ((char const * const *)row_labels, data_rows, NULL);
   {
     // foreach row:
@@ -456,8 +465,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
       gog_object_set_name (GOG_OBJECT (series), col_labels[i], &err);
       if (err != NULL)
       {
-        PERR("error setting name [%s] on series [%d]: [%s]\n",
-             col_labels[i], i, err->message);
+           g_warning("error setting name [%s] on series [%d]: [%s]",
+                     col_labels[i], i, err->message);
       }
 
       g_object_ref (label_data);
@@ -471,10 +480,10 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
       style = gog_styled_object_get_style (GOG_STYLED_OBJECT (series));
       style->fill.type = GOG_FILL_STYLE_PATTERN;
       if (gdk_color_parse (col_colors[i], &color)) {
-	style->fill.auto_back = FALSE;
-	go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
+           style->fill.auto_back = FALSE;
+           go_pattern_set_solid (&style->fill.pattern, GDK_TO_UINT (color));
       } else {
-	PERR("cannot parse color %s.", col_colors[i]);
+           g_warning("cannot parse color [%s]", col_colors[i]);
       }
     }
   }
@@ -494,7 +503,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 
   add_pixbuf_graph_widget (eb, graph);
 
-  PINFO("barchart rendered.");
+  g_debug("barchart rendered.");
   return TRUE;
 }
 
@@ -549,6 +558,23 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   return TRUE;
 }
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void
+draw_print_cb(GtkHTMLEmbedded *eb, cairo_t *cr, gpointer unused)
+{
+  GogGraph *graph = GOG_GRAPH(g_object_get_data(G_OBJECT(eb), "graph"));
+  GogRendererCairo *rend = g_object_new(GOG_RENDERER_CAIRO_TYPE, "model", graph,
+                                        "cairo", cr, "is-vector", TRUE, NULL);
+
+  /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
+  cairo_scale(cr, 0.5, 0.5);
+
+  cairo_translate(cr, 0, -eb->height);
+  gog_renderer_cairo_update(rend, eb->width, eb->height, 1.0);
+  g_object_unref(rend);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 static void
 draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
 {
@@ -560,3 +586,4 @@ draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
   gnome_print_translate (context, 0, eb->height);
   gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
 }
+#endif /* GTKHTML_USES_GTKPRINT */

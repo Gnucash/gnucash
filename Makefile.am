@@ -1,17 +1,18 @@
 
-SUBDIRS = . doc lib src intl-scm packaging po accounts
+SUBDIRS = . doc lib src intl-scm packaging po accounts checks
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles lib/.links
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2006 \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
@@ -23,9 +24,6 @@ dist_doc_DATA = \
   README \
   README.patches \
   README.dependencies
-
-m4datadir = $(datadir)/aclocal
-m4data_DATA = gnucash.m4
 
 # All the other files that go in the distribution tarfile that aren't
 # included some other way...
@@ -40,8 +38,6 @@ m4data_DATA = gnucash.m4
 
 EXTRA_DIST = \
   gnucash.lsm \
-  gnucash.m4 \
-  gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
@@ -79,10 +75,6 @@ EXTRA_DIST = \
   intltool-update.in \
   util/gnc-svnversion
 
-bin_SCRIPTS = gnucash-config
-
-CLEANFILES = gnucash-config
-
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
@@ -102,21 +94,11 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-lib/.links: 
-	rm -f goffice gsf
-if !HAVE_GOFFICE
-	$(LN_S) -f . goffice
-endif
-if !HAVE_LIBGSF
-	$(LN_S) -f $(srcdir)/lib/libgsf-1.12.3/gsf gsf
-endif
-	touch lib/.links
-
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice gsf lib/.links po/POTFILES.in
+  po/POTFILES.in
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files

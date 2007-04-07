@@ -6,16 +6,15 @@ AM_CFLAGS = \
    -I${top_srcdir}/src/core-utils \
    ${GLIB_CFLAGS} ${GUILE_INCS}
 
-lib_LTLIBRARIES = libgncmodule.la 
+lib_LTLIBRARIES = libgnc-module.la
 
-libgncmodule_la_SOURCES = gnc-module.c swig-gnc-module.c
+libgnc_module_la_SOURCES = gnc-module.c swig-gnc-module.c
 
-libgncmodule_la_LIBADD = \
-  ../core-utils/libcore-utils.la \
+libgnc_module_la_LIBADD = \
+  ../core-utils/libgnc-core-utils.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS} \
-  -lltdl
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = gnc-module.scm
@@ -28,7 +27,7 @@ gncinclude_HEADERS = \
 noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
-swig-gnc-module.c: gnc-module.i
+swig-gnc-module.c: gnc-module.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -55,3 +54,5 @@ endif
 
 CLEANFILES = .scm-links gnucash ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-gnc-module.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.module\"

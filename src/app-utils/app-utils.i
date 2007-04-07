@@ -11,6 +11,7 @@
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
 #include <gnc-component-manager.h>
+#include <guile-util.h>
 
 #include "engine-helpers.h"
 
@@ -23,7 +24,7 @@ typedef void (*GNCOptionChangeCallback) (gpointer user_data);
 typedef int GNCOptionDBHandle;
 
 QofBook * gnc_get_current_book (void);
-AccountGroup * gnc_get_current_group (void);
+Account * gnc_get_current_root_account (void);
 
 char * gnc_gettext_helper(const char *string);
 
@@ -69,6 +70,9 @@ GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 
+gchar *number_to_words(gdouble val, gint64 denom);
+const gchar *printable_value (gdouble val, gint denom);
+
 gboolean gnc_reverse_balance (const Account *account);
 
 gboolean gnc_is_euro_currency(const gnc_commodity * currency);
@@ -83,3 +87,23 @@ time_t gnc_accounting_period_fiscal_end(void);
 SCM gnc_make_kvp_options(QofIdType id_type);
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 
+%typemap(in) GList * {
+  SCM path_scm = $input;
+  GList *path = NULL;
+  while (!SCM_NULLP (path_scm))
+  {
+    SCM key_scm = SCM_CAR (path_scm);
+    char *key;
+    if (!SCM_STRINGP (key_scm))
+      break;
+    key = g_strdup (SCM_STRING_CHARS (key_scm));
+    path = g_list_prepend (path, key);
+    path_scm = SCM_CDR (path_scm);
+  }
+  $1 = g_list_reverse (path);
+}
+Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
+%clear GList *;
+
+gint gnc_process_get_fd(const Process *proc, const guint std_fd);
+void gnc_detach_process(Process *proc, const gboolean kill_it);

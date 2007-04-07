@@ -106,7 +106,7 @@ typedef const gchar* QofLogModule;
   if ((da) && (!(db))) {                 \
     val = 1;                             \
   }                                      \
-  val; /* block assumes value of last statment */  \
+  val; /* block assumes value of last statement */  \
 })
 
 /** return TRUE if object is of the given type */

@@ -171,7 +171,7 @@ void
 gas_populate_list( GNCAccountSel *gas )
 {
         account_filter_data atnd;
-        AccountGroup *ag;
+        Account *root;
 	Account *acc;
 	GtkTreeIter iter;
 	GtkEntry *entry;
@@ -183,8 +183,8 @@ gas_populate_list( GNCAccountSel *gas )
         currentSel = gtk_editable_get_chars(
                 GTK_EDITABLE(entry), 0, -1 );
 
-        ag = gnc_book_get_group( gnc_get_current_book() );
-        accts = (GList*)xaccGroupGetSubAccountsSorted( ag );
+        root = gnc_book_get_root_account( gnc_get_current_book() );
+        accts = gnc_account_get_descendants_sorted( root );
 
         filteredAccts   = NULL;
         atnd.gas        = gas;
@@ -404,7 +404,7 @@ gas_new_account_click( GtkButton *b, gpointer ud )
 	  gnc_ui_new_accounts_from_name_window_with_types ( NULL,
 							    gas->acctTypeFilters );
 	else
-	  gnc_ui_new_account_with_types( NULL, gas->acctTypeFilters );
+	  gnc_ui_new_account_with_types( gnc_get_current_book(), gas->acctTypeFilters );
 }
 
 gint
@@ -442,7 +442,7 @@ gnc_account_sel_purge_account( GNCAccountSel *gas,
       while (acc) {
 	if (acc == target)
 	  break;
-	acc = xaccAccountGetParentAccount(acc);
+	acc = gnc_account_get_parent(acc);
       }
 
       if (acc == target)

@@ -219,7 +219,7 @@
 ;           'expire)
 ;          ((grant)
 ;           'grant)
-          ((int intinc aktzu) ;; zinsen
+          ((int intinc) ;; zinsen
            'intinc)
           ((intx intincx)
            'intincx)
@@ -270,7 +270,7 @@
 ;          ((vest) 
 ;           'vest)
           (else
-           (gnc:warning-dialog '()
+           (gnc-warning-dialog '()
             (string-append
              (sprintf #f (_ "The file contains an unknown Action '%s'.")
                       read-value)

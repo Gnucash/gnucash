@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -365,14 +365,16 @@ test_transaction(void)
     for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
-        AccountGroup *grp;
+        Account *root;
         xmlNodePtr test_node;
         gnc_commodity *com;
         gchar *compare_msg;
         gchar *filename1;
         int fd;
 
-        grp = get_random_group(book);
+	/* The next line exists for its side effect of creating the
+	 * account tree. */
+	root = get_random_account_tree(book);
         ran_trn = get_random_transaction(book);
         if(!ran_trn)
         {
@@ -429,7 +431,7 @@ test_transaction(void)
         
         filename1 = g_strdup_printf("test_file_XXXXXX");
         
-        fd = mkstemp(filename1);
+        fd = g_mkstemp(filename1);
         
         write_dom_node_to_file(test_node, fd);
 
@@ -473,7 +475,7 @@ test_transaction(void)
             /* sixtp_destroy(parser); */
         }
 
-        unlink(filename1);
+        g_unlink(filename1);
         g_free(filename1);
         really_get_rid_of_transaction(ran_trn);
         xmlFreeNode(test_node);
@@ -517,5 +519,5 @@ main (int argc, char ** argv)
 
     print_test_results();
     qof_close();
-  return 0;
+    exit(get_rv());
 }

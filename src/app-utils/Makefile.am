@@ -1,10 +1,11 @@
 SUBDIRS = . test
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CFLAGS = \
+  -I$(top_srcdir)/lib/libc \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/core-utils \
@@ -34,6 +35,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
   gnc-helpers.c \
+  gnc-sx-instance-model.c \
   gncmod-app-utils.c \
   gnc-ui-util.c \
   guile-util.c \
@@ -58,17 +60,21 @@ gncinclude_HEADERS = \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \
+  gnc-help-utils.h \
   gnc-helpers.h \
+  gnc-sx-instance-model.h \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
   option-util.h
 
+libgncmod_app_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_app_utils_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GCONF_LIBS} \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
@@ -76,7 +82,7 @@ libgncmod_app_utils_la_LIBADD = \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-app-utils.c: app-utils.i
+swig-app-utils.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -101,6 +107,13 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
+if OS_WIN32
+libgncmod_app_utils_la_SOURCES += gnc-help-utils.c
+libgncmod_app_utils_la_LIBADD += $(HTMLHELP_LIBS)
+else
+EXTRA_DIST += gnc-help-utils.c
+endif
+
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
@@ -121,3 +134,5 @@ endif
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash .scm-links
 MAINTAINERCLEANFILES = swig-app-utils.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.app-util\"

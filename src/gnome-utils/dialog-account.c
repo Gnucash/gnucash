@@ -25,11 +25,11 @@
 #include "config.h"
 
 #include <gnome.h>
-#ifndef HAVE_GLIB26
-#include "gutils26.h"
-#endif
 #include <glib/gi18n.h>
 #include <math.h>
+#ifdef G_OS_WIN32
+#include <pow.h>
+#endif
 #include <string.h>
 
 #include "Transaction.h"
@@ -70,13 +70,13 @@ typedef enum
 
 typedef struct _AccountWindow
 {
+  QofBook *book;
   gboolean modal;
   GtkWidget *dialog;
 
   AccountDialogType dialog_type;
 
   GUID    account;
-  Account *top_level_account; /* owned by the model */
   Account *created_account;
 
   gchar **subaccount_names;
@@ -161,7 +161,7 @@ aw_get_account (AccountWindow *aw)
   if (!aw)
     return NULL;
 
-  return xaccAccountLookup (&aw->account, gnc_get_current_book ());
+  return xaccAccountLookup (&aw->account, aw->book);
 }
 
 static void
@@ -246,7 +246,8 @@ gnc_account_to_ui(AccountWindow *aw)
 
 
 static gboolean
-gnc_account_create_transfer_balance (Account *account,
+gnc_account_create_transfer_balance (QofBook *book,
+                                     Account *account,
                                      Account *transfer,
                                      gnc_numeric balance,
                                      time_t date)
@@ -263,7 +264,7 @@ gnc_account_create_transfer_balance (Account *account,
   xaccAccountBeginEdit (account);
   xaccAccountBeginEdit (transfer);
 
-  trans = xaccMallocTransaction (gnc_get_current_book ());
+  trans = xaccMallocTransaction (book);
 
   xaccTransBeginEdit (trans);
 
@@ -271,7 +272,7 @@ gnc_account_create_transfer_balance (Account *account,
   xaccTransSetDateSecs (trans, date);
   xaccTransSetDescription (trans, _("Opening Balance"));
 
-  split = xaccMallocSplit (gnc_get_current_book ());
+  split = xaccMallocSplit (book);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (account, split);
@@ -281,7 +282,7 @@ gnc_account_create_transfer_balance (Account *account,
 
   balance = gnc_numeric_neg (balance);
 
-  split = xaccMallocSplit (gnc_get_current_book ());
+  split = xaccMallocSplit (book);
 
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (transfer, split);
@@ -383,18 +384,11 @@ gnc_ui_to_account(AccountWindow *aw)
   xaccAccountSetHidden (account, flag);
 
   parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-  if (parent_account == aw->top_level_account)
-    parent_account = NULL;
 
-  if (parent_account != NULL)
-  {
-    xaccAccountBeginEdit (parent_account);
-    if (parent_account != xaccAccountGetParentAccount (account))
-      xaccAccountInsertSubAccount (parent_account, account);
-    xaccAccountCommitEdit (parent_account);
-  }
-  else
-    xaccGroupInsertAccount (gnc_get_current_group (), account);
+  if (parent_account == NULL)
+    parent_account = gnc_book_get_root_account(aw->book);
+  if (parent_account != gnc_account_get_parent (account))
+    gnc_account_append_child (parent_account, account);
 
   xaccAccountCommitEdit (account);
 
@@ -417,8 +411,7 @@ gnc_ui_to_account(AccountWindow *aw)
 
   if (use_equity)
   {
-    if (!gnc_account_create_opening_balance (account, balance, date,
-                                             gnc_get_current_book ()))
+    if (!gnc_account_create_opening_balance (account, balance, date, aw->book))
     {
       const char *message = _("Could not create opening balance.");
       gnc_error_dialog(aw->dialog, message);
@@ -434,7 +427,7 @@ gnc_ui_to_account(AccountWindow *aw)
       return;
     }
 
-    gnc_account_create_transfer_balance (account, transfer, balance, date);
+    gnc_account_create_transfer_balance (aw->book, account, transfer, balance, date);
   }
     LEAVE(" ");
 }
@@ -443,14 +436,13 @@ gnc_ui_to_account(AccountWindow *aw)
 static void
 set_children_types (Account *account, GNCAccountType type)
 {
-  AccountGroup *children;
-  GList *iter;
+  GList *children, *iter;
 
-  children = xaccAccountGetChildren (account);
+  children = gnc_account_get_children(account);
   if (children == NULL)
     return;
 
-  for (iter=xaccGroupGetAccountList (children); iter; iter=iter->next) {
+  for (iter=children; iter; iter=iter->next) {
     account = iter->data;
     if (type == xaccAccountGetType(account))
       continue;
@@ -464,6 +456,7 @@ set_children_types (Account *account, GNCAccountType type)
 
     set_children_types (account, type);
   }
+  g_list_free(children);
 }
 
 static void
@@ -472,6 +465,9 @@ make_children_compatible (AccountWindow *aw)
   Account *account;
 
   g_return_if_fail (aw);
+
+  if (aw->dialog_type == NEW_ACCOUNT)
+      return;
 
   account = aw_get_account (aw);
   g_return_if_fail (account);
@@ -505,7 +501,7 @@ gnc_finish_ok (AccountWindow *aw)
     gnc_suspend_gui_refresh ();
 
     parent = aw_get_account (aw);
-    account = xaccMallocAccount (gnc_get_current_book ());
+    account = xaccMallocAccount (aw->book);
     aw->account = *xaccAccountGetGUID (account);
     aw->type = xaccAccountGetType (parent);
 
@@ -521,8 +517,8 @@ gnc_finish_ok (AccountWindow *aw)
                                       commodity);
     gnc_account_commodity_from_type (aw, FALSE);
 
-    gnc_tree_view_account_set_selected_account
-      (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
+    gnc_tree_view_account_set_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
 
     gnc_resume_gui_refresh ();
     LEAVE("1");
@@ -551,8 +547,7 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
   if (gtk_expander_get_expanded (expander) &&
       !gtk_bin_get_child (GTK_BIN (expander))) {
 
-    view = gnc_tree_view_account_new_with_group (
-      xaccAccountGetChildren (account), FALSE);
+    view = gnc_tree_view_account_new_with_root (account, FALSE);
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -573,7 +568,6 @@ static gboolean
 verify_children_compatible (AccountWindow *aw)
 {
   Account *account;
-  AccountGroup *children;
   GtkWidget *dialog, *vbox, *hbox, *label, *expander;
   gchar *str;
   gboolean result;
@@ -588,9 +582,7 @@ verify_children_compatible (AccountWindow *aw)
   if (xaccAccountTypesCompatible (xaccAccountGetType (account), aw->type))
     return TRUE;
 
-  children = xaccAccountGetChildren (account);
-  if (!children ||
-      !xaccGroupGetNumAccounts (children))
+  if (gnc_account_n_children(account) == 0)
     return TRUE;
 
   dialog = gtk_dialog_new_with_buttons ("",
@@ -684,7 +676,7 @@ gnc_filter_parent_accounts (Account *account, gpointer data)
   if (aw_account == NULL)
     return FALSE;
 
-  if (account == aw->top_level_account)
+  if (gnc_account_is_root(account))
     return TRUE;
 
   if (account == aw_account)
@@ -700,14 +692,13 @@ gnc_filter_parent_accounts (Account *account, gpointer data)
 static gboolean
 gnc_common_ok (AccountWindow *aw)
 {
-  Account *account, *parent;
-  AccountGroup *group;
+  Account *root, *account, *parent;
   gnc_commodity * commodity;
   gchar *fullname, *fullname_parent;
   const gchar *name, *separator;
 
   ENTER("aw %p", aw);
-  group = gnc_get_current_group ();
+  root = gnc_book_get_root_account (aw->book);
 
   separator = gnc_get_account_separator_string();
 
@@ -724,12 +715,12 @@ gnc_common_ok (AccountWindow *aw)
   parent = gnc_tree_view_account_get_selected_account
     (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent == NULL) {
-    account = xaccGetAccountFromFullName(group, name);
+    account = gnc_account_lookup_by_full_name(root, name);
   } else {
     fullname_parent = xaccAccountGetFullName(parent);
     fullname = g_strconcat(fullname_parent, separator, name, NULL);
 
-    account = xaccGetAccountFromFullName(group, fullname);
+    account = gnc_account_lookup_by_full_name(root, fullname);
 
     g_free(fullname_parent);
     g_free(fullname);
@@ -759,7 +750,7 @@ gnc_common_ok (AccountWindow *aw)
   }
 
   /* check whether the types of child and parent are compatible */
-  if (parent != aw->top_level_account &&
+  if (!gnc_account_is_root(parent) &&
       !xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
     const char *message = _("The selected account type is incompatible with "
                             "the one of the selected parent.");
@@ -945,8 +936,6 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   gnc_unregister_gui_component (aw->component_id);
 
-  aw->top_level_account = NULL;
-
   gnc_resume_gui_refresh ();
 
   if (aw->subaccount_names) {
@@ -976,7 +965,7 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
   if (!parent_account)
     return;
 
-  if (parent_account == aw->top_level_account) {
+  if (gnc_account_is_root(parent_account)) {
     types = aw->valid_types;
   } else {
     types = aw->valid_types &
@@ -1232,15 +1221,12 @@ gnc_account_window_create(AccountWindow *aw)
 
   box = glade_xml_get_widget (xml, "parent_scroll");
 
-  //  group = gnc_book_get_group (gnc_get_current_book ());
   aw->parent_tree = gnc_tree_view_account_new(TRUE);
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
   gtk_widget_show(GTK_WIDGET(aw->parent_tree));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->parent_tree));
   g_signal_connect (G_OBJECT (selection), "changed",
                     G_CALLBACK (gnc_account_parent_changed_cb), aw);
-  aw->top_level_account =
-    gnc_tree_view_account_get_top_level (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree));
 
   aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");
   aw->placeholder_button = glade_xml_get_widget (xml, "placeholder_button");
@@ -1302,13 +1288,9 @@ get_ui_fullname (AccountWindow *aw)
   if (!name || *name == '\0')
     name = _("<No name>");
 
-  parent_account = NULL;
-
   parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-  if (parent_account == aw->top_level_account)
-    parent_account = NULL;
 
-  if (parent_account)
+  if (!gnc_account_is_root(parent_account))
   {
     char *parent_name;
     const gchar *separator;
@@ -1421,7 +1403,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
 
 static AccountWindow *
-gnc_ui_new_account_window_internal (Account *base_account,
+gnc_ui_new_account_window_internal (QofBook *book,
+                                    Account *base_account,
                                     gchar **subaccount_names,
 				    GList *valid_types,
 				    gnc_commodity * default_commodity,
@@ -1430,18 +1413,16 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_commodity *commodity, *parent_commodity;
   AccountWindow *aw;
   Account *account;
-  GList *list;
+
+  g_return_val_if_fail(book, NULL);
 
   aw = g_new0 (AccountWindow, 1);
 
+  aw->book = book;
   aw->modal = modal;
   aw->dialog_type = NEW_ACCOUNT;
 
-  aw->valid_types = 0;
-  for (list = valid_types; list; list = list->next)
-    aw->valid_types |= (1 << GPOINTER_TO_INT (list->data));
-
-  account = xaccMallocAccount (gnc_get_current_book ());
+  account = xaccMallocAccount (book);
   aw->account = *xaccAccountGetGUID (account);
 
   if (base_account) {
@@ -1477,8 +1458,9 @@ gnc_ui_new_account_window_internal (Account *base_account,
                                     commodity);
   gnc_account_commodity_from_type (aw, FALSE);
 
-  if (base_account == NULL)
-    base_account = aw->top_level_account;
+  if (base_account == NULL) {
+    base_account = gnc_book_get_root_account(book);
+  }
 
   gtk_tree_view_collapse_all (aw->parent_tree);
   gnc_tree_view_account_set_selected_account (
@@ -1504,21 +1486,20 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
 
 static gchar **
-gnc_split_account_name (const char *in_name, Account **base_account)
+gnc_split_account_name (QofBook *book, const char *in_name, Account **base_account)
 {
-  AccountGroup *group;
-  Account *account;
+  Account *root, *account;
   gchar **names, **ptr, **out_names;
   GList *list, *node;
 
-  group = gnc_get_current_group ();
+  root = gnc_book_get_root_account (book);
+  list = gnc_account_get_children(root);
   names = g_strsplit(in_name, gnc_get_account_separator_string(), -1);
 
   for (ptr = names; *ptr; ptr++) {
     /* Stop if there are no children at the current level. */
-    if (group == NULL)
+    if (list == NULL)
       break;
-    list = xaccGroupGetAccountList (group);
 
     /* Look for the first name in the children. */
     for (node = list; node; node = g_list_next(node)) {
@@ -1535,11 +1516,14 @@ gnc_split_account_name (const char *in_name, Account **base_account)
     if (node == NULL)
       break;
 
-    group = xaccAccountGetChildren (account);
+    g_list_free(list);
+    list = gnc_account_get_children (account);
   }
 
   out_names = g_strdupv(ptr);
   g_strfreev(names);
+  if (list)
+    g_list_free(list);
   return out_names;
 }
 
@@ -1567,6 +1551,7 @@ gnc_ui_new_accounts_from_name_with_defaults (const char *name,
                                              gnc_commodity * default_commodity,
                                              Account * parent)
 {
+  QofBook *book;
   AccountWindow *aw;
   Account *base_account = NULL;
   Account *created_account = NULL;
@@ -1576,19 +1561,20 @@ gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 
   ENTER("name %s, valid %p, commodity %p, account %p",
 	name, valid_types, default_commodity, parent);
+  book = gnc_get_current_book();
   if (!name || *name == '\0')
   {
     subaccount_names = NULL;
     base_account = NULL;
   }
   else
-    subaccount_names = gnc_split_account_name (name, &base_account);
+    subaccount_names = gnc_split_account_name (book, name, &base_account);
 
   if (parent != NULL)
     {
       base_account=parent;
     }
-  aw = gnc_ui_new_account_window_internal (base_account, subaccount_names, 
+  aw = gnc_ui_new_account_window_internal (book, base_account, subaccount_names,
 					   valid_types, default_commodity,
 					   TRUE);
 
@@ -1659,6 +1645,7 @@ gnc_ui_edit_account_window(Account *account)
 
   aw = g_new0 (AccountWindow, 1);
 
+  aw->book = gnc_account_get_book(account);
   aw->modal = FALSE;
   aw->dialog_type = EDIT_ACCOUNT;
   aw->account = *xaccAccountGetGUID (account);
@@ -1675,9 +1662,9 @@ gnc_ui_edit_account_window(Account *account)
   gtk_widget_show_all (aw->dialog);
   gtk_widget_hide (aw->opening_balance_page);
 
-  parent = xaccAccountGetParentAccount (account);
+  parent = gnc_account_get_parent (account);
   if (parent == NULL)
-    parent = aw->top_level_account;
+    parent = account;		/* must be at the root */
 
   gtk_tree_view_collapse_all (aw->parent_tree);
   gnc_tree_view_account_set_selected_account (
@@ -1703,33 +1690,24 @@ gnc_ui_edit_account_window(Account *account)
 /*
  * opens up a window to create a new account
  * 
- * Args:   group - not used
+ * Args:    book - containing book for the new account
+ *        parent - The initial parent for the new account (optional)
  */
 void
-gnc_ui_new_account_window (AccountGroup *this_is_not_used) 
+gnc_ui_new_account_window(QofBook *book, Account *parent)
 {
-  /* FIXME get_current_account went away. */
-  gnc_ui_new_account_window_internal (NULL, NULL, NULL, NULL, FALSE);
-}
+  g_return_if_fail(book != NULL);
+  if (parent && book)
+    g_return_if_fail(gnc_account_get_book(parent) == book);
 
-/*
- * opens up a window to create a new account
- * 
- * Args:   group - not used
- *        parent - The initial parent for the new account
- */
-void
-gnc_ui_new_account_window_with_default(AccountGroup *this_is_not_used,
-                                       Account * parent)
-{
-  gnc_ui_new_account_window_internal (parent, NULL, NULL, NULL, FALSE);
+  gnc_ui_new_account_window_internal (book, parent, NULL, NULL, NULL, FALSE);
 }
 
 void
-gnc_ui_new_account_with_types( AccountGroup *unused,
+gnc_ui_new_account_with_types( QofBook *book,
                                GList *valid_types )
 {
-  gnc_ui_new_account_window_internal( NULL, NULL, valid_types, NULL, FALSE );
+  gnc_ui_new_account_window_internal( book, NULL, NULL, valid_types, NULL, FALSE );
 }
 
 /************************************************************
@@ -1737,7 +1715,7 @@ gnc_ui_new_account_with_types( AccountGroup *unused,
  ************************************************************/
 
 /*
- * register a callback that get's called when the account has changed
+ * register a callback that gets called when the account has changed
  * so significantly that you need to destroy yourself.  In particular
  * this is used by the ledger display to destroy ledgers when the
  * account type has changed.
@@ -1798,7 +1776,6 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
 			       gint response,
 			       RenumberDialog *data)
 {
-  AccountGroup *group;
   GList *children, *tmp;
   gchar *str;
   gchar *prefix;
@@ -1806,8 +1783,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
 
   if (response == GTK_RESPONSE_OK) {
     gtk_widget_hide(data->dialog);
-    group = xaccAccountGetChildren(data->parent);
-    children = xaccGroupGetAccountListSorted(group);
+    children = gnc_account_get_children(data->parent);
     prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
     interval =
       gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
@@ -1820,6 +1796,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
       g_free(str);
     }
     gnc_unset_busy_cursor (NULL);
+    g_list_free(children);
   }
 
   gtk_widget_destroy(data->dialog);
@@ -1831,14 +1808,12 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
 {
   RenumberDialog *data;
   GladeXML *xml;
-  AccountGroup *children;
   GtkWidget *widget;
   gchar *string;
 
   data = g_new(RenumberDialog, 1);
   data->parent = account;
-  children = xaccAccountGetChildren(account);
-  data->num_children = xaccGroupGetNumAccounts(children);
+  data->num_children = gnc_account_n_children(account);
 
   xml = gnc_glade_xml_new ("account.glade", "Renumber Accounts");
   data->dialog = glade_xml_get_widget (xml, "Renumber Accounts");

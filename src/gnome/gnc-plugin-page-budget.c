@@ -39,10 +39,6 @@
 #include <glade/glade.h>
 #include "gnc-date-edit.h"
 
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 #include "gnc-plugin-page-register.h"
 #include "gnc-budget.h"
 
@@ -737,7 +733,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
         return TRUE;
 
     ENTER(" ");
-	gnc_budget_begin_edit( priv->budget );
     name = gnc_dialog_get_string(d, "BudgetName");
     if (name) {
         gnc_budget_set_name(priv->budget, name);
@@ -756,8 +751,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
     gr = GNC_RECURRENCE(gnc_dialog_get_widget(d, "BudgetRecurrenceEntry"));
     r = gnc_recurrence_get(gr);
     gnc_budget_set_recurrence(priv->budget, r);
-
-	gnc_budget_commit_edit( priv->budget );
 
     LEAVE(" ");
     return TRUE;

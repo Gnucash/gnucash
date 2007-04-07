@@ -126,8 +126,8 @@ gnc_tree_view_price_finalize (GObject *object)
   GncTreeViewPricePrivate *priv;
 
   ENTER("view %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
+  gnc_leave_return_if_fail (object != NULL);
+  gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
   view = GNC_TREE_VIEW_PRICE (object);
   priv = GNC_TREE_VIEW_PRICE_GET_PRIVATE (view);
@@ -143,8 +143,8 @@ gnc_tree_view_price_destroy (GtkObject *object)
   GncTreeViewPrice *view;
 
   ENTER("view %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
+  gnc_leave_return_if_fail (object != NULL);
+  gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
   view = GNC_TREE_VIEW_PRICE (object);
 
@@ -746,7 +746,11 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
 					  gnc_tree_view_price_filter_destroy);
 
   /* Whack any existing levels. The top two levels have been created
-   * before this routine can be called. */
+   * before this routine can be called.  Unfortunately, if the just
+   * applied filter filters out all the nodes in the tree, the gtk
+   * code throws a critical error.  This occurs when there are no
+   * prices in the price database.  Once the very first price has been
+   * added this error message goes away. */
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
   LEAVE(" ");
 }

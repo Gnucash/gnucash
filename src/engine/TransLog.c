@@ -25,11 +25,10 @@
 
 #include <errno.h>
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <string.h>
 
 #include "Account.h"
-#include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -50,7 +49,7 @@
  *       No, using a perl script to analyze a file that's supposed to
  *       be human readable is not a contradication in terms -- that's 
  *       exactly the point.
- * (2.b) Use tabs as a human freindly field separator; its also a 
+ * (2.b) Use tabs as a human friendly field separator; its also a 
  *       character that does not (should not) appear naturally anywhere 
  *       in the data, as it serves no formatting purpose in the current 
  *       GUI design.  (hack alert -- this is not currently tested for 
@@ -157,7 +156,7 @@ xaccOpenLog (void)
 
    filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
 
-   trans_log = fopen (filename, "a");
+   trans_log = g_fopen (filename, "a");
    if (!trans_log) {
       int norr = errno;
       printf ("Error: xaccOpenLog(): cannot open journal \n"

@@ -86,7 +86,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
   Account *account;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
+  account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */

@@ -11,14 +11,16 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   gnc-report.h
 
+libgncmod_report_system_la_LDFLAGS = -avoid-version
+
 libgncmod_report_system_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-report-system.c: report-system.i
+swig-report-system.c: report-system.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -77,3 +79,5 @@ EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA}
 
 CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-system.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.core\"

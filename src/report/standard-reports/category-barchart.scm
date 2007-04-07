@@ -116,7 +116,7 @@ developing over time"))
       (lambda ()
         (gnc:filter-accountlist-type 
          account-types
-         (xaccGroupGetSubAccountsSorted (gnc-get-current-group))))
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       (lambda (accounts)
         (list #t
               (gnc:filter-accountlist-type account-types accounts)))
@@ -213,8 +213,8 @@ developing over time"))
         (chart (gnc:make-html-barchart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
-                        (xaccGroupGetAccountListSorted
-                         (gnc-get-current-group)))))
+                        (gnc-account-get-children-sorted
+                         (gnc-get-current-root-account)))))
     
     ;; Returns true if the account a was selected in the account
     ;; selection option.
@@ -228,7 +228,7 @@ developing over time"))
         (let* ((commodity-list #f)
                (exchange-fn #f)
                (tree-depth (if (equal? account-levels 'all)
-                               (gnc:get-current-group-depth)
+                               (gnc:get-current-account-tree-depth)
                                account-levels))
                ;; This is the list of date intervals to calculate.
                (dates-list (if do-intervals?
@@ -298,7 +298,7 @@ developing over time"))
 		  (for-each
 		   (lambda (a)
 		     (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
-							   (gnc:account-get-immediate-subaccounts a))))))
+							   (gnc-account-get-children a))))))
 		   accts)
 		  sum)
 		(length (filter show-acct? accts))))
@@ -332,7 +332,7 @@ developing over time"))
                        (set! res (append
                                   (traverse-accounts
                                    (+ 1 current-depth)
-                                   (gnc:account-get-immediate-subaccounts a))
+                                   (gnc-account-get-children a))
                                   res))))
                    accts)
                   res)
@@ -488,7 +488,7 @@ developing over time"))
                        other-anchor
                        (let* ((acct (car pair))
                               (subaccts 
-                               (gnc:account-get-immediate-subaccounts acct)))
+                               (gnc-account-get-children acct)))
                          (if (null? subaccts)
                              ;; if leaf-account, make this an anchor
                              ;; to the register.

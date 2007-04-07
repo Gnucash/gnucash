@@ -40,20 +40,85 @@
 #include <glib.h>
 #include "qof.h"
 #include "FreqSpec.h"
+#include "Recurrence.h"
 #include "gnc-engine.h"
 
-/**
- * The SchedXaction data.
-*/
-typedef struct gncp_SchedXaction SchedXaction;
+#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
+#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
 
-#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_SX_ID))
-#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_SX_ID, SchedXaction))
+typedef struct _SchedXaction SchedXaction;
+
+/**
+ * A single scheduled transaction.
+ *
+ * Scheduled transactions have a list of transactions, and a frequency
+ * [and associated date anchors] with which they are scheduled.
+ *
+ * Things that make sense to have in a template transaction:
+ *   [not] Date [though eventually some/multiple template transactions
+ *               might have relative dates].
+ *   Memo
+ *   Account
+ *   Funds In/Out... or an expr involving 'amt' [A, x, y, a?] for
+ *     variable expenses.
+ *
+ * Template transactions are instantiated by:
+ *  . copying the fields of the template
+ *  . setting the date to the calculated "due" date.
+ *
+ * We should be able to use the GeneralLedger [or, yet-another-subtype
+ * of the internal ledger] for this editing.
+ **/
+struct _SchedXaction
+{
+  QofInstance     inst;
+  gchar           *name;
+
+  GList           *schedule;
+  FreqSpec        *freq;
+  
+  GDate           last_date;
+  
+  GDate           start_date;
+  /* if end_date is invalid, then no end. */
+  GDate           end_date;
+
+  /* if num_occurances_total == 0, then no limit */
+  gint            num_occurances_total;
+  /* reminaing occurances are as-of the 'last_date'. */
+  gint            num_occurances_remain;
+
+  /* the current instance-count of the SX. */
+  gint            instance_num;
+  
+  gboolean        enabled;
+  gboolean        autoCreateOption;
+  gboolean        autoCreateNotify;
+  gint            advanceCreateDays;
+  gint            advanceRemindDays;
+ 
+  Account        *template_acct;
+  
+  /** The list of deferred SX instances.  This list is of temporalStateData
+   * instances.  */
+  GList /* <temporalStateData*> */ *deferredList;
+};
+
+/** Just the variable temporal bits from the SX structure. */
+typedef struct _temporalStateData {
+  GDate last_date;
+  gint num_occur_rem;
+  gint num_inst;
+} temporalStateData;
+
+#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
 
 /**
  * Creates and initializes a scheduled transaction.
 */
 SchedXaction *xaccSchedXactionMalloc(QofBook *book);
+
+void sx_set_template_account (SchedXaction *sx, Account *account);
 
 /**
  * Cleans up and frees a SchedXaction and it's associated data.
@@ -63,14 +128,19 @@ void xaccSchedXactionFree( SchedXaction *sx );
 void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);
 
-FreqSpec *xaccSchedXactionGetFreqSpec( SchedXaction *sx );
+/** @return GList<Recurrence*> **/
+GList* gnc_sx_get_schedule(const SchedXaction *sx);
+/** @param[in] schedule A GList<Recurrence*> **/
+void gnc_sx_set_schedule(SchedXaction *sx, GList *schedule);
+
+FreqSpec *xaccSchedXactionGetFreqSpec( const SchedXaction *sx );
 /**
  * The FreqSpec is given to the SchedXaction for mem mgmt; it should
  * not be freed by the external code.
 */
 void xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs );
 
-gchar *xaccSchedXactionGetName( SchedXaction *sx );
+gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 /**
  * A copy of the name is made.
 */
@@ -96,13 +166,13 @@ void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur );
  * Returns true if the scheduled transaction has a defined number of
  * occurances, false if not.
 */
-gboolean xaccSchedXactionHasOccurDef( SchedXaction *sx );
-gint xaccSchedXactionGetNumOccur( SchedXaction *sx );
+gboolean xaccSchedXactionHasOccurDef( const SchedXaction *sx );
+gint xaccSchedXactionGetNumOccur( const SchedXaction *sx );
 /**
  * Set to '0' to turn off number-of-occurances definition.
 */
 void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
-gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
+gint xaccSchedXactionGetRemOccur( const SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
 /** \brief Set the instance count.
@@ -114,15 +184,18 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
  * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
-gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );
+gint gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData );
 /**
  * Sets the instance count to something other than the default.  As the
  * default is the incorrect value '0', callers should DTRT here.
 */
 void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 
-GList *xaccSchedXactionGetSplits( SchedXaction *sx );
+GList *xaccSchedXactionGetSplits( const SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
+
+gboolean xaccSchedXactionGetEnabled( const SchedXaction *sx );
+void xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled );
 
 void xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                     gboolean *outAutoCreate,
@@ -131,10 +204,10 @@ void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                     gboolean newAutoCreate,
                                     gboolean newNotify );
 
-gint xaccSchedXactionGetAdvanceCreation( SchedXaction *sx );
+gint xaccSchedXactionGetAdvanceCreation( const SchedXaction *sx );
 void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
 
-gint xaccSchedXactionGetAdvanceReminder( SchedXaction *sx );
+gint xaccSchedXactionGetAdvanceReminder( const SchedXaction *sx );
 void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
 /** \name Temporal state data.
@@ -159,7 +232,7 @@ void *gnc_sx_clone_temporal_state( void *stateData );
 /** @} */
 
 /** \brief Returns the next occurance of a scheduled transaction.
-
+ *
  *   If the transaction hasn't occured, then it's based off the start date.
  * Otherwise, it's based off the last-occurance date.
  *
@@ -199,7 +272,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 
  This is a date-sorted state-data instance list.
  The list should not be modified by the caller; use the
- gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
+ gnc_sx_{add,remove}_defer_instance() functions to modify the list.
 */
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
@@ -229,7 +302,7 @@ gboolean SXRegister (void);
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
 /** \deprecated to be replaced with 'dirty' kvp's */
-KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
+KvpValue *xaccSchedXactionGetSlot( const SchedXaction *sx, 
 				    const char *slot );
 /** \deprecated to be replaced with 'dirty' kvp's */
 void xaccSchedXactionSetSlot( SchedXaction *sx, 

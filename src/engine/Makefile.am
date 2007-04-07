@@ -1,5 +1,4 @@
 SUBDIRS = . test-core test 
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
@@ -7,16 +6,16 @@ AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/core-utils \
 	-I${top_srcdir}/src \
+	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	-I${top_srcdir}/src/business/business-core/ \
 	${QOF_CFLAGS} \
-	${GNUCASH_ENGINE_CFLAGS}
+	${GLIB_CFLAGS} \
+	${GUILE_INCS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
   FreqSpec.c \
   Recurrence.c \
-  Group.c \
   Period.c \
   Query.c \
   SchedXaction.c \
@@ -57,7 +56,6 @@ gncinclude_HEADERS = \
   FreqSpec.h \
   Recurrence.h \
   GNCId.h \
-  Group.h \
   Period.h \
   SchedXaction.h \
   SX-book.h \
@@ -96,9 +94,7 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   AccountP.h \
   FreqSpecP.h \
-  GroupP.h \
   QueryP.h \
-  SchedXactionP.h \
   ScrubP.h \
   SplitP.h \
   SX-book.h \
@@ -112,13 +108,15 @@ noinst_HEADERS = \
 
 noinst_SCRIPTS = iso-currencies-to-c
 
+libgncmod_engine_la_LDFLAGS = -avoid-version
+
 libgncmod_engine_la_LIBADD = \
-  ../gnc-module/libgncmodule.la \
-  ../core-utils/libcore-utils.la \
+  ../gnc-module/libgnc-module.la \
+  ../core-utils/libgnc-core-utils.la \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${REGEX_LIBS} \
-  ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
@@ -168,7 +166,8 @@ endif
 noinst_DATA = .scm-links
 
 if BUILDING_FROM_SVN
-swig-engine.c: engine.i ${gncinclude_HEADERS} ${noinst_HEADERS}
+swig-engine.c: engine.i ${top_srcdir}/src/base-typemaps.i \
+               ${gncinclude_HEADERS} ${noinst_HEADERS}
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/lib/libqof/qof -I${top_srcdir}/src -o $@ $<
 endif
@@ -180,11 +179,7 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-		-e 's#@-LOCALE_DIR-@#${LOCALE_DIR}#g' \
-		-e 's#@-GNC_ACCOUNTS_DIR-@#${GNC_ACCOUNTS_DIR}#g' \
-		-e 's#@-GNC_GLADE_DIR-@#${GNC_GLADE_DIR}#g' \
-		-e 's#@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@#${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}#g' \
-		-e 's#@-pkglibdir-@#${pkglibdir}#g' \
+		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
 		-e 's#@-libdir-@#${libdir}#g' \
 		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
 		-e 's#@-datadir-@#${datadir}#g' \
@@ -197,3 +192,5 @@ BUILT_SOURCES = iso-4217-currencies.c \
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links gncla-dir.h \
 	${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-engine.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.engine\"

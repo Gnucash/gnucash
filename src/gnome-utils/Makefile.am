@@ -1,5 +1,4 @@
 SUBDIRS = glade schemas . test ui
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -10,26 +9,23 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTK_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS} \
-  ${GSF_CFLAGS}
+  ${GOFFICE_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
   account-quickfill.c \
   cursors.c \
-  argv-list-converters.c \
   dialog-account.c \
   dialog-commodity.c \
   dialog-options.c \
@@ -50,6 +46,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-edit.c \
   gnc-date-format.c \
   gnc-dense-cal.c \
+  gnc-dense-cal-model.c \
+  gnc-dense-cal-store.c \
   gnc-druid-gnome.c \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
@@ -75,6 +73,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-period-select.c \
   gnc-query-list.c \
   gnc-splash.c \
+  gnc-sx-instance-dense-cal-adapter.c \
+  gnc-sx-list-tree-model-adapter.c \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
@@ -84,11 +84,11 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-price.c \
+  gnc-tree-view-sx-list.c \
   gnc-tree-view.c \
   gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
-  print-session.c \
   search-param.c \
   gnc-dialog.c \
   swig-gnome-utils.c \
@@ -118,6 +118,8 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-date-format.h \
   gnc-dense-cal.h \
+  gnc-dense-cal-model.h \
+  gnc-dense-cal-store.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
   gnc-file.h \
@@ -140,6 +142,8 @@ gncinclude_HEADERS = \
   gnc-period-select.h \
   gnc-query-list.h \
   gnc-splash.h \
+  gnc-sx-instance-dense-cal-adapter.h \
+  gnc-sx-list-tree-model-adapter.h \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
@@ -149,6 +153,7 @@ gncinclude_HEADERS = \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-price.h \
+  gnc-tree-view-sx-list.h \
   gnc-tree-view.h \
   gnc-window.h \
   misc-gnome-utils.h \
@@ -157,24 +162,23 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
-  argv-list-converters.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
   gnc-druid-provider-multifile-gnome.h \
   search-param.h
 
+libgncmod_gnome_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_gnome_utils_la_LIBADD = \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
   ${GNOME_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
@@ -182,14 +186,14 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
-  ${GSF_LIBS} \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
   ${LIBXML2_LIBS}
 
 if BUILDING_FROM_SVN
-swig-gnome-utils.c: gnome-utils.i gnc-html.h print-session.h
+swig-gnome-utils.c: gnome-utils.i gnc-html.h \
+                    ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -206,6 +210,14 @@ EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA}
 
+if GTKHTML_USES_GTKPRINT
+  EXTRA_DIST += print-session.c
+else
+  AM_CFLAGS += ${GNOME_PRINT_CFLAGS}
+  libgncmod_gnome_utils_la_LIBADD += ${GNOME_PRINT_LIBS}
+  libgncmod_gnome_utils_la_SOURCES += print-session.c
+endif
+
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
@@ -220,7 +232,7 @@ _gnc-version.h: gnc-svninfo.h Makefile
 	@echo "#ifndef GNC_VERSION_H"			>> _gnc-version.h
 	@echo "#define GNC_VERSION_H"			>> _gnc-version.h
 	@echo ""					>> _gnc-version.h
-	@svninfo=`${top_srcdir}/util/gnc-svnversion ${srcdir}` ; \
+	@svninfo=`${top_srcdir}/util/gnc-svnversion ${top_srcdir}` ; \
 	if [ $$? = 0 ] ; then \
 		echo "#define GNUCASH_SVN 1"		>> _gnc-version.h ; \
 	fi
@@ -234,11 +246,11 @@ gnc-svninfo.h: _gnc-svninfo.h
 	-rm -f _gnc-svninfo.h
 
 _gnc-svninfo.h: Makefile
-	@svninfo=`${top_srcdir}/util/gnc-svnversion ${srcdir}` ; \
+	@svninfo=`${top_srcdir}/util/gnc-svnversion ${top_srcdir}` ; \
 	if [ $$? = 0 ] ; then \
 		if [ -z "$$svninfo" ] ; then \
 			echo "gnc-svnversion failed.  figure out why." ; \
-			echo "can't determine svn revision from ${srcdir}." ; \
+			echo "can't determine svn revision from ${top_srcdir}." ; \
 			exit 1 ; \
 		fi ; \
 		echo "/* Autogenerated. Do not change. */" > _gnc-svninfo.h ; \
@@ -290,3 +302,5 @@ install-data-hook:
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
 endif
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.gui\"

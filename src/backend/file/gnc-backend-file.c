@@ -32,9 +32,12 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#ifndef HAVE_GLIB_2_8
+#include <gstdio-2.8.h>
+#endif
 #include <libintl.h>
 #include <locale.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -50,6 +53,7 @@
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
+#include "gnc-path.h"
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
@@ -83,14 +87,14 @@ static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     char pathbuf[PATH_MAX];
     char *path = NULL;
 #endif
     int rc;
     QofBackendError be_err;
 
-    rc = stat (be->lockfile, &statbuf);
+    rc = g_stat (be->lockfile, &statbuf);
     if (!rc)
     {
         /* oops .. file is locked by another user  .. */
@@ -98,7 +102,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
         return FALSE;
     }
 
-    be->lockfd = open (be->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
+    be->lockfd = g_open (be->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
     if (be->lockfd < 0)
     {
         /* oops .. we can't create the lockfile .. */
@@ -132,7 +136,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
      * provides a better long-term solution.
      */
 
-#ifndef _WIN32
+#ifndef G_OS_WIN32
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
@@ -153,29 +157,29 @@ gnc_file_be_get_file_lock (FileBackend *be)
 
         /* Otherwise, something else is wrong. */
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
-        unlink (pathbuf);
+        g_unlink (pathbuf);
         close (be->lockfd);
-        unlink (be->lockfile);
+        g_unlink (be->lockfile);
         return FALSE;
     }
 
-    rc = stat (be->lockfile, &statbuf);
+    rc = g_stat (be->lockfile, &statbuf);
     if (rc)
     {
         /* oops .. stat failed!  This can't happen! */
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
-        unlink (pathbuf);
+        g_unlink (pathbuf);
         close (be->lockfd);
-        unlink (be->lockfile);
+        g_unlink (be->lockfile);
         return FALSE;
     }
 
     if (statbuf.st_nlink != 2)
     {
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_LOCKED);
-        unlink (pathbuf);
+        g_unlink (pathbuf);
         close (be->lockfd);
-        unlink (be->lockfile);
+        g_unlink (be->lockfile);
         return FALSE;
     }
 
@@ -183,12 +187,12 @@ gnc_file_be_get_file_lock (FileBackend *be)
 
     return TRUE;
 
-#else /* ifndef _WIN32 */
+#else /* ifndef G_OS_WIN32 */
     /* On windows, there is no NFS and the open(,O_CREAT | O_EXCL)
        is sufficient for locking. */
     be->linkfile = NULL;
     return TRUE;
-#endif /* ifndef _WIN32 */
+#endif /* ifndef G_OS_WIN32 */
 }
 
 /* ================================================================= */
@@ -207,6 +211,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     if (NULL == be->fullpath)
     {
         qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+        LEAVE("");
         return;
     }
     be->be.fullpath = be->fullpath;
@@ -217,7 +222,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
         int rc;
 
 	/* Again check whether the directory can be accessed */
-        rc = stat (be->dirname, &statbuf);
+        rc = g_stat (be->dirname, &statbuf);
         if (rc != 0 || !S_ISDIR(statbuf.st_mode))
         {
 	    /* Error on stat or if it isn't a directory means we
@@ -225,17 +230,19 @@ file_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
 
-	/* Now check whether we can stat(2) the file itself */
-        rc = stat (be->fullpath, &statbuf);
+	/* Now check whether we can g_stat the file itself */
+        rc = g_stat (be->fullpath, &statbuf);
         if ((rc != 0) && (!create_if_nonexistent))
         {
 	    /* Error on stat means the file doesn't exist */
             qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
         if (rc == 0 && S_ISDIR(statbuf.st_mode))
@@ -247,6 +254,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
             qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
             g_free (be->dirname); be->dirname = NULL;
+            LEAVE("");
             return;
         }
     }
@@ -260,6 +268,7 @@ file_session_begin(QofBackend *be_start, QofSession *session,
     if (!ignore_lock && !gnc_file_be_get_file_lock (be))
     {
         g_free (be->lockfile); be->lockfile = NULL;
+        LEAVE("");
         return;
     }
 
@@ -276,7 +285,7 @@ file_session_end(QofBackend *be_start)
     ENTER (" ");
 
     if (be->linkfile)
-        unlink (be->linkfile);
+        g_unlink (be->linkfile);
 
     if (be->lockfd > 0)
         close (be->lockfd);
@@ -285,18 +294,14 @@ file_session_end(QofBackend *be_start)
         int rv;
 #ifdef G_OS_WIN32
 	/* On windows, we need to allow write-access before
-	   unlink() can succeed */
-	rv = chmod (be->lockfile, S_IWRITE | S_IREAD);
-	if (rv) {
-	    PWARN("Error on chmod(%s): %d: %s", be->lockfile,
-		  errno, strerror(errno) ? strerror(errno) : "");
-	}
+	   g_unlink() can succeed */
+    	rv = g_chmod (be->lockfile, S_IWRITE | S_IREAD);
 #endif
-	rv = unlink (be->lockfile);
-	if (rv) {
-	    PWARN("Error on unlink(%s): %d: %s", be->lockfile,
-		  errno, strerror(errno) ? strerror(errno) : "");
-	}
+	    rv = g_unlink (be->lockfile);
+        if (rv) {
+             PWARN("Error on g_unlink(%s): %d: %s", be->lockfile,
+                   errno, strerror(errno) ? strerror(errno) : "");
+        }
     }
 
     g_free (be->dirname);
@@ -337,15 +342,20 @@ copy_file(const char *orig, const char *bkup)
     char buf[buf_size];
     int orig_fd;
     int bkup_fd;
+    int flags=0;
     ssize_t count_write;
     ssize_t count_read;
 
-    orig_fd = open(orig, O_RDONLY);
+#ifdef G_OS_WIN32
+    flags = O_BINARY;
+#endif
+
+    orig_fd = g_open(orig, O_RDONLY | flags, 0);
     if(orig_fd == -1)
     {
         return FALSE;
     }
-    bkup_fd = creat(bkup, 0600);
+    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | flags, 0600);
     if(bkup_fd == -1)
     {
         close(orig_fd);
@@ -444,10 +454,10 @@ gnc_determine_file_type (const char *path)
 
 	if (!path) { return FALSE; }
 	if (0 == safe_strcmp(path, QOF_STDOUT)) { return FALSE; }
-	t = fopen(path, "r");
+	t = g_fopen(path, "r");
 	if(!t) { PINFO (" new file"); return TRUE; }
 	fclose(t);
-	rc = stat(path, &sbuf);
+	rc = g_stat(path, &sbuf);
 	if(rc < 0) { return FALSE; }
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
@@ -468,7 +478,7 @@ gnc_file_be_backup_file(FileBackend *be)
 
     datafile = be->fullpath;
     
-    rc = stat (datafile, &statbuf);
+    rc = g_stat (datafile, &statbuf);
     if (rc)
       return (errno == ENOENT);
 
@@ -528,6 +538,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     if(!mktemp(tmp_name))
     {
         qof_backend_set_error(be, ERR_BACKEND_MISC);
+        LEAVE("");
         return FALSE;
     }
   
@@ -535,18 +546,19 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     {
         if(!gnc_file_be_backup_file(fbe))
         {
+            LEAVE("");
             return FALSE;
         }
     }
   
     if (gnc_book_write_to_xml_file_v2(book, tmp_name, fbe->file_compression))
     {
-        /* Record the file's permissions before unlinking it */
-        rc = stat(datafile, &statbuf);
+        /* Record the file's permissions before g_unlinking it */
+        rc = g_stat(datafile, &statbuf);
         if(rc == 0)
         {
             /* Use the permissions from the original data file */
-            if(chmod(tmp_name, statbuf.st_mode) != 0)
+            if(g_chmod(tmp_name, statbuf.st_mode) != 0)
             {
 	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
 		/* Even if the chmod did fail, the save
@@ -580,28 +592,31 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             }
 #endif
         }
-        if(unlink(datafile) != 0 && errno != ENOENT)
+        if(g_unlink(datafile) != 0 && errno != ENOENT)
         {
             qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
         if(!gnc_int_link_or_make_backup(fbe, tmp_name, datafile))
         {
             qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
-        if(unlink(tmp_name) != 0)
+        if(g_unlink(tmp_name) != 0)
         {
             qof_backend_set_error(be, ERR_BACKEND_PERM);
             PWARN("unable to unlink temp filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
             g_free(tmp_name);
+            LEAVE("");
             return FALSE;
         }
         g_free(tmp_name);
@@ -614,7 +629,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     }
     else
     {
-        if(unlink(tmp_name) != 0)
+        if(g_unlink(tmp_name) != 0)
         {
             switch (errno) {
             case ENOENT:     /* tmp_name doesn't exist?  Assume "RO" error */
@@ -633,36 +648,33 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             /* already in an error just flow on through */
         }
         g_free(tmp_name);
+        LEAVE("");
         return FALSE;
     }
+    LEAVE("");
     return TRUE;
 }
 
 /* ================================================================= */
 
 static int
-gnc_file_be_select_files (const struct dirent *d)
+gnc_file_be_select_files (const gchar *d)
 {
-    int len = strlen(d->d_name) - 4;
-
-    if (len <= 0)
-        return(0);
-  
-    return((strcmp(d->d_name + len, ".LNK") == 0) ||
-           (strcmp(d->d_name + len, ".xac") == 0) ||
-           (strcmp(d->d_name + len, ".log") == 0));
+    return (g_str_has_suffix(d, ".LNK") ||
+            g_str_has_suffix(d, ".xac") ||
+            g_str_has_suffix(d, ".log"));
 }
 
 static void
 gnc_file_be_remove_old_files(FileBackend *be)
 {
-    struct dirent *dent;
-    DIR *dir;
+    const gchar *dent;
+    GDir *dir;
     struct stat lockstatbuf, statbuf;
     int pathlen;
     time_t now;
 
-    if (stat (be->lockfile, &lockstatbuf) != 0)
+    if (g_stat (be->lockfile, &lockstatbuf) != 0)
         return;
     pathlen = strlen(be->fullpath);
 
@@ -683,20 +695,20 @@ gnc_file_be_remove_old_files(FileBackend *be)
      * directory and then one pass over the 'matching' files. --
      * warlord@MIT.EDU 2002-05-06
      */
-    
-    dir = opendir (be->dirname);
+
+    dir = g_dir_open (be->dirname, 0, NULL);
     if (!dir)
         return;
 
     now = time(NULL);
-    while((dent = readdir(dir)) != NULL) {
+    while((dent = g_dir_read_name(dir)) != NULL) {
         char *name;
         int len;
 
         if (gnc_file_be_select_files (dent) == 0)
              continue;
 
-        name = g_build_filename(be->dirname, dent->d_name, (char*)NULL);
+        name = g_build_filename(be->dirname, dent, (gchar*)NULL);
         len = strlen(name) - 4;
 
         /* Is this file associated with the current data file */
@@ -706,11 +718,11 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 /* Is a lock file. Skip the active lock file */
                 (safe_strcmp(name, be->linkfile) != 0) &&
                 /* Only delete lock files older than the active one */
-                (stat(name, &statbuf) == 0) &&
+                (g_stat(name, &statbuf) == 0) &&
                 (statbuf.st_mtime <lockstatbuf.st_mtime)) 
             {
                 PINFO ("unlink lock file: %s", name);
-                unlink(name);
+                g_unlink(name);
             } 
             else if (be->file_retention_days > 0) 
             {
@@ -735,14 +747,14 @@ gnc_file_be_remove_old_files(FileBackend *be)
                     && file_time > 0
                     && days > be->file_retention_days)
                 {
-                    PINFO ("unlink stale (%d days old) file: %s", days, name);
-                    unlink(name);
+                    PINFO ("g_unlink stale (%d days old) file: %s", days, name);
+                    g_unlink(name);
                 }
             }
         }
         g_free(name);
     }
-    closedir (dir);
+    g_dir_close (dir);
 }
 
 static void
@@ -934,7 +946,7 @@ gnc_file_be_save_may_clobber_data (QofBackend *bend)
 
   /* FIXME: Make sure this doesn't need more sophisticated semantics
    * in the face of special file, devices, pipes, symlinks, etc. */
-  if (stat(bend->fullpath, &statbuf) == 0) return TRUE;
+  if (g_stat(bend->fullpath, &statbuf) == 0) return TRUE;
   return FALSE;
 }
 
@@ -1019,7 +1031,7 @@ gnc_backend_new(void)
 	be->load_config = NULL;
 	be->get_config = NULL;
 
-        be->export = gnc_file_be_write_accounts_to_file;
+    be->export = gnc_file_be_write_accounts_to_file;
 
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
@@ -1029,11 +1041,11 @@ gnc_backend_new(void)
 
 	gnc_be->primary_book = NULL;
 
-        gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
-        gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+    gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+    gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
 
-        gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
-        gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
+    gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
+    gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
 
 	return be;
 }
@@ -1051,10 +1063,16 @@ g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 #ifdef ENABLE_NLS
+	gchar *localedir = gnc_path_get_localedir ();
+	/* FIXME: It is unclear whether setlocale() is actually
+	   needed here (added in r11313). Some platforms might
+	   need it so that gettext works correctly in this
+	   GModule. We'll keep it for now. */
 	setlocale (LC_ALL, "");
-	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
+	bindtextdomain (GETTEXT_PACKAGE, localedir);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
+	g_free (localedir);
 #endif
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
@@ -1062,8 +1080,9 @@ g_module_check_init(GModule *module)
         prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_backend_new;
         prov->provider_free = gnc_provider_free;
-	prov->check_data_type = gnc_determine_file_type;
+        prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
+        g_module_make_resident (module);
         return NULL;
 }
 

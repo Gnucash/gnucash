@@ -36,3 +36,5 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${QOF_CFLAGS}
 
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.qif\"

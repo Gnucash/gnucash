@@ -54,19 +54,21 @@ gnc_numeric_print(gnc_numeric in)
 
 /* ======================================================= */
 
+#define check_unary_op(eq,ex,a,i,e) check_unary_op_r(eq,ex,a,i,e,__LINE__)
 static void
-check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
-                gnc_numeric expected, 
-                gnc_numeric actual, 
-                gnc_numeric input, 
-                const char * errmsg)
+check_unary_op_r (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
+		  gnc_numeric expected, 
+		  gnc_numeric actual, 
+		  gnc_numeric input, 
+		  const char * errmsg,
+		  int line)
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
 	char *a = gnc_numeric_print (input);
 	char *str = g_strdup_printf (errmsg, e,r, a);
 	
-	do_test (eqtest(expected, actual), str);
+	do_test_call (eqtest(expected, actual), str, __FILE__, line);
 	
 	g_free (a);
 	g_free (r);
@@ -76,12 +78,16 @@ check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric),
 
 /* ======================================================= */
 
+#define check_binary_op(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__,gnc_numeric_eq)
+#define check_binary_op_equal(ex,a,ia,ib,e) check_binary_op_r(ex,a,ia,ib,e,__LINE__,gnc_numeric_equal)
 static void
-check_binary_op (gnc_numeric expected, 
-                 gnc_numeric actual, 
-                 gnc_numeric input_a, 
-                 gnc_numeric input_b, 
-                 const char * errmsg)
+check_binary_op_r (gnc_numeric expected, 
+		   gnc_numeric actual, 
+		   gnc_numeric input_a, 
+		   gnc_numeric input_b, 
+		   const char * errmsg,
+		   int line,
+		   gboolean (*eq)(gnc_numeric, gnc_numeric))
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
@@ -89,7 +95,7 @@ check_binary_op (gnc_numeric expected,
 	char *b = gnc_numeric_print (input_b);
 	char *str = g_strdup_printf (errmsg, e,r,a,b);
 	
-	do_test (gnc_numeric_eq(expected, actual), str);
+	do_test_call ((eq)(expected, actual), str, __FILE__, line);
 	
 	g_free (a);
 	g_free (b);
@@ -214,6 +220,9 @@ check_equality_operator (void)
 		deno = rand() / 2;
 		mult = rand() / 2;
 		numer = rand() / 2;
+
+		/* avoid 0 */
+		if (deno == 0 || mult == 0) { i--; continue; }
 
 		val = gnc_numeric_create (numer, deno);
 		mval = gnc_numeric_create (numer*mult, deno*mult);
@@ -626,6 +635,9 @@ check_mult_div (void)
 		gint64 nb = rand();
 		gint64 ne;
 
+		/* avoid 0 */
+		if (nb/4 == 0) { i--; continue; }
+
 		/* avoid overflow; */
 		na /= 2;
 		nb /= 2;
@@ -634,7 +646,7 @@ check_mult_div (void)
 		a = gnc_numeric_create(na, deno);
 		b = gnc_numeric_create(nb, deno);
 
-		check_binary_op (gnc_numeric_create(ne,1), 
+		check_binary_op_equal (gnc_numeric_create(ne,1), 
 			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
@@ -651,7 +663,7 @@ check_mult_div (void)
 		/* Do some hokey random 128-bit division too */
 		b = gnc_numeric_create(deno, nb);
 
-		check_binary_op (gnc_numeric_create(ne,1), 
+		check_binary_op_equal (gnc_numeric_create(ne,1), 
 			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s / %s for div exact");
 
@@ -864,7 +876,7 @@ main (int argc, char **argv)
 		print_test_results();
 	}
 	qof_close();
-  return 0;
+  return get_rv();
 }
 
 /* ======================== END OF FILE ====================== */

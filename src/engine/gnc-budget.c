@@ -32,7 +32,6 @@
 #include "glib-compat.h"
 
 #include "Account.h"
-#include "Group.h"
 
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
@@ -49,7 +48,7 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+static void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
@@ -75,7 +74,7 @@ gnc_budget_free(QofInstance *inst)
     g_free(budget);
 }
 
-static inline void noop (QofInstance *inst) {}
+static void noop (QofInstance *inst) {}
 
 void
 gnc_budget_begin_edit(GncBudget *bgt)
@@ -292,14 +291,12 @@ is_same_commodity(Account *a, gpointer data)
 static gboolean
 xaccAccountChildrenHaveSameCommodity(Account *account)
 {
-    AccountGroup *grp;
     gpointer different;
     gnc_commodity *comm;
 
     comm = xaccAccountGetCommodity(account);
-    grp = xaccAccountGetChildren(account);
-    different = xaccGroupForEachAccount(
-        grp, is_same_commodity, comm, TRUE);
+    different =
+      gnc_account_foreach_descendant_until(account, is_same_commodity, comm);
     return (different == NULL);
 }
 #endif

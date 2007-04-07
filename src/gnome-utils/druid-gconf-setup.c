@@ -34,6 +34,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -138,7 +139,7 @@ druid_gconf_update_path (GError **error)
     g_strfreev(lines);
   }
 
-  output = fopen(path_filename, "a");
+  output = g_fopen(path_filename, "a");
   if (output == NULL) {
     *error = g_error_new (G_FILE_ERROR,
 			  g_file_error_from_errno(errno),
@@ -614,7 +615,7 @@ druid_gconf_install_check_schemas (void)
     return;
   }
 
-#ifdef _WIN32
+#ifdef G_OS_WIN32
   {
     /* automatically update the search path on windows */
     GError *error = NULL;
@@ -631,7 +632,7 @@ druid_gconf_install_check_schemas (void)
       return;
     }
   }
-#endif /* _WIN32 */
+#endif /* G_OS_WIN32 */
 
   xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
   dialog = glade_xml_get_widget (xml, "GConf Query");

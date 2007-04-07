@@ -196,7 +196,6 @@ gnc_preferences_add_page_internal (const gchar *filename,
   ENTER("file %s, widget %s, tab %s full page %d",
 	filename, widgetname, tabname, full_page);
 
-
   add_in = g_malloc(sizeof(addition));
   if (add_in == NULL) {
     g_critical("Unable to allocate memory.\n");
@@ -243,6 +242,7 @@ gnc_preferences_add_page_internal (const gchar *filename,
     g_free(add_in->widgetname);
     g_free(add_in->tabname);
     g_free(add_in);
+    LEAVE("err");
     return;
   } else {
     add_ins = g_slist_append(add_ins, add_in);
@@ -468,6 +468,7 @@ gnc_preferences_build_page (gpointer data,
     g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
 	       "be added to the preferences dialog.",
 	       add_in->widgetname, add_in->filename);
+    LEAVE("");
     return;
   }
   g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
@@ -475,6 +476,7 @@ gnc_preferences_build_page (gpointer data,
     g_critical("The table %s in file %s does not have four columns.  It cannot "
 	       "be added to the preferences dialog.",
 	       add_in->widgetname, add_in->filename);
+    LEAVE("");
     return;
   }
 
@@ -551,6 +553,91 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
 /*******************************/
 /* Dynamically added Callbacks */
 /*******************************/
+
+
+/** The user changed a GtkFontButton.  Update gconf.  Font selection
+ *  choices are stored as a string.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the GtkFontButton that was changed.
+ *  
+ *  @param user_data Unused.
+ */
+static void
+gnc_prefs_font_button_user_cb (GtkFontButton *fb,
+                               gpointer user_data)
+{
+  const gchar *key, *font;
+
+  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+  key = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+  font = gtk_font_button_get_font_name(fb);
+
+  DEBUG("font_button %s set", key);
+  gnc_gconf_set_string(key, NULL, font, NULL);
+}
+
+
+/** A GtkFontButton choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the GtkFontButton that changed.
+ *
+ *  @param value The new value of the GtkFontButton.
+ */
+static void
+gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
+                                GConfEntry *entry)
+{
+  const gchar *font;
+
+  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+  ENTER("fb %p, entry %p", fb, entry);
+
+  font = gconf_value_get_string(entry->value);
+
+  g_signal_handlers_block_by_func(G_OBJECT(fb),
+				  G_CALLBACK(gnc_prefs_font_button_user_cb),
+				  NULL);
+  gtk_font_button_set_font_name(fb, font);
+  g_signal_handlers_unblock_by_func(G_OBJECT(fb),
+				    G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+  LEAVE(" ");
+}
+
+
+/** Connect a GtkFontButton widget to the user callback function.  Set
+ *  the font from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the date_edit that should be connected.
+ */
+static void
+gnc_prefs_connect_font_button (GtkFontButton *fb)
+{
+  const gchar *name, *font;
+
+  g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
+
+  /* Lookup font name based upon gconf setting */
+  name = gtk_widget_get_name(GTK_WIDGET(fb)) + PREFIX_LEN;
+  font = gnc_gconf_get_string(name, NULL, NULL);
+
+  gtk_font_button_set_font_name(fb, font);
+  DEBUG(" font_button %s set", name);
+
+  g_signal_connect(G_OBJECT(fb), "font_set",
+		   G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
+
+  gtk_widget_show_all(GTK_WIDGET(fb));
+}
+
+
+/**********/
 
 
 /** The user clicked on a radio button.  Update gconf.  Radio button
@@ -1053,7 +1140,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
   name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
   text = gnc_gconf_get_string(name, NULL, NULL);
   gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
-  DEBUG(" Entry %s set to '%s'", name, text);
+  DEBUG(" Entry %s set to '%s'", name?name:"(null)", text?text:"(null)");
   g_signal_connect(G_OBJECT(entry), "changed",
 		   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
@@ -1303,6 +1390,9 @@ gnc_prefs_connect_one (const gchar *name,
   } else if (GNC_IS_DATE_EDIT(widget)) {
     DEBUG("  %s - date_edit", name);
     gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget));
+  } else if (GTK_IS_FONT_BUTTON(widget)) {
+    DEBUG("  %s - entry", name);
+    gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
   } else if (GTK_IS_RADIO_BUTTON(widget)) {
     DEBUG("  %s - radio button", name);
     gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
@@ -1493,8 +1583,8 @@ gnc_preferences_gconf_changed (GConfClient *client,
       DEBUG("bad value");
       widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
       if (widget) {
-	DEBUG("forcing %s", gtk_widget_get_name(widget));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+           DEBUG("forcing %s", gtk_widget_get_name(widget));
+           gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
       }
       g_free(group_name);
       g_free(name);
@@ -1516,6 +1606,9 @@ gnc_preferences_gconf_changed (GConfClient *client,
     } else if (GNC_IS_DATE_EDIT(widget)) {
       DEBUG("widget %p - date_edit", widget);
       gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget), entry);
+    } else if (GTK_IS_FONT_BUTTON(widget)) {
+      DEBUG("widget %p - font button", widget);
+      gnc_prefs_font_button_gconf_cb(GTK_FONT_BUTTON(widget), entry);
     } else if (GTK_IS_RADIO_BUTTON(widget)) {
       DEBUG("widget %p - radio button", widget);
       gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));

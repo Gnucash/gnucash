@@ -26,9 +26,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "gnc-main.h"
 #include "gnc-gconf-utils.h"
 
-#define APP_GNUCASH "/apps/gnucash"
 #define CLIENT_TAG  "%s-%s-client"
 #define NOTIFY_TAG  "%s-%s-notify_id"
 
@@ -255,7 +255,7 @@ gnc_gconf_section_name (const char *name)
 {
   if (name == NULL) {
     /* Need to return a newly allocated string */
-    return g_strdup(APP_GNUCASH);
+    return g_strdup(gnc_get_gconf_path());
   }
   if (*name == '/') {
     /* Need to return a newly allocated string */
@@ -268,7 +268,7 @@ gnc_gconf_section_name (const char *name)
    * order to keep this file completely "gnome-free" this approach was
    * used.
    */
-  return g_strjoin("/", APP_GNUCASH, name, NULL);
+  return g_strjoin("/", gnc_get_gconf_path(), name, NULL);
 }
 
 char *
@@ -285,7 +285,7 @@ gnc_gconf_schema_section_name (const char *name)
    * order to keep this file completely "gnome-free" this approach was
    * used.
    */
-  return g_strconcat("/schemas", APP_GNUCASH, "/", name, NULL);
+  return g_strconcat("/schemas", gnc_get_gconf_path(), "/", name, NULL);
 }
 
 static gchar *

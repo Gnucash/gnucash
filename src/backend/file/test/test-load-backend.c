@@ -30,7 +30,7 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 int main (int argc, char ** argv)
 {
@@ -41,5 +41,5 @@ int main (int argc, char ** argv)
         " loading gnc-backend-file GModule failed");
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

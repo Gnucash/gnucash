@@ -1,5 +1,6 @@
 #include "config.h"
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -92,8 +93,8 @@ test_file(const char *filename)
             return g_strdup_printf("qof_session_load errorid %d", err);
         }
 
-        if (!g_setenv("LANG", possible_envs[i], 1))
-          return g_strdup_printf("setenv for LANG");
+        if (!g_setenv("LANG", possible_envs[i], TRUE))
+          return g_strdup("setenv for LANG");
 
         new_session = qof_session_new();
         
@@ -134,28 +135,28 @@ test_file(const char *filename)
 int
 main(int argc, char **argv)
 {
-    DIR *adir;
+    GDir *adir;
 
     gnc_engine_init(argc, argv);
     xaccLogDisable();
     
-    if((adir = opendir(test_dir)) == NULL)
+    if((adir = g_dir_open(test_dir, 0, NULL)) == NULL)
     {
-        failure_args("opendir", __FILE__, __LINE__,
+        failure_args("g_dir_open", __FILE__, __LINE__,
                      "couldn't open dir %s", test_dir);
     }
     else
     {
-        struct dirent *next_file;
+        const gchar *next_file;
 
-        while((next_file = readdir(adir)) != NULL)
+        while((next_file = g_dir_read_name(adir)) != NULL)
         {
             struct stat file_info;
             char* filename;
 
-            filename = g_strdup_printf("%s/%s", test_dir, next_file->d_name);
-            
-            if(stat(filename, &file_info) != 0)
+            filename = g_build_filename(test_dir, next_file, (gchar*) NULL);
+
+            if(g_stat(filename, &file_info) != 0)
             {
                 failure_args("stat", __FILE__, __LINE__,
                              "couldn't stat file %s: %s", filename,
@@ -164,7 +165,7 @@ main(int argc, char **argv)
                 break;
             }
 
-            if (!g_setenv("LANG", base_env, 1))
+            if (!g_setenv("LANG", base_env, TRUE))
             {
               failure_args("setenv", __FILE__, __LINE__,
                            "setenv of LANG failed");
@@ -187,6 +188,7 @@ main(int argc, char **argv)
 
             g_free(filename);
         }
+        g_dir_close(adir);
     }
     
     print_test_results();

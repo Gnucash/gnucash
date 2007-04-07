@@ -185,6 +185,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/tab_width</key>
+      <applyto>/apps/gnucash/general/tab_width</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>30.0</default>
+      <locale name="C">
+        <short>Width of notebook tabs</short>
+        <long>
+	  This key specifies the maximum width of notebook tabs.
+	  If the text in the tab is longer than this value (the test
+	  is approximate) then the tab label will have the middle cut
+	  and replaced with an ellipsis.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/currency_choice</key>
       <applyto>/apps/gnucash/general/currency_choice</applyto>
       <owner>gnucash</owner>
@@ -490,6 +507,32 @@
 	  switching pages in notebooks are drawn. Possible values
 	  are "top", "left", "bottom" and "right".
 	  It defaults to "top".
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dev/allow_file_incompatibility</key>
+      <applyto>/apps/gnucash/dev/allow_file_incompatibility</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Allow file incompatability with older versions.</short>
+        <long>If gnucash should allow file incompatability.  If true, then gnucash will (be allowed to) intentionally break file compatability with old versions.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/tab_next_recent</key>
+      <applyto>/apps/gnucash/general/tab_next_recent</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Closing a tab moves to the the most recent tab.</short>
+        <long>
+	  If true, closing a tab moves to the most recently visited tab.  If false, closing a tab moves one tab to the left.
 	</long>
       </locale>
     </schema>

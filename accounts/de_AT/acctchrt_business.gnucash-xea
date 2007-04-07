@@ -11,6 +11,12 @@
   </gnc-act:long-description>    
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Aktiva</act:name>
   <act:id type="new">8b3e42f98f52f948584d9548c018561e</act:id>
   <act:type>ASSET</act:type>
@@ -26,6 +32,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachanlagen</act:name>
@@ -139,6 +146,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abschreibungen</act:name>
@@ -774,6 +782,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Barverbindlichkeiten</act:name>
@@ -845,6 +854,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstiges</act:name>
@@ -922,6 +932,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Anfangsbestand</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 </gnc-account-example>
 

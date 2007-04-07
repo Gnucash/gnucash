@@ -57,149 +57,149 @@ static void set_commodity_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-			(QofAccessFunc)qof_entity_get_guid,
-			(QofSetterFunc)qof_entity_set_guid },
-	{ "commodity_guid",	CT_GUID,	0, COL_NNUL, NULL,
-			get_commodity_guid, set_commodity_guid },
-	{ "currency_guid",	CT_GUID,	0, COL_NNUL, NULL,
-			get_currency_guid, set_currency_guid },
-	{ "date",			CT_TIMESPEC,	0, COL_NNUL, NULL,
-			get_date, set_date },
-	{ "source",			CT_STRING,	PRICE_MAX_SOURCE_LEN, 0, PRICE_SOURCE },
-	{ "type",			CT_STRING,	PRICE_MAX_TYPE_LEN, 0, PRICE_TYPE },
-	{ "value",			CT_NUMERIC,	0, COL_NNUL, NULL, get_value, set_value },
-	{ NULL }
+    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
+            (QofAccessFunc)qof_entity_get_guid,
+            (QofSetterFunc)qof_entity_set_guid },
+    { "commodity_guid",    CT_GUID,    0, COL_NNUL, NULL,
+            get_commodity_guid, set_commodity_guid },
+    { "currency_guid",    CT_GUID,    0, COL_NNUL, NULL,
+            get_currency_guid, set_currency_guid },
+    { "date",            CT_TIMESPEC,    0, COL_NNUL, NULL,
+            get_date, set_date },
+    { "source",            CT_STRING,    PRICE_MAX_SOURCE_LEN, 0, PRICE_SOURCE },
+    { "type",            CT_STRING,    PRICE_MAX_TYPE_LEN, 0, PRICE_TYPE },
+    { "value",            CT_NUMERIC,    0, COL_NNUL, NULL, get_value, set_value },
+    { NULL }
 };
 
 /* ================================================================= */
 static gpointer
 get_value( gpointer pObject, const QofParam* param )
 {
-	const GNCPrice* pPrice = GNC_PRICE(pObject);
-	static gnc_numeric v;
+    const GNCPrice* pPrice = GNC_PRICE(pObject);
+    static gnc_numeric v;
 
-	v = gnc_price_get_value( pPrice );
-	return &v;
+    v = gnc_price_get_value( pPrice );
+    return &v;
 }
 
 static void
 set_value( gpointer pObject, gpointer pValue )
 {
-	GNCPrice* pPrice = GNC_PRICE(pObject);
-	const gnc_numeric* pNumeric = (const gnc_numeric*)pValue;
+    GNCPrice* pPrice = GNC_PRICE(pObject);
+    const gnc_numeric* pNumeric = (const gnc_numeric*)pValue;
 
-	gnc_price_set_value( pPrice, *pNumeric );
+    gnc_price_set_value( pPrice, *pNumeric );
 }
 
 static gpointer
 get_date( gpointer pObject, const QofParam* param )
 {
-	const GNCPrice* pPrice = GNC_PRICE(pObject);
-	static Timespec t;
+    const GNCPrice* pPrice = GNC_PRICE(pObject);
+    static Timespec t;
 
-	t = gnc_price_get_time( pPrice );
-	return &t;
+    t = gnc_price_get_time( pPrice );
+    return &t;
 }
 
 static void
 set_date( gpointer pObject, gpointer pValue )
 {
-	GNCPrice* pPrice = GNC_PRICE(pObject);
-	const Timespec* pTimespec = (const Timespec*)pValue;
+    GNCPrice* pPrice = GNC_PRICE(pObject);
+    const Timespec* pTimespec = (const Timespec*)pValue;
 
-	gnc_price_set_time( pPrice, *pTimespec );
+    gnc_price_set_time( pPrice, *pTimespec );
 }
 
 static gpointer
 get_currency_guid( gpointer pObject, const QofParam* param )
 {
-	const GNCPrice* pPrice = GNC_PRICE(pObject);
+    const GNCPrice* pPrice = GNC_PRICE(pObject);
 
-	return (gpointer)qof_instance_get_guid(
-							QOF_INSTANCE(gnc_price_get_currency( pPrice )) );
+    return (gpointer)qof_instance_get_guid(
+                            QOF_INSTANCE(gnc_price_get_currency( pPrice )) );
 }
 
 static void 
 set_currency_guid( gpointer pObject, gpointer pValue )
 {
-	GNCPrice* pPrice = GNC_PRICE(pObject);
-	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
-	gnc_commodity* pCurrency;
-	GUID* guid = (GUID*)pValue;
+    GNCPrice* pPrice = GNC_PRICE(pObject);
+    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
+    gnc_commodity* pCurrency;
+    GUID* guid = (GUID*)pValue;
 
-	pCurrency = gnc_commodity_find_commodity_by_guid( guid, pBook );
-	gnc_price_set_currency( pPrice, pCurrency );
+    pCurrency = gnc_commodity_find_commodity_by_guid( guid, pBook );
+    gnc_price_set_currency( pPrice, pCurrency );
 }
 
 static gpointer
 get_commodity_guid( gpointer pObject, const QofParam* param )
 {
-	const GNCPrice* pPrice = GNC_PRICE(pObject);
+    const GNCPrice* pPrice = GNC_PRICE(pObject);
 
-	return (gpointer)qof_instance_get_guid(
-						QOF_INSTANCE(gnc_price_get_commodity( pPrice )) );
+    return (gpointer)qof_instance_get_guid(
+                        QOF_INSTANCE(gnc_price_get_commodity( pPrice )) );
 }
 
 static void 
 set_commodity_guid( gpointer pObject, gpointer pValue )
 {
-	GNCPrice* pPrice = GNC_PRICE(pObject);
-	QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
-	gnc_commodity* pCommodity;
-	GUID* guid = (GUID*)pValue;
+    GNCPrice* pPrice = GNC_PRICE(pObject);
+    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
+    gnc_commodity* pCommodity;
+    GUID* guid = (GUID*)pValue;
 
-	pCommodity = gnc_commodity_find_commodity_by_guid( guid, pBook );
-	gnc_price_set_commodity( pPrice, pCommodity );
+    pCommodity = gnc_commodity_find_commodity_by_guid( guid, pBook );
+    gnc_price_set_commodity( pPrice, pCommodity );
 }
 
 static GNCPrice*
 load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 {
-	if( pPrice == NULL ) {
-		pPrice = gnc_price_create( be->primary_book );
-	}
+    if( pPrice == NULL ) {
+        pPrice = gnc_price_create( be->primary_book );
+    }
 
-	gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
+    gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
 
-	qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
+    qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
 
-	return pPrice;
+    return pPrice;
 }
 
 static void
 load_prices( GncGdaBackend* be )
 {
-	static GdaQuery* query;
-	GdaObject* ret;
-	QofBook* pBook = be->primary_book;
-	GNCPriceDB* pPriceDB = gnc_book_get_pricedb( pBook );
+    static GdaQuery* query;
+    GdaObject* ret;
+    QofBook* pBook = be->primary_book;
+    GNCPriceDB* pPriceDB = gnc_book_get_pricedb( pBook );
 
-	if( query == NULL ) {
-		query = gnc_gda_create_select_query( be, TABLE_NAME );
-	}
-	ret = gnc_gda_execute_query( be, query );
-	if( GDA_IS_DATA_MODEL( ret ) ) {
-		GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-		int numRows = gda_data_model_get_n_rows( pModel );
-		int r;
-		GNCPrice* pPrice;
+    if( query == NULL ) {
+        query = gnc_gda_create_select_query( be, TABLE_NAME );
+    }
+    ret = gnc_gda_execute_query( be, query );
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
+        GNCPrice* pPrice;
 
-		for( r = 0; r < numRows; r++ ) {
-			pPrice = load_price( be, pModel, r, NULL );
+        for( r = 0; r < numRows; r++ ) {
+            pPrice = load_price( be, pModel, r, NULL );
 
-			if( pPrice != NULL ) {
-				gnc_pricedb_add_price( pPriceDB, pPrice );
-			}
-		}
-	}
+            if( pPrice != NULL ) {
+                gnc_pricedb_add_price( pPriceDB, pPrice );
+            }
+        }
+    }
 }
 
 /* ================================================================= */
 static void
 create_prices_tables( GncGdaBackend* be )
 {
-	gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
 /* ================================================================= */
@@ -207,33 +207,33 @@ create_prices_tables( GncGdaBackend* be )
 static void
 commit_price( GncGdaBackend* be, QofInstance* inst )
 {
-	GNCPrice* pPrice = GNC_PRICE(inst);
+    GNCPrice* pPrice = GNC_PRICE(inst);
 
-	/* Ensure commodity and currency are in the db */
-	gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
-	gnc_gda_save_commodity( be, gnc_price_get_currency( pPrice ) );
+    /* Ensure commodity and currency are in the db */
+    gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
+    gnc_gda_save_commodity( be, gnc_price_get_currency( pPrice ) );
 
-	(void)gnc_gda_do_db_operation( be,
-						(inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-						TABLE_NAME,
-						GNC_ID_PRICE, pPrice,
-						col_table );
+    (void)gnc_gda_do_db_operation( be,
+                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        TABLE_NAME,
+                        GNC_ID_PRICE, pPrice,
+                        col_table );
 }
 
 /* ================================================================= */
 void
 gnc_gda_init_price_handler( void )
 {
-	static GncGdaDataType_t be_data =
-	{
-		GNC_GDA_BACKEND_VERSION,
-		GNC_ID_PRICE,
-		commit_price,			/* commit */
-		load_prices,			/* initial_load */
-		create_prices_tables	/* create tables */
-	};
+    static GncGdaDataType_t be_data =
+    {
+        GNC_GDA_BACKEND_VERSION,
+        GNC_ID_PRICE,
+        commit_price,            /* commit */
+        load_prices,            /* initial_load */
+        create_prices_tables    /* create tables */
+    };
 
-	qof_object_register_backend( GNC_ID_PRICE, GNC_GDA_BACKEND, &be_data );
+    qof_object_register_backend( GNC_ID_PRICE, GNC_GDA_BACKEND, &be_data );
 }
 
 /* ========================== END OF FILE ===================== */

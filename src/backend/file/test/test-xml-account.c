@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -41,7 +41,6 @@
 #include "test-file-stuff.h"
 
 #include "Account.h"
-#include "Group.h"
 #include "Scrub.h"
 
 static QofBook *sixbook;
@@ -114,7 +113,8 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp((char*)mark->name, "act:commodity") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, xaccAccountGetCommodity(act), xaccAccountGetBook(act)))
+                   mark, xaccAccountGetCommodity(act),
+                   gnc_account_get_book(act)))
             {
                 return g_strdup("commodities differ");
             }
@@ -146,8 +146,7 @@ node_and_account_equal(xmlNodePtr node, Account *act)
         else if(safe_strcmp((char*)mark->name, "act:parent") == 0)
         {
             if(!equals_node_val_vs_guid(
-                   mark, xaccAccountGetGUID(xaccGroupGetParentAccount(
-                                                xaccAccountGetParent(act)))))
+                   mark, xaccAccountGetGUID(gnc_account_get_parent(act))))
             {
                 return g_strdup("parent ids differ");
             }
@@ -221,7 +220,7 @@ test_account(int i, Account *test_act)
     gchar *compare_msg;
     int fd;
 
-    test_node = gnc_account_dom_tree_create(test_act, FALSE);
+    test_node = gnc_account_dom_tree_create(test_act, FALSE, TRUE);
 
     if(!test_node)
     {
@@ -247,7 +246,7 @@ test_account(int i, Account *test_act)
         
     filename1 = g_strdup_printf("test_file_XXXXXX");
         
-    fd = mkstemp(filename1);
+    fd = g_mkstemp(filename1);
         
     write_dom_node_to_file(test_node, fd);
 
@@ -274,7 +273,7 @@ test_account(int i, Account *test_act)
     }
         
 
-    unlink(filename1);
+    g_unlink(filename1);
     g_free(filename1);
     xmlFreeNode(test_node);
 }
@@ -317,7 +316,7 @@ test_generation()
 /*         act1 = get_random_account(); */
 /*         act2 = get_random_account(); */
 
-/*         xaccAccountInsertSubAccount(act1, act2); */
+/*         gnc_account_append_child(act1, act2); */
 
 /*         test_account(-1, act2); */
 /*         test_account(-1, act1); */
@@ -334,9 +333,9 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
     char *msg;
     Account *act = (Account*)data;
 
-    if(!xaccAccountGetParent(act))
+    if(!gnc_account_get_parent(act))
     {
-        xaccGroupInsertAccount(xaccGetAccountGroup(sixbook), act);
+        gnc_account_append_child(gnc_book_get_root_account(sixbook), act);
     }
 
     msg = node_and_account_equal((xmlNodePtr)global_data, act);
@@ -370,5 +369,5 @@ main (int argc, char ** argv)
     qof_session_destroy(session);        
     print_test_results();
     qof_close();
-    return 0;
+    exit(get_rv());
 }

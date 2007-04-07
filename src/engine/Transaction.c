@@ -35,11 +35,9 @@
 #include <unistd.h>
 
 #include "AccountP.h"
-#include "Group.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
-#include "Split.h"
 #include "SplitP.h"
 #include "TransLog.h"
 #include "cap-gains.h"
@@ -1023,7 +1021,8 @@ xaccTransCommitEdit (Transaction *trans)
      /* Get the cap gains into a consistent state as well. */
      
      /* Lot Scrubbing is temporarily disabled. */
-     //xaccTransScrubGains (trans, NULL);
+     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+         xaccTransScrubGains (trans, NULL);
 
      /* Allow scrubbing in transaction commit again */
      scrub_data = 1;
@@ -1666,45 +1665,9 @@ guint
 gnc_book_count_transactions(QofBook *book)
 {
     guint count = 0;
-    xaccGroupForEachTransaction(xaccGetAccountGroup(book),
+    xaccAccountTreeForEachTransaction(gnc_book_get_root_account(book),
                                 counter_thunk, (void*)&count);
     return count;
-}
-
-/********************************************************************\
-\********************************************************************/
-/* walk through the splits, looking for any account */
-static Account * 
-get_any_account(const Transaction *trans)
-{
-    GList *node;
-    if (!trans) return NULL;
-    for (node = trans->splits; node; node = node->next)
-        if (((Split *)node->data)->acc)
-            return ((Split *)node->data)->acc;
-    return NULL;
-}
-Account *
-xaccGetAccountByName (const Transaction *trans, const char * name)
-{
-   Account *acc;
-   if (!trans || !name) return NULL;
-
-   acc = get_any_account(trans);
-   return acc ? xaccGetPeerAccountFromName (acc, name) : NULL;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Account *
-xaccGetAccountByFullName (const Transaction *trans, const char * name)
-{
-   Account *acc;
-   if (!trans || !name) return NULL;
-
-   acc = get_any_account(trans);
-   return acc ? xaccGetPeerAccountFromFullName (acc, name) : NULL;
 }
 
 /********************************************************************\

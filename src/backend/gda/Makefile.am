@@ -1,7 +1,9 @@
 SUBDIRS = .
 
 # Now a shared library AND a GModule
-lib_LTLIBRARIES = libgnc-backend-gda.la
+lib_LTLIBRARIES = libgnc-backend-gda-utils.la
+pkglib_LTLIBRARIES = libgncmod-backend-gda.la
+
 
 AM_CFLAGS = \
   -I.. -I../.. \
@@ -12,11 +14,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/libc\
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
+  ${LIBGDA_CFLAGS} \
   ${GCONF_CFLAGS} \
-  ${LIBGDA_CFLAGS}
+  ${WARN_CFLAGS}
 
-libgnc_backend_gda_la_SOURCES = \
-  gnc-backend-gda.c \
+libgnc_backend_gda_utils_la_SOURCES = \
   gnc-backend-util-gda.c \
   gnc-account-gda.c \
   gnc-book-gda.c \
@@ -28,22 +30,32 @@ libgnc_backend_gda_la_SOURCES = \
   gnc-slots-gda.c \
   gnc-transaction-gda.c
 
-#noinst_HEADERS = \
-#  gnc-backend-file.h \
-#  gnc-xml.h \
-#  gnc-xml-helper.h \
-#  io-example-account.h \
-#  io-gncxml-gen.h \
-#  io-gncxml.h \
-#  io-gncxml-v2.h \
-#  io-utils.h \
-#  sixtp-dom-generators.h \
-#  sixtp-dom-parsers.h \
-#  sixtp.h \
-#  sixtp-parsers.h \
-#  sixtp-stack.h \
-#  sixtp-utils.h
+libgncmod_backend_gda_la_SOURCES = \
+  gnc-backend-gda.c
 
-libgnc_backend_gda_la_LDFLAGS = -module -avoid-version
-libgnc_backend_gda_la_LIBADD = \
-	${LIBGDA_LIBS}
+noinst_HEADERS = \
+  gnc-account-gda.h \
+  gnc-backend-gda.h \
+  gnc-backend-util-gda.h \
+  gnc-book-gda.h \
+  gnc-budget-gda.h \
+  gnc-commodity-gda.h \
+  gnc-lots-gda.h \
+  gnc-price-gda.h \
+  gnc-schedxaction-gda.h \
+  gnc-slots-gda.h \
+  gnc-transaction-gda.h
+
+libgnc_backend_gda_utils_la_LIBADD = \
+   ${GLIB_LIBS} ${GCONF_LIBS} \
+   ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${LIBGDA_LIBS}
+
+libgncmod_backend_gda_la_LDFLAGS = -module -avoid-version
+libgncmod_backend_gda_la_LIBADD = \
+   ${GLIB_LIBS} ${GCONF_LIBS} \
+   ${top_builddir}/src/engine/libgncmod-engine.la \
+   libgnc-backend-gda-utils.la \
+   ${LIBGDA_LIBS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.gda\"

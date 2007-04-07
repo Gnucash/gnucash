@@ -122,14 +122,14 @@ gboolean gnc_lot_is_closed (GNCLot *);
  *    loops over all of the splits in the lot, and returns the split
  *    with the earliest split->transaction->date_posted.
  */
-Split * gnc_lot_get_earliest_split (const GNCLot *lot);
+Split * gnc_lot_get_earliest_split (GNCLot *lot);
 
 /** The gnc_lot_get_latest_split() routine is a convenience routine
  *    that helps identify the date this lot was closed.   It simply
  *    loops over all of the splits in the lot, and returns the split
  *    with the latest split->transaction->date_posted.
  */
-Split * gnc_lot_get_latest_split (const GNCLot *lot);
+Split * gnc_lot_get_latest_split (GNCLot *lot);
 
 /** Get and set the account title, or the account notes. */
 const char * gnc_lot_get_title (const GNCLot *);

@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "Group.h"
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-engine.h"
@@ -83,7 +82,7 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
     const char *name;
 
     name = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
-    account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
+    account = gnc_account_lookup_by_full_name (gnc_get_current_root_account (), name);
   }
 
   if (!account)
@@ -790,7 +789,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
   tm = localtime (&tt);
 
-  strftime (string, sizeof (string), "%A %d %B %Y", tm);
+  qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
 
   return g_strdup (string);
 }
@@ -1903,6 +1902,10 @@ gnc_split_register_model_add_hooks (gpointer unused)
   gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
 				gnc_split_register_colorize_negative,
 				NULL);
+  /* Get the initial value */
+  use_red_for_negative = gnc_gconf_get_bool(GCONF_GENERAL, 
+                                            KEY_NEGATIVE_IN_RED, 
+                                            NULL);
   return NULL;
 }
 

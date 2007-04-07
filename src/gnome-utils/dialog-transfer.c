@@ -47,6 +47,7 @@
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
+#define GCONF_SECTION "dialogs/transfer"
 
 #define PRECISION 1000000
 
@@ -446,7 +447,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 {
   GtkTreeView *tree_view;
   const char *show_inc_exp_message = _("Show the income and expense accounts");
-  GtkWidget *scroll_win, *box;
+  GtkWidget *scroll_win;
   GtkWidget *button;
   GtkTreeSelection *selection;
   gboolean  use_accounting_labels;
@@ -466,9 +467,6 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
    * trees when in "accountant" mode. -- Herbert Thoma, 2004-01-18
    */
   if(use_accounting_labels) {
-    box = gnc_glade_lookup_widget (xferData->dialog,
-				   (direction == XFER_DIALOG_TO) ?
-				   "left_tree_box" : "right_tree_box");
     button = gnc_glade_lookup_widget (xferData->dialog,
 				      (direction == XFER_DIALOG_TO) ?
 				      "left_show_button" : "right_show_button");
@@ -477,9 +475,6 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 					  "left_trans_window" : "right_trans_window");
   }
   else {
-    box = gnc_glade_lookup_widget (xferData->dialog,
-				   (direction == XFER_DIALOG_TO) ?
-				   "right_tree_box" : "left_tree_box");
     button = gnc_glade_lookup_widget (xferData->dialog,
 				      (direction == XFER_DIALOG_TO) ?
 				      "right_show_button" : "left_show_button");
@@ -489,7 +484,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
   }
 
   tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
-  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(tree_view));
+  gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
   gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
 				    gnc_xfer_dialog_show_inc_exp_visible_cb,
 				    button, /* user data */
@@ -1648,6 +1643,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   dialog = glade_xml_get_widget (xml, "Transfer Dialog");
   xferData->dialog = dialog;
+  g_object_set_data_full (G_OBJECT (dialog), "xml", xml, g_object_unref);
 
   /* parent */
   if (parent != NULL)
@@ -1824,6 +1820,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 			 _("To Amount:"));
     }
   }
+  gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (dialog));
   LEAVE(" ");
 }
 
@@ -1836,6 +1833,7 @@ close_handler (gpointer user_data)
   ENTER(" ");
   dialog = GTK_WIDGET (xferData->dialog);
 
+  gnc_save_window_size (GCONF_SECTION, GTK_WINDOW (dialog));
   gtk_widget_hide (dialog);
   gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
   gtk_widget_destroy (dialog);
@@ -1868,7 +1866,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   xferData->transaction_cb = NULL;
 
   if (initial) {
-    book = xaccAccountGetBook (initial);
+    book = gnc_account_get_book (initial);
   } else {
     book = gnc_get_current_book ();
   }

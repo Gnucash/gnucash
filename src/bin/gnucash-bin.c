@@ -20,7 +20,6 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
-
 #include "config.h"
 
 #include <stdlib.h>
@@ -59,6 +58,8 @@
 #  include <locale.h>
 #endif
 
+#define APP_GNUCASH "/apps/gnucash"
+
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
@@ -67,11 +68,12 @@ static int is_development_version = FALSE;
 #endif
 
 /* Command-line option variables */
-static int gnucash_show_version;
-static const char *add_quotes_file;
-static int nofile;
-static const char *file_to_load;
-static int loglevel;
+static int gnucash_show_version = 0;
+static const char *add_quotes_file = NULL;
+static int nofile = 0;
+static const char *file_to_load = NULL;
+static gchar **log_flags = NULL;
+static gchar *log_to_filename = NULL;
 
 static void
 gnc_print_unstable_message(void)
@@ -82,7 +84,7 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.0.2",
+	    _("The last stable version was "), "GnuCash 2.0.5",
 	    _("The next stable version will be "), "GnuCash 2.2");
 }
 
@@ -92,18 +94,21 @@ gnc_print_unstable_message(void)
 static char *config_path = PKGSYSCONFDIR;
 static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
+static char *gconf_path = APP_GNUCASH;
 
 static void
-envt_override()
+environment_override()
 {
-    char *path;
+    const char *path;
     
-    if ((path = getenv("GNC_CONFIG_PATH")))
-        config_path = path;
-    if ((path = getenv("GNC_SHARE_PATH")))
-        share_path = path;
-    if ((path = getenv("GNC_DOC_PATH")))
-        help_path = path;
+    if ((path = g_getenv("GNC_CONFIG_PATH")))
+        config_path = g_strdup(path);
+    if ((path = g_getenv("GNC_SHARE_PATH")))
+        share_path = g_strdup(path);
+    if ((path = g_getenv("GNC_DOC_PATH")))
+        help_path = g_strdup(path);
+    if ((path = g_getenv("GNC_GCONF_PATH")))
+        gconf_path = g_strdup(path);
 }
 
 static gboolean
@@ -195,79 +200,46 @@ static void
 gnucash_command_line(int *argc, char **argv)
 {
     char *p;
-    int debugging = 0;
+    int debugging = 0, extra = 0;
     char *namespace_regexp = NULL;
-#ifndef HAVE_GTK26
-    poptContext pc;
-    int rc;
-    struct poptOption options[] = {
-        POPT_AUTOHELP
-        {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
-         _("Show GnuCash version"), NULL},
-        {"debug", '\0', POPT_ARG_NONE, &debugging, 0,
-         _("Enable debugging mode"), NULL},
-        {"loglevel", '\0', POPT_ARG_INT, &loglevel, 0,
-	 /* Translators: This is the command line option autohelp
-	    text; see popt(3) */
-         _("Set the logging level from 0 (least) to 6 (most)"), 
-	 /* Translators: Argument description for autohelp; see popt(3) */
-         _("LOGLEVEL")},
-        {"nofile", '\0', POPT_ARG_NONE, &nofile, 0,
-         _("Do not load the last file opened"), NULL},
-        {"config-path", '\0', POPT_ARG_STRING, &config_path, 0,
-         _("Set configuration path"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("CONFIGPATH")},
-        {"share-path", '\0', POPT_ARG_STRING, &share_path, 0,
-         _("Set shared data file search path"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("SHAREPATH")},
-        {"doc-path", '\0', POPT_ARG_STRING, &help_path, 0,
-         _("Set the search path for documentation files"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("DOCPATH")},
-        {"add-price-quotes", '\0', POPT_ARG_STRING, &add_quotes_file, 0,
-         _("Add price quotes to given GnuCash datafile"),
-	 /* Translators: Argument description for autohelp; see popt(3) */
-	 _("FILE")},
-        {"namespace", '\0', POPT_ARG_STRING, &namespace_regexp, 0, 
-         _("Regular expression determining which namespace commodities will be retrieved"), 
-	 /* Translators: Argument description for autohelp; see popt(3) */
-         _("REGEXP")},
-        POPT_TABLEEND
-    };
-    
-    /* Pretend that argv[0] is "gnucash" */
-    if ((p = strstr(argv[0], "-bin"))) *p = '\0';
-
-    pc = poptGetContext(NULL, *argc, (const char **)argv, options, 0);
-    poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
-    
-    while ((rc = poptGetNextOpt(pc)) > 0);
-    file_to_load = poptGetArg(pc);
-    poptFreeContext(pc);
-#else
     GError *error = NULL;
     GOptionContext *context;
     GOptionEntry options[] = {
         {"version", 'v', 0, G_OPTION_ARG_NONE, &gnucash_show_version,
          _("Show GnuCash version"), NULL},
+
         {"debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-         _("Enable debugging mode"), NULL},
+         _("Enable debugging mode: increasing logging to provide deep detail."), NULL},
+
+        {"extra", '\0', 0, G_OPTION_ARG_NONE, &extra,
+         _("Enable extra/development/debugging features."), NULL},
+
+        {"log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
+         _("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
+         NULL},
+
+        {"logto", '\0', 0, G_OPTION_ARG_STRING, &log_to_filename,
+         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."),
+         NULL},
+
+#if 0
         {"loglevel", '\0', 0, G_OPTION_ARG_INT, &loglevel,
-	 /* Translators: This is the command line option autohelp
-	    text; see popt(3) */
-         _("Set the logging level from 0 (least) to 6 (most)"), 
+	 /* Translators: This is the command line option autohelp text; see popt(3) */
+        _("Set the logging level from 0 (least) to 6 (most)"), 
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
          _("LOGLEVEL")},
+#endif // 0
+
         {"nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
          _("Do not load the last file opened"), NULL},
+
         {"config-path", '\0', 0, G_OPTION_ARG_STRING, &config_path,
          _("Set configuration path"),
-	 /* Translators: Argument description for autohelp; see
-	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-	 _("CONFIGPATH")},
+         /* Translators: Argument description for autohelp; see
+            http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+         _("CONFIGPATH")},
+
         {"share-path", '\0', 0, G_OPTION_ARG_STRING, &share_path,
          _("Set shared data file search path"),
 	 /* Translators: Argument description for autohelp; see
@@ -278,6 +250,11 @@ gnucash_command_line(int *argc, char **argv)
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
 	 _("DOCPATH")},
+        {"gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
+         _("Set the prefix path for gconf queries"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("GCONFPATH")},
         {"add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
          _("Add price quotes to given GnuCash datafile"),
 	 /* Translators: Argument description for autohelp; see
@@ -297,29 +274,40 @@ gnucash_command_line(int *argc, char **argv)
     context = g_option_context_new (" [datafile]");
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
-    g_option_context_parse (context, argc, &argv, &error);
+    if (!g_option_context_parse (context, argc, &argv, &error))
+    {
+         g_error("Error parsing command line arguments: [%s]; try `gnucash --help` for available options.", error->message);
+    }
     g_option_context_free (context);
+    if (error)
+         g_error_free(error);
 
     if (*argc > 0)
-      file_to_load = argv[1];
-#endif
+         file_to_load = argv[1];
 
     if (gnucash_show_version) {
         if (is_development_version)
-	  /* Translators: %s is the version number */
-	  g_print(_("GnuCash %s development version"), VERSION);
-	else
-	  /* Translators: %s is the version number */
-	  g_print(_("GnuCash %s"), VERSION);
-	g_print("\n");
-	/* Translators: 1st %s is the build date; 2nd %s is the SVN
-	   revision number */
+        {
+             /* Translators: %s is the version number */
+             g_print(_("GnuCash %s development version"), VERSION);
+        }
+        else
+        {
+             /* Translators: %s is the version number */
+             g_print(_("GnuCash %s"), VERSION);
+        }
+        g_print("\n");
+        /* Translators: 1st %s is the build date; 2nd %s is the SVN
+           revision number */
         g_print(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
-	g_print("\n");
+        g_print("\n");
         exit(0);
     }
 
+    gnc_set_extra(extra);
+    gnc_set_gconf_path(gconf_path);
     gnc_set_debugging(debugging);
+
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
 }
@@ -361,14 +349,12 @@ load_gnucash_modules()
             gnc_module_load(modules[i].name, modules[i].version);
     }
     if (!gnc_engine_is_initialized()) {
-#ifdef G_OS_WIN32
-        g_warning("GnuCash engine indicates it hasn't been initialized correctly. On Windows this mechanism is know not to work. Ignoring for now.\n");
-        /* See more detailed discussion here
-	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html */
-#else
+        /* On Windows this check used to fail anyway, see
+	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
+	   but more recently it seems to work as expected
+	   again. 2006-12-20, cstim. */
         g_error("GnuCash engine failed to initialize.  Exiting.\n");
         exit(0);
-#endif
     }
 }
 
@@ -439,7 +425,7 @@ inner_main (void *closure, int argc, char **argv)
     SCM main_mod;
     char* fn;
     GError *error = NULL;
- 
+
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
@@ -460,10 +446,6 @@ inner_main (void *closure, int argc, char **argv)
        before booting guile.  */
     gnc_main_gui_init();
 
-    /* set a log level before trying to change it globally */
-    gnc_log_default();
-    qof_log_set_level_registered(loglevel);
-
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     scm_c_eval_string("(gnc:main)");
@@ -481,8 +463,9 @@ inner_main (void *closure, int argc, char **argv)
         gnc_file_open_file(fn);
         g_free(fn);
     } 
-    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error) &&
-             !error) {
+    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error)
+             && !error)
+    {
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
@@ -497,10 +480,79 @@ inner_main (void *closure, int argc, char **argv)
     return;
 }
 
-int main(int argc, char ** argv)
+static void
+gnc_log_init()
+{
+     if (log_to_filename != NULL)
+     {
+          qof_log_init_filename_special(log_to_filename);
+     }
+     else
+     {
+          /* initialize logging to our file. */
+          gchar *tracefilename;
+          tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
+                                           (gchar *)NULL);
+          qof_log_init_filename(tracefilename);
+          g_free(tracefilename);
+     }
+
+     // set a reasonable default.
+     qof_log_set_default(QOF_LOG_WARNING);
+
+     gnc_log_default();
+
+     if (gnc_is_debugging())
+     {
+          qof_log_set_level("", QOF_LOG_INFO);
+          qof_log_set_level("qof", QOF_LOG_INFO);
+          qof_log_set_level("gnc", QOF_LOG_INFO);
+     }
+
+     if (log_flags != NULL)
+     {
+          int i = 0;
+          for (; log_flags[i] != NULL; i++)
+          {
+               QofLogLevel level;
+               gchar **parts = NULL;
+               gchar *logger_name = NULL;
+
+               gchar *log_opt = log_flags[i];
+               parts = g_strsplit(log_opt, "=", 2);
+               if (parts == NULL || parts[0] == NULL || parts[1] == NULL)
+               {
+                    g_warning("string [%s] not parseable", log_opt);
+                    continue;
+               }
+
+               logger_name = g_strdup(parts[0]);
+               level = qof_log_level_from_string(parts[1]);
+
+               qof_log_set_level(logger_name, level);
+               g_strfreev(parts);
+          }
+     }
+
+     {
+          gchar *log_config_filename;
+          log_config_filename = gnc_build_dotgnucash_path("log.conf");
+          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
+               qof_log_parse_log_config(log_config_filename);
+          g_free(log_config_filename);
+     }
+ }
+
+int
+main(int argc, char ** argv)
 {
     gchar *localedir;
     GError *binreloc_error = NULL;
+
+#if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
+#    error "No GLib thread implementation available!"
+#endif
+    g_thread_init(NULL);
 
     /* Init binreloc */
     if (!gbr_init (&binreloc_error) ) {
@@ -516,16 +568,21 @@ int main(int argc, char ** argv)
 #endif
     g_free (localedir);
 
-    gnc_module_system_init();
-    envt_override();
+    qof_log_init();
+    qof_log_set_default(QOF_LOG_INFO);
+ 
+    environment_override();
     gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
+    gnc_log_init();
+
+    gnc_module_system_init();
 
     if (add_quotes_file) {
         gchar *prefix = gnc_path_get_prefix ();
-	gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
-	gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-	gchar *pkglibdir = gnc_path_get_pkglibdir ();
+        gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
+        gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+        gchar *pkglibdir = gnc_path_get_pkglibdir ();
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
         gnome_program_init(
@@ -536,10 +593,10 @@ int main(int argc, char ** argv)
 	    GNOME_PARAM_APP_DATADIR, pkgdatadir,
 	    GNOME_PARAM_APP_LIBDIR, pkglibdir,
 	    GNOME_PARAM_NONE);
-	g_free (prefix);
-	g_free (pkgsysconfdir);
-	g_free (pkgdatadir);
-	g_free (pkglibdir);
+        g_free (prefix);
+        g_free (pkgsysconfdir);
+        g_free (pkgdatadir);
+        g_free (pkglibdir);
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }

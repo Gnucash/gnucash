@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = libcore-utils.la
+lib_LTLIBRARIES = libgnc-core-utils.la
 
-libcore_utils_la_SOURCES = \
+libgnc_core_utils_la_SOURCES = \
   gnc-main.c \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
@@ -10,7 +10,7 @@ libcore_utils_la_SOURCES = \
   swig-core-utils.c \
   gnc-gtk-utils.c
 
-libcore_utils_la_LIBADD = \
+libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
@@ -26,7 +26,7 @@ noinst_HEADERS = \
   gnc-gtk-utils.h
 
 if BUILDING_FROM_SVN
-swig-core-utils.c: core-utils.i
+swig-core-utils.c: core-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -61,3 +61,5 @@ noinst_DATA = .scm-links
 EXTRA_DIST = $(gncmod_DATA) core-utils.i
 CLEANFILES = gnucash .scm-links
 MAINTAINERCLEANFILES = swig-core-utils.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.core-utils\"

@@ -20,8 +20,10 @@ AC_DEFUN([AM_BINRELOC],
 		AC_CHECK_FILE([/proc/self/maps])
 		AC_CACHE_CHECK([whether everything is installed to the same prefix],
 			       [br_cv_valid_prefixes], [
+				# datarootdir variables was introduced with autoconf-2.60
 				if test "$bindir" = '${exec_prefix}/bin' -a "$sbindir" = '${exec_prefix}/sbin' -a \
-					"$datadir" = '${prefix}/share' -a "$libdir" = '${exec_prefix}/lib' -a \
+					\( "$datadir" = '${prefix}/share' -o \( "$datadir" = '${datarootdir}' -a "$datarootdir" = '${prefix}/share' \) \) -a \
+					"$libdir" = '${exec_prefix}/lib' -a \
 					"$libexecdir" = '${exec_prefix}/libexec' -a "$sysconfdir" = '${prefix}/etc'
 				then
 					br_cv_valid_prefixes=yes

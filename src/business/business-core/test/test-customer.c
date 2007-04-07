@@ -208,6 +208,7 @@ test_bool_fcn (QofBook *book, const char *message,
 int
 main (int argc, char **argv)
 {
+  qof_log_init();
   guid_init ();
   qof_query_init ();
   qof_object_initialize ();

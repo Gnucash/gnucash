@@ -426,7 +426,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 			date_getter = (Timespec (*)(QofEntity*, QofParam*))param->param_getfcn;
 			param_ts = date_getter(ent, param);
 			param_t = timespecToTime_t(param_ts);
-			strftime(param_date, MAX_DATE_LENGTH, 
+			qof_strftime(param_date, MAX_DATE_LENGTH, 
                 QOF_UTC_DATE_FORMAT, gmtime(&param_t));
 			param_string = g_strdup(param_date);
             known_type = TRUE;
@@ -545,6 +545,7 @@ qof_util_param_as_string(QofEntity *ent, QofParam *param)
 void
 qof_init (void)
 {
+    qof_log_init();
 	qof_util_get_string_cache ();
 	guid_init ();
 	qof_object_initialize ();
@@ -559,6 +560,7 @@ qof_close(void)
 	qof_object_shutdown ();
 	guid_shutdown ();
 	qof_util_string_cache_destroy ();
+    qof_log_shutdown();
 }
 
 /* ************************ END OF FILE ***************************** */

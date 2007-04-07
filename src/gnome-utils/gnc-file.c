@@ -40,7 +40,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
-#include "gnc-gconf-utils.h"
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "TransLog.h"
@@ -55,15 +54,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static GNCShutdownCB shutdown_cb = NULL;
 static gint save_in_progress = 0;
 
-
-typedef struct
-{
-  GtkFileSelection *file_box;
-  char *file_name;
-} FileBoxInfo;
-
-/* PROTOTYPES *******************************************************/
-static void store_filename (GtkWidget *w, gpointer data);
 
 /********************************************************************\
  * gnc_file_dialog                                                  * 
@@ -87,137 +77,107 @@ gnc_file_dialog (const char * title,
 		 GNCFileDialogType type
 		 )
 {
-  /* filebox information */
-  /* This can be allocated on the stack so long as the lifetime
-  ** of the dialog is limited to this function. */
-  FileBoxInfo fb_info = {NULL, NULL};
+  GtkWidget *file_box;
+  const char *internal_name;
+  char *file_name = NULL;
+  gchar * okbutton = GTK_STOCK_OPEN;
+  const gchar *ok_icon = NULL;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN; 
+  gint response;
 
-  ENTER("\n");
+  ENTER(" ");
 
-  /* Create the dialog */
-  fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
-
-  /* Set dialog title, OK button and File Ops buttons according to type */
   switch (type) {
-    case GNC_FILE_DIALOG_OPEN:
-      /* change OK Button to Stock Open */
-      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), GTK_STOCK_OPEN);
-      gtk_button_set_use_stock(GTK_BUTTON(fb_info.file_box->ok_button), TRUE);
-
-      gtk_file_selection_hide_fileop_buttons(fb_info.file_box);
-
-      /* default title */
-      if (title == NULL)
-        title = _("Open");
-      break;
-
-    case GNC_FILE_DIALOG_IMPORT:
-      /* change OK Button to Import */
-      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), _("Import"));
-
-      gtk_file_selection_hide_fileop_buttons(fb_info.file_box);
-
-      /* default title */
-      if (title == NULL)
-        title = _("Import");
-      break;
-
-    case GNC_FILE_DIALOG_SAVE:
-      /* change OK Button to Stock Save */
-      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), GTK_STOCK_SAVE);
-      gtk_button_set_use_stock(GTK_BUTTON(fb_info.file_box->ok_button), TRUE);
-
-      /* default title */
-      if (title == NULL)
-        title = _("Save");
-      break;
-
-    case GNC_FILE_DIALOG_EXPORT:
-      /* change OK Button to Export */
-      gtk_button_set_label(GTK_BUTTON(fb_info.file_box->ok_button), _("Export"));
-
-      /* default title */
-      if (title == NULL)
-        title = _("Export");
-      break;
+	case GNC_FILE_DIALOG_OPEN:
+		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
+		  okbutton = GTK_STOCK_OPEN;
+		  if (title == NULL)
+			  title = _("Open");
+		  break;
+	case GNC_FILE_DIALOG_IMPORT:
+		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
+		  okbutton = _("_Import");
+		  if (title == NULL)
+			  title = _("Import");
+		  break;
+	case GNC_FILE_DIALOG_SAVE:
+		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
+		  okbutton = GTK_STOCK_SAVE;
+		  if (title == NULL)
+			  title = _("Save");
+		  break;
+	case GNC_FILE_DIALOG_EXPORT:
+		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
+		  okbutton = _("_Export");
+		  ok_icon = GTK_STOCK_CONVERT;
+		  if (title == NULL)
+			  title = _("Export");
+		  break;
+	
   }
 
+  file_box = gtk_file_chooser_dialog_new(
+			  title,
+			  NULL,
+			  action,
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			  NULL);
+  if (ok_icon)
+    gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
+  else
+    gtk_dialog_add_button(GTK_DIALOG(file_box),
+			  okbutton, GTK_RESPONSE_ACCEPT);
 
-  /* hack alert - this was filtering directory names as well as file
-   * names, so I think we should not do this by default (rgmerk) */
-  /* FIXME filters ignored. */
-#if 0
-  if (filter != NULL)
-    gtk_file_selection_complete(fb_info.file_box, filter);
-#endif
+  if (starting_dir)
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box),
+					starting_dir);
 
+  gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
+  /*
+  gtk_window_set_transient_for(GTK_WINDOW(file_box),
+			       GTK_WINDOW(gnc_ui_get_toplevel()));
+  */
 
-  /* Set the starting_dir. */
-  if (starting_dir) {
-    /* NOTE: To set the directory only, this must have a trailing
-    ** /.  */
-    gtk_file_selection_set_filename(fb_info.file_box, starting_dir);
+  if (filters != NULL)
+  {
+    GList* filter;
+    GtkFileFilter* all_filter = gtk_file_filter_new();
+
+    for (filter=filters; filter; filter=filter->next) {
+      g_return_val_if_fail(GTK_IS_FILE_FILTER(filter->data), NULL);
+      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box),
+				   GTK_FILE_FILTER (filter->data));
+    }
+
+    gtk_file_filter_set_name (all_filter, _("All files"));
+    gtk_file_filter_add_pattern (all_filter, "*");
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), all_filter);
+
+    /* Note: You cannot set a file filter and pre-select a file name.
+     * The latter wins, and the filter ends up diabled.  Since we are
+     * only settin the starting directory for the chooser dialog,
+     * everything works as expected. */
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box),
+				 GTK_FILE_FILTER (filters->data));
+    g_list_free (filters);
   }
 
-  gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
-  gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
-                               GTK_WINDOW(gnc_ui_get_toplevel()));
+  response = gtk_dialog_run(GTK_DIALOG(file_box));
 
-  /* OK Button stores filename */
-  g_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
-                   "clicked", GTK_SIGNAL_FUNC(store_filename),
-                   (gpointer) &fb_info);
-
-  /* Ensure that the dialog box is destroyed when the user clicks a button. */
-  g_signal_connect_swapped(GTK_OBJECT(fb_info.file_box->ok_button),
-                   "clicked", G_CALLBACK (gtk_widget_destroy),
-                   fb_info.file_box);
-
-  g_signal_connect_swapped(GTK_OBJECT(fb_info.file_box->cancel_button),
-                   "clicked", G_CALLBACK (gtk_widget_destroy),
-                   fb_info.file_box);
-
-  g_signal_connect(GTK_OBJECT(fb_info.file_box), "delete_event",
-                   G_CALLBACK (gtk_widget_destroy),
-                   NULL);
-
-  g_signal_connect(GTK_OBJECT(fb_info.file_box), "destroy_event",
-                   G_CALLBACK (gtk_widget_destroy),
-                   NULL);
-
-  gtk_dialog_run(GTK_DIALOG(fb_info.file_box));
-  LEAVE("\n");
-  return fb_info.file_name;
+  if (response == GTK_RESPONSE_ACCEPT) {
+    /* look for constructs like postgres://foo */
+    internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+    if (strstr (internal_name, "file://") == internal_name) {
+      /* nope, a local file name */
+      internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+    }
+    file_name = g_strdup(internal_name);
+  }
+  gtk_widget_destroy(GTK_WIDGET(file_box));
+  LEAVE("%s", file_name ? file_name : "(null)");
+  return file_name;
 }
 
-/********************************************************************\
- * store_filename                                                   *
- *   callback that saves the name of the file                       *
- *                                                                  *
- * Args:   w - the widget that called us                            *
- *         data - pointer to filebox info structure                 *
- * Return: none                                                     *
-\********************************************************************/
-static void
-store_filename (GtkWidget *w, gpointer data)
-{
-  FileBoxInfo *fb_info = data;
-  GtkFileSelection *fs;
-  const gchar *file_name;
-
-  fs = GTK_FILE_SELECTION (fb_info->file_box);
-
-  file_name = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-
-  if (!strstr (file_name, "://"))
-    file_name = gtk_file_selection_get_filename (fb_info->file_box);
-
-  fb_info->file_name = g_strdup (file_name);
-}
-
-
-/********************************************************************\
-\********************************************************************/
 
 gboolean
 show_session_error (QofBackendError io_error,
@@ -778,7 +738,7 @@ gnc_post_file_open (const char * filename)
 
   if (!uh_oh)
   {
-    AccountGroup *new_group;
+    Account *new_root;
 
     char * logpath = xaccResolveFilePath(newfile);
     PINFO ("logpath=%s", logpath ? logpath : "(null)");
@@ -810,12 +770,12 @@ gnc_post_file_open (const char * filename)
 
     uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
 
-    new_group = gnc_book_get_group (qof_session_get_book (new_session));
-    if (uh_oh) new_group = NULL;
+    new_root = gnc_book_get_root_account (qof_session_get_book (new_session));
+    if (uh_oh) new_root = NULL;
 
     /* Umm, came up empty-handed, but no error: 
      * The backend forgot to set an error. So make one up. */
-    if (!uh_oh && !new_group) 
+    if (!uh_oh && !new_root) 
     {
       uh_oh = show_session_error (ERR_BACKEND_MISC, newfile,
 				  GNC_FILE_DIALOG_OPEN);
@@ -831,11 +791,11 @@ gnc_post_file_open (const char * filename)
     qof_session_destroy (new_session);
     xaccLogEnable();
 
-    /* well, no matter what, I think it's a good idea to have a
-     * topgroup around.  For example, early in the gnucash startup
+    /* well, no matter what, I think it's a good idea to have a root
+     * account around.  For example, early in the gnucash startup
      * sequence, the user opens a file; if this open fails for any
-     * reason, we don't want to leave them high & dry without a
-     * topgroup, because if the user continues, then bad things will
+     * reason, we don't want to leave them high & dry without a root
+     * account, because if the user continues, then bad things will
      * happen. */
     gnc_get_current_session ();
 
@@ -911,21 +871,17 @@ gnc_file_export_file(const char * newfile)
   QofBackendError io_err = ERR_BACKEND_NO_ERR;
   gchar *default_dir;
 
-  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
-  if (default_dir == NULL)
-    gnc_init_default_directory(&default_dir);
-
   if (!newfile) {
+    default_dir = gnc_get_default_directory (GCONF_SECTION);
     newfile =  gnc_file_dialog (_("Export"), NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
     g_free(default_dir);
-    default_dir = NULL;
     if (!newfile)
       return;
   }
 
   /* Remember the directory as the default. */
-  gnc_extract_directory(&default_dir, newfile);
-  gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
+  default_dir = g_path_get_dirname(newfile);
+  gnc_set_default_directory (GCONF_SECTION, default_dir);
   g_free(default_dir);
   
   qof_event_suspend();
@@ -933,7 +889,7 @@ gnc_file_export_file(const char * newfile)
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
   new_session = qof_session_new ();
-  qof_session_begin (new_session, newfile, FALSE, FALSE);
+  qof_session_begin (new_session, newfile, FALSE, TRUE);
 
   io_err = qof_session_get_error (new_session);
 
@@ -1054,15 +1010,14 @@ gnc_file_save_as (void)
 
   last = gnc_history_get_last();
   if (last) {
-    gnc_extract_directory(&default_dir, last);
+    default_dir = g_path_get_dirname(last);
     g_free(last);
   } else {
-    gnc_init_default_directory(&default_dir);
+    default_dir = gnc_get_default_directory(GCONF_SECTION);
   }
   filename = gnc_file_dialog (_("Save"), NULL, default_dir, 
-		  GNC_FILE_DIALOG_SAVE);
-  if (default_dir)
-    free(default_dir);
+			      GNC_FILE_DIALOG_SAVE);
+  g_free(default_dir);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current
@@ -1202,5 +1157,6 @@ gnc_file_set_shutdown_callback (GNCShutdownCB cb)
 gboolean
 gnc_file_save_in_progress (void)
 {
-  return (save_in_progress > 0);
+    QofSession *session = gnc_get_current_session();
+    return (qof_session_save_in_progress(session) || save_in_progress > 0);
 }

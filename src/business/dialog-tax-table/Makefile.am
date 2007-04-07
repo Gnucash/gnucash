@@ -1,5 +1,3 @@
-PWD := $(shell pwd)
-
 pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la
 
 AM_CFLAGS = \
@@ -10,7 +8,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
@@ -27,12 +24,14 @@ libgncmod_dialog_tax_table_la_SOURCES = \
 noinst_HEADERS = \
   dialog-tax-table.h
 
+libgncmod_dialog_tax_table_la_LDFLAGS = -avoid-version
+
 libgncmod_dialog_tax_table_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
@@ -41,7 +40,7 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${EFENCE_LIBS}
 
 if BUILDING_FROM_SVN
-swig-dialog-tax-table.c: dialog-tax-table.i
+swig-dialog-tax-table.c: dialog-tax-table.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -77,3 +76,5 @@ endif
 noinst_DATA = .scm-links
 CLEANFILES = gnucash .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-dialog-tax-table.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.tax\"

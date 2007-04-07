@@ -1,5 +1,6 @@
 GDA backend status - Dec 9, 2006
 Based on r15090
+Merged with r15803
 
 Building:
 - I am currently building with libgda 1.99.1 installed in /opt/libgda-1.99.1.

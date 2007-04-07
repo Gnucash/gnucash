@@ -36,7 +36,6 @@
 
 #include "Split.h"
 #include "AccountP.h"
-#include "Group.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
@@ -728,7 +727,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
   xaccTransCommitEdit(s->parent);
-
+  LEAVE("");
 }
 
 void 
@@ -1068,11 +1067,20 @@ xaccSplitConvertAmount (const Split *split, Account * account)
     const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
-        g_assert(gnc_commodity_equal(
-                     to_commodity, 
-                     xaccAccountGetCommodity(xaccSplitGetAccount(osplit))));
-    if (osplit)
-      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+    {
+        gnc_commodity* split_comm =
+                     xaccAccountGetCommodity(xaccSplitGetAccount(osplit));
+        if (!gnc_commodity_equal(to_commodity, split_comm))
+	{
+          PERR("The split's (%s) amount can't be converted from %s into %s.",
+               guid_to_string(xaccSplitGetGUID(osplit)),
+               gnc_commodity_get_mnemonic(split_comm),
+               gnc_commodity_get_mnemonic(to_commodity)
+               );
+          return gnc_numeric_zero();
+        }
+        return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+    }
   }
 
   /* ... otherwise, we need to compute the amount from the conversion

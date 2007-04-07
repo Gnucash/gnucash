@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -84,7 +84,7 @@ test_db (int i, GNCPriceDB *db)
 
   filename1 = g_strdup_printf ("test_file_XXXXXX");
         
-  fd = mkstemp (filename1);
+  fd = g_mkstemp (filename1);
         
   write_dom_node_to_file (test_node, fd);
 
@@ -116,7 +116,7 @@ test_db (int i, GNCPriceDB *db)
     }
   }
 
-  unlink (filename1);
+  g_unlink (filename1);
   g_free (filename1);
   xmlFreeNode (test_node);
 }
@@ -150,12 +150,12 @@ main (int argc, char ** argv)
 {
    qof_init();
    cashobjects_register();
-   qof_log_init_filename("/tmp/gnctest.trace");
-   qof_log_set_default(QOF_LOG_DETAIL);
-   qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
-  session = qof_session_new ();
-  test_generation ();
-  print_test_results ();
+   //qof_log_init_filename("/tmp/gnctest.trace");
+   //qof_log_set_default(QOF_LOG_DETAIL);
+   //qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
+   session = qof_session_new ();
+   test_generation ();
+   print_test_results ();
    qof_close();
-  return 0;
+   exit(get_rv());
 }

@@ -40,18 +40,48 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-component-manager.h"
+#include "gnc-session.h"
 
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
 
+#include <aqbanking/version.h>
+#if AQBANKING_VERSION_MAJOR > 2
+# include <gwenhywfar/gui.h>
+# define AB_Banking_SetMessageBoxFn GWEN_Gui_SetMessageBoxFn
+# define AB_Banking_SetInputBoxFn GWEN_Gui_SetInputBoxFn
+# define AB_Banking_SetShowBoxFn GWEN_Gui_SetShowBoxFn
+# define AB_Banking_SetHideBoxFn GWEN_Gui_SetHideBoxFn
+# define AB_Banking_SetProgressStartFn GWEN_Gui_SetProgressStartFn
+# define AB_Banking_SetProgressAdvanceFn GWEN_Gui_SetProgressAdvanceFn
+# define AB_Banking_SetProgressLogFn GWEN_Gui_SetProgressLogFn
+# define AB_Banking_SetProgressEndFn GWEN_Gui_SetProgressEndFn
+# define AB_Banking_SetGetTanFn GWEN_Gui_SetGetTanFn
+# define AB_BANKING_MSG_FLAGS_TYPE_ERROR GWEN_GUI_MSG_FLAGS_TYPE_ERROR
+# define AB_BANKING_INPUT_FLAGS_CONFIRM GWEN_GUI_INPUT_FLAGS_CONFIRM
+# define AB_BANKING_INPUT_FLAGS_SHOW GWEN_GUI_INPUT_FLAGS_SHOW
+# define AB_BANKING_PROGRESS_NONE GWEN_GUI_PROGRESS_NONE
+# define AB_Banking_GetUserData(arg) GWEN_INHERIT_GETDATA(GWEN_GUI, GNCInteractor, arg)
+# define AB_Banking_SetUserData(arg1, arg2)
+/* Note about other changes: Replace callback object AB_BANKING by
+   GWEN_GUI, to be created by GWEN_GUI_new; replace GetTan
+   callback by watching for INPUT_FLAGS_TAN in InputBox(). */
+#endif
+
+GWEN_INHERIT(AB_BANKING, GNCInteractor)
+
 #define GCONF_SECTION_CONNECTION GCONF_SECTION "/connection_dialog"
+#define DIALOG_HBCILOG_CM_CLASS "dialog-hbcilog"
 
 gchar *gnc__extractText(const char *text);
+static void cm_close_handler(gpointer user_data);
 
 /** Adds the interactor and progressmonitor classes to the api. */
 GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
 {
   GNCInteractor *data;
+  gint component_id;
   
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
@@ -68,6 +98,11 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
   data->min_loglevel = AB_Banking_LogLevelVerbous;
+
+  component_id = gnc_register_gui_component(DIALOG_HBCILOG_CM_CLASS,
+					    NULL, cm_close_handler,
+					    data);
+  gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
   /* set HBCI_Interactor */
   gnc_hbci_add_callbacks(api, data);
@@ -88,6 +123,8 @@ void GNCInteractor_delete(GNCInteractor *data)
     gtk_widget_destroy (data->dialog);
   }
   
+  gnc_unregister_gui_component_by_data(DIALOG_HBCILOG_CM_CLASS, data);
+
   data->dialog = NULL;
 
   g_hash_table_destroy(data->showbox_hash);
@@ -339,7 +376,7 @@ static int inputBoxCB(AB_BANKING *ab,
 
     if (newPin) {
       if (!hideInput)
-	printf("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
+	g_warning("inputBoxCB: Oops, hideInput==false and newPin==true, i.e. the input is supposed to be readable -- not implemented (since I thought this does not make sense when entering a new PIN).\n");
       retval = gnc_hbci_get_initial_password (data->parent,
 					      title,
 					      text,
@@ -503,7 +540,12 @@ static int keepAlive(void *user_data)
 }
 
 
-static void destr(void *bp, void *user_data)
+#ifndef GWENHYWFAR_CB
+/* Has been introduced in gwenhywfar>=2.4.1 for callback function
+   decoration on win32, but is empty everywhere else. */
+# define GWENHYWFAR_CB
+#endif
+static void GWENHYWFAR_CB destr(void *bp, void *user_data)
 {
   GNCInteractor *data = user_data;
   if (data == NULL)
@@ -621,7 +663,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
   if (result<1 || result>3) {
-    printf("messageBoxCB: Bad result %d", result);
+    g_warning("messageBoxCB: Bad result %d", result);
     result = 0;
   }
   g_free(title);
@@ -786,7 +828,7 @@ on_button_clicked (GtkButton *button,
       /*GNCInteractor_hide (data);*/
     }
   } else {
-    printf("on_button_clicked: Oops, unknown button: %s\n",
+    g_critical("on_button_clicked: Oops, unknown button: %s\n",
 	   name);
   }
   /* Let the widgets be redrawn */
@@ -794,7 +836,37 @@ on_button_clicked (GtkButton *button,
   while (g_main_context_iteration(context, FALSE));
 }
 
-GWEN_INHERIT(AB_BANKING, GNCInteractor)
+static void
+cm_close_handler(gpointer user_data)
+{
+  GNCInteractor *data = user_data;
+
+  GNCInteractor_setAborted(data);
+  /* Notes about correctly handling this ComponentManager close event:
+     We can't actually close the dialog here because AqBanking might
+     still be running and expecting the GNCInteractor object to exist
+     (and it doesn't offer any handlers for aborting from here). This
+     is not per se a problem with gnucash objects because as soon as
+     AqBanking received the SetAborted signal, it will abort and not
+     deliver any actual results, which means the gnc-hbci module will
+     not continue any operation. 
+
+     However, the dialog and the AB_BANKING object will still be
+     around. It is unclear whether this is 1. correct or 2. wrong:
+     1. It might be correct because a user might still want to see the
+     log messages in the window until he manually closes the
+     GNCInteractor. 2. It might be wrong because once we've received
+     the close event, nobody wants to see the GNCInteractor log
+     messages anyway. To implement the behaviour #2, we should add a
+     new flag in GNCInteractor that is being queried in
+     gnc_AB_BANKING_execute() right after AB_Banking_ExecuteQueue()
+     has finished, and if it is activated from the cm_close_handler,
+     gnc_AB_BANKING_execute should immediately delete the AB_BANKING
+     object (which will also delete the GNCInteractor object) and
+     abort.
+  */
+}
+
 
 /********************************************************
  * Constructor 

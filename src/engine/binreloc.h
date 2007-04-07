@@ -41,7 +41,6 @@ typedef enum {
 	#define gbr_find_bin_dir     ffEt66859784967989_gbr_find_bin_dir
 	#define gbr_find_sbin_dir    ffEt66859784967989_gbr_find_sbin_dir
 	#define gbr_find_data_dir    ffEt66859784967989_gbr_find_data_dir
-	#define gbr_find_locale_dir  ffEt66859784967989_gbr_find_locale_dir
 	#define gbr_find_lib_dir     ffEt66859784967989_gbr_find_lib_dir
 	#define gbr_find_libexec_dir ffEt66859784967989_gbr_find_libexec_dir
 	#define gbr_find_etc_dir     ffEt66859784967989_gbr_find_etc_dir
@@ -57,7 +56,6 @@ gchar   *gbr_find_prefix      (const gchar *default_prefix);
 gchar   *gbr_find_bin_dir     (const gchar *default_bin_dir);
 gchar   *gbr_find_sbin_dir    (const gchar *default_sbin_dir);
 gchar   *gbr_find_data_dir    (const gchar *default_data_dir);
-gchar   *gbr_find_locale_dir  (const gchar *default_locale_dir);
 gchar   *gbr_find_lib_dir     (const gchar *default_lib_dir);
 gchar   *gbr_find_libexec_dir (const gchar *default_libexec_dir);
 gchar   *gbr_find_etc_dir     (const gchar *default_etc_dir);

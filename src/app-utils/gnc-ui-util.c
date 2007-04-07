@@ -30,6 +30,9 @@
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
+#ifdef G_OS_WIN32
+#include <pow.h>
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,7 +48,6 @@
 #include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
-#include "Group.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
 #include "gnc-session.h"
@@ -174,30 +176,22 @@ gnc_reverse_balance (const Account *account)
 }
 
 
-void
-gnc_init_default_directory (char **dirname)
+gchar *
+gnc_get_default_directory (const gchar *gconf_section)
 {
-  if (*dirname == NULL)
-    *dirname = g_strdup_printf("%s/", g_get_home_dir());
+  gchar *dir;
+
+  dir = gnc_gconf_get_string (gconf_section, KEY_LAST_PATH, NULL);
+  if (!dir)
+    dir = g_strdup (g_get_home_dir ());
+
+  return dir;
 }
 
 void
-gnc_extract_directory (char **dirname, const char *filename)
+gnc_set_default_directory (const gchar *gconf_section, const gchar *directory)
 {
-  char *tmp;
-
-  if (*dirname)
-    free(*dirname);
-
-  /* Parse out the directory. */
-  if ((filename == NULL) || (strrchr(filename, '/') == NULL)) {
-    *dirname = NULL;
-    return;
-  }
-
-  *dirname = g_strdup(filename);
-  tmp = strrchr(*dirname, '/');
-  *(tmp+1) = '\0';
+  gnc_gconf_set_string(gconf_section, KEY_LAST_PATH, directory, NULL);
 }
 
 QofBook *
@@ -206,10 +200,10 @@ gnc_get_current_book (void)
   return qof_session_get_book (gnc_get_current_session ());
 }
 
-AccountGroup *
-gnc_get_current_group (void)
+Account *
+gnc_get_current_root_account (void)
 {
-  return gnc_book_get_group (gnc_get_current_book ());
+  return gnc_book_get_root_account (gnc_get_current_book ());
 }
 
 gnc_commodity_table *
@@ -374,11 +368,9 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
 
   if (include_children)
   {
-    AccountGroup *children_group;
     GList *children, *node;
 
-    children_group = xaccAccountGetChildren (account);
-    children = xaccGroupGetSubAccounts (children_group);
+    children = gnc_account_get_descendants(account);
 
     for (node = children; node; node = node->next)
     {
@@ -393,6 +385,8 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
         child_balance, child_currency, currency);
       balance = gnc_numeric_add_fixed (balance, child_balance);
     }
+
+    g_list_free(children);
   }
 
   /* reverse sign if needed */
@@ -573,10 +567,9 @@ equity_base_name (GNCEquityType equity_type)
 }
 
 Account *
-gnc_find_or_create_equity_account (AccountGroup *group,
+gnc_find_or_create_equity_account (Account *root,
                                    GNCEquityType equity_type,
-                                   gnc_commodity *currency,
-                                   QofBook *book)
+                                   gnc_commodity *currency)
 {
   Account *parent;
   Account *account;
@@ -588,11 +581,11 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   g_return_val_if_fail (equity_type >= 0, NULL);
   g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
   g_return_val_if_fail (currency != NULL, NULL);
-  g_return_val_if_fail (group != NULL, NULL);
+  g_return_val_if_fail (root != NULL, NULL);
 
   base_name = equity_base_name (equity_type);
 
-  account = xaccGetAccountFromName (group, base_name);
+  account = gnc_account_lookup_by_name(root, base_name);
   if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
@@ -600,7 +593,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   {
     base_name = base_name && *base_name ? _(base_name) : "";
 
-    account = xaccGetAccountFromName (group, base_name);
+    account = gnc_account_lookup_by_name(root, base_name);
     if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
       account = NULL;
   }
@@ -613,7 +606,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   name = g_strconcat (base_name, " - ",
                       gnc_commodity_get_mnemonic (currency), NULL);
-  account = xaccGetAccountFromName (group, name);
+  account = gnc_account_lookup_by_name(root, name);
   if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
     account = NULL;
 
@@ -638,11 +631,12 @@ gnc_find_or_create_equity_account (AccountGroup *group,
     name = g_strdup (base_name);
   }
 
-  parent = xaccGetAccountFromName (group, _("Equity"));
+  parent = gnc_account_lookup_by_name(root, _("Equity"));
   if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
-    parent = NULL;
+    parent = root;
+  g_assert(parent);
 
-  account = xaccMallocAccount (book);
+  account = xaccMallocAccount (gnc_account_get_book(root));
 
   xaccAccountBeginEdit (account);
 
@@ -650,14 +644,9 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   xaccAccountSetType (account, ACCT_TYPE_EQUITY);
   xaccAccountSetCommodity (account, currency);
 
-  if (parent)
-  {
-    xaccAccountBeginEdit (parent);
-    xaccAccountInsertSubAccount (parent, account);
-    xaccAccountCommitEdit (parent);
-  }
-  else
-    xaccGroupInsertAccount (group, account);
+  xaccAccountBeginEdit (parent);
+  gnc_account_append_child (parent, account);
+  xaccAccountCommitEdit (parent);
 
   xaccAccountCommitEdit (account);
 
@@ -682,10 +671,9 @@ gnc_account_create_opening_balance (Account *account,
   g_return_val_if_fail (account != NULL, FALSE);
 
   equity_account =
-    gnc_find_or_create_equity_account (xaccAccountGetRoot (account),
+    gnc_find_or_create_equity_account (gnc_account_get_root(account),
                                        EQUITY_OPENING_BALANCE,
-                                       xaccAccountGetCommodity (account),
-                                       book);
+                                       xaccAccountGetCommodity (account));
   if (!equity_account)
     return FALSE;
 
@@ -737,13 +725,34 @@ static void
 gnc_lconv_set_utf8 (char **p_value, char *default_value)
 {
   char *value = *p_value;
+  *p_value = NULL;
 
   if ((value == NULL) || (value[0] == 0))
-    *p_value = default_value;
+    value = default_value;
 
-  *p_value = g_locale_to_utf8 (*p_value, -1, NULL, NULL, NULL);
-  // FIXME: Do we really need to make a copy here ?
-  //*p_value = g_strdup (*p_value);
+#ifdef G_OS_WIN32
+  {
+    /* get number of resulting wide characters */
+    size_t count = mbstowcs (NULL, value, 0);
+    if (count > 0) {
+      /* malloc and convert */
+      wchar_t *wvalue = g_malloc ((count+1) * sizeof(wchar_t));
+      count = mbstowcs (wvalue, value, count+1);
+      if (count > 0) {
+        *p_value = g_utf16_to_utf8 (wvalue, -1, NULL, NULL, NULL);
+      }
+      g_free (wvalue);
+    }
+  }
+#else /* !G_OS_WIN32 */
+  *p_value = g_locale_to_utf8 (value, -1, NULL, NULL, NULL);
+#endif
+  
+  if (*p_value == NULL) {
+    // The g_locale_to_utf8 conversion failed. FIXME: Should we rather
+    // use an empty string instead of the default_value? Not sure.
+    *p_value = default_value;
+  }
 }
 
 static void
@@ -773,6 +782,7 @@ gnc_localeconv (void)
   gnc_lconv_set_utf8(&lc.mon_thousands_sep, ",");
   gnc_lconv_set_utf8(&lc.mon_grouping, "\003");
   gnc_lconv_set_utf8(&lc.negative_sign, "-");
+  gnc_lconv_set_utf8(&lc.positive_sign, "");
 
   gnc_lconv_set_char(&lc.frac_digits, 2);
   gnc_lconv_set_char(&lc.int_frac_digits, 2);
@@ -1555,6 +1565,114 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 
   /* its OK to return buf, since we declared it static */
   return buf;
+}
+
+
+/********************************************************************\
+ ********************************************************************/
+
+#define FUDGE .00001
+
+static gchar *small_numbers[] = {
+  N_("Zero"), N_("One"), N_("Two"), N_("Three"), N_("Four"),
+  N_("Five"), N_("Six"), N_("Seven"), N_("Eight"), N_("Nine"),
+  N_("Ten"), N_("Eleven"), N_("Twelve"), N_("Thirteen"), N_("Fourteen"),
+  N_("Fifteen"), N_("Sixteen"), N_("Seventeen"), N_("Eighteen"), N_("Nineteen"),
+  N_("Twenty")};
+static gchar *medium_numbers[] = {
+  N_("Zero"), N_("Ten"), N_("Twenty"), N_("Thirty"), N_("Forty"),
+  N_("Fifty"), N_("Sixty"), N_("Seventy"), N_("Eighty"), N_("Ninety")};
+static gchar *big_numbers[] = {
+  N_("Hundred"), N_("Thousand"), N_("Million"), N_("Billion"),
+  N_("Trillion"), N_("Quadrillion"), N_("Quintillion")};
+
+static gchar *
+integer_to_words(gint64 val)
+{
+  gint64 log_val, pow_val, this_part;
+  GString *result;
+  gchar *tmp;
+
+  if (val == 0)
+    return g_strdup("zero");
+  if (val < 0)
+    val = -val;
+
+  result = g_string_sized_new(100);
+
+  while (val >= 1000) {
+    log_val = log10(val) / 3 + FUDGE;
+    pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
+    this_part = val / pow_val;
+    val -= this_part * pow_val;
+    tmp = integer_to_words(this_part);
+    g_string_append_printf(result, "%s %s ", tmp,
+                           gettext(big_numbers[log_val]));
+    g_free(tmp);
+  }
+
+  if (val >= 100) {
+    this_part = val / 100;
+    val -= this_part * 100;
+    g_string_append_printf(result, "%s %s ",
+                           gettext(small_numbers[this_part]),
+                           gettext(big_numbers[0]));
+  }
+
+  if (val > 20) {
+    this_part = val / 10;
+    val -= this_part * 10;
+    g_string_append(result, gettext(medium_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  if (val > 0) {
+    this_part = val;
+    val -= this_part;
+    g_string_append(result, gettext(small_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  result = g_string_truncate(result, result->len - 1);
+  return g_string_free(result, FALSE);
+}
+
+gchar *
+number_to_words(gdouble val, gint64 denom)
+{
+  gint64 int_part, frac_part;
+  gchar *int_string, *full_string;
+
+  if (val < 0) val = -val;
+  if (denom < 0) denom = -denom;
+
+  int_part = trunc(val);
+  frac_part = round((val - int_part) * denom);
+
+  int_string = integer_to_words(int_part);
+  full_string =
+    g_strdup_printf(_("%s and %" G_GINT64_FORMAT "/%" G_GINT64_FORMAT),
+		    int_string, frac_part, denom);
+  g_free(int_string);
+  return full_string;
+}
+
+gchar *
+numeric_to_words(gnc_numeric val)
+{
+  return number_to_words(gnc_numeric_to_double(val),
+                         gnc_numeric_denom(val));
+}
+
+const gchar *
+printable_value (gdouble val, gint denom)
+{
+  GNCPrintAmountInfo info;
+  gnc_numeric num;
+
+  num = gnc_numeric_create(round(val * denom), denom);
+  info = gnc_share_print_info_places(log10(denom));
+  return xaccPrintAmount (num, info);
 }
 
 

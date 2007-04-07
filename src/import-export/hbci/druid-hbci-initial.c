@@ -25,9 +25,9 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -45,12 +45,14 @@
 #include "gnc-html.h"
 //#include "import-account-matcher.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 
 #include <aqbanking/banking.h>
 #include <aqbanking/version.h>
 #include <gwenhywfar/stringlist.h>
 #include <gwenhywfar/version.h>
 
+#define DRUID_HBCI_IMPORT_CM_CLASS "druid-hbci-import"
 /* #define DEFAULT_HBCI_VERSION 201 */
 
 enum account_list_cols {
@@ -84,6 +86,11 @@ struct _hbciinitialinfo
 
 };
 
+/* Is TRUE as long as the druid is opened and running. Is being
+   used to catch a window close event during waiting for a child
+   process. */
+static gboolean hbci_druid_is_active = FALSE;
+
 static void
 reset_initial_info (HBCIInitialInfo *info)
 {
@@ -104,6 +111,8 @@ delete_initial_druid (HBCIInitialInfo *info)
 {
   if (info == NULL) return;
 
+  gnc_unregister_gui_component_by_data(DRUID_HBCI_IMPORT_CM_CLASS, info);
+
   reset_initial_info (info);
   
   /* if (info->interactor)
@@ -112,6 +121,7 @@ delete_initial_druid (HBCIInitialInfo *info)
   if (info->window != NULL) 
     gtk_widget_destroy (info->window);
 
+  hbci_druid_is_active = FALSE;
   g_free (info);
 }
 
@@ -209,9 +219,9 @@ update_accountlist (HBCIInitialInfo *info)
 			      update_accountlist_acc_cb,
 			      info);
   else
-    printf("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
+    g_warning("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
 
-  /* printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
+  /* g_message("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
 
   if (path) {
     gtk_tree_selection_select_path(selection, path);
@@ -270,8 +280,7 @@ static gboolean banking_has_accounts(AB_BANKING *banking)
 
 
 static void
-on_cancel (GnomeDruid *gnomedruid,
-	   gpointer user_data)
+cm_close_handler(gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
 
@@ -279,6 +288,13 @@ on_cancel (GnomeDruid *gnomedruid,
   /* probably not saving because of 'cancel', but for now we save too */
   gnc_AB_BANKING_fini (info->api);
   delete_initial_druid(info);
+}
+
+static void
+on_cancel (GnomeDruid *gnomedruid,
+	   gpointer user_data)
+{
+  cm_close_handler(user_data);
 }
 
 static void
@@ -357,9 +373,9 @@ on_accountlist_changed (GtkTreeSelection *selection,
   if (hbci_acc) {
     old_value = g_hash_table_lookup (info->gnc_hash, hbci_acc);
 
-    printf("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
+    /* g_message("on_accountlist_select_row: Selected hbci_acc id %s; old_value %p \n",
 	   AB_Account_GetAccountNumber(hbci_acc),
-	   old_value);
+	   old_value); */
 
     longname = gnc_hbci_account_longname(hbci_acc);
     if (AB_Account_GetCurrency (hbci_acc) && 
@@ -393,8 +409,19 @@ on_accountlist_changed (GtkTreeSelection *selection,
 
 
 
+static void
+on_child_exit (GPid pid, gint status, gpointer data)
+{
+  gint *data_status = data;
+#ifdef G_OS_WIN32
+  *data_status = status;
+#else
+  *data_status = WEXITSTATUS (status);
+#endif
 
-
+  g_spawn_close_pid (pid);
+  gtk_main_quit ();
+}
 
 
 #if (AQBANKING_VERSION_MAJOR > 1) || \
@@ -420,10 +447,10 @@ on_aqhbci_button (GtkButton *button,
 
   /* This is the point where we look for and start an external
      application shipped with aqhbci that contains the setup druid for
-     HBCI related stuff. It requires qt (but not kde). This
+     AqBanking related stuff. It requires qt (but not kde). This
      application contains the very verbose step-by-step setup wizard
-     for the HBCI account, and the application is shared with other
-     AqBanking-based financial managers that offer the HBCI features
+     for the AqBanking account, and the application is shared with other
+     AqBanking-based financial managers that offer the AqBanking features
      (e.g. KMyMoney). See gnucash-devel discussion here
      https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
   */
@@ -530,7 +557,7 @@ on_aqhbci_button (GtkButton *button,
 
   if (wizard_exists) {
     /* Really check whether the file exists */
-    int fd = open( wizard_path, O_RDONLY );
+    int fd = g_open( wizard_path, O_RDONLY, 0 );
     if ( fd == -1)
       wizard_exists = FALSE;
     else
@@ -540,9 +567,6 @@ on_aqhbci_button (GtkButton *button,
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
-    int wait_status;
-    int wait_result = 0;
-
     /* Call the qt wizard. See the note above about why this approach
        is chosen. */
 
@@ -551,33 +575,36 @@ on_aqhbci_button (GtkButton *button,
     if (info->gnc_hash != NULL)
       g_hash_table_destroy (info->gnc_hash);
     info->gnc_hash = NULL;
-    /* In gtk2, this would be g_spawn_async or similar. */
+
     {
-      pid_t pid;
-      pid = fork();
-      switch (pid) {
-      case -1:
-	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
+      GPid pid;
+      GError *error = NULL;
+      gchar *argv[2];
+      gboolean spawned;
+
+      argv[0] = g_strdup (wizard_path);
+      argv[1] = NULL;
+      spawned = g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+			       NULL, NULL, &pid, &error);
+      g_free (argv[0]);
+
+      if (!spawned) {
+	g_critical("Could not start AqBanking setup wizard: %s",
+		   error->message ? error->message : "(null)");
+	g_error_free (error);
 	res = -1;
-	AB_Banking_Init (info->api);
-	break;
-      case 0: /* child */
-	execl(wizard_path, wizard_path, NULL);
-	printf("Fork call failed. Cannot start AqHBCI setup wizard.");
-	_exit(0);
-      default: /* parent */
-	res = 0;
-	/* wait until child is finished */
-	while (wait_result == 0) {
-	  gtk_main_iteration();
-	  wait_result = waitpid(pid, &wait_status, WNOHANG);
-	  if ((wait_result == pid) && WIFEXITED(wait_status))
-	    res = WEXITSTATUS(wait_status);
-	  else
-	    res = -8;
+      } else {
+	g_child_watch_add (pid, on_child_exit, &res);
+	hbci_druid_is_active = TRUE;
+	gtk_main ();
+	if (!hbci_druid_is_active) {
+	  /* Just in case the druid has been canceled in the meantime. */
+	  g_free (backend_name);
+	  GWEN_Buffer_free(buf);
+	  return;
 	}
-	AB_Banking_Init (info->api);
       }
+      AB_Banking_Init (info->api);
     }
 
     if (res == 0) {
@@ -587,32 +614,31 @@ on_aqhbci_button (GtkButton *button,
       if ((res == 0) || (res == AB_ERROR_FOUND))
 	druid_enable_next_button(info);
       else {
-	printf("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
+	g_warning("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
 	druid_disable_next_button(info);
       }
     }
     else {
-      printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
+      g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
 	(info->window,
-       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-	 _("The external program \"%s Setup Wizard\" returned a nonzero "
-	   "exit code which means it has not been finished successfully. "
-	   "The further HBCI setup can only be finished if the %s "
-	   "Setup Wizard is run successfully. Please try to start and "
-	   "successfully finish the %s Setup Wizard program again."),
-	 backend_name, backend_name, backend_name);
+	 _("The external program \"AqBanking Setup Wizard\" failed "
+	   "to run successfully.  Online Banking can only be setup "
+	   "if this wizard has run successfully.  "
+	   "Please try running the \"AqBanking Setup Wizard\" again."));
       druid_disable_next_button(info);
     }
   } else {
-    printf("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
+    g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
     gnc_error_dialog
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-       _("The external program \"%s Setup Wizard\" has not been found. \n\n"
-	 "The package aqbanking is supposed to install the program "
-	 "\"%s-qt3-wizard\". Please check your installation of aqbanking."),
-       backend_name, backend_name);
+       _("The external program \"AqBanking Setup Wizard\" has not "
+	 "been found. \n\n"
+	 "The aqbanking package should include the "
+	 "program \"qt3-wizard\".  Please check your installation to "
+	 "ensure this program is present.  On some distributions this "
+	 "may require installing additional packages."));
     druid_disable_next_button(info);
   }
   g_free (backend_name);
@@ -631,6 +657,7 @@ void gnc_hbci_initial_druid (void)
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
+  gint component_id;
   
   info = g_new0 (HBCIInitialInfo, 1);
 
@@ -672,14 +699,14 @@ void gnc_hbci_initial_druid (void)
     g_object_unref(info->accountstore);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("HBCI account name"),
+    column = gtk_tree_view_column_new_with_attributes(_("Online Banking Account Name"),
 						      renderer,
 						      "text", ACCOUNT_LIST_COL_HBCI_NAME,
 						      NULL);
     gtk_tree_view_append_column(info->accountview, column);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("GnuCash account name"),
+    column = gtk_tree_view_column_new_with_attributes(_("GnuCash Account Name"),
 						      renderer,
 						      "text", ACCOUNT_LIST_COL_GNC_NAME,
 						      NULL);
@@ -700,6 +727,10 @@ void gnc_hbci_initial_druid (void)
 		      G_CALLBACK (on_accountlist_prepare), info);
   }
 
+  component_id = gnc_register_gui_component(DRUID_HBCI_IMPORT_CM_CLASS,
+					    NULL, cm_close_handler,
+					    info);
+  gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
   /*g_signal_connect (dialog, "destroy",*/
   /*                  G_CALLBACK(gnc_hierarchy_destroy_cb), NULL);*/

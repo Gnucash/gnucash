@@ -1,5 +1,5 @@
 
-SUBDIRS = gnumeric printing
+SUBDIRS = gnumeric
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash

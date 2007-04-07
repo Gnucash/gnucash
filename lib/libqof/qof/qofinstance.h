@@ -92,6 +92,9 @@ Sets this instance AND the collection as dirty.
 */
 void qof_instance_set_dirty(QofInstance* inst);
 
+/* reset the dirty flag */
+void qof_instance_mark_clean (QofInstance *);
+
 gboolean qof_instance_check_edit(const QofInstance *inst);
 
 gboolean qof_instance_do_free(const QofInstance *inst);

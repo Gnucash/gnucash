@@ -5,7 +5,7 @@
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,7 +37,7 @@
 #include "QueryNew.h"
 #include "SX-book.h"
 #include "dialog-account.h"
-#include "dialog-scheduledxaction.h"
+#include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -170,10 +170,10 @@ void gnc_split_register_size_allocate (GtkWidget *widget,
 FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 
-guint
+GType
 gnc_split_reg_get_type( void )
 {
-  static guint gnc_split_reg_type = 0;
+  static GType gnc_split_reg_type = 0;
 
   if (!gnc_split_reg_type)
     {
@@ -483,7 +483,7 @@ account_latest_price (Account *account)
   commodity = xaccAccountGetCommodity (account);
   currency = gnc_default_currency ();
 
-  book = xaccAccountGetBook (account);
+  book = gnc_account_get_book (account);
   pdb = gnc_book_get_pricedb (book);
 
   return gnc_pricedb_lookup_latest (pdb, commodity, currency);
@@ -501,7 +501,7 @@ account_latest_price_any_currency (Account *account)
   if (!account) return NULL;
   commodity = xaccAccountGetCommodity (account);
 
-  book = xaccAccountGetBook (account);
+  book = gnc_account_get_book (account);
   pdb = gnc_book_get_pricedb (book);
 
   price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
@@ -991,7 +991,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 
   gtk_dialog_add_button(GTK_DIALOG(dialog),
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  gnc_gtk_dialog_add_button(dialog, N_("_Remove Splits"),
+  gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
 			    GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
   response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
   gtk_widget_destroy (dialog);
@@ -1227,7 +1227,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         GList *sxElts;
         
         /* Get the correct SX */
-        for ( sxElts = gnc_book_get_schedxactions( gnc_get_current_book() );
+        for ( sxElts = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
               (!theSX) && sxElts;
               sxElts = sxElts->next ) {
           SchedXaction *sx = (SchedXaction*)sxElts->data;
@@ -1237,8 +1237,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         }
 
         if ( theSX ) {
-          SchedXactionDialog *sxd = gnc_ui_scheduled_xaction_dialog_create();
-          gnc_ui_scheduled_xaction_editor_dialog_create( sxd, theSX, FALSE );
+          gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
           return;
         }
       }

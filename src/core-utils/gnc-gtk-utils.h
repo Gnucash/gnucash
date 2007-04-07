@@ -39,16 +39,6 @@
 
 #include <gtk/gtk.h>
 
-/** @name gtk Backwards Compatability Functions
- @{ 
-*/
-#ifndef HAVE_GTK26
-gchar *gtk_combo_box_get_active_text   (GtkComboBox *combo_box);
-#endif
-
-/** @} */
-
-
 /** @name gtk Miscellaneous Functions
  @{ 
 */

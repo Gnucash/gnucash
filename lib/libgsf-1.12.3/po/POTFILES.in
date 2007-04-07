@@ -1,7 +1,0 @@
-# List of source files which contain translatable strings.
-# Please keep this file sorted alphabetically.
-[encoding: UTF-8]
-gsf/gsf-blob.c
-gsf/gsf-clip-data.c
-gsf/gsf-msole-utils.c
-thumbnailer/gsf-office-thumbnailer.schemas.in

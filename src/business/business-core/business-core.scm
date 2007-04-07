@@ -16,7 +16,7 @@
        (let ((e (gncOwnerGetEmployee owner)))
 	 (gncEmployeeGetAddr e)))
       ((eqv? type GNC-OWNER-JOB)
-       (gnc:owner-get-address (gnc:job-get-owner
+       (gnc:owner-get-address (gncJobGetOwner
 			       (gncOwnerGetJob owner))))
       (else '()))))
 
@@ -38,7 +38,7 @@
   (let ((type (gncOwnerGetType owner)))
     (cond
       ((eqv? type GNC-OWNER-JOB)
-       (gnc:owner-get-name-dep (gnc:job-get-owner
+       (gnc:owner-get-name-dep (gncJobGetOwner
 				(gncOwnerGetJob owner))))
       (else (just-name (gncOwnerGetName owner))))))
 
@@ -102,7 +102,7 @@
 		       (lot (xaccSplitGetLot split)))
 		  (if (not (null? lot))
 		      (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
-			     (owner? (gnc:owner-get-owner-from-lot
+			     (owner? (gncOwnerGetOwnerFromLot
 				      lot temp-owner)))
 			(if (not (null? invoice))
 			    (set! owner (gncInvoiceGetOwner invoice))

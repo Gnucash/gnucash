@@ -93,7 +93,7 @@ the object must return a single entity matching one of the choice types.
 #include "qofclass.h"
 #include "qofobject.h"
 
-#define QOF_MOD_CHOICE "qof-choice"
+#define QOF_MOD_CHOICE "qof.choice"
 
 /** \note Choice
 @{

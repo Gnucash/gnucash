@@ -17,9 +17,13 @@
 
 ;; Copyright 2002 Joshua Sled <jsled@asynchronous.org>
 ;;
+
+;; Simple function for testing:
+(define (gnc:foobar val) val)
+
 ;; pretty literal copies of similar code from gnumeric-1.0.8, except we want
-;; positive values to be returned [as gnucash will handle the credit/debit
-;; appropriately]
+;; positive values to be returned (as gnucash will handle the credit/debit
+;; appropriately)
 
 (define (gnc:ipmt rate per nper pv fv type)
   (* -1 (* rate
@@ -40,8 +44,6 @@
 
 (define (gnc:pmt rate nper pv fv type)
   (* -1 (calc-pmt rate nper pv fv type)))
-
-(define (gnc:foobar val) val)
 
 ;;;;;
 ;; below: not-exposed/"private" functions, used by the "public" functions
@@ -72,3 +74,84 @@
                rate)))
 )
 
+
+;; This section added in 2005. Ludovic Nicolle
+;; Formula to get the rate for a given period if there are yper in the year
+;; And the official rate is compounded ycomp in the year.
+;; For example, a mortgage being monthly has yper = 12
+;; and if the posted rate is a plain annual rate, then ycomp = 1.
+;; but if the posted rate is compounded semi-annually, as is the case in Canada,
+;; then ycomp = 2. 
+;; this function can be used to enter the nominal rate in the formulas, without
+;; pre-calculating the power function below.
+
+(define (gnc:periodic_rate rate yper ycomp)
+  (-  (expt (+ 1.0 (/ rate ycomp)) (/ ycomp yper) )  1.0)
+)
+
+;; the three following functions with prefix gnc:cpd_ are more generic equivalents of 
+;; gnc:pmt, gnc:ipmt and gnc:ppmt above, with some differences. 
+;; First difference is that they take the annual nominal rate and two yearly frequencies:
+;; rate is annual, not per period (the functions calculate it themselves)
+;; yfreq determines the compounding frequency of the payed/charged interest
+;; ycomp determines the compounding frequency of the annual nominal rate
+
+;; Second difference is for rounding. My experience shows that all banks do not use
+;; the exact same rounding parameters. Moreover, on top of that situation, numerical calculations 
+;; in gnucash using the original gnc:pmt, gnc:ipmt and gnc:ppmt functions above can also 
+;; create another set of rounding issues. Both problems create the "odd-penny imbalance" problem.
+
+;; So the gnc:cpd_Zpmt functions do automatic rounding, the goal being to have PPMT = PMT - I 
+;; holding true for all calculated numbers. However, this won't fix the first problem if your bank
+;; can't do proper maths and manual fixing of transactions will still be required.
+
+;; One problem with the rounding procedure in these three functions is that it is always 
+;; rounding at the second decimal. This works great with dollars and euros and a lot of major 
+;; currencies but might well cause issues with other currencies not typically divided in 100. 
+;; I have not tested anything else than dollars.
+
+;; If the automatic rounding causes issues for a particular case, one can always use the
+;; equivalence of the cpd_ and non-cpd_ functions, by using periodic_rate() like this:
+;;                     gnc:cpd_pmt(              rate:yfreq:ycomp :nper:pv:fv:type) 
+;;   is equivalent to      gnc:pmt(periodic_rate(rate:yfreq:ycomp):nper:pv:fv:type)
+
+;; On the opposite side, if you want the automatic rounding but don't understand how to use
+;; the cpd_ functions, here is a quick example on how to convert original gnc:Zpmt
+;; function calls. The typical setup is to use 'rate/yfreq' as the first parameter, so the 
+;; slution is to simply use yfreq for both yfreq and ycomp in the gnc:cpd_Zpmt calls, like this:
+;;                         gnc:pmt( rate  /  yfreq   :nper:pv:fv:type)
+;; is equivalent to    gnc:cpd_pmt( rate:yfreq:yfreq :nper:pv:fv:type)
+
+(define (gnc:cpd_ipmt rate yfreq ycomp per nper pv fv type)
+  (* 0.01  
+    (round
+      (* -100 (* (gnc:periodic_rate rate yfreq ycomp)
+           (- 0 (calc-principal pv
+                                (calc-pmt (gnc:periodic_rate rate yfreq ycomp) nper pv fv type)
+                                (gnc:periodic_rate rate yfreq ycomp) (- per 1))))
+      )
+    )
+  )
+)
+
+(define (gnc:cpd_ppmt rate yfreq ycomp per nper pv fv type)
+  (let* (
+                (per_rate (gnc:periodic_rate rate yfreq ycomp))
+                (pmt (* -1 (gnc:cpd_pmt rate yfreq ycomp nper pv fv type)))
+                (ipmt (* per_rate (calc-principal pv pmt per_rate (- per 1))))
+        )
+        (
+                * -1  (+ pmt ipmt)
+        )
+  )
+)
+
+(define (gnc:cpd_pmt rate yfreq ycomp nper pv fv type)
+  (* 0.01  
+    (round
+      (* -100
+        (calc-pmt (gnc:periodic_rate rate yfreq ycomp) nper pv fv type)
+      )
+    )
+  )
+)

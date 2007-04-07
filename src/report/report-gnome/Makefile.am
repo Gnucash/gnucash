@@ -1,12 +1,10 @@
-SUBDIRS = .
-# test -- removed 'test' from SUBDIRS by jsled 2004.05.02 .. I don't know how
-# to get the test-link-mumble to link correctly; plz assist.
-PWD := $(shell pwd)
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
@@ -17,7 +15,6 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
@@ -37,21 +34,22 @@ gncinclude_HEADERS = \
   gnc-plugin-page-report.h \
   window-report.h
 
+libgncmod_report_gnome_la_LDFLAGS = -avoid-version
+
 libgncmod_report_gnome_la_LIBADD = \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GNOME_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 if BUILDING_FROM_SVN
-swig-report-gnome.c: report-gnome.i
+swig-report-gnome.c: report-gnome.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
 endif
@@ -95,3 +93,5 @@ endif
 
 CLEANFILES = gnucash report .scm-links ${SCM_FILE_LINKS}
 MAINTAINERCLEANFILES = swig-report-gnome.c
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.gui\"

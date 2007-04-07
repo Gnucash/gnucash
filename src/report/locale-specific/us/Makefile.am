@@ -5,8 +5,10 @@ pkglib_LTLIBRARIES = libgncmod-locale-reports-us.la
 libgncmod_locale_reports_us_la_SOURCES = \
   gncmod-locale-reports-us.c 
 
+libgncmod_locale_reports_us_la_LDFLAGS = -avoid-version
+
 libgncmod_locale_reports_us_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} 
 
@@ -55,3 +57,5 @@ EXTRA_DIST = \
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.locale.us\"

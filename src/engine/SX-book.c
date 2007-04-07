@@ -39,65 +39,69 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "Group.h"
-#include "GroupP.h"
+#include "Account.h"
+#include "Split.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
+#include "gnc-event.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.engine.sx"
 
 /* XXX this whole file is crufty, it doesn't really use entities
  * in the most efficient/best way */
 
 /* ====================================================================== */
 
-AccountGroup *
-gnc_collection_get_template_group( const QofCollection *col )
+static Account *
+gnc_collection_get_template_root( const QofCollection *col )
 {
   return qof_collection_get_data (col);
 }
 
-AccountGroup *
-gnc_book_get_template_group( QofBook *book )
+Account *
+gnc_book_get_template_root( QofBook *book )
 {
   QofCollection *col;
   if (!book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_SXTG);
-  return gnc_collection_get_template_group (col);
+  return gnc_collection_get_template_root (col);
 }
 
-void
-gnc_collection_set_template_group (QofCollection *col,
-                                   AccountGroup *templateGroup)
+static void
+gnc_collection_set_template_root (QofCollection *col,
+                                  Account *templateRoot)
 {
-  AccountGroup *old_grp;
+  Account *old_root;
   if (!col) return;
 
-  old_grp = gnc_collection_get_template_group (col);
-  if (old_grp == templateGroup) return;
+  old_root = gnc_collection_get_template_root (col);
+  if (old_root == templateRoot) return;
 
-  qof_collection_set_data (col, templateGroup);
+  qof_collection_set_data (col, templateRoot);
 
-  xaccAccountGroupBeginEdit (old_grp);
-  xaccAccountGroupDestroy (old_grp);
+  if (old_root) {
+    xaccAccountBeginEdit (old_root);
+    xaccAccountDestroy (old_root);
+  }
 }
 
 
 void
-gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
+gnc_book_set_template_root (QofBook *book, Account *templateRoot)
 {
   QofCollection *col;
   if (!book) return;
 
-  if (templateGroup && templateGroup->book != book)
+  if (templateRoot && gnc_account_get_book(templateRoot) != book)
   {
-     PERR ("cannot mix and match books freely!");
-     return;
+       g_critical("cannot mix and match books freely!");
+       return;
   }
 
   col = qof_book_get_collection (book, GNC_ID_SXTG);
-  gnc_collection_set_template_group (col, templateGroup);
+  gnc_collection_set_template_root (col, templateRoot);
 }
 
 
@@ -107,26 +111,53 @@ gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
 static void 
 sxtg_book_begin (QofBook *book)
 {
-  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
+  Account *root;
+
+  root = xaccMallocAccount(book);
+  xaccAccountBeginEdit(root);
+  xaccAccountSetType(root, ACCT_TYPE_ROOT);
+  xaccAccountCommitEdit(root);
+  gnc_book_set_template_root (book, root);
 }
 
 static void 
 sxtg_book_end (QofBook *book)
 {
-  gnc_book_set_template_group (book, NULL);
+  gnc_book_set_template_root (book, NULL);
 }
-
 
 static gboolean
 sxtg_is_dirty(const QofCollection *col)
 {
-  return xaccGroupNotSaved(gnc_collection_get_template_group(col));
+  Account *root;
+  GList *descendants, *node;
+  gboolean dirty = FALSE;
+
+  root = gnc_collection_get_template_root(col);
+  descendants = gnc_account_get_descendants(root);
+  for (node = descendants; node; node = g_list_next(node)) {
+    if (qof_instance_is_dirty(node->data)) {
+      dirty = TRUE;
+      break;
+    }
+  }
+  g_list_free(descendants);
+
+  return dirty;
 }
   
 static void
 sxtg_mark_clean(QofCollection *col)
 {
-  xaccGroupMarkSaved(gnc_collection_get_template_group(col));
+  Account *root;
+  GList *descendants;
+
+  root = gnc_collection_get_template_root(col);
+  qof_collection_mark_clean(col);
+
+  descendants = gnc_account_get_descendants(root);
+  g_list_foreach(descendants, (GFunc)qof_instance_mark_clean, NULL);
+  g_list_free(descendants);
 }
 
 static QofObject sxtg_object_def = 
@@ -144,78 +175,45 @@ static QofObject sxtg_object_def =
 
 /* ====================================================================== */
 
-SchedXactions *
-gnc_collection_get_schedxaction_list(const QofCollection *col)
-{
-  return qof_collection_get_data (col);
-}
-
-GList *
+SchedXactions*
 gnc_collection_get_schedxactions(const QofCollection *col)
 {
-  SchedXactions *list;
-  list = qof_collection_get_data (col);
-  if (list) return list->sx_list;
-  return NULL;
+  SchedXactions *rtn = qof_collection_get_data(col);
+  // @@assert(rtn != null);
+  return rtn;
 }
 
-GList *
+SchedXactions*
 gnc_book_get_schedxactions(QofBook *book)
 {
   QofCollection *col;
-  col = qof_book_get_collection (book, GNC_ID_SXTT);
-  return gnc_collection_get_schedxactions (col);
+  col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
+  return gnc_collection_get_schedxactions(col);
 }
 
 void
-gnc_collection_set_schedxactions( QofCollection *col, GList *newList )
+gnc_sxes_add_sx(SchedXactions *sxes, SchedXaction *sx)
 {
-  SchedXactions *old_list, *new_list;
-  if ( col == NULL ) return;
-
-  old_list = qof_collection_get_data (col);
-  if (old_list && old_list->sx_list == newList) 
-  {
-     /* Assume the worst, that any 'set' means the data has 
-      * changed, and needs to be saved. */
-     old_list->sx_notsaved = TRUE;
-     return;
-  }
-  
-  new_list = g_new (SchedXactions, 1);
-  new_list->sx_list = newList;
-  new_list->sx_notsaved = TRUE;
-  if (NULL == newList) new_list->sx_notsaved = FALSE;
-  
-  qof_collection_set_data (col, new_list);
-
-  g_free (old_list);
+  if (g_list_find(sxes->sx_list, sx) != NULL)
+    return;
+  sxes->sx_list = g_list_append(sxes->sx_list, sx);
+  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_ADDED, (gpointer)sx);
 }
 
 void
-gnc_book_set_schedxactions( QofBook *book, GList *newList )
+gnc_sxes_del_sx(SchedXactions *sxes, SchedXaction *sx)
 {
-  QofCollection *col;
-  if ( book == NULL ) return;
-
-  col = qof_book_get_collection (book, GNC_ID_SXTT);
-  gnc_collection_set_schedxactions (col, newList);
+  GList *to_remove;
+  to_remove = g_list_find(sxes->sx_list, sx);
+  if (to_remove == NULL)
+    return;
+  sxes->sx_list = g_list_delete_link(sxes->sx_list, to_remove);
+  qof_event_gen(&sxes->inst.entity, GNC_EVENT_ITEM_REMOVED, (gpointer)sx);
 }
 
 /* ====================================================================== */
 /* SX-trans stuff */
 
-static void 
-sxtt_book_begin (QofBook *book)
-{
-  gnc_book_set_schedxactions (book, NULL);
-}
-
-static void 
-sxtt_book_end (QofBook *book)
-{
-  gnc_book_set_schedxactions (book, NULL);
-}
 static void
 mark_sx_clean(gpointer data, gpointer user_data)
 {
@@ -224,13 +222,28 @@ mark_sx_clean(gpointer data, gpointer user_data)
 }
 
 static void
+book_sxes_setup(QofBook *book)
+{
+     QofCollection *col;
+     SchedXactions *sxes;
+
+     col = qof_book_get_collection(book, GNC_ID_SCHEDXACTION);
+     sxes = g_new (SchedXactions, 1);
+     qof_instance_init(&sxes->inst, GNC_ID_SXES, book);
+     sxes->sx_list = NULL;
+     sxes->sx_notsaved = TRUE;
+     qof_collection_set_data(col, sxes);
+}
+
+static void
 book_sxns_mark_saved(QofCollection *col)
 {
   SchedXactions *sxl;
-
-  sxl = gnc_collection_get_schedxaction_list (col);
-  if (sxl) sxl->sx_notsaved = FALSE;
-  g_list_foreach(gnc_collection_get_schedxactions(col),
+  sxl = gnc_collection_get_schedxactions(col);
+  if (!sxl)
+       return;
+  sxl->sx_notsaved = FALSE;
+  g_list_foreach(sxl->sx_list,
                  mark_sx_clean, 
                  NULL);
 }
@@ -241,10 +254,11 @@ book_sxlist_notsaved(const QofCollection *col)
   GList *sxlist;
   SchedXactions *sxl;
 
-  sxl = gnc_collection_get_schedxaction_list (col);
+  sxl = gnc_collection_get_schedxactions(col);
+  if (!sxl) return FALSE;
   if((sxl && sxl->sx_notsaved)) return TRUE;
  
-  for(sxlist = gnc_collection_get_schedxactions(col);
+  for(sxlist = sxl->sx_list;
       sxlist != NULL;
       sxlist = g_list_next(sxlist))
   {
@@ -256,6 +270,21 @@ book_sxlist_notsaved(const QofCollection *col)
 
   return FALSE;
 }
+
+static QofObject sxes_object_def =
+{
+  interface_version: QOF_OBJECT_VERSION,
+  e_type:            GNC_ID_SXES,
+  type_label:        "Scheduled Transactions List",
+  create:            NULL,
+  book_begin:        book_sxes_setup,
+  book_end:          NULL,
+  is_dirty:          book_sxlist_notsaved,
+  mark_clean:        book_sxns_mark_saved,
+  foreach:           NULL,
+  printable:         NULL,
+  version_cmp:       NULL
+};
   
 static QofObject sxtt_object_def = 
 {
@@ -263,10 +292,10 @@ static QofObject sxtt_object_def =
   e_type:            GNC_ID_SXTT,
   type_label:        "Scheduled Transaction Templates",
   create:            NULL,
-  book_begin:        sxtt_book_begin,
-  book_end:          sxtt_book_end,
-  is_dirty:          book_sxlist_notsaved,
-  mark_clean:        book_sxns_mark_saved,
+  book_begin:        NULL,
+  book_end:          NULL,
+  is_dirty:          NULL,
+  mark_clean:        NULL,
   foreach:           NULL,
   printable:         NULL,
   version_cmp:       NULL,
@@ -275,8 +304,11 @@ static QofObject sxtt_object_def =
 gboolean 
 gnc_sxtt_register (void)
 {
-  return qof_object_register (&sxtg_object_def);
-  return qof_object_register (&sxtt_object_def);
+  if (!qof_object_register(&sxes_object_def))
+    return FALSE;
+  if (!qof_object_register(&sxtg_object_def))
+    return FALSE;
+  return qof_object_register(&sxtt_object_def);
 }
 
 GList*
@@ -284,7 +316,7 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
 {
   GList *rtn = NULL;
   const GUID *acct_guid = xaccAccountGetGUID(acct);
-  GList *sx_list = gnc_book_get_schedxactions(book);
+  GList *sx_list = gnc_book_get_schedxactions(book)->sx_list;
   for (; sx_list != NULL; sx_list = sx_list->next)
   {
     SchedXaction *sx = (SchedXaction*)sx_list->data;

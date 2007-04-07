@@ -25,7 +25,9 @@
 #include "gnc-main.h"
 
 static gchar *namespace_regexp = NULL;
-static gboolean is_debugging;
+static gboolean is_debugging = 0;
+static gboolean extras_enabled = 0;
+static const gchar *gconf_path;
 
 void 
 gnc_main_set_namespace_regexp(const gchar *str)
@@ -53,4 +55,28 @@ void
 gnc_set_debugging(gboolean d)
 {
     is_debugging = d;
+}
+
+gboolean
+gnc_is_extra_enabled(void)
+{
+    return extras_enabled;
+}
+
+void
+gnc_set_extra(gboolean enabled)
+{
+    extras_enabled = enabled;
+}
+
+void
+gnc_set_gconf_path (const gchar *path)
+{
+    gconf_path = path;
+}
+
+const gchar *
+gnc_get_gconf_path (void)
+{
+    return gconf_path;
 }

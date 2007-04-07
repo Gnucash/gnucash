@@ -113,7 +113,7 @@ remove_clicked (CommoditiesDialog *cd)
   if (commodity == NULL)
     return;
 
-  accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup(cd->book));
+  accounts = gnc_account_get_descendants (gnc_book_get_root_account(cd->book));
   can_delete = TRUE;
   do_delete = FALSE;
 

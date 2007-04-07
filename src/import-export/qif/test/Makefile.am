@@ -11,7 +11,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} 
 
 LDADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../../libgncmod-generic-import.la \
   ../libgncmod-qif.la \
@@ -36,7 +36,6 @@ GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_srcdir}/src/app-utils \
   --gnc-module-dir ${top_srcdir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
-  --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/gnome \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/import-export \
@@ -46,7 +45,7 @@ TESTS_ENVIRONMENT := \
   GNC_TEST_FILES=${srcdir}/test-files \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-noinst_PROGRAMS = \
+check_PROGRAMS = \
   test-link \
   test-qif
 

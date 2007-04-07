@@ -201,14 +201,14 @@
 	 (currency (xaccTransGetCurrency txn))
 	 (type-str
 	  (cond
-	   ((equal? type gnc:transaction-type-invoice)
+	   ((equal? type TXN-TYPE-INVOICE)
 	    (if (not (null? invoice))
 		(gnc:make-html-text
 		 (gnc:html-markup-anchor
 		  (gnc:invoice-anchor-text invoice)
 		  inv-str))
 		inv-str))
-	   ((equal? type gnc:transaction-type-payment) (_ "Payment, thank you"))
+	   ((equal? type TXN-TYPE-PAYMENT) (_ "Payment, thank you"))
 	   (else (_ "Unknown"))))
 	 )
 
@@ -296,8 +296,8 @@
        (lambda (txn)
 	 (let ((type (xaccTransGetTxnType txn)))
 	   (if
-	    (or (equal? type gnc:transaction-type-invoice)
-		(equal? type gnc:transaction-type-payment))
+	    (or (equal? type TXN-TYPE-INVOICE)
+		(equal? type TXN-TYPE-PAYMENT))
 	    (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
 				       inv-str reverse? start-date total)))
 
@@ -626,20 +626,19 @@
     document))
 
 (define (find-first-account type)
-  (define (find-first group num index)
+  (define (find-first account num index)
     (if (>= index num)
 	'()
-	(let* ((this-account (xaccGroupGetAccount group index))
-	       (account-type (xaccAccountGetType this-account)))
+	(let* ((this-child (gnc-account-nth-child account index))
+	       (account-type (xaccAccountGetType this-child)))
 	  (if (eq? account-type type)
-	      this-account
-	      (find-first group num (+ index 1))))))
+	      this-child
+	      (find-first account num (+ index 1))))))
 
-  (let* ((current-group (gnc-get-current-group))
-	 (num-accounts (xaccGroupGetNumAccounts
-			current-group)))
+  (let* ((current-root (gnc-get-current-root-account))
+	 (num-accounts (gnc-account-n-children current-root)))
     (if (> num-accounts 0)
-	(find-first current-group num-accounts 0)
+	(find-first current-root num-accounts 0)
 	'())))
 
 (define (find-first-account-for-owner owner)

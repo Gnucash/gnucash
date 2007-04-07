@@ -50,10 +50,6 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
-
 
 /** The instance data structure for a content plugin. */
 typedef struct GncPluginPage {
@@ -352,6 +348,28 @@ const gchar *gnc_plugin_page_get_page_name (GncPluginPage *page);
  *  @param name The new string for the name.
  */
 void gnc_plugin_page_set_page_name (GncPluginPage *page, const char *name);
+
+
+/** Retrieve the long name of this page.  This is the string used in
+ *  the tooltip that is attached to the pate name in the notebook
+ *  tab.
+ *
+ *  @param page The page whose name should be retrieved.
+ *
+ *  @return The page's name.  This string is owned by the page and
+ *  should not be freed by the caller.
+ */
+const gchar *gnc_plugin_page_get_page_long_name (GncPluginPage *page);
+
+
+/** Set the long name of this page.  This is the string used in the
+ *  tooltip that is attached to the pate name in the notebook tab.
+ *
+ *  @param page The page whose name should be set.
+ *
+ *  @param name The new string for the name.
+ */
+void gnc_plugin_page_set_page_long_name (GncPluginPage *page, const char *name);
 
 
 /** Retrieve the Uniform Resource Identifier for this page.

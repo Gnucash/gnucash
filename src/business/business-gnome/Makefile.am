@@ -1,10 +1,10 @@
 SUBDIRS = . glade schemas ui
-PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
@@ -16,7 +16,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
   -I${top_srcdir}/src/business/dialog-tax-table \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
@@ -29,7 +28,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core
 
 libgncmod_business_gnome_la_SOURCES = \
-  businessmod-gnome.c \
   business-options-gnome.c \
   business-urls.c \
   business-gnome-utils.c \
@@ -45,6 +43,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-vendor.c \
   gnc-plugin-business.c \
   gnc-plugin-page-invoice.c \
+  gncmod-business-gnome.c \
   search-owner.c
 
 noinst_HEADERS = \
@@ -65,6 +64,8 @@ noinst_HEADERS = \
   gnc-plugin-page-invoice.h \
   search-owner.h
 
+libgncmod_business_gnome_la_LDFLAGS = -avoid-version
+
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
@@ -76,8 +77,8 @@ libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GLADE_LIBS} \
   ${GNOME_LIBS} \
   ${GUILE_LIBS} \
@@ -115,3 +116,5 @@ endif
 
 noinst_DATA = .scm-links
 CLEANFILES = $(BUILT_SOURCES) gnucash .scm-links ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.gnome\"

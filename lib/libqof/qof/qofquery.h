@@ -79,7 +79,7 @@ probably optimize.
 #include "qofquerycore.h"
 #include "qofchoice.h"
 
-#define QOF_MOD_QUERY "qof-query"
+#define QOF_MOD_QUERY "qof.query"
 
 /** A Query */
 typedef struct _QofQuery QofQuery;

@@ -3,9 +3,12 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-standard-reports.la
 
 libgncmod_standard_reports_la_SOURCES = \
-  gncmod-standard-reports.c 
+  gncmod-standard-reports.c
+
+libgncmod_standard_reports_la_LDFLAGS = -avoid-version
+
 libgncmod_standard_reports_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -63,3 +66,5 @@ EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.report.standard\"

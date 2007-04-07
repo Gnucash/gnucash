@@ -38,9 +38,6 @@
 #include "guile-mappings.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#ifndef HAVE_GLIB26
-#include "gkeyfile.h"
-#endif
 #include "swig-runtime.h"
 
 #include "gnc-plugin-page-register.h"
@@ -76,8 +73,6 @@
 #include "window-reconcile.h"
 #include "window-report.h"
 
-#include "gtk-compat.h"
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -100,6 +95,7 @@ static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboo
 static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page);
 
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
@@ -458,6 +454,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
 	gnc_plugin_page_set_page_name(plugin_page, label);
 	g_free(label);
+
+	label = gnc_plugin_page_register_get_long_name(plugin_page);
+        gnc_plugin_page_set_page_long_name(plugin_page, label);
+        g_free(label);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);
@@ -831,10 +831,10 @@ static const gchar *style_names[] = {
   NULL
 };
 
-#define KEY_REGISTER_TYPE	"Register Type"
-#define KEY_ACCOUNT_NAME	"Account Name"
-#define KEY_REGISTER_STYLE	"Register Style"
-#define KEY_DOUBLE_LINE		"Double Line Mode"
+#define KEY_REGISTER_TYPE       "RegisterType"
+#define KEY_ACCOUNT_NAME        "AccountName"
+#define KEY_REGISTER_STYLE      "RegisterStyle"
+#define KEY_DOUBLE_LINE         "DoubleLineMode"
 
 #define LABEL_ACCOUNT		"Account"
 #define LABEL_SUBACCOUNT	"SubAccount"
@@ -997,8 +997,8 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     acct_name = g_key_file_get_string(key_file, group_name,
 				      KEY_ACCOUNT_NAME, &error);
     book = qof_session_get_book(gnc_get_current_session());
-    account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-					 acct_name);
+    account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
+					      acct_name);
     g_free(acct_name);
     if (account == NULL) {
       LEAVE("Bad account name");
@@ -1157,6 +1157,37 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
+}
+
+static gchar *
+gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GNCLedgerDisplayType ledger_type;
+  	GNCLedgerDisplay *ld;
+	SplitRegister *reg;
+	Account *leader;
+
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+	ld = priv->ledger;
+	reg = gnc_ledger_display_get_split_register (ld);
+	ledger_type = gnc_ledger_display_type (ld);
+	leader = gnc_ledger_display_leader (ld);
+
+	switch (ledger_type) {
+	 case LD_SINGLE:
+	  return g_strdup(xaccAccountGetFullName (leader));
+
+	 case LD_SUBACCOUNT:
+	  return g_strdup_printf("%s+", xaccAccountGetFullName (leader));
+
+	 default:
+	  break;
+	}
+
+        return NULL;
 }
 
 /************************************************************/
@@ -1810,10 +1841,6 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
   SplitRegister * reg;
   Split         * split;
   Transaction   * trans;
-  const char    * payee;
-  const char    * memo;
-  gnc_numeric   amount;
-  time_t        date;
 
 
   ENTER("(action %p, plugin_page %p)", action, plugin_page);
@@ -1827,15 +1854,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
 
   if(split && trans)
   {
-    payee  = xaccTransGetDescription(trans);
-    memo   = xaccTransGetNotes(trans);
-    if (memo == NULL)
-      memo = "";
-    amount = xaccSplitGetAmount(split);
-    amount = gnc_numeric_abs (amount);
-    date   = xaccTransGetDate(trans);
-
-    gnc_ui_print_check_dialog_create(plugin_page, payee, amount, date, memo);
+    gnc_ui_print_check_dialog_create(plugin_page, split);
   }
   LEAVE(" ");
 }
@@ -2577,7 +2596,7 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
 {
   GncPluginPageRegisterPrivate *priv;
   Query *query;
-  AccountGroup *root;
+  Account *root;
   Transaction *trans;
   SplitRegister *reg;
 
@@ -2600,7 +2619,7 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
   }
 
   gnc_suspend_gui_refresh();
-  root = gnc_get_current_group();
+  root = gnc_get_current_root_account();
   xaccTransScrubOrphans(trans);
   xaccTransScrubImbalance(trans, root, NULL);
   gnc_resume_gui_refresh();
@@ -2613,7 +2632,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
 {
   GncPluginPageRegisterPrivate *priv;
   Query *query;
-  AccountGroup *root;
+  Account *root;
   Transaction *trans;
   Split *split;
   GList *node;
@@ -2630,7 +2649,7 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
   }
 
   gnc_suspend_gui_refresh();
-  root = gnc_get_current_group();
+  root = gnc_get_current_root_account();
 
   for (node = xaccQueryGetSplits(query); node; node = node->next)
   {

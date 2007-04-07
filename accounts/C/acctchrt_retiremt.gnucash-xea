@@ -10,6 +10,12 @@
     You would want to select this set of accounts if you have retirement accounts (stock, bond, mutual fund, index fund).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:id>
   <act:type>ASSET</act:type>
@@ -24,6 +30,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investments</act:name>
@@ -41,6 +48,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Retirement</act:name>

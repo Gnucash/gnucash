@@ -428,8 +428,8 @@
   (let ((table (gnc:make-html-table))
 	(work-to-do 0)
 	(work-done 0)
-	(topl-accounts (xaccGroupGetAccountListSorted
-			(gnc-get-current-group))))
+	(topl-accounts (gnc-account-get-children-sorted
+			(gnc-get-current-root-account))))
 
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
@@ -458,13 +458,13 @@
 	 (lambda (x) (if x 
 			 (gnc-commodity-collector-merge
 			  this-collector x )))
-	 (gnc:group-map-all-accounts
+	 (gnc:account-map-descendants
 	  (lambda (a)
 	    ;; Important: Calculate the balance if and only if the
 	    ;; account a is shown, i.e. (use-acct? a) == #t.
 	    (and (use-acct? a)
 		 (my-get-balance-nosub a)))
-	  (xaccAccountGetChildren account)))
+	  account))
 	this-collector))
 
     ;; Use this account in the account hierarchy? Check against the
@@ -474,7 +474,7 @@
     (define (use-acct? a)
       (or (member a accounts)
 	  (and show-subaccts? 
-	       (let ((parent (xaccAccountGetParentAccount a)))
+	       (let ((parent (gnc-account-get-parent a)))
 		 (and parent
 		      (use-acct? parent))))))
 
@@ -580,7 +580,7 @@
 	     (lambda (acct)
 	       (let ((subaccts (filter 
 				use-acct?
-				(gnc:account-get-immediate-subaccounts acct))))
+				(gnc-account-get-children acct))))
 		 (set! sum (+ sum  1))
 		 (if (or (= current-depth tree-depth) (null? subaccts))
 		     sum
@@ -647,7 +647,7 @@
 	   (lambda (acct)
 	     (let ((subaccts (filter 
 			      use-acct?
-			      (gnc:account-get-immediate-subaccounts acct))))
+			      (gnc-account-get-children acct))))
 	       (set! work-done (+ 1 work-done))
 	       (if start-percent
 		   (gnc:report-percent-done

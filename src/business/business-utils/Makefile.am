@@ -2,6 +2,7 @@ pkglib_LTLIBRARIES = libgncmod-business-utils.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_builddir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
@@ -18,8 +19,10 @@ libgncmod_business_utils_la_SOURCES = \
 noinst_HEADERS = \
   business-options.h
 
+libgncmod_business_utils_la_LDFLAGS = -avoid-version
+
 libgncmod_business_utils_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
@@ -63,3 +66,5 @@ clean-local:
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.business.utils\"

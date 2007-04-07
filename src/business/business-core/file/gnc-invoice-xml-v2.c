@@ -191,7 +191,7 @@ set_timespec(xmlNodePtr node, GncInvoice* invoice,
   return TRUE;
 }
 
-static inline gboolean
+static gboolean
 invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;

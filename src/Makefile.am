@@ -10,7 +10,6 @@ NONGUI_SUBDIRS = \
   quotes
 
 GUI_SUBDIRS_1 = \
-  network-utils \
   calculation \
   tax \
   app-utils \
@@ -52,5 +51,4 @@ EXTRA_DIST = \
   gnc-test-env \
   valgrind-gnucash.supp \
   guile-mappings.h \
-  glib-compat.h \
-  gtk-compat.h
+  glib-compat.h

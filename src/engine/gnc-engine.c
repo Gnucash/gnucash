@@ -28,25 +28,23 @@
 #include "qof.h"
 #include "cashobjects.h"
 #include "AccountP.h"
-#include "GroupP.h"
 #include "SX-book-p.h"
 #include "gnc-budget.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
-#include "SchedXactionP.h"
 #include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "gnc-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-file"
 
 /* gnc-backend-file location */
 #include "gnc-path.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
-//static QofLogModule log_module = GNC_MOD_ENGINE;
+// static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* GnuCash version functions */
 unsigned int
@@ -80,27 +78,16 @@ gnc_engine_init(int argc, char ** argv)
     gboolean required;
   } libs[] = {
     { GNC_LIB_NAME, TRUE },
-	{ "gnc-backend-gda", TRUE },
+    { "gncmod-backend-gda", TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
-    { "gnc-backend-postgres", FALSE },
+    { "gncmod-backend-postgres", FALSE },
     { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
-  gchar *tracefilename;
-  gchar *libdir;
+  gchar *pkglibdir;
 
   if (1 == engine_is_initialized) return;
 
-  /* initialize logging to our file. */
-  tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
-				   (gchar *)NULL);
-  qof_log_init_filename(tracefilename);
-  g_free(tracefilename);
-  /* Only set the core log_modules here the rest can be set locally.  */
-  qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
-  qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
-  qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
-  qof_log_set_default(QOF_LOG_WARNING);
   /* initialize QOF */
   qof_init();
   qof_set_alt_dirty_mode(TRUE);
@@ -108,24 +95,24 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  libdir = gnc_path_get_libdir ();
+  pkglibdir = gnc_path_get_pkglibdir ();
   for (lib = libs; lib->lib ; lib++)
   {
-      if (qof_load_backend_library(libdir, lib->lib))
+      if (qof_load_backend_library(pkglibdir, lib->lib))
       {
           engine_is_initialized = 1;
       }
       else
       {
-	  g_message("failed to load %s from %s\n", lib->lib, libdir);
-	  /* If this is a required library, stop now! */
-	  if (lib->required)
-	  {
-	      g_message("required library %s not found.\n", lib->lib);
-	  }
+          g_warning("failed to load %s from %s\n", lib->lib, pkglibdir);
+          /* If this is a required library, stop now! */
+          if (lib->required)
+          {
+              g_critical("required library %s not found.\n", lib->lib);
+          }
       }
   }
-  g_free (libdir);
+  g_free (pkglibdir);
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)
@@ -174,27 +161,7 @@ gnc_engine_is_initialized (void)
 void gnc_log_default(void)
 {
 	qof_log_set_default(QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_ACCOUNT, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_SX, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_QUERY, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_SCRUB, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_LOT, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_COMMODITY, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_BACKEND, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_BUSINESS, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_BOOK, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_GUILE, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_LEDGER, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_REGISTER, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_HTML, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_PREFS, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_WARNING);
-	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_TRACE);
-	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_WARNING);
+    qof_log_set_level(GNC_MOD_ROOT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DEBUG);
 }
 

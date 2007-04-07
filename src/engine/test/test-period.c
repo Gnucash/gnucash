@@ -32,7 +32,6 @@
 #include <time.h>
 #include "cashobjects.h"
 #include "Account.h"
-#include "Group.h"
 #include "Period.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -44,9 +43,8 @@ run_test (void)
 {
   QofSession *sess1, *sess2;
   QofBook *openbook, *closedbook;
-  AccountGroup *grp;
-  AccountList *acclist, *anode;
-  Account *acc, *equity;
+  GList *acclist, *anode;
+  Account *root, *acc, *equity;
   SplitList *splist;
   Split *sfirst, *slast;
   Transaction *tfirst, *tlast;
@@ -66,9 +64,9 @@ run_test (void)
 
   add_random_transactions_to_book (openbook, num_trans);
 
-  grp = xaccGetAccountGroup (openbook);
+  root = gnc_book_get_root_account (openbook);
 
-  acclist = xaccGroupGetSubAccounts (grp);
+  acclist = gnc_account_get_descendants (root);
   for (anode=acclist; anode; anode=anode->next)
   {
     int ns;
@@ -77,10 +75,11 @@ run_test (void)
     if (2 <= ns) break;
     acc = NULL;
   }
+  g_list_free(acclist);
 
   if(!acc)
   {
-    failure("group didn't have accounts with enough splits");
+    failure("book didn't have accounts with enough splits");
     exit(get_rv());
   }
 
@@ -119,8 +118,6 @@ run_test (void)
 
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
-  qof_log_set_file (stdout);
-  qof_log_set_level_registered (QOF_LOG_WARNING);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   equity, "this is opening balance dude");
 
@@ -141,15 +138,13 @@ main (int argc, char **argv)
     else num_trans = 120;
 
     qof_init();
-    gnc_log_default();
-    qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
-
     g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+
     if(cashobjects_register()) {
         srand(num_trans);
         run_test ();
         print_test_results();
     }
     qof_close();
-    return 0;
+    return get_rv();
 }

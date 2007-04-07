@@ -1,2 +1,0 @@
-# These are manually-edited to override or add declarations to those scanned
-# from the header files.

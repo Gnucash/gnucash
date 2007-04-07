@@ -80,19 +80,6 @@ gnc_print_session_destroy(PrintSession * ps)
   g_free(ps);
 }
 
-void 
-gnc_print_session_moveto(PrintSession * ps, double x, double y)
-{
-  gnome_print_moveto(ps->context, x, y);
-}
-
-
-void 
-gnc_print_session_text(PrintSession * ps, const char * text)
-{
-  gnome_print_show(ps->context, (guchar*)text);  
-}
-
 
 void
 gnc_print_session_done(PrintSession * ps)
@@ -117,28 +104,4 @@ gnc_print_session_done(PrintSession * ps)
     default:
       break;
   }
-}
-
-void
-gnc_print_session_rotate(PrintSession *ps, double theta_in_degrees)
-{
-  gnome_print_rotate(ps->context, theta_in_degrees);
-}
-
-void
-gnc_print_session_translate(PrintSession *ps, double x, double y)
-{
-  gnome_print_translate(ps->context, x, y);
-}
-
-void
-gnc_print_session_gsave(PrintSession *ps)
-{
-  gnome_print_gsave(ps->context);
-}
-
-void
-gnc_print_session_grestore(PrintSession *ps)
-{
-  gnome_print_grestore(ps->context);
 }

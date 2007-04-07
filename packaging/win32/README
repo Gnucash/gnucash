@@ -7,7 +7,7 @@ section of this file.
 Before you start with the automated build, you have to complete these
 steps manually. The directory variables are set in custom.sh.
 
-* Download MSYS (but *only* msys, no mingw and no msysdtk)
+* Download MSYS (but *only* msys; no mingw and no msysdtk)
 from http://www.mingw.org/download.shtml -> Current -> MSYS -> (bin, *.exe)
 to $DOWNLOAD_DIR
 
@@ -18,24 +18,34 @@ to $MSYS_DIR
 from http://www.mingw.org/download.shtml -> Current -> mingwPORT -> (bin, wget-*)
 to $DOWNLOAD_DIR
 
-* Adjust installer.sh and/or custom.sh. Especially in the latter you
-  can comment out those build steps that have been completed already
-  and/or should not be performed now. If you want verbose output of
-  any script step, change the first line in install.sh and add the
-  "-x" switch.
+* Adjust custom.sh (install.sh doesn't need to be changed). In
+  custom.sh you should adapt the directory variables. If you want to,
+  you could also comment out those build steps that have been
+  completed already and/or should not be performed now, although the
+  script is quite intelligent not to duplicate already completed
+  work. If you want verbose output of any script step, change the
+  first line in install.sh and add the "-x" switch.
 
-Start/Enter any MSYS shell. Let the automated build begin by:
+Start/Enter any MSYS shell window. Let the automated build begin by:
 
   $INSTALLER_DIR/install.sh
 
 Good luck!
 
+To generate a self-installing setup.exe file that contains
+*everything*, run the following command after install.sh has
+completed:
+
+  $INSTALLER_DIR/dist.sh
+
 More information is collected on http://wiki.gnucash.org/wiki/Windows
+
 
 --------------------------
 
 Cross-compiling a Windows/mingw32 executable of GnuCash on a Linux
-host system.
+host system. (Note: This used to work unchangedly in Sept'2006 but
+probably not any longer.)
 
 These steps need to be performed:
 
@@ -53,13 +63,12 @@ These steps need to be performed:
    adjust the directories in custom.sh according to your
    preferred installation, especially $GLOBAL_DIR.
 
-3. Download the binary windows packages for "guile" and "g-wrap"
-   from http://www.tu-harburg.de/~et2cs/gnc/ and unpack them into
-   the directories $GUILE_DIR and $GWRAP_DIR as given in
-   custom.sh. (This is done because the build system for guile and
-   g-wrap doesn't support cross-compiling.)
+3. Download a binary windows packages for "guile" e.g. from
+   http://www.tu-harburg.de/~et2cs/gnc/ and unpack it into the
+   directory $GUILE_DIR as given in custom.sh. (This is done because
+   the build system for guile doesn't support cross-compiling.)
 
-4. Call install.sh which will read the directory settings from
+4. Call install.sh, which will read the directory settings from
    custom.sh. It should download, compile, and install everything
    automatically. Eventually the windows gnucash is installed into
    $GNUCASH_DIR. 

@@ -41,8 +41,7 @@
 #include "dialog-chart-export.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
-#include "dialog-scheduledxaction.h"
-#include "dialog-sxsincelast.h"
+#include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
 #include "druid-acct-period.h"
 #include "druid-loan.h"
@@ -54,6 +53,7 @@
 #include "gnc-ui.h"
 #include "gnc-window.h"
 #include "gnc-session.h"
+#include "gnc-plugin-page-sx-list.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -220,6 +220,10 @@ GncPlugin *
 gnc_plugin_basic_commands_new (void)
 {
   GncPluginBasicCommands *plugin;
+
+  /* We just need to mention it, so the GType is registered and will be
+   * reflected during plugin-page restore. */
+  GNC_TYPE_PLUGIN_PAGE_SX_LIST;
 
   plugin = g_object_new (GNC_TYPE_PLUGIN_BASIC_COMMANDS, NULL);
 
@@ -434,35 +438,53 @@ gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData
 static void
 gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data)
 {
-  gnc_ui_scheduled_xaction_dialog_create ();
+        GncPluginPage *page = gnc_plugin_page_sx_list_new();
+        gnc_main_window_open_page(NULL, page);
 }
 
 static void
 gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
 {
   GncMainWindow *window;
-  gint ret;
+  GncSxInstanceModel *sx_instances;
+  GncSxSummary summary;
+  GList *auto_created_txns = NULL;
   const char *nothing_to_do_msg =
     _( "There are no Scheduled Transactions to be entered at this time." );
 	
   g_return_if_fail (data != NULL);
 
   window = data->window;
-  ret = gnc_ui_sxsincelast_dialog_create ();
-  if ( ret == 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
-  } else if ( ret < 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), ngettext
-		     /* Translators: %d is the number of transactions. This is a
-			ngettext(3) message. */
-		     ("There are no Scheduled Transactions to be entered at this time. "
-		      "(%d transaction automatically created)",
-		      "There are no Scheduled Transactions to be entered at this time. "
-		      "(%d transactions automatically created)",
-		      -(ret)),
-		     -(ret));
-  } /* else { this else [>0 means dialog was created] intentionally left
-     * blank. } */	       
+
+  sx_instances = gnc_sx_get_current_instances();
+  gnc_sx_instance_model_summarize(sx_instances, &summary);
+  gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
+  if (summary.need_dialog)
+  {
+    gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
+    auto_created_txns = NULL;
+  }
+  else
+  {
+    if (summary.num_auto_create_no_notify_instances == 0)
+    {
+      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
+    }
+    else
+    {
+      gnc_info_dialog(GTK_WIDGET(&window->gtk_window), ngettext
+                      /* Translators: %d is the number of transactions. This is a
+                         ngettext(3) message. */
+                      ("There are no Scheduled Transactions to be entered at this time. "
+                       "(%d transaction automatically created)",
+                       "There are no Scheduled Transactions to be entered at this time. "
+                       "(%d transactions automatically created)",
+                       summary.num_auto_create_no_notify_instances),
+                      summary.num_auto_create_no_notify_instances);
+    }
+  }
+  g_list_free(auto_created_txns);
+  g_object_unref(G_OBJECT(sx_instances));
 }
 
 static void

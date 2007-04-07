@@ -11,6 +11,7 @@
 #include "qof.h"
 #include "Query.h"
 #include "gnc-pricedb.h"
+#include "SchedXaction.h"
 
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
@@ -35,13 +36,13 @@ void random_glist_strings_only (gboolean strings_only);
 void kvp_exclude_type (KvpValueType kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
-void set_max_group_depth (gint max_group_depth);
-void set_max_group_accounts (gint max_group_accounts);
+void set_max_account_tree_depth (gint max_tree_depth);
+void set_max_accounts_per_level (gint max_accounts);
 
 GNCPrice * get_random_price(QofBook *book);
 gboolean make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
 GNCPriceDB * get_random_pricedb(QofBook *book);
-AccountGroup * get_random_group(QofBook * book);
+Account * get_random_account_tree(QofBook * book);
 Account* get_random_account(QofBook * book);
 Split* get_random_split(QofBook *book, Account *account, Transaction *trn);
 Transaction* get_random_transaction(QofBook *book);
@@ -84,8 +85,12 @@ void make_random_changes_to_transaction_and_splits (QofBook *book,
                                                     Transaction *trans,
                                                     GList *accounts);
 void make_random_changes_to_account (QofBook *book, Account *account);
-void make_random_changes_to_group (QofBook *book, AccountGroup *group);
+void make_random_changes_to_level (QofBook *book, Account *parent);
 void make_random_changes_to_book (QofBook *book);
 void make_random_changes_to_session (QofSession *session);
+
+SchedXaction* add_daily_sx(gchar *name, GDate *start, GDate *end, GDate *last_occur);
+SchedXaction* add_once_sx(gchar *name, GDate *when);
+void remove_sx(SchedXaction *sx);
 
 #endif

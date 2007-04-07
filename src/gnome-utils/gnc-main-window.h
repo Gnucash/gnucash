@@ -76,6 +76,7 @@ typedef struct {
 } GncMainWindowActionData;
 
 typedef void (*GncMainWindowFunc) (GncMainWindow *window, GncPluginPage *page);
+typedef void (*GncMainWindowPageFunc) (GncPluginPage *page, gpointer user_data);
 
 /* function prototypes */
 
@@ -125,6 +126,17 @@ void gnc_main_window_open_page (GncMainWindow *window,
  *  @param page The page of data to be removed.
  */
 void gnc_main_window_close_page (GncPluginPage *page);
+
+
+/*  Iterator function to walk all pages in all windows, calling the
+ *  specified function for each page.
+ *
+ *  @param entry A pointer to the function to be called.
+ *
+ *  @param user_data A data pointer passed to each call of the function.
+ */
+void gnc_main_window_foreach_page (GncMainWindowPageFunc fn,
+                                   gpointer user_data);
 
 
 /** Retrieve a pointer to the page that is currently at the front of

@@ -1,7 +1,7 @@
 /********************************************************************\
  * druid-loan.c : A Gnome Druid for setting up loan-repayment       *
  *     scheduled transactions.                                      *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2007 Joshua Sled <jsled@asynchronous.org>     *
  * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -35,7 +35,6 @@
 
 #include "SchedXaction.h"
 #include "SX-book.h"
-#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "druid-utils.h"
 #include "gnc-book.h"
@@ -46,7 +45,6 @@
 #include "gnc-component-manager.h"
 #include "dialog-utils.h"
 #include "Account.h"
-#include "FreqSpec.h"
 #include "gnc-ui.h"
 #include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
@@ -122,7 +120,7 @@ static QofLogModule log_module = GNC_MOD_SX;
  * . param account selection should fill in orig/cur principal amounts from
  *   the books.
  * . initialize type freq to monthly.
- * . if LoanType <- !FIXED
+ * . if LoanType <- !GNC_FIXED
  *   . Frequency <- sensitive
  **/
 
@@ -142,8 +140,9 @@ typedef struct RepayOptData_ {
         Account *to;
         Account *from; /* If NULL { If throughEscrowP, then through escrowAcct };
                         * else: undefined. */
-        FreqSpec *fs;  /* If NULL, part of repayment; otherwise: defined
-                        * here. */
+        GList *schedule;
+    /* If NULL, part of repayment; otherwise: defined
+     * here. */
         GDate *startDate;
 } RepayOptData;
 
@@ -159,10 +158,11 @@ typedef struct RepayOptDataDefault_ {
 
 static RepayOptDataDefault REPAY_DEFAULTS[] = {
      /* { name, default txn memo, throughEscrowP, specSrcAcctP } */
-     { "Taxes",         "Tax Payment",           TRUE,  FALSE },
-     { "Insurance",     "Insurance Payment",     TRUE,  FALSE  },
-     { "PMI",           "PMI Payment",           TRUE,  FALSE  },
-     { "Other Expense", "Miscellaneous Payment", FALSE, FALSE },
+     { N_("Taxes"),         N_("Tax Payment"),           TRUE,  FALSE },
+     { N_("Insurance"),     N_("Insurance Payment"),     TRUE,  FALSE  },
+     /* Translators: PMI stands for Private Mortgage Insurance. */
+     { N_("PMI"),           N_("PMI Payment"),           TRUE,  FALSE  },
+     { N_("Other Expense"), N_("Miscellaneous Payment"), FALSE, FALSE },
      { NULL }
 };
 
@@ -179,18 +179,18 @@ typedef struct RepayOptUI_ {
 } RepayOptUIData;
 
 typedef enum {
-        FIXED = 0,
-        VARIABLE,
-        VARIABLE_3_1 = VARIABLE,
-        VARIABLE_5_1,
-        VARIABLE_7_1,
-        VARIABLE_10_1,
+        GNC_FIXED = 0,
+        GNC_VARIABLE,
+        GNC_VARIABLE_3_1 = GNC_VARIABLE,
+        GNC_VARIABLE_5_1,
+        GNC_VARIABLE_7_1,
+        GNC_VARIABLE_10_1,
         /* ... FIXME */
 } LoanType;
 
 typedef enum {
-        MONTHS = 0,
-        YEARS
+        GNC_MONTHS = 0,
+        GNC_YEARS
 } PeriodSize;
 
 /**
@@ -211,7 +211,7 @@ typedef struct LoanData_ {
         gnc_numeric principal;
         float interestRate;
         LoanType type;
-        FreqSpec *loanFreq;
+        GList *loan_schedule;
         GDate *startDate;
         GDate *varStartDate;
         int numPer;
@@ -224,7 +224,7 @@ typedef struct LoanData_ {
         Account *repPriAcct;
         Account *repIntAcct;
         Account *escrowAcct;
-        FreqSpec *repFreq;
+        GList *repayment_schedule;
         GDate *repStartDate;
 
         int repayOptCount;
@@ -263,7 +263,7 @@ typedef struct LoanDruidData_ {
         GtkSpinButton *prmIrateSpin;
         GtkComboBox   *prmType;
         GtkFrame      *prmVarFrame;
-        GNCFrequency  *prmVarGncFreq;
+        GncFrequency  *prmVarGncFreq;
         GNCDateEdit   *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
         GtkComboBox   *prmLengthType;
@@ -283,7 +283,7 @@ typedef struct LoanDruidData_ {
         GNCAccountSel *repPrincToGAS;
         GNCAccountSel *repIntToGAS;
         GtkFrame      *repFreqFrame;
-        GNCFrequency  *repGncFreq;
+        GncFrequency  *repGncFreq;
 
         /* pay = payment[s] */
         GtkEntry         *payTxnName;
@@ -301,7 +301,7 @@ typedef struct LoanDruidData_ {
         GtkRadioButton   *payTxnFreqPartRb;
         GtkRadioButton   *payTxnFreqUniqRb;
         GtkAlignment     *payFreqAlign;
-        GNCFrequency     *payGncFreq;
+        GncFrequency     *payGncFreq;
 
         /* rev = review */
         GtkComboBox       *revRangeOpt;
@@ -322,8 +322,8 @@ typedef struct toCreateSX_
   gchar *name;
   /** The start, last-occurred and end dates. */
   GDate start, last, end;
-  /** The SX FreqSpec */
-  FreqSpec *freq;
+  /** The SX schedule */
+  GList *schedule;
   /** The current 'instance-num' count. */
   gint instNum;
   /** The main/source transaction being created. */
@@ -800,10 +800,13 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         ldd->ld.startDate = g_date_new();
         ldd->ld.varStartDate = g_date_new();
         g_date_set_time_t( ldd->ld.startDate, time(NULL) );
-        ldd->ld.loanFreq  = xaccFreqSpecMalloc( gnc_get_current_book() );
-        ldd->ld.repFreq   = xaccFreqSpecMalloc( gnc_get_current_book() );
-        xaccFreqSpecSetMonthly( ldd->ld.repFreq, ldd->ld.startDate, 1 );
-        xaccFreqSpecSetUIType( ldd->ld.repFreq, UIFREQ_MONTHLY );
+        ldd->ld.loan_schedule= NULL;
+        ldd->ld.repayment_schedule = NULL;
+        {
+                Recurrence *r = g_new0(Recurrence, 1);
+                recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                ldd->ld.repayment_schedule = g_list_append(ldd->ld.repayment_schedule, r);
+        }
 
         ldd->ld.repMemo = g_strdup( _("Loan") );
         ldd->ld.repAmount = NULL;
@@ -823,13 +826,13 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
                         = g_new0( RepayOptData, 1 );
 
                 optData->enabled        = FALSE;
-                optData->name           = g_strdup( REPAY_DEFAULTS[i].name );
-                optData->txnMemo        = g_strdup( REPAY_DEFAULTS[i].
-                                                    defaultTxnMemo );
+                optData->name           = g_strdup( _(REPAY_DEFAULTS[i].name) );
+                optData->txnMemo        = g_strdup( _(REPAY_DEFAULTS[i].
+                                                      defaultTxnMemo) );
                 optData->amount         = 0.0;
                 optData->throughEscrowP = REPAY_DEFAULTS[i].escrowDefault;
                 optData->specSrcAcctP   = REPAY_DEFAULTS[i].specSrcAcctDefault;
-                optData->fs             = NULL;
+                optData->schedule       = NULL;
                 optData->startDate      = NULL;
         }
 }
@@ -924,10 +927,10 @@ ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_append_printf( gstr, "pmt( %.5f / 12 : %0.2f : %0.2f : 0 : 0 )",
+        g_string_append_printf( gstr, "pmt( %.5f / 12.0 : %0.2f : %0.2f : 0 : 0 )",
                                 (ldd->ld.interestRate / 100),
                                 ( ldd->ld.numPer
-                                  * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                                  * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                                 gnc_numeric_to_double(ldd->ld.principal) );
 }
 
@@ -937,10 +940,10 @@ ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_printf( gstr, "ppmt( %.5f / 12 : i : %0.2f : %0.2f : 0 : 0 )",
+        g_string_printf( gstr, "ppmt( %.5f / 12.0 : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
                          ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double(ldd->ld.principal));
 }
 
@@ -950,10 +953,10 @@ ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_printf( gstr, "ipmt( %.5f / 12 : i : %0.2f : %0.2f : 0 : 0 )",
+        g_string_printf( gstr, "ipmt( %.5f / 12.0 : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
                          ( ldd->ld.numPer
-                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ) * 1.,
+                           * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double( ldd->ld.principal ) );
 }
 
@@ -986,7 +989,7 @@ ld_destroy( GtkObject *o, gpointer ud )
 
                 g_date_free( ldd->ld.startDate );
                 g_date_free( ldd->ld.varStartDate );
-                xaccFreqSpecFree( ldd->ld.loanFreq );
+                recurrenceListFree(&ldd->ld.loan_schedule);
 
                 if ( ldd->ld.repMemo )
                         g_free( ldd->ld.repMemo );
@@ -1001,8 +1004,8 @@ ld_destroy( GtkObject *o, gpointer ud )
                         if ( rod->startDate )
                                 g_date_free( rod->startDate );
 
-                        if ( rod->fs )
-                                xaccFreqSpecFree( rod->fs );
+                        if (rod->schedule != NULL)
+                                recurrenceListFree(&rod->schedule);
 
                         g_free( ldd->ld.repayOpts[i] );
                         g_free( ldd->repayOptsUI[i] );
@@ -1053,7 +1056,7 @@ ld_prm_type_changed( GtkWidget *w, gpointer ud )
         ldd = (LoanDruidData*)ud;
         index = gtk_combo_box_get_active( ldd->prmType );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame),
-                                  index != FIXED );
+                                  index != GNC_FIXED );
 }
 
 static
@@ -1163,10 +1166,11 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
         ldd->ld.interestRate = gtk_spin_button_get_value( ldd->prmIrateSpin );
         ldd->ld.type = gtk_combo_box_get_active( ldd->prmType );
-        if ( ldd->ld.type != FIXED ) {
-                gnc_frequency_save_state( ldd->prmVarGncFreq,
-                                          ldd->ld.loanFreq,
-                                          ldd->ld.varStartDate );
+        if ( ldd->ld.type != GNC_FIXED ) {
+                recurrenceListFree(&ldd->ld.loan_schedule);
+                gnc_frequency_save_to_recurrence(ldd->prmVarGncFreq,
+                                                 &ldd->ld.loan_schedule,
+                                                 ldd->ld.varStartDate);
         }
 
         /* start date */
@@ -1186,7 +1190,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         {
                 ldd->ld.perSize =
                         (gtk_combo_box_get_active( ldd->prmLengthType )
-                         == MONTHS) ? MONTHS : YEARS;
+                         == GNC_MONTHS) ? GNC_MONTHS : GNC_YEARS;
                 ldd->ld.numPer =
                         gtk_spin_button_get_value_as_int( ldd->prmLengthSpin );
                 ldd->ld.numMonRemain =
@@ -1205,10 +1209,10 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         gnc_amount_edit_set_amount( ldd->prmOrigPrincGAE, ldd->ld.principal );
         gtk_spin_button_set_value( ldd->prmIrateSpin, ldd->ld.interestRate );
         gtk_combo_box_set_active( ldd->prmType, ldd->ld.type );
-        if ( ldd->ld.type != FIXED ) {
-                gnc_frequency_setup( ldd->prmVarGncFreq,
-                                     ldd->ld.loanFreq,
-                                     ldd->ld.varStartDate );
+        if ( ldd->ld.type != GNC_FIXED ) {
+                gnc_frequency_setup_recurrence(ldd->prmVarGncFreq,
+                                               ldd->ld.loan_schedule,
+                                               ldd->ld.varStartDate);
         }
 
         /* start date */
@@ -1324,9 +1328,10 @@ ld_rep_save( LoanDruidData *ldd )
                                    "\"interest\" account.") );
                 return TRUE;
         }
-        gnc_frequency_save_state( ldd->repGncFreq,
-                                  ldd->ld.repFreq,
-                                  ldd->ld.repStartDate );
+        recurrenceListFree(&ldd->ld.repayment_schedule);
+        gnc_frequency_save_to_recurrence(ldd->repGncFreq,
+                                         &ldd->ld.repayment_schedule,
+                                         ldd->ld.repStartDate);
 
         /* Set the 'from' accounts of the various options to be the
          * Assets-From account, if they're not already something else. */
@@ -1411,9 +1416,9 @@ ld_rep_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                                      ldd->ld.repPriAcct );
         gnc_account_sel_set_account( ldd->repIntToGAS,
                                      ldd->ld.repIntAcct );
-        gnc_frequency_setup( ldd->repGncFreq,
-                             ldd->ld.repFreq,
-                             ldd->ld.repStartDate );
+        gnc_frequency_setup_recurrence(ldd->repGncFreq,
+                                       ldd->ld.repayment_schedule,
+                                       ldd->ld.repStartDate);
 }
 
 static
@@ -1477,7 +1482,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         gnc_account_sel_set_account( ldd->payAcctToGAS,   rod->to );
 
-        uniq = (rod->fs != NULL);
+        uniq = (rod->schedule != NULL);
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb),
                                       !uniq );
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb),
@@ -1485,8 +1490,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqAlign),
                                   uniq );
         if ( uniq ) {
-                gnc_frequency_setup( ldd->payGncFreq,
-                                     rod->fs, rod->startDate );
+                gnc_frequency_setup_recurrence( ldd->payGncFreq, rod->schedule, rod->startDate );
         }
 
         g_string_free( str, TRUE );
@@ -1548,22 +1552,20 @@ ld_pay_save_current( LoanDruidData *ldd )
          */
 
         /* neither of these should happen. */
-        g_assert( ! (rod->fs && !rod->startDate) );
-        g_assert( ! (!rod->fs && rod->startDate) );
+        g_assert( ! (rod->schedule && !rod->startDate) );
+        g_assert( ! (!rod->schedule && rod->startDate) );
 
         if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb)) ) {
-                if ( rod->fs == NULL ) {
-                        rod->fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-                }
                 if ( rod->startDate == NULL ) {
                         rod->startDate = g_date_new();
                 }
-                gnc_frequency_save_state( ldd->payGncFreq,
-                                          rod->fs, rod->startDate );
+                recurrenceListFree(&rod->schedule);
+                gnc_frequency_save_to_recurrence(ldd->payGncFreq,
+                                                 &rod->schedule,
+                                                 rod->startDate);
         } else {
-                if ( rod->fs ) {
-                        xaccFreqSpecFree( rod->fs );
-                        rod->fs = NULL;
+                if (rod->schedule) {
+                        recurrenceListFree(&rod->schedule);
                 }
                 if ( rod->startDate ) {
                         g_date_free( rod->startDate );
@@ -1655,17 +1657,18 @@ ld_pay_freq_toggle( GtkToggleButton *tb, gpointer ud )
                 RepayOptData *rod;
                 rod = ldd->ld.repayOpts[ ldd->currentIdx ];
 
-                if ( rod->fs == NULL ) {
-                        rod->fs = xaccFreqSpecMalloc( gnc_get_current_book() );
-                        xaccFreqSpecSetMonthly( rod->fs, ldd->ld.startDate, 1 );
-                        xaccFreqSpecSetUIType( rod->fs, UIFREQ_MONTHLY );
+                if ( rod->schedule == NULL ) {
+                        Recurrence *r = g_new0(Recurrence, 1);
+                        recurrenceSet(r, 1, PERIOD_MONTH, ldd->ld.startDate);
+                        rod->schedule = g_list_append(rod->schedule, r);
                 }
                 if ( rod->startDate == NULL ) {
                         rod->startDate = g_date_new();
                         *rod->startDate = *ldd->ld.startDate;
                 }
-                gnc_frequency_setup( ldd->payGncFreq,
-                                     rod->fs, rod->startDate );
+                gnc_frequency_setup_recurrence(ldd->payGncFreq,
+                                               rod->schedule,
+                                               rod->startDate);
         }
 }
 
@@ -1898,51 +1901,28 @@ ld_com_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
 }
 
-#if 0
-static
-void
-ld_gnc_ttinfo_free( gpointer data, gpointer ud )
+static int
+ld_calc_sx_instance_num(GDate *start_date, GList *schedule)
 {
-        gnc_ttinfo_free( (TTInfo*)data );
-}
-#endif
+    int instance_count;
+    GDate next_date, today;
 
-static
-int
-ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
-{
-        float mult = 1.0;
-        UIFreqType uift;
-        uift = xaccFreqSpecGetUIType( fs );
-        switch ( uift ) {
-        case UIFREQ_WEEKLY:
-        {
-                int wMult, dow;
-                xaccFreqSpecGetWeekly( fs, &wMult, &dow );
-                mult = (4.0 / wMult);
-        }
-        break;
-        case UIFREQ_BI_WEEKLY:
-        case UIFREQ_SEMI_MONTHLY:
-                mult = 2.0;
-                break;
-        case UIFREQ_MONTHLY:
-        case UIFREQ_QUARTERLY:
-        case UIFREQ_TRI_ANUALLY:
-        case UIFREQ_SEMI_YEARLY:
-        case UIFREQ_YEARLY:
-        {
-                int mMult, dom, offset;
-                xaccFreqSpecGetMonthly( fs, &mMult, &dom, &offset );
-                mult = ( 1.0 / mMult );
-        }
-        break;
-        default:
-                PERR( "Wacky loan repayment frequency [%d]", uift );
-                break;
-        }
+    g_date_clear(&next_date, 1);
+    g_date_clear(&today, 1);
+    g_date_set_time_t(&today, time(NULL));
 
-        return floor( monthsPassed * mult );
+    if (g_date_compare(start_date, &today) > 0)
+        return 0;
+
+    instance_count = -1;
+    do
+    {
+        instance_count++;
+        recurrenceListNextInstance(schedule, start_date, &next_date);
+    }
+    while (g_date_compare(&next_date, &today) < 0);
+
+    return instance_count;
 }
 
 static
@@ -1981,11 +1961,12 @@ void
 ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
 {
         SchedXaction *sx;
-        GList *ttxnList, *sxList;
+        SchedXactions *sxes;
+        GList *ttxnList;
 
         sx = xaccSchedXactionMalloc( gnc_get_current_book() );
         xaccSchedXactionSetName( sx, tcSX->name );
-        xaccSchedXactionSetFreqSpec( sx, tcSX->freq );
+        gnc_sx_set_schedule(sx, tcSX->schedule);
         xaccSchedXactionSetStartDate( sx, &tcSX->start );
         xaccSchedXactionSetLastOccurDate( sx, &tcSX->last );
         xaccSchedXactionSetEndDate( sx, &tcSX->end );
@@ -2002,9 +1983,8 @@ ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
         xaccSchedXactionSetTemplateTrans( sx, ttxnList,
                                           gnc_get_current_book() );
 
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-        sxList = g_list_append( sxList, sx );
-        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        sxes = gnc_book_get_schedxactions(gnc_get_current_book());
+        gnc_sxes_add_sx(sxes, sx);
 
         g_list_free( ttxnList );
         ttxnList = NULL;
@@ -2013,7 +1993,7 @@ ld_create_sx_from_tcSX( LoanDruidData *ldd, toCreateSX *tcSX )
 /**
  * Does the work to setup the given toCreateSX structure for a specific
  * repayment.  Note that if the RepayOptData doesn't specify a unique
- * FreqSpec, the paymentSX and the tcSX parameters will be the same.
+ * schedule, the paymentSX and the tcSX parameters will be the same.
  **/
 static
 void
@@ -2255,7 +2235,7 @@ ld_create_sxes( LoanDruidData *ldd )
 {
         /* The main loan-payment SX.*/
         toCreateSX *paymentSX = NULL;
-        /* A GList of any other repayment SXes with different FreqSpecs. */
+        /* A GList of any other repayment SXes with different schedule. */
         GList *repaySXes = NULL;
         /* The currently-being-referenced toCreateSX. */
         toCreateSX *tcSX;
@@ -2273,11 +2253,11 @@ ld_create_sxes( LoanDruidData *ldd )
                 paymentSX->end = *ldd->ld.repStartDate;
                 g_date_add_months( &paymentSX->end, ldd->ld.numMonRemain - 1);
         }
-        paymentSX->freq = ldd->ld.repFreq;
+        paymentSX->schedule = ldd->ld.repayment_schedule;
         /* Figure out the correct current instance-count for the txns in the
          * SX. */
         paymentSX->instNum =
-                (ldd->ld.numPer * ( ldd->ld.perSize == YEARS ? 12 : 1 ))
+                (ldd->ld.numPer * ( ldd->ld.perSize == GNC_YEARS ? 12 : 1 ))
                 - ldd->ld.numMonRemain + 1;
 
         paymentSX->mainTxn = gnc_ttinfo_malloc();
@@ -2431,7 +2411,7 @@ ld_create_sxes( LoanDruidData *ldd )
                         continue;
 
                 tcSX = paymentSX;
-                if ( rod->fs != NULL ) {
+                if ( rod->schedule != NULL ) {
                         tcSX = g_new0( toCreateSX, 1 );
                         gstr = g_string_new( ldd->ld.repMemo );
                         g_string_append_printf( gstr, " - %s",
@@ -2443,13 +2423,13 @@ ld_create_sxes( LoanDruidData *ldd )
                                 tcSX->end = tcSX->last;
                                 g_date_add_months( &tcSX->end, ldd->ld.numMonRemain );
                         }
-                        tcSX->freq    = rod->fs;
+                        tcSX->schedule = rod->schedule;
                         /* So it won't get destroyed when the close the
                          * Druid. */
-                        tcSX->instNum = ld_calc_current_instance_num( paymentSX->instNum,
-                                                                      rod->fs );
-                        rod->fs       = NULL;
-                        tcSX->mainTxn   = gnc_ttinfo_malloc();
+                        tcSX->instNum =
+                            ld_calc_sx_instance_num(&tcSX->start, rod->schedule);
+                        rod->schedule = NULL;
+                        tcSX->mainTxn = gnc_ttinfo_malloc();
                         gnc_ttinfo_set_currency( tcSX->mainTxn,
                                                  gnc_default_currency() );
                         gnc_ttinfo_set_description( tcSX->mainTxn,
@@ -2564,7 +2544,7 @@ ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
         endDateMath = g_new0( struct tm, 1 );
         g_date_to_struct_tm( ldd->ld.startDate, endDateMath );
         monthsTotal = ( (ldd->ld.numPer - 1)
-                        * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
+                        * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) );
         endDateMath->tm_mon += monthsTotal;
         g_date_set_time_t( end, mktime( endDateMath ) );
         g_free( endDateMath );
@@ -2641,20 +2621,21 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
 {
         GDate start, end;
         gnc_numeric *rowNumData;
-        GHashTable *schedule;
+        GHashTable *repayment_schedule;
 
         g_date_clear( &start, 1 );
         g_date_clear( &end, 1 );
         ld_get_loan_range( ldd, &start, &end );
 
-        /* The schedule is a hash of GDates to row-of-gnc_numeric[N] data,
-         * where N is the number of columns as determined by the _prep
-         * function, and stored in LoanData::revNumPmts. */
-        schedule = g_hash_table_new( g_date_hash, g_date_equals );
+        /* The repayment_schedule is a hash of GDates to
+         * row-of-gnc_numeric[N] data, where N is the number of columns as
+         * determined by the _prep function, and stored in
+         * LoanData::revNumPmts. */
+        repayment_schedule = g_hash_table_new( g_date_hash, g_date_equals );
 
         /* Do the master repayment */
         {
-                GDate curDate;
+                GDate curDate, nextDate;
                 GString *pmtFormula, *ppmtFormula, *ipmtFormula;
                 int i;
                 GHashTable *ivar;
@@ -2670,20 +2651,21 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                 g_date_clear( &curDate, 1 );
                 curDate = start;
                 g_date_subtract_days( &curDate, 1 );
-                xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
-                                             &curDate, &curDate );
+                g_date_clear(&nextDate, 1);
+                recurrenceListNextInstance(ldd->ld.repayment_schedule, &curDate, &nextDate);
                 for ( i=1;
-                      g_date_valid( &curDate )
-                      && g_date_compare( &curDate, &end ) <= 0 ;
+                      g_date_valid( &nextDate )
+                      && g_date_compare( &nextDate, &end ) <= 0 ;
                       i++,
-                      xaccFreqSpecGetNextInstance( ldd->ld.repFreq,
-                                                   &curDate, &curDate ) )
+                      curDate = nextDate,
+                      recurrenceListNextInstance(ldd->ld.repayment_schedule,
+                                                 &curDate, &nextDate))
                 {
                         gnc_numeric ival;
                         gnc_numeric val;
                         char *eloc;
                         rowNumData =
-                                (gnc_numeric*)g_hash_table_lookup( schedule,
+                                (gnc_numeric*)g_hash_table_lookup( repayment_schedule,
                                                                    &curDate );
                         if ( rowNumData == NULL) {
                                 int j;
@@ -2695,7 +2677,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                                 for ( j=0; j<ldd->ld.revNumPmts; j++ ) {
                                         rowNumData[j] = gnc_numeric_error( GNC_ERROR_ARG );
                                 }
-                                g_hash_table_insert( schedule,
+                                g_hash_table_insert( repayment_schedule,
                                                      (gpointer)dateKeyCopy,
                                                      (gpointer)rowNumData );
                         }
@@ -2740,32 +2722,35 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
         /* Process any other enabled payments. */
         {
                 int i;
-                GDate curDate;
-                FreqSpec *fs;
+                GDate curDate, nextDate;
+                GList *schedule;
 
                 for ( i=0; i<ldd->ld.repayOptCount; i++ )
                 {
                         if ( ! ldd->ld.repayOpts[i]->enabled )
                                 continue;
 
-                        fs = ( ldd->ld.repayOpts[i]->fs != NULL
-                               ? ldd->ld.repayOpts[i]->fs
-                               : ldd->ld.repFreq );
+                        schedule
+                                = ( ldd->ld.repayOpts[i]->schedule != NULL
+                                    ? ldd->ld.repayOpts[i]->schedule
+                                    : ldd->ld.repayment_schedule );
 
                         g_date_clear( &curDate, 1 );
                         curDate = start;
                         g_date_subtract_days( &curDate, 1 );
-                        xaccFreqSpecGetNextInstance( fs, &curDate, &curDate );
-                        for ( ; g_date_valid( &curDate )
-                                && g_date_compare( &curDate, &end ) <= 0;
-                              xaccFreqSpecGetNextInstance(
-                                      fs, &curDate, &curDate ) )
+                        g_date_clear(&nextDate, 1);
+                        recurrenceListNextInstance(schedule, &curDate, &nextDate );
+                        for ( ; g_date_valid( &nextDate )
+                                && g_date_compare( &nextDate, &end ) <= 0;
+                              curDate = nextDate,
+                              recurrenceListNextInstance(
+                                      schedule, &curDate, &nextDate ) )
                         {
                                 gint gncn_how =
                                         GNC_DENOM_SIGFIGS(2)
                                         | GNC_RND_ROUND;
                                 gnc_numeric val;
-                                rowNumData = (gnc_numeric*)g_hash_table_lookup( schedule,
+                                rowNumData = (gnc_numeric*)g_hash_table_lookup( repayment_schedule,
                                                                                 &curDate );
                                 if ( rowNumData == NULL ) {
                                         int j;
@@ -2777,7 +2762,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                                         for ( j=0; j<ldd->ld.revNumPmts; j++ ) {
                                                 rowNumData[j] = gnc_numeric_error( GNC_ERROR_ARG );
                                         }
-                                        g_hash_table_insert( schedule,
+                                        g_hash_table_insert( repayment_schedule,
                                                              (gpointer)dateKeyCopy,
                                                              (gpointer)rowNumData );
                                 }
@@ -2801,11 +2786,11 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
                         g_list_free( ldd->ld.revSchedule );
                         ldd->ld.revSchedule = NULL;
                 }
-                g_hash_table_foreach( schedule, ld_rev_hash_to_list,
+                g_hash_table_foreach( repayment_schedule, ld_rev_hash_to_list,
                                       &ldd->ld.revSchedule );
-                g_hash_table_foreach( schedule, ld_rev_hash_free_date_keys,
+                g_hash_table_foreach( repayment_schedule, ld_rev_hash_free_date_keys,
                                       NULL );
-                g_hash_table_destroy( schedule );
+                g_hash_table_destroy( repayment_schedule );
                 ldd->ld.revSchedule =
                         g_list_sort( ldd->ld.revSchedule, (GCompareFunc)g_date_compare );
         }

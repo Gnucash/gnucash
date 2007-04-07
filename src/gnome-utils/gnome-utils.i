@@ -17,7 +17,6 @@
 #include <gnc-menu-extensions.h>
 #include <gnc-plugin-file-history.h>
 #include <gnc-ui.h>
-#include <print-session.h>
 #include <gnc-splash.h>
 
 SCM scm_init_sw_gnome_utils_module (void);
@@ -35,8 +34,6 @@ void gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
                                        GNCOptionDB  *odb);
 void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
         SCM apply_cb, SCM close_cb);
-
-%include "print-session.h"
 
 gboolean
 gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,

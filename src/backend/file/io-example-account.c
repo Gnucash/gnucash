@@ -32,6 +32,8 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include "sixtp.h"
 
 #include "gnc-engine.h"
@@ -43,7 +45,6 @@
 #include "sixtp-dom-parsers.h"
 #include "sixtp-parsers.h"
 
-#include "Group.h"
 #include "Scrub.h"
 #include "TransLog.h"
 
@@ -69,11 +70,11 @@ gnc_destroy_example_account(GncExampleAccount *gea)
         g_free(gea->filename);
         gea->filename = NULL;
     }
-    if(gea->group != NULL)
+    if(gea->root != NULL)
     {
-        xaccAccountGroupBeginEdit (gea->group);
-        xaccAccountGroupDestroy(gea->group);
-        gea->group = NULL;
+        xaccAccountBeginEdit (gea->root);
+        xaccAccountDestroy(gea->root);
+        gea->root = NULL;
     }
     if(gea->short_description != NULL)
     {
@@ -84,6 +85,11 @@ gnc_destroy_example_account(GncExampleAccount *gea)
     {
         g_free(gea->long_description);
         gea->long_description = NULL;
+    }
+    if(gea->book != NULL)
+    {
+        qof_book_destroy(gea->book);
+        gea->book = NULL;
     }
     g_free(gea);
 }
@@ -138,9 +144,18 @@ add_account_local(GncExampleAccount *gea, Account *act)
 
     xaccAccountScrubCommodity (act);
 
-    if (!xaccAccountGetParent(act))
+    if (xaccAccountGetType(act) == ACCT_TYPE_ROOT)
     {
-        xaccGroupInsertAccount(gea->group, act);
+        gea->root = act;
+    }
+    else if (!gnc_account_get_parent(act))
+    {
+        if (!gea->root) {
+            g_warning(_("The example account file should declared a ROOT "
+                        "account before declaring any other accounts."));
+            gea->root = gnc_book_get_root_account(gea->book);
+        }
+        gnc_account_append_child(gea->root, act);
     }
 }
 
@@ -289,19 +304,18 @@ gnc_titse_sixtp_parser_create(void)
 
 
 GncExampleAccount*
-gnc_read_example_account(QofBook *book, const gchar *filename)
+gnc_read_example_account(const gchar *filename)
 {
     GncExampleAccount *gea;
     sixtp *top_parser;
     sixtp *main_parser;
 
-    g_return_val_if_fail (book != NULL, NULL);
+    g_return_val_if_fail (filename != NULL, NULL);
 
     gea = g_new0(GncExampleAccount, 1);
 
-    gea->book = book;
+    gea->book = qof_book_new();
     gea->filename = g_strdup(filename);
-    gea->group = xaccMallocAccountGroup(book);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
@@ -328,16 +342,13 @@ gnc_read_example_account(QofBook *book, const gchar *filename)
     }
 
     if(!gnc_xml_parse_file(top_parser, filename,
-                           generic_callback, gea, book))
+                           generic_callback, gea, gea->book))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
         return FALSE;
     }
 
-    xaccGroupMarkSaved(gea->group);
-    xaccAccountGroupCommitEdit(gea->group);
-    
     return gea;
 }
 
@@ -371,8 +382,9 @@ gboolean
 gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 {
     FILE *out;
+    sixtp_gdv2 data = { 0 };;
 
-    out = fopen(filename, "w");
+    out = g_fopen(filename, "w");
     if (out == NULL)
     {
         return FALSE;
@@ -389,7 +401,7 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
     
     write_bool_part(out, GNC_ACCOUNT_EXCLUDEP, gea->exclude_from_select_all);
 
-    write_account_group(out, gea->group, NULL);
+    write_account_tree(out, gea->root, &data);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
     
@@ -423,24 +435,14 @@ gnc_free_example_account_list(GSList *list)
     g_slist_free(list);
 }
 
-static gboolean
-is_directory(const gchar *filename)
-{
-    struct stat fileinfo;
-
-    stat(filename, &fileinfo);
-
-    return S_ISDIR(fileinfo.st_mode);
-}
-    
 GSList*
-gnc_load_example_account_list(QofBook *book, const char *dirname)
+gnc_load_example_account_list(const char *dirname)
 {
     GSList *ret;
-    DIR *dir;
-    struct dirent *direntry;
+    GDir *dir;
+    const gchar *direntry;
 
-    dir = opendir(dirname);
+    dir = g_dir_open(dirname, 0, NULL);
 
     if(dir == NULL)
     {
@@ -449,28 +451,34 @@ gnc_load_example_account_list(QofBook *book, const char *dirname)
     
     ret = NULL;
 
-    for(direntry = readdir(dir); direntry != NULL; direntry = readdir(dir))
+    for(direntry = g_dir_read_name(dir); direntry != NULL;
+        direntry = g_dir_read_name(dir))
     {
         gchar *filename;
         GncExampleAccount *gea;
-        filename = g_strdup_printf("%s/%s", dirname, direntry->d_name);
+        if (!g_str_has_suffix(direntry, "xea"))
+          continue;
 
-        if(!is_directory(filename))
+        filename = g_build_filename(dirname, direntry, (gchar*) NULL);
+
+        if(!g_file_test(filename, G_FILE_TEST_IS_DIR))
         {
-            gea = gnc_read_example_account(book, filename);
+            gea = gnc_read_example_account(filename);
 
             if(gea == NULL)
             {
                 g_free(filename);
                 gnc_free_example_account_list(ret);
+                g_dir_close(dir);
                 return NULL;
             }
-            
+
             ret = g_slist_append(ret, gea);
         }
-        
+
         g_free(filename);
     }
+    g_dir_close(dir);
 
     return ret;
 }

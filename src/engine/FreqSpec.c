@@ -87,11 +87,12 @@
 
 #include "FreqSpecP.h"
 
-static QofLogModule log_module = GNC_MOD_SX;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.engine.freqspec"
+
 /* 
  *  FIXME: should be in a header file
  */
-
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #else
@@ -130,7 +131,7 @@ get_wday_name(guint day)
   struct tm t;
   memset( &t, 0, sizeof( t ) );
   t.tm_wday = day;
-  strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
+  qof_strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
   return wday_name;
 }
  
@@ -141,7 +142,7 @@ get_full_month_name(guint month)
   static gchar month_name[WDAY_BUF_WIDTH];
   struct tm t;
   t.tm_mon = month;
-  strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
+  qof_strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
   return month_name;
 }
 #endif
@@ -153,7 +154,7 @@ get_abbrev_month_name(guint month)
   struct tm t;
   memset( &t, 0, sizeof( t ) );
   t.tm_mon = month;
-  strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
+  qof_strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
   return month_name;
 }
 
@@ -753,10 +754,10 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
    { 
       FreqSpec *subFS;
       if ( g_list_length( fs->s.composites.subSpecs ) != 5 ) {
-         PERR( "Invalid Daily[M-F] structure." );
-         snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
-              "Daily[M-F]: error" );
-         return;
+        g_critical("Invalid Daily[M-F] structure");
+        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                  "Daily[M-F]: error" );
+        return;
       }
       /* We assume that all of the weekly FreqSpecs that make up
          the Daily[M-F] FreqSpec have the same interval. */
@@ -925,9 +926,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
    case UIFREQ_SEMI_YEARLY:
       if ( fs->s.monthly.interval_months != 6 ) {
          if ( (fs->s.monthly.interval_months % 6) != 0 ) {
-            PERR( "ERROR: FreqSpec Semi-Yearly month-interval "
-                  "is not a multiple of 6 [%d]",
-                  fs->s.monthly.interval_months );
+              g_critical( "FreqSpec Semi-Yearly month-interval "
+                          "is not a multiple of 6 [%d]",
+                          fs->s.monthly.interval_months );
          }
          snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
               /* %u is the number of intervals; %u
@@ -948,9 +949,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
    case UIFREQ_YEARLY:
       if ( fs->s.monthly.interval_months != 12 ) {
          if ( (fs->s.monthly.interval_months % 12) != 0 ) {
-            PERR( "ERROR: \"Yearly\" FreqSpec month-interval "
-                  "is not a multiple of 12 [%d]",
-                  fs->s.monthly.interval_months );
+              g_critical( "Yearly FreqSpec month-interval "
+                          "is not a multiple of 12 [%d]",
+                          fs->s.monthly.interval_months );
          }
 
          snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
@@ -1096,18 +1097,15 @@ gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b )
             b->s.monthly.day_of_month );
       break;
    case MONTH_RELATIVE:
-      DEBUG( "MONTH-RELATIVE dates not supported." );
-      g_assert( FALSE );
+      g_error( "MONTH-RELATIVE dates not supported." );
       break;
    case COMPOSITE:
       /* We shouldn't see a composite after doing the
        * composite-reduction above. */
-      DEBUG( "This code should not be reached." );
-      g_assert( FALSE );
+      g_error( "This code should not be reached." );
       break;
    default:
-      DEBUG( "Unknown freqspec type %d", fta );
-      g_assert( FALSE );
+      g_error( "Unknown freqspec type %d", fta );
       break;
    }
    return 0;

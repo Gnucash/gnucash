@@ -8,6 +8,7 @@ ui_DATA = \
 	gnc-plugin-file-history-ui.xml \
 	gnc-plugin-register-ui.xml \
 	gnc-plugin-page-register-ui.xml \
+        gnc-plugin-page-sx-list-ui.xml \
 	gnc-plugin-page-sxregister-ui.xml \
 	gnc-sxed-to-create-window-ui.xml \
 	gnc-reconcile-window-ui.xml \

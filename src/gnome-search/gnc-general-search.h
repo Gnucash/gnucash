@@ -83,7 +83,7 @@ void       gnc_general_search_set_selected   (GNCGeneralSearch *gsl,
 					      gpointer searched);
 gpointer   gnc_general_search_get_selected   (GNCGeneralSearch *gsl);
 
-guint      gnc_general_search_get_type       (void);
+GType      gnc_general_search_get_type       (void);
 
 #endif
 

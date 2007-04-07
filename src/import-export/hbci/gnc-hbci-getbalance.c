@@ -49,7 +49,7 @@ bal_print_debug(const char *name,
 		const char *time_str)
 {
   char *str = gnc_AB_VALUE_toReadableString (val);
-  printf("GetBalance: %s%s %s at date %s %s",
+  g_message("GetBalance: %s%s %s at date %s %s",
 	 (negative ? "-" : ""), str, 
 	 name, date_str, time_str);
   free (str);
@@ -71,7 +71,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
   /* Get API */
   api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
-    printf("gnc_hbci_getbalance: Couldn't get AB_BANKING API.\n");
+    g_message("gnc_hbci_getbalance: Couldn't get AB_BANKING API.\n");
     return;
   }
   g_assert (interactor);
@@ -79,11 +79,11 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
-    printf("gnc_hbci_getbalance: No HBCI account found.\n");
+    g_warning("gnc_hbci_getbalance: No HBCI account found.\n");
     /* FIXME: free unneeded data */
     return;
   }
-  /* printf("gnc_hbci_getbalance: HBCI account no. %s found.\n",
+  /* g_message("gnc_hbci_getbalance: HBCI account no. %s found.\n",
      AB_ACCOUNT_accountId (h_acc)); */
   
   {
@@ -92,7 +92,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 
     job = AB_JobGetBalance_new((AB_ACCOUNT*)h_acc);
     if (AB_Job_CheckAvailability(job)) {
-      printf("gnc_hbci_getbalance: JobGetBalance not avaiable for this account.\n");
+      g_message("gnc_hbci_getbalance: JobGetBalance not available for this account.\n");
       /* FIXME: free unneeded data */
       return;
     }
@@ -149,7 +149,7 @@ void gnc_hbci_getbalance_debugprint(AB_JOB *job,
   noted_val = AB_VALUE_new(GWEN_DB_GetCharValue(noted_grp, "value", 0, "0"),
 			     GWEN_DB_GetCharValue(noted_grp, "currency", 0, "EUR"));
     
-  printf("GetBalance: Balances for account %s :\n",
+  g_message("GetBalance: Balances for account %s :\n",
 	 AB_ACCOUNT_accountId (h_acc));
   bal_print_debug("Booked balance",
 		  booked_val,
@@ -204,7 +204,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 
   response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
   if (!response) {
-    printf("gnc_hbci_getbalance_finish: Oops, response == NULL.\n");
+    g_critical("gnc_hbci_getbalance_finish: Oops, response == NULL.\n");
     return TRUE;
   }
 
@@ -217,15 +217,19 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     ti=AB_Balance_GetTime(booked_grp);
     if (ti)
       booked_tt = GWEN_Time_toTime_t (ti);
+    else
+      /* No time found? Use today because the HBCI query asked for
+	 today's balance. */
+      booked_tt = gnc_timet_get_day_start(time(NULL));
     booked_val = AB_Balance_GetValue(booked_grp);
     if (booked_val)
       booked_value = AB_Value_GetValue (booked_val);
     else {
-      printf("gnc_hbci_getbalance_finish: Warning: booked_val == NULL. Assuming 0.\n");
+      g_warning("gnc_hbci_getbalance_finish: Warning: booked_val == NULL. Assuming 0.\n");
       booked_value = 0.0;
     }
   } else {
-    printf("gnc_hbci_getbalance_finish: Warning: booked_grp == NULL. Assuming 0.\n");
+    g_warning("gnc_hbci_getbalance_finish: Warning: booked_grp == NULL. Assuming 0.\n");
     booked_value = 0.0;
     booked_val = NULL;
     booked_tt = 0;
@@ -237,11 +241,11 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     if (noted_val)
       noted_value = AB_Value_GetValue (noted_val);
     else {
-      printf("gnc_hbci_getbalance_finish: Warning: noted_val == NULL. Assuming 0.\n");
+      g_warning("gnc_hbci_getbalance_finish: Warning: noted_val == NULL. Assuming 0.\n");
       noted_value = 0.0;
     }
   } else {
-    printf("gnc_hbci_getbalance_finish: Warning: noted_grp == NULL. Assuming 0.\n");
+    g_warning("gnc_hbci_getbalance_finish: Warning: noted_grp == NULL. Assuming 0.\n");
     noted_value = 0.0;
     noted_val = NULL;
   }
@@ -257,16 +261,20 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 				      GTK_MESSAGE_INFO,
 				      GTK_BUTTONS_OK,
 				      "%s",
-	 /* Translators: Strings from this file are really only
-	  * needed inside Germany (HBCI is not supported anywhere
-	  * else). You may safely ignore strings from the
-	  * import-export/hbci subdirectory in other countries.
-	  */
-	 _("The downloaded HBCI Balance was zero.\n\n"
+      /* Translators: Strings from this file are needed only in
+       * countries that have one of aqbanking's Online Banking
+       * techniques available. This is 'OFX DirectConnect'
+       * (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+       * (Switzerland). If none of these techniques are available
+       * in your country, you may safely ignore strings from the
+       * import-export/hbci subdirectory. */
+	 _("The downloaded Online Banking Balance was zero.\n\n"
 	   "Either this is the correct balance, or your bank does not "
-	   "support Balance download in this HBCI version. In the latter "
-	   "case you should choose a higher HBCI version number in the HBCI "
-	   "Setup. After that, try again to download the HBCI Balance."));
+	   "support Balance download in this Online Banking version. "
+	   "In the latter case you should choose a different "
+	   "Online Banking version number in the Online Banking "
+	   "(AqBanking or HBCI) Setup. After that, try again to "
+	   "download the Online Banking Balance."));
       gtk_dialog_run(GTK_DIALOG(dialog));
       gtk_widget_destroy(GTK_WIDGET(dialog));
       dialogres = FALSE;
@@ -278,7 +286,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       char *booked_str = gnc_AB_VALUE_toReadableString (booked_val);
       char *message1 = g_strdup_printf
 	(
-	 _("Result of HBCI job: \n"
+	 _("Result of Online Banking job: \n"
 	   "Account booked balance is %s"),
 	 booked_str);
       char *message2 = 
