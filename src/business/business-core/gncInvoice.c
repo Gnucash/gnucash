@@ -484,15 +484,21 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
 static QofInstance*
 qofInvoiceGetOwner (GncInvoice *invoice)
 {
+	GncOwner *owner;
+
 	if(!invoice) { return NULL; }
-	return QOF_INSTANCE(&invoice->owner);
+	owner = &invoice->owner;
+	return QOF_INSTANCE(owner);
 }
 
 static QofInstance*
 qofInvoiceGetBillTo (GncInvoice *invoice)
 {
+	GncOwner *billto;
+
 	if(!invoice) { return NULL; }
-	return QOF_INSTANCE(&invoice->billto);
+	billto = &invoice->billto;
+	return QOF_INSTANCE(billto);
 }
 
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
