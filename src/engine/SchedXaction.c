@@ -239,7 +239,7 @@ gnc_sx_commit_edit (SchedXaction *sx)
 /* ============================================================ */
 
 FreqSpec *
-xaccSchedXactionGetFreqSpec( SchedXaction *sx )
+xaccSchedXactionGetFreqSpec( const SchedXaction *sx )
 {
    return sx->freq;
 }
@@ -257,7 +257,7 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 }
 
 GList*
-gnc_sx_get_schedule(SchedXaction *sx)
+gnc_sx_get_schedule(const SchedXaction *sx)
 {
    return sx->schedule;
 }
@@ -273,7 +273,7 @@ gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
 }
 
 gchar *
-xaccSchedXactionGetName( SchedXaction *sx )
+xaccSchedXactionGetName( const SchedXaction *sx )
 {
    return sx->name;
 }
@@ -308,7 +308,7 @@ xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 }
 
 gboolean
-xaccSchedXactionHasEndDate( SchedXaction *sx )
+xaccSchedXactionHasEndDate( const SchedXaction *sx )
 {
    return g_date_valid( &sx->end_date );
 }
@@ -355,13 +355,13 @@ xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 }
 
 gboolean
-xaccSchedXactionHasOccurDef( SchedXaction *sx )
+xaccSchedXactionHasOccurDef( const SchedXaction *sx )
 {
   return ( xaccSchedXactionGetNumOccur( sx ) != 0 );
 }
 
 gint
-xaccSchedXactionGetNumOccur( SchedXaction *sx )
+xaccSchedXactionGetNumOccur( const SchedXaction *sx )
 {
   return sx->num_occurances_total;
 }
@@ -376,7 +376,7 @@ xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 }
 
 gint
-xaccSchedXactionGetRemOccur( SchedXaction *sx )
+xaccSchedXactionGetRemOccur( const SchedXaction *sx )
 {
   return sx->num_occurances_remain;
 }
@@ -401,7 +401,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 
 
 KvpValue *
-xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
+xaccSchedXactionGetSlot( const SchedXaction *sx, const char *slot )
 {
   if (!sx) return NULL;
 
@@ -422,7 +422,7 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 }
 
 gboolean
-xaccSchedXactionGetEnabled( SchedXaction *sx )
+xaccSchedXactionGetEnabled( const SchedXaction *sx )
 {
     return sx->enabled;
 }
@@ -437,7 +437,7 @@ xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled)
 }
 
 void
-xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
@@ -463,7 +463,7 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
 }
 
 gint
-xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
+xaccSchedXactionGetAdvanceCreation( const SchedXaction *sx )
 {
   return sx->advanceCreateDays;
 }
@@ -478,7 +478,7 @@ xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 }
 
 gint
-xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
+xaccSchedXactionGetAdvanceReminder( const SchedXaction *sx )
 {
    return sx->advanceRemindDays;
 }
@@ -604,7 +604,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 }
 
 gint
-gnc_sx_get_instance_count( SchedXaction *sx, void *stateData )
+gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData )
 {
   gint toRet = -1;
   temporalStateData *tsd;
@@ -627,7 +627,7 @@ gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum )
 }
 
 GList *
-xaccSchedXactionGetSplits( SchedXaction *sx )
+xaccSchedXactionGetSplits( const SchedXaction *sx )
 {
   g_return_val_if_fail( sx, NULL );
   return xaccAccountGetSplitList(sx->template_acct);

@@ -168,26 +168,26 @@ gnc_lot_is_closed (GNCLot *lot)
 }
 
 Account *
-gnc_lot_get_account (GNCLot *lot)
+gnc_lot_get_account (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return lot->account;
 }
 
 KvpFrame *
-gnc_lot_get_slots (GNCLot *lot)
+gnc_lot_get_slots (const GNCLot *lot)
 {
     return qof_instance_get_slots(QOF_INSTANCE(lot));
 }
 
 SplitList *
-gnc_lot_get_split_list (GNCLot *lot)
+gnc_lot_get_split_list (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return lot->splits;
 }
 
-gint gnc_lot_count_splits (GNCLot *lot)
+gint gnc_lot_count_splits (const GNCLot *lot)
 {
    if (!lot) return 0;
    return g_list_length (lot->splits);
@@ -197,14 +197,14 @@ gint gnc_lot_count_splits (GNCLot *lot)
 /* Hmm, we should probably inline these. */
 
 const char * 
-gnc_lot_get_title (GNCLot *lot)
+gnc_lot_get_title (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return kvp_frame_get_string (lot->inst.kvp_data, "/title");
 }
 
 const char * 
-gnc_lot_get_notes (GNCLot *lot)
+gnc_lot_get_notes (const GNCLot *lot)
 {
    if (!lot) return NULL;
    return kvp_frame_get_string (lot->inst.kvp_data, "/notes");
@@ -272,7 +272,7 @@ gnc_lot_get_balance (GNCLot *lot)
 /* ============================================================= */
 
 void
-gnc_lot_get_balance_before (GNCLot *lot, Split *split,
+gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
                             gnc_numeric *amount, gnc_numeric *value)
 {
    GList *node;
@@ -283,7 +283,7 @@ gnc_lot_get_balance_before (GNCLot *lot, Split *split,
    if (lot && lot->splits)
    {
       Transaction *ta, *tb;
-      Split *target;
+      const Split *target;
       /* If this is a gains split, find the source of the gains and use
          its transaction for the comparison.  Gains splits are in separate
          transactions that may sort after non-gains transactions.  */

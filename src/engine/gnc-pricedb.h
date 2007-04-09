@@ -220,14 +220,14 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
 /** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
-gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
-gnc_commodity * gnc_price_get_currency(GNCPrice *p);
-Timespec        gnc_price_get_time(GNCPrice *p);
-const char *    gnc_price_get_source(GNCPrice *p);
-const char *    gnc_price_get_typestr(GNCPrice *p);
-gnc_numeric     gnc_price_get_value(GNCPrice *p);
-gint32          gnc_price_get_version(GNCPrice *p);
-gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
+gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
+gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
+Timespec        gnc_price_get_time(const GNCPrice *p);
+const char *    gnc_price_get_source(const GNCPrice *p);
+const char *    gnc_price_get_typestr(const GNCPrice *p);
+gnc_numeric     gnc_price_get_value(const GNCPrice *p);
+gint32          gnc_price_get_version(const GNCPrice *p);
+gboolean        gnc_price_equal(const GNCPrice *p1, const GNCPrice *p2);
 
 #define gnc_price_get_guid(X)    qof_instance_get_guid(QOF_INSTANCE(X))
 #define gnc_price_return_guid(X) (*(qof_instance_get_guid(QOF_INSTANCE(X))))

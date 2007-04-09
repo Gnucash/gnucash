@@ -330,14 +330,14 @@ gnc_price_lookup (const GUID *guid, QofBook *book)
 }
 
 gnc_commodity *
-gnc_price_get_commodity(GNCPrice *p)
+gnc_price_get_commodity(const GNCPrice *p)
 {
   if(!p) return NULL;
   return p->commodity;
 }
 
 Timespec
-gnc_price_get_time(GNCPrice *p)
+gnc_price_get_time(const GNCPrice *p)
 {
   if(!p) {
     Timespec result;
@@ -349,21 +349,21 @@ gnc_price_get_time(GNCPrice *p)
 }
 
 const char *
-gnc_price_get_source(GNCPrice *p)
+gnc_price_get_source(const GNCPrice *p)
 {
   if(!p) return NULL;
   return p->source;
 }
 
 const char *
-gnc_price_get_typestr(GNCPrice *p)
+gnc_price_get_typestr(const GNCPrice *p)
 {
   if(!p) return NULL;
   return p->type;
 }
 
 gnc_numeric
-gnc_price_get_value(GNCPrice *p)
+gnc_price_get_value(const GNCPrice *p)
 {
   if(!p) {
     PERR("price NULL.\n");
@@ -373,21 +373,21 @@ gnc_price_get_value(GNCPrice *p)
 }
 
 gnc_commodity *
-gnc_price_get_currency(GNCPrice *p)
+gnc_price_get_currency(const GNCPrice *p)
 {
   if(!p) return NULL;
   return p->currency;
 }
 
 gint32
-gnc_price_get_version(GNCPrice *p)
+gnc_price_get_version(const GNCPrice *p)
 {
   if(!p) return 0;
   return (p->version);
 }
 
 gboolean
-gnc_price_equal (GNCPrice *p1, GNCPrice *p2)
+gnc_price_equal (const GNCPrice *p1, const GNCPrice *p2)
 {
   Timespec ts1;
   Timespec ts2;
