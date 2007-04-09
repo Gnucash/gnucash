@@ -100,6 +100,9 @@ GncBudget *gnc_budget_new(QofBook *book);
 /** Deletes the given budget object.*/
 void gnc_budget_destroy(GncBudget* budget);
 
+void gnc_budget_begin_edit(GncBudget *bgt);
+void gnc_budget_commit_edit(GncBudget *bgt);
+
 const GUID* gnc_budget_get_guid(GncBudget* budget);
 #define gnc_budget_return_guid(X) \
   (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))

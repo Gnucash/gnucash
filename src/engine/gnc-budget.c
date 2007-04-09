@@ -99,13 +99,13 @@ gnc_budget_free(QofInstance *inst)
 
 static void noop (QofInstance *inst) {}
 
-static void
+void
 gnc_budget_begin_edit(GncBudget *bgt)
 {
     qof_begin_edit(QOF_INSTANCE(bgt));
 }
 
-static void
+void
 gnc_budget_commit_edit(GncBudget *bgt)
 {
     if (!qof_commit_edit(QOF_INSTANCE(bgt))) return;
@@ -128,9 +128,11 @@ gnc_budget_new(QofBook *book)
     g_date_subtract_days(&date, g_date_get_day(&date)-1);
     recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 
+	gnc_budget_begin_edit(budget);
     gnc_budget_set_name(budget, _("Unnamed Budget"));
     gnc_budget_set_description(budget, "");
     gnc_budget_set_num_periods(budget, 12);
+	gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst, QOF_EVENT_CREATE , NULL);
 
