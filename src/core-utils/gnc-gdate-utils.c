@@ -28,23 +28,14 @@
 #include "gnc-gdate-utils.h"
 
 
-gint
-g_date_equals( gconstpointer gda, gconstpointer gdb )
+gboolean
+gnc_gdate_equal(gconstpointer gda, gconstpointer gdb)
 {
-  if ( !g_date_valid( (GDate*)gda )
-       || !g_date_valid( (GDate*)gdb ) ) {
-#if 0
-    DEBUG( "invalid: %p(%s), %p(%s)",
-           gda, ( g_date_valid((GDate*)gda) ? "" : "*" ),
-           gdb, ( g_date_valid((GDate*)gdb) ? "" : "*" ) );
-#endif
-  }
-  return ( g_date_compare( (GDate*)gda, (GDate*)gdb )
-           == 0 ? TRUE : FALSE );
+  return (g_date_compare( (GDate*)gda, (GDate*)gdb ) == 0 ? TRUE : FALSE);
 }
 
 guint
-g_date_hash( gconstpointer gd )
+gnc_gdate_hash( gconstpointer gd )
 {
   gint val = (g_date_get_year( (GDate*)gd ) * 10000)
     + (g_date_get_month( (GDate*)gd ) * 100)
