@@ -500,7 +500,10 @@ gnc_sx_instance_free(GncSxInstance *instance)
 {
     gnc_sx_destroy_temporal_state(instance->temporal_state);
 
-    g_hash_table_destroy(instance->variable_bindings);
+    if (instance->variable_bindings != NULL)
+    {
+        g_hash_table_destroy(instance->variable_bindings);
+    }
     instance->variable_bindings = NULL;
      
     g_free(instance);
@@ -511,7 +514,10 @@ gnc_sx_instances_free(GncSxInstances *instances)
 {
     GList *instance_iter;
 
-    g_hash_table_destroy(instances->variable_names);
+    if (instances->variable_names != NULL)
+    {
+        g_hash_table_destroy(instances->variable_names);
+    }
     instances->variable_names = NULL;
 
     instances->sx = NULL;
@@ -798,7 +804,10 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         added_var_names = added_cb_data.list;
         g_debug("%d added variables", g_list_length(added_var_names));
 
-        g_hash_table_destroy(existing->variable_names);
+        if (existing->variable_names != NULL)
+        {
+            g_hash_table_destroy(existing->variable_names);
+        }
         existing->variable_names = new_instances->variable_names;
         new_instances->variable_names = NULL;
 
@@ -944,7 +953,11 @@ _get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *num
                             gnc_exp_parser_error_string());
             *creation_errors = g_list_append(*creation_errors, err);
         }
-        g_hash_table_destroy(parser_vars);
+
+        if (parser_vars != NULL)
+        {
+            g_hash_table_destroy(parser_vars);
+        }
     }
 }
 
