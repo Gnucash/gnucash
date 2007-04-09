@@ -1358,40 +1358,6 @@ gnc_timet_get_day_end (time_t time_val)
 }
 
 
-#ifndef GNUCASH_MAJOR_VERSION
-time_t
-gnc_timet_get_day_start_gdate (GDate *date)
-{
-  struct tm stm;
-  time_t secs;
-
-  stm.tm_year = g_date_get_year (date) - 1900;
-  stm.tm_mon = g_date_get_month (date) - 1;
-  stm.tm_mday = g_date_get_day (date);
-  gnc_tm_set_day_start(&stm);
-
-  /* Compute number of seconds */
-  secs = mktime (&stm);
-  return secs;
-}
-
-time_t
-gnc_timet_get_day_end_gdate (GDate *date)
-{
-  struct tm stm;
-  time_t secs;
-
-  stm.tm_year = g_date_get_year (date) - 1900;
-  stm.tm_mon = g_date_get_month (date) - 1;
-  stm.tm_mday = g_date_get_day (date);
-  gnc_tm_set_day_end(&stm);
-
-  /* Compute number of seconds */
-  secs = mktime (&stm);
-  return secs;
-}
-#endif /* GNUCASH_MAJOR_VERSION */
-
 /* ======================================================== */
 
 void

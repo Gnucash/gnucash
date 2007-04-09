@@ -496,22 +496,6 @@ time_t gnc_timet_get_day_start(time_t time_val);
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
 
-#ifndef GNUCASH_MAJOR_VERSION
-/** The gnc_timet_get_day_start() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_start_gdate (GDate *date);
-
-/** The gnc_timet_get_day_end() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_end_gdate (GDate *date);
-#endif /* GNUCASH_MAJOR_VERSION */
-
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);
 
