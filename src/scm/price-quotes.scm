@@ -581,12 +581,14 @@
                 (string-append
                  currency-str ":" (gnc-commodity-get-mnemonic commodity))
                 (begin
+				  (gnc-price-begin-edit gnc-price)
                   (gnc-price-set-commodity gnc-price commodity)
                   (gnc-price-set-currency gnc-price currency)
                   (gnc-price-set-time gnc-price gnc-time)
                   (gnc-price-set-source gnc-price "Finance::Quote")
                   (gnc-price-set-typestr gnc-price price-type)
                   (gnc-price-set-value gnc-price price)
+				  (gnc-price-commit-edit gnc-price)
                   gnc-price))))))
 
   (define (book-add-prices! book prices)
