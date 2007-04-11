@@ -1305,6 +1305,7 @@ AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
+  CFLAGS="${CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the GNOME_COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
