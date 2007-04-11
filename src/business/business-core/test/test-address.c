@@ -52,6 +52,7 @@ test_address (void)
     address = gncAddressCreate (book, &ent);
     do_test (address != NULL, "address create");
 
+    gncAddressBeginEdit (address);
     gncAddressDestroy (address);
     success ("create/destroy");
   }

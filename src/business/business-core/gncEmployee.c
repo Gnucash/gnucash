@@ -130,6 +130,7 @@ static void gncEmployeeFree (GncEmployee *employee)
   CACHE_REMOVE (employee->username);
   CACHE_REMOVE (employee->language);
   CACHE_REMOVE (employee->acl);
+  gncAddressBeginEdit (employee->addr);
   gncAddressDestroy (employee->addr);
 
   /* qof_instance_release (&employee->inst); */
@@ -287,7 +288,10 @@ qofEmployeeSetAddr (GncEmployee *employee, QofInstance *addr_ent)
 	if(!employee || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
 	if(addr == employee->addr) { return; }
-	if(employee->addr != NULL) { gncAddressDestroy(employee->addr); }
+	if(employee->addr != NULL) {
+		gncAddressBeginEdit(employee->addr);
+		gncAddressDestroy(employee->addr);
+	}
 	gncEmployeeBeginEdit(employee);
 	employee->addr = addr;
 	gncEmployeeCommitEdit(employee);

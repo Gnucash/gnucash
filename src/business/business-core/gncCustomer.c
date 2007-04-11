@@ -195,7 +195,9 @@ static void gncCustomerFree (GncCustomer *cust)
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
   CACHE_REMOVE (cust->notes);
+  gncAddressBeginEdit (cust->addr);
   gncAddressDestroy (cust->addr);
+  gncAddressBeginEdit (cust->shipaddr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
 
@@ -442,7 +444,10 @@ qofCustomerSetAddr (GncCustomer *cust, QofInstance *addr_ent)
 	if(!cust || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
 	if(addr == cust->addr) { return; }
-	if(cust->addr != NULL) { gncAddressDestroy(cust->addr); }
+	if(cust->addr != NULL) {
+		gncAddressBeginEdit(cust->addr);
+		gncAddressDestroy(cust->addr);
+	}
 	gncCustomerBeginEdit(cust);
 	cust->addr = addr;
 	gncCustomerCommitEdit(cust);
@@ -456,7 +461,10 @@ qofCustomerSetShipAddr (GncCustomer *cust, QofInstance *ship_addr_ent)
 	if(!cust || !ship_addr_ent) { return; }
 	ship_addr = (GncAddress*)ship_addr_ent;
 	if(ship_addr == cust->shipaddr) { return; }
-	if(cust->shipaddr != NULL) { gncAddressDestroy(cust->shipaddr); }
+	if(cust->shipaddr != NULL) {
+		gncAddressBeginEdit(cust->shipaddr);
+		gncAddressDestroy(cust->shipaddr);
+	}
 	gncCustomerBeginEdit(cust);
 	cust->shipaddr = ship_addr;
 	gncCustomerCommitEdit(cust);

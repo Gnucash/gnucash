@@ -134,6 +134,7 @@ static void gncVendorFree (GncVendor *vendor)
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
   CACHE_REMOVE (vendor->notes);
+  gncAddressBeginEdit (vendor->addr);
   gncAddressDestroy (vendor->addr);
   g_list_free (vendor->jobs);
 
@@ -322,7 +323,10 @@ qofVendorSetAddr (GncVendor *vendor, QofInstance *addr_ent)
 	if(!vendor || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
 	if(addr == vendor->addr) { return; }
-	if(vendor->addr != NULL) { gncAddressDestroy(vendor->addr); }
+	if(vendor->addr != NULL) {
+		gncAddressBeginEdit(vendor->addr);
+		gncAddressDestroy(vendor->addr);
+	}
 	gncVendorBeginEdit(vendor);
 	vendor->addr = addr;
 	gncVendorCommitEdit(vendor);
