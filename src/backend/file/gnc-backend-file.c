@@ -594,7 +594,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
         if(g_unlink(datafile) != 0 && errno != ENOENT)
         {
-            qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
+            qof_backend_set_error(be, ERR_BACKEND_READONLY);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
