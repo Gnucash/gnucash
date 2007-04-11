@@ -366,7 +366,10 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
 
   /* If the transaction is balanced, nothing more to do */
   imbalance = xaccTransGetImbalance (trans);
-  if (gnc_numeric_zero_p (imbalance)) return;
+  if (gnc_numeric_zero_p (imbalance)) {
+    LEAVE("zero imbalance");
+    return;
+  }
 
   if (!account)
   {
@@ -377,6 +380,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
        {
           /* This can't occur, things should be in books */
           PERR ("Bad data corruption, no root account in book");
+          LEAVE("");
           return;
        }
     }
@@ -384,6 +388,7 @@ xaccTransScrubImbalance (Transaction *trans, Account *root,
         trans->common_currency, _("Imbalance"));
     if (!account) {
         PERR ("Can't get balancing account");
+        LEAVE("");
         return;
     }
   }

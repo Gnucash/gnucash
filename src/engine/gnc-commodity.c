@@ -1297,10 +1297,12 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   {
     if (c == comm)
     {
+      LEAVE("already in table");
       return c;
     }
     gnc_commodity_copy (c, comm);
     gnc_commodity_destroy (comm);
+    LEAVE("found at %p", c);
     return c;
   }
 
