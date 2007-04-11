@@ -832,15 +832,20 @@ gnc_file_open (void)
 {
   const char * newfile;
   char *lastfile;
+  gchar *last_file_dir;
   gboolean result;
 
   if (!gnc_file_query_save (TRUE))
     return FALSE;
 
   lastfile = gnc_history_get_last();
-  newfile = gnc_file_dialog (_("Open"), NULL, lastfile, GNC_FILE_DIALOG_OPEN);
   if (lastfile)
+    last_file_dir = g_path_get_dirname(lastfile);
+  newfile = gnc_file_dialog (_("Open"), NULL, last_file_dir, GNC_FILE_DIALOG_OPEN);
+  if (lastfile != NULL)
     g_free(lastfile);
+  if (last_file_dir != NULL)
+    g_free(last_file_dir);
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
