@@ -831,8 +831,8 @@ gboolean
 gnc_file_open (void)
 {
   const char * newfile;
-  char *lastfile;
-  gchar *last_file_dir;
+  char *lastfile = NULL;
+  gchar *last_file_dir = NULL;
   gboolean result;
 
   if (!gnc_file_query_save (TRUE))
