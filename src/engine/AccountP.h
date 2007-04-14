@@ -42,7 +42,6 @@
 #include "Account.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "policy.h"
 
 /** STRUCTS *********************************************************/
 
@@ -75,32 +74,14 @@ struct account_s
   gnc_numeric cleared_balance;
   gnc_numeric reconciled_balance;
 
-  /* version number, used for tracking multiuser updates */
-  gint32 version;
-  guint32  version_check;  /* data aging timestamp */
-
   SplitList *splits;       /* list of split pointers */
-  LotList   *lots;         /* list of lot pointers */
-
-  /* Cached pointer to policy method */
-  GNCPolicy *policy;
 
   gboolean balance_dirty;  /* balances in splits incorrect */
   gboolean sort_dirty;     /* sort order of splits is bad */
 
-  /* The "mark" flag can be used by the user to mark this account
-   * in any way desired.  Handy for specialty traversals of the 
-   * account tree. */
-  short mark;
-
   /* -------------------------------------------------------------- */
   /* Backend private expansion data */
   guint32  idata;     /* used by the sql backend for kvp management */
-};
-
-struct _AccountClass
-{
-  QofInstanceClass parent_class;
 };
 
 /* The xaccAccountSortSplits() routine will resort the account's 
@@ -135,22 +116,6 @@ void xaccAccountSetStartingBalance(Account *account,
                                    const gnc_numeric start_baln, 
                                    const gnc_numeric start_cleared_baln, 
                                    const gnc_numeric start_reconciled_baln); 
-
-/* The xaccFreeAccount() routine releases memory associated with the
- *    account.  It should never be called directly from user code;
- *    instead, the xaccAccountDestroy() routine should be used
- *    (because xaccAccountDestroy() has the correct commit semantics).
- */
-
-void xaccFreeAccount (Account *account);
-
-/* The xaccAccountSet/GetVersion() routines set & get the version 
- *    numbers on this account.  The version number is used to manage
- *    multi-user updates.  These routines are private because we don't
- *    want anyone except the backend to mess with them.
- */
-void xaccAccountSetVersion (Account*, gint32);
-gint32 xaccAccountGetVersion (const Account* acc);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

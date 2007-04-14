@@ -39,7 +39,6 @@
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
-#include "policy.h"
 
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
 
@@ -78,6 +77,9 @@ enum {
   PROP_ACCT_VERSION_CHECK,
   PROP_POLICY,
   PROP_MARK,
+  PROP_TAX_RELATED,
+  PROP_TAX_CODE,
+  PROP_TAX_SOURCE,
 };
 
 typedef struct AccountPrivate
@@ -134,28 +136,23 @@ typedef struct AccountPrivate
 //    gnc_numeric balance;
 //    gnc_numeric cleared_balance;
 //    gnc_numeric reconciled_balance;
-//
-//    /* version number, used for tracking multiuser updates */
-//    gint32 version;
-//    guint32 version_check;  /* data aging timestamp */
-//
+
+    /* version number, used for tracking multiuser updates */
+    gint32 version;
+    guint32 version_check;  /* data aging timestamp */
+
 //    SplitList *splits;       /* list of split pointers */
-//    LotList   *lots;         /* list of lot pointers */
-//
-//    /* Cached pointer to policy method */
-//    GNCPolicy *policy;
-//
+
+    LotList   *lots;		/* list of lot pointers */
+    GNCPolicy *policy;		/* Cached pointer to policy method */
+
 //    gboolean balance_dirty;  /* balances in splits incorrect */
 //    gboolean sort_dirty;     /* sort order of splits is bad */
-//
-//    /* The "mark" flag can be used by the user to mark this account
-//     * in any way desired.  Handy for specialty traversals of the 
-//     * account tree. */
-//    short mark;
-//
-//  /* -------------------------------------------------------------- */
-//  /* Backend private expansion data */
-//  guint32  idata;     /* used by the sql backend for kvp management */
+
+    /* The "mark" flag can be used by the user to mark this account
+     * in any way desired.  Handy for specialty traversals of the 
+     * account tree. */
+    short mark;
 } AccountPrivate;
 
 #define GET_PRIVATE(o)  \
@@ -239,6 +236,13 @@ gnc_account_init(Account* acc)
 
     priv->type = ACCT_TYPE_NONE;
 
+    priv->version = 0;
+    priv->version_check = 0;
+    priv->mark = 0;
+
+    priv->policy = xaccGetFIFOPolicy();
+    priv->lots = NULL;
+
 //    priv->commodity = NULL;
 //    priv->commodity_scu = 0;
 //    priv->non_standard_scu = FALSE;
@@ -250,11 +254,6 @@ gnc_account_init(Account* acc)
 //    priv->starting_balance = gnc_numeric_zero();
 //    priv->starting_cleared_balance = gnc_numeric_zero();
 //    priv->starting_reconciled_balance = gnc_numeric_zero();
-//
-//    priv->version = 0;
-//    priv->version_check = 0;
-//
-//    priv->policy = xaccGetFIFOPolicy();
 //
 //    priv->balance_dirty = FALSE;
 //    priv->sort_dirty = FALSE;
@@ -305,6 +304,29 @@ gnc_account_get_property (GObject         *object,
 	    // NEED TO BE CONVERTED TO A G_TYPE_ENUM
 	    g_value_set_int(value, priv->type);
 	    break;
+	case PROP_ACCT_VERSION:
+	    g_value_set_int(value, priv->version);
+	    break;
+	case PROP_ACCT_VERSION_CHECK:
+	    g_value_set_uint(value, priv->version_check);
+	    break;
+	case PROP_POLICY:
+	    /* MAKE THIS A BOXED VALUE */
+	    g_value_set_pointer(value, priv->policy);
+	    break;
+	case PROP_MARK:
+	    g_value_set_int(value, priv->mark);
+	    break;
+	case PROP_TAX_RELATED:
+	    g_value_set_boolean(value, xaccAccountGetTaxRelated(account));
+	    break;
+	case PROP_TAX_CODE:
+	    g_value_set_string(value, xaccAccountGetTaxUSCode(account));
+	    break;
+	case PROP_TAX_SOURCE:
+	    g_value_set_string(value,
+			       xaccAccountGetTaxUSPayerNameSource(account));
+	    break;
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -341,6 +363,27 @@ gnc_account_set_property (GObject         *object,
 	    // NEED TO BE CONVERTED TO A G_TYPE_ENUM
 	    xaccAccountSetType(account, g_value_get_int(value));
 	    break;
+	case PROP_ACCT_VERSION:
+	    xaccAccountSetVersion(account, g_value_get_int(value));
+	    break;
+	case PROP_ACCT_VERSION_CHECK:
+	    gnc_account_set_version_check(account, g_value_get_uint(value));
+	    break;
+	case PROP_POLICY:
+	    gnc_account_set_policy(account, g_value_get_pointer(value));
+	    break;
+	case PROP_MARK:
+	    xaccAccountSetMark(account, g_value_get_int(value));
+	    break;
+	case PROP_TAX_RELATED:
+	    xaccAccountSetTaxRelated(account, g_value_get_boolean(value));
+	    break;
+	case PROP_TAX_CODE:
+	    xaccAccountSetTaxUSCode(account, g_value_get_string(value));
+	    break;
+	case PROP_TAX_SOURCE:
+	    xaccAccountSetTaxUSPayerNameSource(account,
+					       g_value_get_string(value));
 	default:
 	    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	    break;
@@ -434,6 +477,78 @@ gnc_account_class_init (AccountClass *klass)
 			   NUM_ACCOUNT_TYPES - 1,
 			   ACCT_TYPE_BANK,
 			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_ACCT_VERSION,
+	 g_param_spec_int ("acct-version",
+			   "Version",
+			   "The version number of the current account state.",
+			   0,
+			   G_MAXINT32,
+			   0,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_ACCT_VERSION_CHECK,
+	 g_param_spec_uint ("acct-version-check",
+			    "Version Check",
+			    "The version check number of the current account state.",
+			    0,
+			    G_MAXUINT32,
+			    0,
+			    G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_POLICY,
+	 g_param_spec_pointer ("policy",
+			       "Policy",
+			       "The account lots policy.",
+			       G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(gobject_class,
+	 PROP_MARK,
+	 g_param_spec_int ("acct-mark",
+			   "Account Mark",
+			   "Ipsum Lorem",
+			   0,
+			   G_MAXINT16,
+			   0,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_TAX_RELATED,
+         g_param_spec_boolean ("tax-related",
+                               "Tax Related",
+                               "Whether the account maps to an entry on an "
+			       "income tax document.",
+                               FALSE,
+                               G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_TAX_CODE,
+         g_param_spec_string ("tax-code",
+                              "Tax Code",
+                              "This is the code for mapping an account to a "
+			      "specific entry on a taxable document.  In the "
+			      "United States it is used to transfer totals "
+			      "into tax preparation software.",
+                              NULL,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_TAX_SOURCE,
+         g_param_spec_string ("tax-source",
+                              "Tax Source",
+                              "This is an unknown tax related field.",
+                              NULL,
+                              G_PARAM_READWRITE));
 }
 
 static void
@@ -457,11 +572,7 @@ xaccInitAccount (Account * acc, QofBook *book)
   acc->non_standard_scu = FALSE;
 
   acc->splits = NULL;
-  acc->lots = NULL;
-  acc->policy = xaccGetFIFOPolicy();
 
-  acc->version = 0;
-  acc->version_check = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
@@ -664,7 +775,11 @@ xaccFreeAccountChildren (Account *acc)
   priv->children = NULL;
 }
 
-void
+/* The xaccFreeAccount() routine releases memory associated with the
+ * account.  It should never be called directly from user code;
+ * instead, the xaccAccountDestroy() routine should be used (because
+ * xaccAccountDestroy() has the correct commit semantics). */
+static void
 xaccFreeAccount (Account *acc)
 {
   AccountPrivate *priv;
@@ -685,18 +800,18 @@ xaccFreeAccount (Account *acc)
   }
 
   /* remove lots -- although these should be gone by now. */
-  if (acc->lots)
+  if (priv->lots)
   {
     PERR (" instead of calling xaccFreeAccount(), please call \n"
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
   
-    for (lp=acc->lots; lp; lp=lp->next)
+    for (lp=priv->lots; lp; lp=lp->next)
     {
       GNCLot *lot = lp->data;
       gnc_lot_destroy (lot);
     }
-    g_list_free (acc->lots);
-    acc->lots = NULL;
+    g_list_free (priv->lots);
+    priv->lots = NULL;
   }
 
   /* Next, clean up the splits */
@@ -739,7 +854,7 @@ xaccFreeAccount (Account *acc)
   priv->type = ACCT_TYPE_NONE;
   acc->commodity = NULL;
 
-  acc->version = 0;
+  priv->version = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
@@ -836,13 +951,13 @@ xaccAccountCommitEdit (Account *acc)
     }
 
     /* the lots should be empty by now */
-    for (lp = acc->lots; lp; lp = lp->next)
+    for (lp = priv->lots; lp; lp = lp->next)
     {
       GNCLot *lot = lp->data;
       gnc_lot_destroy (lot);
     }
-    g_list_free (acc->lots);
-    acc->lots = NULL;
+    g_list_free(priv->lots);
+    priv->lots = NULL;
 
     qof_instance_set_dirty(&acc->inst);
     acc->inst.editlevel--;
@@ -867,16 +982,52 @@ xaccAccountDestroy (Account *acc)
 void 
 xaccAccountSetVersion (Account *acc, gint32 vers)
 {
-  if (!acc) return;
-  acc->version = vers;
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->version = vers;
 }
 
 gint32 
 xaccAccountGetVersion (const Account *acc)
 {
-  if (!acc) return 0;
-  return (acc->version);
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+
+    return GET_PRIVATE(acc)->version;
 }
+
+void
+gnc_account_increment_version (Account *acc)
+{
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->version++;
+}
+
+guint32
+gnc_account_get_version_check (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+
+    return GET_PRIVATE(acc)->version_check;
+}
+
+void
+gnc_account_set_version_check (Account *acc, guint32 value)
+{
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->version_check = value;
+}
+
 
 /********************************************************************\
 \********************************************************************/
@@ -1194,39 +1345,68 @@ xaccAccountLookup (const GUID *guid, QofBook *book)
 short
 xaccAccountGetMark (const Account *acc)
 {
-  return acc ? acc->mark : 0;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+
+    return GET_PRIVATE(acc)->mark;
 }
 
 void
 xaccAccountSetMark (Account *acc, short m)
 {
-  if (acc) 
-      acc->mark = m;
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->mark = m;
 }
 
 void
 xaccClearMark (Account *acc, short val)
 {
-  Account *root;
+    Account *root;
 
-  if (!acc) return;
-  root = gnc_account_get_root (acc);
-  xaccClearMarkDown (root ? root : acc, val);
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    root = gnc_account_get_root(acc);
+    xaccClearMarkDown(root ? root : acc, val);
 }
 
 void
 xaccClearMarkDown (Account *acc, short val)
 {
-  AccountPrivate *priv;
-  GList *node;
+    AccountPrivate *priv;
+    GList *node;
 
-  if (!acc) return;
-  priv = GET_PRIVATE(acc);
-  acc->mark = val;
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-  for (node = priv->children; node; node = node->next) {
-    xaccClearMarkDown (node->data, val);
-  }
+    priv = GET_PRIVATE(acc);
+    priv->mark = val;
+    for (node = priv->children; node; node = node->next) {
+        xaccClearMarkDown(node->data, val);
+    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+GNCPolicy *
+gnc_account_get_policy (Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+
+    return GET_PRIVATE(acc)->policy;
+}
+
+void
+gnc_account_set_policy (Account *acc, GNCPolicy *policy)
+{
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->policy = policy ? policy : xaccGetFIFOPolicy();
 }
 
 /********************************************************************\
@@ -1235,29 +1415,44 @@ xaccClearMarkDown (Account *acc, short val)
 void
 xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 {
-    if (!acc || !lot || !acc->lots) return;
-    ENTER ("(acc=%p, lot=%p)", acc, lot);
+    AccountPrivate *priv;
 
-    acc->lots = g_list_remove (acc->lots, lot);
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+    g_return_if_fail(GNC_IS_LOT(lot));
+
+    priv = GET_PRIVATE(acc);
+    g_return_if_fail(priv->lots);
+
+    ENTER ("(acc=%p, lot=%p)", acc, lot);
+    priv->lots = g_list_remove(priv->lots, lot);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
+    AccountPrivate *priv, *opriv;
    Account * old_acc = NULL;
 
-   if (!acc || !lot || lot->account == acc) return;
-   ENTER ("(acc=%p, lot=%p)", acc, lot);
+   /* errors */
+   g_return_if_fail(GNC_IS_ACCOUNT(acc));
+   g_return_if_fail(GNC_IS_LOT(lot));
 
+   /* optimizations */
+   if (lot->account == acc)
+       return;
+
+   ENTER ("(acc=%p, lot=%p)", acc, lot);
 
    /* pull it out of the old account */
    if (lot->account) {
       old_acc = lot->account;
-      old_acc->lots = g_list_remove (old_acc->lots, lot);
+      opriv = GET_PRIVATE(old_acc);
+      opriv->lots = g_list_remove(opriv->lots, lot);
    }
 
-   acc->lots = g_list_prepend (acc->lots, lot);
+   priv = GET_PRIVATE(acc);
+   priv->lots = g_list_prepend(priv->lots, lot);
    lot->account = acc;
 
    /* Don't move the splits to the new account.  The caller will do this
@@ -1290,8 +1485,17 @@ xaccPostSplitMove (Split *split, Account *accto)
 void
 xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 {
-  /* Handle special cases. */
-  if (!accfrom || !accto || !accfrom->splits || accfrom == accto) return;
+  AccountPrivate *from_priv, *to_priv;
+
+  /* errors */
+  g_return_if_fail(GNC_IS_ACCOUNT(accfrom));
+  g_return_if_fail(GNC_IS_ACCOUNT(accto));
+
+  /* optimizations */
+  from_priv = GET_PRIVATE(accfrom);
+  to_priv = GET_PRIVATE(accto);
+  if (!accfrom->splits || accfrom == accto)
+      return;
 
   /* check for book mix-up */
   g_return_if_fail (accfrom->inst.book == accto->inst.book);
@@ -1304,7 +1508,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
   /* Concatenate accfrom's lists of splits and lots to accto's lists. */
   //accto->splits = g_list_concat(accto->splits, accfrom->splits);
-  //accto->lots = g_list_concat(accto->lots, accfrom->lots);
+  //to_priv->lots = g_list_concat(to_priv->lots, from_priv->lots);
 
   /* Set appropriate flags. */
   //accfrom->balance_dirty = TRUE;
@@ -1321,7 +1525,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
   /* Finally empty accfrom. */
   g_assert(accfrom->splits == NULL);
-  g_assert(accfrom->lots == NULL);
+  g_assert(from_priv->lots == NULL);
   xaccAccountCommitEdit(accfrom);
   xaccAccountCommitEdit(accto);
 
@@ -2109,7 +2313,7 @@ gnc_account_lookup_by_full_name (const Account *any_acc,
   gchar **names;
 
   g_return_val_if_fail(GNC_IS_ACCOUNT(any_acc), NULL);
-  g_return_val_if_fail(name, 0);
+  g_return_val_if_fail(name, NULL);
 
   root = any_acc;
   rpriv = GET_PRIVATE(root);
@@ -2760,13 +2964,15 @@ xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboole
 SplitList *
 xaccAccountGetSplitList (const Account *acc) 
 {
-  return acc ? acc->splits : NULL;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    return acc->splits;
 }
 
 LotList *
 xaccAccountGetLotList (const Account *acc) 
 {
-  return acc ? acc->lots : NULL;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    return g_list_copy(GET_PRIVATE(acc)->lots);
 }
 
 LotList *
@@ -2775,14 +2981,14 @@ xaccAccountFindOpenLots (const Account *acc,
                                                 gpointer user_data),
                          gpointer user_data, GCompareFunc sort_func)
 {
+  AccountPrivate *priv;
   GList *lot_list;
   GList *retval = NULL;
 
-  if (!acc)
-    return NULL;
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
 
-  lot_list = xaccAccountGetLotList (acc);
-  for ( ; lot_list ; lot_list = lot_list->next ) {
+  priv = GET_PRIVATE(acc);
+  for (lot_list = priv->lots; lot_list; lot_list = lot_list->next) {
     GNCLot *lot = lot_list->data;
 
     /* If this lot is closed, then ignore it */
@@ -2806,12 +3012,15 @@ gpointer
 xaccAccountForEachLot(const Account *acc, 
                       gpointer (*proc)(GNCLot *lot, void *data), void *data) 
 {
+  AccountPrivate *priv;
   LotList *node;
   gpointer result = NULL;
 
-  if (!acc || !proc) return NULL;
-  
-  for (node = acc->lots; node; node = node->next)
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+  g_return_val_if_fail(proc, NULL);
+
+  priv = GET_PRIVATE(acc);
+  for (node = priv->lots; node; node = node->next)
       if ((result = proc((GNCLot *)node->data, data))) 
           break;
   
@@ -2825,7 +3034,8 @@ xaccAccountForEachLot(const Account *acc,
 gboolean
 xaccAccountGetTaxRelated (const Account *acc)
 {
-  return acc ? kvp_frame_get_gint64(acc->inst.kvp_data, "tax-related") : FALSE;
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+  return kvp_frame_get_gint64(acc->inst.kvp_data, "tax-related");
 }
 
 void
@@ -2833,8 +3043,7 @@ xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 {
   KvpValue *new_value;
 
-  if (!acc)
-    return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   if (tax_related)
     new_value = kvp_value_new_gint64 (tax_related);
@@ -2850,13 +3059,14 @@ xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 const char *
 xaccAccountGetTaxUSCode (const Account *acc)
 {
-  return acc ? kvp_frame_get_string(acc->inst.kvp_data, "tax-US/code") : NULL;
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+  return kvp_frame_get_string(acc->inst.kvp_data, "tax-US/code");
 }
 
 void
 xaccAccountSetTaxUSCode (Account *acc, const char *code)
 {
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, "/tax-US/code", code);
@@ -2867,14 +3077,15 @@ xaccAccountSetTaxUSCode (Account *acc, const char *code)
 const char *
 xaccAccountGetTaxUSPayerNameSource (const Account *acc)
 {
-  return acc ? kvp_frame_get_string(acc->inst.kvp_data, 
-                                    "tax-US/payer-name-source") : NULL;
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+  return kvp_frame_get_string(acc->inst.kvp_data,
+			      "tax-US/payer-name-source");
 }
 
 void
 xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 {
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, 
@@ -2890,7 +3101,8 @@ gboolean
 xaccAccountGetPlaceholder (const Account *acc)
 {
   const char *str;
-  if (!acc) return FALSE;
+
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
   
   str = kvp_frame_get_string(acc->inst.kvp_data, "placeholder");
   return (str && !strcmp(str, "true"));
@@ -2899,7 +3111,7 @@ xaccAccountGetPlaceholder (const Account *acc)
 void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
   
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, 
@@ -2914,7 +3126,7 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
   GList *descendants, *node;
   GNCPlaceholderType ret = PLACEHOLDER_NONE;
 
-  if (!acc) return PLACEHOLDER_NONE;
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), PLACEHOLDER_NONE);
   if (xaccAccountGetPlaceholder(acc)) return PLACEHOLDER_THIS;
 
   descendants = gnc_account_get_descendants(acc);
@@ -2935,7 +3147,8 @@ gboolean
 xaccAccountGetHidden (const Account *acc)
 {
   const char *str;
-  if (!acc) return FALSE;
+
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
   
   str = kvp_frame_get_string(acc->inst.kvp_data, "hidden");
   return (str && !strcmp(str, "true"));
@@ -2944,7 +3157,7 @@ xaccAccountGetHidden (const Account *acc)
 void
 xaccAccountSetHidden (Account *acc, gboolean val)
 {
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
   
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, "hidden",
@@ -3632,7 +3845,9 @@ gnc_account_copy_children (Account *to, Account *from)
    /* optimizations */
    to_priv = GET_PRIVATE(to);
    from_priv = GET_PRIVATE(from);
-   if (!from_priv->children) return;
+   if (!from_priv->children)
+       return;
+
    to_book = gnc_account_get_book(to);
    if (!to_book) return;
 
@@ -3969,6 +4184,7 @@ gboolean xaccAccountRegister (void)
 
 // Local Variables:
 // mode: c
-// indent-tabs-mode: t
+// indent-tabs-mode: nil
+// c-block-comment-prefix: "* "
 // eval: (c-add-style "gnc" '("k&r" (c-basic-offset . 4) (c-offsets-alist (case-label . +))) t)
 // End:

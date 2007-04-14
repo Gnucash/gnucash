@@ -613,7 +613,7 @@ xaccSplitAssign (Split *split)
 
    ENTER ("(split=%p)", split);
 
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
@@ -706,7 +706,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!split) return;
    lot = split->lot;
    if (!lot) return;
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    currency = split->parent->common_currency;
 
    ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
@@ -1097,7 +1097,7 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
     * to mark all splits dirty if the opening splits are dirty. */
 
    ENTER("(lot=%p)", lot);
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    for (node = lot->splits; node; node = node->next)
    {
       Split *s = node->data;

@@ -100,7 +100,7 @@ xaccLotFill (GNCLot *lot)
 
    if (!lot) return;
    acc = lot->account;
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
 
    ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 

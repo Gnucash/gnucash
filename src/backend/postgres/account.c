@@ -101,8 +101,8 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    {
      if (0 < pgendAccountCompareVersion (be, acct)) return;
    }
-   acct->version ++;  /* be sure to update the version !! */
-   acct->version_check = be->version_check;
+   gnc_account_increment_version(acct);  /* be sure to update the version !! */
+   gnc_account_set_version_check(acct, be->version_check);
 
    if ((0 == acct->idata) &&
        (FALSE == kvp_frame_is_empty (xaccAccountGetSlots(acct))))
@@ -493,7 +493,8 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    {
       /* save some performance, don't go to the
        * backend if the data is recent. */
-      if (MAX_VERSION_AGE >= be->version_check - acc->version_check) 
+      guint32 value = gnc_account_get_version_check(acc);
+      if (MAX_VERSION_AGE >= be->version_check - value) 
       {
          PINFO ("fresh data, skip check");
          engine_data_is_newer = 0;
@@ -526,7 +527,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
             acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
          }
 
-         acc->version_check = be->version_check;
+         gnc_account_set_version_check(acc, be->version_check);
       }
    }
 
@@ -589,8 +590,8 @@ pgend_account_commit_edit (QofBackend * bend,
       LEAVE ("rolled back");
       return;
    }
-   acct->version ++;   /* be sure to update the version !! */
-   acct->version_check = be->version_check;
+   gnc_account_increment_version(acct);  /* be sure to update the version !! */
+   gnc_account_set_version_check(acct, be->version_check);
 
    if (acct->inst.do_free)
    {

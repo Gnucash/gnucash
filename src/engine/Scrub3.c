@@ -92,7 +92,7 @@ xaccScrubLot (GNCLot *lot)
   ENTER ("(lot=%p) %s", lot, gnc_lot_get_title(lot));
 
   acc = gnc_lot_get_account (lot);
-  pcy = acc->policy;
+  pcy = gnc_account_get_policy(acc);
   xaccAccountBeginEdit(acc);
   xaccScrubMergeLotSubSplits (lot);
 
@@ -156,7 +156,7 @@ rethin:
 void
 xaccAccountScrubLots (Account *acc)
 {
-  LotList *node;
+  LotList *lots, *node;
   if (!acc) return;
   if (FALSE == xaccAccountHasTrades (acc)) return;
                                                                                 
@@ -164,11 +164,13 @@ xaccAccountScrubLots (Account *acc)
   xaccAccountBeginEdit(acc);
   xaccAccountAssignLots (acc);
 
-  for (node = acc->lots; node; node=node->next)
+  lots = xaccAccountGetLotList(acc);
+  for (node = lots; node; node=node->next)
   {
     GNCLot *lot = node->data;
     xaccScrubLot (lot);
   }
+  g_list_free(lots);
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%s)", xaccAccountGetName(acc));
 }

@@ -46,6 +46,7 @@
 #define XACC_ACCOUNT_H
 #include "qof.h"
 #include "gnc-engine.h"
+#include "policy.h"
 
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
@@ -59,7 +60,9 @@ typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
 typedef void (*AccountCb)(Account *a, gpointer data);
 typedef gpointer (*AccountCb2)(Account *a, gpointer data);
 
-typedef struct _AccountClass AccountClass;
+typedef struct {
+    QofInstanceClass parent_class;
+} AccountClass;
 
 /* --- type macros --- */
 #define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
@@ -258,6 +261,15 @@ void xaccAccountSetDescription (Account *account, const char *desc);
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
 void xaccAccountSetLastNum (Account *account, const char *num);
+/** Set the account's lot order policy */
+void gnc_account_set_policy (Account *account, GNCPolicy *policy);
+/** Set the version numbers on this account.  The version number is
+ *  used to manage multi-user updates. */
+void xaccAccountSetVersion (Account*, gint32);
+/** Increment the account version number */
+void gnc_account_increment_version (Account *acc);
+/** Set the account version_check number */
+void gnc_account_set_version_check (Account *acc, guint32 value);
 /** Get the account's type */
 GNCAccountType xaccAccountGetType (const Account *account);
 /** Is the account a stock, mutual fund or currency? */
@@ -273,6 +285,13 @@ const char * xaccAccountGetDescription (const Account *account);
 const char * xaccAccountGetNotes (const Account *account);
 /** Get the last num field of an Account */
 const char * xaccAccountGetLastNum (const Account *account);
+/** Get the account's lot order policy */
+GNCPolicy *gnc_account_get_policy (Account *account);
+/** Get the version numbers on this account.  The version number is
+ *  used to manage multi-user updates. */
+gint32 xaccAccountGetVersion (const Account* acc);
+/** Get the account version_check number */
+guint32 gnc_account_get_version_check (const Account *acc);
 
 /** The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be
@@ -903,13 +922,14 @@ Split * xaccAccountFindSplitByDesc(const Account *account,
 void xaccAccountInsertLot (Account *, GNCLot *);
 void xaccAccountRemoveLot (Account *, GNCLot *);
 
-/** The xaccAccountGetLotList() routine returns a pointer to the GList of
- *    the lots in this account.  
- * @note This GList is the account's internal 
- *    data structure: do not delete it when done; treat it as a read-only
- *    structure.  Note that some routines (such as xaccAccountRemoveLot())
- *    modify this list directly, and could leave you with a corrupted 
- *    pointer. */
+/** The xaccAccountGetLotList() routine returns a list of all lots in
+ *  this account.
+ *
+ *  @param account The account whose lots should be returned.
+ *
+ *  @return A GList of lot pointers, or NULL if there are no lots in
+ *  this account children. It is the callers responsibility to free
+ *  any returned list with the g_list_free() function. */
 LotList* xaccAccountGetLotList (const Account *account);
 
 /** The xaccAccountForEachLot() method will apply the function 'proc'
