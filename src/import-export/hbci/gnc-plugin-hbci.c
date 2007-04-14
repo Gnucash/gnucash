@@ -358,7 +358,7 @@ main_window_to_account (GncMainWindow *window)
   } else {
     account = NULL;
   }
-  account_name = xaccAccountGetName (account);
+  account_name = account ? xaccAccountGetName(account) : NULL;
   LEAVE("account %s(%p)", account_name ? account_name : "(null)", account);
   return account;
 }

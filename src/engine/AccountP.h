@@ -57,35 +57,6 @@ struct account_s
 {
   QofInstance inst;
 
-  /* The accountName is an arbitrary string assigned by the user. 
-   * It is intended to a short, 5 to 30 character long string that
-   * is displayed by the GUI as the account mnemonic. 
-   */
-  char     *accountName;
-
-  /* The accountCode is an arbitrary string assigned by the user.
-   * It is intended to be reporting code that is a synonym for the 
-   * accountName. Typically, it will be a numeric value that follows 
-   * the numbering assignments commonly used by accountants, such 
-   * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
-   * for detail accounts.
-   */
-  char     *accountCode;
-
-  /* The description is an arbitrary string assigned by the user. 
-   * It is intended to be a longer, 1-5 sentence description of what
-   * this account is all about.
-   */
-  char     *description;
-
-  /* The type field is the account type, picked from the enumerated
-   * list that includes ACCT_TYPE_BANK, ACCT_TYPE_STOCK,
-   * ACCT_TYPE_CREDIT, ACCT_TYPE_INCOME, etc.  Its intended use is to
-   * be a hint to the GUI as to how to display and format the
-   * transaction data.
-   */
-  GNCAccountType type;
-
   /* 
    * The commodity field denotes the kind of 'stuff' stored 
    * in this account.  The 'amount' field of a split indicates
@@ -94,12 +65,6 @@ struct account_s
   gnc_commodity * commodity;
   int commodity_scu;
   gboolean non_standard_scu;
-
-  /* The parent and children pointers are used to implement an account
-   * hierarchy, of accounts that have sub-accounts ("detail accounts").
-   */
-  Account *parent;    /* back-pointer to parent */
-  GList *children;    /* list of sub-accounts */
 
   /* protected data, cached parameters */
   gnc_numeric starting_balance;

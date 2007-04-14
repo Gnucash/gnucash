@@ -160,7 +160,7 @@ xaccAccountScrubLots (Account *acc)
   if (!acc) return;
   if (FALSE == xaccAccountHasTrades (acc)) return;
                                                                                 
-  ENTER ("(acc=%s)", acc->accountName);
+  ENTER ("(acc=%s)", xaccAccountGetName(acc));
   xaccAccountBeginEdit(acc);
   xaccAccountAssignLots (acc);
 
@@ -170,7 +170,7 @@ xaccAccountScrubLots (Account *acc)
     xaccScrubLot (lot);
   }
   xaccAccountCommitEdit(acc);
-  LEAVE ("(acc=%s)", acc->accountName);
+  LEAVE ("(acc=%s)", xaccAccountGetName(acc));
 }
 
 /* ============================================================== */

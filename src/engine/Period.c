@@ -761,7 +761,7 @@ add_closing_balances (Account *parent,
       if (gnc_account_n_children(candidate) > 0) 
       {
          PINFO ("add closing baln to subaccts of %s", 
-                 candidate->description);
+                xaccAccountGetDescription(candidate));
          add_closing_balances (candidate, open_book, closed_book,
                           equity_account,
                           post_date, date_entered, desc);

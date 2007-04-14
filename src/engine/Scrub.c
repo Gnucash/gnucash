@@ -606,7 +606,8 @@ xaccTransScrubCurrency (Transaction *trans)
         else
         {
           PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"", 
-              split->memo, split->acc->accountName, gnc_commodity_get_mnemonic (split->acc->commodity));
+                 split->memo, xaccAccountGetName(split->acc),
+                 gnc_commodity_get_mnemonic(xaccAccountGetCommodity(split->acc)));
         }
       }
     }
@@ -691,7 +692,8 @@ xaccAccountScrubCommodity (Account *account)
     return;
   }
 
-  PERR ("Account \"%s\" does not have a commodity!", account->accountName);
+  PERR ("Account \"%s\" does not have a commodity!",
+        xaccAccountGetName(account));
 }
 
 /* ================================================================ */

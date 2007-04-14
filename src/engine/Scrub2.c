@@ -61,7 +61,7 @@ xaccAccountAssignLots (Account *acc)
 
    if (!acc) return;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("acc=%s", xaccAccountGetName(acc));
    xaccAccountBeginEdit (acc);
 
 restart_loop:
@@ -79,7 +79,7 @@ restart_loop:
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("acc=%s", xaccAccountGetName(acc));
 }
 
 /* ============================================================== */
@@ -102,7 +102,7 @@ xaccLotFill (GNCLot *lot)
    acc = lot->account;
    pcy = acc->policy;
 
-   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 
    /* If balance already zero, we have nothing to do. */
    if (gnc_lot_is_closed (lot)) return;
@@ -140,7 +140,7 @@ xaccLotFill (GNCLot *lot)
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 }
 
 /* ============================================================== */
