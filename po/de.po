@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-04-14 13:08+0200\n"
-"PO-Revision-Date: 2007-04-14 13:21+0200\n"
+"PO-Revision-Date: 2007-04-14 20:18+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3417,11 +3417,13 @@ msgid "Tax Tables"
 msgstr "Steuertabellen"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:7
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Value $\n"
 "Percent %"
-msgstr "Prozent (%)"
+msgstr ""
+"Wert (Währung)\n"
+"Prozent (%)"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
@@ -4749,7 +4751,7 @@ msgstr "_Verschieben nach:"
 #: ../src/gnome/glade/account.glade.h:35
 #: ../src/gnome-utils/dialog-account.c:1336
 msgid "New Account"
-msgstr "_Neues Konto"
+msgstr "Neues Konto"
 
 #: ../src/gnome/glade/account.glade.h:36
 msgid "New Account (not implemented)"
@@ -12712,9 +12714,8 @@ msgid "Single-character short column-title form of 'Enabled'|E"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:173
-#, fuzzy
 msgid "Last Occur"
-msgstr "Zuletzt aufgetreten: "
+msgstr "Letztes Auftreten"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:178
 msgid "Next Occur"
@@ -12760,17 +12761,17 @@ msgstr ""
 "deaktivieren. Dieser Wert kann maximal 10 betragen."
 
 #: ../src/gnome-utils/window-main-summarybar.c:312
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Total:"
 msgstr "%s, Summe:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:315
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Non Currency Commodities Total:"
 msgstr "%s, Aktien gesamt:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:318
-#, fuzzy, c-format
+#, c-format
 msgid "%s, Grand Total:"
 msgstr "%s, Gesamt:"
 
@@ -13274,15 +13275,13 @@ msgstr ""
 "Wollen Sie den Auftrag erneut eingeben?"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:592
-#, fuzzy
 msgid ""
 "You did not enter a recipient name.  A recipient name is required for an "
 "online transfer.\n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Verwendungszweck erforderlich.\n"
+"Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag ist die Eingabe eines Empfängernamens erforderlich.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
@@ -13373,9 +13372,8 @@ msgstr ""
 "kontrollieren Sie Ihre Installation der Bibliothek aqbanking."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:702
-#, fuzzy
 msgid "Online Banking Account Name"
-msgstr "Name des Gegenkontos"
+msgstr "Online-Banking Kontoname"
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:709
 msgid "GnuCash Account Name"
@@ -13428,20 +13426,15 @@ msgid "Bank Code"
 msgstr "Bankleitzahl"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:10
-#, fuzzy
 msgid "Choose an Online Banking Version to use with the selected bank:"
-msgstr "Wählen Sie eine HBCI-Version, die benutzt werden soll:"
+msgstr "Wählen Sie eine Online-Banking- oder HBCI-Version, die benutzt werden soll:"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
-#, fuzzy
 msgid ""
 "Click on the line of an Online Banking account name if you want to match it "
 "to a GnuCash account. Click \"Forward\" when all desired accounts are "
 "matching."
-msgstr ""
-"Klicken Sie auf die Zeile eines HBCI-Kontos, um diesem HBCI-Konto ein "
-"GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten Konten "
-"zugeordnet sind."
+msgstr "Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten Konten zugeordnet sind."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
 msgid "Close when finished"
@@ -13496,14 +13489,12 @@ msgid "Get Transactions Online"
 msgstr "Online Kontoumsätze abfragen"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:25
-#, fuzzy
 msgid "Initial Online Banking Setup"
-msgstr "Grundlegende HBCI Einrichtung"
+msgstr "Grundlegende Online-Banking Einrichtung"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:26
-#, fuzzy
 msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr "HBCI Konten mit GnuCash Konten zuordnen"
+msgstr "Online-Banking Konten mit GnuCash Konten zuordnen"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:27
 msgid "Move the selected transaction template one row down"
@@ -13522,14 +13513,12 @@ msgid "Online Banking Connection Window"
 msgstr "Onlinebanking Verbindungsfenster"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:31
-#, fuzzy
 msgid "Online Banking Setup Finished"
-msgstr "HBCI Einrichtung beendet"
+msgstr "Online-Banking Einrichtung beendet"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:32
-#, fuzzy
 msgid "Online Banking Version"
-msgstr "Online-Auftrag Einzelüberweisung"
+msgstr "Online-Banking Version"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:33
 msgid "Online Transaction"
@@ -13749,7 +13738,6 @@ msgid "_Verbose debug messages"
 msgstr "Ausführliche _Fehlermeldungen"
 
 #: ../src/import-export/hbci/gnc-file-aqb-import.c:76
-#, fuzzy
 msgid "Select a file to import"
 msgstr "Wählen Sie eine Datei, die importiert werden soll"
 
@@ -13813,7 +13801,6 @@ msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:136
 #: ../src/import-export/hbci/gnc-hbci-utils.c:711
-#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -13824,12 +13811,9 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags "
-"gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
-"Wahrscheinlich wird dieser HBCI Geschäftsvorfall von Ihrer Bank leider nicht "
-"unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere "
-"Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
+"Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
