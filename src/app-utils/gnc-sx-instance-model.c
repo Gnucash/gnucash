@@ -56,7 +56,7 @@ static gint _get_vars_helper(Transaction *txn, void *var_hash_data);
 
 static GncSxVariable* gnc_sx_variable_new(gchar *name);
 
-static void _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
+static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
 
 /* ------------------------------------------------------------ */
 
@@ -301,13 +301,13 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     if (! parent->variable_names_parsed)
     {
-        parent->variable_names = g_hash_table_new(g_str_hash, g_str_equal);
+        parent->variable_names = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
         gnc_sx_get_variables(parent->sx, parent->variable_names);
         g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
         parent->variable_names_parsed = TRUE;
     }
 
-    rtn->variable_bindings = g_hash_table_new(g_str_hash, g_str_equal);
+    rtn->variable_bindings = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
 
     {
@@ -337,8 +337,6 @@ gnc_sx_instance_get_variables(GncSxInstance *inst)
 {
     GList *vars = NULL;
     g_hash_table_foreach(inst->variable_bindings, _build_list_from_hash_elts, &vars);
-    // @@fixme sort by name
-    // @@fixme make sure the returned list is freed by callers.
     return vars;
 }
 
@@ -373,7 +371,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
             inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
             //inst->temporal_state = postponed->data;
-            instances->list = g_list_append(instances->list, inst);
+            instances->instance_list = g_list_append(instances->instance_list, inst);
         }
     }
 
@@ -388,7 +386,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
-        instances->list = g_list_append(instances->list, inst);
+        instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
     }
@@ -400,7 +398,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
-        instances->list = g_list_append(instances->list, inst);
+        instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
     }
@@ -500,9 +498,13 @@ gnc_sx_instance_model_dispose(GObject *object)
 static void
 gnc_sx_instance_free(GncSxInstance *instance)
 {
-    // @fixme:
-    // variable_bindings elts + map
-    // temporal_state (iff not postponed?)
+    gnc_sx_destroy_temporal_state(instance->temporal_state);
+
+    if (instance->variable_bindings != NULL)
+    {
+        g_hash_table_destroy(instance->variable_bindings);
+    }
+    instance->variable_bindings = NULL;
      
     g_free(instance);
 }
@@ -511,17 +513,22 @@ static void
 gnc_sx_instances_free(GncSxInstances *instances)
 {
     GList *instance_iter;
-    // @fixme:
-    // variable_names
-    // sx = null
 
-    for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
+    if (instances->variable_names != NULL)
+    {
+        g_hash_table_destroy(instances->variable_names);
+    }
+    instances->variable_names = NULL;
+
+    instances->sx = NULL;
+
+    for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
     {
         GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
         gnc_sx_instance_free(inst);
     }
-    g_list_free(instances->list);
-    instances->list = NULL;
+    g_list_free(instances->instance_list);
+    instances->instance_list = NULL;
 
     g_free(instances);
 }
@@ -612,7 +619,7 @@ _gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_
 }
 
 static void
-_gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     GncSxInstanceModel *instances = GNC_SX_INSTANCE_MODEL(user_data);
 
@@ -739,8 +746,8 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         // step through the lists pairwise, and retain the existing
         // instance if the dates align, as soon as they don't stop and
         // cleanup.
-        existing_iter = existing->list;
-        new_iter = new_instances->list;
+        existing_iter = existing->instance_list;
+        new_iter = new_instances->instance_list;
         for (; existing_iter != NULL && new_iter != NULL; existing_iter = existing_iter->next, new_iter = new_iter->next)
         {
             GncSxInstance *existing_inst, *new_inst;
@@ -759,7 +766,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         if (existing_remain)
         {
             // delete excess
-            gnc_g_list_cut(&existing->list, existing_iter);
+            gnc_g_list_cut(&existing->instance_list, existing_iter);
             g_list_foreach(existing_iter, (GFunc)gnc_sx_instance_free, NULL);
         }
 
@@ -767,13 +774,13 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         {
             // append new
             GList *new_iter_iter;
-            gnc_g_list_cut(&new_instances->list, new_iter);
+            gnc_g_list_cut(&new_instances->instance_list, new_iter);
 
             for (new_iter_iter = new_iter; new_iter_iter != NULL; new_iter_iter = new_iter_iter->next)
             {
                 GncSxInstance *inst = (GncSxInstance*)new_iter_iter->data;
                 inst->parent = existing;
-                existing->list = g_list_append(existing->list, new_iter_iter->data);
+                existing->instance_list = g_list_append(existing->instance_list, new_iter_iter->data);
             }
             g_list_free(new_iter);
         }
@@ -797,11 +804,14 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         added_var_names = added_cb_data.list;
         g_debug("%d added variables", g_list_length(added_var_names));
 
-        g_hash_table_destroy(existing->variable_names);
+        if (existing->variable_names != NULL)
+        {
+            g_hash_table_destroy(existing->variable_names);
+        }
         existing->variable_names = new_instances->variable_names;
         new_instances->variable_names = NULL;
 
-        for (inst_iter = existing->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        for (inst_iter = existing->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
         {
             GList *var_iter;
             GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
@@ -888,10 +898,10 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
                                       NULL);
     if (kvp_val == NULL)
     {
-        // @@fixme: this should be more of an assert...
         GString *err = g_string_new("");
         g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
                         xaccSchedXactionGetName(instance->parent->sx));
+        g_critical("%s", err->str);
         *creation_errors = g_list_append(*creation_errors, err);
         return FALSE;
     }
@@ -943,7 +953,11 @@ _get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *num
                             gnc_exp_parser_error_string());
             *creation_errors = g_list_append(*creation_errors, err);
         }
-        g_hash_table_destroy(parser_vars);
+
+        if (parser_vars != NULL)
+        {
+            g_hash_table_destroy(parser_vars);
+        }
     }
 }
 
@@ -1176,14 +1190,14 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         // If there are no instances, then skip; specifically, skip
         // re-setting SchedXaction fields, which will dirty the book
         // spuriously.
-        if (g_list_length(instances->list) == 0)
+        if (g_list_length(instances->instance_list) == 0)
             continue;
 
         last_occur_date = xaccSchedXactionGetLastOccurDate(instances->sx);
         instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
         remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
 
-        for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
+        for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
             gboolean sx_is_auto_create;
@@ -1255,7 +1269,7 @@ gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
     // ensure 'remind' constraints are met:
     {
         GList *inst_iter;
-        inst_iter = g_list_find(instance->parent->list, instance);
+        inst_iter = g_list_find(instance->parent->instance_list, instance);
         g_assert(inst_iter != NULL);
         if (instance->state != SX_INSTANCE_STATE_REMINDER)
         {
@@ -1312,7 +1326,7 @@ gnc_sx_instance_model_check_variables(GncSxInstanceModel *model)
     for (sx_iter = model->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
 
@@ -1357,7 +1371,7 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
         gboolean sx_is_auto_create = FALSE, sx_notify = FALSE;
         xaccSchedXactionGetAutoCreate(instances->sx, &sx_is_auto_create, &sx_notify);
-        for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
             summary->num_instances++;

@@ -48,6 +48,11 @@ struct _gncTaxTable
   GList *         children;     /* list of children for disconnection */
 };
 
+struct _gncTaxTableClass
+{
+  QofInstanceClass parent_class;
+};
+
 struct _gncTaxTableEntry 
 {
   GncTaxTable *   table;
@@ -144,7 +149,7 @@ static inline void
 mark_table (GncTaxTable *table)
 {
   qof_instance_set_dirty(&table->inst);
-  qof_event_gen (&table->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&table->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void 
@@ -200,19 +205,36 @@ gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child)
 }
 
 /* =============================================================== */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_taxtable, GncTaxTable, QOF_TYPE_INSTANCE);
 
+static void
+gnc_taxtable_init(GncTaxTable* tt)
+{
+}
+
+static void
+gnc_taxtable_dispose_real (GObject *ttp)
+{
+}
+
+static void
+gnc_taxtable_finalize_real(GObject* ttp)
+{
+}
+
+/* Create/Destroy Functions */
 GncTaxTable * 
 gncTaxTableCreate (QofBook *book)
 {
   GncTaxTable *table;
   if (!book) return NULL;
 
-  table = g_new0 (GncTaxTable, 1);
-  qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
+  table = g_object_new (GNC_TYPE_TAXTABLE, NULL);
+  qof_instance_init_data (&table->inst, _GNC_MOD_NAME, book);
   table->name = CACHE_INSERT ("");
   addObj (table);
-  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&table->inst, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -224,8 +246,8 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   GncTaxTable *table;
   if (!book) return NULL;
 
-  table = g_new0 (GncTaxTable, 1);
-  qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
+  table = g_object_new (GNC_TYPE_TAXTABLE, NULL);
+  qof_instance_init_data (&table->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&table->inst, &from->inst);
   
   table->name = CACHE_INSERT (from->name);
@@ -264,7 +286,7 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   }
 
   addObj (table);
-  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&table->inst, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -300,7 +322,7 @@ gncTaxTableFree (GncTaxTable *table)
 
   if (!table) return;
 
-  qof_event_gen (&table->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&table->inst, QOF_EVENT_DESTROY, NULL);
   CACHE_REMOVE (table->name);
   remObj (table);
 
@@ -323,8 +345,8 @@ gncTaxTableFree (GncTaxTable *table)
   }
   g_list_free(table->children);
 
-  qof_instance_release (&table->inst);
-  g_free (table);
+  /* qof_instance_release (&table->inst); */
+  g_object_unref (table);
 }
 
 /* =============================================================== */

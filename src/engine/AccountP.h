@@ -133,6 +133,11 @@ struct account_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
+struct _AccountClass
+{
+  QofInstanceClass parent_class;
+};
+
 /* The xaccAccountSortSplits() routine will resort the account's 
  * splits if the sort is dirty. If 'force' is true, the account 
  * is sorted even if the editlevel is not zero. 

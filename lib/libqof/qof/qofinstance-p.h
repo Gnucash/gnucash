@@ -31,49 +31,6 @@
 
 #include "qofinstance.h"
 
-/*
- * UNDER CONSTRUCTION!
- * This is mostly scaffolding for now,
- * eventually, it may hold more fields, such as refrence counting...
- *
- */
-struct QofInstance_s
-{
-   /* Globally unique id identifying this instance */
-   QofEntity entity;
-
-   /* The entity_table in which this instance is stored */
-   QofBook * book;
-
-  /* kvp_data is a key-value pair database for storing arbirtary
-   * information associated with this instance.  
-   * See src/engine/kvp_doc.txt for a list and description of the 
-   * important keys. */
-   KvpFrame *kvp_data;
-
-   /*  Timestamp used to track the last modification to this 
-    *  instance.  Typically used to compare two versions of the
-    *  same object, to see which is newer.  When used with the 
-    *  SQL backend, this field is reserved for SQL use, to compare
-    *  the version in local memory to the remote, server version.
-    */
-   Timespec last_update;
-
-   /*  Keep track of nesting level of begin/end edit calls */
-   int    editlevel;
-
-   /*  In process of being destroyed */
-   gboolean  do_free;
-
-   /*  dirty/clean flag. If dirty, then this instance has been modified,
-    *  but has not yet been written out to storage (file/database)
-    */
-   gboolean  dirty;
-
-   /* True iff this instance has never been committed. */
-   gboolean infant;
-};
-
 void qof_instance_set_slots (QofInstance *, KvpFrame *);
 
 /*  Set the last_update time. Reserved for use by the SQL backend;

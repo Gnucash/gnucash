@@ -38,7 +38,7 @@ struct _gncAddress
   QofInstance inst;
 
   QofBook *	book;
-  QofEntity * parent;
+  QofInstance * parent;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -48,6 +48,11 @@ struct _gncAddress
   char *	phone;
   char *	fax;
   char *	email;
+};
+
+struct _gncAddressClass
+{
+  QofInstanceClass parent_class;
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -62,17 +67,35 @@ void mark_address (GncAddress *address)
   qof_event_gen (address->parent, QOF_EVENT_MODIFY, NULL);
 }
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_address, GncAddress, QOF_TYPE_INSTANCE);
+
+static void
+gnc_address_init(GncAddress* addr)
+{
+}
+
+static void
+gnc_address_dispose_real (GObject *addrp)
+{
+}
+
+static void
+gnc_address_finalize_real(GObject* addrp)
+{
+}
+
 /* Create/Destroy functions */
 
 GncAddress * 
-gncAddressCreate (QofBook *book, QofEntity *prnt)
+gncAddressCreate (QofBook *book, QofInstance *prnt)
 {
   GncAddress *addr;
 
   if (!book) return NULL;
 
-  addr = g_new0 (GncAddress, 1);
-  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
+  addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
+  qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
   addr->book = book;
   addr->dirty = FALSE;
   addr->parent = prnt;
@@ -97,13 +120,13 @@ qofAddressCreate (QofBook *book)
 }
 
 static void
-qofAddressSetOwner(GncAddress *addr, QofEntity *ent)
+qofAddressSetOwner(GncAddress *addr, QofInstance *ent)
 {
 	if(!addr || !ent) { return; }
 	if(addr->parent == NULL) { addr->parent = ent; }
 }
 
-static QofEntity*
+static QofInstance*
 qofAddressGetOwner(GncAddress *addr)
 {
 
@@ -112,13 +135,14 @@ qofAddressGetOwner(GncAddress *addr)
 }
 
 GncAddress * 
-gncCloneAddress (GncAddress *from, QofEntity *new_parent, QofBook *book)
+gncCloneAddress (GncAddress *from, QofInstance *new_parent, QofBook *book)
 {
   GncAddress *addr;
 
   if (!book) return NULL;
 
-  addr = g_new0 (GncAddress, 1);
+  addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
+  qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
   addr->book = book;
   addr->dirty = TRUE;
   addr->parent = new_parent;
@@ -148,7 +172,7 @@ gncAddressFree (GncAddress *addr)
 {
   if (!addr) return;
 
-  qof_event_gen (&addr->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&addr->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (addr->name);
   CACHE_REMOVE (addr->addr1);
@@ -159,8 +183,8 @@ gncAddressFree (GncAddress *addr)
   CACHE_REMOVE (addr->fax);
   CACHE_REMOVE (addr->email);
 
-  qof_instance_release (&addr->inst);
-  g_free (addr);
+  /* qof_instance_release (&addr->inst); */
+  g_object_unref (addr);
 }
 
 

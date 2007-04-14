@@ -96,6 +96,11 @@ struct _gncEntry
   Timespec	b_taxtable_modtime;
 };
 
+struct _gncEntryClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
@@ -169,12 +174,29 @@ G_INLINE_FUNC void mark_entry (GncEntry *entry);
 void mark_entry (GncEntry *entry)
 {
   qof_instance_set_dirty(&entry->inst);
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================ */
-/* Create/Destroy Functions */
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_entry, GncEntry, QOF_TYPE_INSTANCE);
 
+static void
+gnc_entry_init(GncEntry* entry)
+{
+}
+
+static void
+gnc_entry_dispose_real (GObject *entryp)
+{
+}
+
+static void
+gnc_entry_finalize_real(GObject* entryp)
+{
+}
+
+/* Create/Destroy Functions */
 GncEntry *gncEntryCreate (QofBook *book)
 {
   GncEntry *entry;
@@ -182,8 +204,8 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   if (!book) return NULL;
 
-  entry = g_new0 (GncEntry, 1);
-  qof_instance_init (&entry->inst, _GNC_MOD_NAME, book);
+  entry = g_object_new (GNC_TYPE_ENTRY, NULL);
+  qof_instance_init_data (&entry->inst, _GNC_MOD_NAME, book);
 
   entry->desc = CACHE_INSERT ("");
   entry->action = CACHE_INSERT ("");
@@ -203,7 +225,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_CREATE, NULL);
 
   return entry;
 }
@@ -219,7 +241,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  qof_event_gen (&entry->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&entry->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -233,8 +255,8 @@ static void gncEntryFree (GncEntry *entry)
   if (entry->b_tax_table)
     gncTaxTableDecRef (entry->b_tax_table);
 
-  qof_instance_release (&entry->inst);
-  g_free (entry);
+  /* qof_instance_release (&entry->inst); */
+  g_object_unref (entry);
 }
 
 GncEntry *
@@ -1209,7 +1231,7 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   compare = safe_strcmp (a->action, b->action);
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
+  return guid_compare (&(a->inst.guid), &(b->inst.guid));
 }
 
 /* ============================================================= */

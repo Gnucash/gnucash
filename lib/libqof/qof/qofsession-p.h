@@ -38,7 +38,7 @@ struct _QofSession
    * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
    * THAT IS VALID IS E_TYPE!
    */
-  QofEntity entity;
+  QofInstance entity;
 
   /* A book holds pointers to the various types of datasets.
    * A session may have multiple books. */

@@ -99,8 +99,12 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
   tooltips = gtk_tooltips_new();
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(tooltips);
+#else
   g_object_ref (tooltips);
   gtk_object_sink (GTK_OBJECT (tooltips));
+#endif
 
   for (i = 0; i < num_options; i++)
   {
@@ -612,16 +616,14 @@ check_realize (GtkWidget *widget, gpointer user_data)
   GList *list;
   GList *node;
   GdkGC *gc;
-  GdkFont *font;
+  PangoLayout *layout;
 
   if (check_info->mask)
     return;
 
-  style = gtk_widget_get_style (widget);
-  font = gdk_font_from_description(style->font_desc);
-
-  font_height = font->ascent + font->descent;
-  check_size = (font_height > 0) ? font_height - 3 : 9;
+  layout = gtk_widget_create_pango_layout(widget, "sample");
+  pango_layout_get_pixel_size(layout, NULL,  &font_height);
+  check_size = (font_height > 0) ? font_height - 6 : 9;
 
   check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);
 
@@ -631,6 +633,7 @@ check_realize (GtkWidget *widget, gpointer user_data)
   check_info->off_pixmap = gdk_pixmap_new (widget->window,
                                            check_size, check_size, -1);
 
+  style = gtk_widget_get_style (widget);
   gc_values.foreground = style->white;
   gc = gtk_gc_get (1, gtk_widget_get_colormap (widget),
                    &gc_values, GDK_GC_FOREGROUND);

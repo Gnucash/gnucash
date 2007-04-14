@@ -1157,7 +1157,7 @@ gnc_main_window_delete_event (GtkWidget *window,
  *  @param user_data  A pointer to the window data structure.
  */
 static void
-gnc_main_window_event_handler (QofEntity *entity,  QofEventId event_type,
+gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
                                gpointer user_data, gpointer event_data)
 {
 	GncMainWindow *window;
@@ -3454,7 +3454,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
 				       "The GNU way to manage your money!");
-	const gchar *copyright = "© 1997-2006 Contributors";
+	const gchar *copyright = "Â© 1997-2006 Contributors";
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 

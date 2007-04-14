@@ -203,7 +203,7 @@ qof_event_resume (void)
 }
 
 static void
-qof_event_generate_internal (QofEntity *entity, QofEventId event_id, 
+qof_event_generate_internal (QofInstance *entity, QofEventId event_id, 
                             gpointer event_data)
 {
   GList *node;
@@ -275,7 +275,7 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
 }
 
 void
-qof_event_force (QofEntity *entity, QofEventId event_id, gpointer event_data)
+qof_event_force (QofInstance *entity, QofEventId event_id, gpointer event_data)
 {
   if (!entity)
     return;
@@ -284,7 +284,7 @@ qof_event_force (QofEntity *entity, QofEventId event_id, gpointer event_data)
 }
 
 void
-qof_event_gen (QofEntity *entity, QofEventId event_id, gpointer event_data)
+qof_event_gen (QofInstance *entity, QofEventId event_id, gpointer event_data)
 {
   if (!entity)
     return;
@@ -300,7 +300,7 @@ void
 qof_event_generate (const GUID *guid, QofIdType e_type, 
 					QofEventId event_id)
 {
-  QofEntity ent;
+  QofInstance ent;
   ent.guid = *guid;
   ent.e_type = e_type;
   if (suspend_counter) return;

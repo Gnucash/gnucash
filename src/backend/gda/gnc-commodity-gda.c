@@ -58,8 +58,8 @@ static void set_quote_source_name( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] = {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
-            (QofAccessFunc)qof_entity_get_guid,
-            (QofSetterFunc)qof_entity_set_guid },
+            (QofAccessFunc)qof_instance_get_guid,
+            (QofSetterFunc)qof_instance_set_guid },
     { "namespace",        CT_STRING,    COMMODITY_MAX_NAMESPACE_LEN, COL_NNUL,    NULL,
             (QofAccessFunc)gnc_commodity_get_namespace,
             (QofSetterFunc)gnc_commodity_set_namespace },
@@ -154,9 +154,9 @@ load_commodities( GncGdaBackend* be )
             if( pCommodity != NULL ) {
                 GUID guid;
 
-                guid = *qof_entity_get_guid( QOF_ENTITY(pCommodity) );
+                guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
-                qof_entity_set_guid( QOF_ENTITY(pCommodity), &guid );
+                qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
         }
     }

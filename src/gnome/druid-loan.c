@@ -2631,7 +2631,7 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
          * row-of-gnc_numeric[N] data, where N is the number of columns as
          * determined by the _prep function, and stored in
          * LoanData::revNumPmts. */
-        repayment_schedule = g_hash_table_new( g_date_hash, g_date_equals );
+        repayment_schedule = g_hash_table_new(gnc_gdate_hash, gnc_gdate_equal);
 
         /* Do the master repayment */
         {

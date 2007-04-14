@@ -54,8 +54,8 @@ static void set_autonotify( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
-            (QofAccessFunc)qof_entity_get_guid,
-            (QofSetterFunc)qof_entity_set_guid },
+            (QofAccessFunc)qof_instance_get_guid,
+            (QofSetterFunc)qof_instance_set_guid },
     { "name",            CT_STRING, SX_MAX_NAME_LEN, COL_NNUL, GNC_SX_NAME },
     { "start_date",        CT_GDATE,    0, COL_NNUL, GNC_SX_START_DATE },
     { "last_occur",        CT_GDATE,    0, COL_NNUL, GNC_SX_LAST_DATE },
@@ -138,7 +138,7 @@ load_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
     }
 
     gnc_gda_load_object( pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
-    gnc_gda_slots_load( be, qof_entity_get_guid( QOF_ENTITY(pSx) ),
+    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSx) ),
                             qof_instance_get_slots( QOF_INSTANCE(pSx) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pSx) );

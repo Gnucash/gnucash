@@ -1653,8 +1653,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
   xferData->tips = gtk_tooltips_new();
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(xferData->tips);
+#else
   g_object_ref (xferData->tips);
   gtk_object_sink (GTK_OBJECT (xferData->tips));
+#endif
 
   /* default to quickfilling off of the "From" account. */
   xferData->quickfill = XFER_DIALOG_FROM;

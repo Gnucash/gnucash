@@ -120,10 +120,15 @@ struct transaction_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
+struct _TransactionClass
+{
+  QofInstanceClass parent_class;
+};
+
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-#define xaccTransSetGUID(t,g) qof_entity_set_guid(QOF_ENTITY(t),g)
+#define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
 
 /* This routine makes a 'duplicate' of the indicated transaction.
  * This routine cannot be exposed publically since the duplicate

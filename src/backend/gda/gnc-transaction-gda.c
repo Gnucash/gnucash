@@ -135,16 +135,16 @@ static col_cvt_t guid_col_table[] =
 static gpointer
 get_guid( gpointer pObject, const QofParam* param )
 {
-    return (gpointer)qof_entity_get_guid( QOF_ENTITY(pObject) );
+    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pObject) );
 }
 
 static void 
 set_guid( gpointer pObject, gpointer pValue )
 {
-    QofEntity* pEntity = QOF_ENTITY(pObject);
+    QofInstance* pInstance = QOF_INSTANCE(pObject);
     GUID* guid = (GUID*)pValue;
 
-    qof_entity_set_guid( pEntity, guid );
+    qof_instance_set_guid( pInstance, guid );
 }
 
 static gpointer

@@ -58,7 +58,7 @@ typedef struct chart_data_s
 }chart_data;
 
 static void
-chart_collection_cb(QofEntity *ent, gpointer user_data)
+chart_collection_cb(QofInstance *ent, gpointer user_data)
 {
 	chart_data *data;
 	Account *acc;
@@ -73,9 +73,9 @@ chart_collection_cb(QofEntity *ent, gpointer user_data)
 	if(0 == safe_strcmp(EQUITY_ACCOUNT_NAME, xaccAccountGetName(acc)) 
 		&& (xaccAccountGetType(acc) == ACCT_TYPE_EQUITY))
 	{
-		success = qof_entity_copy_to_session(data->chart_session, ent);
+		success = qof_instance_copy_to_session(data->chart_session, ent);
 		if(!success) { return; }
-		guid = qof_entity_get_guid(ent);
+		guid = qof_instance_get_guid(ent);
 		book = qof_session_get_book(data->chart_session);
 		copy_coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
 		data->equity_account = (Account*)qof_collection_lookup_entity(copy_coll, guid);
@@ -84,9 +84,9 @@ chart_collection_cb(QofEntity *ent, gpointer user_data)
 }
 
 static void
-chart_reference_cb(QofEntity *ent, gpointer user_data)
+chart_reference_cb(QofInstance *ent, gpointer user_data)
 {
-	QofEntityReference *reference;
+	QofInstanceReference *reference;
 	QofParam     *ref_param;
 	chart_data   *data;
 
@@ -94,14 +94,14 @@ chart_reference_cb(QofEntity *ent, gpointer user_data)
 	data = (chart_data*)user_data;
 	while(data->param_ref_list != NULL) {
 		ref_param = data->param_ref_list->data;
-		reference = qof_entity_get_reference_from(ent, ref_param);
+		reference = qof_instance_get_reference_from(ent, ref_param);
 		qof_session_update_reference_list(data->chart_session, reference);
 		data->param_ref_list = data->param_ref_list->next;
 	}
 }
 
 static void
-chart_entity_cb(QofEntity *ent, gpointer user_data)
+chart_entity_cb(QofInstance *ent, gpointer user_data)
 {
 	chart_data *data;
 	Account *acc_ent, *equity_account;
@@ -113,19 +113,19 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	const GUID *guid;
 	time_t trans_time;
 	GList *ref;
-	QofEntityReference *ent_ref;
+	QofInstanceReference *ent_ref;
 	
 	g_return_if_fail(user_data != NULL);
 	data = (chart_data*)user_data;
 	trans_time = data->chart_time_t;
 	data->param_ref_list = NULL;
-	guid = qof_entity_get_guid(ent);
+	guid = qof_instance_get_guid(ent);
 	acc_ent = (Account*)ent;
 	ref = NULL;
 	equity_account = data->equity_account;
 	g_return_if_fail(equity_account != NULL);
 	balance = xaccAccountGetBalanceAsOfDate(acc_ent, data->chart_time_t);
-	qof_entity_copy_to_session(data->chart_session, ent);
+	qof_instance_copy_to_session(data->chart_session, ent);
 	book = qof_session_get_book(data->chart_session);
 	coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
 	acc_ent = (Account*)qof_collection_lookup_entity(coll, guid);
@@ -151,7 +151,7 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccSplitSetValue (split, balance);
 	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		ent_ref = qof_instance_get_reference_from(QOF_INSTANCE(split), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}
@@ -168,14 +168,14 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccAccountCommitEdit (acc_ent);
 	ref = qof_class_get_referenceList(GNC_ID_TRANS);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)trans, ref->data);
+		ent_ref = qof_instance_get_reference_from(QOF_INSTANCE(trans), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}
 	g_list_free(ref);
 	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
 	while(ref != NULL) {
-		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		ent_ref = qof_instance_get_reference_from(QOF_INSTANCE(split), ref->data);
 		qof_session_update_reference_list(data->chart_session, ent_ref);
 		ref = g_list_next(ref);
 	}

@@ -158,6 +158,24 @@ get_abbrev_month_name(guint month)
   return month_name;
 }
 
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_freqspec, FreqSpec, QOF_TYPE_INSTANCE);
+
+static void
+gnc_freqspec_init(FreqSpec* fs)
+{
+}
+
+static void
+gnc_freqspec_dispose_real (GObject *fsp)
+{
+}
+
+static void
+gnc_freqspec_finalize_real(GObject* fsp)
+{
+}
+
 /*
  * Initializes a FreqSpec by setting it's to type INVALID.
  * Use this to initialise a stack object.
@@ -168,12 +186,10 @@ get_abbrev_month_name(guint month)
 static void
 xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
 {
-   QofCollection *col;
    g_return_if_fail( fs );
    g_return_if_fail (book);
 
-   col = qof_book_get_collection (book, QOF_ID_FREQSPEC);
-   qof_entity_init (&fs->entity, QOF_ID_FREQSPEC, col);
+   qof_instance_init_data (&fs->entity, QOF_ID_FREQSPEC, book);
 
    fs->type = INVALID;
    fs->uift = UIFREQ_ONCE;
@@ -188,7 +204,7 @@ xaccFreqSpecMalloc(QofBook *book)
 
    g_return_val_if_fail (book, NULL);
 
-   fs = g_new0(FreqSpec, 1);
+   fs = g_object_new(GNC_TYPE_FREQSPEC, NULL);
    xaccFreqSpecInit( fs, book );
    qof_event_gen( &fs->entity, QOF_EVENT_CREATE , NULL);
    return fs;
@@ -224,8 +240,8 @@ xaccFreqSpecFree( FreqSpec *fs )
    qof_event_gen( &fs->entity, QOF_EVENT_DESTROY , NULL);
    xaccFreqSpecCleanUp( fs );
 
-   qof_entity_release (&fs->entity);
-   g_free( fs );
+   /* qof_instance_release (&fs->entity); */
+   g_object_unref( fs );
 }
 
 FreqType

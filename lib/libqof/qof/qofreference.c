@@ -26,16 +26,16 @@
 #include "qofreference.h"
 
 static void
-entity_set_reference_cb(QofEntity *ent, gpointer user_data)
+entity_set_reference_cb(QofInstance *ent, gpointer user_data)
 {
-	void (*reference_setter) (QofEntity*, QofEntity*);
-	void (*choice_setter) (QofEntity*, QofEntity*);
-	void (*collect_setter)(QofEntity*, QofCollection*);
-	QofEntityReference *ref;
+	void (*reference_setter) (QofInstance*, QofInstance*);
+	void (*choice_setter) (QofInstance*, QofInstance*);
+	void (*collect_setter)(QofInstance*, QofCollection*);
+	QofInstanceReference *ref;
 	GList *book_ref_list;
 	QofCollection *coll;
 	QofIdType type;
-	QofEntity *reference;
+	QofInstance *reference;
 	QofBook *partial_book;
 	
 	partial_book = (QofBook*)user_data;
@@ -45,8 +45,8 @@ entity_set_reference_cb(QofEntity *ent, gpointer user_data)
 	book_ref_list = qof_book_get_data(partial_book, ENTITYREFERENCE);
 	while(book_ref_list)
 	{
-		ref = (QofEntityReference*)book_ref_list->data;
-		if(0 == guid_compare(ref->ref_guid, qof_entity_get_guid(ent)))
+		ref = (QofInstanceReference*)book_ref_list->data;
+		if(0 == guid_compare(ref->ref_guid, qof_instance_get_guid(ent)))
 		{
 			/* avoid setting the entity's own guid as a reference. */
 			book_ref_list = g_list_next(book_ref_list);
@@ -56,7 +56,7 @@ entity_set_reference_cb(QofEntity *ent, gpointer user_data)
 		type = ref->param->param_type;
 		coll = qof_book_get_collection(partial_book, type);
 		reference = qof_collection_lookup_entity(coll, ref->ref_guid);
-		reference_setter = (void(*)(QofEntity*, QofEntity*))ref->param->param_setfcn;
+		reference_setter = (void(*)(QofInstance*, QofInstance*))ref->param->param_setfcn;
 		if((reference) && (reference_setter))
 		{
 			qof_begin_edit((QofInstance*)ent);
@@ -66,10 +66,10 @@ entity_set_reference_cb(QofEntity *ent, gpointer user_data)
 			qof_commit_edit((QofInstance*)reference);
 		}
 		/* collect and choice handling */
-		collect_setter = (void(*)(QofEntity*, QofCollection*))ref->param->param_setfcn;
-		choice_setter = (void(*)(QofEntity*, QofEntity*))ref->param->param_setfcn;
+		collect_setter = (void(*)(QofInstance*, QofCollection*))ref->param->param_setfcn;
+		choice_setter = (void(*)(QofInstance*, QofInstance*))ref->param->param_setfcn;
 		if ((0 == safe_strcmp(ref->param->param_type, QOF_TYPE_COLLECT)) &&
-			(0 == guid_compare(qof_entity_get_guid(ent), ref->ent_guid)) &&
+			(0 == guid_compare(qof_instance_get_guid(ent), ref->ent_guid)) &&
 			(0 == safe_strcmp(ref->type, ent->e_type)))
 		{
 			QofCollection *temp_col;
@@ -113,18 +113,18 @@ set_each_type(QofObject *obj, gpointer user_data)
 	qof_object_foreach(obj->e_type, book, entity_set_reference_cb, book);
 }
 
-static QofEntityReference*
-create_reference(QofEntity *ent, const QofParam *param)
+static QofInstanceReference*
+create_reference(QofInstance *ent, const QofParam *param)
 {
-	QofEntityReference *reference;
-	QofEntity          *ref_ent;
+	QofInstanceReference *reference;
+	QofInstance          *ref_ent;
 	const GUID         *cm_guid;
 	char                cm_sa[GUID_ENCODING_LENGTH + 1];
 	gchar              *cm_string;
 
-	ref_ent = (QofEntity*)param->param_getfcn(ent, param);
+	ref_ent = QOF_INSTANCE(param->param_getfcn(ent, param));
 	if(!ref_ent) { return NULL; }
-	reference = g_new0(QofEntityReference, 1);
+	reference = g_new0(QofInstanceReference, 1);
 	reference->type = ent->e_type;
 	reference->ref_guid = g_new(GUID, 1);
 	reference->ent_guid = &ent->guid;
@@ -133,7 +133,7 @@ create_reference(QofEntity *ent, const QofParam *param)
 		reference->choice_type = ref_ent->e_type; 
 	}
 	reference->param = param;
-	cm_guid = qof_entity_get_guid(ref_ent);
+	cm_guid = qof_instance_get_guid(ref_ent);
 	guid_to_string_buff(cm_guid, cm_sa);
 	cm_string = g_strdup(cm_sa);
 	if(TRUE == string_to_guid(cm_string, reference->ref_guid)) {
@@ -144,8 +144,8 @@ create_reference(QofEntity *ent, const QofParam *param)
 	return NULL;
 }
 
-QofEntityReference*
-qof_entity_get_reference_from(QofEntity *ent, const QofParam *param)
+QofInstanceReference*
+qof_instance_get_reference_from(QofInstance *ent, const QofParam *param)
 {
 	g_return_val_if_fail(param, NULL);
 	param = qof_class_get_parameter(ent->e_type, param->param_name);

@@ -474,7 +474,7 @@ gnc_stock_split_druid_finish (GnomeDruidPage *druidpage,
     gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
     gnc_price_set_time (price, ts);
     gnc_price_set_source (price, "user:stock-split");
-    gnc_price_set_type (price, "unknown");
+    gnc_price_set_typestr (price, "unknown");
     gnc_price_set_value (price, amount);
     gnc_price_commit_edit (price);
 

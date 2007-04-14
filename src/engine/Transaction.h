@@ -86,15 +86,32 @@ Splits plus the value of all of its sub-Accounts.
 #ifndef XACC_TRANSACTION_H
 #define XACC_TRANSACTION_H
 
+typedef struct _TransactionClass TransactionClass;
+
 #include <time.h>
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "Split.h"
 
+/* --- type macros --- */
+#define GNC_TYPE_TRANSACTION            (gnc_transaction_get_type ())
+#define GNC_TRANSACTION(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TRANSACTION, Transaction))
+#define GNC_TRANSACTION_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TRANSACTION, TransactionClass))
+#define GNC_IS_TRANSACTION(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TRANSACTION))
+#define GNC_IS_TRANSACTION_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TRANSACTION))
+#define GNC_TRANSACTION_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TRANSACTION, TransactionClass))
+GType gnc_transaction_get_type(void);
+
+
 /* FIXME: These macros are not consistent with the type name */
-#define GNC_IS_TRANS(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TRANS))
-#define GNC_TRANS(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TRANS, Transaction))
+#define GNC_IS_TRANS(obj)  GNC_IS_TRANSACTION(obj)
+#define GNC_TRANS(obj)     GNC_TRANSACTION(obj)
 
 /** @name Transaction Type field values
 @{
@@ -550,9 +567,9 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 /** \deprecated */
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccTransGetGUID(X)      qof_instance_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccTransReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 /** \deprecated */
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 

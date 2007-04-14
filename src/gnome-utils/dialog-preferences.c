@@ -515,7 +515,11 @@ gnc_preferences_build_page (gpointer data,
   gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
 			&copydata);
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(new_content);
+#else
   gtk_object_sink(GTK_OBJECT(new_content));
+#endif
   LEAVE("added content to page");
 }
 

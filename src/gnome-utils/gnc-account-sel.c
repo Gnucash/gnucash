@@ -94,7 +94,7 @@ gnc_account_sel_get_type (void)
 
 static
 void
-gnc_account_sel_event_cb( QofEntity *entity,
+gnc_account_sel_event_cb( QofInstance *entity,
                           QofEventId event_type,
                           gpointer user_data,
 			  gpointer event_data )

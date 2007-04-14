@@ -52,7 +52,7 @@ struct _QofSqlQuery
 	char * single_global_tablename;
 	KvpFrame *kvp_join;
 	GList *param_list;
-	QofEntity *inserted_entity;
+	QofInstance *inserted_entity;
 };
 
 /* ========================================================== */
@@ -573,7 +573,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 	QofIdTypeConst type;
 	sql_insert_statement *sis;
 	gboolean    registered_type;
-	QofEntity   *ent;
+	QofInstance   *ent;
 	struct tm   query_time;
 	time_t      query_time_t;
 	/* cm_ prefix used for variables that hold the data to commit */
@@ -588,15 +588,15 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 /*	KvpFrame       *cm_kvp;
 	KvpValue       *cm_value;
 	KvpValueType   cm_type;*/
-	void (*string_setter)    (QofEntity*, const char*);
-	void (*date_setter)      (QofEntity*, Timespec);
-	void (*numeric_setter)   (QofEntity*, gnc_numeric);
-	void (*double_setter)    (QofEntity*, double);
-	void (*boolean_setter)   (QofEntity*, gboolean);
-	void (*i32_setter)       (QofEntity*, gint32);
-	void (*i64_setter)       (QofEntity*, gint64);
-	void (*char_setter)      (QofEntity*, char);
-/*	void (*kvp_frame_setter) (QofEntity*, KvpFrame*);*/
+	void (*string_setter)    (QofInstance*, const char*);
+	void (*date_setter)      (QofInstance*, Timespec);
+	void (*numeric_setter)   (QofInstance*, gnc_numeric);
+	void (*double_setter)    (QofInstance*, double);
+	void (*boolean_setter)   (QofInstance*, gboolean);
+	void (*i32_setter)       (QofInstance*, gint32);
+	void (*i64_setter)       (QofInstance*, gint64);
+	void (*char_setter)      (QofInstance*, char);
+/*	void (*kvp_frame_setter) (QofInstance*, KvpFrame*);*/
 
 	g_return_if_fail(param || insert_string || query);
 	ent = query->inserted_entity;
@@ -606,12 +606,12 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 	ENTER (" param=%s param_type=%s type=%s content=%s", 
 		param->param_name, param->param_type, type, insert_string);
 	if(safe_strcmp(param->param_type, QOF_TYPE_STRING) == 0)  { 
-		string_setter = (void(*)(QofEntity*, const char*))param->param_setfcn;
+		string_setter = (void(*)(QofInstance*, const char*))param->param_setfcn;
 		if(string_setter != NULL) { string_setter(ent, insert_string); }
 		registered_type = TRUE;
 	}
 	if(safe_strcmp(param->param_type, QOF_TYPE_DATE) == 0) { 
-		date_setter = (void(*)(QofEntity*, Timespec))param->param_setfcn;
+		date_setter = (void(*)(QofInstance*, Timespec))param->param_setfcn;
 		strptime(insert_string, QOF_UTC_DATE_FORMAT, &query_time);
 		query_time_t = mktime(&query_time);
 		timespecFromTime_t(&cm_date, query_time_t);
@@ -619,7 +619,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 	}
 	if((safe_strcmp(param->param_type, QOF_TYPE_NUMERIC) == 0)  ||
 	(safe_strcmp(param->param_type, QOF_TYPE_DEBCRED) == 0)) { 
-		numeric_setter = (void(*)(QofEntity*, gnc_numeric))param->param_setfcn;
+		numeric_setter = (void(*)(QofInstance*, gnc_numeric))param->param_setfcn;
 		string_to_gnc_numeric(insert_string, &cm_numeric);
 		if(numeric_setter != NULL) { numeric_setter(ent, cm_numeric); }
 	}
@@ -633,10 +633,10 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 /*			reference_type = xmlGetProp(node, QSF_OBJECT_TYPE);
 		if(0 == safe_strcmp(QOF_PARAM_GUID, reference_type)) 
 		{
-			qof_entity_set_guid(qsf_ent, cm_guid);
+			qof_instance_set_guid(qsf_ent, cm_guid);
 		}
 		else {
-			reference = qof_entity_get_reference_from(qsf_ent, cm_param);
+			reference = qof_instance_get_reference_from(qsf_ent, cm_param);
 			if(reference) {
 				params->referenceList = g_list_append(params->referenceList, reference);
 			}
@@ -646,7 +646,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 		errno = 0;
 		cm_i32 = (gint32)strtol (insert_string, &tail, 0);
 		if(errno == 0) {
-			i32_setter = (void(*)(QofEntity*, gint32))param->param_setfcn;
+			i32_setter = (void(*)(QofInstance*, gint32))param->param_setfcn;
 			if(i32_setter != NULL) { i32_setter(ent, cm_i32); }
 		}
 		else 
@@ -663,7 +663,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 		errno = 0;
 		cm_i64 = strtoll(insert_string, &tail, 0);
 		if(errno == 0) {
-			i64_setter = (void(*)(QofEntity*, gint64))param->param_setfcn;
+			i64_setter = (void(*)(QofInstance*, gint64))param->param_setfcn;
 			if(i64_setter != NULL) { i64_setter(ent, cm_i64); }
 		}
 		else 
@@ -680,7 +680,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 		errno = 0;
 		cm_double = strtod(insert_string, &tail);
 		if(errno == 0) {
-			double_setter = (void(*)(QofEntity*, double))param->param_setfcn;
+			double_setter = (void(*)(QofInstance*, double))param->param_setfcn;
 			if(double_setter != NULL) { double_setter(ent, cm_double); }
 		}
 	}
@@ -691,7 +691,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 			cm_boolean = TRUE;
 		}
 		else { cm_boolean = FALSE; }
-		boolean_setter = (void(*)(QofEntity*, gboolean))param->param_setfcn;
+		boolean_setter = (void(*)(QofInstance*, gboolean))param->param_setfcn;
 		if(boolean_setter != NULL) { boolean_setter(ent, cm_boolean); }
 	}
 	if(safe_strcmp(param->param_type, QOF_TYPE_KVP) == 0) {
@@ -699,7 +699,7 @@ qof_sql_insertCB(const QofParam *param, const gchar *insert_string, QofSqlQuery 
 	}
 	if(safe_strcmp(param->param_type, QOF_TYPE_CHAR) == 0) { 
 		cm_char = *insert_string;
-		char_setter = (void(*)(QofEntity*, char))param->param_setfcn;
+		char_setter = (void(*)(QofInstance*, char))param->param_setfcn;
 		if(char_setter != NULL) { char_setter(ent, cm_char); }
 	}
 	LEAVE (" ");
@@ -725,7 +725,7 @@ qof_query_set_insert_table(QofSqlQuery *query)
 	}
 }
 
-static QofEntity*
+static QofInstance*
 qof_query_insert(QofSqlQuery *query)
 {
 	GList *field_list, *value_list, *cur;
@@ -755,7 +755,7 @@ qof_query_insert(QofSqlQuery *query)
 		LEAVE (" unable to create instance of type %s", type); 
 		return NULL; 
 	}
-	query->inserted_entity = &inst->entity;
+	query->inserted_entity = inst;
 	value_list = sis->values;
 	for (field_list = sis->fields; field_list != NULL; field_list = field_list->next) 
 	{

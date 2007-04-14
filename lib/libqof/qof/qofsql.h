@@ -62,7 +62,7 @@ search loop, aka a 'join', which is not currently supported in the
 underlying QofQuery code.
 
 However, by repeating queries and adding the entities to a new session using
-::qof_entity_copy_list, a series of queries can be added to a single
+::qof_instance_copy_list, a series of queries can be added to a single
 book. e.g. You can insert multiple entities and save out as a QSF XML
 file or use multiple SELECT queries to build a precise list - this
 can be used to replicate most of the functionality of a SQL join.
@@ -77,7 +77,7 @@ When combined with a foreach callback on the value of param_id for each
 entity in the QofBook, you can produce the effect of a join from running
 the two SELECT queries for each value of param_id held in 'value'.
 
-See ::QofEntityForeachCB and ::qof_object_foreach.
+See ::QofInstanceForeachCB and ::qof_object_foreach.
 
 Date queries handle full date and time strings, using the format
 exported by the QSF backend. To query dates and times, convert

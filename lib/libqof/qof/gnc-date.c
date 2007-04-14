@@ -505,81 +505,6 @@ gnc_print_date (Timespec ts)
 /* ============================================================== */
 
 size_t
-qof_print_hours_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs)
-{
-	size_t flen;
-	if (0 <= secs)
-	{
-		if (show_secs)
-		{
-			flen = g_snprintf(buff, len,
-			   "%02d:%02d:%02d", (int)(secs / 3600),
-			   (int)((secs % 3600) / 60), (int)(secs % 60));
-		}
-		else
-		{
-			flen = g_snprintf(buff, len, 
-			   "%02d:%02d", (int)(secs / 3600),
-			   (int)((secs % 3600) / 60));
-		}
-	} 
-	else 
-	{
-		if (show_secs)
-		{
-			flen = g_snprintf(buff, len,
-			   "-%02d:%02d:%02d", (int)(-secs / 3600),
-			   (int)((-secs % 3600) / 60), (int)(-secs % 60));
-		}
-		else
-		{
-			flen = g_snprintf(buff, len,
-			   "-%02d:%02d", (int)(-secs / 3600),
-			   (int)((-secs % 3600) / 60));
-		}
-	}
-	return flen;
-}
-
-/* ============================================================== */
-
-size_t
-qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs)
-{
-	size_t flen;
-	if (0 <= secs)
-	{
-		if (show_secs)
-		{
-			flen = g_snprintf(buff, len,
-			   "%02d:%02d", 
-				(int)(secs / 60), (int)(secs % 60));
-		}
-		else
-		{
-			flen = g_snprintf(buff, len, 
-			   "%02d", (int)(secs / 60));
-		}
-	} 
-	else 
-	{
-		if (show_secs)
-		{
-			flen = g_snprintf(buff, len,
-			   "-%02d:%02d", (int)(-secs / 60), (int)(-secs % 60));
-		}
-		else
-		{
-			flen = g_snprintf(buff, len,
-			   "-%02d", (int)(-secs / 60));
-		}
-	}
-	return flen;
-}
-
-/* ============================================================== */
-
-size_t
 qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 {
   int flen;
@@ -652,21 +577,6 @@ qof_print_time_buff (char * buff, size_t len, time_t secs)
 	flen = qof_strftime (buff, len, GNC_T_FMT, &ltm);
 	
 	return flen;
-}
-
-/* ============================================================== */
-
-int
-qof_is_same_day (time_t ta, time_t tb)
-{
-  struct tm lta, ltb;
-  lta = *localtime (&ta);
-  ltb = *localtime (&tb);
-  if (lta.tm_year == ltb.tm_year)
-  {
-    return (ltb.tm_yday - lta.tm_yday);
-  }
-  return (ltb.tm_year - lta.tm_year)*365;  /* very approximate */
 }
 
 /* ============================================================== */
@@ -1448,40 +1358,6 @@ gnc_timet_get_day_end (time_t time_val)
 }
 
 
-#ifndef GNUCASH_MAJOR_VERSION
-time_t
-gnc_timet_get_day_start_gdate (GDate *date)
-{
-  struct tm stm;
-  time_t secs;
-
-  stm.tm_year = g_date_get_year (date) - 1900;
-  stm.tm_mon = g_date_get_month (date) - 1;
-  stm.tm_mday = g_date_get_day (date);
-  gnc_tm_set_day_start(&stm);
-
-  /* Compute number of seconds */
-  secs = mktime (&stm);
-  return secs;
-}
-
-time_t
-gnc_timet_get_day_end_gdate (GDate *date)
-{
-  struct tm stm;
-  time_t secs;
-
-  stm.tm_year = g_date_get_year (date) - 1900;
-  stm.tm_mon = g_date_get_month (date) - 1;
-  stm.tm_mday = g_date_get_day (date);
-  gnc_tm_set_day_end(&stm);
-
-  /* Compute number of seconds */
-  secs = mktime (&stm);
-  return secs;
-}
-#endif /* GNUCASH_MAJOR_VERSION */
-
 /* ======================================================== */
 
 void
@@ -1514,5 +1390,15 @@ gnc_timet_get_today_end (void)
   return mktime(&tm);
 }
 
-/********************** END OF FILE *********************************\
-\********************************************************************/
+void
+gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
+{
+    struct tm my_tm;
+    int i;
+    
+    memset(buf, 0, buf_len);
+    memset(&my_tm, 0, sizeof(struct tm));
+    my_tm.tm_wday = dow;
+    i = qof_strftime(buf, buf_len - 1, "%a", &my_tm);
+    buf[i] = 0;
+}

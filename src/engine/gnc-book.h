@@ -12,8 +12,3 @@
 #define gnc_book_get_backend qof_book_get_backend
 #define gnc_book_get_entity_table qof_book_get_entity_table
 #define gnc_book_get_counter qof_book_get_counter
-#define gnc_book_x qof_book_x
-#define gnc_book_x qof_book_x
-#define gnc_book_x qof_book_x
-
-#define GNC_BOOK(obj)     ((GNCBook*)(obj))

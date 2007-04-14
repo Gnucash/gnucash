@@ -267,7 +267,7 @@ void qof_class_param_foreach (QofIdTypeConst obj_name,
 
 Simple check to return a GList of all parameters
 of this object type that are not known QOF data types.
-Used for partial QofBook support, see ::QofEntityReference
+Used for partial QofBook support, see ::QofInstanceReference
 */
 GList* qof_class_get_referenceList(QofIdTypeConst type);
 

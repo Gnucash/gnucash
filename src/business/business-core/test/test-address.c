@@ -38,7 +38,7 @@ test_string_fcn (GncAddress *address, const char *message,
 static void
 test_address (void)
 {
-  QofEntity ent;
+  QofInstance ent;
   GncAddress *address;
   QofBook *book = qof_book_new ();
 
@@ -52,6 +52,7 @@ test_address (void)
     address = gncAddressCreate (book, &ent);
     do_test (address != NULL, "address create");
 
+    gncAddressBeginEdit (address);
     gncAddressDestroy (address);
     success ("create/destroy");
   }

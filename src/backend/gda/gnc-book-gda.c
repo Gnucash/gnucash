@@ -40,18 +40,75 @@
 
 #include "gnc-engine.h"
 #include "gnc-book.h"
+#include "SX-book.h"
+#include "SX-book-p.h"
 
 #define BOOK_TABLE "books"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
+static void set_root_account_guid( gpointer pObject, gpointer pValue );
+static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
+static void set_root_template_guid( gpointer pObject, gpointer pValue );
+
 static col_cvt_t col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
-            (QofAccessFunc)qof_entity_get_guid,
-            (QofSetterFunc)qof_entity_set_guid },
+            (QofAccessFunc)qof_instance_get_guid,
+            (QofSetterFunc)qof_instance_set_guid },
+    { "root_account_guid", CT_GUID,  0, COL_NNUL,             NULL,
+            get_root_account_guid, set_root_account_guid },
+    { "root_template_guid", CT_GUID, 0, COL_NNUL,             NULL,
+            get_root_template_guid, set_root_template_guid },
     { NULL }
 };
+
+/* ================================================================= */
+static gpointer
+get_root_account_guid( gpointer pObject, const QofParam* param )
+{
+    GNCBook* book = QOF_BOOK(pObject);
+    const Account* root = gnc_book_get_root_account( book );
+
+    return (gpointer)qof_instance_get_guid( QOF_INSTANCE( root ) );
+}
+
+static void 
+set_root_account_guid( gpointer pObject, gpointer pValue )
+{
+    GNCBook* book = QOF_BOOK(pObject);
+    const Account* root = gnc_book_get_root_account( book );
+    GUID* guid = (GUID*)pValue;
+
+    qof_instance_set_guid( QOF_INSTANCE( root ), guid );
+}
+
+static gpointer
+get_root_template_guid( gpointer pObject, const QofParam* param )
+{
+    const GNCBook* book = QOF_BOOK(pObject);
+    const Account* root = gnc_book_get_template_root( book );
+
+    return (gpointer)qof_instance_get_guid( QOF_INSTANCE( root ) );
+}
+
+static void 
+set_root_template_guid( gpointer pObject, gpointer pValue )
+{
+    GNCBook* book = QOF_BOOK(pObject);
+    GUID* guid = (GUID*)pValue;
+    Account* root = gnc_book_get_template_root( book );
+
+    if( root == NULL ) {
+        root = xaccMallocAccount( book );
+        xaccAccountBeginEdit( root );
+        xaccAccountSetType( root, ACCT_TYPE_ROOT );
+        xaccAccountCommitEdit( root );
+        gnc_book_set_template_root( book, root );
+    }
+    qof_instance_set_guid( QOF_INSTANCE( root ), guid );
+}
 
 /* ================================================================= */
 static GNCBook*
@@ -110,7 +167,7 @@ create_book_tables( GncGdaBackend* be )
 static void
 commit_book( GncGdaBackend* be, QofInstance* inst )
 {
-    GNCBook* pBook = GNC_BOOK(inst);
+    GNCBook* pBook = QOF_BOOK(inst);
     const GUID* guid;
 
     (void)gnc_gda_do_db_operation( be,

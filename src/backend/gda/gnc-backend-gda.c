@@ -135,6 +135,8 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
     if( be->pConnection == NULL ) {
         g_critical( "SQL error: %s\n", error->message );
         qof_backend_set_error( be_start, ERR_BACKEND_NO_SUCH_DB );
+
+        LEAVE( " " );
         return;
     }
 
@@ -213,7 +215,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     gda_backend be_data;
 
-    ENTER (" ");
+    ENTER( "be=%p, book=%p", be, book );
 
     g_assert( be->primary_book == NULL );
     be->primary_book = book;
@@ -221,6 +223,13 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     /* Load any initial stuff */
     be->loading = TRUE;
     
+#if 0
+    /* Some of this needs to happen in a certain order */
+    initial_load_cb( GNC_ID_BOOK,
+		    qof_object_lookup_backend( GNC_ID_BOOK, GNC_GDA_BACKEND ),
+                    &be_data );
+#endif
+
     be_data.ok = FALSE;
     be_data.be = be;
     be_data.inst = NULL;
@@ -309,20 +318,20 @@ gnc_gda_rollback_edit (QofBackend *be, QofInstance *inst)
 static void
 commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
-	GncGdaDataType_t* pData = data_p;
-	gda_backend* be_data = be_data_p;
+    GncGdaDataType_t* pData = data_p;
+    gda_backend* be_data = be_data_p;
 
-	g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
-	g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
-	/* If this has already been handled, or is not the correct handler, return */
-	g_return_if_fail( strcmp( pData->type_name, be_data->inst->entity.e_type ) == 0 );
-	g_return_if_fail( !be_data->ok );
+    /* If this has already been handled, or is not the correct handler, return */
+    g_return_if_fail( strcmp( pData->type_name, be_data->inst->e_type ) == 0 );
+    g_return_if_fail( !be_data->ok );
 
-	if( pData->commit != NULL ) {
-		(pData->commit)( be_data->be, be_data->inst );
-		be_data->ok = TRUE;
-	}
+    if( pData->commit != NULL ) {
+        (pData->commit)( be_data->be, be_data->inst );
+        be_data->ok = TRUE;
+    }
 }
 
 /* Commit_edit handler - find the correct backend handler for this object
@@ -339,7 +348,9 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     if( be->loading ) return;
 
-    g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n", inst->entity.e_type, inst->dirty, inst->do_free );
+    g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
+             (inst->e_type ? inst->e_type : "(null)"),
+             inst->dirty, inst->do_free );
 
     if( !inst->dirty && !inst->do_free && GNC_IS_TRANS(inst) ) {
         gnc_gda_transaction_commit_splits( be, GNC_TRANS(inst) );
@@ -354,7 +365,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     if( !be_data.ok ) {
         g_critical( "gnc_gda_commit_edit(): Unknown object type %s\n",
-                inst->entity.e_type );
+                inst->e_type );
         return;
     }
 

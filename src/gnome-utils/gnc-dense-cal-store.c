@@ -289,7 +289,7 @@ gdcs_get_info(GncDenseCalModel *model, guint tag)
 {
     GncDenseCalStore *mdl = GNC_DENSE_CAL_STORE(model);
     // assert(tag == 1)
-    return mdl->info;
+    return g_strdup(mdl->info);
 }
 
 static gint

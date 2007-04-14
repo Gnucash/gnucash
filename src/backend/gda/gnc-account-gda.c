@@ -56,16 +56,16 @@ static void set_parent( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",			CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
-            (QofAccessFunc)qof_entity_get_guid,
+    { "guid",		CT_GUID,	0, COL_NNUL|COL_PKEY,	NULL,
+            (QofAccessFunc)qof_instance_get_guid,
             (QofSetterFunc)xaccAccountSetGUID },
-    { "name",			CT_STRING,	ACCOUNT_MAX_NAME_LEN, COL_NNUL,	ACCOUNT_NAME_ },
-    { "account_type",	CT_STRING,	ACCOUNT_MAX_TYPE_LEN, COL_NNUL,	ACCOUNT_TYPE_ },
+    { "name",		CT_STRING, ACCOUNT_MAX_NAME_LEN, COL_NNUL, ACCOUNT_NAME_ },
+    { "account_type",	CT_STRING, ACCOUNT_MAX_TYPE_LEN, COL_NNUL, ACCOUNT_TYPE_ },
     { "commodity_guid",	CT_GUID,	0, COL_NNUL,	NULL,
             get_commodity, set_commodity },
     { "parent_guid",	CT_GUID,	0, 0,	NULL, get_parent, set_parent },
-    { "code",			CT_STRING,	ACCOUNT_MAX_CODE_LEN, 0,	ACCOUNT_CODE_ },
-    { "description",	CT_STRING,	ACCOUNT_MAX_DESCRIPTION_LEN, 0,	ACCOUNT_DESCRIPTION_ },
+    { "code",		CT_STRING, ACCOUNT_MAX_CODE_LEN, 0,	ACCOUNT_CODE_ },
+    { "description",	CT_STRING, ACCOUNT_MAX_DESCRIPTION_LEN, 0,	ACCOUNT_DESCRIPTION_ },
     { NULL }
 };
 

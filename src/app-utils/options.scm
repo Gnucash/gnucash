@@ -35,33 +35,35 @@
          ;; option. The function should restore the option to the original
          ;; value.
          generate-restore-form
-	 ;; the scm->kvp and kvp->scm functions should save and load
-	 ;; the option to a kvp.  The arguments to these function will be
-	 ;; a kvp-frame and a base key-path list for this option.
-	 scm->kvp
-	 kvp->scm	 
+         ;; the scm->kvp and kvp->scm functions should save and load
+         ;; the option to a kvp.  The arguments to these function will be
+         ;; a kvp-frame and a base key-path list for this option.
+         scm->kvp
+         kvp->scm	 
          ;; Validation func should accept a value and return (#t value)
          ;; on success, and (#f "failure-message") on failure. If #t,
          ;; the supplied value will be used by the gui to set the option.
          value-validator
-	 ;;; free-form storage depending on type.
+         ;;; free-form storage depending on type.
          option-data 
-	 ;; If this is a "multiple choice" type of option,
-	 ;; this should be a vector of the following five functions
-	 ;; one taking no arguments giving the number of choices
-         ;; one taking one argument, a non-negative integer, that
+         ;; If this is a "multiple choice" type of option,
+         ;; this should be a vector of the following five functions:
+         ;; 
+         ;; Function 1: taking no arguments, giving the number of choices
+         ;;
+         ;; Function 2: taking one argument, a non-negative integer, that
          ;; returns the scheme value (usually a symbol) matching the
          ;; nth choice
          ;;
-	 ;; one taking one argument, a non-negative integer,
-	 ;; that returns the string matching the nth choice
+         ;; Function 3: taking one argument, a non-negative integer,
+         ;; that returns the string matching the nth choice
          ;;
-	 ;; the third takes one argument and returns the description
-	 ;; containing the nth choice
-	 ;;
-	 ;; the fourth giving a possible value and returning the index
-	 ;; if an option doesn't use these,  this should just be a #f
-	 option-data-fns
+         ;; Function 4: takes one argument and returns the description
+         ;; containing the nth choice
+         ;;
+         ;; Function 5: giving a possible value and returning the index
+         ;; if an option doesn't use these,  this should just be a #f
+         option-data-fns
          ;; This function should return a list of all the strings
          ;; in the option other than the section, name, (define
          ;; (list-lookup list item) and documentation-string that

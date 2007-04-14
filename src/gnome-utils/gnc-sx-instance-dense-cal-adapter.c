@@ -170,7 +170,6 @@ gsidca_find_sx_with_tag(gconstpointer list_data,
     return (GUINT_TO_POINTER(GPOINTER_TO_UINT(sx_instances->sx)) == find_data ? 0 : 1);
 }
 
-// @@ fixme this list is leaked.
 static GList*
 gsidca_get_contained(GncDenseCalModel *model)
 {
@@ -206,7 +205,6 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
     // g_list_find(instances->sxes, {sx_to_tag, tag}).get_freq_spec().get_freq_str();
     FreqSpec *spec;
     GString *info;
-    gchar *info_str;
     GncSxInstances *insts
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
@@ -214,9 +212,7 @@ gsidca_get_info(GncDenseCalModel *model, guint tag)
     spec = xaccSchedXactionGetFreqSpec(insts->sx);
     info = g_string_sized_new(16);
     xaccFreqSpecGetFreqStr(spec, info);
-    info_str = info->str; // @fixme leaked... :/
-    g_string_free(info, FALSE);
-    return info_str;
+    return g_string_free(info, FALSE);
 }
 
 static gint
@@ -228,7 +224,7 @@ gsidca_get_instance_count(GncDenseCalModel *model, guint tag)
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return 0;
-    return g_list_length(insts->list);
+    return g_list_length(insts->instance_list);
 }
 
 static void
@@ -240,7 +236,7 @@ gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDa
         = (GncSxInstances*)g_list_find_custom(adapter->instances->sx_instance_list, GUINT_TO_POINTER(tag), gsidca_find_sx_with_tag)->data;
     if (insts == NULL)
         return;
-    inst = (GncSxInstance*)g_list_nth_data(insts->list, instance_index);
+    inst = (GncSxInstance*)g_list_nth_data(insts->instance_list, instance_index);
     g_date_valid(&inst->date);
     *date = inst->date;
     g_date_valid(date);

@@ -1364,13 +1364,15 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
 
-    decimal_point = info->monetary ?
-      lc->mon_decimal_point : lc->decimal_point;
+    decimal_point = info->monetary
+        ? lc->mon_decimal_point
+        : lc->decimal_point;
     g_utf8_strncpy(temp_ptr, decimal_point, 1);
     temp_ptr = g_utf8_find_next_char(temp_ptr, NULL);
 
-    while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
-	   (num_decimal_places < max_dp))
+    while (!gnc_numeric_zero_p (val)
+           && (val.denom != 1)
+           && (num_decimal_places < max_dp))
     {
       gint64 digit;
 

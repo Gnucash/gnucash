@@ -2408,8 +2408,12 @@ gnucash_sheet_new (Table *table)
 
         /* The entry widget */
         sheet->entry = gtk_entry_new ();
+#ifdef HAVE_GTK_2_10
+        g_object_ref_sink(sheet->entry);
+#else
         g_object_ref(sheet->entry);
         gtk_object_sink(GTK_OBJECT(sheet->entry));
+#endif
 	/*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
         /* set up the editor */

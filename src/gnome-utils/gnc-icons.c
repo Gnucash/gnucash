@@ -87,8 +87,8 @@ gnc_add_stock_icon_pair (GtkIconFactory *factory,
 	gtk_icon_factory_add (factory, stock, set);
 
 	/* Cleanup */
-	gdk_pixbuf_unref (pixbuf2);
-	gdk_pixbuf_unref (pixbuf1);
+	g_object_unref (pixbuf2);
+	g_object_unref (pixbuf1);
 	g_free(fullname2);
 	g_free(fullname1);
 	gtk_icon_set_unref (set);

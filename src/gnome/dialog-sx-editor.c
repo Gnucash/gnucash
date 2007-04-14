@@ -251,7 +251,7 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
     gnc_sxed_save_sx( sxed );
 
     /* add to list */
-    // @@fixme -- forget 'new'-flag: check for existance.
+    // @@fixme -- forget 'new'-flag: check for existance of the SX [?]
     if ( sxed->newsxP ) {
         book = gnc_get_current_book ();
         sxes = gnc_book_get_schedxactions(book);
@@ -1236,6 +1236,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
     /* Do not call show_all here. Screws up the gtkuimanager code */
     gtk_widget_show(sxed->dialog);
 
+    gtk_notebook_set_page(
+        GTK_NOTEBOOK(glade_xml_get_widget(sxed->gxml, "editor_notebook")), 0);
+
     /* Refresh the cal and the ledger */
     gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
     gnc_ledger_display_refresh( sxed->ledger );
@@ -1659,7 +1662,7 @@ _open_editors(GtkDialog *dialog, gint response_code, gpointer data)
 }
 
 static void
-_sx_engine_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_sx_engine_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     Account *acct;
     QofBook *book;

@@ -83,17 +83,28 @@ TODO
 
 - sx editor
   - [/] clean up source formatting
-  - [ ] re-layout dialog
+  - [ ] move "non-editor" general app/ui code out of bottom of dialog-sx-editor.c
+  - [x] re-layout dialog
     - tabs: "overview", "frequency", "template transaction" [, "estimation"]
   - [ ] model-ize
     - (check_consistent, especially...)
+
+GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
+
+gnc_sxed_check_changed( GncSxEditorDialog *sxed )
+gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
+gnc_sxed_save_sx( GncSxEditorDialog *sxed )
+
+
+gchar* gnc_sx_edit_model_get_name(GncSxEditModel *mdl);
+void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 
 - gnc_dense_cal
   - [x] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar
     - [x] conf-save value
   - [ ] code cleanup
-    - [ ] min-size
-  - [ ] start-of-week := {sun,mon} (via locale)
+    - [x] min-size
+  - [x] start-of-week := {sun,mon} (via locale)
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
@@ -158,7 +169,7 @@ TODO
   - [ ] support nth-weekday Recurrence period.
 
 - since-last-run
-  - [ ] "reminder" instances show number of days until due
+  - [ ] "reminder" instances should show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
 ! - [x] save/restore dialog window size
   - [x] remove split pane

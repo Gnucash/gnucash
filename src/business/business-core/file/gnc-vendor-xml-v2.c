@@ -407,7 +407,7 @@ vendor_should_be_saved (GncVendor *vendor)
 }
 
 static void
-do_count (QofEntity * vendor_p, gpointer count_p)
+do_count (QofInstance * vendor_p, gpointer count_p)
 {
   int *count = count_p;
   if (vendor_should_be_saved ((GncVendor *)vendor_p))
@@ -423,7 +423,7 @@ vendor_get_count (QofBook *book)
 }
 
 static void
-xml_add_vendor (QofEntity * vendor_p, gpointer out_p)
+xml_add_vendor (QofInstance * vendor_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncVendor *vendor = (GncVendor *) vendor_p;

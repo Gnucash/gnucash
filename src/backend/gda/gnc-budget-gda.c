@@ -59,8 +59,8 @@ static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
-            (QofAccessFunc)qof_entity_get_guid,
-            (QofSetterFunc)qof_entity_set_guid },
+            (QofAccessFunc)qof_instance_get_guid,
+            (QofSetterFunc)qof_instance_set_guid },
     { "name",            CT_STRING,    BUDGET_MAX_NAME_LEN, COL_NNUL,    "name" },
     { "description",    CT_STRING,    BUDGET_MAX_DESCRIPTION_LEN, 0,    "description" },
     { "num_periods",    CT_INT,        0, COL_NNUL, "num_periods" },

@@ -396,14 +396,6 @@ const char * gnc_print_date(Timespec ts);
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
 
-/** The qof_print_hours_elapsed_buff() routine will print the 'secs' argument
- *    as HH:MM, and will print the seconds if show_secs is true.  
- *    Thus, for example, secs=3599 will print as 0:59
- *    Returns the number of bytes copied.
- */
-size_t qof_print_hours_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-
 /** The qof_print_time_buff() routine prints only the hour-part of the date.
  *    Thus, if secs is  ...
  *    Returns the number of bytes printed.
@@ -411,12 +403,6 @@ size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboole
 
 size_t qof_print_time_buff (char * buff, size_t len, time_t secs);
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
-
-/** The qof_is_same_day() routine returns 0 if both times are in the 
- * same day.
- */
-
-gboolean qof_is_same_day (time_t, time_t);
 
 /* ------------------------------------------------------------------ */
 /** The xaccDateUtilGetStamp() routine will take the given time in
@@ -510,22 +496,6 @@ time_t gnc_timet_get_day_start(time_t time_val);
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
 
-#ifndef GNUCASH_MAJOR_VERSION
-/** The gnc_timet_get_day_start() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_start_gdate (GDate *date);
-
-/** The gnc_timet_get_day_end() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_end_gdate (GDate *date);
-#endif /* GNUCASH_MAJOR_VERSION */
-
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);
 
@@ -563,6 +533,14 @@ time_t gnc_timet_get_today_end(void);
  *  @return A pointer to the generated string.
  *  @note The caller owns this buffer and must free it when done. */
 char * xaccDateUtilGetStampNow (void);
+
+#define MIN_BUF_LEN 10
+/**
+ * Localized DOW abbreviation.
+ * @param buf_len at least MIN_BUF_LEN
+ * @param dow struct tm semantics: 0=sunday .. 6=saturday
+ **/
+void gnc_dow_abbrev(gchar *buf, int buf_len, int dow);
 
 //@}
 //@}

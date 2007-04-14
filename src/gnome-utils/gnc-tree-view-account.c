@@ -1002,6 +1002,8 @@ gnc_tree_view_account_get_account_from_iter (GtkTreeModel *s_model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
   g_return_val_if_fail (s_iter != NULL, NULL);
 
+  ENTER("model %p, iter %p", s_model, s_iter);
+
   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
 						  &f_iter,
 						  s_iter);

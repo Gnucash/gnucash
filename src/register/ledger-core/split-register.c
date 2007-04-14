@@ -1353,7 +1353,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      return TRUE;
    }
 
-   ENTER ("save split is %p \n", split);
+   DEBUG ("save split is %p \n", split);
 
    if (!gnc_split_register_auto_calc (reg, split))
      return FALSE;

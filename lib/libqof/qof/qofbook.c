@@ -48,6 +48,8 @@
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
+QOF_GOBJECT_IMPL(qof_book, QofBook, QOF_TYPE_INSTANCE);
+
 /* ====================================================================== */
 /* constructor / destructor */
 
@@ -66,7 +68,7 @@ qof_book_init (QofBook *book)
       (GDestroyNotify)qof_util_string_cache_remove,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
-  qof_instance_init (&book->inst, QOF_ID_BOOK, book);
+  qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
   book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
@@ -82,11 +84,10 @@ qof_book_new (void)
   QofBook *book;
 
   ENTER (" ");
-  book = g_new0(QofBook, 1);
-  qof_book_init(book);
+  book = g_object_new(QOF_TYPE_BOOK, NULL);
   qof_object_book_begin (book);
 
-  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -101,14 +102,26 @@ book_final (gpointer key, gpointer value, gpointer booq)
   (*cb) (book, key, user_data);
 }
 
+static void
+qof_book_dispose_real (GObject *bookp)
+{
+}
+
+static void
+qof_book_finalize_real (GObject *bookp)
+{
+}
+
 void
 qof_book_destroy (QofBook *book) 
 {
+  GHashTable* cols;
+
   if (!book) return;
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_force (&book->inst, QOF_EVENT_DESTROY, NULL);
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
@@ -122,12 +135,18 @@ qof_book_destroy (QofBook *book)
   g_hash_table_destroy (book->data_tables);
   book->data_tables = NULL;
 
-  qof_instance_release (&book->inst);
+  /* qof_instance_release (&book->inst); */
 
-  g_hash_table_destroy (book->hash_of_collections);
+  /* Note: we need to save this hashtable until after we remove ourself
+   * from it, otherwise we'll crash in our dispose() function when we
+   * DO remove ourself from the collection but the collection had already
+   * been destroyed.
+   */
+  cols = book->hash_of_collections;
+  g_object_unref (book);
+  g_hash_table_destroy (cols);
   book->hash_of_collections = NULL;
 
-  g_free (book);
   LEAVE ("book=%p", book);
 }
 
@@ -411,7 +430,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gboolean qof_book_register (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };

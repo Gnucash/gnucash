@@ -195,11 +195,14 @@ xaccResolveFilePath (const char * filefrag)
   /* OK, now we try to find or build an absolute file path */
 
   /* check for an absolute file path */
-  if (g_path_is_absolute(filefrag))
+  if (g_path_is_absolute(filefrag)) {
+    LEAVE("filefrag is absolute path");
     return g_strdup (filefrag);
+  }
 
   if (!g_ascii_strncasecmp(filefrag, "file:", 5))
   {
+      LEAVE("filefrag is file uri");
       return g_strdup(filefrag + 5);
   }
 
@@ -221,6 +224,7 @@ xaccResolveFilePath (const char * filefrag)
 
 	  if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
 	  {
+	      LEAVE("found %s", fullpath);
 	      return fullpath;
           }
 	  g_free (fullpath);
@@ -251,6 +255,7 @@ xaccResolveFilePath (const char * filefrag)
       gchar *result;
       result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
       g_free (filefrag_dup);
+      LEAVE("create new file %s", result);
       return result;
   } 
 
@@ -261,11 +266,13 @@ xaccResolveFilePath (const char * filefrag)
       gchar *result;
       result = g_build_filename(pathbuf, filefrag_dup, (gchar *)NULL);
       g_free (filefrag_dup);
+      LEAVE("create new file %s", result);
       return result;
   }
 
   g_free (filefrag_dup);
 
+  LEAVE("%s not found", filefrag);
   return NULL;
 }
 

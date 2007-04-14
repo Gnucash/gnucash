@@ -343,9 +343,12 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
         priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
-        // gobject-2.10: g_object_ref_sink(G_OBJECT(priv->gdcal));
+#ifdef HAVE_GTK_2_10
+        g_object_ref_sink(priv->gdcal);
+#else
         g_object_ref(G_OBJECT(priv->gdcal));
         gtk_object_sink(GTK_OBJECT(priv->gdcal));
+#endif
 
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
@@ -541,7 +544,6 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
 
-    /* @@fixme -- add (suppressible?) confirmation dialog */
     selection = gtk_tree_view_get_selection(priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
     if (g_list_length(selected_paths) == 0)

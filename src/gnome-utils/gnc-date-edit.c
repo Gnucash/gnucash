@@ -713,7 +713,7 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_show (GTK_WIDGET(frame));
 
 	gde->calendar = gtk_calendar_new ();
-	gtk_calendar_display_options
+	gtk_calendar_set_display_options
                 (GTK_CALENDAR (gde->calendar),
                  (GTK_CALENDAR_SHOW_DAY_NAMES
                   | GTK_CALENDAR_SHOW_HEADING

@@ -44,12 +44,12 @@
 
 /** Compares two GDate*'s for equality; useful for using GDate*'s as
  *  GHashTable keys. */
-gint g_date_equals( gconstpointer gda, gconstpointer gdb );
+gint gnc_gdate_equal(gconstpointer gda, gconstpointer gdb);
 
 
 /** Provides a "hash" of a GDate* value; useful for using GDate*'s as
  *  GHashTable keys. */
-guint g_date_hash( gconstpointer gd );
+guint gnc_gdate_hash( gconstpointer gd );
 
 /** @} */
 

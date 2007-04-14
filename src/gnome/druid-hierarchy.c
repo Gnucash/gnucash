@@ -744,8 +744,8 @@ balance_cell_edited (GtkCellRendererText *cell,
 
 	account = gnc_tree_view_account_get_selected_account(data->final_account_tree);
 	if (account == NULL) {
-	  printf("Account is null\n");
-	  return;
+      g_critical("account is null");
+      return;
 	}
 
 	error_loc = NULL;
@@ -753,8 +753,17 @@ balance_cell_edited (GtkCellRendererText *cell,
 	  amount = gnc_numeric_zero();
 	  g_object_set (G_OBJECT(cell), "text", "", NULL);
 	}
+    /* Bug#348364: Emulating price-cell, we need to ensure the denominator of
+     * the amount is in the SCU of the account's commodity (so
+     * gnc-ui-util.c:is_decimal_fraction() on the remainder denom for
+     * fractional values will be a "decimal").
+     */
+    {
+        int account_cmdty_fraction = xaccAccountGetCommoditySCU(account);
+        amount = gnc_numeric_convert(amount, account_cmdty_fraction, GNC_RND_ROUND);
+    }
 	set_final_balance (data->balance_hash, account, amount);
-	qof_event_gen ((QofEntity*)account, QOF_EVENT_MODIFY, NULL);
+	qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, NULL);
 }
 
 static void

@@ -3585,7 +3585,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
   } else if(safe_strcmp("price:type", (char*)sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
-    gnc_price_set_type(p, text);
+    gnc_price_set_typestr(p, text);
     g_free(text);
   } else if(safe_strcmp("price:value", (char*)sub_node->name) == 0) {
     gnc_numeric *value = dom_tree_to_gnc_numeric(sub_node);

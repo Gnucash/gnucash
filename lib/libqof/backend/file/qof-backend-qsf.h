@@ -80,7 +80,7 @@ in the QSF QofBackend to contain the reference data so that when the book is
 written out, the reference can be included. When the file is imported back in, a
 little extra code then rebuilds those references during the merge.
 
-Copying entites from an existing QofBook using the qof_entity_copy routines will 
+Copying entites from an existing QofBook using the qof_instance_copy routines will 
 automatically create the reference table. If your QOF objects use references to other
 entities, books that are created manually also need to create a reference table.
 
