@@ -65,7 +65,8 @@ qofinclude_HEADERS = \
    qofsession.h      \
    qofsql.h          \
    qofutil.h         \
-   qofbookmerge.h
+   qofbookmerge.h    \
+   qof-gobject.h
 
 nodist_qofinclude_HEADERS = \
    qofla-dir.h     
