@@ -1575,7 +1575,23 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 
 #define FUDGE .00001
 
+/* Sigh. This (from r15709) is a translators/i18nator's nightmare. I'd
+   guess out of the 29 translations we have, 20 will have their number
+   wordings in a totally different way than English has (not to
+   mention gender-dependent number endings). Which means this
+   word-by-word translation will be useless or even plain
+   wrong. However, in many of those countries there might be no need
+   for check printing with amounts in words anyway, which means many
+   of those languages probably can ignore this whole section
+   altogether. Let's simply pretend a word-by-word translation were
+   "almost" correct. cstim, 2007-04-14. */
 static gchar *small_numbers[] = {
+  /* Translators: This section is for generating the "amount, in
+     words" field when printing a check. This function gets the
+     wording right for English, but unfortunately not for most other
+     languages. Decide for yourself whether the check printing is
+     actually needed in your language; if not, you can safely skip the
+     translation of all of these strings.  */
   N_("Zero"), N_("One"), N_("Two"), N_("Three"), N_("Four"),
   N_("Five"), N_("Six"), N_("Seven"), N_("Eight"), N_("Nine"),
   N_("Ten"), N_("Eleven"), N_("Twelve"), N_("Thirteen"), N_("Fourteen"),
@@ -1585,8 +1601,26 @@ static gchar *medium_numbers[] = {
   N_("Zero"), N_("Ten"), N_("Twenty"), N_("Thirty"), N_("Forty"),
   N_("Fifty"), N_("Sixty"), N_("Seventy"), N_("Eighty"), N_("Ninety")};
 static gchar *big_numbers[] = {
-  N_("Hundred"), N_("Thousand"), N_("Million"), N_("Billion"),
-  N_("Trillion"), N_("Quadrillion"), N_("Quintillion")};
+  /* Translators: This is the word for the number 10^2 */
+  N_("Hundred"),
+  /* Translators: This is the word for the number 10^3 */
+  N_("Thousand"),
+  /* Translators: This is the word for the number 10^6, one thousand
+     thousands. */
+  N_("Million"),
+  /* Translators: This is the word for the number 10^9, one thousand
+     millions. WATCH OUT: In British english and many other languages
+     this word is used for 10^12 which is one million millions! In
+     contrast to this, here in GnuCash this is used in the American
+     english meaning of 10^9.  */
+  N_("Billion"),
+  /* Translators: This is the word for the number 10^12, one million
+     millions. */
+  N_("Trillion"),
+  /* Translators: This is the word for the number 10^15 */
+  N_("Quadrillion"),
+  /* Translators: This is the word for the number 10^18 */
+  N_("Quintillion")};
 
 static gchar *
 integer_to_words(gint64 val)
@@ -1643,7 +1677,7 @@ gchar *
 number_to_words(gdouble val, gint64 denom)
 {
   gint64 int_part, frac_part;
-  gchar *int_string, *full_string;
+  gchar *int_string, *nomin_string, *denom_string, *full_string;
 
   if (val < 0) val = -val;
   if (denom < 0) denom = -denom;
@@ -1652,10 +1686,21 @@ number_to_words(gdouble val, gint64 denom)
   frac_part = round((val - int_part) * denom);
 
   int_string = integer_to_words(int_part);
+  /* Inside of the gettext macro _(...) we must not use any macros but
+     only plain string literals. For this reason, convert the strings
+     separately. */
+  nomin_string = g_strdup_printf("%" G_GINT64_FORMAT, frac_part);
+  denom_string = g_strdup_printf("%" G_GINT64_FORMAT, denom);
   full_string =
-    g_strdup_printf(_("%s and %" G_GINT64_FORMAT "/%" G_GINT64_FORMAT),
-		    int_string, frac_part, denom);
+    /* Translators: This is for the "amount, in words" field in check
+       printing. The first %s is the integer amount of dollars (or
+       whatever currency), the second and third %s the cent amount as
+       a fraction, e.g. 47/100.  */
+    g_strdup_printf(_("%s and %s/%s"),
+		    int_string, nomin_string, denom_string);
   g_free(int_string);
+  g_free(nomin_string);
+  g_free(denom_string);
   return full_string;
 }
 
