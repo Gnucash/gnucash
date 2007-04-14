@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-14 11:15+0200\n"
-"PO-Revision-Date: 2007-01-29 15:00+0100\n"
+"POT-Creation-Date: 2007-04-14 13:08+0200\n"
+"PO-Revision-Date: 2007-04-14 13:21+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -118,177 +118,173 @@ msgstr "Eigenkapital"
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
 
-#: ../src/app-utils/gnc-ui-util.c:1579 ../src/app-utils/gnc-ui-util.c:1585
-#, fuzzy
+#. Translators: This section is for generating the "amount, in
+#. words" field when printing a check. This function gets the
+#. wording right for English, but unfortunately not for most other
+#. languages. Decide for yourself whether the check printing is
+#. actually needed in your language; if not, you can safely skip the
+#. translation of all of these strings.
+#: ../src/app-utils/gnc-ui-util.c:1595 ../src/app-utils/gnc-ui-util.c:1601
 msgid "Zero"
 msgstr "Null"
 
-#: ../src/app-utils/gnc-ui-util.c:1579
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1595
 msgid "One"
-msgstr "Einmal"
+msgstr "Eins"
 
-#: ../src/app-utils/gnc-ui-util.c:1579
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1595
 msgid "Two"
-msgstr "Bis"
+msgstr "Zwei"
 
-#: ../src/app-utils/gnc-ui-util.c:1579
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1595
 msgid "Three"
-msgstr "Dritte Ebene"
+msgstr "Drei"
 
-#: ../src/app-utils/gnc-ui-util.c:1579
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1595
 msgid "Four"
-msgstr "Formular"
+msgstr "Vier"
 
-#: ../src/app-utils/gnc-ui-util.c:1580
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1596
 msgid "Five"
-msgstr "_Datei"
+msgstr "Fünf"
 
-#: ../src/app-utils/gnc-ui-util.c:1580
+#: ../src/app-utils/gnc-ui-util.c:1596
 msgid "Six"
-msgstr ""
+msgstr "Sechs"
 
-#: ../src/app-utils/gnc-ui-util.c:1580
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1596
 msgid "Seven"
-msgstr "Speichern"
+msgstr "Sieben"
 
-#: ../src/app-utils/gnc-ui-util.c:1580
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1596
 msgid "Eight"
-msgstr "Rechts"
+msgstr "Acht"
 
-#: ../src/app-utils/gnc-ui-util.c:1580
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1596
 msgid "Nine"
-msgstr "Keine"
+msgstr "Neun"
 
-#: ../src/app-utils/gnc-ui-util.c:1581 ../src/app-utils/gnc-ui-util.c:1585
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1597 ../src/app-utils/gnc-ui-util.c:1601
 msgid "Ten"
-msgstr "Test"
+msgstr "Zehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1581
+#: ../src/app-utils/gnc-ui-util.c:1597
 msgid "Eleven"
-msgstr ""
+msgstr "Elf"
 
-#: ../src/app-utils/gnc-ui-util.c:1581
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1597
 msgid "Twelve"
-msgstr "Bankschalter"
+msgstr "Zwölf"
 
-#: ../src/app-utils/gnc-ui-util.c:1581
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1597
 msgid "Thirteen"
-msgstr "Dritte Ebene"
+msgstr "Dreizehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1581
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1597
 msgid "Fourteen"
-msgstr "Vierte Ebene"
+msgstr "Vierzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1582
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1598
 msgid "Fifteen"
-msgstr "Gebühr"
+msgstr "Fünfzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1582
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1598
 msgid "Sixteen"
-msgstr "Sechste Ebene"
+msgstr "Sechzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1582
+#: ../src/app-utils/gnc-ui-util.c:1598
 msgid "Seventeen"
-msgstr ""
+msgstr "Siebzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1582
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1598
 msgid "Eighteen"
-msgstr "Rechts"
+msgstr "Achtzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1582
+#: ../src/app-utils/gnc-ui-util.c:1598
 msgid "Nineteen"
-msgstr ""
+msgstr "Neunzehn"
 
-#: ../src/app-utils/gnc-ui-util.c:1583 ../src/app-utils/gnc-ui-util.c:1585
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1599 ../src/app-utils/gnc-ui-util.c:1601
 msgid "Twenty"
-msgstr "Text"
+msgstr "Zwanzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1585
+#: ../src/app-utils/gnc-ui-util.c:1601
 msgid "Thirty"
-msgstr ""
+msgstr "Dreißig"
 
-#: ../src/app-utils/gnc-ui-util.c:1585
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1601
 msgid "Forty"
-msgstr "Formular"
+msgstr "Vierzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1586
+#: ../src/app-utils/gnc-ui-util.c:1602
 msgid "Fifty"
-msgstr ""
+msgstr "Fünfzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1586
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1602
 msgid "Sixty"
-msgstr "Aktie"
+msgstr "Sechzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1586
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1602
 msgid "Seventy"
-msgstr "Auswählen"
+msgstr "Siebzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1586
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1602
 msgid "Eighty"
-msgstr "Rechts"
+msgstr "Achtzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1586
-#, fuzzy
+#: ../src/app-utils/gnc-ui-util.c:1602
 msgid "Ninety"
-msgstr "Keine"
+msgstr "Neunzig"
 
-#: ../src/app-utils/gnc-ui-util.c:1588
+#. Translators: This is the word for the number 10^2
+#: ../src/app-utils/gnc-ui-util.c:1605
 msgid "Hundred"
-msgstr ""
+msgstr "Hundert"
 
-#: ../src/app-utils/gnc-ui-util.c:1588
-#, fuzzy
+#. Translators: This is the word for the number 10^3
+#: ../src/app-utils/gnc-ui-util.c:1607
 msgid "Thousand"
-msgstr "Donnerstag"
+msgstr "Tausend"
 
-#: ../src/app-utils/gnc-ui-util.c:1588
-#, fuzzy
+#. Translators: This is the word for the number 10^6, one thousand
+#. thousands.
+#: ../src/app-utils/gnc-ui-util.c:1610
 msgid "Million"
-msgstr "Rechnung ausstellen"
+msgstr "Million"
 
-#: ../src/app-utils/gnc-ui-util.c:1588
-#, fuzzy
+#. Translators: This is the word for the number 10^9, one thousand
+#. millions. WATCH OUT: In British english and many other languages
+#. this word is used for 10^12 which is one million millions! In
+#. contrast to this, here in GnuCash this is used in the American
+#. english meaning of 10^9.
+#: ../src/app-utils/gnc-ui-util.c:1616
 msgid "Billion"
-msgstr "Rechnung ausstellen"
+msgstr "Milliarde"
 
-#: ../src/app-utils/gnc-ui-util.c:1589
-#, fuzzy
+#. Translators: This is the word for the number 10^12, one million
+#. millions.
+#: ../src/app-utils/gnc-ui-util.c:1619
 msgid "Trillion"
-msgstr "Rechnung ausstellen"
+msgstr "Billion"
 
-#: ../src/app-utils/gnc-ui-util.c:1589
+#. Translators: This is the word for the number 10^15
+#: ../src/app-utils/gnc-ui-util.c:1621
 msgid "Quadrillion"
-msgstr ""
+msgstr "Billiarde"
 
-#: ../src/app-utils/gnc-ui-util.c:1589
-#, fuzzy
+#. Translators: This is the word for the number 10^18
+#: ../src/app-utils/gnc-ui-util.c:1623
 msgid "Quintillion"
-msgstr "Frage"
+msgstr "Quadrillion"
 
-#: ../src/app-utils/gnc-ui-util.c:1656
-#, fuzzy
-msgid "%s and %"
-msgstr "%s bis %s"
+#. Translators: This is for the "amount, in words" field in check
+#. printing. The first %s is the integer amount of dollars (or
+#. whatever currency), the second and third %s the cent amount as
+#. a fraction, e.g. 47/100.
+#: ../src/app-utils/gnc-ui-util.c:1699
+#, c-format
+msgid "%s and %s/%s"
+msgstr "%s und %s/%s"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -3768,12 +3764,11 @@ msgstr "Täglich (%u Mal)"
 
 #. translators: %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:454
-#, fuzzy, c-format
+#, c-format
 msgid "last %s"
-msgstr "Monatsende"
+msgstr "letzter %s"
 
 #: ../src/engine/Recurrence.c:491
-#, fuzzy
 msgid "Semi-monthly "
 msgstr "Halbmonatlich"
 
@@ -6465,9 +6460,8 @@ msgstr "Terminierte Buchungen bearbeiten"
 
 #: ../src/gnome/glade/sched-xact.glade.h:83
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:161
-#, fuzzy
 msgid "Enabled"
-msgstr "Tabelle"
+msgstr "Aktiv"
 
 #: ../src/gnome/glade/sched-xact.glade.h:84
 msgid "End Date:"
@@ -6613,9 +6607,8 @@ msgid "On the"
 msgstr "Am"
 
 #: ../src/gnome/glade/sched-xact.glade.h:132
-#, fuzzy
 msgid "Overview"
-msgstr "Kontrolle"
+msgstr "Übersicht"
 
 #: ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Part of Payment Transaction"
@@ -6759,9 +6752,8 @@ msgid "Sunday"
 msgstr "Sonntag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:167
-#, fuzzy
 msgid "Template Transaction"
-msgstr "<b>Buchungsvorlage</b>"
+msgstr "Buchungsvorlage"
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
 msgid "Template Transaction (Read-Only)"
@@ -7843,14 +7835,12 @@ msgid "Create a new scheduled transaction"
 msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:112
-#, fuzzy
 msgid "Edit the selected scheduled transaction"
-msgstr "Ausgewählte terminierte Buchung löschen?"
+msgstr "Ausgewählte terminierte Buchung bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:114
-#, fuzzy
 msgid "Delete the selected scheduled transaction"
-msgstr "Ausgewählte terminierte Buchung löschen?"
+msgstr "Ausgewählte terminierte Buchung löschen"
 
 #: ../src/gnome/gnc-plugin-register.c:48
 msgid "_General Ledger"
@@ -23034,47 +23024,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Debug-Modus aktivieren"
-
-#~ msgid "<b>Recurrence Frequency</b>"
-#~ msgstr "<b>Häufigkeit der Wiederholung</b>"
-
-#~ msgid "Bi-Weekly"
-#~ msgstr "Zweiwöchentlich"
-
-#~ msgid "Daily [M-F]"
-#~ msgstr "Täglich [Mo-Fr]"
-
-#~ msgid "End "
-#~ msgstr "Ende "
-
-#~ msgid "Occuring in"
-#~ msgstr "In den Monaten"
-
-#~ msgid "Select initial date, above."
-#~ msgstr "Wählen Sie oben ein Anfangsdatum."
-
-#~ msgid "Semi-Yearly"
-#~ msgstr "Halbjährlich"
-
-#~ msgid "Tri-Yearly"
-#~ msgstr "Dreimal pro Jahr"
-
-#~ msgid "year(s)."
-#~ msgstr "Jahre."
-
-#, fuzzy
-#~ msgid "<b>Close Button</b>"
-#~ msgstr "<b>Farben</b>"
-
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "Beim Laden der URL ist ein Fehler aufgetreten."
-
-#~ msgid "Error message"
-#~ msgstr "Fehlermeldung"
-
-#, fuzzy
-#~ msgid "Select an DTAUS file to process"
-#~ msgstr "Zu verarbeitende MT940-Datei auswählen"
