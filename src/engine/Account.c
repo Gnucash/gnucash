@@ -569,7 +569,7 @@ gnc_account_create_root (QofBook *book)
   rpriv = GET_PRIVATE(root);
   xaccAccountBeginEdit(root);
   rpriv->type = ACCT_TYPE_ROOT;
-  CACHE_REPLACE(rpriv->accountName, _("Root Account"));
+  CACHE_REPLACE(rpriv->accountName, "Root Account");
   xaccAccountCommitEdit(root);
   gnc_book_set_root_account(book, root);
   return root;
