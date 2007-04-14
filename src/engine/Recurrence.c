@@ -488,13 +488,14 @@ recurrenceListToCompactString(GList *rs)
                           recurrenceGetMultiplier(first), recurrenceGetMultiplier(second));
             }
 
-            g_string_printf(buf, _("Semi-monthly "));
+            g_string_printf(buf, _("Semi-monthly"));
+            g_string_append_printf(buf, " ");
             if (recurrenceGetMultiplier(first) > 1)
             {
                 /* translators: %u is the recurrence multiplier */
                 g_string_append_printf(buf, _(" (x%u)"), recurrenceGetMultiplier(first));
             }
-            g_string_append_printf(buf, _(": "));
+            g_string_append_printf(buf, ": ");
             _monthly_append_when(first, buf);
             g_string_append_printf(buf, ", ");
             _monthly_append_when(second, buf);
