@@ -3458,7 +3458,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 
-	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
+	logo = gnc_gnome_get_gdkpixbuf ("gnucash-icon-48x48.png");
 
 	authors = get_file_strsplit("doc/AUTHORS");
 	documenters = get_file_strsplit("doc/DOCUMENTERS");

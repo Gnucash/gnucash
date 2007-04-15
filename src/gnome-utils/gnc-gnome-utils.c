@@ -196,7 +196,6 @@ gnc_gtk_add_rc_file (void)
 void
 gnc_gnome_init (int argc, char **argv, const char * version)
 {
-  char *fullname;
   GError *error = NULL;
   gchar *prefix = gnc_path_get_prefix ();
   gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
@@ -226,14 +225,38 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
   /* use custom icon */
-  fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");
-  if (fullname) {
-    gtk_window_set_default_icon_from_file (fullname, &error);
-    g_free(fullname);
-    if (error) {
-      PERR ("Could not set default icon: %s", error->message);
-      g_error_free (error);
+  {
+    int idx;
+    char *icon_filenames[] = {"gnucash-icon-16x16.png",
+                              "gnucash-icon-32x32.png",
+                              "gnucash-icon-48x48.png",
+                              NULL};
+    GList *icons = NULL;
+    char *fullname, *name_iter;
+
+    for (idx = 0; icon_filenames[idx] != NULL; idx++) {
+      GdkPixbuf *buf = NULL;
+
+      fullname = gnc_gnome_locate_pixmap(icon_filenames[idx]);
+      if (fullname == NULL) {
+        g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
+        continue;
+      }
+        
+      buf = gnc_gnome_get_gdkpixbuf(fullname);
+      if (buf == NULL)
+      {
+        g_warning("error loading image from [%s]", fullname);
+        g_free(fullname);
+        continue;
+      }
+      g_free(fullname);
+      icons = g_list_append(icons, buf);
     }
+
+    gtk_window_set_default_icon_list(icons);
+    g_list_foreach(icons, (GFunc)g_object_unref, NULL);
+    g_list_free(icons);
   }
 
   druid_gconf_install_check_schemas();
