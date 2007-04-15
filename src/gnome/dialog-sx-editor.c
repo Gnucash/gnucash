@@ -94,7 +94,7 @@ static gint _sx_engine_event_handler_id = -1;
 #define NUM_LEDGER_LINES_DEFAULT 6
 
 #define EX_CAL_NUM_MONTHS 6
-#define EX_CAL_MO_PER_COL 2
+#define EX_CAL_MO_PER_COL 3
 
 #define GNC_D_WIDTH 25
 #define GNC_D_BUF_WIDTH 26
