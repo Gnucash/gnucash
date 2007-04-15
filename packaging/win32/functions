@@ -1,3 +1,6 @@
+[ "$__SOURCED_FUNCTIONS" ] && return
+__SOURCED_FUNCTIONS=1
+
 function add_step() { steps=("${steps[@]}" "$@"); }
 function quiet() { "$@" &>/dev/null; }
 

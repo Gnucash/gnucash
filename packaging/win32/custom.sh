@@ -2,6 +2,9 @@
 #
 # all directories should be without spaces!
 
+[ "$__SOURCED_CUSTOM_SH" ] && return
+__SOURCED_CUSTOM_SH=1
+
 GLOBAL_DIR=c:\\soft
 TMP_DIR=$GLOBAL_DIR\\tmp
 DOWNLOAD_DIR=$GLOBAL_DIR\\downloads
