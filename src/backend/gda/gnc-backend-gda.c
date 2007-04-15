@@ -203,6 +203,7 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+    g_return_if_fail( g_ascii_strcasecmp( type, GNC_ID_BOOK ) != 0 );
 
     if( pData->initial_load != NULL ) {
         (pData->initial_load)( be_data->be );
@@ -214,6 +215,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     gda_backend be_data;
+    GncGdaDataType_t* pData;
 
     ENTER( "be=%p, book=%p", be, book );
 
@@ -223,12 +225,11 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     /* Load any initial stuff */
     be->loading = TRUE;
     
-#if 0
     /* Some of this needs to happen in a certain order */
-    initial_load_cb( GNC_ID_BOOK,
-		    qof_object_lookup_backend( GNC_ID_BOOK, GNC_GDA_BACKEND ),
-                    &be_data );
-#endif
+    pData = qof_object_lookup_backend( GNC_ID_BOOK, GNC_GDA_BACKEND );
+    if( pData->initial_load != NULL ) {
+        (pData->initial_load)( be );
+    }
 
     be_data.ok = FALSE;
     be_data.be = be;

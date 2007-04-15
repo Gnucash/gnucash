@@ -47,6 +47,8 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+static void commit_book( GncGdaBackend* be, QofInstance* inst );
+
 static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
 static void set_root_account_guid( gpointer pObject, gpointer pValue );
 static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
@@ -153,6 +155,11 @@ load_books( GncGdaBackend* be )
         for( r = 0; r < numRows; r++ ) {
             (void)load_book( be, pModel, r, NULL );
         }
+
+		// If there are no rows, try committing the book
+		if( numRows == 0 ) {
+	    	commit_book( be, QOF_INSTANCE( be->primary_book ) );
+		}
     }
 }
 
