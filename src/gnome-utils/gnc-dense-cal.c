@@ -331,6 +331,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
         gtk_container_add(GTK_CONTAINER(dcal->transPopup), vbox);
 
+        gtk_window_set_resizable(GTK_WINDOW(dcal->transPopup), FALSE);
+
         gtk_widget_realize(GTK_WIDGET(dcal->transPopup));
     }
 
@@ -1132,6 +1134,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // trick with a bit of flicker.
         gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
         populate_hover_window(dcal, doc);
+        gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
         gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
     }
@@ -1168,6 +1171,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     if (doc >= 0)
     {
         populate_hover_window(dcal, doc);
+        gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
     }
     else
