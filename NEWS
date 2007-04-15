@@ -1,6 +1,134 @@
 Version history:
 ------- -------
 
+ 2.1.0 - 14 Apr 2007
+ 	 o Welcome to GnuCash 2.1.0 aka "Opening Windows" the first of
+	 several unstable releases of the GnuCash Open Source Accounting
+	 Software which will eventually lead to the stable version 2.2.0. This
+	 release is the very first of to support Windows as a platform and is
+	 intended for developers and adventurous testers who want to help
+	 tracking down bugs.
+	 o WARNING WARNING WARNING - Make sure you make backups of any files
+	 used in testing versions of GnuCash in the 2.1.x series. Although the
+	 developers go to great lengths to ensure that no data will be lost we
+	 cannot guarentee that your data will not be affected if for some
+	 reason GnuCash crashes in testing these releases.
+	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
+	 to you. Then post any bugs you find to bugzilla
+	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 o If you have the urge to help beyond testing please get involved in
+	 the discussions on the GnuCash mailing lists which you will find at
+	 http://www.gnucash.org. We especially need people to help with
+	 updating the documentation as all texts refer currently to the 1.8.x
+	 series. Please see http://wiki.gnucash.org/wiki/Development on how to
+	 get involved.
+	 o PS I'm not going to list the many features changed or updated in
+	 this release because obviously there is so much that has changed.
+
+ 2.0.5 - 18 February 2007
+ 	 o Release of new stable version 2.0.5.
+	 o Fix some strings not being translated.
+	 o Use guiles native sort and record.
+	 o Adjust how payment dialog resizes.
+	 o Don't abort when F::Q fails to return a quote.
+	 o Change Russian Ruble from RUR to RUB.
+	 o Fix security problem with tmp filesystem and symlink attack.
+	 o Add French and Canadian French translation updates.
+	 o Do not crash on delete_event in new user dialog.
+	 o Add sanity checks when accessing GncPluginPage.
+	 o Make new windows the same size as the active one.
+	 o The New Turkish Lira changed from TRL to TRY in 2005.
+
+ 2.0.4 - 1 January 2007
+ 	 o Release of new stable version 2.0.4.
+	 o Correct account compatibility check with top level account.
+	 o Check for potentially failed utf8 conversion of locale strings.
+	 o Fix crash when accessing the File Properties Menu.
+	 o Avoid crash when renaming page in a page-less window.
+	 o Save and restore the visibility of the toolbar, statusbar, and
+	 summarybar.
+
+ 2.0.3 - 10 December 2006
+ 	 o Release of new stable version 2.0.3.
+	 o Core changes;
+	 - Fix for crashes on Solaris and Windows.
+	 - Fix for crash on quit during save.
+	 - Fix a bug so that blank transactions are marked as pending.
+	 - When progress bar is showing, do not make menus and toolbars
+	   insensitive, but rather the underlying action groups.
+	 - Save window size and position of the transfer dialog.
+	 o Scheduled Transactions changes;
+	 - Fix for UTF-8 bug in month name.
+	 o Import changes;
+	 - Fix missing date when reconciling from HBCI.
+	 o Reports changes;
+	 - Fix some scheme inexact errors.
+	 o Help changes;
+	 - Inform the user about 'gnucash-docs' package when Help is selected
+	   with no content.
+	 o Translations;
+	 - Updated British English, French, German translation.
+
+ 2.0.2 - 08 October 2006
+ 	 o Release of new stable version 2.0.2 
+	 o Configure changes;
+	 - Find absolute path of gconftool-2 during configure. Make gconftool
+	   rules to fail if gconftool-2 could not be found.
+	 - Fix Makefiles for .schemas file installation.
+	 o Core changes;
+	 - various: String fixes that have been delayed due to the string
+	   freeze.
+	 - Update so that bug-buddy 2.16 will still allow you to file bugs
+	   against gnucash.
+	 - Add a tip for raising the accounts menu in a register page.
+	 - Maintain the accounthierarchy when reparenting the descendants of a
+	   deleted account.
+	 - If the file type wasn't recognized, check whether this failed
+	   because of no read permission and give appropriate user feedback.
+	 - Avoid crash from opening transaction in more than one register.
+	 - Add the ability to override the default sort.
+	 o Import Changes;
+	 - Improve wording for XML data file import druid.
+	 - Replace exact comparison of doubles by checking for a small enough
+	   difference.
+	 - Double-check really every string from aqbanking for valid utf-8
+	   characters.
+	 o Translations;
+	 - Updated Hungarian translation
+	 - Updated complete Nepali translation
+	 - Updated French translation
+
+ 2.0.1 - 30 July 2006
+ 	 o Release of new stable version 2.0.1
+	 o Configure changes;
+	 - Check for (g-wrap) module, apparently some distributions ship
+	   g-wrap-config separately from the g-wrap.scm guile module.
+	 - Check for SLIB.
+	 o Core changes;
+	 - Correctly set column sort orders from gconf.
+	 - Allow proper compile/install from tarball using separate builddir.
+	 o Import Changes;
+	 - Fixed bug where OFX/HBCI imports loose spaces in descriptions
+	 - Ignore any unknown !Option in QIF files that are being imported.
+	 - Allow comma-radix numbers without a radix. I.e., allow "17.500" to
+	   be parsed either as "seventeen and a half" or as "seventeen thousand
+	   five hundred".  Note that numbers STILL default to decimal-radix
+	   instead of asking the user to choose.
+	 - Replace the hbox separating debits from credits in the
+	   reconciliation window by a homogeneous table.
+	 - Remove obsolete buttons for aqbanking/hbci setup that are unneeded.
+	 o Business changes;
+	 - Fixed problem when booking an invoice with account name using
+	   account separator character.
+	 - Set the summary bar values when the invoice window is first opened.
+	 - Properly round invoice entries and totals.
+	 o Scheduled Transactions changes;
+	 - Changed Since-Last-Run default to automatically run at GnuCash
+	   start.
+	 o Reports changes;
+	 - Change cmdline warning into an actual user's error dialog when user
+	   attempts to save a report with the same name as an existing report.
+	 
  2.0.0 - 9 July 2006
  	 o Release of new stable version 2.0.0.
 	 o GnuCash 2.0 is based on state-of-the-art gtk2 GUI technology.
