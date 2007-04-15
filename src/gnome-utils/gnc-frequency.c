@@ -181,9 +181,10 @@ gnc_frequency_init(GncFrequency *gf)
     gf->startDate = GNC_DATE_EDIT(gnc_date_edit_new(time(NULL), FALSE, FALSE));
     /* Add the new widget to the table. */
     {
+        gint dont_expand_or_fill = 0;
         GtkWidget *table = glade_xml_get_widget(gf->gxml, "gncfreq_table");
         gtk_table_attach(GTK_TABLE(table), GTK_WIDGET(gf->startDate),
-                         1, 2, 1, 2, (GTK_EXPAND | GTK_FILL), 0,
+                         1, 2, 1, 2, dont_expand_or_fill, 0,
                          0, 0);
     }
     vb = GTK_VBOX(glade_xml_get_widget(gf->gxml, "gncfreq_vbox"));

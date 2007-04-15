@@ -1150,6 +1150,7 @@ Monthly</property>
 		  <property name="right_attach">2</property>
 		  <property name="top_attach">0</property>
 		  <property name="bottom_attach">1</property>
+		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
@@ -1278,85 +1279,72 @@ Monthly</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox108">
+		<widget class="GtkHBox" id="hbox115">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
+		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox115">
+		    <widget class="GtkLabel" id="label847746">
 		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="label" translatable="yes">Every </property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_RIGHT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">1</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">4</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
-		      <child>
-			<widget class="GtkLabel" id="label847746">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Every </property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_RIGHT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">1</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">4</property>
-			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
+		  <child>
+		    <widget class="GtkSpinButton" id="daily_spin">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="climb_rate">1</property>
+		      <property name="digits">0</property>
+		      <property name="numeric">True</property>
+		      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+		      <property name="snap_to_ticks">True</property>
+		      <property name="wrap">False</property>
+		      <property name="adjustment">1 1 365 1 10 10</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
-		      <child>
-			<widget class="GtkSpinButton" id="daily_spin">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="climb_rate">1</property>
-			  <property name="digits">0</property>
-			  <property name="numeric">True</property>
-			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			  <property name="snap_to_ticks">True</property>
-			  <property name="wrap">False</property>
-			  <property name="adjustment">1 1 365 1 10 10</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label847747">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">days.</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">5</property>
-			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
+		  <child>
+		    <widget class="GtkLabel" id="label847747">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">days.</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">5</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -1403,7 +1391,7 @@ Monthly</property>
 		  <child>
 		    <widget class="GtkHBox" id="hbox110">
 		      <property name="visible">True</property>
-		      <property name="homogeneous">True</property>
+		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
 
 		      <child>
@@ -1426,7 +1414,7 @@ Monthly</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
 			</packing>
 		      </child>
@@ -1702,7 +1690,7 @@ Monthly</property>
 		</widget>
 		<packing>
 		  <property name="tab_expand">False</property>
-		  <property name="tab_fill">True</property>
+		  <property name="tab_fill">False</property>
 		</packing>
 	      </child>
 
@@ -1745,7 +1733,7 @@ Monthly</property>
 		      <child>
 			<widget class="GtkHBox" id="hbox126">
 			  <property name="visible">True</property>
-			  <property name="homogeneous">True</property>
+			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
@@ -2053,7 +2041,7 @@ Last Sunday</property>
 		      <child>
 			<widget class="GtkHBox" id="hbox124">
 			  <property name="visible">True</property>
-			  <property name="homogeneous">True</property>
+			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
@@ -2076,7 +2064,7 @@ Last Sunday</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">True</property>
+			      <property name="expand">False</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
@@ -2120,7 +2108,7 @@ Last Sunday</property>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">True</property>
+			      <property name="expand">False</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
