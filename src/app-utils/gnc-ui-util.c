@@ -1575,16 +1575,14 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 
 #define FUDGE .00001
 
-/* Sigh. This (from r15709) is a translators/i18nator's nightmare. I'd
+/* This function is basically untranslatable. I'd
    guess out of the 29 translations we have, 20 will have their number
    wordings in a totally different way than English has (not to
    mention gender-dependent number endings). Which means this
    word-by-word translation will be useless or even plain
-   wrong. However, in many of those countries there might be no need
-   for check printing with amounts in words anyway, which means many
-   of those languages probably can ignore this whole section
-   altogether. Let's simply pretend a word-by-word translation were
-   "almost" correct. cstim, 2007-04-14. */
+   wrong. For this reason, we don't even start to pretend a
+   word-by-word translation would be of any use, so we don't mark any
+   of these strings for translation. cstim, 2007-04-15. */
 static gchar *small_numbers[] = {
   /* Translators: This section is for generating the "amount, in
      words" field when printing a check. This function gets the
@@ -1592,35 +1590,35 @@ static gchar *small_numbers[] = {
      languages. Decide for yourself whether the check printing is
      actually needed in your language; if not, you can safely skip the
      translation of all of these strings.  */
-  N_("Zero"), N_("One"), N_("Two"), N_("Three"), N_("Four"),
-  N_("Five"), N_("Six"), N_("Seven"), N_("Eight"), N_("Nine"),
-  N_("Ten"), N_("Eleven"), N_("Twelve"), N_("Thirteen"), N_("Fourteen"),
-  N_("Fifteen"), N_("Sixteen"), N_("Seventeen"), N_("Eighteen"), N_("Nineteen"),
-  N_("Twenty")};
+  "Zero", "One", "Two", "Three", "Four",
+  "Five", "Six", "Seven", "Eight", "Nine",
+  "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen",
+  "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
+  "Twenty"};
 static gchar *medium_numbers[] = {
-  N_("Zero"), N_("Ten"), N_("Twenty"), N_("Thirty"), N_("Forty"),
-  N_("Fifty"), N_("Sixty"), N_("Seventy"), N_("Eighty"), N_("Ninety")};
+  "Zero", "Ten", "Twenty", "Thirty", "Forty",
+  "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
 static gchar *big_numbers[] = {
   /* Translators: This is the word for the number 10^2 */
-  N_("Hundred"),
+  "Hundred",
   /* Translators: This is the word for the number 10^3 */
-  N_("Thousand"),
+  "Thousand",
   /* Translators: This is the word for the number 10^6, one thousand
      thousands. */
-  N_("Million"),
+  "Million",
   /* Translators: This is the word for the number 10^9, one thousand
      millions. WATCH OUT: In British english and many other languages
      this word is used for 10^12 which is one million millions! In
      contrast to this, here in GnuCash this is used in the American
      english meaning of 10^9.  */
-  N_("Billion"),
+  "Billion",
   /* Translators: This is the word for the number 10^12, one million
      millions. */
-  N_("Trillion"),
+  "Trillion",
   /* Translators: This is the word for the number 10^15 */
-  N_("Quadrillion"),
+  "Quadrillion",
   /* Translators: This is the word for the number 10^18 */
-  N_("Quintillion")};
+  "Quintillion"};
 
 static gchar *
 integer_to_words(gint64 val)
@@ -1696,7 +1694,7 @@ number_to_words(gdouble val, gint64 denom)
        printing. The first %s is the integer amount of dollars (or
        whatever currency), the second and third %s the cent amount as
        a fraction, e.g. 47/100.  */
-    g_strdup_printf(_("%s and %s/%s"),
+    g_strdup_printf("%s and %s/%s",
 		    int_string, nomin_string, denom_string);
   g_free(int_string);
   g_free(nomin_string);
