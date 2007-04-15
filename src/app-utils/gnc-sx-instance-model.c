@@ -131,7 +131,7 @@ static GncSxVariable*
 gnc_sx_variable_new(gchar *name)
 {
     GncSxVariable *var = g_new0(GncSxVariable, 1);
-    var->name = name;
+    var->name = g_strdup(name);
     var->value = gnc_numeric_error(GNC_ERROR_ARG);
     var->editable = TRUE;
     return var;
@@ -144,6 +144,22 @@ gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable)
     var->value = value;
     var->editable = editable;
     return var;
+}
+
+static GncSxVariable*
+gnc_sx_variable_new_copy(GncSxVariable *to_copy)
+{
+    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
+    var->value = to_copy->value;
+    var->editable = to_copy->editable;
+    return var;
+}
+
+void
+gnc_sx_variable_free(GncSxVariable *var)
+{
+    g_free(var->name);
+    g_free(var);
 }
 
 static gint
@@ -257,22 +273,6 @@ _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_da
                                        | GNC_RND_FLOOR);
 }
 
-static GncSxVariable*
-gnc_sx_variable_new_copy(GncSxVariable *to_copy)
-{
-    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
-    var->value = to_copy->value;
-    var->editable = to_copy->editable;
-    return var;
-}
-
-void
-gnc_sx_variable_free(GncSxVariable *var)
-{
-    // g_free(var->name);
-    g_free(var);
-}
-
 void
 gnc_sx_randomize_variables(GHashTable *vars)
 {
@@ -301,13 +301,15 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     if (! parent->variable_names_parsed)
     {
-        parent->variable_names = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+        parent->variable_names = g_hash_table_new_full(
+            g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
         gnc_sx_get_variables(parent->sx, parent->variable_names);
         g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
         parent->variable_names_parsed = TRUE;
     }
 
-    rtn->variable_bindings = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+    rtn->variable_bindings = g_hash_table_new_full(
+        g_str_hash, g_str_equal, NULL, (GDestroyNotify)gnc_sx_variable_free);
     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
 
     {
