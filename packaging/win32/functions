@@ -2,6 +2,17 @@
 __SOURCED_FUNCTIONS=1
 
 function add_step() { steps=("${steps[@]}" "$@"); }
+function remove_step() {
+    while [ "$1" ]; do
+        _steps=("${steps[@]}")
+        unset steps
+        for _step in "${_steps[@]}"; do
+            [ "$_step" != "$1" ] && add_step $_step
+        done
+        shift
+    done
+    unset _steps
+}
 function quiet() { "$@" &>/dev/null; }
 
 # c:/dir/sub
