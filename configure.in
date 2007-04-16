@@ -1422,7 +1422,8 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libqof/backend/Makefile
           lib/libqof/backend/file/Makefile
           packaging/Makefile
-	  packaging/win32/gnucash.iss
+          packaging/win32/Makefile
+          packaging/win32/gnucash.iss
           src/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
