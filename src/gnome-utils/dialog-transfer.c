@@ -85,11 +85,10 @@ struct _xferDialog
 
   XferDirection quickfill;	/* direction match on the account instead. */
 
-  /* stored data for the description quickfill functionality */
+  /* stored data for the description quickfill selection function */
   gint desc_start_selection;
   gint desc_end_selection;
-  gint desc_cursor_position;
-  gboolean desc_didquickfill;
+  guint desc_selection_source_id;
 
   GtkWidget * transferinfo_label;
 
@@ -644,151 +643,83 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   return( changed );
 }
 
-/* The insert_cb will do the insert and quickfill if possible, but won't
- * set the selection or cursor position since the entry widget seems to
- * change these itself.  Instead, a flag will be set and either the
- * key_press_cb or the button_release_cb will set the selection and
- * cursor position stored off from the insert_cb.
+static gboolean
+idle_select_region(gpointer data)
+{
+  XferDialog *xferData = data;
+  g_return_val_if_fail(xferData, FALSE);
+
+  gtk_editable_select_region(GTK_EDITABLE(xferData->description_entry),
+			     xferData->desc_start_selection,
+			     xferData->desc_end_selection);
+
+  xferData->desc_selection_source_id = 0;
+  return FALSE;
+}
+
+/* The insert_cb will do the insert and quickfill if possible and set the
+ * cursor position accordingly.  It will not set the selection but will register
+ * idle_select_region to do that once the program returns to its main loop.
  */
 static void
-gnc_xfer_description_insert_cb(GtkEntry *entry,
+gnc_xfer_description_insert_cb(GtkEditable *editable,
                                const gchar *insert_text,
                                const gint insert_text_len,
                                gint *start_pos,
                                XferDialog *xferData)
 {
-  GString *change_text_gs, *new_text_gs;
-  glong old_text_chars, new_text_chars;
-  const char *old_text, *match_str = NULL;
+  gchar *prefix, *suffix, *new_text;
   QuickFill *match;
-  int i;
-  const char *c;
-  gunichar uc;
+  const gchar *match_str;
+  gint prefix_len, new_text_len, match_str_len;
 
-  xferData->desc_didquickfill = FALSE;
-
-  if ( insert_text_len <= 0 )
+  if (insert_text_len <= 0)
     return;
 
-  old_text = gtk_entry_get_text (entry);
-  if (!old_text)
-    old_text = "";
+  suffix = gtk_editable_get_chars(editable, *start_pos, -1);
 
   /* If we are inserting in the middle, do nothing */
-  old_text_chars = g_utf8_strlen (old_text, -1);
-  if( *start_pos < old_text_chars )
+  if (*suffix) {
+    g_free(suffix);
     return;
-
-  change_text_gs = g_string_new_len (insert_text, insert_text_len);
-
-  /* Construct what the new value of the text entry will be */
-  new_text_gs = g_string_new ("");
-  
-  i = 0;
-  c = old_text;
-  //Copy old text up to insert position
-  while ( *c && ( i < *start_pos ) )
-  {
-    uc = g_utf8_get_char ( c );
-    g_string_append_unichar ( new_text_gs, uc );
-    c = g_utf8_next_char ( c );
-    i++;      
   }
+  g_free(suffix);
 
-  //Copy inserted text
-  g_string_append ( new_text_gs, change_text_gs->str );
+  prefix = gtk_editable_get_chars(editable, 0, *start_pos);
+  new_text = g_strconcat(prefix, insert_text, (gchar*) NULL);
+  prefix_len = strlen(prefix);
+  new_text_len = prefix_len + insert_text_len;
+  g_free(prefix);
 
-  //Copy old text after insert position
-  while ( *c )
+  if ((match = gnc_quickfill_get_string_match(xferData->qf, new_text))
+      && (match_str = gnc_quickfill_string(match))
+      && ((match_str_len = strlen(match_str)) > new_text_len))
   {
-    uc = g_utf8_get_char ( c );
-    g_string_append_unichar ( new_text_gs, uc );
-    c = g_utf8_next_char ( c );
-  }
-
-  if( ( match = gnc_quickfill_get_string_match( xferData->qf, new_text_gs->str ) )
-   && ( match_str = gnc_quickfill_string( match ) ) 
-   && safe_strcmp( new_text_gs->str, old_text ) )
-  {
-    g_signal_handlers_block_matched (G_OBJECT (entry),
+    g_signal_handlers_block_matched (G_OBJECT (editable),
 				     G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, xferData);
 
-    gtk_entry_set_text( entry, match_str );
+    gtk_editable_insert_text(editable,
+			     match_str + prefix_len,
+			     match_str_len - prefix_len,
+			     start_pos);
 
-    g_signal_handlers_unblock_matched (G_OBJECT (entry),
+    g_signal_handlers_unblock_matched (G_OBJECT (editable),
 				       G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, xferData);
 
     /* stop the current insert */
-    g_signal_stop_emission_by_name (G_OBJECT (entry), "insert_text");
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
 
-    /* This doesn't seem to fix the selection problems, why? */
-    gtk_editable_select_region (GTK_EDITABLE(entry), 0, 0);
+    /* set the position */
+    *start_pos = g_utf8_strlen(new_text, -1);
 
-    /* Store off data for the key_press_cb or
-     * the button_release_cb to make use of. */
-    new_text_chars = g_utf8_strlen (new_text_gs->str, -1);
-    xferData->desc_cursor_position = new_text_chars;
-    xferData->desc_start_selection = new_text_chars;
+    /* select region on idle, because it would be reset once this function
+       finishes */
+    xferData->desc_start_selection = *start_pos;
     xferData->desc_end_selection = -1;
-    xferData->desc_didquickfill = TRUE;
+    xferData->desc_selection_source_id = g_idle_add(idle_select_region,
+						    xferData);
   }
-
-  g_string_free (change_text_gs, TRUE);
-  g_string_free (new_text_gs, TRUE);
-  
-}
-
-/* This common post-key press and post-button release handler fixes
- * up the selection and cursor position changes that may be necessary
- * if a quickfill occurred in the insert_cb.
- */
-static gboolean
-common_post_quickfill_handler(guint32 time, XferDialog *xferData )
-{
-  GtkEntry *entry = GTK_ENTRY(xferData->description_entry);
-  gint current_pos;
-  gint current_start;
-  gint current_end;
-  gboolean did_something = FALSE;   /* was the selection or position changed? */
-
-  ENTER(" ");
-  current_pos = gtk_editable_get_position( GTK_EDITABLE(entry) );
-  gtk_editable_get_selection_bounds( GTK_EDITABLE(entry),
-				     &current_start,
-				     &current_end);
-  if( current_pos != xferData->desc_cursor_position )
-  {
-    gtk_editable_set_position( GTK_EDITABLE(entry),
-			       xferData->desc_cursor_position );
-    did_something = TRUE;
-  }
-
-  if( ( current_start != xferData->desc_start_selection ||
-        current_end   != xferData->desc_end_selection      ) &&
-      ( xferData->desc_start_selection != xferData->desc_end_selection ||
-        xferData->desc_start_selection == 0 ) )
-  {
-    gtk_editable_select_region( GTK_EDITABLE(entry),
-				xferData->desc_start_selection,
-				xferData->desc_end_selection );
-    did_something = TRUE;
-  }
-
-  if( did_something ) 
-  {
-    /* Make sure we don't try to change things again based on these values. */
-    xferData->desc_start_selection = current_start;
-    xferData->desc_end_selection = current_end;
-    xferData->desc_cursor_position = current_pos;
-  }
-
-  /* Make sure a new quickfill must occur before coming back through here,
-   * whether or not we actually did anything in this function.
-   */
-  xferData->desc_didquickfill = FALSE;
-
-  LEAVE("did_something=%d", did_something);
-  return( did_something );
+  g_free(new_text);
 }
 
 static gboolean
@@ -800,27 +731,15 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
 
   /* Most "special" keys are allowed to be handled directly by
    * the entry's key press handler, but in some cases that doesn't
-   * seem to work right, so handle it here.
+   * seem to work right, so handle them here.
    */
   ENTER(" ");
   switch( event->keyval )
   {
-    case GDK_Left:        /* right/left cause a focus change which is bad */
-    case GDK_KP_Left:
-    case GDK_Right:
-    case GDK_KP_Right:
-      done_with_input = TRUE;
-      break;
-
-    case GDK_Return:      /* On the first activate, need to
-                           * do the quickfill completion */
+    case GDK_Return:
     case GDK_KP_Enter:
-      if( gnc_xfer_dialog_quickfill( xferData ) )
-        done_with_input = TRUE;
-      /* Else if no updates were done, allow the keypress to go through,
-       * which will result in an activate signal for the dialog.
-       */
-
+      gnc_xfer_dialog_quickfill( xferData );
+      /* NOT done with input, activate the default button of the dialog. */
       break;
 
     case GDK_Tab:
@@ -838,33 +757,8 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
       break;
   }
 
-  /* Common handling for both key presses and button releases
-   * to fix up the selection and cursor position at this point.
-   */
-  if( !done_with_input && xferData->desc_didquickfill )
-    done_with_input = common_post_quickfill_handler( event->time, xferData );
-
-  if( done_with_input )
-    g_signal_stop_emission_by_name (G_OBJECT (entry), "key_press_event");
-
   LEAVE("done=%d", done_with_input);
   return( done_with_input );
-}
-
-static gboolean
-gnc_xfer_description_button_release_cb( GtkEntry *entry,
-                                        GdkEventButton *event,
-                                        XferDialog *xferData )
-{
-  if( xferData->desc_didquickfill )
-  {
-    /* Common handling for both key presses and button presses
-     * to fix up the selection and cursor position at this point.
-     */
-    common_post_quickfill_handler( event->time, xferData );
-  }
-
-  return( FALSE );
 }
 
 /*** End of quickfill-specific callbacks ***/
@@ -1622,6 +1516,9 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
   gnc_quickfill_destroy (xferData->qf);
   xferData->qf = NULL;
 
+  if (xferData->desc_selection_source_id)
+    g_source_remove (xferData->desc_selection_source_id);
+
   g_free(xferData);
 
   DEBUG("xfer dialog destroyed");
@@ -1705,10 +1602,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     /* Get signals from the Description for quickfill. */
     g_signal_connect (G_OBJECT (entry), "insert_text",
 		      G_CALLBACK (gnc_xfer_description_insert_cb), xferData);
-    g_signal_connect (G_OBJECT (entry), "button_release_event",
-		      G_CALLBACK (gnc_xfer_description_button_release_cb), xferData);
-    g_signal_connect_after (G_OBJECT (entry), "key_press_event",
-			    G_CALLBACK (gnc_xfer_description_key_press_cb), xferData);
+    g_signal_connect (G_OBJECT (entry), "key_press_event",
+		      G_CALLBACK (gnc_xfer_description_key_press_cb), xferData);
 
     entry = glade_xml_get_widget (xml, "memo_entry");
     xferData->memo_entry = entry;
@@ -1862,10 +1757,9 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 
   xferData = g_new0 (XferDialog, 1);
 
-  xferData->desc_cursor_position = 0;
   xferData->desc_start_selection = 0;
   xferData->desc_end_selection = 0;
-  xferData->desc_didquickfill = FALSE;
+  xferData->desc_selection_source_id = 0;
   xferData->quickfill = XFER_DIALOG_FROM;
   xferData->transaction_cb = NULL;
 
