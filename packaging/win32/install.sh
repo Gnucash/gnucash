@@ -828,7 +828,7 @@ function inst_aqbanking() {
 	qpushd $TMP_UDIR/aqbanking-*
 	    _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS}"
 	    _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
-	    if test x$aqbanking_with_qt = xyes; then
+	    if test x$AQBANKING_WITH_QT = xyes; then
 		inst_qt4
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \

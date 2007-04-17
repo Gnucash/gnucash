@@ -1,34 +1,54 @@
 #!/bin/sh # for emacs
 #
 # Instead of just editing this file, it is recommended to create a file `custom'
-# in the same directory that will be read in at the end of this script.
+# in the same directory that will be read in at the beginning of this script.
 #
-# You can use the full power of bash 2.04 scripting.  In particular you can
-# override any variable set here, add steps (use add_step <step> and implement
-# function <step>()), remove steps (use remove_step <step>) and more.
-# Keep in mind that this might render install.sh & friends non-functional.
+# You can use the full power of bash 2.04 scripting.  In particular, you can
+# set any variable mentioned here to something non-empty and it will not be
+# overridden later.  However, you must define all variables you make use of
+# yourself.  Expressions registered with late_eval are executed at the end of
+# the script.
+#
+# Steps will be executed in the order they were added.  They can only be added
+# at most once if they have not been blocked already (adding implies blocking).
+# To add a custom step <s>, just implement "function <s>()".  Keep in mind that
+# blocking or reordering may render install.sh & friends non-functional.
 #
 # Note: All directories must be without spaces!
+#
+# Here is an example custom file:
+#
+# REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/trunk"
+# SF_MIRROR="http://switch.dl.sourceforge.net/sourceforge"
+# DISABLE_OPTIMIZATIONS=yes
+# AQBANKING_WITH_QT=no
+# GLOBAL_DIR=Z:\\mydir  # all directories will use this
+# late_eval 'INSTALL_DIR=$GNUCASH_DIR\\myinst'  # no need to define GNUCASH_DIR
+# block_step inst_docs
+# late_eval 'add_step greetings'
+# function greetings() { setup Greetings; }
+
 
 [ "$__SOURCED_DEFAULTS" ] && return
 __SOURCED_DEFAULTS=1
 
-GLOBAL_DIR=c:\\soft
-TMP_DIR=$GLOBAL_DIR\\tmp
-DOWNLOAD_DIR=$GLOBAL_DIR\\downloads
+[ -f "custom" ] && . custom || true
 
-GNUCASH_DIR=$GLOBAL_DIR\\gnucash
-REPOS_URL="http://svn.gnucash.org/repo/gnucash/trunk"
-REPOS_DIR=$GNUCASH_DIR\\repos
+set_default GLOBAL_DIR c:\\soft
+set_default TMP_DIR $GLOBAL_DIR\\tmp
+set_default DOWNLOAD_DIR $GLOBAL_DIR\\downloads
+
+set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
+set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
+set_default REPOS_DIR $GNUCASH_DIR\\repos
 # keep this pointing from BUILD_DIR to REPOS_DIR
-REL_REPOS_DIR=..\\repos
-BUILD_DIR=$GNUCASH_DIR\\build
-INSTALL_DIR=$GNUCASH_DIR\\inst
+set_default REL_REPOS_DIR ..\\repos
+set_default BUILD_DIR $GNUCASH_DIR\\build
+set_default INSTALL_DIR $GNUCASH_DIR\\inst
 
 ####
-cross_compile="no"
-# For cross-compiling, uncomment the following line:
-#cross_compile="yes"
+# For cross-compiling, change this to "yes"
+set_default cross_compile "no"
 
 if test "x$cross_compile" != xyes ; then
     LIBTOOLIZE=libtoolize
@@ -51,169 +71,170 @@ fi
 ####
 
 # If "yes", build without optimizations (-O0) and ease debugging
-DISABLE_OPTIMIZATIONS=no
+set_default DISABLE_OPTIMIZATIONS no
 
-MSYS_DIR=$GLOBAL_DIR\\msys
+set_default MSYS_DIR $GLOBAL_DIR\\msys
 
 # tools here means binaries runnable without other DLLs or data files
-TOOLS_DIR=$GLOBAL_DIR\\tools
-WGET_DIR=$TOOLS_DIR
+set_default TOOLS_DIR $GLOBAL_DIR\\tools
+set_default WGET_DIR $TOOLS_DIR
 #WGET=
 
-SF_MIRROR="http://heanet.dl.sourceforge.net/sourceforge"
-GTK_MIRROR="ftp.gtk.org/pub"
-GNOME_MIRROR="ftp.gnome.org/pub/gnome"
-GNOME_WIN32_URL="$GNOME_MIRROR/binaries/win32"
-GNOME_WIN32_DEPS_URL="$GNOME_WIN32_URL/dependencies"
+set_default SF_MIRROR "http://heanet.dl.sourceforge.net/sourceforge"
+set_default GTK_MIRROR "ftp.gtk.org/pub"
+set_default GNOME_MIRROR "ftp.gnome.org/pub/gnome"
+set_default GNOME_WIN32_URL "$GNOME_MIRROR/binaries/win32"
+set_default GNOME_WIN32_DEPS_URL "$GNOME_WIN32_URL/dependencies"
 
-DTK_URL="$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
+set_default DTK_URL "$SF_MIRROR/mingw/msysDTK-1.0.1.exe"
 
-MINGW_URL="$SF_MIRROR/mingw/MinGW-5.1.0.exe"
-MINGW_DIR=$GLOBAL_DIR\\mingw
+set_default MINGW_URL "$SF_MIRROR/mingw/MinGW-5.1.0.exe"
+set_default MINGW_DIR $GLOBAL_DIR\\mingw
 
-UNZIP_URL="$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
-UNZIP_DIR=$TOOLS_DIR
+set_default UNZIP_URL "$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
+set_default UNZIP_DIR $TOOLS_DIR
 
 # do not use regex-gnu or regex-spencer v3.8.g3, see bug #382852
-REGEX_URL="$GNOME_WIN32_DEPS_URL/libgnurx-2.5.zip"
-REGEX_DEV_URL="$GNOME_WIN32_DEPS_URL/libgnurx-dev-2.5.zip"
-REGEX_DIR=$GLOBAL_DIR\\regex
+set_default REGEX_URL "$GNOME_WIN32_DEPS_URL/libgnurx-2.5.zip"
+set_default REGEX_DEV_URL "$GNOME_WIN32_DEPS_URL/libgnurx-dev-2.5.zip"
+set_default REGEX_DIR $GLOBAL_DIR\\regex
 
-READLINE_BIN_URL="$SF_MIRROR/gnuwin32/readline-5.0-bin.zip"
-READLINE_LIB_URL="$SF_MIRROR/gnuwin32/readline-5.0-lib.zip"
-READLINE_DIR=$GLOBAL_DIR\\readline
+set_default READLINE_BIN_URL "$SF_MIRROR/gnuwin32/readline-5.0-bin.zip"
+set_default READLINE_LIB_URL "$SF_MIRROR/gnuwin32/readline-5.0-lib.zip"
+set_default READLINE_DIR $GLOBAL_DIR\\readline
 
-ACTIVE_PERL_URL="http://downloads.activestate.com/ActivePerl/Windows/5.6/ActivePerl-5.6.1.638-MSWin32-x86.zip"
-ACTIVE_PERL_DIR=$GLOBAL_DIR\\active-perl
+set_default ACTIVE_PERL_URL "http://downloads.activestate.com/ActivePerl/Windows/5.6/ActivePerl-5.6.1.638-MSWin32-x86.zip"
+set_default ACTIVE_PERL_DIR $GLOBAL_DIR\\active-perl
 
-AUTOCONF_URL="http://ftp.gnu.org/gnu/autoconf/autoconf-2.60.tar.bz2"
-AUTOMAKE_URL="http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.bz2"
-LIBTOOL_URL="http://ftp.gnu.org/gnu/libtool/libtool-1.5.22.tar.gz"
-AUTOTOOLS_DIR=$GLOBAL_DIR\\autotools
+set_default AUTOCONF_URL "http://ftp.gnu.org/gnu/autoconf/autoconf-2.60.tar.bz2"
+set_default AUTOMAKE_URL "http://ftp.gnu.org/gnu/automake/automake-1.9.6.tar.bz2"
+set_default LIBTOOL_URL "http://ftp.gnu.org/gnu/libtool/libtool-1.5.22.tar.gz"
+set_default AUTOTOOLS_DIR $GLOBAL_DIR\\autotools
 
-GUILE_URL="http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
-SLIB_URL="http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
-GUILE_DIR=$GLOBAL_DIR\\guile
+set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
+set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
+set_default GUILE_DIR $GLOBAL_DIR\\guile
 
-OPENSSL_BIN_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-bin.zip"
-OPENSSL_LIB_URL="$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
-OPENSSL_DIR=$GLOBAL_DIR\\openssl
+set_default OPENSSL_BIN_URL "$SF_MIRROR/gnuwin32/openssl-0.9.7c-bin.zip"
+set_default OPENSSL_LIB_URL "$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
+set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
 
-MINGW_UTILS_URL="$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
-MINGW_UTILS_DIR=$TOOLS_DIR
+set_default MINGW_UTILS_URL "$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
+set_default MINGW_UTILS_DIR $TOOLS_DIR
 
-EXETYPE_SCRIPT=`pwd`/exetype.pl
-EXETYPE_DIR=$TOOLS_DIR
+set_default EXETYPE_SCRIPT `pwd`/exetype.pl
+set_default EXETYPE_DIR $TOOLS_DIR
 
-LIBXML2_URL="http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
-LIBXSLT_URL="http://www.zlatkovic.com/pub/libxml/libxslt-1.1.19.win32.zip"
-LIBXML2_DIR=$GLOBAL_DIR\\gnome #avoid XML_FLAGS
+set_default LIBXML2_URL "http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
+set_default LIBXSLT_URL "http://www.zlatkovic.com/pub/libxml/libxslt-1.1.19.win32.zip"
+set_default LIBXML2_DIR $GLOBAL_DIR\\gnome #avoid XML_FLAGS
 
-GETTEXT_URL="$GNOME_WIN32_DEPS_URL/gettext-0.14.5.zip"
-GETTEXT_DEV_URL="$GNOME_WIN32_DEPS_URL/gettext-dev-0.14.5.zip"
-LIBICONV_URL="$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
-GLIB_URL="$GNOME_WIN32_URL/glib/2.12/glib-2.12.11.zip"
-GLIB_DEV_URL="$GNOME_WIN32_URL/glib/2.12/glib-dev-2.12.11.zip"
-LIBJPEG_URL="$GNOME_WIN32_DEPS_URL/libjpeg-6b-4.zip"
-LIBPNG_URL="$GTK_MIRROR/gtk/v2.10/win32/dependencies/libpng-1.2.8-bin.zip"
-ZLIB_URL="$GTK_MIRROR/gtk/v2.10/win32/dependencies/zlib123-dll.zip"
-PKG_CONFIG_URL="$GNOME_WIN32_DEPS_URL/pkg-config-0.20.zip"
-CAIRO_URL="$GNOME_WIN32_DEPS_URL/cairo-1.4.2.zip"
-CAIRO_DEV_URL="$GNOME_WIN32_DEPS_URL/cairo-dev-1.4.2.zip"
-EXPAT_URL="$GNOME_WIN32_DEPS_URL/expat-2.0.0.zip"
-FONTCONFIG_URL="$GNOME_WIN32_DEPS_URL/fontconfig-2.3.2-tml-20060825.zip"
-FONTCONFIG_DEV_URL="$GNOME_WIN32_DEPS_URL/fontconfig-dev-2.3.2-tml-20060825.zip"
-FREETYPE_URL="$GNOME_WIN32_DEPS_URL/freetype-2.2.1.zip"
-FREETYPE_DEV_URL="$GNOME_WIN32_DEPS_URL/freetype-dev-2.2.1.zip"
-ATK_URL="$GNOME_WIN32_URL/atk/1.12/atk-1.12.3.zip"
-ATK_DEV_URL="$GNOME_WIN32_URL/atk/1.12/atk-dev-1.12.3.zip"
-PANGO_URL="$GNOME_WIN32_URL/pango/1.16/pango-1.16.1.zip"
-PANGO_DEV_URL="$GNOME_WIN32_URL/pango/1.16/pango-dev-1.16.1.zip"
-LIBART_LGPL_URL="$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-2.3.17.zip"
-LIBART_LGPL_DEV_URL="$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.17.zip"
-GTK_URL="$GNOME_WIN32_URL/gtk+/2.10/gtk+-2.10.11.zip"
-GTK_DEV_URL="$GNOME_WIN32_URL/gtk+/2.10/gtk+-dev-2.10.11.zip"
-INTLTOOL_URL="$GNOME_WIN32_URL/intltool/0.35/intltool-0.35.5.zip"
-ORBIT2_URL="$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-2.13.3.zip"
-ORBIT2_DEV_URL="$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-dev-2.13.3.zip"
-GAIL_URL="$GNOME_WIN32_URL/gail/1.9/gail-1.9.3.zip"
-GAIL_DEV_URL="$GNOME_WIN32_URL/gail/1.9/gail-dev-1.9.3.zip"
-POPT_URL="$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"
-POPT_DEV_URL="$GNOME_WIN32_DEPS_URL/popt-dev-1.10.2-tml-20050828.zip"
-GCONF_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-2.14.0.zip"
-GCONF_DEV_URL="$GNOME_WIN32_URL/GConf/2.14/GConf-dev-2.14.0.zip"
-LIBBONOBO_URL="$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-2.16.0.zip"
-LIBBONOBO_DEV_URL="$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-dev-2.16.0.zip"
-GNOME_VFS_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2-no-openssl.zip"
-GNOME_VFS_DEV_URL="$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2-no-openssl.zip"
-LIBGNOME_URL="$GNOME_WIN32_URL/libgnome/2.16/libgnome-2.16.0-1.zip"
-LIBGNOME_DEV_URL="$GNOME_WIN32_URL/libgnome/2.16/libgnome-dev-2.16.0.zip"
-LIBGNOMECANVAS_URL="$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-2.14.0.zip"
-LIBGNOMECANVAS_DEV_URL="$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-dev-2.14.0.zip"
-LIBBONOBOUI_URL="$GNOME_WIN32_URL/libbonoboui/2.16/libbonoboui-2.16.0.zip"
-LIBBONOBOUI_DEV_URL="$GNOME_WIN32_URL/libbonoboui/2.16/libbonoboui-dev-2.16.0.zip"
-LIBGNOMEUI_URL="$GNOME_WIN32_URL/libgnomeui/2.16/libgnomeui-2.16.0.zip"
-LIBGNOMEUI_DEV_URL="$GNOME_WIN32_URL/libgnomeui/2.16/libgnomeui-dev-2.16.0.zip"
-LIBGLADE_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-2.6.0.zip"
-LIBGLADE_DEV_URL="$GNOME_WIN32_URL/libglade/2.6/libglade-dev-2.6.0.zip"
-LIBGNOMEPRINT_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-2.12.1.zip"
-LIBGNOMEPRINT_DEV_URL="$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-dev-2.12.1.zip"
-LIBGNOMEPRINTUI_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-2.12.1.zip"  # gnomeprint
-LIBGNOMEPRINTUI_DEV_URL="$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-dev-2.12.1.zip"  # gnomeprint
-GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-3.12.2.zip"  # gnomeprint
-GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-dev-3.12.2.zip"  # gnomeprint
-#GTKHTML_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-3.14.0.zip"  # not gnomeprint
-#GTKHTML_DEV_URL="$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-dev-3.14.0.zip"  # not gnomeprint
-GNOME_DIR=$GLOBAL_DIR\\gnome
+set_default GETTEXT_URL "$GNOME_WIN32_DEPS_URL/gettext-0.14.5.zip"
+set_default GETTEXT_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-dev-0.14.5.zip"
+set_default LIBICONV_URL "$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
+set_default GLIB_URL "$GNOME_WIN32_URL/glib/2.12/glib-2.12.11.zip"
+set_default GLIB_DEV_URL "$GNOME_WIN32_URL/glib/2.12/glib-dev-2.12.11.zip"
+set_default LIBJPEG_URL "$GNOME_WIN32_DEPS_URL/libjpeg-6b-4.zip"
+set_default LIBPNG_URL "$GTK_MIRROR/gtk/v2.10/win32/dependencies/libpng-1.2.8-bin.zip"
+set_default ZLIB_URL "$GTK_MIRROR/gtk/v2.10/win32/dependencies/zlib123-dll.zip"
+set_default PKG_CONFIG_URL "$GNOME_WIN32_DEPS_URL/pkg-config-0.20.zip"
+set_default CAIRO_URL "$GNOME_WIN32_DEPS_URL/cairo-1.4.2.zip"
+set_default CAIRO_DEV_URL "$GNOME_WIN32_DEPS_URL/cairo-dev-1.4.2.zip"
+set_default EXPAT_URL "$GNOME_WIN32_DEPS_URL/expat-2.0.0.zip"
+set_default FONTCONFIG_URL "$GNOME_WIN32_DEPS_URL/fontconfig-2.3.2-tml-20060825.zip"
+set_default FONTCONFIG_DEV_URL "$GNOME_WIN32_DEPS_URL/fontconfig-dev-2.3.2-tml-20060825.zip"
+set_default FREETYPE_URL "$GNOME_WIN32_DEPS_URL/freetype-2.2.1.zip"
+set_default FREETYPE_DEV_URL "$GNOME_WIN32_DEPS_URL/freetype-dev-2.2.1.zip"
+set_default ATK_URL "$GNOME_WIN32_URL/atk/1.12/atk-1.12.3.zip"
+set_default ATK_DEV_URL "$GNOME_WIN32_URL/atk/1.12/atk-dev-1.12.3.zip"
+set_default PANGO_URL "$GNOME_WIN32_URL/pango/1.16/pango-1.16.1.zip"
+set_default PANGO_DEV_URL "$GNOME_WIN32_URL/pango/1.16/pango-dev-1.16.1.zip"
+set_default LIBART_LGPL_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-2.3.17.zip"
+set_default LIBART_LGPL_DEV_URL "$GNOME_WIN32_URL/libart_lgpl/2.3/libart_lgpl-dev-2.3.17.zip"
+set_default GTK_URL "$GNOME_WIN32_URL/gtk+/2.10/gtk+-2.10.11.zip"
+set_default GTK_DEV_URL "$GNOME_WIN32_URL/gtk+/2.10/gtk+-dev-2.10.11.zip"
+set_default INTLTOOL_URL "$GNOME_WIN32_URL/intltool/0.35/intltool-0.35.5.zip"
+set_default ORBIT2_URL "$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-2.13.3.zip"
+set_default ORBIT2_DEV_URL "$GNOME_WIN32_URL/ORBit2/2.13/ORBit2-dev-2.13.3.zip"
+set_default GAIL_URL "$GNOME_WIN32_URL/gail/1.9/gail-1.9.3.zip"
+set_default GAIL_DEV_URL "$GNOME_WIN32_URL/gail/1.9/gail-dev-1.9.3.zip"
+set_default POPT_URL "$GNOME_WIN32_DEPS_URL/popt-1.10.2-tml-20050828.zip"
+set_default POPT_DEV_URL "$GNOME_WIN32_DEPS_URL/popt-dev-1.10.2-tml-20050828.zip"
+set_default GCONF_URL "$GNOME_WIN32_URL/GConf/2.14/GConf-2.14.0.zip"
+set_default GCONF_DEV_URL "$GNOME_WIN32_URL/GConf/2.14/GConf-dev-2.14.0.zip"
+set_default LIBBONOBO_URL "$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-2.16.0.zip"
+set_default LIBBONOBO_DEV_URL "$GNOME_WIN32_URL/libbonobo/2.16/libbonobo-dev-2.16.0.zip"
+set_default GNOME_VFS_URL "$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-2.14.2-no-openssl.zip"
+set_default GNOME_VFS_DEV_URL "$GNOME_WIN32_URL/gnome-vfs/2.14/gnome-vfs-dev-2.14.2-no-openssl.zip"
+set_default LIBGNOME_URL "$GNOME_WIN32_URL/libgnome/2.16/libgnome-2.16.0-1.zip"
+set_default LIBGNOME_DEV_URL "$GNOME_WIN32_URL/libgnome/2.16/libgnome-dev-2.16.0.zip"
+set_default LIBGNOMECANVAS_URL "$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-2.14.0.zip"
+set_default LIBGNOMECANVAS_DEV_URL "$GNOME_WIN32_URL/libgnomecanvas/2.14/libgnomecanvas-dev-2.14.0.zip"
+set_default LIBBONOBOUI_URL "$GNOME_WIN32_URL/libbonoboui/2.16/libbonoboui-2.16.0.zip"
+set_default LIBBONOBOUI_DEV_URL "$GNOME_WIN32_URL/libbonoboui/2.16/libbonoboui-dev-2.16.0.zip"
+set_default LIBGNOMEUI_URL "$GNOME_WIN32_URL/libgnomeui/2.16/libgnomeui-2.16.0.zip"
+set_default LIBGNOMEUI_DEV_URL "$GNOME_WIN32_URL/libgnomeui/2.16/libgnomeui-dev-2.16.0.zip"
+set_default LIBGLADE_URL "$GNOME_WIN32_URL/libglade/2.6/libglade-2.6.0.zip"
+set_default LIBGLADE_DEV_URL "$GNOME_WIN32_URL/libglade/2.6/libglade-dev-2.6.0.zip"
+set_default LIBGNOMEPRINT_URL "$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-2.12.1.zip"
+set_default LIBGNOMEPRINT_DEV_URL "$GNOME_WIN32_URL/libgnomeprint/2.12/libgnomeprint-dev-2.12.1.zip"
+set_default LIBGNOMEPRINTUI_URL "$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-2.12.1.zip"  # gnomeprint
+set_default LIBGNOMEPRINTUI_DEV_URL "$GNOME_WIN32_URL/libgnomeprintui/2.12/libgnomeprintui-dev-2.12.1.zip"  # gnomeprint
+set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-3.12.2.zip"  # gnomeprint
+set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.12/gtkhtml-dev-3.12.2.zip"  # gnomeprint
+#set_default GTKHTML_URL "$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-3.14.0.zip"  # not gnomeprint
+#set_default GTKHTML_DEV_URL "$GNOME_WIN32_URL/gtkhtml/3.14/gtkhtml-dev-3.14.0.zip"  # not gnomeprint
+set_default GNOME_DIR $GLOBAL_DIR\\gnome
 
-SWIG_URL="$SF_MIRROR/swig/swigwin-1.3.31.zip"
-SWIG_DIR=$GLOBAL_DIR\\swig
+set_default SWIG_URL "$SF_MIRROR/swig/swigwin-1.3.31.zip"
+set_default SWIG_DIR $GLOBAL_DIR\\swig
 
-PCRE_BIN_URL="$SF_MIRROR/gnuwin32/pcre-6.4-1-bin.zip"
-PCRE_LIB_URL="$SF_MIRROR/gnuwin32/pcre-6.4-1-lib.zip"
-PCRE_DIR=$GLOBAL_DIR\\pcre
+set_default PCRE_BIN_URL "$SF_MIRROR/gnuwin32/pcre-6.4-1-bin.zip"
+set_default PCRE_LIB_URL "$SF_MIRROR/gnuwin32/pcre-6.4-1-lib.zip"
+set_default PCRE_DIR $GLOBAL_DIR\\pcre
 
-LIBGSF_URL="$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.3.tar.bz2"
-LIBGSF_DIR=$GLOBAL_DIR\\libgsf
+set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.3.tar.bz2"
+set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
-GOFFICE_URL="$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.7.tar.bz2"
-GOFFICE_DIR=$GLOBAL_DIR\\goffice
-GOFFICE_PATCH=`pwd`/goffice-0.3.7-patch.diff
+set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.7.tar.bz2"
+set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
+set_default GOFFICE_PATCH `pwd`/goffice-0.3.7-patch.diff
 
-GLADE_URL="$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
-GLADE_DIR=$GLOBAL_DIR\\glade
+set_default GLADE_URL "$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
+set_default GLADE_DIR $GLOBAL_DIR\\glade
 
-INNO_URL="http://files.jrsoftware.org/is/5/isetup-5.1.9.exe"
-INNO_DIR=$GLOBAL_DIR\\inno
+set_default INNO_URL "http://files.jrsoftware.org/is/5/isetup-5.1.9.exe"
+set_default INNO_DIR $GLOBAL_DIR\\inno
 
-HH_URL="http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
-HH_DIR=$GLOBAL_DIR\\hh
+set_default HH_URL "http://download.microsoft.com/download/OfficeXPProf/Install/4.71.1015.0/W98NT42KMe/EN-US/HTMLHELP.EXE"
+set_default HH_DIR $GLOBAL_DIR\\hh
 
-SVN_URL="http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
-SVN_DIR=$GLOBAL_DIR\\svn
+set_default SVN_URL "http://subversion.tigris.org/files/documents/15/35379/svn-1.4.2-setup.exe"
+set_default SVN_DIR $GLOBAL_DIR\\svn
 
 # OFX import in gnucash and ofx directconnect support for aqbanking
-OPENSP_URL="$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"
-OPENSP_DIR=$GLOBAL_DIR\\opensp
-OPENSP_PATCH=`pwd`/opensp-1.5.2-patch.diff
+set_default OPENSP_URL "$SF_MIRROR/openjade/OpenSP-1.5.2.tar.gz"
+set_default OPENSP_DIR $GLOBAL_DIR\\opensp
+set_default OPENSP_PATCH `pwd`/opensp-1.5.2-patch.diff
 
-LIBOFX_URL="$SF_MIRROR/libofx/libofx-0.8.3.tar.gz"
-LIBOFX_DIR=$GLOBAL_DIR\\libofx
-LIBOFX_PATCH=`pwd`/libofx-0.8.3-patch.diff
+set_default LIBOFX_URL "$SF_MIRROR/libofx/libofx-0.8.3.tar.gz"
+set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
+set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-GWENHYWFAR_URL="$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.4.tar.gz"
-GWENHYWFAR_DIR=$GLOBAL_DIR\\gwenhywfar
+set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.4.tar.gz"
+set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-KTOBLZCHECK_URL="$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
+set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-AQBANKING_URL="$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
-AQBANKING_DIR=$GLOBAL_DIR\\aqbanking
+set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
+set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
+set_default AQBANKING_WITH_QT yes
 
-DOCBOOK_XSL_URL="$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
-DOCS_URL="http://svn.gnucash.org/repo/gnucash-docs/trunk"
-DOCS_DIR=$GLOBAL_DIR\\gnucash-docs
+set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
+set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
+set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 ##
 
 # There is no reason to ever need to comment these out!
@@ -259,7 +280,5 @@ add_step svn_up
 add_step inst_gnucash
 add_step inst_docs
 
-
-### read custom
-[ -f "custom" ] && . custom || true
-### end of script
+# run commands registered with late_eval
+eval_now

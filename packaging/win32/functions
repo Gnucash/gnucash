@@ -1,18 +1,38 @@
 [ "$__SOURCED_FUNCTIONS" ] && return
 __SOURCED_FUNCTIONS=1
 
-function add_step() { steps=("${steps[@]}" "$@"); }
-function remove_step() {
+function set_default() {
+    local _varname=$1; shift
+    if [ -z "`eval echo '"$'"$_varname"'"'`" ]; then
+        eval "$_varname"'="'"$*"'"'
+    fi
+}
+
+function block_step() { blocked_steps=("${blocked_steps[@]}" "$@"); }
+function add_step() {
     while [ "$1" ]; do
-        _steps=("${steps[@]}")
-        unset steps
-        for _step in "${_steps[@]}"; do
-            [ "$_step" != "$1" ] && add_step $_step
+        _is_blocked=
+        for blocked in "${blocked_steps[@]}"; do
+            if [ "$blocked" = "$1" ]; then
+                _is_blocked=yes
+                break
+            fi
         done
+        if [ "$_is_blocked" != "yes" ]; then
+            steps=("${steps[@]}" "$1")
+            block_step "$1"
+        fi
         shift
     done
-    unset _steps
 }
+
+function late_eval() { late_cmds=("${late_cmds[@]}" "$@"); }
+function eval_now() {
+    for cmd in "${late_cmds[@]}"; do
+        eval $cmd
+    done
+}
+
 function quiet() { "$@" &>/dev/null; }
 
 # c:/dir/sub
