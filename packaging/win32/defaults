@@ -231,6 +231,8 @@ set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
 set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
+# If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
+# install it and set QTDIR in custom, like "QTDIR=/c/Qt/4.2.3".
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"

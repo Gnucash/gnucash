@@ -19,9 +19,13 @@ to $MSYS_DIR
 from http://www.mingw.org/download.shtml -> Current -> mingwPORT -> (bin, wget-*)
 to $DOWNLOAD_DIR
 
-* Look at defaults and optionally create a file named custom to specify
-  adapted directory variables.  If you want verbose output of any script
-  step, add "set -x" to custom.
+* Look at defaults and create a file named custom to specify adapted directory
+  variables.  If you want verbose output of any script
+  step, add "set -x" to that file.
+
+* Either, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
+  install it and set QTDIR in custom, like "QTDIR=/c/Qt/4.2.3"; or skip building
+  the AqBanking Setup Wizard by specifying "AQBANKING_WITH_QT=no".
 
 Start/Enter any MSYS shell window. Let the automated build begin by:
 

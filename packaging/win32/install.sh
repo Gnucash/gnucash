@@ -791,6 +791,7 @@ function inst_qt4() {
     # already useful in itself and that's why it has already been
     # added.
 
+    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom, or deactivate AQBANKING_WITH_QT"
     export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
     _QTDIR=$QTDIR
     # This section creates .la files for the Qt-4 DLLs so that
