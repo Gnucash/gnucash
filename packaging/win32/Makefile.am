@@ -1,6 +1,6 @@
 EXTRA_DIST = \
   README \
-  custom.sh \
+  defaults \
   dist.sh \
   exetype.pl \
   functions \
