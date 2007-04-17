@@ -14,9 +14,4 @@ checks_DATA = \
 endif
 
 EXTRA_DIST = \
-	deluxe.chk \
-	quicken.chk \
-	quicken_wallet.chk \
-	gnomeprint/deluxe.chk \
-	gnomeprint/quicken.chk \
-	gnomeprint/quicken_wallet.chk
+  ${checks_DATA}

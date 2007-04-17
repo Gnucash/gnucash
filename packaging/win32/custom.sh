@@ -1,17 +1,6 @@
 #!/bin/sh # for emacs
 #
-# Instead of just editing this file, it is recommended to create a file `custom'
-# in the same directory that will be read in at the end of this script.
-#
-# You can use the full power of bash 2.04 scripting.  In particular you can
-# override any variable set here, add steps (use add_step <step> and implement
-# function <step>()), remove steps (use remove_step <step>) and more.
-# Keep in mind that this might render install.sh & friends non-functional.
-#
-# Note: All directories must be without spaces!
-
-[ "$__SOURCED_DEFAULTS" ] && return
-__SOURCED_DEFAULTS=1
+# all directories should be without spaces!
 
 GLOBAL_DIR=c:\\soft
 TMP_DIR=$GLOBAL_DIR\\tmp
@@ -258,8 +247,3 @@ add_step inst_svn
 add_step svn_up
 add_step inst_gnucash
 add_step inst_docs
-
-
-### read custom
-[ -f "custom" ] && . custom || true
-### end of script

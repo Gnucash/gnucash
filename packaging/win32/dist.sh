@@ -8,7 +8,7 @@ function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
 . functions
-. defaults
+. custom.sh
 
 register_env_var PATH ":"
 

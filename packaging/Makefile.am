@@ -1,4 +1,3 @@
-SUBDIRS = win32
 
 EXTRA_DIST = \
   gnucash-1.9.x.ebuild \
