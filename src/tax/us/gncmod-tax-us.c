@@ -12,17 +12,19 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+GNC_MODULE_API_DECL(libgncmod_tax_us)
+
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_tax_us_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_tax_us_gnc_module_current  = 0;
+int libgncmod_tax_us_gnc_module_revision = 0;
+int libgncmod_tax_us_gnc_module_age      = 0;
 
 
 char *
-gnc_module_path(void) {
+libgncmod_tax_us_gnc_module_path(void) {
 #ifdef LOCALE_SPECIFIC_TAX
   const char *thislocale = setlocale(LC_ALL, NULL);
   if (strncmp(thislocale, "de_DE", 5) == 0)
@@ -33,7 +35,7 @@ gnc_module_path(void) {
 }
 
 char *
-gnc_module_description(void) {
+libgncmod_tax_us_gnc_module_description(void) {
   return g_strdup("US income tax information");
 }
 
@@ -46,7 +48,7 @@ lmod(char * mn)
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmod_tax_us_gnc_module_init(int refcount) {
   /* This is a very simple hack that loads the (new, special) German
      tax definition file in a German locale, or (default) loads the
      previous US tax file. */
@@ -61,6 +63,6 @@ gnc_module_init(int refcount) {
 }
 
 int
-gnc_module_end(int refcount) {
+libgncmod_tax_us_gnc_module_end(int refcount) {
   return TRUE;
 }
