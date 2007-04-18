@@ -110,7 +110,7 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
-    if quiet ${CC} --version
+    if quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help
     then
         echo "mingw already installed.  skipping."
     else
@@ -121,7 +121,7 @@ function inst_mingw() {
         $LAST_FILE
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
-    quiet ${CC} --version && quiet ${LD} --help || die "mingw not installed correctly"
+    quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help || die "mingw not installed correctly"
 }
 
 function inst_unzip() {
