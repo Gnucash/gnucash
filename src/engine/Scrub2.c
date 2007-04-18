@@ -57,7 +57,7 @@ static QofLogModule log_module = GNC_MOD_LOT;
 void
 xaccAccountAssignLots (Account *acc)
 {
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return;
 
@@ -65,7 +65,8 @@ xaccAccountAssignLots (Account *acc)
    xaccAccountBeginEdit (acc);
 
 restart_loop:
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split * split = node->data;
 

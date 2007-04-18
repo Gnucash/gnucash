@@ -112,8 +112,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       else
       {
         xaccAccountInsertSplit (twin, s);
-        twin->balance_dirty = TRUE;
-        twin->sort_dirty = TRUE;
+        g_object_set(twin, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
       }
    }
 
@@ -179,8 +178,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
         if (s->acc != twin)
         {
            xaccAccountInsertSplit (twin, s);
-           twin->balance_dirty = TRUE;
-           twin->sort_dirty = TRUE;
+           g_object_set(twin, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
         }
       }
    }

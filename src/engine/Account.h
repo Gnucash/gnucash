@@ -275,6 +275,80 @@ GNCAccountType xaccAccountGetType (const Account *account);
 /** Is the account a stock, mutual fund or currency? */
 gboolean xaccAccountIsPriced(const Account *acc);
 
+/** This function will set the starting commodity balance for this
+ *  account.  This routine is intended for use with backends that do
+ *  not return the complete list of splits for an account, but rather
+ *  return a partial list.  In such a case, the backend will typically
+ *  return all of the splits after some certain date, and the
+ *  'starting balance' will represent the summation of the splits up
+ *  to that date. */
+void gnc_account_set_start_balance (Account *acc,
+                                    const gnc_numeric start_baln);
+
+/** This function will set the starting cleared commodity balance for
+ *  this account.  This routine is intended for use with backends that
+ *  do not return the complete list of splits for an account, but
+ *  rather return a partial list.  In such a case, the backend will
+ *  typically return all of the splits after some certain date, and
+ *  the 'starting balance' will represent the summation of the splits
+ *  up to that date. */
+void gnc_account_set_start_cleared_balance (Account *acc,
+                                            const gnc_numeric start_baln);
+
+/** This function will set the starting reconciled commodity balance
+ *  for this account.  This routine is intended for use with backends
+ *  that do not return the complete list of splits for an account, but
+ *  rather return a partial list.  In such a case, the backend will
+ *  typically return all of the splits after some certain date, and
+ *  the 'starting balance' will represent the summation of the splits
+ *  up to that date. */
+void gnc_account_set_start_reconciled_balance (Account *acc,
+                                               const gnc_numeric start_baln);
+
+/** Tell the account that the running balances may be incorrect and
+ *  need to be recomputed.
+ *
+ *  @param acc Set the flag on this account. */
+void gnc_account_set_balance_dirty (Account *acc);
+
+/** Tell the account believes that the splits may be incorrectly
+ *  sorted and need to be resorted.
+ *
+ *  @param acc Set the flag on this account. */
+void gnc_account_set_sort_dirty (Account *acc);
+
+/** Find the given split in an account.
+ *
+ *  @param acc The account whose splits are to be searched.
+ *
+ *  @param s The split to be found.
+ *
+ *  @result TRUE is the split is found in the accounts list of splits.
+ *  FALSE otherwise.  */
+gboolean gnc_account_find_split (Account *acc, Split *s);
+
+/** Insert the given split from an account.
+ *
+ *  @param acc The account to which the split should be added.
+ *
+ *  @param s The split to be added.
+ *
+ *  @result TRUE is the split is successfully added to the set of
+ *  splits in the account.  FALSE if the addition fails for any reason
+ *  (including that the split is already in the account). */
+gboolean gnc_account_insert_split (Account *acc, Split *s);
+
+/** Remove the given split from an account.
+ *
+ *  @param acc The account from which the split should be removed.
+ *
+ *  @param s The split to be removed.
+ *
+ *  @result TRUE is the split is successfully removed from the set of
+ *  splits in the account.  FALSE if the removal fails for any
+ *  reason. */
+gboolean gnc_account_remove_split (Account *acc, Split *s);
+
 /** Get the account's name */
 const char * xaccAccountGetName (const Account *account);
 /** Get the account's accounting code */
@@ -292,6 +366,45 @@ GNCPolicy *gnc_account_get_policy (Account *account);
 gint32 xaccAccountGetVersion (const Account* acc);
 /** Get the account version_check number */
 guint32 gnc_account_get_version_check (const Account *acc);
+/** Retrieve the starting commodity balance for this account. */
+gnc_numeric gnc_account_get_start_balance (Account *acc);
+
+/** Retrieve the starting cleared commodity balance for this
+ *  account. */
+gnc_numeric gnc_account_get_start_cleared_balance (Account *acc);
+
+/** Retrieve the starting reconciled commodity balance for this
+ *  account. */
+gnc_numeric gnc_account_get_start_reconciled_balance (Account *acc);
+
+/** Get an indication of whether the account believes that the running
+ *  balances may be incorrect and need to be recomputed.
+ *
+ *  @param acc Retrieve the flag on this account.
+ *
+ *  @return TRUE if the running account balances need to be recomputed.
+ *  FALSE if they are correct. */
+gboolean gnc_account_get_balance_dirty (Account *acc);
+
+/** Get an indication of whether the account believes that the splits
+ *  may be incorrectly sorted and need to be resorted.
+ *
+ *  @param acc Retrieve the flag on this account.
+ *
+ *  @return TRUE if the splits in the account need to be resorted.
+ *  FALSE if the sort order is correct. */
+gboolean gnc_account_get_sort_dirty (Account *acc);
+
+/** The following recompute the partial balances (stored with the
+ *  transaction) and the total balance, for this account 
+ */
+void xaccAccountRecomputeBalance (Account *);
+
+/** The xaccAccountSortSplits() routine will resort the account's 
+ *  splits if the sort is dirty. If 'force' is true, the account 
+ *  is sorted even if the editlevel is not zero. 
+ */
+void xaccAccountSortSplits (Account *acc, gboolean force);
 
 /** The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be
@@ -864,7 +977,11 @@ guint32 xaccAccountTypesValid(void);
  *    data structure: do not delete it when done; treat it as a read-only
  *    structure.  Note that some routines (such as xaccAccountRemoveSplit())
  *    modify this list directly, and could leave you with a corrupted 
- *    pointer. */
+ *    pointer.
+ * @note This should be changed so that the returned value is a copy
+ * of the list. No other part of the code should have access to the
+ * internal data structure used by this object.
+ */
 SplitList* xaccAccountGetSplitList (const Account *account);
 
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits

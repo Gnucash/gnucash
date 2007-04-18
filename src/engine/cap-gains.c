@@ -79,7 +79,7 @@ gboolean
 xaccAccountHasTrades (Account *acc)
 {
    gnc_commodity *acc_comm;
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return FALSE;
 
@@ -88,7 +88,8 @@ xaccAccountHasTrades (Account *acc)
       
    acc_comm = acc->commodity;
 
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split *s = node->data;
       Transaction *t = s->parent;

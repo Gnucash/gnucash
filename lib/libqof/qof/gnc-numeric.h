@@ -451,6 +451,7 @@ gnc_numeric gnc_numeric_reduce(gnc_numeric in);
   @{
 */
 GType gnc_numeric_get_type( void );
+#define GNC_NUMERIC (gnc_numeric_get_type ())
 
 /** @} */
 

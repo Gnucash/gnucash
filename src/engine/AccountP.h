@@ -65,57 +65,15 @@ struct account_s
   int commodity_scu;
   gboolean non_standard_scu;
 
-  /* protected data, cached parameters */
-  gnc_numeric starting_balance;
-  gnc_numeric starting_cleared_balance;
-  gnc_numeric starting_reconciled_balance;
-
-  gnc_numeric balance;
-  gnc_numeric cleared_balance;
-  gnc_numeric reconciled_balance;
-
-  SplitList *splits;       /* list of split pointers */
-
-  gboolean balance_dirty;  /* balances in splits incorrect */
-  gboolean sort_dirty;     /* sort order of splits is bad */
-
   /* -------------------------------------------------------------- */
   /* Backend private expansion data */
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-/* The xaccAccountSortSplits() routine will resort the account's 
- * splits if the sort is dirty. If 'force' is true, the account 
- * is sorted even if the editlevel is not zero. 
- */
-void xaccAccountSortSplits (Account *acc, gboolean force);
-
-/* The following recompute the partial balances (stored with the
- * transaction) and the total balance, for this account 
- */
-void xaccAccountRecomputeBalance (Account *);
-
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
 void xaccAccountSetGUID (Account *account, const GUID *guid);
-
-/* The xaccAccountSetStartingBalance() routine will set the starting
- *    commodity balance for this account.  This routine is intended for
- *    use with backends that do not return the complete list of splits
- *    for an account, but rather return a partial list.  In such a case,
- *    the backend will typically return all of the splits after some 
- *    certain date, and the 'starting balance' will represent the summation 
- *    of the splits up to that date.
- *
- *    This routine is in the private .h file because only backends are 
- *    allowed to set the starting balance.  This is *not* a user interface
- *    function.
- */
-void xaccAccountSetStartingBalance(Account *account, 
-                                   const gnc_numeric start_baln, 
-                                   const gnc_numeric start_cleared_baln, 
-                                   const gnc_numeric start_reconciled_baln); 
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);
