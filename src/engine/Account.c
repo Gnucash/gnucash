@@ -523,7 +523,7 @@ gnc_account_class_init (AccountClass *klass)
 
     g_object_class_install_property
 	(gobject_class,
-	 PROP_BALANCE_DIRTY,
+	 PROP_SORT_DIRTY,
 	 g_param_spec_boolean("sort-dirty",
                               "Sort Dirty",
                               "TRUE if the splits in the account needs to be "
