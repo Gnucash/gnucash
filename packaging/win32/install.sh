@@ -913,7 +913,9 @@ function inst_gnucash() {
             export BUILD_GUILE=yes
             export name_build_guile=/usr/bin/guile-config
         fi
-        ./autogen.sh
+        if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
+            ./autogen.sh
+        fi
         # Windows DLLs don't need relinking
         grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd

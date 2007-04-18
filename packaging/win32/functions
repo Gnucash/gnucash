@@ -38,6 +38,14 @@ function quiet() { "$@" &>/dev/null; }
 # c:/dir/sub
 function win_fs_path() { echo "$*" | sed 's,\\,/,g'; }
 
+# usage:  wpwd [rel]
+# rel can be any relative path
+function wpwd() {
+    qpushd `unix_path "${1:-.}"`
+        pwd -W
+    qpopd
+}
+
 # usage:  smart_wget URL DESTDIR
 function smart_wget() {
     _FILE=`basename $1`

@@ -38,13 +38,34 @@ set_default GLOBAL_DIR c:\\soft
 set_default TMP_DIR $GLOBAL_DIR\\tmp
 set_default DOWNLOAD_DIR $GLOBAL_DIR\\downloads
 
-set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
-set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
-set_default REPOS_DIR $GNUCASH_DIR\\repos
-# keep this pointing from BUILD_DIR to REPOS_DIR
-set_default REL_REPOS_DIR ..\\repos
-set_default BUILD_DIR $GNUCASH_DIR\\build
-set_default INSTALL_DIR $GNUCASH_DIR\\inst
+if [ -z "$BUILD_FROM_TARBALL" ]; then
+    if [ -f "../../src/swig-runtime.h" ]; then
+        BUILD_FROM_TARBALL=yes
+    else
+        BUILD_FROM_TARBALL=no
+    fi
+fi
+
+if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
+    UPDATE_SOURCES=no
+    set_default GNUCASH_DIR "$(wpwd ..\\..)"
+    set_default REPOS_DIR $GNUCASH_DIR
+    # keep this pointing from BUILD_DIR to REPOS_DIR
+    set_default REL_REPOS_DIR ..
+    set_default BUILD_DIR $GNUCASH_DIR\\build
+    set_default INSTALL_DIR $GNUCASH_DIR\\inst
+else
+    # change this to "no" if you are using install.sh from the same repository checkout
+    set_default UPDATE_SOURCES yes
+    set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
+    set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
+    set_default REPOS_DIR $GNUCASH_DIR\\repos
+    # keep this pointing from BUILD_DIR to REPOS_DIR
+    set_default REL_REPOS_DIR ..\\repos
+    set_default BUILD_DIR $GNUCASH_DIR\\build
+    set_default INSTALL_DIR $GNUCASH_DIR\\inst
+fi
+
 
 ####
 # For cross-compiling, change this to "yes"
@@ -277,8 +298,10 @@ if test x$cross_compile != xyes ; then
  add_step inst_inno
  add_step inst_hh
 fi
-add_step inst_svn
-add_step svn_up
+if test x$UPDATE_SOURCES = xyes ; then
+ add_step inst_svn
+ add_step svn_up
+fi
 add_step inst_gnucash
 add_step inst_docs
 
