@@ -188,6 +188,8 @@ account_id_handler (xmlNodePtr node, gpointer act_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
+    g_return_val_if_fail(guid, FALSE);
+
     xaccAccountSetGUID(pdata->account, guid);
 
     g_free(guid);
