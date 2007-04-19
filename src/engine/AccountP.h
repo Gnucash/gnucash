@@ -56,15 +56,6 @@ struct account_s
 {
   QofInstance inst;
 
-  /* 
-   * The commodity field denotes the kind of 'stuff' stored 
-   * in this account.  The 'amount' field of a split indicates
-   * how much of the 'stuff' there is.
-   */
-  gnc_commodity * commodity;
-  int commodity_scu;
-  gboolean non_standard_scu;
-
   /* -------------------------------------------------------------- */
   /* Backend private expansion data */
   guint32  idata;     /* used by the sql backend for kvp management */

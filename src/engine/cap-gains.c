@@ -86,7 +86,7 @@ xaccAccountHasTrades (Account *acc)
    if (xaccAccountIsPriced (acc))
       return TRUE;
       
-   acc_comm = acc->commodity;
+   acc_comm = xaccAccountGetCommodity(acc);
 
    splits = xaccAccountGetSplitList(acc);
    for (node=splits; node; node=node->next)
@@ -271,6 +271,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   KvpFrame *cwd;
   KvpValue *vvv;
   const char * cur_name;
+  gnc_commodity *acc_comm;
 
   if (!acc || !gain_acct) return;
 
@@ -278,7 +279,8 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
 
   /* Accounts are indexed by thier unique currency name */
-  cur_name = gnc_commodity_get_unique_name (acc->commodity);
+  acc_comm = xaccAccountGetCommodity(acc);
+  cur_name = gnc_commodity_get_unique_name (acc_comm);
 
   xaccAccountBeginEdit (acc);
   vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));

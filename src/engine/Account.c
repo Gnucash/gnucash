@@ -113,14 +113,14 @@ typedef struct AccountPrivate
      */
     GNCAccountType type;
 
-//    /* 
-//     * The commodity field denotes the kind of 'stuff' stored 
-//     * in this account.  The 'amount' field of a split indicates
-//     * how much of the 'stuff' there is.
-//     */
-//    gnc_commodity * commodity;
-//    int commodity_scu;
-//    gboolean non_standard_scu;
+    /* 
+     * The commodity field denotes the kind of 'stuff' stored 
+     * in this account.  The 'amount' field of a split indicates
+     * how much of the 'stuff' there is.
+     */
+    gnc_commodity * commodity;
+    int commodity_scu;
+    gboolean non_standard_scu;
 
     /* The parent and children pointers are used to implement an account
      * hierarchy, of accounts that have sub-accounts ("detail accounts").
@@ -244,9 +244,9 @@ gnc_account_init(Account* acc)
     priv->policy = xaccGetFIFOPolicy();
     priv->lots = NULL;
 
-//    priv->commodity = NULL;
-//    priv->commodity_scu = 0;
-//    priv->non_standard_scu = FALSE;
+    priv->commodity = NULL;
+    priv->commodity_scu = 0;
+    priv->non_standard_scu = FALSE;
 
     priv->balance = gnc_numeric_zero();
     priv->cleared_balance = gnc_numeric_zero();
@@ -304,6 +304,15 @@ gnc_account_get_property (GObject         *object,
 	case PROP_TYPE:
 	    // NEED TO BE CONVERTED TO A G_TYPE_ENUM
 	    g_value_set_int(value, priv->type);
+	    break;
+	case PROP_COMMODITY:
+	    g_value_set_object(value, priv->commodity);
+	    break;
+	case PROP_COMMODITY_SCU:
+	    g_value_set_int(value, priv->commodity_scu);
+	    break;
+	case PROP_NON_STD_SCU:
+	    g_value_set_boolean(value, priv->non_standard_scu);
 	    break;
 	case PROP_SORT_DIRTY:
 	    g_value_set_boolean(value, priv->sort_dirty);
@@ -387,6 +396,12 @@ gnc_account_set_property (GObject         *object,
 	case PROP_TYPE:
 	    // NEED TO BE CONVERTED TO A G_TYPE_ENUM
 	    xaccAccountSetType(account, g_value_get_int(value));
+	    break;
+	case PROP_COMMODITY:
+	    xaccAccountSetCommodity(account, g_value_get_object(value));
+	    break;
+	case PROP_COMMODITY_SCU:
+	    xaccAccountSetCommoditySCU(account, g_value_get_int(value));
 	    break;
 	case PROP_SORT_DIRTY:
 	    gnc_account_set_sort_dirty(account);
@@ -520,6 +535,45 @@ gnc_account_class_init (AccountClass *klass)
 			   NUM_ACCOUNT_TYPES - 1,
 			   ACCT_TYPE_BANK,
 			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_COMMODITY,
+         g_param_spec_object ("commodity",
+                              "Commodity",
+                              "The commodity field denotes the kind of "
+                              "'stuff' stored  in this account, whether "
+                              "it is USD, gold, stock, etc.",
+                              GNC_TYPE_COMMODITY,
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_COMMODITY_SCU,
+         g_param_spec_int ("commodity-scu",
+                           "Commodity SCU",
+                           "The smallest fraction of the commodity that is "
+                           "tracked.  This number is used as the denominator "
+                           "value in 1/x, so a value of 100 says that the "
+                           "commodity can be divided into hundreths.  E.G."
+                           "1 USD can be divided into 100 cents.",
+                           0,
+                           G_MAXINT32,
+                           1000000,
+                           G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_NON_STD_SCU,
+         g_param_spec_boolean ("non-std-scu",
+                               "Non-std SCU",
+                               "TRUE id the account SCU doesn't match "
+                               "the commodity SCU.  This indicates a case "
+                               "where the two were accidentally set to "
+                               "mismatched values in older versions of "
+                               "GnuCash.",
+                               FALSE,
+                               G_PARAM_READWRITE));
 
     g_object_class_install_property
 	(gobject_class,
@@ -716,12 +770,11 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->idata = 0;
 
-  acc->commodity = NULL;
-  acc->commodity_scu = 0;
-  acc->non_standard_scu = FALSE;
-
   LEAVE ("account=%p\n", acc);
 }
+
+/********************************************************************\
+\********************************************************************/
 
 QofBook *
 gnc_account_get_book(const Account *account)
@@ -861,10 +914,10 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
 
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
-    ret->commodity = gnc_commodity_obtain_twin (from->commodity, book);
+    priv->commodity = gnc_commodity_obtain_twin(from_priv->commodity, book);
 
-    ret->commodity_scu = from->commodity_scu;
-    ret->non_standard_scu = from->non_standard_scu;
+    priv->commodity_scu = from_priv->commodity_scu;
+    priv->non_standard_scu = from_priv->non_standard_scu;
 
     LEAVE (" ");
     return ret;
@@ -929,7 +982,7 @@ xaccFreeAccount (Account *acc)
   AccountPrivate *priv;
   GList *lp;
 
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
   priv = GET_PRIVATE(acc);
   qof_event_gen (&acc->inst, QOF_EVENT_DESTROY, NULL);
@@ -987,7 +1040,6 @@ xaccFreeAccount (Account *acc)
   /* zero out values, just in case stray 
    * pointers are pointing here. */
 
-  acc->commodity = NULL;
   priv->parent = NULL;
   priv->children = NULL;
 
@@ -996,7 +1048,7 @@ xaccFreeAccount (Account *acc)
   priv->reconciled_balance = gnc_numeric_zero();
 
   priv->type = ACCT_TYPE_NONE;
-  acc->commodity = NULL;
+  priv->commodity = NULL;
 
   priv->version = 0;
   priv->balance_dirty = FALSE;
@@ -1117,7 +1169,8 @@ xaccAccountCommitEdit (Account *acc)
 void 
 xaccAccountDestroy (Account *acc) 
 {
-  if (!acc) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
   acc->inst.do_free = TRUE;
 
   xaccAccountCommitEdit (acc);
@@ -1225,11 +1278,8 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
 
   if(!aa && !ab) return TRUE;
 
-  if(!aa || !ab)
-  {
-    PWARN ("one is NULL");
-    return FALSE;
-  }
+  g_return_val_if_fail(GNC_IS_ACCOUNT(aa), FALSE);
+  g_return_val_if_fail(GNC_IS_ACCOUNT(ab), FALSE);
 
   priv_aa = GET_PRIVATE(aa);
   priv_ab = GET_PRIVATE(ab);
@@ -1257,7 +1307,7 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
     return FALSE;
   }
 
-  if (!gnc_commodity_equal(aa->commodity, ab->commodity))
+  if (!gnc_commodity_equal(priv_aa->commodity, priv_ab->commodity))
   {
     PWARN ("commodities differ");
     return FALSE;
@@ -1584,7 +1634,8 @@ xaccAccountBringUpToDate(Account *acc)
 void 
 xaccAccountSetGUID (Account *acc, const GUID *guid)
 {
-  if (!acc || !guid) return;
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+  g_return_if_fail(guid);
 
   /* XXX this looks fishy and weird to me ... */
   PINFO("acct=%p", acc);
@@ -2056,8 +2107,10 @@ qofAccountSetParent (Account *acc, QofInstance *parent)
 {
 	Account *parent_acc;
 	
-	if (!acc || !parent) return;
-	parent_acc = (Account*)parent;
+	g_return_if_fail(GNC_IS_ACCOUNT(acc));
+	g_return_if_fail(GNC_IS_ACCOUNT(parent));
+
+	parent_acc = GNC_ACCOUNT(parent);
 	xaccAccountBeginEdit(acc);
 	xaccAccountBeginEdit(parent_acc);
 	gnc_account_append_child(parent_acc, acc);
@@ -2090,14 +2143,20 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
 {
   AccountPrivate *priv;
   GList *lp;
-  if (!acc || !com || com == acc->commodity) return;
 
+  /* errors */
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+  g_return_if_fail(GNC_IS_COMMODITY(com));
+
+  /* optimizations */
   priv = GET_PRIVATE(acc);
-  xaccAccountBeginEdit(acc);
+  if (com == priv->commodity)
+      return;
 
-  acc->commodity = com;
-  acc->commodity_scu = gnc_commodity_get_fraction(com);
-  acc->non_standard_scu = FALSE;
+  xaccAccountBeginEdit(acc);
+  priv->commodity = com;
+  priv->commodity_scu = gnc_commodity_get_fraction(com);
+  priv->non_standard_scu = FALSE;
 
   /* iterate over splits */
   for (lp = priv->splits; lp; lp = lp->next)
@@ -2135,12 +2194,15 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
 void
 xaccAccountSetCommoditySCU (Account *acc, int scu)
 {
-  if (!acc) return;
+  AccountPrivate *priv;
 
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+  priv = GET_PRIVATE(acc);
   xaccAccountBeginEdit(acc);
-  acc->commodity_scu = scu;
-  if (scu != gnc_commodity_get_fraction(acc->commodity))
-      acc->non_standard_scu = TRUE;
+  priv->commodity_scu = scu;
+  if (scu != gnc_commodity_get_fraction(priv->commodity))
+      priv->non_standard_scu = TRUE;
   mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
@@ -2148,26 +2210,35 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
 int
 xaccAccountGetCommoditySCUi (const Account * acc)
 {
-  return acc ? acc->commodity_scu : 0;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+    return GET_PRIVATE(acc)->commodity_scu;
 }
 
 int
 xaccAccountGetCommoditySCU (const Account * acc)
 {
-  if (!acc) return 0;
+    AccountPrivate *priv;
 
-  if (acc->non_standard_scu || !acc->commodity)
-    return acc->commodity_scu;
-  return gnc_commodity_get_fraction(acc->commodity);
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+
+    priv = GET_PRIVATE(acc);
+    if (priv->non_standard_scu || !priv->commodity)
+	return priv->commodity_scu;
+    return gnc_commodity_get_fraction(priv->commodity);
 }
 
 void
 xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
 {
-  if (!acc || acc->non_standard_scu == flag) return;
+  AccountPrivate *priv;
 
+  g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+  priv = GET_PRIVATE(acc);
+  if (priv->non_standard_scu == flag)
+      return;
   xaccAccountBeginEdit(acc);
-  acc->non_standard_scu = flag;
+  priv->non_standard_scu = flag;
   mark_account (acc);
   xaccAccountCommitEdit(acc);
 }
@@ -2175,7 +2246,8 @@ xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
 gboolean
 xaccAccountGetNonStdSCU (const Account * acc)
 {
-  return acc ? acc->non_standard_scu : 0;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
+    return GET_PRIVATE(acc)->non_standard_scu;
 }
 
 /********************************************************************\
@@ -2521,7 +2593,7 @@ gnc_account_lookup_by_full_name_helper (const Account *parent,
   Account *found;
   GList *node;
 
-  g_return_val_if_fail(parent, NULL);
+  g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
   g_return_val_if_fail(names, NULL);
 
   /* Look for the first name in the children. */
@@ -2777,7 +2849,8 @@ DxaccAccountGetCurrency (const Account *acc)
 gnc_commodity * 
 xaccAccountGetCommodity (const Account *acc)
 {
-  return acc ? acc->commodity : NULL;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    return GET_PRIVATE(acc)->commodity;
 }
 
 /********************************************************************\
@@ -2875,7 +2948,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
   gnc_numeric lowest = gnc_numeric_zero ();
   int seen_a_transaction = 0;
 
-  if (!acc) return gnc_numeric_zero ();
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
   priv = GET_PRIVATE(acc);
   today = gnc_timet_get_today_end();
@@ -2917,7 +2990,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   gboolean found = FALSE;
   gnc_numeric balance;
 
-  if (!acc) return gnc_numeric_zero ();
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
   xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
   xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
@@ -2986,7 +3059,7 @@ xaccAccountGetPresentBalance (const Account *acc)
   GList *node;
   time_t today;
 
-  g_return_val_if_fail(acc, gnc_numeric_zero());
+  g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
   priv = GET_PRIVATE(acc);
   today = gnc_timet_get_today_end();
@@ -3074,14 +3147,19 @@ xaccAccountGetXxxBalanceInCurrency (const Account *acc,
 				    xaccGetBalanceFn fn,
 				    const gnc_commodity *report_currency)
 {
-  gnc_numeric balance;
+    AccountPrivate *priv;
+    gnc_numeric balance;
 
-  if (!acc || !fn || !report_currency) return gnc_numeric_zero ();
-  balance = fn(acc);
-  balance = xaccAccountConvertBalanceToCurrency(acc, balance,
-                                                acc->commodity,
-                                                report_currency);
-  return balance;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
+    g_return_val_if_fail(fn, gnc_numeric_zero());
+    g_return_val_if_fail(GNC_IS_COMMODITY(report_currency), gnc_numeric_zero());
+
+    priv = GET_PRIVATE(acc);
+    balance = fn(acc);
+    balance = xaccAccountConvertBalanceToCurrency(acc, balance,
+						  priv->commodity,
+						  report_currency);
+    return balance;
 }
 
 static gnc_numeric
@@ -3089,9 +3167,15 @@ xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
                                            xaccGetBalanceAsOfDateFn fn,
                                            const gnc_commodity *report_commodity)
 {
-    g_return_val_if_fail(acc && fn && report_commodity, gnc_numeric_zero());
+    AccountPrivate *priv;
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
+    g_return_val_if_fail(fn, gnc_numeric_zero());
+    g_return_val_if_fail(GNC_IS_COMMODITY(report_commodity), gnc_numeric_zero());
+
+    priv = GET_PRIVATE(acc);
     return xaccAccountConvertBalanceToCurrency(
-        acc, fn(acc, date), acc->commodity, report_commodity);
+        acc, fn(acc, date), priv->commodity, report_commodity);
 }
 
 /*
@@ -4244,7 +4328,7 @@ gnc_account_merge_children (Account *parent)
 	continue;
       if (0 != safe_strcmp(priv_a->description, priv_b->description))
 	continue;
-      if (!gnc_commodity_equiv(acc_a->commodity, acc_b->commodity))
+      if (!gnc_commodity_equiv(priv_a->commodity, priv_b->commodity))
 	continue;
       if (0 != safe_strcmp(xaccAccountGetNotes(acc_a),
 			   xaccAccountGetNotes(acc_b)))

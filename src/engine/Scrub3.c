@@ -62,6 +62,7 @@ gains_possible (GNCLot *lot)
   Account *acc;
   Split *split;
   gboolean comeq;
+  gnc_commodity *acc_commodity;
 
   acc = gnc_lot_get_account (lot);
 
@@ -69,7 +70,8 @@ gains_possible (GNCLot *lot)
   if (!node) return FALSE;
   split = node->data;
 
-  comeq = gnc_commodity_equiv (acc->commodity, split->parent->common_currency);
+  acc_commodity = xaccAccountGetCommodity(acc);
+  comeq = gnc_commodity_equiv (acc_commodity, split->parent->common_currency);
   return (FALSE == comeq);
 }
 
