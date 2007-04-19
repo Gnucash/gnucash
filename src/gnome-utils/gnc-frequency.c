@@ -41,6 +41,8 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.frequency"
 
+#define LAST_DAY_OF_MONTH_OPTION_INDEX 31
+
 /** Private Defs ********************/
 
 typedef enum {
@@ -769,13 +771,17 @@ _get_monthly_combobox_index(Recurrence *r)
 {
     GDate recurrence_date = recurrenceGetDate(r);
     int day_of_month_index = g_date_get_day(&recurrence_date) - 1;
-    if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
+    if (recurrenceGetPeriodType(r) == PERIOD_END_OF_MONTH)
     {
-        gint last_day_of_month_list_offset = 30;
+        day_of_month_index = LAST_DAY_OF_MONTH_OPTION_INDEX;
+    }
+    else if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
+    {
         day_of_month_index
-            = last_day_of_month_list_offset
+            = LAST_DAY_OF_MONTH_OPTION_INDEX
             + g_date_get_weekday(&recurrence_date);
     }
+    /* else { default value } */
     return day_of_month_index;
 }
 
@@ -885,8 +891,8 @@ gnc_frequency_setup_recurrence(GncFrequency *gf, GList *recurrences, GDate *star
              gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
 
              day_of_month = glade_xml_get_widget(gf->gxml, "monthly_day");
-             
              gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
+
              gtk_notebook_set_current_page(gf->nb, PAGE_MONTHLY);
              gtk_combo_box_set_active(gf->freqComboBox, PAGE_MONTHLY);
          } break; 
@@ -915,12 +921,13 @@ _get_multiplier_from_widget(GncFrequency *gf, char *widget_name)
 static Recurrence*
 _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier, char *combo_name)
 {
+    int last_day_of_month_option_index = 31;
     Recurrence *r;
     GtkWidget *day_of_month_combo = glade_xml_get_widget(gf->gxml, combo_name);
     int day_of_month_index = gtk_combo_box_get_active(GTK_COMBO_BOX(day_of_month_combo));
         
     r = g_new0(Recurrence, 1);
-    if (day_of_month_index > 30)
+    if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
     {
         GDate *day_of_week_date = g_date_new_julian(g_date_get_julian(start_date));
         // increment until we align on the DOW, but stay inside the month
@@ -929,12 +936,19 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
             g_date_add_days(day_of_week_date, 1);
         recurrenceSet(r, multiplier, PERIOD_LAST_WEEKDAY, day_of_week_date);
     }
+    else if (day_of_month_index == LAST_DAY_OF_MONTH_OPTION_INDEX)
+    {
+        GDate *day_of_month = g_date_new_julian(g_date_get_julian(start_date));
+        recurrenceSet(r, multiplier, PERIOD_END_OF_MONTH, day_of_month);
+    }
     else
     {
-        int month_with_31_days = 1; // january
+        int allowable_date = -1;
         GDate *day_of_month = g_date_new_julian(g_date_get_julian(start_date));
-        g_date_set_month(day_of_month, month_with_31_days);
-        g_date_set_day(day_of_month, day_of_month_index + 1);
+        allowable_date = MIN(day_of_month_index + 1,
+                             g_date_get_days_in_month(g_date_get_month(day_of_month),
+                                                      g_date_get_year(day_of_month)));
+        g_date_set_day(day_of_month, allowable_date);
         recurrenceSet(r, multiplier, PERIOD_MONTH, day_of_month);
     }
     return r;
