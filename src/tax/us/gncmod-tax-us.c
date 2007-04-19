@@ -6,6 +6,10 @@
  *********************************************************************/
 
 #include "config.h"
+#ifdef LOCALE_SPECIFIC_TAX
+#include <string.h>
+#include <locale.h>
+#endif // LOCALE_SPECIFIC_TAX
 #include <gmodule.h>
 #include <libguile.h>
 
