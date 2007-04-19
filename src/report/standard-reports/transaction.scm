@@ -1388,7 +1388,7 @@ in the Options panel.")))
 ;; Define the report.
 (gnc:define-report
  
- 'version 2
+ 'version 1
  
  'name reportname
  

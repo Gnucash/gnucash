@@ -718,7 +718,7 @@
   )
 
 (gnc:define-report 
- 'version 2
+ 'version 1
  'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator balance-sheet-options-generator
