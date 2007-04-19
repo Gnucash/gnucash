@@ -285,7 +285,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   xaccAccountBeginEdit (acc);
   vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
   kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-  xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+  qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
   xaccAccountCommitEdit (acc);
 }
 
@@ -352,7 +352,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 
       vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
       kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-      xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
       xaccAccountCommitEdit (acc);
 
   }

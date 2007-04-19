@@ -668,7 +668,7 @@ add_closing_balances (Account *parent,
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
       kvp_frame_set_guid (cwd, "/book/prev-book", qof_book_get_guid(closed_book));
 
-      xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(twin), twin->inst.kvp_data);
       
       /* -------------------------------- */
       /* Add KVP to closed account, indicating where 
@@ -678,7 +678,7 @@ add_closing_balances (Account *parent,
       kvp_frame_set_guid (cwd, "/book/next-book", qof_book_get_guid(open_book));
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
-      xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(candidate), candidate->inst.kvp_data);
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not

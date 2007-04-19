@@ -40,8 +40,6 @@
 #define XACC_ACCOUNT_P_H
 
 #include "Account.h"
-#include "gnc-commodity.h"
-#include "gnc-engine.h"
 
 /** STRUCTS *********************************************************/
 
@@ -68,10 +66,5 @@ void xaccAccountSetGUID (Account *account, const GUID *guid);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);
-
-/** killed for now, need to resurect this or something similar
- *  * for transactional/dirty kvp.  Later.  Right now a place holder
- *   */
-#define xaccAccountSetSlots_nc(A,S) qof_instance_set_slots(QOF_INSTANCE(A),S)
 
 #endif /* XACC_ACCOUNT_P_H */
