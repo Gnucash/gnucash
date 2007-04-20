@@ -996,6 +996,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     new_txn = xaccTransClone(template_txn);
     xaccTransBeginEdit(new_txn);
 
+    g_debug("creating template txn desc [%s] for sx [%s]",
+            xaccTransGetDescription(new_txn),
+            xaccSchedXactionGetName(creation_data->instance->parent->sx));
+
     /* clear any copied KVP data */
     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
 
@@ -1156,7 +1160,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             = g_list_append(*(creation_data->created_txn_guids), (gpointer)xaccTransGetGUID(new_txn));
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 static void
