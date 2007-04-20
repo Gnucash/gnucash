@@ -902,7 +902,8 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
                         xaccSchedXactionGetName(instance->parent->sx));
         g_critical("%s", err->str);
-        *creation_errors = g_list_append(*creation_errors, err);
+        if (creation_errors != NULL)
+            *creation_errors = g_list_append(*creation_errors, err);
         return FALSE;
     }
     acct_guid = kvp_value_get_guid( kvp_val );
@@ -916,7 +917,9 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(instance->parent->sx));
         g_free((char*)guid_str);
-        *creation_errors = g_list_append(*creation_errors, err);
+        g_critical("%s", err->str);
+        if (creation_errors != NULL)
+            *creation_errors = g_list_append(*creation_errors, err);
         return FALSE;
     }
 
@@ -951,7 +954,8 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
                             formula_str,
                             parseErrorLoc,
                             gnc_exp_parser_error_string());
-            *creation_errors = g_list_append(*creation_errors, err);
+            if (creation_errors != NULL)
+                *creation_errors = g_list_append(*creation_errors, err);
         }
         
         if (parser_vars != NULL)
