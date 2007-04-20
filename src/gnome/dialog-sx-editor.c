@@ -231,15 +231,13 @@ editor_cancel_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
                                      sxed );
 }
 
-static
-void
+static void
 editor_help_button_clicked(GtkButton *b, GncSxEditorDialog *sxed)
 {
     gnc_gnome_help(HF_HELP, HL_SXEDITOR);
 }
 
-static
-void
+static void
 editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
 {
     GNCBook *book;
@@ -457,16 +455,6 @@ set_sums_to_zero( gpointer key,
     tcds->debitSum  = gnc_numeric_zero();
 }
 
-static
-void
-free_sums( gpointer key,
-           gpointer val,
-           gpointer ud )
-{
-    txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
-    g_free( tcds );
-}
-
 static void
 check_credit_debit_balance( gpointer key,
                             gpointer val,
@@ -503,8 +491,7 @@ check_credit_debit_balance( gpointer key,
  * Checks to make sure that the SX is in a reasonable state to save.
  * @return true if checks out okay, false otherwise.
  **/
-static
-gboolean
+static gboolean
 gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 {
     gboolean multi_commodity = FALSE;
@@ -549,8 +536,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         gpointer unusedKey, unusedValue;
 
         unbalanceable = FALSE; /* innocent until proven guilty */
-        vars = g_hash_table_new( g_str_hash, g_str_equal );
-        txns = g_hash_table_new( g_direct_hash, g_direct_equal );
+        vars = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        txns = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
         numIters = NUM_ITERS_NO_VARS;
         /**
          * Plan:
@@ -693,11 +680,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             ttVarCount -= 1;
         }
 
-        g_hash_table_foreach(vars, (GHFunc)gnc_sx_variable_free, NULL);
         g_hash_table_destroy(vars);
-
-        g_hash_table_foreach( txns, free_sums, NULL );
-        g_hash_table_destroy( txns );
+        g_hash_table_destroy(txns);
 
         if ( unbalanceable
              && !gnc_verify_dialog( sxed->dialog, FALSE,
@@ -868,8 +852,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
  * Saves the contents of the SX.  This assumes that gnc_sxed_check_consistent
  * has returned true.
  **/
-static
-void
+static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {
     /* name */

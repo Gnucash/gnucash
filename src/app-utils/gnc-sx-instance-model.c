@@ -63,7 +63,7 @@ static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_ty
 static void
 _sx_var_to_raw_numeric(gchar *name, GncSxVariable *var, GHashTable *parser_var_hash)
 {
-    g_hash_table_insert(parser_var_hash, name, &var->value);
+    g_hash_table_insert(parser_var_hash, g_strdup(name), &var->value);
 }
 
 static void
@@ -73,7 +73,7 @@ _var_numeric_to_sx_var(gchar *name, gnc_numeric *num, GHashTable *sx_var_hash)
     if (!g_hash_table_lookup_extended(sx_var_hash, name, NULL, &p_var))
     {
         p_var = (gpointer)gnc_sx_variable_new(name);
-        g_hash_table_insert(sx_var_hash, name, p_var);
+        g_hash_table_insert(sx_var_hash, g_strdup(name), p_var);
     }
     ((GncSxVariable*)p_var)->value = *num;
 }
@@ -209,7 +209,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
                             gnc_commodity_get_mnemonic(split_cmdty),
                             gnc_commodity_get_mnemonic(first_cmdty));
             var = gnc_sx_variable_new(g_strdup(var_name->str));
-            g_hash_table_insert(var_hash, var->name, var);
+            g_hash_table_insert(var_hash, g_strdup(var->name), var);
             g_string_free(var_name, TRUE);
         }
 
@@ -285,7 +285,7 @@ _clone_sx_var_hash_entry(gpointer key, gpointer value, gpointer user_data)
     GHashTable *to = (GHashTable*)user_data;
     GncSxVariable *to_copy = (GncSxVariable*)value;
     GncSxVariable *var = gnc_sx_variable_new_copy(to_copy);
-    g_hash_table_insert(to, key, var);
+    g_hash_table_insert(to, g_strdup(key), var);
 }
 
 static GncSxInstance*
@@ -301,15 +301,13 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     if (! parent->variable_names_parsed)
     {
-        parent->variable_names = g_hash_table_new_full(
-            g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        parent->variable_names = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
         gnc_sx_get_variables(parent->sx, parent->variable_names);
         g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
         parent->variable_names_parsed = TRUE;
     }
 
-    rtn->variable_bindings = g_hash_table_new_full(
-        g_str_hash, g_str_equal, NULL, (GDestroyNotify)gnc_sx_variable_free);
+    rtn->variable_bindings = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
 
     {
@@ -321,7 +319,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
         i_num = gnc_numeric_create(instance_i_value, 1);
         as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
 
-        g_hash_table_insert(rtn->variable_bindings, "i", as_var);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup("i"), as_var);
     }
 
     return rtn;
@@ -926,7 +924,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
 }
 
 static void
-_get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
+_get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
 {
     kvp_frame *split_kvpf;
     kvp_value *kvp_val;
@@ -955,7 +953,7 @@ _get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *num
                             gnc_exp_parser_error_string());
             *creation_errors = g_list_append(*creation_errors, err);
         }
-
+        
         if (parser_vars != NULL)
         {
             g_hash_table_destroy(parser_vars);
@@ -964,15 +962,15 @@ _get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *num
 }
 
 static void
-_get_credit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
+_get_credit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
 {
-    _get_sx_formula(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
+    _get_sx_formula_value(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
 }
 
 static void
-_get_debit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
+_get_debit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
 {
-    _get_sx_formula(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
+    _get_sx_formula_value(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
 }
 
 static gboolean
@@ -1054,8 +1052,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             credit_num = gnc_numeric_zero();
             debit_num = gnc_numeric_zero();
 
-            _get_credit_formula(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
-            _get_debit_formula(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
+            _get_credit_formula_value(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
+            _get_debit_formula_value(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
                        
             final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
