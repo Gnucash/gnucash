@@ -802,12 +802,14 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 
    if ( !tsd_a && !tsd_b )
       return 0;
+   if (tsd_a == tsd_b)
+      return 0;
    if ( !tsd_a )
       return 1;
    if ( !tsd_b )
       return -1;
    return g_date_compare( &tsd_a->last_date,
-                &tsd_b->last_date );
+                          &tsd_b->last_date );
 }
 
 /**
@@ -817,9 +819,9 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 void
 gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_insert_sorted( sx->deferredList,
-                   deferStateData,
-                   _temporal_state_data_cmp );
+    sx->deferredList = g_list_insert_sorted( sx->deferredList,
+                                             deferStateData,
+                                             _temporal_state_data_cmp );
 }
 
 /**
@@ -829,7 +831,17 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_remove( sx->deferredList, deferStateData );
+    GList *found_by_value;
+
+    found_by_value = g_list_find_custom(
+        sx->deferredList, deferStateData, _temporal_state_data_cmp);
+    if (found_by_value == NULL) {
+        g_warning("unable to find deferred instance");
+        return;
+    }
+
+    gnc_sx_destroy_temporal_state(found_by_value->data);
+    sx->deferredList = g_list_delete_link(sx->deferredList, found_by_value);
 }
 
 /**

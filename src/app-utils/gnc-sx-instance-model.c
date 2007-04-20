@@ -370,7 +370,6 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
             inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
-            //inst->temporal_state = postponed->data;
             instances->instance_list = g_list_append(instances->instance_list, inst);
         }
     }
