@@ -1325,28 +1325,28 @@ static void
 gnc_tree_model_price_path_added (GncTreeModelPrice *model,
 				 GtkTreeIter *iter)
 {
-  GtkTreePath *path, *tmp_path;
+  GtkTreePath *path;
+  GtkTreeModel *tree_model;
   GtkTreeIter tmp_iter;
-  gint *indices;
-  gint depth, i;
 
   ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(model, iter));
-  path = gnc_tree_model_price_get_path (GTK_TREE_MODEL(model), iter);
+  tree_model = GTK_TREE_MODEL(model);
+  path = gnc_tree_model_price_get_path (tree_model, iter);
 
-  /* Tag all the parent nodes as changed. */
-  depth = gtk_tree_path_get_depth (path);
-  indices = gtk_tree_path_get_indices (path);
-  tmp_path = gtk_tree_path_new();
-  for (i = 0; i <= depth - 1; i++) {
-    gtk_tree_path_append_index (tmp_path, indices[i]);
-    gnc_tree_model_price_get_iter (GTK_TREE_MODEL(model), &tmp_iter, tmp_path);
-    gtk_tree_model_row_changed(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
-    gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
+  /* Tag the new item as inserted. */
+  gtk_tree_model_row_inserted (tree_model, path, iter);
+
+  /*  */
+  gtk_tree_path_up(path);
+  while (gtk_tree_path_get_depth(path) != 0) {
+      if (gtk_tree_model_get_iter(tree_model, &tmp_iter, path)) {
+          gtk_tree_model_row_changed(tree_model, path, &tmp_iter);
+          if (gtk_tree_model_iter_n_children(tree_model, &tmp_iter) == 1) {
+              gtk_tree_model_row_has_child_toggled(tree_model, path, &tmp_iter);
+          }
+      }
+      gtk_tree_path_up(path);
   }
-  gtk_tree_path_free(tmp_path);
-    
-  /* Now tag the new item as inserted. */
-  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, iter);
   gtk_tree_path_free(path);
 
   do {

@@ -1,3 +1,8 @@
+2007-04-21  David Hampton  <hampton@employees.org>
+
+	* Fix window corruption problems when adding prices to the price
+	  database. (#376298)
+
 2007-04-21  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Remove viewport/hbox from account scrolls in transfer dialog.
