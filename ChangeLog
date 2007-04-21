@@ -1,3 +1,7 @@
+2007-04-21  David Hampton  <hampton@employees.org>
+
+	* Add some begin_edit/commit_edit checks.
+
 2007-04-21  Derek Atkins  <derek@ihtfp.com>
 
 	* Phil Longstaff's patch to fix a kvp_frame bug.
