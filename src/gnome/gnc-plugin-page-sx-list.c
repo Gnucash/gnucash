@@ -105,12 +105,12 @@ static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageS
 
 /* Command callbacks */
 static GtkActionEntry gnc_plugin_page_sx_list_actions [] = {
-    { "SxListAction", NULL, N_("Scheduled"), NULL, NULL, NULL },
-    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("New"), NULL,
+    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
+    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
       N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new) },
-    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit"), NULL,
+    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
       N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit) },
-    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("Delete"), NULL,
+    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
       N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete) },
 };
 /** The number of actions provided by this plugin. */
