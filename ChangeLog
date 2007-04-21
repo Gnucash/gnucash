@@ -1,3 +1,8 @@
+2007-04-21  Christian Stimming  <stimming@tuhh.de>
+
+	* Use aqbanking's FiId field for correct OFX duplicate matching.
+	  #418072, patch by David Reiser.
+
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Add some begin_edit/commit_edit checks.

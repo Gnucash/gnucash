@@ -39,6 +39,7 @@
 #include "dialog-hbcitrans.h"
 #include "gnc-hbci-kvp.h"
 #include "dialog-daterange.h"
+#include "import-utilities.h"
 
 /* static short module = MOD_IMPORT; */
 
@@ -261,10 +262,13 @@ AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
   /* Create new gnucash transaction for the given hbci one */
   gnc_trans = xaccMallocTransaction(book);
   xaccTransBeginEdit(gnc_trans);
-
-  /*if(data.fi_id_valid==true){
-    gnc_import_set_trans_online_id(gnc_trans, data.fi_id);
-    }*/
+    
+  {
+    /* OFX unique transaction ID */
+    const char *fitid = AB_Transaction_GetFiId(h_trans);
+    if (fitid && (strlen (fitid) > 0))
+      gnc_import_set_trans_online_id(gnc_trans, fitid);
+  }
 
   normalDate = AB_Transaction_GetDate(h_trans);
   valutaDate = AB_Transaction_GetValutaDate(h_trans);
