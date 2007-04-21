@@ -617,7 +617,7 @@ gnc_account_class_init (AccountClass *klass)
                             "all of the splits after some certain date, and "
                             "the 'starting balance' will represent the "
                             "summation of the splits up to that date.",
-                            GNC_NUMERIC,
+                            GNC_TYPE_NUMERIC,
                             G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -634,7 +634,7 @@ gnc_account_class_init (AccountClass *klass)
                             "some certain date, and the 'starting cleared "
                             "balance' will represent the summation of the "
                             "splits up to that date.",
-                            GNC_NUMERIC,
+                            GNC_TYPE_NUMERIC,
                             G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -651,7 +651,7 @@ gnc_account_class_init (AccountClass *klass)
                             "some certain date, and the 'starting recontiled "
                             "balance' will represent the summation of the "
                             "splits up to that date.",
-			     GNC_NUMERIC,
+			     GNC_TYPE_NUMERIC,
 			     G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -662,7 +662,7 @@ gnc_account_class_init (AccountClass *klass)
                             "This is the current ending balance for the "
                             "account.  It is computed from the sum of the "
                             "starting balance and all splits in the account.",
-                            GNC_NUMERIC,
+                            GNC_TYPE_NUMERIC,
                             G_PARAM_READABLE));
 
     g_object_class_install_property
@@ -674,7 +674,7 @@ gnc_account_class_init (AccountClass *klass)
                             "the account.  It is computed from the sum of the "
                             "starting balance and all cleared splits in the "
                             "account.",
-                            GNC_NUMERIC,
+                            GNC_TYPE_NUMERIC,
                             G_PARAM_READABLE));
 
     g_object_class_install_property
@@ -686,7 +686,7 @@ gnc_account_class_init (AccountClass *klass)
                             "for the account.  It is computed from the sum of "
                             "the starting balance and all reconciled splits "
                             "in the account.",
-                            GNC_NUMERIC,
+                            GNC_TYPE_NUMERIC,
                             G_PARAM_READABLE));
 
     g_object_class_install_property
