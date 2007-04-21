@@ -55,8 +55,9 @@ Christian Stimming <stimming@tuhh.de> is a report-generating
    He has also contributed HBCI online banking support and manages
    internationalization and translation.
 
-Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
-   and budgeting. The current website design is his as well.
+Joshua Sled <jsled@asynchronous.org> works on scheduled transactions, and
+   general project monkeying (IRC bot, logs, website maintenance,
+   bug-triage, &c.).
 
 Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    for Gnucash. This includes the Customer/Vendor database, Job tracking,
