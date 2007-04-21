@@ -2849,7 +2849,8 @@ DxaccAccountGetCurrency (const Account *acc)
 gnc_commodity * 
 xaccAccountGetCommodity (const Account *acc)
 {
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    if (!GNC_IS_ACCOUNT(acc))
+        return NULL;
     return GET_PRIVATE(acc)->commodity;
 }
 
