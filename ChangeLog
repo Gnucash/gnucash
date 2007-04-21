@@ -1,3 +1,8 @@
+2007-04-21  Derek Atkins  <derek@ihtfp.com>
+
+	* Phil Longstaff's patch to fix a kvp_frame bug.
+	  Save the current frame so we know where to build the new one.
+
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Fix window corruption problems when adding prices to the price
