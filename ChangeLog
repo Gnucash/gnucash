@@ -1,3 +1,8 @@
+2007-04-21  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Use correct mnemonic widget for "_Parent Account" in account dialog
+	  #431963.
+
 2007-04-21  Christian Stimming  <stimming@tuhh.de>
 
 	* Fix missing exchange rate dialog on purchasing stocks. bug#335101.
