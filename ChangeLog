@@ -1,3 +1,9 @@
+2007-04-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* Bug#343795: Be explicit about number of months so auto-decimal-point
+	  doesn't bite us.
+	  Patch from Jerry Quinn <mailto:jlquinn@optonline.net>.
+
 2007-04-20  Benoit Grégoire <bock@step.polymtl.ca>
 	* src/import-export/qif-import/test/Makefile.am: Fix compile 
 	problem on Ubuntu.
@@ -86,7 +92,7 @@
 	Add sanity checks when accessing GncPluginPage. Fixes #405851 and
 	hopefully others.
 
-2007-02-04  Joshua Sled  <jsled@asynchronous.org>
+2007-02-04  Joshua Sled  <jsled@asynchronous.org><
 
 	Bug#168700: extension of fin.scm with cpd_{,i,p}pmt functions,
 	featuring variable compounding and consistent rounding functions.
