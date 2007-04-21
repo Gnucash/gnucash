@@ -750,8 +750,7 @@ gnc_common_ok (AccountWindow *aw)
   }
 
   /* check whether the types of child and parent are compatible */
-  if (!gnc_account_is_root(parent) &&
-      !xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
+  if (!xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
     const char *message = _("The selected account type is incompatible with "
                             "the one of the selected parent.");
     gnc_error_dialog(aw->dialog, message);
@@ -969,7 +968,7 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     types = aw->valid_types;
   } else {
     types = aw->valid_types &
-      xaccAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
+      xaccParentAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
   }
 
   type_model = gtk_tree_view_get_model (GTK_TREE_VIEW (aw->type_view));

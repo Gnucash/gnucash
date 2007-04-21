@@ -946,15 +946,16 @@ const char * xaccAccountGetTypeStr (GNCAccountType type);
  *  to the local language. */
 GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
 
-/** Return the bitmask of account types compatible with a given type. */
-guint32 xaccAccountTypesCompatibleWith (GNCAccountType type);
+/** Return the bitmask of parent account types compatible with a given type. */
+guint32 xaccParentAccountTypesCompatibleWith (GNCAccountType type);
 
 /** Return TRUE if accounts of type parent_type can have accounts
  * of type child_type as children. */
 gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
                                      GNCAccountType child_type);
 
-/* Returns the bitmask of the account type enums that are valid. */
+/** Returns the bitmask of the account type enums that are valid.  Deprecated and
+ *  root account types are stripped. */
 guint32 xaccAccountTypesValid(void);
 
 

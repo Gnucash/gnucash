@@ -3759,7 +3759,7 @@ xaccAccountGetTypeFromStr (const gchar *str)
 \********************************************************************/
 
 guint32
-xaccAccountTypesCompatibleWith (GNCAccountType type)
+xaccParentAccountTypesCompatibleWith (GNCAccountType type)
 {
   switch (type) {
   case ACCT_TYPE_BANK:
@@ -3782,15 +3782,18 @@ xaccAccountTypesCompatibleWith (GNCAccountType type)
       (1 << ACCT_TYPE_CREDIT)     |
       (1 << ACCT_TYPE_LIABILITY)  |
       (1 << ACCT_TYPE_RECEIVABLE) |
-      (1 << ACCT_TYPE_PAYABLE);
+      (1 << ACCT_TYPE_PAYABLE)    |
+      (1 << ACCT_TYPE_ROOT);
   case ACCT_TYPE_INCOME:
   case ACCT_TYPE_EXPENSE:
     return
       (1 << ACCT_TYPE_INCOME)     |
-      (1 << ACCT_TYPE_EXPENSE);
+      (1 << ACCT_TYPE_EXPENSE)    |
+      (1 << ACCT_TYPE_ROOT);
   case ACCT_TYPE_EQUITY:
     return
-      (1 << ACCT_TYPE_EQUITY);
+      (1 << ACCT_TYPE_EQUITY)     |
+      (1 << ACCT_TYPE_ROOT);
   default:
     PERR("bad account type: %d", type);
     return 0;
@@ -3801,7 +3804,7 @@ gboolean
 xaccAccountTypesCompatible (GNCAccountType parent_type,
                             GNCAccountType child_type)
 {
-  return ((xaccAccountTypesCompatibleWith (parent_type) &
+  return ((xaccParentAccountTypesCompatibleWith (parent_type) &
            (1 << child_type))
           != 0);
 }
@@ -3810,7 +3813,8 @@ guint32
 xaccAccountTypesValid(void)
 {
     guint32 mask = (1 << NUM_ACCOUNT_TYPES) - 1;
-    mask &= ~(1 << ACCT_TYPE_CURRENCY);  /* DEPRECATED */
+    mask &= ~((1 << ACCT_TYPE_CURRENCY) |  /* DEPRECATED */
+              (1 << ACCT_TYPE_ROOT));      /* ROOT */
 
     return mask;
 }
