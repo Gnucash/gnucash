@@ -139,6 +139,9 @@
   (N_ "Display any foreign currency amount in an account"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
+(define optname-unrealized-gains (N_ "Compute unrealized gains and losses"))
+(define opthelp-unrealized-gains
+  (N_ "Include unrealized gains and losses in the computation.  Will produce incorrect results if the current file uses commodity trading accounts"))
 
 
 ;; options generator
@@ -168,6 +171,11 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-report-form
       "d" opthelp-report-form #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-unrealized-gains
+      "e" opthelp-unrealized-gains #t))
     
     ;; accounts to work on
     (add-option
@@ -293,6 +301,8 @@
                                    optname-date))))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
+         (compute-unrealized-gains? (get-option gnc:pagename-general
+                                                optname-unrealized-gains))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))	 
 	 (depth-limit (get-option gnc:pagename-accounts 
@@ -405,6 +415,22 @@
        table
        (+ (* 2 tree-depth)
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+
+    ;; Get the value of all transactions (in transaction currency)
+    ;; in the given account before the given date
+    (define (get-account-value-at-date account to-date)
+      (let ((value (gnc:make-commodity-collector)))
+        (for-each
+         (lambda (split)
+           (let* ((parent (xaccSplitGetParent split))
+                  (currency (xaccTransGetCurrency parent)))
+             (if (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date)
+                 (value 'add currency (xaccSplitGetValue split)))))
+         (xaccAccountGetSplitList account)
+         )
+        value
+        )
+      )
     
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
@@ -425,6 +451,7 @@
 	
         ;; Get all the balances for each of the account types.
         (let* ((asset-balance #f)
+               (asset-basis #f)
                (neg-liability-balance #f) ;; credit balances are < 0
                (liability-balance #f)
                (neg-equity-balance #f)
@@ -434,7 +461,6 @@
                (unrealized-gain-collector #f)
                (total-equity-balance #f)
                (liability-plus-equity #f)
-	       (book-balance #f) ;; assets - liabilities - equity, norm 0
 	       
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
@@ -450,6 +476,9 @@
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
 		   account date-tp #f)))
+               (get-total-value-fn
+                (lambda (account)
+                  (get-account-value-at-date account date-tp)))
 	       )
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
@@ -461,6 +490,9 @@
 	  (set! asset-balance 
                 (gnc:accounts-get-comm-total-assets 
                  asset-accounts get-total-balance-fn))
+          (set! asset-basis
+                (gnc:accounts-get-comm-total-assets
+                 asset-accounts get-total-value-fn))
 	  (gnc:report-percent-done 6)
 	  ;; sum liabilities
 	  (set! neg-liability-balance
@@ -496,38 +528,15 @@
 	  ;; something and its value increases/decreases (prior to
 	  ;; your selling it) and you have to reflect that on your
 	  ;; balance sheet.
-	  ;; 
-	  ;; I *think* a decrease in the value of a liability or
-	  ;; equity constitutes an unrealized loss.  I'm unsure about
-	  ;; that though....
-	  ;; 
-	  (set! book-balance (gnc:make-commodity-collector))
-	  (book-balance 'merge asset-balance #f)
-	  (book-balance 'merge neg-liability-balance #f)
-	  (book-balance 'merge neg-equity-balance #f)
-	  (book-balance 'merge neg-retained-earnings #f)
+	  ;;
+          ;; Don't calculate unrealized gains if we were asked not to.  If we are using
+          ;; commodity trading accounts they will automatically accumulate the gains.
           (set! unrealized-gain-collector (gnc:make-commodity-collector))
-          (let* ((weighted-fn
-                  (gnc:case-exchange-fn 'weighted-average
-                                        report-commodity date-tp))
-		 
-                 (value
-                  (gnc:gnc-monetary-amount
-                   (gnc:sum-collector-commodity book-balance
-                                                report-commodity
-                                                exchange-fn)))
-		 
-                 (cost
-                  (gnc:gnc-monetary-amount
-                   (gnc:sum-collector-commodity book-balance
-                                                report-commodity
-                                                weighted-fn)))
-		 
-                 (unrealized-gain (gnc-numeric-sub-fixed value cost)))
-	    
-            (unrealized-gain-collector 'add report-commodity unrealized-gain)
-	    )
-	  ;; calculate equity and liability+equity totals
+          (if compute-unrealized-gains?
+              (begin (unrealized-gain-collector 'merge asset-balance #f)
+                     (unrealized-gain-collector 'minusmerge asset-basis #f)))
+
+          ;; calculate equity and liability+equity totals
 	  (set! total-equity-balance (gnc:make-commodity-collector))
 	  (total-equity-balance 'merge
 				equity-balance
