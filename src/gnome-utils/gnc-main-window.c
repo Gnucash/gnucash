@@ -1981,22 +1981,25 @@ gnc_main_window_destroy (GtkObject *object)
 GncMainWindow *
 gnc_main_window_new (void)
 {
-	GncMainWindow *window;
-	gncUIWidget old_window;
+    GncMainWindow *window;
+    gncUIWidget old_window;
 
 	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
-	old_window = gnc_ui_get_toplevel();
-	if (old_window) {
-	  gint width, height;
-	  gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
-	  gtk_window_resize (GTK_WINDOW (window), width, height);
-	  if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
-	       & GDK_WINDOW_STATE_MAXIMIZED) != 0)
-	    gtk_window_maximize (GTK_WINDOW (window));
-	}
-	active_windows = g_list_append (active_windows, window);
-	gnc_main_window_update_all_menu_items();
-	return window;
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+
+    old_window = gnc_ui_get_toplevel();
+    if (old_window) {
+        gint width, height;
+        gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
+        gtk_window_resize (GTK_WINDOW (window), width, height);
+        if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
+             & GDK_WINDOW_STATE_MAXIMIZED) != 0) {
+            gtk_window_maximize (GTK_WINDOW (window));
+        }
+    }
+    active_windows = g_list_append (active_windows, window);
+    gnc_main_window_update_all_menu_items();
+    return window;
 }
 
 /************************************************************
