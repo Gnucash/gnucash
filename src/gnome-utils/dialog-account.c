@@ -1263,7 +1263,7 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_widget_show (GTK_WIDGET(aw->transfer_tree));
 
   label = glade_xml_get_widget (xml, "parent_label");
-  gtk_label_set_mnemonic_widget (GTK_LABEL(label), aw->transfer_tree);
+  gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(aw->parent_tree));
 
   /* This goes at the end so the select callback has good data. */
   aw->type_view = glade_xml_get_widget (xml, "type_view");
