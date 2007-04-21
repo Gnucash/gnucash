@@ -110,15 +110,18 @@ function inst_dtk() {
 
 function inst_mingw() {
     setup MinGW
+    _MINGW_UDIR=`unix_path $MINGW_DIR`
+    _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
     if quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help
     then
         echo "mingw already installed.  skipping."
     else
-        _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
-        smart_wget $MINGW_URL $DOWNLOAD_DIR
-        echo "!!! Install g++ !!!"
-        echo "!!! When asked for an installation path, specify $MINGW_DIR !!!"
-        $LAST_FILE
+        mkdir -p $_MINGW_UDIR
+        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
     quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help || die "mingw not installed correctly"
