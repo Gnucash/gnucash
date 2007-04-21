@@ -1,3 +1,12 @@
+2007-04-21  Andreas Köhler  <andi5.py@gmx.net>
+
+	* Remove viewport/hbox from account scrolls in transfer dialog.
+	  Fixes #425917.
+
+	  The scrolled windows for "transfer to" and "transfer from" now
+	  take the treeviews directly and do not pack them into viewports,
+	  letting them actually scroll the scrolled window.
+
 2007-04-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* Bug#343795: Be explicit about number of months so auto-decimal-point

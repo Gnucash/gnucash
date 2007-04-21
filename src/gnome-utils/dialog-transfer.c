@@ -447,7 +447,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 {
   GtkTreeView *tree_view;
   const char *show_inc_exp_message = _("Show the income and expense accounts");
-  GtkWidget *scroll_win, *box;
+  GtkWidget *scroll_win;
   GtkWidget *button;
   GtkTreeSelection *selection;
   gboolean  use_accounting_labels;
@@ -467,9 +467,6 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
    * trees when in "accountant" mode. -- Herbert Thoma, 2004-01-18
    */
   if(use_accounting_labels) {
-    box = gnc_glade_lookup_widget (xferData->dialog,
-				   (direction == XFER_DIALOG_TO) ?
-				   "left_tree_box" : "right_tree_box");
     button = gnc_glade_lookup_widget (xferData->dialog,
 				      (direction == XFER_DIALOG_TO) ?
 				      "left_show_button" : "right_show_button");
@@ -478,9 +475,6 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
 					  "left_trans_window" : "right_trans_window");
   }
   else {
-    box = gnc_glade_lookup_widget (xferData->dialog,
-				   (direction == XFER_DIALOG_TO) ?
-				   "right_tree_box" : "left_tree_box");
     button = gnc_glade_lookup_widget (xferData->dialog,
 				      (direction == XFER_DIALOG_TO) ?
 				      "right_show_button" : "left_show_button");
@@ -490,7 +484,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
   }
 
   tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
-  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(tree_view));
+  gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
   gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),
 				    gnc_xfer_dialog_show_inc_exp_visible_cb,
 				    button, /* user data */
