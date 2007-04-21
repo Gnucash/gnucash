@@ -1299,6 +1299,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    Transaction *pending_trans;
    Transaction *blank_trans;
    Transaction *trans;
+   Account *account;
    Split *blank_split;
    const char *memo;
    const char *desc;
@@ -1401,8 +1402,9 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)
    {
-     xaccSplitSetAccount(blank_split, 
-                         gnc_split_register_get_default_account (reg));
+     account = gnc_split_register_get_default_account(reg);
+     if (account)
+       xaccSplitSetAccount(blank_split, account);
      xaccTransSetDateEnteredSecs(trans, time(NULL));
    }
 

@@ -578,12 +578,13 @@ skip_cb (Account *account, gpointer x)
 static void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
-  Account *root;
+  Account *root = NULL;
   QuickFill *qf;
   ComboCell *cell;
   GtkListStore *store;
 
-  root = gnc_account_get_root(base_account);
+  if (base_account)
+    root = gnc_account_get_root(base_account);
   if (root == NULL)
     root = gnc_get_current_root_account();
   if (root == NULL)

@@ -1737,7 +1737,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
 
     account = xaccAccountLookup (guid, gnc_get_current_book ());
 
-    name = xaccAccountGetFullName (account);
+    name = account ? xaccAccountGetFullName(account) : NULL;
   }
   else
     name = NULL;
