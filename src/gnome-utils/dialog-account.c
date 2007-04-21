@@ -998,6 +998,8 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     type_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->type_view));
     gnc_tree_model_account_types_set_selection(type_selection, 1 << aw->type);
   }
+
+  gnc_account_window_set_name(aw);
 }
 
 static void
