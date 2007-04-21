@@ -1,5 +1,10 @@
 2007-04-21  Christian Stimming  <stimming@tuhh.de>
 
+	* Fix missing exchange rate dialog on purchasing stocks. bug#335101.
+	  Patch by Mike Alexander
+
+2007-04-21  Christian Stimming  <stimming@tuhh.de>
+
 	* Use aqbanking's FiId field for correct OFX duplicate matching.
 	  #418072, patch by David Reiser.
 
