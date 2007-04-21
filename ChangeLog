@@ -1,3 +1,7 @@
+2007-04-21  David Hampton  <hampton@employees.org>
+
+	* Disable the close callback while updating reports.  Fixes #416986.
+
 2007-04-21  Andreas Köhler  <andi5.py@gmx.net>
 
 	* Use correct mnemonic widget for "_Parent Account" in account dialog
