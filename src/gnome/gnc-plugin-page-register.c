@@ -232,7 +232,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
-	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
+	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
 	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
