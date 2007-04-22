@@ -38,12 +38,14 @@
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-component-manager.h"
 #include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "option-util.h"
@@ -58,6 +60,8 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
+
+#define DIALOG_OPTIONS_CM_CLASS "dialog-options"
 
 /*
  * Point where preferences switch control method from a set of
@@ -1382,6 +1386,13 @@ gnc_options_register_stocks (void)
 #endif
 }
 
+static void
+component_close_handler (gpointer data)
+{
+  GNCOptionWin *window = data;
+  gtk_dialog_response(GTK_DIALOG(window->dialog), GTK_RESPONSE_CANCEL);
+}
+
 /* gnc_options_dialog_new:
  *
  *   - Opens the preferences glade file
@@ -1396,6 +1407,7 @@ gnc_options_dialog_new(gchar *title)
   GNCOptionWin * retval;
   GladeXML *xml;
   GtkWidget * hbox;
+  gint component_id;
 
   retval = g_new0(GNCOptionWin, 1);
   xml = gnc_glade_xml_new ("preferences.glade", "GnuCash Options");
@@ -1414,6 +1426,11 @@ gnc_options_dialog_new(gchar *title)
   retval->notebook = gtk_notebook_new();
   gtk_widget_show(retval->notebook);
   gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
+
+  component_id = gnc_register_gui_component (DIALOG_OPTIONS_CM_CLASS,
+                                             NULL, component_close_handler,
+                                             retval);
+  gnc_gui_component_set_session (component_id, gnc_get_current_session());
 
   return retval;
 }
