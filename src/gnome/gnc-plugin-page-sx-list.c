@@ -35,27 +35,28 @@
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <glade/glade-xml.h>
-#include "gnc-exp-parser.h"
-#include "gnc-engine.h"
-#include "Transaction.h"
+#include "SX-book.h"
 #include "Split.h"
+#include "Transaction.h"
+#include "dialog-sx-editor.h"
+#include "dialog-utils.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
-#include "gnc-event.h"
+#include "gnc-component-manager.h"
 #include "gnc-dense-cal.h"
+#include "gnc-engine.h"
+#include "gnc-event.h"
+#include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
 #include "gnc-icons.h"
-#include "gnc-plugin-page-sx-list.h"
-#include "gnc-tree-view-sx-list.h"
-#include "gnc-sx-instance-model.h"
-#include "gnc-sx-instance-dense-cal-adapter.h"
-#include "gnc-sx-list-tree-model-adapter.h"
-#include "gnc-ui-util.h"
 #include "gnc-main-window.h"
-#include "dialog-utils.h"
-#include "gnc-component-manager.h"
-#include "SX-book.h"
-#include "gnc-book.h"
-#include "dialog-sx-editor.h"
+#include "gnc-plugin-page-sx-list.h"
+#include "gnc-sx-instance-dense-cal-adapter.h"
+#include "gnc-sx-instance-model.h"
+#include "gnc-sx-list-tree-model-adapter.h"
+#include "gnc-tree-view-sx-list.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
@@ -562,7 +563,12 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
             g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
         }
     }
-    g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+
+    if (gnc_verify_dialog(NULL, FALSE, _("Are you sure?")))
+    {
+        g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+    }
+
     g_list_free(to_delete);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);
