@@ -474,6 +474,8 @@ inner_main (void *closure, int argc, char **argv)
 
     gnc_destroy_splash_screen();
 
+    gnc_main_window_show_all_windows();
+
     gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);
     gnc_ui_start_event_loop();
     gnc_hook_remove_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);

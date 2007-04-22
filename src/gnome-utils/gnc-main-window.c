@@ -3500,6 +3500,16 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
  *                                                          *
  ************************************************************/
 
+void
+gnc_main_window_show_all_windows(void)
+{
+    GList *window_iter;
+    for (window_iter = active_windows; window_iter != NULL; window_iter = window_iter->next)
+    {
+        gtk_widget_show_all(GTK_WIDGET(window_iter->data));
+    }
+}
+
 /** Get a pointer to the first active top level window or NULL
  *  if there is none.
  *

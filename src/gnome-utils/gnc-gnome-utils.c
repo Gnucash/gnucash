@@ -486,7 +486,8 @@ gnc_gui_init(void)
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     main_window = gnc_main_window_new ();
-    gtk_widget_show (GTK_WIDGET (main_window));
+    // Bug#350993:
+    // gtk_widget_show (GTK_WIDGET (main_window));
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
     map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
