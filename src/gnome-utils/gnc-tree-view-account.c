@@ -1250,6 +1250,7 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   GtkTreeSelection *selection;
   GtkTreePath *sp_account, *sp_start, *sp_end;
   GtkTreeIter si_account, si_start, si_end;
+  gboolean have_start, have_end;
   gint num_children;
 
   ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
@@ -1279,8 +1280,19 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   gtk_tree_view_expand_row (GTK_TREE_VIEW(view), sp_account, TRUE);
 
   /* compute start/end paths */
-  if (gtk_tree_model_iter_nth_child(s_model, &si_start, &si_account, 0) &&
-      gtk_tree_model_iter_nth_child(s_model, &si_end, &si_account, num_children - 1)) {
+  have_start = gtk_tree_model_iter_nth_child(s_model, &si_start, &si_account, 0);
+  si_end = si_account;
+  while (num_children) {
+    GtkTreeIter tmp_iter = si_end;
+    have_end = gtk_tree_model_iter_nth_child(s_model, &si_end, &tmp_iter,
+                                             num_children - 1);
+    if (have_end)
+      num_children = gtk_tree_model_iter_n_children(s_model, &si_end);
+    else
+      num_children = 0;
+  }
+
+  if (have_start && have_end) {
     sp_start = gtk_tree_model_get_path (s_model, &si_start);
     sp_end = gtk_tree_model_get_path (s_model, &si_end);
 
