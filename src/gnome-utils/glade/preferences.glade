@@ -2238,6 +2238,7 @@
 
 	  <child>
 	    <widget class="GtkTable" id="table11">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">10</property>
 	      <property name="n_columns">4</property>
