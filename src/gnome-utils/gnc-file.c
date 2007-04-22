@@ -1092,6 +1092,12 @@ gnc_file_save_as (void)
     return;
   }
 
+  /* Prevent race condition between swapping the contents of the two
+   * sessions, and actually installing the new session as the current
+   * one. Any event callbacks that occur in this interval will have
+   * problems if they check for the current book. */
+  qof_event_suspend();
+
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   qof_session_swap_data (session, new_session);
@@ -1103,6 +1109,8 @@ gnc_file_save_as (void)
    * session. But I'm lazy...
    */
   gnc_set_current_session(new_session);
+
+  qof_event_resume();
 
   /* --------------- END CORE SESSION CODE -------------- */
 
