@@ -3255,6 +3255,8 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
   if (!acc) return gnc_numeric_zero ();
   if (!report_commodity)
     report_commodity = xaccAccountGetCommodity (acc);
+  if (!report_commodity)
+    return gnc_numeric_zero();
 
   balance = xaccAccountGetXxxBalanceInCurrency (acc, fn, report_commodity);
 
@@ -3280,6 +3282,8 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
   g_return_val_if_fail(acc, gnc_numeric_zero());
   if (!report_commodity)
       report_commodity = xaccAccountGetCommodity (acc);
+  if (!report_commodity)
+    return gnc_numeric_zero();
 
   balance = xaccAccountGetXxxBalanceAsOfDateInCurrency(
       acc, date, fn, report_commodity);
