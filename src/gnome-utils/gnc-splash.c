@@ -50,6 +50,13 @@ gnc_gui_init_splash (void)
   }
 }
 
+static gboolean
+button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
+{
+  gnc_destroy_splash_screen();
+  return TRUE;
+}
+
 void
 gnc_show_splash_screen (void)
 {
@@ -111,6 +118,10 @@ gnc_show_splash_screen (void)
   gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), progress, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (splash), vbox);
+
+  gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(splash, "button_press_event",
+                   G_CALLBACK(button_press_cb), NULL);
 
   gtk_window_set_auto_startup_notification (FALSE);
   gtk_widget_show_all (splash);
