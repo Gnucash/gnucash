@@ -2774,8 +2774,14 @@ xaccAccountGetFullName(const Account *account)
   gchar **names;
   int level;
 
+  /* So much for hardening the API. Too many callers to this function don't
+   * bother to check if they have a non-NULL pointer before calling. */
+  if (NULL == account)
+      return g_strdup("");
+
   /* errors */
   g_return_val_if_fail(GNC_IS_ACCOUNT(account), g_strdup(""));
+
   /* optimizations */
   priv = GET_PRIVATE(account);
   if (!priv->parent)
