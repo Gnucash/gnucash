@@ -768,7 +768,7 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
 {
   const gchar *to_mnemonic, *from_mnemonic;
   gchar *string;
-  gnc_numeric price;
+  gnc_numeric rate;
 
   from_mnemonic = gnc_commodity_get_mnemonic(xferData->from_commodity);
   to_mnemonic = gnc_commodity_get_mnemonic(xferData->to_commodity);
@@ -781,10 +781,8 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
   if (!from_mnemonic || !to_mnemonic)
     return;
 
-  // price = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
-  price = gnc_xfer_dialog_compute_price(xferData);
-
-  if (gnc_numeric_check(price) || gnc_numeric_zero_p(price)) {
+  rate = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+  if (gnc_numeric_zero_p(rate)) {
     string = g_strdup_printf("1 %s = x %s", from_mnemonic, to_mnemonic);
     gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
     g_free(string);
@@ -794,14 +792,14 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
     g_free(string);
   } else {
     string = g_strdup_printf("1 %s = %f %s", from_mnemonic,
-			     gnc_numeric_to_double(price), to_mnemonic);
+			     gnc_numeric_to_double(rate), to_mnemonic);
     gtk_label_set_text(GTK_LABEL(xferData->conv_forward), string);
     g_free(string);
 
-    price = gnc_numeric_div(gnc_numeric_create (1, 1), price,
-			    GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    rate = gnc_numeric_div(gnc_numeric_create (1, 1), rate,
+                           GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
     string = g_strdup_printf("1 %s = %f %s", to_mnemonic,
-			     gnc_numeric_to_double(price), from_mnemonic);
+			     gnc_numeric_to_double(rate), from_mnemonic);
     gtk_label_set_text(GTK_LABEL(xferData->conv_reverse), string);
     g_free(string);
   }
