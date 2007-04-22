@@ -1839,7 +1839,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
   /* Set up the tree view and model */
   view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
 
-  fd->model = gnc_tree_model_account_types_filter_using_mask(-1);
+  fd->model = gnc_tree_model_account_types_filter_using_mask
+    (~(1 << ACCT_TYPE_ROOT));
   gtk_tree_view_set_model(view, fd->model);
   g_object_unref (fd->model);
 
