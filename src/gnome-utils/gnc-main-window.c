@@ -3506,7 +3506,7 @@ gnc_main_window_show_all_windows(void)
     GList *window_iter;
     for (window_iter = active_windows; window_iter != NULL; window_iter = window_iter->next)
     {
-        gtk_widget_show_all(GTK_WIDGET(window_iter->data));
+        gtk_widget_show(GTK_WIDGET(window_iter->data));
     }
 }
 
