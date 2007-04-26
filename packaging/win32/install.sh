@@ -82,8 +82,8 @@ function inst_wget() {
         mkdir -p $_WGET_UDIR/bin
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $_WGET_UDIR
         cp $_WGET_UDIR/*/*/wget.exe $_WGET_UDIR/bin
+        quiet wget --version || die "wget unavailable"
     fi
-    quiet wget --version || die "wget unavailable"
 }
 
 function inst_dtk() {
@@ -104,8 +104,8 @@ function inst_dtk() {
             while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
             mv $file $_dst_file
         done
+        quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
     fi
-    quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
 }
 
 function test_for_mingw() {
@@ -131,8 +131,8 @@ function inst_mingw() {
         wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        quiet test_for_mingw || die "mingw not installed correctly"
     fi
-    quiet test_for_mingw || die "mingw not installed correctly"
 }
 
 function inst_unzip() {
@@ -145,8 +145,8 @@ function inst_unzip() {
     else
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
+        quiet unzip --help || die "unzip unavailable"
     fi
-    quiet unzip --help || die "unzip unavailable"
 }
 
 function inst_regex() {
@@ -163,8 +163,8 @@ function inst_regex() {
         mkdir -p $_REGEX_UDIR
         wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
         wget_unpacked $REGEX_DEV_URL $DOWNLOAD_DIR $REGEX_DIR
+        quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
     fi
-    quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
 }
 
 function inst_readline() {
@@ -180,8 +180,8 @@ function inst_readline() {
         mkdir -p $_READLINE_UDIR
         wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
         wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
+        quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
     fi
-    quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
 }
 
 function inst_active_perl() {
@@ -194,14 +194,17 @@ function inst_active_perl() {
         echo "ActivePerl already installed.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
+        quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
     fi
-    quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
 }
 
 function inst_autotools() {
     setup Autotools
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
+    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
+    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
+    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet autoconf --help && quiet automake --help
     then
         echo "autoconf/automake already installed.  skipping."
@@ -222,6 +225,7 @@ function inst_autotools() {
             make
             make install
         qpopd
+        quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
     fi
     if quiet ${LIBTOOLIZE} --help 
     then
@@ -235,13 +239,8 @@ function inst_autotools() {
             make
             make install
         qpopd
+        quiet ${LIBTOOLIZE} --help || die "libtool/libtoolize not installed correctly"
     fi
-    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
-    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-    quiet autoconf --help &&
-    quiet automake --help &&
-    quiet ${LIBTOOLIZE} --help || die "autotools not installed correctly"
 }
 
 function inst_guile() {
@@ -306,6 +305,8 @@ function inst_guile() {
             sed '/lambda.*'"'"'unix/a\
 (define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
 	qpopd
+        guile -c '(use-modules (srfi srfi-39))' &&
+        guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
     fi
     if test x$cross_compile = xyes ; then
 	qpushd $_GUILE_UDIR/bin
@@ -317,8 +318,6 @@ function inst_guile() {
     else
 	add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
-    guile -c '(use-modules (srfi srfi-39))' &&
-    guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
 }
 
 function inst_svn() {
@@ -372,8 +371,8 @@ function inst_openssl() {
             done
             cp -a include/openssl $_OPENSSL_UDIR/include
         qpopd
+        quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
     fi
-    quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
 }
 
 function inst_mingwutils() {
@@ -385,8 +384,8 @@ function inst_mingwutils() {
         echo "mingw-utils already installed.  skipping."
     else
         wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
+        (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
     fi
-    (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
 }
 
 function inst_exetype() {
@@ -399,10 +398,9 @@ function inst_exetype() {
     else
         mkdir -p $_EXETYPE_UDIR/bin
         cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+        quiet which exetype || die "exetype unavailable"
     fi
-    quiet which exetype || die "exetype unavailable"
 }
-
 
 function inst_libxml2() {
     setup LibXML2
@@ -439,8 +437,8 @@ Libs: -L\${libdir} -lxml2 -lz
 Cflags: -I\${includedir}
 EOF
         qpopd
+        quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
     fi
-    quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
 }
 
 function inst_gnome() {
@@ -539,6 +537,10 @@ fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
         qpopd
+        quiet gconftool-2 --version &&
+        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
+#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet intltoolize --version || die "gnome not installed correctly"
     fi
     if test x$cross_compile = xyes ; then
         qpushd $_GNOME_UDIR/lib/pkgconfig
@@ -551,10 +553,6 @@ EOF
 	#    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
 	#qpopd
     fi
-    quiet gconftool-2 --version &&
-    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
-    quiet intltoolize --version || die "gnome not installed correctly"
 }
 
 function inst_swig() {
@@ -573,8 +571,8 @@ function inst_swig() {
             rmdir mydir
             rm INSTALL # bites with /bin/install
         qpopd
+        quiet swig -version || die "swig unavailable"
     fi
-    quiet swig -version || die "swig unavailable"
 }
 
 function inst_pcre() {
@@ -615,8 +613,8 @@ function inst_libgsf() {
 	    make
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
     fi
-    ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
 }
 
 function inst_goffice() {
@@ -647,8 +645,8 @@ function inst_goffice() {
 	    make
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
     fi
-    ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
 }
 
 function inst_glade() {
@@ -667,8 +665,8 @@ function inst_glade() {
             make
             make install
         qpopd
+        quiet glade-3 --version || die "glade not installed correctly"
     fi
-    quiet glade-3 --version || die "glade not installed correctly"
 }
 
 function inst_inno() {
@@ -681,8 +679,8 @@ function inst_inno() {
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
+        quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
     fi
-    quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
 function test_for_hh() {
@@ -721,8 +719,8 @@ function inst_hh() {
                mv htmlhelp.lib htmlhelp.lib.bak
            qpopd
         qpopd
+        quiet test_for_hh || die "html help workshop not installed correctly"
     fi
-    quiet test_for_hh || die "html help workshop not installed correctly"
 }
 
 function inst_opensp() {
@@ -749,8 +747,8 @@ function inst_opensp() {
 	    make -i
 	    make -i install
 	qpopd
+        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
     fi
-    test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
 }
 
 function inst_libofx() {
@@ -776,8 +774,8 @@ function inst_libofx() {
 	    make LDFLAGS="${LDFLAGS} -no-undefined"
 	    make install
 	qpopd
+        quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
     fi
-    quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
 }
 
 function inst_gwenhywfar() {
@@ -804,14 +802,16 @@ function inst_gwenhywfar() {
 	    make check
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
     fi
-    ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
 }
 
 function inst_ktoblzcheck() {
     setup Ktoblzcheck
     # Out of convenience ktoblzcheck is being installed into
     # GWENHYWFAR_DIR
+    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
+    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     if quiet ${PKG_CONFIG} --exists ktoblzcheck
     then
 	echo "Ktoblzcheck already installed. Skipping."
@@ -825,10 +825,8 @@ function inst_ktoblzcheck() {
 	    make check
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
     fi
-    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
-    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
-    ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
 }
 
 function inst_qt4() {
@@ -903,8 +901,8 @@ function inst_aqbanking() {
 	    exetype aqbanking-tool.exe console
 	    exetype aqhbci-tool.exe console
 	qpopd
+        ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
     fi
-    ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
 }
 
 function svn_up() {
