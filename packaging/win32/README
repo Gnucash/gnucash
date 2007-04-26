@@ -5,8 +5,8 @@ For cross-compiling the windows executable on Linux, see the lower
 section of this file.
 
 Before you start with the automated build, you have to complete these
-steps manually. The directory variables are set in `defaults' and optionally
-`custom'.
+steps manually. The directory variables are set in `defaults.sh' and optionally
+`custom.sh'.
 
 * Download MSYS (but *only* msys; no mingw and no msysdtk)
 from http://www.mingw.org/download.shtml -> Current -> MSYS -> (bin, *.exe)
@@ -19,12 +19,12 @@ to $MSYS_DIR
 from http://www.mingw.org/download.shtml -> Current -> mingwPORT -> (bin, wget-*)
 to $DOWNLOAD_DIR
 
-* Look at defaults and create a file named custom to specify adapted directory
+* Look at defaults.sh and create a file named custom.sh to specify adapted directory
   variables.  If you want verbose output of any script
   step, add "set -x" to that file.
 
 * Either, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
-  install it and set QTDIR in custom, like "QTDIR=/c/Qt/4.2.3"; or skip building
+  install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3"; or skip building
   the AqBanking Setup Wizard by specifying "AQBANKING_WITH_QT=no".
 
 Start/Enter any MSYS shell window. Let the automated build begin by:
@@ -58,19 +58,19 @@ These steps need to be performed:
    script create_cross_mingw.sh - it will
    download, compile, and install a mingw32 toolchain.
 
-2. Edit the file defaults: Make a global search-and-replace of
+2. Edit the file defaults.sh: Make a global search-and-replace of
    '\\' into '/' so that all directories are specified in unix
    conventions. Set the variable cross_compile to "yes". Then
-   adjust the directories in defaults according to your
+   adjust the directories in defaults.sh according to your
    preferred installation, especially $GLOBAL_DIR.
 
 3. Download a binary windows packages for "guile" e.g. from
    http://www.tu-harburg.de/~et2cs/gnc/ and unpack it into the
-   directory $GUILE_DIR as given in defaults. (This is done because
+   directory $GUILE_DIR as given in defaults.sh. (This is done because
    the build system for guile doesn't support cross-compiling.)
 
 4. Call install.sh, which will read the directory settings from
-   defaults. It should download, compile, and install everything
+   defaults.sh. It should download, compile, and install everything
    automatically. Eventually the windows gnucash is installed into
    $GNUCASH_DIR. 
 

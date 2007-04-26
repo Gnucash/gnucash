@@ -1,9 +1,9 @@
 EXTRA_DIST = \
   README \
-  defaults \
+  defaults.sh \
   dist.sh \
   exetype.pl \
-  functions \
+  functions.sh \
   goffice-0.3.7-patch.diff \
   install.sh \
   libofx-0.8.3-patch.diff \

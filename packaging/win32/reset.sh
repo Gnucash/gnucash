@@ -2,15 +2,15 @@
 
 set -e
 
-####  Load defaults
+####  Load defaults.sh
 
 function qpushd() { pushd "$@" >/dev/null; }
 function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-. functions
-. defaults
+. functions.sh
+. defaults.sh
 
 ## too bad, bash 2.04 has no real support for arrays
 

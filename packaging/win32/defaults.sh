@@ -1,6 +1,6 @@
 #!/bin/sh # for emacs
 #
-# Instead of just editing this file, it is recommended to create a file `custom'
+# Instead of just editing this file, it is recommended to create a file `custom.sh'
 # in the same directory that will be read in at the beginning of this script.
 #
 # You can use the full power of bash 2.04 scripting.  In particular, you can
@@ -16,7 +16,7 @@
 #
 # Note: All directories must be without spaces!
 #
-# Here is an example custom file:
+# Here is an example custom.sh file:
 #
 # REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/trunk"
 # SF_MIRROR="http://switch.dl.sourceforge.net/sourceforge"
@@ -32,7 +32,7 @@
 [ "$__SOURCED_DEFAULTS" ] && return
 __SOURCED_DEFAULTS=1
 
-[ -f "custom" ] && . custom || true
+[ -f "custom.sh" ] && . custom.sh || true
 
 set_default GLOBAL_DIR c:\\soft
 set_default TMP_DIR $GLOBAL_DIR\\tmp
@@ -257,7 +257,7 @@ set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
-# install it and set QTDIR in custom, like "QTDIR=/c/Qt/4.2.3".
+# install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"

@@ -7,8 +7,8 @@ function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-. functions
-. defaults
+. functions.sh
+. defaults.sh
 
 register_env_var ACLOCAL_FLAGS " "
 register_env_var AUTOTOOLS_CPPFLAGS " "
@@ -834,7 +834,7 @@ function inst_qt4() {
     # already useful in itself and that's why it has already been
     # added.
 
-    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom, or deactivate AQBANKING_WITH_QT"
+    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom.sh, or deactivate AQBANKING_WITH_QT"
     export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
     _QTDIR=$QTDIR
     # This section creates .la files for the Qt-4 DLLs so that
