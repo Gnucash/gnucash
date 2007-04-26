@@ -114,6 +114,7 @@ set_default GCC_CORE_URL "$SF_MIRROR/mingw/gcc-core-3.4.2-20040916-1.tar.gz"
 set_default GCC_GPP_URL "$SF_MIRROR/mingw/gcc-g++-3.4.2-20040916-1.tar.gz"
 set_default MINGW_RT_URL "$SF_MIRROR/mingw/mingw-runtime-3.12.tar.gz"
 set_default W32API_URL "$SF_MIRROR/mingw/w32api-3.9.tar.gz"
+set_default MINGW_MAKE_URL "$SF_MIRROR/mingw/mingw32-make-3.81-2.tar.gz"
 set_default MINGW_DIR $GLOBAL_DIR\\mingw
 
 set_default UNZIP_URL "$SF_MIRROR/gnuwin32/unzip-5.51-1.exe"
@@ -140,8 +141,7 @@ set_default GUILE_URL "http://ftp.gnu.org/pub/gnu/guile/guile-1.6.8.tar.gz"
 set_default SLIB_URL "http://swiss.csail.mit.edu/ftpdir/scm/OLD/slib3a3.zip"
 set_default GUILE_DIR $GLOBAL_DIR\\guile
 
-set_default OPENSSL_BIN_URL "$SF_MIRROR/gnuwin32/openssl-0.9.7c-bin.zip"
-set_default OPENSSL_LIB_URL "$SF_MIRROR/gnuwin32/openssl-0.9.7c-lib.zip"
+set_default OPENSSL_URL "http://www.openssl.org/source/openssl-0.9.8e.tar.gz"
 set_default OPENSSL_DIR $GLOBAL_DIR\\openssl
 
 set_default MINGW_UTILS_URL "$SF_MIRROR/mingw/mingw-utils-0.3.tar.gz"
@@ -280,6 +280,7 @@ fi
 add_step inst_autotools
 add_step inst_guile
 if test x$cross_compile != xyes ; then
+ add_step inst_svn
  add_step inst_openssl
 fi
 add_step inst_mingwutils
@@ -303,7 +304,6 @@ if test x$cross_compile != xyes ; then
  add_step inst_hh
 fi
 if test x$UPDATE_SOURCES = xyes ; then
- add_step inst_svn
  add_step svn_up
 fi
 add_step inst_gnucash

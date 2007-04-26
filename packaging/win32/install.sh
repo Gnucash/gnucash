@@ -108,11 +108,18 @@ function inst_dtk() {
     quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
 }
 
+function test_for_mingw() {
+    ${CC} --version &&
+    g++ --version &&
+    ${LD} --help &&
+    mingw32-make --help
+}
+
 function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
-    if quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help
+    if quiet test_for_mingw
     then
         echo "mingw already installed.  skipping."
     else
@@ -122,9 +129,10 @@ function inst_mingw() {
         wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
         wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
     fi
-    quiet ${CC} --version && quiet g++ --version && quiet ${LD} --help || die "mingw not installed correctly"
+    quiet test_for_mingw || die "mingw not installed correctly"
 }
 
 function inst_unzip() {
@@ -178,6 +186,7 @@ function inst_readline() {
 
 function inst_active_perl() {
     setup ActivePerl \(intltool\)
+    _ACTIVE_PERL_UDIR=`unix_path $ACTIVE_PERL_DIR`
     _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
     set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
     if quiet $INTLTOOL_PERL --help
@@ -312,6 +321,19 @@ function inst_guile() {
     guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
 }
 
+function inst_svn() {
+    setup Subversion
+    _SVN_UDIR=`unix_path $SVN_DIR`
+    add_to_env $_SVN_UDIR/bin PATH
+    if quiet svn --version
+    then
+        echo "subversion already installed.  skipping."
+    else
+        smart_wget $SVN_URL $DOWNLOAD_DIR
+        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
+    fi
+}
+
 function inst_openssl() {
     setup OpenSSL
     _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
@@ -324,14 +346,34 @@ function inst_openssl() {
 	die "You have uninstalled the Win32OpenSSL-0_9_8d version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
     fi
 
-    if test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a ; then
+    if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
         echo "openssl already installed.  skipping."
     else
-	mkdir -p ${_OPENSSL_UDIR}
-	wget_unpacked $OPENSSL_BIN_URL $DOWNLOAD_DIR $OPENSSL_DIR
-	wget_unpacked $OPENSSL_LIB_URL $DOWNLOAD_DIR $OPENSSL_DIR
+        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
+        echo -n "Extracting ${LAST_FILE##*/} ... "
+        tar -xzpf $LAST_FILE -C $TMP_UDIR &>/dev/null | true
+        echo "done"
+        assert_one_dir $TMP_UDIR/openssl-*
+        qpushd $TMP_UDIR/openssl-*
+            for _dir in crypto ssl ; do
+                qpushd $_dir
+                    find . -name "*.h" -exec cp {} ../include/openssl/ \;
+                qpopd
+            done
+            cp *.h include/openssl
+            _COMSPEC_U=`unix_path $COMSPEC`
+            PATH=$_ACTIVE_PERL_UDIR/ActivePerl/Perl/bin:$_MINGW_UDIR/bin $_COMSPEC_U //c ms\\mingw32
+            mkdir -p $_OPENSSL_UDIR/bin
+            mkdir -p $_OPENSSL_UDIR/lib
+            mkdir -p $_OPENSSL_UDIR/include
+            cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
+            for _implib in libeay32 libssl32 ; do
+                cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
+            done
+            cp -a include/openssl $_OPENSSL_UDIR/include
+        qpopd
     fi
-    test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a || die "openssl not installed correctly"
+    quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
 }
 
 function inst_mingwutils() {
@@ -754,7 +796,7 @@ function inst_gwenhywfar() {
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
 		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-		ssl_lib="-lcrypto -lssl" \
+		ssl_lib="-leay32 -lssl32" \
 	        --prefix=$_GWENHYWFAR_UDIR \
 	        CPPFLAGS="${REGEX_CPPFLAGS}" \
 		LDFLAGS="${REGEX_LDFLAGS}"
@@ -863,19 +905,6 @@ function inst_aqbanking() {
 	qpopd
     fi
     ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
-}
-
-function inst_svn() {
-    setup Subversion
-    _SVN_UDIR=`unix_path $SVN_DIR`
-    add_to_env $_SVN_UDIR/bin PATH
-    if quiet svn --version
-    then
-        echo "subversion already installed.  skipping."
-    else
-        smart_wget $SVN_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
-    fi
 }
 
 function svn_up() {
