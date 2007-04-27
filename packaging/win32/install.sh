@@ -341,8 +341,9 @@ function inst_openssl() {
     if test -f $_OPENSSL_UDIR/unins000.exe ; then
 	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
     fi
-    if [ -f $WINDIR\\system32\\libssl32.dll -o -f $WINDIR\\system32\\libeay32.dll ] ; then
-	die "You have uninstalled the Win32OpenSSL-0_9_8d version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
+    # Make sure the files of openssl-0.9.7c-{bin,lib}.zip are really gone!
+    if [ -f $_OPENSSL_UDIR/lib/libcrypto.dll.a ] ; then
+        die "Found old OpenSSL installation in $_OPENSSL_UDIR.  Please remove that first."
     fi
 
     if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
@@ -372,6 +373,13 @@ function inst_openssl() {
             cp -a include/openssl $_OPENSSL_UDIR/include
         qpopd
         quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
+    fi
+    _eay32dll=$(echo $(which libeay32.dll))  # which sucks
+    if [ -z "$_eay32dll" ] ; then
+        die "Did not find libeay32.dll in your PATH, why that?"
+    fi
+    if [ "$_eay32dll" != "$_OPENSSL_UDIR/bin/libeay32.dll" ] ; then
+        die "Found $_eay32dll in PATH.  If you have added $_OPENSSL_UDIR/bin to your PATH before, make sure it is listed before paths from other packages shipping SSL libraries, like SVN.  In particular, check $_MINGW_UDIR/etc/profile.d/installer.sh."
     fi
 }
 
