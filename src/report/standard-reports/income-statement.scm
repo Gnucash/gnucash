@@ -598,7 +598,7 @@
   )
 
 (gnc:define-report 
- 'version 2 ;; but it doesn't matter... :)
+ 'version 1
  'name reportname
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
@@ -606,4 +606,3 @@
  )
 
 ;; END
-

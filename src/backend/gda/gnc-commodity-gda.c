@@ -109,7 +109,7 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
 }
 
 static gnc_commodity*
-load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
+load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
                 gnc_commodity* pCommodity )
 {
     QofBook* pBook = be->primary_book;
@@ -130,7 +130,7 @@ load_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
 }
 
 static void
-load_commodities( GncGdaBackend* be )
+load_all_commodities( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
@@ -149,7 +149,7 @@ load_commodities( GncGdaBackend* be )
         for( r = 0; r < numRows; r++ ) {
             gnc_commodity* c;
 
-            pCommodity = load_commodity( be, pModel, r, NULL );
+            pCommodity = load_single_commodity( be, pModel, r, NULL );
 
             if( pCommodity != NULL ) {
                 GUID guid;
@@ -214,7 +214,7 @@ gnc_gda_init_commodity_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_COMMODITY,
         commit_commodity,            /* commit */
-        load_commodities,            /* initial_load */
+        load_all_commodities,            /* initial_load */
         create_commodities_tables    /* create_tables */
     };
 

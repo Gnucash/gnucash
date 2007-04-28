@@ -296,17 +296,11 @@ xaccFreeSplit (Split *split)
   g_object_unref(split);
 }
 
-static void mark_acc(Account *acc)
-{
-    if (acc && !acc->inst.do_free) {
-        acc->balance_dirty = TRUE;
-        acc->sort_dirty = TRUE;
-    }
-}
-
 void mark_split (Split *s)
 {
-  mark_acc(s->acc);
+  if (s->acc) {
+    g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+  }
 
   /* set dirty flag on lot too. */
   if (s->lot) s->lot->is_closed = -1;
@@ -526,41 +520,21 @@ xaccSplitCommitEdit(Split *s)
 
     /* Possibly remove the split from the original account... */
     if (orig_acc && (orig_acc != acc || s->inst.do_free)) {
-        GList *node = g_list_find (orig_acc->splits, s);
-        if (node) {
-            orig_acc->splits = g_list_delete_link (orig_acc->splits, node);
-            //FIXME: find better event type
-            qof_event_gen (&orig_acc->inst, QOF_EVENT_MODIFY, NULL);
-	    // And send the account-based event, too
-	    qof_event_gen(&orig_acc->inst, GNC_EVENT_ITEM_REMOVED, s);
-        } else PERR("Account lost track of moved or deleted split.");
-        orig_acc->balance_dirty = TRUE;
-        xaccAccountRecomputeBalance(orig_acc);
+        if (!gnc_account_remove_split(orig_acc, s)) {
+          PERR("Account lost track of moved or deleted split.");
+        }
     }
 
     /* ... and insert it into the new account if needed */
-    if (orig_acc != s->acc && !s->inst.do_free) {
-        if (!g_list_find(acc->splits, s)) {
-            if (acc->inst.editlevel == 0) {
-                acc->splits = g_list_insert_sorted(
-                    acc->splits, s, (GCompareFunc)xaccSplitOrder);
-            } else {
-                acc->splits = g_list_prepend(acc->splits, s);
-                acc->sort_dirty = TRUE;
-            }
-
+    if (acc && (orig_acc != acc) && !s->inst.do_free) {
+        if (gnc_account_insert_split(acc, s)) {
             /* If the split's lot belonged to some other account, we
                leave it so. */
             if (s->lot && (NULL == s->lot->account))
                 xaccAccountInsertLot (acc, s->lot);
-
-            //FIXME: find better event
-            qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
-
-	    /* Also send an event based on the account */
-	    qof_event_gen(&acc->inst, GNC_EVENT_ITEM_ADDED, s);
-        } else PERR("Account grabbed split prematurely.");
-        acc->balance_dirty = TRUE;
+        } else {
+            PERR("Account grabbed split prematurely.");
+        }
         xaccSplitSetAmount(s, xaccSplitGetAmount(s));
     }
 
@@ -585,8 +559,10 @@ xaccSplitCommitEdit(Split *s)
     /* This is because Splits don't call qof_commit_edit(). */
     qof_instance_set_dirty(QOF_INSTANCE(s->parent));
 
-    mark_acc(acc);
-    xaccAccountRecomputeBalance(acc);
+    if (acc) {
+        g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+        xaccAccountRecomputeBalance(acc);
+    }
     if (s->inst.do_free)
         xaccFreeSplit(s);
 }

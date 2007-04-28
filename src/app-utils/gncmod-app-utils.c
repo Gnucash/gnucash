@@ -16,22 +16,24 @@
 #include "gnc-hooks.h"
 #include "gnc-exp-parser.h"
 
+GNC_MODULE_API_DECL(libgncmod_app_utils)
+
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_app_utils_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_app_utils_gnc_module_current  = 0;
+int libgncmod_app_utils_gnc_module_revision = 0;
+int libgncmod_app_utils_gnc_module_age      = 0;
 
 
 char *
-gnc_module_path(void) {
+libgncmod_app_utils_gnc_module_path(void) {
   return g_strdup("gnucash/app-utils");
 }
 
 char *
-gnc_module_description(void) {
+libgncmod_app_utils_gnc_module_description(void) {
   return g_strdup("Utilities for building gnc applications");
 }
 
@@ -54,7 +56,7 @@ app_utils_shutdown(void)
 extern SCM scm_init_sw_app_utils_module(void);
 
 int
-gnc_module_init(int refcount)
+libgncmod_app_utils_gnc_module_init(int refcount)
 {
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
@@ -82,7 +84,7 @@ gnc_module_init(int refcount)
 }
 
 int
-gnc_module_end(int refcount)
+libgncmod_app_utils_gnc_module_end(int refcount)
 {
   if (refcount == 0)
     gnc_component_manager_shutdown ();

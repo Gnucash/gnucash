@@ -124,7 +124,7 @@ set_autonotify( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static SchedXaction*
-load_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
+load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
             SchedXaction* pSx )
 {
     const GUID* guid;
@@ -147,7 +147,7 @@ load_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
 }
 
 static void
-load_sxes( GncGdaBackend* be )
+load_all_sxes( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
@@ -163,7 +163,7 @@ load_sxes( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_sx( be, pModel, r, NULL );
+            (void)load_single_sx( be, pModel, r, NULL );
         }
     }
 }
@@ -208,7 +208,7 @@ gnc_gda_init_schedxaction_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_SCHEDXACTION,
         commit_sx,                /* commit */
-        load_sxes,                /* initial_load */
+        load_all_sxes,                /* initial_load */
         create_sx_tables        /* create_tables */
     };
 

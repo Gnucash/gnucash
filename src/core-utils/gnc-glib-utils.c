@@ -287,6 +287,7 @@ void gnc_gpid_kill(GPid pid)
     if (!TerminateProcess((HANDLE) pid, 0)) {
         gchar *msg = g_win32_error_message(GetLastError());
         g_warning("Could not kill child process: %s", msg ? msg : "(null)");
+        g_free(msg);
     }
 #else /* !G_OS_WIN32 */
     if (kill(pid, SIGKILL)) {

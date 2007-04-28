@@ -496,7 +496,11 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    cleared_baln = gnc_numeric_create (cl_b, deno);
    reconciled_baln = gnc_numeric_create (rec_b, deno);
 
-   xaccAccountSetStartingBalance (acc, baln, cleared_baln, reconciled_baln);
+   g_object_set(acc,
+                "start-balance", &baln,
+                "start-cleared-balance", &cleared_baln,
+                "start-reconcoled-balance", &reconciled_baln,
+                NULL);
 
    {
         char buf[80];

@@ -33,6 +33,7 @@
 
 #include "qof.h"
 #include "AccountP.h"
+#include "gnc-commodity.h"
 
 #include "gnc-backend-util-gda.h"
 
@@ -124,7 +125,7 @@ set_parent( gpointer pObject, gpointer pValue )
 }
 
 static Account*
-load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
+load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
             Account* pAccount )
 {
     const GUID* guid;
@@ -149,7 +150,7 @@ load_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 }
 
 static void
-load_accounts( GncGdaBackend* be )
+load_all_accounts( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
@@ -170,7 +171,7 @@ load_accounts( GncGdaBackend* be )
         Account* parent;
 
         for( r = 0; r < numRows; r++ ) {
-            pAccount = load_account( be, pModel, r, NULL );
+            pAccount = load_single_account( be, pModel, r, NULL );
 
             if( pAccount != NULL ) {
 
@@ -242,7 +243,7 @@ gnc_gda_init_account_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
         commit_account,				/* commit */
-        load_accounts,				/* initial_load */
+        load_all_accounts,				/* initial_load */
         create_account_tables		/* create_tables */
     };
 

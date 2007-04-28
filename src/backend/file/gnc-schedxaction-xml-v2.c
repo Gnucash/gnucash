@@ -464,9 +464,6 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
 
         recurrenceNextInstance(r, &start, &next);
 
-        if (recurrenceGetPeriodType(r) == PERIOD_MONTH)
-            g_date_set_month(&next, 1);
-
         {
             gchar date_str[128];
             gchar *sched_str;

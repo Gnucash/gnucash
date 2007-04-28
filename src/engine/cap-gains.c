@@ -79,16 +79,17 @@ gboolean
 xaccAccountHasTrades (Account *acc)
 {
    gnc_commodity *acc_comm;
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return FALSE;
 
    if (xaccAccountIsPriced (acc))
       return TRUE;
       
-   acc_comm = acc->commodity;
+   acc_comm = xaccAccountGetCommodity(acc);
 
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split *s = node->data;
       Transaction *t = s->parent;
@@ -270,6 +271,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   KvpFrame *cwd;
   KvpValue *vvv;
   const char * cur_name;
+  gnc_commodity *acc_comm;
 
   if (!acc || !gain_acct) return;
 
@@ -277,12 +279,13 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
 
   /* Accounts are indexed by thier unique currency name */
-  cur_name = gnc_commodity_get_unique_name (acc->commodity);
+  acc_comm = xaccAccountGetCommodity(acc);
+  cur_name = gnc_commodity_get_unique_name (acc_comm);
 
   xaccAccountBeginEdit (acc);
   vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
   kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-  xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+  qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
   xaccAccountCommitEdit (acc);
 }
 
@@ -349,7 +352,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 
       vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
       kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-      xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
       xaccAccountCommitEdit (acc);
 
   }
@@ -613,7 +616,7 @@ xaccSplitAssign (Split *split)
 
    ENTER ("(split=%p)", split);
 
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
@@ -706,7 +709,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!split) return;
    lot = split->lot;
    if (!lot) return;
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    currency = split->parent->common_currency;
 
    ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
@@ -1097,7 +1100,7 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
     * to mark all splits dirty if the opening splits are dirty. */
 
    ENTER("(lot=%p)", lot);
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    for (node = lot->splits; node; node = node->next)
    {
       Split *s = node->data;

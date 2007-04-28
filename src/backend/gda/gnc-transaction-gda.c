@@ -343,7 +343,7 @@ set_split_account_guid( gpointer pObject, gpointer pValue )
 }
 
 static Split*
-load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
+load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 {
     const GUID* guid;
     GUID split_guid;
@@ -375,7 +375,7 @@ load_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
 }
 
 static void
-load_splits( GncGdaBackend* be, const GUID* guid )
+load_all_splits( GncGdaBackend* be, const GUID* guid )
 {
     GdaObject* ret;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
@@ -400,13 +400,13 @@ load_splits( GncGdaBackend* be, const GUID* guid )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            load_split( be, pModel, r, NULL );
+            load_single_split( be, pModel, r, NULL );
         }
     }
 }
 
 static Transaction*
-load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
+load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
 {
     const GUID* guid;
     GUID tx_guid;
@@ -424,7 +424,7 @@ load_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
     gnc_gda_load_object( pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ),
                             qof_instance_get_slots( QOF_INSTANCE(pTx) ) );
-    load_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
+    load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pTx) );
     xaccTransCommitEdit( pTx );
@@ -446,7 +446,7 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            load_tx( be, pModel, r, NULL );
+            load_single_tx( be, pModel, r, NULL );
         }
     }
 }

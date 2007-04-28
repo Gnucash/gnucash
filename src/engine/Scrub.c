@@ -166,7 +166,7 @@ xaccSplitScrub (Split *split)
   Account *account;
   Transaction *trans;
   gnc_numeric value, amount;
-  gnc_commodity *currency;
+  gnc_commodity *currency, *acc_commodity;
   int scu;
 
   if (!split) return;
@@ -220,12 +220,12 @@ xaccSplitScrub (Split *split)
   /* If the account doesn't have a commodity, 
    * we should attempt to fix that first. 
   */
-  if (!account->commodity)
+  acc_commodity = xaccAccountGetCommodity(account);
+  if (!acc_commodity)
   {
     xaccAccountScrubCommodity (account);
   }
-  if (!account->commodity || 
-      !gnc_commodity_equiv (account->commodity, currency))
+  if (!acc_commodity || !gnc_commodity_equiv(acc_commodity, currency))
   {
     LEAVE ("(split=%p) inequiv currency", split);
     return;
@@ -606,7 +606,8 @@ xaccTransScrubCurrency (Transaction *trans)
         else
         {
           PWARN (" split=\"%s\" account=\"%s\" commodity=\"%s\"", 
-              split->memo, split->acc->accountName, gnc_commodity_get_mnemonic (split->acc->commodity));
+                 split->memo, xaccAccountGetName(split->acc),
+                 gnc_commodity_get_mnemonic(xaccAccountGetCommodity(split->acc)));
         }
       }
     }
@@ -619,7 +620,9 @@ xaccTransScrubCurrency (Transaction *trans)
     if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
         xaccSplitGetValue (sp))) 
     {
-      gnc_commodity *acc_currency = xaccAccountGetCommodity (sp->acc);
+      gnc_commodity *acc_currency;
+
+      acc_currency = sp->acc ? xaccAccountGetCommodity(sp->acc) : NULL;
       if (acc_currency == currency) 
       {
         /* This Split needs fixing: The transaction-currency equals
@@ -691,7 +694,8 @@ xaccAccountScrubCommodity (Account *account)
     return;
   }
 
-  PERR ("Account \"%s\" does not have a commodity!", account->accountName);
+  PERR ("Account \"%s\" does not have a commodity!",
+        xaccAccountGetName(account));
 }
 
 /* ================================================================ */

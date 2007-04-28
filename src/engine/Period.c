@@ -112,8 +112,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       else
       {
         xaccAccountInsertSplit (twin, s);
-        twin->balance_dirty = TRUE;
-        twin->sort_dirty = TRUE;
+        g_object_set(twin, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
       }
    }
 
@@ -179,8 +178,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
         if (s->acc != twin)
         {
            xaccAccountInsertSplit (twin, s);
-           twin->balance_dirty = TRUE;
-           twin->sort_dirty = TRUE;
+           g_object_set(twin, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
         }
       }
    }
@@ -670,7 +668,7 @@ add_closing_balances (Account *parent,
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
       kvp_frame_set_guid (cwd, "/book/prev-book", qof_book_get_guid(closed_book));
 
-      xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(twin), twin->inst.kvp_data);
       
       /* -------------------------------- */
       /* Add KVP to closed account, indicating where 
@@ -680,7 +678,7 @@ add_closing_balances (Account *parent,
       kvp_frame_set_guid (cwd, "/book/next-book", qof_book_get_guid(open_book));
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
-      xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(candidate), candidate->inst.kvp_data);
 
       /* -------------------------------- */
       /* We need to carry a balance on any account that is not
@@ -761,7 +759,7 @@ add_closing_balances (Account *parent,
       if (gnc_account_n_children(candidate) > 0) 
       {
          PINFO ("add closing baln to subaccts of %s", 
-                 candidate->description);
+                xaccAccountGetDescription(candidate));
          add_closing_balances (candidate, open_book, closed_book,
                           equity_account,
                           post_date, date_entered, desc);

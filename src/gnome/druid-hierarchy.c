@@ -188,7 +188,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
 # ifdef G_OS_WIN32
     /* On win32, setlocale() doesn't say anything useful. Use
        glib's function instead. */
-    locale = g_strdup( *g_get_language_names() );
+    locale = g_win32_getlocale();
 # else
     /*
      * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES

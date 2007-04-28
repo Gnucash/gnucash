@@ -1428,6 +1428,7 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
 
    CACHE_REPLACE(trans->num, xnum);
    qof_instance_set_dirty(QOF_INSTANCE(trans));
+   mark_trans(trans);  /* Dirty balance of every account in trans */
    xaccTransCommitEdit(trans);
 }
 

@@ -1200,7 +1200,7 @@ get_random_account(QofBook *book)
 
     xaccAccountSetCommodity(ret, get_random_commodity(book));
 
-    xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
+    qof_instance_set_slots(QOF_INSTANCE(ret), get_random_kvp_frame());
 
     root = gnc_book_get_root_account (book);
     if (!root) 
@@ -1233,7 +1233,7 @@ make_random_changes_to_account (QofBook *book, Account *account)
 
     xaccAccountSetCommodity (account, get_random_commodity(book));
 
-    xaccAccountSetSlots_nc (account, get_random_kvp_frame());
+    qof_instance_set_slots(QOF_INSTANCE(account), get_random_kvp_frame());
 
     xaccAccountCommitEdit (account);
 }

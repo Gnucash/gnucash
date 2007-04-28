@@ -57,15 +57,16 @@ static QofLogModule log_module = GNC_MOD_LOT;
 void
 xaccAccountAssignLots (Account *acc)
 {
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return;
 
-   ENTER ("acc=%s", acc->accountName);
+   ENTER ("acc=%s", xaccAccountGetName(acc));
    xaccAccountBeginEdit (acc);
 
 restart_loop:
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split * split = node->data;
 
@@ -79,7 +80,7 @@ restart_loop:
       if (xaccSplitAssign (split)) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("acc=%s", acc->accountName);
+   LEAVE ("acc=%s", xaccAccountGetName(acc));
 }
 
 /* ============================================================== */
@@ -100,9 +101,9 @@ xaccLotFill (GNCLot *lot)
 
    if (!lot) return;
    acc = lot->account;
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
 
-   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   ENTER ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 
    /* If balance already zero, we have nothing to do. */
    if (gnc_lot_is_closed (lot)) return;
@@ -140,7 +141,7 @@ xaccLotFill (GNCLot *lot)
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);
-   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), acc->accountName);
+   LEAVE ("(lot=%s, acc=%s)", gnc_lot_get_title(lot), xaccAccountGetName(acc));
 }
 
 /* ============================================================== */

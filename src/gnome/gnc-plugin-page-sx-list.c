@@ -35,27 +35,28 @@
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <glade/glade-xml.h>
-#include "gnc-exp-parser.h"
-#include "gnc-engine.h"
-#include "Transaction.h"
+#include "SX-book.h"
 #include "Split.h"
+#include "Transaction.h"
+#include "dialog-sx-editor.h"
+#include "dialog-utils.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
-#include "gnc-event.h"
+#include "gnc-component-manager.h"
 #include "gnc-dense-cal.h"
+#include "gnc-engine.h"
+#include "gnc-event.h"
+#include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
 #include "gnc-icons.h"
-#include "gnc-plugin-page-sx-list.h"
-#include "gnc-tree-view-sx-list.h"
-#include "gnc-sx-instance-model.h"
-#include "gnc-sx-instance-dense-cal-adapter.h"
-#include "gnc-sx-list-tree-model-adapter.h"
-#include "gnc-ui-util.h"
 #include "gnc-main-window.h"
-#include "dialog-utils.h"
-#include "gnc-component-manager.h"
-#include "SX-book.h"
-#include "gnc-book.h"
-#include "dialog-sx-editor.h"
+#include "gnc-plugin-page-sx-list.h"
+#include "gnc-sx-instance-dense-cal-adapter.h"
+#include "gnc-sx-instance-model.h"
+#include "gnc-sx-list-tree-model-adapter.h"
+#include "gnc-tree-view-sx-list.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
@@ -105,12 +106,12 @@ static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageS
 
 /* Command callbacks */
 static GtkActionEntry gnc_plugin_page_sx_list_actions [] = {
-    { "SxListAction", NULL, N_("Scheduled"), NULL, NULL, NULL },
-    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("New"), NULL,
+    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
+    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
       N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new) },
-    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit"), NULL,
+    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
       N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit) },
-    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("Delete"), NULL,
+    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
       N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete) },
 };
 /** The number of actions provided by this plugin. */
@@ -562,7 +563,12 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
             g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
         }
     }
-    g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+
+    if (gnc_verify_dialog(NULL, FALSE, _("Are you sure?")))
+    {
+        g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+    }
+
     g_list_free(to_delete);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);

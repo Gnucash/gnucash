@@ -7,8 +7,8 @@ function qpopd() { popd >/dev/null; }
 function unix_path() { echo "$*" | sed 's,^\([A-Za-z]\):,/\1,;s,\\,/,g'; }
 
 qpushd "$(dirname $(unix_path "$0"))"
-. functions
-. custom.sh
+. functions.sh
+. defaults.sh
 
 register_env_var ACLOCAL_FLAGS " "
 register_env_var AUTOTOOLS_CPPFLAGS " "
@@ -82,8 +82,8 @@ function inst_wget() {
         mkdir -p $_WGET_UDIR/bin
         tar -xjpf $DOWNLOAD_UDIR/wget*.tar.bz2 -C $_WGET_UDIR
         cp $_WGET_UDIR/*/*/wget.exe $_WGET_UDIR/bin
+        quiet wget --version || die "wget unavailable"
     fi
-    quiet wget --version || die "wget unavailable"
 }
 
 function inst_dtk() {
@@ -104,24 +104,35 @@ function inst_dtk() {
             while [ -e $_dst_file ]; do _dst_file=$_dst_file.bak; done
             mv $file $_dst_file
         done
+        quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
     fi
-    quiet ${_MSYS_UDIR}/bin/perl --help || die "msys dtk not installed correctly"
+}
+
+function test_for_mingw() {
+    ${CC} --version &&
+    g++ --version &&
+    ${LD} --help &&
+    mingw32-make --help
 }
 
 function inst_mingw() {
     setup MinGW
-    if quiet ${CC} --version
+    _MINGW_UDIR=`unix_path $MINGW_DIR`
+    _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    if quiet test_for_mingw
     then
         echo "mingw already installed.  skipping."
     else
-        _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
-        smart_wget $MINGW_URL $DOWNLOAD_DIR
-        echo "!!! Install g++ !!!"
-        echo "!!! When asked for an installation path, specify $MINGW_DIR !!!"
-        $LAST_FILE
+        mkdir -p $_MINGW_UDIR
+        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+        wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
         (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        quiet test_for_mingw || die "mingw not installed correctly"
     fi
-    quiet ${CC} --version && quiet ${LD} --help || die "mingw not installed correctly"
 }
 
 function inst_unzip() {
@@ -134,8 +145,8 @@ function inst_unzip() {
     else
         smart_wget $UNZIP_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$UNZIP_DIR"
+        quiet unzip --help || die "unzip unavailable"
     fi
-    quiet unzip --help || die "unzip unavailable"
 }
 
 function inst_regex() {
@@ -152,8 +163,8 @@ function inst_regex() {
         mkdir -p $_REGEX_UDIR
         wget_unpacked $REGEX_URL $DOWNLOAD_DIR $REGEX_DIR
         wget_unpacked $REGEX_DEV_URL $DOWNLOAD_DIR $REGEX_DIR
+        quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
     fi
-    quiet ${LD} $REGEX_LDFLAGS -o $TMP_UDIR/ofile || die "regex not installed correctly"
 }
 
 function inst_readline() {
@@ -169,12 +180,13 @@ function inst_readline() {
         mkdir -p $_READLINE_UDIR
         wget_unpacked $READLINE_BIN_URL $DOWNLOAD_DIR $READLINE_DIR
         wget_unpacked $READLINE_LIB_URL $DOWNLOAD_DIR $READLINE_DIR
+        quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
     fi
-    quiet ${LD} $READLINE_LDFLAGS -lreadline -o $TMP_UDIR/ofile || die "readline not installed correctly"
 }
 
 function inst_active_perl() {
     setup ActivePerl \(intltool\)
+    _ACTIVE_PERL_UDIR=`unix_path $ACTIVE_PERL_DIR`
     _ACTIVE_PERL_WFSDIR=`win_fs_path $ACTIVE_PERL_DIR`
     set_env_or_die $_ACTIVE_PERL_WFSDIR/ActivePerl/Perl/bin/perl INTLTOOL_PERL
     if quiet $INTLTOOL_PERL --help
@@ -182,14 +194,17 @@ function inst_active_perl() {
         echo "ActivePerl already installed.  skipping."
     else
         wget_unpacked $ACTIVE_PERL_URL $DOWNLOAD_DIR $ACTIVE_PERL_DIR
+        quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
     fi
-    quiet $INTLTOOL_PERL --help || die "ActivePerl not installed correctly"
 }
 
 function inst_autotools() {
     setup Autotools
     _AUTOTOOLS_UDIR=`unix_path $AUTOTOOLS_DIR`
     add_to_env $_AUTOTOOLS_UDIR/bin PATH
+    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
+    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
+    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet autoconf --help && quiet automake --help
     then
         echo "autoconf/automake already installed.  skipping."
@@ -210,6 +225,7 @@ function inst_autotools() {
             make
             make install
         qpopd
+        quiet autoconf --help && quiet automake --help || die "autoconf/automake not installed correctly"
     fi
     if quiet ${LIBTOOLIZE} --help 
     then
@@ -223,13 +239,8 @@ function inst_autotools() {
             make
             make install
         qpopd
+        quiet ${LIBTOOLIZE} --help || die "libtool/libtoolize not installed correctly"
     fi
-    add_to_env -I$_AUTOTOOLS_UDIR/include AUTOTOOLS_CPPFLAGS
-    add_to_env -L$_AUTOTOOLS_UDIR/lib AUTOTOOLS_LDFLAGS
-    add_to_env "-I $_AUTOTOOLS_UDIR/share/aclocal" ACLOCAL_FLAGS
-    quiet autoconf --help &&
-    quiet automake --help &&
-    quiet ${LIBTOOLIZE} --help || die "autotools not installed correctly"
 }
 
 function inst_guile() {
@@ -294,6 +305,8 @@ function inst_guile() {
             sed '/lambda.*'"'"'unix/a\
 (define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
 	qpopd
+        guile -c '(use-modules (srfi srfi-39))' &&
+        guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
     fi
     if test x$cross_compile = xyes ; then
 	qpushd $_GUILE_UDIR/bin
@@ -305,8 +318,19 @@ function inst_guile() {
     else
 	add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
-    guile -c '(use-modules (srfi srfi-39))' &&
-    guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
+}
+
+function inst_svn() {
+    setup Subversion
+    _SVN_UDIR=`unix_path $SVN_DIR`
+    add_to_env $_SVN_UDIR/bin PATH
+    if quiet svn --version
+    then
+        echo "subversion already installed.  skipping."
+    else
+        smart_wget $SVN_URL $DOWNLOAD_DIR
+        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
+    fi
 }
 
 function inst_openssl() {
@@ -317,18 +341,46 @@ function inst_openssl() {
     if test -f $_OPENSSL_UDIR/unins000.exe ; then
 	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
     fi
-    if [ -f $WINDIR\\system32\\libssl32.dll -o -f $WINDIR\\system32\\libeay32.dll ] ; then
-	die "You have uninstalled the Win32OpenSSL-0_9_8d version of OpenSSL, but its DLLs libssl32.dll, libeay32.dll, and ssleay32.dll are still existing in $WINDIR\\system32. You have to delete (or rename) them manually. However, if you know these DLLs are needed by some other package, please contact the gnucash authors so that we can adapt this script."
+    # Make sure the files of openssl-0.9.7c-{bin,lib}.zip are really gone!
+    if [ -f $_OPENSSL_UDIR/lib/libcrypto.dll.a ] ; then
+        die "Found old OpenSSL installation in $_OPENSSL_UDIR.  Please remove that first."
     fi
 
-    if test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a ; then
+    if quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile ; then
         echo "openssl already installed.  skipping."
     else
-	mkdir -p ${_OPENSSL_UDIR}
-	wget_unpacked $OPENSSL_BIN_URL $DOWNLOAD_DIR $OPENSSL_DIR
-	wget_unpacked $OPENSSL_LIB_URL $DOWNLOAD_DIR $OPENSSL_DIR
+        smart_wget $OPENSSL_URL $DOWNLOAD_DIR
+        echo -n "Extracting ${LAST_FILE##*/} ... "
+        tar -xzpf $LAST_FILE -C $TMP_UDIR &>/dev/null | true
+        echo "done"
+        assert_one_dir $TMP_UDIR/openssl-*
+        qpushd $TMP_UDIR/openssl-*
+            for _dir in crypto ssl ; do
+                qpushd $_dir
+                    find . -name "*.h" -exec cp {} ../include/openssl/ \;
+                qpopd
+            done
+            cp *.h include/openssl
+            _COMSPEC_U=`unix_path $COMSPEC`
+            PATH=$_ACTIVE_PERL_UDIR/ActivePerl/Perl/bin:$_MINGW_UDIR/bin $_COMSPEC_U //c ms\\mingw32
+            mkdir -p $_OPENSSL_UDIR/bin
+            mkdir -p $_OPENSSL_UDIR/lib
+            mkdir -p $_OPENSSL_UDIR/include
+            cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
+            for _implib in libeay32 libssl32 ; do
+                cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
+            done
+            cp -a include/openssl $_OPENSSL_UDIR/include
+        qpopd
+        quiet ${LD} -L$_OPENSSL_UDIR/lib -leay32 -lssl32 -o $TMP_UDIR/ofile || die "openssl not installed correctly"
     fi
-    test -f ${_OPENSSL_UDIR}/lib/libssl.dll.a || die "openssl not installed correctly"
+    _eay32dll=$(echo $(which libeay32.dll))  # which sucks
+    if [ -z "$_eay32dll" ] ; then
+        die "Did not find libeay32.dll in your PATH, why that?"
+    fi
+    if [ "$_eay32dll" != "$_OPENSSL_UDIR/bin/libeay32.dll" ] ; then
+        die "Found $_eay32dll in PATH.  If you have added $_OPENSSL_UDIR/bin to your PATH before, make sure it is listed before paths from other packages shipping SSL libraries, like SVN.  In particular, check $_MINGW_UDIR/etc/profile.d/installer.sh."
+    fi
 }
 
 function inst_mingwutils() {
@@ -340,8 +392,8 @@ function inst_mingwutils() {
         echo "mingw-utils already installed.  skipping."
     else
         wget_unpacked $MINGW_UTILS_URL $DOWNLOAD_DIR $MINGW_UTILS_DIR
+        (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
     fi
-    (quiet which pexports && quiet which reimp) || die "mingw-utils not installed correctly"
 }
 
 function inst_exetype() {
@@ -354,10 +406,9 @@ function inst_exetype() {
     else
         mkdir -p $_EXETYPE_UDIR/bin
         cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+        quiet which exetype || die "exetype unavailable"
     fi
-    quiet which exetype || die "exetype unavailable"
 }
-
 
 function inst_libxml2() {
     setup LibXML2
@@ -394,8 +445,8 @@ Libs: -L\${libdir} -lxml2 -lz
 Cflags: -I\${includedir}
 EOF
         qpopd
+        quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
     fi
-    quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
 }
 
 function inst_gnome() {
@@ -494,6 +545,10 @@ fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
         qpopd
+        quiet gconftool-2 --version &&
+        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
+#        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
+        quiet intltoolize --version || die "gnome not installed correctly"
     fi
     if test x$cross_compile = xyes ; then
         qpushd $_GNOME_UDIR/lib/pkgconfig
@@ -506,10 +561,6 @@ EOF
 	#    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
 	#qpopd
     fi
-    quiet gconftool-2 --version &&
-    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
-#    ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
-    quiet intltoolize --version || die "gnome not installed correctly"
 }
 
 function inst_swig() {
@@ -528,8 +579,8 @@ function inst_swig() {
             rmdir mydir
             rm INSTALL # bites with /bin/install
         qpopd
+        quiet swig -version || die "swig unavailable"
     fi
-    quiet swig -version || die "swig unavailable"
 }
 
 function inst_pcre() {
@@ -570,8 +621,8 @@ function inst_libgsf() {
 	    make
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
     fi
-    ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
 }
 
 function inst_goffice() {
@@ -602,8 +653,8 @@ function inst_goffice() {
 	    make
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
     fi
-    ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
 }
 
 function inst_glade() {
@@ -622,8 +673,8 @@ function inst_glade() {
             make
             make install
         qpopd
+        quiet glade-3 --version || die "glade not installed correctly"
     fi
-    quiet glade-3 --version || die "glade not installed correctly"
 }
 
 function inst_inno() {
@@ -636,8 +687,8 @@ function inst_inno() {
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
+        quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
     fi
-    quiet which iscc || die "iscc (Inno Setup Compiler) not installed correctly"
 }
 
 function test_for_hh() {
@@ -676,8 +727,8 @@ function inst_hh() {
                mv htmlhelp.lib htmlhelp.lib.bak
            qpopd
         qpopd
+        quiet test_for_hh || die "html help workshop not installed correctly"
     fi
-    quiet test_for_hh || die "html help workshop not installed correctly"
 }
 
 function inst_opensp() {
@@ -704,8 +755,8 @@ function inst_opensp() {
 	    make -i
 	    make -i install
 	qpopd
+        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
     fi
-    test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
 }
 
 function inst_libofx() {
@@ -731,8 +782,8 @@ function inst_libofx() {
 	    make LDFLAGS="${LDFLAGS} -no-undefined"
 	    make install
 	qpopd
+        quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
     fi
-    quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
 }
 
 function inst_gwenhywfar() {
@@ -751,7 +802,7 @@ function inst_gwenhywfar() {
 	    ./configure \
 		--with-openssl-includes=$_OPENSSL_UDIR/include \
 		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-		ssl_lib="-lcrypto -lssl" \
+		ssl_lib="-leay32 -lssl32" \
 	        --prefix=$_GWENHYWFAR_UDIR \
 	        CPPFLAGS="${REGEX_CPPFLAGS}" \
 		LDFLAGS="${REGEX_LDFLAGS}"
@@ -759,14 +810,16 @@ function inst_gwenhywfar() {
 	    make check
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
     fi
-    ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
 }
 
 function inst_ktoblzcheck() {
     setup Ktoblzcheck
     # Out of convenience ktoblzcheck is being installed into
     # GWENHYWFAR_DIR
+    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
+    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     if quiet ${PKG_CONFIG} --exists ktoblzcheck
     then
 	echo "Ktoblzcheck already installed. Skipping."
@@ -780,10 +833,8 @@ function inst_ktoblzcheck() {
 	    make check
 	    make install
 	qpopd
+        ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
     fi
-    add_to_env "-I${_GWENHYWFAR_UDIR}/include" KTOBLZCHECK_CPPFLAGS
-    add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
-    ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
 }
 
 function inst_qt4() {
@@ -791,6 +842,7 @@ function inst_qt4() {
     # already useful in itself and that's why it has already been
     # added.
 
+    [ "$QTDIR" ] || die "QTDIR is not set.  Please install Qt and set that variable in custom.sh, or deactivate AQBANKING_WITH_QT"
     export QTDIR=`unix_path ${QTDIR}`  # help configure of aqbanking
     _QTDIR=$QTDIR
     # This section creates .la files for the Qt-4 DLLs so that
@@ -828,7 +880,7 @@ function inst_aqbanking() {
 	qpushd $TMP_UDIR/aqbanking-*
 	    _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS}"
 	    _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
-	    if test x$aqbanking_with_qt = xyes; then
+	    if test x$AQBANKING_WITH_QT = xyes; then
 		inst_qt4
 		./configure \
 		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
@@ -857,20 +909,7 @@ function inst_aqbanking() {
 	    exetype aqbanking-tool.exe console
 	    exetype aqhbci-tool.exe console
 	qpopd
-    fi
-    ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
-}
-
-function inst_svn() {
-    setup Subversion
-    _SVN_UDIR=`unix_path $SVN_DIR`
-    add_to_env $_SVN_UDIR/bin PATH
-    if quiet svn --version
-    then
-        echo "subversion already installed.  skipping."
-    else
-        smart_wget $SVN_URL $DOWNLOAD_DIR
-        $LAST_FILE //SP- //SILENT //DIR="$SVN_DIR"
+        ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
     fi
 }
 
@@ -912,7 +951,9 @@ function inst_gnucash() {
             export BUILD_GUILE=yes
             export name_build_guile=/usr/bin/guile-config
         fi
-        ./autogen.sh
+        if [ "$BUILD_FROM_TARBALL" != "yes" ]; then
+            ./autogen.sh
+        fi
         # Windows DLLs don't need relinking
         grep -v "need_relink=yes" ltmain.sh > ltmain.sh.new ; mv ltmain.sh.new ltmain.sh
     qpopd
@@ -925,6 +966,7 @@ function inst_gnucash() {
 	    ${LIBOFX_OPTIONS} \
 	    ${AQBANKING_OPTIONS} \
             --enable-binreloc \
+            --enable-locale-specific-tax \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
             LDFLAGS="${AUTOTOOLS_LDFLAGS} ${REGEX_LDFLAGS} ${GNOME_LDFLAGS} ${GUILE_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${HH_LDFLAGS}" \
             PKG_CONFIG_PATH="${PKG_CONFIG_PATH}"

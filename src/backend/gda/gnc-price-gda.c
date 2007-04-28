@@ -154,7 +154,7 @@ set_commodity_guid( gpointer pObject, gpointer pValue )
 }
 
 static GNCPrice*
-load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
+load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 {
     if( pPrice == NULL ) {
         pPrice = gnc_price_create( be->primary_book );
@@ -168,7 +168,7 @@ load_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCPrice* pPrice )
 }
 
 static void
-load_prices( GncGdaBackend* be )
+load_all_prices( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
@@ -186,7 +186,7 @@ load_prices( GncGdaBackend* be )
         GNCPrice* pPrice;
 
         for( r = 0; r < numRows; r++ ) {
-            pPrice = load_price( be, pModel, r, NULL );
+            pPrice = load_single_price( be, pModel, r, NULL );
 
             if( pPrice != NULL ) {
                 gnc_pricedb_add_price( pPriceDB, pPrice );
@@ -229,7 +229,7 @@ gnc_gda_init_price_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_PRICE,
         commit_price,            /* commit */
-        load_prices,            /* initial_load */
+        load_all_prices,            /* initial_load */
         create_prices_tables    /* create tables */
     };
 

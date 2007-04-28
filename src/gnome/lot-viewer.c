@@ -450,6 +450,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       /* Self-reference */
       gtk_list_store_set(store, &iter, LOT_COL_PNTR, lot, -1);
    }
+   g_list_free(lot_list);
 
    /* re-select the row that the user had previously selected, 
     * if possible. */

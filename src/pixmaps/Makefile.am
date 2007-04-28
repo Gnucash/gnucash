@@ -1,7 +1,6 @@
 gncpixmapdir = ${GNC_PIXMAP_DIR}
 
 gncpixmap_DATA = \
-  appicon.png \
   gnc-account-16.png \
   gnc-account-delete-16.png \
   gnc-account-delete.png \
@@ -29,13 +28,17 @@ gncpixmap_DATA = \
   gnc-transfer-16.png \
   gnc-transfer.png \
   gnucash-icon.ico \
-  gnucash-icon.png \
+  gnucash-icon-16x16.png \
+  gnucash-icon-32x32.png \
+  gnucash-icon-48x48.png \
   gnucash_splash.png \
   stock_split_title.png \
   stock_split_watermark.png
 
 gncicondir = ${datadir}/pixmaps
-gncicon_DATA = gnucash-icon.png
+gncicon_DATA = gnucash-icon-16x16.png \
+  gnucash-icon-32x32.png \
+  gnucash-icon-48x48.png
 
 EXTRA_DIST = \
   ${gncpixmap_DATA} ${gncicon_DATA}

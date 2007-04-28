@@ -364,6 +364,11 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  this action. */
 void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
 
+/**
+ * Shows all main windows.
+ **/ 
+void gnc_main_window_show_all_windows(void);
+
 #endif /* __GNC_MAIN_WINDOW_H */
 
 /** @} */

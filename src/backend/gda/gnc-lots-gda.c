@@ -101,7 +101,7 @@ set_lot_is_closed( gpointer pObject, gpointer pValue )
 }
 
 static GNCLot*
-load_lot( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCLot* lot )
+load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCLot* lot )
 {
     if( lot == NULL ) {
         lot = gnc_lot_new( be->primary_book );
@@ -117,7 +117,7 @@ load_lot( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCLot* lot )
 }
 
 static void
-load_lots( GncGdaBackend* be )
+load_all_lots( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
@@ -133,7 +133,7 @@ load_lots( GncGdaBackend* be )
         GNCLot* lot;
 
         for( r = 0; r < numRows; r++ ) {
-            lot = load_lot( be, pModel, r, NULL );
+            lot = load_single_lot( be, pModel, r, NULL );
         }
     }
 }
@@ -172,7 +172,7 @@ gnc_gda_init_lot_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_LOT,
         commit_lot,            /* commit */
-        load_lots,            /* initial_load */
+        load_all_lots,            /* initial_load */
         create_lots_tables    /* create tables */
     };
 

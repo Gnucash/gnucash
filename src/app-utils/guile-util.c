@@ -1220,15 +1220,15 @@ gnc_spawn_process_async (GList *argl, const gboolean search_path)
     NULL, argv, NULL, flags, NULL, NULL, &proc->pid,
     &proc->fd_stdin, &proc->fd_stdout, &proc->fd_stderr, &error);
 
-  if (!retval) {
+  if (retval) {
+    g_child_watch_add (proc->pid, on_child_exit, proc);
+  } else {
     g_warning ("Could not spawn %s: %s", *argv ? *argv : "(null)",
                error->message ? error->message : "(null)");
     g_free (proc);
     proc = NULL;
   }
   g_strfreev (argv);
-
-  g_child_watch_add (proc->pid, on_child_exit, proc);
 
   return proc;
 }
@@ -1261,25 +1261,29 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
   errno = 0;
   close (proc->fd_stdin);
   if (errno) {
-    g_warning ("Close of childs stdin (%d) failed: %s", proc->fd_stdin,
-               g_strerror (errno));
+    g_message ("Close of childs stdin (%d) failed: %s", proc->fd_stdin,
+	       g_strerror (errno));
     errno = 0;
   }
   close (proc->fd_stdout);
   if (errno) {
-    g_warning ("Close of childs stdout (%d) failed: %s", proc->fd_stdout,
-               g_strerror(errno));
+    g_message ("Close of childs stdout (%d) failed: %s", proc->fd_stdout,
+	       g_strerror(errno));
     errno = 0;
   }
   close (proc->fd_stderr);
   if (errno) {
-    g_warning ("Close of childs stderr (%d) failed: %s", proc->fd_stderr,
-               g_strerror(errno));
+    g_message ("Close of childs stderr (%d) failed: %s", proc->fd_stderr,
+	       g_strerror(errno));
     errno = 0;
   }
 
-  if (kill_it)
-    gnc_gpid_kill (proc->pid);
+  if (kill_it) {
+    /* give it a chance to die */
+    g_main_context_iteration (NULL, FALSE);
+    if (!proc->dead)
+      gnc_gpid_kill (proc->pid);
+  }
 
   /* free if the process is both dead and detached */
   if (!proc->dead)

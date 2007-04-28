@@ -1101,11 +1101,15 @@ read_formats(PrintCheckDialog * pcd, GtkListStore *store)
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, (char *)NULL);
+    /* Translators: This is a directory name. FIXME: Should this
+       really be translated?!? */
     read_one_check_directory(pcd, store, _("application"), dirname);
     g_free(dirname);
     g_free(pkgdatadir);
 
     dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
+    /* Translators: This is a directory name. FIXME: Should this
+       really be translated?!? */
     read_one_check_directory(pcd, store, _("user"), dirname);
     g_free(dirname);
 }

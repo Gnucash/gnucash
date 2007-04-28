@@ -346,10 +346,13 @@ xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
+xaccSchedXactionSetLastOccurDate(SchedXaction *sx, GDate* new_last_occur)
 {
+  if (g_date_valid(&sx->last_date)
+      && g_date_compare(&sx->last_date, new_last_occur) == 0)
+    return;
   gnc_sx_begin_edit(sx);
-  sx->last_date = *newLastOccur;
+  sx->last_date = *new_last_occur;
   qof_instance_set_dirty(&sx->inst);
   gnc_sx_commit_edit(sx);
 }
@@ -367,10 +370,12 @@ xaccSchedXactionGetNumOccur( const SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
+xaccSchedXactionSetNumOccur(SchedXaction *sx, gint new_num)
 {
+  if (sx->num_occurances_total == new_num)
+    return;
   gnc_sx_begin_edit(sx);
-  sx->num_occurances_remain = sx->num_occurances_total = newNum;
+  sx->num_occurances_remain = sx->num_occurances_total = new_num;
   qof_instance_set_dirty(&sx->inst);
   gnc_sx_commit_edit(sx);
 }
@@ -382,18 +387,20 @@ xaccSchedXactionGetRemOccur( const SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetRemOccur( SchedXaction *sx,
-                             gint numRemain )
+xaccSchedXactionSetRemOccur(SchedXaction *sx, gint num_remain)
 {
   /* FIXME This condition can be tightened up */
-  if ( numRemain > sx->num_occurances_total ) 
+  if (num_remain > sx->num_occurances_total)
   {
-    g_warning("The number remaining is greater than the total occurrences");
+    g_warning("number remaining [%d] > total occurrences [%d]",
+              num_remain, sx->num_occurances_total);
   }
   else
   {
+    if (num_remain == sx->num_occurances_remain)
+      return;
     gnc_sx_begin_edit(sx);
-    sx->num_occurances_remain = numRemain;
+    sx->num_occurances_remain = num_remain;
     qof_instance_set_dirty(&sx->inst);
     gnc_sx_commit_edit(sx);
   }
@@ -620,10 +627,12 @@ gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData )
 }
 
 void
-gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum )
+gnc_sx_set_instance_count(SchedXaction *sx, gint instance_num)
 {
-  g_return_if_fail( sx );
-  sx->instance_num = instanceNum;
+  g_return_if_fail(sx);
+  if (sx->instance_num == instance_num)
+    return;
+  sx->instance_num = instance_num;
 }
 
 GList *
@@ -802,12 +811,14 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 
    if ( !tsd_a && !tsd_b )
       return 0;
+   if (tsd_a == tsd_b)
+      return 0;
    if ( !tsd_a )
       return 1;
    if ( !tsd_b )
       return -1;
    return g_date_compare( &tsd_a->last_date,
-                &tsd_b->last_date );
+                          &tsd_b->last_date );
 }
 
 /**
@@ -817,9 +828,9 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 void
 gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_insert_sorted( sx->deferredList,
-                   deferStateData,
-                   _temporal_state_data_cmp );
+    sx->deferredList = g_list_insert_sorted( sx->deferredList,
+                                             deferStateData,
+                                             _temporal_state_data_cmp );
 }
 
 /**
@@ -829,7 +840,17 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_remove( sx->deferredList, deferStateData );
+    GList *found_by_value;
+
+    found_by_value = g_list_find_custom(
+        sx->deferredList, deferStateData, _temporal_state_data_cmp);
+    if (found_by_value == NULL) {
+        g_warning("unable to find deferred instance");
+        return;
+    }
+
+    gnc_sx_destroy_temporal_state(found_by_value->data);
+    sx->deferredList = g_list_delete_link(sx->deferredList, found_by_value);
 }
 
 /**

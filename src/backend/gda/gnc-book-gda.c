@@ -114,7 +114,7 @@ set_root_template_guid( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static GNCBook*
-load_book( GncGdaBackend* be, GdaDataModel* pModel, int row,
+load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row,
             GNCBook* pBook )
 {
     const GUID* guid;
@@ -137,7 +137,7 @@ load_book( GncGdaBackend* be, GdaDataModel* pModel, int row,
 }
 
 static void
-load_books( GncGdaBackend* be )
+load_all_books( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
@@ -153,13 +153,13 @@ load_books( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_book( be, pModel, r, NULL );
+            (void)load_single_book( be, pModel, r, NULL );
         }
 
-		// If there are no rows, try committing the book
-		if( numRows == 0 ) {
-	    	commit_book( be, QOF_INSTANCE( be->primary_book ) );
-		}
+	// If there are no rows, try committing the book
+	if( numRows == 0 ) {
+    	    commit_book( be, QOF_INSTANCE( be->primary_book ) );
+	}
     }
 }
 
@@ -203,7 +203,7 @@ gnc_gda_init_book_handler( void )
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_BOOK,
         commit_book,                /* commit */
-        load_books,                    /* initial_load */
+        load_all_books,                    /* initial_load */
         create_book_tables            /* create_tables */
     };
 

@@ -14,27 +14,29 @@
 #include "gnc-module-api.h"
 #include "gnc-plugin-stylesheets.h"
 
+GNC_MODULE_API_DECL(libgncmod_stylesheets)
+
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_stylesheets_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_stylesheets_gnc_module_current  = 0;
+int libgncmod_stylesheets_gnc_module_revision = 0;
+int libgncmod_stylesheets_gnc_module_age      = 0;
 
 
 char *
-gnc_module_path(void) {
+libgncmod_stylesheets_gnc_module_path(void) {
   return g_strdup("gnucash/report/stylesheets");
 }
 
 char *
-gnc_module_description(void) {
+libgncmod_stylesheets_gnc_module_description(void) {
   return g_strdup("Standard report stylesheet definitions");
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmod_stylesheets_gnc_module_init(int refcount) {
   /* load the report system */
   if(!gnc_module_load("gnucash/report/report-system", 0)) {
     return FALSE;
@@ -53,6 +55,6 @@ gnc_module_init(int refcount) {
 }
 
 int
-gnc_module_end(int refcount) {
+libgncmod_stylesheets_gnc_module_end(int refcount) {
   return TRUE;
 }

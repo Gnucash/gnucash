@@ -1981,22 +1981,25 @@ gnc_main_window_destroy (GtkObject *object)
 GncMainWindow *
 gnc_main_window_new (void)
 {
-	GncMainWindow *window;
-	gncUIWidget old_window;
+    GncMainWindow *window;
+    gncUIWidget old_window;
 
 	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
-	old_window = gnc_ui_get_toplevel();
-	if (old_window) {
-	  gint width, height;
-	  gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
-	  gtk_window_resize (GTK_WINDOW (window), width, height);
-	  if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
-	       & GDK_WINDOW_STATE_MAXIMIZED) != 0)
-	    gtk_window_maximize (GTK_WINDOW (window));
-	}
-	active_windows = g_list_append (active_windows, window);
-	gnc_main_window_update_all_menu_items();
-	return window;
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+
+    old_window = gnc_ui_get_toplevel();
+    if (old_window) {
+        gint width, height;
+        gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
+        gtk_window_resize (GTK_WINDOW (window), width, height);
+        if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
+             & GDK_WINDOW_STATE_MAXIMIZED) != 0) {
+            gtk_window_maximize (GTK_WINDOW (window));
+        }
+    }
+    active_windows = g_list_append (active_windows, window);
+    gnc_main_window_update_all_menu_items();
+    return window;
 }
 
 /************************************************************
@@ -3454,11 +3457,11 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
 				       "The GNU way to manage your money!");
-	const gchar *copyright = "Â© 1997-2006 Contributors";
+	const gchar *copyright = "© 1997-2006 Contributors";
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 
-	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
+	logo = gnc_gnome_get_gdkpixbuf ("gnucash-icon-48x48.png");
 
 	authors = get_file_strsplit("doc/AUTHORS");
 	documenters = get_file_strsplit("doc/DOCUMENTERS");
@@ -3496,6 +3499,16 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 /************************************************************
  *                                                          *
  ************************************************************/
+
+void
+gnc_main_window_show_all_windows(void)
+{
+    GList *window_iter;
+    for (window_iter = active_windows; window_iter != NULL; window_iter = window_iter->next)
+    {
+        gtk_widget_show(GTK_WIDGET(window_iter->data));
+    }
+}
 
 /** Get a pointer to the first active top level window or NULL
  *  if there is none.

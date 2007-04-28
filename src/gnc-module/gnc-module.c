@@ -253,6 +253,38 @@ gnc_module_system_modinfo(void)
 }
 
 
+/*
+ *  gnc_module_get_symbol
+ *  gets the munged symbol from the file
+ */
+static gboolean
+gnc_module_get_symbol(GModule* gmodule, const char* symbol, gpointer res)
+{
+  gchar** strs;
+  gchar* munged_symbol;
+  gboolean ret;
+
+  g_return_val_if_fail(gmodule, FALSE);
+  g_return_val_if_fail(symbol, FALSE);
+
+  /* Separate the file from its extension */
+  strs = g_strsplit(g_path_get_basename(g_module_name(gmodule)), ".", 2);  
+
+  /* Translate any dashes to underscores */
+  g_strdelimit(strs[0], "-", '_');
+
+  /* Create the symbol <filename>_<symbol> and retrieve that symbol */
+  munged_symbol = g_strdup_printf("%s_%s", strs[0], symbol);
+  ret = g_module_symbol(gmodule, munged_symbol, res);
+
+  /* printf("(%d) Looking for symbol %s\n", ret, munged_symbol); */
+
+  /* Free everything */
+  g_strfreev(strs);
+  g_free(munged_symbol);
+  return ret;
+}
+
 /*************************************************************
  *  gnc_module_get_info
  *  check a proposed gnc_module by looking for specific symbols in it;
@@ -278,7 +310,7 @@ gnc_module_get_info(const char * fullpath)
 
   /* the modsysver tells us what the expected symbols and their
    * types are */
-  if (!g_module_symbol(gmodule, "gnc_module_system_interface", &modsysver)) {
+  if (!gnc_module_get_symbol(gmodule, "gnc_module_system_interface", &modsysver)) {
 /*       g_debug("Module '%s' does not contain 'gnc_module_system_interface'\n", */
 /*                 fullpath); */
       goto get_info_close;
@@ -289,12 +321,12 @@ gnc_module_get_info(const char * fullpath)
       goto get_info_close;
   }
 
-  if (!g_module_symbol(gmodule, "gnc_module_init", &initfunc) ||
-      !g_module_symbol(gmodule, "gnc_module_path", &pathfunc) ||
-      !g_module_symbol(gmodule, "gnc_module_description", &descripfunc) ||
-      !g_module_symbol(gmodule, "gnc_module_current", &iface) ||
-      !g_module_symbol(gmodule, "gnc_module_revision", &revision) ||
-      !g_module_symbol(gmodule, "gnc_module_age", &age)) {
+  if (!gnc_module_get_symbol(gmodule, "gnc_module_init", &initfunc) ||
+      !gnc_module_get_symbol(gmodule, "gnc_module_path", &pathfunc) ||
+      !gnc_module_get_symbol(gmodule, "gnc_module_description", &descripfunc) ||
+      !gnc_module_get_symbol(gmodule, "gnc_module_current", &iface) ||
+      !gnc_module_get_symbol(gmodule, "gnc_module_revision", &revision) ||
+      !gnc_module_get_symbol(gmodule, "gnc_module_age", &age)) {
     g_warning("Module '%s' does not match module signature\n", fullpath);
     goto get_info_close;
   }
@@ -466,7 +498,7 @@ gnc_module_load_common(char * module_name, gint iface, gboolean optional)
     {
       gpointer initfunc;
 
-      if (g_module_symbol(gmodule, "gnc_module_init", &initfunc))
+      if (gnc_module_get_symbol(gmodule, "gnc_module_init", &initfunc))
       {
         /* stick it in the hash table */
         info = g_new0(GNCLoadedModule, 1);
@@ -545,7 +577,7 @@ gnc_module_unload(GNCModule module)
     int unload_val = TRUE;
 
     info->load_count--;
-    if (g_module_symbol(info->gmodule, "gnc_module_end", &unload_thunk))
+    if (gnc_module_get_symbol(info->gmodule, "gnc_module_end", &unload_thunk))
     {
       int (* thunk)(int) = unload_thunk;
       unload_val = thunk(info->load_count);

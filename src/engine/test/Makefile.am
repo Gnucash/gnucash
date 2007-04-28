@@ -31,6 +31,7 @@ TESTS = \
   test-object \
   test-commodities \
   test-create-account \
+  test-account-object \
   test-group-vs-book \
   test-lots \
   test-period \
@@ -66,6 +67,7 @@ check_PROGRAMS = \
   test-freq-spec \
   test-recurrence \
   test-guid \
+  test-account-object \
   test-group-vs-book \
   test-load-engine \
   test-period \
