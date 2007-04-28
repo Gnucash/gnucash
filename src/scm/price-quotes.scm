@@ -26,7 +26,6 @@
 (export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
 (export gnc:price-quotes-install-sources)
 
-(use-modules (gnucash process))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
@@ -244,32 +243,30 @@
   (g-find-program-in-path "gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
-  (let ((program #f))
+  (let ((program '())
+        (from-child #f))
 
     (define (start-program)
-      (set! program (gnc:run-sub-process #f
-                                        gnc:*finance-quote-check*
-                                        gnc:*finance-quote-check*)))
+      (if (not (null? gnc:*finance-quote-check*))
+          (set! program (gnc-spawn-process-async
+                         (list "perl" "-w" gnc:*finance-quote-check*) #t))))
 
     (define (get-sources)
-      (and program
-           (let ((from-child (cadr program))
-                 (results #f))
-	     (catch
-	      #t
-	      (lambda ()
-		(set! results (read from-child))
-		(gnc:debug (list 'results results))
-		results)
-	      (lambda (key . args)
-		key)))))
+      (if (not (null? program))
+          (let ((results #f))
+            (set! from-child (fdes->inport (gnc-process-get-fd program 1)))
+            (catch
+             #t
+             (lambda ()
+               (set! results (read from-child))
+               (gnc:debug (list 'results results))
+               results)
+             (lambda (key . args)
+               key)))))
 
     (define (kill-program)
-      (and program
-           (let ((pid (car program)))
-             (close-input-port (cadr program))
-             (close-output-port (caddr program))
-             (gnc:cleanup-sub-process (car program) 1))))
+      (if (not (null? program))
+          (gnc-detach-process program #t)))
 
     (dynamic-wind
         start-program
@@ -329,46 +326,45 @@
   ;; was unparsable.  See the gnc-fq-helper for more details
   ;; about it's output.
 
-  (let ((quoter #f))
+  (let ((quoter '())
+        (to-child #f)
+        (from-child #f))
 
     (define (start-quoter)
-      (set! quoter (gnc:run-sub-process #f
-                                        gnc:*finance-quote-helper*
-                                        gnc:*finance-quote-helper*)))
+      (if (not (null? gnc:*finance-quote-helper*))
+          (set! quoter (gnc-spawn-process-async
+                        (list "perl" "-w" gnc:*finance-quote-helper*) #t))))
 
     (define (get-quotes)
-      (and quoter
-           (let ((to-child (caddr quoter))
-                 (from-child (cadr quoter))
-                 (results #f))
-             (map
-              (lambda (request)
-		(catch
-		 #t
-		 (lambda ()
-		   (gnc:debug (list 'handling-request request))
-		   ;; we need to display the first element (the method, so it
-		   ;; won't be quoted) and then write the rest
-		   (display #\( to-child)
-		   (display (car request) to-child)
-		   (display " " to-child)
-		   (for-each (lambda (x) (write x to-child)) (cdr request))
-		   (display #\) to-child)
-		   (newline to-child)
-		   (force-output to-child)
-		   (set! results (read from-child))
-		   (gnc:debug (list 'results results))
-		   results)
-		 (lambda (key . args)
-		   key)))
+      (if (not (null? quoter))
+          (let ((results #f))
+            (set! to-child (fdes->outport (gnc-process-get-fd quoter 0)))
+            (set! from-child (fdes->inport (gnc-process-get-fd quoter 1)))
+            (map
+             (lambda (request)
+               (catch
+                #t
+                (lambda ()
+                  (gnc:debug (list 'handling-request request))
+                  ;; we need to display the first element (the method, so it
+                  ;; won't be quoted) and then write the rest
+                  (display #\( to-child)
+                  (display (car request) to-child)
+                  (display " " to-child)
+                  (for-each (lambda (x) (write x to-child)) (cdr request))
+                  (display #\) to-child)
+                  (newline to-child)
+                  (force-output to-child)
+                  (set! results (read from-child))
+                  (gnc:debug (list 'results results))
+                  results)
+                (lambda (key . args)
+                  key)))
              requests))))
 
     (define (kill-quoter)
-      (and quoter
-           (let ((pid (car quoter)))
-             (close-input-port (cadr quoter))
-             (close-output-port (caddr quoter))
-             (gnc:cleanup-sub-process (car quoter) 1))))
+      (if (not (null? quoter))
+          (gnc-detach-process quoter #t)))
 
     (dynamic-wind
         start-quoter
@@ -519,13 +515,9 @@
              (reverse result-list)))))
 
   (define (timestr->time-pair timestr time-zone)
-    (let ((broken-down (strptime "%Y-%m-%d %H:%M:%S" timestr)))
-      (if (not (= (string-length timestr) (cdr broken-down)))
-          #f
-          (cons (car (if time-zone
-                         (mktime (car broken-down) time-zone)
-                         (mktime (car broken-down))))
-                0))))
+    ;; time-zone is ignored currently
+    (cons (gnc-parse-time-to-timet timestr "%Y-%m-%d %H:%M:%S")
+          0))
 
   (define (commodity-tz-quote-triple->price book c-tz-quote-triple)
     ;; return a string like "NASDAQ:CSCO" on error, or a price on
