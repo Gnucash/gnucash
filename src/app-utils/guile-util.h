@@ -140,3 +140,13 @@ gint gnc_process_get_fd(const Process *proc, const gint std_fd);
 void gnc_detach_process(Process *proc, const gboolean kill_it);
 
 #endif
+
+/** Convert a time string to calendar time representation.  Combine strptime and
+ *  mktime into a single function to avoid the need to wrap struct tm *.
+ *
+ *  @param s String representation of time.
+ *
+ *  @param format Format specification.
+ *
+ *  @return The time in seconds since unix epoch, or -1 on error */
+time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);
