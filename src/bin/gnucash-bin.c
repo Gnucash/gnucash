@@ -109,6 +109,17 @@ environment_override()
         help_path = g_strdup(path);
     if ((path = g_getenv("GNC_GCONF_PATH")))
         gconf_path = g_strdup(path);
+#ifdef G_OS_WIN32
+    {
+        /* unhide files without extension */
+        gchar *pathext = g_build_path(";", ".", g_getenv("PATHEXT"),
+                                      (gchar*) NULL);
+        g_setenv("PATHEXT", pathext, TRUE);
+        g_free(pathext);
+    }
+    /* this is needed by Date::Manip and will not hurt */
+    g_setenv("TZ", "UTC", FALSE);
+#endif
 }
 
 static gboolean
