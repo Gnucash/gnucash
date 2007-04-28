@@ -33,6 +33,19 @@ echo.
 perl -w gnc-fq-check
 if %errorlevel% neq 0 goto error
 
+set OLDTZ=%TZ%
+set TZ
+if %errorlevel% neq 1 goto cfqh
+set TZ=UTC
+:cfqh
+echo.
+echo * Run gnc-fq-helper
+echo.
+echo (yahoo "AMZN") | perl -w gnc-fq-helper
+set errlvlbak=%errorlevel%
+set TZ=%OLDTZ%
+if %errlvlbak% neq 0 goto error
+
 echo.
 echo * Installation succeeded
 echo.
