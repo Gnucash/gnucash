@@ -536,7 +536,7 @@ recurrenceListToCompactString(GList *rs)
                 /* translators: %u is the recurrence multipler. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
-            g_string_append_printf(buf, _(": "));
+            g_string_append_printf(buf, ": ");
             _monthly_append_when(r, buf);
         } break;
         case PERIOD_NTH_WEEKDAY: {

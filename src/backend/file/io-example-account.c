@@ -151,8 +151,8 @@ add_account_local(GncExampleAccount *gea, Account *act)
     else if (!gnc_account_get_parent(act))
     {
         if (!gea->root) {
-            g_warning(_("The example account file should declared a ROOT "
-                        "account before declaring any other accounts."));
+            g_warning("The example account file should declared a ROOT "
+		      "account before declaring any other accounts.");
             gea->root = gnc_book_get_root_account(gea->book);
         }
         gnc_account_append_child(gea->root, act);
