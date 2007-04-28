@@ -367,6 +367,7 @@ function inst_openssl() {
             mkdir -p $_OPENSSL_UDIR/lib
             mkdir -p $_OPENSSL_UDIR/include
             cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
+            cp -a libssl32.dll $_OPENSSL_UDIR/bin/ssleay32.dll
             for _implib in libeay32 libssl32 ; do
                 cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
             done

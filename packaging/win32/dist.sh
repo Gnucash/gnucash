@@ -36,6 +36,7 @@ function prepare() {
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
+    _REPOS_UDIR=`unix_path $REPOS_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
     _INSTALL_UDIR=`unix_path $INSTALL_DIR`
     _INNO_UDIR=`unix_path $INNO_DIR`
@@ -70,7 +71,7 @@ function dist_openssl() {
     setup OpenSSL
     _OPENSSL_UDIR=`unix_path $OPENSSL_DIR`
     mkdir -p $DIST_UDIR/bin
-    cp -a $_OPENSSL_UDIR/bin/lib{eay,ssl}*.dll $DIST_UDIR/bin
+    cp -a $_OPENSSL_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
 function dist_libxml2() {
@@ -187,6 +188,7 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
+    cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
     cp -a $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
 }
 
