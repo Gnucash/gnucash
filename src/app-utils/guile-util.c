@@ -1278,9 +1278,10 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
     errno = 0;
   }
 
-  if (kill_it) {
+  if (kill_it && !proc->dead) {
     /* give it a chance to die */
-    g_main_context_iteration (NULL, FALSE);
+    while (g_main_context_iteration (NULL, FALSE) && !proc->dead)
+      ;
     if (!proc->dead)
       gnc_gpid_kill (proc->pid);
   }
