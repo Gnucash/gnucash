@@ -632,7 +632,6 @@ on_aqhbci_button (GtkButton *button,
     g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
     gnc_error_dialog
       (info->window,
-       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
        _("The external program \"AqBanking Setup Wizard\" has not "
 	 "been found. \n\n"
 	 "The aqbanking package should include the "
