@@ -134,9 +134,6 @@ print error message if its bad  */
 @param data gpointer, place where object class can hang arbitrary data
 
 */
-void qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab);
-void qof_entity_release (QofInstance *ent);
-void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
 
 /** Is QOF operating in "alternate" dirty mode.  In normal mode,
  *  whenever an instance is dirtied, the collection (and therefore the

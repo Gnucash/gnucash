@@ -119,6 +119,9 @@ QofBook * qof_instance_get_book (const QofInstance *);
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (const QofInstance *);
 
+/** Set the GUID of this instance */
+void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
+
 /** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (const QofInstance *);
 

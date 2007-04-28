@@ -58,60 +58,6 @@ qof_set_alt_dirty_mode (gboolean enabled)
 
 /* =============================================================== */
 
-void
-qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab)
-{
-  g_return_if_fail (NULL != tab);
-  
-  /* XXX We passed redundant info to this routine ... but I think that's
-   * OK, it might eliminate programming errors. */
-  if (safe_strcmp(tab->e_type, type))
-  {
-    PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
-    return;
-  }
-  ent->e_type = CACHE_INSERT (type);
-
-  do
-   {
-    guid_new(&ent->guid);
-
-    if (NULL == qof_collection_lookup_entity (tab, &ent->guid)) break;
-
-    PWARN("duplicate id created, trying again");
-  } while(1);
- 
-  ent->collection = tab;
-
-  qof_collection_insert_entity (tab, ent);
-}
-
-void
-qof_entity_release (QofInstance *ent)
-{
-  if (!ent->collection) return;
-  qof_collection_remove_entity (ent);
-  CACHE_REMOVE (ent->e_type);
-  ent->e_type = NULL;
-}
-
-
-/* This is a restricted function, should be used only during 
- * read from file */
-void
-qof_instance_set_guid (QofInstance *ent, const GUID *guid)
-{
-  QofCollection *col;
-  if (guid_equal (guid, &ent->guid)) return;
-
-  col = ent->collection;
-  qof_collection_remove_entity (ent);
-  ent->guid = *guid;
-  qof_collection_insert_entity (col, ent);
-}
-
-/* =============================================================== */
-
 static guint
 id_hash (gconstpointer key)
 {

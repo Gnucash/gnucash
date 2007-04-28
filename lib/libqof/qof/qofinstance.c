@@ -67,19 +67,49 @@ void
 qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 {
 	QofCollection *col;
+        QofIdType col_type;
+
 	g_return_if_fail(QOF_IS_INSTANCE(inst));
 	g_return_if_fail(!inst->book);
 
 	inst->book = book;
 	col = qof_book_get_collection (book, type);
-	qof_entity_init (inst, type, col);
+        g_return_if_fail(col != NULL);
+  
+        /* XXX We passed redundant info to this routine ... but I think that's
+         * OK, it might eliminate programming errors. */
+
+        col_type = qof_collection_get_type(col);
+        if (safe_strcmp(col_type, type)) {
+            PERR ("attempt to insert \"%s\" into \"%s\"", type, col_type);
+            return;
+        }
+        inst->e_type = CACHE_INSERT (type);
+
+        do {
+          guid_new(&inst->guid);
+
+          if (NULL == qof_collection_lookup_entity (col, &inst->guid))
+            break;
+
+          PWARN("duplicate id created, trying again");
+        } while(1);
+ 
+        inst->collection = col;
+
+        qof_collection_insert_entity (col, inst);
 }
 
 static void
 qof_instance_dispose (GObject *instp)
 {
 	QofInstance* inst = QOF_INSTANCE(instp);
-	qof_entity_release (inst);
+
+        if (!inst->collection)
+          return;
+        qof_collection_remove_entity(inst);
+        CACHE_REMOVE(inst->e_type);
+        inst->e_type = NULL;
 	G_OBJECT_CLASS(qof_instance_parent_class)->dispose(instp);
 }
 
@@ -107,6 +137,18 @@ qof_instance_get_book (const QofInstance *inst)
 {
 	if (!inst) return NULL;
 	return inst->book;
+}
+
+void
+qof_instance_set_guid (QofInstance *ent, const GUID *guid)
+{
+  QofCollection *col;
+  if (guid_equal (guid, &ent->guid)) return;
+
+  col = ent->collection;
+  qof_collection_remove_entity(ent);
+  ent->guid = *guid;
+  qof_collection_insert_entity(col, ent);
 }
 
 KvpFrame*
