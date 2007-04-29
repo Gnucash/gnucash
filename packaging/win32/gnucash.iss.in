@@ -45,6 +45,9 @@ Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{
 Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; Flags: postinstall skipifsilent
 Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
 
+[UninstallRun]
+Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
+
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
 ; installation
