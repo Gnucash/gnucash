@@ -530,8 +530,8 @@ function inst_gnome() {
             fi
             if [ ! -f libexec/gconfd-2.console.exe ]; then
                 cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
-                exetype libexec/gconfd-2.exe windows
             fi
+            exetype libexec/gconfd-2.exe windows
 #            sed 's#gtk+-unix-print-2.0 >= [0-9\.]* *##' lib/pkgconfig/libgtkhtml-3.14.pc > tmp  # not gnomeprint
 #            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc  # not gnomeprint
             # work around a bug in msys bash, adding 0x01 smilies
