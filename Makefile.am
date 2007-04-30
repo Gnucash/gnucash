@@ -186,7 +186,13 @@ intl-scm/guile-strings.c:
 
 SVN = svn
 XSLTPROC = xsltproc
-ChangeLog.svn:
+
+# This rule will generate a ChangeLog of gnucash/trunk commits, plus
+# all additional branches that are added in
+# ./macros/svn2cl.xsl. (FIXME: Is the dependency on configure.in
+# really a good idea? Before a release, configure.in will get updated
+# because of the version change, so this should fit just fine.)
+ChangeLog: configure.in
 	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
