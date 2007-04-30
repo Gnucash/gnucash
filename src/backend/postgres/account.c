@@ -81,7 +81,8 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    const gnc_commodity *com;
 
    if (!be || !acct) return;
-   if ((FALSE == do_mark) && (FALSE == acct->inst.dirty)) return;
+   if ((FALSE == do_mark) && (!qof_instance_get_dirty_flag(acct)))
+     return;
 
    ENTER ("acct=%p, mark=%d", acct, do_mark);
 
@@ -556,7 +557,7 @@ pgend_account_commit_edit (QofBackend * bend,
    ENTER ("be=%p, acct=%p", be, acct);
    if (!be || !acct) return;
 
-   if (FALSE == acct->inst.dirty)
+   if (!qof_instance_get_dirty_flag(acct))
    {
       LEAVE ("account not written because not dirty");
       return;
@@ -576,7 +577,7 @@ pgend_account_commit_edit (QofBackend * bend,
     * made changes, and we must roll back. */
    if (0 < pgendAccountCompareVersion (be, acct))
    {
-      acct->inst.do_free = FALSE;
+      qof_instance_set_destroying(acct, FALSE);
       p = "ROLLBACK;";
       SEND_QUERY (be,p,);
       FINISH_QUERY(be->connection);
@@ -593,7 +594,7 @@ pgend_account_commit_edit (QofBackend * bend,
    gnc_account_increment_version(acct);  /* be sure to update the version !! */
    gnc_account_set_version_check(acct, be->version_check);
 
-   if (acct->inst.do_free)
+   if (qof_instance_get_destroying(acct))
    {
       const GUID *guid = xaccAccountGetGUID(acct);
       pgendKVPDelete (be, acct->idata);

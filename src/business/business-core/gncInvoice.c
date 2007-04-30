@@ -150,7 +150,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 void gncInvoiceDestroy (GncInvoice *invoice)
 {
   if (!invoice) return;
-  invoice->inst.do_free = TRUE;
+  qof_instance_set_destroying(invoice, TRUE);
   gncInvoiceCommitEdit (invoice);
 }
 
@@ -1522,7 +1522,7 @@ static const char * _gncInvoicePrintable (gpointer obj)
 
   g_return_val_if_fail (invoice, NULL);
 
-  if (invoice->inst.dirty || invoice->printname == NULL) {
+  if (qof_instance_get_dirty_flag(invoice) || invoice->printname == NULL) {
     if (invoice->printname) g_free (invoice->printname);
 
     invoice->printname =

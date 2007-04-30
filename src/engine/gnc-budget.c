@@ -146,7 +146,7 @@ gnc_budget_destroy(GncBudget *budget)
     g_return_if_fail(GNC_IS_BUDGET(budget));
     gnc_budget_begin_edit(budget);
     qof_instance_set_dirty(&budget->inst);
-    budget->inst.do_free = TRUE;
+    qof_instance_set_destroying(budget, TRUE);
     gnc_budget_commit_edit(budget);
 }
 

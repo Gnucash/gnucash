@@ -119,6 +119,9 @@ QofBook * qof_instance_get_book (const QofInstance *);
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (const QofInstance *);
 
+/** Return the collection this instance belongs to */
+const QofCollection* qof_instance_get_collection (gconstpointer inst);
+
 /** Set the GUID of this instance */
 void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
 
@@ -133,6 +136,11 @@ KvpFrame* qof_instance_get_slots (const QofInstance *);
  */
 Timespec qof_instance_get_last_update (const QofInstance *inst);
 
+gint qof_instance_get_editlevel (gconstpointer ptr);
+void qof_instance_increase_editlevel (gpointer ptr);
+void qof_instance_decrease_editlevel (gpointer ptr);
+void qof_instance_reset_editlevel (gpointer ptr);
+
 /** Compare two instances, based on thier last update times. 
  *  Returns a negative, zero or positive value, respectively, 
  *  if 'left' is earlier, same as or later than 'right'.  
@@ -140,6 +148,37 @@ Timespec qof_instance_get_last_update (const QofInstance *inst);
  *  than any value.
  */
 int qof_instance_version_cmp (const QofInstance *left, const QofInstance *right);
+
+/** Retrieve the flag that indicates whether or not this object is
+ *  about to be destroyed.
+ *
+ *  @param ptr The object whose flag should be retrieved.
+ *
+ *  @return TRUE if the object has been marked for destruction. FALSE
+ *  if the object is not marked for destruction, or if a bad parameter
+ *  is passed to the function. */
+gboolean qof_instance_get_destroying (gconstpointer ptr);
+
+/** Set the flag that indicates whether or not this object is about to
+ *  be destroyed.
+ *
+ *  @param ptr The object whose flag should be set.
+ *
+ *  @param value The new value to be set for this object. */
+void qof_instance_set_destroying (gpointer ptr, gboolean value);
+
+/** Retrieve the flag that indicates whether or not this object has
+ *  been modified.  This is specifically the flag on the object. It
+ *  does not perform any other checking which might normally be
+ *  performed when testing to see if an object is dirty.  If there is
+ *  any question, use the qof_instance_is_dirty() function instead.
+ *
+ *  @param ptr The object whose flag should be retrieved.
+ *
+ *  @return TRUE if the object has been modified and not saved. FALSE
+ *  if the object has not been modified, or if a bad parameter is
+ *  passed to the function. */
+gboolean qof_instance_get_dirty_flag (gconstpointer ptr);
 
 void qof_instance_print_dirty (const QofInstance *entity, gpointer dummy);
 

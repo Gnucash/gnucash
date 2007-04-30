@@ -949,7 +949,7 @@ xaccFreeOneChildAccount (Account *acc, gpointer dummy)
 {
     /* FIXME: this code is kind of hacky.  actually, all this code
      * seems to assume that the account edit levels are all 1. */
-    if (acc->inst.editlevel == 0)
+    if (qof_instance_get_editlevel(acc) == 0)
       xaccAccountBeginEdit(acc);
     xaccAccountDestroy(acc);
 }
@@ -1021,7 +1021,7 @@ xaccFreeAccount (Account *acc)
     PERR (" instead of calling xaccFreeAccount(), please call \n"
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
   
-    acc->inst.editlevel = 0;
+    qof_instance_reset_editlevel(acc);
 
     slist = g_list_copy(priv->splits);
     for (lp = slist; lp; lp = lp->next) {
@@ -1113,12 +1113,12 @@ xaccAccountCommitEdit (Account *acc)
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
   priv = GET_PRIVATE(acc);
-  if (acc->inst.do_free)
+  if (qof_instance_get_destroying(acc))
   {
     GList *lp, *slist;
     QofCollection *col;
  
-    acc->inst.editlevel++;
+    qof_instance_increase_editlevel(acc);
 
     /* First, recursively free children */
     xaccFreeAccountChildren(acc);
@@ -1156,7 +1156,7 @@ xaccAccountCommitEdit (Account *acc)
     priv->lots = NULL;
 
     qof_instance_set_dirty(&acc->inst);
-    acc->inst.editlevel--;
+    qof_instance_decrease_editlevel(acc);
   }
   else 
   {
@@ -1171,7 +1171,7 @@ xaccAccountDestroy (Account *acc)
 {
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-  acc->inst.do_free = TRUE;
+  qof_instance_set_destroying(acc, TRUE);
 
   xaccAccountCommitEdit (acc);
 }
@@ -1499,7 +1499,7 @@ gnc_account_set_sort_dirty (Account *acc)
 
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-    if (acc->inst.do_free)
+    if (qof_instance_get_destroying(acc))
 	return;
 
     priv = GET_PRIVATE(acc);
@@ -1520,7 +1520,7 @@ gnc_account_set_balance_dirty (Account *acc)
 
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-    if (acc->inst.do_free)
+    if (qof_instance_get_destroying(acc))
 	return;
 
     priv = GET_PRIVATE(acc);
@@ -1558,7 +1558,7 @@ gnc_account_insert_split (Account *acc, Split *s)
     if (node)
 	return FALSE;
 
-    if (acc->inst.editlevel == 0) {
+    if (qof_instance_get_editlevel(acc) == 0) {
 	priv->splits = g_list_insert_sorted(priv->splits, s,
 					   (GCompareFunc)xaccSplitOrder);
     } else {
@@ -1610,7 +1610,7 @@ xaccAccountSortSplits (Account *acc, gboolean force)
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
     priv = GET_PRIVATE(acc);
-    if (!priv->sort_dirty || (!force && acc->inst.editlevel > 0))
+    if (!priv->sort_dirty || (!force && qof_instance_get_editlevel(acc) > 0))
         return;
     priv->splits = g_list_sort(priv->splits, (GCompareFunc)xaccSplitOrder);
     priv->sort_dirty = FALSE;
@@ -1892,9 +1892,9 @@ xaccAccountRecomputeBalance (Account * acc)
   if (NULL == acc) return;
 
   priv = GET_PRIVATE(acc);
-  if (acc->inst.editlevel > 0) return;
+  if (qof_instance_get_editlevel(acc) > 0) return;
   if (!priv->balance_dirty) return;
-  if (acc->inst.do_free) return;
+  if (qof_instance_get_destroying(acc)) return;
   if (qof_book_shutting_down(acc->inst.book)) return;
 
   balance            = priv->starting_balance;

@@ -211,8 +211,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    /* Update the rest */
    start = xaccTransGetSplitList(trans);
 
-   PINFO ("split-list=%p, do_free=%d", start, trans->inst.do_free);
-   if ((start) && !(trans->inst.do_free))
+   PINFO ("split-list=%p, destroying=%d", start,
+          qof_instance_get_destroying(trans));
+   if ((start) && !qof_instance_get_destroying(trans))
    {
       gnc_commodity *com;
 
@@ -977,7 +978,7 @@ pgend_trans_commit_edit (QofBackend * bend,
                   "\ttransaction is '%s' %s\n",
                   xaccTransGetDescription (trans), buf);
             rollback = 0;
-            trans->inst.do_free = TRUE;
+            qof_instance_set_destroying(trans, TRUE);
          }
          else
          {

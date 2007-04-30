@@ -122,7 +122,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 void gncOrderDestroy (GncOrder *order)
 {
   if (!order) return;
-  order->inst.do_free = TRUE;
+  qof_instance_set_destroying(order, TRUE);
   gncOrderCommitEdit (order);
 }
 
@@ -408,7 +408,7 @@ _gncOrderPrintable (gpointer obj)
 
   g_return_val_if_fail (order, NULL);
 
-  if (order->inst.dirty || order->printname == NULL) {
+  if (qof_instance_get_dirty_flag(order) || order->printname == NULL) {
     if (order->printname) g_free (order->printname);
 
     order->printname =

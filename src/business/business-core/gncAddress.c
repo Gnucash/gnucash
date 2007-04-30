@@ -163,7 +163,7 @@ void
 gncAddressDestroy (GncAddress *addr)
 {
   if (!addr) return;
-  addr->inst.do_free = TRUE;
+  qof_instance_set_destroying(addr, TRUE);
   gncAddressCommitEdit (addr);
 }
 

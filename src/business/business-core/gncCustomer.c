@@ -181,7 +181,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
 void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
-  cust->inst.do_free = TRUE;
+  qof_instance_set_destroying(cust, TRUE);
   qof_instance_set_dirty (&cust->inst);
   gncCustomerCommitEdit (cust);
 }

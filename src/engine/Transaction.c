@@ -178,7 +178,7 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 
 void check_open (const Transaction *trans)
 {
-  if (trans && 0 >= trans->inst.editlevel)
+  if (trans && 0 >= qof_instance_get_editlevel(trans))
     PERR ("transaction %p not open for editing", trans);
 }
 /********************************************************************\
@@ -186,7 +186,7 @@ void check_open (const Transaction *trans)
 gboolean
 xaccTransStillHasSplit(const Transaction *trans, const Split *s)
 {
-    return (s->parent == trans && !s->inst.do_free);
+    return (s->parent == trans && !qof_instance_get_destroying(s));
 }
 
 /* Executes 'cmd_block' for each split currently in the transaction,
@@ -314,7 +314,7 @@ xaccTransDump (const Transaction *trans, const char *tag)
          gnc_commodity_get_printname(trans->common_currency));
   printf("    version:     %x\n", trans->version);
   printf("    version_chk: %x\n", trans->version_check);
-  printf("    editlevel:   %x\n", trans->editlevel);
+  printf("    editlevel:   %x\n", qof_instance_get_editlevel(trans));
   printf("    orig:        %p\n", trans->orig);
   printf("    idata:       %x\n", trans->idata);
   printf("    splits:      ");
@@ -397,10 +397,7 @@ xaccDupeTransaction (const Transaction *t)
    */
   trans->inst.e_type = NULL;
   trans->inst.guid = *guid_null();
-  trans->inst.collection = NULL;
   trans->inst.book = t->inst.book;
-  trans->inst.editlevel = 0;
-  trans->inst.do_free = FALSE;
   trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
 
   return trans;
@@ -865,7 +862,7 @@ xaccTransDestroy (Transaction *trans)
   if (!xaccTransGetReadOnly (trans) || 
       qof_book_shutting_down(trans->inst.book)) {
       xaccTransBeginEdit(trans);
-      trans->inst.do_free = TRUE;
+      qof_instance_set_destroying(trans, TRUE);
       xaccTransCommitEdit(trans);
   }
 }
@@ -965,7 +962,7 @@ static void trans_cleanup_commit(Transaction *trans)
         if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
             continue;
 
-        if ((s->parent != trans) || s->inst.do_free) {
+        if ((s->parent != trans) || qof_instance_get_destroying(s)) {
             /* Existing split either moved to another transaction or
                was destroyed, drop from list */
             GncEventData ed;
@@ -977,7 +974,7 @@ static void trans_cleanup_commit(Transaction *trans)
 
         if (s->parent == trans) {
             /* Split was either added, destroyed or just changed */
-            if (s->inst.do_free)
+            if (qof_instance_get_destroying(s))
                 qof_event_gen(&s->inst, QOF_EVENT_DESTROY, NULL);
             else qof_event_gen(&s->inst, QOF_EVENT_MODIFY, NULL);
             xaccSplitCommitEdit(s);
@@ -998,8 +995,8 @@ static void trans_cleanup_commit(Transaction *trans)
     xaccTransSortSplits(trans);
 
     /* Put back to zero. */
-    trans->inst.editlevel--;
-    g_assert(trans->inst.editlevel == 0);
+    qof_instance_decrease_editlevel(trans);
+    g_assert(qof_instance_get_editlevel(trans) == 0);
 
     gen_event_trans (trans); //TODO: could be conditional
     qof_event_gen (&trans->inst, QOF_EVENT_MODIFY, NULL);
@@ -1019,9 +1016,10 @@ xaccTransCommitEdit (Transaction *trans)
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
     * call to xaccTransCommitEdit. */
-   trans->inst.editlevel++;
+   qof_instance_increase_editlevel(trans);
 
-   if (was_trans_emptied(trans)) trans->inst.do_free = TRUE;
+   if (was_trans_emptied(trans))
+     qof_instance_set_destroying(trans, TRUE);
 
    /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
@@ -1032,7 +1030,7 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (!(trans->inst.do_free) && scrub_data && 
+   if (!qof_instance_get_destroying(trans) && scrub_data && 
        !qof_book_shutting_down(xaccTransGetBook(trans))) {
      /* If scrubbing gains recurses through here, don't call it again. */
      scrub_data = 0; 
@@ -1201,10 +1199,10 @@ xaccTransRollbackEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
 
    trans->orig = NULL;
-   trans->inst.do_free = FALSE;
+   qof_instance_set_destroying(trans, FALSE);
 
    /* Put back to zero. */
-   trans->inst.editlevel--;
+   qof_instance_decrease_editlevel(trans);
    /* FIXME: The register code seems to depend on the engine to
       generate an event during rollback, even though the state is just
       reverting to what it was. */
@@ -1216,7 +1214,7 @@ xaccTransRollbackEdit (Transaction *trans)
 gboolean
 xaccTransIsOpen (const Transaction *trans)
 {
-  return trans ? (0 < trans->inst.editlevel) : FALSE;
+  return trans ? (0 < qof_instance_get_editlevel(trans)) : FALSE;
 }
 
 /* Only used by postgres backend. Not sure if it should dirty the trans. */

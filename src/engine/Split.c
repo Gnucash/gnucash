@@ -173,7 +173,6 @@ xaccDupeSplit (const Split *s)
    * have to fix this up.
    */
   split->inst.e_type = NULL;
-  split->inst.collection = NULL;
   split->inst.guid = s->inst.guid;
   split->inst.book = s->inst.book;
 
@@ -515,18 +514,18 @@ xaccSplitCommitEdit(Split *s)
     acc = s->acc;
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
-    if (s->lot && (s->lot->account != acc || s->inst.do_free))
+    if (s->lot && (s->lot->account != acc || qof_instance_get_destroying(s)))
         gnc_lot_remove_split (s->lot, s);
 
     /* Possibly remove the split from the original account... */
-    if (orig_acc && (orig_acc != acc || s->inst.do_free)) {
+    if (orig_acc && (orig_acc != acc || qof_instance_get_destroying(s))) {
         if (!gnc_account_remove_split(orig_acc, s)) {
           PERR("Account lost track of moved or deleted split.");
         }
     }
 
     /* ... and insert it into the new account if needed */
-    if (acc && (orig_acc != acc) && !s->inst.do_free) {
+    if (acc && (orig_acc != acc) && !qof_instance_get_destroying(s)) {
         if (gnc_account_insert_split(acc, s)) {
             /* If the split's lot belonged to some other account, we
                leave it so. */
@@ -563,7 +562,7 @@ xaccSplitCommitEdit(Split *s)
         g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
         xaccAccountRecomputeBalance(acc);
     }
-    if (s->inst.do_free)
+    if (qof_instance_get_destroying(s))
         xaccFreeSplit(s);
 }
 
@@ -579,9 +578,9 @@ xaccSplitRollbackEdit(Split *s)
         s->acc = s->orig_acc;  
 
     /* Undestroy if needed */
-    if (s->inst.do_free && s->parent) {
+    if (qof_instance_get_destroying(s) && s->parent) {
         GncEventData ed;
-        s->inst.do_free = FALSE;
+        qof_instance_set_destroying(s, FALSE);
         ed.node = s;
         ed.idx = -1; /* unused */
         qof_event_gen(&s->parent->inst, GNC_EVENT_ITEM_ADDED, &ed);
@@ -1103,14 +1102,15 @@ xaccSplitDestroy (Split *split)
 
    acc = split->acc;
    trans = split->parent;
-   if (acc && !acc->inst.do_free && xaccTransGetReadOnly (trans))
+   if (acc && !qof_instance_get_destroying(acc)
+       && xaccTransGetReadOnly(trans))
        return FALSE;
 
    xaccTransBeginEdit(trans);
    ed.node = split;
    ed.idx = xaccTransGetSplitIndex(trans, split);
    qof_instance_set_dirty(QOF_INSTANCE(split));
-   split->inst.do_free = TRUE;
+   qof_instance_set_destroying(split, TRUE);
    qof_event_gen(&trans->inst, GNC_EVENT_ITEM_REMOVED, &ed);
    xaccTransCommitEdit(trans);
 

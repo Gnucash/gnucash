@@ -233,7 +233,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 void gncEntryDestroy (GncEntry *entry)
 {
   if (!entry) return;
-  entry->inst.do_free = TRUE;
+  qof_instance_set_destroying(entry, TRUE);
   gncEntryCommitEdit(entry);
 }
 
@@ -1181,7 +1181,7 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
 gboolean gncEntryIsOpen (GncEntry *entry)
 {
   if (!entry) return FALSE;
-  return (entry->inst.editlevel > 0);
+  return (qof_instance_get_editlevel(entry) > 0);
 }
 
 /* ================================================================ */

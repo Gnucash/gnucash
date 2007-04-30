@@ -132,13 +132,6 @@ qof_instance_get_guid (const QofInstance *inst)
 	return &(inst->guid);
 }
 
-QofBook *
-qof_instance_get_book (const QofInstance *inst)
-{
-	if (!inst) return NULL;
-	return inst->book;
-}
-
 void
 qof_instance_set_guid (QofInstance *ent, const GUID *guid)
 {
@@ -149,6 +142,20 @@ qof_instance_set_guid (QofInstance *ent, const GUID *guid)
   qof_collection_remove_entity(ent);
   ent->guid = *guid;
   qof_collection_insert_entity(col, ent);
+}
+
+const QofCollection *
+qof_instance_get_collection (gconstpointer ptr)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), NULL);
+    return QOF_INSTANCE(ptr)->collection;
+}
+
+QofBook *
+qof_instance_get_book (const QofInstance *inst)
+{
+    if (!inst) return NULL;
+    return inst->book;
 }
 
 KvpFrame*
@@ -169,6 +176,38 @@ qof_instance_get_last_update (const QofInstance *inst)
 	return inst->last_update;
 }
 
+gint
+qof_instance_get_editlevel (gconstpointer ptr)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), 0);
+    return QOF_INSTANCE(ptr)->editlevel;
+}
+
+void qof_instance_increase_editlevel (gpointer ptr)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(ptr));
+    QOF_INSTANCE(ptr)->editlevel++;
+}
+
+void qof_instance_decrease_editlevel (gpointer ptr)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(ptr));
+    QOF_INSTANCE(ptr)->editlevel--;
+}
+
+void qof_instance_reset_editlevel (gpointer ptr)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(ptr));
+    QOF_INSTANCE(ptr)->editlevel = 0;
+}
+
+gboolean
+qof_instance_check_edit(const  QofInstance *inst)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst), FALSE);
+    return (inst->editlevel > 0);
+}
+
 int
 qof_instance_version_cmp (const QofInstance *left, const QofInstance *right)
 {
@@ -180,6 +219,27 @@ qof_instance_version_cmp (const QofInstance *left, const QofInstance *right)
 	if (left->last_update.tv_nsec < right->last_update.tv_nsec) return -1;
 	if (left->last_update.tv_nsec > right->last_update.tv_nsec) return +1;
 	return 0;
+}
+
+gboolean
+qof_instance_get_destroying (gconstpointer ptr)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), FALSE);
+    return QOF_INSTANCE(ptr)->do_free;
+}
+
+void
+qof_instance_set_destroying (gpointer ptr, gboolean value)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(ptr));
+    QOF_INSTANCE(ptr)->do_free = value;
+}
+
+gboolean
+qof_instance_get_dirty_flag (gconstpointer ptr)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), FALSE);
+    return QOF_INSTANCE(ptr)->dirty;
 }
 
 void
@@ -216,13 +276,6 @@ qof_instance_set_dirty(QofInstance* inst)
 	  coll = inst->collection;
 	  qof_collection_mark_dirty(coll);
 	}
-}
-
-gboolean
-qof_instance_check_edit(const  QofInstance *inst)
-{
-	if(inst->editlevel > 0) { return TRUE; }
-	return FALSE;
 }
 
 gboolean

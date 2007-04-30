@@ -188,7 +188,7 @@ gncTaxTableAddChild (GncTaxTable *table, GncTaxTable *child)
 {
   g_return_if_fail(table);
   g_return_if_fail(child);
-  g_return_if_fail(table->inst.do_free == FALSE);
+  g_return_if_fail(qof_instance_get_destroying(table) == FALSE);
 
   table->children = g_list_prepend(table->children, child);
 }
@@ -199,7 +199,7 @@ gncTaxTableRemoveChild (GncTaxTable *table, GncTaxTable *child)
   g_return_if_fail(table);
   g_return_if_fail(child);
 
-  if (table->inst.do_free) return;
+  if (qof_instance_get_destroying(table)) return;
 
   table->children = g_list_remove(table->children, child);
 }
@@ -309,7 +309,7 @@ void
 gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
-  table->inst.do_free = TRUE;
+  qof_instance_set_destroying(table, TRUE);
   qof_instance_set_dirty (&table->inst);
   gncTaxTableCommitEdit (table);
 }
@@ -331,7 +331,7 @@ gncTaxTableFree (GncTaxTable *table)
     gncTaxTableEntryDestroy (list->data);
   g_list_free (table->entries);
 
-  if (!table->inst.do_free)
+  if (!qof_instance_get_destroying(table))
     PERR("free a taxtable without do_free set!");
 
   /* disconnect from parent */

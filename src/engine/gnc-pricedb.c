@@ -812,8 +812,9 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+  ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p));
 
   if (db->inst.book != p->inst.book)
   {
@@ -857,8 +858,9 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   p->db = db;
   qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
 
-  LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
-         db, p, p->inst.dirty, p->inst.do_free,
+  LEAVE ("db=%p, pr=%p dirty=%d dextroying=%d commodity=%s/%s currency_hash=%p",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p),
          gnc_commodity_get_namespace(p->commodity),
          gnc_commodity_get_mnemonic(p->commodity),
          currency_hash);
@@ -872,8 +874,9 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 {
   if(!db || !p) return FALSE;
 
-  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+  ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p));
 
   if (FALSE == add_price(db, p)) 
   {
@@ -885,8 +888,9 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   qof_instance_set_dirty(&db->inst);
   gnc_pricedb_commit_edit(db);
 
-  LEAVE ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+  LEAVE ("db=%p, pr=%p dirty=%d destroying=%d",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p));
 
   return TRUE;
 }
@@ -904,8 +908,9 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+  ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p));
 
   commodity = gnc_price_get_commodity(p);
   if(!commodity) { LEAVE (" no commodity"); return FALSE; }
@@ -958,8 +963,9 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 {
   gboolean rc;
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
-         db, p, p->inst.dirty, p->inst.do_free);
+  ENTER ("db=%p, pr=%p dirty=%d destroying=%d",
+         db, p, qof_instance_get_dirty_flag(p),
+         qof_instance_get_destroying(p));
 
   gnc_price_ref(p);
   rc = remove_price (db, p, TRUE);
@@ -969,7 +975,7 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 
   /* invoke the backend to delete this price */
   gnc_price_begin_edit (p);
-  p->inst.do_free = TRUE;
+  qof_instance_set_destroying(p, TRUE);
   gnc_price_commit_edit (p);
   p->db = NULL;
   gnc_price_unref(p);
