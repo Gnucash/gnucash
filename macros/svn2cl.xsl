@@ -46,9 +46,9 @@
 
 -->
 
-<!DOCTYPE page [
+<!DOCTYPE xsl:stylesheet [
  <!ENTITY tab "&#9;">
- <!ENTITY newl "&#13;">
+ <!ENTITY newl "&#10;">
  <!ENTITY space "&#32;">
 ]>
 
@@ -63,12 +63,11 @@
 
 <xsl:stylesheet
   version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
  <xsl:output
    method="text"
-   encoding="iso-8859-15"
+   encoding="utf-8"
    media-type="text/plain"
    omit-xml-declaration="yes"
    standalone="yes"
