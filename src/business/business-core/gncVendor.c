@@ -445,7 +445,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  QOF_BEGIN_EDIT (&vendor->inst);
+  qof_begin_edit(&vendor->inst);
 }
 
 static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)

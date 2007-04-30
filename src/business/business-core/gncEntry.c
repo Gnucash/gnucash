@@ -1188,7 +1188,7 @@ gboolean gncEntryIsOpen (GncEntry *entry)
 
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  QOF_BEGIN_EDIT (&entry->inst);
+  qof_begin_edit(&entry->inst);
 }
 
 static void gncEntryOnError (QofInstance *entry, QofBackendError errcode)

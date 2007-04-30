@@ -421,7 +421,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  QOF_BEGIN_EDIT (&term->inst);
+  qof_begin_edit(&term->inst);
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)

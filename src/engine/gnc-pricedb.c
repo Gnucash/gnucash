@@ -156,7 +156,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
 void
 gnc_price_begin_edit (GNCPrice *p)
 {
-  QOF_BEGIN_EDIT (&p->inst);
+  qof_begin_edit(&p->inst);
 }
 
 static void commit_err (QofInstance *inst, QofBackendError errcode)
@@ -178,7 +178,7 @@ gnc_price_commit_edit (GNCPrice *p)
 void
 gnc_pricedb_begin_edit (GNCPriceDB *pdb)
 {
-  QOF_BEGIN_EDIT (&pdb->inst);
+  qof_begin_edit(&pdb->inst);
 }
 
 void

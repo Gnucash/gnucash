@@ -281,7 +281,7 @@ qofJobSetOwner (GncJob *job, QofInstance *ent)
 
 void gncJobBeginEdit (GncJob *job)
 {
-  QOF_BEGIN_EDIT (&job->inst);
+  qof_begin_edit(&job->inst);
 }
 
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)

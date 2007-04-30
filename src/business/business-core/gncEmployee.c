@@ -368,7 +368,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  QOF_BEGIN_EDIT (&employee->inst);
+  qof_begin_edit(&employee->inst);
 }
 
 static void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)

@@ -1470,7 +1470,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  QOF_BEGIN_EDIT (&invoice->inst);
+  qof_begin_edit(&invoice->inst);
 }
 
 static void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)

@@ -527,7 +527,7 @@ void gncTaxTableChanged (GncTaxTable *table)
 
 void gncTaxTableBeginEdit (GncTaxTable *table)
 {
-  QOF_BEGIN_EDIT (&table->inst);
+  qof_begin_edit(&table->inst);
 }
 
 static void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
