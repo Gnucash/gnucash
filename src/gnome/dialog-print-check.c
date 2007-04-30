@@ -502,7 +502,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
     GError *error = NULL;
     GtkWidget *dialog;
     gdouble multip;
-    gint i = 0;
+    gint i = 1;
     GUID guid;
     char buf[GUID_ENCODING_LENGTH+1];
 
