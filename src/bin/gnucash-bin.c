@@ -117,8 +117,6 @@ environment_override()
         g_setenv("PATHEXT", pathext, TRUE);
         g_free(pathext);
     }
-    /* this is needed by Date::Manip and will not hurt */
-    g_setenv("TZ", "UTC", FALSE);
 #endif
 }
 
