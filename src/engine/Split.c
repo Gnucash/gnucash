@@ -34,6 +34,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "qof.h"
 #include "Split.h"
 #include "AccountP.h"
 #include "Scrub.h"
@@ -173,7 +174,7 @@ xaccDupeSplit (const Split *s)
    * have to fix this up.
    */
   split->inst.e_type = NULL;
-  split->inst.guid = s->inst.guid;
+  qof_instance_copy_guid(split, s);
   qof_instance_copy_book(split, s);
 
   split->parent = s->parent;
@@ -347,7 +348,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if (sa == sb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(sa->inst.guid), &(sb->inst.guid)))
+    if (qof_instance_guid_compare(sa, sb) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -1166,7 +1167,7 @@ xaccSplitOrder (const Split *sa, const Split *sb)
   DATE_CMP(sa,sb,date_reconciled);
 
   /* else, sort on guid - keeps sort stable. */
-  retval = guid_compare(&(sa->inst.guid), &(sb->inst.guid));
+  retval = qof_instance_guid_compare(sa, sb);
   if (retval) return retval;
 
   return 0;

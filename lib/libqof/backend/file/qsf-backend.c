@@ -1209,7 +1209,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		reference = g_new0(QofInstanceReference, 1);
 		reference->type = g_strdup(qsf_ent->e_type);
 		reference->ref_guid = cm_guid;
-		reference->ent_guid = &qsf_ent->guid;
+		reference->ent_guid = qof_instance_get_guid(qsf_ent);
 		copy_param = g_new0(QofParam, 1);
 		copy_param->param_name = g_strdup(cm_param->param_name);
 		copy_param->param_type = g_strdup(cm_param->param_type);

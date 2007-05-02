@@ -396,7 +396,7 @@ xaccDupeTransaction (const Transaction *t)
    * use this transaction, we'll have to fix this up.
    */
   trans->inst.e_type = NULL;
-  trans->inst.guid = *guid_null();
+  qof_instance_set_guid(trans, guid_null());
   qof_instance_copy_book(trans, t);
   trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
 
@@ -538,7 +538,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
   if (ta == tb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(ta->inst.guid), &(tb->inst.guid)))
+    if (qof_instance_guid_compare(ta, tb) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -1263,7 +1263,7 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
     return retval;
 
   /* else, sort on guid - keeps sort stable. */
-  return guid_compare(&(ta->inst.guid), &(tb->inst.guid));
+  return qof_instance_guid_compare(ta, tb);
 }
 
 /********************************************************************\

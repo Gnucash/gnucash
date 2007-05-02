@@ -58,6 +58,7 @@ run_test (void)
   QofInstance *ent, *eblk[NENT];
   QofCollection *col;
   QofIdType type;
+  GUID guid;
 
   sess = get_random_session ();
   book = qof_session_get_book (sess);
@@ -70,11 +71,14 @@ run_test (void)
   {
     ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
     eblk[i] = ent;
-    guid_new(&ent->guid);
-    do_test ((NULL == qof_collection_lookup_entity (col, &ent->guid)),
+    guid_new(&guid);
+    ent = g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL);
+    do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
 						  "duplicate guid");
 	 ent->e_type = type;
 	 qof_collection_insert_entity (col, ent);
+         do_test ((NULL != qof_collection_lookup_entity (col, &guid)),
+                  "guid not found");
   }
 
   /* Make valgrind happy -- destroy the session. */

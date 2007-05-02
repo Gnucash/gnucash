@@ -152,9 +152,6 @@ gboolean qof_get_alt_dirty_mode (void);
  *  collection (and therefore the book) is never changed. */
 void qof_set_alt_dirty_mode (gboolean enabled);
 
-/** Return the GUID of this entity */
-const GUID * qof_instance_get_guid (const QofInstance *);
-
 /** @name Collections of Entities 
  @{ */
 

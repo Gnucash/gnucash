@@ -171,7 +171,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
         {
           Split *s = split_node->data;
 
-          if (s && guid_equal (&s->inst.guid, &dti->guid))
+          if (s && guid_equal (qof_instance_get_guid(s), &dti->guid))
           {
             pgendStoreAuditSplit (be, s, SQL_DELETE);
             break;

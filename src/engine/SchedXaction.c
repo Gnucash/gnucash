@@ -67,6 +67,7 @@ static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    Account        *ra;
+   const GUID *guid;
 
    qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
@@ -88,8 +89,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct,
-                       guid_to_string( &sx->inst.guid ));
+   guid = qof_instance_get_guid( sx );
+   xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,

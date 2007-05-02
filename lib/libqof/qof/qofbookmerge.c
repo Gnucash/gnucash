@@ -452,7 +452,7 @@ qof_book_merge_foreach ( QofInstance* mergeEnt, gpointer user_data)
 	currentRule = mergeData->currentRule;
 	g_return_if_fail(currentRule != NULL);
 	g = guid_malloc();
-	*g = mergeEnt->guid;
+	qof_instance_copy_guid(g, mergeEnt);
 	mergeRule = g_new(QofBookMergeRule,1);
 	mergeRule->importEnt = 		mergeEnt;
 	mergeRule->difference = 	difference = 0;

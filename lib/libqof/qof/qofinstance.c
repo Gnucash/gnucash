@@ -61,7 +61,7 @@ enum {
 typedef struct QofInstancePrivate
 {
 //    QofIdType        e_type;    /**<	Entity type */
-//    GUID             guid;      /**< GUID for the entity */
+    GUID guid;                  /**< GUID for the entity */
     QofCollection  *collection; /**< Entity collection */
 
     /* The entity_table in which this instance is stored */
@@ -120,6 +120,15 @@ static void qof_instance_class_init(QofInstanceClass *klass)
     object_class->get_property = qof_instance_get_property;
 
     g_type_class_add_private(klass, sizeof(QofInstancePrivate));
+
+    g_object_class_install_property
+	(object_class,
+	 PROP_GUID,
+	 g_param_spec_boxed ("guid",
+			      "Object GUID",
+			      "The object Globally Unique ID.",
+			      GNC_TYPE_GUID,
+			      G_PARAM_READWRITE));
 
     g_object_class_install_property
         (object_class,
@@ -243,12 +252,13 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
             PERR ("attempt to insert \"%s\" into \"%s\"", type, col_type);
             return;
         }
+        priv = GET_PRIVATE(inst);
         inst->e_type = CACHE_INSERT (type);
 
         do {
-          guid_new(&inst->guid);
+          guid_new(&priv->guid);
 
-          if (NULL == qof_collection_lookup_entity (col, &inst->guid))
+          if (NULL == qof_collection_lookup_entity (col, &priv->guid))
             break;
 
           PWARN("duplicate id created, trying again");
@@ -307,7 +317,7 @@ qof_instance_get_property (GObject         *object,
 
     switch (prop_id) {
         case PROP_GUID:
-            g_value_set_boxed(value, &inst->guid);
+            g_value_set_boxed(value, &priv->guid);
             break;
         case PROP_COLLECTION:
             g_value_set_pointer(value, priv->collection);
@@ -384,30 +394,59 @@ qof_instance_set_property (GObject         *object,
 }
 
 const GUID *
-qof_instance_get_guid (const QofInstance *inst)
+qof_instance_get_guid (gconstpointer inst)
 {
     QofInstancePrivate *priv;
 
     if (!inst) return guid_null();
     g_return_val_if_fail(QOF_IS_INSTANCE(inst), guid_null());
     priv = GET_PRIVATE(inst);
-    return &(inst->guid);
+    return &(priv->guid);
 }
 
 void
-qof_instance_set_guid (QofInstance *ent, const GUID *guid)
+qof_instance_set_guid (gpointer ptr, const GUID *guid)
 {
     QofInstancePrivate *priv;
+    QofInstance *inst;
     QofCollection *col;
 
-    priv = GET_PRIVATE(ent);
-    if (guid_equal (guid, &ent->guid))
+    g_return_if_fail(QOF_IS_INSTANCE(ptr));
+
+    inst = QOF_INSTANCE(ptr);
+    priv = GET_PRIVATE(inst);
+    if (guid_equal (guid, &priv->guid))
         return;
 
     col = priv->collection;
-    qof_collection_remove_entity (ent);
-    ent->guid = *guid;
-    qof_collection_insert_entity (col, ent);
+    qof_collection_remove_entity(inst);
+    priv->guid = *guid;
+    qof_collection_insert_entity(col, inst);
+}
+
+void
+qof_instance_copy_guid (gpointer to, gconstpointer from)
+{
+    QofInstancePrivate *to_priv, *from_priv;
+
+    g_return_if_fail(QOF_IS_INSTANCE(to));
+    g_return_if_fail(QOF_IS_INSTANCE(from));
+
+    GET_PRIVATE(to)->guid = GET_PRIVATE(from)->guid;
+}
+
+gint
+qof_instance_guid_compare(gconstpointer ptr1, gconstpointer ptr2)
+{
+    const QofInstancePrivate *priv1, *priv2;
+
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr1), -1);
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr2),  1);
+
+    priv1 = GET_PRIVATE(ptr1);
+    priv2 = GET_PRIVATE(ptr2);
+
+    return guid_compare(&priv1->guid, &priv2->guid);
 }
 
 QofCollection *
@@ -596,7 +635,7 @@ qof_instance_print_dirty (const QofInstance *inst, gpointer dummy)
     priv = GET_PRIVATE(inst);
     if (priv->dirty) {
         printf("%s instance %s is dirty.\n", inst->e_type,
-               guid_to_string(&inst->guid));
+               guid_to_string(&priv->guid));
     }
 }
 
@@ -662,12 +701,12 @@ qof_instance_gemini (QofInstance *to, const QofInstance *from)
 
   /* Make a note of where the copy came from */
   gnc_kvp_bag_add (to->kvp_data, "gemini", now,
-                                  "inst_guid", &from->guid,
-                                  "book_guid", &from_priv->book->inst.guid,
+                                  "inst_guid", &from_priv->guid,
+                                  "book_guid", &fb_priv->guid,
                                   NULL);
   gnc_kvp_bag_add (from->kvp_data, "gemini", now,
-                                  "inst_guid", &to->guid,
-                                  "book_guid", &to_priv->book->inst.guid,
+                                  "inst_guid", &to_priv->guid,
+                                  "book_guid", &tb_priv->guid,
                                   NULL);
 
   to_priv->dirty = TRUE;
@@ -680,12 +719,14 @@ qof_instance_lookup_twin (const QofInstance *src, QofBook *target_book)
 	KvpFrame *fr;
 	GUID * twin_guid;
 	QofInstance * twin;
+        QofInstancePrivate *bpriv;
 
 	if (!src || !target_book) return NULL;
 	ENTER (" ");
 
+        bpriv = GET_PRIVATE(QOF_INSTANCE(target_book));
 	fr = gnc_kvp_bag_find_by_guid (src->kvp_data, "gemini",
-	                             "book_guid", &target_book->inst.guid);
+	                             "book_guid", &bpriv->guid);
 
 	twin_guid = kvp_frame_get_guid (fr, "inst_guid");
 

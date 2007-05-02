@@ -94,7 +94,7 @@ gnc_kvp_bag_add (KvpFrame *pwd, const char * path,
 
 KvpFrame *
 gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
-                         const char *guid_name, GUID *desired_guid)
+                         const char *guid_name, const GUID *desired_guid)
 {
   KvpValue *arr;
   KvpValueType valtype;

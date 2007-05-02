@@ -130,10 +130,13 @@ void
 qof_collection_remove_entity (QofInstance *ent)
 {
   QofCollection *col;
+  const GUID *guid;
+
   if (!ent) return;
   col = qof_instance_get_collection(ent);
   if (!col) return;
-  g_hash_table_remove (col->hash_of_entities, &ent->guid);
+  guid = qof_instance_get_guid(ent);
+  g_hash_table_remove (col->hash_of_entities, guid);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
   qof_instance_set_collection(ent, NULL);
@@ -142,11 +145,14 @@ qof_collection_remove_entity (QofInstance *ent)
 void
 qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
 {
+  const GUID *guid;
+
   if (!col || !ent) return;
-  if (guid_equal(&ent->guid, guid_null())) return;
+  guid = qof_instance_get_guid(ent);
+  if (guid_equal(guid, guid_null())) return;
   g_return_if_fail (col->e_type == ent->e_type);
   qof_collection_remove_entity (ent);
-  g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
+  g_hash_table_insert (col->hash_of_entities, (gpointer)guid, ent);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
   qof_instance_set_collection(ent, col);
@@ -156,14 +162,16 @@ gboolean
 qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
 {
 	QofInstance *e;
+        const GUID *guid;
 
 	e = NULL;
 	if (!coll || !ent) { return FALSE; }
-	if (guid_equal(&ent->guid, guid_null())) { return FALSE; }
+        guid = qof_instance_get_guid(ent);
+        if (guid_equal(guid, guid_null())) { return FALSE; }
 	g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
-	e = qof_collection_lookup_entity(coll, &ent->guid);
+	e = qof_collection_lookup_entity(coll, guid);
 	if ( e != NULL ) { return FALSE; }
-	g_hash_table_insert (coll->hash_of_entities, &ent->guid, ent);
+	g_hash_table_insert (coll->hash_of_entities, (gpointer)guid, ent);
 	if (!qof_alt_dirty_mode)
 	  qof_collection_mark_dirty(coll);
 	return TRUE;
@@ -192,6 +200,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
 {
 	QofCollection *target;
 	QofInstance *e;
+        const GUID *guid;
 	gint value;
 
 	e = NULL;
@@ -199,14 +208,15 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
 	if (!target || !ent) { return; }
 	value = *(gint*)qof_collection_get_data(target);
 	if (value != 0) { return; }
-	if (guid_equal(&ent->guid, guid_null())) 
+        guid = qof_instance_get_guid(ent);
+        if (guid_equal(guid, guid_null())) 
 	{
 		value = -1;
 		qof_collection_set_data(target, &value);
 		return; 
 	}
 	g_return_if_fail (target->e_type == ent->e_type);
-	e = qof_collection_lookup_entity(target, &ent->guid);
+	e = qof_collection_lookup_entity(target, guid);
 	if ( e == NULL )
 	{
 		value = 1;

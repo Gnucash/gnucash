@@ -164,7 +164,7 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
         ret = xmlNewNode( NULL, BAD_CAST "gnc:freqspec" );
         xmlSetProp( ret, BAD_CAST "version", BAD_CAST freqspec_version_string );
 
-        xmlAddChild( ret, guid_to_dom_tree( "fs:id", &fs->entity.guid ) );
+        xmlAddChild( ret, guid_to_dom_tree( "fs:id", qof_instance_get_guid(fs) ) );
 
         xmlSub = text_to_dom_tree( "fs:ui_type",
                                    uiFreqTypeStrs[ xaccFreqSpecGetUIType(fs) ].str );
@@ -575,7 +575,7 @@ fs_guid_handler( xmlNodePtr node, gpointer data)
         fsParseData *fspd = data;
         GUID        *guid;
         guid = dom_tree_to_guid( node );
-        fspd->fs->entity.guid = *guid;
+        qof_instance_set_guid(fspd->fs, guid);
         return TRUE;
 }
 

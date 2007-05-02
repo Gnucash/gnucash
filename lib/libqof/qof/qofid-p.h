@@ -35,11 +35,6 @@
 /* This file defines an engine-only API for using QOF entity
  * identifiers. */
 
-/** Set the ID of the entity, over-riding the previous ID. 
- *  Very dangerous, use only for file i/o work. 
- */
-void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
-
 /** Take entity, remove it from whatever collection its currently
  *  in, and place it in a new collection.  To be used only for
  *  moving entity from one book to another.

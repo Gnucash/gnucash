@@ -295,17 +295,4 @@ qof_event_gen (QofInstance *entity, QofEventId event_id, gpointer event_data)
   qof_event_generate_internal (entity, event_id, event_data);
 }
 
-/* deprecated */
-void 
-qof_event_generate (const GUID *guid, QofIdType e_type, 
-					QofEventId event_id)
-{
-  QofInstance ent;
-  ent.guid = *guid;
-  ent.e_type = e_type;
-  if (suspend_counter) return;
-  /* caution: this is an incomplete entity! */
-  qof_event_generate_internal (&ent, event_id, NULL);
-}
-
 /* =========================== END OF FILE ======================= */

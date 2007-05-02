@@ -395,7 +395,7 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   compare = timespec_cmp (&(a->closed), &(b->closed));
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.guid), &(b->inst.guid));
+  return qof_instance_guid_compare(a, b);
 }
 
 /* =========================================================== */

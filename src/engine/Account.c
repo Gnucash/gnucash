@@ -1316,7 +1316,7 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
   }
 
   if(check_guids) {
-    if(!guid_equal(&aa->inst.guid, &ab->inst.guid))
+    if(qof_instance_guid_compare(aa, ab) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -2013,7 +2013,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     return result;
 
   /* guarantee a stable sort */
-  return guid_compare (&(aa->inst.guid), &(ab->inst.guid));
+  return qof_instance_guid_compare(aa, ab);
 }
 
 static int

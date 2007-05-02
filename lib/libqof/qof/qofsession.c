@@ -373,7 +373,7 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
 	ref = g_new0(QofInstanceReference, 1);
 	ref->type = ent->e_type;
 	ref->ref_guid = g_new(GUID, 1);
-	ref->ent_guid = &ent->guid;
+	ref->ent_guid = qof_instance_get_guid(ent);
 	ref->param = qof_class_get_parameter(ent->e_type, 
 		qecd->param->param_name);
 	cm_guid = qof_instance_get_guid(ref_ent);

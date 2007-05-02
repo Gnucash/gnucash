@@ -34,6 +34,7 @@
 
 #include <glib.h>
 
+#include "qof.h"
 #include "Account.h"
 #include "AccountP.h"
 #include "Transaction.h"
@@ -320,7 +321,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Find and remove the matching guid's */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
-                    "peer_guid", &sb->inst.guid);
+                    "peer_guid", qof_instance_get_guid(sb));
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
@@ -329,7 +330,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Now do it in the other direction */
    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
-                    "peer_guid", &sa->inst.guid);
+                    "peer_guid", qof_instance_get_guid(sa));
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
@@ -399,6 +400,7 @@ xaccScrubMergeSubSplits (Split *split)
    Transaction *txn;
    SplitList *node;
    GNCLot *lot;
+   const GUID *guid;
 
    if (FALSE == is_subsplit (split)) return FALSE;
 
@@ -422,8 +424,9 @@ restart:
        * example.  Only worry about adjacent sub-splits.  By 
        * repeatedly merging adjacent subsplits, we'll get the non-
        * adjacent ones too. */
+      guid = qof_instance_get_guid(s);
       if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                    "peer_guid", &s->inst.guid) == NULL)
+                                    "peer_guid", guid) == NULL)
          continue;
          
       merge_splits (split, s);

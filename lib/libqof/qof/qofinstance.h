@@ -67,7 +67,6 @@ struct QofInstance_s
    GObject object;
 
    QofIdType        e_type;		   /**<	Entity type */
-   GUID             guid;		   /**< GUID for the entity */
 
   /* kvp_data is a key-value pair database for storing arbirtary
    * information associated with this instance.  
@@ -100,13 +99,26 @@ void qof_instance_copy_book (gpointer ptr1, gconstpointer ptr2);
 gboolean qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2);
 
 /** Return the GUID of this instance */
-const GUID * qof_instance_get_guid (const QofInstance *);
+const GUID * qof_instance_get_guid (gconstpointer);
 
 /** Return the collection this instance belongs to */
 QofCollection* qof_instance_get_collection (gconstpointer inst);
 
 /** Set the GUID of this instance */
-void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
+void qof_instance_set_guid (gpointer inst, const GUID *guid);
+
+/** Copy the GUID from one instance to another.  This routine should
+ *  be used with extreme caution, since GUID values are everywhere
+ *  assumed to be unique. */
+void qof_instance_copy_guid (gpointer to, gconstpointer from);
+
+/** Compare the GUID values of two instances.  This routine returns 0
+ *  if the two values are equal, <0 if the first is smaller than the
+ *  second, or >0 if the second is smaller tan the first. */
+gint qof_instance_guid_compare(const gconstpointer ptr1, const gconstpointer ptr2);
+
+//QofIdType qof_instance_get_e_type (const QofInstance *inst);
+//void qof_instance_set_e_type (QofInstance *ent, QofIdType e_type);
 
 /** Return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (const QofInstance *);
