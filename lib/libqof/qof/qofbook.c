@@ -30,6 +30,7 @@
  * Created by Linas Vepstas December 1998
  * Copyright (c) 1998-2001,2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
 #include "config.h"
@@ -168,7 +169,7 @@ qof_book_not_saved (const QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->inst.dirty || qof_object_is_dirty (book));
+  return(qof_instance_get_dirty_flag(book) || qof_object_is_dirty(book));
 }
 
 void
@@ -178,8 +179,8 @@ qof_book_mark_saved (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = FALSE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, FALSE);
   book->dirty_time = 0;
   qof_object_mark_clean (book);
   if (was_dirty) {
@@ -194,8 +195,8 @@ void qof_book_mark_dirty (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = TRUE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, TRUE);
   if (!was_dirty) {
     book->dirty_time = time(NULL);
     if (book->dirty_cb)
@@ -206,7 +207,7 @@ void qof_book_mark_dirty (QofBook *book)
 void
 qof_book_print_dirty (const QofBook *book)
 {
-  if (book->inst.dirty)
+  if (qof_instance_get_dirty_flag(book))
     printf("book is dirty.\n");
   qof_book_foreach_collection
     (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);

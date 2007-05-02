@@ -31,6 +31,7 @@
  *  @brief Object instance holds common fields that most gnucash objects use.
  * 
  *  @author Copyright (C) 2003,2004 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
 #ifndef QOF_INSTANCE_H
@@ -65,10 +66,8 @@ struct QofInstance_s
 {
    GObject object;
 
-   /* Globally unique id identifying this instance */
    QofIdType        e_type;		   /**<	Entity type */
    GUID             guid;		   /**< GUID for the entity */
-   QofCollection  * collection;		   /**< Entity collection */
 
    /* The entity_table in which this instance is stored */
    QofBook * book;
@@ -78,28 +77,6 @@ struct QofInstance_s
    * See src/engine/kvp_doc.txt for a list and description of the 
    * important keys. */
    KvpFrame *kvp_data;
-
-   /*  Timestamp used to track the last modification to this 
-    *  instance.  Typically used to compare two versions of the
-    *  same object, to see which is newer.  When used with the 
-    *  SQL backend, this field is reserved for SQL use, to compare
-    *  the version in local memory to the remote, server version.
-    */
-   Timespec last_update;
-
-   /*  Keep track of nesting level of begin/end edit calls */
-   int    editlevel;
-
-   /*  In process of being destroyed */
-   gboolean  do_free;
-
-   /*  dirty/clean flag. If dirty, then this instance has been modified,
-    *  but has not yet been written out to storage (file/database)
-    */
-   gboolean  dirty;
-
-   /* True iff this instance has never been committed. */
-   gboolean infant;
 };
 
 struct _QofInstanceClass
@@ -116,11 +93,14 @@ void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
 /** Return the book pointer */
 QofBook * qof_instance_get_book (const QofInstance *);
 
+/** Set the book pointer */
+void qof_instance_set_book (gconstpointer inst, QofBook *book);
+
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (const QofInstance *);
 
 /** Return the collection this instance belongs to */
-const QofCollection* qof_instance_get_collection (gconstpointer inst);
+QofCollection* qof_instance_get_collection (gconstpointer inst);
 
 /** Set the GUID of this instance */
 void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
@@ -183,7 +163,8 @@ gboolean qof_instance_get_dirty_flag (gconstpointer ptr);
 void qof_instance_print_dirty (const QofInstance *entity, gpointer dummy);
 
 /** Return value of is_dirty flag */
-gboolean qof_instance_is_dirty (QofInstance *);
+#define qof_instance_is_dirty qof_instance_get_dirty
+gboolean qof_instance_get_dirty (QofInstance *);
 
 /** \brief Set the dirty flag
 
@@ -194,11 +175,13 @@ void qof_instance_set_dirty(QofInstance* inst);
 /* reset the dirty flag */
 void qof_instance_mark_clean (QofInstance *);
 
+gint qof_instance_get_editlevel(gconstpointer inst);
+void qof_instance_set_editlevel(gpointer inst, gint level);
+void qof_instance_increase_editlevel(gpointer inst);
+void qof_instance_decrease_editlevel(gpointer inst);
 gboolean qof_instance_check_edit(const QofInstance *inst);
 
-gboolean qof_instance_do_free(const QofInstance *inst);
-
-void qof_instance_mark_free(QofInstance *inst);
+gboolean qof_instance_get_infant(const QofInstance *inst);
 
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the

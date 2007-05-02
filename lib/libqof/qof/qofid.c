@@ -131,12 +131,12 @@ qof_collection_remove_entity (QofInstance *ent)
 {
   QofCollection *col;
   if (!ent) return;
-  col = ent->collection;
+  col = qof_instance_get_collection(ent);
   if (!col) return;
   g_hash_table_remove (col->hash_of_entities, &ent->guid);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
-  ent->collection = NULL;
+  qof_instance_set_collection(ent, NULL);
 }
 
 void
@@ -149,7 +149,7 @@ qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
   g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
-  ent->collection = col;
+  qof_instance_set_collection(ent, col);
 }
 
 gboolean

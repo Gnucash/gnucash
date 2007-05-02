@@ -34,6 +34,8 @@
 #include "test-engine-stuff.h"
 #include "qof.h"
 
+#define NENT 500123
+
 static void test_null_guid(void)
 {
   GUID g;
@@ -53,7 +55,7 @@ run_test (void)
   int i;
   QofSession *sess;
   QofBook *book;
-  QofInstance *eblk;
+  QofInstance *ent, *eblk[NENT];
   QofCollection *col;
   QofIdType type;
 
@@ -64,11 +66,10 @@ run_test (void)
   col = qof_book_get_collection (book, "asdf");
   type = qof_collection_get_type (col);
   
-#define NENT 500123
-  eblk = g_new0(QofInstance, NENT);
   for (i=0; i<NENT; i++)
   {
-    QofInstance *ent = &eblk[i];
+    ent = g_object_new(QOF_TYPE_INSTANCE, NULL);
+    eblk[i] = ent;
     guid_new(&ent->guid);
     do_test ((NULL == qof_collection_lookup_entity (col, &ent->guid)),
 						  "duplicate guid");
