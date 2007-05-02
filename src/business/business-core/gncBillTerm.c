@@ -98,14 +98,14 @@ static inline void maybe_resort_list (GncBillTerm *term)
   struct _book_info *bi;
 
   if (term->parent || term->invisible) return;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
 }
 
 static inline void addObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_insert_sorted (bi->terms, term,
                                        (GCompareFunc)gncBillTermCompare);
 }
@@ -113,7 +113,7 @@ static inline void addObj (GncBillTerm *term)
 static inline void remObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_remove (bi->terms, term);
 }
 
@@ -524,7 +524,7 @@ static GncBillTerm *gncBillTermCopy (GncBillTerm *term)
   GncBillTerm *t;
 
   if (!term) return NULL;
-  t = gncBillTermCreate (term->inst.book);
+  t = gncBillTermCreate (qof_instance_get_book(term));
 
   gncBillTermBeginEdit(t);
 

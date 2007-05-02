@@ -1106,6 +1106,7 @@ void
 xaccAccountCommitEdit (Account *acc) 
 {
   AccountPrivate *priv;
+  QofBook *book;
 
   g_return_if_fail(acc);
   if (!qof_commit_edit(&acc->inst)) return;
@@ -1141,8 +1142,9 @@ xaccAccountCommitEdit (Account *acc)
        g_assert(priv->splits == NULL || qof_book_shutting_down(acc->inst.book));
     */
 
-    if (!qof_book_shutting_down(acc->inst.book)) {
-      col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
+    book = qof_instance_get_book(acc);
+    if (!qof_book_shutting_down(book)) {
+      col = qof_book_get_collection(book, GNC_ID_TRANS);
       qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
     }
 
@@ -1816,7 +1818,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
       return;
 
   /* check for book mix-up */
-  g_return_if_fail (accfrom->inst.book == accto->inst.book);
+  g_return_if_fail (qof_instance_books_equal(accfrom, accto));
   ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
 
   xaccAccountBeginEdit(accfrom);
@@ -1895,7 +1897,7 @@ xaccAccountRecomputeBalance (Account * acc)
   if (qof_instance_get_editlevel(acc) > 0) return;
   if (!priv->balance_dirty) return;
   if (qof_instance_get_destroying(acc)) return;
-  if (qof_book_shutting_down(acc->inst.book)) return;
+  if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 
   balance            = priv->starting_balance;
   cleared_balance    = priv->starting_cleared_balance;
@@ -2257,6 +2259,7 @@ xaccAccountGetNonStdSCU (const Account * acc)
 void 
 DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 {
+  QofBook *book;
   const char *string;
   gnc_commodity *commodity;
 
@@ -2272,7 +2275,8 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   commodity = DxaccAccountGetCurrency (acc);
   if (!commodity)
   {
-    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->inst.book), currency);
+    book = qof_instance_get_book(acc);
+    gnc_commodity_table_insert (gnc_commodity_table_get_table (book), currency);
   }
 }
 
@@ -2302,7 +2306,7 @@ gnc_account_append_child (Account *new_parent, Account *child)
   if (old_parent) {
     gnc_account_remove_child(old_parent, child);
 
-    if (old_parent->inst.book != new_parent->inst.book) {
+    if (!qof_instance_books_equal(old_parent, new_parent)) {
       /* hack alert -- this implementation is not exactly correct.
        * If the entity tables are not identical, then the 'from' book 
        * may have a different backend than the 'to' book.  This means
@@ -2317,7 +2321,8 @@ gnc_account_append_child (Account *new_parent, Account *child)
       PWARN ("reparenting accounts across books is not correctly supported\n");
 
       qof_event_gen (&child->inst, QOF_EVENT_DESTROY, NULL);
-      col = qof_book_get_collection (new_parent->inst.book, GNC_ID_ACCOUNT);
+      col = qof_book_get_collection (qof_instance_get_book(new_parent),
+                                     GNC_ID_ACCOUNT);
       qof_collection_insert_entity (col, &child->inst);
       qof_event_gen (&child->inst, QOF_EVENT_CREATE, NULL);
     }
@@ -2847,7 +2852,7 @@ DxaccAccountGetCurrency (const Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  table = gnc_commodity_table_get_table (acc->inst.book);
+  table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
 
   return gnc_commodity_table_lookup_unique (table, s);
 }

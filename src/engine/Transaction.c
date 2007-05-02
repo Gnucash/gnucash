@@ -397,7 +397,7 @@ xaccDupeTransaction (const Transaction *t)
    */
   trans->inst.e_type = NULL;
   trans->inst.guid = *guid_null();
-  trans->inst.book = t->inst.book;
+  qof_instance_copy_book(trans, t);
   trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
 
   return trans;
@@ -428,7 +428,7 @@ xaccTransClone (const Transaction *t)
   trans->orig            = NULL;
   trans->idata           = 0;
 
-  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, t->inst.book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, qof_instance_get_book(t));
   kvp_frame_delete (trans->inst.kvp_data);
   trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
 
@@ -841,7 +841,7 @@ xaccTransBeginEdit (Transaction *trans)
    if (!trans) return;
    if (!qof_begin_edit(&trans->inst)) return;
 
-   if (qof_book_shutting_down(trans->inst.book)) return;
+   if (qof_book_shutting_down(qof_instance_get_book(trans))) return;
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -860,7 +860,7 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
 
   if (!xaccTransGetReadOnly (trans) || 
-      qof_book_shutting_down(trans->inst.book)) {
+      qof_book_shutting_down(qof_instance_get_book(trans))) {
       xaccTransBeginEdit(trans);
       qof_instance_set_destroying(trans, TRUE);
       xaccTransCommitEdit(trans);
@@ -891,7 +891,7 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
-  gboolean shutting_down = qof_book_shutting_down(trans->inst.book);
+  gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
@@ -1156,7 +1156,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
-   be = qof_book_get_backend (trans->inst.book);
+   be = qof_book_get_backend(qof_instance_get_book(trans));
    /** \todo Fix transrollbackedit in QOF so that rollback
    is exposed via the API. */
    if (be && be->rollback) 
@@ -1812,7 +1812,7 @@ xaccTransGetReversedBy(const Transaction *trans)
 
     g_return_val_if_fail(trans, NULL);
     guid = kvp_frame_get_guid(trans->inst.kvp_data, TRANS_REVERSED_BY);
-    return xaccTransLookup(guid, trans->inst.book);
+    return xaccTransLookup(guid, qof_instance_get_book(trans));
 }
 
 void

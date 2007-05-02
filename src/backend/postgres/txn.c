@@ -467,7 +467,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             s = pgendSplitLookup (be, &guid);
             if (!s)
             {
-               s = xaccMallocSplit(trans->inst.book);
+               s = xaccMallocSplit(qof_instance_get_book(trans));
                xaccSplitSetGUID(s, &guid);
             }
 

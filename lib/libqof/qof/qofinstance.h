@@ -69,9 +69,6 @@ struct QofInstance_s
    QofIdType        e_type;		   /**<	Entity type */
    GUID             guid;		   /**< GUID for the entity */
 
-   /* The entity_table in which this instance is stored */
-   QofBook * book;
-
   /* kvp_data is a key-value pair database for storing arbirtary
    * information associated with this instance.  
    * See src/engine/kvp_doc.txt for a list and description of the 
@@ -91,10 +88,16 @@ GType qof_instance_get_type(void);
 void qof_instance_init_data (QofInstance *, QofIdType, QofBook *);
 
 /** Return the book pointer */
-QofBook * qof_instance_get_book (const QofInstance *);
+QofBook *qof_instance_get_book (gconstpointer);
 
 /** Set the book pointer */
 void qof_instance_set_book (gconstpointer inst, QofBook *book);
+
+/** Copy the book from one QofInstances to another.  */
+void qof_instance_copy_book (gpointer ptr1, gconstpointer ptr2);
+
+/** See if two QofInstances share the same book.  */
+gboolean qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2);
 
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (const QofInstance *);

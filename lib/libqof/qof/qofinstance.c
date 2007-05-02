@@ -65,7 +65,7 @@ typedef struct QofInstancePrivate
     QofCollection  *collection; /**< Entity collection */
 
     /* The entity_table in which this instance is stored */
-//    QofBook * book;
+    QofBook * book;
 
     /* kvp_data is a key-value pair database for storing arbirtary
      * information associated with this instance.  
@@ -210,7 +210,7 @@ qof_instance_init (QofInstance *inst)
         QofInstancePrivate *priv;
 
         priv = GET_PRIVATE(inst);
-	inst->book = NULL;
+	priv->book = NULL;
 	inst->kvp_data = kvp_frame_new();
 	priv->last_update.tv_sec = 0;
 	priv->last_update.tv_nsec = -1;
@@ -229,9 +229,9 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 
 	g_return_if_fail(QOF_IS_INSTANCE(inst));
         priv = GET_PRIVATE(inst);
-	g_return_if_fail(!inst->book);
+	g_return_if_fail(!priv->book);
 
-	inst->book = book;
+	priv->book = book;
 	col = qof_book_get_collection (book, type);
         g_return_if_fail(col != NULL);
   
@@ -313,7 +313,7 @@ qof_instance_get_property (GObject         *object,
             g_value_set_pointer(value, priv->collection);
             break;
         case PROP_BOOK:
-            g_value_set_object(value, inst->book);
+            g_value_set_object(value, priv->book);
             break;
         case PROP_KVP_DATA:
             g_value_set_pointer(value, inst->kvp_data);
@@ -426,17 +426,41 @@ qof_instance_set_collection (gconstpointer ptr, QofCollection *col)
 }
 
 QofBook *
-qof_instance_get_book (const QofInstance *inst)
+qof_instance_get_book (gconstpointer inst)
 {
     if (!inst) return NULL;
-    return inst->book;
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst), NULL);
+    return GET_PRIVATE(inst)->book;
 }
 
 void
 qof_instance_set_book (gconstpointer inst, QofBook *book)
 {
     g_return_if_fail(QOF_IS_INSTANCE(inst));
-    QOF_INSTANCE(inst)->book = book;
+    GET_PRIVATE(inst)->book = book;
+}
+
+void
+qof_instance_copy_book (gpointer ptr1, gconstpointer ptr2)
+{
+  g_return_if_fail(QOF_IS_INSTANCE(ptr1));
+  g_return_if_fail(QOF_IS_INSTANCE(ptr2));
+
+  GET_PRIVATE(ptr1)->book = GET_PRIVATE(ptr2)->book;
+}
+
+gboolean
+qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2)
+{
+  const QofInstancePrivate *priv1, *priv2;
+
+  g_return_val_if_fail(QOF_IS_INSTANCE(ptr1), FALSE);
+  g_return_val_if_fail(QOF_IS_INSTANCE(ptr2), FALSE);
+
+  priv1 = GET_PRIVATE(ptr1);
+  priv2 = GET_PRIVATE(ptr2);
+
+  return (priv1->book == priv2->book);
 }
 
 KvpFrame*
@@ -627,11 +651,11 @@ qof_instance_gemini (QofInstance *to, const QofInstance *from)
 
   from_priv = GET_PRIVATE(from);
   to_priv = GET_PRIVATE(to);
-  fb_priv = GET_PRIVATE(QOF_INSTANCE(from)->book);
-  tb_priv = GET_PRIVATE(QOF_INSTANCE(to)->book);
+  fb_priv = GET_PRIVATE(from_priv->book);
+  tb_priv = GET_PRIVATE(to_priv->book);
 
   /* Books must differ for a gemini to be meaningful */
-  if (from->book == to->book)
+  if (from_priv->book == to_priv->book)
     return;
 
   now = time(0);
@@ -639,11 +663,11 @@ qof_instance_gemini (QofInstance *to, const QofInstance *from)
   /* Make a note of where the copy came from */
   gnc_kvp_bag_add (to->kvp_data, "gemini", now,
                                   "inst_guid", &from->guid,
-                                  "book_guid", &from->book->inst.guid,
+                                  "book_guid", &from_priv->book->inst.guid,
                                   NULL);
   gnc_kvp_bag_add (from->kvp_data, "gemini", now,
                                   "inst_guid", &to->guid,
-                                  "book_guid", &to->book->inst.guid,
+                                  "book_guid", &to_priv->book->inst.guid,
                                   NULL);
 
   to_priv->dirty = TRUE;
@@ -690,7 +714,7 @@ qof_begin_edit (QofInstance *inst)
     if (0 >= priv->editlevel) 
         priv->editlevel = 1;
 
-    be = qof_book_get_backend(inst->book);
+    be = qof_book_get_backend(priv->book);
     if (be && qof_backend_begin_exists(be))
         qof_backend_run_begin(be, inst);
     else
@@ -711,7 +735,7 @@ gboolean qof_commit_edit (QofInstance *inst)
     if (0 < priv->editlevel) return FALSE;
 
     if ((0 == priv->editlevel) && priv->dirty) {
-        be = qof_book_get_backend(inst->book);
+        be = qof_book_get_backend(priv->book);
         if (be && qof_backend_commit_exists(be)) {
             qof_backend_run_commit(be, inst);
         }
@@ -737,7 +761,7 @@ qof_commit_edit_part2(QofInstance *inst,
     dirty = priv->dirty;
 
     /* See if there's a backend.  If there is, invoke it. */
-    be = qof_book_get_backend(inst->book);
+    be = qof_book_get_backend(priv->book);
     if (be && qof_backend_commit_exists(be)) {
         QofBackendError errcode;
         
@@ -764,7 +788,7 @@ qof_commit_edit_part2(QofInstance *inst,
     if (dirty && qof_get_alt_dirty_mode() && 
         !(priv->infant && priv->do_free)) {
       qof_collection_mark_dirty(priv->collection);
-      qof_book_mark_dirty(inst->book);
+      qof_book_mark_dirty(priv->book);
     }
     priv->infant = FALSE;
 

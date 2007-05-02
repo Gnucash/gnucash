@@ -816,7 +816,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
          db, p, qof_instance_get_dirty_flag(p),
          qof_instance_get_destroying(p));
 
-  if (db->inst.book != p->inst.book)
+  if (!qof_instance_books_equal(db, p))
   {
      PERR ("attempted to mix up prices across different books");
 	 LEAVE (" ");

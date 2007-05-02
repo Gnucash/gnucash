@@ -72,7 +72,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    if (!trans || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (trans->inst.book == book) return;
+   if (qof_instance_get_book(trans) == book) return;
 
    ENTER ("trans=%p %s", trans, trans->description);
    newtrans = xaccDupeTransaction (trans);
@@ -90,7 +90,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    /* Fiddle the transaction into place in the new book */
    col = qof_book_get_collection (book, GNC_ID_TRANS);
    qof_collection_insert_entity (col, &newtrans->inst);
-   newtrans->inst.book = book;
+   qof_instance_set_book(newtrans, book);
 
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
    xaccTransBeginEdit (newtrans);
@@ -100,7 +100,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      s->inst.book = book;
+      qof_instance_set_book(s, book);
       qof_collection_insert_entity(col, &s->inst);
 
       /* find the twin account, and re-parent to that. */
@@ -130,16 +130,18 @@ void
 gnc_book_insert_trans (QofBook *book, Transaction *trans)
 {
    QofCollection *col;
+   QofBook *trans_book;
    GList *node;
 
    if (!trans || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (trans->inst.book == book) return;
+   trans_book = qof_instance_get_book(trans);
+   if (trans_book == book) return;
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (qof_book_get_backend(book) != qof_book_get_backend(trans->inst.book))
+   if (qof_book_get_backend(book) != qof_book_get_backend(trans_book))
    {
       gnc_book_insert_trans_clobber (book, trans);
       return;
@@ -150,7 +152,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    xaccTransBeginEdit (trans);
 
    col = qof_book_get_collection (book, GNC_ID_TRANS);
-   trans->inst.book = book;
+   qof_instance_set_book(trans, book);
    qof_collection_insert_entity (col, &trans->inst);
 
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
@@ -160,9 +162,9 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* Move the splits over (only if they haven't already been moved). */
-      if (s->inst.book != book)
+      if (qof_instance_get_book(s) != book)
       {
-         s->inst.book = book;
+         qof_instance_set_book(s, book);
          qof_collection_insert_entity (col, &s->inst);
       }
 
@@ -225,7 +227,7 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    ENTER ("lot=%p", lot);
 
    col = qof_book_get_collection (book, GNC_ID_LOT);
-   lot->inst.book = book;
+   qof_instance_set_book(lot, book);
    qof_collection_insert_entity (col, &lot->inst);
 
    /* Move the splits over (only if they haven't already been moved). */
@@ -233,9 +235,9 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    for (snode = lot->splits; snode; snode=snode->next)
    {
       Split *s = snode->data;
-      if (s->inst.book != book)
+      if (qof_instance_get_book(s) != book)
       {
-         s->inst.book = book;
+         qof_instance_set_book(s, book);
          qof_collection_insert_entity (col, &s->inst);
       }
    }
@@ -258,14 +260,17 @@ void
 gnc_book_insert_price (QofBook *book, GNCPrice *pr)
 {
    QofCollection *col;
+   QofBook *pr_book;
+
    if (!pr || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (pr->inst.book == book) return;
+   pr_book = qof_instance_get_book(pr);
+   if (pr_book == book) return;
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (qof_book_get_backend(book) != qof_book_get_backend(pr->inst.book))
+   if (qof_book_get_backend(book) != qof_book_get_backend(pr_book))
    {
       gnc_book_insert_price_clobber (book, pr);
       return;
@@ -277,7 +282,7 @@ gnc_book_insert_price (QofBook *book, GNCPrice *pr)
    gnc_price_begin_edit (pr);
 
    col = qof_book_get_collection (book, GNC_ID_PRICE);
-   pr->inst.book = book;
+   qof_instance_set_book(pr, book);
    qof_collection_insert_entity (col, &pr->inst);
 
    gnc_pricedb_remove_price (pr->db, pr);

@@ -158,7 +158,7 @@ maybe_resort_list (GncTaxTable *table)
   struct _book_info *bi;
 
   if (table->parent || table->invisible) return;
-  bi = qof_book_get_data (table->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(table), _GNC_MOD_NAME);
   bi->tables = g_list_sort (bi->tables, (GCompareFunc)gncTaxTableCompare);
 }
 
@@ -171,7 +171,7 @@ mod_table (GncTaxTable *table)
 static inline void addObj (GncTaxTable *table)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (table->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(table), _GNC_MOD_NAME);
   bi->tables = g_list_insert_sorted (bi->tables, table,
                                        (GCompareFunc)gncTaxTableCompare);
 }
@@ -179,7 +179,7 @@ static inline void addObj (GncTaxTable *table)
 static inline void remObj (GncTaxTable *table)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (table->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(table), _GNC_MOD_NAME);
   bi->tables = g_list_remove (bi->tables, table);
 }
 
@@ -449,7 +449,7 @@ void gncTaxTableMakeInvisible (GncTaxTable *table)
   if (!table) return;
   gncTaxTableBeginEdit (table);
   table->invisible = TRUE;
-  bi = qof_book_get_data (table->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(table), _GNC_MOD_NAME);
   bi->tables = g_list_remove (bi->tables, table);
   gncTaxTableCommitEdit (table);
 }
@@ -600,7 +600,7 @@ static GncTaxTable *gncTaxTableCopy (GncTaxTable *table)
   GList *list;
 
   if (!table) return NULL;
-  t = gncTaxTableCreate (table->inst.book);
+  t = gncTaxTableCreate (qof_instance_get_book(table));
   gncTaxTableSetName (t, table->name);
   for (list = table->entries; list; list=list->next) {
     GncTaxTableEntry *entry, *e;

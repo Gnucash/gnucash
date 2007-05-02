@@ -174,7 +174,7 @@ xaccDupeSplit (const Split *s)
    */
   split->inst.e_type = NULL;
   split->inst.guid = s->inst.guid;
-  split->inst.book = s->inst.book;
+  qof_instance_copy_book(split, s);
 
   split->parent = s->parent;
   split->acc = s->acc;
@@ -221,7 +221,7 @@ xaccSplitClone (const Split *s)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, s->inst.book);
+  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, qof_instance_get_book(s));
   kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
@@ -239,7 +239,7 @@ xaccSplitDump (const Split *split, const char *tag)
 {
   printf("  %s Split %p", tag, split);
   printf("    GUID:     %s\n", guid_to_string(&split->guid));
-  printf("    Book:     %p\n", split->inst.book);
+  printf("    Book:     %p\n", qof_instance_get_book(split));
   printf("    Account:  %p\n", split->acc);
   printf("    Lot:      %p\n", split->lot);
   printf("    Parent:   %p\n", split->parent);
@@ -487,7 +487,7 @@ xaccSplitSetAccount (Split *s, Account *acc)
     Transaction *trans;
 
     g_return_if_fail(s && acc);
-    g_return_if_fail(acc->inst.book == s->inst.book);
+    g_return_if_fail(qof_instance_books_equal(acc, s));
 
     trans = s->parent;
     if (trans)
@@ -636,7 +636,7 @@ xaccSplitDetermineGainStatus (Split *split)
       split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
    } else {
       QofCollection *col;
-      col = qof_book_get_collection (split->inst.book, GNC_ID_SPLIT);
+      col = qof_book_get_collection (qof_instance_get_book(split), GNC_ID_SPLIT);
       split->gains = GAINS_STATUS_GAINS;
       other = (Split *) qof_collection_lookup_entity (col, 
                   kvp_value_get_guid (val));
