@@ -53,10 +53,6 @@
 struct account_s
 {
   QofInstance inst;
-
-  /* -------------------------------------------------------------- */
-  /* Backend private expansion data */
-  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 /* Set the account's GUID. This should only be done when reading

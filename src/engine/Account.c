@@ -726,8 +726,6 @@ xaccInitAccount (Account * acc, QofBook *book)
   ENTER ("book=%p\n", book);
   qof_instance_init_data (&acc->inst, GNC_ID_ACCOUNT, book);
 
-  acc->idata = 0;
-
   LEAVE ("account=%p\n", acc);
 }
 

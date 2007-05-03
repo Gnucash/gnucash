@@ -218,6 +218,11 @@ void qof_instance_set_version_check (gpointer inst, guint32 value);
 /** copy the instance version_check number */
 void qof_instance_copy_version_check (gpointer to, gconstpointer from);
 
+/** get the instance tag number
+    used for kvp management in sql backends. */
+guint32 qof_instance_get_idata (gconstpointer inst);
+void qof_instance_set_idata(gpointer inst, guint32 idata);
+
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the
  *  pair, one can always find the other by looking up it's guid.  Typically,

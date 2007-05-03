@@ -110,10 +110,6 @@ struct transaction_s
    * any changes made if/when the edit is abandoned.
    */
   Transaction *orig;
-
-  /* -------------------------------------------------------------- */
-  /* Backend private expansion data */
-  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 struct _TransactionClass

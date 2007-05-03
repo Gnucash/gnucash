@@ -114,10 +114,6 @@ struct _QofBook
    * except that it provides a nice convenience, avoiding a lookup
    * from the session.  Better solutions welcome ... */
   QofBackend *backend;
-
-  /* -------------------------------------------------------------- */
-  /* Backend private expansion data */
-  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 struct _QofBookClass

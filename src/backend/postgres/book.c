@@ -69,7 +69,7 @@ void
 pgendStoreBookNoLock (PGBackend *be, QofBook *book,
                          gboolean do_check_version)
 {
-   gint32 idata;
+   guint32 idata;
    if (!be || !book) return;
 
    ENTER ("book=%p", book);
@@ -80,14 +80,14 @@ pgendStoreBookNoLock (PGBackend *be, QofBook *book,
    }
    qof_book_set_version(book, (qof_book_get_version(book) +1));  /* be sure to update the version !! */
 
-   if ((0 == qof_book_get_idata(book)) &&
+   if ((0 == qof_instance_get_idata(book)) &&
        (FALSE == kvp_frame_is_empty (qof_book_get_slots(book))))
    {
-      qof_book_set_idata(book, pgendNewGUIDidx(be));
+      qof_instance_set_idata(book, pgendNewGUIDidx(be));
    }
 
    pgendPutOneBookOnly (be, book);
-   idata = qof_book_get_idata(book);
+   idata = qof_instance_get_idata(book);
    if ( idata > 0)
    {
       pgendKVPDelete (be, idata);
@@ -146,7 +146,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    		qof_book_mark_closed(book);
    }
    qof_book_set_version(book, atoi(DB_GET_VAL("version",j)));
-   qof_book_set_idata(book, atoi(DB_GET_VAL("iguid",j)));
+   qof_instance_set_idata(book, atoi(DB_GET_VAL("iguid",j)));
 
    return book;
 }
@@ -174,11 +174,11 @@ pgendBookRestore (PGBackend *be, QofBook *book)
    SEND_QUERY (be, bufp, );
    pgendGetResults (be, get_one_book_cb, book);
 
-   if (0 != qof_book_get_idata(book)) 
+   if (0 != qof_instance_get_idata(book)) 
    {
 	  KvpFrame *pg_frame;
 	  
-	  pg_frame = pgendKVPFetch (be, qof_book_get_idata(book), 
+	  pg_frame = pgendKVPFetch (be, qof_instance_get_idata(book), 
 	   	qof_instance_get_slots((QofInstance*)book));
 	  kvp_frame_for_each_slot(pg_frame, pg_kvp_helper, book);	   
    }
@@ -224,7 +224,7 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
 //   book->book_open = (DB_GET_VAL("book_open",j))[0];
    qof_book_set_version(book, atoi(DB_GET_VAL("version",j)));
-   qof_book_set_idata(book, atoi(DB_GET_VAL("iguid",j)));
+   qof_instance_set_idata(book, atoi(DB_GET_VAL("iguid",j)));
 
    return blist;
 }
@@ -247,17 +247,18 @@ pgendGetAllBooks (PGBackend *be, QofBookList *blist)
    for (node=blist; node; node=node->next)
    {
       QofBook *book = node->data;
-      if (0 != qof_book_get_idata(book)) 
+      if (0 != qof_instance_get_idata(book)) 
       {
 	  	KvpFrame *pg_frame;
 	  
-		  pg_frame = pgendKVPFetch (be, qof_book_get_idata(book), 
+		  pg_frame = pgendKVPFetch (be, qof_instance_get_idata(book), 
 		   	qof_instance_get_slots((QofInstance*)book));
 		  kvp_frame_for_each_slot(pg_frame, pg_kvp_helper, book);	   
       }
-/*      if (0 != book->idata) 
+/*      if (0 != qof_instance_get_idata(book)) 
       {
-         book->inst.kvp_data = pgendKVPFetch (be, book->idata, book->inst.kvp_data);
+         book->inst.kvp_data = pgendKVPFetch(be, qof_instance_get_idata(book),
+                                             book->inst.kvp_data);
       }*/
    }
 

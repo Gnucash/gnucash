@@ -94,7 +94,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
    qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
-   trans->idata = atoi (DB_GET_VAL("iguid",j));
+   qof_instance_set_idata(trans, atoi(DB_GET_VAL("iguid",j)));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
 
@@ -147,7 +147,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccSplitSetDateReconciledTS (s, &ts);
 
    xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
-   s->idata = atoi (DB_GET_VAL("iguid",j));
+   qof_instance_set_idata(s, atoi(DB_GET_VAL("iguid",j)));
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
@@ -214,6 +214,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    char *p, buff[900];
    GList *node, *xaction_list = NULL;
    Account *root;
+   guint32 t_idata, s_idata;
 
    qof_event_suspend();
    pgendDisable(be);
@@ -258,18 +259,20 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
        * We won't do this en-mass, as there currently seems to be no
        * performance advantage to doing so */
    
-      if (trans->idata)
+      t_idata = qof_instance_get_idata(trans);
+      if (t_idata)
       {
-         trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
+         trans->inst.kvp_data = pgendKVPFetch (be, t_idata, trans->inst.kvp_data);
       }
    
       splits = xaccTransGetSplitList(trans);
       for (snode = splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         if (s->idata)
+         s_idata = qof_instance_get_idata(s);
+         if (s_idata)
          {
-            s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
+            s->inst.kvp_data = pgendKVPFetch (be, s_idata, s->inst.kvp_data);
          }
       }
 

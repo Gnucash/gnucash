@@ -133,6 +133,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
                              gboolean do_check_version)
 {
    GList *start, *deletelist=NULL, *node;
+   guint32 s_idata, t_idata;
    char * p;
 
    if (!be || !trans) return;
@@ -220,23 +221,27 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
-         if ((0 == s->idata) &&
+         s_idata = qof_instance_get_idata(s);
+         if ((0 == s_idata) &&
              (FALSE == kvp_frame_is_empty (xaccSplitGetSlots(s))))
          {
-            s->idata = pgendNewGUIDidx(be);
+            s_idata = pgendNewGUIDidx(be);
+            qof_instance_set_idata(s, s_idata);
          }
          pgendPutOneSplitOnly (be, s);
-         if (s->idata)
+         if (s_idata)
          {
-           pgendKVPDelete (be, s->idata);
-           pgendKVPStore (be, s->idata, s->inst.kvp_data);
+           pgendKVPDelete (be, s_idata);
+           pgendKVPStore (be, s_idata, s->inst.kvp_data);
          }
       }
 
-      if ((0 == trans->idata) &&
+      t_idata = qof_instance_get_idata(trans);
+      if ((0 == t_idata) &&
           (FALSE == kvp_frame_is_empty (xaccTransGetSlots(trans))))
       {
-         trans->idata = pgendNewGUIDidx(be);
+         t_idata = pgendNewGUIDidx(be);
+         qof_instance_set_idata(trans, t_idata);
       }
 
       /* Make sure the commodity is in the table.
@@ -246,10 +251,10 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
 
       pgendPutOneTransactionOnly (be, trans);
 
-      if (trans->idata)
+      if (t_idata)
       {
-        pgendKVPDelete (be, trans->idata);
-        pgendKVPStore (be, trans->idata, trans->inst.kvp_data);
+        pgendKVPDelete (be, t_idata);
+        pgendKVPStore (be, t_idata, trans->inst.kvp_data);
       }
    }
    else
@@ -282,9 +287,11 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
-         if (0 != s->idata) pgendKVPDelete (be, s->idata);
+         s_idata = qof_instance_get_idata(s);
+         if (0 != s_idata) pgendKVPDelete (be, s_idata);
       }
-      if (0 != trans->idata) pgendKVPDelete (be, trans->idata);
+      t_idata = qof_instance_get_idata(trans);
+      if (0 != t_idata) pgendKVPDelete (be, t_idata);
    }
 
    LEAVE(" ");
@@ -479,7 +486,7 @@ pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
             xaccSplitSetDateReconciledTS (s, &ts);
 
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
-            s->idata = atoi(DB_GET_VAL("iguid",j));
+            qof_instance_set_idata(s, atoi(DB_GET_VAL("iguid",j)));
 
             /* --------------------------------------------- */
             /* next, find the account that this split goes into */
@@ -632,6 +639,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    int engine_data_is_newer = 0;
    int j;
    GList *node, *engine_splits;
+   guint32 s_idata, t_idata;
    
    ENTER ("be=%p", be);
    if (!be || !trans_guid) return 0;
@@ -755,7 +763,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        xaccTransSetDateEnteredTS (trans, &ts);
        qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
        xaccTransSetCurrency (trans, currency);
-       trans->idata = atoi(DB_GET_VAL("iguid",j));
+       qof_instance_set_idata(trans, atoi(DB_GET_VAL("iguid",j)));
      }
    }
 
@@ -782,7 +790,8 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    /* ------------------------------------------------- */
    /* restore any kvp data associated with the transaction and splits */
 
-   if (0 != trans->idata)
+   t_idata = qof_instance_get_idata(trans);
+   if (0 != t_idata)
    {
       if (!kvp_frame_is_empty (trans->inst.kvp_data))
       {
@@ -790,14 +799,15 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
         trans->inst.kvp_data = kvp_frame_new ();
       }
 
-      trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
+      trans->inst.kvp_data = pgendKVPFetch (be, t_idata, trans->inst.kvp_data);
    }
 
    engine_splits = xaccTransGetSplitList(trans);
    for (node = engine_splits; node; node=node->next)
    {
       Split *s = node->data;
-      if (0 != s->idata)
+      s_idata = qof_instance_get_idata(s);
+      if (0 != s_idata)
       {
          if (!kvp_frame_is_empty (s->inst.kvp_data))
          {
@@ -805,7 +815,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
            s->inst.kvp_data = kvp_frame_new ();
          }
 
-         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
+         s->inst.kvp_data = pgendKVPFetch (be, s_idata, s->inst.kvp_data);
       }
    }
 

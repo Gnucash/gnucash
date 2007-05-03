@@ -101,8 +101,6 @@ xaccInitSplit(Split * split, QofBook *book)
   split->cleared_balance     = gnc_numeric_zero();
   split->reconciled_balance  = gnc_numeric_zero();
 
-  split->idata = 0;
-
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
@@ -134,7 +132,7 @@ xaccSplitReinit(Split * split)
   if (split->inst.kvp_data)
       kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_new();
-  split->idata = 0;
+  qof_instance_set_idata(split, 0);
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
@@ -217,7 +215,6 @@ xaccSplitClone (const Split *s)
   split->balance             = s->balance;
   split->cleared_balance     = s->cleared_balance;
   split->reconciled_balance  = s->reconciled_balance;
-  split->idata               = 0;
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
@@ -255,7 +252,7 @@ xaccSplitDump (const Split *split, const char *tag)
   printf("    CBalance: %s\n", gnc_numeric_to_string(split->cleared_balance));
   printf("    RBalance: %s\n", 
          gnc_numeric_to_string(split->reconciled_balance));
-  printf("    idata:    %x\n", split->idata);
+  printf("    idata:    %x\n", qof_instance_get_idata(split));
 }
 #endif
 

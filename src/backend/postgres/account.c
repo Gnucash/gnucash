@@ -79,6 +79,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
                          gboolean do_check_version)
 {
    const gnc_commodity *com;
+   guint32 a_idata;
 
    if (!be || !acct) return;
    if ((FALSE == do_mark) && (!qof_instance_get_dirty_flag(acct)))
@@ -105,10 +106,12 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
   /* be sure to update the version !! */
    qof_instance_increment_version(acct, be->version_check);
 
-   if ((0 == acct->idata) &&
+   a_idata = qof_instance_get_idata(acct);
+   if ((0 == a_idata) &&
        (FALSE == kvp_frame_is_empty (xaccAccountGetSlots(acct))))
    {
-      acct->idata = pgendNewGUIDidx(be);
+      a_idata = pgendNewGUIDidx(be);
+      qof_instance_set_idata(acct, a_idata);
    }
 
    pgendPutOneAccountOnly (be, acct);
@@ -126,10 +129,10 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    com = xaccAccountGetCommodity (acct);
    pgendPutOneCommodityOnly (be, (gnc_commodity *) com);
 
-   if (acct->idata)
+   if (a_idata)
    {
-      pgendKVPDelete (be, acct->idata);
-      pgendKVPStore (be, acct->idata, acct->inst.kvp_data);
+      pgendKVPDelete (be, a_idata);
+      pgendKVPStore (be, a_idata, acct->inst.kvp_data);
    }
    LEAVE(" ");
 }
@@ -208,8 +211,9 @@ static void
 restore_cb (Account *acc, void * cb_data)
 {
    PGBackend *be = (PGBackend *) cb_data;
-   if (0 == acc->idata) return;
-   acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
+   guint32 a_idata = qof_instance_get_idata(acc);
+   if (0 == a_idata) return;
+   acc->inst.kvp_data = pgendKVPFetch (be, a_idata, acc->inst.kvp_data);
 }
 
 static void 
@@ -301,7 +305,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    if (commodity)
      xaccAccountSetCommodity(acc, commodity);
    qof_instance_set_version(acc, atoi(DB_GET_VAL("version",j)));
-   acc->idata = atoi(DB_GET_VAL("iguid",j));
+   qof_instance_set_idata(acc, atoi(DB_GET_VAL("iguid",j)));
 
    /* try to find the parent account */
    PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
@@ -475,6 +479,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    char *pbuff;
    Account *acc = NULL;
    int engine_data_is_newer = 0;
+   guint32 a_idata;
 
    ENTER ("be=%p", be);
    if (!be || !acct_guid) return 0;
@@ -523,9 +528,10 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       /* restore any kvp data associated with the transaction and splits */
       if (acc)
       {
-         if (acc->idata)
+         a_idata = qof_instance_get_idata(acc);
+         if (a_idata)
          {
-            acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
+            acc->inst.kvp_data = pgendKVPFetch (be, a_idata, acc->inst.kvp_data);
          }
 
          qof_instance_set_version_check(acc, be->version_check);
@@ -597,7 +603,7 @@ pgend_account_commit_edit (QofBackend * bend,
    if (qof_instance_get_destroying(acct))
    {
       const GUID *guid = xaccAccountGetGUID(acct);
-      pgendKVPDelete (be, acct->idata);
+      pgendKVPDelete (be, qof_instance_get_idata(acct));
 
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");

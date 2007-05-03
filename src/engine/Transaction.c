@@ -274,7 +274,6 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->marker = 0;
   trans->orig = NULL;
 
-  trans->idata = 0;
   qof_instance_init_data (&trans->inst, GNC_ID_TRANS, book);
   LEAVE (" ");
 }
@@ -314,7 +313,7 @@ xaccTransDump (const Transaction *trans, const char *tag)
   printf("    version_chk: %x\n", qof_instance_get_version_check(trans));
   printf("    editlevel:   %x\n", qof_instance_get_editlevel(trans));
   printf("    orig:        %p\n", trans->orig);
-  printf("    idata:       %x\n", trans->idata);
+  printf("    idata:       %x\n", qof_instance_get_idata(trans));
   printf("    splits:      ");
   for (node = trans->splits; node; node = node->next)
   {
@@ -424,7 +423,6 @@ xaccTransClone (const Transaction *t)
   qof_instance_copy_version_check(trans, t);
 
   trans->orig            = NULL;
-  trans->idata           = 0;
 
   qof_instance_init_data (&trans->inst, GNC_ID_TRANS, qof_instance_get_book(t));
   kvp_frame_delete (trans->inst.kvp_data);

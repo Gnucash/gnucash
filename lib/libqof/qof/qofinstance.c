@@ -56,8 +56,10 @@ enum {
     PROP_DESTROYING,
     PROP_DIRTY,
     PROP_INFANT,
+
     PROP_VERSION,
     PROP_VERSION_CHECK,
+    PROP_IDATA,
 };
 
 typedef struct QofInstancePrivate
@@ -101,6 +103,9 @@ typedef struct QofInstancePrivate
     gint32 version;
     guint32 version_check;  /* data aging timestamp */
 
+    /* -------------------------------------------------------------- */
+    /* Backend private expansion data */
+    guint32  idata;   /* used by the sql backend for kvp management */
 }  QofInstancePrivate;
 
 #define GET_PRIVATE(o)  \
@@ -183,7 +188,7 @@ static void qof_instance_class_init(QofInstanceClass *klass)
          g_param_spec_int ("editlevel",
                            "Object Edit Level",
                            "The object edit level.",
-                           0, G_MAXINT, 0,
+                           0, G_MAXINT32, 0,
                            G_PARAM_READABLE));
 
     g_object_class_install_property
@@ -240,6 +245,15 @@ static void qof_instance_class_init(QofInstanceClass *klass)
 			    G_MAXUINT32,
 			    0,
 			    G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (object_class,
+         PROP_EDITLEVEL,
+         g_param_spec_uint ("idata",
+                            "Object IData",
+                            "Per instance backend private data.",
+                            0, G_MAXUINT32, 0,
+                            G_PARAM_READWRITE));
 }
 
 static void
@@ -378,6 +392,9 @@ qof_instance_get_property (GObject         *object,
 	case PROP_VERSION_CHECK:
 	    g_value_set_uint(value, priv->version_check);
 	    break;
+        case PROP_IDATA:
+            g_value_set_uint(value, priv->idata);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
             break;
@@ -428,6 +445,9 @@ qof_instance_set_property (GObject         *object,
 	case PROP_VERSION_CHECK:
 	    qof_instance_set_version_check(inst, g_value_get_uint(value));
 	    break;
+        case PROP_IDATA:
+            qof_instance_set_idata(inst, g_value_get_uint(value));
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
             break;
@@ -778,6 +798,21 @@ qof_instance_copy_version_check (gpointer to, gconstpointer from)
     g_return_if_fail(QOF_IS_INSTANCE(to));
     g_return_if_fail(QOF_IS_INSTANCE(from));
     GET_PRIVATE(to)->version_check = GET_PRIVATE(from)->version_check;
+}
+
+guint32 qof_instance_get_idata (gconstpointer inst)
+{
+	if(!inst) { return 0; }
+        g_return_val_if_fail(QOF_IS_INSTANCE(inst), 0);
+	return GET_PRIVATE(inst)->idata;
+}
+
+void qof_instance_set_idata(gpointer inst, guint32 idata)
+{
+	if(!inst) { return; }
+	if(idata < 0) { return; }
+        g_return_if_fail(QOF_IS_INSTANCE(inst));
+	GET_PRIVATE(inst)->idata = idata;
 }
 
 /* ========================================================== */

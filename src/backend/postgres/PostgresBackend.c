@@ -466,7 +466,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
    qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
-   trans->idata = atoi(DB_GET_VAL("iguid",j));
+   qof_instance_set_idata(trans, atoi(DB_GET_VAL("iguid",j)));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), 
                                        pgendGetBook(be));
@@ -564,13 +564,15 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
 
-      trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
+      trans->inst.kvp_data = pgendKVPFetch(be, qof_instance_get_idata(trans),
+                                           trans->inst.kvp_data);
    
       engine_splits = xaccTransGetSplitList(trans);
       for (snode = engine_splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
+         s->inst.kvp_data = pgendKVPFetch(be, qof_instance_get_idata(s),
+                                          s->inst.kvp_data);
       }
 
       xaccTransCommitEdit (trans);

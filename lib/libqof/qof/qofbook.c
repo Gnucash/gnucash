@@ -76,7 +76,6 @@ qof_book_init (QofBook *book)
   
   book->book_open = 'y';
   book->version = 0;
-  book->idata = 0;
 }
 
 QofBook *
@@ -357,22 +356,10 @@ gint32 qof_book_get_version (const QofBook *book)
 	return book->version;
 }
 
-guint32 qof_book_get_idata (const QofBook *book)
-{
-	if(!book) { return 0; }
-	return book->idata;
-}
-
 void qof_book_set_version (QofBook *book, gint32 version)
 {
 	if(!book && version < 0) { return; }
 	book->version = version;
-}
-
-void qof_book_set_idata(QofBook *book, guint32 idata)
-{
-	if(!book && idata < 0) { return; }
-	book->idata = idata;
 }
 
 gint64
