@@ -198,6 +198,26 @@ gboolean qof_instance_check_edit(const QofInstance *inst);
 
 gboolean qof_instance_get_infant(const QofInstance *inst);
 
+/** Get the version number on this instance.  The version number is
+ *  used to manage multi-user updates. */
+gint32 qof_instance_get_version (gconstpointer inst);
+/** Compare the version numbers of two instances. */
+gint qof_instance_compare_version (gconstpointer inst1, gconstpointer inst2);
+/** Set the version number on this instance.  The version number is
+ *  used to manage multi-user updates. */
+void qof_instance_set_version (gpointer inst, gint32 value);
+/** Copy the version number on this instance.  The version number is
+ *  used to manage multi-user updates. */
+void qof_instance_copy_version (gpointer to, gconstpointer from);
+/** Increment the instance version number */
+void qof_instance_increment_version (gpointer inst, guint32 new_check);
+/** Get the instance version_check number */
+guint32 qof_instance_get_version_check (gconstpointer inst);
+/** Set the instance version_check number */
+void qof_instance_set_version_check (gpointer inst, guint32 value);
+/** copy the instance version_check number */
+void qof_instance_copy_version_check (gpointer to, gconstpointer from);
+
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the
  *  pair, one can always find the other by looking up it's guid.  Typically,

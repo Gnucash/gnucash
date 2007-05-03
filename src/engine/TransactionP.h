@@ -95,10 +95,6 @@ struct transaction_s
    * splits can be valued.  */
   gnc_commodity *common_currency;
 
-  /* version number, used for tracking multiuser updates */
-  gint32 version;
-  guint32 version_check; /* data aging timestamp */
-
   GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 

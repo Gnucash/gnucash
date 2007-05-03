@@ -102,8 +102,8 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    {
      if (0 < pgendAccountCompareVersion (be, acct)) return;
    }
-   gnc_account_increment_version(acct);  /* be sure to update the version !! */
-   gnc_account_set_version_check(acct, be->version_check);
+  /* be sure to update the version !! */
+   qof_instance_increment_version(acct, be->version_check);
 
    if ((0 == acct->idata) &&
        (FALSE == kvp_frame_is_empty (xaccAccountGetSlots(acct))))
@@ -300,7 +300,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
    if (commodity)
      xaccAccountSetCommodity(acc, commodity);
-   xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
+   qof_instance_set_version(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 
    /* try to find the parent account */
@@ -494,7 +494,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    {
       /* save some performance, don't go to the
        * backend if the data is recent. */
-      guint32 value = gnc_account_get_version_check(acc);
+      guint32 value = qof_instance_get_version_check(acc);
       if (MAX_VERSION_AGE >= be->version_check - value) 
       {
          PINFO ("fresh data, skip check");
@@ -528,7 +528,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
             acc->inst.kvp_data = pgendKVPFetch (be, acc->idata, acc->inst.kvp_data);
          }
 
-         gnc_account_set_version_check(acc, be->version_check);
+         qof_instance_set_version_check(acc, be->version_check);
       }
    }
 
@@ -591,8 +591,8 @@ pgend_account_commit_edit (QofBackend * bend,
       LEAVE ("rolled back");
       return;
    }
-   gnc_account_increment_version(acct);  /* be sure to update the version !! */
-   gnc_account_set_version_check(acct, be->version_check);
+   /* be sure to update the version !! */
+   qof_instance_increment_version(acct, be->version_check);
 
    if (qof_instance_get_destroying(acct))
    {

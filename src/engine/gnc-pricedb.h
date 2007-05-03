@@ -210,7 +210,6 @@ void gnc_price_set_time(GNCPrice *p, Timespec t);
 void gnc_price_set_source(GNCPrice *p, const char *source);
 void gnc_price_set_typestr(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
-void gnc_price_set_version(GNCPrice *p, gint32 versn);
 /**  @} */
 
 /* ------------------ */
@@ -226,7 +225,6 @@ Timespec        gnc_price_get_time(const GNCPrice *p);
 const char *    gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_typestr(const GNCPrice *p);
 gnc_numeric     gnc_price_get_value(const GNCPrice *p);
-gint32          gnc_price_get_version(const GNCPrice *p);
 gboolean        gnc_price_equal(const GNCPrice *p1, const GNCPrice *p2);
 
 #define gnc_price_get_guid(X)    qof_instance_get_guid(QOF_INSTANCE(X))

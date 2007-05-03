@@ -271,8 +271,6 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->date_posted.tv_sec  = 0;
   trans->date_posted.tv_nsec = 0;
 
-  trans->version = 0;
-  trans->version_check = 0;
   trans->marker = 0;
   trans->orig = NULL;
 
@@ -312,8 +310,8 @@ xaccTransDump (const Transaction *trans, const char *tag)
          trans->description ? trans->description : "(null)");
   printf("    Currency:    %s\n", 
          gnc_commodity_get_printname(trans->common_currency));
-  printf("    version:     %x\n", trans->version);
-  printf("    version_chk: %x\n", trans->version_check);
+  printf("    version:     %x\n", qof_instance_get_version(trans));
+  printf("    version_chk: %x\n", qof_instance_get_version_check(trans));
   printf("    editlevel:   %x\n", qof_instance_get_editlevel(trans));
   printf("    orig:        %p\n", trans->orig);
   printf("    idata:       %x\n", trans->idata);
@@ -386,7 +384,7 @@ xaccDupeTransaction (const Transaction *t)
 
   trans->date_entered = t->date_entered;
   trans->date_posted = t->date_posted;
-  trans->version = t->version;
+  qof_instance_copy_version(trans, t);
   trans->orig = NULL;
 
   trans->common_currency = t->common_currency;
@@ -422,8 +420,8 @@ xaccTransClone (const Transaction *t)
   trans->num             = CACHE_INSERT (t->num);
   trans->description     = CACHE_INSERT (t->description);
   trans->common_currency = t->common_currency;
-  trans->version         = t->version;
-  trans->version_check   = t->version_check;
+  qof_instance_copy_version(trans, t);
+  qof_instance_copy_version_check(trans, t);
 
   trans->orig            = NULL;
   trans->idata           = 0;
@@ -483,7 +481,6 @@ xaccFreeTransaction (Transaction *trans)
   trans->date_entered.tv_nsec = 0;
   trans->date_posted.tv_sec = 0;
   trans->date_posted.tv_nsec = 0;
-  trans->version = 0;
 
   if (trans->orig)
   {
@@ -1215,20 +1212,6 @@ gboolean
 xaccTransIsOpen (const Transaction *trans)
 {
   return trans ? (0 < qof_instance_get_editlevel(trans)) : FALSE;
-}
-
-/* Only used by postgres backend. Not sure if it should dirty the trans. */
-void
-xaccTransSetVersion (Transaction *trans, gint32 vers)
-{
-  if (trans) 
-      trans->version = vers;
-}
-
-gint32
-xaccTransGetVersion (const Transaction *trans)
-{
-  return trans ? trans->version : 0;
 }
 
 #define SECS_PER_DAY 86400

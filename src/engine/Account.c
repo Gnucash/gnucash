@@ -73,8 +73,6 @@ enum {
   PROP_END_CLEARED_BALANCE,
   PROP_END_RECONCILED_BALANCE,
 
-  PROP_ACCT_VERSION,
-  PROP_ACCT_VERSION_CHECK,
   PROP_POLICY,
   PROP_MARK,
   PROP_TAX_RELATED,
@@ -139,10 +137,6 @@ typedef struct AccountPrivate
     gnc_numeric reconciled_balance;
 
     gboolean balance_dirty;     /* balances in splits incorrect */
-
-    /* version number, used for tracking multiuser updates */
-    gint32 version;
-    guint32 version_check;  /* data aging timestamp */
 
     GList *splits;              /* list of split pointers */
     gboolean sort_dirty;        /* sort order of splits is bad */
@@ -237,8 +231,6 @@ gnc_account_init(Account* acc)
 
     priv->type = ACCT_TYPE_NONE;
 
-    priv->version = 0;
-    priv->version_check = 0;
     priv->mark = 0;
 
     priv->policy = xaccGetFIFOPolicy();
@@ -338,12 +330,6 @@ gnc_account_get_property (GObject         *object,
 	case PROP_END_RECONCILED_BALANCE:
 	    g_value_set_boxed(value, &priv->reconciled_balance);
 	    break;
-	case PROP_ACCT_VERSION:
-	    g_value_set_int(value, priv->version);
-	    break;
-	case PROP_ACCT_VERSION_CHECK:
-	    g_value_set_uint(value, priv->version_check);
-	    break;
 	case PROP_POLICY:
 	    /* MAKE THIS A BOXED VALUE */
 	    g_value_set_pointer(value, priv->policy);
@@ -420,12 +406,6 @@ gnc_account_set_property (GObject         *object,
 	case PROP_START_RECONCILED_BALANCE:
 	    number = g_value_get_boxed(value);
 	    gnc_account_set_start_reconciled_balance(account, *number);
-	    break;
-	case PROP_ACCT_VERSION:
-	    xaccAccountSetVersion(account, g_value_get_int(value));
-	    break;
-	case PROP_ACCT_VERSION_CHECK:
-	    gnc_account_set_version_check(account, g_value_get_uint(value));
 	    break;
 	case PROP_POLICY:
 	    gnc_account_set_policy(account, g_value_get_pointer(value));
@@ -688,28 +668,6 @@ gnc_account_class_init (AccountClass *klass)
                             "in the account.",
                             GNC_TYPE_NUMERIC,
                             G_PARAM_READABLE));
-
-    g_object_class_install_property
-	(gobject_class,
-	 PROP_ACCT_VERSION,
-	 g_param_spec_int ("acct-version",
-			   "Version",
-			   "The version number of the current account state.",
-			   0,
-			   G_MAXINT32,
-			   0,
-			   G_PARAM_READWRITE));
-
-    g_object_class_install_property
-	(gobject_class,
-	 PROP_ACCT_VERSION_CHECK,
-	 g_param_spec_uint ("acct-version-check",
-			    "Version Check",
-			    "The version check number of the current account state.",
-			    0,
-			    G_MAXUINT32,
-			    0,
-			    G_PARAM_READWRITE));
 
     g_object_class_install_property
 	(gobject_class,
@@ -1050,7 +1008,6 @@ xaccFreeAccount (Account *acc)
   priv->type = ACCT_TYPE_NONE;
   priv->commodity = NULL;
 
-  priv->version = 0;
   priv->balance_dirty = FALSE;
   priv->sort_dirty = FALSE;
 
@@ -1177,56 +1134,6 @@ xaccAccountDestroy (Account *acc)
 
   xaccAccountCommitEdit (acc);
 }
-
-void 
-xaccAccountSetVersion (Account *acc, gint32 vers)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version = vers;
-}
-
-gint32 
-xaccAccountGetVersion (const Account *acc)
-{
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-
-    return GET_PRIVATE(acc)->version;
-}
-
-void
-gnc_account_increment_version (Account *acc)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version++;
-}
-
-guint32
-gnc_account_get_version_check (const Account *acc)
-{
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-
-    return GET_PRIVATE(acc)->version_check;
-}
-
-void
-gnc_account_set_version_check (Account *acc, guint32 value)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version_check = value;
-}
-
 
 /********************************************************************\
 \********************************************************************/

@@ -445,7 +445,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       {
          gint32 db_version, cache_version;
          db_version = atoi (DB_GET_VAL("version",j));
-         cache_version = xaccTransGetVersion (trans);
+         cache_version = qof_instance_get_version (trans);
          if (db_version <= cache_version) {
             return qd;
          }
@@ -465,7 +465,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetDatePostedTS (trans, &ts);
    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
-   xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+   qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), 

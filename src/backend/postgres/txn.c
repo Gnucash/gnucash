@@ -143,8 +143,8 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    {
       if (0 < pgendTransactionCompareVersion (be, trans)) return;
    }
-   trans->version ++;  /* be sure to update the version !! */
-   trans->version_check = be->version_check;
+   /* be sure to update the version !! */
+   qof_instance_increment_version(trans, be->version_check);
 
    /* first, we need to see which splits are in the database
     * since what is there may not match what we have cached in 
@@ -652,7 +652,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    {
       /* save some performance, don't go to the
          backend if the data is recent. */
-      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
+      if (MAX_VERSION_AGE >= be->version_check - qof_instance_get_version_check(trans)) 
       {
          PINFO ("fresh data, skip check");
          pgendEnable(be);
@@ -715,7 +715,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
      {
        gint32 db_version, cache_version;
        db_version = atoi (DB_GET_VAL("version",j));
-       cache_version = xaccTransGetVersion (trans);
+       cache_version = qof_instance_get_version (trans);
        if (db_version == cache_version) {
          engine_data_is_newer = 0;
        } else 
@@ -753,7 +753,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        xaccTransSetDatePostedTS (trans, &ts);
        ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
        xaccTransSetDateEnteredTS (trans, &ts);
-       xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+       qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
        xaccTransSetCurrency (trans, currency);
        trans->idata = atoi(DB_GET_VAL("iguid",j));
      }
@@ -762,7 +762,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    PQclear (result);
 
    /* set timestamp as 'recent' for this data */
-   trans->version_check = be->version_check;
+   qof_instance_set_version_check(trans, be->version_check);
 
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 

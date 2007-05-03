@@ -56,6 +56,8 @@ enum {
     PROP_DESTROYING,
     PROP_DIRTY,
     PROP_INFANT,
+    PROP_VERSION,
+    PROP_VERSION_CHECK,
 };
 
 typedef struct QofInstancePrivate
@@ -94,6 +96,11 @@ typedef struct QofInstancePrivate
 
     /* True iff this instance has never been committed. */
     gboolean infant;
+
+    /* version number, used for tracking multiuser updates */
+    gint32 version;
+    guint32 version_check;  /* data aging timestamp */
+
 }  QofInstancePrivate;
 
 #define GET_PRIVATE(o)  \
@@ -211,6 +218,28 @@ static void qof_instance_class_init(QofInstanceClass *klass)
                                "state of the data file.",
                                FALSE,
                                G_PARAM_READABLE));
+
+    g_object_class_install_property
+	(object_class,
+	 PROP_VERSION,
+	 g_param_spec_int ("version",
+			   "Version",
+			   "The version number of the current instance state.",
+			   0,
+			   G_MAXINT32,
+			   0,
+			   G_PARAM_READWRITE));
+
+    g_object_class_install_property
+	(object_class,
+	 PROP_VERSION_CHECK,
+	 g_param_spec_uint ("version-check",
+			    "Version Check",
+			    "The version check number of the current instance state.",
+			    0,
+			    G_MAXUINT32,
+			    0,
+			    G_PARAM_READWRITE));
 }
 
 static void
@@ -343,6 +372,12 @@ qof_instance_get_property (GObject         *object,
         case PROP_INFANT:
             g_value_set_boolean(value, priv->infant);
             break;
+	case PROP_VERSION:
+	    g_value_set_int(value, priv->version);
+	    break;
+	case PROP_VERSION_CHECK:
+	    g_value_set_uint(value, priv->version_check);
+	    break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
             break;
@@ -387,6 +422,12 @@ qof_instance_set_property (GObject         *object,
         case PROP_DIRTY:
             qof_instance_set_dirty(inst);
             break;
+	case PROP_VERSION:
+	    qof_instance_set_version(inst, g_value_get_int(value));
+	    break;
+	case PROP_VERSION_CHECK:
+	    qof_instance_set_version_check(inst, g_value_get_uint(value));
+	    break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
             break;
@@ -427,8 +468,6 @@ qof_instance_set_guid (gpointer ptr, const GUID *guid)
 void
 qof_instance_copy_guid (gpointer to, gconstpointer from)
 {
-    QofInstancePrivate *to_priv, *from_priv;
-
     g_return_if_fail(QOF_IS_INSTANCE(to));
     g_return_if_fail(QOF_IS_INSTANCE(from));
 
@@ -675,6 +714,70 @@ qof_instance_get_infant(const QofInstance *inst)
 {
     g_return_val_if_fail(QOF_IS_INSTANCE(inst), FALSE);
     return GET_PRIVATE(inst)->infant;
+}
+
+gint32 
+qof_instance_get_version (gconstpointer inst)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst), 0);
+    return GET_PRIVATE(inst)->version;
+}
+
+gint
+qof_instance_compare_version (gconstpointer inst1, gconstpointer inst2)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst1), 1);
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst2), -1);
+    return GET_PRIVATE(inst2)->version - GET_PRIVATE(inst1)->version;
+}
+
+void 
+qof_instance_set_version (gpointer inst, gint32 vers)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(inst));
+    GET_PRIVATE(inst)->version = vers;
+}
+
+void
+qof_instance_copy_version (gpointer to, gconstpointer from)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(to));
+    g_return_if_fail(QOF_IS_INSTANCE(from));
+    GET_PRIVATE(to)->version = GET_PRIVATE(from)->version;
+}
+
+void
+qof_instance_increment_version (gpointer inst, guint32 new_check)
+{
+    QofInstancePrivate *priv;
+
+    g_return_if_fail(QOF_IS_INSTANCE(inst));
+
+    priv = GET_PRIVATE(inst);
+    priv->version++;
+    priv->version_check = new_check;
+}
+
+guint32
+qof_instance_get_version_check (gconstpointer inst)
+{
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst), 0);
+    return GET_PRIVATE(inst)->version_check;
+}
+
+void
+qof_instance_set_version_check (gpointer inst, guint32 value)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(inst));
+    GET_PRIVATE(inst)->version_check = value;
+}
+
+void
+qof_instance_copy_version_check (gpointer to, gconstpointer from)
+{
+    g_return_if_fail(QOF_IS_INSTANCE(to));
+    g_return_if_fail(QOF_IS_INSTANCE(from));
+    GET_PRIVATE(to)->version_check = GET_PRIVATE(from)->version_check;
 }
 
 /* ========================================================== */

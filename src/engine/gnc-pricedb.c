@@ -68,8 +68,6 @@ gnc_price_create (QofBook *book)
   p = g_object_new(GNC_TYPE_PRICE, NULL);
 
   p->refcount = 1;
-  p->version = 0;
-  p->version_check = 0;
   p->value = gnc_numeric_zero();
   p->type = NULL;
   p->source = NULL;
@@ -136,7 +134,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
   new_p = gnc_price_create(book);
   if(!new_p) { LEAVE (" "); return NULL; }
 
-  new_p->version = p->version;
+  qof_instance_copy_version(new_p, p);
 
   gnc_price_begin_edit(new_p);
   /* never ever clone guid's */
@@ -307,15 +305,6 @@ gnc_price_set_value(GNCPrice *p, gnc_numeric value)
   }
 }
 
-void
-gnc_price_set_version(GNCPrice *p, gint32 vers)
-{
-  /* begin/end edit is inappropriate here, this is a backend thing only. */
-  if(!p) return;
-  p->version = vers;
-}
-
-
 /* ==================================================================== */
 /* getters */
 
@@ -377,13 +366,6 @@ gnc_price_get_currency(const GNCPrice *p)
 {
   if(!p) return NULL;
   return p->currency;
-}
-
-gint32
-gnc_price_get_version(const GNCPrice *p)
-{
-  if(!p) return 0;
-  return (p->version);
 }
 
 gboolean
