@@ -41,6 +41,8 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
+#define GCONF_SECTION "dialogs/import/generic_matcher/account_matcher"
+
 /*-******************************************************************\
  *   Structs   *
 \********************************************************************/
@@ -80,15 +82,15 @@ build_acct_tree(struct _accountpickerdialog * picker)
 					_("Account ID"), "online_id");
   g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-  col = gnc_tree_view_find_column_by_name(
-      GNC_TREE_VIEW(picker->account_tree), "type");
-  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-
   gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
 		    GTK_WIDGET(picker->account_tree));
 
   /* Configure the columns */
   gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
+  g_object_set(account_tree,
+               "gconf-section", GCONF_SECTION,
+               "show-column-menu", TRUE,
+               (gchar*) NULL);
 }
 
 /* When user clicks to create a new account */
