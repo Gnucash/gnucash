@@ -952,6 +952,9 @@ static GtkActionEntry report_actions[] =
         { "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
           N_("Paste the clipboard content at the cursor position"),
           NULL },
+	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+	  N_("Refresh this window"),
+	  G_CALLBACK (gnc_plugin_page_report_reload_cb) },
         { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "", 
 	  N_("Add the current report to the `Custom' menu for later use. "
 	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
