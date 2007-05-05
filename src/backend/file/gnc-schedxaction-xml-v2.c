@@ -155,17 +155,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     GDate	*date;
     gint        instCount;
     const GUID        *templ_acc_guid;
-    gboolean allow_incompat = FALSE;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    gboolean allow_incompat = TRUE;
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
