@@ -510,8 +510,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
 
     key_file = g_key_file_new();
     guid_new(&guid);
-    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_GUID,
-                          guid_to_string_buff(&guid, buf));
+    guid_to_string_buff(&guid, buf);
+    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_GUID, buf);
     g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE,
                           _("Custom Check"));
     g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, FALSE);
@@ -1887,14 +1887,14 @@ draw_page_custom(GncPrintContext * context, gint page_nr, gpointer user_data)
     draw_text(context, buf, &item, desc);
     g_date_free(date);
 
-    item.x = multip * gtk_spin_button_get_value(pcd->words_x);
-    item.y = multip * gtk_spin_button_get_value(pcd->words_y);
+    item.x = multip * gtk_spin_button_get_value(pcd->number_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->number_y);
     info = gnc_default_print_info(FALSE);
     amount = gnc_numeric_abs(xaccSplitGetAmount(pcd->split));
     draw_text(context, xaccPrintAmount(amount, info), &item, desc);
 
-    item.x = multip * gtk_spin_button_get_value(pcd->number_x);
-    item.y = multip * gtk_spin_button_get_value(pcd->number_y);
+    item.x = multip * gtk_spin_button_get_value(pcd->words_x);
+    item.y = multip * gtk_spin_button_get_value(pcd->words_y);
     text = numeric_to_words(amount);
     draw_text(context, text, &item, desc);
     g_free(text);
