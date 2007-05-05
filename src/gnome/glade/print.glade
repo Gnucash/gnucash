@@ -213,7 +213,6 @@ Bottom
 Custom</property>
 		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="changed" handler="gnc_print_check_position_changed" last_modification_time="Sat, 03 Mar 2007 22:06:12 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>

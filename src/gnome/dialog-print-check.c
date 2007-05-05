@@ -123,7 +123,6 @@ G_LOCK_DEFINE_STATIC(print_settings);
 /* Used by glade_xml_signal_autoconnect_full */
 void gnc_ui_print_check_response_cb(GtkDialog * dialog, gint response, PrintCheckDialog * pcd);
 void gnc_print_check_format_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
-void gnc_print_check_position_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
 void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd);
 void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
 
@@ -2053,22 +2052,6 @@ gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
 
 
 void
-gnc_print_check_position_changed (GtkComboBox *widget,
-				  PrintCheckDialog * pcd)
-{
-  gboolean sensitive;
-  gint value;
-
-  value = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
-  if (-1 == value)
-    return;
-  sensitive = (value == pcd->position_max);
-  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_label), sensitive);
-  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_x), sensitive);
-  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_y), sensitive);
-}
-
-void
 gnc_print_check_format_changed (GtkComboBox *widget,
                                 PrintCheckDialog * pcd)
 {
@@ -2092,8 +2075,6 @@ gnc_print_check_format_changed (GtkComboBox *widget,
 
   /* Update the positions combobox */
   pcd->selected_format = format;
-  g_signal_handlers_block_by_func(pcd->position_combobox,
-                                  gnc_print_check_position_changed, pcd);
   p_store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->position_combobox),
                           GTK_TREE_MODEL(p_store));
@@ -2108,8 +2089,6 @@ gnc_print_check_format_changed (GtkComboBox *widget,
   gtk_combo_box_append_text(GTK_COMBO_BOX(pcd->position_combobox), _("Custom"));
   pnum = MIN(pnum, pcd->position_max);
   gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->position_combobox), pnum);
-  g_signal_handlers_unblock_by_func(pcd->position_combobox,
-                                    gnc_print_check_position_changed, pcd);
 
   /* If there's only one thing in the position combobox, make it insensitive */
   sensitive = (pcd->position_max > 0);
@@ -2120,10 +2099,6 @@ gnc_print_check_format_changed (GtkComboBox *widget,
   gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
 			gnc_print_check_set_sensitive,
 			GINT_TO_POINTER(sensitive));
-  if (sensitive == TRUE)
-    return;
-  
-  gnc_print_check_position_changed(widget, pcd);
 }
 
 void
