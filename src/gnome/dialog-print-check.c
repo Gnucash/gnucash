@@ -125,6 +125,7 @@ void gnc_ui_print_check_response_cb(GtkDialog * dialog, gint response, PrintChec
 void gnc_print_check_format_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
 void gnc_print_check_position_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
 void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd);
+void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
 
 
 /** This enum defines the types of items that gnucash knows how to
@@ -496,7 +497,9 @@ pcd_key_file_save_item_xy (GKeyFile *key_file, int index,
 /** Save all of the information from the custom check dialog into a check
  *  description file. */
 static void
-pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
+pcd_save_custom_data(PrintCheckDialog *pcd,
+                     const gchar *filename,
+                     const gchar *title)
 {
     GKeyFile *key_file;
     GError *error = NULL;
@@ -512,8 +515,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
     guid_new(&guid);
     guid_to_string_buff(&guid, buf);
     g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_GUID, buf);
-    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE,
-                          _("Custom Check"));
+    g_key_file_set_string(key_file, KF_GROUP_TOP, KF_KEY_TITLE, title);
     g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_GRID, FALSE);
     g_key_file_set_boolean(key_file, KF_GROUP_TOP, KF_KEY_SHOW_BOXES, FALSE);
     g_key_file_set_double(key_file, KF_GROUP_TOP, KF_KEY_ROTATION,
@@ -547,16 +549,50 @@ pcd_save_custom_data(PrintCheckDialog *pcd, gchar *filename)
 }
 
 
+/* Make the OK button sensitive iff a title has been entered. */
+void
+gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
+{
+  const gchar *text;
+  gboolean sensitive;
+
+  text = gtk_entry_get_text(GTK_ENTRY(editable));
+  sensitive = text && *text;
+  gtk_widget_set_sensitive(ok_button, sensitive);
+}
+
+
 /** This function is called when the user clicks the "save format" button in
  *  the check printing dialog.  It presents another dialog to the user to get
  *  the filename for saving the data. */
 void
-gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd)
+gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 {
     GtkFileChooser *chooser;
     GtkFileFilter *filter;
-    GtkWidget *dialog;
-    gchar *check_dir, *filename;
+    GtkWidget *dialog, *entry, *button;
+    GladeXML *xml;
+    gchar *check_dir, *filename, *title;
+
+    /* Get a title for the new check format. */
+    xml = gnc_glade_xml_new ("print.glade", "Format Title Dialog");
+    dialog = glade_xml_get_widget (xml, "Format Title Dialog");
+    entry = glade_xml_get_widget (xml, "format_title");
+    button = glade_xml_get_widget (xml, "okbutton");
+    gnc_check_format_title_changed(GTK_EDITABLE(entry), button);
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pcd);
+
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK) {
+        gtk_widget_destroy(dialog);
+        g_object_unref(xml);
+        return;
+    }
+
+    /* Now get the filename. */
+    title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+    gtk_widget_destroy (dialog);
+    g_object_unref(xml);
 
     dialog = gtk_file_chooser_dialog_new(_("Save Check Description"),
                                          GTK_WINDOW(pcd->dialog),
@@ -581,13 +617,15 @@ gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd)
     gtk_file_filter_add_pattern(filter, "*");
     gtk_file_chooser_add_filter(chooser, filter);
 
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        pcd_save_custom_data(pcd, filename);
+        pcd_save_custom_data(pcd, filename, title);
         g_free(filename);
     }
 
     gtk_widget_destroy (dialog);
+    g_free(title);
 }
 
 
