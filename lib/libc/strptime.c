@@ -38,6 +38,166 @@
 
 #include "strptime.h"
 
+
+#ifdef OS_WIN32
+/* The localtime_r() definition in pthreads-win32's pthread.h doesn't guard
+ * against localtime() returning NULL.
+ */
+#undef localtime_r
+/* The localtime() in Microsoft's C library is MT-safe */
+#define localtime_r(tp,tmp) (localtime(tp)?(*(tmp)=*localtime(tp),(tmp)):0)
+
+#include <windows.h>
+
+static char *
+get_locale_string (int lctype)
+{
+  int nbytes = GetLocaleInfo (GetThreadLocale (), lctype, NULL, 0);
+  char *tem;
+
+  if (nbytes == 0)
+    return "???";
+
+  tem = malloc (nbytes);
+
+  if (GetLocaleInfo (GetThreadLocale (), lctype, tem, nbytes) == 0) {
+    free (tem);
+    tem = malloc (4);
+    strcpy (tem, "???");
+  }
+
+  return tem;
+}
+
+static void
+append_char (char **str, int *size, int *i, char c)
+{
+  if (*size <= *i + 1) {
+    char *new;
+    *size *= 2;
+    new = malloc (*size);
+    strncpy (new, *str, *i);
+    free (*str);
+    *str = new;
+  }
+  (*str)[*i] = c;
+  (*str)[++(*i)] = '\0';
+}
+
+static char *
+translate_picture (const char *picture)
+{
+  int size = strlen (picture) * 2;
+  char *str = malloc (size);
+  int i = 0;
+
+  str[0] = '\0';
+
+  while (*picture) {
+    const char *q = picture + 1;
+    int count;
+
+    while (*picture == *q)
+      q++;
+    count = q - picture;
+
+    switch (*picture) {
+    case '\'':
+      picture++;
+      while (*picture && *picture != '\'') {
+	append_char (&str, &size, &i, *picture);
+	picture++;
+      }
+      break;
+    case 'd':
+      switch (count) {
+      case 1:
+      case 2:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'd');
+	break;
+      case 3:
+      case 4:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'a');
+	break;
+      }
+      picture += count - 1;
+      break;
+    case 'M':
+      switch (count) {
+      case 1:
+      case 2:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'm');
+	break;
+      case 3:
+      case 4:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'b');
+	break;
+      }
+      picture += count - 1;
+      break;
+    case 'y':
+      switch (count) {
+      case 1: /* Last digit of year. Ugh... */
+      case 2:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'y');
+	break;
+      case 4:
+	append_char (&str, &size, &i, '%');
+	append_char (&str, &size, &i, 'Y');
+	break;
+      }
+      picture += count - 1;
+      break;
+    case 'g':
+      /* Era. Huh. Just ignore, as the era stuff
+       * implementation below depends on glibc.
+       */
+      picture += count - 1;
+      break;
+    case 'h':
+      append_char (&str, &size, &i, '%');
+      append_char (&str, &size, &i, 'I');
+      picture += count - 1;
+      break;
+    case 'H':
+      append_char (&str, &size, &i, '%');
+      append_char (&str, &size, &i, 'H');
+      picture += count - 1;
+      break;
+    case 'm':
+      append_char (&str, &size, &i, '%');
+      append_char (&str, &size, &i, 'M');
+      picture += count - 1;
+      break;
+    case 's':
+      append_char (&str, &size, &i, '%');
+      append_char (&str, &size, &i, 'S');
+      picture += count - 1;
+      break;
+    case 't':
+      append_char (&str, &size, &i, '%');
+      append_char (&str, &size, &i, 'p');
+      picture += count - 1;
+      break;
+    default:
+      append_char (&str, &size, &i, *picture);
+      break;
+    }
+    if (*picture)
+      picture++;
+  }
+
+  return str;
+}
+
+#endif /* OS_WIN32 */
+
+
 #ifndef __P
 # if defined (__GNUC__) || (defined (__STDC__) && __STDC__)
 #  define __P(args) args
@@ -332,6 +492,30 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		      break;
 		    }
 		}
+#elif defined (OS_WIN32)
+	      if (*decided !=raw)
+		{
+		  char *locale_string = get_locale_string (LOCALE_SDAYNAME1 + cnt);
+		  if (match_string (locale_string, rp))
+		    {
+		      if (*decided == not
+			  && strcmp (locale_string, weekday_name[cnt]))
+			*decided = loc;
+		      free (locale_string);
+		      break;
+		    }
+		  free (locale_string);
+		  locale_string = get_locale_string (LOCALE_SABBREVDAYNAME1 + cnt);
+		  if (match_string (locale_string, rp))
+		    {
+		      if (*decided == not
+			  && strcmp (locale_string, ab_weekday_name[cnt]))
+			*decided = loc;
+		      free (locale_string);
+		      break;
+		    }
+		  free (locale_string);
+		}
 #endif
 	      if (*decided != loc
 		  && (match_string (weekday_name[cnt], rp)
@@ -373,6 +557,30 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		      break;
 		    }
 		}
+#elif defined (OS_WIN32)
+	      if (*decided !=raw)
+		{
+		  char *locale_string = get_locale_string (LOCALE_SMONTHNAME1 + cnt);
+		  if (match_string (locale_string, rp))
+		    {
+		      if (*decided == not
+			  && strcmp (locale_string, month_name[cnt]))
+			*decided = loc;
+		      free (locale_string);
+		      break;
+		    }
+		  free (locale_string);
+		  locale_string = get_locale_string (LOCALE_SABBREVMONTHNAME1 + cnt);
+		  if (match_string (locale_string, rp))
+		    {
+		      if (*decided == not
+			  && strcmp (locale_string, ab_month_name[cnt]))
+			*decided = loc;
+		      free (locale_string);
+		      break;
+		    }
+		  free (locale_string);
+		}
 #endif
 	      if (match_string (month_name[cnt], rp)
 		  || match_string (ab_month_name[cnt], rp))
@@ -407,6 +615,50 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		  want_xday = 1;
 		  break;
 		}
+	      *decided = raw;
+	    }
+#elif defined (OS_WIN32)
+	  if (*decided != raw)
+	    {
+	      char *date_locale_string = get_locale_string (LOCALE_SSHORTDATE);
+	      char *time_locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+	      int date_len = strlen (date_locale_string);
+	      int time_len = strlen (time_locale_string);
+	      char *d_t_fmt = malloc (date_len + time_len + 2);
+	      char *posix_d_t_fmt;
+
+	      strncpy (d_t_fmt, date_locale_string, date_len);
+	      strncat (d_t_fmt, " ", 1);
+	      strncat (d_t_fmt, time_locale_string, time_len);
+	      free (date_locale_string);
+	      free (time_locale_string);
+
+	      posix_d_t_fmt = translate_picture (d_t_fmt);
+
+	      free (d_t_fmt);
+                     
+	      if (!recursive (posix_d_t_fmt))
+		{
+		  if (*decided == loc)
+		    {
+		      free (posix_d_t_fmt);
+		      return NULL;
+		    }
+		  else
+		    {
+		      rp = rp_backup;
+		    }
+		}
+	      else
+		{
+		  if (*decided == not &&
+		      strcmp (posix_d_t_fmt, HERE_D_T_FMT))
+		    *decided = loc;
+		  want_xday = 1;
+		  free (posix_d_t_fmt);
+		  break;
+		}
+	      free (posix_d_t_fmt);
 	      *decided = raw;
 	    }
 #endif
@@ -455,6 +707,38 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		  want_xday = 1;
 		  break;
 		}
+	      *decided = raw;
+	    }
+#elif defined (OS_WIN32)
+	  if (*decided != raw)
+	    {
+	      char *locale_string = get_locale_string (LOCALE_SSHORTDATE);
+	      char *posix_d_fmt = translate_picture (locale_string);
+
+	      free (locale_string);
+
+	      if (!recursive (posix_d_fmt))
+		{
+		  if (*decided == loc)
+		    {
+		      free(posix_d_fmt);
+		      return NULL;
+		    }
+		  else
+		    {
+		      rp = rp_backup;
+		    }
+		}
+	      else
+		{
+		  if (*decided == not
+		      && strcmp (posix_d_fmt, HERE_D_FMT))
+		    *decided = loc;
+		  want_xday = 1;
+		  free(posix_d_fmt);
+		  break;
+		}
+	      free(posix_d_fmt);
 	      *decided = raw;
 	    }
 #endif
@@ -522,6 +806,30 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		}
 	      *decided = raw;
 	    }
+#elif defined (OS_WIN32)
+	  if (*decided != raw)
+	    {
+	      char *locale_string = get_locale_string (LOCALE_S1159);
+	      if (match_string (locale_string, rp))
+		{
+		  if (strcmp (locale_string, HERE_AM_STR))
+		    *decided = loc;
+		  free (locale_string);
+		  break;
+		}
+	      free (locale_string);
+	      locale_string = get_locale_string (LOCALE_S2359);
+	      if (match_string (locale_string, rp))
+		{
+		  if (strcmp (locale_string, HERE_PM_STR))
+		    *decided = loc;
+		  is_pm = 1;
+		  free (locale_string);
+		  break;
+		}
+	      *decided = raw;
+	      free (locale_string);
+	    }
 #endif
 	  if (!match_string (HERE_AM_STR, rp))
 	    if (match_string (HERE_PM_STR, rp))
@@ -548,6 +856,45 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		    *decided = loc;
 		  break;
 		}
+	      *decided = raw;
+	    }
+#elif defined (OS_WIN32)
+	  if (*decided != raw)
+	    {
+	      char *locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+	      int locale_len = strlen (locale_string);
+	      char *t_p_fmt = malloc (locale_len + 4);
+	      char *posix_t_p_fmt;
+
+	      strncpy (t_p_fmt, locale_string, locale_len);
+	      strncat (t_p_fmt, " tt", 3);
+
+	      posix_t_p_fmt = translate_picture (t_p_fmt);
+
+	      free (t_p_fmt);
+
+	      if (!recursive (posix_t_p_fmt))
+		{
+		  if (*decided == loc)
+		    {
+		      free (posix_t_p_fmt);
+		      return NULL;
+		    }
+		  else
+		    {
+		      rp = rp_backup;
+		    }
+		}
+	      else
+		{
+		  if (*decided == not &&
+		      strcmp (posix_t_p_fmt,
+			      HERE_T_FMT_AMPM))
+		    *decided = loc;
+		  free (posix_t_p_fmt);
+		  break;
+		}
+	      free (posix_t_p_fmt);
 	      *decided = raw;
 	    }
 #endif
@@ -602,6 +949,29 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		    *decided = loc;
 		  break;
 		}
+	      *decided = raw;
+	    }
+#elif defined (OS_WIN32)
+	  if (*decided != raw)
+	    {
+	      char *locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+	      if (!recursive (locale_string))
+		{
+		  if (*decided == loc)
+		    return NULL;
+		  else
+		    rp = rp_backup;
+		}
+	      else
+		{
+		  free (locale_string);
+		  locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+		  if (strcmp (locale_string, HERE_T_FMT))
+		    *decided = loc;
+		  free (locale_string);
+		  break;
+		}
+	      free (locale_string);
 	      *decided = raw;
 	    }
 #endif
@@ -983,6 +1353,8 @@ strptime (buf, format, tm)
   enum locale_status decided;
 
 #ifdef _NL_CURRENT
+  decided = not;
+#elif defined (OS_WIN32)
   decided = not;
 #else
   decided = raw;
