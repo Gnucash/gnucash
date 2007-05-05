@@ -31,14 +31,6 @@
 /* to be renamed qofdate.c */
 #include <ctype.h>
 
-#ifdef HAVE_LANGINFO_H
-#define HAVE_LANGINFO_D_FMT 1
-#endif
-
-#ifdef HAVE_LANGINFO_D_FMT
-#include <langinfo.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,15 +50,9 @@
 
 #define NANOS_PER_SECOND 1000000000
 
-#ifdef HAVE_LANGINFO_D_FMT
-#  define GNC_D_FMT (nl_langinfo (D_FMT))
-#  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
-#  define GNC_T_FMT (nl_langinfo (T_FMT))
-#else
-#  define GNC_D_FMT "%Y-%m-%d"
-#  define GNC_D_T_FMT "%Y-%m-%d %r"
-#  define GNC_T_FMT "%r"
-#endif
+#define GNC_D_FMT "%x"
+#define GNC_D_T_FMT "%c"
+#define GNC_T_FMT "%X"
 
 
 /* This is now user configured through the gnome options system() */

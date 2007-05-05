@@ -60,10 +60,6 @@
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 
-#ifdef HAVE_LANGINFO_D_FMT
-#include <langinfo.h>
-#endif
-
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.editor"
 
