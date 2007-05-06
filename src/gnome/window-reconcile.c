@@ -754,7 +754,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
   if (result == GTK_RESPONSE_OK)
   {
     *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
-    *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
+    *statement_date = gnc_date_edit_get_date_end(GNC_DATE_EDIT(date_value));
 
     if (gnc_reverse_balance(account))
       *new_ending = gnc_numeric_neg (*new_ending);
