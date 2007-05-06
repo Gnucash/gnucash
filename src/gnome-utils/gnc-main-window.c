@@ -1417,6 +1417,7 @@ gnc_main_window_update_menu_item (GncMainWindow *window)
   /* Figure out the label name. Add the accelerator if possible. */
   title = gnc_main_window_generate_title(window);
   strings = g_strsplit(title, "_", 0);
+  g_free(title);
   expanded = g_strjoinv("__", strings);
   if (index < 10) {
     data.label = g_strdup_printf("_%d %s", (index + 1) % 10, expanded);
