@@ -26,6 +26,7 @@ typedef int GNCOptionDBHandle;
 QofBook * gnc_get_current_book (void);
 Account * gnc_get_current_root_account (void);
 
+%newobject gnc_gettext_helper;
 char * gnc_gettext_helper(const char *string);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
