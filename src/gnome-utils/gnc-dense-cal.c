@@ -432,6 +432,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->week_starts_monday = 0;
     {
         gchar **parts;
+	/* Translators: This string should not have shown up in
+	   gnucash.pot as it is looked up in the "gtk20" translation
+	   domain. You can safely ignore this string and leave it
+	   untranslated. */
         parts = g_strsplit(dgettext("gtk20", "calendar:week_start:0"),
                            ":", 3);
         if (parts[0] != NULL

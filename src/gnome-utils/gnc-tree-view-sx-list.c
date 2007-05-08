@@ -159,6 +159,8 @@ gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     col = gnc_tree_view_add_toggle_column(view, _("Enabled"), 
+    /* Translators: This string has a context prefix; the translation
+       must only contain the part after the | character. */
                                           Q_("Single-character short column-title form of 'Enabled'|E"),
                                           "enabled", SXLTMA_COL_ENABLED,
                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,

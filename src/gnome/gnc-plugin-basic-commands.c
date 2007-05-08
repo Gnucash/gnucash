@@ -372,6 +372,8 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
     error_message = qof_session_get_error_message(qsf_session);
     if (!error_message)
 	error_message = "";
+    /* Translators: %d is the error number; %s is the error message as
+       text. */
     message = g_strdup_printf(_("Error: Loading failed, error code %d - %s."), err, error_message);
     PERR("%s", message);
     qof_session_destroy(qsf_session);
