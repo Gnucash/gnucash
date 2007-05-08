@@ -397,7 +397,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
     gtk_list_store_clear(summary->datamodel);
     for (current = g_list_first(currency_list); current; current = g_list_next(current)) {
-      const char *mnemonic, *total_mode_label;
+      const char *mnemonic;
+      gchar *total_mode_label;
 
       currency_accum = current->data;
 
