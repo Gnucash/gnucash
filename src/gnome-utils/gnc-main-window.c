@@ -1999,6 +1999,7 @@ gnc_main_window_new (void)
         }
     }
     active_windows = g_list_append (active_windows, window);
+    gnc_main_window_update_title(window);
     gnc_main_window_update_all_menu_items();
     return window;
 }
