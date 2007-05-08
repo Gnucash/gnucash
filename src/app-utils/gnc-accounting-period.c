@@ -92,7 +92,7 @@ lookup_end_date_option(const gchar *section,
 		       const gchar *key_relative,
 		       GDate *fy_end)
 {
-  const gchar *choice;
+  gchar *choice;
   time_t time;
   int which;
 
@@ -104,6 +104,7 @@ lookup_end_date_option(const gchar *section,
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_end_timet(which, fy_end, NULL);
   }
+  g_free(choice);
   if (time == 0)
     time = -1;
   return time;
