@@ -564,7 +564,11 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
         }
     }
 
-    if (gnc_verify_dialog(NULL, FALSE, _("Are you sure?")))
+    /* FIXME: Does this always refer to only one transaction? Or could
+       multiple SXs be deleted as well? Ideally, the number of
+       to-be-deleted SXs should be mentioned here; see
+       dialog-sx-since-last-run.c:807 */
+    if (gnc_verify_dialog(NULL, FALSE, _("Do you really want to delete this scheduled transaction?")))
     {
         g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
     }

@@ -274,8 +274,8 @@
       <locale name="C">
         <short>Show splash screen</short>
         <long>
-	  This setting determines whether GnuCash will show a splash screen
-	  at startup.
+	  If active, a splash screen will be shown at
+	  startup. Otherwise no splash screen will be shown.
 	</long>
       </locale>
     </schema>
@@ -519,7 +519,11 @@
       <default>false</default>
       <locale name="C">
         <short>Allow file incompatability with older versions.</short>
-        <long>If gnucash should allow file incompatability.  If true, then gnucash will (be allowed to) intentionally break file compatability with old versions.</long>
+        <long>If active, gnucash will be allowed to intentionally
+        break file compatibility with older versions, so that a data
+        file saved in this version cannot be read by an older version
+        again. Otherwise gnucash will write data files only in formats
+        that can be read by older versions as well.</long>
       </locale>
     </schema>
 
