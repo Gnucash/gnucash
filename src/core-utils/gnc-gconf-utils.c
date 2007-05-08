@@ -908,8 +908,8 @@ gnc_gconf_schemas_found (void)
 
   key = gnc_gconf_make_schema_key(GCONF_GENERAL_REGISTER, "use_theme_colors");
   schema = gconf_client_get_schema(our_client, key, &err);
+  g_free(key);
   if (schema == NULL) {
-    g_free(key);
     return FALSE;
   }
   gconf_schema_free(schema);

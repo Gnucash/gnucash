@@ -397,7 +397,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
     gtk_list_store_clear(summary->datamodel);
     for (current = g_list_first(currency_list); current; current = g_list_next(current)) {
-      const char *mnemonic;
+      const char *mnemonic, *total_mode_label;
 
       currency_accum = current->data;
 
@@ -420,13 +420,15 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
                        gnc_commodity_print_info(currency_accum->currency, TRUE));
 
       gtk_list_store_append(summary->datamodel, &iter);
+      total_mode_label = get_total_mode_label(mnemonic, currency_accum->total_mode);
       gtk_list_store_set(summary->datamodel, &iter,
-                         COLUMN_MNEMONIC_TYPE, get_total_mode_label(mnemonic, currency_accum->total_mode),
+                         COLUMN_MNEMONIC_TYPE, total_mode_label,
                          COLUMN_ASSETS,        _("Assets:"),
                          COLUMN_ASSETS_VALUE,  asset_amount_string,
                          COLUMN_PROFITS,       _("Profits:"),
                          COLUMN_PROFITS_VALUE, profit_amount_string,
                          -1);
+      g_free(total_mode_label);
     }
     gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
 			    GTK_TREE_MODEL(summary->datamodel));
