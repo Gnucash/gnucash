@@ -262,13 +262,16 @@ gnc_module_get_symbol(GModule* gmodule, const char* symbol, gpointer res)
 {
   gchar** strs;
   gchar* munged_symbol;
+  gchar *basename;
   gboolean ret;
 
   g_return_val_if_fail(gmodule, FALSE);
   g_return_val_if_fail(symbol, FALSE);
 
   /* Separate the file from its extension */
-  strs = g_strsplit(g_path_get_basename(g_module_name(gmodule)), ".", 2);  
+  basename = g_path_get_basename(g_module_name(gmodule));
+  strs = g_strsplit(basename, ".", 2);
+  g_free(basename);
 
   /* Translate any dashes to underscores */
   g_strdelimit(strs[0], "-", '_');
