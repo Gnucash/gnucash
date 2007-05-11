@@ -955,23 +955,30 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 	  if (*decided != raw)
 	    {
 	      char *locale_string = get_locale_string (LOCALE_STIMEFORMAT);
-	      if (!recursive (locale_string))
+	      char *posix_t_fmt = translate_picture (locale_string);
+
+	      free (locale_string);
+
+	      if (!recursive (posix_t_fmt))
 		{
 		  if (*decided == loc)
-		    return NULL;
+		    {
+		      free (posix_t_fmt);
+		      return NULL;
+		    }
 		  else
-		    rp = rp_backup;
+		    {
+		      rp = rp_backup;
+		    }
 		}
 	      else
 		{
-		  free (locale_string);
-		  locale_string = get_locale_string (LOCALE_STIMEFORMAT);
-		  if (strcmp (locale_string, HERE_T_FMT))
+		  if (strcmp (posix_t_fmt, HERE_T_FMT))
 		    *decided = loc;
-		  free (locale_string);
+		  free (posix_t_fmt);
 		  break;
 		}
-	      free (locale_string);
+	      free (posix_t_fmt);
 	      *decided = raw;
 	    }
 #endif
