@@ -639,7 +639,7 @@ gnc_find_or_create_equity_account (Account *root,
   }
 
   parent = gnc_account_lookup_by_name(root, _("Equity"));
-  if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
+  if (!parent || xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
     parent = root;
   g_assert(parent);
 
