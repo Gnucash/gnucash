@@ -42,4 +42,25 @@ gchar *qof_time_format_from_utf8(const gchar *utf8_format);
  */
 gchar *qof_formatted_time_to_utf8(const gchar *locale_string);
 
+
+#ifdef G_OS_WIN32
+
+typedef enum {
+  QOF_WIN32_PICTURE_DATE,
+  QOF_WIN32_PICTURE_TIME,
+  QOF_WIN32_PICTURE_DATETIME
+} QofWin32Picture;
+
+/** Get a strftime/strptime format specification for date, time or date and time,
+ *  according to the pictures for LOCALE_SSHORTDATE, LOCALE_STIMEFORMAT or a
+ *  combination of both with a space in between, respectively.
+ *
+ *  @param picture The type of spec requested.  Date, time or both.
+ *
+ *  @return The format specification as constant ASCII string.
+ */
+const char *qof_win32_get_time_format(QofWin32Picture picture);
+
+#endif /* G_OS_WIN32 */
+
 #endif /* __GNC_DATE_P_H__ */

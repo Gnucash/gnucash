@@ -49,8 +49,8 @@
 
 #include <windows.h>
 
-static char *
-get_locale_string (int lctype)
+char *
+get_win32_locale_string (int lctype)
 {
   int nbytes = GetLocaleInfo (GetThreadLocale (), lctype, NULL, 0);
   char *tem;
@@ -84,8 +84,8 @@ append_char (char **str, int *size, int *i, char c)
   (*str)[++(*i)] = '\0';
 }
 
-static char *
-translate_picture (const char *picture)
+char *
+translate_win32_picture (const char *picture)
 {
   int size = strlen (picture) * 2;
   char *str = malloc (size);
@@ -495,7 +495,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	      if (*decided !=raw)
 		{
-		  char *locale_string = get_locale_string (LOCALE_SDAYNAME1 + cnt);
+		  char *locale_string = get_win32_locale_string (LOCALE_SDAYNAME1 + cnt);
 		  if (match_string (locale_string, rp))
 		    {
 		      if (*decided == not
@@ -505,7 +505,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		      break;
 		    }
 		  free (locale_string);
-		  locale_string = get_locale_string (LOCALE_SABBREVDAYNAME1 + cnt);
+		  locale_string = get_win32_locale_string (LOCALE_SABBREVDAYNAME1 + cnt);
 		  if (match_string (locale_string, rp))
 		    {
 		      if (*decided == not
@@ -560,7 +560,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	      if (*decided !=raw)
 		{
-		  char *locale_string = get_locale_string (LOCALE_SMONTHNAME1 + cnt);
+		  char *locale_string = get_win32_locale_string (LOCALE_SMONTHNAME1 + cnt);
 		  if (match_string (locale_string, rp))
 		    {
 		      if (*decided == not
@@ -570,7 +570,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		      break;
 		    }
 		  free (locale_string);
-		  locale_string = get_locale_string (LOCALE_SABBREVMONTHNAME1 + cnt);
+		  locale_string = get_win32_locale_string (LOCALE_SABBREVMONTHNAME1 + cnt);
 		  if (match_string (locale_string, rp))
 		    {
 		      if (*decided == not
@@ -620,8 +620,8 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	  if (*decided != raw)
 	    {
-	      char *date_locale_string = get_locale_string (LOCALE_SSHORTDATE);
-	      char *time_locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+	      char *date_locale_string = get_win32_locale_string (LOCALE_SSHORTDATE);
+	      char *time_locale_string = get_win32_locale_string (LOCALE_STIMEFORMAT);
 	      int date_len = strlen (date_locale_string);
 	      int time_len = strlen (time_locale_string);
 	      char *d_t_fmt = malloc (date_len + time_len + 2);
@@ -633,7 +633,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 	      free (date_locale_string);
 	      free (time_locale_string);
 
-	      posix_d_t_fmt = translate_picture (d_t_fmt);
+	      posix_d_t_fmt = translate_win32_picture (d_t_fmt);
 
 	      free (d_t_fmt);
                      
@@ -712,8 +712,8 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	  if (*decided != raw)
 	    {
-	      char *locale_string = get_locale_string (LOCALE_SSHORTDATE);
-	      char *posix_d_fmt = translate_picture (locale_string);
+	      char *locale_string = get_win32_locale_string (LOCALE_SSHORTDATE);
+	      char *posix_d_fmt = translate_win32_picture (locale_string);
 
 	      free (locale_string);
 
@@ -809,7 +809,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	  if (*decided != raw)
 	    {
-	      char *locale_string = get_locale_string (LOCALE_S1159);
+	      char *locale_string = get_win32_locale_string (LOCALE_S1159);
 	      if (match_string (locale_string, rp))
 		{
 		  if (strcmp (locale_string, HERE_AM_STR))
@@ -818,7 +818,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 		  break;
 		}
 	      free (locale_string);
-	      locale_string = get_locale_string (LOCALE_S2359);
+	      locale_string = get_win32_locale_string (LOCALE_S2359);
 	      if (match_string (locale_string, rp))
 		{
 		  if (strcmp (locale_string, HERE_PM_STR))
@@ -861,7 +861,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	  if (*decided != raw)
 	    {
-	      char *locale_string = get_locale_string (LOCALE_STIMEFORMAT);
+	      char *locale_string = get_win32_locale_string (LOCALE_STIMEFORMAT);
 	      int locale_len = strlen (locale_string);
 	      char *t_p_fmt = malloc (locale_len + 4);
 	      char *posix_t_p_fmt;
@@ -869,7 +869,7 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 	      strncpy (t_p_fmt, locale_string, locale_len);
 	      strncat (t_p_fmt, " tt", 3);
 
-	      posix_t_p_fmt = translate_picture (t_p_fmt);
+	      posix_t_p_fmt = translate_win32_picture (t_p_fmt);
 
 	      free (t_p_fmt);
 
@@ -954,8 +954,8 @@ strptime_internal (rp, fmt, tm, decided, era_cnt)
 #elif defined (OS_WIN32)
 	  if (*decided != raw)
 	    {
-	      char *locale_string = get_locale_string (LOCALE_STIMEFORMAT);
-	      char *posix_t_fmt = translate_picture (locale_string);
+	      char *locale_string = get_win32_locale_string (LOCALE_STIMEFORMAT);
+	      char *posix_t_fmt = translate_win32_picture (locale_string);
 
 	      free (locale_string);
 

@@ -876,6 +876,9 @@ if test "x$DATADIRNAME" = "x"; then
   AC_SUBST(DATADIRNAME)
 fi
 
+dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
+LANGINFO_D_FMT_CHECK
+
 dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
   [  --enable-locale-specific-tax enable localized tax categories (experimental)],
