@@ -871,8 +871,8 @@ gnc_default_currency (void)
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
     g_free(mnemonic);
-    g_free(choice);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency ();
@@ -902,9 +902,9 @@ gnc_default_report_currency (void)
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
-    g_free(choice);
     g_free(mnemonic);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency (); 

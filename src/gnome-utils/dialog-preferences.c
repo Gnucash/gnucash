@@ -623,7 +623,8 @@ gnc_prefs_font_button_gconf_cb (GtkFontButton *fb,
 static void
 gnc_prefs_connect_font_button (GtkFontButton *fb)
 {
-  const gchar *name, *font;
+  const gchar *name;
+  gchar *font;
 
   g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
 
@@ -633,6 +634,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
   gtk_font_button_set_font_name(fb, font);
   DEBUG(" font_button %s set", name);
+  g_free(font);
 
   g_signal_connect(G_OBJECT(fb), "font_set",
 		   G_CALLBACK(gnc_prefs_font_button_user_cb), NULL);
@@ -1138,13 +1140,15 @@ gnc_prefs_entry_gconf_cb (GtkEntry *entry,
 static void
 gnc_prefs_connect_entry (GtkEntry *entry)
 {
-  const gchar *name, *text;
+  const gchar *name;
+  gchar *text;
 
   g_return_if_fail(GTK_IS_ENTRY(entry));
   name = gtk_widget_get_name(GTK_WIDGET(entry)) + PREFIX_LEN;
   text = gnc_gconf_get_string(name, NULL, NULL);
   gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
   DEBUG(" Entry %s set to '%s'", name?name:"(null)", text?text:"(null)");
+  g_free(text);
   g_signal_connect(G_OBJECT(entry), "changed",
 		   G_CALLBACK(gnc_prefs_entry_user_cb), NULL);
 }
