@@ -202,6 +202,7 @@ gnc_history_add_file (const char *newfile)
    * Store the new zero entry.
    */
   gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
+  g_free(to);
 }
 
 
