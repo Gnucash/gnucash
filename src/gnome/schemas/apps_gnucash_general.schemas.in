@@ -518,7 +518,7 @@
       <type>bool</type>
       <default>false</default>
       <locale name="C">
-        <short>Allow file incompatability with older versions.</short>
+        <short>Allow file incompatibility with older versions.</short>
         <long>If active, gnucash will be allowed to intentionally
         break file compatibility with older versions, so that a data
         file saved in this version cannot be read by an older version
