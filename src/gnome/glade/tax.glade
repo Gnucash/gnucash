@@ -5,7 +5,7 @@
 <requires lib="gnome"/>
 
 <widget class="GtkDialog" id="Tax Information Dialog">
-  <property name="visible">True</property>
+  <property name="visible">False</property>
   <property name="title" translatable="yes">Tax Information</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
