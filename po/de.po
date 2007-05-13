@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-11 22:49+0200\n"
-"PO-Revision-Date: 2007-04-28 12:09+0200\n"
+"PO-Revision-Date: 2007-05-13 15:20+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3270,14 +3270,14 @@ msgstr "_Wert: "
 #: ../src/core-utils/gnc-gkeyfile-utils.c:111
 #, c-format
 msgid "Value '%s' cannot be interpreted as a float number."
-msgstr ""
+msgstr "Wert »%s« kann nicht als Gleitkommazahl ausgewertet werden."
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:154
 #, c-format
 msgid ""
 "Key file contains key '%s' in group '%s' which has a value that cannot be "
 "interpreted."
-msgstr ""
+msgstr "Die Einstellungsdatei enthält einen Eintrag (key) »%s« in Gruppe »%s«, der nicht ausgewertet werden kann."
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3634 ../src/import-export/hbci/gnc-hbci-utils.c:900
@@ -3599,7 +3599,7 @@ msgstr "Halbmonatlich"
 #: ../src/engine/Recurrence.c:506
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr ""
+msgstr "Unbekannt, Liste mit %d Einträgen."
 
 #: ../src/engine/Recurrence.c:517 ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Once"
@@ -4373,7 +4373,7 @@ msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
 
 #: ../src/gnome/glade/account.glade.h:1
 msgid "<b>Acco_unt Type</b>"
-msgstr "<b>Konto_art</b>"
+msgstr "<b>K_ontoart</b>"
 
 #: ../src/gnome/glade/account.glade.h:2
 msgid "<b>Balance Information</b>"
@@ -4422,7 +4422,7 @@ msgstr "<b>Buchungen</b>"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "<b>_Parent Account</b>"
-msgstr "<b>_Hauptkonto</b>"
+msgstr "<b>Ha_uptkonto</b>"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -4433,7 +4433,7 @@ msgstr "Kontoart"
 
 #: ../src/gnome/glade/account.glade.h:15
 msgid "Account _name:"
-msgstr "Konto_bezeichnung:"
+msgstr "Kontobe_zeichnung:"
 
 #: ../src/gnome/glade/account.glade.h:16
 msgid "C_lear All"
@@ -4755,6 +4755,14 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
+"Wie Aktie/Währung\n"
+"1\n"
+"1/10\n"
+"1/100\n"
+"1/1000\n"
+"1/10000\n"
+"1/100000\n"
+"1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:77
 msgid "_Account code:"
@@ -4790,7 +4798,7 @@ msgstr "Neu _nummerieren"
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:270
 msgid "_Security/currency:"
-msgstr "_Aktie/Währung:"
+msgstr "Aktie/_Währung:"
 
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
@@ -5104,6 +5112,17 @@ msgid ""
 "Daily (360)\n"
 "Daily (365)"
 msgstr ""
+"Jährlich\n"
+"Halbjährlich\n"
+"Dreimal im Jahr\n"
+"Vierteljährlich\n"
+"Alle zwei Monate\n"
+"Monatlich\n"
+"Halbmonatlich\n"
+"Alle zwei Wochen\n"
+"Wöchentlich\n"
+"Täglich (360 Tage)\n"
+"Täglich (365 Tage)"
 
 #: ../src/gnome/glade/fincalc.glade.h:18
 msgid "Beginning"
@@ -5606,9 +5625,8 @@ msgstr ""
 "Punkte"
 
 #: ../src/gnome/glade/print.glade.h:11
-#, fuzzy
 msgid "New Check Format Title"
-msgstr "Scheckformular kann nicht gespeichert werden."
+msgstr "Titel des neuen Scheckformats"
 
 #: ../src/gnome/glade/print.glade.h:13
 msgid "Pa_yee:"
@@ -6139,6 +6157,45 @@ msgid ""
 "Last Saturday\n"
 "Last Sunday"
 msgstr ""
+"1.\n"
+"2.\n"
+"3.\n"
+"4.\n"
+"5.\n"
+"6.\n"
+"7.\n"
+"8.\n"
+"9.\n"
+"10.\n"
+"11.\n"
+"12.\n"
+"13.\n"
+"14.\n"
+"15.\n"
+"16.\n"
+"17.\n"
+"18.\n"
+"19.\n"
+"20.\n"
+"21.\n"
+"22.\n"
+"23.\n"
+"24.\n"
+"25.\n"
+"26.\n"
+"27.\n"
+"28.\n"
+"29.\n"
+"30.\n"
+"31.\n"
+"Letzter Tag des Monats\n"
+"Letzter Montag\n"
+"Letzter Dienstag\n"
+"Letzter Mittwoch\n"
+"Letzter Donnerstag\n"
+"Letzter Freitag\n"
+"Letzter Samstag\n"
+"Letzter Sonntag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:44
 msgid "<b>End</b>"
@@ -6240,6 +6297,10 @@ msgid ""
 "Whole Loan\n"
 "Custom"
 msgstr ""
+"Dieses Jahr\n"
+"Heute in einem Jahr\n"
+"Gesamtes Darlehen\n"
+"Benutzerdefiniert"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid ""
@@ -6250,6 +6311,12 @@ msgid ""
 "Quarterly\n"
 "Yearly"
 msgstr ""
+"Täglich\n"
+"Wöchentlich\n"
+"Zweiwöchentlich\n"
+"Monatlich\n"
+"Vierteljährlich\n"
+"Jährlich"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -6401,6 +6468,12 @@ msgid ""
 "Semi-Monthly\n"
 "Monthly"
 msgstr ""
+"Nie\n"
+"Einmalig\n"
+"Täglich\n"
+"Wöchentlich\n"
+"Halbmonatlich\n"
+"Monatlich"
 
 #: ../src/gnome/glade/sched-xact.glade.h:125
 msgid "Not scheduled"
@@ -7054,14 +7127,14 @@ msgstr "_Tipp des Tages"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:160
 msgid "View the Tips of the Day"
-msgstr "Anzeigen des »Tipp des Tages?«"
+msgstr "»Tipp des Tages« anzeigen"
 
 #. Translators: %d is the error number; %s is the error message as
 #. text.
 #: ../src/gnome/gnc-plugin-basic-commands.c:377
 #, c-format
 msgid "Error: Loading failed, error code %d - %s."
-msgstr ""
+msgstr "Fehler beim Laden: Fehlercode %d, »%s«."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:399
 msgid "Select the QSF file to import into GnuCash"
@@ -7502,18 +7575,16 @@ msgid "Account Report"
 msgstr "Kontenbericht"
 
 #: ../src/gnome/gnc-plugin-page-register.c:258
-#, fuzzy
 msgid "Open a register report for this Account"
-msgstr "Kontobuch als Bericht für diesen Buchungssatz öffnen"
+msgstr "Kontobuch als Bericht für dieses Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:260
 msgid "Account Transaction Report"
 msgstr "Buchungsbericht"
 
 #: ../src/gnome/gnc-plugin-page-register.c:261
-#, fuzzy
 msgid "Open a register report for the selected Transaction"
-msgstr "Kontobuch als Bericht für diesen Buchungssatz öffnen"
+msgstr "Kontobuch als Bericht für den gewählten Buchungssatz öffnen"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:286
@@ -7669,10 +7740,8 @@ msgstr "Ausgewählte terminierte Buchung löschen"
 #. to-be-deleted SXs should be mentioned here; see
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:571
-#, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr ""
-"Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie die ausgewählte Terminierte Buchung löschen wollen?"
 
 #: ../src/gnome/gnc-plugin-register.c:48
 msgid "_General Ledger"
@@ -8160,15 +8229,15 @@ msgstr "Position der Zahlungsempfänger-Zeile"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after strings."
-msgstr ""
+msgstr "Vor und nach den Worten »***« drucken."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid "Print the date format below the date."
-msgstr ""
+msgstr "Datumsformat unter das Datum drucken."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:15
 msgid "The default check printing font"
-msgstr ""
+msgstr "Voreingestellte Schriftart zum Scheck drucken"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
 msgid ""
@@ -8375,7 +8444,7 @@ msgstr "Konten mit Vorzeichenumkehr"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
 msgid "Allow file incompatability with older versions."
-msgstr ""
+msgstr "Inkompatibles Dateiformat erlauben."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
 msgid "Automatically insert a decimal point"
@@ -8482,13 +8551,10 @@ msgstr ""
 "Werkzeugleiste verwendet wird oder der Menüpunkt im Menü »Datei«."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
-#, fuzzy
 msgid ""
 "If active, a splash screen will be shown at startup. Otherwise no splash "
 "screen will be shown."
-msgstr ""
-"Wenn gewählt wird der »Neue Benutzer« Dialog angezeigt. Andernfalls wird er "
-"nicht angezeigt."
+msgstr "Wenn gewählt wird der Begrüßungsbildschirm (Splash Screen) angezeigt. Andernfalls wird er nicht angezeigt."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
 msgid ""
@@ -10746,7 +10812,7 @@ msgstr "Alte Log/Sicherungsdateien nach so vielen Tagen löschen (0 = niemals)."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Anzeigen des »Tipp des Tages«"
+msgstr "»Tipp des Tages« anzeigen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:57
 msgid "Display hints for using GnuCash at startup"
@@ -22828,6 +22894,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "Custom Check"
-#~ msgstr "Benutzerdefiniertes Scheckformular"
