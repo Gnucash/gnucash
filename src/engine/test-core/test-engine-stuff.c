@@ -448,9 +448,9 @@ get_random_gnc_numeric(void)
     }
     else
     {
-       gint64 norm = RAND_IN_RANGE (10ULL);
+       gint64 norm = RAND_IN_RANGE (8ULL);
 
-       /* multiple of 10, between 1 and 10 000 million */
+       /* multiple of 10, between 1 and 10 million */
        deno = 1;
        while (norm) 
        {
@@ -462,7 +462,7 @@ get_random_gnc_numeric(void)
     /* Arbitrary random numbers can cause pointless overflow 
      * during calculations.  Limit dynamic range in hopes 
      * of avoiding overflow. */
-    numer = get_random_gint64()/100000;
+    numer = get_random_gint64()/1000000;
     if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
