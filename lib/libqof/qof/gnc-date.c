@@ -632,7 +632,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 
    /* Use strtok to find delimiters */
    if (tmp) {
-     static char *delims = ".,-+/\\() ";
+     static char *delims = ".,-+/\\()년월年月 ";
 
       first_field = strtok (tmp, delims);
       if (first_field) {
