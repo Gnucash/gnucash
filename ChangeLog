@@ -6,6 +6,9 @@
 	  there is small interval in the middle where any call to get the
 	  current book will get bogus results.  Fixes #414783.
 
+	* Remember the current session when an option dialog boxes is opened,
+	  and close it when the session is closed.  Fixes #394074.
+
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Disable the close callback while updating reports.  Fixes #416986.
