@@ -126,6 +126,7 @@
 ( "Mauritanian Ouguiya" "ouguiya" "khoum"  "ISO4217" "MRO" "478" 5 5)
 ( "Mauritius Rupee" "rupee" "cent"  "ISO4217" "MUR" "480" 100 100 )
 ( "Mexican Peso" "peso" "centavo" "ISO4217" "MXN" "484" 100 100 ) ;;sicne Jan 1993
+( "Moldovan Leu" "leu" "ban" "ISO4217" "MDL" "498" 100 100 )
 ( "Mongolian Tugrik" "tugrik" "mongo" "ISO4217" "MNT" "496" 100 100 )
 ( "Moroccan Dirham" "dirham" "centime"  "ISO4217" "MAD" "504" 100 100 )
 ( "Mozambique Metical" "metical" "centavo"  "ISO4217" "MZM" "508" 100 100 )

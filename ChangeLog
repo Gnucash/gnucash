@@ -18,6 +18,8 @@
 	  in the exchange rate field, just pull the the existing number
 	  straight out of the widget.  Fixes #408703.
 
+	* Add the Moldovan Leu.  Fixes #414064.
+
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Disable the close callback while updating reports.  Fixes #416986.
