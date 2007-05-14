@@ -11,7 +11,13 @@
 
 	* Changing the transaction number can affect the split sort order and
 	  thus the running account balances.  Fixes #386074.
- 
+
+	* Use simpler behavior for setting the "1 xxx = 2 yyy" exchange
+	  rate sample strings in the lower right corner of the transfer
+	  dialog.  Don't try and duplicate the logic that sets the number
+	  in the exchange rate field, just pull the the existing number
+	  straight out of the widget.  Fixes #408703.
+
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Disable the close callback while updating reports.  Fixes #416986.
