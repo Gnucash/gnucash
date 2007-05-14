@@ -9,6 +9,9 @@
 	* Remember the current session when an option dialog boxes is opened,
 	  and close it when the session is closed.  Fixes #394074.
 
+	* Changing the transaction number can affect the split sort order and
+	  thus the running account balances.  Fixes #386074.
+ 
 2007-04-21  David Hampton  <hampton@employees.org>
 
 	* Disable the close callback while updating reports.  Fixes #416986.
