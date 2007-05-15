@@ -1083,10 +1083,11 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
                  _("There is a duplicate check format file."));
             gtk_message_dialog_format_secondary_text
                 (GTK_MESSAGE_DIALOG(dialog),
-		 /* Translators: %1$s is the name of the first check
-		    format; %2$s is the filename of that format; %3$s
-		    the name of the other check format; and %4$s the
-		    filename of that other format. */
+		 /* Translators: %1$s is the type of the first check
+		  * format (user defined or application defined); %2$s
+		  * is the filename of that format; %3$s the type of
+		  * the other check format; and %4$s the filename of
+		  * that other format. */
                  _("The guids in the %s check format file '%s' and "
                    "the %s check format file '%s' match."),
                  existing->group, existing->filename,
@@ -1121,15 +1122,16 @@ read_formats(PrintCheckDialog * pcd, GtkListStore *store)
 
     pkgdatadir = gnc_path_get_pkgdatadir();
     dirname = g_build_filename(pkgdatadir, CHECK_FMT_DIR, (char *)NULL);
-    /* Translators: This is a directory name. FIXME: Should this
-       really be translated?!? */
+    /* Translators: This string may be presented to the user to
+     * indicate that a check file format was defined by the gnucash
+     * application. */
     read_one_check_directory(pcd, store, _("application"), dirname);
     g_free(dirname);
     g_free(pkgdatadir);
 
     dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
-    /* Translators: This is a directory name. FIXME: Should this
-       really be translated?!? */
+    /* Translators: This string may be presented to the user to
+     * indicate that a check file format was defined by a user. */
     read_one_check_directory(pcd, store, _("user"), dirname);
     g_free(dirname);
 }
