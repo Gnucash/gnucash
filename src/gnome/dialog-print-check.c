@@ -74,8 +74,7 @@
 
 #define DEFAULT_FONT            "sans 12"
 #define CHECK_FMT_DIR           "checks"
-#define CUSTOM_CHECK_NAME       "custom.chk"
-#define CHECK_NAME_FILTER       "*.chk"
+#define CHECK_NAME_EXTENSION    ".chk"
 #define DEGREES_TO_RADIANS      (G_PI / 180.0)
 
 #define KF_GROUP_TOP       "Top"
@@ -126,6 +125,7 @@ void gnc_print_check_format_changed(GtkComboBox *widget, PrintCheckDialog * pcd)
 void gnc_print_check_save_button_clicked(GtkButton *button, PrintCheckDialog *pcd);
 void gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button);
 
+static void initialize_format_combobox (PrintCheckDialog * pcd);
 
 /** This enum defines the types of items that gnucash knows how to
  *  print on checks.  Most refer to specific fields from a gnucash
@@ -496,9 +496,7 @@ pcd_key_file_save_item_xy (GKeyFile *key_file, int index,
 /** Save all of the information from the custom check dialog into a check
  *  description file. */
 static void
-pcd_save_custom_data(PrintCheckDialog *pcd,
-                     const gchar *filename,
-                     const gchar *title)
+pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
 {
     GKeyFile *key_file;
     GError *error = NULL;
@@ -507,6 +505,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd,
     gint i = 1;
     GUID guid;
     char buf[GUID_ENCODING_LENGTH+1];
+    gchar *filename, *pathname;
+    GtkTreeModel *model;
 
     multip = pcd_get_custom_multip(pcd);
 
@@ -533,7 +533,17 @@ pcd_save_custom_data(PrintCheckDialog *pcd,
     pcd_key_file_save_item_xy(key_file, i++, NOTES, multip,
                               pcd->notes_x, pcd->notes_y);
 
-    if (!gnc_key_file_save_to_file(filename, key_file, &error)) {
+    filename = g_strconcat(title, CHECK_NAME_EXTENSION, NULL);
+    pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR, 
+                                filename, NULL);
+
+    if (gnc_key_file_save_to_file(pathname, key_file, &error)) {
+        /* Reload the format combo box and reselect the "custom" entry */
+        initialize_format_combobox(pcd);
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(pcd->format_combobox));
+        gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->format_combobox),
+                                 pcd->format_max - 1);
+    } else {
         dialog = gtk_message_dialog_new(GTK_WINDOW(pcd->dialog),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
@@ -545,6 +555,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd,
         gtk_widget_destroy(dialog);
         g_error_free(error);
     }
+    g_free(pathname);
+    g_free(filename);
 }
 
 
@@ -567,11 +579,9 @@ gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
 void
 gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 {
-    GtkFileChooser *chooser;
-    GtkFileFilter *filter;
     GtkWidget *dialog, *entry, *button;
     GladeXML *xml;
-    gchar *check_dir, *filename, *title;
+    gchar *title;
 
     /* Get a title for the new check format. */
     xml = gnc_glade_xml_new ("print.glade", "Format Title Dialog");
@@ -588,42 +598,11 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
         return;
     }
 
-    /* Now get the filename. */
     title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
     gtk_widget_destroy (dialog);
     g_object_unref(xml);
 
-    dialog = gtk_file_chooser_dialog_new(_("Save Check Description"),
-                                         GTK_WINDOW(pcd->dialog),
-                                         GTK_FILE_CHOOSER_ACTION_SAVE,
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                                         NULL);
-    chooser = GTK_FILE_CHOOSER(dialog);
-
-    check_dir = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR, NULL);
-    gtk_file_chooser_set_current_folder(chooser, check_dir);
-    gtk_file_chooser_set_current_name(chooser, CUSTOM_CHECK_NAME);
-    g_free(check_dir);
-
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, CHECK_NAME_FILTER);
-    gtk_file_filter_add_pattern(filter, CHECK_NAME_FILTER);
-    gtk_file_chooser_add_filter(chooser, filter);
-
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, _("All Files"));
-    gtk_file_filter_add_pattern(filter, "*");
-    gtk_file_chooser_add_filter(chooser, filter);
-
-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
-        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        pcd_save_custom_data(pcd, filename, title);
-        g_free(filename);
-    }
-
-    gtk_widget_destroy (dialog);
+    pcd_save_custom_data(pcd, title);
     g_free(title);
 }
 
@@ -1165,6 +1144,23 @@ format_is_a_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
     return separator;
 }
 
+static void
+initialize_format_combobox (PrintCheckDialog * pcd)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+
+  store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+  read_formats(pcd, store);
+  gtk_list_store_append(store, &iter);
+  gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
+  pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store),NULL);
+  gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
+                          GTK_TREE_MODEL(store));
+  gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
+                                       format_is_a_separator, NULL, NULL);
+}
+
 
 /********************************************************************\
  * gnc_ui_print_check_dialog_create
@@ -1179,8 +1175,6 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   GladeXML *xml;
   GtkWidget *table;
   GtkWindow *window;
-  GtkListStore *store;
-  GtkTreeIter iter;
   gchar *font;
 
   pcd = g_new0(PrintCheckDialog, 1);
@@ -1233,15 +1227,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   pcd->default_font = font ? font : g_strdup(DEFAULT_FONT);
 
   /* Update the combo boxes bases on the available check formats */
-  store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
-  read_formats(pcd, store);
-  gtk_list_store_append(store, &iter);
-  gtk_list_store_set(store, &iter, COL_NAME, _("Custom"), -1);
-  pcd->format_max = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store),NULL);
-  gtk_combo_box_set_model(GTK_COMBO_BOX(pcd->format_combobox),
-                          GTK_TREE_MODEL(store));
-  gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(pcd->format_combobox),
-                                       format_is_a_separator, NULL, NULL);
+  initialize_format_combobox(pcd);
 
 #if USE_GTKPRINT
   gtk_widget_destroy(glade_xml_get_widget (xml, "lower_left"));
