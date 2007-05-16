@@ -50,6 +50,7 @@ EXTRA_DIST = \
   po/gnucash.pot \
   po/POTFILES.in \
   po/POTFILES.skip \
+  po/POTFILES.ignore \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
