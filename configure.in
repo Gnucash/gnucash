@@ -1103,9 +1103,11 @@ then
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
 
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
-        AC_MSG_ERROR([Cannot find libgoffice.])
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.4 >= 0.4.0, [], [
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
+        PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
+          AC_MSG_ERROR([Cannot find libgoffice.])
+        ])
       ])
     ])
     AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
