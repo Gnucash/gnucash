@@ -471,8 +471,7 @@ inner_main (void *closure, int argc, char **argv)
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
         gnc_destroy_splash_screen();
-        if (!gnc_file_open_file(fn))
-            gnc_history_remove_file(fn);
+        gnc_file_open_file(fn);
         g_free(fn);
     } 
     else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error)
