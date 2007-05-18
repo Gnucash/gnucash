@@ -1888,9 +1888,10 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   }
 
   /* actually add in the new transactions. */
-  scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc-get-current-root-account)"),
-	     wind->imported_account_tree);
+  if (wind->imported_account_tree != SCM_BOOL_F)
+    scm_call_2(cat_and_merge,
+	       scm_c_eval_string("(gnc-get-current-root-account)"),
+	       wind->imported_account_tree);
   
   gnc_resume_gui_refresh();
   
