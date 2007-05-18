@@ -722,7 +722,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     else if( account_type_has_auto_interest_charge( data.account_type ) )
       gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge...") );
     else {
-      gtk_widget_hide(interest);
+      gtk_widget_destroy(interest);
       interest = NULL;
     }
 
