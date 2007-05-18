@@ -108,6 +108,7 @@ static void gnc_main_window_destroy (GtkObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
+static void gnc_main_window_update_all_menu_items (void);
 
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
@@ -1287,6 +1288,8 @@ gnc_main_window_attach_to_book (QofSession *session)
 
   book = qof_session_get_book(session);
   qof_book_set_dirty_cb(book, gnc_main_window_book_dirty_cb, NULL);
+  gnc_main_window_update_all_titles();
+  gnc_main_window_update_all_menu_items();
 }
 
 
