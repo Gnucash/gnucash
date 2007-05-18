@@ -1815,8 +1815,11 @@ void
 gnc_xfer_dialog_set_information_label( XferDialog *xferData,
 				       const gchar *text )
 {
-  if(xferData && text)
-    gtk_label_set_label (GTK_LABEL (xferData->transferinfo_label), text);
+  if(xferData && text) {
+    gchar *markup_text = g_strdup_printf ("<b>%s</b>", text);
+    gtk_label_set_markup (GTK_LABEL (xferData->transferinfo_label), markup_text);
+    g_free (markup_text);
+  }
 }
 
 
@@ -1825,11 +1828,14 @@ gnc_xfer_dialog_set_account_label( XferDialog *xferData,
 				   const gchar *text,
 				   XferDirection direction )
 {
-  if(xferData && text)
-    gtk_label_set_text (GTK_LABEL ((direction == XFER_DIALOG_FROM ?
-				    xferData->from_transfer_label :
-				    xferData->to_transfer_label)),
-		    	text);
+  if(xferData && text) {
+    gchar *markup_text = g_strdup_printf ("<b>%s</b>", text);
+    gtk_label_set_markup (GTK_LABEL ((direction == XFER_DIALOG_FROM ?
+				      xferData->from_transfer_label :
+				      xferData->to_transfer_label)),
+			  markup_text);
+    g_free (markup_text);
+  }
 }
 
 void
