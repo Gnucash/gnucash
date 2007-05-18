@@ -247,7 +247,7 @@
         (from-child #f))
 
     (define (start-program)
-      (if (not (null? gnc:*finance-quote-check*))
+      (if (not (string-null? gnc:*finance-quote-check*))
           (set! program (gnc-spawn-process-async
                          (list "perl" "-w" gnc:*finance-quote-check*) #t))))
 
@@ -331,7 +331,7 @@
         (from-child #f))
 
     (define (start-quoter)
-      (if (not (null? gnc:*finance-quote-helper*))
+      (if (not (string-null? gnc:*finance-quote-helper*))
           (set! quoter (gnc-spawn-process-async
                         (list "perl" "-w" gnc:*finance-quote-helper*) #t))))
 
