@@ -1485,6 +1485,8 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
 {
   if (!win) return;
 
+  gnc_unregister_gui_component_by_data(DIALOG_OPTIONS_CM_CLASS, win);
+
   gtk_widget_destroy(win->dialog);
 
   if(win->tips) {
