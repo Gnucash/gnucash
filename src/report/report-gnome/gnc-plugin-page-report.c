@@ -57,6 +57,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-report.h"
+#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
@@ -85,6 +86,7 @@ typedef struct GncPluginPageReportPrivate
 {
         /// The report-id
         int reportId;
+        gint component_manager_id;
 
         /// The report which this Page is satisifying
         SCM cur_report;
@@ -334,8 +336,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         gtk_container_add(GTK_CONTAINER(priv->container), 
                           gnc_html_get_widget(priv->html));
   
-        gnc_register_gui_component( WINDOW_REPORT_CM_CLASS, NULL,
-                                    close_handler, priv );
+        priv->component_manager_id =
+          gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, NULL,
+                                     close_handler, page);
+        gnc_gui_component_set_session(priv->component_manager_id,
+                                      gnc_get_current_session());
   
         gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
         gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
@@ -643,6 +648,13 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 
         PINFO("destroy widget");
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+
+        if (priv->component_manager_id) {
+                gnc_unregister_gui_component(priv->component_manager_id);
+                priv->component_manager_id = 0;
+        }
+
+        gnc_plugin_page_report_destroy(priv);
         gnc_report_remove_by_id(priv->reportId);
 }
 
@@ -902,8 +914,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         SCM  set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
         SCM  edited, editor; 
 
-        gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, priv);
-
         /* close any open editors */
         for (edited = scm_list_copy(priv->edited_reports); !SCM_NULLP(edited);
              edited = SCM_CDR(edited)) {
@@ -1125,9 +1135,9 @@ gnc_plugin_page_report_raise_editor(SCM report)
 static void
 close_handler (gpointer user_data)
 {
-        GncPluginPageReportPrivate *priv = user_data;  
+        GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
         DEBUG("in close handler\n");
-        gnc_plugin_page_report_destroy (priv);
+        gnc_main_window_close_page (plugin_page);
 }
 
 static void
