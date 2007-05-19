@@ -147,6 +147,7 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
+static void gnc_plugin_page_register_close_cb (gpointer user_data);
 
 static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
 static void gppr_account_destroy_cb (Account *account);
@@ -751,7 +752,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
-				     NULL, page);
+				     gnc_plugin_page_register_close_cb,
+				     page);
 	gnc_gui_component_set_session (priv->component_manager_id,
 				       gnc_get_current_session());
 	acct = gnc_plugin_page_register_get_account(page);
@@ -2810,6 +2812,13 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   }
 
   gnc_plugin_page_register_ui_update(NULL, page);
+}
+
+static void
+gnc_plugin_page_register_close_cb (gpointer user_data)
+{
+  GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
+  gnc_main_window_close_page (plugin_page);
 }
 
 /** This function is called when an account has been edited and an
