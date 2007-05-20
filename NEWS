@@ -1,12 +1,13 @@
 Version history:
 ------- -------
 
- 2.1.2 - 13 May 2007
- 	 o Welcome to GnuCash 2.1.2 aka "Mother's Day"the third of several
-	 unstable releasesof the GnuCash Open Source Accounting Software which
-	 will eventually lead to the stable version 2.2.0. With this new
-	 release series, GnuCash is available on Microsoft Windows for the
-	 first time, and it also runs on GNU/Linux, *BSD, Solaris and Mac OSX.
+ 2.1.2 - 19 May 2007
+ 	 o Welcome to GnuCash 2.1.2 aka "Financially secure yet?"the third of
+	 several unstable releases of the GnuCash Open Source Accounting 
+	 Software which will eventually lead to the stable version 2.2.0.
+	 With this new release series, GnuCash is available on Microsoft 
+	 Windows for the first time, and it also runs on GNU/Linux, *BSD, 
+	 Solaris and Mac OSX.
 	 This release is intended for developers and testers who want to help
 	 tracking down bugs.
 	 o WARNING: Make sure you make backups of any files used in testing
