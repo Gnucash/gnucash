@@ -14,6 +14,7 @@
       <placeholder name="FileSavePlaceholder">
         <menuitem name="FileSave" action="FileSaveAction"/>
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
+        <menuitem name="FileSaveGDA" action="FileSaveGDAAction"/>
       </placeholder>
       <menu name="FileImport" action="FileImportAction">
         <menuitem name="FileImportQSF" action="FileImportQSFAction"/>

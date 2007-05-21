@@ -204,8 +204,8 @@ create_prices_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 
-static void
-commit_price( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_price( GncGdaBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
 
@@ -228,7 +228,7 @@ gnc_gda_init_price_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_PRICE,
-        commit_price,            /* commit */
+        gnc_gda_save_price,            /* commit */
         load_all_prices,            /* initial_load */
         create_prices_tables    /* create tables */
     };

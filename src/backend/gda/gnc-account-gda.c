@@ -205,8 +205,8 @@ create_account_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-static void
-commit_account( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;
@@ -242,7 +242,7 @@ gnc_gda_init_account_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
-        commit_account,				/* commit */
+        gnc_gda_save_account,				/* commit */
         load_all_accounts,				/* initial_load */
         create_account_tables		/* create_tables */
     };

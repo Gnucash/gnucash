@@ -127,6 +127,7 @@ void gnc_file_new (void);
 gboolean gnc_file_open (void);
 void gnc_file_save (void);
 void gnc_file_save_as (void);
+void gnc_file_do_save_as(const char* filename);
 
 /** Tell the user about errors in the backends
 

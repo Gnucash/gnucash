@@ -47,6 +47,7 @@
 #include "gnc-commodity-gda.h"
 #include "gnc-lots-gda.h"
 #include "gnc-price-gda.h"
+#include "gnc-pricedb.h"
 #include "gnc-schedxaction-gda.h"
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
@@ -243,8 +244,107 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 
 /* ================================================================= */
 
+static gint
+compare_namespaces(gconstpointer a, gconstpointer b)
+{
+  const gchar *sa = (const gchar *) a;
+  const gchar *sb = (const gchar *) b;
+  return(safe_strcmp(sa, sb));
+}
+
+static gint
+compare_commodity_ids(gconstpointer a, gconstpointer b)
+{
+  const gnc_commodity *ca = (const gnc_commodity *) a;
+  const gnc_commodity *cb = (const gnc_commodity *) b;
+  return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
+                     gnc_commodity_get_mnemonic(cb)));
+}
+
 static void
-gnc_gda_sync_all(QofBackend* be, QofBook *book)
+save_commodities( GncGdaBackend* be, QofBook* book )
+{
+    gnc_commodity_table* tbl;
+    GList* namespaces;
+    GList* lp;
+
+    tbl = gnc_book_get_commodity_table( book );
+    namespaces = gnc_commodity_table_get_namespaces( tbl );
+    if( namespaces != NULL ) {
+        namespaces = g_list_sort( namespaces, compare_namespaces );
+    }
+    for( lp = namespaces; lp != NULL; lp = lp->next ) {
+        GList* comms;
+        GList* lp2;
+        
+        comms = gnc_commodity_table_get_commodities( tbl, lp->data );
+        comms = g_list_sort( comms, compare_commodity_ids );
+
+        for( lp2 = comms; lp2 != NULL; lp2 = lp2->next ) {
+	    gnc_gda_save_commodity( be, GNC_COMMODITY(lp2->data) );
+        }
+    }
+}
+
+static void
+save_account_tree( GncGdaBackend* be, Account* root )
+{
+    GList* descendants;
+    GList* node;
+
+    descendants = gnc_account_get_descendants( root );
+    for( node = descendants; node != NULL; node = g_list_next(node) ) {
+        gnc_gda_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
+    }
+    g_list_free( descendants );
+}
+
+static void
+save_accounts( GncGdaBackend* be, QofBook* book )
+{
+    save_account_tree( be, gnc_book_get_root_account( book ) );
+}
+
+static void
+save_budgets( GncGdaBackend* be, QofBook* book )
+{
+}
+
+static gboolean
+save_price( GNCPrice* p, gpointer data )
+{
+    GncGdaBackend* be = (GncGdaBackend*)data;
+
+    gnc_gda_save_price( be, QOF_INSTANCE(p) );
+
+    return TRUE;
+}
+
+static void
+save_prices( GncGdaBackend* be, QofBook* book )
+{
+    GNCPriceDB* priceDB = gnc_book_get_pricedb( book );
+
+    gnc_pricedb_foreach_price( priceDB, save_price, be, TRUE );
+}
+
+static void
+save_transactions( GncGdaBackend* be, QofBook* book )
+{
+}
+
+static void
+save_template_transactions( GncGdaBackend* be, QofBook* book )
+{
+}
+
+static void
+save_schedXactions( GncGdaBackend* be, QofBook* book )
+{
+}
+
+static void
+gnc_gda_sync_all( QofBackend* be, QofBook *book )
 {
     GncGdaBackend *fbe = (GncGdaBackend *) be;
     GdaDataModel* tables;
@@ -279,6 +379,12 @@ gnc_gda_sync_all(QofBackend* be, QofBook *book)
         }
     }
 
+    // Update the dictionary because new tables may exist
+    gda_dict_update_dbms_meta_data( fbe->pDict, 0, NULL, &error );
+    if( error != NULL ) {
+        g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+    }
+
     /* Create new tables */
     be_data.ok = FALSE;
     be_data.be = fbe;
@@ -292,12 +398,13 @@ gnc_gda_sync_all(QofBackend* be, QofBook *book)
     }
 
     /* Save all contents */
-
-    /* Accounts */
-    /* Prices */
-    /* Budgets */
-    /* Sched tx */
-    /* Transactions */
+    //save_commodities( fbe, book );
+    save_accounts( fbe, book );
+    save_prices( fbe, book );
+    save_transactions( fbe, book );
+    save_template_transactions( fbe, book );
+    save_schedXactions( fbe, book );
+    save_budgets( fbe, book );
 
     LEAVE ("book=%p", book);
 }

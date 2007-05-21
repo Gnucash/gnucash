@@ -69,7 +69,7 @@ static col_cvt_t col_table[] = {
     { "fullname",        CT_STRING,    COMMODITY_MAX_FULLNAME_LEN, COL_NNUL,    NULL,
             (QofAccessFunc)gnc_commodity_get_fullname,
             (QofSetterFunc)gnc_commodity_set_fullname },
-    { "cusip",            CT_STRING,    COMMODITY_MAX_CUSIP_LEN, COL_NNUL,    NULL,
+    { "cusip",            CT_STRING,    COMMODITY_MAX_CUSIP_LEN, 0,    NULL,
             (QofAccessFunc)gnc_commodity_get_cusip,
             (QofSetterFunc)gnc_commodity_set_cusip },
     { "fraction",        CT_INT,        0, COL_NNUL,    NULL,
@@ -198,7 +198,8 @@ is_commodity_in_db( GncGdaBackend* be, gnc_commodity* pCommodity )
                                 pCommodity, col_table );
 }
 
-void gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
+void
+gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
 {
     if( !is_commodity_in_db( be, pCommodity ) ) {
         commit_commodity( be, QOF_INSTANCE(pCommodity) );

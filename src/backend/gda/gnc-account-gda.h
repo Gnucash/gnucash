@@ -33,5 +33,6 @@
 #include <gmodule.h>
 
 void gnc_gda_init_account_handler( void );
+void gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst );
 
 #endif /* GNC_ACCOUNT_GDA_H_ */
