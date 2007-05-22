@@ -188,6 +188,7 @@ intl-scm/guile-strings.c:
 SVN = svn
 XSLTPROC = xsltproc
 
+if BUILDING_FROM_SVN
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
 # all additional branches that are added in
 # ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
@@ -197,3 +198,4 @@ ChangeLog: NEWS
 	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
 	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
+endif
