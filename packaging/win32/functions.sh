@@ -112,12 +112,12 @@ function add_to_env() {
     _SED=`eval echo '"s#.*'"${_SEP}$1${_SEP}"'.*##"'`
     _TEST=`echo "${_SEP}${_ENV}${_SEP}" | sed "${_SED}"`
     if [ "$_TEST" ]; then
-	if [ "$_ENV" ]; then
-	    eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
-	else
-	    eval "$2_ADDS"'="'"$1"'"'
-	fi
-	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
+        if [ "$_ENV" ]; then
+            eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
+        else
+            eval "$2_ADDS"'="'"$1"'"'
+        fi
+        eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
     fi
 }
 
@@ -144,5 +144,5 @@ function assert_one_dir() {
 ### Local Variables: ***
 ### mode: shell-script ***
 ### sh-basic-offset: 4 ***
-### tab-width: 8 ***
+### indent-tabs-mode: nil ***
 ### End: ***

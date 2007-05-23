@@ -246,5 +246,5 @@ qpopd
 
 ### Local Variables: ***
 ### sh-basic-offset: 4 ***
-### tab-width: 8 ***
+### indent-tabs-mode: nil ***
 ### End: ***
