@@ -30,6 +30,7 @@ register_env_var PCRE_CPPFLAGS " "
 register_env_var PCRE_LDFLAGS " "
 register_env_var PKG_CONFIG ":" ""
 register_env_var PKG_CONFIG_PATH ":"
+register_env_var PKG_CONFIG_LIBDIR ":"
 register_env_var READLINE_CPPFLAGS " "
 register_env_var READLINE_LDFLAGS " "
 register_env_var REGEX_CPPFLAGS " "
@@ -73,7 +74,9 @@ function prepare() {
     fi
 
     if [ "$CROSS_COMPILE" ]; then
-        PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+        # to avoid using the host's installed packages
+        PKG_CONFIG_PATH=""
+        PKG_CONFIG_LIBDIR=""
     fi
 }
 
@@ -421,46 +424,26 @@ function inst_exetype() {
     else
         mkdir -p $_EXETYPE_UDIR/bin
         cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+        chmod +x $_EXETYPE_UDIR/bin/exetype
         quiet which exetype || die "exetype unavailable"
     fi
 }
 
-function inst_libxml2() {
-    setup LibXML2
-    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
-    if quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile
+function inst_libxslt() {
+    setup LibXSLT
+    _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
+    if quiet which xsltproc
     then
-        echo "libxml2 already installed.  skipping."
+        echo "libxslt already installed.  skipping."
     else
-        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXML2_DIR
-        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $LIBXML2_DIR
-        qpushd $LIBXML2_DIR
+        [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
+        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXSLT_DIR
+        qpushd $_LIBXSLT_UDIR
             mv libxslt-* mydir
             cp -r mydir/* .
             rm -rf mydir
-            mv libxml2-* mydir
-            cp -r mydir/* .
-            rm -rf mydir
-            pexports bin/libxml2.dll > libxml2.def
-            ${DLLTOOL} --input-def libxml2.def --output-lib lib/libxml2.a
-            rm libxml2.def
-            _LIBXML2_VERSION=`echo $LAST_FILE | sed 's#.*libxml2-\(.*\).win32.zip#\1#'`
-            mkdir -p lib/pkgconfig
-            cat > lib/pkgconfig/libxml-2.0.pc <<EOF
-prefix=/ignore
-exec_prefix=\${prefix}
-libdir=\${exec_prefix}/lib
-includedir=\${prefix}/include
-
-Name: libXML
-Version: $_LIBXML2_VERSION
-Description: libXML library version 2.
-Requires:
-Libs: -L\${libdir} -lxml2 -lz
-Cflags: -I\${includedir}
-EOF
         qpopd
-        quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
+        quiet which xsltproc || die "libxslt not installed correctly"
     fi
 }
 
@@ -471,7 +454,11 @@ function inst_gnome() {
     add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
+    else
+        add_to_env pkg-config PKG_CONFIG
+    fi
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
@@ -481,6 +468,8 @@ function inst_gnome() {
         echo "gnome packages installed.  skipping."
     else
         mkdir -p $_GNOME_UDIR
+        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -534,7 +523,7 @@ function inst_gnome() {
         wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
         wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        qpushd $GNOME_DIR
+        qpushd $_GNOME_UDIR
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
             if [ ! -f lib/libz.dll.a ]; then
                 qpushd bin
@@ -559,6 +548,7 @@ else
 fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
+            chmod +x bin/pkg-config{.exe,-msys.sh}
         qpopd
         quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
@@ -567,7 +557,7 @@ EOF
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
         qpushd $_GNOME_UDIR/lib/pkgconfig
-            perl -pi.bak -e"s!^prefix=.*\$!prefix=$GNOME_DIR!" *.pc
+            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
             #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
         qpopd
         # Latest gnome-dev packages don't ship with *.la files

@@ -145,10 +145,11 @@ set_default MINGW_UTILS_DIR $TOOLS_DIR
 set_default EXETYPE_SCRIPT `pwd`/exetype.pl
 set_default EXETYPE_DIR $TOOLS_DIR
 
-set_default LIBXML2_URL "http://www.zlatkovic.com/pub/libxml/libxml2-2.6.27.win32.zip"
 set_default LIBXSLT_URL "http://www.zlatkovic.com/pub/libxml/libxslt-1.1.19.win32.zip"
-set_default LIBXML2_DIR $GLOBAL_DIR\\gnome #avoid XML_FLAGS
+set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 
+set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2-2.6.27.zip"
+set_default LIBXML2_DEV_URL "$GNOME_WIN32_DEPS_URL/libxml2-dev-2.6.27.zip"
 set_default GETTEXT_URL "$GNOME_WIN32_DEPS_URL/gettext-0.14.5.zip"
 set_default GETTEXT_DEV_URL "$GNOME_WIN32_DEPS_URL/gettext-dev-0.14.5.zip"
 set_default LIBICONV_URL "$GNOME_WIN32_DEPS_URL/libiconv-1.9.1.bin.woe32.zip"
@@ -276,11 +277,11 @@ add_step inst_autotools
 add_step inst_guile
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
+ add_step inst_mingwutils
  add_step inst_openssl
 fi
-add_step inst_mingwutils
 add_step inst_exetype
-add_step inst_libxml2
+add_step inst_libxslt
 add_step inst_gnome
 add_step inst_swig
 add_step inst_pcre
