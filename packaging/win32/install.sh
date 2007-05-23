@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[ ! "$BASH" -a -x /bin/bash ] && exec /bin/bash "$0" "$@"
+
 set -e
 
 function qpushd() { pushd "$@" >/dev/null; }
@@ -69,6 +71,10 @@ function prepare() {
     if [ "$DISABLE_OPTIMIZATIONS" = "yes" ]; then
         export CFLAGS="$CFLAGS -g -O0"
     fi
+
+    if [ "$CROSS_COMPILE" ]; then
+        PKG_CONFIG_PATH="" # to avoid using the host's installed packages
+    fi
 }
 
 function inst_wget() {
@@ -109,28 +115,36 @@ function inst_dtk() {
 }
 
 function test_for_mingw() {
-    ${CC} --version &&
-    g++ --version &&
-    ${LD} --help &&
-    mingw32-make --help
+    ${CC} --version
+    ${LD} --help
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        g++ --version
+        mingw32-make --help
+    fi
 }
 
 function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
+
     if quiet test_for_mingw
     then
         echo "mingw already installed.  skipping."
     else
         mkdir -p $_MINGW_UDIR
-        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
-        (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        if [ "$CROSS_COMPILE" != "yes" ]; then
+            wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
+            (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        else
+            ./create_cross_mingw.sh
+        fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
 }
@@ -308,7 +322,7 @@ function inst_guile() {
         guile -c '(use-modules (srfi srfi-39))' &&
         guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
     fi
-    if test x$cross_compile = xyes ; then
+    if [ "$CROSS_COMPILE" = "yes" ]; then
         qpushd $_GUILE_UDIR/bin
         # The cross-compiling guile expects these program names
         # for the build-time guile
@@ -551,7 +565,7 @@ EOF
 #        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
-    if test x$cross_compile = xyes ; then
+    if [ "$CROSS_COMPILE" = "yes" ]; then
         qpushd $_GNOME_UDIR/lib/pkgconfig
             perl -pi.bak -e"s!^prefix=.*\$!prefix=$GNOME_DIR!" *.pc
             #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
@@ -945,7 +959,7 @@ function inst_gnucash() {
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
     qpushd $REPOS_DIR
-        if test "x$cross_compile" = xyes ; then
+        if [ "$CROSS_COMPILE" = "yes" ]; then
             # Set these variables manually because of cross-compiling
             export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
             export GUILE_INCS="${GUILE_CPPFLAGS}"
@@ -960,7 +974,7 @@ function inst_gnucash() {
     qpopd
 
     qpushd $BUILD_DIR
-        $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
+        $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
@@ -1101,7 +1115,7 @@ function finish() {
             echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
         fi
     done
-    if test "x$cross_compile" = "xyes" ; then
+    if [ "$CROSS_COMPILE" = "yes" ]; then
         echo "You might want to create a binary tarball now as follows:"
         qpushd $GLOBAL_DIR
         echo tar -czf $HOME/gnucash-fullbin.tar.gz --anchored \

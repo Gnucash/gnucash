@@ -69,25 +69,20 @@ fi
 
 ####
 # For cross-compiling, change this to "yes"
-set_default cross_compile "no"
+set_default CROSS_COMPILE "no"
 
-if test "x$cross_compile" != xyes ; then
-    LIBTOOLIZE=libtoolize
-    HOST_XCOMPILE=""
-    TARGET_XCOMPILE=""
-    LD=ld
-    CC=gcc
-    DLLTOOL=dlltool
+if [ "$CROSS_COMPILE" != yes ]; then
+    set_default LIBTOOLIZE libtoolize
+    set_default LD ld
+    set_default CC gcc
+    set_default DLLTOOL dlltool
 else
     # Insert your cross-compiler mingw32 bin-directories here
-    PATH=$GLOBAL_DIR/bin:$GLOBAL_DIR/mingw32/bin:$PATH
-    LIBTOOLIZE=$GLOBAL_DIR/autotools/bin/libtoolize
-    PKG_CONFIG_PATH="" # to avoid using the host's installed packages
-    HOST_XCOMPILE="--host=mingw32"
-    TARGET_XCOMPILE="--target=mingw32"
-    LD=mingw32-ld
-    CC=mingw32-gcc
-    DLLTOOL=mingw32-dlltool
+    set_default LIBTOOLIZE $GLOBAL_DIR/autotools/bin/libtoolize
+    set_default HOST_XCOMPILE "--host=mingw32"
+    set_default LD mingw32-ld
+    set_default CC mingw32-gcc
+    set_default DLLTOOL mingw32-dlltool
 fi
 ####
 
@@ -266,20 +261,20 @@ set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
-if test x$cross_compile != xyes ; then
+if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_wget
  add_step inst_dtk
- add_step inst_mingw
  add_step inst_unzip
 fi
+add_step inst_mingw
 add_step inst_regex
 add_step inst_readline
-if test x$cross_compile != xyes ; then
+if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_active_perl
 fi
 add_step inst_autotools
 add_step inst_guile
-if test x$cross_compile != xyes ; then
+if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_svn
  add_step inst_openssl
 fi
@@ -299,11 +294,11 @@ add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
 ##
-if test x$cross_compile != xyes ; then
+if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_inno
  add_step inst_hh
 fi
-if test x$UPDATE_SOURCES = xyes ; then
+if [ "$UPDATE_SOURCES" = "yes" ]; then
  add_step svn_up
 fi
 add_step inst_gnucash
