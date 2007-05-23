@@ -56,7 +56,7 @@ function smart_wget() {
     # download the file to the tmpdir and then when that completes
     # move it to the dest dir.
     if [ ! -f $_DLD/$_FILE ] ; then
-        wget --passive-ftp -c $1 -P $TMP_DIR
+        wget --passive-ftp -c $1 -P $TMP_UDIR
         mv $TMP_UDIR/$_FILE $_DLD
     fi
     LAST_FILE=$_DLD/$_FILE
