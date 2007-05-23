@@ -432,6 +432,7 @@ function inst_exetype() {
 function inst_libxslt() {
     setup LibXSLT
     _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
+    add_to_env $_LIBXSLT_UDIR/bin PATH
     if quiet which xsltproc
     then
         echo "libxslt already installed.  skipping."
