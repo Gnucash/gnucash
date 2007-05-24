@@ -737,20 +737,22 @@ function inst_hh() {
 }
 
 function inst_opensp() {
-    setup Opensp
+    setup OpenSP
     _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
     add_to_env ${_OPENSP_UDIR}/bin PATH
     if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
     then
-        echo "Opensp already installed. Skipping."
+        echo "OpenSP already installed. Skipping."
     else
         wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/OpenSP-*
         qpushd $TMP_UDIR/OpenSP-*
             [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
                 patch -p0 < $OPENSP_PATCH
-            automake lib/Makefile
-            ./configure \
+            aclocal ${ACLOCAL_FLAGS} -I m4
+            automake
+            autoconf
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_OPENSP_UDIR} \
                 --disable-doc-build --disable-static
             # On many windows machines, none of the programs will
@@ -760,7 +762,7 @@ function inst_opensp() {
             make -i
             make -i install
         qpopd
-        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
+        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "OpenSP not installed correctly"
     fi
 }
 
@@ -778,7 +780,7 @@ function inst_libofx() {
         qpushd $TMP_UDIR/libofx-*
             [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
                 patch -p1 < $LIBOFX_PATCH
-            ./configure \
+            ./configure ${HOST_XCOMPILE} \
                 --prefix=${_LIBOFX_UDIR} \
                 --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
                 --with-opensp-libs=${_OPENSP_UDIR}/lib \
