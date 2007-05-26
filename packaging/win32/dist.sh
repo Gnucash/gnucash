@@ -26,7 +26,6 @@ function prepare() {
     _GUILE_UDIR=`unix_path $GUILE_DIR`
     _WIN_UDIR=`unix_path $WINDIR`
     _EXETYPE_UDIR=`unix_path $EXETYPE_DIR`
-    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
     _GNOME_UDIR=`unix_path $GNOME_DIR`
     _PCRE_UDIR=`unix_path $PCRE_DIR`
     _LIBGSF_UDIR=`unix_path $LIBGSF_DIR`
@@ -74,14 +73,9 @@ function dist_openssl() {
     cp -a $_OPENSSL_UDIR/bin/*.dll $DIST_UDIR/bin
 }
 
-function dist_libxml2() {
-    setup LibXML2
-    mkdir -p $DIST_UDIR/bin
-    cp -a $_LIBXML2_UDIR/bin/libxml2.dll $DIST_UDIR/bin
-}
-
 function dist_gnome() {
     setup Gnome platform
+    wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
@@ -231,7 +225,6 @@ dist_regex
 dist_autotools
 dist_guile
 dist_openssl
-dist_libxml2
 dist_gnome
 dist_pcre
 dist_libgsf
