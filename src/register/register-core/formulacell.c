@@ -142,7 +142,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   gunichar uc;
 
   g_debug("%s, %d, %s, %d, %d, %d, %d",
-          (gchar *)change, change_len, (gchar *)newval, newval_len,
+          change ? (gchar *)change : "(null)", change_len,
+          newval ? (gchar *)newval : "(null)", newval_len,
           *cursor_position, *start_selection, *end_selection);
 
   /* accept the newval string if user action was delete */
