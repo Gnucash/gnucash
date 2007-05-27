@@ -720,23 +720,23 @@ recompute_x_y_scales(GncDenseCal *dcal)
      * lets us draw larger than our area. */
     denom = 7 * num_cols(dcal);
     g_assert(denom != 0);
-    dcal->x_scale = (gint)((width
+    dcal->x_scale = ((gint)(width
                             - (dcal->leftPadding * 2)
                             - (num_cols(dcal) * ((8 * MINOR_BORDER_SIZE)
                                                  + dcal->label_width))
                             - ((num_cols(dcal)-1) * COL_BORDER_SIZE))
-                           / denom);
+                     / denom);
     dcal->x_scale = MAX(dcal->x_scale, dcal->min_x_scale);
 
     denom = num_weeks_per_col(dcal);
     g_assert(denom != 0);
-    dcal->y_scale = (gint)((height
+    dcal->y_scale = ((gint)(height
                             - (dcal->topPadding * 2)
                             - MINOR_BORDER_SIZE
                             - dcal->dayLabelHeight
                             - (num_weeks_per_col(dcal)-1
                                * MINOR_BORDER_SIZE))
-                           / denom);
+                     / denom);
     dcal->y_scale = MAX(dcal->y_scale, dcal->min_y_scale);
 
     _gdc_set_cal_min_size_req(dcal);
