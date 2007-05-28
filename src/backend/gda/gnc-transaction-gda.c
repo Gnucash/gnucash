@@ -515,8 +515,8 @@ save_splits( GncGdaBackend* be, const GUID* tx_guid, SplitList* pSplitList )
     g_list_foreach( pSplitList, save_split_cb, &split_info );
 }
 
-static void
-commit_transaction( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
 {
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
@@ -716,7 +716,7 @@ gnc_gda_init_transaction_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_TRANS,
-        commit_transaction,            /* commit */
+        gnc_gda_save_transaction,            /* commit */
         NULL,                        /* initial_load */
         create_transaction_tables    /* create tables */
     };

@@ -328,9 +328,22 @@ save_prices( GncGdaBackend* be, QofBook* book )
     gnc_pricedb_foreach_price( priceDB, save_price, be, TRUE );
 }
 
+static int
+save_tx( Transaction* tx, gpointer data )
+{
+    GncGdaBackend* be = (GncGdaBackend*)data;
+
+    gnc_gda_save_transaction( be, QOF_INSTANCE(tx) );
+
+    return 0;
+}
+
 static void
 save_transactions( GncGdaBackend* be, QofBook* book )
 {
+    xaccAccountTreeForEachTransaction( gnc_book_get_root_account( book ),
+                                       save_tx,
+                                       (gpointer)be );
 }
 
 static void

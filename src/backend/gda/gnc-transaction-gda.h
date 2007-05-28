@@ -34,5 +34,6 @@
 
 void gnc_gda_init_transaction_handler( void );
 void gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx );
+void gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst );
 
 #endif /* GNC_TRANSACTION_GDA_H_ */
