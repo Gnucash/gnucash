@@ -233,10 +233,10 @@ gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 
   ENTER("chooser %p, option %p", chooser, option);
   filename = gtk_file_chooser_get_preview_filename(chooser);
-  DEBUG("chooser preview name is %s.", filename);
+  DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
   if (filename == NULL) {
     filename = g_strdup(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION));
-    DEBUG("using last selection of %s", filename);
+    DEBUG("using last selection of %s", filename ? filename : "(null)");
     if (filename == NULL) {
       LEAVE("no usable name");
       return;
