@@ -887,7 +887,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 rect = (GdkRectangle*)mcListIter->data;
                 gdk_draw_rectangle(dcal->drawbuf, gc,
                                    TRUE, rect->x, rect->y,
-                                   rect->width - 2, rect->height);
+                                   rect->width, rect->height);
             }
             g_list_foreach(mcList, free_rect, NULL);
             g_list_free(mcList);
@@ -957,7 +957,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             + (i * (col_width(dcal)+COL_BORDER_SIZE))
             + dcal->label_width;
         y = dcal->topPadding + dcal->dayLabelHeight;
-        w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width - 2;
+        w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width;
         h = col_height(dcal);
 
         /* draw the outside border [inside the month labels] */
