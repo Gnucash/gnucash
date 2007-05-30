@@ -1952,6 +1952,8 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                         }
         }
 
+        g_object_unref (layout);
+
         return max;
 }
 

@@ -623,6 +623,7 @@ check_realize (GtkWidget *widget, gpointer user_data)
 
   layout = gtk_widget_create_pango_layout(widget, "sample");
   pango_layout_get_pixel_size(layout, NULL,  &font_height);
+  g_object_unref(layout);
   check_size = (font_height > 0) ? font_height - 6 : 9;
 
   check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);

@@ -1075,6 +1075,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                                widget->allocation.y,
                                widget->allocation.width,
                                widget->allocation.height);
+
+    g_object_unref(layout);
 }
 
 static void
