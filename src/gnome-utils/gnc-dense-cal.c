@@ -1648,7 +1648,7 @@ gdc_get_doc_offset(GncDenseCal *dcal, GDate *d)
     toRet = g_date_get_julian(d) - g_date_get_julian(&soc);
     /* ensure not after end of visible calendar. */
     g_date_add_months(&soc, dcal->numMonths);
-    if (g_date_get_julian(d) > g_date_get_julian(&soc))
+    if (g_date_get_julian(d) >= g_date_get_julian(&soc))
         return -1;
     /* return pre-computed value. */
     return toRet;
