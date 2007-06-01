@@ -871,20 +871,34 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	gint num;
 	gboolean prov_type;
 	gboolean (*type_check) (const char*);
-	
+	gchar *libdir_from_env = NULL;
+
 	ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
 	       qof_providers_initialized ? "true" : "false");
 	prov_type = FALSE;
 	if (!qof_providers_initialized)
 	{
+		libdir_from_env = g_strdup(g_getenv("QOF_LIB_DIR"));
 		for (num = 0; backend_list[num].filename != NULL; num++) {
-			if(!qof_load_backend_library(backend_list[num].libdir,
-				backend_list[num].filename))
-			{
-				PWARN (" failed to load %s from %s",
-				backend_list[num].filename, backend_list[num].libdir);
+			if (libdir_from_env) {
+				if (!(qof_load_backend_library(libdir_from_env,
+											   backend_list[num].filename)
+					  || qof_load_backend_library(backend_list[num].libdir,
+												  backend_list[num].filename)))
+				{
+					PWARN (" failed to load %s from %s or %s",
+						   backend_list[num].filename, libdir_from_env,
+						   backend_list[num].libdir);
+				}
+			} else {
+				if (!qof_load_backend_library(backend_list[num].libdir,
+											  backend_list[num].filename)) {
+					PWARN (" failed to load %s from %s",
+						   backend_list[num].filename, backend_list[num].libdir);
+				}
 			}
 		}
+		g_free(libdir_from_env);
 		qof_providers_initialized = TRUE;
 	}
 	p = provider_list;
