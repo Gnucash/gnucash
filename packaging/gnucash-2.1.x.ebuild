@@ -51,8 +51,7 @@ DEPEND="${RDEPEND}
 			media-gfx/graphviz
 			virtual/tetex )
 	dev-util/pkgconfig
-	sys-devel/libtool
-	>=dev-lang/swig-1.3.28"
+	sys-devel/libtool"
 
 if [[ "${PV}" == "2.1.0" ]]; then
   S="${S}." # packaging bug. :/
