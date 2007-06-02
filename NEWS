@@ -1,6 +1,46 @@
 Version history:
 ------- -------
 
+ 2.1.3 - 02 June 2007
+ 	 o Welcome to GnuCash 2.1.3 aka "at last!", the fourth of several
+	 unstable 2.1.x releases of the GnuCash Open Source Accounting
+	 Software which will eventually lead to the stable version 2.2.0.
+	 With this new release series, GnuCash is available on Microsoft 
+	 Windows for the first time, and it also runs on GNU/Linux, *BSD, 
+	 Solaris and Mac OSX.
+	 This release is intended for developers and testers who want to help
+	 tracking down bugs.
+	 o WARNING: Make sure you make backups of any files used in testing
+	 versions of GnuCash in the 2.1.x series. Although the developers go
+	 to great lengths to ensure that no data will be lost we cannot
+	 guarantee that your data will not be affected if for some reason
+	 GnuCash crashes in testing these releases.
+	 o Please test any and all features important to you. Then post any
+	 bugs you find to bugzilla
+	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 o Compared to the 2.0.x series, there are only very few user-visible
+	 new features, except for the completed port to the Microsoft Windows
+	 operating system. Minor new features compared to the 2.0.x series
+	 are;
+	 o The Scheduled Transaction code has been refactored. The Scheduled
+	 Transaction list view is now integrated into the main window, the
+	 Editor has been re-designed for compactness, and the Since-Last-Run
+	 dialog has been simplified.
+	 o SWIG is now used instead of g-wrap for providing language bindings.
+	 o Check printing has been improved, with new formats and simpler
+	 format descriptions.
+	 o DATA FILE NOTICE If you are using Scheduled Transactions, the data
+	 file saved by GnuCash 2.1.2 and higher is NOT backward-compatible
+	 with GnuCash 2.0 anymore because of extensions in the file format.
+	 Please make a safe backup of your 2.0 data before upgrading to 2.1.3.
+	 o Bugfixes and improvements since the last version 2.1.2 include:
+	 o Fixes to crashes and slowness in Scheduled Transaction Editor.
+	 o Fix to crash when editing style sheets and selecting images using
+	 Windows version.
+	 o Fix crash on QIF import with german umlaut.
+	 o Updated translations.
+	 o Improvements to Windows packaging.
+
  2.1.2 - 19 May 2007
  	 o Welcome to GnuCash 2.1.2 aka "Financially secure yet?"the third of
 	 several unstable releases of the GnuCash Open Source Accounting 
