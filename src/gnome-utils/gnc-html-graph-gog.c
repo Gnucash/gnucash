@@ -33,6 +33,7 @@
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include <goffice/goffice.h>
+#include <goffice/graph/gog-chart.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
 #ifdef GOFFICE_WITH_CAIRO
@@ -48,6 +49,7 @@
 #include <goffice/graph/gog-plot.h>
 #include <goffice/graph/gog-series.h>
 #include <goffice/utils/go-color.h>
+#include <goffice/utils/go-marker.h>
 #include <goffice/graph/gog-data-set.h>
 #include <goffice/data/go-data-simple.h>
 #include <goffice/app/go-plugin.h>
@@ -514,8 +516,11 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   GogPlot *plot;
   GogSeries *series;
   GOData *sliceData;
+  GogStyle *style;
   int datasize;
   double *xData, *yData;
+  gchar *marker_str, *color_str;
+  gboolean fill = FALSE;
 
   gtkhtml_pre_3_10_1_bug_workaround(eb);
 
@@ -530,6 +535,9 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 
     yDataStr = g_hash_table_lookup( eb->params, "y_data" );
     yData = read_doubles( yDataStr, datasize );
+
+    marker_str = g_hash_table_lookup(eb->params, "marker");
+    color_str = g_hash_table_lookup(eb->params, "color");
   }
 
   if (!create_basic_plot_elements("GogXYPlot", &graph, &chart, &plot))
@@ -538,6 +546,7 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   }
 
   series = gog_plot_new_series( plot );
+  style = gog_styled_object_get_style(GOG_STYLED_OBJECT(series));
 
   sliceData = go_data_vector_val_new( xData, datasize, NULL );
   gog_series_set_dim( series, 0, sliceData, NULL );
@@ -546,6 +555,62 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
   sliceData = go_data_vector_val_new( yData, datasize, NULL );
   gog_series_set_dim( series, 1, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
+
+  /* set marker shape */
+  if (marker_str) {
+    GOMarkerShape shape;
+
+    if (g_str_has_prefix(marker_str, "filled ")) {
+      fill = TRUE;
+      marker_str += 7;
+    }
+    shape = go_marker_shape_from_str(marker_str);
+    if (shape != GO_MARKER_NONE) {
+      style->marker.auto_shape = FALSE;
+      go_marker_set_shape(style->marker.mark, shape);
+    } else {
+      g_warning("cannot parse marker shape [%s]", marker_str);
+    }
+  }
+
+  /* set marker and line colors */
+  if (color_str) {
+    GdkColor color;
+    if (gdk_color_parse(color_str, &color)) {
+      style->marker.auto_outline_color = FALSE;
+      go_marker_set_outline_color(style->marker.mark, GDK_TO_UINT(color));
+      style->line.auto_color = FALSE;
+      style->line.color = GDK_TO_UINT(color);
+    } else {
+      g_warning("cannot parse color [%s]", color_str);
+    }
+  }
+
+  /* set marker fill colors */
+  if (fill) {
+    style->marker.auto_fill_color = style->marker.auto_outline_color;
+    go_marker_set_fill_color(style->marker.mark,
+                             go_marker_get_outline_color(style->marker.mark));
+  } else {
+    GogStyle *chart_style =
+      gog_styled_object_get_style(GOG_STYLED_OBJECT(chart));
+
+    if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+        && chart_style->fill.pattern.pattern == GO_PATTERN_SOLID) {
+      style->marker.auto_fill_color = FALSE;
+      go_marker_set_fill_color(style->marker.mark,
+                               chart_style->fill.pattern.back);
+    } else if (chart_style->fill.type == GOG_FILL_STYLE_PATTERN
+               && chart_style->fill.pattern.pattern
+               == GO_PATTERN_FOREGROUND_SOLID) {
+      style->marker.auto_fill_color = FALSE;
+      go_marker_set_fill_color(style->marker.mark,
+                               chart_style->fill.pattern.fore);
+    } else {
+      g_warning("fill color of markers can only be set like a solid fill "
+                "pattern of the chart");
+    }
+  }
 
   set_chart_titles_from_hash(chart, eb);
   set_chart_axis_labels_from_hash(chart, eb);

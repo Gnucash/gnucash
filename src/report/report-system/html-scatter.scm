@@ -34,18 +34,18 @@
                       y-axis-label
                       ;; a list of x-y-value lists.
                       data 
-                      ;; Valid marker names are: 
+                      ;; Valid marker names are:
                       ;; "none", "circle", "diamond", "cross", "x",
-                      ;; "square", "asterisk", "filled circle",
-                      ;; "filled square", "filled diamond"
+                      ;; "square", "asterisk" and some more.
                       ;; The full list can be found in
-                      ;; guppi3/src/libguppiplot/guppi-marker.c in
-                      ;; guppi_marker_info_array[]
+                      ;; goffice/goffice/utils/go-marker.c, marker_shapes[]
+                      ;; Marker names prefixed by filled, e.g. "filled square",
+                      ;; are filled in the same color as the outline
                       marker
-                      ;; The color of the marker. Should be a rgba
-                      ;; value as a hex string, as returned by
-                      ;; gnc:color-option->hex-string
-                      markercolor 
+                      ;; The color of the markers outline. Should be a hex string,
+                      ;; as returned by gnc:color-option->hex-string, prefixed by
+                      ;; #, like "#ff0000" for red
+                      markercolor
                       )))
 
 (define gnc:html-scatter? 
@@ -164,10 +164,7 @@
          (y-label (gnc:html-scatter-y-axis-label scatter))
          (data (gnc:html-scatter-data scatter))
          (marker (gnc:html-scatter-marker scatter))
-	 ;; Workaround to set the alpha channel, since libguppitank
-	 ;; requires a rgba value here.
-	 (markercolor (string-append (gnc:html-scatter-markercolor scatter) 
-				     "ff")))
+         (markercolor (string-append "#" (gnc:html-scatter-markercolor scatter))))
     (if (and (list? data)
              (not (null? data)))
         (begin 
@@ -202,7 +199,7 @@
           (if markercolor
               (begin 
                 (push "  <param name=\"color\" value=\"")
-                (push (string-append "0x" markercolor))
+                (push markercolor)
 		(push "\">\n")))
           (if (and data (list? data))
               (let ((datasize (length data))
