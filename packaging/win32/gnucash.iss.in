@@ -111,6 +111,11 @@ Root: HKCU; Subkey: "Software\AqHbci"; ValueType: none; Flags: uninsdeletekeyife
 Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\AqHbci\Paths"; ValueType: string; ValueName: "xmldatadir"; ValueData: "{app}\share\aqhbci\xml"; Flags: uninsdeletevalue
 
+; And (sigh) even one for qbanking
+Root: HKCU; Subkey: "Software\QBanking"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\QBanking\Paths"; ValueType: none; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\QBanking\Paths"; ValueType: string; ValueName: "cfgmoduledir"; ValueData: "{app}\lib\@PACKAGE@\plugins\@AQBANKING_SO_EFFECTIVE@\frontends\qbanking\cfgmodules"; Flags: uninsdeletevalue
+
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Delete the created config script on uninstall
