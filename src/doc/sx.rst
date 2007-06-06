@@ -166,6 +166,13 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
     - [x] src/gnome/druid-acct-period.c
 
 - gnc_frequency
+  - [ ] 'every x months' spin button makes large jumps
+
+    <andi5> jsled: another topic: you have probably seen the "every x months"
+    spin button make jumps greater than one, right? ... this seems to be due
+    to a spin button timeout event which controls "fast-forward"
+    spinning... it is run because the changed(?) signal handler is too slow
+
   - [ ] support nth-weekday Recurrence period.
 
 - since-last-run
