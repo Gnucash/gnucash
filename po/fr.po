@@ -8,15 +8,15 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
 # Fabrice Kurz <kurzf@voila.fr>, 2006
 #
-# Please follow the guidelines you'll find here: http://live.gnome.org/GnomeFr/Traduire
+# Please follow the guidelines you'll find here: http://live.gnome.org/gnomefr/Traduire
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-11 22:49+0200\n"
-"PO-Revision-Date: 2007-05-01 14:01+0200\n"
-"Last-Translator: Fabrice Kurz <kurzf@voila.fr>\n"
+"PO-Revision-Date: 2007-06-07 20:21+0200\n"
+"Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:139
 msgid " Variables are in the form 'name=value'"
-msgstr "Les variables sont de la forme 'nom=valeur'"
+msgstr "Les variables sont de la forme « nom=valeur »"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -59,7 +59,7 @@ msgstr "Fonction non définie"
 
 #: ../src/app-utils/gnc-exp-parser.c:655
 msgid "Out of memory"
-msgstr "Dépassement de mémoire"
+msgstr "Mémoire insuffisante"
 
 #: ../src/app-utils/gnc-exp-parser.c:657
 msgid "Numeric error"
@@ -200,7 +200,7 @@ msgstr "Message du serveur Postgresql : %s"
 
 #: ../src/backend/postgres/putil.c:57 ../src/backend/postgres/upgrade.c:398
 msgid "Backend connection is not available"
-msgstr "Connection au serveur non disponible"
+msgstr "La connection au serveur n'est pas disponible"
 
 #: ../src/backend/postgres/putil.c:66
 msgid "Query could not be executed"
@@ -208,18 +208,15 @@ msgstr "La requête n'a pas pu être executée"
 
 #: ../src/bin/gnucash-bin.c:84
 msgid "This is a development version. It may or may not work.\n"
-msgstr "Ceci est une version de développement. Elle peut fonctionner ou non.\n"
+msgstr "Ceci est une version de développement. Elle peut ne pas fonctionner correctement.\n"
 
 #: ../src/bin/gnucash-bin.c:85
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
-msgstr ""
-"Rapporter les bugs ou tout autre problème à gnucash-devel@gnucash.org.\n"
+msgstr "Rapporter les anomalies ou tout autre problème à gnucash-devel@gnucash.org.\n"
 
 #: ../src/bin/gnucash-bin.c:86
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
-"Vous pouvez consulter ou transmettre des rapports de bug sur http://bugzilla."
-"gnome.org\n"
+msgstr "Vous pouvez consulter ou transmettre des rapports d'anomalie sur http://bugzilla.gnome.org\n"
 
 # po/guile_strings.txt:34
 #: ../src/bin/gnucash-bin.c:87
@@ -17004,7 +17001,7 @@ msgstr "_Imprimer le rapport..."
 # messages-i18n.c:105
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:944
 msgid "Print the current report"
-msgstr "Imprimer le rapport en cours"
+msgstr "Imprime le rapport en cours"
 
 # messages-i18n.c:326
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:958
@@ -17016,10 +17013,7 @@ msgid ""
 "Add the current report to the `Custom' menu for later use. The report will "
 "be saved in the file ~/.gnucash/saved-reports-2.0. It will be accessible as "
 "menu entry in the report menu at the next startup of GnuCash."
-msgstr ""
-"Ajouter  le rapport actif  au menu « Personnalisé » pour une utilisation "
-"ultérieure. Le rapport sera sauvé dans le fichier ~/.gnucash/saved-reports-"
-"2.0. L'opération prendra effet au redémarrage de GnuCash."
+msgstr "Ajoute le rapport actif au menu « Personnalisé » pour une utilisation ultérieure. Le rapport sera sauvé dans le fichier ~/.gnucash/saved-reports-2.0. L'opération prendra effet au redémarrage de GnuCash."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -17030,7 +17024,7 @@ msgstr "Exporter _rapport"
 # messages-i18n.c:84
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:965
 msgid "Export HTML-formatted report to file"
-msgstr "Exporter un rapport formaté en HTML vers un fichier"
+msgstr "Exporte vers un fichier un rapport formaté en HTML"
 
 # po/guile_strings.txt:138
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:967
@@ -17043,7 +17037,7 @@ msgstr "Options du _rapport"
 #: ../intl-scm/guile-strings.c:1368 ../intl-scm/guile-strings.c:1374
 #: ../intl-scm/guile-strings.c:1380
 msgid "Edit report options"
-msgstr "Éditer les options du rapport"
+msgstr "Édite les options du rapport"
 
 # messages-i18n.c:248
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:971
@@ -17053,7 +17047,7 @@ msgstr "Précédent"
 # messages-i18n.c:86
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:972
 msgid "Move back one step in the history"
-msgstr "Reculer d'un pas dans l'historique."
+msgstr "Recule d'un pas dans l'historique."
 
 # messages-i18n.c:289
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:974
@@ -17063,27 +17057,27 @@ msgstr "Suivant"
 # messages-i18n.c:87
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:975
 msgid "Move forward one step in the history"
-msgstr "Avancer d'un pas dans l'historique."
+msgstr "Avance d'un pas dans l'historique."
 
 # messages-i18n.c:323
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:977
 msgid "Reload"
-msgstr "Rafraîchir"
+msgstr "Actualiser"
 
 # messages-i18n.c:105
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:978
 msgid "Reload the current page"
-msgstr "Recharger la page courante"
+msgstr "Actualise la page courante"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:980
 msgid "Stop"
-msgstr "Stop"
+msgstr "Arrêter"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:981
 msgid "Cancel outstanding HTML requests"
-msgstr "Annuler les requêtes HTML en suspens"
+msgstr "Annule les requêtes HTML en suspend"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:988
@@ -17102,7 +17096,7 @@ msgstr "Choisir le format d'exportation"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1271
 msgid "Choose the export format for this report:"
-msgstr "Choisir le format d'exportation pour ce rapport :"
+msgstr "Choisissez le format d'exportation pour ce rapport :"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1311
@@ -17118,7 +17112,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Impossible d'enregistrer avec ce nom.\n"
+"Impossible d'enregistrer sous ce nom.\n"
 "\n"
 "%s"
 
@@ -24936,579 +24930,3 @@ msgstr ""
 "Selon une autre théorie, la chose se serait en fait déjà produite.\n"
 "\n"
 "Douglas Adams, « Le Dernier Restaurant avant la Fin du Monde »"
-
-# src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
-# src/gnome/glade-gnc-dialogs.c:1276
-#, fuzzy
-#~ msgid "Custom Check"
-#~ msgstr "Client"
-
-#, fuzzy
-#~ msgid "Zero"
-#~ msgstr "zéro"
-
-# messages-i18n.c:309
-#, fuzzy
-#~ msgid "One"
-#~ msgstr "Une seule fois"
-
-# messages-i18n.c:342 po/guile_strings.txt:252
-#, fuzzy
-#~ msgid "Two"
-#~ msgstr "Vers"
-
-#, fuzzy
-#~ msgid "Three"
-#~ msgstr "Troisième niveau"
-
-# messages-i18n.c:290 po/guile_strings.txt:106
-#, fuzzy
-#~ msgid "Four"
-#~ msgstr "Formulaire"
-
-# messages-i18n.c:288
-#, fuzzy
-#~ msgid "Five"
-#~ msgstr "Fixe"
-
-# messages-i18n.c:327
-#, fuzzy
-#~ msgid "Seven"
-#~ msgstr "Enregistrer"
-
-#, fuzzy
-#~ msgid "Eight"
-#~ msgstr "Droite"
-
-# po/guile_strings.txt:243
-#, fuzzy
-#~ msgid "Nine"
-#~ msgstr "Aucun"
-
-# po/guile_strings.txt:46
-#, fuzzy
-#~ msgid "Ten"
-#~ msgstr "Test"
-
-# messages-i18n.c:341
-#, fuzzy
-#~ msgid "Twelve"
-#~ msgstr "Caissier"
-
-#, fuzzy
-#~ msgid "Thirteen"
-#~ msgstr "Troisième niveau"
-
-#, fuzzy
-#~ msgid "Fourteen"
-#~ msgstr "Quatrième niveau"
-
-# messages-i18n.c:287
-#, fuzzy
-#~ msgid "Fifteen"
-#~ msgstr "Honoraires"
-
-# messages-i18n.c:229
-#, fuzzy
-#~ msgid "Sixteen"
-#~ msgstr "Sixième niveau"
-
-#, fuzzy
-#~ msgid "Eighteen"
-#~ msgstr "Droite"
-
-# po/guile_strings.txt:134
-#, fuzzy
-#~ msgid "Twenty"
-#~ msgstr "Texte"
-
-# messages-i18n.c:290 po/guile_strings.txt:106
-#, fuzzy
-#~ msgid "Forty"
-#~ msgstr "Formulaire"
-
-#, fuzzy
-#~ msgid "Sixty"
-#~ msgstr "Titre"
-
-# src/gnome/glade-gnc-dialogs.c:936 src/gnome/glade-gnc-dialogs.c:943
-#, fuzzy
-#~ msgid "Seventy"
-#~ msgstr "Sélectionner"
-
-#, fuzzy
-#~ msgid "Eighty"
-#~ msgstr "Droite"
-
-# po/guile_strings.txt:243
-#, fuzzy
-#~ msgid "Ninety"
-#~ msgstr "Aucun"
-
-# messages-i18n.c:343
-#, fuzzy
-#~ msgid "Thousand"
-#~ msgstr "Jeudi"
-
-#, fuzzy
-#~ msgid "Million"
-#~ msgstr "Facturation"
-
-#, fuzzy
-#~ msgid "Billion"
-#~ msgstr "Facturation"
-
-#, fuzzy
-#~ msgid "Trillion"
-#~ msgstr "Facturation"
-
-# po/guile_strings.txt:46
-#, fuzzy
-#~ msgid "Quintillion"
-#~ msgstr "Question"
-
-#, fuzzy
-#~ msgid "%s and %"
-#~ msgstr "du %s au %s"
-
-# messages-i18n.c:186
-#, fuzzy
-#~ msgid "Root Account"
-#~ msgstr "Compte-rendu des comptes"
-
-#, fuzzy
-#~ msgid "Semi-monthly "
-#~ msgstr "Bimensuel"
-
-# messages-i18n.c:303
-#~ msgid "_Lot Viewer..."
-#~ msgstr "_Afficheur de lot..."
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Passer en mode débogage"
-
-#~ msgid "Absolute Day-of-the-month"
-#~ msgstr "Jour du mois"
-
-#~ msgid "Choose the type of Billing Term"
-#~ msgstr "Choisir le type de conditions de facturation"
-
-# po/guile_strings.txt:144
-#~ msgid "Number of days from now"
-#~ msgstr "Nombre de jours à dater d'aujourd'hui"
-
-# messages-i18n.c:345 po/guile_strings.txt:254
-# src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
-#~ msgid "Type Menu"
-#~ msgstr "Menu des options"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-# messages-i18n.c:348 po/guile_strings.txt:57
-#~ msgid "Value $"
-#~ msgstr "Valeur $"
-
-#~ msgid "Percent (%)"
-#~ msgstr "Pourcentage (%)"
-
-# messages-i18n.c:348 po/guile_strings.txt:57
-#~ msgid "Value ($)"
-#~ msgstr "Valeur ($)"
-
-#~ msgid ""
-#~ "The following transactions are presently being edited; are you sure you "
-#~ "want to delete them?"
-#~ msgstr ""
-#~ "Les transactions suivantes sont actuellement en cours de modification. "
-#~ "Êtes-vous sûr que vous souhaitez les effacer ?"
-
-#~ msgid ""
-#~ "Canceling the Since-Last-Run dialog will revert all changes. Are you sure "
-#~ "you want to lose all Scheduled Transaction changes?"
-#~ msgstr ""
-#~ "La fermeture de ce dialogue annulera tous les changements. Confirmez-vous "
-#~ "la perte de toutes les transactions récurrentes ?"
-
-# messages-i18n.c:105
-#~ msgid "Ready to create"
-#~ msgstr "Prête à créer"
-
-#~ msgid "Needs values for variables"
-#~ msgstr "Besoin de valeurs pour les variables"
-
-# messages-i18n.c:294 po/guile_strings.txt:205
-# src/gnome/glade-gnc-dialogs.c:644
-#~ msgid "Ignored"
-#~ msgstr "Ignorée"
-
-#~ msgid "Postponed"
-#~ msgstr "Reportée"
-
-#~ msgid "Obsolete"
-#~ msgstr "Terminée"
-
-#~ msgid ""
-#~ "The following errors were encountered while creating the Scheduled "
-#~ "Transactions:\n"
-#~ msgstr ""
-#~ " Les erreurs suivantes ont été rencontrées pendant la création de "
-#~ "transactions récurrentes:\n"
-
-#~ msgid "A Fixed-Rate loan"
-#~ msgstr "Emprunt à taux fixe"
-
-# po/guile_strings.txt:182
-#~ msgid "3/1 Year"
-#~ msgstr "3/1 Année"
-
-#~ msgid "A 3/1 Year ARM"
-#~ msgstr "un prêt à taux révisable fixe pendant 3 ans"
-
-# po/guile_strings.txt:182
-#~ msgid "5/1 Year"
-#~ msgstr "5/1 Année"
-
-#~ msgid "A 5/1 Year ARM"
-#~ msgstr "un prêt à taux révisable fixe pendant 5 ans"
-
-# po/guile_strings.txt:182
-#~ msgid "7/1 Year"
-#~ msgstr "7/1 Année"
-
-#~ msgid "A 7/1 Year ARM"
-#~ msgstr "un prêt à taux révisable fixe pendant 7 ans"
-
-# po/guile_strings.txt:182
-#~ msgid "10/1 Year"
-#~ msgstr "10/1 Année"
-
-#~ msgid "A 10/1 Year ARM"
-#~ msgstr "un prêt à taux révisable fixe pendant 10 ans"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "1/10"
-#~ msgstr "1/10"
-
-#~ msgid "1/100"
-#~ msgstr "1/100"
-
-#~ msgid "1/1000"
-#~ msgstr "1/1000"
-
-#~ msgid "1/10000"
-#~ msgstr "1/10000"
-
-#~ msgid "1/100000"
-#~ msgstr "1/100000"
-
-#~ msgid "1/1000000"
-#~ msgstr "1/1000000"
-
-# messages-i18n.c:262
-#~ msgid "Use Commodity Value"
-#~ msgstr "Selon la devise"
-
-#~ msgid "A list of all of the lots in this account."
-#~ msgstr "Une liste de tous les lots de ce compte."
-
-# messages-i18n.c:104
-#~ msgid "Open a register showing the transactions in this lot"
-#~ msgstr "Ouvrir un registre montrant les transactions sur ce lot"
-
-#~ msgid "10th"
-#~ msgstr "10"
-
-#~ msgid "11th"
-#~ msgstr "11"
-
-#~ msgid "12th"
-#~ msgstr "12"
-
-#~ msgid "13th"
-#~ msgstr "13"
-
-#~ msgid "14th"
-#~ msgstr "14"
-
-#~ msgid "15th"
-#~ msgstr "15"
-
-#~ msgid "16th"
-#~ msgstr "16"
-
-#~ msgid "17th"
-#~ msgstr "17"
-
-#~ msgid "18th"
-#~ msgstr "18"
-
-#~ msgid "19th"
-#~ msgstr "19"
-
-#~ msgid "1st"
-#~ msgstr "1er"
-
-#~ msgid "20th"
-#~ msgstr "20"
-
-#~ msgid "21st"
-#~ msgstr "21"
-
-#~ msgid "22nd"
-#~ msgstr "22"
-
-#~ msgid "23rd"
-#~ msgstr "23"
-
-#~ msgid "24th"
-#~ msgstr "24"
-
-#~ msgid "25th"
-#~ msgstr "25"
-
-#~ msgid "26th"
-#~ msgstr "26"
-
-#~ msgid "27th"
-#~ msgstr "27"
-
-#~ msgid "28th"
-#~ msgstr "28"
-
-# po/guile_strings.txt:122
-#~ msgid "2nd"
-#~ msgstr "2"
-
-#~ msgid "3rd"
-#~ msgstr "3"
-
-#~ msgid "4th"
-#~ msgstr "4"
-
-#~ msgid "5th"
-#~ msgstr "5"
-
-#~ msgid "6th"
-#~ msgstr "6"
-
-#~ msgid "7th"
-#~ msgstr "7"
-
-#~ msgid "8th"
-#~ msgstr "8"
-
-#~ msgid "9th"
-#~ msgstr "9"
-
-#~ msgid "<b>Recurrence Frequency</b>"
-#~ msgstr "<b>Fréquence des instances</b>"
-
-#~ msgid "Apr, Aug, Dec"
-#~ msgstr "Avr, Août, Déc"
-
-#~ msgid "Apr, Oct"
-#~ msgstr "Avr, Oct"
-
-#~ msgid "April"
-#~ msgstr "Avril"
-
-#~ msgid "August"
-#~ msgstr "Août"
-
-#~ msgid "Bi-Weekly"
-#~ msgstr "Bihebdomadaire"
-
-#~ msgid "Current Year"
-#~ msgstr "Année courante"
-
-#~ msgid "Daily [M-F]"
-#~ msgstr "Quotidien [L-V]"
-
-# messages-i18n.c:270
-#~ msgid "December"
-#~ msgstr "Décembre"
-
-# po/guile_strings.txt:122
-#~ msgid "End "
-#~ msgstr "Fin "
-
-#~ msgid "Feb, Aug"
-#~ msgstr "Fév, Août"
-
-#~ msgid "Feb, Jun, Oct"
-#~ msgstr "Fév, Juin, Oct"
-
-#~ msgid "Feb, May, Aug, Nov"
-#~ msgstr "Fév, Mai, Août, Nov"
-
-#~ msgid "February"
-#~ msgstr "Février"
-
-#~ msgid "Jan, Apr, Jul, Oct"
-#~ msgstr "Jan, Avr, Juil, Oct"
-
-#~ msgid "Jan, Jul"
-#~ msgstr "Jan, Juil"
-
-#~ msgid "Jan, May, Sep"
-#~ msgstr "Jan, Mai, Sep"
-
-#~ msgid "January"
-#~ msgstr "Janvier"
-
-#~ msgid "July"
-#~ msgstr "Juillet"
-
-#~ msgid "Jun, Dec"
-#~ msgstr "Juin, Déc"
-
-#~ msgid "June"
-#~ msgstr "Juin"
-
-#~ msgid "Mar, Jul, Nov"
-#~ msgstr "Mars, Juil, Nov"
-
-#~ msgid "Mar, Jun, Sep, Dec"
-#~ msgstr "Mars, Juin, Sep, Déc"
-
-#~ msgid "Mar, Sep"
-#~ msgstr "Mars, Sep"
-
-#~ msgid "March"
-#~ msgstr "Mars"
-
-# po/guile_strings.txt:101
-#~ msgid "May"
-#~ msgstr "Mai"
-
-#~ msgid "May, Nov"
-#~ msgstr "Mai, Nov"
-
-# po/guile_strings.txt:173
-#~ msgid "November"
-#~ msgstr "Novembre"
-
-# po/guile_strings.txt:182
-#~ msgid "Now + 1 Year"
-#~ msgstr "Année prochaine"
-
-#~ msgid "Occuring in"
-#~ msgstr "Se produit dans"
-
-#~ msgid "October"
-#~ msgstr "Octobre"
-
-# po/guile_strings.txt:96
-#~ msgid "Select initial date, above."
-#~ msgstr "Sélectionnez la date initiale, ci-dessus."
-
-# po/guile_strings.txt:182
-#~ msgid "Semi-Yearly"
-#~ msgstr "Semi-Annuel"
-
-#~ msgid "September"
-#~ msgstr "Septembre"
-
-# po/guile_strings.txt:182
-#~ msgid "Tri-Yearly"
-#~ msgstr "Trisannuel"
-
-#~ msgid "Whole Loan"
-#~ msgstr "Emprunt complet"
-
-#~ msgid "[29th/last]"
-#~ msgstr "[29è/dernier]"
-
-#~ msgid "[30th/last]"
-#~ msgstr "[30è/dernier]"
-
-#~ msgid "[31st/last]"
-#~ msgstr "[31er/dernier]"
-
-# po/guile_strings.txt:182
-#~ msgid "year(s)."
-#~ msgstr "année(s)."
-
-# po/guile_strings.txt:182
-#~ msgid "years"
-#~ msgstr "années"
-
-#~ msgid "does not contain"
-#~ msgstr "ne contient pas"
-
-# messages-i18n.c:210
-#~ msgid "Select pixmap"
-#~ msgstr "Sélectionner une image"
-
-#~ msgid ""
-#~ "Enter the type of commodity. For stocks, this is often an exchange on "
-#~ "which the stock is traded. You can choose an existing type from the list "
-#~ "or enter a new type with the keyboard."
-#~ msgstr ""
-#~ "Saisir le type de produit.\n"
-#~ "Pour les actions, c'est souvent un marché sur lequel l'action est gérée.\n"
-#~ "Vous pouvez choisir un type existant dans la liste ou saisir un nouveau "
-#~ "type au clavier."
-
-# messages-i18n.c:34
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "Une erreur s'est produite en essayant de charger l'URL spécifiée."
-
-#~ msgid "Error message"
-#~ msgstr "Message d'erreur"
-
-# messages-i18n.c:11
-#~ msgid ""
-#~ "The GnuCash personal finance manager.\n"
-#~ "The GNU way to manage your money!\n"
-#~ "http://www.gnucash.org/"
-#~ msgstr ""
-#~ "Le gestionnaire de finances personnelles GnuCash.\n"
-#~ "La voie GNU pour gérer votre argent!\n"
-#~ "http://www.gnucash.org/"
-
-#~ msgid "EDIT"
-#~ msgstr "ÉDITER"
-
-# src/gnome/glade-gnc-dialogs.c:506
-#~ msgid "Select Import Action"
-#~ msgstr "Sélectionner l'opération d'importation"
-
-# messages-i18n.c:346
-#~ msgid "HBCI Version"
-#~ msgstr "Version de HBCI"
-
-# src/gnome/glade-gnc-dialogs.c:333
-#~ msgid "HBCI account name"
-#~ msgstr "Nom du compte HBCI"
-
-#~ msgid "<b>HBCI</b>"
-#~ msgstr "<b>HBCI</b>"
-
-# src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#~ msgid "Online HBCI Transaction"
-#~ msgstr "Transaction HBCI en ligne"
-
-# src/gnome/glade-gnc-dialogs.c:786
-#~ msgid "_HBCI Setup..."
-#~ msgstr "Configuration _HBCI"
-
-#~ msgid "Initial setup of HBCI/AqBanking access"
-#~ msgstr "Configuration de l'accès HBCI initial"
-
-#~ msgid "Process an MT940 response file"
-#~ msgstr "Traiter un fichier de réponse MT940"
-
-# messages-i18n.c:83
-#~ msgid "Quit GnuCash?"
-#~ msgstr "Quitter GnuCash ?"
-
-#~ msgid ""
-#~ "You are attempting to close the last GnuCash window.  Doing so will quit "
-#~ "the application.  Are you sure that this is what you want to do?"
-#~ msgstr ""
-#~ "Vous tentez de fermer la dernière fenêtre de GnuCash. Ceci quittera "
-#~ "l'application. Est-ce bien votre intention ?"
