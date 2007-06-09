@@ -136,7 +136,7 @@ gnc_exp_parser_shutdown (void)
   key_file = g_key_file_new();
   g_hash_table_foreach (variable_bindings, set_one_key, key_file);
   g_key_file_set_comment(key_file, GROUP_NAME, NULL,
-			 _(" Variables are in the form 'name=value'"),
+			 " Variables are in the form 'name=value'",
 			 NULL);
   gnc_key_file_save_to_file(filename, key_file, NULL);
   g_key_file_free(key_file);
