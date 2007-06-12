@@ -243,13 +243,13 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.5.4.tar.gz"
+set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.0.tar.gz"
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
 set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.13.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.2.9.tar.gz"
+set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.0.tar.gz"
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
