@@ -570,6 +570,14 @@ on_aqhbci_button (GtkButton *button,
     /* Call the qt wizard. See the note above about why this approach
        is chosen. */
 
+#if ((AQBANKING_VERSION_MAJOR == 2) && \
+     (AQBANKING_VERSION_MINOR >= 3))
+    /* With aqbanking>=2.3.0, we can directly activate all backends
+       here. Reduces user confusion. But in aqbanking-3.x this won't
+       be needed anymore. */
+    AB_Banking_ActivateAllProviders (info->api);
+#endif
+
     /* Reset existing mapping tables */
     AB_Banking_Fini (info->api);
     if (info->gnc_hash != NULL)
