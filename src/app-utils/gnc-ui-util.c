@@ -869,7 +869,7 @@ gnc_default_currency (void)
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
     g_free(mnemonic);
   }
   g_free(choice);
