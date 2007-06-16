@@ -9,19 +9,19 @@ you to track bank accounts, stocks, income and expenses. As quick and
 intuitive to use as a checkbook register, it is based on professional
 accounting principles to ensure balanced books and accurate reports.
 
-###################
+-------------------
 
 Available Support Options
 
 Online FAQ:    http://wiki.gnucash.org/wiki/FAQ
-Mailing Lists: http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat):    irc://irc.gnome.org/gnucash
+Mailing Lists:  http://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (Chat):    Channel #gnucash on server irc.gnome.org, see also http://wiki.gnucash.org/wiki/IRC
 
 If you encounter any bugs or problems, do not hesitate to report them
-at our bug tracking tool "Bugzilla" on
+into our bug tracking tool "Bugzilla":
 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
 
-###################
+-------------------
 
 Feature Highlights: 
 
@@ -38,7 +38,7 @@ Feature Highlights:
 More information and a Tutorial on how to get started can be found in
 the "Help" menu when clicking on "Tutorial and Concepts Guide".
 
-###################
+-------------------
 
 About the Program:
 
@@ -47,8 +47,4 @@ GNU General Public License (GPL). It is collaboratively developed by
 12 people from over 6 countries.
 
 Programming on GnuCash began in 1997, and its first release was in
-1998. GnuCash was initially made for Linux and comparable operating
-systems, a free, open source collection of community-based projects
-that has become a major force in the computing world.
-
-The GnuCash Developers.
+1998. 
