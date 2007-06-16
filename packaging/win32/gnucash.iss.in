@@ -20,7 +20,7 @@ Compression=lzma
 OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
-InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README
+InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt
 
 [Types]
 Name: "full"; Description: "{cm:FullInstall}"
@@ -71,6 +71,7 @@ Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdir
 
 ; And all the documentation
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main

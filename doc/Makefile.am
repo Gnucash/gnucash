@@ -4,6 +4,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 doc_DATA = \
   README.francais \
   README.german \
+  README.win32-bin.txt \
   guile-hackers.txt \
   projects.html 
 
@@ -20,6 +21,7 @@ EXTRA_DIST = \
   README.build-system \
   README.francais \
   README.german \
+  README.win32-bin.txt \
   README.HBCI \
   README.OFX \
   README.translator.txt \
