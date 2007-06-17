@@ -885,8 +885,8 @@ function inst_aqbanking() {
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
         qpushd $TMP_UDIR/aqbanking-*
-            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS}"
-            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
+            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS}"
+            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS}"
             if test x$AQBANKING_WITH_QT = xyes; then
                 inst_qt4
                 ./configure \
