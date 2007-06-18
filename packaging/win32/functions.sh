@@ -122,6 +122,7 @@ function add_to_env() {
 }
 
 # usage: set_env_or_die VALUE NAME
+# like add_to_env, but die if $NAME has been set to a different value
 function set_env_or_die() {
     _OLDADDS=`eval echo '"$'"$2_ADDS"'"'`
     add_to_env "$1" "$2"
@@ -135,6 +136,14 @@ function set_env_or_die() {
             die
         fi
     fi
+}
+
+# usage set_env VALUE NAME
+# like $NAME=$VALUE, but also reset env tracking variables
+function set_env() {
+    eval "$2=$1"
+    eval "$2_BASE="
+    eval "$2_ADDS=$1"
 }
 
 function assert_one_dir() {

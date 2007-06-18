@@ -72,10 +72,10 @@ function prepare() {
         export CFLAGS="$CFLAGS -g -O0"
     fi
 
-    if [ "$CROSS_COMPILE" ]; then
+    if [ "$CROSS_COMPILE" = "yes" ]; then
         # to avoid using the build machine's installed packages
-        export PKG_CONFIG_PATH=""
-        export PKG_CONFIG_LIBDIR=""
+        set_env "" PKG_CONFIG_PATH    # registered
+        export PKG_CONFIG_LIBDIR=""   # not registered
     fi
 }
 
