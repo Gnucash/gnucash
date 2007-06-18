@@ -235,18 +235,10 @@ qsf_session_begin(QofBackend *be, QofSession *session, const gchar *book_path,
 		qof_backend_set_error(be, ERR_BACKEND_NO_ERR);
 		return;
 	}
-	p = strchr (book_path, ':');
-	if (p) {
-		path = g_strdup (book_path);
-		if (!g_ascii_strncasecmp(path, "file:", 5)) {
-			p = g_new(gchar, strlen(path) - 5 + 1);
-			strcpy(p, path + 5);
-		}
-		qsf_be->fullpath = g_strdup(p);
-		g_free (path);
-	}
-	else {
-		qsf_be->fullpath = g_strdup(book_path);
+	if (g_str_has_prefix (book_path, "file:")) {
+		qsf_be->fullpath = g_strdup (book_path + 5);
+	} else {
+		qsf_be->fullpath = g_strdup (book_path);
 	}
 	if(create_if_nonexistent)
 	{
