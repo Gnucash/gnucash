@@ -326,6 +326,7 @@ function inst_guile() {
         guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
     fi
     if [ "$CROSS_COMPILE" = "yes" ]; then
+        mkdir -p $_GUILE_UDIR/bin
         qpushd $_GUILE_UDIR/bin
         # The cross-compiling guile expects these program names
         # for the build-time guile
