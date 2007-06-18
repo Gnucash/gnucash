@@ -688,7 +688,7 @@ function inst_inno() {
     add_to_env $_INNO_UDIR PATH
     if quiet which iscc
     then
-        echo "Inno Setup Compiler already installed.  Skipping."
+        echo "Inno Setup Compiler already installed.  skipping."
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
@@ -742,7 +742,7 @@ function inst_opensp() {
     add_to_env ${_OPENSP_UDIR}/bin PATH
     if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
     then
-        echo "OpenSP already installed. Skipping."
+        echo "OpenSP already installed. skipping."
     else
         wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/OpenSP-*
@@ -773,7 +773,7 @@ function inst_libofx() {
     add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists libofx
     then
-        echo "Libofx already installed. Skipping."
+        echo "Libofx already installed. skipping."
     else
         wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/libofx-*
@@ -801,7 +801,7 @@ function inst_gwenhywfar() {
     add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gwenhywfar
     then
-        echo "Gwenhywfar already installed. Skipping."
+        echo "Gwenhywfar already installed. skipping."
     else
         wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gwenhywfar-*
@@ -829,7 +829,7 @@ function inst_ktoblzcheck() {
     add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     if quiet ${PKG_CONFIG} --exists ktoblzcheck
     then
-        echo "Ktoblzcheck already installed. Skipping."
+        echo "Ktoblzcheck already installed. skipping."
     else
         wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/ktoblzcheck-*
@@ -880,7 +880,7 @@ function inst_aqbanking() {
     add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists aqbanking
     then
-        echo "AqBanking already installed. Skipping."
+        echo "AqBanking already installed. skipping."
     else
         wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/aqbanking-*
