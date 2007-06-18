@@ -1137,7 +1137,7 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
   g_return_if_fail (view && wind);
   selection = gtk_tree_view_get_selection (view);
 
-  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
+  select_line (wind, selection, wind->cat_display_info, wind->cat_map_info,
 	       update_categories_page);
 }
 
