@@ -65,6 +65,9 @@ typedef struct
   GtkCheckButton* sep_buttons[SEP_NUM_OF_TYPES];
   GtkCheckButton* custom_cbutton;
   GtkEntry* custom_entry;
+  GtkBox* typehbox;
+  GtkComboBox** typecombo_array;
+  gboolean fully_initialized;
 } GncCsvPreview;
 
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty);
@@ -124,6 +127,28 @@ static void cancel_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   gtk_widget_hide((GtkWidget*)(preview->dialog));
 }
 
+static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
+{
+  if(preview->fully_initialized)
+  {
+    int i, ncols = preview->parse_data->column_types->len;
+    printf("tree resized!\n");
+    for(i = 0; i < ncols; i++)
+    {
+      gint col_width;
+      col_width = gtk_tree_view_column_get_width(gtk_tree_view_get_column(preview->treeview, i));
+      printf("%d got width %d\n", i, col_width);
+      gtk_widget_set_size_request(GTK_WIDGET(preview->typecombo_array[i]), col_width, 0);
+    }
+  }
+}
+
+static void cbox_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
+{
+  printf("resized to nothing\n");
+  gtk_widget_set_size_request(widget, 0, 0);
+}
+
 static GncCsvPreview* gnc_csv_new_preview()
 {
   GncCsvPreview* preview = g_malloc(sizeof(GncCsvPreview));
@@ -137,8 +162,8 @@ static GncCsvPreview* gnc_csv_new_preview()
   int i;
   GtkWidget *encselector = go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8);
   GtkTable* enctable;
+  preview->fully_initialized = FALSE;
   preview->xml = gnc_glade_xml_new("gnc-csv-preview-dialog.glade", "dialog");
-  printf("xml is %p\n", preview->xml);
   preview->dialog = (GtkDialog*)(glade_xml_get_widget(preview->xml, "dialog"));
 
   for(i = 0; i < SEP_NUM_OF_TYPES; i++)
@@ -172,18 +197,31 @@ static GncCsvPreview* gnc_csv_new_preview()
   g_signal_connect(G_OBJECT(cancel_button), "clicked",
                    G_CALLBACK(cancel_button_clicked), (gpointer)preview);
 
+  preview->typehbox = GTK_BOX(glade_xml_get_widget(preview->xml, "typehbox"));
   preview->treeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "treeview"));
-  printf("treeview is %p \n", preview->treeview);
+  g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
+                   G_CALLBACK(treeview_resized), (gpointer)preview);
+
+  preview->typecombo_array = NULL;
   
+  /* TODO Free stuff */
   preview->approved = FALSE;
   return preview;
 }
 
+/*   testbox = GTK_COMBO_BOX(gtk_combo_box_new_text()); */
+/*   gtk_combo_box_append_text(testbox, "Hello"); */
+/*   gtk_box_pack_start(preview->typehbox, GTK_WIDGET(testbox), TRUE, TRUE, 5); */
+/*   gtk_widget_show_all(GTK_WIDGET(preview->typehbox)); */
 
 static void gnc_csv_preview_free(GncCsvPreview* preview)
 {
   g_object_unref(preview->xml);
   g_free(preview);
+  if(preview->typecombo_array != NULL)
+  {
+    g_free(preview->typecombo_array);
+  }
 }
 
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
@@ -199,12 +237,27 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   /* Clear out any exisiting columns. */
   if(notEmpty)
   {
+    GList *children, *children_begin;
     int size;
     do
     {
       GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->treeview, 0);
       size = gtk_tree_view_remove_column(preview->treeview, col);
     } while(size);
+    children = children_begin = gtk_container_get_children(GTK_CONTAINER(preview->typehbox));
+    while(children != NULL)
+    {
+      gtk_container_remove(GTK_CONTAINER(preview->typehbox), GTK_WIDGET(children->data));
+      /* TODO free stuff */
+      children = children->next;
+    }
+    g_list_free(children_begin);
+
+    for(i = 0; i < ncols; i++)
+    {
+      g_free(preview->typecombo_array[i]);
+    }
+    g_free(preview->typecombo_array);
   }
   
   /* TODO free types */
@@ -226,9 +279,25 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
     gtk_tree_view_insert_column_with_attributes(preview->treeview,
                                                 -1, "", renderer, "text", i, NULL);
   }
-  
+
   gtk_tree_view_set_model(preview->treeview, GTK_TREE_MODEL(store));
   g_object_unref(GTK_TREE_MODEL(store));
+
+  gtk_widget_show_all(GTK_WIDGET(preview->treeview));
+
+  preview->typecombo_array = g_malloc(sizeof(GtkComboBox*) * ncols);
+
+  for(i = 0; i < ncols; i++)
+  {
+    preview->typecombo_array[i] = GTK_COMBO_BOX(gtk_combo_box_new_text());
+    g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
+                     G_CALLBACK(cbox_resized), (gpointer)preview);
+    gtk_combo_box_append_text(preview->typecombo_array[i], "Hello");
+    gtk_box_pack_start(preview->typehbox, GTK_WIDGET(preview->typecombo_array[i]), FALSE, TRUE, 0);
+  }
+
+  gtk_widget_show_all(GTK_WIDGET(preview->typehbox));
+  preview->fully_initialized = TRUE;
 }
 
 static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
@@ -382,7 +451,6 @@ void gnc_file_csv_import(void)
     parse_data->column_types->data[0] = GNC_CSV_DATE;
     parse_data->column_types->data[1] = GNC_CSV_DESCRIPTION;
     parse_data->column_types->data[2] = GNC_CSV_AMOUNT;
-    printf("1ctype 1: %d\n", parse_data->column_types->data[0]);
 
     preview = gnc_csv_new_preview();
     if(gnc_csv_preview(preview, parse_data))
