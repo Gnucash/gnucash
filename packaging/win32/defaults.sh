@@ -68,21 +68,20 @@ fi
 
 
 ####
+set_default LD ld
+set_default CC gcc
+set_default DLLTOOL dlltool
+set_default RANLIB ranlib
+
 # For cross-compiling, change this to "yes"
 set_default CROSS_COMPILE "no"
 
 if [ "$CROSS_COMPILE" != yes ]; then
     set_default LIBTOOLIZE libtoolize
-    set_default LD ld
-    set_default CC gcc
-    set_default DLLTOOL dlltool
 else
     # Insert your cross-compiler mingw32 bin-directories here
     set_default LIBTOOLIZE $GLOBAL_DIR/autotools/bin/libtoolize
     set_default HOST_XCOMPILE "--host=mingw32"
-    set_default LD mingw32-ld
-    set_default CC mingw32-gcc
-    set_default DLLTOOL mingw32-dlltool
 fi
 ####
 

@@ -73,9 +73,9 @@ function prepare() {
     fi
 
     if [ "$CROSS_COMPILE" ]; then
-        # to avoid using the host's installed packages
-        PKG_CONFIG_PATH=""
-        PKG_CONFIG_LIBDIR=""
+        # to avoid using the build machine's installed packages
+        export PKG_CONFIG_PATH=""
+        export PKG_CONFIG_LIBDIR=""
     fi
 }
 
@@ -129,6 +129,7 @@ function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/mingw32/bin PATH
     [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
 
     if quiet test_for_mingw
