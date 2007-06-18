@@ -808,15 +808,17 @@ function inst_gwenhywfar() {
         wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/gwenhywfar-*
         qpushd $TMP_UDIR/gwenhywfar-*
-            ./configure \
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            ./configure ${HOST_XCOMPILE} \
                 --with-openssl-includes=$_OPENSSL_UDIR/include \
+                --disable-binreloc \
                 ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
                 ssl_lib="-leay32 -lssl32" \
                 --prefix=$_GWENHYWFAR_UDIR \
-                CPPFLAGS="${REGEX_CPPFLAGS}" \
-                LDFLAGS="${REGEX_LDFLAGS}"
+                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
+                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
             make
-            make check
+            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
@@ -836,10 +838,12 @@ function inst_ktoblzcheck() {
         wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
         assert_one_dir $TMP_UDIR/ktoblzcheck-*
         qpushd $TMP_UDIR/ktoblzcheck-*
-            ./configure \
-                --prefix=${_GWENHYWFAR_UDIR}
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_GWENHYWFAR_UDIR} \
+                --disable-binreloc
             make
-            make check
+            [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
         qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
