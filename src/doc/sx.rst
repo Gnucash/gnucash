@@ -183,6 +183,14 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 - since-last-run
   - [ ] "reminder" instances should show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
+  - [ ] text changes [tw20070614]_
+    - [ ] "Sx, Instance, Variable" -> "Transaction"
+    - [ ] "Instance State" -> "Status"
+    - [ ] "Variable Value" -> "Value"
+  - [ ] bold SX names [tw20070614]_
+  - [ ] checkbox/option to show/hide Reminders [tw20070614]_
+  - [ ] filter/remove SXes that don't have any instances in the list [tw20070614-2]_
+  - [ ] remove tree expand controls, except for non-to-create instances with variables [tw200070614-2]_
 ! - [x] save/restore dialog window size
   - [x] remove split pane
   - [x] "auto" scrollbars
@@ -204,6 +212,9 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
   - [x] add variable table to instances
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
+
+.. _[tw20070614]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
+.. _[tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
 
 - destroy/cleanup, notes:
   - dispose: break references; callable multiple times
