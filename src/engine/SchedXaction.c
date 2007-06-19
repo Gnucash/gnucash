@@ -266,7 +266,7 @@ gnc_sx_get_schedule(const SchedXaction *sx)
 void
 gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
 {
-   g_return_if_fail(sx && schedule);
+   g_return_if_fail(sx);
    gnc_sx_begin_edit(sx);
    sx->schedule = schedule;
    qof_instance_set_dirty(&sx->inst);

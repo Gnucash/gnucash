@@ -529,7 +529,7 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 
     if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
         return FALSE;
-    g_return_val_if_fail(schedule, FALSE);
+    // g_return_val_if_fail(schedule, FALSE);
     g_debug("setting freshly-parsed schedule: [%s]", recurrenceListToString(schedule));
     gnc_sx_set_schedule(parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;

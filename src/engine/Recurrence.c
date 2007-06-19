@@ -267,9 +267,15 @@ recurrenceListNextInstance(const GList *rlist, const GDate *ref, GDate *next)
     const GList *iter;
     GDate nextSingle;  /* The next date for an individual recurrence */
 
-    g_return_if_fail(rlist && ref && next && g_date_valid(ref));
-
     g_date_clear(next, 1);
+
+    // empty rlist = no recurrence
+    if (rlist == NULL) {
+        return;
+    }
+
+    g_return_if_fail(ref && next && g_date_valid(ref));
+
     for (iter = rlist; iter; iter = iter->next) {
         const Recurrence *r = iter->data;
 
@@ -318,15 +324,18 @@ recurrenceListToString(const GList *r)
     const GList *iter;
     GString *str;
     gchar *s;
-    g_return_val_if_fail(r, NULL);
 
     str = g_string_new("");
-    for(iter = r; iter; iter = iter->next){
-        if (iter != r)
-            g_string_append(str, " + ");
-        s = recurrenceToString((Recurrence *)iter->data);
-        g_string_append(str, s);
-        g_free(s);
+    if (r == NULL) {
+        g_string_append(str, "None");
+    } else {
+        for(iter = r; iter; iter = iter->next){
+            if (iter != r)
+                g_string_append(str, " + ");
+            s = recurrenceToString((Recurrence *)iter->data);
+            g_string_append(str, s);
+            g_free(s);
+        }
     }
     return g_string_free(str, FALSE);
 }

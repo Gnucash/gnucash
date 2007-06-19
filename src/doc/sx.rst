@@ -166,11 +166,6 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
     - [x] src/gnome/druid-acct-period.c
 
 - gnc_frequency
-  - [ ] Freq=none doesn't work::
-
-    * 17:00:29  CRIT <gnc.engine.recurrence> recurrenceListNextInstance: assertion `rlist && ref && next && g_date_valid(ref)' failed
-    * 17:00:36  CRIT <gnc.engine.sx> gnc_sx_set_schedule: assertion `sx && schedule' failed
-
   - [ ] 'every x months' spin button makes large jumps::
 
     <andi5> jsled: another topic: you have probably seen the "every x months"
@@ -179,6 +174,10 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
     spinning... it is run because the changed(?) signal handler is too slow
 
   - [ ] support nth-weekday Recurrence period.
+  - [x] Freq=none doesn't work::
+
+    * 17:00:29  CRIT <gnc.engine.recurrence> recurrenceListNextInstance: assertion `rlist && ref && next && g_date_valid(ref)' failed
+    * 17:00:36  CRIT <gnc.engine.sx> gnc_sx_set_schedule: assertion `sx && schedule' failed
 
 - since-last-run
   - [ ] "reminder" instances should show number of days until due
