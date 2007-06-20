@@ -14,46 +14,60 @@ TODO
   - [x] printf -> logging
 
 - core
-! - [ ] @fixme-s
-! - [ ] after updating/merging new instances, ensure sx-instance-state consistency
+  - ! [ ] @fixme-s
+  - ! [ ] after updating/merging new instances, ensure sx-instance-state consistency
   - [x] sx list -> qof collection
   - [x] sx engine events
+
     - [x] sx list collection add/remove -- sx-list GNC_EVENT_ITEM_ADDED, _REMOVED
     - [x] sx modified -- QOF_EVENT_MODIFY
+
   - [x] sx upcoming instance model
-!   - [x] implement sort model
+
+    - ! [x] implement sort model
+
   - [x] rename, re-home gnc-sx-instance-model:sxsl_get_sx_vars
   - [x] rename, re-home gnc-sx-instance-model:parse_vars_from_formula
 
 - unit testing
+
   - [ ] model updating in the face of change
+
     - [ ] insert sx
     - [ ] remove sx
     - [ ] update sx
+
       - [ ] add instances
       - [ ] remove instances
       - [ ] make "weird"
+
     - [ ] ± disabled flag
+
   - [x] ensure state consistency model is upheld
   - [ ] check variables-unbound logic
   - [ ] verify summary counts
   - [ ] check "since last run" states
+
     - [ ] specious datafile dirty-ing
     - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
     - [ ] +autocreate, -notify, w/postponed
     - [ ] +autocreate, +notify, w/postponed
+
   - [ ] bugs
+
     - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
+
   - remove
+
     - [x] display-using src/gnome-utils/test/test-sx.c
 
 - bugs
 
-! - [x] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
+  - ! [x] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
-! - [x] parse from 1.8 file doesn't setup start date correctly;
+  - ! [x] parse from 1.8 file doesn't setup start date correctly;
     daily-auto-yes-notify.xac has start date of 2006-09-26, but new TXN is
     for $today.
 
@@ -61,11 +75,12 @@ TODO
 
   - [x] created/review txns disappear, eventual crash [ve20070303]_
 
-! - [x] auto-create (+notify) txns not in review list. [ve20070209]_
+  - ! [x] auto-create (+notify) txns not in review list. [ve20070209]_
 
   - [x] sx-from-trans: "unknown get.type [3]" [dh20070120]_
 
-! - [x] crash with two sx lists open and SX mutation
+  - ! [x] crash with two sx lists open and SX mutation
+
     - I'm pretty sure this is due to SX lists not getting cleaned up on page close, somehow.
 
   - [x] no way to clear a variable entry [ve20070209]_
@@ -75,18 +90,25 @@ TODO
 .. _[ve20070303]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
 
 - sx list page
+
   - [/] make into split panel
+
     - [ ] fix default slider position
     - [ ] conf-save slider position
-! - [x] use gnc-tree-view
-! - [x] save/restore state
+
+  - ! [x] use gnc-tree-view
+  - ! [x] save/restore state
 
 - sx editor
+
   - [/] clean up source formatting
   - [ ] move "non-editor" general app/ui code out of bottom of dialog-sx-editor.c
   - [x] re-layout dialog
+
     - tabs: "overview", "frequency", "template transaction" [, "estimation"]
+
   - [ ] model-ize
+
     - (check_consistent, especially...)
 
 GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
@@ -100,72 +122,104 @@ gchar* gnc_sx_edit_model_get_name(GncSxEditModel *mdl);
 void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 
 - gnc_dense_cal
+
   - [x] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar
+
     - [x] conf-save value
+
   - [ ] code cleanup
+
     - [x] min-size
+
   - [x] start-of-week := {sun,mon} (via locale)
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
   - [/] (re-format file)
-! - [x] font handling: gdk -> pango
+  - ! [x] font handling: gdk -> pango
   - [x] set_model(GncTemporalInstancesModel *mdl)
+
     - [x] new interface creation.
     - [x] register callbacks for signals
+
   - [x] remove clist usage
 
 - sx-from-trans
+
   - [?] convert to GObject
   - [x] hookup destroy/finalize
 
 - FreqSpec
+
   - [#] type+ui-type -> type
 
 - use Recurrence instead of FreqSpec
-! - [x] load druid
-! - [x] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
-! - [x] XML migration, handling
+
+  - ! [x] load druid
+  - ! [x] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
+  - ! [x] XML migration, handling
+
     - xml:freqSpec -> obj:Recurrence
+
       - [x] none (Recurrence doesn't support)
       - [x] once
+
         - [x] if once, fix Recurrence date to be SX start date. :p
+
       - [x] daily
       - [x] daily [m-f] (composite)
       - [x] weekly, single
       - [x] weekly, multiple (composite)
       - [x] monthly (+quarterly, tri-anually, semi-annually, yearly)
       - [x] semi-monthly (composite)
+
     - [x] write Recurrences into new-version SX
+
   - gnc-frequency
-!   - [x] Support Recurrence
+
+    - ! [x] Support Recurrence
+
       - [x] in
       - [x] out
-!   - [x] Support 'last-day-of-month'
+
+    - ! [x] Support 'last-day-of-month'
     - [x] simplify
+
       - [x] remove daily [m-f] (-> weekly)
       - [x] remove biweekly page (-> weekly)
       - [x] remove > monthly pages (-> monthly)
+
     - [x] clean up, reformat source
+
   - gnc-plugin-page-sx-list
+
     - [x] gnc_plugin_page_sx_list_cmd_new
+
   - dialog-sx-editor
+
     - [x] gnc_sxed_check_changed
     - [x] gnc_sxed_check_consistent
     - [x] gnc_sxed_update_cal
     - [x] gnc_sxed_save_sx
+
   - sx list
+
     - [x] recurrence_cmp(...)
     - [x] More compact recurrenceListToString(...).
+
   - [ ] remove FreqSpec code
+
     - [ ] SX code
+
       - [ ] engine
       - [ ] backend
       - [ ] gnc-frequency
       - [ ] gnc-dense-cal-store
+
     - [x] src/gnome/druid-acct-period.c
 
 - gnc_frequency
+
   - [ ] 'every x months' spin button makes large jumps::
 
     <andi5> jsled: another topic: you have probably seen the "every x months"
@@ -180,33 +234,44 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
     * 17:00:36  CRIT <gnc.engine.sx> gnc_sx_set_schedule: assertion `sx && schedule' failed
 
 - since-last-run
+
   - [ ] "reminder" instances should show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
   - [ ] text changes [tw20070614]_
+
     - [ ] "Sx, Instance, Variable" -> "Transaction"
     - [ ] "Instance State" -> "Status"
     - [ ] "Variable Value" -> "Value"
+
   - [ ] bold SX names [tw20070614]_
   - [ ] checkbox/option to show/hide Reminders [tw20070614]_
   - [ ] filter/remove SXes that don't have any instances in the list [tw20070614-2]_
   - [ ] remove tree expand controls, except for non-to-create instances with variables [tw200070614-2]_
-! - [x] save/restore dialog window size
+  - ! [x] save/restore dialog window size
   - [x] remove split pane
   - [x] "auto" scrollbars
-! - [x] rewrite adapter (re-)population logic
+  - ! [x] rewrite adapter (re-)population logic
   - [x] move "effect_change" up to app-utils/, test.
   - [x] move state-change up to app-utils
   - [x] move variable-setting up to app-utils
   - [x] move summarization up to app-utils
   - [x] add reminders, postponed to SxInstanceModel
   - [x] add mutation support to sx instance model
+
     - [x] state machine
+
   - [x] add variable state to sx instance model
+
     - [x] handle (hidden/system not for editing) variables.
+
   - [x] add sx_upcoming_instance_model()
-      - [x] add effect_auto_create()
+
+    - [x] add effect_auto_create()
+
   - [x] add some sort of "ready to go" flag and api
+
     - [x] variable setting, primarily
+
   - [x] some sort of commit_changes()
   - [x] add variable table to instances
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
@@ -216,6 +281,7 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 .. _[tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
 
 - destroy/cleanup, notes:
+
   - dispose: break references; callable multiple times
   - finalize: complete destruction; just before free; only called once
 
@@ -259,18 +325,22 @@ instances through this interface.
 The old SLR dialog has the following stages:
 
 - Reminders
+
   - can be promoted to "to-create"
+
 - Auto-created, with notification
 - To-Create
+
   - postponed, to-create
   - ignore state.
+
 - Created review
 - Obsolete SX cleanup
 
 The new SLR dialog will have the following:
 
-- Creation
-  (treemodel consisting of)
+- Creation (treemodel consisting of)
+
   - auto-created
   - reminder
   - postponed
@@ -304,7 +374,9 @@ Formula Parsing
 ------------------------
 
 A SXes formula is parsed in the context of:
+
 - the template transaction
+
   - the accounts of the splits
 - the sequence number
 - the date of the transaction
@@ -314,6 +386,7 @@ Testing Notes
 ---------------------
 
 - auto-create
+
   - auto-create with postponed instances shouldn't destroy postponed
     instances
 
@@ -325,7 +398,9 @@ ignoring the first instance. We only want to increment the
 counters for newly-discovered-as-to-be-created SXes."
 
 - auto-create 
+
   - auto-create transactions can be created w/o user interaction
+
     - their state is transitioned to 'created', which is not modifiable
   
   - auto-create (+notify) transactions should be displayed, even if they are
@@ -335,6 +410,7 @@ counters for newly-discovered-as-to-be-created SXes."
     are other transactions.
   
   - Scenarios
+
     - only auto-create (-notify): no SLR, info dialog w/count (***)
     - only auto-create (+notify): SLR dialog, already created
     - others, auto-create (-notify): SLR dialog, incl. created 
@@ -373,6 +449,7 @@ Known Issues
 ------------
 
 (as of 2007-01-14)
+
 - The SX List plugin page doesn't save/restore its state.
 - Updating the variables in a formula with the SLR dialog open isn't consistent.
 - Closing an sx list plugin page leads to corrupted state.
