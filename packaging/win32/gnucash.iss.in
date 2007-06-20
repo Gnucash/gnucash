@@ -107,6 +107,7 @@ Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "i
 Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "wizarddir"; ValueData: "{app}\lib\aqbanking\plugins\16\wizards"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "pkgdatadir"; ValueData: "{app}\share\aqbanking"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "sysconfdir"; ValueData: "{app}\etc"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Software\Aqbanking\Paths"; ValueType: string; ValueName: "localedir"; ValueData: "{app}\lib\locale"; Flags: uninsdeletevalue
 
 ; And even one for aqhbci
 Root: HKCU; Subkey: "Software\AqHbci"; ValueType: none; Flags: uninsdeletekeyifempty

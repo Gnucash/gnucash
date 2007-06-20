@@ -166,6 +166,7 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/lib/aqbanking ${DIST_UDIR}/lib
     cp -a ${_AQBANKING_UDIR}/share/aqbanking ${DIST_UDIR}/share
     cp -a ${_AQBANKING_UDIR}/share/aqhbci ${DIST_UDIR}/share
+    cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
 function dist_gnucash() {
