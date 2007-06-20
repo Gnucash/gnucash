@@ -729,6 +729,8 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
     xaccTransSetDescription(new_trans, 
              gnc_ttinfo_get_description(tti));
 
+    xaccTransSetDatePostedSecs(new_trans, time(NULL));
+
     xaccTransSetNum(new_trans,
           gnc_ttinfo_get_num(tti));
     xaccTransSetCurrency( new_trans,
