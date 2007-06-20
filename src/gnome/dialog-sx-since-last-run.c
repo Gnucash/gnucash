@@ -359,14 +359,13 @@ gnc_sx_slr_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
     g_signal_connect(adapter->real, "rows-reordered", G_CALLBACK(gsslrtma_proxy_rows_reordered), adapter);
 }
 
-/* @@fixme: i18n. **/
 /* @@fixme: non-staticize. **/
 static char* gnc_sx_instance_state_names[] = {
-    ("Ignored"),
-    ("Postponed"),
-    ("To-Create"),
-    ("Reminder"),
-    ("Created"),
+    "Ignored",
+    "Postponed",
+    "To-Create",
+    "Reminder",
+    "Created",
     NULL
 };
 
@@ -375,6 +374,17 @@ static GtkTreeModel* _singleton_slr_state_model = NULL;
 GtkTreeModel*
 gnc_sx_get_slr_state_model(void)
 {
+    // This lists exists only to have translatable versions of the strings above.
+    char* _i18n_gnc_sx_instance_state_names[] = {
+        _("Ignored"),
+        _("Postponed"),
+        _("To-Create"),
+        _("Reminder"),
+        _("Created"),
+        NULL
+    };
+    if (_i18n_gnc_sx_instance_state_names == NULL) { ; }
+
     if (_singleton_slr_state_model == NULL)
     {
         int i;
@@ -386,7 +396,7 @@ gnc_sx_get_slr_state_model(void)
             gtk_list_store_insert_with_values(GTK_LIST_STORE(_singleton_slr_state_model),
                                               &iter,
                                               SX_INSTANCE_STATE_MAX_STATE + 1,
-                                              0, gnc_sx_instance_state_names[i], -1);
+                                              0, _(gnc_sx_instance_state_names[i]), -1);
         }
     }
     return _singleton_slr_state_model;
@@ -426,7 +436,6 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
         FreqSpec *fs;
         GString *frequency_str;
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
-        char next_occur_date_buf[MAX_DATE_LENGTH+1];
 
         frequency_str = g_string_sized_new(32);
         fs = xaccSchedXactionGetFreqSpec(instances->sx);
@@ -436,7 +445,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
             GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
             if (last_occur == NULL || !g_date_valid(last_occur))
             {
-                g_stpcpy(last_occur_date_buf, "never");
+                g_stpcpy(last_occur_date_buf, _("never"));
             }
             else
             {
@@ -445,8 +454,6 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                                 last_occur);
             }
         }
-
-        qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
 
         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
         {
@@ -480,7 +487,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                 }
                 gtk_tree_store_set(model->real, &inst_tree_iter,
                                    SLR_MODEL_COL_NAME, instance_date_buf,
-                                   SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[inst->state],
+                                   SLR_MODEL_COL_INSTANCE_STATE, _(gnc_sx_instance_state_names[inst->state]),
                                    SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
                                    SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
                                    SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
@@ -508,7 +515,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                         }
                         else
                         {
-                            tmp_str = g_string_new("(need value)");
+                            tmp_str = g_string_new(_("(need value)"));
                         }
 
                         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real),
@@ -829,7 +836,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
      
     for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
     {
-        if (strcmp(value, gnc_sx_instance_state_names[i]) == 0)
+        if (strcmp(value, _(gnc_sx_instance_state_names[i])) == 0)
             break;
     }
     if (i == SX_INSTANCE_STATE_CREATED)
@@ -926,7 +933,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
         gtk_tree_view_set_model(dialog->instance_view, GTK_TREE_MODEL(dialog->editing_model));
 
         renderer = gtk_cell_renderer_text_new();
-        col = gtk_tree_view_column_new_with_attributes("SX, Instance, Variable", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Transaction"), renderer,
                                                        "text", SLR_MODEL_COL_NAME,
                                                        NULL);
         gtk_tree_view_append_column(dialog->instance_view, col);
@@ -942,7 +949,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(instance_state_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Instance State", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Status"), renderer,
                                                        "text", SLR_MODEL_COL_INSTANCE_STATE,
                                                        "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
                                                        // you might think only "sensitive" is required to
@@ -961,7 +968,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(variable_value_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Variable Value", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
                                                        "text", SLR_MODEL_COL_VARAIBLE_VALUE,
                                                        "visible", SLR_MODEL_COL_VARIABLE_VISIBILITY,
                                                        NULL);

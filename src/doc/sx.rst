@@ -110,33 +110,35 @@ TODO
   - [ ] model-ize
 
     - (check_consistent, especially...)
+    - Notes::
 
-GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
+    GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
 
-gnc_sxed_check_changed( GncSxEditorDialog *sxed )
-gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
-gnc_sxed_save_sx( GncSxEditorDialog *sxed )
+    gnc_sxed_check_changed( GncSxEditorDialog *sxed )
+    gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
+    gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
-
-gchar* gnc_sx_edit_model_get_name(GncSxEditModel *mdl);
-void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
+    gchar* gnc_sx_edit_model_get_name(GncSxEditModel *mdl);
+    void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 
 - gnc_dense_cal
 
-  - [x] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar
-
-    - [x] conf-save value
+  - [ ] eliminate the XXX FIXME "cannot find tag [1]" messages.
 
   - [ ] code cleanup
 
     - [x] min-size
 
-  - [x] start-of-week := {sun,mon} (via locale)
   - [ ] change number-of-month properties to display-named properties (width, length)
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
   - [/] (re-format file)
   - ! [x] font handling: gdk -> pango
+  - [x] start-of-week := {sun,mon} (via locale)
+  - [x] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar
+
+    - [x] conf-save value
+
   - [x] set_model(GncTemporalInstancesModel *mdl)
 
     - [x] new interface creation.
@@ -228,6 +230,7 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
     spinning... it is run because the changed(?) signal handler is too slow
 
   - [ ] support nth-weekday Recurrence period.
+
   - [x] Freq=none doesn't work::
 
     * 17:00:29  CRIT <gnc.engine.recurrence> recurrenceListNextInstance: assertion `rlist && ref && next && g_date_valid(ref)' failed
@@ -237,16 +240,16 @@ void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 
   - [ ] "reminder" instances should show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
-  - [ ] text changes [tw20070614]_
-
-    - [ ] "Sx, Instance, Variable" -> "Transaction"
-    - [ ] "Instance State" -> "Status"
-    - [ ] "Variable Value" -> "Value"
-
   - [ ] bold SX names [tw20070614]_
   - [ ] checkbox/option to show/hide Reminders [tw20070614]_
   - [ ] filter/remove SXes that don't have any instances in the list [tw20070614-2]_
   - [ ] remove tree expand controls, except for non-to-create instances with variables [tw200070614-2]_
+  - [x] text changes [tw20070614]_
+
+    - "Sx, Instance, Variable" -> "Transaction"
+    - "Instance State" -> "Status"
+    - "Variable Value" -> "Value"
+
   - ! [x] save/restore dialog window size
   - [x] remove split pane
   - [x] "auto" scrollbars
