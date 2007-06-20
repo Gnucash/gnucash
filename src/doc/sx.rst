@@ -123,8 +123,6 @@ TODO
 
 - gnc_dense_cal
 
-  - [ ] eliminate the XXX FIXME "cannot find tag [1]" messages.
-
   - [ ] code cleanup
 
     - [x] min-size
@@ -133,6 +131,7 @@ TODO
   - [ ] gconf setting for dense-cal font-size reduction
   - [?] better transient/floating window
   - [/] (re-format file)
+  - [x] eliminate the "couldn't find tag [1]" messages.
   - ! [x] font handling: gdk -> pango
   - [x] start-of-week := {sun,mon} (via locale)
   - [x] {0, 1, 2, 3, 4, 6, 12} month selection for dense calendar

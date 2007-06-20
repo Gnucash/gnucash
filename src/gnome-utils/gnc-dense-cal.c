@@ -1834,7 +1834,7 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove)
     }
     if (iter == NULL)
     {
-        g_warning("couldn't find tag [%d]", mark_to_remove);
+        g_message("couldn't find tag [%d]", mark_to_remove);
         return;
     }
     if (mark_data == NULL)
