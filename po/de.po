@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-12 22:29+0200\n"
-"PO-Revision-Date: 2007-06-12 22:35+0200\n"
+"POT-Creation-Date: 2007-06-20 23:17+0200\n"
+"PO-Revision-Date: 2007-06-20 23:36+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -212,11 +212,11 @@ msgstr "GnuCash Version anzeigen"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
-msgstr ""
+msgstr "Debug-Modus aktivieren: Besonders viele Log-Meldungen ausgeben."
 
 #: ../src/bin/gnucash-bin.c:224
 msgid "Enable extra/development/debugging features."
-msgstr ""
+msgstr "Zusätzliche/instabile/Debug-Funktionen aktivieren."
 
 #: ../src/bin/gnucash-bin.c:227
 msgid ""
@@ -229,6 +229,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
+"Datei, wo die Logmeldungen hingeschrieben werden; Default \"/tmp/gnucash."
+"trace\"; kann \"stderr\" oder \"stdout\" sein."
 
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
@@ -465,7 +467,7 @@ msgstr "Auslagenerstattung"
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:454
-#: ../src/engine/FreqSpec.c:728 ../src/engine/Recurrence.c:470
+#: ../src/engine/FreqSpec.c:728 ../src/engine/Recurrence.c:479
 #: ../src/gnome/glade/sched-xact.glade.h:118 ../intl-scm/guile-strings.c:3588
 #: ../intl-scm/guile-strings.c:3614 ../intl-scm/guile-strings.c:3674
 #: ../intl-scm/guile-strings.c:3676 ../intl-scm/guile-strings.c:3782
@@ -478,10 +480,12 @@ msgid "None"
 msgstr "Keine"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:630
+#: ../src/gnome/druid-hierarchy.c:829
 msgid "Yes"
 msgstr "Ja"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:635
+#: ../src/gnome/druid-hierarchy.c:832
 msgid "No"
 msgstr "Nein"
 
@@ -3365,7 +3369,7 @@ msgstr "Einmalig: %s"
 msgid "Daily (x%u)"
 msgstr "Täglich (%u Mal)"
 
-#: ../src/engine/FreqSpec.c:752 ../src/engine/Recurrence.c:520
+#: ../src/engine/FreqSpec.c:752 ../src/engine/Recurrence.c:529
 #: ../src/gnome/glade/sched-xact.glade.h:71
 #, c-format
 msgid "Daily"
@@ -3566,7 +3570,7 @@ msgstr ""
 "sind nicht korrekt. Die Zugriffsrechte müssen »rwx«\n"
 "(Lesen/Schreiben/Ausführen) für den aktuellen Benutzer erlauben.\n"
 
-#: ../src/engine/Recurrence.c:418 ../src/gnome/glade/fincalc.glade.h:45
+#: ../src/engine/Recurrence.c:427 ../src/gnome/glade/fincalc.glade.h:45
 #: ../src/gnome/glade/sched-xact.glade.h:190
 msgid "Weekly"
 msgstr "Wöchentlich"
@@ -3576,36 +3580,36 @@ msgstr "Wöchentlich"
 #. translators: %u is the number of intervals
 #. translators: %u is the recurrence multipler.
 #. translators: %u is the recurrence multiplier.
-#: ../src/engine/Recurrence.c:422 ../src/engine/Recurrence.c:496
-#: ../src/engine/Recurrence.c:524 ../src/engine/Recurrence.c:537
-#: ../src/engine/Recurrence.c:551
+#: ../src/engine/Recurrence.c:431 ../src/engine/Recurrence.c:505
+#: ../src/engine/Recurrence.c:533 ../src/engine/Recurrence.c:546
+#: ../src/engine/Recurrence.c:560
 #, c-format
 msgid " (x%u)"
 msgstr "(%u Mal)"
 
 #. translators: %s is an already-localized form of the day of the week.
-#: ../src/engine/Recurrence.c:454
+#: ../src/engine/Recurrence.c:463
 #, c-format
 msgid "last %s"
 msgstr "letzter %s"
 
-#: ../src/engine/Recurrence.c:491 ../src/gnome/glade/fincalc.glade.h:42
+#: ../src/engine/Recurrence.c:500 ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
 msgstr "Halbmonatlich"
 
 #. translators: %d is the number of Recurrences in the list.
-#: ../src/engine/Recurrence.c:506
+#: ../src/engine/Recurrence.c:515
 #, c-format
 msgid "Unknown, %d-size list."
 msgstr "Unbekannt, Liste mit %d Einträgen."
 
-#: ../src/engine/Recurrence.c:517 ../src/gnome/glade/sched-xact.glade.h:130
+#: ../src/engine/Recurrence.c:526 ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Once"
 msgstr "Einmal"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Recurrence.c:533 ../src/gnome/glade/fincalc.glade.h:33
+#: ../src/engine/Recurrence.c:542 ../src/gnome/glade/fincalc.glade.h:33
 #: ../src/gnome/glade/sched-xact.glade.h:111 ../intl-scm/guile-strings.c:3678
 #: ../intl-scm/guile-strings.c:3680 ../intl-scm/guile-strings.c:4832
 #: ../intl-scm/guile-strings.c:4834
@@ -3614,7 +3618,7 @@ msgstr "Monatlich"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Recurrence.c:547 ../intl-scm/guile-strings.c:3686
+#: ../src/engine/Recurrence.c:556 ../intl-scm/guile-strings.c:3686
 #: ../intl-scm/guile-strings.c:3688 ../intl-scm/guile-strings.c:4840
 #: ../intl-scm/guile-strings.c:4842
 msgid "Yearly"
@@ -3862,6 +3866,8 @@ msgid ""
 "The guids in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
+"Die GUID-Nummern des Scheckformats %s, Datei »%s«, stimmen überein mit denen "
+"des Formats %s, Datei »%s«."
 
 #. Translators: This string may be presented to the user to
 #. * indicate that a check file format was defined by the gnucash
@@ -5610,6 +5616,10 @@ msgid ""
 "format\" selector of the Print Check dialog.  Using the title of an exiting "
 "custom format will cause that format to be overwritten."
 msgstr ""
+"Geben Sie einen Namen für dieses Scheckformat an. Dieser Name wird in dem "
+"Auswahlfenster »Scheckformat« vom Scheck-Drucken-Fenster verwendet. Wenn Sie "
+"den Namen eines existierenden Scheckformats wählen, wird das existierende "
+"Format überschrieben."
 
 #: ../src/gnome/glade/print.glade.h:8
 msgid ""
@@ -6367,6 +6377,11 @@ msgid ""
 "7/1 Year ARM\n"
 "10/1 Year ARM"
 msgstr ""
+"Fester Zinssatz\n"
+"3/1 Jahr Variabler Satz\n"
+"5/1 Jahr Variabler Satz\n"
+"7/1 Jahr Variabler Satz\n"
+"10/1 Jahr Variabler Satz"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
@@ -8171,6 +8186,8 @@ msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
 msgstr ""
+"Beim Drucken des Datums auf Schecks das Datum zusätzlich direkt in 8 Punkt "
+"Schrift drucken und die Buchstaben Y, M und D benutzen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid ""
@@ -8238,6 +8255,8 @@ msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
+"Die voreingestellte Schriftart beim Scheckdrucken. Dieser Wert kann durch "
+"jede Schriftart in einer Scheckformat-Datei geändert werden."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid "This is the numerical identifier of the predefined date format to use."
@@ -8453,8 +8472,8 @@ msgid "Character to use as separator between account names"
 msgstr "Das Zeichen, das Kontennamen trennt"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
-msgid "Closing a tab moves to the the most recent tab."
-msgstr ""
+msgid "Closing a tab moves to the most recently visited tab."
+msgstr "Tab schließen wechselt zum zuletzt benutzten Tab."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
 msgid "Color all lines of a transaction the same"
@@ -8554,6 +8573,12 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
 msgid ""
+"If active, closing a tab moves to the most recently visited tab. Otherwise "
+"closing a tab moves one tab to the left."
+msgstr "Wenn gewählt wird beim Schließen eines Tabs (Karteikarte) zum zuletzt besuchten Tab gewechselt. Andernfalls wird zum Tab links daneben gewechselt."
+
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
+msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
@@ -8561,7 +8586,7 @@ msgstr ""
 "Wenn nicht aktiviert, wird jedes Kontofenster als Karteikarte im aktuellen "
 "Fenster geöffnet."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
@@ -8569,7 +8594,7 @@ msgstr ""
 "Falls angeklickt wird jeder Bericht in einem neuen Top-Level-Fenster "
 "angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid ""
 "If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
 "when designating fields on screen. Otherwise, informal labels such as "
@@ -8579,15 +8604,19 @@ msgstr ""
 "Rechnungswesen, »Kredit« und »Debit«, verwendet. Andernfalls werden "
 "umgangssprachliche Beschriftungen gewählt."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid ""
 "If active, gnucash will be allowed to intentionally break file compatibility "
 "with older versions, so that a data file saved in this version cannot be "
 "read by an older version again. Otherwise gnucash will write data files only "
 "in formats that can be read by older versions as well."
 msgstr ""
+"Wenn aktiviert, schreibt GnuCash seine Dateien in einem neuen Format, "
+"welches von einer älteren Version nicht mehr gelesen werden kann. "
+"Andernfalls schreibt GnuCash Dateien nur in einer Form, die von älteren "
+"GnuCash-Versionen weiterhin gelesen werden kann."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
@@ -8595,7 +8624,7 @@ msgstr ""
 "Wenn aktiviert, nach Drücken von 'Eingabe' zum leeren Buchungssatz gehen. "
 "Ansonsten nur eine Zeile nach unten gehen."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
 msgid ""
 "If active, the register will be colored as specified by the system theme. "
 "This can be overridden to provide custom colors by editing the gtkrc file in "
@@ -8607,7 +8636,7 @@ msgstr ""
 "geändert werden. Andernfalls werden im Kontofenster die von GnuCash "
 "voreingestellten Farben verwendet."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
@@ -8616,16 +8645,10 @@ msgstr ""
 "Wenn aktiviert, werden die Größe und Position jedes Fensters beim Schließen "
 "gespeichert. Andernfalls werden sie nicht gespeichert."
 
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
+#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr "24 Stunden-Format statt 12 Stunden-Format"
-
-#: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
-msgid ""
-"If true, closing a tab moves to the most recently visited tab. If false, "
-"closing a tab moves one tab to the left."
-msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
 msgid "Labels on toolbar buttons"
@@ -8733,6 +8756,9 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"Diese Einstellung gibt die maximale Breite der Tabs (Karteikarten-Reiter) "
+"an. Wenn Text in einem Reiter länger als dieser Wert ist, wird der Text "
+"abgeschnitten und mit Punkten beendet."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid ""
@@ -8816,6 +8842,9 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
+"Diese Einstellung gibt die Fensterkante an, an der die Karteikarten-Reiter "
+"(Tabs) angezeigt werden. Mögliche Werte sind »top«, »left«, »bottom« und "
+"»right«. Voreingestellt ist »top«."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:61
 msgid ""
@@ -12590,7 +12619,7 @@ msgstr "Letztes Auftreten"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:180
 msgid "Next Occur"
-msgstr ""
+msgstr "Nächstes Auftreten"
 
 #: ../src/gnome-utils/print-session.c:45
 msgid "Print GnuCash Document"
@@ -13767,6 +13796,8 @@ msgstr ""
 msgid ""
 "Executing the Online Banking outbox failed. Please check the log window."
 msgstr ""
+"Das Abschicken der Online-Banking Aufträge schlug fehl. Bitte prüfen Sie das "
+"Protokollfenster auf weitere Fehlermeldungen."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:572
 #, c-format
@@ -13778,6 +13809,12 @@ msgid ""
 "Description and remote name: \"%s\"\n"
 "Value: \"%s\"\n"
 msgstr ""
+"Eine Lastschrift ist von der Bank zurückgewiesen worden. Die zurückgewiesene "
+"Lastschrift hat folgende Daten:\n"
+"BLZ Empfänger: \"%s\"\n"
+"Kontonummer Empfänger: \"%s\"\n"
+"Verwendungszweck und Name des Empfängers: \"%s\"\n"
+"Betrag: \"%s\"\n"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:588
 msgid ""
@@ -13800,6 +13837,9 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
+"Kein Online-Banking Konto gefunden, welches zu diesem GnuCash-Konto "
+"zugeordnet ist. Die Buchungen werden nicht als Online-Banking Aufträge "
+"abgeschickt."
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -13824,7 +13864,7 @@ msgstr "_Onlinebanking Einrichtung..."
 msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
-msgstr ""
+msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:102
 msgid "Get _Balance"
@@ -13874,7 +13914,7 @@ msgstr "_MT940 importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:127
 msgid "Import a MT940 file into GnuCash"
-msgstr ""
+msgstr "Buchungen aus einer MT940 Datei importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:129
 msgid "Import MT94_2"
@@ -13882,7 +13922,7 @@ msgstr "MT94_2 importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:130
 msgid "Import a MT942 file into GnuCash"
-msgstr ""
+msgstr "Buchungen aus einer MT942 Datei importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:132
 msgid "Import _DTAUS"
@@ -13890,7 +13930,7 @@ msgstr "_DTAUS importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:133
 msgid "Import a DTAUS file into GnuCash"
-msgstr ""
+msgstr "Buchungen aus einer DTAUS Datei importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:136
 msgid "Import _CSV"
@@ -13898,7 +13938,7 @@ msgstr "_CSV importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:137
 msgid "Import a CSV file into GnuCash"
-msgstr ""
+msgstr "Buchungen aus einer CSV Datei importieren"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:139
 msgid "Import CSV and s_end..."
@@ -13909,6 +13949,8 @@ msgid ""
 "Import a CSV file into GnuCash and send the transfers online through Online "
 "Banking"
 msgstr ""
+"Buchungen aus einer CSV Datei importieren und als Online-Banking Aufträge an "
+"die Bank schicken"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:143
 msgid "Import DTAUS and _send..."
@@ -13919,6 +13961,8 @@ msgid ""
 "Import a DTAUS file into GnuCash and send the transfers online through "
 "Online Banking"
 msgstr ""
+"Buchungen aus einer DTAUS Datei importieren und als Online-Banking Aufträge "
+"an die Bank schicken"
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
@@ -13952,7 +13996,7 @@ msgstr ""
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
 msgid "CSV import data format"
-msgstr ""
+msgstr "CSV-Import Dateiformat"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
 msgid "Close dialog when finished"
@@ -13960,7 +14004,7 @@ msgstr "Fenster nach Verbindungsende schließen"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid "DTAUS import data format"
-msgstr ""
+msgstr "DTAUS-Import Dateiformat"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
@@ -13991,11 +14035,11 @@ msgstr "HBCI PIN im Speicher merken"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 msgid "SWIFT MT940 import data format"
-msgstr ""
+msgstr "SWIFT MT940-Import Dateiformat"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
 msgid "SWIFT MT942 import data format"
-msgstr ""
+msgstr "SWIFT MT942-Import Dateiformat"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
 msgid ""
@@ -14003,6 +14047,10 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von CSV-Dateien an. "
+"Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort als "
+"»Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
+"AqBanking-Profils an."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
 msgid ""
@@ -14010,6 +14058,10 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von DTAUS-Dateien "
+"an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, die dort "
+"als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
+"AqBanking-Profils an."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
 msgid ""
@@ -14017,6 +14069,10 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT940-"
+"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
+"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
+"Namen des AqBanking-Profils an."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
 msgid ""
@@ -14024,6 +14080,10 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
+"Diese Einstellung gibt die Datenformate beim Importieren von SWIFT MT942-"
+"Dateien an. Die Bibliothek AqBanking bietet verschiedene Datenformate an, "
+"die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
+"Namen des AqBanking-Profils an."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
 msgid "Verbose HBCI debug messages"
@@ -14517,7 +14577,6 @@ msgstr ""
 "können den Import jederzeit mit »Abbrechen« ohne Änderungen beenden."
 
 #: ../src/import-export/qif-import/qif.glade.h:22
-#, fuzzy
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
@@ -14531,19 +14590,13 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash "
-"seperate Konten anstelle von »Kategorien«, um Buchungssätze zu "
-"klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein GnuCash "
-"Konto umgewandelt.\n"
+"Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash seperate Konten anstelle von »Kategorien«, um Buchungssätze zu klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein GnuCash Konto umgewandelt.\n"
 "\n"
-"Auf der nächsten Seite werden Sie die Möglichkeit haben, die vorgeschlagenen "
-"Umwandlungen zwischen QIF-Kategorien und GnuCash-Konten anzusehen. Diese "
-"können Sie dann mit einem Klick auf den Kategorie-Namen ändern.\n"
+"Auf der nächsten Seite werden Sie die Möglichkeit haben, die vorgeschlagenen Umwandlungen zwischen QIF-Kategorien und GnuCash-Konten anzusehen. Diese können Sie dann mit einem Doppelklick auf den Kategorie-Namen ändern.\n"
 "\n"
 "Sie können jederzeit auch später in GnuCash Änderungen vornehmen."
 
 #: ../src/import-export/qif-import/qif.glade.h:27
-#, fuzzy
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial "
 "institution, some of the information in the QIF file may duplicate "
@@ -14563,20 +14616,11 @@ msgid ""
 "\n"
 "Click \"Forward\" to find duplicate transactions. "
 msgstr ""
-"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen aus der "
-"QIF-Datei schon in Ihren GnuCash Konten enthalten sein. GnuCash wird "
-"versuchen, doppelt vorhandene Buchungen zu finden.\n"
+"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen aus der QIF-Datei schon in Ihren GnuCash Konten enthalten sein. GnuCash wird versuchen, doppelt vorhandene Buchungen zu finden.\n"
 "\n"
-"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende Buchung "
-"einer importierten Buchung entspricht. Importierte Buchungen werden auf der "
-"linken Seite angezeigt. Mögliche Entsprechungen für die auf der linken Seite "
-"ausgewählte Buchung werden auf der rechten Seite angezeigt. Es ist möglich, "
-"dass mehrere existierende Buchungen einer importierten Buchung entsprechen. "
-"Sie können die richtige Buchung durch klicken in die »Duplikat?«-Spalte der "
-"richtigen Buchung auswählen.\n"
+"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende Buchung einer importierten Buchung entspricht. Importierte Buchungen werden auf der linken Seite angezeigt. Mögliche Entsprechungen für die auf der linken Seite ausgewählte Buchung werden auf der rechten Seite angezeigt. Es ist möglich, dass mehrere existierende Buchungen einer importierten Buchung entsprechen. Sie können die richtige Buchung durch Doppelklicken in die »Duplikat?«-Spalte der richtigen Buchung auswählen.\n"
 "\n"
-"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu finden, "
-"im »QIF Import«-Abschnitt der GnuCash-Einstellungen beeinflussen.\n"
+"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu finden, im »QIF Import«-Abschnitt der GnuCash-Einstellungen beeinflussen.\n"
 "\n"
 "Klicken Sie nun auf »Vor«, um doppelte Buchungen zu finden."
 
@@ -14639,7 +14683,6 @@ msgid "Match payees/memos to GnuCash accounts"
 msgstr "Finde passende GnuCash Konten für QIF-Zahlungsempfänger/Buchungstext"
 
 #: ../src/import-export/qif-import/qif.glade.h:47
-#, fuzzy
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds you own will be matched with GnuCash accounts. If a GnuCash account "
@@ -14656,19 +14699,9 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"Auf der nächsten Seite werden die Konten und Aktiendepots aus den QIF "
-"Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit "
-"demselben oder einem ähnlichen Namen existiert, wird dieses Konto als Ziel "
-"vorgeschlagen. Andernfalls wird GnuCash einen neues Konto mit demselben Typ "
-"und Namen wie das QIF-Konto anlegen. Wenn das vorgeschlagene Konto nicht "
-"passt, können Sie mit Anklicken den Namen ändern oder ein anderes wählen.\n"
+"Auf der nächsten Seite werden die Konten und Aktiendepots aus den QIF Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit demselben oder einem ähnlichen Namen existiert, wird dieses Konto als Ziel vorgeschlagen. Andernfalls wird GnuCash einen neues Konto mit demselben Typ und Namen wie das QIF-Konto anlegen. Wenn das vorgeschlagene Konto nicht passt, können Sie mit Doppelklicken den Namen ändern oder ein anderes wählen.\n"
 "\n"
-"Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen "
-"Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes "
-"Aktiendepot, seperate Kontos für Brokergebühren, spezielle Ausgleichkonten "
-"(Unterkonten von Gewinnrücklagen) als Quelle des Anfangsbestand usw. Auf der "
-"nächsten Seite können Sie diese Konten bearbeiten. Allerdings wird "
-"empfohlen, die Auswahl zu übernehmen.\n"
+"Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes Aktiendepot, seperate Kontos für Brokergebühren, spezielle Ausgleichkonten (Unterkonten von Gewinnrücklagen) als Quelle des Anfangsbestand usw. Auf der nächsten Seite können Sie diese Konten bearbeiten. Allerdings wird empfohlen, die Auswahl zu übernehmen.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:51
 msgid "Payees and memos"
@@ -17686,7 +17719,8 @@ msgstr "Einzelheiten zum Abonnieren der Liste siehe http://www.gnucash.org/ ."
 msgid ""
 "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/"
 "&gt;."
-msgstr "Mehr über die Programmiersprache Scheme unter http://www.scheme.com/tspl2d ."
+msgstr ""
+"Mehr über die Programmiersprache Scheme unter http://www.scheme.com/tspl2d ."
 
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
