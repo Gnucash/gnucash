@@ -61,7 +61,7 @@
       <applyto>/apps/gnucash/general/enable_euro</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>TRUE</default>
+      <default>FALSE</default>
       <locale name="C">
         <short>Enables Euro support</short>
         <long>Enables additional support for the European Union EURO currency.</long>
