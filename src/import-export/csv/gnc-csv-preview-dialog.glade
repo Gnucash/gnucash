@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Mon Jun 18 07:54:27 2007 by lasindi@pi-->
+<!--Generated with glade3 3.2.0 on Mon Jun 18 10:08:53 2007 by lasindi@pi-->
 <glade-interface>
   <widget class="GtkDialog" id="dialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -329,12 +329,11 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="typehbox">
+              <widget class="GtkTreeView" id="ctreeview">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="headers_clickable">True</property>
               </widget>
               <packing>
                 <property name="position">4</property>

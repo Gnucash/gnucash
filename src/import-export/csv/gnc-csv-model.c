@@ -138,7 +138,7 @@ int gnc_csv_convert_enc(GncCsvParseData* parse_data, const char* enc)
                                          parse_data->raw_str.end - parse_data->raw_str.begin,
                                          "UTF-8", enc, &bytes_read,
                                          &bytes_written, &error);
-  printf("using %s got %p\n", enc, parse_data->file_str.begin);
+  g_debug("using %s got %p\n", enc, parse_data->file_str.begin);
   if(parse_data->file_str.begin == NULL)
   {
     return 1;
@@ -162,7 +162,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
   guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
                                 (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
                                 "UTF-8", NULL);
-  printf("Guessed %s\n", guess_enc);
+  g_debug("Guessed %s\n", guess_enc);
   /* TODO Handle error */
   gnc_csv_convert_enc(parse_data, guess_enc);
   if(parse_data->file_str.begin == NULL)
@@ -201,7 +201,7 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
     if(max_cols < ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len)
       max_cols = ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len;
   }
-  printf("max_cols %d\n", max_cols);
+  g_debug("max_cols %d\n", max_cols);
 
   if(guessColTypes)
   {

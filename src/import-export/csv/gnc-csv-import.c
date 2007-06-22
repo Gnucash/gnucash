@@ -61,13 +61,11 @@ typedef struct
   GladeXML* xml;
   GtkDialog* dialog;
   GtkTreeView* treeview;
+  GtkTreeView* ctreeview;
   gboolean approved;
   GtkCheckButton* sep_buttons[SEP_NUM_OF_TYPES];
   GtkCheckButton* custom_cbutton;
   GtkEntry* custom_entry;
-  GtkBox* typehbox;
-  GtkComboBox** typecombo_array;
-  gboolean fully_initialized;
 } GncCsvPreview;
 
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty);
@@ -103,7 +101,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* enc,
   if(second_call)
   {
     GError* error = NULL;
-    printf("Encoding selected! %p %p %s\n", selector, preview, enc);
+    g_debug("Encoding selected! %p %p %s\n", selector, preview, enc);
     /* TODO Handle errors */
     gnc_csv_convert_enc(preview->parse_data, enc);
     gnc_csv_parse(preview->parse_data, FALSE, &error);
@@ -129,25 +127,48 @@ static void cancel_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 
 static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
 {
-  if(preview->fully_initialized)
+  int i, ncols = preview->parse_data->column_types->len;
+  g_debug("tree resized!\n");
+  for(i = 0; i < ncols - 1; i++)
   {
-    int i, ncols = preview->parse_data->column_types->len;
-    printf("tree resized!\n");
-    for(i = 0; i < ncols; i++)
-    {
-      gint col_width;
-      col_width = gtk_tree_view_column_get_width(gtk_tree_view_get_column(preview->treeview, i));
-      printf("%d got width %d\n", i, col_width);
-      gtk_widget_set_size_request(GTK_WIDGET(preview->typecombo_array[i]), col_width, 0);
-    }
+    gint col_width;
+    GtkTreeViewColumn* ccol;
+    col_width = gtk_tree_view_column_get_width(gtk_tree_view_get_column(preview->treeview, i));
+    ccol = gtk_tree_view_get_column(preview->ctreeview, i);
+    gtk_tree_view_column_set_min_width(ccol, col_width);
+    gtk_tree_view_column_set_max_width(ccol, col_width);
+    g_debug("%d got width %d\n", i, col_width);
   }
 }
 
-static void cbox_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
+static void column_type_edited(GtkCellRenderer *renderer, gchar *path,
+                               gchar *new_text, GncCsvPreview* preview)
 {
-  printf("resized to nothing\n");
-  gtk_widget_set_size_request(widget, 0, 0);
+  int i, ncols = preview->parse_data->column_types->len;
+  GtkTreeModel* store = (gtk_tree_view_get_model(preview->ctreeview));
+  GtkTreeIter iter;
+  gtk_tree_model_get_iter_first(store, &iter);
+  for(i = 0; i < ncols; i++)
+  {
+    GtkCellRenderer* col_renderer;
+    GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->ctreeview, i);
+    GList* rend_list = gtk_tree_view_column_get_cell_renderers(col);
+    col_renderer = rend_list->data;
+    g_list_free(rend_list);
+
+    if(col_renderer != renderer)
+    {
+      ;
+    }
+    else
+    {
+      gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2*i+1, new_text, -1);
+      g_debug("editing col %d\n", i);
+    }
+  }
+  g_debug("Got here %s %s!\n", path, new_text);
 }
+
 
 static GncCsvPreview* gnc_csv_new_preview()
 {
@@ -162,7 +183,6 @@ static GncCsvPreview* gnc_csv_new_preview()
   int i;
   GtkWidget *encselector = go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8);
   GtkTable* enctable;
-  preview->fully_initialized = FALSE;
   preview->xml = gnc_glade_xml_new("gnc-csv-preview-dialog.glade", "dialog");
   preview->dialog = (GtkDialog*)(glade_xml_get_widget(preview->xml, "dialog"));
 
@@ -197,42 +217,46 @@ static GncCsvPreview* gnc_csv_new_preview()
   g_signal_connect(G_OBJECT(cancel_button), "clicked",
                    G_CALLBACK(cancel_button_clicked), (gpointer)preview);
 
-  preview->typehbox = GTK_BOX(glade_xml_get_widget(preview->xml, "typehbox"));
   preview->treeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "treeview"));
+  preview->ctreeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "ctreeview"));
   g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
                    G_CALLBACK(treeview_resized), (gpointer)preview);
 
-  preview->typecombo_array = NULL;
-  
   /* TODO Free stuff */
   preview->approved = FALSE;
   return preview;
 }
 
-/*   testbox = GTK_COMBO_BOX(gtk_combo_box_new_text()); */
-/*   gtk_combo_box_append_text(testbox, "Hello"); */
-/*   gtk_box_pack_start(preview->typehbox, GTK_WIDGET(testbox), TRUE, TRUE, 5); */
-/*   gtk_widget_show_all(GTK_WIDGET(preview->typehbox)); */
-
 static void gnc_csv_preview_free(GncCsvPreview* preview)
 {
   g_object_unref(preview->xml);
   g_free(preview);
-  if(preview->typecombo_array != NULL)
-  {
-    g_free(preview->typecombo_array);
-  }
 }
 
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
 {
-  GtkListStore* store;
+  GtkListStore *store, **cstores, *ctstore;
   GtkTreeIter iter;
   int i, j, ncols = preview->parse_data->column_types->len;
-  GType* types = g_malloc(ncols * sizeof(GType));
+  GType* types = g_malloc(2 * ncols * sizeof(GType));
   for(i = 0; i < ncols; i++)
     types[i] = G_TYPE_STRING;
   store = gtk_list_store_newv(ncols, types);
+  for(i = 0; i < 2*ncols; i += 2)
+  {
+    types[i] = GTK_TYPE_TREE_MODEL;
+    types[i+1] = G_TYPE_STRING;
+  }
+  ctstore = gtk_list_store_newv(2*ncols, types);
+  cstores = g_malloc(ncols * sizeof(GtkListStore*));
+  for(i = 0; i < ncols; i++)
+  {
+    cstores[i] = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(cstores[i], &iter);
+    gtk_list_store_set(cstores[i], &iter, 0, "Hello", -1);
+    gtk_list_store_append(cstores[i], &iter);
+    gtk_list_store_set(cstores[i], &iter, 0, "Good bye", -1);
+  }
 
   /* Clear out any exisiting columns. */
   if(notEmpty)
@@ -244,20 +268,11 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
       GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->treeview, 0);
       size = gtk_tree_view_remove_column(preview->treeview, col);
     } while(size);
-    children = children_begin = gtk_container_get_children(GTK_CONTAINER(preview->typehbox));
-    while(children != NULL)
+    do
     {
-      gtk_container_remove(GTK_CONTAINER(preview->typehbox), GTK_WIDGET(children->data));
-      /* TODO free stuff */
-      children = children->next;
-    }
-    g_list_free(children_begin);
-
-    for(i = 0; i < ncols; i++)
-    {
-      g_free(preview->typecombo_array[i]);
-    }
-    g_free(preview->typecombo_array);
+      GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->ctreeview, 0);
+      size = gtk_tree_view_remove_column(preview->treeview, col);
+    } while(size);
   }
   
   /* TODO free types */
@@ -272,32 +287,37 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
                          -1);
     }
   }
+  gtk_list_store_append(ctstore, &iter);
+  for(i = 0; i < ncols; i++)
+  {
+    gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1, "Hello", -1);
+  }
 
   for(i = 0; i < ncols; i++)
   {
-    GtkCellRenderer* renderer = gtk_cell_renderer_text_new();
+    GtkCellRenderer *renderer = gtk_cell_renderer_text_new(),
+      *crenderer = gtk_cell_renderer_combo_new();
+    g_object_set(G_OBJECT(crenderer), "model", cstores[i], "text-column", 0,
+                 "editable", TRUE, "has-entry", FALSE, NULL);
+    g_signal_connect(G_OBJECT(crenderer), "edited",
+                     G_CALLBACK(column_type_edited), (gpointer)preview);
+    
     gtk_tree_view_insert_column_with_attributes(preview->treeview,
                                                 -1, "", renderer, "text", i, NULL);
+    gtk_tree_view_insert_column_with_attributes(preview->ctreeview,
+                                                -1, "", crenderer, "model", 2*i,
+                                                "text", 2*i+1, NULL);
   }
 
   gtk_tree_view_set_model(preview->treeview, GTK_TREE_MODEL(store));
   g_object_unref(GTK_TREE_MODEL(store));
+  gtk_tree_view_set_model(preview->ctreeview, GTK_TREE_MODEL(ctstore));
+  g_object_unref(GTK_TREE_MODEL(ctstore));
 
   gtk_widget_show_all(GTK_WIDGET(preview->treeview));
-
-  preview->typecombo_array = g_malloc(sizeof(GtkComboBox*) * ncols);
-
-  for(i = 0; i < ncols; i++)
-  {
-    preview->typecombo_array[i] = GTK_COMBO_BOX(gtk_combo_box_new_text());
-    g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
-                     G_CALLBACK(cbox_resized), (gpointer)preview);
-    gtk_combo_box_append_text(preview->typecombo_array[i], "Hello");
-    gtk_box_pack_start(preview->typehbox, GTK_WIDGET(preview->typecombo_array[i]), FALSE, TRUE, 0);
-  }
-
-  gtk_widget_show_all(GTK_WIDGET(preview->typehbox));
-  preview->fully_initialized = TRUE;
+  gtk_widget_show_all(GTK_WIDGET(preview->ctreeview));
+  g_debug("ctreeview is %p\n", preview->ctreeview);
+  /* TODO free cstore and ctstore */
 }
 
 static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
@@ -325,7 +345,7 @@ static void encoding_dialog_selected(GOCharmapSel* selector, const char* enc,
   static gboolean second_call = FALSE;
   if(second_call)
   {
-    printf("set encoding %s\n", enc);
+    g_debug("set encoding %s\n", enc);
     encdialog->encoding = (char*)enc;
     second_call = FALSE;
   }
@@ -337,15 +357,15 @@ static void encoding_dialog_selected(GOCharmapSel* selector, const char* enc,
 
 static void enc_ok_button_clicked(GtkWidget* button, EncodingDialog* encdialog)
 {
-  printf("OK!\n");
-  printf("using dialog encoding %s\n", encdialog->encoding);
+  g_debug("OK!\n");
+  g_debug("using dialog encoding %s\n", encdialog->encoding);
   if(!gnc_csv_convert_enc(encdialog->parse_data, encdialog->encoding))
     encdialog->approved = 1;
 }
 
 static void enc_cancel_button_clicked(GtkWidget* button, EncodingDialog* encdialog)
 {
-  printf("cancel!\n");
+  g_debug("cancel!\n");
   encdialog->approved = -1;
 }
 
@@ -429,23 +449,23 @@ void gnc_file_csv_import(void)
         } while(result == 0);
         if(result == -1)
         {
-          printf("Canceled!\n");
+          g_debug("Canceled!\n");
         }
         else
         {
-          printf("Success!\n");
+          g_debug("Success!\n");
         }
       }
       else /* GNC_CSV_FILE_OPEN_ERR */
       {
         /* TODO Do real error handling */
-        printf("Couldn't open file\n");
+        g_debug("Couldn't open file\n");
       }
     }
     if(gnc_csv_parse(parse_data, TRUE, &error))
     {
       /* TODO real error handling */
-      printf("Error in parsing: %s\n", error->message);
+      g_debug("Error in parsing: %s\n", error->message);
     }
 
     parse_data->column_types->data[0] = GNC_CSV_DATE;
@@ -462,14 +482,14 @@ void gnc_file_csv_import(void)
 
     /* TODO Move this after the parsing code. */
     account = gnc_import_select_account(NULL, NULL, 1, NULL, NULL, 0, NULL, NULL);
-    printf("2ctype 1: %d\n", parse_data->column_types->data[0]);
+    g_debug("2ctype 1: %d\n", parse_data->column_types->data[0]);
 
     gnc_parse_to_trans(parse_data, account);
-    printf("3ctype 1: %d\n", parse_data->column_types->data[0]);
+    g_debug("3ctype 1: %d\n", parse_data->column_types->data[0]);
 
     /* Create the Generic transaction importer GUI. */
     gnc_csv_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
-    printf("4ctype 1: %d\n", parse_data->column_types->data[0]);
+    g_debug("4ctype 1: %d\n", parse_data->column_types->data[0]);
 
     transactions = parse_data->transactions;
     while(transactions != NULL)
