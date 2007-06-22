@@ -459,7 +459,7 @@ qof_instance_get_guid (gconstpointer inst)
 {
     QofInstancePrivate *priv;
 
-    if (!inst) return guid_null();
+    if (!inst) return NULL;
     g_return_val_if_fail(QOF_IS_INSTANCE(inst), guid_null());
     priv = GET_PRIVATE(inst);
     return &(priv->guid);
