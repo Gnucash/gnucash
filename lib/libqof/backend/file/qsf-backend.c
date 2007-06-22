@@ -1062,7 +1062,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	gint32         cm_i32;
 	gint64         cm_i64;
 	Timespec       cm_date;
-	gchar          cm_char,    (*char_getter)  (xmlNodePtr);
+	gchar          *cm_char,  *(*char_getter)  (xmlNodePtr);
 	GUID           *cm_guid;
 	KvpFrame       *cm_kvp;
 	KvpValue       *cm_value;
@@ -1209,10 +1209,11 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		params->referenceList = g_list_append(params->referenceList, reference);
 	}
 	if(safe_strcmp(qof_type, QOF_TYPE_CHAR) == 0) {
-		char_getter = (gchar (*)(xmlNodePtr))xmlNodeGetContent;
+		char_getter = (gchar * (*)(xmlNodePtr))xmlNodeGetContent;
 		cm_char = char_getter(node);
 		char_setter = (void(*)(QofInstance*, gchar))cm_setter;
-		if(char_setter != NULL) { char_setter(qsf_ent, cm_char); }
+		if(char_setter != NULL) { char_setter(qsf_ent, *cm_char); }
+		xmlFree(cm_char);
 	}
 }
 
