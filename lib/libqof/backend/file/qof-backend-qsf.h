@@ -158,9 +158,6 @@ v0.2 introduces the QSF_MAP_FILES QofBackendOption.
 Initialises the backend and provides access to the
 functions that will load and save the data. Initialises
 default values for the QofBackendOption KvpFrame.
-
-Calls gettext because QofBackendOption
-strings are translatable.
 */
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);
