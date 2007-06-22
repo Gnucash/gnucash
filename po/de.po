@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-20 23:17+0200\n"
-"PO-Revision-Date: 2007-06-20 23:36+0200\n"
+"POT-Creation-Date: 2007-06-22 22:21+0200\n"
+"PO-Revision-Date: 2007-06-22 22:25+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -223,6 +223,8 @@ msgid ""
 "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}"
 "\""
 msgstr ""
+"Loglevel einstellen; Beispiel »komponente.irgendwas={debug,info,warn,crit,"
+"error}«"
 
 #: ../src/bin/gnucash-bin.c:231
 msgid ""
@@ -1533,7 +1535,7 @@ msgstr ""
 "geöffnet."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "Number of _rows:"
 msgstr "Anzahl der _Zeilen:"
 
@@ -2792,7 +2794,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedger.c:822
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
-#: ../src/gnome/gnc-split-reg.c:727
+#: ../src/gnome/gnc-split-reg.c:726
 #: ../src/register/ledger-core/split-register.c:423
 msgid "_Record"
 msgstr "_Speichern"
@@ -2824,7 +2826,7 @@ msgstr ""
 "damit Ihre Bestellung ändern?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:502
-#: ../src/gnome/gnc-split-reg.c:725
+#: ../src/gnome/gnc-split-reg.c:724
 msgid "_Don't Record"
 msgstr "_Nicht speichern"
 
@@ -3801,6 +3803,7 @@ msgstr "Anteile"
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../src/gnome/dialog-find-transactions.c:115
+#: ../src/gnome/dialog-sx-since-last-run.c:959
 #: ../src/gnome/glade/lots.glade.h:18
 #: ../src/gnome/glade/sched-xact.glade.h:185 ../intl-scm/guile-strings.c:2402
 #: ../intl-scm/guile-strings.c:3026 ../intl-scm/guile-strings.c:3332
@@ -3869,21 +3872,22 @@ msgstr ""
 "Die GUID-Nummern des Scheckformats %s, Datei »%s«, stimmen überein mit denen "
 "des Formats %s, Datei »%s«."
 
-#. Translators: This string may be presented to the user to
-#. * indicate that a check file format was defined by the gnucash
-#. * application.
+#. Translators: This is a directory name. It may be presented to
+#. * the user to indicate that some data file was defined by the
+#. * gnucash application.
 #: ../src/gnome/dialog-print-check.c:1128
 msgid "application"
 msgstr "application"
 
-#. Translators: This string may be presented to the user to
-#. * indicate that a check file format was defined by a user.
-#: ../src/gnome/dialog-print-check.c:1135
+#. Translators: This is a directory name. It may be presented to
+#. * the user to indicate that some data file was defined by a
+#. * user herself.
+#: ../src/gnome/dialog-print-check.c:1136
 msgid "user"
 msgstr "user"
 
-#: ../src/gnome/dialog-print-check.c:1158
-#: ../src/gnome/dialog-print-check.c:2077
+#: ../src/gnome/dialog-print-check.c:1159
+#: ../src/gnome/dialog-print-check.c:2078
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
@@ -4026,9 +4030,37 @@ msgstr ""
 "ihrerseits gerade bearbeitet wird. Bitte speichern Sie die Buchung, bevor "
 "Sie eine Terminierte Buchung daraus erstellen wollen."
 
+#: ../src/gnome/dialog-sx-since-last-run.c:363
+msgid "Ignored"
+msgstr "Ignoriert"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:364
+msgid "Postponed"
+msgstr "Zurückgestellt"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:365
+msgid "To-Create"
+msgstr "Zu Erstellen"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:366
+msgid "Reminder"
+msgstr "Erinnerung"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:367
+msgid "Created"
+msgstr "Erstellt"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:436
+msgid "Never"
+msgstr "Nie"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:506
+msgid "(Need Value)"
+msgstr "(Wert benötigt)"
+
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
-#: ../src/gnome/dialog-sx-since-last-run.c:807
+#: ../src/gnome/dialog-sx-since-last-run.c:802
 #: ../src/gnome/gnc-plugin-basic-commands.c:480
 #, c-format
 msgid ""
@@ -4044,7 +4076,16 @@ msgstr[1] ""
 "Es gibt keine terminierten Buchungen, die erstellt werden sollen. (%d "
 "Buchungen automatisch erstellt)"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:1003
+#: ../src/gnome/dialog-sx-since-last-run.c:924
+msgid "Transaction"
+msgstr "Buchung"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:940
+#: ../src/gnome/glade/register.glade.h:70
+msgid "Status"
+msgstr "Status"
+
+#: ../src/gnome/dialog-sx-since-last-run.c:998
 msgid "Created Transactions"
 msgstr "Buchungen erstellt"
 
@@ -4485,7 +4526,7 @@ msgstr "Konteneinrichten fertigstellen"
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/glade/account.glade.h:25
-#: ../src/gnome-utils/glade/preferences.glade.h:74
+#: ../src/gnome-utils/glade/preferences.glade.h:73
 #: ../intl-scm/guile-strings.c:198 ../intl-scm/guile-strings.c:204
 #: ../intl-scm/guile-strings.c:210 ../intl-scm/guile-strings.c:216
 #: ../intl-scm/guile-strings.c:324 ../intl-scm/guile-strings.c:328
@@ -6011,10 +6052,6 @@ msgstr "_Buchung"
 msgid "Start:"
 msgstr "Start:"
 
-#: ../src/gnome/glade/register.glade.h:70
-msgid "Status"
-msgstr "Status"
-
 #: ../src/gnome/glade/register.glade.h:71
 msgid "Toda_y"
 msgstr "_Heute"
@@ -6781,7 +6818,7 @@ msgid "_Run when data file opened"
 msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 
 #: ../src/gnome/glade/sched-xact.glade.h:196
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 msgid "days"
 msgstr "Tage"
 
@@ -7515,7 +7552,7 @@ msgid "Dup_licate Transaction"
 msgstr "Buchung dupli_zieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:199
-#: ../src/gnome/gnc-split-reg.c:1164
+#: ../src/gnome/gnc-split-reg.c:1163
 msgid "_Delete Transaction"
 msgstr "_Buchung löschen"
 
@@ -7678,7 +7715,7 @@ msgstr "Suchergebnisse Bericht"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1727
-#: ../src/gnome-utils/glade/preferences.glade.h:99
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 #: ../intl-scm/guile-strings.c:1930 ../intl-scm/guile-strings.c:2554
 #: ../intl-scm/guile-strings.c:3952 ../intl-scm/guile-strings.c:5106
 msgid "Register"
@@ -7702,7 +7739,7 @@ msgstr ""
 "nicht ungültig machen."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2067
-#: ../src/gnome/gnc-split-reg.c:908
+#: ../src/gnome/gnc-split-reg.c:907
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
@@ -7762,15 +7799,15 @@ msgstr ""
 "Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem einzigen "
 "Journal)"
 
-#: ../src/gnome/gnc-split-reg.c:610
+#: ../src/gnome/gnc-split-reg.c:609
 msgid "<No information>"
 msgstr "<keine Informationen>"
 
-#: ../src/gnome/gnc-split-reg.c:706
+#: ../src/gnome/gnc-split-reg.c:705
 msgid "Save transaction before closing?"
 msgstr "Geänderte Buchung speichern?"
 
-#: ../src/gnome/gnc-split-reg.c:708
+#: ../src/gnome/gnc-split-reg.c:707
 msgid ""
 "The current transaction has been changed.  Would you like to record the "
 "changes before closing this page, close the page without recording the "
@@ -7780,22 +7817,22 @@ msgstr ""
 "bevor Sie das Fenster schließen? Oder soll das Fenster ohne Speichern "
 "geschlossen werden? Oder möchten Sie abbrechen?"
 
-#: ../src/gnome/gnc-split-reg.c:935
+#: ../src/gnome/gnc-split-reg.c:934
 msgid "Cannot modify or delete this transaction."
 msgstr "Buchung kann nicht geändert oder gelöscht werden."
 
-#: ../src/gnome/gnc-split-reg.c:937
+#: ../src/gnome/gnc-split-reg.c:936
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
 "Diese Buchung ist als Schreibgeschützt markiert, mit folgenden Kommentar: \"%"
 "s\""
 
-#: ../src/gnome/gnc-split-reg.c:969
+#: ../src/gnome/gnc-split-reg.c:968
 msgid "Remove the splits from this transaction?"
 msgstr "Buchungsteile von dieser Buchung entfernen?"
 
-#: ../src/gnome/gnc-split-reg.c:970
+#: ../src/gnome/gnc-split-reg.c:969
 msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
@@ -7803,16 +7840,16 @@ msgstr ""
 "Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungen "
 "löschen würden. Dies bedeutet, dass ihr abgeglichener Saldo verändert wird."
 
-#: ../src/gnome/gnc-split-reg.c:994
+#: ../src/gnome/gnc-split-reg.c:993
 msgid "_Remove Splits"
 msgstr "Buchungsteile entfernen"
 
-#: ../src/gnome/gnc-split-reg.c:1069
+#: ../src/gnome/gnc-split-reg.c:1068
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
 msgstr "Den Buchungsteil »%s« von der Buchung »%s« entfernen?"
 
-#: ../src/gnome/gnc-split-reg.c:1070
+#: ../src/gnome/gnc-split-reg.c:1069
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
@@ -7820,11 +7857,11 @@ msgstr ""
 "Sie würden einen abgeglichenen Buchungsteil löschen! Das würde bewirken, "
 "dass Ihr Saldo nicht mehr abgeglichen ist."
 
-#: ../src/gnome/gnc-split-reg.c:1073
+#: ../src/gnome/gnc-split-reg.c:1072
 msgid "You cannot delete this split."
 msgstr "Sie können diesen Buchungsteil nicht löschen."
 
-#: ../src/gnome/gnc-split-reg.c:1074
+#: ../src/gnome/gnc-split-reg.c:1073
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "delete it from this register window.  You may delete the entire transaction "
@@ -7838,23 +7875,23 @@ msgstr ""
 "dem Knopf »Gegenbuchung«) und löschen diesen Buchungsteil von jenem anderen "
 "Kontofenster."
 
-#: ../src/gnome/gnc-split-reg.c:1101
+#: ../src/gnome/gnc-split-reg.c:1100
 msgid "(no memo)"
 msgstr "(Kein Buchungstext)"
 
-#: ../src/gnome/gnc-split-reg.c:1104
+#: ../src/gnome/gnc-split-reg.c:1103
 msgid "(no description)"
 msgstr "(Keine Beschreibung)"
 
-#: ../src/gnome/gnc-split-reg.c:1127
+#: ../src/gnome/gnc-split-reg.c:1126
 msgid "_Delete Split"
 msgstr "Buchungsteil _löschen"
 
-#: ../src/gnome/gnc-split-reg.c:1143
+#: ../src/gnome/gnc-split-reg.c:1142
 msgid "Delete the current transaction?"
 msgstr "Aktuelle Buchung löschen?"
 
-#: ../src/gnome/gnc-split-reg.c:1144
+#: ../src/gnome/gnc-split-reg.c:1143
 msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
@@ -7862,39 +7899,39 @@ msgstr ""
 "Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen Buchungen "
 "löschen würden. Dies bedeutet, dass ihr abgeglichener Saldo verändert wird."
 
-#: ../src/gnome/gnc-split-reg.c:1794
+#: ../src/gnome/gnc-split-reg.c:1793
 msgid "Present:"
 msgstr "Aktueller Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1795
+#: ../src/gnome/gnc-split-reg.c:1794
 msgid "Future:"
 msgstr "Zukünftiger Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1796
+#: ../src/gnome/gnc-split-reg.c:1795
 msgid "Cleared:"
 msgstr "Bestätigt:"
 
-#: ../src/gnome/gnc-split-reg.c:1797
+#: ../src/gnome/gnc-split-reg.c:1796
 msgid "Reconciled:"
 msgstr "Abgeglichen:"
 
-#: ../src/gnome/gnc-split-reg.c:1798
+#: ../src/gnome/gnc-split-reg.c:1797
 msgid "Projected Minimum:"
 msgstr "Voraussichtliches Minimum:"
 
-#: ../src/gnome/gnc-split-reg.c:1802
+#: ../src/gnome/gnc-split-reg.c:1801
 msgid "Shares:"
 msgstr "Anteile:"
 
-#: ../src/gnome/gnc-split-reg.c:1803
+#: ../src/gnome/gnc-split-reg.c:1802
 msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1875
+#: ../src/gnome/gnc-split-reg.c:1874
 msgid "This account register is read-only."
 msgstr "Dieses Konto ist schreibgeschützt."
 
-#: ../src/gnome/gnc-split-reg.c:1909
+#: ../src/gnome/gnc-split-reg.c:1908
 msgid ""
 "This account may not be edited.  If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
@@ -7904,7 +7941,7 @@ msgstr ""
 "Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster »Konto "
 "Eigenschaften« und deaktivieren Sie die Option »Platzhalter-Konto«."
 
-#: ../src/gnome/gnc-split-reg.c:1916
+#: ../src/gnome/gnc-split-reg.c:1915
 msgid ""
 "One of the sub-accounts selected may not be edited.  If you want to edit "
 "transactions in this register, please open the sub-account options and turn "
@@ -8349,7 +8386,7 @@ msgid "Pre-select cleared transactions"
 msgstr "Bestätigte Buchungen zum Abgleichen vorwählen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
 "user to enter a transaction for the interest charge or payment. Currently "
@@ -8575,7 +8612,9 @@ msgstr ""
 msgid ""
 "If active, closing a tab moves to the most recently visited tab. Otherwise "
 "closing a tab moves one tab to the left."
-msgstr "Wenn gewählt wird beim Schließen eines Tabs (Karteikarte) zum zuletzt besuchten Tab gewechselt. Andernfalls wird zum Tab links daneben gewechselt."
+msgstr ""
+"Wenn gewählt wird beim Schließen eines Tabs (Karteikarte) zum zuletzt "
+"besuchten Tab gewechselt. Andernfalls wird zum Tab links daneben gewechselt."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
 msgid ""
@@ -10558,7 +10597,7 @@ msgid "Months:"
 msgstr "Monate:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "Sample:"
 msgstr "Beispiel:"
 
@@ -10909,23 +10948,19 @@ msgstr "_Vertikale Linien zwischen Spalten zeichnen"
 msgid "Draw hori_zontal lines between rows"
 msgstr "_Horizontale Linien zwischen Zeilen zeichnen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:73
-msgid "Enables support for the European Union EURO currency."
-msgstr "Aktiviert die Unterstützung der Währung EURO"
-
-#: ../src/gnome-utils/glade/preferences.glade.h:75
+#: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "GnuCash Options"
 msgstr "GnuCash Optionen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:76
+#: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "GnuCash Preferences"
 msgstr "GnuCash Einstellungen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:77
+#: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "How many automatic decimal places will be filled in."
 msgstr "Wieviele Dezimalstellen automatisch ausgefüllt werden."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:78
+#: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
@@ -10934,7 +10969,7 @@ msgstr ""
 "Wenn nicht aktiviert, wird jedes Kontofenster als Karteikarte im aktuellen "
 "Fenster geöffnet."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
@@ -10942,7 +10977,7 @@ msgstr ""
 "Falls angeklickt wird jeder Bericht in einem neuen Top-Level-Fenster "
 "angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
@@ -10950,7 +10985,7 @@ msgstr ""
 "Wenn aktiviert, werden Aktien in der Zusammenfassungs-Zeile angezeigt, die "
 "keine Währungen sind. Wenn nicht aktiviert, werden nur Währungen angezeigt."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
 "the bottom of the register.  If clear, pressing the 'Enter' key will move "
@@ -10959,7 +10994,7 @@ msgstr ""
 "Wenn aktiviert, nach Drücken von 'Eingabe' zum leeren Buchungssatz gehen. "
 "Ansonsten nur eine Zeile nach unten gehen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
@@ -10968,35 +11003,35 @@ msgstr ""
 "Kontofenstern verwendet. Wenn nicht aktiviert, werden GnuCash-spezifische "
 "Farben in den Kontofenstern verwendet."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 msgid "Include _grand total"
 msgstr "_Gesamtsumme anzeigen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid "Include _non-currency totals"
 msgstr "_Aktien-Gesamtsumme anzeigen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid "Loc_ale:"
 msgstr "_Systemeinstellung:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "New search _limit:"
 msgstr "Ergebnisanzahl für Neue Suche:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "Number of _transactions:"
 msgstr "Anzahl Buchungen:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "Perform account list _setup on new file"
 msgstr "Konteneinrichtung bei neuer Datei"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Bestätigte Buchungen automatisch als Abgeglichen markieren."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
 "\"File\" menu"
@@ -11004,47 +11039,47 @@ msgstr ""
 "Assistent für neue Konteneinrichtung öffnen, wenn »Neue Datei« im Menü "
 "»Datei« gewählt wird"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "Print '***' before and after each text field on the check."
 msgstr "Vor und nach dem Text jeweils »***« drucken."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Print _blocking chars"
 msgstr "_Abschlusszeichen drucken"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Print _date format"
 msgstr "_Datumsformat zusätzlich drucken"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Printing"
 msgstr "Drucken"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 msgid "Priority text besi_de icons"
 msgstr "Text _neben wichtigen Icons"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 msgid "Re_lative:"
 msgstr "Re_lativ:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid "Register Defaults"
 msgstr "Voreinstellungen Kontobuch"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 msgid "Register opens in a new _window"
 msgstr "Kontobuch in neuem Fenster öffnen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Report opens in a new _window"
 msgstr "Bericht in neuem _Fenster öffnen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Reports"
 msgstr "Berichte"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid ""
 "Show a close button on each notebook tab.  These function identically to the "
 "'Close' menu item."
@@ -11052,36 +11087,36 @@ msgstr ""
 "Einen Knopf »Schließen« auf jeder Karteikarte anzeigen. Die Schließen-"
 "Funktion kann auch im gleichnamigen Menüpunkt erreicht werden."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 "Gesamtsumme für alle Konten anzeigen, umgerechnet in die voreingestellte "
 "Währung für Berichte."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr ""
 "Alle Buchungssätze einzeilig anzeigen. (Zweizeilig, wenn die Bemerkung "
 "angezeigt werden soll.)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 msgid "Show close button on _notebook tabs"
 msgstr "Den Knopf »Schließen« bei _Karteikarten-Ansicht anzeigen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 msgid "Show horizontal borders on the cells."
 msgstr "Horizontale Begrenzungen anzeigen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:109
 msgid "Show splash scree_n"
 msgstr "_Begrüßungsbild anzeigen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Show splash screen at startup."
 msgstr "Begrüßungsbild (Splash screen) beim Programmstart anzeigen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -11089,7 +11124,7 @@ msgstr ""
 "Diese Anzahl Buchungen in einem Kontofenster anzeigen. Der Wert Null "
 "bedeutet alle Buchungen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
@@ -11097,25 +11132,25 @@ msgstr ""
 "Zwei Zeilen pro Buchung anzeigen anstatt einer. Dies betrifft nicht die "
 "ausgeklappten Buchungen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid "Show vertical borders on the cells."
 msgstr "Vertikale Begrenzungen anzeigen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Ertrags- und Aufwandskonten mit umgekehrten Vorzeichen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr "Passiva-, Eigenkapitals- und Ertragskonten mit umgekehrten Vorzeichen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Text _below icons"
 msgstr "Text _unter Icons"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid ""
 "The character that will be used between components of an account name.  A "
 "legal value is any single character except letters and numbers, or any of "
@@ -11126,64 +11161,64 @@ msgstr ""
 "Zeichen wählen, das kein Buchstabe oder Zahl ist, zum Beispiel »:«, »/« oder "
 "»-«."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid "To_p"
 msgstr "_Oben"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Transaction _journal"
 msgstr "Buchungsjournal"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 msgid "US Dollars (USD)"
 msgstr "US Dollars (USD)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid "U_K:"
 msgstr "U_K:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 msgid "U_se 24-hour clock"
 msgstr "24-Stunden-_Format"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:124
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Use _formal accounting labels"
 msgstr "Buchungsüberschriften aus _Rechnungswesen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "24 Stunden-Format statt 12 Stunden-Format"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Nur 'Soll' und 'Haben' anstatt informeller Bezeichnungen benutzen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "Use s_ystem default"
 msgstr "_System-Voreinstellung"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid "Use the date format common in continental Europe."
 msgstr "Das auf dem europäischen Kontinent übliche Datumsformat benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "Use the date format common in the United Kingdom."
 msgstr "Das in Großbritannien übliche Datumsformat benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "Use the date format common in the United States."
 msgstr ""
 "Das in den Vereinigten Staaten von Amerika übliche Datumsformat benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr "Das in dem ISO-Standard 8601 beschriebene Datumsformat benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "Use the date format specified by the system locale."
 msgstr "Das Datumsformat aus den Systemeinstellungen übernehmen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
@@ -11191,135 +11226,131 @@ msgstr ""
 "Absolutes Enddatum für Gewinn/Verlustrechnung und Datum für Bilanz.  Ebenso "
 "Enddatum für die Berechnung des Reingewinns."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "Absolutes Anfangsdatum für Gewinn/Verlustrechnung."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Standard-Währung für neue Konten."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Use the specified currency for all newly created reports."
 msgstr "Standard-Währung für neue Berichte."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid ""
 "Use the specified relative ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
 msgstr "Relatives Enddatum für Gewinn/Verlustrechnung und Datum für Bilanz"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "Relatives Anfangsdatum für Gewinn/Verlustrechnung"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Die systemweit voreingestellte Währung für neue Konten benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Die systemweit voreingestellte Währung für neue Berichte benutzen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 "Die GNOME-Voreinstellung für die Anzeige der Icons in der Werkzeugleiste "
 "benutzen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Windows"
 msgstr "Fenster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "_Absolute:"
 msgstr "_Absolut:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "_Auto-raise lists"
 msgstr "Listen automatisch aufklappen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid "_Auto-split ledger"
 msgstr "_Aktive vollständig"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 msgid "_Automatic decimal point"
 msgstr "Automatische _Dezimalstellen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 msgid "_Basic ledger"
 msgstr "_Einzeilig"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "_Decimal places:"
 msgstr "Komma_stellen:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid "_Double line mode"
 msgstr "_Bemerkung anzeigen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
-msgid "_Enable euro support"
-msgstr "_EURO-Unterstützung aktivieren"
-
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "_Europe:"
 msgstr "_Europa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 msgid "_ISO:"
 msgstr "_ISO:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "_Icons only"
 msgstr "Nur _Icons"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "_Income & expense"
 msgstr "_Erträge & Aufwendungen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 msgid "_Left"
 msgstr "_Links"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 msgid "_None"
 msgstr "_Keine"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 msgid "_Relative:"
 msgstr "_Relativ:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 msgid "_Retain log files:"
 msgstr "Logdateien au_fbewahren"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 msgid "_Right"
 msgstr "_Rechts"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 msgid "_Save window size and position"
 msgstr "_Fenstergrößen und -positionen speichern"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 msgid "_Text only"
 msgstr "Nur _Text"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 msgid "_US:"
 msgstr "_USA:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Use system theme colors"
 msgstr "Farben der _systemweiten Einstellungen verwenden"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_Width:"
 msgstr "_Breite:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 msgid "characters"
 msgstr "Zeichen"
 
@@ -14590,9 +14621,14 @@ msgid ""
 "If you change your mind later, you can reorganize the account structure "
 "safely within GnuCash."
 msgstr ""
-"Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash seperate Konten anstelle von »Kategorien«, um Buchungssätze zu klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein GnuCash Konto umgewandelt.\n"
+"Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash "
+"seperate Konten anstelle von »Kategorien«, um Buchungssätze zu "
+"klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein GnuCash "
+"Konto umgewandelt.\n"
 "\n"
-"Auf der nächsten Seite werden Sie die Möglichkeit haben, die vorgeschlagenen Umwandlungen zwischen QIF-Kategorien und GnuCash-Konten anzusehen. Diese können Sie dann mit einem Doppelklick auf den Kategorie-Namen ändern.\n"
+"Auf der nächsten Seite werden Sie die Möglichkeit haben, die vorgeschlagenen "
+"Umwandlungen zwischen QIF-Kategorien und GnuCash-Konten anzusehen. Diese "
+"können Sie dann mit einem Doppelklick auf den Kategorie-Namen ändern.\n"
 "\n"
 "Sie können jederzeit auch später in GnuCash Änderungen vornehmen."
 
@@ -14616,11 +14652,20 @@ msgid ""
 "\n"
 "Click \"Forward\" to find duplicate transactions. "
 msgstr ""
-"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen aus der QIF-Datei schon in Ihren GnuCash Konten enthalten sein. GnuCash wird versuchen, doppelt vorhandene Buchungen zu finden.\n"
+"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen aus der "
+"QIF-Datei schon in Ihren GnuCash Konten enthalten sein. GnuCash wird "
+"versuchen, doppelt vorhandene Buchungen zu finden.\n"
 "\n"
-"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende Buchung einer importierten Buchung entspricht. Importierte Buchungen werden auf der linken Seite angezeigt. Mögliche Entsprechungen für die auf der linken Seite ausgewählte Buchung werden auf der rechten Seite angezeigt. Es ist möglich, dass mehrere existierende Buchungen einer importierten Buchung entsprechen. Sie können die richtige Buchung durch Doppelklicken in die »Duplikat?«-Spalte der richtigen Buchung auswählen.\n"
+"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende Buchung "
+"einer importierten Buchung entspricht. Importierte Buchungen werden auf der "
+"linken Seite angezeigt. Mögliche Entsprechungen für die auf der linken Seite "
+"ausgewählte Buchung werden auf der rechten Seite angezeigt. Es ist möglich, "
+"dass mehrere existierende Buchungen einer importierten Buchung entsprechen. "
+"Sie können die richtige Buchung durch Doppelklicken in die »Duplikat?«-"
+"Spalte der richtigen Buchung auswählen.\n"
 "\n"
-"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu finden, im »QIF Import«-Abschnitt der GnuCash-Einstellungen beeinflussen.\n"
+"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu finden, "
+"im »QIF Import«-Abschnitt der GnuCash-Einstellungen beeinflussen.\n"
 "\n"
 "Klicken Sie nun auf »Vor«, um doppelte Buchungen zu finden."
 
@@ -14699,9 +14744,20 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"Auf der nächsten Seite werden die Konten und Aktiendepots aus den QIF Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit demselben oder einem ähnlichen Namen existiert, wird dieses Konto als Ziel vorgeschlagen. Andernfalls wird GnuCash einen neues Konto mit demselben Typ und Namen wie das QIF-Konto anlegen. Wenn das vorgeschlagene Konto nicht passt, können Sie mit Doppelklicken den Namen ändern oder ein anderes wählen.\n"
+"Auf der nächsten Seite werden die Konten und Aktiendepots aus den QIF "
+"Dateien nach GnuCash umgewandelt. Wenn bereits ein GnuCash Konto mit "
+"demselben oder einem ähnlichen Namen existiert, wird dieses Konto als Ziel "
+"vorgeschlagen. Andernfalls wird GnuCash einen neues Konto mit demselben Typ "
+"und Namen wie das QIF-Konto anlegen. Wenn das vorgeschlagene Konto nicht "
+"passt, können Sie mit Doppelklicken den Namen ändern oder ein anderes "
+"wählen.\n"
 "\n"
-"Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes Aktiendepot, seperate Kontos für Brokergebühren, spezielle Ausgleichkonten (Unterkonten von Gewinnrücklagen) als Quelle des Anfangsbestand usw. Auf der nächsten Seite können Sie diese Konten bearbeiten. Allerdings wird empfohlen, die Auswahl zu übernehmen.\n"
+"Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen "
+"Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes "
+"Aktiendepot, seperate Kontos für Brokergebühren, spezielle Ausgleichkonten "
+"(Unterkonten von Gewinnrücklagen) als Quelle des Anfangsbestand usw. Auf der "
+"nächsten Seite können Sie diese Konten bearbeiten. Allerdings wird "
+"empfohlen, die Auswahl zu übernehmen.\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:51
 msgid "Payees and memos"
@@ -22704,6 +22760,10 @@ msgid ""
 "bugs and unstable features! If you are looking for a stable personal finance "
 "application, you should use the latest release of GnuCash 2.0."
 msgstr ""
+"Das ist eine Entwicklungsversion von GnuCash. Vermutlich sind hier noch "
+"haufenweise Fehler enthalten. Wenn Sie auf Nummer sicher gehen wollen, dann "
+"benutzen Sie doch lieber die neueste Version aus der Reihe GnuCash 2.0.x, "
+"welche es aber natürlich noch nicht für Windows gibt."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid ""
