@@ -2311,6 +2311,9 @@ gnc_main_window_close_page (GncPluginPage *page)
 	if (!gnc_plugin_page_finish_pending(page))
 	  return;
 
+	if (!GNC_IS_MAIN_WINDOW (page->window))
+	  return;
+
 	window = GNC_MAIN_WINDOW (page->window);
 	if (!window) {
 	  g_warning("Page is not in a window.");
