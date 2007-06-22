@@ -159,8 +159,8 @@ Initialises the backend and provides access to the
 functions that will load and save the data. Initialises
 default values for the QofBackendOption KvpFrame.
 */
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+G_MODULE_EXPORT void
+qof_backend_module_init(void);
 
 /** \name Supported backend configurations
 @{

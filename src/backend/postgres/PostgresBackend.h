@@ -133,7 +133,7 @@ QofBook * pgendGetBook(PGBackend *pbe);
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+G_MODULE_EXPORT void
+qof_backend_module_init(void);
 
 #endif /* POSTGRES_BACKEND_H */

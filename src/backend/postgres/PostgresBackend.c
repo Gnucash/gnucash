@@ -2536,8 +2536,8 @@ pg_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
 	QofBackendProvider *prov;
 
@@ -2549,7 +2549,6 @@ g_module_check_init(GModule *module)
 	prov->provider_free = pg_provider_free;
 	prov->check_data_type = NULL;
 	qof_backend_register_provider (prov);
-	return NULL;
 }
 
 /* ======================== END OF FILE ======================== */

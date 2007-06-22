@@ -1057,8 +1057,8 @@ gnc_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
         QofBackendProvider *prov;
         prov = g_new0 (QofBackendProvider, 1);
@@ -1069,8 +1069,6 @@ g_module_check_init(GModule *module)
         prov->provider_free = gnc_provider_free;
         prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
-        g_module_make_resident (module);
-        return NULL;
 }
 
 /* ========================== END OF FILE ===================== */
