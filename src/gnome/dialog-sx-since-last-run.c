@@ -359,7 +359,6 @@ gnc_sx_slr_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
     g_signal_connect(adapter->real, "rows-reordered", G_CALLBACK(gsslrtma_proxy_rows_reordered), adapter);
 }
 
-/* @@fixme: non-staticize. **/
 static char* gnc_sx_instance_state_names[] = {
     N_("Ignored"),
     N_("Postponed"),
@@ -385,7 +384,7 @@ gnc_sx_get_slr_state_model(void)
             gtk_list_store_insert_with_values(GTK_LIST_STORE(_singleton_slr_state_model),
                                               &iter,
                                               SX_INSTANCE_STATE_MAX_STATE + 1,
-                                              0, gnc_sx_instance_state_names[i], -1);
+                                              0, _(gnc_sx_instance_state_names[i]), -1);
         }
     }
     return _singleton_slr_state_model;
@@ -476,7 +475,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                 }
                 gtk_tree_store_set(model->real, &inst_tree_iter,
                                    SLR_MODEL_COL_NAME, instance_date_buf,
-                                   SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[inst->state],
+                                   SLR_MODEL_COL_INSTANCE_STATE, _(gnc_sx_instance_state_names[inst->state]),
                                    SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
                                    SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
                                    SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
@@ -825,7 +824,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
      
     for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
     {
-        if (strcmp(value, gnc_sx_instance_state_names[i]) == 0)
+        if (strcmp(value, _(gnc_sx_instance_state_names[i])) == 0)
             break;
     }
     if (i == SX_INSTANCE_STATE_CREATED)
