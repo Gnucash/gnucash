@@ -12,7 +12,8 @@
 enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DATE,
                        GNC_CSV_DESCRIPTION,
-                       GNC_CSV_AMOUNT};
+                       GNC_CSV_AMOUNT,
+                       GNC_CSV_NUM_COL_TYPES};
 
 enum GncCsvErrorType {GNC_CSV_FILE_OPEN_ERR,
                       GNC_CSV_ENCODING_ERR};
