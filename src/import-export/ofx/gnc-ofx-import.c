@@ -336,7 +336,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 		  xaccSplitSetMemo(split, data.memo);
 		}
 	      }
-	    else if(data.unique_id_valid==true&&data.security_data_ptr->secname_valid==true)
+	    else if(data.unique_id_valid == true
+		    && data.security_data_valid
+		    && data.security_data_ptr != NULL
+		    && data.security_data_ptr->secname_valid == true)
 	      {
 		/************************ Process an investment transaction ******************************/
 		/* Note that the ACCT_TYPE_STOCK account type should be replaced with something
