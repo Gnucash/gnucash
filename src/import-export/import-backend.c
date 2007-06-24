@@ -584,13 +584,13 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       time_t match_time, download_time;
       int datediff_day;
       Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
+      Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
     
       /* Matching heuristics */
     
       /* Amount heuristics */
       downloaded_split_amount = 
-	gnc_numeric_to_double
-	(xaccSplitGetAmount(gnc_import_TransInfo_get_fsplit (trans_info)));
+	gnc_numeric_to_double (xaccSplitGetAmount(new_trans_fsplit));
       /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
@@ -598,7 +598,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	/* bug#347791: Doubly type shouldn't be compared for exact
 	   equality, so we're using fabs() instead. */
 	/*if (gnc_numeric_equal(xaccSplitGetAmount
-	  (gnc_import_TransInfo_get_fsplit (trans_info)),
+	  (new_trans_fsplit),
 	  xaccSplitGetAmount(split))) 
 	  -- gnc_numeric_equal is an expensive function call */
 	{
@@ -655,15 +655,15 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	     split anyway and skip the rest of the tests.) */
 	}
       
-      /* Check number heuristics */  
-      if(strlen(xaccTransGetNum(new_trans))!=0)
-        { 
+      /* Check number heuristics */
+      {
+	const char *new_trans_str = xaccTransGetNum(new_trans);
+	if (new_trans_str && strlen(new_trans_str) != 0) { 
           long new_trans_number, split_number;
-          const gchar *new_trans_str, *split_str;
+          const gchar *split_str;
           char *endptr;
           gboolean conversion_ok = TRUE;
           
-          new_trans_str = xaccTransGetNum (new_trans);
           /* To distinguish success/failure after strtol call */
           errno = 0;
           new_trans_number = strtol(new_trans_str, &endptr, 10);
@@ -692,20 +692,19 @@ static void split_find_match (GNCImportTransInfo * trans_info,
               prob -= 2;
             }
         }
-      
+      }
+
       /* Memo heuristics */  
-      if(strlen(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)))!=0)
-	{
-	  if((strcmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-		     xaccSplitGetMemo(split))
-	      ==0))
+      {
+	const char *memo = xaccSplitGetMemo(new_trans_fsplit);
+	if (memo && strlen(memo) != 0) {
+	  if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
 	    {	
 	      /* An exact match of memo gives a +2 */
 	      prob = prob+2;
 	      /* DEBUG("heuristics:  probability + 2 (memo)"); */
 	    }
-	  else if((strncmp(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit (trans_info)),
-			   xaccSplitGetMemo(split),
+	  else if((strncmp(memo, xaccSplitGetMemo(split),
 			   strlen(xaccSplitGetMemo(split))/2)
 		   ==0))
 	    {
@@ -717,19 +716,21 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	      /*DEBUG("heuristics:  probability + 1 (memo)");	*/
 	    }
 	}
+      }
 
-      /* Description heuristics */  
-      if(strlen(xaccTransGetDescription(new_trans))!=0)
-	{
-	  if((strcmp(xaccTransGetDescription (new_trans),
-		     xaccTransGetDescription(xaccSplitGetParent(split)))
-	      ==0))
+      /* Description heuristics */
+      {
+	const char *descr = xaccTransGetDescription(new_trans);
+	if (descr && strlen(descr) != 0) {
+	  if (safe_strcmp(descr,
+			  xaccTransGetDescription(xaccSplitGetParent(split)))
+	      ==0)
 	    {	
 	      /*An exact match of Description gives a +2 */
 	      prob = prob+2;
 	      /*DEBUG("heuristics:  probability + 2 (description)");*/
 	    }
-	  else if((strncmp(xaccTransGetDescription (new_trans),
+	  else if((strncmp(descr,
 			   xaccTransGetDescription (xaccSplitGetParent(split)),
 			   strlen(xaccTransGetDescription (new_trans))/2)
 		   ==0))
@@ -742,17 +743,18 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	      /*DEBUG("heuristics:  probability + 1 (description)");	*/
 	    }
 	}
+      }
 
       /*Online id punishment*/
-      if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&
-	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
-	{
+/*       if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) && */
+/* 	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0)) */
+/* 	{ */
 	  /* If the pref is to show match even with online ID's,
 	     puninsh the transaction with online id */
 	  
 	  /* DISABLED, it's the wrong solution to the problem. benoitg, 24/2/2003 */
 	  /*prob = prob-3;*/
-	}
+/* 	} */
       
       /* Is the probability high enough? Otherwise do nothing and return. */
       if(prob < display_threshold)

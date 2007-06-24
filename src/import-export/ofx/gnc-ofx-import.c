@@ -302,7 +302,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	}
 	xaccTransSetNotes(transaction, notes);
 	g_free(notes);
-	if( data.account_ptr->currency_valid == true)
+	if ( data.account_ptr && data.account_ptr->currency_valid )
 	  {
 	    DEBUG("Currency from libofx: %s",data.account_ptr->currency);
 	    currency = gnc_commodity_table_lookup( gnc_get_current_commodities (),
