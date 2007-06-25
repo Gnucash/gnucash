@@ -319,11 +319,10 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   return sort->obj_cmp (conva, convb);
 }
 
-static QofQuery * sortQuery = NULL;
-
-static int sort_func (gconstpointer a, gconstpointer b)
+static int sort_func (gconstpointer a, gconstpointer b, gpointer q)
 {
   int retval;
+  QofQuery *sortQuery = q;
 
   g_return_val_if_fail (sortQuery, 0);
 
@@ -735,16 +734,11 @@ static GList * qof_query_run_internal (QofQuery *q,
    */
   matching_objects = g_list_reverse(matching_objects);
 
-  /* Now sort the matching objects based on the search criteria
-   * sortQuery is an unforgivable use of static global data...  
-   * I just can't figure out how else to do this sanely.
-   */
+  /* Now sort the matching objects based on the search criteria */
   if (q->primary_sort.comp_fcn || q->primary_sort.obj_cmp ||
       (q->primary_sort.use_default && q->defaultSort))
   {
-    sortQuery = q;
-    matching_objects = g_list_sort(matching_objects, sort_func);
-    sortQuery = NULL;
+    matching_objects = g_list_sort_with_data(matching_objects, sort_func, q);
   }
 
   /* Crop the list to limit the number of splits. */
