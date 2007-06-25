@@ -1814,7 +1814,7 @@ gboolean xaccSplitRegister (void)
     { "d-share-amount", QOF_TYPE_DOUBLE,  
       (QofAccessFunc)DxaccSplitGetShareAmount, NULL },
     { "d-share-int64", QOF_TYPE_INT64, 
-      (QofAccessFunc)qof_instance_get_guid, NULL },
+      (QofAccessFunc)qof_entity_get_guid, NULL },
     { SPLIT_BALANCE, QOF_TYPE_NUMERIC, 
       (QofAccessFunc)xaccSplitGetBalance, NULL },
     { SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,
@@ -1855,7 +1855,7 @@ gboolean xaccSplitRegister (void)
     { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, 
-      (QofAccessFunc)qof_instance_get_guid, NULL },
+      (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
   };
 

@@ -702,6 +702,7 @@ qof_book_merge_commit_rule_loop(QofBookMergeData *mergeData,
 	g_return_if_fail(rule != NULL);
 	g_return_if_fail(mergeData != NULL);
 	g_return_if_fail(mergeData->targetBook != NULL);
+	g_return_if_fail(rule->importEnt && rule->targetEnt);
 	g_return_if_fail((rule->mergeResult != MERGE_NEW)||(rule->mergeResult != MERGE_UPDATE));
 
 	DEBUG ("qof_book_merge_commit_rule_loop rule: type: %s, result: %s, importEnt Type: %s, guid: %s",

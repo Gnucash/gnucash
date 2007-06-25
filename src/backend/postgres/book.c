@@ -208,7 +208,7 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    for (node=blist; node; node=node->next)
    {
       book = node->data;
-      if (guid_equal (qof_instance_get_guid(QOF_INSTANCE(book)), &guid)) break;
+      if (guid_equal (qof_entity_get_guid(QOF_INSTANCE(book)), &guid)) break;
       book = NULL;
    }
    

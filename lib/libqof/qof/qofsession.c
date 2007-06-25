@@ -368,15 +368,17 @@ col_ref_cb (QofInstance* ref_ent, gpointer user_data)
 	char         cm_sa[GUID_ENCODING_LENGTH + 1];
 	gchar        *cm_string;
 
+    g_return_if_fail(user_data);
 	qecd = (QofInstanceCopyData*)user_data;
 	ent = qecd->from;
+    g_return_if_fail(ent);
 	ref = g_new0(QofInstanceReference, 1);
 	ref->type = ent->e_type;
 	ref->ref_guid = g_new(GUID, 1);
 	ref->ent_guid = qof_instance_get_guid(ent);
 	ref->param = qof_class_get_parameter(ent->e_type, 
 		qecd->param->param_name);
-	cm_guid = qof_instance_get_guid(ref_ent);
+	cm_guid = qof_entity_get_guid(ref_ent);
 	guid_to_string_buff(cm_guid, cm_sa);
 	cm_string = g_strdup(cm_sa);
 	if(TRUE == string_to_guid(cm_string, ref->ref_guid)) {
@@ -594,7 +596,8 @@ qof_instance_coll_foreach(QofInstance *original, gpointer user_data)
 	QofBook *targetBook;
 	QofCollection *coll;
 	QofInstance *copy;
-	
+
+	g_return_if_fail(original != NULL);
 	g_return_if_fail(user_data != NULL);
 	copy = NULL;
 	qecd = (QofInstanceCopyData*)user_data;
@@ -612,7 +615,8 @@ qof_instance_coll_copy(QofInstance *original, gpointer user_data)
 	QofBook *book;
 	QofInstance *inst;
 	const GUID *g;
-	
+
+	g_return_if_fail(original != NULL);
 	g_return_if_fail(user_data != NULL);
 	qecd = (QofInstanceCopyData*)user_data;
 	book = qof_session_get_book(qecd->new_session);

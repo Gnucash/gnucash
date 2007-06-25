@@ -1971,7 +1971,7 @@ gboolean xaccTransRegister (void)
     { QOF_PARAM_BOOK, QOF_ID_BOOK,      
       (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID,    
-      (QofAccessFunc)qof_instance_get_guid, NULL },
+      (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
   };
 

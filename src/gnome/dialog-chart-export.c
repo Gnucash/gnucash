@@ -75,7 +75,7 @@ chart_collection_cb(QofInstance *ent, gpointer user_data)
 	{
 		success = qof_instance_copy_to_session(data->chart_session, ent);
 		if(!success) { return; }
-		guid = qof_instance_get_guid(ent);
+		guid = qof_entity_get_guid(ent);
 		book = qof_session_get_book(data->chart_session);
 		copy_coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
 		data->equity_account = (Account*)qof_collection_lookup_entity(copy_coll, guid);
@@ -119,7 +119,7 @@ chart_entity_cb(QofInstance *ent, gpointer user_data)
 	data = (chart_data*)user_data;
 	trans_time = data->chart_time_t;
 	data->param_ref_list = NULL;
-	guid = qof_instance_get_guid(ent);
+	guid = qof_entity_get_guid(ent);
 	acc_ent = (Account*)ent;
 	ref = NULL;
 	equity_account = data->equity_account;

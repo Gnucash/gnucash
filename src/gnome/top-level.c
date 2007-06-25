@@ -230,7 +230,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
     
     /* Get the book GUID */
     book = qof_session_get_book(session);
-    guid = qof_instance_get_guid(QOF_INSTANCE(book));
+    guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
     
     keyfile = gnc_find_state_file(url, guid_string, &filename);
@@ -317,7 +317,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
 
     /* Get the book GUID */
     book = qof_session_get_book(session);
-    guid = qof_instance_get_guid(QOF_INSTANCE(book));
+    guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
 
     /* Find the filename to use.  This returns the data from the

@@ -709,6 +709,7 @@ reference_list_lookup(gpointer data, gpointer user_data)
 	ref_param = (QofParam*)data;
 	object_node = params->output_node;
 	ent = params->qsf_ent;
+	g_return_if_fail(ent);
 	ns = params->qsf_ns;
 	starter = g_new(QofInstanceReference, 1);
 	starter->ent_guid = qof_instance_get_guid(ent);
@@ -766,6 +767,7 @@ qsf_entity_foreach(QofInstance *ent, gpointer data)
 	const GUID *cm_guid;
 	gchar       cm_sa[GUID_ENCODING_LENGTH + 1];
 
+	g_return_if_fail(ent != NULL);
 	g_return_if_fail(data != NULL);
 	params = (qsf_param*)data;
 	param_count = ++params->count;

@@ -105,7 +105,7 @@ void gnc_budget_commit_edit(GncBudget *bgt);
 
 const GUID* gnc_budget_get_guid(GncBudget* budget);
 #define gnc_budget_return_guid(X) \
-  (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
+  (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 /** Set/Get the name of the Budget */
 void gnc_budget_set_name(GncBudget* budget, const gchar* name);

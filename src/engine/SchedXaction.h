@@ -318,7 +318,7 @@ gboolean SXRegister (void);
 /** \deprecated */
 #define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSchedXactionGetGUID(X) qof_instance_get_guid(QOF_INSTANCE(X))
+#define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 

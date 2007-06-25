@@ -465,6 +465,12 @@ qof_instance_get_guid (gconstpointer inst)
     return &(priv->guid);
 }
 
+const GUID *
+qof_entity_get_guid (gconstpointer ent)
+{
+    return ent ? qof_instance_get_guid(ent) : guid_null();
+}
+
 void
 qof_instance_set_guid (gpointer ptr, const GUID *guid)
 {

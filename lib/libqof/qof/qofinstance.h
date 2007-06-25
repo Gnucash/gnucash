@@ -101,6 +101,10 @@ gboolean qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2);
 /** Return the GUID of this instance */
 const GUID * qof_instance_get_guid (gconstpointer);
 
+/** \deprecated Use qof_instance_get_guid instead.
+ *  Works like qof_instance_get_guid, but returns NULL on NULL */
+const GUID * qof_entity_get_guid (gconstpointer);
+
 /** Return the collection this instance belongs to */
 QofCollection* qof_instance_get_collection (gconstpointer inst);
 
