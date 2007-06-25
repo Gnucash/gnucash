@@ -559,27 +559,32 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
-    gchar *localedir;
-    GError *binreloc_error = NULL;
-
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
     g_thread_init(NULL);
 
-    /* Init binreloc */
-    if (!gbr_init (&binreloc_error) ) {
-      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
+#ifdef ENABLE_BINRELOC
+    {
+        GError *binreloc_error = NULL;
+        if (!gbr_init(&binreloc_error)) {
+            g_print("main: Error on gbr_init: %s\n", binreloc_error->message);
+            g_error_free(binreloc_error);
+        }
     }
-    localedir = gnc_path_get_localedir ();
-#ifdef HAVE_GETTEXT
-    /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
-       via gtk_init(). */
-    bindtextdomain (GETTEXT_PACKAGE, localedir);
-    textdomain (GETTEXT_PACKAGE);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
-    g_free (localedir);
+
+#ifdef HAVE_GETTEXT
+    {
+        gchar *localedir = gnc_path_get_localedir();
+        /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()
+           via gtk_init(). */
+        bindtextdomain(GETTEXT_PACKAGE, localedir);
+        textdomain(GETTEXT_PACKAGE);
+        bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+        g_free(localedir);
+    }
+#endif
 
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);
