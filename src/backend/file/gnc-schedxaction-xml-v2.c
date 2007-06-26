@@ -453,6 +453,7 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
         g_date_clear(&next, 1);
 
         recurrenceNextInstance(r, &start, &next);
+        g_return_if_fail(g_date_valid(&next));
 
         {
             gchar date_str[128];
