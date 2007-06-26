@@ -133,6 +133,29 @@ libgoffice/libgsf details
   - libgnomeui-2.0	>= 2.0.0
   - libgsf-gnome-1	>= 1.12.2
 
+
+Partial update, 2007-06-09; RHEL-only
+-------------------------------------
+- RHEL
+  - *RHEL 4 = 2005-02-15		RHEL 5
+
+    - aqbanking: not included		aqbanking-2.2.9 from Fedora Core 7
+    - cairo: not included		cairo-1.4.4     from Fedora Core 7
+    - gconf2-2.8.1			GConf2-2.14.0-9.el5
+    - glib2-2.4.7			glib2-2.12.3-2.fc6
+    - gtk2-2.4.13			gtk2-2.10.4-16.el5
+    - guile-1.6.4			guile-1.8.0--8.20060831cvs
+    - gwrap: not included		g-wrap-1.9.6    from Fedora Core 7
+    - libart_lgpl-2.3.16		libart-lgpl-2.3.17-4
+    - libglade2-2.4.0			libglade2-2.6.0-2
+    - libgnomeprint22-2.8.0		libgnomeprint22-2.12.1-6
+    - libgnomeui-2.8.0			libgnomeui-2.16.0-5.el5
+    - libgsf-1.10.1			libgsf-1.14.1-6.1
+    - libofx: not included		libofx-0.8.3    from Fedora Core 7
+    - libxml2-2.6.16			libxml2-2.6.26-2.1.2	
+    - pango-1.6.0			pango-1.14.9    from Fedora Core 7
+
+
 Status, 2007-01-17
 ------------------
 
