@@ -13,6 +13,7 @@ AppPublisher=GnuCash Development Team
 AppPublisherURL=http://www.gnucash.org
 AppSupportURL=http://www.gnucash.org
 AppUpdatesURL=http://www.gnucash.org
+VersionInfoVersion=@VERSION@
 DefaultDirName={pf}\@PACKAGE@
 DefaultGroupName=GnuCash
 LicenseFile=@prefix@\..\dist\share\@PACKAGE@\doc\COPYING
@@ -21,6 +22,8 @@ OutputDir=.
 OutputBaseFilename=@PACKAGE@-@VERSION@-setup
 UninstallFilesDir={app}\uninstall\@PACKAGE@
 InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt
+SetupIconFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon.ico
+WizardSmallImageFile=@prefix@\..\dist\share\@PACKAGE@\pixmaps\gnucash-icon-48x48.bmp
 
 [Types]
 Name: "full"; Description: "{cm:FullInstall}"
