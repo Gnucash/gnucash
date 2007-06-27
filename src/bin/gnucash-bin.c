@@ -572,6 +572,8 @@ main(int argc, char ** argv)
             g_error_free(binreloc_error);
         }
     }
+#else
+    g_message("main: binreloc relocation support was disable at configure time.\n");
 #endif
 
 #ifdef HAVE_GETTEXT
