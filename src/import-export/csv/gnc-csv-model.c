@@ -14,9 +14,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-#include <stdio.h> /* Get rid of this */
-
-/* Returns a set of sensible defaults for parsing CSV files. */
+/** A set of sensible defaults for parsing CSV files. 
+ * @return StfParseOptions_t* for parsing a file with comma separators
+ */
 static StfParseOptions_t* default_parse_options(void)
 {
   StfParseOptions_t* options = stf_parse_options_new();
@@ -26,9 +26,7 @@ static StfParseOptions_t* default_parse_options(void)
 }
 
 /* TODO This will be replaced by something more sophisticated. */
-time_t parse_date(const char* date_str);
-
-time_t parse_date(const char* date_str)
+static time_t parse_date(const char* date_str)
 {
   struct tm retvalue;
   char mstr[3], dstr[3], ystr[3];
@@ -48,7 +46,11 @@ time_t parse_date(const char* date_str)
   return mktime(&retvalue);
 }
 
-/* TODO Comment. */
+/** Loads a file into a string.
+ * @param filename Name of the file to open
+ * @param error Passes back the error that occurred, if one occurred.
+ * @return Contents of the file at filename if successful; NULL if an error occurred
+ */
 GncCsvStr file_to_string(const char* filename, GError** error)
 {
   /* The file descriptor for opening the file, a flag indicating
@@ -89,6 +91,9 @@ GncCsvStr file_to_string(const char* filename, GError** error)
   return file_str;
 }
 
+/** Constructor for GncCsvParseData.
+ * @return Pointer to a new GncCSvParseData
+ */
 /* TODO Comment */
 GncCsvParseData* gnc_csv_new_parse_data(void)
 {
@@ -103,6 +108,9 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
   return parse_data;
 }
 
+/** Destructor for GncCsvParseData.
+ * @param parse_data Parse data whose memory will be freed
+ */
 /* TODO Comment */
 void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
 {
@@ -121,12 +129,26 @@ void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
     g_list_free(parse_data->error_lines);
   /* TODO Find out if there's a potential memory leak here. */
   if(parse_data->transactions != NULL)
+  {
+    GList* transactions = parse_data->transactions;
+    do
+    {
+      transactions = g_list_next(transactions);
+    } while(transactions != NULL);
     g_list_free(parse_data->transactions);
+  }
   g_free(parse_data);
 }
 
+/** Converts raw file data using a new encoding. This function must be
+ * called after gnc_csv_load_file only if gnc_csv_load_file guessed
+ * the wrong encoding.
+ * @param parse_data Data that is being parsed
+ * @param encoding Encoding that data should be translated using
+ * @return 0 on success, 1 on failure
+ */
 /* TODO Comment */
-int gnc_csv_convert_enc(GncCsvParseData* parse_data, const char* enc)
+int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding)
 {
   GError* error;
   gsize bytes_read, bytes_written;
@@ -136,18 +158,29 @@ int gnc_csv_convert_enc(GncCsvParseData* parse_data, const char* enc)
   }
   parse_data->file_str.begin = g_convert(parse_data->raw_str.begin,
                                          parse_data->raw_str.end - parse_data->raw_str.begin,
-                                         "UTF-8", enc, &bytes_read,
+                                         "UTF-8", encoding, &bytes_read,
                                          &bytes_written, &error);
-  g_debug("using %s got %p\n", enc, parse_data->file_str.begin);
   if(parse_data->file_str.begin == NULL)
   {
     return 1;
   }
   parse_data->file_str.end = parse_data->file_str.begin + bytes_written;
-  parse_data->encoding = (gchar*)enc;
+  parse_data->encoding = (gchar*)encoding;
   return 0;
 }
 
+/** Loads a file into a GncCsvParseData. This is the first function
+ * that must be called after createing a new GncCsvParseData. If this
+ * fails because the file couldn't be opened, no more functions can be
+ * called on the parse data until this succeeds (or until it fails
+ * because of an encoding guess error). If it fails because the
+ * encoding could not be guessed, gnc_csv_convert_encoding must be
+ * called until it succeeds.
+ * @param parse_data Data that is being parsed
+ * @param filename Name of the file that should be opened
+ * @param error Will contain an error if there is a failure
+ * @return 0 on success, 1 on failure
+ */
 /* TODO Comment */
 int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
                       GError** error)
@@ -164,7 +197,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
                                 "UTF-8", NULL);
   g_debug("Guessed %s\n", guess_enc);
   /* TODO Handle error */
-  gnc_csv_convert_enc(parse_data, guess_enc);
+  gnc_csv_convert_encoding(parse_data, guess_enc);
   if(parse_data->file_str.begin == NULL)
   {
     g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "Encoding conversion failed.");
@@ -174,6 +207,16 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
     return 0;
 }
 
+/** Parses a file into cells. This requires having an encoding that
+ * works (see gnc_csv_convert_encoding). parse_data->options should be
+ * set according to how the user wants before calling this
+ * function. (Note: if guessColTypes is TRUE, all the column types
+ * will be GNC_CSV_NONE right now.)
+ * @param parse_data Data that is being parsed
+ * @param guessColTypes TRUE to guess what the types of columns are based on the cell contents
+ * @error error Will contain an error if there is a failure
+ * @return 0 on success, 1 on failure
+ */
 /* TODO Comment. */
 /* TODO Should we use 0 for domain and code in errors? */
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)
@@ -228,6 +271,15 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
   return 0;
 }
 
+/** Creates a list of transactions from parsed data. Transactions that
+ * could be created from rows are placed in parse_data->transactions;
+ * rows that fail are placed in parse_data->error_lines. (Note: there
+ * is no way for this function to "fail," i.e. it only returns 0, so
+ * it may be changed to a void function in the future.)
+ * @param parse_data Data that is being parsed
+ * @param account Account with which transactions are created
+ * @return 0 on success, 1 on failure
+ */
 /* TODO Comment. */
 int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account)
 {
@@ -294,7 +346,12 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account)
       }
     }
     if(noErrors)
-      parse_data->transactions = g_list_append(parse_data->transactions, trans);
+    {
+      GncCsvTransLine* trans_line = g_malloc(sizeof(GncCsvTransLine));
+      trans_line->line_no = i;
+      trans_line->trans = trans;
+      parse_data->transactions = g_list_append(parse_data->transactions, trans_line);
+    }
   }
   return 0;
 }

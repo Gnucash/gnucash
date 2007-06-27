@@ -16,11 +16,8 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @addtogroup Import_Export
-    @{ */
-/** @internal
-    @file gnc-csv-import.c
-    @brief Csv import module code
+/** @file gnc-csv-import.c
+    @brief CSV Import GUI code
     @author Copyright (c) 2007 Benny Sperisen <lasindi@gmail.com>
 */
 #include "config.h"
@@ -48,86 +45,97 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-/* These are the different types of checkbuttons that the user can
- * click to configure separators in a delimited file. */
+/** Enumeration for separator checkbutton types. These are the
+ * different types of checkbuttons that the user can click to
+ * configure separators in a delimited file. */
 enum SEP_BUTTON_TYPES {SEP_SPACE, SEP_TAB, SEP_COMMA, SEP_COLON, SEP_SEMICOLON, SEP_HYPHEN,
                        SEP_NUM_OF_TYPES};
 
-/* This struct contains all of the data relevant to the preview dialog
- * that lets the user configure an import. */
+/** Data for the preview dialog. This struct contains all of the data
+ * relevant to the preview dialog that lets the user configure an
+ * import. */
 typedef struct
 {
-  GncCsvParseData* parse_data; /* The actual data */
-  GladeXML* xml; /* The Glade file that contains the dialog. */
-  GtkDialog* dialog; /* The dialog */
-  GtkTreeView* treeview; /* The treeview containing the data */
-  GtkTreeView* ctreeview; /* The treeview containing the column types */
-  GtkCheckButton* sep_buttons[SEP_NUM_OF_TYPES]; /* Checkbuttons for common separators */
-  GtkCheckButton* custom_cbutton; /* The checkbutton for a custom separator */
-  GtkEntry* custom_entry; /* The entry for custom separators */
-  gboolean approved; /* This is FALSE until the user clicks "OK". */
+  GncCsvParseData* parse_data; /**< The actual data we are previewing */
+  GtkDialog* dialog;
+  GladeXML* xml; /**< The Glade file that contains the dialog. */
+  GtkTreeView* treeview; /**< The treeview containing the data */
+  GtkTreeView* ctreeview; /**< The treeview containing the column types */
+  GtkCheckButton* sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
+  GtkCheckButton* custom_cbutton; /**< The checkbutton for a custom separator */
+  GtkEntry* custom_entry; /**< The entry for custom separators */
+  gboolean encoding_selected_called; /**< Before encoding_selected is first called, this is FALSE.
+                                      * (See description of encoding_selected.) */
+  gboolean approved; /**< This is FALSE until the user clicks "OK". */
 } GncCsvPreview;
 
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty);
 
-/* Event handler for when one of the separator checkbuttons is clicked. */
-static void sep_button_clicked(GtkCheckButton* widget, GncCsvPreview* preview)
+/** Event handler for separator changes. This function is called
+ * whenever one of the widgets for configuring the separators (the
+ * separator checkbuttons or the custom separator entry) is
+ * changed.
+ * @param widget The widget that was changed
+ * @param preview The data that is being configured
+ */
+static void sep_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 {
-  /* The stock separator charactors */
-  char* sep_chars[] = {" ", "\t", ",", ":", ";", "-"};
-  /* A list of all the separators that have been checked. */
-  GSList* separators = NULL;
   int i;
+  char* stock_separator_characters[] = {" ", "\t", ",", ":", ";", "-"};
+  GSList* checked_separators = NULL;
 
-  /* Go through each of the separator buttons. */
+  /* Add the corresponding characters to checked_separators for each
+   * button that is checked. */
   for(i = 0; i < SEP_NUM_OF_TYPES; i++)
   {
-    /* If this button is checked, add the corresponding character to
-     * the separators list. */
     if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(preview->sep_buttons[i])))
-      separators = g_slist_append(separators, sep_chars[i]);
+      checked_separators = g_slist_append(checked_separators, stock_separator_characters[i]);
   }
 
-  /* If the custom button is checked ... */
+  /* Add the custom separator if the user checked its button. */
   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(preview->custom_cbutton)))
   {
-    /* ... get the separator string from the custom entry ... */
     char* custom_sep = (char*)gtk_entry_get_text(preview->custom_entry);
-    if(custom_sep[0] != '\0') /* ... and if it isn't blank add it to the separators list. */
-      separators = g_slist_append(separators, custom_sep);
+    if(custom_sep[0] != '\0') /* Don't add a blank separator (bad things will happen!). */
+      checked_separators = g_slist_append(checked_separators, custom_sep);
   }
 
-  /* Set the parse options using the separators list. */
-  stf_parse_options_csv_set_separators(preview->parse_data->options, NULL, separators);
-  g_slist_free(separators); /* Free the separators list. */
+  /* Set the parse options using the checked_separators list. */
+  stf_parse_options_csv_set_separators(preview->parse_data->options, NULL, checked_separators);
+  g_slist_free(checked_separators);
 
   /* TODO Handle error */
   gnc_csv_parse(preview->parse_data, FALSE, NULL);
   gnc_csv_preview_treeview(preview, TRUE);
 }
 
-/* Event handler for a new encoding being selected. */
+/** Event handler for a new encoding. This is called when the user
+ * selects a new encoding; the data is reparsed and shown to the
+ * user.
+ * @param selector The widget the user uses to select a new encoding
+ * @param encoding The encoding that the user selected
+ * @param preview The data that is being configured
+ */
 static void encoding_selected(GOCharmapSel* selector, const char* encoding,
                               GncCsvPreview* preview)
 {
   /* This gets called twice everytime a new encoding is selected. The
    * second call actually passes the correct data; thus, we only do
    * something the second time this is called. */
-  static gboolean second_call = FALSE;
 
   /* If this is the second time the function is called ... */
-  if(second_call)
+  if(preview->encoding_selected_called)
   {
     GError* error = NULL;
     /* TODO Handle errors and comment */
-    gnc_csv_convert_enc(preview->parse_data, encoding);
+    gnc_csv_convert_encoding(preview->parse_data, encoding);
     gnc_csv_parse(preview->parse_data, FALSE, &error);
     gnc_csv_preview_treeview(preview, TRUE);
-    second_call = FALSE;
+    preview->encoding_selected_called = FALSE;
   }
   else /* If this is the first call of the function ... */
   {
-    second_call = TRUE; /* ... set the flag and wait for the next call. */
+    preview->encoding_selected_called = TRUE; /* ... set the flag and wait for the next call. */
   }
 }
 
@@ -137,7 +145,12 @@ static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {"None",
                                                         "Description",
                                                         "Amount"};
 
-/* Event handler for the "OK" button being clicked on the dialog. */
+/** Event handler for the "OK" button. When "OK" is clicked, this
+ * function updates the parse data with the user's column type
+ * configuration and closes the preview dialog.
+ * @param widget The "OK" button
+ * @param preview The data that is being configured
+ */
 static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 {
   /* Shorten the column_types identifier. */
@@ -178,14 +191,23 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   preview->approved = TRUE; /* The user has wants to do the import. */
 }
 
-/* Event handler for the "Cancel" dialog being clicked on the dialog. */
+/** Event handler for the "Cancel" button. When the user clicks
+ * "Cancel", the dialog is simply closed.
+ * @param widget The "Cancel" button
+ * @param preview The data that is being configured
+ */
 static void cancel_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 {
-  /* Simply close the dialog. */
   gtk_widget_hide((GtkWidget*)(preview->dialog));
 }
 
-/* Event handler for the treeview being resized. */
+/** Event handler for the data treeview being resized. When the data
+ * treeview is resized, the column types treeview's columns are also resized to
+ * match.
+ * @param widget The data treeview
+ * @param allocation The size of the data treeview
+ * @param preview The data that is being configured
+ */
 static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
 {
   /* ncols is the number of columns in the data. */
@@ -209,9 +231,17 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
   }
 }
 
-/* Event handler for the user selecting a new column type. */
-static void column_type_edited(GtkCellRenderer *renderer, gchar *path,
-                               gchar *new_text, GncCsvPreview* preview)
+/** Event handler for the user selecting a new column type. When the
+ * user selects a new column type, that column's text must be changed
+ * to that selection, and any other columns containing that selection
+ * must be changed to "None" because we don't allow duplicates.
+ * @param renderer The renderer of the column the user changed
+ * @param path There is only 1 row in preview->ctreeview, so this is always 0.
+ * @param new_text The text the user selected
+ * @param preview The data that is being configured
+ */
+static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
+                               gchar* new_text, GncCsvPreview* preview)
 {
   /* ncols is the number of columns in the data. */
   int i, ncols = preview->parse_data->column_types->len;
@@ -233,7 +263,7 @@ static void column_type_edited(GtkCellRenderer *renderer, gchar *path,
     GList* rend_list = gtk_tree_view_column_get_cell_renderers(col);
     /* rend_list has only one entry, which we put in col_renderer. */
     col_renderer = rend_list->data;
-    g_list_free(rend_list); /* Free rend_list since we don't need it anymore. */
+    g_list_free(rend_list);
 
     /* If this is not the column that was edited ... */
     if(col_renderer != renderer)
@@ -263,7 +293,9 @@ static void column_type_edited(GtkCellRenderer *renderer, gchar *path,
   }
 }
 
-/* Constructor for GncCsvPreview. */
+/** Constructor for GncCsvPreview.
+ * @return A new GncCsvPreview* ready for use.
+ */
 static GncCsvPreview* gnc_csv_preview_new()
 {
   int i;
@@ -337,13 +369,20 @@ static GncCsvPreview* gnc_csv_preview_new()
   /* Load the column type treeview. */
   preview->ctreeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "ctreeview"));
 
+  /* This is TRUE only after encoding_selected is called, so we must
+   * set it initially to FALSE. */
+  preview->encoding_selected_called = FALSE;
+
   /* TODO Free stuff */
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
 
   return preview;
 }
 
-/* Function for destroying a preview when we're done with it. */
+/** Destructor for GncCsvPreview. This does not free
+ * preview->parse_data, which must be freed separately.
+ * @param preview The preview whose memory is freed.
+ */
 static void gnc_csv_preview_free(GncCsvPreview* preview)
 {
   g_object_unref(preview->xml);
@@ -446,10 +485,14 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   /* TODO free cstore and ctstore */
 }
 
-/* This function is used to let the user preview and configure the
- * data parsed from the file. It doesn't return until the user clicks
- * "OK" or "Cancel" on the dialog. It returns 0 if the user approved
- * the import and 1 if the user didn't. */
+/** A function that lets the user preview a file's data. This function
+ * is used to let the user preview and configure the data parsed from
+ * the file. It doesn't return until the user clicks "OK" or "Cancel"
+ * on the dialog.
+ * @param preview The GUI for previewing the data
+ * @param parse_data The data we want to preview
+ * @return 0 if the user approved the import; 1 if the user didn't.
+ */
 static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
 {
   /* Set the preview's parse_data to the one we're getting passed. */
@@ -468,7 +511,7 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
     return 1;
 }
 
-/* The function that actually imports a CSV/Fixed-Width file. */
+/** Lets the user import a CSV/Fixed-Width file. */
 /* TODO Comment this function. */
 void gnc_file_csv_import(void)
 {
@@ -545,8 +588,9 @@ void gnc_file_csv_import(void)
     /* Copy all of the transactions to the importer GUI. */
     while(transactions != NULL)
     {
+      GncCsvTransLine* trans_line = transactions->data;
       gnc_gen_trans_list_add_trans(gnc_csv_importer_gui,
-                                   (Transaction*)(transactions->data));
+                                   (Transaction*)(trans_line->trans));
       transactions = g_list_next(transactions);
     }
     /* Let the user load those transactions into the account. */
@@ -558,5 +602,3 @@ void gnc_file_csv_import(void)
     g_free(selected_filename);
   }
 }
-
-/** @} */
