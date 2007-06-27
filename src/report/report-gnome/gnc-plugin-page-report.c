@@ -1376,6 +1376,14 @@ gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
 
 	save_func = scm_c_eval_string("gnc:report-save-to-savefile");
 	scm_call_1(save_func, priv->cur_report);
+
+	{
+	  GtkActionGroup *action_group =
+	    gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
+	  GtkAction *action =
+	    gtk_action_group_get_action (action_group, "ReportSaveAction");
+	  gtk_action_set_sensitive(action, FALSE);
+	}
 }
 
 static void
