@@ -421,13 +421,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
     for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        FreqSpec *fs;
-        GString *frequency_str;
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
-
-        frequency_str = g_string_sized_new(32);
-        fs = xaccSchedXactionGetFreqSpec(instances->sx);
-        xaccFreqSpecGetFreqStr(fs, frequency_str);
 
         {
             GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
@@ -447,6 +441,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
         {
             gtk_tree_store_append(model->real, &sx_tree_iter, NULL);
         }
+
         gtk_tree_store_set(model->real, &sx_tree_iter,
                            SLR_MODEL_COL_NAME, xaccSchedXactionGetName(instances->sx),
                            SLR_MODEL_COL_INSTANCE_STATE, NULL,
@@ -455,7 +450,6 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                            SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
                            SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
                            -1);
-        g_string_free(frequency_str, TRUE);
 
         // Insert instance information
         {
