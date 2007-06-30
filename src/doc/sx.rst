@@ -1,10 +1,10 @@
 -*- mode: rst; buffer-file-coding-system: utf-8 -*-
 
 Scheduled Transactions
-===============================================================
+======================
 
 TODO
-----------
+----
 
 - meta
 
@@ -252,7 +252,7 @@ TODO
   - [ ] "reminder" instances should show number of days until due
   - [ ] "Find unfinished" button; count; sensitize Ok as function of unfinished.
   - [ ] bold SX names [tw20070614]_
-  - [ ] checkbox/option to show/hide Reminders [tw20070614]_
+  - [ ] checkbox/option to show/hide reminders [tw20070614]_, or a multi-part tree [tw20070619]_
   - [ ] filter/remove SXes that don't have any instances in the list [tw20070614-2]_
   - [ ] remove tree expand controls, except for non-to-create instances with variables [tw200070614-2]_
   - [x] text changes [tw20070614]_
@@ -293,6 +293,7 @@ TODO
 
 .. [tw20070614]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
 .. [tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
+.. [tw20070619]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020757.html
 
 - destroy/cleanup, notes:
 
