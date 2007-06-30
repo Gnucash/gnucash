@@ -221,6 +221,9 @@ qof_book_get_dirty_time (const QofBook *book)
 void
 qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 {
+  if (book->dirty_cb)
+    g_warning("qof_book_set_dirty_cb: Already existing callback %p, will be overwritten by %p\n",
+	      book->dirty_cb, cb);
   book->dirty_data = user_data;
   book->dirty_cb = cb;
 }
