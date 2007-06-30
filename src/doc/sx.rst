@@ -220,6 +220,8 @@ TODO
 
   - [ ] remove FreqSpec code
 
+    - [x] don't write FreqSpecs out.
+
     - [ ] SX code
 
       - [ ] engine

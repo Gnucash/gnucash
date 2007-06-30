@@ -174,29 +174,37 @@ gnc_freqSpec_dom_tree_create( FreqSpec *fs )
 
         case INVALID: {
                 xmlSub = xmlNewNode( NULL, BAD_CAST "fs:none" );
+                xmlAddChild( ret, xmlSub );
         } break;
 
         case ONCE: {
-                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:once" );
-                xmlAddChild( xmlSub, 
-                             gdate_to_dom_tree( "fs:date", 
-                                                &fs->s.once.date ) );
+                if (!g_date_valid(&fs->s.once.date))
+                {
+                    xmlSub = xmlNewNode(NULL, BAD_CAST "fs:none");
+                }
+                else
+                {
+                    xmlSub = xmlNewNode( NULL, BAD_CAST "fs:once" );
+                    xmlAddChild( xmlSub, 
+                                 gdate_to_dom_tree( "fs:date", 
+                                                    &fs->s.once.date ) );
+                }
                 xmlAddChild( ret, xmlSub );
         } break;
 
         case DAILY: {
-                        xmlSub = xmlNewNode( NULL, BAD_CAST "fs:daily" );
-                        xmlAddChild( xmlSub, 
-                                     guint_to_dom_tree(
-                                             "fs:interval", 
-                                             fs->s.daily.interval_days )
-                                );
-                        xmlAddChild( xmlSub, 
-                                     guint_to_dom_tree( 
-                                             "fs:offset", 
-                                             fs->s.daily.offset_from_epoch )
-                                );
-                        xmlAddChild( ret, xmlSub );
+                xmlSub = xmlNewNode( NULL, BAD_CAST "fs:daily" );
+                xmlAddChild( xmlSub, 
+                             guint_to_dom_tree(
+                                     "fs:interval", 
+                                     fs->s.daily.interval_days )
+                        );
+                xmlAddChild( xmlSub, 
+                             guint_to_dom_tree( 
+                                     "fs:offset", 
+                                     fs->s.daily.offset_from_epoch )
+                        );
+                xmlAddChild( ret, xmlSub );
         } break;
         
         case WEEKLY: {
