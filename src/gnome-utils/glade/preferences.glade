@@ -2222,7 +2222,7 @@
 		  <child>
 		    <widget class="GtkSpinButton" id="gconf/general/autosave_interval_minutes">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">The number of minutes until saving of the data file to harddisk will be started automatically.  If zero, no saving will be started automatically.</property>
+		      <property name="tooltip" translatable="yes">The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</property>
 		      <property name="can_focus">True</property>
 		      <property name="climb_rate">1</property>
 		      <property name="digits">0</property>
