@@ -87,9 +87,9 @@ TODO
 
   - [x] no way to clear a variable entry [ve20070209]_
 
-.. [dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
-.. [ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
-.. [ve20070303]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
+.. [dh20070120] http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
+.. [ve20070209] http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
+.. [ve20070303] http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
 
 - sx list page
 
@@ -112,7 +112,8 @@ TODO
   - [ ] model-ize
 
     - (check_consistent, especially...)
-    - Notes::
+
+Notes::
 
     GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
     
@@ -227,10 +228,7 @@ TODO
 
   - [ ] 'every x months' spin button makes large jumps::
 
-    <andi5> jsled: another topic: you have probably seen the "every x months"
-    spin button make jumps greater than one, right? ... this seems to be due
-    to a spin button timeout event which controls "fast-forward"
-    spinning... it is run because the changed(?) signal handler is too slow
+    <andi5> jsled: another topic: you have probably seen the "every x months" spin button make jumps greater than one, right? ... this seems to be due to a spin button timeout event which controls "fast-forward" spinning... it is run because the changed(?) signal handler is too slow
 
   - [ ] support nth-weekday Recurrence period.
 
@@ -283,9 +281,9 @@ TODO
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
-.. [tw20070614]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
-.. [tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
-.. [tw20070619]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020757.html
+.. [tw20070614] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
+.. [tw20070614-2] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
+.. [tw20070619] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020757.html
 
 - destroy/cleanup, notes:
 
@@ -293,7 +291,7 @@ TODO
   - finalize: complete destruction; just before free; only called once
 
 Pedantic Todo
-----------------------
+-------------
 
 - s/SchedXaction/Scheduled/
 - s/temporal_state/instance_sequence_context/
@@ -304,7 +302,7 @@ Pedantic Todo
 (eventually real documentation... (?))
 
 Since Last Run
-----------------------
+--------------
 
 +------------------+------------------+------------------+
 |      Thing       |      State       |      Value       |
@@ -359,38 +357,42 @@ to see the created transactions.  This is done using the transaction-search
 functionality over the created transactions by ID.
 
 Upcoming instance states
----------------------------------------
+------------------------
 
-    reminder  -> to-create
-    postponed -> to-create
-    to-create -> postponed
-    to-create -> ignore
-    to-create -> created [terminal]
+- reminder  -> to-create
+- postponed -> to-create
+- to-create -> postponed
+- to-create -> ignore
+- to-create -> created [terminal]
 
 Definitions:
 
-    reminder: a transient upcoming transaction that will not be created.
-    postponed: a historical to-create transaction that the user has
-        explicitly deferred.
-    to-create: an upcoming SX instance that should be created.
-    ignore: a scheduled instance the user has explicitly prevented the
-        instantiation of.
-    created: the instance has been created in this interaction cycle.
+reminder
+  a transient upcoming transaction that will not be created.
+postponed
+  a historical to-create transaction that the user has explicitly deferred.
+to-create
+  an upcoming SX instance that should be created.
+ignore
+  a scheduled instance the user has explicitly prevented the instantiation of.
+created
+  the instance has been created in this interaction cycle.
 
 Formula Parsing
-------------------------
+---------------
 
 A SXes formula is parsed in the context of:
 
 - the template transaction
 
   - the accounts of the splits
+
 - the sequence number
 - the date of the transaction
 - a variable-binding table.
 
 Testing Notes
----------------------
+-------------
 
 - auto-create
 
