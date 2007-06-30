@@ -57,7 +57,7 @@ Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidde
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [Files]
 ; The main executables and DLLs
-Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs; Components: main; AfterInstall: MyAfterInstallConfig()
+Source: "@prefix@\..\dist\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs ignoreversion; Components: main; AfterInstall: MyAfterInstallConfig()
 ; Note: The above AfterInstall function will create the 
 ; gnucash.bat file on-the-fly by the Pascal script below.
 
