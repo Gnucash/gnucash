@@ -7,6 +7,7 @@ TODO
 ----------
 
 - meta
+
   - [ ] GncSxListTreeModelAdapter: s/real/adapted/
   - [ ] generic tree model adapter setup code
   - [ ] move documentation into doxygen comments, here and in sources.
@@ -14,6 +15,7 @@ TODO
   - [x] printf -> logging
 
 - core
+
   - ! [ ] @fixme-s
   - ! [ ] after updating/merging new instances, ensure sx-instance-state consistency
   - [x] sx list -> qof collection
@@ -65,6 +67,14 @@ TODO
 
 - bugs
 
+  - [ ] gnucash --nofile; File > New File > Forward++ > Apply; Actions > SX >
+    List; Schedule > New; boom::
+
+    Program received signal SIGSEGV, Segmentation fault.
+    [Switching to Thread -1233758544 (LWP 10243)]
+    0xb7e069f8 in gnc_ledger_display_internal (lead_account=0x0, q=0x85b8c88, ld_type=LD_GL, reg_type=SEARCH_LEDGER, style=REG_STYLE_JOURNAL, use_double_line=0, is_template=1)
+        at gnc-ledger-display.c:731
+
   - ! [x] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
   - ! [x] parse from 1.8 file doesn't setup start date correctly;
@@ -85,9 +95,9 @@ TODO
 
   - [x] no way to clear a variable entry [ve20070209]_
 
-.. _[dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
-.. _[ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
-.. _[ve20070303]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
+.. [dh20070120]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
+.. [ve20070209]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
+.. [ve20070303]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
 
 - sx list page
 
@@ -113,11 +123,11 @@ TODO
     - Notes::
 
     GncSxEditModel* gnc_sx_edit_model_new(SchedXaction *sx);
-
+    
     gnc_sxed_check_changed( GncSxEditorDialog *sxed )
     gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
     gnc_sxed_save_sx( GncSxEditorDialog *sxed )
-
+    
     gchar* gnc_sx_edit_model_get_name(GncSxEditModel *mdl);
     void gnc_sx_edit_model_set_name(GncSxEditModel *mdl, gchar *new_name);
 
@@ -279,8 +289,8 @@ TODO
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
-.. _[tw20070614]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
-.. _[tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
+.. [tw20070614]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
+.. [tw20070614-2]: http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
 
 - destroy/cleanup, notes:
 
@@ -417,51 +427,3 @@ counters for newly-discovered-as-to-be-created SXes."
     - only auto-create (+notify): SLR dialog, already created
     - others, auto-create (-notify): SLR dialog, incl. created 
     - others, auto-create (+notify): SLR dialog, incl. created
-
-------------------------------------------------------------
-
-Release Notes
-=============
-
-Major overhaul
---------------
-
-The core application-side SX code was overhauled for clarity, modularity, correctness, testability, &c.
-
-SXList Plugin Page
--------------------
-
-The SX list and upcoming-instances calendar moved from a top-level window to being a plugin page in the normal application container.
-
-Since Last Run
---------------
-
-The Since Last Run (SLR) dialog received a functional overhaul as well.  The previous druid-based approach led to a huge bookkeeping headache, as transitioning between pages required partially-processed SXes to be maintained and transactions to be created and destroyed.  As well, the multi-stage dialog approach was just too involved and ill-suited to the task at hand, especially as some stages were conditional on the state of the data.  It made me sad.
-
-The new Since Last Run dialog is a single treeview of upcoming instances and variable bindings.  There's a checkbox to have all created transactions presented after they are.
-
-It's easier to describe via screenshot: <http://asynchronous.org/tmp/sx-cleanup-eg.png>.
-
-Updating/signaling
-------------------
-
-Part of the overhaul is a better use of QOF and GObject signaling for updates.  The SX list and SLR update in response to changes in each other; for instance, you can change the frequency or start-range of an SX while the SLR dialog is open, and it will update in place.
-
-Known Issues
-------------
-
-(as of 2007-01-14)
-
-- The SX List plugin page doesn't save/restore its state.
-- Updating the variables in a formula with the SLR dialog open isn't consistent.
-- Closing an sx list plugin page leads to corrupted state.
-
-Licensing
----------
-
-In new files (and old files related to this code that I hold copyright on), I've removed the "or any later version" clause.  I have problems licensing under a license that I haven't read, or that can change in ways I disagree with.  At some point I'll make this change for all source files I hold copyright on, and I intend to not use the clause on sources I (re)write in the future.
-
-Testing
--------
-
-The key areas I think need testing are the new plugin page and the SLR dialog.  It, at least, shouldn't do anything worse than the 1.8/2.0 SX code. :)
