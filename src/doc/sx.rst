@@ -67,14 +67,6 @@ TODO
 
 - bugs
 
-  - [ ] gnucash --nofile; File > New File > Forward++ > Apply; Actions > SX >
-    List; Schedule > New; boom::
-
-    Program received signal SIGSEGV, Segmentation fault.
-    [Switching to Thread -1233758544 (LWP 10243)]
-    0xb7e069f8 in gnc_ledger_display_internal (lead_account=0x0, q=0x85b8c88, ld_type=LD_GL, reg_type=SEARCH_LEDGER, style=REG_STYLE_JOURNAL, use_double_line=0, is_template=1)
-        at gnc-ledger-display.c:731
-
   - ! [x] with SLR open (with instances), add variables to SX; only newly-created instances will have appropriate variable tables.
 
   - ! [x] parse from 1.8 file doesn't setup start date correctly;
