@@ -44,6 +44,30 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/autosave_show_explanation</key>
+      <applyto>/apps/gnucash/general/autosave_show_explanation</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show auto-save explanation</short>
+        <long>If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/autosave_interval_minutes</key>
+      <applyto>/apps/gnucash/general/autosave_interval_minutes</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>3</default>
+      <locale name="C">
+        <short>Auto-save time interval</short>
+        <long>The number of minutes until saving of the data file to harddisk will be started automatically.  If zero, no saving will be started automatically.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/negative_in_red</key>
       <applyto>/apps/gnucash/general/negative_in_red</applyto>
       <owner>gnucash</owner>
