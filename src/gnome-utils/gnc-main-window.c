@@ -1275,6 +1275,8 @@ gnc_main_window_update_all_titles (void)
 #define KEY_AUTOSAVE_SHOW_EXPLANATION "autosave_show_explanation"
 #define KEY_AUTOSAVE_INTERVAL "autosave_interval_minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
+static void 
+autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
 /* Here's how autosave works: 
  *
  * Initially, the book is in state "undirty". Once the book changes
@@ -1304,14 +1306,20 @@ gnc_main_window_update_all_titles (void)
  */
 static gboolean autosave_timeout_cb(gpointer user_data)
 {
-  /* QofBook *book = user_data; */
+  QofBook *book = user_data;
   gboolean show_explanation;
+  GtkWidget *toplevel;
+
+  g_debug("autosave_timeout_cb called\n");
 
   /* Is there already a save in progress? If yes, return FALSE so that
      the timeout is automatically destroyed and the function will not
      be called again. */
   if (gnc_file_save_in_progress() || !gnc_current_session_exist())
     return FALSE;
+
+  /* Store the current toplevel window for later use. */
+  toplevel = gnc_ui_get_toplevel();
 
   /* Lookup gconf key to show an explanatory dialog the very first
      time this becomes active. */
@@ -1332,7 +1340,19 @@ static gboolean autosave_timeout_cb(gpointer user_data)
   }
 
   /* Timeout has passed - save the file. */
+  g_debug("autosave_timeout_cb: Really trigger auto-save now.\n");
+  if (GNC_IS_MAIN_WINDOW(toplevel))
+    gnc_main_window_set_progressbar_window( GNC_MAIN_WINDOW( toplevel ) );
+  else
+    g_debug("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
+  if (GNC_IS_WINDOW(toplevel))
+    gnc_window_set_progressbar_window( GNC_WINDOW( toplevel ) );
+  else
+    g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
+
   gnc_file_save();
+
+  gnc_main_window_set_progressbar_window(NULL);
 
   /* Return FALSE so that the timeout is automatically destroyed and
      the function will not be called again. */
@@ -1342,9 +1362,17 @@ static void
 autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data)
 {
   guint autosave_source_id = GPOINTER_TO_UINT(user_data);
+  gboolean res;
   /* Remove the timer that would have triggered the next autosave */
-  if (autosave_source_id > 0)
-    g_source_remove (autosave_source_id);
+  if (autosave_source_id > 0) {
+    res = g_source_remove (autosave_source_id);
+    g_debug("Removing auto save timer with id %d, result=%s\n",
+	    autosave_source_id, (res ? "TRUE" : "FALSE"));
+
+    /* Set the event source id to zero. */
+    qof_book_set_data_fin(book, AUTOSAVE_SOURCE_ID,
+			  GUINT_TO_POINTER(0), autosave_remove_timer_cb);
+  }
 }
 static void autosave_remove_timer(QofBook *book)
 {
@@ -1357,7 +1385,9 @@ static void autosave_add_timer(QofBook *book)
     gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
 
   /* Interval zero means auto-save is turned off. */
-  if (interval_mins > 0) {
+  if ( interval_mins > 0
+       && ( ! gnc_file_save_in_progress() )
+       && gnc_current_session_exist() ) {
     /* Add a new timer (timeout) that runs until the next autosave
        timeout. */
     guint autosave_source_id =
@@ -1370,7 +1400,7 @@ static void autosave_add_timer(QofBook *book)
     g_timeout_add(interval_mins * 60 * 1000,
 		  autosave_timeout_cb, book);
 #endif
-    g_debug("Added new auto save timer with id %d\n", autosave_source_id);
+    g_debug("Adding new auto-save timer with id %d\n", autosave_source_id);
 
     /* Save the event source id for a potential removal, and also
        set the callback upon book closing */
@@ -1381,6 +1411,8 @@ static void autosave_add_timer(QofBook *book)
 }
 static void gnc_main_window_autosave_dirty (QofBook *book, gboolean dirty)
 {
+  g_debug("gnc_main_window_autosave_dirty(dirty = %s)\n",
+	  (dirty ? "TRUE" : "FALSE"));
   if (dirty) {
     /* Book state changed from non-dirty to dirty. Start the autosave
        timer. */
