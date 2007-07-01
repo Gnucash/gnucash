@@ -1,5 +1,6 @@
 # Messages en francais pour GnuCash
-# Copyright (C) 1998-2006 Free Software Foundation, Inc.
+# French Translations for GnuCash
+# Copyright (C) 1998-2007 Free Software Foundation, Inc.
 # Yannick LE NY <y.le.ny@ifrance.com>, 1998-2001, 2007
 # Jérôme Sautret <jerome@sautret.org>, 2002.
 # Benoit Grégoire <bock@step·polymtl.ca>, 2003, 2004.
@@ -16,7 +17,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-30 13:36+0200\n"
-"PO-Revision-Date: 2007-06-30 14:06+0200\n"
+"PO-Revision-Date: 2007-06-30 22:24+0200\n"
 "Last-Translator: Yannick LE NY <y.le.ny@ifrance.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4426,42 +4427,36 @@ msgstr ""
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: ../src/gnome/dialog-sx-since-last-run.c:363
-#, fuzzy
 msgid "Ignored"
-msgstr "Ignorer"
+msgstr "Ignoré"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:364
-#, fuzzy
 msgid "Postponed"
-msgstr "Reporter"
+msgstr "Reporté"
 
 # messages-i18n.c:320
 #: ../src/gnome/dialog-sx-since-last-run.c:365
-#, fuzzy
 msgid "To-Create"
-msgstr "Créer"
+msgstr "A créer"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: ../src/gnome/dialog-sx-since-last-run.c:366
-#, fuzzy
 msgid "Reminder"
-msgstr "Grand Livre"
+msgstr "Rappel"
 
 # messages-i18n.c:320
 #: ../src/gnome/dialog-sx-since-last-run.c:367
-#, fuzzy
 msgid "Created"
-msgstr "Créer"
+msgstr "Créé"
 
 # messages-i18n.c:200
 #: ../src/gnome/dialog-sx-since-last-run.c:430
-#, fuzzy
 msgid "Never"
-msgstr "Perpétuel"
+msgstr "Jamais"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:500
 msgid "(Need Value)"
-msgstr ""
+msgstr "(valeur nécessaire)"
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -4483,9 +4478,8 @@ msgstr[1] ""
 
 # messages-i18n.c:162
 #: ../src/gnome/dialog-sx-since-last-run.c:918
-#, fuzzy
 msgid "Transaction"
-msgstr "_Transaction"
+msgstr "Transaction"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/gnome/dialog-sx-since-last-run.c:934
@@ -9411,7 +9405,7 @@ msgstr "Permet une incompatibilité du fichier avec les anciennes versions."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
 msgid "Auto-save time interval"
-msgstr ""
+msgstr "Intervalle de temps entre les sauvegardes automatiques"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:5
 msgid "Automatically insert a decimal point"
@@ -9429,9 +9423,8 @@ msgid "Character to use as separator between account names"
 msgstr "Le caractère utilisé pour séparer les noms détaillés des comptes"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
-#, fuzzy
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr "Fermer un onglet provoque un déplacement vers l'onglet le plus récent."
+msgstr "Fermer un onglet provoque un déplacement vers l'onglet visité le plus récent."
 
 # messages-i18n.c:176
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:9
@@ -9515,6 +9508,9 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
+"Si cette option est cochée, GnuCash montre une explicatioin de la fonction "
+"de sauvegarde automatique lors du premier lancement de cette fonctionnalité."
+"Autrement aucune explication supplémentaire n'est montrée." 
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
 msgid ""
@@ -9548,13 +9544,12 @@ msgstr ""
 "s'affichera au démarrage. Autrement aucun écran informatif ne s'affichera."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If active, closing a tab moves to the most recently visited tab. Otherwise "
 "closing a tab moves one tab to the left."
 msgstr ""
 "Si option cochée, fermer un onglet provoque le déplacement vers l'onglet le "
-"plus récemment visité. Si faux, fermer un onglet provoque le déplacement "
+"plus récemment visité. Autrement, fermer un onglet provoque le déplacement "
 "d'un onglet vers la gauche."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
@@ -9659,7 +9654,7 @@ msgstr "Enregistrer les taille et position de la fenêtre."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Show auto-save explanation"
-msgstr ""
+msgstr "Montrer explication de la sauvegarde automatique"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Show close buttons on notebook tabs"
@@ -9724,6 +9719,9 @@ msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
 msgstr ""
+"Le nombre de minutes jusqu'à ce que la sauvegarde du fichier de données "
+"sur le disque dur sera lancé automatiquement. Si zéro, aucune sauvegarde "
+"ne sera lancée automatiquement."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid ""
@@ -11898,7 +11896,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:38
 msgid "Auto-save time _interval:"
-msgstr ""
+msgstr "_Intervalle de temps pour sauvegarde automatique : "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid "Automatic _interest transfer"
@@ -12513,7 +12511,7 @@ msgstr "caractères"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 msgid "minutes"
-msgstr ""
+msgstr "minutes"
 
 #: ../src/gnome-utils/glade/totd.glade.h:1
 msgid "<b>Tip of the Day:</b>"
@@ -13523,6 +13521,17 @@ msgid ""
 "\n"
 "Press \"Close\" now so that your file will be saved."
 msgstr ""
+"Votre fichier de données a besoin d'être enregistré sur votre disque dur "
+"pour enregistrer les modifications. GnuCash a une fonction pour enregistrer "
+"le fichier automatiquement toutes les %d minutes. Cette fonction est activé "
+"pour la première fois maintenant. \n"
+"\n"
+"Si vous aimeriez changer l'intervalle de temps, vous pouvez le faire sous "
+"Edition -> Préferences -> Général -> Intervalle de sauvegarde automatique."
+"Si vous voulez désactiver cette fonction, configurez l'intervalle de temps "
+"à zéro et aucune sauvegarde automatique ne se produira plus.\n"
+"\n"
+"Appuyez sur \"Fermer\" maintenant et ainsi votre fichier sera sauvegardé."
 
 # messages-i18n.c:11
 #: ../src/gnome-utils/gnc-main-window.c:3626
@@ -13553,7 +13562,8 @@ msgstr ""
 "Delafond <gerard@delafond.org>\n"
 "Didier Vidal <didier-devel@9online.fr>\n"
 "Jonathan Ernst <jonathan@ernstfamily.ch>\n"
-"Fabrice Kurz <kurzf@voila.fr>"
+"Fabrice Kurz <kurzf@voila.fr>\n"
+"Stéphane Raimbault <stephane.raimbault@gmail.com>"
 
 # messages-i18n.c:343
 #. CY Strings
@@ -14643,7 +14653,6 @@ msgstr ""
 "l'assistant \"Assistant de configuration bancaire\" et recommencer."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:643
-#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
@@ -14651,7 +14660,7 @@ msgid ""
 "check your installation to ensure this program is present.  On some "
 "distributions this may require installing additional packages."
 msgstr ""
-"Le programme externe \"AqAssistant de configuration bancaire AqBanking\" n'a "
+"Le programme externe \"Assistant de configuration bancaire AqBanking\" n'a "
 "pas été trouvé.\n"
 "\n"
 "Le package aqbanking doit normalement installer le programme \"qt3-wizard\" "
@@ -15408,7 +15417,6 @@ msgid "Import DTAUS and _send..."
 msgstr "Importer DTAUS et envoyer..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:144
-#, fuzzy
 msgid ""
 "Import a DTAUS file into GnuCash and send the transfers online through "
 "Online Banking"
@@ -18918,6 +18926,9 @@ msgid ""
 "report will be available in the menu Reports -> Custom at the next startup "
 "of GnuCash."
 msgstr ""
+"Votre rapport \"%s\" a été sauvegardé dans le fichier de configuration \"%s\"."
+"Le rapport sera disponible dans le menu Rapports -> Personnalisé au prochain "
+"démarrage de GnuCash." 
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
