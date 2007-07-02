@@ -1,6 +1,55 @@
 Version history:
 ------- -------
 
+ 2.1.5 - 02 July 2007
+	 o Welcome to GnuCash 2.1.5 aka "Release Candidate 2", the fifth of
+	 several unstable 2.1.x releases of the GnuCash Open Source Accounting
+	 Software which will eventually lead to the stable version 2.2.0.
+	 With this new release series, GnuCash is available on Microsoft 
+	 Windows for the first time, and it also runs on GNU/Linux, *BSD, 
+	 Solaris and Mac OSX.
+	 This release is intended for developers and testers who want to help
+	 tracking down bugs.
+	 o WARNING: Make sure you make backups of any files used in testing
+	 versions of GnuCash in the 2.1.x series. Although the developers go
+	 to great lengths to ensure that no data will be lost we cannot
+	 guarantee that your data will not be affected if for some reason
+	 GnuCash crashes in testing these releases.
+	 o Please test any and all features important to you. Then post any
+	 bugs you find to bugzilla
+	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 o Compared to the 2.0.x series, there are only very few user-visible
+	 new features, except for the completed port to the Microsoft Windows
+	 operating system. Minor new features compared to the 2.0.x series
+	 are;
+	 o Port to Microsoft Windows completed. Note that Windows 2000 or newer
+	 is required; GnuCash does not run on Windows 98 or 95.
+	 o The Scheduled Transaction list view is now improved and summarized
+	 more compactly. The Since-Last-Run dialog has been simplified.
+	 o SWIG is now used instead of g-wrap for providing language bindings.
+	 o Check printing has been improved, with new formats and simpler
+	 format descriptions.
+	 o Automatic saving of the data file was added.
+	 o DATA FILE NOTICE: In version 2.1.2 the format for scheduled
+	 transactions in the data file was changed. Files using the old format
+	 will be read without problems by this new version, but the new
+	 version of GnuCash only writes the new format. The new file format
+	 cannot be loaded by older versions of GnuCash. (If you try, the file
+	 will fail to be loaded with an error message.) As a result, if you
+	 begin using the new Gnucash, and you have data files with scheduled
+	 transactions, then these files will not be readable by older
+	 versions. If you have to make a new data file readable by older
+	 versions of GnuCash, this can be achived by deleting all records of
+	 scheduled transactions in the scheduled transaction editor.
+	 o Bugfixes and improvements since the last version 2.1.4 include:
+	 o Updated translations.
+	 o German translation of Online Banking wizard is activated on
+	 Windows.
+	 o Improvements to Windows packaging.
+	 o When adding custom reports to the menu, appropriate user feedback
+	 will be given.
+	 o Automatic saving of the data file was added.
+
  2.1.4 - 16 June 2007
 	 o Welcome to GnuCash 2.1.4 aka "Release Candidate 1", the fourth of
 	 several unstable 2.1.x releases of the GnuCash Open Source Accounting
