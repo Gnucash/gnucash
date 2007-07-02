@@ -508,13 +508,15 @@ on_aqhbci_button (GtkButton *button,
 
       /* User pressed cancel in choice dialog */
       if (x == -1) {
-	GWEN_PluginDescription_List2_freeAll(pluginlist);
+	if (pluginlist)
+	  GWEN_PluginDescription_List2_freeAll(pluginlist);
 #if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
      ((GWENHYWFAR_VERSION_MAJOR == 1) && \
       ((GWENHYWFAR_VERSION_MINOR < 98))))
 	/* Memory cleanup needed for gwenhywfar<1.98.x but not for
 	   gwenhywfar>=1.98.x */
-	GWEN_PluginDescription_List2_free(pluginlist);
+	if (pluginlist)
+	  GWEN_PluginDescription_List2_free(pluginlist);
 #endif
 	return;
       }
@@ -533,13 +535,15 @@ on_aqhbci_button (GtkButton *button,
   /* Allocate the backend name again because the PluginDescr list will
      be freed */
   backend_name = g_strdup (backend_name_nc);
-  GWEN_PluginDescription_List2_freeAll (pluginlist);
+  if (pluginlist)
+    GWEN_PluginDescription_List2_freeAll (pluginlist);
 #if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
      ((GWENHYWFAR_VERSION_MAJOR == 1) && \
       ((GWENHYWFAR_VERSION_MINOR < 98))))
   /* Memory cleanup needed for gwenhywfar<1.98.x but not for
      gwenhywfar>=1.98.x */
-  GWEN_PluginDescription_List2_free (pluginlist);
+  if (pluginlist)
+    GWEN_PluginDescription_List2_free (pluginlist);
 #endif
   }
 
