@@ -455,6 +455,7 @@ on_aqhbci_button (GtkButton *button,
      https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
   */
   gboolean wizard_exists;
+  gboolean qt_probably_unavailable = FALSE;
   const char *wizard_path;
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
@@ -568,6 +569,20 @@ on_aqhbci_button (GtkButton *button,
       close( fd );
   }
 
+#ifdef G_OS_WIN32
+  {
+    const char *check_file = "qtdemo.exe";
+    gchar *found_program = g_find_program_in_path(check_file);
+    if (found_program) {
+      g_debug("Yes, we found the Qt demo program in %s\n", found_program);
+      g_free(found_program);
+    } else {
+      g_warning("Ouch, no Qt demo program was found. Qt not installed?\n");
+      qt_probably_unavailable = TRUE;
+    }
+  }
+#endif
+
   druid_disable_next_button(info);
   /* AB_Banking_DeactivateProvider(banking, backend_name); */
   if (wizard_exists) {
@@ -600,6 +615,11 @@ on_aqhbci_button (GtkButton *button,
 			       NULL, NULL, &pid, &error);
       g_free (argv[0]);
 
+      if (error)
+	g_critical("Error on starting AqBanking setup wizard: Code %d: %s",
+		   error->code,
+		   error->message ? error->message : "(null)");
+
       if (!spawned) {
 	g_critical("Could not start AqBanking setup wizard: %s",
 		   error->message ? error->message : "(null)");
@@ -631,6 +651,24 @@ on_aqhbci_button (GtkButton *button,
       }
     }
     else {
+      if (qt_probably_unavailable) {
+	g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
+	gnc_error_dialog
+	  (info->window,
+	   _("The external program \"AqBanking Setup Wizard\" failed "
+	     "to run successfully because the "
+	     "additional software \"Qt\" was not found.  "
+	     "Please install the \"Qt/Windows Open Source Edition\" "
+	     "from Trolltech by downloading it from www.trolltech.com"
+	     "\n\n"
+	     "If you have installed Qt already, you will have to adapt "
+	     "the PATH variable of your system appropriately.  "
+	     "Contact the GnuCash developers if you need further "
+	     "assistance on how to install Qt correctly."
+	     "\n\n"
+	     "Online Banking cannot be setup without Qt.  Press \"Close\" "
+	     "now, then \"Cancel\" to cancel the Online Banking setup."));
+      } else {
       g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
 	(info->window,
@@ -638,6 +676,7 @@ on_aqhbci_button (GtkButton *button,
 	   "to run successfully.  Online Banking can only be setup "
 	   "if this wizard has run successfully.  "
 	   "Please try running the \"AqBanking Setup Wizard\" again."));
+      }
       druid_disable_next_button(info);
     }
   } else {
