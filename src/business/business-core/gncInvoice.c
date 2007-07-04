@@ -1107,12 +1107,16 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* check the lot -- if we still look like a payment lot, then that
    * means we need to create a balancing split and create a new payment
    * lot for the next invoice
+   *
+   * we're looking for a positive balance for bill/AP, and a negative balance
+   * for invoice/AR.
+   * (because bill payments debit AP accounts and invoice payments
+   * credit AR accounts)
    */
   total = gnc_lot_get_balance (lot);
-  if (!reverse)
-    total = gnc_numeric_neg (total);
-
-  if (gnc_numeric_negative_p (total)) {
+  
+  if ( (gnc_numeric_negative_p (total) && reverse) || 
+       (gnc_numeric_positive_p (total) && !reverse) ) {
     Transaction *t2;
     GNCLot *lot2;
     Split *split;
@@ -1143,6 +1147,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccSplitSetAction (split, action2);
     xaccAccountInsertSplit (acc, split);
     xaccTransAppendSplit (t2, split);
+    // the value of total used here is correct for both bill/AP and
+    // invoice/AR. See the comment before this if block
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
 			   invoice->currency);
     gnc_lot_add_split (lot, split);
