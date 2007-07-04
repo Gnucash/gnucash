@@ -72,17 +72,25 @@ typedef struct
   Transaction* trans;
 } GncCsvTransLine;
 
+extern const int num_date_formats;
+/* A set of date formats that the user sees. */
+extern const gchar* date_format_user[];
+
+/* Matching formats for date_format_user to be used with strptime. */
+extern const gchar* date_format_internal[];
+
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 typedef struct
 {
   gchar* encoding;
-  GncCsvStr raw_str; /**> Untouched data from the file as a string */
-  GncCsvStr file_str; /**> raw_str translated into UTF-8 */
-  GPtrArray* orig_lines; /**> file_str parsed into a two-dimensional array of strings */
-  StfParseOptions_t* options; /**> Options controlling how file_str should be parsed */
-  GArray* column_types; /**> Array of values from the GncCsvColumnType enumeration */
-  GList* error_lines; /**> List of pointers to rows in orig_lines that have errors */
-  GList* transactions; /**> List of GncCsvTransLine*s created using orig_lines and column_types */
+  GncCsvStr raw_str; /**< Untouched data from the file as a string */
+  GncCsvStr file_str; /**< raw_str translated into UTF-8 */
+  GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
+  StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
+  GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
+  GList* error_lines; /**< List of row numbers in orig_lines that have errors */
+  GList* transactions; /**< List of GncCsvTransLine*s created using orig_lines and column_types */
+  int date_format; /**< The format of the text in the date columns from date_format_internal. */
 } GncCsvParseData;
 
 GncCsvParseData* gnc_csv_new_parse_data(void);
@@ -92,11 +100,11 @@ void gnc_csv_parse_data_free(GncCsvParseData* parse_data);
 int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
                       GError** error);
 
-int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding);
+int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, GError** error);
 
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
-int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account);
+int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
 GncCsvStr file_to_string(const char* filename, GError** error);
 

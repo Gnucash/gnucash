@@ -34,12 +34,11 @@
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-glib-utils.h"
+#include "gnc-gui-query.h"
 #include "dialog-utils.h"
 
 #include "gnc-csv-import.h"
 #include "gnc-csv-model.h"
-
-#include <stdlib.h> /* TODO Get rid of this */
 
 #define GCONF_SECTION "dialogs/import/csv"
 
@@ -58,6 +57,8 @@ typedef struct
 {
   GncCsvParseData* parse_data; /**< The actual data we are previewing */
   GtkDialog* dialog;
+  GOCharmapSel* encselector; /**< The widget for selecting the encoding */
+  GtkComboBox* date_format_combo; /**< The widget for selecting the date format */
   GladeXML* xml; /**< The Glade file that contains the dialog. */
   GtkTreeView* treeview; /**< The treeview containing the data */
   GtkTreeView* ctreeview; /**< The treeview containing the column types */
@@ -66,6 +67,14 @@ typedef struct
   GtkEntry* custom_entry; /**< The entry for custom separators */
   gboolean encoding_selected_called; /**< Before encoding_selected is first called, this is FALSE.
                                       * (See description of encoding_selected.) */
+  /* TODO We might not need previewing_errors. */
+  gboolean previewing_errors; /**< TRUE if the dialog is displaying
+                               * error lines, instead of all the file
+                               * data. */
+  int code_encoding_calls; /**< Normally this is 0. If the computer
+                            * changes encselector, this is set to
+                            * 2. encoding_selected is called twice,
+                            * each time decrementing this by 1. */
   gboolean approved; /**< This is FALSE until the user clicks "OK". */
 } GncCsvPreview;
 
@@ -83,6 +92,7 @@ static void sep_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   int i;
   char* stock_separator_characters[] = {" ", "\t", ",", ":", ";", "-"};
   GSList* checked_separators = NULL;
+  GError* error;
 
   /* Add the corresponding characters to checked_separators for each
    * button that is checked. */
@@ -104,8 +114,30 @@ static void sep_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   stf_parse_options_csv_set_separators(preview->parse_data->options, NULL, checked_separators);
   g_slist_free(checked_separators);
 
-  /* TODO Handle error */
-  gnc_csv_parse(preview->parse_data, FALSE, NULL);
+  /* Parse the data using the new options. We don't want to reguess
+   * the column types because we want to leave the user's
+   * configurations in tact. */
+  if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+  {
+    /* Warn the user there was a problem and try to undo what caused
+     * the error. (This will cause a reparsing and ideally a usable
+     * configuration.) */
+    gnc_error_dialog(NULL, "Error in parsing");
+    /* If the user changed the custom separator, erase that custom separator. */
+    if(widget == GTK_WIDGET(preview->custom_entry))
+    {
+      gtk_entry_set_text(GTK_ENTRY(widget), "");
+    }
+    /* If the user checked a checkbutton, toggle that checkbutton back. */
+    else
+    {
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+                                   !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+    }
+    return;
+  }
+
+  /* If we parsed successfully, redisplay the data. */
   gnc_csv_preview_treeview(preview, TRUE);
 }
 
@@ -123,13 +155,29 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
    * second call actually passes the correct data; thus, we only do
    * something the second time this is called. */
 
+  /* Prevent code-caused calls of this function from having an impact. */
+  if(preview->code_encoding_calls > 0)
+  {
+    preview->code_encoding_calls--;
+    return;
+  }
+
   /* If this is the second time the function is called ... */
   if(preview->encoding_selected_called)
   {
+    const char* previous_encoding = preview->parse_data->encoding;
     GError* error = NULL;
-    /* TODO Handle errors and comment */
-    gnc_csv_convert_encoding(preview->parse_data, encoding);
-    gnc_csv_parse(preview->parse_data, FALSE, &error);
+    /* Try converting the new encoding and reparsing. */
+    if(gnc_csv_convert_encoding(preview->parse_data, encoding, &error) ||
+       gnc_csv_parse(preview->parse_data, FALSE, &error))
+    {
+      /* If it fails, change back to the old encoding. */
+      gnc_error_dialog(NULL, "Invalid encoding selected");
+      preview->encoding_selected_called = FALSE;
+      go_charmap_sel_set_encoding(selector, previous_encoding);
+      return;
+    }
+
     gnc_csv_preview_treeview(preview, TRUE);
     preview->encoding_selected_called = FALSE;
   }
@@ -144,6 +192,15 @@ static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {"None",
                                                         "Date",
                                                         "Description",
                                                         "Amount"};
+
+/** Event handler for selecting a new date format.
+ * @param format_selector The combo box for selecting date formats
+ * @param preview The data that is being configured
+ */
+static void date_format_selected(GtkComboBox* format_selector, GncCsvPreview* preview)
+{
+  preview->parse_data->date_format = gtk_combo_box_get_active(format_selector);
+}
 
 /** Event handler for the "OK" button. When "OK" is clicked, this
  * function updates the parse data with the user's column type
@@ -301,6 +358,7 @@ static GncCsvPreview* gnc_csv_preview_new()
   int i;
   GncCsvPreview* preview = g_malloc(sizeof(GncCsvPreview));
   GtkWidget *ok_button, *cancel_button;
+  GtkContainer* date_format_container;
   /* The names in the glade file for the sep buttons. */
   char* sep_button_names[] = {"space_cbutton",
                               "tab_cbutton",
@@ -308,12 +366,12 @@ static GncCsvPreview* gnc_csv_preview_new()
                               "colon_cbutton",
                               "semicolon_cbutton",
                               "hyphen_cbutton"};
-  /* The table containing encselector and the separator configuration widgets */
+  /* The table containing preview->encselector and the separator configuration widgets */
   GtkTable* enctable;
-  /* The widget for selecting the encoding. (The default is UTF-8.) */
-  GtkWidget* encselector = go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8);
-  /* Connect it to the encoding_selected event handler. */
-  g_signal_connect(G_OBJECT(encselector), "charmap_changed",
+
+  preview->encselector = GO_CHARMAP_SEL(go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8));
+  /* Connect the selector to the encoding_selected event handler. */
+  g_signal_connect(G_OBJECT(preview->encselector), "charmap_changed",
                    G_CALLBACK(encoding_selected), (gpointer)preview);
 
   /* Load the Glade file. */
@@ -348,9 +406,25 @@ static GncCsvPreview* gnc_csv_preview_new()
   /* Get the table from the Glade file. */
   enctable = GTK_TABLE(glade_xml_get_widget(preview->xml, "enctable"));
   /* Put the selector in at the top. */
-  gtk_table_attach_defaults(enctable, encselector, 1, 2, 0, 1);
+  gtk_table_attach_defaults(enctable, GTK_WIDGET(preview->encselector), 1, 2, 0, 1);
   /* Show the table in all its glory. */
   gtk_widget_show_all(GTK_WIDGET(enctable));
+
+  /* Add in the date format combo box and hook it up to an event handler. */
+  preview->date_format_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
+  for(i = 0; i < num_date_formats; i++)
+  {
+    gtk_combo_box_append_text(preview->date_format_combo, date_format_user[i]);
+  }
+  gtk_combo_box_set_active(preview->date_format_combo, 0);
+  g_signal_connect(G_OBJECT(preview->date_format_combo), "changed",
+                   G_CALLBACK(date_format_selected), (gpointer)preview);
+
+  /* Add it to the dialog. */
+  date_format_container = GTK_CONTAINER(glade_xml_get_widget(preview->xml,
+                                                             "date_format_container"));
+  gtk_container_add(date_format_container, GTK_WIDGET(preview->date_format_combo));
+  gtk_widget_show_all(GTK_WIDGET(date_format_container));
 
   /* Connect the "OK" and "Cancel" buttons to their event handlers. */
   ok_button = glade_xml_get_widget(preview->xml, "ok_button");
@@ -373,9 +447,6 @@ static GncCsvPreview* gnc_csv_preview_new()
    * set it initially to FALSE. */
   preview->encoding_selected_called = FALSE;
 
-  /* TODO Free stuff */
-  preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
-
   return preview;
 }
 
@@ -393,29 +464,41 @@ static void gnc_csv_preview_free(GncCsvPreview* preview)
  * its data treeview. notEmpty is TRUE when the data treeview already
  * contains data, FALSE otherwise (e.g. the first time this function
  * is called on a preview). */
-/* TODO Something's probably screwing up with this function when
- * selecting a new encoding. */
-/* TODO Comment this function. */
 /* TODO Look at getting rid of notEmpty */
 static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
 {
+  /* store has the data from the file being imported. cstores is an
+   * array of stores that hold the combo box entries for each
+   * column. ctstore contains both pointers to models in cstore and
+   * the actual text that appears in preview->ctreeview. */
   GtkListStore *store, **cstores, *ctstore;
   GtkTreeIter iter;
+  /* ncols is the number of columns in the file data. */
   int i, j, ncols = preview->parse_data->column_types->len;
+
+  /* store contains only strings. */
   GType* types = g_malloc(2 * ncols * sizeof(GType));
   for(i = 0; i < ncols; i++)
     types[i] = G_TYPE_STRING;
   store = gtk_list_store_newv(ncols, types);
+
+  /* ctstore is arranged as follows:
+   * model 0, text 0, model 1, text 1, ..., model ncols, text ncols. */
   for(i = 0; i < 2*ncols; i += 2)
   {
     types[i] = GTK_TYPE_TREE_MODEL;
     types[i+1] = G_TYPE_STRING;
   }
   ctstore = gtk_list_store_newv(2*ncols, types);
+
+  g_free(types);
+
+  /* Each element in cstores is a single column model. */
   cstores = g_malloc(ncols * sizeof(GtkListStore*));
   for(i = 0; i < ncols; i++)
   {
     cstores[i] = gtk_list_store_new(1, G_TYPE_STRING);
+    /* Add all of the possible entries to the combo box. */
     for(j = 0; j < GNC_CSV_NUM_COL_TYPES; j++)
     {
       gtk_list_store_append(cstores[i], &iter);
@@ -423,16 +506,17 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
     }
   }
 
-  /* Clear out any exisiting columns. */
   if(notEmpty)
   {
     GList *children, *children_begin;
     int size;
+    /* Clear out exisiting columns in preview->treeview. */
     do
     {
       GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->treeview, 0);
       size = gtk_tree_view_remove_column(preview->treeview, col);
     } while(size);
+    /* Do the same in preview->ctreeview. */
     do
     {
       GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->ctreeview, 0);
@@ -440,49 +524,90 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
     } while(size);
   }
   
-  /* TODO free types */
-
-  for(i = 0; i < preview->parse_data->orig_lines->len; i++)
+  /* Fill the data treeview with data from the file. */
+  if(preview->previewing_errors) /* If we are showing only errors ... */
   {
-    gtk_list_store_append(store, &iter);
-    for(j = 0; j < ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->len; j++)
+    /* ... only pick rows that are in preview->error_lines. */
+    GList* error_lines = preview->parse_data->error_lines;
+    while(error_lines != NULL)
     {
-      gtk_list_store_set(store, &iter, j,
-                         ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
-                         -1);
+      i = GPOINTER_TO_INT(error_lines->data);
+      gtk_list_store_append(store, &iter);
+      for(j = 0; j < ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->len; j++)
+      {
+        gtk_list_store_set(store, &iter, j,
+                           ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
+                           -1);
+      }
     }
   }
+  else /* Otherwise, put in all of the data. */
+  {
+    for(i = 0; i < preview->parse_data->orig_lines->len; i++)
+    {
+      gtk_list_store_append(store, &iter);
+      for(j = 0; j < ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->len; j++)
+      {
+        gtk_list_store_set(store, &iter, j,
+                           ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
+                           -1);
+      }
+    }
+  }
+  /* Set all the column types to what's in the parse data. */
   gtk_list_store_append(ctstore, &iter);
   for(i = 0; i < ncols; i++)
   {
-    gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1, "None", -1);
+    gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1,
+                       "None", -1);
   }
 
+  /* Insert columns into the data and column type treeviews. */
   for(i = 0; i < ncols; i++)
   {
+    /* Create renderers for the data treeview (renderer) and the
+     * column type treeview (crenderer). */
     GtkCellRenderer *renderer = gtk_cell_renderer_text_new(),
       *crenderer = gtk_cell_renderer_combo_new();
+    /* We are using cstores for the combo box entries, and we don't
+     * want the user to be able to manually enter their own column
+     * types. */
     g_object_set(G_OBJECT(crenderer), "model", cstores[i], "text-column", 0,
                  "editable", TRUE, "has-entry", FALSE, NULL);
     g_signal_connect(G_OBJECT(crenderer), "edited",
                      G_CALLBACK(column_type_edited), (gpointer)preview);
-    
+
+    /* Add a single column for the treeview. */
     gtk_tree_view_insert_column_with_attributes(preview->treeview,
                                                 -1, "", renderer, "text", i, NULL);
+    /* Use the alternating model and text entries from ctstore in
+     * preview->ctreeview. */
     gtk_tree_view_insert_column_with_attributes(preview->ctreeview,
                                                 -1, "", crenderer, "model", 2*i,
                                                 "text", 2*i+1, NULL);
   }
 
+  /* Set the treeviews to use the models. */
   gtk_tree_view_set_model(preview->treeview, GTK_TREE_MODEL(store));
-  g_object_unref(GTK_TREE_MODEL(store));
   gtk_tree_view_set_model(preview->ctreeview, GTK_TREE_MODEL(ctstore));
-  g_object_unref(GTK_TREE_MODEL(ctstore));
 
+  /* Free the memory for the stores. */
+  g_object_unref(GTK_TREE_MODEL(store));
+  g_object_unref(GTK_TREE_MODEL(ctstore));
+  for(i = 0; i < ncols; i++)
+    g_object_unref(GTK_TREE_MODEL(cstores[i]));
+
+  /* Make the things actually appear. */
   gtk_widget_show_all(GTK_WIDGET(preview->treeview));
   gtk_widget_show_all(GTK_WIDGET(preview->ctreeview));
-  g_debug("ctreeview is %p\n", preview->ctreeview);
-  /* TODO free cstore and ctstore */
+
+  /* Set the encoding selector to the right encoding. */
+  preview->code_encoding_calls = 2;
+  go_charmap_sel_set_encoding(preview->encselector, preview->parse_data->encoding);
+
+  /* Set the date format to what's in the combo box (since we don't
+   * necessarily know if this will always be the same). */
+  preview->parse_data->date_format = gtk_combo_box_get_active(preview->date_format_combo);
 }
 
 /** A function that lets the user preview a file's data. This function
@@ -497,6 +622,9 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
 {
   /* Set the preview's parse_data to the one we're getting passed. */
   preview->parse_data = parse_data;
+  preview->previewing_errors = FALSE; /* We're looking at all the data. */
+  preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
+
   /* Load the data into the treeview. (This is the first time we've
    * called gnc_csv_preview_treeview on this preview, so we use
    * FALSE. */
@@ -504,7 +632,29 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
   /* Wait until the user clicks "OK" or "Cancel". */
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
 
-  /* Return 0 or 1 if preview->approved is TRUE or FALSE, respectively. */
+  if(preview->approved)
+    return 0;
+  else
+    return 1;
+}
+
+/** A function that lets the user preview rows with errors. This
+ * function must only be called after calling gnc_csv_preview. It is
+ * essentially identical in behavior to gnc_csv_preview except that it
+ * displays lines with errors instead of all of the data.
+ * @param preview The GUI for previewing the data (and the data being previewed)
+ * @return 0 if the user approved of importing the lines; 1 if the user didn't.
+ */
+/* TODO Let the user manually edit cells' data? */
+static int gnc_csv_preview_errors(GncCsvPreview* preview)
+{
+  /* TODO Implement */
+  preview->previewing_errors = TRUE;
+  preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
+
+  /* Wait until the user clicks "OK" or "Cancel". */
+  gtk_dialog_run(GTK_DIALOG(preview->dialog));
+  
   if(preview->approved)
     return 0;
   else
@@ -512,7 +662,6 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
 }
 
 /** Lets the user import a CSV/Fixed-Width file. */
-/* TODO Comment this function. */
 void gnc_file_csv_import(void)
 {
   /* The name of the file the user selected. */
@@ -524,15 +673,13 @@ void gnc_file_csv_import(void)
 
   /* Let the user select a file. */
   selected_filename = gnc_file_dialog(_("Select an CSV/Fixed-Width file to import"),
-				      NULL,
-				      default_dir,
-				      GNC_FILE_DIALOG_IMPORT);
+				      NULL, default_dir, GNC_FILE_DIALOG_IMPORT);
   g_free(default_dir); /* We don't need default_dir anymore. */
 
   /* If the user actually selected a file ... */
   if(selected_filename!=NULL)
   {
-    int i;
+    int i, user_canceled = 0;
     Account* account; /* The account the user will select */
     GError* error = NULL;
     GList* transactions; /* A list of the transactions we create. */
@@ -544,22 +691,24 @@ void gnc_file_csv_import(void)
     gnc_set_default_directory(GCONF_SECTION, default_dir);
     g_free(default_dir);
 
-    /* TODO Check for errors */
-
     /* Load the file into parse_data. */
     parse_data = gnc_csv_new_parse_data();
     if(gnc_csv_load_file(parse_data, selected_filename, &error))
     {
       /* If we couldn't load the file ... */
-      /* TODO Do real error handling */
-      g_debug("Couldn't open file\n");
+      gnc_error_dialog(NULL, "%s", error->message);
+      if(error->code == GNC_CSV_FILE_OPEN_ERR)
+      {
+        gnc_csv_parse_data_free(parse_data);
+        g_free(selected_filename);
+        return;
+      }
     }
     /* Parse the data. */
     if(gnc_csv_parse(parse_data, TRUE, &error))
     {
       /* If we couldn't parse the data ... */
-      /* TODO real error handling */
-      g_debug("Error in parsing: %s\n", error->message);
+      gnc_error_dialog(NULL, "%s", error->message);
     }
 
     /* Preview the data. */
@@ -575,10 +724,25 @@ void gnc_file_csv_import(void)
 
     /* Let the user select an account to put the transactions in. */
     account = gnc_import_select_account(NULL, NULL, 1, NULL, NULL, 0, NULL, NULL);
+    if(account == NULL) /* Quit if the user canceled. */
+    {
+      gnc_csv_preview_free(preview);
+      gnc_csv_parse_data_free(parse_data);
+      g_free(selected_filename);
+      return;
+    }
 
     /* Create transactions from the parsed data. */
-    /* TODO Handle errors here. */
-    gnc_parse_to_trans(parse_data, account);
+    gnc_parse_to_trans(parse_data, account, FALSE);
+
+    /* If there are errors, let the user try and eliminate them by
+     * previewing them. Repeat until either there are no errors or the
+     * user gives up. */
+    while((parse_data->error_lines != NULL) && !user_canceled)
+    {
+      gnc_csv_preview_errors(preview);
+      user_canceled = gnc_parse_to_trans(parse_data, account, TRUE);
+    }
 
     /* Create the genereic transaction importer GUI. */
     gnc_csv_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
@@ -590,7 +754,7 @@ void gnc_file_csv_import(void)
     {
       GncCsvTransLine* trans_line = transactions->data;
       gnc_gen_trans_list_add_trans(gnc_csv_importer_gui,
-                                   (Transaction*)(trans_line->trans));
+                                   trans_line->trans);
       transactions = g_list_next(transactions);
     }
     /* Let the user load those transactions into the account. */
