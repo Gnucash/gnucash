@@ -40,6 +40,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
+  gnc-autosave.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
