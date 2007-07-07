@@ -224,6 +224,9 @@ mcrd_init (PlannerCellRendererDate *date)
 			  G_CALLBACK (mcrd_selected_double_click),
 			  date);
 
+	//Set calendar to show current date when displayed
+	date->time = mrp_time_current_time();
+
         gtk_widget_show_all (frame);
 }
 
