@@ -60,7 +60,7 @@
       <applyto>/apps/gnucash/general/autosave_interval_minutes</applyto>
       <owner>gnucash</owner>
       <type>float</type>
-      <default>3</default>
+      <default>5</default>
       <locale name="C">
         <short>Auto-save time interval</short>
         <long>The number of minutes until saving of the data file to harddisk will be started automatically.  If zero, no saving will be started automatically.</long>
