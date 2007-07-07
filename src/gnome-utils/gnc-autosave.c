@@ -39,6 +39,11 @@
 #define KEY_AUTOSAVE_INTERVAL "autosave_interval_minutes"
 #define AUTOSAVE_SOURCE_ID "autosave_source_id"
 
+#ifdef G_LOG_DOMAIN
+# undef G_LOG_DOMAIN
+#endif
+#define G_LOG_DOMAIN "gnc.gui.autosave"
+
 static void 
 autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
 
@@ -70,10 +75,90 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data);
  * state with the book "undirty".
  */
 
+static gboolean autosave_confirm(GtkWidget *toplevel)
+{
+  GtkWidget *dialog, *label;
+  guint interval_mins =
+    gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
+  gboolean switch_off_autosave, show_expl_again, save_now;
+  gchar *message;
+  gint response;
+
+#define YES_THIS_TIME 1
+#define YES_ALWAYS 2
+#define NO_NEVER 3
+#define NO_NOT_THIS_TIME 4
+  /* The autosave timeout has occurred, and we should show the
+     explanation dialog. */
+  dialog =
+    gtk_message_dialog_new(GTK_WINDOW(toplevel),
+			   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+			   GTK_MESSAGE_QUESTION,
+			   GTK_BUTTONS_NONE,
+			   "%s",
+			   _("Save file automatically?"));
+  gtk_message_dialog_format_secondary_text
+    (GTK_MESSAGE_DIALOG(dialog),
+     _("Your data file needs to be saved to your harddisk to save your changes.  GnuCash has a feature to save the file automatically every %d minutes, just as if you had pressed the \"Save\" button each time. \n\n"
+       "You can change the time interval or turn off this feature under Edit -> Preferences -> General -> Auto-save time interval. \n\n"
+       "Should your file be saved automatically?"),
+     interval_mins);
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 _("_Yes, this time"), YES_THIS_TIME,
+			 _("Yes, _always"), YES_ALWAYS,
+			 _("No, n_ever"), NO_NEVER,
+			 _("_No, not this time"), NO_NOT_THIS_TIME,
+			 NULL);
+  gtk_dialog_set_default_response( GTK_DIALOG(dialog), NO_NOT_THIS_TIME);
+
+  /* Run the modal dialog */
+  response = gtk_dialog_run( GTK_DIALOG( dialog ) );
+  gtk_widget_destroy( dialog );
+
+  /* Evaluate the response */
+  switch (response) {
+  case YES_THIS_TIME:
+    switch_off_autosave = FALSE;
+    show_expl_again = TRUE;
+    save_now = TRUE;
+    break;
+  case YES_ALWAYS:
+    switch_off_autosave = FALSE;
+    show_expl_again = FALSE;
+    save_now = TRUE;
+    break;
+  case NO_NEVER:
+    switch_off_autosave = TRUE;
+    show_expl_again = FALSE;
+    save_now = FALSE;
+    break;
+  default:
+  case NO_NOT_THIS_TIME:
+    switch_off_autosave = FALSE;
+    show_expl_again = TRUE;
+    save_now = FALSE;
+  };
+
+  /* Should we show this explanation again? */
+  gnc_gconf_set_bool(GCONF_GENERAL, KEY_AUTOSAVE_SHOW_EXPLANATION, show_expl_again, NULL);
+  g_debug("autosave_timeout_cb: Show explanation again=%s\n",
+	  (show_expl_again ? "TRUE" : "FALSE"));
+
+  /* Should we switch off autosave? */
+  if (switch_off_autosave) {
+    gnc_gconf_set_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, 0, NULL);
+    g_debug("autosave_timeout_cb: User chose to disable auto-save.\n");
+  }
+
+  return save_now;
+}
+
+
 static gboolean autosave_timeout_cb(gpointer user_data)
 {
   QofBook *book = user_data;
   gboolean show_explanation;
+  gboolean save_now = TRUE;
   GtkWidget *toplevel;
 
   g_debug("autosave_timeout_cb called\n");
@@ -87,42 +172,41 @@ static gboolean autosave_timeout_cb(gpointer user_data)
   /* Store the current toplevel window for later use. */
   toplevel = gnc_ui_get_toplevel();
 
-  /* Lookup gconf key to show an explanatory dialog the very first
-     time this becomes active. */
+  /* Lookup gconf key to show an explanatory dialog, if wanted. */
   show_explanation =
     gnc_gconf_get_bool(GCONF_GENERAL, KEY_AUTOSAVE_SHOW_EXPLANATION, NULL);
   if (show_explanation) {
-    guint interval_mins =
-      gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
-    /* The autosave timeout has occurred for the very first
-       time. Explain this feature. */
-    gnc_info_dialog(NULL,
-		      _("Your data file needs to be saved to your harddisk to save your changes.  GnuCash has a feature to save the file automatically every %d minutes.  This feature is being activated the very first time right now. \n\n"
-			"If you like to change the time interval, you can do so under Edit -> Preferences -> General -> Auto-save time interval.  If you like to switch off this feature, set the time interval to zero and no auto-save will occur anymore.\n\n"
-			"Press \"Close\" now so that your file will be saved."),
-		      interval_mins);
-    /* Don't show this explanation again. */
-    gnc_gconf_set_bool(GCONF_GENERAL, KEY_AUTOSAVE_SHOW_EXPLANATION, FALSE, NULL);
+    save_now = autosave_confirm(toplevel);
   }
 
-  /* Timeout has passed - save the file. */
-  g_debug("autosave_timeout_cb: Really trigger auto-save now.\n");
-  if (GNC_IS_MAIN_WINDOW(toplevel))
-    gnc_main_window_set_progressbar_window( GNC_MAIN_WINDOW( toplevel ) );
-  else
-    g_debug("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
-  if (GNC_IS_WINDOW(toplevel))
-    gnc_window_set_progressbar_window( GNC_WINDOW( toplevel ) );
-  else
-    g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
+  if (save_now) {
+    g_debug("autosave_timeout_cb: Really trigger auto-save now.\n");
 
-  gnc_file_save();
+    /* Timeout has passed - save the file. */
+    if (GNC_IS_MAIN_WINDOW(toplevel))
+      gnc_main_window_set_progressbar_window( GNC_MAIN_WINDOW( toplevel ) );
+    else
+      g_debug("autosave_timeout_cb: toplevel is not a GNC_MAIN_WINDOW\n");
+    if (GNC_IS_WINDOW(toplevel))
+      gnc_window_set_progressbar_window( GNC_WINDOW( toplevel ) );
+    else
+      g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
 
-  gnc_main_window_set_progressbar_window(NULL);
+    gnc_file_save();
 
-  /* Return FALSE so that the timeout is automatically destroyed and
-     the function will not be called again. */
-  return FALSE;
+    gnc_main_window_set_progressbar_window(NULL);
+
+    /* Return FALSE so that the timeout is automatically destroyed and
+       the function will not be called again. However, at least in my
+       glib-2.12.4 the timer event source still exists after returning
+       FALSE?! */
+    return FALSE;
+  } else {
+    g_debug("autosave_timeout_cb: No auto-save this time, let the timeout run again.\n");
+    /* Return TRUE so that the timeout is not removed but will be
+       triggered again after the next time interval. */
+    return TRUE;
+  }
 }
 
 static void 
@@ -142,13 +226,13 @@ autosave_remove_timer_cb(QofBook *book, gpointer key, gpointer user_data)
   }
 }
 
-static void autosave_remove_timer(QofBook *book)
+void gnc_autosave_remove_timer(QofBook *book)
 {
   autosave_remove_timer_cb(book, AUTOSAVE_SOURCE_ID,
 			   qof_book_get_data(book, AUTOSAVE_SOURCE_ID));
 }
 
-static void autosave_add_timer(QofBook *book)
+static void gnc_autosave_add_timer(QofBook *book)
 {
   guint interval_mins =
     gnc_gconf_get_float(GCONF_GENERAL, KEY_AUTOSAVE_INTERVAL, NULL);
@@ -179,7 +263,7 @@ static void autosave_add_timer(QofBook *book)
   }
 }
 
-void gnc_main_window_autosave_dirty (QofBook *book, gboolean dirty)
+void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty)
 {
   g_debug("gnc_main_window_autosave_dirty(dirty = %s)\n",
 	  (dirty ? "TRUE" : "FALSE"));
@@ -187,13 +271,13 @@ void gnc_main_window_autosave_dirty (QofBook *book, gboolean dirty)
     /* Book state changed from non-dirty to dirty. Start the autosave
        timer. */
     /* First stop a potentially running old timer. */
-    autosave_remove_timer(book);
+    gnc_autosave_remove_timer(book);
     /* Add a new timer (timeout) that runs until the next autosave
        timeout. */
-    autosave_add_timer(book);
+    gnc_autosave_add_timer(book);
   } else {
     /* Book state changed from dirty to non-dirty (probably due to
        saving). Delete the running autosave timer. */
-    autosave_remove_timer(book);
+    gnc_autosave_remove_timer(book);
   }
 }

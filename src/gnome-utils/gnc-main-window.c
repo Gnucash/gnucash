@@ -1012,6 +1012,9 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   if ((tmp = strrchr(filename, '/')) != NULL)
     filename = tmp + 1;
 
+  /* Remove any pending auto-save timeouts */
+  gnc_autosave_remove_timer(book);
+
   dialog = gtk_message_dialog_new(GTK_WINDOW(window),
 				  GTK_DIALOG_MODAL,
 				  GTK_MESSAGE_WARNING,
@@ -1280,7 +1283,7 @@ gnc_main_window_book_dirty_cb (QofBook *book,
   gnc_main_window_update_all_titles();
 
   /* Auto-save feature */
-  gnc_main_window_autosave_dirty(book, dirty);
+  gnc_autosave_dirty_handler(book, dirty);
 }
 
 static void

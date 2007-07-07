@@ -44,6 +44,7 @@
 #include "qof.h"
 #include "TransLog.h"
 #include "gnc-session.h"
+#include "gnc-autosave.h"
 
 #define GCONF_SECTION "dialogs/export_accounts"
 
@@ -539,16 +540,22 @@ gboolean
 gnc_file_query_save (gboolean can_cancel)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
+  QofBook *current_book;
 
   if (!gnc_current_session_exist())
       return TRUE;
+
+  current_book = qof_session_get_book (gnc_get_current_session ());
+  /* Remove any pending auto-save timeouts */
+  gnc_autosave_remove_timer(current_book);
+
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
    * Pose the question as a "while" loop, so that if user screws
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (qof_book_not_saved(qof_session_get_book (gnc_get_current_session ())))
+  while (qof_book_not_saved(current_book))
   {
     GtkWidget *dialog;
     gint response;
@@ -564,7 +571,7 @@ gnc_file_query_save (gboolean can_cancel)
 				    GTK_MESSAGE_QUESTION,
 				    GTK_BUTTONS_NONE,
 				    "%s", title);
-    oldest_change = qof_book_get_dirty_time(qof_session_get_book (gnc_get_current_session ()));
+    oldest_change = qof_book_get_dirty_time(current_book);
     minutes = (time(NULL) - oldest_change) / 60 + 1;
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					     message, minutes);

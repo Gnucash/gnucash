@@ -29,6 +29,9 @@
 
 /** Callback that is used to notify the autosave subsystem when the
     QofBook changed its dirty state. */
-void gnc_main_window_autosave_dirty (QofBook *book, gboolean dirty);
+void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty);
+
+/** Removes any still existing autosave timer from the event loop. */
+void gnc_autosave_remove_timer(QofBook *book);
 
 #endif
