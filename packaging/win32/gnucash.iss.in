@@ -49,9 +49,14 @@ Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{
 [Run]
 Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
 Filename: "{app}\bin\guile.bat"; Parameters: "-c ""(use-modules (ice-9 slib)) (require 'printf)"""; Flags: runhidden
+;; The Windows firewall exceptions, see http://www.vincenzo.net/isxkb/index.php?title=Adding_a_rule_to_the_Windows_firewall
+Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\bin\gnucash-bin.exe"" ""GnuCash Free Finance Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
+Filename: "{sys}\netsh.exe"; Parameters: "firewall add allowedprogram ""{app}\libexec\gconfd-2.exe"" ""GConf Settings Manager"" ENABLE ALL"; StatusMsg: "{cm:StatusMsgFirewall}"; Flags: runhidden; MinVersion: 0,5.01.2600sp2;
 
 [UninstallRun]
 Filename: "{app}\bin\gconftool-2.exe"; Parameters: "--shutdown"; Flags: runhidden
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\bin\gnucash-bin.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
+Filename: "{sys}\netsh.exe"; Parameters: "firewall delete allowedprogram program=""{app}\libexec\gconfd-2.exe"""; Flags: runhidden; MinVersion: 0,5.01.2600sp2
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Here we configure the included files and the place of their
@@ -204,6 +209,7 @@ CreateDesktopIcon=Create a &desktop icon
 CreateMenuLink=Create a start menu link
 RunPrg=Run GnuCash now
 AdditionalIcons=Create these icons:
+StatusMsgFirewall=Installing Windows firewall rules...
 
 MainFiles=GnuCash Program
 TranslFiles=Translation Files
@@ -215,6 +221,7 @@ de.CreateDesktopIcon=Ein Icon auf dem Desktop erstellen
 de.CreateMenuLink=Eine Verknüpfung im Startmenü erstellen
 de.RunPrg=GnuCash jetzt starten
 de.AdditionalIcons=Folgende Icons erstellen:
+de.StatusMsgFirewall=Ausnahmen für Windows-Firewall installieren...
 
 de.MainFiles=GnuCash Hauptprogramm
 de.TranslFiles=Deutsche Übersetzung
