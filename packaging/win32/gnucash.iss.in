@@ -44,7 +44,7 @@ Name: menuicon; Description: "{cm:CreateMenuLink}"; GroupDescription: "{cm:Addit
 Name: "{group}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: menuicon; Flags: runminimized
 Name: "{group}\Install Finance-Quote"; Filename: "{app}\bin\install-fq-mods.bat"; WorkingDir: "{app}\bin"; Comment: "Install the necessary perl modules for online retrieval of prices.  Requires ActivePerl 5.8"; Tasks: menuicon
 Name: "{group}\Uninstall GnuCash"; Filename: "{uninstallexe}"; Tasks: menuicon
-Name: "{userdesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
+Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "GnuCash Free Finance Manager"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
 
 [Run]
 Filename: "{app}\bin\gnucash.bat"; Description: "{cm:RunPrg}"; WorkingDir: "{app}\bin"; OnlyBelowVersion: 0,6; Flags: postinstall skipifsilent runhidden
