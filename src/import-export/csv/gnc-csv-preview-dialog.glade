@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.0 on Sun Jul  8 01:33:26 2007 by lasindi@pi-->
+<!--Generated with glade3 3.2.0 on Sun Jul  8 10:39:03 2007 by lasindi@pi-->
 <glade-interface>
   <widget class="GtkDialog" id="dialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -85,7 +85,7 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
-                      <widget class="GtkRadioButton" id="radiobutton1">
+                      <widget class="GtkRadioButton" id="radiobutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -102,7 +102,7 @@
                         <property name="label" translatable="yes">Fixed-Width</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton1</property>
+                        <property name="group">radiobutton</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -171,7 +171,7 @@
                         <property name="column_spacing">3</property>
                         <property name="row_spacing">3</property>
                         <child>
-                          <widget class="GtkEntry" id="custom_entry1">
+                          <widget class="GtkEntry" id="custom_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -186,7 +186,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="custom_cbutton1">
+                          <widget class="GtkCheckButton" id="custom_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -201,7 +201,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="hyphen_cbutton1">
+                          <widget class="GtkCheckButton" id="hyphen_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -218,7 +218,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="semicolon_cbutton1">
+                          <widget class="GtkCheckButton" id="semicolon_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -235,7 +235,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="colon_cbutton1">
+                          <widget class="GtkCheckButton" id="colon_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -250,7 +250,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="comma_cbutton1">
+                          <widget class="GtkCheckButton" id="comma_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -265,7 +265,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="tab_cbutton1">
+                          <widget class="GtkCheckButton" id="tab_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -279,7 +279,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="space_cbutton1">
+                          <widget class="GtkCheckButton" id="space_cbutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -419,6 +419,7 @@
                 <property name="enable_grid_lines">GTK_TREE_VIEW_GRID_LINES_BOTH</property>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="position">8</property>
               </packing>
             </child>

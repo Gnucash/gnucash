@@ -43,7 +43,6 @@
 /* #include "gutils.h" */
 /* #include "parse-util.h" */
 #include <goffice/utils/go-glib-extras.h>
-#include <goffice/utils/go-locale.h>
 #include <goffice/utils/go-format.h>
 
 #include <stdlib.h>
@@ -1343,7 +1342,9 @@ stf_parse_options_guess (char const *data)
 	GPtrArray *lines;
 	int tabcount;
 	int sepcount;
-	gunichar sepchar = go_locale_get_arg_sep ();
+	/* TODO In the future, use the goffice 0.3. */
+	/* gunichar sepchar = go_locale_get_arg_sep (); */
+	gunichar sepchar = ',';
 
 	g_return_val_if_fail (data != NULL, NULL);
 
@@ -1368,8 +1369,10 @@ stf_parse_options_guess (char const *data)
 		 * The order is mostly random, although ' ' and '!' which
 		 * could very easily occur in text are put last.
 		 */
+		/* TODO Replace with the 0.3 goffice call in the future. */
 		if (count_character (lines, (c = sepchar), 0.5) > 0 ||
-		    count_character (lines, (c = go_locale_get_col_sep ()), 0.5) > 0 ||
+		    /* count_character (lines, (c = go_locale_get_col_sep ()), 0.5) > 0 || */
+		    count_character (lines, (c = ','), 0.5) > 0 ||
 		    count_character (lines, (c = ':'), 0.5) > 0 ||
 		    count_character (lines, (c = ','), 0.5) > 0 ||
 		    count_character (lines, (c = ';'), 0.5) > 0 ||

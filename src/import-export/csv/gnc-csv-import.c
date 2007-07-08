@@ -539,6 +539,7 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
                            ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
                            -1);
       }
+      error_lines = g_list_next(error_lines);
     }
   }
   else /* Otherwise, put in all of the data. */
@@ -559,7 +560,8 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   for(i = 0; i < ncols; i++)
   {
     gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1,
-                       "None", -1);
+                       column_type_strs[(int)(preview->parse_data->column_types->data[i])],
+                       -1);
   }
 
   /* Insert columns into the data and column type treeviews. */
@@ -664,6 +666,7 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
 
   /* Wait until the user clicks "OK" or "Cancel". */
+  gnc_csv_preview_treeview(preview, TRUE);
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
   
   if(preview->approved)
@@ -751,13 +754,8 @@ void gnc_file_csv_import(void)
      * user gives up. */
     while(!((parse_data->error_lines == NULL) || user_canceled))
     {
-      /* TODO remove printfs */
-      printf("start %d %d\n", g_list_length(parse_data->transactions),
-             g_list_length(parse_data->error_lines));
-      gnc_csv_preview_errors(preview);
-      user_canceled = gnc_parse_to_trans(parse_data, account, TRUE);
-      printf("end %d %d\n", g_list_length(parse_data->transactions),
-             g_list_length(parse_data->error_lines));
+      user_canceled = gnc_csv_preview_errors(preview);
+      gnc_parse_to_trans(parse_data, account, TRUE);
     }
 
     /* Create the genereic transaction importer GUI. */
