@@ -342,26 +342,28 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
 
 /** A struct encaspulating a property of a transaction. */
 /* TODO Comment */
-static typedef struct
+typedef struct
 {
   gboolean essential;
   int type;
   void* value;
+  int date_format;
 } TransProperty;
 
-static TransProperty* trans_property_new(int type)
+static TransProperty* trans_property_new(int type, int date_format)
 {
   TransProperty* prop = g_malloc(sizeof(TransProperty));
   prop->type = type;
+  prop->date_format = date_format;
   switch(type)
   {
   case GNC_CSV_DATE:
   case GNC_CSV_AMOUNT:
-    essential = TRUE
+    prop->essential = TRUE;
     break;
 
   default:
-    essential = FALSE;
+    prop->essential = FALSE;
   }
   return prop;
 }
@@ -372,7 +374,7 @@ static void trans_property_free(TransProperty* prop)
   {
   case GNC_CSV_DATE:
   case GNC_CSV_AMOUNT:
-    g_free(value);
+    g_free(prop->value);
     break;
   }
   g_free(prop);
@@ -391,29 +393,33 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
   {
   case GNC_CSV_DATE:
     prop->value = g_malloc(sizeof(time_t));
-    *(prop->value) = parse_date(str);
-    return prop->value != -1;
+    *((time_t*)(prop->value)) = parse_date(str, prop->date_format);
+    return *((time_t*)(prop->value)) != -1;
 
   case GNC_CSV_DESCRIPTION:
-    *prop->value = g_strdup(str);
+    prop->value = g_strdup(str);
     return TRUE;
 
   case GNC_CSV_AMOUNT:
     prop->value = g_malloc(sizeof(gnc_numeric));
-    *(prop->value) = double_to_gnc_numeric(atof(str), 1,
+    *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(atof(str), 1,
                                            GNC_RND_ROUND);
     /* TODO error handling */
     return TRUE;
   }
+  return FALSE; /* We should never actually get here. */
 }
 
 /** Creates a transaction from a list of "TransProperty"s.
  */
-static Transaction trans_from_trans_properties(GList* properties, GNCBook* book)
+static Transaction* trans_from_trans_properties(GList* properties, Account* account)
 {
   Transaction* trans;
   Split* split;
   GList* properties_begin = properties;
+  GNCBook* book = gnc_account_get_book(account);
+  gnc_commodity* currency = xaccAccountGetCommodity(account);
+  gnc_numeric amount;
   
   unsigned int essential_properties_left = 2;
   while(properties != NULL)
@@ -438,16 +444,15 @@ static Transaction trans_from_trans_properties(GList* properties, GNCBook* book)
     switch(prop->type)
     {
     case GNC_CSV_DATE:
-      xaccTransSetDatePostedSecs(trans, date);
+      xaccTransSetDatePostedSecs(trans, *((time_t*)(prop->value)));
       break;
 
     case GNC_CSV_DESCRIPTION:
-      xaccTransSetDescription(trans, description);
+      xaccTransSetDescription(trans, (char*)(prop->value));
       break;
-      
+
     case GNC_CSV_AMOUNT:
-      gnc_numeric amount = double_to_gnc_numeric(atof(line->pdata[j]), 1,
-                                                 GNC_RND_ROUND);
+      amount = *((gnc_numeric*)(prop->value));
       split = xaccMallocSplit(book);
       xaccSplitSetAccount(split, account);
       xaccSplitSetParent(split, trans);
