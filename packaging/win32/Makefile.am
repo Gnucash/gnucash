@@ -11,3 +11,12 @@ EXTRA_DIST = \
   opensp-1.5.2-patch.diff \
   pi.sh \
   reset.sh
+
+if OS_WIN32
+  bin_PROGRAMS = redirect
+  redirect_SOURCES = redirect.c
+  redirect_LDADD = $(GLIB_LIBS)
+  AM_CFLAGS = $(GLIB_CFLAGS)
+else
+  EXTRA_DIST += redirect.c
+endif
