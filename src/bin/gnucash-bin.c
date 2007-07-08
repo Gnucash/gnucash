@@ -573,7 +573,7 @@ main(int argc, char ** argv)
         }
     }
 #else
-    g_message("main: binreloc relocation support was disable at configure time.\n");
+    g_message("main: binreloc relocation support was disabled at configure time.\n");
 #endif
 
 #ifdef HAVE_GETTEXT
