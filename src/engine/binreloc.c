@@ -51,12 +51,11 @@ _br_find_exe (GbrInitError *error)
 	gchar *prefix;
 	gchar *result;
 
-	/* From the documentation of
-	   g_win32_get_package_installation_directory: If both
-	   package and dll_name are NULL, the directory from where
-	   the main executable of the process was loaded is
-	   used. */
-	prefix = g_win32_get_package_installation_directory (GETTEXT_PACKAGE, NULL);
+	/* From the glib docs: This function looks in the Windows
+	   Registry for the value #InstallationDirectory in the key
+	   #HKLM\Software\${package}, and if that value exists and is
+	   a string, returns that. */
+	prefix = g_win32_get_package_installation_directory ("GnuCash", NULL);
 	result = g_build_filename (prefix,
 				   "bin", "gnucash-bin.exe",
 				   (char*)NULL);
