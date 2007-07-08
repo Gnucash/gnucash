@@ -1,5 +1,3 @@
-GnuCash 2.2.x README file for Windows binary packages.
-
 GnuCash is a free, open source accounting program released under the
 GNU General Public License (GPL) and available for GNU/Linux, *BSD,
 Solaris, Mac OSX, and Microsoft Windows.
@@ -48,3 +46,7 @@ GNU General Public License (GPL). It is collaboratively developed by
 
 Programming on GnuCash began in 1997, and its first release was in
 1998. 
+
+-------------------
+
+This is the GnuCash 2.2.x README file for Windows binary packages.
