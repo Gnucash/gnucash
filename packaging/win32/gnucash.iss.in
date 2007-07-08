@@ -46,7 +46,7 @@ Name: "{group}\{cm:IconName_README}"; Filename: "{app}\doc\gnucash\{cm:IconFilen
 Name: "{group}\{cm:IconName_FAQ}"; Filename: "http://wiki.gnucash.org/wiki/FAQ"; Tasks: menuicon
 Name: "{group}\{cm:IconName_Bugzilla}"; Filename: "http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash"; Tasks: menuicon
 Name: "{group}\{cm:IconName_InstallFQ}"; Filename: "{app}\bin\install-fq-mods.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_InstallFQ}"; Tasks: menuicon
-Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Tasks: menuicon
+Name: "{group}\{cm:IconName_Uninstall}"; Filename: "{uninstallexe}"; Comment: "{cm:IconComment_Uninstall}"; Tasks: menuicon
 
 Name: "{commondesktop}\GnuCash"; Filename: "{app}\bin\gnucash.bat"; WorkingDir: "{app}\bin"; Comment: "{cm:IconComment_GnuCash}"; IconFilename: "{app}\share\gnucash\pixmaps\gnucash-icon.ico"; Tasks: desktopicon; Flags: runminimized
 
@@ -220,15 +220,16 @@ MainFiles=GnuCash Program
 TranslFiles=Translation Files
 TemplFiles=Account Template Files
 
-IconFilename_README=README.win32-bin.txt
 IconComment_GnuCash=GnuCash Free Finance Manager
 IconName_README=Show README
 IconComment_README=Show the README file
+IconFilename_README=README.win32-bin.txt
 IconName_FAQ=FAQ (Online)
 IconName_Bugzilla=Report a Bug (Online)
 IconName_InstallFQ=Install Online Price Retrieval
-IconComment_InstallFQ="Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.8"
+IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.8
 IconName_Uninstall=Uninstall GnuCash
+IconComment_Uninstall=Uninstall the Finance Manager GnuCash
 
 ;; German translation
 
@@ -249,7 +250,8 @@ de.IconName_README=README anzeigen
 de.IconComment_README=Die Informationsdatei (README) anzeigen
 de.IconFilename_README=README-de.win32-bin.txt
 de.IconName_FAQ=Häufige Fragen (online, engl.)
-de.IconName_Bugzilla=Fehlerbericht einschicken (online, engl.)
+de.IconName_Bugzilla=Fehlerbericht einsenden (online, engl.)
 de.IconName_InstallFQ=Online Kursabruf installieren
-de.IconComment_InstallFQ="Das notwendige Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu können.  Dazu ist das Programm ActivePerl 5.8 erforderlich."
+de.IconComment_InstallFQ=Das zusätzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu können.  Dazu ist das Programm ActivePerl 5.8 erforderlich.
 de.IconName_Uninstall=Deinstallieren von GnuCash
+de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer löschen
