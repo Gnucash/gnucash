@@ -201,6 +201,11 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
 
+;; The following language files are available as well, in alphabetical
+;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
+;; Finnish, Hungarian, Italian, Norwegian, Polish, Portuguese,
+;; Russian, Slovak, Slovenian, Spanish
+
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; These are only for improved text messages
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -255,3 +260,29 @@ de.IconName_InstallFQ=Online Kursabruf installieren
 de.IconComment_InstallFQ=Das zusätzliche Modul Finance-Quote installieren, um online Aktien- und Devisenkurse abrufen zu können.  Dazu ist das Programm ActivePerl 5.8 erforderlich.
 de.IconName_Uninstall=Deinstallieren von GnuCash
 de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer löschen
+
+
+;; French translation
+
+fr.FullInstall=Installation complète
+fr.CustomInstall=Installation personnalisée
+fr.CreateDesktopIcon=Créer un icône sur le bureau
+fr.CreateMenuLink=Créer un lien dans le menu de démarrage
+fr.RunPrg=Démarrer GnuCash maintenant
+fr.AdditionalIcons=Créer les icônes suivants:
+fr.StatusMsgFirewall=Installation des règles de pare-feu de Windows
+
+fr.MainFiles=Programme GnuCash
+fr.TranslFiles=Traduction française
+fr.TemplFiles=Modèle de plan comptable
+
+fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
+fr.IconName_README=Afficher le LISEZMOI
+fr.IconComment_README=Afficher le fichier LISEZMOI
+fr.IconFilename_README=README.win32-bin.txt
+fr.IconName_FAQ=FAQ (En ligne, en anglais)
+fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
+fr.IconName_InstallFQ=Installer les quotations en ligne
+fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le téléchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
+fr.IconName_Uninstall=Dé-installer GnuCash
+fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
