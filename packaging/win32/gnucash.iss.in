@@ -194,7 +194,7 @@ end;
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile=@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
