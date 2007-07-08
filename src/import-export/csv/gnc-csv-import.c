@@ -377,7 +377,7 @@ static GncCsvPreview* gnc_csv_preview_new()
   /* Load the Glade file. */
   preview->xml = gnc_glade_xml_new("gnc-csv-preview-dialog.glade", "dialog");
   /* Load the dialog. */
-  preview->dialog = (GtkDialog*)(glade_xml_get_widget(preview->xml, "dialog"));
+  preview->dialog = GTK_DIALOG(glade_xml_get_widget(preview->xml, "dialog"));
 
   /* Load the separator buttons from the glade file into the
    * preview->sep_buttons array. */
@@ -648,6 +648,17 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
 /* TODO Let the user manually edit cells' data? */
 static int gnc_csv_preview_errors(GncCsvPreview* preview)
 {
+  GtkLabel* instructions_label = GTK_LABEL(glade_xml_get_widget(preview->xml, "instructions_label"));
+  GtkImage* instructions_image = GTK_IMAGE(glade_xml_get_widget(preview->xml, "instructions_image"));
+  gchar* name;
+  GtkIconSize size;
+  gtk_image_get_stock(instructions_image, &name, &size);
+  gtk_image_set_from_stock(instructions_image, GTK_STOCK_DIALOG_ERROR, size);
+  gtk_label_set_text(instructions_label,
+                     "The rows displayed below had errors. You can attempt to correct these errors by changing the configuration.");
+  gtk_widget_show(GTK_WIDGET(instructions_image));
+  gtk_widget_show(GTK_WIDGET(instructions_label));
+
   /* TODO Implement */
   preview->previewing_errors = TRUE;
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
@@ -738,10 +749,15 @@ void gnc_file_csv_import(void)
     /* If there are errors, let the user try and eliminate them by
      * previewing them. Repeat until either there are no errors or the
      * user gives up. */
-    while((parse_data->error_lines != NULL) && !user_canceled)
+    while(!((parse_data->error_lines == NULL) || user_canceled))
     {
+      /* TODO remove printfs */
+      printf("start %d %d\n", g_list_length(parse_data->transactions),
+             g_list_length(parse_data->error_lines));
       gnc_csv_preview_errors(preview);
       user_canceled = gnc_parse_to_trans(parse_data, account, TRUE);
+      printf("end %d %d\n", g_list_length(parse_data->transactions),
+             g_list_length(parse_data->error_lines));
     }
 
     /* Create the genereic transaction importer GUI. */
