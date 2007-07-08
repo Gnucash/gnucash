@@ -197,7 +197,14 @@ function finish() {
     done
     gconftool-2 --shutdown
 
-    exetype $DIST_UDIR/libexec/gconfd-2.exe windows
+    mv $DIST_UDIR/libexec/gconfd-2.exe $DIST_UDIR/bin
+    exetype $DIST_UDIR/bin/gconfd-2.exe windows
+    cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/libexec/gconfd-2.exe
+
+    if [ "$AQBANKING_WITH_QT" = "yes" ]; then
+        mv ${DIST_UDIR}/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe $DIST_UDIR/bin
+        cp $_BUILD_UDIR/packaging/win32/redirect.exe $DIST_UDIR/lib/aqbanking/plugins/16/wizards/qt3-wizard.exe
+    fi
 
     # Strip redirections in distributed libtool .la files
     for file in $DIST_UDIR/lib/*.la; do
