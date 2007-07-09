@@ -172,7 +172,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
        gnc_csv_parse(preview->parse_data, FALSE, &error))
     {
       /* If it fails, change back to the old encoding. */
-      gnc_error_dialog(NULL, "Invalid encoding selected");
+      gnc_error_dialog(NULL, _("Invalid encoding selected"));
       preview->encoding_selected_called = FALSE;
       go_charmap_sel_set_encoding(selector, previous_encoding);
       return;
@@ -188,10 +188,10 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
 }
 
 /* This array contains all of the different strings for different column types. */
-static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {"None",
-                                                        "Date",
-                                                        "Description",
-                                                        "Amount"};
+static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
+                                                        N_("Date"),
+                                                        N_("Description"),
+                                                        N_("Amount")};
 
 /** Event handler for selecting a new date format.
  * @param format_selector The combo box for selecting date formats
@@ -234,7 +234,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
     for(type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
     {
       /* ... we find one that matches with what's in the column. */
-      if(!strcmp(contents, column_type_strs[type]))
+      if(!strcmp(contents, _(column_type_strs[type])))
       {
         /* Set the column_types array appropriately and quit. */
         column_types->data[i] = type;
@@ -337,7 +337,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
       {
         /* ... set this column to the "None" type. (We can't allow duplicate types.) */
         gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2*i+1,
-                           column_type_strs[GNC_CSV_NONE], -1);
+                           _(column_type_strs[GNC_CSV_NONE]), -1);
       }
     }
     else /* If this is the column that was edited ... */
@@ -414,7 +414,7 @@ static GncCsvPreview* gnc_csv_preview_new()
   preview->date_format_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
   for(i = 0; i < num_date_formats; i++)
   {
-    gtk_combo_box_append_text(preview->date_format_combo, date_format_user[i]);
+    gtk_combo_box_append_text(preview->date_format_combo, _(date_format_user[i]));
   }
   gtk_combo_box_set_active(preview->date_format_combo, 0);
   g_signal_connect(G_OBJECT(preview->date_format_combo), "changed",
@@ -502,26 +502,30 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
     for(j = 0; j < GNC_CSV_NUM_COL_TYPES; j++)
     {
       gtk_list_store_append(cstores[i], &iter);
-      gtk_list_store_set(cstores[i], &iter, 0, column_type_strs[j], -1);
+      gtk_list_store_set(cstores[i], &iter, 0, _(column_type_strs[j]), -1);
     }
   }
 
   if(notEmpty)
   {
     GList *children, *children_begin;
-    int size;
+    GList *tv_columns, *tv_columns_begin, *ctv_columns, *ctv_columns_begin;
+    tv_columns = tv_columns_begin = gtk_tree_view_get_columns(preview->treeview);
+    ctv_columns = ctv_columns_begin = gtk_tree_view_get_columns(preview->ctreeview);
     /* Clear out exisiting columns in preview->treeview. */
-    do
+    while(tv_columns != NULL)
     {
-      GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->treeview, 0);
-      size = gtk_tree_view_remove_column(preview->treeview, col);
-    } while(size);
+      gtk_tree_view_remove_column(preview->treeview, GTK_TREE_VIEW_COLUMN(tv_columns->data));
+      tv_columns = g_list_next(tv_columns);
+    }
     /* Do the same in preview->ctreeview. */
-    do
+    while(ctv_columns != NULL)
     {
-      GtkTreeViewColumn* col = gtk_tree_view_get_column(preview->ctreeview, 0);
-      size = gtk_tree_view_remove_column(preview->ctreeview, col);
-    } while(size);
+      gtk_tree_view_remove_column(preview->ctreeview, GTK_TREE_VIEW_COLUMN(ctv_columns->data));
+      ctv_columns = g_list_next(ctv_columns);
+    }
+    g_list_free(tv_columns_begin);
+    g_list_free(ctv_columns_begin);
   }
   
   /* Fill the data treeview with data from the file. */
@@ -560,7 +564,7 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   for(i = 0; i < ncols; i++)
   {
     gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1,
-                       column_type_strs[(int)(preview->parse_data->column_types->data[i])],
+                       _(column_type_strs[(int)(preview->parse_data->column_types->data[i])]),
                        -1);
   }
 
@@ -657,7 +661,7 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
   gtk_image_get_stock(instructions_image, &name, &size);
   gtk_image_set_from_stock(instructions_image, GTK_STOCK_DIALOG_ERROR, size);
   gtk_label_set_text(instructions_label,
-                     "The rows displayed below had errors. You can attempt to correct these errors by changing the configuration.");
+                     _("The rows displayed below had errors. You can attempt to correct these errors by changing the configuration."));
   gtk_widget_show(GTK_WIDGET(instructions_image));
   gtk_widget_show(GTK_WIDGET(instructions_label));
 
@@ -696,7 +700,7 @@ void gnc_file_csv_import(void)
     int i, user_canceled = 0;
     Account* account; /* The account the user will select */
     GError* error = NULL;
-    GList* transactions; /* A list of the transactions we create. */
+    GList* transactions; /* A list of the transactions we create */
     GncCsvParseData* parse_data;
     GncCsvPreview* preview;
     
@@ -717,6 +721,9 @@ void gnc_file_csv_import(void)
         g_free(selected_filename);
         return;
       }
+      /* If we couldn't guess the encoding, we are content with just
+       * displaying an error message and move on with a blank
+       * display. */
     }
     /* Parse the data. */
     if(gnc_csv_parse(parse_data, TRUE, &error))

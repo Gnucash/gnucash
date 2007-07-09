@@ -2,6 +2,7 @@
 
 #include "gnc-book.h"
 
+#include <glib/gi18n.h>
 #include <goffice/utils/go-glib-extras.h>
 
 #include <string.h>
@@ -19,14 +20,14 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 const int num_date_formats = 8;
 /* A set of date formats that the user sees. */
-const gchar* date_format_user[] = {"yyyy/mm/dd",
-                                   "yy/mm/dd",
-                                   "dd/mm/yyyy",
-                                   "dd/mm/yy",
-                                   "dd/mm/yyyy",
-                                   "dd/mm/yy",
-                                   "mm/dd/yyyy",
-                                   "mm/dd/yy"};
+const gchar* date_format_user[] = {N_("yyyy/mm/dd"),
+                                   N_("yy/mm/dd"),
+                                   N_("dd/mm/yyyy"),
+                                   N_("dd/mm/yy"),
+                                   N_("dd/mm/yyyy"),
+                                   N_("dd/mm/yy"),
+                                   N_("mm/dd/yyyy"),
+                                   N_("mm/dd/yy")};
 
 /* Matching formats for date_format_user to be used with strptime. */
 const gchar* date_format_internal[] = {"%Y/%m/%d",
@@ -245,7 +246,6 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
   guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
                                 (size_t)(parse_data->raw_str.end - parse_data->raw_str.begin),
                                 "UTF-8", NULL);
-  guess_enc = NULL; /* TODO Get rid of, testing */
   if(guess_enc == NULL)
   {
     g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "Unknown encoding.");
@@ -283,14 +283,24 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
   /* max_cols is the number of columns in the row with the most columns. */
   int i, max_cols = 0;
 
-  /* Do the actual parsing. */
-  /* TODO: This size might have to change ... because I'm not exactly
-   * sure what it's for. ... */
-  chunk = g_string_chunk_new(100);
-  parse_data->orig_lines = stf_parse_general(parse_data->options, chunk,
-                                             parse_data->file_str.begin,
-                                             parse_data->file_str.end);
-  g_string_chunk_free(chunk);
+  /* If everything is fine ... */
+  if(parse_data->file_str.begin != NULL)
+  {
+    /* Do the actual parsing. */
+    /* TODO: This size might have to change ... because I'm not exactly
+     * sure what it's for. ... */
+    chunk = g_string_chunk_new(100);
+    parse_data->orig_lines = stf_parse_general(parse_data->options, chunk,
+                                               parse_data->file_str.begin,
+                                               parse_data->file_str.end);
+    g_string_chunk_free(chunk);
+  }
+  /* If we couldn't get the encoding right, we just want an empty array. */
+  else
+  {
+    parse_data->orig_lines = g_ptr_array_new();
+  }
+
   /* If it failed, generate an error. */
   if(parse_data->orig_lines == NULL)
   {
@@ -304,7 +314,6 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
     if(max_cols < ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len)
       max_cols = ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len;
   }
-  g_debug("max_cols %d\n", max_cols);
 
   if(guessColTypes)
   {
