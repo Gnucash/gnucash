@@ -98,6 +98,8 @@ static void start_edit(GtkCellRenderer *cr, GtkCellEditable *editable,
 static void get_editable_start_editing_cb(
     GtkCellRenderer *cr, GtkCellEditable *editable,
     const gchar *path, gpointer user_data);
+static void editing_started_cb(GtkCellRenderer*, GtkCellEditable*, 
+			const gchar*, gpointer);
 
 static gboolean
 gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
@@ -149,7 +151,7 @@ static ColDef all_tree_view_transaction_columns[] = {
      "R", "recn", "x", -1,
      gtvt_edited_cb, NULL, NULL},
     {COL_AMOUNT, -1,
-     "Amt", "amount", "xxxxxx", -1,
+     "Price", "amount", "xxxxxx", -1, //Changed COL_AMOUNT header to "Price" (JG)
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_VALUE, -1,
      "Val", "value", "xxxxxx", -1,
@@ -166,7 +168,7 @@ static ColDef all_tree_view_transaction_columns[] = {
      "Balance", "balance", "xxxxxxx", -1,
      NULL, NULL, NULL},
     {COL_RATE, -1,
-     "Price", "price", "xxxxxx", -1,
+     "Amt", "price", "xxxxxx", -1, //Changed COL_RATE header to "Amt" (JG)
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_TYPE, -1,
@@ -968,6 +970,26 @@ set_rate_for(GncTreeViewTransaction *tv, Transaction *trans, Split *split,
 #endif
 }
 
+//Callback to set the completion on the cell renderer entry.
+//Connected to the "editing-started" signal from CellRenderer.
+static void
+editing_started_cb(GtkCellRenderer *cell, GtkCellEditable *editable, 
+		const gchar *path, gpointer data)
+{
+	if (GTK_IS_ENTRY(editable))
+	{
+		gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
+					"model_column"));
+		GtkEntry *entry = GTK_ENTRY(editable);
+		GtkEntryCompletion *completion = gtk_entry_completion_new();
+		gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(data));
+		gtk_entry_completion_set_text_column(completion, column);
+		gtk_entry_set_completion(entry, completion);
+	}//if
+	else
+		g_print("CellRenderer completion failed!!\n");
+}//editing_started_cb
+
 /* Connected to "edited" from cellrenderer. For reference, see
    split-register-model-save.c */
 static void
@@ -975,6 +997,7 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
                const gchar *new_text, gpointer data)
 {
     GtkTreeIter iter;
+    GtkEntryCompletion *completion;
     Split *split;
     Transaction *trans;
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(data);
@@ -1515,13 +1538,18 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
             col = gnc_tree_view_add_text_column (
                 GNC_TREE_VIEW(tv), def.title, def.pref_name, NULL, def.sizer,
                 def.modelcol, def.visibility_model_col, def.sort_fn);
+                def.editing_started_cb = &editing_started_cb; //Set function pointer
         }
 
         g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
         cr = gnc_tree_view_column_get_renderer(col);
+
         if (def.editing_started_cb) {
-            g_signal_connect(G_OBJECT(cr), "editing-started",
-                             (GCallback) def.editing_started_cb, tv);
+		//Store the position of the column in the model
+		g_object_set_data(G_OBJECT(cr), "model_column", 
+				GINT_TO_POINTER(def.modelcol));
+           	g_signal_connect(G_OBJECT(cr), "editing-started",
+                	(GCallback) def.editing_started_cb, get_trans_model_from_view(tv));
         }
 
         // This can die when prefs are used.
