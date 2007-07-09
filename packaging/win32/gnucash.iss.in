@@ -296,28 +296,27 @@ fr.IconComment_Uninstall=Dιsinstalle le gestionnaire financier GnuCash
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Greek translation
 
-el.FullInstall=~~~~~~ ~~~~~~~~~~~
-el.CustomInstall=~~~~~~~~~~~~~ ~~~~~~~~~~~
-el.CreateDesktopIcon=~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~~~~~ ~~~~~~~~
-el.CreateMenuLink=~~~~~~~~ ~~~ ~~~~~ ~~~~~~
-el.RunPrg=~~~~~~~~ ~~~ GnuCash ~~~~
-el.AdditionalIcons=~~~~~~~~~~ ~~~~~~~~~~:
-el.StatusMsgFirewall=~~~~~~~~~~~ ~~~~~~~ ~~~ ~~ ~~~~~~ ~~~~~~~~~~ ~~~ Windows...
+el.FullInstall=Πλήρης εγκατάσταση
+el.CustomInstall=Προσαρμοσμένη εγκατάσταση
+el.CreateDesktopIcon=Δημιουργία εικονιδίου στην επιφάνεια εργασίας
+el.CreateMenuLink=Προσθήκη στο μενού Έναρξη
+el.RunPrg=Εκτέλεση του GnuCash τώρα
+el.AdditionalIcons=Δημιουργία εικονιδίων:
+el.StatusMsgFirewall=Εγκατάσταση κανόνων για το τοίχος προστασίας των Windows...
 
-el.MainFiles=~~~~~~~~~ GnuCash
-el.TranslFiles=~~~~~~ ~~~~~~~~~~~
-el.TemplFiles=~~~~~~ ~~ ~~~~~~~ ~~~~~~~~~~~
+el.MainFiles=Πρόγραμμα GnuCash
+el.TranslFiles=Αρχεία μετάφρασεων
+el.TemplFiles=Αρχεία με πρότυπα λογαριασμών
 
-el.IconComment_GnuCash=GnuCash ~~~~~~~~~ ~~~~. ~~~~~~~~~~~
-el.IconName_README=~~~~~~~~ ~~~ README
-el.IconComment_README=~~~~~~~~ ~~~ ~~~~~~~ README
+el.IconComment_GnuCash=GnuCash πρόγραμμα διαχ. οικονομικών
+el.IconName_README=Εμφάνιση του README
+el.IconComment_README=Εμφάνιση του αρχείου README
 el.IconFilename_README=README.win32-bin.txt
-el.IconName_FAQ=~~~~~~ ~~~~~~~~~ (Online)
-el.IconName_Bugzilla=~~~~~~~ ~~~~~~~~~ (Online)
-el.IconName_InstallFQ=~~~~~~~~~~~ ~~~~~ ~~~~~ (online)
-el.IconComment_InstallFQ=~~~~~~~~~~~ ~~~ perl module Finance-Quote ~~~ ~~~~ ~~~~~ online.  ~~~~~~~ ActivePerl 5.8
-el.IconName_Uninstall=~~~~~~~~~~~~~ GnuCash
-el.IconComment_Uninstall=~~~~~~~~~~~~~ ~~~ ~~~~~~~~~~~ ~~~~~~~~~~~ GnuCash
-
+el.IconName_FAQ=Συχνές ερωτήσεις (Online)
+el.IconName_Bugzilla=Αναφορά σφάλματος (Online)
+el.IconName_InstallFQ=Εγκατάσταση λήψης τιμών (online)
+el.IconComment_InstallFQ=Εγκατάσταση του perl module Finance-Quote για λήψη τιμών online.  Απαιτεί ActivePerl 5.8
+el.IconName_Uninstall=Απεγκατάσταση GnuCash
+el.IconComment_Uninstall=Απεγκατάσταση του διαχειριστή οικονομικών GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;
