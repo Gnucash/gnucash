@@ -200,6 +200,7 @@ end;
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
 
 ;; The following language files are available as well, in alphabetical
 ;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
@@ -236,6 +237,8 @@ IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online
 IconName_Uninstall=Uninstall GnuCash
 IconComment_Uninstall=Uninstall the Finance Manager GnuCash
 
+
+;; ;;;;;;;;;;;;;;;;;;;;
 ;; German translation
 
 de.FullInstall=Komplett-Installation
@@ -262,6 +265,7 @@ de.IconName_Uninstall=Deinstallieren von GnuCash
 de.IconComment_Uninstall=Die OpenSource-Finanzverwaltung GnuCash wieder deinstallieren und vom Computer löschen
 
 
+;; ;;;;;;;;;;;;;;;;;;;;
 ;; French translation
 
 fr.FullInstall=Installation complète
@@ -286,3 +290,33 @@ fr.IconName_InstallFQ=Installer les quotations en ligne
 fr.IconComment_InstallFQ=Installation du module Finance-Quote requis pour le téléchargement du cours des devises et actions. Le programme ActivePerl 5.8 est aussi requis
 fr.IconName_Uninstall=Dé-installer GnuCash
 fr.IconComment_Uninstall=Désinstalle le gestionnaire financier GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; Greek translation
+
+el.FullInstall=~~~~~~ ~~~~~~~~~~~
+el.CustomInstall=~~~~~~~~~~~~~ ~~~~~~~~~~~
+el.CreateDesktopIcon=~~~~~~~~~~ ~~~~~~~~~~ ~~~~ ~~~~~~~~~ ~~~~~~~~
+el.CreateMenuLink=~~~~~~~~ ~~~ ~~~~~ ~~~~~~
+el.RunPrg=~~~~~~~~ ~~~ GnuCash ~~~~
+el.AdditionalIcons=~~~~~~~~~~ ~~~~~~~~~~:
+el.StatusMsgFirewall=~~~~~~~~~~~ ~~~~~~~ ~~~ ~~ ~~~~~~ ~~~~~~~~~~ ~~~ Windows...
+
+el.MainFiles=~~~~~~~~~ GnuCash
+el.TranslFiles=~~~~~~ ~~~~~~~~~~~
+el.TemplFiles=~~~~~~ ~~ ~~~~~~~ ~~~~~~~~~~~
+
+el.IconComment_GnuCash=GnuCash ~~~~~~~~~ ~~~~. ~~~~~~~~~~~
+el.IconName_README=~~~~~~~~ ~~~ README
+el.IconComment_README=~~~~~~~~ ~~~ ~~~~~~~ README
+el.IconFilename_README=README.win32-bin.txt
+el.IconName_FAQ=~~~~~~ ~~~~~~~~~ (Online)
+el.IconName_Bugzilla=~~~~~~~ ~~~~~~~~~ (Online)
+el.IconName_InstallFQ=~~~~~~~~~~~ ~~~~~ ~~~~~ (online)
+el.IconComment_InstallFQ=~~~~~~~~~~~ ~~~ perl module Finance-Quote ~~~ ~~~~ ~~~~~ online.  ~~~~~~~ ActivePerl 5.8
+el.IconName_Uninstall=~~~~~~~~~~~~~ GnuCash
+el.IconComment_Uninstall=~~~~~~~~~~~~~ ~~~ ~~~~~~~~~~~ ~~~~~~~~~~~ GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
