@@ -87,6 +87,7 @@ Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdir
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
+Source: "@prefix@\..\dist\share\@PACKAGE@\doc\README-fr.win32-bin.txt"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\COPYING"; DestDir: "{app}\doc\@PACKAGE@"; Flags: ignoreversion; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\AUTHORS"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
 Source: "@prefix@\..\dist\share\@PACKAGE@\doc\ChangeLog"; DestDir: "{app}\doc\@PACKAGE@"; Components: main
@@ -198,8 +199,8 @@ end;
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\..\dist\share\@PACKAGE@\doc\README-de.win32-bin.txt"
-Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
+Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
 
 ;; The following language files are available as well, in alphabetical
@@ -283,7 +284,7 @@ fr.TemplFiles=Modèle de plan comptable
 fr.IconComment_GnuCash=GnuCash, le gestionnaire financier OpenSource
 fr.IconName_README=Afficher le LISEZMOI
 fr.IconComment_README=Afficher le fichier LISEZMOI
-fr.IconFilename_README=README.win32-bin.txt
+fr.IconFilename_README=README-fr.win32-bin.txt
 fr.IconName_FAQ=FAQ (En ligne, en anglais)
 fr.IconName_Bugzilla=Envoyer un rapport d'erreur (En ligne, en anglais)
 fr.IconName_InstallFQ=Installer les quotations en ligne
