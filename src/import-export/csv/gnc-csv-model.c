@@ -509,7 +509,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
 {
   int i, j;
   GArray* column_types = parse_data->column_types;
-  GList *error_lines, *begin_error_lines;
+  GList *error_lines = NULL, *begin_error_lines = NULL;
   GList* last_transaction;
 
   /* Free parse_data->error_lines and parse_data->transactions if they
