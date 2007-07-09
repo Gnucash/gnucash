@@ -83,6 +83,7 @@ extern const gchar* date_format_internal[];
 typedef struct
 {
   gchar* encoding;
+  GMappedFile* raw_mapping; /**< The mapping containing raw_str */
   GncCsvStr raw_str; /**< Untouched data from the file as a string */
   GncCsvStr file_str; /**< raw_str translated into UTF-8 */
   GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
@@ -105,7 +106,5 @@ int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, 
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
 int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
-
-GncCsvStr file_to_string(const char* filename, GError** error);
 
 #endif

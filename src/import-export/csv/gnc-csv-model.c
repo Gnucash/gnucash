@@ -70,51 +70,6 @@ static time_t parse_date(const char* date_str, int format)
   return mktime(&retvalue);
 }
 
-/** Loads a file into a string.
- * @param filename Name of the file to open
- * @param error Passes back the error that occurred, if one occurred.
- * @return Contents of the file at filename if successful; NULL if an error occurred
- */
-GncCsvStr file_to_string(const char* filename, GError** error)
-{
-  /* The file descriptor for opening the file, a flag indicating
-   * whether the file actually exists, the length of the file */
-  int fd, exists, length, max_cols = 0, i;
-
-  struct stat buf; /* Used to find file size */
-
-  /* What we want to return. */
-  GncCsvStr file_str;
-
-  /* Make sure filename is meaningful. */
-  if(filename == NULL)
-  {
-    g_set_error(error, 0, 0, "Received NULL filename.");
-    file_str.begin = file_str.end = NULL;
-    return file_str;
-  }
-
-  exists = stat(filename, &buf);
-  /* Make sure the file exists. */
-  if(exists == -1)
-  {
-    g_set_error(error, 0, 0, "File %s does not exist.", filename);
-    file_str.begin = file_str.end = NULL;
-    return file_str;
-  }
-
-  /* Now we can get the length of the file out of buf. */
-  length = (int)(buf.st_size);
-
-  /* Put the file's contents into a string starting at data_begin. */
-  fd = open(filename, O_RDONLY);
-  file_str.begin = mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
-  file_str.end = file_str.begin + length - 1; /* Point data_end to the end. */
-  close(fd);
-
-  return file_str;
-}
-
 /** Constructor for GncCsvParseData.
  * @return Pointer to a new GncCSvParseData
  */
@@ -141,12 +96,9 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
 void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
 {
   /* All non-NULL pointers have been initialized and must be freed. */
-  
-  /* parse_data->raw_str is created using mmap (see file_to_string),
-   * so we free it using munmap. */
-  if(parse_data->raw_str.begin != NULL)
-    munmap(parse_data->raw_str.begin,
-           parse_data->raw_str.end - parse_data->raw_str.begin);
+
+  if(parse_data->raw_mapping != NULL)
+    g_mapped_file_free(parse_data->raw_mapping);
 
   if(parse_data->file_str.begin != NULL)
     g_free(parse_data->file_str.begin);
@@ -233,14 +185,19 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
   const char* guess_enc;
 
   /* Get the raw data first and handle an error if one occurs. */
-  parse_data->raw_str = file_to_string(filename, error);
-  if(parse_data->raw_str.begin == NULL)
+  parse_data->raw_mapping = g_mapped_file_new(filename, FALSE, error);
+  if(parse_data->raw_mapping == NULL)
   {
     /* TODO Handle file opening errors more specifically,
      * e.g. inexistent file versus no read permission. */
+    parse_data->raw_str.begin = NULL;
     g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, "File opening failed.");
     return 1;
   }
+
+  /* Copy the mapping's contents into parse-data->raw_str. */
+  parse_data->raw_str.begin = g_mapped_file_get_contents(parse_data->raw_mapping);
+  parse_data->raw_str.end = parse_data->raw_str.begin + g_mapped_file_get_length(parse_data->raw_mapping);
 
   /* Make a guess at the encoding of the data. */
   guess_enc = go_guess_encoding((const char*)(parse_data->raw_str.begin),
@@ -510,7 +467,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
   int i, j;
   GArray* column_types = parse_data->column_types;
   GList *error_lines = NULL, *begin_error_lines = NULL;
-  GList* last_transaction;
+  GList* last_transaction = NULL;
 
   /* Free parse_data->error_lines and parse_data->transactions if they
    * already exist. */
@@ -546,7 +503,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     gboolean errors = FALSE;
     GList* properties = NULL;
     GList* properties_begin;
-    Transaction* trans;
+    Transaction* trans = NULL;
 
     /* TODO There should eventually be a specification of what errors
      * actually occurred, not just that one happened. */
