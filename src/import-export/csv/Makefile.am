@@ -42,8 +42,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
-  $(GOFFICE_CFLAGS) \
-  -Wall
+  $(GOFFICE_CFLAGS)
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \

@@ -55,7 +55,7 @@ static StfParseOptions_t* default_parse_options(void)
 static time_t parse_date(const char* date_str, int format)
 {
   struct tm retvalue;
-  char mstr[3], dstr[3], ystr[3], *last_parsed_char;
+  char *last_parsed_char;
   last_parsed_char = strptime(date_str, date_format_internal[format], &retvalue);
   if(last_parsed_char != date_str + strlen(date_str))
   {
@@ -307,7 +307,15 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
   return 0;
 }
 
-/** A struct encaspulating a property of a transaction. */
+/** A struct containing TransProperties that all describe a single transaction. */
+typedef struct
+{
+  int date_format; /**< The format for parsing dates */
+  Account* account; /**< The account the transaction belongs to */
+  GList* properties; /**< List of TransProperties */
+} TransPropertyList;
+
+/** A struct encapsulating a property of a transaction. */
 typedef struct
 {
   gboolean essential; /**< TRUE if every transaction needs this property */
@@ -316,18 +324,17 @@ typedef struct
   void* value; /**< Pointer to the data that will be used to configure a transaction */
   /* TODO Try coming up with a more elegant way than storing this for
    * every transaction safely. */
-  int date_format; /**< The format for parsing dates */
+  TransPropertyList* set; /**< The set the property belongs to */
 } TransProperty;
 
 /** Constructor TransProperty.
  * @param type The type of the new property (see TransProperty.type for possible values)
- * @param date_format The format used for parsing dates (index in date_format_internal)
  */
-static TransProperty* trans_property_new(int type, int date_format)
+static TransProperty* trans_property_new(int type, TransPropertyList* set)
 {
   TransProperty* prop = g_malloc(sizeof(TransProperty));
   prop->type = type;
-  prop->date_format = date_format;
+  prop->set = set;
   
   switch(type)
   {
@@ -373,7 +380,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
   {
   case GNC_CSV_DATE:
     prop->value = g_malloc(sizeof(time_t));
-    *((time_t*)(prop->value)) = parse_date(str, prop->date_format);
+    *((time_t*)(prop->value)) = parse_date(str, prop->set->date_format);
     return *((time_t*)(prop->value)) != -1;
 
   case GNC_CSV_DESCRIPTION:
@@ -388,31 +395,59 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
     if(endptr != str + strlen(str))
       return FALSE;
 
-    *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, 1,
+    *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->set->account),
                                                            GNC_RND_ROUND);
     return TRUE;
   }
   return FALSE; /* We should never actually get here. */
 }
 
-/** Creates a transaction from a list of "TransProperty"s.
- */
-static Transaction* trans_properties_to_trans(GList* properties, Account* account)
+/* TODO Comment */
+static TransPropertyList* trans_property_list_new(Account* account, int date_format)
+{
+  TransPropertyList* set = g_new(TransPropertyList, 1);
+  set->account = account;
+  set->date_format = date_format;
+  set->properties = NULL;
+  return set;
+}
+
+/* TODO Comment */
+static void trans_property_list_free(TransPropertyList* set)
+{
+  GList* properties_begin = set->properties;
+  while(set->properties != NULL)
+  {
+    trans_property_free((TransProperty*)(set->properties->data));
+    set->properties = g_list_next(set->properties);
+  }
+  g_list_free(properties_begin);
+  g_free(set);
+}
+
+/* TODO Comment */
+static void trans_property_list_add(TransProperty* property)
+{
+  property->set->properties = g_list_append(property->set->properties, property);
+}
+
+/* TODO Comment */
+static Transaction* trans_property_list_to_trans(TransPropertyList* set)
 {
   Transaction* trans;
   Split* split;
-  GList* properties_begin = properties;
-  GNCBook* book = gnc_account_get_book(account);
-  gnc_commodity* currency = xaccAccountGetCommodity(account);
+  GList* properties_begin = set->properties;
+  GNCBook* book = gnc_account_get_book(set->account);
+  gnc_commodity* currency = xaccAccountGetCommodity(set->account);
   gnc_numeric amount;
   
   unsigned int essential_properties_left = 2;
-  while(properties != NULL)
+  while(set->properties != NULL)
   {
-    if(((TransProperty*)(properties->data))->essential)
+    if(((TransProperty*)(set->properties->data))->essential)
       essential_properties_left--;
 
-    properties = g_list_next(properties);
+    set->properties = g_list_next(set->properties);
   }
   if(essential_properties_left)
     return NULL;
@@ -422,10 +457,10 @@ static Transaction* trans_properties_to_trans(GList* properties, Account* accoun
   xaccTransBeginEdit(trans);
   xaccTransSetCurrency(trans, currency);
 
-  properties = properties_begin;
-  while(properties != NULL)
+  set->properties = properties_begin;
+  while(set->properties != NULL)
   {
-    TransProperty* prop = (TransProperty*)(properties->data);
+    TransProperty* prop = (TransProperty*)(set->properties->data);
     switch(prop->type)
     {
     case GNC_CSV_DATE:
@@ -439,13 +474,13 @@ static Transaction* trans_properties_to_trans(GList* properties, Account* accoun
     case GNC_CSV_AMOUNT:
       amount = *((gnc_numeric*)(prop->value));
       split = xaccMallocSplit(book);
-      xaccSplitSetAccount(split, account);
+      xaccSplitSetAccount(split, set->account);
       xaccSplitSetParent(split, trans);
       xaccSplitSetAmount(split, amount);
       xaccSplitSetValue(split, amount);
       xaccSplitSetAction(split, "Deposit");
     }
-    properties = g_list_next(properties);
+    set->properties = g_list_next(set->properties);
   }
 
   return trans;
@@ -501,8 +536,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     GPtrArray* line = parse_data->orig_lines->pdata[i];
     /* This flag is TRUE if there are any errors in this row. */
     gboolean errors = FALSE;
-    GList* properties = NULL;
-    GList* properties_begin;
+    TransPropertyList* set = trans_property_list_new(account, parse_data->date_format);
     Transaction* trans = NULL;
 
     /* TODO There should eventually be a specification of what errors
@@ -514,12 +548,12 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
       if(column_types->data[j] != GNC_CSV_NONE)
       {
         /* Affect the transaction appropriately. */
-        TransProperty* property = trans_property_new(column_types->data[j],
-                                                     parse_data->date_format);
+        TransProperty* property = trans_property_new(column_types->data[j], set);
         gboolean succeeded = trans_property_set(property, line->pdata[j]);
+        /* TODO Maybe move error handling to within TransPropertyList functions? */
         if(succeeded)
         {
-          properties = g_list_append(properties, property);
+          trans_property_list_add(property);
         }
         else
         {
@@ -533,19 +567,13 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     /* If we had success, add the transaction to parse_data->transaction. */
     if(!errors)
     {
-      trans = trans_properties_to_trans(properties, account);
+      trans = trans_property_list_to_trans(set);
       errors = trans == NULL;
     }
 
-    /* We need to free the properties and the properties list. */
-    properties_begin = properties;
-    while(properties != NULL)
-    {
-      trans_property_free((TransProperty*)(properties->data));
-      properties = g_list_next(properties);
-    }
-    g_list_free(properties_begin);
+    trans_property_list_free(set);
       
+
     /* If there was no success, add this line to parse_data->error_lines. */
     if(errors)
     {
