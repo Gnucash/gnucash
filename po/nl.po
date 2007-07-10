@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-30 13:36+0200\n"
+"POT-Creation-Date: 2007-07-10 22:05+0200\n"
 "PO-Revision-Date: 2007-02-18 15:15+0100\n"
 "Last-Translator: Hendrik-Jan Heins <hjheins@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -407,17 +407,17 @@ msgstr ""
 "maken."
 
 #. Translators: This is the memo of an auto-created split
-#: ../src/business/business-core/gncInvoice.c:1120
+#: ../src/business/business-core/gncInvoice.c:1124
 msgid "Automatic Payment Forward"
 msgstr "Automatische betaling doorsturen"
 
-#: ../src/business/business-core/gncInvoice.c:1121
+#: ../src/business/business-core/gncInvoice.c:1125
 msgid "Auto Split"
 msgstr "Auto opsplitsen"
 
 #. src/app-utils/prefs.scm
-#: ../src/business/business-core/gncInvoice.c:1314
-#: ../src/business/business-core/gncInvoice.c:1408
+#: ../src/business/business-core/gncInvoice.c:1320
+#: ../src/business/business-core/gncInvoice.c:1414
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
 #: ../src/gnome/druid-loan.c:1792 ../src/gnome/druid-loan.c:2273
 #: ../src/gnome/druid-loan.c:2336 ../src/gnome/druid-loan.c:2350
@@ -429,11 +429,11 @@ msgstr "Auto opsplitsen"
 msgid "Payment"
 msgstr "Betaling"
 
-#: ../src/business/business-core/gncInvoice.c:1435
+#: ../src/business/business-core/gncInvoice.c:1441
 msgid "Pre-Payment"
 msgstr "Aanbetaling"
 
-#: ../src/business/business-core/gncInvoice.c:1532
+#: ../src/business/business-core/gncInvoice.c:1538
 msgid " (posted)"
 msgstr " (geboekt)"
 
@@ -774,13 +774,13 @@ msgstr "Gebruikersnaam"
 #. src/business/business-reports/gnucash/report/aging.scm
 #. src/business/business-reports/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:706
-#: ../src/gnome/dialog-sx-editor.c:1694
+#: ../src/gnome/dialog-sx-editor.c:1705
 #: ../src/gnome/glade/sched-xact.glade.h:115
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:9
 #: ../src/gnome-utils/gnc-dense-cal.c:327
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:405
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:156
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:167
 #: ../intl-scm/guile-strings.c:6976 ../intl-scm/guile-strings.c:7216
 msgid "Name"
 msgstr "Naam"
@@ -1554,7 +1554,7 @@ msgstr ""
 
 #
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
-#: ../src/gnome-utils/glade/preferences.glade.h:87
+#: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "Number of _rows:"
 msgstr "Aantal _rijen"
 
@@ -2482,7 +2482,7 @@ msgstr "K_opieer"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:115
 #: ../src/gnome/gnc-plugin-page-register.c:178
-#: ../src/gnome-utils/gnc-main-window.c:256
+#: ../src/gnome-utils/gnc-main-window.c:257
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:962
 msgid "_Paste"
 msgstr "_Plakken"
@@ -2532,7 +2532,7 @@ msgstr "Annuleer de huidige regel"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:135
 #: ../src/gnome/glade/register.glade.h:82
-#: ../src/gnome/gnc-plugin-page-sx-list.c:114
+#: ../src/gnome/gnc-plugin-page-sx-list.c:124
 #: ../src/gnome/window-reconcile.c:2038
 msgid "_Delete"
 msgstr "_Verwijder"
@@ -3811,7 +3811,7 @@ msgstr "Aandelen"
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../src/gnome/dialog-find-transactions.c:115
-#: ../src/gnome/dialog-sx-since-last-run.c:953
+#: ../src/gnome/dialog-sx-since-last-run.c:964
 #: ../src/gnome/glade/lots.glade.h:18
 #: ../src/gnome/glade/sched-xact.glade.h:185 ../intl-scm/guile-strings.c:2448
 #: ../intl-scm/guile-strings.c:3072 ../intl-scm/guile-strings.c:3378
@@ -3905,44 +3905,44 @@ msgstr "Aangepast"
 msgid "Complete"
 msgstr "Klaar"
 
-#: ../src/gnome/dialog-sx-editor.c:175 ../src/gnome/glade/price.glade.h:22
+#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/glade/price.glade.h:22
 #: ../src/gnome/glade/register.glade.h:85
-#: ../src/gnome/gnc-plugin-page-sx-list.c:112
-#: ../src/gnome-utils/gnc-main-window.c:220
+#: ../src/gnome/gnc-plugin-page-sx-list.c:122
+#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:2035
 #: ../src/report/report-gnome/report.glade.h:17
 msgid "_Edit"
 msgstr "B_ewerken"
 
-#: ../src/gnome/dialog-sx-editor.c:176 ../src/gnome/window-reconcile.c:1995
+#: ../src/gnome/dialog-sx-editor.c:187 ../src/gnome/window-reconcile.c:1995
 msgid "_Transaction"
 msgstr "Boe_king"
 
-#: ../src/gnome/dialog-sx-editor.c:177 ../src/gnome/glade/register.glade.h:101
-#: ../src/gnome-utils/gnc-main-window.c:221
+#: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:101
+#: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_View"
 msgstr "_Bekijk"
 
-#: ../src/gnome/dialog-sx-editor.c:178 ../src/gnome/glade/register.glade.h:74
-#: ../src/gnome-utils/gnc-main-window.c:222
+#: ../src/gnome/dialog-sx-editor.c:189 ../src/gnome/glade/register.glade.h:74
+#: ../src/gnome-utils/gnc-main-window.c:223
 msgid "_Actions"
 msgstr "_Acties"
 
-#: ../src/gnome/dialog-sx-editor.c:208
+#: ../src/gnome/dialog-sx-editor.c:219
 msgid "This SX has changed; are you sure you want to cancel?"
 msgstr "Deze SX is veranderd; weet u zeker dat u wilt annuleren?"
 
-#: ../src/gnome/dialog-sx-editor.c:625
+#: ../src/gnome/dialog-sx-editor.c:636
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
 msgstr "Kon de credit formule voor de opsplitsing '%s' niet doorvoeren."
 
-#: ../src/gnome/dialog-sx-editor.c:651
+#: ../src/gnome/dialog-sx-editor.c:662
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr "Kon de debet formule voor de opsplitsing '%s'niet doorvoeren."
 
-#: ../src/gnome/dialog-sx-editor.c:685 ../src/gnome/dialog-sx-from-trans.c:270
+#: ../src/gnome/dialog-sx-editor.c:696 ../src/gnome/dialog-sx-from-trans.c:270
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
@@ -3950,11 +3950,11 @@ msgstr ""
 "De automatische transactie editor kan deze transactie niet automatisch "
 "balanceren. Moet de transactie echt worden aangemaakt?"
 
-#: ../src/gnome/dialog-sx-editor.c:704
+#: ../src/gnome/dialog-sx-editor.c:715
 msgid "Please name the Scheduled Transaction."
 msgstr "Geef de naam op van de geplande transactie."
 
-#: ../src/gnome/dialog-sx-editor.c:730
+#: ../src/gnome/dialog-sx-editor.c:741
 #, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
@@ -3963,12 +3963,12 @@ msgstr ""
 "Een geplande transactie met de naam '%s' bestaat al. Weet u zeker dat u deze "
 "transactie dezelfde naam wilt geven?"
 
-#: ../src/gnome/dialog-sx-editor.c:759
+#: ../src/gnome/dialog-sx-editor.c:770
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr ""
 "De geplande transactie met variabele kan niet automatisch worden gegenereerd."
 
-#: ../src/gnome/dialog-sx-editor.c:768
+#: ../src/gnome/dialog-sx-editor.c:779
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
@@ -3976,15 +3976,15 @@ msgstr ""
 "Geplande transacties zonder een sjabloon kunnen niet automatisch gegenereerd "
 "worden."
 
-#: ../src/gnome/dialog-sx-editor.c:782
+#: ../src/gnome/dialog-sx-editor.c:793
 msgid "Please provide a valid end selection."
 msgstr "Geef een geldige eindselectie"
 
-#: ../src/gnome/dialog-sx-editor.c:798
+#: ../src/gnome/dialog-sx-editor.c:809
 msgid "There must be some number of occurrences."
 msgstr "Er moet een aantal gebeurtenissen zijn."
 
-#: ../src/gnome/dialog-sx-editor.c:806
+#: ../src/gnome/dialog-sx-editor.c:817
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
@@ -3993,7 +3993,7 @@ msgstr ""
 "Het aantal overgebleven gebeurtenissen (%d) is groter dan het totaal aantal "
 "gebeurtenissen (%d)."
 
-#: ../src/gnome/dialog-sx-editor.c:837
+#: ../src/gnome/dialog-sx-editor.c:848
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
@@ -4001,11 +4001,11 @@ msgstr ""
 "U heeft getracht een geplande transactie te maken die zich nooit zal "
 "voordoen. Weet u zeker dat u dit wilt doen?"
 
-#: ../src/gnome/dialog-sx-editor.c:1331
+#: ../src/gnome/dialog-sx-editor.c:1342
 msgid "(never)"
 msgstr "(nooit)"
 
-#: ../src/gnome/dialog-sx-editor.c:1482
+#: ../src/gnome/dialog-sx-editor.c:1493
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
@@ -4013,8 +4013,8 @@ msgstr ""
 "Het huidige transactie sjabloon is veranderd. Wilt u de veranderingen "
 "opslaan?"
 
-#: ../src/gnome/dialog-sx-editor.c:1715
-#: ../src/gnome/gnc-plugin-page-sx-list.c:187
+#: ../src/gnome/dialog-sx-editor.c:1726
+#: ../src/gnome/gnc-plugin-page-sx-list.c:197
 msgid "Scheduled Transactions"
 msgstr "Geplande Transacties"
 
@@ -4034,42 +4034,42 @@ msgstr ""
 "Kan geen geplande transactie genereren van een transactie die momenteel "
 "wordt bewerkt. Accepteer aub de transactie voordat u hem plant."
 
-#: ../src/gnome/dialog-sx-since-last-run.c:363
+#: ../src/gnome/dialog-sx-since-last-run.c:374
 msgid "Ignored"
 msgstr "Genegeerd"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:364
+#: ../src/gnome/dialog-sx-since-last-run.c:375
 msgid "Postponed"
 msgstr "Uitgesteld"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:365
+#: ../src/gnome/dialog-sx-since-last-run.c:376
 #, fuzzy
 msgid "To-Create"
 msgstr "Genereren"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:366
+#: ../src/gnome/dialog-sx-since-last-run.c:377
 #, fuzzy
 msgid "Reminder"
 msgstr "lijst"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:367
+#: ../src/gnome/dialog-sx-since-last-run.c:378
 #, fuzzy
 msgid "Created"
 msgstr "Genereren"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:430
+#: ../src/gnome/dialog-sx-since-last-run.c:441
 #, fuzzy
 msgid "Never"
 msgstr "Oneindig"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:500
+#: ../src/gnome/dialog-sx-since-last-run.c:511
 #, fuzzy
 msgid "(Need Value)"
 msgstr "Nieuwe waarde"
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
-#: ../src/gnome/dialog-sx-since-last-run.c:796
+#: ../src/gnome/dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-basic-commands.c:480
 #, c-format
 msgid ""
@@ -4085,17 +4085,17 @@ msgstr[1] ""
 "Er zijn geen geplande transacties die nu kunnen worden ingevoerd. (%d "
 "transacties automatisch aangemaakt)"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:918
+#: ../src/gnome/dialog-sx-since-last-run.c:929
 #, fuzzy
 msgid "Transaction"
 msgstr "Boe_king"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:934
+#: ../src/gnome/dialog-sx-since-last-run.c:945
 #: ../src/gnome/glade/register.glade.h:70
 msgid "Status"
 msgstr "Status"
 
-#: ../src/gnome/dialog-sx-since-last-run.c:992
+#: ../src/gnome/dialog-sx-since-last-run.c:1003
 #, fuzzy
 msgid "Created Transactions"
 msgstr "Aangemaakte transactie(s) herzien"
@@ -6338,7 +6338,7 @@ msgid "Edit Scheduled Transaction"
 msgstr "Geplande transactie bewerken"
 
 #: ../src/gnome/glade/sched-xact.glade.h:84
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:161
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:172
 #, fuzzy
 msgid "Enabled"
 msgstr "Tabel"
@@ -6382,7 +6382,7 @@ msgstr "Eeuwig"
 
 #: ../src/gnome/glade/sched-xact.glade.h:98
 #: ../src/gnome-utils/gnc-dense-cal.c:328
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:170
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:181
 msgid "Frequency"
 msgstr "Frequentie"
 
@@ -6765,7 +6765,7 @@ msgid "_Run when data file opened"
 msgstr "_Uitvoeren bij openen bestand"
 
 #: ../src/gnome/glade/sched-xact.glade.h:196
-#: ../src/gnome-utils/glade/preferences.glade.h:166
+#: ../src/gnome-utils/glade/preferences.glade.h:168
 msgid "days"
 msgstr "dagen"
 
@@ -7240,7 +7240,7 @@ msgstr "Hernummer de subrekeningen van de geselecteerde rekening"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:172
 #: ../src/gnome/gnc-plugin-page-budget.c:148
 #: ../src/gnome/gnc-plugin-page-register.c:222
-#: ../src/gnome-utils/gnc-main-window.c:267
+#: ../src/gnome-utils/gnc-main-window.c:268
 msgid "_Filter By..."
 msgstr "_Filter op..."
 
@@ -7330,7 +7330,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:218
 #: ../src/gnome/gnc-plugin-page-budget.c:164 ../src/gnome/lot-viewer.c:434
-#: ../src/gnome-utils/gnc-file.c:95 ../src/gnome-utils/gnc-file.c:844
+#: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:851
 #: ../src/gnome/window-reconcile.c:1572
 msgid "Open"
 msgstr "Openen"
@@ -7481,33 +7481,33 @@ msgstr "_Cheque afdrukken..."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:172
-#: ../src/gnome-utils/gnc-main-window.c:250
+#: ../src/gnome-utils/gnc-main-window.c:251
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:956
 msgid "Cu_t"
 msgstr "K_nip"
 
 #: ../src/gnome/gnc-plugin-page-register.c:173
-#: ../src/gnome-utils/gnc-main-window.c:251
+#: ../src/gnome-utils/gnc-main-window.c:252
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:957
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "Knip de huidige selectie en copieer hem naar het klembord"
 
 #
 #: ../src/gnome/gnc-plugin-page-register.c:175
-#: ../src/gnome-utils/gnc-main-window.c:253
+#: ../src/gnome-utils/gnc-main-window.c:254
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:959
 msgid "_Copy"
 msgstr "_Kopieer"
 
 #
 #: ../src/gnome/gnc-plugin-page-register.c:176
-#: ../src/gnome-utils/gnc-main-window.c:254
+#: ../src/gnome-utils/gnc-main-window.c:255
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:960
 msgid "Copy the current selection to clipboard"
 msgstr "Kopieer de huidige selectie naar het klembord"
 
 #: ../src/gnome/gnc-plugin-page-register.c:179
-#: ../src/gnome-utils/gnc-main-window.c:257
+#: ../src/gnome-utils/gnc-main-window.c:258
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:963
 msgid "Paste the clipboard content at the cursor position"
 msgstr "Plak de inhoud van het klembord op de cursor positie"
@@ -7583,7 +7583,7 @@ msgstr "Voeg _omgekeerd boeking toe"
 #
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:220
-#: ../src/gnome-utils/gnc-main-window.c:265
+#: ../src/gnome-utils/gnc-main-window.c:266
 msgid "_Sort By..."
 msgstr "_Sorteer op..."
 
@@ -7714,7 +7714,7 @@ msgstr "Zoekresultaat rapport"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:1727
-#: ../src/gnome-utils/glade/preferences.glade.h:99
+#: ../src/gnome-utils/glade/preferences.glade.h:100
 #: ../intl-scm/guile-strings.c:1976 ../intl-scm/guile-strings.c:2600
 #: ../intl-scm/guile-strings.c:3998 ../intl-scm/guile-strings.c:5152
 msgid "Register"
@@ -7753,30 +7753,30 @@ msgstr "Sorteer %s op..."
 msgid "Filter %s by..."
 msgstr "Filter %s op..."
 
-#: ../src/gnome/gnc-plugin-page-sx-list.c:109
+#: ../src/gnome/gnc-plugin-page-sx-list.c:119
 #, fuzzy
 msgid "_Scheduled"
 msgstr "Gepland"
 
 #. File menu
 #. Transaction menu
-#: ../src/gnome/gnc-plugin-page-sx-list.c:110
-#: ../src/gnome-utils/gnc-main-window.c:232
+#: ../src/gnome/gnc-plugin-page-sx-list.c:120
+#: ../src/gnome-utils/gnc-main-window.c:233
 #: ../src/gnome/window-reconcile.c:2032
 msgid "_New"
 msgstr "_Nieuw"
 
-#: ../src/gnome/gnc-plugin-page-sx-list.c:111
+#: ../src/gnome/gnc-plugin-page-sx-list.c:121
 #, fuzzy
 msgid "Create a new scheduled transaction"
 msgstr "Geef de naam op van de geplande transactie."
 
-#: ../src/gnome/gnc-plugin-page-sx-list.c:113
+#: ../src/gnome/gnc-plugin-page-sx-list.c:123
 #, fuzzy
 msgid "Edit the selected scheduled transaction"
 msgstr "De geselecteerde geplande transacties verwijderen?"
 
-#: ../src/gnome/gnc-plugin-page-sx-list.c:115
+#: ../src/gnome/gnc-plugin-page-sx-list.c:125
 #, fuzzy
 msgid "Delete the selected scheduled transaction"
 msgstr "De geselecteerde geplande transacties verwijderen?"
@@ -7785,7 +7785,7 @@ msgstr "De geselecteerde geplande transacties verwijderen?"
 #. multiple SXs be deleted as well? Ideally, the number of
 #. to-be-deleted SXs should be mentioned here; see
 #. dialog-sx-since-last-run.c:807
-#: ../src/gnome/gnc-plugin-page-sx-list.c:571
+#: ../src/gnome/gnc-plugin-page-sx-list.c:581
 #, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
 msgstr "Weet u zeker dat u de geselecteerde transactie wilt verwijderen?"
@@ -8384,7 +8384,7 @@ msgid "Pre-select cleared transactions"
 msgstr "Vink goedgekeurde transacties af"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
-#: ../src/gnome-utils/glade/preferences.glade.h:96
+#: ../src/gnome-utils/glade/preferences.glade.h:97
 msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the "
 "user to enter a transaction for the interest charge or payment. Currently "
@@ -8753,7 +8753,7 @@ msgid "Source of default report currency"
 msgstr "Bron van standaard munteenheid rapportages"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
-#: ../src/gnome-utils/glade/preferences.glade.h:119
+#: ../src/gnome-utils/glade/preferences.glade.h:121
 msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
@@ -10037,7 +10037,7 @@ msgstr "Het bestand kan niet worden heropend."
 
 #. try to load once again
 #: ../src/gnome-utils/druid-gnc-xml-import.c:705
-#: ../src/gnome-utils/gnc-file.c:748 ../src/gnome-utils/gnc-file.c:760
+#: ../src/gnome-utils/gnc-file.c:755 ../src/gnome-utils/gnc-file.c:767
 msgid "Reading file..."
 msgstr "Bestand lezen..."
 
@@ -10050,7 +10050,7 @@ msgid "There was an error parsing the file."
 msgstr "Er is een fout opgetreden bij het verwerken van het bestand."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:755
-#: ../src/gnome-utils/gnc-file.c:975
+#: ../src/gnome-utils/gnc-file.c:982
 msgid "Writing file..."
 msgstr "Bestand schrijven..."
 
@@ -10568,7 +10568,7 @@ msgid "Months:"
 msgstr "Maanden:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
-#: ../src/gnome-utils/glade/preferences.glade.h:104
+#: ../src/gnome-utils/glade/preferences.glade.h:105
 msgid "Sample:"
 msgstr "Voorbeeld:"
 
@@ -10968,13 +10968,19 @@ msgstr "Hoeveel automatische decimale posities worden gevuld."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
 msgid ""
+"If active, GnuCash shows a confirmation question each time the auto-save "
+"feature is started. Otherwise no extra explanation is shown."
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:79
+msgid ""
 "If checked, each register will be opened in its own top level window.  If "
 "clear, the register will be opened in the current window."
 msgstr ""
 "Wanneer aangevinkt, wordt ieder kasboek geopend in z'n eigen venster. Als "
 "niet aangevinkt, wordt ieder kasboek geopend in het huidige venster."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:79
+#: ../src/gnome-utils/glade/preferences.glade.h:80
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
@@ -10982,7 +10988,7 @@ msgstr ""
 "Wanneer aangevinkt, wordt ieder rapport geopend in z'n eigen venster. Als "
 "niet aangevinkt, wordt ieder rapport geopend in het huidige venster."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:80
+#: ../src/gnome-utils/glade/preferences.glade.h:81
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
@@ -10990,7 +10996,7 @@ msgstr ""
 "Wanneer aangevinkt, worden non-valuta goederen getoond in de "
 "samenvattingsbalk. Als niet aangevinkt, worden alleen de valuta getoond."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:81
+#: ../src/gnome-utils/glade/preferences.glade.h:82
 msgid ""
 "If checked, pressing the 'Enter' key will move to the blank transaction at "
 "the bottom of the register.  If clear, pressing the 'Enter' key will move "
@@ -11000,7 +11006,7 @@ msgstr ""
 "kasboek op 'Enter'. Wanneer niet geselecteerd, verplaatst 'Enter' een rij "
 "naar beneden."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:82
+#: ../src/gnome-utils/glade/preferences.glade.h:83
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
 "clear, the original GnuCash register colors will be used."
@@ -11010,38 +11016,38 @@ msgstr ""
 "kasboek kleuren gebruikt."
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:83
+#: ../src/gnome-utils/glade/preferences.glade.h:84
 msgid "Include _grand total"
 msgstr "Toon ook totaal _generaal"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:84
+#: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "Include _non-currency totals"
 msgstr "Toon ook totalen die niet in geld uitgedrukt zijn"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:85
+#: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "Loc_ale:"
 msgstr "Loc_ale"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:86
+#: ../src/gnome-utils/glade/preferences.glade.h:87
 msgid "New search _limit:"
 msgstr "Nieuwe zoeklimiet:"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:88
+#: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "Number of _transactions:"
 msgstr "Aantal transacties"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:89
+#: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid "Perform account list _setup on new file"
 msgstr "Start een dagboek lijst setup bij openen van nieuw bestand"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:90
+#: ../src/gnome-utils/glade/preferences.glade.h:91
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr "Controleer goedgekeurde transacties tijdens het verwerken."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:91
+#: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid ""
 "Present the new account list dialog when you choose \"New File\" from the "
 "\"File\" menu"
@@ -11049,52 +11055,52 @@ msgstr ""
 "Open het nieuwe dagboek lijst venster wanneer u \"Nieuw bestand\" maken "
 "kiest uit het \"Bestand\" menu"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:92
+#: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Print '***' before and after each text field on the check."
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:93
+#: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Print _blocking chars"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:94
+#: ../src/gnome-utils/glade/preferences.glade.h:95
 #, fuzzy
 msgid "Print _date format"
 msgstr "Aangepast datum formaat"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:95
+#: ../src/gnome-utils/glade/preferences.glade.h:96
 #, fuzzy
 msgid "Printing"
 msgstr "Afdrukken"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:97
+#: ../src/gnome-utils/glade/preferences.glade.h:98
 #, fuzzy
 msgid "Priority text besi_de icons"
 msgstr "Text naast iconen"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:98
+#: ../src/gnome-utils/glade/preferences.glade.h:99
 msgid "Re_lative:"
 msgstr "Re_latief"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:100
+#: ../src/gnome-utils/glade/preferences.glade.h:101
 msgid "Register Defaults"
 msgstr "standaard instellingen Kasboek"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:101
+#: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Register opens in a new _window"
 msgstr "Kasboek start in een nieuw venster"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:102
+#: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "Report opens in a new _window"
 msgstr "Rapporten openen in een nieuw venster"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:103
+#: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid "Reports"
 msgstr "Rapporten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:105
+#: ../src/gnome-utils/glade/preferences.glade.h:106
 msgid ""
 "Show a close button on each notebook tab.  These function identically to the "
 "'Close' menu item."
@@ -11102,35 +11108,39 @@ msgstr ""
 "Toon een sluitknop op ieder boektab. Deze functie is identiek aan het "
 "'sluit' menu item."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:106
+#: ../src/gnome-utils/glade/preferences.glade.h:107
 msgid ""
 "Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 "Toon een totaal van alle rapporten, geconverteerd naar de standaard "
 "munteenheid van het rapport"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:107
+#: ../src/gnome-utils/glade/preferences.glade.h:108
 msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Toon transacties op een regel (twee in dubbel regel modus)."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:108
+#: ../src/gnome-utils/glade/preferences.glade.h:109
+msgid "Show auto-save confirmation _question"
+msgstr ""
+
+#: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Show close button on _notebook tabs"
 msgstr "Toon sluit knop op boek tabs"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:109
+#: ../src/gnome-utils/glade/preferences.glade.h:111
 msgid "Show horizontal borders on the cells."
 msgstr "Toon horizontale randen in cellen."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:110
+#: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid "Show splash scree_n"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:111
+#: ../src/gnome-utils/glade/preferences.glade.h:113
 #, fuzzy
 msgid "Show splash screen at startup."
 msgstr "Toon tips bij opstarten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:112
+#: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
@@ -11138,7 +11148,7 @@ msgstr ""
 "Toon zoveel transacties in een kasboek. Een waarde van nul betekent toon "
 "alle transacties."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:113
+#: ../src/gnome-utils/glade/preferences.glade.h:115
 msgid ""
 "Show two lines of information for each transaction instead of one.  Does not "
 "affect expanded transactions."
@@ -11146,15 +11156,15 @@ msgstr ""
 "Toon twee regels met informatie voor iedere transactie in plaats van een. "
 "Doet niets met uitgesplitst weergegeven transacties."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:114
+#: ../src/gnome-utils/glade/preferences.glade.h:116
 msgid "Show vertical borders on the cells."
 msgstr "Toon standaard verticale randen in cellen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:115
+#: ../src/gnome-utils/glade/preferences.glade.h:117
 msgid "Sign reverse balances on income and expense accounts."
 msgstr "Draai Inkomsten en Uitgaven dagboeken om"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:116
+#: ../src/gnome-utils/glade/preferences.glade.h:118
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
@@ -11162,11 +11172,11 @@ msgstr ""
 "Draai creditcard, te betalen, passiva, actief vermogen en inkomsten "
 "dagboeken om"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:117
+#: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Text _below icons"
 msgstr "_Tekst onder iconen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:118
+#: ../src/gnome-utils/glade/preferences.glade.h:120
 #, fuzzy
 msgid ""
 "The character that will be used between components of an account name.  A "
@@ -11179,94 +11189,94 @@ msgstr ""
 "de volgende: \"dubbele punt\" \"slash\", \"backslash\", \"streepje\" en "
 "\"punt\"."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:120
+#: ../src/gnome-utils/glade/preferences.glade.h:122
 #, fuzzy
 msgid "To_p"
 msgstr "Tot"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:121
+#: ../src/gnome-utils/glade/preferences.glade.h:123
 msgid "Transaction _journal"
 msgstr "Transactie _journaal"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:122
+#: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "US Dollars (USD)"
 msgstr "US Dollars (USD)"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:123
+#: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "U_K:"
 msgstr "U_K:"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:124
+#: ../src/gnome-utils/glade/preferences.glade.h:126
 msgid "U_se 24-hour clock"
 msgstr "Gebruik 24-uurs klok"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:125
+#: ../src/gnome-utils/glade/preferences.glade.h:127
 msgid "Use _formal accounting labels"
 msgstr "Gebruik _formele boekhoud labels"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:126
+#: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "Gebruik een 24-uur (in plats van een 12-uurs) klok"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:127
+#: ../src/gnome-utils/glade/preferences.glade.h:129
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Gebruik alleen 'debet' en 'credit' in plaats van informele synoniemen"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:128
+#: ../src/gnome-utils/glade/preferences.glade.h:130
 #, fuzzy
 msgid "Use s_ystem default"
 msgstr "Gebruik s_ysteemstandaard"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:129
+#: ../src/gnome-utils/glade/preferences.glade.h:131
 #, fuzzy
 msgid "Use the date format common in continental Europe."
 msgstr "Gebruik het datum formaat gebruikelijk in Europa"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:130
+#: ../src/gnome-utils/glade/preferences.glade.h:132
 #, fuzzy
 msgid "Use the date format common in the United Kingdom."
 msgstr "Gebruik het datum formaat gebruikelijk in het Verenigd Koninkrijk"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:131
+#: ../src/gnome-utils/glade/preferences.glade.h:133
 #, fuzzy
 msgid "Use the date format common in the United States."
 msgstr "Gebruik het datum formaat gebruikelijk in de Verenigde Staten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:132
+#: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "Use the date format specified by the ISO-8601 standard."
 msgstr "Gebruik het datum formaat volgens de ISO-8601 standaard"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:133
+#: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Use the date format specified by the system locale."
 msgstr "Gebruik het datum formaat volgens systeem locale"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:134
+#: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid ""
 "Use the specified absolute ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
 msgstr ""
 "Gebruik deze Einddatum voor winst/verlies en voor netto activa calculatie"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:135
+#: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 "Gebruik de aangegeven absolute begindatum voor winst/verlies berekeningen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:136
+#: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use the specified currency for all newly created accounts."
 msgstr "Gebruik de aangegeven valuta voor alle nieuwe dagboeken"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:137
+#: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "Use the specified currency for all newly created reports."
 msgstr "Gebruik de aangegeven valuta voor alle nieuwe rapporten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:138
+#: ../src/gnome-utils/glade/preferences.glade.h:140
 msgid ""
 "Use the specified relative ending date for profit/loss calculations.  Also "
 "use this date for net assets calculations."
@@ -11274,126 +11284,126 @@ msgstr ""
 "Gebruik de aangegeven relatieve einddatum voor winst/verlies berekeningen. "
 "Gebruik deze datum ook voor netto activa calculatie"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:139
+#: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 "Gebruik de aangegeven relatieve begindatum voor winst/verlies berekenings"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:140
+#: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the system locale currency for all newly created accounts."
 msgstr "Kies de systeem locale valuta voor alle nieuw te maken dagboeken."
 
-#: ../src/gnome-utils/glade/preferences.glade.h:141
+#: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the system locale currency for all newly created reports."
 msgstr ""
 "Gebruik de systeem locale valuta voor alle nieuw aan te kanen rapporten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:142
+#: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid "Use the system setting for displaying toolbar items."
 msgstr "Gebruik de systeeminstellingen om tool menu gegevens te tonen"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:143
+#: ../src/gnome-utils/glade/preferences.glade.h:145
 msgid "Windows"
 msgstr "Vensters"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:144
+#: ../src/gnome-utils/glade/preferences.glade.h:146
 msgid "_Absolute:"
 msgstr "Absoluut:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:145
+#: ../src/gnome-utils/glade/preferences.glade.h:147
 msgid "_Auto-raise lists"
 msgstr "Automatisch inschijvende lijsten"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:146
+#: ../src/gnome-utils/glade/preferences.glade.h:148
 msgid "_Auto-split ledger"
 msgstr "Splits grootboek _Automatisch op"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:147
+#: ../src/gnome-utils/glade/preferences.glade.h:149
 msgid "_Automatic decimal point"
 msgstr "Automatische _decimale komma"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:148
+#: ../src/gnome-utils/glade/preferences.glade.h:150
 msgid "_Basic ledger"
 msgstr "_Eenvoudig grootboek"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:149
+#: ../src/gnome-utils/glade/preferences.glade.h:151
 msgid "_Decimal places:"
 msgstr "Decimale posities:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:150
+#: ../src/gnome-utils/glade/preferences.glade.h:152
 msgid "_Double line mode"
 msgstr "_Dubbele-regel modus"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:151
+#: ../src/gnome-utils/glade/preferences.glade.h:153
 msgid "_Europe:"
 msgstr "_Europa:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:152
+#: ../src/gnome-utils/glade/preferences.glade.h:154
 msgid "_ISO:"
 msgstr "_ISO:"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:153
+#: ../src/gnome-utils/glade/preferences.glade.h:155
 msgid "_Icons only"
 msgstr "Alleen _iconen"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:154
+#: ../src/gnome-utils/glade/preferences.glade.h:156
 msgid "_Income & expense"
 msgstr "W_inst & Verlies"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:155
+#: ../src/gnome-utils/glade/preferences.glade.h:157
 #, fuzzy
 msgid "_Left"
 msgstr "_Recentst"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:156
+#: ../src/gnome-utils/glade/preferences.glade.h:158
 msgid "_None"
 msgstr "Geen"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:157
+#: ../src/gnome-utils/glade/preferences.glade.h:159
 msgid "_Relative:"
 msgstr "_Relatief:"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:158
+#: ../src/gnome-utils/glade/preferences.glade.h:160
 msgid "_Retain log files:"
 msgstr "Aantal dagen dat log bestanden bewaa_rd worden"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:159
+#: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Right"
 msgstr ""
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:160
+#: ../src/gnome-utils/glade/preferences.glade.h:162
 msgid "_Save window size and position"
 msgstr "Bewaar ven_stergrootte en positie"
 
 #
-#: ../src/gnome-utils/glade/preferences.glade.h:161
+#: ../src/gnome-utils/glade/preferences.glade.h:163
 msgid "_Text only"
 msgstr "Alleen _tekst"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:162
+#: ../src/gnome-utils/glade/preferences.glade.h:164
 msgid "_US:"
 msgstr "_US:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:163
+#: ../src/gnome-utils/glade/preferences.glade.h:165
 msgid "_Use system theme colors"
 msgstr "Gebr_uik kleuren systeem-thema"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:164
+#: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Width:"
 msgstr ""
 
-#: ../src/gnome-utils/glade/preferences.glade.h:165
+#: ../src/gnome-utils/glade/preferences.glade.h:167
 #, fuzzy
 msgid "characters"
 msgstr "Karakter:"
 
-#: ../src/gnome-utils/glade/preferences.glade.h:167
+#: ../src/gnome-utils/glade/preferences.glade.h:169
 msgid "minutes"
 msgstr ""
 
@@ -11473,6 +11483,42 @@ msgstr "Fondsen overboeken"
 #: ../src/gnome-utils/gnc-account-sel.c:382
 msgid "New..."
 msgstr "Nieuw..."
+
+#: ../src/gnome-utils/gnc-autosave.c:99
+#, fuzzy
+msgid "Save file automatically?"
+msgstr "(automatisch ingevuld)"
+
+#: ../src/gnome-utils/gnc-autosave.c:102
+#, c-format
+msgid ""
+"Your data file needs to be saved to your hard disk to save your changes.  "
+"GnuCash has a feature to save the file automatically every %d minutes, just "
+"as if you had pressed the \"Save\" button each time. \n"
+"\n"
+"You can change the time interval or turn off this feature under Edit -> "
+"Preferences -> General -> Auto-save time interval. \n"
+"\n"
+"Should your file be saved automatically?"
+msgstr ""
+
+#: ../src/gnome-utils/gnc-autosave.c:107
+#, fuzzy
+msgid "_Yes, this time"
+msgstr "Meest recent in tijd"
+
+#: ../src/gnome-utils/gnc-autosave.c:108
+msgid "Yes, _always"
+msgstr ""
+
+#: ../src/gnome-utils/gnc-autosave.c:109
+#, fuzzy
+msgid "No, n_ever"
+msgstr "Oneindig"
+
+#: ../src/gnome-utils/gnc-autosave.c:110
+msgid "_No, not this time"
+msgstr ""
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -11576,69 +11622,69 @@ msgstr "Verwerken bestand %s is mislukt"
 msgid "Failed to open file: %s: %s"
 msgstr "Kan het bestand: %s: %s niet openenen"
 
-#: ../src/gnome-utils/gnc-file.c:99 ../src/gnome-utils/gnc-main-window.c:234
+#: ../src/gnome-utils/gnc-file.c:100 ../src/gnome-utils/gnc-main-window.c:235
 msgid "_Import"
 msgstr "_Importeer"
 
 #
-#: ../src/gnome-utils/gnc-file.c:101 ../src/gnome-utils/gnc-file.c:254
+#: ../src/gnome-utils/gnc-file.c:102 ../src/gnome-utils/gnc-file.c:255
 msgid "Import"
 msgstr "Importeren"
 
-#: ../src/gnome-utils/gnc-file.c:107 ../src/gnome-utils/gnc-file.c:1023
+#: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1030
 msgid "Save"
 msgstr "Opslaan"
 
-#: ../src/gnome-utils/gnc-file.c:111 ../src/gnome-utils/gnc-main-window.c:235
+#: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-main-window.c:236
 msgid "_Export"
 msgstr "_Exporteer"
 
-#: ../src/gnome-utils/gnc-file.c:114 ../src/gnome-utils/gnc-file.c:270
-#: ../src/gnome-utils/gnc-file.c:881
+#: ../src/gnome-utils/gnc-file.c:115 ../src/gnome-utils/gnc-file.c:271
+#: ../src/gnome-utils/gnc-file.c:888
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:999
 msgid "Export"
 msgstr "Exporteren"
 
-#: ../src/gnome-utils/gnc-file.c:152
+#: ../src/gnome-utils/gnc-file.c:153
 msgid "All files"
 msgstr "Alle bestanden"
 
 #. Just in case
-#: ../src/gnome-utils/gnc-file.c:194
+#: ../src/gnome-utils/gnc-file.c:195
 #: ../src/import-export/hbci/druid-hbci-utils.c:153
 #: ../src/import-export/hbci/druid-hbci-utils.c:167
 msgid "(null)"
 msgstr "(null)"
 
-#: ../src/gnome-utils/gnc-file.c:203
+#: ../src/gnome-utils/gnc-file.c:204
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "Geen passende backend gevonden voor %s."
 
-#: ../src/gnome-utils/gnc-file.c:208
+#: ../src/gnome-utils/gnc-file.c:209
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr "De URL %s wordt niet ondersteund door deze versie van GnuCash."
 
-#: ../src/gnome-utils/gnc-file.c:213
+#: ../src/gnome-utils/gnc-file.c:214
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "Kan de URL niet verwerken: %s"
 
-#: ../src/gnome-utils/gnc-file.c:218
+#: ../src/gnome-utils/gnc-file.c:219
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
 "Kan niet verbinden met %s de hostnaam, gebruikersnaam of wachtwoord is "
 "incorrect."
 
-#: ../src/gnome-utils/gnc-file.c:224
+#: ../src/gnome-utils/gnc-file.c:225
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
 "Kan niet verbinden met %s. Verbinding verbroken, kan geen gegevens verzenden."
 
-#: ../src/gnome-utils/gnc-file.c:230
+#: ../src/gnome-utils/gnc-file.c:231
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
@@ -11647,12 +11693,12 @@ msgstr ""
 "komen. Om met deze gegevens te kunnen werken dient u een upgrade van GnuCash "
 "uit te voeren."
 
-#: ../src/gnome-utils/gnc-file.c:237
+#: ../src/gnome-utils/gnc-file.c:238
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr "De database %s lijkt niet te bestaan. Wilt u er een aanmaken?"
 
-#: ../src/gnome-utils/gnc-file.c:247
+#: ../src/gnome-utils/gnc-file.c:248
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11666,7 +11712,7 @@ msgstr ""
 "Wilt u doorgaan met het openen van de database?"
 
 # c-format
-#: ../src/gnome-utils/gnc-file.c:255
+#: ../src/gnome-utils/gnc-file.c:256
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11679,7 +11725,7 @@ msgstr ""
 "\n"
 "Wilt u doorgaan met het importeren van de database?"
 
-#: ../src/gnome-utils/gnc-file.c:263
+#: ../src/gnome-utils/gnc-file.c:264
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11693,7 +11739,7 @@ msgstr ""
 "\n"
 "Wilt u doorgaan met het opslaan van de database?"
 
-#: ../src/gnome-utils/gnc-file.c:271
+#: ../src/gnome-utils/gnc-file.c:272
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11704,7 +11750,7 @@ msgstr ""
 "een andere gebruiker gebruikt. In dat geval kunt u de database beter niet "
 "exporteren. Wilt u doorgaan met het exporteren van de database?"
 
-#: ../src/gnome-utils/gnc-file.c:294
+#: ../src/gnome-utils/gnc-file.c:295
 #, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -11713,14 +11759,14 @@ msgstr ""
 "GnuCash kon niet schrijven naar %s. Die database staat misschien op een "
 "alleen-lezen bestandssysteem, of u heeft geen schrijfrechten in de map."
 
-#: ../src/gnome-utils/gnc-file.c:301
+#: ../src/gnome-utils/gnc-file.c:302
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
 "Het bestand/URL %s bevat geen GnuCash gegevens of de gegevens zijn "
 "onleesbaar."
 
-#: ../src/gnome-utils/gnc-file.c:307
+#: ../src/gnome-utils/gnc-file.c:308
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
@@ -11728,19 +11774,19 @@ msgstr ""
 "De server op URL %s kreeg een foutmelding, slechte of onleesbare gegevens "
 "tegengekomen."
 
-#: ../src/gnome-utils/gnc-file.c:313
+#: ../src/gnome-utils/gnc-file.c:314
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "U heeft geen toegang tot de gegevens in %s."
 
-#: ../src/gnome-utils/gnc-file.c:318
+#: ../src/gnome-utils/gnc-file.c:319
 #: ../src/register/register-core/formulacell.c:117
 #: ../src/register/register-core/pricecell.c:180
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "Er is een fout opgetreden tijdens het verwerken van %s."
 
-#: ../src/gnome-utils/gnc-file.c:324
+#: ../src/gnome-utils/gnc-file.c:325
 #, c-format
 msgid ""
 "Invalid QSF Object file! The QSF object file %s failed to validate against "
@@ -11751,7 +11797,7 @@ msgstr ""
 "worden tegen het QSF object schema. De XML structuur van het bestand is of "
 "niet goed ingesteld of bevat ongeldige gegevens."
 
-#: ../src/gnome-utils/gnc-file.c:331
+#: ../src/gnome-utils/gnc-file.c:332
 #, c-format
 msgid ""
 "Invalid QSF Map file! The QSF map file %s failed to validate against the QSF "
@@ -11762,7 +11808,7 @@ msgstr ""
 "tegen het QSF map schema. De XML structuur van het bestand is of niet goed "
 "ingesteld of bevat ongeldige gegevens."
 
-#: ../src/gnome-utils/gnc-file.c:338
+#: ../src/gnome-utils/gnc-file.c:339
 #, c-format
 msgid ""
 "The QSF Map file %s was written for a different version of QOF.  It may need "
@@ -11771,7 +11817,7 @@ msgstr ""
 "Het QSF map bestand %s is geschreven voor een andere versie van QOF. Het "
 "moet worden aangepast om te werken met uw huidige QOF installatie."
 
-#: ../src/gnome-utils/gnc-file.c:345
+#: ../src/gnome-utils/gnc-file.c:346
 #, c-format
 msgid ""
 "The selected QSF map %s contains unusable data. This is usually because not "
@@ -11779,7 +11825,7 @@ msgid ""
 "described in the map."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-file.c:352
+#: ../src/gnome-utils/gnc-file.c:353
 #, c-format
 msgid ""
 "The selected QSF object file %s contains one or more invalid GUIDs. The file "
@@ -11789,14 +11835,14 @@ msgstr ""
 "Het bestand kan niet worden evrwerkt - controleer de bron van het bestand en "
 "probeer het opnieuw."
 
-#: ../src/gnome-utils/gnc-file.c:359
+#: ../src/gnome-utils/gnc-file.c:360
 #, c-format
 msgid "The selected QSF Object file %s requires a map but it was not provided."
 msgstr ""
 "Het geselecteerde QSF object bestand %s vereist een map, maar deze is niet "
 "gegeven."
 
-#: ../src/gnome-utils/gnc-file.c:365
+#: ../src/gnome-utils/gnc-file.c:366
 #, c-format
 msgid ""
 "Wrong QSF map selected. The selected map %s validates but was written for "
@@ -11808,14 +11854,14 @@ msgstr ""
 "gedefinieerd in deze map bevat niet alle objecten beschreven in het huidige "
 "QSF object bestand."
 
-#: ../src/gnome-utils/gnc-file.c:373
+#: ../src/gnome-utils/gnc-file.c:374
 #, c-format
 msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
 msgstr ""
 "Het geselecteerde bestand %s is een QSF map en kan niet worden geopend als "
 "QSF object"
 
-#: ../src/gnome-utils/gnc-file.c:379
+#: ../src/gnome-utils/gnc-file.c:380
 #, c-format
 msgid ""
 "When converting XML strings into numbers, an overflow has been detected. The "
@@ -11826,7 +11872,7 @@ msgstr ""
 "geconstateerd. Het QSF object bestand %s bevat ongeldige gegevens in een "
 "veld dat is bedoeld voor een nummerieke waarde."
 
-#: ../src/gnome-utils/gnc-file.c:386
+#: ../src/gnome-utils/gnc-file.c:387
 #, c-format
 msgid ""
 "The QSF object file %s is valid and contains GnuCash objects. However, "
@@ -11841,42 +11887,42 @@ msgstr ""
 "nieuwe aan, importeer vervolgens dit QSF object bestand zodat de gegevens "
 "kunnen worden samengevoegd in het hoofd gegevensboek."
 
-#: ../src/gnome-utils/gnc-file.c:396
+#: ../src/gnome-utils/gnc-file.c:397
 #, fuzzy
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "Fout bij het lezen van het bestand. Wilt u doorgaan?"
 
-#: ../src/gnome-utils/gnc-file.c:402
+#: ../src/gnome-utils/gnc-file.c:403
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "Fout bij het verwerken van het bestand %s"
 
-#: ../src/gnome-utils/gnc-file.c:407
+#: ../src/gnome-utils/gnc-file.c:408
 #, c-format
 msgid "The file %s is empty."
 msgstr "Het bestand %s is leeg."
 
-#: ../src/gnome-utils/gnc-file.c:415
+#: ../src/gnome-utils/gnc-file.c:416
 #, c-format
 msgid "The file %s could not be found."
 msgstr "Het bestand %s kan niet gevonden worden."
 
-#: ../src/gnome-utils/gnc-file.c:421
+#: ../src/gnome-utils/gnc-file.c:422
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
 "Dit bestand is afkomstig van een oudere versie van GnuCash. Wilt u doorgaan?"
 
-#: ../src/gnome-utils/gnc-file.c:427
+#: ../src/gnome-utils/gnc-file.c:428
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "Het bestand %s is leeg."
 
-#: ../src/gnome-utils/gnc-file.c:432
+#: ../src/gnome-utils/gnc-file.c:433
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "Kan geen backup maken van het bestand %s"
 
-#: ../src/gnome-utils/gnc-file.c:437
+#: ../src/gnome-utils/gnc-file.c:438
 #, fuzzy, c-format
 msgid ""
 "Could not write to file %s.  Check that you have permission to write to this "
@@ -11885,12 +11931,12 @@ msgstr ""
 "Kon niet schrijven naar bestand %s. Controleer of u schrijfrechten heeft "
 "voor dit bestand en dat er voldoende schijfruimte is."
 
-#: ../src/gnome-utils/gnc-file.c:444
+#: ../src/gnome-utils/gnc-file.c:445
 #, fuzzy, c-format
 msgid "No read permission to read from file %s."
 msgstr "U heeft geen toegang tot de gegevens in %s."
 
-#: ../src/gnome-utils/gnc-file.c:449
+#: ../src/gnome-utils/gnc-file.c:450
 msgid ""
 "This database is from an older version of GnuCash. Do you want to want to "
 "upgrade the database to the current version?"
@@ -11898,7 +11944,7 @@ msgstr ""
 "Deze database is afkomstig van een oudere versie van GnuCash.Wilt u de "
 "database aanpassen aan de huidige versie?"
 
-#: ../src/gnome-utils/gnc-file.c:456
+#: ../src/gnome-utils/gnc-file.c:457
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -11909,33 +11955,33 @@ msgstr ""
 "andere gebruikers zijn, raadpleeg dan de documentatie om uit te zoeken hoe u "
 "problemen verhelpt met onafgesloten sessies."
 
-#: ../src/gnome-utils/gnc-file.c:466
+#: ../src/gnome-utils/gnc-file.c:467
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "Er is een onbekende I/O fout (%d) opgetreden."
 
 #
-#: ../src/gnome-utils/gnc-file.c:555
+#: ../src/gnome-utils/gnc-file.c:562
 msgid "Save changes to the file?"
 msgstr "Wijzigingen opslaan naar het bestand?"
 
-#: ../src/gnome-utils/gnc-file.c:558 ../src/gnome-utils/gnc-main-window.c:998
+#: ../src/gnome-utils/gnc-file.c:565 ../src/gnome-utils/gnc-main-window.c:999
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
 "Als u niet opslaat zullen wijzigingen van de afgelopen %d minuten kwijt zijn."
 
-#: ../src/gnome-utils/gnc-file.c:572
+#: ../src/gnome-utils/gnc-file.c:579
 msgid "Continue _Without Saving"
 msgstr "Doorgaan zonder opslaan"
 
-#: ../src/gnome-utils/gnc-file.c:652
+#: ../src/gnome-utils/gnc-file.c:659
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash kon %s niet reserveren"
 
 #
-#: ../src/gnome-utils/gnc-file.c:654
+#: ../src/gnome-utils/gnc-file.c:661
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -11944,7 +11990,7 @@ msgstr ""
 "geval kunt u de database beter niet openen.\n"
 "Wat wilt u doen?"
 
-#: ../src/gnome-utils/gnc-file.c:657
+#: ../src/gnome-utils/gnc-file.c:664
 msgid ""
 "That database may be on a read-only file system, or you may not have write "
 "permission for the directory. If you proceed you may not be able to save any "
@@ -11955,27 +12001,27 @@ msgstr ""
 "veranderingen niet opslaan. Wat wilt u doen?"
 
 #
-#: ../src/gnome-utils/gnc-file.c:674
+#: ../src/gnome-utils/gnc-file.c:681
 msgid "_Open Anyway"
 msgstr "Toch _openen"
 
 #
-#: ../src/gnome-utils/gnc-file.c:676
+#: ../src/gnome-utils/gnc-file.c:683
 msgid "_Create New File"
 msgstr "Nieuw bestand maken"
 
-#: ../src/gnome-utils/gnc-file.c:916 ../src/gnome-utils/gnc-file.c:1120
+#: ../src/gnome-utils/gnc-file.c:923 ../src/gnome-utils/gnc-file.c:1127
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1355
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "Het bestand %s bestaat al. Weet u zeker dat u het wilt overschrijven?"
 
-#: ../src/gnome-utils/gnc-file.c:931
+#: ../src/gnome-utils/gnc-file.c:938
 msgid "Exporting file..."
 msgstr "Bestand exporteren..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:944
+#: ../src/gnome-utils/gnc-file.c:951
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -12050,245 +12096,245 @@ msgstr "_Open dagboek"
 
 #
 #. Toplevel
-#: ../src/gnome-utils/gnc-main-window.c:219
+#: ../src/gnome-utils/gnc-main-window.c:220
 msgid "_File"
 msgstr "_Bestand"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:223
+#: ../src/gnome-utils/gnc-main-window.c:224
 msgid "Tra_nsaction"
 msgstr "Tra_nsactie"
 
-#: ../src/gnome-utils/gnc-main-window.c:224
+#: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Reports"
 msgstr "_Rapporten"
 
-#: ../src/gnome-utils/gnc-main-window.c:225
+#: ../src/gnome-utils/gnc-main-window.c:226
 msgid "_Tools"
 msgstr "_Gereedschappen"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:226
+#: ../src/gnome-utils/gnc-main-window.c:227
 msgid "E_xtensions"
 msgstr "E_xtensies"
 
-#: ../src/gnome-utils/gnc-main-window.c:227
+#: ../src/gnome-utils/gnc-main-window.c:228
 msgid "_Windows"
 msgstr "Vensters"
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:228
+#: ../src/gnome-utils/gnc-main-window.c:229
 #: ../src/gnome/window-reconcile.c:1996 ../src/gnome/window-reconcile.c:2044
 msgid "_Help"
 msgstr "_Help"
 
-#: ../src/gnome-utils/gnc-main-window.c:233
+#: ../src/gnome-utils/gnc-main-window.c:234
 msgid "_Open"
 msgstr "_Openen"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:236
+#: ../src/gnome-utils/gnc-main-window.c:237
 msgid "_Print..."
 msgstr "Afdrukken (_p)"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:237
+#: ../src/gnome-utils/gnc-main-window.c:238
 msgid "Print the currently active page"
 msgstr "Huidige actieve pagina afdrukken"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:238
+#: ../src/gnome-utils/gnc-main-window.c:239
 msgid "Proper_ties"
 msgstr "Eigenschappen"
 
-#: ../src/gnome-utils/gnc-main-window.c:239
+#: ../src/gnome-utils/gnc-main-window.c:240
 msgid "Edit the properties of the current file"
 msgstr "Bewerk de eigenschappen van het huidige bestand"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:241
+#: ../src/gnome-utils/gnc-main-window.c:242
 msgid "_Close"
 msgstr "_Sluiten"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:242
+#: ../src/gnome-utils/gnc-main-window.c:243
 msgid "Close the currently active page"
 msgstr "Sluit de huidige pagina"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:244
+#: ../src/gnome-utils/gnc-main-window.c:245
 msgid "_Quit"
 msgstr "_Afsluiten"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:245
+#: ../src/gnome-utils/gnc-main-window.c:246
 msgid "Quit this application"
 msgstr "Deze toepassing afsluiten"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:259
+#: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Pr_eferences"
 msgstr "Voork_euren"
 
-#: ../src/gnome-utils/gnc-main-window.c:260
+#: ../src/gnome-utils/gnc-main-window.c:261
 msgid "Edit the global preferences of GnuCash"
 msgstr "Pas de globale GnuCash voorkeuren aan"
 
-#: ../src/gnome-utils/gnc-main-window.c:266
+#: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Select sorting criteria for this page view"
 msgstr "Kies sorteercriteria voor deze pagina"
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:268
+#: ../src/gnome-utils/gnc-main-window.c:269
 msgid "Select the account types that should be displayed."
 msgstr "Selecteer de dagboektypen die weergegeven moeten worden"
 
-#: ../src/gnome-utils/gnc-main-window.c:269
+#: ../src/gnome-utils/gnc-main-window.c:270
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:965
 msgid "_Refresh"
 msgstr "Ve_rnieuwen"
 
-#: ../src/gnome-utils/gnc-main-window.c:270
+#: ../src/gnome-utils/gnc-main-window.c:271
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:966
 msgid "Refresh this window"
 msgstr "Vernieuw dit venster"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-main-window.c:275
+#: ../src/gnome-utils/gnc-main-window.c:276
 #: ../src/gnome/window-reconcile.c:2025
 msgid "_Check & Repair"
 msgstr "_Controleer & repareer"
 
-#: ../src/gnome-utils/gnc-main-window.c:276
+#: ../src/gnome-utils/gnc-main-window.c:277
 msgid "Reset _Warnings..."
 msgstr "Reset Waarschuwingen"
 
-#: ../src/gnome-utils/gnc-main-window.c:277
+#: ../src/gnome-utils/gnc-main-window.c:278
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
 "Reset de staat van alle waarschuwingsberichten zodat ze opnieuw getoond "
 "worden."
 
-#: ../src/gnome-utils/gnc-main-window.c:279
+#: ../src/gnome-utils/gnc-main-window.c:280
 msgid "Re_name Page"
 msgstr "Hernoem de pagina"
 
-#: ../src/gnome-utils/gnc-main-window.c:280
+#: ../src/gnome-utils/gnc-main-window.c:281
 msgid "Rename this page."
 msgstr "Hernoem deze"
 
 #. Windows menu
-#: ../src/gnome-utils/gnc-main-window.c:285
+#: ../src/gnome-utils/gnc-main-window.c:286
 msgid "_New Window"
 msgstr "_Nieuw venster"
 
-#: ../src/gnome-utils/gnc-main-window.c:286
+#: ../src/gnome-utils/gnc-main-window.c:287
 msgid "Open a new top-level GnuCash window."
 msgstr "Open een nieuwe instantie van GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:288
+#: ../src/gnome-utils/gnc-main-window.c:289
 msgid "New Window with _Page"
 msgstr "Nieuw venster met pagina"
 
-#: ../src/gnome-utils/gnc-main-window.c:289
+#: ../src/gnome-utils/gnc-main-window.c:290
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Verplaats de huidige pagina naar een nieuwe instantie van GnuCash"
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:294
+#: ../src/gnome-utils/gnc-main-window.c:295
 msgid "Tutorial and Concepts _Guide"
 msgstr "Tutorial en concepten _gids"
 
-#: ../src/gnome-utils/gnc-main-window.c:295
+#: ../src/gnome-utils/gnc-main-window.c:296
 msgid "Open the GnuCash Tutorial"
 msgstr "Open de GnuCash tutorial"
 
-#: ../src/gnome-utils/gnc-main-window.c:297
+#: ../src/gnome-utils/gnc-main-window.c:298
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: ../src/gnome-utils/gnc-main-window.c:298
+#: ../src/gnome-utils/gnc-main-window.c:299
 msgid "Open the GnuCash Help"
 msgstr "Open de GnuCash help"
 
-#: ../src/gnome-utils/gnc-main-window.c:300
+#: ../src/gnome-utils/gnc-main-window.c:301
 msgid "_About"
 msgstr "_Over"
 
-#: ../src/gnome-utils/gnc-main-window.c:301
+#: ../src/gnome-utils/gnc-main-window.c:302
 msgid "About GnuCash"
 msgstr "Over GnuCash"
 
-#: ../src/gnome-utils/gnc-main-window.c:311
+#: ../src/gnome-utils/gnc-main-window.c:312
 msgid "_Toolbar"
 msgstr "_Werkbalk"
 
-#: ../src/gnome-utils/gnc-main-window.c:312
+#: ../src/gnome-utils/gnc-main-window.c:313
 msgid "Show/hide the toolbar on this window"
 msgstr "Toon/verberg de werkbalk in dit venster"
 
-#: ../src/gnome-utils/gnc-main-window.c:314
+#: ../src/gnome-utils/gnc-main-window.c:315
 msgid "Su_mmary Bar"
 msgstr "Samenvattingsbalk"
 
-#: ../src/gnome-utils/gnc-main-window.c:315
+#: ../src/gnome-utils/gnc-main-window.c:316
 msgid "Show/hide the summary bar on this window"
 msgstr "Toon/verberg de samenvattingsbalk in dit venster"
 
-#: ../src/gnome-utils/gnc-main-window.c:317
+#: ../src/gnome-utils/gnc-main-window.c:318
 msgid "Stat_us Bar"
 msgstr "Statusbalk"
 
-#: ../src/gnome-utils/gnc-main-window.c:318
+#: ../src/gnome-utils/gnc-main-window.c:319
 msgid "Show/hide the status bar on this window"
 msgstr "Toon/verberg de statusbalk in dit venster"
 
-#: ../src/gnome-utils/gnc-main-window.c:328
+#: ../src/gnome-utils/gnc-main-window.c:329
 msgid "Window _1"
 msgstr "Venster _1"
 
-#: ../src/gnome-utils/gnc-main-window.c:329
+#: ../src/gnome-utils/gnc-main-window.c:330
 msgid "Window _2"
 msgstr "Venster _2"
 
-#: ../src/gnome-utils/gnc-main-window.c:330
+#: ../src/gnome-utils/gnc-main-window.c:331
 msgid "Window _3"
 msgstr "Venster _3"
 
-#: ../src/gnome-utils/gnc-main-window.c:331
+#: ../src/gnome-utils/gnc-main-window.c:332
 msgid "Window _4"
 msgstr "Venster _4"
 
-#: ../src/gnome-utils/gnc-main-window.c:332
+#: ../src/gnome-utils/gnc-main-window.c:333
 msgid "Window _5"
 msgstr "Venster _5"
 
-#: ../src/gnome-utils/gnc-main-window.c:333
+#: ../src/gnome-utils/gnc-main-window.c:334
 msgid "Window _6"
 msgstr "Venster _6"
 
-#: ../src/gnome-utils/gnc-main-window.c:334
+#: ../src/gnome-utils/gnc-main-window.c:335
 msgid "Window _7"
 msgstr "Venster _7"
 
-#: ../src/gnome-utils/gnc-main-window.c:335
+#: ../src/gnome-utils/gnc-main-window.c:336
 msgid "Window _8"
 msgstr "Venster _8"
 
-#: ../src/gnome-utils/gnc-main-window.c:336
+#: ../src/gnome-utils/gnc-main-window.c:337
 msgid "Window _9"
 msgstr "Vensters _9"
 
-#: ../src/gnome-utils/gnc-main-window.c:337
+#: ../src/gnome-utils/gnc-main-window.c:338
 msgid "Window _0"
 msgstr "Vensters _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:995
+#: ../src/gnome-utils/gnc-main-window.c:996
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "Wijzigingen opslaan naar bestand %s voor afsluiten?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1000
+#: ../src/gnome-utils/gnc-main-window.c:1001
 #, fuzzy, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
@@ -12296,7 +12342,7 @@ msgid ""
 msgstr ""
 "Als u niet opslaat zullen wijzigingen van de afgelopen %d minuten kwijt zijn."
 
-#: ../src/gnome-utils/gnc-main-window.c:1002
+#: ../src/gnome-utils/gnc-main-window.c:1003
 #, fuzzy, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
@@ -12305,53 +12351,38 @@ msgstr ""
 "Als u niet opslaat zullen wijzigingen van de afgelopen %d minuten kwijt zijn."
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:1010
+#: ../src/gnome-utils/gnc-main-window.c:1011
 msgid "<unknown>"
 msgstr "<onbekend>"
 
-#: ../src/gnome-utils/gnc-main-window.c:1037
+#: ../src/gnome-utils/gnc-main-window.c:1041
 msgid "Close _Without Saving"
 msgstr "Afsluiten zonder op te slaan"
 
-#: ../src/gnome-utils/gnc-main-window.c:1225
+#: ../src/gnome-utils/gnc-main-window.c:1229
 msgid "<no file>"
 msgstr "<geen bestand>"
 
-#: ../src/gnome-utils/gnc-main-window.c:1334
-#, c-format
-msgid ""
-"Your data file needs to be saved to your harddisk to save your changes.  "
-"GnuCash has a feature to save the file automatically every %d minutes.  This "
-"feature is being activated the very first time right now. \n"
-"\n"
-"If you like to change the time interval, you can do so under Edit -> "
-"Preferences -> General -> Auto-save time interval.  If you like to switch "
-"off this feature, set the time interval to zero and no auto-save will occur "
-"anymore.\n"
-"\n"
-"Press \"Close\" now so that your file will be saved."
-msgstr ""
-
 #
-#: ../src/gnome-utils/gnc-main-window.c:3626
+#: ../src/gnome-utils/gnc-main-window.c:3473
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "De GnuCash persoonlijke financieel beheerder. De GNU manier om uw geld te "
 "beheren!"
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3639
+#: ../src/gnome-utils/gnc-main-window.c:3486
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s Deze kopie is gemaakt van svn r%s op %s."
 
-#: ../src/gnome-utils/gnc-main-window.c:3642
+#: ../src/gnome-utils/gnc-main-window.c:3489
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s Deze kopie is gemaakt van r%s op %s."
 
 #
-#: ../src/gnome-utils/gnc-main-window.c:3654
+#: ../src/gnome-utils/gnc-main-window.c:3501
 msgid "translator_credits"
 msgstr "Vertalers: "
 
@@ -12719,16 +12750,16 @@ msgstr "Prijs"
 
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:164
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:175
 msgid "Single-character short column-title form of 'Enabled'|E"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:175
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:186
 #, fuzzy
 msgid "Last Occur"
 msgstr "Laatste keer voorgekomen:"
 
-#: ../src/gnome-utils/gnc-tree-view-sx-list.c:180
+#: ../src/gnome-utils/gnc-tree-view-sx-list.c:191
 #, fuzzy
 msgid "Next Occur"
 msgstr "Volgende verschijning"
@@ -13098,7 +13129,7 @@ msgid "Match _display threshold"
 msgstr "Overeenkomend _toon grenswaarde"
 
 #: ../src/import-export/generic-import.glade.h:35
-#: ../src/import-export/hbci/druid-hbci-initial.c:724
+#: ../src/import-export/hbci/druid-hbci-initial.c:767
 #: ../src/import-export/qif-import/dialog-account-picker.c:296
 #: ../src/import-export/qif-import/druid-qif-import.c:1055
 msgid "New?"
@@ -13348,26 +13379,41 @@ msgstr "%s op %s (code %s)"
 msgid "%s at bank code %s"
 msgstr "%s op %s (code %s)"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:502
+#: ../src/import-export/hbci/druid-hbci-initial.c:503
 msgid "Choose AqBanking Backend"
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:503
+#: ../src/import-export/hbci/druid-hbci-initial.c:504
 msgid "Please choose an AqBanking backend to be configured"
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:504
+#: ../src/import-export/hbci/druid-hbci-initial.c:505
 msgid "Co_nfigure"
 msgstr "Instelle_n"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:633
+#: ../src/import-export/hbci/druid-hbci-initial.c:658
+msgid ""
+"The external program \"AqBanking Setup Wizard\" failed to run successfully "
+"because the additional software \"Qt\" was not found.  Please install the "
+"\"Qt/Windows Open Source Edition\" from Trolltech by downloading it from www."
+"trolltech.com\n"
+"\n"
+"If you have installed Qt already, you will have to adapt the PATH variable "
+"of your system appropriately.  Contact the GnuCash developers if you need "
+"further assistance on how to install Qt correctly.\n"
+"\n"
+"Online Banking cannot be setup without Qt.  Press \"Close\" now, then "
+"\"Cancel\" to cancel the Online Banking setup."
+msgstr ""
+
+#: ../src/import-export/hbci/druid-hbci-initial.c:675
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
 "Online Banking can only be setup if this wizard has run successfully.  "
 "Please try running the \"AqBanking Setup Wizard\" again."
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:643
+#: ../src/import-export/hbci/druid-hbci-initial.c:686
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
@@ -13376,12 +13422,12 @@ msgid ""
 "distributions this may require installing additional packages."
 msgstr ""
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:709
+#: ../src/import-export/hbci/druid-hbci-initial.c:752
 #, fuzzy
 msgid "Online Banking Account Name"
 msgstr "Naam andere dagboek"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:716
+#: ../src/import-export/hbci/druid-hbci-initial.c:759
 #, fuzzy
 msgid "GnuCash Account Name"
 msgstr "GnuCash dagboek naam"
