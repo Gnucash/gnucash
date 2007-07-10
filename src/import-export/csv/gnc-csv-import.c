@@ -356,7 +356,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
 static GncCsvPreview* gnc_csv_preview_new()
 {
   int i;
-  GncCsvPreview* preview = g_malloc(sizeof(GncCsvPreview));
+  GncCsvPreview* preview = g_new(GncCsvPreview, 1);
   GtkWidget *ok_button, *cancel_button;
   GtkContainer* date_format_container;
   /* The names in the glade file for the sep buttons. */
@@ -477,7 +477,7 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   int i, j, ncols = preview->parse_data->column_types->len;
 
   /* store contains only strings. */
-  GType* types = g_malloc(2 * ncols * sizeof(GType));
+  GType* types = g_new(GType, 2 * ncols);
   for(i = 0; i < ncols; i++)
     types[i] = G_TYPE_STRING;
   store = gtk_list_store_newv(ncols, types);
@@ -494,7 +494,7 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   g_free(types);
 
   /* Each element in cstores is a single column model. */
-  cstores = g_malloc(ncols * sizeof(GtkListStore*));
+  cstores = g_new(GtkListStore*, ncols);
   for(i = 0; i < ncols; i++)
   {
     cstores[i] = gtk_list_store_new(1, G_TYPE_STRING);

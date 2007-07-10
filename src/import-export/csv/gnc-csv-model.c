@@ -75,7 +75,7 @@ static time_t parse_date(const char* date_str, int format)
  */
 GncCsvParseData* gnc_csv_new_parse_data(void)
 {
-  GncCsvParseData* parse_data = g_malloc(sizeof(GncCsvParseData));
+  GncCsvParseData* parse_data = g_new(GncCsvParseData, 1);
   parse_data->encoding = "UTF-8";
   /* All of the data pointers are initially NULL. This is so that, if
    * gnc_csv_parse_data_free is called before all of the data is
@@ -332,7 +332,7 @@ typedef struct
  */
 static TransProperty* trans_property_new(int type, TransPropertyList* set)
 {
-  TransProperty* prop = g_malloc(sizeof(TransProperty));
+  TransProperty* prop = g_new(TransProperty, 1);
   prop->type = type;
   prop->set = set;
   
@@ -379,7 +379,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
   switch(prop->type)
   {
   case GNC_CSV_DATE:
-    prop->value = g_malloc(sizeof(time_t));
+    prop->value = g_new(time_t, 1);
     *((time_t*)(prop->value)) = parse_date(str, prop->set->date_format);
     return *((time_t*)(prop->value)) != -1;
 
@@ -389,7 +389,7 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
 
   case GNC_CSV_AMOUNT:
     value = strtod(str, &endptr);
-    prop->value = g_malloc(sizeof(gnc_numeric));
+    prop->value = g_new(gnc_numeric, 1);
 
     /* If this isn't a valid numeric string, this is an error. */
     if(endptr != str + strlen(str))
@@ -582,7 +582,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     }
     else
     {
-      GncCsvTransLine* trans_line = g_malloc(sizeof(GncCsvTransLine));
+      GncCsvTransLine* trans_line = g_new(GncCsvTransLine, 1);
 
       trans_line->trans = trans;
       trans_line->line_no = i;
