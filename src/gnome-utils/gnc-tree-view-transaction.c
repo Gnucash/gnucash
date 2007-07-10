@@ -976,13 +976,13 @@ static void
 editing_started_cb(GtkCellRenderer *cell, GtkCellEditable *editable, 
 		const gchar *path, gpointer data)
 {
+	gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
+				"model_column"));
+	GtkEntryCompletion *completion = gtk_entry_completion_new();
 	if (GTK_IS_ENTRY(editable))
 	{
-		gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
-					"model_column"));
 		GtkEntry *entry = GTK_ENTRY(editable);
-		GtkEntryCompletion *completion = gtk_entry_completion_new();
-		gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(data));
+		gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(get_trans_model_from_view(data)));
 		gtk_entry_completion_set_text_column(completion, column);
 		gtk_entry_set_completion(entry, completion);
 	}//if
@@ -1545,11 +1545,11 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
         cr = gnc_tree_view_column_get_renderer(col);
 
         if (def.editing_started_cb) {
-		//Store the position of the column in the model
 		g_object_set_data(G_OBJECT(cr), "model_column", 
 				GINT_TO_POINTER(def.modelcol));
+		//Store the position of the column in the model
            	g_signal_connect(G_OBJECT(cr), "editing-started",
-                	(GCallback) def.editing_started_cb, get_trans_model_from_view(tv));
+                	(GCallback) def.editing_started_cb, tv);
         }
 
         // This can die when prefs are used.
