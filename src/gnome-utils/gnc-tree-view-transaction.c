@@ -983,7 +983,9 @@ editing_started_cb(GtkCellRenderer *cell, GtkCellEditable *editable,
 	{
 		GtkEntry *entry = GTK_ENTRY(editable);
 		gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(get_trans_model_from_view(data)));
-		gtk_entry_completion_set_text_column(completion, column);
+		g_object_set(G_OBJECT(completion), "text-column", column);
+		gtk_entry_completion_set_inline_completion(completion, TRUE);
+		gtk_entry_completion_set_popup_completion(completion, FALSE);
 		gtk_entry_set_completion(entry, completion);
 	}//if
 	else
