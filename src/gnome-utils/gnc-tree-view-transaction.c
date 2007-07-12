@@ -151,7 +151,7 @@ static ColDef all_tree_view_transaction_columns[] = {
      "R", "recn", "x", -1,
      gtvt_edited_cb, NULL, NULL},
     {COL_AMOUNT, -1,
-     "Price", "amount", "xxxxxx", -1, //Changed COL_AMOUNT header to "Price" (JG)
+     "Amt", "amount", "xxxxxx", -1,
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_VALUE, -1,
      "Val", "value", "xxxxxx", -1,
@@ -168,7 +168,7 @@ static ColDef all_tree_view_transaction_columns[] = {
      "Balance", "balance", "xxxxxxx", -1,
      NULL, NULL, NULL},
     {COL_RATE, -1,
-     "Amt", "price", "xxxxxx", -1, //Changed COL_RATE header to "Amt" (JG)
+     "Price", "price", "xxxxxx", -1,
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_TYPE, -1,
