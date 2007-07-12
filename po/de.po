@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-08 15:20+0200\n"
-"PO-Revision-Date: 2007-07-08 15:20+0200\n"
+"PO-Revision-Date: 2007-07-12 21:11+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15377,7 +15377,7 @@ msgstr "Gebühr"
 #: ../src/register/ledger-core/split-register.c:2043
 #: ../intl-scm/guile-strings.c:154
 msgid "Rebate"
-msgstr "Rabatt"
+msgstr "Erstattung"
 
 #. Action: Dividend
 #: ../src/register/ledger-core/split-register.c:2063
