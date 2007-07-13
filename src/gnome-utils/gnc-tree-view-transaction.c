@@ -595,6 +595,11 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         if (is_trans) {
             Timespec ts = {0,0};
             xaccTransGetDatePostedTS (trans, &ts);
+	    //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
+	    //is a new transaction and set the time to current time to show current
+	    //date on new transactions
+	    if (ts.tv_sec == 0)
+	        ts.tv_sec = time(NULL);
             g_object_set(cell, "text", gnc_print_date(ts), NULL);
         }
         break;
