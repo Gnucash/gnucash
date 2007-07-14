@@ -163,6 +163,7 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
+  gnc-autosave.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \
