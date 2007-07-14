@@ -1,6 +1,38 @@
 Version history:
 ------- -------
 
+ 2.2.0 - 14 July 2007
+  	 o Welcome to the GnuCash 2.2.0 Release.
+	 o With this new release series, GnuCash is available on Microsoft
+	 Windows for the first time, and it also runs on GNU/Linux, *BSD,
+	 Solaris and Mac OSX.
+	 o This release has only a few user-visible new features, except for
+	 the completed port to the Microsoft Windows operating system. In
+	 summary, the following features are new, compared to the older 2.0.x
+	 series:
+	 o Port to Microsoft Windows completed. Note that Windows 2000, XP, or
+	 Vista is required; GnuCash does not run on Windows 98 or 95.
+	 o Data file notice: In version 2.1.2 the format for scheduled
+	 transactions in the data file was changed. Files using the old format
+	 will be read without problems by this new version, but the new
+	 version of GnuCash only writes the new format. The new file format
+	 cannot be loaded by older versions of GnuCash. (If you try, the file
+	 will fail to be loaded with an error message.) As a result, if you
+	 begin using the new Gnucash, and you have data files with scheduled
+	 transactions, then these files will not be readable by older
+	 versions. If you have to make a new data file readable by older
+	 versions of GnuCash, this can be achived by deleting all records of
+	 scheduled transactions in the scheduled transaction editor.
+	 o SWIG is now used instead of g-wrap for providing language bindings.
+	 o The Scheduled Transaction list view is now improved and summarized
+	 more compactly. The Since-Last-Run dialog has been simplified.
+	 o Check printing has been improved, with new formats and simpler
+	 format descriptions.
+	 o Automatic saving of the data file was added.
+	 o Bugfixes and improvements since the last version 2.1.5 include:
+	 o Updated translations.
+	 o Improved handling of Online Banking wizard on Windows.
+
  2.1.5 - 02 July 2007
 	 o Welcome to GnuCash 2.1.5 aka "Release Candidate 2", the fifth of
 	 several unstable 2.1.x releases of the GnuCash Open Source Accounting
