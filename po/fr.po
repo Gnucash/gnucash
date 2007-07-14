@@ -1,14 +1,12 @@
 # Messages en francais pour GnuCash
-# French Translations for GnuCash
-# Copyright (C) 1998-2007 Free Software Foundation, Inc.
-# Yannick LE NY <y.le.ny@ifrance.com>, 1998-2001, 2007
+# Copyright (C) 1998-2006 Free Software Foundation, Inc.
+# Yannick LE NY <y-le-ny@ifrance.com>, 1998-2001.
 # Jérôme Sautret <jerome@sautret.org>, 2002.
 # Benoit Grégoire <bock@step·polymtl.ca>, 2003, 2004.
 # Delafond <gerard@delafond.org>, 2004.
 # Didier Vidal <didier-devel@9online.fr>, 2006
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
 # Fabrice Kurz <kurzf@voila.fr>, 2006
-# Stéphane Raimbault <stephane.raimbault@gmail.com>, 2007
 #
 # Please follow the guidelines you'll find here: http://live.gnome.org/gnomefr/Traduire
 #
@@ -16,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2007-06-30 22:24+0200\n"
-"Last-Translator: Yannick LE NY <y.le.ny@ifrance.com>\n"
+"POT-Creation-Date: 2007-07-14 13:17+0200\n"
+"PO-Revision-Date: 2007-06-07 20:21+0200\n"
+"Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -186,7 +184,7 @@ msgstr ""
 #, c-format
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
 msgstr ""
-"Mode d'accès à la base de données inconnu : '%s'. Le mode par défaut sera "
+"Mode d'accès à la base de données inconnu : « %s ». Le mode par défaut sera "
 "utilisé : multi-utilisateur."
 
 #: ../src/backend/postgres/PostgresBackend.c:1984
@@ -237,28 +235,22 @@ msgstr "Version de GnuCash"
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
 msgstr ""
-"Active le mode débogage: augmente les logs/journal pour fournir plus de "
-"détails"
 
 #: ../src/bin/gnucash-bin.c:224
 msgid "Enable extra/development/debugging features."
-msgstr "Active les fonctionnalités extra/développement/débogage."
+msgstr ""
 
 #: ../src/bin/gnucash-bin.c:227
 msgid ""
 "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}"
 "\""
 msgstr ""
-"Ecrase le niveau de log, sous la forme \"log.ger.path={debug,info,warn,crit,"
-"error}"
 
 #: ../src/bin/gnucash-bin.c:231
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Fichier pour mettre les logs ; par défaut dans \"/tmp/gnucash.trace\"; peut "
-"être aussi une des sorties système \"stderr\" ou \"stdout\"."
 
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
@@ -307,14 +299,16 @@ msgid "DOCPATH"
 msgstr "REP_DOCUMENTATION"
 
 #: ../src/bin/gnucash-bin.c:263
+#, fuzzy
 msgid "Set the prefix path for gconf queries"
-msgstr "Définir le chemin pour les requêtes gconf"
+msgstr "Définir le chemin pour les fichiers de documentation"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:266
+#, fuzzy
 msgid "GCONFPATH"
-msgstr "REP_GCONF"
+msgstr "REP_CONFIG"
 
 #: ../src/bin/gnucash-bin.c:268
 msgid "Add price quotes to given GnuCash datafile"
@@ -599,7 +593,7 @@ msgid ""
 "already in use."
 msgstr ""
 "Vous devez fournir un nom unique pour ces Conditions de Facturation.\n"
-"Votre choix \"%s\" est déjà utilisé."
+"Votre choix « %s » est déjà utilisé."
 
 # po/guile_strings.txt:101
 #. src/report/standard-reports/price-scatter.scm
@@ -630,14 +624,14 @@ msgstr "Inconnu"
 #: ../src/business/business-gnome/dialog-billterms.c:592
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr "Le Terme \"%s\" est utilisé. Vous ne pouvez pas le supprimer."
+msgstr "Le Terme « %s » est utilisé. Vous ne pouvez pas le supprimer."
 
 # messages-i18n.c:17
 #: ../src/business/business-gnome/dialog-billterms.c:598
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:542
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Confirmez-vous la suppression de \"%s\"?"
+msgstr "Confirmez-vous la suppression de « %s » ?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid ""
@@ -661,8 +655,8 @@ msgid ""
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "Vous devez saisir un nom de société.\n"
-"Si ce client est un individu (et non pas une société), \"Nom de la société\" "
-"et \"Nom du Contact\" doivent être les mêmes."
+"Si ce client est un individu (et non pas une société), « Nom de la société » "
+"et « Nom du Contact » doivent être les mêmes."
 
 # messages-i18n.c:13
 #: ../src/business/business-gnome/dialog-customer.c:279
@@ -1445,7 +1439,7 @@ msgid ""
 "an Invoice or Bill first?"
 msgstr ""
 "Vous n'avez pas de compte valide pour la publication. Créez un compte de "
-"type \"%s\" avant de continuer à traiter ce paiement.Peut-être voudrez vous "
+"type « %s » avant de continuer à traiter ce paiement.Peut-être voudrez vous "
 "créer une facture au préalable?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
@@ -1454,7 +1448,7 @@ msgid ""
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "Vous devez saisir le nom de la société. Si ce fournisseur est une personne "
-"physique (et non morale) le \"Nom de la société\" et le \"Nom du contact\" "
+"physique (et non morale) le « Nom de la société » et le « Nom du contact » "
 "doivent être les mêmes."
 
 # messages-i18n.c:21
@@ -1534,12 +1528,11 @@ msgstr "Jour pivot : "
 
 # messages-i18n.c:313
 #: ../src/business/business-gnome/glade/billterms.glade.h:10
+#, fuzzy
 msgid ""
 "Days\n"
 "Proximo"
-msgstr ""
-"Jours\n"
-"Proximo"
+msgstr "Proximo"
 
 # src/gnome/glade-gnc-dialogs.c:573
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
@@ -2918,7 +2911,7 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, GnuCash vérifie au démarrage si des factures "
 "sont proche de leur échéance. Dans ce cas, il affiche un dialogue de rappel. "
-"La définition de \"proche\" est controllée par l'option \"jours d'avance\". "
+"La définition de « proche » est controllée par l'option « jours d'avance ». "
 "Autrement GnuCash ne vérifie pas les factures échues."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
@@ -2993,8 +2986,8 @@ msgid ""
 "active."
 msgstr ""
 "Ce champs défini le nombre de jours que GnuCash utilise pour notifier des "
-"factures dues. Sa valeur est utilisée uniquement si l'option \"M'avertir "
-"lorsque due\" est active."
+"factures dues. Sa valeur est utilisée uniquement si l'option « M'avertir "
+"lorsque due » est active."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid ""
@@ -3522,7 +3515,7 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Vous devez fournir un nom unique pour cette table de taxation. Le nom \"%s\" "
+"Vous devez fournir un nom unique pour cette table de taxation. Le nom « %s » "
 "est déjà utilisé."
 
 # messages-i18n.c:13
@@ -3534,7 +3527,7 @@ msgstr "Vous devez choisir un compte de taxation."
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
 msgstr ""
-"La table de taxation \"%s\" est utilisée. Vous ne pouvez pas la détruire."
+"La table de taxation « %s » est utilisée. Vous ne pouvez pas la détruire."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:580
 msgid ""
@@ -3573,13 +3566,11 @@ msgid "Tax Tables"
 msgstr "Tables de taxation"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:7
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Value $\n"
 "Percent %"
-msgstr ""
-"Valeur $\n"
-"Pourcentage %"
+msgstr "Pourcentage %"
 
 # messages-i18n.c:130
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
@@ -3605,7 +3596,7 @@ msgstr "_Valeur :"
 #: ../src/core-utils/gnc-gkeyfile-utils.c:111
 #, c-format
 msgid "Value '%s' cannot be interpreted as a float number."
-msgstr "La valeur '%s' ne peut pas être interprété comme un nombre flottant"
+msgstr ""
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:154
 #, c-format
@@ -3613,8 +3604,6 @@ msgid ""
 "Key file contains key '%s' in group '%s' which has a value that cannot be "
 "interpreted."
 msgstr ""
-"Fichier clé contenant une clé '%s' dans le groupe '%s' qui a une valeur qui "
-"ne peut pas être interprété."
 
 # messages-i18n.c:250 po/guile_strings.txt:94
 # src/gnome/glade-gnc-dialogs.c:620
@@ -3938,15 +3927,15 @@ msgstr "Hebdomadaire"
 #: ../src/engine/Recurrence.c:431 ../src/engine/Recurrence.c:505
 #: ../src/engine/Recurrence.c:533 ../src/engine/Recurrence.c:546
 #: ../src/engine/Recurrence.c:560
-#, c-format
+#, fuzzy, c-format
 msgid " (x%u)"
-msgstr " (x%u)"
+msgstr "Quotidien (x%u)"
 
 #. translators: %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:463
-#, c-format
+#, fuzzy, c-format
 msgid "last %s"
-msgstr "dernier %s"
+msgstr "dernier jour"
 
 #: ../src/engine/Recurrence.c:500 ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
@@ -3956,7 +3945,7 @@ msgstr "Bimensuel"
 #: ../src/engine/Recurrence.c:515
 #, c-format
 msgid "Unknown, %d-size list."
-msgstr "Inconnu , liste de taille %d"
+msgstr ""
 
 # messages-i18n.c:309
 #: ../src/engine/Recurrence.c:526 ../src/gnome/glade/sched-xact.glade.h:130
@@ -4231,12 +4220,13 @@ msgid "You must enter a valid amount."
 msgstr "Vous devez saisir un montant valide."
 
 #: ../src/gnome/dialog-print-check.c:551
+#, fuzzy
 msgid "Cannot save check format file."
-msgstr "Impossible d'enregistrer le fichier du format du chèque"
+msgstr "Impossible d'enregistrer dans ce fichier"
 
 #: ../src/gnome/dialog-print-check.c:1083
 msgid "There is a duplicate check format file."
-msgstr "Il y a un fichier du format du chèque en doublon"
+msgstr ""
 
 #. Translators: %1$s is the type of the first check
 #. * format (user defined or application defined); %2$s
@@ -4249,16 +4239,15 @@ msgid ""
 "The guids in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"Les paramètres dans le fichier %s du format du chèque '%s' et le fichier %s "
-"du format du chèque '%s' sont en correspondance / identiques."
 
 # messages-i18n.c:176
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
 #. * gnucash application.
 #: ../src/gnome/dialog-print-check.c:1128
+#, fuzzy
 msgid "application"
-msgstr "application"
+msgstr "Quitter cette application"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -4266,8 +4255,9 @@ msgstr "application"
 #. * the user to indicate that some data file was defined by a
 #. * user herself.
 #: ../src/gnome/dialog-print-check.c:1136
+#, fuzzy
 msgid "user"
-msgstr "utilisateur"
+msgstr "Client"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -4317,12 +4307,12 @@ msgstr ""
 #: ../src/gnome/dialog-sx-editor.c:636
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
-msgstr "Incapable de traiter la formule de crédit pour la répartition  \"%s\"."
+msgstr "Incapable de traiter la formule de crédit pour la répartition  « %s »."
 
 #: ../src/gnome/dialog-sx-editor.c:662
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
-msgstr "Incapable de traiter la formule de débit pour la répartition \"%s\"."
+msgstr "Incapable de traiter la formule de débit pour la répartition « %s »."
 
 #: ../src/gnome/dialog-sx-editor.c:696 ../src/gnome/dialog-sx-from-trans.c:270
 msgid ""
@@ -4344,7 +4334,7 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"Une transaction récurrente avec le nom \"%s\" existe déjà. Êtes-vous sûr de "
+"Une transaction récurrente avec le nom « %s » existe déjà. Êtes-vous sûr de "
 "vouloir donner le même nom à celle-ci ?"
 
 #: ../src/gnome/dialog-sx-editor.c:770
@@ -4427,36 +4417,42 @@ msgstr ""
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: ../src/gnome/dialog-sx-since-last-run.c:374
+#, fuzzy
 msgid "Ignored"
-msgstr "Ignoré"
+msgstr "Ignorer"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:375
+#, fuzzy
 msgid "Postponed"
-msgstr "Reporté"
+msgstr "Reporter"
 
 # messages-i18n.c:320
 #: ../src/gnome/dialog-sx-since-last-run.c:376
+#, fuzzy
 msgid "To-Create"
-msgstr "A créer"
+msgstr "Créer"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: ../src/gnome/dialog-sx-since-last-run.c:377
+#, fuzzy
 msgid "Reminder"
-msgstr "Rappel"
+msgstr "Grand Livre"
 
 # messages-i18n.c:320
 #: ../src/gnome/dialog-sx-since-last-run.c:378
+#, fuzzy
 msgid "Created"
-msgstr "Créé"
+msgstr "Créer"
 
 # messages-i18n.c:200
 #: ../src/gnome/dialog-sx-since-last-run.c:441
+#, fuzzy
 msgid "Never"
-msgstr "Jamais"
+msgstr "Perpétuel"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:511
 msgid "(Need Value)"
-msgstr "(valeur nécessaire)"
+msgstr ""
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -4478,8 +4474,9 @@ msgstr[1] ""
 
 # messages-i18n.c:162
 #: ../src/gnome/dialog-sx-since-last-run.c:929
+#, fuzzy
 msgid "Transaction"
-msgstr "Transaction"
+msgstr "_Transaction"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/gnome/dialog-sx-since-last-run.c:945
@@ -4489,8 +4486,9 @@ msgstr "État"
 
 # messages-i18n.c:176
 #: ../src/gnome/dialog-sx-since-last-run.c:1003
+#, fuzzy
 msgid "Created Transactions"
-msgstr "Transactions créées"
+msgstr "Réviser la transaction créée"
 
 # messages-i18n.c:290 po/guile_strings.txt:106
 #: ../src/gnome/dialog-tax-info.c:717
@@ -4582,14 +4580,15 @@ msgstr "Type de compte"
 # messages-i18n.c:166
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: ../src/gnome/druid-hierarchy.c:486
-#, c-format
+#, fuzzy, c-format
 msgid "Accounts in '%s'"
-msgstr "Comptes dans '%s'"
+msgstr "<b>Comptes dans '%s'</b>"
 
 # messages-i18n.c:166
 #: ../src/gnome/druid-hierarchy.c:505
+#, fuzzy
 msgid "Accounts in Category"
-msgstr "Comptes dans catégorie"
+msgstr "<b>Comptes par catégorie</b>"
 
 #: ../src/gnome/druid-hierarchy.c:711
 msgid "zero"
@@ -4613,44 +4612,51 @@ msgstr "Utilise existant"
 # po/guile_strings.txt:264
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: ../src/gnome/druid-loan.c:161
+#, fuzzy
 msgid "Taxes"
-msgstr "Impôts"
+msgstr "_Impôts"
 
 # messages-i18n.c:312
 #: ../src/gnome/druid-loan.c:161
+#, fuzzy
 msgid "Tax Payment"
-msgstr "Paiement d'impôts"
+msgstr "Remboursement"
 
 # messages-i18n.c:227
 #: ../src/gnome/druid-loan.c:162
+#, fuzzy
 msgid "Insurance"
-msgstr "Assurance"
+msgstr "Interface"
 
 # messages-i18n.c:227
 #: ../src/gnome/druid-loan.c:162
+#, fuzzy
 msgid "Insurance Payment"
-msgstr "Paiement de l'assurance"
+msgstr "Paiement d'intérêts"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI"
-msgstr "Assurance pour prêt (hypothécaire)"
+msgstr ""
 
 # messages-i18n.c:312
 #: ../src/gnome/druid-loan.c:164
+#, fuzzy
 msgid "PMI Payment"
-msgstr "Paiement de l'assurance pour prêt (hypothécaire)"
+msgstr "Remboursement"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: ../src/gnome/druid-loan.c:165
+#, fuzzy
 msgid "Other Expense"
-msgstr "Autres dépenses"
+msgstr "Dépenses"
 
 # messages-i18n.c:312
 #: ../src/gnome/druid-loan.c:165
+#, fuzzy
 msgid "Miscellaneous Payment"
-msgstr "Divers paiements"
+msgstr "Traitement des paiements"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -4658,7 +4664,7 @@ msgstr "Divers paiements"
 #: ../src/gnome/druid-loan.c:632
 #, c-format
 msgid "... pay \"%s\"?"
-msgstr "... payez \"%s\" ?"
+msgstr "... payez « %s » ?"
 
 # messages-i18n.c:96
 #: ../src/gnome/druid-loan.c:644
@@ -4689,12 +4695,12 @@ msgstr "SVP, sélectionnez un compte en fidéicommis valide."
 # src/gnome/dialog-qif-import.c:310
 #: ../src/gnome/druid-loan.c:1313 ../src/gnome/druid-loan.c:1532
 msgid "Please select a valid \"from\" account."
-msgstr "SVP, sélectionnez un compte \"source\" valide."
+msgstr "SVP, sélectionnez un compte « source » valide."
 
 # src/gnome/dialog-qif-import.c:310
 #: ../src/gnome/druid-loan.c:1320 ../src/gnome/druid-loan.c:1541
 msgid "Please select a valid \"to\" account."
-msgstr "SVP sélectionnez un compte \"destination\" valide."
+msgstr "SVP sélectionnez un compte « destination » valide."
 
 # messages-i18n.c:13
 #: ../src/gnome/druid-loan.c:1327
@@ -4706,7 +4712,7 @@ msgstr "SVP, sélectionnez un compte valide pour les intérêts."
 #: ../src/gnome/druid-loan.c:1440
 #, c-format
 msgid "Payment: \"%s\""
-msgstr "Paiement : \"%s\""
+msgstr "Paiement : « %s »"
 
 #: ../src/gnome/druid-loan.c:1798 ../src/gnome/druid-loan.c:2371
 msgid "Principal"
@@ -4743,9 +4749,9 @@ msgstr ""
 "données."
 
 #: ../src/gnome/druid-merge.c:225
-#, c-format
+#, fuzzy, c-format
 msgid "Error: the Commit operation failed, error code %d."
-msgstr "Erreur : la fusion a échoué, le code d'erreur est %d."
+msgstr "Erreur : la fusion a échoué."
 
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
@@ -4762,8 +4768,8 @@ msgstr[1] "%i conflits doivent être résolus."
 #, c-format
 msgid "%i parameter value for this \"%s\" object."
 msgid_plural "%i parameter values for this \"%s\" object."
-msgstr[0] "%i valeur de paramètre pour l'objet \"%s\"."
-msgstr[1] "%i valeurs de paramètres pour l'objet \"%s\"."
+msgstr[0] "%i valeur de paramètre pour l'objet « %s »."
+msgstr[1] "%i valeurs de paramètres pour l'objet « %s »."
 
 #. FIXME: each g_strdup_printf as well as g_strconcat
 #. will allocate a new string; all of these need to be
@@ -5139,11 +5145,11 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Cliquez sur `Appliquer' pour créer vos nouveaux comptes\n"
+"Cliquez sur « Appliquer » pour créer vos nouveaux comptes\n"
 "\n"
-"Cliquez sur `Précédent' pour revoir vos choix\n"
+"Cliquez sur « Précédent » pour revoir vos choix\n"
 "\n"
-"Cliquez sur `Annuler' pour fermer cet assistant sans créer les nouveaux "
+"Cliquez sur « Annuler » pour fermer cet assistant sans créer les nouveaux "
 "comptes."
 
 # po/guile_strings.txt:100
@@ -5276,14 +5282,6 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
-"Utiliser valeur du produit\n"
-"1\n"
-"1/10\n"
-"1/100\n"
-"1/1000\n"
-"1/10000\n"
-"1/100000\n"
-"1/1000000"
 
 # messages-i18n.c:164
 #: ../src/gnome/glade/account.glade.h:77
@@ -5671,17 +5669,6 @@ msgid ""
 "Daily (360)\n"
 "Daily (365)"
 msgstr ""
-"Annuel\n"
-"Semi-annuel\n"
-"Tri-annuel\n"
-"Trimestriel\n"
-"Bimestriel\n"
-"Mensuel\n"
-"Semi-moensuel\n"
-"Bi-hebdomadaire\n"
-"hebdomadaire\n"
-"Quotidien (360)\n"
-"Quotidien (365)"
 
 #: ../src/gnome/glade/fincalc.glade.h:18
 msgid "Beginning"
@@ -6209,8 +6196,9 @@ msgstr "Format personnalisé"
 
 # messages-i18n.c:270
 #: ../src/gnome/glade/print.glade.h:6
+#, fuzzy
 msgid "Degrees"
-msgstr "Degrés"
+msgstr "Réduire"
 
 #: ../src/gnome/glade/print.glade.h:7
 msgid ""
@@ -6218,10 +6206,6 @@ msgid ""
 "format\" selector of the Print Check dialog.  Using the title of an exiting "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"Entrez un titre pour ce format personnalisé. Ce titre apparaitra dans le "
-"sélecteur du \"format du chèque\" de la fenêtre de dialogue Imprimer chèque. "
-"L'utilisation du titre d'un format personnalisé existant provoquera "
-"l'écrasement de ce format."
 
 #: ../src/gnome/glade/print.glade.h:8
 msgid ""
@@ -6260,16 +6244,17 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: ../src/gnome/glade/print.glade.h:19
+#, fuzzy
 msgid "Save Custom Check Format"
-msgstr "Enregistrer le format du chèque personnalisé"
+msgstr "Format de date personnalisé"
 
 #: ../src/gnome/glade/print.glade.h:20
 msgid "The origin point is the lower left-hand corner of the page."
-msgstr "Le point d'origine est le coin en bas et à gauche de la page"
+msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:21
 msgid "The origin point is the upper left-hand corner of the page."
-msgstr "Le point d'origine est le coin en haut et à droite de la page"
+msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:22
 msgid ""
@@ -6291,8 +6276,9 @@ msgstr "Format de _date :"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: ../src/gnome/glade/print.glade.h:28
+#, fuzzy
 msgid "_Notes:"
-msgstr "_Notes :"
+msgstr "Notes :"
 
 # po/guile_strings.txt:138
 #: ../src/gnome/glade/print.glade.h:29
@@ -6302,13 +6288,14 @@ msgstr "_Rotation"
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: ../src/gnome/glade/print.glade.h:30
+#, fuzzy
 msgid "_Save format"
-msgstr "Enregi_strer le format"
+msgstr "Format de _date :"
 
 # messages-i18n.c:162
 #: ../src/gnome/glade/print.glade.h:31
 msgid "_Translation:"
-msgstr "_Translation :"
+msgstr "_Translation :"
 
 # src/gnome/glade-gnc-dialogs.c:1372
 #: ../src/gnome/glade/print.glade.h:32
@@ -6492,7 +6479,7 @@ msgstr "Faire une copie de la transaction en cours"
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Se déplacer à la transaction vierge en bas du registre"
 
-# po/guile_strings.txt:173                        
+# po/guile_strings.txt:173
 #: ../src/gnome/glade/register.glade.h:33
 msgid "Num_ber"
 msgstr "N_uméro"
@@ -6848,50 +6835,12 @@ msgid ""
 "Last Saturday\n"
 "Last Sunday"
 msgstr ""
-"1er\n"
-"2ème\n"
-"3ème\n"
-"4ème\n"
-"5ème\n"
-"6ème\n"
-"7ème\n"
-"8ème\n"
-"9ème\n"
-"10ème\n"
-"11ème\n"
-"12ème\n"
-"13ème\n"
-"14ème\n"
-"15ème\n"
-"16ème\n"
-"17ème\n"
-"18ème\n"
-"19ème\n"
-"20ème\n"
-"21st\n"
-"22nd\n"
-"23rd\n"
-"24ème\n"
-"25ème\n"
-"26ème\n"
-"27ème\n"
-"28ème\n"
-"29ème\n"
-"30ème\n"
-"31ème\n"
-"Dernier jour du mois\n"
-"Dernier Lundi\n"
-"Dernier Mardi\n"
-"Dernier Mercredi\n"
-"Dernier Jeudi\n"
-"Dernier Vendredi\n"
-"Dernier Samedi\n"
-"Dernier Dimanche"
 
 # messages-i18n.c:180
 #: ../src/gnome/glade/sched-xact.glade.h:44
+#, fuzzy
 msgid "<b>End</b>"
-msgstr "<b>Fin</b>"
+msgstr "<b>Date de fin</b>"
 
 # po/guile_strings.txt:173
 #: ../src/gnome/glade/sched-xact.glade.h:45
@@ -6997,10 +6946,6 @@ msgid ""
 "Whole Loan\n"
 "Custom"
 msgstr ""
-"Année actuelle\n"
-"Maintenant + 1 An\n"
-"Prêt Entier\n"
-"Personnalisé"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid ""
@@ -7011,12 +6956,6 @@ msgid ""
 "Quarterly\n"
 "Yearly"
 msgstr ""
-"Quotidien\n"
-"Hebdomadaire\n"
-"Bi-Hebdomadaire\n"
-"Mensuel\n"
-"Trimestriel\n"
-"Annuel"
 
 # messages-i18n.c:135
 #. src/business/business-reports/owner-report.scm
@@ -7048,8 +6987,9 @@ msgstr "Éditer Transaction Récurrente"
 # po/guile_strings.txt:264
 #: ../src/gnome/glade/sched-xact.glade.h:84
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:172
+#, fuzzy
 msgid "Enabled"
-msgstr "Activé"
+msgstr "Proximo"
 
 # messages-i18n.c:180
 #: ../src/gnome/glade/sched-xact.glade.h:85
@@ -7082,16 +7022,11 @@ msgid ""
 "7/1 Year ARM\n"
 "10/1 Year ARM"
 msgstr ""
-"Taux fixe\n"
-"Emprunt à taux variable sur 3 ans\n"
-"Emprunt à taux variable sur 5 ans\n"
-"Emprunt à taux variable sur 7 ans\n"
-"Emprunt à taux variable sur 10 ans"
 
 # messages-i18n.c:290 po/guile_strings.txt:106
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "For:"
-msgstr "Pour :"
+msgstr "Nombre :"
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
 msgid "Forever"
@@ -7195,12 +7130,6 @@ msgid ""
 "Semi-Monthly\n"
 "Monthly"
 msgstr ""
-"Aucun\n"
-"Une fois\n"
-"Quotidien\n"
-"Hebdomadaire\n"
-"Semi-Mensuel\n"
-"Mensuel"
 
 #: ../src/gnome/glade/sched-xact.glade.h:125
 msgid "Not scheduled"
@@ -7226,8 +7155,9 @@ msgstr "Le"
 
 # src/gnome/glade-gnc-dialogs.c:979
 #: ../src/gnome/glade/sched-xact.glade.h:133
+#, fuzzy
 msgid "Overview"
-msgstr "Vue d'ensemble"
+msgstr "Vue globale"
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/sched-xact.glade.h:134
@@ -7361,8 +7291,9 @@ msgid "Since Last Run"
 msgstr "Depuis le dernier traitement"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
+#, fuzzy
 msgid "Since Last Run..."
-msgstr "Depuis la dernière exécution..."
+msgstr "_Depuis la dernière exécution..."
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/gnome/glade/sched-xact.glade.h:163
@@ -7388,8 +7319,9 @@ msgstr "Dimanche"
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/sched-xact.glade.h:168
+#, fuzzy
 msgid "Template Transaction"
-msgstr "Modèle de transaction"
+msgstr "<b>Modèle de transaction</b>"
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/sched-xact.glade.h:169
@@ -7524,8 +7456,9 @@ msgstr "_Avertir avant la création des transactions"
 
 # messages-i18n.c:80
 #: ../src/gnome/glade/sched-xact.glade.h:194
+#, fuzzy
 msgid "_Review created transactions"
-msgstr "_Revue des transactions créées"
+msgstr "Cocher les _transactions pointées."
 
 #: ../src/gnome/glade/sched-xact.glade.h:195
 msgid "_Run when data file opened"
@@ -7544,12 +7477,11 @@ msgstr "jours."
 
 # po/guile_strings.txt:184
 #: ../src/gnome/glade/sched-xact.glade.h:198
+#, fuzzy
 msgid ""
 "months\n"
 "years"
-msgstr ""
-"mois\n"
-"années"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome/glade/sched-xact.glade.h:200
@@ -7880,8 +7812,9 @@ msgid "The list of Scheduled Transactions"
 msgstr "Liste des transactions récurrentes"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:135
+#, fuzzy
 msgid "Since _Last Run..."
-msgstr "Depuis _la dernière exécution..."
+msgstr "_Depuis la dernière exécution..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:136
 msgid "Create Scheduled Transactions since the last time run"
@@ -7945,7 +7878,7 @@ msgstr "Voir les astuces du jour"
 #: ../src/gnome/gnc-plugin-basic-commands.c:377
 #, c-format
 msgid "Error: Loading failed, error code %d - %s."
-msgstr "Erreur: chargement a echoué, code d'erreur %d - %s."
+msgstr ""
 
 # src/gnome/dialog-qif-import.c:221
 #: ../src/gnome/gnc-plugin-basic-commands.c:399
@@ -8024,6 +7957,7 @@ msgstr "Ouvrir le compte sélectionné et tous ses sous-comptes"
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:161
 #: ../src/gnome/gnc-plugin-page-register.c:181
+#, fuzzy
 msgid "Edit _Account"
 msgstr "Editer le compte"
 
@@ -8462,18 +8396,20 @@ msgstr "Rapport de compte"
 
 # messages-i18n.c:104
 #: ../src/gnome/gnc-plugin-page-register.c:259
+#, fuzzy
 msgid "Open a register report for this Account"
-msgstr "Ouvrir un rapport du registre pour ce compte"
+msgstr "Ouvrir une fenêtre avec un rapport de registre pour cette transaction"
 
 # messages-i18n.c:346
 #: ../src/gnome/gnc-plugin-page-register.c:261
 msgid "Account Transaction Report"
-msgstr "Rapport de transaction du compte"
+msgstr "Rapport de transaction"
 
 # messages-i18n.c:104
 #: ../src/gnome/gnc-plugin-page-register.c:262
+#, fuzzy
 msgid "Open a register report for the selected Transaction"
-msgstr "Ouvrir un rapport du registre pour la transaction sélectionnée"
+msgstr "Ouvrir une fenêtre avec un rapport de registre pour cette transaction"
 
 # messages-i18n.c:346
 #. Translators: This is a menu item in the View menu
@@ -8615,6 +8551,7 @@ msgid "Filter %s by..."
 msgstr "Filtrer %s selon..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:119
+#, fuzzy
 msgid "_Scheduled"
 msgstr "Planifié"
 
@@ -8629,18 +8566,21 @@ msgstr "_Nouveau"
 
 # messages-i18n.c:26
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
+#, fuzzy
 msgid "Create a new scheduled transaction"
-msgstr "Créer une nouvelle transaction planifiée."
+msgstr "Donnez un nom à la transaction récurrente."
 
 # messages-i18n.c:26
 #: ../src/gnome/gnc-plugin-page-sx-list.c:123
+#, fuzzy
 msgid "Edit the selected scheduled transaction"
-msgstr "Editer la transaction planifiée qui est sélectionnée"
+msgstr "Supprimer la transaction récurrente ?"
 
 # messages-i18n.c:26
 #: ../src/gnome/gnc-plugin-page-sx-list.c:125
+#, fuzzy
 msgid "Delete the selected scheduled transaction"
-msgstr "Supprimer la transaction planifiée qui est sélectionnée"
+msgstr "Supprimer la transaction récurrente ?"
 
 # messages-i18n.c:56
 #. FIXME: Does this always refer to only one transaction? Or could
@@ -8648,8 +8588,10 @@ msgstr "Supprimer la transaction planifiée qui est sélectionnée"
 #. to-be-deleted SXs should be mentioned here; see
 #. dialog-sx-since-last-run.c:807
 #: ../src/gnome/gnc-plugin-page-sx-list.c:581
+#, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
-msgstr "Confirmez-vous la suppression de cette transaction planifiée ?"
+msgstr ""
+"Confirmez-vous la suppression de la transaction récurrente sélectionnée ?"
 
 # messages-i18n.c:183
 #: ../src/gnome/gnc-plugin-register.c:48
@@ -9121,9 +9063,6 @@ msgid ""
 "Each time the date is printed, print the date format immediately below in 8 "
 "point type using the characters Y, M, and D."
 msgstr ""
-"Chaque fois que la date est imprimée, imprime le format de date "
-"immédiatement au-dessous en type 8 points en utilisant les caractères A, M, "
-"et J."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid ""
@@ -9180,24 +9119,22 @@ msgstr "Position du récepteur du chèque"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid "Print '***' before and after strings."
-msgstr "Imprimer '***' avant et après les chaines."
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
+#, fuzzy
 msgid "Print the date format below the date."
-msgstr "Imprimer le format de date au-dessous de la date."
+msgstr "Utiliser le format de date en cours aux Etats Unis d'Amérique."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:15
 msgid "The default check printing font"
-msgstr "La police d'impression du chèque par défaut"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
 msgid ""
 "The default font to use when printing checks. This value will be overridden "
 "by any font specified in a check description file."
 msgstr ""
-"La police par défaut utilisée lors de l'impression des chèques. Cette valeur "
-"sera écrasée par n'importe quelle police indiquée dans un fichier de "
-"description de chèque."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid "This is the numerical identifier of the predefined date format to use."
@@ -9401,11 +9338,11 @@ msgstr "Comptes dont le solde doit être inversé"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
 msgid "Allow file incompatibility with older versions."
-msgstr "Permet une incompatibilité du fichier avec les anciennes versions."
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
 msgid "Auto-save time interval"
-msgstr "Intervalle de temps entre les sauvegardes automatiques"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:5
 msgid "Automatically insert a decimal point"
@@ -9425,7 +9362,6 @@ msgstr "Le caractère utilisé pour séparer les noms détaillés des comptes"
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr ""
-"Fermer un onglet provoque un déplacement vers l'onglet visité le plus récent."
 
 # messages-i18n.c:176
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:9
@@ -9509,9 +9445,6 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"Si cette option est cochée, GnuCash montre une explicatioin de la fonction "
-"de sauvegarde automatique lors du premier lancement de cette fonctionnalité."
-"Autrement aucune explication supplémentaire n'est montrée."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
 msgid ""
@@ -9537,21 +9470,18 @@ msgstr ""
 "d'outils"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
+#, fuzzy
 msgid ""
 "If active, a splash screen will be shown at startup. Otherwise no splash "
 "screen will be shown."
 msgstr ""
-"Si cette option est cochée, l'écran informatif de Gnucash (logo, version) "
-"s'affichera au démarrage. Autrement aucun écran informatif ne s'affichera."
+"Si cette option est cochée,  l'assistant de création de comptes s'affichera."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
 msgid ""
 "If active, closing a tab moves to the most recently visited tab. Otherwise "
 "closing a tab moves one tab to the left."
 msgstr ""
-"Si option cochée, fermer un onglet provoque le déplacement vers l'onglet le "
-"plus récemment visité. Autrement, fermer un onglet provoque le déplacement "
-"d'un onglet vers la gauche."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
 msgid ""
@@ -9589,12 +9519,6 @@ msgid ""
 "read by an older version again. Otherwise gnucash will write data files only "
 "in formats that can be read by older versions as well."
 msgstr ""
-"Si cette option est cochée, gnucash sera autorisé à briser "
-"intentionnellement la compatibility du fichier avec les anciennes versions, "
-"alors un fichier de données enregistré dans cette version ne pourra pas être "
-"lu par une ancienne version de nouveau. Autrement Gnucash écrira les "
-"fichiers de données seulement dans les formats qui pourront être lus aussi "
-"bien par d'anciennes versions."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
 msgid ""
@@ -9631,9 +9555,7 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr ""
-"Si option cochée, utilise un format horaire sur 24 heures (au lieu de 12 "
-"heures)."
+msgstr "Utiliser un format horaire sur 24 heures (au lieu de 12 heures)."
 
 # po/guile_strings.txt:135
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
@@ -9645,8 +9567,9 @@ msgid "Number of automatic decimal places"
 msgstr "Nombre de décimales pour le placement automatique du point"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
+#, fuzzy
 msgid "Position of the notebook tabs"
-msgstr "Position des onglets"
+msgstr "Position de la ligne de date"
 
 # po/guile_strings.txt:93
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
@@ -9655,11 +9578,11 @@ msgstr "Enregistrer les taille et position de la fenêtre."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Show auto-save explanation"
-msgstr "Montrer explication de la sauvegarde automatique"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
 msgid "Show close buttons on notebook tabs"
-msgstr "Afficher les boutons de fermeture sur les onglets"
+msgstr "Afficher le bouton de fermeture sur les onglets"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
 msgid ""
@@ -9678,7 +9601,7 @@ msgstr "Afficher les bordures horizontales dans le registre"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
 msgid "Show splash screen"
-msgstr "Montrer fenetre d'information"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
 msgid ""
@@ -9720,9 +9643,6 @@ msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
 msgstr ""
-"Le nombre de minutes jusqu'à ce que la sauvegarde du fichier de données sur "
-"le disque dur sera lancé automatiquement. Si zéro, aucune sauvegarde ne sera "
-"lancée automatiquement."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid ""
@@ -9763,9 +9683,6 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"Cette clé spécifie la largeur maximum des onglets. Si le texte dans l'onglet "
-"est plus long que cette valeur (le test est approximatif) alors le libellé "
-"de l'onglet aura une coupure au milieu et sera remplacé par une ellipse."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 msgid ""
@@ -9855,9 +9772,6 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
-"Ce paramètre détermine le bord sur lequel les onglets pour se déplacer dans "
-"les pages seront dessinés. Les valeurs possibles sont are \"haut\", \"gauche"
-"\",  \"bas\" et \"droite\". Par défaut, il est à \"haut\" ."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
 msgid ""
@@ -9898,7 +9812,7 @@ msgstr "Utiliser la terminologie comptable"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:70
 msgid "Width of notebook tabs"
-msgstr "Largeur des onglets"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:1
 msgid "Change contents of reconciled split"
@@ -10025,15 +9939,16 @@ msgstr ""
 "futur rapprochement."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
+#, fuzzy
 msgid ""
 "This dialog is presented before allowing you to remove a reconciled split "
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
 "Cette fenêtre est présentée avant de vous autoriser à effacer une "
-"répartition rapprochée d'une transaction. La suppression effacera la valeur "
-"rapprochée du registre et cela peut conduire à des difficultés lors de "
-"futurs rapprochements."
+"répartition d'une transaction déjà rapprochée. La suppression va effacer la "
+"valeur rapprochée du registre et cela peut conduire à des difficultés lors "
+"d'un futur rapprochement."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
 msgid ""
@@ -10499,7 +10414,7 @@ msgid ""
 "Error in regular expression '%s':\n"
 "%s"
 msgstr ""
-"Erreur dans l'expression rationnelle '%s' :\n"
+"Erreur dans l'expression rationnelle « %s » :\n"
 "%s"
 
 # src/gnome/glade-gnc-dialogs.c:1460
@@ -11749,6 +11664,7 @@ msgstr "<b>Actions</b>"
 
 # po/guile_strings.txt:173
 #: ../src/gnome-utils/glade/preferences.glade.h:7
+#, fuzzy
 msgid "<b>Checks</b>"
 msgstr "<b>Conditions</b>"
 
@@ -11844,12 +11760,14 @@ msgstr "<b>Affichage dans la barre de résumé</b>"
 
 # messages-i18n.c:240
 #: ../src/gnome-utils/glade/preferences.glade.h:27
+#, fuzzy
 msgid "<b>Tab Position</b>"
-msgstr "<b>Position des onglets</b>"
+msgstr "<b>Transactions</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:28
+#, fuzzy
 msgid "<b>Tabs</b>"
-msgstr "<b>Onglets</b>"
+msgstr "<b>Labels</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:29
 msgid "<b>Time Format</b>"
@@ -11897,7 +11815,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:38
 msgid "Auto-save time _interval:"
-msgstr "_Intervalle de temps pour sauvegarde automatique : "
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid "Automatic _interest transfer"
@@ -11932,18 +11850,17 @@ msgstr ""
 
 # po/guile_strings.txt:138
 #: ../src/gnome-utils/glade/preferences.glade.h:44
+#, fuzzy
 msgid "B_ottom"
-msgstr "En bas"
+msgstr "_Rotation"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:45
 msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
-"Au-dessous de la date actuelle, imprimer le format de cette date en type 8 "
-"point."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:46
 msgid "Bring the most _recent tab to the front"
-msgstr "Mettre l'onglet le plus récent sur le devant"
+msgstr ""
 
 # po/guile_strings.txt:89
 #: ../src/gnome-utils/glade/preferences.glade.h:47
@@ -11981,8 +11898,9 @@ msgstr "Date/Heure"
 
 # po/guile_strings.txt:258
 #: ../src/gnome-utils/glade/preferences.glade.h:54
+#, fuzzy
 msgid "Default _font:"
-msgstr "Police par dé_faut : "
+msgstr "Taux par défaut : "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:56
 msgid "Delete old log/backup files after this many days (0 = never)."
@@ -12005,20 +11923,21 @@ msgstr "Afficher les montants _négatifs en rouge"
 
 # messages-i18n.c:71
 #: ../src/gnome-utils/glade/preferences.glade.h:61
+#, fuzzy
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Afficher/Mettre les onglets en bas de la fenêtre."
+msgstr "Aller à la ligne vide en bas de la facture"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:62
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Afficher/Mettre les onglets à gauche de la fenêtre."
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:63
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Afficher/Mettre les onglets à droite de la fenêtre."
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Afficher/Mettre les onglets en haut de la fenêtre."
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:65
 msgid "Display this many rows when a register is created."
@@ -12083,14 +12002,10 @@ msgid "How many automatic decimal places will be filled in."
 msgstr "Combien d'emplacements décimaux seront entrés automatiquement."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:78
-#, fuzzy
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
-"Si cette option est cochée, GnuCash montre une explicatioin de la fonction "
-"de sauvegarde automatique lors du premier lancement de cette fonctionnalité."
-"Autrement aucune explication supplémentaire n'est montrée."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:79
 msgid ""
@@ -12174,22 +12089,24 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:93
 msgid "Print '***' before and after each text field on the check."
-msgstr "Imprimer '***'  avant et après chaque chaine de texte sur le chèque."
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:94
 msgid "Print _blocking chars"
-msgstr "Imprimer des caractères bloquants"
+msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: ../src/gnome-utils/glade/preferences.glade.h:95
+#, fuzzy
 msgid "Print _date format"
-msgstr "Imprimer le format de _date"
+msgstr "Format de date personnalisé"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: ../src/gnome-utils/glade/preferences.glade.h:96
+#, fuzzy
 msgid "Printing"
-msgstr "Impression"
+msgstr "Imprimer"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:98
 msgid "Priority text besi_de icons"
@@ -12239,9 +12156,8 @@ msgid "Show all transactions on one line. (Two in double line mode.)"
 msgstr "Montrer les transactions sur une (deux en mode double ligne)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:109
-#, fuzzy
 msgid "Show auto-save confirmation _question"
-msgstr "Montrer explication de la sauvegarde automatique"
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:110
 msgid "Show close button on _notebook tabs"
@@ -12254,11 +12170,12 @@ msgstr "Par défaut, montre les bordures horizontales sur les cellules."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:112
 msgid "Show splash scree_n"
-msgstr "Montrer fenêtre d'informatio_ns"
+msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:113
+#, fuzzy
 msgid "Show splash screen at startup."
-msgstr "Afficher l'écran informatif au démarrage."
+msgstr "_Afficher un conseil la prochaine fois"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid ""
@@ -12311,8 +12228,9 @@ msgstr ""
 
 # messages-i18n.c:342 po/guile_strings.txt:252
 #: ../src/gnome-utils/glade/preferences.glade.h:122
+#, fuzzy
 msgid "To_p"
-msgstr "Haut"
+msgstr "Vers"
 
 # messages-i18n.c:346
 #: ../src/gnome-utils/glade/preferences.glade.h:123
@@ -12348,8 +12266,9 @@ msgstr ""
 
 # messages-i18n.c:213
 #: ../src/gnome-utils/glade/preferences.glade.h:130
+#, fuzzy
 msgid "Use s_ystem default"
-msgstr "Utiliser (préférences) système par défaut"
+msgstr "Utiliser les _préférences Gnome"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "Use the date format common in continental Europe."
@@ -12477,6 +12396,7 @@ msgid "_Income & expense"
 msgstr "Revenus et _Dépenses"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:157
+#, fuzzy
 msgid "_Left"
 msgstr "Gauche"
 
@@ -12495,8 +12415,9 @@ msgid "_Retain log files:"
 msgstr "_Garder les fichiers journaux durant :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:161
+#, fuzzy
 msgid "_Right"
-msgstr "D_roite"
+msgstr "Droite"
 
 # po/guile_strings.txt:93
 #: ../src/gnome-utils/glade/preferences.glade.h:162
@@ -12518,16 +12439,17 @@ msgstr "_Utiliser les couleurs système"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Width:"
-msgstr "Largeur : "
+msgstr ""
 
 # messages-i18n.c:257
 #: ../src/gnome-utils/glade/preferences.glade.h:167
+#, fuzzy
 msgid "characters"
-msgstr "caractères"
+msgstr "Caractère :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:169
 msgid "minutes"
-msgstr "minutes"
+msgstr ""
 
 #: ../src/gnome-utils/glade/totd.glade.h:1
 msgid "<b>Tip of the Day:</b>"
@@ -12620,7 +12542,7 @@ msgid "Save file automatically?"
 msgstr "(rempli automatiquement)"
 
 #: ../src/gnome-utils/gnc-autosave.c:102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your data file needs to be saved to your hard disk to save your changes.  "
 "GnuCash has a feature to save the file automatically every %d minutes, just "
@@ -12631,17 +12553,6 @@ msgid ""
 "\n"
 "Should your file be saved automatically?"
 msgstr ""
-"Votre fichier de données a besoin d'être enregistré sur votre disque dur "
-"pour enregistrer les modifications. GnuCash a une fonction pour enregistrer "
-"le fichier automatiquement toutes les %d minutes. Cette fonction est activé "
-"pour la première fois maintenant. \n"
-"\n"
-"Si vous aimeriez changer l'intervalle de temps, vous pouvez le faire sous "
-"Edition -> Préferences -> Général -> Intervalle de sauvegarde automatique.Si "
-"vous voulez désactiver cette fonction, configurez l'intervalle de temps à "
-"zéro et aucune sauvegarde automatique ne se produira plus.\n"
-"\n"
-"Appuyez sur \"Fermer\" maintenant et ainsi votre fichier sera sauvegardé."
 
 #: ../src/gnome-utils/gnc-autosave.c:107
 #, fuzzy
@@ -12652,11 +12563,9 @@ msgstr "Plus proche dans le temps"
 msgid "Yes, _always"
 msgstr ""
 
-# messages-i18n.c:200
 #: ../src/gnome-utils/gnc-autosave.c:109
-#, fuzzy
 msgid "No, n_ever"
-msgstr "Jamais"
+msgstr ""
 
 #: ../src/gnome-utils/gnc-autosave.c:110
 msgid "_No, not this time"
@@ -12703,38 +12612,45 @@ msgstr "Calendrier"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:239
+#, fuzzy
 msgid "12 months"
-msgstr "12 mois"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:240
+#, fuzzy
 msgid "6 months"
-msgstr "6 mois"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:241
+#, fuzzy
 msgid "4 months"
-msgstr "4 mois"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:242
+#, fuzzy
 msgid "3 months"
-msgstr "3 mois"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:243
+#, fuzzy
 msgid "2 months"
-msgstr "2 mois"
+msgstr "mois"
 
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/gnc-dense-cal.c:244
+#, fuzzy
 msgid "1 month"
-msgstr "1 mois"
+msgstr "mois"
 
 # messages-i18n.c:145
 #: ../src/gnome-utils/gnc-dense-cal.c:277
+#, fuzzy
 msgid "View:"
-msgstr "Vue:"
+msgstr "_Affichage"
 
 # src/gnome/glade-gnc-dialogs.c:1324
 #. src/report/stylesheets/stylesheet-fancy.scm
@@ -12753,7 +12669,7 @@ msgstr "Date : "
 #. untranslated.
 #: ../src/gnome-utils/gnc-dense-cal.c:439
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
+msgstr ""
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
@@ -13217,8 +13133,11 @@ msgstr ""
 "parce que le package« gnucash-docs » n'est ps installé."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:310
+#, fuzzy
 msgid "GnuCash could not find the files for the help documentation."
-msgstr "GnuCash ne peut pas trouver les fichiers pour la documentation d'aide."
+msgstr ""
+"GnuCash ne peut pas trouver les fichiers pour l'aide. C'est certainement "
+"parce que le package« gnucash-docs » n'est ps installé."
 
 #: ../src/gnome-utils/gnc-html.c:106
 msgid "Not found"
@@ -13541,22 +13460,22 @@ msgid "Save changes to file %s before closing?"
 msgstr "Enregistrer les changements du fichier %s avant de le fermer ?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1001
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
 "discarded."
 msgstr ""
-"Si vous ne sauvez pas, les modifications réalisées dans les %d dernières "
-"heures et %d dernières minutes seront perdues."
+"Si vous ne sauvez pas, les changements réalisées dans les %d dernières "
+"minutes seront perdus."
 
 #: ../src/gnome-utils/gnc-main-window.c:1003
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
 "discarded."
 msgstr ""
-"Si vous ne sauvez pas, les modifications réalisées dans les %d derniers "
-"jours et %d dernières heures seront perdues."
+"Si vous ne sauvez pas, les changements réalisées dans les %d dernières "
+"minutes seront perdus."
 
 #: ../src/gnome-utils/gnc-main-window.c:1011
 msgid "<unknown>"
@@ -13600,8 +13519,7 @@ msgstr ""
 "Delafond <gerard@delafond.org>\n"
 "Didier Vidal <didier-devel@9online.fr>\n"
 "Jonathan Ernst <jonathan@ernstfamily.ch>\n"
-"Fabrice Kurz <kurzf@voila.fr>\n"
-"Stéphane Raimbault <stephane.raimbault@gmail.com>"
+"Fabrice Kurz <kurzf@voila.fr>"
 
 # messages-i18n.c:343
 #. CY Strings
@@ -13988,15 +13906,17 @@ msgstr "Cours"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:175
 msgid "Single-character short column-title form of 'Enabled'|E"
-msgstr "A"
+msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:186
+#, fuzzy
 msgid "Last Occur"
-msgstr "Dernière occurrence/apparition"
+msgstr "Dernière occurrence :"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:191
+#, fuzzy
 msgid "Next Occur"
-msgstr "Prochaine occurrence/apparition"
+msgstr "Prochaine instance"
 
 #: ../src/gnome-utils/print-session.c:45
 msgid "Print GnuCash Document"
@@ -14031,24 +13951,21 @@ msgid ""
 "This setting contains the number of files to keep in the Recently Opened "
 "Files menu. This value may be set to zero to disable the file history. This "
 "number has a maximum value of 10."
-msgstr ""
-"Ce paramètre contient le nombre de fichiers à garder dans le menu Fichiers "
-"ouverts récemment. Cette valeur peut être mise à zéro pour désactiver le "
-"fichier d'historique.Ce nombre a une valeur maximum de 10."
+msgstr "Ce paramètre contient le nombre de fichiers à garder dans le menu "
 
 # messages-i18n.c:344
 #: ../src/gnome-utils/window-main-summarybar.c:312
-#, c-format
+#, fuzzy, c-format
 msgid "%s, Total:"
 msgstr "%s, total :"
 
 #: ../src/gnome-utils/window-main-summarybar.c:315
-#, c-format
+#, fuzzy, c-format
 msgid "%s, Non Currency Commodities Total:"
 msgstr "%s, total des valeurs non monétaires :"
 
 #: ../src/gnome-utils/window-main-summarybar.c:318
-#, c-format
+#, fuzzy, c-format
 msgid "%s, Grand Total:"
 msgstr "%s, Grand total :"
 
@@ -14614,14 +14531,15 @@ msgstr ""
 "Voulez vous recommencer?"
 
 #: ../src/import-export/hbci/dialog-hbcitrans.c:592
+#, fuzzy
 msgid ""
 "You did not enter a recipient name.  A recipient name is required for an "
 "online transfer.\n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Vous n'avez pas renseigné le destinataire du virement, qui est obligatoire "
-"pour les virements en ligne.\n"
+"Vous n'avez pas renseigné l'objet du virement, qui est obligatoire pour les "
+"virements en ligne.\n"
 "\n"
 "Voulez vous recommencer?"
 
@@ -14695,17 +14613,19 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:675
+#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
 "Online Banking can only be setup if this wizard has run successfully.  "
 "Please try running the \"AqBanking Setup Wizard\" again."
 msgstr ""
-"Le programme externe \"Assistant de configuration bancaire AqBanking\" a "
-"échoué à fonctionner avec succès. La banque en ligne ne peut être configurée "
-"que seulement si l'assistant fonctionne correctement.Veuillez redémarrer "
-"l'assistant \"Assistant de configuration bancaire\" et recommencer."
+"Le programme externe « %s,  Assistant de configuration »  a retourné un code "
+"de fin d'exécution non nul, ce qui signifie qu'il y a eu une erreur. La "
+"configuration HBCI ne peut être terminée que si cet assistant %s est exécuté "
+"sans erreur. Veuillez redémarrer l'assistant  %s et recommencer."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:686
+#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
@@ -14713,21 +14633,20 @@ msgid ""
 "check your installation to ensure this program is present.  On some "
 "distributions this may require installing additional packages."
 msgstr ""
-"Le programme externe \"Assistant de configuration bancaire AqBanking\" n'a "
-"pas été trouvé.\n"
+"Le programme externe « %s Assistant de configuration » n'a pas été trouvé.\n"
 "\n"
-"Le package aqbanking doit normalement installer le programme \"qt3-wizard\" "
-"Vérifiez votre installation pour vous assurer que ce programme est présent."
-"Sur quelques distributions celà requiert l'installations de paquets/"
-"logiciels supplémentaires."
+"Le package aqbanking doit normalement installer le programme « %s-qt3-wizard "
+"».Vérifiez votre installation d'aqbanking."
 
 # messages-i18n.c:194
 #: ../src/import-export/hbci/druid-hbci-initial.c:752
+#, fuzzy
 msgid "Online Banking Account Name"
-msgstr "Nom du compte de la banque en ligne/HBCI"
+msgstr "Autre compte"
 
 # src/gnome/glade-gnc-dialogs.c:347 src/gnome/glade-gnc-dialogs.c:401
 #: ../src/import-export/hbci/druid-hbci-initial.c:759
+#, fuzzy
 msgid "GnuCash Account Name"
 msgstr "Nom du compte GnuCash"
 
@@ -14786,19 +14705,20 @@ msgid "Bank Code"
 msgstr "Code bancaire"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:10
+#, fuzzy
 msgid "Choose an Online Banking Version to use with the selected bank:"
 msgstr ""
-"Choisissez une version de la banque en ligne/HBCI à utiliser avec la banque "
-"sélectionnée :"
+"Choisissez une version de HBCI à utiliser avec la banque sélectionnée :"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
+#, fuzzy
 msgid ""
 "Click on the line of an Online Banking account name if you want to match it "
 "to a GnuCash account. Click \"Forward\" when all desired accounts are "
 "matching."
 msgstr ""
-"Cliquez sur la ligne d'un compte banque en ligne/HBCI si vous voulez le lier "
-"avec un compte GnuCash. Cliquez sur « Suivant » quand chaque compte est lié."
+"Cliquez sur la ligne d'un compte HBCI si vous voulez le lier avec un compte "
+"GnuCash. Cliquez sur « Suivant » quand chaque compte est lié."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
 msgid "Close when finished"
@@ -14862,13 +14782,14 @@ msgid "Get Transactions Online"
 msgstr "Récupérer les transactions en ligne"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:25
+#, fuzzy
 msgid "Initial Online Banking Setup"
-msgstr "Configuration initiale banque en ligne/HBCI"
+msgstr "Configuration initiale HBCI"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:26
+#, fuzzy
 msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr ""
-"Faire correspondre les comptes banque en ligne/HBCI avec les comptes GNuCash"
+msgstr "Faire correspondre les comptes HBCI avec les comptes GNuCash"
 
 # messages-i18n.c:95
 #: ../src/import-export/hbci/glade/hbci.glade.h:27
@@ -14886,17 +14807,20 @@ msgid "Name for new template"
 msgstr "Entrez un nom pour le nouveau modèle"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:30
+#, fuzzy
 msgid "Online Banking Connection Window"
-msgstr "Fenêtre de connexion banque en ligne/HBCI"
+msgstr "Fenêtre de connexion HBCI"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:31
+#, fuzzy
 msgid "Online Banking Setup Finished"
-msgstr "Configuration de banque en ligne/HBCI terminée"
+msgstr "Configuration de HBCI terminée"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: ../src/import-export/hbci/glade/hbci.glade.h:32
+#, fuzzy
 msgid "Online Banking Version"
-msgstr "Version de banque en ligne /HBCI"
+msgstr "Transaction en ligne"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: ../src/import-export/hbci/glade/hbci.glade.h:33
@@ -14959,28 +14883,33 @@ msgid "Sort the list of transaction templates alphabetically"
 msgstr "Triez la liste des modèles de transactions par ordre alphabétique."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
+#, fuzzy
 msgid "Start AqBanking Setup Wizard"
-msgstr "Démarrer l'assistant de configuration AqBanking/HBCI."
+msgstr "Démarrer l'assistant de configuration HBCI."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:45
+#, fuzzy
 msgid "Start AqBanking Wizard"
-msgstr "Démarrer l'assistant de AqBanking/HBCI"
+msgstr "Démarrer l'assistant de aqHBCI"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:46
+#, fuzzy
 msgid "Start Online Banking Wizard"
-msgstr "Démarrer l'assistant de banque en ligne/HBCI"
+msgstr "Démarrer l'assistant de aqHBCI"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:47
+#, fuzzy
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
 "this program.\t"
 msgstr ""
-" La configuration de votre connection banque en ligne/HBCI est contôlée par "
-"le programme externe \"Assistant de configuration AqBanking/HBCI\". Cliquez "
-"sur le bouton ci-dessous pour démarrer ce programme.\t"
+" La configuration de votre connection HBCI est contôlée par le programme "
+"externe « Assistant de configuration HBCI ». cliquez sur le bouton ci-"
+"dessous pour démarrer le programme.\t"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:48
+#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
@@ -14990,17 +14919,17 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"Maintenant, la configuration de correspondance pour tous les comptes "
-"banqueen ligne/HBCI à des comptes GnuCash est terminée. Vous pouvez "
-"invoquer \n"
-"maintenant des actions banque en ligne/HBCI sur ces comptes.\n"
+"Maintenant, la configuration de correspondance pour tous les comptes HBCI \n"
+"à des comptes GnuCash est terminée. Vous pouvez invoquer maintenant des\n"
+"actions HBCI sur ces comptes.\n"
 "\n"
-"Si vous voulez ajouter une autre banque, utilisateur ou compte, vous\n"
+"Si vous voulez ajouter une autre banque HBCI, utilisateur ou compte, vous\n"
 "pouvez redémarrer cet assistant n'importe quand.\n"
 "\n"
-"Actionnez \"Terminer\" maintenant."
+"Actionnez « Terminer » maintenant."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:53
+#, fuzzy
 msgid ""
 "This druid helps you setting up your Online Banking connection with your "
 "bank.\n"
@@ -15025,30 +14954,29 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now."
 msgstr ""
-"Cet assistant vous aide à paramétrer votre connexion banque en ligne/HBCI "
-"avec votre banque.\n"
+"Cet assistant vous aide à paramétrer votre connexion HBCI avec une banque.\n"
 "\n"
-"Vous devez d'abord obtenir un accès banque en ligne/HBCI à votre banque. Si "
-"votre banque décide de vous donner un accès électronique/en ligne, la banque "
-"vous enverra une lettre contenant\n"
+"Vous devez d'abord obtenir un accès HBCI à votre banque. Si votre banque\n"
+"décide de vous donner un accès HBCI, la banque vous enverra une lettre\n"
+"contenant\n"
 "\n"
 "* Le code de banque de votre banque\n"
 "* L'ID utilisateur qui vous identifie chez votre banque\n"
-"* L'adresse Internet du serveur banque en ligne/HBCI de votre banque\n"
-"* Pour la banque en ligne/HBCI, les informations sur la clé de cryptographie "
-"publique de votre banque (\"Ini-Letter\").\n"
+"* L'adresse Internet du serveur HBCI de votre banque\n"
+"* Les informations sur la clé de cryptographie publique de votre banque "
+"(« Ini-Letter »).\n"
 "\n"
-"Ces informations sont nécessaires dans ce qui suit. Actionnez \"Suivant\" "
+"Ces informations sont nécessaires dans ce qui suit. Actionnez « Suivant » "
 "maintenant.\n"
 "\n"
-"REMARQUE : AUCUNE GARANTIE POUR QUOI QUE CE SOIT. Certaines banques "
-"utilisent un serveur avec une implémentation banque en ligne/HBCI de basse "
-"qualité. Vous ne devriez pas vous faire confiance à banque en ligne/HBCI "
-"pour des transferts critiques, car parfois, votre banque ne vous donne pasun "
-"retour correct lorsqu'un transfert a été rejeté.\n"
+"REMARQUE : AUCUNE GARANTIE POUR QUOI QUE CE SOIT. Certaines banques \n"
+"utilisent un HBCI de basse qualité. Vous ne devriez pas vous faire reposer \n"
+"des transferts critiques par HBCI, car parfois, votre banque ne vous donne "
+"pas\n"
+"un retour correct lorsqu'un transfert a été rejeté.\n"
 "\n"
-"Actionnez \"Annuler\" si vous ne voulez pas continuer la configuration\n"
-"banque en ligne/HBCI maintenant."
+"Actionnez « Annuler » si vous ne voulez pas continuer la configuration\n"
+"HBCI maintenant."
 
 # messages-i18n.c:346
 #: ../src/import-export/hbci/glade/hbci.glade.h:67
@@ -15109,23 +15037,23 @@ msgstr "Mot de passe : "
 
 # messages-i18n.c:238
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
+#, fuzzy
 msgid "<b>Online Banking</b>"
-msgstr "<b>Banque en ligne</b>"
+msgstr "<b>Rapprochement</b>"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
+#, fuzzy
 msgid "Activate verbose debug messages for Online Banking."
-msgstr ""
-"Activer la génération de messages de diagnostic pour banque en ligne/HBCI."
+msgstr "Activer la génération de messages de diagnostic HBCI supplémentaires."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
 msgid "Remember _PIN"
 msgstr "Se rappeler du code _PIN"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
+#, fuzzy
 msgid "Remember the Online Banking PIN in memory during a session."
-msgstr ""
-"Garder le code PIN de banque en ligne/HBCI en mémoire vive durant toute la "
-"session"
+msgstr "Garder le mot de passe HBCI en mémoire vive durant toute la session"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
 msgid "_Verbose debug messages"
@@ -15133,6 +15061,7 @@ msgstr "Messages de _diagnostic HBCI supplémentaires"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/import-export/hbci/gnc-file-aqb-import.c:76
+#, fuzzy
 msgid "Select a file to import"
 msgstr "Sélectionner un fichier à importer"
 
@@ -15144,6 +15073,7 @@ msgstr "Sélectionner un fichier à importer"
 #. * in your country, you may safely ignore strings from the
 #. * import-export/hbci subdirectory.
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:271
+#, fuzzy
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -15153,22 +15083,21 @@ msgid ""
 "(AqBanking or HBCI) Setup. After that, try again to download the Online "
 "Banking Balance."
 msgstr ""
-"Le solde banque en ligne/HBCI téléchargé était 0.\n"
+"Le solde HBCI téléchargé était 0.\n"
 "\n"
 "Soit le solde est correct, soit votre banque ne supporte pas le téchargement "
-"des soldes dans cette version de banque en ligne/HBCI. Dans ce dernier cas, "
-"vous devriez choisir une version banque en ligne/HBCI différente dans le "
-"module de configuration banque en ligne (AqBanking or HBCI).Ensuite "
-"recommencez le téléchargement."
+"des soldes dans cette version de HBCI. Dans ce dernier cas, vous devriez "
+"choisir une version HBCI supérieure dans le module de configuration HBCI. "
+"Ensuite recommencez le téléchargement."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:289
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Result of Online Banking job: \n"
 "Account booked balance is %s"
 msgstr ""
-"Résultat de la requête banque en ligne/HBCI : \n"
-"Le solde réservé du compte est %s"
+"Résultat de la requête HBCI : \n"
+"Le solde réservé du compte est %s."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:296
 #, c-format
@@ -15188,15 +15117,16 @@ msgid "Reconcile account now?"
 msgstr "Rapprocher le compte sélectionné?"
 
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
+#, fuzzy
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
 msgstr ""
-"L'importation banque en ligne/HBCI n'a pas renvoyé de transactions pour la "
-"période choisie."
+"L'importation HBCI n'a pas renvoyé de transactions pour la période choisie."
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:136
 #: ../src/import-export/hbci/gnc-hbci-utils.c:711
+#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -15211,9 +15141,8 @@ msgstr ""
 "requête. Il n'est pas possible d'exécuter cette requête.\n"
 "\n"
 "La raison la plus probable est que votre banque ne supporte pas votre "
-"requête ou votre compte banque en ligne/HBCI ne vous permet pas d'executer "
-"cette requête. Des messages d'erreur peuvent 6etre visibles sur votre "
-"console log.\n"
+"requête ou votre compte HBCI ne vous permet pas d'executer cette requête. "
+"Des messages d'erreur peuvent 6etre visibles sur votre console log.\n"
 "\n"
 "Voulez vous ré-entrer la requête?"
 
@@ -15227,17 +15156,20 @@ msgstr ""
 "changements?"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:250
+#, fuzzy
 msgid "Online Banking Direct Debit Note"
-msgstr "Note de débit immédiat avec banque en ligne/HBCI"
+msgstr "Note de débit immédiat en ligne HBCI"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:252
+#, fuzzy
 msgid "Online Banking Bank-Internal Transfer"
-msgstr "Virement intra-bancaire avec banque en ligne/HBCI"
+msgstr "Virement intra-bancaire HBCI en ligne"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:255
+#, fuzzy
 msgid "Online Banking Transaction"
-msgstr "Transaction avec banque en ligne"
+msgstr "Transaction en ligne"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:357
 msgid ""
@@ -15273,27 +15205,27 @@ msgstr ""
 "Aucune carte à puce n'a été trouvée dans le lecteur. Voulez vous recommencer?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:385
+#, fuzzy
 msgid ""
 "Unfortunately this Online Banking job is not supported by your bank or for "
 "your account. Aborting."
 msgstr ""
-"Malheureusement, cette tâche banque en ligne/HBCI n'est pas supportée par "
-"votre banque ou votre compte. Interruption."
+"Malheureusement, cette tâche HBCI n'est pas gérée par votre banque ou votre "
+"compte. Interruption."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:393
+#, fuzzy
 msgid ""
 "The server of your bank refused the Online Banking connection. Please try "
 "again later. Aborting."
 msgstr ""
-"Le serveur de votre banque a refusé la connection banque en ligne/HBCI. Ré-"
-"essayez plus tard. Interruption"
+"Le serveur de votre banque a refusé la connection HBCI. Ré-essayez plus "
+"tard. Interruption"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:544
 msgid ""
 "Executing the Online Banking outbox failed. Please check the log window."
 msgstr ""
-"Execution de banque en ligne hors-fenêtre a échoué. Verifiez la fenêtre des "
-"logs."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:572
 #, c-format
@@ -15305,14 +15237,9 @@ msgid ""
 "Description and remote name: \"%s\"\n"
 "Value: \"%s\"\n"
 msgstr ""
-"Une note (transaction) de débit a été refusé par la banque. La note de débit "
-"refusée a les données/informations suivantes: \n"
-"code de la banque à distance : \"%s\"\n"
-"Numéro du compte à distance : \"%s\"\n"
-"Description et nom du compte distant : \"%s\"\n"
-"Valeur : \"%s\"\n"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:588
+#, fuzzy
 msgid ""
 "One of the jobs was sent to the bank successfully, but the bank is refusing "
 "to execute the job. Please check the log window for the exact error message "
@@ -15321,10 +15248,10 @@ msgid ""
 "\n"
 "The job has been removed from the queue."
 msgstr ""
-"une des requêtes a été envoyée à la banque avec succès, mais la banque "
-"refuse de l'exécuter. Vérifiez le fenêtre des messages pour connaitre "
-"l'erreur exacte remontée par la banque. Le ligne de l'erreur contient un "
-"numéro de code supérieur à 9000.\n"
+"La requête a été envoyée à la banque avec succès, mais elle refuse de "
+"l'exécuter. Vérifiez le fenêtre des messages pour connaitre l'erreur exacte "
+"remontée par la banque. Le ligne de l'erreur contient un code supérieur à "
+"9000.\n"
 "\n"
 "Voulez vous recommencer?"
 
@@ -15333,8 +15260,6 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
-"Aucun compte de banque en ligne trouvé pour ce compte Gnucash. Ces "
-"transactions ne seront pas exécutées par la banque en ligne."
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
@@ -15354,15 +15279,13 @@ msgstr "Actions en _ligne"
 #. Menu Items
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:99
 msgid "_Online Banking Setup..."
-msgstr "C_onfiguration banque en ligne..."
+msgstr ""
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:100
 msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
 msgstr ""
-"Configuration initiale de l'accès banque en ligne (HBCI, ou OFX "
-"DirectConnect, utilisant AqBanking)"
 
 # messages-i18n.c:346
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:102
@@ -15371,8 +15294,9 @@ msgstr "Obtenir le _Solde"
 
 # messages-i18n.c:113
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:103
+#, fuzzy
 msgid "Get the account balance online through Online Banking"
-msgstr "Obtenir  les soldes de comptes en ligne par banque en ligne/HBCI"
+msgstr "Obtenir  les soldes de comptes en ligne par HBCI"
 
 # messages-i18n.c:346
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
@@ -15381,8 +15305,9 @@ msgstr "Récupérer les _transactions... "
 
 # messages-i18n.c:113
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:106
+#, fuzzy
 msgid "Get the transactions online through Online Banking"
-msgstr "Obtenir les les transactions par banque en ligne/HBCI"
+msgstr "Obtenir les les transactions en ligne par HBCI"
 
 # messages-i18n.c:346
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:108
@@ -15391,8 +15316,9 @@ msgstr "_Créer une transaction..."
 
 # messages-i18n.c:94
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
+#, fuzzy
 msgid "Issue a new transaction online through Online Banking"
-msgstr "Créer une nouvelle transaction par banque en ligne/HBCI"
+msgstr "Créer une nouvelle transaction en ligne par HBCI"
 
 # messages-i18n.c:176
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:117
@@ -15401,8 +15327,9 @@ msgstr "Transaction i_nterne..."
 
 # messages-i18n.c:113
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:118
+#, fuzzy
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "Créer une nouvelle transaction intra-bancaire par banque en ligne/HBCI"
+msgstr "Créer une nouvelle transaction intra-bancaire en ligne par HBCI"
 
 # messages-i18n.c:277
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:121
@@ -15411,71 +15338,74 @@ msgstr "Débit _Immédiat..."
 
 # messages-i18n.c:113
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
+#, fuzzy
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr "Créer une nouvelle note à débit immédiat par banque en ligne/HBCI"
+msgstr "Créer une nouvelle note à débit immédiat en ligne par HBCI"
 
 # messages-i18n.c:293
 #. File -> Import menu item
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:126
+#, fuzzy
 msgid "Import _MT940"
-msgstr "Importer _MT940"
+msgstr "Importer MT940"
 
 # src/gnome/dialog-qif-import.c:221
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:127
+#, fuzzy
 msgid "Import a MT940 file into GnuCash"
-msgstr "Importer un fichier MT940 dans GnuCash"
+msgstr "Sélectionner un fichier MT940 à traiter"
 
 # messages-i18n.c:293
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:129
+#, fuzzy
 msgid "Import MT94_2"
-msgstr "Importer MT94_2"
+msgstr "Importer MT940"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:130
 msgid "Import a MT942 file into GnuCash"
-msgstr "Importer un fichier MT942 dans GnuCash"
+msgstr ""
 
 # messages-i18n.c:293
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:132
+#, fuzzy
 msgid "Import _DTAUS"
-msgstr "Importer _DTAUS"
+msgstr "Importer MT940"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:133
 msgid "Import a DTAUS file into GnuCash"
-msgstr "Importer un fichier DTAUS dans GnuCash"
+msgstr ""
 
 # messages-i18n.c:293
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:136
+#, fuzzy
 msgid "Import _CSV"
-msgstr "Importer _CSV"
+msgstr "Importer"
 
 # src/gnome/dialog-qif-import.c:221
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:137
+#, fuzzy
 msgid "Import a CSV file into GnuCash"
-msgstr "Importer un fichier CSV dans GnuCash"
+msgstr "Import de fichier QSF"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:139
 msgid "Import CSV and s_end..."
-msgstr "Importer CSV et envoyer..."
+msgstr ""
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:140
 msgid ""
 "Import a CSV file into GnuCash and send the transfers online through Online "
 "Banking"
 msgstr ""
-"Importer un fichier CSV dans GnuCash et envoyer les tranferts en ligne par "
-"banque en ligne"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:143
 msgid "Import DTAUS and _send..."
-msgstr "Importer DTAUS et envoyer..."
+msgstr ""
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:144
 msgid ""
 "Import a DTAUS file into GnuCash and send the transfers online through "
 "Online Banking"
 msgstr ""
-"Importer un fichier DTAUS dans GnuCash et envoyer les tranferts en ligne par "
-"banque en ligne"
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
@@ -15514,8 +15444,9 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
+#, fuzzy
 msgid "CSV import data format"
-msgstr "Format de données pour import de CSV"
+msgstr "Format de date personnalisé"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
 msgid "Close dialog when finished"
@@ -15523,7 +15454,7 @@ msgstr "Fermez la fenêtre quand vous avez terminé"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid "DTAUS import data format"
-msgstr "Format de données pour import de DTAUS"
+msgstr ""
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
@@ -15553,11 +15484,11 @@ msgstr "garder le mot de passe en mémoire?"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
 msgid "SWIFT MT940 import data format"
-msgstr "Format de données pour import de SWIFT MT940"
+msgstr ""
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
 msgid "SWIFT MT942 import data format"
-msgstr "Format de données pour import de SWIFT MT942"
+msgstr ""
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:12
 msgid ""
@@ -15565,9 +15496,6 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"Ce paramètre indique le format de données lors de l'importation de fichiers "
-"CSV. La librairie AqBanking offre plusieurs formats d'import (appellés "
-"\"profils\") à partir duquel vous pouvez en choisir un ici."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:13
 msgid ""
@@ -15575,9 +15503,6 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"Ce paramètre indique le format de données lors de l'importation de fichiers "
-"DTAUS. La librairie AqBanking offre plusieurs formats d'import (appellés "
-"\"profils\") à partir duquel vous pouvez en choisir un ici."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:14
 msgid ""
@@ -15585,9 +15510,6 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"Ce paramètre indique le format de données lors de l'importation de fichiers "
-"SWIFT MT940. La librairie AqBanking offre plusieurs formats d'import "
-"(appellés \"profils\") à partir duquel vous pouvez en choisir un ici."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:15
 msgid ""
@@ -15595,9 +15517,6 @@ msgid ""
 "AqBanking library offers various import formats (called \"profiles\") of "
 "which you can choose one here."
 msgstr ""
-"Ce paramètre indique le format de données lors de l'importation de fichiers "
-"SWIFT MT942. La librairie AqBanking offre plusieurs formats d'import "
-"(appellés \"profils\") à partir duquel vous pouvez en choisir un ici."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:16
 msgid "Verbose HBCI debug messages"
@@ -15671,8 +15590,9 @@ msgstr "R"
 
 # messages-i18n.c:231
 #: ../src/import-export/import-main-matcher.c:435
+#, fuzzy
 msgid "Info"
-msgstr "Informations"
+msgstr "Informations d'imposition"
 
 #: ../src/import-export/import-main-matcher.c:586
 msgid "New, already balanced"
@@ -15683,14 +15603,14 @@ msgstr "Nouveau, déjà équilibré"
 #: ../src/import-export/import-main-matcher.c:610
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
-msgstr "Nouveau, transférer %s vers (manuel) \"%s\""
+msgstr "Nouveau, transférer %s vers (manuel) « %s »"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
 #: ../src/import-export/import-main-matcher.c:618
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
-msgstr "Nouveau, transférer %s vers (auto) \"%s\""
+msgstr "Nouveau, transférer %s vers (auto) « %s »"
 
 #. Translators: %s is the amount to be transferred.
 #: ../src/import-export/import-main-matcher.c:629
@@ -15823,7 +15743,7 @@ msgstr ""
 #: ../src/import-export/ofx/gnc-ofx-import.c:357
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Comptes d'actions pour le produit \"%s\""
+msgstr "Comptes d'actions pour le produit « %s »"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -15832,7 +15752,7 @@ msgstr "Comptes d'actions pour le produit \"%s\""
 #: ../src/import-export/ofx/gnc-ofx-import.c:423
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "Compte de revenu pour le titre \"%s\""
+msgstr "Compte de revenu pour le titre « %s »"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:578
 msgid "Unknown OFX checking account"
@@ -15972,7 +15892,7 @@ msgstr "Vous devez saisir une devise existante ou un type différent"
 #: ../src/import-export/qif-import/druid-qif-import.c:1672
 #, c-format
 msgid "Enter information about \"%s\""
-msgstr "Saisir une information à propos de \"%s\""
+msgstr "Saisir une information à propos de « %s »"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1684
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
@@ -16127,6 +16047,7 @@ msgstr ""
 "sur « Annuler » pour annuler le processus. "
 
 #: ../src/import-export/qif-import/qif.glade.h:22
+#, fuzzy
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
@@ -16147,12 +16068,13 @@ msgstr ""
 "Sur la page suivante, vous aurez la possibilité de regarder les "
 "correspondances suggérées entre les comptes GnuCash et les catégories QIF "
 "Vous pouvez changer les correspondances qui ne vous conviennent pas en "
-"double-cliquant sur la ligne contenant le nom de la catégorie.\n"
+"cliquant sur la ligne contenant le nom de la catégorie.\n"
 "\n"
 "Si vous changez d'avis plus tard, vous pouvez réorganiser la structure du "
 "compte en toute sécurité au sein de GnuCash."
 
 #: ../src/import-export/qif-import/qif.glade.h:27
+#, fuzzy
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial "
 "institution, some of the information in the QIF file may duplicate "
@@ -16172,24 +16094,22 @@ msgid ""
 "\n"
 "Click \"Forward\" to find duplicate transactions. "
 msgstr ""
-"Si vous importez un fichier QIF téléchargé à partir d'une banque ou d'une "
-"institution financière, certaines informations dans le fichier peuvent "
-"êtreredondantes avec vos comptes GnuCash. GnuCash va essayer de détecter les "
-"doublons de transactions existantes. \n"
+"Si vous importez un fichier QIF téléchargé d'une banque ou d'une institution "
+"financière, certaines informations dans le fichier peuvent être redondantes "
+"avec vos comptes GnuCash. GnuCash va essayer de détecter les doublons.\n"
 "\n"
 "Sur la page suivante, vous devrez confirmer les rapprochements faits entre "
 "les transactions importées et celles qui existent déjà. Les transactions "
-"importées sont affichées sur la gauche et les correspondances possibles avec "
-"les transactions existantes et sélectionnées sont sur la droite. Il peut y "
-"avoir plusieurs anciennes transactions qui peuvent correspondre à une "
-"transaction importée. Vous pourrez sélectionner la bonne en double-cliquant "
-"sur la colonne \"Dup ?\" de la transaction correcte.\n"
+"importées sont affichées sur la gauche et les transactions existantes "
+"possibles sur la droite. Il peut y avoir plusieurs anciennes transactions "
+"qui peuvent correspondre. Vous pourrez sélectionner la bonne en cliquant sur "
+"la colonne « Dup ? » de la transaction correcte.\n"
 "\n"
 "Vous pouvez contrôler les règles utilisées par GnuCash pour trouver les "
-"transactions dupliquées dans la section \"Importer QIF\" de la boîte de "
+"transactions dupliquées dans la section « Importer QIF » de la boîte de "
 "dialogue des préférences de GnuCash\n"
 "\n"
-"Cliquer sur \"Suivant\" pour trouver les transactions dupliquées."
+"Cliquer sur « Suivant » pour trouver les transactions dupliquées."
 
 # src/gnome/glade-gnc-dialogs.c:74
 #: ../src/import-export/qif-import/qif.glade.h:34
@@ -16254,6 +16174,7 @@ msgid "Match payees/memos to GnuCash accounts"
 msgstr "Mémos rapprochés des comptes GnuCash"
 
 #: ../src/import-export/qif-import/qif.glade.h:47
+#, fuzzy
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds you own will be matched with GnuCash accounts. If a GnuCash account "
@@ -16275,13 +16196,12 @@ msgstr ""
 "comptes GnuCash. Si un compte GnuCash existe déjà avec le même nom, ou un "
 "nom similaire et un type compatible, ce compte sera utilisé. Sinon, GnuCash "
 "créera un nouveau compte avec le même nom et type que le compte QIF. Si le "
-"compte suggéré par GnuCash ne vous convient pas, double-cliquez pour le "
-"changer.\n"
+"compte suggéré par GnuCash ne vous convient pas, cliquez pour le changer.\n"
 "\n"
 "Notez que GnuCash créera beaucoup de comptes qui n'existent pas sur votre "
 "autre programme de finances personnelles, incluant un compte séparé pour "
 "chaque action que vous possédez, des comptes séparés pour les commissions de "
-"courtage, comptes \"Capitaux propres\" spéciaux (sous-comptes de gain/"
+"courtage, comptes « Capitaux propres » spéciaux (sous-comptes de gain/"
 "bénéfices retenus, par défaut) qui sont la source de votre solde initial, "
 "etc. Tous ces comptes apparaîtront à la page suivante et ainsi vous pouvez "
 "les changer si vous le voulez, mais il est plus sûr de les laisser tels "
@@ -18979,9 +18899,6 @@ msgid ""
 "report will be available in the menu Reports -> Custom at the next startup "
 "of GnuCash."
 msgstr ""
-"Votre rapport \"%s\" a été sauvegardé dans le fichier de configuration \"%s"
-"\".Le rapport sera disponible dans le menu Rapports -> Personnalisé au "
-"prochain démarrage de GnuCash."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -19116,13 +19033,13 @@ msgstr "Lignes de crédit"
 #: ../intl-scm/guile-strings.c:1398
 #, c-format
 msgid "Building '%s' report ..."
-msgstr "Compilation du rapport '%s' en cours..."
+msgstr "Compilation du rapport « %s » en cours..."
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1400
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr "Affichage du rapport '%s' en cours..."
+msgstr "Affichage du rapport « %s » en cours..."
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #. src/report/report-system/html-utilities.scm
@@ -19583,21 +19500,19 @@ msgstr ""
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1610 ../intl-scm/guile-strings.c:1776
+#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
-msgstr ""
-"Pour les détails pour la souscription à cette liste, regardez à &lt;http://"
-"www.gnucash.org/&gt;."
+msgstr "Pour les détails pour la souscription à la liste, voyez %s"
 
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1612 ../intl-scm/guile-strings.c:1778
+#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/"
 "&gt;."
-msgstr ""
-"Vous pouvez apprendre à écrire en scheme à &lt;http://www.scheme.com/tspl2d/"
-"&gt;."
+msgstr "Vous pouvez apprendre à écrire en scheme en utilisant %s."
 
 # po/guile_strings.txt:18
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -21908,8 +21823,9 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:3162 ../intl-scm/guile-strings.c:4316
+#, fuzzy
 msgid "Compute unrealized gains and losses"
-msgstr "Calculer les gains et pertes non réalisés"
+msgstr "Inclure les gains de pertes"
 
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -21918,9 +21834,6 @@ msgid ""
 "Include unrealized gains and losses in the computation.  Will produce "
 "incorrect results if the current file uses commodity trading accounts"
 msgstr ""
-"Inclure les gains et pertes non réalisés dans le calcul. Produira des "
-"résultats incorrects si le fichier actuel utilise des comptes de négoce de "
-"matières premières(commodity trading)"
 
 # messages-i18n.c:268 po/guile_strings.txt:32
 #. src/report/standard-reports/gnucash/report/balance-sheet.scm
@@ -23778,7 +23691,7 @@ msgstr "Importation des transactions en cours..."
 #: ../intl-scm/guile-strings.c:5820 ../intl-scm/guile-strings.c:5838
 #, c-format
 msgid "The file contains an unknown Action '%s'."
-msgstr "Ce fichier contient une Action inconnue: '%s'."
+msgstr "Ce fichier contient une Action inconnue: « %s »."
 
 #. src/import-export/qif-import/qif-import/qif-parse.scm
 #. src/import-export/qif-import/qif-parse.scm
@@ -24950,10 +24863,6 @@ msgid ""
 "bugs and unstable features! If you are looking for a stable personal finance "
 "application, you should use the latest release of GnuCash 2.0."
 msgstr ""
-"Attention!! Il s'agit d'une version de DEVELOPPEMENT de GnuCash. Elle a "
-"probablement beaucoup de bugs/bogues et des fonctionnalités unstables! Si "
-"vous recherchez une application stable de finances personnelles, vous "
-"devriez utiliser la drnière version de GnuCash 2.0."
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid ""
@@ -25095,8 +25004,6 @@ msgid ""
 "To switch between multiple tabs in the main window, press Control+Alt+Page "
 "Up/Down."
 msgstr ""
-"Pour naviguer entre les multiples onglets dans la fenêtre principale, "
-"appuyez sur Control+Alt+Page Up/Down."
 
 #: ../doc/tip_of_the_day.list.in:63
 msgid ""
@@ -25177,26 +25084,29 @@ msgstr ""
 "\n"
 "Selon une autre théorie, la chose se serait en fait déjà produite.\n"
 "\n"
-"Douglas Adams, \"Le Dernier Restaurant avant la Fin du Monde\" "
+"Douglas Adams, « Le Dernier Restaurant avant la Fin du Monde »"
+
+#~ msgid " Variables are in the form 'name=value'"
+#~ msgstr "Les variables sont de la forme « nom=valeur »"
+
+# messages-i18n.c:223
+#, fuzzy
+#~ msgid "Save Check Description"
+#~ msgstr "Trier par description"
+
+#, fuzzy
+#~ msgid "All Files"
+#~ msgstr "Tous les fichiers"
+
+#, fuzzy
+#~ msgid "New Check Format Title"
+#~ msgstr "Impossible d'enregistrer dans ce fichier"
 
 #~ msgid "Enables support for the European Union EURO currency."
 #~ msgstr "Active le support pour l'euro, la devise de l'Union Européenne"
 
 #~ msgid "_Enable euro support"
 #~ msgstr "Activer le support de l'_Euro"
-
-#~ msgid " Variables are in the form 'name=value'"
-#~ msgstr "Les variables sont de la forme « nom=valeur »"
-
-# messages-i18n.c:223
-#~ msgid "Save Check Description"
-#~ msgstr "Enregistrer description du chèque"
-
-#~ msgid "All Files"
-#~ msgstr "Tous les fichiers"
-
-#~ msgid "New Check Format Title"
-#~ msgstr "Nouveau titre du format du chèque"
 
 #~ msgid "online book"
 #~ msgstr "Livre en ligne"
