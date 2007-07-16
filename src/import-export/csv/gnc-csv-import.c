@@ -778,8 +778,12 @@ void gnc_file_csv_import(void)
                                    trans_line->trans);
       transactions = g_list_next(transactions);
     }
-    /* Let the user load those transactions into the account. */
-    gnc_gen_trans_list_run(gnc_csv_importer_gui);
+    /* Let the user load those transactions into the account, so long
+     * as there is at least one transaction to be loaded. */
+    if(parse_data->transactions != NULL)
+      gnc_gen_trans_list_run(gnc_csv_importer_gui);
+    else
+      gnc_gen_trans_list_delete(gnc_csv_importer_gui);
 
     /* Free the memory we allocated. */
     gnc_csv_preview_free(preview);

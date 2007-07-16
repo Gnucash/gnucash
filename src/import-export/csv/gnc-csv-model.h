@@ -76,9 +76,6 @@ extern const int num_date_formats;
 /* A set of date formats that the user sees. */
 extern const gchar* date_format_user[];
 
-/* Matching formats for date_format_user to be used with strptime. */
-extern const gchar* date_format_internal[];
-
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 typedef struct
 {

@@ -11,6 +11,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <regex.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -18,26 +19,11 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-const int num_date_formats = 8;
-/* A set of date formats that the user sees. */
-const gchar* date_format_user[] = {N_("yyyy/mm/dd"),
-                                   N_("yy/mm/dd"),
-                                   N_("dd/mm/yyyy"),
-                                   N_("dd/mm/yy"),
-                                   N_("dd/mm/yyyy"),
-                                   N_("dd/mm/yy"),
-                                   N_("mm/dd/yyyy"),
-                                   N_("mm/dd/yy")};
+const int num_date_formats = 3;
 
-/* Matching formats for date_format_user to be used with strptime. */
-const gchar* date_format_internal[] = {"%Y/%m/%d",
-                                       "%y/%m/%d",
-                                       "%d/%m/%Y",
-                                       "%d/%m/%y",
-                                       "%d/%m/%Y",
-                                       "%d/%m/%y",
-                                       "%m/%d/%Y",
-                                       "%m/%d/%y"};
+const gchar* date_format_user[] = {N_("y-d-m"),
+                                   N_("d-m-y"),
+                                   N_("m-d-y")};
 
 /** A set of sensible defaults for parsing CSV files. 
  * @return StfParseOptions_t* for parsing a file with comma separators
@@ -50,24 +36,108 @@ static StfParseOptions_t* default_parse_options(void)
   return options;
 }
 
-/* TODO This will be replaced by something more sophisticated. */
-/* TODO Comment. */
+/** Parses a string into a date, given a format. This function
+ * requires only knowing the order in which the year, month and day
+ * appear. For example, 01-02-2003 will be parsed the same way as
+ * 01/02/2003.
+ * @param date_str The string containing a date being parsed
+ * @param format An index specifying a format in date_format_user
+ * @return The parsed value of date_str on success or -1 on failure
+ */
 static time_t parse_date(const char* date_str, int format)
 {
-  struct tm retvalue;
-  char *last_parsed_char;
-  last_parsed_char = strptime(date_str, date_format_internal[format], &retvalue);
-  if(last_parsed_char != date_str + strlen(date_str))
+  time_t rawtime; /* The integer time */
+  struct tm retvalue; /* The time in a broken-down structure */
+  
+  int i, j, mem_length, orig_year, orig_month, orig_day;
+
+  /* Buffer for containing individual parts (e.g. year, month, day) of a date */
+  char date_segment[5];
+
+  /* The compiled regular expression */
+  regex_t preg = {0};
+
+  /* An array containing indices specifying the matched substrings in date_str */
+  regmatch_t pmatch[4] = { {0}, {0}, {0}, {0} };
+
+  /* The regular expression for parsing dates */
+  const char* regex = "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$";
+
+  /* We get our matches using the regular expression. */
+  regcomp(&preg, regex, REG_EXTENDED);
+  regexec(&preg, date_str, 4, pmatch, 0);
+  regfree(&preg);
+
+  /* If there wasn't a match, there was an error. */
+  if(pmatch[0].rm_eo == 0)
+    return -1;
+
+  /* Put some sane values in retvalue by using the current time for
+   * the non-year-month-day parts of the date. */
+  time(&rawtime);
+  localtime_r(&rawtime, &retvalue);
+
+  /* j traverses pmatch (index 0 contains the entire string, so we
+   * start at index 1 for the first meaningful match). */
+  j = 1;
+  /* Go through the date format and interpret the matches in order of
+   * the sections in the date format. */
+  for(i = 0; date_format_user[format][i]; i++)
+  {
+    char segment_type = date_format_user[format][i];
+    /* Only do something if this is a meaningful character */
+    if(segment_type == 'y' || segment_type == 'm' || segment_type == 'd')
+    {
+      /* Copy the matching substring into date_segment so that we can
+       * convert it into an integer. */
+      mem_length = pmatch[j].rm_eo - pmatch[j].rm_so;
+      memcpy(date_segment, date_str + pmatch[j].rm_so, mem_length);
+      date_segment[mem_length] = '\0';
+
+      /* Set the appropriate member of retvalue. Save the original
+       * values so that we can check if the change when we use mktime
+       * below. */
+      switch(segment_type)
+      {
+      case 'y':
+        retvalue.tm_year = atoi(date_segment);
+
+        /* Handle two-digit years. */
+        if(retvalue.tm_year < 100)
+        {
+          /* We allow two-digit years in the range 1969 - 2068. */
+          if(retvalue.tm_year < 69)
+            retvalue.tm_year += 100;
+        }
+        else
+          retvalue.tm_year -= 1900;
+        orig_year = retvalue.tm_year;
+        break;
+        
+      case 'm':
+        orig_month = retvalue.tm_mon = atoi(date_segment) - 1;
+        break;
+        
+      case 'd':
+        orig_day = retvalue.tm_mday = atoi(date_segment);
+        break;
+      }
+      j++;
+    }
+  }
+  /* Convert back to an integer. If mktime leaves retvalue unchanged,
+   * everything is okay; otherwise, an error has occurred. */
+  rawtime = mktime(&retvalue);
+  if(retvalue.tm_mday == orig_day &&
+     retvalue.tm_mon == orig_month &&
+     retvalue.tm_year == orig_year)
+  {
+    return rawtime;
+  }
+  else
   {
     return -1;
   }
-  /* We have to set the hour, minute, second and daylight savings time
-   * flags to valid values. */
-  retvalue.tm_hour = 0;
-  retvalue.tm_min = 0;
-  retvalue.tm_sec = 1;
-  retvalue.tm_isdst = -1;
-  return mktime(&retvalue);
 }
 
 /** Constructor for GncCsvParseData.
