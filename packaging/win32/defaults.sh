@@ -18,7 +18,7 @@
 #
 # Here is an example custom.sh file:
 #
-# REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/trunk"
+# REPOS_URL="svn+ssh://<dev>@svn.gnucash.org/repo/gnucash/branches/2.2"
 # SF_MIRROR="http://switch.dl.sourceforge.net/sourceforge"
 # DISABLE_OPTIMIZATIONS=yes
 # AQBANKING_WITH_QT=no
@@ -58,7 +58,7 @@ else
     # change this to "no" if you are using install.sh from the same repository checkout
     set_default UPDATE_SOURCES yes
     set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
-    set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
+    set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/branches/2.2"
     set_default REPOS_DIR $GNUCASH_DIR\\repos
     # keep this pointing from BUILD_DIR to REPOS_DIR
     set_default REL_REPOS_DIR ..\\repos
