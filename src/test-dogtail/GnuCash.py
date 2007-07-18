@@ -18,13 +18,24 @@ from dogtail import tree, predicate
 from dogtail.config import config
 from dogtail.procedural import focus
 
+
 # use the the following list to dismiss the code in this Order Cancel, No, Then Close, .... Add more if others
 default_dismiss_list = ['Close', 'Cancel', 'No'] 
+default_accept_list = ['OK', 'Yes', 'Apply', 'Accept']
 def in_dismiss_list(button, dismiss_list=default_dismiss_list):
     """Check if the Button already in the dismiss list you could override the default behaviour by passing
         your own dismiss list to the code
     """
     for button_name in dismiss_list:
+        if button_name == button.name:
+            return button
+    return None
+
+def in_accept_list(button, accept_list=default_accept_list):
+    """Check if the Button already in the accept list you could override the default behaviour by passing
+        your own dismiss list to the code
+    """
+    for button_name in accept_list:
         if button_name == button.name:
             return button
     return None
@@ -156,6 +167,18 @@ class GnucashWindow(Window):
                     dismiss_button.click()
                     return True
         return False
+
+    def accept(self):
+        """" when calling dismiss the expected action is Cancel, Close and No """
+        button_list = self.findChildren(predicate.GenericPredicate(roleName='push button'))
+        for button in button_list:
+           accept_button = in_accept_list(button)
+           if accept_button != None:
+               if accept_button.showing:
+                   accept_button.click()
+                   return True
+        return False
+
 
 class NewAccount(GnucashWindow):
     """ Wrapper class for new Account Dialog """	
@@ -1095,10 +1118,50 @@ class Reconcile(GnucashWindow):
     
     def __init__(self):
         self.invoke_list = ["Actions", "Reconcile..."]
-        self.dialog_name = ". Reconcile"
+        self.dialog_name = ". - Reconcile"            # TODO: This line does not work as expected 
+                                                      # current work around override the dialog_name
+
+    def initialize(self):
+        self.ending_balance_txt = \
+        self.findChild(predicate.GenericPredicate( roleName='text' ))
+        self.include_subaccount_cb = \
+        self.findChild(predicate.GenericPredicate( \
+        roleName='check box', \
+        name='Include subaccounts'))
+        self.enter_payment_btn = self.button('Enter Interest Payment...')
+        self.ok_btn = self.button('OK')
+        self.cancel_btn = self.button('Cancel')
+
+    def __setattr__(self, name, value):
+        if name =='ending_balance':
+            self.ending_balance_txt.text = value
+        elif name == 'include_subaccount':
+            if value and not self.include_subaccount_cb.checked:
+                self.include_subaccount_cb.click()
+            elif not value and self.include_subaccount_cb.checked:
+                self.include_subaccount_cb.click()
+        else:
+            self.__dict__[name]=value
+
+class ReconcileFrame(Node):
+    
+    def __init__(self, initializer):
+        config.childrenLimit = 1500
+        Node.__init__(self, initializer)
+#        self.funds_out_panel = \
+ #       self.findChildren(predicate.GenericPredicate(roleName='panel'))
+  #      for item in self.funds_out_panel:
+   #         print item
+        #self.fund_in_panel = \
+        #self.findChild(predicate.GenericPredicate(roleName='panel', name='Funds In'))
 
 if __name__ == '__main__':
-    reconcile = Reconcile()
-    reconcile.invoke()
-    reconcile.dismiss()
+    config.childrenLimit = 1500
 
+    gnucash = GnuCashApp()
+    asset_reconcile = gnucash.findChild(predicate.GenericPredicate(roleName='frame'))
+    reconcileFrame = ReconcileFrame(asset_reconcile)
+    panels = asset_reconcile.findChildren(predicate.GenericPredicate(roleName='panel'))
+    reconcileFrame.dump()
+    for item in panels:
+        print item
