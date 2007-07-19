@@ -16,7 +16,6 @@
 %define libgnomeui_version 2.8.0
 %define libgnomeprintui_version 2.8.0
 %define guile_version 1.6.0
-%define gwrap_version 1.3.4
 %define gtkhtml3_version 3.1
 %define libofx_version 0.8.0
 %define aqbanking_version 1.3
@@ -41,11 +40,9 @@ Requires:  	libgnomeui >= %{libgnomeui_version}
 Requires:	libgnomeprintui22 >= %{libgnomeprintui22_version}
 Requires:	guile >= %{guile_version}
 Requires:	gtkhtml3 >= %{gtkhtml3_version}
-Requires:	g-wrap >= %{g-wrap_version}
 
 BuildRequires: 	libgnomeui-devel >= %{libgnomeui_version}
 BuildRequires: 	libgnomeprintui22-devel >= %{libgnomeprintui22_version}
-BuildRequires: 	g-wrap-devel >= %{g-wrap_version}
 BuildRequires: 	gtkhtml3-devel >= %{gtkhtml3_version}
 BuildRequires: 	bzip2-devel, expat-devel, guile-devel
 BuildRequires: 	libglade2-devel, libgsf-devel
