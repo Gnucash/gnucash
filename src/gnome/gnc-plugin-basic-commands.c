@@ -104,10 +104,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
     NULL,
     G_CALLBACK (gnc_main_window_cmd_file_save_as) },
+#ifdef QSF_IMPORT_WORKS
   { "FileImportQSFAction", GTK_STOCK_CONVERT,
     N_("_QSF Import"), NULL,
     N_("Import a QSF object file"),
     G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
+#endif // QSF_IMPORT_WORKS
   { "FileExportAccountsAction", GTK_STOCK_CONVERT,
     N_("Export _Accounts"), NULL,
     N_("Export the account hierarchy to a new GnuCash datafile"),
@@ -138,9 +140,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+#ifdef CLOSE_BOOKS_ACTUALLY_WORKS
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
+#endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
   /* Tools menu */
 
