@@ -8,17 +8,16 @@ msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2001-1-18 14:00+0900\n"
-"Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
+"PO-Revision-Date: 2007-07-20 23:06+0200\n"
+"Last-Translator: \"Hiroto Kagotani\" <hiroto.kagotani@gmail.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
-#, fuzzy
 msgid "Illegal variable in expression."
-msgstr "正規表現"
+msgstr "式に不正な変数があります"
 
 #: ../src/app-utils/gnc-exp-parser.c:643
 msgid "Unbalanced parenthesis"
@@ -176,31 +175,28 @@ msgid "Query could not be executed"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:84
-#, fuzzy
 msgid "This is a development version. It may or may not work.\n"
-msgstr "開発バージョンのため、動作しないかもしれません。"
+msgstr "これは開発バージョンのため、動作しないかもしれません。\n"
 
 #: ../src/bin/gnucash-bin.c:85
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
-msgstr ""
+msgstr "バグやその他の問題は gnucash-devel@gnucash.org に報告してください。\n"
 
 #: ../src/bin/gnucash-bin.c:86
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
+msgstr "また、 http://bugzilla.gnome.org でバグを探したり登録することができます。\n"
 
 #: ../src/bin/gnucash-bin.c:87
-#, fuzzy
 msgid "The last stable version was "
-msgstr "最新の安定バージョンは %s です。"
+msgstr "最新の安定バージョン: "
 
 #: ../src/bin/gnucash-bin.c:88
-#, fuzzy
 msgid "The next stable version will be "
-msgstr "次の安定バージョンは %s です。"
+msgstr "次の安定バージョン: "
 
 #: ../src/bin/gnucash-bin.c:218
 msgid "Show GnuCash version"
-msgstr "GnuCashのバージョンを表示"
+msgstr "GnuCashのバージョンを表示する"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
@@ -238,9 +234,8 @@ msgid "Do not load the last file opened"
 msgstr "最後に開いたファイルを読み込まない"
 
 #: ../src/bin/gnucash-bin.c:247
-#, fuzzy
 msgid "Set configuration path"
-msgstr "コンフィグレーションファイルのディレクトリを設定"
+msgstr "コンフィグレーションパスを設定する"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -249,9 +244,8 @@ msgid "CONFIGPATH"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:253
-#, fuzzy
 msgid "Set shared data file search path"
-msgstr "共有ディレクトリを設定"
+msgstr "共有データファイル検索パスを設定する"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -262,7 +256,7 @@ msgstr ""
 #. src/scm/command-line.scm
 #: ../src/bin/gnucash-bin.c:258 ../intl-scm/guile-strings.c:6
 msgid "Set the search path for documentation files"
-msgstr "文書ファイル検索パスを設定する。"
+msgstr "文書ファイル検索パスを設定する"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -271,9 +265,8 @@ msgid "DOCPATH"
 msgstr ""
 
 #: ../src/bin/gnucash-bin.c:263
-#, fuzzy
 msgid "Set the prefix path for gconf queries"
-msgstr "文書ファイル検索パスを設定する。"
+msgstr "gconf問い合わせのプレフィックスパスを設定する"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -304,15 +297,15 @@ msgstr ""
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:301
-#, fuzzy, c-format
+#, c-format
 msgid "GnuCash %s development version"
-msgstr "GnuCashのバージョンを表示"
+msgstr "GnuCash %s 開発バージョン"
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:306
-#, fuzzy, c-format
+#, c-format
 msgid "GnuCash %s"
-msgstr "GnuCash を終了する"
+msgstr "GnuCash %s"
 
 #. Translators: 1st %s is the build date; 2nd %s is the SVN
 #. revision number
@@ -359,7 +352,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6934 ../intl-scm/guile-strings.c:7164
 #: ../intl-scm/guile-strings.c:7404
 msgid "Invoice"
-msgstr "請求書"
+msgstr "納品書"
 
 #. src/app-utils/prefs.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -405,9 +398,8 @@ msgid "Automatic Payment Forward"
 msgstr ""
 
 #: ../src/business/business-core/gncInvoice.c:1125
-#, fuzzy
 msgid "Auto Split"
-msgstr "株分割"
+msgstr "自動分割"
 
 #. src/app-utils/prefs.scm
 #: ../src/business/business-core/gncInvoice.c:1320
@@ -447,9 +439,8 @@ msgstr "選択..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:71
 #: ../src/gnome-utils/gnc-general-select.c:219
-#, fuzzy
 msgid "Edit..."
-msgstr "編集"
+msgstr "編集..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:217
 #, fuzzy
@@ -473,27 +464,24 @@ msgstr "なし"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:630
 #: ../src/gnome/druid-hierarchy.c:829
-#, fuzzy
 msgid "Yes"
-msgstr "年"
+msgstr "はい"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:635
 #: ../src/gnome/druid-hierarchy.c:832
-#, fuzzy
 msgid "No"
-msgstr "なし"
+msgstr "いいえ"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:640
-#, fuzzy
 msgid "Use Global"
-msgstr "ローカル時間を使用する"
+msgstr "グローバル設定を使用"
 
 #: ../src/business/business-gnome/business-urls.c:58
 #: ../src/business/business-gnome/business-urls.c:190
 #: ../src/gnome/top-level.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Badly formed URL %s"
-msgstr "gnc-optionsのフォームが正しくありません: URL."
+msgstr "URLのフォーマットが正しくありません: %s"
 
 #. ==============================================================
 #. HTML Handler for reports.
@@ -504,12 +492,12 @@ msgstr "gnc-optionsのフォームが正しくありません: URL."
 #: ../src/gnome/top-level.c:89
 #, c-format
 msgid "Bad URL: %s"
-msgstr ""
+msgstr "URLが正しくありません: %s"
 
 #: ../src/business/business-gnome/business-urls.c:72
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "実体がありません: %s"
 
 #. =================================================================
 #: ../src/business/business-gnome/business-urls.c:162
@@ -534,9 +522,8 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-billterms.c:262
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:129
-#, fuzzy
 msgid "Negative amounts are not allowed."
-msgstr "負の金額を赤色で表示する"
+msgstr "マイナスの金額は許されません。"
 
 #: ../src/business/business-gnome/dialog-billterms.c:267
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:136
@@ -587,9 +574,9 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-billterms.c:598
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:542
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "%sの勘定を本当に削除してもよろしいですか？"
+msgstr "\"%s\" を本当に削除してもよろしいですか？"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid ""
@@ -621,9 +608,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-customer.c:294
 #, fuzzy
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
-"適正な現金金額を入力してください。\n"
-"あるいは空白にしてください。"
+msgstr "貸方にはプラスの金額を入力するか空白のままにしておかなければなりません。"
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
@@ -634,23 +619,21 @@ msgid "<No name>"
 msgstr "<名前なし>"
 
 #: ../src/business/business-gnome/dialog-customer.c:372
-#, fuzzy
 msgid "Edit Customer"
-msgstr "カスタム"
+msgstr "顧客を編集"
 
 #: ../src/business/business-gnome/dialog-customer.c:374
 #: ../src/business/business-gnome/glade/customer.glade.h:15
-#, fuzzy
 msgid "New Customer"
-msgstr "カスタム"
+msgstr "顧客を新規作成"
 
 #: ../src/business/business-gnome/dialog-customer.c:781
 msgid "View/Edit Customer"
-msgstr ""
+msgstr "顧客を表示/編集する"
 
 #: ../src/business/business-gnome/dialog-customer.c:782
 msgid "Customer's Jobs"
-msgstr ""
+msgstr "顧客の職業"
 
 #. { N_("Customer's Orders"), order_customer_cb},
 #: ../src/business/business-gnome/dialog-customer.c:784
@@ -664,38 +647,34 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-invoice.c:2209
 #: ../src/business/business-gnome/dialog-invoice.c:2455
 #: ../src/business/business-gnome/dialog-job.c:516
-#, fuzzy
 msgid "Process Payment"
-msgstr "定期支払額"
+msgstr "支払の処理"
 
 #: ../src/business/business-gnome/dialog-customer.c:794
 msgid "Shipping Contact"
-msgstr ""
+msgstr "配達先"
 
 #: ../src/business/business-gnome/dialog-customer.c:796
 #: ../src/business/business-gnome/dialog-vendor.c:659
 msgid "Billing Contact"
-msgstr ""
+msgstr "請求先"
 
 #: ../src/business/business-gnome/dialog-customer.c:798
-#, fuzzy
 msgid "Customer ID"
-msgstr "カスタム"
+msgstr "顧客ID"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../src/business/business-gnome/dialog-customer.c:800
 #: ../src/business/business-gnome/dialog-vendor.c:663
 #: ../intl-scm/guile-strings.c:5876 ../intl-scm/guile-strings.c:5894
-#, fuzzy
 msgid "Company Name"
-msgstr "会社のロゴ画像"
+msgstr "会社名"
 
 #: ../src/business/business-gnome/dialog-customer.c:806
 #: ../src/business/business-gnome/dialog-vendor.c:669
-#, fuzzy
 msgid "Contact"
-msgstr "内容"
+msgstr "連絡先"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -709,21 +688,19 @@ msgstr "内容"
 #: ../src/business/business-gnome/dialog-vendor.c:671
 #: ../intl-scm/guile-strings.c:6128 ../intl-scm/guile-strings.c:6652
 #: ../intl-scm/guile-strings.c:7002 ../intl-scm/guile-strings.c:7242
-#, fuzzy
 msgid "Company"
-msgstr "列スパン:"
+msgstr "会社"
 
 #: ../src/business/business-gnome/dialog-customer.c:810
 #: ../src/business/business-gnome/dialog-employee.c:704
 #: ../src/business/business-gnome/dialog-job.c:544
 #: ../src/business/business-gnome/dialog-vendor.c:673
 msgid "ID #"
-msgstr ""
+msgstr "ID #"
 
 #: ../src/business/business-gnome/dialog-customer.c:832
-#, fuzzy
 msgid "Find Customer"
-msgstr "カスタム"
+msgstr "顧客を検索"
 
 #: ../src/business/business-gnome/dialog-date-close.c:72
 #, fuzzy
@@ -747,16 +724,16 @@ msgstr "適正な式を入力してください。"
 
 #: ../src/business/business-gnome/dialog-employee.c:308
 msgid "Edit Employee"
-msgstr ""
+msgstr "従業員を編集"
 
 #: ../src/business/business-gnome/dialog-employee.c:310
 #: ../src/business/business-gnome/glade/employee.glade.h:18
 msgid "New Employee"
-msgstr ""
+msgstr "従業員を新規作成"
 
 #: ../src/business/business-gnome/dialog-employee.c:682
 msgid "View/Edit Employee"
-msgstr ""
+msgstr "従業員を表示/編集する"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 #, fuzzy
@@ -765,22 +742,20 @@ msgstr "費用チャート"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
 msgid "Employee ID"
-msgstr ""
+msgstr "従業員ID"
 
 #: ../src/business/business-gnome/dialog-employee.c:694
-#, fuzzy
 msgid "Employee Username"
-msgstr "ユーザ名:"
+msgstr "従業員ユーザ名"
 
 #: ../src/business/business-gnome/dialog-employee.c:696
 #: ../src/business/business-gnome/dialog-invoice.c:2299
 msgid "Employee Name"
-msgstr ""
+msgstr "従業員名"
 
 #: ../src/business/business-gnome/dialog-employee.c:702
-#, fuzzy
 msgid "Username"
-msgstr "ユーザ名:"
+msgstr "ユーザ名"
 
 #. src/business/business-reports/gnucash/report/aging.scm
 #. src/business/business-reports/aging.scm
@@ -797,9 +772,8 @@ msgid "Name"
 msgstr "名前"
 
 #: ../src/business/business-gnome/dialog-employee.c:727
-#, fuzzy
 msgid "Find Employee"
-msgstr "完了"
+msgstr "従業員を検索"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -853,9 +827,8 @@ msgstr "本当にこの価格を削除してもよろしいですか?"
 #: ../intl-scm/guile-strings.c:6132 ../intl-scm/guile-strings.c:6328
 #: ../intl-scm/guile-strings.c:6656 ../intl-scm/guile-strings.c:6852
 #: ../intl-scm/guile-strings.c:7174 ../intl-scm/guile-strings.c:7414
-#, fuzzy
 msgid "Due Date"
-msgstr "日付"
+msgstr "期限日"
 
 #: ../src/business/business-gnome/dialog-invoice.c:628
 #, fuzzy
@@ -878,19 +851,16 @@ msgid "Total:"
 msgstr "合計:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:925
-#, fuzzy
 msgid "Subtotal:"
-msgstr "合計"
+msgstr "小計:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:926
-#, fuzzy
 msgid "Tax:"
-msgstr "税金(_T)"
+msgstr "税金:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:930
-#, fuzzy
 msgid "Total Cash:"
-msgstr "合計:"
+msgstr "現金合計:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:931
 #, fuzzy
@@ -901,69 +871,70 @@ msgstr "貸方合計"
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
 #, fuzzy
 msgid "New Invoice"
-msgstr "請求書"
+msgstr "Invoiceを新規作成"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1551
 #, fuzzy
 msgid "Edit Invoice"
-msgstr "請求書"
+msgstr "Invoiceを編集"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1554
 #, fuzzy
 msgid "View Invoice"
-msgstr "請求書"
+msgstr "Invoiceを表示"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1562
 #, fuzzy
 msgid "New Bill"
-msgstr "新規ファイル"
+msgstr "Billを新規作成"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1566
 #, fuzzy
 msgid "Edit Bill"
-msgstr "検索"
+msgstr "Billを編集"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1569
 #, fuzzy
 msgid "View Bill"
-msgstr "新規ファイル"
+msgstr "Billを表示"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1577
 #, fuzzy
 msgid "New Expense Voucher"
-msgstr "費用円グラフ"
+msgstr "Expense Voucherを新規作成"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1581
 #, fuzzy
 msgid "Edit Expense Voucher"
-msgstr "費用棒グラフ"
+msgstr "Expense Voucherを編集"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1584
 #, fuzzy
 msgid "View Expense Voucher"
-msgstr "費用棒グラフ"
+msgstr "Expense Voucherを表示"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2196
+#, fuzzy
 msgid "View/Edit Invoice"
-msgstr ""
+msgstr "Invoiceを表示/編集する"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2201
 #: ../src/business/business-gnome/dialog-invoice.c:2454
 #, fuzzy
 msgid "View/Edit Bill"
-msgstr "検索"
+msgstr "Billを表示/編集する"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: ../src/business/business-gnome/dialog-invoice.c:2208
 #, fuzzy
 msgid "View/Edit Voucher"
-msgstr "費用棒グラフ"
+msgstr "Voucherを表示/編集する"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2218
 #, fuzzy
 msgid "Invoice Owner"
-msgstr "請求書"
+msgstr "Invoiceオーナー"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -1133,12 +1104,12 @@ msgstr "番号"
 #: ../src/business/business-gnome/dialog-invoice.c:2392
 #, fuzzy
 msgid "Find Bill"
-msgstr "検索"
+msgstr "Billを検索"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2398
 #, fuzzy
 msgid "Find Expense Voucher"
-msgstr "費用棒グラフ"
+msgstr "Expense Voucherを検索"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -1152,12 +1123,12 @@ msgstr "費用棒グラフ"
 #: ../intl-scm/guile-strings.c:7168 ../intl-scm/guile-strings.c:7408
 #, fuzzy
 msgid "Expense Voucher"
-msgstr "費用チャート"
+msgstr "Expense Voucher"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2404
 #, fuzzy
 msgid "Find Invoice"
-msgstr "請求書"
+msgstr "Invoiceを検索"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/general-journal.scm
@@ -1191,7 +1162,7 @@ msgstr "請求書"
 #: ../intl-scm/guile-strings.c:5150 ../intl-scm/guile-strings.c:6140
 #: ../intl-scm/guile-strings.c:6664
 msgid "Amount"
-msgstr "合計"
+msgstr "金額"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2465
 #, fuzzy
@@ -1223,26 +1194,27 @@ msgstr "証券を選択しなければなりません。"
 #: ../src/business/business-gnome/dialog-job.c:237
 #, fuzzy
 msgid "Edit Job"
-msgstr "編集"
+msgstr "Jobを編集"
 
 #: ../src/business/business-gnome/dialog-job.c:239
 #, fuzzy
 msgid "New Job"
-msgstr "新規"
+msgstr "Jobを新規作成"
 
 #: ../src/business/business-gnome/dialog-job.c:514
+#, fuzzy
 msgid "View/Edit Job"
-msgstr ""
+msgstr "Jobを表示/編集する"
 
 #: ../src/business/business-gnome/dialog-job.c:515
 #, fuzzy
 msgid "View Invoices"
-msgstr "請求書"
+msgstr "Invoicesを表示"
 
 #: ../src/business/business-gnome/dialog-job.c:524
 #, fuzzy
 msgid "Owner's Name"
-msgstr "ユーザ名"
+msgstr "オーナー名"
 
 #: ../src/business/business-gnome/dialog-job.c:526
 msgid "Only Active?"
@@ -1252,19 +1224,19 @@ msgstr ""
 #: ../src/business/business-gnome/glade/job.glade.h:7
 #, fuzzy
 msgid "Job Number"
-msgstr "番号"
+msgstr "Job番号"
 
 #: ../src/business/business-gnome/dialog-job.c:532
 #: ../src/business/business-gnome/dialog-job.c:542
 #: ../src/business/business-gnome/glade/job.glade.h:6
 #, fuzzy
 msgid "Job Name"
-msgstr "名前"
+msgstr "Job名"
 
 #: ../src/business/business-gnome/dialog-job.c:590
 #, fuzzy
 msgid "Find Job"
-msgstr "検索"
+msgstr "Jobを検索"
 
 #: ../src/business/business-gnome/dialog-order.c:165
 #, fuzzy
@@ -1297,7 +1269,7 @@ msgstr "閉じる"
 
 #: ../src/business/business-gnome/dialog-order.c:800
 msgid "View/Edit Order"
-msgstr ""
+msgstr "Orderを表示/編集"
 
 #: ../src/business/business-gnome/dialog-order.c:808
 #, fuzzy
@@ -1318,7 +1290,7 @@ msgstr "閉じる"
 #: ../src/business/business-gnome/dialog-order.c:816
 #, fuzzy
 msgid "Owner Name "
-msgstr "ユーザ名"
+msgstr "オーナー名 "
 
 #: ../src/business/business-gnome/dialog-order.c:818
 #: ../src/business/business-gnome/glade/order.glade.h:12
@@ -1334,7 +1306,7 @@ msgstr "閉じる"
 #: ../src/business/business-gnome/dialog-order.c:884
 #, fuzzy
 msgid "Find Order"
-msgstr "検索"
+msgstr "Orderを検索"
 
 #: ../src/business/business-gnome/dialog-payment.c:228
 msgid ""
@@ -1384,22 +1356,25 @@ msgid "You must enter a payment address."
 msgstr "勘定科目の名前を入力しなければなりません。"
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
+#, fuzzy
 msgid "Edit Vendor"
-msgstr ""
+msgstr "Vendorを編集"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
 #, fuzzy
 msgid "New Vendor"
-msgstr "新しい値"
+msgstr "Vendorを新規作成"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
+#, fuzzy
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "Venderを表示/編集する"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
+#, fuzzy
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "VendorのJob"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
@@ -1418,7 +1393,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-vendor.c:694
 #, fuzzy
 msgid "Find Vendor"
-msgstr "検索"
+msgstr "Venderを検索"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 #, fuzzy
@@ -1440,9 +1415,8 @@ msgid "Cancel your changes"
 msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:5
-#, fuzzy
 msgid "Close this window"
-msgstr "ヘルプウィンドウを閉じる"
+msgstr "このウィンドウを閉じる"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
@@ -1465,9 +1439,8 @@ msgid ""
 msgstr "ポートフォリオ"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
-#, fuzzy
 msgid "De_scription:"
-msgstr "説明:"
+msgstr "説明(_S):"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 #, fuzzy
@@ -1564,16 +1537,14 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
 #: ../src/report/report-gnome/report.glade.h:18
-#, fuzzy
 msgid "_Name:"
-msgstr "名前:"
+msgstr "名前(_N):"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:34
 #: ../src/gnome/glade/price.glade.h:25
 #: ../src/gnome-utils/glade/commodity.glade.h:22
-#, fuzzy
 msgid "_Type:"
-msgstr "型:"
+msgstr "型(_T):"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
 msgid "<b>Bills</b>"
@@ -1601,18 +1572,16 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:88
-#, fuzzy
 msgid "Number of _rows:"
-msgstr "行数"
+msgstr "行数(_R): "
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:141
 #: ../src/import-export/generic-import.glade.h:40
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
 #: ../src/import-export/qif-import/qif.glade.h:57
-#, fuzzy
 msgid "Preferences"
-msgstr "初期設定"
+msgstr "設定"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 #, fuzzy
@@ -1767,9 +1736,8 @@ msgstr "貸方行"
 #: ../src/business/business-gnome/glade/customer.glade.h:7
 #: ../src/business/business-gnome/glade/employee.glade.h:7
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
-#, fuzzy
 msgid "Currency: "
-msgstr "通貨:"
+msgstr "通貨: "
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -1780,27 +1748,27 @@ msgstr "通貨:"
 #: ../intl-scm/guile-strings.c:6204 ../intl-scm/guile-strings.c:6728
 #, fuzzy
 msgid "Customer"
-msgstr "カスタム"
+msgstr "顧客"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:9
 msgid "Customer Number: "
-msgstr ""
+msgstr "顧客番号: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:10
 msgid "Discount: "
-msgstr ""
+msgstr "割引: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:11
 #: ../src/business/business-gnome/glade/employee.glade.h:10
 #: ../src/business/business-gnome/glade/vendor.glade.h:5
 msgid "Email: "
-msgstr ""
+msgstr "Email: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:12
 #: ../src/business/business-gnome/glade/employee.glade.h:13
 #: ../src/business/business-gnome/glade/vendor.glade.h:6
 msgid "Fax: "
-msgstr ""
+msgstr "Fax: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:13
 #: ../src/business/business-gnome/glade/employee.glade.h:14
@@ -1812,7 +1780,6 @@ msgstr "国際"
 #: ../src/business/business-gnome/glade/customer.glade.h:14
 #: ../src/business/business-gnome/glade/employee.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:8
-#, fuzzy
 msgid "Name: "
 msgstr "名前:"
 
@@ -2253,40 +2220,35 @@ msgstr "ビジネス"
 #: ../src/business/business-gnome/gnc-plugin-business.c:148
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #: ../intl-scm/guile-strings.c:6124 ../intl-scm/guile-strings.c:6648
-#, fuzzy
 msgid "_Business"
-msgstr "ビジネス"
+msgstr "ビジネス(_B)"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
-#, fuzzy
 msgid "_Customer"
-msgstr "カスタム"
+msgstr "顧客(_C)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
 #, fuzzy
 msgid "_New Customer..."
-msgstr "カスタム"
+msgstr "新規顧客(_N)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:153
-#, fuzzy
 msgid "Open the New Customer dialog"
-msgstr "新規ユーザチュートリアルを開く"
+msgstr "新規顧客ダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
-#, fuzzy
 msgid "_Find Customer..."
-msgstr "カスタム"
+msgstr "顧客の検索(_F)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-#, fuzzy
 msgid "Open the Find Customer dialog"
-msgstr "新規ユーザチュートリアルを開く"
+msgstr "顧客検索ダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
 #, fuzzy
 msgid "New _Invoice..."
-msgstr "請求書"
+msgstr "新規請求書(_I)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 #, fuzzy
@@ -2296,7 +2258,7 @@ msgstr "全体の初期設定ダイアログを開く"
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 #, fuzzy
 msgid "Find In_voice..."
-msgstr "請求書"
+msgstr "請求書の検索(_V)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
 #, fuzzy
@@ -2330,16 +2292,14 @@ msgstr "期首残高"
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
-#, fuzzy
 msgid "_Process Payment..."
-msgstr "定期支払額"
+msgstr "支払の処理(_P)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
-#, fuzzy
 msgid "Open the Process Payment dialog"
-msgstr "定期支払額"
+msgstr "支払処理ダイアログを開く"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
@@ -2375,7 +2335,7 @@ msgstr "新規ファイル"
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 #, fuzzy
 msgid "Open the New Bill dialog"
-msgstr "新規ユーザチュートリアルを開く"
+msgstr "新規Billダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 #, fuzzy
@@ -2389,14 +2349,12 @@ msgstr "期首残高"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
-#, fuzzy
 msgid "_Employee"
-msgstr "完了"
+msgstr "従業員(_E)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
-#, fuzzy
 msgid "_New Employee..."
-msgstr "完了"
+msgstr "新規従業員(_N)"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 #, fuzzy
@@ -2404,9 +2362,8 @@ msgid "Open the New Employee dialog"
 msgstr "全体の初期設定ダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
-#, fuzzy
 msgid "_Find Employee..."
-msgstr "完了"
+msgstr "従業員の検索(_F)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 #, fuzzy
@@ -2416,22 +2373,22 @@ msgstr "全体の初期設定ダイアログを開く"
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 #, fuzzy
 msgid "New _Expense Voucher..."
-msgstr "費用円グラフ"
+msgstr "Expense Voucherを新規作成(_E)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 #, fuzzy
 msgid "Open the New Expense Voucher dialog"
-msgstr "費用円グラフ"
+msgstr "Expense Voucherの新規作成ダイアログを開く"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 #, fuzzy
 msgid "Find Expense _Voucher..."
-msgstr "費用棒グラフ"
+msgstr "Expense Voucherを検索(_V)..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 #, fuzzy
 msgid "Open the Find Expense Voucher dialog"
-msgstr "費用棒グラフ"
+msgstr "Expense Voucherの検索ダイアログを開く"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
@@ -3135,7 +3092,7 @@ msgstr "請求"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
-msgstr "所得勘定科目"
+msgstr "収益勘定科目"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 #, fuzzy
@@ -3367,9 +3324,8 @@ msgid "Unknown EntryLedger Type"
 msgstr "ファイルタイプを特定できません"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
-#, fuzzy
 msgid "The subtotal value of this entry "
-msgstr "帳票のタイトル"
+msgstr "このエントリの小計値 "
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:750
 #, fuzzy
@@ -3521,16 +3477,15 @@ msgstr "通貨"
 #: ../intl-scm/guile-strings.c:152 ../intl-scm/guile-strings.c:1380
 #: ../intl-scm/guile-strings.c:1950 ../intl-scm/guile-strings.c:2574
 msgid "Income"
-msgstr "所得"
+msgstr "収益"
 
 #: ../src/engine/Account.c:3645
-#, fuzzy
 msgid "A/Receivable"
-msgstr "受取"
+msgstr "売掛金"
 
 #: ../src/engine/Account.c:3646
 msgid "A/Payable"
-msgstr ""
+msgstr "買掛金"
 
 #: ../src/engine/cap-gains.c:236
 #, fuzzy
@@ -4096,15 +4051,13 @@ msgstr "取引(_T)"
 
 #: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:101
 #: ../src/gnome-utils/gnc-main-window.c:222
-#, fuzzy
 msgid "_View"
-msgstr "新規(_N)"
+msgstr "表示(_V)"
 
 #: ../src/gnome/dialog-sx-editor.c:189 ../src/gnome/glade/register.glade.h:74
 #: ../src/gnome-utils/gnc-main-window.c:223
-#, fuzzy
 msgid "_Actions"
-msgstr "取引内容"
+msgstr "アクション(_A)"
 
 #: ../src/gnome/dialog-sx-editor.c:219
 #, fuzzy
@@ -4583,7 +4536,7 @@ msgstr "配当額は正の値でなければなりません"
 #, fuzzy
 msgid "You must select an income account for the cash distribution."
 msgstr ""
-"現金配当のための所得勘定科目を\n"
+"現金配当のための収益勘定科目を\n"
 "選択しなければなりません"
 
 #: ../src/gnome/druid-stock-split.c:393
@@ -5157,9 +5110,8 @@ msgid "Close the Budget List"
 msgstr "予算"
 
 #: ../src/gnome/glade/budget.glade.h:7
-#, fuzzy
 msgid "Create a New Budget"
-msgstr "新しいファイルを作成する"
+msgstr "新しい予算を作成する"
 
 #: ../src/gnome/glade/budget.glade.h:8
 #, fuzzy
@@ -5638,9 +5590,8 @@ msgstr ""
 "新しい勘定科目を作成せずにダイアログを閉じるには'キャンセル'を押してください"
 
 #: ../src/gnome/glade/merge.glade.h:14
-#, fuzzy
 msgid "QSF Data Import Setup"
-msgstr "QIF インポート"
+msgstr "QSF データインポート設定"
 
 #: ../src/gnome/glade/merge.glade.h:15
 msgid "Shows how your QSF data conflicts with existing data in your file."
@@ -5687,17 +5638,17 @@ msgstr ""
 
 #: ../src/gnome/glade/newuser.glade.h:1
 msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
-msgstr ""
+msgstr "<span size=\"larger\" weight=\"bold\">GnuCashへようこそ!</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:2
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">次もようこそダイアログを表示しますか?</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:3
-#, fuzzy
 msgid "C_reate a new set of accounts"
-msgstr "新しい勘定科目セットを作成する"
+msgstr "新しい勘定科目セットを作成する(_R)"
 
 #: ../src/gnome/glade/newuser.glade.h:4
 msgid ""
@@ -5713,16 +5664,17 @@ msgid ""
 "the <i>OK</i> button or press the <i>Cancel</i> button if don't want to "
 "perform any of them."
 msgstr ""
+"ほとんどの新規ユーザーがGnuCashを使い始めるときに実行したいアクションを"
+"いくつか用意しました。以下からアクションを一つ選んで<i>OK</i>ボタンを押すか"
+"どれも実行したくなけば<i>キャンセル</i>ボタンドを押してください。"
 
 #: ../src/gnome/glade/newuser.glade.h:6
-#, fuzzy
 msgid "_Import my QIF files"
-msgstr "QIFファイル読み込み"
+msgstr "QIFファイルのインポート(_I)"
 
 #: ../src/gnome/glade/newuser.glade.h:7
-#, fuzzy
 msgid "_Open the new user tutorial"
-msgstr "新規ユーザチュートリアルを開く"
+msgstr "新規ユーザチュートリアルを開く(_O)"
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
@@ -6285,16 +6237,14 @@ msgstr "合計"
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/glade/register.glade.h:76
 #: ../src/gnome/gnc-plugin-page-register.c:284
-#, fuzzy
 msgid "_Auto-Split Ledger"
-msgstr "自動諸口表示"
+msgstr "自動分割元帳(_A)"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-register.c:281
-#, fuzzy
 msgid "_Basic Ledger"
-msgstr "基本帳簿"
+msgstr "基本元帳(_B)"
 
 #: ../src/gnome/glade/register.glade.h:83
 #: ../src/gnome/gnc-plugin-page-register.c:268
@@ -7089,9 +7039,8 @@ msgid "<b>A_sset Account</b>"
 msgstr "親勘定科目"
 
 #: ../src/gnome/glade/stocks.glade.h:2
-#, fuzzy
 msgid "<b>_Income Account</b>"
-msgstr "所得勘定科目"
+msgstr "<b>収益勘定科目(_I)</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
@@ -7150,9 +7099,8 @@ msgstr ""
 "空白のままでも大丈夫です。"
 
 #: ../src/gnome/glade/stocks.glade.h:10
-#, fuzzy
 msgid "New _Price:"
-msgstr "新規価格:"
+msgstr "新規価格(_P):"
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
@@ -7177,19 +7125,18 @@ msgstr "このウィザードは株の分割または株の合併の記録に関
 
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
-#, fuzzy
 msgid "_Amount:"
-msgstr "合計"
+msgstr "金額(_A)"
 
 #: ../src/gnome/glade/stocks.glade.h:18
 #, fuzzy
 msgid "_Memo:"
-msgstr "摘要"
+msgstr "摘要(_M)"
 
 #: ../src/gnome/glade/stocks.glade.h:19
 #, fuzzy
 msgid "_Shares:"
-msgstr "株式:"
+msgstr "株式(_S):"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -7201,57 +7148,49 @@ msgid "<b>Payer Name Source</b>"
 msgstr "支払者名の元"
 
 #: ../src/gnome/glade/tax.glade.h:3
-#, fuzzy
 msgid "<b>Tax Information</b>"
-msgstr "貸借情報"
+msgstr "<b>税金情報</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 #, fuzzy
 msgid "<b>_Accounts</b>"
-msgstr "勘定科目型"
+msgstr "<b>勘定科目(_A)</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
-#, fuzzy
 msgid "<b>_TXF Categories</b>"
-msgstr "Vs. カテゴリ"
+msgstr "<b>_TXFカテゴリ</b>"
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "Accounts Selected:"
 msgstr "選択済の勘定科目:"
 
 #: ../src/gnome/glade/tax.glade.h:7
-#, fuzzy
 msgid "C_urrent Account"
-msgstr "現在の勘定科目"
+msgstr "現在の勘定科目(_U)"
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Tax Information"
 msgstr "税金情報"
 
 #: ../src/gnome/glade/tax.glade.h:9
-#, fuzzy
 msgid "Tax _Related"
-msgstr "税金関連科目"
+msgstr "税金関連科目(_R)"
 
 #: ../src/gnome/glade/tax.glade.h:10
-#, fuzzy
 msgid "_Expense"
-msgstr "費用"
+msgstr "費用(_E)"
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "_Income"
-msgstr "所得"
+msgstr "収益(_I)"
 
 #: ../src/gnome/glade/tax.glade.h:12
-#, fuzzy
 msgid "_Parent Account"
-msgstr "親勘定科目"
+msgstr "親勘定科目(_P)"
 
 #: ../src/gnome/glade/tax.glade.h:13
-#, fuzzy
 msgid "_Select Subaccounts"
-msgstr "子勘定科目を選択"
+msgstr "子勘定科目を選択(_S)"
 
 #: ../src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
@@ -7262,78 +7201,65 @@ msgid "Username and Password"
 msgstr "ユーザ名とパスワード"
 
 #: ../src/gnome/glade/userpass.glade.h:3
-#, fuzzy
 msgid "_Password:"
-msgstr "パスワード:"
+msgstr "パスワード(_P):"
 
 #: ../src/gnome/glade/userpass.glade.h:4
-#, fuzzy
 msgid "_Username:"
-msgstr "ユーザ名:"
+msgstr "ユーザ名(_U):"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:57
-#, fuzzy
 msgid "New Accounts _Page"
-msgstr "新しい勘定科目ツリー"
+msgstr "勘定科目ページの新規作成(_P)"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
-#, fuzzy
 msgid "Open a new Account Tree page"
-msgstr "新しい勘定科目ツリー一覧を開く"
+msgstr "新しい勘定科目ツリーページを開く"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:95
-#, fuzzy
 msgid "New _File"
-msgstr "新規ファイル"
+msgstr "ファイルを新規作成(_F)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:96
 msgid "Create a new file"
 msgstr "新しいファイルを作成する"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:98
-#, fuzzy
 msgid "_Open..."
-msgstr "開く"
+msgstr "開く(_O)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
-#, fuzzy
 msgid "Open an existing GnuCash file"
-msgstr "GnuCashマニュアルを開く"
+msgstr "既存のGnuCashファイルを開く"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:101
-#, fuzzy
 msgid "_Save"
-msgstr "保存"
+msgstr "保存(_S)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:102
-#, fuzzy
 msgid "Save the current file"
-msgstr "現在の価格を削除"
+msgstr "現在のファイルを保存"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "Save _As..."
-msgstr ""
+msgstr "名前をつけて保存(_A)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:108
-#, fuzzy
 msgid "_QSF Import"
-msgstr "QIF インポート"
+msgstr "_QSFインポート"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:109
-#, fuzzy
 msgid "Import a QSF object file"
-msgstr "QIFファイル読み込み"
+msgstr "QSFオブジェクトファイルをインポート"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:112
-#, fuzzy
 msgid "Export _Accounts"
-msgstr "勘定科目を書き出し..."
+msgstr "勘定科目をエクスポート"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:113
-#, fuzzy
 msgid "Export the account hierarchy to a new GnuCash datafile"
-msgstr "勘定科目の階層を新しいファイルに書き出す"
+msgstr "勘定科目の階層を新しいGnuCashデータファイルにエクスポートする"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:116
 #, fuzzy
@@ -7347,22 +7273,20 @@ msgstr "残高の存在する株勘定科目は一つもありません"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:122
-#, fuzzy
 msgid "_Find..."
-msgstr "検索"
+msgstr "検索(_F)..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:123
 msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:125
-#, fuzzy
 msgid "Ta_x Options"
-msgstr "オプション"
+msgstr "税金オプション(_X)"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:126
 msgid "Setup tax information for all income and expense accounts"
-msgstr "すべての所得、費用勘定科目に税金情報を設定する"
+msgstr "すべての収益、費用勘定科目に税金情報を設定する"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:131
@@ -7450,47 +7374,40 @@ msgid "Error: Loading failed, error code %d - %s."
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:399
-#, fuzzy
 msgid "Select the QSF file to import into GnuCash"
-msgstr "読み込む QIF ファイルを選択"
+msgstr "GnuCashにインポートするQSFファイルを選択する"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:455
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-budget.c:55
-#, fuzzy
 msgid "New Budget"
-msgstr "予算"
+msgstr "予算を新規作成"
 
 #: ../src/gnome/gnc-plugin-budget.c:56
-#, fuzzy
 msgid "Create a new Budget"
-msgstr "新しいファイルを作成する"
+msgstr "新しい予算を作成する"
 
 #: ../src/gnome/gnc-plugin-budget.c:59
-#, fuzzy
 msgid "Open Budget"
-msgstr "予算"
+msgstr "予算を開く"
 
 #: ../src/gnome/gnc-plugin-budget.c:60
 msgid "Open an existing Budget"
-msgstr ""
+msgstr "既存の予算を開く"
 
 #: ../src/gnome/gnc-plugin-budget.c:219
-#, fuzzy
 msgid "Select a Budget"
-msgstr "勘定科目の削除(_D)"
+msgstr "予算を選択する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:148
-#, fuzzy
 msgid "Create a new Account"
 msgstr "新しい勘定科目を作成する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:150
-#, fuzzy
 msgid "New Account _Hierarchy..."
-msgstr "新規勘定科目一覧"
+msgstr "勘定科目の階層を新規作成(_H)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:151
 msgid "Extend the current book by merging with new account type categories"
@@ -7499,9 +7416,8 @@ msgstr ""
 #. File menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:153
 #: ../src/gnome/gnc-plugin-page-budget.c:127
-#, fuzzy
 msgid "Open _Account"
-msgstr "勘定科目を開く(_O)"
+msgstr "勘定科目を開く(_A)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
 #: ../src/gnome/gnc-plugin-page-budget.c:128
@@ -7510,9 +7426,8 @@ msgstr "選択された勘定科目を開く"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 #: ../src/gnome/gnc-plugin-page-budget.c:131
-#, fuzzy
 msgid "Open _Subaccounts"
-msgstr "子勘定科目を開く(_U)"
+msgstr "子勘定科目を開く(_S)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:157
 #: ../src/gnome/gnc-plugin-page-budget.c:132
@@ -7522,9 +7437,8 @@ msgstr "選択された勘定科目とその子勘定科目を全部開く"
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:161
 #: ../src/gnome/gnc-plugin-page-register.c:181
-#, fuzzy
 msgid "Edit _Account"
-msgstr "勘定科目を編集"
+msgstr "勘定科目を編集(_A)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:162
 #: ../src/gnome/gnc-plugin-page-register.c:182
@@ -7532,32 +7446,28 @@ msgid "Edit the selected account"
 msgstr "選択された勘定科目を編集する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
-#, fuzzy
 msgid "_Delete Account..."
-msgstr "勘定科目の削除(_D)"
+msgstr "勘定科目を削除(_D)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:165
 msgid "Delete selected account"
 msgstr "選択された勘定科目を削除する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:167
-#, fuzzy
 msgid "_Renumber Subaccounts..."
-msgstr "子勘定科目を選択"
+msgstr "子勘定科目をリナンバー(_R)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:168
-#, fuzzy
 msgid "Renumber the children of the selected account"
-msgstr "選択された勘定科目を照合する"
+msgstr "選択された勘定科目の子勘定科目をリナンバーする"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:172
 #: ../src/gnome/gnc-plugin-page-budget.c:148
 #: ../src/gnome/gnc-plugin-page-register.c:222
 #: ../src/gnome-utils/gnc-main-window.c:268
-#, fuzzy
 msgid "_Filter By..."
-msgstr "プロット形式"
+msgstr "フィルター(_F)..."
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:176
@@ -7585,9 +7495,8 @@ msgstr "資金を別の勘定科目へ移動する"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:233
-#, fuzzy
 msgid "Stoc_k Split..."
-msgstr "株式の分割(_P)..."
+msgstr "株式の分割(_K)..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 #: ../src/gnome/gnc-plugin-page-register.c:234
@@ -7606,9 +7515,8 @@ msgid "Bring up the lot viewer/editor window"
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
-#, fuzzy
 msgid "Check & Repair A_ccount"
-msgstr "他の勘定科目"
+msgstr "勘定科目を検査 & 修復(_C)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:189
 #: ../src/gnome/window-reconcile.c:2026
@@ -7618,9 +7526,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#, fuzzy
 msgid "Check & Repair Su_baccounts"
-msgstr "子勘定を掃除する(_B)"
+msgstr "子勘定を検査 & 修復(_B)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:192
 #, fuzzy
@@ -7631,7 +7538,7 @@ msgstr "勘定科目とその子勘定科目の中の問題点を見つけ、修
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:195
 msgid "Check & Repair A_ll"
-msgstr ""
+msgstr "すべて検査 & 修復(_L)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:196
 msgid ""
@@ -7685,14 +7592,14 @@ msgid "(no name)"
 msgstr "(摘要なし)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:887
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting account %s"
-msgstr "勘定科目を選択"
+msgstr "勘定科目 %s を削除します"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:979
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s will be deleted."
-msgstr "選択済の勘定科目:"
+msgstr "勘定科目 %s が削除されます。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:989
 #, c-format
@@ -7705,9 +7612,9 @@ msgid "All transactions in this account will be deleted."
 msgstr "下の日付以前のすべての価格を削除します。"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1000
-#, fuzzy, c-format
+#, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
-msgstr "選択された勘定科目全ての補助科目を含む"
+msgstr "その子勘定科目は全て勘定科目 %s に移動されます"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1004
 #, fuzzy
@@ -7725,25 +7632,22 @@ msgid "All sub-account transactions will be deleted."
 msgstr "選択済の勘定科目:"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1017
-#, fuzzy
 msgid "Are you sure you want to do this?"
-msgstr "%sの勘定を本当に削除してもよろしいですか？"
+msgstr "本当に実行してもよろしいですか？"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-budget.c:136
 #, fuzzy
 msgid "_Delete Budget"
-msgstr "勘定科目の削除(_D)"
+msgstr "予算を削除(_D)"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:137
-#, fuzzy
 msgid "Delete this budget"
-msgstr "この取引を削除する"
+msgstr "この予算を削除する"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:140
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "勘定一覧オプションの編集"
+msgstr "この予算のオプションを編集する"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Estimate Budget"
@@ -7773,9 +7677,9 @@ msgid "Set the budget options using this dialog."
 msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-budget.c:849
-#, fuzzy, c-format
+#, c-format
 msgid "Delete %s?"
-msgstr "削除"
+msgstr "%s を削除?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:913
 #, fuzzy
@@ -7792,71 +7696,61 @@ msgstr "印刷確認(_P)..."
 #: ../src/gnome-utils/gnc-main-window.c:251
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:956
 msgid "Cu_t"
-msgstr ""
+msgstr "切り取り(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:173
 #: ../src/gnome-utils/gnc-main-window.c:252
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:957
-#, fuzzy
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "取引クリップボードを貼り付ける"
+msgstr "現在の選択を切り取りクリップボードにコピーする"
 
 #: ../src/gnome/gnc-plugin-page-register.c:175
 #: ../src/gnome-utils/gnc-main-window.c:254
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:959
-#, fuzzy
 msgid "_Copy"
-msgstr "列スパン:"
+msgstr "コピー(_C)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:176
 #: ../src/gnome-utils/gnc-main-window.c:255
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:960
-#, fuzzy
 msgid "Copy the current selection to clipboard"
-msgstr "取引クリップボードを貼り付ける"
+msgstr "現在の選択をクリップボードにコピーする"
 
 #: ../src/gnome/gnc-plugin-page-register.c:179
 #: ../src/gnome-utils/gnc-main-window.c:258
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:963
 msgid "Paste the clipboard content at the cursor position"
-msgstr ""
+msgstr "カーソル位置にクリップボードの内容を貼り付ける"
 
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-register.c:187
-#, fuzzy
 msgid "Cu_t Transaction"
-msgstr "取引の切取り"
+msgstr "取引を切り取り(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:188
-#, fuzzy
 msgid "Cut the selected transaction into clipboard"
-msgstr "選択されている取引を切り取る"
+msgstr "選択されている取引をクリップボードに切り取る"
 
 #: ../src/gnome/gnc-plugin-page-register.c:190
-#, fuzzy
 msgid "_Copy Transaction"
-msgstr "取引をコピー"
+msgstr "取引をコピー(_C)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:191
-#, fuzzy
 msgid "Copy the selected transaction into clipboard"
-msgstr "選択された取引をコピーする"
+msgstr "選択された取引をクリップボードにコピーする"
 
 #: ../src/gnome/gnc-plugin-page-register.c:193
-#, fuzzy
 msgid "_Paste Transaction"
-msgstr "取引の貼付け"
+msgstr "取引を貼り付け(_P)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "Dup_licate Transaction"
-msgstr "取引の複製"
+msgstr "取引を複製(_L)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:199
 #: ../src/gnome/gnc-split-reg.c:1163
-#, fuzzy
 msgid "_Delete Transaction"
-msgstr "取引削除"
+msgstr "取引を削除(_D)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:202
 #, fuzzy
@@ -7869,24 +7763,22 @@ msgid "Remove all splits in the current transaction"
 msgstr "この取引の諸口をすべて表示する"
 
 #: ../src/gnome/gnc-plugin-page-register.c:205
-#, fuzzy
 msgid "_Enter Transaction"
-msgstr "取引の貸借を再度一致させる"
+msgstr "取引を入力(_E)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:208
-#, fuzzy
 msgid "Ca_ncel Transaction"
-msgstr "取引の貸借を再度一致させる"
+msgstr "取引をキャンセル(_N)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
 #, fuzzy
 msgid "_Void Transaction"
-msgstr "取引を検索"
+msgstr "取引をVoid(_V)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:213
 #, fuzzy
 msgid "_Unvoid Transaction"
-msgstr "取引検索(_F)"
+msgstr "取引をUnvoid(_U)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:215
 #, fuzzy
@@ -7896,9 +7788,8 @@ msgstr "取引削除"
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:220
 #: ../src/gnome-utils/gnc-main-window.c:266
-#, fuzzy
 msgid "_Sort By..."
-msgstr "番号順に並べる"
+msgstr "並べ替え(_S)..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:239
 #, fuzzy
@@ -7906,9 +7797,8 @@ msgid "_Blank Transaction"
 msgstr "取引(_T)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:242
-#, fuzzy
 msgid "Edit E_xchange Rate"
-msgstr "為替レート"
+msgstr "為替レートを編集(_X)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:243
 #, fuzzy
@@ -7916,25 +7806,21 @@ msgid "Edit the exchange rate for the current transaction"
 msgstr "この帳簿の主勘定科目を編集する"
 
 #: ../src/gnome/gnc-plugin-page-register.c:248
-#, fuzzy
 msgid "Sche_dule..."
-msgstr "スケジュール"
+msgstr "スケジュール(_D)..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:251
-#, fuzzy
 msgid "_All transactions"
-msgstr "全取引を表示"
+msgstr "全取引(_A)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:253
-#, fuzzy
 msgid "_This transaction"
-msgstr "取引(_T)"
+msgstr "この取引(_T)"
 
 #. Reports menu
 #: ../src/gnome/gnc-plugin-page-register.c:258
-#, fuzzy
 msgid "Account Report"
-msgstr "勘定科目名分割記号"
+msgstr "勘定科目帳票"
 
 #: ../src/gnome/gnc-plugin-page-register.c:259
 #, fuzzy
@@ -7979,9 +7865,9 @@ msgstr "総勘定元帳"
 #. Translators: %s is the name
 #. of the tab page
 #: ../src/gnome/gnc-plugin-page-register.c:1085
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to %s?"
-msgstr "別のファイルを読み込む"
+msgstr "%s への変更を保存しますか?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1089
 #, fuzzy
@@ -7994,14 +7880,12 @@ msgstr ""
 "記録しますか？"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1092
-#, fuzzy
 msgid "_Discard Transaction"
-msgstr "取引を検索"
+msgstr "取引を破棄(_D)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1096
-#, fuzzy
 msgid "_Save Transaction"
-msgstr "取引の貼付け"
+msgstr "取引を保存(_S)"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1127
 #: ../src/gnome/gnc-plugin-page-register.c:1159
@@ -8070,16 +7954,16 @@ msgstr "取引の貼付け"
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2115
-#, fuzzy, c-format
+#, c-format
 msgid "Sort %s by..."
-msgstr "番号順に並べる"
+msgstr "%s を並べ替え..."
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2167
 #: ../src/gnome-utils/gnc-tree-view-account.c:1821
-#, fuzzy, c-format
+#, c-format
 msgid "Filter %s by..."
-msgstr "プロット形式"
+msgstr "%s をフィルタ..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:119
 #, fuzzy
@@ -8320,46 +8204,41 @@ msgid "Show the CUSIP Code (Exchange Specific Data) column"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
-#, fuzzy
 msgid "Show the Full Name column"
-msgstr "凡例に長い勘定科目名を表示しますか?"
+msgstr "フルネーム列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
 msgid "Show the Namespace column"
-msgstr ""
+msgstr "ネームスペース列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
 #, fuzzy
 msgid "Show the Print Name column"
-msgstr "所得と費用の勘定を表示する"
+msgstr "印刷名列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
 msgid "Show the Quote Flag column"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:8
-#, fuzzy
 msgid "Show the Quote Source column"
-msgstr "建値元"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:9
-#, fuzzy
 msgid "Show the Quote Timezone column"
-msgstr "所得と費用の勘定を表示する"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
-#, fuzzy
 msgid "Show the Unique Name column"
-msgstr "所得と費用の勘定を表示する"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
 msgid "Show the fraction column"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
-#, fuzzy
 msgid "Show the name column"
-msgstr "純利益を表示しますか?"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
 msgid "Show the symbol column"
@@ -8406,9 +8285,8 @@ msgid "New hierarchy dialog on \"New File\""
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:9
-#, fuzzy
 msgid "Show the new user dialog"
-msgstr "新規ユーザチュートリアルを開く"
+msgstr "ユーザ新規作成ダイアログを開く"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
 msgid "Sort column ascending or descending"
@@ -8456,16 +8334,14 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:17
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:17
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:17
-#, fuzzy
 msgid "Window geometry"
-msgstr "ウィンドウの位置・大きさを保存する"
+msgstr "ウィンドウの位置とサイズ"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:18
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:18
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:18
-#, fuzzy
 msgid "Window position"
-msgstr "入金"
+msgstr "ウィンドウ位置"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:2
 msgid "Show the Price column"
@@ -8486,14 +8362,12 @@ msgid "Show the commodity column"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
-#, fuzzy
 msgid "Show the currency column"
-msgstr "海外通貨を表示"
+msgstr "通貨列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:7
-#, fuzzy
 msgid "Show the date column"
-msgstr "テキストのみ表示"
+msgstr "データ列を表示"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:9
 msgid "This setting enables the Price column."
@@ -8522,12 +8396,11 @@ msgstr ""
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
 #, fuzzy
 msgid "Custom date format"
-msgstr "カスタム書式"
+msgstr "カスタム日付書式"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:2
-#, fuzzy
 msgid "Date format to use"
-msgstr "日付のオプションは %s です。"
+msgstr "使用する日付書式"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:3
 msgid ""
@@ -9961,14 +9834,12 @@ msgid "Clear any selected image file."
 msgstr "選択されたファイルを読み込まない"
 
 #: ../src/gnome-utils/dialog-options.c:2033
-#, fuzzy
 msgid "Select image"
-msgstr "pixmap を選択"
+msgstr "画像の選択"
 
 #: ../src/gnome-utils/dialog-options.c:2035
-#, fuzzy
 msgid "Select an image file."
-msgstr "範囲設定(_R)..."
+msgstr "画像ファイルを選択する"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -9977,13 +9848,13 @@ msgstr "範囲設定(_R)..."
 #. language - just keep in mind to have exactly two %s in your
 #. translation.
 #: ../src/gnome-utils/dialog-preferences.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Income%sSalary%sTaxable"
-msgstr "所得-給料-課税"
+msgstr "収益%s給与%s課税"
 
 #: ../src/gnome-utils/dialog-transfer.c:448
 msgid "Show the income and expense accounts"
-msgstr "所得と費用の勘定を表示する"
+msgstr "収益と費用の勘定を表示する"
 
 #: ../src/gnome-utils/dialog-transfer.c:1243
 #, fuzzy
@@ -10736,9 +10607,8 @@ msgid "%Y-%m-%d"
 msgstr ""
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:3
-#, fuzzy
 msgid "Abbreviation"
-msgstr "シンボル/略語:"
+msgstr "略称"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:4
 msgid "Date format:"
@@ -10761,15 +10631,13 @@ msgid "Include Century"
 msgstr "所得・費用チャート"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:8
-#, fuzzy
 msgid "Months:"
 msgstr "月"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:11
 #: ../src/gnome-utils/glade/preferences.glade.h:105
-#, fuzzy
 msgid "Sample:"
-msgstr "例:99999"
+msgstr "表示例:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:12
 msgid ""
@@ -10781,9 +10649,15 @@ msgid ""
 "Locale\n"
 "Custom\n"
 msgstr ""
+"US (12/31/2001)\n"
+"UK (31/12/2001)\n"
+"Europe (31.12.2001)\n"
+"ISO (2001-12-31)\n"
+"UTC\n"
+"ロケール\n"
+"カスタム\n"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:20
-#, fuzzy
 msgid "Years:"
 msgstr "年"
 
@@ -10839,14 +10713,12 @@ msgid "<b>Checks</b>"
 msgstr "番号"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:8
-#, fuzzy
 msgid "<b>Date Format</b>"
-msgstr "日付の書式"
+msgstr "<b>日付の書式</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:9
-#, fuzzy
 msgid "<b>Default Currency</b>"
-msgstr "デフォルトの通貨"
+msgstr "<b>デフォルトの通貨</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:10
 #, fuzzy
@@ -10864,9 +10736,8 @@ msgid "<b>End Date</b>"
 msgstr "終了日付"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:13
-#, fuzzy
 msgid "<b>Fancy Date Format</b>"
-msgstr "日付の書式"
+msgstr "<b>日付の書式</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:14
 msgid "<b>Files</b>"
@@ -10939,7 +10810,7 @@ msgstr "内容"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:29
 msgid "<b>Time Format</b>"
-msgstr ""
+msgstr "<b>時刻の書式</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:30
 msgid "<b>Toolbar Style</b>"
@@ -11201,9 +11072,8 @@ msgid "Include _non-currency totals"
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
-#, fuzzy
 msgid "Loc_ale:"
-msgstr "ロケール"
+msgstr "ロケール(_A):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:87
 #, fuzzy
@@ -11337,14 +11207,14 @@ msgstr "デフォルトでセルに対して縦罫線を表示する"
 #: ../src/gnome-utils/glade/preferences.glade.h:117
 #, fuzzy
 msgid "Sign reverse balances on income and expense accounts."
-msgstr "所得と費用の勘定科目を逆にする"
+msgstr "収益と費用の勘定科目を逆にする"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:118
 #, fuzzy
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
-msgstr "クレジットカード、負債、資本、所得の各勘定科目をそれぞれ逆にする"
+msgstr "クレジットカード、負債、資本、収益の各勘定科目をそれぞれ逆にする"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:119
 msgid "Text _below icons"
@@ -11370,12 +11240,11 @@ msgstr "取引出納帳"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:124
 msgid "US Dollars (USD)"
-msgstr ""
+msgstr "米ドル (USD)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:125
-#, fuzzy
 msgid "U_K:"
-msgstr "英国"
+msgstr "英国(_K)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:126
 #, fuzzy
@@ -11392,34 +11261,32 @@ msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "12時間形式ではなく、24時間形式で時刻を表示する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:129
-#, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "非公式な同義語の代わりに「借方」と「貸方」だけを使用する"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
-#, fuzzy
 msgid "Use s_ystem default"
-msgstr "GNOMEのデフォルトを使用"
+msgstr "システムのデフォルトを使用"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:131
 msgid "Use the date format common in continental Europe."
-msgstr ""
+msgstr "ヨーロッパ大陸で一般的な日付書式を使用する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:132
 msgid "Use the date format common in the United Kingdom."
-msgstr ""
+msgstr "英国で一般的な日付書式を使用する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "Use the date format common in the United States."
-msgstr ""
+msgstr "米国で一般的な日付書式を使用する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "Use the date format specified by the ISO-8601 standard."
-msgstr ""
+msgstr "ISO-8601標準で規定された日付書式を使用する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:135
 msgid "Use the date format specified by the system locale."
-msgstr ""
+msgstr "システムロケールで規定された日付書式を使用する。"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:136
 msgid ""
@@ -11464,14 +11331,12 @@ msgid "Use the system setting for displaying toolbar items."
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:145
-#, fuzzy
 msgid "Windows"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:146
-#, fuzzy
 msgid "_Absolute:"
-msgstr "完了"
+msgstr "絶対(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:147
 #, fuzzy
@@ -11479,9 +11344,8 @@ msgid "_Auto-raise lists"
 msgstr "リストを自動的に前面に出す"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:148
-#, fuzzy
 msgid "_Auto-split ledger"
-msgstr "自動諸口表示"
+msgstr "自動分割元帳(_A)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:149
 #, fuzzy
@@ -11489,44 +11353,37 @@ msgid "_Automatic decimal point"
 msgstr "自動小数点付加"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:150
-#, fuzzy
 msgid "_Basic ledger"
-msgstr "基本帳簿"
+msgstr "基本元帳(_B)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:151
-#, fuzzy
 msgid "_Decimal places:"
-msgstr "小数点以下の桁数"
+msgstr "小数点以下の桁数(_D)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:152
-#, fuzzy
 msgid "_Double line mode"
-msgstr "二行モード"
+msgstr "二行モード(_D)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:153
-#, fuzzy
 msgid "_Europe:"
-msgstr "ヨーロッパ"
+msgstr "ヨーロッパ(_E):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:154
-#, fuzzy
 msgid "_ISO:"
-msgstr "ISO (国際基準)"
+msgstr "_ISO:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:155
-#, fuzzy
 msgid "_Icons only"
-msgstr "アイコンのみ"
+msgstr "アイコンのみ(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:156
-#, fuzzy
 msgid "_Income & expense"
-msgstr "所得および費用(_I)"
+msgstr "収益 & 費用(_I)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:157
 #, fuzzy
 msgid "_Left"
-msgstr "最後"
+msgstr "左(_R)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:158
 #, fuzzy
@@ -11534,9 +11391,8 @@ msgid "_None"
 msgstr "なし"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:159
-#, fuzzy
 msgid "_Relative:"
-msgstr "リベート"
+msgstr "相対(_R)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:160
 #, fuzzy
@@ -11545,30 +11401,27 @@ msgstr "照合(_R)..."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:161
 msgid "_Right"
-msgstr ""
+msgstr "右(_R)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:162
-#, fuzzy
 msgid "_Save window size and position"
-msgstr "ウィンドウの大きさや位置を保存する。"
+msgstr "ウィンドウのサイズと位置を保存(_S)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:163
-#, fuzzy
 msgid "_Text only"
-msgstr "テキストのみ"
+msgstr "テキストのみ(_T)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:164
-#, fuzzy
 msgid "_US:"
-msgstr "米国"
+msgstr "米国(_U):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:165
 msgid "_Use system theme colors"
-msgstr ""
+msgstr "システムのテーマカラーを使用(_U)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:166
 msgid "_Width:"
-msgstr ""
+msgstr "幅(_W):"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:167
 #, fuzzy
@@ -11580,18 +11433,16 @@ msgid "minutes"
 msgstr ""
 
 #: ../src/gnome-utils/glade/totd.glade.h:1
-#, fuzzy
 msgid "<b>Tip of the Day:</b>"
-msgstr "今日のヒント"
+msgstr "<b>今日のヒント:</b>"
 
 #: ../src/gnome-utils/glade/totd.glade.h:2
-#, fuzzy
 msgid "GnuCash Tip Of The Day"
-msgstr "今日のヒント(_T)"
+msgstr "GnuCash今日のヒント"
 
 #: ../src/gnome-utils/glade/totd.glade.h:3
 msgid "_Show tips at startup"
-msgstr ""
+msgstr "スタート時にヒントを表示(_S)"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:1
 #, fuzzy
@@ -11627,7 +11478,7 @@ msgstr "説明:"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:9
 msgid "Exchange Rate:"
-msgstr "為替レート"
+msgstr "為替レート:"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:10
 msgid "Memo:"
@@ -11645,7 +11496,7 @@ msgstr "番号:"
 #: ../intl-scm/guile-strings.c:1842 ../intl-scm/guile-strings.c:1926
 #: ../intl-scm/guile-strings.c:2466 ../intl-scm/guile-strings.c:2550
 msgid "Show Income/Expense"
-msgstr "所得/費用を表示する"
+msgstr "収益/費用を表示する"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:14
 msgid "Transfer Funds"
@@ -11674,22 +11525,20 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-autosave.c:107
-#, fuzzy
 msgid "_Yes, this time"
-msgstr "時間的にもっとも近い"
+msgstr "はい（今回は）(_Y)"
 
 #: ../src/gnome-utils/gnc-autosave.c:108
 msgid "Yes, _always"
-msgstr ""
+msgstr "はい（今回以降も）(_A)"
 
 #: ../src/gnome-utils/gnc-autosave.c:109
-#, fuzzy
 msgid "No, n_ever"
-msgstr "前年度の終了日"
+msgstr "いいえ（今回以降も）(_E)"
 
 #: ../src/gnome-utils/gnc-autosave.c:110
 msgid "_No, not this time"
-msgstr ""
+msgstr "いいえ（今回は）(_N)"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -11726,39 +11575,32 @@ msgid "Calendar"
 msgstr "カレンダー"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:239
-#, fuzzy
 msgid "12 months"
-msgstr "月"
+msgstr "12ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:240
-#, fuzzy
 msgid "6 months"
-msgstr "月"
+msgstr "6ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:241
-#, fuzzy
 msgid "4 months"
-msgstr "月"
+msgstr "4ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:242
-#, fuzzy
 msgid "3 months"
-msgstr "月"
+msgstr "3ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:243
-#, fuzzy
 msgid "2 months"
-msgstr "月"
+msgstr "2ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:244
-#, fuzzy
 msgid "1 month"
-msgstr "月"
+msgstr "1ヶ月"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:277
-#, fuzzy
 msgid "View:"
-msgstr "新規(_N)"
+msgstr "表示:"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -11768,7 +11610,7 @@ msgstr "新規(_N)"
 #: ../intl-scm/guile-strings.c:660 ../intl-scm/guile-strings.c:872
 #: ../intl-scm/guile-strings.c:1084
 msgid "Date: "
-msgstr "日付:"
+msgstr "日付: "
 
 #. Translators: This string should not have shown up in
 #. gnucash.pot as it is looked up in the "gtk20" translation
@@ -11800,33 +11642,30 @@ msgstr ""
 "%s"
 
 #: ../src/gnome-utils/gnc-file.c:100 ../src/gnome-utils/gnc-main-window.c:235
-#, fuzzy
 msgid "_Import"
-msgstr "QIF インポート"
+msgstr "インポート(_I)"
 
 #: ../src/gnome-utils/gnc-file.c:102 ../src/gnome-utils/gnc-file.c:255
-#, fuzzy
 msgid "Import"
-msgstr "QIF インポート"
+msgstr "インポート"
 
 #: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1030
 msgid "Save"
 msgstr "保存"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-main-window.c:236
-#, fuzzy
 msgid "_Export"
-msgstr "書き出し"
+msgstr "エクスポート(_E)"
 
 #: ../src/gnome-utils/gnc-file.c:115 ../src/gnome-utils/gnc-file.c:271
 #: ../src/gnome-utils/gnc-file.c:888
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:999
 msgid "Export"
-msgstr "書き出し"
+msgstr "エクスポート"
 
 #: ../src/gnome-utils/gnc-file.c:153
 msgid "All files"
-msgstr ""
+msgstr "全ファイル"
 
 #. Just in case
 #: ../src/gnome-utils/gnc-file.c:195
@@ -12073,44 +11912,28 @@ msgid "There was an error parsing the file %s."
 msgstr "ファイル保存中にエラー"
 
 #: ../src/gnome-utils/gnc-file.c:408
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is empty."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は空です。"
+msgstr "ファイル %s は空です。"
 
 #: ../src/gnome-utils/gnc-file.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s could not be found."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は見つかりませんでした。"
+msgstr "ファイル %s が見つかりませんでした。"
 
 #: ../src/gnome-utils/gnc-file.c:422
-#, fuzzy
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr ""
-"このファイルはGnuCashの古いバージョン用です。\n"
-"このまま続行しますか?"
+msgstr "このファイルはGnuCashの古いバージョン用です。このまま続行しますか?"
 
 #: ../src/gnome-utils/gnc-file.c:428
-#, fuzzy, c-format
+#, c-format
 msgid "The file type of file %s is unknown."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は空です。"
+msgstr "ファイル %s のファイルタイプが不明です。"
 
 #: ../src/gnome-utils/gnc-file.c:433
-#, fuzzy, c-format
+#, c-format
 msgid "Could not make a backup of the file %s"
-msgstr ""
-"ファイルを開くことができませんでした\n"
-"     %s。\n"
-"\n"
-"%s"
+msgstr "ファイル %s のバックアップが作成できませんでした。"
 
 #: ../src/gnome-utils/gnc-file.c:438
 #, c-format
@@ -12118,20 +11941,21 @@ msgid ""
 "Could not write to file %s.  Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
 msgstr ""
+"ファイル %s に書き込めませんでした。"
+"このファイルへの書込み許可があるか、十分なスペースがあるかチェックしてください。"
 
 #: ../src/gnome-utils/gnc-file.c:445
 #, c-format
 msgid "No read permission to read from file %s."
-msgstr ""
+msgstr "ファイル %s の読出し許可がありません。"
 
 #: ../src/gnome-utils/gnc-file.c:450
-#, fuzzy
 msgid ""
 "This database is from an older version of GnuCash. Do you want to want to "
 "upgrade the database to the current version?"
 msgstr ""
-"このファイルはGnuCashの古いバージョン用です。\n"
-"このまま続行しますか?"
+"このデータベースはGnuCashの古いバージョン用です。"
+"データベースを現在のバージョン用に更新しますか?"
 
 #: ../src/gnome-utils/gnc-file.c:457
 msgid ""
@@ -12157,77 +11981,64 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:579
 msgid "Continue _Without Saving"
-msgstr ""
+msgstr "保存せずに続ける(_W)"
 
 #: ../src/gnome-utils/gnc-file.c:659
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
-msgstr ""
+msgstr "GnuCashは %s をロックすることができませんでした。"
 
 #: ../src/gnome-utils/gnc-file.c:661
-#, fuzzy
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
 msgstr ""
-"Gnucash はロックすることができませんでした。\n"
-"   %s.\n"
-"そのデータベースは別のユーザに使用されているかもしれません。\n"
-"その場合、ファイルを開くべきではありません。\n"
-"\n"
-"このままファイルを開きますか?"
+"このデータベースは別のユーザに使用されている可能性があります。"
+"その場合は、データベースを開くべきではありません。どうしますか?"
 
 #: ../src/gnome-utils/gnc-file.c:664
-#, fuzzy
 msgid ""
 "That database may be on a read-only file system, or you may not have write "
 "permission for the directory. If you proceed you may not be able to save any "
 "changes. What would you like to do?"
 msgstr ""
-"Gnucash はロックすることができませんでした。\n"
-"   %s.\n"
-"そのデータベースは別のユーザに使用されているかもしれません。\n"
-"その場合、ファイルを開くべきではありません。\n"
-"\n"
-"このままファイルを開きますか?"
+"このデータベースは読出し専用のファイルシステムにあるか、"
+"ディレクトリへの書込み許可がない可能性があります。"
+"このまま続けると変更を保存できないかもしれません。どうしますか?"
 
 #: ../src/gnome-utils/gnc-file.c:681
-#, fuzzy
 msgid "_Open Anyway"
-msgstr "勘定科目を開く(_O)"
+msgstr "構わずに開く(_O)"
 
 #: ../src/gnome-utils/gnc-file.c:683
-#, fuzzy
 msgid "_Create New File"
-msgstr "新しいファイルを作成する"
+msgstr "新しいファイルを作成する(_C)"
 
 #: ../src/gnome-utils/gnc-file.c:923 ../src/gnome-utils/gnc-file.c:1127
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1355
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" はすで存在します。\n"
-" 本当に上書きしてよろしいですか?"
+msgstr "ファイル %s はすで存在します。本当に上書きしてよろしいですか?"
 
 #: ../src/gnome-utils/gnc-file.c:938
 msgid "Exporting file..."
-msgstr ""
+msgstr "ファイルのエクスポート中..."
 
 #. %s is the strerror(3) error string of the error that occurred.
 #: ../src/gnome-utils/gnc-file.c:951
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error saving the file.\n"
 "\n"
 "%s"
-msgstr "ファイル保存中にエラー"
+msgstr ""
+"ファイルの保存中にエラーがありました。\n"
+"\n"
+"%s"
 
 #: ../src/gnome-utils/gnc-general-select.c:221
-#, fuzzy
 msgid "View..."
-msgstr "新規..."
+msgstr "表示..."
 
 #: ../src/gnome-utils/gnc-gnome-utils.c:280
 msgid ""
@@ -12241,15 +12052,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-html.c:106
 msgid "Not found"
-msgstr ""
+msgstr "見つかりませんでした"
 
 #: ../src/gnome-utils/gnc-html.c:108
-#, fuzzy
 msgid "The specified URL could not be loaded."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は見つかりませんでした。"
+msgstr "指定されたURLはロードできませんでした。"
 
 #: ../src/gnome-utils/gnc-html.c:507 ../src/gnome-utils/gnc-html.c:962
 #, fuzzy
@@ -12273,9 +12080,9 @@ msgstr ""
 
 #. %s is a URL (some location somewhere).
 #: ../src/gnome-utils/gnc-html.c:902
-#, fuzzy, c-format
+#, c-format
 msgid "There was an error accessing %s."
-msgstr "ファイル保存中にエラー"
+msgstr "%s のアクセス中にエラーがありました。"
 
 #: ../src/gnome-utils/gnc-icons.c:17
 msgid "_Delete Account"
@@ -12286,9 +12093,8 @@ msgid "_Edit Account"
 msgstr "勘定科目の編集(_E)"
 
 #: ../src/gnome-utils/gnc-icons.c:19
-#, fuzzy
 msgid "_New Account"
-msgstr "新規勘定科目"
+msgstr "新規勘定科目(_N)"
 
 #. Account menu
 #: ../src/gnome-utils/gnc-icons.c:20 ../src/gnome/window-reconcile.c:2016
@@ -12297,14 +12103,12 @@ msgstr "勘定科目を開く(_O)"
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:220
-#, fuzzy
 msgid "_File"
-msgstr "新規ファイル"
+msgstr "ファイル(_F)"
 
 #: ../src/gnome-utils/gnc-main-window.c:224
-#, fuzzy
 msgid "Tra_nsaction"
-msgstr "取引"
+msgstr "取引(_N)"
 
 #: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Reports"
@@ -12315,9 +12119,8 @@ msgid "_Tools"
 msgstr "ツール(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:227
-#, fuzzy
 msgid "E_xtensions"
-msgstr "費用"
+msgstr "拡張(_X)"
 
 #: ../src/gnome-utils/gnc-main-window.c:228
 msgid "_Windows"
@@ -12330,24 +12133,20 @@ msgid "_Help"
 msgstr "ヘルプ(_H)"
 
 #: ../src/gnome-utils/gnc-main-window.c:234
-#, fuzzy
 msgid "_Open"
 msgstr "開く"
 
 #: ../src/gnome-utils/gnc-main-window.c:237
-#, fuzzy
 msgid "_Print..."
-msgstr "印刷確認(_P)..."
+msgstr "印刷(_P)..."
 
 #: ../src/gnome-utils/gnc-main-window.c:238
-#, fuzzy
 msgid "Print the currently active page"
-msgstr "このノートページを閉じる"
+msgstr "現在アクティブなページを印刷する"
 
 #: ../src/gnome-utils/gnc-main-window.c:239
-#, fuzzy
 msgid "Proper_ties"
-msgstr "価格"
+msgstr "プロパティ(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:240
 #, fuzzy
@@ -12355,83 +12154,73 @@ msgid "Edit the properties of the current file"
 msgstr "株式や投資信託などの価格を見るまたは編集する"
 
 #: ../src/gnome-utils/gnc-main-window.c:242
-#, fuzzy
 msgid "_Close"
 msgstr "閉じる"
 
 #: ../src/gnome-utils/gnc-main-window.c:243
-#, fuzzy
 msgid "Close the currently active page"
-msgstr "このノートページを閉じる"
+msgstr "現在アクティブなページを閉じる"
 
 #: ../src/gnome-utils/gnc-main-window.c:245
-#, fuzzy
 msgid "_Quit"
-msgstr "資本"
+msgstr "終了(_Q)"
 
 #: ../src/gnome-utils/gnc-main-window.c:246
-#, fuzzy
 msgid "Quit this application"
-msgstr "取引の複製"
+msgstr "このアプリケーションを終了する"
 
 #: ../src/gnome-utils/gnc-main-window.c:260
-#, fuzzy
 msgid "Pr_eferences"
-msgstr "初期設定"
+msgstr "設定"
 
 #: ../src/gnome-utils/gnc-main-window.c:261
 msgid "Edit the global preferences of GnuCash"
-msgstr ""
+msgstr "GnuCash全体の設定を編集する"
 
 #: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Select sorting criteria for this page view"
-msgstr ""
+msgstr "このページ表示の並び替え方法を選択する"
 
 #: ../src/gnome-utils/gnc-main-window.c:269
-#, fuzzy
 msgid "Select the account types that should be displayed."
-msgstr "勘定科目を選択(なし=すべて)"
+msgstr "表示する勘定科目の種類を選択する。"
 
 #: ../src/gnome-utils/gnc-main-window.c:270
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:965
-#, fuzzy
 msgid "_Refresh"
-msgstr "帳票(_R)"
+msgstr "再表示(_R)"
 
 #: ../src/gnome-utils/gnc-main-window.c:271
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:966
-#, fuzzy
 msgid "Refresh this window"
-msgstr "ヘルプウィンドウを閉じる"
+msgstr "このウィンドウを再表示する"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:276
 #: ../src/gnome/window-reconcile.c:2025
 msgid "_Check & Repair"
-msgstr ""
+msgstr "検査 & 修復(_C)"
 
 #: ../src/gnome-utils/gnc-main-window.c:277
-#, fuzzy
 msgid "Reset _Warnings..."
-msgstr "内部留保"
+msgstr "警告のリセット(_W)..."
 
 #: ../src/gnome-utils/gnc-main-window.c:278
 msgid "Reset the state of all warning message so they will be shown again."
-msgstr ""
+msgstr "すべての警告メッセージの状態をリセットしてもう一度表示されるようにする。"
 
 #: ../src/gnome-utils/gnc-main-window.c:280
 msgid "Re_name Page"
-msgstr ""
+msgstr "ページ名変更"
 
 #: ../src/gnome-utils/gnc-main-window.c:281
 msgid "Rename this page."
-msgstr ""
+msgstr "このページの名前を変更する"
 
 #. Windows menu
 #: ../src/gnome-utils/gnc-main-window.c:286
-#, fuzzy
 msgid "_New Window"
-msgstr "ウィンドウ(_W)"
+msgstr "新規ウィンドウ(_W)"
 
 #: ../src/gnome-utils/gnc-main-window.c:287
 #, fuzzy
@@ -12449,109 +12238,91 @@ msgstr ""
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:295
 msgid "Tutorial and Concepts _Guide"
-msgstr ""
+msgstr "チュートリアルとコンセプトガイド(_G)"
 
 #: ../src/gnome-utils/gnc-main-window.c:296
-#, fuzzy
 msgid "Open the GnuCash Tutorial"
-msgstr "GnuCashマニュアルを開く"
+msgstr "GnuCashのチュートリアルを開く"
 
 #: ../src/gnome-utils/gnc-main-window.c:298
-#, fuzzy
 msgid "_Contents"
 msgstr "内容"
 
 #: ../src/gnome-utils/gnc-main-window.c:299
-#, fuzzy
 msgid "Open the GnuCash Help"
-msgstr "GnuCashマニュアルを開く"
+msgstr "GnuCashのヘルプを開く"
 
 #: ../src/gnome-utils/gnc-main-window.c:301
-#, fuzzy
 msgid "_About"
-msgstr "合計"
+msgstr "GnuCashについて(_A)"
 
 #: ../src/gnome-utils/gnc-main-window.c:302
-#, fuzzy
 msgid "About GnuCash"
-msgstr "GnuCash を終了する"
+msgstr "GnuCashについて"
 
 #: ../src/gnome-utils/gnc-main-window.c:312
-#, fuzzy
 msgid "_Toolbar"
-msgstr "ツール(_T)"
+msgstr "ツールバー(_T)"
 
 #: ../src/gnome-utils/gnc-main-window.c:313
 msgid "Show/hide the toolbar on this window"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:315
-#, fuzzy
 msgid "Su_mmary Bar"
-msgstr "摘要を表示しますか?"
+msgstr "サマリーバー(_M)"
 
 #: ../src/gnome-utils/gnc-main-window.c:316
 msgid "Show/hide the summary bar on this window"
-msgstr ""
+msgstr "このウィンドウのサマリーバーを表示する/隠す"
 
 #: ../src/gnome-utils/gnc-main-window.c:318
-#, fuzzy
 msgid "Stat_us Bar"
-msgstr "合計を表示しますか?"
+msgstr "ステータスバー(_U)"
 
 #: ../src/gnome-utils/gnc-main-window.c:319
 msgid "Show/hide the status bar on this window"
-msgstr ""
+msgstr "このウィンドウのステータスバーを表示する/隠す"
 
 #: ../src/gnome-utils/gnc-main-window.c:329
-#, fuzzy
 msgid "Window _1"
-msgstr "window1"
+msgstr "ウィンドウ _1"
 
 #: ../src/gnome-utils/gnc-main-window.c:330
-#, fuzzy
 msgid "Window _2"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _2"
 
 #: ../src/gnome-utils/gnc-main-window.c:331
-#, fuzzy
 msgid "Window _3"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _3"
 
 #: ../src/gnome-utils/gnc-main-window.c:332
-#, fuzzy
 msgid "Window _4"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _4"
 
 #: ../src/gnome-utils/gnc-main-window.c:333
-#, fuzzy
 msgid "Window _5"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _5"
 
 #: ../src/gnome-utils/gnc-main-window.c:334
-#, fuzzy
 msgid "Window _6"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _6"
 
 #: ../src/gnome-utils/gnc-main-window.c:335
-#, fuzzy
 msgid "Window _7"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _7"
 
 #: ../src/gnome-utils/gnc-main-window.c:336
-#, fuzzy
 msgid "Window _8"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _8"
 
 #: ../src/gnome-utils/gnc-main-window.c:337
-#, fuzzy
 msgid "Window _9"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _9"
 
 #: ../src/gnome-utils/gnc-main-window.c:338
-#, fuzzy
 msgid "Window _0"
-msgstr "ウィンドウ(_W)"
+msgstr "ウィンドウ _0"
 
 #: ../src/gnome-utils/gnc-main-window.c:996
 #, c-format
@@ -12589,8 +12360,7 @@ msgstr "<ファイルなし>"
 #, fuzzy
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
-"GnuCash 個人用財務管理\n"
-"GNU でお金を管理しよう!"
+"GnuCash個人用財務管理。GNUでお金を管理しよう!"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3486
@@ -12604,9 +12374,8 @@ msgid "%s  This copy was built from r%s on %s."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:3501
-#, fuzzy
 msgid "translator_credits"
-msgstr "貸方"
+msgstr "有志"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -12626,9 +12395,8 @@ msgid "Start of previous month"
 msgstr "前月の開始日"
 
 #: ../src/gnome-utils/gnc-period-select.c:69
-#, fuzzy
 msgid "Start of this quarter"
-msgstr "前四半期の開始日"
+msgstr "今四半期の開始日"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:70 ../intl-scm/guile-strings.c:210
@@ -12636,25 +12404,21 @@ msgid "Start of previous quarter"
 msgstr "前四半期の開始日"
 
 #: ../src/gnome-utils/gnc-period-select.c:71
-#, fuzzy
 msgid "Start of this year"
-msgstr "今月の開始日"
+msgstr "今年の開始日"
 
 #: ../src/gnome-utils/gnc-period-select.c:72
-#, fuzzy
 msgid "Start of previous year"
-msgstr "前四半期の開始日"
+msgstr "前年の開始日"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:75
-#, fuzzy
 msgid "Start of this fiscal year"
-msgstr "本年度の暦上の開始日"
+msgstr "今年度の開始日"
 
 #: ../src/gnome-utils/gnc-period-select.c:76
-#, fuzzy
 msgid "Start of previous fiscal year"
-msgstr "前四半期の開始日"
+msgstr "前年度の開始日"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:190
@@ -12667,9 +12431,8 @@ msgid "End of previous month"
 msgstr "前月の終了日"
 
 #: ../src/gnome-utils/gnc-period-select.c:84
-#, fuzzy
 msgid "End of this quarter"
-msgstr "前四半期の終了日"
+msgstr "今四半期の終了日"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:85 ../intl-scm/guile-strings.c:214
@@ -12677,25 +12440,21 @@ msgid "End of previous quarter"
 msgstr "前四半期の終了日"
 
 #: ../src/gnome-utils/gnc-period-select.c:86
-#, fuzzy
 msgid "End of this year"
-msgstr "前年度の終了日"
+msgstr "今年の終了日"
 
 #: ../src/gnome-utils/gnc-period-select.c:87
-#, fuzzy
 msgid "End of previous year"
-msgstr "前四半期の終了日"
+msgstr "前年の終了日"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:90
-#, fuzzy
 msgid "End of this fiscal year"
-msgstr "前年度の終了日"
+msgstr "今年度の終了日"
 
 #: ../src/gnome-utils/gnc-period-select.c:91
-#, fuzzy
 msgid "End of previous fiscal year"
-msgstr "前四半期の終了日"
+msgstr "前年度の終了日"
 
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:95
@@ -12710,9 +12469,8 @@ msgid "Version: GnuCash-%s (r%s built %s)"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-splash.c:111
-#, fuzzy
 msgid "Loading..."
-msgstr "処理中..."
+msgstr "ロード中..."
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:599
 msgid "New top level account"
@@ -13005,19 +12763,17 @@ msgstr "GnuCashドキュメントの印刷"
 
 #. ********************* END OF FILE *********************************\*******************************************************************
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:1
-#, fuzzy
 msgid "Most recently opened file"
-msgstr "もっとも最近に記録された価格"
+msgstr "もっとも最近開いたファイル"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:2
 #, fuzzy
 msgid "Next most recently opened file"
-msgstr "もっとも最近に記録された価格"
+msgstr "次に最近開いたファイル"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:3
-#, fuzzy
 msgid "Number of files in history"
-msgstr "列数"
+msgstr "ヒストリー中のファイル数"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:4
 msgid "This field contains the full path of the most recently opened file."
@@ -13135,11 +12891,8 @@ msgid "Difference:"
 msgstr "差分:"
 
 #: ../src/gnome/window-reconcile.c:1885
-#, fuzzy
 msgid "The account is not balanced. Are you sure you want to finish?"
-msgstr ""
-"勘定の貸借がが合いません。\n"
-"本当に終了してよろしいですか?"
+msgstr "勘定の貸借がが合いません。本当に終了してよろしいですか?"
 
 #: ../src/gnome/window-reconcile.c:1942
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -13150,9 +12903,7 @@ msgstr "本当にこの調整を延期して、あとで終了しますか？"
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
-msgstr ""
-"この調整ウィンドウには変更があります。\n"
-"本当にキャンセルしてもよろしいですか?"
+msgstr "この調整ウィンドウには変更があります。本当にキャンセルしてもよろしいですか?"
 
 #. Toplevel
 #: ../src/gnome/window-reconcile.c:1993
@@ -15837,7 +15588,7 @@ msgstr "取引の注釈を入力する"
 #: ../src/register/register-gnome/gnucash-item-list.c:476
 #, fuzzy
 msgid "List"
-msgstr "最後"
+msgstr "リスト"
 
 #: ../src/report/report-gnome/dialog-column-view.c:332
 msgid "Contents"
@@ -15862,35 +15613,30 @@ msgid "Rows"
 msgstr "行"
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "HTML Style Sheet Properties: %s"
-msgstr "HTML スタイルシート"
+msgstr "HTML スタイルシートプロパティ: %s"
 
 #: ../src/report/report-gnome/dialog-style-sheet.c:372
-#, fuzzy
 msgid "Style Sheet Name"
-msgstr "スタイルシート"
+msgstr "スタイルシート名"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:275
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:276
-#, fuzzy
 msgid "The numeric ID of the report."
-msgstr "帳票のタイトル"
+msgstr "帳票の数値ID"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:953
-#, fuzzy
 msgid "_Print Report..."
-msgstr "帳票"
+msgstr "帳票を印刷(_P)..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:954
-#, fuzzy
 msgid "Print the current report"
-msgstr "このレポートを再読込"
+msgstr "現在の帳票を印刷する"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:968
-#, fuzzy
 msgid "Add _Report"
-msgstr "帳票(_R)"
+msgstr "帳票を追加(_R)"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:969
 msgid ""
@@ -15900,25 +15646,23 @@ msgid ""
 msgstr ""
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:974
-#, fuzzy
 msgid "Export _Report"
-msgstr "費用チャート"
+msgstr "帳票をエクスポート(_R)"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:975
 msgid "Export HTML-formatted report to file"
 msgstr "HTML形式の帳票をファイルに出力"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:977
-#, fuzzy
 msgid "_Report Options"
-msgstr "四番目のオプション"
+msgstr "帳票のオプション(_R)"
 
 #. src/report/report-system/html-utilities.scm
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:978
 #: ../intl-scm/guile-strings.c:1414 ../intl-scm/guile-strings.c:1420
 #: ../intl-scm/guile-strings.c:1426
 msgid "Edit report options"
-msgstr "帳票オプションを編集する"
+msgstr "帳票のオプションを編集する"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:981
 msgid "Back"
@@ -15938,12 +15682,11 @@ msgstr "履歴を一つ先へ進む"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:987
 msgid "Reload"
-msgstr "再ロード"
+msgstr "再読込"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:988
-#, fuzzy
 msgid "Reload the current page"
-msgstr "このレポートを再読込"
+msgstr "現在のページを再読込"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:990
 msgid "Stop"
@@ -16020,24 +15763,20 @@ msgid "<b>Available style sheets</b>"
 msgstr ""
 
 #: ../src/report/report-gnome/report.glade.h:4
-#, fuzzy
 msgid "<b>New style sheet info</b>"
-msgstr "新規スタイルシートの情報"
+msgstr "<b>新規スタイルシートの情報</b>"
 
 #: ../src/report/report-gnome/report.glade.h:5
-#, fuzzy
 msgid "<b>Style sheet options</b>"
-msgstr "スタイルシートオプション"
+msgstr "<b>スタイルシートオプション</b>"
 
 #: ../src/report/report-gnome/report.glade.h:6
-#, fuzzy
 msgid "<b>_Selected Reports</b>"
-msgstr "デフォルトの通貨"
+msgstr "<b>選択された帳票</b>"
 
 #: ../src/report/report-gnome/report.glade.h:7
-#, fuzzy
 msgid "A_dd  >>"
-msgstr "追加 >>"
+msgstr "追加(_D) >>"
 
 #: ../src/report/report-gnome/report.glade.h:8
 msgid "Enter report row/column span"
@@ -16048,48 +15787,40 @@ msgid "HTML Style Sheets"
 msgstr "HTML スタイルシート"
 
 #: ../src/report/report-gnome/report.glade.h:10
-#, fuzzy
 msgid "Move _up"
-msgstr "上へ移動"
+msgstr "上へ移動(_U)"
 
 #: ../src/report/report-gnome/report.glade.h:11
-#, fuzzy
 msgid "Move dow_n"
-msgstr "下へ移動"
+msgstr "下へ移動(_N)"
 
 #: ../src/report/report-gnome/report.glade.h:12
 msgid "New Style Sheet"
-msgstr "新規スタイルシート"
+msgstr "スタイルシートを新規作成"
 
 #: ../src/report/report-gnome/report.glade.h:13
-#, fuzzy
 msgid "Report Size"
-msgstr "帳票名"
+msgstr "帳票サイズ"
 
 #: ../src/report/report-gnome/report.glade.h:14
-#, fuzzy
 msgid "Select HTML Style Sheet"
-msgstr "HTML スタイルシート"
+msgstr "HTML スタイルシートを選択"
 
 #: ../src/report/report-gnome/report.glade.h:15
-#, fuzzy
 msgid "Si_ze..."
-msgstr "サイズ..."
+msgstr "サイズ(_Z)..."
 
 #: ../src/report/report-gnome/report.glade.h:16
-#, fuzzy
 msgid "_Column span:"
-msgstr "列スパン:"
+msgstr "列スパン(_C):"
 
 #: ../src/report/report-gnome/report.glade.h:19
-#, fuzzy
 msgid "_Row span:"
-msgstr "行スパン:"
+msgstr "行スパン(_R):"
 
 #: ../src/report/report-gnome/report.glade.h:20
-#, fuzzy
 msgid "_Template:"
-msgstr "リベート"
+msgstr "テンプレート(_T):"
 
 #: ../src/report/report-gnome/window-report.c:101
 msgid "Set the report options you want using this dialog."
@@ -16099,9 +15830,8 @@ msgstr ""
 #. src/report/utility-reports/gnucash/report/view-column.scm
 #: ../src/report/report-gnome/window-report.c:202
 #: ../intl-scm/guile-strings.c:1462 ../intl-scm/guile-strings.c:1484
-#, fuzzy
 msgid "Report error"
-msgstr "帳票名"
+msgstr "帳票エラー"
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
@@ -16124,13 +15854,12 @@ msgstr ""
 
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
-#, fuzzy
 msgid "St_yle Sheets"
-msgstr "スタイルシート"
+msgstr "スタイルシート(_Y)"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:50
 msgid "Edit report style sheets."
-msgstr "スタイルシートの帳票を編集する"
+msgstr "帳票のスタイルシートを編集する。"
 
 #: ../lib/libqof/backend/file/qsf-backend.c:107
 msgid "Level of compression to use: 0 for none, 9 for highest."
@@ -16622,7 +16351,7 @@ msgstr "ヘッダとなるバナー"
 #: ../intl-scm/guile-strings.c:284 ../intl-scm/guile-strings.c:496
 #: ../intl-scm/guile-strings.c:708 ../intl-scm/guile-strings.c:920
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -16639,9 +16368,8 @@ msgstr ""
 #. src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:288 ../intl-scm/guile-strings.c:500
 #: ../intl-scm/guile-strings.c:712 ../intl-scm/guile-strings.c:924
-#, fuzzy
 msgid "Center"
-msgstr "入力"
+msgstr "中央"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -16659,7 +16387,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:292 ../intl-scm/guile-strings.c:504
 #: ../intl-scm/guile-strings.c:716 ../intl-scm/guile-strings.c:928
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -17283,77 +17011,76 @@ msgstr "プロットする高さのドット数"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1254
 msgid "Choose the marker for each data point."
-msgstr ""
+msgstr "各データ点のマーカーを選択してください。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1256 ../intl-scm/guile-strings.c:1258
 msgid "Circle"
-msgstr ""
+msgstr "円"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1260 ../intl-scm/guile-strings.c:1262
 #, fuzzy
 msgid "Cross"
-msgstr "損失"
+msgstr "十字"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1264 ../intl-scm/guile-strings.c:1266
 #, fuzzy
 msgid "Square"
-msgstr "元"
+msgstr "四角"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1268 ../intl-scm/guile-strings.c:1270
 msgid "Asterisk"
-msgstr ""
+msgstr "星印"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1272
 msgid "Filled circle"
-msgstr ""
+msgstr "塗りつぶし円"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1274
 msgid "Circle filled with color"
-msgstr ""
+msgstr "色付き円"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1276
 msgid "Filled square"
-msgstr ""
+msgstr "塗りつぶし四角"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1278
 msgid "Square filled with color"
-msgstr ""
+msgstr "色付き四角"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1280
 #, fuzzy
 msgid "Choose the method for sorting accounts."
-msgstr "新規科目に使用する通貨を選択してください。"
+msgstr "勘定科目を並べ替える方法を選択してください。"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1284
-#, fuzzy
 msgid "Alphabetical by account code"
-msgstr "ソートし勘定コード別に小計"
+msgstr "勘定科目コードのアルファベット順"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1286
 msgid "Alphabetical"
-msgstr ""
+msgstr "アルファベット順"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1288
 #, fuzzy
 msgid "Alphabetical by account name"
-msgstr "ソートし勘定科目別に小計"
+msgstr "勘定科目名のアルファベット順"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1292
 msgid "By amount, largest to smallest"
-msgstr ""
+msgstr "金額の降順"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1294
@@ -17384,9 +17111,8 @@ msgstr ""
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1304 ../intl-scm/guile-strings.c:1314
-#, fuzzy
 msgid "Do not show"
-msgstr "ソートしない"
+msgstr "表示しない"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1306
@@ -17432,12 +17158,12 @@ msgstr ""
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1322
 msgid "_Assets & Liabilities"
-msgstr "資産および負債(_A)"
+msgstr "資産 & 負債(_A)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1324
 msgid "_Income & Expense"
-msgstr "所得および費用(_I)"
+msgstr "収益 & 費用(_I)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1326
@@ -17447,13 +17173,12 @@ msgstr "税金(_T)"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1328
 msgid "_Sample & Custom"
-msgstr ""
+msgstr "サンプル & カスタム(_S)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:1330
-#, fuzzy
 msgid "_Custom"
-msgstr "カスタム"
+msgstr "カスタム(_C)"
 
 #. src/report/report-system/report.scm
 #. src/report/standard-reports/gnucash/report/transaction.scm
@@ -17669,15 +17394,13 @@ msgstr "マネーマーケット"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1392
-#, fuzzy
 msgid "Accounts Receivable"
-msgstr "選択済の勘定科目:"
+msgstr "売掛金"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1394
-#, fuzzy
 msgid "Accounts Payable"
-msgstr "勘定科目名"
+msgstr "買掛金"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:1396
@@ -17694,7 +17417,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1400
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr ""
+msgstr "'%s' の帳票を作成中 ..."
 
 #. src/report/report-system/html-utilities.scm
 #: ../intl-scm/guile-strings.c:1404
@@ -17744,23 +17467,21 @@ msgstr ""
 
 #. src/report/report-system/html-style-sheet.scm
 #: ../intl-scm/guile-strings.c:1428
-#, fuzzy
 msgid "Can't save style sheet"
-msgstr "スタイルシートの帳票を編集する"
+msgstr "スタイルシートが保存できません"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1432 ../intl-scm/guile-strings.c:1442
-#, fuzzy
 msgid "This report has no options."
-msgstr "帳票オプションを編集する"
+msgstr "この帳票にはオプションはありません"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
 #: ../intl-scm/guile-strings.c:1436 ../intl-scm/guile-strings.c:1446
 #, c-format
 msgid "Display the %s report"
-msgstr "%s 帳票を表示。"
+msgstr "%s の帳票を表示。"
 
 #. src/report/report-gnome/report-gnome.scm
 #. src/report/report-gnome/gnucash/report/report-gnome.scm
@@ -17792,9 +17513,8 @@ msgstr "新しい行へ包み込まれる前の列数"
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
 #: ../intl-scm/guile-strings.c:1466 ../intl-scm/guile-strings.c:1488
-#, fuzzy
 msgid "Edit Options"
-msgstr "最初のオプション"
+msgstr "オプションを編集"
 
 #. src/report/utility-reports/view-column.scm
 #. src/report/utility-reports/gnucash/report/view-column.scm
@@ -18474,7 +18194,7 @@ msgstr "純利益を表示"
 #: ../intl-scm/guile-strings.c:1846 ../intl-scm/guile-strings.c:1930
 #: ../intl-scm/guile-strings.c:2470 ../intl-scm/guile-strings.c:2554
 msgid "Show Asset & Liability bars"
-msgstr "資産・負債の棒グラフを表示"
+msgstr "資産と負債の棒グラフを表示"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -18706,13 +18426,13 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1940 ../intl-scm/guile-strings.c:2564
 msgid "Show Income and Expenses?"
-msgstr "所得/費用を表示しますか?"
+msgstr "収益と費用を表示しますか?"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1942 ../intl-scm/guile-strings.c:2566
 msgid "Show the Asset and the Liability bars?"
-msgstr "資産・負債の棒グラフを表示しますか?"
+msgstr "資産と負債の棒グラフを表示しますか?"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -18742,7 +18462,7 @@ msgstr ""
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1962 ../intl-scm/guile-strings.c:2586
 msgid "Income Chart"
-msgstr "所得チャート"
+msgstr "収益チャート"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -18766,7 +18486,7 @@ msgstr "負債チャート"
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1970 ../intl-scm/guile-strings.c:2594
 msgid "Net Worth Barchart"
-msgstr ""
+msgstr "純資産棒グラフ"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
@@ -19067,9 +18787,8 @@ msgstr ""
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2056 ../intl-scm/guile-strings.c:2680
-#, fuzzy
 msgid "Date of Report"
-msgstr "日付の書式:"
+msgstr "帳票の日付"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -19125,9 +18844,8 @@ msgstr "この勘定科目について取引帳票を実行する"
 #: ../intl-scm/guile-strings.c:2690 ../intl-scm/guile-strings.c:2882
 #: ../intl-scm/guile-strings.c:3096 ../intl-scm/guile-strings.c:3204
 #: ../intl-scm/guile-strings.c:4250 ../intl-scm/guile-strings.c:4358
-#, fuzzy
 msgid "Levels of Subaccounts"
-msgstr "子勘定科目を選択"
+msgstr "子勘定科目のレベル"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -19539,7 +19257,7 @@ msgstr "内部留保"
 #: ../intl-scm/guile-strings.c:2172 ../intl-scm/guile-strings.c:2796
 #, fuzzy
 msgid "Net Income"
-msgstr "所得"
+msgstr "収益"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -19809,9 +19527,8 @@ msgstr "親勘定科目"
 #: ../intl-scm/guile-strings.c:2268 ../intl-scm/guile-strings.c:2892
 #: ../intl-scm/guile-strings.c:3106 ../intl-scm/guile-strings.c:3214
 #: ../intl-scm/guile-strings.c:4260 ../intl-scm/guile-strings.c:4368
-#, fuzzy
 msgid "Parent account subtotals"
-msgstr "親勘定科目"
+msgstr "親勘定科目小計"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -19922,23 +19639,20 @@ msgstr ""
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2338 ../intl-scm/guile-strings.c:2962
-#, fuzzy
 msgid "Revenues"
-msgstr "初期設定"
+msgstr "収益"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2340 ../intl-scm/guile-strings.c:2964
-#, fuzzy
 msgid "Total Revenue"
-msgstr "合計"
+msgstr "合計収益"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2344 ../intl-scm/guile-strings.c:2968
-#, fuzzy
 msgid "Total Expenses"
-msgstr "費用"
+msgstr "合計費用"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -19964,7 +19678,7 @@ msgstr "純資産:"
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2350 ../intl-scm/guile-strings.c:2974
 msgid "Income Barchart"
-msgstr "収入棒グラフ"
+msgstr "収益棒グラフ"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
@@ -21600,7 +21314,7 @@ msgstr ""
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:4164 ../intl-scm/guile-strings.c:5318
 msgid "Income Piechart"
-msgstr "所得円グラフ"
+msgstr "収益円グラフ"
 
 #. src/report/standard-reports/gnucash/report/account-piecharts.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -22157,7 +21871,6 @@ msgstr ""
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5870
-#, fuzzy
 msgid "Fancy Date Format"
 msgstr "日付の書式"
 
@@ -22169,58 +21882,51 @@ msgstr ""
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5878 ../intl-scm/guile-strings.c:5896
-#, fuzzy
 msgid "Company Address"
-msgstr "顧客住所"
+msgstr "会社住所"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5880 ../intl-scm/guile-strings.c:5898
-#, fuzzy
 msgid "Company ID"
-msgstr "列スパン:"
+msgstr "会社ID"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5882 ../intl-scm/guile-strings.c:5900
-#, fuzzy
 msgid "Company Phone Number"
-msgstr "会社のロゴ画像"
+msgstr "会社電話番号"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5884 ../intl-scm/guile-strings.c:5902
-#, fuzzy
 msgid "Company Fax Number"
-msgstr "会社のロゴ画像"
+msgstr "会社FAX番号"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5886 ../intl-scm/guile-strings.c:5904
-#, fuzzy
 msgid "Company Website URL"
-msgstr "会社のロゴ画像"
+msgstr "会社ウェブサイトURL"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5888 ../intl-scm/guile-strings.c:5906
-#, fuzzy
 msgid "Company Email Address"
-msgstr "顧客住所"
+msgstr "会社Emailアドレス"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:5890 ../intl-scm/guile-strings.c:5908
-#, fuzzy
 msgid "Company Contact Person"
-msgstr "会社のロゴ画像"
+msgstr "会社連絡先人物"
 
 #. src/business/business-reports/payables.scm
 #. src/business/business-reports/gnucash/report/payables.scm
 #: ../intl-scm/guile-strings.c:5910 ../intl-scm/guile-strings.c:6434
 #, fuzzy
 msgid "Payable Account"
-msgstr "親勘定科目"
+msgstr "買掛金"
 
 #. src/business/business-reports/payables.scm
 #. src/business/business-reports/gnucash/report/payables.scm
@@ -23224,7 +22930,7 @@ msgstr "印刷プレビュー"
 #: ../intl-scm/guile-strings.c:7190 ../intl-scm/guile-strings.c:7430
 #, fuzzy
 msgid "Receivables Account"
-msgstr "矯正が必要なアカウンティング 101"
+msgstr "売掛金"
 
 #. src/business/business-reports/gnucash/report/receivables.scm
 #. src/business/business-reports/receivables.scm
@@ -23242,28 +22948,27 @@ msgid "Receivable Aging"
 msgstr "受取"
 
 #: ../doc/tip_of_the_day.list.in:1
-#, fuzzy
 msgid ""
 "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of "
 "bugs and unstable features! If you are looking for a stable personal finance "
 "application, you should use the latest release of GnuCash 2.0."
 msgstr ""
-"警告!!これは GnuCash の開発バージョンです。\n"
-"たくさんのバグと不安定な機能があるかもしれません。\n"
-"もし安定版の個人向け財務アプリケーションをお探しならば、\n"
-"最新のリリースである GnuCash 1.4 を使用すべきです。"
+"警告!!これは GnuCash の開発バージョンです。"
+"たくさんのバグと不安定な機能があるかもしれません。"
+"もし安定版の個人向け財務アプリケーションをお探しならば、"
+"最新のリリースである GnuCash 2.0 を使用すべきです。"
 
 #: ../doc/tip_of_the_day.list.in:6
-#, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information. If you are "
 "upgrading from earlier versions of GnuCash, the section \"What's new in "
 "GnuCash 2.0\" is particularly interesting. You can access the manual under "
 "the Help menu."
 msgstr ""
-"GnuCash オンラインマニュアルには有益な情報がたくさんあります。\n"
-"GnuCash 1.4からアップグレードしたのならば、\"What's new in GnuCash 1.6\"\n"
-"をご覧ください。マニュアルにはヘルプメニューからアクセスすることができます。"
+"GnuCash オンラインマニュアルには有益な情報がたくさんあります。"
+"以前のバージョンのGnuCashからアップグレードした場合は、"
+"\"What's new in GnuCash 2.0\"のセクションが特に興味のあるところでしょう。"
+"マニュアルにはヘルプメニューからアクセスすることができます。"
 
 #: ../doc/tip_of_the_day.list.in:11
 #, fuzzy
