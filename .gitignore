@@ -95,3 +95,9 @@ src/swig-runtime.h
 src/tax/us/gnucash
 stamp-h1
 swig-*.c
+.deps
+.libs
+.scm-links
+*~
+po/.intltool-merge-cache
+src/bin/gnucash-bin.o
