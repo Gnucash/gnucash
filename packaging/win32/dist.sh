@@ -93,6 +93,7 @@ function dist_gnome() {
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
+    cp $DIST_DIR/share/themes/MS-Windows/gtk-2.0/gtkrc $DIST_DIR/etc/gtk-2.0
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
