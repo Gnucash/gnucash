@@ -1144,24 +1144,74 @@ class Reconcile(GnucashWindow):
             self.__dict__[name]=value
 
 class ReconcileFrame(Node):
-    
+
+    class FundsTable(Node):
+        """ Wrapper for table in Reconcile Frame """
+        def __init__(self, initializer):
+            Node.__init__(self, initializer)
+            self.row_table_cell = 0
+            self.column_table_cell = 0
+
+        def __setattr__(self, name, value):
+            if name == 'row':
+                self.row_table_cell = value
+            elif name == 'column':
+                self.column_table_cell = value
+            else:
+                self.__dict__[name]=value
+
+        def click(self, row=None, column=None):
+            """ Another row - column based controls i found no action assigned with this table cell Only Activate which does not work because dogtail does not detect the position correctly """
+            if row == None:
+                row = self.row_table_cell
+            if column == None:
+                column = self.column_table_cell
+            table_cell_list = self.findChildren\
+            (predicate.GenericPredicate(roleName='table cell'), recursive=True)
+            cell = table_cell_list[(row*4)+column]
+            # when click i add double the cell hieght size[1] because dogtail doesn't detect the position correctly 
+            # it detects it above its rendered position 
+            dogtail.rawinput.click(cell.position[0], cell.position[1]+cell.size[1]*2)
+
     def __init__(self, initializer):
         config.childrenLimit = 1500
         Node.__init__(self, initializer)
-#        self.funds_out_panel = \
- #       self.findChildren(predicate.GenericPredicate(roleName='panel'))
-  #      for item in self.funds_out_panel:
-   #         print item
-        #self.fund_in_panel = \
-        #self.findChild(predicate.GenericPredicate(roleName='panel', name='Funds In'))
+        self.funds_out_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name='Funds Out'))
+        self.funds_out_table = \
+        self.funds_out_panel.findChild(predicate.GenericPredicate(roleName='table'))
+        self.funds_out = self.FundsTable(self.funds_out_table)
+        self.funds_in_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name='Funds In'))
+        self.funds_in_table = \
+        self.funds_in_panel.findChild(predicate.GenericPredicate(roleName='table'))
+        self.funds_in = self.FundsTable(self.funds_in_table)
+
+    def __setattr__(self, name, value):
+        if name =='ending_balance':
+            self.ending_balance_txt.text = value
+        elif name == 'include_subaccount':
+            if value and not self.include_subaccount_cb.checked:
+                self.include_subaccount_cb.click()
+            elif not value and self.include_subaccount_cb.checked:
+                self.include_subaccount_cb.click()
+        else:
+            self.__dict__[name]=value
 
 if __name__ == '__main__':
+    """ This main Changes Frequently because it used to test most recent added widget """
+    """ Currently i use it to test the new wrapper for Reconcile Frame """
     config.childrenLimit = 1500
 
     gnucash = GnuCashApp()
-    asset_reconcile = gnucash.findChild(predicate.GenericPredicate(roleName='frame'))
-    reconcileFrame = ReconcileFrame(asset_reconcile)
-    panels = asset_reconcile.findChildren(predicate.GenericPredicate(roleName='panel'))
-    reconcileFrame.dump()
-    for item in panels:
-        print item
+    asset_reconcile = gnucash.findChildren(predicate.GenericPredicate(roleName='frame'))
+    for f in asset_reconcile:
+        result = re.search(". Reconcile", f.name)
+        if (result != None):
+            asset_rec = f
+    reconcileFrame = ReconcileFrame(asset_rec)
+    tabel_cell_list = reconcileFrame.funds_out_table.findChildren(predicate.GenericPredicate(roleName='table cell'), recursive=True)
+    f = reconcileFrame.funds_out
+    f.row = 2
+    f.column = 1
+    f.click()
