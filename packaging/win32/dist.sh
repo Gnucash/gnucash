@@ -185,7 +185,11 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
-    cp -a $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
+
+    _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
+    sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
+        > $_GNUCASH_UDIR/gnucash.iss \
+        -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g"
 }
 
 function finish() {

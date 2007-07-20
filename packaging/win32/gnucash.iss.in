@@ -77,6 +77,17 @@ Source: "@prefix@\..\dist\lib\*"; DestDir: "{app}\lib"; Flags: recursesubdirs; C
 Source: "@prefix@\..\dist\libexec\*"; DestDir: "{app}\libexec"; Flags: recursesubdirs; Components: main
 Source: "@prefix@\..\dist\share\*"; DestDir: "{app}\share"; Flags: recursesubdirs; Components: main
 
+; Additionally, we ship the Qt DLLs because the Online-Banking-Wizard
+; lib/aqbanking/plugins/16/wizards/qt3-wizard.exe needs them.
+Source: "@-qtbindir-@\QtCore4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtGui4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\mingwm10.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+; The following are all needed by Qt3Support
+Source: "@-qtbindir-@\Qt3Support4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtXml4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtSql4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "@-qtbindir-@\QtNetwork4.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+
 ;; The translations (no idea why mingw installs them in prefix/lib/locale)
 ;Source: "@prefix@\..\dist\lib\locale\*"; DestDir: "{app}\lib\locale"; Flags: recursesubdirs; Components: translations
 ;
