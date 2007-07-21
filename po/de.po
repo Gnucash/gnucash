@@ -2,7 +2,7 @@
 # Messages in Deutsch für GnuCash
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
-# Christian Stimming <stimming@tuhh.de>, 2001-2003, 2004, 2005, 2006.
+# Christian Stimming <stimming@tuhh.de>, 2001-2003, 2004, 2005, 2006, 2007.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 #
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-08 15:20+0200\n"
-"PO-Revision-Date: 2007-07-12 21:11+0200\n"
+"POT-Creation-Date: 2007-07-21 10:04+0200\n"
+"PO-Revision-Date: 2007-07-21 10:06+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4061,7 +4061,7 @@ msgstr "(Wert benötigt)"
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
 #: ../src/gnome/dialog-sx-since-last-run.c:807
-#: ../src/gnome/gnc-plugin-basic-commands.c:480
+#: ../src/gnome/gnc-plugin-basic-commands.c:484
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
@@ -7059,133 +7059,133 @@ msgstr "Aktuelle Datei speichern"
 msgid "Save _As..."
 msgstr "Speichern _unter..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:108
+#: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_QSF Import"
 msgstr "_QSF-Import"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:109
+#: ../src/gnome/gnc-plugin-basic-commands.c:110
 msgid "Import a QSF object file"
 msgstr "QSF-Datei importieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:112
+#: ../src/gnome/gnc-plugin-basic-commands.c:114
 msgid "Export _Accounts"
 msgstr "_Konten exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:113
+#: ../src/gnome/gnc-plugin-basic-commands.c:115
 msgid "Export the account hierarchy to a new GnuCash datafile"
 msgstr "Die Konten-Hierarchie in eine neue GnuCash-Datei exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:116
+#: ../src/gnome/gnc-plugin-basic-commands.c:118
 msgid "Export _Chart of Accounts to QSF"
 msgstr "Kontenhierarchie nach _QSF XML exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:117
+#: ../src/gnome/gnc-plugin-basic-commands.c:119
 msgid "Export the chart of accounts for a date with balances as QSF"
 msgstr "Kontenhierarchie mit Salden eines bestimmten Tages als QSF exportieren"
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:122
+#: ../src/gnome/gnc-plugin-basic-commands.c:124
 msgid "_Find..."
 msgstr "_Suchen..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:123
+#: ../src/gnome/gnc-plugin-basic-commands.c:125
 msgid "Find transactions with a search"
 msgstr "Finde Buchungssätze"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:125
+#: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Ta_x Options"
 msgstr "Steuer_relevante Optionen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:126
+#: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
 "Steuerrelevante Informationen für Ertrags- und Aufwandskonten einrichten"
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:131
+#: ../src/gnome/gnc-plugin-basic-commands.c:133
 msgid "_Scheduled Transactions"
 msgstr "_Terminierte Buchungen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:132
+#: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "_Scheduled Transaction Editor"
 msgstr "Terminierte Buchungen Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:133
+#: ../src/gnome/gnc-plugin-basic-commands.c:135
 msgid "The list of Scheduled Transactions"
 msgstr "Die Liste der terminierten Buchungen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:135
+#: ../src/gnome/gnc-plugin-basic-commands.c:137
 msgid "Since _Last Run..."
 msgstr "Seit _letztem Aufruf..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:136
+#: ../src/gnome/gnc-plugin-basic-commands.c:138
 msgid "Create Scheduled Transactions since the last time run"
 msgstr ""
 "Alle terminierten Buchungen seit dem letzten Aufruf von GnuCash erstellen."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:138
+#: ../src/gnome/gnc-plugin-basic-commands.c:140
 msgid "_Mortgage & Loan Repayment..."
 msgstr "_Hypothek & Darlehen Assistent..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:139
+#: ../src/gnome/gnc-plugin-basic-commands.c:141
 msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "Terminierte Buchungen einrichten, die ein Darlehen tilgen sollen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:141
+#: ../src/gnome/gnc-plugin-basic-commands.c:144
 msgid "Close _Books"
 msgstr "_Buchabschluß"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:142
+#: ../src/gnome/gnc-plugin-basic-commands.c:145
 msgid "Archive old data using accounting periods"
 msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #. Tools menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:147
+#: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "_Price Editor"
 msgstr "_Preis-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:148
+#: ../src/gnome/gnc-plugin-basic-commands.c:152
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:150
+#: ../src/gnome/gnc-plugin-basic-commands.c:154
 msgid "_Security Editor"
 msgstr "_Aktien-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:151
+#: ../src/gnome/gnc-plugin-basic-commands.c:155
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 "Wertpapiere für Aktienkonten und Investmentfonds anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:153
+#: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Financial Calculator"
 msgstr "_Finanzrechner"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:154
+#: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "Use the financial calculator"
 msgstr "Den Finanzrechner benutzen"
 
 #. Help menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:159
+#: ../src/gnome/gnc-plugin-basic-commands.c:163
 msgid "_Tips Of The Day"
 msgstr "_Tipp des Tages"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:160
+#: ../src/gnome/gnc-plugin-basic-commands.c:164
 msgid "View the Tips of the Day"
 msgstr "»Tipp des Tages« anzeigen"
 
 #. Translators: %d is the error number; %s is the error message as
 #. text.
-#: ../src/gnome/gnc-plugin-basic-commands.c:377
+#: ../src/gnome/gnc-plugin-basic-commands.c:381
 #, c-format
 msgid "Error: Loading failed, error code %d - %s."
 msgstr "Fehler beim Laden: Fehlercode %d, »%s«."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:399
+#: ../src/gnome/gnc-plugin-basic-commands.c:403
 msgid "Select the QSF file to import into GnuCash"
 msgstr "Zu ladende QIF-Datei auswählen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:455
+#: ../src/gnome/gnc-plugin-basic-commands.c:459
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "Es gibt keine terminierten Buchungen, die gebucht werden sollten."
 
@@ -13627,14 +13627,10 @@ msgid "Start AqBanking Setup Wizard"
 msgstr "AqBanking Einrichtungs-Assistent starten"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:45
-msgid "Start AqBanking Wizard"
-msgstr "AqBanking Einrichtungs-Assistenten starten"
-
-#: ../src/import-export/hbci/glade/hbci.glade.h:46
 msgid "Start Online Banking Wizard"
 msgstr "Onlinebanking Einrichtungs-Assistenten starten"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:47
+#: ../src/import-export/hbci/glade/hbci.glade.h:46
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
@@ -13644,7 +13640,7 @@ msgstr ""
 "Programm »AqBanking Einrichtungs-Assistent« durchgeführt. Bitte klicken Sie "
 "den Knopf, um dieses Programm zu starten."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:48
+#: ../src/import-export/hbci/glade/hbci.glade.h:47
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
@@ -13664,7 +13660,7 @@ msgstr ""
 "\n"
 "Klicken Sie jetzt »Anwenden«."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:53
+#: ../src/import-export/hbci/glade/hbci.glade.h:52
 msgid ""
 "This druid helps you setting up your Online Banking connection with your "
 "bank.\n"
@@ -13713,25 +13709,29 @@ msgstr ""
 "Klicken Sie »Abbrechen«, wenn Sie jetzt keine HBCI Verbindung einrichten "
 "möchten."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:67
+#: ../src/import-export/hbci/glade/hbci.glade.h:66
 msgid "Use Transaction Template"
 msgstr "Überweisungsvorlage:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:68
+#: ../src/import-export/hbci/glade/hbci.glade.h:67
 msgid "Version"
 msgstr "Version"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:69
+#: ../src/import-export/hbci/glade/hbci.glade.h:68
 msgid "_Earliest possible date"
 msgstr "_Frühestes mögliches Datum"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:70
+#: ../src/import-export/hbci/glade/hbci.glade.h:69
 msgid "_Last retrieval date"
 msgstr "_Letztes Abrufdatum"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:71
+#: ../src/import-export/hbci/glade/hbci.glade.h:70
 msgid "_Now"
 msgstr "_Jetzt"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:71
+msgid "_Start AqBanking Wizard"
+msgstr "AqBanking Einrichtungs-Assistenten _starten"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
 msgid "at Bank"
