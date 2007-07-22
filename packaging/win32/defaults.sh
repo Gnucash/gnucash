@@ -213,12 +213,12 @@ set_default PCRE_BIN_URL "$SF_MIRROR/gnuwin32/pcre-6.4-1-bin.zip"
 set_default PCRE_LIB_URL "$SF_MIRROR/gnuwin32/pcre-6.4-1-lib.zip"
 set_default PCRE_DIR $GLOBAL_DIR\\pcre
 
-set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.3.tar.bz2"
+set_default LIBGSF_URL "$GNOME_MIRROR/sources/libgsf/1.14/libgsf-1.14.5.tar.bz2"
 set_default LIBGSF_DIR $GLOBAL_DIR\\libgsf
 
-set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.3/goffice-0.3.7.tar.bz2"
+set_default GOFFICE_URL "$GNOME_MIRROR/sources/goffice/0.4/goffice-0.4.1.tar.bz2"
 set_default GOFFICE_DIR $GLOBAL_DIR\\goffice
-set_default GOFFICE_PATCH `pwd`/goffice-0.3.7-patch.diff
+set_default GOFFICE_PATCH `pwd`/goffice-0.4.1-patch.diff
 
 set_default GLADE_URL "$GNOME_MIRROR/sources/glade3/3.0/glade3-3.1.2.tar.bz2"
 set_default GLADE_DIR $GLOBAL_DIR\\glade
