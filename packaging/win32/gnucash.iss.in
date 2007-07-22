@@ -184,7 +184,8 @@ begin
 
   { Create the gnucash.bat file; #10 is the linefeed character and #13 CR }
   FileName := appdir + '\bin\gnucash.bat' ;
-  FileString := 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
+  FileString := 'chcp ' + ExpandConstant('{cm:LanguageCodePage}') + ''#13#10 ;
+  FileString := FileString + 'set PATH=' + appdir + '\bin;' + libdir + ';' + libdir + '\gnucash;%PATH%'#13#10 ;
 
   FileString := FileString + 'set GUILE_WARN_DEPRECATED=no'#13#10 ;
   FileString := FileString + 'set GNC_MODULE_PATH=' + pkglibdir + ''#13#10 ;
@@ -248,6 +249,12 @@ IconName_InstallFQ=Install Online Price Retrieval
 IconComment_InstallFQ=Install the necessary perl module Finance-Quote for online retrieval of prices.  Requires ActivePerl 5.8
 IconName_Uninstall=Uninstall GnuCash
 IconComment_Uninstall=Uninstall the Finance Manager GnuCash
+
+;; List of Code pages, used in gnucash.bat
+LanguageCodePage=1252
+de.LanguageCodePage=1252
+el.LanguageCodePage=1253
+fr.LanguageCodePage=1252
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;
