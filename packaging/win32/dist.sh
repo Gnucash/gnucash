@@ -121,8 +121,6 @@ function dist_libgsf() {
     setup libGSF
     mkdir -p $DIST_UDIR/bin
     cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp -a $_LIBGSF_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
     cp -a $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
 }
