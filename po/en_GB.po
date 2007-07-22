@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2007-05-20 22:46+0100\n"
+"PO-Revision-Date: 2007-07-22 14:09+0200\n"
 "Last-Translator: Nigel Titley <nigel@titley.com>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12493,7 +12493,7 @@ msgstr "Get Quotes"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:438
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Column letter for 'Get Quotes'|Q"
+msgstr "Q"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:444
 #: ../src/gnome-utils/gnc-tree-view-price.c:453
@@ -12552,7 +12552,7 @@ msgstr "Price"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:175
 msgid "Single-character short column-title form of 'Enabled'|E"
-msgstr "Single-character short column-title form of 'Enabled'|E"
+msgstr "E"
 
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:186
 msgid "Last Occur"
