@@ -977,14 +977,15 @@ set_rate_for(GncTreeViewTransaction *tv, Transaction *trans, Split *split,
 //model to use for autocompletion, so that the real tree model is
 //not altered by the autocompletion.
 static void
-model_copy(GtkCellRenderer *cell, gpointer data)
+model_copy(gpointer data)
 {
 	GtkListStore *list;
 	GtkTreeIter iter1, iter2;
 	gchar *string;
 	gboolean loop = TRUE;
-	gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
-				"model_column"));
+	//gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
+	//			"model_column"));
+	gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
 
 	list = gtk_list_store_new(1, G_TYPE_STRING);
 	gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
@@ -996,7 +997,7 @@ model_copy(GtkCellRenderer *cell, gpointer data)
 		loop = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
 	}//while
 
-	g_object_set_data(G_OBJECT(cell), "model_copy", list);
+	g_object_set_data(G_OBJECT(data), "model_copy", list);
 }//model_copy
 
 /* Connected to "edited" from cellrenderer. For reference, see
@@ -1063,9 +1064,9 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
             xaccSplitSetMemo(split, new_text);
         if (is_trans)
             xaccTransSetDescription(trans, new_text);
-	gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(cell),
+		gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
 			"model_copy")), &copy_iter);
-	gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(cell), 
+		gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
 			"model_copy")), &copy_iter, 0, new_text, -1);
         break;
     case COL_NOTES:
@@ -1385,7 +1386,7 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
                               const gchar *path_string, gpointer user_data)
 {
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
-	GtkListStore *list = g_object_get_data(G_OBJECT(cr), "model_copy");
+	GtkListStore *list = g_object_get_data(G_OBJECT(tv), "model_copy");
 	GtkEntryCompletion *completion = gtk_entry_completion_new();
 
     g_print("start_edit");
@@ -1399,7 +1400,11 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
 			//&& GTK_IS_ENTRY(editable))
 	{
 		gtk_entry_completion_set_model(completion, list);
+		//gtk_entry_completion_set_model(completion, 
+		//	GTK_TREE_MODEL(get_trans_model_from_view(tv)));
 		g_object_set(G_OBJECT(completion), "text-column", 0);
+		//g_object_set(G_OBJECT(completion), "text-column", 
+		//	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
 		gtk_entry_completion_set_inline_completion(completion, TRUE);
 		gtk_entry_completion_set_popup_completion(completion, FALSE);
 		gtk_entry_set_completion(GTK_ENTRY(editable), completion);
@@ -1577,7 +1582,6 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
 				GINT_TO_POINTER(def.modelcol));
        		g_signal_connect(G_OBJECT(cr), "editing-started",
         		(GCallback) def.editing_started_cb, tv);
-			model_copy(cr, tv);
         }
 
         // This can die when prefs are used.
@@ -1594,6 +1598,9 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
             col, cr, cdf, tv, NULL);
         i++;
     }
+
+	//Make a copy of data from the treemodel to use for autocompletion
+	model_copy(tv);
 
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tv));
 
