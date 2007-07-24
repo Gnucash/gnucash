@@ -1044,7 +1044,9 @@ class FindVendorJob(Find):
 
 
 class Register(Node):
-    """ Wrapper class for gnucash register """ 
+    """ Wrapper class for gnucash register 
+        TODO: It is better to have register supported by a11y to be able to be more readable by dogtail
+    """ 
 
     def __init__(self, initializer):
         Node.__init__(self, initializer)
@@ -1054,6 +1056,7 @@ class Register(Node):
 
     def __goto(self, x, y):
         sleep(1)
+        # Click to activate the Register widget
         dogtail.rawinput.click(self.position[0], self.position[1])
         for j in range(x):
             self.typeText('\n')
@@ -1061,6 +1064,7 @@ class Register(Node):
             self.keyCombo("Tab")
 
     def set_cell_text(self, text):
+        """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left based on the the difference """
         relative_pos = self.column_val - self.prev_col_val
         print relative_pos
         if relative_pos > 0 :
@@ -1075,6 +1079,7 @@ class Register(Node):
 #        sleep(5)
 
     def end_trans(self):
+        """ end trans finalize the transaction entery by click Enter and close the register """
         self.keyCombo("Enter")
         GnuCashApp().menu('File').menuItem('Close').click()
 
@@ -1187,16 +1192,6 @@ class ReconcileFrame(Node):
         self.funds_in_panel.findChild(predicate.GenericPredicate(roleName='table'))
         self.funds_in = self.FundsTable(self.funds_in_table)
 
-    def __setattr__(self, name, value):
-        if name =='ending_balance':
-            self.ending_balance_txt.text = value
-        elif name == 'include_subaccount':
-            if value and not self.include_subaccount_cb.checked:
-                self.include_subaccount_cb.click()
-            elif not value and self.include_subaccount_cb.checked:
-                self.include_subaccount_cb.click()
-        else:
-            self.__dict__[name]=value
 
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
