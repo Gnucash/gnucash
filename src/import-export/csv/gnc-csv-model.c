@@ -531,8 +531,6 @@ typedef struct
   int type; /**< A value from the GncCsvColumnType enum except
              * GNC_CSV_NONE and GNC_CSV_NUM_COL_TYPES */
   void* value; /**< Pointer to the data that will be used to configure a transaction */
-  /* TODO Try coming up with a more elegant way than storing this for
-   * every transaction safely. */
   TransPropertyList* set; /**< The set the property belongs to */
 } TransProperty;
 
@@ -583,7 +581,7 @@ static void trans_property_free(TransProperty* prop)
  */
 static gboolean trans_property_set(TransProperty* prop, char* str)
 {
-  char* endptr;
+  char *endptr, *possible_currency_symbol, *str_dupe;
   double value;
   switch(prop->type)
   {
@@ -597,12 +595,42 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
     return TRUE;
 
   case GNC_CSV_AMOUNT:
-    value = strtod(str, &endptr);
+    str_dupe = g_strdup(str); /* First, we make a copy so we can't mess up real data. */
+
+    /* Go through str_dupe looking for currency symbols. */
+    for(possible_currency_symbol = str_dupe; possible_currency_symbol;
+        possible_currency_symbol = g_utf8_next_char(possible_currency_symbol))
+    {
+      if(g_unichar_type(g_utf8_get_char(possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
+      {
+        /* If we find a currency symbol, save the position just ahead
+         * of the currency symbol (next_symbol), and find the null
+         * terminator of the string (last_symbol). */
+        char *next_symbol = g_utf8_next_char(possible_currency_symbol), *last_symbol = next_symbol;
+        while(*last_symbol)
+          last_symbol = g_utf8_next_char(last_symbol);
+
+        /* Move all of the string (including the null byte, which is
+         * why we have +1 in the size parameter) following the
+         * currency symbol back one character, thereby overwriting the
+         * currency symbol. */
+        memmove(possible_currency_symbol, next_symbol, last_symbol - next_symbol + 1);
+        break;
+      }
+    }
+
+    /* Translate the string (now clean of currency symbols) into a number. */
+    value = strtod(str_dupe, &endptr);
     prop->value = g_new(gnc_numeric, 1);
 
     /* If this isn't a valid numeric string, this is an error. */
-    if(endptr != str + strlen(str))
+    if(endptr != str_dupe + strlen(str_dupe))
+    {
+      g_free(str_dupe);
       return FALSE;
+    }
+
+    g_free(str_dupe);
 
     *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->set->account),
                                                            GNC_RND_ROUND);
