@@ -39,6 +39,7 @@
 
 #include "gnc-csv-import.h"
 #include "gnc-csv-model.h"
+#include "gnc-csv-gnumeric-popup.h"
 
 #define GCONF_SECTION "dialogs/import/csv"
 
@@ -76,9 +77,14 @@ typedef struct
                             * 2. encoding_selected is called twice,
                             * each time decrementing this by 1. */
   gboolean approved; /**< This is FALSE until the user clicks "OK". */
+  GtkWidget** treeview_buttons; /**< This array contains the header buttons in treeview */
+  int longest_line; /**< The length of the longest row */
+  int fixed_context_col; /**< The number of the column whose the user has clicked */
+  int fixed_context_dx; /**< The horizontal coordinate of the pixel in the header of the column
+                         * the user has clicked */
 } GncCsvPreview;
 
-static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty);
+static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty);
 
 /** Event handler for separator changes. This function is called
  * whenever one of the widgets for configuring the separators (the
@@ -138,7 +144,27 @@ static void sep_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   }
 
   /* If we parsed successfully, redisplay the data. */
-  gnc_csv_preview_treeview(preview, TRUE);
+  gnc_csv_preview_update(preview, TRUE);
+}
+
+/* TODO Comment */
+static void separated_or_fixed_selected(GtkToggleButton* csv_button, GncCsvPreview* preview)
+{
+  GError* error = NULL;
+  if(gtk_toggle_button_get_active(csv_button)) /* If we're in CSV mode ... */
+  {
+    stf_parse_options_set_type(preview->parse_data->options, PARSE_TYPE_CSV);
+  }
+  else /* If we're in fixed-width mode ... */
+  {
+    stf_parse_options_set_type(preview->parse_data->options, PARSE_TYPE_FIXED);
+  }
+  if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+  {
+    gnc_error_dialog(NULL, "%s", error->message);
+    return;
+  }
+  gnc_csv_preview_update(preview, TRUE);
 }
 
 /** Event handler for a new encoding. This is called when the user
@@ -178,7 +204,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
       return;
     }
 
-    gnc_csv_preview_treeview(preview, TRUE);
+    gnc_csv_preview_update(preview, TRUE);
     preview->encoding_selected_called = FALSE;
   }
   else /* If this is the first call of the function ... */
@@ -357,7 +383,7 @@ static GncCsvPreview* gnc_csv_preview_new()
 {
   int i;
   GncCsvPreview* preview = g_new(GncCsvPreview, 1);
-  GtkWidget *ok_button, *cancel_button;
+  GtkWidget *ok_button, *cancel_button, *csv_button;
   GtkContainer* date_format_container;
   /* The names in the glade file for the sep buttons. */
   char* sep_button_names[] = {"space_cbutton",
@@ -368,6 +394,7 @@ static GncCsvPreview* gnc_csv_preview_new()
                               "hyphen_cbutton"};
   /* The table containing preview->encselector and the separator configuration widgets */
   GtkTable* enctable;
+  PangoContext* context; /* Used to set a monotype font on preview->treeview */
 
   preview->encselector = GO_CHARMAP_SEL(go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8));
   /* Connect the selector to the encoding_selected event handler. */
@@ -435,10 +462,16 @@ static GncCsvPreview* gnc_csv_preview_new()
   g_signal_connect(G_OBJECT(cancel_button), "clicked",
                    G_CALLBACK(cancel_button_clicked), (gpointer)preview);
 
+  /* Connect the CSV/Fixed-Width radio button event handler. */
+  csv_button = glade_xml_get_widget(preview->xml, "csv_button");
+  g_signal_connect(csv_button, "toggled",
+                   G_CALLBACK(separated_or_fixed_selected), (gpointer)preview);                   
+
   /* Load the data treeview and connect it to its resizing event handler. */
   preview->treeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "treeview"));
   g_signal_connect(G_OBJECT(preview->treeview), "size-allocate",
                    G_CALLBACK(treeview_resized), (gpointer)preview);
+  context = gtk_widget_create_pango_context(GTK_WIDGET(preview->treeview));
 
   /* Load the column type treeview. */
   preview->ctreeview = (GtkTreeView*)(glade_xml_get_widget(preview->xml, "ctreeview"));
@@ -460,12 +493,308 @@ static void gnc_csv_preview_free(GncCsvPreview* preview)
   g_free(preview);
 }
 
-/* This function loads the preview's data (preview->parse_data) into
- * its data treeview. notEmpty is TRUE when the data treeview already
- * contains data, FALSE otherwise (e.g. the first time this function
- * is called on a preview). */
+/** Returns the cell renderer from a column in the preview's treeview.
+ * @param preview The data that is being configured
+ * @param col The number of the column whose cell renderer is being retrieved
+ * @return The cell renderer of column number col
+ */
+static GtkCellRenderer* gnc_csv_preview_get_cell_renderer(GncCsvPreview* preview, int col)
+{
+  GList* renderers = gtk_tree_view_column_get_cell_renderers(gtk_tree_view_get_column(preview->treeview, col));
+  GtkCellRenderer* cell = GTK_CELL_RENDERER(renderers->data);
+  g_list_free(renderers);
+  return cell;
+}
+
+/* The following is code copied from Gnumeric 1.7.8 licensed under the
+ * GNU General Public License version 2. It is from the file
+ * gnumeric/src/dialogs/dialog-stf-fixed-page.c, and it has been
+ * modified slightly to work within GnuCash. */
+
+/* ---- Beginning of Gnumeric Code ---- */
+
+/*
+ * Copyright 2001 Almer S. Tigelaar <almer@gnome.org>
+ * Copyright 2003 Morten Welinder <terra@gnome.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+enum {
+	CONTEXT_STF_IMPORT_MERGE_LEFT = 1,
+	CONTEXT_STF_IMPORT_MERGE_RIGHT = 2,
+	CONTEXT_STF_IMPORT_SPLIT = 3,
+	CONTEXT_STF_IMPORT_WIDEN = 4,
+	CONTEXT_STF_IMPORT_NARROW = 5
+};
+
+static GnumericPopupMenuElement const popup_elements[] = {
+	{ N_("Merge with column on _left"), GTK_STOCK_REMOVE,
+	  0, 1 << CONTEXT_STF_IMPORT_MERGE_LEFT, CONTEXT_STF_IMPORT_MERGE_LEFT },
+	{ N_("Merge with column on _right"), GTK_STOCK_REMOVE,
+	  0, 1 << CONTEXT_STF_IMPORT_MERGE_RIGHT, CONTEXT_STF_IMPORT_MERGE_RIGHT },
+	{ "", NULL, 0, 0, 0 },
+	{ N_("_Split this column"), NULL,
+	  0, 1 << CONTEXT_STF_IMPORT_SPLIT, CONTEXT_STF_IMPORT_SPLIT },
+	{ "", NULL, 0, 0, 0 },
+	{ N_("_Widen this column"), GTK_STOCK_GO_FORWARD,
+	  0, 1 << CONTEXT_STF_IMPORT_WIDEN, CONTEXT_STF_IMPORT_WIDEN },
+	{ N_("_Narrow this column"), GTK_STOCK_GO_BACK,
+	  0, 1 << CONTEXT_STF_IMPORT_NARROW, CONTEXT_STF_IMPORT_NARROW },
+	{ NULL, NULL, 0, 0, 0 },
+};
+
+static gboolean
+make_new_column (GncCsvPreview *preview, int col, int dx, gboolean test_only)
+{
+	PangoLayout *layout;
+	PangoFontDescription *font_desc;
+	int charindex, width;
+	GtkCellRenderer *cell =	gnc_csv_preview_get_cell_renderer(preview, col);
+	int colstart, colend;
+        GError* error = NULL;
+
+	colstart = (col == 0)
+		? 0
+		: stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col - 1);
+	colend = stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col);
+
+	g_object_get (G_OBJECT (cell), "font_desc", &font_desc, NULL);
+	layout = gtk_widget_create_pango_layout (GTK_WIDGET (preview->treeview), "x");
+	pango_layout_set_font_description (layout, font_desc);
+	pango_layout_get_pixel_size (layout, &width, NULL);
+	if (width < 1) width = 1;
+	charindex = colstart + (dx + width / 2) / width;
+	g_object_unref (layout);
+	pango_font_description_free (font_desc);
+
+	if (charindex <= colstart || (colend != -1 && charindex >= colend))
+		return FALSE;
+
+	if (!test_only) {
+		stf_parse_options_fixed_splitpositions_add (preview->parse_data->options, charindex);
+                if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+                {
+                  gnc_error_dialog(NULL, "%s", error->message);
+                  return FALSE;
+                }
+		gnc_csv_preview_update (preview, TRUE);
+	}
+
+	return TRUE;
+}
+
+
+static gboolean
+widen_column (GncCsvPreview *preview, int col, gboolean test_only)
+{
+	int colcount = stf_parse_options_fixed_splitpositions_count (preview->parse_data->options);
+	int nextstart, nextnextstart;
+        GError* error = NULL;
+
+	if (col >= colcount - 1)
+		return FALSE;
+
+	nextstart = stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col);
+
+	nextnextstart = (col == colcount - 2)
+		? preview->longest_line
+		: stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col + 1);
+
+	if (nextstart + 1 >= nextnextstart)
+		return FALSE;
+
+	if (!test_only) {
+		stf_parse_options_fixed_splitpositions_remove (preview->parse_data->options, nextstart);
+		stf_parse_options_fixed_splitpositions_add (preview->parse_data->options, nextstart + 1);
+                if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+                {
+                  gnc_error_dialog(NULL, "%s", error->message);
+                  return FALSE;
+                }
+		gnc_csv_preview_update (preview, TRUE);
+	}
+	return TRUE;
+}
+
+static gboolean
+narrow_column (GncCsvPreview *preview, int col, gboolean test_only)
+{
+	int colcount = stf_parse_options_fixed_splitpositions_count (preview->parse_data->options);
+	int thisstart, nextstart;
+        GError* error = NULL;
+
+	if (col >= colcount - 1)
+		return FALSE;
+
+	thisstart = (col == 0)
+		? 0
+		: stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col - 1);
+	nextstart = stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col);
+
+	if (nextstart - 1 <= thisstart)
+		return FALSE;
+
+	if (!test_only) {
+		stf_parse_options_fixed_splitpositions_remove (preview->parse_data->options, nextstart);
+		stf_parse_options_fixed_splitpositions_add (preview->parse_data->options, nextstart - 1);
+                if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+                {
+                  gnc_error_dialog(NULL, "%s", error->message);
+                  return FALSE;
+                }
+		gnc_csv_preview_update (preview, TRUE);
+	}
+	return TRUE;
+}
+
+static gboolean
+delete_column (GncCsvPreview *preview, int col, gboolean test_only)
+{
+        GError* error = NULL;
+	int colcount = stf_parse_options_fixed_splitpositions_count (preview->parse_data->options);
+	if (col < 0 || col >= colcount - 1)
+		return FALSE;
+
+	if (!test_only) {
+		int nextstart = stf_parse_options_fixed_splitpositions_nth (preview->parse_data->options, col);
+		stf_parse_options_fixed_splitpositions_remove (preview->parse_data->options, nextstart);
+                if(gnc_csv_parse(preview->parse_data, FALSE, &error))
+                {
+                  gnc_error_dialog(NULL, "%s", error->message);
+                  return FALSE;
+                }
+		gnc_csv_preview_update (preview, TRUE);
+	}
+	return TRUE;
+}
+
+static void
+select_column (GncCsvPreview *preview, int col)
+{
+        GError* error = NULL;
+	int colcount = stf_parse_options_fixed_splitpositions_count (preview->parse_data->options);
+	GtkTreeViewColumn *column;
+
+	if (col < 0 || col >= colcount)
+		return;
+
+	column = gtk_tree_view_get_column (preview->treeview, col);
+	gtk_widget_grab_focus (column->button);
+}
+
+static gboolean
+fixed_context_menu_handler (GnumericPopupMenuElement const *element,
+			    gpointer user_data)
+{
+	GncCsvPreview *preview = user_data;
+	int col = preview->fixed_context_col;
+
+	switch (element->index) {
+	case CONTEXT_STF_IMPORT_MERGE_LEFT:
+		delete_column (preview, col - 1, FALSE);
+		break;
+	case CONTEXT_STF_IMPORT_MERGE_RIGHT:
+		delete_column (preview, col, FALSE);
+		break;
+	case CONTEXT_STF_IMPORT_SPLIT:
+		make_new_column (preview, col, preview->fixed_context_dx, FALSE);
+		break;
+	case CONTEXT_STF_IMPORT_WIDEN:
+		widen_column (preview, col, FALSE);
+		break;
+	case CONTEXT_STF_IMPORT_NARROW:
+		narrow_column (preview, col, FALSE);
+		break;
+	default:
+		; /* Nothing */
+	}
+	return TRUE;
+}
+
+static void
+fixed_context_menu (GncCsvPreview *preview, GdkEventButton *event,
+		    int col, int dx)
+{
+	int sensitivity_filter = 0;
+
+	preview->fixed_context_col = col;
+	preview->fixed_context_dx = dx;
+
+	if (!delete_column (preview, col - 1, TRUE))
+		sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_MERGE_LEFT);
+	if (!delete_column (preview, col, TRUE))
+		sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_MERGE_RIGHT);
+	if (!make_new_column (preview, col, dx, TRUE))
+		sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_SPLIT);
+	if (!widen_column (preview, col, TRUE))
+		sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_WIDEN);
+	if (!narrow_column (preview, col, TRUE))
+		sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_NARROW);
+
+	select_column (preview, col);
+	gnumeric_create_popup_menu (popup_elements, &fixed_context_menu_handler,
+				    preview, 0,
+				    sensitivity_filter, event);
+}
+
+/* ---- End of Gnumeric Code ---- */
+
+/** Event handler for clicking on column headers. This function is
+ * called whenever the user clicks on column headers in
+ * preview->treeview to modify columns when in fixed-width mode.
+ * @param button The button at the top of a column of the treeview
+ * @param event The event that happened (where the user clicked)
+ * @param preview The data being configured
+ */
+/* TODO Comment */
+/* TODO Clean up */
+static void header_button_press_handler(GtkWidget* button, GdkEventButton* event,
+                                        GncCsvPreview* preview)
+{
+  /* col is the number of the column that was clicked, and offset is
+     to correct for the indentation of button. */
+  int i, col = 0, offset = GTK_BIN(button)->child->allocation.x - button->allocation.x,
+    ncols = preview->parse_data->column_types->len;
+  for(i = 0; i < ncols; i++)
+  {
+    if(preview->treeview_buttons[i] == button)
+    {
+      col = i;
+      break;
+    }
+  }
+
+  if(event->type == GDK_2BUTTON_PRESS && event->button == 1)
+  {
+    make_new_column(preview, col, (int)event->x - offset, FALSE);
+  }
+  else if(event->type == GDK_BUTTON_PRESS && event->button == 3)
+  {
+    fixed_context_menu(preview, event, col, (int)event->x - offset);
+  }
+}
+
+/* Loads the preview's data into its data treeview. notEmpty is TRUE
+ * when the data treeview already contains data, FALSE otherwise
+ * (e.g. the first time this function is called on a preview).
+ * @param preview The data being previewed
+ * @param notEmpty Whether this function has been called before or not
+ */
 /* TODO Look at getting rid of notEmpty */
-static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
+static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
 {
   /* store has the data from the file being imported. cstores is an
    * array of stores that hold the combo box entries for each
@@ -474,7 +803,8 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   GtkListStore *store, **cstores, *ctstore;
   GtkTreeIter iter;
   /* ncols is the number of columns in the file data. */
-  int i, j, ncols = preview->parse_data->column_types->len;
+  int i, j, ncols = preview->parse_data->column_types->len,
+    max_str_len = preview->parse_data->file_str.end - preview->parse_data->file_str.begin;
 
   /* store contains only strings. */
   GType* types = g_new(GType, 2 * ncols);
@@ -526,23 +856,32 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
     }
     g_list_free(tv_columns_begin);
     g_list_free(ctv_columns_begin);
+    g_free(preview->treeview_buttons);
   }
   
   /* Fill the data treeview with data from the file. */
+  /* Also, update the longest line value within the following loop (whichever is executed). */
+  preview->longest_line = 0;
   if(preview->previewing_errors) /* If we are showing only errors ... */
   {
     /* ... only pick rows that are in preview->error_lines. */
     GList* error_lines = preview->parse_data->error_lines;
     while(error_lines != NULL)
     {
+      int this_line_length = 0;
       i = GPOINTER_TO_INT(error_lines->data);
       gtk_list_store_append(store, &iter);
       for(j = 0; j < ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->len; j++)
       {
-        gtk_list_store_set(store, &iter, j,
-                           ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
-                           -1);
+        /* Add this cell's length to the row's length and set the value of the list store. */
+        gchar* cell_string = (gchar*)((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j];
+        this_line_length += g_utf8_strlen(cell_string, max_str_len);
+        gtk_list_store_set(store, &iter, j, cell_string, -1);
       }
+
+      if(this_line_length > preview->longest_line)
+        preview->longest_line = this_line_length;
+
       error_lines = g_list_next(error_lines);
     }
   }
@@ -550,15 +889,21 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
   {
     for(i = 0; i < preview->parse_data->orig_lines->len; i++)
     {
+      int this_line_length = 0;
       gtk_list_store_append(store, &iter);
       for(j = 0; j < ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->len; j++)
       {
-        gtk_list_store_set(store, &iter, j,
-                           ((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j],
-                           -1);
+        /* Add this cell's length to the row's length and set the value of the list store. */
+        gchar* cell_string = (gchar*)((GPtrArray*)(preview->parse_data->orig_lines->pdata[i]))->pdata[j];
+        this_line_length += g_utf8_strlen(cell_string, max_str_len);
+        gtk_list_store_set(store, &iter, j, cell_string, -1);
       }
+
+      if(this_line_length > preview->longest_line)
+        preview->longest_line = this_line_length;
     }
   }
+
   /* Set all the column types to what's in the parse data. */
   gtk_list_store_append(ctstore, &iter);
   for(i = 0; i < ncols; i++)
@@ -568,13 +913,17 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
                        -1);
   }
 
+  preview->treeview_buttons = g_new(GtkWidget*, ncols);
   /* Insert columns into the data and column type treeviews. */
   for(i = 0; i < ncols; i++)
   {
+    GtkTreeViewColumn* col; /* The column we add to preview->treeview. */
     /* Create renderers for the data treeview (renderer) and the
      * column type treeview (crenderer). */
-    GtkCellRenderer *renderer = gtk_cell_renderer_text_new(),
+    GtkCellRenderer* renderer = gtk_cell_renderer_text_new(),
       *crenderer = gtk_cell_renderer_combo_new();
+    /* We want a monospace font for the data in case of fixed-width data. */
+    g_object_set(G_OBJECT(renderer), "family", "monospace", NULL);
     /* We are using cstores for the combo box entries, and we don't
      * want the user to be able to manually enter their own column
      * types. */
@@ -584,13 +933,20 @@ static void gnc_csv_preview_treeview(GncCsvPreview* preview, gboolean notEmpty)
                      G_CALLBACK(column_type_edited), (gpointer)preview);
 
     /* Add a single column for the treeview. */
-    gtk_tree_view_insert_column_with_attributes(preview->treeview,
-                                                -1, "", renderer, "text", i, NULL);
+    col = gtk_tree_view_column_new_with_attributes("", renderer, "text", i, NULL);
+    gtk_tree_view_insert_column(preview->treeview, col, -1);
     /* Use the alternating model and text entries from ctstore in
      * preview->ctreeview. */
     gtk_tree_view_insert_column_with_attributes(preview->ctreeview,
                                                 -1, "", crenderer, "model", 2*i,
                                                 "text", 2*i+1, NULL);
+
+    /* We need to allow clicking on the column headers for fixed-width
+     * column splitting and merging. */
+    g_object_set(G_OBJECT(col), "clickable", TRUE, NULL);
+    g_signal_connect(G_OBJECT(col->button), "button_press_event",
+                     G_CALLBACK(header_button_press_handler), (gpointer)preview);
+    preview->treeview_buttons[i] = col->button;
   }
 
   /* Set the treeviews to use the models. */
@@ -632,9 +988,9 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
 
   /* Load the data into the treeview. (This is the first time we've
-   * called gnc_csv_preview_treeview on this preview, so we use
-   * FALSE. */
-  gnc_csv_preview_treeview(preview, FALSE);
+   * called gnc_csv_preview_update on this preview, so we use
+   * FALSE.) */
+  gnc_csv_preview_update(preview, FALSE);
   /* Wait until the user clicks "OK" or "Cancel". */
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
 
@@ -670,7 +1026,7 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
 
   /* Wait until the user clicks "OK" or "Cancel". */
-  gnc_csv_preview_treeview(preview, TRUE);
+  gnc_csv_preview_update(preview, TRUE);
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
   
   if(preview->approved)

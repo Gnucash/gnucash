@@ -6,12 +6,14 @@ libgncmod_csv_la_SOURCES = \
   gncmod-csv-import.c \
   gnc-plugin-csv.c \
   gnc-csv-import.c \
-  gnc-csv-model.c
+  gnc-csv-model.c \
+  gnc-csv-gnumeric-popup.c
 
 noinst_HEADERS = \
   gnc-plugin-csv.h \
   gnc-csv-import.h \
-  gnc-csv-model.h
+  gnc-csv-model.h \
+  gnc-csv-gnumeric-popup.h
 
 libgncmod_csv_la_LDFLAGS = -avoid-version $(pkg-config --libs libgoffice-0.3)
 

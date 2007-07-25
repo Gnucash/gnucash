@@ -84,6 +84,7 @@ typedef struct
   GncCsvStr raw_str; /**< Untouched data from the file as a string */
   GncCsvStr file_str; /**< raw_str translated into UTF-8 */
   GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
+  GStringChunk* chunk; /**< A chunk of memory in which the contents of orig_lines is stored */
   StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
   GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
   GList* error_lines; /**< List of row numbers in orig_lines that have errors */

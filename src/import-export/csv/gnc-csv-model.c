@@ -19,11 +19,13 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
-const int num_date_formats = 3;
+const int num_date_formats = 5;
 
-const gchar* date_format_user[] = {N_("y-d-m"),
+const gchar* date_format_user[] = {N_("y-m-d"),
                                    N_("d-m-y"),
-                                   N_("m-d-y")};
+                                   N_("m-d-y"),
+                                   N_("d-m"),
+                                   N_("m-d")};
 
 /** A set of sensible defaults for parsing CSV files. 
  * @return StfParseOptions_t* for parsing a file with comma separators
@@ -36,18 +38,11 @@ static StfParseOptions_t* default_parse_options(void)
   return options;
 }
 
-/** Parses a string into a date, given a format. This function
- * requires only knowing the order in which the year, month and day
- * appear. For example, 01-02-2003 will be parsed the same way as
- * 01/02/2003.
- * @param date_str The string containing a date being parsed
- * @param format An index specifying a format in date_format_user
- * @return The parsed value of date_str on success or -1 on failure
- */
-static time_t parse_date(const char* date_str, int format)
+/* TODO Comment */
+static time_t parse_date_with_year(const char* date_str, int format)
 {
   time_t rawtime; /* The integer time */
-  struct tm retvalue; /* The time in a broken-down structure */
+  struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
   
   int i, j, mem_length, orig_year, orig_month, orig_day;
 
@@ -71,6 +66,37 @@ static time_t parse_date(const char* date_str, int format)
   /* If there wasn't a match, there was an error. */
   if(pmatch[0].rm_eo == 0)
     return -1;
+
+  /* If this is a string without separators ... */
+  if(pmatch[1].rm_so == -1)
+  {
+    /* ... we will fill in the indices based on the user's selection. */
+    int k = 0; /* k traverses date_str by keeping track of where separators "should" be. */
+    j = 1; /* j traverses pmatch. */
+    for(i = 0; date_format_user[format][i]; i++)
+    {
+      char segment_type = date_format_user[format][i];
+      /* Only do something if this is a meaningful character */
+      if(segment_type == 'y' || segment_type == 'm' || segment_type == 'd')
+      {
+        pmatch[j].rm_so = k;
+        switch(segment_type)
+        {
+        case 'm':
+        case 'd':
+          k += 2;
+          break;
+
+        case 'y':
+          k += 4;
+          break;
+        }
+
+        pmatch[j].rm_eo = k;
+        j++;
+      }
+    }    
+  }
 
   /* Put some sane values in retvalue by using the current time for
    * the non-year-month-day parts of the date. */
@@ -127,6 +153,13 @@ static time_t parse_date(const char* date_str, int format)
   }
   /* Convert back to an integer. If mktime leaves retvalue unchanged,
    * everything is okay; otherwise, an error has occurred. */
+  /* We have to use a "test" date value to account for changes in
+   * daylight savings time, which can cause a date change with mktime
+   * near midnight, causing the code to incorrectly think a date is
+   * incorrect. */
+  test_retvalue = retvalue;
+  mktime(&test_retvalue);
+  retvalue.tm_isdst = test_retvalue.tm_isdst;
   rawtime = mktime(&retvalue);
   if(retvalue.tm_mday == orig_day &&
      retvalue.tm_mon == orig_month &&
@@ -138,6 +171,114 @@ static time_t parse_date(const char* date_str, int format)
   {
     return -1;
   }
+}
+
+/* TODO Comment */
+static time_t parse_date_without_year(const char* date_str, int format)
+{
+  time_t rawtime; /* The integer time */
+  struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
+  
+  int i, j, mem_length, orig_year, orig_month, orig_day;
+
+  /* Buffer for containing individual parts (e.g. year, month, day) of a date */
+  gchar* date_segment;
+
+  /* The compiled regular expression */
+  regex_t preg = {0};
+
+  /* An array containing indices specifying the matched substrings in date_str */
+  regmatch_t pmatch[3] = { {0}, {0}, {0} };
+
+  /* The regular expression for parsing dates */
+  const char* regex = "^ *([0-9]+) *[-/.'] *([0-9]+).*$";
+
+  /* We get our matches using the regular expression. */
+  regcomp(&preg, regex, REG_EXTENDED);
+  regexec(&preg, date_str, 3, pmatch, 0);
+  regfree(&preg);
+
+  /* If there wasn't a match, there was an error. */
+  if(pmatch[0].rm_eo == 0)
+    return -1;
+
+  /* Put some sane values in retvalue by using the current time for
+   * the non-year-month-day parts of the date. */
+  time(&rawtime);
+  localtime_r(&rawtime, &retvalue);
+  orig_year = retvalue.tm_year;
+
+  /* j traverses pmatch (index 0 contains the entire string, so we
+   * start at index 1 for the first meaningful match). */
+  j = 1;
+  /* Go through the date format and interpret the matches in order of
+   * the sections in the date format. */
+  for(i = 0; date_format_user[format][i]; i++)
+  {
+    char segment_type = date_format_user[format][i];
+    /* Only do something if this is a meaningful character */
+    if(segment_type == 'm' || segment_type == 'd')
+    {
+      /* Copy the matching substring into date_segment so that we can
+       * convert it into an integer. */
+      mem_length = pmatch[j].rm_eo - pmatch[j].rm_so;
+      date_segment = g_new(gchar, mem_length);
+      memcpy(date_segment, date_str + pmatch[j].rm_so, mem_length);
+      date_segment[mem_length] = '\0';
+
+      /* Set the appropriate member of retvalue. Save the original
+       * values so that we can check if the change when we use mktime
+       * below. */
+      switch(segment_type)
+      {
+      case 'm':
+        orig_month = retvalue.tm_mon = atoi(date_segment) - 1;
+        break;
+        
+      case 'd':
+        orig_day = retvalue.tm_mday = atoi(date_segment);
+        break;
+      }
+      g_free(date_segment);
+      j++;
+    }
+  }
+  /* Convert back to an integer. If mktime leaves retvalue unchanged,
+   * everything is okay; otherwise, an error has occurred. */
+  /* We have to use a "test" date value to account for changes in
+   * daylight savings time, which can cause a date change with mktime
+   * near midnight, causing the code to incorrectly think a date is
+   * incorrect. */
+  test_retvalue = retvalue;
+  mktime(&test_retvalue);
+  retvalue.tm_isdst = test_retvalue.tm_isdst;
+  rawtime = mktime(&retvalue);
+  if(retvalue.tm_mday == orig_day &&
+     retvalue.tm_mon == orig_month &&
+     retvalue.tm_year == orig_year)
+  {
+    return rawtime;
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+/** Parses a string into a date, given a format. This function
+ * requires only knowing the order in which the year, month and day
+ * appear. For example, 01-02-2003 will be parsed the same way as
+ * 01/02/2003.
+ * @param date_str The string containing a date being parsed
+ * @param format An index specifying a format in date_format_user
+ * @return The parsed value of date_str on success or -1 on failure
+ */
+static time_t parse_date(const char* date_str, int format)
+{
+  if(strchr(date_format_user[format], 'y'))
+    return parse_date_with_year(date_str, format);
+  else
+    return parse_date_without_year(date_str, format);
 }
 
 /** Constructor for GncCsvParseData.
@@ -157,6 +298,7 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
   parse_data->error_lines = parse_data->transactions = NULL;
   parse_data->options = default_parse_options();
   parse_data->date_format = -1;
+  parse_data->chunk = g_string_chunk_new(100 * 1024);
   return parse_data;
 }
 
@@ -198,6 +340,7 @@ void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
     g_list_free(parse_data->transactions);
   }
 
+  g_free(parse_data->chunk);
   g_free(parse_data);
 }
 
@@ -306,21 +449,17 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
 /* TODO Should we use 0 for domain and code in errors? */
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error)
 {
-  GStringChunk* chunk; /* TODO Find out exactly what this is. */
   /* max_cols is the number of columns in the row with the most columns. */
   int i, max_cols = 0;
 
   /* If everything is fine ... */
+  /* TODO Check about freeing parse_data->orig_lines ... */
   if(parse_data->file_str.begin != NULL)
   {
     /* Do the actual parsing. */
-    /* TODO: This size might have to change ... because I'm not exactly
-     * sure what it's for. ... */
-    chunk = g_string_chunk_new(100);
-    parse_data->orig_lines = stf_parse_general(parse_data->options, chunk,
+    parse_data->orig_lines = stf_parse_general(parse_data->options, parse_data->chunk,
                                                parse_data->file_str.begin,
                                                parse_data->file_str.end);
-    g_string_chunk_free(chunk);
   }
   /* If we couldn't get the encoding right, we just want an empty array. */
   else
