@@ -33,7 +33,7 @@ def in_dismiss_list(button, dismiss_list=default_dismiss_list):
 
 def in_accept_list(button, accept_list=default_accept_list):
     """Check if the Button already in the accept list you could override the default behaviour by passing
-        your own dismiss list to the code
+        your own accept list to the code
     """
     for button_name in accept_list:
         if button_name == button.name:
@@ -102,6 +102,7 @@ class GnuCashApp (Application):
         return account_page
     
     def add_account (self, account_name, account_type=None, account_parent=None, smallest_fraction=None, account_code=None,   description=None, notes=None):
+        """ Add account this function able to add only two levels parent child account """
         if account_parent != None:
             account_table = self.findChild(predicate.GenericPredicate(roleName='page tab', name='Accounts'))
             parent_cell = account_table.findChild(predicate.GenericPredicate(roleName='table cell', name=account_parent))
@@ -122,7 +123,17 @@ class GnuCashApp (Application):
             newAccount.account_type = account_type
         newAccount.account_name = account_name
         newAccount.accept()
-    
+
+    def reconcile_account(self, account_name):
+        """ Only for user visible account """
+        account_table = self.findChild(predicate.GenericPredicate(roleName='page tab', name='Accounts'))
+        account_cell = account_table.findChild(predicate.GenericPredicate(roleName='table cell', name=account_name))
+        account_cell.rawClick()
+
+        reconcile = Reconcile()
+        reconcile.invoke()
+        return reconcile
+
 class GnucashWindow(Window):
     """ A base for all Gnucash Dialogs dialogs """
 
@@ -147,7 +158,7 @@ class GnucashWindow(Window):
         dialog_list = gnucash.findChildren(predicate.GenericPredicate(roleName='dialog'))
         sleep(5)
         for dialog in dialog_list:
-            result = re.match(self.dialog_name, dialog.name)
+            result = re.search(self.dialog_name, dialog.name)
             print self.dialog_name
             print dialog.name
             if result != None:
@@ -237,7 +248,6 @@ class NewAccount(GnucashWindow):
         elif name == 'account_parent':
             self.account_parent_table.findChild(predicate.GenericPredicate(roleName="table cell", name='New top level account')).doAction('activate')
             self.account_parent_table.findChild(predicate.GenericPredicate(roleName="table cell", name=value )).doAction('activate')
-            
         elif name == 'hidden':
             if value and not self.hidden_checkbox.checked:
                 self.hidden_checkbox.click()
@@ -1173,14 +1183,19 @@ class ReconcileFrame(Node):
                 column = self.column_table_cell
             table_cell_list = self.findChildren\
             (predicate.GenericPredicate(roleName='table cell'), recursive=True)
-            cell = table_cell_list[(row*4)+column]
+            cell = table_cell_list[(row*5)+column]
             # when click i add double the cell hieght size[1] because dogtail doesn't detect the position correctly 
             # it detects it above its rendered position 
             dogtail.rawinput.click(cell.position[0], cell.position[1]+cell.size[1]*2)
 
-    def __init__(self, initializer):
+    def __init__(self):
         config.childrenLimit = 1500
-        Node.__init__(self, initializer)
+        frame_list = gnucash.findChildren(predicate.GenericPredicate(roleName='frame'))
+        for frame in frame_list:
+            result = re.search(". Reconcile", frame.name)
+            if (result != None):
+                asset_rec = frame
+        Node.__init__(self, asset_rec)
         self.funds_out_panel = \
         self.findChild(predicate.GenericPredicate(roleName='panel', name='Funds Out'))
         self.funds_out_table = \
@@ -1192,6 +1207,25 @@ class ReconcileFrame(Node):
         self.funds_in_panel.findChild(predicate.GenericPredicate(roleName='table'))
         self.funds_in = self.FundsTable(self.funds_in_table)
 
+    def __select_all_funds(self, funds_type):
+        """ Select All funds out item in funds out table """
+        funds_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name=funds_type))
+        funds_table = \
+        funds_panel.findChild(predicate.GenericPredicate(roleName='table'))
+        funds = self.FundsTable(funds_table)
+        tabel_cell_list = funds_panel.findChildren(predicate.GenericPredicate(roleName='table cell'), recursive=True)
+        for i in  range((len(tabel_cell_list)/5)):
+            funds.row = i
+            funds.col = 2
+            funds.click()
+
+    def select_all_funds_out(self):
+        self.__select_all_funds('Funds Out')
+
+    def select_all_funds_in(self):
+        self.__select_all_funds('Funds In')
+
 
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
@@ -1199,14 +1233,11 @@ if __name__ == '__main__':
     config.childrenLimit = 1500
 
     gnucash = GnuCashApp()
-    asset_reconcile = gnucash.findChildren(predicate.GenericPredicate(roleName='frame'))
-    for f in asset_reconcile:
-        result = re.search(". Reconcile", f.name)
-        if (result != None):
-            asset_rec = f
-    reconcileFrame = ReconcileFrame(asset_rec)
-    tabel_cell_list = reconcileFrame.funds_out_table.findChildren(predicate.GenericPredicate(roleName='table cell'), recursive=True)
-    f = reconcileFrame.funds_out
-    f.row = 2
-    f.column = 1
-    f.click()
+    reconcile = gnucash.reconcile_account('Asset')
+    reconcile.ending_balance = '2000'
+    reconcile.accept()
+
+    reconcileFrame = ReconcileFrame()
+    reconcileFrame.select_all_funds_out()
+    reconcileFrame.select_all_funds_in()
+
