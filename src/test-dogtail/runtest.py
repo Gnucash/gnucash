@@ -262,7 +262,7 @@ class ScenarioTest(unittest.TestCase):
       #  gnuCash.close_without_saving()
 
     def test_new_account_dialog(self):
-        """ Test creating new Account currently I could able only two test and account with only 2 levels 
+        """ Test creating new Account currently I could able only to test an account with only 2 levels 
             No validation here 
             TODO: add validation
         """
