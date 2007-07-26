@@ -719,7 +719,7 @@
 
   (let* ((temp-owner (gncOwnerCreate))
 	 (owner (gnc:owner-from-split split temp-owner))
-	 (res #f))
+	 (res -1)) ;; XXX -- in this case we should create an error report
 
     (if (not (null? owner))
 	(set! res (gnc:owner-report-create owner account)))
