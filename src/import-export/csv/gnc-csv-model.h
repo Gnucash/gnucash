@@ -42,6 +42,8 @@ enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DATE,
                        GNC_CSV_DESCRIPTION,
                        GNC_CSV_AMOUNT,
+                       GNC_CSV_DEPOSIT,
+                       GNC_CSV_WITHDRAWAL,
                        GNC_CSV_NUM_COL_TYPES};
 
 /** Enumeration for error types. These are the different types of

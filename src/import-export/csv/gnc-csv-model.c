@@ -542,6 +542,7 @@ static TransProperty* trans_property_new(int type, TransPropertyList* set)
   TransProperty* prop = g_new(TransProperty, 1);
   prop->type = type;
   prop->set = set;
+  prop->value = NULL;
   
   switch(type)
   {
@@ -566,7 +567,10 @@ static void trans_property_free(TransProperty* prop)
      * them, unlike types like char* ("Description"). */
   case GNC_CSV_DATE:
   case GNC_CSV_AMOUNT:
-    g_free(prop->value);
+  case GNC_CSV_DEPOSIT:
+  case GNC_CSV_WITHDRAWAL:
+    if(prop->value != NULL)
+      g_free(prop->value);
     break;
   }
   g_free(prop);
@@ -595,10 +599,12 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
     return TRUE;
 
   case GNC_CSV_AMOUNT:
+  case GNC_CSV_DEPOSIT:
+  case GNC_CSV_WITHDRAWAL:
     str_dupe = g_strdup(str); /* First, we make a copy so we can't mess up real data. */
 
     /* Go through str_dupe looking for currency symbols. */
-    for(possible_currency_symbol = str_dupe; possible_currency_symbol;
+    for(possible_currency_symbol = str_dupe; *possible_currency_symbol;
         possible_currency_symbol = g_utf8_next_char(possible_currency_symbol))
     {
       if(g_unichar_type(g_utf8_get_char(possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
@@ -621,7 +627,6 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
 
     /* Translate the string (now clean of currency symbols) into a number. */
     value = strtod(str_dupe, &endptr);
-    prop->value = g_new(gnc_numeric, 1);
 
     /* If this isn't a valid numeric string, this is an error. */
     if(endptr != str_dupe + strlen(str_dupe))
@@ -632,8 +637,12 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
 
     g_free(str_dupe);
 
-    *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->set->account),
-                                                           GNC_RND_ROUND);
+    if(abs(value) > 0.00001)
+    {
+      prop->value = g_new(gnc_numeric, 1);
+      *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->set->account),
+                                                             GNC_RND_ROUND);
+    }
     return TRUE;
   }
   return FALSE; /* We should never actually get here. */
@@ -669,21 +678,40 @@ static void trans_property_list_add(TransProperty* property)
 }
 
 /* TODO Comment */
+static void trans_add_split(Transaction* trans, Account* account, GNCBook* book,
+                            gnc_numeric amount)
+{
+  Split* split = xaccMallocSplit(book);
+  xaccSplitSetAccount(split, account);
+  xaccSplitSetParent(split, trans);
+  xaccSplitSetAmount(split, amount);
+  xaccSplitSetValue(split, amount);
+  xaccSplitSetAction(split, "Deposit");
+}
+
+/* TODO Comment */
 static Transaction* trans_property_list_to_trans(TransPropertyList* set)
 {
   Transaction* trans;
-  Split* split;
   GList* properties_begin = set->properties;
   GNCBook* book = gnc_account_get_book(set->account);
   gnc_commodity* currency = xaccAccountGetCommodity(set->account);
   gnc_numeric amount;
+  gboolean alreadyHaveDepositOrWithdrawal = FALSE, noAmountYet = TRUE;
   
   unsigned int essential_properties_left = 2;
   while(set->properties != NULL)
   {
     if(((TransProperty*)(set->properties->data))->essential)
       essential_properties_left--;
-
+    else if(((TransProperty*)(set->properties->data))->type == GNC_CSV_DEPOSIT ||
+            ((TransProperty*)(set->properties->data))->type == GNC_CSV_WITHDRAWAL)
+    {
+      if(alreadyHaveDepositOrWithdrawal)
+        essential_properties_left--;
+      else
+        alreadyHaveDepositOrWithdrawal = TRUE;
+    }
     set->properties = g_list_next(set->properties);
   }
   if(essential_properties_left)
@@ -708,16 +736,29 @@ static Transaction* trans_property_list_to_trans(TransPropertyList* set)
       xaccTransSetDescription(trans, (char*)(prop->value));
       break;
 
+    case GNC_CSV_DEPOSIT:
+    case GNC_CSV_WITHDRAWAL:
     case GNC_CSV_AMOUNT:
-      amount = *((gnc_numeric*)(prop->value));
-      split = xaccMallocSplit(book);
-      xaccSplitSetAccount(split, set->account);
-      xaccSplitSetParent(split, trans);
-      xaccSplitSetAmount(split, amount);
-      xaccSplitSetValue(split, amount);
-      xaccSplitSetAction(split, "Deposit");
+      if(noAmountYet && prop->value != NULL)
+      {
+        /* Withdrawals are just negative deposits. */
+        if(prop->type == GNC_CSV_WITHDRAWAL)
+          amount = gnc_numeric_neg(*((gnc_numeric*)(prop->value)));
+        else
+          amount = *((gnc_numeric*)(prop->value));
+
+        trans_add_split(trans, set->account, book, amount);
+        
+        noAmountYet = FALSE;
+      }
     }
     set->properties = g_list_next(set->properties);
+  }
+
+  if(noAmountYet)
+  {
+    amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(set->account), GNC_RND_ROUND);
+    trans_add_split(trans, set->account, book, amount);
   }
 
   return trans;

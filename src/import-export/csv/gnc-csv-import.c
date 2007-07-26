@@ -217,7 +217,9 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
 static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
                                                         N_("Date"),
                                                         N_("Description"),
-                                                        N_("Amount")};
+                                                        N_("Amount"),
+                                                        N_("Deposit"),
+                                                        N_("Withdrawal")};
 
 /** Event handler for selecting a new date format.
  * @param format_selector The combo box for selecting date formats
