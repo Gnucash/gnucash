@@ -1,18 +1,19 @@
-""" wrapper code to help when scripting GnuCash
+""" wrapper code to help when scripting GnuCash testcases
     Author: Ahmed Sayed Hassan <ahmadsayed83@yahoo.com>
 """
 __author__ = 'Ahmed Sayed Hassan <ahmadsayed83@yahoo.com>'
 
 import os
 import re
+import dogtail.procedural
+import dogtail.rawinput
+import shutil
 from dogtail.tree import Node
 from dogtail.tree import root
 from dogtail.tree import Window
 from dogtail.tree import predicate
 from dogtail.tree import Application
 from dogtail.procedural import click
-import dogtail.procedural
-import dogtail.rawinput
 from time import sleep
 from dogtail import tree, predicate
 from dogtail.config import config
@@ -42,7 +43,7 @@ def in_accept_list(button, accept_list=default_accept_list):
 
 def cleanup():
     """ Remove only the First Entry of the recent in order to avoid opening recent application """
-    os.system("gconftool-2 --unset /apps/gnucash/history/file0")        
+    os.system("gconftool-2 --unset /apps/gnucash/history/file0")
 
 def ungraceful_close():
     """ kill gnuCash Process used when Hang expected """
@@ -52,13 +53,16 @@ def cleanup_all():
     """ usefull to delete all GnuCash to run first time wizard or when things go extemely wrong"""
     ungraceful_close()
     sleep(5)
-    os.system("gconftool-2 --recursive-unset /apps/gnucash")        
+    os.system("gconftool-2 --recursive-unset /apps/gnucash")
 
 class GnuCashApp (Application):
 
     """ Wrapper for GnuCash Application"""
     def __init__(self):
         Application.__init__(self, root.application("gnucash"))
+        self.data_file_path = '/home/ahmed/work/gnucash-dogtail/src/test-dogtail/'
+        self.data_file_dest = self.data_file_path + 'projects_under_test/'
+        self.data_file_src = self.data_file_path + 'projects/'
 
     def __close(self):
         """ Close GnuCash Application """
@@ -75,6 +79,15 @@ class GnuCashApp (Application):
         self.__close()
         focus.application('gnucash')
         click('Save', roleName='push button')
+
+    def open_data_file(self, data_file_name):
+        """ using GUI to open already exist project we have two folders (projects) where we save the project before applying test case procedure and (projects_under_test) where we copy the current project and begin using it in the testcase """
+        data_file_path = self.data_file_src + data_file_name
+        data_file_dest_path = self.data_file_dest + data_file_name
+        shutil.copy(self.data_file_src+data_file_name, self.data_file_dest)
+        open_data_file = Open()
+        open_data_file.invoke()
+        open_data_file.open_location(data_file_dest_path)
 
     def dismiss_all_dialogs(self):
         """ dismiss all dialogs using procedural this should be migrated to tree but there is a problem with the
@@ -190,13 +203,36 @@ class GnucashWindow(Window):
                    return True
         return False
 
+class Open(GnucashWindow):
+    """ Wrapper class for Open dialog """
+
+    def __init__(self):
+        self.invoke_list = ["File", "Open", "Open..."]
+        self.dialog_name = 'Open'
+
+    def initialize(self):
+        self.location_txt = self.findChild(predicate.IsLabelledAs('Location:'))
+
+    def __setattr__(self, name, value):
+        if name == 'location':
+            self.location_txt.text = value
+        else:
+            self.__dict__[name]=value
+
+    def open_location(self, file_path):
+        self.location = file_path
+        self.button('Open').click()
+
 
 class NewAccount(GnucashWindow):
     """ Wrapper class for new Account Dialog """	
 
-    def initialize (self):
+    def __init__(self):
+        self.invoke_list = ["File", "New", "New Account..."]
+        self.dialog_name = 'New Account - .'
+
+    def initialize(self):
         """ Define Widgets called at gnucash Constructor after invoke """
-        print ("initialization")
         self.GeneralTab = self.tab("General")
         self.OpeninigBalanceTab = self.tab("Opening Balance")
         self.account_name_text = \
@@ -223,11 +259,6 @@ class NewAccount(GnucashWindow):
         self.GeneralTab.findChild(predicate.GenericPredicate(\
         roleName="check box", name="Tax related"))
         self.ok_button = self.button("OK")
-        
-    def __init__(self):
-        self.invoke_list = ["File", "New", "New Account..."]
-        self.dialog_name = 'New Account - .'
-        
 
     def __setattr__(self, name, value):
         """ Always set the account name as your last account because it changes the dialog title which may lead to failure
@@ -1190,6 +1221,7 @@ class ReconcileFrame(Node):
 
     def __init__(self):
         config.childrenLimit = 1500
+        gnucash = GnuCashApp()
         frame_list = gnucash.findChildren(predicate.GenericPredicate(roleName='frame'))
         for frame in frame_list:
             result = re.search(". Reconcile", frame.name)
@@ -1226,18 +1258,21 @@ class ReconcileFrame(Node):
     def select_all_funds_in(self):
         self.__select_all_funds('Funds In')
 
+    def finish(self):
+        self.menu('Reconcile').menuItem('Finish').click()
 
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
-    """ Currently i use it to test the new wrapper for Reconcile Frame """
-    config.childrenLimit = 1500
-
     gnucash = GnuCashApp()
-    reconcile = gnucash.reconcile_account('Asset')
-    reconcile.ending_balance = '2000'
-    reconcile.accept()
+    gnucash.open_data_file('mytest2')
+#    open_dialog.dismiss()
+ #   gnucash = GnuCashApp()
+ #   reconcile = gnucash.reconcile_account('Asset')
+ #   reconcile.include_subaccount = True
+ #   reconcile.accept()
 
-    reconcileFrame = ReconcileFrame()
-    reconcileFrame.select_all_funds_out()
-    reconcileFrame.select_all_funds_in()
+#    reconcileFrame = ReconcileFrame()
+#    reconcileFrame.select_all_funds_out()
+#    reconcileFrame.select_all_funds_in()
+#    reconcileFrame.finish()
 
