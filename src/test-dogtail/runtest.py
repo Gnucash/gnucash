@@ -250,7 +250,7 @@ class ScenarioTest(unittest.TestCase):
 
     def setUp(self):
         """ a setup  for the test case in this type of test just run gnucash and go dismiss first dialog """
-        cleanup_all()
+        #cleanup_all()
         run('gnucash')
         sleep (20)
         gnuCash = GnuCashApp()
@@ -258,8 +258,8 @@ class ScenarioTest(unittest.TestCase):
 
     def tearDown(self):
         """ just close gnucash without Saving """
-       # gnuCash = GnuCashApp()
-      #  gnuCash.close_without_saving()
+        gnuCash = GnuCashApp()
+        gnuCash.close_without_saving()
 
     def test_new_account_dialog(self):
         """ Test creating new Account currently I could able only to test an account with only 2 levels 
@@ -328,6 +328,26 @@ class ScenarioTest(unittest.TestCase):
         account_tab = gnucash.tab('Accounts')
         validate_node(account_tab, 'test_perform_transaction')
 
+    def test_perform_reconcilation(self):
+        gnucash = GnuCashApp()
+        gnucash.open_data_file('mytest2')
+        reconcile = gnucash.reconcile_account('Asset')
+        reconcile.include_subaccount = True
+        reconcile.accept()
+        reconcileFrame = ReconcileFrame()
+        validate_node(reconcileFrame.funds_in, 'test_before_perform_reconcilation_funds_in')
+        validate_node(reconcileFrame.funds_out, 'test_before_perform_reconcilation_funds_out')
+
+        reconcileFrame.select_all_funds_out()
+        reconcileFrame.select_all_funds_in()
+        reconcileFrame.finish()
+
+        # Validation Done by opening the Reconcile frame and check Funds In and Funds Out Table are empty
+        reconcile = gnucash.reconcile_account('Asset')
+        reconcile.accept()
+        reconcileFrame = ReconcileFrame()
+        validate_node(reconcileFrame.funds_in, 'test_after_perform_reconcilation_funds_in')
+        validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out')
 
 if __name__ == "__main__":
     unittest.main()
