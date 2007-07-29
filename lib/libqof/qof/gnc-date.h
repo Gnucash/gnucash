@@ -148,13 +148,14 @@ gboolean gnc_date_string_to_monthformat(const gchar *format_string,
  * unsigned int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
  * they're not more than a couple dozen times the age of the universe.
- * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ * Values of this type can range from -9,223,372,036,854,775,808 to
+ * 9,223,372,036,854,775,807.
  */
 
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
-   guint64 tv_sec;     
+   gint64 tv_sec;     
    glong tv_nsec;
 };
 #endif /* SWIG */
@@ -164,7 +165,8 @@ struct timespec64
  * store the seconds.  This should adequately cover dates in the
  * distant future as well as the distant past, as long as they're not
  * more than a couple dozen times the age of the universe
- * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ * Values of this type can range from -9,223,372,036,854,775,808 to
+ * 9,223,372,036,854,775,807.
  */
 typedef struct timespec64 Timespec;
 
