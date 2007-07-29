@@ -250,7 +250,7 @@ class ScenarioTest(unittest.TestCase):
 
     def setUp(self):
         """ a setup  for the test case in this type of test just run gnucash and go dismiss first dialog """
-        #cleanup_all()
+        cleanup_all()
         run('gnucash')
         sleep (20)
         gnuCash = GnuCashApp()
@@ -259,14 +259,13 @@ class ScenarioTest(unittest.TestCase):
     def tearDown(self):
         """ just close gnucash without Saving """
         gnuCash = GnuCashApp()
-        gnuCash.close_without_saving()
+#        gnuCash.close_without_saving()
 
     def test_new_account_dialog(self):
         """ Test creating new Account currently I could able only to test an account with only 2 levels 
             No validation here 
             TODO: add validation
         """
-        config.childrenLimit=500 
         gnucash = GnuCashApp()
         gnucash.add_new_account_page()
         account_list = [
@@ -329,6 +328,7 @@ class ScenarioTest(unittest.TestCase):
         validate_node(account_tab, 'test_perform_transaction')
 
     def test_perform_reconcilation(self):
+        """ Test Reconcilation """
         gnucash = GnuCashApp()
         gnucash.open_data_file('mytest2')
         reconcile = gnucash.reconcile_account('Asset')
@@ -348,6 +348,21 @@ class ScenarioTest(unittest.TestCase):
         reconcileFrame = ReconcileFrame()
         validate_node(reconcileFrame.funds_in, 'test_after_perform_reconcilation_funds_in')
         validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out')
+
+    def test_accounts_receivable(self):
+        """ Test accounts receivable """
+        gnucash = GnuCashApp()
+        gnucash.add_new_account_page()
+        account_list = [
+                ['Asset', 'Asset'],
+                ['Income', 'Income'],
+                ['Checking', 'Bank', 'Asset'],
+                ['Accounts Receivable', 'A/Receivable', 'Asset'],
+                ['Sales', 'Income', 'Income'],
+            ]
+        for account in account_list:
+            gnucash.add_account(*account)
+
 
 if __name__ == "__main__":
     unittest.main()
