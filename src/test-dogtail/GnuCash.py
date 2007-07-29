@@ -1158,9 +1158,96 @@ class Register(Node):
         else:
             self.__dict__[name]=value
 
+class BookOptions(GnucashWindow):
+    """ Wapper class for Book options """
+
+    def __init__(self):
+        self.invoke_list= ["File", "Properties"]
+        self.dialog_name = 'Book Options'
+
+    def initialize(self):
+        self.company_name_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The name of your business'))
+        self.company_address_txt  = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The address of your business'))
+        self.company_contact_person_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The contact person to print on invoices'))
+        self.company_phone_number_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The phone number of your business'))
+        self.company_fax_number_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The fax number of your business'))
+        self.company_email_address_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The email address of your business'))
+        self.company_website_url_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The URL address of your website'))
+        self.company_id_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The ID for your company (eg \'Tax-ID: 00-000000)'))
+        #TODO: Add the remaining fields 
+
+    def __setattr__(self, name, value):
+        if name == 'company_name':
+            self.company_name_txt.text = value
+        elif name == 'company_address':
+            self.company_address_txt.text = value
+        elif name == 'company_phone_number':
+            self.company_phone_number_txt.text = value
+        elif name == 'company_fax_number':
+            self.company_fax_number_txt.text = value
+        elif name == 'company_email_address':
+            self.company_email_address_txt.text = value
+        else:
+            self.__dict__[name]=value
+
+
+class Question(Window):
+
+    def __init__(self):
+        gnucash = GnuCashApp()
+        node = gnucash.findChild(predicate.GenericPredicate(\
+        roleName='dialog', \
+        name='Question'))
+        Window.__init__(self, node)
+        self.description_txt = \
+        self.findChild(predicate.GenericPredicate(roleName='text'))
+        self.post_to_account_combo = \
+        self.findChild(predicate.GenericPredicate(roleName='combo box'))
+        self.new_btn = self.button('New...')
+        self.accumulate_splits_cb = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='check box', \
+        name='Accumulate Splits?'))
+
+    def __setattr__(self, name, value):
+        if name == 'description':
+            self.description_txt.text = value
+        elif name == 'post_to_account':
+            self.post_to_account_combo.combovalue = value
+        elif name == 'accumulate_splits':
+            if value and not self.accumulate_splits_cb.checked:
+                self.accumulate_splits_cb.click()
+            elif not value and self.accumulate_splits_cb.checked:
+                self.accumulate_splits_cb.click()
+        else:
+            self.__dict__[name]=value
 
 class Reconcile(GnucashWindow):
-    """ Wrapper Class for  """
+    """ Wrapper Class for Reconcilation dialog """
     
     def __init__(self):
         self.invoke_list = ["Actions", "Reconcile..."]
@@ -1264,15 +1351,7 @@ class ReconcileFrame(Node):
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     gnucash = GnuCashApp()
-    gnucash.open_data_file('mytest2')
-#    open_dialog.dismiss()
- #   gnucash = GnuCashApp()
- #   reconcile = gnucash.reconcile_account('Asset')
- #   reconcile.include_subaccount = True
- #   reconcile.accept()
-
-#    reconcileFrame = ReconcileFrame()
-#    reconcileFrame.select_all_funds_out()
-#    reconcileFrame.select_all_funds_in()
-#    reconcileFrame.finish()
+    book_options = BookOptions()
+    book_options.invoke()
+    book_options.dismiss()
 
