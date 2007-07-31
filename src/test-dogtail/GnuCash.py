@@ -723,9 +723,12 @@ class Find(GnucashWindow):
         self.remove_btn_list = \
         self.findChildren(\
         predicate.GenericPredicate(roleName='push button', name='Remove'))
-        self.search_criteria_filler_list = \
-        self.findChildren(\
-        predicate.GenericPredicate(roleName='filler'))
+        self.search_criteria_panel = \
+        self.findChild(\
+        predicate.GenericPredicate(roleName='scroll pane'))
+        self.text_fields_list = \
+        self.search_criteria_panel.findChildren(\
+        predicate.GenericPredicate(roleName='text'))
         self.find_btn = self.button('Find')
         self.new_search_rb = \
         self.findChild(\
@@ -740,7 +743,19 @@ class Find(GnucashWindow):
         self.findChild(\
         predicate.GenericPredicate(roleName='radio button', name='Delete results from current search'))
 
+    def add_criteria(self):
+        self.button('Add').click()
+        self.text_fields_list = \
+        self.search_criteria_panel.findChildren(\
+        predicate.GenericPredicate(roleName='text'))
 
+    def find(self):
+        self.find_btn.click()
+        self.result_table = self.findChild(\
+        predicate.GenericPredicate(roleName='table'))
+        result_set = self.result_table.findChildren(\
+        predicate.GenericPredicate(roleName='table cell'))
+        return result_set
 
 class FindTransaction(Find):
     """ Find Transaction Wrapper """
@@ -874,13 +889,16 @@ class NewXXX(GnucashWindow):
 
         def __init__(self, initialize):
             Node.__init__(self, initialize)
-            #self.company_name_txt = self.findChild(\
-            #predicate.IsLabelledAs('Company Name: '))
+            self.identification_panel = \
+            self.findChild(predicate.GenericPredicate(roleName='panel', name='Identification'))
+            self.idenetification_list = \
+            self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
+            self.company_name_txt = self.idenetification_list[1]
             self.billing_information = \
             self.findChild(predicate.GenericPredicate\
             (roleName='panel', name ='Billing Address'))
             self.billing_information_elements = \
-            self.findChildren(predicate.GenericPredicate\
+            self.billing_information.findChildren(predicate.GenericPredicate\
             (roleName='text'))
             self.active_cb = self.findChild(predicate.GenericPredicate(\
             roleName='check box', name='Active'))
@@ -892,6 +910,13 @@ class NewXXX(GnucashWindow):
             self.phone_txt = self.billing_information_elements[5]
             self.fax_txt = self.billing_information_elements[6]
             self.email_txt = self.billing_information_elements[7]
+            self.notes_panel = \
+            self.findChild(predicate.GenericPredicate(\
+            roleName='panel', \
+            name='Notes'))
+            self.notes_txt = \
+            self.notes_panel.findChild(predicate.GenericPredicate(\
+            roleName='text'))
 
     class YYYInformation(Node):
         """
@@ -1006,8 +1031,15 @@ class FindCustomer(Find):
     """ Find Customer wrapper """
 
     def __init__(self):
+        gnucash = GnuCashApp()
         self.invoke_list = ["Business", "Customer", "Find Customer..."]
         self.dialog_name = 'Find Customer'
+        sleep(2)
+        find_customer = gnucash.findChild(\
+        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), retry=False, requireResult=False)
+        if find_customer != None:
+            Window.__init__(self, find_customer)
+            self.initialize()
 
 
 class NewInvoice(GnucashWindow):
@@ -1017,6 +1049,46 @@ class NewInvoice(GnucashWindow):
         self.invoke_list = ["Business", "Customer", "New Invoice..."]
         self.dialog_name = 'New Invoice'
 
+    def initialize(self):
+        self.invoice_information_panel = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='panel', \
+        name='Invoice Information'))
+        self.invoice_id_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The invoice ID number.  If left blank a reasonable number will be chosen for you.'))
+        self.billing_information_panel = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='panel', \
+        name='Billing Information'))
+        self.billing_information_list = \
+        self.billing_information_panel.findChildren(predicate.GenericPredicate(roleName='text'), recursive=True)
+        print len(self.billing_information_list)
+        self.customer_txt = self.billing_information_list[0]
+        #self.job_txt = self.billing_information_list[1]
+        self.billing_id_txt = self.billing_information_list[1]
+        self.notes_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name='Notes'))
+        self.notes_txt = \
+        self.notes_panel.findChild(predicate.GenericPredicate(roleName='text'))
+        self.select_btn = self.button('Select...')
+    def __setattr__(self, name, value):
+        #TODO: Customer Text does not work
+        if name =='customer':
+            self.select_btn.click()
+            findCustomer = FindCustomer()
+            findCustomer.text_fields_list[0].text = value
+            cell = findCustomer.find()[0]
+            dogtail.rawinput.click(cell.position[0], cell.position[1]+cell.size[1]*2)
+            findCustomer.button('Select').click()
+
+        elif name == 'billing_id':
+            self.billing_id_txt.text = value
+        elif name == 'notes':
+            self.notes_txt.text =value
+        else:
+            self.__dict__[name]=value
 
 class FindInvoice(Find):
     """ Find Invoice wrapper """
@@ -1211,6 +1283,8 @@ class BookOptions(GnucashWindow):
             self.company_fax_number_txt.text = value
         elif name == 'company_email_address':
             self.company_email_address_txt.text = value
+        elif name == 'company_id':
+            self.company_id_txt.text = value
         else:
             self.__dict__[name]=value
 
@@ -1350,8 +1424,13 @@ class ReconcileFrame(Node):
 
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
+    config.childrenLimit = 1500
     gnucash = GnuCashApp()
-    book_options = BookOptions()
-    book_options.invoke()
-    book_options.dismiss()
-
+    new_invoice = NewInvoice()
+    new_invoice.invoke()
+    new_invoice.billing_id = "ABC Purchase Order # 12988"
+    new_invoice.notes = "Your Personal notes goes here\nNotes do not appear on printed invoices"
+    new_invoice.customer = 'ABC Inc'
+    new_invoice.accept()
+    #findCustomer.dismiss()
+#    new_invoice.dismiss()
