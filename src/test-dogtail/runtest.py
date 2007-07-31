@@ -352,6 +352,8 @@ class ScenarioTest(unittest.TestCase):
     def test_accounts_receivable(self):
         """ Test accounts receivable """
         gnucash = GnuCashApp()
+
+        # Account setup
         gnucash.add_new_account_page()
         account_list = [
                 ['Asset', 'Asset'],
@@ -363,6 +365,33 @@ class ScenarioTest(unittest.TestCase):
         for account in account_list:
             gnucash.add_account(*account)
 
+        # Company Registration
+        book_options = BookOptions()
+        book_options.invoke()
+        book_options.company_name = 'ABC Corp'
+        book_options.company_id = '12-1234455'
+        book_options.accept()
+
+        # add new customer 
+        new_customer = NewCustomer()
+        new_customer.invoke()
+        new_customer.customer.company_name_txt.text = 'ABC Inc'
+        new_customer.customer.name_txt.text = 'Bob McBob'
+        new_customer.customer.address_1_txt.text = '123 First Ave.'
+        new_customer.customer.address_2_txt.text = 'Somecity, SS 12345'
+        new_customer.customer.phone_txt.text = '515-234-5678'
+        new_customer.customer.fax_txt.text = '515-235-5679'
+        new_customer.customer.email_txt.text = 'abc@abc.com'
+        new_customer.customer.notes_txt.text = 'Bob McBobs, Sales Dept.'
+        new_customer.accept()
+
+        # add new invoice
+        new_invoice = NewInvoice()
+        new_invoice.invoke()
+        new_invoice.billing_id = "ABC Purchase Order # 12988"
+        new_invoice.notes = "Your Personal notes goes here\nNotes do not appear on printed invoices"
+        new_invoice.customer = 'ABC Inc'
+        new_invoice.accept()
 
 if __name__ == "__main__":
     unittest.main()
