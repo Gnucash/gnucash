@@ -134,9 +134,6 @@ print error message if its bad  */
 @param data gpointer, place where object class can hang arbitrary data
 
 */
-void qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab);
-void qof_entity_release (QofInstance *ent);
-void qof_instance_set_guid (QofInstance *ent, const GUID *guid);
 
 /** Is QOF operating in "alternate" dirty mode.  In normal mode,
  *  whenever an instance is dirtied, the collection (and therefore the
@@ -154,9 +151,6 @@ gboolean qof_get_alt_dirty_mode (void);
  *  instance is freed instead of committed, the dirty state of
  *  collection (and therefore the book) is never changed. */
 void qof_set_alt_dirty_mode (gboolean enabled);
-
-/** Return the GUID of this entity */
-const GUID * qof_instance_get_guid (const QofInstance *);
 
 /** @name Collections of Entities 
  @{ */

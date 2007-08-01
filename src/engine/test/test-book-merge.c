@@ -24,6 +24,7 @@
 
 #include "config.h" 
 #include <glib.h>
+#include <unistd.h>
 
 #include "qof.h"
 #include "test-stuff.h"
@@ -504,6 +505,7 @@ test_rule_loop (QofBookMergeData *mergeData, QofBookMergeRule *rule, guint remai
 int
 main (int argc, char **argv)
 {
+  sleep(10);
 	qof_init();
 	myobjRegister();
 	test_merge();

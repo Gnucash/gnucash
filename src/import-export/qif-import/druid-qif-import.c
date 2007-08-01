@@ -1137,7 +1137,7 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
   g_return_if_fail (view && wind);
   selection = gtk_tree_view_get_selection (view);
 
-  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
+  select_line (wind, selection, wind->cat_display_info, wind->cat_map_info,
 	       update_categories_page);
 }
 
@@ -1888,9 +1888,10 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   }
 
   /* actually add in the new transactions. */
-  scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc-get-current-root-account)"),
-	     wind->imported_account_tree);
+  if (wind->imported_account_tree != SCM_BOOL_F)
+    scm_call_2(cat_and_merge,
+	       scm_c_eval_string("(gnc-get-current-root-account)"),
+	       wind->imported_account_tree);
   
   gnc_resume_gui_refresh();
   

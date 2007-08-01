@@ -53,7 +53,6 @@
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
-#include "gnc-path.h"
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
@@ -1058,22 +1057,10 @@ gnc_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
-	QofBackendProvider *prov;
-#ifdef ENABLE_NLS
-	gchar *localedir = gnc_path_get_localedir ();
-	/* FIXME: It is unclear whether setlocale() is actually
-	   needed here (added in r11313). Some platforms might
-	   need it so that gettext works correctly in this
-	   GModule. We'll keep it for now. */
-	setlocale (LC_ALL, "");
-	bindtextdomain (GETTEXT_PACKAGE, localedir);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-	g_free (localedir);
-#endif
+        QofBackendProvider *prov;
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
         prov->access_method = "file";
@@ -1082,8 +1069,6 @@ g_module_check_init(GModule *module)
         prov->provider_free = gnc_provider_free;
         prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
-        g_module_make_resident (module);
-        return NULL;
 }
 
 /* ========================== END OF FILE ===================== */

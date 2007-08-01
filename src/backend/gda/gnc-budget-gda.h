@@ -33,5 +33,6 @@
 #include <gmodule.h>
 
 void gnc_gda_init_budget_handler( void );
+void gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst );
 
 #endif /* GNC_BUDGET_GDA_H_ */

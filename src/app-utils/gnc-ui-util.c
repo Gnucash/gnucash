@@ -639,7 +639,7 @@ gnc_find_or_create_equity_account (Account *root,
   }
 
   parent = gnc_account_lookup_by_name(root, _("Equity"));
-  if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
+  if (!parent || xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
     parent = root;
   g_assert(parent);
 
@@ -839,6 +839,13 @@ gnc_locale_default_currency_nodefault (void)
 
   currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
 
+  /* Some very old locales (notably on win32) still announce a euro
+     currency as default, although it has been replaced by EUR in
+     2001. We use EUR as default in that case, but the user can always
+     override from gconf. */
+  if (gnc_is_euro_currency (currency))
+    currency = gnc_get_euro();
+
   return (currency ? currency : NULL);
 }
 
@@ -869,10 +876,10 @@ gnc_default_currency (void)
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
     g_free(mnemonic);
-    g_free(choice);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency ();
@@ -902,9 +909,9 @@ gnc_default_report_currency (void)
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
-    g_free(choice);
     g_free(mnemonic);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency (); 

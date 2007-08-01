@@ -175,7 +175,7 @@ commit_commodity( GncGdaBackend* be, QofInstance* inst )
     const GUID* guid;
 
     (void)gnc_gda_do_db_operation( be,
-                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         COMMODITIES_TABLE,
                         GNC_ID_COMMODITY, (gnc_commodity*)inst,
                         col_table );
@@ -184,7 +184,7 @@ commit_commodity( GncGdaBackend* be, QofInstance* inst )
     guid = qof_instance_get_guid( inst );
 
     // Now, commit or delete any slots
-    if( !inst->do_free ) {
+    if( !qof_instance_get_destroying(inst) ) {
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {
         gnc_gda_slots_delete( be, guid );

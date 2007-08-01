@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[ ! "$BASH" -a -x /bin/bash ] && exec /bin/bash "$0" "$@"
+
 set -e
 
 function qpushd() { pushd "$@" >/dev/null; }
@@ -69,6 +71,12 @@ function prepare() {
     if [ "$DISABLE_OPTIMIZATIONS" = "yes" ]; then
         export CFLAGS="$CFLAGS -g -O0"
     fi
+
+    if [ "$CROSS_COMPILE" = "yes" ]; then
+        # to avoid using the build machine's installed packages
+        set_env "" PKG_CONFIG_PATH    # registered
+        export PKG_CONFIG_LIBDIR=""   # not registered
+    fi
 }
 
 function inst_wget() {
@@ -96,8 +104,8 @@ function inst_dtk() {
         smart_wget $DTK_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$MSYS_DIR"
         for file in \
-	    /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
-	    /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,guile,libtool}
+            /bin/{aclocal*,auto*,ifnames,libtool*,guile*} \
+            /share/{aclocal,aclocal-1.7,autoconf,autogen,automake-1.7,guile,libtool}
         do
             [ "${file##*.bak}" ] || continue
             _dst_file=$file.bak
@@ -109,28 +117,37 @@ function inst_dtk() {
 }
 
 function test_for_mingw() {
-    ${CC} --version &&
-    g++ --version &&
-    ${LD} --help &&
-    mingw32-make --help
+    ${CC} --version
+    ${LD} --help
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        g++ --version
+        mingw32-make --help
+    fi
 }
 
 function inst_mingw() {
     setup MinGW
     _MINGW_UDIR=`unix_path $MINGW_DIR`
     _MINGW_WFSDIR=`win_fs_path $MINGW_DIR`
+    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/mingw32/bin PATH
+    [ "$CROSS_COMPILE" = "yes" ] && add_to_env $_MINGW_UDIR/bin PATH
+
     if quiet test_for_mingw
     then
         echo "mingw already installed.  skipping."
     else
         mkdir -p $_MINGW_UDIR
-        wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
-        wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
-        (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        if [ "$CROSS_COMPILE" != "yes" ]; then
+            wget_unpacked $BINUTILS_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_CORE_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $GCC_GPP_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
+            wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
+            (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+        else
+            ./create_cross_mingw.sh
+        fi
         quiet test_for_mingw || die "mingw not installed correctly"
     fi
 }
@@ -279,44 +296,45 @@ function inst_guile() {
             qpopd
             ./configure ${HOST_XCOMPILE} \
                 --disable-static \
-	        --disable-elisp \
-	        --disable-networking \
-	        --disable-dependency-tracking \
-	        --disable-libtool-lock \
-	        --disable-linuxthreads \
-	        -C --prefix=$_GUILE_WFSDIR \
-	        ac_cv_func_regcomp_rx=yes \
-	        CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS}" \
-	        LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS}"
-	    cp config.status config.status.bak
-	    cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
-	    ./config.status
-	    qpushd guile-config
-	      cp Makefile Makefile.bak
-	      cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
-	    qpopd
-	    make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -no-undefined -avoid-version"
-	    make install
-	qpopd
-	_SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
-	unzip $_SLIB_BALL -d $_SLIB_DIR
-	qpushd $_SLIB_DIR/slib
-	    cp guile.init guile.init.bak
+                --disable-elisp \
+                --disable-networking \
+                --disable-dependency-tracking \
+                --disable-libtool-lock \
+                --disable-linuxthreads \
+                -C --prefix=$_GUILE_WFSDIR \
+                ac_cv_func_regcomp_rx=yes \
+                CPPFLAGS="${READLINE_CPPFLAGS} ${REGEX_CPPFLAGS}" \
+                LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS}"
+            cp config.status config.status.bak
+            cat config.status.bak | sed 's# fileblocks[$.A-Za-z]*,#,#' > config.status
+            ./config.status
+            qpushd guile-config
+              cp Makefile Makefile.bak
+              cat Makefile.bak | sed '/-bindir-/s,:,^,g' > Makefile
+            qpopd
+            make LDFLAGS="-lwsock32 ${READLINE_LDFLAGS} ${REGEX_LDFLAGS} -no-undefined -avoid-version"
+            make install
+        qpopd
+        _SLIB_DIR=$_GUILE_UDIR/share/guile/1.*
+        unzip $_SLIB_BALL -d $_SLIB_DIR
+        qpushd $_SLIB_DIR/slib
+            cp guile.init guile.init.bak
             sed '/lambda.*'"'"'unix/a\
 (define software-type (lambda () '"'"'ms-dos))' guile.init.bak > guile.init
-	qpopd
+        qpopd
         guile -c '(use-modules (srfi srfi-39))' &&
         guile -c "(use-modules (ice-9 slib)) (require 'printf)" || die "guile not installed correctly"
     fi
-    if test x$cross_compile = xyes ; then
-	qpushd $_GUILE_UDIR/bin
-	# The cross-compiling guile expects these program names
-	# for the build-time guile
-	ln -sf /usr/bin/guile-config mingw32-guile-config
-	ln -sf /usr/bin/guile mingw32-build-guile
-	qpopd
+    if [ "$CROSS_COMPILE" = "yes" ]; then
+        mkdir -p $_GUILE_UDIR/bin
+        qpushd $_GUILE_UDIR/bin
+        # The cross-compiling guile expects these program names
+        # for the build-time guile
+        ln -sf /usr/bin/guile-config mingw32-guile-config
+        ln -sf /usr/bin/guile mingw32-build-guile
+        qpopd
     else
-	add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
+        add_to_env "-I $_GUILE_UDIR/share/aclocal" ACLOCAL_FLAGS
     fi
 }
 
@@ -339,7 +357,7 @@ function inst_openssl() {
     add_to_env $_OPENSSL_UDIR/bin PATH
     # Make sure the files of Win32OpenSSL-0_9_8d are really gone!
     if test -f $_OPENSSL_UDIR/unins000.exe ; then
-	die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
+        die "Wrong version of OpenSSL installed! Run $_OPENSSL_UDIR/unins000.exe and start install.sh again."
     fi
     # Make sure the files of openssl-0.9.7c-{bin,lib}.zip are really gone!
     if [ -f $_OPENSSL_UDIR/lib/libcrypto.dll.a ] ; then
@@ -367,6 +385,7 @@ function inst_openssl() {
             mkdir -p $_OPENSSL_UDIR/lib
             mkdir -p $_OPENSSL_UDIR/include
             cp -a libeay32.dll libssl32.dll $_OPENSSL_UDIR/bin
+            cp -a libssl32.dll $_OPENSSL_UDIR/bin/ssleay32.dll
             for _implib in libeay32 libssl32 ; do
                 cp -a out/$_implib.a $_OPENSSL_UDIR/lib/$_implib.dll.a
             done
@@ -406,46 +425,27 @@ function inst_exetype() {
     else
         mkdir -p $_EXETYPE_UDIR/bin
         cp $EXETYPE_SCRIPT $_EXETYPE_UDIR/bin/exetype
+        chmod +x $_EXETYPE_UDIR/bin/exetype
         quiet which exetype || die "exetype unavailable"
     fi
 }
 
-function inst_libxml2() {
-    setup LibXML2
-    _LIBXML2_UDIR=`unix_path $LIBXML2_DIR`
-    if quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile
+function inst_libxslt() {
+    setup LibXSLT
+    _LIBXSLT_UDIR=`unix_path $LIBXSLT_DIR`
+    add_to_env $_LIBXSLT_UDIR/bin PATH
+    if quiet which xsltproc
     then
-        echo "libxml2 already installed.  skipping."
+        echo "libxslt already installed.  skipping."
     else
-        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXML2_DIR
-        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $LIBXML2_DIR
-        qpushd $LIBXML2_DIR
+        [ "$CROSS_COMPILE" = "yes" ] && die "xsltproc unavailable"
+        wget_unpacked $LIBXSLT_URL $DOWNLOAD_DIR $LIBXSLT_DIR
+        qpushd $_LIBXSLT_UDIR
             mv libxslt-* mydir
             cp -r mydir/* .
             rm -rf mydir
-            mv libxml2-* mydir
-            cp -r mydir/* .
-            rm -rf mydir
-            pexports bin/libxml2.dll > libxml2.def
-            ${DLLTOOL} --input-def libxml2.def --output-lib lib/libxml2.a
-            rm libxml2.def
-            _LIBXML2_VERSION=`echo $LAST_FILE | sed 's#.*libxml2-\(.*\).win32.zip#\1#'`
-            mkdir -p lib/pkgconfig
-            cat > lib/pkgconfig/libxml-2.0.pc <<EOF
-prefix=/ignore
-exec_prefix=\${prefix}
-libdir=\${exec_prefix}/lib
-includedir=\${prefix}/include
-
-Name: libXML
-Version: $_LIBXML2_VERSION
-Description: libXML library version 2.
-Requires:
-Libs: -L\${libdir} -lxml2 -lz
-Cflags: -I\${includedir}
-EOF
         qpopd
-        quiet ${LD} -L$_LIBXML2_UDIR/lib -lxml2 -o $TMP_UDIR/ofile || die "libxml2 not installed correctly"
+        quiet which xsltproc || die "libxslt not installed correctly"
     fi
 }
 
@@ -456,7 +456,11 @@ function inst_gnome() {
     add_to_env -L$_GNOME_UDIR/lib GNOME_LDFLAGS
     add_to_env $_GNOME_UDIR/bin PATH
     add_to_env $_GNOME_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
+    if [ "$CROSS_COMPILE" != "yes" ]; then
+        add_to_env $_GNOME_UDIR/bin/pkg-config-msys.sh PKG_CONFIG
+    else
+        add_to_env pkg-config PKG_CONFIG
+    fi
     add_to_env "-I $_GNOME_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
@@ -466,60 +470,62 @@ function inst_gnome() {
         echo "gnome packages installed.  skipping."
     else
         mkdir -p $_GNOME_UDIR
-	wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
-	wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
-	wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
-	wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        qpushd $GNOME_DIR
+        wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $CAIRO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $EXPAT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FONTCONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FONTCONFIG_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FREETYPE_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $FREETYPE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ATK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ATK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $PANGO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBART_LGPL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTK_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $INTLTOOL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $ORBIT2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GAIL_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GAIL_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $POPT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GCONF_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GCONF_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBO_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GNOME_VFS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GNOME_VFS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOME_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMECANVAS_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMECANVAS_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBBONOBOUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEUI_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGLADE_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEPRINT_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEPRINT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
+        wget_unpacked $LIBGNOMEPRINTUI_DEV_URL $DOWNLOAD_DIR $GNOME_DIR  # gnomeprint
+        wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GTKHTML_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        qpushd $_GNOME_UDIR
             [ -f bin/zlib1.dll ] || mv zlib1.dll bin
             if [ ! -f lib/libz.dll.a ]; then
                 qpushd bin
@@ -529,8 +535,8 @@ function inst_gnome() {
             fi
             if [ ! -f libexec/gconfd-2.console.exe ]; then
                 cp libexec/gconfd-2.exe libexec/gconfd-2.console.exe
-                exetype libexec/gconfd-2.exe windows
             fi
+            exetype libexec/gconfd-2.exe windows
 #            sed 's#gtk+-unix-print-2.0 >= [0-9\.]* *##' lib/pkgconfig/libgtkhtml-3.14.pc > tmp  # not gnomeprint
 #            mv tmp lib/pkgconfig/libgtkhtml-3.14.pc  # not gnomeprint
             # work around a bug in msys bash, adding 0x01 smilies
@@ -544,22 +550,23 @@ else
 fi
 \${PKG_CONFIG} "\$@" | tr -d \\\\r && \$res
 EOF
+            chmod +x bin/pkg-config{.exe,-msys.sh}
         qpopd
         quiet gconftool-2 --version &&
         ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgnomeprintui-2.2 libgtkhtml-3.8 &&  # gnomeprint
 #        ${PKG_CONFIG} --exists gconf-2.0 libgnome-2.0 libgnomeui-2.0 libgnomeprint-2.2 libgtkhtml-3.14 &&  # not gnomeprint
         quiet intltoolize --version || die "gnome not installed correctly"
     fi
-    if test x$cross_compile = xyes ; then
+    if [ "$CROSS_COMPILE" = "yes" ]; then
         qpushd $_GNOME_UDIR/lib/pkgconfig
-	    perl -pi.bak -e"s!^prefix=.*\$!prefix=$GNOME_DIR!" *.pc
-	    #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
-	qpopd
-	# Latest gnome-dev packages don't ship with *.la files
-	# anymore. What do we do...?
+            perl -pi.bak -e"s!^prefix=.*\$!prefix=$_GNOME_UDIR!" *.pc
+            #perl -pi.bak -e's!^Libs: !Libs: -L\${prefix}/bin !' *.pc
+        qpopd
+        # Latest gnome-dev packages don't ship with *.la files
+        # anymore. What do we do...?
         #qpushd $_GNOME_UDIR/bin
-	#    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
-	#qpopd
+        #    for A in *-0.dll; do ln -sf $A `echo $A|sed 's/\(.*\)-0.dll/\1.dll/'`; done
+        #qpopd
     fi
 }
 
@@ -607,20 +614,20 @@ function inst_libgsf() {
     add_to_env $_LIBGSF_UDIR/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1
     then
-	echo "libgsf already installed.  skipping."
+        echo "libgsf already installed.  skipping."
     else
-	wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/libgsf-*
-	qpushd $TMP_UDIR/libgsf-*
-	    ./configure ${HOST_XCOMPILE} \
-	        --prefix=$_LIBGSF_UDIR \
+        wget_unpacked $LIBGSF_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libgsf-*
+        qpushd $TMP_UDIR/libgsf-*
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=$_LIBGSF_UDIR \
                 --disable-static \
-	        --without-python \
-	        CPPFLAGS="${GNOME_CPPFLAGS}" \
-	        LDFLAGS="${GNOME_LDFLAGS}"
-	    make
-	    make install
-	qpopd
+                --without-python \
+                CPPFLAGS="${GNOME_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS}"
+            make
+            make install
+        qpopd
         ${PKG_CONFIG} --exists libgsf-1 libgsf-gnome-1 || die "libgsf not installed correctly"
     fi
 }
@@ -630,30 +637,30 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.3
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.4
     then
-	echo "goffice already installed.  skipping."
+        echo "goffice already installed.  skipping."
     else
-	rm -rf $TMP_UDIR/goffice-*
-	wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
-	mydir=`pwd`
-	assert_one_dir $TMP_UDIR/goffice-*
-	qpushd $TMP_UDIR/goffice-*
-	    [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
-		patch -p1 < $GOFFICE_PATCH
-	    ${LIBTOOLIZE} --force
-	    aclocal ${ACLOCAL_FLAGS} -I .
-	    automake
-	    autoconf
-	    ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
-	        CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
-	        LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
-	    [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
-	    [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
-	    make
-	    make install
-	qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
+        rm -rf $TMP_UDIR/goffice-*
+        wget_unpacked $GOFFICE_URL $DOWNLOAD_DIR $TMP_DIR
+        mydir=`pwd`
+        assert_one_dir $TMP_UDIR/goffice-*
+        qpushd $TMP_UDIR/goffice-*
+            [ -n "$GOFFICE_PATCH" -a -f "$GOFFICE_PATCH" ] && \
+                patch -p1 < $GOFFICE_PATCH
+            ${LIBTOOLIZE} --force
+            aclocal ${ACLOCAL_FLAGS} -I .
+            automake
+            autoconf
+            ./configure ${HOST_XCOMPILE} --prefix=$_GOFFICE_UDIR \
+                CPPFLAGS="${GNOME_CPPFLAGS} ${PCRE_CPPFLAGS}" \
+                LDFLAGS="${GNOME_LDFLAGS} ${PCRE_LDFLAGS}"
+            [ -d ../libgsf-* ] || die "We need the unpacked package $TMP_UDIR/libgsf-*; please unpack it in $TMP_UDIR"
+            [ -f dumpdef.pl ] || cp -p ../libgsf-*/dumpdef.pl .
+            make
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists libgoffice-0.4 || die "goffice not installed correctly"
     fi
 }
 
@@ -683,7 +690,7 @@ function inst_inno() {
     add_to_env $_INNO_UDIR PATH
     if quiet which iscc
     then
-        echo "Inno Setup Compiler already installed.  Skipping."
+        echo "Inno Setup Compiler already installed.  skipping."
     else
         smart_wget $INNO_URL $DOWNLOAD_DIR
         $LAST_FILE //SP- //SILENT //DIR="$INNO_DIR"
@@ -732,30 +739,32 @@ function inst_hh() {
 }
 
 function inst_opensp() {
-    setup Opensp
+    setup OpenSP
     _OPENSP_UDIR=`unix_path ${OPENSP_DIR}`
     add_to_env ${_OPENSP_UDIR}/bin PATH
     if test -f ${_OPENSP_UDIR}/bin/libosp-5.dll
     then
-	echo "Opensp already installed. Skipping."
+        echo "OpenSP already installed. skipping."
     else
-	wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/OpenSP-*
-	qpushd $TMP_UDIR/OpenSP-*
-	    [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
-		patch -p0 < $OPENSP_PATCH
-	    automake lib/Makefile
-	    ./configure \
-	        --prefix=${_OPENSP_UDIR} \
-		--disable-doc-build --disable-static
-	    # On many windows machines, none of the programs will
-	    # build, but we only need the library, so ignore the rest.
-	    make all-am
-	    make -C lib
-	    make -i
-	    make -i install
-	qpopd
-        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "Opensp not installed correctly"
+        wget_unpacked $OPENSP_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/OpenSP-*
+        qpushd $TMP_UDIR/OpenSP-*
+            [ -n "$OPENSP_PATCH" -a -f "$OPENSP_PATCH" ] && \
+                patch -p0 < $OPENSP_PATCH
+            aclocal ${ACLOCAL_FLAGS} -I m4
+            automake
+            autoconf
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_OPENSP_UDIR} \
+                --disable-doc-build --disable-static
+            # On many windows machines, none of the programs will
+            # build, but we only need the library, so ignore the rest.
+            make all-am
+            make -C lib
+            make -i
+            make -i install
+        qpopd
+        test -f ${_OPENSP_UDIR}/bin/libosp-5.dll || die "OpenSP not installed correctly"
     fi
 }
 
@@ -766,22 +775,22 @@ function inst_libofx() {
     add_to_env ${_LIBOFX_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
     if quiet ${PKG_CONFIG} --exists libofx
     then
-	echo "Libofx already installed. Skipping."
+        echo "Libofx already installed. skipping."
     else
-	wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/libofx-*
-	qpushd $TMP_UDIR/libofx-*
-	    [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
-		patch -p1 < $LIBOFX_PATCH
-	    ./configure \
-	        --prefix=${_LIBOFX_UDIR} \
-		--with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
-		--with-opensp-libs=${_OPENSP_UDIR}/lib \
-		CPPFLAGS="-DOS_WIN32" \
-		--disable-static
-	    make LDFLAGS="${LDFLAGS} -no-undefined"
-	    make install
-	qpopd
+        wget_unpacked $LIBOFX_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libofx-*
+        qpushd $TMP_UDIR/libofx-*
+            [ -n "$LIBOFX_PATCH" -a -f "$LIBOFX_PATCH" ] && \
+                patch -p1 < $LIBOFX_PATCH
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_LIBOFX_UDIR} \
+                --with-opensp-includes=${_OPENSP_UDIR}/include/OpenSP \
+                --with-opensp-libs=${_OPENSP_UDIR}/lib \
+                CPPFLAGS="-DOS_WIN32" \
+                --disable-static
+            make LDFLAGS="${LDFLAGS} -no-undefined"
+            make install
+        qpopd
         quiet ${PKG_CONFIG} --exists libofx || die "Libofx not installed correctly"
     fi
 }
@@ -794,22 +803,24 @@ function inst_gwenhywfar() {
     add_to_env "-I $_GWENHYWFAR_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists gwenhywfar
     then
-	echo "Gwenhywfar already installed. Skipping."
+        echo "Gwenhywfar already installed. skipping."
     else
-	wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/gwenhywfar-*
-	qpushd $TMP_UDIR/gwenhywfar-*
-	    ./configure \
-		--with-openssl-includes=$_OPENSSL_UDIR/include \
-		ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
-		ssl_lib="-leay32 -lssl32" \
-	        --prefix=$_GWENHYWFAR_UDIR \
-	        CPPFLAGS="${REGEX_CPPFLAGS}" \
-		LDFLAGS="${REGEX_LDFLAGS}"
-	    make
-	    make check
-	    make install
-	qpopd
+        wget_unpacked $GWENHYWFAR_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/gwenhywfar-*
+        qpushd $TMP_UDIR/gwenhywfar-*
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            ./configure ${HOST_XCOMPILE} \
+                --with-openssl-includes=$_OPENSSL_UDIR/include \
+                --disable-binreloc \
+                ssl_libraries="-L${_OPENSSL_UDIR}/lib" \
+                ssl_lib="-leay32 -lssl32" \
+                --prefix=$_GWENHYWFAR_UDIR \
+                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
+                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            make
+            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
         ${PKG_CONFIG} --exists gwenhywfar || die "Gwenhywfar not installed correctly"
     fi
 }
@@ -822,17 +833,19 @@ function inst_ktoblzcheck() {
     add_to_env "-L${_GWENHYWFAR_UDIR}/lib" KTOBLZCHECK_LDFLAGS
     if quiet ${PKG_CONFIG} --exists ktoblzcheck
     then
-	echo "Ktoblzcheck already installed. Skipping."
+        echo "Ktoblzcheck already installed. skipping."
     else
-	wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/ktoblzcheck-*
-	qpushd $TMP_UDIR/ktoblzcheck-*
-	    ./configure \
-	        --prefix=${_GWENHYWFAR_UDIR}
-	    make
-	    make check
-	    make install
-	qpopd
+        wget_unpacked $KTOBLZCHECK_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/ktoblzcheck-*
+        qpushd $TMP_UDIR/ktoblzcheck-*
+            # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
+            ./configure ${HOST_XCOMPILE} \
+                --prefix=${_GWENHYWFAR_UDIR} \
+                --disable-binreloc
+            make
+            [ "$CROSS_COMPILE" != "yes" ] && make check
+            make install
+        qpopd
         ${PKG_CONFIG} --exists ktoblzcheck || die "Ktoblzcheck not installed correctly"
     fi
 }
@@ -848,20 +861,20 @@ function inst_qt4() {
     # This section creates .la files for the Qt-4 DLLs so that
     # libtool correctly links to the DLLs.
     if test ! -f ${_QTDIR}/lib/libQtCore4.la ; then
-	qpushd ${_QTDIR}/lib
-	    for A in lib*.a; do
-		LIBBASENAME=`basename ${A} .a`
-		OUTFILE="${LIBBASENAME}.la"
-		BASENAME=`echo ${LIBBASENAME} | sed -e"s/lib//" `
-		DLLNAME="${BASENAME}.dll"
+        qpushd ${_QTDIR}/lib
+            for A in lib*.a; do
+                LIBBASENAME=`basename ${A} .a`
+                OUTFILE="${LIBBASENAME}.la"
+                BASENAME=`echo ${LIBBASENAME} | sed -e"s/lib//" `
+                DLLNAME="${BASENAME}.dll"
 
-		# Create la file
-		echo "# Generated by foo bar libtool" > $OUTFILE
-		echo "dlname='../bin/${DLLNAME}'" >> $OUTFILE
-		echo "library_names='${DLLNAME}'" >> $OUTFILE
-		echo "libdir='${_QTDIR}/bin'" >> $OUTFILE
-	    done
-	qpopd
+                # Create la file
+                echo "# Generated by foo bar libtool" > $OUTFILE
+                echo "dlname='../bin/${DLLNAME}'" >> $OUTFILE
+                echo "library_names='${DLLNAME}'" >> $OUTFILE
+                echo "libdir='${_QTDIR}/bin'" >> $OUTFILE
+            done
+        qpopd
     fi
 }
 
@@ -873,42 +886,42 @@ function inst_aqbanking() {
     add_to_env "-I $_AQBANKING_UDIR/share/aclocal" ACLOCAL_FLAGS
     if quiet ${PKG_CONFIG} --exists aqbanking
     then
-	echo "AqBanking already installed. Skipping."
+        echo "AqBanking already installed. skipping."
     else
-	wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
-	assert_one_dir $TMP_UDIR/aqbanking-*
-	qpushd $TMP_UDIR/aqbanking-*
-	    _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS}"
-	    _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS}"
-	    if test x$AQBANKING_WITH_QT = xyes; then
-		inst_qt4
-		./configure \
-		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
-		    --with-frontends="cbanking qbanking" \
-		    --with-backends="aqdtaus aqhbci aqofxconnect" \
-		    CPPFLAGS="${_AQ_CPPFLAGS}" \
-		    LDFLAGS="${_AQ_LDFLAGS}" \
-		    qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
-		    qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
-		    --prefix=${_AQBANKING_UDIR}
-		make qt4-port
-		make clean
-	    else
-		./configure \
-		    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
-		    --with-frontends="cbanking" \
-		    --with-backends="aqdtaus aqhbci aqofxconnect" \
-		    CPPFLAGS="${_AQ_CPPFLAGS}" \
-		    LDFLAGS="${_AQ_LDFLAGS}" \
-	            --prefix=${_AQBANKING_UDIR}
-	    fi
-	    make
-	    make install
-	qpopd
-	qpushd ${_AQBANKING_UDIR}/bin
-	    exetype aqbanking-tool.exe console
-	    exetype aqhbci-tool.exe console
-	qpopd
+        wget_unpacked $AQBANKING_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/aqbanking-*
+        qpushd $TMP_UDIR/aqbanking-*
+            _AQ_CPPFLAGS="-I${_LIBOFX_UDIR}/include ${KTOBLZCHECK_CPPFLAGS} ${GNOME_CPPFLAGS}"
+            _AQ_LDFLAGS="-L${_LIBOFX_UDIR}/lib ${KTOBLZCHECK_LDFLAGS} ${GNOME_LDFLAGS}"
+            if test x$AQBANKING_WITH_QT = xyes; then
+                inst_qt4
+                ./configure \
+                    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-frontends="cbanking qbanking" \
+                    --with-backends="aqdtaus aqhbci aqofxconnect" \
+                    CPPFLAGS="${_AQ_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    qt3_libs="-L${_QTDIR}/lib -L${_QTDIR}/bin -lQtCore4 -lQtGui4 -lQt3Support4" \
+                    qt3_includes="-I${_QTDIR}/include -I${_QTDIR}/include/Qt -I${_QTDIR}/include/QtCore -I${_QTDIR}/include/QtGui -I${_QTDIR}/include/Qt3Support" \
+                    --prefix=${_AQBANKING_UDIR}
+                make qt4-port
+                make clean
+            else
+                ./configure \
+                    --with-gwen-dir=${_GWENHYWFAR_UDIR} \
+                    --with-frontends="cbanking" \
+                    --with-backends="aqdtaus aqhbci aqofxconnect" \
+                    CPPFLAGS="${_AQ_CPPFLAGS}" \
+                    LDFLAGS="${_AQ_LDFLAGS}" \
+                    --prefix=${_AQBANKING_UDIR}
+            fi
+            make
+            make install
+        qpopd
+        qpushd ${_AQBANKING_UDIR}/bin
+            exetype aqbanking-tool.exe console
+            exetype aqhbci-tool.exe console
+        qpopd
         ${PKG_CONFIG} --exists aqbanking || die "AqBanking not installed correctly"
     fi
 }
@@ -919,11 +932,11 @@ function svn_up() {
     # latest revision that should compile, use HEAD or vwxyz
     SVN_REV="HEAD"
     if [ -x .svn ]; then
-	setup "svn update in ${REPOS_DIR}"
-	svn up -r ${SVN_REV}
+        setup "svn update in ${REPOS_DIR}"
+        svn up -r ${SVN_REV}
     else
-	setup svn co
-	svn co -r ${SVN_REV} $REPOS_URL .
+        setup svn co
+        svn co -r ${SVN_REV} $REPOS_URL .
     fi
     qpopd
 }
@@ -944,7 +957,7 @@ function inst_gnucash() {
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
     qpushd $REPOS_DIR
-        if test "x$cross_compile" = xyes ; then
+        if [ "$CROSS_COMPILE" = "yes" ]; then
             # Set these variables manually because of cross-compiling
             export GUILE_LIBS="${GUILE_LDFLAGS} -lguile -lguile-ltdl"
             export GUILE_INCS="${GUILE_CPPFLAGS}"
@@ -959,12 +972,12 @@ function inst_gnucash() {
     qpopd
 
     qpushd $BUILD_DIR
-        $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} ${TARGET_XCOMPILE} \
+        $_REL_REPOS_UDIR/configure ${HOST_XCOMPILE} \
             --prefix=$_INSTALL_WFSDIR \
             --enable-debug \
             --enable-schemas-install=no \
-	    ${LIBOFX_OPTIONS} \
-	    ${AQBANKING_OPTIONS} \
+            ${LIBOFX_OPTIONS} \
+            ${AQBANKING_OPTIONS} \
             --enable-binreloc \
             --enable-locale-specific-tax \
             CPPFLAGS="${AUTOTOOLS_CPPFLAGS} ${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS} ${GUILE_CPPFLAGS} ${KTOBLZCHECK_CPPFLAGS} ${HH_CPPFLAGS} -D_WIN32" \
@@ -1081,37 +1094,37 @@ function finish() {
     setup Finish...
     _NEW=x
     for _ENV in $ENV_VARS; do
-	_ADDS=`eval echo '"\$'"${_ENV}"'_ADDS"'`
-	if [ "$_ADDS" ]; then
-	    if [ "$_NEW" ]; then
-		echo
-		echo "Environment variables changed, please do the following"
-		echo
-		[ -d /etc/profile.d ] || echo "mkdir -p /etc/profile.d"
-		_NEW=
-	    fi
-	    _VAL=`eval echo '"$'"${_ENV}_BASE"'"'`
-	    if [ "$_VAL" ]; then
-		_CHANGE="export ${_ENV}=\"${_ADDS}"'$'"${_ENV}\""
-	    else
-		_CHANGE="export ${_ENV}=\"${_ADDS}\""
-	    fi
-	    echo $_CHANGE
-	    echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
-	fi
+        _ADDS=`eval echo '"\$'"${_ENV}"'_ADDS"'`
+        if [ "$_ADDS" ]; then
+            if [ "$_NEW" ]; then
+                echo
+                echo "Environment variables changed, please do the following"
+                echo
+                [ -d /etc/profile.d ] || echo "mkdir -p /etc/profile.d"
+                _NEW=
+            fi
+            _VAL=`eval echo '"$'"${_ENV}_BASE"'"'`
+            if [ "$_VAL" ]; then
+                _CHANGE="export ${_ENV}=\"${_ADDS}"'$'"${_ENV}\""
+            else
+                _CHANGE="export ${_ENV}=\"${_ADDS}\""
+            fi
+            echo $_CHANGE
+            echo echo "'${_CHANGE}' >> /etc/profile.d/installer.sh"
+        fi
     done
-    if test "x$cross_compile" = "xyes" ; then
-	echo "You might want to create a binary tarball now as follows:"
-	qpushd $GLOBAL_DIR
-	echo tar -czf $HOME/gnucash-fullbin.tar.gz --anchored \
-	    --exclude='*.a' --exclude='*.o' --exclude='*.h' \
-	    --exclude='*.info' --exclude='*.html' \
-	    --exclude='*include/*' --exclude='*gtk-doc*' \
-	    --exclude='bin*' \
-	    --exclude='mingw32/*' --exclude='*bin/mingw32-*' \
-	    --exclude='gnucash-trunk*' \
-	    *
-	qpopd
+    if [ "$CROSS_COMPILE" = "yes" ]; then
+        echo "You might want to create a binary tarball now as follows:"
+        qpushd $GLOBAL_DIR
+        echo tar -czf $HOME/gnucash-fullbin.tar.gz --anchored \
+            --exclude='*.a' --exclude='*.o' --exclude='*.h' \
+            --exclude='*.info' --exclude='*.html' \
+            --exclude='*include/*' --exclude='*gtk-doc*' \
+            --exclude='bin*' \
+            --exclude='mingw32/*' --exclude='*bin/mingw32-*' \
+            --exclude='gnucash-trunk*' \
+            *
+        qpopd
     fi
 }
 
@@ -1125,5 +1138,5 @@ qpopd
 
 ### Local Variables: ***
 ### sh-basic-offset: 4 ***
-### tab-width: 8 ***
+### indent-tabs-mode: nil ***
 ### End: ***

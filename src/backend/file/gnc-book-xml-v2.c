@@ -101,17 +101,7 @@ xmlNodePtr
 gnc_book_dom_tree_create(QofBook *book)
 {
     xmlNodePtr ret;
-    gboolean allow_incompat;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    gboolean allow_incompat = TRUE;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);

@@ -29,6 +29,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifndef HAVE_STRPTIME
+#    include "strptime.h"
+#endif
 
 #include "qof.h"
 #include "engine-helpers.h"
@@ -1278,9 +1281,10 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
     errno = 0;
   }
 
-  if (kill_it) {
+  if (kill_it && !proc->dead) {
     /* give it a chance to die */
-    g_main_context_iteration (NULL, FALSE);
+    while (g_main_context_iteration (NULL, FALSE) && !proc->dead)
+      ;
     if (!proc->dead)
       gnc_gpid_kill (proc->pid);
   }
@@ -1290,4 +1294,18 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
     proc->detached = TRUE;
   else
     g_free (proc);
+}
+
+
+time_t
+gnc_parse_time_to_timet(const gchar *s, const gchar *format)
+{
+  struct tm tm;
+
+  g_return_val_if_fail(s && format, -1);
+
+  if (!strptime(s, format, &tm))
+    return -1;
+
+  return mktime(&tm);
 }

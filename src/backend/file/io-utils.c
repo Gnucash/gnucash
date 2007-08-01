@@ -74,17 +74,7 @@ void
 write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd)
 {
     GList *descendants, *node;
-    gboolean allow_incompat = FALSE;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    gboolean allow_incompat = TRUE;
 
     if (allow_incompat)
       write_one_account(out, root, gd, allow_incompat);

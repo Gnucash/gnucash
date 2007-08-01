@@ -1414,6 +1414,7 @@ gnc_ui_new_account_window_internal (QofBook *book,
   gnc_commodity *commodity, *parent_commodity;
   AccountWindow *aw;
   Account *account;
+  GList *list;
 
   g_return_val_if_fail(book, NULL);
 
@@ -1422,6 +1423,10 @@ gnc_ui_new_account_window_internal (QofBook *book,
   aw->book = book;
   aw->modal = modal;
   aw->dialog_type = NEW_ACCOUNT;
+
+  aw->valid_types = 0;
+  for (list = valid_types; list; list = list->next)
+    aw->valid_types |= (1 << GPOINTER_TO_INT (list->data));
 
   account = xaccMallocAccount (book);
   aw->account = *xaccAccountGetGUID (account);

@@ -176,14 +176,14 @@ create_sx_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-static void
-commit_sx( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_schedxaction( GncGdaBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
 
     (void)gnc_gda_do_db_operation( be,
-                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         SCHEDXACTION_TABLE,
                         /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx,
                         col_table );
@@ -192,7 +192,7 @@ commit_sx( GncGdaBackend* be, QofInstance* inst )
     guid = qof_instance_get_guid( inst );
 
     // Now, commit any slots
-    if( !inst->do_free ) {
+    if( !qof_instance_get_destroying(inst) ) {
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {
         gnc_gda_slots_delete( be, guid );
@@ -207,7 +207,7 @@ gnc_gda_init_schedxaction_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_SCHEDXACTION,
-        commit_sx,                /* commit */
+        gnc_gda_save_schedxaction,                /* commit */
         load_all_sxes,                /* initial_load */
         create_sx_tables        /* create_tables */
     };

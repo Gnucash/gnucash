@@ -132,15 +132,17 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "DtausImportAction", GTK_STOCK_CONVERT, N_("Import _DTAUS"), NULL,
     N_("Import a DTAUS file into GnuCash"),
     G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_import) },
+#ifdef CSV_IMPORT_FUNCTIONAL
   { "CsvImportAction", GTK_STOCK_CONVERT, N_("Import _CSV"), NULL,
     N_("Import a CSV file into GnuCash"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_import) },
-  { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
-    N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
-    G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_importsend) },
   { "CsvImportSendAction", GTK_STOCK_CONVERT, N_("Import CSV and s_end..."), NULL,
     N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_csv_importsend) },
+#endif
+  { "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
+    N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
+    G_CALLBACK (gnc_plugin_hbci_cmd_dtaus_importsend) },
 
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);

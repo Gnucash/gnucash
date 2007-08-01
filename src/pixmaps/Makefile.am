@@ -30,6 +30,7 @@ gncpixmap_DATA = \
   gnucash-icon.ico \
   gnucash-icon-16x16.png \
   gnucash-icon-32x32.png \
+  gnucash-icon-48x48.bmp \
   gnucash-icon-48x48.png \
   gnucash_splash.png \
   stock_split_title.png \

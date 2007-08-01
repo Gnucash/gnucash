@@ -331,17 +331,8 @@ new, totally cool report, consult the mailing list %s.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (gnc:html-markup/format
-          (_ "For details on subscribing to that list, see %s.")
-          (gnc:html-markup-anchor
-           "http://www.gnucash.org"
-           (gnc:html-markup-tt
-            "www.gnucash.org")))
-         (gnc:html-markup/format
-          (_ "You can learn more about writing scheme using this %s.")
-          (gnc:html-markup-anchor
-           "http://www.scheme.com/tspl2d/index.html"
-           (_ "online book"))))
+         (_ "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;.")
+         (_ "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."))
 
         (gnc:html-markup-p
          (gnc:html-markup/format

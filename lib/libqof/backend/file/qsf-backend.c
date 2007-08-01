@@ -235,18 +235,10 @@ qsf_session_begin(QofBackend *be, QofSession *session, const gchar *book_path,
 		qof_backend_set_error(be, ERR_BACKEND_NO_ERR);
 		return;
 	}
-	p = strchr (book_path, ':');
-	if (p) {
-		path = g_strdup (book_path);
-		if (!g_ascii_strncasecmp(path, "file:", 5)) {
-			p = g_new(gchar, strlen(path) - 5 + 1);
-			strcpy(p, path + 5);
-		}
-		qsf_be->fullpath = g_strdup(p);
-		g_free (path);
-	}
-	else {
-		qsf_be->fullpath = g_strdup(book_path);
+	if (g_str_has_prefix (book_path, "file:")) {
+		qsf_be->fullpath = g_strdup (book_path + 5);
+	} else {
+		qsf_be->fullpath = g_strdup (book_path);
 	}
 	if(create_if_nonexistent)
 	{
@@ -717,6 +709,7 @@ reference_list_lookup(gpointer data, gpointer user_data)
 	ref_param = (QofParam*)data;
 	object_node = params->output_node;
 	ent = params->qsf_ent;
+	g_return_if_fail(ent);
 	ns = params->qsf_ns;
 	starter = g_new(QofInstanceReference, 1);
 	starter->ent_guid = qof_instance_get_guid(ent);
@@ -774,6 +767,7 @@ qsf_entity_foreach(QofInstance *ent, gpointer data)
 	const GUID *cm_guid;
 	gchar       cm_sa[GUID_ENCODING_LENGTH + 1];
 
+	g_return_if_fail(ent != NULL);
 	g_return_if_fail(data != NULL);
 	params = (qsf_param*)data;
 	param_count = ++params->count;
@@ -1070,7 +1064,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	gint32         cm_i32;
 	gint64         cm_i64;
 	Timespec       cm_date;
-	gchar          cm_char,    (*char_getter)  (xmlNodePtr);
+	gchar          *cm_char,  *(*char_getter)  (xmlNodePtr);
 	GUID           *cm_guid;
 	KvpFrame       *cm_kvp;
 	KvpValue       *cm_value;
@@ -1209,7 +1203,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		reference = g_new0(QofInstanceReference, 1);
 		reference->type = g_strdup(qsf_ent->e_type);
 		reference->ref_guid = cm_guid;
-		reference->ent_guid = &qsf_ent->guid;
+		reference->ent_guid = qof_instance_get_guid(qsf_ent);
 		copy_param = g_new0(QofParam, 1);
 		copy_param->param_name = g_strdup(cm_param->param_name);
 		copy_param->param_type = g_strdup(cm_param->param_type);
@@ -1217,10 +1211,11 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		params->referenceList = g_list_append(params->referenceList, reference);
 	}
 	if(safe_strcmp(qof_type, QOF_TYPE_CHAR) == 0) {
-		char_getter = (gchar (*)(xmlNodePtr))xmlNodeGetContent;
+		char_getter = (gchar * (*)(xmlNodePtr))xmlNodeGetContent;
 		cm_char = char_getter(node);
 		char_setter = (void(*)(QofInstance*, gchar))cm_setter;
-		if(char_setter != NULL) { char_setter(qsf_ent, cm_char); }
+		if(char_setter != NULL) { char_setter(qsf_ent, *cm_char); }
+		xmlFree(cm_char);
 	}
 }
 
@@ -1275,8 +1270,8 @@ qsf_provider_free (QofBackendProvider *prov)
 	g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init (void)
 {
 	QofBackendProvider *prov;
 
@@ -1288,6 +1283,4 @@ g_module_check_init(GModule *module)
 	prov->check_data_type = qsf_determine_file_type;
 	prov->provider_free = qsf_provider_free;
 	qof_backend_register_provider (prov);
-	g_module_make_resident (module);
-	return NULL;
 }

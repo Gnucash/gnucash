@@ -256,9 +256,11 @@ xaccTransWriteLog (Transaction *trans, char flag)
                "%s\t%s\t%s\t%s\t%c\t%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT "\t%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT "\t%s\n",
                flag,
                trans_guid_str, split_guid_str,  /* trans+split make up unique id */
-               dnow ? dnow : "",
-               dent ? dent : "", 
-               dpost ? dpost : "", 
+	       /* Note that the next three strings always exist,
+		* so we don't need to test them. */
+               dnow,
+               dent,
+               dpost,
                acc_guid_str,
                accname ? accname : "",
                trans->num ? trans->num : "", 

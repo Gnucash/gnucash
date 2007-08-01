@@ -233,7 +233,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 void gncEntryDestroy (GncEntry *entry)
 {
   if (!entry) return;
-  entry->inst.do_free = TRUE;
+  qof_instance_set_destroying(entry, TRUE);
   gncEntryCommitEdit(entry);
 }
 
@@ -1181,14 +1181,14 @@ gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv)
 gboolean gncEntryIsOpen (GncEntry *entry)
 {
   if (!entry) return FALSE;
-  return (entry->inst.editlevel > 0);
+  return (qof_instance_get_editlevel(entry) > 0);
 }
 
 /* ================================================================ */
 
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  QOF_BEGIN_EDIT (&entry->inst);
+  qof_begin_edit(&entry->inst);
 }
 
 static void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
@@ -1231,7 +1231,7 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   compare = safe_strcmp (a->action, b->action);
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.guid), &(b->inst.guid));
+  return qof_instance_guid_compare(a, b);
 }
 
 /* ============================================================= */

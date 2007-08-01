@@ -233,10 +233,10 @@ gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 
   ENTER("chooser %p, option %p", chooser, option);
   filename = gtk_file_chooser_get_preview_filename(chooser);
-  DEBUG("chooser preview name is %s.", filename);
+  DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
   if (filename == NULL) {
     filename = g_strdup(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION));
-    DEBUG("using last selection of %s", filename);
+    DEBUG("using last selection of %s", filename ? filename : "(null)");
     if (filename == NULL) {
       LEAVE("no usable name");
       return;
@@ -1485,6 +1485,8 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
 {
   if (!win) return;
 
+  gnc_unregister_gui_component_by_data(DIALOG_OPTIONS_CM_CLASS, win);
+
   gtk_widget_destroy(win->dialog);
 
   if(win->tips) {
@@ -2496,7 +2498,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
       test = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
       g_object_set_data_full(G_OBJECT(widget), LAST_SELECTION,
 			     g_strdup(string), g_free);
-      DEBUG("Set %s, retrieved %s", string, test);
+      DEBUG("Set %s, retrieved %s", string, test ? test : "(null)");
       gnc_image_option_update_preview_cb(GTK_FILE_CHOOSER(widget), option);
     }
     LEAVE("FALSE");
@@ -2515,7 +2517,7 @@ static gboolean gnc_option_set_ui_value_budget(
     GtkTreeModel *tm;
     GtkTreeIter iter;
 
-    if (value != SCM_BOOL_F) {
+    if (!SCM_NULLP(value)) {
         if (!SWIG_IsPointer(value))
             scm_misc_error("gnc_option_set_ui_value_budget",
                            "Option Value not a wcp.", value);

@@ -116,7 +116,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
 void gncEmployeeDestroy (GncEmployee *employee)
 {
   if (!employee) return;
-  employee->inst.do_free = TRUE;
+  qof_instance_set_destroying(employee, TRUE);
   gncEmployeeCommitEdit(employee);
 }
 
@@ -362,12 +362,13 @@ Account * gncEmployeeGetCCard (GncEmployee *employee)
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;
-  return (employee->inst.dirty || gncAddressIsDirty (employee->addr));
+  return (qof_instance_get_dirty_flag(employee)
+          || gncAddressIsDirty (employee->addr));
 }
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  QOF_BEGIN_EDIT (&employee->inst);
+  qof_begin_edit(&employee->inst);
 }
 
 static void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)

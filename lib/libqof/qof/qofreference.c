@@ -39,7 +39,7 @@ entity_set_reference_cb(QofInstance *ent, gpointer user_data)
 	QofBook *partial_book;
 	
 	partial_book = (QofBook*)user_data;
-	g_return_if_fail(partial_book || ent);
+	g_return_if_fail(partial_book && ent);
 	reference = NULL;
 	coll = NULL;
 	book_ref_list = qof_book_get_data(partial_book, ENTITYREFERENCE);
@@ -122,12 +122,13 @@ create_reference(QofInstance *ent, const QofParam *param)
 	char                cm_sa[GUID_ENCODING_LENGTH + 1];
 	gchar              *cm_string;
 
+	g_return_val_if_fail(ent, NULL);
 	ref_ent = QOF_INSTANCE(param->param_getfcn(ent, param));
 	if(!ref_ent) { return NULL; }
 	reference = g_new0(QofInstanceReference, 1);
 	reference->type = ent->e_type;
 	reference->ref_guid = g_new(GUID, 1);
-	reference->ent_guid = &ent->guid;
+	reference->ent_guid = qof_instance_get_guid(ent);
 	if(qof_object_is_choice(ent->e_type)) 
 	{ 
 		reference->choice_type = ref_ent->e_type; 

@@ -84,8 +84,8 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.0.5",
-	    _("The next stable version will be "), "GnuCash 2.2");
+	    _("The last stable version was "), "GnuCash 2.2.0",
+	    _("The next stable version will be "), "GnuCash 2.4");
 }
 
 /* Priority of paths: The default is set at build time.  It may be
@@ -109,6 +109,15 @@ environment_override()
         help_path = g_strdup(path);
     if ((path = g_getenv("GNC_GCONF_PATH")))
         gconf_path = g_strdup(path);
+#ifdef G_OS_WIN32
+    {
+        /* unhide files without extension */
+        gchar *pathext = g_build_path(";", ".", g_getenv("PATHEXT"),
+                                      (gchar*) NULL);
+        g_setenv("PATHEXT", pathext, TRUE);
+        g_free(pathext);
+    }
+#endif
 }
 
 static gboolean
@@ -550,27 +559,34 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
-    gchar *localedir;
-    GError *binreloc_error = NULL;
-
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
     g_thread_init(NULL);
 
-    /* Init binreloc */
-    if (!gbr_init (&binreloc_error) ) {
-      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
+#ifdef ENABLE_BINRELOC
+    {
+        GError *binreloc_error = NULL;
+        if (!gbr_init(&binreloc_error)) {
+            g_print("main: Error on gbr_init: %s\n", binreloc_error->message);
+            g_error_free(binreloc_error);
+        }
     }
-    localedir = gnc_path_get_localedir ();
-#ifdef HAVE_GETTEXT
-    /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
-       via gtk_init(). */
-    bindtextdomain (GETTEXT_PACKAGE, localedir);
-    textdomain (GETTEXT_PACKAGE);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+#else
+    g_message("main: binreloc relocation support was disabled at configure time.\n");
 #endif
-    g_free (localedir);
+
+#ifdef HAVE_GETTEXT
+    {
+        gchar *localedir = gnc_path_get_localedir();
+        /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()
+           via gtk_init(). */
+        bindtextdomain(GETTEXT_PACKAGE, localedir);
+        textdomain(GETTEXT_PACKAGE);
+        bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+        g_free(localedir);
+    }
+#endif
 
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);

@@ -42,8 +42,6 @@ struct gnc_price_s
   char *source;
   char *type;
   gnc_numeric value;
-  gint32   version;              /* version number, for syncing with backend */
-  guint32  version_check;        /* data aging timestamp */
 
   /* 'private' object management fields */
   guint32  refcount;             /* garbage collection reference count */

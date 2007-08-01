@@ -215,6 +215,8 @@ qof_log_prettify (const char *name)
     *(p+2) = 0x0;
   }
   else { strcpy (&buffer[QOF_LOG_MAX_CHARS - 6], "...()"); }
+  if (function_buffer)
+    g_free(function_buffer);
   function_buffer = g_strdup(buffer);
   g_free(buffer);
   return function_buffer;
@@ -272,6 +274,7 @@ qof_log_parse_log_config(const char *filename)
                g_debug("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
                qof_log_set_level(logger_name, level);
 
+	       g_free(logger_name);
                g_free(level_str);
           }
           g_strfreev(levels);

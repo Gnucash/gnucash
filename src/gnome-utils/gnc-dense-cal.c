@@ -432,6 +432,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->week_starts_monday = 0;
     {
         gchar **parts;
+	/* Translators: This string should not have shown up in
+	   gnucash.pot as it is looked up in the "gtk20" translation
+	   domain. You can safely ignore this string and leave it
+	   untranslated. */
         parts = g_strsplit(dgettext("gtk20", "calendar:week_start:0"),
                            ":", 3);
         if (parts[0] != NULL
@@ -716,23 +720,23 @@ recompute_x_y_scales(GncDenseCal *dcal)
      * lets us draw larger than our area. */
     denom = 7 * num_cols(dcal);
     g_assert(denom != 0);
-    dcal->x_scale = (gint)((width
+    dcal->x_scale = ((gint)(width
                             - (dcal->leftPadding * 2)
                             - (num_cols(dcal) * ((8 * MINOR_BORDER_SIZE)
                                                  + dcal->label_width))
                             - ((num_cols(dcal)-1) * COL_BORDER_SIZE))
-                           / denom);
+                     / denom);
     dcal->x_scale = MAX(dcal->x_scale, dcal->min_x_scale);
 
     denom = num_weeks_per_col(dcal);
     g_assert(denom != 0);
-    dcal->y_scale = (gint)((height
+    dcal->y_scale = ((gint)(height
                             - (dcal->topPadding * 2)
                             - MINOR_BORDER_SIZE
                             - dcal->dayLabelHeight
                             - (num_weeks_per_col(dcal)-1
                                * MINOR_BORDER_SIZE))
-                           / denom);
+                     / denom);
     dcal->y_scale = MAX(dcal->y_scale, dcal->min_y_scale);
 
     _gdc_set_cal_min_size_req(dcal);
@@ -883,7 +887,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 rect = (GdkRectangle*)mcListIter->data;
                 gdk_draw_rectangle(dcal->drawbuf, gc,
                                    TRUE, rect->x, rect->y,
-                                   rect->width - 2, rect->height);
+                                   rect->width, rect->height);
             }
             g_list_foreach(mcList, free_rect, NULL);
             g_list_free(mcList);
@@ -953,7 +957,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             + (i * (col_width(dcal)+COL_BORDER_SIZE))
             + dcal->label_width;
         y = dcal->topPadding + dcal->dayLabelHeight;
-        w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width - 2;
+        w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width;
         h = col_height(dcal);
 
         /* draw the outside border [inside the month labels] */
@@ -1071,6 +1075,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                                widget->allocation.y,
                                widget->allocation.width,
                                widget->allocation.height);
+
+    g_object_unref(layout);
 }
 
 static void
@@ -1642,7 +1648,7 @@ gdc_get_doc_offset(GncDenseCal *dcal, GDate *d)
     toRet = g_date_get_julian(d) - g_date_get_julian(&soc);
     /* ensure not after end of visible calendar. */
     g_date_add_months(&soc, dcal->numMonths);
-    if (g_date_get_julian(d) > g_date_get_julian(&soc))
+    if (g_date_get_julian(d) >= g_date_get_julian(&soc))
         return -1;
     /* return pre-computed value. */
     return toRet;
@@ -1828,7 +1834,7 @@ gdc_mark_remove(GncDenseCal *dcal, guint mark_to_remove)
     }
     if (iter == NULL)
     {
-        g_warning("couldn't find tag [%d]", mark_to_remove);
+        g_message("couldn't find tag [%d]", mark_to_remove);
         return;
     }
     if (mark_data == NULL)

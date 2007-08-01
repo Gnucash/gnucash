@@ -31,13 +31,9 @@
 /* to be renamed qofdate.c */
 #include <ctype.h>
 
-#ifdef HAVE_LANGINFO_H
-#define HAVE_LANGINFO_D_FMT 1
-#endif
-
-#ifdef HAVE_LANGINFO_D_FMT
-#include <langinfo.h>
-#endif
+#ifdef HAVE_LANGINFO_D_FMT 
+#  include <langinfo.h> 
+#endif 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,12 +58,15 @@
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #  define GNC_D_T_FMT (nl_langinfo (D_T_FMT))
 #  define GNC_T_FMT (nl_langinfo (T_FMT))
+#elif defined(G_OS_WIN32)
+#  define GNC_D_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_DATE))
+#  define GNC_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_TIME))
+#  define GNC_D_T_FMT (qof_win32_get_time_format(QOF_WIN32_PICTURE_DATETIME))
 #else
-#  define GNC_D_FMT "%Y-%m-%d"
-#  define GNC_D_T_FMT "%Y-%m-%d %r"
-#  define GNC_T_FMT "%r"
+#  define GNC_D_FMT "%Y-%m-%d" 
+#  define GNC_D_T_FMT "%Y-%m-%d %r" 
+#  define GNC_T_FMT "%r" 
 #endif
-
 
 /* This is now user configured through the gnome options system() */
 static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
@@ -633,7 +632,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 
    /* Use strtok to find delimiters */
    if (tmp) {
-     static char *delims = ".,-+/\\() ";
+     static char *delims = ".,-+/\\()년월年月 ";
 
       first_field = strtok (tmp, delims);
       if (first_field) {

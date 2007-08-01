@@ -56,7 +56,7 @@ typedef struct FileBackend_struct FileBackend;
 // This is now a static inside the module
 //QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+G_MODULE_EXPORT void
+qof_backend_module_init(void);
 
 #endif /* GNC_BACKEND_FILE_H_ */

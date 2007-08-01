@@ -81,23 +81,10 @@
 #include <string.h>
 #include <time.h>
 
-#ifdef HAVE_LANGINFO_D_FMT
-#include <langinfo.h>
-#endif
-
 #include "FreqSpecP.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.freqspec"
-
-/* 
- *  FIXME: should be in a header file
- */
-#ifdef HAVE_LANGINFO_D_FMT
-#  define GNC_D_FMT (nl_langinfo (D_FMT))
-#else
-#  define GNC_D_FMT "%Y-%m-%d"
-#endif
  
 #define GDATE_STRING_SIZE 25
 #define GDATE_STRING_BUF_SIZE (GDATE_STRING_SIZE + 1)
@@ -745,8 +732,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
       tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
       /* this is now a GDate. */
       g_date_strftime( tmpStr, GDATE_STRING_SIZE,
-             GNC_D_FMT,
-             &fs->s.once.date );
+                       "%x",
+                       &fs->s.once.date );
       /* %s is the strftime-string of the one-time date. */
       snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Once: %s"), tmpStr );
       g_free( tmpStr );

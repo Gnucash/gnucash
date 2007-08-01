@@ -40,6 +40,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   druid-gnc-xml-import.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
+  gnc-autosave.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
@@ -162,6 +163,7 @@ gncinclude_HEADERS = \
   window-main-summarybar.h
 
 noinst_HEADERS = \
+  gnc-autosave.h \
   gnc-druid-gnome.h \
   gnc-druid-provider-edge-gnome.h \
   gnc-druid-provider-file-gnome.h \

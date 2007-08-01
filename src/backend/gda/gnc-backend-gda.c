@@ -37,6 +37,7 @@
 #include "qofquerycore-p.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
+#include "SX-book.h"
 
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
@@ -51,6 +52,8 @@
 #include "gnc-schedxaction-gda.h"
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
+
+#include "gnc-backend-gda.h"
 
 static const gchar* convert_search_obj( QofIdType objType );
 static void gnc_gda_init_object_handlers( void );
@@ -306,8 +309,18 @@ save_accounts( GncGdaBackend* be, QofBook* book )
 }
 
 static void
+write_budget( QofInstance* ent, gpointer data )
+{
+    GncGdaBackend* be = (GncGdaBackend*)data;
+
+    gnc_gda_save_budget( be, ent );
+}
+
+static void
 save_budgets( GncGdaBackend* be, QofBook* book )
 {
+    qof_collection_foreach( qof_book_get_collection( book, GNC_ID_BUDGET ),
+                            write_budget, be );
 }
 
 static gboolean
@@ -349,11 +362,27 @@ save_transactions( GncGdaBackend* be, QofBook* book )
 static void
 save_template_transactions( GncGdaBackend* be, QofBook* book )
 {
+    Account* ra;
+
+    ra = gnc_book_get_template_root( book );
+    if( gnc_account_n_descendants( ra ) > 0 ) {
+        save_account_tree( be, ra );
+        xaccAccountTreeForEachTransaction( ra, save_tx, (gpointer)be );
+    }
 }
 
 static void
 save_schedXactions( GncGdaBackend* be, QofBook* book )
 {
+    GList* schedXactions;
+    SchedXaction* tmpSX;
+
+    schedXactions = gnc_book_get_schedxactions( book )->sx_list;
+
+    for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
+        tmpSX = schedXactions->data;
+	gnc_gda_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
+    }
 }
 
 static void
@@ -471,13 +500,13 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
              (inst->e_type ? inst->e_type : "(null)"),
-             inst->dirty, inst->do_free );
+             qof_instance_get_dirty_flag(inst), qof_instance_get_destroying(inst) );
 
-    if( !inst->dirty && !inst->do_free && GNC_IS_TRANS(inst) ) {
+    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) && GNC_IS_TRANS(inst) ) {
         gnc_gda_transaction_commit_splits( be, GNC_TRANS(inst) );
     }
 
-    if( !inst->dirty && !inst->do_free ) return;
+    if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) return;
 
     be_data.ok = FALSE;
     be_data.be = be;
@@ -490,7 +519,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
         return;
     }
 
-    inst->dirty = FALSE;
+    qof_instance_mark_clean(inst);
     qof_book_mark_saved( be->primary_book );
 }
 /* ---------------------------------------------------------------------- */
@@ -831,8 +860,8 @@ gnc_gda_provider_free (QofBackendProvider *prov)
     g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
     QofBackendProvider *prov;
 
@@ -844,8 +873,6 @@ g_module_check_init(GModule *module)
     prov->provider_free = gnc_gda_provider_free;
     prov->check_data_type = NULL;
     qof_backend_register_provider (prov);
-
-    return NULL;
 }
 
 /* ========================== END OF FILE ===================== */

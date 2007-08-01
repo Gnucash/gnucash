@@ -71,8 +71,8 @@
                  ;; pick the 1-char tag off from the remainder of the line 
                  (set! tag (string-ref line 0))
                  (set! value (substring line 1))
-		 (gnc-utf8-strip-invalid value) ;; changes value in-place
-                 
+                 (set! value (gnc-utf8-strip-invalid-strdup value))
+
                  ;; now do something with the line 
                  (if
                   (eq? tag #\!)

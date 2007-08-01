@@ -155,24 +155,14 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     GDate	*date;
     gint        instCount;
     const GUID        *templ_acc_guid;
-    gboolean allow_incompat = FALSE;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    gboolean allow_2_2_incompat = TRUE;
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
     ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
 
-    if (allow_incompat)
+    if (allow_2_2_incompat)
         xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version2_string);
     else
         xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version_string);
@@ -183,7 +173,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
 
-    if (allow_incompat)
+    if (allow_2_2_incompat)
     {
         xmlNewTextChild( ret, NULL, BAD_CAST SX_ENABLED,
                          BAD_CAST ( sx->enabled ? "y" : "n" ) );
@@ -229,14 +219,17 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
 
-    /* output freq spec */
-    fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
-    xmlAddChild( fsNode,
-                 gnc_freqSpec_dom_tree_create(
+    if (!allow_2_2_incompat)
+    {
+        /* output freq spec */
+        fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
+        xmlAddChild( fsNode,
+                     gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
-    xmlAddChild( ret, fsNode );
+        xmlAddChild( ret, fsNode );
+    }
 
-    if (allow_incompat)
+    if (allow_2_2_incompat)
     {
         xmlNodePtr schedule_node = xmlNewNode(NULL, "sx:schedule");
         GList *schedule = gnc_sx_get_schedule(sx);
@@ -463,6 +456,7 @@ _fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
         g_date_clear(&next, 1);
 
         recurrenceNextInstance(r, &start, &next);
+        g_return_if_fail(g_date_valid(&next));
 
         {
             gchar date_str[128];
@@ -539,7 +533,7 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 
     if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
         return FALSE;
-    g_return_val_if_fail(schedule, FALSE);
+    // g_return_val_if_fail(schedule, FALSE);
     g_debug("setting freshly-parsed schedule: [%s]", recurrenceListToString(schedule));
     gnc_sx_set_schedule(parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;

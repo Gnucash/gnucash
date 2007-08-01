@@ -150,7 +150,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 void gncInvoiceDestroy (GncInvoice *invoice)
 {
   if (!invoice) return;
-  invoice->inst.do_free = TRUE;
+  qof_instance_set_destroying(invoice, TRUE);
   gncInvoiceCommitEdit (invoice);
 }
 
@@ -858,6 +858,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       const char * memo, gboolean accumulatesplits)
 {
   Transaction *txn;
+  QofBook *book;
   GNCLot *lot = NULL;
   GList *iter;
   GList *splitinfo = NULL;
@@ -871,6 +872,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   if (!invoice || !acc) return NULL;
 
   gncInvoiceBeginEdit (invoice);
+  book = qof_instance_get_book(invoice);
 
   /* Stabilize the Billing Terms of this invoice */
   if (invoice->terms)
@@ -903,7 +905,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Create a new lot for this invoice, if we need to do so */
   if (!lot)
-    lot = gnc_lot_new (invoice->inst.book);
+    lot = gnc_lot_new (book);
 
   type = gncInvoiceGetType (invoice);
 
@@ -913,7 +915,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   g_free (lot_title);
 
   /* Create a new transaction */
-  txn = xaccMallocTransaction (invoice->inst.book);
+  txn = xaccMallocTransaction (book);
   xaccTransBeginEdit (txn);
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
@@ -971,7 +973,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	} else {
 	  Split *split;
 
-	  split = xaccMallocSplit (invoice->inst.book);
+	  split = xaccMallocSplit (book);
 	  /* set action and memo? */
 
 	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
@@ -1002,7 +1004,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	if (ccard_acct && gncEntryGetBillPayment (entry) == GNC_PAYMENT_CARD) {
 	  Split *split;
 
-	  split = xaccMallocSplit (invoice->inst.book);
+	  split = xaccMallocSplit (book);
 	  /* set action? */
 	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
 	  xaccSplitSetAction (split, type);
@@ -1036,7 +1038,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split;
     GncAccountValue *acc_val = iter->data;
 
-    split = xaccMallocSplit (invoice->inst.book);
+    split = xaccMallocSplit (book);
     /* set action and memo? */
 
     xaccSplitSetMemo (split, memo);
@@ -1055,7 +1057,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
    * we should make that now..
    */
   if (ccard_acct && !gnc_numeric_zero_p (invoice->to_charge_amount)) {
-    Split *split = xaccMallocSplit (invoice->inst.book);
+    Split *split = xaccMallocSplit (book);
 
     /* Set memo.  action? */
     xaccSplitSetMemo (split, _("Extra to Charge Card"));
@@ -1075,7 +1077,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Now create the Posted split (which is negative -- it's a credit) */
   {
-    Split *split = xaccMallocSplit (invoice->inst.book);
+    Split *split = xaccMallocSplit (book);
 
     /* Set action/memo */
     xaccSplitSetMemo (split, memo);
@@ -1105,12 +1107,16 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* check the lot -- if we still look like a payment lot, then that
    * means we need to create a balancing split and create a new payment
    * lot for the next invoice
+   *
+   * we're looking for a positive balance for bill/AP, and a negative balance
+   * for invoice/AR.
+   * (because bill payments debit AP accounts and invoice payments
+   * credit AR accounts)
    */
   total = gnc_lot_get_balance (lot);
-  if (!reverse)
-    total = gnc_numeric_neg (total);
-
-  if (gnc_numeric_negative_p (total)) {
+  
+  if ( (gnc_numeric_negative_p (total) && reverse) || 
+       (gnc_numeric_positive_p (total) && !reverse) ) {
     Transaction *t2;
     GNCLot *lot2;
     Split *split;
@@ -1118,8 +1124,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     char *memo2 = _("Automatic Payment Forward");
     char *action2 = _("Auto Split");
 
-    t2 = xaccMallocTransaction (invoice->inst.book);
-    lot2 = gnc_lot_new (invoice->inst.book);
+    t2 = xaccMallocTransaction (book);
+    lot2 = gnc_lot_new (book);
     gncOwnerAttachToLot (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)),
 			 lot2);
     
@@ -1136,17 +1142,19 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
       xaccTransSetDatePostedTS (t2, post_date);
 
     /* Balance out this lot */
-    split = xaccMallocSplit (invoice->inst.book);
+    split = xaccMallocSplit (book);
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccAccountInsertSplit (acc, split);
     xaccTransAppendSplit (t2, split);
+    // the value of total used here is correct for both bill/AP and
+    // invoice/AR. See the comment before this if block
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
 			   invoice->currency);
     gnc_lot_add_split (lot, split);
 
     /* And apply the pre-payment to a new lot */
-    split = xaccMallocSplit (invoice->inst.book);
+    split = xaccMallocSplit (book);
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccAccountInsertSplit (acc, split);
@@ -1470,7 +1478,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  QOF_BEGIN_EDIT (&invoice->inst);
+  qof_begin_edit(&invoice->inst);
 }
 
 static void gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
@@ -1510,7 +1518,7 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
   if (compare) return compare;
 
-  return guid_compare (&(a->inst.guid), &(b->inst.guid));
+  return qof_instance_guid_compare(a, b);
 }
 
 /* ============================================================= */
@@ -1522,7 +1530,7 @@ static const char * _gncInvoicePrintable (gpointer obj)
 
   g_return_val_if_fail (invoice, NULL);
 
-  if (invoice->inst.dirty || invoice->printname == NULL) {
+  if (qof_instance_get_dirty_flag(invoice) || invoice->printname == NULL) {
     if (invoice->printname) g_free (invoice->printname);
 
     invoice->printname =

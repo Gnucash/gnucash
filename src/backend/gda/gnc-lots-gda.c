@@ -153,7 +153,7 @@ commit_lot( GncGdaBackend* be, QofInstance* inst )
     GNCLot* lot = GNC_LOT(inst);
 
     (void)gnc_gda_do_db_operation( be,
-                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
                         GNC_ID_LOT, lot,
                         col_table );

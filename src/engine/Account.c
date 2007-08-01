@@ -73,8 +73,6 @@ enum {
   PROP_END_CLEARED_BALANCE,
   PROP_END_RECONCILED_BALANCE,
 
-  PROP_ACCT_VERSION,
-  PROP_ACCT_VERSION_CHECK,
   PROP_POLICY,
   PROP_MARK,
   PROP_TAX_RELATED,
@@ -139,10 +137,6 @@ typedef struct AccountPrivate
     gnc_numeric reconciled_balance;
 
     gboolean balance_dirty;     /* balances in splits incorrect */
-
-    /* version number, used for tracking multiuser updates */
-    gint32 version;
-    guint32 version_check;  /* data aging timestamp */
 
     GList *splits;              /* list of split pointers */
     gboolean sort_dirty;        /* sort order of splits is bad */
@@ -237,8 +231,6 @@ gnc_account_init(Account* acc)
 
     priv->type = ACCT_TYPE_NONE;
 
-    priv->version = 0;
-    priv->version_check = 0;
     priv->mark = 0;
 
     priv->policy = xaccGetFIFOPolicy();
@@ -338,12 +330,6 @@ gnc_account_get_property (GObject         *object,
 	case PROP_END_RECONCILED_BALANCE:
 	    g_value_set_boxed(value, &priv->reconciled_balance);
 	    break;
-	case PROP_ACCT_VERSION:
-	    g_value_set_int(value, priv->version);
-	    break;
-	case PROP_ACCT_VERSION_CHECK:
-	    g_value_set_uint(value, priv->version_check);
-	    break;
 	case PROP_POLICY:
 	    /* MAKE THIS A BOXED VALUE */
 	    g_value_set_pointer(value, priv->policy);
@@ -420,12 +406,6 @@ gnc_account_set_property (GObject         *object,
 	case PROP_START_RECONCILED_BALANCE:
 	    number = g_value_get_boxed(value);
 	    gnc_account_set_start_reconciled_balance(account, *number);
-	    break;
-	case PROP_ACCT_VERSION:
-	    xaccAccountSetVersion(account, g_value_get_int(value));
-	    break;
-	case PROP_ACCT_VERSION_CHECK:
-	    gnc_account_set_version_check(account, g_value_get_uint(value));
 	    break;
 	case PROP_POLICY:
 	    gnc_account_set_policy(account, g_value_get_pointer(value));
@@ -691,28 +671,6 @@ gnc_account_class_init (AccountClass *klass)
 
     g_object_class_install_property
 	(gobject_class,
-	 PROP_ACCT_VERSION,
-	 g_param_spec_int ("acct-version",
-			   "Version",
-			   "The version number of the current account state.",
-			   0,
-			   G_MAXINT32,
-			   0,
-			   G_PARAM_READWRITE));
-
-    g_object_class_install_property
-	(gobject_class,
-	 PROP_ACCT_VERSION_CHECK,
-	 g_param_spec_uint ("acct-version-check",
-			    "Version Check",
-			    "The version check number of the current account state.",
-			    0,
-			    G_MAXUINT32,
-			    0,
-			    G_PARAM_READWRITE));
-
-    g_object_class_install_property
-	(gobject_class,
 	 PROP_POLICY,
 	 g_param_spec_pointer ("policy",
 			       "Policy",
@@ -767,8 +725,6 @@ xaccInitAccount (Account * acc, QofBook *book)
 {
   ENTER ("book=%p\n", book);
   qof_instance_init_data (&acc->inst, GNC_ID_ACCOUNT, book);
-
-  acc->idata = 0;
 
   LEAVE ("account=%p\n", acc);
 }
@@ -949,7 +905,7 @@ xaccFreeOneChildAccount (Account *acc, gpointer dummy)
 {
     /* FIXME: this code is kind of hacky.  actually, all this code
      * seems to assume that the account edit levels are all 1. */
-    if (acc->inst.editlevel == 0)
+    if (qof_instance_get_editlevel(acc) == 0)
       xaccAccountBeginEdit(acc);
     xaccAccountDestroy(acc);
 }
@@ -1021,7 +977,7 @@ xaccFreeAccount (Account *acc)
     PERR (" instead of calling xaccFreeAccount(), please call \n"
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
   
-    acc->inst.editlevel = 0;
+    qof_instance_reset_editlevel(acc);
 
     slist = g_list_copy(priv->splits);
     for (lp = slist; lp; lp = lp->next) {
@@ -1050,7 +1006,6 @@ xaccFreeAccount (Account *acc)
   priv->type = ACCT_TYPE_NONE;
   priv->commodity = NULL;
 
-  priv->version = 0;
   priv->balance_dirty = FALSE;
   priv->sort_dirty = FALSE;
 
@@ -1106,6 +1061,7 @@ void
 xaccAccountCommitEdit (Account *acc) 
 {
   AccountPrivate *priv;
+  QofBook *book;
 
   g_return_if_fail(acc);
   if (!qof_commit_edit(&acc->inst)) return;
@@ -1113,12 +1069,12 @@ xaccAccountCommitEdit (Account *acc)
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
   priv = GET_PRIVATE(acc);
-  if (acc->inst.do_free)
+  if (qof_instance_get_destroying(acc))
   {
     GList *lp, *slist;
     QofCollection *col;
  
-    acc->inst.editlevel++;
+    qof_instance_increase_editlevel(acc);
 
     /* First, recursively free children */
     xaccFreeAccountChildren(acc);
@@ -1141,8 +1097,9 @@ xaccAccountCommitEdit (Account *acc)
        g_assert(priv->splits == NULL || qof_book_shutting_down(acc->inst.book));
     */
 
-    if (!qof_book_shutting_down(acc->inst.book)) {
-      col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
+    book = qof_instance_get_book(acc);
+    if (!qof_book_shutting_down(book)) {
+      col = qof_book_get_collection(book, GNC_ID_TRANS);
       qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
     }
 
@@ -1156,7 +1113,7 @@ xaccAccountCommitEdit (Account *acc)
     priv->lots = NULL;
 
     qof_instance_set_dirty(&acc->inst);
-    acc->inst.editlevel--;
+    qof_instance_decrease_editlevel(acc);
   }
   else 
   {
@@ -1171,60 +1128,10 @@ xaccAccountDestroy (Account *acc)
 {
   g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-  acc->inst.do_free = TRUE;
+  qof_instance_set_destroying(acc, TRUE);
 
   xaccAccountCommitEdit (acc);
 }
-
-void 
-xaccAccountSetVersion (Account *acc, gint32 vers)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version = vers;
-}
-
-gint32 
-xaccAccountGetVersion (const Account *acc)
-{
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-
-    return GET_PRIVATE(acc)->version;
-}
-
-void
-gnc_account_increment_version (Account *acc)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version++;
-}
-
-guint32
-gnc_account_get_version_check (const Account *acc)
-{
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
-
-    return GET_PRIVATE(acc)->version_check;
-}
-
-void
-gnc_account_set_version_check (Account *acc, guint32 value)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->version_check = value;
-}
-
 
 /********************************************************************\
 \********************************************************************/
@@ -1314,7 +1221,7 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
   }
 
   if(check_guids) {
-    if(!guid_equal(&aa->inst.guid, &ab->inst.guid))
+    if(qof_instance_guid_compare(aa, ab) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -1499,7 +1406,7 @@ gnc_account_set_sort_dirty (Account *acc)
 
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-    if (acc->inst.do_free)
+    if (qof_instance_get_destroying(acc))
 	return;
 
     priv = GET_PRIVATE(acc);
@@ -1520,7 +1427,7 @@ gnc_account_set_balance_dirty (Account *acc)
 
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
-    if (acc->inst.do_free)
+    if (qof_instance_get_destroying(acc))
 	return;
 
     priv = GET_PRIVATE(acc);
@@ -1558,7 +1465,7 @@ gnc_account_insert_split (Account *acc, Split *s)
     if (node)
 	return FALSE;
 
-    if (acc->inst.editlevel == 0) {
+    if (qof_instance_get_editlevel(acc) == 0) {
 	priv->splits = g_list_insert_sorted(priv->splits, s,
 					   (GCompareFunc)xaccSplitOrder);
     } else {
@@ -1610,7 +1517,7 @@ xaccAccountSortSplits (Account *acc, gboolean force)
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
 
     priv = GET_PRIVATE(acc);
-    if (!priv->sort_dirty || (!force && acc->inst.editlevel > 0))
+    if (!priv->sort_dirty || (!force && qof_instance_get_editlevel(acc) > 0))
         return;
     priv->splits = g_list_sort(priv->splits, (GCompareFunc)xaccSplitOrder);
     priv->sort_dirty = FALSE;
@@ -1816,7 +1723,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
       return;
 
   /* check for book mix-up */
-  g_return_if_fail (accfrom->inst.book == accto->inst.book);
+  g_return_if_fail (qof_instance_books_equal(accfrom, accto));
   ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
 
   xaccAccountBeginEdit(accfrom);
@@ -1892,10 +1799,10 @@ xaccAccountRecomputeBalance (Account * acc)
   if (NULL == acc) return;
 
   priv = GET_PRIVATE(acc);
-  if (acc->inst.editlevel > 0) return;
+  if (qof_instance_get_editlevel(acc) > 0) return;
   if (!priv->balance_dirty) return;
-  if (acc->inst.do_free) return;
-  if (qof_book_shutting_down(acc->inst.book)) return;
+  if (qof_instance_get_destroying(acc)) return;
+  if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 
   balance            = priv->starting_balance;
   cleared_balance    = priv->starting_cleared_balance;
@@ -2011,7 +1918,7 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     return result;
 
   /* guarantee a stable sort */
-  return guid_compare (&(aa->inst.guid), &(ab->inst.guid));
+  return qof_instance_guid_compare(aa, ab);
 }
 
 static int
@@ -2257,6 +2164,7 @@ xaccAccountGetNonStdSCU (const Account * acc)
 void 
 DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 {
+  QofBook *book;
   const char *string;
   gnc_commodity *commodity;
 
@@ -2272,7 +2180,8 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   commodity = DxaccAccountGetCurrency (acc);
   if (!commodity)
   {
-    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->inst.book), currency);
+    book = qof_instance_get_book(acc);
+    gnc_commodity_table_insert (gnc_commodity_table_get_table (book), currency);
   }
 }
 
@@ -2302,7 +2211,7 @@ gnc_account_append_child (Account *new_parent, Account *child)
   if (old_parent) {
     gnc_account_remove_child(old_parent, child);
 
-    if (old_parent->inst.book != new_parent->inst.book) {
+    if (!qof_instance_books_equal(old_parent, new_parent)) {
       /* hack alert -- this implementation is not exactly correct.
        * If the entity tables are not identical, then the 'from' book 
        * may have a different backend than the 'to' book.  This means
@@ -2317,7 +2226,8 @@ gnc_account_append_child (Account *new_parent, Account *child)
       PWARN ("reparenting accounts across books is not correctly supported\n");
 
       qof_event_gen (&child->inst, QOF_EVENT_DESTROY, NULL);
-      col = qof_book_get_collection (new_parent->inst.book, GNC_ID_ACCOUNT);
+      col = qof_book_get_collection (qof_instance_get_book(new_parent),
+                                     GNC_ID_ACCOUNT);
       qof_collection_insert_entity (col, &child->inst);
       qof_event_gen (&child->inst, QOF_EVENT_CREATE, NULL);
     }
@@ -2847,7 +2757,7 @@ DxaccAccountGetCurrency (const Account *acc)
   s = kvp_value_get_string (v);
   if (!s) return NULL;
 
-  table = gnc_commodity_table_get_table (acc->inst.book);
+  table = gnc_commodity_table_get_table (qof_instance_get_book(acc));
 
   return gnc_commodity_table_lookup_unique (table, s);
 }

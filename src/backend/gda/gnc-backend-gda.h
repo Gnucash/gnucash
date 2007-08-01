@@ -32,6 +32,7 @@
 #include "qof.h"
 #include <gmodule.h>
 
+#if 0
 #include "qofbackend-p.h"
 struct GncGdaBackend_struct
 {
@@ -69,11 +70,12 @@ typedef struct
   void		(*run_query)( GncGdaBackend* pBackend, gpointer pQuery );
   void		(*free_query)( GncGdaBackend* pBackend, gpointer pQuery );
 } GncGdaDataType_t;
+#endif
 
 // This is now a static inside the module
 //QofBackend * libgncmod_backend_gda_LTX_gnc_backend_new(void);
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+G_MODULE_EXPORT void
+qof_backend_module_init(void);
 
 #endif /* GNC_BACKEND_GDA_H_ */

@@ -98,14 +98,14 @@ static inline void maybe_resort_list (GncBillTerm *term)
   struct _book_info *bi;
 
   if (term->parent || term->invisible) return;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
 }
 
 static inline void addObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_insert_sorted (bi->terms, term,
                                        (GCompareFunc)gncBillTermCompare);
 }
@@ -113,21 +113,21 @@ static inline void addObj (GncBillTerm *term)
 static inline void remObj (GncBillTerm *term)
 {
   struct _book_info *bi;
-  bi = qof_book_get_data (term->inst.book, _GNC_MOD_NAME);
+  bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
   bi->terms = g_list_remove (bi->terms, term);
 }
 
 static inline void
 gncBillTermAddChild (GncBillTerm *table, GncBillTerm *child)
 {
-  g_return_if_fail(table->inst.do_free == FALSE);
+  g_return_if_fail(qof_instance_get_destroying(table) == FALSE);
   table->children = g_list_prepend(table->children, child);
 }
 
 static inline void
 gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child)
 {
-  if (table->inst.do_free) return;
+  if (qof_instance_get_destroying(table)) return;
   table->children = g_list_remove(table->children, child);
 }
 
@@ -172,7 +172,7 @@ void gncBillTermDestroy (GncBillTerm *term)
   if (!term) return;
   DEBUG("destroying bill term %s (%p)",
 	    guid_to_string(qof_instance_get_guid(&term->inst)), term);
-  term->inst.do_free = TRUE;
+  qof_instance_set_destroying(term, TRUE);
   qof_instance_set_dirty (&term->inst);
   gncBillTermCommitEdit (term);
 }
@@ -189,7 +189,7 @@ static void gncBillTermFree (GncBillTerm *term)
   CACHE_REMOVE (term->desc);
   remObj (term);
 
-  if (!term->inst.do_free)
+  if (!qof_instance_get_destroying(term))
     PERR("free a billterm without do_free set!");
 
   /* disconnect from parent */
@@ -421,7 +421,7 @@ void gncBillTermChanged (GncBillTerm *term)
 
 void gncBillTermBeginEdit (GncBillTerm *term)
 {
-  QOF_BEGIN_EDIT (&term->inst);
+  qof_begin_edit(&term->inst);
 }
 
 static void gncBillTermOnError (QofInstance *inst, QofBackendError errcode)
@@ -524,7 +524,7 @@ static GncBillTerm *gncBillTermCopy (GncBillTerm *term)
   GncBillTerm *t;
 
   if (!term) return NULL;
-  t = gncBillTermCreate (term->inst.book);
+  t = gncBillTermCreate (qof_instance_get_book(term));
 
   gncBillTermBeginEdit(t);
 
@@ -592,7 +592,7 @@ int gncBillTermCompare (GncBillTerm *a, GncBillTerm *b)
 gboolean gncBillTermIsDirty (GncBillTerm *term)
 {
   if (!term) return FALSE;
-  return term->inst.dirty;
+  return qof_instance_get_dirty_flag(term);
 }
 
 /********************************************************/

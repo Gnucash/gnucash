@@ -38,18 +38,18 @@ test_string_fcn (GncAddress *address, const char *message,
 static void
 test_address (void)
 {
-  QofInstance ent;
+  QofInstance *ent;
   GncAddress *address;
   QofBook *book = qof_book_new ();
 
-  ent.e_type = "asdf";
-  ent.guid = *guid_null();
+  ent = g_object_new(QOF_TYPE_INSTANCE, "guid", guid_null(), NULL);
+  ent->e_type = "asdf";
 
   /* Test creation/destruction */
   {
     do_test (gncAddressCreate (NULL,  NULL) == NULL, "address create NULL");
 
-    address = gncAddressCreate (book, &ent);
+    address = gncAddressCreate (book, ent);
     do_test (address != NULL, "address create");
 
     gncAddressBeginEdit (address);
@@ -59,7 +59,7 @@ test_address (void)
 
   /* Test setting routines */
   {
-    address = gncAddressCreate (book, &ent);
+    address = gncAddressCreate (book, ent);
     test_string_fcn (address, "Name", gncAddressSetName, gncAddressGetName);
     test_string_fcn (address, "Addr1", gncAddressSetAddr1, gncAddressGetAddr1);
     test_string_fcn (address, "Addr2", gncAddressSetAddr2, gncAddressGetAddr2);

@@ -826,10 +826,10 @@ use_existing_account_data_func(GtkTreeViewColumn *tree_column,
   switch (disposition)
   {
   case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
-    to_user = "yes";
+    to_user = _("Yes");
     break;
   case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
-    to_user = "no";
+    to_user = _("No");
     break;
   }
   

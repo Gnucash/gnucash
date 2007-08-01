@@ -440,7 +440,7 @@ gboolean gnc_lot_register (void)
           (QofAccessFunc) gnc_lot_get_notes, 
           (QofSetterFunc) gnc_lot_set_notes },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, 
-          (QofAccessFunc) qof_instance_get_guid, NULL },
+          (QofAccessFunc) qof_entity_get_guid, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, 
           (QofAccessFunc) gnc_lot_get_book, NULL },
         { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, 

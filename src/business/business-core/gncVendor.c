@@ -121,7 +121,7 @@ GncVendor *gncVendorCreate (QofBook *book)
 void gncVendorDestroy (GncVendor *vendor)
 {
   if (!vendor) return;
-  vendor->inst.do_free = TRUE;
+  qof_instance_set_destroying(vendor, TRUE);
   gncVendorCommitEdit (vendor);
 }
 
@@ -445,7 +445,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  QOF_BEGIN_EDIT (&vendor->inst);
+  qof_begin_edit(&vendor->inst);
 }
 
 static void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
@@ -504,7 +504,8 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
-  return (vendor->inst.dirty || gncAddressIsDirty (vendor->addr));
+  return (qof_instance_get_dirty_flag(vendor)
+          || gncAddressIsDirty (vendor->addr));
 }
 
 /* ============================================================== */

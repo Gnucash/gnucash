@@ -24,7 +24,11 @@
 
 #include <glib.h>
 #include "gnc-date-p.h"
+#include "strptime.h"
 #include <windows.h>
+
+static GHashTable *picture_to_format = NULL;
+G_LOCK_DEFINE_STATIC(picture_to_format);
 
 gchar *
 qof_time_format_from_utf8(const gchar *utf8_format)
@@ -78,4 +82,43 @@ qof_formatted_time_to_utf8(const gchar *locale_string)
     g_free(utf16_string);
 
     return retval;
+}
+
+const char *
+qof_win32_get_time_format(QofWin32Picture picture)
+{
+    gchar *locale_string, *format;
+    gchar *tmp1, *tmp2;
+
+    switch (picture) {
+    case QOF_WIN32_PICTURE_DATE:
+        locale_string = get_win32_locale_string(LOCALE_SSHORTDATE);
+        break;
+    case QOF_WIN32_PICTURE_TIME:
+        locale_string = get_win32_locale_string(LOCALE_STIMEFORMAT);
+        break;
+    case QOF_WIN32_PICTURE_DATETIME:
+        tmp1 = get_win32_locale_string(LOCALE_SSHORTDATE);
+        tmp2 = get_win32_locale_string(LOCALE_STIMEFORMAT);
+        locale_string = g_strconcat(tmp1, " ", tmp2);
+        g_free(tmp1);
+        g_free(tmp2);
+        break;
+    default:
+        g_assert_not_reached();
+    }
+
+    G_LOCK(picture_to_format);
+    if (!picture_to_format)
+        picture_to_format = g_hash_table_new_full(g_str_hash, g_str_equal,
+                                                  NULL, g_free);
+    format = g_hash_table_lookup(picture_to_format, locale_string);
+    if (!format) {
+        format = translate_win32_picture(locale_string);
+        g_hash_table_insert(picture_to_format, g_strdup(locale_string), format);
+    }
+    G_UNLOCK(picture_to_format);
+    g_free(locale_string);
+
+    return format;
 }

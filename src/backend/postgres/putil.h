@@ -358,7 +358,7 @@ int finishQuery(PGBackend *be);
       for (node=be->blist; node; node=node->next)                \
       {                                                          \
          book = node->data;                                      \
-         if (guid_equal (qof_instance_get_guid((QofInstance*)book), &book_guid)) break; \
+         if (guid_equal (qof_entity_get_guid((QofInstance*)book), &book_guid)) break; \
          book = NULL;                                            \
       }                                                          \
       if (!book) return data;                                    \

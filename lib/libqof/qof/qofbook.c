@@ -30,6 +30,7 @@
  * Created by Linas Vepstas December 1998
  * Copyright (c) 1998-2001,2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
 #include "config.h"
@@ -75,7 +76,6 @@ qof_book_init (QofBook *book)
   
   book->book_open = 'y';
   book->version = 0;
-  book->idata = 0;
 }
 
 QofBook *
@@ -168,7 +168,7 @@ qof_book_not_saved (const QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->inst.dirty || qof_object_is_dirty (book));
+  return(qof_instance_get_dirty_flag(book) || qof_object_is_dirty(book));
 }
 
 void
@@ -178,8 +178,8 @@ qof_book_mark_saved (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = FALSE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, FALSE);
   book->dirty_time = 0;
   qof_object_mark_clean (book);
   if (was_dirty) {
@@ -194,8 +194,8 @@ void qof_book_mark_dirty (QofBook *book)
 
   if (!book) return;
 
-  was_dirty = book->inst.dirty;
-  book->inst.dirty = TRUE;
+  was_dirty = qof_instance_get_dirty_flag(book);
+  qof_instance_set_dirty_flag(book, TRUE);
   if (!was_dirty) {
     book->dirty_time = time(NULL);
     if (book->dirty_cb)
@@ -206,7 +206,7 @@ void qof_book_mark_dirty (QofBook *book)
 void
 qof_book_print_dirty (const QofBook *book)
 {
-  if (book->inst.dirty)
+  if (qof_instance_get_dirty_flag(book))
     printf("book is dirty.\n");
   qof_book_foreach_collection
     (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
@@ -221,6 +221,9 @@ qof_book_get_dirty_time (const QofBook *book)
 void
 qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 {
+  if (book->dirty_cb)
+    g_warning("qof_book_set_dirty_cb: Already existing callback %p, will be overwritten by %p\n",
+	      book->dirty_cb, cb);
   book->dirty_data = user_data;
   book->dirty_cb = cb;
 }
@@ -356,22 +359,10 @@ gint32 qof_book_get_version (const QofBook *book)
 	return book->version;
 }
 
-guint32 qof_book_get_idata (const QofBook *book)
-{
-	if(!book) { return 0; }
-	return book->idata;
-}
-
 void qof_book_set_version (QofBook *book, gint32 version)
 {
 	if(!book && version < 0) { return; }
 	book->version = version;
-}
-
-void qof_book_set_idata(QofBook *book, guint32 idata)
-{
-	if(!book && idata < 0) { return; }
-	book->idata = idata;
 }
 
 gint64
@@ -430,7 +421,7 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gboolean qof_book_register (void)
 {
   static QofParam params[] = {
-    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };

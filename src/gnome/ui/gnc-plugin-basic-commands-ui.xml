@@ -16,9 +16,6 @@
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
         <menuitem name="FileSaveGDA" action="FileSaveGDAAction"/>
       </placeholder>
-      <menu name="FileImport" action="FileImportAction">
-        <menuitem name="FileImportQSF" action="FileImportQSFAction"/>
-      </menu>
       <menu name="FileExport" action="FileExportAction">
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
         <menuitem name="FileExportChart" action="FileExportChartAction"/>
@@ -49,7 +46,6 @@
           <menuitem name="ActionsSinceLastRun" action="ActionsSinceLastRunAction"/>
           <menuitem name="ActionsMortgageLoan" action="ActionsMortgageLoanAction"/>
         </menu>
-        <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/>
       </placeholder>
     </menu>
   

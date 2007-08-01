@@ -109,9 +109,6 @@ void gnc_engine_gen_event (QofInstance *entity, GNCEngineEventType event_type);
 void gnc_engine_suspend_events (void);
 /** \deprecated use qof_event_resume instead. */
 void gnc_engine_resume_events (void);
-/** \deprecated use qof_event_generate instead. */
-void gnc_engine_generate_event (const GUID *guid, QofIdType e_type, 
-         GNCEngineEventType event_type);
 /** \deprecated use QofBookMergeResult instead. */
 #define qof_book_mergeResult QofBookMergeResult
 /** \deprecated use QofBookMergeRule instead. */

@@ -26,6 +26,7 @@ typedef int GNCOptionDBHandle;
 QofBook * gnc_get_current_book (void);
 Account * gnc_get_current_root_account (void);
 
+%newobject gnc_gettext_helper;
 char * gnc_gettext_helper(const char *string);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
@@ -107,3 +108,5 @@ Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
 
 gint gnc_process_get_fd(const Process *proc, const guint std_fd);
 void gnc_detach_process(Process *proc, const gboolean kill_it);
+
+time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);

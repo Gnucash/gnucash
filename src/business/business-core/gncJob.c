@@ -131,7 +131,7 @@ gncCloneJob (GncJob *from, QofBook *book)
 void gncJobDestroy (GncJob *job)
 {
   if (!job) return;
-  job->inst.do_free = TRUE;
+  qof_instance_set_destroying(job, TRUE);
   gncJobCommitEdit (job);
 }
 
@@ -281,7 +281,7 @@ qofJobSetOwner (GncJob *job, QofInstance *ent)
 
 void gncJobBeginEdit (GncJob *job)
 {
-  QOF_BEGIN_EDIT (&job->inst);
+  qof_begin_edit(&job->inst);
 }
 
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)

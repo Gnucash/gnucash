@@ -6,6 +6,17 @@
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
+ *
+ * As a special exception, permission is granted to link the binary
+ * module resultant from this code with the OpenSSL project's
+ * "OpenSSL" library (or modified versions of it that use the same
+ * license as the "OpenSSL" library), and distribute the linked
+ * executable.  You must obey the GNU General Public License in all
+ * respects for all of the code used other than "OpenSSL". If you
+ * modify this file, you may extend this exception to your version
+ * of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version
+ * of this file.
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -359,14 +370,12 @@ gnc_sx_slr_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
     g_signal_connect(adapter->real, "rows-reordered", G_CALLBACK(gsslrtma_proxy_rows_reordered), adapter);
 }
 
-/* @@fixme: i18n. **/
-/* @@fixme: non-staticize. **/
 static char* gnc_sx_instance_state_names[] = {
-    ("Ignored"),
-    ("Postponed"),
-    ("To-Create"),
-    ("Reminder"),
-    ("Created"),
+    N_("Ignored"),
+    N_("Postponed"),
+    N_("To-Create"),
+    N_("Reminder"),
+    N_("Created"),
     NULL
 };
 
@@ -386,7 +395,7 @@ gnc_sx_get_slr_state_model(void)
             gtk_list_store_insert_with_values(GTK_LIST_STORE(_singleton_slr_state_model),
                                               &iter,
                                               SX_INSTANCE_STATE_MAX_STATE + 1,
-                                              0, gnc_sx_instance_state_names[i], -1);
+                                              0, _(gnc_sx_instance_state_names[i]), -1);
         }
     }
     return _singleton_slr_state_model;
@@ -423,20 +432,13 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
     for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        FreqSpec *fs;
-        GString *frequency_str;
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
-        char next_occur_date_buf[MAX_DATE_LENGTH+1];
-
-        frequency_str = g_string_sized_new(32);
-        fs = xaccSchedXactionGetFreqSpec(instances->sx);
-        xaccFreqSpecGetFreqStr(fs, frequency_str);
 
         {
             GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
             if (last_occur == NULL || !g_date_valid(last_occur))
             {
-                g_stpcpy(last_occur_date_buf, "never");
+                g_stpcpy(last_occur_date_buf, _("Never"));
             }
             else
             {
@@ -446,12 +448,11 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
             }
         }
 
-        qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
-
         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
         {
             gtk_tree_store_append(model->real, &sx_tree_iter, NULL);
         }
+
         gtk_tree_store_set(model->real, &sx_tree_iter,
                            SLR_MODEL_COL_NAME, xaccSchedXactionGetName(instances->sx),
                            SLR_MODEL_COL_INSTANCE_STATE, NULL,
@@ -460,7 +461,6 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                            SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
                            SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
                            -1);
-        g_string_free(frequency_str, TRUE);
 
         // Insert instance information
         {
@@ -480,7 +480,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                 }
                 gtk_tree_store_set(model->real, &inst_tree_iter,
                                    SLR_MODEL_COL_NAME, instance_date_buf,
-                                   SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[inst->state],
+                                   SLR_MODEL_COL_INSTANCE_STATE, _(gnc_sx_instance_state_names[inst->state]),
                                    SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
                                    SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
                                    SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
@@ -508,7 +508,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                         }
                         else
                         {
-                            tmp_str = g_string_new("(need value)");
+                            tmp_str = g_string_new(_("(Need Value)"));
                         }
 
                         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real),
@@ -829,7 +829,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
      
     for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
     {
-        if (strcmp(value, gnc_sx_instance_state_names[i]) == 0)
+        if (strcmp(value, _(gnc_sx_instance_state_names[i])) == 0)
             break;
     }
     if (i == SX_INSTANCE_STATE_CREATED)
@@ -926,7 +926,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
         gtk_tree_view_set_model(dialog->instance_view, GTK_TREE_MODEL(dialog->editing_model));
 
         renderer = gtk_cell_renderer_text_new();
-        col = gtk_tree_view_column_new_with_attributes("SX, Instance, Variable", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Transaction"), renderer,
                                                        "text", SLR_MODEL_COL_NAME,
                                                        NULL);
         gtk_tree_view_append_column(dialog->instance_view, col);
@@ -942,7 +942,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(instance_state_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Instance State", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Status"), renderer,
                                                        "text", SLR_MODEL_COL_INSTANCE_STATE,
                                                        "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
                                                        // you might think only "sensitive" is required to
@@ -961,7 +961,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(variable_value_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Variable Value", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
                                                        "text", SLR_MODEL_COL_VARAIBLE_VALUE,
                                                        "visible", SLR_MODEL_COL_VARIABLE_VISIBILITY,
                                                        NULL);

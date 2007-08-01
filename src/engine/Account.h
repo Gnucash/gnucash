@@ -232,8 +232,8 @@ Account *gnc_book_get_root_account(QofBook *book);
 void gnc_book_set_root_account(QofBook *book, Account *root);
 
 /** @deprecated */
-#define xaccAccountGetGUID(X)     qof_instance_get_guid(QOF_INSTANCE(X))
-#define xaccAccountReturnGUID(X) (X ? *(qof_instance_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
+#define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_INSTANCE(X))
+#define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
@@ -263,13 +263,6 @@ void xaccAccountSetNotes (Account *account, const char *notes);
 void xaccAccountSetLastNum (Account *account, const char *num);
 /** Set the account's lot order policy */
 void gnc_account_set_policy (Account *account, GNCPolicy *policy);
-/** Set the version numbers on this account.  The version number is
- *  used to manage multi-user updates. */
-void xaccAccountSetVersion (Account*, gint32);
-/** Increment the account version number */
-void gnc_account_increment_version (Account *acc);
-/** Set the account version_check number */
-void gnc_account_set_version_check (Account *acc, guint32 value);
 /** Get the account's type */
 GNCAccountType xaccAccountGetType (const Account *account);
 /** Is the account a stock, mutual fund or currency? */
@@ -361,11 +354,6 @@ const char * xaccAccountGetNotes (const Account *account);
 const char * xaccAccountGetLastNum (const Account *account);
 /** Get the account's lot order policy */
 GNCPolicy *gnc_account_get_policy (Account *account);
-/** Get the version numbers on this account.  The version number is
- *  used to manage multi-user updates. */
-gint32 xaccAccountGetVersion (const Account* acc);
-/** Get the account version_check number */
-guint32 gnc_account_get_version_check (const Account *acc);
 /** Retrieve the starting commodity balance for this account. */
 gnc_numeric gnc_account_get_start_balance (Account *acc);
 

@@ -147,6 +147,7 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
+static void gnc_plugin_page_register_close_cb (gpointer user_data);
 
 static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
 static void gppr_account_destroy_cb (Account *account);
@@ -247,20 +248,18 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ScheduleTransactionAction", GNC_STOCK_SCHEDULE, N_("Sche_dule..."), NULL,
 	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
-	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL,
-	  NULL,
+	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
-	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL,
-	  NULL,
+	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current) },
 
 	/* Reports menu */
 
 	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL,
-	  N_("Open a register report window for this transaction"),
+	  N_("Open a register report for this Account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
 	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL,
-	  N_("Open a register report window for this transaction"),
+	  N_("Open a register report for the selected Transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
@@ -753,7 +752,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
-				     NULL, page);
+				     gnc_plugin_page_register_close_cb,
+				     page);
 	gnc_gui_component_set_session (priv->component_manager_id,
 				       gnc_get_current_session());
 	acct = gnc_plugin_page_register_get_account(page);
@@ -2812,6 +2812,13 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   }
 
   gnc_plugin_page_register_ui_update(NULL, page);
+}
+
+static void
+gnc_plugin_page_register_close_cb (gpointer user_data)
+{
+  GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
+  gnc_main_window_close_page (plugin_page);
 }
 
 /** This function is called when an account has been edited and an

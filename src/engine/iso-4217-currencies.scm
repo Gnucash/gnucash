@@ -47,7 +47,7 @@
 ( "Burundi Franc" "franc" "centime" "ISO4217" "BIF" "108" 1 1 )
 ( "CFA Franc BEAC" "franc" "centime" "ISO4217" "XAF" "950" 1 1 )
 ( "CFA Franc BCEAO" "franc" "centime" "ISO4217" "XOF" "952" 1 1 )
-( "CFP Franc Pacifique" "franc" "centime" "ISO4217" "XPF" "953" 100 100 )
+( "CFP Franc Pacifique" "franc" "centime" "ISO4217" "XPF" "953" 1 1 )
 ( "Cambodia Riel" "riel" "sen" "ISO4217" "KHR" "116" 100 100 )
 ( "Canadian Dollar" "dollar" "cent" "ISO4217" "CAD" "124" 100 100 )
 ( "Cape Verde Escudo" "escudo" "centavo" "ISO4217" "CVE" "132" 100 100 )

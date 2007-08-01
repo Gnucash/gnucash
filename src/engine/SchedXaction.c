@@ -67,6 +67,7 @@ static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    Account        *ra;
+   const GUID *guid;
 
    qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
@@ -88,8 +89,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct,
-                       guid_to_string( &sx->inst.guid ));
+   guid = qof_instance_get_guid( sx );
+   xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,
@@ -265,7 +266,7 @@ gnc_sx_get_schedule(const SchedXaction *sx)
 void
 gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
 {
-   g_return_if_fail(sx && schedule);
+   g_return_if_fail(sx);
    gnc_sx_begin_edit(sx);
    sx->schedule = schedule;
    qof_instance_set_dirty(&sx->inst);
@@ -727,6 +728,8 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 
     xaccTransSetDescription(new_trans, 
              gnc_ttinfo_get_description(tti));
+
+    xaccTransSetDatePostedSecs(new_trans, time(NULL));
 
     xaccTransSetNum(new_trans,
           gnc_ttinfo_get_num(tti));

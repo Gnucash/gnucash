@@ -21,7 +21,7 @@
 /** @internal
      @file gnc-ofx-import.c
      @brief Ofx import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
+     @author Copyright (c) 2002 Benoit GrÃ©goire <bock@step.polymtl.ca>
  */
 #include "config.h"
 
@@ -302,7 +302,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	}
 	xaccTransSetNotes(transaction, notes);
 	g_free(notes);
-	if( data.account_ptr->currency_valid == true)
+	if ( data.account_ptr && data.account_ptr->currency_valid )
 	  {
 	    DEBUG("Currency from libofx: %s",data.account_ptr->currency);
 	    currency = gnc_commodity_table_lookup( gnc_get_current_commodities (),
@@ -336,7 +336,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 		  xaccSplitSetMemo(split, data.memo);
 		}
 	      }
-	    else if(data.unique_id_valid==true&&data.security_data_ptr->secname_valid==true)
+	    else if(data.unique_id_valid == true
+		    && data.security_data_valid
+		    && data.security_data_ptr != NULL
+		    && data.security_data_ptr->secname_valid == true)
 	      {
 		/************************ Process an investment transaction ******************************/
 		/* Note that the ACCT_TYPE_STOCK account type should be replaced with something
@@ -633,7 +636,7 @@ void gnc_file_ofx_import (void)
   extern int ofx_ERROR_msg;
   extern int ofx_INFO_msg;
   extern int ofx_STATUS_msg;
-  const char *selected_filename;
+  char *selected_filename;
   char *default_dir;
   LibofxContextPtr libofx_context = libofx_get_new_context();
 
@@ -655,6 +658,10 @@ void gnc_file_ofx_import (void)
 
   if(selected_filename!=NULL)
     {
+#ifdef G_OS_WIN32
+      gchar *conv_name;
+#endif
+
       /* Remember the directory as the default. */
       default_dir = g_path_get_dirname(selected_filename);
       gnc_set_default_directory(GCONF_SECTION, default_dir);
@@ -674,9 +681,15 @@ void gnc_file_ofx_import (void)
       ofx_set_security_cb(libofx_context, ofx_proc_security_cb, 0);
       /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
 
+#ifdef G_OS_WIN32
+      conv_name = g_win32_locale_filename_from_utf8(selected_filename);
+      g_free(selected_filename);
+      selected_filename = conv_name;
+#endif
 
       DEBUG("Opening selected file");
-     libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
+      libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
+      g_free(selected_filename);
     }
 
 }

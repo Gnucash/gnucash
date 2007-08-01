@@ -56,7 +56,7 @@ function smart_wget() {
     # download the file to the tmpdir and then when that completes
     # move it to the dest dir.
     if [ ! -f $_DLD/$_FILE ] ; then
-        wget --passive-ftp -c $1 -P $TMP_DIR
+        wget --passive-ftp -c $1 -P $TMP_UDIR
         mv $TMP_UDIR/$_FILE $_DLD
     fi
     LAST_FILE=$_DLD/$_FILE
@@ -112,16 +112,17 @@ function add_to_env() {
     _SED=`eval echo '"s#.*'"${_SEP}$1${_SEP}"'.*##"'`
     _TEST=`echo "${_SEP}${_ENV}${_SEP}" | sed "${_SED}"`
     if [ "$_TEST" ]; then
-	if [ "$_ENV" ]; then
-	    eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
-	else
-	    eval "$2_ADDS"'="'"$1"'"'
-	fi
-	eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
+        if [ "$_ENV" ]; then
+            eval "$2_ADDS"'="'"$1${_SEP}"'$'"$2_ADDS"'"'
+        else
+            eval "$2_ADDS"'="'"$1"'"'
+        fi
+        eval "$2"'="$'"$2_ADDS"'$'"$2_BASE"'"'
     fi
 }
 
 # usage: set_env_or_die VALUE NAME
+# like add_to_env, but die if $NAME has been set to a different value
 function set_env_or_die() {
     _OLDADDS=`eval echo '"$'"$2_ADDS"'"'`
     add_to_env "$1" "$2"
@@ -137,6 +138,14 @@ function set_env_or_die() {
     fi
 }
 
+# usage set_env VALUE NAME
+# like $NAME=$VALUE, but also reset env tracking variables
+function set_env() {
+    eval "$2=$1"
+    eval "$2_BASE="
+    eval "$2_ADDS=$1"
+}
+
 function assert_one_dir() {
     quiet [ -d "$@" ] || die "Detected multiple directories where only one was expected; please delete all but the latest one: $@"
 }
@@ -144,5 +153,5 @@ function assert_one_dir() {
 ### Local Variables: ***
 ### mode: shell-script ***
 ### sh-basic-offset: 4 ***
-### tab-width: 8 ***
+### indent-tabs-mode: nil ***
 ### End: ***

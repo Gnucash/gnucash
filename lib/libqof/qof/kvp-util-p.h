@@ -88,7 +88,7 @@ void gnc_kvp_bag_merge (KvpFrame *kvp_into, const char *intopath,
  */
 
 KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
-                         const char *guid_name, GUID *desired_guid);
+                         const char *guid_name, const GUID *desired_guid);
 
 
 /** Remove the given frame from the bag.  The frame is removed,

@@ -487,7 +487,7 @@ commit_split( GncGdaBackend* be, QofInstance* inst )
     Split* pSplit = GNC_SPLIT(inst);
 
     (void)gnc_gda_do_db_operation( be,
-                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         SPLIT_TABLE,
                         GNC_ID_SPLIT, pSplit,
                         split_col_table );
@@ -525,7 +525,7 @@ gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
     gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );
 
     (void)gnc_gda_do_db_operation( be,
-                        (inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
+                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TRANSACTION_TABLE,
                         GNC_ID_TRANS, pTx,
                         tx_col_table );
@@ -535,7 +535,7 @@ gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
     // Delete any old slots and splits for this transaction
     delete_splits( be, pTx );
 
-    if( !inst->do_free ) {
+    if( !qof_instance_get_destroying(inst) ) {
         SplitList* splits;
 
         // Now, commit any slots and splits
@@ -548,7 +548,7 @@ gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
         for( ; splits != NULL; splits = splits->next ) {
             QofInstance* inst = QOF_INSTANCE(splits->data);
 
-            inst->dirty = FALSE;
+            qof_instance_mark_clean(inst);
         }
     } else {
         gnc_gda_slots_delete( be, guid );

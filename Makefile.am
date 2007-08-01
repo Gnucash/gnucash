@@ -50,6 +50,7 @@ EXTRA_DIST = \
   po/gnucash.pot \
   po/POTFILES.in \
   po/POTFILES.skip \
+  po/POTFILES.ignore \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
@@ -186,7 +187,15 @@ intl-scm/guile-strings.c:
 
 SVN = svn
 XSLTPROC = xsltproc
-ChangeLog.svn:
-	$(SVN) log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
+
+if BUILDING_FROM_SVN
+# This rule will generate a ChangeLog of gnucash/trunk commits, plus
+# all additional branches that are added in
+# ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
+# idea? Before a release, NEWS will get updated because of the version
+# change, so this should fit just fine.)
+ChangeLog: NEWS
+	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
+endif

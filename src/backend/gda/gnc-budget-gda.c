@@ -191,14 +191,14 @@ create_budget_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-static void
-commit_budget( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
 
     (void)gnc_gda_do_db_operation( be,
-                        inst->do_free ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
+                        qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
                         BUDGET_TABLE,
                         GNC_ID_BUDGET, pBudget,
                         col_table );
@@ -207,7 +207,7 @@ commit_budget( GncGdaBackend* be, QofInstance* inst )
     guid = qof_instance_get_guid( inst );
 
     // Now, commit any slots
-    if( !inst->do_free ) {
+    if( !qof_instance_get_destroying(inst) ) {
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {
         gnc_gda_slots_delete( be, guid );
@@ -222,7 +222,7 @@ gnc_gda_init_budget_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_BUDGET,
-        commit_budget,                /* commit */
+        gnc_gda_save_budget,                /* commit */
         load_all_budgets,                /* initial_load */
         create_budget_tables        /* create_tables */
     };

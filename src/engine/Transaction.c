@@ -178,7 +178,7 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 
 void check_open (const Transaction *trans)
 {
-  if (trans && 0 >= trans->inst.editlevel)
+  if (trans && 0 >= qof_instance_get_editlevel(trans))
     PERR ("transaction %p not open for editing", trans);
 }
 /********************************************************************\
@@ -186,7 +186,7 @@ void check_open (const Transaction *trans)
 gboolean
 xaccTransStillHasSplit(const Transaction *trans, const Split *s)
 {
-    return (s->parent == trans && !s->inst.do_free);
+    return (s->parent == trans && !qof_instance_get_destroying(s));
 }
 
 /* Executes 'cmd_block' for each split currently in the transaction,
@@ -271,12 +271,9 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->date_posted.tv_sec  = 0;
   trans->date_posted.tv_nsec = 0;
 
-  trans->version = 0;
-  trans->version_check = 0;
   trans->marker = 0;
   trans->orig = NULL;
 
-  trans->idata = 0;
   qof_instance_init_data (&trans->inst, GNC_ID_TRANS, book);
   LEAVE (" ");
 }
@@ -312,11 +309,11 @@ xaccTransDump (const Transaction *trans, const char *tag)
          trans->description ? trans->description : "(null)");
   printf("    Currency:    %s\n", 
          gnc_commodity_get_printname(trans->common_currency));
-  printf("    version:     %x\n", trans->version);
-  printf("    version_chk: %x\n", trans->version_check);
-  printf("    editlevel:   %x\n", trans->editlevel);
+  printf("    version:     %x\n", qof_instance_get_version(trans));
+  printf("    version_chk: %x\n", qof_instance_get_version_check(trans));
+  printf("    editlevel:   %x\n", qof_instance_get_editlevel(trans));
   printf("    orig:        %p\n", trans->orig);
-  printf("    idata:       %x\n", trans->idata);
+  printf("    idata:       %x\n", qof_instance_get_idata(trans));
   printf("    splits:      ");
   for (node = trans->splits; node; node = node->next)
   {
@@ -386,7 +383,7 @@ xaccDupeTransaction (const Transaction *t)
 
   trans->date_entered = t->date_entered;
   trans->date_posted = t->date_posted;
-  trans->version = t->version;
+  qof_instance_copy_version(trans, t);
   trans->orig = NULL;
 
   trans->common_currency = t->common_currency;
@@ -396,11 +393,8 @@ xaccDupeTransaction (const Transaction *t)
    * use this transaction, we'll have to fix this up.
    */
   trans->inst.e_type = NULL;
-  trans->inst.guid = *guid_null();
-  trans->inst.collection = NULL;
-  trans->inst.book = t->inst.book;
-  trans->inst.editlevel = 0;
-  trans->inst.do_free = FALSE;
+  qof_instance_set_guid(trans, guid_null());
+  qof_instance_copy_book(trans, t);
   trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
 
   return trans;
@@ -425,13 +419,12 @@ xaccTransClone (const Transaction *t)
   trans->num             = CACHE_INSERT (t->num);
   trans->description     = CACHE_INSERT (t->description);
   trans->common_currency = t->common_currency;
-  trans->version         = t->version;
-  trans->version_check   = t->version_check;
+  qof_instance_copy_version(trans, t);
+  qof_instance_copy_version_check(trans, t);
 
   trans->orig            = NULL;
-  trans->idata           = 0;
 
-  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, t->inst.book);
+  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, qof_instance_get_book(t));
   kvp_frame_delete (trans->inst.kvp_data);
   trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
 
@@ -486,7 +479,6 @@ xaccFreeTransaction (Transaction *trans)
   trans->date_entered.tv_nsec = 0;
   trans->date_posted.tv_sec = 0;
   trans->date_posted.tv_nsec = 0;
-  trans->version = 0;
 
   if (trans->orig)
   {
@@ -541,7 +533,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
   if (ta == tb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(ta->inst.guid), &(tb->inst.guid)))
+    if (qof_instance_guid_compare(ta, tb) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -844,7 +836,7 @@ xaccTransBeginEdit (Transaction *trans)
    if (!trans) return;
    if (!qof_begin_edit(&trans->inst)) return;
 
-   if (qof_book_shutting_down(trans->inst.book)) return;
+   if (qof_book_shutting_down(qof_instance_get_book(trans))) return;
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -863,9 +855,9 @@ xaccTransDestroy (Transaction *trans)
   if (!trans) return;
 
   if (!xaccTransGetReadOnly (trans) || 
-      qof_book_shutting_down(trans->inst.book)) {
+      qof_book_shutting_down(qof_instance_get_book(trans))) {
       xaccTransBeginEdit(trans);
-      trans->inst.do_free = TRUE;
+      qof_instance_set_destroying(trans, TRUE);
       xaccTransCommitEdit(trans);
   }
 }
@@ -894,7 +886,7 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
-  gboolean shutting_down = qof_book_shutting_down(trans->inst.book);
+  gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
@@ -965,7 +957,7 @@ static void trans_cleanup_commit(Transaction *trans)
         if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
             continue;
 
-        if ((s->parent != trans) || s->inst.do_free) {
+        if ((s->parent != trans) || qof_instance_get_destroying(s)) {
             /* Existing split either moved to another transaction or
                was destroyed, drop from list */
             GncEventData ed;
@@ -977,7 +969,7 @@ static void trans_cleanup_commit(Transaction *trans)
 
         if (s->parent == trans) {
             /* Split was either added, destroyed or just changed */
-            if (s->inst.do_free)
+            if (qof_instance_get_destroying(s))
                 qof_event_gen(&s->inst, QOF_EVENT_DESTROY, NULL);
             else qof_event_gen(&s->inst, QOF_EVENT_MODIFY, NULL);
             xaccSplitCommitEdit(s);
@@ -998,8 +990,8 @@ static void trans_cleanup_commit(Transaction *trans)
     xaccTransSortSplits(trans);
 
     /* Put back to zero. */
-    trans->inst.editlevel--;
-    g_assert(trans->inst.editlevel == 0);
+    qof_instance_decrease_editlevel(trans);
+    g_assert(qof_instance_get_editlevel(trans) == 0);
 
     gen_event_trans (trans); //TODO: could be conditional
     qof_event_gen (&trans->inst, QOF_EVENT_MODIFY, NULL);
@@ -1019,9 +1011,10 @@ xaccTransCommitEdit (Transaction *trans)
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive
     * call to xaccTransCommitEdit. */
-   trans->inst.editlevel++;
+   qof_instance_increase_editlevel(trans);
 
-   if (was_trans_emptied(trans)) trans->inst.do_free = TRUE;
+   if (was_trans_emptied(trans))
+     qof_instance_set_destroying(trans, TRUE);
 
    /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
@@ -1032,7 +1025,7 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (!(trans->inst.do_free) && scrub_data && 
+   if (!qof_instance_get_destroying(trans) && scrub_data && 
        !qof_book_shutting_down(xaccTransGetBook(trans))) {
      /* If scrubbing gains recurses through here, don't call it again. */
      scrub_data = 0; 
@@ -1158,7 +1151,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
-   be = qof_book_get_backend (trans->inst.book);
+   be = qof_book_get_backend(qof_instance_get_book(trans));
    /** \todo Fix transrollbackedit in QOF so that rollback
    is exposed via the API. */
    if (be && be->rollback) 
@@ -1201,10 +1194,10 @@ xaccTransRollbackEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
 
    trans->orig = NULL;
-   trans->inst.do_free = FALSE;
+   qof_instance_set_destroying(trans, FALSE);
 
    /* Put back to zero. */
-   trans->inst.editlevel--;
+   qof_instance_decrease_editlevel(trans);
    /* FIXME: The register code seems to depend on the engine to
       generate an event during rollback, even though the state is just
       reverting to what it was. */
@@ -1216,21 +1209,7 @@ xaccTransRollbackEdit (Transaction *trans)
 gboolean
 xaccTransIsOpen (const Transaction *trans)
 {
-  return trans ? (0 < trans->inst.editlevel) : FALSE;
-}
-
-/* Only used by postgres backend. Not sure if it should dirty the trans. */
-void
-xaccTransSetVersion (Transaction *trans, gint32 vers)
-{
-  if (trans) 
-      trans->version = vers;
-}
-
-gint32
-xaccTransGetVersion (const Transaction *trans)
-{
-  return trans ? trans->version : 0;
+  return trans ? (0 < qof_instance_get_editlevel(trans)) : FALSE;
 }
 
 #define SECS_PER_DAY 86400
@@ -1265,7 +1244,7 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
     return retval;
 
   /* else, sort on guid - keeps sort stable. */
-  return guid_compare(&(ta->inst.guid), &(tb->inst.guid));
+  return qof_instance_guid_compare(ta, tb);
 }
 
 /********************************************************************\
@@ -1814,7 +1793,7 @@ xaccTransGetReversedBy(const Transaction *trans)
 
     g_return_val_if_fail(trans, NULL);
     guid = kvp_frame_get_guid(trans->inst.kvp_data, TRANS_REVERSED_BY);
-    return xaccTransLookup(guid, trans->inst.book);
+    return xaccTransLookup(guid, qof_instance_get_book(trans));
 }
 
 void
@@ -1992,7 +1971,7 @@ gboolean xaccTransRegister (void)
     { QOF_PARAM_BOOK, QOF_ID_BOOK,      
       (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID,    
-      (QofAccessFunc)qof_instance_get_guid, NULL },
+      (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
   };
 

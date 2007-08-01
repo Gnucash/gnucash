@@ -77,7 +77,7 @@ Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
    tutorial written by Carol Champagne. Looks after
    releasing new GnuCash versions and updating the website.
 
-Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
+Benoit GrÃ©goire <bock@step.polymtl.ca> coded a long awaited OFX module
    for GnuCash and wrote the external libOFX library that it uses.
 
 Neil Williams <linux@codehelp.co.uk> finished conversion from GncBook
@@ -88,7 +88,7 @@ Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
    for GnuCash. He replaced g-wrap by SWIG as GnuCash's guile wrapper
    generator and is also an all around hacker.
 
-Andreas Köhler <andi5.py@gmx.net> is hunting down lots of bugs,
+Andreas KÃ¶hler <andi5.py@gmx.net> is hunting down lots of bugs,
    especially for GUI code and other gtk related issues.
 
 Other Contributors:
@@ -103,7 +103,7 @@ A. Alper Atici <alper_atici@yahoo.com> Turkish translation
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Roman Bertle <bertle@smoerz.org> Austrian German account templates
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
-Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
+Dennis BjÃ¶rklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
@@ -153,10 +153,10 @@ Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
-Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Jon KÃ¥re Hellan <hellan@acm.org> misc core dump fixes
 Hendrik-Jan Heins <hjh@passys.nl> Dutch translation
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
-Péter Hosszú <hosszu@web.de> Hungarian translation
+PÃ©ter HosszÃº <hosszu@web.de> Hungarian translation
 Edward J. Huff <ejhuff@huff20may77.us> Date handling in reports, quarterly option
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
 David Jafferian <david.jafferian@east.sun.com> Delete account query code.
@@ -191,7 +191,7 @@ Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work, x86_64 support
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Yves-Eric Martin <yem_lists.gnucash.org@filter.yve.net> work on financial year end work
-Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
+Juan Manuel GarcÃ­a Molina <juanmagm@mail.com> messages Spanish translation
 David Montenegro <sunrise2000@comcast.net> all sorts of Scheme reports
 Orestes Mas <orestes@tsc.upc.es> Catalan translation
 Bernard Meens <meensb@xs4all.nl> Dutch translation
@@ -205,7 +205,7 @@ Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Christian Neumair <chris@gnome-de.org> Various gnome2 fixes/HIG work.
 Johnny Ernst Nielsen <j.e.nielsen@iname.com> messages Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
-Martin Norbäck <d95mback@dtek.chalmers.se> Swedish translation
+Martin NorbÃ¤ck <d95mback@dtek.chalmers.se> Swedish translation
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
@@ -217,7 +217,7 @@ Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
-Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
+Zdenko PodobnÃ½ <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches
@@ -243,6 +243,7 @@ Michael T. Garrison Stuber <garrisonstuber@bellsouth.net> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Tor Harald Thorland <linux@strigen.com> testing, Norwegian translation
+Nigel Titley <nigel@titley.com> British English translation
 James A. Treacy <treacy@debian.org> doc patch
 Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch

@@ -152,7 +152,7 @@ g_key_file_get_double (GKeyFile *key_file, const gchar *group_name,
           g_set_error (error, G_KEY_FILE_ERROR,
                        G_KEY_FILE_ERROR_INVALID_VALUE,
                        _("Key file contains key '%s' in group '%s' "
-                         "which has value that cannot be interpreted."), key,
+                         "which has a value that cannot be interpreted."), key,
                        group_name);
           g_error_free (key_file_error);
         }

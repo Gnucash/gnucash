@@ -58,60 +58,6 @@ qof_set_alt_dirty_mode (gboolean enabled)
 
 /* =============================================================== */
 
-void
-qof_entity_init (QofInstance *ent, QofIdType type, QofCollection * tab)
-{
-  g_return_if_fail (NULL != tab);
-  
-  /* XXX We passed redundant info to this routine ... but I think that's
-   * OK, it might eliminate programming errors. */
-  if (safe_strcmp(tab->e_type, type))
-  {
-    PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
-    return;
-  }
-  ent->e_type = CACHE_INSERT (type);
-
-  do
-   {
-    guid_new(&ent->guid);
-
-    if (NULL == qof_collection_lookup_entity (tab, &ent->guid)) break;
-
-    PWARN("duplicate id created, trying again");
-  } while(1);
- 
-  ent->collection = tab;
-
-  qof_collection_insert_entity (tab, ent);
-}
-
-void
-qof_entity_release (QofInstance *ent)
-{
-  if (!ent->collection) return;
-  qof_collection_remove_entity (ent);
-  CACHE_REMOVE (ent->e_type);
-  ent->e_type = NULL;
-}
-
-
-/* This is a restricted function, should be used only during 
- * read from file */
-void
-qof_instance_set_guid (QofInstance *ent, const GUID *guid)
-{
-  QofCollection *col;
-  if (guid_equal (guid, &ent->guid)) return;
-
-  col = ent->collection;
-  qof_collection_remove_entity (ent);
-  ent->guid = *guid;
-  qof_collection_insert_entity (col, ent);
-}
-
-/* =============================================================== */
-
 static guint
 id_hash (gconstpointer key)
 {
@@ -184,40 +130,48 @@ void
 qof_collection_remove_entity (QofInstance *ent)
 {
   QofCollection *col;
+  const GUID *guid;
+
   if (!ent) return;
-  col = ent->collection;
+  col = qof_instance_get_collection(ent);
   if (!col) return;
-  g_hash_table_remove (col->hash_of_entities, &ent->guid);
+  guid = qof_instance_get_guid(ent);
+  g_hash_table_remove (col->hash_of_entities, guid);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
-  ent->collection = NULL;
+  qof_instance_set_collection(ent, NULL);
 }
 
 void
 qof_collection_insert_entity (QofCollection *col, QofInstance *ent)
 {
+  const GUID *guid;
+
   if (!col || !ent) return;
-  if (guid_equal(&ent->guid, guid_null())) return;
+  guid = qof_instance_get_guid(ent);
+  if (guid_equal(guid, guid_null())) return;
   g_return_if_fail (col->e_type == ent->e_type);
   qof_collection_remove_entity (ent);
-  g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
+  g_hash_table_insert (col->hash_of_entities, (gpointer)guid, ent);
   if (!qof_alt_dirty_mode)
     qof_collection_mark_dirty(col);
-  ent->collection = col;
+  qof_instance_set_collection(ent, col);
 }
 
 gboolean
 qof_collection_add_entity (QofCollection *coll, QofInstance *ent)
 {
 	QofInstance *e;
+        const GUID *guid;
 
 	e = NULL;
 	if (!coll || !ent) { return FALSE; }
-	if (guid_equal(&ent->guid, guid_null())) { return FALSE; }
+        guid = qof_instance_get_guid(ent);
+        if (guid_equal(guid, guid_null())) { return FALSE; }
 	g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
-	e = qof_collection_lookup_entity(coll, &ent->guid);
+	e = qof_collection_lookup_entity(coll, guid);
 	if ( e != NULL ) { return FALSE; }
-	g_hash_table_insert (coll->hash_of_entities, &ent->guid, ent);
+	g_hash_table_insert (coll->hash_of_entities, (gpointer)guid, ent);
 	if (!qof_alt_dirty_mode)
 	  qof_collection_mark_dirty(coll);
 	return TRUE;
@@ -246,6 +200,7 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
 {
 	QofCollection *target;
 	QofInstance *e;
+        const GUID *guid;
 	gint value;
 
 	e = NULL;
@@ -253,14 +208,15 @@ collection_compare_cb (QofInstance *ent, gpointer user_data)
 	if (!target || !ent) { return; }
 	value = *(gint*)qof_collection_get_data(target);
 	if (value != 0) { return; }
-	if (guid_equal(&ent->guid, guid_null())) 
+        guid = qof_instance_get_guid(ent);
+        if (guid_equal(guid, guid_null())) 
 	{
 		value = -1;
 		qof_collection_set_data(target, &value);
 		return; 
 	}
 	g_return_if_fail (target->e_type == ent->e_type);
-	e = qof_collection_lookup_entity(target, &ent->guid);
+	e = qof_collection_lookup_entity(target, guid);
 	if ( e == NULL )
 	{
 		value = 1;

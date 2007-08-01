@@ -26,8 +26,8 @@
  * restoring data to/from an SQL database via libgda
  */
 
-#ifndef GNC_BACKEND_GDA_H_
-#define GNC_BACKEND_GDA_H_
+#ifndef GNC_BACKEND_GDA_UTIL_H_
+#define GNC_BACKEND_GDA_UTIL_H_
 
 #include "qof.h"
 #include <gmodule.h>
@@ -152,4 +152,4 @@ GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);
 
-#endif /* GNC_BACKEND_GDA_H_ */
+#endif /* GNC_BACKEND_GDA_UTIL_H_ */
