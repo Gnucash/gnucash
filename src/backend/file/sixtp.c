@@ -712,8 +712,8 @@ sixtp_parse_file_common(sixtp *sixtp,
     {
         if(parse_result)
             *parse_result = NULL;
-	if (g_slist_length(ctxt->data.stack) > 1)
-	  sixtp_handle_catastrophe(&ctxt->data);
+        if (g_slist_length(ctxt->data.stack) > 1)
+            sixtp_handle_catastrophe(&ctxt->data);
         sixtp_context_destroy(ctxt);
         return FALSE;
     }
