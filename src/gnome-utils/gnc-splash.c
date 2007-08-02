@@ -108,6 +108,11 @@ gnc_show_splash_screen (void)
   separator = gtk_hseparator_new();
 
   progress = gtk_label_new(NULL);
+  /* the set_max_width avoids "bumping" of the splash screen
+     if a long string is given in gnc_update_splash_screen();
+     presumably it would be better to inhibit size change of the
+     top level container, but I don't know how to do this */
+  gtk_label_set_max_width_chars(GTK_LABEL(progress), 50);
   markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading..."));
   gtk_label_set_markup(GTK_LABEL(progress), markup);
   g_free(markup);
@@ -150,12 +155,15 @@ gnc_update_splash_screen (const gchar *string)
 
   if (progress)
   {
-    markup = g_markup_printf_escaped(MARKUP_STRING, string);
-    gtk_label_set_markup (GTK_LABEL(progress), markup);
-    g_free (markup);
+    if(string && strcmp(string, ""))
+    {
+      markup = g_markup_printf_escaped(MARKUP_STRING, string);
+      gtk_label_set_markup (GTK_LABEL(progress), markup);
+      g_free (markup);
 
-    /* make sure new text is up */
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
+      /* make sure new text is up */
+      while (gtk_events_pending ())
+       gtk_main_iteration ();
+    }
   }
 }

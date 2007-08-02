@@ -470,7 +470,6 @@ inner_main (void *closure, int argc, char **argv)
     
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
-        gnc_destroy_splash_screen();
         gnc_file_open_file(fn);
         g_free(fn);
     } 
