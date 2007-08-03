@@ -927,8 +927,9 @@ ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_append_printf( gstr, "pmt( %.5f / 12.0 : %0.2f : %0.2f : 0 : 0 )",
+        g_string_append_printf( gstr, "pmt( %.5f / %0.2f : %0.2f : %0.2f : 0 : 0 )",
                                 (ldd->ld.interestRate / 100),
+                                12.0,
                                 ( ldd->ld.numPer
                                   * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                                 gnc_numeric_to_double(ldd->ld.principal) );
@@ -940,8 +941,9 @@ ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_printf( gstr, "ppmt( %.5f / 12.0 : i : %0.2f : %0.2f : 0 : 0 )",
+        g_string_printf( gstr, "ppmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
+                         12.0,
                          ( ldd->ld.numPer
                            * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double(ldd->ld.principal));
@@ -953,8 +955,9 @@ ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_printf( gstr, "ipmt( %.5f / 12.0 : i : %0.2f : %0.2f : 0 : 0 )",
+        g_string_printf( gstr, "ipmt( %.5f / %0.2f : i : %0.2f : %0.2f : 0 : 0 )",
                          (ldd->ld.interestRate / 100),
+                         12.0,
                          ( ldd->ld.numPer
                            * ( ldd->ld.perSize == GNC_MONTHS ? 1 : 12 ) ) * 1.,
                          gnc_numeric_to_double( ldd->ld.principal ) );
