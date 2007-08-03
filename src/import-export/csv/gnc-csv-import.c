@@ -213,14 +213,6 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
   }
 }
 
-/* This array contains all of the different strings for different column types. */
-static char* column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
-                                                        N_("Date"),
-                                                        N_("Description"),
-                                                        N_("Amount"),
-                                                        N_("Deposit"),
-                                                        N_("Withdrawal")};
-
 /** Event handler for selecting a new date format.
  * @param format_selector The combo box for selecting date formats
  * @param preview The data that is being configured
@@ -262,7 +254,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
     for(type = 0; type < GNC_CSV_NUM_COL_TYPES; type++)
     {
       /* ... we find one that matches with what's in the column. */
-      if(!strcmp(contents, _(column_type_strs[type])))
+      if(!strcmp(contents, _(gnc_csv_column_type_strs[type])))
       {
         /* Set the column_types array appropriately and quit. */
         column_types->data[i] = type;
@@ -365,7 +357,7 @@ static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
       {
         /* ... set this column to the "None" type. (We can't allow duplicate types.) */
         gtk_list_store_set(GTK_LIST_STORE(store), &iter, 2*i+1,
-                           _(column_type_strs[GNC_CSV_NONE]), -1);
+                           _(gnc_csv_column_type_strs[GNC_CSV_NONE]), -1);
       }
     }
     else /* If this is the column that was edited ... */
@@ -779,6 +771,12 @@ static void header_button_press_handler(GtkWidget* button, GdkEventButton* event
     }
   }
 
+  /* Don't let the user affect the last column if it has error messages. */
+  if(preview->parse_data->orig_max_row < ncols && ncols - col == 1)
+  {
+    return;
+  }
+
   if(event->type == GDK_2BUTTON_PRESS && event->button == 1)
   {
     make_new_column(preview, col, (int)event->x - offset, FALSE);
@@ -834,7 +832,7 @@ static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
     for(j = 0; j < GNC_CSV_NUM_COL_TYPES; j++)
     {
       gtk_list_store_append(cstores[i], &iter);
-      gtk_list_store_set(cstores[i], &iter, 0, _(column_type_strs[j]), -1);
+      gtk_list_store_set(cstores[i], &iter, 0, _(gnc_csv_column_type_strs[j]), -1);
     }
   }
 
@@ -911,7 +909,7 @@ static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
   for(i = 0; i < ncols; i++)
   {
     gtk_list_store_set(ctstore, &iter, 2*i, cstores[i], 2*i+1,
-                       _(column_type_strs[(int)(preview->parse_data->column_types->data[i])]),
+                       _(gnc_csv_column_type_strs[(int)(preview->parse_data->column_types->data[i])]),
                        -1);
   }
 
@@ -1016,6 +1014,8 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
   GtkImage* instructions_image = GTK_IMAGE(glade_xml_get_widget(preview->xml, "instructions_image"));
   gchar* name;
   GtkIconSize size;
+  GtkTreeViewColumn* last_col;
+
   gtk_image_get_stock(instructions_image, &name, &size);
   gtk_image_set_from_stock(instructions_image, GTK_STOCK_DIALOG_ERROR, size);
   gtk_label_set_text(instructions_label,
@@ -1029,6 +1029,13 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
 
   /* Wait until the user clicks "OK" or "Cancel". */
   gnc_csv_preview_update(preview, TRUE);
+
+  /* Set the last column to have the header "Errors" so that the user
+   * doesn't find the extra column confusing. */
+  last_col = gtk_tree_view_get_column(preview->treeview,
+                                      preview->parse_data->column_types->len - 1);
+  gtk_tree_view_column_set_title(last_col, _("Errors"));
+
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
   
   if(preview->approved)

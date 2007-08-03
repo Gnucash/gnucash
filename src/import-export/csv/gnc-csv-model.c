@@ -27,6 +27,14 @@ const gchar* date_format_user[] = {N_("y-m-d"),
                                    N_("d-m"),
                                    N_("m-d")};
 
+/* This array contains all of the different strings for different column types. */
+gchar* gnc_csv_column_type_strs[GNC_CSV_NUM_COL_TYPES] = {N_("None"),
+                                                          N_("Date"),
+                                                          N_("Description"),
+                                                          N_("Balance"),
+                                                          N_("Deposit"),
+                                                          N_("Withdrawal")};
+
 /** A set of sensible defaults for parsing CSV files. 
  * @return StfParseOptions_t* for parsing a file with comma separators
  */
@@ -38,13 +46,19 @@ static StfParseOptions_t* default_parse_options(void)
   return options;
 }
 
-/* TODO Comment */
+/** Parses a string into a date, given a format. The format must
+ * include the year. This function should only be called by
+ * parse_date.
+ * @param date_str The string containing a date being parsed
+ * @param format An index specifying a format in date_format_user
+ * @return The parsed value of date_str on success or -1 on failure
+ */
 static time_t parse_date_with_year(const char* date_str, int format)
 {
   time_t rawtime; /* The integer time */
   struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
   
-  int i, j, mem_length, orig_year, orig_month, orig_day;
+  int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
 
   /* Buffer for containing individual parts (e.g. year, month, day) of a date */
   char date_segment[5];
@@ -173,13 +187,19 @@ static time_t parse_date_with_year(const char* date_str, int format)
   }
 }
 
-/* TODO Comment */
+/** Parses a string into a date, given a format. The format cannot
+ * include the year. This function should only be called by
+ * parse_date.
+ * @param date_str The string containing a date being parsed
+ * @param format An index specifying a format in date_format_user
+ * @return The parsed value of date_str on success or -1 on failure
+ */
 static time_t parse_date_without_year(const char* date_str, int format)
 {
   time_t rawtime; /* The integer time */
   struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
   
-  int i, j, mem_length, orig_year, orig_month, orig_day;
+  int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
 
   /* Buffer for containing individual parts (e.g. year, month, day) of a date */
   gchar* date_segment;
@@ -294,6 +314,7 @@ GncCsvParseData* gnc_csv_new_parse_data(void)
   parse_data->raw_str.begin = parse_data->raw_str.end
     = parse_data->file_str.begin = parse_data->file_str.end = NULL;
   parse_data->orig_lines = NULL;
+  parse_data->orig_row_lengths = NULL;
   parse_data->column_types = NULL;
   parse_data->error_lines = parse_data->transactions = NULL;
   parse_data->options = default_parse_options();
@@ -316,7 +337,10 @@ void gnc_csv_parse_data_free(GncCsvParseData* parse_data)
     g_free(parse_data->file_str.begin);
 
   if(parse_data->orig_lines != NULL)
-    g_ptr_array_free(parse_data->orig_lines, TRUE);
+    stf_parse_general_free(parse_data->orig_lines);
+
+  if(parse_data->orig_row_lengths != NULL)
+    g_array_free(parse_data->orig_row_lengths, FALSE);
 
   if(parse_data->options != NULL)
     stf_parse_options_free(parse_data->options);
@@ -404,7 +428,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
     /* TODO Handle file opening errors more specifically,
      * e.g. inexistent file versus no read permission. */
     parse_data->raw_str.begin = NULL;
-    g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, "File opening failed.");
+    g_set_error(error, 0, GNC_CSV_FILE_OPEN_ERR, _("File opening failed."));
     return 1;
   }
 
@@ -418,7 +442,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
                                 "UTF-8", NULL);
   if(guess_enc == NULL)
   {
-    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "Unknown encoding.");
+    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, _("Unknown encoding."));
     return 1;
   }
 
@@ -427,7 +451,7 @@ int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
   gnc_csv_convert_encoding(parse_data, guess_enc, error);
   if(parse_data->file_str.begin == NULL)
   {
-    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, "Unknown encoding.");
+    g_set_error(error, 0, GNC_CSV_ENCODING_ERR, _("Unknown encoding."));
     return 1;
   }
   else
@@ -452,8 +476,12 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
   /* max_cols is the number of columns in the row with the most columns. */
   int i, max_cols = 0;
 
+  if(parse_data->orig_lines != NULL)
+  {
+    stf_parse_general_free(parse_data->orig_lines);
+  }
+
   /* If everything is fine ... */
-  /* TODO Check about freeing parse_data->orig_lines ... */
   if(parse_data->file_str.begin != NULL)
   {
     /* Do the actual parsing. */
@@ -465,6 +493,21 @@ int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** 
   else
   {
     parse_data->orig_lines = g_ptr_array_new();
+  }
+
+  /* Record the original row lengths of parse_data->orig_lines. */
+  if(parse_data->orig_row_lengths != NULL)
+    g_array_free(parse_data->orig_row_lengths, FALSE);
+  parse_data->orig_row_lengths =
+    g_array_sized_new(FALSE, FALSE, sizeof(int), parse_data->orig_lines->len);
+  g_array_set_size(parse_data->orig_row_lengths, parse_data->orig_lines->len);
+  parse_data->orig_max_row = 0;
+  for(i = 0; i < parse_data->orig_lines->len; i++)
+  {
+    int length = ((GPtrArray*)parse_data->orig_lines->pdata[i])->len;
+    parse_data->orig_row_lengths->data[i] = length;
+    if(length > parse_data->orig_max_row)
+      parse_data->orig_max_row = length;
   }
 
   /* If it failed, generate an error. */
@@ -527,46 +570,36 @@ typedef struct
 /** A struct encapsulating a property of a transaction. */
 typedef struct
 {
-  gboolean essential; /**< TRUE if every transaction needs this property */
   int type; /**< A value from the GncCsvColumnType enum except
              * GNC_CSV_NONE and GNC_CSV_NUM_COL_TYPES */
   void* value; /**< Pointer to the data that will be used to configure a transaction */
-  TransPropertyList* set; /**< The set the property belongs to */
+  TransPropertyList* list; /**< The list the property belongs to */
 } TransProperty;
 
-/** Constructor TransProperty.
+/** Constructor for TransProperty.
  * @param type The type of the new property (see TransProperty.type for possible values)
  */
-static TransProperty* trans_property_new(int type, TransPropertyList* set)
+static TransProperty* trans_property_new(int type, TransPropertyList* list)
 {
   TransProperty* prop = g_new(TransProperty, 1);
   prop->type = type;
-  prop->set = set;
+  prop->list = list;
   prop->value = NULL;
-  
-  switch(type)
-  {
-    /* Only the "Date" and "Amount" properties are essential. */
-  case GNC_CSV_DATE:
-  case GNC_CSV_AMOUNT:
-    prop->essential = TRUE;
-    break;
-
-  default:
-    prop->essential = FALSE;
-  }
   return prop;
 }
 
+/** Destructor for TransProperty.
+ * @param prop The property to be freed
+ */
 static void trans_property_free(TransProperty* prop)
 {
   switch(prop->type)
   {
-    /* The types for "Date" and "Amount" (time_t and gnc_numeric,
+    /* The types for "Date" and "Balance" (time_t and gnc_numeric,
      * respectively) are typically not pointed to, we have to free
      * them, unlike types like char* ("Description"). */
   case GNC_CSV_DATE:
-  case GNC_CSV_AMOUNT:
+  case GNC_CSV_BALANCE:
   case GNC_CSV_DEPOSIT:
   case GNC_CSV_WITHDRAWAL:
     if(prop->value != NULL)
@@ -591,14 +624,14 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
   {
   case GNC_CSV_DATE:
     prop->value = g_new(time_t, 1);
-    *((time_t*)(prop->value)) = parse_date(str, prop->set->date_format);
+    *((time_t*)(prop->value)) = parse_date(str, prop->list->date_format);
     return *((time_t*)(prop->value)) != -1;
 
   case GNC_CSV_DESCRIPTION:
     prop->value = g_strdup(str);
     return TRUE;
 
-  case GNC_CSV_AMOUNT:
+  case GNC_CSV_BALANCE:
   case GNC_CSV_DEPOSIT:
   case GNC_CSV_WITHDRAWAL:
     str_dupe = g_strdup(str); /* First, we make a copy so we can't mess up real data. */
@@ -640,7 +673,8 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
     if(abs(value) > 0.00001)
     {
       prop->value = g_new(gnc_numeric, 1);
-      *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value, xaccAccountGetCommoditySCU(prop->set->account),
+      *((gnc_numeric*)(prop->value)) = double_to_gnc_numeric(value,
+                                                             xaccAccountGetCommoditySCU(prop->list->account),
                                                              GNC_RND_ROUND);
     }
     return TRUE;
@@ -648,36 +682,54 @@ static gboolean trans_property_set(TransProperty* prop, char* str)
   return FALSE; /* We should never actually get here. */
 }
 
-/* TODO Comment */
+/** Constructor for TransPropertyList.
+ * @param account The account with which transactions should be built
+ * @param date_format An index from date_format_user for how date properties should be parsed
+ * @return A pointer to a new TransPropertyList
+ */
 static TransPropertyList* trans_property_list_new(Account* account, int date_format)
 {
-  TransPropertyList* set = g_new(TransPropertyList, 1);
-  set->account = account;
-  set->date_format = date_format;
-  set->properties = NULL;
-  return set;
+  TransPropertyList* list = g_new(TransPropertyList, 1);
+  list->account = account;
+  list->date_format = date_format;
+  list->properties = NULL;
+  return list;
 }
 
-/* TODO Comment */
-static void trans_property_list_free(TransPropertyList* set)
+/** Destructor for TransPropertyList.
+ * @param list The list to be freed
+ */
+static void trans_property_list_free(TransPropertyList* list)
 {
-  GList* properties_begin = set->properties;
-  while(set->properties != NULL)
+  /* Free all of the properties in this list before freeeing the list itself. */
+  GList* properties_begin = list->properties;
+  while(list->properties != NULL)
   {
-    trans_property_free((TransProperty*)(set->properties->data));
-    set->properties = g_list_next(set->properties);
+    trans_property_free((TransProperty*)(list->properties->data));
+    list->properties = g_list_next(list->properties);
   }
   g_list_free(properties_begin);
-  g_free(set);
+  g_free(list);
 }
 
-/* TODO Comment */
+/** Adds a property to the list it's linked with.
+ * (The TransPropertyList is not passed as a parameter because the property is
+ * associated with a list when it's constructed.)
+ * @param property The property to be added to its list
+ */
 static void trans_property_list_add(TransProperty* property)
 {
-  property->set->properties = g_list_append(property->set->properties, property);
+  property->list->properties = g_list_append(property->list->properties, property);
 }
 
-/* TODO Comment */
+/** Adds a split to a transaction.
+ * This function is only called by trans_property_list_to_trans. This is in a
+ * separate function to avoid copying code twice in trans_property_list_to_trans.
+ * @param trans The transaction to add a split to
+ * @param account The account used for the split
+ * @param book The book where the split should be stored
+ * @param amount The amount of the split
+ */
 static void trans_add_split(Transaction* trans, Account* account, GNCBook* book,
                             gnc_numeric amount)
 {
@@ -689,32 +741,112 @@ static void trans_add_split(Transaction* trans, Account* account, GNCBook* book,
   xaccSplitSetAction(split, "Deposit");
 }
 
+/** Tests a TransPropertyList for having enough essential properties.
+ * Essential properties are "Date" and one of the following: "Balance", "Deposit", or
+ * "Withdrawal".
+ * @param list The list we are checking
+ * @param error Contains an error message on failure
+ * @return TRUE if there are enough essentials; FALSE otherwise
+ */
+static gboolean trans_property_list_verify_essentials(TransPropertyList* list, gchar** error)
+{
+  int i;
+  /* possible_errors lists the ways in which a list can fail this test. */
+  enum PossibleErrorTypes {NO_DATE, NO_AMOUNT, NUM_OF_POSSIBLE_ERRORS};
+  gchar* possible_errors[NUM_OF_POSSIBLE_ERRORS] = {N_("No date column."),
+                                                    N_("No balance, deposit, or withdrawal column.")};
+  int possible_error_lengths[NUM_OF_POSSIBLE_ERRORS] = {0};
+  GList *properties_begin = list->properties, *errors_list = NULL;
+
+  /* Go through each of the properties and erase possible errors. */
+  while(list->properties)
+  {
+    switch(((TransProperty*)(list->properties->data))->type)
+    {
+    case GNC_CSV_DATE:
+      possible_errors[NO_DATE] = NULL;
+      break;
+
+    case GNC_CSV_BALANCE:
+    case GNC_CSV_DEPOSIT:
+    case GNC_CSV_WITHDRAWAL:
+      possible_errors[NO_AMOUNT] = NULL;
+      break;
+    }
+    list->properties = g_list_next(list->properties);
+  }
+  list->properties = properties_begin;
+
+  /* Accumulate a list of the actual errors. */
+  for(i = 0; i < NUM_OF_POSSIBLE_ERRORS; i++)
+  {
+    if(possible_errors[i] != NULL)
+    {
+      errors_list = g_list_append(errors_list, GINT_TO_POINTER(i));
+      /* Since we added an error, we want to also store its length for
+       * when we construct the full error string. */
+      possible_error_lengths[i] = strlen(_(possible_errors[i]));
+    }
+  }
+
+  /* If there are no errors, we can quit now. */
+  if(errors_list == NULL)
+    return TRUE;
+  else
+  {
+    /* full_error_size is the full length of the error message. */
+    int full_error_size = 0, string_length = 0;
+    GList* errors_list_begin = errors_list;
+    gchar *error_message, *error_message_begin;
+
+    /* Find the value for full_error_size. */
+    while(errors_list)
+    {
+      /* We add an extra 1 to account for spaces in between messages. */
+      full_error_size += possible_error_lengths[GPOINTER_TO_INT(errors_list->data)] + 1;
+      errors_list = g_list_next(errors_list);
+    }
+    errors_list = errors_list_begin;
+
+    /* Append the error messages one after another. */
+    error_message = error_message_begin = g_new(gchar, full_error_size);
+    while(errors_list)
+    {
+      i = GPOINTER_TO_INT(errors_list->data);
+      string_length = possible_error_lengths[i];
+      
+      /* Copy the error message and put a space after it. */
+      strncpy(error_message, _(possible_errors[i]), string_length);
+      error_message += string_length;
+      *error_message = ' ';
+      error_message++;
+      
+      errors_list = g_list_next(errors_list);
+    }
+    *error_message = '\0'; /* Replace the last space with the null byte. */
+    g_list_free(errors_list_begin);
+
+    *error = error_message_begin;
+    return FALSE;
+  }
+}
+
+/** Create a Transaction from a TransPropertyList.
+ * @param list The list of properties
+ * @param error Contains an error on failure
+ * @return On success, a pointer to a new transaction; on failure, NULL
+ */
 /* TODO Comment */
-static Transaction* trans_property_list_to_trans(TransPropertyList* set)
+static Transaction* trans_property_list_to_trans(TransPropertyList* list, gchar** error)
 {
   Transaction* trans;
-  GList* properties_begin = set->properties;
-  GNCBook* book = gnc_account_get_book(set->account);
-  gnc_commodity* currency = xaccAccountGetCommodity(set->account);
+  GList* properties_begin = list->properties;
+  GNCBook* book = gnc_account_get_book(list->account);
+  gnc_commodity* currency = xaccAccountGetCommodity(list->account);
   gnc_numeric amount;
-  gboolean alreadyHaveDepositOrWithdrawal = FALSE, noAmountYet = TRUE;
+  gboolean noAmountYet = TRUE;
   
-  unsigned int essential_properties_left = 2;
-  while(set->properties != NULL)
-  {
-    if(((TransProperty*)(set->properties->data))->essential)
-      essential_properties_left--;
-    else if(((TransProperty*)(set->properties->data))->type == GNC_CSV_DEPOSIT ||
-            ((TransProperty*)(set->properties->data))->type == GNC_CSV_WITHDRAWAL)
-    {
-      if(alreadyHaveDepositOrWithdrawal)
-        essential_properties_left--;
-      else
-        alreadyHaveDepositOrWithdrawal = TRUE;
-    }
-    set->properties = g_list_next(set->properties);
-  }
-  if(essential_properties_left)
+  if(!trans_property_list_verify_essentials(list, error))
     return NULL;
 
   trans = xaccMallocTransaction(book);
@@ -722,10 +854,10 @@ static Transaction* trans_property_list_to_trans(TransPropertyList* set)
   xaccTransBeginEdit(trans);
   xaccTransSetCurrency(trans, currency);
 
-  set->properties = properties_begin;
-  while(set->properties != NULL)
+  list->properties = properties_begin;
+  while(list->properties != NULL)
   {
-    TransProperty* prop = (TransProperty*)(set->properties->data);
+    TransProperty* prop = (TransProperty*)(list->properties->data);
     switch(prop->type)
     {
     case GNC_CSV_DATE:
@@ -738,7 +870,7 @@ static Transaction* trans_property_list_to_trans(TransPropertyList* set)
 
     case GNC_CSV_DEPOSIT:
     case GNC_CSV_WITHDRAWAL:
-    case GNC_CSV_AMOUNT:
+    case GNC_CSV_BALANCE:
       if(noAmountYet && prop->value != NULL)
       {
         /* Withdrawals are just negative deposits. */
@@ -747,18 +879,18 @@ static Transaction* trans_property_list_to_trans(TransPropertyList* set)
         else
           amount = *((gnc_numeric*)(prop->value));
 
-        trans_add_split(trans, set->account, book, amount);
+        trans_add_split(trans, list->account, book, amount);
         
         noAmountYet = FALSE;
       }
     }
-    set->properties = g_list_next(set->properties);
+    list->properties = g_list_next(list->properties);
   }
 
   if(noAmountYet)
   {
-    amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(set->account), GNC_RND_ROUND);
-    trans_add_split(trans, set->account, book, amount);
+    amount = double_to_gnc_numeric(0.0, xaccAccountGetCommoditySCU(list->account), GNC_RND_ROUND);
+    trans_add_split(trans, list->account, book, amount);
   }
 
   return trans;
@@ -777,7 +909,7 @@ static Transaction* trans_property_list_to_trans(TransPropertyList* set)
 int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
                        gboolean redo_errors)
 {
-  int i, j;
+  int i, j, max_cols = 0;
   GArray* column_types = parse_data->column_types;
   GList *error_lines = NULL, *begin_error_lines = NULL;
   GList* last_transaction = NULL;
@@ -814,7 +946,8 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     GPtrArray* line = parse_data->orig_lines->pdata[i];
     /* This flag is TRUE if there are any errors in this row. */
     gboolean errors = FALSE;
-    TransPropertyList* set = trans_property_list_new(account, parse_data->date_format);
+    gchar* error_message = NULL;
+    TransPropertyList* list = trans_property_list_new(account, parse_data->date_format);
     Transaction* trans = NULL;
 
     /* TODO There should eventually be a specification of what errors
@@ -826,7 +959,7 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
       if(column_types->data[j] != GNC_CSV_NONE)
       {
         /* Affect the transaction appropriately. */
-        TransProperty* property = trans_property_new(column_types->data[j], set);
+        TransProperty* property = trans_property_new(column_types->data[j], list);
         gboolean succeeded = trans_property_set(property, line->pdata[j]);
         /* TODO Maybe move error handling to within TransPropertyList functions? */
         if(succeeded)
@@ -836,6 +969,8 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
         else
         {
           errors = TRUE;
+          error_message = g_strdup_printf(_("%s column could not be understood."),
+                                          _(gnc_csv_column_type_strs[property->type]));
           trans_property_free(property);
           break;
         }
@@ -845,21 +980,32 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     /* If we had success, add the transaction to parse_data->transaction. */
     if(!errors)
     {
-      trans = trans_property_list_to_trans(set);
+      trans = trans_property_list_to_trans(list, &error_message);
       errors = trans == NULL;
     }
 
-    trans_property_list_free(set);
-      
+    trans_property_list_free(list);
 
-    /* If there was no success, add this line to parse_data->error_lines. */
+    /* If there were errors, add this line to parse_data->error_lines. */
     if(errors)
     {
       parse_data->error_lines = g_list_append(parse_data->error_lines,
                                               GINT_TO_POINTER(i));
+      /* If there's already an error message, we need to replace it. */
+      if(line->len > (int)(parse_data->orig_row_lengths->data[i]))
+      {
+        g_free(line->pdata[line->len - 1]);
+        line->pdata[line->len - 1] = error_message;
+      }
+      else
+      {
+        /* Put the error message at the end of the line. */
+        g_ptr_array_add(line, error_message);
+      }
     }
     else
     {
+      /* If all went well, add this transaction to the list. */
       GncCsvTransLine* trans_line = g_new(GncCsvTransLine, 1);
 
       trans_line->trans = trans;
@@ -867,6 +1013,8 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
 
       if(redo_errors)
       {
+        /* If we are correcting errors, find the right place to insert
+         * the transaction. */
         while(last_transaction != NULL &&
               ((GncCsvTransLine*)(last_transaction->data))->line_no < i)
         {
@@ -900,5 +1048,19 @@ int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account,
   {
     g_list_free(begin_error_lines);
   }
+
+  /* We need to resize parse_data->column_types since errors may have added columns. */
+  for(i = 0; i < parse_data->orig_lines->len; i++)
+  {
+    if(max_cols < ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len)
+      max_cols = ((GPtrArray*)(parse_data->orig_lines->pdata[i]))->len;
+  }
+  i = parse_data->column_types->len;
+  parse_data->column_types = g_array_set_size(parse_data->column_types, max_cols);
+  for(; i < max_cols; i++)
+  {
+    parse_data->column_types->data[i] = GNC_CSV_NONE;
+  }
+
   return 0;
 }

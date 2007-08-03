@@ -41,7 +41,7 @@
 enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_DATE,
                        GNC_CSV_DESCRIPTION,
-                       GNC_CSV_AMOUNT,
+                       GNC_CSV_BALANCE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
                        GNC_CSV_NUM_COL_TYPES};
@@ -78,6 +78,9 @@ extern const int num_date_formats;
 /* A set of date formats that the user sees. */
 extern const gchar* date_format_user[];
 
+/* This array contains all of the different strings for different column types. */
+extern gchar* gnc_csv_column_type_strs[];
+
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 typedef struct
 {
@@ -86,6 +89,9 @@ typedef struct
   GncCsvStr raw_str; /**< Untouched data from the file as a string */
   GncCsvStr file_str; /**< raw_str translated into UTF-8 */
   GPtrArray* orig_lines; /**< file_str parsed into a two-dimensional array of strings */
+  GArray* orig_row_lengths; /**< The lengths of rows in orig_lines
+                             * before error messages are appended */
+  int orig_max_row; /**< Holds the maximum value in orig_row_lengths */
   GStringChunk* chunk; /**< A chunk of memory in which the contents of orig_lines is stored */
   StfParseOptions_t* options; /**< Options controlling how file_str should be parsed */
   GArray* column_types; /**< Array of values from the GncCsvColumnType enumeration */
