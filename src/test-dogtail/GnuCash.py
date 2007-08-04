@@ -1157,7 +1157,10 @@ class FindVendorJob(Find):
 
 
 class Register(Node):
-    """ Wrapper class for gnucash register 
+    """ Wrapper class for gnucash register.
+        Current Limitation:
+            1- This code could not read the data from register validation done e.g in the account page
+            2 - you must have gnucash not minimized and the top level application.
         TODO: It is better to have register supported by a11y to be able to be more readable by dogtail
     """ 
 
@@ -1177,7 +1180,7 @@ class Register(Node):
             self.keyCombo("Tab")
 
     def set_cell_text(self, text):
-        """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left based on the the difference """
+        """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left by calculating the the difference from the current position"""
         relative_pos = self.column_val - self.prev_col_val
         print relative_pos
         if relative_pos > 0 :
@@ -1228,7 +1231,77 @@ class Register(Node):
             self.column_val = 5
             self.set_cell_text(value)
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
+
+
+class EditInvoice(Node):
+    """ Wrapper class for edit invoice tab half dialog and half register """
+    class InvoiceRegister(Register):
+
+        def __init__(self, initializer):
+            Register.__init__(self, initializer)
+
+        def __goto(self, x, y):
+            sleep(1)
+            self.prev_col_val = 0
+            self.row_val = x
+            self.column_val = y
+            # Click to activate the Register widget
+            dogtail.rawinput.click(self.position[0], self.position[1])
+            for j in range(x):
+                self.typeText('\n')
+            for i in range(y):
+                self.keyCombo("Tab")
+
+        def __setattr__(self, name, value):
+            if name == 'row':
+                self.row_val = value
+                self.__goto(int(value), 0)
+            elif name == 'column':
+                self.prev_col_val = self.column_val
+                self.column_val = value
+            elif name == 'date':
+                self.prev_col_val = self.column_val
+                self.column_val = 0
+                self.set_cell_text(value)
+            elif name == 'description':
+                self.prev_col_val = self.column_val
+                self.column_val = 1
+                self.set_cell_text(value)
+            elif name == 'action':
+                self.prev_col_val = self.column_val
+                self.column_val = 2
+                self.set_cell_text(value)
+            elif name == 'income_account':
+                self.prev_col_val = self.column_val
+                self.column_val = 3
+                self.set_cell_text(value)
+            elif name == 'quantity':
+                self.prev_col_val = self.column_val
+                self.column_val = 4
+                self.set_cell_text(value)
+            elif name == 'unit_price':
+                self.prev_col_val = self.column_val
+                self.column_val = 5
+                self.set_cell_text(value)
+            elif name == 'discount':
+                self.prev_col_val = self.column_val
+                self.column_val = 6
+                self.set_cell_text(value)
+            elif name == 'tax_table':
+                self.prev_col_val = self.column_val
+                self.column_val = 7
+                self.set_cell_text(value)
+            else:
+                self.__dict__[name] = value
+
+    def __init__(self, initializer):
+        """ Pass a tab node to this initializer """
+        Node.__init__(self, initializer)
+        invoice_entries = self.findChild(predicate.GenericPredicate(name = 'Invoice Entries', roleName = 'panel'))
+        invoice_register = invoice_entries.findChild(predicate.GenericPredicate(roleName = 'layered pane'))
+        self.invoice_register = self.InvoiceRegister(invoice_register)
+        
 
 class BookOptions(GnucashWindow):
     """ Wapper class for Book options """
@@ -1319,10 +1392,12 @@ class Question(Window):
                 self.accumulate_splits_cb.click()
         else:
             self.__dict__[name]=value
+    def accept(self):
+        self.button('OK').click()
 
 class Reconcile(GnucashWindow):
     """ Wrapper Class for Reconcilation dialog """
-    
+
     def __init__(self):
         self.invoke_list = ["Actions", "Reconcile..."]
         self.dialog_name = ". - Reconcile"            # TODO: This line does not work as expected 
@@ -1426,11 +1501,6 @@ if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
     gnucash = GnuCashApp()
-    new_invoice = NewInvoice()
-    new_invoice.invoke()
-    new_invoice.billing_id = "ABC Purchase Order # 12988"
-    new_invoice.notes = "Your Personal notes goes here\nNotes do not appear on printed invoices"
-    new_invoice.customer = 'ABC Inc'
-    new_invoice.accept()
-    #findCustomer.dismiss()
-#    new_invoice.dismiss()
+    # Validation
+    account_tab = gnucash.tab('Accounts')
+    validate_node(account_tab, 'test_accounts_receivable')
