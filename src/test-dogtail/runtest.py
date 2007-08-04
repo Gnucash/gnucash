@@ -393,5 +393,41 @@ class ScenarioTest(unittest.TestCase):
         new_invoice.customer = 'ABC Inc'
         new_invoice.accept()
 
+        # Edit the Invoice
+        my_tab =  gnucash.tab('Edit Invoice - 000001')
+
+        edit_invoice = EditInvoice(my_tab)
+        edit_invoice.invoice_register.date = '07/15/2007'
+        edit_invoice.invoice_register.description = 'Nails'
+        edit_invoice.invoice_register.action = 'Material'
+        edit_invoice.invoice_register.income_account = 'Income:Sales'
+        edit_invoice.invoice_register.quantity = '1,000.00'
+        edit_invoice.invoice_register.unit_price = '0.10'
+
+
+        edit_invoice.invoice_register.row = 1
+        edit_invoice.invoice_register.date = '07/15/2007'
+        edit_invoice.invoice_register.description = 'Hammer'
+        edit_invoice.invoice_register.action = 'Material'
+        edit_invoice.invoice_register.income_account = 'Income:Sales'
+        edit_invoice.invoice_register.quantity = '1.00'
+        edit_invoice.invoice_register.unit_price = '500.00'
+        edit_invoice.invoice_register.discount = '5.00'
+
+        gnucash.menu('Actions').menuItem('Enter').click()
+
+        # Post to Asset:Accounts Receivable 
+        gnucash.button('Post').click()
+        question = Question()
+        question.post_to_account = 'Asset:Accounts Receivable'
+        question.accept()
+
+        # close the edit invoice tab as a cleanup
+        edit_invoice.invoice_register.end_trans()
+
+        # Validation
+        account_tab = gnucash.tab('Accounts')
+        validate_node(account_tab, 'test_accounts_receivable')
+
 if __name__ == "__main__":
     unittest.main()
