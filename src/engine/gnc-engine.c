@@ -77,8 +77,10 @@ gnc_engine_init(int argc, char ** argv)
     gboolean required;
   } libs[] = {
     { GNC_LIB_NAME, TRUE },
+#ifdef SQL_DIR
     /* shouldn't the PG gnc-module do this instead of US doing it? */
     { "gnc-backend-postgres", FALSE },
+#endif
     { NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
