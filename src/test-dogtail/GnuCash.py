@@ -894,9 +894,15 @@ class NewXXX(GnucashWindow):
             self.idenetification_list = \
             self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
             self.company_name_txt = self.idenetification_list[1]
-            self.billing_information = \
-            self.findChild(predicate.GenericPredicate\
-            (roleName='panel', name ='Billing Address'))
+            self.panel_list = \
+            self.findChildren(predicate.GenericPredicate(roleName='panel'))
+            for panel in self.panel_list:
+                if re.search('. Address', panel.name) != None:
+                    self.billing_information  = panel
+                    break
+#            self.billing_information = \
+#            self.findChild(predicate.GenericPredicate\
+#            (roleName='panel', name='Billing Address'))
             self.billing_information_elements = \
             self.billing_information.findChildren(predicate.GenericPredicate\
             (roleName='text'))
@@ -930,29 +936,19 @@ class NewXXX(GnucashWindow):
             self.findChild(predicate.GenericPredicate(roleName='combo box', name='USD (US Dollar)'))
             self.terms_combobox = \
             self.findChild(predicate.GenericPredicate(roleName='combo box', name='None'))
-            self.info_elements = self.findChildren(predicate.GenericPredicate(roleName='text'))
-            self.discount_txt = self.info_elements[0]
-            self.credit_limit_txt = self.info_elements[1]
             self.tax_included_combobox = \
             self.findChild(predicate.GenericPredicate(roleName='combo box', name='Use Global'))
             self.override_global_tax_cb = \
             self.findChild(predicate.GenericPredicate(\
             roleName= 'check box', \
             description='Override the global Tax Table?'))
-            self.tax_table_combobox = \
-            self.findChild(predicate.GenericPredicate\
-            (roleName='combo box', \
-            description='What Tax Table should be applied to this customer?'))
 
     def __init__(self):
         pass
 
     def initialize(self):
         """ Initialize new generic components """
-        self.ok_btn = self.button('OK')
-        self.cancel_btn = self.button('Cancel')
-        self.help_btn = self.button('Help')
-
+        pass
 
 class NewCustomer(NewXXX):
     """ New Customer wrapper """
@@ -965,11 +961,10 @@ class NewCustomer(NewXXX):
             self.phone_txt = self.findChild(predicate.IsLabelledAs('Phone: '))
             self.fax_txt = self.findChild(predicate.IsLabelledAs('Fax: '))
             self.email_txt = self.findChild(predicate.IsLabelledAs('Email: '))
-            
+
     def __init__(self):
         self.invoke_list = ["Business", "Customer", "New Customer..."]
         self.dialog_name = 'New Customer'
-        
 
     def initialize(self):
         NewXXX.initialize(self)
@@ -982,6 +977,14 @@ class NewCustomer(NewXXX):
         self.customer.customer_number_txt = self.identification_panel_element[0]
         self.billing_information = \
         self.YYYInformation(self.tab('Billing Information'))
+        self.billing_information.info_elements = self.findChildren(predicate.GenericPredicate(roleName='text'))
+        self.billing_information.discount_txt = self.billing_information.info_elements[0]
+        self.billing_information.credit_limit_txt = self.billing_information.info_elements[1]
+        self.billing_information.tax_table_combobox = \
+        self.findChild(predicate.GenericPredicate\
+        (roleName='combo box', \
+        description='What Tax Table should be applied to this customer?'))
+
         self.shipping_information = self.tab('Shipping Address')
         self.ok_btn = self.button('OK')
         self.cancel_btn = self.button('Cancel')
@@ -989,17 +992,24 @@ class NewCustomer(NewXXX):
 
 class NewVendor(NewXXX):
 
+
     def __init__(self):
-        self.invoke_list = ["Business", "Customer", "New Vendor..."]
+        self.invoke_list = ["Business", "Vendor", "New Vendor..."]
         self.dialog_name = 'New Vendor'
 
     def initialize(self):
         NewXXX.initialize(self)
         self.vendor = self.XXX(self.tab('Vendor'))
-        self.vendor.vendor_number_txt = \
-        self.vendor.findChild(predicate.IsLabelledAs('Vendor Number: '))
+        self.identification_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name='Identification'))
+        self.identification_panel_element = \
+        self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
+        self.vendor.vendor_number_txt = self.identification_panel_element[0]
         self.payment_information = \
         self.YYYInformation(self.tab('Payment Information'))
+        self.ok_btn = self.button('OK')
+        self.cancel_btn = self.button('Cancel')
+        self.help_btn = self.button('Help')
 
 class NewEmpolyee(NewXXX):
     """ Wrapper for New Empolyee Dialog """
@@ -1073,6 +1083,7 @@ class NewInvoice(GnucashWindow):
         self.notes_txt = \
         self.notes_panel.findChild(predicate.GenericPredicate(roleName='text'))
         self.select_btn = self.button('Select...')
+
     def __setattr__(self, name, value):
         #TODO: Customer Text does not work
         if name =='customer':
@@ -1082,7 +1093,6 @@ class NewInvoice(GnucashWindow):
             cell = findCustomer.find()[0]
             dogtail.rawinput.click(cell.position[0], cell.position[1]+cell.size[1]*2)
             findCustomer.button('Select').click()
-
         elif name == 'billing_id':
             self.billing_id_txt.text = value
         elif name == 'notes':
@@ -1096,6 +1106,62 @@ class FindInvoice(Find):
     def __init__(self):
         self.invoke_list = ["Business", "Customer", "Find Invoice..."]
         self.dialog_name = 'Find Invoice'
+
+class NewBill(GnucashWindow):
+    """ New Bill wrapper """
+    # TODO: refactor the NewBill and NewInvoice
+
+    def __init__(self):
+        self.invoke_list = ["Business", "Vendor", "New Bill..."]
+        self.dialog_name = 'New Bill'
+
+    def initialize(self):
+        self.invoice_information_panel = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='panel', \
+        name='Invoice Information'))
+        self.invoice_id_txt = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='text', \
+        description='The invoice ID number.  If left blank a reasonable number will be chosen for you.'))
+        self.billing_information_panel = \
+        self.findChild(predicate.GenericPredicate(\
+        roleName='panel', \
+        name='Billing Information'))
+        self.billing_information_list = \
+        self.billing_information_panel.findChildren(predicate.GenericPredicate(roleName='text'), recursive=True)
+        print len(self.billing_information_list)
+        self.customer_txt = self.billing_information_list[0]
+        #self.job_txt = self.billing_information_list[1]
+        self.billing_id_txt = self.billing_information_list[1]
+        self.notes_panel = \
+        self.findChild(predicate.GenericPredicate(roleName='panel', name='Notes'))
+        self.notes_txt = \
+        self.notes_panel.findChild(predicate.GenericPredicate(roleName='text'))
+        self.select_btn = self.button('Select...')
+
+    def __setattr__(self, name, value):
+        #TODO: Customer Text does not work
+        if name =='vendor':
+            self.select_btn.click()
+            find_vendor = FindVendor()
+            find_vendor.text_fields_list[0].text = value
+            cell = find_vendor.find()[0]
+            dogtail.rawinput.click(cell.position[0], cell.position[1]+cell.size[1]*2)
+            find_vendor.button('Select').click()
+        elif name == 'billing_id':
+            self.billing_id_txt.text = value
+        elif name == 'notes':
+            self.notes_txt.text =value
+        else:
+            self.__dict__[name]=value
+
+class FindBill(Find):
+    """ Find Bill wrapper """
+
+    def __init__(self):
+        self.invoke_list = ["Business", "Vendor", "Find Bill..."]
+        self.dialog_name = 'Find Bill'
 
 class NewJob(GnucashWindow):
     """ New Job wrapper """
@@ -1121,13 +1187,6 @@ class ProcessPayment(GnucashWindow):
         self.invoke_list = ["Business", "Customer", "Process Payment..."]
         self.dialog_name = '' # TODO: Code update required here, to give this dialog an
 
-class NewVendor(GnucashWindow):
-    """ New Vendor """
-
-    def __init__(self):
-        self.invoke_list = ["Business", "Vendor", "New Vendor..."]
-        self.dialog_name = 'New Vendor'
-
 
 class FindVendor(Find):
     """ Find Vendor wrapper """
@@ -1135,6 +1194,14 @@ class FindVendor(Find):
     def __init__(self):
         self.invoke_list = ["Business", "Vendor", "Find Vendor..."]
         self.dialog_name = 'Find Vendor'
+        # TODO: Refactor the following code snippet to be in the Find class itself
+        sleep(2) #Sleep 2 seconds just to insure the dialog loaded if exist
+        gnucash = GnuCashApp()
+        find_vendor = gnucash.findChild(\
+        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), retry=False, requireResult=False)
+        if find_vendor != None:
+            Window.__init__(self, find_vendor)
+            self.initialize()
 
 
 
@@ -1500,7 +1567,15 @@ class ReconcileFrame(Node):
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
+    # Edit the Invoice
     gnucash = GnuCashApp()
-    # Validation
-    account_tab = gnucash.tab('Accounts')
-    validate_node(account_tab, 'test_accounts_receivable')
+    my_tab =  gnucash.tab('Edit Bill - 000001')
+
+    edit_invoice = EditInvoice(my_tab)
+    edit_invoice.invoice_register.date = '07/15/2007'
+    edit_invoice.invoice_register.description = 'Nails'
+    edit_invoice.invoice_register.action = 'Material'
+    edit_invoice.invoice_register.income_account = 'Income:Sales'
+    edit_invoice.invoice_register.quantity = '1,000.00'
+    edit_invoice.invoice_register.unit_price = '0.10'
+
