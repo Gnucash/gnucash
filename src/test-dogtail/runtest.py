@@ -350,7 +350,7 @@ class ScenarioTest(unittest.TestCase):
         validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out')
 
     def test_accounts_receivable(self):
-        """ Test accounts receivable """
+        """ Test accounts receivable Jobs not added yet"""
         gnucash = GnuCashApp()
 
         # Account setup
@@ -428,6 +428,75 @@ class ScenarioTest(unittest.TestCase):
         # Validation
         account_tab = gnucash.tab('Accounts')
         validate_node(account_tab, 'test_accounts_receivable')
+
+    def test_accounts_payable(self):
+
+        gnucash = GnuCashApp()
+
+        # Account setup
+        gnucash.add_new_account_page()
+        account_list = [
+                ['Asset', 'Asset'],
+                ['Liabilities', 'Liability'],
+                ['Expenses', 'Expense'],
+                ['Bank', 'Bank', 'Asset'],
+                ['Accounts Payable', 'A/Payable', 'Liabilities'],
+                ['AP Expenses', 'Expense', 'Expenses'],
+            ]
+        for account in account_list:
+            gnucash.add_account(*account)
+
+        # Company Registration
+        book_options = BookOptions()
+        book_options.invoke()
+        book_options.company_name = 'BCA Corp'
+        book_options.company_id = '12-1234455'
+        book_options.accept()
+
+        # add Three vendors
+        new_vendor = NewVendor()
+        new_vendor.invoke()
+        new_vendor.vendor.company_name_txt.text = 'BCA Inc'
+        new_vendor.vendor.name_txt.text = 'Joe Recievable'
+        new_vendor.vendor.address_1_txt.text = '321 Second St.'
+        new_vendor.vendor.address_2_txt.text = 'Someothercity, SC 54321'
+        new_vendor.vendor.phone_txt.text = '322-555-2345'
+        new_vendor.vendor.fax_txt.text = '322-555-2346'
+        new_vendor.vendor.email_txt.text = 'bca@bca.com'
+        new_vendor.vendor.notes_txt.text = 'Track any other comments here'
+        new_vendor.accept()
+
+        new_vendor = NewVendor()
+        new_vendor.invoke()
+        new_vendor.vendor.company_name_txt.text = 'Paper Supply Corporation'
+        new_vendor.vendor.name_txt.text = 'Fred Smith'
+        new_vendor.vendor.address_1_txt.text = '321 Second St.'
+        new_vendor.vendor.address_2_txt.text = 'Someothercity, SC 54321'
+        new_vendor.vendor.phone_txt.text = '322-555-2345'
+        new_vendor.vendor.fax_txt.text = '322-555-2346'
+        new_vendor.vendor.email_txt.text = 'bca@bca.com'
+        new_vendor.vendor.notes_txt.text = 'Track any other comments here'
+        new_vendor.accept()
+
+        new_vendor = NewVendor()
+        new_vendor.invoke()
+        new_vendor.vendor.company_name_txt.text = 'XYZ Computer Sales'
+        new_vendor.vendor.name_txt.text = 'Frank Reciever'
+        new_vendor.vendor.address_1_txt.text = '321 Second St.'
+        new_vendor.vendor.address_2_txt.text = 'Someothercity, SC 54321'
+        new_vendor.vendor.phone_txt.text = '322-555-2345'
+        new_vendor.vendor.fax_txt.text = '322-555-2346'
+        new_vendor.vendor.email_txt.text = 'bca@bca.com'
+        new_vendor.vendor.notes_txt.text = 'Track any other comments here'
+        new_vendor.accept()
+
+        # add new Bill
+        new_bill = NewBill()
+        new_bill.invoke()
+        new_bill.vendor = 'Paper Supply Corporation'
+        new_bill.notes = 'Additional notes about the bill go here'
+        new_bill.accept()
+
 
 if __name__ == "__main__":
     unittest.main()
