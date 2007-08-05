@@ -33,7 +33,6 @@
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
-#include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */

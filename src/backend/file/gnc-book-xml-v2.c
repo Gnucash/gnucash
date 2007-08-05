@@ -134,8 +134,6 @@ gnc_book_dom_tree_create(QofBook *book)
     xaccAccountTreeForEachTransaction (gnc_book_get_root_account(book),
 				       traverse_txns, ret);
 
-    xmlAddChild(ret, gnc_freqSpec_dom_tree_create (book));
-
     /* xxx FIXME hack alert how are we going to handle 
      *  gnc_book_get_template_group handled ???   */
     xmlAddChild(ret, gnc_schedXaction_dom_tree_create(

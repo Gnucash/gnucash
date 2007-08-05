@@ -41,7 +41,6 @@
 #include "qof.h"
 #include "gnc-book.h"
 #include "Account.h"
-#include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "dialog-preferences.h"
@@ -948,18 +947,9 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
     /* start date and freq spec */
     {
-        FreqSpec *fs;
         GDate gdate;
         GString *str;
         GList *schedule = NULL;
-
-        fs = xaccSchedXactionGetFreqSpec( sxed->sx );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
-
-        str = g_string_new( "" );
-        xaccFreqSpecGetFreqStr( fs, str );
-        g_debug("freq spec: %s", str->str);
-        g_string_free(str, TRUE);
 
         gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
         gnc_sx_set_schedule(sxed->sx, schedule);

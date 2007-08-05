@@ -41,7 +41,6 @@ typedef struct _SchedXactionClass SchedXactionClass;
 #include <time.h>
 #include <glib.h>
 #include "qof.h"
-#include "FreqSpec.h"
 #include "Recurrence.h"
 #include "gnc-engine.h"
 
@@ -91,7 +90,6 @@ struct _SchedXaction
   gchar           *name;
 
   GList           *schedule;
-  FreqSpec        *freq;
   
   GDate           last_date;
   
@@ -153,13 +151,6 @@ void gnc_sx_commit_edit (SchedXaction *sx);
 GList* gnc_sx_get_schedule(const SchedXaction *sx);
 /** @param[in] schedule A GList<Recurrence*> **/
 void gnc_sx_set_schedule(SchedXaction *sx, GList *schedule);
-
-FreqSpec *xaccSchedXactionGetFreqSpec( const SchedXaction *sx );
-/**
- * The FreqSpec is given to the SchedXaction for mem mgmt; it should
- * not be freed by the external code.
-*/
-void xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs );
 
 gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 /**

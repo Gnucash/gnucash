@@ -1547,11 +1547,11 @@ ld_pay_save_current( LoanDruidData *ldd )
         }
         
         /* if ( rb toggled )
-         *   ensure freqspec/startdate setup
+         *   ensure schedule/startdate setup
          *   save
          * else
          *   if (freqspec setup)
-         *     remove freqspec/startdate
+         *     remove schedule/startdate
          */
 
         /* neither of these should happen. */

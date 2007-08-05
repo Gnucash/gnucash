@@ -33,7 +33,6 @@
 #include "gnc-session.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "FreqSpec.h"
 #include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"

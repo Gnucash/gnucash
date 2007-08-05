@@ -25,13 +25,10 @@
 #include <glib.h>
 
 #include "test-stuff.h"
-#include "FreqSpec.h"
 #include "Recurrence.h"
 #include "gnc-engine.h"
 
 static QofBook *book;
-static FreqSpec *fs;
-//#define FREQSPECTEST
 
 static void check_valid(GDate *next, GDate *ref, GDate *start,
                         guint16 mult, PeriodType pt)
@@ -47,15 +44,9 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
 
     if (!valid) return;
 
-    // FreqSpec.h does claim to offer this.
     do_test(g_date_compare(ref, next) < 0,
             "next date not strictly later than ref date");
     startToNext = g_date_get_julian(next) - g_date_get_julian(start);
-
-    // FreqSpec *doesn't* offer beginning dates.
-#ifndef FREQSPECTEST
-    do_test(startToNext >= 0, "next date is before start date");
-#endif
 
     // Phase test
     switch (pt) {
@@ -65,9 +56,6 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         mult *= 12;
         // fall-through
     case PERIOD_END_OF_MONTH:
-#ifdef FREQSPECTEST
-        return;   // FreqSpec doesn't have this case
-#endif
         if (pt == PERIOD_END_OF_MONTH)
             do_test(g_date_is_last_of_month(next), "end of month phase wrong");
         // fall-through
@@ -131,36 +119,6 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
 
 }
 
-#ifdef FREQSPECTEST
-static void convert_pt_to_fs(FreqSpec *fs, guint mult,
-                             PeriodType pt, GDate *start)
-{
-    switch (pt) {
-    case PERIOD_ONCE:
-        xaccFreqSpecSetOnceDate(fs, start);
-        break;
-    case PERIOD_DAY:
-        xaccFreqSpecSetDaily(fs, start, mult);
-        break;
-    case PERIOD_WEEK:
-        xaccFreqSpecSetWeekly(fs, start, mult);
-        break;
-    case PERIOD_MONTH:
-        xaccFreqSpecSetMonthly(fs, start, mult);
-        break;
-    case PERIOD_END_OF_MONTH:
-        // not handled
-    case PERIOD_NTH_WEEKDAY:
-        break;
-    case PERIOD_YEAR:
-        xaccFreqSpecSetMonthly(fs, start, 12*mult);
-        break;
-    default:
-        ;
-    }
-}
-#endif
-
 #define NUM_DATES_TO_TEST 300
 #define NUM_DATES_TO_TEST_REF 300
 #define NUM_MULT_TO_TEST 10
@@ -193,10 +151,6 @@ static void test_all()
                     mult_reg = recurrenceGetMultiplier(&r);
 
                     recurrenceNextInstance(&r, &d_ref, &d_next);
-#ifdef FREQSPECTEST
-                    convert_pt_to_fs(fs, mult_reg, pt_reg, &d_start_reg);
-                    xaccFreqSpecGetNextInstance(fs, &d_ref, &d_next);
-#endif
                     check_valid(&d_next, &d_ref, &d_start_reg,
                                 mult_reg, pt_reg);
 
@@ -237,10 +191,6 @@ static void test_specific(PeriodType pt, guint16 mult,
 
     recurrenceSet(&r, mult, pt, &start);
     recurrenceNextInstance(&r, &ref, &next);
-#ifdef FREQSPECTEST
-    convert_pt_to_fs(fs, mult, pt, &start);
-    xaccFreqSpecGetNextInstance(fs, &ref, &next);
-#endif
 
     check_valid(&next, &ref, &start, mult, pt);
     if (!test_equal(&next, &true_next)) {
@@ -344,13 +294,10 @@ static void test_some()
     test_specific(PERIOD_MONTH, 1,     1,30,1,    2,27,1,   2,28,1);
     test_specific(PERIOD_MONTH, 1,     2,28,1,    3,30,1,   4,28,1);
 
-#ifdef FREQSPECTEST
-    test_specific(PERIOD_MONTH, 3,    12, 12, 1,  2, 1, 1,    3, 12, 1);
-#else
     test_specific(PERIOD_END_OF_MONTH, 1,   2,28,1,    3,30,1,   3,31,1);
     test_specific(PERIOD_END_OF_MONTH, 5,   4,30,1,    4,21,1,  4,30,1);
     test_specific(PERIOD_END_OF_MONTH, 5,   2,28,1,    5,21,1,  7,31,1);
-#endif
+
     test_specific(PERIOD_YEAR,          7,   6,8,199,    9,10,1338,  6,8,1340);
     test_specific(PERIOD_YEAR,          2,   9,8,838,    6,30,1094,  9,8,1094);
 
@@ -371,7 +318,6 @@ static void test_main()
 {
 
     book = qof_book_new ();
-    fs = xaccFreqSpecMalloc(book);
 
     test_use();
 
@@ -379,7 +325,6 @@ static void test_main()
 
     test_all();
 
-    xaccFreqSpecFree(fs);
     qof_book_destroy (book);
 }
 

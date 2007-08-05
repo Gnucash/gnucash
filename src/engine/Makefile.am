@@ -14,7 +14,6 @@ AM_CFLAGS = \
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
-  FreqSpec.c \
   Recurrence.c \
   Period.c \
   Query.c \
@@ -93,7 +92,6 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   AccountP.h \
-  FreqSpecP.h \
   QueryP.h \
   ScrubP.h \
   SplitP.h \
