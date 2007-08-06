@@ -729,6 +729,9 @@ class Find(GnucashWindow):
         self.text_fields_list = \
         self.search_criteria_panel.findChildren(\
         predicate.GenericPredicate(roleName='text'))
+        self.search_by_list = \
+        self.search_criteria_panel.findChildren(\
+        predicate.GenericPredicate(roleName='combo box'))
         self.find_btn = self.button('Find')
         self.new_search_rb = \
         self.findChild(\
@@ -744,10 +747,16 @@ class Find(GnucashWindow):
         predicate.GenericPredicate(roleName='radio button', name='Delete results from current search'))
 
     def add_criteria(self):
+
         self.button('Add').click()
         self.text_fields_list = \
         self.search_criteria_panel.findChildren(\
         predicate.GenericPredicate(roleName='text'))
+
+        self.search_by_list = \
+        self.search_criteria_panel.findChildren(\
+        predicate.GenericPredicate(roleName='combo box'))
+
 
     def find(self):
         self.find_btn.click()
@@ -1239,6 +1248,9 @@ class Register(Node):
 
     def __goto(self, x, y):
         sleep(1)
+        self.prev_col_val = 0
+        self.row_val = x
+        self.column_val = y
         # Click to activate the Register widget
         dogtail.rawinput.click(self.position[0], self.position[1])
         for j in range(x):
@@ -1248,6 +1260,7 @@ class Register(Node):
 
     def set_cell_text(self, text):
         """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left by calculating the the difference from the current position"""
+        
         relative_pos = self.column_val - self.prev_col_val
         print relative_pos
         if relative_pos > 0 :
@@ -1569,13 +1582,27 @@ if __name__ == '__main__':
     config.childrenLimit = 1500
     # Edit the Invoice
     gnucash = GnuCashApp()
-    my_tab =  gnucash.tab('Edit Bill - 000001')
+    # Post to Asset:Accounts Receivable 
+    # add new customer 
+    #new_customer = NewCustomer()
+    #new_customer.invoke()
+    #new_customer.customer.company_name_txt.text = 'ABC Inc'
+    #new_customer.customer.name_txt.text = 'Bob McBob'
+    #new_customer.customer.address_1_txt.text = '123 First Ave.'
+    #new_customer.customer.address_2_txt.text = 'Somecity, SS 12345'
+    #new_customer.customer.phone_txt.text = '515-234-5678'
+    #new_customer.customer.fax_txt.text = '515-235-5679'
+    #new_customer.customer.email_txt.text = 'abc@abc.com'
+    #new_customer.customer.notes_txt.text = 'Bob McBobs, Sales Dept.'
+    #new_customer.accept()
 
-    edit_invoice = EditInvoice(my_tab)
-    edit_invoice.invoice_register.date = '07/15/2007'
-    edit_invoice.invoice_register.description = 'Nails'
-    edit_invoice.invoice_register.action = 'Material'
-    edit_invoice.invoice_register.income_account = 'Income:Sales'
-    edit_invoice.invoice_register.quantity = '1,000.00'
-    edit_invoice.invoice_register.unit_price = '0.10'
+    findCustomer = FindCustomer()
+    findCustomer.text_fields_list[0].text = "."
+    findCustomer.search_by_list[0].combovalue = 'Customer ID'
+    findCustomer.search_by_list[1].combovalue = 'matches regex'
+    findCustomer.add_criteria()
+    findCustomer.text_fields_list[0].text = "x"
+    findCustomer.search_by_list[0].combovalue = 'Company Name'
+    findCustomer.search_by_list[1].combovalue = 'contains'
 
+    print (findCustomer.find())
