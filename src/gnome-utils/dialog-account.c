@@ -1291,7 +1291,7 @@ get_ui_fullname (AccountWindow *aw)
 
   parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
 
-  if (!gnc_account_is_root(parent_account))
+  if (parent_account && !gnc_account_is_root(parent_account))
   {
     char *parent_name;
     const gchar *separator;
