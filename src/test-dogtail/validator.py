@@ -22,14 +22,7 @@ def validate_node (node, testname, ref_filename=None, act_filename=None):
     act_file.close()
     # get divided 265 to get the exact system status
     error_code = os.system("diff %s %s" % (act_filename, ref_filename))/256
-    if error_code == EXIT_SUCCESS:
-        return 
-    elif error_code == EXIT_FAILURE:
-        raise Exception('Exit Failure: Refernece file not match the act file')
-    elif error_code == EXIT_TROUBLE:
-        raise Exception('Exit Trouble: Reference file not found')
-    else:
-        raise Exception('Unknown Error')
+    return error_code
 
 def generate_act_file (node, file, depth = 0):
     """ helper method that Generate the act file, The file Generated in the testcase """
