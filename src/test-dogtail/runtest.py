@@ -233,7 +233,7 @@ class TestDialogs(unittest.TestCase):
         test_cell.doAction('activate')
         style_sheet.delete_btn.click()
         # after removing the node confirm that the state resotred to the previous State before Adding
-        validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2')
+        assert(validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2') == EXIT_SUCCESS)
         style_sheet.dismiss()
 
 class ScenarioTest(unittest.TestCase):
@@ -289,7 +289,7 @@ class ScenarioTest(unittest.TestCase):
             gnucash.add_account(*account)
         # Validation
         account_tab = gnucash.tab('Accounts')
-        validate_node(account_tab, 'test_new_account_dialog')
+        assert(validate_node(account_tab, 'test_new_account_dialog') == EXIT_SUCCESS)
 
     def test_perform_transaction(self):
         """ Call the previos test case and then perform some transaction 
@@ -325,7 +325,7 @@ class ScenarioTest(unittest.TestCase):
         register.end_trans()
         # Validation
         account_tab = gnucash.tab('Accounts')
-        validate_node(account_tab, 'test_perform_transaction')
+        assert(validate_node(account_tab, 'test_perform_transaction') == EXIT_SUCCESS)
 
     def test_perform_reconcilation(self):
         """ Test Reconcilation """
@@ -335,8 +335,8 @@ class ScenarioTest(unittest.TestCase):
         reconcile.include_subaccount = True
         reconcile.accept()
         reconcileFrame = ReconcileFrame()
-        validate_node(reconcileFrame.funds_in, 'test_before_perform_reconcilation_funds_in')
-        validate_node(reconcileFrame.funds_out, 'test_before_perform_reconcilation_funds_out')
+        assert(validate_node(reconcileFrame.funds_in, 'test_before_perform_reconcilation_funds_in') == EXIT_SUCCESS)
+        assert(validate_node(reconcileFrame.funds_out, 'test_before_perform_reconcilation_funds_out') == EXIT_SUCCESS)
 
         reconcileFrame.select_all_funds_out()
         reconcileFrame.select_all_funds_in()
@@ -346,8 +346,8 @@ class ScenarioTest(unittest.TestCase):
         reconcile = gnucash.reconcile_account('Asset')
         reconcile.accept()
         reconcileFrame = ReconcileFrame()
-        validate_node(reconcileFrame.funds_in, 'test_after_perform_reconcilation_funds_in')
-        validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out')
+        assert(validate_node(reconcileFrame.funds_in, 'test_after_perform_reconcilation_funds_in') == EXIT_SUCCESS)
+        assert(validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out') == EXIT_SUCCESS)
 
     def test_accounts_receivable(self):
         """ Test accounts receivable Jobs not added yet"""
@@ -427,7 +427,7 @@ class ScenarioTest(unittest.TestCase):
 
         # Validation
         account_tab = gnucash.tab('Accounts')
-        validate_node(account_tab, 'test_accounts_receivable')
+        assert(validate_node(account_tab, 'test_accounts_receivable')==EXIT_SUCCESS)
 
     def test_accounts_payable(self):
 
@@ -497,6 +497,52 @@ class ScenarioTest(unittest.TestCase):
         new_bill.notes = 'Additional notes about the bill go here'
         new_bill.accept()
 
+        # Edit the Invoice
+
+        my_tab =  gnucash.tab('Edit Bill - 000001')
+        edit_invoice = EditInvoice(my_tab)
+        edit_invoice.invoice_register.date = '07/15/2007'
+        edit_invoice.invoice_register.description = 'LetterHead'
+        edit_invoice.invoice_register.action = 'Material'
+        edit_invoice.invoice_register.income_account = 'Expenses:AP Expenses'
+        edit_invoice.invoice_register.quantity = '5.00'
+        edit_invoice.invoice_register.unit_price = '15'
+        gnucash.menu('Actions').menuItem('Enter').click()
+
+        edit_invoice.invoice_register.row = 1
+        edit_invoice.invoice_register.date = '07/15/2007'
+        edit_invoice.invoice_register.description = 'Envelops'
+        edit_invoice.invoice_register.action = 'Material'
+        edit_invoice.invoice_register.income_account = 'Expenses:AP Expenses'
+        edit_invoice.invoice_register.quantity = '500'
+        edit_invoice.invoice_register.unit_price = '0.05'
+        gnucash.menu('Actions').menuItem('Enter').click()
+        # Post to Asset:Accounts Receivable 
+        gnucash.button('Post').click()
+        question = Question()
+        question.post_to_account = 'Liabilities:Accounts Payable'
+        question.accept()
+
+        # close the edit invoice tab as a cleanup
+        edit_invoice.invoice_register.end_trans()
+
+        # Validation
+        account_tab = gnucash.tab('Accounts')
+        assert(validate_node(account_tab, 'test_accounts_payable')==EXIT_SUCCESS)
+
+class TestTest(unittest.TestCase):
+
+    def setUp(self):
+        print "Setup"
+
+    def tearDown(self):
+        print "tearDown"
+
+    def test_test1(self):
+        x = 4
+        y = 4
+        assert (x == 5)
+        assert (y == 4)
 
 if __name__ == "__main__":
     unittest.main()
