@@ -667,7 +667,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 		account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
 		sensitive = (account != NULL);
 
-		subaccounts = (gnc_account_n_children(account) != 0);
+		subaccounts = account && (gnc_account_n_children(account) != 0);
 		/* Check here for placeholder accounts, etc. */
 	}
 
