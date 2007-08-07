@@ -86,7 +86,7 @@ gncReadFile (const char * file, char ** data)
   if (!file || file[0] == '\0') return 0;
 
   /* take absolute paths without searching */
-  if (file[0] != '/')
+  if (!g_path_is_absolute (file))
     filename = gncFindFile (file);
   else
     filename = g_strdup (file);
