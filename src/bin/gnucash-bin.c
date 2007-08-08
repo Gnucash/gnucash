@@ -528,7 +528,6 @@ gnc_log_init()
           {
                QofLogLevel level;
                gchar **parts = NULL;
-               gchar *logger_name = NULL;
 
                gchar *log_opt = log_flags[i];
                parts = g_strsplit(log_opt, "=", 2);
@@ -539,7 +538,6 @@ gnc_log_init()
                }
 
                level = qof_log_level_from_string(parts[1]);
-
                qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
