@@ -113,12 +113,19 @@ class GnuCashApp (Application):
         self.menu("File").menu("New").child("New Accounts Page").click()
         account_page = self.tab("Accounts")
         return account_page
-    
-    def add_account (self, account_name, account_type=None, account_parent=None, smallest_fraction=None, account_code=None,   description=None, notes=None):
-        """ Add account this function able to add only two levels parent child account """
+
+    def add_account (self, account_name, account_type=None, \
+        account_parent=None, smallest_fraction=None, account_code=None,  \
+         description=None, notes=None):
+        """ Add account this function able to add only
+             two levels parent child account """
         if account_parent != None:
-            account_table = self.findChild(predicate.GenericPredicate(roleName='page tab', name='Accounts'))
-            parent_cell = account_table.findChild(predicate.GenericPredicate(roleName='table cell', name=account_parent))
+            account_table = \
+            self.findChild(\
+            predicate.GenericPredicate(roleName='page tab', name='Accounts'))
+            parent_cell = \
+            account_table.findChild(\
+            predicate.GenericPredicate(roleName='table cell', name=account_parent))
             parent_cell.rawClick()
 
         newAccount = NewAccount()
@@ -146,6 +153,7 @@ class GnuCashApp (Application):
         reconcile = Reconcile()
         reconcile.invoke()
         return reconcile
+    
 
 class GnucashWindow(Window):
     """ A base for all Gnucash Dialogs dialogs """
@@ -196,11 +204,11 @@ class GnucashWindow(Window):
         """" when calling dismiss the expected action is Cancel, Close and No """
         button_list = self.findChildren(predicate.GenericPredicate(roleName='push button'))
         for button in button_list:
-           accept_button = in_accept_list(button)
-           if accept_button != None:
-               if accept_button.showing:
-                   accept_button.click()
-                   return True
+            accept_button = in_accept_list(button)
+            if accept_button != None:
+                if accept_button.showing:
+                    accept_button.click()
+                    return True
         return False
 
 class Open(GnucashWindow):
@@ -217,7 +225,7 @@ class Open(GnucashWindow):
         if name == 'location':
             self.location_txt.text = value
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
     def open_location(self, file_path):
         self.location = file_path
@@ -261,7 +269,8 @@ class NewAccount(GnucashWindow):
         self.ok_button = self.button("OK")
 
     def __setattr__(self, name, value):
-        """ Always set the account name as your last account because it changes the dialog title which may lead to failure
+        """ Always set the account name as your last account 
+        because it changes the dialog title which may lead to failure
         TODO: Fix up this issue, find a way to search using the regex, or implement it
         """
         if name == 'account_name':
@@ -295,7 +304,7 @@ class NewAccount(GnucashWindow):
             elif not value and self.tax_related_checkbox.checked:
                 self.tax_related_checkbox.click()
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
     def set_currency(self, value):
         """ TODO: Try to figure out why It does not work  """
@@ -712,9 +721,6 @@ class Preferences(GnucashWindow):
 
 class Find(GnucashWindow):
     """ Wrapper for all gnucash Find include Find txns, Find Customer, Find Job, ... """
-    
-    def __init__(self):
-        pass
 
     def initialize(self):
         """ initialize Common components """
@@ -747,7 +753,7 @@ class Find(GnucashWindow):
         predicate.GenericPredicate(roleName='radio button', name='Delete results from current search'))
 
     def add_criteria(self):
-
+        """ Add search critieria then refresh the children list """
         self.button('Add').click()
         self.text_fields_list = \
         self.search_criteria_panel.findChildren(\
@@ -759,6 +765,7 @@ class Find(GnucashWindow):
 
 
     def find(self):
+        """ Click find button and return a results appears in the find dialog"""
         self.find_btn.click()
         self.result_table = self.findChild(\
         predicate.GenericPredicate(roleName='table'))
@@ -832,7 +839,7 @@ class NewStyleSheet(Window):
         elif name == 'template':
             self.template_combo.combovalue = value
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
     def accept(self):
         self.ok_btn.click()
@@ -887,6 +894,27 @@ class NewXXX(GnucashWindow):
     """ This class used to hold the common controls between the New Customer, New Vendor and New Empolyee 
         TODO: Replace XXX with a nice name, this name is terrible, i can not call other one
     """
+
+    def add_new_XXX (self, company_name=None, name=None, \
+        address_1=None, address_2=None, \
+        phone=None, fax=None, email=None, notes=None):
+        """ add new customer """
+        if company_name != None:
+            self.xxx.company_name_txt.text = company_name
+        if name != None:
+            self.xxx.name_txt.text = name
+        if address_1 != None:
+            self.xxx.address_1_txt.text = address_1
+        if address_2 != None:
+            self.xxx.address_2_txt.text = address_2
+        if phone != None:
+            self.xxx.phone_txt.text = phone
+        if fax != None:
+            self.xxx.fax_txt.text = fax
+        if email != None:
+            self.xxx.email_txt.text = email
+        if notes != None:
+            self.xxx.notes_txt.text = notes
 
     class XXX(Node):
         """ 
@@ -964,23 +992,57 @@ class NewCustomer(NewXXX):
     class ShippingAddress(Node):
 
         def __init__(self, initializer):
-            Node.__init__(self, intializer)
-            self.name_txt = self.findChild(predicate.IsLabelledAs('Name: '))
-            self.address_txt = self.findChild(predicate.IsLabelledAs('Address: '))
-            self.phone_txt = self.findChild(predicate.IsLabelledAs('Phone: '))
-            self.fax_txt = self.findChild(predicate.IsLabelledAs('Fax: '))
-            self.email_txt = self.findChild(predicate.IsLabelledAs('Email: '))
+            Node.__init__(self, initializer)
+            self.shipping_address_elements = \
+            self.findChildren(predicate.GenericPredicate(roleName='text'))
+            self.name_txt = self.shipping_address_elements[0]
+            self.address_1_txt = self.shipping_address_elements[1]
+            self.address_2_txt = self.shipping_address_elements[2]
+            self.address_3_txt = self.shipping_address_elements[3]
+            self.address_4_txt = self.shipping_address_elements[4]
+            self.phone_txt = self.shipping_address_elements[5]
+            self.fax_txt = self.shipping_address_elements[6]
+            self.email_txt = self.shipping_address_elements[7]
 
+    def add_new_shipping_address(self, name=None, address_1=None, \
+        address_2=None, address_3=None, address_4=None,
+        phone=None, fax=None, email=None):
+        if name != None:
+            self.shipping_address.name_txt.text = name
+        if address_1 != None:
+            self.shipping_address.address_1_txt.text = address_1
+        if address_2 != None:
+            self.shipping_address.address_2_txt.text = address_2
+        if address_3 != None:
+            self.shipping_address.address_3_txt.text = address_3
+        if address_4 != None:
+            self.shipping_address.address_4_txt.text = address_4
+        if phone != None:
+            self.phone_txt.text = phone
+        if fax != None:
+            self.fax_txt.text = fax
+        if email != None:
+            self.email_txt.text = email
     def __init__(self):
         self.invoke_list = ["Business", "Customer", "New Customer..."]
         self.dialog_name = 'New Customer'
 
+    def add_new_customer (self, company_name=None, name=None, \
+        address_1=None, address_2=None, \
+        phone=None, fax=None, email=None, notes=None):
+        NewXXX.add_new_XXX(self, company_name, name, \
+        address_1, address_2, \
+        phone, fax, email, notes)
+
+
     def initialize(self):
         NewXXX.initialize(self)
         self.customer = self.XXX(self.tab('Customer'))
+        self.xxx = self.customer
         self.billing_information = self.YYYInformation(self.tab('Billing Information'))
         self.identification_panel = \
-        self.customer.findChild(predicate.GenericPredicate(roleName='panel', name='Identification'))
+        self.customer.findChild(\
+        predicate.GenericPredicate(roleName='panel', name='Identification'))
         self.identification_panel_element = \
         self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
         self.customer.customer_number_txt = self.identification_panel_element[0]
@@ -994,7 +1056,7 @@ class NewCustomer(NewXXX):
         (roleName='combo box', \
         description='What Tax Table should be applied to this customer?'))
 
-        self.shipping_information = self.tab('Shipping Address')
+        self.shipping_address = self.ShippingAddress(self.tab('Shipping Address'))
         self.ok_btn = self.button('OK')
         self.cancel_btn = self.button('Cancel')
         self.help_btn = self.button('Help')
@@ -1095,7 +1157,7 @@ class NewInvoice(GnucashWindow):
 
     def __setattr__(self, name, value):
         #TODO: Customer Text does not work
-        if name =='customer':
+        if name == 'customer':
             self.select_btn.click()
             findCustomer = FindCustomer()
             findCustomer.text_fields_list[0].text = value
@@ -1105,9 +1167,9 @@ class NewInvoice(GnucashWindow):
         elif name == 'billing_id':
             self.billing_id_txt.text = value
         elif name == 'notes':
-            self.notes_txt.text =value
+            self.notes_txt.text = value
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
 class FindInvoice(Find):
     """ Find Invoice wrapper """
@@ -1151,7 +1213,7 @@ class NewBill(GnucashWindow):
 
     def __setattr__(self, name, value):
         #TODO: Customer Text does not work
-        if name =='vendor':
+        if name == 'vendor':
             self.select_btn.click()
             find_vendor = FindVendor()
             find_vendor.text_fields_list[0].text = value
@@ -1161,9 +1223,9 @@ class NewBill(GnucashWindow):
         elif name == 'billing_id':
             self.billing_id_txt.text = value
         elif name == 'notes':
-            self.notes_txt.text =value
+            self.notes_txt.text = value
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
 class FindBill(Find):
     """ Find Bill wrapper """
@@ -1439,7 +1501,7 @@ class BookOptions(GnucashWindow):
         elif name == 'company_id':
             self.company_id_txt.text = value
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
 
 class Question(Window):
@@ -1471,7 +1533,7 @@ class Question(Window):
             elif not value and self.accumulate_splits_cb.checked:
                 self.accumulate_splits_cb.click()
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
     def accept(self):
         self.button('OK').click()
 
@@ -1503,7 +1565,7 @@ class Reconcile(GnucashWindow):
             elif not value and self.include_subaccount_cb.checked:
                 self.include_subaccount_cb.click()
         else:
-            self.__dict__[name]=value
+            self.__dict__[name] = value
 
 class ReconcileFrame(Node):
 
@@ -1520,7 +1582,7 @@ class ReconcileFrame(Node):
             elif name == 'column':
                 self.column_table_cell = value
             else:
-                self.__dict__[name]=value
+                self.__dict__[name] = value
 
         def click(self, row=None, column=None):
             """ Another row - column based controls i found no action assigned with this table cell Only Activate which does not work because dogtail does not detect the position correctly """
@@ -1557,12 +1619,13 @@ class ReconcileFrame(Node):
 
     def __select_all_funds(self, funds_type):
         """ Select All funds out item in funds out table """
-        funds_panel = \
-        self.findChild(predicate.GenericPredicate(roleName='panel', name=funds_type))
+        funds_panel = self.findChild(\
+        predicate.GenericPredicate(roleName='panel', name=funds_type))
         funds_table = \
         funds_panel.findChild(predicate.GenericPredicate(roleName='table'))
         funds = self.FundsTable(funds_table)
-        tabel_cell_list = funds_panel.findChildren(predicate.GenericPredicate(roleName='table cell'), recursive=True)
+        tabel_cell_list = funds_panel.findChildren(\
+        predicate.GenericPredicate(roleName='table cell'), recursive=True)
         for i in  range((len(tabel_cell_list)/5)):
             funds.row = i
             funds.col = 2
@@ -1584,25 +1647,17 @@ if __name__ == '__main__':
     gnucash = GnuCashApp()
     # Post to Asset:Accounts Receivable 
     # add new customer 
-    #new_customer = NewCustomer()
-    #new_customer.invoke()
-    #new_customer.customer.company_name_txt.text = 'ABC Inc'
-    #new_customer.customer.name_txt.text = 'Bob McBob'
-    #new_customer.customer.address_1_txt.text = '123 First Ave.'
-    #new_customer.customer.address_2_txt.text = 'Somecity, SS 12345'
-    #new_customer.customer.phone_txt.text = '515-234-5678'
-    #new_customer.customer.fax_txt.text = '515-235-5679'
-    #new_customer.customer.email_txt.text = 'abc@abc.com'
-    #new_customer.customer.notes_txt.text = 'Bob McBobs, Sales Dept.'
-    #new_customer.accept()
+    new_customer = NewCustomer()
+    new_customer.invoke()
+    new_customer.add_new_customer('name')
+    new_customer.add_new_shipping_address('name','address1','address2')
+    #findCustomer = FindCustomer()
+    #findCustomer.text_fields_list[0].text = "."
+    #findCustomer.search_by_list[0].combovalue = 'Customer ID'
+    #findCustomer.search_by_list[1].combovalue = 'matches regex'
+    #findCustomer.add_criteria()
+    #findCustomer.text_fields_list[0].text = "x"
+    #findCustomer.search_by_list[0].combovalue = 'Company Name'
+    #findCustomer.search_by_list[1].combovalue = 'contains'
 
-    findCustomer = FindCustomer()
-    findCustomer.text_fields_list[0].text = "."
-    findCustomer.search_by_list[0].combovalue = 'Customer ID'
-    findCustomer.search_by_list[1].combovalue = 'matches regex'
-    findCustomer.add_criteria()
-    findCustomer.text_fields_list[0].text = "x"
-    findCustomer.search_by_list[0].combovalue = 'Company Name'
-    findCustomer.search_by_list[1].combovalue = 'contains'
-
-    print (findCustomer.find())
+    #print (findCustomer.find())
