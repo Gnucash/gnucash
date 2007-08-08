@@ -538,10 +538,9 @@ gnc_log_init()
                     continue;
                }
 
-               logger_name = g_strdup(parts[0]);
                level = qof_log_level_from_string(parts[1]);
 
-               qof_log_set_level(logger_name, level);
+               qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
      }
