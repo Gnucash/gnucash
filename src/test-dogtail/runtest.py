@@ -236,6 +236,33 @@ class TestDialogs(unittest.TestCase):
         assert(validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2') == EXIT_SUCCESS)
         style_sheet.dismiss()
 
+    def test_find_customer_dialog(self):
+        """ Separate in another class What to test 
+            1 - Various find condtion return the expected results
+            2 - when edit each result we got the expected results
+        """
+        
+        gnucash = GnuCashApp()
+        customer_info_list = [
+            ['ABC Corp', 'Bob McBob', '123 First Ave.', \
+            'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+            'abc@abc.com','Bob McBobs, Sales Dept.'],
+            ['ABC2 Corp', 'Bob2 McBob', '123 First Ave.', \
+            'Somecity2, SS 12345', '515-234-5678','515-235-5679', \
+            'abc2@abc.com','Bob McBobs, Sales Dept.'],
+            ['ABC Corp3', 'Bob3 McBob3', '123 First Ave.', \
+            'Somecity3, SS 12345', '515-234-5678','515-235-5679', \
+            'abc3@abc.com','Bob McBobs, Sales Dept.'],
+            ['ABC4 Corp', 'Bob4 McBob4', '123 First Ave.', \
+            'Somecity4, SS 12345', '515-234-5678','515-235-5679', \
+            'abc4@abc.com','Bob McBobs, Sales Dept.'],
+        ]
+        for customer_info in customer_info_list:
+            new_customer = NewCustomer()
+            new_customer.invoke()
+            new_customer.add_new_customer(*customer_info)
+            new_customer.accept()
+
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
 
