@@ -180,8 +180,6 @@ class GnucashWindow(Window):
         sleep(5)
         for dialog in dialog_list:
             result = re.search(self.dialog_name, dialog.name)
-            print self.dialog_name
-            print dialog.name
             if result != None:
                 Window.__init__(self, dialog)
                 self.initialize()
@@ -738,6 +736,9 @@ class Find(GnucashWindow):
         self.search_by_list = \
         self.search_criteria_panel.findChildren(\
         predicate.GenericPredicate(roleName='combo box'))
+        self.is_case_insensitive_list = \
+        self.search_criteria_panel.findChildren(\
+        predicate.GenericPredicate(roleName='toggle button'))
         self.find_btn = self.button('Find')
         self.new_search_rb = \
         self.findChild(\
@@ -1018,11 +1019,11 @@ class NewCustomer(NewXXX):
         if address_4 != None:
             self.shipping_address.address_4_txt.text = address_4
         if phone != None:
-            self.phone_txt.text = phone
+            self.shipping_address.phone_txt.text = phone
         if fax != None:
-            self.fax_txt.text = fax
+            self.shipping_address.fax_txt.text = fax
         if email != None:
-            self.email_txt.text = email
+            self.shipping_address.email_txt.text = email
     def __init__(self):
         self.invoke_list = ["Business", "Customer", "New Customer..."]
         self.dialog_name = 'New Customer'
@@ -1030,6 +1031,7 @@ class NewCustomer(NewXXX):
     def add_new_customer (self, company_name=None, name=None, \
         address_1=None, address_2=None, \
         phone=None, fax=None, email=None, notes=None):
+        """ A wrapper for add_new_xxx """
         NewXXX.add_new_XXX(self, company_name, name, \
         address_1, address_2, \
         phone, fax, email, notes)
@@ -1145,7 +1147,6 @@ class NewInvoice(GnucashWindow):
         name='Billing Information'))
         self.billing_information_list = \
         self.billing_information_panel.findChildren(predicate.GenericPredicate(roleName='text'), recursive=True)
-        print len(self.billing_information_list)
         self.customer_txt = self.billing_information_list[0]
         #self.job_txt = self.billing_information_list[1]
         self.billing_id_txt = self.billing_information_list[1]
@@ -1201,7 +1202,6 @@ class NewBill(GnucashWindow):
         name='Billing Information'))
         self.billing_information_list = \
         self.billing_information_panel.findChildren(predicate.GenericPredicate(roleName='text'), recursive=True)
-        print len(self.billing_information_list)
         self.customer_txt = self.billing_information_list[0]
         #self.job_txt = self.billing_information_list[1]
         self.billing_id_txt = self.billing_information_list[1]
@@ -1324,7 +1324,6 @@ class Register(Node):
         """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left by calculating the the difference from the current position"""
         
         relative_pos = self.column_val - self.prev_col_val
-        print relative_pos
         if relative_pos > 0 :
             for i in range(relative_pos):
                 self.keyCombo("Tab")
@@ -1644,20 +1643,3 @@ if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
     # Edit the Invoice
-    gnucash = GnuCashApp()
-    # Post to Asset:Accounts Receivable 
-    # add new customer 
-    new_customer = NewCustomer()
-    new_customer.invoke()
-    new_customer.add_new_customer('name')
-    new_customer.add_new_shipping_address('name','address1','address2')
-    #findCustomer = FindCustomer()
-    #findCustomer.text_fields_list[0].text = "."
-    #findCustomer.search_by_list[0].combovalue = 'Customer ID'
-    #findCustomer.search_by_list[1].combovalue = 'matches regex'
-    #findCustomer.add_criteria()
-    #findCustomer.text_fields_list[0].text = "x"
-    #findCustomer.search_by_list[0].combovalue = 'Company Name'
-    #findCustomer.search_by_list[1].combovalue = 'contains'
-
-    #print (findCustomer.find())
