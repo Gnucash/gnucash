@@ -236,32 +236,123 @@ class TestDialogs(unittest.TestCase):
         assert(validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2') == EXIT_SUCCESS)
         style_sheet.dismiss()
 
-    def test_find_customer_dialog(self):
-        """ Separate in another class What to test 
-            1 - Various find condtion return the expected results
-            2 - when edit each result we got the expected results
+
+class Business(unittest.TestCase):
+    """ Test  Business related dialogs Add/Find object """
+    def setUp(self):
+        #cleanup_all()
+        #run('gnucash')
+        #sleep(20)
+        gnuCash = GnuCashApp()
+        #gnuCash.dismiss_all_dialogs()
+
+    def tearDown(self):
+        gnuCash = GnuCashApp()
+        #gnuCash.close_without_saving()
+
+    def add_new_customers(self):
+        """ normal function used to add the list of customers to be processed
+            list = [
+                [ 
+                    [data in the customer tab 1],
+                    [data in the shipping address tab 1]
+                ],
+                [
+                    [data in the customer tab 2],
+                    [data in the shipping address tab 2]
+                ],
+            ]
+            TODO: anyone else feel it is relatively complex.
         """
-        
-        gnucash = GnuCashApp()
         customer_info_list = [
-            ['ABC Corp', 'Bob McBob', '123 First Ave.', \
-            'Somecity, SS 12345', '515-234-5678','515-235-5679', \
-            'abc@abc.com','Bob McBobs, Sales Dept.'],
-            ['ABC2 Corp', 'Bob2 McBob', '123 First Ave.', \
-            'Somecity2, SS 12345', '515-234-5678','515-235-5679', \
-            'abc2@abc.com','Bob McBobs, Sales Dept.'],
-            ['ABC Corp3', 'Bob3 McBob3', '123 First Ave.', \
-            'Somecity3, SS 12345', '515-234-5678','515-235-5679', \
-            'abc3@abc.com','Bob McBobs, Sales Dept.'],
-            ['ABC4 Corp', 'Bob4 McBob4', '123 First Ave.', \
-            'Somecity4, SS 12345', '515-234-5678','515-235-5679', \
-            'abc4@abc.com','Bob McBobs, Sales Dept.'],
+        [
+        ['ABC Corp', 'Bob McBob', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ['ABC Corp', '123 First Ave.', \
+        'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
+        'abc@abc.com']
+        ],
+        [
+        ['ABC2 Corp', 'Bob2 McBob2', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ['ABC Corp', '123 First Ave.', \
+        'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
+        'abc@abc.com']
+        ],
+        [
+        ['ABC3 Corp', 'Bob3 McBob3', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ['ABC Corp', '123 First Ave.', \
+        'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
+        'abc@abc.com']
+        ],
+        [
+        ['ABC4 Corp', 'Bob4 McBob4', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ['ABC Corp', '123 First Ave.', \
+        'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
+        'abc@abc.com']
+        ],
         ]
         for customer_info in customer_info_list:
             new_customer = NewCustomer()
             new_customer.invoke()
-            new_customer.add_new_customer(*customer_info)
+            new_customer.add_new_customer(*customer_info[0])
+            new_customer.add_new_shipping_address(*customer_info[1])
             new_customer.accept()
+
+    def test_add_new_customer(self):
+
+        self.add_new_customers()
+        # Validation by using Find and dump the result table
+        find_customer = FindCustomer()
+        find_customer.invoke()
+        find_customer.text_fields_list[0].text = "."
+        find_customer.search_by_list[0].combovalue = 'Company Name'
+        find_customer.search_by_list[1].combovalue = 'matches regex'
+        find_customer.find()
+        assert(validate_node(find_customer.result_table, 'test_add_new_customer') == EXIT_SUCCESS)
+
+    def test_find_customer(self):
+        """ Will be data driven testcase 
+            search_criteria = [
+                [
+                    [ search_by, search_type, search_term, is case insestive ]
+                    [ search criteria 2]
+                ],
+                [
+                    [serch critieria 1 for second testcase]
+                ],
+            ]
+        """
+        #self.add_new_customers()
+        search_criteria_list = [
+                [
+                    ['Company Name', 'matches regex', '.', True],
+                    ['Company Name', 'matches regex', '.', True]
+                ],
+                [
+                    ['Company Name', 'matches regex', '.', False],
+                ],
+            ]
+        for test_no, search_criteria in enumerate(search_criteria_list):
+            find_customer = FindCustomer()
+            find_customer.invoke()
+            for i,criteria in enumerate(search_criteria):
+                find_customer.search_by_list[0].combovalue = criteria[0]
+                find_customer.search_by_list[1].combovalue = criteria[1]
+                find_customer.text_fields_list[0].text = criteria[2]
+                if criteria[3]:
+                    find_customer.is_case_insensitive_list[0].click()
+                if i < (len(search_criteria)-1):
+                    find_customer.add_criteria()
+            find_customer.find()
+            assert(validate_node(find_customer.result_table, 'test_find_new_customer_%d' % test_no) == EXIT_SUCCESS)
+            find_customer.dismiss()
 
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
@@ -273,7 +364,6 @@ class ScenarioTest(unittest.TestCase):
         accounts = gnucash.tab('Accounts')
         account = accounts.findChild(predicate.GenericPredicate(roleName='table cell', name=account))
         account.doAction('activate')
-
 
     def setUp(self):
         """ a setup  for the test case in this type of test just run gnucash and go dismiss first dialog """
