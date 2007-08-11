@@ -132,6 +132,13 @@ void          xaccTransDestroy (Transaction *trans);
  */
 Transaction * xaccTransClone (const Transaction *t);
 
+void
+xaccTransCopyOnto(const Transaction *from, Transaction *to);
+
+void
+xaccTransCopyOntoAndChangeAccount(const Transaction *from, Transaction *to, 
+                                  const Account *from_acc, Account *to_acc);
+
 /** Equality.
  *
  * @param ta First transaction to compare

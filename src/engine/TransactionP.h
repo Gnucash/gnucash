@@ -136,6 +136,8 @@ struct transaction_s
  */
 Transaction * xaccDupeTransaction (const Transaction *t);
 
+void xaccFreeTransaction (Transaction *trans);
+
 /* The xaccTransSet/GetVersion() routines set & get the version
  *    numbers on this transaction.  The version number is used to manage
  *    multi-user updates.  These routines are private because we don't

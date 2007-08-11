@@ -97,6 +97,8 @@ void xaccSplitReinit(Split * split);
  */
 gboolean      xaccSplitDestroy (Split *split);
 
+void xaccSplitCopyOnto(const Split *from, Split *to);
+
 /** Returns the book of this split, i.e. the entity where this split
  * is stored. */
 QofBook *   xaccSplitGetBook (const Split *split);

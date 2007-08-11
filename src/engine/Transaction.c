@@ -439,11 +439,65 @@ xaccTransClone (const Transaction *t)
   return trans;
 }
 
+void
+xaccTransCopyOnto(const Transaction *from, Transaction *to)
+{
+    xaccTransCopyOntoAndChangeAccount(from, to, NULL, NULL);
+}
+
+/* This function explicitly must robustly handle some unusual input.
+
+     'from' may be a duped trans (see xaccDupeTransaction), so its
+     splits may not really belong to the accounts that they say they do.
+
+     'from_acc' need not be a valid account.  It may be an already freed
+     Account. Therefore, it must not be dereferenced at all.  
+
+   Neither 'from', nor 'from_acc', nor any of 'from's splits may be modified
+   in any way.
+
+   The 'to' transaction will end up with valid copies of from's
+   splits.  In addition, the copies of any of from's splits that were
+   in from_acc (or at least claimed to be) will end up in to_acc.
+*/
+void
+xaccTransCopyOntoAndChangeAccount(const Transaction *from, Transaction *to, 
+                                  const Account *from_acc, Account *to_acc)
+{
+    Timespec ts = {0,0};
+    gboolean change_accounts = FALSE;
+
+    if (!from || !to)
+        return;
+
+    change_accounts = from_acc && GNC_IS_ACCOUNT(to_acc) && from_acc != to_acc;
+    xaccTransBeginEdit(to);
+
+    FOR_EACH_SPLIT(to, xaccSplitDestroy(s));
+
+    xaccTransSetCurrency(to, xaccTransGetCurrency(from));
+    xaccTransSetDescription(to, xaccTransGetDescription(from));
+    xaccTransSetNum(to, xaccTransGetNum(from));
+    xaccTransSetNotes(to, xaccTransGetNotes(from));
+    xaccTransGetDatePostedTS(from, &ts);
+    xaccTransSetDatePostedTS(to, &ts);
+
+    /* Each new split will be parented to 'to' */
+    FOR_EACH_SPLIT(from, {
+            Split *new_split = xaccMallocSplit(
+                qof_instance_get_book(QOF_INSTANCE(from)));
+            xaccSplitCopyOnto(s, new_split);
+            if (change_accounts && xaccSplitGetAccount(s) == from_acc)
+                xaccSplitSetAccount(new_split, to_acc);
+            xaccSplitSetParent(new_split, to);
+        });
+    xaccTransCommitEdit(to);
+}
 
 /********************************************************************\
 \********************************************************************/
 
-static void
+void
 xaccFreeTransaction (Transaction *trans)
 {
   GList *node;

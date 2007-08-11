@@ -159,6 +159,8 @@ xaccDupeSplit (const Split *s)
   split->inst.entity.guid = s->inst.entity.guid;
   split->inst.book = s->inst.book;
 
+   /* Do not call xaccSplitSetParent() or xaccSplitSetAccount because
+      we do not want to generate any events. */
   split->parent = s->parent;
   split->acc = s->acc;
   split->orig_acc = s->orig_acc;
@@ -214,6 +216,33 @@ xaccSplitClone (const Split *s)
       gnc_lot_add_split(s->lot, split);
   }
   return split;
+}
+
+/* This is really a helper for xaccTransCopyOnto. It doesn't reparent
+   the 'to' split to from's transaction, because xaccTransCopyOnto is
+   responsible for parenting the split to the correct transaction.
+   Also, from's parent transaction may not even be a valid
+   transaction, so this function may not modify anything about 'from'
+   or from's transaction.
+*/
+void 
+xaccSplitCopyOnto(const Split *from, Split *to)
+{
+   if (!from || !to) return;
+   xaccTransBeginEdit (to->parent);
+
+   xaccSplitSetMemo(to, xaccSplitGetMemo(from));
+   xaccSplitSetAction(to, xaccSplitGetAction(from));
+   xaccSplitSetAmount(to, xaccSplitGetAmount(from));
+   xaccSplitSetValue(to, xaccSplitGetValue(from));
+   /* Setting the account is okay here because, even though the from
+      split might not really belong to the account it claims to,
+      setting the account won't cause any event involving from. */
+   xaccSplitSetAccount(to, xaccSplitGetAccount(from));
+   /* N.B. Don't set parent. */
+
+   qof_instance_set_dirty(QOF_INSTANCE(to));
+   xaccTransCommitEdit(to->parent);
 }
 
 #ifdef DUMP_FUNCTIONS
@@ -1350,7 +1379,6 @@ xaccSplitSetMemo (Split *split, const char *memo)
    CACHE_REPLACE(split->memo, memo);
    qof_instance_set_dirty(QOF_INSTANCE(split));
    xaccTransCommitEdit(split->parent);
-
 }
 
 static void
