@@ -76,11 +76,6 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 
    ENTER ("trans=%p %s", trans, trans->description);
    newtrans = xaccDupeTransaction (trans);
-   for (node = newtrans->splits; node; node = node->next)
-   {
-      Split *s = node->data;
-      s->parent = newtrans;
-   }
 
    /* Utterly wipe out the transaction from the old book. */
    xaccTransBeginEdit (trans);

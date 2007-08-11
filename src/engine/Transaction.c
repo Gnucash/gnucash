@@ -342,12 +342,17 @@ xaccTransSortSplits (Transaction *trans)
 
 /********************************************************************\
 \********************************************************************/
-/* This routine is not exposed externally, since it does weird things, 
- * like not really owning the splits correctly, and other weirdnesses. 
- * This routine is prone to programmer snafu if not used correctly. 
- * It is used only by the edit-rollback code.
+/* This function must be used carefully.  The resulting transaction is
+ * not really a valid transaction.  Its splits will be copies of the
+ * original transaction's splits, and they will be correctly parented
+ * to the new, invalid transaction.  However, these new splits will
+ * not really belong to any accounts, even though they will claim to
+ * belong to the same accounts as the original transaction's splits.
+ *
+ * Also, the duplicate transaction is created without generating any
+ * of the events that would normally be generated if the transaction
+ * had been created normally.
  */
-/* Actually, it *is* public, and used by Period.c */
 Transaction *
 xaccDupeTransaction (const Transaction *t)
 {
@@ -359,11 +364,15 @@ xaccDupeTransaction (const Transaction *t)
   trans->num         = CACHE_INSERT (t->num);
   trans->description = CACHE_INSERT (t->description);
 
-  trans->splits = g_list_copy (t->splits);
-  for (node = trans->splits; node; node = node->next)
-  {
-    node->data = xaccDupeSplit (node->data);
-  }
+  trans->splits = NULL;
+
+  FOR_EACH_SPLIT(t, {
+          s = xaccDupeSplit(s);
+          s->parent = trans;
+          trans->splits = g_list_prepend(trans->splits, s);
+      });
+
+  trans->splits = g_list_reverse(trans->splits);
 
   trans->date_entered = t->date_entered;
   trans->date_posted = t->date_posted;
@@ -373,7 +382,7 @@ xaccDupeTransaction (const Transaction *t)
   trans->common_currency = t->common_currency;
 
   /* Trash the guid and entity table. We don't want to mistake 
-   * the cloned transaction as something official.  If we ever 
+   * the duped transaction as something official.  If we ever 
    * use this transaction, we'll have to fix this up.
    */
   trans->inst.entity.e_type = NULL;
