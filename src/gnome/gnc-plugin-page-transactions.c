@@ -139,14 +139,28 @@ gppt_cmd_edit_account(GtkAction *act, GncPluginPageTransactions *pp)
         gnc_ui_edit_account_window(acc);
 }
 
-static void gppt_cmd_cut_trans(GtkAction *act, GncPluginPageTransactions *pp)
-{;}
-static void gppt_cmd_copy_trans(GtkAction *act, GncPluginPageTransactions *pp)
-{;}
-static void gppt_cmd_paste_trans(GtkAction *act, GncPluginPageTransactions *pp)
-{;}
-static void gppt_cmd_duplicate_trans(GtkAction *act, GncPluginPageTransactions *pp) 
-{;}
+static void
+gppt_cmd_cut_trans(GtkAction *act, GncPluginPageTransactions *pp)
+{
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_TRANSACTIONS(pp));
+}
+static void
+gppt_cmd_copy_trans(GtkAction *act, GncPluginPageTransactions *pp)
+{
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_TRANSACTIONS(pp));
+    gnc_tree_view_transaction_copy_trans_to_clipboard(GET_PRIVATE(pp)->tv);
+}
+static void
+gppt_cmd_paste_trans(GtkAction *act, GncPluginPageTransactions *pp)
+{
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_TRANSACTIONS(pp));
+    gnc_tree_view_transaction_paste_trans_from_clipboard(GET_PRIVATE(pp)->tv);
+}
+static void
+gppt_cmd_duplicate_trans(GtkAction *act, GncPluginPageTransactions *pp) 
+{
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_TRANSACTIONS(pp));
+}
 
 static void 
 gppt_cmd_delete_trans(GtkAction *act, GncPluginPageTransactions *pp) 

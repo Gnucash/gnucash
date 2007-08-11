@@ -88,6 +88,10 @@ void gnc_tree_view_transaction_goto_blank_trans(GncTreeViewTransaction *tv);
 
 void gnc_tree_view_transaction_select_split(GncTreeViewTransaction *tv, 
                                             Split *split);
+void gnc_tree_view_transaction_copy_trans_to_clipboard(
+    GncTreeViewTransaction *tv);
+void gnc_tree_view_transaction_paste_trans_from_clipboard(
+    GncTreeViewTransaction *tv);
 
 
 /** @} */

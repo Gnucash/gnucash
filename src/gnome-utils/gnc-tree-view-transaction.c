@@ -68,6 +68,7 @@ BUGS:
 
 #include "Account.h"
 #include "Transaction.h"
+#include "TransactionP.h" // FIXME
 #include "Scrub.h"
 #include "gnc-component-manager.h"
 #include "gnc-icons.h"
@@ -1753,3 +1754,40 @@ gnc_tree_view_transaction_unvoid(GncTreeViewTransaction *tv)
     xaccTransUnvoid(trans);
 }
 
+static Transaction *clipboard_trans = NULL;
+/* Must never dereference. */
+static const Account *clipboard_acct = NULL;
+
+void gnc_tree_view_transaction_copy_trans_to_clipboard(
+    GncTreeViewTransaction *tv)
+{
+    Transaction *trans;
+
+    g_return_if_fail(GNC_IS_TREE_VIEW_TRANSACTION(tv));
+
+    trans = get_selected_trans(tv);
+    if (!trans)
+        return;
+
+    if (clipboard_trans)
+        xaccFreeTransaction(clipboard_trans);
+        
+    clipboard_trans = xaccDupeTransaction(trans);
+    clipboard_acct = tv->priv->anchor;
+}
+
+void gnc_tree_view_transaction_paste_trans_from_clipboard(
+    GncTreeViewTransaction *tv)
+{
+    Transaction *trans;
+
+    g_return_if_fail(GNC_IS_TREE_VIEW_TRANSACTION(tv));
+
+    trans = get_selected_trans(tv);
+    if (!trans || !clipboard_trans)
+        return;
+
+    begin_edit(tv, NULL, trans);
+    xaccTransCopyOntoAndChangeAccount(clipboard_trans, trans, clipboard_acct, 
+                                      tv->priv->anchor);
+}
