@@ -1399,10 +1399,10 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
 		== GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")))
 			//&& GTK_IS_ENTRY(editable))
 	{
-		gtk_entry_completion_set_model(completion, list);
+            gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list));
 		//gtk_entry_completion_set_model(completion, 
 		//	GTK_TREE_MODEL(get_trans_model_from_view(tv)));
-		g_object_set(G_OBJECT(completion), "text-column", 0);
+            g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
 		//g_object_set(G_OBJECT(completion), "text-column", 
 		//	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
 		gtk_entry_completion_set_inline_completion(completion, TRUE);
