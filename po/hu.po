@@ -1,19 +1,18 @@
-# gnucash@2.1@.po to @hu@
+# gnucash@2.2@.po to @hu@
 # Hungarian Tanslation of GNUCash
 # Copyright ? 2003-2006 Free Software Foundation, Inc.
 #
 # HOSSZÚ Péter <hosszu@web.de>, 2001-2003.
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
-# Takó Kornél <takokornel@gmail.com>, 2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: @gnucash@2.1.4@po\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: @gnucash@\n"
+"Report-Msgid-Bugs-To: takokornel@gmail.com\n"
 "POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2007-06-27 10:48+0200\n"
+"PO-Revision-Date: 2007-08-12 01:29+0200\n"
 "Last-Translator: Kornel Tako <takokornel@gmail.com>\n"
-"Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
+"Language-Team: Hungarian <gnucash-devel-request@gnucash.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,11 +30,11 @@ msgstr " Bezáratlan zárójelek"
 
 #: ../src/app-utils/gnc-exp-parser.c:645
 msgid "Stack overflow"
-msgstr "Stack overflow"
+msgstr "Verem túlcsordulás"
 
 #: ../src/app-utils/gnc-exp-parser.c:647
 msgid "Stack underflow"
-msgstr "Stack underflow"
+msgstr "Verem alulcsordulás"
 
 #: ../src/app-utils/gnc-exp-parser.c:649
 msgid "Undefined character"
@@ -214,11 +213,11 @@ msgstr "GnuCash verziószám megjelenítése"
 
 #: ../src/bin/gnucash-bin.c:221
 msgid "Enable debugging mode: increasing logging to provide deep detail."
-msgstr ""
+msgstr "Hibakereső mód engedélyezése, részletesebb naplózással."
 
 #: ../src/bin/gnucash-bin.c:224
 msgid "Enable extra/development/debugging features."
-msgstr ""
+msgstr "Extrta / fejlesztői hibajelentés engedélyezése."
 
 #: ../src/bin/gnucash-bin.c:227
 msgid ""
@@ -231,6 +230,8 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
+"Log-fájl  \"/tmp/gnucash.trace\"; lehet \"stderr\" vagy "
+"\"stdout\" is."
 
 #. Translators: This is the command line option autohelp text; see popt(3)
 #: ../src/bin/gnucash-bin.c:237
@@ -280,14 +281,13 @@ msgstr "DOCPATH"
 
 #: ../src/bin/gnucash-bin.c:263
 msgid "Set the prefix path for gconf queries"
-msgstr ""
+msgstr "Gconf kérések telepítési útvonala"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:266
-#, fuzzy
 msgid "GCONFPATH"
-msgstr "CONFIGPATH"
+msgstr "GCONFPATH"
 
 #: ../src/bin/gnucash-bin.c:268
 msgid "Add price quotes to given GnuCash datafile"
@@ -300,10 +300,8 @@ msgid "FILE"
 msgstr "FILE"
 
 #: ../src/bin/gnucash-bin.c:273
-msgid ""
-"Regular expression determining which namespace commodities will be retrieved"
-msgstr ""
-"Regular expression determining which namespace commodities will be retrieved"
+msgid "Regular expression determining which namespace commodities will be retrieved"
+msgstr "Regular expression determining which namespace commodities will be retrieved"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -598,8 +596,7 @@ msgstr "Biztosan törölni kívánja ezt: \"%s\"?"
 msgid ""
 "This transaction needs to be assigned to a Customer.  Please choose the "
 "Customer below."
-msgstr ""
-"E tranzakciót hozzá kell rendelni egy ügyfélhez.  Válasszon ügyfelet alul."
+msgstr "E tranzakciót hozzá kell rendelni egy ügyfélhez.  Válasszon ügyfelet alul."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid ""
@@ -623,8 +620,7 @@ msgstr "Meg kell adni a számlázási címet."
 
 #: ../src/business/business-gnome/dialog-customer.c:289
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
-"Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
+msgstr "Engedmény százaléka lehet 0-100 közötti érték, vagy üresen kell hagyni."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
@@ -805,8 +801,7 @@ msgid "Are you sure you want to delete the selected entry?"
 msgstr "Biztosan, törölni kívánja kiválasztott tételt?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:497
-msgid ""
-"This entry is attached to an order and will be deleted from that as well!"
+msgid "This entry is attached to an order and will be deleted from that as well!"
 msgstr "E tételt egy megrendeléshez kapcsolódik és onnan is törlésre kerülne!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:605
@@ -1382,10 +1377,12 @@ msgid ""
 "Days\n"
 "Proximo"
 msgstr ""
+"Nap\n"
+"Következő hónap"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
 msgid "De_scription:"
-msgstr "Magyarázat:"
+msgstr "Ma_gyarázat:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 msgid "Delete the current Billing Term"
@@ -1518,7 +1515,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:88
 msgid "Number of _rows:"
-msgstr "Cellák száma:"
+msgstr "Cellák _száma:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:141
@@ -1530,7 +1527,7 @@ msgstr "Beállítások"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 msgid "Ta_x included"
-msgstr "Adót tartalmaz"
+msgstr "Ad_ót tartalmaz"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid ""
@@ -1568,7 +1565,7 @@ msgstr "H_almozza a rész-könyveléseket rögzítéskor"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
-msgstr "Nappal korábban:"
+msgstr "_Nappal korábban:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Notify when due"
@@ -1576,7 +1573,7 @@ msgstr "Értesítés határidő_n"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Open in new window"
-msgstr "Megnyitás új ablakban"
+msgstr "_Megnyitás új ablakban"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Tax included"
@@ -1851,8 +1848,7 @@ msgstr "Kifizetési cím"
 msgid ""
 "The employee ID number.  If left blank a reasonable number will be chosen "
 "for you"
-msgstr ""
-"Az alkalmazottszám. Üresen hagyva egy megfelelő érték kerül kiválasztásra"
+msgstr "Az alkalmazottszám. Üresen hagyva egy megfelelő érték kerül kiválasztásra"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:22
 msgid "Username: "
@@ -1943,8 +1939,7 @@ msgid "Owner Information"
 msgstr "Tulajdonos-információ"
 
 #: ../src/business/business-gnome/glade/job.glade.h:9
-msgid ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
+msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
 msgstr ""
 "Az megbízás azonosítószáma. Üresen hagyva egy megfelelő érték kerül "
 "kiválasztásra"
@@ -2093,8 +2088,7 @@ msgstr "Adótáblázat:"
 msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
-"A beszállító sorszáma. Üresen hagyva megfelelő szám kerül kiválasztásra"
+msgstr "A beszállító sorszáma. Üresen hagyva megfelelő szám kerül kiválasztásra"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -2128,16 +2122,16 @@ msgstr "Üzlet"
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #: ../intl-scm/guile-strings.c:6124 ../intl-scm/guile-strings.c:6648
 msgid "_Business"
-msgstr "Üzlet"
+msgstr "_Üzlet"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
 msgid "_Customer"
-msgstr "Ügyfél"
+msgstr "_Ügyfél"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
 msgid "_New Customer..."
-msgstr "Új ügyfél..."
+msgstr "_Új ügyfél..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:153
 msgid "Open the New Customer dialog"
@@ -2145,7 +2139,7 @@ msgstr "Nyissa meg az új ügyfél párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "_Find Customer..."
-msgstr "Ügy_felek keresése..."
+msgstr "_Ügyfelek keresése..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
 msgid "Open the Find Customer dialog"
@@ -2153,7 +2147,7 @@ msgstr "Nyissa meg az ügyfél keresése párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
 msgid "New _Invoice..."
-msgstr "Új számla..."
+msgstr "Új _számla..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 msgid "Open the New Invoice dialog"
@@ -2161,7 +2155,7 @@ msgstr "Nyissa meg az új számla párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Find In_voice..."
-msgstr "Számla keresése..."
+msgstr "Számla _keresése..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
 msgid "Open the Find Invoice dialog"
@@ -2191,7 +2185,7 @@ msgstr "Nyissa meg a megbízás keresése párbeszédablakot"
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
 msgid "_Process Payment..."
-msgstr "Kifizetés lebonyolítása..."
+msgstr "_Kifizetés lebonyolítása..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
@@ -2202,11 +2196,11 @@ msgstr "Nyissa meg a kifizetés lebonyolítása párbeszédablakot"
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
 msgid "_Vendor"
-msgstr "Beszállító"
+msgstr "_Beszállító"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
 msgid "_New Vendor..."
-msgstr "Új beszállító..."
+msgstr "_Új beszállító..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
@@ -2214,7 +2208,7 @@ msgstr "Nyissa meg az új eladó párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
-msgstr "Beszállító keresése..."
+msgstr "Beszállító _keresése..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
@@ -2222,7 +2216,7 @@ msgstr "Nyissa meg a beszállító keresése párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
-msgstr "Új számla..."
+msgstr "Új _számla..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the New Bill dialog"
@@ -2239,7 +2233,7 @@ msgstr "Nyissa meg a számla keresése párbeszédablakot"
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
 msgid "_Employee"
-msgstr "Munkatárs"
+msgstr "_Munkatárs"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
 msgid "_New Employee..."
@@ -2251,7 +2245,7 @@ msgstr "Nyissa meg az új munkatárs párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
 msgid "_Find Employee..."
-msgstr "Munkatárs keresése..."
+msgstr "_Munkatárs keresése..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 msgid "Open the Find Employee dialog"
@@ -2259,7 +2253,7 @@ msgstr "Nyissa meg a munkatárs keresése párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
-msgstr "Új kiadási bizonylat..."
+msgstr "Új _kiadási bizonylat..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
@@ -2267,7 +2261,7 @@ msgstr "Nyissa meg az új kiadási bizonylat párbeszédablakot"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
-msgstr "Kiadási bizonylat keresése..."
+msgstr "_Kiadási bizonylat keresése..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
@@ -2284,7 +2278,7 @@ msgstr "Adótáblák listájának szerkesztése/megtekintése"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Billing Terms Editor"
-msgstr "Fizetésifeltétel-szerkesztő"
+msgstr "_Fizetésifeltétel-szerkesztő"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
 msgid "View and edit the list of Billing Terms"
@@ -2304,7 +2298,7 @@ msgstr "E_xportálás"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
 msgid "QSF _Invoice..."
-msgstr "QSF számla..."
+msgstr "QSF _számla..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
 msgid "Export one or more invoices to QSF"
@@ -2312,7 +2306,7 @@ msgstr "Exportáljon egy vagy több számlát QSF-be"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "QSF _Customer..."
-msgstr "QSF ügyfél..."
+msgstr "QSF _ügyfél..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
 msgid "Export one or more customers to QSF"
@@ -2320,7 +2314,7 @@ msgstr "Exportáljon egy vagy több ügyfelet QSF-be"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "QSF _Vendor..."
-msgstr "QSF beszállító..."
+msgstr "QSF _beszállító..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "Export one or more vendors to QSF"
@@ -2328,7 +2322,7 @@ msgstr "Exportáljon egy vagy több beszállítót QSF-be"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
-msgstr "QSF munkatárs..."
+msgstr "QSF _munkatárs..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
 msgid "Export one or more employees to QSF"
@@ -2392,7 +2386,7 @@ msgstr "Rendezési S_orrend"
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:98
 msgid "New _Invoice"
-msgstr "Új számla"
+msgstr "Új _számla"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:99
 msgid "Create a new invoice"
@@ -2418,8 +2412,9 @@ msgstr "Nyomtatható számla készítése"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:109
+#, fuzzy
 msgid "_Cut"
-msgstr "Kivágás"
+msgstr "_Kivágás"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:112
 msgid "Copy"
@@ -2430,7 +2425,7 @@ msgstr "Másolás"
 #: ../src/gnome-utils/gnc-main-window.c:257
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:962
 msgid "_Paste"
-msgstr "Beillesztés"
+msgstr "_Beillesztés"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:118
 msgid "_Edit Invoice"
@@ -2442,7 +2437,7 @@ msgstr "E számla szerkesztése"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:121
 msgid "_Post Invoice"
-msgstr "Számla könyvelése"
+msgstr "_Számla könyvelése"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:122
 msgid "Post this Invoice to your Chart of Accounts"
@@ -2450,7 +2445,7 @@ msgstr "Számla könyvelése az ön folyószámláira"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:124
 msgid "_Unpost Invoice"
-msgstr "Számla könyvelésének visszavonása"
+msgstr "Számla könyvelésének _visszavonása"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:125
 msgid "Unpost this Invoice and make it editable"
@@ -2469,7 +2464,7 @@ msgstr "Bejegyzés rögzítése"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:132
 #: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:2010
 msgid "_Cancel"
-msgstr "Mégsem"
+msgstr "_Mégsem"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
 msgid "Cancel the current entry"
@@ -2480,7 +2475,7 @@ msgstr "Bejegyzés megszakítása"
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
 #: ../src/gnome/window-reconcile.c:2038
 msgid "_Delete"
-msgstr "Törlés"
+msgstr "_Törlés"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 msgid "Delete the current entry"
@@ -2489,7 +2484,7 @@ msgstr "Bejegyzés törlése"
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:138
 #: ../src/gnome/glade/register.glade.h:78
 msgid "_Blank"
-msgstr "Üres"
+msgstr "_Üres"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
 msgid "Move to the blank entry at the bottom of the Invoice"
@@ -2506,7 +2501,7 @@ msgstr "Tétel másolata"
 #. Business menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:146
 msgid "_Pay Invoice"
-msgstr "Számla kifizetése"
+msgstr "S_zámla kifizetése"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:147
 msgid "Enter a payment for the owner of this Invoice"
@@ -2538,18 +2533,18 @@ msgstr "Tét_el dátuma"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:162
 msgid "_Quantity"
-msgstr "Mennyiség"
+msgstr "_Mennyiség"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:163
 #: ../src/register/ledger-core/split-register.c:1717
 #: ../src/register/ledger-core/split-register.c:1719
 msgid "_Price"
-msgstr "Ár"
+msgstr "_Ár"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:164
 #: ../src/gnome/glade/register.glade.h:18
 msgid "Descri_ption"
-msgstr "Magyarázat"
+msgstr "M_agyarázat"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:193
 #: ../src/gnome/glade/register.glade.h:25
@@ -3048,8 +3043,7 @@ msgid "Billable?"
 msgstr "Számlázható?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
-msgid ""
-"Enter the income/expense account for the Entry, or choose one from the list"
+msgid "Enter the income/expense account for the Entry, or choose one from the list"
 msgstr ""
 "Adja meg a bevétel/költség folyószámlát a tételhez, vagy válasszon egyet a "
 "listából"
@@ -3159,8 +3153,7 @@ msgstr "Meg kell adnia az adótáblázat nevét."
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
-msgstr ""
-"Egyedi nevet kell adni az adótáblázatnak. Ez \"%s\" már használatban van."
+msgstr "Egyedi nevet kell adni az adótáblázatnak. Ez \"%s\" már használatban van."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:144
 msgid "You must choose a Tax Account."
@@ -3209,6 +3202,8 @@ msgid ""
 "Value $\n"
 "Percent %"
 msgstr ""
+"Érték $\n"
+"Százalék %"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
@@ -3224,19 +3219,20 @@ msgstr "_Típus: "
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:12
 msgid "_Value: "
-msgstr "Érték: "
+msgstr "_Érték: "
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:111
 #, c-format
+#, fuzzy
 msgid "Value '%s' cannot be interpreted as a float number."
-msgstr ""
+msgstr "A(z) '%s' érték nem értelmezhető lebegő számként."
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:154
 #, c-format
 msgid ""
 "Key file contains key '%s' in group '%s' which has a value that cannot be "
 "interpreted."
-msgstr ""
+msgstr "Kulcs fájl '%s' kulcsot tartalmaz a(z) '%s' csoportban, melynek értéke nem értelmezhető."
 
 #. src/report/report-system/report-utilities.scm
 #: ../src/engine/Account.c:3634 ../src/import-export/hbci/gnc-hbci-utils.c:900
@@ -3301,8 +3297,7 @@ msgstr "Realizált nyereség/veszteség"
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr ""
-"Realizált nyereség/veszteség más számlákról melyek máshol nicsenek elmentve."
+msgstr "Realizált nyereség/veszteség más számlákról melyek máshol nicsenek elmentve."
 
 #: ../src/engine/cap-gains.c:585
 msgid "Lot"
@@ -3542,7 +3537,7 @@ msgstr " (x%u)"
 #: ../src/engine/Recurrence.c:463
 #, c-format
 msgid "last %s"
-msgstr ""
+msgstr "Utolsó %s"
 
 #: ../src/engine/Recurrence.c:500 ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
@@ -3620,8 +3615,7 @@ msgstr "Folyószámlakészlet exportálása QSF XML-be"
 msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
-msgstr ""
-"Ez a pénznem jelenleg használatban van legalább egy számlán. Nem törölhető."
+msgstr "Ez a pénznem jelenleg használatban van legalább egy számlán. Nem törölhető."
 
 #: ../src/gnome/dialog-commodities.c:149
 msgid ""
@@ -3799,11 +3793,11 @@ msgstr "Érvényes összeget kell megadni."
 
 #: ../src/gnome/dialog-print-check.c:551
 msgid "Cannot save check format file."
-msgstr ""
+msgstr "Csekk űrlap fájlt nem lehet menteni."
 
 #: ../src/gnome/dialog-print-check.c:1083
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "Csekk-űrlap fájl másolata létezik."
 
 #. Translators: %1$s is the type of the first check
 #. * format (user defined or application defined); %2$s
@@ -3815,7 +3809,7 @@ msgstr ""
 msgid ""
 "The guids in the %s check format file '%s' and the %s check format file '%s' "
 "match."
-msgstr ""
+msgstr "A GUID-k, a %s csekk-űrlap fájlban '%s' és a %s csekk-űrlap fájl '%s' egyeznek."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3856,12 +3850,12 @@ msgstr "_Tranzakció"
 #: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:101
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_View"
-msgstr "Nézet"
+msgstr "_Nézet"
 
 #: ../src/gnome/dialog-sx-editor.c:189 ../src/gnome/glade/register.glade.h:74
 #: ../src/gnome-utils/gnc-main-window.c:223
 msgid "_Actions"
-msgstr "Műveletek"
+msgstr "M_űveletek"
 
 #: ../src/gnome/dialog-sx-editor.c:219
 msgid "This SX has changed; are you sure you want to cancel?"
@@ -3904,8 +3898,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-sx-editor.c:770
 msgid "Scheduled Transactions with variables cannot be automatically created."
-msgstr ""
-"Nem lehet automatikusan létrehozni időzített tranzakciókat változókkal."
+msgstr "Nem lehet automatikusan létrehozni időzített tranzakciókat változókkal."
 
 #: ../src/gnome/dialog-sx-editor.c:779
 msgid ""
@@ -3948,8 +3941,7 @@ msgstr "(soha)"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr ""
-"A jelenlegi tranzakciósablon megváltozott. Kívánja rögzíteni a változásokat?"
+msgstr "A jelenlegi tranzakciósablon megváltozott. Kívánja rögzíteni a változásokat?"
 
 #: ../src/gnome/dialog-sx-editor.c:1726
 #: ../src/gnome/gnc-plugin-page-sx-list.c:197
@@ -3960,8 +3952,7 @@ msgstr "Ütemezett tranzakciók"
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr ""
-"Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
+msgstr "Az ütemezett tranzakció kiegyenlítetlen. Erősen ajánlott a korrigálása."
 
 #: ../src/gnome/dialog-sx-from-trans.c:771
 msgid ""
@@ -3972,38 +3963,32 @@ msgstr ""
 "tranzakcióból. Előbb fejezze be a tranzakció szerkesztését."
 
 #: ../src/gnome/dialog-sx-since-last-run.c:374
-#, fuzzy
 msgid "Ignored"
-msgstr "Kihagy"
+msgstr "Kihagyott"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:375
-#, fuzzy
 msgid "Postponed"
-msgstr "Halaszt"
+msgstr "Halasztott"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:376
-#, fuzzy
 msgid "To-Create"
 msgstr "Létrehozás"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:377
-#, fuzzy
 msgid "Reminder"
-msgstr "Folyószámla-könyv"
+msgstr "Emlékeztető"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:378
-#, fuzzy
 msgid "Created"
-msgstr "Létrehozás"
+msgstr "Létrehozva"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:441
-#, fuzzy
 msgid "Never"
-msgstr "Végtelen"
+msgstr "Soha"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:511
 msgid "(Need Value)"
-msgstr ""
+msgstr "(Érték)"
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -4021,9 +4006,8 @@ msgstr[0] ""
 "létrehozva)"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:929
-#, fuzzy
 msgid "Transaction"
-msgstr "Tra_nzakciók"
+msgstr "Tranzakciók"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:945
 #: ../src/gnome/glade/register.glade.h:70
@@ -4116,9 +4100,9 @@ msgstr "Folyószámlatípusok"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: ../src/gnome/druid-hierarchy.c:486
-#, fuzzy, c-format
+#, c-format
 msgid "Accounts in '%s'"
-msgstr "<b>Folyószámlák '%s'-ban</b>"
+msgstr "<b>Számlák '%s'-ban</b>"
 
 #: ../src/gnome/druid-hierarchy.c:505
 msgid "Accounts in Category"
@@ -4148,24 +4132,24 @@ msgstr "Adók"
 
 #: ../src/gnome/druid-loan.c:161
 msgid "Tax Payment"
-msgstr ""
+msgstr "Adófizetés"
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance"
-msgstr ""
+msgstr "Kamat"
 
 #: ../src/gnome/druid-loan.c:162
 msgid "Insurance Payment"
-msgstr ""
+msgstr "Kamatfizetés"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI"
-msgstr ""
+msgstr "MJB"
 
 #: ../src/gnome/druid-loan.c:164
 msgid "PMI Payment"
-msgstr ""
+msgstr "MJB Fizetés"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Other Expense"
@@ -4173,7 +4157,7 @@ msgstr "Egyéb Költség"
 
 #: ../src/gnome/druid-loan.c:165
 msgid "Miscellaneous Payment"
-msgstr ""
+msgstr "Egyéb kifizetés"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -4248,14 +4232,13 @@ msgstr "Nincs ütközés amit fel kellene oldani."
 
 #: ../src/gnome/druid-merge.c:170
 #, c-format
-msgid ""
-"Error: Please resolve all %d conflicts before trying to commit the data."
+msgid "Error: Please resolve all %d conflicts before trying to commit the data."
 msgstr "Hiba: Oldja fel mind a %d ütközést, mielőtt jóváhagyja az adatokat."
 
 #: ../src/gnome/druid-merge.c:225
 #, c-format
 msgid "Error: the Commit operation failed, error code %d."
-msgstr "Hiba: a jóváhagyási művelet sikertelen."
+msgstr "Hiba: a jóváhagyási művelet sikertelen. Hibakód %d."
 
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
@@ -4399,7 +4382,7 @@ msgstr "<b>Tranzakciók</b>"
 
 #: ../src/gnome/glade/account.glade.h:13
 msgid "<b>_Parent Account</b>"
-msgstr "<b>Fő számla</b>"
+msgstr "<b>_Szülő számla</b>"
 
 #. src/report/standard-reports/gnucash/report/account-summary.scm
 #. src/report/standard-reports/account-summary.scm
@@ -4497,7 +4480,7 @@ msgstr "Általános"
 
 #: ../src/gnome/glade/account.glade.h:26
 msgid "H_idden"
-msgstr "Rejtett"
+msgstr "Re_jtett"
 
 #: ../src/gnome/glade/account.glade.h:27
 msgid "Hide accounts which have a zero total value."
@@ -4546,7 +4529,7 @@ msgstr "Új folyószámla"
 
 #: ../src/gnome/glade/account.glade.h:36
 msgid "New Account (not implemented)"
-msgstr ""
+msgstr "Új Számla (nem megvalósított)"
 
 #: ../src/gnome/glade/account.glade.h:37
 msgid "New Account Hierarchy Setup"
@@ -4554,7 +4537,7 @@ msgstr "Új számlahierarchia beállítása"
 
 #: ../src/gnome/glade/account.glade.h:38
 msgid "No_tes:"
-msgstr "Megjegyzések:"
+msgstr "Me_gjegyzések:"
 
 #: ../src/gnome/glade/account.glade.h:39
 msgid ""
@@ -4585,7 +4568,7 @@ msgstr "egyéb"
 
 #: ../src/gnome/glade/account.glade.h:43
 msgid "Placeholde_r"
-msgstr "Töltelék"
+msgstr "T_öltelék"
 
 #: ../src/gnome/glade/account.glade.h:44
 msgid "Please choose the currency to use for new accounts."
@@ -4642,7 +4625,7 @@ msgstr "Új számlák beállítása"
 
 #: ../src/gnome/glade/account.glade.h:56
 msgid "Show _hidden accounts"
-msgstr "Rejtett számlák megjelenítése"
+msgstr "Rej_tett számlák megjelenítése"
 
 #: ../src/gnome/glade/account.glade.h:57
 msgid "Show _zero total accounts"
@@ -4658,7 +4641,7 @@ msgstr "A pénznem legkisebb egysége, amit használni lehet."
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
-msgstr "Adóvonatkozású"
+msgstr "A_dóvonatkozású"
 
 #: ../src/gnome/glade/account.glade.h:61
 msgid ""
@@ -4671,8 +4654,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:62
 msgid "This account contains read-only transactions which may not be deleted."
-msgstr ""
-"A számla tartalmaz csak olvasható tranzakciókat is, amiket nem törölhet."
+msgstr "A számla tartalmaz csak olvasható tranzakciókat is, amiket nem törölhet."
 
 #: ../src/gnome/glade/account.glade.h:63
 msgid ""
@@ -4710,6 +4692,7 @@ msgstr ""
 "Kattintson a 'Megszakítás' -ra ha nem akar létrehozni új számlakészletet."
 
 #: ../src/gnome/glade/account.glade.h:69
+#, fuzzy
 msgid ""
 "Use Commodity Value\n"
 "1\n"
@@ -4720,6 +4703,14 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
+"Alkalmazandó egység\n"
+"1\n"
+"1/10\n"
+"1/100\n"
+"1/1000\n"
+"1/10000\n"
+"1/100000\n"
+"1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:77
 msgid "_Account code:"
@@ -4727,7 +4718,7 @@ msgstr "Száml_aszám:"
 
 #: ../src/gnome/glade/account.glade.h:78
 msgid "_Balance:"
-msgstr "Egyenleg:"
+msgstr "_Egyenleg:"
 
 #: ../src/gnome/glade/account.glade.h:79 ../src/gnome/glade/price.glade.h:21
 #: ../src/gnome/glade/print.glade.h:27 ../src/gnome/glade/register.glade.h:81
@@ -4738,11 +4729,11 @@ msgstr "_Dátum:"
 
 #: ../src/gnome/glade/account.glade.h:80
 msgid "_Default"
-msgstr "Alapértelmezés"
+msgstr "_Alapértelmezés"
 
 #: ../src/gnome/glade/account.glade.h:81
 msgid "_Description:"
-msgstr "Magyarázat:"
+msgstr "_Magyarázat:"
 
 #: ../src/gnome/glade/account.glade.h:82
 msgid "_Move to:"
@@ -4750,7 +4741,7 @@ msgstr "_Mozgatás:"
 
 #: ../src/gnome/glade/account.glade.h:83
 msgid "_Renumber"
-msgstr "Újra számozás"
+msgstr "_Újra számozás"
 
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:270
@@ -4760,7 +4751,7 @@ msgstr "Pénznem kivála_sztása:"
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
 msgid "_Select All"
-msgstr "Mindent kijelöl"
+msgstr "M_indent kijelöl"
 
 #: ../src/gnome/glade/account.glade.h:86
 msgid "_Select transfer account"
@@ -4768,7 +4759,7 @@ msgstr "Átvitel_számla kiválasztása"
 
 #: ../src/gnome/glade/account.glade.h:87
 msgid "_Use equity 'Opening Balances' account"
-msgstr "Saját tőke számla használata nyitóegyenlegnek "
+msgstr "_Saját tőke számla használata nyitóegyenlegnek "
 
 #: ../src/gnome/glade/acctperiod.glade.h:1
 msgid "Book Closing Dates"
@@ -4979,8 +4970,7 @@ msgid "Future dates are not supported"
 msgstr "Jövőbeli dátumokat nem támogatottak"
 
 #: ../src/gnome/glade/chart-export.glade.h:4
-msgid ""
-"Select the date to use and click Export to choose the filename and location."
+msgid "Select the date to use and click Export to choose the filename and location."
 msgstr ""
 "Válasszon dátumot és kattintson az Exportra, hogy fájlnevet és helyet "
 "válasszon."
@@ -5188,7 +5178,7 @@ msgstr "Kezdet_i kifizetés:"
 
 #: ../src/gnome/glade/fincalc.glade.h:49
 msgid "_Payments:"
-msgstr "Fizetések:"
+msgstr "_Fizetések:"
 
 #: ../src/gnome/glade/fincalc.glade.h:50
 msgid "total"
@@ -5204,11 +5194,11 @@ msgstr "<b>_Mini-néző</b>"
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Notes</b>"
-msgstr "<b>Megjegyzések</b>"
+msgstr "<b>_Megjegyzések</b>"
 
 #: ../src/gnome/glade/lots.glade.h:4
 msgid "<b>_Title</b>"
-msgstr "<b>Cím</b>"
+msgstr "<b>_Cím</b>"
 
 #: ../src/gnome/glade/lots.glade.h:5
 msgid "A summary of all of the transactions in the selected lot"
@@ -5390,8 +5380,7 @@ msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
 msgstr "<span size=\"larger\" weight=\"bold\">Üdvözli a GnuCash!</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:2
-msgid ""
-"<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
+msgid "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">Üdvözlő ablak megjelenítése ismét?</"
 "span>"
@@ -5428,7 +5417,7 @@ msgstr "QIF-fájlok _importálása"
 
 #: ../src/gnome/glade/newuser.glade.h:7
 msgid "_Open the new user tutorial"
-msgstr "Az új felhasználói tankönyv megnyitása"
+msgstr "_Új felhasználói tankönyv megnyitása"
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
@@ -5451,7 +5440,7 @@ msgstr ""
 #: ../src/gnome/glade/price.glade.h:7
 #: ../src/gnome-utils/dialog-commodity.c:279
 msgid "Cu_rrency:"
-msgstr "Pénznem:"
+msgstr "Pé_nznem:"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _last price for a stock"
@@ -5459,7 +5448,7 @@ msgstr "A részvény _utolsó árának törlése"
 
 #: ../src/gnome/glade/price.glade.h:9
 msgid "Delete _manually entered prices"
-msgstr "Kézi bevitelű árak törlése"
+msgstr "Kézi _bevitelű árak törlése"
 
 #: ../src/gnome/glade/price.glade.h:10
 msgid "Delete all stock prices based upon the critera below:"
@@ -5471,7 +5460,7 @@ msgstr "A jelenlegi ár szerkesztése."
 
 #: ../src/gnome/glade/price.glade.h:12
 msgid "Get _Quotes"
-msgstr "Árfolyamadatok lehívása"
+msgstr "_Árfolyamadatok lehívása"
 
 #: ../src/gnome/glade/price.glade.h:13
 msgid "Get new online quotes for stock accounts."
@@ -5517,20 +5506,20 @@ msgstr "F_orrás:"
 
 #: ../src/gnome/glade/price.glade.h:23
 msgid "_Price:"
-msgstr "Ár:"
+msgstr "_Ár:"
 
 #: ../src/gnome/glade/price.glade.h:24
 #: ../src/gnome-utils/dialog-commodity.c:274
 msgid "_Security:"
-msgstr "Értékpapír:"
+msgstr "_Értékpapír:"
 
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
-msgstr "Összeg (számokkal):"
+msgstr "Összeg (_számokkal):"
 
 #: ../src/gnome/glade/print.glade.h:2
 msgid "Amount (_words):"
-msgstr "Összeg (szó):"
+msgstr "Összeg (_szó):"
 
 #: ../src/gnome/glade/print.glade.h:3
 msgid "Check _format:"
@@ -5546,7 +5535,7 @@ msgstr "Saját formátum"
 
 #: ../src/gnome/glade/print.glade.h:6
 msgid "Degrees"
-msgstr ""
+msgstr "Fokozat"
 
 #: ../src/gnome/glade/print.glade.h:7
 msgid ""
@@ -5589,15 +5578,15 @@ msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:19
 msgid "Save Custom Check Format"
-msgstr ""
+msgstr "Saját csekk-űrlap mentése"
 
 #: ../src/gnome/glade/print.glade.h:20
 msgid "The origin point is the lower left-hand corner of the page."
-msgstr ""
+msgstr "Kiinduló pont, az oldal bal alsó sarka."
 
 #: ../src/gnome/glade/print.glade.h:21
 msgid "The origin point is the upper left-hand corner of the page."
-msgstr ""
+msgstr "Kiinduló pont, az oldal bal felső sarka."
 
 #: ../src/gnome/glade/print.glade.h:22
 msgid ""
@@ -5625,7 +5614,7 @@ msgstr "Fo_rgás"
 
 #: ../src/gnome/glade/print.glade.h:30
 msgid "_Save format"
-msgstr ""
+msgstr "_Formátum mentése"
 
 #: ../src/gnome/glade/print.glade.h:31
 msgid "_Translation:"
@@ -5633,7 +5622,7 @@ msgstr "Á_tszámítás:"
 
 #: ../src/gnome/glade/print.glade.h:32
 msgid "_Units:"
-msgstr "Mértékegységek:"
+msgstr "_Mértékegységek:"
 
 #: ../src/gnome/glade/print.glade.h:33
 msgid "x"
@@ -5657,7 +5646,7 @@ msgstr "<b>Információ egyeztetése</b>"
 
 #: ../src/gnome/glade/reconcile.glade.h:2 ../src/gnome/window-reconcile.c:721
 msgid "Enter _Interest Payment..."
-msgstr ""
+msgstr "_Kamatfizetés bevitele..."
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "Include _subaccounts"
@@ -5682,11 +5671,11 @@ msgstr "<b>Új tranzakció-információ</b>"
 
 #: ../src/gnome/glade/register.glade.h:2
 msgid "Amo_unt"
-msgstr "Összeg"
+msgstr "Öss_zeg"
 
 #: ../src/gnome/glade/register.glade.h:4
 msgid "C_hoose Date:"
-msgstr "Dátum választás:"
+msgstr "D_átum választás:"
 
 #: ../src/gnome/glade/register.glade.h:5
 msgid "C_leared"
@@ -5711,8 +5700,7 @@ msgstr "A jelenlegi tranzakció másolása"
 
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:249
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
+msgid "Create a Scheduled Transaction with the current transaction as a template"
 msgstr "Ütemezett tranzakció létrehozása a jelenlegi tranzakció mintájára"
 
 #: ../src/gnome/glade/register.glade.h:12
@@ -5730,7 +5718,7 @@ msgstr "A jelenlegi tranzakció törlése"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
-msgstr "Tranzakció dup_likálása"
+msgstr "Tra_nzakció duplikálása"
 
 #: ../src/gnome/glade/register.glade.h:21
 #: ../src/import-export/generic-import.glade.h:17
@@ -5755,7 +5743,7 @@ msgstr "Minden felosztás törlése kivéve, ami ehhez a számlához tartozik."
 
 #: ../src/gnome/glade/register.glade.h:27
 msgid "Filter register by..."
-msgstr ""
+msgstr "Regiszter szűrése..."
 
 #: ../src/gnome/glade/register.glade.h:28
 msgid "Jump"
@@ -5782,7 +5770,7 @@ msgstr "Ugrás a regiszter alján lévő üres tranzakcióra"
 
 #: ../src/gnome/glade/register.glade.h:33
 msgid "Num_ber"
-msgstr "Szám"
+msgstr "Szá_m"
 
 #: ../src/gnome/glade/register.glade.h:34
 msgid "Paste Transaction"
@@ -5810,7 +5798,7 @@ msgstr "Tranzakcióosztások törlése"
 #: ../src/gnome/gnc-plugin-page-register.c:272
 #: ../src/gnome-utils/gnc-icons.c:22
 msgid "S_plit Transaction"
-msgstr "Tranzakció osztása"
+msgstr "T_ranzakció osztása"
 
 #: ../src/gnome/glade/register.glade.h:40
 msgid "S_tatement Date"
@@ -5818,7 +5806,7 @@ msgstr "Bankszámla kivona_t dátuma"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
-msgstr "Ütemezés"
+msgstr "Ütemezés..."
 
 #: ../src/gnome/glade/register.glade.h:43
 msgid "Select Range:"
@@ -5826,7 +5814,7 @@ msgstr "Tartomány kiválasztása:"
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Select _All"
-msgstr "Mindent kijelöl"
+msgstr "Mindent _kijelöl"
 
 #: ../src/gnome/glade/register.glade.h:45
 msgid "Show _All"
@@ -5849,8 +5837,7 @@ msgstr "Tranzakciók egy vagy két sorban"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:285
-msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+msgid "Show transactions on one or two lines and expand the current transaction"
 msgstr "Tranzakciók egy vagy két sorban, és a jelenlegi tranzakció kifejtése"
 
 #: ../src/gnome/glade/register.glade.h:50
@@ -5925,8 +5912,7 @@ msgstr "Rendezés a tétel dátuma szerint"
 
 #: ../src/gnome/glade/register.glade.h:65
 msgid "Sort by the statement date (unreconciled items last)"
-msgstr ""
-"Rendezés a bankszámlakivonat dátuma szerint (nem egyeztetett elemek a végén)"
+msgstr "Rendezés a bankszámlakivonat dátuma szerint (nem egyeztetett elemek a végén)"
 
 #: ../src/gnome/glade/register.glade.h:66
 msgid "Sort register by..."
@@ -5934,7 +5920,7 @@ msgstr "Rendezés..."
 
 #: ../src/gnome/glade/register.glade.h:68
 msgid "St_yle"
-msgstr "Stílus"
+msgstr "St_ílus"
 
 #: ../src/gnome/glade/register.glade.h:69
 msgid "Start:"
@@ -5942,7 +5928,7 @@ msgstr "Kezdés:"
 
 #: ../src/gnome/glade/register.glade.h:71
 msgid "Toda_y"
-msgstr "Ma"
+msgstr "M_a"
 
 #: ../src/gnome/glade/register.glade.h:72
 msgid "Void Transaction"
@@ -5950,11 +5936,11 @@ msgstr "Tranzakció érvénytelenítése"
 
 #: ../src/gnome/glade/register.glade.h:73
 msgid "_Action"
-msgstr "Művelet"
+msgstr "_Művelet"
 
 #: ../src/gnome/glade/register.glade.h:75
 msgid "_Amount"
-msgstr "Összeg"
+msgstr "_Összeg"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/glade/register.glade.h:76
@@ -5966,12 +5952,12 @@ msgstr "_Autoosztott-főkönyv"
 #: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-register.c:281
 msgid "_Basic Ledger"
-msgstr "Alap-főkönyv"
+msgstr "_Alap-főkönyv"
 
 #: ../src/gnome/glade/register.glade.h:83
 #: ../src/gnome/gnc-plugin-page-register.c:268
 msgid "_Double Line"
-msgstr "Kétsoros"
+msgstr "_Kétsoros"
 
 #: ../src/gnome/glade/register.glade.h:84
 msgid "_Earliest"
@@ -5985,7 +5971,7 @@ msgstr "Be_fagyasztott"
 #: ../src/gnome/gnc-plugin-page-register.c:245
 #: ../src/gnome-utils/gnc-icons.c:23
 msgid "_Jump"
-msgstr "Ugrás"
+msgstr "_Ugrás"
 
 #: ../src/gnome/glade/register.glade.h:89
 msgid "_Latest"
@@ -5997,19 +5983,19 @@ msgstr "_Megjegyzés"
 
 #: ../src/gnome/glade/register.glade.h:91
 msgid "_Notes"
-msgstr "Megjegyzések"
+msgstr "_Megjegyzések"
 
 #: ../src/gnome/glade/register.glade.h:92
 msgid "_Number"
-msgstr "Szám"
+msgstr "_Szám"
 
 #: ../src/gnome/glade/register.glade.h:93
 msgid "_Number:"
-msgstr "Szám:"
+msgstr "_Szám:"
 
 #: ../src/gnome/glade/register.glade.h:94
 msgid "_Reconciled"
-msgstr "Egyeztetett"
+msgstr "_Egyeztetett"
 
 #: ../src/gnome/glade/register.glade.h:96
 msgid "_Standard Order"
@@ -6021,7 +6007,7 @@ msgstr "A bank_számlakivonat dátuma"
 
 #: ../src/gnome/glade/register.glade.h:98
 msgid "_Today"
-msgstr "Ma"
+msgstr "_Ma"
 
 #: ../src/gnome/glade/register.glade.h:99
 msgid "_Transaction Journal"
@@ -6029,7 +6015,7 @@ msgstr "_Tranzakciónapló"
 
 #: ../src/gnome/glade/register.glade.h:100
 msgid "_Unreconciled"
-msgstr "Nem egyeztetett"
+msgstr "_Nem egyeztetett"
 
 #: ../src/gnome/glade/register.glade.h:102
 msgid "_Voided"
@@ -6085,6 +6071,45 @@ msgid ""
 "Last Saturday\n"
 "Last Sunday"
 msgstr ""
+"1.\n"
+"2.\n"
+"3.\n"
+"4.\n"
+"5.\n"
+"6.\n"
+"7.\n"
+"8.\n"
+"9.\n"
+"10.\n"
+"11.\n"
+"12.\n"
+"13.\n"
+"14.\n"
+"15.\n"
+"16.\n"
+"17.\n"
+"18.\n"
+"19.\n"
+"20.\n"
+"21.\n"
+"22.\n"
+"23.\n"
+"24.\n"
+"25.\n"
+"26.\n"
+"27.\n"
+"28.\n"
+"29.\n"
+"30.\n"
+"31.\n"
+"Hónap utlsó napja\n"
+"Utolsó hétfő\n"
+"Utolsó kedd\n"
+"Utolsó szerda\n"
+"Utolsó  csütörtök\n"
+"Utolsó péntek\n"
+"Utolsó szombat\n"
+"Utolsó vasárnap"
 
 #: ../src/gnome/glade/sched-xact.glade.h:44
 msgid "<b>End</b>"
@@ -6182,6 +6207,10 @@ msgid ""
 "Whole Loan\n"
 "Custom"
 msgstr ""
+"Aktuális év\n"
+"Idei+1 év\n"
+"Teljes hitel\n"
+"Egyéni"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid ""
@@ -6469,7 +6498,7 @@ msgstr "Félhavi"
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr ""
 "Az újonnan létrehozott, ütemezett tranzakciók megjelölése 'automatikusan-"
-"létrehozandó' -ként"
+"létrehozandó' -ként."
 
 #: ../src/gnome/glade/sched-xact.glade.h:159
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -6673,7 +6702,7 @@ msgstr "<b>E_szközszámla</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "<b>_Income Account</b>"
-msgstr "<b>Bevételszámla</b>"
+msgstr "<b>_Bevételszámla</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
@@ -6681,7 +6710,7 @@ msgstr "Kiegyenlítési összeg"
 
 #: ../src/gnome/glade/stocks.glade.h:4
 msgid "Currenc_y:"
-msgstr "Pénznem:"
+msgstr "Pénzne_m:"
 
 #: ../src/gnome/glade/stocks.glade.h:5
 msgid "Desc_ription:"
@@ -6725,11 +6754,10 @@ msgstr ""
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid "New _Price:"
-msgstr "Új ár:"
+msgstr "Új _ár:"
 
 #: ../src/gnome/glade/stocks.glade.h:11
-msgid ""
-"Select the account for which you want to record a stock split or merger."
+msgid "Select the account for which you want to record a stock split or merger."
 msgstr ""
 "Válassza ki a számlát, amelyre részvényosztást vagy összevonást kíván "
 "rögzíteni."
@@ -6753,7 +6781,7 @@ msgstr "E tündér segít a részvénymegosztás vagy összesítés rögzítés�
 #: ../src/gnome/glade/stocks.glade.h:16
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
 msgid "_Amount:"
-msgstr "Összeg:"
+msgstr "_Összeg:"
 
 #: ../src/gnome/glade/stocks.glade.h:18
 msgid "_Memo:"
@@ -6761,7 +6789,7 @@ msgstr "_Megjegyzés:"
 
 #: ../src/gnome/glade/stocks.glade.h:19
 msgid "_Shares:"
-msgstr "Darab:"
+msgstr "_Darab:"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -6777,7 +6805,7 @@ msgstr "<b>Adóinformáció</b>"
 
 #: ../src/gnome/glade/tax.glade.h:4
 msgid "<b>_Accounts</b>"
-msgstr "<b>Számlák</b>"
+msgstr "<b>_Számlák</b>"
 
 #: ../src/gnome/glade/tax.glade.h:5
 msgid "<b>_TXF Categories</b>"
@@ -6789,7 +6817,7 @@ msgstr "Kiválasztott számlák:"
 
 #: ../src/gnome/glade/tax.glade.h:7
 msgid "C_urrent Account"
-msgstr "A jelenlegi számla"
+msgstr "A _jelenlegi számla"
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Tax Information"
@@ -6797,19 +6825,19 @@ msgstr "Adóinformáció"
 
 #: ../src/gnome/glade/tax.glade.h:9
 msgid "Tax _Related"
-msgstr "Adó vonatkozású"
+msgstr "Adó _vonatkozású"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "_Expense"
-msgstr "Költség"
+msgstr "_Költség"
 
 #: ../src/gnome/glade/tax.glade.h:11
 msgid "_Income"
-msgstr "Bevétel"
+msgstr "_Bevétel"
 
 #: ../src/gnome/glade/tax.glade.h:12
 msgid "_Parent Account"
-msgstr "Fő számla"
+msgstr "_Fő számla"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "_Select Subaccounts"
@@ -6963,8 +6991,7 @@ msgstr "Értékpapír-szerke_sztő"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr ""
-"Értékpapírok és befektetési alapok (javak) megtekintése és szerkesztése"
+msgstr "Értékpapírok és befektetési alapok (javak) megtekintése és szerkesztése"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:153
 msgid "_Financial Calculator"
@@ -7064,7 +7091,7 @@ msgstr "A kiválasztott folyószámlák szerkesztése"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
 msgid "_Delete Account..."
-msgstr "Számla törlése"
+msgstr "_Számla törlése..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:165
 msgid "Delete selected account"
@@ -7072,7 +7099,7 @@ msgstr "A kiválasztott folyószámlák törlése"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:167
 msgid "_Renumber Subaccounts..."
-msgstr "Alszámlák új_raszámozása"
+msgstr "_Alszámlák újraszámozása..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:168
 msgid "Renumber the children of the selected account"
@@ -7090,7 +7117,7 @@ msgstr "Szűrés..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:176
 #: ../src/gnome/gnc-plugin-page-register.c:230
 msgid "_Reconcile..."
-msgstr "Egyeztetés"
+msgstr "_Egyeztetés..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:231
@@ -7113,7 +7140,7 @@ msgstr "Pénz átvezetése egyik folyószámlák a másikra"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
 #: ../src/gnome/gnc-plugin-page-register.c:233
 msgid "Stoc_k Split..."
-msgstr "Részvény_kifejtés"
+msgstr "Részvény_kifejtés..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 #: ../src/gnome/gnc-plugin-page-register.c:234
@@ -7270,8 +7297,7 @@ msgid "Estimate Budget"
 msgstr "Költségvetés becslése"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:144
-msgid ""
-"Estimate a budget value for the selected accounts from past transactions"
+msgid "Estimate a budget value for the selected accounts from past transactions"
 msgstr ""
 "Költségvetésérték becslése a kiválasztott számlákra múltbéli tranzakciók "
 "alapján"
@@ -7304,7 +7330,7 @@ msgstr "Legalább egy folyószámlát ki kell választani a becsléshez."
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:167
 msgid "_Print Check..."
-msgstr "Nyomtatás ellenőrzése"
+msgstr "_Nyomtatás ellenőrzése..."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:172
@@ -7415,7 +7441,7 @@ msgstr "A jelen tranzakció árfolyamának szerkesztése"
 
 #: ../src/gnome/gnc-plugin-page-register.c:248
 msgid "Sche_dule..."
-msgstr "Ütemezés"
+msgstr "Üte_mezés..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:251
 msgid "_All transactions"
@@ -7631,8 +7657,7 @@ msgstr "A tranzakció nem módosítható vagy törölhető."
 #: ../src/gnome/gnc-split-reg.c:936
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
-"A tranzakciót csak olvashatóként jelölték meg a következő megjegyzéssel: '%s'"
+msgstr "A tranzakciót csak olvashatóként jelölték meg a következő megjegyzéssel: '%s'"
 
 #: ../src/gnome/gnc-split-reg.c:968
 msgid "Remove the splits from this transaction?"
@@ -7876,8 +7901,7 @@ msgstr ""
 "jelenik meg."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
-msgid ""
-"If active, the new user dialog will be shown. Otherwise it will not be shown."
+msgid "If active, the new user dialog will be shown. Otherwise it will not be shown."
 msgstr ""
 "Ha aktív, megjelenik az új felhasználó párbeszédablak. Különben nem jelenik "
 "meg."
@@ -7904,8 +7928,7 @@ msgstr "Oszlop növekvő vagy csökkenő rendezése"
 msgid ""
 "The X,Y coordinates of the top left corner of the dialog when it was last "
 "closed."
-msgstr ""
-"Az párbeszédablak bal felső sarkának X,Y koordinátái az utolsó bezáráskor."
+msgstr "Az párbeszédablak bal felső sarkának X,Y koordinátái az utolsó bezáráskor."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:12
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:11
@@ -8239,8 +8262,7 @@ msgstr ""
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
-msgstr ""
-"Ha aktív, megjelenik a \"Nap Tippje\" indításkor. Különben nem jelenik meg."
+msgstr "Ha aktív, megjelenik a \"Nap Tippje\" indításkor. Különben nem jelenik meg."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -8445,8 +8467,7 @@ msgstr ""
 "kilépés után. Különben a méretek nem maradnak meg."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
-msgid ""
-"If active, use a 24 hour time format. Otherwise use a 12 hour time format."
+msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 msgstr "Aktiválva 24 órás időalak használata. Különben 12 órás."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
@@ -8745,8 +8766,7 @@ msgstr "E dialógus megjelenik, mielőtt engedélyezik egy tranzakció törlés�
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
-msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik egyszerre több áradat törlését."
+msgstr "E dialógus megjelenik, mielőtt engedélyezik egyszerre több áradat törlését."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:20
 msgid ""
@@ -8772,8 +8792,7 @@ msgstr ""
 msgid ""
 "This dialog is presented before allowing you to remove a splits from a "
 "transaction."
-msgstr ""
-"E dialógus megjelenik, mielőtt engedélyezik kifejtés törlését tranzakcióból."
+msgstr "E dialógus megjelenik, mielőtt engedélyezik kifejtés törlését tranzakcióból."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
 msgid ""
@@ -8859,8 +8878,7 @@ msgid "Profit/loss starting date type"
 msgstr "Nyereség/veszteség kezdő dátum típus"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
-msgid ""
-"Show a grand total of all accounts converted to the default report currency"
+msgid "Show a grand total of all accounts converted to the default report currency"
 msgstr "Főösszeg megjelenítése minden számlán az alapértelmezett pénznemben"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
@@ -9074,11 +9092,10 @@ msgid "Add results to current search"
 msgstr "Felvétel a jelenlegi keresés eredményei közé"
 
 #: ../src/gnome-search/search.glade.h:4
-msgid ""
-"Choose whether to search all your data or only that marked as \"active\""
+msgid "Choose whether to search all your data or only that marked as \"active\""
 msgstr ""
 "Válasza ki, hogy minden adat között keressen, vagy csak az 'aktív'-ként "
-"megjelöltek között."
+"megjelöltek között"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
@@ -9286,8 +9303,7 @@ msgstr "Vagy érvényes nyitóegyenleget kell megadni, vagy üresen hagyni."
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
-msgstr ""
-"Vagy egy célszámlát, vagy a nyitóegyenlegek > saját tőke számlát válassza ki."
+msgstr "Vagy egy célszámlát, vagy a nyitóegyenlegek > saját tőke számlát válassza ki."
 
 #: ../src/gnome-utils/dialog-account.c:1324
 msgid "Edit Account"
@@ -9391,8 +9407,7 @@ msgstr "Ez az áru már létezik."
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
-msgstr ""
-"Meg kell adni az áru \"Megnevezés\"-ét \"Rövidítés\"-ét és \"Típus\"-át."
+msgstr "Meg kell adni az áru \"Megnevezés\"-ét \"Rövidítés\"-ét és \"Típus\"-át."
 
 #: ../src/gnome-utils/dialog-options.c:880
 msgid "Select all accounts."
@@ -10226,7 +10241,7 @@ msgstr "Dátumformátum:"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:5
 msgid "December 31, 2000"
-msgstr "2003. december 31."
+msgstr "2003. december 31"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:6
 #: ../src/import-export/generic-import.glade.h:28
@@ -10734,8 +10749,7 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:107
-msgid ""
-"Show a grand total of all accounts converted to the default report currency."
+msgid "Show a grand total of all accounts converted to the default report currency."
 msgstr "Főösszeg megjelenítése minden számlán az alapértelmezett pénznemben."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:108
@@ -10760,7 +10774,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:113
 msgid "Show splash screen at startup."
-msgstr "Indító ablak megjelenítése"
+msgstr "Indító ablak megjelenítése."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:114
 msgid ""
@@ -10872,8 +10886,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:137
 msgid "Use the specified absolute starting date for profit/loss calculations."
-msgstr ""
-"A megadott abszolút kezdő dátum használata nyereség/veszteség számításhoz."
+msgstr "A megadott abszolút kezdő dátum használata nyereség/veszteség számításhoz."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "Use the specified currency for all newly created accounts."
@@ -10893,8 +10906,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:141
 msgid "Use the specified relative starting date for profit/loss calculations."
-msgstr ""
-"A megadott relatív kezdő dátum használata nyereség/veszteség számításhoz."
+msgstr "A megadott relatív kezdő dátum használata nyereség/veszteség számításhoz."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "Use the system locale currency for all newly created accounts."
@@ -10902,8 +10914,7 @@ msgstr "A rendszerben alapértelmezett pénznem használata minden új számlán
 
 #: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "Use the system locale currency for all newly created reports."
-msgstr ""
-"A rendszerben alapértelmezett pénznem használata minden új jelentésben."
+msgstr "A rendszerben alapértelmezett pénznem használata minden új jelentésben."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:144
 msgid "Use the system setting for displaying toolbar items."
@@ -11077,9 +11088,8 @@ msgid "New..."
 msgstr "Új..."
 
 #: ../src/gnome-utils/gnc-autosave.c:99
-#, fuzzy
 msgid "Save file automatically?"
-msgstr "(automatikus kitöltés)"
+msgstr "Automatikus mentés?"
 
 #: ../src/gnome-utils/gnc-autosave.c:102
 #, c-format
@@ -11172,7 +11182,7 @@ msgstr "2 hónap"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:277
 msgid "View:"
-msgstr "Nézet"
+msgstr "Nézet:"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -11337,15 +11347,12 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:302
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
-msgstr ""
-"%s fájl/URL nem tartalmaz GnuCash-adatokat, vagy az adatállomány sérült."
+msgstr "%s fájl/URL nem tartalmaz GnuCash-adatokat, vagy az adatállomány sérült."
 
 #: ../src/gnome-utils/gnc-file.c:308
 #, c-format
-msgid ""
-"The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr ""
-"%s URL-en a szerver hibát észlelt, vagy rossz illetve sérült adatot talált."
+msgid "The server at URL %s experienced an error or encountered bad or corrupt data."
+msgstr "%s URL-en a szerver hibát észlelt, vagy rossz illetve sérült adatot talált."
 
 #: ../src/gnome-utils/gnc-file.c:314
 #, c-format
@@ -11896,7 +11903,7 @@ msgstr ""
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
 "discarded."
-msgstr "Ha nem rögzíti a változásokat az előző %d percből, azok elvesznek."
+msgstr "Ha nem rögzíti a változásokat az előző %d nap és %d órából, azok elvesznek."
 
 #: ../src/gnome-utils/gnc-main-window.c:1011
 msgid "<unknown>"
@@ -11904,7 +11911,7 @@ msgstr "<ismeretlen>"
 
 #: ../src/gnome-utils/gnc-main-window.c:1041
 msgid "Close _Without Saving"
-msgstr "Bezárás rögzítés nélkül"
+msgstr "Bezárás _rögzítés nélkül"
 
 #: ../src/gnome-utils/gnc-main-window.c:1229
 msgid "<no file>"
@@ -11927,7 +11934,7 @@ msgstr "%s E példány az r%s változatból épült %s gépen."
 
 #: ../src/gnome-utils/gnc-main-window.c:3501
 msgid "translator_credits"
-msgstr "Fordítók"
+msgstr "Fordító_k"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -12314,8 +12321,7 @@ msgid "This field contains the full path of the most recently opened file."
 msgstr "E mező tartalmazza a legutóbb megnyitott fájl teljes útját."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:5
-msgid ""
-"This field contains the full path of the next most recently opened file."
+msgid "This field contains the full path of the next most recently opened file."
 msgstr "E mező tartalmazza a következő legutóbb megnyitott fájl teljes útját."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
@@ -12433,11 +12439,11 @@ msgstr "Ezen egyeztetési ablak a tartalma megváltozott. Biztosan elhagyja?"
 #. Toplevel
 #: ../src/gnome/window-reconcile.c:1993
 msgid "_Reconcile"
-msgstr "Egyeztetés"
+msgstr "_Egyeztetés"
 
 #: ../src/gnome/window-reconcile.c:1994
 msgid "_Account"
-msgstr "Fiók"
+msgstr "_Fiók"
 
 #. Reconcile menu
 #: ../src/gnome/window-reconcile.c:2000
@@ -12445,8 +12451,7 @@ msgid "_Reconcile Information..."
 msgstr "_Információ egyeztetése..."
 
 #: ../src/gnome/window-reconcile.c:2001
-msgid ""
-"Change the reconcile information including statement date and ending balance."
+msgid "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Az egyeztetési információ változtatása beleértve a bankszámlakivonat dátumát "
 "és a záróegyenleget is."
@@ -12461,7 +12466,7 @@ msgstr "A számlaegyeztetés befejezése"
 
 #: ../src/gnome/window-reconcile.c:2007
 msgid "_Postpone"
-msgstr "Halaszt"
+msgstr "_Halaszt"
 
 #: ../src/gnome/window-reconcile.c:2008
 msgid "Postpone the reconciliation of this account"
@@ -12547,7 +12552,7 @@ msgstr "_Auto-bővítés küszöb"
 
 #: ../src/import-export/generic-import.glade.h:12
 msgid "Auto-c_lear threshold"
-msgstr "Auto-egyezés küszöb"
+msgstr "Auto-e_gyezés küszöb"
 
 #: ../src/import-export/generic-import.glade.h:13
 msgid "Choose a format"
@@ -12555,7 +12560,7 @@ msgstr "Formátum kiválasztása"
 
 #: ../src/import-export/generic-import.glade.h:14
 msgid "Commercial ATM _fees threshold"
-msgstr "Kereskedelmi bankomat díj küszöb"
+msgstr "Kereskedelmi _bankomat díj küszöb"
 
 #: ../src/import-export/generic-import.glade.h:18
 msgid "Enable edit match action"
@@ -12651,7 +12656,7 @@ msgstr "Új?"
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Online account ID here..."
-msgstr "(Online folyószámla azonosító... "
+msgstr "Online számla azonosító..."
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid "Other Account"
@@ -12720,10 +12725,8 @@ msgid "Use _bayesian matching"
 msgstr "Bayes-i illesztés"
 
 #: ../src/import-export/generic-import.glade.h:53
-msgid ""
-"Use bayesian algorithms to match new transactions with existing accounts."
-msgstr ""
-"Bayes-i illesztés használata új tranzakciók meglévő számlákra illesztéséhez."
+msgid "Use bayesian algorithms to match new transactions with existing accounts."
+msgstr "Bayes-i illesztés használata új tranzakciók meglévő számlákra illesztéséhez."
 
 #: ../src/import-export/generic-import.glade.h:54
 msgid "Yellow"
@@ -13342,8 +13345,7 @@ msgstr "Tájékoztatásul: e számlának a jegyzett egyenlege %s\n"
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
-msgstr ""
-"A könyvelt egyenleg megegyezik a számla jelenlegi egyeztetett egyenlegével."
+msgstr "A könyvelt egyenleg megegyezik a számla jelenlegi egyeztetett egyenlegével."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:315
 msgid "Reconcile account now?"
@@ -13446,8 +13448,7 @@ msgstr ""
 "Kilépés."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:544
-msgid ""
-"Executing the Online Banking outbox failed. Please check the log window."
+msgid "Executing the Online Banking outbox failed. Please check the log window."
 msgstr ""
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:572
@@ -13527,7 +13528,7 @@ msgstr "Az átutalások online lekérdezése HBCI/AqBanking útján"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:108
 msgid "_Issue Transaction..."
-msgstr "Tranzakc_ió intézése"
+msgstr "_Tranzakció intézése..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
 #, fuzzy
@@ -13536,7 +13537,7 @@ msgstr "Új online átutalás intézése HBCI-vel"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:117
 msgid "I_nternal Transaction..."
-msgstr "Belső tranzakc_ió "
+msgstr "B_első tranzakció..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:118
 #, fuzzy
@@ -13545,7 +13546,7 @@ msgstr "Belső átutalás intézése HBCI/AqBanking útján"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:121
 msgid "_Direct Debit..."
-msgstr "Direkt terhelés"
+msgstr "_Direkt terhelés..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
 #, fuzzy
@@ -13607,8 +13608,7 @@ msgstr ""
 
 #: ../src/import-export/hbci/hbci-interaction.c:401
 #, c-format
-msgid ""
-"The PIN needs to be at least %d characters long. Do you want to try again?"
+msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
 msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:414
@@ -13616,13 +13616,11 @@ msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
 msgid ""
 "You entered %ld characters, but the PIN must be no longer than %d "
 "characters. Do you want to try again?"
-msgstr ""
-"%ld betűt adtak meg, de a PIN legfeljebb %d betű lehet. Akarja újrapróbálni?"
+msgstr "%ld betűt adtak meg, de a PIN legfeljebb %d betű lehet. Akarja újrapróbálni?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:482
 #, c-format
-msgid ""
-"This TAN needs to be at least %d characters long. Do you want to try again?"
+msgid "This TAN needs to be at least %d characters long. Do you want to try again?"
 msgstr "A TAN legalább %d karakter kell legyen. Akarja újrapróbálni?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:495
@@ -13630,8 +13628,7 @@ msgstr "A TAN legalább %d karakter kell legyen. Akarja újrapróbálni?"
 msgid ""
 "You entered %ld characters, but the TAN must be no longer than %d "
 "characters. Do you want to try again?"
-msgstr ""
-"%ld betűt adtak meg, de a TAN legfeljebb %d betű lehet. Akarja újrapróbálni?"
+msgstr "%ld betűt adtak meg, de a TAN legfeljebb %d betű lehet. Akarja újrapróbálni?"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
 msgid "CSV import data format"
@@ -13896,8 +13893,7 @@ msgstr "GnuCash .log naplófájlok visszajátszása..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
-msgstr ""
-"Egy GnuCash naplófájl visszajátszása összeomlás után. Vissza nem vonható."
+msgstr "Egy GnuCash naplófájl visszajátszása összeomlás után. Vissza nem vonható."
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -14045,8 +14041,7 @@ msgstr "Adja meg az információt \"%s\"-ról"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1684
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr ""
-"Válassza ki az áru tőzsdéjét vagy besorolását (BUX, NASDAQ, NYSE stb.)."
+msgstr "Válassza ki az áru tőzsdéjét vagy besorolását (BUX, NASDAQ, NYSE stb.)."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1708
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
@@ -14080,7 +14075,7 @@ msgstr "Dup?"
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:48
 msgid "Import _QIF..."
-msgstr "QIF-fájl importálása"
+msgstr "_QIF-fájl importálása..."
 
 #: ../src/import-export/qif-import/gnc-plugin-qif-import.c:49
 msgid "Import a Quicken QIF file"
@@ -14379,8 +14374,7 @@ msgstr "QIF számla alapértelmezett nevének beállítása"
 
 #: ../src/import-export/qif-import/qif.glade.h:70
 msgid "Show some documentation-only pages in QIF Import druid."
-msgstr ""
-"A QIF Importálása tündér néhány,csak dokumentációs lapjának megjelenítése."
+msgstr "A QIF Importálása tündér néhány,csak dokumentációs lapjának megjelenítése."
 
 #: ../src/import-export/qif-import/qif.glade.h:75
 msgid ""
@@ -14586,7 +14580,7 @@ msgstr ""
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Maximum ATM fee amount in your area"
-msgstr "Legnagyobb ATM díj az ön körzetében."
+msgstr "Legnagyobb ATM díj az ön körzetében"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
 msgid "Minimum score to be displayed"
@@ -14858,8 +14852,7 @@ msgid "_Rebalance"
 msgstr "Új_rakiegyenlítés"
 
 #: ../src/register/ledger-core/split-register-control.c:1042
-msgid ""
-"You need to expand the transaction in order to modify its exchange rates."
+msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "A tranzakciók kibontása szükséges az árfolyamok változtatásához."
 
 #: ../src/register/ledger-core/split-register-control.c:1165
@@ -15032,15 +15025,13 @@ msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Forrás-számla megadása vagy kiválasztása listából"
 
 #: ../src/register/ledger-core/split-register-model.c:1298
-msgid ""
-"This transaction has multiple splits; press the Split button to see them all"
+msgid "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "E tranzakciónak több kifejtése van. Nyomja meg a 'Kibontás' gombot hogy "
 "mindent lássa"
 
 #: ../src/register/ledger-core/split-register-model.c:1301
-msgid ""
-"This transaction is a stock split; press the Split button to see details"
+msgid "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "E tranzakció egy készlet-kifejtés. Nyomja meg a 'Kibontás' gombot a "
 "részletek megtekintéséhez "
@@ -15124,7 +15115,7 @@ msgstr "A jelentés azonosítószáma."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:953
 msgid "_Print Report..."
-msgstr "Jelentés nyomtatása"
+msgstr "_Jelentés nyomtatása..."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:954
 msgid "Print the current report"
@@ -16384,8 +16375,7 @@ msgstr "Számlák megjelenítése e mélységig, a többi beállítás felülbí
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1224
-msgid ""
-"Override account-selection and show sub-accounts of all selected accounts?"
+msgid "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
 "A számlakiválasztás figyelmen kívül hagyása, és minden kiválasztott számla "
 "alszámláinak megjelenítése?"
@@ -17301,8 +17291,7 @@ msgstr ""
 #. src/report/utility-reports/gnucash/report/hello-world.scm
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:1610 ../intl-scm/guile-strings.c:1776
-msgid ""
-"For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
+msgid "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;."
 msgstr ""
 
 #. src/report/utility-reports/gnucash/report/hello-world.scm
@@ -18387,8 +18376,7 @@ msgstr "Korrigáló tételek mintája"
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2084 ../intl-scm/guile-strings.c:2708
 msgid "Any text in the Description column which identifies adjusting entries"
-msgstr ""
-"Bármilyen szöveg a Leírás oszlopban, ami azonosítja a korrigáló tételeket"
+msgstr "Bármilyen szöveg a Leírás oszlopban, ami azonosítja a korrigáló tételeket"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -18411,8 +18399,7 @@ msgstr "A korrigáló tételek mintája reguláris kifejezés"
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
 #: ../intl-scm/guile-strings.c:2092 ../intl-scm/guile-strings.c:2716
-msgid ""
-"Causes the Adjusting Entries Pattern to be treated as a regular expression"
+msgid "Causes the Adjusting Entries Pattern to be treated as a regular expression"
 msgstr "A korrigáló tételek mintáját reguláris kifejezésként kezelik"
 
 #. src/report/standard-reports/trial-balance.scm
@@ -18484,8 +18471,7 @@ msgstr "A záró tételek mintája reguláris kifejezés"
 #: ../intl-scm/guile-strings.c:2104 ../intl-scm/guile-strings.c:2328
 #: ../intl-scm/guile-strings.c:2728 ../intl-scm/guile-strings.c:2952
 #: ../intl-scm/guile-strings.c:3444 ../intl-scm/guile-strings.c:4598
-msgid ""
-"Causes the Closing Entries Pattern to be treated as a regular expression"
+msgid "Causes the Closing Entries Pattern to be treated as a regular expression"
 msgstr "A záró tételek mintáját reguláris kifejezésként kezelik"
 
 #. src/report/standard-reports/trial-balance.scm
@@ -18546,8 +18532,7 @@ msgstr "Számlanév megjelenítése hiperhivatkozásként"
 #: ../intl-scm/guile-strings.c:3122 ../intl-scm/guile-strings.c:3230
 #: ../intl-scm/guile-strings.c:4276 ../intl-scm/guile-strings.c:4384
 msgid "Shows each account in the table as a hyperlink to its register window"
-msgstr ""
-"Minden számla a főkönyvi ablakára mutató hiperhivatkozásként jelenik meg"
+msgstr "Minden számla a főkönyvi ablakára mutató hiperhivatkozásként jelenik meg"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -19141,15 +19126,13 @@ msgstr "Kötelezettség-oszlopdiagram"
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2358 ../intl-scm/guile-strings.c:2982
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr ""
-"Oszlopdiagram megjelenítése az időszakonkénti bevétel időbeli alakulásával"
+msgstr "Oszlopdiagram megjelenítése az időszakonkénti bevétel időbeli alakulásával"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
 #: ../intl-scm/guile-strings.c:2360 ../intl-scm/guile-strings.c:2984
 msgid "Shows a barchart with the Expenses per interval developing over time"
-msgstr ""
-"Oszlopdiagram megjelenítése az időszakonkénti költségek időbeli alakulásával"
+msgstr "Oszlopdiagram megjelenítése az időszakonkénti költségek időbeli alakulásával"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/gnucash/report/category-barchart.scm
@@ -19799,10 +19782,8 @@ msgstr "* az árucikkadat,tranzakcióárat használva készült az árlista hely
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:3394 ../intl-scm/guile-strings.c:4548
-msgid ""
-"If you are in a multi-currency situation, the exchanges may not be correct."
-msgstr ""
-"Ha ön egy több pénznemű helyzetben van, az átváltások talán nem pontosak."
+msgid "If you are in a multi-currency situation, the exchanges may not be correct."
+msgstr "Ha ön egy több pénznemű helyzetben van, az átváltások talán nem pontosak."
 
 #. src/report/standard-reports/gnucash/report/equity-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -20814,7 +20795,7 @@ msgstr "Első negyedévi becsült adó"
 #: ../intl-scm/guile-strings.c:5400 ../intl-scm/guile-strings.c:5490
 #: ../intl-scm/guile-strings.c:5580 ../intl-scm/guile-strings.c:5670
 msgid "Jan 1 - Mar 31"
-msgstr "jan. 1. - márc. 31."
+msgstr "Jan. 1 - Márc. 31"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -20832,7 +20813,7 @@ msgstr "Második negyedévi becsült adó"
 #: ../intl-scm/guile-strings.c:5404 ../intl-scm/guile-strings.c:5494
 #: ../intl-scm/guile-strings.c:5584 ../intl-scm/guile-strings.c:5674
 msgid "Apr 1 - May 31"
-msgstr "Ápr. 1. - máj. 31."
+msgstr "Ápr. 1 - Máj. 31"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -21088,8 +21069,7 @@ msgstr "Adóköteles jövedelem / Levonható költségek"
 #: ../intl-scm/guile-strings.c:5466 ../intl-scm/guile-strings.c:5556
 #: ../intl-scm/guile-strings.c:5646 ../intl-scm/guile-strings.c:5736
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr ""
-"E jelentés az adóköteles jövedelemet és a levonható költségeket mutatja."
+msgstr "E jelentés az adóköteles jövedelemet és a levonható költségeket mutatja."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf.scm
@@ -21104,8 +21084,7 @@ msgstr "TXF"
 #: ../intl-scm/guile-strings.c:5472 ../intl-scm/guile-strings.c:5562
 #: ../intl-scm/guile-strings.c:5652 ../intl-scm/guile-strings.c:5742
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr ""
-"Ez az oldal az adóköteles jövedelemet és a levonható költségeket mutatja."
+msgstr "Ez az oldal az adóköteles jövedelemet és a levonható költségeket mutatja."
 
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #. src/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
@@ -22363,8 +22342,7 @@ msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
-msgstr ""
-"Dátumok megadásakor nyomhat '+' vagy '-' -t a megfelelő dátum kiválasztáshoz."
+msgstr "Dátumok megadásakor nyomhat '+' vagy '-' -t a megfelelő dátum kiválasztáshoz."
 
 #: ../doc/tip_of_the_day.list.in:60
 msgid ""
@@ -22436,8 +22414,3 @@ msgid ""
 "\""
 msgstr ""
 
-#~ msgid "Enables support for the European Union EURO currency."
-#~ msgstr "Engedélyezi az EU pénzének (EURO) használatát."
-
-#~ msgid "_Enable euro support"
-#~ msgstr "EURO támogatás _engedélyezése"
