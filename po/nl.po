@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2007-02-18 15:15+0100\n"
+"PO-Revision-Date: 2007-08-12 21:13+0200\n"
 "Last-Translator: Hendrik-Jan Heins <hjheins@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12692,7 +12692,7 @@ msgstr "Haal koersen"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:438
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Kolom letter voor 'Haal Quotes'|Q"
+msgstr "Q"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:444
 #: ../src/gnome-utils/gnc-tree-view-price.c:453

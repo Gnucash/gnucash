@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-02 10:11-0600\n"
-"PO-Revision-Date: 2007-07-05 00:16+0300\n"
+"PO-Revision-Date: 2007-08-12 21:12+0200\n"
 "Last-Translator: Maxim V. Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -6594,7 +6594,7 @@ msgstr "Тимчасовий"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:643
 msgid "Column letter for 'Placeholder'|P"
-msgstr "Літера стовпчика для 'Тимчасовий'|Т"
+msgstr "Т"
 
 #. Translators: %s is a currency mnemonic.
 #: ../src/gnome-utils/gnc-tree-view-account.c:1388
@@ -6683,7 +6683,7 @@ msgstr "Отримати котирування"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:438
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr "Літера стовпчика для 'Отримати котирування'|Q"
+msgstr "Q"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:444
 #: ../src/gnome-utils/gnc-tree-view-price.c:453
