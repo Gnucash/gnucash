@@ -35,4 +35,7 @@ void gnc_set_debugging(gboolean d);
 gboolean gnc_is_extra_enabled(void);
 void gnc_set_extra(gboolean enabled);
 
+void gnc_set_gconf_path(const gchar *prefix);
+const gchar *gnc_get_gconf_path(void);
+
 #endif /* GNC_MAIN_H */

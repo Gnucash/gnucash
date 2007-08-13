@@ -53,7 +53,6 @@
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
-#include "gnc-path.h"
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
@@ -342,15 +341,20 @@ copy_file(const char *orig, const char *bkup)
     char buf[buf_size];
     int orig_fd;
     int bkup_fd;
+    int flags=0;
     ssize_t count_write;
     ssize_t count_read;
 
-    orig_fd = g_open(orig, O_RDONLY, 0);
+#ifdef G_OS_WIN32
+    flags = O_BINARY;
+#endif
+
+    orig_fd = g_open(orig, O_RDONLY | flags, 0);
     if(orig_fd == -1)
     {
         return FALSE;
     }
-    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL, 0600);
+    bkup_fd = g_open(bkup, O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | flags, 0600);
     if(bkup_fd == -1)
     {
         close(orig_fd);
@@ -589,7 +593,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
         if(g_unlink(datafile) != 0 && errno != ENOENT)
         {
-            qof_backend_set_error(be, ERR_FILEIO_BACKUP_ERROR);
+            qof_backend_set_error(be, ERR_BACKEND_READONLY);
             PWARN("unable to unlink filename %s: %s",
                   datafile ? datafile : "(null)", 
                   strerror(errno) ? strerror(errno) : ""); 
@@ -816,7 +820,7 @@ file_begin_edit (QofBackend *be, QofInstance *inst)
     QofBook *book = gp;
     const char * filepath;
 
-    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
+    QofIdTypeConst typ = QOF_INSTANCE(inst)->e_type;
     if (strcmp (GNC_ID_PERIOD, typ)) return;
     filepath = build_period_filepath(fbe, book);
     PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
@@ -1053,22 +1057,10 @@ gnc_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
-	QofBackendProvider *prov;
-#ifdef ENABLE_NLS
-	gchar *localedir = gnc_path_get_localedir ();
-	/* FIXME: It is unclear whether setlocale() is actually
-	   needed here (added in r11313). Some platforms might
-	   need it so that gettext works correctly in this
-	   GModule. We'll keep it for now. */
-	setlocale (LC_ALL, "");
-	bindtextdomain (GETTEXT_PACKAGE, localedir);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-	g_free (localedir);
-#endif
+        QofBackendProvider *prov;
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
         prov->access_method = "file";
@@ -1077,8 +1069,6 @@ g_module_check_init(GModule *module)
         prov->provider_free = gnc_provider_free;
         prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
-        g_module_make_resident (module);
-        return NULL;
 }
 
 /* ========================== END OF FILE ===================== */

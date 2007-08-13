@@ -849,6 +849,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   /* show it all */
   gtk_widget_show_all (sw->dialog);
 
+  /* hide the dialog */
+  gtk_widget_hide (sw->dialog);
+
   /* Hide the 'new' button if there is no new_item_cb */
   if (!sw->new_item_cb)
     gtk_widget_hide_all (new_item_button);
@@ -950,6 +953,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
   gnc_search_dialog_init_widgets (sw, title);
   if (sw->gconf_section)
     gnc_restore_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
+  gtk_widget_show(sw->dialog);
 
   /* Maybe display the original query results? */
   if (callbacks && show_start_query) {

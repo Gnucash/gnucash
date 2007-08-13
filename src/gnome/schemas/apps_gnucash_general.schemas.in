@@ -44,6 +44,30 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/autosave_show_explanation</key>
+      <applyto>/apps/gnucash/general/autosave_show_explanation</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show auto-save explanation</short>
+        <long>If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/autosave_interval_minutes</key>
+      <applyto>/apps/gnucash/general/autosave_interval_minutes</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>5</default>
+      <locale name="C">
+        <short>Auto-save time interval</short>
+        <long>The number of minutes until saving of the data file to harddisk will be started automatically.  If zero, no saving will be started automatically.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/negative_in_red</key>
       <applyto>/apps/gnucash/general/negative_in_red</applyto>
       <owner>gnucash</owner>
@@ -61,7 +85,7 @@
       <applyto>/apps/gnucash/general/enable_euro</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
-      <default>TRUE</default>
+      <default>FALSE</default>
       <locale name="C">
         <short>Enables Euro support</short>
         <long>Enables additional support for the European Union EURO currency.</long>
@@ -185,6 +209,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/tab_width</key>
+      <applyto>/apps/gnucash/general/tab_width</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>30.0</default>
+      <locale name="C">
+        <short>Width of notebook tabs</short>
+        <long>
+	  This key specifies the maximum width of notebook tabs.
+	  If the text in the tab is longer than this value (the test
+	  is approximate) then the tab label will have the middle cut
+	  and replaced with an ellipsis.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/currency_choice</key>
       <applyto>/apps/gnucash/general/currency_choice</applyto>
       <owner>gnucash</owner>
@@ -257,8 +298,8 @@
       <locale name="C">
         <short>Show splash screen</short>
         <long>
-	  This setting determines whether GnuCash will show a splash screen
-	  at startup.
+	  If active, a splash screen will be shown at
+	  startup. Otherwise no splash screen will be shown.
 	</long>
       </locale>
     </schema>
@@ -501,7 +542,26 @@
       <type>bool</type>
       <default>false</default>
       <locale name="C">
-        <short>If gnucash should allow file incompatability.  If true, then gnucash will (be allowed to) intentionally break file compatability with old versions.</short>
+        <short>Allow file incompatibility with older versions.</short>
+        <long>If active, gnucash will be allowed to intentionally
+        break file compatibility with older versions, so that a data
+        file saved in this version cannot be read by an older version
+        again. Otherwise gnucash will write data files only in formats
+        that can be read by older versions as well.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/tab_next_recent</key>
+      <applyto>/apps/gnucash/general/tab_next_recent</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Closing a tab moves to the most recently visited tab.</short>
+        <long>
+	  If active, closing a tab moves to the most recently visited tab.  Otherwise closing a tab moves one tab to the left.
+	</long>
       </locale>
     </schema>
 

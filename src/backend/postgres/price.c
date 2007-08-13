@@ -141,8 +141,8 @@ pgendStorePriceNoLock (PGBackend *be, GNCPrice *pr,
    {
      if (0 < pgendPriceCompareVersion (be, pr)) return;
    }
-   pr->version ++;  /* be sure to update the version !! */
-   pr->version_check = be->version_check;
+   /* be sure to update the version !! */
+   qof_instance_increment_version(pr, be->version_check);
 
    /* make sure that we've stored the commodity 
     * and currency before we store the price.
@@ -285,7 +285,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* compare versions. Hack alert -- Not sure how to handle failures */
    sql_vers = atoi (DB_GET_VAL("version",j));
-   local_vers = gnc_price_get_version(pr);
+   local_vers = qof_instance_get_version(pr);
    if (sql_vers < local_vers) {
       PERR ("local price version is higher than db !!! local=%d sql=%d",
          local_vers, sql_vers);
@@ -293,7 +293,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       gnc_price_unref (pr);
       return data;
    }
-   gnc_price_set_version (pr, sql_vers);
+   qof_instance_set_version (pr, sql_vers);
 
    modity = gnc_string_to_commodity (DB_GET_VAL("commodity",j), book);
    gnc_price_set_commodity (pr, modity);
@@ -305,7 +305,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_set_time (pr, ts);
 
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
-   gnc_price_set_type (pr, DB_GET_VAL("type",j));
+   gnc_price_set_typestr (pr, DB_GET_VAL("type",j));
 
    num = strtoll (DB_GET_VAL("valueNum", j), NULL, 0);
    denom = strtoll (DB_GET_VAL("valueDenom", j), NULL, 0);
@@ -450,7 +450,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 void
 pgend_price_begin_edit (QofBackend * bend, GNCPrice *pr)
 {
-   if (pr && pr->db && pr->db->inst.dirty) 
+   if (pr && pr->db && qof_instance_get_dirty_flag(pr->db)) 
    {
       PERR ("price db is unexpectedly dirty");
    }
@@ -477,7 +477,7 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
     * made changes, and we must roll back. */
    if (0 < pgendPriceCompareVersion (be, pr))
    {
-      pr->inst.do_free = FALSE;
+      qof_instance_set_destroying(pr, FALSE);
       bufp = "ROLLBACK;";
       SEND_QUERY (be,bufp,);
       FINISH_QUERY(be->connection);
@@ -491,10 +491,10 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
       qof_backend_set_error (&be->be, ERR_BACKEND_MODIFIED);
       return;
    }
-   pr->version ++;   /* be sure to update the version !! */
-   pr->version_check = be->version_check;
+   /* be sure to update the version !! */
+   qof_instance_increment_version(pr, be->version_check);
 
-   if (pr->inst.do_free) 
+   if (qof_instance_get_destroying(pr))
    {
       pgendStoreAuditPrice (be, pr, SQL_DELETE);
       bufp = be->buff; *bufp = 0;

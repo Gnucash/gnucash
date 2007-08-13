@@ -202,8 +202,46 @@ gnc_history_add_file (const char *newfile)
    * Store the new zero entry.
    */
   gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
+  g_free(to);
 }
 
+
+/** Remove all occurences of a file name from the history list.  Move
+ *  the other key values up in the list to fill the gaps.
+ *
+ *  @param filename The name of the file to remove from the list.
+ */
+void
+gnc_history_remove_file (const char *oldfile)
+{
+  gchar *filename, *from, *to;
+  gint i, j;
+
+  if (!oldfile)
+    return;
+  if (!g_utf8_validate(oldfile, -1, NULL))
+    return;
+
+  for (i=0, j=0; i<MAX_HISTORY_FILES; i++) {
+    from = gnc_history_gconf_index_to_key(i);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+
+    if (filename) {
+      if (g_utf8_collate(oldfile, filename) == 0) {
+        gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
+      } else {
+        if (i != j) {
+          to = gnc_history_gconf_index_to_key(j);
+          gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
+          gnc_gconf_unset(HISTORY_STRING_SECTION, from, NULL);
+          g_free(to);
+        }
+        j++;
+      }
+    }
+    g_free(from);
+  }
+}
 
 /*  Retrieve the name of the file most recently accessed.  This is the
  *  name at the front of the list.  Since the "list" is actually a
@@ -297,7 +335,8 @@ gnc_history_update_action (GncMainWindow *window,
 	gchar *action_name, *label_name, *old_filename;
 	gint limit;
 
-	ENTER("window %p, index %d, filename %s", window, index, filename);
+	ENTER("window %p, index %d, filename %s", window, index,
+	      filename ? filename : "(null)");
 	/* Get the action group */
 	action_group =
 	  gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
@@ -435,7 +474,7 @@ gnc_plugin_history_list_from_gnucash1 (void)
   /* Copy the old values from the gnucash 1.x/gnome1 settings file to
    * the gnucash 2.x/gconf settings area.  */
   mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
-  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE);
+  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE, NULL);
   if (keyfile) {
     keys = g_key_file_get_keys(keyfile, GNOME1_HISTORY, NULL, NULL);
     if (keys) {
@@ -658,7 +697,9 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
 	 */
 	filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
 	gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-	gnc_file_open_file (filename); /* also opens new account page */
+	/* also opens new account page */
+	if (!gnc_file_open_file (filename))
+	  gnc_history_remove_file (filename);
 	gnc_window_set_progressbar_window (NULL);
 }
 

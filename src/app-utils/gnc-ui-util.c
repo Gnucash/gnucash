@@ -413,17 +413,24 @@ gnc_ui_account_get_tax_info_string (const Account *account)
   if (get_form == SCM_UNDEFINED)
   {
     GNCModule module;
+    const gchar *tax_module;
     /* load the tax info */
 #ifdef LOCALE_SPECIFIC_TAX
-    const char *thislocale = setlocale(LC_ALL, NULL);
     /* This is a very simple hack that loads the (new, special) German
        tax definition file in a German locale, or (default) loads the
        previous US tax file. */
+# ifdef G_OS_WIN32
+    gchar *thislocale = g_win32_getlocale();
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-#else
+    g_free(thislocale);
+# else /* !G_OS_WIN32 */
+    const char *thislocale = setlocale(LC_ALL, NULL);
+    gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
+# endif /* G_OS_WIN32 */
+#else /* LOCALE_SPECIFIC_TAX */
     gboolean is_de_DE = FALSE;
 #endif /* LOCALE_SPECIFIC_TAX */
-    const char *tax_module = is_de_DE ? 
+    tax_module = is_de_DE ? 
       "gnucash/tax/de_DE" : 
       "gnucash/tax/us";
 
@@ -632,7 +639,7 @@ gnc_find_or_create_equity_account (Account *root,
   }
 
   parent = gnc_account_lookup_by_name(root, _("Equity"));
-  if (parent && xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
+  if (!parent || xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
     parent = root;
   g_assert(parent);
 
@@ -832,6 +839,13 @@ gnc_locale_default_currency_nodefault (void)
 
   currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
 
+  /* Some very old locales (notably on win32) still announce a euro
+     currency as default, although it has been replaced by EUR in
+     2001. We use EUR as default in that case, but the user can always
+     override from gconf. */
+  if (gnc_is_euro_currency (currency))
+    currency = gnc_get_euro();
+
   return (currency ? currency : NULL);
 }
 
@@ -862,10 +876,10 @@ gnc_default_currency (void)
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
     g_free(mnemonic);
-    g_free(choice);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency ();
@@ -894,10 +908,10 @@ gnc_default_report_currency (void)
 				    KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
-    g_free(choice);
+    DEBUG("mnemonic %s, result %p", mnemonic ? mnemonic : "(null)", currency);
     g_free(mnemonic);
   }
+  g_free(choice);
 
   if (!currency)
     currency = gnc_locale_default_currency (); 
@@ -1364,13 +1378,15 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
 
-    decimal_point = info->monetary ?
-      lc->mon_decimal_point : lc->decimal_point;
+    decimal_point = info->monetary
+        ? lc->mon_decimal_point
+        : lc->decimal_point;
     g_utf8_strncpy(temp_ptr, decimal_point, 1);
     temp_ptr = g_utf8_find_next_char(temp_ptr, NULL);
 
-    while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
-	   (num_decimal_places < max_dp))
+    while (!gnc_numeric_zero_p (val)
+           && (val.denom != 1)
+           && (num_decimal_places < max_dp))
     {
       gint64 digit;
 
@@ -1565,6 +1581,157 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 
   /* its OK to return buf, since we declared it static */
   return buf;
+}
+
+
+/********************************************************************\
+ ********************************************************************/
+
+#define FUDGE .00001
+
+/* This function is basically untranslatable. I'd
+   guess out of the 29 translations we have, 20 will have their number
+   wordings in a totally different way than English has (not to
+   mention gender-dependent number endings). Which means this
+   word-by-word translation will be useless or even plain
+   wrong. For this reason, we don't even start to pretend a
+   word-by-word translation would be of any use, so we don't mark any
+   of these strings for translation. cstim, 2007-04-15. */
+static gchar *small_numbers[] = {
+  /* Translators: This section is for generating the "amount, in
+     words" field when printing a check. This function gets the
+     wording right for English, but unfortunately not for most other
+     languages. Decide for yourself whether the check printing is
+     actually needed in your language; if not, you can safely skip the
+     translation of all of these strings.  */
+  "Zero", "One", "Two", "Three", "Four",
+  "Five", "Six", "Seven", "Eight", "Nine",
+  "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen",
+  "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
+  "Twenty"};
+static gchar *medium_numbers[] = {
+  "Zero", "Ten", "Twenty", "Thirty", "Forty",
+  "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+static gchar *big_numbers[] = {
+  /* Translators: This is the word for the number 10^2 */
+  "Hundred",
+  /* Translators: This is the word for the number 10^3 */
+  "Thousand",
+  /* Translators: This is the word for the number 10^6, one thousand
+     thousands. */
+  "Million",
+  /* Translators: This is the word for the number 10^9, one thousand
+     millions. WATCH OUT: In British english and many other languages
+     this word is used for 10^12 which is one million millions! In
+     contrast to this, here in GnuCash this is used in the American
+     english meaning of 10^9.  */
+  "Billion",
+  /* Translators: This is the word for the number 10^12, one million
+     millions. */
+  "Trillion",
+  /* Translators: This is the word for the number 10^15 */
+  "Quadrillion",
+  /* Translators: This is the word for the number 10^18 */
+  "Quintillion"};
+
+static gchar *
+integer_to_words(gint64 val)
+{
+  gint64 log_val, pow_val, this_part;
+  GString *result;
+  gchar *tmp;
+
+  if (val == 0)
+    return g_strdup("zero");
+  if (val < 0)
+    val = -val;
+
+  result = g_string_sized_new(100);
+
+  while (val >= 1000) {
+    log_val = log10(val) / 3 + FUDGE;
+    pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
+    this_part = val / pow_val;
+    val -= this_part * pow_val;
+    tmp = integer_to_words(this_part);
+    g_string_append_printf(result, "%s %s ", tmp,
+                           gettext(big_numbers[log_val]));
+    g_free(tmp);
+  }
+
+  if (val >= 100) {
+    this_part = val / 100;
+    val -= this_part * 100;
+    g_string_append_printf(result, "%s %s ",
+                           gettext(small_numbers[this_part]),
+                           gettext(big_numbers[0]));
+  }
+
+  if (val > 20) {
+    this_part = val / 10;
+    val -= this_part * 10;
+    g_string_append(result, gettext(medium_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  if (val > 0) {
+    this_part = val;
+    val -= this_part;
+    g_string_append(result, gettext(small_numbers[this_part]));
+    g_string_append_c(result, ' ');
+  }
+
+  result = g_string_truncate(result, result->len - 1);
+  return g_string_free(result, FALSE);
+}
+
+gchar *
+number_to_words(gdouble val, gint64 denom)
+{
+  gint64 int_part, frac_part;
+  gchar *int_string, *nomin_string, *denom_string, *full_string;
+
+  if (val < 0) val = -val;
+  if (denom < 0) denom = -denom;
+
+  int_part = trunc(val);
+  frac_part = round((val - int_part) * denom);
+
+  int_string = integer_to_words(int_part);
+  /* Inside of the gettext macro _(...) we must not use any macros but
+     only plain string literals. For this reason, convert the strings
+     separately. */
+  nomin_string = g_strdup_printf("%" G_GINT64_FORMAT, frac_part);
+  denom_string = g_strdup_printf("%" G_GINT64_FORMAT, denom);
+  full_string =
+    /* Translators: This is for the "amount, in words" field in check
+       printing. The first %s is the integer amount of dollars (or
+       whatever currency), the second and third %s the cent amount as
+       a fraction, e.g. 47/100.  */
+    g_strdup_printf("%s and %s/%s",
+		    int_string, nomin_string, denom_string);
+  g_free(int_string);
+  g_free(nomin_string);
+  g_free(denom_string);
+  return full_string;
+}
+
+gchar *
+numeric_to_words(gnc_numeric val)
+{
+  return number_to_words(gnc_numeric_to_double(val),
+                         gnc_numeric_denom(val));
+}
+
+const gchar *
+printable_value (gdouble val, gint denom)
+{
+  GNCPrintAmountInfo info;
+  gnc_numeric num;
+
+  num = gnc_numeric_create(round(val * denom), denom);
+  info = gnc_share_print_info_places(log10(denom));
+  return xaccPrintAmount (num, info);
 }
 
 

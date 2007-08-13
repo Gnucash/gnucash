@@ -26,6 +26,7 @@ typedef int GNCOptionDBHandle;
 QofBook * gnc_get_current_book (void);
 Account * gnc_get_current_root_account (void);
 
+%newobject gnc_gettext_helper;
 char * gnc_gettext_helper(const char *string);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
@@ -70,6 +71,9 @@ GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 
+gchar *number_to_words(gdouble val, gint64 denom);
+const gchar *printable_value (gdouble val, gint denom);
+
 gboolean gnc_reverse_balance (const Account *account);
 
 gboolean gnc_is_euro_currency(const gnc_commodity * currency);
@@ -104,3 +108,5 @@ Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
 
 gint gnc_process_get_fd(const Process *proc, const guint std_fd);
 void gnc_detach_process(Process *proc, const gboolean kill_it);
+
+time_t gnc_parse_time_to_timet(const gchar *s, const gchar *format);

@@ -11,7 +11,7 @@
 
 (re-export gnc-is-debugging)
 (re-export g-find-program-in-path)
-(re-export gnc-utf8-strip-invalid)
+(re-export gnc-utf8-strip-invalid-strdup)
 (re-export gnc-scm-log-warn)
 (re-export gnc-scm-log-error)
 (re-export gnc-scm-log-msg)

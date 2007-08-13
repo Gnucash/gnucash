@@ -80,7 +80,7 @@ in the QSF QofBackend to contain the reference data so that when the book is
 written out, the reference can be included. When the file is imported back in, a
 little extra code then rebuilds those references during the merge.
 
-Copying entites from an existing QofBook using the qof_entity_copy routines will 
+Copying entites from an existing QofBook using the qof_instance_copy routines will 
 automatically create the reference table. If your QOF objects use references to other
 entities, books that are created manually also need to create a reference table.
 
@@ -158,12 +158,9 @@ v0.2 introduces the QSF_MAP_FILES QofBackendOption.
 Initialises the backend and provides access to the
 functions that will load and save the data. Initialises
 default values for the QofBackendOption KvpFrame.
-
-Calls gettext because QofBackendOption
-strings are translatable.
 */
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+G_MODULE_EXPORT void
+qof_backend_module_init(void);
 
 /** \name Supported backend configurations
 @{

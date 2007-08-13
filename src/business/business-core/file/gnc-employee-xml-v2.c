@@ -389,7 +389,7 @@ employee_should_be_saved (GncEmployee *employee)
 }
 
 static void
-do_count (QofEntity * employee_p, gpointer count_p)
+do_count (QofInstance * employee_p, gpointer count_p)
 {
   int *count = count_p;
   if (employee_should_be_saved ((GncEmployee *) employee_p))
@@ -405,7 +405,7 @@ employee_get_count (QofBook *book)
 }
 
 static void
-xml_add_employee (QofEntity * employee_p, gpointer out_p)
+xml_add_employee (QofInstance * employee_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncEmployee *employee = (GncEmployee *) employee_p;

@@ -452,7 +452,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
   const char * path_to_load;
   const gchar * default_acctname = NULL;
-  int rv;
 
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
@@ -1138,7 +1137,7 @@ gnc_ui_qif_import_category_line_select_cb(GtkTreeView *view, GtkTreePath *path,
   g_return_if_fail (view && wind);
   selection = gtk_tree_view_get_selection (view);
 
-  select_line (wind, selection, wind->acct_display_info, wind->acct_map_info,
+  select_line (wind, selection, wind->cat_display_info, wind->cat_map_info,
 	       update_categories_page);
 }
 
@@ -1741,7 +1740,7 @@ make_qif_druid_page(gnc_commodity * comm)
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  next_label = gtk_label_new(_("Click \"Next\" to accept the information "
+  next_label = gtk_label_new(_("Click \"Forward\" to accept the information "
                                "and move on."));
   gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_end(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
@@ -1881,9 +1880,10 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   }
 
   /* actually add in the new transactions. */
-  scm_call_2(cat_and_merge, 
-	     scm_c_eval_string("(gnc-get-current-root-account)"),
-	     wind->imported_account_tree);
+  if (wind->imported_account_tree != SCM_BOOL_F)
+    scm_call_2(cat_and_merge,
+	       scm_c_eval_string("(gnc-get-current-root-account)"),
+	       wind->imported_account_tree);
   
   gnc_resume_gui_refresh();
   

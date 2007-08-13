@@ -83,14 +83,15 @@ typedef const gchar * QofIdTypeConst;
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
 
+typedef struct QofCollection_s QofCollection;
+
+#include "qofinstance.h"
+
 #define QOF_ID_NONE           NULL
 #define QOF_ID_NULL           "null"
 
 #define QOF_ID_BOOK           "Book"
 #define QOF_ID_SESSION        "Session"
-
-/** simple,cheesy cast but holds water for now */
-#define QOF_ENTITY(object) ((QofEntity *)(object))
 
 /** Inline string comparision; compiler will optimize away most of this */
 #define QSTRCMP(da,db) ({                \
@@ -111,7 +112,7 @@ typedef const gchar* QofLogModule;
 
 /** return TRUE if object is of the given type */
 #define QOF_CHECK_TYPE(obj,type) (((obj) != NULL) && \
-  (0 == QSTRCMP((type),(((QofEntity *)(obj))->e_type))))
+  (0 == QSTRCMP((type),(((QofInstance *)(obj))->e_type))))
 
 /** cast object to the indicated type,
 print error message if its bad  */
@@ -120,12 +121,11 @@ print error message if its bad  */
   (c_type *) (obj) :                                          \
   (c_type *) ({                                               \
      g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,               \
-       "Error: Bad QofEntity at %s:%d", __FILE__, __LINE__);  \
+       "Error: Bad QofInstance at %s:%d", __FILE__, __LINE__);  \
      (obj);                                                   \
   }))
 
-/** QofEntity declaration */
-typedef struct QofEntity_s QofEntity;
+
 /** QofCollection declaration 
 
 @param e_type QofIdType
@@ -134,31 +134,6 @@ typedef struct QofEntity_s QofEntity;
 @param data gpointer, place where object class can hang arbitrary data
 
 */
-typedef struct QofCollection_s QofCollection;
-
-/** QofEntity structure
-
-@param e_type 	Entity type
-@param guid		GUID for the entity
-@param collection	Entity collection
-*/
-
-struct QofEntity_s
-{
-	QofIdType        e_type;
-	GUID             guid;
-	QofCollection  * collection;
-};
-
-/** @name QOF Entity Initialization & Shutdown 
- @{ */
-/** Initialise the memory associated with an entity */
-void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
-                                                                                
-/** Release the data associated with this entity. Dont actually free
- * the memory associated with the instance. */
-void qof_entity_release (QofEntity *);
-/** @} */
 
 /** Is QOF operating in "alternate" dirty mode.  In normal mode,
  *  whenever an instance is dirtied, the collection (and therefore the
@@ -177,9 +152,6 @@ gboolean qof_get_alt_dirty_mode (void);
  *  collection (and therefore the book) is never changed. */
 void qof_set_alt_dirty_mode (gboolean enabled);
 
-/** Return the GUID of this entity */
-const GUID * qof_entity_get_guid (const QofEntity *);
-
 /** @name Collections of Entities 
  @{ */
 
@@ -196,13 +168,13 @@ void qof_collection_destroy (QofCollection *col);
 QofIdType qof_collection_get_type (const QofCollection *);
 
 /** Find the entity going only from its guid */
-QofEntity * qof_collection_lookup_entity (const QofCollection *, const GUID *);
+QofInstance * qof_collection_lookup_entity (const QofCollection *, const GUID *);
 
-/** Callback type for qof_entity_foreach */
-typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
+/** Callback type for qof_collection_foreach */
+typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
-void qof_collection_foreach (const QofCollection *, QofEntityForeachCB, 
+void qof_collection_foreach (const QofCollection *, QofInstanceForeachCB, 
                              gpointer user_data);
 
 /** Store and retreive arbitrary object-defined data 
@@ -234,11 +206,13 @@ of one object type as references of another entity.
 Entities can be
 freely added and merged across these secondary collections, they
 will not be removed from the original collection as they would
-by using ::qof_entity_insert_entity or ::qof_entity_remove_entity. 
+by using ::qof_instance_insert_entity or ::qof_instance_remove_entity. 
 
 */
 gboolean
-qof_collection_add_entity (QofCollection *coll, QofEntity *ent);
+qof_collection_add_entity (QofCollection *coll, QofInstance *ent);
+
+void qof_collection_remove_entity (QofInstance *ent);
 
 /** \brief Merge two QOF_TYPE_COLLECT of the same type.
 
@@ -246,8 +220,8 @@ qof_collection_add_entity (QofCollection *coll, QofEntity *ent);
 
 QOF_TYPE_COLLECT uses a secondary collection, independent of
 those in the book. Entities will not be removed from the
-original collection as when using ::qof_entity_insert_entity
-or ::qof_entity_remove_entity.
+original collection as when using ::qof_instance_insert_entity
+or ::qof_instance_remove_entity.
 
 */
 gboolean
@@ -255,7 +229,7 @@ qof_collection_merge (QofCollection *target, QofCollection *merge);
 
 /** \brief Compare two secondary collections.
 
-Performs a deep comparision of the collections. Each QofEntity in
+Performs a deep comparision of the collections. Each QofInstance in
 each collection is looked up in the other collection, via the GUID.
 
 \return 0 if the collections are identical or both are NULL

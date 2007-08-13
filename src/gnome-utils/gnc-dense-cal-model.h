@@ -54,7 +54,7 @@ typedef struct _GncDenseCalModelIface
 
 GType gnc_dense_cal_model_get_type(void);
 
-/* @fixme: glist mem alloc policy... ? */
+/** @return Caller-owned GList (but not elements).  The Model-user will free. **/
 GList* gnc_dense_cal_model_get_contained(GncDenseCalModel *model);
 gchar* gnc_dense_cal_model_get_name(GncDenseCalModel *model, guint tag);
 gchar* gnc_dense_cal_model_get_info(GncDenseCalModel *model, guint tag);

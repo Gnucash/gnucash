@@ -65,9 +65,9 @@ FILE            *ofile)      /* output file                               */
     times_I->tm_yday = amortsched->yday_I;
 
     fprintf(ofile,"Amortization Table\n");
-    strftime(datel,(size_t)100,"%c",times_E);
+    qof_strftime(datel,(size_t)100,"%c",times_E);
     fprintf(ofile,"Effective       Date: %s\n",datel);
-    strftime(datel,(size_t)100,"%c",times_I);
+    qof_strftime(datel,(size_t)100,"%c",times_I);
     fprintf(ofile,"Initial Payment Date: %s\n",datel);
     fprintf(ofile,"Compounding Frequency per year: %u\n",amortsched->CF);
     fprintf(ofile,"Payment     Frequency per year: %u\n",amortsched->PF);

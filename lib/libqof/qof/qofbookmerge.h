@@ -175,7 +175,7 @@ typedef struct
 	GSList *mergeParam;      /**< list of usable parameters for the object type */
 	GSList *linkedEntList;   /**< list of complex data types included in this object. 
 
-	linkedEntList contains an ::QofEntity reference to any parameter that is not
+	linkedEntList contains an ::QofInstance reference to any parameter that is not
 	one of the core QOF_TYPE data types. This entity must be already
     registered with QOF and the results of the comparison for the linked entity
     will modulate the mergeResult of this object. e.g. if an invoice is the
@@ -183,8 +183,8 @@ typedef struct
     MERGE_REPORT and the customer as MERGE_NEW.
 	*/
 	QofBookMergeResult mergeResult; /**< result of comparison with main ::QofBook */
-	QofEntity *importEnt;    /**< pointer to the current entity in the import book. */
-	QofEntity *targetEnt;    /**< pointer to the corresponding entity in the
+	QofInstance *importEnt;    /**< pointer to the current entity in the import book. */
+	QofInstance *targetEnt;    /**< pointer to the corresponding entity in the
                                 target book, if any. */
 }QofBookMergeRule;
 
@@ -194,7 +194,7 @@ typedef struct
 Used to dictate what to merge, how to merge it, where to get the new data and
 where to put the amended data. 
 
-Combines lists of \a ::QofParam, \a ::QofEntity and \a ::QofBookMergeRule
+Combines lists of \a ::QofParam, \a ::QofInstance and \a ::QofBookMergeRule
 into one struct that can be easily passed between callbacks. Also holds the
 pointers to the import and target ::QofBook structures.
 	
@@ -209,7 +209,7 @@ typedef struct
                                     parameter in the current object. */
 	GList 	*mergeList;          /**< GList of all ::qof_book_mergeRule rules
                                     for the merge operation. */
-	GSList 	*targetList;         /**< GSList of ::QofEntity * for each object
+	GSList 	*targetList;         /**< GSList of ::QofInstance * for each object
                                     of this type in the target book */
 	QofBook *mergeBook;          /**< pointer to the import book for this
                                     merge operation. */
@@ -218,16 +218,16 @@ typedef struct
 	gboolean abort;	             /**< set to TRUE if MERGE_INVALID is set. */
 	QofBookMergeRule *currentRule; /**< placeholder for the rule currently
                                     being tested or applied. */
-	GSList *orphan_list;         /**< List of QofEntity's that need to be rematched.
+	GSList *orphan_list;         /**< List of QofInstance's that need to be rematched.
 
-	When one QofEntity has a lower difference to the targetEnt than the
+	When one QofInstance has a lower difference to the targetEnt than the
     previous best_match, the new match takes precedence. This list holds those
     orphaned entities that are not a good enough match so that these can be
-    rematched later. The ranking is handled using the private QofEntityRating
+    rematched later. The ranking is handled using the private QofInstanceRating
     struct and the GHashTable ::QofBookMergeData::target_table.
 	*/
 	GHashTable *target_table;    /**< The GHashTable to hold the
-                                    QofEntityRating values.  */
+                                    QofInstanceRating values.  */
 
 }QofBookMergeData;
 
@@ -335,7 +335,7 @@ process must handle the NULL targetEnt and NOT call any param_getfcn
 routines for the target entity. The import entity is available for display.
 
 Uses ::qof_book_get_collection with the QofBookMergeRule::mergeType object
-type to return a collection of ::QofEntity entities from either the
+type to return a collection of ::QofInstance entities from either the
 QofBookMergeData::mergeBook or QofBookMergeData::targetBook. Then
 uses ::qof_collection_lookup_entity to lookup the QofBookMergeRule::importEnt
 and again the qof_book_mergeRule::targetEnt to return the two specific entities.
@@ -359,7 +359,7 @@ This allows the dialog to display the description of the object and all
 parameter data.
 
 */
-gchar* qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt);
+gchar* qof_book_merge_param_as_string(QofParam *qtparam, QofInstance *qtEnt);
 
 /** \brief called by dialogue callback to set the result of user intervention
 

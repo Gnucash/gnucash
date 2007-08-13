@@ -184,7 +184,7 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
 
 struct _iter {
   const GUID *guid;
-  QofEntity *ent;
+  QofInstance *ent;
 };
 
 static void
@@ -445,7 +445,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       {
          gint32 db_version, cache_version;
          db_version = atoi (DB_GET_VAL("version",j));
-         cache_version = xaccTransGetVersion (trans);
+         cache_version = qof_instance_get_version (trans);
          if (db_version <= cache_version) {
             return qd;
          }
@@ -465,8 +465,8 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetDatePostedTS (trans, &ts);
    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
-   xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
-   trans->idata = atoi(DB_GET_VAL("iguid",j));
+   qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
+   qof_instance_set_idata(trans, atoi(DB_GET_VAL("iguid",j)));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), 
                                        pgendGetBook(be));
@@ -564,13 +564,15 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       Transaction *trans = (Transaction *) node->data;
       GList *engine_splits, *snode;
 
-      trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
+      trans->inst.kvp_data = pgendKVPFetch(be, qof_instance_get_idata(trans),
+                                           trans->inst.kvp_data);
    
       engine_splits = xaccTransGetSplitList(trans);
       for (snode = engine_splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
+         s->inst.kvp_data = pgendKVPFetch(be, qof_instance_get_idata(s),
+                                          s->inst.kvp_data);
       }
 
       xaccTransCommitEdit (trans);
@@ -1627,7 +1629,7 @@ static void
 pgend_do_begin (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   // if (!safe_strcmp (type, GNC_ID_PERIOD))
@@ -1653,7 +1655,7 @@ static void
 pgend_do_commit (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   // if (!safe_strcmp (type, GNC_ID_PERIOD))
@@ -1689,7 +1691,7 @@ static void
 pgend_do_rollback (QofBackend *bend, QofInstance *inst)
 {
   PGBackend *be = (PGBackend*)bend;
-  QofIdTypeConst type = inst->entity.e_type;
+  QofIdTypeConst type = inst->e_type;
 
   ENTER ("be=%p, type=%s", bend, type);
   switch (be->session_mode) {
@@ -2534,8 +2536,8 @@ pg_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module)
+G_MODULE_EXPORT void
+qof_backend_module_init(void)
 {
 	QofBackendProvider *prov;
 
@@ -2547,7 +2549,6 @@ g_module_check_init(GModule *module)
 	prov->provider_free = pg_provider_free;
 	prov->check_data_type = NULL;
 	qof_backend_register_provider (prov);
-	return NULL;
 }
 
 /* ======================== END OF FILE ======================== */

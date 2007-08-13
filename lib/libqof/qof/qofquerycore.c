@@ -1450,12 +1450,11 @@ collect_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2)
 }
 
 static void
-query_collect_cb(QofEntity* ent, gpointer user_data)
+query_collect_cb(QofInstance* ent, gpointer user_data)
 {
 	query_coll_t pdata;
 	GUID *guid;
 
-	guid = guid_malloc();
 	guid = (GUID*)qof_entity_get_guid(ent);
 	pdata = (query_coll_t)user_data;
 	pdata->guids = g_list_append(pdata->guids, guid);

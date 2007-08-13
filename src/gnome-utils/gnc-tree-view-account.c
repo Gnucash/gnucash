@@ -1002,6 +1002,8 @@ gnc_tree_view_account_get_account_from_iter (GtkTreeModel *s_model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
   g_return_val_if_fail (s_iter != NULL, NULL);
 
+  ENTER("model %p, iter %p", s_model, s_iter);
+
   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
 						  &f_iter,
 						  s_iter);
@@ -1248,6 +1250,7 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   GtkTreeSelection *selection;
   GtkTreePath *sp_account, *sp_start, *sp_end;
   GtkTreeIter si_account, si_start, si_end;
+  gboolean have_start, have_end;
   gint num_children;
 
   ENTER("view %p, account %p (%s)", view, account, xaccAccountGetName(account));
@@ -1277,8 +1280,19 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   gtk_tree_view_expand_row (GTK_TREE_VIEW(view), sp_account, TRUE);
 
   /* compute start/end paths */
-  if (gtk_tree_model_iter_nth_child(s_model, &si_start, &si_account, 0) &&
-      gtk_tree_model_iter_nth_child(s_model, &si_end, &si_account, num_children - 1)) {
+  have_start = gtk_tree_model_iter_nth_child(s_model, &si_start, &si_account, 0);
+  si_end = si_account;
+  while (num_children) {
+    GtkTreeIter tmp_iter = si_end;
+    have_end = gtk_tree_model_iter_nth_child(s_model, &si_end, &tmp_iter,
+                                             num_children - 1);
+    if (have_end)
+      num_children = gtk_tree_model_iter_n_children(s_model, &si_end);
+    else
+      num_children = 0;
+  }
+
+  if (have_start && have_end) {
     sp_start = gtk_tree_model_get_path (s_model, &si_start);
     sp_end = gtk_tree_model_get_path (s_model, &si_end);
 
@@ -1825,7 +1839,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
   /* Set up the tree view and model */
   view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
 
-  fd->model = gnc_tree_model_account_types_filter_using_mask(-1);
+  fd->model = gnc_tree_model_account_types_filter_using_mask
+    (~(1 << ACCT_TYPE_ROOT));
   gtk_tree_view_set_model(view, fd->model);
   g_object_unref (fd->model);
 
@@ -1853,12 +1868,12 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
   LEAVE(" ");
 }
 
-#define ACCT_COUNT    "Number of Open Accounts"
-#define ACCT_OPEN     "Open Account %d"
-#define ACCT_SELECTED "Selected Account"
-#define SHOW_HIDDEN   "Show Hidden"
-#define SHOW_ZERO     "Show Zero Total"
-#define ACCT_TYPES    "Account Types"
+#define ACCT_COUNT    "NumberOfOpenAccounts"
+#define ACCT_OPEN     "OpenAccount%d"
+#define ACCT_SELECTED "SelectedAccount"
+#define SHOW_HIDDEN   "ShowHidden"
+#define SHOW_ZERO     "ShowZeroTotal"
+#define ACCT_TYPES    "AccountTypes"
 
 typedef struct foo {
   GKeyFile *key_file;

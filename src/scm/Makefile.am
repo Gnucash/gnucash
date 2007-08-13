@@ -1,10 +1,10 @@
 
-SUBDIRS = gnumeric printing
+SUBDIRS = gnumeric
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gncscmmod_DATA = process.scm main.scm price-quotes.scm
+gncscmmod_DATA = main.scm price-quotes.scm
 
 gnc_regular_scm_files = \
   command-line.scm \

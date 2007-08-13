@@ -30,6 +30,7 @@
 #ifdef HAVE_X11_XLIB_H
 # include <X11/Xlib.h>
 #endif
+#include <libxml/xmlIO.h>
 
 #include "gnc-html-graph-gog.h"
 
@@ -53,6 +54,9 @@
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
+#ifdef G_OS_WIN32
+#    include "gnc-help-utils.h"
+#endif
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
@@ -192,7 +196,6 @@ gnc_gtk_add_rc_file (void)
 void
 gnc_gnome_init (int argc, char **argv, const char * version)
 {
-  char *fullname;
   GError *error = NULL;
   gchar *prefix = gnc_path_get_prefix ();
   gchar *pkgsysconfdir = gnc_path_get_pkgsysconfdir ();
@@ -213,18 +216,47 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   g_free (pkgdatadir);
   g_free (pkglibdir);
 
+#ifdef G_OS_WIN32
+  /* workaround for bug #421792 */
+  xmlCleanupInputCallbacks();
+#endif
+
   /* initialization required for gtkhtml */
   gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
   /* use custom icon */
-  fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");
-  if (fullname) {
-    gtk_window_set_default_icon_from_file (fullname, &error);
-    g_free(fullname);
-    if (error) {
-      PERR ("Could not set default icon: %s", error->message);
-      g_error_free (error);
+  {
+    int idx;
+    char *icon_filenames[] = {"gnucash-icon-16x16.png",
+                              "gnucash-icon-32x32.png",
+                              "gnucash-icon-48x48.png",
+                              NULL};
+    GList *icons = NULL;
+    char *fullname, *name_iter;
+
+    for (idx = 0; icon_filenames[idx] != NULL; idx++) {
+      GdkPixbuf *buf = NULL;
+
+      fullname = gnc_gnome_locate_pixmap(icon_filenames[idx]);
+      if (fullname == NULL) {
+        g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
+        continue;
+      }
+        
+      buf = gnc_gnome_get_gdkpixbuf(fullname);
+      if (buf == NULL)
+      {
+        g_warning("error loading image from [%s]", fullname);
+        g_free(fullname);
+        continue;
+      }
+      g_free(fullname);
+      icons = g_list_append(icons, buf);
     }
+
+    gtk_window_set_default_icon_list(icons);
+    g_list_foreach(icons, (GFunc)g_object_unref, NULL);
+    g_list_free(icons);
   }
 
   druid_gconf_install_check_schemas();
@@ -232,6 +264,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   return;
 }
 
+#ifndef G_OS_WIN32
 void
 gnc_gnome_help (const char *file_name, const char *anchor)
 {
@@ -251,6 +284,37 @@ gnc_gnome_help (const char *file_name, const char *anchor)
   PERR ("%s", error->message);
   g_error_free(error);
 }
+
+#else /* G_OS_WIN32 */
+void
+gnc_gnome_help (const char *file_name, const char *anchor)
+{
+  const gchar * const *lang;
+  gchar *pkgdatadir, *fullpath, *found = NULL;
+  
+  pkgdatadir = gnc_path_get_pkgdatadir ();
+  for (lang=g_get_language_names (); *lang; lang++) {
+    fullpath = g_build_filename (pkgdatadir, "help", *lang, file_name,
+                                 (gchar*) NULL);
+    if (g_file_test (fullpath, G_FILE_TEST_IS_REGULAR)) {
+      found = g_strdup (fullpath);
+      g_free (fullpath);
+      break;
+    }
+    g_free (fullpath);
+  }
+  g_free (pkgdatadir);
+
+  if (!found) {
+    const gchar *message =
+      _("GnuCash could not find the files for the help documentation.");
+    gnc_error_dialog (NULL, message);
+  } else {
+    gnc_show_htmlhelp (found, anchor);
+  }
+  g_free (found);
+}
+#endif
 
 /********************************************************************\
  * gnc_gnome_get_pixmap                                             *
@@ -422,7 +486,8 @@ gnc_gui_init(void)
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     main_window = gnc_main_window_new ();
-    gtk_widget_show (GTK_WIDGET (main_window));
+    // Bug#350993:
+    // gtk_widget_show (GTK_WIDGET (main_window));
     gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
     map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);

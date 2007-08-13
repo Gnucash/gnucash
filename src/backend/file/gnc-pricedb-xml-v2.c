@@ -115,7 +115,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
   } else if(safe_strcmp("price:type", (char*)sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
-    gnc_price_set_type(p, text);
+    gnc_price_set_typestr(p, text);
     g_free(text);
   } else if(safe_strcmp("price:value", (char*)sub_node->name) == 0) {
     gnc_numeric *value = dom_tree_to_gnc_numeric(sub_node);
@@ -406,7 +406,7 @@ gnc_price_to_dom_tree(const xmlChar *tag, GNCPrice *price)
     if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;
   }
     
-  typestr = gnc_price_get_type(price);
+  typestr = gnc_price_get_typestr(price);
   if(typestr && (strlen(typestr) != 0)) {
     tmpnode = text_to_dom_tree("price:type", typestr);
     if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;

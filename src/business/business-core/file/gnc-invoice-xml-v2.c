@@ -501,7 +501,7 @@ invoice_should_be_saved (GncInvoice *invoice)
 }
 
 static void
-do_count (QofEntity * invoice_p, gpointer count_p)
+do_count (QofInstance * invoice_p, gpointer count_p)
 {
   int *count = count_p;
   if (invoice_should_be_saved ((GncInvoice *)invoice_p))
@@ -517,7 +517,7 @@ invoice_get_count (QofBook *book)
 }
 
 static void
-xml_add_invoice (QofEntity * invoice_p, gpointer out_p)
+xml_add_invoice (QofInstance * invoice_p, gpointer out_p)
 {
   xmlNodePtr node;
   GncInvoice *invoice = (GncInvoice *) invoice_p;

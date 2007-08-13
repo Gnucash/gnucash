@@ -1288,8 +1288,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         return TRUE;
                 case 3:
                         do_popup = (sheet->popup != NULL);
-			if (!do_popup)
-				return FALSE;
                         break;
                 default:
                         return FALSE;
@@ -1340,7 +1338,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
 				       sheet->popup_data, event->button, event->time);
 
-                return TRUE;
+                return button_1 || do_popup;
         }
 
         /* and finally...process this as a POINTER_TRAVERSE */
@@ -1368,7 +1366,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (do_popup)
 		gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
 			       sheet->popup_data, event->button, event->time);
-        return TRUE;
+        return button_1 || do_popup;
 }
 
 gboolean
@@ -1952,6 +1950,8 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                         }
         }
 
+        g_object_unref (layout);
+
         return max;
 }
 
@@ -2408,8 +2408,12 @@ gnucash_sheet_new (Table *table)
 
         /* The entry widget */
         sheet->entry = gtk_entry_new ();
+#ifdef HAVE_GTK_2_10
+        g_object_ref_sink(sheet->entry);
+#else
         g_object_ref(sheet->entry);
         gtk_object_sink(GTK_OBJECT(sheet->entry));
+#endif
 	/*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
         /* set up the editor */

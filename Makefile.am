@@ -1,12 +1,12 @@
 
-SUBDIRS = . doc lib src intl-scm packaging po accounts
+SUBDIRS = . doc lib src intl-scm packaging po accounts checks
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles lib/.links
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 dist_doc_DATA = \
   AUTHORS \
@@ -50,6 +50,7 @@ EXTRA_DIST = \
   po/gnucash.pot \
   po/POTFILES.in \
   po/POTFILES.skip \
+  po/POTFILES.ignore \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
@@ -58,6 +59,7 @@ EXTRA_DIST = \
   po/glossary/es_NI-policy.txt \
   po/glossary/fr.po \
   po/glossary/gnc-glossary.txt \
+  po/glossary/hu.po \
   po/glossary/it.po \
   po/glossary/nl.po \
   po/glossary/nb.po \
@@ -94,21 +96,11 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-lib/.links: 
-	rm -f goffice gsf
-if !HAVE_GOFFICE
-	$(LN_S) -f . goffice
-endif
-if !HAVE_LIBGSF
-	$(LN_S) -f $(srcdir)/lib/libgsf-1.12.3/gsf gsf
-endif
-	touch lib/.links
-
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice gsf lib/.links po/POTFILES.in
+  po/POTFILES.in
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files
@@ -196,7 +188,15 @@ intl-scm/guile-strings.c:
 
 SVN = svn
 XSLTPROC = xsltproc
-ChangeLog.svn:
+
+if BUILDING_FROM_SVN
+# This rule will generate a ChangeLog of gnucash/trunk commits, plus
+# all additional branches that are added in
+# ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
+# idea? Before a release, NEWS will get updated because of the version
+# change, so this should fit just fine.)
+ChangeLog: NEWS
 	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
+endif

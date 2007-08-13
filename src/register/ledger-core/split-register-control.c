@@ -1124,7 +1124,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
    * _not_ the blank split, then return FALSE -- this is a "special"
    * gain/loss stock transaction.
    */
-  if (gnc_numeric_zero_p(exch_rate) && !force_dialog &&
+  if (gnc_numeric_zero_p(exch_rate) && !force_dialog && split &&
       split != gnc_split_register_get_blank_split (reg))
     return FALSE;
 

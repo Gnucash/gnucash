@@ -68,6 +68,11 @@ struct _gncCustomer
   GncAddress *    shipaddr;
 };
 
+struct _gncCustomerClass
+{
+  QofInstanceClass parent_class;
+};
+
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_CUSTOMER
@@ -79,34 +84,52 @@ G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 void mark_customer (GncCustomer *customer)
 {
   qof_instance_set_dirty(&customer->inst);
-  qof_event_gen (&customer->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&customer->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
-/* Create/Destroy Functions */
 
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_customer, GncCustomer, QOF_TYPE_INSTANCE);
+
+static void
+gnc_customer_init(GncCustomer* cust)
+{
+}
+
+static void
+gnc_customer_dispose_real (GObject *custp)
+{
+}
+
+static void
+gnc_customer_finalize_real(GObject* custp)
+{
+}
+
+/* Create/Destroy Functions */
 GncCustomer *gncCustomerCreate (QofBook *book)
 {
   GncCustomer *cust;
 
   if (!book) return NULL;
 
-  cust = g_new0 (GncCustomer, 1);
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
+  qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
 
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->inst.entity);
+  cust->addr = gncAddressCreate (book, &cust->inst);
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
+  cust->shipaddr = gncAddressCreate (book, &cust->inst);
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&cust->inst, QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -118,9 +141,9 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   GList *node;
   GncCustomer *cust;
 
-  cust = g_new0 (GncCustomer, 1);
+  cust = g_object_new (GNC_TYPE_CUSTOMER, NULL);
 
-  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
+  qof_instance_init_data (&cust->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&cust->inst, &from->inst);
 
   cust->id = CACHE_INSERT (from->id);
@@ -132,8 +155,8 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->active = from->active;
   cust->taxtable_override = from->taxtable_override;
 
-  cust->addr = gncCloneAddress (from->addr, &cust->inst.entity, book);
-  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst.entity, book);
+  cust->addr = gncCloneAddress (from->addr, &cust->inst, book);
+  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst, book);
 
   /* Find the matching currency in the new book, assumes
    * currency has already been copied into new book. */
@@ -150,7 +173,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
     cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_CREATE, NULL);
+  qof_event_gen (&cust->inst, QOF_EVENT_CREATE, NULL);
 
   return cust;
 }
@@ -158,7 +181,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
 void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
-  cust->inst.do_free = TRUE;
+  qof_instance_set_destroying(cust, TRUE);
   qof_instance_set_dirty (&cust->inst);
   gncCustomerCommitEdit (cust);
 }
@@ -167,12 +190,14 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_DESTROY, NULL);
+  qof_event_gen (&cust->inst, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
   CACHE_REMOVE (cust->notes);
+  gncAddressBeginEdit (cust->addr);
   gncAddressDestroy (cust->addr);
+  gncAddressBeginEdit (cust->shipaddr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
 
@@ -182,8 +207,8 @@ static void gncCustomerFree (GncCustomer *cust)
     gncTaxTableDecRef (cust->taxtable);
   }
 
-  qof_instance_release (&cust->inst);
-  g_free (cust);
+  /* qof_instance_release (&cust->inst); */
+  g_object_unref (cust);
 }
 
 GncCustomer *
@@ -340,7 +365,7 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
                                        (GCompareFunc)gncJobCompare);
 
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&cust->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -357,7 +382,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
-  qof_event_gen (&cust->inst.entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (&cust->inst, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)
@@ -412,28 +437,34 @@ GncAddress * gncCustomerGetAddr (GncCustomer *cust)
 }
 
 static void
-qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent)
+qofCustomerSetAddr (GncCustomer *cust, QofInstance *addr_ent)
 {
 	GncAddress *addr;
 
 	if(!cust || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
 	if(addr == cust->addr) { return; }
-	if(cust->addr != NULL) { gncAddressDestroy(cust->addr); }
+	if(cust->addr != NULL) {
+		gncAddressBeginEdit(cust->addr);
+		gncAddressDestroy(cust->addr);
+	}
 	gncCustomerBeginEdit(cust);
 	cust->addr = addr;
 	gncCustomerCommitEdit(cust);
 }
 
 static void
-qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent)
+qofCustomerSetShipAddr (GncCustomer *cust, QofInstance *ship_addr_ent)
 {
 	GncAddress *ship_addr;
 
 	if(!cust || !ship_addr_ent) { return; }
 	ship_addr = (GncAddress*)ship_addr_ent;
 	if(ship_addr == cust->shipaddr) { return; }
-	if(cust->shipaddr != NULL) { gncAddressDestroy(cust->shipaddr); }
+	if(cust->shipaddr != NULL) {
+		gncAddressBeginEdit(cust->shipaddr);
+		gncAddressDestroy(cust->shipaddr);
+	}
 	gncCustomerBeginEdit(cust);
 	cust->shipaddr = ship_addr;
 	gncCustomerCommitEdit(cust);

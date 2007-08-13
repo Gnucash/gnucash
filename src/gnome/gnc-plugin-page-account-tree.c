@@ -649,7 +649,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 		account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
 		sensitive = (account != NULL);
 
-		subaccounts = (gnc_account_n_children(account) != 0);
+		subaccounts = account && (gnc_account_n_children(account) != 0);
 		/* Check here for placeholder accounts, etc. */
 	}
 
@@ -1147,7 +1147,8 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 	xaccAccountScrubImbalance (account);
 
 	// XXX: Lots are disabled
-	//xaccAccountScrubLots (account);
+        if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+ 	    xaccAccountScrubLots(account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1165,7 +1166,8 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 	xaccAccountTreeScrubImbalance (account);
 
 	// XXX: Lots are disabled
-	//xaccAccountTreeScrubLots (account);
+        if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+ 	    xaccAccountTreeScrubLots(account);
 
 	gnc_resume_gui_refresh ();
 }
@@ -1180,7 +1182,8 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
 	xaccAccountTreeScrubOrphans (root);
 	xaccAccountTreeScrubImbalance (root);
 	// XXX: Lots are disabled
-	// xaccAccountTreeScrubLots (root);
+        if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
+            xaccAccountTreeScrubLots(root);
 
 	gnc_resume_gui_refresh ();
 }

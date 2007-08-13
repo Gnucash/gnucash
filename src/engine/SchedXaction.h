@@ -36,15 +36,30 @@
 #ifndef XACC_SCHEDXACTION_H
 #define XACC_SCHEDXACTION_H
 
+typedef struct _SchedXactionClass SchedXactionClass;
+
 #include <time.h>
 #include <glib.h>
 #include "qof.h"
-#include "FreqSpec.h"
 #include "Recurrence.h"
 #include "gnc-engine.h"
 
-#define GNC_IS_SX(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_SCHEDXACTION))
-#define GNC_SX(obj)     (QOF_CHECK_CAST((obj), GNC_ID_SCHEDXACTION, SchedXaction))
+/* --- type macros --- */
+#define GNC_TYPE_SCHEDXACTION            (gnc_schedxaction_get_type ())
+#define GNC_SCHEDXACTION(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SCHEDXACTION, SchedXaction))
+#define GNC_SCHEDXACTION_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SCHEDXACTION, SchedXactionClass))
+#define GNC_IS_SCHEDXACTION(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SCHEDXACTION))
+#define GNC_IS_SCHEDXACTION_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SCHEDXACTION))
+#define GNC_SCHEDXACTION_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SCHEDXACTION, SchedXactionClass))
+GType gnc_schedxaction_get_type(void);
+
+#define GNC_IS_SX(obj)  GNC_IS_SCHEDXACTION(obj)
+#define GNC_SX(obj)     GNC_SCHEDXACTION(obj)
 
 typedef struct _SchedXaction SchedXaction;
 
@@ -75,7 +90,6 @@ struct _SchedXaction
   gchar           *name;
 
   GList           *schedule;
-  FreqSpec        *freq;
   
   GDate           last_date;
   
@@ -104,6 +118,11 @@ struct _SchedXaction
   GList /* <temporalStateData*> */ *deferredList;
 };
 
+struct _SchedXactionClass
+{
+  QofInstanceClass parent_class;
+};
+
 /** Just the variable temporal bits from the SX structure. */
 typedef struct _temporalStateData {
   GDate last_date;
@@ -111,7 +130,7 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
-#define xaccSchedXactionSetGUID(X,G) qof_entity_set_guid(QOF_ENTITY(X),(G))
+#define xaccSchedXactionSetGUID(X,G) qof_instance_set_guid(QOF_INSTANCE(X),(G))
 
 /**
  * Creates and initializes a scheduled transaction.
@@ -129,18 +148,11 @@ void gnc_sx_begin_edit (SchedXaction *sx);
 void gnc_sx_commit_edit (SchedXaction *sx);
 
 /** @return GList<Recurrence*> **/
-GList* gnc_sx_get_schedule(SchedXaction *sx);
+GList* gnc_sx_get_schedule(const SchedXaction *sx);
 /** @param[in] schedule A GList<Recurrence*> **/
 void gnc_sx_set_schedule(SchedXaction *sx, GList *schedule);
 
-FreqSpec *xaccSchedXactionGetFreqSpec( SchedXaction *sx );
-/**
- * The FreqSpec is given to the SchedXaction for mem mgmt; it should
- * not be freed by the external code.
-*/
-void xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs );
-
-gchar *xaccSchedXactionGetName( SchedXaction *sx );
+gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 /**
  * A copy of the name is made.
 */
@@ -149,7 +161,7 @@ void xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName );
 GDate* xaccSchedXactionGetStartDate( SchedXaction *sx );
 void xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart );
 
-int xaccSchedXactionHasEndDate( SchedXaction *sx );
+int xaccSchedXactionHasEndDate( const SchedXaction *sx );
 /**
  * Returns invalid date when there is no end-date specified.
 */
@@ -166,13 +178,13 @@ void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur );
  * Returns true if the scheduled transaction has a defined number of
  * occurances, false if not.
 */
-gboolean xaccSchedXactionHasOccurDef( SchedXaction *sx );
-gint xaccSchedXactionGetNumOccur( SchedXaction *sx );
+gboolean xaccSchedXactionHasOccurDef( const SchedXaction *sx );
+gint xaccSchedXactionGetNumOccur( const SchedXaction *sx );
 /**
  * Set to '0' to turn off number-of-occurances definition.
 */
 void xaccSchedXactionSetNumOccur( SchedXaction *sx, gint numNum );
-gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
+gint xaccSchedXactionGetRemOccur( const SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
 /** \brief Set the instance count.
@@ -184,30 +196,30 @@ void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
  * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
-gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );
+gint gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData );
 /**
  * Sets the instance count to something other than the default.  As the
  * default is the incorrect value '0', callers should DTRT here.
 */
 void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 
-GList *xaccSchedXactionGetSplits( SchedXaction *sx );
+GList *xaccSchedXactionGetSplits( const SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 
-gboolean xaccSchedXactionGetEnabled( SchedXaction *sx );
+gboolean xaccSchedXactionGetEnabled( const SchedXaction *sx );
 void xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled );
 
-void xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+void xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                     gboolean *outAutoCreate,
                                     gboolean *outNotify );
 void xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                     gboolean newAutoCreate,
                                     gboolean newNotify );
 
-gint xaccSchedXactionGetAdvanceCreation( SchedXaction *sx );
+gint xaccSchedXactionGetAdvanceCreation( const SchedXaction *sx );
 void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
 
-gint xaccSchedXactionGetAdvanceReminder( SchedXaction *sx );
+gint xaccSchedXactionGetAdvanceReminder( const SchedXaction *sx );
 void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
 /** \name Temporal state data.
@@ -297,12 +309,12 @@ gboolean SXRegister (void);
 /** \deprecated */
 #define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
 /** \deprecated to be replaced with 'dirty' kvp's */
-KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
+KvpValue *xaccSchedXactionGetSlot( const SchedXaction *sx, 
 				    const char *slot );
 /** \deprecated to be replaced with 'dirty' kvp's */
 void xaccSchedXactionSetSlot( SchedXaction *sx, 

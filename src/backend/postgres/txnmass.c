@@ -71,7 +71,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
       gint32 db_version, cache_version;
       db_version = atoi (DB_GET_VAL("version",j));
-      cache_version = xaccTransGetVersion (trans);
+      cache_version = qof_instance_get_version (trans);
       if (db_version < cache_version) {
          xaccTransBeginEdit (trans);
          xaction_list = g_list_prepend (xaction_list, trans);
@@ -93,15 +93,15 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetDatePostedTS (trans, &ts);
    ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
-   xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
-   trans->idata = atoi (DB_GET_VAL("iguid",j));
+   qof_instance_set_version (trans, atoi(DB_GET_VAL("version",j)));
+   qof_instance_set_idata(trans, atoi(DB_GET_VAL("iguid",j)));
 
    currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
 
    xaccTransSetCurrency (trans, currency);
 
    /* set timestamp as 'recent' for this data */
-   trans->version_check = be->version_check;
+   qof_instance_set_version_check(trans, be->version_check);
 
    xaction_list = g_list_prepend (xaction_list, trans);
 
@@ -147,7 +147,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccSplitSetDateReconciledTS (s, &ts);
 
    xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
-   s->idata = atoi (DB_GET_VAL("iguid",j));
+   qof_instance_set_idata(s, atoi(DB_GET_VAL("iguid",j)));
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
@@ -214,6 +214,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    char *p, buff[900];
    GList *node, *xaction_list = NULL;
    Account *root;
+   guint32 t_idata, s_idata;
 
    qof_event_suspend();
    pgendDisable(be);
@@ -258,18 +259,20 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
        * We won't do this en-mass, as there currently seems to be no
        * performance advantage to doing so */
    
-      if (trans->idata)
+      t_idata = qof_instance_get_idata(trans);
+      if (t_idata)
       {
-         trans->inst.kvp_data = pgendKVPFetch (be, trans->idata, trans->inst.kvp_data);
+         trans->inst.kvp_data = pgendKVPFetch (be, t_idata, trans->inst.kvp_data);
       }
    
       splits = xaccTransGetSplitList(trans);
       for (snode = splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         if (s->idata)
+         s_idata = qof_instance_get_idata(s);
+         if (s_idata)
          {
-            s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
+            s->inst.kvp_data = pgendKVPFetch (be, s_idata, s->inst.kvp_data);
          }
       }
 

@@ -136,7 +136,7 @@
     (map
      (lambda (elt)
        (cond ((number? elt)
-              (abs elt))
+              (exact->inexact (abs elt)))
              ((string? elt)
               (with-input-from-string elt
                 (lambda ()

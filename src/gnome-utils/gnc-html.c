@@ -107,13 +107,10 @@ static char error_404_title[] = N_("Not found");
 static char error_404_body[] = 
 N_("The specified URL could not be loaded.");
 
-static char error_format[] = 
-"<html><body><h3>%s</h3><p>%s</p>\n<p>%s:</p><p>";
-static char error_title[] = N_("Error");
-static char error_body1[] = 
-N_("There was an error loading the specified URL.");
-static char error_body2[] = N_("Error message");
-static char error_end[] = "</body></html>";
+#ifdef GTKHTML_USES_GTKPRINT
+static GtkPrintSettings *print_settings = NULL;
+G_LOCK_DEFINE_STATIC(print_settings);
+#endif
 
 
 static char * 
@@ -172,7 +169,7 @@ URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
                    char ** url_location, char ** url_label)
 {
-  char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
+  char        uri_rexp[] = "^(([^:][^:]+):)?([^#]+)?(#(.*))?$";
   regex_t     compiled;
   regmatch_t  match[6];
   char        * protocol=NULL, * path=NULL, * label=NULL;
@@ -235,11 +232,12 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
  
   if (!safe_strcmp (retval, URL_TYPE_FILE)) {
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
+      if (g_path_is_absolute(path)) {
         *url_location = g_strdup(path);
       }
       else {
-        *url_location = g_strconcat(html->base_location, "/", path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }
@@ -256,13 +254,14 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     /* case URL_TYPE_OTHER: */
 
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
-        *url_location = 
-          g_strconcat(extract_machine_name(html->base_location),
-                      "/", path+1, NULL);
+      if (g_path_is_absolute(path)) {
+        *url_location =
+          g_build_filename(extract_machine_name(html->base_location),
+                           path, (gchar*)NULL);
       }
       else {
-        *url_location = g_strconcat(html->base_location, path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }
@@ -420,106 +419,10 @@ https_allowed()
   return TRUE;
 }
 
-
-
-/************************************************************
- * gnc_html_http_request_cb: fires when an HTTP request is completed.
- * this is when it's time to load the data into the GtkHTML widget. 
- ************************************************************/
-
-static void
-gnc_html_http_request_cb(const gchar * uri, int completed_ok, 
-                         const gchar * body, gint body_len, 
-                         gpointer user_data)
-{
-  gnc_html * html = user_data; 
-  URLType  type;
-  char     * location = NULL;
-  char     * label    = NULL;
-  GList    * handles  = NULL;
-  GList    * current;
-  gpointer loc_tmp, handles_tmp;
-  
-  DEBUG("uri %s, ok %d, body %10.10s, body len %d", uri, completed_ok, body, body_len);
-  g_hash_table_lookup_extended(html->request_info, uri, 
-                               &loc_tmp, &handles_tmp );
-
-  location = loc_tmp;
-  handles  = handles_tmp;
-  
-  /* handles will be NULL for an HTTP POST transaction, where we are
-   * displaying the reply data. */
-  if(!handles) {    
-    GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
-    if(completed_ok) {
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-    }
-    else {
-      char *data;
-
-      data = g_strdup_printf(error_format, 
-			     _(error_title), _(error_body1), _(error_body2));
-      gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
-      g_free (data);
-      gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
-      gtk_html_write(GTK_HTML(html->html), handle,
-                     error_end, strlen(error_end));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
-    }
-  }
-  /* otherwise, it's a normal SUBMIT transaction */ 
-  else {
-    /* before writing to the handles, make sure any new traffic won't
-     * see them while we're working */
-    g_hash_table_remove(html->request_info, uri);
-    g_free(location);
-    location = NULL;
-
-    for(current = handles; current; current = current->next) {
-      /* request completed OK... write the HTML to the handles that
-       * asked for that URI. */
-      if(completed_ok) {
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data),
-                       body, body_len);
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_OK);
-        type = gnc_html_parse_url(html, uri, &location, &label);
-        if(label) {
-          gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
-        }
-        g_free(location);
-        g_free(label);
-        location = label = NULL;
-      }
-      /* request failed... body is the ghttp error text. */
-      else {
-        char *data;
-
-	data = g_strdup_printf(error_format, 
-			       _(error_title), _(error_body1), _(error_body2));
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       data, strlen(data));
-	g_free (data);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       body, body_len);
-        gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                       error_end, strlen(error_end));
-        gtk_html_end(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
-                     GTK_HTML_STREAM_ERROR);
-      }
-    }
-    g_list_free(handles);    
-  }
-
-  gnc_unset_busy_cursor (html->html);
-}
-
-
 /************************************************************
  * gnc_html_start_request: starts the gnc-http object working on an
  * http/https request.
  ************************************************************/
-
 static void 
 gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
 {
@@ -1143,8 +1046,12 @@ gnc_html_new( GtkWindow *parent )
   //retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(retval->container);
+#else
   g_object_ref (retval->container);
   gtk_object_sink (GTK_OBJECT (retval->container));
+#endif
 
   /* signals */
   g_signal_connect(retval->html, "url_requested",
@@ -1315,6 +1222,49 @@ gnc_html_export(gnc_html * html, const char *filepath)
   return TRUE;
 }
 
+#ifdef GTKHTML_USES_GTKPRINT
+static void
+draw_page_cb(GtkPrintOperation *operation, GtkPrintContext *context,
+             gint page_nr, gpointer user_data)
+{
+    gnc_html *html = user_data;
+
+    gtk_html_print_page((GtkHTML*) html->html, context);
+}
+
+void
+gnc_html_print(gnc_html *html)
+{
+    GtkPrintOperation *print;
+    GtkPrintOperationResult res;
+
+    print = gtk_print_operation_new();
+
+    G_LOCK(print_settings);
+    if (print_settings)
+        gtk_print_operation_set_print_settings(print, print_settings);
+    G_UNLOCK(print_settings);
+
+    gtk_print_operation_set_use_full_page(print, FALSE);
+    gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
+    gtk_print_operation_set_n_pages(print, 1);
+    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page_cb), html);
+
+    res = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                  GTK_WINDOW(html->window), NULL);
+
+    if (res == GTK_PRINT_OPERATION_RESULT_APPLY) {
+        G_LOCK(print_settings);
+        if (print_settings)
+            g_object_unref(print_settings);
+        print_settings = g_object_ref(gtk_print_operation_get_print_settings(print));
+        G_UNLOCK(print_settings);
+    }
+
+    g_object_unref(print);
+}
+
+#else /* !GTKHTML_USES_GTKPRINT */
 void
 gnc_html_print(gnc_html * html)
 {
@@ -1329,6 +1279,7 @@ gnc_html_print(gnc_html * html)
   gtk_html_print(GTK_HTML(html->html), ps->context);
   gnc_print_session_done(ps);
 }
+#endif /* GTKHTML_USES_GTKPRINT */
 
 gnc_html_history * 
 gnc_html_get_history(gnc_html * html)

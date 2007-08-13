@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Types xmlns:graph="http://www.gnumeric.org/graph_v2.dtd">
-	<Type _name="Linear"
-		engine="GogLinRegCurve"
-		_description="Linear regression curve">
-	</Type>
-</Types>

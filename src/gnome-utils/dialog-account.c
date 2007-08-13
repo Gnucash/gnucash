@@ -752,8 +752,7 @@ gnc_common_ok (AccountWindow *aw)
   }
 
   /* check whether the types of child and parent are compatible */
-  if (!gnc_account_is_root(parent) &&
-      !xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
+  if (!xaccAccountTypesCompatible (aw->type, xaccAccountGetType (parent))) {
     const char *message = _("The selected account type is incompatible with "
                             "the one of the selected parent.");
     gnc_error_dialog(aw->dialog, message);
@@ -972,7 +971,7 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     types = aw->valid_types;
   } else {
     types = aw->valid_types &
-      xaccAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
+      xaccParentAccountTypesCompatibleWith (xaccAccountGetType (parent_account));
   }
 
   type_model = gtk_tree_view_get_model (GTK_TREE_VIEW (aw->type_view));
@@ -1002,6 +1001,8 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
     type_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (aw->type_view));
     gnc_tree_model_account_types_set_selection(type_selection, 1 << aw->type);
   }
+
+  gnc_account_window_set_name(aw);
 }
 
 static void
@@ -1269,7 +1270,7 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_widget_show (GTK_WIDGET(aw->transfer_tree));
 
   label = glade_xml_get_widget (xml, "parent_label");
-  gtk_label_set_mnemonic_widget (GTK_LABEL(label), aw->transfer_tree);
+  gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(aw->parent_tree));
 
   /* This goes at the end so the select callback has good data. */
   aw->type_view = glade_xml_get_widget (xml, "type_view");
@@ -1296,7 +1297,7 @@ get_ui_fullname (AccountWindow *aw)
   parent_account = gnc_tree_view_account_get_selected_account (
       GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
 
-  if (!gnc_account_is_root(parent_account))
+  if (parent_account && !gnc_account_is_root(parent_account))
   {
     char *parent_name;
     const gchar *separator;
@@ -1428,6 +1429,10 @@ gnc_ui_new_account_window_internal (QofBook *book,
   aw->book = book;
   aw->modal = modal;
   aw->dialog_type = NEW_ACCOUNT;
+
+  aw->valid_types = 0;
+  for (list = valid_types; list; list = list->next)
+    aw->valid_types |= (1 << GPOINTER_TO_INT (list->data));
 
   account = xaccMallocAccount (book);
   aw->account = *xaccAccountGetGUID (account);

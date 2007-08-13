@@ -789,7 +789,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
   tm = localtime (&tt);
 
-  strftime (string, sizeof (string), "%A %d %B %Y", tm);
+  qof_strftime (string, sizeof (string), "%A %d %B %Y", tm);
 
   return g_strdup (string);
 }
@@ -1737,7 +1737,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
 
     account = xaccAccountLookup (guid, gnc_get_current_book ());
 
-    name = xaccAccountGetFullName (account);
+    name = account ? xaccAccountGetFullName(account) : NULL;
   }
   else
     name = NULL;

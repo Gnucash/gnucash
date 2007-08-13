@@ -122,5 +122,41 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/print_date_format</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/print_date_format</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Print the date format below the date.</short>
+        <long>Each time the date is printed, print the date format immediately below in 8 point type using the characters Y, M, and D.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/default_font</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/default_font</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>sans 10</default>
+      <locale name="C">
+        <short>The default check printing font</short>
+        <long>The default font to use when printing checks.  This value will be overridden by any font specified in a check description file.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/blocking_chars</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/blocking_chars</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Print '***' before and after strings.</short>
+        <long>Print '***' before and after strings.</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

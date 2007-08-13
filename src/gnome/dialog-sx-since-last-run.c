@@ -6,6 +6,17 @@
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
+ *
+ * As a special exception, permission is granted to link the binary
+ * module resultant from this code with the OpenSSL project's
+ * "OpenSSL" library (or modified versions of it that use the same
+ * license as the "OpenSSL" library), and distribute the linked
+ * executable.  You must obey the GNU General Public License in all
+ * respects for all of the code used other than "OpenSSL". If you
+ * modify this file, you may extend this exception to your version
+ * of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version
+ * of this file.
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -92,8 +103,6 @@ static GncSxInstance* _gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *m
 /** @return false if the iter is not actaully an GncSxInstance's variable. **/
 gboolean gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, GncSxInstance **instance_loc, GncSxVariable **var_loc);
 
-void gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state);
-void gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value);
 void gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model, gboolean auto_create_only, GList **created_transaction_guids, GList **creation_errors);
 
 GtkTreeModel* gnc_sx_get_slr_state_model(void);
@@ -361,14 +370,12 @@ gnc_sx_slr_tree_model_adapter_init(GTypeInstance *instance, gpointer klass)
     g_signal_connect(adapter->real, "rows-reordered", G_CALLBACK(gsslrtma_proxy_rows_reordered), adapter);
 }
 
-/* @@fixme: i18n. **/
-/* @@fixme: non-staticize. **/
 static char* gnc_sx_instance_state_names[] = {
-    ("Ignored"),
-    ("Postponed"),
-    ("To-Create"),
-    ("Reminder"),
-    ("Created"),
+    N_("Ignored"),
+    N_("Postponed"),
+    N_("To-Create"),
+    N_("Reminder"),
+    N_("Created"),
     NULL
 };
 
@@ -388,7 +395,7 @@ gnc_sx_get_slr_state_model(void)
             gtk_list_store_insert_with_values(GTK_LIST_STORE(_singleton_slr_state_model),
                                               &iter,
                                               SX_INSTANCE_STATE_MAX_STATE + 1,
-                                              0, gnc_sx_instance_state_names[i], -1);
+                                              0, _(gnc_sx_instance_state_names[i]), -1);
         }
     }
     return _singleton_slr_state_model;
@@ -425,20 +432,13 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
     for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        FreqSpec *fs;
-        GString *frequency_str;
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
-        char next_occur_date_buf[MAX_DATE_LENGTH+1];
-
-        frequency_str = g_string_sized_new(32);
-        fs = xaccSchedXactionGetFreqSpec(instances->sx);
-        xaccFreqSpecGetFreqStr(fs, frequency_str);
 
         {
             GDate *last_occur = xaccSchedXactionGetLastOccurDate(instances->sx);
             if (last_occur == NULL || !g_date_valid(last_occur))
             {
-                g_stpcpy(last_occur_date_buf, "never");
+                g_stpcpy(last_occur_date_buf, _("Never"));
             }
             else
             {
@@ -448,12 +448,11 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
             }
         }
 
-        qof_print_gdate(next_occur_date_buf, MAX_DATE_LENGTH, &instances->next_instance_date);
-
         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
         {
             gtk_tree_store_append(model->real, &sx_tree_iter, NULL);
         }
+
         gtk_tree_store_set(model->real, &sx_tree_iter,
                            SLR_MODEL_COL_NAME, xaccSchedXactionGetName(instances->sx),
                            SLR_MODEL_COL_INSTANCE_STATE, NULL,
@@ -462,7 +461,6 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                            SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
                            SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
                            -1);
-        g_string_free(frequency_str, TRUE);
 
         // Insert instance information
         {
@@ -471,7 +469,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
             char instance_date_buf[MAX_DATE_LENGTH+1];
             int instance_index = -1;
 
-            for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+            for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
             {
                 GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
                 qof_print_gdate(instance_date_buf, MAX_DATE_LENGTH, &inst->date);
@@ -482,7 +480,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                 }
                 gtk_tree_store_set(model->real, &inst_tree_iter,
                                    SLR_MODEL_COL_NAME, instance_date_buf,
-                                   SLR_MODEL_COL_INSTANCE_STATE, gnc_sx_instance_state_names[inst->state],
+                                   SLR_MODEL_COL_INSTANCE_STATE, _(gnc_sx_instance_state_names[inst->state]),
                                    SLR_MODEL_COL_VARAIBLE_VALUE, NULL,
                                    SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
                                    SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
@@ -510,7 +508,7 @@ gsslrtma_populate_tree_store(GncSxSlrTreeModelAdapter *model)
                         }
                         else
                         {
-                            tmp_str = g_string_new("(need value)");
+                            tmp_str = g_string_new(_("(Need Value)"));
                         }
 
                         if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(model->real),
@@ -596,12 +594,12 @@ _gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *model, GtkTreeIter *ite
     gtk_tree_path_free(path);
 
     instances = (GncSxInstances*)g_list_nth_data(model->instances->sx_instance_list, instances_index);
-    if (instance_index < 0 || instance_index >= g_list_length(instances->list))
+    if (instance_index < 0 || instance_index >= g_list_length(instances->instance_list))
     {
         return NULL;
     }
 
-    return (GncSxInstance*)g_list_nth_data(instances->list, instance_index);
+    return (GncSxInstance*)g_list_nth_data(instances->instance_list, instance_index);
 }
 
 gboolean
@@ -661,13 +659,6 @@ gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkT
     return TRUE;
 }
 
-void
-gnc_sx_slr_model_change_instance_state(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxInstanceState new_state)
-{
-    // @fixme: pop this out a level.
-    gnc_sx_instance_model_change_instance_state(model->instances, instance, new_state);
-}
-
 /**
  * Special-case list indexing that only refers to "editable" variables. :(
  **/
@@ -697,7 +688,7 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
     indices[0] = g_list_index(model->instances->sx_instance_list, instance->parent);
     if (indices[0] == -1)
         return NULL;
-    indices[1] = g_list_index(instance->parent->list, instance);
+    indices[1] = g_list_index(instance->parent->instance_list, instance);
     if (indices[1] == -1)
         return NULL;
     variables = gnc_sx_instance_get_variables(instance);
@@ -707,12 +698,6 @@ _get_path_for_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance,
         return NULL;
     path = gtk_tree_path_new_from_indices(indices[0], indices[1], indices[2], -1);
     return path;
-}
-
-void
-gnc_sx_slr_model_change_variable(GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable, gnc_numeric *new_value)
-{
-    gnc_sx_instance_model_set_variable(model->instances, instance, variable, new_value);
 }
 
 static void
@@ -844,7 +829,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
      
     for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
     {
-        if (strcmp(value, gnc_sx_instance_state_names[i]) == 0)
+        if (strcmp(value, _(gnc_sx_instance_state_names[i])) == 0)
             break;
     }
     if (i == SX_INSTANCE_STATE_CREATED)
@@ -867,7 +852,7 @@ instance_state_changed_cb(GtkCellRendererText *cell,
         return;
     }
 
-    gnc_sx_slr_model_change_instance_state(dialog->editing_model, inst, new_state);
+    gnc_sx_instance_model_change_instance_state(dialog->editing_model->instances, inst, new_state);
 }
 
 static void
@@ -903,8 +888,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
         if (strlen(g_strstrip(value_copy)) == 0)
         {
             gnc_numeric invalid_num = gnc_numeric_error(GNC_ERROR_ARG);
-            // @fixme? Change to gnc_sx_slr_model_clear_variable(...)?
-            gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &invalid_num);
+            gnc_sx_instance_model_set_variable(dialog->editing_model->instances, inst, var, &invalid_num);
         }
         else
         {
@@ -913,7 +897,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
         g_free(value_copy);
         return;
     }
-    gnc_sx_slr_model_change_variable(dialog->editing_model, inst, var, &parsed_num);
+    gnc_sx_instance_model_set_variable(dialog->editing_model->instances, inst, var, &parsed_num);
 }
 
 GncSxSinceLastRunDialog*
@@ -942,7 +926,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
         gtk_tree_view_set_model(dialog->instance_view, GTK_TREE_MODEL(dialog->editing_model));
 
         renderer = gtk_cell_renderer_text_new();
-        col = gtk_tree_view_column_new_with_attributes("SX, Instance, Variable", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Transaction"), renderer,
                                                        "text", SLR_MODEL_COL_NAME,
                                                        NULL);
         gtk_tree_view_append_column(dialog->instance_view, col);
@@ -958,7 +942,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(instance_state_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Instance State", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Status"), renderer,
                                                        "text", SLR_MODEL_COL_INSTANCE_STATE,
                                                        "visible", SLR_MODEL_COL_INSTANCE_VISIBILITY,
                                                        // you might think only "sensitive" is required to
@@ -977,7 +961,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
                          "edited",
                          G_CALLBACK(variable_value_changed_cb),
                          dialog);
-        col = gtk_tree_view_column_new_with_attributes("Variable Value", renderer,
+        col = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
                                                        "text", SLR_MODEL_COL_VARAIBLE_VALUE,
                                                        "visible", SLR_MODEL_COL_VARIABLE_VISIBILITY,
                                                        NULL);
@@ -1024,12 +1008,6 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
     xaccFreeQuery(guid_query);
 }
 
-static GList*
-gnc_sx_slr_model_check_variables(GncSxSlrTreeModelAdapter *editing_model)
-{
-    return gnc_sx_instance_model_check_variables(editing_model->instances);
-}
-
 static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
@@ -1037,12 +1015,12 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     {
     case GTK_RESPONSE_OK:
         // @@fixme validate current state(GError *errs);
-        // - instance state constraints
-        // - required variable binding
-        // - ability to create transactions
+        // - [ ] instance state constraints
+        // - [x] required variable binding
+        // - [?] ability to create transactions
     {
         GList *unbound_variables;
-        unbound_variables = gnc_sx_slr_model_check_variables(app_dialog->editing_model);
+        unbound_variables = gnc_sx_instance_model_check_variables(app_dialog->editing_model->instances);
         g_message("%d variables unbound", g_list_length(unbound_variables));
         if (g_list_length(unbound_variables) > 0)
         {
@@ -1071,10 +1049,8 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
         && g_list_length(app_dialog->created_txns) > 0)
     {
-
         _show_created_transactions(app_dialog, app_dialog->created_txns);
     }
-    g_list_foreach(app_dialog->created_txns, (GFunc)guid_free, NULL);
     g_list_free(app_dialog->created_txns);
     app_dialog->created_txns = NULL;
 

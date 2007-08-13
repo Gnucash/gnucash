@@ -148,13 +148,14 @@ gboolean gnc_date_string_to_monthformat(const gchar *format_string,
  * unsigned int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
  * they're not more than a couple dozen times the age of the universe.
- * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ * Values of this type can range from -9,223,372,036,854,775,808 to
+ * 9,223,372,036,854,775,807.
  */
 
 #ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
 struct timespec64
 {
-   guint64 tv_sec;     
+   gint64 tv_sec;     
    glong tv_nsec;
 };
 #endif /* SWIG */
@@ -164,7 +165,8 @@ struct timespec64
  * store the seconds.  This should adequately cover dates in the
  * distant future as well as the distant past, as long as they're not
  * more than a couple dozen times the age of the universe
- * Values of this type can range from 0 to 18,446,744,073,709,551,615.
+ * Values of this type can range from -9,223,372,036,854,775,808 to
+ * 9,223,372,036,854,775,807.
  */
 typedef struct timespec64 Timespec;
 
@@ -328,6 +330,35 @@ gchar dateSeparator(void);
  * itself, instead of depending on the routines here.
  */
 
+/** qof_format_time takes a format specification in UTF-8 and a broken-down time,
+ *  tries to call strftime with a sufficiently large buffer and, if successful,
+ *  return a newly allocated string in UTF-8 for the printing result.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return A newly allocated string on success, or NULL otherwise.
+ */
+gchar *qof_format_time(const gchar *format, const struct tm *tm);
+
+/** qof_strftime calls qof_format_time to print a given time and afterwards tries
+ *  to put the result into a buffer of fixed size.
+ *
+ *  @param buf A buffer.
+ *
+ *  @param max The size of buf in bytes.
+ *
+ *  @param format A format specification in UTF-8.
+ *
+ *  @param tm A broken-down time.
+ *
+ *  @return The number of characters written, not include the null byte, if the
+ *  complete string, including the null byte, fits into the buffer.  Otherwise 0.
+ */
+gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
+                   const struct tm *tm);
+
 /** qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string
  *    representation
@@ -367,14 +398,6 @@ const char * gnc_print_date(Timespec ts);
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
 
-/** The qof_print_hours_elapsed_buff() routine will print the 'secs' argument
- *    as HH:MM, and will print the seconds if show_secs is true.  
- *    Thus, for example, secs=3599 will print as 0:59
- *    Returns the number of bytes copied.
- */
-size_t qof_print_hours_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs);
-
 /** The qof_print_time_buff() routine prints only the hour-part of the date.
  *    Thus, if secs is  ...
  *    Returns the number of bytes printed.
@@ -382,12 +405,6 @@ size_t qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboole
 
 size_t qof_print_time_buff (char * buff, size_t len, time_t secs);
 size_t qof_print_date_time_buff (char * buff, size_t len, time_t secs);
-
-/** The qof_is_same_day() routine returns 0 if both times are in the 
- * same day.
- */
-
-gboolean qof_is_same_day (time_t, time_t);
 
 /* ------------------------------------------------------------------ */
 /** The xaccDateUtilGetStamp() routine will take the given time in
@@ -481,22 +498,6 @@ time_t gnc_timet_get_day_start(time_t time_val);
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
 
-#ifndef GNUCASH_MAJOR_VERSION
-/** The gnc_timet_get_day_start() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_start_gdate (GDate *date);
-
-/** The gnc_timet_get_day_end() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day.
- *
- *  @deprecated
- */
-time_t gnc_timet_get_day_end_gdate (GDate *date);
-#endif /* GNUCASH_MAJOR_VERSION */
-
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);
 
@@ -534,6 +535,14 @@ time_t gnc_timet_get_today_end(void);
  *  @return A pointer to the generated string.
  *  @note The caller owns this buffer and must free it when done. */
 char * xaccDateUtilGetStampNow (void);
+
+#define MIN_BUF_LEN 10
+/**
+ * Localized DOW abbreviation.
+ * @param buf_len at least MIN_BUF_LEN
+ * @param dow struct tm semantics: 0=sunday .. 6=saturday
+ **/
+void gnc_dow_abbrev(gchar *buf, int buf_len, int dow);
 
 //@}
 //@}

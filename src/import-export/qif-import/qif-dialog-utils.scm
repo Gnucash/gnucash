@@ -609,7 +609,7 @@
                      (gnc-account-lookup-by-full-name 
                       (gnc-get-current-root-account)
                       (qif-map-entry:gnc-name map-entry)))
-		    (book (gnc-account-get-book (gnc:get-current-root-account)))
+		    (book (gnc-account-get-book (gnc-get-current-root-account)))
                     (existing-type 
                      (xaccAccountGetType existing-gnc-acct)))
                (if (and (not (null? existing-gnc-acct)) 

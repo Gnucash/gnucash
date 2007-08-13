@@ -473,7 +473,8 @@
                                     '(last-year 1st-last 2nd-last
                                                 3rd-last 4th-last))
                             (set-tm:year bdtm (- (tm:year bdtm) 1)))
-                        (set-tm:mday bdtm 1)
+                        (or (eq? alt-period 'from-to)
+                            (set-tm:mday bdtm 1))
                         (if (< (gnc:date-get-year bdtm) 
                                tax-qtr-real-qtr-year)
                             (case alt-period
@@ -512,7 +513,8 @@
                                   '(last-year 1st-last 2nd-last
                                               3rd-last 4th-last))
                           (set-tm:year bdtm (+ (tm:year bdtm) 1)))
-                      (set-tm:mday bdtm 31)
+                      (or (eq? alt-period 'from-to)
+                          (set-tm:mday bdtm 31))
                       (if (< (gnc:date-get-year bdtm) tax-qtr-real-qtr-year)
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31

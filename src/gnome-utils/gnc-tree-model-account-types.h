@@ -94,7 +94,7 @@ GType gnc_tree_model_account_types_get_type (void);
 
 /*************** Method 1 functions ***************/
 
-/* Returns a GtkTreeModelFilter that wraps the model. Deprecated
+/* Returns a GtkTreeModelFilter that wraps the model. Deprecated and root
    account types will be filtered. Caller is responsible for
    ref/unref. */
 GtkTreeModel * gnc_tree_model_account_types_valid (void);

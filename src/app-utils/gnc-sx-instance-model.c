@@ -7,6 +7,16 @@
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
+ * As a special exception, permission is granted to link the binary module
+ * resultant from this code with the OpenSSL project's "OpenSSL" library (or
+ * modified versions of it that use the same license as the "OpenSSL"
+ * library), and distribute the linked executable.  You must obey the GNU
+ * General Public License in all respects for all of the code used other than
+ * "OpenSSL". If you modify this file, you may extend this exception to your
+ * version of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version of this
+ * file.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,10 +51,8 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 
-#define LOG_MOD "gnc.app-util.sx"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.app-util.sx"
 
 static GObjectClass *parent_class = NULL;
 
@@ -58,14 +66,14 @@ static gint _get_vars_helper(Transaction *txn, void *var_hash_data);
 
 static GncSxVariable* gnc_sx_variable_new(gchar *name);
 
-static void _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
+static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data);
 
 /* ------------------------------------------------------------ */
 
 static void
 _sx_var_to_raw_numeric(gchar *name, GncSxVariable *var, GHashTable *parser_var_hash)
 {
-    g_hash_table_insert(parser_var_hash, name, &var->value);
+    g_hash_table_insert(parser_var_hash, g_strdup(name), &var->value);
 }
 
 static void
@@ -75,7 +83,7 @@ _var_numeric_to_sx_var(gchar *name, gnc_numeric *num, GHashTable *sx_var_hash)
     if (!g_hash_table_lookup_extended(sx_var_hash, name, NULL, &p_var))
     {
         p_var = (gpointer)gnc_sx_variable_new(name);
-        g_hash_table_insert(sx_var_hash, name, p_var);
+        g_hash_table_insert(sx_var_hash, g_strdup(name), p_var);
     }
     ((GncSxVariable*)p_var)->value = *num;
 }
@@ -133,7 +141,7 @@ static GncSxVariable*
 gnc_sx_variable_new(gchar *name)
 {
     GncSxVariable *var = g_new0(GncSxVariable, 1);
-    var->name = name;
+    var->name = g_strdup(name);
     var->value = gnc_numeric_error(GNC_ERROR_ARG);
     var->editable = TRUE;
     return var;
@@ -146,6 +154,22 @@ gnc_sx_variable_new_full(gchar *name, gnc_numeric value, gboolean editable)
     var->value = value;
     var->editable = editable;
     return var;
+}
+
+static GncSxVariable*
+gnc_sx_variable_new_copy(GncSxVariable *to_copy)
+{
+    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
+    var->value = to_copy->value;
+    var->editable = to_copy->editable;
+    return var;
+}
+
+void
+gnc_sx_variable_free(GncSxVariable *var)
+{
+    g_free(var->name);
+    g_free(var);
 }
 
 static gint
@@ -195,7 +219,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
                             gnc_commodity_get_mnemonic(split_cmdty),
                             gnc_commodity_get_mnemonic(first_cmdty));
             var = gnc_sx_variable_new(g_strdup(var_name->str));
-            g_hash_table_insert(var_hash, var->name, var);
+            g_hash_table_insert(var_hash, g_strdup(var->name), var);
             g_string_free(var_name, TRUE);
         }
 
@@ -260,13 +284,6 @@ _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_da
 }
 
 void
-gnc_sx_variable_free(GncSxVariable *var)
-{
-    // g_free(var->name);
-    g_free(var);
-}
-
-void
 gnc_sx_randomize_variables(GHashTable *vars)
 {
     g_hash_table_foreach(vars, (GHFunc)_set_var_to_random_value, NULL);
@@ -277,10 +294,8 @@ _clone_sx_var_hash_entry(gpointer key, gpointer value, gpointer user_data)
 {
     GHashTable *to = (GHashTable*)user_data;
     GncSxVariable *to_copy = (GncSxVariable*)value;
-    GncSxVariable *var = gnc_sx_variable_new(to_copy->name);
-    var->value = to_copy->value;
-    var->editable = to_copy->editable;
-    g_hash_table_insert(to, key, var);
+    GncSxVariable *var = gnc_sx_variable_new_copy(to_copy);
+    g_hash_table_insert(to, g_strdup(key), var);
 }
 
 static GncSxInstance*
@@ -296,13 +311,13 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     if (! parent->variable_names_parsed)
     {
-        parent->variable_names = g_hash_table_new(g_str_hash, g_str_equal);
+        parent->variable_names = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
         gnc_sx_get_variables(parent->sx, parent->variable_names);
         g_hash_table_foreach(parent->variable_names, (GHFunc)_wipe_parsed_sx_var, NULL);
         parent->variable_names_parsed = TRUE;
     }
 
-    rtn->variable_bindings = g_hash_table_new(g_str_hash, g_str_equal);
+    rtn->variable_bindings = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
     g_hash_table_foreach(parent->variable_names, _clone_sx_var_hash_entry, rtn->variable_bindings);
 
     {
@@ -314,7 +329,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
         i_num = gnc_numeric_create(instance_i_value, 1);
         as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
 
-        g_hash_table_insert(rtn->variable_bindings, "i", as_var);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup("i"), as_var);
     }
 
     return rtn;
@@ -332,8 +347,6 @@ gnc_sx_instance_get_variables(GncSxInstance *inst)
 {
     GList *vars = NULL;
     g_hash_table_foreach(inst->variable_bindings, _build_list_from_hash_elts, &vars);
-    // @@fixme sort by name
-    // @@fixme make sure the returned list is freed by callers.
     return vars;
 }
 
@@ -367,8 +380,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
             inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
-            //inst->temporal_state = postponed->data;
-            instances->list = g_list_append(instances->list, inst);
+            instances->instance_list = g_list_append(instances->instance_list, inst);
         }
     }
 
@@ -383,7 +395,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
-        instances->list = g_list_append(instances->list, inst);
+        instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
     }
@@ -395,7 +407,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
         int seq_num;
         seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
         inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
-        instances->list = g_list_append(instances->list, inst);
+        instances->instance_list = g_list_append(instances->instance_list, inst);
         gnc_sx_incr_temporal_state(sx, sequence_ctx);
         cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
     }
@@ -495,9 +507,13 @@ gnc_sx_instance_model_dispose(GObject *object)
 static void
 gnc_sx_instance_free(GncSxInstance *instance)
 {
-    // @fixme:
-    // variable_bindings elts + map
-    // temporal_state (iff not postponed?)
+    gnc_sx_destroy_temporal_state(instance->temporal_state);
+
+    if (instance->variable_bindings != NULL)
+    {
+        g_hash_table_destroy(instance->variable_bindings);
+    }
+    instance->variable_bindings = NULL;
      
     g_free(instance);
 }
@@ -506,17 +522,22 @@ static void
 gnc_sx_instances_free(GncSxInstances *instances)
 {
     GList *instance_iter;
-    // @fixme:
-    // variable_names
-    // sx = null
 
-    for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
+    if (instances->variable_names != NULL)
+    {
+        g_hash_table_destroy(instances->variable_names);
+    }
+    instances->variable_names = NULL;
+
+    instances->sx = NULL;
+
+    for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
     {
         GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
         gnc_sx_instance_free(inst);
     }
-    g_list_free(instances->list);
-    instances->list = NULL;
+    g_list_free(instances->instance_list);
+    instances->instance_list = NULL;
 
     g_free(instances);
 }
@@ -607,7 +628,7 @@ _gnc_sx_instance_find_by_sx(GncSxInstances *in_list_instances, SchedXaction *sx_
 }
 
 static void
-_gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     GncSxInstanceModel *instances = GNC_SX_INSTANCE_MODEL(user_data);
 
@@ -691,6 +712,24 @@ _gnc_sx_instance_event_handler(QofEntity *ent, QofEventId event_type, gpointer u
     }
 }
 
+typedef struct _HashListPair
+{
+    GHashTable *hash;
+    GList *list;
+} HashListPair;
+
+static void
+_find_unreferenced_vars(gchar *key,
+                        gpointer value,
+                        HashListPair *cb_pair)
+{
+    if (!g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
+    {
+        g_debug("variable [%s] not found", key);
+        cb_pair->list = g_list_append(cb_pair->list, key);
+    }
+}
+
 void
 gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx)
 {
@@ -708,7 +747,6 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
     existing = (GncSxInstances*)link->data;
     new_instances = _gnc_sx_gen_instances((gpointer)sx, &model->range_end);
     existing->sx = new_instances->sx;
-    // @fixme: variable names stuff
     existing->next_instance_date = new_instances->next_instance_date;
     {
         GList *existing_iter, *new_iter;
@@ -717,8 +755,8 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         // step through the lists pairwise, and retain the existing
         // instance if the dates align, as soon as they don't stop and
         // cleanup.
-        existing_iter = existing->list;
-        new_iter = new_instances->list;
+        existing_iter = existing->instance_list;
+        new_iter = new_instances->instance_list;
         for (; existing_iter != NULL && new_iter != NULL; existing_iter = existing_iter->next, new_iter = new_iter->next)
         {
             GncSxInstance *existing_inst, *new_inst;
@@ -737,7 +775,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         if (existing_remain)
         {
             // delete excess
-            gnc_g_list_cut(&existing->list, existing_iter);
+            gnc_g_list_cut(&existing->instance_list, existing_iter);
             g_list_foreach(existing_iter, (GFunc)gnc_sx_instance_free, NULL);
         }
 
@@ -745,15 +783,69 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
         {
             // append new
             GList *new_iter_iter;
-            gnc_g_list_cut(&new_instances->list, new_iter);
+            gnc_g_list_cut(&new_instances->instance_list, new_iter);
 
             for (new_iter_iter = new_iter; new_iter_iter != NULL; new_iter_iter = new_iter_iter->next)
             {
                 GncSxInstance *inst = (GncSxInstance*)new_iter_iter->data;
                 inst->parent = existing;
-                existing->list = g_list_append(existing->list, new_iter_iter->data);
+                existing->instance_list = g_list_append(existing->instance_list, new_iter_iter->data);
             }
             g_list_free(new_iter);
+        }
+    }
+
+    // handle variables
+    {
+        HashListPair removed_cb_data, added_cb_data;
+        GList *removed_var_names = NULL, *added_var_names = NULL;
+        GList *inst_iter = NULL;
+
+        removed_cb_data.hash = new_instances->variable_names;
+        removed_cb_data.list = NULL;
+        g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
+        removed_var_names = removed_cb_data.list;
+        g_debug("%d removed variables", g_list_length(removed_var_names));
+
+        added_cb_data.hash = existing->variable_names;
+        added_cb_data.list = NULL;
+        g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
+        added_var_names = added_cb_data.list;
+        g_debug("%d added variables", g_list_length(added_var_names));
+
+        if (existing->variable_names != NULL)
+        {
+            g_hash_table_destroy(existing->variable_names);
+        }
+        existing->variable_names = new_instances->variable_names;
+        new_instances->variable_names = NULL;
+
+        for (inst_iter = existing->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
+        {
+            GList *var_iter;
+            GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
+            
+            for (var_iter = removed_var_names; var_iter != NULL; var_iter = var_iter->next)
+            {
+                gchar *to_remove_key = (gchar*)var_iter->data;
+                g_hash_table_remove(inst->variable_bindings, to_remove_key);
+            }
+
+            for (var_iter = added_var_names; var_iter != NULL; var_iter = var_iter->next)
+            {
+                gchar *to_add_key = (gchar*)var_iter->data;
+                if (!g_hash_table_lookup_extended(
+                        inst->variable_bindings, to_add_key, NULL, NULL))
+                {
+                    GncSxVariable *parent_var
+                        = g_hash_table_lookup(existing->variable_names, to_add_key);
+                    GncSxVariable *var_copy;
+
+                    g_assert(parent_var != NULL);
+                    var_copy = gnc_sx_variable_new_copy(parent_var);
+                    g_hash_table_insert(inst->variable_bindings, to_add_key, var_copy);
+                }
+            }
         }
     }
     gnc_sx_instances_free(new_instances);
@@ -815,11 +907,12 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
                                       NULL);
     if (kvp_val == NULL)
     {
-        // @@fixme: this should be more of an assert...
         GString *err = g_string_new("");
         g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
                         xaccSchedXactionGetName(instance->parent->sx));
-        *creation_errors = g_list_append(*creation_errors, err);
+        g_critical("%s", err->str);
+        if (creation_errors != NULL)
+            *creation_errors = g_list_append(*creation_errors, err);
         return FALSE;
     }
     acct_guid = kvp_value_get_guid( kvp_val );
@@ -833,7 +926,9 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(instance->parent->sx));
         g_free((char*)guid_str);
-        *creation_errors = g_list_append(*creation_errors, err);
+        g_critical("%s", err->str);
+        if (creation_errors != NULL)
+            *creation_errors = g_list_append(*creation_errors, err);
         return FALSE;
     }
 
@@ -841,7 +936,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
 }
 
 static void
-_get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
+_get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *numeric, GList **creation_errors, const char *formula_key)
 {
     kvp_frame *split_kvpf;
     kvp_value *kvp_val;
@@ -868,22 +963,27 @@ _get_sx_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *num
                             formula_str,
                             parseErrorLoc,
                             gnc_exp_parser_error_string());
-            *creation_errors = g_list_append(*creation_errors, err);
+            if (creation_errors != NULL)
+                *creation_errors = g_list_append(*creation_errors, err);
         }
-        g_hash_table_destroy(parser_vars);
+        
+        if (parser_vars != NULL)
+        {
+            g_hash_table_destroy(parser_vars);
+        }
     }
 }
 
 static void
-_get_credit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
+_get_credit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
 {
-    _get_sx_formula(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
+    _get_sx_formula_value(instance, template_split, credit_num, creation_errors, GNC_SX_CREDIT_FORMULA);
 }
 
 static void
-_get_debit_formula(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
+_get_debit_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
 {
-    _get_sx_formula(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
+    _get_sx_formula_value(instance, template_split, debit_num, creation_errors, GNC_SX_DEBIT_FORMULA);
 }
 
 static gboolean
@@ -904,6 +1004,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     new_txn = xaccTransClone(template_txn);
     xaccTransBeginEdit(new_txn);
+
+    g_debug("creating template txn desc [%s] for sx [%s]",
+            xaccTransGetDescription(new_txn),
+            xaccSchedXactionGetName(creation_data->instance->parent->sx));
 
     /* clear any copied KVP data */
     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
@@ -965,8 +1069,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             credit_num = gnc_numeric_zero();
             debit_num = gnc_numeric_zero();
 
-            _get_credit_formula(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
-            _get_debit_formula(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
+            _get_credit_formula_value(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
+            _get_debit_formula_value(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
                        
             final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
@@ -1051,8 +1155,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     {
         kvp_frame *txn_frame;
-        /* set a kvp-frame element in the transaction indicating and
-         * pointing-to the SX this was created from. */
         txn_frame = xaccTransGetSlots(new_txn);
         kvp_frame_set_guid(txn_frame, "from-sched-xaction", xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
     }
@@ -1065,7 +1167,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             = g_list_append(*(creation_data->created_txn_guids), (gpointer)xaccTransGetGUID(new_txn));
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 static void
@@ -1103,14 +1205,14 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         // If there are no instances, then skip; specifically, skip
         // re-setting SchedXaction fields, which will dirty the book
         // spuriously.
-        if (g_list_length(instances->list) == 0)
+        if (g_list_length(instances->instance_list) == 0)
             continue;
 
         last_occur_date = xaccSchedXactionGetLastOccurDate(instances->sx);
         instance_count = gnc_sx_get_instance_count(instances->sx, NULL);
         remain_occur_count = xaccSchedXactionGetRemOccur(instances->sx);
 
-        for (instance_iter = instances->list; instance_iter != NULL; instance_iter = instance_iter->next)
+        for (instance_iter = instances->instance_list; instance_iter != NULL; instance_iter = instance_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
             gboolean sx_is_auto_create;
@@ -1182,7 +1284,7 @@ gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
     // ensure 'remind' constraints are met:
     {
         GList *inst_iter;
-        inst_iter = g_list_find(instance->parent->list, instance);
+        inst_iter = g_list_find(instance->parent->instance_list, instance);
         g_assert(inst_iter != NULL);
         if (instance->state != SX_INSTANCE_STATE_REMINDER)
         {
@@ -1239,7 +1341,7 @@ gnc_sx_instance_model_check_variables(GncSxInstanceModel *model)
     for (sx_iter = model->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
-        for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
 
@@ -1284,7 +1386,7 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
         gboolean sx_is_auto_create = FALSE, sx_notify = FALSE;
         xaccSchedXactionGetAutoCreate(instances->sx, &sx_is_auto_create, &sx_notify);
-        for (inst_iter = instances->list; inst_iter != NULL; inst_iter = inst_iter->next)
+        for (inst_iter = instances->instance_list; inst_iter != NULL; inst_iter = inst_iter->next)
         {
             GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
             summary->num_instances++;

@@ -58,6 +58,8 @@
 #  include <locale.h>
 #endif
 
+#define APP_GNUCASH "/apps/gnucash"
+
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
@@ -82,8 +84,8 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.0.5",
-	    _("The next stable version will be "), "GnuCash 2.2");
+	    _("The last stable version was "), "GnuCash 2.2.0",
+	    _("The next stable version will be "), "GnuCash 2.4");
 }
 
 /* Priority of paths: The default is set at build time.  It may be
@@ -92,6 +94,7 @@ gnc_print_unstable_message(void)
 static char *config_path = PKGSYSCONFDIR;
 static char *share_path = PKGDATADIR;
 static char *help_path = GNC_HELPDIR;
+static char *gconf_path = APP_GNUCASH;
 
 static void
 environment_override()
@@ -104,6 +107,17 @@ environment_override()
         share_path = g_strdup(path);
     if ((path = g_getenv("GNC_DOC_PATH")))
         help_path = g_strdup(path);
+    if ((path = g_getenv("GNC_GCONF_PATH")))
+        gconf_path = g_strdup(path);
+#ifdef G_OS_WIN32
+    {
+        /* unhide files without extension */
+        gchar *pathext = g_build_path(";", ".", g_getenv("PATHEXT"),
+                                      (gchar*) NULL);
+        g_setenv("PATHEXT", pathext, TRUE);
+        g_free(pathext);
+    }
+#endif
 }
 
 static gboolean
@@ -245,6 +259,11 @@ gnucash_command_line(int *argc, char **argv)
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
 	 _("DOCPATH")},
+        {"gconf-path", '\0', 0, G_OPTION_ARG_STRING, &gconf_path,
+         _("Set the prefix path for gconf queries"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("GCONFPATH")},
         {"add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
          _("Add price quotes to given GnuCash datafile"),
 	 /* Translators: Argument description for autohelp; see
@@ -295,7 +314,7 @@ gnucash_command_line(int *argc, char **argv)
     }
 
     gnc_set_extra(extra);
-
+    gnc_set_gconf_path(gconf_path);
     gnc_set_debugging(debugging);
 
     if (namespace_regexp)
@@ -354,6 +373,8 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
     QofSession *session = NULL;
 
+    scm_c_eval_string("(debug-set! stack 200000)");
+    
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
@@ -449,7 +470,6 @@ inner_main (void *closure, int argc, char **argv)
     
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
-        gnc_destroy_splash_screen();
         gnc_file_open_file(fn);
         g_free(fn);
     } 
@@ -461,6 +481,8 @@ inner_main (void *closure, int argc, char **argv)
     }
 
     gnc_destroy_splash_screen();
+
+    gnc_main_window_show_all_windows();
 
     gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);
     gnc_ui_start_event_loop();
@@ -506,7 +528,6 @@ gnc_log_init()
           {
                QofLogLevel level;
                gchar **parts = NULL;
-               gchar *logger_name = NULL;
 
                gchar *log_opt = log_flags[i];
                parts = g_strsplit(log_opt, "=", 2);
@@ -516,10 +537,8 @@ gnc_log_init()
                     continue;
                }
 
-               logger_name = g_strdup(parts[0]);
                level = qof_log_level_from_string(parts[1]);
-
-               qof_log_set_level(logger_name, level);
+               qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
      }
@@ -536,22 +555,34 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
-    gchar *localedir;
-    GError *binreloc_error = NULL;
-
-    /* Init binreloc */
-    if (!gbr_init (&binreloc_error) ) {
-      printf("main: Error on gbr_init: %s\n", binreloc_error->message);
-    }
-    localedir = gnc_path_get_localedir ();
-#ifdef HAVE_GETTEXT
-    /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
-       via gtk_init(). */
-    bindtextdomain (GETTEXT_PACKAGE, localedir);
-    textdomain (GETTEXT_PACKAGE);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+#if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
+#    error "No GLib thread implementation available!"
 #endif
-    g_free (localedir);
+    g_thread_init(NULL);
+
+#ifdef ENABLE_BINRELOC
+    {
+        GError *binreloc_error = NULL;
+        if (!gbr_init(&binreloc_error)) {
+            g_print("main: Error on gbr_init: %s\n", binreloc_error->message);
+            g_error_free(binreloc_error);
+        }
+    }
+#else
+    g_message("main: binreloc relocation support was disabled at configure time.\n");
+#endif
+
+#ifdef HAVE_GETTEXT
+    {
+        gchar *localedir = gnc_path_get_localedir();
+        /* setlocale(LC_ALL, ""); is already called by gtk_set_locale()
+           via gtk_init(). */
+        bindtextdomain(GETTEXT_PACKAGE, localedir);
+        textdomain(GETTEXT_PACKAGE);
+        bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+        g_free(localedir);
+    }
+#endif
 
     qof_log_init();
     qof_log_set_default(QOF_LOG_INFO);

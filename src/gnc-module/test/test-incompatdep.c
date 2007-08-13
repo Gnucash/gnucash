@@ -13,7 +13,7 @@ guile_main(void *closure, int argc, char ** argv)
 
   gnc_module_system_init();
 
-  foo = gnc_module_load("gnucash/incompatdeps", 0);
+  foo = gnc_module_load("gnucash/incompatdep", 0);
   
   if(!foo) {
     printf("  ok\n");

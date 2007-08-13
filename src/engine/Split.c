@@ -34,6 +34,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "qof.h"
 #include "Split.h"
 #include "AccountP.h"
 #include "Scrub.h"
@@ -54,6 +55,24 @@ const char *void_former_val_str = "void-former-value";
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
+
+/* GObject Initialization */
+QOF_GOBJECT_IMPL(gnc_split, Split, QOF_TYPE_INSTANCE);
+
+static void
+gnc_split_init(Split* split)
+{
+}
+
+static void
+gnc_split_dispose_real (GObject *splitp)
+{
+}
+
+static void
+gnc_split_finalize_real(GObject* splitp)
+{
+}
 
 /********************************************************************\
  * xaccInitSplit
@@ -82,12 +101,10 @@ xaccInitSplit(Split * split, QofBook *book)
   split->cleared_balance     = gnc_numeric_zero();
   split->reconciled_balance  = gnc_numeric_zero();
 
-  split->idata = 0;
-
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, book);
+  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, book);
 }
 
 void
@@ -115,7 +132,7 @@ xaccSplitReinit(Split * split)
   if (split->inst.kvp_data)
       kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_new();
-  split->idata = 0;
+  qof_instance_set_idata(split, 0);
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
@@ -130,7 +147,7 @@ xaccMallocSplit(QofBook *book)
   Split *split;
   g_return_val_if_fail (book, NULL);
 
-  split = g_new0 (Split, 1);
+  split = g_object_new (GNC_TYPE_SPLIT, NULL);
   xaccInitSplit (split, book);
 
   return split;
@@ -148,16 +165,15 @@ xaccMallocSplit(QofBook *book)
 Split *
 xaccDupeSplit (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   /* Trash the entity table. We don't want to mistake the cloned
    * splits as something official.  If we ever use this split, we'll
    * have to fix this up.
    */
-  split->inst.entity.e_type = NULL;
-  split->inst.entity.collection = NULL;
-  split->inst.entity.guid = s->inst.entity.guid;
-  split->inst.book = s->inst.book;
+  split->inst.e_type = NULL;
+  qof_instance_copy_guid(split, s);
+  qof_instance_copy_book(split, s);
 
    /* Do not call xaccSplitSetParent() or xaccSplitSetAccount because
       we do not want to generate any events. */
@@ -189,7 +205,7 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitClone (const Split *s)
 {
-  Split *split = g_new0 (Split, 1);
+  Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
 
   split->parent              = NULL;
   split->memo                = CACHE_INSERT(s->memo);
@@ -201,12 +217,11 @@ xaccSplitClone (const Split *s)
   split->balance             = s->balance;
   split->cleared_balance     = s->cleared_balance;
   split->reconciled_balance  = s->reconciled_balance;
-  split->idata               = 0;
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  qof_instance_init(&split->inst, GNC_ID_SPLIT, s->inst.book);
+  qof_instance_init_data(&split->inst, GNC_ID_SPLIT, qof_instance_get_book(s));
   kvp_frame_delete(split->inst.kvp_data);
   split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
@@ -251,7 +266,7 @@ xaccSplitDump (const Split *split, const char *tag)
 {
   printf("  %s Split %p", tag, split);
   printf("    GUID:     %s\n", guid_to_string(&split->guid));
-  printf("    Book:     %p\n", split->inst.book);
+  printf("    Book:     %p\n", qof_instance_get_book(split));
   printf("    Account:  %p\n", split->acc);
   printf("    Lot:      %p\n", split->lot);
   printf("    Parent:   %p\n", split->parent);
@@ -266,7 +281,7 @@ xaccSplitDump (const Split *split, const char *tag)
   printf("    CBalance: %s\n", gnc_numeric_to_string(split->cleared_balance));
   printf("    RBalance: %s\n", 
          gnc_numeric_to_string(split->reconciled_balance));
-  printf("    idata:    %x\n", split->idata);
+  printf("    idata:    %x\n", qof_instance_get_idata(split));
 }
 #endif
 
@@ -303,21 +318,15 @@ xaccFreeSplit (Split *split)
 
   // Is this right? 
   if (split->gains_split) split->gains_split->gains_split = NULL;
-  qof_instance_release(&split->inst);
-  g_free(split);
-}
-
-static void mark_acc(Account *acc)
-{
-    if (acc && !acc->inst.do_free) {
-        acc->balance_dirty = TRUE;
-        acc->sort_dirty = TRUE;
-    }
+  /* qof_instance_release(&split->inst); */
+  g_object_unref(split);
 }
 
 void mark_split (Split *s)
 {
-  mark_acc(s->acc);
+  if (s->acc) {
+    g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+  }
 
   /* set dirty flag on lot too. */
   if (s->lot) s->lot->is_closed = -1;
@@ -365,7 +374,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if (sa == sb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(sa->inst.entity.guid), &(sb->inst.entity.guid)))
+    if (qof_instance_guid_compare(sa, sb) != 0)
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -505,7 +514,7 @@ xaccSplitSetAccount (Split *s, Account *acc)
     Transaction *trans;
 
     g_return_if_fail(s && acc);
-    g_return_if_fail(acc->inst.book == s->inst.book);
+    g_return_if_fail(qof_instance_books_equal(acc, s));
 
     trans = s->parent;
     if (trans)
@@ -532,58 +541,38 @@ xaccSplitCommitEdit(Split *s)
     acc = s->acc;
     /* Remove from lot (but only if it hasn't been moved to
        new lot already) */
-    if (s->lot && (s->lot->account != acc || s->inst.do_free))
+    if (s->lot && (s->lot->account != acc || qof_instance_get_destroying(s)))
         gnc_lot_remove_split (s->lot, s);
 
     /* Possibly remove the split from the original account... */
-    if (orig_acc && (orig_acc != acc || s->inst.do_free)) {
-        GList *node = g_list_find (orig_acc->splits, s);
-        if (node) {
-            orig_acc->splits = g_list_delete_link (orig_acc->splits, node);
-            //FIXME: find better event type
-            qof_event_gen (&orig_acc->inst.entity, QOF_EVENT_MODIFY, NULL);
-	    // And send the account-based event, too
-	    qof_event_gen(&orig_acc->inst.entity, GNC_EVENT_ITEM_REMOVED, s);
-        } else PERR("Account lost track of moved or deleted split.");
-        orig_acc->balance_dirty = TRUE;
-        xaccAccountRecomputeBalance(orig_acc);
+    if (orig_acc && (orig_acc != acc || qof_instance_get_destroying(s))) {
+        if (!gnc_account_remove_split(orig_acc, s)) {
+          PERR("Account lost track of moved or deleted split.");
+        }
     }
 
     /* ... and insert it into the new account if needed */
-    if (orig_acc != s->acc && !s->inst.do_free) {
-        if (!g_list_find(acc->splits, s)) {
-            if (acc->inst.editlevel == 0) {
-                acc->splits = g_list_insert_sorted(
-                    acc->splits, s, (GCompareFunc)xaccSplitDateOrder);
-            } else {
-                acc->splits = g_list_prepend(acc->splits, s);
-                acc->sort_dirty = TRUE;
-            }
-
+    if (acc && (orig_acc != acc) && !qof_instance_get_destroying(s)) {
+        if (gnc_account_insert_split(acc, s)) {
             /* If the split's lot belonged to some other account, we
                leave it so. */
             if (s->lot && (NULL == s->lot->account))
                 xaccAccountInsertLot (acc, s->lot);
-
-            //FIXME: find better event
-            qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
-
-	    /* Also send an event based on the account */
-	    qof_event_gen(&acc->inst.entity, GNC_EVENT_ITEM_ADDED, s);
-        } else PERR("Account grabbed split prematurely.");
-        acc->balance_dirty = TRUE;
+        } else {
+            PERR("Account grabbed split prematurely.");
+        }
         xaccSplitSetAmount(s, xaccSplitGetAmount(s));
     }
 
     if (s->parent != s->orig_parent) {
         //FIXME: find better event
         if (s->orig_parent)
-            qof_event_gen(&s->orig_parent->inst.entity, QOF_EVENT_MODIFY, 
+            qof_event_gen(&s->orig_parent->inst, QOF_EVENT_MODIFY, 
                           NULL);
     }
     if (s->lot) {
         /* A change of value/amnt affects gains display, etc. */
-        qof_event_gen (&s->lot->inst.entity, QOF_EVENT_MODIFY, NULL);
+        qof_event_gen (&s->lot->inst, QOF_EVENT_MODIFY, NULL);
     }
 
     /* Important: we save off the original parent transaction and account
@@ -591,16 +580,13 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_instance_mark_clean(QOF_INSTANCE(s));
+    qof_commit_edit_part2(QOF_INSTANCE(s), NULL, NULL, 
+                          (void (*) (QofInstance *)) xaccFreeSplit);
 
-    /* This is because Splits don't call qof_commit_edit(). */
-    qof_instance_set_dirty(QOF_INSTANCE(s->parent));
-
-    mark_acc(acc);
-    xaccAccountRecomputeBalance(acc);
-    //qof_event_gen (&acc->inst.entity, GNC_EVENT_ITEM_CHANGED, ed);
-    if (s->inst.do_free)
-        xaccFreeSplit(s);
+    if (acc) {
+        g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+        xaccAccountRecomputeBalance(acc);
+    }
 }
 
 /* An engine-private helper for completing xaccTransRollbackEdit(). */
@@ -615,12 +601,12 @@ xaccSplitRollbackEdit(Split *s)
         s->acc = s->orig_acc;  
 
     /* Undestroy if needed */
-    if (s->inst.do_free && s->parent) {
+    if (qof_instance_get_destroying(s) && s->parent) {
         GncEventData ed;
-        s->inst.do_free = FALSE;
+        qof_instance_set_destroying(s, FALSE);
         ed.node = s;
         ed.idx = -1; /* unused */
-        qof_event_gen(&s->parent->inst.entity, GNC_EVENT_ITEM_ADDED, &ed);
+        qof_event_gen(&s->parent->inst, GNC_EVENT_ITEM_ADDED, &ed);
     }
 
     /* But for the parent trans, we want the intermediate events, so
@@ -673,7 +659,7 @@ xaccSplitDetermineGainStatus (Split *split)
       split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
    } else {
       QofCollection *col;
-      col = qof_book_get_collection (split->inst.book, GNC_ID_SPLIT);
+      col = qof_book_get_collection (qof_instance_get_book(split), GNC_ID_SPLIT);
       split->gains = GAINS_STATUS_GAINS;
       other = (Split *) qof_collection_lookup_entity (col, 
                   kvp_value_get_guid (val));
@@ -1137,15 +1123,16 @@ xaccSplitDestroy (Split *split)
 
    acc = split->acc;
    trans = split->parent;
-   if (acc && !acc->inst.do_free && xaccTransGetReadOnly (trans))
+   if (acc && !qof_instance_get_destroying(acc)
+       && xaccTransGetReadOnly(trans))
        return FALSE;
 
    xaccTransBeginEdit(trans);
    ed.node = split;
    ed.idx = xaccTransGetSplitIndex(trans, split);
    qof_instance_set_dirty(QOF_INSTANCE(split));
-   split->inst.do_free = TRUE;
-   qof_event_gen(&trans->inst.entity, GNC_EVENT_ITEM_REMOVED, &ed);
+   qof_instance_set_destroying(split, TRUE);
+   qof_event_gen(&trans->inst, GNC_EVENT_ITEM_REMOVED, &ed);
    xaccTransCommitEdit(trans);
 
    return TRUE;
@@ -1154,8 +1141,8 @@ xaccSplitDestroy (Split *split)
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccSplitDateOrder (const Split *sa, const Split *sb)
+gint
+xaccSplitOrder (const Split *sa, const Split *sb)
 {
   int retval;
   int comp;
@@ -1200,11 +1187,35 @@ xaccSplitDateOrder (const Split *sa, const Split *sb)
   DATE_CMP(sa,sb,date_reconciled);
 
   /* else, sort on guid - keeps sort stable. */
-  retval = guid_compare(&(sa->inst.entity.guid), &(sb->inst.entity.guid));
+  retval = qof_instance_guid_compare(sa, sb);
   if (retval) return retval;
 
   return 0;
 }
+
+gint
+xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
+{
+  Transaction *ta, *tb;
+
+  if (sa == sb) return 0;
+  /* nothing is always less than something */
+  if (!sa && sb) return -1;
+  if (sa && !sb) return +1;
+
+  ta = sa->parent;
+  tb = sb->parent;
+  if ( ta && !tb ) return -1;
+  if ( !ta && tb ) return +1;
+  if ( !ta && !tb ) return 0;
+
+  /* if dates differ, return */
+  DATE_CMP(ta,tb,date_posted);
+
+  /* If the dates are the same, do not change the order */
+  return -1;
+}
+
 
 static gboolean
 get_corr_account_split(const Split *sa, const Split **retval)
@@ -1514,7 +1525,7 @@ xaccSplitSetParent(Split *s, Transaction *t)
     ed.node = s;
     if (old_trans) {
         ed.idx = xaccTransGetSplitIndex(old_trans, s);
-        qof_event_gen(&old_trans->inst.entity, GNC_EVENT_ITEM_REMOVED, &ed);
+        qof_event_gen(&old_trans->inst, GNC_EVENT_ITEM_REMOVED, &ed);
     }
     s->parent = t;
 
@@ -1530,7 +1541,7 @@ xaccSplitSetParent(Split *s, Transaction *t)
             t->splits = g_list_append(t->splits, s);
         
         ed.idx = -1; /* unused */
-        qof_event_gen(&t->inst.entity, GNC_EVENT_ITEM_ADDED, &ed);
+        qof_event_gen(&t->inst, GNC_EVENT_ITEM_ADDED, &ed);
     }
     xaccTransCommitEdit(t);
 }
@@ -1796,7 +1807,7 @@ no_op (gpointer obj, const QofParam *p)
 }
 
 static void
-qofSplitSetParentTrans(Split *s, QofEntity *ent)
+qofSplitSetParentTrans(Split *s, QofInstance *ent)
 {
     Transaction *trans = (Transaction*)ent;
 
@@ -1805,7 +1816,7 @@ qofSplitSetParentTrans(Split *s, QofEntity *ent)
 }
 
 static void
-qofSplitSetAccount(Split *s, QofEntity *ent)
+qofSplitSetAccount(Split *s, QofInstance *ent)
 {
     Account *acc = (Account*)ent;
 
@@ -1870,7 +1881,7 @@ gboolean xaccSplitRegister (void)
     { NULL },
   };
 
-  qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitDateOrder, params);
+  qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitOrder, params);
   qof_class_register (SPLIT_ACCT_FULLNAME,
                       (QofSortFunc)xaccSplitCompareAccountFullNames, NULL);
   qof_class_register (SPLIT_CORR_ACCT_NAME,

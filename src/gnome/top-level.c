@@ -84,7 +84,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
   {                                                                         \
     GUID guid;                                                              \
     QofCollection *col;                                                     \
-    QofEntity *entity;                                                      \
+    QofInstance *entity;                                                      \
     if (!string_to_guid (location + strlen(URL_TYPE_STR), &guid))           \
     {                                                                       \
       result->error_message = g_strdup_printf (_("Bad URL: %s"), location); \
@@ -231,7 +231,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
     
     /* Get the book GUID */
     book = qof_session_get_book(session);
-    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
     
     keyfile = gnc_find_state_file(url, guid_string, &filename);
@@ -318,7 +318,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
 
     /* Get the book GUID */
     book = qof_session_get_book(session);
-    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_string = guid_to_string(guid);
 
     /* Find the filename to use.  This returns the data from the

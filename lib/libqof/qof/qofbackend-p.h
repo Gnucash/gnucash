@@ -393,15 +393,7 @@ new, otherwise the book version number.
 */
 gint32 qof_book_get_version (const QofBook *book);
 
-/** get the book tag number
-
-used for kvp management in sql backends.
-*/
-guint32 qof_book_get_idata (const QofBook *book);
-
 void qof_book_set_version (QofBook *book, gint32 version);
-
-void qof_book_set_idata(QofBook *book, guint32 idata);
 
 /* @} */
 /* @} */

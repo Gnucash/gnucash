@@ -34,10 +34,27 @@
 #ifndef XACC_SPLIT_H
 #define XACC_SPLIT_H
 
+typedef struct _SplitClass SplitClass;
+
 #include <time.h>
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+
+/* --- type macros --- */
+#define GNC_TYPE_SPLIT            (gnc_split_get_type ())
+#define GNC_SPLIT(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SPLIT, Split))
+#define GNC_SPLIT_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_SPLIT, SplitClass))
+#define GNC_IS_SPLIT(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SPLIT))
+#define GNC_IS_SPLIT_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SPLIT))
+#define GNC_SPLIT_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SPLIT, SplitClass))
+GType gnc_split_get_type(void);
+
 
 /** @name Split Reconciled field values
 
@@ -73,7 +90,7 @@ gnc_numeric xaccSplitConvertAmount (const Split *split,
 Split       * xaccMallocSplit (QofBook *book);
 
 /* Reinit a previously malloc'd split. Split remains in the book it
-   was already in, and the QofEntity portions also remain unchanged.
+   was already in, and the QofInstance portions also remain unchanged.
    It's basically the data elements that are reverted to default
    values. */
 void xaccSplitReinit(Split * split);
@@ -351,7 +368,7 @@ const char *xaccSplitGetType(const Split *s);
 void xaccSplitMakeStockSplit(Split *s);
 
 /**
- * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
+ * The xaccSplitOrder(sa,sb) method is useful for sorting.
  *    if sa and sb have different transactions, return their xaccTransOrder
  *    return a negative value if split sa has a smaller currency-value than sb,
  *    return a positive value if split sa has a larger currency-value than sb,
@@ -362,7 +379,8 @@ void xaccSplitMakeStockSplit(Split *s);
  *    Then it compares the reconciled flags, then the reconciled dates,
  *    Finally, it returns zero if all of the above match.
  */
-int  xaccSplitDateOrder (const Split *sa, const Split *sb);
+gint xaccSplitOrder (const Split *sa, const Split *sb);
+gint xaccSplitOrderDateOnly (const Split *sa, const Split *sb);
 
 
 /*
@@ -485,9 +503,9 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 /** @} */
 
 /** \deprecated */
-#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
-#define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+#define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 #endif /* XACC_SPLIT_H */
 /** @} */

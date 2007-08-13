@@ -29,7 +29,7 @@ base QOF type and references to other objects - usually by storing
 the type of the referenced object and the GUID of the referenced object
 as the value and the GUID of the original object as the key in a
 GHashTable or other lookup mechanism within the backend. See
-::QofEntityReference.
+::QofInstanceReference.
 
 \section backendqueries Handling Queries:
 

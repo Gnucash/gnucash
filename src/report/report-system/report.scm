@@ -406,7 +406,17 @@
         (begin
           (display saved-form
                    (open-file conf-file-name "a"))
-          (force-output)))))
+          (force-output)
+	  (let ((report-name (gnc:report-name report)))
+	    (gnc-info-dialog
+	     '()
+	     (sprintf 
+	      #f (_ "Your report \"%s\" has been saved into the configuration file \"%s\".  The report will be available in the menu Reports -> Custom at the next startup of GnuCash.")
+	      (if (and report-name (not (string-null? report-name)))
+		  (gnc:gettext report-name)
+		  (gnc:gettext "Untitled"))
+	      conf-file-name)))
+	  ))))
 
 ;; gets the renderer from the report template;
 ;; gets the stylesheet from the report;

@@ -5,6 +5,17 @@
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of version 2 of the GNU General Public *
  * License as published by the Free Software Foundation.            *
+ *
+ * As a special exception, permission is granted to link the binary
+ * module resultant from this code with the OpenSSL project's
+ * "OpenSSL" library (or modified versions of it that use the same
+ * license as the "OpenSSL" library), and distribute the linked
+ * executable.  You must obey the GNU General Public License in all
+ * respects for all of the code used other than "OpenSSL". If you
+ * modify this file, you may extend this exception to your version
+ * of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version
+ * of this file.
  *                                                                  *
  * This program is distributed in the hope that it will be useful,  *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
@@ -30,7 +41,6 @@
 #include "qof.h"
 #include "gnc-book.h"
 #include "Account.h"
-#include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "dialog-preferences.h"
@@ -60,14 +70,8 @@
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
 
-#ifdef HAVE_LANGINFO_D_FMT
-#include <langinfo.h>
-#endif
-
-#define LOG_MOD "gnc.gui.sx.editor"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.sx.editor"
 
 static gint _sx_engine_event_handler_id = -1;
 
@@ -96,7 +100,7 @@ static gint _sx_engine_event_handler_id = -1;
 #define NUM_LEDGER_LINES_DEFAULT 6
 
 #define EX_CAL_NUM_MONTHS 6
-#define EX_CAL_MO_PER_COL 2
+#define EX_CAL_MO_PER_COL 3
 
 #define GNC_D_WIDTH 25
 #define GNC_D_BUF_WIDTH 26
@@ -233,15 +237,13 @@ editor_cancel_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
                                      sxed );
 }
 
-static
-void
+static void
 editor_help_button_clicked(GtkButton *b, GncSxEditorDialog *sxed)
 {
     gnc_gnome_help(HF_HELP, HL_SXEDITOR);
 }
 
-static
-void
+static void
 editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
 {
     GNCBook *book;
@@ -253,7 +255,7 @@ editor_ok_button_clicked( GtkButton *b, GncSxEditorDialog *sxed )
     gnc_sxed_save_sx( sxed );
 
     /* add to list */
-    // @@fixme -- forget 'new'-flag: check for existance.
+    // @@fixme -- forget 'new'-flag: check for existance of the SX [?]
     if ( sxed->newsxP ) {
         book = gnc_get_current_book ();
         sxes = gnc_book_get_schedxactions(book);
@@ -413,6 +415,9 @@ gnc_sxed_check_changed( GncSxEditorDialog *sxed )
         sx_start_date = *xaccSchedXactionGetStartDate(sxed->sx);
         sx_schedule_str = recurrenceListToString(gnc_sx_get_schedule(sxed->sx));
 
+        g_debug("dialog schedule [%s], sx schedule [%s]",
+                dialog_schedule_str, sx_schedule_str);
+
         schedules_are_the_same = (strcmp(dialog_schedule_str, sx_schedule_str) == 0);
         g_free(dialog_schedule_str);
         g_free(sx_schedule_str);
@@ -456,16 +461,6 @@ set_sums_to_zero( gpointer key,
     tcds->debitSum  = gnc_numeric_zero();
 }
 
-static
-void
-free_sums( gpointer key,
-           gpointer val,
-           gpointer ud )
-{
-    txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
-    g_free( tcds );
-}
-
 static void
 check_credit_debit_balance( gpointer key,
                             gpointer val,
@@ -502,8 +497,7 @@ check_credit_debit_balance( gpointer key,
  * Checks to make sure that the SX is in a reasonable state to save.
  * @return true if checks out okay, false otherwise.
  **/
-static
-gboolean
+static gboolean
 gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 {
     gboolean multi_commodity = FALSE;
@@ -548,8 +542,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         gpointer unusedKey, unusedValue;
 
         unbalanceable = FALSE; /* innocent until proven guilty */
-        vars = g_hash_table_new( g_str_hash, g_str_equal );
-        txns = g_hash_table_new( g_direct_hash, g_direct_equal );
+        vars = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)gnc_sx_variable_free);
+        txns = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, g_free);
         numIters = NUM_ITERS_NO_VARS;
         /**
          * Plan:
@@ -692,11 +686,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
             ttVarCount -= 1;
         }
 
-        g_hash_table_foreach(vars, (GHFunc)gnc_sx_variable_free, NULL);
         g_hash_table_destroy(vars);
-
-        g_hash_table_foreach( txns, free_sums, NULL );
-        g_hash_table_destroy( txns );
+        g_hash_table_destroy(txns);
 
         if ( unbalanceable
              && !gnc_verify_dialog( sxed->dialog, FALSE,
@@ -867,8 +858,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
  * Saves the contents of the SX.  This assumes that gnc_sxed_check_consistent
  * has returned true.
  **/
-static
-void
+static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {
     /* name */
@@ -957,18 +947,9 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
     /* start date and freq spec */
     {
-        FreqSpec *fs;
         GDate gdate;
         GString *str;
         GList *schedule = NULL;
-
-        fs = xaccSchedXactionGetFreqSpec( sxed->sx );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
-
-        str = g_string_new( "" );
-        xaccFreqSpecGetFreqStr( fs, str );
-        g_debug("freq spec: %s", str->str);
-        g_string_free(str, TRUE);
 
         gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
         gnc_sx_set_schedule(sxed->sx, schedule);
@@ -1234,6 +1215,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
 
     /* Do not call show_all here. Screws up the gtkuimanager code */
     gtk_widget_show(sxed->dialog);
+
+    gtk_notebook_set_page(
+        GTK_NOTEBOOK(glade_xml_get_widget(sxed->gxml, "editor_notebook")), 0);
 
     /* Refresh the cal and the ledger */
     gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
@@ -1562,6 +1546,13 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         goto cleanup;
     }
 
+    gnc_dense_cal_store_update_name(sxed->dense_cal_model, xaccSchedXactionGetName(sxed->sx));
+    {
+        gchar *schedule_desc = recurrenceListToCompactString(recurrences);
+        gnc_dense_cal_store_update_info(sxed->dense_cal_model, schedule_desc);
+        g_free(schedule_desc);
+    }
+
     gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
     gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
 
@@ -1651,7 +1642,7 @@ _open_editors(GtkDialog *dialog, gint response_code, gpointer data)
 }
 
 static void
-_sx_engine_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
+_sx_engine_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_data, gpointer evt_data)
 {
     Account *acct;
     QofBook *book;

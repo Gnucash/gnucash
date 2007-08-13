@@ -266,7 +266,7 @@
 (define (gnc:html-barchart-render barchart doc)
   (define (ensure-numeric elt)
     (cond ((number? elt)
-           elt)
+           (exact->inexact elt))
           ((string? elt)
            (with-input-from-string elt
              (lambda ()

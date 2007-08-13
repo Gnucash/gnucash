@@ -15,7 +15,6 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
@@ -40,12 +39,12 @@ libgncmod_report_gnome_la_LDFLAGS = -avoid-version
 libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
-  ${GNOME_PRINT_LIBS} \
   ${GNOME_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}

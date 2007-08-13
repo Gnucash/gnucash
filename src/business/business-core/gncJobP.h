@@ -53,6 +53,6 @@ GncJob * gncCloneJob (GncJob *from, QofBook *book);
  */
 GncJob * gncJobObtainTwin (GncJob *from, QofBook *book);
 
-#define gncJobSetGUID(E,G) qof_entity_set_guid(QOF_ENTITY(E),(G))
+#define gncJobSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_JOBP_H_ */

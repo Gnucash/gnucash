@@ -38,12 +38,14 @@
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-component-manager.h"
 #include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "option-util.h"
@@ -58,6 +60,8 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
+
+#define DIALOG_OPTIONS_CM_CLASS "dialog-options"
 
 /*
  * Point where preferences switch control method from a set of
@@ -229,10 +233,10 @@ gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 
   ENTER("chooser %p, option %p", chooser, option);
   filename = gtk_file_chooser_get_preview_filename(chooser);
-  DEBUG("chooser preview name is %s.", filename);
+  DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
   if (filename == NULL) {
     filename = g_strdup(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION));
-    DEBUG("using last selection of %s", filename);
+    DEBUG("using last selection of %s", filename ? filename : "(null)");
     if (filename == NULL) {
       LEAVE("no usable name");
       return;
@@ -732,8 +736,12 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 
   /* Create the tooltips */
   tooltips = gtk_tooltips_new ();
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(tooltips);
+#else
   g_object_ref (tooltips);
   gtk_object_sink (GTK_OBJECT (tooltips));
+#endif
 
   /* Iterate over the options and create a radio button for each one */
   for (i = 0; i < num_values; i++)
@@ -1229,8 +1237,12 @@ gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
   propertybox->tips = gtk_tooltips_new();
   propertybox->option_db = odb;
 
+#ifdef HAVE_GTK_2_10
+  g_object_ref_sink(propertybox->tips);
+#else
   g_object_ref (propertybox->tips);
   gtk_object_sink (GTK_OBJECT (propertybox->tips));
+#endif
 
   num_sections = gnc_option_db_num_sections(odb);
   default_section_name = gnc_option_db_get_default_section(odb);
@@ -1292,6 +1304,8 @@ gnc_options_dialog_notebook(GNCOptionWin * win)
 void
 gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *window)
 {
+  GNCOptionWinCallback close_cb;
+
   switch (response) {
    case GTK_RESPONSE_HELP:
     if(window->help_cb)
@@ -1301,8 +1315,11 @@ gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *w
    case GTK_RESPONSE_OK:
    case GTK_RESPONSE_APPLY:
     gnc_options_dialog_changed_internal (window->dialog, FALSE);
+    close_cb = window->close_cb;
+    window->close_cb = NULL;
     if (window->apply_cb)
       window->apply_cb (window, window->apply_cb_data);
+    window->close_cb = close_cb;
     if (response == GTK_RESPONSE_APPLY)
       break;
     /* fall through */
@@ -1369,6 +1386,13 @@ gnc_options_register_stocks (void)
 #endif
 }
 
+static void
+component_close_handler (gpointer data)
+{
+  GNCOptionWin *window = data;
+  gtk_dialog_response(GTK_DIALOG(window->dialog), GTK_RESPONSE_CANCEL);
+}
+
 /* gnc_options_dialog_new:
  *
  *   - Opens the preferences glade file
@@ -1383,6 +1407,7 @@ gnc_options_dialog_new(gchar *title)
   GNCOptionWin * retval;
   GladeXML *xml;
   GtkWidget * hbox;
+  gint component_id;
 
   retval = g_new0(GNCOptionWin, 1);
   xml = gnc_glade_xml_new ("preferences.glade", "GnuCash Options");
@@ -1401,6 +1426,11 @@ gnc_options_dialog_new(gchar *title)
   retval->notebook = gtk_notebook_new();
   gtk_widget_show(retval->notebook);
   gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
+
+  component_id = gnc_register_gui_component (DIALOG_OPTIONS_CM_CLASS,
+                                             NULL, component_close_handler,
+                                             retval);
+  gnc_gui_component_set_session (component_id, gnc_get_current_session());
 
   return retval;
 }
@@ -1454,6 +1484,8 @@ void
 gnc_options_dialog_destroy(GNCOptionWin * win)
 {
   if (!win) return;
+
+  gnc_unregister_gui_component_by_data(DIALOG_OPTIONS_CM_CLASS, win);
 
   gtk_widget_destroy(win->dialog);
 
@@ -2466,7 +2498,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
       test = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
       g_object_set_data_full(G_OBJECT(widget), LAST_SELECTION,
 			     g_strdup(string), g_free);
-      DEBUG("Set %s, retrieved %s", string, test);
+      DEBUG("Set %s, retrieved %s", string, test ? test : "(null)");
       gnc_image_option_update_preview_cb(GTK_FILE_CHOOSER(widget), option);
     }
     LEAVE("FALSE");
@@ -2485,7 +2517,7 @@ static gboolean gnc_option_set_ui_value_budget(
     GtkTreeModel *tm;
     GtkTreeIter iter;
 
-    if (value != SCM_BOOL_F) {
+    if (!SCM_NULLP(value)) {
         if (!SWIG_IsPointer(value))
             scm_misc_error("gnc_option_set_ui_value_budget",
                            "Option Value not a wcp.", value);
@@ -2847,10 +2879,9 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
   SCM result;
 
   string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-  DEBUG("filename %s", string);
+  DEBUG("filename %s", string ? string : "(null)");
   result = scm_makfrom0str(string ? string : "");
-  if (string)
-    g_free(string);
+  g_free(string);
   return result;
 }
 

@@ -1135,7 +1135,7 @@
   )
 
 (gnc:define-report 
- 'version 1.1
+ 'version 1
  'name reportname
  'menu-path (list gnc:menuname-income-expense)
  'options-generator trial-balance-options-generator

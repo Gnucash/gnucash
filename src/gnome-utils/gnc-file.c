@@ -44,6 +44,7 @@
 #include "qof.h"
 #include "TransLog.h"
 #include "gnc-session.h"
+#include "gnc-autosave.h"
 
 #define GCONF_SECTION "dialogs/export_accounts"
 
@@ -190,7 +191,6 @@ show_session_error (QofBackendError io_error,
   const char *fmt, *label;
   gint response;
 
-  gnc_destroy_splash_screen(); /* Just in case */
   if (NULL == newfile) { newfile = _("(null)"); }
 
   switch (io_error)
@@ -539,16 +539,22 @@ gboolean
 gnc_file_query_save (gboolean can_cancel)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
+  QofBook *current_book;
 
   if (!gnc_current_session_exist())
       return TRUE;
+
+  current_book = qof_session_get_book (gnc_get_current_session ());
+  /* Remove any pending auto-save timeouts */
+  gnc_autosave_remove_timer(current_book);
+
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
    * Pose the question as a "while" loop, so that if user screws
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (qof_book_not_saved(qof_session_get_book (gnc_get_current_session ())))
+  while (qof_book_not_saved(current_book))
   {
     GtkWidget *dialog;
     gint response;
@@ -564,7 +570,7 @@ gnc_file_query_save (gboolean can_cancel)
 				    GTK_MESSAGE_QUESTION,
 				    GTK_BUTTONS_NONE,
 				    "%s", title);
-    oldest_change = qof_book_get_dirty_time(qof_session_get_book (gnc_get_current_session ()));
+    oldest_change = qof_book_get_dirty_time(current_book);
     minutes = (time(NULL) - oldest_change) / 60 + 1;
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					     message, minutes);
@@ -660,8 +666,6 @@ gnc_post_file_open (const char * filename)
                    "What would you like to do?")
                  );
     int rc;
-
-    gnc_destroy_splash_screen(); /* Just in case */
 
     dialog = gtk_message_dialog_new(NULL,
 				    0,
@@ -831,16 +835,21 @@ gboolean
 gnc_file_open (void)
 {
   const char * newfile;
-  char *lastfile;
+  char *lastfile = NULL;
+  gchar *last_file_dir = NULL;
   gboolean result;
 
   if (!gnc_file_query_save (TRUE))
     return FALSE;
 
   lastfile = gnc_history_get_last();
-  newfile = gnc_file_dialog (_("Open"), NULL, lastfile, GNC_FILE_DIALOG_OPEN);
   if (lastfile)
+    last_file_dir = g_path_get_dirname(lastfile);
+  newfile = gnc_file_dialog (_("Open"), NULL, last_file_dir, GNC_FILE_DIALOG_OPEN);
+  if (lastfile != NULL)
     g_free(lastfile);
+  if (last_file_dir != NULL)
+    g_free(last_file_dir);
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -1087,6 +1096,12 @@ gnc_file_save_as (void)
     return;
   }
 
+  /* Prevent race condition between swapping the contents of the two
+   * sessions, and actually installing the new session as the current
+   * one. Any event callbacks that occur in this interval will have
+   * problems if they check for the current book. */
+  qof_event_suspend();
+
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   qof_session_swap_data (session, new_session);
@@ -1098,6 +1113,8 @@ gnc_file_save_as (void)
    * session. But I'm lazy...
    */
   gnc_set_current_session(new_session);
+
+  qof_event_resume();
 
   /* --------------- END CORE SESSION CODE -------------- */
 

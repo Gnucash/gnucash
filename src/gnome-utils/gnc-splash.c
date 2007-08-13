@@ -50,6 +50,13 @@ gnc_gui_init_splash (void)
   }
 }
 
+static gboolean
+button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
+{
+  gnc_destroy_splash_screen();
+  return TRUE;
+}
+
 void
 gnc_show_splash_screen (void)
 {
@@ -101,6 +108,11 @@ gnc_show_splash_screen (void)
   separator = gtk_hseparator_new();
 
   progress = gtk_label_new(NULL);
+  /* the set_max_width avoids "bumping" of the splash screen
+     if a long string is given in gnc_update_splash_screen();
+     presumably it would be better to inhibit size change of the
+     top level container, but I don't know how to do this */
+  gtk_label_set_max_width_chars(GTK_LABEL(progress), 50);
   markup = g_markup_printf_escaped(MARKUP_STRING, _("Loading..."));
   gtk_label_set_markup(GTK_LABEL(progress), markup);
   g_free(markup);
@@ -111,6 +123,10 @@ gnc_show_splash_screen (void)
   gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), progress, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (splash), vbox);
+
+  gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(splash, "button_press_event",
+                   G_CALLBACK(button_press_cb), NULL);
 
   gtk_window_set_auto_startup_notification (FALSE);
   gtk_widget_show_all (splash);
@@ -139,12 +155,15 @@ gnc_update_splash_screen (const gchar *string)
 
   if (progress)
   {
-    markup = g_markup_printf_escaped(MARKUP_STRING, string);
-    gtk_label_set_markup (GTK_LABEL(progress), markup);
-    g_free (markup);
+    if(string && strcmp(string, ""))
+    {
+      markup = g_markup_printf_escaped(MARKUP_STRING, string);
+      gtk_label_set_markup (GTK_LABEL(progress), markup);
+      g_free (markup);
 
-    /* make sure new text is up */
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
+      /* make sure new text is up */
+      while (gtk_events_pending ())
+       gtk_main_iteration ();
+    }
   }
 }

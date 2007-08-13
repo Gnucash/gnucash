@@ -29,7 +29,6 @@
 
 #include "qof.h"
 
-#include "FreqSpec.h"
 #include "Account.h"
 #include "gnc-book.h"
 #include "SX-book.h"
@@ -38,24 +37,40 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 
-#define LOG_MOD "gnc.engine.sx"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.engine.sx"
 
 /* Local Prototypes *****/
 
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
+/* GObject initialization */
+QOF_GOBJECT_IMPL(gnc_schedxaction, SchedXaction, QOF_TYPE_INSTANCE);
+
+static void
+gnc_schedxaction_init(SchedXaction* sx)
+{
+}
+
+static void
+gnc_schedxaction_dispose_real (GObject *sxp)
+{
+}
+
+static void
+gnc_schedxaction_finalize_real(GObject* sxp)
+{
+}
+
 static void
 xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    Account        *ra;
+   const GUID *guid;
 
-   qof_instance_init (&sx->inst, GNC_ID_SCHEDXACTION, book);
+   qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    sx->schedule = NULL;
-   sx->freq = xaccFreqSpecMalloc(book);
 
    g_date_clear( &sx->last_date, 1 );
    g_date_clear( &sx->start_date, 1 );
@@ -72,8 +87,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct,
-                       guid_to_string( &sx->inst.entity.guid ));
+   guid = qof_instance_get_guid( sx );
+   xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
    xaccAccountSetCommodity(
       sx->template_acct,
       gnc_commodity_new( book,
@@ -90,9 +105,9 @@ xaccSchedXactionMalloc(QofBook *book)
 
    g_return_val_if_fail (book, NULL);
 
-   sx = g_new0( SchedXaction, 1 );
+   sx = g_object_new(GNC_TYPE_SCHEDXACTION, NULL);
    xaccSchedXactionInit( sx, book );
-   qof_event_gen( &sx->inst.entity, QOF_EVENT_CREATE , NULL);
+   qof_event_gen( &sx->inst, QOF_EVENT_CREATE , NULL);
 
    return sx;
 }
@@ -158,8 +173,7 @@ xaccSchedXactionFree( SchedXaction *sx )
       
   if ( sx == NULL ) return;
   
-  xaccFreqSpecFree( sx->freq );
-  qof_event_gen( &sx->inst.entity, QOF_EVENT_DESTROY , NULL);
+  qof_event_gen( &sx->inst, QOF_EVENT_DESTROY , NULL);
   
   if ( sx->name )
     g_free( sx->name );
@@ -188,8 +202,8 @@ xaccSchedXactionFree( SchedXaction *sx )
           sx->deferredList = NULL;
   }
   
-  qof_instance_release (&sx->inst);
-  g_free( sx );
+  /* qof_instance_release (&sx->inst); */
+  g_object_unref( sx );
 }
 
 /* ============================================================ */
@@ -207,7 +221,7 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 
 static void commit_done(QofInstance *inst)
 {
-  qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
+  qof_event_gen (inst, QOF_EVENT_MODIFY, NULL);
 }
 
 static void noop(QofInstance *inst) {}
@@ -221,26 +235,8 @@ gnc_sx_commit_edit (SchedXaction *sx)
 
 /* ============================================================ */
 
-FreqSpec *
-xaccSchedXactionGetFreqSpec( SchedXaction *sx )
-{
-   return sx->freq;
-}
-
-void
-xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
-{
-   g_return_if_fail( fs );
-
-   gnc_sx_begin_edit(sx);
-   xaccFreqSpecFree( sx->freq );
-   sx->freq = fs;
-   qof_instance_set_dirty(&sx->inst);
-   gnc_sx_commit_edit(sx);
-}
-
 GList*
-gnc_sx_get_schedule(SchedXaction *sx)
+gnc_sx_get_schedule(const SchedXaction *sx)
 {
    return sx->schedule;
 }
@@ -248,7 +244,7 @@ gnc_sx_get_schedule(SchedXaction *sx)
 void
 gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
 {
-   g_return_if_fail(sx && schedule);
+   g_return_if_fail(sx);
    gnc_sx_begin_edit(sx);
    sx->schedule = schedule;
    qof_instance_set_dirty(&sx->inst);
@@ -256,7 +252,7 @@ gnc_sx_set_schedule(SchedXaction *sx, GList *schedule)
 }
 
 gchar *
-xaccSchedXactionGetName( SchedXaction *sx )
+xaccSchedXactionGetName( const SchedXaction *sx )
 {
    return sx->name;
 }
@@ -291,7 +287,7 @@ xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 }
 
 gboolean
-xaccSchedXactionHasEndDate( SchedXaction *sx )
+xaccSchedXactionHasEndDate( const SchedXaction *sx )
 {
    return g_date_valid( &sx->end_date );
 }
@@ -329,54 +325,61 @@ xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 }
 
 void
-xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
+xaccSchedXactionSetLastOccurDate(SchedXaction *sx, GDate* new_last_occur)
 {
+  if (g_date_valid(&sx->last_date)
+      && g_date_compare(&sx->last_date, new_last_occur) == 0)
+    return;
   gnc_sx_begin_edit(sx);
-  sx->last_date = *newLastOccur;
+  sx->last_date = *new_last_occur;
   qof_instance_set_dirty(&sx->inst);
   gnc_sx_commit_edit(sx);
 }
 
 gboolean
-xaccSchedXactionHasOccurDef( SchedXaction *sx )
+xaccSchedXactionHasOccurDef( const SchedXaction *sx )
 {
   return ( xaccSchedXactionGetNumOccur( sx ) != 0 );
 }
 
 gint
-xaccSchedXactionGetNumOccur( SchedXaction *sx )
+xaccSchedXactionGetNumOccur( const SchedXaction *sx )
 {
   return sx->num_occurances_total;
 }
 
 void
-xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
+xaccSchedXactionSetNumOccur(SchedXaction *sx, gint new_num)
 {
+  if (sx->num_occurances_total == new_num)
+    return;
   gnc_sx_begin_edit(sx);
-  sx->num_occurances_remain = sx->num_occurances_total = newNum;
+  sx->num_occurances_remain = sx->num_occurances_total = new_num;
   qof_instance_set_dirty(&sx->inst);
   gnc_sx_commit_edit(sx);
 }
 
 gint
-xaccSchedXactionGetRemOccur( SchedXaction *sx )
+xaccSchedXactionGetRemOccur( const SchedXaction *sx )
 {
   return sx->num_occurances_remain;
 }
 
 void
-xaccSchedXactionSetRemOccur( SchedXaction *sx,
-                             gint numRemain )
+xaccSchedXactionSetRemOccur(SchedXaction *sx, gint num_remain)
 {
   /* FIXME This condition can be tightened up */
-  if ( numRemain > sx->num_occurances_total ) 
+  if (num_remain > sx->num_occurances_total)
   {
-    g_warning("The number remaining is greater than the total occurrences");
+    g_warning("number remaining [%d] > total occurrences [%d]",
+              num_remain, sx->num_occurances_total);
   }
   else
   {
+    if (num_remain == sx->num_occurances_remain)
+      return;
     gnc_sx_begin_edit(sx);
-    sx->num_occurances_remain = numRemain;
+    sx->num_occurances_remain = num_remain;
     qof_instance_set_dirty(&sx->inst);
     gnc_sx_commit_edit(sx);
   }
@@ -384,7 +387,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 
 
 KvpValue *
-xaccSchedXactionGetSlot( SchedXaction *sx, const char *slot )
+xaccSchedXactionGetSlot( const SchedXaction *sx, const char *slot )
 {
   if (!sx) return NULL;
 
@@ -405,7 +408,7 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 }
 
 gboolean
-xaccSchedXactionGetEnabled( SchedXaction *sx )
+xaccSchedXactionGetEnabled( const SchedXaction *sx )
 {
     return sx->enabled;
 }
@@ -420,7 +423,7 @@ xaccSchedXactionSetEnabled( SchedXaction *sx, gboolean newEnabled)
 }
 
 void
-xaccSchedXactionGetAutoCreate( SchedXaction *sx,
+xaccSchedXactionGetAutoCreate( const SchedXaction *sx,
                                gboolean *outAutoCreate,
                                gboolean *outNotify )
 {
@@ -446,7 +449,7 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
 }
 
 gint
-xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
+xaccSchedXactionGetAdvanceCreation( const SchedXaction *sx )
 {
   return sx->advanceCreateDays;
 }
@@ -461,7 +464,7 @@ xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 }
 
 gint
-xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
+xaccSchedXactionGetAdvanceReminder( const SchedXaction *sx )
 {
    return sx->advanceRemindDays;
 }
@@ -587,7 +590,7 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 }
 
 gint
-gnc_sx_get_instance_count( SchedXaction *sx, void *stateData )
+gnc_sx_get_instance_count( const SchedXaction *sx, void *stateData )
 {
   gint toRet = -1;
   temporalStateData *tsd;
@@ -603,14 +606,16 @@ gnc_sx_get_instance_count( SchedXaction *sx, void *stateData )
 }
 
 void
-gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum )
+gnc_sx_set_instance_count(SchedXaction *sx, gint instance_num)
 {
-  g_return_if_fail( sx );
-  sx->instance_num = instanceNum;
+  g_return_if_fail(sx);
+  if (sx->instance_num == instance_num)
+    return;
+  sx->instance_num = instance_num;
 }
 
 GList *
-xaccSchedXactionGetSplits( SchedXaction *sx )
+xaccSchedXactionGetSplits( const SchedXaction *sx )
 {
   g_return_val_if_fail( sx, NULL );
   return xaccAccountGetSplitList(sx->template_acct);
@@ -702,6 +707,8 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
     xaccTransSetDescription(new_trans, 
              gnc_ttinfo_get_description(tti));
 
+    xaccTransSetDatePostedSecs(new_trans, time(NULL));
+
     xaccTransSetNum(new_trans,
           gnc_ttinfo_get_num(tti));
     xaccTransSetCurrency( new_trans,
@@ -785,12 +792,14 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 
    if ( !tsd_a && !tsd_b )
       return 0;
+   if (tsd_a == tsd_b)
+      return 0;
    if ( !tsd_a )
       return 1;
    if ( !tsd_b )
       return -1;
    return g_date_compare( &tsd_a->last_date,
-                &tsd_b->last_date );
+                          &tsd_b->last_date );
 }
 
 /**
@@ -800,9 +809,9 @@ _temporal_state_data_cmp( gconstpointer a, gconstpointer b )
 void
 gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_insert_sorted( sx->deferredList,
-                   deferStateData,
-                   _temporal_state_data_cmp );
+    sx->deferredList = g_list_insert_sorted( sx->deferredList,
+                                             deferStateData,
+                                             _temporal_state_data_cmp );
 }
 
 /**
@@ -812,7 +821,17 @@ gnc_sx_add_defer_instance( SchedXaction *sx, void *deferStateData )
 void
 gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 {
-   sx->deferredList = g_list_remove( sx->deferredList, deferStateData );
+    GList *found_by_value;
+
+    found_by_value = g_list_find_custom(
+        sx->deferredList, deferStateData, _temporal_state_data_cmp);
+    if (found_by_value == NULL) {
+        g_warning("unable to find deferred instance");
+        return;
+    }
+
+    gnc_sx_destroy_temporal_state(found_by_value->data);
+    sx->deferredList = g_list_delete_link(sx->deferredList, found_by_value);
 }
 
 /**
@@ -846,8 +865,6 @@ gboolean
 SXRegister(void)
 {
 	static QofParam params[] = {
-	 { GNC_SX_FREQ_SPEC, QOF_ID_FREQSPEC, (QofAccessFunc)xaccSchedXactionGetFreqSpec,
-		 (QofSetterFunc)xaccSchedXactionSetFreqSpec },
 	 { GNC_SX_NAME, QOF_TYPE_STRING, (QofAccessFunc)xaccSchedXactionGetName,
 		 (QofSetterFunc)xaccSchedXactionSetName },
 	 { GNC_SX_START_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetStartDate,

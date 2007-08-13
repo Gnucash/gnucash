@@ -160,13 +160,7 @@ typedef struct QofBackend_s QofBackend;
 /** \brief DOCUMENT ME! */
 typedef void (*QofBePercentageFunc) (const char *message, double percent);
 
-/** @name Allow access to the begin routine for this backend.
-
-QOF_BEGIN_EDIT and QOF_COMMIT_EDIT_PART1 and part2 rely on 
-calling QofBackend *be->begin and be->commit. This means the
-QofBackend struct becomes part of the public API.
-These function replaces those calls to allow the macros to be
-used when QOF is built as a library. */
+/** @name Allow access to the begin routine for this backend. */
 //@{
 
 void qof_backend_run_begin(QofBackend *be, QofInstance *inst);

@@ -25,7 +25,6 @@
 
 #include "config.h"
 
-#include <FreqSpec.h>
 #include <glib.h>
 #include "gnc-dense-cal-model.h"
 #include <gtk/gtk.h>
@@ -54,35 +53,38 @@ enum GDC_COLORS
 
 struct _GncDenseCal
 {
-     GtkWidget widget;
+    GtkVBox widget;
 
-     GdkPixmap *drawbuf;
+    GtkComboBox *view_options;
+    GtkDrawingArea *cal_drawing_area;
 
-     gboolean initialized;
+    GdkPixmap *drawbuf;
+    
+    gboolean initialized;
 
-     gboolean showPopup;
-     GtkWindow *transPopup;
+    gboolean showPopup;
+    GtkWindow *transPopup;
 
-     gint min_x_scale;
-     gint min_y_scale;
+    gint min_x_scale;
+    gint min_y_scale;
 
-     gint x_scale;
-     gint y_scale;
+    gint x_scale;
+    gint y_scale;
 
-     gint numMonths;
-     gint monthsPerCol;
-     gint num_weeks; /* computed */
+    gint numMonths;
+    gint monthsPerCol;
+    gint num_weeks; /* computed */
 
-     GDateMonth month;
-     gint year;
-     gint firstOfMonthOffset;
+    GDateMonth month;
+    gint year;
+    gint firstOfMonthOffset;
 
-     gint leftPadding;
-     gint topPadding;
+    gint leftPadding;
+    gint topPadding;
 
-     gdc_month_coords monthPositions[12];
+    gdc_month_coords monthPositions[12];
 
-     GdkColor weekColors[MAX_COLORS];
+    GdkColor weekColors[MAX_COLORS];
 
     guint label_width;
     guint label_height;
@@ -91,6 +93,8 @@ struct _GncDenseCal
     GncDenseCalModel *model;
 
     guint lastMarkTag;
+
+    gint week_starts_monday;
 
     /**
      * A GList of gdc_mark_data structs, one for each active/valid markTag.
@@ -105,7 +109,7 @@ struct _GncDenseCal
 
 struct _GncDenseCalClass
 {
-    GtkWidgetClass parent_class;
+    GtkVBoxClass parent_class;
 };
 
 typedef struct _gdc_mark_data
@@ -124,17 +128,19 @@ GtkWidget*     gnc_dense_cal_new_with_model         (GncDenseCalModel *model);
 GType          gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
+
 void gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon);
+GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 /**
  * @param year Julian year: 2000 = 2000AD.
  **/
 void gnc_dense_cal_set_year( GncDenseCal *dcal, guint year );
-void gnc_dense_cal_set_num_months( GncDenseCal *dcal, guint num_months );
-void gnc_dense_cal_set_months_per_col( GncDenseCal *dcal, guint monthsPerCol );
-
-guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
-GDateMonth gnc_dense_cal_get_month( GncDenseCal *dcal );
 GDateYear gnc_dense_cal_get_year( GncDenseCal *dcal );
+
+void gnc_dense_cal_set_num_months( GncDenseCal *dcal, guint num_months );
+guint gnc_dense_cal_get_num_months( GncDenseCal *dcal );
+
+void gnc_dense_cal_set_months_per_col( GncDenseCal *dcal, guint monthsPerCol );
 
 G_END_DECLS
 

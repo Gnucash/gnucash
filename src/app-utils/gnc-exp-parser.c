@@ -86,7 +86,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
 
   if ( addPredefined ) {
     filename = gnc_exp_parser_filname();
-    key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE);
+    key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE, NULL);
     if (key_file) {
       keys = g_key_file_get_keys(key_file, GROUP_NAME, NULL, NULL);
       for (key = keys; key && *key; key++) {
@@ -136,7 +136,7 @@ gnc_exp_parser_shutdown (void)
   key_file = g_key_file_new();
   g_hash_table_foreach (variable_bindings, set_one_key, key_file);
   g_key_file_set_comment(key_file, GROUP_NAME, NULL,
-			 _(" Variables are in the form 'name=value'"),
+			 " Variables are in the form 'name=value'",
 			 NULL);
   gnc_key_file_save_to_file(filename, key_file, NULL);
   g_key_file_free(key_file);

@@ -531,13 +531,12 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     return;
 
   leader = gnc_ledger_display_leader( gsr->ledger );
-  euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
 
   commodity = xaccAccountGetCommodity( leader );
 
   /* no EURO converson, if account is already EURO or no EURO currency */
   if (commodity != NULL)
-    euro = (euro && gnc_is_euro_currency( commodity ) && 
+    euro = (gnc_is_euro_currency( commodity ) &&
             (strncasecmp(gnc_commodity_get_mnemonic(commodity), "EUR", 3)));
   else
     euro = FALSE;

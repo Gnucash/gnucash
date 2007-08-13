@@ -46,78 +46,8 @@
 
 #include "gnc-gconf-utils.h"
 
-#define LOG_MOD "gnc.backend.file.sx"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
-
-/**
- * The XML output should look something like:
- * <gnc:count-data cd:type="schedXaction">XXX</gnc:count-data>
- * ...
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Rent</sx:name>
- *   <sx:enabled>y</sx:enabled>
- *   <sx:autoCreate>y</sx:autoCreate>
- *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
- *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
- *   <sx:advanceRemindDays>5</sx:advanceRemindDays>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:lastOccur>
- *     <gdate>2001-02-28</gdate>
- *   </sx:lastOccur>
- *   <sx:start>
- *     <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <!-- no end -->
- *   <sx:freq>
- *     <!-- freq spec tree -->
- *   </sx:freq>
- *   <sx:deferredInstance>
- *     <sx:last>2001-10-02</sx:last>
- *     [...]
- *   </sx:deferredInstance>
- *   [...]
- * </gnc:schedxaction>
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Loan 1</sx:name>
- *   <sx:manual-conf>f</sx:manual-conf>
- *   <sx:start>
- *      <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <sx:end type="date">
- *     <gdate>2004-03-20</gdate>
- *   </sx:end>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:freq>
- *     <!-- freqspec tree -->
- *   </sx:freq>
- * </gnc:schedxaction>
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Loan 2</sx:name>
- *   <sx:manual-conf>f</sx:manual-conf>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:start>
- *      <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <sx:end type="num_occur">
- *     <sx:num>42</sx:num>
- *   </sx:end>
- *   <sx:freq>
- *     <!-- freqspec tree -->
- *   </sx:freq>
- * </gnc:schedxaction>
- * 
- * et-cetera...
- * bleh.
- **/
-
-/* 
- * All tags should be #defined here 
- */
+#define G_LOG_DOMAIN "gnc.backend.file.sx"
 
 #define SX_ID                   "sx:id"
 #define SX_NAME                 "sx:name"
@@ -157,24 +87,14 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     GDate	*date;
     gint        instCount;
     const GUID        *templ_acc_guid;
-    gboolean allow_incompat = FALSE;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    gboolean allow_2_2_incompat = TRUE;
 
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
     ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
 
-    if (allow_incompat)
+    if (allow_2_2_incompat)
         xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version2_string);
     else
         xmlSetProp(ret, BAD_CAST "version", BAD_CAST schedxaction_version_string);
@@ -185,7 +105,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
 
-    if (allow_incompat)
+    if (allow_2_2_incompat)
     {
         xmlNewTextChild( ret, NULL, BAD_CAST SX_ENABLED,
                          BAD_CAST ( sx->enabled ? "y" : "n" ) );
@@ -231,14 +151,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
 
-    /* output freq spec */
-    fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
-    xmlAddChild( fsNode,
-                 gnc_freqSpec_dom_tree_create(
-                         xaccSchedXactionGetFreqSpec(sx)) );
-    xmlAddChild( ret, fsNode );
-
-    if (allow_incompat)
+    if (allow_2_2_incompat)
     {
         xmlNodePtr schedule_node = xmlNewNode(NULL, "sx:schedule");
         GList *schedule = gnc_sx_get_schedule(sx);
@@ -449,6 +362,52 @@ sx_end_handler( xmlNodePtr node, gpointer sx_pdata )
     return sx_set_date( node, sx, xaccSchedXactionSetEndDate );
 }
 
+static void
+_fixup_recurrence_start_dates(GDate *sx_start_date, GList *schedule)
+{
+    GList *iter;
+    for (iter = schedule; iter != NULL; iter = iter->next) {
+        Recurrence *r;
+        GDate start, next;
+
+        r = (Recurrence*)iter->data;
+
+        start = *sx_start_date;
+        g_date_subtract_days(&start, 1);
+
+        g_date_clear(&next, 1);
+
+        recurrenceNextInstance(r, &start, &next);
+        g_return_if_fail(g_date_valid(&next));
+
+        {
+            gchar date_str[128];
+            gchar *sched_str;
+
+            g_date_strftime(date_str, 127, "%x", &next);
+            sched_str = recurrenceToString(r);
+            g_debug("setting recurrence [%s] start date to [%s]",
+                    sched_str, date_str);
+            g_free(sched_str);
+        }
+
+        recurrenceSet(r,
+                      recurrenceGetMultiplier(r),
+                      recurrenceGetPeriodType(r), 
+                      &next);
+    }
+
+    if (g_list_length(schedule) == 1
+        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
+    {
+        char date_buf[128];
+        Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
+        g_date_strftime(date_buf, 127, "%x", sx_start_date);
+        recurrenceSet(fixup, 1, PERIOD_ONCE, sx_start_date);
+        g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
+    }
+}
+
 static gboolean
 sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 {
@@ -458,21 +417,11 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 
     g_return_val_if_fail( node, FALSE );
 
-    xaccSchedXactionSetFreqSpec(sx, dom_tree_to_freqSpec(node, pdata->book));
-
     schedule = dom_tree_freqSpec_to_recurrences(node, pdata->book);
     gnc_sx_set_schedule(sx, schedule);
     g_debug("parsed from freqspec [%s]", recurrenceListToString(schedule));
-    if (g_list_length(schedule) == 1
-        && recurrenceGetPeriodType((Recurrence*)g_list_nth_data(schedule, 0)) == PERIOD_ONCE)
-    {
-        char date_buf[128];
-        Recurrence *fixup = (Recurrence*)g_list_nth_data(schedule, 0);
-        g_date_strftime(date_buf, 127, "%x", xaccSchedXactionGetStartDate(sx));
-        recurrenceSet(fixup, 1, PERIOD_ONCE, xaccSchedXactionGetStartDate(sx));
-        g_debug("fixed up period=ONCE Recurrence to date [%s]", date_buf);
-    }
 
+    _fixup_recurrence_start_dates(xaccSchedXactionGetStartDate(sx), schedule);
     pdata->saw_freqspec = TRUE;
 
     return TRUE;
@@ -504,7 +453,7 @@ sx_recurrence_handler(xmlNodePtr node, gpointer _pdata)
 
     if (!dom_tree_generic_parse(node, sx_recurrence_list_handlers, &schedule))
         return FALSE;
-    g_return_val_if_fail(schedule, FALSE);
+    // g_return_val_if_fail(schedule, FALSE);
     g_debug("setting freshly-parsed schedule: [%s]", recurrenceListToString(schedule));
     gnc_sx_set_schedule(parsing_data->sx, schedule);
     parsing_data->saw_recurrence = TRUE;

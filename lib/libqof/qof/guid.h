@@ -25,6 +25,7 @@
 #define GUID_H 
 
 #include <stddef.h>
+#include <glib-object.h>
 
 /** @addtogroup Entity
     @{ */
@@ -58,6 +59,12 @@ typedef union _GUID
                    * aligned on systems that need them to be. */
 } GUID;
 
+
+#define GNC_TYPE_GUID (gnc_guid_get_type())
+#define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
+
+GType gnc_guid_get_type (void); 
+G_CONST_RETURN GUID* gnc_value_get_guid (const GValue *value); 
 
 /** number of characters needed to encode a guid as a string
  * not including the null terminator. */
@@ -143,6 +150,8 @@ GUID * guid_malloc (void);
 
 /* Return a guid set to all zero's */
 void   guid_free (GUID *guid);
+
+GUID *guid_copy (const GUID *guid);
 
 /** The guid_to_string() routine returns a null-terminated string 
  *  encoding of the id. String encodings of identifiers are hex 

@@ -78,14 +78,15 @@ static QofLogModule log_module = GNC_MOD_LOT;
 gboolean 
 xaccAccountHasTrades (Account *acc)
 {
-   SplitList *node;
+   SplitList *splits, *node;
 
    if (!acc) return FALSE;
 
    if (xaccAccountIsPriced (acc))
       return TRUE;
       
-   for (node=acc->splits; node; node=node->next)
+   splits = xaccAccountGetSplitList(acc);
+   for (node=splits; node; node=node->next)
    {
       Split *s = node->data;
       Transaction *t = s->parent;
@@ -268,6 +269,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   KvpFrame *cwd;
   KvpValue *vvv;
   const char * cur_name;
+  gnc_commodity *acc_comm;
 
   if (!acc || !gain_acct) return;
 
@@ -275,12 +277,13 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
   cwd = kvp_frame_get_frame_slash (cwd, "/lot-mgmt/gains-act/");
 
   /* Accounts are indexed by thier unique currency name */
-  cur_name = gnc_commodity_get_unique_name (acc->commodity);
+  acc_comm = xaccAccountGetCommodity(acc);
+  cur_name = gnc_commodity_get_unique_name (acc_comm);
 
   xaccAccountBeginEdit (acc);
   vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
   kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-  xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+  qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
   xaccAccountCommitEdit (acc);
 }
 
@@ -305,7 +308,7 @@ xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
   vvv = kvp_frame_get_slot (cwd, cur_name);
   gain_acct_guid = kvp_value_get_guid (vvv);
 
-  gain_acct = xaccAccountLookup (gain_acct_guid, acc->inst.book);
+  gain_acct = xaccAccountLookup (gain_acct_guid, qof_instance_get_book(acc));
   return gain_acct;
 }
 
@@ -333,7 +336,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
   vvv = kvp_frame_get_slot (cwd, cur_name);
   gain_acct_guid = kvp_value_get_guid (vvv);
 
-  gain_acct = xaccAccountLookup (gain_acct_guid, acc->inst.book);
+  gain_acct = xaccAccountLookup (gain_acct_guid, qof_instance_get_book(acc));
 
   /* If there is no default place to put gains/losses 
    * for this account, then create such a place */
@@ -347,7 +350,7 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 
       vvv = kvp_value_new_guid (xaccAccountGetGUID (gain_acct));
       kvp_frame_set_slot_nc (cwd, cur_name, vvv);
-      xaccAccountSetSlots_nc (acc, acc->inst.kvp_data);
+      qof_instance_set_slots(QOF_INSTANCE(acc), acc->inst.kvp_data);
       xaccAccountCommitEdit (acc);
 
   }
@@ -524,7 +527,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
       /* Put the remainder of the balance into a new split, 
        * which is in other respects just a clone of this one. */
-      new_split = xaccMallocSplit (acc->inst.book);
+      new_split = xaccMallocSplit (qof_instance_get_book(acc));
 
       /* Copy most of the split attributes */
       xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
@@ -573,7 +576,7 @@ MakeDefaultLot (Account *acc)
    gint64 id;
    char buff[200];
 
-   lot = gnc_lot_new (acc->inst.book);
+   lot = gnc_lot_new (qof_instance_get_book(acc));
 
    /* Provide a reasonable title for the new lot */
    id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
@@ -611,7 +614,7 @@ xaccSplitAssign (Split *split)
 
    ENTER ("(split=%p)", split);
 
-   pcy = acc->policy;
+   pcy = gnc_account_get_policy(acc);
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
@@ -657,7 +660,7 @@ xaccSplitGetCapGainsSplit (const Split *split)
 
    /* Both splits will be in the same collection, so search there. */
    gains_split = (Split*) qof_collection_lookup_entity (
-       split->inst.entity.collection, gains_guid);
+       qof_instance_get_collection(split), gains_guid);
    PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }
@@ -680,7 +683,7 @@ xaccSplitGetGainsSourceSplit (const Split *split)
 
    /* Both splits will be in the same collection, so search there. */
    source_split = (Split*) qof_collection_lookup_entity(
-       split->inst.entity.collection, source_guid);
+       qof_instance_get_collection(split), source_guid);
    PINFO ("split=%p has source-split=%p", split, source_split);
    return source_split;
 }
@@ -704,7 +707,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!split) return;
    lot = split->lot;
    if (!lot) return;
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    currency = split->parent->common_currency;
 
    ENTER ("(split=%p gains=%p status=0x%x lot=%s)", split, 
@@ -940,7 +943,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       if (NULL == lot_split)
       {
          Account *lot_acc = lot->account;
-         QofBook *book = lot_acc->inst.book;
+         QofBook *book = qof_instance_get_book(lot_acc);
 
          new_gain_split = TRUE;
          
@@ -1095,7 +1098,7 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
     * to mark all splits dirty if the opening splits are dirty. */
 
    ENTER("(lot=%p)", lot);
-   pcy = lot->account->policy;
+   pcy = gnc_account_get_policy(lot->account);
    for (node = lot->splits; node; node = node->next)
    {
       Split *s = node->data;

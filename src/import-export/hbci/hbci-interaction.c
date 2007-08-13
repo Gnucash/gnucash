@@ -40,6 +40,8 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-component-manager.h"
+#include "gnc-session.h"
 
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
@@ -70,13 +72,16 @@
 GWEN_INHERIT(AB_BANKING, GNCInteractor)
 
 #define GCONF_SECTION_CONNECTION GCONF_SECTION "/connection_dialog"
+#define DIALOG_HBCILOG_CM_CLASS "dialog-hbcilog"
 
 gchar *gnc__extractText(const char *text);
+static void cm_close_handler(gpointer user_data);
 
 /** Adds the interactor and progressmonitor classes to the api. */
 GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
 {
   GNCInteractor *data;
+  gint component_id;
   
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
@@ -93,6 +98,11 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
   data->min_loglevel = AB_Banking_LogLevelVerbous;
+
+  component_id = gnc_register_gui_component(DIALOG_HBCILOG_CM_CLASS,
+					    NULL, cm_close_handler,
+					    data);
+  gnc_gui_component_set_session(component_id, gnc_get_current_session());
 
   /* set HBCI_Interactor */
   gnc_hbci_add_callbacks(api, data);
@@ -113,6 +123,8 @@ void GNCInteractor_delete(GNCInteractor *data)
     gtk_widget_destroy (data->dialog);
   }
   
+  gnc_unregister_gui_component_by_data(DIALOG_HBCILOG_CM_CLASS, data);
+
   data->dialog = NULL;
 
   g_hash_table_destroy(data->showbox_hash);
@@ -822,6 +834,37 @@ on_button_clicked (GtkButton *button,
   /* Let the widgets be redrawn */
   context = g_main_context_default();
   while (g_main_context_iteration(context, FALSE));
+}
+
+static void
+cm_close_handler(gpointer user_data)
+{
+  GNCInteractor *data = user_data;
+
+  GNCInteractor_setAborted(data);
+  /* Notes about correctly handling this ComponentManager close event:
+     We can't actually close the dialog here because AqBanking might
+     still be running and expecting the GNCInteractor object to exist
+     (and it doesn't offer any handlers for aborting from here). This
+     is not per se a problem with gnucash objects because as soon as
+     AqBanking received the SetAborted signal, it will abort and not
+     deliver any actual results, which means the gnc-hbci module will
+     not continue any operation. 
+
+     However, the dialog and the AB_BANKING object will still be
+     around. It is unclear whether this is 1. correct or 2. wrong:
+     1. It might be correct because a user might still want to see the
+     log messages in the window until he manually closes the
+     GNCInteractor. 2. It might be wrong because once we've received
+     the close event, nobody wants to see the GNCInteractor log
+     messages anyway. To implement the behaviour #2, we should add a
+     new flag in GNCInteractor that is being queried in
+     gnc_AB_BANKING_execute() right after AB_Banking_ExecuteQueue()
+     has finished, and if it is activated from the cm_close_handler,
+     gnc_AB_BANKING_execute should immediately delete the AB_BANKING
+     object (which will also delete the GNCInteractor object) and
+     abort.
+  */
 }
 
 

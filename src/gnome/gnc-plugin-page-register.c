@@ -95,6 +95,7 @@ static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboo
 static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
+static gchar *gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page);
 
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
@@ -146,10 +147,11 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
+static void gnc_plugin_page_register_close_cb (gpointer user_data);
 
 static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
 static void gppr_account_destroy_cb (Account *account);
-static void gnc_plugin_page_register_event_handler (QofEntity *entity,
+static void gnc_plugin_page_register_event_handler (QofInstance *entity,
 						    QofEventId event_type,
 						    GncPluginPageRegister *page,
 						    GncEventData *ed);
@@ -231,7 +233,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
-	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
+	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
 	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
@@ -246,20 +248,18 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ScheduleTransactionAction", GNC_STOCK_SCHEDULE, N_("Sche_dule..."), NULL,
 	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
-	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL,
-	  NULL,
+	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
-	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL,
-	  NULL,
+	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current) },
 
 	/* Reports menu */
 
 	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL,
-	  N_("Open a register report window for this transaction"),
+	  N_("Open a register report for this Account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
 	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL,
-	  N_("Open a register report window for this transaction"),
+	  N_("Open a register report for the selected Transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 
@@ -453,6 +453,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
 	gnc_plugin_page_set_page_name(plugin_page, label);
 	g_free(label);
+
+	label = gnc_plugin_page_register_get_long_name(plugin_page);
+        gnc_plugin_page_set_page_long_name(plugin_page, label);
+        g_free(label);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);
@@ -746,7 +750,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
-				     NULL, page);
+				     gnc_plugin_page_register_close_cb,
+				     page);
 	gnc_gui_component_set_session (priv->component_manager_id,
 				       gnc_get_current_session());
 	acct = gnc_plugin_page_register_get_account(page);
@@ -824,10 +829,10 @@ static const gchar *style_names[] = {
   NULL
 };
 
-#define KEY_REGISTER_TYPE	"Register Type"
-#define KEY_ACCOUNT_NAME	"Account Name"
-#define KEY_REGISTER_STYLE	"Register Style"
-#define KEY_DOUBLE_LINE		"Double Line Mode"
+#define KEY_REGISTER_TYPE       "RegisterType"
+#define KEY_ACCOUNT_NAME        "AccountName"
+#define KEY_REGISTER_STYLE      "RegisterStyle"
+#define KEY_DOUBLE_LINE         "DoubleLineMode"
 
 #define LABEL_ACCOUNT		"Account"
 #define LABEL_SUBACCOUNT	"SubAccount"
@@ -1150,6 +1155,37 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
+}
+
+static gchar *
+gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GNCLedgerDisplayType ledger_type;
+  	GNCLedgerDisplay *ld;
+	SplitRegister *reg;
+	Account *leader;
+
+	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
+
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+	ld = priv->ledger;
+	reg = gnc_ledger_display_get_split_register (ld);
+	ledger_type = gnc_ledger_display_type (ld);
+	leader = gnc_ledger_display_leader (ld);
+
+	switch (ledger_type) {
+	 case LD_SINGLE:
+	  return g_strdup(xaccAccountGetFullName (leader));
+
+	 case LD_SUBACCOUNT:
+	  return g_strdup_printf("%s+", xaccAccountGetFullName (leader));
+
+	 default:
+	  break;
+	}
+
+        return NULL;
 }
 
 /************************************************************/
@@ -1803,10 +1839,6 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
   SplitRegister * reg;
   Split         * split;
   Transaction   * trans;
-  const char    * payee;
-  const char    * memo;
-  gnc_numeric   amount;
-  time_t        date;
 
 
   ENTER("(action %p, plugin_page %p)", action, plugin_page);
@@ -1819,18 +1851,8 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
   trans    = xaccSplitGetParent(split);
 
   if(split && trans)
-  {
-    payee  = xaccTransGetDescription(trans);
-    memo   = xaccTransGetNotes(trans);
-    if (memo == NULL)
-      memo = "";
-    amount = xaccSplitGetAmount(split);
-    amount = gnc_numeric_abs (amount);
-    date   = xaccTransGetDate(trans);
+    gnc_ui_print_check_dialog_create(plugin_page, split);
 
-    gnc_ui_print_check_dialog_create(GNC_PLUGIN_PAGE(plugin_page), 
-                                     payee, amount, date, memo);
-  }
   LEAVE(" ");
 }
 
@@ -2782,6 +2804,13 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   gnc_plugin_page_register_ui_update(NULL, page);
 }
 
+static void
+gnc_plugin_page_register_close_cb (gpointer user_data)
+{
+  GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
+  gnc_main_window_close_page (plugin_page);
+}
+
 /** This function is called when an account has been edited and an
  *  "extreme" change has been made to it.  (E.G. Changing from a
  *  credit card account to an expense account.  This rouine is
@@ -2841,7 +2870,7 @@ gppr_account_destroy_cb (Account *account)
  *  @param ed
  */
 static void
-gnc_plugin_page_register_event_handler (QofEntity *entity,
+gnc_plugin_page_register_event_handler (QofInstance *entity,
 					QofEventId event_type,
 					GncPluginPageRegister *page,
 					GncEventData *ed)

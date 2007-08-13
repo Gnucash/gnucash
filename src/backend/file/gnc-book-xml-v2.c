@@ -100,18 +100,8 @@ traverse_txns (Transaction *txn, gpointer data)
 xmlNodePtr
 gnc_book_dom_tree_create(QofBook *book)
 {
-    xmlNodePtr ret, rootAccNode;
-    gboolean allow_incompat;
-    GError *err = NULL;
-
-    allow_incompat = gnc_gconf_get_bool("dev", "allow_file_incompatibility", &err);
-    if (err != NULL)
-    {
-        g_warning("error getting gconf value [%s]", err->message);
-        g_error_free(err);
-        allow_incompat = FALSE;
-    }
-    g_debug("allow_incompatibility: [%s]", allow_incompat ? "true" : "false");
+    xmlNodePtr ret;
+    gboolean allow_incompat = TRUE;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);
@@ -143,8 +133,6 @@ gnc_book_dom_tree_create(QofBook *book)
 
     xaccAccountTreeForEachTransaction (gnc_book_get_root_account(book),
 				       traverse_txns, ret);
-
-    xmlAddChild(ret, gnc_freqSpec_dom_tree_create (book));
 
     /* xxx FIXME hack alert how are we going to handle 
      *  gnc_book_get_template_group handled ???   */
@@ -196,7 +184,7 @@ book_id_handler(xmlNodePtr node, gpointer book_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    qof_entity_set_guid(QOF_ENTITY(book), guid);
+    qof_instance_set_guid(QOF_INSTANCE(book), guid);
     g_free(guid);
     
     return TRUE;

@@ -7,12 +7,22 @@
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
  *
+ * As a special exception, permission is granted to link the binary module
+ * resultant from this code with the OpenSSL project's "OpenSSL" library (or
+ * modified versions of it that use the same license as the "OpenSSL"
+ * library), and distribute the linked executable.  You must obey the GNU
+ * General Public License in all respects for all of the code used other than
+ * "OpenSSL". If you modify this file, you may extend this exception to your
+ * version of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version of this
+ * file.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License*
+ * You should have received a copy of the GNU General Public License
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
@@ -164,35 +174,6 @@ gnc_dense_cal_store_update_info(GncDenseCalStore *model, gchar *info)
 }
 
 static void
-gdcs_generic_update(GncDenseCalStore *trans, GDate *start, FreqSpec *fs)
-{
-    int i;
-    GDate date;
-
-    date = *start;
-    /* go one day before what's in the box so we can get the correct start
-     * date. */
-    g_date_subtract_days(&date, 1);
-    xaccFreqSpecGetNextInstance(fs, &date, &date);
-
-    i = 0;
-    while ((i < trans->num_marks)
-           && g_date_valid(&date)
-           /* Do checking against end restriction. */
-           && ((trans->end_type == NEVER_END)
-               || (trans->end_type == END_ON_DATE
-                   && g_date_compare(&date, &trans->end_date) <= 0)
-               || (trans->end_type == END_AFTER_N_OCCS
-                   && i < trans->n_occurrences)))
-    {
-        *trans->cal_marks[i++] = date;
-        xaccFreqSpecGetNextInstance(fs, &date, &date);
-    }
-    trans->num_real_marks = (i == 0 ? 0 : (i-1));
-    g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
-}
-
-static void
 gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *recurrences)
 {
     int i;
@@ -220,29 +201,6 @@ gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *re
     }
     trans->num_real_marks = (i == 0 ? 0 : (i-1));
     g_signal_emit_by_name(trans, "update", GUINT_TO_POINTER(1));
-}
-
-void
-gnc_dense_cal_store_update_no_end(GncDenseCalStore *model, GDate *start, FreqSpec *fs)
-{
-    model->end_type = NEVER_END;
-    gdcs_generic_update(model, start, fs);
-}
-
-void
-gnc_dense_cal_store_update_count_end(GncDenseCalStore *model, GDate *start, FreqSpec *fs, int num_occur)
-{
-    model->end_type = END_AFTER_N_OCCS;
-    model->n_occurrences = num_occur;
-    gdcs_generic_update(model, start, fs);
-}
-
-void
-gnc_dense_cal_store_update_date_end(GncDenseCalStore *model, GDate *start, FreqSpec *fs, GDate *end_date)
-{
-    model->end_type = END_ON_DATE;
-    model->end_date = *end_date;
-    gdcs_generic_update(model, start, fs);
 }
 
 void
@@ -289,7 +247,7 @@ gdcs_get_info(GncDenseCalModel *model, guint tag)
 {
     GncDenseCalStore *mdl = GNC_DENSE_CAL_STORE(model);
     // assert(tag == 1)
-    return mdl->info;
+    return g_strdup(mdl->info);
 }
 
 static gint

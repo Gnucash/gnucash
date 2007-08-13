@@ -7,6 +7,16 @@
  * modify it under the terms of version 2 of the GNU General Public
  * License as published by the Free Software Foundation.
  *
+ * As a special exception, permission is granted to link the binary module
+ * resultant from this code with the OpenSSL project's "OpenSSL" library (or
+ * modified versions of it that use the same license as the "OpenSSL"
+ * library), and distribute the linked executable.  You must obey the GNU
+ * General Public License in all respects for all of the code used other than
+ * "OpenSSL". If you modify this file, you may extend this exception to your
+ * version of the file, but you are not obligated to do so. If you do not
+ * wish to do so, delete this exception statement from your version of this
+ * file.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,33 +45,31 @@
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <glade/glade-xml.h>
-#include "gnc-exp-parser.h"
-#include "gnc-engine.h"
-#include "Transaction.h"
+#include "SX-book.h"
 #include "Split.h"
+#include "Transaction.h"
+#include "dialog-sx-editor.h"
+#include "dialog-utils.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
-#include "gnc-event.h"
+#include "gnc-component-manager.h"
 #include "gnc-dense-cal.h"
+#include "gnc-engine.h"
+#include "gnc-event.h"
+#include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
 #include "gnc-icons.h"
-#include "gnc-plugin-page-sx-list.h"
-#include "gnc-tree-view-sx-list.h"
-#include "gnc-sx-instance-model.h"
-#include "gnc-sx-instance-dense-cal-adapter.h"
-#include "gnc-sx-list-tree-model-adapter.h"
-#include "gnc-ui-util.h"
 #include "gnc-main-window.h"
-#include "dialog-utils.h"
-#include "gnc-component-manager.h"
-#include "SX-book.h"
-#include "gnc-book.h"
-#include "dialog-sx-editor.h"
+#include "gnc-plugin-page-sx-list.h"
+#include "gnc-sx-instance-dense-cal-adapter.h"
+#include "gnc-sx-instance-model.h"
+#include "gnc-sx-list-tree-model-adapter.h"
+#include "gnc-tree-view-sx-list.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-#define LOG_MOD "gnc.gui.plugin-page.sx-list"
-static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN LOG_MOD
+#define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define GCONF_SECTION "window/pages/sx_list"
@@ -108,12 +116,12 @@ static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageS
 
 /* Command callbacks */
 static GtkActionEntry gnc_plugin_page_sx_list_actions [] = {
-    { "SxListAction", NULL, N_("Scheduled"), NULL, NULL, NULL },
-    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("New"), NULL,
+    { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
+    { "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
       N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new) },
-    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit"), NULL,
+    { "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
       N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit) },
-    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("Delete"), NULL,
+    { "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
       N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete) },
 };
 /** The number of actions provided by this plugin. */
@@ -346,9 +354,12 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new(GNC_SX_INSTANCE_MODEL(priv->instances));
         priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model(GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
-        // gobject-2.10: g_object_ref_sink(G_OBJECT(priv->gdcal));
+#ifdef HAVE_GTK_2_10
+        g_object_ref_sink(priv->gdcal);
+#else
         g_object_ref(G_OBJECT(priv->gdcal));
         gtk_object_sink(GTK_OBJECT(priv->gdcal));
+#endif
 
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
@@ -408,6 +419,9 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+
+    g_key_file_set_integer(key_file, group_name, "dense_cal_num_months",
+                           gnc_dense_cal_get_num_months(priv->gdcal)); 
 }
 
 /**
@@ -435,6 +449,15 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 
     /* Install it now so we can them manipulate the created widget */
     gnc_main_window_open_page(GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
+
+    {
+        GError *err = NULL;
+        gint num_months = g_key_file_get_integer(key_file, group_name, "dense_cal_num_months", &err);
+        if (err == NULL)
+            gnc_dense_cal_set_num_months(priv->gdcal, num_months);
+        else
+            g_error_free(err);
+    }
 
     return GNC_PLUGIN_PAGE(page);
 }
@@ -532,7 +555,6 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
 
-    /* @@fixme -- add (suppressible?) confirmation dialog */
     selection = gtk_tree_view_get_selection(priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
     if (g_list_length(selected_paths) == 0)
@@ -551,7 +573,16 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
             g_debug("to-delete [%s]\n", xaccSchedXactionGetName((SchedXaction*)list->data));
         }
     }
-    g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+
+    /* FIXME: Does this always refer to only one transaction? Or could
+       multiple SXs be deleted as well? Ideally, the number of
+       to-be-deleted SXs should be mentioned here; see
+       dialog-sx-since-last-run.c:807 */
+    if (gnc_verify_dialog(NULL, FALSE, _("Do you really want to delete this scheduled transaction?")))
+    {
+        g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
+    }
+
     g_list_free(to_delete);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);

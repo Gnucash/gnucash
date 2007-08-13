@@ -33,7 +33,6 @@
 #include "gnc-session.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "FreqSpec.h"
 #include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
@@ -448,9 +447,9 @@ get_random_gnc_numeric(void)
     }
     else
     {
-       gint64 norm = RAND_IN_RANGE (10ULL);
+       gint64 norm = RAND_IN_RANGE (8ULL);
 
-       /* multiple of 10, between 1 and 10 000 million */
+       /* multiple of 10, between 1 and 10 million */
        deno = 1;
        while (norm) 
        {
@@ -462,7 +461,7 @@ get_random_gnc_numeric(void)
     /* Arbitrary random numbers can cause pointless overflow 
      * during calculations.  Limit dynamic range in hopes 
      * of avoiding overflow. */
-    numer = get_random_gint64()/100000;
+    numer = get_random_gint64()/1000000;
     if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
@@ -660,7 +659,7 @@ make_random_changes_to_price (QofBook *book, GNCPrice *p)
   g_free (string);
 
   string = get_random_string ();
-  gnc_price_set_type (p, string);
+  gnc_price_set_typestr (p, string);
   g_free (string);
 
   gnc_price_set_value (p, get_random_gnc_numeric ());
@@ -1200,7 +1199,7 @@ get_random_account(QofBook *book)
 
     xaccAccountSetCommodity(ret, get_random_commodity(book));
 
-    xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
+    qof_instance_set_slots(QOF_INSTANCE(ret), get_random_kvp_frame());
 
     root = gnc_book_get_root_account (book);
     if (!root) 
@@ -1233,7 +1232,7 @@ make_random_changes_to_account (QofBook *book, Account *account)
 
     xaccAccountSetCommodity (account, get_random_commodity(book));
 
-    xaccAccountSetSlots_nc (account, get_random_kvp_frame());
+    qof_instance_set_slots(QOF_INSTANCE(account), get_random_kvp_frame());
 
     xaccAccountCommitEdit (account);
 }
@@ -2131,7 +2130,6 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 static Recurrence*
 daily_freq(GDate* start, int multiplier)
 {
-     QofBook *book = qof_session_get_book(gnc_get_current_session());
      Recurrence *r = g_new0(Recurrence, 1);
      recurrenceSet(r, multiplier, PERIOD_DAY, start);
      return r;
@@ -2140,7 +2138,6 @@ daily_freq(GDate* start, int multiplier)
 static Recurrence*
 once_freq(GDate *when)
 {
-     QofBook *book = qof_session_get_book(gnc_get_current_session());
      Recurrence *r = g_new0(Recurrence, 1);
      recurrenceSet(r, 1, PERIOD_ONCE, when);
      return r;
