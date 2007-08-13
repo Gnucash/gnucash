@@ -471,15 +471,11 @@ class Preferences(GnucashWindow):
             self.findChild(predicate.GenericPredicate(\
             roleName='check box', \
             name='Display "tip of the day" dialog'))
-            self.enable_euro_support = \
-            self.findChild(predicate.GenericPredicate(\
-            roleName='check box', \
-            name='Enable euro support'))
             self.perform_account_list_setup_on_new_file_cb = \
             self.findChild(predicate.GenericPredicate(\
             roleName='check box', \
             name='Perform account list setup on new file'))
-            
+
     class OnlineBanking(Node):
 
         def __init__(self, initializer):
@@ -1070,9 +1066,18 @@ class NewVendor(NewXXX):
         self.invoke_list = ["Business", "Vendor", "New Vendor..."]
         self.dialog_name = 'New Vendor'
 
+    def add_new_vendor (self, company_name=None, name=None, \
+        address_1=None, address_2=None, \
+        phone=None, fax=None, email=None, notes=None):
+        """ A wrapper for add_new_xxx """
+        NewXXX.add_new_XXX(self, company_name, name, \
+        address_1, address_2, \
+        phone, fax, email, notes)
+
     def initialize(self):
         NewXXX.initialize(self)
         self.vendor = self.XXX(self.tab('Vendor'))
+        self.xxx = self.vendor
         self.identification_panel = \
         self.findChild(predicate.GenericPredicate(roleName='panel', name='Identification'))
         self.identification_panel_element = \
@@ -1642,4 +1647,5 @@ class ReconcileFrame(Node):
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
-    # Edit the Invoice
+
+
