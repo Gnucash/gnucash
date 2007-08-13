@@ -195,6 +195,7 @@
 ( "Vanuatu Vatu" "vatu" "centime" "ISO4217" "VUV" "548" 1 1 )
 ( "Venezuelan Bolivar" "bolivar" "centimo" "ISO4217" "VEB" "862" 100 100 )
 ( "Vietnamese Dong" "dong" "hao" "ISO4217" "VND" "704" 100 100 )
+( "Yemeni Riyal" "riyal" "fils" "ISO4217" "YER" "886" 100 100 )
 ( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  "890" 100 100)
 ( "Zambian Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 )
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 )
