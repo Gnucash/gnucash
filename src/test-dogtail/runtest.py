@@ -5,12 +5,12 @@ from os import system
 from GnuCash import *
 import GnuCash
 import types
+import sys
 from validator import *
 
 def appstate (func):
     """ Default application state when start run the application when done close it """
     def wrapper(* args, **kwargs):
-        print "Run GnuCash"
         run('gnucash')
         sleep (10)
         gnuCash = GnuCashApp()
@@ -80,6 +80,7 @@ class SimpleTest(unittest.TestCase):
 class DialogTest(unittest.TestCase):
     """ Test that dialog loaded as expected """
     def setUp(self):
+        cleanup_all()
         run('gnucash')
         sleep (10)
         gnuCash = GnuCashApp()
@@ -196,6 +197,7 @@ class DialogTest(unittest.TestCase):
 class TestDialogs(unittest.TestCase):
     """ Test Each dialog functionality """
     def setUp(self):
+        cleanup_all()
         run('gnucash')
         sleep(20)
         gnuCash = GnuCashApp()
@@ -233,22 +235,22 @@ class TestDialogs(unittest.TestCase):
         test_cell.doAction('activate')
         style_sheet.delete_btn.click()
         # after removing the node confirm that the state resotred to the previous State before Adding
-        assert(validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2') == EXIT_SUCCESS)
+        self.assertEquals(validate_node(style_sheet.style_sheets_table, 'test_style_sheets_2'), EXIT_SUCCESS)
         style_sheet.dismiss()
 
 
 class Business(unittest.TestCase):
     """ Test  Business related dialogs Add/Find object """
     def setUp(self):
-        #cleanup_all()
-        #run('gnucash')
-        #sleep(20)
+        cleanup_all()
+        run('gnucash')
+        sleep(20)
         gnuCash = GnuCashApp()
-        #gnuCash.dismiss_all_dialogs()
+        gnuCash.dismiss_all_dialogs()
 
     def tearDown(self):
         gnuCash = GnuCashApp()
-        #gnuCash.close_without_saving()
+        gnuCash.close_without_saving()
 
     def add_new_customers(self):
         """ normal function used to add the list of customers to be processed
@@ -269,7 +271,7 @@ class Business(unittest.TestCase):
         ['ABC Corp', 'Bob McBob', '123 First Ave.', \
         'Somecity, SS 12345', '515-234-5678','515-235-5679', \
         'abc@abc.com','Bob McBobs, Sales Dept.'],
-        ['ABC Corp', '123 First Ave.', \
+        ['Shipping Contact1', '123 First Ave.', \
         'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
         'abc@abc.com']
         ],
@@ -277,7 +279,7 @@ class Business(unittest.TestCase):
         ['ABC2 Corp', 'Bob2 McBob2', '123 First Ave.', \
         'Somecity, SS 12345', '515-234-5678','515-235-5679', \
         'abc@abc.com','Bob McBobs, Sales Dept.'],
-        ['ABC Corp', '123 First Ave.', \
+        ['Shipping Contact2', '123 First Ave.', \
         'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
         'abc@abc.com']
         ],
@@ -285,7 +287,7 @@ class Business(unittest.TestCase):
         ['ABC3 Corp', 'Bob3 McBob3', '123 First Ave.', \
         'Somecity, SS 12345', '515-234-5678','515-235-5679', \
         'abc@abc.com','Bob McBobs, Sales Dept.'],
-        ['ABC Corp', '123 First Ave.', \
+        ['Shipping Contact3', '123 First Ave.', \
         'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
         'abc@abc.com']
         ],
@@ -293,7 +295,7 @@ class Business(unittest.TestCase):
         ['ABC4 Corp', 'Bob4 McBob4', '123 First Ave.', \
         'Somecity, SS 12345', '515-234-5678','515-235-5679', \
         'abc@abc.com','Bob McBobs, Sales Dept.'],
-        ['ABC Corp', '123 First Ave.', \
+        ['Shipping Contact4', '123 First Ave.', \
         'Somecity, SS 12345', '', '', '515-234-5678','515-235-5679', \
         'abc@abc.com']
         ],
@@ -305,8 +307,47 @@ class Business(unittest.TestCase):
             new_customer.add_new_shipping_address(*customer_info[1])
             new_customer.accept()
 
-    def test_add_new_customer(self):
+    def add_new_vendors(self):
+        """ normal function used to add the list of vendors to be processed
+            list = [
+                [ 
+                    [data in the vendor tab 1],
+                ],
+                [
+                    [data in the vendor tab 2],
+                ],
+            ]
+        """
+        vendor_info_list = [
+        [
+        ['ABC Corp', 'Bob McBob', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ],
+        [
+        ['ABC2 Corp', 'Bob2 McBob2', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ],
+        [
+        ['ABC3 Corp', 'Bob3 McBob3', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ],
+        [
+        ['ABC4 Corp', 'Bob4 McBob4', '123 First Ave.', \
+        'Somecity, SS 12345', '515-234-5678','515-235-5679', \
+        'abc@abc.com','Bob McBobs, Sales Dept.'],
+        ],
+        ]
+        for vendor_info in vendor_info_list:
+            new_vendor = NewVendor()
+            new_vendor.invoke()
+            new_vendor.add_new_vendor(*vendor_info[0])
+            new_vendor.accept()
 
+    def test_add_new_customer(self):
+        """ Test adding new cusotmers """
         self.add_new_customers()
         # Validation by using Find and dump the result table
         find_customer = FindCustomer()
@@ -315,11 +356,11 @@ class Business(unittest.TestCase):
         find_customer.search_by_list[0].combovalue = 'Company Name'
         find_customer.search_by_list[1].combovalue = 'matches regex'
         find_customer.find()
-        assert(validate_node(find_customer.result_table, 'test_add_new_customer') == EXIT_SUCCESS)
+        self.assertEquals(validate_node(find_customer.result_table, 'test_add_new_customer'), EXIT_SUCCESS)
 
     def test_find_customer(self):
-        """ Will be data driven testcase 
-            search_criteria = [
+        """ Test Find Customer 
+        search_criteria = [
                 [
                     [ search_by, search_type, search_term, is case insestive ]
                     [ search criteria 2]
@@ -327,18 +368,36 @@ class Business(unittest.TestCase):
                 [
                     [serch critieria 1 for second testcase]
                 ],
-            ]
-        """
-        #self.add_new_customers()
+            ] """
+        self.add_new_customers()
         search_criteria_list = [
                 [
-                    ['Company Name', 'matches regex', '.', True],
-                    ['Company Name', 'matches regex', '.', True]
+                    ['Company Name', 'matches regex', '.', False], # Get all results
+                ],
+                [
+                    ['Company Name', 'matches regex', '[a-z][0-9]', False],
+                ],
+                [
+                    ['Company Name', 'matches regex', '[a-z][3-9]', False],
                 ],
                 [
                     ['Company Name', 'matches regex', '.', False],
+                    ['Customer ID', 'contains', '1', False],
                 ],
+                [
+                    ['Billing Contact', 'matches regex', 'Bob2', False],
+                ],
+                [
+                    ['Shipping Contact', 'matches regex', '.', False],
+                ],
+                [
+                    ['Shipping Contact', 'matches regex', '[a-z][2-9]', False],
+                    ['Customer ID', 'contains', '2', False],
+                ]
+
+
             ]
+        count = 0
         for test_no, search_criteria in enumerate(search_criteria_list):
             find_customer = FindCustomer()
             find_customer.invoke()
@@ -351,8 +410,81 @@ class Business(unittest.TestCase):
                 if i < (len(search_criteria)-1):
                     find_customer.add_criteria()
             find_customer.find()
-            assert(validate_node(find_customer.result_table, 'test_find_new_customer_%d' % test_no) == EXIT_SUCCESS)
+            try:
+                self.assertEquals(\
+                validate_node(find_customer.result_table, \
+                'test_find_new_customer_%d' % test_no), \
+                EXIT_SUCCESS)
+            except:
+                count = count + 1
             find_customer.dismiss()
+        self.assertEquals(count, 0)
+
+    def test_add_new_vendor(self):
+        """ Test adding new vendors """
+        self.add_new_vendors()
+        # Validation by using Find and dump the result table
+        find_vendor= FindVendor()
+        find_vendor.invoke()
+        find_vendor.text_fields_list[0].text = "."
+        find_vendor.search_by_list[0].combovalue = 'Company Name'
+        find_vendor.search_by_list[1].combovalue = 'matches regex'
+        find_vendor.find()
+        self.assertEquals(validate_node(find_vendor.result_table, 'test_add_new_vendor'), EXIT_SUCCESS)
+
+    def test_find_vendor(self):
+        """ Test Find Customer 
+        search_criteria = [
+                [
+                    [ search_by, search_type, search_term, is case insestive ]
+                    [ search criteria 2]
+                ],
+                [
+                    [serch critieria 1 for second testcase]
+                ],
+            ] """
+        self.add_new_vendors()
+        search_criteria_list = [
+                [
+                    ['Company Name', 'matches regex', '.', False], # Get all results
+                ],
+                [
+                    ['Company Name', 'matches regex', '[a-z][0-9]', False],
+                ],
+                [
+                    ['Company Name', 'matches regex', '[a-z][3-9]', False],
+                ],
+                [
+                    ['Company Name', 'matches regex', '.', False],
+                    ['Vendor ID', 'contains', '1', False],
+                ],
+                [
+                    ['Billing Contact', 'matches regex', 'Bob2', False],
+                ],
+
+            ]
+        count = 0
+        for test_no, search_criteria in enumerate(search_criteria_list):
+            find_vendor = FindVendor()
+            find_vendor.invoke()
+            for i,criteria in enumerate(search_criteria):
+                find_vendor.search_by_list[0].combovalue = criteria[0]
+                find_vendor.search_by_list[1].combovalue = criteria[1]
+                find_vendor.text_fields_list[0].text = criteria[2]
+                if criteria[3]:
+                    find_vendor.is_case_insensitive_list[0].click()
+                if i < (len(search_criteria)-1):
+                    find_vendor.add_criteria()
+            find_vendor.find()
+            try:
+                self.assertEquals(\
+                validate_node(find_vendor.result_table, \
+                'test_find_vendor_%d' % test_no), \
+                EXIT_SUCCESS)
+            except:
+                count = count + 1
+            find_vendor.dismiss()
+        self.assertEquals(count, 0)
 
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
@@ -406,7 +538,7 @@ class ScenarioTest(unittest.TestCase):
             gnucash.add_account(*account)
         # Validation
         account_tab = gnucash.tab('Accounts')
-        assert(validate_node(account_tab, 'test_new_account_dialog') == EXIT_SUCCESS)
+        self.assertEquals(validate_node(account_tab, 'test_new_account_dialog'), EXIT_SUCCESS)
 
     def test_perform_transaction(self):
         """ Call the previos test case and then perform some transaction 
@@ -442,7 +574,7 @@ class ScenarioTest(unittest.TestCase):
         register.end_trans()
         # Validation
         account_tab = gnucash.tab('Accounts')
-        assert(validate_node(account_tab, 'test_perform_transaction') == EXIT_SUCCESS)
+        self.assertEquals(validate_node(account_tab, 'test_perform_transaction'), EXIT_SUCCESS)
 
     def test_perform_reconcilation(self):
         """ Test Reconcilation """
@@ -452,9 +584,12 @@ class ScenarioTest(unittest.TestCase):
         reconcile.include_subaccount = True
         reconcile.accept()
         reconcileFrame = ReconcileFrame()
-        assert(validate_node(reconcileFrame.funds_in, 'test_before_perform_reconcilation_funds_in') == EXIT_SUCCESS)
-        assert(validate_node(reconcileFrame.funds_out, 'test_before_perform_reconcilation_funds_out') == EXIT_SUCCESS)
-
+        self.assertEquals(\
+        validate_node(reconcileFrame.funds_in, \
+        'test_before_perform_reconcilation_funds_in'), EXIT_SUCCESS)
+        self.assertEquals(\
+        validate_node(reconcileFrame.funds_out, \
+        'test_before_perform_reconcilation_funds_out'), EXIT_SUCCESS)
         reconcileFrame.select_all_funds_out()
         reconcileFrame.select_all_funds_in()
         reconcileFrame.finish()
@@ -463,8 +598,12 @@ class ScenarioTest(unittest.TestCase):
         reconcile = gnucash.reconcile_account('Asset')
         reconcile.accept()
         reconcileFrame = ReconcileFrame()
-        assert(validate_node(reconcileFrame.funds_in, 'test_after_perform_reconcilation_funds_in') == EXIT_SUCCESS)
-        assert(validate_node(reconcileFrame.funds_out, 'test_after_perform_reconcilation_funds_out') == EXIT_SUCCESS)
+        self.assertEquals(\
+        validate_node(reconcileFrame.funds_in, \
+        'test_after_perform_reconcilation_funds_in'), EXIT_SUCCESS)
+        self.assertEquals(\
+        validate_node(reconcileFrame.funds_out, \
+        'test_after_perform_reconcilation_funds_out'), EXIT_SUCCESS)
 
     def test_accounts_receivable(self):
         """ Test accounts receivable Jobs not added yet"""
@@ -544,7 +683,8 @@ class ScenarioTest(unittest.TestCase):
 
         # Validation
         account_tab = gnucash.tab('Accounts')
-        assert(validate_node(account_tab, 'test_accounts_receivable')==EXIT_SUCCESS)
+        self.assertEquals(validate_node(account_tab, \
+        'test_accounts_receivable'), EXIT_SUCCESS)
 
     def test_accounts_payable(self):
 
@@ -645,21 +785,9 @@ class ScenarioTest(unittest.TestCase):
 
         # Validation
         account_tab = gnucash.tab('Accounts')
-        assert(validate_node(account_tab, 'test_accounts_payable')==EXIT_SUCCESS)
-
-class TestTest(unittest.TestCase):
-
-    def setUp(self):
-        print "Setup"
-
-    def tearDown(self):
-        print "tearDown"
-
-    def test_test1(self):
-        x = 4
-        y = 4
-        assert (x == 5)
-        assert (y == 4)
+        self.assertEquals(\
+        validate_node(account_tab, \
+        'test_accounts_payable'), EXIT_SUCCESS)
 
 if __name__ == "__main__":
     unittest.main()
