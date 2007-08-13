@@ -113,4 +113,3 @@
     Node roleName='menu' name='' description=''
      Node roleName='menu item' name='$, Grand Total:' description='' text=''
      Node roleName='menu item' name='$:' description='' text=''
-     Node roleName='menu item' name='EUR, Total:' description='' text=''
