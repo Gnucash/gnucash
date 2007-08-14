@@ -1850,8 +1850,8 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
   split    = gnc_split_register_get_current_split(reg);
   trans    = xaccSplitGetParent(split);
 
-  if(split && trans)
-    gnc_ui_print_check_dialog_create(plugin_page, split);
+  if (split && trans)
+      gnc_ui_print_check_dialog_create(GNC_PLUGIN_PAGE(plugin_page), split);
 
   LEAVE(" ");
 }

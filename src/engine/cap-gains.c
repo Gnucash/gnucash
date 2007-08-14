@@ -90,7 +90,7 @@ xaccAccountHasTrades (Account *acc)
    {
       Split *s = node->data;
       Transaction *t = s->parent;
-      if (acc->commodity != t->common_currency) return TRUE;
+      if (xaccAccountGetCommodity(acc) != t->common_currency) return TRUE;
    }
 
    return FALSE;
