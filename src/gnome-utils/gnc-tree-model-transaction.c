@@ -137,7 +137,7 @@ static gboolean	gnc_tree_model_transaction_iter_parent (
 /** Helper Functions ****************************************************/
 
 static void gnc_tree_model_transaction_event_handler(
-    QofEntity *entity, QofEventId event_type, gpointer tm, gpointer event_data);
+    QofInstance *entity, QofEventId event_type, gpointer tm, gpointer event_data);
 
 /************************************************************/
 /*               g_object required functions                */
@@ -327,7 +327,7 @@ iter_to_string(GtkTreeIter *iter)
             iter->user_data2,
             iter->user_data2 ? ((GList *) iter->user_data2)->data : 0,
             iter->user_data2 ?
-            ((QofEntity *)((GList *) iter->user_data2)->data)->e_type : "",
+            (QOF_INSTANCE(((GList *) iter->user_data2)->data))->e_type : "",
             iter->user_data3);
     else
         strcpy(string, "(null)");
@@ -422,9 +422,9 @@ gnc_tree_model_transaction_get_value (GtkTreeModel *tm, GtkTreeIter *iter,
     switch (column) {
     case GNC_TREE_MODEL_TRANSACTION_COL_GUID:
         if (is_split)
-            guid = qof_entity_get_guid((QofEntity *)split);
+            guid = qof_entity_get_guid(QOF_INSTANCE(split));
         else
-            guid = qof_entity_get_guid((QofEntity *)trans);
+            guid = qof_entity_get_guid(QOF_INSTANCE(trans));
         g_value_set_pointer(value, (gpointer) guid);
         break;
     case GNC_TREE_MODEL_TRANSACTION_COL_DATE:
@@ -1187,7 +1187,7 @@ get_removal_path(GncTreeModelTransaction *model, Transaction *trans,
  */
 static void
 gnc_tree_model_transaction_event_handler(
-    QofEntity *entity, QofEventId event_type, gpointer tm, gpointer event_data)
+    QofInstance *entity, QofEventId event_type, gpointer tm, gpointer event_data)
 {
     GncTreeModelTransaction *model = (GncTreeModelTransaction *) tm;
     GncTreeModelTransactionPrivate *priv = model->priv;
@@ -1201,7 +1201,7 @@ gnc_tree_model_transaction_event_handler(
     GList *tnode;
 
     g_return_if_fail(GNC_IS_TREE_MODEL_TRANSACTION(model));
-    if (QOF_INSTANCE(entity)->book != priv->book)
+    if (qof_instance_get_book(entity) != priv->book)
         return;
     type = entity->e_type;
 

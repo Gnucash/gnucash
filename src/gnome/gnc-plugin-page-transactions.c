@@ -100,23 +100,12 @@ static void gppt_cmd_print_check(GtkAction *act, GncPluginPageTransactions *pp)
 {
     Split *split;
     Transaction *trans;
-    const char *payee;
-    const char *memo;
-    gnc_numeric amount;
     
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_TRANSACTIONS(pp));
     split = gnc_tree_view_transaction_get_selected_split(GET_PRIVATE(pp)->tv);
-    trans = xaccSplitGetParent(split);
-    
-    if (split && trans) {
-        payee  = xaccTransGetDescription(trans);
-        memo   = xaccTransGetNotes(trans);
-        if (!memo)
-            memo = "";
-        amount = gnc_numeric_abs(xaccSplitGetAmount(split));
-        
-        gnc_ui_print_check_dialog_create(GNC_PLUGIN_PAGE(pp), payee, amount, 
-                                         xaccTransGetDate(trans), memo);
+
+    if (split) {
+        gnc_ui_print_check_dialog_create(GNC_PLUGIN_PAGE(pp), split);
     }
 }
 
