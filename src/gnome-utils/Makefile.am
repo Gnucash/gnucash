@@ -326,7 +326,7 @@ planner-marshal.h: Makefile.am planner-marshal.list
 	&& (cmp -s xgen-gmh planner-marshal.h || cp xgen-gmh planner-marshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~
 
-planner-marshal.c: Makefile.am planner-marshal.list
+planner-marshal.c: Makefile.am planner-marshal.list planner-marshal.h
 	(echo "#include \"planner-marshal.h\""; $(GLIB_GENMARSHAL) --prefix=planner_marshal $(srcdir)/planner-marshal.list --body) > xgen-gmc \
 	&& cp xgen-gmc planner-marshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
