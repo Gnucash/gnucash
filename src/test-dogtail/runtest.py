@@ -506,6 +506,37 @@ class Business(unittest.TestCase):
         find_invoice.find()
         self.assertEquals(validate_node(find_invoice.result_table, 'test_add_new_invoice'), EXIT_SUCCESS)
 
+    def test_add_new_bill(self):
+        """ Test Add new Bills """
+        self.add_new_vendors()
+
+        new_bill = NewBill()
+        new_bill.invoke()
+        new_bill.vendor = 'ABC2 Corp'
+        new_bill.notes = 'Additional notes about the bill go here'
+        new_bill.accept()
+
+        # Validation by using Find and dump the result table
+        find_bill = FindBill()
+        find_bill.invoke()
+        find_bill.text_fields_list[0].text = "."
+        find_bill.search_by_list[0].combovalue = 'Bill ID'
+        find_bill.search_by_list[1].combovalue = 'matches regex'
+        find_bill.find()
+        self.assertEquals(validate_node(find_bill.result_table, 'test_add_new_bill'), EXIT_SUCCESS)
+
+class TestWizard(unittest.TestCase):
+    """ Will be a scenarios will walk throw different pathes of the wizads """
+    pass
+
+class TestPreferences(unittest.TestCase):
+    """  Will be a set of scenarios that will detect the affet of changing preferences """
+    pass
+
+class TestReports(unittest.TestCase):
+    """ Will test the output reports not sure yet how I'm going to do this but i'll try to use generic validator"""
+    pass
+
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
 
