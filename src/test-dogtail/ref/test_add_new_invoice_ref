@@ -1,0 +1,7 @@
+{child with roleName='table'}
+ Node roleName='table cell' name='000001' description=''
+ Node roleName='table cell' name='08/15/2007' description=''
+ Node roleName='table cell' name='ABC Corp' description=''
+ Node roleName='table cell' name='' description=''
+ Node roleName='table cell' name='Invoice' description=''
+ Node roleName='table cell' name='ABC Purchase Order # 12988' description=''
