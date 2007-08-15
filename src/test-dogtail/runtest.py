@@ -39,7 +39,7 @@ class SimpleTest(unittest.TestCase):
         gnuCash.close_without_saving()
 
     def test_start_gnucash_tip_of_day(self):
-        """  Start gnucash Tip of days appear properly. """
+        """  Start gnucash check if Tip of days appear properly. """
         #cleanup_all()
         run('gnucash')
         sleep (10)
@@ -359,7 +359,7 @@ class Business(unittest.TestCase):
         self.assertEquals(validate_node(find_customer.result_table, 'test_add_new_customer'), EXIT_SUCCESS)
 
     def test_find_customer(self):
-        """ Test Find Customer 
+        """ Test Find Customers 
         search_criteria = [
                 [
                     [ search_by, search_type, search_term, is case insestive ]
@@ -421,7 +421,7 @@ class Business(unittest.TestCase):
         self.assertEquals(count, 0)
 
     def test_add_new_vendor(self):
-        """ Test adding new vendors """
+        """ Test Add new vendors """
         self.add_new_vendors()
         # Validation by using Find and dump the result table
         find_vendor= FindVendor()
@@ -486,6 +486,26 @@ class Business(unittest.TestCase):
             find_vendor.dismiss()
         self.assertEquals(count, 0)
 
+    def test_add_new_invoice(self):
+        """ Test Add new Invoice """
+        self.add_new_customers()
+        # add new invoice
+        new_invoice = NewInvoice()
+        new_invoice.invoke()
+        new_invoice.billing_id = "ABC Purchase Order # 12988"
+        new_invoice.notes = "Your Personal notes goes here\nNotes do not appear on printed invoices"
+        new_invoice.customer = 'ABC Corp'
+        new_invoice.accept()
+
+        # Validation by using Find and dump the result table
+        find_invoice = FindInvoice()
+        find_invoice.invoke()
+        find_invoice.text_fields_list[0].text = "."
+        find_invoice.search_by_list[0].combovalue = 'Invoice ID'
+        find_invoice.search_by_list[1].combovalue = 'matches regex'
+        find_invoice.find()
+        self.assertEquals(validate_node(find_invoice.result_table, 'test_add_new_invoice'), EXIT_SUCCESS)
+
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
 
@@ -508,13 +528,10 @@ class ScenarioTest(unittest.TestCase):
     def tearDown(self):
         """ just close gnucash without Saving """
         gnuCash = GnuCashApp()
-#        gnuCash.close_without_saving()
+        gnuCash.close_without_saving()
 
     def test_new_account_dialog(self):
-        """ Test creating new Account currently I could able only to test an account with only 2 levels 
-            No validation here 
-            TODO: add validation
-        """
+        """ Test Add new accounts """
         gnucash = GnuCashApp()
         gnucash.add_new_account_page()
         account_list = [
@@ -790,4 +807,5 @@ class ScenarioTest(unittest.TestCase):
         'test_accounts_payable'), EXIT_SUCCESS)
 
 if __name__ == "__main__":
+    config.childrenLimit = 1500
     unittest.main()
