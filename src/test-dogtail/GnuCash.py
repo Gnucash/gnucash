@@ -609,7 +609,7 @@ class Preferences(GnucashWindow):
             name='USD (US Dollar)'))
 
     class ScheduledTransactions(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.notify_before_transactions_are_created_cb = \
@@ -633,7 +633,7 @@ class Preferences(GnucashWindow):
             name='Run when data file opened'))
 
     class Windows(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.width_spin_button = \
@@ -1289,11 +1289,11 @@ class NewVendorJob(GnucashWindow):
     def __init__(self):
         self.invoke_list = ["Business", "Vendor", "New Job..."]
         self.dialog_name = 'New Job .'
-    
+
 
 class FindVendorJob(Find):
     """ Find Job for Vendor """
-    
+
     def __init__(self):
         self.invoke_list = ["Business", "Vendor", "Find Job..."]
         self.dialog_name = 'Find Job'
@@ -1305,7 +1305,7 @@ class Register(Node):
             1- This code could not read the data from register validation done e.g in the account page
             2 - you must have gnucash not minimized and the top level application.
         TODO: It is better to have register supported by a11y to be able to be more readable by dogtail
-    """ 
+    """
 
     def __init__(self, initializer):
         Node.__init__(self, initializer)
