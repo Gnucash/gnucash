@@ -527,7 +527,39 @@ class Business(unittest.TestCase):
 
 class TestWizard(unittest.TestCase):
     """ Will be a scenarios will walk throw different pathes of the wizads """
-    pass
+    def setUp(self):
+        cleanup_all()
+        run('gnucash')
+        sleep(20)
+        gnuCash = GnuCashApp()
+        gnuCash.dismiss_all_dialogs()
+
+    def tearDown(self):
+        gnuCash = GnuCashApp()
+        gnuCash.close_without_saving()
+
+    def test_default_wizard(self):
+        """ Test Only the default wizards """
+        gnucash = GnuCashApp()
+        gnucash.menu('File').menu('New').menuItem('New File').click()
+
+        focus.application('gnucash')
+        click('Continue Without Saving', roleName='push button')
+
+        duride_frame = gnucash.findChild(\
+        predicate.GenericPredicate(roleName='frame', \
+        name='New Account Hierarchy Setup'))
+        new_account_setup = NewAccountSetup(duride_frame)
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.clickApply()
+
+        # Validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_default_wizard'), EXIT_SUCCESS)
+
 
 class TestPreferences(unittest.TestCase):
     """  Will be a set of scenarios that will detect the affet of changing preferences """
