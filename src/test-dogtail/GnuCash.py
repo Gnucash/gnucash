@@ -13,6 +13,7 @@ from dogtail.tree import root
 from dogtail.tree import Window
 from dogtail.tree import predicate
 from dogtail.tree import Application
+from dogtail.tree import Wizard
 from dogtail.procedural import click
 from time import sleep
 from dogtail import tree, predicate
@@ -1644,8 +1645,30 @@ class ReconcileFrame(Node):
     def finish(self):
         self.menu('Reconcile').menuItem('Finish').click()
 
+class NewAccountSetup(Wizard):
+
+    def __init__(self, node):
+        Wizard.__init__(self, node)
+
+    def set_account_category(self, category_list):
+        simple_checkbook = self.currentPage().child(name='A Simple Checkbook')
+        self.currentPage().button('Clear All').click()
+        categorize_table = simple_checkbook.findAncestor(predicate.GenericPredicate(roleName='table'))
+        cells = categorize_table.findChildren(predicate.GenericPredicate(roleName='table cell'))
+        for category in category_list:
+            for i, cell in enumerate(cells):
+                if cell.name == category:
+                    cells[i-1].doAction('toggle')
+
 if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
-
-
+    gnucash = GnuCashApp()
+    gnucash.menu('File').menu('New').menuItem('New File').click()
+    duride_frame = gnucash.findChild(\
+    predicate.GenericPredicate(roleName='frame', \
+    name='New Account Hierarchy Setup'))
+    new_account_setup = NewAccountSetup(duride_frame)
+    new_account_setup.clickForward()
+    new_account_setup.clickForward()
+    new_account_setup.set_account_category([ 'Car Loan'])
