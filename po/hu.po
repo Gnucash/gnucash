@@ -1,4 +1,4 @@
-# gnucash@2.2@.po to @hu@
+# gnucash2.2.po to hu
 # Hungarian Tanslation of GNUCash
 # Copyright ? 2003-2006 Free Software Foundation, Inc.
 #
@@ -7,10 +7,10 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: @gnucash@\n"
+"Project-Id-Version: gnucash 2.2\n"
 "Report-Msgid-Bugs-To: takokornel@gmail.com\n"
 "POT-Creation-Date: 2007-07-10 22:05+0200\n"
-"PO-Revision-Date: 2007-08-12 21:13+0200\n"
+"PO-Revision-Date: 2007-08-16 09:42+0200\n"
 "Last-Translator: Kornel Tako <takokornel@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=1; plural=0;\n"
 "X-Generator: KBabel 1.11.4\n"
-"X-Poedit-Country: HUNGARY\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -2412,7 +2411,6 @@ msgstr "Nyomtatható számla készítése"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:109
-#, fuzzy
 msgid "_Cut"
 msgstr "_Kivágás"
 
@@ -4692,7 +4690,6 @@ msgstr ""
 "Kattintson a 'Megszakítás' -ra ha nem akar létrehozni új számlakészletet."
 
 #: ../src/gnome/glade/account.glade.h:69
-#, fuzzy
 msgid ""
 "Use Commodity Value\n"
 "1\n"
@@ -10304,7 +10301,6 @@ msgid "'_Enter' moves to blank transaction"
 msgstr "'_Enter' ugrás az üres tranzakcióra"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:2
-#, fuzzy
 msgid "07/31/2005"
 msgstr "07/31/2005"
 
@@ -10313,12 +10309,10 @@ msgid "2005-07-31"
 msgstr "2005-07-31"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:4
-#, fuzzy
 msgid "31.07.2005"
 msgstr "31.07.2005"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:5
-#, fuzzy
 msgid "31/07/2005"
 msgstr "31/07/2005"
 
@@ -11105,18 +11099,16 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-autosave.c:107
-#, fuzzy
 msgid "_Yes, this time"
-msgstr "Időben a legközelebbi"
+msgstr "_Igen, ekkor"
 
 #: ../src/gnome-utils/gnc-autosave.c:108
 msgid "Yes, _always"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-autosave.c:109
-#, fuzzy
 msgid "No, n_ever"
-msgstr "Végtelen"
+msgstr "Nem, _Soha"
 
 #: ../src/gnome-utils/gnc-autosave.c:110
 msgid "_No, not this time"
@@ -12914,19 +12906,16 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:675
-#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
 "Online Banking can only be setup if this wizard has run successfully.  "
 "Please try running the \"AqBanking Setup Wizard\" again."
 msgstr ""
-"Az \"%s beállító tündér\" külső program nem nulla értékkel lépett ki, tehát "
-"nem sikerült befejezni. A további HBCI beállítás csak akkor végezhető el, ha "
-"%s beállító tündér sikeresen lefutott. Próbálja ismét elindítani és "
-"sikeresen befejezni az %s beállító tündér programot."
+"A(z) \"AqBanking Setup Wizard\" beállító program futtatása nem volt sikeres.  "
+"Az Online Banking beállítása csak akkor lehetségesl, ha ez a program sikeresen lefutott.  "
+"Próbálja ismét futtatni az és sikeresen befejezni beállító programot."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:686
-#, fuzzy
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
@@ -12934,10 +12923,10 @@ msgid ""
 "check your installation to ensure this program is present.  On some "
 "distributions this may require installing additional packages."
 msgstr ""
-"Az \"%s beállító tündér\" külső program nem található. \n"
+"Az \"AqBanking Setup Wizard\" külső program nem található. \n"
 "\n"
-"Az aqbanking csomagnak kellene telepítenie a \"%s-qt3-wizard\" programot. "
-"Ellenőrizze az aqbanking csomag telepítését."
+"Az aqbanking csomagnak tartalmaznia kellene \"qt3-wizard\" programot."
+"Ellenőrizze az aqbanking csomag meglétét. Némelyik disztribúció esetén további csomagok telepítésére lehet szükség."
 
 #: ../src/import-export/hbci/druid-hbci-initial.c:752
 msgid "Online Banking Account Name"
@@ -12992,9 +12981,8 @@ msgid "Bank Code"
 msgstr "Bankkód"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:10
-#, fuzzy
 msgid "Choose an Online Banking Version to use with the selected bank:"
-msgstr "Válassza ki a banknál használni kívánt HBCI változatot:"
+msgstr "Válassza ki a banknál használni kívánt Online Banking változatot:"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
 msgid ""
@@ -13060,9 +13048,8 @@ msgid "Initial Online Banking Setup"
 msgstr "Online Banking kezdő beállítása"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:26
-#, fuzzy
 msgid "Match Online Banking accounts with GnuCash accounts"
-msgstr "HBCI és GnuCash számlák összevetése"
+msgstr "Online Banking és GnuCash számlák összevetése"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:27
 msgid "Move the selected transaction template one row down"
@@ -13077,14 +13064,12 @@ msgid "Name for new template"
 msgstr "Új sablon neve"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:30
-#, fuzzy
 msgid "Online Banking Connection Window"
-msgstr "HBCI kapcsolat ablak"
+msgstr "Online Banking kapcsolat ablak"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:31
-#, fuzzy
 msgid "Online Banking Setup Finished"
-msgstr "HBCI beállítása kész"
+msgstr "Online Banking beállítása kész"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:32
 msgid "Online Banking Version"
@@ -13163,7 +13148,6 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:48
-#, fuzzy
 msgid ""
 "The setup for matching Online Banking accounts to GnuCash accounts is now "
 "finished.  You can now invoke Online Banking actions on those accounts.\n"
@@ -13173,16 +13157,14 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"Most minden HBCI számla, ami egyezik egy GnuCash számlával, kész. "
-"Végrehajthat HBCI akciókat azokon a számlákon.\n"
+"Online Banking számlák beállítása, ami egyezik egy GnuCash számlával, befejeződött. "
+"Most már végrehajthat Online Banking akciókat azokon a számlákon.\n"
 "\n"
-"Ha akarnak újabb HBCI bankot, használót vagy számlát felvenni, bármikor újra "
-"elindíthatják e tündért.\n"
+"Ha akar újabb Bankot, Felhasználót vagy Számlát felvenni, bármikor újra elindíthatja ezt a programot.\n"
 "\n"
-"Kattintsona az 'Alkalmazás' -ra."
+"Kattintson az \"Alkalmazás\" -ra."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:53
-#, fuzzy
 msgid ""
 "This druid helps you setting up your Online Banking connection with your "
 "bank.\n"
@@ -13207,25 +13189,23 @@ msgid ""
 "Press \"Cancel\" if you do not wish to setup any Online Banking connection "
 "now."
 msgstr ""
-"E tündér segít beállítani a HBCI kapcsolatot a bankkal.\n"
+"Ez a tündér segít beállítani az Online Banking kapcsolatot a bankjával.\n"
 "\n"
-"Először kérni kell egy HBCI hozzáférést a banktól. Ha a bank megadja, küld "
+"Először kérni kell egy Online Banking hozzáférést a banktól. Ha a bank megadja, küld "
 "egy levelet, ami tartalmazza:\n"
 "\n"
 "* a bank kódját\n"
 "* a felhasználó azonosítóját, amivel a bank azonosítja a felhasználót\n"
-"* bank HBCI kiszolgálójának az internetes címét\n"
-"* információt a bank nyilvános kulcsának kriptográfiájáról (\"Ini-Letter"
-"\").\n"
+"* a bank Online Banking kiszolgálójának az internetes címét\n"
+"* HBCI Online Banking információt a bank nyilvános kulcsának kriptográfiájáról (\"Ini-Letter\").\n"
 "\n"
-"Ez az információ a következőkben lesz szükséges.Kattintson az \"Előre\" -re "
-"most.\n"
+"Ez az információ a következőkben lesz szükséges.Kattintson az \"Előre\" -re.\n"
 "\n"
 "MEGJEGYZÉS: SEMMI SEM GARANTÁLT. Néhány bank szegényesen megvalósított HBCI-"
 "t használ.Ne bízzon idő-kritikus átutalásokat HBCI-re, mert időnként a bank "
 "pozitív visszaigazolást ad, amikor az átutalást elutasították!\n"
 "\n"
-"Nyomjon 'Megszkítás' -t,ha mégsem akarja beállítani a HBCI kapcsolatot most."
+"Nyomjon 'Megszkítás' -t,ha mégsem akarja beállítani az Online Banking kapcsolatot."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:67
 msgid "Use Transaction Template"
@@ -13284,9 +13264,8 @@ msgid "<b>Online Banking</b>"
 msgstr ""
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
-#, fuzzy
 msgid "Activate verbose debug messages for Online Banking."
-msgstr "Bőbeszédű hibaüzenetek aktiválása a HBCI online bankoláshoz."
+msgstr "Bőbeszédű hibaüzenetek aktiválása az Online Banking-hez."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
 msgid "Remember _PIN"
@@ -13312,7 +13291,6 @@ msgstr "Importálandó fájl kiválasztása"
 #. * in your country, you may safely ignore strings from the
 #. * import-export/hbci subdirectory.
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:271
-#, fuzzy
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -13322,12 +13300,12 @@ msgid ""
 "(AqBanking or HBCI) Setup. After that, try again to download the Online "
 "Banking Balance."
 msgstr ""
-"A letöltött HBCI egyenleg nulla.\n"
+"A letöltött Online Banking egyenleg nulla volt.\n"
 "\n"
 "Vagy ez a helyes egyenleg, vagy a bank nem támogatja az egyenleg-letöltést "
-"ebben a HBCI változatban. A második esetén önnek magasabb számú HBCI "
-"változatot kell választania a HBCI beállításában. Azután próbálja újra "
-"letölteni a HBCI-egyenleget."
+"ebben az Online Banking változatban. A következőkben más verziószámú Online Banking-t"
+"kell választania a(z) beállításban (AqBanking vagy HBCI). Azután próbálja meg újra "
+"letölteni az Online Banking egyenleget."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:289
 #, c-format
@@ -13352,15 +13330,13 @@ msgid "Reconcile account now?"
 msgstr "Folyószámla egyeztetése most ?"
 
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
-#, fuzzy
 msgid ""
 "The Online Banking import returned no transactions for the selected time "
 "period."
-msgstr "A HBCI-importálás nem adott vissza átutalást a kiválasztott időszakra."
+msgstr "Az Online Banking-importálás nem jelzett tranzakciót a kiválasztott időszakra."
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:136
 #: ../src/import-export/hbci/gnc-hbci-utils.c:711
-#, fuzzy
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -13375,10 +13351,10 @@ msgstr ""
 "végrehajtása. \n"
 "\n"
 "Legvalószínűbb, hogy a bank nem támogatja a kiválasztott feladatot, vagy a "
-"HBCI számlán nincs engedélyezve e feladat végrehajtása. További hibaüzenet "
-"feltűnhet a konzol-naplóban.\n"
+"HBCI számlán nincs engedélyezve a feladat végrehajtása. További hibaüzenetet"
+"találhat a konzol-naplóban.\n"
 "\n"
-"Újra be akarja vinni a feladatot?"
+"Újra végre akarja hajtani a feladatot?"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:219
 msgid ""
@@ -13439,12 +13415,11 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:393
-#, fuzzy
 msgid ""
 "The server of your bank refused the Online Banking connection. Please try "
 "again later. Aborting."
 msgstr ""
-"A bank kiszolgálója elutasította a HBCI kapcsolatot. Próbálja újra később. "
+"A bank kiszolgálója elutasította az Online Banking kapcsolatot. Próbálja újra később. "
 "Kilépés."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:544
@@ -13463,7 +13438,6 @@ msgid ""
 msgstr ""
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:588
-#, fuzzy
 msgid ""
 "One of the jobs was sent to the bank successfully, but the bank is refusing "
 "to execute the job. Please check the log window for the exact error message "
@@ -13472,11 +13446,10 @@ msgid ""
 "\n"
 "The job has been removed from the queue."
 msgstr ""
-"A feladatot sikerült elküldeni a bankba, de a bank elutasította a feladat "
-"végrehajtását. Ellenőrizze a napló ablakot a bank pontos hibaüzenetéért! A "
-"hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
+"A feladatot sikerült elküldeni a bankba, de a bank elutasította a feladat végrehajtását. Ellenőrizze a napló ablakot a bank pontos hibaüzenetéért! "
+"A hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
 "\n"
-"Akarja újból bevinni a feladatot?"
+"A feladat el lett távolítva a kérésből."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:663
 msgid ""
@@ -13514,9 +13487,8 @@ msgid "Get _Balance"
 msgstr "HBCI-_egyenleg lehívása"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:103
-#, fuzzy
 msgid "Get the account balance online through Online Banking"
-msgstr "Számlaegyenleg online lekérdezése HBCI/AqBanking útján"
+msgstr "Számlaegyenleg online lekérdezése Online Banking útján"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
 msgid "Get _Transactions..."
@@ -13531,27 +13503,24 @@ msgid "_Issue Transaction..."
 msgstr "_Tranzakció intézése..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
-#, fuzzy
 msgid "Issue a new transaction online through Online Banking"
-msgstr "Új online átutalás intézése HBCI-vel"
+msgstr "Új online átutalás intézése Online Banking-gel"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:117
 msgid "I_nternal Transaction..."
 msgstr "B_első tranzakció..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:118
-#, fuzzy
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr "Belső átutalás intézése HBCI/AqBanking útján"
+msgstr "Új belső tranzakció intézése Online Banking-gel"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:121
 msgid "_Direct Debit..."
 msgstr "_Direkt terhelés..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:122
-#, fuzzy
 msgid "Issue a new direct debit note online through Online Banking"
-msgstr "Új online direkt terhelés intézése HBCI/AqBanking útján"
+msgstr "Új online direkt terhelés intézése Online Banking-gel"
 
 #. File -> Import menu item
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:126
@@ -13837,7 +13806,6 @@ msgstr "Dátumformátum kiválasztása ehhez a QIF fájlhoz"
 
 #: ../src/import-export/import-provider-format.glade.h:5
 #: ../src/import-export/qif-import/qif.glade.h:71
-#, fuzzy
 msgid ""
 "The QIF file format does not specify which order the day, month, and year "
 "components of a date are printed.  In most cases, it is possible to "
@@ -14174,7 +14142,6 @@ msgstr ""
 "\" -ra a kilépéshez. "
 
 #: ../src/import-export/qif-import/qif.glade.h:22
-#, fuzzy
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories to "
 "classify your transactions. Each of the categories in your QIF file will be "
@@ -14200,7 +14167,6 @@ msgstr ""
 "biztonsággal átszervezhető."
 
 #: ../src/import-export/qif-import/qif.glade.h:27
-#, fuzzy
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial "
 "institution, some of the information in the QIF file may duplicate "
@@ -14220,15 +14186,17 @@ msgid ""
 "\n"
 "Click \"Forward\" to find duplicate transactions. "
 msgstr ""
-"Egy bank vagy más pénzintézet QIF fájljának betöltésekor a QIF fájlban "
-"duplikált információ előfordulhat, ami már a GnuCash-fájlban szerepel. A "
-"GnuCash megkísérli a létező tranzakciók duplikált információit felderíteni.\n"
+"Egy bank vagy más pénzintézet QIF fájljának importálásakor, némelyik információ a QIF fájlban "
+"megduplázhat információkat a GnuCash-fájlban.  "
+"A GnuCash megkísérli a létező tranzakciók duplikált információit felderíteni.\n"
 "\n"
-"A következő oldalon válaszhat,hogy egy létező tranzakció megfelel -e egy "
-"importált tranzakciónak.Bal oldalon láthatóak az importáltak,jobb oldalon a "
+"A következő oldalon válaszhat,hogy egy létező tranzakció megfelel -e egy importált tranzakciónak.  Bal oldalon láthatóak az importáltak, jobb oldalon a "
 "meglévő,lehetséges megfelelő tranzakciók.Több régi tranzakció is megfelelhet "
-"az importáltnak,válassza ki a megfelelőt.Kattintson a megfelelő tranzakció "
-"\"Dup\" oszlopára."
+"az importáltnak, kiválaszthatja a megfelelőt dupla kattintással a megfelelő tranzakció \"Dup\" oszlopára.\n"
+"\n"
+"Vezérelheti a GnuCash által használt szabályokat a megduplázott tranzakciók megtalálására, a GnuCash Beállítások párbeszédablak, \"QIF Import\"részében.\n"
+"\n"
+"Kattintson az \"Előre\" gombra a folytatáshoz. "
 
 #: ../src/import-export/qif-import/qif.glade.h:34
 msgid "Import QIF files"
@@ -14311,7 +14279,8 @@ msgstr ""
 "azonos, vagy hasonló nevű és kompatibilis típusú GnuCash-számla, akkor a "
 "program azzal veti össze. Különben a GnuCash létrehoz egy új számlát "
 "ugyanazzal a névvel és típussal, mint amilyen a QIF fájlban van. Ha a "
-"javasolt GnuCash-számla nem tetszik, az megváltoztatható.\n"
+"javasolt GnuCash-számla nem tetszik, az megváltoztatható dupla kattintással.\n"
+"\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:51
 msgid "Payees and memos"
