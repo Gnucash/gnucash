@@ -1,5 +1,5 @@
  ####################################################################
- # GnuCash.py -- Wrapper of Gnucash widgets and dialogs             #
+ # runtest.py -- Gnucash testcases                                  #
  # Copyright (C) 2007 Ahmed Sayed Hassan, <ahmadsayed83@yahoo.com>  #
  #                                                                  #
  # This program is free software; you can redistribute it and/or    #
