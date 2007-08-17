@@ -1,6 +1,30 @@
+ ####################################################################
+ # GnuCash.py -- Wrapper of Gnucash widgets and dialogs             #
+ # Copyright (C) 2007 Ahmed Sayed Hassan, <ahmadsayed83@yahoo.com>  #
+ #                                                                  #
+ # This program is free software; you can redistribute it and/or    #
+ # modify it under the terms of the GNU General Public License as   #
+ # published by the Free Software Foundation; either version 2 of   #
+ # the License, or (at your option) any later version.              #
+ #                                                                  #
+ # This program is distributed in the hope that it will be useful,  #
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of   #
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    #
+ # GNU General Public License for more details.                     #
+ #                                                                  #
+ # You should have received a copy of the GNU General Public License#
+ # along with this program; if not, contact:                        #
+ #                                                                  #
+ # Free Software Foundation           Voice:  +1-617-542-5942       #
+ # 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       #
+ # Boston, MA  02110-1301,  USA       gnu@gnu.org                   #
+ #                                                                  #
+ ####################################################################
+
+__author__ = "Ahmed Sayed <ahmadsayed83@yahoo.com>"
+
 import unittest
 from dogtail.utils import run
-#from dogtail import tree, predicate
 from os import system
 from GnuCash import *
 import GnuCash
@@ -538,6 +562,25 @@ class TestWizard(unittest.TestCase):
         gnuCash = GnuCashApp()
         gnuCash.close_without_saving()
 
+    def new_account_wizard(self, category_list):
+        """ FIXME: This method  does not work properly, if category list contains multiple items"""
+        gnucash = GnuCashApp()
+        gnucash.menu('File').menu('New').menuItem('New File').click()
+
+        focus.application('gnucash')
+        click('Continue Without Saving', roleName='push button')
+
+        duride_frame = gnucash.findChild(\
+        predicate.GenericPredicate(roleName='frame', \
+        name='New Account Hierarchy Setup'))
+        new_account_setup = NewAccountSetup(duride_frame)
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.set_account_category(category_list)
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.clickApply()
+
     def test_default_wizard(self):
         """ Test Only the default wizards """
         gnucash = GnuCashApp()
@@ -560,6 +603,156 @@ class TestWizard(unittest.TestCase):
         account_tab = gnucash.tab('Accounts')
         self.assertEquals(validate_node(account_tab, 'test_default_wizard'), EXIT_SUCCESS)
 
+    def test_new_account_wizard_select_all(self):
+        """ Test the new account wizard and select all categorize """
+        gnucash = GnuCashApp()
+        gnucash.menu('File').menu('New').menuItem('New File').click()
+
+        focus.application('gnucash')
+        click('Continue Without Saving', roleName='push button')
+
+        duride_frame = gnucash.findChild(\
+        predicate.GenericPredicate(roleName='frame', \
+        name='New Account Hierarchy Setup'))
+        new_account_setup = NewAccountSetup(duride_frame)
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.currentPage().button('Select All').click()
+        new_account_setup.clickForward()
+        new_account_setup.clickForward()
+        new_account_setup.clickApply()
+
+        # Validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_select_all'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_a_simple_checkbook(self):
+        gnucash = GnuCashApp()
+        """ Test Creating A Simple Checkbook """ 
+        self.new_account_wizard(['A Simple Checkbook'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_a_simple_checkbook'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_business_accounts(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Business Accounts """ 
+        self.new_account_wizard(['Business Accounts'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_business_accounts'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_car_loan(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Car Loan """ 
+        self.new_account_wizard(['Car Loan'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_car_loan'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_cd_and_money_market(self):
+        gnucash = GnuCashApp()
+        """ Test Creating CD and Money Market """ 
+        self.new_account_wizard(['CD and Money Market'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_cd_and_money_market'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_childcare_expenses(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Childcare Expenses """ 
+        self.new_account_wizard(['Childcare Expenses'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_childcare_expenses'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_common_accounts(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Common Accounts """ 
+        self.new_account_wizard(['Common Accounts'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_common_accounts'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_education_loan(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Education Loan """ 
+        self.new_account_wizard(['Education Loan'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_education_loan'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_fixed_assets(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Fixed Assets """ 
+        self.new_account_wizard(['Fixed Assets'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_fixed_assets'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_home_mortgage_loan(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Home Mortgage Loan """ 
+        self.new_account_wizard(['Home Mortgage Loan'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_home_mortgage_loan'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_homeowner_expenses(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Homeowner Expenses """ 
+        self.new_account_wizard(['Homeowner Expenses'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_homeowner_expenses'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_investment_accounts(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Investment Accounts """ 
+        self.new_account_wizard(['Investment Accounts'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_investment_accounts'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_other_loans(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Other Loans """ 
+        self.new_account_wizard(['Other Loans'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_other_loans'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_renter_expenses(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Renter Expenses """ 
+        self.new_account_wizard(['Renter Expenses'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_renter_expenses'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_retirement_accounts(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Retirement Accounts """ 
+        self.new_account_wizard(['Retirement Accounts'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_retirement_accounts'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_spouse_income(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Spouse Income """ 
+        self.new_account_wizard(['Spouse Income'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_spouse_income'), EXIT_SUCCESS)
+
+    def test_new_account_wizard_spouse_retirement_accounts(self):
+        gnucash = GnuCashApp()
+        """ Test Creating Spouse Retirement Accounts """ 
+        self.new_account_wizard(['Spouse Retirement Accounts'])
+        #validation
+        account_tab = gnucash.tab('Accounts')
+        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_spouse_retirement_accounts'), EXIT_SUCCESS)
 
 class TestPreferences(unittest.TestCase):
     """  Will be a set of scenarios that will detect the affet of changing preferences """
