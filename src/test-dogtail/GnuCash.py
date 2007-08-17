@@ -1,6 +1,26 @@
-""" wrapper code to help when scripting GnuCash testcases
-    Author: Ahmed Sayed Hassan <ahmadsayed83@yahoo.com>
-"""
+ ####################################################################
+ # GnuCash.py -- Wrapper of Gnucash widgets and dialogs             #
+ # Copyright (C) 2007 Ahmed Sayed Hassan, <ahmadsayed83@yahoo.com>  #
+ #                                                                  #
+ # This program is free software; you can redistribute it and/or    #
+ # modify it under the terms of the GNU General Public License as   #
+ # published by the Free Software Foundation; either version 2 of   #
+ # the License, or (at your option) any later version.              #
+ #                                                                  #
+ # This program is distributed in the hope that it will be useful,  #
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of   #
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    #
+ # GNU General Public License for more details.                     #
+ #                                                                  #
+ # You should have received a copy of the GNU General Public License#
+ # along with this program; if not, contact:                        #
+ #                                                                  #
+ # Free Software Foundation           Voice:  +1-617-542-5942       #
+ # 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       #
+ # Boston, MA  02110-1301,  USA       gnu@gnu.org                   #
+ #                                                                  #
+ ####################################################################
+ 
 __author__ = 'Ahmed Sayed Hassan <ahmadsayed83@yahoo.com>'
 
 import os
@@ -1664,11 +1684,22 @@ if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
     gnucash = GnuCashApp()
-    gnucash.menu('File').menu('New').menuItem('New File').click()
     duride_frame = gnucash.findChild(\
-    predicate.GenericPredicate(roleName='frame', \
-    name='New Account Hierarchy Setup'))
+        predicate.GenericPredicate(roleName='frame', \
+        name='New Account Hierarchy Setup'))
     new_account_setup = NewAccountSetup(duride_frame)
-    new_account_setup.clickForward()
-    new_account_setup.clickForward()
-    new_account_setup.set_account_category([ 'Car Loan'])
+    simple_checkbook = new_account_setup.currentPage().child(name='A Simple Checkbook')
+    categorize_table = simple_checkbook.findAncestor(predicate.GenericPredicate(roleName='table'))
+    cells = categorize_table.findChildren(predicate.GenericPredicate(roleName='table cell'))
+    for cell in cells:
+        name = cell.name
+        if len(name) > 1:
+            lower_under_score_name = name.lower().replace(' ', '_')
+            print ""
+            print "    def test_new_account_wizard_%s(self):" % lower_under_score_name
+            print "        gnucash = GnuCashApp()"
+            print "        \"\"\" Test Creating %s \"\"\" " % name
+            print "        self.new_account_wizard(['%s'])" % name
+            print "        #validation"
+            print "        account_tab = gnucash.tab('Accounts')"
+            print "        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_%s'), EXIT_SUCCESS)" % lower_under_score_name
