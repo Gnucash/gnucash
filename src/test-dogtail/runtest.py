@@ -759,8 +759,43 @@ class TestPreferences(unittest.TestCase):
     pass
 
 class TestReports(unittest.TestCase):
-    """ Will test the output reports not sure yet how I'm going to do this but i'll try to use generic validator"""
-    pass
+    """ 
+    To Test the reporting I'll follow the following
+        1 - Open a presaved datafile
+        2 - Creat the report
+        3 - Export the report to HTML file
+        4 - Sed the actual file and reference file to remove the current date.
+        5 - apply diff
+    """
+    def setUp(self):
+        """ a setup  for the test case in this type of test just run gnucash and go dismiss first dialog """
+        cleanup_all()
+        run('gnucash')
+        sleep (20)
+        gnuCash = GnuCashApp()
+        gnuCash.dismiss_all_dialogs()
+        gnuCash.open_data_file('mytest2')
+
+    def tearDown(self):
+        """ just close gnucash without Saving """
+        gnuCash = GnuCashApp()
+        try:
+            gnuCash.close_without_saving()
+        except:
+            pass
+
+    def validate_report(self, testcase_name):
+        """ Helper method to aid in validating the report """
+        validate_files(testcase_name, filter_command="\'/TABLE/,/\/TABLE/p\'")
+
+    def test_account_summary(self):
+        gnucash = GnuCashApp()
+        gnucash.create_account_summary()
+        export_report = ExportReport()
+        export_report.invoke()
+        export_report.export_report(gnucash.cwd_path + '/act/test_account_summary_act')
+        sleep(5)
+        self.validate_report('test_account_summary')
 
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
@@ -1064,4 +1099,6 @@ class ScenarioTest(unittest.TestCase):
 
 if __name__ == "__main__":
     config.childrenLimit = 1500
+    os.system("rm act/*")
+    os.system("rm projects_under_test/*")
     unittest.main()
