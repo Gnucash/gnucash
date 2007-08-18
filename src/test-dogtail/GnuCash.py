@@ -44,8 +44,11 @@ from dogtail.procedural import focus
 # use the the following list to dismiss the code in this Order Cancel, No, Then Close, .... Add more if others
 default_dismiss_list = ['Close', 'Cancel', 'No'] 
 default_accept_list = ['OK', 'Yes', 'Apply', 'Accept']
+
 def in_dismiss_list(button, dismiss_list=default_dismiss_list):
-    """Check if the Button already in the dismiss list you could override the default behaviour by passing
+    """
+        Check if the Button already in the dismiss 
+        list you could override the default behaviour by passing
         your own dismiss list to the code
     """
     for button_name in dismiss_list:
@@ -54,7 +57,9 @@ def in_dismiss_list(button, dismiss_list=default_dismiss_list):
     return None
 
 def in_accept_list(button, accept_list=default_accept_list):
-    """Check if the Button already in the accept list you could override the default behaviour by passing
+    """
+        Check if the Button already in the accept list 
+        you could override the default behaviour by passing
         your own accept list to the code
     """
     for button_name in accept_list:
@@ -63,7 +68,10 @@ def in_accept_list(button, accept_list=default_accept_list):
     return None
 
 def cleanup():
-    """ Remove only the First Entry of the recent in order to avoid opening recent application """
+    """ 
+        Remove only the First Entry of the recent 
+        in order to avoid opening recent application 
+    """
     os.system("gconftool-2 --unset /apps/gnucash/history/file0")
 
 def ungraceful_close():
@@ -71,7 +79,10 @@ def ungraceful_close():
     os.system("killall gnucash-bin")
 
 def cleanup_all():
-    """ usefull to delete all GnuCash to run first time wizard or when things go extemely wrong"""
+    """ 
+        usefull to delete all GnuCash to run first 
+        time wizard or when things go extemely wrong
+    """
     ungraceful_close()
     sleep(5)
     os.system("gconftool-2 --recursive-unset /apps/gnucash")
@@ -81,9 +92,9 @@ class GnuCashApp (Application):
     """ Wrapper for GnuCash Application"""
     def __init__(self):
         Application.__init__(self, root.application("gnucash"))
-        self.data_file_path = '/home/ahmed/work/gnucash-dogtail/src/test-dogtail/'
-        self.data_file_dest = self.data_file_path + 'projects_under_test/'
-        self.data_file_src = self.data_file_path + 'projects/'
+        self.cwd_path = os.getcwd()
+        self.data_file_dest = self.cwd_path + '/projects_under_test/'
+        self.data_file_src = self.cwd_path + '/projects/'
 
     def __close(self):
         """ Close GnuCash Application """
@@ -102,7 +113,12 @@ class GnuCashApp (Application):
         click('Save', roleName='push button')
 
     def open_data_file(self, data_file_name):
-        """ using GUI to open already exist project we have two folders (projects) where we save the project before applying test case procedure and (projects_under_test) where we copy the current project and begin using it in the testcase """
+        """ 
+        using GUI to open already exist project we have two 
+        folders (projects) where we save the project 
+        before applying test case procedure and (projects_under_test) 
+        where we copy the current project and begin using it in the testcase 
+        """
         data_file_path = self.data_file_src + data_file_name
         data_file_dest_path = self.data_file_dest + data_file_name
         shutil.copy(self.data_file_src+data_file_name, self.data_file_dest)
@@ -111,8 +127,11 @@ class GnuCashApp (Application):
         open_data_file.open_location(data_file_dest_path)
 
     def dismiss_all_dialogs(self):
-        """ dismiss all dialogs using procedural this should be migrated to tree but there is a problem with the
-        Yes/No dialogs apears after dismiss the first wizard"""
+        """ 
+        dismiss all dialogs using procedural this should be migrated 
+        to tree but there is a problem with the
+        Yes/No dialogs apears after dismiss the first wizard
+        """
         dialogs = self.findChildren(predicate.GenericPredicate(roleName='dialog'))
         if dialogs == None: return
         focus.application('gnucash')
@@ -174,7 +193,9 @@ class GnuCashApp (Application):
         reconcile = Reconcile()
         reconcile.invoke()
         return reconcile
-    
+
+    def create_account_summary(self):
+        self.menu('Reports').menuItem('Account Summary').click()
 
 class GnucashWindow(Window):
     """ A base for all Gnucash Dialogs dialogs """
@@ -210,7 +231,8 @@ class GnucashWindow(Window):
 
     def dismiss(self):
         """" when calling dismiss the expected action is Cancel, Close and No """
-        button_list = self.findChildren(predicate.GenericPredicate(roleName='push button'))
+        button_list = self.findChildren(\
+        predicate.GenericPredicate(roleName='push button'))
         for button in button_list:
             dismiss_button = in_dismiss_list(button)
             if dismiss_button != None:
@@ -221,7 +243,8 @@ class GnucashWindow(Window):
 
     def accept(self):
         """" when calling dismiss the expected action is Cancel, Close and No """
-        button_list = self.findChildren(predicate.GenericPredicate(roleName='push button'))
+        button_list = self.findChildren(\
+        predicate.GenericPredicate(roleName='push button'))
         for button in button_list:
             accept_button = in_accept_list(button)
             if accept_button != None:
@@ -238,7 +261,21 @@ class Open(GnucashWindow):
         self.dialog_name = 'Open'
 
     def initialize(self):
+        """ Initialize Open Dialog location components """
         self.location_txt = self.findChild(predicate.IsLabelledAs('Location:'))
+
+    def invoke(self):
+        gnucash = GnuCashApp()
+        gnucash.menu('File').menu('Open').menuItem('Open...').click()
+        try:
+            focus.application('gnucash')
+            click('Continue Without Saving', roleName='push button')
+        except:
+            pass
+
+        dialog = gnucash.findChild(predicate.GenericPredicate(roleName='dialog', name='Open'))
+        Window.__init__(self, dialog)
+        self.initialize()
 
     def __setattr__(self, name, value):
         if name == 'location':
@@ -247,9 +284,31 @@ class Open(GnucashWindow):
             self.__dict__[name] = value
 
     def open_location(self, file_path):
+        """ shorthand method to open location """
         self.location = file_path
         self.button('Open').click()
 
+class ExportReport(GnucashWindow):
+    """ Wrapper class for Export Report to HTML """
+
+    def __init__(self):
+        self.invoke_list = ["File", "Export", "Export Report"]
+        self.dialog_name = 'Save HTML To File'
+
+    def initialize(self):
+        """ Initialize export reports components """
+        self.name_txt = self.findChild(predicate.IsLabelledAs('Name:'))
+
+    def __setattr__(self, name, value):
+        if name == 'name':
+            self.name_txt.text = value
+        else:
+            self.__dict__[name] = value
+
+    def export_report(self, file_path):
+        """ Shorthand method to export the report """
+        self.name = file_path
+        self.button('Export').click()
 
 class NewAccount(GnucashWindow):
     """ Wrapper class for new Account Dialog """	
@@ -288,7 +347,8 @@ class NewAccount(GnucashWindow):
         self.ok_button = self.button("OK")
 
     def __setattr__(self, name, value):
-        """ Always set the account name as your last account 
+        """ 
+        Always set the account name as your last account 
         because it changes the dialog title which may lead to failure
         TODO: Fix up this issue, find a way to search using the regex, or implement it
         """
@@ -303,10 +363,14 @@ class NewAccount(GnucashWindow):
         elif name == 'smallest_fraction_text':
             self.smallest_fraction.combovalue = value
         elif name == 'account_type':
-            self.account_type_table.findChild(predicate.GenericPredicate(roleName="table cell", name=value )).select()
+            self.account_type_table.findChild(predicate.GenericPredicate\
+            (roleName="table cell", name=value )).select()
         elif name == 'account_parent':
-            self.account_parent_table.findChild(predicate.GenericPredicate(roleName="table cell", name='New top level account')).doAction('activate')
-            self.account_parent_table.findChild(predicate.GenericPredicate(roleName="table cell", name=value )).doAction('activate')
+            self.account_parent_table.findChild(predicate.GenericPredicate\
+            (roleName="table cell", \
+            name='New top level account')).doAction('activate')
+            self.account_parent_table.findChild(predicate.GenericPredicate\
+            (roleName="table cell", name=value )).doAction('activate')
         elif name == 'hidden':
             if value and not self.hidden_checkbox.checked:
                 self.hidden_checkbox.click()
@@ -342,7 +406,10 @@ class Preferences(GnucashWindow):
     class AccountingPeriodTab(Node):
 
         def __init__(self, initializer):
-            """ Init method for Accounting Dialog Calender does not work, can not find a way to use it """
+            """ 
+            Init method for Accounting Dialog Calender 
+            does not work, can not find a way to use it 
+            """
             Node.__init__(self, initializer)
             self.include_grand_total_checkbox = \
             self.findChild(predicate.GenericPredicate \
@@ -365,9 +432,9 @@ class Preferences(GnucashWindow):
             self.findChild(predicate.GenericPredicate(\
             roleName='combo box', \
             name='Start of this year'))
-            
+
     class Accounts(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.charachter_text = \
@@ -402,7 +469,7 @@ class Preferences(GnucashWindow):
             name='Locale:'))
 
     class Business(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.open_in_new_window_cb = \
@@ -465,7 +532,7 @@ class Preferences(GnucashWindow):
             name='ISO'))
 
     class General(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.show_splash_screen_cb = \
@@ -576,7 +643,7 @@ class Preferences(GnucashWindow):
             name="'Enter' moves to blank transaction"))
 
     class RegisterDefaults(Node):
-        
+
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.number_of_rows_spin_button = \
@@ -735,7 +802,10 @@ class Preferences(GnucashWindow):
         self.windows = self.Windows(self.tab('Windows'))
 
 class Find(GnucashWindow):
-    """ Wrapper for all gnucash Find include Find txns, Find Customer, Find Job, ... """
+    """ 
+    Wrapper for all gnucash Find include Find txns, \
+    Find Customer, Find Job, ... 
+    """
 
     def initialize(self):
         """ initialize Common components """
@@ -759,16 +829,20 @@ class Find(GnucashWindow):
         self.find_btn = self.button('Find')
         self.new_search_rb = \
         self.findChild(\
-        predicate.GenericPredicate(roleName='radio button', name='New search'))
+        predicate.GenericPredicate(roleName='radio button', \
+        name='New search'))
         self.refine_current_search_rb = \
         self.findChild(\
-        predicate.GenericPredicate(roleName='radio button', name='Refine current search'))
+        predicate.GenericPredicate(roleName='radio button', \
+        name='Refine current search'))
         self.add_results_to_current_search_rb = \
         self.findChild(\
-        predicate.GenericPredicate(roleName='radio button', name='Add results to current search'))
+        predicate.GenericPredicate(roleName='radio button', \
+        name='Add results to current search'))
         self.delete_results_from_current_search = \
         self.findChild(\
-        predicate.GenericPredicate(roleName='radio button', name='Delete results from current search'))
+        predicate.GenericPredicate(roleName='radio button', \
+        name='Delete results from current search'))
 
     def add_criteria(self):
         """ Add search critieria then refresh the children list """
@@ -806,8 +880,10 @@ class TaxOption(GnucashWindow):
         self.dialog_name = 'Tax Information'
 
     def initialize(self):
-        """ intialize Tax options dialog components 
-            TODO: Compelete the remaining fields after thing became more clear with this dialog
+        """ 
+            intialize Tax options dialog components 
+            TODO: Compelete the remaining fields after 
+            thing became more clear with this dialog
         """
         self.income_rb = self.findChild(predicate.GenericPredicate(\
         roleName='radio button', name='Income'))
@@ -837,7 +913,8 @@ class StyleSheets(GnucashWindow):
         self.new_btn = self.button('New')
         self.delete_btn = self.button('Delete')
         self.close_btn = self.button('Close')
-        self.style_sheets_table = self.findChild(predicate.GenericPredicate(roleName='table'))
+        self.style_sheets_table = \
+        self.findChild(predicate.GenericPredicate(roleName='table'))
 
 
 class NewStyleSheet(Window):
@@ -845,8 +922,10 @@ class NewStyleSheet(Window):
 
     def __init__(self, Node):
         Window.__init__(self, Node)
-        self.name_text = self.findChild(predicate.GenericPredicate(roleName='text'))
-        self.template_combo = self.findChild(predicate.GenericPredicate(roleName='combo box'))
+        self.name_text = \
+        self.findChild(predicate.GenericPredicate(roleName='text'))
+        self.template_combo = \
+        self.findChild(predicate.GenericPredicate(roleName='combo box'))
         self.ok_btn = self.button('OK')
         self.cancel_btn = self.button('Cancel')
 
@@ -892,7 +971,8 @@ class ResetWarnings(GnucashWindow):
 
     def initialize(self):
         """ Reset Warning controls 
-            TODO: confirm the selet all and unselect those controls not visible while writing this code
+            TODO: confirm the selet all and unselect 
+            those controls not visible while writing this code
         """
         self.select_all_btn = self.button('Select All')
         self.unselect_all_btn = self.button('Unselect All')
@@ -909,8 +989,11 @@ class SetupAccountingPeriods(GnucashWindow):
 
 
 class NewXXX(GnucashWindow):
-    """ This class used to hold the common controls between the New Customer, New Vendor and New Empolyee 
-        TODO: Replace XXX with a nice name, this name is terrible, i can not call other one
+    """ 
+    This class used to hold the common controls between the New Customer, 
+    New Vendor and New Empolyee 
+    TODO: Replace XXX with a nice name, this name is terrible, 
+    i can not call other one
     """
 
     def add_new_XXX (self, company_name=None, name=None, \
@@ -945,9 +1028,11 @@ class NewXXX(GnucashWindow):
         def __init__(self, initialize):
             Node.__init__(self, initialize)
             self.identification_panel = \
-            self.findChild(predicate.GenericPredicate(roleName='panel', name='Identification'))
+            self.findChild(predicate.GenericPredicate(\
+            roleName='panel', name='Identification'))
             self.idenetification_list = \
-            self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
+            self.identification_panel.findChildren(\
+            predicate.GenericPredicate(roleName='text'))
             self.company_name_txt = self.idenetification_list[1]
             self.panel_list = \
             self.findChildren(predicate.GenericPredicate(roleName='panel'))
@@ -983,16 +1068,20 @@ class NewXXX(GnucashWindow):
         """
         Class to wrap 
             1 - Billing Information in New Customer
-            2 - Payment Information in New Vendor (Not all member variable used in this case
+            2 - Payment Information in New Vendor 
+            (Not all member variable used in this case
         """
         def __init__(self, initializer):
             Node.__init__(self, initializer)
             self.currency_combobox = \
-            self.findChild(predicate.GenericPredicate(roleName='combo box', name='USD (US Dollar)'))
+            self.findChild(predicate.GenericPredicate(roleName='combo box', \
+            name='USD (US Dollar)'))
             self.terms_combobox = \
-            self.findChild(predicate.GenericPredicate(roleName='combo box', name='None'))
+            self.findChild(predicate.GenericPredicate(roleName='combo box', \
+            name='None'))
             self.tax_included_combobox = \
-            self.findChild(predicate.GenericPredicate(roleName='combo box', name='Use Global'))
+            self.findChild(predicate.GenericPredicate(roleName='combo box', \
+            name='Use Global'))
             self.override_global_tax_cb = \
             self.findChild(predicate.GenericPredicate(\
             roleName= 'check box', \
@@ -1058,18 +1147,24 @@ class NewCustomer(NewXXX):
         NewXXX.initialize(self)
         self.customer = self.XXX(self.tab('Customer'))
         self.xxx = self.customer
-        self.billing_information = self.YYYInformation(self.tab('Billing Information'))
+        self.billing_information = \
+        self.YYYInformation(self.tab('Billing Information'))
         self.identification_panel = \
         self.customer.findChild(\
         predicate.GenericPredicate(roleName='panel', name='Identification'))
         self.identification_panel_element = \
-        self.identification_panel.findChildren(predicate.GenericPredicate(roleName='text'))
-        self.customer.customer_number_txt = self.identification_panel_element[0]
+        self.identification_panel.findChildren(\
+        predicate.GenericPredicate(roleName='text'))
+        self.customer.customer_number_txt = \
+        self.identification_panel_element[0]
         self.billing_information = \
         self.YYYInformation(self.tab('Billing Information'))
-        self.billing_information.info_elements = self.findChildren(predicate.GenericPredicate(roleName='text'))
-        self.billing_information.discount_txt = self.billing_information.info_elements[0]
-        self.billing_information.credit_limit_txt = self.billing_information.info_elements[1]
+        self.billing_information.info_elements = self.findChildren(\
+        predicate.GenericPredicate(roleName='text'))
+        self.billing_information.discount_txt = \
+        self.billing_information.info_elements[0]
+        self.billing_information.credit_limit_txt = \
+        self.billing_information.info_elements[1]
         self.billing_information.tax_table_combobox = \
         self.findChild(predicate.GenericPredicate\
         (roleName='combo box', \
@@ -1145,7 +1240,8 @@ class FindCustomer(Find):
         self.dialog_name = 'Find Customer'
         sleep(2)
         find_customer = gnucash.findChild(\
-        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), retry=False, requireResult=False)
+        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), \
+        retry=False, requireResult=False)
         if find_customer != None:
             Window.__init__(self, find_customer)
             self.initialize()
@@ -1172,7 +1268,8 @@ class NewInvoice(GnucashWindow):
         roleName='panel', \
         name='Billing Information'))
         self.billing_information_list = \
-        self.billing_information_panel.findChildren(predicate.GenericPredicate(roleName='text'), recursive=True)
+        self.billing_information_panel.findChildren(\
+        predicate.GenericPredicate(roleName='text'), recursive=True)
         self.customer_txt = self.billing_information_list[0]
         #self.job_txt = self.billing_information_list[1]
         self.billing_id_txt = self.billing_information_list[1]
@@ -1295,7 +1392,8 @@ class FindVendor(Find):
         sleep(2) #Sleep 2 seconds just to insure the dialog loaded if exist
         gnucash = GnuCashApp()
         find_vendor = gnucash.findChild(\
-        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), retry=False, requireResult=False)
+        predicate.GenericPredicate(roleName='dialog', name=self.dialog_name), \
+        retry=False, requireResult=False)
         if find_vendor != None:
             Window.__init__(self, find_vendor)
             self.initialize()
@@ -1323,9 +1421,12 @@ class FindVendorJob(Find):
 class Register(Node):
     """ Wrapper class for gnucash register.
         Current Limitation:
-            1- This code could not read the data from register validation done e.g in the account page
-            2 - you must have gnucash not minimized and the top level application.
-        TODO: It is better to have register supported by a11y to be able to be more readable by dogtail
+            1- This code could not read the data from register 
+            validation done e.g in the account page
+            2 - you must have gnucash not minimized and 
+            the top level application.
+        TODO: It is better to have register supported by a11y to 
+        be able to be more readable by dogtail
     """
 
     def __init__(self, initializer):
@@ -1347,8 +1448,11 @@ class Register(Node):
             self.keyCombo("Tab")
 
     def set_cell_text(self, text):
-        """ based on the self.row and self.col set_cell_text get the relative value and move press tab (move right) or Shift-Tab move left by calculating the the difference from the current position"""
-        
+        """ 
+        based on the self.row and self.col set_cell_text get the relative 
+        value and move press tab (move right) or Shift-Tab move left by 
+        calculating the the difference from the current position
+        """
         relative_pos = self.column_val - self.prev_col_val
         if relative_pos > 0 :
             for i in range(relative_pos):
@@ -1362,7 +1466,10 @@ class Register(Node):
 #        sleep(5)
 
     def end_trans(self):
-        """ end trans finalize the transaction entery by click Enter and close the register """
+        """ 
+        end trans finalize the transaction entery 
+        by click Enter and close the register 
+        """
         self.keyCombo("Enter")
         GnuCashApp().menu('File').menuItem('Close').click()
 
@@ -1402,7 +1509,10 @@ class Register(Node):
 
 
 class EditInvoice(Node):
-    """ Wrapper class for edit invoice tab half dialog and half register """
+    """ 
+    Wrapper class for edit invoice 
+    tab half dialog and half register 
+    """
     class InvoiceRegister(Register):
 
         def __init__(self, initializer):
@@ -1465,16 +1575,17 @@ class EditInvoice(Node):
     def __init__(self, initializer):
         """ Pass a tab node to this initializer """
         Node.__init__(self, initializer)
-        invoice_entries = self.findChild(predicate.GenericPredicate(name = 'Invoice Entries', roleName = 'panel'))
-        invoice_register = invoice_entries.findChild(predicate.GenericPredicate(roleName = 'layered pane'))
+        invoice_entries = self.findChild(predicate.GenericPredicate(\
+        name = 'Invoice Entries', roleName = 'panel'))
+        invoice_register = invoice_entries.findChild(\
+        predicate.GenericPredicate(roleName = 'layered pane'))
         self.invoice_register = self.InvoiceRegister(invoice_register)
-        
 
 class BookOptions(GnucashWindow):
     """ Wapper class for Book options """
 
     def __init__(self):
-        self.invoke_list= ["File", "Properties"]
+        self.invoke_list = ["File", "Properties"]
         self.dialog_name = 'Book Options'
 
     def initialize(self):
@@ -1567,8 +1678,7 @@ class Reconcile(GnucashWindow):
 
     def __init__(self):
         self.invoke_list = ["Actions", "Reconcile..."]
-        self.dialog_name = ". - Reconcile"            # TODO: This line does not work as expected 
-                                                      # current work around override the dialog_name
+        self.dialog_name = ". - Reconcile"
 
     def initialize(self):
         self.ending_balance_txt = \
@@ -1582,7 +1692,7 @@ class Reconcile(GnucashWindow):
         self.cancel_btn = self.button('Cancel')
 
     def __setattr__(self, name, value):
-        if name =='ending_balance':
+        if name == 'ending_balance':
             self.ending_balance_txt.text = value
         elif name == 'include_subaccount':
             if value and not self.include_subaccount_cb.checked:
@@ -1610,7 +1720,11 @@ class ReconcileFrame(Node):
                 self.__dict__[name] = value
 
         def click(self, row=None, column=None):
-            """ Another row - column based controls i found no action assigned with this table cell Only Activate which does not work because dogtail does not detect the position correctly """
+            """ 
+            Another row - column based controls i found no action assigned 
+            with this table cell Only Activate which does not work because 
+            dogtail does not detect the position correctly 
+            """
             if row == None:
                 row = self.row_table_cell
             if column == None:
@@ -1673,8 +1787,11 @@ class NewAccountSetup(Wizard):
     def set_account_category(self, category_list):
         simple_checkbook = self.currentPage().child(name='A Simple Checkbook')
         self.currentPage().button('Clear All').click()
-        categorize_table = simple_checkbook.findAncestor(predicate.GenericPredicate(roleName='table'))
-        cells = categorize_table.findChildren(predicate.GenericPredicate(roleName='table cell'))
+        categorize_table = \
+        simple_checkbook.findAncestor(\
+        predicate.GenericPredicate(roleName='table'))
+        cells = categorize_table.findChildren(\
+        predicate.GenericPredicate(roleName='table cell'))
         for category in category_list:
             for i, cell in enumerate(cells):
                 if cell.name == category:
@@ -1684,22 +1801,6 @@ if __name__ == '__main__':
     """ This main Changes Frequently because it used to test most recent added widget """
     config.childrenLimit = 1500
     gnucash = GnuCashApp()
-    duride_frame = gnucash.findChild(\
-        predicate.GenericPredicate(roleName='frame', \
-        name='New Account Hierarchy Setup'))
-    new_account_setup = NewAccountSetup(duride_frame)
-    simple_checkbook = new_account_setup.currentPage().child(name='A Simple Checkbook')
-    categorize_table = simple_checkbook.findAncestor(predicate.GenericPredicate(roleName='table'))
-    cells = categorize_table.findChildren(predicate.GenericPredicate(roleName='table cell'))
-    for cell in cells:
-        name = cell.name
-        if len(name) > 1:
-            lower_under_score_name = name.lower().replace(' ', '_')
-            print ""
-            print "    def test_new_account_wizard_%s(self):" % lower_under_score_name
-            print "        gnucash = GnuCashApp()"
-            print "        \"\"\" Test Creating %s \"\"\" " % name
-            print "        self.new_account_wizard(['%s'])" % name
-            print "        #validation"
-            print "        account_tab = gnucash.tab('Accounts')"
-            print "        self.assertEquals(validate_node(account_tab, 'test_new_account_wizard_%s'), EXIT_SUCCESS)" % lower_under_score_name
+    export_report = ExportReport()
+    export_report.invoke()
+    export_report.export_report('testdffdsf')
