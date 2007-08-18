@@ -159,7 +159,7 @@ gnc_dense_cal_store_update_name(GncDenseCalStore *model, gchar *name)
         g_free(model->name);
     }
     model->name = g_strdup(name);
-    g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
+    //g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
 }
 
 void
@@ -170,7 +170,7 @@ gnc_dense_cal_store_update_info(GncDenseCalStore *model, gchar *info)
         g_free(model->info);
     }
     model->info = g_strdup(info);
-    g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
+    //g_signal_emit_by_name(model, "update", GUINT_TO_POINTER(1));
 }
 
 static void

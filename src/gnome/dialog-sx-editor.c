@@ -1553,8 +1553,8 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         g_free(schedule_desc);
     }
 
-    gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
-    gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
+    //gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
+    //gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
 
     /* figure out the end restriction */
     if (gtk_toggle_button_get_active(sxed->optEndDate))
