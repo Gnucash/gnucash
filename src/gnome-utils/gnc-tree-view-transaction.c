@@ -717,8 +717,7 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
             num = xaccTransGetAccountBalance(trans, anchor);
             if (gnc_reverse_balance(anchor)) 
                 num = gnc_numeric_neg(num);
-            s = xaccPrintAmount(num, gnc_account_print_info(
-                                        anchor, FALSE));
+            s = xaccPrintAmount(num, gnc_account_print_info(anchor, TRUE));
         } else s = "";
         g_object_set(cell, "text", s, NULL);
         break;
