@@ -197,6 +197,9 @@ class GnuCashApp (Application):
     def create_account_summary(self):
         self.menu('Reports').menuItem('Account Summary').click()
 
+    def create_transaction_report(self):
+        self.menu('Reports').menuItem('Transaction Report').click()
+
 class GnucashWindow(Window):
     """ A base for all Gnucash Dialogs dialogs """
 
