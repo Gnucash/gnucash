@@ -655,6 +655,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
   /* Create the dialog box */
   xml = gnc_glade_xml_new ("reconcile.glade", "Reconcile Start Dialog");
   dialog = glade_xml_get_widget (xml, "Reconcile Start Dialog");
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, &data);
   title = gnc_recn_make_window_name (account);
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free (title);
@@ -732,9 +733,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
       if( auto_interest_xfer_option )
        gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
     }
-
-    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
-				      &data);
 
     gtk_widget_show_all(dialog);
 
