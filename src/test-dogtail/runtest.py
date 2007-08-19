@@ -102,7 +102,10 @@ class SimpleTest(unittest.TestCase):
 
 
 class DialogTest(unittest.TestCase):
-    """ Test that dialog loaded as expected """
+    """ 
+    Test that dialog loaded as expected 
+    Also this test show if the wrappers are defined properly
+    """
     def setUp(self):
         cleanup_all()
         run('gnucash')
@@ -114,19 +117,6 @@ class DialogTest(unittest.TestCase):
     def tearDown(self):
         gnuCash = GnuCashApp()
         gnuCash.close_without_saving()
-
-    def create_test_suite(self):
-        """ This helper method could create python code for this test """
-        list_dialogs = [method for method in dir(GnuCash) if type(getattr(GnuCash, method)) == types.ClassType]
-        for i in list_dialogs:
-            if issubclass(getattr(GnuCash, i), GnucashWindow):
-                print "    def test_invoke_" + str(i)+"(self):"
-                var_name = i.lower()
-                print "       "+var_name+ " = "+i+"()"
-                print "       "+var_name+".invoke()"
-                print "       "+var_name+".dismiss()"
-                print
-
 
     def test_invoke_FindCustomer(self):
        findcustomer = FindCustomer()
@@ -786,7 +776,7 @@ class TestReports(unittest.TestCase):
 
     def validate_report(self, testcase_name):
         """ Helper method to aid in validating the report """
-        validate_files(testcase_name, filter_command="\'/TABLE/,/\/TABLE/p\'")
+        return validate_files(testcase_name, filter_command="\'/TABLE/,/\/TABLE/p\'")
 
     def test_account_summary(self):
         gnucash = GnuCashApp()
@@ -795,7 +785,18 @@ class TestReports(unittest.TestCase):
         export_report.invoke()
         export_report.export_report(gnucash.cwd_path + '/act/test_account_summary_act')
         sleep(5)
-        self.validate_report('test_account_summary')
+        self.assertEquals(self.validate_report('test_account_summary'), \
+        EXIT_SUCCESS)
+
+    def test_transaction_report(self):
+        gnucash = GnuCashApp()
+        gnucash.create_transaction_report()
+        export_report = ExportReport()
+        export_report.invoke()
+        export_report.export_report(gnucash.cwd_path + '/act/test_transaction_report_act')
+        sleep(5)
+        self.assertEquals(self.validate_report('test_transaction_report'), \
+        EXIT_SUCCESS)
 
 class ScenarioTest(unittest.TestCase):
     """ Test a compelete Scenario """
