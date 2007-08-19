@@ -2144,16 +2144,17 @@ gnc_tree_view_append_column (GncTreeView *view,
 }
 
 static gboolean
-get_column_next_to(GtkTreeView *tv, GtkTreeViewColumn **col, gboolean backward)
+get_column_next_to(GncTreeView *view, GtkTreeViewColumn **col, gboolean backward)
 {
     GList *cols, *node;
     GtkTreeViewColumn *c = NULL;
+    GncTreeViewPrivate *priv;
     gint seen = 0;
     gboolean wrapped = FALSE;
-    
-    cols = gtk_tree_view_get_columns(tv);
-    g_return_val_if_fail(g_list_length(cols) > 0, FALSE);
-    
+
+    cols = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+
     node = g_list_find(cols, *col);
     g_return_val_if_fail(node, FALSE);
     do {
@@ -2163,11 +2164,14 @@ get_column_next_to(GtkTreeView *tv, GtkTreeViewColumn **col, gboolean backward)
             node = backward ? g_list_last(cols) : cols;
         }
         c = GTK_TREE_VIEW_COLUMN(node->data);
-        if (c && gtk_tree_view_column_get_visible(c))
+        if (c
+            && gtk_tree_view_column_get_visible(c)
+            && c != priv->spacer_column
+            && c != priv->column_menu_column)
             seen++;
         if (c == *col) break;
     } while (!seen);
-    
+
     g_list_free(cols);
     *col = c;
     return wrapped;
@@ -2185,7 +2189,7 @@ gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path)
 }
 
 gboolean
-gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
+gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
                      GtkTreePath *path, GdkEventKey *event)
 {
     GtkTreeView *tv = GTK_TREE_VIEW(view);
@@ -2199,7 +2203,7 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
     case GDK_ISO_Left_Tab:
     case GDK_KP_Tab:
         shifted = event->state & GDK_SHIFT_MASK;
-        wrapped = get_column_next_to(tv, col, shifted); 
+        wrapped = get_column_next_to(view, col, shifted);
         if (wrapped) {
             /* This is the end (or beginning) of the line, buddy. */
             depth = gtk_tree_path_get_depth(path);
