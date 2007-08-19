@@ -1099,11 +1099,11 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
         acct = xaccSplitGetAccount(split);
         if (!acct) {
             if (anchor) {
-                g_assert_not_reached();
                 xaccSplitSetAccount(split, anchor);
                 acct = xaccSplitGetAccount(split);
-            } else
+            } else {
                 break; //Well, what else is there to do?
+            }
         }
 
         if (viewcol == COL_CREDIT)
