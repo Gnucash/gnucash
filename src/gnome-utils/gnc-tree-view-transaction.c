@@ -1208,6 +1208,7 @@ restore_cursor_to_dirty(GncTreeViewTransaction *tv)
         GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
         GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
         gtk_tree_selection_select_path(sel, path);
+        gtk_tree_path_free(path);
     }
 }
 
@@ -1250,6 +1251,7 @@ gnc_tree_view_transaction_select_split(GncTreeViewTransaction *tv,
         GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
         GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
         gtk_tree_selection_select_path(sel, path);
+        gtk_tree_path_free(path);
     }
 }
 
@@ -1262,6 +1264,7 @@ void gnc_tree_view_transaction_goto_blank_trans(GncTreeViewTransaction *tv)
         GtkTreePath *path = get_view_path_from_model_iter(tv, &iter);
         GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
         gtk_tree_selection_select_path(sel, path);
+        gtk_tree_path_free(path);
     }
 }
 
