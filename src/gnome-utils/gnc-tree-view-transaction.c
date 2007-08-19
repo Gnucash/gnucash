@@ -642,20 +642,14 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
                 s = "";
             } else if (anchor) {
                 s = xaccTransHasReconciledSplitsByAccount(
-                    trans, anchor) ? "c":"n";
+                    trans, anchor) ? gnc_get_reconcile_str(CREC):gnc_get_reconcile_str(NREC);
             } else {
                 s = "";
             }
             gtk_tree_path_free(path);
         } else {
-            switch (xaccSplitGetReconcile(split)) {
-            case NREC: s = "n"; break;
-            case CREC: s = "c"; break;
-            case YREC: s = "y"; break;
-            case FREC: s = "f"; break;
-            case VREC: s = "V"; break;
-            default: s = "";
-            }
+            s = gnc_get_reconcile_str(xaccSplitGetReconcile(split));
+            if (!s) s = "";
         }
         g_object_set(cell, "text", s, NULL);
         break;
