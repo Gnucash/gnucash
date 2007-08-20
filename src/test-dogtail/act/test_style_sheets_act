@@ -1,6 +1,0 @@
-{child with roleName='table'}
- Node roleName='table column header' name='Style Sheet Name' description='' text='Style Sheet Name'
- Node roleName='table cell' name='Default' description='' text='Default'
- Node roleName='table cell' name='Easy' description='' text='Easy'
- Node roleName='table cell' name='Technicolor' description='' text='Technicolor'
- Node roleName='table cell' name='test' description='' text='test'
