@@ -49,6 +49,7 @@
 #include "gnc-account-sel.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-html.h"
@@ -105,6 +106,8 @@ static void gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page, 
 static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 /* Callbacks */
+static void gnc_plugin_page_account_tree_summarybar_position_changed(GConfEntry *entry,
+								     gpointer user_data);
 static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 							      GdkEventButton *event,
 			       				      GncPluginPage *page);
@@ -483,9 +486,13 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
-	gtk_box_pack_end (GTK_BOX (priv->widget), plugin_page->summarybar,
-			  FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
+			    FALSE, FALSE, 0);
 	gtk_widget_show(plugin_page->summarybar);
+	gnc_plugin_page_account_tree_summarybar_position_changed(NULL, page);
+	gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
+		gnc_plugin_page_account_tree_summarybar_position_changed,
+		page);
 
 	LEAVE("widget = %p", priv->widget);
 	return priv->widget;
@@ -500,6 +507,10 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+
+	gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
+		gnc_plugin_page_account_tree_summarybar_position_changed,
+		page);
 
 	if (priv->widget) {
 	  g_object_unref(G_OBJECT(priv->widget));
@@ -586,6 +597,35 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 
 
 /* Callbacks */
+
+static void
+gnc_plugin_page_account_tree_summarybar_position_changed(GConfEntry *entry,
+							 gpointer user_data)
+{
+	GncPluginPage *plugin_page;
+	GncPluginPageAccountTree *page;
+	GncPluginPageAccountTreePrivate *priv;
+	GtkPositionType position = GTK_POS_BOTTOM;
+	gchar *conf_string;
+	
+	g_return_if_fail(user_data != NULL);
+	
+	plugin_page = GNC_PLUGIN_PAGE(user_data);
+	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (user_data);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+	
+	conf_string = gnc_gconf_get_string (GCONF_GENERAL,
+					    KEY_SUMMARYBAR_POSITION, NULL);
+	if (conf_string) {
+		position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
+					       conf_string, GTK_POS_BOTTOM);
+		g_free (conf_string);
+	}
+
+	gtk_box_reorder_child(GTK_BOX(priv->widget),
+			      plugin_page->summarybar,
+			      (position == GTK_POS_TOP ? 0 : -1) );
+}
 
 /** This button press handler calls the common button press handler
  *  for all pages.  The GtkTreeView eats all button presses and
