@@ -555,6 +555,34 @@ gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 }
 
 
+static void
+gnucash_sheet_hadjustment_changed (GtkAdjustment *adj,
+                                   GnucashSheet *sheet)
+{
+        GnucashRegister *reg;
+
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+        reg = GNUCASH_REGISTER(sheet->reg);
+        g_return_if_fail (reg != NULL);
+
+        if (adj->upper - adj->lower > adj->page_size)
+        {
+                if (!reg->hscrollbar_visible)
+                {
+                        gtk_widget_show(reg->hscrollbar);
+                        reg->hscrollbar_visible = TRUE;
+                }
+        } else {
+                if (reg->hscrollbar_visible)
+                {
+                        gtk_widget_hide(reg->hscrollbar);
+                        reg->hscrollbar_visible = FALSE;
+                }
+        }
+}
+
+
 void
 gnucash_sheet_redraw_all (GnucashSheet *sheet)
 {
@@ -657,6 +685,8 @@ gnucash_sheet_create (Table *table)
 
         g_signal_connect (G_OBJECT (sheet->vadj), "value_changed",
                 G_CALLBACK (gnucash_sheet_vadjustment_value_changed), sheet);
+        g_signal_connect (G_OBJECT (sheet->hadj), "changed",
+                G_CALLBACK (gnucash_sheet_hadjustment_changed), sheet);
 
         return sheet;
 }
@@ -2599,6 +2629,7 @@ gnucash_register_new (Table *table)
                           0, 0);
         reg->hscrollbar = scrollbar;
         gtk_widget_show(scrollbar);
+        reg->hscrollbar_visible = TRUE;
 
 	/* The gtkrc color helper widgets need to be part of a window
 	 * hierarchy so they can be realized. Stick them in a box
