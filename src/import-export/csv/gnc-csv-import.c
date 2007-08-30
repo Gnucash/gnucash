@@ -68,7 +68,7 @@ typedef struct
   GtkEntry* custom_entry; /**< The entry for custom separators */
   gboolean encoding_selected_called; /**< Before encoding_selected is first called, this is FALSE.
                                       * (See description of encoding_selected.) */
-  /* TODO We might not need previewing_errors. */
+  gboolean not_empty; /**< FALSE initially, true after the first type gnc_csv_preview_update is called. */
   gboolean previewing_errors; /**< TRUE if the dialog is displaying
                                * error lines, instead of all the file
                                * data. */
@@ -84,7 +84,7 @@ typedef struct
                          * the user has clicked */
 } GncCsvPreview;
 
-static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty);
+static void gnc_csv_preview_update(GncCsvPreview* preview);
 
 /** Event handler for separator changes. This function is called
  * whenever one of the widgets for configuring the separators (the
@@ -144,13 +144,18 @@ static void sep_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
   }
 
   /* If we parsed successfully, redisplay the data. */
-  gnc_csv_preview_update(preview, TRUE);
+  gnc_csv_preview_update(preview);
 }
 
-/* TODO Comment */
+/** Event handler for clicking one of the format type radio
+ * buttons. This occurs if the format (Fixed-Width or CSV) is changed.
+ * @param csv_button The "Separated" radio button
+ * @param preview The display of the data being imported
+ */
 static void separated_or_fixed_selected(GtkToggleButton* csv_button, GncCsvPreview* preview)
 {
   GError* error = NULL;
+  /* Set the parsing type correctly. */
   if(gtk_toggle_button_get_active(csv_button)) /* If we're in CSV mode ... */
   {
     stf_parse_options_set_type(preview->parse_data->options, PARSE_TYPE_CSV);
@@ -159,12 +164,17 @@ static void separated_or_fixed_selected(GtkToggleButton* csv_button, GncCsvPrevi
   {
     stf_parse_options_set_type(preview->parse_data->options, PARSE_TYPE_FIXED);
   }
+
+  /* Reparse the data. */
   if(gnc_csv_parse(preview->parse_data, FALSE, &error))
   {
+    /* Show an error dialog explaining the problem. */
     gnc_error_dialog(NULL, "%s", error->message);
     return;
   }
-  gnc_csv_preview_update(preview, TRUE);
+
+  /* Show the new data. */
+  gnc_csv_preview_update(preview);
 }
 
 /** Event handler for a new encoding. This is called when the user
@@ -172,7 +182,7 @@ static void separated_or_fixed_selected(GtkToggleButton* csv_button, GncCsvPrevi
  * user.
  * @param selector The widget the user uses to select a new encoding
  * @param encoding The encoding that the user selected
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void encoding_selected(GOCharmapSel* selector, const char* encoding,
                               GncCsvPreview* preview)
@@ -204,7 +214,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
       return;
     }
 
-    gnc_csv_preview_update(preview, TRUE);
+    gnc_csv_preview_update(preview);
     preview->encoding_selected_called = FALSE;
   }
   else /* If this is the first call of the function ... */
@@ -215,7 +225,7 @@ static void encoding_selected(GOCharmapSel* selector, const char* encoding,
 
 /** Event handler for selecting a new date format.
  * @param format_selector The combo box for selecting date formats
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void date_format_selected(GtkComboBox* format_selector, GncCsvPreview* preview)
 {
@@ -226,7 +236,7 @@ static void date_format_selected(GtkComboBox* format_selector, GncCsvPreview* pr
  * function updates the parse data with the user's column type
  * configuration and closes the preview dialog.
  * @param widget The "OK" button
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 {
@@ -271,7 +281,7 @@ static void ok_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 /** Event handler for the "Cancel" button. When the user clicks
  * "Cancel", the dialog is simply closed.
  * @param widget The "Cancel" button
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void cancel_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
 {
@@ -283,7 +293,7 @@ static void cancel_button_clicked(GtkWidget* widget, GncCsvPreview* preview)
  * match.
  * @param widget The data treeview
  * @param allocation The size of the data treeview
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCsvPreview* preview)
 {
@@ -315,7 +325,7 @@ static void treeview_resized(GtkWidget* widget, GtkAllocation* allocation, GncCs
  * @param renderer The renderer of the column the user changed
  * @param path There is only 1 row in preview->ctreeview, so this is always 0.
  * @param new_text The text the user selected
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  */
 static void column_type_edited(GtkCellRenderer* renderer, gchar* path,
                                gchar* new_text, GncCsvPreview* preview)
@@ -474,6 +484,9 @@ static GncCsvPreview* gnc_csv_preview_new()
    * set it initially to FALSE. */
   preview->encoding_selected_called = FALSE;
 
+  /* It is empty at first. */
+  preview->not_empty = FALSE;
+
   return preview;
 }
 
@@ -488,7 +501,7 @@ static void gnc_csv_preview_free(GncCsvPreview* preview)
 }
 
 /** Returns the cell renderer from a column in the preview's treeview.
- * @param preview The data that is being configured
+ * @param preview The display of the data being imported
  * @param col The number of the column whose cell renderer is being retrieved
  * @return The cell renderer of column number col
  */
@@ -584,7 +597,7 @@ make_new_column (GncCsvPreview *preview, int col, int dx, gboolean test_only)
                   gnc_error_dialog(NULL, "%s", error->message);
                   return FALSE;
                 }
-		gnc_csv_preview_update (preview, TRUE);
+		gnc_csv_preview_update (preview);
 	}
 
 	return TRUE;
@@ -618,7 +631,7 @@ widen_column (GncCsvPreview *preview, int col, gboolean test_only)
                   gnc_error_dialog(NULL, "%s", error->message);
                   return FALSE;
                 }
-		gnc_csv_preview_update (preview, TRUE);
+		gnc_csv_preview_update (preview);
 	}
 	return TRUE;
 }
@@ -649,7 +662,7 @@ narrow_column (GncCsvPreview *preview, int col, gboolean test_only)
                   gnc_error_dialog(NULL, "%s", error->message);
                   return FALSE;
                 }
-		gnc_csv_preview_update (preview, TRUE);
+		gnc_csv_preview_update (preview);
 	}
 	return TRUE;
 }
@@ -670,7 +683,7 @@ delete_column (GncCsvPreview *preview, int col, gboolean test_only)
                   gnc_error_dialog(NULL, "%s", error->message);
                   return FALSE;
                 }
-		gnc_csv_preview_update (preview, TRUE);
+		gnc_csv_preview_update (preview);
 	}
 	return TRUE;
 }
@@ -753,8 +766,6 @@ fixed_context_menu (GncCsvPreview *preview, GdkEventButton *event,
  * @param event The event that happened (where the user clicked)
  * @param preview The data being configured
  */
-/* TODO Comment */
-/* TODO Clean up */
 static void header_button_press_handler(GtkWidget* button, GdkEventButton* event,
                                         GncCsvPreview* preview)
 {
@@ -762,6 +773,7 @@ static void header_button_press_handler(GtkWidget* button, GdkEventButton* event
      to correct for the indentation of button. */
   int i, col = 0, offset = GTK_BIN(button)->child->allocation.x - button->allocation.x,
     ncols = preview->parse_data->column_types->len;
+  /* Find the column that was clicked. */
   for(i = 0; i < ncols; i++)
   {
     if(preview->treeview_buttons[i] == button)
@@ -777,10 +789,12 @@ static void header_button_press_handler(GtkWidget* button, GdkEventButton* event
     return;
   }
 
+  /* Double clicks can split columns. */
   if(event->type == GDK_2BUTTON_PRESS && event->button == 1)
   {
     make_new_column(preview, col, (int)event->x - offset, FALSE);
   }
+  /* Right clicking brings up a context menu. */
   else if(event->type == GDK_BUTTON_PRESS && event->button == 3)
   {
     fixed_context_menu(preview, event, col, (int)event->x - offset);
@@ -793,8 +807,7 @@ static void header_button_press_handler(GtkWidget* button, GdkEventButton* event
  * @param preview The data being previewed
  * @param notEmpty Whether this function has been called before or not
  */
-/* TODO Look at getting rid of notEmpty */
-static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
+static void gnc_csv_preview_update(GncCsvPreview* preview)
 {
   /* store has the data from the file being imported. cstores is an
    * array of stores that hold the combo box entries for each
@@ -836,7 +849,7 @@ static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
     }
   }
 
-  if(notEmpty)
+  if(preview->not_empty)
   {
     GList *children, *children_begin;
     GList *tv_columns, *tv_columns_begin, *ctv_columns, *ctv_columns_begin;
@@ -970,6 +983,9 @@ static void gnc_csv_preview_update(GncCsvPreview* preview, gboolean notEmpty)
   /* Set the date format to what's in the combo box (since we don't
    * necessarily know if this will always be the same). */
   preview->parse_data->date_format = gtk_combo_box_get_active(preview->date_format_combo);
+
+  /* It's now been filled with some stuff. */
+  preview->not_empty = TRUE;
 }
 
 /** A function that lets the user preview a file's data. This function
@@ -990,7 +1006,7 @@ static int gnc_csv_preview(GncCsvPreview* preview, GncCsvParseData* parse_data)
   /* Load the data into the treeview. (This is the first time we've
    * called gnc_csv_preview_update on this preview, so we use
    * FALSE.) */
-  gnc_csv_preview_update(preview, FALSE);
+  gnc_csv_preview_update(preview);
   /* Wait until the user clicks "OK" or "Cancel". */
   gtk_dialog_run(GTK_DIALOG(preview->dialog));
 
@@ -1023,12 +1039,11 @@ static int gnc_csv_preview_errors(GncCsvPreview* preview)
   gtk_widget_show(GTK_WIDGET(instructions_image));
   gtk_widget_show(GTK_WIDGET(instructions_label));
 
-  /* TODO Implement */
   preview->previewing_errors = TRUE;
   preview->approved = FALSE; /* This is FALSE until the user clicks "OK". */
 
   /* Wait until the user clicks "OK" or "Cancel". */
-  gnc_csv_preview_update(preview, TRUE);
+  gnc_csv_preview_update(preview);
 
   /* Set the last column to have the header "Errors" so that the user
    * doesn't find the extra column confusing. */
@@ -1119,7 +1134,7 @@ void gnc_file_csv_import(void)
     }
 
     /* Create transactions from the parsed data. */
-    gnc_parse_to_trans(parse_data, account, FALSE);
+    gnc_csv_parse_to_trans(parse_data, account, FALSE);
 
     /* If there are errors, let the user try and eliminate them by
      * previewing them. Repeat until either there are no errors or the
@@ -1127,7 +1142,7 @@ void gnc_file_csv_import(void)
     while(!((parse_data->error_lines == NULL) || user_canceled))
     {
       user_canceled = gnc_csv_preview_errors(preview);
-      gnc_parse_to_trans(parse_data, account, TRUE);
+      gnc_csv_parse_to_trans(parse_data, account, TRUE);
     }
 
     /* Create the genereic transaction importer GUI. */

@@ -44,6 +44,7 @@ enum GncCsvColumnType {GNC_CSV_NONE,
                        GNC_CSV_BALANCE,
                        GNC_CSV_DEPOSIT,
                        GNC_CSV_WITHDRAWAL,
+                       GNC_CSV_NUM,
                        GNC_CSV_NUM_COL_TYPES};
 
 /** Enumeration for error types. These are the different types of
@@ -61,6 +62,9 @@ typedef struct
   char* end;
 } GncCsvStr;
 
+/* TODO We now sort transactions by date, not line number, so we
+ * should probably get rid of this struct and uses of it. */
+
 /** Struct pairing a transaction with a line number. This struct is
  * used to keep the transactions in order. When rows are separated
  * into "valid" and "error" lists (in case some of the rows have cells
@@ -72,6 +76,8 @@ typedef struct
 {
   int line_no;
   Transaction* trans;
+  gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
+  gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
 } GncCsvTransLine;
 
 extern const int num_date_formats;
@@ -111,6 +117,6 @@ int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, 
 
 int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
-int gnc_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
+int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
 #endif
