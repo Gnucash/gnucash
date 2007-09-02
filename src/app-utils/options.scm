@@ -98,7 +98,7 @@
             strings-getter
             option-widget-changed-proc)))
 
-u(define (gnc:option-section option)
+(define (gnc:option-section option)
   (vector-ref option 0))
 (define (gnc:option-name option)
   (vector-ref option 1))
