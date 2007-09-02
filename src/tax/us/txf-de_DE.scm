@@ -59,6 +59,7 @@
 
    (cons 'K41 #(none "41" "Innergemeinschaftliche Lieferungen an Abnehmer mit USt-IdNr. " 2 #f "41"))
    (cons 'K44 #(none "44" "Innergemeinschaftliche Lieferungen neuer Fahrzeuge an Abnehmer ohne USt-IdNr" 2 #f "44"))
+   (cons 'K45 #(none "45" "Im Inland nicht steuerbare Umsätze" 2 #f "45"))
    (cons 'K49 #(none "49" "Innergemeinschaftliche Lieferungen neuer Fahrzeuge außerhalb eines Unternehmens" 2 #f "49"))
    (cons 'K43 #(none "43" "Weitere steuerfreie Umsätze mit Vorsteuerabzug" 2 #f "43"))
    (cons 'K48 #(none "48" "Steuerfreie Umsätze ohne Vorsteuerabzug" 2 #f "48"))
