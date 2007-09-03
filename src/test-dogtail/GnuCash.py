@@ -233,7 +233,7 @@ class GnucashWindow(Window):
                 print "Not called"
 
     def dismiss(self):
-        """" when calling dismiss the expected action is Cancel, Close and No """
+        """ when calling dismiss the expected action is Cancel, Close and No """
         button_list = self.findChildren(\
         predicate.GenericPredicate(roleName='push button'))
         for button in button_list:
@@ -245,7 +245,7 @@ class GnucashWindow(Window):
         return False
 
     def accept(self):
-        """" when calling dismiss the expected action is Cancel, Close and No """
+        """ when calling dismiss the expected action is Cancel, Close and No """
         button_list = self.findChildren(\
         predicate.GenericPredicate(roleName='push button'))
         for button in button_list:
