@@ -3613,7 +3613,7 @@
   <act:parent type="guid">3db9920658f7630cee64902f9698ebb3</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>2. Forderungen gegen verbundene Unternhmen</act:name>
+  <act:name>2. Forderungen gegen verbundene Unternehmen</act:name>
   <act:id type="guid">2206ddc60ecf97df41c9a90d71fdd94d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
