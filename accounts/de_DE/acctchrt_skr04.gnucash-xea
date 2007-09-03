@@ -6543,48 +6543,6 @@
   <act:parent type="guid">19972a0e65d1f25f0878a3b9fba9343f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ich</act:name>
-  <act:id type="guid">ed8168841da5ad21320eff743656ff5c</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>EUR</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">false</slot:value>
-    </slot>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"></slot:value>
-    </slot>
-  </act:slots>
-  <act:parent type="guid">59977885c98ae6b07c92795deafd9c80</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>mein Partner</act:name>
-  <act:id type="guid">a200a28aedfd7dda397a29a152539171</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>EUR</cmdty:id>
-  </act:commodity>
-  <act:commodity-scu>100</act:commodity-scu>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">false</slot:value>
-    </slot>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"></slot:value>
-    </slot>
-  </act:slots>
-  <act:parent type="guid">59977885c98ae6b07c92795deafd9c80</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
   <act:name>Variables Kapital</act:name>
   <act:id type="guid">9cd3e7bdd52547af02d5724aceb85def</act:id>
   <act:type>LIABILITY</act:type>
