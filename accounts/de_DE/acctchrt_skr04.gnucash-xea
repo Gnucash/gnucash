@@ -12516,7 +12516,7 @@
   <act:parent type="guid">ca4f3be70076340cc2702f8863077d48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 1. Betriebliche Erträge</act:name>
+  <act:name>01. Betriebliche Erträge</act:name>
   <act:id type="guid">ef9980b6277cc8f46bc1b1411ea65c87</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -14178,7 +14178,7 @@
   <act:parent type="guid">9bf908bfc78429d448d917b0f9f433dd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 2. Erhöhung oder Verminderung des Bestandes an fertigen und unfertigen Erzeugnissen</act:name>
+  <act:name>02. Erhöhung oder Verminderung des Bestandes an fertigen und unfertigen Erzeugnissen</act:name>
   <act:id type="guid">1e39012da3dcba7d9581752aa72fdac3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -14312,7 +14312,7 @@
   <act:parent type="guid">1e39012da3dcba7d9581752aa72fdac3</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 3. Andere aktivierte Eigenleistungen</act:name>
+  <act:name>03. Andere aktivierte Eigenleistungen</act:name>
   <act:id type="guid">65a4c9e673990503afd7bd9e0f005db7</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -14358,7 +14358,7 @@
   <act:parent type="guid">65a4c9e673990503afd7bd9e0f005db7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 4. Sonstige betriebliche Erträge</act:name>
+  <act:name>04. Sonstige betriebliche Erträge</act:name>
   <act:id type="guid">4c0c1557fe54e71d7ed717587a0c0b4d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -15604,7 +15604,7 @@
   <act:parent type="guid">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 9. Erträge aus Beteiligungen</act:name>
+  <act:name>09. Erträge aus Beteiligungen</act:name>
   <act:id type="guid">077d47ff0c858e8c31c31e0203042482</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -16494,7 +16494,7 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 5. Materialaufwand</act:name>
+  <act:name>05. Materialaufwand</act:name>
   <act:id type="guid">57c64d9217db4ee87cece20a3c08a148</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -17878,7 +17878,7 @@
   <act:parent type="guid">6a2cb0c78ebe7460483db55b133914ea</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 6. Personalaufwand</act:name>
+  <act:name>06. Personalaufwand</act:name>
   <act:id type="guid">6dd2362a27e92ab13554c41721b91795</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -18576,7 +18576,7 @@
   <act:parent type="guid">a943872d0d0623064a3c76ccff77965e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 7. Abschreibungen</act:name>
+  <act:name>07. Abschreibungen</act:name>
   <act:id type="guid">1b709a262ee2432eed07961dc6a92463</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -19216,7 +19216,7 @@
   <act:parent type="guid">9dda452d32d7855339d67cf02698c269</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name> 8. sonstige betriebliche Aufwendungen</act:name>
+  <act:name>08. sonstige betriebliche Aufwendungen</act:name>
   <act:id type="guid">cf7f94dcdeb53cd3d602ea87d83aba4e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
