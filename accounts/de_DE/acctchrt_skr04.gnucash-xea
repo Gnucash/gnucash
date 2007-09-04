@@ -7,7 +7,7 @@
       Standardkontenrahmen SKR04, Stand 2005
     </gnc-act:short-description>
     <gnc-act:long-description>
-	    1. BETA-Version des Kontenrahmes SKR04:2005. Der SKR04 orientiert sich an den Positionen des Jahresabschlusses (Aktiva, Passiva, Erträge und Aufwendungen) und ist von daher besonders den Neueinsteigern der Unternehmensbuchhaltung zu empfehlen. Da sich diese Gliederung außerdem an die HGB-Vorschriften für Kapitalgesellschaften anlehnt, sollten insbesondere auch GmbH-Buchhalter diesen Kontenrahmen verwenden. Er enthält sowohl Konten für Kapital- als auch Personengesellschaften. Der Kontenrahmen sollte den eigenen Bedürfnissen angepasst werden was Struktur und Kontenbezeichnungen angeht. Diese Version enthält fast alle Konten mit "Hausnummern" mit Ausnahme der Statistikkonten gemäß dem gesetzlichen Stand 2005. In den Beschreibungen sind auch die Felder für die Umsatzsteuervoranmeldung genannt. Ganz sicher enthält er aber noch Fehler, etwa in der Gruppierung. Korrekturen und Verbesserungsvorschläge bitte an gnucash AT mataram.de.
+	    BETA-Version eines Kontenrahmes SKR04 für 2005.  Mehr Informationen unter http://linuxwiki.de/GnuCash/skr04
     </gnc-act:long-description>
 <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
