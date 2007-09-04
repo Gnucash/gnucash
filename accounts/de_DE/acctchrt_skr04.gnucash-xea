@@ -12690,6 +12690,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4140</act:code>
+  <act:description>UStVa Zl. 42 KZ 45</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
