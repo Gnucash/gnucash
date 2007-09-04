@@ -4935,7 +4935,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>UStVa Zl. 55, KZ 66</act:description>
+  <act:description>UstVa Zl. 55, Kz. 66</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -5002,7 +5002,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1402</act:code>
-  <act:description>UStVa Zl. 56, KZ 61</act:description>
+  <act:description>UstVa Zl. 56, Kz. 61</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -5047,7 +5047,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1407</act:code>
-  <act:description>UStVa Zl. 59, KZ 63</act:description>
+  <act:description>UstVa Zl. 59, Kz. 63</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -5070,7 +5070,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1408</act:code>
-  <act:description>UStVa Zl. 58, KZ 67</act:description>
+  <act:description>UstVa Zl. 58, Kz. 67</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -5292,7 +5292,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1432</act:code>
-  <act:description>UStVa Zl. 61, KZ 59</act:description>
+  <act:description>UstVa Zl. 61, Kz. 59</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -5315,7 +5315,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>1433</act:code>
-  <act:description>UStVa Zl. 57, KZ 62</act:description>
+  <act:description>UstVa Zl. 57, Kz. 62</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12146,7 +12146,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>3832</act:code>
-  <act:description>UStVA Zl. 52, KZ 65</act:description>
+  <act:description>UstVa Zl. 52, Kz. 65</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12369,7 +12369,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>3851</act:code>
-  <act:description>UStVA Kz. 69</act:description>
+  <act:description>UstVa Zl. 63f, Kz. 69</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12553,7 +12553,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4100</act:code>
-  <act:description>UStVa Zl. 25, KZ 48</act:description>
+  <act:description>UstVa Zl. 25, Kz. 48</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12598,7 +12598,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4120</act:code>
-  <act:description>UStVa Zl. 24, KZ 43</act:description>
+  <act:description>UstVa Zl. 24, Kz. 43</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12621,7 +12621,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4125</act:code>
-  <act:description>UStVa Zl. 21, KZ 41</act:description>
+  <act:description>UstVa Zl. 21, Kz. 41</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12644,7 +12644,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4130</act:code>
-  <act:description>UStVa Zl. 40, KZ 42</act:description>
+  <act:description>UstVa Zl. 40, Kz. 42</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12667,7 +12667,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4135</act:code>
-  <act:description>UStVa Zl. 22, KZ 44</act:description>
+  <act:description>UstVa Zl. 22, Kz. 44</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12690,7 +12690,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4140</act:code>
-  <act:description>UStVa Zl. 42, KZ 45</act:description>
+  <act:description>UstVa Zl. 42, Kz. 45</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12713,7 +12713,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4150</act:code>
-  <act:description>UStVa Zl. 24, KZ 43</act:description>
+  <act:description>UstVa Zl. 24, Kz. 43</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12759,7 +12759,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4180</act:code>
-  <act:description>UStVa Zl. 32, KZ 76</act:description>
+  <act:description>UstVa Zl. 32, Kz. 76</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12849,7 +12849,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4300</act:code>
-  <act:description>UStVa Zl. 28, KZ 86</act:description>
+  <act:description>UstVa Zl. 28, Kz. 86</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12872,7 +12872,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4310</act:code>
-  <act:description>UStVa Zl. 36, KZ 93</act:description>
+  <act:description>UstVa Zl. 36, Kz. 93</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12895,7 +12895,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4315</act:code>
-  <act:description>UStVa Zl. 35, KZ 97</act:description>
+  <act:description>UstVa Zl. 35, Kz. 97</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12940,7 +12940,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4337</act:code>
-  <act:description>UStVa Zl. 41, KZ 60</act:description>
+  <act:description>UstVa Zl. 41, Kz. 60</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12963,7 +12963,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4338</act:code>
-  <act:description>UStVa Zl. 42, KZ 45</act:description>
+  <act:description>UstVa Zl. 42, Kz. 45</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -12986,7 +12986,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4339</act:code>
-  <act:description>UStVa Zl. 42, KZ 45</act:description>
+  <act:description>UstVa Zl. 42, Kz. 45</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -13009,7 +13009,7 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:code>4400</act:code>
-  <act:description>UStVa Zl. 27, KZ 51</act:description>
+  <act:description>UstVa Zl. 27, Kz. 51</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
