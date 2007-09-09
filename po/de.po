@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-21 10:04+0200\n"
-"PO-Revision-Date: 2007-07-21 10:06+0200\n"
+"POT-Creation-Date: 2007-08-11 17:04+0200\n"
+"PO-Revision-Date: 2007-08-11 17:06+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -426,8 +426,8 @@ msgstr "Automatische Buchung"
 #: ../src/business/business-core/gncInvoice.c:1320
 #: ../src/business/business-core/gncInvoice.c:1414
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:140
-#: ../src/gnome/druid-loan.c:1792 ../src/gnome/druid-loan.c:2273
-#: ../src/gnome/druid-loan.c:2336 ../src/gnome/druid-loan.c:2350
+#: ../src/gnome/druid-loan.c:1795 ../src/gnome/druid-loan.c:2276
+#: ../src/gnome/druid-loan.c:2339 ../src/gnome/druid-loan.c:2353
 #: ../src/register/ledger-core/split-register.c:2028
 #: ../src/register/ledger-core/split-register.c:2033
 #: ../src/register/ledger-core/split-register.c:2042
@@ -469,7 +469,7 @@ msgstr "Auslagenerstattung"
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:454
-#: ../src/engine/FreqSpec.c:728 ../src/engine/Recurrence.c:479
+#: ../src/engine/Recurrence.c:330 ../src/engine/Recurrence.c:482
 #: ../src/gnome/glade/sched-xact.glade.h:118 ../intl-scm/guile-strings.c:3634
 #: ../intl-scm/guile-strings.c:3660 ../intl-scm/guile-strings.c:3720
 #: ../intl-scm/guile-strings.c:3722 ../intl-scm/guile-strings.c:3828
@@ -477,7 +477,6 @@ msgstr "Auslagenerstattung"
 #: ../intl-scm/guile-strings.c:4814 ../intl-scm/guile-strings.c:4874
 #: ../intl-scm/guile-strings.c:4876 ../intl-scm/guile-strings.c:4982
 #: ../intl-scm/guile-strings.c:4998
-#, c-format
 msgid "None"
 msgstr "Keine"
 
@@ -580,9 +579,7 @@ msgstr "Im nächsten Monat"
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
 #: ../src/business/business-gnome/dialog-billterms.c:471
-#: ../src/engine/FreqSpec.c:987 ../intl-scm/guile-strings.c:6152
-#: ../intl-scm/guile-strings.c:6676
-#, c-format
+#: ../intl-scm/guile-strings.c:6152 ../intl-scm/guile-strings.c:6676
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -780,7 +777,7 @@ msgstr "Benutzername"
 #. src/business/business-reports/gnucash/report/aging.scm
 #. src/business/business-reports/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:706
-#: ../src/gnome/dialog-sx-editor.c:1705
+#: ../src/gnome/dialog-sx-editor.c:1695
 #: ../src/gnome/glade/sched-xact.glade.h:115
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:9
 #: ../src/gnome-utils/gnc-dense-cal.c:327
@@ -2044,7 +2041,7 @@ msgstr ""
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-gnome/glade/payment.glade.h:2
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:70
-#: ../src/gnome/druid-loan.c:1786 ../src/gnome/glade/lots.glade.h:8
+#: ../src/gnome/druid-loan.c:1789 ../src/gnome/glade/lots.glade.h:8
 #: ../src/gnome/glade/register.glade.h:14 ../src/gnome/reconcile-list.c:226
 #: ../src/gnome-utils/gnc-tree-view-price.c:447
 #: ../src/import-export/generic-import.glade.h:15
@@ -3354,149 +3351,6 @@ msgstr ""
 msgid "Lot"
 msgstr "Posten"
 
-#. This is displayed instead of the number of the day of month.
-#: ../src/engine/FreqSpec.c:690
-msgid "last day"
-msgstr "Monatsende"
-
-#. %s is the strftime-string of the one-time date.
-#: ../src/engine/FreqSpec.c:738
-#, c-format
-msgid "Once: %s"
-msgstr "Einmalig: %s"
-
-#. %u is the number of intervals
-#: ../src/engine/FreqSpec.c:747
-#, c-format
-msgid "Daily (x%u)"
-msgstr "Täglich (%u Mal)"
-
-#: ../src/engine/FreqSpec.c:752 ../src/engine/Recurrence.c:529
-#: ../src/gnome/glade/sched-xact.glade.h:71
-#, c-format
-msgid "Daily"
-msgstr "Täglich"
-
-#. %u is the number of intervals
-#: ../src/engine/FreqSpec.c:772
-#, c-format
-msgid "Weekdays: (x%u)"
-msgstr "Wochentags: (%u Mal)"
-
-#: ../src/engine/FreqSpec.c:777
-#, c-format
-msgid "Weekdays"
-msgstr "Wochentags"
-
-#. %d are the number of intervals; %s is
-#. the name of the weekday
-#: ../src/engine/FreqSpec.c:816
-#, c-format
-msgid "Weekly (x%d): %s"
-msgstr "Wöchentlich (%d Mal): %s"
-
-#. Translators: %s is the name of the weekday
-#: ../src/engine/FreqSpec.c:822
-#, c-format
-msgid "Weekly: %s"
-msgstr "Wöchentlich: %s"
-
-#. %s is the name of the weekday
-#: ../src/engine/FreqSpec.c:829
-#, c-format
-msgid "Bi-Weekly, %ss"
-msgstr "Zweiwöchentlich am %s"
-
-#. Translators: %u is the number of intervals;
-#. %s is the day of month of the starting month
-#. (or the string "last day"); %s is the day of
-#. month of the ending month
-#: ../src/engine/FreqSpec.c:852
-#, c-format
-msgid "Semi-monthly (x%u): %s, %s"
-msgstr "Halbmonatlich (%u Mal): am %s. und %s."
-
-#. Translators: %s is the day of month of the
-#. starting month (or the string "last day"); %s
-#. is the day of month of the ending month
-#: ../src/engine/FreqSpec.c:863
-#, c-format
-msgid "Semi-monthly: %s, %s"
-msgstr "Halbmonatlich: am %s. und %s."
-
-#. %u is the number of intervals; %u is
-#. the day of month
-#: ../src/engine/FreqSpec.c:879
-#, c-format
-msgid "Monthly (x%u): %u"
-msgstr "Monatlich (%u Mal): am %u."
-
-#. %u is the day of month
-#: ../src/engine/FreqSpec.c:887
-#, c-format
-msgid "Monthly: %u"
-msgstr "Monatlich: am %u."
-
-#. %u is the number of intervals; %u is
-#. the day of month
-#: ../src/engine/FreqSpec.c:897
-#, c-format
-msgid "Quarterly (x%u): %u"
-msgstr "Vierteljährlich (%u Mal): am %u."
-
-#. %u is the day of month
-#: ../src/engine/FreqSpec.c:905
-#, c-format
-msgid "Quarterly: %u"
-msgstr "Vierteljährlich: am %u."
-
-#. %u is the number of intervals; %u is
-#. the day of month
-#: ../src/engine/FreqSpec.c:916
-#, c-format
-msgid "Tri-Yearly (x%u): %u"
-msgstr "Alle 4 Monate (%u Mal): am %u."
-
-#. %u is the day of month
-#: ../src/engine/FreqSpec.c:924
-#, c-format
-msgid "Tri-Yearly: %u"
-msgstr "Alle 4 Monate: am %u."
-
-#. %u is the number of intervals; %u
-#. is the day of month
-#: ../src/engine/FreqSpec.c:939
-#, c-format
-msgid "Semi-Yearly (x%u): %u"
-msgstr "Halbjährlich (%u Mal): am %u."
-
-#. %u is the day of month
-#: ../src/engine/FreqSpec.c:947
-#, c-format
-msgid "Semi-Yearly: %u"
-msgstr "Halbjährlich: am %u."
-
-#. FIXME: This string *must* be translated for
-#. en_GB, en_AU and everywhere else with the
-#. sensible ordering of ddmmyy.  Translators
-#. note: to switch the last two arguments,
-#. write "Yearly (x%1$u): %3$u of month %2$s"
-#.
-#. %u is the number of intervals; %s is the
-#. abbreviated name of the month; %u is the
-#. day of month.
-#: ../src/engine/FreqSpec.c:970
-#, c-format
-msgid "Yearly (x%u): %s/%u"
-msgstr "Jährlich (%1$u Mal): %3$u. %2$s"
-
-#. %s is the abbreviated name of the
-#. month; %u is the day of month
-#: ../src/engine/FreqSpec.c:980
-#, c-format
-msgid "Yearly: %s/%u"
-msgstr "Jährlich: %2$u. %1$s"
-
 #: ../src/engine/gnc-budget.c:132 ../src/gnome/gnc-plugin-page-budget.c:846
 msgid "Unnamed Budget"
 msgstr "Unbenanntes Budget"
@@ -3572,7 +3426,12 @@ msgstr ""
 "sind nicht korrekt. Die Zugriffsrechte müssen »rwx«\n"
 "(Lesen/Schreiben/Ausführen) für den aktuellen Benutzer erlauben.\n"
 
-#: ../src/engine/Recurrence.c:427 ../src/gnome/glade/fincalc.glade.h:45
+#. translators: " + " is an separator in a list of string-representations of recurrence frequencies
+#: ../src/engine/Recurrence.c:336
+msgid " + "
+msgstr " + "
+
+#: ../src/engine/Recurrence.c:430 ../src/gnome/glade/fincalc.glade.h:45
 #: ../src/gnome/glade/sched-xact.glade.h:190
 msgid "Weekly"
 msgstr "Wöchentlich"
@@ -3580,38 +3439,41 @@ msgstr "Wöchentlich"
 #. translators: %u is the recurrence multipler.
 #. translators: %u is the recurrence multiplier
 #. translators: %u is the number of intervals
-#. translators: %u is the recurrence multipler.
 #. translators: %u is the recurrence multiplier.
-#: ../src/engine/Recurrence.c:431 ../src/engine/Recurrence.c:505
-#: ../src/engine/Recurrence.c:533 ../src/engine/Recurrence.c:546
-#: ../src/engine/Recurrence.c:560
+#: ../src/engine/Recurrence.c:434 ../src/engine/Recurrence.c:508
+#: ../src/engine/Recurrence.c:536 ../src/engine/Recurrence.c:549
+#: ../src/engine/Recurrence.c:563
 #, c-format
 msgid " (x%u)"
 msgstr "(%u Mal)"
 
 #. translators: %s is an already-localized form of the day of the week.
-#: ../src/engine/Recurrence.c:463
+#: ../src/engine/Recurrence.c:466
 #, c-format
 msgid "last %s"
 msgstr "letzter %s"
 
-#: ../src/engine/Recurrence.c:500 ../src/gnome/glade/fincalc.glade.h:42
+#: ../src/engine/Recurrence.c:503 ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
 msgstr "Halbmonatlich"
 
 #. translators: %d is the number of Recurrences in the list.
-#: ../src/engine/Recurrence.c:515
+#: ../src/engine/Recurrence.c:518
 #, c-format
 msgid "Unknown, %d-size list."
 msgstr "Unbekannt, Liste mit %d Einträgen."
 
-#: ../src/engine/Recurrence.c:526 ../src/gnome/glade/sched-xact.glade.h:130
+#: ../src/engine/Recurrence.c:529 ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Once"
 msgstr "Einmal"
 
+#: ../src/engine/Recurrence.c:532 ../src/gnome/glade/sched-xact.glade.h:71
+msgid "Daily"
+msgstr "Täglich"
+
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Recurrence.c:542 ../src/gnome/glade/fincalc.glade.h:33
+#: ../src/engine/Recurrence.c:545 ../src/gnome/glade/fincalc.glade.h:33
 #: ../src/gnome/glade/sched-xact.glade.h:111 ../intl-scm/guile-strings.c:3724
 #: ../intl-scm/guile-strings.c:3726 ../intl-scm/guile-strings.c:4878
 #: ../intl-scm/guile-strings.c:4880
@@ -3620,7 +3482,7 @@ msgstr "Monatlich"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Recurrence.c:556 ../intl-scm/guile-strings.c:3732
+#: ../src/engine/Recurrence.c:559 ../intl-scm/guile-strings.c:3732
 #: ../intl-scm/guile-strings.c:3734 ../intl-scm/guile-strings.c:4886
 #: ../intl-scm/guile-strings.c:4888
 msgid "Yearly"
@@ -3638,7 +3500,7 @@ msgstr "Ausgleichskonto"
 #. src/report/standard-reports/gnucash/report/register.scm
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1244 ../src/engine/Split.c:1261
+#: ../src/engine/Split.c:1240 ../src/engine/Split.c:1257
 #: ../intl-scm/guile-strings.c:3884 ../intl-scm/guile-strings.c:3906
 #: ../intl-scm/guile-strings.c:5038 ../intl-scm/guile-strings.c:5060
 msgid "-- Split Transaction --"
@@ -3646,7 +3508,7 @@ msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1277 ../src/gnome/druid-stock-split.c:454
+#: ../src/engine/Split.c:1273 ../src/gnome/druid-stock-split.c:454
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:328
 #: ../src/register/ledger-core/split-register.c:2072
@@ -3895,7 +3757,7 @@ msgstr "Benutzerdefiniert"
 msgid "Complete"
 msgstr "Komplett"
 
-#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/glade/price.glade.h:22
+#: ../src/gnome/dialog-sx-editor.c:185 ../src/gnome/glade/price.glade.h:22
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/gnc-plugin-page-sx-list.c:122
 #: ../src/gnome-utils/gnc-main-window.c:221
@@ -3904,41 +3766,41 @@ msgstr "Komplett"
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../src/gnome/dialog-sx-editor.c:187 ../src/gnome/window-reconcile.c:1995
+#: ../src/gnome/dialog-sx-editor.c:186 ../src/gnome/window-reconcile.c:1995
 msgid "_Transaction"
 msgstr "_Buchung"
 
-#: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:101
+#: ../src/gnome/dialog-sx-editor.c:187 ../src/gnome/glade/register.glade.h:101
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_View"
 msgstr "_Ansicht"
 
-#: ../src/gnome/dialog-sx-editor.c:189 ../src/gnome/glade/register.glade.h:74
+#: ../src/gnome/dialog-sx-editor.c:188 ../src/gnome/glade/register.glade.h:74
 #: ../src/gnome-utils/gnc-main-window.c:223
 msgid "_Actions"
 msgstr "A_ktionen"
 
-#: ../src/gnome/dialog-sx-editor.c:219
+#: ../src/gnome/dialog-sx-editor.c:218
 msgid "This SX has changed; are you sure you want to cancel?"
 msgstr ""
 "Diese terminierte Buchung wurde geändert. Sind Sie sicher, dass Sie\n"
 "abbrechen wollen?"
 
-#: ../src/gnome/dialog-sx-editor.c:636
+#: ../src/gnome/dialog-sx-editor.c:635
 #, c-format
 msgid "Couldn't parse credit formula for split \"%s\"."
 msgstr ""
 "Die Berechnungsformel für die Minderungsbuchung konnte nicht verarbeitet "
 "werden im Buchungsteil »%s«. "
 
-#: ../src/gnome/dialog-sx-editor.c:662
+#: ../src/gnome/dialog-sx-editor.c:661
 #, c-format
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr ""
 "Die Berechnungsformel für die Mehrungsbuchung konnte nicht verarbeitet "
 "werden im Buchungsteil »%s«. "
 
-#: ../src/gnome/dialog-sx-editor.c:696 ../src/gnome/dialog-sx-from-trans.c:270
+#: ../src/gnome/dialog-sx-editor.c:695 ../src/gnome/dialog-sx-from-trans.c:270
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
@@ -3946,11 +3808,11 @@ msgstr ""
 "Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch "
 "ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
 
-#: ../src/gnome/dialog-sx-editor.c:715
+#: ../src/gnome/dialog-sx-editor.c:714
 msgid "Please name the Scheduled Transaction."
 msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
 
-#: ../src/gnome/dialog-sx-editor.c:741
+#: ../src/gnome/dialog-sx-editor.c:740
 #, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
@@ -3959,12 +3821,12 @@ msgstr ""
 "Eine terminierte Buchung mit dem Namen »%s« existiert bereits. Sind Sie "
 "sicher, dass die aktuelle den gleichen Namen erhalten soll?"
 
-#: ../src/gnome/dialog-sx-editor.c:770
+#: ../src/gnome/dialog-sx-editor.c:769
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr ""
 "Terminierte Buchungen mit Variablen können nicht automatisch erstellt werden."
 
-#: ../src/gnome/dialog-sx-editor.c:779
+#: ../src/gnome/dialog-sx-editor.c:778
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
@@ -3972,15 +3834,15 @@ msgstr ""
 "Terminierte Buchungen ohne Buchungsvorlage können nicht automatisch erstellt "
 "werden."
 
-#: ../src/gnome/dialog-sx-editor.c:793
+#: ../src/gnome/dialog-sx-editor.c:792
 msgid "Please provide a valid end selection."
 msgstr "Bitte geben Sie ein gültiges Enddatum ein."
 
-#: ../src/gnome/dialog-sx-editor.c:809
+#: ../src/gnome/dialog-sx-editor.c:808
 msgid "There must be some number of occurrences."
 msgstr "Es muss eine Anzahl des Auftretens geben."
 
-#: ../src/gnome/dialog-sx-editor.c:817
+#: ../src/gnome/dialog-sx-editor.c:816
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
@@ -3989,7 +3851,7 @@ msgstr ""
 "Die Zahl des verbleibenden Auftretens (%d) ist größer als die Zahl des "
 "totalen Auftretens (%d)."
 
-#: ../src/gnome/dialog-sx-editor.c:848
+#: ../src/gnome/dialog-sx-editor.c:847
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
@@ -3997,18 +3859,18 @@ msgstr ""
 "Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie "
 "auftritt. Wollen Sie wirklich fortsetzen?"
 
-#: ../src/gnome/dialog-sx-editor.c:1342
+#: ../src/gnome/dialog-sx-editor.c:1332
 msgid "(never)"
 msgstr "(niemals)"
 
-#: ../src/gnome/dialog-sx-editor.c:1493
+#: ../src/gnome/dialog-sx-editor.c:1483
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 "Die aktuelle Buchungsvorlage wurde verändert. Soll sie gespeichert werden?"
 
-#: ../src/gnome/dialog-sx-editor.c:1726
+#: ../src/gnome/dialog-sx-editor.c:1716
 #: ../src/gnome/gnc-plugin-page-sx-list.c:197
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
@@ -4247,44 +4109,44 @@ msgstr "über Treuhandkonto?"
 msgid "Loan"
 msgstr "Darlehen"
 
-#: ../src/gnome/druid-loan.c:1041
+#: ../src/gnome/druid-loan.c:1044
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
 msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
-#: ../src/gnome/druid-loan.c:1160
+#: ../src/gnome/druid-loan.c:1163
 msgid "Please select a valid loan account."
 msgstr "Sie müssen ein gültiges Darlehen-Konto auswählen."
 
-#: ../src/gnome/druid-loan.c:1247
+#: ../src/gnome/druid-loan.c:1250
 msgid "Please select a valid Escrow Account."
 msgstr "Sie müssen ein gültiges Treuhand-Konto auswählen."
 
-#: ../src/gnome/druid-loan.c:1313 ../src/gnome/druid-loan.c:1532
+#: ../src/gnome/druid-loan.c:1316 ../src/gnome/druid-loan.c:1535
 msgid "Please select a valid \"from\" account."
 msgstr "Sie müssen ein gültiges Herkunftskonto angeben."
 
-#: ../src/gnome/druid-loan.c:1320 ../src/gnome/druid-loan.c:1541
+#: ../src/gnome/druid-loan.c:1323 ../src/gnome/druid-loan.c:1544
 msgid "Please select a valid \"to\" account."
 msgstr "Sie müssen ein gültiges Zielkonto angeben."
 
-#: ../src/gnome/druid-loan.c:1327
+#: ../src/gnome/druid-loan.c:1330
 msgid "Please select a valid \"interest\" account."
 msgstr "Sie müssen ein gültiges Zinskonto angeben."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
-#: ../src/gnome/druid-loan.c:1440
+#: ../src/gnome/druid-loan.c:1443
 #, c-format
 msgid "Payment: \"%s\""
 msgstr "Zahlung: »%s«"
 
-#: ../src/gnome/druid-loan.c:1798 ../src/gnome/druid-loan.c:2371
+#: ../src/gnome/druid-loan.c:1801 ../src/gnome/druid-loan.c:2374
 msgid "Principal"
 msgstr "Endbetrag Kapital"
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-import/qif-import/qif-dialog-utils.scm
-#: ../src/gnome/druid-loan.c:1804 ../src/gnome/druid-loan.c:2392
+#: ../src/gnome/druid-loan.c:1807 ../src/gnome/druid-loan.c:2395
 #: ../src/import-export/qif/qif-defaults.c:130
 #: ../src/register/ledger-core/split-register.c:2034
 #: ../intl-scm/guile-strings.c:5746 ../intl-scm/guile-strings.c:5768
@@ -4292,7 +4154,7 @@ msgstr "Endbetrag Kapital"
 msgid "Interest"
 msgstr "Zinsen"
 
-#: ../src/gnome/druid-loan.c:2272
+#: ../src/gnome/druid-loan.c:2275
 msgid "Escrow "
 msgstr "Treuhand "
 
@@ -7358,7 +7220,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:218
 #: ../src/gnome/gnc-plugin-page-budget.c:164 ../src/gnome/lot-viewer.c:434
-#: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:851
+#: ../src/gnome-utils/gnc-file.c:96 ../src/gnome-utils/gnc-file.c:848
 #: ../src/gnome/window-reconcile.c:1572
 msgid "Open"
 msgstr "Öffnen"
@@ -10088,7 +9950,7 @@ msgstr "Die Datei konnte nicht neu geöffnet werden."
 
 #. try to load once again
 #: ../src/gnome-utils/druid-gnc-xml-import.c:705
-#: ../src/gnome-utils/gnc-file.c:755 ../src/gnome-utils/gnc-file.c:767
+#: ../src/gnome-utils/gnc-file.c:752 ../src/gnome-utils/gnc-file.c:764
 msgid "Reading file..."
 msgstr "Datei wird gelesen..."
 
@@ -10101,7 +9963,7 @@ msgid "There was an error parsing the file."
 msgstr "Beim Verarbeiten der Datei ist ein Fehler aufgetreten."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:755
-#: ../src/gnome-utils/gnc-file.c:982
+#: ../src/gnome-utils/gnc-file.c:979
 msgid "Writing file..."
 msgstr "Datei wird geschrieben..."
 
@@ -11612,11 +11474,11 @@ msgstr "Kann Datei %s nicht öffnen: %s"
 msgid "_Import"
 msgstr "_Importieren"
 
-#: ../src/gnome-utils/gnc-file.c:102 ../src/gnome-utils/gnc-file.c:255
+#: ../src/gnome-utils/gnc-file.c:102 ../src/gnome-utils/gnc-file.c:254
 msgid "Import"
 msgstr "Import"
 
-#: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1030
+#: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1027
 msgid "Save"
 msgstr "Speichern"
 
@@ -11624,8 +11486,8 @@ msgstr "Speichern"
 msgid "_Export"
 msgstr "E_xportieren"
 
-#: ../src/gnome-utils/gnc-file.c:115 ../src/gnome-utils/gnc-file.c:271
-#: ../src/gnome-utils/gnc-file.c:888
+#: ../src/gnome-utils/gnc-file.c:115 ../src/gnome-utils/gnc-file.c:270
+#: ../src/gnome-utils/gnc-file.c:885
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:999
 msgid "Export"
 msgstr "Exportieren"
@@ -11634,43 +11496,42 @@ msgstr "Exportieren"
 msgid "All files"
 msgstr "Alle Dateien"
 
-#. Just in case
-#: ../src/gnome-utils/gnc-file.c:195
+#: ../src/gnome-utils/gnc-file.c:194
 #: ../src/import-export/hbci/druid-hbci-utils.c:153
 #: ../src/import-export/hbci/druid-hbci-utils.c:167
 msgid "(null)"
 msgstr "(keine)"
 
-#: ../src/gnome-utils/gnc-file.c:204
+#: ../src/gnome-utils/gnc-file.c:203
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "Kein passendes Dateimodul wurde gefunden für %s."
 
-#: ../src/gnome-utils/gnc-file.c:209
+#: ../src/gnome-utils/gnc-file.c:208
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr "Die URL »%s« kann von dieser GnuCash Version nicht verarbeitet werden."
 
-#: ../src/gnome-utils/gnc-file.c:214
+#: ../src/gnome-utils/gnc-file.c:213
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "Folgende URL konnte nicht verarbeitet werden: %s"
 
-#: ../src/gnome-utils/gnc-file.c:219
+#: ../src/gnome-utils/gnc-file.c:218
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
 "Verbindung konnte nicht aufgebaut werden zu Rechner »%s«. Der Rechnername, "
 "Benutzername oder Passwort waren falsch."
 
-#: ../src/gnome-utils/gnc-file.c:225
+#: ../src/gnome-utils/gnc-file.c:224
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
 "Verbindung konnte nicht aufgebaut werden zu Rechner »%s«. Verbindung "
 "verloren. Daten konnten nicht gesendet werden."
 
-#: ../src/gnome-utils/gnc-file.c:231
+#: ../src/gnome-utils/gnc-file.c:230
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
@@ -11678,13 +11539,13 @@ msgstr ""
 "Diese Datei scheint von einer neueren Version von GnuCash zu sein. Sie "
 "brauchen eine neuere GnuCash Version, um die Datei lesen zu können."
 
-#: ../src/gnome-utils/gnc-file.c:238
+#: ../src/gnome-utils/gnc-file.c:237
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr ""
 "Die Datenbank oder Datei »%s« existiert nicht. Möchten Sie sie erstellen?"
 
-#: ../src/gnome-utils/gnc-file.c:248
+#: ../src/gnome-utils/gnc-file.c:247
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11697,7 +11558,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:256
+#: ../src/gnome-utils/gnc-file.c:255
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11710,7 +11571,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Importieren der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:264
+#: ../src/gnome-utils/gnc-file.c:263
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11723,7 +11584,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Speichern der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:272
+#: ../src/gnome-utils/gnc-file.c:271
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11736,7 +11597,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:295
+#: ../src/gnome-utils/gnc-file.c:294
 #, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -11746,14 +11607,14 @@ msgstr ""
 "einem schreibgeschützten Dateisystem befinden oder Sie haben keine "
 "Schreibberechtigung in das Verzeichnis. "
 
-#: ../src/gnome-utils/gnc-file.c:302
+#: ../src/gnome-utils/gnc-file.c:301
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
 "Die Datei/URL »%s« verweist nicht auf GnuCash-Daten oder diese Daten sind "
 "fehlerhaft."
 
-#: ../src/gnome-utils/gnc-file.c:308
+#: ../src/gnome-utils/gnc-file.c:307
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
@@ -11761,19 +11622,19 @@ msgstr ""
 "Der Server unter der URL »%s« stiess auf einen Fehler oder benutzte falsche "
 "oder fehlerhafte Daten."
 
-#: ../src/gnome-utils/gnc-file.c:314
+#: ../src/gnome-utils/gnc-file.c:313
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "Sie haben keine Zugriffsberechtigung für die Datei »%s«."
 
-#: ../src/gnome-utils/gnc-file.c:319
+#: ../src/gnome-utils/gnc-file.c:318
 #: ../src/register/register-core/formulacell.c:117
 #: ../src/register/register-core/pricecell.c:180
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "Fehler aufgetreten beim Verarbeiten von »%s«."
 
-#: ../src/gnome-utils/gnc-file.c:325
+#: ../src/gnome-utils/gnc-file.c:324
 #, c-format
 msgid ""
 "Invalid QSF Object file! The QSF object file %s failed to validate against "
@@ -11784,7 +11645,7 @@ msgstr ""
 "verglichen mit dem QSF Objekt-Schema. Die XML-Struktur ist entweder nicht "
 "wohlgeformt oder enthält ungültige Daten."
 
-#: ../src/gnome-utils/gnc-file.c:332
+#: ../src/gnome-utils/gnc-file.c:331
 #, c-format
 msgid ""
 "Invalid QSF Map file! The QSF map file %s failed to validate against the QSF "
@@ -11795,7 +11656,7 @@ msgstr ""
 "Format, verglichen mit dem QSF Map-Schema. Die XML-Struktur ist entweder "
 "nicht wohlgeformt oder enthält ungültige Daten."
 
-#: ../src/gnome-utils/gnc-file.c:339
+#: ../src/gnome-utils/gnc-file.c:338
 #, c-format
 msgid ""
 "The QSF Map file %s was written for a different version of QOF.  It may need "
@@ -11806,7 +11667,7 @@ msgstr ""
 "Sie in der Dokumentation der anderen Version, ob Sie Konvertierungsschritte "
 "durchführen müssen, um sie mit dieser Version zu lesen."
 
-#: ../src/gnome-utils/gnc-file.c:346
+#: ../src/gnome-utils/gnc-file.c:345
 #, c-format
 msgid ""
 "The selected QSF map %s contains unusable data. This is usually because not "
@@ -11817,7 +11678,7 @@ msgstr ""
 "sein, wenn nicht für alle erforderlichen Parameter für die gewünschten "
 "Objekte alle notwendigen Berechnungsformeln in der Zuordnung angegeben waren."
 
-#: ../src/gnome-utils/gnc-file.c:353
+#: ../src/gnome-utils/gnc-file.c:352
 #, c-format
 msgid ""
 "The selected QSF object file %s contains one or more invalid GUIDs. The file "
@@ -11827,14 +11688,14 @@ msgstr ""
 "GUIDs. Die Datei kann nicht verarbeitet werden. Versuchen Sie, eine "
 "korrigierte Datei zu erhalten."
 
-#: ../src/gnome-utils/gnc-file.c:360
+#: ../src/gnome-utils/gnc-file.c:359
 #, c-format
 msgid "The selected QSF Object file %s requires a map but it was not provided."
 msgstr ""
 "Die gewählte QSF-Objekt-Datei »%s« erfordert eine QSF-Zuordnung (Map), aber "
 "es ist keine verfügbar."
 
-#: ../src/gnome-utils/gnc-file.c:366
+#: ../src/gnome-utils/gnc-file.c:365
 #, c-format
 msgid ""
 "Wrong QSF map selected. The selected map %s validates but was written for "
@@ -11846,14 +11707,14 @@ msgstr ""
 "in dieser Zuordnung enthält nicht alle Objekte, die in der aktuellen QSF-"
 "Objekt-Datei zu finden sind."
 
-#: ../src/gnome-utils/gnc-file.c:374
+#: ../src/gnome-utils/gnc-file.c:373
 #, c-format
 msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
 msgstr ""
 "Die gewählte Datei »%s« ist eine QSF-Zuordnung (Map) und kann nicht als QSF-"
 "Objekt geöffnet werden."
 
-#: ../src/gnome-utils/gnc-file.c:380
+#: ../src/gnome-utils/gnc-file.c:379
 #, c-format
 msgid ""
 "When converting XML strings into numbers, an overflow has been detected. The "
@@ -11864,7 +11725,7 @@ msgstr ""
 "QSF-Datei »%s« enthält ungültige Daten in einem Feld, das eine Zahl "
 "enthalten soll."
 
-#: ../src/gnome-utils/gnc-file.c:387
+#: ../src/gnome-utils/gnc-file.c:386
 #, c-format
 msgid ""
 "The QSF object file %s is valid and contains GnuCash objects. However, "
@@ -11878,42 +11739,42 @@ msgstr ""
 "GnuCash-Buch fusioniert werden muss. Bitte öffnen Sie eine GnuCash-Datei "
 "oder erstellen eine neue, und importieren dann diese QSF-Datei."
 
-#: ../src/gnome-utils/gnc-file.c:397
+#: ../src/gnome-utils/gnc-file.c:396
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "Es gab einen Fehler beim Öffnen der Datei. Möchten Sie fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:403
+#: ../src/gnome-utils/gnc-file.c:402
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "Beim Lesen der Datei »%s« ist ein Fehler aufgetreten."
 
-#: ../src/gnome-utils/gnc-file.c:408
+#: ../src/gnome-utils/gnc-file.c:407
 #, c-format
 msgid "The file %s is empty."
 msgstr "Die Datei »%s« ist leer."
 
-#: ../src/gnome-utils/gnc-file.c:416
+#: ../src/gnome-utils/gnc-file.c:415
 #, c-format
 msgid "The file %s could not be found."
 msgstr "Die Datei »%s« konnte nicht gefunden werden."
 
-#: ../src/gnome-utils/gnc-file.c:422
+#: ../src/gnome-utils/gnc-file.c:421
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
 "Diese Datei ist von einer älteren Version von GnuCash. Möchten Sie "
 "fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:428
+#: ../src/gnome-utils/gnc-file.c:427
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "Der Dateityp der Datei »%s« ist unbekannt."
 
-#: ../src/gnome-utils/gnc-file.c:433
+#: ../src/gnome-utils/gnc-file.c:432
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "Von der Datei »%s« konnte kein Backup erstellt werden."
 
-#: ../src/gnome-utils/gnc-file.c:438
+#: ../src/gnome-utils/gnc-file.c:437
 #, c-format
 msgid ""
 "Could not write to file %s.  Check that you have permission to write to this "
@@ -11923,12 +11784,12 @@ msgstr ""
 "dass Sie Schreibberechtigung für das Verzeichnis und diese Datei haben und "
 "dass genug Platz auf dem Datenträger frei ist."
 
-#: ../src/gnome-utils/gnc-file.c:445
+#: ../src/gnome-utils/gnc-file.c:444
 #, c-format
 msgid "No read permission to read from file %s."
 msgstr "Sie haben keine Leseberechtigung für die Datei »%s«."
 
-#: ../src/gnome-utils/gnc-file.c:450
+#: ../src/gnome-utils/gnc-file.c:449
 msgid ""
 "This database is from an older version of GnuCash. Do you want to want to "
 "upgrade the database to the current version?"
@@ -11936,7 +11797,7 @@ msgstr ""
 "Diese Datei ist von einer älteren Version von GnuCash.  Möchten Sie die "
 "Datei zur aktuellen GnuCash-Version aktualisieren?"
 
-#: ../src/gnome-utils/gnc-file.c:457
+#: ../src/gnome-utils/gnc-file.c:456
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -11949,32 +11810,32 @@ msgstr ""
 "Wenn keine anderen Anwender mehr im System sind, konsultieren Sie bitte das "
 "Handbuch, um Anweisungen zum Löschen von 'dangling login sessions' zu finden."
 
-#: ../src/gnome-utils/gnc-file.c:467
+#: ../src/gnome-utils/gnc-file.c:466
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "Ein unbekannter Eingabe/Ausgabefehler (%d) ist aufgetreten."
 
-#: ../src/gnome-utils/gnc-file.c:562
+#: ../src/gnome-utils/gnc-file.c:561
 msgid "Save changes to the file?"
 msgstr "Änderungen in Datei speichern?"
 
-#: ../src/gnome-utils/gnc-file.c:565 ../src/gnome-utils/gnc-main-window.c:999
+#: ../src/gnome-utils/gnc-file.c:564 ../src/gnome-utils/gnc-main-window.c:999
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
-#: ../src/gnome-utils/gnc-file.c:579
+#: ../src/gnome-utils/gnc-file.c:578
 msgid "Continue _Without Saving"
 msgstr "Schließen _ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-file.c:659
+#: ../src/gnome-utils/gnc-file.c:658
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash konnte keine exklusive Schreibberechtigung für %s erreichen."
 
-#: ../src/gnome-utils/gnc-file.c:661
+#: ../src/gnome-utils/gnc-file.c:660
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -11988,7 +11849,7 @@ msgstr ""
 "\n"
 "Was möchten Sie tun?"
 
-#: ../src/gnome-utils/gnc-file.c:664
+#: ../src/gnome-utils/gnc-file.c:663
 msgid ""
 "That database may be on a read-only file system, or you may not have write "
 "permission for the directory. If you proceed you may not be able to save any "
@@ -12003,15 +11864,15 @@ msgstr ""
 "\n"
 "Was möchten Sie tun?"
 
-#: ../src/gnome-utils/gnc-file.c:681
+#: ../src/gnome-utils/gnc-file.c:678
 msgid "_Open Anyway"
 msgstr "Tr_otzdem öffnen"
 
-#: ../src/gnome-utils/gnc-file.c:683
+#: ../src/gnome-utils/gnc-file.c:680
 msgid "_Create New File"
 msgstr "_Neue Datei anlegen"
 
-#: ../src/gnome-utils/gnc-file.c:923 ../src/gnome-utils/gnc-file.c:1127
+#: ../src/gnome-utils/gnc-file.c:920 ../src/gnome-utils/gnc-file.c:1124
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1355
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -12019,12 +11880,12 @@ msgstr ""
 "Die Datei »%s« existiert bereits. Sind Sie sicher, dass sie überschrieben "
 "werden soll?"
 
-#: ../src/gnome-utils/gnc-file.c:938
+#: ../src/gnome-utils/gnc-file.c:935
 msgid "Exporting file..."
 msgstr "Datei exportieren..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:951
+#: ../src/gnome-utils/gnc-file.c:948
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -12060,7 +11921,7 @@ msgstr "Nicht gefunden"
 msgid "The specified URL could not be loaded."
 msgstr "Die angegebene URL konnte nicht geladen werden."
 
-#: ../src/gnome-utils/gnc-html.c:507 ../src/gnome-utils/gnc-html.c:962
+#: ../src/gnome-utils/gnc-html.c:509 ../src/gnome-utils/gnc-html.c:964
 msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
@@ -12069,7 +11930,7 @@ msgstr ""
 "Sie den Netzwerk Abschnitt der Einstellungen und aktivieren die "
 "entsprechende Option."
 
-#: ../src/gnome-utils/gnc-html.c:516 ../src/gnome-utils/gnc-html.c:972
+#: ../src/gnome-utils/gnc-html.c:518 ../src/gnome-utils/gnc-html.c:974
 msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
@@ -12078,7 +11939,7 @@ msgstr ""
 "Menü »Voreinstellungen«einschalten"
 
 #. %s is a URL (some location somewhere).
-#: ../src/gnome-utils/gnc-html.c:902
+#: ../src/gnome-utils/gnc-html.c:904
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
@@ -12469,7 +12330,7 @@ msgstr "Version: GnuCash-%s svn (Revision %s, erstellt am %s)"
 msgid "Version: GnuCash-%s (r%s built %s)"
 msgstr "Version: GnuCash-%s svn (Revision %s, erstellt am %s)"
 
-#: ../src/gnome-utils/gnc-splash.c:111
+#: ../src/gnome-utils/gnc-splash.c:116
 msgid "Loading..."
 msgstr "Laden..."
 
@@ -13101,7 +12962,7 @@ msgid "Match _display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 
 #: ../src/import-export/generic-import.glade.h:35
-#: ../src/import-export/hbci/druid-hbci-initial.c:767
+#: ../src/import-export/hbci/druid-hbci-initial.c:770
 #: ../src/import-export/qif-import/dialog-account-picker.c:296
 #: ../src/import-export/qif-import/druid-qif-import.c:1055
 msgid "New?"
@@ -13339,29 +13200,29 @@ msgstr ""
 msgid "The two passwords didn't match. Please try again."
 msgstr "Die beiden PINs haben nicht übereingestimmt. Bitte erneut eingeben."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:140
+#: ../src/import-export/hbci/druid-hbci-initial.c:143
 #, c-format
 msgid "%s at %s (code %s)"
 msgstr "%s bei %s (BLZ %s)"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:145
+#: ../src/import-export/hbci/druid-hbci-initial.c:148
 #, c-format
 msgid "%s at bank code %s"
 msgstr "%s bei %s"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:503
+#: ../src/import-export/hbci/druid-hbci-initial.c:506
 msgid "Choose AqBanking Backend"
 msgstr "AqBanking-Modul wählen"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:504
+#: ../src/import-export/hbci/druid-hbci-initial.c:507
 msgid "Please choose an AqBanking backend to be configured"
 msgstr "Wählen Sie das Modul von AqBanking, das Sie einrichten möchten."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:505
+#: ../src/import-export/hbci/druid-hbci-initial.c:508
 msgid "Co_nfigure"
 msgstr "_Einrichten"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:658
+#: ../src/import-export/hbci/druid-hbci-initial.c:661
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully "
 "because the additional software \"Qt\" was not found.  Please install the "
@@ -13388,7 +13249,7 @@ msgstr ""
 "»Schließen« und dann »Abbrechen«, um die Einrichtung des Online-Banking "
 "wieder abzubrechen."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:675
+#: ../src/import-export/hbci/druid-hbci-initial.c:678
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully.  "
 "Online Banking can only be setup if this wizard has run successfully.  "
@@ -13401,7 +13262,7 @@ msgstr ""
 "»AqBanking Assistent« erfolgreich aufgerufen worden ist. Bitte versuchen Sie "
 "erneut, den »AqBanking Einrichtungs-Assistent« korrekt auszuführen."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:686
+#: ../src/import-export/hbci/druid-hbci-initial.c:689
 msgid ""
 "The external program \"AqBanking Setup Wizard\" has not been found. \n"
 "\n"
@@ -13416,11 +13277,11 @@ msgstr ""
 "dann ein Programm namens »qt3-wizard« installiert ist. Bitte kontrollieren "
 "Sie Ihre Installation der Bibliothek aqbanking."
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:752
+#: ../src/import-export/hbci/druid-hbci-initial.c:755
 msgid "Online Banking Account Name"
 msgstr "Online-Banking Kontoname"
 
-#: ../src/import-export/hbci/druid-hbci-initial.c:759
+#: ../src/import-export/hbci/druid-hbci-initial.c:762
 msgid "GnuCash Account Name"
 msgstr "GnuCash Kontoname"
 
@@ -14596,7 +14457,7 @@ msgstr ""
 "eindeutige Abkürzung an."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1751
-msgid "Click \"Next\" to accept the information and move on."
+msgid "Click \"Forward\" to accept the information and move on."
 msgstr ""
 "Wenn Sie fertig gelesen haben, klicken Sie bitte »Vor«, um fortzufahren."
 

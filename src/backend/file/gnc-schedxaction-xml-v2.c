@@ -49,74 +49,6 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.backend.file.sx"
 
-/**
- * The XML output should look something like:
- * <gnc:count-data cd:type="schedXaction">XXX</gnc:count-data>
- * ...
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Rent</sx:name>
- *   <sx:enabled>y</sx:enabled>
- *   <sx:autoCreate>y</sx:autoCreate>
- *   <sx:autoCreateNotify>n</sx:autoCreateNotify>
- *   <sx:advanceCreateDays>0</sx:advanceCreateDays>
- *   <sx:advanceRemindDays>5</sx:advanceRemindDays>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:lastOccur>
- *     <gdate>2001-02-28</gdate>
- *   </sx:lastOccur>
- *   <sx:start>
- *     <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <!-- no end -->
- *   <sx:freq>
- *     <!-- freq spec tree -->
- *   </sx:freq>
- *   <sx:deferredInstance>
- *     <sx:last>2001-10-02</sx:last>
- *     [...]
- *   </sx:deferredInstance>
- *   [...]
- * </gnc:schedxaction>
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Loan 1</sx:name>
- *   <sx:manual-conf>f</sx:manual-conf>
- *   <sx:start>
- *      <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <sx:end type="date">
- *     <gdate>2004-03-20</gdate>
- *   </sx:end>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:freq>
- *     <!-- freqspec tree -->
- *   </sx:freq>
- * </gnc:schedxaction>
- * <gnc:schedxaction version="1.0.0">
- *   <sx:id type="guid">...</sx:id>
- *   <sx:name>Loan 2</sx:name>
- *   <sx:manual-conf>f</sx:manual-conf>
- *   <sx:instanceCount>100</sx:instanceCount>
- *   <sx:start>
- *      <gdate>2000-12-31</gdate>
- *   </sx:start>
- *   <sx:end type="num_occur">
- *     <sx:num>42</sx:num>
- *   </sx:end>
- *   <sx:freq>
- *     <!-- freqspec tree -->
- *   </sx:freq>
- * </gnc:schedxaction>
- * 
- * et-cetera...
- * bleh.
- **/
-
-/* 
- * All tags should be #defined here 
- */
-
 #define SX_ID                   "sx:id"
 #define SX_NAME                 "sx:name"
 #define SX_ENABLED              "sx:enabled"
@@ -218,16 +150,6 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlAddChild( ret, 
 		 guid_to_dom_tree(SX_TEMPL_ACCT,
 				  templ_acc_guid));
-
-    if (!allow_2_2_incompat)
-    {
-        /* output freq spec */
-        fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
-        xmlAddChild( fsNode,
-                     gnc_freqSpec_dom_tree_create(
-                         xaccSchedXactionGetFreqSpec(sx)) );
-        xmlAddChild( ret, fsNode );
-    }
 
     if (allow_2_2_incompat)
     {
@@ -494,8 +416,6 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
     GList *schedule;
 
     g_return_val_if_fail( node, FALSE );
-
-    xaccSchedXactionSetFreqSpec(sx, dom_tree_to_freqSpec(node, pdata->book));
 
     schedule = dom_tree_freqSpec_to_recurrences(node, pdata->book);
     gnc_sx_set_schedule(sx, schedule);

@@ -110,16 +110,16 @@
   <xsl:text>gnucash/branches/gobject-engine-dev-warlord</xsl:text>
  </xsl:variable>
  <xsl:variable name="sp5">
-  <xsl:text>gnucash/branches/register-rewrite</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp6">
   <xsl:text>gnucash/branches/module-cleanup</xsl:text>
  </xsl:variable>
- <xsl:variable name="sp7">
+ <xsl:variable name="sp6">
   <xsl:text>gnucash/branches/remove-group2</xsl:text>
  </xsl:variable>
- <xsl:variable name="sp8">
+ <xsl:variable name="sp7">
   <xsl:text>gnucash/branches/sx-cleanup</xsl:text>
+ </xsl:variable>
+ <xsl:variable name="sp8">
+  <xsl:text>NOTUSED</xsl:text>
  </xsl:variable>
  <xsl:variable name="sp9">
   <xsl:text>NOTUSED</xsl:text>

@@ -58,17 +58,17 @@ static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
+    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL, NULL,
             (QofAccessFunc)qof_instance_get_guid,
             (QofSetterFunc)qof_instance_set_guid },
-    { "name",            CT_STRING,    BUDGET_MAX_NAME_LEN, COL_NNUL,    "name" },
-    { "description",    CT_STRING,    BUDGET_MAX_DESCRIPTION_LEN, 0,    "description" },
-    { "num_periods",    CT_INT,        0, COL_NNUL, "num_periods" },
-    { "recurrence_mult", CT_INT,    0, COL_NNUL, NULL,
+    { "name",            CT_STRING,    BUDGET_MAX_NAME_LEN, COL_NNUL,    NULL, "name" },
+    { "description",    CT_STRING,    BUDGET_MAX_DESCRIPTION_LEN, 0,    NULL, "description" },
+    { "num_periods",    CT_INT,        0, COL_NNUL, NULL, "num_periods" },
+    { "recurrence_mult", CT_INT,    0, COL_NNUL, NULL, NULL,
             get_recurrence_mult, set_recurrence_mult },
     { "recurrence_period_type", CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN,
-            COL_NNUL, NULL, get_recurrence_period_type, set_recurrence_period_type },
-    { "recurrence_period_start", CT_GDATE, 0, COL_NNUL, NULL,
+            COL_NNUL, NULL, NULL, get_recurrence_period_type, set_recurrence_period_type },
+    { "recurrence_period_start", CT_GDATE, 0, COL_NNUL, NULL, NULL,
             get_recurrence_period_start, set_recurrence_period_start },
     { NULL }
 };

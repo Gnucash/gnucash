@@ -43,7 +43,7 @@ TODO
       - [ ] remove instances
       - [ ] make "weird"
 
-    - [ ] Â± disabled flag
+    - [ ] ± disabled flag
 
   - [x] ensure state consistency model is upheld
   - [ ] check variables-unbound logic
@@ -51,7 +51,7 @@ TODO
   - [ ] check "since last run" states
 
     - [ ] specious datafile dirty-ing
-    - [ ] -autocreate[, Â±notify]
+    - [ ] -autocreate[, ±notify]
     - [ ] +autocreate, -notify
     - [ ] +autocreate, +notify
     - [ ] +autocreate, -notify, w/postponed

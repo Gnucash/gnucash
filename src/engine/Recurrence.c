@@ -327,11 +327,14 @@ recurrenceListToString(const GList *r)
 
     str = g_string_new("");
     if (r == NULL) {
-        g_string_append(str, "None");
+        g_string_append(str, _("None"));
     } else {
         for(iter = r; iter; iter = iter->next){
             if (iter != r)
-                g_string_append(str, " + ");
+            {
+                /* translators: " + " is an separator in a list of string-representations of recurrence frequencies */
+                g_string_append(str, _(" + "));
+            }
             s = recurrenceToString((Recurrence *)iter->data);
             g_string_append(str, s);
             g_free(s);
@@ -542,15 +545,15 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, _("Monthly"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multipler. */
+                /* translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
             g_string_append_printf(buf, ": ");
             _monthly_append_when(r, buf);
         } break;
         case PERIOD_NTH_WEEKDAY: {
-            g_warning("nth weekday unhandled");
-            g_string_printf(buf, "@fixme: nth weekday");
+            g_warning("nth weekday not handled");
+            g_string_printf(buf, "@fixme: nth weekday not handled");
         } break;
         case PERIOD_YEAR: {
             g_string_printf(buf, _("Yearly"));
@@ -561,7 +564,7 @@ recurrenceListToCompactString(GList *rs)
             }
         } break;
         default:
-            g_error("unknown Recurrnce period %d", recurrenceGetPeriodType(r));
+            g_error("unknown Recurrence period %d", recurrenceGetPeriodType(r));
             break;
         }
     }

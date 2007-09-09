@@ -50,12 +50,12 @@ static void set_lot_is_closed( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL,
+    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL, NULL,
             (QofAccessFunc)qof_instance_get_guid,
             (QofSetterFunc)qof_instance_set_guid },
-    { "account_guid",    CT_GUID,      0, COL_NNUL,    NULL,
+    { "account_guid",    CT_GUID,      0, COL_NNUL,    NULL, NULL,
             get_lot_account, set_lot_account },
-    { "is_closed",        CT_STRING,  1, COL_NNUL, NULL,
+    { "is_closed",        CT_STRING,  1, COL_NNUL, NULL, NULL,
             get_lot_is_closed, set_lot_is_closed },
     { NULL }
 };

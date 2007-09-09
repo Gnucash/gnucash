@@ -21,7 +21,7 @@
 /** @internal
     @file import-backend.c
     @brief import-backend.c: Generic importer backend implementation (duplicate matching algorithm, action handling,  etc.)
-    @author Copyright (C) 2002 Benoit GrÃ©goire
+    @author Copyright (C) 2002 Benoit Grégoire
     @author Christian Stimming
     @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */

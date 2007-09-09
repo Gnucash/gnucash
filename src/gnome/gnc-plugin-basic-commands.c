@@ -142,9 +142,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+#ifdef CLOSE_BOOKS_ACTUALLY_WORKS
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
+#endif // CLOSE_BOOKS_ACTUALLY_WORKS
 
   /* Tools menu */
 

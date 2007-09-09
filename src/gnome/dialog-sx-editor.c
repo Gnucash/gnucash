@@ -41,7 +41,6 @@
 #include "qof.h"
 #include "gnc-book.h"
 #include "Account.h"
-#include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "dialog-preferences.h"
@@ -948,18 +947,9 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
     /* start date and freq spec */
     {
-        FreqSpec *fs;
         GDate gdate;
         GString *str;
         GList *schedule = NULL;
-
-        fs = xaccSchedXactionGetFreqSpec( sxed->sx );
-        gnc_frequency_save_state( sxed->gncfreq, fs, &gdate );
-
-        str = g_string_new( "" );
-        xaccFreqSpecGetFreqStr( fs, str );
-        g_debug("freq spec: %s", str->str);
-        g_string_free(str, TRUE);
 
         gnc_frequency_save_to_recurrence(sxed->gncfreq, &schedule, &gdate);
         gnc_sx_set_schedule(sxed->sx, schedule);
@@ -1563,8 +1553,8 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         g_free(schedule_desc);
     }
 
-    gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
-    gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
+    //gnc_dense_cal_set_month(sxed->example_cal, g_date_get_month(&first_date));
+    //gnc_dense_cal_set_year(sxed->example_cal, g_date_get_year(&first_date));
 
     /* figure out the end restriction */
     if (gtk_toggle_button_get_active(sxed->optEndDate))

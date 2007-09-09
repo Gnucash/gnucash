@@ -1155,8 +1155,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     {
         kvp_frame *txn_frame;
-        /* set a kvp-frame element in the transaction indicating and
-         * pointing-to the SX this was created from. */
         txn_frame = xaccTransGetSlots(new_txn);
         kvp_frame_set_guid(txn_frame, "from-sched-xaction", xaccSchedXactionGetGUID(creation_data->instance->parent->sx));
     }

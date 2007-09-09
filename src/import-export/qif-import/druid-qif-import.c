@@ -1748,7 +1748,7 @@ make_qif_druid_page(gnc_commodity * comm)
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  next_label = gtk_label_new(_("Click \"Next\" to accept the information "
+  next_label = gtk_label_new(_("Click \"Forward\" to accept the information "
                                "and move on."));
   gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_end(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);

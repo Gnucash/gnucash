@@ -1288,8 +1288,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         return TRUE;
                 case 3:
                         do_popup = (sheet->popup != NULL);
-			if (!do_popup)
-				return FALSE;
                         break;
                 default:
                         return FALSE;
@@ -1340,7 +1338,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
 				       sheet->popup_data, event->button, event->time);
 
-                return TRUE;
+                return button_1 || do_popup;
         }
 
         /* and finally...process this as a POINTER_TRAVERSE */
@@ -1368,7 +1366,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         if (do_popup)
 		gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
 			       sheet->popup_data, event->button, event->time);
-        return TRUE;
+        return button_1 || do_popup;
 }
 
 gboolean

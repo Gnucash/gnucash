@@ -95,7 +95,8 @@ typedef struct {
 #define COL_UNIQUE	0x04
 #define COL_AUTOINC	0x08
 	gint flags;
-	const char* param_name;		// If non null, use qof getter/setter
+	const gchar* gobj_param_name;	// If non-null, use g_object_get/g_object_set
+	const gchar* param_name;	// If non null, use qof getter/setter
 	QofAccessFunc getter;
 	QofSetterFunc setter;
 } col_cvt_t;

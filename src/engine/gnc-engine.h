@@ -93,7 +93,6 @@
 #define GNC_ID_COMMODITY      "Commodity"
 #define GNC_ID_COMMODITY_NAMESPACE "CommodityNamespace"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
-#define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_LOT            "Lot"
 #define GNC_ID_PERIOD         "Period"
 #define GNC_ID_PRICE          "Price"

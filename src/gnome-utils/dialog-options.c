@@ -2879,10 +2879,9 @@ gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
   SCM result;
 
   string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-  DEBUG("filename %s", string);
+  DEBUG("filename %s", string ? string : "(null)");
   result = scm_makfrom0str(string ? string : "");
-  if (string)
-    g_free(string);
+  g_free(string);
   return result;
 }
 

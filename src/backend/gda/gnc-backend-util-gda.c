@@ -158,7 +158,11 @@ load_string( GdaDataModel* pModel, gint row,
     } else {
         s = g_value_get_string( val );
     }
-    (*setter)( pObject, (const gpointer)s );
+    if( table->gobj_param_name != NULL ) {
+	g_object_set( pObject, table->gobj_param_name, s, NULL );
+    } else {
+	(*setter)( pObject, (const gpointer)s );
+    }
 }
 
 static void
@@ -853,7 +857,7 @@ retrieve_guid( gpointer pObject, gpointer pValue )
 // Table to retrieve just the guid
 static col_cvt_t guid_table[] =
 {
-    { "guid", CT_GUID, 0, 0, NULL, NULL, retrieve_guid },
+    { "guid", CT_GUID, 0, 0, NULL, NULL, NULL, retrieve_guid },
     { NULL }
 };
 

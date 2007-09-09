@@ -1,6 +1,44 @@
 Version history:
 ------- -------
 
+ 2.2.1 - 19 August 2007
+  	 Welcome to the GnuCash 2.2.1 Release.
+	 Fixed Bugs:
+	 o #170729: locale-specific delimiters in scheduled transactions
+		    templates and mortgage druid
+	 o #339260: Right-click doesn't select txn but works on the previously
+		    selected in the register
+	 o #361604: Balance sheet report shows incorrect prices for commodities
+		    when using "nearest in time" option
+	 o #445917: Dialog says, Click "Next"..., Button says "Forward"
+	 o #452496: Dirtying a split does not dirty the parent txn or book
+	 o #457027: About dialog shows wrong year in Copyright string
+	 o #457213: Resizing SLR window causes it to show up as blank next time
+	 o #457228: AqBanking Wizard QtCore4.dll error on WinXP, procedure entry
+		    point not found
+	 o #457944: startup delay, keep splash screen during file loading
+	 o #458080: RPM .spec file still depends on g-wrap
+	 o #458567: Ship with windows gtkrc
+	 o #458783: Doesn't start if installed into a directory with an "umlaut"
+	 o #459259: Unshortened column-title in Scheduled Transactions editor
+		    for some locales
+	 o #460432: Crash when running Account Report or Account Transaction
+		    Report against A/R account
+	 o #460924: Fox for warning: the address of '*' will always evaluate as
+		    'true'
+	 o #462567: win32: GnuCash improperly interprets filenames as URLs and
+		    fails
+	 o #465338: hbci module init fails on FreeBSD due to change 15799
+	 o #468115: Save Account Tree Sort Preference
+	 Other Changes:
+	 o Fix XPF [CFP Franc Pacifique] to not use cents, add YER [Yemeni Riyal]
+	 o Update gnome libraries in Win32 build
+	 o Avoid a few critical warnings and improve logging
+	 o Completely remove FreqSpec
+	 o Disable Close books and QSF Import again
+	 o Update translations: British English, Catalan, French, German,
+		                Hungarian, Japanese, Ukrainian
+
  2.2.0 - 14 July 2007
   	 o Welcome to the GnuCash 2.2.0 Release.
 	 o With this new release series, GnuCash is available on Microsoft
