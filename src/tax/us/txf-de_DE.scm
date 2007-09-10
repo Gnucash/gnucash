@@ -61,18 +61,22 @@
    (cons 'K36 #(none "36" "Umsätze, die anderen Steuersätzen unterliegen (Steuer)" 1 #f "36"))
    (cons 'K39 #(none "39" "Anrechnung (Abzug) der festgesetzten Sondervorauszahlung für Dauerfristverlängerung" 1 #f "39"))
    (cons 'K41 #(none "41" "Innergemeinschaftliche Lieferungen an Abnehmer mit USt-IdNr. " 2 #f "41"))
+   (cons 'K42 #(none "42" "Lieferungen des ersten Abnehmers (§25b Abs. 2 UStG) bei innergemeinschaftlichen Dreiecksgeschäften" 2 #f "42"))
    (cons 'K43 #(none "43" "Weitere steuerfreie Umsätze mit Vorsteuerabzug" 2 #f "43"))
    (cons 'K44 #(none "44" "Innergemeinschaftliche Lieferungen neuer Fahrzeuge an Abnehmer ohne USt-IdNr" 2 #f "44"))
    (cons 'K45 #(none "45" "Im Inland nicht steuerbare Umsätze" 2 #f "45"))
    (cons 'K48 #(none "48" "Steuerfreie Umsätze ohne Vorsteuerabzug" 2 #f "48"))
-   (cons 'K51 #(none "51" "Steuerpflichtige Umsätze, Steuersatz 16 v.H." 2 #f "51"))
    (cons 'K49 #(none "49" "Innergemeinschaftliche Lieferungen neuer Fahrzeuge außerhalb eines Unternehmens" 2 #f "49"))
+   (cons 'K51 #(none "51" "Steuerpflichtige Umsätze, Steuersatz 16 v.H." 2 #f "51"))
    (cons 'K60 #(none "60" "Umsätze, für die der Leistungsempfänger die Steuer nach §13b Abs 2 UStG schuldet" 2 #f "60"))
    (cons 'K76 #(none "76" "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Bemessungsgrundlage)" 2 #f "76"))
    (cons 'K77 #(none "77" "Lieferungen in das übrige Gemeinschaftsgebiet an Abnehmer mit USt-IdNr." 2 #f "77"))
    (cons 'K80 #(none "80" "Umsätze, für die eine Steuer nach § 24 UStG zu entrichten ist (Steuer)" 1 #f "80"))
    (cons 'K83 #(none "83" "Verbleibende Umsatzsteuer-Vorauszahlung" 1 #f "83"))
    (cons 'K86 #(none "86" "Steuerpflichtige Umsätze, Steuersatz 7 v.H." 2 #f "86"))
+   (cons 'K93 #(none "93" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.H." 2 #f "93"))
+   (cons 'K97 #(none "97" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 16 v.H." 2 #f "97"))
+   (cons 'K98 #(none "98" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Steuer)" 1 #f "98"))
 
    ))
 
@@ -87,7 +91,6 @@
   (list
    (cons 'N000 #(none "" "Nur zur Voransicht im Steuer-Bericht -- kein Export" 0 #f ""))
 
-   (cons 'K42 #(none "42" "Lieferungen des ersten Abnehmers (§25b Abs. 2 UStG) bei innergemeinschaftlichen Dreiecksgeschäften" 2 #f "42"))
    (cons 'K52 #(none "52" "Leistungen eines im Ausland ansässigen Unternehmers (Bemessungsgrundlage)" 2 #f "52"))
    (cons 'K53 #(none "53" "Leistungen eines im Ausland ansässigen Unternehmers (Steuer)" 2 #f "52"))
    (cons 'K59 #(none "59" "Vorsteuerabzug für innergemeinschaftliche Lieferungen neuer Fahrzeuge außerhalb eines Unternehmens" 1 #f "59"))
@@ -104,12 +107,9 @@
    (cons 'K84 #(none "84" "Bauleistungen eines im Inland ansässigen Unternehmers (Bemessungsgrundlage" 1 #f "84"))
    (cons 'K85 #(none "85" "Bauleistungen eines im Inland ansässigen Unternehmers (Steuer)" 1 #f "85"))
    (cons 'K91 #(none "91" "Steuerfreie innergemeinschaftliche Erwerbe nach §4b UStG" 2 #f "91"))
-   (cons 'K93 #(none "93" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 7 v.H." 2 #f "93"))
    (cons 'K94 #(none "94" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Bemessungsgrundlage)" 2 #f "94"))
    (cons 'K95 #(none "95" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Bemessungsgrundlage)" 2 #f "95"))
    (cons 'K96 #(none "96" "Innergemeinschaftliche Erwerbe neuer Fahrzeuge von Lieferern ohne USt-IdNr. (Steuer)" 1 #f "96"))
-   (cons 'K97 #(none "97" "Steuerpflichtige innergemeinschaftliche Erwerbe zum Steuersatz von 16 v.H." 2 #f "97"))
-   (cons 'K98 #(none "98" "Steuerpflichtige innergemeinschaftliche Erwerbe zu anderen Steuersätzen (Steuer)" 1 #f "98"))
 
    ))
 
