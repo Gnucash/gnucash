@@ -59,6 +59,7 @@
 ( "Costa Rican Colon" "colon" "centimo" "ISO4217" "CRC" "188" 100 100 )
 ( "Croatian Kuna" "kuna" "lipa" "ISO4217" "HRK" "191" 100 100 )
 ( "Cuban Peso" "peso" "centavo" "ISO4217" "CUP" "192" 100 100 )
+( "Cuban Convertible Peso" "peso" "centavo" "ISO4217" "CUC" "XXX" 100 100 )
 ( "Cyprus Pound" "pound" "pence"  "ISO4217" "CYP" "196" 100 100 )
 ( "Czech Koruna" "koruna" "haleru" "ISO4217" "CZK" "203" 100 100  )
 ( "Danish Krone" "krone" "ore" "ISO4217" "DKK" "208" 100 100 )
