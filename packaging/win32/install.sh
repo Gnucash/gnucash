@@ -1067,6 +1067,8 @@ function inst_docs() {
     _DOCS_UDIR=`unix_path $DOCS_DIR`
     if [ ! -d $_DOCS_UDIR/docbook-xsl ] ; then
         wget_unpacked $DOCBOOK_XSL_URL $DOWNLOAD_DIR $DOCS_DIR
+        # add a pause to allow windows to realize that the files now exist
+        sleep 1
         mv $_DOCS_UDIR/docbook-xsl-* $_DOCS_UDIR/docbook-xsl
     fi
     mkdir -p $_DOCS_UDIR/repos
