@@ -23,6 +23,7 @@
 ( "Australian Dollar" "dollar" "cent" "ISO4217" "AUD" "036" 100 100 )
 ( "Austrian Shilling" "shilling" "groschen"  "ISO4217" "ATS" "040" 100 100 ) ;; through 1998
 ( "Azerbaijani Manat" "manat" "gopik" "ISO4217" "AZM" "031" 100 100 )
+( "Azerbaijani Manat" "manat" "gopik" "ISO4217" "AZN" "944" 100 100 )
 ( "Bahamian Dollar" "dollar" "cent"  "ISO4217" "BSD" "044" 100 100 )
 ( "Bahraini Dinar" "dinar" "fil"  "ISO4217" "BHD" "048" 1000 1000 )
 ( "Bangladeshi Taka" "taka" "paisa"  "ISO4217" "BDT" "050" 100 100 )
@@ -55,6 +56,7 @@
 ( "Chilean Peso" "peso" "centavo" "ISO4217" "CLP" "152" 1 1 )
 ( "Chinese Yuan Renminbi" "renminbi" "fen" "ISO4217" "CNY" "156" 100 100 )
 ( "Colombian Peso" "peso" "centavo" "ISO4217" "COP" "170" 100 100 )
+;; ( "Colombian Unidad de Valor Real" "???" "???" "ISO4217" "COU" "970" 100 100)
 ( "Comoros Franc" "franc" "centime" "ISO4217" "KMF" "174" 1 1  )
 ( "Costa Rican Colon" "colon" "centimo" "ISO4217" "CRC" "188" 100 100 )
 ( "Croatian Kuna" "kuna" "lipa" "ISO4217" "HRK" "191" 100 100 )
@@ -130,7 +132,8 @@
 ( "Moldovan Leu" "leu" "ban" "ISO4217" "MDL" "498" 100 100 )
 ( "Mongolian Tugrik" "tugrik" "mongo" "ISO4217" "MNT" "496" 100 100 )
 ( "Moroccan Dirham" "dirham" "centime"  "ISO4217" "MAD" "504" 100 100 )
-( "Mozambique Metical" "metical" "centavo"  "ISO4217" "MZM" "508" 100 100 )
+( "Mozambique Metical" "metical" "centavo" "ISO4217" "MZM" "508" 100 100 )
+( "Mozambique Metical" "metical" "centavo" "ISO4217" "MZN" "943" 100 100 ) ;; 2006-07-01; <http://en.wikipedia.org/wiki/Mozambican_metical>
 ( "Myanmar Kyat" "kyat" "pya" "ISO4217" "MMK" "104" 100 100 )
 ( "Namibian Dollar" "dollar" "cent" "ISO4217" "NAD" "516" 100 100 )
 ( "Nepalese Rupee" "rupee" "paise" "ISO4217" "NPR" "524" 100 100 )
