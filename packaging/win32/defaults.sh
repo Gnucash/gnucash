@@ -23,6 +23,7 @@
 # DISABLE_OPTIMIZATIONS=yes
 # AQBANKING_WITH_QT=no
 # GLOBAL_DIR=Z:\\mydir  # all directories will use this
+# WGET_RATE=50k         #limit download bandwith to 50KB/s
 # late_eval 'INSTALL_DIR=$GNUCASH_DIR\\myinst'  # no need to define GNUCASH_DIR
 # block_step inst_docs
 # late_eval 'add_step greetings'
