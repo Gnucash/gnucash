@@ -884,6 +884,15 @@ AC_ARG_ENABLE( locale-specific-tax,
   [  --enable-locale-specific-tax enable localized tax categories (experimental)],
   AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
 
+dnl Make sure we have a proper gettext installed
+AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)
+if test "$gt_cv_have_gettext" != "yes" || test "x$GMSGFMT" = "x"; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([Cannot find Glib Gettext.  Maybe you need to install the gettext package?])
+else
+  AC_MSG_RESULT(yes - $GMSGFMT)
+fi
+
 ### --------------------------------------------------------------------------
 ### help files
 
