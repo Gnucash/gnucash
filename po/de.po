@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-07 21:49+0200\n"
-"PO-Revision-Date: 2007-09-07 21:59+0200\n"
+"PO-Revision-Date: 2007-09-14 22:47+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18879,10 +18879,7 @@ msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
-msgstr ""
-"Anpassungsbuchung für diese Konten (FIXME: ungenaue Übersetzung) werden in "
-"den Spalten Anpassung, Rohbilanz und Einnahmerechnung ausgerechnet. Dies ist "
-"vor allem nützlich für Handelsunternehmen."
+msgstr "Anpassungsbuchung für diese Konten (FIXME: ungenaue Übersetzung) werden in den Spalten Anpassung, Rohbilanz und Gewinn- und Verlustrechnung ausgerechnet. Dies ist vor allem nützlich für Handelsunternehmen."
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -19208,7 +19205,7 @@ msgstr "Angepasste Rohbilanz"
 #: ../intl-scm/guile-strings.c:2160 ../intl-scm/guile-strings.c:2240
 #: ../intl-scm/guile-strings.c:2784 ../intl-scm/guile-strings.c:2864
 msgid "Income Statement"
-msgstr "Einnahmeüberschussrechnung"
+msgstr "Gewinn- und Verlustrechnung"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -19576,7 +19573,7 @@ msgstr "Summe Erträge anzeigen"
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2292 ../intl-scm/guile-strings.c:2916
 msgid "Whether or not to include a line indicating total revenue"
-msgstr "Eine Zeile für die Summe Erträge anzeigen"
+msgstr "Eine Zeile für die Gesamterträge anzeigen"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
@@ -19613,7 +19610,7 @@ msgstr "Gewinn"
 #. src/report/standard-reports/gnucash/report/income-statement.scm
 #: ../intl-scm/guile-strings.c:2340 ../intl-scm/guile-strings.c:2964
 msgid "Total Revenue"
-msgstr "Gesamtgewinn"
+msgstr "Gesamterträge"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/gnucash/report/income-statement.scm
