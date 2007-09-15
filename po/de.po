@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-07 21:49+0200\n"
-"PO-Revision-Date: 2007-09-14 22:47+0200\n"
+"PO-Revision-Date: 2007-09-15 10:34+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -606,9 +606,7 @@ msgstr ""
 msgid ""
 "This transaction needs to be assigned to a Vendor.  Please choose the Vendor "
 "below."
-msgstr ""
-"Diese Buchung muss einem Zulieferer zugeordnet sein.  Bitte wählen Sie unten "
-"einen Zulieferer."
+msgstr "Diese Buchung muss einem Lieferanten zugeordnet sein.  Bitte wählen Sie unten einen Lieferanten."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid ""
@@ -1310,10 +1308,7 @@ msgstr ""
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
-msgstr ""
-"Sie müssen einen Firmennamen eingeben. Wenn dieser Zulieferer eine Person "
-"ist (und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das "
-"gleiche eintragen."
+msgstr "Sie müssen einen Firmennamen eingeben. Wenn dieser Lieferant eine Person ist (und keine Firma), sollten Sie bei »Firmenname« und »Kontaktadresse« das gleiche eintragen."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
@@ -1321,25 +1316,25 @@ msgstr "Sie müssen eine Zahlungsadresse eingeben."
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
-msgstr "Zulieferer bearbeiten"
+msgstr "Lieferant bearbeiten"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
 msgid "New Vendor"
-msgstr "Neuer Zulieferer"
+msgstr "Neuer Lieferant"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
 msgid "View/Edit Vendor"
-msgstr "Zulieferer anzeigen/bearbeiten"
+msgstr "Lieferant anzeigen/bearbeiten"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
 msgid "Vendor's Jobs"
-msgstr "Aufträge Zulieferer"
+msgstr "Aufträge Lieferant"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
 msgid "Vendor's Bills"
-msgstr "Rechnungen Zulieferer"
+msgstr "Rechnungen Lieferant"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
 msgid "Pay Bill"
@@ -1347,11 +1342,11 @@ msgstr "Rechnung zahlen"
 
 #: ../src/business/business-gnome/dialog-vendor.c:661
 msgid "Vendor ID"
-msgstr "Zulieferernummer"
+msgstr "Lieferantennummer"
 
 #: ../src/business/business-gnome/dialog-vendor.c:694
 msgid "Find Vendor"
-msgstr "Zulieferer suchen"
+msgstr "Lieferant suchen"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
@@ -1563,17 +1558,13 @@ msgstr ""
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
-msgstr ""
-"Ob Steuern als Voreinstellung in eingegangenen Rechnungen aufgeführt werden "
-"sollen. Diese Einstellung wird bei neuen Kunden und Zulieferern übernommen."
+msgstr "Ob Steuern als Voreinstellung in eingegangenen Rechnungen aufgeführt werden sollen. Diese Einstellung wird bei neuen Kunden und Lieferanten übernommen."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
-msgstr ""
-"Ob Steuern als Voreinstellung in verschickte Rechnungen aufgeführt werden "
-"sollen. Diese Einstellung wird bei neuen Kunden und Zulieferern übernommen."
+msgstr "Ob Steuern als Voreinstellung in verschickte Rechnungen aufgeführt werden sollen. Diese Einstellung wird bei neuen Kunden und Lieferanten übernommen."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
@@ -2117,9 +2108,7 @@ msgstr "Steuertabelle:"
 msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
-"Die Zulieferernummer. Falls keine angegeben wird, wird automatisch ein "
-"sinnvoller Wert gewählt."
+msgstr "Die Lieferantennummer. Falls keine angegeben wird, wird automatisch ein sinnvoller Wert gewählt."
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -2128,15 +2117,15 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:136
 #: ../intl-scm/guile-strings.c:6206 ../intl-scm/guile-strings.c:6730
 msgid "Vendor"
-msgstr "Zulieferer"
+msgstr "Lieferant"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
 msgid "Vendor Number: "
-msgstr "Zulieferer Nummer: "
+msgstr "Lieferantennummer: "
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
-msgstr "Welche Steuertabelle soll bei diesem Zulieferer angewendet werden?"
+msgstr "Welche Steuertabelle soll bei diesem Lieferanten angewendet werden?"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
@@ -2227,23 +2216,23 @@ msgstr "Den Dialog für das Eingeben von Zahlungen öffnen"
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
 msgid "_Vendor"
-msgstr "_Zulieferer"
+msgstr "_Lieferant"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
 msgid "_New Vendor..."
-msgstr "Zulieferer anlegen..."
+msgstr "_Neuer Lieferant..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
-msgstr "Den Dialog für das Anlegen neuer Zulieferer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Lieferanten öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
-msgstr "_Zulieferer suchen..."
+msgstr "_Lieferant suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
-msgstr "Den Dialog für die Suche nach Zulieferern öffnen"
+msgstr "Den Dialog für die Suche nach Lieferanten öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
@@ -2345,11 +2334,11 @@ msgstr "Kunden nach QSF exportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "QSF _Vendor..."
-msgstr "QSF _Zulieferer..."
+msgstr "QSF _Lieferant..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "Export one or more vendors to QSF"
-msgstr "Zulieferer nach QSF exportieren"
+msgstr "Lieferant(en) nach QSF exportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
@@ -2403,7 +2392,7 @@ msgstr "Kunden nach XML exportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:791
 msgid "Export Vendors to XML"
-msgstr "Zulieferer nach XML exportieren"
+msgstr "Lieferanten nach XML exportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:823
 msgid "Export Employees to XML"
@@ -8577,9 +8566,8 @@ msgid "Position of the notebook tabs"
 msgstr "Position der Reiter der Karteikarten"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
-#, fuzzy
 msgid "Position of the summary bar"
-msgstr "Position des Scheckvordrucks auf der Seite"
+msgstr "Position der Zusammenfassungsleiste"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Save window sizes and locations"
@@ -8769,15 +8757,11 @@ msgstr ""
 "»-«."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:65
-#, fuzzy
 msgid ""
 "This setting determines the edge at which the summary bar for various pages "
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom"
 "\"."
-msgstr ""
-"Diese Einstellung gibt die Fensterkante an, an der die Karteikarten-Reiter "
-"(Tabs) angezeigt werden. Mögliche Werte sind »top«, »left«, »bottom« und "
-"»right«. Voreingestellt ist »top«."
+msgstr "Diese Einstellung gibt die Fensterkante an, an der die Zusammenfassungsleiste angezeigt wird. Mögliche Werte sind »top« (oben) und »bottom« (unten). Voreingestellt ist »bottom«."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:66
 msgid ""
@@ -10819,14 +10803,12 @@ msgid "Display the notebook tabs at the top of the window."
 msgstr "Die Karteireiter der Tabs am oberen Rand des Fensters anzeigen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:67
-#, fuzzy
 msgid "Display the summary bar at the bottom of the page."
-msgstr "Die Karteireiter der Tabs am unteren Rand des Fensters anzeigen."
+msgstr "Die Zusammenfassungsleiste am unteren Rand der Seite anzeigen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
-#, fuzzy
 msgid "Display the summary bar at the top of the page."
-msgstr "Die Karteireiter der Tabs am oberen Rand des Fensters anzeigen."
+msgstr "Die Zusammenfassungsleiste am oberen Rand der Seite anzeigen."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display this many rows when a register is created."
@@ -15468,7 +15450,7 @@ msgstr "Bitte geben Sie einen Namen für den Kunden ein"
 
 #: ../src/register/ledger-core/split-register-model.c:877
 msgid "Enter the name of the Vendor"
-msgstr "Geben Sie den Namen des Zulieferers ein"
+msgstr "Geben Sie den Namen des Lieferants ein"
 
 #: ../src/register/ledger-core/split-register-model.c:880
 msgid "Enter a description of the transaction"
@@ -21769,14 +21751,12 @@ msgstr ""
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5866
 msgid "Default Vendor TaxTable"
-msgstr "Voreinstellung Zulieferer Steuertabelle"
+msgstr "Voreinstellung Lieferant Steuertabelle"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5868
 msgid "The default tax table to apply to vendors."
-msgstr ""
-"Voreinstellung für die Steuertabelle, die bei Zulieferern angewendet werden "
-"soll."
+msgstr "Voreinstellung für die Steuertabelle, die bei Lieferanten angewendet werden soll."
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:5870
@@ -22539,7 +22519,7 @@ msgstr "Kundenbericht"
 #: ../intl-scm/guile-strings.c:6226 ../intl-scm/guile-strings.c:6232
 #: ../intl-scm/guile-strings.c:6750 ../intl-scm/guile-strings.c:6756
 msgid "Vendor Report"
-msgstr "Zuliefererbericht"
+msgstr "Lieferantenbericht"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -23013,16 +22993,3 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
-
-#~ msgid "No Valid Invoice Selected"
-#~ msgstr "Keine gültige Rechnung ausgewählt"
-
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash 2.0."
-#~ msgstr ""
-#~ "Das ist eine Entwicklungsversion von GnuCash. Vermutlich sind hier noch "
-#~ "haufenweise Fehler enthalten. Wenn Sie auf Nummer sicher gehen wollen, "
-#~ "dann benutzen Sie doch lieber die neueste Version aus der Reihe GnuCash "
-#~ "2.0.x, welche es aber natürlich noch nicht für Windows gibt."
