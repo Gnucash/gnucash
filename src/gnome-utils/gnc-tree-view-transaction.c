@@ -70,6 +70,7 @@ BUGS:
 #include "Transaction.h"
 #include "TransactionP.h" // FIXME
 #include "Scrub.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
@@ -125,7 +126,6 @@ typedef struct {
     gchar *title;
     gchar *pref_name;
     gchar *sizer;
-    int color_model_col;
     int visibility_model_col;
     void (*edited_cb)(GtkCellRendererText *, const gchar *,
                       const gchar *, gpointer);
@@ -137,58 +137,58 @@ typedef struct {
 static ColDef all_tree_view_transaction_columns[] = {
     {COL_DATE, GNC_TREE_MODEL_TRANSACTION_COL_DATE,
      "Date", "date", "00/00/0000xxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, NULL, gtmt_sort_by_date},
     {COL_NUM, GNC_TREE_MODEL_TRANSACTION_COL_NUM,
      "Num", "num", "0000xx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_COLOR_NONE,
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_DESCRIPTION, GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION,
      "Description", "description", "xxxxxxxxxxxxxxxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_ACCOUNT, -1,
      "Transfer", "transfer", "xxxxxxxxxxxxxxxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      NULL /*FIXME?*/, start_edit, NULL},
     {COL_RECN, -1,
      "R", "recn", "x",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, NULL, NULL},
     {COL_AMOUNT, -1,
      "Amt", "amount", "xxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
     {COL_VALUE, -1,
      "Val", "value", "xxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      NULL, NULL, NULL},
     {COL_DEBIT, -1,
      "Debit", "debit", "xxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_CREDIT, -1,
      "Credit", "credit", "xxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_BALANCE, -1,
      "Balance", "balance", "xxxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      NULL, NULL, NULL},
     {COL_RATE, -1,
      "Price", "price", "xxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb,
      NULL},
     {COL_TYPE, -1,
      "Type", "type", "x",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      NULL, NULL, NULL},
     {COL_NOTES, -1,
      "Notes", "notes", "xxxxxxxxx",
-     GNC_TREE_VIEW_COLUMN_COLOR_NONE, GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
      gtvt_edited_cb, get_editable_start_editing_cb, NULL},
 };
 
@@ -709,10 +709,16 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
     case COL_BALANCE:
         if (is_trans && trans && anchor) {
             num = xaccTransGetAccountBalance(trans, anchor);
-            if (gnc_reverse_balance(anchor)) 
+            if (gnc_reverse_balance(anchor))
                 num = gnc_numeric_neg(num);
             s = xaccPrintAmount(num, gnc_account_print_info(anchor, TRUE));
-        } else s = "";
+            if (gnc_numeric_negative_p(num)
+                && gnc_gconf_get_bool(GCONF_GENERAL, KEY_NEGATIVE_IN_RED,
+                                        NULL))
+                g_object_set(cell, "foreground", "red", (gchar*)NULL);
+        } else {
+            s = "";
+        }
         g_object_set(cell, "text", s, NULL);
         break;
     case COL_ACCOUNT:
@@ -1578,15 +1584,6 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
             col = gnc_tree_view_add_calendar_column (
                 GNC_TREE_VIEW(tv), def.title, def.pref_name, NULL, def.sizer,
                 def.modelcol, def.visibility_model_col, def.sort_fn);
-        } else if (col_list[i] == COL_AMOUNT
-                   || col_list[i] == COL_VALUE
-                   || col_list[i] == COL_DEBIT
-                   || col_list[i] == COL_CREDIT
-                   || col_list[i] == COL_BALANCE) {
-            col = gnc_tree_view_add_numeric_column (
-                GNC_TREE_VIEW(tv), def.title, def.pref_name, def.sizer,
-                def.modelcol, def.color_model_col, def.visibility_model_col,
-                def.sort_fn);
         } else {
             col = gnc_tree_view_add_text_column (
                 GNC_TREE_VIEW(tv), def.title, def.pref_name, NULL, def.sizer,
