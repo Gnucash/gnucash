@@ -34,7 +34,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "gnc-backend-file.h"
+#include "gnc-backend-xml.h"
 
 #include "sixtp.h"
 

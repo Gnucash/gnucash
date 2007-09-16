@@ -249,4 +249,4 @@ EXTRA_DIST = \
   test-real-data.sh \
   test-xml2-is-file.c
 
-INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.file\"
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.xml\"

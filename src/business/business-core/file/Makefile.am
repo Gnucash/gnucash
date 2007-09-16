@@ -14,7 +14,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 libgncmod_business_backend_xml_la_SOURCES = \
-  gncmod-business-backend-file.c \
+  gncmod-business-backend-xml.c \
   gnc-address-xml-v2.c \
   gnc-bill-term-xml-v2.c \
   gnc-customer-xml-v2.c \
