@@ -97,15 +97,16 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 static void
 gnc_gda_session_begin(QofBackend *be_start, QofSession *session, 
                    const gchar *book_id,
-                   gboolean ignore_lock, gboolean create_if_nonexistent)
+                   gboolean ignore_lock,
+				   gboolean create_if_nonexistent)
 {
     GncGdaBackend *be = (GncGdaBackend*) be_start;
     GError* error = NULL;
     gda_backend be_data;
     gchar* book_info;
     gchar* dsn;
-    gchar* username;
-    gchar* password;
+    gchar* username = "";
+    gchar* password = "";
 
     ENTER (" ");
 
@@ -115,25 +116,100 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
     book_info = g_strdup( book_id );
     dsn = strchr( book_info, ':' );
     *dsn = '\0';
-    dsn += 3;
-    username = strchr( dsn, ':' );
-    if( username != NULL ) {
-        *username++ = '\0';
-    } else {
-        username = "";
-    }
-    password = strchr( username, ':' );
-    if( password != NULL ) {
-        *password++ = '\0';
-    } else {
-        password = "";
-    }
+    dsn += 3;						// Skip '://'
 
-    be->pConnection = gda_client_open_connection( be->pClient,
+	// String will be one of:
+	//
+	//    sqlite:<filename>
+	//    mysql:<dbname>
+	//    pgsql:<dbname>
+	//    @<gda_connectionname>
+
+	if( dsn[0] == '@' ) {
+	    dsn++;
+
+	    be->pConnection = gda_client_open_connection( be->pClient,
 						dsn,
 						username, password,
 						0,
 						&error );
+    } else {
+		gchar* provider;
+		GList* provider_list;
+		GList* l;
+		gboolean provider_found;
+		
+		provider = dsn;
+	    dsn = strchr( dsn, ':' );
+		*dsn = '\0';
+		dsn++;
+
+		// Get a list of all of the providers.  If the requested provider is on the list, use it.
+		// Note that we need a case insensitive comparison here
+		provider_list = gda_config_get_provider_list();
+
+		provider_found = FALSE;
+		for( l = provider_list; l != NULL; l = l->next ) {
+			GdaProviderInfo* provider_info = (GdaProviderInfo*)l->data;
+
+			if( provider_info != NULL && g_ascii_strcasecmp( provider_info->id, provider ) == 0 ) {
+				provider_found = TRUE;
+				provider = provider_info->id;
+				break;
+			}
+		}
+
+		if( provider_found ) {
+			gchar* cnc;
+
+		    // If the provider is SQLite, split the file name into DB_DIR and
+			// DB_NAME
+			if( strcmp( provider, "SQLite" ) == 0 ) {
+			    gchar* last_slash = g_strrstr( dsn, "/" );
+				if( last_slash != NULL ) {
+				    *last_slash = '\0';
+					last_slash++;
+					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
+											dsn, last_slash );
+				} else {
+				    cnc = g_strdup_printf( "DB_DIR=.;DB_NAME=%s", dsn );
+				}
+			} else {
+			    cnc = g_strdup( dsn );
+			}
+
+			be->pConnection = gda_client_open_connection_from_string( be->pClient,
+									provider, 
+									cnc,
+									username, password,
+									0,
+									&error );
+
+		    if( be->pConnection == NULL ) {
+				GdaServerOperation* op = gda_client_prepare_create_database(
+													be->pClient,
+													dsn,
+													provider );
+				if( op != NULL ) {
+					gboolean isOK;
+					isOK = gda_client_perform_create_database(
+													be->pClient,
+													op,
+													&error );
+					if( isOK ) {
+						be->pConnection = gda_client_open_connection_from_string(
+													be->pClient,
+													provider, 
+													cnc,
+													username, password,
+													0,
+													&error );
+					}
+				}
+			}
+		g_free( cnc );
+		}
+	}
     g_free( book_info );
 
     if( be->pConnection == NULL ) {

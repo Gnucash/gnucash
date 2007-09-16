@@ -106,21 +106,21 @@ static void set_split_account_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t split_col_table[] =
 {
-    { "guid",            CT_GUID,     0, COL_NNUL|COL_PKEY,    NULL, NULL,
+    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
             get_guid, set_guid },
     { "tx_guid",        CT_GUID,     0, COL_NNUL,    NULL, NULL,
             get_split_tx_guid, set_split_tx_guid },
-    { "memo",            CT_STRING,     SPLIT_MAX_MEMO_LEN, COL_NNUL,    NULL, SPLIT_MEMO },
-    { "action",            CT_STRING,     SPLIT_MAX_ACTION_LEN, COL_NNUL,    NULL, SPLIT_ACTION },
-    { "reconcile_state", CT_STRING,     1, COL_NNUL,    NULL, NULL,
+    { "memo",            CT_STRING,  SPLIT_MAX_MEMO_LEN, COL_NNUL,    NULL, SPLIT_MEMO },
+    { "action",          CT_STRING,  SPLIT_MAX_ACTION_LEN, COL_NNUL,    NULL, SPLIT_ACTION },
+    { "reconcile_state", CT_STRING,  1, COL_NNUL,    NULL, NULL,
             get_split_reconcile_state, set_split_reconcile_state },
-    { "reconcile_date",    CT_TIMESPEC, 0, COL_NNUL,    NULL, NULL,
+    { "reconcile_date", CT_TIMESPEC, 0, COL_NNUL,    NULL, NULL,
             get_split_reconcile_date, set_split_reconcile_date },
-    { "value",            CT_NUMERIC,     0, COL_NNUL,    NULL, NULL,
+    { "value",           CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
             get_split_value, set_split_value },
-    { "quantity",        CT_NUMERIC,     0, COL_NNUL,    NULL, NULL,
+    { "quantity",        CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
             get_split_quantity, set_split_quantity },
-    { "account_guid",    CT_GUID,     0, COL_NNUL,    NULL, NULL,
+    { "account_guid",    CT_GUID,    0, COL_NNUL,    NULL, NULL,
             get_split_account_guid, set_split_account_guid },
     { NULL }
 };
@@ -340,6 +340,130 @@ set_split_account_guid( gpointer pObject, gpointer pValue )
     Account* pAccount = xaccAccountLookup( guid, pBook );
 
     xaccSplitSetAccount( pSplit, pAccount );
+}
+
+static void retrieve_numeric_value( gpointer pObject, gpointer pValue );
+
+static void 
+retrieve_numeric_value( gpointer pObject, gpointer pValue )
+{
+    gnc_numeric* pResult = (gnc_numeric*)pObject;
+    gnc_numeric val = *(gnc_numeric*)pValue;
+
+    *pResult = val;
+}
+
+
+// Table to retrieve just the guid
+static col_cvt_t quantity_table[] =
+{
+    { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, retrieve_numeric_value },
+    { NULL }
+};
+
+static gnc_numeric
+get_gnc_numeric_from_row( GdaDataModel* model, int row )
+{
+	gnc_numeric val;
+
+    gnc_gda_load_object( model, row, NULL, &val, quantity_table );
+
+    return val;
+}
+
+/*
+ * get_account_balance_from_query
+ *
+ * Given a GDA query which should return a number of rows of gnc_numeric num/denom pairs,
+ * return the sum.
+ */
+static gnc_numeric
+get_account_balance_from_query( GncGdaBackend* be, GdaQuery* query )
+{
+	gnc_numeric bal = gnc_numeric_zero();
+    GdaObject* ret;
+
+	/* Execute the query */
+    ret = gnc_gda_execute_query( be, query );
+
+	/* Loop for all rows, convert each to a gnc_numeric and sum them */
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
+
+        for( r = 0; r < numRows; r++ ) {
+		    gnc_numeric val = get_gnc_numeric_from_row( pModel, r );
+			bal = gnc_numeric_add( bal, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
+		}
+	}
+
+    return bal;
+}
+
+void
+gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount, 
+								    gnc_numeric* start_balance,
+								    gnc_numeric* cleared_balance,
+									gnc_numeric* reconciled_balance )
+{
+	GdaQuery* query;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gchar* sql;
+
+    guid_to_string_buff( qof_instance_get_guid( pAccount ), guid_buf );
+
+	/*
+	 * For start balance,
+	 *    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	 *        WHERE ACCOUNT_GUID=<guid> GROUP BY QUANTITY_DENOM
+	 *
+	 * This will return one entry per denom.  These can then be made into
+	 * gnc_numerics and then added.  With luck, there will only be one entry.
+	 */
+
+	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+
+	/* Create the query */
+	query = gnc_gda_create_query_from_sql( be, sql );
+	*start_balance = get_account_balance_from_query( be, query );
+
+	g_free( sql );
+
+	/*
+	 * For cleared balance,
+	 *    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	 *        WHERE ACCOUNT_GUID=<guid> AND RECONCILE_STATE='c'
+	 *        GROUP BY QUANTITY_DENOM
+	 *
+	 * This just requires a modification to the query
+	 */
+
+	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+
+	query = gnc_gda_create_query_from_sql( be, sql );
+    *cleared_balance = get_account_balance_from_query( be, query );
+
+	g_free( sql );
+
+	/*
+	 * For reconciled balance,
+	 *    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	 *        WHERE ACCOUNT_GUID=<guid> AND RECONCILE_STATE='c'
+	 *        GROUP BY QUANTITY_DENOM
+	 *
+	 * This just requires a small modification to the cleared balance query
+	 */
+
+	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='y' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='y' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+
+	query = gnc_gda_create_query_from_sql( be, sql );
+	*reconciled_balance = get_account_balance_from_query( be, query );
+
+	g_free( sql );
 }
 
 static Split*
@@ -596,12 +720,48 @@ get_guid_from_query( QofQuery* pQuery )
 }
 
 static gpointer
-compile_split_query( GncGdaBackend* pBackend, QofQuery* pQuery )
+compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 {
     gchar* buf;
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gchar* s;
 
+#if 1
+	GdaQuery* query;
+	GdaObject* results;
+
+    acct_guid = get_guid_from_query( pQuery );
+    guid_to_string_buff( acct_guid, guid_buf );
+	buf = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
+	results = gnc_gda_execute_sql( be, buf );
+	g_free( buf );
+	buf = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (", TRANSACTION_TABLE );
+    if( GDA_IS_DATA_MODEL( results ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(results);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
+
+        for( r = 0; r < numRows; r++ ) {
+			const GUID* guid;
+
+			guid = gnc_gda_load_tx_guid( pModel, r );
+    		guid_to_string_buff( guid, guid_buf );
+			if( r == 0 ) {
+				s = g_strconcat( buf, "'", guid_buf, "'", NULL );
+			} else {
+				s = g_strconcat( buf, ",'", guid_buf, "'", NULL );
+			}
+			g_free( buf );
+			buf = s;
+        }
+    }
+	s = g_strconcat( buf, ")", NULL );
+	g_free( buf );
+	buf = s;
+
+	return buf;
+#else
 #if 1
     acct_guid = get_guid_from_query( pQuery );
     guid_to_string_buff( acct_guid, guid_buf );
@@ -625,7 +785,7 @@ compile_split_query( GncGdaBackend* pBackend, QofQuery* pQuery )
     /* Subquery */
 
     /* SELECT */
-    subQuery = gda_query_new( pBackend->pDict );
+    subQuery = gda_query_new( be->pDict );
     gda_query_set_query_type( subQuery, GDA_QUERY_TYPE_SELECT );
 
     /* FROM splits */
@@ -650,7 +810,7 @@ compile_split_query( GncGdaBackend* pBackend, QofQuery* pQuery )
     /* Main query */
 
     /* SELECT * FROM transactions */
-    query = gnc_gda_create_select_query( pBackend, TRANSACTION_TABLE );
+    query = gnc_gda_create_select_query( be, TRANSACTION_TABLE );
     gda_query_add_sub_query( query, subQuery );
     g_object_unref( G_OBJECT(subQuery) );
 
@@ -676,6 +836,7 @@ compile_split_query( GncGdaBackend* pBackend, QofQuery* pQuery )
 
     return query;
 #endif
+#endif
 }
 
 static void
@@ -683,15 +844,9 @@ run_split_query( GncGdaBackend* be, gpointer pQuery )
 {
     GdaQuery* query;
 #if 1
-    GError* error = NULL;
     const gchar* sql = (const gchar*)pQuery;
 
-    query = gda_query_new_from_sql( be->pDict, sql, &error );
-    if( query == NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
-        return;
-    }
-    error = NULL;
+	query = gnc_gda_create_query_from_sql( be, sql );
 #else
     query = GDA_QUERY(pQuery);
 #endif

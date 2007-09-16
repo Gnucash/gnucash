@@ -40,6 +40,7 @@
 #include "gnc-account-gda.h"
 #include "gnc-commodity-gda.h"
 #include "gnc-slots-gda.h"
+#include "gnc-transaction-gda.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
@@ -124,6 +125,20 @@ set_parent( gpointer pObject, gpointer pValue )
     }
 }
 
+static void
+load_balances( GncGdaBackend* be, Account* pAccount )
+{
+    gnc_numeric start_balance, cleared_balance, reconciled_balance;
+
+	gnc_gda_get_account_balances( be, pAccount, &start_balance, &cleared_balance, &reconciled_balance );
+
+    g_object_set( pAccount,
+				"start-balance", &start_balance,
+                "start-cleared-balance", &cleared_balance,
+                "start-reconciled-balance", &reconciled_balance,
+                NULL);
+}
+
 static Account*
 load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
             Account* pAccount )
@@ -143,6 +158,7 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
     gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
     gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
                         qof_instance_get_slots( QOF_INSTANCE(pAccount) ) );
+    load_balances( be, pAccount );
 
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
 

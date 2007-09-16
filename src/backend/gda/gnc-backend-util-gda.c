@@ -847,10 +847,10 @@ static void retrieve_guid( gpointer pObject, gpointer pValue );
 static void 
 retrieve_guid( gpointer pObject, gpointer pValue )
 {
-    GUID** ppGuid = (GUID**)pObject;
+    GUID* pGuid = (GUID*)pObject;
     GUID* guid = (GUID*)pValue;
 
-    *ppGuid = guid;
+	memcpy( pGuid, guid, sizeof( GUID ) );
 }
 
 
@@ -864,11 +864,28 @@ static col_cvt_t guid_table[] =
 const GUID*
 gnc_gda_load_guid( GdaDataModel* pModel, gint row )
 {
-    const GUID* guid;
+	static GUID guid;
 
     gnc_gda_load_object( pModel, row, NULL, &guid, guid_table );
 
-    return guid;
+    return &guid;
+}
+
+// Table to retrieve just the guid
+static col_cvt_t tx_guid_table[] =
+{
+    { "tx_guid", CT_GUID, 0, 0, NULL, NULL, NULL, retrieve_guid },
+    { NULL }
+};
+
+const GUID*
+gnc_gda_load_tx_guid( GdaDataModel* pModel, gint row )
+{
+    static GUID guid;
+
+    gnc_gda_load_object( pModel, row, NULL, &guid, tx_guid_table );
+
+    return &guid;
 }
 
 void
@@ -935,8 +952,8 @@ gnc_gda_execute_query( GncGdaBackend* be, GdaQuery* query )
     return ret;
 }
 
-GdaObject*
-gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
+GdaQuery*
+gnc_gda_create_query_from_sql( GncGdaBackend* be, const gchar* sql )
 {
     GError* error = NULL;
 
@@ -945,9 +962,22 @@ gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
     query = gda_query_new_from_sql( be->pDict, sql, &error );
     if( query == NULL ) {
         g_critical( "SQL error: %s\n", error->message );
-        return NULL;
     }
-    return gnc_gda_execute_query( be, query );
+
+	return query;
+}
+
+GdaObject*
+gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
+{
+	GdaQuery* query;
+
+	query = gnc_gda_create_query_from_sql( be, sql );
+	if( query != NULL ) {
+	    return gnc_gda_execute_query( be, query );
+	} else {
+		return NULL;
+	}
 }
 
 int
