@@ -165,15 +165,15 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
 		    // If the provider is SQLite, split the file name into DB_DIR and
 			// DB_NAME
 			if( strcmp( provider, "SQLite" ) == 0 ) {
-			    gchar* last_slash = g_strrstr( dsn, "/" );
-				if( last_slash != NULL ) {
-				    *last_slash = '\0';
-					last_slash++;
-					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
-											dsn, last_slash );
-				} else {
-				    cnc = g_strdup_printf( "DB_DIR=.;DB_NAME=%s", dsn );
-				}
+				gchar* dirname;
+				gchar* basename;
+
+				dirname = g_path_get_dirname( dsn );
+				basename = g_path_get_basename( dsn );
+				cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
+											dirname, basename );
+				g_free( dirname );
+				g_free( basename );
 			} else {
 			    cnc = g_strdup( dsn );
 			}
