@@ -6587,7 +6587,7 @@
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> a) Personengesellschaft</act:name>
+    <act:name>a) Personengesellschaft</act:name>
     <act:id type="new">411ea1d84113310d5129ff98c4bb2397</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -7354,7 +7354,7 @@
     <act:parent type="new">3260c1391626c6d4390a92d314f6d047</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> b) Kapitalgesellschaft</act:name>
+    <act:name>b) Kapitalgesellschaft</act:name>
     <act:id type="new">74e3a2129a8919b314a0d3ca7ecd5028</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -12754,7 +12754,7 @@
       </slot>
       <slot>
 	<slot:key>notes</slot:key>
-	<slot:value type="string"> Ausfuhrlieferungen, Lohnveredelung...</slot:value>
+	<slot:value type="string">Ausfuhrlieferungen, Lohnveredelung...</slot:value>
       </slot>
       <slot>
 	<slot:key>tax-related</slot:key>
@@ -14967,7 +14967,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> Erlöse aus Verkäufen Finanzanlagen 100 %/50 % steuerfrei</act:name>
+    <act:name>Erlöse aus Verkäufen Finanzanlagen 100 %/50 % steuerfrei</act:name>
     <act:id type="new">1c8e09eed7456660192d41c23b610c62</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -16807,7 +16807,7 @@
     </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> a) Aufwendungen für Roh-, Hilfs- und Betriebsstoffe und für bezogene Waren</act:name>
+    <act:name>a) Aufwendungen für Roh-, Hilfs- und Betriebsstoffe und für bezogene Waren</act:name>
     <act:id type="new">3cc4cb3a122624f62657777491c1ac38</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -17875,7 +17875,7 @@
     <act:parent type="new">fc97ca612c23df95481f1a141efa72ef</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> b) Aufwendungen für bezogene Leistungen</act:name>
+    <act:name>b) Aufwendungen für bezogene Leistungen</act:name>
     <act:id type="new">7862bce521129521ac86d0326f7f8e3c</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
@@ -20545,7 +20545,7 @@
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name> Gewerbesteuerlich zu berücksichtigendes Mietleasing § 8 GewStG</act:name>
+    <act:name>Gewerbesteuerlich zu berücksichtigendes Mietleasing § 8 GewStG</act:name>
     <act:id type="new">4e2ffa4719c68aecc33759447db520fb</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
