@@ -15571,7 +15571,7 @@
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Ertärge aus der Auflösung von Sonderposten mit Rücklageanteil (aus der Währungsumstellung auf den Euro)</act:name>
+    <act:name>Erträge aus der Auflösung von Sonderposten mit Rücklageanteil (aus der Währungsumstellung auf den Euro)</act:name>
     <act:id type="new">eaeae472049fad366c28d8f3597486de</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>
@@ -25448,7 +25448,7 @@
     </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>21. Veränderungen Vortäge und Rücklagen</act:name>
+    <act:name>21. Veränderungen Vorträge und Rücklagen</act:name>
     <act:id type="new">e940821294093238c9ed9e89a1d00a37</act:id>
     <act:type>EQUITY</act:type>
     <act:commodity>
