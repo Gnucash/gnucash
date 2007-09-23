@@ -30,6 +30,8 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 #include <libgda/libgda.h>
 
 #include "qof.h"
@@ -78,6 +80,8 @@ typedef struct {
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
+#define SQLITE_PROVIDER_NAME "SQLite"
+
 /* ================================================================= */
 
 static void
@@ -111,38 +115,49 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
     ENTER (" ");
 
     be->pClient = gda_client_new();
+	be->pConnection = NULL;
 
-    /* Split book_id into provider and connection string */
+    /* Split book_id into provider and connection string.  If there's no
+	provider, use "file" */
     book_info = g_strdup( book_id );
     dsn = strchr( book_info, ':' );
-    *dsn = '\0';
-    dsn += 3;						// Skip '://'
+	if( dsn != NULL ) {
+    	*dsn = '\0';
+    	dsn += 3;						// Skip '://'
 
-	// String will be one of:
-	//
-	//    sqlite:<filename>
-	//    mysql:<dbname>
-	//    pgsql:<dbname>
-	//    @<gda_connectionname>
+		// String will be one of:
+		//
+		//    sqlite:<filename>
+		//    mysql:<dbname>
+		//    pgsql:<dbname>
+		//    @<gda_connectionname>
 
-	if( dsn[0] == '@' ) {
-	    dsn++;
+		if( dsn[0] == '@' ) {
+	    	dsn++;
 
-	    be->pConnection = gda_client_open_connection( be->pClient,
-						dsn,
-						username, password,
-						0,
-						&error );
-    } else {
+	    	be->pConnection = gda_client_open_connection( be->pClient,
+													dsn,
+													username, password,
+													0,
+													&error );
+		}
+	}
+
+	if( dsn == NULL || dsn[0] != '@' ) {
 		gchar* provider;
 		GList* provider_list;
 		GList* l;
 		gboolean provider_found;
 		
-		provider = dsn;
-	    dsn = strchr( dsn, ':' );
-		*dsn = '\0';
-		dsn++;
+		if( dsn != NULL ) {
+			provider = dsn;
+	    	dsn = strchr( dsn, ':' );
+			*dsn = '\0';
+			dsn++;
+		} else {
+			provider = SQLITE_PROVIDER_NAME;
+			dsn = book_info;
+		}
 
 		// Get a list of all of the providers.  If the requested provider is on the list, use it.
 		// Note that we need a case insensitive comparison here
@@ -164,14 +179,25 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
 
 		    // If the provider is SQLite, split the file name into DB_DIR and
 			// DB_NAME
-			if( strcmp( provider, "SQLite" ) == 0 ) {
+			if( strcmp( provider, SQLITE_PROVIDER_NAME ) == 0 ) {
 				gchar* dirname;
 				gchar* basename;
 
 				dirname = g_path_get_dirname( dsn );
 				basename = g_path_get_basename( dsn );
-				cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
+				
+				// Remove .db from the base name if it exists
+				if( g_str_has_suffix( basename, ".db" ) ) {
+					gchar* bn = g_strdup( basename );
+					gchar* suffix = g_strrstr( bn, ".db" );
+					*suffix = '\0';
+
+					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s", dirname, bn );
+					g_free( bn );
+				} else {
+					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
 											dirname, basename );
+				}
 				g_free( dirname );
 				g_free( basename );
 			} else {
@@ -936,18 +962,73 @@ gnc_gda_provider_free (QofBackendProvider *prov)
     g_free (prov);
 }
 
+/*
+ * Checks to see whether the file is an sqlite file or not
+ *
+ */
+static gboolean
+gnc_gda_check_sqlite_file(const gchar *path)
+{
+	FILE* f;
+	gchar buf[50];
+
+	// BAD if the path is null
+	if( path == NULL ) {
+		return FALSE;
+	}
+
+	if( g_str_has_suffix( path, ".db" ) ) {
+		f = g_fopen( path, "r" );
+
+		// OK if the file doesn't exist - new file
+		if( f == NULL ) {
+			return TRUE;
+		}
+
+		// OK if file has the correct header
+		fread( buf, sizeof(buf), 1, f );
+		fclose( f );
+		if( g_str_has_prefix( buf, "SQLite format" ) ) {
+			return TRUE;
+		}
+	} else {
+		f = g_fopen( path, "r" );
+
+		// BAD if the file exists - not ours
+		if( f != NULL ) {
+			fclose( f );
+			return FALSE;
+		}
+
+		// OK - new file
+		return TRUE;
+	}
+
+	// Otherwise, BAD
+	return FALSE;
+}
+
 G_MODULE_EXPORT void
 qof_backend_module_init(void)
 {
     QofBackendProvider *prov;
 
     prov = g_new0 (QofBackendProvider, 1);
-    prov->provider_name = "GnuCash LibGDA Backend (MySQL)";
+    prov->provider_name = "GnuCash LibGDA Backend";
     prov->access_method = "gda";
     prov->partial_book_supported = FALSE;
     prov->backend_new = gnc_gda_backend_new;
     prov->provider_free = gnc_gda_provider_free;
     prov->check_data_type = NULL;
+    qof_backend_register_provider (prov);
+
+    prov = g_new0 (QofBackendProvider, 1);
+    prov->provider_name = "GnuCash LibGDA Backend";
+    prov->access_method = "file";
+    prov->partial_book_supported = FALSE;
+    prov->backend_new = gnc_gda_backend_new;
+    prov->provider_free = gnc_gda_provider_free;
+    prov->check_data_type = gnc_gda_check_sqlite_file;
     qof_backend_register_provider (prov);
 }
 

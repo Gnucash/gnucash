@@ -36,7 +36,7 @@
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "gncmod-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-xml"
 
 /* gnc-backend-file location */
 #include "gnc-path.h"
@@ -76,8 +76,8 @@ gnc_engine_init(int argc, char ** argv)
     const gchar* lib;
     gboolean required;
   } libs[] = {
-    { GNC_LIB_NAME, TRUE },
     { "gncmod-backend-gda", TRUE },
+    { GNC_LIB_NAME, TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
     { "gncmod-backend-postgres", FALSE },
     { NULL, FALSE } }, *lib;

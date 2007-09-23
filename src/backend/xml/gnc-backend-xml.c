@@ -452,6 +452,12 @@ gnc_determine_file_type (const char *path)
 	FILE *t;
 
 	if (!path) { return FALSE; }
+
+	// Since this can be called with "xml:" as a prefix, remove it if it exists
+	if( g_str_has_prefix( path, "xml:" ) ) {
+	    path += 4;
+	}
+
 	if (0 == safe_strcmp(path, QOF_STDOUT)) { return FALSE; }
 	t = g_fopen(path, "r");
 	if(!t) { PINFO (" new file"); return TRUE; }
@@ -461,7 +467,7 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	PINFO (" %s is not a gnc file", path);
+	PINFO (" %s is not a gnc XML file", path);
 	return FALSE;
 }	
 
@@ -1064,6 +1070,15 @@ qof_backend_module_init(void)
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
         prov->access_method = "file";
+        prov->partial_book_supported = FALSE;
+        prov->backend_new = gnc_backend_new;
+        prov->provider_free = gnc_provider_free;
+        prov->check_data_type = gnc_determine_file_type;
+        qof_backend_register_provider (prov);
+
+        prov = g_new0 (QofBackendProvider, 1);
+        prov->provider_name = "GnuCash File Backend Version 2";
+        prov->access_method = "xml";
         prov->partial_book_supported = FALSE;
         prov->backend_new = gnc_backend_new;
         prov->provider_free = gnc_provider_free;

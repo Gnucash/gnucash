@@ -159,9 +159,9 @@ load_string( GdaDataModel* pModel, gint row,
         s = g_value_get_string( val );
     }
     if( table->gobj_param_name != NULL ) {
-	g_object_set( pObject, table->gobj_param_name, s, NULL );
+		g_object_set( pObject, table->gobj_param_name, s, NULL );
     } else {
-	(*setter)( pObject, (const gpointer)s );
+		(*setter)( pObject, (const gpointer)s );
     }
 }
 
@@ -173,8 +173,12 @@ get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name,
     gchar* s;
 
     memset( value, 0, sizeof( GValue ) );
-    getter = get_getter( obj_name, table_row );
-    s = (gchar*)(*getter)( pObject, NULL );
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &s, NULL );
+	} else {
+    	getter = get_getter( obj_name, table_row );
+    	s = (gchar*)(*getter)( pObject, NULL );
+	}
     if( s ) {
         g_value_init( value, G_TYPE_STRING );
         g_value_set_string( value, s );
