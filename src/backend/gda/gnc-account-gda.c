@@ -128,14 +128,16 @@ set_parent( gpointer pObject, gpointer pValue )
 static void
 load_balances( GncGdaBackend* be, Account* pAccount )
 {
-    gnc_numeric start_balance, cleared_balance, reconciled_balance;
+    gnc_numeric start_balance;
+	gnc_numeric cleared_balance;
+	gnc_numeric reconciled_balance;
 
 	gnc_gda_get_account_balances( be, pAccount, &start_balance, &cleared_balance, &reconciled_balance );
 
     g_object_set( pAccount,
-				"start-balance", &start_balance,
-                "start-cleared-balance", &cleared_balance,
-                "start-reconciled-balance", &reconciled_balance,
+				"end-balance", &start_balance,
+                "end-cleared-balance", &cleared_balance,
+                "end-reconciled-balance", &reconciled_balance,
                 NULL);
 }
 

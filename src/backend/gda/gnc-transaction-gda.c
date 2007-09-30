@@ -72,17 +72,17 @@ static void set_tx_enter_date( gpointer pObject, gpointer pValue );
 
 static col_cvt_t tx_col_table[] =
 {
-    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
+    { "guid",          CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
             get_guid, set_guid },
-    { "currency_guid",    CT_GUID,    0, COL_NNUL,    NULL, NULL,
+    { "currency_guid", CT_GUID,    0, COL_NNUL,    NULL, NULL,
             get_tx_currency_guid, set_tx_currency_guid },
-    { "num",            CT_STRING,    TX_MAX_NUM_LEN, COL_NNUL, NULL, NULL,
+    { "num",           CT_STRING,    TX_MAX_NUM_LEN, COL_NNUL, NULL, NULL,
             get_tx_num, set_tx_num },
-    { "post_date",        CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
+    { "post_date",     CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
             get_tx_post_date, set_tx_post_date },
-    { "enter_date",        CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
+    { "enter_date",    CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
             get_tx_enter_date, set_tx_enter_date },
-    { "description",    CT_STRING,    TX_MAX_DESCRIPTION_LEN, 0,    NULL, NULL,
+    { "description",   CT_STRING,    TX_MAX_DESCRIPTION_LEN, 0,    NULL, NULL,
             (QofAccessFunc)xaccTransGetDescription,
             (QofSetterFunc)xaccTransSetDescription },
     { NULL }
@@ -108,20 +108,20 @@ static col_cvt_t split_col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
             get_guid, set_guid },
-    { "tx_guid",        CT_GUID,     0, COL_NNUL,    NULL, NULL,
+    { "tx_guid",         CT_GUID,     0, COL_NNUL,    NULL, NULL,
             get_split_tx_guid, set_split_tx_guid },
+    { "account_guid",    CT_GUID,    0, COL_NNUL,    NULL, NULL,
+            get_split_account_guid, set_split_account_guid },
     { "memo",            CT_STRING,  SPLIT_MAX_MEMO_LEN, COL_NNUL,    NULL, SPLIT_MEMO },
     { "action",          CT_STRING,  SPLIT_MAX_ACTION_LEN, COL_NNUL,    NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,  1, COL_NNUL,    NULL, NULL,
             get_split_reconcile_state, set_split_reconcile_state },
-    { "reconcile_date", CT_TIMESPEC, 0, COL_NNUL,    NULL, NULL,
+    { "reconcile_date",  CT_TIMESPEC, 0, COL_NNUL,    NULL, NULL,
             get_split_reconcile_date, set_split_reconcile_date },
     { "value",           CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
             get_split_value, set_split_value },
     { "quantity",        CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
             get_split_quantity, set_split_quantity },
-    { "account_guid",    CT_GUID,    0, COL_NNUL,    NULL, NULL,
-            get_split_account_guid, set_split_account_guid },
     { NULL }
 };
 
@@ -440,8 +440,8 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	 * This just requires a modification to the query
 	 */
 
-	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
-	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
+	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
 
 	query = gnc_gda_create_query_from_sql( be, sql );
     *cleared_balance = get_account_balance_from_query( be, query );
@@ -457,8 +457,8 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	 * This just requires a small modification to the cleared balance query
 	 */
 
-	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='y' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
-	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='y' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
+	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
 
 	query = gnc_gda_create_query_from_sql( be, sql );
 	*reconciled_balance = get_account_balance_from_query( be, query );
@@ -488,18 +488,19 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSpl
     }
 
     gnc_gda_load_object( pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
+
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
                             qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
 
     g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
 
-    qof_instance_mark_clean( QOF_INSTANCE(pSplit) );
+    //qof_instance_mark_clean( QOF_INSTANCE(pSplit) );
 
     return pSplit;
 }
 
 static void
-load_all_splits( GncGdaBackend* be, const GUID* guid )
+load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
 {
     GdaObject* ret;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
@@ -507,7 +508,7 @@ load_all_splits( GncGdaBackend* be, const GUID* guid )
     GdaQueryCondition* cond;
     GValue value;
 
-    guid_to_string_buff( guid, guid_buf );
+    guid_to_string_buff( tx_guid, guid_buf );
     memset( &value, 0, sizeof( GValue ) );
     g_value_init( &value, G_TYPE_STRING );
     g_value_set_string( &value, guid_buf );
@@ -736,11 +737,16 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 	buf = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
 	results = gnc_gda_execute_sql( be, buf );
 	g_free( buf );
-	buf = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (", TRANSACTION_TABLE );
     if( GDA_IS_DATA_MODEL( results ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(results);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
+
+		if( numRows != 1 ) {
+			buf = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (", TRANSACTION_TABLE );
+		} else {
+			buf = g_strdup_printf( "SELECT * FROM %s WHERE guid =", TRANSACTION_TABLE );
+		}
 
         for( r = 0; r < numRows; r++ ) {
 			const GUID* guid;
@@ -755,10 +761,13 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 			g_free( buf );
 			buf = s;
         }
+
+		if( numRows != 1 ) {
+			s = g_strconcat( buf, ")", NULL );
+			g_free( buf );
+			buf = s;
+		}
     }
-	s = g_strconcat( buf, ")", NULL );
-	g_free( buf );
-	buf = s;
 
 	return buf;
 #else

@@ -22,8 +22,8 @@
  *  @brief load and save data to SQL - utility functions
  *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
  *
- * This file implements the top-level QofBackend API for saving/
- * restoring data to/from an SQL db using libgda
+ * This file contains utility routines to support saving/restoring
+ * data to/from an SQL db using libgda
  */
 
 #include "config.h"
@@ -651,6 +651,28 @@ static col_type_handler_t date_handler =
         { load_date, create_timespec_col,
             get_gvalue_date_for_query, get_gvalue_date_cond };
 /* ----------------------------------------------------------------- */
+static gint64
+get_integer_value( const GValue* value )
+{
+	if( G_VALUE_HOLDS_INT(value) ) {
+		return g_value_get_int( value );
+	} else if( G_VALUE_HOLDS_UINT(value) ) {
+		return g_value_get_uint( value );
+	} else if( G_VALUE_HOLDS_LONG(value) ) {
+		return g_value_get_long( value );
+	} else if( G_VALUE_HOLDS_ULONG(value) ) {
+		return g_value_get_ulong( value );
+	} else if( G_VALUE_HOLDS_INT64(value) ) {
+		return g_value_get_int64( value );
+	} else if( G_VALUE_HOLDS_UINT64(value) ) {
+		return g_value_get_uint64( value );
+	} else {
+		g_warning( "Unknown type: %s", G_VALUE_TYPE_NAME( value ) );
+	}
+
+	return 0;
+}
+
 static void
 load_numeric( GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
@@ -669,7 +691,7 @@ load_numeric( GdaDataModel* pModel, gint row,
         isNull = TRUE;
         num = 0;
     } else {
-        num = g_value_get_int64( val );
+        num = get_integer_value( val );
     }
     buf = g_strdup_printf( "%s_denom", table->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
@@ -678,7 +700,7 @@ load_numeric( GdaDataModel* pModel, gint row,
         isNull = TRUE;
         denom = 1;
     } else {
-        denom = g_value_get_int64( val );
+        denom = get_integer_value( val );
     }
     n = gnc_numeric_create( num, denom );
     if( isNull ) {
