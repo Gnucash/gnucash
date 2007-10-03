@@ -36,33 +36,48 @@
 
 static QofLogModule log_module = QOF_MOD_UTIL;
 
-/* Search for str2 in first nchar chars of str1, ignore case..  Return
- * pointer to first match, or null.  */
-gchar *
-strncasestr(const guchar *str1, const guchar *str2, size_t len) 
+gboolean
+qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle)
 {
-  while (*str1 && len--) 
-  {
-    if (toupper(*str1) == toupper(*str2)) 
-    {
-      if (strncasecmp(str1,str2,strlen(str2)) == 0) 
-      {
-        return (gchar *) str1;
-      }
-    }
-    str1++;
-  }
-  return NULL;
+    gchar *haystack_casefold, *haystack_normalized;
+    gchar *needle_casefold, *needle_normalized;
+    gchar *p;
+    gint offset;
+
+    g_return_val_if_fail (haystack && needle, FALSE);
+
+    haystack_casefold = g_utf8_casefold (haystack, -1);
+    haystack_normalized = g_utf8_normalize (haystack_casefold, -1,
+                                            G_NORMALIZE_ALL);
+    g_free (haystack_casefold);
+
+    needle_casefold = g_utf8_casefold (needle, -1);
+    needle_normalized = g_utf8_normalize (needle_casefold, -1, G_NORMALIZE_ALL);
+    g_free (needle_casefold);
+
+    p = strstr (haystack_normalized, needle_normalized);
+    g_free (haystack_normalized);
+    g_free (needle_normalized);
+
+    return p != NULL;
 }
 
-/* Search for str2 in str1, ignore case.  Return pointer to first
- * match, or null.  */
-gchar *
-strcasestr(const gchar *str1, const gchar *str2) 
+gint
+qof_utf8_strcasecmp (const gchar *da, const gchar *db)
 {
-   size_t len = strlen (str1);
-   gchar * retval = strncasestr (str1, str2, len);
-   return retval;
+    gchar *da_casefold, *db_casefold;
+    gint retval;
+
+    g_return_val_if_fail (da != NULL, 0);
+    g_return_val_if_fail (db != NULL, 0);
+
+    da_casefold = g_utf8_casefold (da, -1);
+    db_casefold = g_utf8_casefold (db, -1);
+    retval = g_utf8_collate (da_casefold, db_casefold);
+    g_free (da_casefold);
+    g_free (db_casefold);
+
+    return retval;
 }
 
 gint 
@@ -89,7 +104,7 @@ safe_strcasecmp (const gchar * da, const gchar * db)
 {
 	if ((da) && (db)) {
 		if ((da) != (db)) {
-			gint retval = strcasecmp ((da), (db));
+			gint retval = qof_utf8_strcasecmp ((da), (db));
 			/* if strings differ, return */
 			if (retval) return retval;
 		}     
