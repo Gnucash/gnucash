@@ -839,7 +839,7 @@
   <act:parent type="guid">043969ee2463beed15c59e8d85e9501c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Einkommen</act:name>
+  <act:name>Erträge</act:name>
   <act:id type="new">2aab8a58e98f47823a5bbe0c7a180e08</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -847,7 +847,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Einkommen</act:description>
+  <act:description>Erträge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>

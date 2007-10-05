@@ -7,7 +7,7 @@
       Grundlegende Kontenstruktur
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Einkommen und verschiedene Ausgaben.
+    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben.
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -155,7 +155,7 @@
   <act:parent type="guid">dec5fb863e343e41cd0c028562b26cef</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Einkommen</act:name>
+  <act:name>Erträge</act:name>
   <act:id type="new">134fe997a0edfcfbdd77fdd2916220de</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -163,7 +163,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Einkommen</act:description>
+  <act:description>Erträge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
