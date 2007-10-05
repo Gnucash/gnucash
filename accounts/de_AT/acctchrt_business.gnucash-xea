@@ -865,7 +865,7 @@
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sonstiges Einkommen</act:description>
+  <act:description>Sonstige Erträge</act:description>
   <act:parent type="guid">2aab8a58e98f47823a5bbe0c7a180e08</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
