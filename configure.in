@@ -402,6 +402,7 @@ else
 
    Cannot find SLIB.  Are you sure you have it installed?
    See http://bugzilla.gnome.org/show_bug.cgi?id=347922
+   and http://bugzilla.gnome.org/show_bug.cgi?id=483631
 
 ])
 fi
