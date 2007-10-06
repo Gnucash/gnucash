@@ -1008,7 +1008,7 @@ int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account,
     gboolean errors = FALSE;
     gchar* error_message = NULL;
     TransPropertyList* list = trans_property_list_new(account, parse_data->date_format);
-    GncCsvTransLine* trans_line;
+    GncCsvTransLine* trans_line = NULL;
 
     for(j = 0; j < line->len; j++)
     {
