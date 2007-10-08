@@ -520,12 +520,28 @@ load_timespec( GdaDataModel* pModel, gint row,
     if( gda_value_is_null( val ) ) {
         (*setter)( pObject, NULL );
     } else {
-        date = (GDate*)g_value_get_boxed( val );
-        if( date != NULL ) {
-            ts = gnc_dmy2timespec( g_date_get_day( date ),
+		if( G_VALUE_HOLDS_STRING( val ) ) {
+			const gchar* s = g_value_get_string( val );
+			gchar* buf;
+			buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c 00:00:00",
+									s[6], s[7], s[8], s[9],
+									s[0], s[1],
+									s[3], s[4] );
+		    ts = gnc_iso8601_to_timespec_gmt( buf );
+			(*setter)( pObject, &ts );
+			g_free( buf );
+
+		} else if( G_VALUE_HOLDS_BOXED( val ) ) {
+			const gchar* n = g_type_name( val->g_type );
+        	date = (GDate*)g_value_get_boxed( val );
+        	if( date != NULL ) {
+            	ts = gnc_dmy2timespec( g_date_get_day( date ),
                                 g_date_get_month( date ),
                                 g_date_get_year( date ) );
-            (*setter)( pObject, &ts );
+            	(*setter)( pObject, &ts );
+			}
+		} else {
+			g_warning( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
         }
     }
 }
