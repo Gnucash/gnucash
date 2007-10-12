@@ -41,7 +41,7 @@ typedef char gchar;
   GList *c_list = NULL;
 
   while (!SCM_NULLP(list)) {
-        Account *p;
+        void *p;
 
         SCM p_scm = SCM_CAR(list);
         if (SCM_FALSEP(p_scm) || SCM_NULLP(p_scm))

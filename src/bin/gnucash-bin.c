@@ -84,7 +84,7 @@ gnc_print_unstable_message(void)
 	    _("This is a development version. It may or may not work.\n"),
 	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
 	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-	    _("The last stable version was "), "GnuCash 2.2.0",
+	    _("The last stable version was "), "GnuCash 2.2.1",
 	    _("The next stable version will be "), "GnuCash 2.4");
 }
 
@@ -470,7 +470,6 @@ inner_main (void *closure, int argc, char **argv)
     
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
-        gnc_destroy_splash_screen();
         gnc_file_open_file(fn);
         g_free(fn);
     } 
@@ -529,7 +528,6 @@ gnc_log_init()
           {
                QofLogLevel level;
                gchar **parts = NULL;
-               gchar *logger_name = NULL;
 
                gchar *log_opt = log_flags[i];
                parts = g_strsplit(log_opt, "=", 2);
@@ -539,10 +537,8 @@ gnc_log_init()
                     continue;
                }
 
-               logger_name = g_strdup(parts[0]);
                level = qof_log_level_from_string(parts[1]);
-
-               qof_log_set_level(logger_name, level);
+               qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
      }

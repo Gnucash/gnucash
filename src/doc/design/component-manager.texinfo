@@ -2,6 +2,11 @@
 @chapter Component Manager
 @cindex Component Manager
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 The Component Manager (hereafter referred to as the CM) is a framework
 for managing GUI objects in GnuCash. The CM provides several services.
 

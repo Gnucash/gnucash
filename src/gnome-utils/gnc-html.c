@@ -169,7 +169,7 @@ URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
                    char ** url_location, char ** url_label)
 {
-  char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
+  char        uri_rexp[] = "^(([^:][^:]+):)?([^#]+)?(#(.*))?$";
   regex_t     compiled;
   regmatch_t  match[6];
   char        * protocol=NULL, * path=NULL, * label=NULL;
@@ -232,11 +232,12 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
  
   if (!safe_strcmp (retval, URL_TYPE_FILE)) {
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
+      if (g_path_is_absolute(path)) {
         *url_location = g_strdup(path);
       }
       else {
-        *url_location = g_strconcat(html->base_location, "/", path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }
@@ -253,13 +254,14 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     /* case URL_TYPE_OTHER: */
 
     if(!found_protocol && path && html && html->base_location) {
-      if(path[0] == '/') {
-        *url_location = 
-          g_strconcat(extract_machine_name(html->base_location),
-                      "/", path+1, NULL);
+      if (g_path_is_absolute(path)) {
+        *url_location =
+          g_build_filename(extract_machine_name(html->base_location),
+                           path, (gchar*)NULL);
       }
       else {
-        *url_location = g_strconcat(html->base_location, path, NULL);
+        *url_location =
+          g_build_filename(html->base_location, path, (gchar*)NULL);
       }
       g_free(path);
     }

@@ -93,6 +93,7 @@ function dist_gnome() {
     wget_unpacked $PANGO_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $LIBART_LGPL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GTK_URL $DOWNLOAD_DIR $DIST_DIR
+    cp $DIST_DIR/share/themes/MS-Windows/gtk-2.0/gtkrc $DIST_DIR/etc/gtk-2.0
     wget_unpacked $ORBIT2_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $GAIL_URL $DOWNLOAD_DIR $DIST_DIR
     wget_unpacked $POPT_URL $DOWNLOAD_DIR $DIST_DIR
@@ -120,8 +121,6 @@ function dist_libgsf() {
     setup libGSF
     mkdir -p $DIST_UDIR/bin
     cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/etc/gconf/schemas
-    cp -a $_LIBGSF_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
     cp -a $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
 }
@@ -184,7 +183,11 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/share
     cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
-    cp -a $_BUILD_UDIR/packaging/win32/gnucash.iss $_GNUCASH_UDIR
+
+    _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
+    sed < $_BUILD_UDIR/packaging/win32/gnucash.iss \
+        > $_GNUCASH_UDIR/gnucash.iss \
+        -e "s#@-qtbindir-@#${_QTDIR_WIN}/bin#g"
 }
 
 function finish() {

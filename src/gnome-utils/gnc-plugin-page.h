@@ -41,6 +41,8 @@
 
 G_BEGIN_DECLS
 
+#define KEY_SUMMARYBAR_POSITION "summarybar_position"
+
 /* type macros */
 #define GNC_TYPE_PLUGIN_PAGE            (gnc_plugin_page_get_type ())
 #define GNC_PLUGIN_PAGE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPage))

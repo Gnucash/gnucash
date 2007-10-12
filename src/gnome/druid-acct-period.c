@@ -473,7 +473,7 @@ ap_close_period (GnomeDruidPage *druidpage,
   }
 
   /* Load up the GUI for the next closing period. */
-  gnc_frequency_setup (info->period_menu, NULL, &info->closing_date);
+  gnc_frequency_setup_recurrence(info->period_menu, NULL, &info->closing_date);
 
   show_book_details (info);
   return TRUE;

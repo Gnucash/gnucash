@@ -148,7 +148,7 @@ string_match_predicate (gpointer object,
       ret = 1;
 
   } else if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) {
-    if (strcasestr (s, pdata->matchstring))
+    if (qof_utf8_substr_nocase (s, pdata->matchstring))
       ret = 1;
 
   } else {

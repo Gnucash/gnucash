@@ -17,10 +17,6 @@
  *   and perform the same "next instance" computation for this
  *   sequence.
  *
- *   Note: Recurrence is similar to FreqSpec, but it represents a
- *   broader concept than FreqSpec (because it also represents the
- *   beginning of the recurrence).
- *
  * Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
  *
  * This program is free software; you can redistribute it and/or

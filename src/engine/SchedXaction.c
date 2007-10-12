@@ -29,7 +29,6 @@
 
 #include "qof.h"
 
-#include "FreqSpec.h"
 #include "Account.h"
 #include "gnc-book.h"
 #include "SX-book.h"
@@ -72,7 +71,6 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
    sx->schedule = NULL;
-   sx->freq = xaccFreqSpecMalloc(book);
 
    g_date_clear( &sx->last_date, 1 );
    g_date_clear( &sx->start_date, 1 );
@@ -176,7 +174,6 @@ xaccSchedXactionFree( SchedXaction *sx )
       
   if ( sx == NULL ) return;
   
-  xaccFreqSpecFree( sx->freq );
   qof_event_gen( &sx->inst, QOF_EVENT_DESTROY , NULL);
   
   if ( sx->name )
@@ -238,24 +235,6 @@ gnc_sx_commit_edit (SchedXaction *sx)
 }
 
 /* ============================================================ */
-
-FreqSpec *
-xaccSchedXactionGetFreqSpec( const SchedXaction *sx )
-{
-   return sx->freq;
-}
-
-void
-xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
-{
-   g_return_if_fail( fs );
-
-   gnc_sx_begin_edit(sx);
-   xaccFreqSpecFree( sx->freq );
-   sx->freq = fs;
-   qof_instance_set_dirty(&sx->inst);
-   gnc_sx_commit_edit(sx);
-}
 
 GList*
 gnc_sx_get_schedule(const SchedXaction *sx)
@@ -887,8 +866,6 @@ gboolean
 SXRegister(void)
 {
 	static QofParam params[] = {
-	 { GNC_SX_FREQ_SPEC, QOF_ID_FREQSPEC, (QofAccessFunc)xaccSchedXactionGetFreqSpec,
-		 (QofSetterFunc)xaccSchedXactionSetFreqSpec },
 	 { GNC_SX_NAME, QOF_TYPE_STRING, (QofAccessFunc)xaccSchedXactionGetName,
 		 (QofSetterFunc)xaccSchedXactionSetName },
 	 { GNC_SX_START_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetStartDate,

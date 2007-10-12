@@ -432,7 +432,7 @@ debug_print_counter_data(load_counter *data)
           data->books_total, data->books_loaded);
     DEBUG("Commodities: Total: %d, Loaded: %d",
           data->commodities_total, data->commodities_loaded);
-    DEBUG("Scheduled Tansactions: Total: %d, Loaded: %d",
+    DEBUG("Scheduled Transactions: Total: %d, Loaded: %d",
           data->schedXactions_total, data->schedXactions_loaded);
     DEBUG("Budgets: Total: %d, Loaded: %d",
           data->budgets_total, data->budgets_loaded);
@@ -470,7 +470,7 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
 //             counter->books_total, counter->books_loaded);
 //      printf("Commodities: Total: %d, Loaded: %d\n",
 //             counter->commodities_total, counter->commodities_loaded);
-//      printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+//      printf("Scheduled Transactions: Total: %d, Loaded: %d\n",
 //             counter->schedXactions_total, counter->schedXactions_loaded);
 //      printf("Budgets: Total: %d, Loaded: %d\n",
 //	     counter->budgets_total, counter->budgets_loaded);

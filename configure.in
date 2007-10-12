@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.59)
-AC_INIT([gnucash], [2.2.0], [gnucash-devel@gnucash.org])
+AC_INIT([gnucash], [2.2.1], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 
@@ -102,7 +102,7 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_HEADER_STDC
 
-AC_CHECK_HEADERS(limits.h sys/times.h)
+AC_CHECK_HEADERS(limits.h sys/times.h sys/wait.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
@@ -402,6 +402,7 @@ else
 
    Cannot find SLIB.  Are you sure you have it installed?
    See http://bugzilla.gnome.org/show_bug.cgi?id=347922
+   and http://bugzilla.gnome.org/show_bug.cgi?id=483631
 
 ])
 fi
@@ -883,6 +884,15 @@ dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
   [  --enable-locale-specific-tax enable localized tax categories (experimental)],
   AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
+
+dnl Make sure we have a proper gettext installed
+AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)
+if test "$gt_cv_have_gettext" != "yes" || test "x$GMSGFMT" = "x"; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([Cannot find Glib Gettext.  Maybe you need to install the gettext package?])
+else
+  AC_MSG_RESULT(yes - $GMSGFMT)
+fi
 
 ### --------------------------------------------------------------------------
 ### help files
@@ -1406,11 +1416,13 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/fr_FR/Makefile
           accounts/hu_HU/Makefile
           accounts/it/Makefile
+          accounts/ja/Makefile
           accounts/nb/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           accounts/tr_TR/Makefile
+          accounts/zh_CN/Makefile
           checks/Makefile
           doc/Makefile
           doc/examples/Makefile

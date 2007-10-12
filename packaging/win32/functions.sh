@@ -56,8 +56,13 @@ function smart_wget() {
     # download the file to the tmpdir and then when that completes
     # move it to the dest dir.
     if [ ! -f $_DLD/$_FILE ] ; then
-        wget --passive-ftp -c $1 -P $TMP_UDIR
-        mv $TMP_UDIR/$_FILE $_DLD
+    # If WGET_RATE is set (in bytes/sec), limit download bandwith
+    if [ ! -z "$WGET_RATE" ] ; then
+            wget --passive-ftp -c $1 -P $TMP_UDIR --limit-rate=$WGET_RATE
+        else
+            wget --passive-ftp -c $1 -P $TMP_UDIR
+        fi
+    mv $TMP_UDIR/$_FILE $_DLD
     fi
     LAST_FILE=$_DLD/$_FILE
 }

@@ -45,8 +45,7 @@
     ;; the report-list is edited by a special add-on page for the
     ;; options editor.
     (opt-register 
-     (gnc:make-internal-option
-      "__general" "report-list" '()))
+     (gnc:make-internal-option "__general" "report-list" '()))
     
     (opt-register
      (gnc:make-number-range-option 

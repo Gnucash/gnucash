@@ -1,656 +1,748 @@
-<?xml version="1.0" encoding="EUC-JP"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      °ìÈÌÅª¤ÊÈñÌÜ
+      é€šç”¨å¸æˆ·
     </gnc-act:title>
     <gnc-act:short-description>
-      °ìÈÌ¤Ë¤è¤¯»È¤ï¤ì¤ëÈñÌÜ
+      A basic set of accounts most commonly used
     </gnc-act:short-description>
     <gnc-act:long-description>
-      ¤Û¤È¤ó¤É¤Î¥æ¡¼¥¶¡¼¤Ï¤³¤ÎÈñÌÜ¤òÁª¤Ö¤Ç¤·¤ç¤¦¡£¤â¤Ã¤È¤â°ìÈÌÅª¤Ë»È¤ï¤ì¤ëÈñÌÜ (¶ä¹ÔÍÂ¶â¡¢¸½¶â¡¢¥¯¥ì¥¸¥Ã¥È¥«¡¼¥É¡¢½êÆÀ¡¢°ìÈÌÅª¤Ê»Ù½Ğ) ¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ş¤¹¡£
+    Most users will want to select this set of accounts.  It includes most commonly used accounts (checking, savings, cash, credit card, income, common expenses).
   </gnc-act:long-description>    
+  <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
-  <act:name>Root Account</act:name>
+  <act:name>æ ¹å¸æˆ·</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»ñ»º</act:name>
+  <act:name>èµ„äº§</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>»ñ»º</act:description>
-  <gnc-act:start-selected>1</gnc-act:start-selected>
+  <act:description>èµ„äº§</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Î®Æ°»ñ»º</act:name>
+  <act:name>æµåŠ¨èµ„äº§</act:name>
   <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>´ÊÃ±¤Ë¸½¶â²½¤Ç¤­¤ë»ñ»º</act:description>
+  <act:description>æµåŠ¨èµ„äº§</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶ä¹ÔÍÂ¶â</act:name>
+  <act:name>æ”¯ç¥¨å¸æˆ·</act:name>
+  <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>æ”¯ç¥¨å¸æˆ·</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>å‚¨è“„å¸æˆ·</act:name>
   <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶ä¹Ô¤ÎÉáÄÌÍÂ¶â¤äÄê´üÍÂ¶â</act:description>
+  <act:description>å‚¨è“„å¸æˆ·</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¸½¶â</act:name>
+  <act:name>ç°é‡‘çš„é’±åŒ…</act:name>
   <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ºâÉÛ¤Ê¤É¤Ë¤¢¤ë¸½¶â</act:description>
+  <act:description>ç°é‡‘çš„é’±åŒ…</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÉéºÄ</act:name>
+  <act:name>è´Ÿå€º</act:name>
   <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÉéºÄ</act:description>
+  <act:description>è´Ÿå€º</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼Ú¶â</act:name>
-  <act:id type="new">a8186db64d71dc2ca5fdccb3234b531b</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
-  </act:commodity>
-  <act:description>¼Ú¶â</act:description>
-  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
-  <act:name>¥¯¥ì¥¸¥Ã¥È¥«¡¼¥É</act:name>
+  <act:name>ä¿¡ç”¨å¡</act:name>
   <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¥¯¥ì¥¸¥Ã¥È¥«¡¼¥É¤Ç¤Î¼Ú¶â</act:description>
-  <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
+  <act:description>ä¿¡ç”¨å¡</act:description>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼ıÆş</act:name>
+  <act:name>æ”¶å…¥</act:name>
   <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¼ıÆş</act:description>
+  <act:description>æ”¶å…¥</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¥Ü¡¼¥Ê¥¹</act:name>
+  <act:name>å¥–é‡‘</act:name>
   <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¾ŞÍ¿¤ä³Æ¼ï¼êÅö</act:description>
+  <act:description>å¥–é‡‘</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Â£Í¿</act:name>
+  <act:name>æ”¶åˆ°çš„ç¤¼ç‰©</act:name>
   <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤â¤é¤Ã¤¿¤ª¶â</act:description>
+  <act:description>æ”¶åˆ°çš„ç¤¼ç‰©</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼õ¼èÍø»Ò</act:name>
+  <act:name>åˆ©æ¯æ”¶å…¥</act:name>
   <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¼õ¼èÍø»Ò</act:description>
+  <act:description>åˆ©æ¯æ”¶å…¥</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼õ¼èÍø»Ò(¤½¤ÎÂ¾)</act:name>
+  <act:name>æ”¯ç¥¨åˆ©æ¯</act:name>
+  <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>æ”¯ç¥¨åˆ©æ¯</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>å…¶ä»–åˆ©æ¯</act:name>
   <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤½¤ÎÂ¾¤ÎÍø»Ò</act:description>
+  <act:description>å…¶ä»–åˆ©æ¯</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼õ¼èÍø»Ò(ÍÂ¶â)</act:name>
+  <act:name>å‚¨è“„å­˜æ¬¾åˆ©æ¯æ‰€å¾—</act:name>
   <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÍÂ¶â¤Ë¤Ä¤¤¤¿Íø»Ò</act:description>
+  <act:description>å‚¨è“„å­˜æ¬¾åˆ©æ¯æ‰€å¾—</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¤½¤ÎÂ¾¤Î¼ıÆş</act:name>
+  <act:name>å…¶ä»–æ”¶å…¥</act:name>
   <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤½¤ÎÂ¾¤Î¼ıÆş</act:description>
+  <act:description>å…¶ä»–æ”¶å…¥</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>µëÍ¿</act:name>
+  <act:name>è–ªé‡‘</act:name>
   <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>´ğËÜµë</act:description>
+  <act:description>è–ªé‡‘</act:description>
   <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»Ù½Ğ</act:name>
+  <act:name>è´¹ç”¨</act:name>
   <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>»Ù½Ğ</act:description>
+  <act:description>è´¹ç”¨</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ä´À°</act:name>
+  <act:name>è°ƒæ•´</act:name>
   <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ä´À°</act:description>
+  <act:description>è°ƒæ•´</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼Ö</act:name>
+  <act:name>æ±½è½¦</act:name>
   <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¼Ö´ØÏ¢¤Î»Ù½Ğ</act:description>
+  <act:description>æ±½è½¦</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÎÁ¶â</act:name>
+  <act:name>æ”¶è´¹</act:name>
   <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÎÁ¶â</act:description>
+  <act:description>æ”¶è´¹</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¥¬¥½¥ê¥ó</act:name>
+  <act:name>ç‡ƒæ°”</act:name>
   <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¥¬¥½¥ê¥óÂå</act:description>
+  <act:description>ç‡ƒæ°”</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ãó¼Ö¾ì</act:name>
+  <act:name>åœè½¦</act:name>
   <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ãó¼Ö¾ìÂå</act:description>
+  <act:description>åœè½¦</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>½¤Íı¡¢¼Ö¸¡</act:name>
+  <act:name>ç»´ä¿®å’Œä¿å…»</act:name>
   <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>½¤Íı¡¢¼Ö¸¡Âå</act:description>
+  <act:description>ç»´ä¿®å’Œä¿å…»</act:description>
   <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶ä¹Ô¼ê¿ôÎÁ</act:name>
+  <act:name>é“¶è¡ŒæœåŠ¡æ”¶è´¹</act:name>
   <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¿¶¤ê¹ş¤ß¤Ê¤É¤Î¼ê¿ôÎÁ</act:description>
+  <act:description>é“¶è¡ŒæœåŠ¡æ”¶è´¹</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>½ñÀÒ¤ä»¨»ï</act:name>
+  <act:name>ä¹¦ç±</act:name>
   <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ËÜÂå</act:description>
+  <act:description>ä¹¦ç±</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼õ¿®ÎÁ</act:name>
+  <act:name>ç”µæŠ¥</act:name>
   <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Í­ÎÁ¥Æ¥ì¥Ó¤Î¼õ¿®ÎÁ</act:description>
+  <act:description>ç”µæŠ¥</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>´óÉÕ</act:name>
+  <act:name>æ…ˆå–„</act:name>
   <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>´óÉÕ¡¢Êç¶â</act:description>
+  <act:description>æ…ˆå–„</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÈïÉş</act:name>
+  <act:name>è¡£æœ</act:name>
   <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÈïÉşÈñ</act:description>
+  <act:description>è¡£æœ</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¥³¥ó¥Ô¥å¡¼¥¿¡¼</act:name>
+  <act:name>ç”µè„‘</act:name>
   <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¥³¥ó¥Ô¥å¡¼¥¿¡¼´ØÏ¢¤Î»Ù½Ğ</act:description>
+  <act:description>ç”µè„‘</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¿©ÎÁ</act:name>
+  <act:name>ç”¨é¤</act:name>
   <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¿©Èñ</act:description>
+  <act:description>ç”¨é¤</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¶µ°é</act:name>
+  <act:name>æ•™è‚²</act:name>
   <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¶µ°éÈñ</act:description>
+  <act:description>æ•™è‚²</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¸ä³Ú</act:name>
+  <act:name>å¨±ä¹</act:name>
   <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¸ä³ÚÈñ</act:description>
+  <act:description>å¨±ä¹</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>±Ç²è¡¢²»³Ú</act:name>
+  <act:name>Music/Movies</act:name>
   <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>±Ç²è¡¢²»³Ú</act:description>
+  <act:description>Music/Movies</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Î¹¹Ô</act:name>
+  <act:name>å¨±ä¹</act:name>
+  <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>å¨±ä¹</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>æ—…è¡Œ</act:name>
   <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Î¹¹Ô</act:description>
+  <act:description>æ—…è¡Œ</act:description>
   <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Â£ÅúÉÊ</act:name>
+  <act:name>ç¤¼å“</act:name>
   <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Â£ÅúÉÊ</act:description>
+  <act:description>ç¤¼å“</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»¨²ß</act:name>
+  <act:name>æ‚è´§</act:name>
   <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>»¨²ß</act:description>
+  <act:description>æ‚è´§</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼ñÌ£</act:name>
+  <act:name>çˆ±å¥½</act:name>
   <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¼ñÌ£</act:description>
+  <act:description>çˆ±å¥½</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»ÙÊ§Êİ¸±ÎÁ</act:name>
+  <act:name>ä¿é™©</act:name>
   <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>³Æ¼ï»ÙÊ§Êİ¸±ÎÁ</act:description>
+  <act:description>ä¿é™©</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¼«Æ°¼ÖÊİ¸±</act:name>
+  <act:name>æ±½è½¦ä¿é™©</act:name>
   <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¼«Æ°¼ÖÊİ¸±ÎÁ</act:description>
+  <act:description>æ±½è½¦ä¿é™©</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>·ò¹¯Êİ¸±</act:name>
+  <act:name>å¥åº·ä¿é™©</act:name>
   <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>·ò¹¯Êİ¸±ÎÁ</act:description>
+  <act:description>å¥åº·ä¿é™©</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ç¯¶â</act:name>
+  <act:name>äººå¯¿ä¿é™©</act:name>
   <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ç¯¶â</act:description>
+  <act:description>äººå¯¿ä¿é™©</act:description>
   <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¥¯¥ê¡¼¥Ë¥ó¥°</act:name>
+  <act:name>Laundry/Dry Cleaning</act:name>
   <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¥³¥¤¥ó¥é¥ó¥É¥ê¡¼¡¢¥¯¥ê¡¼¥Ë¥ó¥°Âå</act:description>
+  <act:description>Laundry/Dry Cleaning</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>°åÎÅÈñ</act:name>
+  <act:name>åŒ»ç–—è´¹ç”¨</act:name>
   <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>°åÎÅÈñ</act:description>
+  <act:description>åŒ»ç–—è´¹ç”¨</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»¨Èñ</act:name>
+  <act:name>æ‚é¡¹</act:name>
   <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤½¤ÎÂ¾¤Î»¨Èñ</act:description>
+  <act:description>æ‚é¡¹</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÅÅÏÃ</act:name>
+  <act:name>åœ¨çº¿æœåŠ¡</act:name>
+  <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>åœ¨çº¿æœåŠ¡</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ç”µè¯</act:name>
   <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÅÅÏÃÂå</act:description>
+  <act:description>ç”µè¯</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¸òÄÌÈñ</act:name>
+  <act:name>å…¬å…±äº¤é€š</act:name>
   <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¸òÄÌÈñ</act:description>
+  <act:description>å…¬å…±äº¤é€š</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>²ñÈñ</act:name>
+  <act:name>è®¢é˜…æ‚å¿—</act:name>
   <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>²ñÈñ</act:description>
+  <act:description>è®¢é˜…æ‚å¿—</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÆüÍÑÉÊ</act:name>
+  <act:name>ä¾›åº”å“</act:name>
   <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÆüÍÑÉÊ</act:description>
+  <act:description>ä¾›åº”å“</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÀÇ¶â</act:name>
+  <act:name>ç¨æ”¶</act:name>
   <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÀÇ¶â</act:description>
+  <act:description>ç¨æ”¶</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>½êÆÀÀÇ</act:name>
+  <act:name>è”é‚¦</act:name>
   <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>½êÆÀÀÇ</act:description>
+  <act:description>è”é‚¦</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¤½¤ÎÂ¾ÀÇ¶â</act:name>
+  <act:name>åŒ»ä¿</act:name>
+  <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>åŒ»ä¿</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>å…¶å®ƒç¨</act:name>
   <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤½¤ÎÂ¾¤ÎÀÇ¶â</act:description>
+  <act:description>å…¶å®ƒç¨</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÃÏÊıÀÇ¡¢½»Ì±ÀÇ</act:name>
+  <act:name>ç¤¾ä¼šä¿é™©</act:name>
+  <act:id type="new">c252f10f3d57dd05c500856164b1729e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ç¤¾ä¼šä¿é™©</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>State/Province</act:name>
   <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÃÏÊıÀÇ¡¢½»Ì±ÀÇ</act:description>
+  <act:description>State/Province</act:description>
   <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¸ø¶¦ÎÁ¶â</act:name>
+  <act:name>æ°´ç”µè´¹</act:name>
   <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>³Æ¼ï¸ø¶¦ÎÁ¶â</act:description>
+  <act:description>æ°´ç”µè´¹</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ÅÅµ¤</act:name>
+  <act:name>ç”µ</act:name>
   <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>ÅÅµ¤Âå</act:description>
+  <act:description>ç”µ</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¤´¤ß¼ı½¸</act:name>
+  <act:name>åƒåœ¾æ”¶é›†</act:name>
   <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¤´¤ß¼ı½¸ÎÁ¶â</act:description>
+  <act:description>åƒåœ¾æ”¶é›†</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¥¬¥¹</act:name>
+  <act:name>ç‡ƒæ°”</act:name>
   <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¥¬¥¹Âå</act:description>
+  <act:description>ç‡ƒæ°”</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>¿åÆ»</act:name>
+  <act:name>æ°´</act:name>
   <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>¿åÆ»Âå</act:description>
+  <act:description>æ°´</act:description>
   <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>»ñËÜ</act:name>
+  <act:name>Equity</act:name>
   <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>»ñËÜ</act:description>
+  <act:description>Equity</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>½é´ü»Ä¹â</act:name>
+  <act:name>æœŸåˆä½™é¢</act:name>
   <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>³Æ¼ïÈñÌÜ¤Ë¤ª¤±¤ë´ü´Ö½éÆü¤Î»Ä¹â</act:description>
+  <act:description>æœŸåˆä½™é¢</act:description>
   <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
 </gnc:account>
 </gnc-account-example>

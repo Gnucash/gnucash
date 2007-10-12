@@ -637,7 +637,7 @@ function inst_goffice() {
     _GOFFICE_UDIR=`unix_path $GOFFICE_DIR`
     add_to_env $_GOFFICE_UDIR/bin PATH
     add_to_env $_GOFFICE_UDIR/lib/pkgconfig PKG_CONFIG_PATH
-    if quiet ${PKG_CONFIG} --exists libgoffice-0.3
+    if quiet ${PKG_CONFIG} --exists libgoffice-0.4
     then
         echo "goffice already installed.  skipping."
     else
@@ -660,7 +660,7 @@ function inst_goffice() {
             make
             make install
         qpopd
-        ${PKG_CONFIG} --exists libgoffice-0.3 || die "goffice not installed correctly"
+        ${PKG_CONFIG} --exists libgoffice-0.4 || die "goffice not installed correctly"
     fi
 }
 
@@ -1067,6 +1067,8 @@ function inst_docs() {
     _DOCS_UDIR=`unix_path $DOCS_DIR`
     if [ ! -d $_DOCS_UDIR/docbook-xsl ] ; then
         wget_unpacked $DOCBOOK_XSL_URL $DOWNLOAD_DIR $DOCS_DIR
+        # add a pause to allow windows to realize that the files now exist
+        sleep 1
         mv $_DOCS_UDIR/docbook-xsl-* $_DOCS_UDIR/docbook-xsl
     fi
     mkdir -p $_DOCS_UDIR/repos

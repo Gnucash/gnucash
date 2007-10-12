@@ -51,7 +51,7 @@
 	(set-split type-info create-fcn)
 	(set-non-split type-info create-fcn))
 
-    (hash-set! gnc:*register-report-hash* acct-type type-info)))	
+    (hash-set! gnc:*register-report-hash* acct-type type-info)))
 
 (define (lookup-register-report acct-type split)
   (let ((type-info (hash-ref gnc:*register-report-hash* acct-type)))
@@ -60,7 +60,7 @@
     (gnc:debug "hash: " gnc:*register-report-hash*)
     (gnc:debug "split: " split)
     (if type-info
-	(if (not (null? split))
+	(if (and split (not (null? split)))
 	    (begin (gnc:debug "get-split...") (get-split type-info))
 	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
 	#f)))

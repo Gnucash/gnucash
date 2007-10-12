@@ -111,6 +111,8 @@ jsled needed to re-define a gud.el function as such:
     (let ((l (copy-list args)))
       (nconc l (list "-cd" (expand-file-name default-directory) "-fullname"))))
 
+jsled does not need the above with emacs-22, thankfully.  It was getting quite tiresome.
+
 
 Using Electric Fence with GnuCash
 ---------------------------------
@@ -127,7 +129,7 @@ If you know how to fix this, please update tehse instructions.
 
 Using Valgrind with GnuCash
 ---------------------------
--- run ./src/bin/overrides/gnucash-valgrind
+-- run ${prefix}/bin/gnucash-valgrind
 
 However, I did not find valgrind to be useful.  It reported a bunch of
 guile bugs, some g_hash_table bugs, and then the program exited prematurely 

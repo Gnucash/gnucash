@@ -551,17 +551,13 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    qof_instance_mark_clean(QOF_INSTANCE(s));
-
-    /* This is because Splits don't call qof_commit_edit(). */
-    qof_instance_set_dirty(QOF_INSTANCE(s->parent));
+    qof_commit_edit_part2(QOF_INSTANCE(s), NULL, NULL, 
+                          (void (*) (QofInstance *)) xaccFreeSplit);
 
     if (acc) {
         g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
         xaccAccountRecomputeBalance(acc);
     }
-    if (qof_instance_get_destroying(s))
-        xaccFreeSplit(s);
 }
 
 /* An engine-private helper for completing xaccTransRollbackEdit(). */
