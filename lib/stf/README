@@ -1,0 +1,2 @@
+This consists of code taken from Gnumeric's Structured Text Format
+parser. It is used for the CSV/Fixed-Width file importer.

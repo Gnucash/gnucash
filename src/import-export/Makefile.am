@@ -1,7 +1,7 @@
 SUBDIRS = . schemas qif qif-import \
-	${OFX_DIR} ${HBCI_DIR} log-replay test
+	${OFX_DIR} ${HBCI_DIR} log-replay test csv
 DIST_SUBDIRS = schemas qif qif-import qif-io-core \
-	ofx hbci log-replay test
+	ofx hbci log-replay test csv
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
