@@ -132,6 +132,12 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
 }
 
 static void
+combo_changed_cb(GNCAccountSel *gas, gpointer combo)
+{
+        g_signal_emit_by_name(gas, "account_sel_changed");
+}
+
+static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
 	GtkWidget *widget;
@@ -147,6 +153,8 @@ gnc_account_sel_init (GNCAccountSel *gas)
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),
 				GTK_TREE_MODEL(gas->store));
 	g_object_unref(gas->store);
+        g_signal_connect_swapped(gas->combo, "changed",
+                                 G_CALLBACK(combo_changed_cb), gas);
         gtk_container_add( GTK_CONTAINER(gas), widget );
 
         /* Add completion. */
