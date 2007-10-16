@@ -701,7 +701,9 @@ gnc_ui_qif_import_select_loaded_file_cb (GtkTreeSelection *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
   gint row;
+  GtkWidget *button;
 
+  button = gnc_glade_lookup_widget(wind->window, "unload_file_button");
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
     gtk_tree_model_get(model, &iter, FILENAME_COL_INDEX, &row, -1);
     if(SCM_LISTP(wind->imported_files) && 
@@ -710,11 +712,17 @@ gnc_ui_qif_import_select_loaded_file_cb (GtkTreeSelection *selection,
       wind->selected_file = scm_list_ref(wind->imported_files,
 					 scm_int2num(row));   
       scm_gc_protect_object(wind->selected_file);
+      g_object_set(button, "sensitive", TRUE, (gchar*)NULL);
+      gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                        TRUE, TRUE, TRUE, TRUE);
     } 
   } else {
     scm_gc_unprotect_object(wind->selected_file);
     wind->selected_file = SCM_BOOL_F;
     scm_gc_protect_object(wind->selected_file);
+      g_object_set(button, "sensitive", FALSE, (gchar*)NULL);
+    gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                      FALSE, TRUE, TRUE, TRUE);
   }
 }
 
@@ -731,9 +739,9 @@ gnc_ui_qif_import_loaded_files_prepare_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  update_file_page(wind);
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                    FALSE, TRUE, TRUE, TRUE); 
+                                    FALSE, TRUE, TRUE, TRUE);
+  update_file_page(wind);
 }
 
 
@@ -860,6 +868,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
   SCM    fix_default = scm_c_eval_string("qif-import:fix-from-acct");
   SCM    scm_name;
 
+  g_return_val_if_fail(wind->selected_file != SCM_BOOL_F, FALSE);
   if(!acct_name || acct_name[0] == 0) {
     gnc_warning_dialog(wind->window, _("You must enter an account name."));
     return TRUE;
