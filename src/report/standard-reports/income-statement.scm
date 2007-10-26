@@ -123,6 +123,14 @@
   (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp
   (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
+(define optname-two-column
+  (N_ "Display as a two column report"))
+(define opthelp-two-column
+  (N_ "Divides the report into an income column and an expense column"))
+(define optname-standard-order
+  (N_ "Display in standard, income first, order"))
+(define opthelp-standard-order
+  (N_ "Causes the report to display in the standard order, placing income before expenses"))
 
 ;; options generator
 (define (income-statement-options-generator)
@@ -229,6 +237,16 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-total-expense
       "j" opthelp-total-expense #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-two-column
+      "k" opthelp-two-column #f))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-standard-order
+      "l" opthelp-standard-order #t))
     
     ;; closing entry match criteria
     ;; 
@@ -323,6 +341,10 @@
 				    optname-closing-casing))
 	 (closing-regexp (get-option pagename-entries
 				     optname-closing-regexp))
+	 (two-column? (get-option gnc:pagename-display
+				  optname-two-column))
+	 (standard-order? (get-option gnc:pagename-display
+				      optname-standard-order))
 	 (closing-pattern
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
@@ -421,7 +443,9 @@
 	       
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
-	       (build-table (gnc:make-html-table)) ;; gnc:html-table
+	       (inc-table (gnc:make-html-table)) ;; gnc:html-table
+	       (exp-table (gnc:make-html-table))
+
 	       (table-env #f)                      ;; parameters for :make-
 	       (params #f)                         ;; and -add-account-
                (revenue-table #f)                  ;; gnc:html-acct-table
@@ -541,43 +565,91 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 		 ))
-	    (gnc:html-table-append-row! build-table space)
-	    )
-	  
+	    (gnc:html-table-append-row! inc-table space)
+	    (gnc:html-table-append-row! exp-table space))
+
+	       
 	  (gnc:report-percent-done 80)
 	  (if label-revenue?
-	      (add-subtotal-line build-table (_ "Revenues") #f #f))
+	      (add-subtotal-line inc-table (_ "Revenues") #f #f))
 	  (set! revenue-table
 		(gnc:make-html-acct-table/env/accts
 		 table-env revenue-accounts))
 	  (gnc:html-table-add-account-balances
-	   build-table revenue-table params)
+	   inc-table revenue-table params)
           (if total-revenue?
 	      (add-subtotal-line 
-	       build-table (_ "Total Revenue") #f revenue-total))
+	       inc-table (_ "Total Revenue") #f revenue-total))
 	  
 	  (gnc:report-percent-done 85)
 	  (if label-expense?
 	      (add-subtotal-line 
-	       build-table (_ "Expenses") #f #f))
+	       exp-table (_ "Expenses") #f #f))
 	  (set! expense-table
 		(gnc:make-html-acct-table/env/accts
 		 table-env expense-accounts))
 	  (gnc:html-table-add-account-balances
-	   build-table expense-table params)
+	   exp-table expense-table params)
 	  (if total-expense?
 	      (add-subtotal-line
-	       build-table (_ "Total Expenses") #f expense-total))
+	       exp-table (_ "Total Expenses") #f expense-total))
 	  
 	  (report-line
-	   build-table 
+	   (if standard-order? 
+	       exp-table 
+	       inc-table)
 	   (string-append (_ "Net income") period-for)
 	   (string-append (_ "Net loss") period-for)
 	   net-income
 	   (* 2 (- tree-depth 1)) exchange-fn #f #f
 	   )
 	  
-	  (gnc:html-document-add-object! doc build-table)
+	  (gnc:html-document-add-object! 
+	   doc 
+	   (let* ((build-table (gnc:make-html-table)))
+	     (if two-column?     
+		 (gnc:html-table-append-row!
+		  build-table
+		  (if standard-order?
+		      (list
+		       (gnc:make-html-table-cell inc-table)
+		       (gnc:make-html-table-cell exp-table)
+		       )
+		      (list
+		       (gnc:make-html-table-cell exp-table)
+		       (gnc:make-html-table-cell inc-table)
+		       )
+		      )
+		  )
+		 (if standard-order?
+		     (begin
+		       (gnc:html-table-append-row!
+			build-table
+			(list (gnc:make-html-table-cell inc-table)))
+		       (gnc:html-table-append-row!
+			build-table
+			(list (gnc:make-html-table-cell exp-table)))
+		       )
+		     (begin
+		       (gnc:html-table-append-row!
+			build-table
+			(list (gnc:make-html-table-cell exp-table)))
+		       (gnc:html-table-append-row!
+			build-table
+			(list (gnc:make-html-table-cell inc-table)))
+		       )
+		     )
+		 )
+	     
+	     (gnc:html-table-set-style!
+	      build-table "td"
+	      'attribute '("align" "left")
+	      'attribute '("valign" "top"))
+	     build-table
+	     )
+	   )
+  
+	  
 	  
           ;; add currency information if requested
 	  (gnc:report-percent-done 90)
