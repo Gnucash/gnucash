@@ -88,7 +88,7 @@ perform a global, forced refresh. This should also be nestable.
 situation in which changes can come from external components.
 
 @item Components should be able to specify which Engine entities
-can cause refreshes. This requirement avoids allows the implementation
+can cause refreshes. This requirement allows the implementation
 to avoid unnecessary refreshing.
 
 @end itemize
