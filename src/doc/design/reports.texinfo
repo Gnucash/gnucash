@@ -23,7 +23,7 @@ Formatting of dates & numbers.
 Currency conversions.
 
 @item
-Create of graphs such as pie and bar charts.
+Creation of graphs such as pie and bar charts.
 
 @item
 Creation of hyperlinks to other reports and to other GnuCash
