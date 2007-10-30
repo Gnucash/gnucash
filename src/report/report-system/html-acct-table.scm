@@ -554,6 +554,7 @@
   (string<? (gnc-account-get-full-name a)
 	    (gnc-account-get-full-name b)))
 
+
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)
   ;; 
   ;; This is where most of the html-acct-table functionality ends up....
@@ -566,7 +567,9 @@
   (define (get-val alist key)
     (let ((lst (assoc-ref alist key)))
       (if lst (car lst) lst)))
-  
+
+
+
   ;; helper to plop <env> in the next available env cell
   (define (add-row env)
     (let ((html-table (gnc:_html-acct-table-matrix_ acct-table)))
@@ -631,76 +634,118 @@
 	 (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
 	 (disp-depth-reached 0)
 	 )
-    
-    (define (traverse-accounts! accts acct-depth logi-depth)
+
+    ;; the following function was adapted from html-utilities.scm
+    ;; 
+    ;;
+    ;; there's got to be a prettier way to do this. maybe even make two
+    ;; of these. The balance-mode is only used by trial-balance.scm. so 
+    ;; make two versions of this animal, one that cares about balance-mode 
+    ;; one that doesn't. then check for a balance-mode !'post-closing and
+    ;; call the right one. later.
+    (define (get-balance-nosub-mode account start-date end-date)
+      (let* ((post-closing-bal
+	      (if start-date
+		  (gnc:account-get-comm-balance-interval
+		   account start-date end-date #f)
+		  (gnc:account-get-comm-balance-at-date
+		   account end-date #f)))
+	     (closing (lambda(a)
+			(gnc:account-get-trans-type-balance-interval
+			 (list account) closing-pattern
+			 start-date end-date)
+			)
+		      )
+	     (adjusting (lambda(a)
+			  (gnc:account-get-trans-type-balance-interval
+			   (list account) adjusting-pattern
+			   start-date end-date)
+			  )
+			)
+	     )
+	;; what the heck is this? how about (case balance-mode blah...
+	(or (and (equal? balance-mode 'post-closing) post-closing-bal)
+	    (and (equal? balance-mode 'pre-closing)
+		 (let* ((closing-amt (closing account))
+			)
+		   (post-closing-bal 'minusmerge closing-amt #f)
+		   post-closing-bal)
+		 )
+	    (and (equal? balance-mode 'pre-adjusting)
+		 (let* ((closing-amt (closing account))
+			(adjusting-amt (adjusting account))
+			)
+		   (post-closing-bal 'minusmerge closing-amt #f)
+		   (post-closing-bal 'minusmerge adjusting-amt #f)
+		   post-closing-bal)
+		 )
+	    ;; error if we get here.
+	    )
+	)
+      )
+
+    ;; helper to calculate the balances for all required accounts
+    (define (calculate-balances accts start-date end-date)
+      (if (not (null? accts))
+	  (cons (cons (car accts)
+		      ;; using the existing function that cares about balance-mode
+		      ;; maybe this should get replaces at some point.
+		      (get-balance-nosub-mode (car accts) start-date end-date))
+		(calculate-balances (cdr accts) start-date end-date))
+	  '()
+	  )
+      )
+
+
+    (define (traverse-accounts! accts acct-depth logi-depth new-balances)
       
       (define (use-acct? acct)
-        ;; BUG?  when depth-limit is not integer but boolean?
+	;; BUG?  when depth-limit is not integer but boolean?
 	(and (or (equal? limit-behavior 'flatten) (< logi-depth depth-limit))
 	     (member acct accounts)
 	     )
 	)
       
-      ;; the following function was adapted from html-utilities.scm
-      (define (my-get-balance-nosub account start-date end-date)
-	(let* ((post-closing-bal
-		(if start-date
-		    (gnc:account-get-comm-balance-interval
-		     account start-date end-date #f)
-		    (gnc:account-get-comm-balance-at-date
-		     account end-date #f)))
-	       (closing (lambda(a)
-			  (gnc:account-get-trans-type-balance-interval
-			   (list account) closing-pattern
-			   start-date end-date)
-			  )
-			)
-	       (adjusting (lambda(a)
-			    (gnc:account-get-trans-type-balance-interval
-			     (list account) adjusting-pattern
-			     start-date end-date)
-			    )
-			  )
+      ;; helper function to return a cached balance from a list of 
+      ;; ( acct . balance ) cells
+      (define (get-balance acct-balances acct)
+	(let ((this-collector (gnc:make-commodity-collector)))
+	  (gnc-commodity-collector-merge 
+	   this-collector 
+	   (if (not (null? acct-balances))
+	       ;; if the acct matches, return the appropriate balance
+	       (if (equal? acct (caar acct-balances))
+		   (cdar acct-balances)
+		   ;; otherwise, keep looking
+		   (get-balance (cdr acct-balances) acct))
+	       ;; return a zero commodity collector
+	       (gnc:make-commodity-collector)
 	       )
-	  (or (and (equal? balance-mode 'post-closing) post-closing-bal)
-	      (and (equal? balance-mode 'pre-closing)
-		   (let* ((closing-amt (closing account))
-			  )
-		     (post-closing-bal 'minusmerge closing-amt #f)
-		     post-closing-bal)
-		   )
-	      (and (equal? balance-mode 'pre-adjusting)
-		   (let* ((closing-amt (closing account))
-			  (adjusting-amt (adjusting account))
-			  )
-		     (post-closing-bal 'minusmerge closing-amt #f)
-		     (post-closing-bal 'minusmerge adjusting-amt #f)
-		     post-closing-bal)
-		   )
-              ;; error if we get here.
-	      )
+	   )
+	  this-collector
 	  )
 	)
+
       
-      ;; Additional function that includes the subaccounts as
-      ;; well. Note: It is necessary to define this here (instead of
-      ;; changing an argument for account-get-balance) because the
-      ;; use-acct? query is needed.
-      (define (my-get-balance account start-date end-date)
-	;; this-collector for storing the result
-	(let ((this-collector
-	       (my-get-balance-nosub account start-date end-date)))
+      ;; helper function that returns a cached balance  from a list of
+      ;; ( acct . balance ) cells for the given account *and* its 
+      ;; sub-accounts.
+      (define (get-balance-sub acct-balances account)
+	;; its important to make a *new* collector for this, otherwise we're dealing with 
+	;; pointers to the current collectors in our acct-balances list and that's a 
+	;; problem -- the balances get changed.
+	(let ((this-collector (gnc:make-commodity-collector)))
+	  ;; get the balance of the parent account and stick it on the collector
+	  ;; that nice shiny *NEW* collector!!
+	  (gnc-commodity-collector-merge this-collector (get-balance acct-balances account))
 	  (for-each
 	   (lambda (x) (if x (gnc-commodity-collector-merge this-collector x)))
 	   (gnc:account-map-descendants
 	    (lambda (a)
-	      ;; Important: Calculate the balance if and only if the
-	      ;; account a is shown, i.e. (use-acct? a) == #t.
-	      (and (use-acct? a)
-		   (my-get-balance-nosub a start-date end-date)))
+	      (get-balance acct-balances a ))
 	    account))
 	  this-collector))
-
+      
       
       (let ((disp-depth
 	     (if (integer? depth-limit)
@@ -730,15 +775,15 @@
 		  (account-guid (gncAccountGetGUID acct))
 		  (account-description (xaccAccountGetDescription acct))
 		  (account-notes (xaccAccountGetNotes acct))
-                  ;; These next two are commodity-collectors.
-		  (account-bal (my-get-balance-nosub
-				acct start-date end-date))
-		  (recursive-bal (my-get-balance
-                                  acct start-date end-date))
-                  ;; These next two are of type <gnc:monetary>, right?
+		  ;; These next two are commodity-collectors.
+		  (account-bal (get-balance
+				new-balances acct))
+		  (recursive-bal (get-balance-sub
+				  new-balances acct))
+		  ;; These next two are of type <gnc:monetary>, right?
 		  (report-comm-account-bal
-                   (gnc:sum-collector-commodity
-                    account-bal report-commodity exchange-fn))
+		   (gnc:sum-collector-commodity
+		    account-bal report-commodity exchange-fn))
 		  (report-comm-recursive-bal
 		   (gnc:sum-collector-commodity
 		    recursive-bal report-commodity exchange-fn))
@@ -777,6 +822,7 @@
 				  (gnc:make-html-text account-name))
 			     ))
 		  )
+
 	     (set! acct-depth-reached (max acct-depth-reached acct-depth))
 	     (set! logi-depth-reached (max logi-depth-reached logi-depth))
 	     (set! disp-depth-reached (max disp-depth-reached disp-depth))
@@ -799,16 +845,17 @@
 		   (add-row row-env)
 		   )
 		 )
-             ;; Recurse:
+	     ;; Recurse:
 	     ;; Dive into an account even if it isnt selected!
+	     ;; why? because some subaccts may be selected.
 	     (traverse-accounts! subaccts
 				 (+ acct-depth 1)
 				 (if (use-acct? acct)
 				     (+ logi-depth 1)
 				     logi-depth)
-				 )
+				 new-balances)
 
-             ;; after the return from recursion: subtotals
+	     ;; after the return from recursion: subtotals
 	     (or (not (use-acct? acct))
 		 (not subtotal-mode)
 		 ;; ditto that remark concerning zero recursive-bal...
@@ -840,17 +887,15 @@
 		 )
 	     )) ;; end of (lambda (acct) ...)
 	 ;; lambda is applied to each item in the (sorted) account list
-         (if less-p
+	 (if less-p
 	     (sort accts less-p)
 	     accts)
 	 ) ;; end of for-each
-        )
+	)
       ) ;; end of definition of traverse-accounts!
 
-    ;;(display (list "END-DATE: " end-date))
-    
     ;; do it
-    (traverse-accounts! toplvl-accts 0 0)
+    (traverse-accounts! toplvl-accts 0 0 (calculate-balances accounts start-date end-date))
     
     ;; set the column-header colspan
     (if gnc:colspans-are-working-right
