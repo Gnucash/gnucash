@@ -663,7 +663,7 @@
 			  )
 			)
 	     )
-	;; what the heck is this? how about (case balance-mode blah...
+	;; what the heck is this? how about (case balance-mode blah)...
 	(or (and (equal? balance-mode 'post-closing) post-closing-bal)
 	    (and (equal? balance-mode 'pre-closing)
 		 (let* ((closing-amt (closing account))
@@ -686,14 +686,20 @@
 
     ;; helper to calculate the balances for all required accounts
     (define (calculate-balances accts start-date end-date)
-      (if (not (null? accts))
-	  (cons (cons (car accts)
-		      ;; using the existing function that cares about balance-mode
-		      ;; maybe this should get replaces at some point.
-		      (get-balance-nosub-mode (car accts) start-date end-date))
-		(calculate-balances (cdr accts) start-date end-date))
-	  '()
-	  )
+      (define (calculate-balances-helper accts start-date end-date acct-balances)
+        (if (not (null? accts))
+            (begin
+                ;; using the existing function that cares about balance-mode
+                ;; maybe this should get replaces at some point.
+                (hash-set! acct-balances (gncAccountGetGUID (car accts))
+                    (get-balance-nosub-mode (car accts) start-date end-date))
+                (calculate-balances-helper (cdr accts) start-date end-date acct-balances)
+            )
+            acct-balances)
+        )
+        
+      (calculate-balances-helper accts start-date end-date
+                                 (make-hash-table 23))                                 
       )
 
 
@@ -712,12 +718,7 @@
 	(let ((this-collector (gnc:make-commodity-collector)))
 	  (gnc-commodity-collector-merge 
 	   this-collector 
-	   (if (not (null? acct-balances))
-	       ;; if the acct matches, return the appropriate balance
-	       (if (equal? acct (caar acct-balances))
-		   (cdar acct-balances)
-		   ;; otherwise, keep looking
-		   (get-balance (cdr acct-balances) acct))
+	   (or (hash-ref acct-balances (gncAccountGetGUID acct))
 	       ;; return a zero commodity collector
 	       (gnc:make-commodity-collector)
 	       )
@@ -732,7 +733,7 @@
       ;; sub-accounts.
       (define (get-balance-sub acct-balances account)
 	;; its important to make a *new* collector for this, otherwise we're dealing with 
-	;; pointers to the current collectors in our acct-balances list and that's a 
+	;; pointers to the current collectors in our acct-balances hash and that's a 
 	;; problem -- the balances get changed.
 	(let ((this-collector (gnc:make-commodity-collector)))
 	  ;; get the balance of the parent account and stick it on the collector
