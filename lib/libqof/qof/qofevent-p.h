@@ -30,9 +30,6 @@
 /* for backwards compatibility - to be moved back to qofevent.c in libqof2 */
 typedef struct
 {
-#ifndef QOF_DISABLE_DEPRECATED
-  GNCEngineEventHandler old_handler;        /** \deprecated */
-#endif
   QofEventHandler handler;
   gpointer user_data;
 

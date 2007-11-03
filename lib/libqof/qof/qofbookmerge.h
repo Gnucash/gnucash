@@ -207,7 +207,7 @@ typedef struct
 {
 	GSList 	*mergeObjectParams;  /**< GSList of ::QofParam details for each
                                     parameter in the current object. */
-	GList 	*mergeList;          /**< GList of all ::qof_book_mergeRule rules
+	GList 	*mergeList;          /**< GList of all ::QofBookMergeRule rules
                                     for the merge operation. */
 	GSList 	*targetList;         /**< GSList of ::QofInstance * for each object
                                     of this type in the target book */
@@ -338,7 +338,7 @@ Uses ::qof_book_get_collection with the QofBookMergeRule::mergeType object
 type to return a collection of ::QofInstance entities from either the
 QofBookMergeData::mergeBook or QofBookMergeData::targetBook. Then
 uses ::qof_collection_lookup_entity to lookup the QofBookMergeRule::importEnt
-and again the qof_book_mergeRule::targetEnt to return the two specific entities.
+and again the QofBookMergeRule::targetEnt to return the two specific entities.
 
 */
 void qof_book_merge_rule_foreach( QofBookMergeData* mergeData,
@@ -381,7 +381,7 @@ Recommended method: Only offer three options to the user per rule:
 	- change MERGE_REPORT to MERGE_ABSOLUTE or MERGE_DUPLICATE
 
 Handle the required result changes in code: Check the value of
-qof_book_mergeRule::mergeAbsolute and use these principles:
+QofBookMergeRule::mergeAbsolute and use these principles:
 
 To ignore entities tagged as:
 - MERGE_REPORT, you must check the value of mergeAbsolute.
@@ -405,14 +405,14 @@ It is not possible to update the same rule more than once.
 
 -# \b MERGE_NEW is reserved for new objects and is only pre-set if
 all parameters, including GUID, have already failed to match any 
-relevant object. ::qof_book_mergeCommit will create new 
+relevant object. ::qof_book_merge_commit will create new 
 entities for all rules tagged as MERGE_NEW. 
 	- if mergeAbsolute is TRUE and the user wants to import the 
 		data, requests to set MERGE_NEW will be forced to MERGE_UPDATE 
 		because an entity with that GUID already exists in the target book.
 	- if MERGE_NEW is pre-set, requests to change to MERGE_UPDATE will be 
 		ignored because a new entity is needed.
--# \b MERGE_UPDATE is reserved for existing objects - ::qof_book_mergeCommit 
+-# \b MERGE_UPDATE is reserved for existing objects - ::qof_book_merge_commit 
 will require a matching entity to update and will force a change to back to 
 MERGE_NEW if none is known to exist, using the principle above.
 -# \b MERGE_INVALID will cause an abort of the merge process.
@@ -449,7 +449,7 @@ qof_book_merge_update_result(QofBookMergeData *mergeData, QofBookMergeResult tag
 
 qof_book_merge_commit will abort the \b entire merge operation if any rule
 is set to ::MERGE_INVALID. It is the responsibility of the calling 
-function to handle the error code from ::qof_book_mergeCommit, close the
+function to handle the error code from ::qof_book_merge_commit, close the
 dialogue and return. qof_book_merge_commit will already have halted the merge 
 operation and freed any memory allocated to all merge structures before
 returning the error code. There is no way for the dialogue process to report

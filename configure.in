@@ -599,8 +599,6 @@ AC_SUBST(QOF_PREFIX)
 AC_SUBST(QOF_LIB_DIR)
 AC_SUBST(QOF_XML_DIR)
 
-AC_DEFINE(QOF_DISABLE_DEPRECATED,1, [Don't use deprecated qof functions])
-
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
