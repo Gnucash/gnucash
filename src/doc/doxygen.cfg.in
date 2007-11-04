@@ -1,4 +1,4 @@
-# Doxyfile 1.5.3-20071008
+# Doxyfile 1.5.2
 
 # This file describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project
@@ -133,18 +133,10 @@ SHORT_NAMES            = NO
 # If the JAVADOC_AUTOBRIEF tag is set to YES then Doxygen 
 # will interpret the first line (until the first dot) of a JavaDoc-style 
 # comment as the brief description. If set to NO, the JavaDoc 
-# comments will behave just like regular Qt-style comments 
-# (thus requiring an explicit @brief command for a brief description.)
+# comments will behave just like the Qt-style comments (thus requiring an 
+# explicit @brief command for a brief description.
 
 JAVADOC_AUTOBRIEF      = NO
-
-# If the QT_AUTOBRIEF tag is set to YES then Doxygen will 
-# interpret the first line (until the first dot) of a Qt-style 
-# comment as the brief description. If set to NO, the comments 
-# will behave just like regular Qt-style comments (thus requiring 
-# an explicit \brief command for a brief description.)
-
-QT_AUTOBRIEF           = NO
 
 # The MULTILINE_CPP_IS_BRIEF tag can be set to YES to make Doxygen 
 # treat a multi-line C++ special comment block (i.e. a block of //! or /// 
@@ -215,12 +207,6 @@ BUILTIN_STL_SUPPORT    = NO
 
 CPP_CLI_SUPPORT        = NO
 
-# Set the SIP_SUPPORT tag to YES if your project consists of sip sources only. 
-# Doxygen will parse them like normal C++ but will assume all classes use public 
-# instead of private inheritance when no explicit protection keyword is present.
-
-SIP_SUPPORT            = NO
-
 # If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC 
 # tag is set to YES, then doxygen will reuse the documentation of the first 
 # member in the group (if any) for the other members of the group. By default 
@@ -269,13 +255,6 @@ EXTRACT_LOCAL_CLASSES  = YES
 # If set to NO (the default) only methods in the interface are included.
 
 EXTRACT_LOCAL_METHODS  = NO
-
-# If this flag is set to YES, the members of anonymous namespaces will be extracted 
-# and appear in the documentation as a namespace called 'anonymous_namespace{file}', 
-# where file will be replaced with the base name of the file that contains the anonymous 
-# namespace. By default anonymous namespace are hidden.
-
-EXTRACT_ANON_NSPACES   = NO
 
 # If the HIDE_UNDOC_MEMBERS tag is set to YES, Doxygen will hide all 
 # undocumented members of documented classes, files or namespaces. 
@@ -595,9 +574,7 @@ FILTER_SOURCE_FILES    = NO
 # If the SOURCE_BROWSER tag is set to YES then a list of source files will 
 # be generated. Documented entities will be cross-referenced with these sources. 
 # Note: To get rid of all source code in the generated output, make sure also 
-# VERBATIM_HEADERS is set to NO. If you have enabled CALL_GRAPH or CALLER_GRAPH 
-# then you must also enable this option. If you don't then doxygen will produce 
-# a warning and turn it on anyway
+# VERBATIM_HEADERS is set to NO.
 
 SOURCE_BROWSER         = YES
 
@@ -722,14 +699,6 @@ HTML_ALIGN_MEMBERS     = YES
 # of the generated HTML documentation.
 
 GENERATE_HTMLHELP      = NO
-
-# If the HTML_DYNAMIC_SECTIONS tag is set to YES then the generated HTML 
-# documentation will contain sections that can be hidden and shown after the 
-# page has loaded. For this to work a browser that supports 
-# JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox 
-# Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari).
-
-HTML_DYNAMIC_SECTIONS  = NO
 
 # If the GENERATE_HTMLHELP tag is set to YES, the CHM_FILE tag can 
 # be used to specify the file name of the resulting .chm file. You 
@@ -1201,7 +1170,7 @@ INCLUDE_GRAPH          = YES
 
 INCLUDED_BY_GRAPH      = YES
 
-# If the CALL_GRAPH, SOURCE_BROWSER and HAVE_DOT tags are set to YES then doxygen will 
+# If the CALL_GRAPH and HAVE_DOT tags are set to YES then doxygen will 
 # generate a call dependency graph for every global function or class method. 
 # Note that enabling this option will significantly increase the time of a run. 
 # So in most cases it will be better to enable call graphs for selected 
@@ -1209,7 +1178,7 @@ INCLUDED_BY_GRAPH      = YES
 
 CALL_GRAPH             = NO
 
-# If the CALLER_GRAPH, SOURCE_BROWSER and HAVE_DOT tags are set to YES then doxygen will 
+# If the CALLER_GRAPH and HAVE_DOT tags are set to YES then doxygen will 
 # generate a caller dependency graph for every global function or class method. 
 # Note that enabling this option will significantly increase the time of a run. 
 # So in most cases it will be better to enable caller graphs for selected 
@@ -1249,28 +1218,10 @@ DOTFILE_DIRS           =
 # The MAX_DOT_GRAPH_MAX_NODES tag can be used to set the maximum number of 
 # nodes that will be shown in the graph. If the number of nodes in a graph 
 # becomes larger than this value, doxygen will truncate the graph, which is 
-# visualized by representing a node as a red box. Note that doxygen if the number 
-# of direct children of the root node in a graph is already larger than 
-# MAX_DOT_GRAPH_NOTES then the graph will not be shown at all. Also note 
-# that the size of a graph can be further restricted by MAX_DOT_GRAPH_DEPTH.
+# visualized by representing a node as a red box. Note that doxygen will always 
+# show the root nodes and its direct children regardless of this setting.
 
 DOT_GRAPH_MAX_NODES    = 50
-
-# The MAX_DOT_GRAPH_DEPTH tag can be used to set the maximum depth of the 
-# graphs generated by dot. A depth value of 3 means that only nodes reachable 
-# from the root by following a path via at most 3 edges will be shown. Nodes 
-# that lay further from the root node will be omitted. Note that setting this 
-# option to 1 or 2 may greatly reduce the computation time needed for large 
-# code bases. Also note that the size of a graph can be further restricted by 
-# DOT_GRAPH_MAX_NODES. Using a depth of 0 means no depth restriction.
-
-# this is commented out to suppress warnings in doxygen 1.5.2. This should be 
-# uncommented when warlord upgrades to 1.5.3. 
-#
-# Note that running doxygen -u on this file will undo this commenting and
-# it will again generate warnings in 1.5.2
-#
-#MAX_DOT_GRAPH_DEPTH    = 0
 
 # Set the DOT_TRANSPARENT tag to YES to generate images with a transparent 
 # background. This is disabled by default, which results in a white background. 
@@ -1278,7 +1229,7 @@ DOT_GRAPH_MAX_NODES    = 50
 # badly anti-aliased labels on the edges of a graph (i.e. they become hard to 
 # read).
 
-DOT_TRANSPARENT        = YES
+DOT_TRANSPARENT        = NO
 
 # Set the DOT_MULTI_TARGETS tag to YES allow dot to generate multiple output 
 # files in one run (i.e. multiple -o and -T options on the command line). This 
