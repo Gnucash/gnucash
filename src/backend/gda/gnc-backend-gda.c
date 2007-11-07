@@ -344,6 +344,9 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 
     be->loading = FALSE;
 
+	// Mark the book as clean
+	qof_instance_mark_clean( QOF_INSTANCE(book) );
+
     LEAVE( "" );
 }
 
@@ -595,10 +598,15 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     gda_backend be_data;
 
+    ENTER( " " );
+
     /* During initial load where objects are being created, don't commit
     anything */
 
-    if( be->loading ) return;
+    if( be->loading ) {
+		LEAVE( "" );
+	    return;
+	}
 
     g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
              (inst->e_type ? inst->e_type : "(null)"),
@@ -623,6 +631,8 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     qof_instance_mark_clean(inst);
     qof_book_mark_saved( be->primary_book );
+
+	LEAVE( "" );
 }
 /* ---------------------------------------------------------------------- */
 
@@ -748,6 +758,8 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
     gda_backend be_data;
     gnc_gda_query_info* pQueryInfo;
 
+	ENTER( " " );
+
     searchObj = qof_query_get_search_for( pQuery );
 
     pQueryInfo = g_malloc( sizeof( gnc_gda_query_info ) );
@@ -761,6 +773,7 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
 
     qof_object_foreach_backend( GNC_GDA_BACKEND, compile_query_cb, &be_data );
     if( be_data.ok ) {
+		LEAVE( "" );
         return be_data.pQueryInfo;
     }
 
@@ -793,6 +806,8 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
     g_debug( "Compiled: %s\n", sql );
     pQueryInfo->pCompiledQuery =  g_strdup( sql );
 
+	LEAVE( "" );
+
     return pQueryInfo;
 }
 
@@ -821,6 +836,8 @@ gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
     gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
     gda_backend be_data;
 
+	ENTER( " " );
+
     // Try various objects first
     be_data.ok = FALSE;
     be_data.be = be;
@@ -829,12 +846,15 @@ gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
 
     qof_object_foreach_backend( GNC_GDA_BACKEND, free_query_cb, &be_data );
     if( be_data.ok ) {
+		LEAVE( "" );
         return;
     }
 
     g_debug( "gda_free_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
     g_free( pQueryInfo->pCompiledQuery );
     g_free( pQueryInfo );
+
+	LEAVE( "" );
 }
 
 static void
@@ -864,6 +884,8 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 
     g_return_if_fail( !be->in_query );
 
+	ENTER( " " );
+
     be->loading = TRUE;
     be->in_query = TRUE;
 
@@ -879,11 +901,17 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
     be->loading = FALSE;
     be->in_query = FALSE;
     qof_event_resume();
-    if( be_data.ok ) {
-       	return;
-    }
+//    if( be_data.ok ) {
+//		LEAVE( "" );
+//       	return;
+//    }
 
-    g_debug( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
+	// Mark the book as clean
+	qof_instance_mark_clean( QOF_INSTANCE(be->primary_book) );
+
+//    g_debug( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
+
+	LEAVE( "" );
 }
 
 /* ================================================================= */

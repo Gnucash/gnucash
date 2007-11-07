@@ -32,6 +32,7 @@
 #include <libgda/libgda.h>
 
 #include "qof.h"
+#include "Account.h"
 #include "AccountP.h"
 #include "gnc-commodity.h"
 
@@ -50,6 +51,7 @@ static gpointer get_commodity( gpointer pObject, const QofParam* );
 static void set_commodity( gpointer pObject, gpointer pValue );
 static gpointer get_parent( gpointer pObject, const QofParam* );
 static void set_parent( gpointer pObject, gpointer pValue );
+static void set_parent_guid( gpointer pObject, gpointer pValue );
 
 #define ACCOUNT_MAX_NAME_LEN 50
 #define ACCOUNT_MAX_TYPE_LEN 50
@@ -70,6 +72,16 @@ static col_cvt_t col_table[] =
     { "description",	CT_STRING, ACCOUNT_MAX_DESCRIPTION_LEN, 0, "description" },
     { NULL }
 };
+static col_cvt_t parent_col_table[] =
+{
+    { "parent_guid",	CT_GUID,	0, 0,	NULL, NULL, NULL, set_parent_guid },
+    { NULL }
+};
+
+typedef struct {
+	Account* pAccount;
+	GUID guid;
+} account_parent_guid_struct;
 
 /* ================================================================= */
 static gpointer
@@ -126,6 +138,15 @@ set_parent( gpointer pObject, gpointer pValue )
 }
 
 static void
+set_parent_guid( gpointer pObject, gpointer pValue )
+{
+	account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
+    GUID* guid = (GUID*)pValue;
+
+	s->guid = *guid;
+}
+
+static void
 load_balances( GncGdaBackend* be, Account* pAccount )
 {
     gnc_numeric start_balance;
@@ -143,19 +164,18 @@ load_balances( GncGdaBackend* be, Account* pAccount )
 
 static Account*
 load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
-            Account* pAccount )
+				GList** l_accounts_needing_parents )
 {
     const GUID* guid;
     GUID acc_guid;
+	Account* pAccount;
 
     guid = gnc_gda_load_guid( pModel, row );
     acc_guid = *guid;
 
+    pAccount = xaccAccountLookup( &acc_guid, be->primary_book );
     if( pAccount == NULL ) {
-        pAccount = xaccAccountLookup( &acc_guid, be->primary_book );
-        if( pAccount == NULL ) {
-            pAccount = xaccMallocAccount( be->primary_book );
-        }
+        pAccount = xaccMallocAccount( be->primary_book );
     }
     gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
     gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
@@ -163,6 +183,15 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
     load_balances( be, pAccount );
 
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
+
+	/* If we don't have a parent, it might be because the parent account hasn't
+	   been loaded yet.  Remember the account and its parent guid for later. */
+	if( gnc_account_get_parent( pAccount ) == NULL ) {
+		account_parent_guid_struct* s = g_slice_new( account_parent_guid_struct );
+		s->pAccount = pAccount;
+		gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, s, parent_col_table );
+		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
+	}
 
     return pAccount;
 }
@@ -187,10 +216,12 @@ load_all_accounts( GncGdaBackend* be )
         int r;
         Account* pAccount;
         Account* parent;
+		GList* l_accounts_needing_parents = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            pAccount = load_single_account( be, pModel, r, NULL );
+            pAccount = load_single_account( be, pModel, r, &l_accounts_needing_parents );
 
+#if 0
             if( pAccount != NULL ) {
 
                 /* Backwards compatibility.  If there's no parent, see if
@@ -211,7 +242,45 @@ load_all_accounts( GncGdaBackend* be )
                     }
                 }
             }
+#endif
         }
+
+		/* While there are items on the list of accounts needing parents,
+		   try to see if the parent has now been loaded.  Theory says that if
+		   items are removed from the front and added to the back if the
+		   parent is still not available, then eventually, the list will
+		   shrink to size 0. */
+		if( l_accounts_needing_parents != NULL ) {
+			gboolean progress_made = TRUE;
+
+			Account* pParent;
+			GList* elem;
+			
+			while( progress_made ) {
+				progress_made = FALSE;
+				for( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
+					account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
+					const gchar* name = xaccAccountGetName( s->pAccount );
+    				pParent = xaccAccountLookup( &s->guid, be->primary_book );
+					if( pParent != NULL ) {
+						gnc_account_append_child( pParent, s->pAccount );
+						l_accounts_needing_parents = g_list_delete_link( l_accounts_needing_parents, elem );
+						progress_made = TRUE;
+					}
+				}
+			}
+
+			/* Any accounts left over must be parented by the root account */
+			for( elem = l_accounts_needing_parents; elem != NULL; elem = g_list_next( elem ) ) {
+				account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
+                Account* root;
+                root = gnc_book_get_root_account( pBook );
+                if( root == NULL ) {
+                    root = gnc_account_create_root( pBook );
+                }
+                gnc_account_append_child( root, pAccount ); 
+			}
+		}
     }
 }
 

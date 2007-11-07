@@ -113,11 +113,14 @@ sxtg_book_begin (QofBook *book)
 {
   Account *root;
 
-  root = xaccMallocAccount(book);
-  xaccAccountBeginEdit(root);
-  xaccAccountSetType(root, ACCT_TYPE_ROOT);
-  xaccAccountCommitEdit(root);
-  gnc_book_set_template_root (book, root);
+  root = gnc_book_get_template_root( book );
+  if( root == NULL ) {
+  	root = xaccMallocAccount(book);
+  	xaccAccountBeginEdit(root);
+  	xaccAccountSetType(root, ACCT_TYPE_ROOT);
+  	xaccAccountCommitEdit(root);
+  	gnc_book_set_template_root (book, root);
+  }
 }
 
 static void 

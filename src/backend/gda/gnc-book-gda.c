@@ -53,12 +53,13 @@ static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
 static void set_root_account_guid( gpointer pObject, gpointer pValue );
 static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
 static void set_root_template_guid( gpointer pObject, gpointer pValue );
+static void ignore( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL, NULL,
             (QofAccessFunc)qof_instance_get_guid,
-            (QofSetterFunc)qof_instance_set_guid },
+            /*(QofSetterFunc)qof_instance_set_guid*/ ignore },
     { "root_account_guid", CT_GUID,  0, COL_NNUL,             NULL, NULL,
             get_root_account_guid, set_root_account_guid },
     { "root_template_guid", CT_GUID, 0, COL_NNUL,             NULL, NULL,
@@ -67,6 +68,11 @@ static col_cvt_t col_table[] =
 };
 
 /* ================================================================= */
+static void 
+ignore( gpointer pObject, gpointer pValue )
+{
+}
+
 static gpointer
 get_root_account_guid( gpointer pObject, const QofParam* param )
 {
@@ -114,18 +120,19 @@ set_root_template_guid( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static GNCBook*
-load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row,
-            GNCBook* pBook )
+load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID book_guid;
+	GNCBook* pBook;
 
     guid = gnc_gda_load_guid( pModel, row );
     book_guid = *guid;
 
-    if( pBook == NULL ) {
-        pBook = gnc_book_new();
-    }
+	pBook = be->primary_book;
+	if( pBook == NULL ) {
+	    pBook = gnc_book_new();
+	}
 
     gnc_gda_load_object( pModel, row, GNC_ID_BOOK, pBook, col_table );
     gnc_gda_slots_load( be, gnc_book_get_guid( pBook ),
@@ -150,16 +157,14 @@ load_all_books( GncGdaBackend* be )
     if( GDA_IS_DATA_MODEL( ret ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
-        int r;
 
-        for( r = 0; r < numRows; r++ ) {
-            (void)load_single_book( be, pModel, r, NULL );
-        }
-
-	// If there are no rows, try committing the book
-	if( numRows == 0 ) {
-    	    commit_book( be, QOF_INSTANCE( be->primary_book ) );
-	}
+		// If there are no rows, try committing the book
+		if( numRows == 0 ) {
+   	    	commit_book( be, QOF_INSTANCE( be->primary_book ) );
+		} else {
+			// Otherwise, load the 1st book.
+            (void)load_single_book( be, pModel, 0 );
+		}
     }
 }
 

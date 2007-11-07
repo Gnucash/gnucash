@@ -109,16 +109,14 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
 }
 
 static gnc_commodity*
-load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row,
-                gnc_commodity* pCommodity )
+load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     QofBook* pBook = be->primary_book;
     int col;
     const GValue* val;
+    gnc_commodity* pCommodity;
 
-    if( pCommodity == NULL ) {
-        pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
-    }
+    pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
 
     gnc_gda_load_object( pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pCommodity) ),
@@ -149,7 +147,7 @@ load_all_commodities( GncGdaBackend* be )
         for( r = 0; r < numRows; r++ ) {
             gnc_commodity* c;
 
-            pCommodity = load_single_commodity( be, pModel, r, NULL );
+            pCommodity = load_single_commodity( be, pModel, r );
 
             if( pCommodity != NULL ) {
                 GUID guid;

@@ -136,20 +136,18 @@ set_recurrence_period_start( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static GncBudget*
-load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row,
-            GncBudget* pBudget )
+load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID budget_guid;
+	GncBudget* pBudget;
 
     guid = gnc_gda_load_guid( pModel, row );
     budget_guid = *guid;
 
+    pBudget = gnc_budget_lookup( &budget_guid, be->primary_book );
     if( pBudget == NULL ) {
-        pBudget = gnc_budget_lookup( &budget_guid, be->primary_book );
-        if( pBudget == NULL ) {
-            pBudget = gnc_budget_new( be->primary_book );
-        }
+        pBudget = gnc_budget_new( be->primary_book );
     }
 
     gnc_gda_load_object( pModel, row, GNC_ID_BUDGET, pBudget, col_table );
@@ -178,7 +176,7 @@ load_all_budgets( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_budget( be, pModel, r, NULL );
+            (void)load_single_budget( be, pModel, r );
         }
     }
 }

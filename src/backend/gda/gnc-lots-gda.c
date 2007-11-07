@@ -101,11 +101,11 @@ set_lot_is_closed( gpointer pObject, gpointer pValue )
 }
 
 static GNCLot*
-load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row, GNCLot* lot )
+load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
-    if( lot == NULL ) {
-        lot = gnc_lot_new( be->primary_book );
-    }
+	GNCLot* lot;
+
+    lot = gnc_lot_new( be->primary_book );
 
     gnc_gda_load_object( pModel, row, GNC_ID_LOT, lot, col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(lot) ),
@@ -133,7 +133,7 @@ load_all_lots( GncGdaBackend* be )
         GNCLot* lot;
 
         for( r = 0; r < numRows; r++ ) {
-            lot = load_single_lot( be, pModel, r, NULL );
+            lot = load_single_lot( be, pModel, r );
         }
     }
 }

@@ -467,10 +467,11 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 }
 
 static Split*
-load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row, Split* pSplit )
+load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID split_guid;
+	Split* pSplit;
 
     guid = gnc_gda_load_guid( pModel, row );
     split_guid = *guid;
@@ -525,25 +526,24 @@ load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_split( be, pModel, r, NULL );
+            load_single_split( be, pModel, r );
         }
     }
 }
 
 static Transaction*
-load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, Transaction* pTx )
+load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID tx_guid;
+	Transaction* pTx;
 
     guid = gnc_gda_load_guid( pModel, row );
     tx_guid = *guid;
 
+    pTx = xaccTransLookup( &tx_guid, be->primary_book );
     if( pTx == NULL ) {
-        pTx = xaccTransLookup( &tx_guid, be->primary_book );
-        if( pTx == NULL ) {
-            pTx = xaccMallocTransaction( be->primary_book );
-        }
+        pTx = xaccMallocTransaction( be->primary_book );
     }
     xaccTransBeginEdit( pTx );
     gnc_gda_load_object( pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
@@ -571,7 +571,7 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_tx( be, pModel, r, NULL );
+            load_single_tx( be, pModel, r );
         }
     }
 }

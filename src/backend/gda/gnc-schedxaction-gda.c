@@ -124,18 +124,16 @@ set_autonotify( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static SchedXaction*
-load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row,
-            SchedXaction* pSx )
+load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID sx_guid;
+	SchedXaction* pSx;
 
     guid = gnc_gda_load_guid( pModel, row );
     sx_guid = *guid;
 
-    if( pSx == NULL ) {
-        pSx = xaccSchedXactionMalloc( be->primary_book );
-    }
+    pSx = xaccSchedXactionMalloc( be->primary_book );
 
     gnc_gda_load_object( pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSx) ),
@@ -163,7 +161,7 @@ load_all_sxes( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_sx( be, pModel, r, NULL );
+            (void)load_single_sx( be, pModel, r );
         }
     }
 }
