@@ -514,7 +514,7 @@ Please enter a name for the account. If the file was exported from another accou
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">QIF files you have loaded</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb"/>
+	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb" after="yes"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -589,7 +589,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkButton" id="button70">
+		    <widget class="GtkButton" id="unload_file_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Unload selected file</property>
