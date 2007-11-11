@@ -1825,7 +1825,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
   value = gnc_account_sel_new();
   gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list);
 
-  g_signal_connect(value, "changed",
+  g_signal_connect(value, "account_sel_changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
   gnc_option_set_widget (option, value);
