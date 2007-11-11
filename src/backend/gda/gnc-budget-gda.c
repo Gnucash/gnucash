@@ -35,26 +35,20 @@
 
 #include "gnc-backend-util-gda.h"
 
+#include "Recurrence.h"
+
 #include "gnc-budget-gda.h"
 #include "gnc-slots-gda.h"
+#include "gnc-recurrence-gda.h"
 
 #include "gnc-budget.h"
-#include "Recurrence.h"
 
 #define BUDGET_TABLE "budgets"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gpointer get_recurrence_mult( gpointer pObject, const QofParam* );
-static void set_recurrence_mult( gpointer pObject, gpointer pValue );
-static gpointer get_recurrence_period_type( gpointer pObject, const QofParam* );
-static void set_recurrence_period_type( gpointer pObject, gpointer pValue );
-static gpointer get_recurrence_period_start( gpointer pObject, const QofParam* );
-static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
-
 #define BUDGET_MAX_NAME_LEN 50
 #define BUDGET_MAX_DESCRIPTION_LEN 500
-#define BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN 50
 
 static col_cvt_t col_table[] =
 {
@@ -64,75 +58,8 @@ static col_cvt_t col_table[] =
     { "name",            CT_STRING,    BUDGET_MAX_NAME_LEN, COL_NNUL,    NULL, "name" },
     { "description",    CT_STRING,    BUDGET_MAX_DESCRIPTION_LEN, 0,    NULL, "description" },
     { "num_periods",    CT_INT,        0, COL_NNUL, NULL, "num_periods" },
-    { "recurrence_mult", CT_INT,    0, COL_NNUL, NULL, NULL,
-            get_recurrence_mult, set_recurrence_mult },
-    { "recurrence_period_type", CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN,
-            COL_NNUL, NULL, NULL, get_recurrence_period_type, set_recurrence_period_type },
-    { "recurrence_period_start", CT_GDATE, 0, COL_NNUL, NULL, NULL,
-            get_recurrence_period_start, set_recurrence_period_start },
     { NULL }
 };
-
-/* ================================================================= */
-static gpointer
-get_recurrence_mult( gpointer pObject, const QofParam* param )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    const Recurrence* r = gnc_budget_get_recurrence( budget );
-    guint m = r->mult;
-
-    return (gpointer)m;
-}
-
-static void
-set_recurrence_mult( gpointer pObject, gpointer pValue )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
-    guint m = (guint)pValue;
-
-    r->mult = m;
-}
-
-static gpointer
-get_recurrence_period_type( gpointer pObject, const QofParam* param )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    const Recurrence* r = gnc_budget_get_recurrence( budget );
-
-    return (gpointer)recurrencePeriodTypeToString(
-                            recurrenceGetPeriodType( r ) );
-}
-
-static void
-set_recurrence_period_type( gpointer pObject, gpointer pValue )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
-
-    r->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
-}
-
-static gpointer
-get_recurrence_period_start( gpointer pObject, const QofParam* param )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    const Recurrence* r = gnc_budget_get_recurrence( budget );
-    static GDate date;
-
-    date = recurrenceGetDate( r );
-    return (gpointer)&date;
-}
-
-static void
-set_recurrence_period_start( gpointer pObject, gpointer pValue )
-{
-    GncBudget* budget = GNC_BUDGET(pObject);
-    Recurrence* r = (Recurrence*)gnc_budget_get_recurrence( budget );
-    GDate* date = (GDate*)pValue;
-
-    r->start = *date;
-}
 
 /* ================================================================= */
 static GncBudget*
@@ -141,6 +68,7 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
     const GUID* guid;
     GUID budget_guid;
 	GncBudget* pBudget;
+	Recurrence* r;
 
     guid = gnc_gda_load_guid( pModel, row );
     budget_guid = *guid;
@@ -151,6 +79,8 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
     }
 
     gnc_gda_load_object( pModel, row, GNC_ID_BUDGET, pBudget, col_table );
+	r = g_new0( Recurrence, 1 );
+	gnc_gda_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
     gnc_gda_slots_load( be, gnc_budget_get_guid( pBudget ),
                             qof_instance_get_slots( QOF_INSTANCE(pBudget) ) );
 
@@ -201,13 +131,13 @@ gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst )
                         GNC_ID_BUDGET, pBudget,
                         col_table );
 
-    // Delete old slot info
+    // Now, commit any slots and recurrence
     guid = qof_instance_get_guid( inst );
-
-    // Now, commit any slots
     if( !qof_instance_get_destroying(inst) ) {
+		gnc_gda_recurrence_save( be, guid, gnc_budget_get_recurrence( pBudget ) );
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {
+        gnc_gda_recurrence_delete( be, guid );
         gnc_gda_slots_delete( be, guid );
     }
 }

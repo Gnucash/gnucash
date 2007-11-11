@@ -40,6 +40,7 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "SX-book.h"
+#include "Recurrence.h"
 
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
@@ -51,6 +52,7 @@
 #include "gnc-lots-gda.h"
 #include "gnc-price-gda.h"
 #include "gnc-pricedb.h"
+#include "gnc-recurrence-gda.h"
 #include "gnc-schedxaction-gda.h"
 #include "gnc-slots-gda.h"
 #include "gnc-transaction-gda.h"
@@ -925,6 +927,7 @@ gnc_gda_init_object_handlers( void )
     gnc_gda_init_price_handler();
     gnc_gda_init_transaction_handler();
     gnc_gda_init_slots_handler();
+	gnc_gda_init_recurrence_handler();
     gnc_gda_init_schedxaction_handler();
     gnc_gda_init_lot_handler();
 }

@@ -26,6 +26,7 @@ libgnc_backend_gda_utils_la_SOURCES = \
   gnc-commodity-gda.c \
   gnc-lots-gda.c \
   gnc-price-gda.c \
+  gnc-recurrence-gda.c \
   gnc-schedxaction-gda.c \
   gnc-slots-gda.c \
   gnc-transaction-gda.c
@@ -42,6 +43,7 @@ noinst_HEADERS = \
   gnc-commodity-gda.h \
   gnc-lots-gda.h \
   gnc-price-gda.h \
+  gnc-recurrence-gda.h \
   gnc-schedxaction-gda.h \
   gnc-slots-gda.h \
   gnc-transaction-gda.h
