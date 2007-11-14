@@ -197,6 +197,6 @@ if BUILDING_FROM_SVN
 # change, so this should fit just fine.)
 ChangeLog: NEWS
 	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
-	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash/branches/2.2" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
 endif
