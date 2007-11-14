@@ -63,7 +63,10 @@
 
 <xsl:stylesheet
   version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common"
+  extension-element-prefixes="exsl"
+  >
 
  <xsl:output
    method="text"
@@ -97,50 +100,59 @@
    </xsl:otherwise>
   </xsl:choose>
  </xsl:variable>
- <xsl:variable name="sp1">
-  <xsl:text>gnucash/branches/reshuffle-modules</xsl:text>
+ <xsl:variable name="branches">
+  <branch>
+   <prefix>gnucash/branches/csv-import</prefix>
+  </branch>
+  <branch>
+   <prefix>gnucash/branches/reshuffle-modules</prefix>
+  </branch>
+  <branch>
+   <prefix>gnucash/branches/deprecated-cleanup</prefix>
+  </branch>
+  <branch>
+   <prefix>gnucash/branches/gobject-engine-dev-warlord</prefix>
+  </branch>
+  <branch>
+   <prefix>gnucash/branches/remove-group2</prefix>
+  </branch>
+  <branch>
+   <prefix>gnucash/branches/sx-cleanup</prefix>
+  </branch>
  </xsl:variable>
- <xsl:variable name="sp2">
-  <xsl:text>gnucash/branches/deprecated-cleanup</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp3">
-  <xsl:text>gnucash/branches/gda-dev</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp4">
-  <xsl:text>gnucash/branches/gobject-engine-dev-warlord</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp5">
-  <xsl:text>gnucash/branches/module-cleanup</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp6">
-  <xsl:text>gnucash/branches/remove-group2</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp7">
-  <xsl:text>gnucash/branches/sx-cleanup</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp8">
-  <xsl:text>NOTUSED</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp9">
-  <xsl:text>NOTUSED</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp10">
-  <xsl:text>NOTUSED</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp11">
-  <xsl:text>NOTUSED</xsl:text>
- </xsl:variable>
- <xsl:variable name="sp12">
-  <xsl:text>NOTUSED</xsl:text>
- </xsl:variable>
+ <xsl:variable name="sp_branches" select="exsl:node-set($branches)"/>
  <xsl:variable name="sp_root">
   <xsl:text>gnucash/</xsl:text>
  </xsl:variable>
 
- <!-- add newlines at the end of the changelog -->
  <xsl:template match="log">
-  <xsl:apply-templates/>
-  <xsl:text>&newl;</xsl:text>
+  <xsl:variable name="print-entries">
+   <xsl:apply-templates/>
+  </xsl:variable>
+  <xsl:apply-templates select="exsl:node-set($print-entries)" />
+ </xsl:template>
+
+ <xsl:template match="print-entry">
+  <!-- save log entry number -->
+  <xsl:variable name="pos" select="position()"/>
+  <!-- fetch previous entry's header -->
+  <xsl:variable name="prevheader" select="../print-entry[position()=(($pos)-1)]/header"/>
+  <!-- print header -->
+  <xsl:choose>
+   <!-- first log entry -->
+   <xsl:when test="$pos=1">
+    <xsl:value-of select="header"/>
+    <xsl:text>&newl;&newl;</xsl:text>
+   </xsl:when>
+   <!-- new header -->
+   <xsl:when test="$prevheader!=header">
+    <xsl:text>&newl;</xsl:text>
+    <xsl:value-of select="header"/>
+    <xsl:text>&newl;&newl;</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+  <!-- print message -->
+  <xsl:value-of select="message"/>
  </xsl:template>
 
  <!-- format one entry from the log -->
@@ -151,56 +163,34 @@
   </xsl:variable>
   <!-- Only continue if this entry shouldn't have been printed -->
   <xsl:choose>
-   <xsl:when test="starts-with($paths, 'DONTPRINT')"/>
+   <xsl:when test="$paths='DONTPRINT'"/>
    <xsl:otherwise>
-    <!-- save log entry number -->
-    <xsl:variable name="pos" select="position()"/>
-    <!-- fetch previous entry's date -->
-    <xsl:variable name="prevdate">
-     <xsl:apply-templates select="../logentry[position()=(($pos)-1)]/date"/>
-    </xsl:variable>
-    <!-- fetch previous entry's author -->
-    <xsl:variable name="prevauthor">
-     <xsl:apply-templates select="../logentry[position()=(($pos)-1)]/author"/>
-    </xsl:variable>
-    <!-- fetch this entry's date -->
-    <xsl:variable name="date">
-     <xsl:apply-templates select="date" />
-    </xsl:variable>
-    <!-- fetch this entry's author -->
-    <xsl:variable name="author">
-     <xsl:apply-templates select="author" />
-    </xsl:variable>
-    <!-- check if header is changed -->
-    <xsl:if test="($prevdate!=$date) or ($prevauthor!=$author)">
-     <!-- add newline -->
-     <xsl:if test="not(position()=1)">
-      <xsl:text>&newl;</xsl:text>
-     </xsl:if>
-     <!-- date -->
-     <xsl:apply-templates select="date" />
-     <!-- two spaces -->
-     <xsl:text>&space;&space;</xsl:text>
-     <!-- author's name -->
-     <xsl:apply-templates select="author" />
-     <!-- two newlines -->
-     <xsl:text>&newl;&newl;</xsl:text>
-    </xsl:if>
-    <!-- get revision number -->
-    <xsl:variable name="rev">
-     <xsl:if test="$include-rev='yes'">
-      <xsl:text>[r</xsl:text>
-      <xsl:value-of select="@revision"/>
-      <xsl:text>]&space;</xsl:text>
-     </xsl:if>
-    </xsl:variable>
-    <!-- first line is indented (other indents are done in wrap template) -->
-    <xsl:text>&tab;*&space;</xsl:text>
-    <!-- print the paths and message nicely wrapped -->
-    <xsl:call-template name="wrap">
-     <xsl:with-param name="txt" select="concat($rev,$paths,normalize-space(msg))" />
-      
-    </xsl:call-template>
+    <print-entry>
+     <header>
+      <!-- date -->
+      <xsl:apply-templates select="date" />
+      <!-- two spaces -->
+      <xsl:text>&space;&space;</xsl:text>
+      <!-- author's name -->
+      <xsl:apply-templates select="author" />
+     </header>
+     <message>
+      <!-- get revision number -->
+      <xsl:variable name="rev">
+       <xsl:if test="$include-rev='yes'">
+        <xsl:text>[r</xsl:text>
+        <xsl:value-of select="@revision"/>
+        <xsl:text>]&space;</xsl:text>
+       </xsl:if>
+      </xsl:variable>
+      <!-- first line is indented (other indents are done in wrap template) -->
+      <xsl:text>&tab;*&space;</xsl:text>
+      <!-- print the paths and message nicely wrapped -->
+      <xsl:call-template name="wrap">
+       <xsl:with-param name="txt" select="concat($rev,$paths,normalize-space(msg))" />
+      </xsl:call-template>
+     </message>
+    </print-entry>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
@@ -224,17 +214,28 @@
 
  <!-- present a list of paths names -->
  <xsl:template match="paths">
-  <xsl:for-each select="path">
-   <xsl:sort select="normalize-space(.)" data-type="text" />
-   <!-- unless we are the first entry, add a comma -->
-   <xsl:if test="not(position()=1)">
-    <xsl:text>,&space;</xsl:text>
-   </xsl:if>
-   <!-- print the path name -->
-   <xsl:apply-templates select="."/>
-  </xsl:for-each>
-  <!-- end the list with a colon -->
-  <xsl:text>:&space;</xsl:text>
+  <xsl:variable name="combined">
+   <xsl:for-each select="path">
+    <xsl:sort select="normalize-space(.)" data-type="text" />
+    <!-- unless we are the first entry, add a comma -->
+    <xsl:if test="not(position()=1)">
+     <xsl:text>,&space;</xsl:text>
+    </xsl:if>
+    <!-- print the path name -->
+    <xsl:apply-templates select="."/>
+   </xsl:for-each>
+   <!-- end the list with a colon -->
+   <xsl:text>:&space;</xsl:text>
+  </xsl:variable>
+  <!-- Use DONTPRINT if any path is not to be printed -->
+  <xsl:choose>
+   <xsl:when test="contains($combined,'DONTPRINT')">
+    <xsl:text>DONTPRINT</xsl:text>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:value-of select="$combined"/>
+   </xsl:otherwise>
+  </xsl:choose>
  </xsl:template>
 
  <!-- transform path to something printable -->
@@ -256,70 +257,49 @@
   <xsl:variable name="p3">
    <xsl:choose>
     <xsl:when test="starts-with($p2,$sp)">
-     <xsl:value-of select="substring($p2,1+string-length($sp))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp1)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp2)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp3)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp4)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp5)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp6)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp7)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp8)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp9)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp10)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp11)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
-    </xsl:when>
-    <xsl:when test="starts-with($p2,$sp12)">
-     <xsl:value-of select="substring($p2,1+string-length($sp_root))" />
+     <xsl:value-of select="substring($p2,1+string-length($sp))"/>
     </xsl:when>
     <xsl:otherwise>
-     <!-- If this should not be printed, use that keyword instead of a
-     path. It should not be printed if it does not begin with
-     any of the given strip-prefix'es. -->
-     <xsl:text>DONTPRINT</xsl:text>
+     <xsl:variable name="rev" select="ancestor::logentry/@revision"/>
+     <xsl:for-each select="$sp_branches/branch">
+      <xsl:if test="starts-with($p2,prefix)">
+       <!-- respect 'before' and 'after' child elements -->
+       <xsl:if test="(count(before)!=1 or $rev &lt; before) and (count(after)!=1 or after &lt; $rev)">
+        <xsl:value-of select="substring($p2,1+string-length($sp_root))"/>
+       </xsl:if>
+      </xsl:if>
+     </xsl:for-each>
     </xsl:otherwise>
    </xsl:choose>
   </xsl:variable>
-  <!-- strip another slash -->
-  <xsl:variable name="p4">
-   <xsl:choose>
-    <xsl:when test="starts-with($p3,'/')">
-     <xsl:value-of select="substring($p3,2)" />
-    </xsl:when>
-    <xsl:otherwise>
-     <xsl:value-of select="$p3" />
-    </xsl:otherwise>
-   </xsl:choose>
-  </xsl:variable>
-  <!-- translate empty string to dot -->
   <xsl:choose>
-   <xsl:when test="$p4 = ''">
-    <xsl:text>.</xsl:text>
+   <xsl:when test="$p3=''">
+    <!-- If this should not be printed, use that keyword instead of a
+         path. It should not be printed if it does not begin with
+         any of the given strip-prefix'es. -->
+    <xsl:text>DONTPRINT</xsl:text>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:value-of select="$p4" />
+    <!-- strip another slash -->
+    <xsl:variable name="p4">
+     <xsl:choose>
+      <xsl:when test="starts-with($p3,'/')">
+       <xsl:value-of select="substring($p3,2)" />
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="$p3" />
+      </xsl:otherwise>
+     </xsl:choose>
+    </xsl:variable>
+    <!-- translate empty string to dot -->
+    <xsl:choose>
+     <xsl:when test="$p4 = ''">
+      <xsl:text>.</xsl:text>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:value-of select="$p4" />
+     </xsl:otherwise>
+    </xsl:choose>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
