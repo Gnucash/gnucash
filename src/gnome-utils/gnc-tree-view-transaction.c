@@ -608,11 +608,11 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         if (is_trans) {
             Timespec ts = {0,0};
             xaccTransGetDatePostedTS (trans, &ts);
-	    //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
-	    //is a new transaction and set the time to current time to show current
-	    //date on new transactions
-	    if (ts.tv_sec == 0)
-	        ts.tv_sec = time(NULL);
+        //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
+        //is a new transaction and set the time to current time to show current
+        //date on new transactions
+        if (ts.tv_sec == 0)
+            ts.tv_sec = time(NULL);
             g_object_set(cell, "text", gnc_print_date(ts), NULL);
         }
         break;
@@ -993,25 +993,25 @@ set_rate_for(GncTreeViewTransaction *tv, Transaction *trans, Split *split,
 static void
 model_copy(gpointer data)
 {
-	GtkListStore *list;
-	GtkTreeIter iter1, iter2;
-	gchar *string;
-	gboolean loop = TRUE;
-	//gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
-	//			"model_column"));
-	gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
+    GtkListStore *list;
+    GtkTreeIter iter1, iter2;
+    gchar *string;
+    gboolean loop = TRUE;
+    //gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
+    //			"model_column"));
+    gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
 
-	list = gtk_list_store_new(1, G_TYPE_STRING);
-	gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
-	while (loop)	
-	{
-		gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1, column, &string, -1);
-		gtk_list_store_append(list, &iter2);
-		gtk_list_store_set(list, &iter2, 0, string, -1);
-		loop = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
-	}//while
+    list = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+    gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
+    while (loop)	
+    {
+        gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1, column, &string, -1);
+        gtk_list_store_append(list, &iter2);
+        gtk_list_store_set(list, &iter2, 0, string, -1);
+        loop = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
+    }//while
 
-	g_object_set_data(G_OBJECT(data), "model_copy", list);
+    g_object_set_data(G_OBJECT(data), "model_copy", list);
 }//model_copy
 
 /* Connected to "edited" from cellrenderer. For reference, see
@@ -1078,10 +1078,10 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
             xaccSplitSetMemo(split, new_text);
         if (is_trans)
             xaccTransSetDescription(trans, new_text);
-		gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
-			"model_copy")), &copy_iter);
-		gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
-			"model_copy")), &copy_iter, 0, new_text, -1);
+        gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
+            "model_copy")), &copy_iter);
+        gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
+            "model_copy")), &copy_iter, 0, new_text, -1);
         break;
     case COL_NOTES:
         if (is_trans) {
@@ -1244,11 +1244,14 @@ motion_cb(GtkTreeSelection *sel, gpointer data)
         gnc_tree_model_transaction_get_split_and_trans (
             model, &iter, NULL, NULL, NULL, &trans);
 
-        if (transaction_changed_confirm(tv, trans)) {
+        //Only ask for confirmation if data has been edited
+        if (g_object_get_data(G_OBJECT(tv), "data-edited") && transaction_changed_confirm(tv, trans)) {
             /* Restore cursor position */
             restore_cursor_to_dirty(tv);
-        } else
+        } else {
             gnc_tree_model_transaction_set_blank_split_parent(model, trans);
+            g_object_set_data(G_OBJECT(tv), "data-edited", FALSE);
+        }
     }
 }
 
@@ -1370,12 +1373,29 @@ static void
 remove_edit(GtkCellEditable *ce, gpointer user_data)
 {
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
+    const gchar *new_string; 
+    const gchar *current_string; 
 
+    //These strings are used to determine if cell data was altered so
+    //that keynav works better
+    new_string = gtk_entry_get_text(GTK_ENTRY(g_object_get_data(
+            G_OBJECT(tv->priv->temp_cr), "cell-editable")));	
+    current_string = g_object_get_data(G_OBJECT(
+            tv->priv->temp_cr), "current-string");
+
+    //If editing wasn't canceled and strings don't match then
+    //cell data was edited
+    if (!g_object_get_data(G_OBJECT(tv->priv->temp_cr), "edit-canceled") 
+             && g_ascii_strcasecmp(new_string, current_string))
+    {
+        g_object_set_data(G_OBJECT(tv), "data-edited", (gpointer)TRUE);
+    }//if 
     g_print("remove edit\n");
     g_object_set_data(G_OBJECT(tv->priv->temp_cr), "cell-editable", NULL);
     tv->priv->temp_cr = NULL;
     g_free(tv->priv->acct_edit_path);
     tv->priv->acct_edit_path = NULL;
+
 }
 
 /* Explain: GtkEntry has a cursor that blinks upon
@@ -1398,34 +1418,81 @@ finish_edit(GtkTreeViewColumn *col)
     }
 }
 
+//Handle the "editing-canceled" signal
+static void
+gtvt_editing_canceled_cb(GtkCellRenderer *cr, gpointer user_data)
+{
+    GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
+
+    //Set edit-canceled property
+    g_object_set_data(G_OBJECT(cr), "edit-canceled", (gpointer)TRUE);	
+
+}//gtvt_editing_canceled_cb
+
 static void
 get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
                               const gchar *path_string, gpointer user_data)
 {
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
-	GtkListStore *list = g_object_get_data(G_OBJECT(tv), "model_copy");
-	GtkEntryCompletion *completion = gtk_entry_completion_new();
+    GtkListStore *list = g_object_get_data(G_OBJECT(tv), "model_copy");
+    GtkEntryCompletion *completion = gtk_entry_completion_new();
+    gint depth;
+    GtkTreeViewColumn *num, *description, *transfer;
+
+    num = gtk_tree_view_get_column(GTK_TREE_VIEW(tv), 1);
+    description = gtk_tree_view_get_column(GTK_TREE_VIEW(tv), 2);
+    transfer = gtk_tree_view_get_column(GTK_TREE_VIEW(tv), 3);
+
+    //Use depth to determine if it is a split or parent transaction
+    //ISSUE: the returned depth is a crazy number, not 0,1,2... that
+    //the path string would seem to indicate
+    depth = gtk_tree_path_get_depth((GtkTreePath*)path_string);
+
+    g_print(" depth: %d ", depth);
+    //First steps towards setting the column headers based
+    //on whether split or parent is being edited
+    if (depth >= 0)
+    {
+        gtk_tree_view_column_set_title(num, "Action");
+        gtk_tree_view_column_set_title(description, "Memo");
+        gtk_tree_view_column_set_title(transfer, "Accounts");
+    }//if
+    else
+    {
+        gtk_tree_view_column_set_title(num, "Num");
+        gtk_tree_view_column_set_title(description, "Description");
+        gtk_tree_view_column_set_title(transfer, "Transfer");
+    }//else
 
     g_print("start_edit");
     g_object_set_data(G_OBJECT(cr), "cell-editable", editable);
+    //Copy the string in the GtkEntry for later comparison
+    g_object_set_data(G_OBJECT(cr), "current-string", 
+            g_strdup(gtk_entry_get_text(GTK_ENTRY(editable))));
     tv->priv->temp_cr = cr;
+    //Add edit-canceled property to cr so we can distinguish between
+    //cancelled and actual changes
+    g_object_set_data(G_OBJECT(cr), "edit-canceled", FALSE);
     g_signal_connect(G_OBJECT(editable), "remove-widget",
                      (GCallback) remove_edit, tv);
 
-	if (GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION 
-		== GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")))
-			//&& GTK_IS_ENTRY(editable))
-	{
-            gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list));
-		//gtk_entry_completion_set_model(completion, 
-		//	GTK_TREE_MODEL(get_trans_model_from_view(tv)));
-            g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
-		//g_object_set(G_OBJECT(completion), "text-column", 
-		//	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
-		gtk_entry_completion_set_inline_completion(completion, TRUE);
-		gtk_entry_completion_set_popup_completion(completion, FALSE);
-		gtk_entry_set_completion(GTK_ENTRY(editable), completion);
-	}//if
+    if (GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION 
+        == GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")))
+            //&& GTK_IS_ENTRY(editable))
+    {
+        gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list));
+
+        //Data used for completion is set based on if editing split or not
+        if (depth < 0)
+           	g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
+        else
+       	    g_object_set(G_OBJECT(completion), "text-column", 1, NULL);
+        //g_object_set(G_OBJECT(completion), "text-column", 
+        //	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
+        gtk_entry_completion_set_inline_completion(completion, TRUE);
+        gtk_entry_completion_set_popup_completion(completion, FALSE);
+        gtk_entry_set_completion(GTK_ENTRY(editable), completion);
+    }//if
 
 }
 
@@ -1594,12 +1661,15 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
         cr = gnc_tree_view_column_get_renderer(col);
 
         if (def.editing_started_cb) {
-			//Store the position of the column in the model
-			g_object_set_data(G_OBJECT(cr), "model_column", 
-				GINT_TO_POINTER(def.modelcol));
-       		g_signal_connect(G_OBJECT(cr), "editing-started",
-        		(GCallback) def.editing_started_cb, tv);
+            //Store the position of the column in the model
+            g_object_set_data(G_OBJECT(cr), "model_column", 
+                GINT_TO_POINTER(def.modelcol));
+            g_signal_connect(G_OBJECT(cr), "editing-started",
+                (GCallback) def.editing_started_cb, tv);
         }
+
+        //Connect editing-canceled signal so that edit-cancelled can be set appropriately
+        g_signal_connect(G_OBJECT(cr), "editing-canceled", G_CALLBACK(gtvt_editing_canceled_cb), tv);
 
         // This can die when prefs are used.
         g_object_set(G_OBJECT(col), "resizable", TRUE, NULL);
@@ -1616,14 +1686,17 @@ gnc_tree_view_transaction_set_cols(GncTreeViewTransaction *tv,
         i++;
     }
 
-	//Make a copy of data from the treemodel to use for autocompletion
-	model_copy(tv);
+    //Make a copy of data from the treemodel to use for autocompletion
+    model_copy(tv);
 
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tv));
 
     //g_signal_connect(tv, "cursor-changed", G_CALLBACK(motion_cb), NULL);
     g_signal_connect(gtk_tree_view_get_selection(GTK_TREE_VIEW(tv)),
                      "changed", G_CALLBACK(motion_cb), tv);
+
+    //Add a data-edited property to keep track of transaction edits
+    g_object_set_data(G_OBJECT(tv), "data-edited", FALSE);
 
     //gtk_tree_selection_set_mode(gtk_tree_view_get_selection(tv),
     //                            GTK_SELECTION_BROWSE);
@@ -1681,7 +1754,8 @@ gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
     case GDK_Return:
     case GDK_KP_Enter:
         break;
-    default: return TRUE;
+    default: 
+	return TRUE;
     }
 
     gtk_tree_view_get_cursor(tv, &path, &col);
@@ -1690,14 +1764,23 @@ gtvt_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer unused)
     wrapped = gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
 
     if (wrapped && tabbed) {
-        mark_split_dirty(GNC_TREE_VIEW_TRANSACTION(tv), NULL, NULL);
+    //if (g_object_get_data(G_OBJECT(tv), "data-edited") == TRUE)
+    //{
+        //g_print("Data reset\n");
+        	mark_split_dirty(GNC_TREE_VIEW_TRANSACTION(tv), NULL, NULL);
+    //}//if
         gtk_tree_view_get_cursor(tv, &path, &col);
         wrapped = gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
     }
 
     if (!path || !gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path)) {
         /* no need to restore cursor because we won't move. */
-        transaction_changed_confirm(GNC_TREE_VIEW_TRANSACTION(tv), NULL);
+        //Only ask for confirmation if data was edited
+        if (g_object_get_data(G_OBJECT(tv), "data-edited"))
+        {
+       	    transaction_changed_confirm(GNC_TREE_VIEW_TRANSACTION(tv), NULL);
+            g_object_set_data(G_OBJECT(tv), "data-edited", FALSE);
+        }//if
     } else
         gtk_tree_view_set_cursor(tv, path, col, TRUE);
 
