@@ -453,6 +453,8 @@ recnInterestXferWindow( startRecnWindowData *data)
 		    			    _("Payment From") );
     gnc_xfer_dialog_set_from_show_button_active( data->xferData, TRUE );
 
+    // XXX: Set "from" account from previous interest payment.
+
     gnc_xfer_dialog_set_to_account_label( data->xferData,
 		    			  _("Reconcile Account") );
     gnc_xfer_dialog_select_to_account( data->xferData, data->account );
@@ -471,6 +473,8 @@ recnInterestXferWindow( startRecnWindowData *data)
     gnc_xfer_dialog_set_to_account_label( data->xferData,
 		    			  _("Payment To") );
     gnc_xfer_dialog_set_to_show_button_active( data->xferData, TRUE );
+
+    // XXX: Set "to" account from previous interest payment.
 
     /* Quickfill based on the reconcile account, which is the "From" acct. */
     gnc_xfer_dialog_quickfill_to_account( data->xferData, FALSE );
