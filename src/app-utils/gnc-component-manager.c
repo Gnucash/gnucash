@@ -261,7 +261,7 @@ gnc_cm_event_handler (QofInstance *entity,
   const GUID *guid = qof_entity_get_guid(entity);
 #if CM_DEBUG
   fprintf (stderr, "event_handler: event %d, entity %p, guid %s\n", event_type,
-	   entity, guid);
+	   entity, guid_to_string(guid));
 #endif
   add_event (&changes, guid, event_type, TRUE);
 
