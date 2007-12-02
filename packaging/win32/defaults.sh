@@ -23,6 +23,7 @@
 # DISABLE_OPTIMIZATIONS=yes
 # AQBANKING_WITH_QT=no
 # GLOBAL_DIR=Z:\\mydir  # all directories will use this
+# WGET_RATE=50k         #limit download bandwith to 50KB/s
 # late_eval 'INSTALL_DIR=$GNUCASH_DIR\\myinst'  # no need to define GNUCASH_DIR
 # block_step inst_docs
 # late_eval 'add_step greetings'
@@ -144,7 +145,7 @@ set_default MINGW_UTILS_DIR $TOOLS_DIR
 set_default EXETYPE_SCRIPT `pwd`/exetype.pl
 set_default EXETYPE_DIR $TOOLS_DIR
 
-set_default LIBXSLT_URL "http://www.zlatkovic.com/pub/libxml/libxslt-1.1.19.win32.zip"
+set_default LIBXSLT_URL "http://www.zlatkovic.com/pub/libxml/oldreleases/libxslt-1.1.19.win32.zip"
 set_default LIBXSLT_DIR $GLOBAL_DIR\\libxslt
 
 set_default LIBXML2_URL "$GNOME_WIN32_DEPS_URL/libxml2-2.6.27.zip"
@@ -242,13 +243,13 @@ set_default LIBOFX_DIR $GLOBAL_DIR\\libofx
 set_default LIBOFX_PATCH `pwd`/libofx-0.8.3-patch.diff
 
 ## online banking: gwenhywfar+aqbanking
-set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.1.tar.gz"
+set_default GWENHYWFAR_URL "$SF_MIRROR/gwenhywfar/gwenhywfar-2.6.2.tar.gz"
 set_default GWENHYWFAR_DIR $GLOBAL_DIR\\gwenhywfar
 
-set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.14.tar.gz"
+set_default KTOBLZCHECK_URL "$SF_MIRROR/ktoblzcheck/ktoblzcheck-1.16.tar.gz"
 # ktoblzcheck is being installed into GWENHYWFAR_DIR
 
-set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.2.tar.gz"
+set_default AQBANKING_URL "$SF_MIRROR/aqbanking/aqbanking-2.3.3.tar.gz"
 set_default AQBANKING_DIR $GLOBAL_DIR\\aqbanking
 set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,

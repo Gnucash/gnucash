@@ -188,6 +188,23 @@ gnc_gda_recurrence_save( GncGdaBackend* be, const GUID* guid, const Recurrence* 
 }
 
 void
+gnc_gda_recurrence_save_list( GncGdaBackend* be, const GUID* guid, GList* schedule )
+{
+    recurrence_info_t recurrence_info;
+	GList* l;
+
+	gnc_gda_recurrence_delete( be, guid );
+
+    recurrence_info.be = be;
+    recurrence_info.guid = guid;
+	for( l = schedule; l != NULL; l = g_list_next( l ) ) {
+		recurrence_info.pRecurrence = (Recurrence*)l->data;
+    	(void)gnc_gda_do_db_operation( be, OP_DB_ADD, TABLE_NAME,
+                                TABLE_NAME, &recurrence_info, col_table );
+	}
+}
+
+void
 gnc_gda_recurrence_delete( GncGdaBackend* be, const GUID* guid )
 {
     recurrence_info_t recurrence_info;
@@ -209,8 +226,8 @@ load_recurrence( GncGdaBackend* be, GdaDataModel* pModel, gint row, Recurrence* 
     gnc_gda_load_object( pModel, row, TABLE_NAME, &recurrence_info, col_table );
 }
 
-void
-gnc_gda_recurrence_load( GncGdaBackend* be, const GUID* guid, Recurrence* pRecurrence )
+static GdaObject*
+gnc_gda_set_recurrences_from_db( GncGdaBackend* be, const GUID* guid )
 {
     gchar* buf;
     GdaObject* ret;
@@ -264,14 +281,47 @@ gnc_gda_recurrence_load( GncGdaBackend* be, const GUID* guid, Recurrence* pRecur
     gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(key_value), &value );
 
     ret = gnc_gda_execute_query( be, query );
+
+	return ret;
+}
+
+void
+gnc_gda_recurrence_load( GncGdaBackend* be, const GUID* guid, Recurrence* pRecurrence )
+{
+	GdaObject* ret;
+
+	ret = gnc_gda_set_recurrences_from_db( be, guid );
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+
+		if( numRows > 0 ) {
+			if( numRows > 1 ) {
+				g_warning( "More than 1 recurrence found: first one used" );
+			}
+			load_recurrence( be, pModel, 0, pRecurrence );
+		} else {
+			g_warning( "No recurrences found" );
+		}
+    }
+}
+
+void
+gnc_gda_recurrence_load_list( GncGdaBackend* be, const GUID* guid, GList** pSchedule )
+{
+	GdaObject* ret;
+
+	ret = gnc_gda_set_recurrences_from_db( be, guid );
     if( GDA_IS_DATA_MODEL( ret ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
 
-        for( r = 0; r < numRows; r++ ) {
-            load_recurrence( be, pModel, r, pRecurrence );
-        }
+		for( r = 0; r < numRows; r++ ) {
+			Recurrence* pRecurrence = g_new0( Recurrence, 1 );
+			load_recurrence( be, pModel, 0, pRecurrence );
+			*pSchedule = g_list_append( *pSchedule, pRecurrence );
+		}
     }
 }
 

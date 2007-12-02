@@ -173,7 +173,7 @@ static void gnc_sxed_update_cal(GncSxEditorDialog *sxed);
 
 static void gnc_sxed_reg_check_close(GncSxEditorDialog *sxed);
 
-static gint sxed_close_event( GtkDialog *dlg, gpointer ud );
+static gboolean sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer ud );
 
 static gboolean sxed_confirmed_cancel( GncSxEditorDialog *sxed );
 
@@ -861,6 +861,8 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
 static void
 gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 {
+	gnc_sx_begin_edit( sxed->sx );
+
     /* name */
     {
         char *name;
@@ -962,6 +964,8 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
         /* now that we have it, set the start date */
         xaccSchedXactionSetStartDate( sxed->sx, &gdate );
     }
+
+	gnc_sx_commit_edit( sxed->sx );
 }
 
 static void
@@ -1036,8 +1040,8 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
 }
 
 static
-gint
-sxed_close_event( GtkDialog *dlg, gpointer ud )
+gboolean
+sxed_delete_event( GtkWidget *widget, GdkEvent *event, gpointer ud )
 {
     GncSxEditorDialog *sxed = (GncSxEditorDialog*)ud;
 
@@ -1173,8 +1177,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
                                 sxed_close_handler,
                                 sxed );
 
-    g_signal_connect( sxed->dialog, "close",
-                      G_CALLBACK(sxed_close_event), sxed );
+    g_signal_connect( sxed->dialog, "delete_event",
+                      G_CALLBACK(sxed_delete_event), sxed );
     g_signal_connect( sxed->dialog, "destroy",
                       G_CALLBACK(scheduledxaction_editor_dialog_destroy),
                       sxed );

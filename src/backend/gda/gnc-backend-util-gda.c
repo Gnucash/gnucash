@@ -1174,7 +1174,9 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 
     /* VALUES */
     for( col = 0; table[col].col_name != NULL; col++ ) {
-        get_col_gvalue_for_query( be, obj_name, pObject, &table[col], query );
+		if(( table[col].flags & COL_AUTOINC ) == 0 ) {
+	        get_col_gvalue_for_query( be, obj_name, pObject, &table[col], query );
+		}
     }
 
     return query;

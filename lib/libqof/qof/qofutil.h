@@ -166,6 +166,16 @@ void qof_close (void);
 
 /* **** Prototypes *********************************************/
 
+/** Search for an occurence of the substring needle in the string
+ * haystack, ignoring case. Return TRUE if one is found or FALSE
+ * otherwise. */
+gboolean qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle);
+
+/** Use g_utf8_casefold and g_utf8_collate to compare two utf8 strings,
+ * ignore case. Return < 0 if da compares before db, 0 if they compare
+ * equal, > 0 if da compares after db. */
+gint qof_utf8_strcasecmp (const gchar *da, const gchar *db);
+
 /** The safe_strcmp compares strings da and db the same way that strcmp()
  does, except that either may be null.  This routine assumes that
  a non-null string is always greater than a null string.
@@ -200,13 +210,6 @@ gint safe_strcasecmp (const gchar * da, const gchar * db);
  * a null string is equal to the empty string.
  */
 gint null_strcmp (const gchar * da, const gchar * db);
-
-/** Search for str2 in first nchar chars of str1, ignore case. Return
- * pointer to first match, or null. These are just like that strnstr
- * and the strstr functions, except that they ignore the case. */
-extern gchar *strncasestr(const guchar *str1, const guchar *str2, 
-	size_t len);
-extern gchar *strcasestr(const gchar *str1, const gchar *str2);
 
 /** The ultostr() subroutine is the inverse of strtoul(). It accepts a
  * number and prints it in the indicated base.  The returned string

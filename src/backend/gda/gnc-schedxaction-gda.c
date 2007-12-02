@@ -39,6 +39,9 @@
 #include "gnc-slots-gda.h"
 
 #include "SchedXaction.h"
+#include "Recurrence.h"
+
+#include "gnc-recurrence-gda.h"
 
 #define SCHEDXACTION_TABLE "schedxactions"
 
@@ -50,15 +53,17 @@ static gpointer get_autocreate( gpointer pObject, const QofParam* param );
 static void set_autocreate( gpointer pObject, gpointer pValue );
 static gpointer get_autonotify( gpointer pObject, const QofParam* param );
 static void set_autonotify( gpointer pObject, gpointer pValue );
+static gpointer get_template_act_guid( gpointer pObject, const QofParam* param );
+static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
     { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY,    NULL, NULL,
             (QofAccessFunc)qof_instance_get_guid,
             (QofSetterFunc)qof_instance_set_guid },
-    { "name",            CT_STRING, SX_MAX_NAME_LEN, COL_NNUL, NULL, GNC_SX_NAME },
+    { "name",            CT_STRING, SX_MAX_NAME_LEN, 0, NULL, GNC_SX_NAME },
     { "start_date",        CT_GDATE,    0, COL_NNUL, NULL, GNC_SX_START_DATE },
-    { "last_occur",        CT_GDATE,    0, COL_NNUL, NULL, GNC_SX_LAST_DATE },
+    { "last_occur",        CT_GDATE,    0, 0, NULL, GNC_SX_LAST_DATE },
     { "num_occur",        CT_INT,        0, COL_NNUL, NULL, GNC_SX_NUM_OCCUR },
     { "rem_occur",        CT_INT,        0, COL_NNUL, NULL, GNC_SX_REM_OCCUR },
     { "auto_create",    CT_BOOLEAN,    0, COL_NNUL, NULL, NULL,
@@ -71,6 +76,8 @@ static col_cvt_t col_table[] =
     { "adv_notify",    CT_INT,        0, COL_NNUL, NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
             (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
+    { "template_act_guid", CT_GUID,    0, COL_NNUL,    NULL, NULL,
+            get_template_act_guid, set_template_act_guid },
     { NULL }
 };
 
@@ -122,6 +129,26 @@ set_autonotify( gpointer pObject, gpointer pValue )
     xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
 }
 
+static gpointer
+get_template_act_guid( gpointer pObject, const QofParam* param )
+{
+    const SchedXaction* pSx = GNC_SX(pObject);
+
+    return (gpointer)xaccAccountGetGUID( pSx->template_acct );
+}
+
+static void 
+set_template_act_guid( gpointer pObject, gpointer pValue )
+{
+    SchedXaction* pSx = GNC_SX(pObject);
+    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSx) );
+    GUID* guid = (GUID*)pValue;
+	Account* pAcct;
+
+	pAcct = xaccAccountLookup( guid, pBook );
+	sx_set_template_account( pSx, pAcct );
+}
+
 /* ================================================================= */
 static SchedXaction*
 load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
@@ -129,6 +156,7 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     const GUID* guid;
     GUID sx_guid;
 	SchedXaction* pSx;
+	GList* schedule = NULL;
 
     guid = gnc_gda_load_guid( pModel, row );
     sx_guid = *guid;
@@ -136,6 +164,8 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     pSx = xaccSchedXactionMalloc( be->primary_book );
 
     gnc_gda_load_object( pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
+	gnc_gda_recurrence_load_list( be, guid, &schedule );
+	gnc_sx_set_schedule( pSx, schedule );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSx) ),
                             qof_instance_get_slots( QOF_INSTANCE(pSx) ) );
 
@@ -185,11 +215,10 @@ gnc_gda_save_schedxaction( GncGdaBackend* be, QofInstance* inst )
                         SCHEDXACTION_TABLE,
                         /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx,
                         col_table );
-
-    // Delete old slot info
-    guid = qof_instance_get_guid( inst );
+	gnc_gda_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
 
     // Now, commit any slots
+    guid = qof_instance_get_guid( inst );
     if( !qof_instance_get_destroying(inst) ) {
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {

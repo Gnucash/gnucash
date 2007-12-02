@@ -2,6 +2,11 @@
 @chapter User Preferences
 @cindex User Preferences
 
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
 The options system is used to obtain user preferences, both globally,
 and when displaying a report. A wide variety of option types are
 supported, so it should be possible to create an option for just about

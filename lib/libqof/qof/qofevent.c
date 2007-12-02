@@ -68,40 +68,6 @@ find_next_handler_id(void)
   return handler_id;
 }
 
-/* support deprecated code with a private function*/
-#ifndef QOF_DISABLE_DEPRECATED
-gint
-qof_event_register_old_handler (GNCEngineEventHandler handler, gpointer user_data)
-{
-  HandlerInfo *hi;
-  gint handler_id;
-
-  ENTER ("(handler=%p, data=%p)", handler, user_data);
-
-  /* sanity check */
-  if (!handler)
-  {
-    PERR ("no handler specified");
-    return 0;
-  }
-  PINFO (" deprecated handler specified");
-
-  handler_id = find_next_handler_id();
-  /* Found one, add the handler */
-  hi = g_new0 (HandlerInfo, 1);
-
-  hi->old_handler = handler;
-  hi->user_data = user_data;
-  hi->handler_id = handler_id;
-
-  handlers = g_list_prepend (handlers, hi);
-
-  LEAVE (" (handler=%p, data=%p) handler_id=%d", handler, user_data, handler_id);
-  return handler_id;
-
-}
-#endif /* QOF_DISABLE_DEPRECATED */
-
 gint
 qof_event_register_handler (QofEventHandler handler, gpointer user_data)
 {
@@ -147,23 +113,15 @@ qof_event_unregister_handler (gint handler_id)
 
     /* Normally, we could actually remove the handler's node from the
        list, but we may be unregistering the event handler as a result
-       of a generated event, such as GNC_EVENT_DESTROY.  In that case,
+       of a generated event, such as QOF_EVENT_DESTROY.  In that case,
        we're in the middle of walking the GList and it is wrong to
        modify the list. So, instead, we just NULL the handler. */ 
     if(hi->handler) 
     LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
 	   hi->handler, hi->user_data);
-#ifndef QOF_DISABLE_DEPRECATED
-    if(hi->old_handler) 
-	LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
-	   hi->old_handler, hi->user_data);
-#endif
 
     /* safety -- clear the handler in case we're running events now */
     hi->handler = NULL;
-#ifndef QOF_DISABLE_DEPRECATED
-    hi->old_handler = NULL;
-#endif
 
     if (handler_run_level == 0) {
       handlers = g_list_remove_link (handlers, node);
@@ -231,15 +189,6 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
     HandlerInfo *hi = node->data;
 
     next_node = node->next;
-#ifndef QOF_DISABLE_DEPRECATED
-    if ((hi->old_handler) && (use_old_handlers))
-    {
-      PINFO(" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
-            hi->old_handler);
-      hi->old_handler ((GUID *)&entity->guid, entity->e_type,
-                       event_id, hi->user_data);
-    }
-#endif
     if (hi->handler)
     {
       PINFO("id=%d hi=%p han=%p data=%p", hi->handler_id, hi, 
@@ -258,11 +207,7 @@ qof_event_generate_internal (QofInstance *entity, QofEventId event_id,
     {
       HandlerInfo *hi = node->data;
       next_node = node->next;
-      if ((hi->handler == NULL)
-#ifndef QOF_DISABLE_DEPRECATED
-         &&(hi->old_handler == NULL)
-#endif
-         )
+      if (hi->handler == NULL)
       {
         /* remove this node from the list, then free this node */
         handlers = g_list_remove_link (handlers, node);

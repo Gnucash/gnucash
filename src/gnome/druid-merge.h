@@ -33,7 +33,7 @@
 \n
 This druid builds a second ::QofBook in memory using ::QofSession and
 populates the book with accounts created using the usual New Account Tree
-code. The druid then uses ::qof_book_mergeInit to begin the merge 
+code. The druid then uses ::qof_book_merge_init to begin the merge 
 of the new book (created with QofSession) with the existing QofBook
 (loaded by the user), with user intervention and collision handling.
 
@@ -44,9 +44,9 @@ of the new book (created with QofSession) with the existing QofBook
 	GUID's in the target book so objects that do not have a GUID match cannot be assumed to
 	be ::MERGE_NEW - parameter values must be checked.
 
-- If a GUID match exists, set qof_book_mergeRule::mergeAbsolute to \a TRUE.
+- If a GUID match exists, set QofBookMergeRule::mergeAbsolute to \a TRUE.
 	-# If ALL parameters in the import object match the target object with the same \a GUID, 
-	set ::qof_book_mergeResult to \a MERGE_ABSOLUTE.
+	set ::QofBookMergeResult to \a MERGE_ABSOLUTE.
 	-# If any parameters differ, set ::MERGE_UPDATE.
 - If the import object \a GUID does not match an existing object,
 mergeAbsolute is unchanged from the default \a FALSE
@@ -65,7 +65,7 @@ Note that this will not set or return an error value. However, g_return is only
 used for critical errors that arise from programming errors, not for invalid import data 
 which should be cleaned up before creating the import QofBook.
 
-Only ::qof_book_mergeInit, ::qof_book_mergeUpdateResult and ::qof_book_mergeCommit return 
+Only ::qof_book_merge_init, ::qof_book_merge_update_result and ::qof_book_merge_commit return 
 any error values to the calling process. 
 
 	@{ */

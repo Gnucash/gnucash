@@ -402,6 +402,7 @@ else
 
    Cannot find SLIB.  Are you sure you have it installed?
    See http://bugzilla.gnome.org/show_bug.cgi?id=347922
+   and http://bugzilla.gnome.org/show_bug.cgi?id=483631
 
 ])
 fi
@@ -901,6 +902,15 @@ AC_ARG_ENABLE( locale-specific-tax,
   [  --enable-locale-specific-tax enable localized tax categories (experimental)],
   AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
 
+dnl Make sure we have a proper gettext installed
+AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)
+if test "$gt_cv_have_gettext" != "yes" || test "x$GMSGFMT" = "x"; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([Cannot find Glib Gettext.  Maybe you need to install the gettext package?])
+else
+  AC_MSG_RESULT(yes - $GMSGFMT)
+fi
+
 ### --------------------------------------------------------------------------
 ### help files
 
@@ -1120,33 +1130,49 @@ then
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
 
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.4 >= 0.4.0, [], [
-      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [], [
-        PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [], [
-          AC_MSG_ERROR([Cannot find libgoffice.])
+    # checks for goffice
+    goffice=0
+    goffice_with_cairo=0
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [
+      AC_DEFINE(HAVE_GOFFICE_0_5,1,[System has goffice 0.5.1 or better])
+      AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
+      goffice=1
+      goffice_with_cairo=1
+    ], [goffice=0])
+
+    if test x$goffice = x0
+    then
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.4 >= 0.4.0, [goffice=1], [
+        PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [goffice=1], [
+          PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [goffice=1], [
+            AC_MSG_ERROR([Cannot find libgoffice.])
+          ])
         ])
       ])
-    ])
+    fi
     AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
     AC_SUBST(GOFFICE_CFLAGS)
     AC_SUBST(GOFFICE_LIBS)
 
-    saved_CPPFLAGS="${CPPFLAGS}"
-    CPPFLAGS="${GOFFICE_CFLAGS} ${CPPFLAGS}"
-    AC_CHECK_HEADER(goffice/graph/gog-renderer-cairo.h, [
-      AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
-      goffice_with_cairo=yes
-    ], [
-      goffice_with_cairo=no
-    ])
-    CPPFLAGS="${saved_CPPFLAGS}"
+    if test x$goffice_with_cairo = x0
+    then
+      saved_CPPFLAGS="${CPPFLAGS}"
+      CPPFLAGS="${GOFFICE_CFLAGS} ${CPPFLAGS}"
+      AC_CHECK_HEADER(goffice/graph/gog-renderer-cairo.h, [
+        AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
+        goffice_with_cairo=1
+      ], [
+        goffice_with_cairo=0
+      ])
+      CPPFLAGS="${saved_CPPFLAGS}"
+    fi
 
     # check for gtkhtml >= 3.14 with gtkprint support
     gtkhtml=0
     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.14, [
       if test "x$HAVE_GTK_2_10" != "xyes"; then
         AC_MSG_NOTICE([Found libgtkhtml-3.14, but not gtk+-2.0 >= 2.10])
-      elif test "x$goffice_with_cairo" != "xyes"; then
+      elif test "x$goffice_with_cairo" != "x1"; then
         AC_MSG_NOTICE([Found libgtkhtml-3.14, but goffice lacks a cairo renderer])
       else
         gtkhtml=1
@@ -1423,11 +1449,13 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/fr_FR/Makefile
           accounts/hu_HU/Makefile
           accounts/it/Makefile
+          accounts/ja/Makefile
           accounts/nb/Makefile
           accounts/pt_BR/Makefile
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           accounts/tr_TR/Makefile
+          accounts/zh_CN/Makefile
           checks/Makefile
           doc/Makefile
           doc/examples/Makefile
@@ -1441,6 +1469,7 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libqof/qof/Makefile
           lib/libqof/backend/Makefile
           lib/libqof/backend/file/Makefile
+          lib/stf/Makefile
           packaging/Makefile
           packaging/win32/Makefile
           packaging/win32/gnucash.iss
@@ -1495,6 +1524,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/schemas/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
+          src/import-export/csv/Makefile
           src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile

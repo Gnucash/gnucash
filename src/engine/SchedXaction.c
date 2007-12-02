@@ -88,6 +88,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
    guid = qof_instance_get_guid( sx );
+   xaccAccountBeginEdit( sx->template_acct );
    xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
@@ -95,6 +96,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
                          "template", "template",
                          "template", "template", 1 ) );
    xaccAccountSetType( sx->template_acct, ACCT_TYPE_BANK );
+   xaccAccountCommitEdit( sx->template_acct );
    ra = gnc_book_get_template_root( book );
    gnc_account_append_child( ra, sx->template_acct );
 }

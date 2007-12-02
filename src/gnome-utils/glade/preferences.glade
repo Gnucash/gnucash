@@ -3857,7 +3857,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
+		  <property name="right_attach">2</property>
 		  <property name="top_attach">15</property>
 		  <property name="bottom_attach">16</property>
 		  <property name="x_options">fill</property>
@@ -3880,7 +3880,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
+		  <property name="right_attach">2</property>
 		  <property name="top_attach">16</property>
 		  <property name="bottom_attach">17</property>
 		  <property name="x_padding">12</property>
@@ -3905,7 +3905,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
+		  <property name="right_attach">2</property>
 		  <property name="top_attach">17</property>
 		  <property name="bottom_attach">18</property>
 		  <property name="x_padding">12</property>
@@ -3930,7 +3930,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
+		  <property name="right_attach">2</property>
 		  <property name="top_attach">18</property>
 		  <property name="bottom_attach">19</property>
 		  <property name="x_padding">12</property>
@@ -3955,9 +3955,86 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">4</property>
+		  <property name="right_attach">2</property>
 		  <property name="top_attach">19</property>
 		  <property name="bottom_attach">20</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label6">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Summary Bar Position&lt;/b&gt;</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">True</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">15</property>
+		  <property name="bottom_attach">16</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/summarybar_position/top">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the summary bar at the top of the page.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Top</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">16</property>
+		  <property name="bottom_attach">17</property>
+		  <property name="x_padding">12</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="gconf/general/summarybar_position/bottom">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display the summary bar at the bottom of the page.</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Bottom</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">gconf/general/summarybar_position/top</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">17</property>
+		  <property name="bottom_attach">18</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
@@ -4138,7 +4215,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
+		  <property name="right_attach">3</property>
 		  <property name="top_attach">13</property>
 		  <property name="bottom_attach">14</property>
 		  <property name="x_options">fill</property>

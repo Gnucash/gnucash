@@ -33,8 +33,10 @@
 #include <gmodule.h>
 
 void gnc_gda_recurrence_save( GncGdaBackend* be, const GUID* guid, const Recurrence* pRecurrence );
+void gnc_gda_recurrence_save_list( GncGdaBackend* be, const GUID* guid, GList* schedule );
 void gnc_gda_recurrence_delete( GncGdaBackend* be, const GUID* guid );
 void gnc_gda_recurrence_load( GncGdaBackend* be, const GUID* guid, Recurrence* pRecurrence );
+void gnc_gda_recurrence_load_list( GncGdaBackend* be, const GUID* guid, GList** pSchedule );
 
 void gnc_gda_init_recurrence_handler( void );
 

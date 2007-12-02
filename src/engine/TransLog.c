@@ -273,7 +273,8 @@ xaccTransWriteLog (Transaction *trans, char flag)
                gnc_numeric_denom(amt),
                gnc_numeric_num(val), 
                gnc_numeric_denom(val),
-               drecn ? drecn : "");
+	       /* The next string always exists. No need to test it. */
+               drecn);
    }
 
    fprintf (trans_log, "===== END\n");

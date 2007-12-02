@@ -30,7 +30,7 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Umlaufverm&#246;gen</act:name>
+  <act:name>Umlaufvermögen</act:name>
   <act:id type="new">809dbb01a0f166f19adb8c8014f9fa7d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -43,7 +43,7 @@
   <act:parent type="new">de55a3419ae28ee9ab7ad78bdd197fc4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fl&#252;ssige Mittel und Wertschriften</act:name>
+  <act:name>Flüssige Mittel und Wertschriften</act:name>
   <act:id type="new">1f3f585318c62b6a58bf62f28e98d07d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -135,7 +135,7 @@
   <act:parent type="new">1f3f585318c62b6a58bf62f28e98d07d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Checks, Besitzwechsel (diskontf&#228;hig)</act:name>
+  <act:name>Checks, Besitzwechsel (diskontfähig)</act:name>
   <act:id type="new">7eb94ff3d3d21ea9b9e32c171ccd03fe</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -365,7 +365,7 @@
   <act:parent type="new">0c883cc3148a4c54fc8a6293c7f35b74</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te und angefangene Arbeiten</act:name>
+  <act:name>Vorräte und angefangene Arbeiten</act:name>
   <act:id type="new">21e939144b5c93d81e26c2ca82f5a214</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -388,7 +388,7 @@
   <act:parent type="new">809dbb01a0f166f19adb8c8014f9fa7d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te Handelswaren</act:name>
+  <act:name>Vorräte Handelswaren</act:name>
   <act:id type="new">27ed12ce114682252c4a6a3129429c36</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -411,7 +411,7 @@
   <act:parent type="new">21e939144b5c93d81e26c2ca82f5a214</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te Rohstoffe</act:name>
+  <act:name>Vorräte Rohstoffe</act:name>
   <act:id type="new">af01aaaa06a47beefbaecf8c7e8aaeb5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -434,7 +434,7 @@
   <act:parent type="new">21e939144b5c93d81e26c2ca82f5a214</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te Werkstoffe</act:name>
+  <act:name>Vorräte Werkstoffe</act:name>
   <act:id type="new">4691453a9ba6486f0a7089c377c1c3fc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -457,7 +457,7 @@
   <act:parent type="new">21e939144b5c93d81e26c2ca82f5a214</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te Hilfs- und Verbrauchsmaterial</act:name>
+  <act:name>Vorräte Hilfs- und Verbrauchsmaterial</act:name>
   <act:id type="new">b6eb4acac0cff3dc58b5e654b37835d6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -641,7 +641,7 @@
   <act:parent type="new">370937cd49fb271ad1783cda51e7374d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Anlageverm&#246;gen</act:name>
+  <act:name>Anlagevermögen</act:name>
   <act:id type="new">28348f262fe7216b1ab92656580ee987</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -687,7 +687,7 @@
   <act:parent type="new">28348f262fe7216b1ab92656580ee987</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Wertpapiere des Anlageverm&#246;gens</act:name>
+  <act:name>Wertpapiere des Anlagevermögens</act:name>
   <act:id type="new">3df4a66d0599a2bdf614cfba210c9d5b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -802,7 +802,7 @@
   <act:parent type="new">e56cdb2274c5ff01d7bf194def1b2b2c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Langf. F'gen ggn. Aktion&#228;ren</act:name>
+  <act:name>Langf. F'gen ggn. Aktionären</act:name>
   <act:id type="new">2a512e57c1de462db0142bcfdcee10d3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -917,7 +917,7 @@
   <act:parent type="new">ee28b40fed8cd193e15f26f20835c3fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B&#252;romaschinen, EDV-Anlage, Kommunikation</act:name>
+  <act:name>Büromaschinen, EDV-Anlage, Kommunikation</act:name>
   <act:id type="new">8d39d906e88342e5a2b2ad7911b4a9dc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -963,7 +963,7 @@
   <act:parent type="new">ee28b40fed8cd193e15f26f20835c3fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Werkzeuge und Ger&#228;te</act:name>
+  <act:name>Werkzeuge und Geräte</act:name>
   <act:id type="new">43fcb6c7b815d30f07fee4b056017505</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1032,7 +1032,7 @@
   <act:parent type="new">ee28b40fed8cd193e15f26f20835c3fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;brige mobile Sachanlagen</act:name>
+  <act:name>Übrige mobile Sachanlagen</act:name>
   <act:id type="new">7ee39c0c95f75d6476cfafe3b6abcb3c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1078,7 +1078,7 @@
   <act:parent type="new">28348f262fe7216b1ab92656580ee987</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gesch&#228;ftsliegenschaften</act:name>
+  <act:name>Geschäftsliegenschaften</act:name>
   <act:id type="new">a0820a3d2f554f123d8caa986da63de6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1101,7 +1101,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fabrikgeb&#228;ude</act:name>
+  <act:name>Fabrikgebäude</act:name>
   <act:id type="new">406f5d704913814b50c477e6440a1530</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1124,7 +1124,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Werkstattgeb&#228;ude, Atelier</act:name>
+  <act:name>Werkstattgebäude, Atelier</act:name>
   <act:id type="new">36ede62c4d0a2c0dbaac02b854931c7b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1147,7 +1147,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Lagergeb&#228;ude</act:name>
+  <act:name>Lagergebäude</act:name>
   <act:id type="new">092cfa0ac3e4f169cd5edeecbc5551a9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1170,7 +1170,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ausstellungs- und Verkaufsgeb&#228;ude</act:name>
+  <act:name>Ausstellungs- und Verkaufsgebäude</act:name>
   <act:id type="new">3b56da617d8feb463a13cbea2e6ce35a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1193,7 +1193,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B&#252;ro- und Verwaltungsgeb&#228;ude</act:name>
+  <act:name>Büro- und Verwaltungsgebäude</act:name>
   <act:id type="new">9746981fc1105db11907ad96668fe17a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1216,7 +1216,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Wohnh&#228;user</act:name>
+  <act:name>Wohnhäuser</act:name>
   <act:id type="new">0735263b8ff0d84409bf291f4dc4e280</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1239,7 +1239,7 @@
   <act:parent type="new">31e21993176c0a8d6be103c5faf3596e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Unbebaute Grundst&#252;cke</act:name>
+  <act:name>Unbebaute Grundstücke</act:name>
   <act:id type="new">d51d9224c01e96f82c6385c8d993c1e1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1308,7 +1308,7 @@
   <act:parent type="new">9bb1571b69cad5444ec3b4ea3bcab4bb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Marken, Muster, Modelle, Pl&#228;ne</act:name>
+  <act:name>Marken, Muster, Modelle, Pläne</act:name>
   <act:id type="new">38563c6c3a4174650e41105cc32ca596</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1400,7 +1400,7 @@
   <act:parent type="new">9bb1571b69cad5444ec3b4ea3bcab4bb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;brige immaterielle Anlagen</act:name>
+  <act:name>Übrige immaterielle Anlagen</act:name>
   <act:id type="new">7d207c0ac1a19e0844a9f46839df6fff</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1469,7 +1469,7 @@
   <act:parent type="new">fdfd5d1630c4a69d000d13f54202150e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gr&#252;ndungs-, Kapitalerh'gs- &amp; Org.Aufwand</act:name>
+  <act:name>Gründungs-, Kapitalerh'gs- &amp; Org.Aufwand</act:name>
   <act:id type="new">5cdef4cc3d1af18c5bad74c96f5e6fb4</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1561,7 +1561,7 @@
   <act:parent type="new">6fd0dde1dedf14c5d7bf7aaa3bf20504</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fl&#252;ssige Mittel und Wertschriften</act:name>
+  <act:name>Flüssige Mittel und Wertschriften</act:name>
   <act:id type="new">550d56ffdf6b84e30bc95e1a817160f2</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1607,7 +1607,7 @@
   <act:parent type="new">611e46d5f690b9afe1e2b6fa9a88e7c4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Vorr&#228;te und angefangene Arbeiten</act:name>
+  <act:name>Vorräte und angefangene Arbeiten</act:name>
   <act:id type="new">6692eb9d5f4495ad087dbe0f9fe63127</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1929,7 +1929,7 @@
   <act:parent type="new">83b4297525ec48d13837029e84bac41d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Verbindl. aus L/L ggn. Aktion&#228;ren</act:name>
+  <act:name>Verbindl. aus L/L ggn. Aktionären</act:name>
   <act:id type="new">eafe01e9fe5eb16624fdd5ff58fb135a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2090,7 +2090,7 @@
   <act:parent type="new">f356fe55d736bdfba131e311f0e842de</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Kurzf. Finanzverb. ggn. Aktion&#228;ren</act:name>
+  <act:name>Kurzf. Finanzverb. ggn. Aktionären</act:name>
   <act:id type="new">fae53f58a880fb11b24146cee83f82ed</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2136,7 +2136,7 @@
   <act:parent type="new">f356fe55d736bdfba131e311f0e842de</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Kurzf. f&#228;lliger Teil v. langf. Fi'zverb.</act:name>
+  <act:name>Kurzf. fälliger Teil v. langf. Fi'zverb.</act:name>
   <act:id type="new">405c5270b0860bb82aa8c2e419cc89bc</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2228,7 +2228,7 @@
   <act:parent type="new">737966be188a8cc20a0285a37eea8bf6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>F&#228;llige Dividenden u. Obligationenzinsen</act:name>
+  <act:name>Fällige Dividenden u. Obligationenzinsen</act:name>
   <act:id type="new">618e49b8e41d0114934158262f3aeb90</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2251,7 +2251,7 @@
   <act:parent type="new">737966be188a8cc20a0285a37eea8bf6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>F&#228;llige Obligationenanleihen</act:name>
+  <act:name>Fällige Obligationenanleihen</act:name>
   <act:id type="new">d1899e32a3546203ce44e4a69ceecb7d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2297,7 +2297,7 @@
   <act:parent type="new">737966be188a8cc20a0285a37eea8bf6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Andere kurzf. Verbindl. ggn. Aktion&#228;ren</act:name>
+  <act:name>Andere kurzf. Verbindl. ggn. Aktionären</act:name>
   <act:id type="new">47b01aeefcb9b5a68a8a3d48cc1ae3bf</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2343,7 +2343,7 @@
   <act:parent type="new">737966be188a8cc20a0285a37eea8bf6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Passive Rechnungsabgr. kurzfr. R&#252;cktell.</act:name>
+  <act:name>Passive Rechnungsabgr. kurzfr. Rücktell.</act:name>
   <act:id type="new">524b8a24a845b48de10c41ffb62534af</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2389,7 +2389,7 @@
   <act:parent type="new">524b8a24a845b48de10c41ffb62534af</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Kurzfristige R&#252;ckstellungen</act:name>
+  <act:name>Kurzfristige Rückstellungen</act:name>
   <act:id type="new">91b29b0d5260f9ace3f28dbccd93e11a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2619,7 +2619,7 @@
   <act:parent type="new">a305626c4ccf26230bc441aaa277b739</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Langf. Verbindl. ggn. Aktion&#228;ren</act:name>
+  <act:name>Langf. Verbindl. ggn. Aktionären</act:name>
   <act:id type="new">a343a729f2296f2e1c008ff16a44513d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2665,7 +2665,7 @@
   <act:parent type="new">a305626c4ccf26230bc441aaa277b739</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>R&#252;ckstellungen lanfgristig</act:name>
+  <act:name>Rückstellungen lanfgristig</act:name>
   <act:id type="new">a482c3baeff74f411e8e1efecc49f623</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2688,7 +2688,7 @@
   <act:parent type="new">fe422c2004aa3f49077b4110fde8299f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r Reparatur, Sanierung und Erneuerung</act:name>
+  <act:name>für Reparatur, Sanierung und Erneuerung</act:name>
   <act:id type="new">cbd3874eabd02bc11c06ec8407b7bf0e</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2711,7 +2711,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r Forschung und Entwicklung</act:name>
+  <act:name>für Forschung und Entwicklung</act:name>
   <act:id type="new">6c8d98f6555cf75116aeaf3807503276</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2734,7 +2734,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r betriebliche Umstrukturierung</act:name>
+  <act:name>für betriebliche Umstrukturierung</act:name>
   <act:id type="new">270a74f65257815532bcfaf280e07f90</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2780,7 +2780,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r Steuern (langfristig)</act:name>
+  <act:name>für Steuern (langfristig)</act:name>
   <act:id type="new">f052bff7a281db1130096897c3e79b8f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2803,7 +2803,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r Umweltschutzmassnahmen</act:name>
+  <act:name>für Umweltschutzmassnahmen</act:name>
   <act:id type="new">9d76f36b2b9bdc984e390bbab38d1a7f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2826,7 +2826,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>f&#252;r Altersvorsorge</act:name>
+  <act:name>für Altersvorsorge</act:name>
   <act:id type="new">2ac7bd40676ec2b7435d3c121ccddd4b</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2849,7 +2849,7 @@
   <act:parent type="new">a482c3baeff74f411e8e1efecc49f623</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;brige R&#252;ckstellungen</act:name>
+  <act:name>Übrige Rückstellungen</act:name>
   <act:id type="new">1e19f21c89fc4e10faa6a03993d766a8</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -2987,7 +2987,7 @@
   <act:parent type="new">3b353e891e249ec5081c453095d9a062</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Passive Rechnungsabgr., kurzfr. R&#252;ckstell.</act:name>
+  <act:name>Passive Rechnungsabgr., kurzfr. Rückstell.</act:name>
   <act:id type="new">d2a154dbdf431fd1ec7a776cfcd70518</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -3056,7 +3056,7 @@
   <act:parent type="new">3b353e891e249ec5081c453095d9a062</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>R&#252;ckstellungen</act:name>
+  <act:name>Rückstellungen</act:name>
   <act:id type="new">655b5cc7bfd131962a8decfd20936928</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -3148,7 +3148,7 @@
   <act:parent type="new">35c16769f27d36b58aa7efabce4d1275</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Privat f&#252;r Einzelfirmen und Personenges.</act:name>
+  <act:name>Privat für Einzelfirmen und Personenges.</act:name>
   <act:id type="new">52ed25b4a942d5c10fa7588f872bbd18</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -3378,7 +3378,7 @@
   <act:parent type="new">646497df14eea03d25040f1da2f9d70d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'&#228;nderung angef./fert. Arb. Produktion</act:name>
+  <act:name>B'änderung angef./fert. Arb. Produktion</act:name>
   <act:id type="new">c2bcc9f4961f9e76b4880b835280947b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3677,7 +3677,7 @@
   <act:parent type="new">ea5ae607c469cbade094f3be80c50fca</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'&#228;nderungen angefangene und fertige DL</act:name>
+  <act:name>B'änderungen angefangene und fertige DL</act:name>
   <act:id type="new">be7e9be311a8fd8359ebd723dc80d3f9</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3723,7 +3723,7 @@
   <act:parent type="new">ea5ae607c469cbade094f3be80c50fca</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Ertrag</act:name>
+  <act:name>Übriger Ertrag</act:name>
   <act:id type="new">9971c453723ce515418e3ce47f8e7e1b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3769,7 +3769,7 @@
   <act:parent type="new">9971c453723ce515418e3ce47f8e7e1b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertr&#228;ge aus Lizenzen, Patenten etc.</act:name>
+  <act:name>Erträge aus Lizenzen, Patenten etc.</act:name>
   <act:id type="new">f543c736ef85a49ab8506b36cb6d2de7</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3792,7 +3792,7 @@
   <act:parent type="new">9971c453723ce515418e3ce47f8e7e1b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Ertrag aus Leist. an Konzernges.</act:name>
+  <act:name>Übriger Ertrag aus Leist. an Konzernges.</act:name>
   <act:id type="new">523cd3be558c853f7aa62d4f86afd585</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3861,7 +3861,7 @@
   <act:parent type="new">9971c453723ce515418e3ce47f8e7e1b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertragsminderung auf &#252;brigem Ertrag</act:name>
+  <act:name>Ertragsminderung auf übrigem Ertrag</act:name>
   <act:id type="new">a6fb014736962f8897b7523961767ab5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -3999,7 +3999,7 @@
   <act:parent type="new">b9806266c5d10119537f7e1009cea4aa</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'&#228;nderungen angef./fert. Arb. aus P/DL</act:name>
+  <act:name>B'änderungen angef./fert. Arb. aus P/DL</act:name>
   <act:id type="new">15928b1c3c7b061f2db3f20e60f13ea1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -4022,7 +4022,7 @@
   <act:parent type="new">f200b18acf0fd0a6b030858081393bf7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'&#228;nderungen angef./fertig. Arbeiten Prod.</act:name>
+  <act:name>B'änderungen angef./fertig. Arbeiten Prod.</act:name>
   <act:id type="new">f0d9d6a436005db9370df2493e7dd3f8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -4045,7 +4045,7 @@
   <act:parent type="new">15928b1c3c7b061f2db3f20e60f13ea1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'&#228;nderungen angef./fert. Arbeiten DL</act:name>
+  <act:name>B'änderungen angef./fert. Arbeiten DL</act:name>
   <act:id type="new">9cd820a44c59620f87d515f261a550c3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -4275,7 +4275,7 @@
   <act:parent type="new">d797d2298d86d988e15bd8f8b3da5f22</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bestandesver&#228;nderungen, Materialverluste</act:name>
+  <act:name>Bestandesveränderungen, Materialverluste</act:name>
   <act:id type="new">b9d5be6d7b3f09875b0c7f14822d5e7b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4436,7 +4436,7 @@
   <act:parent type="new">ee9b51391da307ae291332c5d0ebc0e9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'ver&#228;nderungen Warenverluste Handelswa.</act:name>
+  <act:name>B'veränderungen Warenverluste Handelswa.</act:name>
   <act:id type="new">2bf425723a05b050806f62c288f4b410</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4482,7 +4482,7 @@
   <act:parent type="new">ee9b51391da307ae291332c5d0ebc0e9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwand f&#252;r Drittleistungen</act:name>
+  <act:name>Aufwand für Drittleistungen</act:name>
   <act:id type="new">47e2dc0afc23bb591b14864ea94e6d1d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4505,7 +4505,7 @@
   <act:parent type="new">4bc660da3649f5dd42f9ec4f797d2e97</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwand f&#252;r Drittleistungen Bereich A</act:name>
+  <act:name>Aufwand für Drittleistungen Bereich A</act:name>
   <act:id type="new">c97d1abfc6f43c6fa6f9d83c309b0072</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4528,7 +4528,7 @@
   <act:parent type="new">47e2dc0afc23bb591b14864ea94e6d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwand f&#252;r Drittleistungen Bereich B</act:name>
+  <act:name>Aufwand für Drittleistungen Bereich B</act:name>
   <act:id type="new">545997faf2bdf2fdc3054544baff5a34</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4551,7 +4551,7 @@
   <act:parent type="new">47e2dc0afc23bb591b14864ea94e6d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwand f&#252;r Drittleistungen Bereich C</act:name>
+  <act:name>Aufwand für Drittleistungen Bereich C</act:name>
   <act:id type="new">526127456cbf71b4141ce221e29530ab</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4574,7 +4574,7 @@
   <act:parent type="new">47e2dc0afc23bb591b14864ea94e6d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Direkte Spesen f&#252;r Drittleistungen</act:name>
+  <act:name>Direkte Spesen für Drittleistungen</act:name>
   <act:id type="new">995320a362dc06713f33d3008db2afdb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4597,7 +4597,7 @@
   <act:parent type="new">47e2dc0afc23bb591b14864ea94e6d1d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwandminderungen f&#252;r Drittleistu. (DL)</act:name>
+  <act:name>Aufwandminderungen für Drittleistu. (DL)</act:name>
   <act:id type="new">becfa2b53802266b480a4146156ff090</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4643,7 +4643,7 @@
   <act:parent type="new">4bc660da3649f5dd42f9ec4f797d2e97</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Elektrizit&#228;t</act:name>
+  <act:name>Elektrizität</act:name>
   <act:id type="new">b782fdbff64232420baa700cd1f8bc1f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4758,7 +4758,7 @@
   <act:parent type="new">29fabbc0f61db678fa68957b9631afbd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Aufwand</act:name>
+  <act:name>Übriger Aufwand</act:name>
   <act:id type="new">f6874af4a0318974d9e903076b82c13f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4781,7 +4781,7 @@
   <act:parent type="new">4bc660da3649f5dd42f9ec4f797d2e97</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Materialaufwand Produktion</act:name>
+  <act:name>Übriger Materialaufwand Produktion</act:name>
   <act:id type="new">dbc6b1f9b30963f0408be4e26dbe3092</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4804,7 +4804,7 @@
   <act:parent type="new">f6874af4a0318974d9e903076b82c13f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Materialaufwand Handel</act:name>
+  <act:name>Übriger Materialaufwand Handel</act:name>
   <act:id type="new">0f691695e17f0e416ce0136072904951</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4827,7 +4827,7 @@
   <act:parent type="new">f6874af4a0318974d9e903076b82c13f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Aufwand f&#252;r Drittleistungen</act:name>
+  <act:name>Übriger Aufwand für Drittleistungen</act:name>
   <act:id type="new">542a85e7f44720a300c4360f9a764da1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4850,7 +4850,7 @@
   <act:parent type="new">f6874af4a0318974d9e903076b82c13f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Aufwand f&#252;r Verpackung</act:name>
+  <act:name>Aufwand für Verpackung</act:name>
   <act:id type="new">7c4297cfbf5fa65349c435b5e7c76cb6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4919,7 +4919,7 @@
   <act:parent type="new">9f68365671cc8241576b8e19ed4298e3</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B'ver&#228;nderungen, Mat.- u. Warenverluste</act:name>
+  <act:name>B'veränderungen, Mat.- u. Warenverluste</act:name>
   <act:id type="new">a83441c68b7a678030befaa920f33311</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4942,7 +4942,7 @@
   <act:parent type="new">4bc660da3649f5dd42f9ec4f797d2e97</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bestandesver&#228;nderungen Produktionsmat.</act:name>
+  <act:name>Bestandesveränderungen Produktionsmat.</act:name>
   <act:id type="new">810fba97ca9a50221e813fb0d9681fba</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4965,7 +4965,7 @@
   <act:parent type="new">a83441c68b7a678030befaa920f33311</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bestandesver&#228;nderungen Handelswaren</act:name>
+  <act:name>Bestandesveränderungen Handelswaren</act:name>
   <act:id type="new">72e20817969103681fd5032496eae5be</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5172,7 +5172,7 @@
   <act:parent type="new">ca0f7c157ec91618e06a7c07852a869a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Personalaufwand Produktion</act:name>
+  <act:name>Übriger Personalaufwand Produktion</act:name>
   <act:id type="new">f6f9fa7a4ec37d5dc803074f79202751</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5333,7 +5333,7 @@
   <act:parent type="new">10d40de428d49f7aaedd99d527579f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Personalaufwand Handel</act:name>
+  <act:name>Übriger Personalaufwand Handel</act:name>
   <act:id type="new">ccbc1fa8fdb8f7b9b10daa7ece9efff4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5494,7 +5494,7 @@
   <act:parent type="new">21ece8a35be72b3ac7f2572820280740</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Personalaufwand DL</act:name>
+  <act:name>Übriger Personalaufwand DL</act:name>
   <act:id type="new">93dc0907e034f757947c9d5c30f26d0f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5609,7 +5609,7 @@
   <act:parent type="new">1c5161b96c463ad0d5a2420cfbd51efa</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Personalaufwand Verwaltung</act:name>
+  <act:name>Übriger Personalaufwand Verwaltung</act:name>
   <act:id type="new">b329d87cbc52ad5fe38bf8382ca1a8b1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5816,7 +5816,7 @@
   <act:parent type="new">ffc8c3b282d82f646c28881f3874c134</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Personalaufwand</act:name>
+  <act:name>Übriger Personalaufwand</act:name>
   <act:id type="new">a98b65260aa9ff1bad78786fbe7a05b9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5885,7 +5885,7 @@
   <act:parent type="new">a98b65260aa9ff1bad78786fbe7a05b9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Spesenentsch&#228;digungen effektiv</act:name>
+  <act:name>Spesenentschädigungen effektiv</act:name>
   <act:id type="new">99de34c25d7e067ee233bc6563ee9f8b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -5908,7 +5908,7 @@
   <act:parent type="new">a98b65260aa9ff1bad78786fbe7a05b9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Spesenentsch&#228;digungen pauschal</act:name>
+  <act:name>Spesenentschädigungen pauschal</act:name>
   <act:id type="new">c9ece9eea1a4439624c00cccdae898d9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6092,7 +6092,7 @@
   <act:parent type="new">58fa26c6900b9562a176c1d4121dece1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fremdmieten Gesch&#228;ftslokalit&#228;ten</act:name>
+  <act:name>Fremdmieten Geschäftslokalitäten</act:name>
   <act:id type="new">6ed9f2c8fb4f5db783e6884b185f727e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6115,7 +6115,7 @@
   <act:parent type="new">05b13a66a2561135d206d4b0997ed2fb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Eigenmiete Gesch&#228;ftslokalit&#228;ten</act:name>
+  <act:name>Eigenmiete Geschäftslokalitäten</act:name>
   <act:id type="new">377b7b584119cbeb773df7727ec25c1b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6184,7 +6184,7 @@
   <act:parent type="new">05b13a66a2561135d206d4b0997ed2fb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Unterhalt Gesch&#228;ftsr&#228;ume</act:name>
+  <act:name>Unterhalt Geschäftsräume</act:name>
   <act:id type="new">f50693cf941e33b0e654f4d4acdbeae7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6368,7 +6368,7 @@
   <act:parent type="new">431d0beb0816c744fb503b7ac61ef984</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>URE von B&#252;roeinrichtungen</act:name>
+  <act:name>URE von Büroeinrichtungen</act:name>
   <act:id type="new">9985cdf5cdfec8414f566e8ab5446c70</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6575,7 +6575,7 @@
   <act:parent type="new">80134735d1989fd725141d82f2d27a25</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Verkehrsabgaben, Beitr&#228;ge, Geb&#252;hren</act:name>
+  <act:name>Verkehrsabgaben, Beiträge, Gebühren</act:name>
   <act:id type="new">c55e248c99c072f886644b6fdd299f84</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6690,7 +6690,7 @@
   <act:parent type="new">2eaefc2ca2f5520a5956c60a4f643897</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Sachvers., Abgaben, Geb&#252;hren, Bewillig.</act:name>
+  <act:name>Sachvers., Abgaben, Gebühren, Bewillig.</act:name>
   <act:id type="new">4d7277d594a63e6f46aef35956ef62a7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6736,7 +6736,7 @@
   <act:parent type="new">4d7277d594a63e6f46aef35956ef62a7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>V'pr&#228;m. f. Elementarsch., Glasbr., Einb.</act:name>
+  <act:name>V'präm. f. Elementarsch., Glasbr., Einb.</act:name>
   <act:id type="new">b91d6b56c6212700a00940e92b210c9f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6759,7 +6759,7 @@
   <act:parent type="new">a13affc9217bde9c2e2a6715be444e7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>V'pr&#228;m. f. Betriebshaftpf. u. Garantie</act:name>
+  <act:name>V'präm. f. Betriebshaftpf. u. Garantie</act:name>
   <act:id type="new">b6af4c96860b883329f84ecde5791159</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6782,7 +6782,7 @@
   <act:parent type="new">a13affc9217bde9c2e2a6715be444e7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>V'pr&#228;m. f. Betriebsunterbrechung</act:name>
+  <act:name>V'präm. f. Betriebsunterbrechung</act:name>
   <act:id type="new">3e1737df81769606ee71726e124edab3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6805,7 +6805,7 @@
   <act:parent type="new">a13affc9217bde9c2e2a6715be444e7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Kreditverischerungspr&#228;mien</act:name>
+  <act:name>Kreditverischerungsprämien</act:name>
   <act:id type="new">f6505da93b69149acf2f4e9b7c0d233b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6828,7 +6828,7 @@
   <act:parent type="new">a13affc9217bde9c2e2a6715be444e7f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Abgaben, Geb&#252;hren, Bewilligungen</act:name>
+  <act:name>Abgaben, Gebühren, Bewilligungen</act:name>
   <act:id type="new">1c9aec9940dfdbb518af65f7bb205481</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6851,7 +6851,7 @@
   <act:parent type="new">4d7277d594a63e6f46aef35956ef62a7</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Abgaben und Geb&#252;hren</act:name>
+  <act:name>Abgaben und Gebühren</act:name>
   <act:id type="new">ffe2700bd59600b353c6b972311019bd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -6943,7 +6943,7 @@
   <act:parent type="new">0d45bb1a32fbc2adf84bd9fb6947ab17</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Elektrizit&#228;t</act:name>
+  <act:name>Elektrizität</act:name>
   <act:id type="new">f2e498eba1b7ed279d73a3e317a2840c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7127,7 +7127,7 @@
   <act:parent type="new">84a760d1a7fe76a6f5a66cd576feaa9f</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B&#252;romat., Drucksach., Fotokop., Fachlit.</act:name>
+  <act:name>Büromat., Drucksach., Fotokop., Fachlit.</act:name>
   <act:id type="new">3bb8318439bfe09f6acc04b74c2f9dfa</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7173,7 +7173,7 @@
   <act:parent type="new">32c8a1ea1c9d41e77e9cdc4e65faf2c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Beitr&#228;ge, Spenden, Vergabungen, Trinkgelder</act:name>
+  <act:name>Beiträge, Spenden, Vergabungen, Trinkgelder</act:name>
   <act:id type="new">8162df1d9575c9abea9281008eb338d7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7196,7 +7196,7 @@
   <act:parent type="new">32c8a1ea1c9d41e77e9cdc4e65faf2c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Buchf&#252;hrungs- und Beratungsaufwand</act:name>
+  <act:name>Buchführungs- und Beratungsaufwand</act:name>
   <act:id type="new">25a41008eb70f5b3140dae7432e120f8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7472,7 +7472,7 @@
   <act:parent type="new">0eeb784bbaba39d87049f92034eae25a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Werbebeitr&#228;ge, Sponsoring</act:name>
+  <act:name>Werbebeiträge, Sponsoring</act:name>
   <act:id type="new">39500b976f4088a4a2864f5627931a15</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7495,7 +7495,7 @@
   <act:parent type="new">0eeb784bbaba39d87049f92034eae25a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#214;ffentlichkeitsarbeit / Public Relation</act:name>
+  <act:name>Öffentlichkeitsarbeit / Public Relation</act:name>
   <act:id type="new">0dcee5d5f8fc54ac2c48de228fc3067a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7541,7 +7541,7 @@
   <act:parent type="new">0eeb784bbaba39d87049f92034eae25a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Betriebsaufwand</act:name>
+  <act:name>Übriger Betriebsaufwand</act:name>
   <act:id type="new">881a2864824eabe5efda20960671d801</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7564,7 +7564,7 @@
   <act:parent type="new">58fa26c6900b9562a176c1d4121dece1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Wirtschaftsausk&#252;nfte, Betreibungen</act:name>
+  <act:name>Wirtschaftsauskünfte, Betreibungen</act:name>
   <act:id type="new">51d6087e6a2fdadd4d9c022469925264</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7725,7 +7725,7 @@
   <act:parent type="new">578a216435cf95ca1234c034b53940f2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Zinsaufw. aus F'verb. ggn. Aktion&#228;ren</act:name>
+  <act:name>Zinsaufw. aus F'verb. ggn. Aktionären</act:name>
   <act:id type="new">16a807e29ceb534393669317623034d6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7771,7 +7771,7 @@
   <act:parent type="new">578a216435cf95ca1234c034b53940f2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Finanzaufwand</act:name>
+  <act:name>Übriger Finanzaufwand</act:name>
   <act:id type="new">9d8cd7fe687d738f3a5491562bddf251</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7817,7 +7817,7 @@
   <act:parent type="new">744a248e08fac386b838efc48c36a3ac</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertr&#228;ge aus fl. Mitteln u. Wertschriften</act:name>
+  <act:name>Erträge aus fl. Mitteln u. Wertschriften</act:name>
   <act:id type="new">4232b3ba822566aa3f6070e0425a3361</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7840,7 +7840,7 @@
   <act:parent type="new">899b19c52b12e44349a539a5e6d32d82</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertr&#228;ge aus Finanzanlagen</act:name>
+  <act:name>Erträge aus Finanzanlagen</act:name>
   <act:id type="new">1e5613d7a8b90e5c5f41a9045b686288</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7863,7 +7863,7 @@
   <act:parent type="new">899b19c52b12e44349a539a5e6d32d82</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertr&#228;ge aus F'anlagen bei Konzernges.</act:name>
+  <act:name>Erträge aus F'anlagen bei Konzernges.</act:name>
   <act:id type="new">8b96ee294e36036b27465194831b46c7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7886,7 +7886,7 @@
   <act:parent type="new">899b19c52b12e44349a539a5e6d32d82</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ertr&#228;ge aud F'anlagen bei Aktion&#228;ren</act:name>
+  <act:name>Erträge aud F'anlagen bei Aktionären</act:name>
   <act:id type="new">48b730bf90a3e350181e45156521d5bf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -7909,7 +7909,7 @@
   <act:parent type="new">899b19c52b12e44349a539a5e6d32d82</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>&#220;briger Finanzertrag</act:name>
+  <act:name>Übriger Finanzertrag</act:name>
   <act:id type="new">74a386db50c394eddd7213d14cca37ba</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -8438,7 +8438,7 @@
   <act:parent type="new">c389e2a8f18c4e3923da6a2676275764</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gew. aus Ver&#228;usserung v. betr. Anlagever.</act:name>
+  <act:name>Gew. aus Veräusserung v. betr. Anlagever.</act:name>
   <act:id type="new">bb06ce503ac898ed1497b5654d4a921f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>

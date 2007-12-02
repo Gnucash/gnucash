@@ -57,6 +57,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -96,6 +97,8 @@ static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 static gchar *gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page);
+
+static void gnc_plugin_page_register_summarybar_position_changed(GConfEntry *entry, gpointer user_data);
 
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
@@ -743,8 +746,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
 	if (plugin_page->summarybar) {
 	  gtk_widget_show_all(plugin_page->summarybar);
-	  gtk_box_pack_end(GTK_BOX (priv->widget), plugin_page->summarybar,
-			   FALSE, FALSE, 0);
+	  gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar,
+			     FALSE, FALSE, 0);
+	  gnc_plugin_page_register_summarybar_position_changed(NULL, page);
+	  gnc_gconf_general_register_cb(KEY_SUMMARYBAR_POSITION,
+               gnc_plugin_page_register_summarybar_position_changed, page);
 	}
 
 	priv->event_handler_id = qof_event_register_handler
@@ -779,6 +785,9 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+
+	gnc_gconf_general_remove_cb(KEY_SUMMARYBAR_POSITION,
+		gnc_plugin_page_register_summarybar_position_changed, page);
 
 	if (priv->widget == NULL)
 		return;
@@ -1188,6 +1197,35 @@ gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
 	}
 
         return NULL;
+}
+
+static void
+gnc_plugin_page_register_summarybar_position_changed(GConfEntry *entry,
+						     gpointer user_data)
+{
+	GncPluginPage *plugin_page;
+	GncPluginPageRegister *page;
+	GncPluginPageRegisterPrivate *priv;
+	GtkPositionType position = GTK_POS_BOTTOM;
+	gchar *conf_string;
+	
+	g_return_if_fail(user_data != NULL);
+	
+	plugin_page = GNC_PLUGIN_PAGE(user_data);
+	page = GNC_PLUGIN_PAGE_REGISTER (user_data);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+	
+	conf_string = gnc_gconf_get_string (GCONF_GENERAL,
+					    KEY_SUMMARYBAR_POSITION, NULL);
+	if (conf_string) {
+		position = gnc_enum_from_nick (GTK_TYPE_POSITION_TYPE,
+					       conf_string, GTK_POS_BOTTOM);
+		g_free (conf_string);
+	}
+
+	gtk_box_reorder_child(GTK_BOX(priv->widget),
+			      plugin_page->summarybar,
+			      (position == GTK_POS_TOP ? 0 : -1) );
 }
 
 /************************************************************/

@@ -213,11 +213,14 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         {
             GncSxVariable *var;
             GString *var_name;
+            const gchar *split_mnemonic, *first_mnemonic;
 
             var_name = g_string_sized_new(16);
+            split_mnemonic = gnc_commodity_get_mnemonic(split_cmdty);
+            first_mnemonic = gnc_commodity_get_mnemonic(first_cmdty);
             g_string_printf(var_name, "%s -> %s",
-                            gnc_commodity_get_mnemonic(split_cmdty),
-                            gnc_commodity_get_mnemonic(first_cmdty));
+                            split_mnemonic ? split_mnemonic : "(null)",
+                            first_mnemonic ? first_mnemonic : "(null)");
             var = gnc_sx_variable_new(g_strdup(var_name->str));
             g_hash_table_insert(var_hash, g_strdup(var->name), var);
             g_string_free(var_name, TRUE);

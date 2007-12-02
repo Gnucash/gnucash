@@ -48,7 +48,7 @@
     (add-option
      (gnc:make-account-sel-limited-option
       acc-page this-acc
-      (N_ "The payable account you wish to examine") "zz"
+      "w" (N_ "The payable account you wish to examine") 
       #f #f (list ACCT-TYPE-PAYABLE)))
 
     (aging-options-generator options)))

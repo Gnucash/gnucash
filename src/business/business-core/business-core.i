@@ -64,10 +64,38 @@ static GncEmployee * gncEmployeeLookupFlip(GUID g, QofBook *b)
 %}
 
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
-GLIST_HELPER_INOUT(AccountValueList, SWIGTYPE_p__gncAccountValue);
 
 %typemap(in) GncAccountValue * "$1 = gnc_scm_to_account_value_ptr($input);"
 %typemap(out) GncAccountValue * "$result = gnc_account_value_ptr_to_scm($1);"
+%typemap(in) AccountValueList * {
+  SCM list = $input;
+  GList *c_list = NULL;
+
+  while (!SCM_NULLP(list)) {
+        GncAccountValue *p;
+
+        SCM p_scm = SCM_CAR(list);
+        if (SCM_FALSEP(p_scm) || SCM_NULLP(p_scm))
+           p = NULL;
+        else
+           p = gnc_scm_to_account_value_ptr(p_scm);
+
+        c_list = g_list_prepend(c_list, p);
+        list = SCM_CDR(list);
+  }
+
+  $1 = g_list_reverse(c_list);
+}
+%typemap(out) AccountValueList * {
+  SCM list = SCM_EOL;
+  GList *node;
+
+  for (node = $1; node; node = node->next)
+    list = scm_cons(gnc_account_value_ptr_to_scm(node->data), list);
+
+  $result = scm_reverse(list);
+}
+
 
 
 /* Parse the header files to generate wrappers */

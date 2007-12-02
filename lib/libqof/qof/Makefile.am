@@ -11,7 +11,6 @@ AM_CFLAGS = \
   -I$(top_srcdir)/lib/libc
 
 libgnc_qof_la_SOURCES =  \
-   deprecated.c      \
    gnc-date.c        \
    gnc-numeric.c     \
    guid.c            \
@@ -37,7 +36,6 @@ libgnc_qof_la_SOURCES =  \
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
-   deprecated.h      \
    gnc-date.h        \
    gnc-date-p.h      \
    gnc-numeric.h     \

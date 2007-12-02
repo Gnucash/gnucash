@@ -1030,7 +1030,7 @@ function inst_gnucash() {
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat
         echo "set LTDL_LIBRARY_PATH=${INSTALL_DIR}\\lib" >> gnucash.bat
-        echo "start gnucash-bin" >> gnucash.bat
+        echo "start gnucash-bin %*" >> gnucash.bat
     qpopd
 }
 
@@ -1067,6 +1067,8 @@ function inst_docs() {
     _DOCS_UDIR=`unix_path $DOCS_DIR`
     if [ ! -d $_DOCS_UDIR/docbook-xsl ] ; then
         wget_unpacked $DOCBOOK_XSL_URL $DOWNLOAD_DIR $DOCS_DIR
+        # add a pause to allow windows to realize that the files now exist
+        sleep 1
         mv $_DOCS_UDIR/docbook-xsl-* $_DOCS_UDIR/docbook-xsl
     fi
     mkdir -p $_DOCS_UDIR/repos
