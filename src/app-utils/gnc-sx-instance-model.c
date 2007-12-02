@@ -52,7 +52,7 @@
 #include "qof.h"
 
 #undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN "gnc.app-util.sx"
+#define G_LOG_DOMAIN "gnc.app-utils.sx"
 
 static GObjectClass *parent_class = NULL;
 
