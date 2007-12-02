@@ -937,13 +937,17 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
   gint model_column, current;
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  if (!s_model)
+    return;
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   column = gnc_tree_view_find_column_by_name(view, name);
 
   if (!column) {
+    g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
     gtk_tree_sortable_set_sort_column_id(
       GTK_TREE_SORTABLE(s_model), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
       GTK_SORT_ASCENDING);
+    g_signal_handler_unblock(s_model, priv->sort_column_changed_cb_id);
     return;
   }
 
