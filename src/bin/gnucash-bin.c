@@ -522,6 +522,14 @@ gnc_log_init()
           qof_log_set_level("gnc", QOF_LOG_INFO);
      }
 
+     {
+          gchar *log_config_filename;
+          log_config_filename = gnc_build_dotgnucash_path("log.conf");
+          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
+               qof_log_parse_log_config(log_config_filename);
+          g_free(log_config_filename);
+     }
+
      if (log_flags != NULL)
      {
           int i = 0;
@@ -542,14 +550,6 @@ gnc_log_init()
                qof_log_set_level(parts[0], level);
                g_strfreev(parts);
           }
-     }
-
-     {
-          gchar *log_config_filename;
-          log_config_filename = gnc_build_dotgnucash_path("log.conf");
-          if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
-               qof_log_parse_log_config(log_config_filename);
-          g_free(log_config_filename);
      }
  }
 
