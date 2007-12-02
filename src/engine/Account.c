@@ -3298,10 +3298,13 @@ xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboole
  * allowing the internal organization to change data structures if
  * necessary for whatever reason, while leaving the external API
  * unchanged. */
+/* XXX: violates the const'ness by forcing a sort before returning
+ * the splitlist */
 SplitList *
 xaccAccountGetSplitList (const Account *acc) 
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), NULL);
+    xaccAccountSortSplits((Account*)acc, FALSE);  // normally a noop
     return GET_PRIVATE(acc)->splits;
 }
 
