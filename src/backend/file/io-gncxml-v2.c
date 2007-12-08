@@ -1313,7 +1313,11 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     gz_thread_params_t *params;
     FILE *file;
 
+#ifdef G_OS_WIN32
+    if (_pipe(filedes, 4096, _O_BINARY) < 0) {
+#else
     if (pipe(filedes) < 0) {
+#endif
       g_warning("Pipe call failed. Opening uncompressed file.");
       return g_fopen(filename, perms);
     }
