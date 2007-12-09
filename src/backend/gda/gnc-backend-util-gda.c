@@ -616,7 +616,8 @@ load_date( GdaDataModel* pModel, gint row,
 
     val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
     if( gda_value_is_null( val ) ) {
-        (*setter)( pObject, NULL );
+		date = g_date_new_dmy( 1, 1, 1970 );
+        (*setter)( pObject, date );
     } else {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			const gchar* s = g_value_get_string( val );
