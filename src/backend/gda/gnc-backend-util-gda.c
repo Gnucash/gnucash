@@ -237,7 +237,7 @@ load_int( GdaDataModel* pModel, gint row,
     } else {
         int_value = g_value_get_int( val );
     }
-    (*setter)( pObject, (gpointer)int_value );
+    (*setter)( pObject, GINT_TO_POINTER(int_value) );
 }
 
 static void
@@ -250,7 +250,7 @@ get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name,
     memset( value, 0, sizeof( GValue ) );
 
     getter = get_getter( obj_name, table_row );
-    int_value = (gint)(*getter)( pObject, NULL );
+    int_value = GPOINTER_TO_INT((*getter)( pObject, NULL ));
     g_value_init( value, G_TYPE_INT );
     g_value_set_int( value, int_value );
 }

@@ -711,7 +711,7 @@ handle_and_term( QofQueryTerm* pTerm, gchar* sql )
     } else if( strcmp( pPredData->type_name, "gint64" ) == 0 ) {
         query_int64_t pData = (query_int64_t)pPredData;
     
-        sprintf( val, "%lld", pData->val );
+        sprintf( val, "%" G_GINT64_FORMAT, pData->val );
         strcat( sql, val );
     } else if( strcmp( pPredData->type_name, "double" ) == 0 ) {
         query_double_t pData = (query_double_t)pPredData;

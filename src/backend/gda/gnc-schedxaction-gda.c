@@ -91,7 +91,7 @@ get_autocreate( gpointer pObject, const QofParam* param )
     gboolean autoNotify;
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return (gpointer)autoCreate;
+    return GINT_TO_POINTER(autoCreate);
 }
 
 static void 
@@ -102,7 +102,7 @@ set_autocreate( gpointer pObject, gpointer pValue )
     gboolean autoNotify;
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    autoCreate = (gboolean)pValue;
+    autoCreate = GPOINTER_TO_INT(pValue);
     xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
 }
 
@@ -114,7 +114,7 @@ get_autonotify( gpointer pObject, const QofParam* param )
     gboolean autoNotify;
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return (gpointer)autoNotify;
+    return GINT_TO_POINTER(autoNotify);
 }
 
 static void 
@@ -125,7 +125,7 @@ set_autonotify( gpointer pObject, gpointer pValue )
     gboolean autoNotify;
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    autoNotify = (gboolean)pValue;
+    autoNotify = GPOINTER_TO_INT(pValue);
     xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
 }
 

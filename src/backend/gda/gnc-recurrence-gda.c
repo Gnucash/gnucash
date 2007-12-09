@@ -123,14 +123,14 @@ get_recurrence_mult( gpointer pObject, const QofParam* param )
 	
 	m = pInfo->pRecurrence->mult;
 
-    return (gpointer)m;
+    return GUINT_TO_POINTER(m);
 }
 
 static void
 set_recurrence_mult( gpointer pObject, gpointer pValue )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
-    guint m = (guint)pValue;
+    guint m = GPOINTER_TO_UINT(pValue);
 
     pInfo->pRecurrence->mult = m;
 }
