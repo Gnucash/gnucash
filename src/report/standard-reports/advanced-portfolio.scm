@@ -41,7 +41,6 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-shares-digits (N_ "Share decimal places"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
-;;(define optname-include-gains (N_ "Include gains and losses"))
 (define optname-show-symbol (N_ "Show ticker symbols"))
 (define optname-show-listing (N_ "Show listings"))
 (define optname-show-price (N_ "Show prices"))
@@ -101,15 +100,6 @@
       gnc:pagename-general optname-prefer-pricelist "f" 
       (N_ "Prefer use of price editor pricing over transactions, where applicable.")
       #t))
-
-
-;; this option is currently unimplemented
-;;    (gnc:register-option 
-;;     options 
-;;     (gnc:make-simple-boolean-option
-;;      gnc:pagename-general optname-include-gains "g" 
-;;      (N_ "Include splits with no shares for calculating money-in and money-out")
-;;      #f))
 
     (gnc:register-option
       options
@@ -327,7 +317,6 @@
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-                 (name (xaccAccountGetName current))
 		 ;; commodity is the actual stock/thing we are looking at
                  (commodity (xaccAccountGetCommodity current))
                  (ticker-symbol (gnc-commodity-get-mnemonic commodity))
@@ -335,8 +324,6 @@
                  (unit-collector (gnc:account-get-comm-balance-at-date
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
-;;                 (totalunits 0.0) ;;      these two items do nothing, but are in a debug below, 
- ;;                (totalunityears 0.0);;   so I'm leaving it. asw
 
                  ;; Counter to keep track of stuff
                  (unitscoll     (gnc:make-commodity-collector))
@@ -375,8 +362,6 @@
 		 (seen_split '())
 		 )
 
-
-	    ;;          (gnc:debug "---" name "---")
 	    (for-each
 	     ;; we're looking at each split we find in the account. these splits
 	     ;; could refer to the same transaction, so we have to examine each
@@ -495,7 +480,6 @@
 				     ((equal? commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s)))
 				      (begin
 					(gnc:debug "adjsting the moneyin/out " split-value)
-					;;(unitscoll 'add commodity split-units)
 					(if (gnc-numeric-negative-p split-value)
 					    (moneyincoll 'add commod-currency
 							  (gnc-numeric-neg split-value))
@@ -531,8 +515,6 @@
 	       )
 	     (xaccAccountGetSplitList current)
 	     )
-;;          (gnc:debug "totalunits" totalunits)
-;;          (gnc:debug "totalunityears" totalunityears)
 
 	    ;; now we determine which price data to use, the pricelist or the txn
 	    ;; and if we have a choice, use whichever is newest.
@@ -677,9 +659,6 @@
                                   gnc:optname-reportname))
         (include-empty (get-option gnc:pagename-accounts
                                   optname-zero-shares))
-	;; unimplemented option
-	;; (include-gains (get-option gnc:pagename-general
-	;;                            optname-include-gains))
 	(show-symbol (get-option gnc:pagename-display
 				  optname-show-symbol))
 	(show-listing (get-option gnc:pagename-display
