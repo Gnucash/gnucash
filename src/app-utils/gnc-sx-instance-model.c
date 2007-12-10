@@ -846,7 +846,7 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
                     g_assert(parent_var != NULL);
                     var_copy = gnc_sx_variable_new_copy(parent_var);
-                    g_hash_table_insert(inst->variable_bindings, to_add_key, var_copy);
+                    g_hash_table_insert(inst->variable_bindings, g_strdup(to_add_key), var_copy);
                 }
             }
         }
