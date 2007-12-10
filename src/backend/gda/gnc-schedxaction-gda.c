@@ -39,6 +39,7 @@
 #include "gnc-slots-gda.h"
 
 #include "SchedXaction.h"
+#include "SX-book.h"
 #include "Recurrence.h"
 
 #include "gnc-recurrence-gda.h"
@@ -189,9 +190,14 @@ load_all_sxes( GncGdaBackend* be )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
+     	SchedXactions *sxes;
+     	sxes = gnc_book_get_schedxactions( be->primary_book );
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_sx( be, pModel, r );
+            SchedXaction* sx;
+			
+			sx = load_single_sx( be, pModel, r );
+		    gnc_sxes_add_sx(sxes, sx);
         }
     }
 }

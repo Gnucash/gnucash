@@ -476,11 +476,9 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
     guid = gnc_gda_load_guid( pModel, row );
     split_guid = *guid;
 
+    pSplit = xaccSplitLookup( &split_guid, be->primary_book );
     if( pSplit == NULL ) {
-        pSplit = xaccSplitLookup( &split_guid, be->primary_book );
-        if( pSplit == NULL ) {
-            pSplit = xaccMallocSplit( be->primary_book );
-        }
+        pSplit = xaccMallocSplit( be->primary_book );
     }
 
     /* If the split is dirty, don't overwrite it */
