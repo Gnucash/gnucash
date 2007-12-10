@@ -225,24 +225,22 @@
 	  ((average-basis) 
            (if (not (eqv? b-list '()))
                (list (cons (gnc-numeric-add b-units
-						(caar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+						(caar b-list) 10000 GNC-RND-ROUND) 
                            (gnc-numeric-div
                             (gnc-numeric-add b-value
                                              (gnc-numeric-mul (caar b-list)
                                                               (cdar b-list) 
-								  GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))
-						 GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))
+								  10000 GNC-RND-ROUND)
+						 10000 GNC-RND-ROUND)
                             (gnc-numeric-add b-units
-						 (caar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))
-				GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+						 (caar b-list) 10000 GNC-RND-ROUND)
+				10000 GNC-RND-ROUND)))
                (append b-list 
                        (list (cons b-units (gnc-numeric-div
-						b-value b-units GNC-DENOM-AUTO 
-						(logior GNC-DENOM-REDUCE GNC-RND-NEVER)))))))
+						b-value b-units 10000 GNC-RND-ROUND))))))
 	  (else (append b-list 
                         (list (cons b-units (gnc-numeric-div
-						 b-value b-units GNC-DENOM-AUTO 
-						 (logior GNC-DENOM-REDUCE GNC-RND-NEVER)))))))
+						 b-value b-units 10000 GNC-RND-ROUND))))))
 	(if (not (eqv? b-list '()))
 	    (case b-method
 	      ((fifo-basis) 
@@ -250,11 +248,11 @@
                                (gnc-numeric-abs b-units) (caar b-list))))
                    (basis-builder (cdr b-list) (gnc-numeric-add
                                                 b-units 
-						    (caar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+						    (caar b-list) 10000 GNC-RND-ROUND) 
                                   b-value b-method)
                    (append (list (cons (gnc-numeric-add
                                         b-units 
-					    (caar b-list) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+					    (caar b-list) 10000 GNC-RND-ROUND) 
                                        (cdar b-list))) (cdr b-list))))
 	      ((filo-basis) 
                (if (not (= -1 (gnc-numeric-compare
@@ -263,16 +261,16 @@
                                   (gnc-numeric-add
                                    b-units 
                                    (caar (reverse b-list)) 
-				       GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+				       10000 GNC-RND-ROUND) 
                                   b-value b-method)
                    (append (cdr (reverse b-list)) 
                            (list (cons (gnc-numeric-add
                                         b-units 
-					    (caar (reverse b-list)) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+					    (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
                                        (cdar (reverse b-list)))))))
 	      ((average-basis) 
                (list (cons (gnc-numeric-add
-				(caar b-list) b-units GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
+				(caar b-list) b-units 10000 GNC-RND-ROUND) 
                            (cdar b-list)))))
 	    '()
 	    )
@@ -280,13 +278,13 @@
 	;; this is a split/merge...
 	(let* ((current-units (units-basis b-list))
 	       (units-ratio (gnc-numeric-div current-units 
-					     (gnc-numeric-add b-units current-units GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
-					     GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+					     (gnc-numeric-add b-units current-units 10000 GNC-RND-ROUND) 
+					     10000 GNC-RND-ROUND)))
 	  
 	  (define (apply-ratio blist ratio)
 	    (if (not (eqv? blist '()))
-		(cons (cons (gnc-numeric-div (caar blist) ratio GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER)) 
-			    (gnc-numeric-mul ratio (cdar blist) GNC-DENOM-AUTO (logior GNC-DENOM-REDUCE GNC-RND-NEVER))) 
+		(cons (cons (gnc-numeric-div (caar blist) ratio 10000 GNC-RND-ROUND) 
+			    (gnc-numeric-mul ratio (cdar blist) 10000 GNC-RND-ROUND)) 
 		      (apply-ratio (cdr blist) ratio ))
 		'()
     )
