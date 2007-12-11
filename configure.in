@@ -543,6 +543,10 @@ AC_ARG_ENABLE(qof,
 
 AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)],
 	[gnc_with_qof=$withval], [gnc_with_qof=yes])
+AC_ARG_WITH(qt3_wizard_package,
+                 [  --with-qt3-wizard-package=name  name of package containing qt3-wizard (aqbanking)],
+	[QT3_WIZARD_PACKAGE=$withval], [QT3_WIZARD_PACKAGE=aqbanking])
+AC_DEFINE_UNQUOTED([QT3_WIZARD_PACKAGE],["$QT3_WIZARD_PACKAGE"],[Name of package containing qt3-wizard.])
 
 # GnuCash builds without deprecated QOF code so needs latest version.
 QOF_REQUIRED=0.6.4
