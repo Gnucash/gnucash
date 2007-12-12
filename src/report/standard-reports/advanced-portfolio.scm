@@ -204,98 +204,116 @@
 	(gnc-numeric-zero)
 	)
     )
+
+  ;; apply a ratio to an existing basis-list, useful for splits/mergers and spinoffs
+  ;; I need to get a brain and use (map) for this.
+  (define (apply-basis-ratio b-list units-ratio value-ratio)
+    (if (not (eqv? b-list '()))
+	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) 100000 GNC-RND-ROUND) 
+		    (gnc-numeric-mul value-ratio (cdar b-list) 100000 GNC-RND-ROUND)) 
+	      (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
+	'()
+	)    
+    )
   
   ;; this builds a list for basis calculation and handles average, fifo and filo methods
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
   ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
   ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
-  ;; 
-  ;; FIXME!! need to implement handling of zero for b-units coming in to handle spinoffs. 
   (define (basis-builder b-list b-units b-value b-method)
     (gnc:debug "actually in basis-builder")
     (gnc:debug "b-list is " b-list " b-units is " b-units " b-value is " b-value " b-method is " b-method)
 
     ;; if there is no b-value, then this is a split/merger and needs special handling
-    ;; FIX ME!! make a (cond (splits/merger) (spin-off) (regular basis adjustment))
-    (if (not (gnc-numeric-zero-p b-value))
+    (cond 
 
-	;; nope, its normal, just adjust the basis
-    (if (gnc-numeric-positive-p b-units)
-	(case b-method
-	  ((average-basis) 
-           (if (not (eqv? b-list '()))
-               (list (cons (gnc-numeric-add b-units
-						(caar b-list) 10000 GNC-RND-ROUND) 
-                           (gnc-numeric-div
-                            (gnc-numeric-add b-value
-                                             (gnc-numeric-mul (caar b-list)
-                                                              (cdar b-list) 
-								  10000 GNC-RND-ROUND)
-						 10000 GNC-RND-ROUND)
-                            (gnc-numeric-add b-units
-						 (caar b-list) 10000 GNC-RND-ROUND)
-				10000 GNC-RND-ROUND)))
-               (append b-list 
-                       (list (cons b-units (gnc-numeric-div
-						b-value b-units 10000 GNC-RND-ROUND))))))
-	  (else (append b-list 
-                        (list (cons b-units (gnc-numeric-div
-						 b-value b-units 10000 GNC-RND-ROUND))))))
-	(if (not (eqv? b-list '()))
-	    (case b-method
-	      ((fifo-basis) 
-               (if (not (= -1 (gnc-numeric-compare
-                               (gnc-numeric-abs b-units) (caar b-list))))
-                   (basis-builder (cdr b-list) (gnc-numeric-add
-                                                b-units 
-						    (caar b-list) 10000 GNC-RND-ROUND) 
-                                  b-value b-method)
-                   (append (list (cons (gnc-numeric-add
-                                        b-units 
-					    (caar b-list) 10000 GNC-RND-ROUND) 
-                                       (cdar b-list))) (cdr b-list))))
-	      ((filo-basis) 
-               (if (not (= -1 (gnc-numeric-compare
-                               (gnc-numeric-abs b-units) (caar (reverse b-list)))))
-                   (basis-builder (reverse (cdr (reverse b-list))) 
-                                  (gnc-numeric-add
-                                   b-units 
-                                   (caar (reverse b-list)) 
-				       10000 GNC-RND-ROUND) 
-                                  b-value b-method)
-                   (append (cdr (reverse b-list)) 
-                           (list (cons (gnc-numeric-add
-                                        b-units 
-					    (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
-                                       (cdar (reverse b-list)))))))
-	      ((average-basis) 
-               (list (cons (gnc-numeric-add
-				(caar b-list) b-units 10000 GNC-RND-ROUND) 
-                           (cdar b-list)))))
-	    '()
-	    )
-	)
-	;; this is a split/merge...
+     ;; we have value and positive units, add units to basis
+     ((and (not (gnc-numeric-zero-p b-value))
+	   (gnc-numeric-positive-p b-units))
+      (case b-method
+	((average-basis) 
+	 (if (not (eqv? b-list '()))
+	     (list (cons (gnc-numeric-add b-units
+					  (caar b-list) 10000 GNC-RND-ROUND) 
+			 (gnc-numeric-div
+			  (gnc-numeric-add b-value
+					   (gnc-numeric-mul (caar b-list)
+							    (cdar b-list) 
+							    10000 GNC-RND-ROUND)
+					   10000 GNC-RND-ROUND)
+			  (gnc-numeric-add b-units
+					   (caar b-list) 10000 GNC-RND-ROUND)
+			  10000 GNC-RND-ROUND)))
+	     (append b-list 
+		     (list (cons b-units (gnc-numeric-div
+					  b-value b-units 10000 GNC-RND-ROUND))))))
+	(else (append b-list 
+		      (list (cons b-units (gnc-numeric-div
+					   b-value b-units 10000 GNC-RND-ROUND)))))))
+
+     ;; we have value and negative units, remove units from basis
+     ((and (not (gnc-numeric-zero-p b-value))
+	   (gnc-numeric-negative-p b-units))
+      (if (not (eqv? b-list '()))
+	  (case b-method
+	    ((fifo-basis) 
+	     (if (not (= -1 (gnc-numeric-compare
+			     (gnc-numeric-abs b-units) (caar b-list))))
+		 (basis-builder (cdr b-list) (gnc-numeric-add
+					      b-units 
+					      (caar b-list) 10000 GNC-RND-ROUND) 
+				b-value b-method)
+		 (append (list (cons (gnc-numeric-add
+				      b-units 
+				      (caar b-list) 10000 GNC-RND-ROUND) 
+				     (cdar b-list))) (cdr b-list))))
+	    ((filo-basis) 
+	     (if (not (= -1 (gnc-numeric-compare
+			     (gnc-numeric-abs b-units) (caar (reverse b-list)))))
+		 (basis-builder (reverse (cdr (reverse b-list))) 
+				(gnc-numeric-add
+				 b-units 
+				 (caar (reverse b-list)) 
+				 10000 GNC-RND-ROUND) 
+				b-value b-method)
+		 (append (cdr (reverse b-list)) 
+			 (list (cons (gnc-numeric-add
+				      b-units 
+				      (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
+				     (cdar (reverse b-list)))))))
+	    ((average-basis) 
+	     (list (cons (gnc-numeric-add
+			  (caar b-list) b-units 10000 GNC-RND-ROUND) 
+			 (cdar b-list)))))
+	  '()
+	  ))
+	
+     ;; no value, just units, this is a split/merge...
+     ((and (gnc-numeric-zero-p b-value)
+	   (not (gnc-numeric-zero-p b-units)))
 	(let* ((current-units (units-basis b-list))
-	       (units-ratio (gnc-numeric-div current-units 
-					     (gnc-numeric-add b-units current-units 10000 GNC-RND-ROUND) 
-					     10000 GNC-RND-ROUND)))
+	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units 100000 GNC-RND-ROUND) 
+					     current-units 10000 GNC-RND-ROUND))
+	       (value-ratio (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio 100000 GNC-RND-ROUND)))
 	  
-	  (define (apply-ratio blist ratio)
-	    (if (not (eqv? blist '()))
-		(cons (cons (gnc-numeric-div (caar blist) ratio 10000 GNC-RND-ROUND) 
-			    (gnc-numeric-mul ratio (cdar blist) 10000 GNC-RND-ROUND)) 
-		      (apply-ratio (cdr blist) ratio ))
-		'()
-    )
-	)
 	  (gnc:debug "blist is " b-list " units ratio is " units-ratio)
-	  (apply-ratio b-list units-ratio) 
-    )
+	  (apply-basis-ratio b-list units-ratio value-ratio) 
+	  ))
 
-	;; FIXME!!! If there are no units, just a value, then its a spin-off, must
-	;; reduce the *values* but not the number of units held
-	)
+	;; If there are no units, just a value, then its a spin-off,
+	;; calculate a ratio for the values, but leave the units alone
+	;; with a ratio of 1
+     ((and (gnc-numeric-zero-p b-units)
+	   (not (gnc-numeric-zero-p b-value)))
+      (let* ((current-value (sum-basis b-list))
+	       (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value 100000 GNC-RND-ROUND) 
+					     current-value 100000 GNC-RND-ROUND)))
+	  
+	(gnc:debug "this is a spinoff")
+	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
+	(apply-basis-ratio b-list (gnc:make-gnc-numeric 1 1) value-ratio))
+      )
+     )
     )
 
   
@@ -414,7 +432,7 @@
 				(set! seen_split (acons (gncSplitGetGUID s) #t seen_split))
 
 				(gnc:debug "split units " split-units " split-value " split-value " commod-currency " commod-currency)
-
+				
 				;; now we look at what type of split this is and process accordingly
 			  (cond
 
@@ -493,7 +511,7 @@
 				 ;; transaction with only one other split. xaccSplitGetOtherSplit only
 				 ;; returns on a two-split txn :) 
 				 ;; FIXME!! not implemented in basis-builder yet!
-				 ((and (gnc-numeric-zero-p txn-units) (xaccSplitGetOtherSplit s))
+				 ((and (gnc-numeric-zero-p txn-units) (not (null? (xaccSplitGetOtherSplit s))))
 				  (if (same-account? current (xaccSplitGetAccount s))
 				      (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
 											      (exchange-fn (gnc:make-gnc-monetary 
