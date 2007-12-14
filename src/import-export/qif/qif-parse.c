@@ -156,6 +156,7 @@ build_action_map()
   QIF_ADD_ACT("miscexp", QIF_A_MISCEXP);
   QIF_ADD_ACT("miscexpx", QIF_A_MISCEXPX);
   QIF_ADD_ACT("miscinc", QIF_A_MISCINC);
+  QIF_ADD_ACT("cash", QIF_A_MISCINC);
   QIF_ADD_ACT("miscincx", QIF_A_MISCINCX);
   QIF_ADD_ACT("reinvdiv", QIF_A_REINVDIV);
   QIF_ADD_ACT("reinvint", QIF_A_REINVINT);
@@ -182,7 +183,9 @@ build_action_map()
   QIF_ADD_ACT("aktsplit", QIF_A_STKSPLIT);
   //QIF_ADD_ACT("vest", QIF_A_VEST);
   QIF_ADD_ACT("xin", QIF_A_XIN);
+  QIF_ADD_ACT("contribx", QIF_A_XIN);
   QIF_ADD_ACT("xout", QIF_A_XOUT);
+  QIF_ADD_ACT("withdrwx", QIF_A_XOUT);
 }
 #undef QIF_ADD_ACT
 
