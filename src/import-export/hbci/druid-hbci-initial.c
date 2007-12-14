@@ -688,10 +688,10 @@ on_aqhbci_button (GtkButton *button,
       (info->window,
        _("The external program \"AqBanking Setup Wizard\" has not "
 	 "been found. \n\n"
-	 "The aqbanking package should include the "
+	 "The %s package should include the "
 	 "program \"qt3-wizard\".  Please check your installation to "
 	 "ensure this program is present.  On some distributions this "
-	 "may require installing additional packages."));
+	 "may require installing additional packages."), QT3_WIZARD_PACKAGE);
     druid_disable_next_button(info);
   }
   g_free (backend_name);
