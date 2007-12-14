@@ -144,7 +144,7 @@ function inst_mingw() {
             wget_unpacked $MINGW_RT_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $W32API_URL $DOWNLOAD_DIR $MINGW_DIR
             wget_unpacked $MINGW_MAKE_URL $DOWNLOAD_DIR $MINGW_DIR
-            (echo "y"; echo "y"; echo "$_MINGW_WFSDIR") | sh pi.sh
+            (echo "y"; echo "y"; echo "$_MINGW_WFSDIR"; echo "y") | sh pi.sh
         else
             ./create_cross_mingw.sh
         fi
