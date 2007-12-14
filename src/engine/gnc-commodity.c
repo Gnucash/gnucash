@@ -377,7 +377,7 @@ gnc_quote_source_get_type (gnc_quote_source *source)
     return SOURCE_SINGLE;
   }
 
-  DEBUG("type is %d",source->type);
+  LEAVE("type is %d",source->type);
   return source->type;
 }
 
@@ -390,7 +390,7 @@ gnc_quote_source_get_index (gnc_quote_source *source)
     return 0;
   }
 
-  DEBUG("index is %d", source->index);
+  LEAVE("index is %d", source->index);
   return source->index;
 }
 
@@ -403,7 +403,7 @@ gnc_quote_source_get_supported (gnc_quote_source *source)
     return FALSE;
   }
 
-  DEBUG("%ssupported", source && source->supported ? "" : "not ");
+  LEAVE("%ssupported", source && source->supported ? "" : "not ");
   return source->supported;
 }
 
@@ -969,7 +969,7 @@ gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 void
 gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz) 
 {
-  ENTER ("(cm=%p, tz=%s)", cm, tz);
+  ENTER ("(cm=%p, tz=%s)", cm, tz ? tz : "(null)");
 
   if(!cm || tz == cm->quote_tz) return;
 
