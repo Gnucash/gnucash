@@ -50,15 +50,18 @@
 #include "gnc-component-manager.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-session.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.slr"
 
+#define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 #define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
 
 struct _GncSxSinceLastRunDialog
 {
     GtkWidget *dialog;
+    gint component_id;
     GncSxSlrTreeModelAdapter *editing_model;
     GtkTreeView *instance_view;
     GtkToggleButton *review_created_txns_toggle;
@@ -118,6 +121,8 @@ GtkTreeModel* gnc_sx_get_slr_state_model(void);
 
 static void _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_txn_guids);
 
+static void close_handler(gpointer user_data);
+static void dialog_destroy_cb(GtkObject *object, GncSxSinceLastRunDialog *app_dialog);
 static void dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog);
 
 /* ------------------------------------------------------------ */
@@ -911,9 +916,6 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     dialog->dialog = glade_xml_get_widget(glade, "since-last-run-dialog");
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
-    // gobject-2.10: g_object_ref_sink(G_OBJECT(dialog->editing_model));
-    g_object_ref(G_OBJECT(dialog->editing_model));
-     
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(glade_xml_get_widget(glade, "review_txn_toggle"));
 
     dialog->created_txns = auto_created_txn_guids;
@@ -971,9 +973,15 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     }
 
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
+    g_signal_connect(G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);
 
     gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog->dialog));
-     
+
+    dialog->component_id = gnc_register_gui_component
+        (DIALOG_SX_SINCE_LAST_RUN_CM_CLASS, NULL, close_handler, dialog);
+    gnc_gui_component_set_session(dialog->component_id,
+                                  gnc_get_current_session());
+
     gtk_widget_show_all(dialog->dialog);
 
     return dialog;
@@ -1009,6 +1017,24 @@ _show_created_transactions(GncSxSinceLastRunDialog *app_dialog, GList *created_t
 }
 
 static void
+close_handler(gpointer user_data)
+{
+    GncSxSinceLastRunDialog *app_dialog = user_data;
+
+    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(app_dialog->dialog));
+    gtk_widget_destroy(app_dialog->dialog);
+}
+
+static void
+dialog_destroy_cb(GtkObject *object, GncSxSinceLastRunDialog *app_dialog)
+{
+    gnc_unregister_gui_component(app_dialog->component_id);
+
+    g_object_unref(G_OBJECT(app_dialog->editing_model));
+    app_dialog->editing_model = NULL;
+}
+
+static void
 dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog *app_dialog)
 {
     switch (response_id)
@@ -1018,49 +1044,46 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
         // - [ ] instance state constraints
         // - [x] required variable binding
         // - [?] ability to create transactions
-    {
-        GList *unbound_variables;
-        unbound_variables = gnc_sx_instance_model_check_variables(app_dialog->editing_model->instances);
-        g_message("%d variables unbound", g_list_length(unbound_variables));
-        if (g_list_length(unbound_variables) > 0)
         {
-            // focus first variable
-            GncSxVariableNeeded *first_unbound;
-            GtkTreePath *variable_path;
-            GtkTreeViewColumn *variable_col;
-            gint variable_view_column = 2;
-            gboolean start_editing = TRUE;
+            GList *unbound_variables;
+            unbound_variables = gnc_sx_instance_model_check_variables(app_dialog->editing_model->instances);
+            g_message("%d variables unbound", g_list_length(unbound_variables));
+            if (g_list_length(unbound_variables) > 0)
+            {
+                // focus first variable
+                GncSxVariableNeeded *first_unbound;
+                GtkTreePath *variable_path;
+                GtkTreeViewColumn *variable_col;
+                gint variable_view_column = 2;
+                gboolean start_editing = TRUE;
 
-            first_unbound = (GncSxVariableNeeded*)unbound_variables->data;
-            variable_path = _get_path_for_variable(app_dialog->editing_model, first_unbound->instance, first_unbound->variable);
-            variable_col = gtk_tree_view_get_column(app_dialog->instance_view, variable_view_column);
+                first_unbound = (GncSxVariableNeeded*)unbound_variables->data;
+                variable_path = _get_path_for_variable(app_dialog->editing_model, first_unbound->instance, first_unbound->variable);
+                variable_col = gtk_tree_view_get_column(app_dialog->instance_view, variable_view_column);
 
-            gtk_tree_view_set_cursor(app_dialog->instance_view, variable_path, variable_col, start_editing);
+                gtk_tree_view_set_cursor(app_dialog->instance_view, variable_path, variable_col, start_editing);
 
-            gtk_tree_path_free(variable_path);
-            g_list_foreach(unbound_variables, (GFunc)g_free, NULL);
-            g_list_free(unbound_variables);
-            return;
+                gtk_tree_path_free(variable_path);
+                g_list_foreach(unbound_variables, (GFunc)g_free, NULL);
+                g_list_free(unbound_variables);
+                return;
+            }
         }
-    }
-    gnc_suspend_gui_refresh();
-    gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, NULL);
-    gnc_resume_gui_refresh();
-    if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
-        && g_list_length(app_dialog->created_txns) > 0)
-    {
-        _show_created_transactions(app_dialog, app_dialog->created_txns);
-    }
-    g_list_free(app_dialog->created_txns);
-    app_dialog->created_txns = NULL;
+        gnc_suspend_gui_refresh();
+        gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, NULL);
+        gnc_resume_gui_refresh();
+        if (gtk_toggle_button_get_active(app_dialog->review_created_txns_toggle)
+            && g_list_length(app_dialog->created_txns) > 0)
+        {
+            _show_created_transactions(app_dialog, app_dialog->created_txns);
+        }
+        g_list_free(app_dialog->created_txns);
+        app_dialog->created_txns = NULL;
 
     /* FALLTHROUGH */
-    case GTK_RESPONSE_CANCEL: 
+    case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
-        gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(app_dialog->dialog));
-        gtk_widget_destroy(GTK_WIDGET(dialog));
-        g_object_unref(G_OBJECT(app_dialog->editing_model));
-        app_dialog->editing_model = NULL;
+        gnc_close_gui_component(app_dialog->component_id);
         break;
     default:
         g_error("unknown response id [%d]", response_id);
