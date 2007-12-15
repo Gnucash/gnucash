@@ -51,7 +51,10 @@
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 
-static QofLogModule log_module = GNC_MOD_SCRUB;
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "gnc.engine.scrub"
+
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* ================================================================ */
 
