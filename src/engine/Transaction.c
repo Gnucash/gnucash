@@ -365,39 +365,39 @@ xaccTransSortSplits (Transaction *trans)
  */
 /* Actually, it *is* public, and used by Period.c */
 Transaction *
-xaccDupeTransaction (const Transaction *t)
+xaccDupeTransaction (const Transaction *from)
 {
-  Transaction *trans;
+  Transaction *to;
   GList *node;
 
-  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
+  to = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
-  trans->num         = CACHE_INSERT (t->num);
-  trans->description = CACHE_INSERT (t->description);
+  to->num         = CACHE_INSERT (from->num);
+  to->description = CACHE_INSERT (from->description);
 
-  trans->splits = g_list_copy (t->splits);
-  for (node = trans->splits; node; node = node->next)
+  to->splits = g_list_copy (from->splits);
+  for (node = to->splits; node; node = node->next)
   {
     node->data = xaccDupeSplit (node->data);
   }
 
-  trans->date_entered = t->date_entered;
-  trans->date_posted = t->date_posted;
-  qof_instance_copy_version(trans, t);
-  trans->orig = NULL;
+  to->date_entered = from->date_entered;
+  to->date_posted = from->date_posted;
+  qof_instance_copy_version(to, from);
+  to->orig = NULL;
 
-  trans->common_currency = t->common_currency;
+  to->common_currency = from->common_currency;
 
   /* Trash the guid and entity table. We don't want to mistake 
    * the cloned transaction as something official.  If we ever 
    * use this transaction, we'll have to fix this up.
    */
-  trans->inst.e_type = NULL;
-  qof_instance_set_guid(trans, guid_null());
-  qof_instance_copy_book(trans, t);
-  trans->inst.kvp_data = kvp_frame_copy (t->inst.kvp_data);
+  to->inst.e_type = NULL;
+  qof_instance_set_guid(to, guid_null());
+  qof_instance_copy_book(to, from);
+  to->inst.kvp_data = kvp_frame_copy (from->inst.kvp_data);
 
-  return trans;
+  return to;
 }
 
 /*
@@ -405,41 +405,41 @@ xaccDupeTransaction (const Transaction *t)
  * a full fledged transaction with unique guid, splits, etc.
  */
 Transaction *
-xaccTransClone (const Transaction *t)
+xaccTransClone (const Transaction *from)
 {
-  Transaction *trans;
+  Transaction *to;
   Split *split;
   GList *node;
 
   qof_event_suspend();
-  trans = g_object_new (GNC_TYPE_TRANSACTION, NULL);
+  to = g_object_new (GNC_TYPE_TRANSACTION, NULL);
 
-  trans->date_entered    = t->date_entered;
-  trans->date_posted     = t->date_posted;
-  trans->num             = CACHE_INSERT (t->num);
-  trans->description     = CACHE_INSERT (t->description);
-  trans->common_currency = t->common_currency;
-  qof_instance_copy_version(trans, t);
-  qof_instance_copy_version_check(trans, t);
+  to->date_entered    = from->date_entered;
+  to->date_posted     = from->date_posted;
+  to->num             = CACHE_INSERT (from->num);
+  to->description     = CACHE_INSERT (from->description);
+  to->common_currency = from->common_currency;
+  qof_instance_copy_version(to, from);
+  qof_instance_copy_version_check(to, from);
 
-  trans->orig            = NULL;
+  to->orig            = NULL;
 
-  qof_instance_init_data (&trans->inst, GNC_ID_TRANS, qof_instance_get_book(t));
-  kvp_frame_delete (trans->inst.kvp_data);
-  trans->inst.kvp_data    = kvp_frame_copy (t->inst.kvp_data);
+  qof_instance_init_data (&to->inst, GNC_ID_TRANS, qof_instance_get_book(from));
+  kvp_frame_delete (to->inst.kvp_data);
+  to->inst.kvp_data    = kvp_frame_copy (from->inst.kvp_data);
 
-  xaccTransBeginEdit(trans);
-  for (node = t->splits; node; node = node->next)
+  xaccTransBeginEdit(to);
+  for (node = from->splits; node; node = node->next)
   {
     split = xaccSplitClone(node->data);
-    split->parent = trans;
-    trans->splits = g_list_append (trans->splits, split);
+    split->parent = to;
+    to->splits = g_list_append (to->splits, split);
   }
-  qof_instance_set_dirty(QOF_INSTANCE(trans));
-  xaccTransCommitEdit(trans);
+  qof_instance_set_dirty(QOF_INSTANCE(to));
+  xaccTransCommitEdit(to);
   qof_event_resume();
 
-  return trans;
+  return to;
 }
 
 
