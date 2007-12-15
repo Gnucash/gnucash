@@ -828,8 +828,19 @@
     ((pricedb-nearest) (lambda (foreign domestic)
 			(gnc:exchange-by-pricedb-nearest
 			 foreign domestic to-date-tp)))
-    (else (gnc:warn "gnc:case-exchange-fn: bad price-source value: " 
-                    source-option))))
+    (else 
+     (begin
+       ;; FIX-ME 
+       ;; this is a hack to prevent report crashing if a report
+       ;; implements source-options that aren't fully implemented. We
+       ;; return a reasonably sane fallback function: nearest.
+       ;;
+       ;; known to be missing: pricedb-latest-before
+       (gnc:warn "gnc:case-exchange-fn: bad price-source value: " 
+                    source-option " using pricedb-nearest.")
+       (lambda (foreign domestic)
+	 (gnc:exchange-by-pricedb-nearest
+	  foreign domestic to-date-tp))))))
 
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
@@ -858,8 +869,14 @@
     ((pricedb-latest) (lambda (foreign domestic date)
 		       (gnc:exchange-by-pricedb-latest foreign domestic)))
     ((pricedb-nearest) gnc:exchange-by-pricedb-nearest)
-    (else (gnc:warn "gnc:case-exchange-time-fn: bad price-source value: " 
-                    source-option))))
+    (else 
+     (begin
+       (gnc:warn "gnc:case-exchange-time-fn: bad price-source value: " 
+                    source-option " using pricedb-nearest.")
+       ;; FIX-ME another hack to prevent report crashing when an
+       ;; unimplemented source-option comes through
+       gnc:exchange-by-pricedb-nearest
+       ))))
 
 
 
