@@ -83,6 +83,7 @@ function dist_gnome() {
     wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBPNG_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/libpng13.dll -d $DIST_DIR
+    wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $ZLIB_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE zlib1.dll -d $DIST_DIR\\bin
     wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $DIST_DIR

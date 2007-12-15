@@ -480,6 +480,7 @@ function inst_gnome() {
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBJPEG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBPNG_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $LIBTIFF_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $ZLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $PKG_CONFIG_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $CAIRO_URL $DOWNLOAD_DIR $GNOME_DIR
