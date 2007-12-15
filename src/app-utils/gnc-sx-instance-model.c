@@ -1015,6 +1015,12 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     /* clear any copied KVP data */
     qof_instance_set_slots(QOF_INSTANCE(new_txn), kvp_frame_new());
 
+    /* Bug#500427: copy the notes, if any */
+    if (xaccTransGetNotes(template_txn) != NULL)
+    {
+        xaccTransSetNotes(new_txn, g_strdup(xaccTransGetNotes(template_txn)));
+    }
+
     xaccTransSetDate(new_txn,
                      g_date_get_day(&creation_data->instance->date),
                      g_date_get_month(&creation_data->instance->date),
