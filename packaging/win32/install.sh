@@ -472,8 +472,9 @@ function inst_gnome() {
         mkdir -p $_GNOME_UDIR
         wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBXML2_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $GNOME_DIR
-        wget_unpacked $GETTEXT_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_RUNTIME_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
+        wget_unpacked $GETTEXT_TOOLS_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $LIBICONV_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_URL $DOWNLOAD_DIR $GNOME_DIR
         wget_unpacked $GLIB_DEV_URL $DOWNLOAD_DIR $GNOME_DIR
@@ -1012,6 +1013,10 @@ function inst_gnucash() {
         for A in *.la; do
             sed '/dependency_libs/d' $A > tmp ; mv tmp $A
         done
+
+        # gettext 0.17 installs translations to \share\locale, but not all
+        # gnome packages have been recompiled against it
+        cp -a locale ../share && rm -rf locale
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas

@@ -76,7 +76,7 @@ function dist_openssl() {
 function dist_gnome() {
     setup Gnome platform
     wget_unpacked $LIBXML2_URL $DOWNLOAD_DIR $DIST_DIR
-    wget_unpacked $GETTEXT_URL $DOWNLOAD_DIR $DIST_DIR
+    wget_unpacked $GETTEXT_RUNTIME_URL $DOWNLOAD_DIR $DIST_DIR
     smart_wget $LIBICONV_URL $DOWNLOAD_DIR
     unzip -q $LAST_FILE bin/iconv.dll -d $DIST_DIR
     wget_unpacked $GLIB_URL $DOWNLOAD_DIR $DIST_DIR
@@ -109,6 +109,8 @@ function dist_gnome() {
     wget_unpacked $LIBGNOMEPRINTUI_URL $DOWNLOAD_DIR $DIST_DIR  # gnomeprint
     wget_unpacked $GTKHTML_URL $DOWNLOAD_DIR $DIST_DIR
     rm -rf $DIST_UDIR/etc/gconf/gconf.xml.defaults/{desktop,schemas}
+    cp -a $DIST_UDIR/lib/locale $DIST_UDIR/share
+    rm -rf $DIST_UDIR/lib/locale
 }
 
 function dist_pcre() {
@@ -121,8 +123,8 @@ function dist_libgsf() {
     setup libGSF
     mkdir -p $DIST_UDIR/bin
     cp -a $_LIBGSF_UDIR/bin/libgsf*.dll $DIST_UDIR/bin
-    mkdir -p $DIST_UDIR/lib
-    cp -a $_LIBGSF_UDIR/lib/locale $DIST_UDIR/lib
+    mkdir -p $DIST_UDIR/share
+    cp -a $_LIBGSF_UDIR/share/locale $DIST_UDIR/lib
 }
 
 function dist_goffice() {
@@ -130,9 +132,9 @@ function dist_goffice() {
     mkdir -p $DIST_UDIR/bin
     cp -a $_GOFFICE_UDIR/bin/libgoffice*.dll $DIST_UDIR/bin
     mkdir -p $DIST_UDIR/lib
-    cp -a $_GOFFICE_UDIR/lib/{goffice,locale} $DIST_UDIR/lib
+    cp -a $_GOFFICE_UDIR/lib/goffice $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/share
-    cp -a $_GOFFICE_UDIR/share/{goffice,pixmaps} $DIST_UDIR/share
+    cp -a $_GOFFICE_UDIR/share/{goffice,locale,pixmaps} $DIST_UDIR/share
 }
 
 function dist_libofx() {
@@ -175,13 +177,12 @@ function dist_gnucash() {
     mkdir -p $DIST_UDIR/etc/gconf/schemas
     cp -a $_INSTALL_UDIR/etc/gconf/schemas/* $DIST_UDIR/etc/gconf/schemas
     mkdir -p $DIST_UDIR/lib
-    cp -a $_INSTALL_UDIR/lib/locale $DIST_UDIR/lib
     cp -a $_INSTALL_UDIR/lib/lib*.la $DIST_UDIR/lib
     mkdir -p $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
-    cp -a $_INSTALL_UDIR/share/{gnucash,pixmaps,xml} $DIST_UDIR/share
+    cp -a $_INSTALL_UDIR/share/{gnucash,locale,pixmaps,xml} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
 
     _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `
