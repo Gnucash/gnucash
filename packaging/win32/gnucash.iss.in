@@ -214,6 +214,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-de.win32-bin.txt"
 Name: "fr"; MessagesFile: "compiler:Languages\French.isl"; InfoAfterFile: "@prefix@\share\@PACKAGE@\doc\README-fr.win32-bin.txt"
 Name: "el"; MessagesFile: "@prefix@\share\@PACKAGE@\Greek-4-5.1.11.isl"
+Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 ;; The following language files are available as well, in alphabetical
 ;; order: Basque, BrazilianPortuguese, Catalan, Czech, Danish, Dutch,
@@ -255,6 +256,7 @@ LanguageCodePage=1252
 de.LanguageCodePage=1252
 el.LanguageCodePage=1253
 fr.LanguageCodePage=1252
+pt_BR.LanguageCodePage=1252
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;
@@ -336,5 +338,32 @@ el.IconName_InstallFQ=Εγκατάσταση λήψης τιμών (online)
 el.IconComment_InstallFQ=Εγκατάσταση του perl module Finance-Quote για λήψη τιμών online.  Απαιτεί ActivePerl 5.8
 el.IconName_Uninstall=Απεγκατάσταση GnuCash
 el.IconComment_Uninstall=Απεγκατάσταση του διαχειριστή οικονομικών GnuCash
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Brazilian Portuguese translation
+
+pt_BR.FullInstall=Instalaηγo Completa
+pt_BR.CustomInstall=Instalaηγo Personalizada
+pt_BR.CreateDesktopIcon=Criar um νcone na Αrea de Trabalho
+pt_BR.CreateMenuLink=Criar um link no menu Iniciar
+pt_BR.RunPrg=Executar o GnuCash agora
+pt_BR.AdditionalIcons=Criar estes νcones:
+pt_BR.StatusMsgFirewall=Instalando as regras de firewall do Windows...
+
+pt_BR.MainFiles=Programa GnuCash
+pt_BR.TranslFiles=Traduηγo
+pt_BR.TemplFiles=Modelos de Conta
+
+pt_BR.IconComment_GnuCash=Gerenciador Financeiro Livre GnuCash
+pt_BR.IconName_README=Mostrar LEIA-ME (README)
+pt_BR.IconComment_README=Mostra o arquivo LEIA-ME (README)
+pt_BR.IconFilename_README=LEIA-ME.win32-bin.txt
+pt_BR.IconName_FAQ=Perguntas Freqόentes (online, inglκs)
+pt_BR.IconName_Bugzilla=Relatar um erro (online, inglκs)
+pt_BR.IconName_InstallFQ=Instalar a Consulta de Preηos Online
+pt_BR.IconComment_InstallFQ=Instala o mσdulo perl Finance-Quote, necessαrio para a busca de preηos online. Requer ActivePerl 5.8.
+pt_BR.IconName_Uninstall=Desinstalar o GnuCash
+pt_BR.IconComment_Uninstall=Desinstala o Gerenciador Financeiro GnuCash
 
 ;; ;;;;;;;;;;;;;;;;;;;;
