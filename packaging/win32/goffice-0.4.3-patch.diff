@@ -1,6 +1,6 @@
-diff -Nur goffice-0.4.1-old/goffice/Makefile.am goffice-0.4.1/goffice/Makefile.am
---- goffice-0.4.1-old/goffice/Makefile.am	Sat Jul  7 00:44:32 2007
-+++ goffice-0.4.1/goffice/Makefile.am	Sat Jul 21 23:24:22 2007
+diff -Nur goffice-0.4.3-old/goffice/Makefile.am goffice-0.4.3/goffice/Makefile.am
+--- goffice-0.4.3-old/goffice/Makefile.am	Sat Jul  7 00:44:32 2007
++++ goffice-0.4.3/goffice/Makefile.am	Sat Jul 21 23:24:22 2007
 @@ -24,7 +24,7 @@
  libgoffice_0_la_DEPENDENCIES = goffice.def
  libgoffice_0_la_LDFLAGS += -no-undefined -export-symbols goffice.def
@@ -10,9 +10,9 @@ diff -Nur goffice-0.4.1-old/goffice/Makefile.am goffice-0.4.1/goffice/Makefile.a
  endif
  endif
  
-diff -Nur goffice-0.4.1-old/gtk-doc.m4 goffice-0.4.1/gtk-doc.m4
---- goffice-0.4.1-old/gtk-doc.m4	Thu Jan  1 00:00:00 1970
-+++ goffice-0.4.1/gtk-doc.m4	Sat Jul 21 23:25:04 2007
+diff -Nur goffice-0.4.3-old/gtk-doc.m4 goffice-0.4.3/gtk-doc.m4
+--- goffice-0.4.3-old/gtk-doc.m4	Thu Jan  1 00:00:00 1970
++++ goffice-0.4.3/gtk-doc.m4	Sat Jul 21 23:25:04 2007
 @@ -0,0 +1,53 @@
 +dnl -*- mode: autoconf -*-
 +
