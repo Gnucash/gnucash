@@ -261,11 +261,10 @@ Account*
 gnc_sx_get_template_transaction_account(SchedXaction *sx)
 {
     Account *template_root, *sx_template_acct;
-    const char *sx_guid_str;
+    char sx_guid_str[GUID_ENCODING_LENGTH];
 
     template_root = gnc_book_get_template_root(gnc_get_current_book());
-    sx_guid_str = guid_to_string(xaccSchedXactionGetGUID(sx));
-    /* Get account named after guid string. */
+    guid_to_string_buff(xaccSchedXactionGetGUID(sx), sx_guid_str);
     sx_template_acct = gnc_account_lookup_by_name(template_root, sx_guid_str);
     return sx_template_acct;
 }
@@ -924,13 +923,12 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
     *split_acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
     if (*split_acct == NULL)
     {
-        const char *guid_str;
+        char guid_str[GUID_ENCODING_LENGTH];
         GString *err;
-        guid_str = guid_to_string((const GUID*)acct_guid);
+        guid_to_string_buff((const GUID*)acct_guid, guid_str);
         err = g_string_new("");
         g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(instance->parent->sx));
-        g_free((char*)guid_str);
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
