@@ -57,6 +57,6 @@ gladedir = ${GNC_GLADE_DIR}
 glade_DATA = \
 	gnc-csv-preview-dialog.glade
 
-EXTRA_DIST = $(ui_DATA)
+EXTRA_DIST = $(ui_DATA) $(glade_DATA)
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.import.csv\"
