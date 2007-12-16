@@ -618,6 +618,7 @@ load_date( GdaDataModel* pModel, gint row,
     if( gda_value_is_null( val ) ) {
 		date = g_date_new_dmy( 1, 1, 1970 );
         (*setter)( pObject, date );
+		g_date_free( date );
     } else {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			const gchar* s = g_value_get_string( val );
@@ -627,11 +628,13 @@ load_date( GdaDataModel* pModel, gint row,
 
 			date = g_date_new_dmy( day, month, year );
 			(*setter)( pObject, date );
+			g_date_free( date );
 
 		} else if( G_VALUE_HOLDS_BOXED( val ) ) {
         	date = (GDate*)g_value_get_boxed( val );
         	if( date != NULL ) {
             	(*setter)( pObject, date );
+				g_date_free( date );
 			}
 		} else {
 			g_warning( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );

@@ -190,7 +190,7 @@ set_int64_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_GINT64 ) {
-        kvp_frame_add_gint64( pInfo->pKvpFrame, pInfo->path->str, *(gint64*)pValue );
+        kvp_frame_set_gint64( pInfo->pKvpFrame, pInfo->path->str, *(gint64*)pValue );
     }
 }
 
@@ -212,7 +212,7 @@ set_string_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_STRING ) {
-        kvp_frame_add_string( pInfo->pKvpFrame, pInfo->path->str, (const gchar*)pValue );
+        kvp_frame_set_string( pInfo->pKvpFrame, pInfo->path->str, (const gchar*)pValue );
     }
 }
 
@@ -236,7 +236,7 @@ set_double_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_DOUBLE ) {
-        kvp_frame_add_double( pInfo->pKvpFrame, pInfo->path->str, *(double*)pValue );
+        kvp_frame_set_double( pInfo->pKvpFrame, pInfo->path->str, *(double*)pValue );
     }
 }
 
@@ -260,7 +260,7 @@ set_timespec_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_TIMESPEC ) {
-        kvp_frame_add_timespec( pInfo->pKvpFrame, pInfo->path->str, *(Timespec*)pValue );
+        kvp_frame_set_timespec( pInfo->pKvpFrame, pInfo->path->str, *(Timespec*)pValue );
     }
 }
 
@@ -282,7 +282,7 @@ set_guid_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_GUID ) {
-        kvp_frame_add_guid( pInfo->pKvpFrame, pInfo->path->str, (GUID*)pValue );
+        kvp_frame_set_guid( pInfo->pKvpFrame, pInfo->path->str, (GUID*)pValue );
     }
 }
 
@@ -306,7 +306,7 @@ set_numeric_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_NUMERIC ) {
-        kvp_frame_add_numeric( pInfo->pKvpFrame, pInfo->path->str, *(gnc_numeric*)pValue );
+        kvp_frame_set_numeric( pInfo->pKvpFrame, pInfo->path->str, *(gnc_numeric*)pValue );
     }
 }
 
