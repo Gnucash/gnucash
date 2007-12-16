@@ -916,6 +916,8 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
+        else
+            g_string_free(err, TRUE);
         return FALSE;
     }
     acct_guid = kvp_value_get_guid( kvp_val );
@@ -932,6 +934,8 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
         g_critical("%s", err->str);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
+        else
+            g_string_free(err, TRUE);
         return FALSE;
     }
 
@@ -966,8 +970,11 @@ _get_sx_formula_value(GncSxInstance *instance, Split *template_split, gnc_numeri
                             formula_str,
                             parseErrorLoc,
                             gnc_exp_parser_error_string());
+            g_critical("%s", err->str);
             if (creation_errors != NULL)
                 *creation_errors = g_list_append(*creation_errors, err);
+            else
+                g_string_free(err, TRUE);
         }
         
         if (parser_vars != NULL)
@@ -1052,15 +1059,15 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
 
-        /* clear out any copied Split frame data. */
-        qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
-
         if (!_get_template_split_account(creation_data->instance, template_split, &split_acct, creation_data->creation_errors))
         {
             err_flag = TRUE;
             break;
         }
              
+        /* clear out any copied Split frame data. */
+        qof_instance_set_slots(QOF_INSTANCE(copying_split), kvp_frame_new());
+
         split_cmdty = xaccAccountGetCommodity(split_acct);
         if (first_cmdty == NULL)
         {
@@ -1068,8 +1075,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             xaccTransSetCurrency(new_txn, first_cmdty);
         }
 
-        xaccAccountBeginEdit(split_acct);
-        xaccAccountInsertSplit(split_acct, copying_split);
+        xaccSplitSetAccount(copying_split, split_acct);
 
         {
             gnc_numeric credit_num, debit_num, final;
@@ -1084,12 +1090,16 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
             gncn_error = gnc_numeric_check(final);
-            if (gncn_error != GNC_ERROR_OK) {
+            if (gncn_error != GNC_ERROR_OK)
+            {
                 GString *err = g_string_new("");
-                g_string_printf(err, "Error %d in SX [%s] final gnc_numeric value, using 0 instead.", 
-                                gncn_error,
-                                xaccSchedXactionGetName(creation_data->instance->parent->sx));
-                *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead", 
+                                gncn_error, xaccSchedXactionGetName(creation_data->instance->parent->sx));
+                g_critical("%s", err->str);
+                if (creation_data->creation_errors != NULL)
+                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
+                else
+                    g_string_free(err, TRUE);
                 final = gnc_numeric_zero();
             }
 
@@ -1149,8 +1159,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
             xaccSplitScrub(copying_split);
         }
-
-        xaccAccountCommitEdit(split_acct);
     }
 
     if (err_flag)
