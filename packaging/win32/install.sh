@@ -843,7 +843,8 @@ function inst_ktoblzcheck() {
             # circumvent binreloc bug, http://trac.autopackage.org/ticket/28
             ./configure ${HOST_XCOMPILE} \
                 --prefix=${_GWENHYWFAR_UDIR} \
-                --disable-binreloc
+                --disable-binreloc \
+                --disable-python
             make
             [ "$CROSS_COMPILE" != "yes" ] && make check
             make install
