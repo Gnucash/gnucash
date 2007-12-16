@@ -361,11 +361,11 @@ load_gnucash_modules()
     }
     if (!gnc_engine_is_initialized()) {
         /* On Windows this check used to fail anyway, see
-	   https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
-	   but more recently it seems to work as expected
-	   again. 2006-12-20, cstim. */
-        g_error("GnuCash engine failed to initialize.  Exiting.\n");
-        exit(0);
+         * https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
+         * but more recently it seems to work as expected
+         * again. 2006-12-20, cstim. */
+        g_warning("GnuCash engine failed to initialize.  Exiting.\n");
+        exit(1);
     }
 }
 
@@ -409,7 +409,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
 
     qof_session_destroy(session);
     if (!SCM_NFALSEP(scm_result)) {
-        g_error("Failed to add quotes to %s.", add_quotes_file);
+        g_warning("Failed to add quotes to %s.", add_quotes_file);
         goto fail;
     }
 
@@ -418,7 +418,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     return;
  fail:
     if (session && qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        g_error("Session Error: %s", qof_session_get_error_message(session));
+        g_warning("Session Error: %s", qof_session_get_error_message(session));
     qof_event_resume();
     gnc_shutdown(1);
 }
