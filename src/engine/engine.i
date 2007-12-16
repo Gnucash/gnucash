@@ -108,6 +108,8 @@ const char *qof_session_get_url (QofSession *session);
 
 const char *gnc_print_date (Timespec ts);
 
+GUID guid_new_return(void);
+
 %inline {
 static QofQuery * qof_query_create_for_splits(void) {
   return qof_query_create_for(GNC_ID_SPLIT);
