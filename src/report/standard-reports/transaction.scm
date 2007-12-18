@@ -95,6 +95,16 @@
        (= (gnc:timepair-get-month tp-a)
           (gnc:timepair-get-month tp-b))))
 
+(define (timepair-same-week tp-a tp-b)
+  (and (timepair-same-year tp-a tp-b)
+       (= (gnc:timepair-get-week tp-a)
+	  (gnc:timepair-get-week tp-b))))
+
+(define (split-same-week-p a b)
+  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+	(tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+    (timepair-same-week tp-a tp-b)))
+
 (define (split-same-month-p a b)
   (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
         (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
@@ -167,6 +177,13 @@
                                                #t
                                                (used-sort-account-full-name column-vector))))
                         table width subheading-style)))
+
+(define (render-week-subheading split table width subheading-style column-vector)
+  (add-subheading-row (gnc:date-get-week-year-string
+		       (gnc:timepair->date
+			(gnc-transaction-get-date-posted
+			 (xaccSplitGetParent split))))
+		      table width subheading-style))
 
 (define (render-month-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-month-year-string
@@ -241,6 +258,14 @@
                                                         #t
                                                         (used-sort-account-full-name column-vector)))
                     total-collector subtotal-style export?))
+
+(define (render-week-subtotal
+	 table width split total-collector subtotal-style column-vector export?)
+  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+				 (xaccSplitGetParent split)))))
+    (add-subtotal-row table width
+		      (total-string (gnc:date-get-week-year-string tm))
+		      total-collector subtotal-style export?)))
 
 (define (render-month-subtotal
          table width split total-collector subtotal-style column-vector export?)
@@ -700,7 +725,7 @@
         (subtotal-choice-list
          (list
           (vector 'none (N_ "None") (N_ "None"))
-          ;;(vector 'weekly (N_ "Weekly") (N_ "Weekly"))
+          (vector 'weekly (N_ "Weekly") (N_ "Weekly"))
           (vector 'monthly (N_ "Monthly") (N_ "Monthly"))
           (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly"))
           (vector 'yearly (N_ "Yearly") (N_ "Yearly")))))
@@ -1162,6 +1187,8 @@ Credit Card, and Income accounts")))))
     ;; subtotal-renderer))
     (list
      (cons 'none (vector #f #f #f))
+     (cons 'weekly (vector split-same-week-p render-week-subheading
+			   render-week-subtotal))
      (cons 'monthly (vector split-same-month-p render-month-subheading 
                             render-month-subtotal))
      (cons 'quarterly (vector split-same-quarter-p render-quarter-subheading 
