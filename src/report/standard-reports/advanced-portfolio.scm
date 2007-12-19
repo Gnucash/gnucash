@@ -306,8 +306,8 @@
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list))
-	       (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value 100000 GNC-RND-ROUND) 
-					     current-value 100000 GNC-RND-ROUND)))
+	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value 100000 GNC-RND-ROUND) 
+					   current-value 100000 GNC-RND-ROUND)))
 	  
 	(gnc:debug "this is a spinoff")
 	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
@@ -470,47 +470,31 @@
 				    
 				    (gnc:debug "going in to basis list " basis-list split-units split-value)
 
-				    ;; first fix the basis. but only when we are dealing with the actual stock
+				    ;; are we dealing with the actual stock/fund?
 				    (if (same-account? current (xaccSplitGetAccount s))
-					(set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
-												(exchange-fn (gnc:make-gnc-monetary 
-													      commod-currency split-value) 
-													     currency)) basis-method)))
+					(begin
+
+					  ;; adjust the basis
+					  (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
+												  (exchange-fn (gnc:make-gnc-monetary 
+														commod-currency split-value) 
+													       currency)) basis-method))
+					  ;; adjust moneyin/out
+					  (if (gnc-numeric-positive-p split-value)
+					      ;; but only adjust moneyin if it's not a spinoff
+					      (if (or (null? (xaccSplitGetOtherSplit s))
+						      (not (gnc-numeric-zero-p (xaccSplitGetAmount (xaccSplitGetOtherSplit s)))))
+					       (moneyincoll 'add commod-currency split-value))
+					      (moneyoutcoll 'add commod-currency (gnc-numeric-neg split-value)))
+					  )
+					)
 				    (gnc:debug  "coming out of basis list " basis-list)
-				    ;; now look at what else we have to work with
-				    (cond
-			 
-				     ;; are we looking at the same
-				     ;; account? that means we're
-				     ;; dealing strictly with the
-				     ;; amount of stock moving, and
-				     ;; its value, adjust the money
-				     ;; collectors ((same-account?
-				     ;; current (xaccSplitGetAccount
-				     ;; s)) if the commod-currency and
-				     ;; the commodity of this split,
-				     ;; s, are the same then we're
-				     ;; dealing with actual money
-				     ;; being shuffled and we need to
-				     ;; adjust moneyin/out
-				     ((equal? commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s)))
-				      (begin
-					(gnc:debug "adjsting the moneyin/out " split-value)
-					(if (gnc-numeric-negative-p split-value)
-					    (moneyincoll 'add commod-currency
-							  (gnc-numeric-neg split-value))
-					    (moneyoutcoll 'add commod-currency split-value)
-			   )
-			  )
-				      )
-				     )
 				    )
 				  )
 
 				 ;; here is where we handle a spin-off txn. This will be a no-units
 				 ;; transaction with only one other split. xaccSplitGetOtherSplit only
 				 ;; returns on a two-split txn :) 
-				 ;; FIXME!! not implemented in basis-builder yet!
 				 ((and (gnc-numeric-zero-p txn-units) (not (null? (xaccSplitGetOtherSplit s))))
 				  (if (same-account? current (xaccSplitGetAccount s))
 				      (set! basis-list (basis-builder basis-list split-units (gnc:gnc-monetary-amount 
