@@ -183,7 +183,7 @@ function dist_gnucash() {
     cp -a $_INSTALL_UDIR/lib/gnucash/lib*.dll $DIST_UDIR/lib/gnucash
     cp -a $_INSTALL_UDIR/libexec $DIST_UDIR
     mkdir -p $DIST_UDIR/share
-    cp -a $_INSTALL_UDIR/share/{gnucash,locale,pixmaps,xml} $DIST_UDIR/share
+    cp -a $_INSTALL_UDIR/share/{gnucash,locale,xml} $DIST_UDIR/share
     cp -a $_REPOS_UDIR/packaging/win32/install-fq-mods.bat $DIST_UDIR/bin
 
     _QTDIR_WIN=`echo $QTDIR | sed 's,^/\([A-Za-z]\)/,\1:/,g' `

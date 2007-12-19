@@ -39,25 +39,25 @@ gncpixmap_DATA = \
 gncnormalicondir = ${datadir}/icons/hicolor/48x48/apps
 gncnormalicon_DATA = 48x48/gnucash-icon.png
 48x48/gnucash-icon.png: gnucash-icon-48x48.png
-	-mkdir 48x48
-	cp gnucash-icon-48x48.png 48x48/gnucash-icon.png
+	-mkdir -p 48x48
+	cp ${srcdir}/gnucash-icon-48x48.png 48x48/gnucash-icon.png
 
 gncmediumicondir = ${datadir}/icons/hicolor/32x32/apps
 gncmediumicon_DATA = 32x32/gnucash-icon.png
 32x32/gnucash-icon.png: gnucash-icon-32x32.png
-	-mkdir 32x32
-	cp gnucash-icon-32x32.png 32x32/gnucash-icon.png
+	-mkdir -p 32x32
+	cp ${srcdir}/gnucash-icon-32x32.png 32x32/gnucash-icon.png
 
 gncsmallicondir = ${datadir}/icons/hicolor/16x16/apps
 gncsmallicon_DATA = 16x16/gnucash-icon.png
 16x16/gnucash-icon.png: gnucash-icon-16x16.png
-	-mkdir 16x16
-	cp gnucash-icon-16x16.png 16x16/gnucash-icon.png
+	-mkdir -p 16x16
+	cp ${srcdir}/gnucash-icon-16x16.png 16x16/gnucash-icon.png
 
 gncscalableicondir = ${datadir}/icons/hicolor/scalable/apps
 gncscalableicon_DATA = scalable/gnucash-icon.svg
 scalable/gnucash-icon.svg: ${top_srcdir}/art/icon.svgz
-	-mkdir scalable
+	-mkdir -p scalable
 	gzip -cd ${top_srcdir}/art/icon.svgz > scalable/gnucash-icon.svg
 
 # As suggested by <http://live.gnome.org/GnomeGoals/AppIcon>
