@@ -72,17 +72,12 @@ static void set_tx_enter_date( gpointer pObject, gpointer pValue );
 
 static col_cvt_t tx_col_table[] =
 {
-    { "guid",          CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
-            get_guid, set_guid },
-    { "currency_guid", CT_GUID,    0, COL_NNUL,    NULL, NULL,
-            get_tx_currency_guid, set_tx_currency_guid },
-    { "num",           CT_STRING,    TX_MAX_NUM_LEN, COL_NNUL, NULL, NULL,
-            get_tx_num, set_tx_num },
-    { "post_date",     CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
-            get_tx_post_date, set_tx_post_date },
-    { "enter_date",    CT_TIMESPEC, 0, COL_NNUL, NULL, NULL,
-            get_tx_enter_date, set_tx_enter_date },
-    { "description",   CT_STRING,    TX_MAX_DESCRIPTION_LEN, 0,    NULL, NULL,
+    { "guid",          CT_GUID,     0,                      COL_NNUL, "guid" },
+    { "currency_guid", CT_GUID,     0,                      COL_NNUL, NULL, NULL, get_tx_currency_guid, set_tx_currency_guid },
+    { "num",           CT_STRING,   TX_MAX_NUM_LEN,         COL_NNUL, NULL, NULL, get_tx_num,           set_tx_num },
+    { "post_date",     CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_post_date,     set_tx_post_date },
+    { "enter_date",    CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_enter_date,    set_tx_enter_date },
+    { "description",   CT_STRING,   TX_MAX_DESCRIPTION_LEN, 0,        NULL, NULL,
             (QofAccessFunc)xaccTransGetDescription,
             (QofSetterFunc)xaccTransSetDescription },
     { NULL }
@@ -106,22 +101,15 @@ static void set_split_account_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t split_col_table[] =
 {
-    { "guid",            CT_GUID,    0, COL_NNUL|COL_PKEY, NULL, NULL,
-            get_guid, set_guid },
-    { "tx_guid",         CT_GUID,     0, COL_NNUL,    NULL, NULL,
-            get_split_tx_guid, set_split_tx_guid },
-    { "account_guid",    CT_GUID,    0, COL_NNUL,    NULL, NULL,
-            get_split_account_guid, set_split_account_guid },
-    { "memo",            CT_STRING,  SPLIT_MAX_MEMO_LEN, COL_NNUL,    NULL, SPLIT_MEMO },
-    { "action",          CT_STRING,  SPLIT_MAX_ACTION_LEN, COL_NNUL,    NULL, SPLIT_ACTION },
-    { "reconcile_state", CT_STRING,  1, COL_NNUL,    NULL, NULL,
-            get_split_reconcile_state, set_split_reconcile_state },
-    { "reconcile_date",  CT_TIMESPEC, 0, COL_NNUL,    NULL, NULL,
-            get_split_reconcile_date, set_split_reconcile_date },
-    { "value",           CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
-            get_split_value, set_split_value },
-    { "quantity",        CT_NUMERIC, 0, COL_NNUL,    NULL, NULL,
-            get_split_quantity, set_split_quantity },
+    { "guid",            CT_GUID,     0,                    COL_NNUL, "guid" },
+    { "tx_guid",         CT_GUID,     0,                    COL_NNUL, NULL, NULL,    get_split_tx_guid,         set_split_tx_guid },
+    { "account_guid",    CT_GUID,     0,                    COL_NNUL, NULL, NULL,    get_split_account_guid,    set_split_account_guid },
+    { "memo",            CT_STRING,   SPLIT_MAX_MEMO_LEN,   COL_NNUL, NULL, SPLIT_MEMO },
+    { "action",          CT_STRING,   SPLIT_MAX_ACTION_LEN, COL_NNUL, NULL, SPLIT_ACTION },
+    { "reconcile_state", CT_STRING,   1,                    COL_NNUL, NULL, NULL,    get_split_reconcile_state, set_split_reconcile_state },
+    { "reconcile_date",  CT_TIMESPEC, 0,                    COL_NNUL, NULL, NULL,    get_split_reconcile_date,  set_split_reconcile_date },
+    { "value",           CT_NUMERIC,  0,                    COL_NNUL, NULL, NULL,    get_split_value,           set_split_value },
+    { "quantity",        CT_NUMERIC,  0,                    COL_NNUL, NULL, NULL,    get_split_quantity,        set_split_quantity },
     { NULL }
 };
 

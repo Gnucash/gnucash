@@ -65,7 +65,7 @@ typedef void (*GNC_GDA_LOAD_FN)( GdaDataModel* pModel, gint row,
                                 const col_cvt_t* table );
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
                         GdaConnection* cnn, xmlNodePtr array_data,
-                        const col_cvt_t* table_row );
+                        const col_cvt_t* table_row, gboolean pkey );
 typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( GncGdaBackend* be,
                 QofIdTypeConst obj_name, gpointer pObject,
                 const col_cvt_t* table_row, GdaQuery* query );
@@ -208,14 +208,14 @@ get_gvalue_string_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_string_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_STRING );
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags );
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t string_handler
@@ -237,7 +237,11 @@ load_int( GdaDataModel* pModel, gint row,
     } else {
         int_value = g_value_get_int( val );
     }
-    (*setter)( pObject, GINT_TO_POINTER(int_value) );
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, int_value, NULL );
+    } else {
+    	(*setter)( pObject, GINT_TO_POINTER(int_value) );
+    }
 }
 
 static void
@@ -277,14 +281,14 @@ get_gvalue_int_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_int_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags );
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t int_handler =
@@ -349,14 +353,14 @@ get_gvalue_int64_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags );
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t int64_handler =
@@ -422,14 +426,14 @@ get_gvalue_double_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_double_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags );
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t double_handler =
@@ -453,7 +457,11 @@ load_guid( GdaDataModel* pModel, gint row,
         string_to_guid( g_value_get_string( val ), &guid );
         pGuid = &guid;
     }
-    (*setter)( pObject, (gpointer)pGuid );
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)pGuid );
+    }
 }
 
 static void
@@ -466,8 +474,12 @@ get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 
     memset( value, 0, sizeof( GValue ) );
 
-    getter = get_getter( obj_name, table_row );
-    guid = (*getter)( pObject, NULL );
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+	} else {
+    	getter = get_getter( obj_name, table_row );
+    	guid = (*getter)( pObject, NULL );
+	}
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
         g_value_init( value, G_TYPE_STRING );
@@ -497,10 +509,10 @@ get_gvalue_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    "char", GUID_ENCODING_LENGTH, table_row->flags );
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t guid_handler =
@@ -592,14 +604,14 @@ get_gvalue_timespec_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_DATE );
     add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags );
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
 static col_type_handler_t timespec_handler =
@@ -832,7 +844,7 @@ get_gvalue_numeric_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_numeric_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
     gchar* buf;
@@ -1325,7 +1337,7 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
 
             pHandler = get_handler( col_table[col].col_type );
 
-            pHandler->create_col_fn( server, cnn, array_data, &col_table[col] );
+            pHandler->create_col_fn( server, cnn, array_data, &col_table[col], col == 0 );
         }
         
         if( !gda_server_operation_load_data_from_xml(op, root, error ) ) {
