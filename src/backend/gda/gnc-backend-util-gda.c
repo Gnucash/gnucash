@@ -297,6 +297,79 @@ static col_type_handler_t int_handler =
 /* ----------------------------------------------------------------- */
 
 static void
+load_boolean( GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    gint int_value;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        int_value = 0;
+    } else {
+        int_value = g_value_get_int( val );
+    }
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, int_value, NULL );
+    } else {
+    	(*setter)( pObject, GINT_TO_POINTER(int_value) );
+    }
+}
+
+static void
+get_gvalue_boolean( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GValue* value )
+{
+    gint int_value;
+    QofAccessFunc getter;
+
+    memset( value, 0, sizeof( GValue ) );
+
+    getter = get_getter( obj_name, table_row );
+    int_value = GPOINTER_TO_INT((*getter)( pObject, NULL ));
+    g_value_init( value, G_TYPE_INT );
+    g_value_set_int( value, int_value );
+}
+
+static void
+get_gvalue_boolean_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_int( be, obj_name, pObject, table_row, &value );
+    add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_boolean_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_int( be, obj_name, pObject, table_row, &value );
+    return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
+}
+
+static void
+create_boolean_col( GdaServerProvider* server, GdaConnection* cnn,
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
+{
+    const gchar* dbms_type;
+
+    dbms_type = gda_server_provider_get_default_dbms_type( server,
+                                                        cnn, G_TYPE_INT );
+    add_table_column( server, cnn, array_data, table_row->col_name,
+                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+}
+
+static col_type_handler_t boolean_handler =
+        { load_boolean, create_boolean_col,
+            get_gvalue_boolean_for_query, get_gvalue_boolean_cond };
+/* ----------------------------------------------------------------- */
+
+static void
 load_int64( GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
@@ -877,6 +950,9 @@ get_handler( int col_type )
             break;
 
         case CT_BOOLEAN:
+            pHandler = &boolean_handler;
+            break;
+
         case CT_INT:
             pHandler = &int_handler;
             break;

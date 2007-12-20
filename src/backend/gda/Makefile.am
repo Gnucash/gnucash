@@ -1,4 +1,4 @@
-SUBDIRS = .
+SUBDIRS = . test
 
 # Now a shared library AND a GModule
 lib_LTLIBRARIES = libgnc-backend-gda-utils.la
