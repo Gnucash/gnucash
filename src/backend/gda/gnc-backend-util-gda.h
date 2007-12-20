@@ -77,6 +77,9 @@ typedef struct
 typedef enum {
 	CT_STRING,
 	CT_GUID,
+	CT_GUID_A,
+	CT_GUID_C,
+	CT_GUID_T,
 	CT_INT,
 	CT_INT64,
 	CT_TIMESPEC,
@@ -133,7 +136,7 @@ GdaObject* gnc_gda_execute_sql( GncGdaBackend* pBackend, const gchar* sql );
 GdaQuery* gnc_gda_create_query_from_sql( GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_query_get_count( GncGdaBackend* pBackend, GdaQuery* query );
-void gnc_gda_load_object( GdaDataModel* pModel, int row,
+void gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel, int row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );
 gboolean gnc_gda_object_is_it_in_db( GncGdaBackend* be,
@@ -145,8 +148,8 @@ gboolean gnc_gda_create_table( GdaConnection* pConnection,
 						GError** error );
 void gnc_gda_create_table_if_needed( GncGdaBackend* be,
 						const gchar* table_name, col_cvt_t* col_table );
-const GUID* gnc_gda_load_guid( GdaDataModel* pModel, int row );
-const GUID* gnc_gda_load_tx_guid( GdaDataModel* pModel, int row );
+const GUID* gnc_gda_load_guid( GncGdaBackend* be, GdaDataModel* pModel, int row );
+const GUID* gnc_gda_load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, int row );
 GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name );
 GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
 														const gchar* col_name,

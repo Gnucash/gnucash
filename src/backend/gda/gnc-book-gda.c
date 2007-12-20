@@ -57,8 +57,8 @@ static void set_root_template_guid( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",               CT_GUID, 0, COL_NNUL, "guid" },
-    { "root_account_guid",  CT_GUID, 0, COL_NNUL, NULL, NULL, get_root_account_guid,  set_root_account_guid },
-    { "root_template_guid", CT_GUID, 0, COL_NNUL, NULL, NULL, get_root_template_guid, set_root_template_guid },
+    { "root_account_guid",  CT_GUID_A, 0, COL_NNUL, NULL, NULL, get_root_account_guid,  set_root_account_guid },
+    { "root_template_guid", CT_GUID_A, 0, COL_NNUL, NULL, NULL, get_root_template_guid, set_root_template_guid },
     { NULL }
 };
 
@@ -116,7 +116,7 @@ load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
     GUID book_guid;
 	GNCBook* pBook;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     book_guid = *guid;
 
 	pBook = be->primary_book;
@@ -124,7 +124,7 @@ load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
 	    pBook = gnc_book_new();
 	}
 
-    gnc_gda_load_object( pModel, row, GNC_ID_BOOK, pBook, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_BOOK, pBook, col_table );
     gnc_gda_slots_load( be, gnc_book_get_guid( pBook ),
                             qof_instance_get_slots( QOF_INSTANCE(pBook) ) );
 

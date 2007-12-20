@@ -68,7 +68,7 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
 	GncBudget* pBudget;
 	Recurrence* r;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     budget_guid = *guid;
 
     pBudget = gnc_budget_lookup( &budget_guid, be->primary_book );
@@ -76,7 +76,7 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pBudget = gnc_budget_new( be->primary_book );
     }
 
-    gnc_gda_load_object( pModel, row, GNC_ID_BUDGET, pBudget, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_gda_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
     gnc_gda_slots_load( be, gnc_budget_get_guid( pBudget ),

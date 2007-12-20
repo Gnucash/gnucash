@@ -63,8 +63,9 @@ static col_cvt_t col_table[] =
     { "guid",           CT_GUID,   0,                           COL_NNUL, "guid" },
     { "name",           CT_STRING, ACCOUNT_MAX_NAME_LEN,        COL_NNUL, "name" },
     { "account_type",   CT_STRING, ACCOUNT_MAX_TYPE_LEN,        COL_NNUL, NULL, ACCOUNT_TYPE_ },
-    { "commodity_guid", CT_GUID,   0,                           COL_NNUL, NULL, NULL, get_commodity, set_commodity },
-    { "parent_guid",    CT_GUID,   0,                           0,        NULL, NULL, get_parent,    set_parent },
+//    { "commodity_guid", CT_GUID_C, 0,                           COL_NNUL, NULL, NULL, get_commodity, set_commodity },
+    { "commodity_guid", CT_GUID_C, 0,                           COL_NNUL, "commodity" },
+    { "parent_guid",    CT_GUID_A, 0,                           0,        NULL, NULL, get_parent,    set_parent },
     { "code",           CT_STRING, ACCOUNT_MAX_CODE_LEN,        0,        "code" },
     { "description",    CT_STRING, ACCOUNT_MAX_DESCRIPTION_LEN, 0,        "description" },
     { NULL }
@@ -167,14 +168,14 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
     GUID acc_guid;
 	Account* pAccount;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     acc_guid = *guid;
 
     pAccount = xaccAccountLookup( &acc_guid, be->primary_book );
     if( pAccount == NULL ) {
         pAccount = xaccMallocAccount( be->primary_book );
     }
-    gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
     gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
                         qof_instance_get_slots( QOF_INSTANCE(pAccount) ) );
     load_balances( be, pAccount );
@@ -186,7 +187,7 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 	if( gnc_account_get_parent( pAccount ) == NULL ) {
 		account_parent_guid_struct* s = g_slice_new( account_parent_guid_struct );
 		s->pAccount = pAccount;
-		gnc_gda_load_object( pModel, row, GNC_ID_ACCOUNT, s, parent_col_table );
+		gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, s, parent_col_table );
 		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
 	}
 

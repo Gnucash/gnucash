@@ -51,7 +51,7 @@ static void set_lot_is_closed( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",         CT_GUID,   0, COL_NNUL, "guid" },
-    { "account_guid", CT_GUID,   0, COL_NNUL, NULL, NULL, get_lot_account,   set_lot_account },
+    { "account_guid", CT_GUID_A, 0, COL_NNUL, NULL, NULL, get_lot_account,   set_lot_account },
     { "is_closed",    CT_STRING, 1, COL_NNUL, NULL, NULL, get_lot_is_closed, set_lot_is_closed },
     { NULL }
 };
@@ -103,7 +103,7 @@ load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row )
 
     lot = gnc_lot_new( be->primary_book );
 
-    gnc_gda_load_object( pModel, row, GNC_ID_LOT, lot, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_LOT, lot, col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(lot) ),
                             qof_instance_get_slots( QOF_INSTANCE(lot) ) );
 

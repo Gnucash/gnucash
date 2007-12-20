@@ -222,7 +222,7 @@ load_recurrence( GncGdaBackend* be, GdaDataModel* pModel, gint row, Recurrence* 
     recurrence_info.be = be;
 	recurrence_info.pRecurrence = r;
 
-    gnc_gda_load_object( pModel, row, TABLE_NAME, &recurrence_info, col_table );
+    gnc_gda_load_object( be, pModel, row, TABLE_NAME, &recurrence_info, col_table );
 }
 
 static GdaObject*

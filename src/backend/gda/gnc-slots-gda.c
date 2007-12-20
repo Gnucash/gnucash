@@ -357,7 +357,7 @@ load_slot( GncGdaBackend* be, GdaDataModel* pModel, gint row, KvpFrame* pFrame )
     slot_info.pKvpFrame = pFrame;
     slot_info.path = NULL;
 
-    gnc_gda_load_object( pModel, row, TABLE_NAME, &slot_info, col_table );
+    gnc_gda_load_object( be, pModel, row, TABLE_NAME, &slot_info, col_table );
 
     if( slot_info.path != NULL ) {
         g_string_free( slot_info.path, TRUE );

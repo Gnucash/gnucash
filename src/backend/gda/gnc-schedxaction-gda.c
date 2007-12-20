@@ -73,7 +73,7 @@ static col_cvt_t col_table[] =
     { "adv_notify",        CT_INT,     0,               COL_NNUL, NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
             (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
-    { "template_act_guid", CT_GUID,    0,               COL_NNUL, NULL, NULL,        get_template_act_guid, set_template_act_guid },
+    { "template_act_guid", CT_GUID_A,  0,               COL_NNUL, NULL, NULL,        get_template_act_guid, set_template_act_guid },
     { NULL }
 };
 
@@ -154,12 +154,12 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
 	SchedXaction* pSx;
 	GList* schedule = NULL;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     sx_guid = *guid;
 
     pSx = xaccSchedXactionMalloc( be->primary_book );
 
-    gnc_gda_load_object( pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
+    gnc_gda_load_object( be, pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSx) ),

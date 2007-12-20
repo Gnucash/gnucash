@@ -58,8 +58,6 @@ typedef struct {
 
 static gpointer get_guid( gpointer pObject, const QofParam* param );
 static void set_guid( gpointer pObject, gpointer pValue );
-static gpointer get_tx_currency_guid( gpointer pObject, const QofParam* param );
-static void set_tx_currency_guid( gpointer pObject, gpointer pValue );
 static gpointer get_tx_num( gpointer pObject, const QofParam* param );
 static void set_tx_num( gpointer pObject, gpointer pValue );
 static gpointer get_tx_post_date( gpointer pObject, const QofParam* param );
@@ -73,7 +71,9 @@ static void set_tx_enter_date( gpointer pObject, gpointer pValue );
 static col_cvt_t tx_col_table[] =
 {
     { "guid",          CT_GUID,     0,                      COL_NNUL, "guid" },
-    { "currency_guid", CT_GUID,     0,                      COL_NNUL, NULL, NULL, get_tx_currency_guid, set_tx_currency_guid },
+    { "currency_guid", CT_GUID_C,   0,                      COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccTransGetCurrency,
+			(QofSetterFunc)xaccTransSetCurrency },
     { "num",           CT_STRING,   TX_MAX_NUM_LEN,         COL_NNUL, NULL, NULL, get_tx_num,           set_tx_num },
     { "post_date",     CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_post_date,     set_tx_post_date },
     { "enter_date",    CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_enter_date,    set_tx_enter_date },
@@ -102,8 +102,8 @@ static void set_split_account_guid( gpointer pObject, gpointer pValue );
 static col_cvt_t split_col_table[] =
 {
     { "guid",            CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "tx_guid",         CT_GUID,     0,                    COL_NNUL, NULL, NULL,    get_split_tx_guid,         set_split_tx_guid },
-    { "account_guid",    CT_GUID,     0,                    COL_NNUL, NULL, NULL,    get_split_account_guid,    set_split_account_guid },
+    { "tx_guid",         CT_GUID_T,   0,                    COL_NNUL, NULL, NULL,    get_split_tx_guid,         set_split_tx_guid },
+    { "account_guid",    CT_GUID_A,   0,                    COL_NNUL, NULL, NULL,    get_split_account_guid,    set_split_account_guid },
     { "memo",            CT_STRING,   SPLIT_MAX_MEMO_LEN,   COL_NNUL, NULL, SPLIT_MEMO },
     { "action",          CT_STRING,   SPLIT_MAX_ACTION_LEN, COL_NNUL, NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,   1,                    COL_NNUL, NULL, NULL,    get_split_reconcile_state, set_split_reconcile_state },
@@ -133,27 +133,6 @@ set_guid( gpointer pObject, gpointer pValue )
     GUID* guid = (GUID*)pValue;
 
     qof_instance_set_guid( pInstance, guid );
-}
-
-static gpointer
-get_tx_currency_guid( gpointer pObject, const QofParam* param )
-{
-    const Transaction* pTx = GNC_TRANS(pObject);
-
-    return (gpointer)qof_instance_get_guid(
-                        QOF_INSTANCE(xaccTransGetCurrency( pTx )) );
-}
-
-static void 
-set_tx_currency_guid( gpointer pObject, gpointer pValue )
-{
-    Transaction* pTx = GNC_TRANS(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pTx) );
-    gnc_commodity* pCurrency;
-    GUID* guid = (GUID*)pValue;
-
-    pCurrency = gnc_commodity_find_commodity_by_guid( guid, pBook );
-    xaccTransSetCurrency( pTx, pCurrency );
 }
 
 static gpointer
@@ -350,11 +329,11 @@ static col_cvt_t quantity_table[] =
 };
 
 static gnc_numeric
-get_gnc_numeric_from_row( GdaDataModel* model, int row )
+get_gnc_numeric_from_row( GncGdaBackend* be, GdaDataModel* model, int row )
 {
 	gnc_numeric val;
 
-    gnc_gda_load_object( model, row, NULL, &val, quantity_table );
+    gnc_gda_load_object( be, model, row, NULL, &val, quantity_table );
 
     return val;
 }
@@ -381,7 +360,7 @@ get_account_balance_from_query( GncGdaBackend* be, GdaQuery* query )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-		    gnc_numeric val = get_gnc_numeric_from_row( pModel, r );
+		    gnc_numeric val = get_gnc_numeric_from_row( be, pModel, r );
 			bal = gnc_numeric_add( bal, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
 		}
 	}
@@ -461,7 +440,7 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
     GUID split_guid;
 	Split* pSplit;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     split_guid = *guid;
 
     pSplit = xaccSplitLookup( &split_guid, be->primary_book );
@@ -474,7 +453,7 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
         return pSplit;
     }
 
-    gnc_gda_load_object( pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
 
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
                             qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
@@ -524,7 +503,7 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     GUID tx_guid;
 	Transaction* pTx;
 
-    guid = gnc_gda_load_guid( pModel, row );
+    guid = gnc_gda_load_guid( be, pModel, row );
     tx_guid = *guid;
 
     pTx = xaccTransLookup( &tx_guid, be->primary_book );
@@ -532,7 +511,7 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pTx = xaccMallocTransaction( be->primary_book );
     }
     xaccTransBeginEdit( pTx );
-    gnc_gda_load_object( pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ),
                             qof_instance_get_slots( QOF_INSTANCE(pTx) ) );
     load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
@@ -737,7 +716,7 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
         for( r = 0; r < numRows; r++ ) {
 			const GUID* guid;
 
-			guid = gnc_gda_load_tx_guid( pModel, r );
+			guid = gnc_gda_load_tx_guid( be, pModel, r );
     		guid_to_string_buff( guid, guid_buf );
 			if( r == 0 ) {
 				s = g_strconcat( buf, "'", guid_buf, "'", NULL );

@@ -38,6 +38,8 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 
+#include "gnc-commodity.h"
+
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
 
@@ -60,7 +62,7 @@ typedef struct {
     gnc_gda_query_info* pQueryInfo;
 } gda_backend;
 
-typedef void (*GNC_GDA_LOAD_FN)( GdaDataModel* pModel, gint row,
+typedef void (*GNC_GDA_LOAD_FN)( GncGdaBackend* be, GdaDataModel* pModel, gint row,
                                 QofSetterFunc setter, gpointer pObject,
                                 const col_cvt_t* table );
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
@@ -145,7 +147,7 @@ get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
 }
 
 static void
-load_string( GdaDataModel* pModel, gint row,
+load_string( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -224,7 +226,7 @@ static col_type_handler_t string_handler
 /* ----------------------------------------------------------------- */
 
 static void
-load_int( GdaDataModel* pModel, gint row,
+load_int( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -297,7 +299,7 @@ static col_type_handler_t int_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_boolean( GdaDataModel* pModel, gint row,
+load_boolean( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -370,7 +372,7 @@ static col_type_handler_t boolean_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_int64( GdaDataModel* pModel, gint row,
+load_int64( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -442,7 +444,7 @@ static col_type_handler_t int64_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_double( GdaDataModel* pModel, gint row,
+load_double( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -515,7 +517,7 @@ static col_type_handler_t double_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_guid( GdaDataModel* pModel, gint row,
+load_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -592,8 +594,253 @@ static col_type_handler_t guid_handler =
         { load_guid, create_guid_col,
             get_gvalue_guid_for_query, get_gvalue_guid_cond };
 /* ----------------------------------------------------------------- */
+
 static void
-load_timespec( GdaDataModel* pModel, gint row,
+load_account_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)pGuid );
+    }
+}
+
+static void
+get_gvalue_account_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+                const col_cvt_t* table_row, GValue* value )
+{
+    QofAccessFunc getter;
+    const GUID* guid;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
+    memset( value, 0, sizeof( GValue ) );
+
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+	} else {
+    	getter = get_getter( obj_name, table_row );
+    	guid = (*getter)( pObject, NULL );
+	}
+    if( guid != NULL ) {
+        (void)guid_to_string_buff( guid, guid_buf );
+        g_value_init( value, G_TYPE_STRING );
+        g_value_set_string( value, guid_buf );
+    }
+}
+
+static void
+get_gvalue_account_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_guid( be, obj_name, pObject, table_row, &value );
+    add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_account_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_account_guid( be, obj_name, pObject, table_row, &value );
+    return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
+}
+
+static void
+create_account_guid_col( GdaServerProvider* server, GdaConnection* cnn,
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
+{
+    add_table_column( server, cnn, array_data, table_row->col_name,
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
+}
+
+static col_type_handler_t account_guid_handler =
+        { load_account_guid, create_account_guid_col,
+            get_gvalue_account_guid_for_query, get_gvalue_account_guid_cond };
+/* ----------------------------------------------------------------- */
+
+static void
+load_commodity_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+	gnc_commodity* commodity = NULL;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+	if( pGuid != NULL ) {
+		commodity = gnc_commodity_find_commodity_by_guid( pGuid, be->primary_book );
+	}
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, commodity, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)commodity );
+    }
+}
+
+static void
+get_gvalue_commodity_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+                const col_cvt_t* table_row, GValue* value )
+{
+    QofAccessFunc getter;
+    const GUID* guid = NULL;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gnc_commodity* commodity;
+
+    memset( value, 0, sizeof( GValue ) );
+
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &commodity, NULL );
+	} else {
+    	getter = get_getter( obj_name, table_row );
+    	commodity = (*getter)( pObject, NULL );
+	}
+	if( commodity != NULL ) {
+		guid = qof_instance_get_guid( QOF_INSTANCE(commodity) );
+	}
+    if( guid != NULL ) {
+        (void)guid_to_string_buff( guid, guid_buf );
+        g_value_init( value, G_TYPE_STRING );
+        g_value_set_string( value, guid_buf );
+    }
+}
+
+static void
+get_gvalue_commodity_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_commodity_guid( be, obj_name, pObject, table_row, &value );
+    add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_commodity_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_commodity_guid( be, obj_name, pObject, table_row, &value );
+    return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
+}
+
+static void
+create_commodity_guid_col( GdaServerProvider* server, GdaConnection* cnn,
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
+{
+    add_table_column( server, cnn, array_data, table_row->col_name,
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
+}
+
+static col_type_handler_t commodity_guid_handler =
+        { load_commodity_guid, create_commodity_guid_col,
+            get_gvalue_commodity_guid_for_query, get_gvalue_commodity_guid_cond };
+/* ----------------------------------------------------------------- */
+
+static void
+load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)pGuid );
+    }
+}
+
+static void
+get_gvalue_tx_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+                const col_cvt_t* table_row, GValue* value )
+{
+    QofAccessFunc getter;
+    const GUID* guid;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
+    memset( value, 0, sizeof( GValue ) );
+
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+	} else {
+    	getter = get_getter( obj_name, table_row );
+    	guid = (*getter)( pObject, NULL );
+	}
+    if( guid != NULL ) {
+        (void)guid_to_string_buff( guid, guid_buf );
+        g_value_init( value, G_TYPE_STRING );
+        g_value_set_string( value, guid_buf );
+    }
+}
+
+static void
+get_gvalue_tx_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_tx_guid( be, obj_name, pObject, table_row, &value );
+    add_field_to_query( query, table_row->col_name, &value );
+}
+
+static GdaQueryCondition*
+get_gvalue_tx_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+{
+    GValue value;
+
+    get_gvalue_tx_guid( be, obj_name, pObject, table_row, &value );
+    return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
+}
+
+static void
+create_tx_guid_col( GdaServerProvider* server, GdaConnection* cnn,
+            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
+{
+    add_table_column( server, cnn, array_data, table_row->col_name,
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
+}
+
+static col_type_handler_t tx_guid_handler =
+        { load_tx_guid, create_tx_guid_col,
+            get_gvalue_tx_guid_for_query, get_gvalue_tx_guid_cond };
+/* ----------------------------------------------------------------- */
+static void
+load_timespec( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -692,7 +939,7 @@ static col_type_handler_t timespec_handler =
             get_gvalue_timespec_for_query, get_gvalue_timespec_cond };
 /* ----------------------------------------------------------------- */
 static void
-load_date( GdaDataModel* pModel, gint row,
+load_date( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -791,7 +1038,7 @@ get_integer_value( const GValue* value )
 }
 
 static void
-load_numeric( GdaDataModel* pModel, gint row,
+load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -969,6 +1216,18 @@ get_handler( int col_type )
             pHandler = &guid_handler;
             break;
                 
+		case CT_GUID_A:
+            pHandler = &account_guid_handler;
+            break;
+                
+		case CT_GUID_C:
+            pHandler = &commodity_guid_handler;
+            break;
+                
+		case CT_GUID_T:
+            pHandler = &tx_guid_handler;
+            break;
+                
         case CT_TIMESPEC:
             pHandler = &timespec_handler;
             break;
@@ -1008,11 +1267,11 @@ static col_cvt_t guid_table[] =
 };
 
 const GUID*
-gnc_gda_load_guid( GdaDataModel* pModel, gint row )
+gnc_gda_load_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
 	static GUID guid;
 
-    gnc_gda_load_object( pModel, row, NULL, &guid, guid_table );
+    gnc_gda_load_object( be, pModel, row, NULL, &guid, guid_table );
 
     return &guid;
 }
@@ -1025,17 +1284,17 @@ static col_cvt_t tx_guid_table[] =
 };
 
 const GUID*
-gnc_gda_load_tx_guid( GdaDataModel* pModel, gint row )
+gnc_gda_load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
     static GUID guid;
 
-    gnc_gda_load_object( pModel, row, NULL, &guid, tx_guid_table );
+    gnc_gda_load_object( be, pModel, row, NULL, &guid, tx_guid_table );
 
     return &guid;
 }
 
 void
-gnc_gda_load_object( GdaDataModel* pModel, gint row,
+gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel, gint row,
                     QofIdTypeConst obj_name, gpointer pObject,
                     const col_cvt_t* table )
 {
@@ -1051,7 +1310,7 @@ gnc_gda_load_object( GdaDataModel* pModel, gint row,
             setter = table[col].setter;
         }
         pHandler = get_handler( table[col].col_type );
-        pHandler->load_fn( pModel, row, setter, pObject, &table[col] );
+        pHandler->load_fn( be, pModel, row, setter, pObject, &table[col] );
     }
 }
 

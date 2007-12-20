@@ -47,10 +47,6 @@ static gpointer get_value( gpointer pObject, const QofParam* param );
 static void set_value( gpointer pObject, gpointer pValue );
 static gpointer get_date( gpointer pObject, const QofParam* param );
 static void set_date( gpointer pObject, gpointer pValue );
-static gpointer get_currency_guid( gpointer pObject, const QofParam* param );
-static void set_currency_guid( gpointer pObject, gpointer pValue );
-static gpointer get_commodity_guid( gpointer pObject, const QofParam* param );
-static void set_commodity_guid( gpointer pObject, gpointer pValue );
 
 #define PRICE_MAX_SOURCE_LEN 50
 #define PRICE_MAX_TYPE_LEN 50
@@ -58,8 +54,12 @@ static void set_commodity_guid( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",           CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "commodity_guid", CT_GUID,     0,                    COL_NNUL, NULL, NULL,       get_commodity_guid, set_commodity_guid },
-    { "currency_guid",  CT_GUID,     0,                    COL_NNUL, NULL, NULL,       get_currency_guid,  set_currency_guid },
+    { "commodity_guid", CT_GUID_C,   0,                    COL_NNUL, NULL, NULL,
+			(QofAccessFunc)gnc_price_get_commodity,
+			(QofSetterFunc)gnc_price_set_commodity },
+    { "currency_guid",  CT_GUID_C,   0,                    COL_NNUL, NULL, NULL,
+			(QofAccessFunc)gnc_price_get_currency,
+			(QofSetterFunc)gnc_price_set_currency },
     { "date",           CT_TIMESPEC, 0,                    COL_NNUL, NULL, NULL,       get_date,           set_date },
     { "source",         CT_STRING,   PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
     { "type",           CT_STRING,   PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
@@ -106,48 +106,6 @@ set_date( gpointer pObject, gpointer pValue )
     gnc_price_set_time( pPrice, *pTimespec );
 }
 
-static gpointer
-get_currency_guid( gpointer pObject, const QofParam* param )
-{
-    const GNCPrice* pPrice = GNC_PRICE(pObject);
-
-    return (gpointer)qof_instance_get_guid(
-                            QOF_INSTANCE(gnc_price_get_currency( pPrice )) );
-}
-
-static void 
-set_currency_guid( gpointer pObject, gpointer pValue )
-{
-    GNCPrice* pPrice = GNC_PRICE(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
-    gnc_commodity* pCurrency;
-    GUID* guid = (GUID*)pValue;
-
-    pCurrency = gnc_commodity_find_commodity_by_guid( guid, pBook );
-    gnc_price_set_currency( pPrice, pCurrency );
-}
-
-static gpointer
-get_commodity_guid( gpointer pObject, const QofParam* param )
-{
-    const GNCPrice* pPrice = GNC_PRICE(pObject);
-
-    return (gpointer)qof_instance_get_guid(
-                        QOF_INSTANCE(gnc_price_get_commodity( pPrice )) );
-}
-
-static void 
-set_commodity_guid( gpointer pObject, gpointer pValue )
-{
-    GNCPrice* pPrice = GNC_PRICE(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pPrice) );
-    gnc_commodity* pCommodity;
-    GUID* guid = (GUID*)pValue;
-
-    pCommodity = gnc_commodity_find_commodity_by_guid( guid, pBook );
-    gnc_price_set_commodity( pPrice, pCommodity );
-}
-
 static GNCPrice*
 load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
@@ -155,7 +113,7 @@ load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
 
     pPrice = gnc_price_create( be->primary_book );
 
-    gnc_gda_load_object( pModel, row, GNC_ID_PRICE, pPrice, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_PRICE, pPrice, col_table );
 
     qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
 

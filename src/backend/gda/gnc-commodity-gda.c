@@ -116,7 +116,7 @@ load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
 
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
 
-    gnc_gda_load_object( pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
+    gnc_gda_load_object( be, pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pCommodity) ),
                             qof_instance_get_slots( QOF_INSTANCE(pCommodity) ) );
 
