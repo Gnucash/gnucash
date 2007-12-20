@@ -603,6 +603,7 @@ load_account_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
+	Account* account = NULL;
 
     val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
     if( gda_value_is_null( val ) ) {
@@ -611,10 +612,13 @@ load_account_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
         string_to_guid( g_value_get_string( val ), &guid );
         pGuid = &guid;
     }
+	if( pGuid != NULL ) {
+		account = xaccAccountLookup( pGuid, be->primary_book );
+	}
     if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+		g_object_set( pObject, table->gobj_param_name, account, NULL );
     } else {
-		(*setter)( pObject, (const gpointer)pGuid );
+		(*setter)( pObject, (const gpointer)account );
     }
 }
 
@@ -623,16 +627,20 @@ get_gvalue_account_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pO
                 const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
-    const GUID* guid;
+    const GUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	Account* account;
 
     memset( value, 0, sizeof( GValue ) );
 
 	if( table_row->gobj_param_name != NULL ) {
-		g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+		g_object_get( pObject, table_row->gobj_param_name, &account, NULL );
 	} else {
     	getter = get_getter( obj_name, table_row );
-    	guid = (*getter)( pObject, NULL );
+    	account = (*getter)( pObject, NULL );
+	}
+	if( account != NULL ) {
+		guid = qof_instance_get_guid( QOF_INSTANCE(account) );
 	}
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );
@@ -769,6 +777,7 @@ load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
+	Transaction* tx = NULL;
 
     val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
     if( gda_value_is_null( val ) ) {
@@ -777,10 +786,13 @@ load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
         string_to_guid( g_value_get_string( val ), &guid );
         pGuid = &guid;
     }
+	if( pGuid != NULL ) {
+		tx = xaccTransLookup( pGuid, be->primary_book );
+	}
     if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+		g_object_set( pObject, table->gobj_param_name, tx, NULL );
     } else {
-		(*setter)( pObject, (const gpointer)pGuid );
+		(*setter)( pObject, (const gpointer)tx );
     }
 }
 
@@ -789,16 +801,20 @@ get_gvalue_tx_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject
                 const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
-    const GUID* guid;
+    const GUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	Transaction* tx;
 
     memset( value, 0, sizeof( GValue ) );
 
 	if( table_row->gobj_param_name != NULL ) {
-		g_object_get( pObject, table_row->gobj_param_name, &guid, NULL );
+		g_object_get( pObject, table_row->gobj_param_name, &tx, NULL );
 	} else {
     	getter = get_getter( obj_name, table_row );
-    	guid = (*getter)( pObject, NULL );
+    	tx = (*getter)( pObject, NULL );
+	}
+	if( tx != NULL ) {
+		guid = qof_instance_get_guid( QOF_INSTANCE(tx) );
 	}
     if( guid != NULL ) {
         (void)guid_to_string_buff( guid, guid_buf );

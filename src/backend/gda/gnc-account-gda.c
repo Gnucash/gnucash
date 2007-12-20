@@ -47,8 +47,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "accounts"
 
-static gpointer get_commodity( gpointer pObject, const QofParam* );
-static void set_commodity( gpointer pObject, gpointer pValue );
 static gpointer get_parent( gpointer pObject, const QofParam* );
 static void set_parent( gpointer pObject, gpointer pValue );
 static void set_parent_guid( gpointer pObject, gpointer pValue );
@@ -63,9 +61,8 @@ static col_cvt_t col_table[] =
     { "guid",           CT_GUID,   0,                           COL_NNUL, "guid" },
     { "name",           CT_STRING, ACCOUNT_MAX_NAME_LEN,        COL_NNUL, "name" },
     { "account_type",   CT_STRING, ACCOUNT_MAX_TYPE_LEN,        COL_NNUL, NULL, ACCOUNT_TYPE_ },
-//    { "commodity_guid", CT_GUID_C, 0,                           COL_NNUL, NULL, NULL, get_commodity, set_commodity },
     { "commodity_guid", CT_GUID_C, 0,                           COL_NNUL, "commodity" },
-    { "parent_guid",    CT_GUID_A, 0,                           0,        NULL, NULL, get_parent,    set_parent },
+    { "parent_guid",    CT_GUID,   0,                           0,        NULL, NULL, get_parent,    set_parent },
     { "code",           CT_STRING, ACCOUNT_MAX_CODE_LEN,        0,        "code" },
     { "description",    CT_STRING, ACCOUNT_MAX_DESCRIPTION_LEN, 0,        "description" },
     { NULL }
@@ -82,26 +79,6 @@ typedef struct {
 } account_parent_guid_struct;
 
 /* ================================================================= */
-static gpointer
-get_commodity( gpointer pObject, const QofParam* param )
-{
-    const Account* pAccount = GNC_ACCOUNT(pObject);
-
-    return (gpointer)qof_instance_get_guid(
-                        QOF_INSTANCE(xaccAccountGetCommodity( pAccount )) );
-}
-
-static void 
-set_commodity( gpointer pObject, gpointer pValue )
-{
-    Account* pAccount = GNC_ACCOUNT(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
-    gnc_commodity* pCommodity;
-    GUID* guid = (GUID*)pValue;
-
-    pCommodity = gnc_commodity_find_commodity_by_guid( guid, pBook );
-    xaccAccountSetCommodity( pAccount, pCommodity );
-}
 
 static gpointer
 get_parent( gpointer pObject, const QofParam* param )

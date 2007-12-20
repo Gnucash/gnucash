@@ -73,7 +73,7 @@ static col_cvt_t col_table[] =
     { "adv_notify",        CT_INT,     0,               COL_NNUL, NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
             (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
-    { "template_act_guid", CT_GUID_A,  0,               COL_NNUL, NULL, NULL,        get_template_act_guid, set_template_act_guid },
+    { "template_act_guid", CT_GUID,    0,               COL_NNUL, NULL, NULL,        get_template_act_guid, set_template_act_guid },
     { NULL }
 };
 

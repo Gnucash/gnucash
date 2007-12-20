@@ -72,19 +72,15 @@ static col_cvt_t tx_col_table[] =
 {
     { "guid",          CT_GUID,     0,                      COL_NNUL, "guid" },
     { "currency_guid", CT_GUID_C,   0,                      COL_NNUL, NULL, NULL,
-			(QofAccessFunc)xaccTransGetCurrency,
-			(QofSetterFunc)xaccTransSetCurrency },
+			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
     { "num",           CT_STRING,   TX_MAX_NUM_LEN,         COL_NNUL, NULL, NULL, get_tx_num,           set_tx_num },
     { "post_date",     CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_post_date,     set_tx_post_date },
     { "enter_date",    CT_TIMESPEC, 0,                      COL_NNUL, NULL, NULL, get_tx_enter_date,    set_tx_enter_date },
     { "description",   CT_STRING,   TX_MAX_DESCRIPTION_LEN, 0,        NULL, NULL,
-            (QofAccessFunc)xaccTransGetDescription,
-            (QofSetterFunc)xaccTransSetDescription },
+            (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
     { NULL }
 };
 
-static gpointer get_split_tx_guid( gpointer pObject, const QofParam* param );
-static void set_split_tx_guid( gpointer pObject, gpointer pValue );
 static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* param );
 static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
 static gpointer get_split_reconcile_date( gpointer pObject, const QofParam* param );
@@ -93,8 +89,6 @@ static gpointer get_split_value( gpointer pObject, const QofParam* param );
 static void set_split_value( gpointer pObject, gpointer pValue );
 static gpointer get_split_quantity( gpointer pObject, const QofParam* param );
 static void set_split_quantity( gpointer pObject, gpointer pValue );
-static gpointer get_split_account_guid( gpointer pObject, const QofParam* param );
-static void set_split_account_guid( gpointer pObject, gpointer pValue );
 
 #define SPLIT_MAX_MEMO_LEN 50
 #define SPLIT_MAX_ACTION_LEN 50
@@ -102,8 +96,10 @@ static void set_split_account_guid( gpointer pObject, gpointer pValue );
 static col_cvt_t split_col_table[] =
 {
     { "guid",            CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "tx_guid",         CT_GUID_T,   0,                    COL_NNUL, NULL, NULL,    get_split_tx_guid,         set_split_tx_guid },
-    { "account_guid",    CT_GUID_A,   0,                    COL_NNUL, NULL, NULL,    get_split_account_guid,    set_split_account_guid },
+    { "tx_guid",         CT_GUID_T,   0,                    COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccSplitGetParent, (QofSetterFunc)xaccSplitSetParent },
+    { "account_guid",    CT_GUID_A,   0,                    COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccSplitGetAccount, (QofSetterFunc)xaccSplitSetAccount },
     { "memo",            CT_STRING,   SPLIT_MAX_MEMO_LEN,   COL_NNUL, NULL, SPLIT_MEMO },
     { "action",          CT_STRING,   SPLIT_MAX_ACTION_LEN, COL_NNUL, NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,   1,                    COL_NNUL, NULL, NULL,    get_split_reconcile_state, set_split_reconcile_state },
@@ -118,6 +114,8 @@ static col_cvt_t guid_col_table[] =
     { "tx_guid", CT_GUID, 0, 0, NULL, NULL, get_guid, set_guid },
     { NULL }
 };
+
+static void retrieve_numeric_value( gpointer pObject, gpointer pValue );
 
 /* ================================================================= */
 static gpointer
@@ -190,26 +188,6 @@ set_tx_enter_date( gpointer pObject, gpointer pValue )
     Timespec* pTS = (Timespec*)pValue;
 
     xaccTransSetDateEnteredTS( pTx, pTS );
-}
-
-static gpointer
-get_split_tx_guid( gpointer pObject, const QofParam* param )
-{
-    const Split* pSplit = GNC_SPLIT(pObject);
-    Transaction* pTx = xaccSplitGetParent( pSplit );
-
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pTx) );
-}
-
-static void 
-set_split_tx_guid( gpointer pObject, gpointer pValue )
-{
-    Split* pSplit = GNC_SPLIT(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
-    GUID* guid = (GUID*)pValue;
-    Transaction* pTx = xaccTransLookup( guid, pBook );
-
-    xaccSplitSetParent( pSplit, pTx );
 }
 
 static gpointer
@@ -289,28 +267,6 @@ set_split_quantity( gpointer pObject, gpointer pValue )
     xaccSplitSetAmount( pSplit, *pV );
 }
 
-static gpointer
-get_split_account_guid( gpointer pObject, const QofParam* param )
-{
-    const Split* pSplit = GNC_SPLIT(pObject);
-    Account* pAccount = xaccSplitGetAccount( pSplit );
-
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pAccount) );
-}
-
-static void 
-set_split_account_guid( gpointer pObject, gpointer pValue )
-{
-    Split* pSplit = GNC_SPLIT(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSplit) );
-    GUID* guid = (GUID*)pValue;
-    Account* pAccount = xaccAccountLookup( guid, pBook );
-
-    xaccSplitSetAccount( pSplit, pAccount );
-}
-
-static void retrieve_numeric_value( gpointer pObject, gpointer pValue );
-
 static void 
 retrieve_numeric_value( gpointer pObject, gpointer pValue )
 {
@@ -321,7 +277,7 @@ retrieve_numeric_value( gpointer pObject, gpointer pValue )
 }
 
 
-// Table to retrieve just the guid
+// Table to retrieve just the quantity
 static col_cvt_t quantity_table[] =
 {
     { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, retrieve_numeric_value },
