@@ -11,7 +11,8 @@
 ;;   http://www.xe.com/iso4217.htm
 ;;   http://www.thefinancials.com/vortex/CurrencyFormats.html
 
-( "Afghanistan Afghani" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 )
+( "Afghanistan Afghani (old)" "afghani" "pul" "ISO4217" "AFA" "004" 100 100 ) ;; through 2003-01-02
+( "Afghanistan Afghani" "afghani" "afghani" "ISO4217" "AFN" "971" 1 1 ) ;; from 2002-10-07
 ( "Albanian Lek" "lek" "qindarka" "ISO4217" "ALL" "008" 100 100 )
 ( "Algerian Dinar" "dinar" "centime"  "ISO4217" "DZD" "012" 100 100 )
 ( "Andorran Franc" "franc" "centime" "ISO4217" "ADF" "950" 100 100 ) ;; 1/1 French Franc
