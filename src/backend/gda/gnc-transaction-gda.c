@@ -56,10 +56,6 @@ typedef struct {
     const GUID* guid;
 } split_info_t;
 
-static gpointer get_guid( gpointer pObject, const QofParam* param );
-static void set_guid( gpointer pObject, gpointer pValue );
-static gpointer get_tx_num( gpointer pObject, const QofParam* param );
-static void set_tx_num( gpointer pObject, gpointer pValue );
 static gpointer get_tx_post_date( gpointer pObject, const QofParam* param );
 static void set_tx_post_date( gpointer pObject, gpointer pValue );
 static gpointer get_tx_enter_date( gpointer pObject, const QofParam* param );
@@ -105,46 +101,13 @@ static col_cvt_t split_col_table[] =
 
 static col_cvt_t guid_col_table[] =
 {
-    { "tx_guid", CT_GUID, 0, 0, NULL, NULL, get_guid, set_guid },
+    { "tx_guid", CT_GUID, 0, 0, "guid" },
     { NULL }
 };
 
 static void retrieve_numeric_value( gpointer pObject, gnc_numeric value );
 
 /* ================================================================= */
-static gpointer
-get_guid( gpointer pObject, const QofParam* param )
-{
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pObject) );
-}
-
-static void 
-set_guid( gpointer pObject, gpointer pValue )
-{
-    QofInstance* pInstance = QOF_INSTANCE(pObject);
-    GUID* guid = (GUID*)pValue;
-
-    qof_instance_set_guid( pInstance, guid );
-}
-
-static gpointer
-get_tx_num( gpointer pObject, const QofParam* param )
-{
-    const Transaction* pTx = GNC_TRANS(pObject);
-    const gchar* s;
-
-    s = xaccTransGetNum( pTx );
-    return (gpointer)s;
-}
-
-static void 
-set_tx_num( gpointer pObject, gpointer pValue )
-{
-    Transaction* pTx = GNC_TRANS(pObject);
-    const gchar* s = (const gchar*)pValue;
-
-    xaccTransSetNum( pTx, s );
-}
 
 static gpointer
 get_tx_post_date( gpointer pObject, const QofParam* param )
