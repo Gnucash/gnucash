@@ -75,18 +75,18 @@ typedef struct
 
 // Type for conversion of db row to object.
 typedef enum {
-	CT_STRING,
-	CT_GUID,
-	CT_GUID_A,
-	CT_GUID_C,
-	CT_GUID_T,
-	CT_INT,
-	CT_INT64,
-	CT_TIMESPEC,
-	CT_GDATE,
-	CT_NUMERIC,
-	CT_DOUBLE,
-	CT_BOOLEAN
+	CT_STRING = -1,
+	CT_GUID = -2,
+	CT_INT = -3,
+	CT_INT64 = -4,
+	CT_TIMESPEC = -5,
+	CT_GDATE = -6,
+	CT_NUMERIC = -7,
+	CT_DOUBLE = -8,
+	CT_BOOLEAN = -9,
+	CT_GUID_A = -10,
+	CT_GUID_C = -11,
+	CT_GUID_T = -12
 } E_COL_TYPE;
 
 typedef struct {
@@ -109,6 +109,26 @@ typedef enum {
 	OP_DB_ADD_OR_UPDATE,
 	OP_DB_DELETE
 } E_DB_OPERATION;
+
+typedef void (*GNC_GDA_LOAD_FN)( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+                                QofSetterFunc setter, gpointer pObject,
+                                const col_cvt_t* table );
+typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
+                        GdaConnection* cnn, xmlNodePtr array_data,
+                        const col_cvt_t* table_row, gboolean pkey );
+typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( GncGdaBackend* be,
+                QofIdTypeConst obj_name, gpointer pObject,
+                const col_cvt_t* table_row, GdaQuery* query );
+typedef GdaQueryCondition* (*GNC_GDA_GET_GVALUE_COND_FN)( GncGdaBackend* be,
+                QofIdTypeConst obj_name, gpointer pObject,
+                const col_cvt_t* table_row, GdaQuery* query );
+
+typedef struct {
+    GNC_GDA_LOAD_FN             load_fn;
+    GNC_GDA_CREATE_COL_FN       create_col_fn;
+    GNC_GDA_GET_GVALUE_QUERY_FN get_gvalue_query_fn;
+    GNC_GDA_GET_GVALUE_COND_FN  get_gvalue_cond_fn;
+} col_type_handler_t;
 
 gboolean gnc_gda_do_db_operation( GncGdaBackend* pBackend,
 									E_DB_OPERATION op,
@@ -154,6 +174,15 @@ GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* tab
 GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
 														const gchar* col_name,
 														const GValue* value );
+void gnc_gda_register_column_handler( int colType, col_type_handler_t* handler );
+void gnc_gda_register_standard_col_type_handlers( void );
+
+void gnc_gda_get_gvalue_objectref_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
+GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
+                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
+void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
+	            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init(GModule *module);

@@ -979,6 +979,7 @@ gnc_gda_backend_new(void)
     if( !initialized ) {
         gda_init( "gnucash", "2.0", 0, NULL );
         gnc_gda_init_object_handlers();
+		gnc_gda_register_standard_col_type_handlers();
         initialized = TRUE;
     }
 
