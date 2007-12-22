@@ -1564,6 +1564,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/test-core/Makefile
           src/business/Makefile
           src/business/business-core/Makefile
+          src/business/business-core/gda/Makefile
           src/business/business-core/test/Makefile
           src/business/business-core/xml/Makefile
           src/business/business-utils/Makefile
