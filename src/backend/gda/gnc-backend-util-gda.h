@@ -125,6 +125,11 @@ typedef struct {
     GNC_GDA_GET_GVALUE_COND_FN  get_gvalue_cond_fn;
 } col_type_handler_t;
 
+QofAccessFunc gnc_gda_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row );
+void gnc_gda_add_table_column( GdaServerProvider* server, GdaConnection* cnn,
+            xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
+            gint size, gint flags );
+
 gboolean gnc_gda_do_db_operation( GncGdaBackend* pBackend,
 									E_DB_OPERATION op,
 									const gchar* table_name,
@@ -169,8 +174,9 @@ GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* tab
 GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
 														const gchar* col_name,
 														const GValue* value );
-void gnc_gda_register_column_handler( const gchar* colType, const col_type_handler_t* handler );
+void gnc_gda_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler );
 void gnc_gda_register_standard_col_type_handlers( void );
+void gnc_gda_add_field_to_query( GdaQuery* query, const gchar* col_name, const GValue* value );
 
 void gnc_gda_get_gvalue_objectref_guid_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );

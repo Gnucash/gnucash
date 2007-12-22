@@ -46,8 +46,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 #define MAX_LANGUAGE_LEN 50
 #define MAX_ACL_LEN 50
 
-#define employee_addr_string "employee:addr"
-
 #define TABLE_NAME "employees"
 
 static col_cvt_t col_table[] =
@@ -63,6 +61,7 @@ static col_cvt_t col_table[] =
 	{ "ccard_guid", CT_ACCOUNTREF,    0,                COL_NNUL, NULL, EMPLOYEE_CC },
 	{ "workday",    CT_NUMERIC,       0,                COL_NNUL, NULL, EMPLOYEE_WORKDAY },
 	{ "rate",       CT_NUMERIC,       0,                COL_NNUL, NULL, EMPLOYEE_RATE },
+	{ "addr",       CT_ADDRESS,       0,                0,        NULL, EMPLOYEE_ADDR },
     { NULL }
 };
 

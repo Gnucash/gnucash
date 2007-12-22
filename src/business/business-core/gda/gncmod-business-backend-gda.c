@@ -77,7 +77,7 @@ libgncmod_business_backend_gda_gnc_module_init(int refcount)
 
   if (refcount == 0) {
     /* Initialize our pointers into the backend subsystem */
-//    gnc_address_gda_initialize ();
+    gnc_address_gda_initialize ();
 //    gnc_billterm_gda_initialize ();
     gnc_customer_gda_initialize ();
     gnc_employee_gda_initialize ();

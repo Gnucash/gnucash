@@ -61,18 +61,15 @@ static col_cvt_t col_table[] =
 	{ "active",       CT_BOOLEAN,       0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncVendorGetActive, (QofSetterFunc)gncVendorSetActive },
 	{ "tax_override", CT_BOOLEAN,       0,             COL_NNUL, NULL, VENDOR_TAX_OVERRIDE },
+	{ "addr",         CT_ADDRESS,       0,             0,        NULL, VENDOR_ADDR },
 	{ NULL }
 };
 
 #if 0
-#define vendor_addr_string "vendor:addr"
 #define vendor_terms_string "vendor:terms"
 #define vendor_taxtable_string "vendor:taxtable"
 #define vendor_taxtableoverride_string "vendor:use-tt"
 
-    xmlAddChild(ret, gnc_address_to_dom_tree(vendor_addr_string,
-					     gncVendorGetAddr (vendor)));
-    
     term = gncVendorGetTerms (vendor);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,

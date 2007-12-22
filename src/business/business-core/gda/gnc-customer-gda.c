@@ -59,23 +59,16 @@ static col_cvt_t col_table[] =
 	{ "currency",     CT_COMMODITYREF,  0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncCustomerGetCurrency, (QofSetterFunc)gncCustomerSetCurrency },
 	{ "tax_override", CT_BOOLEAN,       0,             COL_NNUL, NULL, CUSTOMER_TT_OVER },
+	{ "addr",         CT_ADDRESS,       0,             0,        NULL, CUSTOMER_ADDR },
+	{ "shipaddr",     CT_ADDRESS,       0,             0,        NULL, CUSTOMER_SHIPADDR },
 	{ NULL }
 };
 
 #if 0
-/* ids */
-#define cust_addr_string "cust:addr"
-#define cust_shipaddr_string "cust:shipaddr"
 #define cust_terms_string "cust:terms"
 #define cust_taxincluded_string "cust:taxincluded"
 #define cust_taxtable_string "cust:taxtable"
 
-    xmlAddChild(ret, gnc_address_to_dom_tree(cust_addr_string,
-					     gncCustomerGetAddr (cust)));
-    
-    xmlAddChild(ret, gnc_address_to_dom_tree(cust_shipaddr_string,
-					     gncCustomerGetShipAddr (cust)));
-    
     term = gncCustomerGetTerms (cust);
     if (term)
       xmlAddChild(ret, guid_to_dom_tree(cust_terms_string,
