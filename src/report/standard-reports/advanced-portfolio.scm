@@ -47,6 +47,7 @@
 (define optname-show-shares (N_ "Show number of shares"))
 (define optname-basis-method (N_ "Basis calculation method"))
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
+(define optname-ignore-brokerage-fees (N_ "Ignore brokerage fees when calculating returns"))
 
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
@@ -99,6 +100,12 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-prefer-pricelist "f" 
       (N_ "Prefer use of price editor pricing over transactions, where applicable.")
+      #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-ignore-brokerage-fees "g"
+      (N_ "Ignore brokerage fees when calculating returns")
       #t))
 
     (gnc:register-option
@@ -320,8 +327,9 @@
 (define (table-add-stock-rows table accounts to-date
                                 currency price-fn exchange-fn 
 				include-empty show-symbol show-listing show-shares show-price
-                                basis-method prefer-pricelist total-basis total-value total-moneyin total-moneyout
-                                total-gain total-ugain total-brokerage)
+                                basis-method prefer-pricelist ignore-brokerage-fees
+                                total-basis total-value total-moneyin total-moneyout
+                                total-income total-gain total-ugain total-brokerage)
 
    (let ((share-print-info
 	  (gnc-share-print-info-places
@@ -403,10 +411,14 @@
 			    (begin
 			      ;; we're using a transaction to get the price, so we have to set some stuff
 			      (set! commod-currency (xaccAccountGetCommodity (xaccSplitGetAccount s)))
+			      ;; FIX-ME this doesn't set a pricing-txn
+			      ;; if there is a price list which leads
+			      ;; to a swigification crash if the user
+			      ;; unchecks "prefer price list" option.
 			      (set! pricing-txn (xaccSplitGetParent s))
 			      (gnc:debug "pricing txn is " pricing-txn)
-			    )
 			      )
+			    )
 			) 
 		      (xaccTransGetSplitList parent)) 
 			  )
@@ -462,7 +474,7 @@
 				 ;; with these to differentiate them
 				 ;; :(
 				 ((split-account-type? s ACCT-TYPE-INCOME)
-				  (dividendcoll 'add commod-currency split-value))
+				  (dividendcoll 'add commod-currency (gnc-numeric-neg split-value)))
 
 				 ;; we have units, handle all cases of that
 				 ((not (gnc-numeric-zero-p split-units))
@@ -550,24 +562,21 @@
 	    (gaincoll 'add currency (sum-basis basis-list))
 	    (gnc:debug (list "basis we're using to build rows is " (sum-basis basis-list)))
 	    (gnc:debug (list "but the actual basis list is " basis-list))
-	    ;; FIXME! these lines were intended to adjust the dividends and
-	    ;; brokerage fees back out of the money collector so the user could
-	    ;; see just the pure investment money. It doesn't work because its
-	    ;; impossible to tell where income comes from.
 
-	    ;; (moneyincoll 'minusmerge dividendcoll #f)
-	    ;; (moneyincoll 'minusmerge brokeragecoll #f)
-	    ;; (moneyoutcoll 'minusmerge brokeragecoll #f)
 	    (gaincoll 'merge moneyoutcoll #f)
 	    (gaincoll 'minusmerge moneyincoll #f)
 
+            ;; This removes the already-counted dividends from moneyin.
+	    (moneyincoll 'minusmerge dividendcoll #f)
 
+            (if (not ignore-brokerage-fees)
+	      (moneyincoll 'merge brokeragecoll #f))
 
-	    
 	  (if (or include-empty (not (gnc-numeric-zero-p units)))
 	    (let* ((moneyin (gnc:sum-collector-commodity moneyincoll currency exchange-fn))
 		  (moneyout (gnc:sum-collector-commodity moneyoutcoll currency exchange-fn))
-                   (brokerage (gnc:sum-collector-commodity brokeragecoll currency exchange-fn))
+                  (brokerage (gnc:sum-collector-commodity brokeragecoll currency exchange-fn))
+		  (income (gnc:sum-collector-commodity dividendcoll currency exchange-fn))
 		  ;; just so you know, gain == realized gain, ugain == un-realized gain, bothgain, well..
 		  (gain (gnc:sum-collector-commodity gaincoll currency exchange-fn))
 		  (ugain (gnc:make-gnc-monetary currency 
@@ -585,6 +594,7 @@
 	      (total-moneyin 'merge moneyincoll #f)
 	      (total-moneyout 'merge moneyoutcoll #f)
               (total-brokerage 'merge brokeragecoll #f)
+	      (total-income 'merge dividendcoll #f)
 	      (total-gain 'merge gaincoll #f)
 	      (total-ugain 'add (gnc:gnc-monetary-commodity ugain) (gnc:gnc-monetary-amount ugain))
 	      (total-basis 'add currency (sum-basis basis-list))
@@ -613,17 +623,25 @@
 					(gnc:make-html-table-header-cell/markup "number-cell" value)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyin)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyout)
+					(gnc:make-html-table-header-cell/markup "number-cell" income)
 					(gnc:make-html-table-header-cell/markup "number-cell" gain)
 					(gnc:make-html-table-header-cell/markup "number-cell" ugain)
 					(gnc:make-html-table-header-cell/markup "number-cell" bothgain)
 					(gnc:make-html-table-header-cell/markup "number-cell" 
-					    (let ((moneyinvalue (gnc-numeric-to-double
-								 (gnc:gnc-monetary-amount moneyin))))
+					    (let* ((moneyinvalue (gnc-numeric-to-double
+								  (gnc:gnc-monetary-amount moneyin)))
+					           (bothgainvalue (+ (gnc-numeric-to-double
+								      (gnc:gnc-monetary-amount income))
+								   (- (gnc-numeric-to-double
+								       (gnc:gnc-monetary-amount bothgain))
+								      (if ignore-brokerage-fees
+								       0
+								       (gnc-numeric-to-double
+								        (gnc:gnc-monetary-amount brokerage))))))
+                                             )
 					      (if (= 0.0 moneyinvalue)
 						  (sprintf #f "%.2f%%" moneyinvalue)
-						  (sprintf #f "%.2f%%" (* 100 (/ (gnc-numeric-to-double
-									     (gnc:gnc-monetary-amount bothgain))
-									    moneyinvalue))))))
+						  (sprintf #f "%.2f%%" (* 100 (/ bothgainvalue moneyinvalue))))))
                                         (gnc:make-html-table-header-cell/markup "number-cell" brokerage)
 					 )
 			)
@@ -671,11 +689,14 @@
 				  optname-basis-method))
 	(prefer-pricelist (get-option gnc:pagename-general
 				      optname-prefer-pricelist))
+	(ignore-brokerage-fees (get-option gnc:pagename-general
+				  optname-ignore-brokerage-fees))
 
 	(total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
         (total-moneyin  (gnc:make-commodity-collector))
         (total-moneyout (gnc:make-commodity-collector))
+        (total-income   (gnc:make-commodity-collector))
         (total-gain     (gnc:make-commodity-collector)) ;; realized gain
 	(total-ugain (gnc:make-commodity-collector))    ;; unrealized gain
         (total-brokerage (gnc:make-commodity-collector))
@@ -707,9 +728,12 @@
 		      pricedb foreign (timespecCanonicalDayTime date))))))
 	       (headercols (list (_ "Account")))
 	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
+	       (sum-total-moneyin (gnc-numeric-zero))
+	       (sum-total-income (gnc-numeric-zero))
 	       (sum-total-both-gains (gnc-numeric-zero))
 	       (sum-total-gain (gnc-numeric-zero))
-	       (sum-total-ugain (gnc-numeric-zero)))
+	       (sum-total-ugain (gnc-numeric-zero))
+	       (sum-total-brokerage (gnc-numeric-zero)))
 
 	  ;;begin building lists for which columns to display
           (if show-symbol 
@@ -733,6 +757,7 @@
 				    (_ "Value")
 				    (_ "Money In")
 				    (_ "Money Out")
+				    (_ "Income")
 				    (_ "Realized Gain")
 				    (_ "Unrealized Gain")
 				    (_ "Total Gain")
@@ -747,22 +772,27 @@
           
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn
-           include-empty show-symbol show-listing show-shares show-price 
-	   basis-method prefer-pricelist total-basis total-value total-moneyin total-moneyout total-gain total-ugain total-brokerage)
+           include-empty show-symbol show-listing show-shares show-price
+	   basis-method prefer-pricelist ignore-brokerage-fees
+           total-basis total-value total-moneyin total-moneyout
+           total-income total-gain total-ugain total-brokerage)
 	  
 
+	  (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
+	  (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
 	  (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
 	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
 	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
 										      (gnc:gnc-monetary-amount sum-total-ugain)
 										      100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
 
           (gnc:html-table-append-row/markup!
            table
            "grand-total"
            (list
             (gnc:make-html-table-cell/size
-             1 15 (gnc:make-html-text (gnc:html-markup-hr)))))
+             1 16 (gnc:make-html-text (gnc:html-markup-hr)))))
 
 	  ;; finish building the totals columns, now that totals are complete
 	  (append! totalscols (list
@@ -771,9 +801,11 @@
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" (gnc:sum-collector-commodity total-value currency exchange-fn))
 			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
+				"total-number-cell" sum-total-moneyin)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
+			       (gnc:make-html-table-cell/markup
+				"total-number-cell" sum-total-income)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-gain)
 			       (gnc:make-html-table-cell/markup
@@ -782,16 +814,23 @@
 				"total-number-cell" sum-total-both-gains)
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" 
-				(let ((totalinvalue (gnc-numeric-to-double
-						     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity 
-									       total-moneyin currency exchange-fn)))))
+				(let* ((totalinvalue (gnc-numeric-to-double
+						      (gnc:gnc-monetary-amount sum-total-moneyin)))
+				       (totalgainvalue (+ (gnc-numeric-to-double
+							   (gnc:gnc-monetary-amount sum-total-income))
+							(- (gnc-numeric-to-double
+						            (gnc:gnc-monetary-amount sum-total-both-gains))
+							   (if ignore-brokerage-fees
+							    0
+							    (gnc-numeric-to-double
+							     (gnc:gnc-monetary-amount sum-total-brokerage))))))
+				 )
+
 				  (if (= 0.0 totalinvalue) 
 				      (sprintf #f "%.2f%%" totalinvalue) 
-				      (sprintf #f "%.2f%%" (* 100 (/ (gnc-numeric-to-double
-								      (gnc:gnc-monetary-amount sum-total-both-gains))
-										   totalinvalue))))))
+				      (sprintf #f "%.2f%%" (* 100 (/ totalgainvalue totalinvalue))))))
                              (gnc:make-html-table-cell/markup
-                              "total-number-cell" (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
+                              "total-number-cell" sum-total-brokerage)
 			       ))
 	  
 
