@@ -70,28 +70,23 @@ typedef struct
   void		(*free_query)( GncGdaBackend* pBackend, gpointer pQuery );
 } GncGdaDataType_t;
 
-// This is now a static inside the module
-//QofBackend * libgncmod_backend_gda_LTX_gnc_backend_new(void);
-
 // Type for conversion of db row to object.
-typedef enum {
-	CT_STRING = -1,
-	CT_GUID = -2,
-	CT_INT = -3,
-	CT_INT64 = -4,
-	CT_TIMESPEC = -5,
-	CT_GDATE = -6,
-	CT_NUMERIC = -7,
-	CT_DOUBLE = -8,
-	CT_BOOLEAN = -9,
-	CT_GUID_A = -10,
-	CT_GUID_C = -11,
-	CT_GUID_T = -12
-} E_COL_TYPE;
+#define CT_STRING "ct_string"
+#define CT_GUID "ct_guid"
+#define CT_INT "ct_int"
+#define CT_INT64 "ct_int64"
+#define CT_TIMESPEC "ct_timespec"
+#define CT_GDATE "ct_gdate"
+#define CT_NUMERIC "ct_numeric"
+#define CT_DOUBLE "ct_double"
+#define CT_BOOLEAN "ct_boolean"
+#define CT_ACCOUNTREF "ct_accountref"
+#define CT_COMMODITYREF "ct_commodityref"
+#define CT_TXREF "ct_txref"
 
 typedef struct {
 	const gchar* col_name;
-	E_COL_TYPE col_type;
+	const gchar* col_type;
 	gint size;
 #define COL_PKEY	0x01
 #define COL_NNUL	0x02
@@ -110,17 +105,17 @@ typedef enum {
 	OP_DB_DELETE
 } E_DB_OPERATION;
 
-typedef void (*GNC_GDA_LOAD_FN)( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+typedef void (*GNC_GDA_LOAD_FN)( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
                                 QofSetterFunc setter, gpointer pObject,
                                 const col_cvt_t* table );
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
                         GdaConnection* cnn, xmlNodePtr array_data,
                         const col_cvt_t* table_row, gboolean pkey );
-typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( GncGdaBackend* be,
-                QofIdTypeConst obj_name, gpointer pObject,
+typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( const GncGdaBackend* be,
+                QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GdaQuery* query );
-typedef GdaQueryCondition* (*GNC_GDA_GET_GVALUE_COND_FN)( GncGdaBackend* be,
-                QofIdTypeConst obj_name, gpointer pObject,
+typedef GdaQueryCondition* (*GNC_GDA_GET_GVALUE_COND_FN)( const GncGdaBackend* be,
+                QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GdaQuery* query );
 
 typedef struct {
@@ -151,40 +146,40 @@ GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 									QofIdTypeConst obj_name,
 									gpointer pObject,
 									const col_cvt_t* table );
-GdaObject* gnc_gda_execute_query( GncGdaBackend* pBackend, GdaQuery* pQuery );
-GdaObject* gnc_gda_execute_sql( GncGdaBackend* pBackend, const gchar* sql );
-GdaQuery* gnc_gda_create_query_from_sql( GncGdaBackend* pBackend, const gchar* sql );
-int gnc_gda_execute_select_get_count( GncGdaBackend* pBackend, const gchar* sql );
-int gnc_gda_execute_query_get_count( GncGdaBackend* pBackend, GdaQuery* query );
-void gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel, int row,
+GdaObject* gnc_gda_execute_query( const GncGdaBackend* pBackend, GdaQuery* pQuery );
+GdaObject* gnc_gda_execute_sql( const GncGdaBackend* pBackend, const gchar* sql );
+GdaQuery* gnc_gda_create_query_from_sql( const GncGdaBackend* pBackend, const gchar* sql );
+int gnc_gda_execute_select_get_count( const GncGdaBackend* pBackend, const gchar* sql );
+int gnc_gda_execute_query_get_count( const GncGdaBackend* pBackend, GdaQuery* query );
+void gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, int row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );
-gboolean gnc_gda_object_is_it_in_db( GncGdaBackend* be,
+gboolean gnc_gda_object_is_it_in_db( const GncGdaBackend* be,
 									const gchar* table_name,
-									QofIdTypeConst obj_name, gpointer pObject,
+									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );
 gboolean gnc_gda_create_table( GdaConnection* pConnection,
-						const gchar* table_name, col_cvt_t* col_table,
+						const gchar* table_name, const col_cvt_t* col_table,
 						GError** error );
-void gnc_gda_create_table_if_needed( GncGdaBackend* be,
-						const gchar* table_name, col_cvt_t* col_table );
-const GUID* gnc_gda_load_guid( GncGdaBackend* be, GdaDataModel* pModel, int row );
-const GUID* gnc_gda_load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, int row );
+void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
+						const gchar* table_name, const col_cvt_t* col_table );
+const GUID* gnc_gda_load_guid( const GncGdaBackend* be, GdaDataModel* pModel, int row );
+const GUID* gnc_gda_load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, int row );
 GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name );
 GdaQueryCondition* gnc_gda_create_condition_from_field( GdaQuery* query,
 														const gchar* col_name,
 														const GValue* value );
-void gnc_gda_register_column_handler( int colType, col_type_handler_t* handler );
+void gnc_gda_register_column_handler( const gchar* colType, const col_type_handler_t* handler );
 void gnc_gda_register_standard_col_type_handlers( void );
 
-void gnc_gda_get_gvalue_objectref_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
-GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
+void gnc_gda_get_gvalue_objectref_guid_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
+GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
 void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 	            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey );
 
 G_MODULE_EXPORT const gchar *
-g_module_check_init(GModule *module);
+g_module_check_init( GModule *module );
 
 #endif /* GNC_BACKEND_GDA_UTIL_H_ */

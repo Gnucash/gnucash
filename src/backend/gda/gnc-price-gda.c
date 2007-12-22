@@ -51,13 +51,13 @@ static void set_date( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",           CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "commodity_guid", CT_GUID_C,   0,                    COL_NNUL, NULL, PRICE_COMMODITY },
-    { "currency_guid",  CT_GUID_C,   0,                    COL_NNUL, NULL, PRICE_CURRENCY },
-    { "date",           CT_TIMESPEC, 0,                    COL_NNUL, NULL, NULL,       get_date,           set_date },
-    { "source",         CT_STRING,   PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
-    { "type",           CT_STRING,   PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
-    { "value",          CT_NUMERIC,  0,                    COL_NNUL, NULL, PRICE_VALUE },
+    { "guid",           CT_GUID,           0,                    COL_NNUL, "guid" },
+    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_COMMODITY },
+    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_CURRENCY },
+    { "date",           CT_TIMESPEC,       0,                    COL_NNUL, NULL, NULL,       get_date, set_date },
+    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
+    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
+    { "value",          CT_NUMERIC,        0,                    COL_NNUL, NULL, PRICE_VALUE },
     { NULL }
 };
 

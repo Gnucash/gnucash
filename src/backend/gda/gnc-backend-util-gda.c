@@ -148,7 +148,7 @@ get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
 }
 
 static void
-load_string( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_string( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -169,8 +169,8 @@ load_string( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GValue* value )
+get_gvalue_string( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
     gchar* s;
@@ -189,8 +189,8 @@ get_gvalue_string( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static void
-get_gvalue_string_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_string_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -199,8 +199,8 @@ get_gvalue_string_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_string_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_string_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -227,7 +227,7 @@ static col_type_handler_t string_handler
 /* ----------------------------------------------------------------- */
 
 static void
-load_int( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_int( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -248,8 +248,8 @@ load_int( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GValue* value )
+get_gvalue_int( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     gint int_value;
     QofAccessFunc getter;
@@ -263,8 +263,8 @@ get_gvalue_int( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static void
-get_gvalue_int_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_int_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -273,8 +273,8 @@ get_gvalue_int_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_int_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_int_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -300,7 +300,7 @@ static col_type_handler_t int_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_boolean( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_boolean( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -321,8 +321,8 @@ load_boolean( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_boolean( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GValue* value )
+get_gvalue_boolean( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     gint int_value;
     QofAccessFunc getter;
@@ -336,8 +336,8 @@ get_gvalue_boolean( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static void
-get_gvalue_boolean_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_boolean_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -346,8 +346,8 @@ get_gvalue_boolean_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_boolean_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_boolean_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -373,7 +373,7 @@ static col_type_handler_t boolean_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_int64( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_int64( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -390,7 +390,7 @@ load_int64( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_int64( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     gint64* pInt64;
@@ -408,8 +408,8 @@ get_gvalue_int64( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 }
 
 static void
-get_gvalue_int64_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_int64_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -418,8 +418,8 @@ get_gvalue_int64_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_int64_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_int64_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -445,7 +445,7 @@ static col_type_handler_t int64_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_double( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_double( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -462,7 +462,7 @@ load_double( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_double( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
@@ -481,8 +481,8 @@ get_gvalue_double( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 }
 
 static void
-get_gvalue_double_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_double_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -491,8 +491,8 @@ get_gvalue_double_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_double_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_double_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -518,7 +518,7 @@ static col_type_handler_t double_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -541,7 +541,7 @@ load_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_guid( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
@@ -564,8 +564,8 @@ get_gvalue_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 }
 
 static void
-get_gvalue_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_guid_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -574,8 +574,8 @@ get_gvalue_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -597,7 +597,7 @@ static col_type_handler_t guid_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-get_gvalue_objectref_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_objectref_guid( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
@@ -624,8 +624,8 @@ get_gvalue_objectref_guid( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer 
 }
 
 void
-gnc_gda_get_gvalue_objectref_guid_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+gnc_gda_get_gvalue_objectref_guid_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -634,8 +634,8 @@ gnc_gda_get_gvalue_objectref_guid_for_query( GncGdaBackend* be, QofIdTypeConst o
 }
 
 GdaQueryCondition*
-gnc_gda_get_gvalue_objectref_guid_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -652,7 +652,7 @@ gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn
 }
 
 static void
-load_account_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_account_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -684,7 +684,7 @@ static col_type_handler_t account_guid_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_commodity_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_commodity_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -716,7 +716,7 @@ static col_type_handler_t commodity_guid_handler =
 /* ----------------------------------------------------------------- */
 
 static void
-load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -747,7 +747,7 @@ static col_type_handler_t tx_guid_handler =
             gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
 /* ----------------------------------------------------------------- */
 static void
-load_timespec( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -785,8 +785,8 @@ load_timespec( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_timespec( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GValue* value )
+get_gvalue_timespec( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     QofAccessFunc getter;
     Timespec* pTimespec;
@@ -810,8 +810,8 @@ get_gvalue_timespec( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static void
-get_gvalue_timespec_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_timespec_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -820,8 +820,8 @@ get_gvalue_timespec_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_timespec_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_timespec_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -846,7 +846,7 @@ static col_type_handler_t timespec_handler =
             get_gvalue_timespec_for_query, get_gvalue_timespec_cond };
 /* ----------------------------------------------------------------- */
 static void
-load_date( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_date( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -882,7 +882,7 @@ load_date( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_date( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     GDate* date;
@@ -899,8 +899,8 @@ get_gvalue_date( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
 }
 
 static void
-get_gvalue_date_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_date_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -909,8 +909,8 @@ get_gvalue_date_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_date_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_date_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
 
@@ -945,10 +945,10 @@ get_integer_value( const GValue* value )
 }
 
 typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
-typedef gnc_numeric (*NumericGetterFunc)( gpointer );
+typedef gnc_numeric (*NumericGetterFunc)( const gpointer );
 
 static void
-load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+load_numeric( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
             const col_cvt_t* table )
 {
@@ -984,7 +984,7 @@ load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
 }
 
 static void
-get_gvalue_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
+get_gvalue_numeric( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
     NumericGetterFunc getter;
@@ -999,8 +999,8 @@ get_gvalue_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject
 }
 
 static void
-get_gvalue_numeric_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_numeric_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
     GValue num_value;
@@ -1030,8 +1030,8 @@ get_gvalue_numeric_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static GdaQueryCondition*
-get_gvalue_numeric_cond( GncGdaBackend* be, QofIdTypeConst obj_name,
-                gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
+get_gvalue_numeric_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
+                const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
     GValue num_value;
@@ -1096,21 +1096,21 @@ static col_type_handler_t numeric_handler =
 static GHashTable* g_columnTypeHash = NULL;
 
 void
-gnc_gda_register_column_handler( gint colType, col_type_handler_t* handler )
+gnc_gda_register_column_handler( const gchar* colType, const col_type_handler_t* handler )
 {
 	if( g_columnTypeHash == NULL ) {
-		g_columnTypeHash = g_hash_table_new( g_direct_hash, g_direct_equal );
+		g_columnTypeHash = g_hash_table_new( g_str_hash, g_str_equal );
 	}
 
-	g_hash_table_insert( g_columnTypeHash, GINT_TO_POINTER(colType), handler );
+	g_hash_table_insert( g_columnTypeHash, (gpointer)colType, (gpointer)handler );
 }
 
 static col_type_handler_t*
-get_handler( gint col_type )
+get_handler( const gchar* col_type )
 {
     col_type_handler_t* pHandler;
 
-	pHandler = g_hash_table_lookup( g_columnTypeHash, GINT_TO_POINTER(col_type) );
+	pHandler = g_hash_table_lookup( g_columnTypeHash, col_type );
 	if( pHandler == NULL ) {
         g_assert( FALSE );
     }
@@ -1127,9 +1127,9 @@ gnc_gda_register_standard_col_type_handlers( void )
     gnc_gda_register_column_handler( CT_INT64, &int64_handler );
     gnc_gda_register_column_handler( CT_DOUBLE, &double_handler );
     gnc_gda_register_column_handler( CT_GUID, &guid_handler );
-	gnc_gda_register_column_handler( CT_GUID_A, &account_guid_handler );
-	gnc_gda_register_column_handler( CT_GUID_C, &commodity_guid_handler );
-	gnc_gda_register_column_handler( CT_GUID_T, &tx_guid_handler );
+	gnc_gda_register_column_handler( CT_ACCOUNTREF, &account_guid_handler );
+	gnc_gda_register_column_handler( CT_COMMODITYREF, &commodity_guid_handler );
+	gnc_gda_register_column_handler( CT_TXREF, &tx_guid_handler );
     gnc_gda_register_column_handler( CT_TIMESPEC, &timespec_handler );
     gnc_gda_register_column_handler( CT_GDATE, &date_handler );
     gnc_gda_register_column_handler( CT_NUMERIC, &numeric_handler );
@@ -1155,7 +1155,7 @@ static col_cvt_t guid_table[] =
 };
 
 const GUID*
-gnc_gda_load_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row )
+gnc_gda_load_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
 	static GUID guid;
 
@@ -1172,7 +1172,7 @@ static col_cvt_t tx_guid_table[] =
 };
 
 const GUID*
-gnc_gda_load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row )
+gnc_gda_load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
     static GUID guid;
 
@@ -1182,7 +1182,7 @@ gnc_gda_load_tx_guid( GncGdaBackend* be, GdaDataModel* pModel, gint row )
 }
 
 void
-gnc_gda_load_object( GncGdaBackend* be, GdaDataModel* pModel, gint row,
+gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
                     QofIdTypeConst obj_name, gpointer pObject,
                     const col_cvt_t* table )
 {
@@ -1230,7 +1230,7 @@ gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name )
 
 /* ================================================================= */
 GdaObject*
-gnc_gda_execute_query( GncGdaBackend* be, GdaQuery* query )
+gnc_gda_execute_query( const GncGdaBackend* be, GdaQuery* query )
 {
     GError* error = NULL;
 
@@ -1246,7 +1246,7 @@ gnc_gda_execute_query( GncGdaBackend* be, GdaQuery* query )
 }
 
 GdaQuery*
-gnc_gda_create_query_from_sql( GncGdaBackend* be, const gchar* sql )
+gnc_gda_create_query_from_sql( const GncGdaBackend* be, const gchar* sql )
 {
     GError* error = NULL;
 
@@ -1261,7 +1261,7 @@ gnc_gda_create_query_from_sql( GncGdaBackend* be, const gchar* sql )
 }
 
 GdaObject*
-gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
+gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
 {
 	GdaQuery* query;
 
@@ -1274,7 +1274,7 @@ gnc_gda_execute_sql( GncGdaBackend* be, const gchar* sql )
 }
 
 int
-gnc_gda_execute_select_get_count( GncGdaBackend* be, const gchar* sql )
+gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 {
     GError* error = NULL;
     int count = 0;
@@ -1295,7 +1295,7 @@ gnc_gda_execute_select_get_count( GncGdaBackend* be, const gchar* sql )
 }
 
 int
-gnc_gda_execute_query_get_count( GncGdaBackend* be, GdaQuery* query )
+gnc_gda_execute_query_get_count( const GncGdaBackend* be, GdaQuery* query )
 {
     int count = 0;
 
@@ -1322,7 +1322,7 @@ get_col_gvalue_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 static void
-get_col_gvalue_for_condition( GncGdaBackend* be, QofIdTypeConst obj_name,
+get_col_gvalue_for_condition( const GncGdaBackend* be, QofIdTypeConst obj_name,
                         gpointer pObject, const col_cvt_t* table_row,
                         GdaQuery* query )
 {
@@ -1337,7 +1337,7 @@ get_col_gvalue_for_condition( GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 gboolean
-gnc_gda_object_is_it_in_db( GncGdaBackend* be, const gchar* table_name,
+gnc_gda_object_is_it_in_db( const GncGdaBackend* be, const gchar* table_name,
                     QofIdTypeConst obj_name, gpointer pObject,
                     const col_cvt_t* table )
 {
@@ -1513,7 +1513,7 @@ add_table_column( GdaServerProvider* server, GdaConnection* cnn,
 
 gboolean
 gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
-                    col_cvt_t* col_table, GError** error )
+                    const col_cvt_t* col_table, GError** error )
 {
     GdaServerOperation *op;
     GdaServerProvider *server;
@@ -1592,8 +1592,9 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
     return TRUE;
 }
 
-void gnc_gda_create_table_if_needed( GncGdaBackend* be,
-                        const gchar* table_name, col_cvt_t* col_table )
+void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
+			                        const gchar* table_name,
+									const col_cvt_t* col_table )
 {
     GdaDictTable* table;
     GError* error = NULL;

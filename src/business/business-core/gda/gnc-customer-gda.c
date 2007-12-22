@@ -49,16 +49,16 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,    0,             COL_NNUL, "guid" },
-	{ "name",         CT_STRING,  MAX_NAME_LEN,  COL_NNUL, NULL, CUSTOMER_NAME },
-	{ "id",           CT_STRING,  MAX_ID_LEN,    COL_NNUL, NULL, CUSTOMER_ID },
-	{ "notes",        CT_STRING,  MAX_NOTES_LEN, COL_NNUL, NULL, CUSTOMER_NOTES },
-	{ "active",       CT_BOOLEAN, 0,             COL_NNUL, NULL, QOF_PARAM_ACTIVE },
-	{ "discount",     CT_NUMERIC, 0,             COL_NNUL, NULL, CUSTOMER_DISCOUNT },
-	{ "credit",       CT_NUMERIC, 0,             COL_NNUL, NULL, CUSTOMER_CREDIT },
-	{ "currency",     CT_GUID_C,  0,             COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,          0,             COL_NNUL, "guid" },
+	{ "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL, NULL, CUSTOMER_NAME },
+	{ "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL, NULL, CUSTOMER_ID },
+	{ "notes",        CT_STRING,        MAX_NOTES_LEN, COL_NNUL, NULL, CUSTOMER_NOTES },
+	{ "active",       CT_BOOLEAN,       0,             COL_NNUL, NULL, QOF_PARAM_ACTIVE },
+	{ "discount",     CT_NUMERIC,       0,             COL_NNUL, NULL, CUSTOMER_DISCOUNT },
+	{ "credit",       CT_NUMERIC,       0,             COL_NNUL, NULL, CUSTOMER_CREDIT },
+	{ "currency",     CT_COMMODITYREF,  0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncCustomerGetCurrency, (QofSetterFunc)gncCustomerSetCurrency },
-	{ "tax_override", CT_BOOLEAN, 0,             COL_NNUL, NULL, CUSTOMER_TT_OVER },
+	{ "tax_override", CT_BOOLEAN,       0,             COL_NNUL, NULL, CUSTOMER_TT_OVER },
 	{ NULL }
 };
 

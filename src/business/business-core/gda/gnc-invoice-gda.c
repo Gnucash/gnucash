@@ -47,13 +47,13 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,     0,             COL_NNUL, "guid" },
-	{ "id",           CT_STRING,   MAX_ID_LEN,    COL_NNUL, NULL, INVOICE_ID },
-	{ "date_opened",  CT_TIMESPEC, 0,             COL_NNUL, NULL, INVOICE_OPENED },
-	{ "date_posted",  CT_TIMESPEC, 0,             0,        NULL, INVOICE_POSTED },
-	{ "notes",        CT_STRING,   MAX_NOTES_LEN, COL_NNUL, NULL, INVOICE_NOTES },
-	{ "active",       CT_BOOLEAN,  0,             COL_NNUL, NULL, QOF_PARAM_ACTIVE },
-	{ "currency",     CT_GUID_C,   0,             COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,           0,             COL_NNUL, "guid" },
+	{ "id",           CT_STRING,         MAX_ID_LEN,    COL_NNUL, NULL, INVOICE_ID },
+	{ "date_opened",  CT_TIMESPEC,       0,             COL_NNUL, NULL, INVOICE_OPENED },
+	{ "date_posted",  CT_TIMESPEC,       0,             0,        NULL, INVOICE_POSTED },
+	{ "notes",        CT_STRING,         MAX_NOTES_LEN, COL_NNUL, NULL, INVOICE_NOTES },
+	{ "active",       CT_BOOLEAN,        0,             COL_NNUL, NULL, QOF_PARAM_ACTIVE },
+	{ "currency",     CT_COMMODITYREF,   0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncInvoiceGetCurrency, (QofSetterFunc)gncInvoiceSetCurrency },
 	{ NULL }
 };

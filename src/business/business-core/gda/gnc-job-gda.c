@@ -47,7 +47,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 #if 0
 /* ids */
 #define job_owner_string "job:owner"
-#define job_slots_string "job:slots"
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (job_owner_string,
 					    gncJobGetOwner (job)));

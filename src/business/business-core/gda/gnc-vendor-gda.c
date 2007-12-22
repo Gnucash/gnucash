@@ -52,15 +52,15 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,    0,             COL_NNUL, "guid" },
-	{ "name",         CT_STRING,  MAX_NAME_LEN,  COL_NNUL, NULL, VENDOR_NAME },
-	{ "id",           CT_STRING,  MAX_ID_LEN,    COL_NNUL, NULL, VENDOR_ID },
-	{ "notes",        CT_STRING,  MAX_NOTES_LEN, COL_NNUL, NULL, VENDOR_NOTES },
-	{ "currency",     CT_GUID_C,  0,             COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,          0,             COL_NNUL, "guid" },
+	{ "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL, NULL, VENDOR_NAME },
+	{ "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL, NULL, VENDOR_ID },
+	{ "notes",        CT_STRING,        MAX_NOTES_LEN, COL_NNUL, NULL, VENDOR_NOTES },
+	{ "currency",     CT_COMMODITYREF,  0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncVendorGetCurrency, (QofSetterFunc)gncVendorSetCurrency },
-	{ "active",       CT_BOOLEAN, 0,             COL_NNUL, NULL, NULL,
+	{ "active",       CT_BOOLEAN,       0,             COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncVendorGetActive, (QofSetterFunc)gncVendorSetActive },
-	{ "tax_override", CT_BOOLEAN, 0,             COL_NNUL, NULL, VENDOR_TAX_OVERRIDE },
+	{ "tax_override", CT_BOOLEAN,       0,             COL_NNUL, NULL, VENDOR_TAX_OVERRIDE },
 	{ NULL }
 };
 
@@ -69,7 +69,6 @@ static col_cvt_t col_table[] =
 #define vendor_terms_string "vendor:terms"
 #define vendor_taxtable_string "vendor:taxtable"
 #define vendor_taxtableoverride_string "vendor:use-tt"
-#define vendor_slots_string "vendor:slots"
 
     xmlAddChild(ret, gnc_address_to_dom_tree(vendor_addr_string,
 					     gncVendorGetAddr (vendor)));
