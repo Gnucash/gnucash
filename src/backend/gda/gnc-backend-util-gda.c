@@ -1053,6 +1053,9 @@ get_integer_value( const GValue* value )
 	return 0;
 }
 
+typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
+typedef gnc_numeric (*NumericGetterFunc)( gpointer );
+
 static void
 load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
@@ -1063,6 +1066,7 @@ load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
     gint64 num, denom;
     gnc_numeric n;
     gboolean isNull = FALSE;
+	NumericSetterFunc n_setter = (NumericSetterFunc)setter;
 
     buf = g_strdup_printf( "%s_num", table->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
@@ -1083,10 +1087,8 @@ load_numeric( GncGdaBackend* be, GdaDataModel* pModel, gint row,
         denom = get_integer_value( val );
     }
     n = gnc_numeric_create( num, denom );
-    if( isNull ) {
-        (*setter)( pObject, NULL );
-    } else {
-        (*setter)( pObject, &n );
+    if( !isNull ) {
+        (*n_setter)( pObject, n );
     }
 }
 
@@ -1094,17 +1096,15 @@ static void
 get_gvalue_numeric( GncGdaBackend* be, QofIdTypeConst obj_name, gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
-    QofAccessFunc getter;
-    gnc_numeric* n;
+    NumericGetterFunc getter;
+    gnc_numeric n;
 
     memset( value, 0, sizeof( GValue ) );
 
-    getter = get_getter( obj_name, table_row );
-    n = (gnc_numeric*)(*getter)( pObject, NULL );
-    if( n != NULL ) {
-        g_value_init( value, gnc_numeric_get_type() );
-        g_value_set_boxed( value, n );
-    }
+    getter = (NumericGetterFunc)get_getter( obj_name, table_row );
+    n = (*getter)( pObject );
+    g_value_init( value, gnc_numeric_get_type() );
+    g_value_set_boxed( value, &n );
 }
 
 static void

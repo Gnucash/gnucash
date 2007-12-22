@@ -62,7 +62,7 @@ static col_cvt_t col_table[] =
     { "name",           CT_STRING, ACCOUNT_MAX_NAME_LEN,        COL_NNUL, "name" },
     { "account_type",   CT_STRING, ACCOUNT_MAX_TYPE_LEN,        COL_NNUL, NULL, ACCOUNT_TYPE_ },
     { "commodity_guid", CT_GUID_C, 0,                           COL_NNUL, "commodity" },
-    { "parent_guid",    CT_GUID,   0,                           0,        NULL, NULL, get_parent,    set_parent },
+    { "parent_guid",    CT_GUID,   0,                           0,        NULL, NULL, get_parent, set_parent },
     { "code",           CT_STRING, ACCOUNT_MAX_CODE_LEN,        0,        "code" },
     { "description",    CT_STRING, ACCOUNT_MAX_DESCRIPTION_LEN, 0,        "description" },
     { NULL }

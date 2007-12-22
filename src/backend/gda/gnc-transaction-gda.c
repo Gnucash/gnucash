@@ -85,10 +85,6 @@ static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* par
 static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
 static gpointer get_split_reconcile_date( gpointer pObject, const QofParam* param );
 static void set_split_reconcile_date( gpointer pObject, gpointer pValue );
-static gpointer get_split_value( gpointer pObject, const QofParam* param );
-static void set_split_value( gpointer pObject, gpointer pValue );
-static gpointer get_split_quantity( gpointer pObject, const QofParam* param );
-static void set_split_quantity( gpointer pObject, gpointer pValue );
 
 #define SPLIT_MAX_MEMO_LEN 50
 #define SPLIT_MAX_ACTION_LEN 50
@@ -96,16 +92,14 @@ static void set_split_quantity( gpointer pObject, gpointer pValue );
 static col_cvt_t split_col_table[] =
 {
     { "guid",            CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "tx_guid",         CT_GUID_T,   0,                    COL_NNUL, NULL, NULL,
-			(QofAccessFunc)xaccSplitGetParent, (QofSetterFunc)xaccSplitSetParent },
-    { "account_guid",    CT_GUID_A,   0,                    COL_NNUL, NULL, NULL,
-			(QofAccessFunc)xaccSplitGetAccount, (QofSetterFunc)xaccSplitSetAccount },
+    { "tx_guid",         CT_GUID_T,   0,                    COL_NNUL, NULL, SPLIT_TRANS },
+    { "account_guid",    CT_GUID_A,   0,                    COL_NNUL, NULL, SPLIT_ACCOUNT },
     { "memo",            CT_STRING,   SPLIT_MAX_MEMO_LEN,   COL_NNUL, NULL, SPLIT_MEMO },
     { "action",          CT_STRING,   SPLIT_MAX_ACTION_LEN, COL_NNUL, NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,   1,                    COL_NNUL, NULL, NULL,    get_split_reconcile_state, set_split_reconcile_state },
     { "reconcile_date",  CT_TIMESPEC, 0,                    COL_NNUL, NULL, NULL,    get_split_reconcile_date,  set_split_reconcile_date },
-    { "value",           CT_NUMERIC,  0,                    COL_NNUL, NULL, NULL,    get_split_value,           set_split_value },
-    { "quantity",        CT_NUMERIC,  0,                    COL_NNUL, NULL, NULL,    get_split_quantity,        set_split_quantity },
+    { "value",           CT_NUMERIC,  0,                    COL_NNUL, NULL, SPLIT_VALUE },
+    { "quantity",        CT_NUMERIC,  0,                    COL_NNUL, NULL, SPLIT_AMOUNT },
     { NULL }
 };
 
@@ -115,7 +109,7 @@ static col_cvt_t guid_col_table[] =
     { NULL }
 };
 
-static void retrieve_numeric_value( gpointer pObject, gpointer pValue );
+static void retrieve_numeric_value( gpointer pObject, gnc_numeric value );
 
 /* ================================================================= */
 static gpointer
@@ -229,58 +223,18 @@ set_split_reconcile_date( gpointer pObject, gpointer pValue )
     xaccSplitSetDateReconciledTS( pSplit, pTS );
 }
 
-static gpointer
-get_split_value( gpointer pObject, const QofParam* param )
-{
-    const Split* pSplit = GNC_SPLIT(pObject);
-    static gnc_numeric v;
-
-    v = xaccSplitGetValue( pSplit );
-    return (gpointer)&v;
-}
-
 static void 
-set_split_value( gpointer pObject, gpointer pValue )
-{
-    Split* pSplit = GNC_SPLIT(pObject);
-    gnc_numeric* pV = (gnc_numeric*)pValue;
-
-    xaccSplitSetValue( pSplit, *pV );
-}
-
-static gpointer
-get_split_quantity( gpointer pObject, const QofParam* param )
-{
-    const Split* pSplit = GNC_SPLIT(pObject);
-    static gnc_numeric v;
-
-    v = xaccSplitGetAmount( pSplit );
-    return (gpointer)&v;
-}
-
-static void 
-set_split_quantity( gpointer pObject, gpointer pValue )
-{
-    Split* pSplit = GNC_SPLIT(pObject);
-    gnc_numeric* pV = (gnc_numeric*)pValue;
-
-    xaccSplitSetAmount( pSplit, *pV );
-}
-
-static void 
-retrieve_numeric_value( gpointer pObject, gpointer pValue )
+retrieve_numeric_value( gpointer pObject, gnc_numeric value )
 {
     gnc_numeric* pResult = (gnc_numeric*)pObject;
-    gnc_numeric val = *(gnc_numeric*)pValue;
-
-    *pResult = val;
+    *pResult = value;
 }
 
 
 // Table to retrieve just the quantity
 static col_cvt_t quantity_table[] =
 {
-    { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, retrieve_numeric_value },
+    { "quantity", CT_NUMERIC, 0, COL_NNUL, NULL, NULL, NULL, (QofSetterFunc)retrieve_numeric_value },
     { NULL }
 };
 

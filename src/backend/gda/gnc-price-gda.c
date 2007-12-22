@@ -43,8 +43,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "prices"
 
-static gpointer get_value( gpointer pObject, const QofParam* param );
-static void set_value( gpointer pObject, gpointer pValue );
 static gpointer get_date( gpointer pObject, const QofParam* param );
 static void set_date( gpointer pObject, gpointer pValue );
 
@@ -54,38 +52,16 @@ static void set_date( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
     { "guid",           CT_GUID,     0,                    COL_NNUL, "guid" },
-    { "commodity_guid", CT_GUID_C,   0,                    COL_NNUL, NULL, NULL,
-			(QofAccessFunc)gnc_price_get_commodity,
-			(QofSetterFunc)gnc_price_set_commodity },
-    { "currency_guid",  CT_GUID_C,   0,                    COL_NNUL, NULL, NULL,
-			(QofAccessFunc)gnc_price_get_currency,
-			(QofSetterFunc)gnc_price_set_currency },
+    { "commodity_guid", CT_GUID_C,   0,                    COL_NNUL, NULL, PRICE_COMMODITY },
+    { "currency_guid",  CT_GUID_C,   0,                    COL_NNUL, NULL, PRICE_CURRENCY },
     { "date",           CT_TIMESPEC, 0,                    COL_NNUL, NULL, NULL,       get_date,           set_date },
     { "source",         CT_STRING,   PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
     { "type",           CT_STRING,   PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
-    { "value",          CT_NUMERIC,  0,                    COL_NNUL, NULL, NULL,       get_value,          set_value },
+    { "value",          CT_NUMERIC,  0,                    COL_NNUL, NULL, PRICE_VALUE },
     { NULL }
 };
 
 /* ================================================================= */
-static gpointer
-get_value( gpointer pObject, const QofParam* param )
-{
-    const GNCPrice* pPrice = GNC_PRICE(pObject);
-    static gnc_numeric v;
-
-    v = gnc_price_get_value( pPrice );
-    return &v;
-}
-
-static void
-set_value( gpointer pObject, gpointer pValue )
-{
-    GNCPrice* pPrice = GNC_PRICE(pObject);
-    const gnc_numeric* pNumeric = (const gnc_numeric*)pValue;
-
-    gnc_price_set_value( pPrice, *pNumeric );
-}
 
 static gpointer
 get_date( gpointer pObject, const QofParam* param )
