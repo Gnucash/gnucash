@@ -576,7 +576,7 @@ For a transaction that is a duplicate of an existing one, click on the &quot;Oth
 check whether GnuCash chose the right existing transaction.
 To switch transactions between both states, click on the checkmark in the &quot;New&quot; column.
 When all new transactions have the correct destination account and all duplicates are matched with the right existing transaction, 
-click &quot;Ok&quot;.</property>
+click &quot;OK&quot;.</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1073,7 +1073,7 @@ click &quot;Ok&quot;.</property>
       <child>
 	<widget class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/atm_fee_threshold">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+	  <property name="tooltip" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores.  These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw $100, and you are charged $101,50 plus Interac fees.  If you manually entered that $100, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
 	  <property name="can_focus">True</property>
 	  <property name="climb_rate">1</property>
 	  <property name="digits">2</property>

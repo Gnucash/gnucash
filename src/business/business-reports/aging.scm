@@ -335,7 +335,7 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-sort-by
       "i"
-      (N_ "Sort companys by")
+      (N_ "Sort companies by")
       'name
       (list 
        (vector 'name (N_ "Name") (N_ "Name of the company"))
