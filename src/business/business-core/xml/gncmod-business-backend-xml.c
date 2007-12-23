@@ -43,34 +43,34 @@
 #include "gnc-tax-table-xml-v2.h"
 #include "gnc-vendor-xml-v2.h"
 
-GNC_MODULE_API_DECL(libgncmod_business_backend_file)
+GNC_MODULE_API_DECL(libgncmod_business_backend_xml)
 
 /* version of the gnc module system interface we require */
-int libgncmod_business_backend_file_gnc_module_system_interface = 0;
+int libgncmod_business_backend_xml_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int libgncmod_business_backend_file_gnc_module_current  = 0;
-int libgncmod_business_backend_file_gnc_module_revision = 0;
-int libgncmod_business_backend_file_gnc_module_age      = 0;
+int libgncmod_business_backend_xml_gnc_module_current  = 0;
+int libgncmod_business_backend_xml_gnc_module_revision = 0;
+int libgncmod_business_backend_xml_gnc_module_age      = 0;
 
 static GNCModule bus_core;
 static GNCModule file;
 
 
 char *
-libgncmod_business_backend_file_gnc_module_path(void)
+libgncmod_business_backend_xml_gnc_module_path(void)
 {
   return g_strdup("gnucash/business-core-file");
 }
 
 char *
-libgncmod_business_backend_file_gnc_module_description(void)
+libgncmod_business_backend_xml_gnc_module_description(void)
 {
   return g_strdup("The XML (v2) parsers for GnuCash business objects");
 }
 
 int
-libgncmod_business_backend_file_gnc_module_init(int refcount)
+libgncmod_business_backend_xml_gnc_module_init(int refcount)
 {
   if(!gnc_engine_is_initialized()) { return FALSE; }
 
@@ -96,7 +96,7 @@ libgncmod_business_backend_file_gnc_module_init(int refcount)
 }
 
 int
-libgncmod_business_backend_file_gnc_module_end(int refcount)
+libgncmod_business_backend_xml_gnc_module_end(int refcount)
 {
   int unload = TRUE;
 

@@ -658,14 +658,14 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
 /* ================================================================ */
 /* Get Functions */
 
-Timespec gncEntryGetDate (GncEntry *entry)
+Timespec gncEntryGetDate (const GncEntry *entry)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!entry) return ts;
   return entry->date;
 }
 
-Timespec gncEntryGetDateEntered (GncEntry *entry)
+Timespec gncEntryGetDateEntered (const GncEntry *entry)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!entry) return ts;

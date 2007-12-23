@@ -1462,10 +1462,12 @@ AC_CONFIG_FILES(po/Makefile.in
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
-          src/backend/file/Makefile
-          src/backend/file/test/Makefile
-          src/backend/file/test/test-files/Makefile
-          src/backend/file/test/test-files/xml2/Makefile
+          src/backend/xml/Makefile
+          src/backend/xml/test/Makefile
+          src/backend/xml/test/test-files/Makefile
+          src/backend/xml/test/test-files/xml2/Makefile
+		  src/backend/gda/Makefile
+		  src/backend/gda/test/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/bin/Makefile
@@ -1547,8 +1549,9 @@ AC_CONFIG_FILES(po/Makefile.in
           src/test-core/Makefile
           src/business/Makefile
           src/business/business-core/Makefile
+          src/business/business-core/gda/Makefile
           src/business/business-core/test/Makefile
-          src/business/business-core/file/Makefile
+          src/business/business-core/xml/Makefile
           src/business/business-utils/Makefile
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
@@ -1571,6 +1574,9 @@ output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
 output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
 output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
 
+if test x${GDA_DIR} != x; then
+components="$components gda"
+fi
 if test x${SQL_DIR} != x; then
 components="$components sql"
 fi

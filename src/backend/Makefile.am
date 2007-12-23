@@ -1,3 +1,3 @@
 
-SUBDIRS = file ${SQL_DIR}
-DIST_SUBDIRS = file postgres
+SUBDIRS = xml ${SQL_DIR} ${GDA_DIR}
+DIST_SUBDIRS = xml postgres gda

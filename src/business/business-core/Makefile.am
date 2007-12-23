@@ -1,4 +1,4 @@
-SUBDIRS = . test file
+SUBDIRS = . gda test xml
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la
 

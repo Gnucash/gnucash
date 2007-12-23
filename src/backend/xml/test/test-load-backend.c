@@ -30,7 +30,7 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define GNC_LIB_NAME "gncmod-backend-file"
+#define GNC_LIB_NAME "gncmod-backend-xml"
 
 int main (int argc, char ** argv)
 {
@@ -38,7 +38,7 @@ int main (int argc, char ** argv)
     cashobjects_register();
     do_test(
         qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
-        " loading gnc-backend-file GModule failed");
+        " loading gnc-backend-xml GModule failed");
     print_test_results();
     qof_close();
     exit(get_rv());

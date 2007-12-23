@@ -135,8 +135,8 @@ void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 /* GET FUNCTIONS */
 /** @name Generic (shared) data 
  @{ */
-Timespec gncEntryGetDate (GncEntry *entry);
-Timespec gncEntryGetDateEntered (GncEntry *entry);
+Timespec gncEntryGetDate (const GncEntry *entry);
+Timespec gncEntryGetDateEntered (const GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
 const char * gncEntryGetNotes (GncEntry *notes);

@@ -10,7 +10,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/calculation \
-  --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
   --guile-load-dir ${top_srcdir}/src/import-export/qif-io-core/test \
   --guile-load-dir ${top_srcdir}/lib \

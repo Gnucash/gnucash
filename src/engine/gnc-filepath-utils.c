@@ -205,6 +205,10 @@ xaccResolveFilePath (const char * filefrag)
       LEAVE("filefrag is file uri");
       return g_strdup(filefrag + 5);
   }
+  if( g_ascii_strncasecmp( filefrag, "xml:", 4 ) == 0 ) {
+  	  LEAVE( "filefrag is xml file uri" );
+	  return g_strdup( filefrag + 4);
+  }
 
   /* get conservative on the length so that sprintf(getpid()) works ... */
   /* strlen ("/.LCK") + sprintf (%x%d) */
@@ -293,6 +297,7 @@ xaccResolveURL (const char * pathfrag)
 
   if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
       !g_ascii_strncasecmp (pathfrag, "https://", 8)     ||
+      !g_ascii_strncasecmp (pathfrag, "gda://", 6)		 ||
       !g_ascii_strncasecmp (pathfrag, "postgres://", 11))
   {
     return g_strdup(pathfrag);
@@ -300,6 +305,9 @@ xaccResolveURL (const char * pathfrag)
 
   if (!g_ascii_strncasecmp (pathfrag, "file:", 5)) {
     return (xaccResolveFilePath (pathfrag));
+  }
+  if (!g_ascii_strncasecmp (pathfrag, "xml:", 4)) {
+    return (g_strdup_printf( "xml:%s", xaccResolveFilePath (pathfrag)) );
   }
 
   return (xaccResolveFilePath (pathfrag));
