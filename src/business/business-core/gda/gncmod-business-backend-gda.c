@@ -58,52 +58,53 @@ static GNCModule bus_core;
 gchar *
 libgncmod_business_backend_gda_gnc_module_path(void)
 {
-  return g_strdup("gnucash/business-core-gda");
+    return g_strdup( "gnucash/business-core-gda" );
 }
 
 gchar *
 libgncmod_business_backend_gda_gnc_module_description(void)
 {
-  return g_strdup("The GDA backend for GnuCash business objects");
+    return g_strdup( "The GDA backend for GnuCash business objects" );
 }
 
 int
 libgncmod_business_backend_gda_gnc_module_init(int refcount)
 {
-  if(!gnc_engine_is_initialized()) { return FALSE; }
+    if(!gnc_engine_is_initialized()) { return FALSE; }
 
-  bus_core = gnc_module_load("gnucash/business-core", 0);
-  if(!bus_core) return FALSE;
+    bus_core = gnc_module_load( "gnucash/business-core", 0 );
+    if( !bus_core ) return FALSE;
 
-  if (refcount == 0) {
-    /* Initialize our pointers into the backend subsystem */
-    gnc_address_gda_initialize ();
-//    gnc_billterm_gda_initialize ();
-    gnc_customer_gda_initialize ();
-    gnc_employee_gda_initialize ();
-//    gnc_entry_gda_initialize ();
-    gnc_invoice_gda_initialize ();
-    gnc_job_gda_initialize ();
-    gnc_order_gda_initialize ();
-//    gnc_owner_gda_initialize ();
-//    gnc_taxtable_gda_initialize ();
-    gnc_vendor_gda_initialize ();
-  }
+    if( refcount == 0 ) {
+        /* Initialize our pointers into the backend subsystem */
+        gnc_address_gda_initialize();
+        gnc_billterm_gda_initialize();
+        gnc_customer_gda_initialize();
+        gnc_employee_gda_initialize();
+//        gnc_entry_gda_initialize();
+        gnc_invoice_gda_initialize();
+        gnc_job_gda_initialize();
+        gnc_order_gda_initialize();
+//    gnc_owner_gda_initialize();
+//    gnc_taxtable_gda_initialize();
+        gnc_vendor_gda_initialize();
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 int
 libgncmod_business_backend_gda_gnc_module_end(int refcount)
 {
-  int unload = TRUE;
+    int unload = TRUE;
 
-  if (bus_core)
-    unload = gnc_module_unload(bus_core);
+    if( bus_core ) {
+        unload = gnc_module_unload( bus_core );
+	}
 
-  if (refcount == 0) {
-    bus_core = NULL;
-  }
+    if( refcount == 0 ) {
+        bus_core = NULL;
+    }
 
-  return unload;
+    return unload;
 }

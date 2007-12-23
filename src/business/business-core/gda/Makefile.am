@@ -16,6 +16,7 @@ AM_CFLAGS = \
 libgncmod_business_backend_gda_la_SOURCES = \
   gncmod-business-backend-gda.c \
   gnc-address-gda.c \
+  gnc-bill-term-gda.c \
   gnc-customer-gda.c \
   gnc-employee-gda.c \
   gnc-invoice-gda.c \
@@ -24,7 +25,6 @@ libgncmod_business_backend_gda_la_SOURCES = \
   gnc-vendor-gda.c
 
 #libgncmod_business_backend_gda_la_SOURCES = \
-#  gnc-bill-term-gda.c \
 #  gnc-entry-gda.c \
 #  gnc-owner-gda.c \
 #  gnc-tax-table-gda.c
