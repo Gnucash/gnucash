@@ -169,7 +169,7 @@
               (string->symbol (gnc:html-style-sheet-name ss))
               (gnc:html-style-sheet-name ss)
               (string-append (gnc:html-style-sheet-name ss) 
-                             (_ " Stylesheet"))))
+                             " " (_ "Stylesheet"))))
            (gnc:get-html-style-sheets)))))
 
     (if (procedure? generator)
