@@ -352,7 +352,7 @@ void collision_rule_loop(QofBookMergeData *mergeData, QofBookMergeRule *rule,
 		   will allocate a new string; all of these need to be
 		   freed later. Currently this causes a lot of memory
 		   leaks. */
-		buffer = g_strconcat(buffer, g_strdup_printf(_("%i:Parameter name: %s "), 
+		buffer = g_strconcat(buffer, g_strdup_printf(_("%i: Parameter name: %s "), 
 			count, one_param->param_name), NULL);
 		importstring = qof_book_merge_param_as_string(one_param, rule->importEnt);
 		buffer = g_strconcat(buffer, 
