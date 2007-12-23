@@ -36,6 +36,7 @@
 #include "gnc-customer-gda.h"
 #include "gnc-address-gda.h"
 #include "gnc-bill-term-gda.h"
+#include "gnc-tax-table-gda.h"
 
 #define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
