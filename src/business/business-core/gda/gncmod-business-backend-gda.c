@@ -81,12 +81,12 @@ libgncmod_business_backend_gda_gnc_module_init(int refcount)
         gnc_billterm_gda_initialize();
         gnc_customer_gda_initialize();
         gnc_employee_gda_initialize();
-//        gnc_entry_gda_initialize();
+        gnc_entry_gda_initialize();
         gnc_invoice_gda_initialize();
         gnc_job_gda_initialize();
         gnc_order_gda_initialize();
-//    gnc_owner_gda_initialize();
-//    gnc_taxtable_gda_initialize();
+	    gnc_owner_gda_initialize();
+	    gnc_taxtable_gda_initialize();
         gnc_vendor_gda_initialize();
     }
 

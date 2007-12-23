@@ -44,21 +44,14 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 #define MAX_NAME_LEN 50
 #define MAX_REFERENCE_LEN 50
 
-#if 0
-/* ids */
-#define job_owner_string "job:owner"
-
-    xmlAddChild(ret, gnc_owner_to_dom_tree (job_owner_string,
-					    gncJobGetOwner (job)));
-#endif
-
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,    0,                 COL_NNUL, "guid" },
-	{ "id",           CT_STRING,  MAX_ID_LEN,        COL_NNUL, NULL, JOB_ID },
-	{ "name",         CT_STRING,  MAX_NAME_LEN,      COL_NNUL, NULL, JOB_NAME },
-	{ "reference",    CT_STRING,  MAX_REFERENCE_LEN, COL_NNUL, NULL, JOB_REFERENCE },
-	{ "active",       CT_BOOLEAN, 0,                 COL_NNUL, NULL, JOB_ACTIVE },
+	{ "guid",      CT_GUID,     0,                 COL_NNUL, "guid" },
+	{ "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL, NULL, JOB_ID },
+	{ "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL, NULL, JOB_NAME },
+	{ "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL, NULL, JOB_REFERENCE },
+	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL, NULL, JOB_ACTIVE },
+	{ "owner",     CT_OWNERREF, 0,                 COL_NNUL, NULL, JOB_OWNER },
 	{ NULL }
 };
 

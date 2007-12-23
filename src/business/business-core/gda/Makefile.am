@@ -23,11 +23,9 @@ libgncmod_business_backend_gda_la_SOURCES = \
   gnc-invoice-gda.c \
   gnc-job-gda.c \
   gnc-order-gda.c \
+  gnc-owner-gda.c \
+  gnc-tax-table-gda.c \
   gnc-vendor-gda.c
-
-#libgncmod_business_backend_gda_la_SOURCES = \
-#  gnc-owner-gda.c \
-#  gnc-tax-table-gda.c
 
 noinst_HEADERS = \
   gnc-address-gda.h \

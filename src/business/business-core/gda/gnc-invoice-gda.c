@@ -44,66 +44,31 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define MAX_ID_LEN 50
 #define MAX_NOTES_LEN 100
+#define MAX_BILLING_ID_LEN 100
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,           0,             COL_NNUL, "guid" },
-	{ "id",           CT_STRING,         MAX_ID_LEN,    COL_NNUL, NULL, INVOICE_ID },
-	{ "date_opened",  CT_TIMESPEC,       0,             COL_NNUL, NULL, INVOICE_OPENED },
-	{ "date_posted",  CT_TIMESPEC,       0,             0,        NULL, INVOICE_POSTED },
-	{ "notes",        CT_STRING,         MAX_NOTES_LEN, COL_NNUL, NULL, INVOICE_NOTES },
-	{ "active",       CT_BOOLEAN,        0,             COL_NNUL, NULL, QOF_PARAM_ACTIVE },
-	{ "currency",     CT_COMMODITYREF,   0,             COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,         0,                  COL_NNUL, "guid" },
+	{ "id",           CT_STRING,       MAX_ID_LEN,         COL_NNUL, NULL, INVOICE_ID },
+	{ "date_opened",  CT_TIMESPEC,     0,                  COL_NNUL, NULL, INVOICE_OPENED },
+	{ "date_posted",  CT_TIMESPEC,     0,                  0,        NULL, INVOICE_POSTED },
+	{ "notes",        CT_STRING,       MAX_NOTES_LEN,      COL_NNUL, NULL, INVOICE_NOTES },
+	{ "active",       CT_BOOLEAN,      0,                  COL_NNUL, NULL, QOF_PARAM_ACTIVE },
+	{ "currency",     CT_COMMODITYREF, 0,                  COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncInvoiceGetCurrency, (QofSetterFunc)gncInvoiceSetCurrency },
+	{ "owner",        CT_OWNERREF,     0,                  0,        NULL, NULL,
+			(QofAccessFunc)gncInvoiceGetOwner, (QofSetterFunc)gncInvoiceSetOwner },
+	{ "terms",        CT_BILLTERMREF,  0,                  0,        NULL, INVOICE_TERMS },
+	{ "billing_id",   CT_STRING,       MAX_BILLING_ID_LEN, 0,        NULL, INVOICE_BILLINGID },
+	{ "post_txn",     CT_TXREF,        0,                  0,        NULL, INVOICE_POST_TXN },
+	{ "post_lot",     CT_LOTREF,       0,                  0,        NULL, NULL,
+			(QofAccessFunc)gncInvoiceGetPostedLot, (QofSetterFunc)gncInvoiceSetPostedLot },
+	{ "post_acc",     CT_ACCOUNTREF,   0,                  0,        NULL, INVOICE_ACC },
+	{ "billto",       CT_OWNERREF,     0,                  0,        NULL, INVOICE_BILLTO },
+	{ "charge_amt",   CT_NUMERIC,      0,                  0,        NULL, NULL,
+			(QofAccessFunc)gncInvoiceGetToChargeAmount, (QofSetterFunc)gncInvoiceSetToChargeAmount },
 	{ NULL }
 };
-
-#if 0
-/* ids */
-
-#define invoice_owner_string "invoice:owner"
-#define invoice_terms_string "invoice:terms"
-#define invoice_billing_id_string "invoice:billing_id"
-#define invoice_posttxn_string "invoice:posttxn"
-#define invoice_postlot_string "invoice:postlot"
-#define invoice_postacc_string "invoice:postacc"
-#define invoice_billto_string "invoice:billto"
-#define invoice_tochargeamt_string "invoice:charge-amt"
-
-    xmlAddChild(ret, gnc_owner_to_dom_tree (invoice_owner_string,
-					    gncInvoiceGetOwner (invoice)));
-
-    term = gncInvoiceGetTerms (invoice);
-    if (term)
-      xmlAddChild(ret, guid_to_dom_tree(invoice_terms_string,
-					qof_instance_get_guid (QOF_INSTANCE(term))));
-      
-    maybe_add_string (ret, invoice_billing_id_string,
-		      gncInvoiceGetBillingID (invoice));
-
-    txn = gncInvoiceGetPostedTxn (invoice);
-    if (txn)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
-					  xaccTransGetGUID (txn)));
-
-    lot = gncInvoiceGetPostedLot (invoice);
-    if (lot)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_postlot_string,
-					  gnc_lot_get_guid (lot)));
-
-    acc = gncInvoiceGetPostedAcc (invoice);
-    if (acc)
-      xmlAddChild (ret, guid_to_dom_tree (invoice_postacc_string,
-					  qof_instance_get_guid(QOF_INSTANCE(acc))));
-
-    billto = gncInvoiceGetBillTo (invoice);
-    if (billto && billto->owner.undefined != NULL)
-      xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_billto_string, billto));
-
-    amt = gncInvoiceGetToChargeAmount (invoice);
-    if (! gnc_numeric_zero_p (amt))
-      xmlAddChild (ret, gnc_numeric_to_dom_tree (invoice_tochargeamt_string, &amt));
-#endif
 
 static GncInvoice*
 load_single_invoice( GncGdaBackend* be, GdaDataModel* pModel, int row )

@@ -83,6 +83,7 @@ typedef struct
 #define CT_ACCOUNTREF "ct_accountref"
 #define CT_COMMODITYREF "ct_commodityref"
 #define CT_TXREF "ct_txref"
+#define CT_LOTREF "ct_lotref"
 
 typedef struct {
 	const gchar* col_name;

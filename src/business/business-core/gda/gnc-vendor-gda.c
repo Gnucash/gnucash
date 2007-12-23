@@ -39,6 +39,7 @@
 #include "gnc-vendor-gda.h"
 #include "gnc-address-gda.h"
 #include "gnc-bill-term-gda.h"
+#include "gnc-tax-table-gda.h"
 
 #define _GNC_MOD_NAME	GNC_ID_VENDOR
 
@@ -47,46 +48,27 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 #define MAX_NAME_LEN 50
 #define MAX_ID_LEN 50
 #define MAX_NOTES_LEN 100
+#define MAX_TAX_INC_LEN 50
 
 #define TABLE_NAME "vendors"
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,          0,             COL_NNUL, "guid" },
-	{ "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL, NULL, VENDOR_NAME },
-	{ "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL, NULL, VENDOR_ID },
-	{ "notes",        CT_STRING,        MAX_NOTES_LEN, COL_NNUL, NULL, VENDOR_NOTES },
-	{ "currency",     CT_COMMODITYREF,  0,             COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,          0,               COL_NNUL, "guid" },
+	{ "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL, NULL, VENDOR_NAME },
+	{ "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL, NULL, VENDOR_ID },
+	{ "notes",        CT_STRING,        MAX_NOTES_LEN,   COL_NNUL, NULL, VENDOR_NOTES },
+	{ "currency",     CT_COMMODITYREF,  0,               COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncVendorGetCurrency, (QofSetterFunc)gncVendorSetCurrency },
-	{ "active",       CT_BOOLEAN,       0,             COL_NNUL, NULL, NULL,
+	{ "active",       CT_BOOLEAN,       0,               COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncVendorGetActive, (QofSetterFunc)gncVendorSetActive },
-	{ "tax_override", CT_BOOLEAN,       0,             COL_NNUL, NULL, VENDOR_TAX_OVERRIDE },
-	{ "addr",         CT_ADDRESS,       0,             0,        NULL, VENDOR_ADDR },
+	{ "tax_override", CT_BOOLEAN,       0,               COL_NNUL, NULL, VENDOR_TAX_OVERRIDE },
+	{ "addr",         CT_ADDRESS,       0,               0,        NULL, VENDOR_ADDR },
+	{ "terms",        CT_BILLTERMREF,   0,               0,        NULL, VENDOR_TERMS },
+	{ "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,        NULL, VENDOR_TAX_INC },
+	{ "tax_table",    CT_TAXTABLEREF,   0,               0,        NULL, VENDOR_TAX_TABLE },
 	{ NULL }
 };
-
-#if 0
-#define vendor_terms_string "vendor:terms"
-#define vendor_taxtable_string "vendor:taxtable"
-#define vendor_taxtableoverride_string "vendor:use-tt"
-
-    term = gncVendorGetTerms (vendor);
-    if (term)
-      xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,
-					qof_instance_get_guid(QOF_INSTANCE(term))));
-
-    xmlAddChild(ret, text_to_dom_tree(vendor_taxincluded_string,
-				      gncTaxIncludedTypeToString (
-				     gncVendorGetTaxIncluded (vendor))));
-
-    taxtable = gncVendorGetTaxTable (vendor);
-    if (taxtable)
-      xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
-					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
-
-    return ret;
-}
-#endif
 
 static GncVendor*
 load_single_vendor( GncGdaBackend* be, GdaDataModel* pModel, int row )

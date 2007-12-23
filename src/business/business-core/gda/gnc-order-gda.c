@@ -54,16 +54,9 @@ static col_cvt_t col_table[] =
 	{ "active",      CT_BOOLEAN,  0,                 COL_NNUL, NULL, QOF_PARAM_ACTIVE },
 	{ "date_opened", CT_TIMESPEC, 0,                 COL_NNUL, NULL, ORDER_OPENED },
 	{ "date_closed", CT_TIMESPEC, 0,                 COL_NNUL, NULL, ORDER_CLOSED },
+	{ "owner",       CT_OWNERREF, 0,                 COL_NNUL, NULL, ORDER_OWNER },
 	{ NULL },
 };
-
-#if 0
-/* ids */
-#define order_owner_string "order:owner"
-
-    xmlAddChild(ret, gnc_owner_to_dom_tree (order_owner_string,
-					    gncOrderGetOwner (order)));
-#endif
 
 static GncOrder*
 load_single_order( GncGdaBackend* be, GdaDataModel* pModel, int row )
