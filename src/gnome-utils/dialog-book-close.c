@@ -167,14 +167,26 @@ static void finish_txn_cb(gnc_commodity* cmdty,
     acc = cacb->base_acct;
   else
   {
-    acc = xaccMallocAccount(cacb->cbw->book);
-    xaccAccountBeginEdit(acc);
-    xaccAccountSetType(acc, ACCT_TYPE_EQUITY);
-    xaccAccountSetName(acc, gnc_commodity_get_mnemonic(cmdty));
-    xaccAccountSetDescription(acc, gnc_commodity_get_mnemonic(cmdty));
-    xaccAccountCommitEdit(acc);
+    /* See if we already have an account by that name */
+    acc = gnc_account_lookup_by_name(cacb->base_acct,
+				     gnc_commodity_get_mnemonic(cmdty));
+
+    /* If not, then create one */
+    if (!acc)
+    {
+      acc = xaccMallocAccount(cacb->cbw->book);
+      xaccAccountBeginEdit(acc);
+      xaccAccountSetType(acc, ACCT_TYPE_EQUITY);
+      xaccAccountSetName(acc, gnc_commodity_get_mnemonic(cmdty));
+      xaccAccountSetDescription(acc, gnc_commodity_get_mnemonic(cmdty));
+      xaccAccountSetCommodity(acc, cmdty);
+      gnc_account_append_child(cacb->base_acct, acc);
+      xaccAccountCommitEdit(acc);
+    }
   }
+  /* Make sure the account exists and is of the correct commodity */
   g_assert(acc);
+  g_assert(gnc_commodity_equal(cmdty, xaccAccountGetCommodity(acc)));
 
   /* Create the split for the Equity account to balance out
    * all the accounts of this.  Use the "total".
