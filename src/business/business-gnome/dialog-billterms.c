@@ -161,7 +161,7 @@ set_numeric (GtkWidget *widget, GncBillTerm *term,
 
 static void
 get_numeric (GtkWidget *widget, GncBillTerm *term,
-	     gnc_numeric (*func)(GncBillTerm *))
+	     gnc_numeric (*func)(const GncBillTerm *))
 {
   gnc_numeric val;
   gdouble fl;
@@ -183,7 +183,7 @@ set_int (GtkWidget *widget, GncBillTerm *term,
 
 static void
 get_int (GtkWidget *widget, GncBillTerm *term,
-	     gint (*func)(GncBillTerm *))
+	     gint (*func)(const GncBillTerm *))
 {
   gint val;
 
