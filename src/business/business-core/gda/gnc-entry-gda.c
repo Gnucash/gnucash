@@ -84,7 +84,7 @@ static col_cvt_t col_table[] =
 	{ "b_paytype",     CT_INT,         0,                   0,        NULL, NULL, (QofAccessFunc)gncEntryGetBillPayment, (QofSetterFunc)gncEntrySetBillPayment },
 	{ "billable",      CT_BOOLEAN,     0,                   0,        NULL, ENTRY_BILLABLE },
 	{ "billto",        CT_OWNERREF,    0,                   0,        NULL, ENTRY_BILLTO },
-	{ "order",         CT_ORDERREF,    0,                   0,        NULL, NULL, (QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder },
+	{ "order_guid",    CT_ORDERREF,    0,                   0,        NULL, NULL, (QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder },
 	{ NULL }
 };
 
