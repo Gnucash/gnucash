@@ -675,6 +675,12 @@ gnc_numeric gncTaxTableEntryGetAmount (const GncTaxTableEntry *entry)
   return entry->amount;
 }
 
+GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry )
+{
+  if (!entry) return NULL;
+  return entry->table;
+}
+
 int gncTaxTableEntryCompare (const GncTaxTableEntry *a, const GncTaxTableEntry *b)
 {
   char *name_a, *name_b;

@@ -63,6 +63,8 @@ GncTaxTable * gncCloneTaxTable (GncTaxTable *from, QofBook *book);
  */
 GncTaxTable * gncTaxTableObtainTwin (const GncTaxTable *from, QofBook *book);
 
+GncTaxTable* gncTaxTableEntryGetTable( const GncTaxTableEntry* entry );
+
 #define gncTaxTableSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
 #endif /* GNC_TAXTABLEP_H_ */

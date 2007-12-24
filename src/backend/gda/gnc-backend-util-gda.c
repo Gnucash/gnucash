@@ -129,12 +129,27 @@ gnc_gda_create_condition_from_field( GdaQuery* query, const gchar* col_name,
     return cond;
 }
 /* ----------------------------------------------------------------- */
+static gpointer
+get_autoinc_id( gpointer pObject, const QofParam* param )
+{
+    // Just need a 0 to force a new recurrence id
+    return (gpointer)0;
+}
+
+static void
+set_autoinc_id( gpointer pObject, gpointer pValue )
+{
+    // Nowhere to put the ID
+}
+
 QofAccessFunc
 gnc_gda_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
 {
     QofAccessFunc getter;
 
-    if( table_row->param_name != NULL ) {
+	if( (table_row->flags & COL_AUTOINC) != 0 ) {
+		getter = get_autoinc_id;
+    } else if( table_row->param_name != NULL ) {
         getter = qof_class_get_parameter_getter( obj_name,
                                                 table_row->param_name );
     } else {
@@ -1221,7 +1236,9 @@ gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     col_type_handler_t* pHandler;
 
     for( col = 0; table[col].col_name != NULL; col++ ) {
-        if( table[col].param_name != NULL ) {
+		if( (table[col].flags & COL_AUTOINC) != 0 ) {
+			setter = set_autoinc_id;
+        } else if( table[col].param_name != NULL ) {
             setter = qof_class_get_parameter_setter( obj_name,
                                                     table[col].param_name );
         } else {

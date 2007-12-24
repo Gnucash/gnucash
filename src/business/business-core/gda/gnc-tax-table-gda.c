@@ -69,6 +69,7 @@ static col_cvt_t tt_col_table[] =
 			get_child, (QofSetterFunc)gncTaxTableSetChild },
 	{ "parent",    CT_TAXTABLEREF, 0,			 0,        NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetParent, (QofSetterFunc)gncTaxTableSetParent },
+	{ NULL }
 };
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
@@ -76,21 +77,22 @@ static col_cvt_t tt_col_table[] =
 static col_cvt_t ttentries_col_table[] =
 {
 	{ "id",       CT_INT,         0, COL_NNUL|COL_AUTOINC },
-	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL,            NULL },
+	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL,            NULL, NULL,
+			(QofAccessFunc)gncTaxTableEntryGetTable, set_obj_guid },
 	{ "account",  CT_ACCOUNTREF,  0, COL_NNUL,            NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetAccount, (QofSetterFunc)gncTaxTableEntrySetAccount },
 	{ "amount",   CT_NUMERIC,     0, COL_NNUL,            NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetAmount, (QofSetterFunc)gncTaxTableEntrySetAmount },
 	{ "type",     CT_INT,         0, COL_NNUL,            NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetType, (QofSetterFunc)gncTaxTableEntrySetType },
-	{ NULL },
+	{ NULL }
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static col_cvt_t guid_col_table[] =
 {
-    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
+    { "taxtable", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
     { NULL }
 };
 
@@ -195,6 +197,7 @@ load_single_taxtable( GncGdaBackend* be, GdaDataModel* pModel, int row )
     gnc_gda_load_object( be, pModel, row, GNC_ID_TAXTABLE, tt, tt_col_table );
     gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(tt)),
                         qof_instance_get_slots( QOF_INSTANCE(tt) ) );
+	load_taxtable_entries( be, tt );
 
     qof_instance_mark_clean( QOF_INSTANCE(tt) );
 
@@ -324,7 +327,7 @@ gnc_taxtable_gda_initialize( void )
     static GncGdaDataType_t be_data =
     {
         GNC_GDA_BACKEND_VERSION,
-        GNC_ID_ORDER,
+        GNC_ID_TAXTABLE,
         gnc_gda_save_taxtable,				/* commit */
         load_all_taxtables,					/* initial_load */
         create_taxtable_tables				/* create_tables */

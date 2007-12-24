@@ -51,8 +51,6 @@ typedef struct {
 	Recurrence* pRecurrence;
 } recurrence_info_t;
 
-static gpointer get_recurrence_id( gpointer pObject, const QofParam* param );
-static void set_recurrence_id( gpointer pObject, gpointer pValue );
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
 static gpointer get_recurrence_mult( gpointer pObject, const QofParam* );
@@ -64,8 +62,7 @@ static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "recurrence_id",           CT_INT,    0,                                     COL_NNUL|COL_AUTOINC, NULL, NULL,
-            get_recurrence_id, set_recurrence_id },
+    { "recurrence_id",           CT_INT,    0,                                     COL_NNUL|COL_AUTOINC },
     { "obj_guid",                CT_GUID,   0,                                     COL_NNUL,             NULL, NULL,
             get_obj_guid, set_obj_guid },
     { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL,             NULL, NULL,
@@ -86,19 +83,6 @@ static col_cvt_t guid_col_table[] =
 };
 
 /* ================================================================= */
-
-static gpointer
-get_recurrence_id( gpointer pObject, const QofParam* param )
-{
-    // Just need a 0 to force a new recurrence id
-    return (gpointer)0;
-}
-
-static void
-set_recurrence_id( gpointer pObject, gpointer pValue )
-{
-    // Nowhere to put the ID
-}
 
 static gpointer
 get_obj_guid( gpointer pObject, const QofParam* param )

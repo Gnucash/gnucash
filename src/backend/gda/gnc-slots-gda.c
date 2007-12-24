@@ -51,8 +51,6 @@ typedef struct {
     GString* path;
 } slot_info_t;
 
-static gpointer get_slot_id( gpointer pObject, const QofParam* param );
-static void set_slot_id( gpointer pObject, gpointer pValue );
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
 static gpointer get_path( gpointer pObject, const QofParam* param );
@@ -77,7 +75,7 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
 static col_cvt_t col_table[] =
 {
-    { "slot_id",      CT_INT,      0,                     COL_NNUL|COL_AUTOINC, NULL, NULL, get_slot_id,      set_slot_id },
+    { "slot_id",      CT_INT,      0,                     COL_NNUL|COL_AUTOINC },
     { "obj_guid",     CT_GUID,     0,                     COL_NNUL,             NULL, NULL, get_obj_guid,     set_obj_guid },
     { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL,             NULL, NULL, get_path,         set_path },
     { "slot_type",    CT_INT,      0,                     COL_NNUL,             NULL, NULL, get_slot_type,    set_slot_type, },
@@ -100,19 +98,6 @@ static col_cvt_t guid_col_table[] =
 };
 
 /* ================================================================= */
-
-static gpointer
-get_slot_id( gpointer pObject, const QofParam* param )
-{
-    // Just need a 0 to force a new slot id
-    return (gpointer)0;
-}
-
-static void
-set_slot_id( gpointer pObject, gpointer pValue )
-{
-    // Nowhere to put the ID
-}
 
 static gpointer
 get_obj_guid( gpointer pObject, const QofParam* param )

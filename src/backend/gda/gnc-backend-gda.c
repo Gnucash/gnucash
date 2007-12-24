@@ -582,7 +582,7 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
     /* If this has already been handled, or is not the correct handler, return */
-    g_return_if_fail( strcmp( pData->type_name, be_data->inst->e_type ) == 0 );
+    if( strcmp( pData->type_name, be_data->inst->e_type ) != 0 ) return;
     g_return_if_fail( !be_data->ok );
 
     if( pData->commit != NULL ) {
@@ -626,8 +626,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
     qof_object_foreach_backend( GNC_GDA_BACKEND, commit_cb, &be_data );
 
     if( !be_data.ok ) {
-        g_critical( "gnc_gda_commit_edit(): Unknown object type %s\n",
-                inst->e_type );
+        g_critical( "gnc_gda_commit_edit(): Unknown object type '%s'\n", inst->e_type );
         return;
     }
 
@@ -739,7 +738,8 @@ compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
-    g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
+	// Is this the right item?
+    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
     g_return_if_fail( !be_data->ok );
 
     if( pData->compile_query != NULL ) {
@@ -867,9 +867,10 @@ run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
-
     g_return_if_fail( !be_data->ok );
+
+	// Is this the right item?
+    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
 
     if( pData->run_query != NULL ) {
         (pData->run_query)( be_data->be, be_data->pCompiledQuery );
