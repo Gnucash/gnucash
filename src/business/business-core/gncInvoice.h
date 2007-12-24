@@ -97,23 +97,23 @@ void gncInvoiceSortEntries (GncInvoice *invoice);
 
 /** @name Get Functions 
  @{ */
-const char * gncInvoiceGetID (GncInvoice *invoice);
+const char * gncInvoiceGetID (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
-Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
-Timespec gncInvoiceGetDatePosted (GncInvoice *invoice);
-Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
-GncBillTerm * gncInvoiceGetTerms (GncInvoice *invoice);
-const char * gncInvoiceGetBillingID (GncInvoice *invoice);
-const char * gncInvoiceGetNotes (GncInvoice *invoice);
+Timespec gncInvoiceGetDateOpened (const GncInvoice *invoice);
+Timespec gncInvoiceGetDatePosted (const GncInvoice *invoice);
+Timespec gncInvoiceGetDateDue (const GncInvoice *invoice);
+GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
+const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
+const char * gncInvoiceGetNotes (const GncInvoice *invoice);
 const char * gncInvoiceGetType (GncInvoice *invoice); 
-gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice);
+gnc_commodity * gncInvoiceGetCurrency (const GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
-gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice);
-gboolean gncInvoiceGetActive (GncInvoice *invoice);
+gnc_numeric gncInvoiceGetToChargeAmount (const GncInvoice *invoice);
+gboolean gncInvoiceGetActive (const GncInvoice *invoice);
 
-GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
-Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
-Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
+GNCLot * gncInvoiceGetPostedLot (const GncInvoice *invoice);
+Transaction * gncInvoiceGetPostedTxn (const GncInvoice *invoice);
+Account * gncInvoiceGetPostedAcc (const GncInvoice *invoice);
 /** @} */
 
 /** return the "total" amount of the invoice */
@@ -165,7 +165,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice *invoice,
 
 
 /** Given a transaction, find and return the Invoice */
-GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
+GncInvoice * gncInvoiceGetInvoiceFromTxn (const Transaction *txn);
 
 /** Given a LOT, find and return the Invoice attached to the lot */
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
@@ -181,9 +181,9 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
-int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
-gboolean gncInvoiceIsPosted (GncInvoice *invoice);
-gboolean gncInvoiceIsPaid (GncInvoice *invoice);
+int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b);
+gboolean gncInvoiceIsPosted (const GncInvoice *invoice);
+gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 
 #define INVOICE_ID	"id"
 #define INVOICE_OWNER	"owner"
