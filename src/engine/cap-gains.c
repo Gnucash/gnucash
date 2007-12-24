@@ -168,7 +168,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
    gnc_commodity *currency,
-   gint64 guess,
+   guint64 guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
@@ -195,7 +195,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
           sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   G_MAXINT64, earliest_pred);
+                   G_MAXUINT64, earliest_pred);
    LEAVE ("found lot=%p %s baln=%s", lot, gnc_lot_get_title (lot),
                gnc_num_dbg_to_string(gnc_lot_get_balance(lot)));
    return lot;
@@ -210,7 +210,7 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 	  sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   G_MININT64, latest_pred);
+                   0, latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
