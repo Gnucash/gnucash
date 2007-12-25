@@ -248,6 +248,8 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
         return;
     }
 
+	be->supports_transactions = gda_connection_supports_feature( be->pConnection, GDA_CONNECTION_FEATURE_TRANSACTIONS );
+
     // Set up the dictionary
     be->pDict = gda_dict_new();
     gda_dict_set_connection( be->pDict, be->pConnection );
@@ -311,7 +313,9 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    g_return_if_fail( g_ascii_strcasecmp( type, GNC_ID_BOOK ) != 0 );
+
+	// Don't need to load anything for the books table
+    if( g_ascii_strcasecmp( type, GNC_ID_BOOK ) == 0 ) return;
 
     if( pData->initial_load != NULL ) {
         (pData->initial_load)( be_data->be );
@@ -347,7 +351,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     be->loading = FALSE;
 
 	// Mark the book as clean
-	qof_instance_mark_clean( QOF_INSTANCE(book) );
+	qof_book_mark_saved( book );
 
     LEAVE( "" );
 }
@@ -599,6 +603,8 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     gda_backend be_data;
+	GError* error;
+	gboolean status;
 
     ENTER( " " );
 
@@ -620,6 +626,20 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) return;
 
+#define TRANSACTION_NAME "trans"
+	error = NULL;
+	if( be->supports_transactions ) {
+		status = gda_connection_begin_transaction( be->pConnection, TRANSACTION_NAME,
+										GDA_TRANSACTION_ISOLATION_UNKNOWN, &error );
+		if( !status ) {
+			if( error != NULL ) {
+				g_warning( "Unable to begin transaction: %s\n", error->message );
+			} else {
+				g_warning( "Unable to begin transaction\n" );
+			}
+		}
+	}
+
     be_data.ok = FALSE;
     be_data.be = be;
     be_data.inst = inst;
@@ -627,8 +647,28 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     if( !be_data.ok ) {
         g_critical( "gnc_gda_commit_edit(): Unknown object type '%s'\n", inst->e_type );
+		if( be->supports_transactions ) {
+			status = gda_connection_rollback_transaction( be->pConnection, TRANSACTION_NAME, &error );
+			if( !status ) {
+				if( error != NULL ) {
+					g_warning( "Unable to roll back transaction: %s\n", error->message );
+				} else {
+					g_warning( "Unable to roll back transaction\n" );
+				}
+			}
+		}
         return;
     }
+	if( be->supports_transactions ) {
+		status = gda_connection_commit_transaction( be->pConnection, TRANSACTION_NAME, &error );
+		if( !status ) {
+			if( error != NULL ) {
+				g_warning( "Unable to commit transaction: %s\n", error->message );
+			} else {
+				g_warning( "Unable to commit transaction\n" );
+			}
+		}
+	}
 
     qof_instance_mark_clean(inst);
     qof_book_mark_saved( be->primary_book );

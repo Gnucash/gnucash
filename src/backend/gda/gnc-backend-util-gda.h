@@ -44,6 +44,7 @@ struct GncGdaBackend_struct
   QofBook *primary_book;	/* The primary, main open book */
   gboolean	loading;		/* We are performing an initial load */
   gboolean  in_query;
+  gboolean  supports_transactions;
 };
 typedef struct GncGdaBackend_struct GncGdaBackend;
 
