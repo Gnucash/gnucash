@@ -1650,6 +1650,8 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 
     ENTER ("(acc=%p, lot=%p)", acc, lot);
     priv->lots = g_list_remove(priv->lots, lot);
+    qof_event_gen (&lot->inst, QOF_EVENT_REMOVE, NULL);
+    qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
@@ -1684,6 +1686,9 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
     * if appropriate, and doing it here will not work if we are being 
     * called from gnc_book_close_period since xaccAccountInsertSplit
     * will try to balance capital gains and things aren't ready for that. */
+
+   qof_event_gen (&lot->inst, QOF_EVENT_ADD, NULL);
+   qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, NULL);
 
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }

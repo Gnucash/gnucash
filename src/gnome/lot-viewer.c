@@ -64,6 +64,7 @@ enum lot_cols {
 #define RESPONSE_DELETE        2
 #define RESPONSE_SCRUB_LOT     3
 #define RESPONSE_SCRUB_ACCOUNT 4
+#define RESPONSE_NEW_LOT       5
 
 #define GCONF_SECTION "dialogs/lot_viewer"
 #define GCONF_KEY_HPOSITION "hpane_position"
@@ -77,6 +78,7 @@ struct _GNCLotViewer
 #endif
    GtkButton     * delete_button;
    GtkButton     * scrub_lot_button;
+   GtkButton     * new_lot_button;
    GtkPaned      * lot_hpaned;
    GtkPaned      * lot_vpaned;
    GtkTreeView   * lot_view;
@@ -210,6 +212,26 @@ lv_clear_splits (GNCLotViewer *lv)
    gtk_clist_clear (lv->mini_clist);
 }
 
+static void 
+lv_save_current_row (GNCLotViewer *lv)
+{
+   GNCLot *lot = lv->selected_lot;
+   const char * str;
+   char * notes;
+
+   if (lot)
+   {
+      /* Get the title, save_the_title */
+      str = gtk_entry_get_text (lv->title_entry);
+      gnc_lot_set_title (lot, str);
+
+      /* Get the notes, save the notes */
+      notes = xxxgtk_textview_get_text (lv->lot_notes);
+      gnc_lot_set_notes (lot, notes);
+      g_free(notes);
+   }
+}
+
 /* ======================================================================== */
 /* Callback for selecting a row the the list-of-list clist */
 
@@ -218,6 +240,8 @@ lv_select_row (GNCLotViewer *lv,
 	       GNCLot       *lot)
 {
    const char * str;
+
+   lv_save_current_row (lv);
 
    str = gnc_lot_get_title (lot);
    if (!str) str = "";
@@ -273,21 +297,7 @@ lv_unset_lot (GNCLotViewer *lv)
 static void 
 lv_unselect_row (GNCLotViewer *lv)
 {
-   GNCLot *lot = lv->selected_lot;
-   const char * str;
-   char * notes;
-
-   if (lot)
-   {
-      /* Get the title, save_the_title */
-      str = gtk_entry_get_text (lv->title_entry);
-      gnc_lot_set_title (lot, str);
-
-      /* Get the notes, save the notes */
-      notes = xxxgtk_textview_get_text (lv->lot_notes);
-      gnc_lot_set_notes (lot, notes);
-      g_free(notes);
-   }
+   lv_save_current_row (lv);
 
    lv_unset_lot (lv);
 }
@@ -488,20 +498,7 @@ lv_close_handler (gpointer user_data)
    GNCLotViewer *lv = user_data;
    GNCLot *lot = lv->selected_lot;
 
-   if (lot)
-   {
-      const char * str;
-      char *notes;
-
-      /* Get the title, save the title */
-      str = gtk_entry_get_text (lv->title_entry);
-      gnc_lot_set_title (lot, str);
-
-      /* Get the notes, save the notes */
-      notes = xxxgtk_textview_get_text (lv->lot_notes);
-      gnc_lot_set_notes (lot, notes);
-      g_free(notes);
-   }
+   lv_save_current_row (lv);
 
    gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
    gtk_widget_destroy (lv->window);
@@ -582,6 +579,12 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
      gnc_lot_viewer_fill (lv);
      lv_show_splits (lv);
      break;
+
+   case RESPONSE_NEW_LOT:
+     lv_save_current_row (lv);
+     lot = gnc_lot_make_default (lv->account);
+     xaccAccountInsertLot (lv->account, lot);
+     break;
    }
 }
 
@@ -659,6 +662,7 @@ lv_create (GNCLotViewer *lv)
 #endif
    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
    lv->scrub_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub lot button"));
+   lv->new_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "new lot button"));
 
    lv->lot_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "lot view"));
    lv_init_lot_view(lv);
@@ -709,7 +713,7 @@ gnc_lot_viewer_dialog (Account *account)
 
    gnc_gui_component_watch_entity_type (component_id,
                GNC_ID_LOT,
-               QOF_EVENT_CREATE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+               QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
    gtk_widget_show_all (lv->window);
    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));

@@ -39,8 +39,12 @@
  * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
+#include <glib.h>
+#include <glib/gi18n.h>
+
 #include "config.h"
 #include "Account.h"
+#include "AccountP.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "cap-gains.h"
@@ -452,6 +456,24 @@ gboolean gnc_lot_register (void)
 
     qof_class_register (GNC_ID_LOT, NULL, params);
     return qof_object_register(&gncLotDesc);
+}
+
+GNCLot * gnc_lot_make_default (Account *acc)
+{
+   GNCLot * lot;
+   gint64 id;
+   char buff[200];
+
+   lot = gnc_lot_new (qof_instance_get_book(acc));
+
+   /* Provide a reasonable title for the new lot */
+   id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
+   snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
+   kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
+   id ++;
+   kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
+
+   return lot;
 }
 
 /* ========================== END OF FILE ========================= */
