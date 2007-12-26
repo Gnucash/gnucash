@@ -53,6 +53,7 @@ static void set_id( gpointer pObject, gpointer pValue );
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
 static gpointer get_child( gpointer pObject, const QofParam* param );
+static void set_parent( gpointer pObject, gpointer pValue );
 
 #define MAX_NAME_LEN 50
 
@@ -68,7 +69,7 @@ static col_cvt_t tt_col_table[] =
 	{ "child",     CT_TAXTABLEREF, 0,			 0,        NULL, NULL,
 			get_child, (QofSetterFunc)gncTaxTableSetChild },
 	{ "parent",    CT_TAXTABLEREF, 0,			 0,        NULL, NULL,
-			(QofAccessFunc)gncTaxTableGetParent, (QofSetterFunc)gncTaxTableSetParent },
+			(QofAccessFunc)gncTaxTableGetParent, set_parent },
 	{ NULL }
 };
 
@@ -139,6 +140,18 @@ get_child( gpointer pObject, const QofParam* param )
 {
 	GncTaxTable* tt = GNC_TAXTABLE(pObject);
 	return gncTaxTableGetChild( tt );
+}
+
+static void
+set_parent( gpointer data, gpointer value )
+{
+	GncTaxTable* tt = GNC_TAXTABLE(data);
+	GncTaxTable* parent;
+
+	if( value != NULL ) {
+		parent = GNC_TAXTABLE(value);
+		gncTaxTableSetParent( tt, parent );
+	}
 }
 
 static void
