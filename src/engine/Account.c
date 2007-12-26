@@ -871,6 +871,7 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
     priv->commodity = gnc_commodity_obtain_twin(from_priv->commodity, book);
+    gnc_commodity_increment_usage_count(priv->commodity);
 
     priv->commodity_scu = from_priv->commodity_scu;
     priv->non_standard_scu = from_priv->non_standard_scu;
@@ -1004,6 +1005,7 @@ xaccFreeAccount (Account *acc)
   priv->reconciled_balance = gnc_numeric_zero();
 
   priv->type = ACCT_TYPE_NONE;
+  gnc_commodity_decrement_usage_count(priv->commodity);
   priv->commodity = NULL;
 
   priv->balance_dirty = FALSE;
@@ -2066,7 +2068,9 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
       return;
 
   xaccAccountBeginEdit(acc);
+  gnc_commodity_decrement_usage_count(priv->commodity);
   priv->commodity = com;
+  gnc_commodity_increment_usage_count(com);
   priv->commodity_scu = gnc_commodity_get_fraction(com);
   priv->non_standard_scu = FALSE;
 
@@ -2085,15 +2089,6 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
   priv->balance_dirty = TRUE;
   mark_account (acc);
 
-  if (gnc_commodity_is_iso(com)) {
-    /* compatability hack - Gnucash 1.8 gets currency quotes when a
-       non-default currency is assigned to an account.  */
-	gnc_commodity_begin_edit(com);
-    gnc_commodity_set_quote_flag(com, TRUE);
-    gnc_commodity_set_quote_source(com, 
-        gnc_commodity_get_default_quote_source(com));
-	gnc_commodity_commit_edit(com);
-  }
   xaccAccountCommitEdit(acc);
 }
 

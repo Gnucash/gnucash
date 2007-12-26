@@ -1194,7 +1194,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     if (w->edit_commodity) {
       c = w->edit_commodity;
       gnc_commodity_begin_edit(c);
-      gnc_commodity_set_quote_flag (c, gtk_toggle_button_get_active
+      gnc_commodity_user_set_quote_flag (c, gtk_toggle_button_get_active
 				    (GTK_TOGGLE_BUTTON (w->get_quote_check)));
       selection = gtk_combo_box_get_active(GTK_COMBO_BOX(w->quote_tz_menu));
       string = gnc_timezone_menu_position_to_string(selection);
@@ -1237,7 +1237,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
       gnc_commodity_set_fraction (c, fraction);
     }
 
-    gnc_commodity_set_quote_flag (c, gtk_toggle_button_get_active
+    gnc_commodity_user_set_quote_flag (c, gtk_toggle_button_get_active
 				  (GTK_TOGGLE_BUTTON (w->get_quote_check)));
 
     for (type = SOURCE_SINGLE; type < SOURCE_MAX; type++) {

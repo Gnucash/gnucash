@@ -61,6 +61,10 @@ struct gnc_commodity_s
   gboolean  quote_flag;	    /* user wants price quotes */
   gnc_quote_source * quote_source;   /* current/old source of quotes */
   char    * quote_tz;
+
+  /* the number of accounts using this commodity - this field is not
+   * persisted */
+  int       usage_count;
 };
 
 struct _GncCommodityClass
@@ -624,6 +628,17 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   cm->mark = 0;
 
+#if !ACCOUNTS_CLEANED_UP
+  /* Account objects are not actually cleaned up when a book is closed (in fact
+   * a memory leak), but commodities are, so in currently this warning gets hit
+   * quite frequently.  Disable the check until cleaning up of accounts objects
+   * on close is implemented.  */
+  if(cm->usage_count != 0) {
+      PWARN("Destroying commodity (%p) with non-zero usage_count (%d).", cm,
+              cm->usage_count);
+  }
+#endif
+
   /* qof_instance_release (&cm->inst); */
   g_object_unref(cm);
 }
@@ -638,13 +653,15 @@ gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
   gnc_commodity_set_quote_flag (dest, src->quote_flag);
   gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
   gnc_commodity_set_quote_tz (dest, src->quote_tz);
+  kvp_frame_delete (dest->inst.kvp_data);
+  dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
 }
 
 gnc_commodity *
-gnc_commodity_clone(gnc_commodity *src)
+gnc_commodity_clone(gnc_commodity *src, QofBook *dest_book)
 {
   gnc_commodity * dest = g_object_new(GNC_TYPE_COMMODITY, NULL);
-  /* qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, src->inst.book); */
+  qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, dest_book);
 
   dest->fullname = CACHE_INSERT(src->fullname);
   dest->mnemonic = CACHE_INSERT(src->mnemonic);
@@ -658,6 +675,9 @@ gnc_commodity_clone(gnc_commodity *src)
   dest->quote_flag = src->quote_flag;
 
   gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
+
+  kvp_frame_delete (dest->inst.kvp_data);
+  dest->inst.kvp_data = kvp_frame_copy (src->inst.kvp_data);
 
   reset_printname(dest);
   reset_unique_name(dest);
@@ -772,6 +792,21 @@ gnc_commodity_get_mark(const gnc_commodity * cm)
 {
   if(!cm) return 0;
   return cm->mark;
+}
+
+/********************************************************************
+ * gnc_commodity_get_auto_quote_control_flag
+ ********************************************************************/
+
+static gboolean
+gnc_commodity_get_auto_quote_control_flag(const gnc_commodity *cm)
+{
+  const char *str;
+
+  if(!cm) return FALSE;
+
+  str = kvp_frame_get_string(cm->inst.kvp_data, "auto_quote_control");
+  return !str || (strcmp(str, "false") != 0);
 }
 
 /********************************************************************
@@ -929,6 +964,60 @@ gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark)
 }
 
 /********************************************************************
+ * gnc_commodity_set_auto_quote_control_flag
+ ********************************************************************/
+
+static void
+gnc_commodity_set_auto_quote_control_flag(gnc_commodity *cm,
+                                          const gboolean flag)
+{
+  ENTER ("(cm=%p, flag=%d)", cm, flag);
+
+  if(!cm) {
+    LEAVE("");
+    return;
+  }
+
+  gnc_commodity_begin_edit(cm);
+  kvp_frame_set_string(cm->inst.kvp_data,
+                       "auto_quote_control", flag ? NULL : "false");
+  mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
+  LEAVE("");
+}
+
+/********************************************************************
+ * gnc_commodity_user_set_quote_flag
+ ********************************************************************/
+
+void
+gnc_commodity_user_set_quote_flag(gnc_commodity *cm, const gboolean flag)
+{
+  ENTER ("(cm=%p, flag=%d)", cm, flag);
+
+  if(!cm) {
+    LEAVE("");
+    return;
+  }
+
+  gnc_commodity_begin_edit(cm);
+  gnc_commodity_set_quote_flag(cm, flag);
+  if(gnc_commodity_is_iso(cm)) {
+    /* For currencies, disable auto quote control if the quote flag is being
+     * changed from its default value and enable it if the quote flag is being
+     * reset to its default value.  The defaults for the quote flag are
+     * disabled if no accounts are using the currency, and true otherwise.
+     * Thus enable auto quote control if flag is FALSE and there are not any
+     * accounts using this currency OR flag is TRUE and there are accounts
+     * using this currency; otherwise disable auto quote control */
+    gnc_commodity_set_auto_quote_control_flag(cm,
+        (!flag && (cm->usage_count == 0)) || (flag && (cm->usage_count != 0)));
+  }
+  gnc_commodity_commit_edit(cm);
+  LEAVE("");
+}
+
+/********************************************************************
  * gnc_commodity_set_quote_flag
  ********************************************************************/
 
@@ -979,6 +1068,70 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
   mark_commodity_dirty(cm);
   gnc_commodity_commit_edit(cm);
   LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_increment_usage_count
+ ********************************************************************/
+
+void
+gnc_commodity_increment_usage_count(gnc_commodity *cm)
+{
+  const char *str;
+
+  ENTER("(cm=%p)", cm);
+
+  if(!cm) {
+    LEAVE("");
+    return;
+  }
+
+  if((cm->usage_count == 0) && !cm->quote_flag
+      && gnc_commodity_get_auto_quote_control_flag(cm)
+      && gnc_commodity_is_iso(cm)) {
+    /* compatability hack - Gnucash 1.8 gets currency quotes when a
+       non-default currency is assigned to an account.  */
+    gnc_commodity_begin_edit(cm);
+    gnc_commodity_set_quote_flag(cm, TRUE);
+    gnc_commodity_set_quote_source(cm,
+        gnc_commodity_get_default_quote_source(cm));
+    gnc_commodity_commit_edit(cm);
+  }
+  cm->usage_count++;
+  LEAVE("(usage_count=%d)", cm->usage_count);
+}
+
+/********************************************************************
+ * gnc_commodity_decrement_usage_count
+ ********************************************************************/
+
+void
+gnc_commodity_decrement_usage_count(gnc_commodity *cm)
+{
+  const char *str;
+
+  ENTER("(cm=%p)", cm);
+
+  if(!cm) {
+    LEAVE("");
+    return;
+  }
+
+  if(cm->usage_count == 0) {
+    PWARN("usage_count already zero");
+    LEAVE("");
+    return;
+  }
+
+  cm->usage_count--;
+  if((cm->usage_count == 0) && cm->quote_flag
+      && gnc_commodity_get_auto_quote_control_flag(cm)
+      && gnc_commodity_is_iso(cm)) {
+    /* if this is a currency with auto quote control enabled and no more
+     * accounts reference this currency, disable quote retrieval */
+    gnc_commodity_set_quote_flag(cm, FALSE);
+  }
+  LEAVE("(usage_count=%d)", cm->usage_count);
 }
 
 /********************************************************************\
@@ -1122,7 +1275,7 @@ gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
   twin = gnc_commodity_table_lookup_unique (comtbl, ucom);
   if (!twin)
   {
-    twin = gnc_commodity_clone (from);
+    twin = gnc_commodity_clone (from, book);
     twin = gnc_commodity_table_insert (comtbl, twin);
   }
   return twin;
@@ -1779,19 +1932,27 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
 
 /* =========================================================== */
 
+typedef struct {
+  gnc_commodity_table *dest;
+  QofBook *dest_book;
+} table_copy_helper_data;
+
 static gboolean 
 table_copy_helper (gnc_commodity *src_cm, gpointer user_data)
 {
-  gnc_commodity_table *dest = user_data;
-  gnc_commodity_table_insert (dest, gnc_commodity_clone (src_cm));
+  table_copy_helper_data *data = user_data;
+  gnc_commodity_table_insert (data->dest,
+      gnc_commodity_clone (src_cm, data->dest_book));
   return TRUE;
 }
 
 void
 gnc_commodity_table_copy(gnc_commodity_table *dest,
-                          gnc_commodity_table *src)
+                          gnc_commodity_table *src,
+                          QofBook *dest_book)
 {
-  gnc_commodity_table_foreach_commodity (src, table_copy_helper, dest);
+  table_copy_helper_data data = {dest, dest_book};
+  gnc_commodity_table_foreach_commodity (src, table_copy_helper, &data);
 }
 
 /********************************************************************
