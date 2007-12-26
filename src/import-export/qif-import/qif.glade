@@ -1119,7 +1119,7 @@ Check to see if there is an existing Type that is appropriate; if not, you can e
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">If you are importing a QIF file downloaded from a bank or other financial institution, some of the information in the QIF file may duplicate information already in your GnuCash accounts.  GnuCash will try to detect duplicates of existing transactions.  
 
-On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible  matches for the selected left-hand transaction are shown  to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the &quot;Dup?&quot; column of the correct transaction.
+On the next page, you will be asked to confirm that an existing transaction matches an imported transaction.  Imported transactions are shown on the left side of the page, and possible matches for the selected left-hand transaction are shown to the right.  There may be several old transactions that could match an imported transaction; you will be able to select the correct one by double-clicking in the &quot;Dup?&quot; column of the correct transaction.
 
 You can control the rules used by GnuCash to find duplicate transactions in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
 
