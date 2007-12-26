@@ -137,6 +137,9 @@
           (list->vector
            (list '2nd-est (N_ "2nd Est Tax Quarter") (N_ "Apr 1 - May 31")))
           (list->vector
+	   ;; Translators: The US tax quarters are different from
+	   ;; actual year's quarters! See the definition of
+	   ;; tax-qtr-real-qtr-year variable above.
            (list '3rd-est (N_ "3rd Est Tax Quarter") (N_ "Jun 1 - Aug 31")))
           (list->vector
            (list '4th-est (N_ "4th Est Tax Quarter") (N_ "Sep 1 - Dec 31")))
@@ -283,7 +286,7 @@
       '()
       (cons (gnc:make-html-table-header-cell/markup
              "number-header"
-             (_ "Sub-")
+             "Sub-"
              (number->string (- max-level 1)))
             (make-sub-headers (- max-level 1)))))
 

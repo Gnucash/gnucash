@@ -1029,6 +1029,11 @@
 ;; Here are some standard functions to help process gnc:html-acct-tables.
 ;; 
 
+(define (gnc:html-make-nbsps n)
+  (if (> n 0)
+      (string-append "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" (gnc:html-make-nbsps (- n 1)))
+      ""))
+
 ;; Stylesheets define the following cell styles which these functions
 ;; use: "text-cell" "total-label-cell" "number-cell"
 ;; "total-number-cell".  Row styles include "normal-row",
@@ -1065,16 +1070,15 @@
 	 (tbl-width (or table-width (+ amt-depth amt-colspan)))
 	 (row
 	  (append
-	   (gnc:html-make-empty-cells lbl-depth)  ;; padding before label
 	   (list
 	    (if label-markup                      ;; the actual label
 		(gnc:make-html-table-cell/size/markup
-		 1 lbl-colspan label-markup label)
+		 1 1 label-markup (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label)
 		(gnc:make-html-table-cell/size
-		 1 lbl-colspan label))
+		 1 1 (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label))
 	    )
 	   (gnc:html-make-empty-cells             ;; padding after label
-            (+ (- amt-depth (+ lbl-depth lbl-colspan))
+            (+ (- amt-depth (/ tbl-width 2))
                (if total-rule? -1 0)
                )
             )

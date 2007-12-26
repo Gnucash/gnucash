@@ -1,5 +1,5 @@
 #
-# Spec file for FC4
+# Spec file for Fedora and other RedHat distros and derivatives
 #
 # Check whether GnuCash should build optional modules.
 # To modify parameters, edit the .spec file, 0 is off, 1 is on
@@ -10,6 +10,10 @@
 # The --whatprovides redhat-release lets us work on RHEL as well as FC
 # Granted, it will look weird, but at least it wont fail outright.
 %define fc_rel %(rpm -q --queryformat='%{VERSION}' --whatprovides redhat-release)
+
+# Edit dist if not a Fedora release
+%define dist FC%{fc_rel}
+
 %define version @-VERSION-@
 %define __libtoolize /bin/true
 
@@ -24,7 +28,7 @@
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
 Version:   	%{version}
-Release:  	1.FC%{fc_rel}
+Release:  	1.%{dist}
 License:	GPL
 Group:     	Applications/Finance
 URL:            http://www.gnucash.org
@@ -40,6 +44,7 @@ Requires:  	libgnomeui >= %{libgnomeui_version}
 Requires:	libgnomeprintui22 >= %{libgnomeprintui22_version}
 Requires:	guile >= %{guile_version}
 Requires:	gtkhtml3 >= %{gtkhtml3_version}
+Requires:	slib >= 3a1
 
 BuildRequires: 	libgnomeui-devel >= %{libgnomeui_version}
 BuildRequires: 	libgnomeprintui22-devel >= %{libgnomeprintui22_version}

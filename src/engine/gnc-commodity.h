@@ -312,7 +312,7 @@ void  gnc_commodity_destroy(gnc_commodity * cm);
 void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
 
 /** allocate and copy */
-gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
+gnc_commodity * gnc_commodity_clone(gnc_commodity *src, QofBook *dest_book);
 /** @} */
 
 
@@ -547,6 +547,23 @@ void  gnc_commodity_set_cusip(gnc_commodity * cm, const char * cusip);
  */
 void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
 
+/** Set the automatic price quote flag for the specified commodity,
+ *  based on user input. This flag indicates whether stock quotes
+ *  should be retrieved for the specified stock.
+ *
+ *  It is necessary to have a separate function to distinguish when
+ *  this setting is being modified by a user so that the
+ *  auto-enabling/auto-disabling of currencies can be handled
+ *  properly.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ *
+ *  @param flag TRUE if quotes should be pulled for this commodity, FALSE
+ *  otherwise.
+ */
+void  gnc_commodity_user_set_quote_flag(gnc_commodity *cm,
+                                        const gboolean flag);
+
 /** Set the automatic price quote flag for the specified commodity.
  *  This flag indicates whether stock quotes should be retrieved for
  *  the specified stock.
@@ -583,6 +600,29 @@ void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
 void  gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz);
 /** @} */
 
+
+/** @name Commodity Usage Count Adjustment Routines
+@{
+*/
+
+/** Increment a commodity's internal counter that tracks how many
+ *  accounts are using that commodity.  For currencies, this may have
+ *  the side effect of enabling the commodity's quote flag.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ */
+void
+gnc_commodity_increment_usage_count(gnc_commodity *cm);
+
+/** Decrement a commodity's internal counter that tracks how many
+ *  accounts are using that commodity.  For currencies, this may have
+ *  the side effect of disabling the commodity's quote flag.
+ *
+ *  @param cm A pointer to a commodity data structure.
+ */
+void
+gnc_commodity_decrement_usage_count(gnc_commodity *cm);
+/** @} */
 
 
 /** @name Commodity Comparison 
@@ -653,7 +693,8 @@ gboolean gnc_commodity_table_equal(gnc_commodity_table *t_1,
 
 /** copy all commodities from src table to dest table */
 void gnc_commodity_table_copy(gnc_commodity_table *dest,
-                              gnc_commodity_table *src);
+                              gnc_commodity_table *src,
+                              QofBook *dest_book);
 /** @} */
 /* ---------------------------------------------------------- */
 /** @name Commodity Table Lookup functions

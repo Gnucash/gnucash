@@ -824,7 +824,7 @@ year(s)</property>
 	<widget class="GtkButton" id="SampleButton">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">button1</property>
+	  <property name="label" translatable="no">button1</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -840,7 +840,7 @@ year(s)</property>
 	<widget class="GtkToggleButton" id="SampleToggleButton">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">togglebutton1</property>
+	  <property name="label" translatable="no">togglebutton1</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -858,7 +858,7 @@ year(s)</property>
 	<widget class="GtkCheckButton" id="SampleCheckButton">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">checkbutton1</property>
+	  <property name="label" translatable="no">checkbutton1</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -877,7 +877,7 @@ year(s)</property>
 	<widget class="GtkRadioButton" id="SampleRadioButton">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">radiobutton1</property>
+	  <property name="label" translatable="no">radiobutton1</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>

@@ -571,25 +571,6 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
 /* ============================================================== */
 
-static GNCLot *
-MakeDefaultLot (Account *acc)
-{
-   GNCLot * lot;
-   gint64 id;
-   char buff[200];
-
-   lot = gnc_lot_new (qof_instance_get_book(acc));
-
-   /* Provide a reasonable title for the new lot */
-   id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-   snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
-   kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
-   id ++;
-   kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
-
-   return lot;
-}
-
 /* Accounting-policy callback.  Given an account and an amount, 
  * this routine should return a lot.  By implementing this as 
  * a callback, we can 'easily' add other accounting policies.
@@ -632,7 +613,7 @@ xaccSplitAssign (Split *split)
      lot = pcy->PolicyGetLot (pcy, split);
      if (!lot)
      {
-        lot = MakeDefaultLot (acc);
+        lot = gnc_lot_make_default (acc);
         PINFO ("start new lot (%s)", gnc_lot_get_title(lot));
      }
      split = xaccSplitAssignToLot (split, lot);

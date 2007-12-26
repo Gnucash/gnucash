@@ -344,8 +344,12 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   /* Check the ID; set one if necessary */
   res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
   if (safe_strcmp (res, "") == 0) {
+    /* Invoices and bills have separate counters.
+       Therefore we pass the GncOwer to gncInvoiceNextID
+       so it knows whether we are creating a bill
+       or an invoice. */
     string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
-			      gncInvoiceNextID(iw->book));
+			      gncInvoiceNextID(iw->book, &(iw->owner)));
     gtk_entry_set_text (GTK_ENTRY (iw->id_entry), string);
     g_free(string);
   }

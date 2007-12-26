@@ -37,7 +37,9 @@
 #include <string.h>
 
 #include "gnc-plugin-basic-commands.h"
+#include "gnc-ui-util.h"
 
+#include "dialog-book-close.h"
 #include "dialog-chart-export.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
@@ -76,6 +78,7 @@ static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction 
 static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data);
@@ -157,6 +160,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
     N_("Use the financial calculator"),
     G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator) },
+  { "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
+    N_("Close the Book at the end of the Period"),
+    G_CALLBACK (gnc_main_window_cmd_tools_close_book) },
 
   /* Help menu */
 
@@ -525,6 +531,12 @@ static void
 gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data)
 {
   gnc_ui_fincalc_dialog_create();
+}
+
+static void
+gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data)
+{
+  gnc_ui_close_book(gnc_get_current_book());
 }
 
 static void

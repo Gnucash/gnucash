@@ -138,6 +138,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
 
   list->account = account;
   list->list_type = type;
+  list->statement_date = statement_date;
 
   query = xaccMallocQuery();
   xaccQuerySetBook(query, gnc_get_current_book ());
@@ -577,9 +578,16 @@ gnc_reconcile_list_postpone (GNCReconcileList *list)
 
     split = gtk_clist_get_row_data (clist, i);
 
-    recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
+    // Don't change splits past reconciliation date that haven't been
+    // set to be reconciled
+    if ( difftime(list->statement_date,
+		  xaccTransGetDate(xaccSplitGetParent(split))) >= 0 ||
+	 g_hash_table_lookup(list->reconciled, split))
+    {
+      recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
 
-    xaccSplitSetReconcile (split, recn);
+      xaccSplitSetReconcile (split, recn);
+    }
   }
   gnc_resume_gui_refresh();
 }

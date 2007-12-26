@@ -196,20 +196,27 @@
 	     ;; if it's an existing company, destroy the temp owner and
 	     ;; then make sure the currencies match
 	     (begin
-	       (gncOwnerDestroy temp-owner)
 	       (if (not (gnc-commodity-equiv
 			 this-currency
 			 (company-get-currency company-info)))
-		   (cons #f (sprintf
-			     (_ "Transactions relating to '%s' contain \
-more than one currency.  This report is not designed to cope with this possibility.")  (gncOwnerGetName owner)))
+		   (let ((error-str
+			  (string-append "IGNORING TRANSACTION!\n" "Invoice Owner: " (gncOwnerGetName owner)
+					 "\nTransaction GUID:" (gncTransGetGuid transaction)
+					 "\nTransaction Currency" (gnc-commodity-get-mnemonic this-currency)
+					 "\nClient Currency" (gnc-ommodity-get-mnemonic(company-get-currency company-info)))))
+		     (gnc-error-dialog '() error-str)
+		     (gnc:error error-str)
+		     (cons #f (sprintf
+			       (_ "Transactions relating to '%s' contain \
++more than one currency.  This report is not designed to cope with this possibility.")  (gncOwnerGetName owner))))
 		   (begin
 		     (gnc:debug "it's an old company")
 		     (if (gnc-numeric-negative-p value)
 			 (process-invoice company-info (gnc-numeric-neg value) bucket-intervals this-date)
 			 (process-payment company-info value))
 		     (hash-set! hash guid company-info)
-		     (cons #t guid))))
+		     (cons #t guid)))
+	       (gncOwnerDestroy temp-owner))
 		 
 	     ;; if it's a new company
 	     (begin
@@ -294,12 +301,8 @@ more than one currency.  This report is not designed to cope with this possibili
 (define (setup-query query account date)
   (define (date-copy date)
     (cons (car date) (cdr date)))
-  (let ((begindate (date-copy date)))
+  (let ((begindate (make-zdate))) ;Set begindate to the start of the Epoch
 ;    (gnc:debug "Account: " account)
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))	;XXX - 360 days!?!
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
     (qof-query-set-book query (gnc-get-current-book))
@@ -335,7 +338,7 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-sort-by
       "i"
-      (N_ "Sort companys by")
+      (N_ "Sort companies by")
       'name
       (list 
        (vector 'name (N_ "Name") (N_ "Name of the company"))
