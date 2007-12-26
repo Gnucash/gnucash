@@ -185,6 +185,27 @@
     table))
 		 
 ;;
+;; Adds the 'Balance' row to the table if it has not been printed and
+;; total is not zero
+;;
+;; Returns printed? 
+;;
+(define (add-balance-row table txn odd-row? printed? start-date total)
+  (if (not printed?)
+      (begin
+	(set! printed? #t)
+	(if (not (gnc-numeric-zero-p total))
+	    (let ((row (list (gnc-print-date start-date) "" "" "Balance" ""
+			(gnc:make-html-table-cell/markup "number-cell" 
+				(gnc:make-gnc-monetary (xaccTransGetCurrency txn) total))))
+		  (row-style (if odd-row? "normal-row" "alternate-row")))
+	      (gnc:html-table-append-row/markup! table row-style row)
+	      (set! odd-row? (not odd-row?))
+	      (set! row-style (if odd-row? "normal-row" "alternate-row")))
+	    )))
+	printed?)
+
+;;
 ;; Make sure the caller checks the type first and only calls us with
 ;; invoice and payment transactions.  we don't verify it here.
 ;;
@@ -240,19 +261,9 @@
 
     (if (gnc:timepair-later start-date date)
 	(begin
-
-	  ; Maybe print out the 'balance' row
-	  (if (not printed?)
-	      (begin
-		(set! printed? #t)
-		(if (not (gnc-numeric-zero-p total))
-		    (let ((row (make-row start-date #f "" (_ "Balance") "" total))
-			  (row-style (if odd-row? "normal-row" "alternate-row")))
-		      (gnc:html-table-append-row/markup! table row-style
-							 (reverse row))
-		      (set! odd-row? (not odd-row?))
-		      (set! row-style (if odd-row? "normal-row" "alternate-row")))
-		    )))
+	  
+	  ; Adds 'balance' row if needed
+	  (set! printed? (add-balance-row table txn odd-row? printed? start-date total))
 	  
 	  ; Now print out the invoice row
 	  (if (not (null? invoice))
@@ -305,7 +316,12 @@
 	      (set! total (gnc-numeric-add-fixed total (cadr result)))
 	      (set! odd-row? (caddr result))
 	      ))))
-       txns))
+       txns)
+	  ;Balance row may not have been added if all transactions were before
+	  ;start-date (and no other rows would be added either) so add it now
+      (if (not (null? txns))
+	  (add-balance-row table (car txns) odd-row? printed? start-date total)
+		))
 
     (gnc:html-table-append-row/markup! 
      table
