@@ -1088,7 +1088,7 @@ read_one_check_directory(PrintCheckDialog * pcd, GtkListStore *store,
 		  * is the filename of that format; %3$s the type of
 		  * the other check format; and %4$s the filename of
 		  * that other format. */
-                 _("The guids in the %s check format file '%s' and "
+                 _("The GUIDs in the %s check format file '%s' and "
                    "the %s check format file '%s' match."),
                  existing->group, existing->filename,
                  format->group, format->filename);
