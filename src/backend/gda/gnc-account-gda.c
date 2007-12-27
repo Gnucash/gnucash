@@ -297,6 +297,37 @@ gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static void
+load_account_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+	Account* account = NULL;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+	if( pGuid != NULL ) {
+		account = xaccAccountLookup( pGuid, be->primary_book );
+	}
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, account, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)account );
+    }
+}
+
+static col_type_handler_t account_guid_handler =
+        { load_account_guid, gnc_gda_create_objectref_guid_col,
+            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
+/* ================================================================= */
 void
 gnc_gda_init_account_handler( void )
 {
@@ -310,5 +341,7 @@ gnc_gda_init_account_handler( void )
     };
 
     qof_object_register_backend( GNC_ID_ACCOUNT, GNC_GDA_BACKEND, &be_data );
+
+	gnc_gda_register_col_type_handler( CT_ACCOUNTREF, &account_guid_handler );
 }
 /* ========================== END OF FILE ===================== */

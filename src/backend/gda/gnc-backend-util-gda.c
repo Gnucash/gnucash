@@ -38,9 +38,6 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 
-#include "gnc-commodity.h"
-#include "gnc-lot.h"
-
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
 
@@ -58,28 +55,6 @@ typedef struct {
     gpointer pCompiledQuery;
     gnc_gda_query_info* pQueryInfo;
 } gda_backend;
-
-#if 0
-typedef void (*GNC_GDA_LOAD_FN)( GncGdaBackend* be, GdaDataModel* pModel, gint row,
-                                QofSetterFunc setter, gpointer pObject,
-                                const col_cvt_t* table );
-typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
-                        GdaConnection* cnn, xmlNodePtr array_data,
-                        const col_cvt_t* table_row, gboolean pkey );
-typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( GncGdaBackend* be,
-                QofIdTypeConst obj_name, gpointer pObject,
-                const col_cvt_t* table_row, GdaQuery* query );
-typedef GdaQueryCondition* (*GNC_GDA_GET_GVALUE_COND_FN)( GncGdaBackend* be,
-                QofIdTypeConst obj_name, gpointer pObject,
-                const col_cvt_t* table_row, GdaQuery* query );
-
-typedef struct {
-    GNC_GDA_LOAD_FN             load_fn;
-    GNC_GDA_CREATE_COL_FN       create_col_fn;
-    GNC_GDA_GET_GVALUE_QUERY_FN get_gvalue_query_fn;
-    GNC_GDA_GET_GVALUE_COND_FN  get_gvalue_cond_fn;
-} col_type_handler_t;
-#endif
 
 /* ================================================================= */
 void
@@ -663,131 +638,6 @@ gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn
                     "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
 }
 
-static void
-load_account_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
-            QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
-{
-    const GValue* val;
-    GUID guid;
-    const GUID* pGuid;
-	Account* account = NULL;
-
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-    if( gda_value_is_null( val ) ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		account = xaccAccountLookup( pGuid, be->primary_book );
-	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, account, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)account );
-    }
-}
-
-static col_type_handler_t account_guid_handler =
-        { load_account_guid, gnc_gda_create_objectref_guid_col,
-            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
-/* ----------------------------------------------------------------- */
-
-static void
-load_commodity_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
-            QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
-{
-    const GValue* val;
-    GUID guid;
-    const GUID* pGuid;
-	gnc_commodity* commodity = NULL;
-
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-    if( gda_value_is_null( val ) ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		commodity = gnc_commodity_find_commodity_by_guid( pGuid, be->primary_book );
-	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, commodity, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)commodity );
-    }
-}
-
-static col_type_handler_t commodity_guid_handler =
-        { load_commodity_guid, gnc_gda_create_objectref_guid_col,
-            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
-/* ----------------------------------------------------------------- */
-static void
-load_lot_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
-            QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
-{
-    const GValue* val;
-    GUID guid;
-    const GUID* pGuid;
-	GNCLot* lot = NULL;
-
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-    if( gda_value_is_null( val ) ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		lot = gnc_lot_lookup( pGuid, be->primary_book );
-	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, lot, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)lot );
-    }
-}
-
-static col_type_handler_t lot_guid_handler =
-        { load_lot_guid, gnc_gda_create_objectref_guid_col,
-            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
-/* ----------------------------------------------------------------- */
-
-static void
-load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
-            QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
-{
-    const GValue* val;
-    GUID guid;
-    const GUID* pGuid;
-	Transaction* tx = NULL;
-
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
-    if( gda_value_is_null( val ) ) {
-        pGuid = NULL;
-    } else {
-        string_to_guid( g_value_get_string( val ), &guid );
-        pGuid = &guid;
-    }
-	if( pGuid != NULL ) {
-		tx = xaccTransLookup( pGuid, be->primary_book );
-	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, tx, NULL );
-    } else {
-		(*setter)( pObject, (const gpointer)tx );
-    }
-}
-
-static col_type_handler_t tx_guid_handler =
-        { load_tx_guid, gnc_gda_create_objectref_guid_col,
-            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
 /* ----------------------------------------------------------------- */
 static void
 load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
@@ -1173,11 +1023,6 @@ gnc_gda_register_standard_col_type_handlers( void )
     gnc_gda_register_col_type_handler( CT_TIMESPEC, &timespec_handler );
     gnc_gda_register_col_type_handler( CT_GDATE, &date_handler );
     gnc_gda_register_col_type_handler( CT_NUMERIC, &numeric_handler );
-
-	gnc_gda_register_col_type_handler( CT_ACCOUNTREF, &account_guid_handler );
-	gnc_gda_register_col_type_handler( CT_COMMODITYREF, &commodity_guid_handler );
-	gnc_gda_register_col_type_handler( CT_LOTREF, &lot_guid_handler );
-	gnc_gda_register_col_type_handler( CT_TXREF, &tx_guid_handler );
 }
 
 static void retrieve_guid( gpointer pObject, gpointer pValue );

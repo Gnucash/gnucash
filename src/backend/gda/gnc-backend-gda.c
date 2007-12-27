@@ -305,17 +305,23 @@ gnc_gda_destroy_backend(QofBackend *be)
 
 /* ================================================================= */
 
+static const gchar* fixed_load_order[] =
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, NULL };
+
 static void
 initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 {
     GncGdaDataType_t* pData = data_p;
     gda_backend* be_data = be_data_p;
+	int i;
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
-	// Don't need to load anything for the books table
-    if( g_ascii_strcasecmp( type, GNC_ID_BOOK ) == 0 ) return;
+	// Don't need to load anything if it has already been loaded with the fixed order
+	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
+    	if( g_ascii_strcasecmp( type, fixed_load_order[i] ) == 0 ) return;
+	}
 
     if( pData->initial_load != NULL ) {
         (pData->initial_load)( be_data->be );
@@ -328,6 +334,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     gda_backend be_data;
     GncGdaDataType_t* pData;
+	int i;
 
     ENTER( "be=%p, book=%p", be, book );
 
@@ -338,9 +345,11 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     be->loading = TRUE;
     
     /* Some of this needs to happen in a certain order */
-    pData = qof_object_lookup_backend( GNC_ID_BOOK, GNC_GDA_BACKEND );
-    if( pData->initial_load != NULL ) {
-        (pData->initial_load)( be );
+	for( i = 0; fixed_load_order[i] != NULL; i++ ) {
+    	pData = qof_object_lookup_backend( fixed_load_order[i], GNC_GDA_BACKEND );
+    	if( pData->initial_load != NULL ) {
+        	(pData->initial_load)( be );
+		}
     }
 
     be_data.ok = FALSE;

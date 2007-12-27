@@ -159,6 +159,37 @@ commit_lot( GncGdaBackend* be, QofInstance* inst )
                         qof_instance_get_slots( inst ) );
 }
 
+/* ----------------------------------------------------------------- */
+static void
+load_lot_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+	GNCLot* lot = NULL;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+	if( pGuid != NULL ) {
+		lot = gnc_lot_lookup( pGuid, be->primary_book );
+	}
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, lot, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)lot );
+    }
+}
+
+static col_type_handler_t lot_guid_handler =
+        { load_lot_guid, gnc_gda_create_objectref_guid_col,
+            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
 /* ================================================================= */
 void
 gnc_gda_init_lot_handler( void )
@@ -173,6 +204,8 @@ gnc_gda_init_lot_handler( void )
     };
 
     qof_object_register_backend( GNC_ID_LOT, GNC_GDA_BACKEND, &be_data );
+
+	gnc_gda_register_col_type_handler( CT_LOTREF, &lot_guid_handler );
 }
 
 /* ========================== END OF FILE ===================== */

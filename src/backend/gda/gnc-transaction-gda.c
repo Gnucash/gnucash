@@ -414,6 +414,19 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
     }
 }
 
+static void
+load_tx_by_guid( GncGdaBackend* be, GUID* tx_guid )
+{
+    GdaQuery* query;
+	gchar* sql;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
+    guid_to_string_buff( tx_guid, guid_buf );
+	sql = g_strdup_printf( "SELECT * FROM %s WHERE guid = %s", TRANSACTION_TABLE, guid_buf );
+	query = gnc_gda_create_query_from_sql( be, sql );
+	query_transactions( be, query );
+}
+
 /* ================================================================= */
 static void
 create_transaction_tables( GncGdaBackend* be )
@@ -710,6 +723,37 @@ free_split_query( GncGdaBackend* pBackend, gpointer pQuery )
 #endif
 }
 
+/* ----------------------------------------------------------------- */
+static void
+load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
+            QofSetterFunc setter, gpointer pObject,
+            const col_cvt_t* table )
+{
+    const GValue* val;
+    GUID guid;
+    const GUID* pGuid;
+	Transaction* tx = NULL;
+
+    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    if( gda_value_is_null( val ) ) {
+        pGuid = NULL;
+    } else {
+        string_to_guid( g_value_get_string( val ), &guid );
+        pGuid = &guid;
+    }
+	if( pGuid != NULL ) {
+		tx = xaccTransLookup( pGuid, be->primary_book );
+	}
+    if( table->gobj_param_name != NULL ) {
+		g_object_set( pObject, table->gobj_param_name, tx, NULL );
+    } else {
+		(*setter)( pObject, (const gpointer)tx );
+    }
+}
+
+static col_type_handler_t tx_guid_handler =
+        { load_tx_guid, gnc_gda_create_objectref_guid_col,
+            gnc_gda_get_gvalue_objectref_guid_for_query, gnc_gda_get_gvalue_objectref_guid_cond };
 /* ================================================================= */
 void
 gnc_gda_init_transaction_handler( void )
@@ -736,6 +780,8 @@ gnc_gda_init_transaction_handler( void )
 
     qof_object_register_backend( GNC_ID_TRANS, GNC_GDA_BACKEND, &be_data_tx );
     qof_object_register_backend( GNC_ID_SPLIT, GNC_GDA_BACKEND, &be_data_split );
+
+	gnc_gda_register_col_type_handler( CT_TXREF, &tx_guid_handler );
 }
 
 /* ========================== END OF FILE ===================== */
