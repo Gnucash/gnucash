@@ -628,7 +628,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   cm->mark = 0;
 
-#if !ACCOUNTS_CLEANED_UP
+#ifdef ACCOUNTS_CLEANED_UP
   /* Account objects are not actually cleaned up when a book is closed (in fact
    * a memory leak), but commodities are, so in currently this warning gets hit
    * quite frequently.  Disable the check until cleaning up of accounts objects
