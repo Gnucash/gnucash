@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-26 23:17+0100\n"
-"PO-Revision-Date: 2007-12-26 23:20+0100\n"
+"POT-Creation-Date: 2007-12-27 13:47+0100\n"
+"PO-Revision-Date: 2007-12-27 14:01+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -8635,7 +8635,8 @@ msgstr ""
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
-msgstr "Diese Rückfrage kommt vor dem Löschen von Buchungszeilen einer Buchung."
+msgstr ""
+"Diese Rückfrage kommt vor dem Löschen von Buchungszeilen einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:24
 msgid ""
@@ -17276,6 +17277,7 @@ msgstr "Farbe der Markierung"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/category-barchart.scm
@@ -17283,9 +17285,10 @@ msgstr "Farbe der Markierung"
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
 #: ../intl-scm/guile-strings.c:1210 ../intl-scm/guile-strings.c:1282
-#: ../intl-scm/guile-strings.c:1484 ../intl-scm/guile-strings.c:1678
-#: ../intl-scm/guile-strings.c:1752 ../intl-scm/guile-strings.c:2172
-#: ../intl-scm/guile-strings.c:2878 ../intl-scm/guile-strings.c:2940
+#: ../intl-scm/guile-strings.c:1360 ../intl-scm/guile-strings.c:1484
+#: ../intl-scm/guile-strings.c:1678 ../intl-scm/guile-strings.c:1752
+#: ../intl-scm/guile-strings.c:2172 ../intl-scm/guile-strings.c:2878
+#: ../intl-scm/guile-strings.c:2940
 #, c-format
 msgid "%s to %s"
 msgstr "%s bis %s"
@@ -17526,12 +17529,6 @@ msgstr "Aktuelle Wechselkurse anzeigen"
 #: ../intl-scm/guile-strings.c:1358 ../intl-scm/guile-strings.c:2734
 msgid "Show full account names (including parent accounts)"
 msgstr "Lange Kontenbezeichung (einschließlich Hauptkonten) anzeigen"
-
-#. src/report/standard-reports/cash-flow.scm
-#: ../intl-scm/guile-strings.c:1360
-#, c-format
-msgid "%s - %s to %s for"
-msgstr "%s - %s bis %s für"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1362
@@ -18215,24 +18212,24 @@ msgstr "Eine Zeile für die Summe Aufwendungen anzeigen"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1664
 msgid "Display as a two column report"
-msgstr ""
+msgstr "Zweispaltig anzeigen"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1666
 msgid "Divides the report into an income column and an expense column"
-msgstr ""
+msgstr "Konten in zwei Spalten anzeigen: Eine Spalte Erträge, eine Spalte Aufwendungen"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1668
 msgid "Display in standard, income first, order"
-msgstr ""
+msgstr "Normale Reihenfolge anzeigen (Erträge zuerst)"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1670
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses"
-msgstr ""
+msgstr "Konten in der normalen Reihenfolge anzeigen, also Erträge vor Aufwendungen. Andernfalls zuerst die Aufwendungen, dann die Erträge anzeigen."
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1680
@@ -18802,7 +18799,7 @@ msgstr "Gesamter Ertrag"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2106
 msgid "Brokerage Fees"
-msgstr ""
+msgstr "Brokergebühren"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2108
