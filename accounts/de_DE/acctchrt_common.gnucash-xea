@@ -7,7 +7,7 @@
       Grundlegende Kontenstruktur
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, ErtrÃ¤ge und verschiedene Ausgaben. Wenn Sie aber einen SKR verwenden wollen, brauchen Sie sie nicht.
+    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben. Wenn Sie aber einen SKR verwenden wollen, brauchen Sie sie nicht.
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -129,14 +129,14 @@
   <act:parent type="new">265c29e7f9adb75346f96a4f7e79654e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>ErtrÃ¤ge</act:name>
+  <act:name>Erträge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>ErtrÃ¤ge</act:description>
+  <act:description>Erträge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -203,7 +203,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Sonstige ErtrÃ¤ge</act:description>
+  <act:description>Sonstige Erträge</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
