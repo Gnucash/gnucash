@@ -195,29 +195,6 @@ load_all_accounts( GncGdaBackend* be )
 
         for( r = 0; r < numRows; r++ ) {
             pAccount = load_single_account( be, pModel, r, &l_accounts_needing_parents );
-
-#if 0
-            if( pAccount != NULL ) {
-
-                /* Backwards compatibility.  If there's no parent, see if
-                 * this account is of type ROOT.  If not, find or create a
-                 * ROOT account and make that the parent. */
-                parent = gnc_account_get_parent( pAccount );
-                if( parent == NULL ) {
-                    int type;
-
-                    type = xaccAccountGetType( pAccount );
-                    if( type != ACCT_TYPE_ROOT ) {
-                        Account* root;
-                        root = gnc_book_get_root_account( pBook );
-                        if( root == NULL ) {
-                            root = gnc_account_create_root( pBook );
-                        }
-                        gnc_account_append_child( root, pAccount ); 
-                    }
-                }
-            }
-#endif
         }
 
 		/* While there are items on the list of accounts needing parents,

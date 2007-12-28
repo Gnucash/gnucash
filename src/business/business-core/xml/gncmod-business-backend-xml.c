@@ -60,7 +60,7 @@ static GNCModule file;
 char *
 libgncmod_business_backend_xml_gnc_module_path(void)
 {
-  return g_strdup("gnucash/business-core-file");
+  return g_strdup("gnucash/business-core-xml");
 }
 
 char *

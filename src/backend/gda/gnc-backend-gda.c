@@ -870,9 +870,8 @@ free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    g_return_if_fail( strcmp( type, be_data->pQueryInfo->searchObj ) == 0 );
-
-    g_return_if_fail( !be_data->ok );
+    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
+    if( be_data->ok ) return;
 
     if( pData->free_query != NULL ) {
         (pData->free_query)( be_data->be, be_data->pCompiledQuery );
