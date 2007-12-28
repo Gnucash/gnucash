@@ -377,7 +377,8 @@
         (qif-number (qif-xtn:number qif-xtn))
         (qif-action (qif-xtn:action qif-xtn))
         (qif-security (qif-xtn:security-name qif-xtn))
-        (qif-memo (qif-split:memo (car (qif-xtn:splits qif-xtn))))
+        (qif-default-split (qif-xtn:default-split qif-xtn))
+        (qif-memo #f)
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
         (qif-cleared (qif-xtn:cleared qif-xtn))
         (n- (lambda (n) (gnc-numeric-neg n)))
@@ -394,12 +395,20 @@
         (xaccTransSetDescription gnc-xtn qif-payee))
     (if qif-number
         (xaccTransSetNum gnc-xtn qif-number))
+
+    ;; Look for the transaction memo (QIF "M" line). When a default split
+    ;; exists, the memo can be found there. Otherwise, it will be in the
+    ;; first member of the splits list.
+    (if qif-default-split
+       (set! qif-memo (qif-split:memo qif-default-split))
+       (set! qif-memo (qif-split:memo (car (qif-xtn:splits qif-xtn)))))
     (if qif-memo
-	(begin
-	  (xaccSplitSetMemo gnc-near-split qif-memo)
 	  (if (or (not qif-payee)
-		  (equal? qif-payee ""))
-	      (xaccTransSetDescription gnc-xtn qif-memo))))
+	          (equal? qif-payee ""))
+	      (xaccTransSetDescription gnc-xtn qif-memo)
+	      ;; Use the memo for the transaction notes. Previously this went to
+	      ;; the debit/credit lines. See bug 495219 for more information.
+	      (xaccTransSetNotes gnc-xtn qif-memo)))
     
     (if (eq? qif-cleared 'cleared)        
         (xaccSplitSetReconcile gnc-near-split #\c))
@@ -428,7 +437,10 @@
                        (far-acct-type #f)
                        (far-acct #f)
                        (split-amt (qif-split:amount qif-split))
-                       (memo (qif-split:memo qif-split))
+                       ;; For split transactions, get this split's memo.
+                       (memo
+                         (if qif-default-split
+                             (qif-split:memo qif-split) #f))
                        (cat (qif-split:category qif-split)))
                    
                    (if (not split-amt) (set! split-amt (gnc-numeric-zero)))
