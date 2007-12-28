@@ -222,9 +222,8 @@ string_free_pdata (QofQueryPredData *pd)
 
   if (pdata->is_regex)
     regfree (&pdata->compiled);
-  else
-    g_free (pdata->matchstring);
 
+  g_free (pdata->matchstring);
   g_free (pdata);
 }
 

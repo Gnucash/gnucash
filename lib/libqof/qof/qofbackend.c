@@ -393,6 +393,7 @@ qof_load_backend_library (const char *directory, const char* module_name)
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, module_name);
 	backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
+	g_free(fullpath);
 	if (!backend) {
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());
 		return FALSE;
