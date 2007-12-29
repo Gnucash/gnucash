@@ -173,7 +173,7 @@ void qof_session_load (QofSession *session,
  *    for any failure.  Calling this routine returns the current error.
  */
 QofBackendError qof_session_get_error (QofSession *session);
-const char * qof_session_get_error_message(QofSession *session);
+const char * qof_session_get_error_message(const QofSession *session);
 
 /**
  * The qof_session_pop_error() routine can be used to obtain the reason
@@ -197,7 +197,7 @@ QofBackendError qof_session_pop_error (QofSession *session);
  */
 void qof_session_add_book (QofSession *session, QofBook *book);
 
-QofBook * qof_session_get_book (QofSession *session);
+QofBook * qof_session_get_book (const QofSession *session);
 
 /**
  *    The qof_session_get_file_path() routine returns the fully-qualified file
@@ -213,9 +213,9 @@ QofBook * qof_session_get_book (QofSession *session);
  *    URL's for local files take the form of 
  *    file:/some/where/some/file.gml
  */
-const char * qof_session_get_file_path (QofSession *session);
+const char * qof_session_get_file_path (const QofSession *session);
 
-const char * qof_session_get_url (QofSession *session);
+const char * qof_session_get_url (const QofSession *session);
 
 /**
  * The qof_session_not_saved() subroutine will return TRUE
@@ -225,7 +225,7 @@ gboolean qof_session_not_saved(QofSession *session);
 gboolean qof_session_save_in_progress(QofSession *session);
 
 /** Allows the backend to warn the user if a dataset already exists. */
-gboolean qof_session_save_may_clobber_data (QofSession *session);
+gboolean qof_session_save_may_clobber_data (const QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
@@ -409,7 +409,7 @@ backends may return a ::QofBackendError.
  *  backend has pending events which must be processed to bring 
  *  the engine up to date with the backend.
  */
-gboolean qof_session_events_pending (QofSession *session);
+gboolean qof_session_events_pending (const QofSession *session);
 
 /**  The qof_session_process_events() method will process any events
  *   indicated by the qof_session_events_pending() method. It returns 

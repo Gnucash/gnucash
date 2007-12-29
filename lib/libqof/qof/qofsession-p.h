@@ -67,7 +67,7 @@ struct _QofSession
 };
 
 
-QofBackend * qof_session_get_backend (QofSession *session);
+QofBackend * qof_session_get_backend (const QofSession *session);
 
 void qof_session_push_error (QofSession *session, QofBackendError err,
                              const char *message);

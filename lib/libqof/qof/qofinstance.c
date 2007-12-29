@@ -633,7 +633,7 @@ void qof_instance_reset_editlevel (gpointer ptr)
 }
 
 gboolean
-qof_instance_check_edit(const  QofInstance *inst)
+qof_instance_check_edit(const QofInstance *inst)
 {
     g_return_val_if_fail(QOF_IS_INSTANCE(inst), FALSE);
     return (GET_PRIVATE(inst)->editlevel > 0);

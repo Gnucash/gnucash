@@ -153,7 +153,7 @@ qof_backend_run_begin(QofBackend *be, QofInstance *inst)
 }
 
 gboolean
-qof_backend_begin_exists(QofBackend *be)
+qof_backend_begin_exists(const QofBackend *be)
 {
 	if(be->begin) { return TRUE; }
 	else { return FALSE; }
@@ -179,7 +179,7 @@ void qof_backend_prepare_frame(QofBackend *be)
 	be->config_count = 0;
 }
 
-void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
+void qof_backend_prepare_option(QofBackend *be, const QofBackendOption *option)
 {
 	KvpValue *value;
 	gchar *temp;
@@ -376,7 +376,7 @@ qof_backend_get_config(QofBackend *be)
 }
 
 gboolean
-qof_backend_commit_exists(QofBackend *be)
+qof_backend_commit_exists(const QofBackend *be)
 {
 	if(!be) { return FALSE; }
 	if(be->commit) { return TRUE; }

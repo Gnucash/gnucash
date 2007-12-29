@@ -267,7 +267,7 @@ time_t xaccDMYToSec (gint day, gint month, gint year);
  * daylight savings time! Timezone stuff under unix is not
  * standardized and is a big mess.
  */
-glong gnc_timezone (struct tm *tm);
+glong gnc_timezone (const struct tm *tm);
 // @}
 
 /* ------------------------------------------------------------------------ */
@@ -380,7 +380,7 @@ size_t qof_print_date_dmy_buff (gchar * buff, size_t buflen, int day, int month,
 size_t qof_print_date_buff (char * buff, size_t buflen, time_t secs);
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). **/
-size_t qof_print_gdate( char *buf, size_t bufflen, GDate *gd );
+size_t qof_print_gdate( char *buf, size_t bufflen, const GDate *gd );
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). 
  *  Return: string, which should be freed when no longer needed.
@@ -499,10 +499,10 @@ time_t gnc_timet_get_day_start(time_t time_val);
 time_t gnc_timet_get_day_end(time_t time_val);
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
-int date_get_last_mday(struct tm *tm);
+int date_get_last_mday(const struct tm *tm);
 
 /** Is the mday field the last day of the specified month.*/
-gboolean date_is_last_mday(struct tm *tm);
+gboolean date_is_last_mday(const struct tm *tm);
 
 /** \deprecated Use date_get_last_mday() */
 int gnc_date_my_last_mday (int month, int year);

@@ -175,13 +175,13 @@ QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
                                                 const KvpValue *value);
 
 /** Copy a predicate. */
-QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
+QofQueryPredData *qof_query_core_predicate_copy (const QofQueryPredData *pdata);
 
 /** Destroy a predicate. */
 void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
 /** Retrieve a predicate. */
-gboolean qof_query_date_predicate_get_date (QofQueryPredData *pd, Timespec *date);
+gboolean qof_query_date_predicate_get_date (const QofQueryPredData *pd, Timespec *date);
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */
