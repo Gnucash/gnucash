@@ -43,9 +43,6 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #define TABLE_NAME "prices"
 
-static gpointer get_date( gpointer pObject, const QofParam* param );
-static void set_date( gpointer pObject, gpointer pValue );
-
 #define PRICE_MAX_SOURCE_LEN 50
 #define PRICE_MAX_TYPE_LEN 50
 
@@ -54,7 +51,7 @@ static col_cvt_t col_table[] =
     { "guid",           CT_GUID,           0,                    COL_NNUL, "guid" },
     { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_COMMODITY },
     { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_CURRENCY },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL, NULL, NULL,       get_date, set_date },
+    { "date",           CT_TIMESPEC,       0,                    COL_NNUL, NULL, PRICE_DATE },
     { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
     { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
     { "value",          CT_NUMERIC,        0,                    COL_NNUL, NULL, PRICE_VALUE },
@@ -62,25 +59,6 @@ static col_cvt_t col_table[] =
 };
 
 /* ================================================================= */
-
-static gpointer
-get_date( gpointer pObject, const QofParam* param )
-{
-    const GNCPrice* pPrice = GNC_PRICE(pObject);
-    static Timespec t;
-
-    t = gnc_price_get_time( pPrice );
-    return &t;
-}
-
-static void
-set_date( gpointer pObject, gpointer pValue )
-{
-    GNCPrice* pPrice = GNC_PRICE(pObject);
-    const Timespec* pTimespec = (const Timespec*)pValue;
-
-    gnc_price_set_time( pPrice, *pTimespec );
-}
 
 static GNCPrice*
 load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )

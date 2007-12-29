@@ -63,8 +63,8 @@ static gpointer get_string_val( gpointer pObject, const QofParam* param );
 static void set_string_val( gpointer pObject, gpointer pValue );
 static gpointer get_double_val( gpointer pObject, const QofParam* param );
 static void set_double_val( gpointer pObject, gpointer pValue );
-static gpointer get_timespec_val( gpointer pObject, const QofParam* param );
-static void set_timespec_val( gpointer pObject, gpointer pValue );
+static Timespec get_timespec_val( gpointer pObject, const QofParam* param );
+static void set_timespec_val( gpointer pObject, Timespec ts );
 static gpointer get_guid_val( gpointer pObject, const QofParam* param );
 static void set_guid_val( gpointer pObject, gpointer pValue );
 static gnc_numeric get_numeric_val( gpointer pObject, const QofParam* param );
@@ -82,7 +82,8 @@ static col_cvt_t col_table[] =
     { "int64_val",    CT_INT64,    0,                     0,                    NULL, NULL, get_int64_val,    set_int64_val },
     { "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,                    NULL, NULL, get_string_val,   set_string_val },
     { "double_val",   CT_DOUBLE,   0,                     0,                    NULL, NULL, get_double_val,   set_double_val },
-    { "timespec_val", CT_TIMESPEC, 0,                     0,                    NULL, NULL, get_timespec_val, set_timespec_val },
+    { "timespec_val", CT_TIMESPEC, 0,                     0,                    NULL, NULL,
+			(QofAccessFunc)get_timespec_val, (QofSetterFunc)set_timespec_val },
     { "guid_val",     CT_GUID,     0,                     0,                    NULL, NULL, get_guid_val,     set_guid_val },
     { "numeric_val",  CT_NUMERIC,  0,                     0,                    NULL, NULL,
 			(QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val },
@@ -215,27 +216,22 @@ set_double_val( gpointer pObject, gpointer pValue )
     }
 }
 
-static gpointer
+static Timespec
 get_timespec_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-    static Timespec ts;
 
-    if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_TIMESPEC ) {
-        ts = kvp_value_get_timespec( pInfo->pKvpValue );
-        return (gpointer)&ts;
-    } else {
-        return NULL;
-    }
+//if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_TIMESPEC ) {
+    return kvp_value_get_timespec( pInfo->pKvpValue );
 }
 
 static void
-set_timespec_val( gpointer pObject, gpointer pValue )
+set_timespec_val( gpointer pObject, Timespec ts )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
     if( pInfo->value_type == KVP_TYPE_TIMESPEC ) {
-        kvp_frame_set_timespec( pInfo->pKvpFrame, pInfo->path->str, *(Timespec*)pValue );
+        kvp_frame_set_timespec( pInfo->pKvpFrame, pInfo->path->str, ts );
     }
 }
 

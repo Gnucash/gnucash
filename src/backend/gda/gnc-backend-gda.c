@@ -300,7 +300,7 @@ gnc_gda_session_end(QofBackend *be_start)
 static void
 gnc_gda_destroy_backend(QofBackend *be)
 {
-    g_free(be);
+    g_free( be );
 }
 
 /* ================================================================= */
@@ -870,8 +870,8 @@ free_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
     if( be_data->ok ) return;
+    if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
 
     if( pData->free_query != NULL ) {
         (pData->free_query)( be_data->be, be_data->pCompiledQuery );

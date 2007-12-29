@@ -639,6 +639,8 @@ gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn
 }
 
 /* ----------------------------------------------------------------- */
+typedef Timespec (*TimespecAccessFunc)( const gpointer );
+
 static void
 load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
@@ -681,25 +683,23 @@ static void
 get_gvalue_timespec( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
-    QofAccessFunc getter;
-    Timespec* pTimespec;
+    TimespecAccessFunc getter;
+    Timespec ts;
+    GDate* date;
+    gint y, m, d;
+    gchar iso8601_buf[33];
 
     memset( value, 0, sizeof( GValue ) );
 
-    getter = gnc_gda_get_getter( obj_name, table_row );
-    pTimespec = (Timespec*)(*getter)( pObject, NULL );
-    if( pTimespec != NULL ) {
-        GDate* date;
-        gint y, m, d;
-        gchar iso8601_buf[33];
+    getter = (TimespecAccessFunc)gnc_gda_get_getter( obj_name, table_row );
+    ts = (*getter)( pObject );
 
-        date = g_date_new();
-        (void)gnc_timespec_to_iso8601_buff( *pTimespec, iso8601_buf );
-        sscanf( iso8601_buf, "%d-%d-%d", &y, &m, &d );
-        g_date_set_dmy( date, d, m, y );
-        g_value_init( value, G_TYPE_DATE );
-        g_value_set_boxed( value, date );
-    }
+    date = g_date_new();
+    (void)gnc_timespec_to_iso8601_buff( ts, iso8601_buf );
+    sscanf( iso8601_buf, "%d-%d-%d", &y, &m, &d );
+    g_date_set_dmy( date, d, m, y );
+    g_value_init( value, G_TYPE_DATE );
+    g_value_set_boxed( value, date );
 }
 
 static void
@@ -837,8 +837,8 @@ get_integer_value( const GValue* value )
 	return 0;
 }
 
-typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
 typedef gnc_numeric (*NumericGetterFunc)( const gpointer );
+typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
 
 static void
 load_numeric( const GncGdaBackend* be, GdaDataModel* pModel, gint row,

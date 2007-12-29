@@ -37,6 +37,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include "engine-helpers.h"
 
 #include "gnc-backend-util-gda.h"
 #include "gnc-transaction-gda.h"
@@ -56,11 +57,6 @@ typedef struct {
     const GUID* guid;
 } split_info_t;
 
-static gpointer get_tx_post_date( gpointer pObject, const QofParam* param );
-static void set_tx_post_date( gpointer pObject, gpointer pValue );
-static gpointer get_tx_enter_date( gpointer pObject, const QofParam* param );
-static void set_tx_enter_date( gpointer pObject, gpointer pValue );
-
 #define TX_MAX_NUM_LEN 50
 #define TX_MAX_DESCRIPTION_LEN 500
 
@@ -70,8 +66,10 @@ static col_cvt_t tx_col_table[] =
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL, NULL, NULL,
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
     { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL, NULL, TRANS_NUM },
-    { "post_date",     CT_TIMESPEC,       0,                      COL_NNUL, NULL, NULL, get_tx_post_date,  set_tx_post_date },
-    { "enter_date",    CT_TIMESPEC,       0,                      COL_NNUL, NULL, NULL, get_tx_enter_date, set_tx_enter_date },
+    { "post_date",     CT_TIMESPEC,       0,                      COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)gnc_transaction_set_date_posted },
+    { "enter_date",    CT_TIMESPEC,       0,                      COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)gnc_transaction_set_date_entered },
     { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,        NULL, NULL,
             (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
     { NULL }
@@ -79,8 +77,7 @@ static col_cvt_t tx_col_table[] =
 
 static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* param );
 static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
-static gpointer get_split_reconcile_date( gpointer pObject, const QofParam* param );
-static void set_split_reconcile_date( gpointer pObject, gpointer pValue );
+static void set_split_reconcile_date( gpointer pObject, Timespec ts );
 
 #define SPLIT_MAX_MEMO_LEN 50
 #define SPLIT_MAX_ACTION_LEN 50
@@ -93,7 +90,8 @@ static col_cvt_t split_col_table[] =
     { "memo",            CT_STRING,       SPLIT_MAX_MEMO_LEN,   COL_NNUL, NULL, SPLIT_MEMO },
     { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL, NULL, SPLIT_ACTION },
     { "reconcile_state", CT_STRING,       1,                    COL_NNUL, NULL, NULL,    get_split_reconcile_state, set_split_reconcile_state },
-    { "reconcile_date",  CT_TIMESPEC,     0,                    COL_NNUL, NULL, NULL,    get_split_reconcile_date,  set_split_reconcile_date },
+    { "reconcile_date",  CT_TIMESPEC,     0,                    COL_NNUL, NULL, NULL,
+			(QofAccessFunc)xaccSplitRetDateReconciledTS, (QofSetterFunc)set_split_reconcile_date },
     { "value",           CT_NUMERIC,      0,                    COL_NNUL, NULL, SPLIT_VALUE },
     { "quantity",        CT_NUMERIC,      0,                    COL_NNUL, NULL, SPLIT_AMOUNT },
     { NULL }
@@ -108,44 +106,6 @@ static col_cvt_t guid_col_table[] =
 static void retrieve_numeric_value( gpointer pObject, gnc_numeric value );
 
 /* ================================================================= */
-
-static gpointer
-get_tx_post_date( gpointer pObject, const QofParam* param )
-{
-    const Transaction* pTx = GNC_TRANS(pObject);
-    static Timespec ts;
-
-    ts = xaccTransRetDatePostedTS( pTx );
-    return (gpointer)&ts;
-}
-
-static void 
-set_tx_post_date( gpointer pObject, gpointer pValue )
-{
-    Transaction* pTx = GNC_TRANS(pObject);
-    Timespec* pTS = (Timespec*)pValue;
-
-    xaccTransSetDatePostedTS( pTx, pTS );
-}
-
-static gpointer
-get_tx_enter_date( gpointer pObject, const QofParam* param )
-{
-    const Transaction* pTx = GNC_TRANS(pObject);
-    static Timespec ts;
-
-    ts = xaccTransRetDateEnteredTS( pTx );
-    return (gpointer)&ts;
-}
-
-static void 
-set_tx_enter_date( gpointer pObject, gpointer pValue )
-{
-    Transaction* pTx = GNC_TRANS(pObject);
-    Timespec* pTS = (Timespec*)pValue;
-
-    xaccTransSetDateEnteredTS( pTx, pTS );
-}
 
 static gpointer
 get_split_reconcile_state( gpointer pObject, const QofParam* param )
@@ -167,23 +127,10 @@ set_split_reconcile_state( gpointer pObject, gpointer pValue )
     xaccSplitSetReconcile( pSplit, s[0] );
 }
 
-static gpointer
-get_split_reconcile_date( gpointer pObject, const QofParam* param )
-{
-    const Split* pSplit = GNC_SPLIT(pObject);
-    static Timespec ts;
-
-    ts = xaccSplitRetDateReconciledTS( pSplit );
-    return (gpointer)&ts;
-}
-
 static void 
-set_split_reconcile_date( gpointer pObject, gpointer pValue )
+set_split_reconcile_date( gpointer pObject, Timespec ts )
 {
-    Split* pSplit = GNC_SPLIT(pObject);
-    Timespec* pTS = (Timespec*)pValue;
-
-    xaccSplitSetDateReconciledTS( pSplit, pTS );
+    xaccSplitSetDateReconciledTS( GNC_SPLIT(pObject), &ts );
 }
 
 static void 
@@ -237,6 +184,7 @@ get_account_balance_from_query( GncGdaBackend* be, GdaQuery* query )
 			bal = gnc_numeric_add( bal, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
 		}
 	}
+	g_object_unref( G_OBJECT(ret) );
 
     return bal;
 }
@@ -268,7 +216,7 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	/* Create the query */
 	query = gnc_gda_create_query_from_sql( be, sql );
 	*start_balance = get_account_balance_from_query( be, query );
-
+	g_object_unref( G_OBJECT(query) );
 	g_free( sql );
 
 	/*
@@ -285,6 +233,7 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 
 	query = gnc_gda_create_query_from_sql( be, sql );
     *cleared_balance = get_account_balance_from_query( be, query );
+	g_object_unref( G_OBJECT(query) );
 
 	g_free( sql );
 
@@ -302,6 +251,7 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 
 	query = gnc_gda_create_query_from_sql( be, sql );
 	*reconciled_balance = get_account_balance_from_query( be, query );
+	g_object_unref( G_OBJECT(query) );
 
 	g_free( sql );
 }
