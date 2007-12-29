@@ -197,7 +197,7 @@
   ;; sum up the contents of the b-list built by basis-builder below
   (define (sum-basis b-list)
     (if (not (eqv? b-list '()))
-	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) 100 GNC-RND-ROUND)
+	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
 			 (sum-basis (cdr b-list)) 100 GNC-RND-ROUND)
 	(gnc-numeric-zero)
 	)
@@ -207,7 +207,7 @@
   (define (units-basis b-list)
     (if (not (eqv? b-list '()))
 	(gnc-numeric-add (caar b-list) (units-basis (cdr b-list)) 
-			 100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER))
+			 100 GNC-RND-ROUND)
 	(gnc-numeric-zero)
 	)
     )
@@ -216,8 +216,8 @@
   ;; I need to get a brain and use (map) for this.
   (define (apply-basis-ratio b-list units-ratio value-ratio)
     (if (not (eqv? b-list '()))
-	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) 100000 GNC-RND-ROUND) 
-		    (gnc-numeric-mul value-ratio (cdar b-list) 100000 GNC-RND-ROUND)) 
+	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
+		    (gnc-numeric-mul value-ratio (cdar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)) 
 	      (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
 	'()
 	)    
@@ -241,22 +241,22 @@
 	((average-basis) 
 	 (if (not (eqv? b-list '()))
 	     (list (cons (gnc-numeric-add b-units
-					  (caar b-list) 10000 GNC-RND-ROUND) 
+					  (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
 			 (gnc-numeric-div
 			  (gnc-numeric-add b-value
 					   (gnc-numeric-mul (caar b-list)
 							    (cdar b-list) 
-							    10000 GNC-RND-ROUND)
-					   10000 GNC-RND-ROUND)
+							    GNC-DENOM-AUTO GNC-RND-ROUND)
+					   GNC-DENOM-AUTO GNC-RND-ROUND)
 			  (gnc-numeric-add b-units
-					   (caar b-list) 10000 GNC-RND-ROUND)
-			  10000 GNC-RND-ROUND)))
+					   (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND)
+			  GNC-DENOM-AUTO GNC-RND-ROUND)))
 	     (append b-list 
 		     (list (cons b-units (gnc-numeric-div
-					  b-value b-units 10000 GNC-RND-ROUND))))))
+					  b-value b-units GNC-DENOM-AUTO GNC-RND-ROUND))))))
 	(else (append b-list 
 		      (list (cons b-units (gnc-numeric-div
-					   b-value b-units 10000 GNC-RND-ROUND)))))))
+					   b-value b-units GNC-DENOM-AUTO GNC-RND-ROUND)))))))
 
      ;; we have value and negative units, remove units from basis
      ((and (not (gnc-numeric-zero-p b-value))
@@ -268,11 +268,11 @@
 			     (gnc-numeric-abs b-units) (caar b-list))))
 		 (basis-builder (cdr b-list) (gnc-numeric-add
 					      b-units 
-					      (caar b-list) 10000 GNC-RND-ROUND) 
+					      (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
 				b-value b-method)
 		 (append (list (cons (gnc-numeric-add
 				      b-units 
-				      (caar b-list) 10000 GNC-RND-ROUND) 
+				      (caar b-list) GNC-DENOM-AUTO GNC-RND-ROUND) 
 				     (cdar b-list))) (cdr b-list))))
 	    ((filo-basis) 
 	     (if (not (= -1 (gnc-numeric-compare
@@ -281,16 +281,16 @@
 				(gnc-numeric-add
 				 b-units 
 				 (caar (reverse b-list)) 
-				 10000 GNC-RND-ROUND) 
+				 GNC-DENOM-AUTO GNC-RND-ROUND) 
 				b-value b-method)
 		 (append (cdr (reverse b-list)) 
 			 (list (cons (gnc-numeric-add
 				      b-units 
-				      (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
+				      (caar (reverse b-list)) GNC-DENOM-AUTO GNC-RND-ROUND) 
 				     (cdar (reverse b-list)))))))
 	    ((average-basis) 
 	     (list (cons (gnc-numeric-add
-			  (caar b-list) b-units 10000 GNC-RND-ROUND) 
+			  (caar b-list) b-units GNC-DENOM-AUTO GNC-RND-ROUND) 
 			 (cdar b-list)))))
 	  '()
 	  ))
@@ -299,11 +299,11 @@
      ((and (gnc-numeric-zero-p b-value)
 	   (not (gnc-numeric-zero-p b-units)))
 	(let* ((current-units (units-basis b-list))
-	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units 100000 GNC-RND-ROUND) 
-					     current-units 10000 GNC-RND-ROUND))
-	       (value-ratio (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio 100000 GNC-RND-ROUND)))
+	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-RND-ROUND) 
+					     current-units GNC-DENOM-AUTO GNC-RND-ROUND))
+	       (value-ratio (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-RND-ROUND)))
 	  
-	  (gnc:debug "blist is " b-list " units ratio is " units-ratio)
+	  (gnc:debug "blist is " b-list " current units is " current-units " units ratio is " units-ratio)
 	  (apply-basis-ratio b-list units-ratio value-ratio) 
 	  ))
 
@@ -313,8 +313,8 @@
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list))
-	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value 100000 GNC-RND-ROUND) 
-					   current-value 100000 GNC-RND-ROUND)))
+	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-RND-ROUND) 
+					   current-value GNC-DENOM-AUTO GNC-RND-ROUND)))
 	  
 	(gnc:debug "this is a spinoff")
 	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
@@ -545,13 +545,13 @@
 				  (gnc:make-gnc-monetary commod-currency
 							 (gnc-numeric-div txn-value
 									  (gnc-numeric-abs txn-units)
-									  100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER)))
+									  100 GNC-RND-ROUND))
 				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 		  
 		  (set! value (if price (gnc:make-gnc-monetary commod-currency 
 						     (gnc-numeric-mul units
 								      (gnc:gnc-monetary-amount price)
-										100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER)))
+										100 GNC-RND-ROUND))
 				  (gnc:make-gnc-monetary commod-currency (gnc-numeric-zero))))
 		  (set! warn-price-dirty #t)
 		  )  
@@ -582,10 +582,10 @@
 		  (ugain (gnc:make-gnc-monetary currency 
 						(gnc-numeric-sub (gnc:gnc-monetary-amount (exchange-fn value currency))
 								 (sum-basis basis-list) 
-								 100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+								 100 GNC-RND-ROUND)))
 		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
 									      (gnc:gnc-monetary-amount ugain)
-									      100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+									      100 GNC-RND-ROUND)))
 
 		  (activecols (list (gnc:html-account-anchor current)))
 		  )
@@ -784,7 +784,7 @@
 	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
 	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
 										      (gnc:gnc-monetary-amount sum-total-ugain)
-										      100 (logior GNC-DENOM-REDUCE GNC-RND-NEVER))))
+										      100 GNC-RND-ROUND)))
 	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
 
           (gnc:html-table-append-row/markup!
