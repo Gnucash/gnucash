@@ -261,7 +261,7 @@ Account*
 gnc_sx_get_template_transaction_account(SchedXaction *sx)
 {
     Account *template_root, *sx_template_acct;
-    char sx_guid_str[GUID_ENCODING_LENGTH];
+    char sx_guid_str[GUID_ENCODING_LENGTH+1];
 
     template_root = gnc_book_get_template_root(gnc_get_current_book());
     guid_to_string_buff(xaccSchedXactionGetGUID(sx), sx_guid_str);
@@ -923,7 +923,7 @@ _get_template_split_account(GncSxInstance *instance, Split *template_split, Acco
     *split_acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
     if (*split_acct == NULL)
     {
-        char guid_str[GUID_ENCODING_LENGTH];
+        char guid_str[GUID_ENCODING_LENGTH+1];
         GString *err;
         guid_to_string_buff((const GUID*)acct_guid, guid_str);
         err = g_string_new("");
