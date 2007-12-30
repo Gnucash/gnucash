@@ -33,10 +33,10 @@
 #include "Query.h"
 #include "Transaction.h"
 
-Timespec gnc_transaction_get_date_posted(Transaction *t);
-Timespec gnc_transaction_get_date_entered(Transaction *t);
+Timespec gnc_transaction_get_date_posted(const Transaction *t);
+Timespec gnc_transaction_get_date_entered(const Transaction *t);
 
-Timespec gnc_split_get_date_reconciled(Split *s);
+Timespec gnc_split_get_date_reconciled(const Split *s);
 
 void gnc_transaction_set_date_posted(Transaction *t, const Timespec d);
 void gnc_transaction_set_date_entered(Transaction *t, const Timespec d);
@@ -71,7 +71,7 @@ gnc_numeric gnc_scm_to_numeric(SCM arg);
 int gnc_numeric_p(SCM arg);
 gnc_commodity * gnc_scm_to_commodity(SCM scm);
 SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
-SCM gnc_book_to_scm (QofBook *book);
-SCM qof_session_to_scm (QofSession *session);
+SCM gnc_book_to_scm (const QofBook *book);
+SCM qof_session_to_scm (const QofSession *session);
 
 #endif

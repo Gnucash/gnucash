@@ -279,7 +279,7 @@ int gnc_date_my_last_mday (int month, int year)
 param  tm: the time value in question
 return the last day of the month, integer.
 */
-int date_get_last_mday(struct tm *tm)
+int date_get_last_mday(const struct tm *tm)
 {
   return gnc_date_my_last_mday (tm->tm_mon+1, tm->tm_year+1900);
 }
@@ -291,7 +291,7 @@ int date_get_last_mday(struct tm *tm)
 param  tm: the time value in question
 return TRUE if tm_mday matches the last day of the month, else FALSE.
 */
-gboolean date_is_last_mday(struct tm *tm)
+gboolean date_is_last_mday(const struct tm *tm)
 {
   return(tm->tm_mday == date_get_last_mday(tm));
 }
@@ -472,7 +472,7 @@ qof_print_date_buff (char * buff, size_t len, time_t t)
 }
 
 size_t
-qof_print_gdate( char *buf, size_t len, GDate *gd )
+qof_print_gdate( char *buf, size_t len, const GDate *gd )
 {
   return qof_print_date_dmy_buff( buf, len,
              g_date_get_day(gd),
@@ -1292,7 +1292,7 @@ gnc_dmy2timespec_end (int day, int month, int year)
 \********************************************************************/
 
 long int
-gnc_timezone (struct tm *tm)
+gnc_timezone (const struct tm *tm)
 {
   g_return_val_if_fail (tm != NULL, 0);
 

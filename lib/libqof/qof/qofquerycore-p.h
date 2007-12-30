@@ -50,7 +50,7 @@ QofQueryPredicateFunc qof_query_core_get_predicate (gchar const *type);
 QofCompareFunc qof_query_core_get_compare (gchar const *type);
 
 /* Compare two predicates */
-gboolean qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2);
+gboolean qof_query_core_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2);
 
 /* Predicate Data Structures:
  *

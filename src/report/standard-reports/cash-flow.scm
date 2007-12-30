@@ -192,9 +192,11 @@
 
 
     (gnc:html-document-set-title! 
-     doc (sprintf #f (_ "%s - %s to %s for")
-		  (get-option gnc:pagename-general gnc:optname-reportname)
-                  (gnc-print-date from-date-tp) (gnc-print-date to-date-tp)))
+     doc (string-append
+	  (get-option gnc:pagename-general gnc:optname-reportname)
+	  " - "
+	  (sprintf #f (_ "%s to %s")
+		   (gnc-print-date from-date-tp) (gnc-print-date to-date-tp))))
 
 
     ;; add subaccounts if requested

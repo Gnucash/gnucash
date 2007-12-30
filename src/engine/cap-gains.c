@@ -76,7 +76,7 @@ static QofLogModule log_module = GNC_MOD_LOT;
 /* ============================================================== */
 
 gboolean 
-xaccAccountHasTrades (Account *acc)
+xaccAccountHasTrades (const Account *acc)
 {
    gnc_commodity *acc_comm;
    SplitList *splits, *node;
@@ -266,7 +266,7 @@ GetOrMakeLotOrphanAccount (Account *root, gnc_commodity * currency)
 /* ============================================================== */
 
 void
-xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
+xaccAccountSetDefaultGainAccount (Account *acc, const Account *gain_acct)
 {
   KvpFrame *cwd;
   KvpValue *vvv;
@@ -292,7 +292,7 @@ xaccAccountSetDefaultGainAccount (Account *acc, Account *gain_acct)
 /* ============================================================== */
 
 Account *
-xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * currency)
+xaccAccountGetDefaultGainAccount (const Account *acc, const gnc_commodity * currency)
 {
   Account *gain_acct = NULL;
   KvpFrame *cwd;

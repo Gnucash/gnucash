@@ -129,6 +129,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  gnc_utf8_strip_invalid(data.name);
 	if (data.memo_valid)
 	  gnc_utf8_strip_invalid(data.memo);
+	if (data.check_number_valid)
+	  gnc_utf8_strip_invalid(data.check_number);
+	if (data.reference_number_valid)
+	  gnc_utf8_strip_invalid(data.reference_number);
 
 	/********** Create the transaction and setup transaction data ************/
 	book = gnc_account_get_book(account);

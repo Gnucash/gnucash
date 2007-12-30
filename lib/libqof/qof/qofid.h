@@ -252,7 +252,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge);
 	on success.
 */
 QofCollection*
-qof_collection_from_glist (QofIdType type, GList *glist);
+qof_collection_from_glist (QofIdType type, const GList *glist);
 
 /** @} */
 /** @} */

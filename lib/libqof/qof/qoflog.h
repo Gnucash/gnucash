@@ -101,7 +101,7 @@
 DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST)
 
 gchar* qof_log_level_to_string(QofLogLevel lvl);
-QofLogLevel qof_log_level_from_string(gchar *str);
+QofLogLevel qof_log_level_from_string(const gchar *str);
 
 /** Indents one level; see ENTER macro. **/
 void qof_log_indent(void);
