@@ -47,6 +47,7 @@ done
 # Check for gcc and intltool (somehow breaks the suggested content
 # order, doesn't it? Whatever.)
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 
