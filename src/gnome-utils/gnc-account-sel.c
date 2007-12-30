@@ -183,7 +183,7 @@ gas_populate_list( GNCAccountSel *gas )
 	Account *acc;
 	GtkTreeIter iter;
 	GtkEntry *entry;
-	gint i, active = 0;
+	gint i, active = -1;
         GList *accts, *ptr, *filteredAccts;
         gchar *currentSel, *name;
 
@@ -218,7 +218,8 @@ gas_populate_list( GNCAccountSel *gas )
 
         /* If the account which was in the text box before still exists, then
          * reset to it. */
-	gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
+	if (active != -1)
+	  gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
 
         g_list_free( filteredAccts );
         if ( currentSel ) {
