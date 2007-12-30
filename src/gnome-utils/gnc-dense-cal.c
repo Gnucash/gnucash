@@ -436,12 +436,18 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->week_starts_monday = 0;
     {
         gchar **parts;
-	/* Translators: This string should not have shown up in
-	   gnucash.pot as it is looked up in the "gtk20" translation
-	   domain. You can safely ignore this string and leave it
-	   untranslated. */
-        parts = g_strsplit(dgettext("gtk20", "calendar:week_start:0"),
-                           ":", 3);
+	const char *week_start_str;
+
+	/* Use this renaming macro to avoid extraction of the message
+	   string into the gnucash.pot file when calling xgettext. */
+#define dgettext_noextract dgettext
+	/* Translators: This string must not show up in gnucash.pot as
+	   it is looked up in the "gtk20" translation domain
+	   instead. */
+	week_start_str = dgettext_noextract("gtk20", "calendar:week_start:0");
+#undef dgettext_noextract
+
+        parts = g_strsplit(week_start_str, ":", 3);
         if (parts[0] != NULL
             && parts[1] != NULL
             && parts[2] != NULL)
