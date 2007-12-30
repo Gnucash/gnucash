@@ -509,9 +509,10 @@ _get_day_of_month_recurrence(GncFrequency *gf, GDate *start_date, int multiplier
     if (day_of_month_index > LAST_DAY_OF_MONTH_OPTION_INDEX)
     {
         GDate *day_of_week_date = g_date_new_julian(g_date_get_julian(start_date));
+        GDateWeekday selected_day_of_week = day_of_month_index - LAST_DAY_OF_MONTH_OPTION_INDEX;
         // increment until we align on the DOW, but stay inside the month
         g_date_set_day(day_of_week_date, 1);
-        while (g_date_get_weekday(day_of_week_date) != (day_of_month_index - 30))
+        while (g_date_get_weekday(day_of_week_date) != selected_day_of_week)
             g_date_add_days(day_of_week_date, 1);
         recurrenceSet(r, multiplier, PERIOD_LAST_WEEKDAY, day_of_week_date);
     }
