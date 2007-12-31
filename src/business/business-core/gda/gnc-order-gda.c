@@ -29,6 +29,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncOrderP.h"
 
@@ -113,8 +114,8 @@ create_order_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_order( GncGdaBackend* be, QofInstance* inst )
+static void
+save_order( GncGdaBackend* be, QofInstance* inst )
 {
     GncOrder* v = GNC_ORDER(inst);
     const GUID* guid;
@@ -173,7 +174,7 @@ gnc_order_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_ORDER,
-        gnc_gda_save_order,				/* commit */
+        save_order,						/* commit */
         load_all_orders,				/* initial_load */
         create_order_tables				/* create_tables */
     };

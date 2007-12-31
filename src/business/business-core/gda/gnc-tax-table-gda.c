@@ -31,6 +31,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncEntry.h"
 #include "gncTaxTableP.h"
@@ -279,8 +280,8 @@ save_tt_entries( GncGdaBackend* be, const GUID* guid, GList* entries )
     }
 }
 
-void
-gnc_gda_save_taxtable( GncGdaBackend* be, QofInstance* inst )
+static void
+save_taxtable( GncGdaBackend* be, QofInstance* inst )
 {
     GncTaxTable* tt = GNC_TAXTABLE(inst);
     const GUID* guid;
@@ -341,7 +342,7 @@ gnc_taxtable_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_TAXTABLE,
-        gnc_gda_save_taxtable,				/* commit */
+        save_taxtable,						/* commit */
         load_all_taxtables,					/* initial_load */
         create_taxtable_tables				/* create_tables */
     };

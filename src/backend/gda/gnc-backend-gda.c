@@ -135,10 +135,8 @@ gnc_gda_session_begin(QofBackend *be_start, QofSession *session,
 		//    @<gda_connectionname>
 
 		if( dsn[0] == '@' ) {
-	    	dsn++;
-
 	    	be->pConnection = gda_client_open_connection( be->pClient,
-													dsn,
+													&dsn[1],
 													username, password,
 													0,
 													&error );
@@ -561,6 +559,7 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
 
     /* Save all contents */
     //save_commodities( fbe, book );
+	gnc_gda_save_book( fbe, QOF_INSTANCE(book) );
     save_accounts( fbe, book );
     save_prices( fbe, book );
     save_transactions( fbe, book );

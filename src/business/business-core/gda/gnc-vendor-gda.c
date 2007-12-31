@@ -30,7 +30,11 @@
 
 #include <libgda/libgda.h>
 
+#include "gnc-commodity.h"
+
 #include "gnc-backend-util-gda.h"
+#include "gnc-commodity-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gnc-commodity.h"
 #include "gncBillTermP.h"
@@ -125,8 +129,8 @@ create_vendor_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_vendor( GncGdaBackend* be, QofInstance* inst )
+static void
+save_vendor( GncGdaBackend* be, QofInstance* inst )
 {
     GncVendor* v = GNC_VENDOR(inst);
     const GUID* guid;
@@ -157,7 +161,7 @@ gnc_vendor_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_VENDOR,
-        gnc_gda_save_vendor,				/* commit */
+        save_vendor,						/* commit */
         load_all_vendors,					/* initial_load */
         create_vendor_tables				/* create_tables */
     };

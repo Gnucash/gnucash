@@ -1,5 +1,10 @@
-/********************************************************************
- * gnc-book-gda.h: load and save data to SQL via libgda             *
+/********************************************************************\
+ * dialog-database-connection.h -- dialog for opening a connection  *
+ *                        to a libgda database, either predefined   *
+ *                        in ~/.libgda/config or explicit using     *
+ *                        provider and database.                    *
+ *                                                                  *
+ * Copyright (C) 2007-8 Phil Longstaff (plongstaff@rogers.com)      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,21 +23,24 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-book-gda.h
- *  @brief load and save data to SQL via libgda
- *  @author Copyright (c) 2006 Phil Longstaff <plongstaff@rogers.com>
+
+#ifndef DIALOG_DATABASE_CONNECTION_H
+#define DIALOG_DATABASE_CONNECTION_H
+
+/** @addtogroup GUI
+    @{ */
+/** @file dialog-database-connection.h
  *
- * This file implements the top-level QofBackend API for saving/
- * restoring data to/from an SQL database via libgda
+ *  This file contains the functions to present a GUI to select
+ *  a database connection.
  */
 
-#ifndef GNC_BOOK_GDA_H_
-#define GNC_BOOK_GDA_H_
+/** Create and run the dialog to close the book.
+ *
+ */
+void gnc_ui_database_connection( void );
 
-#include "qof.h"
-#include <gmodule.h>
 
-void gnc_gda_init_book_handler( void );
-void gnc_gda_save_book( GncGdaBackend* be, QofInstance* inst );
+/** @} */
 
-#endif /* GNC_BOOK_GDA_H_ */
+#endif /* DIALOG_DATABASE_CONNECTION_H */

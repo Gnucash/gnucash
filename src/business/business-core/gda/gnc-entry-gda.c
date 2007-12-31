@@ -30,6 +30,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncEntryP.h"
 #include "gncOrderP.h"
@@ -181,8 +182,8 @@ create_entry_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_entry( GncGdaBackend* be, QofInstance* inst )
+static void
+save_entry( GncGdaBackend* be, QofInstance* inst )
 {
     GncEntry* v = GNC_ENTRY(inst);
     const GUID* guid;
@@ -210,7 +211,7 @@ gnc_entry_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_ENTRY,
-        gnc_gda_save_entry,					/* commit */
+        save_entry,							/* commit */
         load_all_entries,					/* initial_load */
         create_entry_tables					/* create_tables */
     };

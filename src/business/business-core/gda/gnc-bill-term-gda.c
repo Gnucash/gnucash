@@ -29,6 +29,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncBillTermP.h"
 #include "gncInvoice.h"

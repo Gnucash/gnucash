@@ -29,6 +29,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncJobP.h"
 #include "gnc-job-gda.h"
@@ -110,8 +111,8 @@ create_job_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_job( GncGdaBackend* be, QofInstance* inst )
+static void
+save_job( GncGdaBackend* be, QofInstance* inst )
 {
     GncJob* job = GNC_JOB(inst);
     const GUID* guid;
@@ -139,7 +140,7 @@ gnc_job_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_JOB,
-        gnc_gda_save_job,				/* commit */
+        save_job,						/* commit */
         load_all_jobs,					/* initial_load */
         create_job_tables				/* create_tables */
     };

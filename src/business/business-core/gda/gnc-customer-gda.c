@@ -29,6 +29,7 @@
 #include <libgda/libgda.h>
 
 #include "gnc-backend-util-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncBillTermP.h"
 #include "gncCustomerP.h"
@@ -125,8 +126,8 @@ create_customer_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_customer( GncGdaBackend* be, QofInstance* inst )
+static void
+save_customer( GncGdaBackend* be, QofInstance* inst )
 {
     GncCustomer* customer = GNC_CUSTOMER(inst);
     const GUID* guid;
@@ -154,7 +155,7 @@ gnc_customer_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_CUSTOMER,
-        gnc_gda_save_customer,				/* commit */
+        save_customer,						/* commit */
         load_all_customers,					/* initial_load */
         create_customer_tables				/* create_tables */
     };

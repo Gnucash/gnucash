@@ -26,9 +26,13 @@
 #include "config.h"
 #include <gmodule.h>
 
+#include <libgda/libgda.h>
+
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 #include "gnc-engine.h"
+
+#include "gnc-backend-util-gda.h"
 
 #include "gnc-address-gda.h"
 #include "gnc-bill-term-gda.h"

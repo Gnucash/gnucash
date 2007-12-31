@@ -35,5 +35,6 @@
 #define CT_BILLTERMREF "billterm"
 
 void gnc_billterm_gda_initialize( void );
+void gnc_gda_save_billterm( GncGdaBackend* be, QofInstance* inst );
 
 #endif /* GNC_BILLTERM_GDA_H */

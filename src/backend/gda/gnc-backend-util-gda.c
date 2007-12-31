@@ -205,7 +205,7 @@ create_string_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_STRING );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t string_handler
@@ -278,7 +278,7 @@ create_int_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t int_handler =
@@ -351,7 +351,7 @@ create_boolean_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t boolean_handler =
@@ -423,7 +423,7 @@ create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t int64_handler =
@@ -496,7 +496,7 @@ create_double_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t double_handler =
@@ -575,7 +575,7 @@ create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t guid_handler =
@@ -635,7 +635,7 @@ gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    "char", GUID_ENCODING_LENGTH, table_row->flags | pkey ? COL_PKEY : 0 );
+                    "char", GUID_ENCODING_LENGTH, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 /* ----------------------------------------------------------------- */
@@ -731,7 +731,7 @@ create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_DATE );
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
-                    dbms_type, table_row->size, table_row->flags | pkey ? COL_PKEY : 0 );
+                    dbms_type, table_row->size, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
 
 static col_type_handler_t timespec_handler =

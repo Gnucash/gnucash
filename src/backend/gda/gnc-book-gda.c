@@ -47,8 +47,6 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static void commit_book( GncGdaBackend* be, QofInstance* inst );
-
 static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
 static void set_root_account_guid( gpointer pObject, gpointer pValue );
 static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
@@ -69,7 +67,7 @@ get_root_account_guid( gpointer pObject, const QofParam* param )
     GNCBook* book = QOF_BOOK(pObject);
     const Account* root = gnc_book_get_root_account( book );
 
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE( root ) );
+    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
 }
 
 static void 
@@ -79,7 +77,7 @@ set_root_account_guid( gpointer pObject, gpointer pValue )
     const Account* root = gnc_book_get_root_account( book );
     GUID* guid = (GUID*)pValue;
 
-    qof_instance_set_guid( QOF_INSTANCE( root ), guid );
+    qof_instance_set_guid( QOF_INSTANCE(root), guid );
 }
 
 static gpointer
@@ -88,7 +86,7 @@ get_root_template_guid( gpointer pObject, const QofParam* param )
     const GNCBook* book = QOF_BOOK(pObject);
     const Account* root = gnc_book_get_template_root( book );
 
-    return (gpointer)qof_instance_get_guid( QOF_INSTANCE( root ) );
+    return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
 }
 
 static void 
@@ -105,7 +103,7 @@ set_root_template_guid( gpointer pObject, gpointer pValue )
         xaccAccountCommitEdit( root );
         gnc_book_set_template_root( book, root );
     }
-    qof_instance_set_guid( QOF_INSTANCE( root ), guid );
+    qof_instance_set_guid( QOF_INSTANCE(root), guid );
 }
 
 /* ================================================================= */
@@ -150,7 +148,7 @@ load_all_books( GncGdaBackend* be )
 
 		// If there are no rows, try committing the book
 		if( numRows == 0 ) {
-   	    	commit_book( be, QOF_INSTANCE( be->primary_book ) );
+   	    	gnc_gda_save_book( be, QOF_INSTANCE(be->primary_book) );
 		} else {
 			// Otherwise, load the 1st book.
             (void)load_single_book( be, pModel, 0 );
@@ -166,8 +164,8 @@ create_book_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-static void
-commit_book( GncGdaBackend* be, QofInstance* inst )
+void
+gnc_gda_save_book( GncGdaBackend* be, QofInstance* inst )
 {
     GNCBook* pBook = QOF_BOOK(inst);
     const GUID* guid;
@@ -197,9 +195,9 @@ gnc_gda_init_book_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_BOOK,
-        commit_book,                /* commit */
+        gnc_gda_save_book,                 /* commit */
         load_all_books,                    /* initial_load */
-        create_book_tables            /* create_tables */
+        create_book_tables 		           /* create_tables */
     };
 
     qof_object_register_backend( GNC_ID_BOOK, GNC_GDA_BACKEND, &be_data );

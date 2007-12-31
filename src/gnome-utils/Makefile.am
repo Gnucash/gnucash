@@ -20,7 +20,8 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS}
+  ${GOFFICE_CFLAGS} \
+  ${LIBGDA_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -29,6 +30,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account.c \
   dialog-book-close.c \
   dialog-commodity.c \
+  dialog-database-connection.c \
   dialog-options.c \
   dialog-preferences.c \
   dialog-query-list.c \
@@ -102,6 +104,7 @@ gncinclude_HEADERS = \
   account-quickfill.h \
   dialog-account.h \
   dialog-book-close.h \
+  dialog-database-connection.h \
   dialog-commodity.h \
   dialog-preferences.h \
   dialog-options.h \

@@ -12,6 +12,7 @@
         </placeholder>
       </menu>
       <placeholder name="FileSavePlaceholder">
+		<menuitem name="FileDatabaseConnection" action="FileDatabaseConnectionAction"/>
         <menuitem name="FileSave" action="FileSaveAction"/>
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
       </placeholder>

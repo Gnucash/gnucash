@@ -28,7 +28,11 @@
 
 #include <libgda/libgda.h>
 
+#include "gnc-commodity.h"
+
 #include "gnc-backend-util-gda.h"
+#include "gnc-commodity-gda.h"
+#include "gnc-slots-gda.h"
 
 #include "gncBillTermP.h"
 #include "gncInvoiceP.h"
@@ -125,8 +129,8 @@ create_invoice_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_invoice( GncGdaBackend* be, QofInstance* inst )
+static void
+save_invoice( GncGdaBackend* be, QofInstance* inst )
 {
     GncInvoice* v = GNC_INVOICE(inst);
     const GUID* guid;
@@ -188,7 +192,7 @@ gnc_invoice_gda_initialize( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_INVOICE,
-        gnc_gda_save_invoice,				/* commit */
+        save_invoice,						/* commit */
         load_all_invoices,					/* initial_load */
         create_invoice_tables				/* create_tables */
     };
