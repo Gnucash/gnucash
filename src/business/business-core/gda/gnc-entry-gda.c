@@ -1,7 +1,7 @@
 /********************************************************************\
- * gnc-entry-xml-v2.c -- entry xml i/o implementation         *
+ * gnc-entry-gda.c -- entry libgda backend                          *
  *                                                                  *
- * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
+ * Copyright (C) 2007-2008 Phil Longstaff (plongstaff@rogers.com)   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -46,11 +46,6 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gpointer get_date( gpointer pObject, const QofParam* param );
-static void set_date( gpointer pObject, gpointer pValue );
-static gpointer get_date_entered( gpointer pObject, const QofParam* param );
-static void set_date_entered( gpointer pObject, gpointer pValue );
-
 #define TABLE_NAME "entries"
 #define MAX_DESCRIPTION_LEN 50
 #define MAX_ACTION_LEN 50
@@ -61,8 +56,8 @@ static void set_date_entered( gpointer pObject, gpointer pValue );
 static col_cvt_t col_table[] =
 {
 	{ "guid",          CT_GUID,        0,                   COL_NNUL, "guid" },
-	{ "date",          CT_TIMESPEC,    0,                   COL_NNUL, NULL, NULL, get_date, set_date },
-	{ "entered",       CT_TIMESPEC,    0,                   COL_NNUL, NULL, NULL, get_date_entered, set_date_entered },
+	{ "date",          CT_TIMESPEC,    0,                   COL_NNUL, NULL, ENTRY_DATE },
+	{ "entered",       CT_TIMESPEC,    0,                   COL_NNUL, NULL, ENTRY_DATE_ENTERED },
 	{ "description",   CT_STRING,      MAX_DESCRIPTION_LEN, 0,        NULL, ENTRY_DESC },
 	{ "action",        CT_STRING,      MAX_ACTION_LEN,      0,        NULL, ENTRY_ACTION },
 	{ "notes",         CT_STRING,      MAX_NOTES_LEN,       0,        NULL, ENTRY_NOTES },
@@ -89,50 +84,16 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-static gpointer
-get_date( gpointer pObject, const QofParam* param )
-{
-    const GncEntry* pEntry = GNC_ENTRY(pObject);
-    static Timespec ts;
-
-    ts = gncEntryGetDate( pEntry );
-    return (gpointer)&ts;
-}
-
-static void 
-set_date( gpointer pObject, gpointer pValue )
-{
-    GncEntry* pEntry = GNC_ENTRY(pObject);
-    Timespec* pTS = (Timespec*)pValue;
-
-    gncEntrySetDate( pEntry, *pTS );
-}
-
-static gpointer
-get_date_entered( gpointer pObject, const QofParam* param )
-{
-    const GncEntry* pEntry = GNC_ENTRY(pObject);
-    static Timespec ts;
-
-    ts = gncEntryGetDateEntered( pEntry );
-    return (gpointer)&ts;
-}
-
-static void 
-set_date_entered( gpointer pObject, gpointer pValue )
-{
-    GncEntry* pEntry = GNC_ENTRY(pObject);
-    Timespec* pTS = (Timespec*)pValue;
-
-    gncEntrySetDateEntered( pEntry, *pTS );
-}
-
-static GncEntry*
+static void
 load_single_entry( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncEntry* pEntry;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -146,8 +107,6 @@ load_single_entry( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pEntry) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pEntry) );
-
-    return pEntry;
 }
 
 static void
@@ -155,7 +114,11 @@ load_all_entries( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -169,7 +132,7 @@ load_all_entries( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_entry( be, pModel, r );
+            load_single_entry( be, pModel, r );
 		}
     }
 }
@@ -178,6 +141,8 @@ load_all_entries( GncGdaBackend* be )
 static void
 create_entry_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -185,13 +150,16 @@ create_entry_tables( GncGdaBackend* be )
 static void
 save_entry( GncGdaBackend* be, QofInstance* inst )
 {
-    GncEntry* v = GNC_ENTRY(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_ENTRY(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_ENTRY, v,
+                        GNC_ID_ENTRY, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -204,6 +172,32 @@ save_entry( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static void
+write_single_entry( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+	GncEntry* entry = GNC_ENTRY(term_p);
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_ENTRY(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+  	/* Only save if attached */
+  	if( gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
+			gncEntryGetBill( entry ) != NULL ) {
+    	save_entry( be, term_p );
+	}
+}
+
+static void
+write_entries( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_ENTRY, be->primary_book, write_single_entry, (gpointer)be );
+}
+
+/* ================================================================= */
 void
 gnc_entry_gda_initialize( void )
 {
@@ -213,7 +207,9 @@ gnc_entry_gda_initialize( void )
         GNC_ID_ENTRY,
         save_entry,							/* commit */
         load_all_entries,					/* initial_load */
-        create_entry_tables					/* create_tables */
+        create_entry_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_entries						/* write */
     };
 
     qof_object_register_backend( GNC_ID_ENTRY, GNC_GDA_BACKEND, &be_data );

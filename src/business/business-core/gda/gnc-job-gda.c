@@ -1,6 +1,8 @@
 /********************************************************************\
  * gnc-job-gda.c -- job gda backend                                 *
  *                                                                  *
+ * Copyright (C) 2007-2008 Phil Longstaff (plongstaff@rogers.com)   *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -56,12 +58,16 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-static GncJob*
+static void
 load_single_job( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID job_guid;
 	GncJob* pJob;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     job_guid = *guid;
@@ -75,8 +81,6 @@ load_single_job( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pJob) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pJob) );
-
-    return pJob;
 }
 
 static void
@@ -84,7 +88,11 @@ load_all_jobs( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -98,7 +106,7 @@ load_all_jobs( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_job( be, pModel, r );
+            load_single_job( be, pModel, r );
 		}
     }
 }
@@ -107,6 +115,8 @@ load_all_jobs( GncGdaBackend* be )
 static void
 create_job_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -114,13 +124,16 @@ create_job_tables( GncGdaBackend* be )
 static void
 save_job( GncGdaBackend* be, QofInstance* inst )
 {
-    GncJob* job = GNC_JOB(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_JOB(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_JOB, job,
+                        GNC_ID_JOB, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -133,6 +146,45 @@ save_job( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+job_should_be_saved( GncJob *job )
+{
+    const char *id;
+
+	g_return_val_if_fail( job != NULL, FALSE );
+
+    /* make sure this is a valid job before we save it -- should have an ID */
+    id = gncJobGetID( job );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+
+static void
+write_single_job( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_JOB(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( job_should_be_saved( GNC_JOB(term_p) ) ) {
+    	save_job( be, term_p );
+	}
+}
+
+static void
+write_jobs( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_JOB, be->primary_book, write_single_job, (gpointer)be );
+}
+
+/* ================================================================= */
 void
 gnc_job_gda_initialize( void )
 {
@@ -142,7 +194,9 @@ gnc_job_gda_initialize( void )
         GNC_ID_JOB,
         save_job,						/* commit */
         load_all_jobs,					/* initial_load */
-        create_job_tables				/* create_tables */
+        create_job_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_jobs						/* write */
     };
 
     qof_object_register_backend( GNC_ID_JOB, GNC_GDA_BACKEND, &be_data );

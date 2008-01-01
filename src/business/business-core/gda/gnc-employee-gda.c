@@ -70,12 +70,16 @@ static col_cvt_t col_table[] =
     { NULL }
 };
 
-static GncEmployee*
+static void
 load_single_employee( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID emp_guid;
 	GncEmployee* pEmployee;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     emp_guid = *guid;
@@ -89,8 +93,6 @@ load_single_employee( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pEmployee) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pEmployee) );
-
-    return pEmployee;
 }
 
 static void
@@ -98,8 +100,13 @@ load_all_employees( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
-    gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
+    QofBook* pBook;
+    gnc_commodity_table* pTable;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
+    pTable = gnc_commodity_table_get_table( pBook );
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -113,7 +120,7 @@ load_all_employees( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_employee( be, pModel, r );
+            load_single_employee( be, pModel, r );
 		}
     }
 }
@@ -122,6 +129,8 @@ load_all_employees( GncGdaBackend* be )
 static void
 create_employee_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -131,6 +140,10 @@ save_employee( GncGdaBackend* be, QofInstance* inst )
 {
     GncEmployee* emp = GNC_EMPLOYEE(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_EMPLOYEE(inst) );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, gncEmployeeGetCurrency( emp ) );
@@ -151,6 +164,44 @@ save_employee( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+employee_should_be_saved( GncEmployee *employee )
+{
+    const char *id;
+
+	g_return_val_if_fail( employee != NULL, FALSE );
+
+    /* make sure this is a valid employee before we save it -- should have an ID */
+    id = gncEmployeeGetID( employee );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+static void
+write_single_employee( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_EMPLOYEE(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( employee_should_be_saved( GNC_EMPLOYEE(term_p) ) ) {
+    	save_employee( be, term_p );
+	}
+}
+
+static void
+write_employees( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_EMPLOYEE, be->primary_book, write_single_employee, (gpointer)be );
+}
+
+/* ================================================================= */
 void
 gnc_employee_gda_initialize( void )
 {
@@ -160,7 +211,9 @@ gnc_employee_gda_initialize( void )
         GNC_ID_EMPLOYEE,
         save_employee,						/* commit */
         load_all_employees,					/* initial_load */
-        create_employee_tables				/* create_tables */
+        create_employee_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_employees						/* write */
     };
 
     qof_object_register_backend( GNC_ID_EMPLOYEE, GNC_GDA_BACKEND, &be_data );

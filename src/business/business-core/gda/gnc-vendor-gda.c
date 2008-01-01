@@ -74,12 +74,16 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-static GncVendor*
+static void
 load_single_vendor( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncVendor* pVendor;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -93,8 +97,6 @@ load_single_vendor( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pVendor) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pVendor) );
-
-    return pVendor;
 }
 
 static void
@@ -102,7 +104,8 @@ load_all_vendors( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+
+	g_return_if_fail( be != NULL );
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -125,6 +128,8 @@ load_all_vendors( GncGdaBackend* be )
 static void
 create_vendor_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -134,6 +139,10 @@ save_vendor( GncGdaBackend* be, QofInstance* inst )
 {
     GncVendor* v = GNC_VENDOR(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_VENDOR(inst) );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, gncVendorGetCurrency( v ) );
@@ -154,6 +163,45 @@ save_vendor( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+vendor_should_be_saved( GncVendor *vendor )
+{
+    const char *id;
+
+	g_return_val_if_fail( vendor != NULL, FALSE );
+
+    /* make sure this is a valid vendor before we save it -- should have an ID */
+    id = gncVendorGetID( vendor );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+
+static void
+write_single_vendor( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_VENDOR(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( vendor_should_be_saved( GNC_VENDOR(term_p) ) ) {
+    	save_vendor( be, term_p );
+	}
+}
+
+static void
+write_vendors( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_VENDOR, be->primary_book, write_single_vendor, (gpointer)be );
+}
+
+/* ================================================================= */
 void
 gnc_vendor_gda_initialize( void )
 {
@@ -163,7 +211,9 @@ gnc_vendor_gda_initialize( void )
         GNC_ID_VENDOR,
         save_vendor,						/* commit */
         load_all_vendors,					/* initial_load */
-        create_vendor_tables				/* create_tables */
+        create_vendor_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_vendors						/* write */
     };
 
     qof_object_register_backend( GNC_ID_VENDOR, GNC_GDA_BACKEND, &be_data );

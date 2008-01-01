@@ -49,8 +49,6 @@ typedef struct {
     const GUID* guid;
 } guid_info_t;
 
-static gpointer get_id( gpointer pObject, const QofParam* param );
-static void set_id( gpointer pObject, gpointer pValue );
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
 static gpointer get_child( gpointer pObject, const QofParam* param );
@@ -99,22 +97,11 @@ static col_cvt_t guid_col_table[] =
 };
 
 static gpointer
-get_id( gpointer pObject, const QofParam* param )
-{
-    // Just need a 0 to force a new id
-    return (gpointer)0;
-}
-
-static void
-set_id( gpointer pObject, gpointer pValue )
-{
-    // Nowhere to put the ID
-}
-
-static gpointer
 get_obj_guid( gpointer pObject, const QofParam* param )
 {
     guid_info_t* pInfo = (guid_info_t*)pObject;
+
+	g_return_val_if_fail( pInfo != NULL, NULL );
 
     return (gpointer)pInfo->guid;
 }
@@ -131,6 +118,9 @@ set_invisible( gpointer data, gpointer value )
 	GncTaxTable* tt = GNC_TAXTABLE(data);
 	gboolean b = GPOINTER_TO_INT(value);
 
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( GNC_IS_TAXTABLE(data) );
+
 	if( b ) {
 		gncTaxTableMakeInvisible( tt );
 	}
@@ -140,6 +130,10 @@ static gpointer
 get_child( gpointer pObject, const QofParam* param )
 {
 	GncTaxTable* tt = GNC_TAXTABLE(pObject);
+
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_TAXTABLE(pObject), NULL );
+
 	return gncTaxTableGetChild( tt );
 }
 
@@ -148,6 +142,9 @@ set_parent( gpointer data, gpointer value )
 {
 	GncTaxTable* tt = GNC_TAXTABLE(data);
 	GncTaxTable* parent;
+
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( GNC_IS_TAXTABLE(data) );
 
 	if( value != NULL ) {
 		parent = GNC_TAXTABLE(value);
@@ -159,6 +156,12 @@ static void
 load_single_ttentry( GncGdaBackend* be, GdaDataModel* pModel, int row, GncTaxTable* tt )
 {
 	GncTaxTableEntry* e = gncTaxTableEntryCreate();
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( tt != NULL );
+
     gnc_gda_load_object( be, pModel, row, GNC_ID_TAXTABLE, e, ttentries_col_table );
 	gncTaxTableAddEntry( tt, e );
 }
@@ -171,6 +174,9 @@ load_taxtable_entries( GncGdaBackend* be, GncTaxTable* tt )
     GdaQuery* query;
     GdaQueryCondition* cond;
     GValue value;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( tt != NULL );
 
     guid_to_string_buff( qof_instance_get_guid( QOF_INSTANCE(tt) ), guid_buf );
     memset( &value, 0, sizeof( GValue ) );
@@ -194,12 +200,16 @@ load_taxtable_entries( GncGdaBackend* be, GncTaxTable* tt )
     }
 }
 
-static GncTaxTable*
+static void
 load_single_taxtable( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncTaxTable* tt;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -214,8 +224,6 @@ load_single_taxtable( GncGdaBackend* be, GdaDataModel* pModel, int row )
 	load_taxtable_entries( be, tt );
 
     qof_instance_mark_clean( QOF_INSTANCE(tt) );
-
-    return tt;
 }
 
 static void
@@ -223,7 +231,8 @@ load_all_taxtables( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+
+	g_return_if_fail( be != NULL );
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -237,7 +246,7 @@ load_all_taxtables( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_taxtable( be, pModel, r );
+            load_single_taxtable( be, pModel, r );
 		}
     }
 }
@@ -246,6 +255,8 @@ load_all_taxtables( GncGdaBackend* be )
 static void
 create_taxtable_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TT_TABLE_NAME, tt_col_table );
     gnc_gda_create_table_if_needed( be, TTENTRIES_TABLE_NAME, ttentries_col_table );
 }
@@ -255,6 +266,9 @@ static void
 delete_all_tt_entries( GncGdaBackend* be, const GUID* guid )
 {
     guid_info_t guid_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
 
     guid_info.be = be;
     guid_info.guid = guid;
@@ -266,6 +280,9 @@ static void
 save_tt_entries( GncGdaBackend* be, const GUID* guid, GList* entries )
 {
 	GList* entry;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
 
     /* First, delete the old slots for this object */
     delete_all_tt_entries( be, guid );
@@ -286,6 +303,10 @@ save_taxtable( GncGdaBackend* be, QofInstance* inst )
     GncTaxTable* tt = GNC_TAXTABLE(inst);
     const GUID* guid;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_TAXTABLE(inst) );
+
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TT_TABLE_NAME,
@@ -305,16 +326,43 @@ save_taxtable( GncGdaBackend* be, QofInstance* inst )
 
 /* ================================================================= */
 static void
+write_single_taxtable( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_TAXTABLE(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+    save_taxtable( be, term_p );
+}
+
+static void
+write_taxtables( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, write_single_taxtable, (gpointer)be );
+}
+
+/* ================================================================= */
+static void
 load_taxtable_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	GncTaxTable* taxtable = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -324,8 +372,8 @@ load_taxtable_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		taxtable = gncTaxTableLookup( be->primary_book, pGuid );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, taxtable, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, taxtable, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)taxtable );
     }
@@ -344,7 +392,9 @@ gnc_taxtable_gda_initialize( void )
         GNC_ID_TAXTABLE,
         save_taxtable,						/* commit */
         load_all_taxtables,					/* initial_load */
-        create_taxtable_tables				/* create_tables */
+        create_taxtable_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_taxtables						/* write */
     };
 
     qof_object_register_backend( GNC_ID_TAXTABLE, GNC_GDA_BACKEND, &be_data );

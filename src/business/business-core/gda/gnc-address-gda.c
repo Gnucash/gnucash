@@ -68,7 +68,7 @@ typedef GncAddress* (*AddressGetterFunc)( const gpointer );
 static void
 load_address( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gchar* buf;
@@ -77,9 +77,15 @@ load_address( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	const col_cvt_t* subtable;
 	const gchar* s;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
     addr = gncAddressCreate( be->primary_book, NULL );
 	for( subtable = col_table; subtable->col_name != NULL; subtable++ ) {
-    	buf = g_strdup_printf( "%s_%s", table->col_name, subtable->col_name );
+    	buf = g_strdup_printf( "%s_%s", table_row->col_name, subtable->col_name );
     	val = gda_data_model_get_value_at_col_name( pModel, buf, row );
     	g_free( buf );
     	if( gda_value_is_null( val ) ) {
@@ -108,6 +114,12 @@ get_gvalue_address( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoi
     AddressGetterFunc getter;
     GncAddress* addr;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
+
     memset( value, 0, sizeof( GValue ) );
 
 	getter = (AddressGetterFunc)gnc_gda_get_getter( obj_name, table_row );
@@ -127,6 +139,12 @@ get_gvalue_address_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
     QofAccessFunc getter;
 	const col_cvt_t* subtable_row;
 	gchar* buf;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
 
     memset( &value, 0, sizeof( GValue ) );
     get_gvalue_address( be, obj_name, pObject, table_row, &value );
@@ -167,6 +185,12 @@ get_gvalue_address_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 	gchar* s;
 	QofAccessFunc getter;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     memset( &value, 0, sizeof( GValue ) );
     get_gvalue_address( be, obj_name, pObject, table_row, &value );
 
@@ -203,6 +227,11 @@ create_address_col( GdaServerProvider* server, GdaConnection* cnn,
     const gchar* dbms_type;
     gchar* buf;
 	const col_cvt_t* subtable_row;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn,
                                                             G_TYPE_STRING );

@@ -504,6 +504,20 @@ save_schedXactions( GncGdaBackend* be, QofBook* book )
 }
 
 static void
+write_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+{
+    GncGdaDataType_t* pData = data_p;
+    gda_backend* be_data = be_data_p;
+
+    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+    g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
+
+    if( pData->write != NULL ) {
+        (pData->write)( be_data->be );
+    }
+}
+
+static void
 gnc_gda_sync_all( QofBackend* be, QofBook *book )
 {
     GncGdaBackend *fbe = (GncGdaBackend *) be;
@@ -566,6 +580,7 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
     save_template_transactions( fbe, book );
     save_schedXactions( fbe, book );
     save_budgets( fbe, book );
+    qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, &be_data );
 
     LEAVE ("book=%p", book);
 }

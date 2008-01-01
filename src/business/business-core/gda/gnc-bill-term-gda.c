@@ -75,17 +75,23 @@ set_invisible( gpointer data, gpointer value )
 	GncBillTerm* term = GNC_BILLTERM(data);
 	gboolean b = GPOINTER_TO_INT(value);
 
+	g_return_if_fail( term != NULL );
+
 	if( b ) {
 		gncBillTermMakeInvisible( term );
 	}
 }
 
-static GncBillTerm*
+static void
 load_single_billterm( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncBillTerm* pBillTerm;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -99,8 +105,6 @@ load_single_billterm( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pBillTerm) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBillTerm) );
-
-    return pBillTerm;
 }
 
 static void
@@ -108,7 +112,11 @@ load_all_billterms( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -122,15 +130,38 @@ load_all_billterms( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_billterm( be, pModel, r );
+            load_single_billterm( be, pModel, r );
 		}
     }
 }
 
 /* ================================================================= */
 static void
+write_single_billterm( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_BILLTERM(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+    gnc_gda_save_billterm( be, term_p );
+}
+
+static void
+write_billterms( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, write_single_billterm, (gpointer)be );
+}
+
+/* ================================================================= */
+static void
 create_billterm_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -138,13 +169,16 @@ create_billterm_tables( GncGdaBackend* be )
 void
 gnc_gda_save_billterm( GncGdaBackend* be, QofInstance* inst )
 {
-    GncBillTerm* v = GNC_BILLTERM(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( !GNC_IS_BILLTERM(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_BILLTERM, v,
+                        GNC_ID_BILLTERM, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -160,14 +194,20 @@ gnc_gda_save_billterm( GncGdaBackend* be, QofInstance* inst )
 static void
 load_billterm_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	GncBillTerm* term = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -177,8 +217,8 @@ load_billterm_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		term = gncBillTermLookup( be->primary_book, pGuid );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, term, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, term, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)term );
     }
@@ -197,7 +237,9 @@ gnc_billterm_gda_initialize( void )
         GNC_ID_BILLTERM,
         gnc_gda_save_billterm,				/* commit */
         load_all_billterms,					/* initial_load */
-        create_billterm_tables				/* create_tables */
+        create_billterm_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_billterms						/* write */
     };
 
     qof_object_register_backend( GNC_ID_BILLTERM, GNC_GDA_BACKEND, &be_data );

@@ -45,24 +45,31 @@ typedef GncOwner* (*OwnerGetterFunc)( const gpointer );
 static void
 load_owner( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gchar* buf;
 	GncOwnerType type;
     GUID guid;
-	QofBook* book = be->primary_book;
+	QofBook* book;
 	GncOwner owner;
 
-    buf = g_strdup_printf( "%s_type", table->col_name );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+	book = be->primary_book;
+    buf = g_strdup_printf( "%s_type", table_row->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
 	type = (GncOwnerType)g_value_get_int( val );
     g_free( buf );
-    buf = g_strdup_printf( "%s_guid", table->col_name );
+    buf = g_strdup_printf( "%s_guid", table_row->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
     g_free( buf );
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( !gda_value_is_null( val ) ) {
         string_to_guid( g_value_get_string( val ), &guid );
     }
@@ -116,8 +123,8 @@ load_owner( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     	PWARN("Invalid owner type: %d\n", type );
 	}
 
-	if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, &owner, NULL );
+	if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, &owner, NULL );
 	} else {
     	(*setter)( pObject, &owner );
 	}
@@ -129,6 +136,12 @@ get_gvalue_owner( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoint
 {
     OwnerGetterFunc getter;
     GncOwner* owner;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -150,6 +163,12 @@ get_gvalue_owner_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	GncOwnerType type;
 	QofInstance* inst = NULL;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
 
     memset( &value, 0, sizeof( GValue ) );
     get_gvalue_owner( be, obj_name, pObject, table_row, &value );
@@ -214,6 +233,12 @@ get_gvalue_owner_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
     GdaQueryCondition* sub_cond;
     GdaQueryCondition* cond;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     memset( &value, 0, sizeof( GValue ) );
     get_gvalue_owner( be, obj_name, pObject, table_row, &value );
     cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_NODE_AND );
@@ -274,6 +299,11 @@ create_owner_col( GdaServerProvider* server, GdaConnection* cnn,
     const gchar* dbms_type;
     gchar* buf;
 	const col_cvt_t* subtable_row;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn, G_TYPE_INT );
     buf = g_strdup_printf( "%s_type", table_row->col_name );

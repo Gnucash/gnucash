@@ -59,12 +59,16 @@ static col_cvt_t col_table[] =
 	{ NULL },
 };
 
-static GncOrder*
+static void
 load_single_order( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncOrder* pOrder;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -78,8 +82,6 @@ load_single_order( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pOrder) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pOrder) );
-
-    return pOrder;
 }
 
 static void
@@ -87,7 +89,11 @@ load_all_orders( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -101,7 +107,7 @@ load_all_orders( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_order( be, pModel, r );
+            load_single_order( be, pModel, r );
 		}
     }
 }
@@ -110,6 +116,8 @@ load_all_orders( GncGdaBackend* be )
 static void
 create_order_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -117,13 +125,16 @@ create_order_tables( GncGdaBackend* be )
 static void
 save_order( GncGdaBackend* be, QofInstance* inst )
 {
-    GncOrder* v = GNC_ORDER(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_ORDER(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_ORDER, v,
+                        GNC_ID_ORDER, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -136,17 +147,62 @@ save_order( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+order_should_be_saved( GncOrder *order )
+{
+    const char *id;
+
+	g_return_val_if_fail( order != NULL, FALSE );
+
+    /* make sure this is a valid order before we save it -- should have an ID */
+    id = gncOrderGetID( order );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+
+static void
+write_single_order( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_ORDER(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( order_should_be_saved( GNC_ORDER(term_p) ) ) {
+    	save_order( be, term_p );
+	}
+}
+
+static void
+write_orders( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_ORDER, be->primary_book, write_single_order, (gpointer)be );
+}
+
+/* ================================================================= */
 static void
 load_order_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	GncOrder* order = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -156,8 +212,8 @@ load_order_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		order = gncOrderLookup( be->primary_book, pGuid );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, order, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, order, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)order );
     }
@@ -176,7 +232,9 @@ gnc_order_gda_initialize( void )
         GNC_ID_ORDER,
         save_order,						/* commit */
         load_all_orders,				/* initial_load */
-        create_order_tables				/* create_tables */
+        create_order_tables,			/* create_tables */
+		NULL, NULL, NULL,
+		write_orders					/* write */
     };
 
     qof_object_register_backend( GNC_ID_ORDER, GNC_GDA_BACKEND, &be_data );

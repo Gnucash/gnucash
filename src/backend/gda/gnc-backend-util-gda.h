@@ -55,6 +55,7 @@ typedef struct GncGdaBackend_struct GncGdaBackend;
  *
  * commit()			- commit an object to the db
  * initial_load()	- load stuff when new db opened
+ * create_tables()  - create any db tables
  */
 #define GNC_GDA_BACKEND	"gnc:gda:1"
 #define GNC_GDA_BACKEND_VERSION	1
@@ -69,6 +70,7 @@ typedef struct
   gpointer	(*compile_query)( GncGdaBackend* pBackend, QofQuery* pQuery );
   void		(*run_query)( GncGdaBackend* pBackend, gpointer pQuery );
   void		(*free_query)( GncGdaBackend* pBackend, gpointer pQuery );
+  void		(*write)( GncGdaBackend* pBackend );
 } GncGdaDataType_t;
 
 // Type for conversion of db row to object.

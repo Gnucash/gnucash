@@ -71,12 +71,16 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-static GncCustomer*
+static void
 load_single_customer( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID customer_guid;
 	GncCustomer* pCustomer;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     customer_guid = *guid;
@@ -90,8 +94,6 @@ load_single_customer( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pCustomer) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pCustomer) );
-
-    return pCustomer;
 }
 
 static void
@@ -99,7 +101,11 @@ load_all_customers( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -113,7 +119,7 @@ load_all_customers( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_customer( be, pModel, r );
+            load_single_customer( be, pModel, r );
 		}
     }
 }
@@ -122,6 +128,8 @@ load_all_customers( GncGdaBackend* be )
 static void
 create_customer_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -129,13 +137,16 @@ create_customer_tables( GncGdaBackend* be )
 static void
 save_customer( GncGdaBackend* be, QofInstance* inst )
 {
-    GncCustomer* customer = GNC_CUSTOMER(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_CUSTOMER(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_CUSTOMER, customer,
+                        GNC_ID_CUSTOMER, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -148,6 +159,45 @@ save_customer( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+customer_should_be_saved( GncCustomer *customer )
+{
+    const char *id;
+
+	g_return_val_if_fail( customer != NULL, FALSE );
+
+    /* Make sure this is a valid customer before we save it -- should have an ID */
+    id = gncCustomerGetID( customer );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+
+static void
+write_single_customer( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_CUSTOMER(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( customer_should_be_saved( GNC_CUSTOMER(term_p) ) ) {
+    	save_customer( be, term_p );
+	}
+}
+
+static void
+write_customers( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_CUSTOMER, be->primary_book, write_single_customer, (gpointer)be );
+}
+
+/* ================================================================= */
 void
 gnc_customer_gda_initialize( void )
 {
@@ -157,7 +207,9 @@ gnc_customer_gda_initialize( void )
         GNC_ID_CUSTOMER,
         save_customer,						/* commit */
         load_all_customers,					/* initial_load */
-        create_customer_tables				/* create_tables */
+        create_customer_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_customers						/* write */
     };
 
     qof_object_register_backend( GNC_ID_CUSTOMER, GNC_GDA_BACKEND, &be_data );

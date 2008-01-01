@@ -74,12 +74,16 @@ static col_cvt_t col_table[] =
 	{ NULL }
 };
 
-static GncInvoice*
+static void
 load_single_invoice( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID v_guid;
 	GncInvoice* pInvoice;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     v_guid = *guid;
@@ -93,8 +97,6 @@ load_single_invoice( GncGdaBackend* be, GdaDataModel* pModel, int row )
                         qof_instance_get_slots( QOF_INSTANCE(pInvoice) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pInvoice) );
-
-    return pInvoice;
 }
 
 static void
@@ -102,7 +104,11 @@ load_all_invoices( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+    QofBook* pBook;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -116,7 +122,7 @@ load_all_invoices( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_invoice( be, pModel, r );
+            load_single_invoice( be, pModel, r );
 		}
     }
 }
@@ -125,6 +131,8 @@ load_all_invoices( GncGdaBackend* be )
 static void
 create_invoice_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -132,16 +140,20 @@ create_invoice_tables( GncGdaBackend* be )
 static void
 save_invoice( GncGdaBackend* be, QofInstance* inst )
 {
-    GncInvoice* v = GNC_INVOICE(inst);
     const GUID* guid;
+	GncInvoice* invoice = GNC_INVOICE(inst);
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_INVOICE(inst) );
 
     // Ensure the commodity is in the db
-    gnc_gda_save_commodity( be, gncInvoiceGetCurrency( v ) );
+    gnc_gda_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_INVOICE, v,
+                        GNC_ID_INVOICE, inst,
                         col_table );
 
     // Now, commit or delete any slots
@@ -154,17 +166,62 @@ save_invoice( GncGdaBackend* be, QofInstance* inst )
 }
 
 /* ================================================================= */
+static gboolean
+invoice_should_be_saved( GncInvoice *invoice )
+{
+    const char *id;
+
+	g_return_val_if_fail( invoice != NULL, FALSE );
+
+    /* make sure this is a valid invoice before we save it -- should have an ID */
+    id = gncInvoiceGetID( invoice );
+    if( id == NULL || *id == '\0' ) {
+        return FALSE;
+	}
+
+    return TRUE;
+}
+
+static void
+write_single_invoice( QofInstance *term_p, gpointer be_p )
+{
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
+
+	g_return_if_fail( term_p != NULL );
+	g_return_if_fail( GNC_IS_INVOICE(term_p) );
+	g_return_if_fail( be_p != NULL );
+
+	if( invoice_should_be_saved( GNC_INVOICE(term_p) ) ) {
+    	save_invoice( be, term_p );
+	}
+}
+
+static void
+write_invoices( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_object_foreach( GNC_ID_INVOICE, be->primary_book, write_single_invoice, (gpointer)be );
+}
+
+/* ================================================================= */
 static void
 load_invoice_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	GncInvoice* invoice = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -174,8 +231,8 @@ load_invoice_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		invoice = gncInvoiceLookup( be->primary_book, pGuid );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, invoice, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, invoice, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)invoice );
     }
@@ -194,7 +251,9 @@ gnc_invoice_gda_initialize( void )
         GNC_ID_INVOICE,
         save_invoice,						/* commit */
         load_all_invoices,					/* initial_load */
-        create_invoice_tables				/* create_tables */
+        create_invoice_tables,				/* create_tables */
+		NULL, NULL, NULL,
+		write_invoices						/* write */
     };
 
     qof_object_register_backend( GNC_ID_INVOICE, GNC_GDA_BACKEND, &be_data );
