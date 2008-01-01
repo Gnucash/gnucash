@@ -83,10 +83,15 @@ typedef struct {
 static gpointer
 get_parent( gpointer pObject, const QofParam* param )
 {
-    const Account* pAccount = GNC_ACCOUNT(pObject);
-    const Account* pParent = gnc_account_get_parent( pAccount );
+    const Account* pAccount;
+    const Account* pParent;
     const GUID* parent_guid;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_ACCOUNT(pObject), NULL );
+
+    pAccount = GNC_ACCOUNT(pObject);
+    pParent = gnc_account_get_parent( pAccount );
     if( pParent == NULL ) {
         parent_guid = NULL;
     } else {
@@ -99,11 +104,16 @@ get_parent( gpointer pObject, const QofParam* param )
 static void 
 set_parent( gpointer pObject, gpointer pValue )
 {
-    Account* pAccount = GNC_ACCOUNT(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
+    Account* pAccount;
+    QofBook* pBook;
     GUID* guid = (GUID*)pValue;
     Account* pParent;
     
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_ACCOUNT(pObject) );
+
+    pAccount = GNC_ACCOUNT(pObject);
+    pBook = qof_instance_get_book( QOF_INSTANCE(pAccount) );
     if( guid != NULL ) {
         pParent = xaccAccountLookup( guid, pBook );
         if( pParent != NULL ) {
@@ -118,6 +128,9 @@ set_parent_guid( gpointer pObject, gpointer pValue )
 	account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
     GUID* guid = (GUID*)pValue;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
 	s->guid = *guid;
 }
 
@@ -128,6 +141,9 @@ load_balances( GncGdaBackend* be, Account* pAccount )
 	gnc_numeric cleared_balance;
 	gnc_numeric reconciled_balance;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pAccount != NULL );
+
 	gnc_gda_get_account_balances( be, pAccount, &start_balance, &cleared_balance, &reconciled_balance );
 
     g_object_set( pAccount,
@@ -137,13 +153,18 @@ load_balances( GncGdaBackend* be, Account* pAccount )
                 NULL);
 }
 
-static Account*
+static void
 load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 				GList** l_accounts_needing_parents )
 {
     const GUID* guid;
     GUID acc_guid;
 	Account* pAccount;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( l_accounts_needing_parents != NULL );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     acc_guid = *guid;
@@ -167,8 +188,6 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
 		gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, s, parent_col_table );
 		*l_accounts_needing_parents = g_list_prepend( *l_accounts_needing_parents, s );
 	}
-
-    return pAccount;
 }
 
 static void
@@ -176,8 +195,13 @@ load_all_accounts( GncGdaBackend* be )
 {
     static GdaQuery* query = NULL;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
-    gnc_commodity_table* pTable = gnc_commodity_table_get_table( pBook );
+    QofBook* pBook;
+    gnc_commodity_table* pTable;
+
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
+    pTable = gnc_commodity_table_get_table( pBook );
 
     /* First time, create the query */
     if( query == NULL ) {
@@ -189,12 +213,11 @@ load_all_accounts( GncGdaBackend* be )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
-        Account* pAccount;
         Account* parent;
 		GList* l_accounts_needing_parents = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            pAccount = load_single_account( be, pModel, r, &l_accounts_needing_parents );
+            load_single_account( be, pModel, r, &l_accounts_needing_parents );
         }
 
 		/* While there are items on the list of accounts needing parents,
@@ -230,7 +253,7 @@ load_all_accounts( GncGdaBackend* be )
                 if( root == NULL ) {
                     root = gnc_account_create_root( pBook );
                 }
-                gnc_account_append_child( root, pAccount ); 
+                gnc_account_append_child( root, s->pAccount ); 
 			}
 		}
     }
@@ -240,6 +263,8 @@ load_all_accounts( GncGdaBackend* be )
 static void
 create_account_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -249,6 +274,10 @@ gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_ACCOUNT(inst) );
 
     // If there is no commodity yet, this might be because a new account name has been entered directly
     // into the register and an account window will be opened.  The account info is not complete yet,
@@ -277,14 +306,20 @@ gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst )
 static void
 load_account_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	Account* account = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -294,8 +329,8 @@ load_account_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		account = xaccAccountLookup( pGuid, be->primary_book );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, account, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, account, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)account );
     }

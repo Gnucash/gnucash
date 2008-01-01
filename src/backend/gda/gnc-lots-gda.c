@@ -45,14 +45,13 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static gpointer get_lot_account( gpointer pObject, const QofParam* param );
 static void set_lot_account( gpointer pObject, gpointer pValue );
-static gpointer get_lot_is_closed( gpointer pObject, const QofParam* param );
 static void set_lot_is_closed( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",         CT_GUID,   0, COL_NNUL, "guid" },
-    { "account_guid", CT_GUID,   0, COL_NNUL, NULL, NULL, get_lot_account,   set_lot_account },
-    { "is_closed",    CT_STRING, 1, COL_NNUL, NULL, NULL, get_lot_is_closed, set_lot_is_closed },
+    { "guid",         CT_GUID,    0, COL_NNUL, "guid" },
+    { "account_guid", CT_GUID,    0, COL_NNUL, NULL, NULL, get_lot_account,   set_lot_account },
+    { "is_closed",    CT_BOOLEAN, 0, COL_NNUL, NULL, NULL, (QofAccessFunc)gnc_lot_is_closed, set_lot_is_closed },
     { NULL }
 };
 
@@ -61,8 +60,12 @@ static gpointer
 get_lot_account( gpointer pObject, const QofParam* param )
 {
     const GNCLot* lot = GNC_LOT(pObject);
-    const Account* pAccount = gnc_lot_get_account( lot );
+    const Account* pAccount;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_LOT(pObject), NULL );
+
+    pAccount = gnc_lot_get_account( lot );
     return (gpointer)qof_instance_get_guid( QOF_INSTANCE(pAccount) );
 }
 
@@ -70,36 +73,39 @@ static void
 set_lot_account( gpointer pObject, gpointer pValue )
 {
     GNCLot* lot = GNC_LOT(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
+    QofBook* pBook;
     GUID* guid = (GUID*)pValue;
-    Account* pAccount = xaccAccountLookup( guid, pBook );
+    Account* pAccount;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_LOT(pObject) );
+	g_return_if_fail( pValue != NULL );
+
+    pBook = qof_instance_get_book( QOF_INSTANCE(lot) );
+    pAccount = xaccAccountLookup( guid, pBook );
     xaccAccountInsertLot( pAccount, lot );
-}
-
-static gpointer
-get_lot_is_closed( gpointer pObject, const QofParam* param )
-{
-    GNCLot* lot = GNC_LOT(pObject);
-    static gboolean is_closed; 
-
-    is_closed = gnc_lot_is_closed( lot );
-    return &is_closed;
 }
 
 static void
 set_lot_is_closed( gpointer pObject, gpointer pValue )
 {
     GNCLot* lot = GNC_LOT(pObject);
-    const gboolean* pBoolean = (const gboolean*)pValue;
+    gboolean closed = GPOINTER_TO_INT(pValue);
 
-    lot->is_closed = *pBoolean;
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_LOT(pObject) );
+
+    lot->is_closed = closed;
 }
 
-static GNCLot*
+static void
 load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
 	GNCLot* lot;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     lot = gnc_lot_new( be->primary_book );
 
@@ -108,8 +114,6 @@ load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row )
                             qof_instance_get_slots( QOF_INSTANCE(lot) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(lot) );
-
-    return lot;
 }
 
 static void
@@ -117,6 +121,8 @@ load_all_lots( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
+
+	g_return_if_fail( be != NULL );
 
     if( query == NULL ) {
         query = gnc_gda_create_select_query( be, TABLE_NAME );
@@ -126,10 +132,9 @@ load_all_lots( GncGdaBackend* be )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
-        GNCLot* lot;
 
         for( r = 0; r < numRows; r++ ) {
-            lot = load_single_lot( be, pModel, r );
+            load_single_lot( be, pModel, r );
         }
     }
 }
@@ -138,6 +143,8 @@ load_all_lots( GncGdaBackend* be )
 static void
 create_lots_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -146,12 +153,14 @@ create_lots_tables( GncGdaBackend* be )
 static void
 commit_lot( GncGdaBackend* be, QofInstance* inst )
 {
-    GNCLot* lot = GNC_LOT(inst);
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_LOT(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         TABLE_NAME,
-                        GNC_ID_LOT, lot,
+                        GNC_ID_LOT, inst,
                         col_table );
 
     // Now, commit any slots
@@ -163,14 +172,20 @@ commit_lot( GncGdaBackend* be, QofInstance* inst )
 static void
 load_lot_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	GNCLot* lot = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -180,8 +195,8 @@ load_lot_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		lot = gnc_lot_lookup( pGuid, be->primary_book );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, lot, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, lot, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)lot );
     }

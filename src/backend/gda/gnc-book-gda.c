@@ -65,8 +65,12 @@ static gpointer
 get_root_account_guid( gpointer pObject, const QofParam* param )
 {
     GNCBook* book = QOF_BOOK(pObject);
-    const Account* root = gnc_book_get_root_account( book );
+    const Account* root;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( QOF_IS_BOOK(pObject), NULL );
+
+    root = gnc_book_get_root_account( book );
     return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
 }
 
@@ -74,9 +78,14 @@ static void
 set_root_account_guid( gpointer pObject, gpointer pValue )
 {
     GNCBook* book = QOF_BOOK(pObject);
-    const Account* root = gnc_book_get_root_account( book );
+    const Account* root;
     GUID* guid = (GUID*)pValue;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( QOF_IS_BOOK(pObject) );
+	g_return_if_fail( pValue != NULL );
+
+    root = gnc_book_get_root_account( book );
     qof_instance_set_guid( QOF_INSTANCE(root), guid );
 }
 
@@ -84,8 +93,12 @@ static gpointer
 get_root_template_guid( gpointer pObject, const QofParam* param )
 {
     const GNCBook* book = QOF_BOOK(pObject);
-    const Account* root = gnc_book_get_template_root( book );
+    const Account* root;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( QOF_IS_BOOK(pObject), NULL );
+
+    root = gnc_book_get_template_root( book );
     return (gpointer)qof_instance_get_guid( QOF_INSTANCE(root) );
 }
 
@@ -94,8 +107,13 @@ set_root_template_guid( gpointer pObject, gpointer pValue )
 {
     GNCBook* book = QOF_BOOK(pObject);
     GUID* guid = (GUID*)pValue;
-    Account* root = gnc_book_get_template_root( book );
+    Account* root;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( QOF_IS_BOOK(pObject) );
+	g_return_if_fail( pValue != NULL );
+
+    root = gnc_book_get_template_root( book );
     if( root == NULL ) {
         root = xaccMallocAccount( book );
         xaccAccountBeginEdit( root );
@@ -107,12 +125,16 @@ set_root_template_guid( gpointer pObject, gpointer pValue )
 }
 
 /* ================================================================= */
-static GNCBook*
+static void
 load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID book_guid;
 	GNCBook* pBook;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     book_guid = *guid;
@@ -127,8 +149,6 @@ load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
                             qof_instance_get_slots( QOF_INSTANCE(pBook) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBook) );
-
-    return pBook;
 }
 
 static void
@@ -136,7 +156,8 @@ load_all_books( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+
+	g_return_if_fail( be != NULL );
 
     if( query == NULL ) {
         query = gnc_gda_create_select_query( be, BOOK_TABLE );
@@ -151,7 +172,7 @@ load_all_books( GncGdaBackend* be )
    	    	gnc_gda_save_book( be, QOF_INSTANCE(be->primary_book) );
 		} else {
 			// Otherwise, load the 1st book.
-            (void)load_single_book( be, pModel, 0 );
+            load_single_book( be, pModel, 0 );
 		}
     }
 }
@@ -160,6 +181,8 @@ load_all_books( GncGdaBackend* be )
 static void
 create_book_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, BOOK_TABLE, col_table );
 }
 
@@ -167,13 +190,16 @@ create_book_tables( GncGdaBackend* be )
 void
 gnc_gda_save_book( GncGdaBackend* be, QofInstance* inst )
 {
-    GNCBook* pBook = QOF_BOOK(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( QOF_IS_BOOK(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
                         BOOK_TABLE,
-                        GNC_ID_BOOK, pBook,
+                        GNC_ID_BOOK, inst,
                         col_table );
 
     // Delete old slot info

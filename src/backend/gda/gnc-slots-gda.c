@@ -105,6 +105,8 @@ get_obj_guid( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+
     return (gpointer)pInfo->guid;
 }
 
@@ -119,6 +121,8 @@ get_path( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+
     return (gpointer)pInfo->path->str;
 }
 
@@ -126,6 +130,9 @@ static void
 set_path( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
 
     pInfo->path = g_string_new( (gchar*)pValue );
 }
@@ -135,6 +142,8 @@ get_slot_type( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+
     return (gpointer)kvp_value_get_type( pInfo->pKvpValue );
 }
 
@@ -142,6 +151,9 @@ static void
 set_slot_type( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
 
     pInfo->value_type = (KvpValueType)pValue;
 }
@@ -151,6 +163,8 @@ get_int64_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     static gint64 i64_val;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GINT64 ) {
         i64_val = kvp_value_get_gint64( pInfo->pKvpValue );
@@ -165,6 +179,9 @@ set_int64_val( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
     if( pInfo->value_type == KVP_TYPE_GINT64 ) {
         kvp_frame_set_gint64( pInfo->pKvpFrame, pInfo->path->str, *(gint64*)pValue );
     }
@@ -174,6 +191,8 @@ static gpointer
 get_string_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_STRING ) {
         return (gpointer)kvp_value_get_string( pInfo->pKvpValue );
@@ -187,6 +206,9 @@ set_string_val( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
     if( pInfo->value_type == KVP_TYPE_STRING ) {
         kvp_frame_set_string( pInfo->pKvpFrame, pInfo->path->str, (const gchar*)pValue );
     }
@@ -197,6 +219,8 @@ get_double_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     static double d_val;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_DOUBLE ) {
         d_val = kvp_value_get_double( pInfo->pKvpValue );
@@ -211,6 +235,9 @@ set_double_val( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
     if( pInfo->value_type == KVP_TYPE_DOUBLE ) {
         kvp_frame_set_double( pInfo->pKvpFrame, pInfo->path->str, *(double*)pValue );
     }
@@ -221,6 +248,8 @@ get_timespec_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_val_if_fail( pObject != NULL, gnc_dmy2timespec( 1, 1, 1970 ) );
+
 //if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_TIMESPEC ) {
     return kvp_value_get_timespec( pInfo->pKvpValue );
 }
@@ -229,6 +258,8 @@ static void
 set_timespec_val( gpointer pObject, Timespec ts )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_if_fail( pObject != NULL );
 
     if( pInfo->value_type == KVP_TYPE_TIMESPEC ) {
         kvp_frame_set_timespec( pInfo->pKvpFrame, pInfo->path->str, ts );
@@ -239,6 +270,8 @@ static gpointer
 get_guid_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GUID ) {
         return (gpointer)kvp_value_get_guid( pInfo->pKvpValue );
@@ -252,6 +285,9 @@ set_guid_val( gpointer pObject, gpointer pValue )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
     if( pInfo->value_type == KVP_TYPE_GUID ) {
         kvp_frame_set_guid( pInfo->pKvpFrame, pInfo->path->str, (GUID*)pValue );
     }
@@ -261,6 +297,8 @@ static gnc_numeric
 get_numeric_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
+
+	g_return_val_if_fail( pObject != NULL, gnc_numeric_zero() );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_NUMERIC ) {
         return kvp_value_get_numeric( pInfo->pKvpValue );
@@ -274,6 +312,8 @@ set_numeric_val( gpointer pObject, gnc_numeric value )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+
     if( pInfo->value_type == KVP_TYPE_NUMERIC ) {
         kvp_frame_set_numeric( pInfo->pKvpFrame, pInfo->path->str, value );
     }
@@ -283,8 +323,13 @@ static void
 save_slot( const gchar* key, KvpValue* value, gpointer data )
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
-    gint curlen = pSlot_info->path->len;
+    gint curlen;
 
+	g_return_if_fail( key != NULL );
+	g_return_if_fail( value != NULL );
+	g_return_if_fail( data != NULL );
+
+    curlen = pSlot_info->path->len;
     pSlot_info->pKvpValue = value;
     if( curlen != 0 ) {
         g_string_append( pSlot_info->path, "/" );
@@ -307,6 +352,10 @@ gnc_gda_slots_save( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+	g_return_if_fail( pFrame != NULL );
+
     /* First, delete the old slots for this object */
     gnc_gda_slots_delete( be, guid );
 
@@ -322,6 +371,9 @@ gnc_gda_slots_delete( GncGdaBackend* be, const GUID* guid )
 {
     slot_info_t slot_info;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+
     slot_info.be = be;
     slot_info.guid = guid;
     (void)gnc_gda_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
@@ -332,6 +384,11 @@ static void
 load_slot( GncGdaBackend* be, GdaDataModel* pModel, gint row, KvpFrame* pFrame )
 {
     slot_info_t slot_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pFrame != NULL );
 
     slot_info.be = be;
     slot_info.pKvpFrame = pFrame;
@@ -351,11 +408,14 @@ gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
     GdaObject* ret;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     gchar* field_name;
-
     static GdaQuery* query = NULL;
     GdaQueryCondition* cond;
     GdaQueryField* key_value;
     GValue value;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+	g_return_if_fail( pFrame != NULL );
 
     guid_to_string_buff( guid, guid_buf );
 
@@ -415,6 +475,8 @@ gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
 static void
 create_slots_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 

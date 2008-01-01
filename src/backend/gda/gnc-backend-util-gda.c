@@ -63,6 +63,10 @@ gnc_gda_add_field_to_query( GdaQuery* query, const gchar* col_name, const GValue
     GdaQueryField* field;
     GdaQueryField* field_value;
 
+	g_return_if_fail( query != NULL );
+	g_return_if_fail( col_name != NULL );
+	g_return_if_fail( value != NULL );
+
     field = gda_query_field_field_new( query, col_name );
     gda_query_field_set_visible( field, TRUE );
 
@@ -83,6 +87,10 @@ gnc_gda_create_condition_from_field( GdaQuery* query, const gchar* col_name,
     GdaQueryCondition* cond;
     GdaQueryField* key;
     GdaQueryField* key_value;
+
+	g_return_val_if_fail( query != NULL, NULL );
+	g_return_val_if_fail( col_name != NULL, NULL );
+	g_return_val_if_fail( value != NULL, NULL );
 
     cond = gda_query_condition_new( query, GDA_QUERY_CONDITION_LEAF_EQUAL );
 
@@ -122,6 +130,9 @@ gnc_gda_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
 {
     QofAccessFunc getter;
 
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+
 	if( (table_row->flags & COL_AUTOINC) != 0 ) {
 		getter = get_autoinc_id;
     } else if( table_row->param_name != NULL ) {
@@ -137,19 +148,25 @@ gnc_gda_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row )
 static void
 load_string( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     const gchar* s;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         s = NULL;
     } else {
         s = g_value_get_string( val );
     }
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, s, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, s, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)s );
     }
@@ -161,6 +178,12 @@ get_gvalue_string( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     QofAccessFunc getter;
     gchar* s;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 	if( table_row->gobj_param_name != NULL ) {
@@ -181,6 +204,12 @@ get_gvalue_string_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_string( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -190,6 +219,12 @@ get_gvalue_string_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
 
     get_gvalue_string( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name,
@@ -201,6 +236,11 @@ create_string_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_STRING );
@@ -216,19 +256,25 @@ static col_type_handler_t string_handler
 static void
 load_int( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gint int_value;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         int_value = 0;
     } else {
         int_value = g_value_get_int( val );
     }
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, int_value, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
     } else {
     	(*setter)( pObject, GINT_TO_POINTER(int_value) );
     }
@@ -240,6 +286,12 @@ get_gvalue_int( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     gint int_value;
     QofAccessFunc getter;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -255,6 +307,12 @@ get_gvalue_int_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_int( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -265,6 +323,12 @@ get_gvalue_int_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_int( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -274,6 +338,11 @@ create_int_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
@@ -289,19 +358,25 @@ static col_type_handler_t int_handler =
 static void
 load_boolean( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gint int_value;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         int_value = 0;
     } else {
         int_value = g_value_get_int( val );
     }
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, int_value, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
     } else {
     	(*setter)( pObject, GINT_TO_POINTER(int_value) );
     }
@@ -313,6 +388,12 @@ get_gvalue_boolean( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     gint int_value;
     QofAccessFunc getter;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -328,6 +409,12 @@ get_gvalue_boolean_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_int( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -338,6 +425,12 @@ get_gvalue_boolean_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_int( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -347,6 +440,11 @@ create_boolean_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
@@ -362,12 +460,18 @@ static col_type_handler_t boolean_handler =
 static void
 load_int64( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gint64 i64_value;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         (*setter)( pObject, NULL );
     } else {    
@@ -383,6 +487,12 @@ get_gvalue_int64( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoint
     gint64* pInt64;
     gint64 i64_value;
     QofAccessFunc getter;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
     getter = gnc_gda_get_getter( obj_name, table_row );
@@ -400,6 +510,12 @@ get_gvalue_int64_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_int64( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -410,6 +526,12 @@ get_gvalue_int64_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_int64( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -419,6 +541,11 @@ create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
@@ -434,12 +561,18 @@ static col_type_handler_t int64_handler =
 static void
 load_double( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gdouble d_value;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         (*setter)( pObject, (gpointer)NULL );
     } else {
@@ -455,6 +588,12 @@ get_gvalue_double( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoin
     QofAccessFunc getter;
     gdouble* pDouble;
     gdouble d_value;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -473,6 +612,12 @@ get_gvalue_double_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_double( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -483,6 +628,12 @@ get_gvalue_double_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_double( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -492,6 +643,11 @@ create_double_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
@@ -507,21 +663,27 @@ static col_type_handler_t double_handler =
 static void
 load_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
         string_to_guid( g_value_get_string( val ), &guid );
         pGuid = &guid;
     }
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, pGuid, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, pGuid, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)pGuid );
     }
@@ -534,6 +696,12 @@ get_gvalue_guid( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointe
     QofAccessFunc getter;
     const GUID* guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -556,6 +724,12 @@ get_gvalue_guid_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_guid( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -566,6 +740,12 @@ get_gvalue_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_guid( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -574,6 +754,11 @@ static void
 create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
+
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
                     "char", GUID_ENCODING_LENGTH, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
@@ -591,6 +776,12 @@ get_gvalue_objectref_guid( const GncGdaBackend* be, QofIdTypeConst obj_name, con
     const GUID* guid = NULL;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	QofInstance* inst;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
 
@@ -616,6 +807,12 @@ gnc_gda_get_gvalue_objectref_guid_for_query( const GncGdaBackend* be, QofIdTypeC
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_objectref_guid( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -626,6 +823,12 @@ gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* be, QofIdTypeConst 
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_objectref_guid( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -634,6 +837,11 @@ void
 gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
+
     gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
                     "char", GUID_ENCODING_LENGTH, table_row->flags | (pkey ? COL_PKEY : 0) );
 }
@@ -644,13 +852,19 @@ typedef Timespec (*TimespecAccessFunc)( const gpointer );
 static void
 load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GDate* date;
     Timespec ts;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         (*setter)( pObject, NULL );
     } else {
@@ -689,6 +903,12 @@ get_gvalue_timespec( const GncGdaBackend* be, QofIdTypeConst obj_name,
     gint y, m, d;
     gchar iso8601_buf[33];
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
+
     memset( value, 0, sizeof( GValue ) );
 
     getter = (TimespecAccessFunc)gnc_gda_get_getter( obj_name, table_row );
@@ -708,6 +928,12 @@ get_gvalue_timespec_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_timespec( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -718,6 +944,12 @@ get_gvalue_timespec_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     get_gvalue_timespec( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
 }
@@ -727,6 +959,11 @@ create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
 {
     const gchar* dbms_type;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_DATE );
@@ -741,12 +978,18 @@ static col_type_handler_t timespec_handler =
 static void
 load_date( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GDate* date;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
 		date = g_date_new_dmy( 1, 1, 1970 );
         (*setter)( pObject, date );
@@ -781,6 +1024,12 @@ get_gvalue_date( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointe
     GDate* date;
     QofAccessFunc getter;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
+
     memset( value, 0, sizeof( GValue ) );
 
     getter = gnc_gda_get_getter( obj_name, table_row );
@@ -797,6 +1046,12 @@ get_gvalue_date_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     GValue value;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     get_gvalue_date( be, obj_name, pObject, table_row, &value );
     gnc_gda_add_field_to_query( query, table_row->col_name, &value );
 }
@@ -806,6 +1061,12 @@ get_gvalue_date_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query )
 {
     GValue value;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
 
     get_gvalue_date( be, obj_name, pObject, table_row, &value );
     return gnc_gda_create_condition_from_field( query, table_row->col_name, &value );
@@ -818,6 +1079,8 @@ static col_type_handler_t date_handler =
 static gint64
 get_integer_value( const GValue* value )
 {
+	g_return_val_if_fail( value != NULL, 0 );
+
 	if( G_VALUE_HOLDS_INT(value) ) {
 		return g_value_get_int( value );
 	} else if( G_VALUE_HOLDS_UINT(value) ) {
@@ -843,7 +1106,7 @@ typedef void (*NumericSetterFunc)( gpointer, gnc_numeric );
 static void
 load_numeric( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     gchar* buf;
@@ -852,7 +1115,13 @@ load_numeric( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     gboolean isNull = FALSE;
 	NumericSetterFunc n_setter = (NumericSetterFunc)setter;
 
-    buf = g_strdup_printf( "%s_num", table->col_name );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    buf = g_strdup_printf( "%s_num", table_row->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
     g_free( buf );
     if( gda_value_is_null( val ) ) {
@@ -861,7 +1130,7 @@ load_numeric( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     } else {
         num = get_integer_value( val );
     }
-    buf = g_strdup_printf( "%s_denom", table->col_name );
+    buf = g_strdup_printf( "%s_denom", table_row->col_name );
     val = gda_data_model_get_value_at_col_name( pModel, buf, row );
     g_free( buf );
     if( gda_value_is_null( val ) ) {
@@ -883,6 +1152,12 @@ get_gvalue_numeric( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoi
     NumericGetterFunc getter;
     gnc_numeric n;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( value != NULL );
+
     memset( value, 0, sizeof( GValue ) );
 
     getter = (NumericGetterFunc)gnc_gda_get_getter( obj_name, table_row );
@@ -900,6 +1175,12 @@ get_gvalue_numeric_for_query( const GncGdaBackend* be, QofIdTypeConst obj_name,
     GValue denom_value;
     gnc_numeric* n;
     gchar* s;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
 
     memset( &value, 0, sizeof( GValue ) );
     memset( &num_value, 0, sizeof( GValue ) );
@@ -935,6 +1216,12 @@ get_gvalue_numeric_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
     GdaQueryCondition* denom_cond;
     GdaQueryCondition* cond;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table_row != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
+
     memset( &value, 0, sizeof( GValue ) );
     memset( &num_value, 0, sizeof( GValue ) );
     memset( &denom_value, 0, sizeof( GValue ) );
@@ -969,6 +1256,11 @@ create_numeric_col( GdaServerProvider* server, GdaConnection* cnn,
     const gchar* dbms_type;
     gchar* buf;
 
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( table_row != NULL );
+
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn,
                                                             G_TYPE_INT64 );
     buf = g_strdup_printf( "%s_num", table_row->col_name );
@@ -991,6 +1283,9 @@ static GHashTable* g_columnTypeHash = NULL;
 void
 gnc_gda_register_col_type_handler( const gchar* colType, const col_type_handler_t* handler )
 {
+	g_return_if_fail( colType != NULL );
+	g_return_if_fail( handler != NULL );
+
 	if( g_columnTypeHash == NULL ) {
 		g_columnTypeHash = g_hash_table_new( g_str_hash, g_str_equal );
 	}
@@ -1002,6 +1297,8 @@ static col_type_handler_t*
 get_handler( const gchar* col_type )
 {
     col_type_handler_t* pHandler;
+
+	g_return_val_if_fail( pHandler != NULL, NULL );
 
 	pHandler = g_hash_table_lookup( g_columnTypeHash, col_type );
 	if( pHandler == NULL ) {
@@ -1033,6 +1330,9 @@ retrieve_guid( gpointer pObject, gpointer pValue )
     GUID* pGuid = (GUID*)pObject;
     GUID* guid = (GUID*)pValue;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pValue != NULL );
+
 	memcpy( pGuid, guid, sizeof( GUID ) );
 }
 
@@ -1048,6 +1348,10 @@ const GUID*
 gnc_gda_load_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
 	static GUID guid;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pModel != NULL, NULL );
+	g_return_val_if_fail( row >= 0, NULL );
 
     gnc_gda_load_object( be, pModel, row, NULL, &guid, guid_table );
 
@@ -1066,6 +1370,10 @@ gnc_gda_load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 {
     static GUID guid;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pModel != NULL, NULL );
+	g_return_val_if_fail( row >= 0, NULL );
+
     gnc_gda_load_object( be, pModel, row, NULL, &guid, tx_guid_table );
 
     return &guid;
@@ -1074,23 +1382,30 @@ gnc_gda_load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 void
 gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
                     QofIdTypeConst obj_name, gpointer pObject,
-                    const col_cvt_t* table )
+                    const col_cvt_t* table_row )
 {
     int col;
     QofSetterFunc setter;
     col_type_handler_t* pHandler;
 
-    for( col = 0; table[col].col_name != NULL; col++ ) {
-		if( (table[col].flags & COL_AUTOINC) != 0 ) {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    for( col = 0; table_row[col].col_name != NULL; col++ ) {
+		if( (table_row[col].flags & COL_AUTOINC) != 0 ) {
 			setter = set_autoinc_id;
-        } else if( table[col].param_name != NULL ) {
+        } else if( table_row[col].param_name != NULL ) {
             setter = qof_class_get_parameter_setter( obj_name,
-                                                    table[col].param_name );
+                                                    table_row[col].param_name );
         } else {
-            setter = table[col].setter;
+            setter = table_row[col].setter;
         }
-        pHandler = get_handler( table[col].col_type );
-        pHandler->load_fn( be, pModel, row, setter, pObject, &table[col] );
+        pHandler = get_handler( table_row[col].col_type );
+        pHandler->load_fn( be, pModel, row, setter, pObject, &table_row[col] );
     }
 }
 
@@ -1101,6 +1416,9 @@ gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name )
     GdaQuery* query;
     GdaQueryTarget* target;
     GdaQueryField* allFields;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
 
     /* SELECT */
     query = gda_query_new( be->pDict );
@@ -1125,8 +1443,10 @@ GdaObject*
 gnc_gda_execute_query( const GncGdaBackend* be, GdaQuery* query )
 {
     GError* error = NULL;
-
     GdaObject* ret;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( query != NULL, NULL );
 
     ret = gda_query_execute( query, NULL, FALSE, &error );
 
@@ -1141,8 +1461,10 @@ GdaQuery*
 gnc_gda_create_query_from_sql( const GncGdaBackend* be, const gchar* sql )
 {
     GError* error = NULL;
-
     GdaQuery* query;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( sql != NULL, NULL );
 
     query = gda_query_new_from_sql( be->pDict, sql, &error );
     if( query == NULL ) {
@@ -1157,6 +1479,9 @@ gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
 {
 	GdaQuery* query;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( sql != NULL, NULL );
+
 	query = gnc_gda_create_query_from_sql( be, sql );
 	if( query != NULL ) {
 	    return gnc_gda_execute_query( be, query );
@@ -1170,8 +1495,10 @@ gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 {
     GError* error = NULL;
     int count = 0;
-
     GdaObject* ret;
+
+	g_return_val_if_fail( be != NULL, 0 );
+	g_return_val_if_fail( sql != NULL, 0 );
 
     ret = gnc_gda_execute_sql( be, sql );
     if( GDA_IS_DATA_MODEL(ret) ) {
@@ -1190,8 +1517,10 @@ int
 gnc_gda_execute_query_get_count( const GncGdaBackend* be, GdaQuery* query )
 {
     int count = 0;
-
     GdaObject* ret;
+
+	g_return_val_if_fail( be != NULL, 0 );
+	g_return_val_if_fail( query != NULL, 0 );
 
     ret = gnc_gda_execute_query( be, query );
     if( GDA_IS_DATA_MODEL(ret) ) {
@@ -1209,6 +1538,12 @@ get_col_gvalue_for_query( GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     col_type_handler_t* pHandler;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
+
     pHandler = get_handler( table_row->col_type );
     pHandler->get_gvalue_query_fn( be, obj_name, pObject, table_row, query );
 }
@@ -1220,6 +1555,12 @@ get_col_gvalue_for_condition( const GncGdaBackend* be, QofIdTypeConst obj_name,
 {
     col_type_handler_t* pHandler;
     GdaQueryCondition* cond;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( obj_name != NULL );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+	g_return_if_fail( query != NULL );
 
     pHandler = get_handler( table_row->col_type );
     cond = pHandler->get_gvalue_cond_fn( be, obj_name, pObject, table_row, query );
@@ -1235,6 +1576,12 @@ gnc_gda_object_is_it_in_db( const GncGdaBackend* be, const gchar* table_name,
 {
     GdaQuery* query;
     int count;
+
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( obj_name != NULL, FALSE );
+	g_return_val_if_fail( pObject != NULL, FALSE );
+	g_return_val_if_fail( table != NULL, FALSE );
 
     /* SELECT * FROM */
     query = gnc_gda_create_select_query( be, table_name );
@@ -1258,6 +1605,12 @@ gnc_gda_do_db_operation( GncGdaBackend* be,
                         const col_cvt_t* table )
 {
     GdaQuery* pQuery;
+
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( obj_name != NULL, FALSE );
+	g_return_val_if_fail( pObject != NULL, FALSE );
+	g_return_val_if_fail( table != NULL, FALSE );
 
     if( op == OP_DB_ADD_OR_UPDATE ) {
         if( gnc_gda_object_is_it_in_db( be, table_name, obj_name, pObject, table ) ) {
@@ -1292,8 +1645,14 @@ gnc_gda_build_insert_query( GncGdaBackend* be,
 {
     GdaQuery* query;
     int col;
-
     GdaQueryTarget* target;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table != NULL, NULL );
+
 
     /* INSERT */
     query = gda_query_new( be->pDict );
@@ -1321,8 +1680,13 @@ gnc_gda_build_update_query( GncGdaBackend* be,
 {
     GdaQuery* query;
     int col;
-
     GdaQueryTarget* target;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table != NULL, NULL );
 
     /* UPDATE */
     query = gda_query_new( be->pDict );
@@ -1350,6 +1714,12 @@ gnc_gda_build_delete_query( GncGdaBackend* be,
     GdaQuery* query;
     GdaQueryTarget* target;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( table_name != NULL, NULL );
+	g_return_val_if_fail( obj_name != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( table != NULL, NULL );
+
     /* DELETE */
     query = gda_query_new( be->pDict );
     gda_query_set_query_type( query, GDA_QUERY_TYPE_DELETE );
@@ -1373,6 +1743,12 @@ gnc_gda_add_table_column( GdaServerProvider* server, GdaConnection* cnn,
 {
     xmlNodePtr array_row, array_value;
     gchar* buf;
+
+	g_return_if_fail( server != NULL );
+	g_return_if_fail( cnn != NULL );
+	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( arg != NULL );
+	g_return_if_fail( dbms_type != NULL );
 
     array_row = xmlNewChild( array_data, NULL, "gda_array_row", NULL );
     array_value = xmlNewChild( array_row, NULL, "gda_array_value", arg );
@@ -1410,8 +1786,12 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
     GdaServerOperation *op;
     GdaServerProvider *server;
     
+	g_return_val_if_fail( cnn != NULL, FALSE );
     g_return_val_if_fail( GDA_IS_CONNECTION(cnn), FALSE );
     g_return_val_if_fail( gda_connection_is_opened(cnn), FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
+	g_return_val_if_fail( error != NULL, FALSE );
     
     server = gda_connection_get_provider_obj( cnn );
     
@@ -1491,6 +1871,10 @@ void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
     GError* error = NULL;
     GdaDictDatabase* db;
     
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( table_name != NULL );
+	g_return_if_fail( col_table != NULL );
+
     db = gda_dict_get_database( be->pDict );
     table = gda_dict_database_get_table_by_name( db, table_name );
     if( !GDA_IS_DICT_TABLE(table) ) {

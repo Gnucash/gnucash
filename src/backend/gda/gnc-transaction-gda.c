@@ -113,6 +113,9 @@ get_split_reconcile_state( gpointer pObject, const QofParam* param )
     const Split* pSplit = GNC_SPLIT(pObject);
     static gchar c[2];
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_SPLIT(pObject), NULL );
+
     c[0] = xaccSplitGetReconcile( pSplit );
     c[1] = '\0';
     return (gpointer)c;
@@ -124,12 +127,19 @@ set_split_reconcile_state( gpointer pObject, gpointer pValue )
     Split* pSplit = GNC_SPLIT(pObject);
     const gchar* s = (const gchar*)pValue;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SPLIT(pObject) );
+	g_return_if_fail( pValue != NULL );
+
     xaccSplitSetReconcile( pSplit, s[0] );
 }
 
 static void 
 set_split_reconcile_date( gpointer pObject, Timespec ts )
 {
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SPLIT(pObject) );
+
     xaccSplitSetDateReconciledTS( GNC_SPLIT(pObject), &ts );
 }
 
@@ -137,6 +147,9 @@ static void
 retrieve_numeric_value( gpointer pObject, gnc_numeric value )
 {
     gnc_numeric* pResult = (gnc_numeric*)pObject;
+
+	g_return_if_fail( pObject != NULL );
+
     *pResult = value;
 }
 
@@ -151,7 +164,11 @@ static col_cvt_t quantity_table[] =
 static gnc_numeric
 get_gnc_numeric_from_row( GncGdaBackend* be, GdaDataModel* model, int row )
 {
-	gnc_numeric val;
+	gnc_numeric val = gnc_numeric_zero();
+
+	g_return_val_if_fail( be != NULL, val );
+	g_return_val_if_fail( model != NULL, val );
+	g_return_val_if_fail( row >= 0, val );
 
     gnc_gda_load_object( be, model, row, NULL, &val, quantity_table );
 
@@ -169,6 +186,9 @@ get_account_balance_from_query( GncGdaBackend* be, GdaQuery* query )
 {
 	gnc_numeric bal = gnc_numeric_zero();
     GdaObject* ret;
+
+	g_return_val_if_fail( be != NULL, bal );
+	g_return_val_if_fail( query != NULL, bal );
 
 	/* Execute the query */
     ret = gnc_gda_execute_query( be, query );
@@ -198,6 +218,12 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	GdaQuery* query;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gchar* sql;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pAccount != NULL );
+	g_return_if_fail( start_balance != NULL );
+	g_return_if_fail( cleared_balance != NULL );
+	g_return_if_fail( reconciled_balance != NULL );
 
     guid_to_string_buff( qof_instance_get_guid( pAccount ), guid_buf );
 
@@ -256,12 +282,16 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	g_free( sql );
 }
 
-static Split*
+static void
 load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID split_guid;
 	Split* pSplit;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     split_guid = *guid;
@@ -272,20 +302,13 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
     }
 
     /* If the split is dirty, don't overwrite it */
-    if( qof_instance_is_dirty( QOF_INSTANCE(pSplit) ) ) {
-        return pSplit;
-    }
-
-    gnc_gda_load_object( be, pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
-
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
+    if( !qof_instance_is_dirty( QOF_INSTANCE(pSplit) ) ) {
+    	gnc_gda_load_object( be, pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
+    	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
                             qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
+	}
 
     g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
-
-    //qof_instance_mark_clean( QOF_INSTANCE(pSplit) );
-
-    return pSplit;
 }
 
 static void
@@ -296,6 +319,9 @@ load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
     GdaQuery* query;
     GdaQueryCondition* cond;
     GValue value;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( tx_guid != NULL );
 
     guid_to_string_buff( tx_guid, guid_buf );
     memset( &value, 0, sizeof( GValue ) );
@@ -319,12 +345,16 @@ load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
     }
 }
 
-static Transaction*
+static void
 load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID tx_guid;
 	Transaction* pTx;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     tx_guid = *guid;
@@ -343,14 +373,15 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     xaccTransCommitEdit( pTx );
 
     g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
-
-    return pTx;
 }
 
 static void
 query_transactions( GncGdaBackend* be, GdaQuery* query )
 {
     GdaObject* ret;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( query != NULL );
 
     ret = gnc_gda_execute_query( be, query );
     if( GDA_IS_DATA_MODEL( ret ) ) {
@@ -371,6 +402,9 @@ load_tx_by_guid( GncGdaBackend* be, GUID* tx_guid )
 	gchar* sql;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( tx_guid != NULL );
+
     guid_to_string_buff( tx_guid, guid_buf );
 	sql = g_strdup_printf( "SELECT * FROM %s WHERE guid = %s", TRANSACTION_TABLE, guid_buf );
 	query = gnc_gda_create_query_from_sql( be, sql );
@@ -381,6 +415,8 @@ load_tx_by_guid( GncGdaBackend* be, GUID* tx_guid )
 static void
 create_transaction_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TRANSACTION_TABLE, tx_col_table );
     gnc_gda_create_table_if_needed( be, SPLIT_TABLE, split_col_table );
 }
@@ -391,6 +427,10 @@ delete_split_slots_cb( gpointer data, gpointer user_data )
     split_info_t* split_info = (split_info_t*)user_data;
     Split* pSplit = GNC_SPLIT(data);
 
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( GNC_IS_SPLIT(data) );
+	g_return_if_fail( user_data != NULL );
+
     gnc_gda_slots_delete( split_info->be,
                     qof_instance_get_guid( QOF_INSTANCE(pSplit) ) );
 }
@@ -399,6 +439,9 @@ static void
 delete_splits( GncGdaBackend* be, Transaction* pTx )
 {
     split_info_t split_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pTx != NULL );
 
     (void)gnc_gda_do_db_operation( be, OP_DB_DELETE, SPLIT_TABLE,
                                 SPLIT_TABLE, pTx, guid_col_table );
@@ -410,16 +453,17 @@ delete_splits( GncGdaBackend* be, Transaction* pTx )
 static void
 commit_split( GncGdaBackend* be, QofInstance* inst )
 {
-    Split* pSplit = GNC_SPLIT(inst);
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         SPLIT_TABLE,
-                        GNC_ID_SPLIT, pSplit,
+                        GNC_ID_SPLIT, inst,
                         split_col_table );
     gnc_gda_slots_save( be,
-                        qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
-                        qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
+                        qof_instance_get_guid( inst ),
+                        qof_instance_get_slots( inst ) );
 }
 
 static void
@@ -428,6 +472,10 @@ save_split_cb( gpointer data, gpointer user_data )
     split_info_t* split_info = (split_info_t*)user_data;
     Split* pSplit = GNC_SPLIT(data);
 
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( GNC_IS_SPLIT(data) );
+	g_return_if_fail( user_data != NULL );
+
     commit_split( split_info->be, QOF_INSTANCE(pSplit) );
 }
 
@@ -435,6 +483,10 @@ static void
 save_splits( GncGdaBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 {
     split_info_t split_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( tx_guid != NULL );
+	g_return_if_fail( pSplitList != NULL );
 
     split_info.be = be;
     split_info.guid = tx_guid;
@@ -446,6 +498,10 @@ gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
 {
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_TRANS(inst) );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );
@@ -481,12 +537,16 @@ gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
     }
 }
 
-void gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx )
+void
+gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx )
 {
     SplitList* splits;
     Split* s;
     QofBackend* qbe = (QofBackend*)be;
     
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pTx != NULL );
+
     splits = xaccTransGetSplitList( pTx );
     for( ; splits != NULL; splits = splits->next ) {
         s = GNC_SPLIT(splits->data);
@@ -499,13 +559,16 @@ void gnc_gda_transaction_commit_splits( GncGdaBackend* be, Transaction* pTx )
 static const GUID*
 get_guid_from_query( QofQuery* pQuery )
 {
-    GList* pOrTerms = qof_query_get_terms( pQuery );
+    GList* pOrTerms;
     GList* pAndTerms;
     GList* andTerm;
     QofQueryTerm* pTerm;
     QofQueryPredData* pPredData;
     GSList* pParamPath;
 
+	g_return_val_if_fail( pQuery != NULL, NULL );
+
+    pOrTerms = qof_query_get_terms( pQuery );
     pAndTerms = (GList*)pOrTerms->data;
     andTerm = pAndTerms->next;
     pTerm = (QofQueryTerm*)andTerm->data;
@@ -528,11 +591,13 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gchar* s;
-
-#if 1
 	GdaQuery* query;
 	GdaObject* results;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pQuery != NULL, NULL );
+
+#if 1
     acct_guid = get_guid_from_query( pQuery );
     guid_to_string_buff( acct_guid, guid_buf );
 	buf = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
@@ -653,8 +718,13 @@ static void
 run_split_query( GncGdaBackend* be, gpointer pQuery )
 {
     GdaQuery* query;
+    const gchar* sql;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pQuery != NULL );
+
 #if 1
-    const gchar* sql = (const gchar*)pQuery;
+    sql = (const gchar*)pQuery;
 
 	query = gnc_gda_create_query_from_sql( be, sql );
 #else
@@ -664,8 +734,11 @@ run_split_query( GncGdaBackend* be, gpointer pQuery )
 }
 
 static void
-free_split_query( GncGdaBackend* pBackend, gpointer pQuery )
+free_split_query( GncGdaBackend* be, gpointer pQuery )
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pQuery != NULL );
+
 #if 1
     g_free( pQuery );
 #else
@@ -677,14 +750,20 @@ free_split_query( GncGdaBackend* pBackend, gpointer pQuery )
 static void
 load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	Transaction* tx = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -694,8 +773,8 @@ load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		tx = xaccTransLookup( pGuid, be->primary_book );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, tx, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, tx, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)tx );
     }

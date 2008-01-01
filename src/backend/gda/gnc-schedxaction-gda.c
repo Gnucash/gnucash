@@ -86,6 +86,9 @@ get_autocreate( gpointer pObject, const QofParam* param )
     gboolean autoCreate;
     gboolean autoNotify;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
+
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     return GINT_TO_POINTER(autoCreate);
 }
@@ -96,6 +99,9 @@ set_autocreate( gpointer pObject, gpointer pValue )
     SchedXaction* pSx = GNC_SX(pObject);
     gboolean autoCreate;
     gboolean autoNotify;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SX(pObject) );
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     autoCreate = GPOINTER_TO_INT(pValue);
@@ -109,6 +115,9 @@ get_autonotify( gpointer pObject, const QofParam* param )
     gboolean autoCreate;
     gboolean autoNotify;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
+
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     return GINT_TO_POINTER(autoNotify);
 }
@@ -120,6 +129,9 @@ set_autonotify( gpointer pObject, gpointer pValue )
     gboolean autoCreate;
     gboolean autoNotify;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SX(pObject) );
+
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
     autoNotify = GPOINTER_TO_INT(pValue);
     xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
@@ -130,6 +142,9 @@ get_template_act_guid( gpointer pObject, const QofParam* param )
 {
     const SchedXaction* pSx = GNC_SX(pObject);
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
+
     return (gpointer)xaccAccountGetGUID( pSx->template_acct );
 }
 
@@ -137,10 +152,15 @@ static void
 set_template_act_guid( gpointer pObject, gpointer pValue )
 {
     SchedXaction* pSx = GNC_SX(pObject);
-    QofBook* pBook = qof_instance_get_book( QOF_INSTANCE(pSx) );
+    QofBook* pBook;
     GUID* guid = (GUID*)pValue;
 	Account* pAcct;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_SX(pObject) );
+	g_return_if_fail( pValue != NULL );
+
+    pBook = qof_instance_get_book( QOF_INSTANCE(pSx) );
 	pAcct = xaccAccountLookup( guid, pBook );
 	sx_set_template_account( pSx, pAcct );
 }
@@ -153,6 +173,10 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     GUID sx_guid;
 	SchedXaction* pSx;
 	GList* schedule = NULL;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pModel != NULL, NULL );
+	g_return_val_if_fail( row >= 0, NULL );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     sx_guid = *guid;
@@ -175,7 +199,8 @@ load_all_sxes( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+
+	g_return_if_fail( be != NULL );
 
     if( query == NULL ) {
         query = gnc_gda_create_select_query( be, SCHEDXACTION_TABLE );
@@ -192,7 +217,9 @@ load_all_sxes( GncGdaBackend* be )
             SchedXaction* sx;
 			
 			sx = load_single_sx( be, pModel, r );
-		    gnc_sxes_add_sx(sxes, sx);
+			if( sx != NULL ) {
+		    	gnc_sxes_add_sx(sxes, sx);
+			}
         }
     }
 }
@@ -201,6 +228,8 @@ load_all_sxes( GncGdaBackend* be )
 static void
 create_sx_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, SCHEDXACTION_TABLE, col_table );
 }
 
@@ -210,6 +239,10 @@ gnc_gda_save_schedxaction( GncGdaBackend* be, QofInstance* inst )
 {
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_SX(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),

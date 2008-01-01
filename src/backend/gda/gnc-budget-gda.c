@@ -60,13 +60,17 @@ static col_cvt_t col_table[] =
 };
 
 /* ================================================================= */
-static GncBudget*
+static void
 load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     const GUID* guid;
     GUID budget_guid;
 	GncBudget* pBudget;
 	Recurrence* r;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
 
     guid = gnc_gda_load_guid( be, pModel, row );
     budget_guid = *guid;
@@ -83,8 +87,6 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
                             qof_instance_get_slots( QOF_INSTANCE(pBudget) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
-
-    return pBudget;
 }
 
 static void
@@ -92,7 +94,8 @@ load_all_budgets( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
+
+	g_return_if_fail( be != NULL );
 
     if( query == NULL ) {
         query = gnc_gda_create_select_query( be, BUDGET_TABLE );
@@ -104,7 +107,7 @@ load_all_budgets( GncGdaBackend* be )
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            (void)load_single_budget( be, pModel, r );
+            load_single_budget( be, pModel, r );
         }
     }
 }
@@ -113,6 +116,8 @@ load_all_budgets( GncGdaBackend* be )
 static void
 create_budget_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, BUDGET_TABLE, col_table );
 }
 
@@ -122,6 +127,10 @@ gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_BUDGET(inst) );
 
     (void)gnc_gda_do_db_operation( be,
                         qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,

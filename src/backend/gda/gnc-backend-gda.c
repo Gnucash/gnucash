@@ -41,6 +41,7 @@
 #include "gnc-engine.h"
 #include "SX-book.h"
 #include "Recurrence.h"
+#include "gnc-budget.h"
 
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
@@ -101,18 +102,22 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 }
 
 static void
-gnc_gda_session_begin(QofBackend *be_start, QofSession *session, 
-                   const gchar *book_id,
-                   gboolean ignore_lock,
-				   gboolean create_if_nonexistent)
+gnc_gda_session_begin( QofBackend *be_start, QofSession *session, 
+	                   const gchar *book_id,
+                       gboolean ignore_lock,
+				       gboolean create_if_nonexistent )
 {
-    GncGdaBackend *be = (GncGdaBackend*) be_start;
+    GncGdaBackend *be = (GncGdaBackend*)be_start;
     GError* error = NULL;
     gda_backend be_data;
     gchar* book_info;
     gchar* dsn;
     gchar* username = "";
     gchar* password = "";
+
+	g_return_if_fail( be_start != NULL );
+	g_return_if_fail( session != NULL );
+	g_return_if_fail( book_id != NULL );
 
     ENTER (" ");
 
@@ -277,6 +282,9 @@ static void
 gnc_gda_session_end(QofBackend *be_start)
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
+
+	g_return_if_fail( be_start != NULL );
+
     ENTER (" ");
 
     if( be->pDict != NULL ) {
@@ -298,6 +306,8 @@ gnc_gda_session_end(QofBackend *be_start)
 static void
 gnc_gda_destroy_backend(QofBackend *be)
 {
+	g_return_if_fail( be != NULL );
+
     g_free( be );
 }
 
@@ -334,6 +344,9 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     GncGdaDataType_t* pData;
 	int i;
 
+	g_return_if_fail( be_start != NULL );
+	g_return_if_fail( book != NULL );
+
     ENTER( "be=%p, book=%p", be, book );
 
     g_assert( be->primary_book == NULL );
@@ -368,18 +381,20 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 static gint
 compare_namespaces(gconstpointer a, gconstpointer b)
 {
-  const gchar *sa = (const gchar *) a;
-  const gchar *sb = (const gchar *) b;
-  return(safe_strcmp(sa, sb));
+    const gchar *sa = (const gchar *) a;
+    const gchar *sb = (const gchar *) b;
+
+    return( safe_strcmp( sa, sb ) );
 }
 
 static gint
 compare_commodity_ids(gconstpointer a, gconstpointer b)
 {
-  const gnc_commodity *ca = (const gnc_commodity *) a;
-  const gnc_commodity *cb = (const gnc_commodity *) b;
-  return(safe_strcmp(gnc_commodity_get_mnemonic(ca),
-                     gnc_commodity_get_mnemonic(cb)));
+    const gnc_commodity *ca = (const gnc_commodity *) a;
+    const gnc_commodity *cb = (const gnc_commodity *) b;
+  
+    return( safe_strcmp( gnc_commodity_get_mnemonic( ca ),
+                     	 gnc_commodity_get_mnemonic( cb ) ) );
 }
 
 static void
@@ -388,6 +403,9 @@ save_commodities( GncGdaBackend* be, QofBook* book )
     gnc_commodity_table* tbl;
     GList* namespaces;
     GList* lp;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
 
     tbl = gnc_book_get_commodity_table( book );
     namespaces = gnc_commodity_table_get_namespaces( tbl );
@@ -402,7 +420,7 @@ save_commodities( GncGdaBackend* be, QofBook* book )
         comms = g_list_sort( comms, compare_commodity_ids );
 
         for( lp2 = comms; lp2 != NULL; lp2 = lp2->next ) {
-	    gnc_gda_save_commodity( be, GNC_COMMODITY(lp2->data) );
+	    	gnc_gda_save_commodity( be, GNC_COMMODITY(lp2->data) );
         }
     }
 }
@@ -412,6 +430,9 @@ save_account_tree( GncGdaBackend* be, Account* root )
 {
     GList* descendants;
     GList* node;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( root != NULL );
 
     descendants = gnc_account_get_descendants( root );
     for( node = descendants; node != NULL; node = g_list_next(node) ) {
@@ -423,6 +444,9 @@ save_account_tree( GncGdaBackend* be, Account* root )
 static void
 save_accounts( GncGdaBackend* be, QofBook* book )
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
+
     save_account_tree( be, gnc_book_get_root_account( book ) );
 }
 
@@ -431,12 +455,19 @@ write_budget( QofInstance* ent, gpointer data )
 {
     GncGdaBackend* be = (GncGdaBackend*)data;
 
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( ent != NULL );
+	g_return_if_fail( GNC_IS_BUDGET(ent) );
+
     gnc_gda_save_budget( be, ent );
 }
 
 static void
 save_budgets( GncGdaBackend* be, QofBook* book )
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
+
     qof_collection_foreach( qof_book_get_collection( book, GNC_ID_BUDGET ),
                             write_budget, be );
 }
@@ -446,6 +477,9 @@ save_price( GNCPrice* p, gpointer data )
 {
     GncGdaBackend* be = (GncGdaBackend*)data;
 
+	g_return_val_if_fail( p != NULL, FALSE );
+	g_return_val_if_fail( data != NULL, FALSE );
+
     gnc_gda_save_price( be, QOF_INSTANCE(p) );
 
     return TRUE;
@@ -454,7 +488,12 @@ save_price( GNCPrice* p, gpointer data )
 static void
 save_prices( GncGdaBackend* be, QofBook* book )
 {
-    GNCPriceDB* priceDB = gnc_book_get_pricedb( book );
+    GNCPriceDB* priceDB;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
+
+    priceDB = gnc_book_get_pricedb( book );
 
     gnc_pricedb_foreach_price( priceDB, save_price, be, TRUE );
 }
@@ -464,6 +503,9 @@ save_tx( Transaction* tx, gpointer data )
 {
     GncGdaBackend* be = (GncGdaBackend*)data;
 
+	g_return_val_if_fail( tx != NULL, 0 );
+	g_return_val_if_fail( data != NULL, 0 );
+
     gnc_gda_save_transaction( be, QOF_INSTANCE(tx) );
 
     return 0;
@@ -472,6 +514,9 @@ save_tx( Transaction* tx, gpointer data )
 static void
 save_transactions( GncGdaBackend* be, QofBook* book )
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
+	
     xaccAccountTreeForEachTransaction( gnc_book_get_root_account( book ),
                                        save_tx,
                                        (gpointer)be );
@@ -481,6 +526,9 @@ static void
 save_template_transactions( GncGdaBackend* be, QofBook* book )
 {
     Account* ra;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
 
     ra = gnc_book_get_template_root( book );
     if( gnc_account_n_descendants( ra ) > 0 ) {
@@ -494,6 +542,9 @@ save_schedXactions( GncGdaBackend* be, QofBook* book )
 {
     GList* schedXactions;
     SchedXaction* tmpSX;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
 
     schedXactions = gnc_book_get_schedxactions( book )->sx_list;
 
@@ -526,6 +577,9 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
     gint row;
     gint numTables;
     gda_backend be_data;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( book != NULL );
 
     ENTER ("book=%p, primary=%p", book, fbe->primary_book);
 
@@ -592,11 +646,15 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
 static void
 gnc_gda_begin_edit (QofBackend *be, QofInstance *inst)
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
 }
 
 static void
 gnc_gda_rollback_edit (QofBackend *be, QofInstance *inst)
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
 }
 
 static void
@@ -629,15 +687,16 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 	GError* error;
 	gboolean status;
 
-    ENTER( " " );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
 
     /* During initial load where objects are being created, don't commit
     anything */
-
     if( be->loading ) {
-		LEAVE( "" );
 	    return;
 	}
+
+    ENTER( " " );
 
     g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
              (inst->e_type ? inst->e_type : "(null)"),
@@ -711,11 +770,18 @@ convert_search_obj( QofIdType objType )
 static void
 handle_and_term( QofQueryTerm* pTerm, gchar* sql )
 {
-    GSList* pParamPath = qof_query_term_get_param_path( pTerm );
-    QofQueryPredData* pPredData = qof_query_term_get_pred_data( pTerm );
-    gboolean isInverted = qof_query_term_is_inverted( pTerm );
+    GSList* pParamPath;
+    QofQueryPredData* pPredData;
+    gboolean isInverted;
     GSList* name;
     gchar val[GUID_ENCODING_LENGTH+1];
+
+	g_return_if_fail( pTerm != NULL );
+	g_return_if_fail( sql != NULL );
+
+    pParamPath = qof_query_term_get_param_path( pTerm );
+    pPredData = qof_query_term_get_pred_data( pTerm );
+    isInverted = qof_query_term_is_inverted( pTerm );
 
     strcat( sql, "(" );
     if( isInverted ) {
@@ -803,7 +869,7 @@ compile_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
 	// Is this the right item?
     if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;
-    g_return_if_fail( !be_data->ok );
+    if( be_data->ok ) return;
 
     if( pData->compile_query != NULL ) {
         be_data->pQueryInfo->pCompiledQuery = (pData->compile_query)(
@@ -822,6 +888,9 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
     gchar sql[1000];
     gda_backend be_data;
     gnc_gda_query_info* pQueryInfo;
+
+	g_return_val_if_fail( pBEnd != NULL, NULL );
+	g_return_val_if_fail( pQuery != NULL, NULL );
 
 	ENTER( " " );
 
@@ -900,6 +969,9 @@ gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
     gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
     gda_backend be_data;
 
+	g_return_if_fail( pBEnd != NULL );
+	g_return_if_fail( pQuery != NULL );
+
 	ENTER( " " );
 
     // Try various objects first
@@ -947,6 +1019,8 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
     gnc_gda_query_info* pQueryInfo = (gnc_gda_query_info*)pQuery;
     gda_backend be_data;
 
+	g_return_if_fail( pBEnd != NULL );
+	g_return_if_fail( pQuery != NULL );
     g_return_if_fail( !be->in_query );
 
 	ENTER( " " );
@@ -1050,8 +1124,10 @@ gnc_gda_backend_new(void)
 }
 
 static void
-gnc_gda_provider_free (QofBackendProvider *prov)
+gnc_gda_provider_free( QofBackendProvider *prov )
 {
+	g_return_if_fail( prov != NULL );
+
     prov->provider_name = NULL;
     prov->access_method = NULL;
     g_free (prov);
@@ -1062,15 +1138,13 @@ gnc_gda_provider_free (QofBackendProvider *prov)
  *
  */
 static gboolean
-gnc_gda_check_sqlite_file(const gchar *path)
+gnc_gda_check_sqlite_file( const gchar *path )
 {
 	FILE* f;
 	gchar buf[50];
 
 	// BAD if the path is null
-	if( path == NULL ) {
-		return FALSE;
-	}
+	g_return_val_if_fail( path != NULL, FALSE );
 
 	if( g_str_has_suffix( path, ".db" ) ) {
 		f = g_fopen( path, "r" );

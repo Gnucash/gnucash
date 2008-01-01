@@ -89,6 +89,8 @@ get_obj_guid( gpointer pObject, const QofParam* param )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+
     return (gpointer)pInfo->guid;
 }
 
@@ -104,8 +106,10 @@ get_recurrence_mult( gpointer pObject, const QofParam* param )
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
     static guint m;
 	
-	m = pInfo->pRecurrence->mult;
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( pInfo->pRecurrence != NULL, NULL );
 
+	m = pInfo->pRecurrence->mult;
     return GUINT_TO_POINTER(m);
 }
 
@@ -115,6 +119,9 @@ set_recurrence_mult( gpointer pObject, gpointer pValue )
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
     guint m = GPOINTER_TO_UINT(pValue);
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pInfo->pRecurrence != NULL );
+
     pInfo->pRecurrence->mult = m;
 }
 
@@ -122,6 +129,9 @@ static gpointer
 get_recurrence_period_type( gpointer pObject, const QofParam* param )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( pInfo->pRecurrence != NULL, NULL );
 
     return (gpointer)recurrencePeriodTypeToString(
                             recurrenceGetPeriodType( pInfo->pRecurrence ) );
@@ -132,6 +142,10 @@ set_recurrence_period_type( gpointer pObject, gpointer pValue )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pInfo->pRecurrence != NULL );
+	g_return_if_fail( pValue != NULL );
+
     pInfo->pRecurrence->ptype = recurrencePeriodTypeFromString( (gchar*)pValue );
 }
 
@@ -140,6 +154,9 @@ get_recurrence_period_start( gpointer pObject, const QofParam* param )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
     static GDate date;
+
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( pInfo->pRecurrence != NULL, NULL );
 
     date = recurrenceGetDate( pInfo->pRecurrence );
     return (gpointer)&date;
@@ -151,6 +168,10 @@ set_recurrence_period_start( gpointer pObject, gpointer pValue )
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
     GDate* date = (GDate*)pValue;
 
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( pInfo->pRecurrence != NULL );
+	g_return_if_fail( pValue != NULL );
+
     pInfo->pRecurrence->start = *date;
 }
 
@@ -160,6 +181,10 @@ void
 gnc_gda_recurrence_save( GncGdaBackend* be, const GUID* guid, const Recurrence* r )
 {
     recurrence_info_t recurrence_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+	g_return_if_fail( r != NULL );
 
 	gnc_gda_recurrence_delete( be, guid );
 
@@ -175,6 +200,9 @@ gnc_gda_recurrence_save_list( GncGdaBackend* be, const GUID* guid, GList* schedu
 {
     recurrence_info_t recurrence_info;
 	GList* l;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
 
 	gnc_gda_recurrence_delete( be, guid );
 
@@ -192,6 +220,9 @@ gnc_gda_recurrence_delete( GncGdaBackend* be, const GUID* guid )
 {
     recurrence_info_t recurrence_info;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+
     recurrence_info.be = be;
     recurrence_info.guid = guid;
     (void)gnc_gda_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
@@ -202,6 +233,11 @@ static void
 load_recurrence( GncGdaBackend* be, GdaDataModel* pModel, gint row, Recurrence* r )
 {
     recurrence_info_t recurrence_info;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( r != NULL );
 
     recurrence_info.be = be;
 	recurrence_info.pRecurrence = r;
@@ -216,11 +252,13 @@ gnc_gda_set_recurrences_from_db( GncGdaBackend* be, const GUID* guid )
     GdaObject* ret;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
     gchar* field_name;
-
     static GdaQuery* query = NULL;
     GdaQueryCondition* cond;
     GdaQueryField* key_value;
     GValue value;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( guid != NULL, NULL );
 
     guid_to_string_buff( guid, guid_buf );
 
@@ -273,6 +311,10 @@ gnc_gda_recurrence_load( GncGdaBackend* be, const GUID* guid, Recurrence* pRecur
 {
 	GdaObject* ret;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+	g_return_if_fail( pRecurrence != NULL );
+
 	ret = gnc_gda_set_recurrences_from_db( be, guid );
     if( GDA_IS_DATA_MODEL( ret ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
@@ -294,6 +336,10 @@ gnc_gda_recurrence_load_list( GncGdaBackend* be, const GUID* guid, GList** pSche
 {
 	GdaObject* ret;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( guid != NULL );
+	g_return_if_fail( pSchedule != NULL );
+
 	ret = gnc_gda_set_recurrences_from_db( be, guid );
     if( GDA_IS_DATA_MODEL( ret ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
@@ -312,6 +358,8 @@ gnc_gda_recurrence_load_list( GncGdaBackend* be, const GUID* guid, GList** pSche
 static void
 create_recurrence_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 

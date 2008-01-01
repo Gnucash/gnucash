@@ -91,6 +91,9 @@ get_quote_source_name( gpointer pObject, const QofParam* param )
 {
     const gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
 
+	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( GNC_IS_COMMODITY(pObject), NULL );
+
     return (gpointer)gnc_quote_source_get_internal_name(
                             gnc_commodity_get_quote_source(pCommodity));
 }
@@ -101,6 +104,10 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
     gnc_commodity* pCommodity = GNC_COMMODITY(pObject);
     const gchar* quote_source_name = (const gchar*)pValue;
     gnc_quote_source* quote_source;
+
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( GNC_IS_COMMODITY(pObject) );
+	g_return_if_fail( pValue != NULL );
 
     quote_source = gnc_quote_source_lookup_by_internal( quote_source_name );
     gnc_commodity_set_quote_source( pCommodity, quote_source );
@@ -161,6 +168,8 @@ load_all_commodities( GncGdaBackend* be )
 static void
 create_commodities_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, COMMODITIES_TABLE, col_table );
 }
 
@@ -170,10 +179,14 @@ commit_commodity( GncGdaBackend* be, QofInstance* inst )
 {
     const GUID* guid;
 
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_COMMODITY(inst) );
+
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
                         COMMODITIES_TABLE,
-                        GNC_ID_COMMODITY, (gnc_commodity*)inst,
+                        GNC_ID_COMMODITY, inst,
                         col_table );
 
     // Delete old slot info
@@ -190,6 +203,9 @@ commit_commodity( GncGdaBackend* be, QofInstance* inst )
 static gboolean
 is_commodity_in_db( GncGdaBackend* be, gnc_commodity* pCommodity )
 {
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( pCommodity != NULL, FALSE );
+
     return gnc_gda_object_is_it_in_db( be, COMMODITIES_TABLE, GNC_ID_COMMODITY,
                                 pCommodity, col_table );
 }
@@ -197,6 +213,9 @@ is_commodity_in_db( GncGdaBackend* be, gnc_commodity* pCommodity )
 void
 gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
 {
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pCommodity != NULL );
+
     if( !is_commodity_in_db( be, pCommodity ) ) {
         commit_commodity( be, QOF_INSTANCE(pCommodity) );
     }
@@ -207,14 +226,20 @@ gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
 static void
 load_commodity_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             QofSetterFunc setter, gpointer pObject,
-            const col_cvt_t* table )
+            const col_cvt_t* table_row )
 {
     const GValue* val;
     GUID guid;
     const GUID* pGuid;
 	gnc_commodity* commodity = NULL;
 
-    val = gda_data_model_get_value_at_col_name( pModel, table->col_name, row );
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( pObject != NULL );
+	g_return_if_fail( table_row != NULL );
+
+    val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
         pGuid = NULL;
     } else {
@@ -224,8 +249,8 @@ load_commodity_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	if( pGuid != NULL ) {
 		commodity = gnc_commodity_find_commodity_by_guid( pGuid, be->primary_book );
 	}
-    if( table->gobj_param_name != NULL ) {
-		g_object_set( pObject, table->gobj_param_name, commodity, NULL );
+    if( table_row->gobj_param_name != NULL ) {
+		g_object_set( pObject, table_row->gobj_param_name, commodity, NULL );
     } else {
 		(*setter)( pObject, (const gpointer)commodity );
     }

@@ -65,6 +65,10 @@ load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
 	GNCPrice* pPrice;
 
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pModel != NULL, NULL );
+	g_return_val_if_fail( row >= 0, NULL );
+
     pPrice = gnc_price_create( be->primary_book );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_PRICE, pPrice, col_table );
@@ -79,9 +83,13 @@ load_all_prices( GncGdaBackend* be )
 {
     static GdaQuery* query;
     GdaObject* ret;
-    QofBook* pBook = be->primary_book;
-    GNCPriceDB* pPriceDB = gnc_book_get_pricedb( pBook );
+    QofBook* pBook;
+    GNCPriceDB* pPriceDB;
 
+	g_return_if_fail( be != NULL );
+
+    pBook = be->primary_book;
+    pPriceDB = gnc_book_get_pricedb( pBook );
     if( query == NULL ) {
         query = gnc_gda_create_select_query( be, TABLE_NAME );
     }
@@ -106,6 +114,8 @@ load_all_prices( GncGdaBackend* be )
 static void
 create_prices_tables( GncGdaBackend* be )
 {
+	g_return_if_fail( be != NULL );
+
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
 }
 
@@ -115,6 +125,10 @@ void
 gnc_gda_save_price( GncGdaBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( inst != NULL );
+	g_return_if_fail( GNC_IS_PRICE(inst) );
 
     /* Ensure commodity and currency are in the db */
     gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
