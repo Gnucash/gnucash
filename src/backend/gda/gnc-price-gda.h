@@ -33,6 +33,5 @@
 #include <gmodule.h>
 
 void gnc_gda_init_price_handler( void );
-void gnc_gda_save_price( GncGdaBackend* be, QofInstance* inst );
 
 #endif /* GNC_PRICE_GDA_H_ */

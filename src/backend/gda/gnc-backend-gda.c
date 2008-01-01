@@ -41,7 +41,6 @@
 #include "gnc-engine.h"
 #include "SX-book.h"
 #include "Recurrence.h"
-#include "gnc-budget.h"
 
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
@@ -88,16 +87,16 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 /* ================================================================= */
 
 static void
-create_tables_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
     GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
+    GncGdaBackend* be = be_p;
 
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+    g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
     if( pData->create_tables != NULL ) {
-        (pData->create_tables)( be_data->be );
+        (pData->create_tables)( be );
     }
 }
 
@@ -109,7 +108,6 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     GError* error = NULL;
-    gda_backend be_data;
     gchar* book_info;
     gchar* dsn;
     gchar* username = "";
@@ -262,10 +260,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     }
 
     // Call all object backends to create any required tables
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.inst = NULL;
-    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, &be_data );
+    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
 
     // Update the dictionary because new tables may exist
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
@@ -317,13 +312,13 @@ static const gchar* fixed_load_order[] =
 { GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, NULL };
 
 static void
-initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+initial_load_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
     GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
+    GncGdaBackend* be = be_p;
 	int i;
 
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+    g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
 	// Don't need to load anything if it has already been loaded with the fixed order
@@ -332,7 +327,7 @@ initial_load_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 	}
 
     if( pData->initial_load != NULL ) {
-        (pData->initial_load)( be_data->be );
+        (pData->initial_load)( be );
     }
 }
 
@@ -340,7 +335,6 @@ static void
 gnc_gda_load(QofBackend* be_start, QofBook *book)
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
-    gda_backend be_data;
     GncGdaDataType_t* pData;
 	int i;
 
@@ -363,10 +357,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 		}
     }
 
-    be_data.ok = FALSE;
-    be_data.be = be;
-    be_data.inst = NULL;
-    qof_object_foreach_backend( GNC_GDA_BACKEND, initial_load_cb, &be_data );
+    qof_object_foreach_backend( GNC_GDA_BACKEND, initial_load_cb, be );
 
     be->loading = FALSE;
 
@@ -398,7 +389,7 @@ compare_commodity_ids(gconstpointer a, gconstpointer b)
 }
 
 static void
-save_commodities( GncGdaBackend* be, QofBook* book )
+write_commodities( GncGdaBackend* be, QofBook* book )
 {
     gnc_commodity_table* tbl;
     GList* namespaces;
@@ -426,7 +417,7 @@ save_commodities( GncGdaBackend* be, QofBook* book )
 }
 
 static void
-save_account_tree( GncGdaBackend* be, Account* root )
+write_account_tree( GncGdaBackend* be, Account* root )
 {
     GList* descendants;
     GList* node;
@@ -442,64 +433,15 @@ save_account_tree( GncGdaBackend* be, Account* root )
 }
 
 static void
-save_accounts( GncGdaBackend* be, QofBook* book )
+write_accounts( GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
 
-    save_account_tree( be, gnc_book_get_root_account( book ) );
-}
-
-static void
-write_budget( QofInstance* ent, gpointer data )
-{
-    GncGdaBackend* be = (GncGdaBackend*)data;
-
-	g_return_if_fail( data != NULL );
-	g_return_if_fail( ent != NULL );
-	g_return_if_fail( GNC_IS_BUDGET(ent) );
-
-    gnc_gda_save_budget( be, ent );
-}
-
-static void
-save_budgets( GncGdaBackend* be, QofBook* book )
-{
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
-
-    qof_collection_foreach( qof_book_get_collection( book, GNC_ID_BUDGET ),
-                            write_budget, be );
-}
-
-static gboolean
-save_price( GNCPrice* p, gpointer data )
-{
-    GncGdaBackend* be = (GncGdaBackend*)data;
-
-	g_return_val_if_fail( p != NULL, FALSE );
-	g_return_val_if_fail( data != NULL, FALSE );
-
-    gnc_gda_save_price( be, QOF_INSTANCE(p) );
-
-    return TRUE;
-}
-
-static void
-save_prices( GncGdaBackend* be, QofBook* book )
-{
-    GNCPriceDB* priceDB;
-
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
-
-    priceDB = gnc_book_get_pricedb( book );
-
-    gnc_pricedb_foreach_price( priceDB, save_price, be, TRUE );
+    write_account_tree( be, gnc_book_get_root_account( be->primary_book ) );
 }
 
 static int
-save_tx( Transaction* tx, gpointer data )
+write_tx( Transaction* tx, gpointer data )
 {
     GncGdaBackend* be = (GncGdaBackend*)data;
 
@@ -512,41 +454,38 @@ save_tx( Transaction* tx, gpointer data )
 }
 
 static void
-save_transactions( GncGdaBackend* be, QofBook* book )
+write_transactions( GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
 	
-    xaccAccountTreeForEachTransaction( gnc_book_get_root_account( book ),
-                                       save_tx,
+    xaccAccountTreeForEachTransaction( gnc_book_get_root_account( be->primary_book ),
+                                       write_tx,
                                        (gpointer)be );
 }
 
 static void
-save_template_transactions( GncGdaBackend* be, QofBook* book )
+write_template_transactions( GncGdaBackend* be )
 {
     Account* ra;
 
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
 
-    ra = gnc_book_get_template_root( book );
+    ra = gnc_book_get_template_root( be->primary_book );
     if( gnc_account_n_descendants( ra ) > 0 ) {
-        save_account_tree( be, ra );
-        xaccAccountTreeForEachTransaction( ra, save_tx, (gpointer)be );
+        write_account_tree( be, ra );
+        xaccAccountTreeForEachTransaction( ra, write_tx, (gpointer)be );
     }
 }
 
 static void
-save_schedXactions( GncGdaBackend* be, QofBook* book )
+write_schedXactions( GncGdaBackend* be )
 {
     GList* schedXactions;
     SchedXaction* tmpSX;
 
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( book != NULL );
 
-    schedXactions = gnc_book_get_schedxactions( book )->sx_list;
+    schedXactions = gnc_book_get_schedxactions( be->primary_book )->sx_list;
 
     for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
         tmpSX = schedXactions->data;
@@ -555,36 +494,35 @@ save_schedXactions( GncGdaBackend* be, QofBook* book )
 }
 
 static void
-write_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
+write_cb( const gchar* type, gpointer data_p, gpointer be_p )
 {
     GncGdaDataType_t* pData = data_p;
-    gda_backend* be_data = be_data_p;
+    GncGdaBackend* be = (GncGdaBackend*)be_p;
 
-    g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
+    g_return_if_fail( type != NULL && data_p != NULL && be_p != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
 
     if( pData->write != NULL ) {
-        (pData->write)( be_data->be );
+        (pData->write)( be );
     }
 }
 
 static void
-gnc_gda_sync_all( QofBackend* be, QofBook *book )
+gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 {
-    GncGdaBackend *fbe = (GncGdaBackend *) be;
+    GncGdaBackend* be = (GncGdaBackend*)fbe;
     GdaDataModel* tables;
     GError* error = NULL;
     gint row;
     gint numTables;
-    gda_backend be_data;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
 
-    ENTER ("book=%p, primary=%p", book, fbe->primary_book);
+    ENTER ("book=%p, primary=%p", book, be->primary_book);
 
     /* Destroy the current contents of the database */
-    tables = gda_connection_get_schema( fbe->pConnection,
+    tables = gda_connection_get_schema( be->pConnection,
                                         GDA_CONNECTION_SCHEMA_TABLES,
                                         NULL,
                                         &error );
@@ -599,7 +537,7 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
         row_value = gda_data_model_get_value_at( tables, 0, row );
         table_name = g_value_get_string( row_value );
         error = NULL;
-        if( !gda_drop_table( fbe->pConnection, table_name, &error ) ) {
+        if( !gda_drop_table( be->pConnection, table_name, &error ) ) {
             g_critical( "Unable to drop table %s\n", table_name );
             if( error != NULL ) {
                 g_critical( "SQL error: %s\n", error->message );
@@ -608,33 +546,28 @@ gnc_gda_sync_all( QofBackend* be, QofBook *book )
     }
 
     // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( fbe->pDict, 0, NULL, &error );
+    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
         g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     /* Create new tables */
-    be_data.ok = FALSE;
-    be_data.be = fbe;
-    be_data.inst = NULL;
-    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, &be_data );
+    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
 
     // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( fbe->pDict, 0, NULL, &error );
+    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
         g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     /* Save all contents */
-    //save_commodities( fbe, book );
-	gnc_gda_save_book( fbe, QOF_INSTANCE(book) );
-    save_accounts( fbe, book );
-    save_prices( fbe, book );
-    save_transactions( fbe, book );
-    save_template_transactions( fbe, book );
-    save_schedXactions( fbe, book );
-    save_budgets( fbe, book );
-    qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, &be_data );
+    //write_commodities( be, book );
+	gnc_gda_save_book( be, QOF_INSTANCE(book) );
+    write_accounts( be );
+    write_transactions( be );
+    write_template_transactions( be );
+    write_schedXactions( be );
+    qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, be );
 
     LEAVE ("book=%p", book);
 }

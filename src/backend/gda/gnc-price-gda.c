@@ -121,8 +121,8 @@ create_prices_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 
-void
-gnc_gda_save_price( GncGdaBackend* be, QofInstance* inst )
+static void
+save_price( GncGdaBackend* be, QofInstance* inst )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
 
@@ -141,6 +141,31 @@ gnc_gda_save_price( GncGdaBackend* be, QofInstance* inst )
                         col_table );
 }
 
+static gboolean
+write_price( GNCPrice* p, gpointer data )
+{
+    GncGdaBackend* be = (GncGdaBackend*)data;
+
+	g_return_val_if_fail( p != NULL, FALSE );
+	g_return_val_if_fail( data != NULL, FALSE );
+
+    save_price( be, QOF_INSTANCE(p) );
+
+    return TRUE;
+}
+
+static void
+write_prices( GncGdaBackend* be )
+{
+    GNCPriceDB* priceDB;
+
+	g_return_if_fail( be != NULL );
+
+    priceDB = gnc_book_get_pricedb( be->primary_book );
+
+    gnc_pricedb_foreach_price( priceDB, write_price, be, TRUE );
+}
+
 /* ================================================================= */
 void
 gnc_gda_init_price_handler( void )
@@ -149,9 +174,11 @@ gnc_gda_init_price_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_PRICE,
-        gnc_gda_save_price,            /* commit */
+        save_price,         		/* commit */
         load_all_prices,            /* initial_load */
-        create_prices_tables    /* create tables */
+        create_prices_tables,    	/* create tables */
+		NULL, NULL, NULL,
+		write_prices				/* write */
     };
 
     qof_object_register_backend( GNC_ID_PRICE, GNC_GDA_BACKEND, &be_data );

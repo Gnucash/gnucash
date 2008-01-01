@@ -122,8 +122,8 @@ create_budget_tables( GncGdaBackend* be )
 }
 
 /* ================================================================= */
-void
-gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst )
+static void
+save_budget( GncGdaBackend* be, QofInstance* inst )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
@@ -149,6 +149,27 @@ gnc_gda_save_budget( GncGdaBackend* be, QofInstance* inst )
     }
 }
 
+static void
+write_budget( QofInstance* ent, gpointer data )
+{
+    GncGdaBackend* be = (GncGdaBackend*)data;
+
+	g_return_if_fail( data != NULL );
+	g_return_if_fail( ent != NULL );
+	g_return_if_fail( GNC_IS_BUDGET(ent) );
+
+    save_budget( be, ent );
+}
+
+static void
+write_budgets( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+    qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_BUDGET ),
+                            write_budget, be );
+}
+
 /* ================================================================= */
 void
 gnc_gda_init_budget_handler( void )
@@ -157,9 +178,11 @@ gnc_gda_init_budget_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_BUDGET,
-        gnc_gda_save_budget,                /* commit */
-        load_all_budgets,                /* initial_load */
-        create_budget_tables        /* create_tables */
+        save_budget,    		        /* commit */
+        load_all_budgets,               /* initial_load */
+        create_budget_tables,	        /* create_tables */
+		NULL, NULL, NULL,
+		write_budgets					/* write */
     };
 
     qof_object_register_backend( GNC_ID_BUDGET, GNC_GDA_BACKEND, &be_data );
