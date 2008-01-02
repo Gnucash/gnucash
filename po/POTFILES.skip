@@ -12,6 +12,3 @@ src/backend/file/io-gncbin-r.c
 src/import-export/binary-import/binary-import.glade
 src/import-export/binary-import/druid-commodity.c
 src/import-export/binary-import/gncmod-binary-import.c
-# The features in import-export/qif are still unused.
-src/import-export/qif/qif-defaults.c
-src/import-export/qif/qif-parse.c
