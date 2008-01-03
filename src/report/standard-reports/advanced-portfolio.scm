@@ -320,6 +320,10 @@
 	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
 	(apply-basis-ratio b-list (gnc:make-gnc-numeric 1 1) value-ratio))
       )
+
+     ;; when all else fails, just send the b-list back
+     (else
+      b-list)
      )
     )
 
