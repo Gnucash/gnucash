@@ -137,23 +137,11 @@ load_all_billterms( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-write_single_billterm( QofInstance *term_p, gpointer be_p )
-{
-    GncGdaBackend* be = (GncGdaBackend*)be_p;
-
-	g_return_if_fail( term_p != NULL );
-	g_return_if_fail( GNC_IS_BILLTERM(term_p) );
-	g_return_if_fail( be_p != NULL );
-
-    gnc_gda_save_billterm( be, term_p );
-}
-
-static void
 write_billterms( GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, write_single_billterm, (gpointer)be );
+    qof_object_foreach( GNC_ID_BILLTERM, be->primary_book, (QofInstanceForeachCB)gnc_gda_save_billterm, (gpointer)be );
 }
 
 /* ================================================================= */
@@ -167,13 +155,13 @@ create_billterm_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 void
-gnc_gda_save_billterm( GncGdaBackend* be, QofInstance* inst )
+gnc_gda_save_billterm( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( !GNC_IS_BILLTERM(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),

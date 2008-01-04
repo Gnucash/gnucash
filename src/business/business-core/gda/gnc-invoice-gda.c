@@ -138,14 +138,14 @@ create_invoice_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_invoice( GncGdaBackend* be, QofInstance* inst )
+save_invoice( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 	GncInvoice* invoice = GNC_INVOICE(inst);
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_INVOICE(inst) );
+	g_return_if_fail( be != NULL );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, gncInvoiceGetCurrency( invoice ) );
@@ -192,7 +192,7 @@ write_single_invoice( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( invoice_should_be_saved( GNC_INVOICE(term_p) ) ) {
-    	save_invoice( be, term_p );
+    	save_invoice( term_p, be );
 	}
 }
 

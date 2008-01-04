@@ -135,13 +135,13 @@ create_customer_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_customer( GncGdaBackend* be, QofInstance* inst )
+save_customer( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_CUSTOMER(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -185,7 +185,7 @@ write_single_customer( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( customer_should_be_saved( GNC_CUSTOMER(term_p) ) ) {
-    	save_customer( be, term_p );
+    	save_customer( term_p, be );
 	}
 }
 

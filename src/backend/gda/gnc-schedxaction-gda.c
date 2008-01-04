@@ -235,14 +235,14 @@ create_sx_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 void
-gnc_gda_save_schedxaction( GncGdaBackend* be, QofInstance* inst )
+gnc_gda_save_schedxaction( QofInstance* inst, GncGdaBackend* be )
 {
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_SX(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),

@@ -196,7 +196,8 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${QOF_LIBS} \
   ${GOFFICE_LIBS} \
   ${REGEX_LIBS} \
-  ${LIBXML2_LIBS}
+  ${LIBXML2_LIBS} \
+  ${LIBGDA_LIBS}
 
 if BUILDING_FROM_SVN
 swig-gnome-utils.c: gnome-utils.i gnc-html.h \

@@ -122,13 +122,13 @@ create_job_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_job( GncGdaBackend* be, QofInstance* inst )
+save_job( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_JOB(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -172,7 +172,7 @@ write_single_job( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( job_should_be_saved( GNC_JOB(term_p) ) ) {
-    	save_job( be, term_p );
+    	save_job( term_p, be );
 	}
 }
 

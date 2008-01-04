@@ -298,14 +298,14 @@ save_tt_entries( GncGdaBackend* be, const GUID* guid, GList* entries )
 }
 
 static void
-save_taxtable( GncGdaBackend* be, QofInstance* inst )
+save_taxtable( QofInstance* inst, GncGdaBackend* be )
 {
     GncTaxTable* tt = GNC_TAXTABLE(inst);
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_TAXTABLE(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -326,23 +326,11 @@ save_taxtable( GncGdaBackend* be, QofInstance* inst )
 
 /* ================================================================= */
 static void
-write_single_taxtable( QofInstance *term_p, gpointer be_p )
-{
-    GncGdaBackend* be = (GncGdaBackend*)be_p;
-
-	g_return_if_fail( term_p != NULL );
-	g_return_if_fail( GNC_IS_TAXTABLE(term_p) );
-	g_return_if_fail( be_p != NULL );
-
-    save_taxtable( be, term_p );
-}
-
-static void
 write_taxtables( GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
-    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, write_single_taxtable, (gpointer)be );
+    qof_object_foreach( GNC_ID_TAXTABLE, be->primary_book, (QofInstanceForeachCB)save_taxtable, (gpointer)be );
 }
 
 /* ================================================================= */

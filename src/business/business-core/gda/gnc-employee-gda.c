@@ -136,14 +136,14 @@ create_employee_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_employee( GncGdaBackend* be, QofInstance* inst )
+save_employee( QofInstance* inst, GncGdaBackend* be )
 {
     GncEmployee* emp = GNC_EMPLOYEE(inst);
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_EMPLOYEE(inst) );
+	g_return_if_fail( be != NULL );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, gncEmployeeGetCurrency( emp ) );
@@ -189,7 +189,7 @@ write_single_employee( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( employee_should_be_saved( GNC_EMPLOYEE(term_p) ) ) {
-    	save_employee( be, term_p );
+    	save_employee( term_p, be );
 	}
 }
 

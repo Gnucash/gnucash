@@ -33,6 +33,6 @@
 #include <gmodule.h>
 
 void gnc_gda_init_book_handler( void );
-void gnc_gda_save_book( GncGdaBackend* be, QofInstance* inst );
+void gnc_gda_save_book( QofInstance* inst, GncGdaBackend* be );
 
 #endif /* GNC_BOOK_GDA_H_ */

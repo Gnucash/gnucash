@@ -56,6 +56,10 @@ typedef struct GncGdaBackend_struct GncGdaBackend;
  * commit()			- commit an object to the db
  * initial_load()	- load stuff when new db opened
  * create_tables()  - create any db tables
+ * compile_query()  - compile a backend object query
+ * run_query()      - run a compiled query
+ * free_query()     - free a compiled query
+ * write()          - write all objects
  */
 #define GNC_GDA_BACKEND	"gnc:gda:1"
 #define GNC_GDA_BACKEND_VERSION	1
@@ -64,7 +68,7 @@ typedef struct
   int		version;	/* backend version number */
   const gchar *	type_name;	/* The XML tag for this type */
 
-  void		(*commit)( GncGdaBackend* pBackend, QofInstance* inst );
+  void		(*commit)( QofInstance* inst, GncGdaBackend* be );
   void		(*initial_load)( GncGdaBackend* pBackend );
   void		(*create_tables)( GncGdaBackend* pBackend );
   gpointer	(*compile_query)( GncGdaBackend* pBackend, QofQuery* pQuery );

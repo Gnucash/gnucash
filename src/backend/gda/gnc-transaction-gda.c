@@ -451,10 +451,10 @@ delete_splits( GncGdaBackend* be, Transaction* pTx )
 }
 
 static void
-commit_split( GncGdaBackend* be, QofInstance* inst )
+commit_split( QofInstance* inst, GncGdaBackend* be )
 {
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -476,7 +476,7 @@ save_split_cb( gpointer data, gpointer user_data )
 	g_return_if_fail( GNC_IS_SPLIT(data) );
 	g_return_if_fail( user_data != NULL );
 
-    commit_split( split_info->be, QOF_INSTANCE(pSplit) );
+    commit_split( QOF_INSTANCE(pSplit), split_info->be );
 }
 
 static void
@@ -494,14 +494,14 @@ save_splits( GncGdaBackend* be, const GUID* tx_guid, SplitList* pSplitList )
 }
 
 void
-gnc_gda_save_transaction( GncGdaBackend* be, QofInstance* inst )
+gnc_gda_save_transaction( QofInstance* inst, GncGdaBackend* be )
 {
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_TRANS(inst) );
+	g_return_if_fail( be != NULL );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );

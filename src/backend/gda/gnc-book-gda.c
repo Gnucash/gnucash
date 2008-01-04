@@ -169,7 +169,7 @@ load_all_books( GncGdaBackend* be )
 
 		// If there are no rows, try committing the book
 		if( numRows == 0 ) {
-   	    	gnc_gda_save_book( be, QOF_INSTANCE(be->primary_book) );
+   	    	gnc_gda_save_book( QOF_INSTANCE(be->primary_book), be );
 		} else {
 			// Otherwise, load the 1st book.
             load_single_book( be, pModel, 0 );
@@ -188,7 +188,7 @@ create_book_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 void
-gnc_gda_save_book( GncGdaBackend* be, QofInstance* inst )
+gnc_gda_save_book( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 

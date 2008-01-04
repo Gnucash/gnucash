@@ -135,14 +135,14 @@ create_vendor_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_vendor( GncGdaBackend* be, QofInstance* inst )
+save_vendor( QofInstance* inst, GncGdaBackend* be )
 {
     GncVendor* v = GNC_VENDOR(inst);
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_VENDOR(inst) );
+	g_return_if_fail( be != NULL );
 
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, gncVendorGetCurrency( v ) );
@@ -189,7 +189,7 @@ write_single_vendor( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( vendor_should_be_saved( GNC_VENDOR(term_p) ) ) {
-    	save_vendor( be, term_p );
+    	save_vendor( term_p, be );
 	}
 }
 

@@ -41,6 +41,8 @@
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
 
+static QofLogModule log_module = GNC_MOD_BACKEND;
+
 typedef struct {
     QofIdType searchObj;
     gpointer pCompiledQuery;
@@ -888,7 +890,7 @@ load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             	(*setter)( pObject, &ts );
 			}
 		} else {
-			g_warning( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
+			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
         }
     }
 }
@@ -1012,7 +1014,7 @@ load_date( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 				g_date_free( date );
 			}
 		} else {
-			g_warning( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
+			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
         }
     }
 }
@@ -1094,7 +1096,7 @@ get_integer_value( const GValue* value )
 	} else if( G_VALUE_HOLDS_UINT64(value) ) {
 		return g_value_get_uint64( value );
 	} else {
-		g_warning( "Unknown type: %s", G_VALUE_TYPE_NAME( value ) );
+		PWARN( "Unknown type: %s", G_VALUE_TYPE_NAME( value ) );
 	}
 
 	return 0;
@@ -1291,6 +1293,7 @@ gnc_gda_register_col_type_handler( const gchar* colType, const col_type_handler_
 	}
 
 	g_hash_table_insert( g_columnTypeHash, (gpointer)colType, (gpointer)handler );
+	DEBUG( "Col type %s registered\n", colType );
 }
 
 static col_type_handler_t*
@@ -1298,7 +1301,7 @@ get_handler( const gchar* col_type )
 {
     col_type_handler_t* pHandler;
 
-	g_return_val_if_fail( pHandler != NULL, NULL );
+	g_return_val_if_fail( col_type != NULL, NULL );
 
 	pHandler = g_hash_table_lookup( g_columnTypeHash, col_type );
 	if( pHandler == NULL ) {
@@ -1451,7 +1454,7 @@ gnc_gda_execute_query( const GncGdaBackend* be, GdaQuery* query )
     ret = gda_query_execute( query, NULL, FALSE, &error );
 
     if( error != NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
+        PERR( "SQL error: %s\n", error->message );
     }
 
     return ret;
@@ -1468,7 +1471,7 @@ gnc_gda_create_query_from_sql( const GncGdaBackend* be, const gchar* sql )
 
     query = gda_query_new_from_sql( be->pDict, sql, &error );
     if( query == NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
+        PERR( "SQL error: %s\n", error->message );
     }
 
 	return query;
@@ -1507,7 +1510,7 @@ gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
     }
 
     if( error != NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
+        PERR( "SQL error: %s\n", error->message );
     }
 
     return count;
@@ -1880,7 +1883,7 @@ void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
     if( !GDA_IS_DICT_TABLE(table) ) {
         gnc_gda_create_table( be->pConnection, table_name, col_table, &error );
         if( error != NULL ) {
-            g_critical( "Error creating table: %s\n", error->message );
+            PERR( "Error creating table: %s\n", error->message );
         }
     }
 }

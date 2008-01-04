@@ -242,7 +242,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     g_free( book_info );
 
     if( be->pConnection == NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
+        PERR( "SQL error: %s\n", error->message );
         qof_backend_set_error( be_start, ERR_BACKEND_NO_SUCH_DB );
 
         LEAVE( " " );
@@ -256,7 +256,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     gda_dict_set_connection( be->pDict, be->pConnection );
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
-        g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     // Call all object backends to create any required tables
@@ -265,7 +265,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     // Update the dictionary because new tables may exist
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
-        g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     LEAVE (" ");
@@ -427,7 +427,7 @@ write_account_tree( GncGdaBackend* be, Account* root )
 
     descendants = gnc_account_get_descendants( root );
     for( node = descendants; node != NULL; node = g_list_next(node) ) {
-        gnc_gda_save_account( be, QOF_INSTANCE(GNC_ACCOUNT(node->data)) );
+        gnc_gda_save_account( QOF_INSTANCE(GNC_ACCOUNT(node->data)), be );
     }
     g_list_free( descendants );
 }
@@ -448,7 +448,7 @@ write_tx( Transaction* tx, gpointer data )
 	g_return_val_if_fail( tx != NULL, 0 );
 	g_return_val_if_fail( data != NULL, 0 );
 
-    gnc_gda_save_transaction( be, QOF_INSTANCE(tx) );
+    gnc_gda_save_transaction( QOF_INSTANCE(tx), be );
 
     return 0;
 }
@@ -489,7 +489,7 @@ write_schedXactions( GncGdaBackend* be )
 
     for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
         tmpSX = schedXactions->data;
-	gnc_gda_save_schedxaction( be, QOF_INSTANCE( tmpSX ) );
+	gnc_gda_save_schedxaction( QOF_INSTANCE( tmpSX ), be );
     }
 }
 
@@ -527,7 +527,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
                                         NULL,
                                         &error );
     if( error != NULL ) {
-        g_critical( "SQL error: %s\n", error->message );
+        PERR( "SQL error: %s\n", error->message );
     }
     numTables = gda_data_model_get_n_rows( tables );
     for( row = 0; row < numTables; row++ ) {
@@ -538,9 +538,9 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
         table_name = g_value_get_string( row_value );
         error = NULL;
         if( !gda_drop_table( be->pConnection, table_name, &error ) ) {
-            g_critical( "Unable to drop table %s\n", table_name );
+            PERR( "Unable to drop table %s\n", table_name );
             if( error != NULL ) {
-                g_critical( "SQL error: %s\n", error->message );
+                PERR( "SQL error: %s\n", error->message );
             }
         }
     }
@@ -548,7 +548,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     // Update the dictionary because new tables may exist
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
-        g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     /* Create new tables */
@@ -557,12 +557,13 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     // Update the dictionary because new tables may exist
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
     if( error != NULL ) {
-        g_critical( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
     /* Save all contents */
+	be->primary_book = book;
     //write_commodities( be, book );
-	gnc_gda_save_book( be, QOF_INSTANCE(book) );
+	gnc_gda_save_book( QOF_INSTANCE(book), be );
     write_accounts( be );
     write_transactions( be );
     write_template_transactions( be );
@@ -604,7 +605,7 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
     g_return_if_fail( !be_data->ok );
 
     if( pData->commit != NULL ) {
-        (pData->commit)( be_data->be, be_data->inst );
+        (pData->commit)( be_data->inst, be_data->be );
         be_data->ok = TRUE;
     }
 }
@@ -631,7 +632,7 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     ENTER( " " );
 
-    g_debug( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
+    DEBUG( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
              (inst->e_type ? inst->e_type : "(null)"),
              qof_instance_get_dirty_flag(inst), qof_instance_get_destroying(inst) );
 
@@ -648,9 +649,9 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 										GDA_TRANSACTION_ISOLATION_UNKNOWN, &error );
 		if( !status ) {
 			if( error != NULL ) {
-				g_warning( "Unable to begin transaction: %s\n", error->message );
+				PWARN( "Unable to begin transaction: %s\n", error->message );
 			} else {
-				g_warning( "Unable to begin transaction\n" );
+				PWARN( "Unable to begin transaction\n" );
 			}
 		}
 	}
@@ -661,14 +662,14 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
     qof_object_foreach_backend( GNC_GDA_BACKEND, commit_cb, &be_data );
 
     if( !be_data.ok ) {
-        g_critical( "gnc_gda_commit_edit(): Unknown object type '%s'\n", inst->e_type );
+        PERR( "gnc_gda_commit_edit(): Unknown object type '%s'\n", inst->e_type );
 		if( be->supports_transactions ) {
 			status = gda_connection_rollback_transaction( be->pConnection, TRANSACTION_NAME, &error );
 			if( !status ) {
 				if( error != NULL ) {
-					g_warning( "Unable to roll back transaction: %s\n", error->message );
+					PWARN( "Unable to roll back transaction: %s\n", error->message );
 				} else {
-					g_warning( "Unable to roll back transaction\n" );
+					PWARN( "Unable to roll back transaction\n" );
 				}
 			}
 		}
@@ -678,9 +679,9 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 		status = gda_connection_commit_transaction( be->pConnection, TRANSACTION_NAME, &error );
 		if( !status ) {
 			if( error != NULL ) {
-				g_warning( "Unable to commit transaction: %s\n", error->message );
+				PWARN( "Unable to commit transaction: %s\n", error->message );
 			} else {
-				g_warning( "Unable to commit transaction\n" );
+				PWARN( "Unable to commit transaction\n" );
 			}
 		}
 	}
@@ -870,7 +871,7 @@ gnc_gda_compile_query(QofBackend* pBEnd, QofQuery* pQuery)
         }
     }
 
-    g_debug( "Compiled: %s\n", sql );
+    DEBUG( "Compiled: %s\n", sql );
     pQueryInfo->pCompiledQuery =  g_strdup( sql );
 
 	LEAVE( "" );
@@ -919,7 +920,7 @@ gnc_gda_free_query(QofBackend* pBEnd, gpointer pQuery)
         return;
     }
 
-    g_debug( "gda_free_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
+    DEBUG( "gda_free_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
     g_free( pQueryInfo->pCompiledQuery );
     g_free( pQueryInfo );
 
@@ -981,7 +982,7 @@ gnc_gda_run_query(QofBackend* pBEnd, gpointer pQuery)
 	// Mark the book as clean
 	qof_instance_mark_clean( QOF_INSTANCE(be->primary_book) );
 
-//    g_debug( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
+//    DEBUG( "gda_run_query(): %s\n", (gchar*)pQueryInfo->pCompiledQuery );
 
 	LEAVE( "" );
 }

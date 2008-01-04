@@ -123,7 +123,7 @@ create_budget_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_budget( GncGdaBackend* be, QofInstance* inst )
+save_budget( QofInstance* inst, GncGdaBackend* be )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
@@ -150,24 +150,12 @@ save_budget( GncGdaBackend* be, QofInstance* inst )
 }
 
 static void
-write_budget( QofInstance* ent, gpointer data )
-{
-    GncGdaBackend* be = (GncGdaBackend*)data;
-
-	g_return_if_fail( data != NULL );
-	g_return_if_fail( ent != NULL );
-	g_return_if_fail( GNC_IS_BUDGET(ent) );
-
-    save_budget( be, ent );
-}
-
-static void
 write_budgets( GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
 
     qof_collection_foreach( qof_book_get_collection( be->primary_book, GNC_ID_BUDGET ),
-                            write_budget, be );
+                            (QofInstanceForeachCB)save_budget, be );
 }
 
 /* ================================================================= */

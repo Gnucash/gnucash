@@ -123,13 +123,13 @@ create_order_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_order( GncGdaBackend* be, QofInstance* inst )
+save_order( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_ORDER(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -173,7 +173,7 @@ write_single_order( QofInstance *term_p, gpointer be_p )
 	g_return_if_fail( be_p != NULL );
 
 	if( order_should_be_saved( GNC_ORDER(term_p) ) ) {
-    	save_order( be, term_p );
+    	save_order( term_p, be );
 	}
 }
 

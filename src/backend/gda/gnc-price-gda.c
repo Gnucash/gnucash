@@ -122,7 +122,7 @@ create_prices_tables( GncGdaBackend* be )
 /* ================================================================= */
 
 static void
-save_price( GncGdaBackend* be, QofInstance* inst )
+save_price( QofInstance* inst, GncGdaBackend* be )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
 
@@ -149,7 +149,7 @@ write_price( GNCPrice* p, gpointer data )
 	g_return_val_if_fail( p != NULL, FALSE );
 	g_return_val_if_fail( data != NULL, FALSE );
 
-    save_price( be, QOF_INSTANCE(p) );
+    save_price( QOF_INSTANCE(p), be );
 
     return TRUE;
 }

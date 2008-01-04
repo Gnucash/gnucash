@@ -175,7 +175,7 @@ create_commodities_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-commit_commodity( GncGdaBackend* be, QofInstance* inst )
+commit_commodity( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
@@ -217,7 +217,7 @@ gnc_gda_save_commodity( GncGdaBackend* be, gnc_commodity* pCommodity )
 	g_return_if_fail( pCommodity != NULL );
 
     if( !is_commodity_in_db( be, pCommodity ) ) {
-        commit_commodity( be, QOF_INSTANCE(pCommodity) );
+        commit_commodity( QOF_INSTANCE(pCommodity), be );
     }
 }
 

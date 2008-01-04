@@ -151,7 +151,7 @@ create_lots_tables( GncGdaBackend* be )
 /* ================================================================= */
 
 static void
-commit_lot( GncGdaBackend* be, QofInstance* inst )
+commit_lot( QofInstance* inst, GncGdaBackend* be )
 {
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );

@@ -270,7 +270,7 @@ create_account_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 void
-gnc_gda_save_account( GncGdaBackend* be, QofInstance* inst )
+gnc_gda_save_account( QofInstance* inst, GncGdaBackend* be )
 {
     Account* pAcc = GNC_ACCOUNT(inst);
     const GUID* guid;

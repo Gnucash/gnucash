@@ -148,13 +148,13 @@ create_entry_tables( GncGdaBackend* be )
 
 /* ================================================================= */
 static void
-save_entry( GncGdaBackend* be, QofInstance* inst )
+save_entry( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
 
-	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_ENTRY(inst) );
+	g_return_if_fail( be != NULL );
 
     (void)gnc_gda_do_db_operation( be,
                         (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
@@ -185,7 +185,7 @@ write_single_entry( QofInstance *term_p, gpointer be_p )
   	/* Only save if attached */
   	if( gncEntryGetOrder( entry ) != NULL || gncEntryGetInvoice( entry ) != NULL ||
 			gncEntryGetBill( entry ) != NULL ) {
-    	save_entry( be, term_p );
+    	save_entry( term_p, be );
 	}
 }
 

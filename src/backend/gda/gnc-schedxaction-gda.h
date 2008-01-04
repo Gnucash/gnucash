@@ -33,6 +33,6 @@
 #include <gmodule.h>
 
 void gnc_gda_init_schedxaction_handler( void );
-void gnc_gda_save_schedxaction( GncGdaBackend* be, QofInstance* inst );
+void gnc_gda_save_schedxaction( QofInstance* inst, GncGdaBackend* be );
 
 #endif /* GNC_SCHEDXACTION_GDA_H_ */
