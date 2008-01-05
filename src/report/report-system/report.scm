@@ -47,7 +47,7 @@
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name options-generator
+                    '(version name report-guid parent-type options-generator
                               options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
                               menu-tip export-types export-thunk)))
@@ -65,6 +65,8 @@
     ((record-constructor <report-template>)
      #f                         ;; version
      #f                         ;; name
+     #f                         ;; report-guid for backwards compat of newer reports
+     #f                         ;; parent-type for backwards compat of newer reports
      #f                         ;; options-generator
      #f                         ;; options-cleanup-cb
      #f                         ;; options-changed-cb
@@ -138,6 +140,10 @@
         (gnc:report-template-new-options templ)
         #f)))
 
+;; dummy function to enable backwards compatibility of newer reports
+(define (gnc:report-template-new-options/report-guid template-id template-name)
+  (gnc:report-template-new-options/name template-name))
+
 (define (gnc:report-template-menu-name/name template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
     (if templ
@@ -150,6 +156,10 @@
     (if templ
 	(gnc:report-template-renderer templ)
         #f)))
+
+;; dummy function to enable backwards compatibility of newer reports
+(define (gnc:report-template-renderer/report-guid template-id template-name)
+  (gnc:report-template-renderer/name template-name))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
@@ -276,6 +286,10 @@
             template-name id options #t #t #f #f)))
     (gnc-report-add r))
   )
+
+;; dummy function to enable backwards compatibility with newer reports
+(define (gnc:restore-report-by-guid id template-id template-name options)
+  (gnc:restore-report id template-name options))
 
 
 (define (gnc:make-report-options template-name)
