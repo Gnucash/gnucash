@@ -1119,6 +1119,11 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   gtk_tree_path_free(parent_path);
 
   gtk_tree_selection_select_path (selection, s_path);
+
+  /* give gtk+ a chance to resize the tree view first by handling pending
+   * configure events */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
   gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
   debug_path(LEAVE, s_path);
   gtk_tree_path_free(s_path);
