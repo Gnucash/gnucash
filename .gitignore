@@ -12,6 +12,8 @@ Makefile.in
 TAGS
 aclocal.m4
 autom4te.cache
+cscope.files
+cscope.out
 compile
 config.guess
 config.h

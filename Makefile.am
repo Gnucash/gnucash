@@ -105,9 +105,12 @@ DISTCLEANFILES = \
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files
+if GNUCASH_SEPARATE_BUILDDIR
+	find ${srcdir}/src ${srcdir}/lib -name '*.[ch]' >> cscope.files
+endif
 
-cscope.out: cscope.files
-	cscope -b
+${srcdir}/cscope.out: cscope.files
+	cscope -b -f ${srcdir}/cscope.out
 
 
 # make sure etags.files is up to date.
