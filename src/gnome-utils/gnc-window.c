@@ -175,7 +175,7 @@ gnc_window_show_progress (const char *message, double percentage)
     return;
   }
 
-  gnc_update_splash_screen(message);
+  gnc_update_splash_screen(message, percentage);
 
   if (percentage < 0) {
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), " ");

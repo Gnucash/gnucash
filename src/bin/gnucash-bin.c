@@ -140,7 +140,7 @@ try_load_config_array(const gchar *fns[])
 static void
 update_message(const gchar *msg)
 {
-    gnc_update_splash_screen(msg);
+    gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
     g_message(msg);
 }
 
@@ -352,7 +352,7 @@ load_gnucash_modules()
     /* module initializations go here */
     len = sizeof(modules) / sizeof(*modules);
     for (i = 0; i < len; i++) {
-        gnc_update_splash_screen(modules[i].name);
+        gnc_update_splash_screen(modules[i].name, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         if (modules[i].optional)
             gnc_module_load_optional(modules[i].name, modules[i].version);
         else
@@ -463,14 +463,14 @@ inner_main (void *closure, int argc, char **argv)
     scm_c_eval_string("(gnc:main)");
 
     /* Install Price Quote Sources */
-    gnc_update_splash_screen(_("Checking Finance::Quote..."));
+    gnc_update_splash_screen(_("Checking Finance::Quote..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     scm_c_use_module("gnucash price-quotes");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");  
 
     gnc_hook_run(HOOK_STARTUP, NULL);
     
     if (!nofile && (fn = get_file_to_load())) {
-        gnc_update_splash_screen(_("Loading data..."));
+        gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(fn);
         g_free(fn);
     } 
