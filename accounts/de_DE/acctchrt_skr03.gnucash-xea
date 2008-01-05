@@ -1020,7 +1020,7 @@
     <act:parent type="new">a657ade965a1429d44d830d3832bf9aa</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4670 Reisekosten Unernehmer</act:name>
+    <act:name>4670 Reisekosten Unternehmer</act:name>
     <act:id type="new">dda3ae53573975cd05fab1d3cdf40806</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
