@@ -750,6 +750,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Printable Invoice")
+ 'report-guid "5123a759ceb9483abf2182d01c140e8d"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer

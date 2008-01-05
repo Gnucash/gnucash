@@ -317,6 +317,7 @@ commodities.")))
 (gnc:define-report
  'version 1
  'name (N_ "Price")
+ 'report-guid "1d241609fd4644caad765c95be20ff4c"
  'menu-path (list gnc:menuname-asset-liability)
  'menu-name (N_ "Price Scatterplot")
  'options-generator options-generator

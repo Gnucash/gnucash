@@ -678,6 +678,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Customer Report")
+ 'report-guid "c146317be32e4948a561ec7fc89d15c1"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator customer-options-generator
  'renderer reg-renderer
@@ -686,6 +687,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Vendor Report")
+ 'report-guid "d7d1e53505ee4b1b82efad9eacedaea0"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator vendor-options-generator
  'renderer reg-renderer
@@ -694,6 +696,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Employee Report")
+ 'report-guid "08ae9c2e884b4f9787144f47eacd7f44"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator employee-options-generator
  'renderer reg-renderer

@@ -854,6 +854,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Easy Invoice")
+ 'report-guid "67112f318bef4fc496bdc27d106bbda4"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer

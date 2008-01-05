@@ -66,6 +66,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Payable Aging")
+ 'report-guid "e57770f2dbca46619d6dac4ac5469b50"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer payables-renderer

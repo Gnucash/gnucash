@@ -607,6 +607,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Register")
+ 'report-guid "22104e02654c4adba844ee75a3f8d173"
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #f)

@@ -541,6 +541,7 @@ developing over time"))
      (gnc:define-report
       'version 1
       'name (car l)
+      'report-guid (car (reverse l))
       'menu-path (if (caddr l)
 		     (list gnc:menuname-income-expense)
 		     (list gnc:menuname-asset-liability))
@@ -555,15 +556,15 @@ developing over time"))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "44f81bee049b4b3ea908f8dac9a9474e")
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "b1f15b2052c149df93e698fe85a81ea6")
   (list reportname-assets 
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f))
+        #f menuname-assets menutip-assets (lambda (x) #f) "e9cf815f79db44bcb637d0295093ae3d")
   (list reportname-liabilities 
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t))))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "faf410e8f8da481fbc09e4763da40bcc")))

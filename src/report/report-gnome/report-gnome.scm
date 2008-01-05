@@ -77,12 +77,13 @@
                  menu-path
                  (lambda (window)
                    (let ((report (gnc:make-report
-                                  (gnc:report-template-name template))))
+                                  (gnc:report-template-report-guid template))))
                      (gnc-main-window-open-report report window)))))
           (gnc-add-scm-extension item))))
 
-  (define (add-template name template)
-    (let ((menu-name (gnc:report-template-menu-name template)))
+  (define (add-template report-guid template)
+    (let ((name (gnc:report-template-name template))
+	  (menu-name (gnc:report-template-menu-name template)))
       (if menu-name (set! name menu-name))
       (set! *template-items* (cons (cons name template) *template-items*))))
 

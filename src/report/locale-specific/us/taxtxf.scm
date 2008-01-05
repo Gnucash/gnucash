@@ -821,6 +821,7 @@
 (gnc:define-report
  'version 1
  'name reportname
+ 'report-guid "f8921f4e5c284d7caca81e239f468a68"
  'menu-name (N_ "Tax Report & TXF Export")
  ;;'menu-path (list gnc:menuname-taxes)
  'menu-tip (N_ "Taxable Income / Deductible Expenses / Export to .TXF file")

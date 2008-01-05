@@ -67,6 +67,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Receivable Aging")
+ 'report-guid "9cf76bed17f14401b8e3e22d0079cb98"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer receivables-renderer

@@ -128,6 +128,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "25455562bd234dd0b048ecc5a8af9e43"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator general-journal-options-generator
  'renderer general-journal-renderer

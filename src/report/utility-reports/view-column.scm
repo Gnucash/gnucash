@@ -239,6 +239,7 @@
 (gnc:define-report 
  'version 1
  'name (N_ "Multicolumn View")
+ 'report-guid "d8ba4a2e89e8479ca9f6eccdeb164588"
  'menu-name (N_ "Custom Multicolumn Report")
  'menu-path (list gnc:menuname-utility)
  'renderer render-view

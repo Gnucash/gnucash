@@ -958,6 +958,7 @@
 (gnc:define-report
  'version 1
  'name (N_ "Fancy Invoice")
+ 'report-guid "3ce293441e894423a2425d7a22dd1ac6"
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer

@@ -1418,6 +1418,7 @@ in the Options panel.")))
  'version 1
  
  'name reportname
+ 'report-guid "2fe3b9833af044abb929a88d5a59620f"
  
  'options-generator trep-options-generator
  
