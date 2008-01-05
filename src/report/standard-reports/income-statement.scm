@@ -48,8 +48,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define reportname (N_ "Income Statement"))
-
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
 (define optname-report-title (N_ "Report Title"))
@@ -133,7 +131,7 @@
   (N_ "Causes the report to display in the standard order, placing income before expenses"))
 
 ;; options generator
-(define (income-statement-options-generator)
+(define (income-statement-options-generator-internal reportname)
   (let* ((options (gnc:new-options))
          (add-option 
           (lambda (new-option)
@@ -275,7 +273,7 @@
 ;; set up the document and add the table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (income-statement-renderer report-obj)
+(define (income-statement-renderer-internal report-obj reportname)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option 
@@ -669,12 +667,36 @@
     )
   )
 
+(define is-reportname (N_ "Income Statement"))
+(define pnl-reportname (N_ "Profit & Loss"))
+
+(define (income-statement-options-generator)
+  (income-statement-options-generator-internal is-reportname))
+(define (income-statement-renderer report-obj)
+  (income-statement-renderer-internal report-obj is-reportname))
+
+(define (profit-and-loss-options-generator)
+  (income-statement-options-generator-internal pnl-reportname))
+(define (profit-and-loss-renderer report-obj)
+  (income-statement-renderer-internal report-obj is-reportname))
+
+
 (gnc:define-report 
  'version 1
- 'name reportname
+ 'name is-reportname
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
  'renderer income-statement-renderer
+ )
+
+;; Also make a "Profit & Loss" report, even if it's the exact same one,
+;; just relabeled.
+(gnc:define-report 
+ 'version 1
+ 'name pnl-reportname
+ 'menu-path (list gnc:menuname-income-expense)
+ 'options-generator profit-and-loss-options-generator
+ 'renderer profit-and-loss-renderer
  )
 
 ;; END
