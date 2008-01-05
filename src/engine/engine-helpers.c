@@ -2146,9 +2146,10 @@ gnc_numeric_p(SCM arg)
 
 
 static SCM
-gnc_generic_to_scm(const void *x, const gchar *type_str)
+gnc_generic_to_scm(const void *cx, const gchar *type_str)
 {
     swig_type_info * stype = NULL;
+    void *x = (void*) cx;
 
     if (!x) return SCM_BOOL_F;
     stype = SWIG_TypeQuery(type_str);
