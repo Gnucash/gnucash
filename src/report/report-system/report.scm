@@ -197,7 +197,7 @@
 	(gnc:report-template-new-options templ)
 	#f)))
 
-(define (gnc:report-template-menu-name/report-guid template-id)
+(define (gnc:report-template-menu-name/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
 	(or (gnc:report-template-menu-name templ)
@@ -230,10 +230,6 @@
     (if templ
 	(gnc:report-template-renderer templ)
         #f)))
-
-;; dummy function to enable backwards compatibility of newer reports
-(define (gnc:report-template-renderer/report-guid template-id template-name)
-  (gnc:report-template-renderer/name template-name))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
