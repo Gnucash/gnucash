@@ -294,12 +294,8 @@ more than one currency.  This report is not designed to cope with this possibili
 (define (setup-query query account date)
   (define (date-copy date)
     (cons (car date) (cdr date)))
-  (let ((begindate (date-copy date)))
+  (let ((begindate (make-zdate))) ;Set begindate to the start of the Epoch
 ;    (gnc:debug "Account: " account)
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))
-    (set! begindate (decdate begindate NinetyDayDelta))	;XXX - 360 days!?!
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
     (qof-query-set-book query (gnc-get-current-book))
