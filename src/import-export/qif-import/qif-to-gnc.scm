@@ -1001,6 +1001,24 @@
       ;; otherwise: one-to-one, a normal single split match.
       (else 
        (cond 
+        ;; If one transaction has more splits than the other, mark the
+        ;; one with less splits, regardless of all other conditions.
+        ;; Otherwise, QIF split transactions will become mangled. For
+        ;; more information, see bug 114724.
+        ((< (length (qif-xtn:splits xtn))
+            (length (qif-xtn:splits other-xtn)))
+               (qif-xtn:mark-split xtn split)
+               (qif-import:merge-xtn-info xtn other-xtn)
+               (qif-split:set-matching-cleared!
+                (car match-splits) (qif-xtn:cleared xtn)))
+             
+        ((> (length (qif-xtn:splits xtn))
+            (length (qif-xtn:splits other-xtn)))
+               (qif-xtn:mark-split other-xtn (car match-splits))
+               (qif-import:merge-xtn-info other-xtn xtn)
+               (qif-split:set-matching-cleared!
+                split (qif-xtn:cleared other-xtn)))
+
         ;; this is a transfer involving a security xtn.  Let the 
         ;; security xtn dominate the way it's handled. 
         ((and (not action) o-action o-security)
@@ -1031,25 +1049,14 @@
             (qif-xtn:mark-split other-xtn (car match-splits))
             (qif-import:merge-xtn-info other-xtn xtn)
             (qif-split:set-matching-cleared! 
-             split (qif-xtn:cleared other-xtn)))))        
+             split (qif-xtn:cleared other-xtn)))))
         
-        ;; otherwise, this is a normal no-frills split match.  if one
-        ;; transaction has more splits than the other one,
-        ;; (heuristically) mark the one with less splits.
+        ;; Otherwise, this is a normal no-frills split match.
         (#t 
-         (if (< (length (qif-xtn:splits xtn))
-                (length (qif-xtn:splits other-xtn)))
-             (begin 
-               (qif-xtn:mark-split xtn split)
-               (qif-import:merge-xtn-info xtn other-xtn)
-               (qif-split:set-matching-cleared!
-                (car match-splits) (qif-xtn:cleared xtn)))
-             
-             (begin
-               (qif-xtn:mark-split other-xtn (car match-splits))
-               (qif-import:merge-xtn-info other-xtn xtn)
-               (qif-split:set-matching-cleared!
-                split (qif-xtn:cleared other-xtn))))))))))
+          (qif-xtn:mark-split other-xtn (car match-splits))
+          (qif-import:merge-xtn-info other-xtn xtn)
+          (qif-split:set-matching-cleared!
+           split (qif-xtn:cleared other-xtn))))))))
 
 
 (define (qif-import:merge-xtn-info from-xtn to-xtn)
