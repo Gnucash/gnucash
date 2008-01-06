@@ -1,6 +1,37 @@
 Version history:
 ------- -------
 
+ 2.2.3 - 06 January 2008
+ 	 Welcome to the GnuCash 2.2.3 Release.
+	 Fixed Bugs:
+	 o #114724: QIF importer drops split details for transfers with
+	            identical amount
+	 o #463678: xfer dialog from CC auto-payment from reconcile doesn't
+	            display accounts
+	 o #495219: QIF-Importer handles memo from transactions wrong
+	 o #497517: Transactions set to 'c' in the R(econciled) field of the
+	            register are incorrectly set to 'n' when postponing a
+	            reconciliation
+	 o #503889: Should install icons into expected locations
+	 o #504007: QIF Import Druid does not allow selecting currency
+	 o #504257: Need to replace old Afghanistan Afghani (AFA) with new
+	            Afghanistan Afghani (AFN)
+	 o #504261: Start on W2K fails with Entry Point Not Found (KERNEL32.dll)
+	 o #505386: Gnucash looses transactions if the file contains special
+	            characters
+	 o #505972: SX-related segfaults in 2.2.2
+	 o #506074: Fractional timezone offsets not always handled correctly
+	 o #506429: "Last Day of Month" SXes saved on wrong day of week
+	 o #506671: Add cyprus, maltese and slovenian currencies to EURO support
+	 o #506714: progress bar during launching
+	 Other Changes:
+	 o New Vietnamese translation
+	 o Improve several minor strings
+	 o Update translations: Dutch, German
+	 o Some business report improvements regarding date parameters
+	 o Fix gcc 4.2.x compiler warnings
+	 o Use aqbanking pkg-config file and require < v2.9, allow goffice v0.6
+
  2.2.2 - 16 December 2007
 	 Welcome to the GnuCash 2.2.2 Release.
 	 Fixed Bugs:
