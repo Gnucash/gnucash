@@ -918,7 +918,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
-	  <signal name="next" handler="gnc_ui_qif_import_memo_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
 
@@ -965,7 +965,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
       <child>
 	<widget class="GnomeDruidPageStandard" id="currency_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Enter the currency used for new accounts</property>
+	  <property name="title" translatable="yes">Enter the QIF file currency</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
