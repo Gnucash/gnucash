@@ -447,9 +447,9 @@ get_random_gnc_numeric(void)
     }
     else
     {
-       gint64 norm = RAND_IN_RANGE (8ULL);
+       gint64 norm = RAND_IN_RANGE (7ULL);
 
-       /* multiple of 10, between 1 and 10 million */
+       /* multiple of 10, between 1 and 1 million */
        deno = 1;
        while (norm) 
        {
@@ -460,8 +460,14 @@ get_random_gnc_numeric(void)
 
     /* Arbitrary random numbers can cause pointless overflow 
      * during calculations.  Limit dynamic range in hopes 
-     * of avoiding overflow. */
-    numer = get_random_gint64()/1000000;
+     * of avoiding overflow. Right now limit it to approx 2^48.
+     * The initial division is to help us down towards the range.
+     * The loop is to "make sure" we get there.  We might
+     * want to make this dependent on "deno" in the future.
+     */
+    do {
+      numer = get_random_gint64()/1000000;
+    } while ((numer >> 31) > 0x1FFFF);
     if (0 == numer) numer = 1;
     /* Make sure we have a non-zero denominator */
     if (0 == deno) deno = 1;
