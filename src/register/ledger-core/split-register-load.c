@@ -24,11 +24,14 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
+#include "gnc-gui-query.h"
 #include "numcell.h"
 #include "quickfillcell.h"
 #include "recncell.h"
@@ -221,7 +224,34 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (default_account != NULL) {
       gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
       if (gnc_commodity_is_currency(commodity))
-          currency = commodity;
+	currency = commodity;
+      else {
+	Account *parent_account = default_account;
+	/* Account commodity is not a currency, walk up the tree until
+	 * we find a parent account that is a currency account and use
+	 * it's currency.
+	 */
+	do {
+	  parent_account = gnc_account_get_parent ( parent_account );
+	  if (parent_account)
+	  {
+	    commodity = xaccAccountGetCommodity (parent_account);
+	    if (gnc_commodity_is_currency(commodity))
+	    {
+	      currency = commodity;
+	      break;
+	    }
+	  }
+	} while (parent_account && !currency);
+      }
+
+      /* If we don't have a currency then pop up a warning dialog */
+      if (!currency)
+      {
+	gnc_info_dialog(NULL, "%s",
+			_("Could not determine the account currency for this register.  "
+			  "Using the currency obtained from the system's locale setting instead."));
+      }
     }
 
     gnc_suspend_gui_refresh ();
