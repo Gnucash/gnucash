@@ -1115,15 +1115,15 @@ then
     # checks for goffice
     goffice=0
     goffice_with_cairo=0
-    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [
+    PKG_CHECK_MODULES(GOFFICE, libgoffice-0.6 >= 0.6.0, [goffice=1], [
+      PKG_CHECK_MODULES(GOFFICE, libgoffice-0.5 >= 0.5.1, [goffice=1], [])
+    ])
+    if test x$goffice = x1
+    then
       AC_DEFINE(HAVE_GOFFICE_0_5,1,[System has goffice 0.5.1 or better])
       AC_DEFINE(GOFFICE_WITH_CAIRO,1,[GOffice has been built with cairo support])
-      goffice=1
       goffice_with_cairo=1
-    ], [goffice=0])
-
-    if test x$goffice = x0
-    then
+    else
       PKG_CHECK_MODULES(GOFFICE, libgoffice-0.4 >= 0.4.0, [goffice=1], [
         PKG_CHECK_MODULES(GOFFICE, libgoffice-0.3 >= 0.3.0, [goffice=1], [
           PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4, [goffice=1], [
