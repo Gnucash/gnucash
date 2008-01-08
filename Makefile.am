@@ -144,6 +144,8 @@ doc:
 
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
+distuninstallcheck_listfiles = \
+  find . -type f -print | grep -v ./share/icons/hicolor/icon-theme.cache | grep -v ./share/info/dir
 
 dist-hook: po/POTFILES.in
 
