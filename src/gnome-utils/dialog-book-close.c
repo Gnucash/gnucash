@@ -125,7 +125,7 @@ static void close_accounts_cb(Account *a, gpointer data)
   if (cacb->acct_type != xaccAccountGetType(a))
     return;
 
-  bal = xaccAccountGetBalanceAsOfDate(a, cacb->cbw->close_date);
+  bal = xaccAccountGetBalanceAsOfDate(a, cacb->cbw->close_date+1);
   if (gnc_numeric_zero_p(bal))
     return;
 
