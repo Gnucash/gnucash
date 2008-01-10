@@ -62,22 +62,24 @@
     (gnc:debug "payables-account" payables-account)
     (aging-renderer report-obj this-acc payables-account #f)))
 
+(define payables-aging-guid "e57770f2dbca46619d6dac4ac5469b50")
+
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report
  'version 1
  'name (N_ "Payable Aging")
- 'report-guid "e57770f2dbca46619d6dac4ac5469b50"
+ 'report-guid payables-aging-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer payables-renderer
  'in-menu? #t)
 
 (define (payables-report-create-internal acct)
-  (let* ((options (gnc:make-report-options (N_ "Payable Aging")))
+  (let* ((options (gnc:make-report-options payables-aging-guid))
 	 (acct-op (gnc:lookup-option options acc-page this-acc)))
 
     (gnc:option-set-value acct-op acct)
-    (gnc:make-report "Payable Aging" options)))
+    (gnc:make-report payables-aging-guid options)))
 
 (define (gnc:payables-report-create-internal
 	 account split query journal? double? title

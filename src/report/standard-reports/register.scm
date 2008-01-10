@@ -604,17 +604,26 @@
 
     document))
 
+(define register-report-guid "22104e02654c4adba844ee75a3f8d173")
+
+;; we get called from elsewhere... but this doesn't work FIX-ME, find
+;; out how to get report-guid's exported from report into the report
+;; system at large. might have to define this at the report-system
+;; level to get them read by other reports. Look at the aging reports
+;; for suggestions, perhaps
+(export register-report-guid)
+
 (gnc:define-report
  'version 1
  'name (N_ "Register")
- 'report-guid "22104e02654c4adba844ee75a3f8d173"
+ 'report-guid register-report-guid
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #f)
 
 (define (gnc:register-report-create-internal invoice? query journal? double?
                                              title debit-string credit-string)
-  (let* ((options (gnc:make-report-options "Register"))
+  (let* ((options (gnc:make-report-options register-report-guid))
          (query-op (gnc:lookup-option options "__reg" "query"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (double-op (gnc:lookup-option options "__reg" "double"))
@@ -634,6 +643,6 @@
     (gnc:option-set-value title-op title)
     (gnc:option-set-value debit-op debit-string)
     (gnc:option-set-value credit-op credit-string)
-    (gnc:make-report "Register" options)))
+    (gnc:make-report register-report-guid options)))
 
 (export gnc:register-report-create-internal)

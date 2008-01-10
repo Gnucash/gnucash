@@ -63,22 +63,24 @@
 
     (aging-renderer report-obj this-acc receivables-account #t)))
 
+(define receivables-aging-guid "9cf76bed17f14401b8e3e22d0079cb98")
+
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report
  'version 1
  'name (N_ "Receivable Aging")
- 'report-guid "9cf76bed17f14401b8e3e22d0079cb98"
+ 'report-guid receivables-aging-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer receivables-renderer
  'in-menu? #t)
 
 (define (receivables-report-create-internal acct)
-  (let* ((options (gnc:make-report-options (N_ "Receivable Aging")))
+  (let* ((options (gnc:make-report-options receivables-aging-guid))
 	 (acct-op (gnc:lookup-option options acc-page this-acc)))
 
     (gnc:option-set-value acct-op acct)
-    (gnc:make-report "Receivable Aging" options)))
+    (gnc:make-report receivables-aging-guid options)))
 
 (define (gnc:receivables-report-create-internal
 	 account split query journal? double? title

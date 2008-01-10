@@ -955,20 +955,22 @@
 
     document))
 
+(define fancy-invoice-guid "3ce293441e894423a2425d7a22dd1ac6")
+
 (gnc:define-report
  'version 1
  'name (N_ "Fancy Invoice")
- 'report-guid "3ce293441e894423a2425d7a22dd1ac6"
+ 'report-guid fancy-invoice-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
 (define (gnc:fancy-invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options (N_ "Fancy Invoice")))
+  (let* ((options (gnc:make-report-options fancy-invoice-guid))
          (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report (N_ "Fancy Invoice") options)))
+    (gnc:make-report fancy-invoice-guid options)))
 
 (export gnc:fancy-invoice-report-create-internal)

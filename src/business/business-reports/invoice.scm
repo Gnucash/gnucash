@@ -747,20 +747,22 @@
 
     document))
 
+(define invoice-report-guid "5123a759ceb9483abf2182d01c140e8d")
+
 (gnc:define-report
  'version 1
  'name (N_ "Printable Invoice")
- 'report-guid "5123a759ceb9483abf2182d01c140e8d"
+ 'report-guid invoice-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
 (define (gnc:invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options (N_ "Printable Invoice")))
+  (let* ((options (gnc:make-report-options invoice-report-guid))
          (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report (N_ "Printable Invoice") options)))
+    (gnc:make-report invoice-report-guid options)))
 
 (export gnc:invoice-report-create-internal)
