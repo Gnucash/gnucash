@@ -1444,14 +1444,11 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
     transfer = gtk_tree_view_get_column(GTK_TREE_VIEW(tv), 3);
 
     //Use depth to determine if it is a split or parent transaction
-    //ISSUE: the returned depth is a crazy number, not 0,1,2... that
-    //the path string would seem to indicate
-    depth = gtk_tree_path_get_depth((GtkTreePath*)path_string);
+    depth = gtk_tree_path_get_depth(gtk_tree_path_new_from_string(path_string));
 
-    g_print(" depth: %d ", depth);
     //First steps towards setting the column headers based
     //on whether split or parent is being edited
-    if (depth >= 0)
+    if (depth >= 2)
     {
         gtk_tree_view_column_set_title(num, "Action");
         gtk_tree_view_column_set_title(description, "Memo");
