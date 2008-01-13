@@ -85,6 +85,8 @@
 
 #define GCONF_SECTION_SEARCH  "dialogs/business/invoice_search"
 
+#define LAST_POSTED_TO_ACCT "last-posted-to-acct"
+
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
@@ -602,6 +604,9 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   GList * acct_types = NULL;
   Timespec ddue, postdate;
   gboolean accumulate;
+  QofInstance *owner_inst;
+  KvpFrame *kvpf;
+  KvpValue *kvp_val;
 
   /* Make sure the invoice is ok */
   if (!gnc_invoice_window_verify_ok (iw))
@@ -650,6 +655,11 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   ddue = postdate;
   memo = NULL;
 
+  owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+  kvpf = qof_instance_get_slots (owner_inst);
+  acc = xaccAccountLookup (kvp_frame_get_guid (kvpf, LAST_POSTED_TO_ACCT),
+			   iw->book);
+
   /* Get the default for the accumulate option */
   accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
 
@@ -667,6 +677,13 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   gncInvoiceBeginEdit (invoice);
   gnc_invoice_window_ok_save (iw);
 
+  /* Save acc as last used account in the kvp frame of the invoice owner */
+  kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;
+  qof_begin_edit (owner_inst);
+  kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
+  qof_instance_set_dirty (owner_inst);
+  qof_commit_edit (owner_inst);
+  
   /* ... post it; post date is set to now ... */
   gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
   gncInvoiceCommitEdit (invoice);
