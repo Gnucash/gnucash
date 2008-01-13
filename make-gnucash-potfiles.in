@@ -4,8 +4,8 @@
 # This perl script is used to make po/POTFILES.in, the list
 # of files to be searched for translatable strings.
 #
-# It will exclude any files listed in po/POTFILES.skip or that match the
-# regexp patterns listed in @ignorepatterns.
+# It will exclude any files listed in po/POTFILES.skip, po/POTFILES.ignore
+# or that match the regexp patterns listed in @ignorepatterns.
 #
 # Author: Dave Peticolas <dave@krondo.com>
 
@@ -16,6 +16,7 @@ use File::Basename;
 my @ignorepatterns = ('gw-', 'test', 'experimental');
 
 my @skipped_files = `grep -v \# @-SRCDIR-@/po/POTFILES.skip`;
+my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
 
 my @possible_files = `find @-SRCDIR-@/src -name '*.c' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
@@ -32,7 +33,7 @@ foreach my $file (@possible_files) {
     my ($name, $path) = fileparse($file);
     $path =~ s/^\.\///;
 
-    foreach my $pat (@ignorepatterns, @skipped_files) {
+    foreach my $pat (@ignorepatterns, @skipped_files, @ignored_files) {
         chomp($pat);
         next unless $pat;
 
