@@ -1695,7 +1695,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 			  <child>
 			    <widget class="GtkScrolledWindow" id="accounts_in_category">
 			      <property name="visible">True</property>
-			      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+			      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			      <property name="shadow_type">GTK_SHADOW_IN</property>
 			      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
