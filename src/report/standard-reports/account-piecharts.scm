@@ -156,7 +156,7 @@ balance at a given time"))
 ;; account settings, you have to give the reportname, the
 ;; account-types to work on and whether this report works on
 ;; intervals as arguments.
-(define (piechart-renderer report-obj reportname
+(define (piechart-renderer report-obj reportname report-guid
                            account-types do-intervals?)
   
   ;; This is a helper function for looking up option values.
@@ -335,7 +335,7 @@ balance at a given time"))
                   (set! combined
                         (append start
                                 (list (list sum (_ "Other")))))
-                  (let ((options (gnc:make-report-options reportname))
+                  (let ((options (gnc:make-report-options report-guid))
                         (id #f))
                     ;; now copy all the options
                     (gnc:options-copy-values (gnc:report-options report-obj)
@@ -345,7 +345,7 @@ balance at a given time"))
                      (gnc:lookup-option options gnc:pagename-accounts 
                                         optname-accounts)
                      (map cadr finish))
-                    (set! id (gnc:make-report reportname options))
+                    (set! id (gnc:make-report report-guid options))
                     ;; set the URL.
                     (set! other-anchor (gnc:report-anchor-text id)))))
             
@@ -367,7 +367,7 @@ balance at a given time"))
                                ;; immediate subaccounts of this account
                                ;; (and including this account).
                                (gnc:make-report-anchor
-                                reportname
+                                report-guid
                                 report-obj
                                 (list
                                  (list gnc:pagename-accounts optname-accounts
@@ -475,6 +475,7 @@ balance at a given time"))
       'renderer (lambda (report-obj)
 		  (piechart-renderer report-obj 
 				     (car l) 
+				     (car (reverse l))
 				     (cadr l)
 				     (caddr l))))))
  (list 
