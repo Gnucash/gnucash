@@ -1394,7 +1394,6 @@ gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pModel != NULL );
 	g_return_if_fail( row >= 0 );
-	g_return_if_fail( obj_name != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 

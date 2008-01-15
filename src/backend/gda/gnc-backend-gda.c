@@ -28,6 +28,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -1085,6 +1086,7 @@ gnc_gda_check_sqlite_file( const gchar *path )
 
 		// OK if the file doesn't exist - new file
 		if( f == NULL ) {
+			PINFO( "Has '.db', doesn't exist (errno=%d) -> GDA", errno );
 			return TRUE;
 		}
 
@@ -1092,18 +1094,22 @@ gnc_gda_check_sqlite_file( const gchar *path )
 		fread( buf, sizeof(buf), 1, f );
 		fclose( f );
 		if( g_str_has_prefix( buf, "SQLite format" ) ) {
+			PINFO( "Has '.db', exists, has SQLite format string -> GDA" );
 			return TRUE;
 		}
+		PINFO( "Has '.db', exists, does not have SQLite format string -> not GDA" );
 	} else {
 		f = g_fopen( path, "r" );
 
 		// BAD if the file exists - not ours
 		if( f != NULL ) {
 			fclose( f );
+			PINFO( "No '.db', exists -> not GDA" );
 			return FALSE;
 		}
 
 		// OK - new file
+		PINFO( "No '.db', doesn't exist (errno=%d) -> GDA", errno );
 		return TRUE;
 	}
 
