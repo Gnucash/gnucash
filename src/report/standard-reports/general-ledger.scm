@@ -38,19 +38,21 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "General Ledger"))
+(define xactrptguid "2fe3b9833af044abb929a88d5a59620f")
 (define xactrptname "Transaction Report")
+
 
 ;; report constructor
 
 (define (gnc:make-general-ledger-report)
-  (let* ((xactrpt (gnc:make-report xactrptname)))
+  (let* ((xactrpt (gnc:make-report xactrptguid)))
     xactrpt))
 
 ;; options generator
 
 (define (general-ledger-options-generator)
   
-  (let* ((options (gnc:report-template-new-options/name xactrptname))
+  (let* ((options (gnc:report-template-new-options/report-guid xactrptguid xactrptname))
 	 )
     
     (define pagename-sorting (N_ "Sorting"))
@@ -124,7 +126,7 @@
 
 (define (general-ledger-renderer report-obj)
   ;; just delegate rendering to the Transaction Report renderer...
-  ((gnc:report-template-renderer/name xactrptname) report-obj))
+  ((gnc:report-template-renderer/report-guid xactrptguid xactrptname) report-obj))
 
 (gnc:define-report 
  'version 1
