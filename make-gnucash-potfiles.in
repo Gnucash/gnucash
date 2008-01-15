@@ -18,7 +18,7 @@ my @ignorepatterns = ('gw-', 'test', 'experimental');
 my @skipped_files = `grep -v \# @-SRCDIR-@/po/POTFILES.skip`;
 my @ignored_files = `grep -v \# @-SRCDIR-@/po/POTFILES.ignore`;
 
-my @possible_files = `find @-SRCDIR-@/src -name '*.c' -o -name '*.glade' \\
+my @possible_files = `cd @-SRCDIR-@ && find src -name '*.c' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
                       -o -name '*.schemas.in' |sort`;
 ## For perl files add the following:
@@ -44,7 +44,7 @@ foreach my $file (@possible_files) {
     next if $ignores{$path . $name};
     
     # Ignore unreadable files, e.g. dangling symlinks
-    next unless (-r $path . $name);
+    next unless (-r "@-SRCDIR-@/" . $path . $name);
     
     print $path . $name . "\n";
 }

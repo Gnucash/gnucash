@@ -100,8 +100,7 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
-  make-gnucash-potfiles po/.intltool-merge-cache \
-  po/POTFILES.in
+  make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files
@@ -142,7 +141,7 @@ doc:
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
 
-dist-hook: po/POTFILES.in
+#dist-hook: po/POTFILES.in
 
 distcheck-hook:
 	@e=''; \
@@ -173,10 +172,8 @@ pot: Makefile po/POTFILES.in
 	${MAKE} -C po $(PACKAGE).pot
 
 
-BUILT_SOURCES = po/POTFILES.in
-
-po/POTFILES.in: make-gnucash-potfiles .potfiles
-	./make-gnucash-potfiles > ./po/POTFILES.in
+$(srcdir)/po/POTFILES.in: make-gnucash-potfiles .potfiles
+	./make-gnucash-potfiles > $(srcdir)/po/POTFILES.in
 
 # Creation rules so that po/gnucash.pot can always be created for
 # make dist.
