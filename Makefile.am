@@ -178,7 +178,7 @@ pot: Makefile po/POTFILES.in
 
 
 $(srcdir)/po/POTFILES.in: make-gnucash-potfiles .potfiles
-	./make-gnucash-potfiles > $(srcdir)/po/POTFILES.in
+	if test -w $(srcdir)/po/POTFILES.in ; then ./make-gnucash-potfiles > $(srcdir)/po/POTFILES.in ; fi
 
 # Creation rules so that po/gnucash.pot can always be created for
 # make dist.
