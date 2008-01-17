@@ -170,7 +170,7 @@ developing over time"))
 ;; constant over the whole report period. Note that this might get
 ;; *really* complicated.
 
-(define (category-barchart-renderer report-obj reportname 
+(define (category-barchart-renderer report-obj reportname reportguid 
                                     account-types do-intervals?)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
@@ -437,7 +437,7 @@ developing over time"))
                    (set! all-data
                          (append start
                                  (list (list (_ "Other") other-sum))))
-                   (let* ((options (gnc:make-report-options reportname))
+                   (let* ((options (gnc:make-report-options reportguid))
                           (id #f))
                      ;; now copy all the options
                      (gnc:options-copy-values 
@@ -448,7 +448,7 @@ developing over time"))
                                          optname-accounts)
                       (map car finish))
                      ;; Set the URL to point to this report.
-                     (set! id (gnc:make-report reportname options))
+                     (set! id (gnc:make-report reportguid options))
                      (set! other-anchor (gnc:report-anchor-text id)))))
              
              
@@ -498,7 +498,7 @@ developing over time"))
                              ;; immediate subaccounts of this account
                              ;; (and including this account).
                              (gnc:make-report-anchor
-                              reportname
+                              reportguid
                               report-obj
                               (list
                                (list gnc:pagename-accounts optname-accounts
@@ -550,7 +550,8 @@ developing over time"))
       'options-generator (lambda () (options-generator (cadr l) (cadr tip-and-rev)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 
-					      (car l) 
+					      (car l)
+					      (car (reverse l))
 					      (cadr l)
 					      (caddr l))))))
  (list 
