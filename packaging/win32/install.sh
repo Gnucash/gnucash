@@ -929,6 +929,33 @@ function inst_aqbanking() {
     fi
 }
 
+function inst_libgda() {
+    setup LibGDA
+    _LIBGDA_UDIR=`unix_path ${LIBGDA_DIR}`
+    add_to_env ${_LIBGDA_UDIR}/bin PATH
+    add_to_env ${_LIBGDA_UDIR}/lib/pkgconfig PKG_CONFIG_PATH
+    if quiet ${PKG_CONFIG} --exists libgda-3.0
+    then
+        echo "Libgda already installed. skipping."
+    else
+        wget_unpacked $LIBGDA_URL $DOWNLOAD_DIR $TMP_DIR
+        assert_one_dir $TMP_UDIR/libgda-*
+        qpushd $TMP_UDIR/libgda-*
+            #patch to ignore vfs, as libgda uses depriciated header
+            patch libgda/gda-data-model-dir.c $LIBGDA_PATCH
+            #patch to use g_setenv instead of setenv (bug #510739)
+            patch tools/gda-sql.c $LIBGDA_PATCH2
+            ./configure  \
+                --prefix=${_LIBGDA_UDIR} \
+                CPPFLAGS="${REGEX_CPPFLAGS} ${GNOME_CPPFLAGS}" \
+                LDFLAGS="${REGEX_LDFLAGS} ${GNOME_LDFLAGS} -lintl"
+            make
+            make install
+        qpopd
+        ${PKG_CONFIG} --exists libgda-3.0 || die "Libgda not installed correctly"
+    fi
+}
+
 function svn_up() {
     mkdir -p $_REPOS_UDIR
     qpushd $REPOS_DIR
@@ -996,7 +1023,7 @@ function inst_gnucash() {
         qpushd src/bin
             rm gnucash
             make PATH_SEPARATOR=";" \
-                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin" \
+                bindir="${_INSTALL_UDIR}/bin:${_INSTALL_UDIR}/lib:${_INSTALL_UDIR}/lib/gnucash:${_GOFFICE_UDIR}/bin:${_LIBGSF_UDIR}/bin:${_PCRE_UDIR}/bin:${_GNOME_UDIR}/bin:${_LIBXML2_UDIR}/bin:${_GUILE_UDIR}/bin:${_REGEX_UDIR}/bin:${_AUTOTOOLS_UDIR}/bin:${AQBANKING_UPATH}:${_LIBOFX_UDIR}/bin:${_OPENSP_UDIR}/bin:${LIBGDA_DIR}/bin" \
                 gnucash
         qpopd
 
@@ -1032,7 +1059,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
-        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;%PATH%" > gnucash.bat
+        echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBGDA_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
         echo "set GUILE_LOAD_PATH=${INSTALL_DIR}\\share\\gnucash\\guile-modules;${INSTALL_DIR}\\share\\gnucash\\scm;%GUILE_LOAD_PATH%" >> gnucash.bat

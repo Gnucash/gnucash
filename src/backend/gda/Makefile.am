@@ -51,13 +51,15 @@ noinst_HEADERS = \
 libgnc_backend_gda_utils_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${LIBGDA_LIBS}
+   ${LIBGDA_LIBS} \
+   ${QOF_LIBS}
 
 libgncmod_backend_gda_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_gda_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    libgnc-backend-gda-utils.la \
-   ${LIBGDA_LIBS}
+   ${LIBGDA_LIBS} \
+   ${QOF_LIBS}
 
 INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.gda\"

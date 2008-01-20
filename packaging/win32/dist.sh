@@ -171,6 +171,14 @@ function dist_aqbanking() {
     cp -a ${_AQBANKING_UDIR}/share/locale ${DIST_UDIR}/lib
 }
 
+function dist_libgda() {
+    setup Libgda
+    cp -a ${_LIBGDA_UDIR}/bin/* ${DIST_UDIR}/bin
+    cp -a ${_LIBGDA_UDIR}/lib/libgda-3.0 ${DIST_UDIR}/lib
+    cp -a ${_LIBGDA_UDIR}/share/libgda-3.0 ${DIST_UDIR}/share
+    cp -a ${_LIBGDA_UDIR}/share/locale ${DIST_UDIR}/lib
+}
+
 function dist_gnucash() {
     setup GnuCash
     mkdir -p $DIST_UDIR/bin
@@ -245,6 +253,7 @@ dist_goffice
 dist_libofx
 dist_gwenhywfar
 dist_aqbanking
+dist_libgda
 dist_gnucash
 finish
 qpopd

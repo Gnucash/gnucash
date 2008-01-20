@@ -257,6 +257,11 @@ set_default AQBANKING_WITH_QT yes
 # If set to yes, download Qt from http://www.trolltech.com/developer/downloads/qt/windows,
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
 
+set_default LIBGDA_URL "http://ftp.acc.umu.se/pub/GNOME/sources/libgda/3.1/libgda-3.1.2.tar.gz"
+set_default LIBGDA_DIR $GLOBAL_DIR\\libgda
+set_default LIBGDA_PATCH `pwd`/libgda-3.1.2-patch.diff
+set_default LIBGDA_PATCH2 `pwd`/libgda-3.1.2-patch2.diff
+
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
@@ -296,6 +301,7 @@ add_step inst_libofx
 add_step inst_gwenhywfar
 add_step inst_ktoblzcheck
 add_step inst_aqbanking
+add_step inst_libgda
 ##
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_inno
