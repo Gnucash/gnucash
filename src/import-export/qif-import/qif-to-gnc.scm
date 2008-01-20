@@ -542,8 +542,32 @@
                (gnc-far-split (xaccMallocSplit (gnc-get-current-book))))
           
           (if (not num-shares) (set! num-shares (gnc-numeric-zero)))
-          (if (not share-price) (set! share-price (gnc-numeric-zero)))
-          (if (not split-amt) (set! split-amt (n* num-shares share-price)))
+
+          ;; Determine the extended price of all shares without commission.
+          (if xtn-amt
+              ;; Adjust for commission (if any).
+              (if commission-amt
+                  (case qif-action
+                    ((sell sellx shrsout)
+                     (set! split-amt (n+ xtn-amt commission-amt)))
+                    (else
+                     (set! split-amt (nsub xtn-amt commission-amt))))
+                  (set! split-amt xtn-amt))
+              ;; There's no grand total available.
+              (if share-price
+                  ;; Use the given share price, despite possible rounding.
+                  (set! split-amt (n* num-shares share-price))
+                  (set! split-amt (gnc-numeric-zero))))
+
+          ;; Determine the share price.
+          (if (not share-price)
+              (set! share-price (gnc-numeric-zero))
+              (if (and xtn-amt (not (gnc-numeric-zero-p num-shares)))
+                  ;; There's a share price but it could be imprecise
+                  ;; enough to cause rounding. We can compute a better
+                  ;; share price ourselves. For more information, see
+                  ;; bug 373584.
+                  (set! share-price (n/ split-amt num-shares))))
           
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
