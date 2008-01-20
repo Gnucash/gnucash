@@ -371,7 +371,8 @@
                     
                     ;; trying to sneak one by, eh? 
                     (else 
-                     (if (not qstate-type)
+                     (if (and (not qstate-type)
+                              (not (string=? (string-trim line) "")))
                          (begin
                            (display "line = ") (display line) (newline)
                            (display "qif-file:read-file : ")
