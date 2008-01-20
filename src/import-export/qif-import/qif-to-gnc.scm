@@ -379,6 +379,7 @@
         (qif-security (qif-xtn:security-name qif-xtn))
         (qif-default-split (qif-xtn:default-split qif-xtn))
         (qif-memo #f)
+        (qif-date (qif-xtn:date qif-xtn))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
         (qif-cleared (qif-xtn:cleared qif-xtn))
         (n- (lambda (n) (gnc-numeric-neg n)))
@@ -387,8 +388,24 @@
         (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
         (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
     
-    ;; set properties of the whole transaction     
-    (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))
+    ;; Set properties of the whole transaction.
+
+    ;; Set the transaction date.
+    (cond
+      ((not qif-date)
+        (throw 'bad-date
+               "qif-import:qif-xtn-to-gnc-xtn"
+               "Missing transaction date."
+               #f
+               #f))
+      ((< (list-ref qif-date 2) 1970)
+        (throw 'bad-date
+               "qif-import:qif-xtn-to-gnc-xtn"
+               "Invalid transaction year (~A)."
+               (list (list-ref qif-date 2))
+               #f))
+      (else
+        (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))))
     
     ;; fixme: bug #105 
     (if qif-payee
