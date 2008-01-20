@@ -127,7 +127,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 	provider, use "file" */
     book_info = g_strdup( book_id );
     dsn = strchr( book_info, ':' );
-	if( dsn != NULL ) {
+	if( dsn != NULL && *(dsn+1)==*(dsn+2) && *(dsn+1)=='/' ) {
     	*dsn = '\0';
     	dsn += 3;						// Skip '://'
 
@@ -145,6 +145,8 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 													0,
 													&error );
 		}
+	} else {
+		dsn = NULL;
 	}
 
 	if( dsn == NULL || dsn[0] != '@' ) {
