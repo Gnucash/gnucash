@@ -122,7 +122,7 @@ gnc_commodity * gnc_import_select_commodity(char * cusip,
       
     }
   if (retval != NULL&&
-      gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
+      gnc_commodity_get_cusip(retval)!=NULL &&
       cusip != NULL &&
       (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
     {
