@@ -841,7 +841,8 @@ update_parent(GncTreeModelTransaction *model, GtkTreePath *path)
         /* This has an undesired side-effect in the sort model.  The
            order of identical sort keys unfortunately changes when
            row_changed is emitted. */
-        gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+        //What are the side-effects of commenting this out???
+        //gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
         tnode = iter.user_data2;
 
         /* Checkme: Isn't there a simpler condition to check for? */ 
@@ -1256,7 +1257,7 @@ gnc_tree_model_transaction_event_handler(
             /* The blank trans won't emit MODIFY until it's committed */
             if (priv->btrans == trans) {
                 priv->btrans = xaccMallocTransaction(priv->book);
-                priv->tlist = g_list_prepend(priv->tlist, priv->btrans);
+                priv->tlist = g_list_append(priv->tlist, priv->btrans);
 
                 /* Insert a new blank trans */
                 iter = make_iter(model, BLANK, priv->tlist, NULL);
