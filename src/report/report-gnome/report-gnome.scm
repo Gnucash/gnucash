@@ -26,7 +26,7 @@
 ;; returns a function that takes a list: (options, report),
 ;; and returns a widget
 (define (gnc:report-options-editor report) 
-  (if (equal? (gnc:report-type report) "Multicolumn View")
+  (if (equal? (gnc:report-type report) "d8ba4a2e89e8479ca9f6eccdeb164588")
       gnc-column-view-edit-options
       gnc-report-window-default-params-editor))
 
