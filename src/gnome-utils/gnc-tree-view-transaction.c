@@ -994,21 +994,29 @@ static void
 model_copy(gpointer data)
 {
     GtkListStore *list;
-    GtkTreeIter iter1, iter2;
+    GtkTreeIter parent_iter, list_iter, child_iter;
     gchar *string;
-    gboolean loop = TRUE;
+    gboolean parents = FALSE, children = FALSE;
     //gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
     //			"model_column"));
     gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
 
     list = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
-    gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
-    while (loop)	
+    parents = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
+    while (parents)	
     {
-        gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1, column, &string, -1);
-        gtk_list_store_append(list, &iter2);
-        gtk_list_store_set(list, &iter2, 0, string, -1);
-        loop = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &iter1);
+        gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter, column, &string, -1);
+        gtk_list_store_append(list, &list_iter);
+        gtk_list_store_set(list, &list_iter, 0, string, -1);
+        children = gtk_tree_model_iter_children(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, &parent_iter);
+        while (children)
+        {
+            //Get the Memo string for the child (split) node
+            gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, column, &string, -1);
+            //We aren't actually doing anything with the Memo string yet
+            children = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter);
+        }//while
+        parents = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
     }//while
 
     g_object_set_data(G_OBJECT(data), "model_copy", list);
@@ -1480,7 +1488,7 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
         gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list));
 
         //Data used for completion is set based on if editing split or not
-        if (depth < 0)
+        if (depth == 1)
            	g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
         else
        	    g_object_set(G_OBJECT(completion), "text-column", 1, NULL);
