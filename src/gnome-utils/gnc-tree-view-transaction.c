@@ -993,33 +993,41 @@ set_rate_for(GncTreeViewTransaction *tv, Transaction *trans, Split *split,
 static void
 model_copy(gpointer data)
 {
-    GtkListStore *list;
-    GtkTreeIter parent_iter, list_iter, child_iter;
+    GtkListStore *description_list, *memo_list;
+    GtkTreeIter parent_iter, description_iter, memo_iter, child_iter;
     gchar *string;
     gboolean parents = FALSE, children = FALSE;
     //gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
     //			"model_column"));
     gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
 
-    list = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+    description_list = gtk_list_store_new(1, G_TYPE_STRING);
+    memo_list = gtk_list_store_new(1, G_TYPE_STRING);
+    
     parents = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
     while (parents)	
     {
         gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter, column, &string, -1);
-        gtk_list_store_append(list, &list_iter);
-        gtk_list_store_set(list, &list_iter, 0, string, -1);
+        gtk_list_store_append(description_list, &description_iter);
+        gtk_list_store_set(description_list, &description_iter, 0, string, -1);
         children = gtk_tree_model_iter_children(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, &parent_iter);
         while (children)
         {
             //Get the Memo string for the child (split) node
             gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, column, &string, -1);
-            //We aren't actually doing anything with the Memo string yet
+            //Store the memo field if it isn't an empty string
+            if (g_ascii_strcasecmp(string, ""))    
+            {
+                gtk_list_store_append(memo_list, &memo_iter);
+                gtk_list_store_set(memo_list, &memo_iter, 0, string, -1);
+            }//if
             children = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter);
         }//while
         parents = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
     }//while
 
-    g_object_set_data(G_OBJECT(data), "model_copy", list);
+    g_object_set_data(G_OBJECT(data), "model_copy", description_list);
+    g_object_set_data(G_OBJECT(data), "memo_copy", memo_list);
 }//model_copy
 
 /* Connected to "edited" from cellrenderer. For reference, see
@@ -1083,13 +1091,21 @@ gtvt_edited_cb(GtkCellRendererText *cell, const gchar *path_string,
     case COL_DESCRIPTION: // aka "MEMO"
         begin_edit(tv, split, trans);
         if (is_split)
+        {
             xaccSplitSetMemo(split, new_text);
+            gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
+                "memo_copy")), &copy_iter);
+            gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
+                "memo_copy")), &copy_iter, 0, new_text, -1);
+        }//if
         if (is_trans)
+        {
             xaccTransSetDescription(trans, new_text);
-        gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
-            "model_copy")), &copy_iter);
-        gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
-            "model_copy")), &copy_iter, 0, new_text, -1);
+            gtk_list_store_append(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv),
+                "model_copy")), &copy_iter);
+            gtk_list_store_set(GTK_LIST_STORE(g_object_get_data(G_OBJECT(tv), 
+                "model_copy")), &copy_iter, 0, new_text, -1);
+        }//if
         break;
     case COL_NOTES:
         if (is_trans) {
@@ -1442,7 +1458,8 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
                               const gchar *path_string, gpointer user_data)
 {
     GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
-    GtkListStore *list = g_object_get_data(G_OBJECT(tv), "model_copy");
+    GtkListStore *description_list = g_object_get_data(G_OBJECT(tv), "model_copy");
+    GtkListStore *memo_list = g_object_get_data(G_OBJECT(tv), "memo_copy");
     GtkEntryCompletion *completion = gtk_entry_completion_new();
     gint depth;
     GtkTreeViewColumn *num, *description, *transfer;
@@ -1485,13 +1502,17 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
         == GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")))
             //&& GTK_IS_ENTRY(editable))
     {
-        gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(list));
-
         //Data used for completion is set based on if editing split or not
         if (depth == 1)
+        {
+            gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(description_list));
            	g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
+        }//if
         else
-       	    g_object_set(G_OBJECT(completion), "text-column", 1, NULL);
+        {
+            gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(memo_list));
+       	    g_object_set(G_OBJECT(completion), "text-column", 0, NULL);
+        }//else
         //g_object_set(G_OBJECT(completion), "text-column", 
         //	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
         gtk_entry_completion_set_inline_completion(completion, TRUE);
@@ -1499,7 +1520,7 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
         gtk_entry_set_completion(GTK_ENTRY(editable), completion);
     }//if
 
-}
+}//get_editable_start_editing_cb
 
 static void
 start_edit(GtkCellRenderer *cr, GtkCellEditable *editable,
