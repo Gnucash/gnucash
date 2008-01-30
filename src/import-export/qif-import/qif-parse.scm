@@ -156,6 +156,8 @@
       (list GNC-CCARD-TYPE))
      ((string=? mangled-string "invst") ;; these are brokerage accounts.
       (list GNC-BANK-TYPE))
+     ((string=? mangled-string "401(k)/403(b)")
+      (list GNC-BANK-TYPE))
      ((string=? mangled-string "oth a")
       (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "oth l")
