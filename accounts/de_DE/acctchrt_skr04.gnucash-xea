@@ -88,7 +88,7 @@
     </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>A. Anlagevermögen<act:name>
+    <act:name>A. Anlagevermögen</act:name>
     <act:id type="new">25554b48b5e81d8452521bacda7cc226</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -380,7 +380,7 @@
     <act:parent type="new">6ecb789e06f3feac57be62f87a44beba</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>III. Immaterielle Vermögensgegenstände<act:name>
+    <act:name>III. Immaterielle Vermögensgegenstände</act:name>
     <act:id type="new">3dbb5945983bc0de9d33b40bb21c53cb</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -705,7 +705,7 @@
     <act:parent type="new">ea0f8625843879d059e4d62a6b8dcb5b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>IV. Sachanlagen<act:name>
+    <act:name>IV. Sachanlagen</act:name>
     <act:id type="new">4240cda2d91992e2202a40b0bf36a8b2</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -2096,7 +2096,7 @@
     <act:parent type="new">494f8637752cd509f107671d632d4179</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>V. Finanzanlagen<act:name>
+    <act:name>V. Finanzanlagen</act:name>
     <act:id type="new">0c02303d139190b2cfded19f03caa096</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -2590,7 +2590,7 @@
     <act:parent type="new">5431c68bfabcf5fdbef88abedd861198</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>I. Vorräte<act:name>
+    <act:name>I. Vorräte</act:name>
     <act:id type="new">693674f6bcdd8dfbc525267340f4771b</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -3034,7 +3034,7 @@
     <act:parent type="new">c4ecd4b8292df74335546eda34e7e375</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>II. Forderungen und sonstige Vermögensgegenstände<act:name>
+    <act:name>II. Forderungen und sonstige Vermögensgegenstände</act:name>
     <act:id type="new">045196223f1e151347db1f23d28b3dc5</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -6093,7 +6093,7 @@
     <act:parent type="new">50c6c3e215775bc40d571f027d07dfed</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>IV. Kassenbestand, Bundesbankguthaben, Guthaben bei Kreditinstituten und Schecks<act:name>
+    <act:name>IV. Kassenbestand, Bundesbankguthaben, Guthaben bei Kreditinstituten und Schecks</act:name>
     <act:id type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
