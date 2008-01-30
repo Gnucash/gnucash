@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Kredit Auto
     </gnc-act:title>
     <gnc-act:short-description>
-      Kredit für Autokauf
+      Kredit fÃ¼r Autokauf
     </gnc-act:short-description>
     <gnc-act:long-description>
-      Falls Sie einen Kredit zum Autokauf besitzen, können Sie mit dieser Auswahl die passenden Konten bekommen.
+      Falls Sie einen Kredit zum Autokauf besitzen, kÃ¶nnen Sie mit dieser Auswahl die passenden Konten bekommen.
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -57,7 +57,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Kredit für Autokauf</act:description>
+  <act:description>Kredit fÃ¼r Autokauf</act:description>
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -119,7 +119,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Kreditzinsen für Autokauf</act:description>
+  <act:description>Kreditzinsen fÃ¼r Autokauf</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 </gnc-account-example>

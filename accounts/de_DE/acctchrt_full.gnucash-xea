@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Alle Konten
@@ -27,14 +27,14 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Barvermögen</act:name>
+  <act:name>BarvermÃ¶gen</act:name>
   <act:id type="new">12862aa943c3475761754a838a21460c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Barvermögen</act:description>
+  <act:description>BarvermÃ¶gen</act:description>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -170,14 +170,14 @@
   <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Währungskonto</act:name>
+  <act:name>WÃ¤hrungskonto</act:name>
   <act:id type="new">7e9716d2b642edef2c4361ed3e0fb9a5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Währungskonto zum Geldumtausch</act:description>
+  <act:description>WÃ¤hrungskonto zum Geldumtausch</act:description>
   <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -276,7 +276,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Kredit für Autokauf</act:description>
+  <act:description>Kredit fÃ¼r Autokauf</act:description>
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -302,25 +302,25 @@
   <act:parent type="new">13df44e66790069c74d563946aa0394e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Erträge</act:name>
+  <act:name>ErtrÃ¤ge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Erträge</act:description>
+  <act:description>ErtrÃ¤ge</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>BAFöG</act:name>
+  <act:name>BAFÃ¶G</act:name>
   <act:id type="new">a3f10cc287e9fb80272dd9bc4c86d090</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>BAFöG-Leistungen</act:description>
+  <act:description>BAFÃ¶G-Leistungen</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -397,7 +397,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Sonstige ErtrÃ¤ge</act:description>
+  <act:description>Sonstige ErtrÃƒÂ¤ge</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -511,36 +511,36 @@
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bücher</act:name>
+  <act:name>BÃ¼cher</act:name>
   <act:id type="new">74b282047c3191ba045fb23f66f9b375</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Bücher</act:description>
+  <act:description>BÃ¼cher</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Büroartikel</act:name>
+  <act:name>BÃ¼roartikel</act:name>
   <act:id type="new">137ab9fbb95b59f8116de159eb319e28</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Büroartikel</act:description>
+  <act:description>BÃ¼roartikel</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Studiengebühren</act:name>
+  <act:name>StudiengebÃ¼hren</act:name>
   <act:id type="new">df59b64631384ab3ae44e022170e0d47</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Studiengebühren</act:description>
+  <act:description>StudiengebÃ¼hren</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -595,7 +595,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>KFZ Steuer/Gebühren</act:description>
+  <act:description>KFZ Steuer/GebÃ¼hren</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -617,18 +617,18 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Kreditzinsen für Autokauf</act:description>
+  <act:description>Kreditzinsen fÃ¼r Autokauf</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Parkgebühren</act:name>
+  <act:name>ParkgebÃ¼hren</act:name>
   <act:id type="new">f8fba4deb2b88b950cfec0761860caa0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Parkplatzgebühren</act:description>
+  <act:description>ParkplatzgebÃ¼hren</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -742,14 +742,14 @@
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bankgebühren</act:name>
+  <act:name>BankgebÃ¼hren</act:name>
   <act:id type="new">12a5ccccdded86ec783e61c8a059ee96</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Konto- und Bankgebühren</act:description>
+  <act:description>Konto- und BankgebÃ¼hren</act:description>
   <act:parent type="new">18ca785b6fcd2895427459c233a47c57</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -782,7 +782,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Wohltätige Spenden</act:description>
+  <act:description>WohltÃ¤tige Spenden</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -936,7 +936,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Auswärts Essen</act:description>
+  <act:description>AuswÃ¤rts Essen</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1035,7 +1035,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ausgaben für Wohnung/Haus</act:description>
+  <act:description>Ausgaben fÃ¼r Wohnung/Haus</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1046,7 +1046,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Zahlungen für Bausparvertrag</act:description>
+  <act:description>Zahlungen fÃ¼r Bausparvertrag</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
