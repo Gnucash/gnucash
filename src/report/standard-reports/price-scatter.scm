@@ -41,6 +41,7 @@
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-commodity (N_ "Price of Commodity"))
 (define optname-price-source (N_ "Price Source"))
+(define optname-invert (N_ "Invert prices"))
 
 ;;      (optname-accounts (N_ "Accounts"))
 
@@ -94,6 +95,13 @@
                     (N_ "Price Database")
                     (N_ "The recorded prices"))
             )))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      pagename-price optname-invert
+      "g"
+      (N_ "Plot commodity per currency rather than currency per commodity.")
+      #f))
 
     
     (gnc:options-add-plot-size! 
@@ -168,6 +176,7 @@
          (currency-accounts 
           (filter gnc:account-has-shares? (gnc-account-get-descendants-sorted
                                            (gnc-get-current-root-account))))
+	 (invert (get-option pagename-price optname-invert))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -182,7 +191,11 @@
      chart report-title)
     (gnc:html-scatter-set-subtitle!
      chart (string-append
-            (gnc-commodity-get-mnemonic price-commodity)
+	    ;; Check for whether it is commodity against currency or
+	    ;; the other way round. 
+	    (if invert
+		(gnc-commodity-get-mnemonic report-currency)
+		(gnc-commodity-get-mnemonic price-commodity))
             " - "
             (sprintf #f
                      (_ "%s to %s")
@@ -200,7 +213,12 @@
                                     ((filledsquare) "filled square")))
     (gnc:html-scatter-set-markercolor! chart mcolor)
     (gnc:html-scatter-set-y-axis-label!
-     chart (gnc-commodity-get-mnemonic report-currency))
+     chart 
+     ;; Check for whether it is commodity against currency or
+     ;; the other way round. 
+     (if invert
+	 (gnc-commodity-get-mnemonic price-commodity)
+	 (gnc-commodity-get-mnemonic report-currency)))
     (gnc:html-scatter-set-x-axis-label!
      chart (case interval
              ((DayDelta) (N_ "Days"))
@@ -248,10 +266,15 @@
        ;; data))
        
        ;; convert the gnc:numeric's to doubles
-       (set! data (map (lambda (x) 
-                         (list (first x) 
-                               (gnc-numeric-to-double (second x))))
-                       data))
+       (if invert
+	   (set! data (map (lambda (x) 
+			     (list (first x) 
+				   (/ 1 (gnc-numeric-to-double (second x)))))
+			   data))
+	   (set! data (map (lambda (x) 
+			     (list (first x) 
+				   (gnc-numeric-to-double (second x))))
+			   data)))
 
        ;; convert the dates to the weird x-axis scaling of the
        ;; scatterplot
