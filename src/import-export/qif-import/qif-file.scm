@@ -40,6 +40,7 @@
           (tag #f)
           (value #f)
           (heinous-error #f)
+          (missing-date-warned #f)
           (delimiters (string #\cr #\nl))
           (progress-dialog '())
           (file-stats (stat path))
@@ -238,7 +239,17 @@
                                                 current-account-name) 
                         
                         (if (qif-xtn:date current-xtn)
-                            (qif-file:add-xtn! self current-xtn))
+                            (qif-file:add-xtn! self current-xtn)
+                            ;; The date is missing! Warn the user if they
+                            ;; haven't been warned already.
+                            (if (not missing-date-warned)
+                                (begin
+                                  (set! missing-date-warned #t)
+                                  (gnc-warning-dialog '() (string-append
+                              (_ "One or more transactions is missing a date.")
+                              "\n"
+                              (_ "Some transactions may be discarded."))))))
+
                         ;;(write current-xtn) (newline)
                         (set! current-xtn (make-qif-xtn))
                         (set! current-split #f)
