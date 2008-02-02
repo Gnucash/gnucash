@@ -286,7 +286,7 @@
   <gnc:account version="2.0.0">
     <act:name>1400 Ford. a. Lieferungen und Leistungen</act:name>
     <act:id type="new">2fe36b4ddde053387e42aa893a94b91b</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>RECEIVABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -481,7 +481,7 @@
   <gnc:account version="2.0.0">
     <act:name>1600 Verblk. aus Lieferungen u. Leistungen</act:name>
     <act:id type="new">1bf9f2675a36b278adcf6da68a7e4cbe</act:id>
-    <act:type>LIABILITY</act:type>
+    <act:type>PAYABLE</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
