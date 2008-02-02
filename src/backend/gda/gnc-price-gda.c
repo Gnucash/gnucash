@@ -125,6 +125,7 @@ static void
 save_price( QofInstance* inst, GncGdaBackend* be )
 {
     GNCPrice* pPrice = GNC_PRICE(inst);
+	gint op;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
@@ -134,11 +135,14 @@ save_price( QofInstance* inst, GncGdaBackend* be )
     gnc_gda_save_commodity( be, gnc_price_get_commodity( pPrice ) );
     gnc_gda_save_commodity( be, gnc_price_get_currency( pPrice ) );
 
-    (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TABLE_NAME,
-                        GNC_ID_PRICE, pPrice,
-                        col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, TABLE_NAME, GNC_ID_PRICE, pPrice, col_table );
 }
 
 static gboolean

@@ -283,14 +283,20 @@ gnc_gda_save_account( QofInstance* inst, GncGdaBackend* be )
     // into the register and an account window will be opened.  The account info is not complete yet,
     // but the name has been set, triggering this commit
     if( xaccAccountGetCommodity( pAcc ) != NULL ) {
+		gint op;
+
         // Ensure the commodity is in the db
         gnc_gda_save_commodity( be, xaccAccountGetCommodity( pAcc ) );
 
-        (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TABLE_NAME,
-                        GNC_ID_ACCOUNT, pAcc,
-                        col_table );
+		if( qof_instance_get_destroying( inst ) ) {
+			op = OP_DB_DELETE;
+		} else if( be->is_pristine_db ) {
+			op = OP_DB_ADD;
+		} else {
+			op = OP_DB_ADD_OR_UPDATE;
+		}
+
+        (void)gnc_gda_do_db_operation( be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc, col_table );
 
         // Now, commit or delete any slots
         guid = qof_instance_get_guid( inst );

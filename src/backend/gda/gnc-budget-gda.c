@@ -127,16 +127,20 @@ save_budget( QofInstance* inst, GncGdaBackend* be )
 {
     GncBudget* pBudget = GNC_BUDGET(inst);
     const GUID* guid;
+	gint op;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_BUDGET(inst) );
 
-    (void)gnc_gda_do_db_operation( be,
-                        qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
-                        BUDGET_TABLE,
-                        GNC_ID_BUDGET, pBudget,
-                        col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget, col_table );
 
     // Now, commit any slots and recurrence
     guid = qof_instance_get_guid( inst );

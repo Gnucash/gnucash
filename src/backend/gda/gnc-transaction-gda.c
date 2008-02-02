@@ -453,14 +453,19 @@ delete_splits( GncGdaBackend* be, Transaction* pTx )
 static void
 commit_split( QofInstance* inst, GncGdaBackend* be )
 {
+	gint op;
+
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( be != NULL );
 
-    (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        SPLIT_TABLE,
-                        GNC_ID_SPLIT, inst,
-                        split_col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, SPLIT_TABLE, GNC_ID_SPLIT, inst, split_col_table );
     gnc_gda_slots_save( be,
                         qof_instance_get_guid( inst ),
                         qof_instance_get_slots( inst ) );
@@ -498,6 +503,7 @@ gnc_gda_save_transaction( QofInstance* inst, GncGdaBackend* be )
 {
     Transaction* pTx = GNC_TRANS(inst);
     const GUID* guid;
+	gint op;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_TRANS(inst) );
@@ -506,16 +512,22 @@ gnc_gda_save_transaction( QofInstance* inst, GncGdaBackend* be )
     // Ensure the commodity is in the db
     gnc_gda_save_commodity( be, xaccTransGetCurrency( pTx ) );
 
-    (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TRANSACTION_TABLE,
-                        GNC_ID_TRANS, pTx,
-                        tx_col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+
+    (void)gnc_gda_do_db_operation( be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx, tx_col_table );
 
     guid = qof_instance_get_guid( inst );
 
     // Delete any old slots and splits for this transaction
-    delete_splits( be, pTx );
+	if( !be->is_pristine_db ) {
+    	delete_splits( be, pTx );
+	}
 
     if( !qof_instance_get_destroying(inst) ) {
         SplitList* splits;

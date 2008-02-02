@@ -45,6 +45,7 @@ struct GncGdaBackend_struct
   gboolean	loading;		/* We are performing an initial load */
   gboolean  in_query;
   gboolean  supports_transactions;
+  gboolean  is_pristine_db;	// Are we saving to a new pristine db?
 
   gint obj_total;			// Total # of objects (for percentage calculation)
   gint operations_done;		// Number of operations (save/load) done

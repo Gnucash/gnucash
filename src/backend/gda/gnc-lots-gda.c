@@ -153,15 +153,20 @@ create_lots_tables( GncGdaBackend* be )
 static void
 commit_lot( QofInstance* inst, GncGdaBackend* be )
 {
+	gint op;
+
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_LOT(inst) );
 
-    (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        TABLE_NAME,
-                        GNC_ID_LOT, inst,
-                        col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, TABLE_NAME, GNC_ID_LOT, inst, col_table );
 
     // Now, commit any slots
     gnc_gda_slots_save( be, qof_instance_get_guid( inst ),

@@ -239,16 +239,20 @@ gnc_gda_save_schedxaction( QofInstance* inst, GncGdaBackend* be )
 {
     SchedXaction* pSx = GNC_SX(inst);
     const GUID* guid;
+	gint op;
 
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( GNC_IS_SX(inst) );
 	g_return_if_fail( be != NULL );
 
-    (void)gnc_gda_do_db_operation( be,
-                        (qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE ),
-                        SCHEDXACTION_TABLE,
-                        /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx,
-                        col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, SCHEDXACTION_TABLE, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
 
     // Now, commit any slots

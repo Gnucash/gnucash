@@ -191,16 +191,20 @@ void
 gnc_gda_save_book( QofInstance* inst, GncGdaBackend* be )
 {
     const GUID* guid;
+	gint op;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( inst != NULL );
 	g_return_if_fail( QOF_IS_BOOK(inst) );
 
-    (void)gnc_gda_do_db_operation( be,
-                        qof_instance_get_destroying(inst) ? OP_DB_DELETE : OP_DB_ADD_OR_UPDATE,
-                        BOOK_TABLE,
-                        GNC_ID_BOOK, inst,
-                        col_table );
+	if( qof_instance_get_destroying( inst ) ) {
+		op = OP_DB_DELETE;
+	} else if( be->is_pristine_db ) {
+		op = OP_DB_ADD;
+	} else {
+		op = OP_DB_ADD_OR_UPDATE;
+	}
+    (void)gnc_gda_do_db_operation( be, op, BOOK_TABLE, GNC_ID_BOOK, inst, col_table );
 
     // Delete old slot info
     guid = qof_instance_get_guid( inst );

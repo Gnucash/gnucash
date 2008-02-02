@@ -356,8 +356,10 @@ gnc_gda_slots_save( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
 	g_return_if_fail( guid != NULL );
 	g_return_if_fail( pFrame != NULL );
 
-    /* First, delete the old slots for this object */
-    gnc_gda_slots_delete( be, guid );
+    // If this is not saving into a new db, clear out the old saved slots first
+	if( !be->is_pristine_db ) {
+    	gnc_gda_slots_delete( be, guid );
+	}
 
     slot_info.be = be;
     slot_info.guid = guid;

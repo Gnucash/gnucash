@@ -124,6 +124,8 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     be->pClient = gda_client_new();
 	be->pConnection = NULL;
 
+	// FIXME: better username/password handling
+
     /* Split book_id into provider and connection string.  If there's no
 	provider, use "file" */
     book_info = g_strdup( book_id );
@@ -583,10 +585,13 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 
     /* Save all contents */
 	be->primary_book = book;
+	be->is_pristine_db = TRUE;
 	be->obj_total = 0;
     be->obj_total += 1 + gnc_account_n_descendants( gnc_book_get_root_account( book ) );
 	be->obj_total += gnc_book_count_transactions( book );
 	be->operations_done = 0;
+
+	// FIXME: should write the set of commodities that are used 
     //write_commodities( be, book );
 	gnc_gda_save_book( QOF_INSTANCE(book), be );
     write_accounts( be );
@@ -594,6 +599,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     write_template_transactions( be );
     write_schedXactions( be );
     qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, be );
+	be->is_pristine_db = FALSE;
 
     LEAVE( "book=%p", book );
 }
