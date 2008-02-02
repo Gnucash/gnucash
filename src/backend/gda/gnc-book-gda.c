@@ -45,7 +45,7 @@
 
 #define BOOK_TABLE "books"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 static gpointer get_root_account_guid( gpointer pObject, const QofParam* );
 static void set_root_account_guid( gpointer pObject, gpointer pValue );

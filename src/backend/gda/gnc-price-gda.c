@@ -39,7 +39,7 @@
 #include "gnc-commodity-gda.h"
 #include "gnc-price-gda.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
 

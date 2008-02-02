@@ -45,6 +45,9 @@ struct GncGdaBackend_struct
   gboolean	loading;		/* We are performing an initial load */
   gboolean  in_query;
   gboolean  supports_transactions;
+
+  gint obj_total;			// Total # of objects (for percentage calculation)
+  gint operations_done;		// Number of operations (save/load) done
 };
 typedef struct GncGdaBackend_struct GncGdaBackend;
 

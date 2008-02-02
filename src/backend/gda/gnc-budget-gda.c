@@ -45,7 +45,7 @@
 
 #define BUDGET_TABLE "budgets"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 50
 #define BUDGET_MAX_DESCRIPTION_LEN 500

@@ -65,6 +65,7 @@ static void gnc_gda_init_object_handlers( void );
 static void add_table_column( GdaServerProvider* server, GdaConnection* cnn,
             xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
             gint size, gint flags );
+static void update_save_progress( GncGdaBackend* be );
 
 typedef struct {
     QofIdType searchObj;
@@ -81,7 +82,7 @@ typedef struct {
     gnc_gda_query_info* pQueryInfo;
 } gda_backend;
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SQLITE_PROVIDER_NAME "SQLite"
 
@@ -111,8 +112,8 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     GError* error = NULL;
     gchar* book_info;
     gchar* dsn;
-    gchar* username = "";
-    gchar* password = "";
+    gchar* username = NULL;
+    gchar* password = NULL;
 
 	g_return_if_fail( be_start != NULL );
 	g_return_if_fail( session != NULL );
@@ -431,6 +432,7 @@ write_account_tree( GncGdaBackend* be, Account* root )
     descendants = gnc_account_get_descendants( root );
     for( node = descendants; node != NULL; node = g_list_next(node) ) {
         gnc_gda_save_account( QOF_INSTANCE(GNC_ACCOUNT(node->data)), be );
+		update_save_progress( be );
     }
     g_list_free( descendants );
 }
@@ -452,6 +454,7 @@ write_tx( Transaction* tx, gpointer data )
 	g_return_val_if_fail( data != NULL, 0 );
 
     gnc_gda_save_transaction( QOF_INSTANCE(tx), be );
+	update_save_progress( be );
 
     return 0;
 }
@@ -511,6 +514,21 @@ write_cb( const gchar* type, gpointer data_p, gpointer be_p )
 }
 
 static void
+update_save_progress( GncGdaBackend* be )
+{
+	if( be->be.percentage != NULL ) {
+		gint percent_done;
+
+		be->operations_done++;
+		percent_done = be->operations_done * 100 / be->obj_total;
+		if( percent_done > 100 ) {
+			percent_done = 100;
+		}
+		(be->be.percentage)( NULL, percent_done );
+	}
+}
+
+static void
 gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 {
     GncGdaBackend* be = (GncGdaBackend*)fbe;
@@ -522,7 +540,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
 
-    ENTER ("book=%p, primary=%p", book, be->primary_book);
+    ENTER( "book=%p, primary=%p", book, be->primary_book );
 
     /* Destroy the current contents of the database */
     tables = gda_connection_get_schema( be->pConnection,
@@ -565,6 +583,10 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 
     /* Save all contents */
 	be->primary_book = book;
+	be->obj_total = 0;
+    be->obj_total += 1 + gnc_account_n_descendants( gnc_book_get_root_account( book ) );
+	be->obj_total += gnc_book_count_transactions( book );
+	be->operations_done = 0;
     //write_commodities( be, book );
 	gnc_gda_save_book( QOF_INSTANCE(book), be );
     write_accounts( be );
@@ -573,7 +595,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     write_schedXactions( be );
     qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, be );
 
-    LEAVE ("book=%p", book);
+    LEAVE( "book=%p", book );
 }
 
 /* ================================================================= */

@@ -42,7 +42,7 @@
 #include "gnc-commodity-gda.h"
 #include "gnc-slots-gda.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 static gpointer get_quote_source_name( gpointer pObject, const QofParam* );
 static void set_quote_source_name( gpointer pObject, gpointer pValue );

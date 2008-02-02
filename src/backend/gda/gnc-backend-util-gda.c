@@ -41,7 +41,7 @@
 #include "gnc-backend-util-gda.h"
 #include "gnc-gconf-utils.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef struct {
     QofIdType searchObj;

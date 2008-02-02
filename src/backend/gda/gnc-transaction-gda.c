@@ -47,7 +47,7 @@
 
 #include "gnc-engine.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
 #define SPLIT_TABLE "splits"
