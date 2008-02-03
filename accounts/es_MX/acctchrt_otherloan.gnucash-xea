@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Otros préstamos
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Cuentas para controlar otros préstamos, junto con su interés asociado
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deseará seleccionar este juego de cuentas si tiene un préstamo
+      distinto a un préstamo hipotecario (otro préstamo, interés de
+      otro préstamo).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasivo</act:name>
+  <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Pasivo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Préstamos</act:name>
+  <act:id type="new">b5624a9d1a1b797b87b815774faccfe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Préstamos</act:description>
+  <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otro préstamo</act:name>
+  <act:id type="new">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otro préstamo</act:description>
+  <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">565e52a122e8acc9a67a36e61357e2ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intereses</act:name>
+  <act:id type="new">4a02c14e992ea79076837c164aa6fc8d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Intereses</act:description>
+  <act:parent type="new">565e52a122e8acc9a67a36e61357e2ae</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otro interés</act:name>
+  <act:id type="new">f01de45e290ecc29b64d9cb8a733af68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Interés asociado a otro préstamo</act:description>
+  <act:parent type="new">4a02c14e992ea79076837c164aa6fc8d</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

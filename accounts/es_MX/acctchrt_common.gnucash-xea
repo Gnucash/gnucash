@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Cuentas comunes
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Un juego básico de cuentas mayoritariamente utilizadas
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      La mayoría de usuarios deseará escoger este juego de
+      cuentas. Incluye las cuentas más comúnmente utilizadas (cuenta
+      de ahorros, efectivo, tarjeta de crédito, ingresos,
+      gastos comunes).
+  </gnc-act:long-description>    
+  <gnc-act:start-selected>1</gnc-act:start-selected>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo</act:name>
+  <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Activo circulante</act:name>
+  <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Activo circulante</act:description>
+  <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cuenta de Cheques</act:name>
+  <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Cuenta de Cheques</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cuenta de ahorros</act:name>
+  <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Cuenta de ahorros</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Efectivo</act:name>
+  <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
+  <act:type>CASH</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Dinero en efectivo (cartera)</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasivo</act:name>
+  <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Pasivo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cuentas por pagar</act:name>
+  <act:id type="new">a8186db64d71dc2ca5fdccb3234b531b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Cuentas por pagar</act:description>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Tarjeta de crédito</act:name>
+  <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
+  <act:type>CREDIT</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Tarjeta de crédito</act:description>
+  <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos</act:name>
+  <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ingresos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pagos extra</act:name>
+  <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Pagos extra</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Regalos recibidos</act:name>
+  <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Regalos recibidos</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingresos por intereses</act:name>
+  <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ingresos por intereses</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intereses cuenta de cheques</act:name>
+  <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Intereses de la cuenta de cheques</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros intereses</act:name>
+  <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros ingresos por intereses</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intereses cuenta de ahorros</act:name>
+  <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Intereses de la cuenta de ahorros</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros ingresos</act:name>
+  <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros ingresos</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sueldo</act:name>
+  <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Sueldo</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ajustes</act:name>
+  <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ajustes</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Automóvil</act:name>
+  <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Automóvil</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Verificación</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos por Verificación de emisión de contaminantes</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Placas y Permisos</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Placas y Permisos</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Estacionamiento</act:name>
+  <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Estacionamiento</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Casetas de Peaje</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Casetas de Peaje</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gasolina</act:name>
+  <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gasolina</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reparación y mantenimiento</act:name>
+  <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Reparación y mantenimiento del automóvil</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cargo de servicio bancario</act:name>
+  <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Cargo de servicio bancario</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Libros</act:name>
+  <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Libros</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>TV Cable</act:name>
+  <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>TV por Cable</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obras de caridad</act:name>
+  <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Aportaciones a obras de caridad</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ropa</act:name>
+  <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ropa</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Computadora</act:name>
+  <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos relacionados con la computadora</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Restaurantes</act:name>
+  <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Restaurantes</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Educación</act:name>
+  <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Educación</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ocio</act:name>
+  <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Ocio</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Música/Películas</act:name>
+  <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Música/Películas</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Entretenimiento</act:name>
+  <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Entretenimiento</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Viajes</act:name>
+  <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Viajes</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Regalos</act:name>
+  <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Regalos</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Despensa</act:name>
+  <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Despensa</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hobbies</act:name>
+  <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Hobbies</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguros</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguros</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro del automóvil</act:name>
+  <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguro del automóvil</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro Social</act:name>
+  <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguro Social</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Seguro de vida</act:name>
+  <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Seguro de vida</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lavandería</act:name>
+  <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Lavandería</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos médicos</act:name>
+  <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos médicos</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros gastos</act:name>
+  <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros gastos</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Servicios de Internet</act:name>
+  <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Servicios de Internet</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Teléfono</act:name>
+  <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Teléfono</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Transporte público</act:name>
+  <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Transporte público</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Suscripciones</act:name>
+  <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Suscripciones</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Material de oficina</act:name>
+  <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Material de oficina</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Impuestos</act:name>
+  <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuestos</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Federales</act:name>
+  <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuestos Federales</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ISR</act:name>
+  <act:id type="new">30806ad38d282e15090fbd9a4a61ca28</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuesto sobre la Renta</act:description>
+  <act:parent type="new">090a786357463ec7fbee8066cb999097</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IVA</act:name>
+  <act:id type="new">43c2a97b5d6d40b4b3d7b9b5f2f432bf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuesto del Valor Agregado</act:description>
+  <act:parent type="new">090a786357463ec7fbee8066cb999097</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IETU</act:name>
+  <act:id type="new">30b89467a096e0c4c40c600b8c02f6b7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Impuesto Empresarial de Tasa Única</act:description>
+  <act:parent type="new">090a786357463ec7fbee8066cb999097</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>PTU</act:name>
+  <act:id type="new">e753ffa05ffe9fe534db2ff833fb5265</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Participanción de los Trabajadores en las Utilidades</act:description>
+  <act:parent type="new">090a786357463ec7fbee8066cb999097</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Tenencia</act:name>
+  <act:id type="new">62fa4c9267beef0acf66cb0b55433b7f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Tenencia</act:description>
+  <act:parent type="new">090a786357463ec7fbee8066cb999097</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IMSS</act:name>
+  <act:id type="new">27eb9496be9d24ce0849d494ffe5ce95</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Aportaciones al IMSS</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Retenciones</act:name>
+  <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Retenciones de impuestos por empresas o individuos</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Otros impuestos</act:name>
+  <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Otros impuestos</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Municipales</act:name>
+  <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Municipales</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Servicios</act:name>
+  <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Servicios</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Electricidad</act:name>
+  <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Electricidad</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Recolección de basura</act:name>
+  <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Recolección de basura</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gas</act:name>
+  <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gas</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Agua</act:name>
+  <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Agua</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Capital</act:name>
+  <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
+  <act:type>EQUITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Aportaciones de Capital y resultados acumulados</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Balances de apertura</act:name>
+  <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
+  <act:type>EQUITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Balances de apertura</act:description>
+  <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

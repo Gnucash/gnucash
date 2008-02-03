@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Préstamo de automóvil
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Cuentas para pago a plazos de automóvil e intereses asociados
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Debería seleccionar este juego de cuentas si está pagando a plazos
+      su automóvil (plazos de automóvil, intereses por plazos de
+      automóvil).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pasivo</act:name>
+  <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Pasivo</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Préstamos</act:name>
+  <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Préstamos</act:description>
+  <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehículo a plazos</act:name>
+  <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Vehículo a plazos</act:description>
+  <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intereses</act:name>
+  <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Intereses</act:description>
+  <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Intereses pago plazos vehículo</act:name>
+  <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Intereses pago plazos vehículo</act:description>
+  <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
