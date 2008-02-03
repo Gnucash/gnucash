@@ -584,18 +584,30 @@
           (set! qif-far-acct (cadr qif-accts))
           (set! qif-commission-acct (caddr qif-accts))
 
-          ;; translate the QIF account names into Gnucash accounts
+          ;; Translate the QIF account names into GnuCash accounts.
           (if (and qif-near-acct qif-far-acct)
               (begin 
+                ;; Determine the near account.
                 (set! near-acct-info 
                       (or (hash-ref qif-acct-map qif-near-acct)
                           (hash-ref qif-cat-map qif-near-acct)))
                 (set! near-acct-name (qif-map-entry:gnc-name near-acct-info))
                 (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
                 
-                (set! far-acct-info
-                      (or (hash-ref qif-acct-map qif-far-acct)
-                          (hash-ref qif-cat-map qif-far-acct)))
+                ;; Determine the far account.
+                (if (or (not (string? qif-far-acct))
+                        (string=? qif-far-acct ""))
+                    ;; No far account name is specified, so try a
+                    ;; payee or memo mapping to get a default.
+                    (set! far-acct-info
+                          (or (hash-ref qif-memo-map (qif-xtn:payee qif-xtn))
+                              (hash-ref qif-memo-map
+                                        (qif-split:memo
+                                          (car (qif-xtn:splits qif-xtn)))))))
+                (if (not far-acct-info)
+                    (set! far-acct-info
+                          (or (hash-ref qif-acct-map qif-far-acct)
+                              (hash-ref qif-cat-map qif-far-acct))))
                 (set! far-acct-name (qif-map-entry:gnc-name far-acct-info))
                 (set! far-acct (hash-ref gnc-acct-hash far-acct-name))))
           
