@@ -262,7 +262,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	    break;
 	  }
 	  tmp=notes;
-	  notes=g_strdup_printf("%s%s%s",tmp,"|Ivestment Trans type:", dest_string);
+	  notes=g_strdup_printf("%s%s%s",tmp,"|Investment Trans type:", dest_string);
 	  g_free(tmp);
 	}
 	if(data.memo_valid==true&&data.name_valid==true){/* Copy only if memo wasn't put in Description */
