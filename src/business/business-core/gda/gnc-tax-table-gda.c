@@ -219,8 +219,7 @@ load_single_taxtable( GncGdaBackend* be, GdaDataModel* pModel, int row )
         tt = gncTaxTableCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_TAXTABLE, tt, tt_col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(tt)),
-                        qof_instance_get_slots( QOF_INSTANCE(tt) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(tt) );
 	load_taxtable_entries( be, tt );
 
     qof_instance_mark_clean( QOF_INSTANCE(tt) );

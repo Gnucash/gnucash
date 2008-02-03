@@ -34,7 +34,8 @@
 
 void gnc_gda_slots_save( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame );
 void gnc_gda_slots_delete( GncGdaBackend* be, const GUID* guid );
-void gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame );
+void gnc_gda_slots_load( GncGdaBackend* be, QofInstance* inst );
+void gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list );
 
 void gnc_gda_init_slots_handler( void );
 

@@ -145,8 +145,7 @@ load_single_book( GncGdaBackend* be, GdaDataModel* pModel, int row )
 	}
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_BOOK, pBook, col_table );
-    gnc_gda_slots_load( be, gnc_book_get_guid( pBook ),
-                            qof_instance_get_slots( QOF_INSTANCE(pBook) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pBook) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBook) );
 }

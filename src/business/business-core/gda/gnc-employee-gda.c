@@ -89,8 +89,7 @@ load_single_employee( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pEmployee = gncEmployeeCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_EMPLOYEE, pEmployee, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pEmployee )),
-                        qof_instance_get_slots( QOF_INSTANCE(pEmployee) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pEmployee) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pEmployee) );
 }

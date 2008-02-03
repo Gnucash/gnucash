@@ -77,8 +77,7 @@ load_single_job( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pJob = gncJobCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_JOB, pJob, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pJob )),
-                        qof_instance_get_slots( QOF_INSTANCE(pJob) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pJob) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pJob) );
 }

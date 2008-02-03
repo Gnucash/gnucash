@@ -186,8 +186,7 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     gnc_gda_load_object( be, pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSx) ),
-                            qof_instance_get_slots( QOF_INSTANCE(pSx) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pSx) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pSx) );
 

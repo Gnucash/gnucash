@@ -92,9 +92,9 @@ static col_cvt_t col_table[] =
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static col_cvt_t guid_col_table[] =
+static col_cvt_t obj_guid_col_table[] =
 {
-    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
+    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, _retrieve_guid_ },
     { NULL }
 };
 
@@ -379,7 +379,7 @@ gnc_gda_slots_delete( GncGdaBackend* be, const GUID* guid )
     slot_info.be = be;
     slot_info.guid = guid;
     (void)gnc_gda_do_db_operation( be, OP_DB_DELETE, TABLE_NAME,
-                                TABLE_NAME, &slot_info, guid_col_table );
+                                TABLE_NAME, &slot_info, obj_guid_col_table );
 }
 
 static void
@@ -404,7 +404,7 @@ load_slot( GncGdaBackend* be, GdaDataModel* pModel, gint row, KvpFrame* pFrame )
 }
 
 void
-gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
+gnc_gda_slots_load( GncGdaBackend* be, QofInstance* inst )
 {
     gchar* buf;
     GdaObject* ret;
@@ -414,11 +414,14 @@ gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
     GdaQueryCondition* cond;
     GdaQueryField* key_value;
     GValue value;
+	const GUID* guid;
+	KvpFrame* pFrame;
 
 	g_return_if_fail( be != NULL );
-	g_return_if_fail( guid != NULL );
-	g_return_if_fail( pFrame != NULL );
+	g_return_if_fail( inst != NULL );
 
+	guid = qof_instance_get_guid( inst );
+	pFrame = qof_instance_get_slots( inst );
     guid_to_string_buff( guid, guid_buf );
 
     /* First time, create the query */
@@ -460,17 +463,105 @@ gnc_gda_slots_load( GncGdaBackend* be, const GUID* guid, KvpFrame* pFrame )
     g_value_set_string( &value, guid_buf );
     gda_query_field_value_set_value( GDA_QUERY_FIELD_VALUE(key_value), &value );
 
-    ret = gnc_gda_execute_query( be, query );
+	ret = gnc_gda_execute_query( be, query );
     if( GDA_IS_DATA_MODEL( ret ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
-        KvpValue* pValue;
 
         for( r = 0; r < numRows; r++ ) {
             load_slot( be, pModel, r, pFrame );
         }
     }
+}
+
+static const GUID*
+load_obj_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
+{
+    static GUID guid;
+
+	g_return_val_if_fail( be != NULL, NULL );
+	g_return_val_if_fail( pModel != NULL, NULL );
+	g_return_val_if_fail( row >= 0, NULL );
+
+    gnc_gda_load_object( be, pModel, row, NULL, &guid, obj_guid_col_table );
+
+    return &guid;
+}
+
+static void
+load_slot_for_list_item( GncGdaBackend* be, GdaDataModel* pModel, gint row, QofCollection* coll )
+{
+    slot_info_t slot_info;
+	const GUID* guid;
+	QofInstance* inst;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( pModel != NULL );
+	g_return_if_fail( row >= 0 );
+	g_return_if_fail( coll != NULL );
+
+	guid = load_obj_guid( be, pModel, row );
+	inst = qof_collection_lookup_entity( coll, guid );
+
+    slot_info.be = be;
+    slot_info.pKvpFrame = qof_instance_get_slots( inst );
+    slot_info.path = NULL;
+
+    gnc_gda_load_object( be, pModel, row, TABLE_NAME, &slot_info, col_table );
+
+    if( slot_info.path != NULL ) {
+        g_string_free( slot_info.path, TRUE );
+    }
+}
+
+void
+gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
+{
+	QofCollection* coll;
+	GdaQuery* query;
+	GString* sql;
+    gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gboolean first_guid = TRUE;
+	GdaObject* ret;
+
+	g_return_if_fail( be != NULL );
+
+	// Ignore empty list
+	if( list == NULL ) return;
+
+	// Create the query for all slots for all items on the list
+	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
+	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", TABLE_NAME, obj_guid_col_table[0].col_name );
+	for( ; list != NULL; list = list->next ) {
+		QofInstance* inst = QOF_INSTANCE(list->data);
+		coll = qof_instance_get_collection( inst );
+    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
+
+		if( !first_guid ) {
+			g_string_append( sql, "," );
+		}
+		g_string_append( sql, "'" );
+		g_string_append( sql, guid_buf );
+		g_string_append( sql, "'" );
+		first_guid = FALSE;
+    }
+	g_string_append( sql, ")" );
+
+	// Execute the query and load the slots
+	query = gnc_gda_create_query_from_sql( be, sql->str );
+	g_string_free( sql, TRUE );
+	ret = gnc_gda_execute_query( be, query );
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
+
+        for( r = 0; r < numRows; r++ ) {
+            load_slot_for_list_item( be, pModel, r, coll );
+        }
+    }
+	g_object_unref( ret );
 }
 
 /* ================================================================= */

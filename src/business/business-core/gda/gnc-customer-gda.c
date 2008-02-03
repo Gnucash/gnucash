@@ -90,8 +90,7 @@ load_single_customer( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pCustomer = gncCustomerCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_CUSTOMER, pCustomer, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pCustomer )),
-                        qof_instance_get_slots( QOF_INSTANCE(pCustomer) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pCustomer) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pCustomer) );
 }

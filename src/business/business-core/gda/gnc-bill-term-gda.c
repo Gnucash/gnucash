@@ -101,8 +101,7 @@ load_single_billterm( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pBillTerm = gncBillTermCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_BILLTERM, pBillTerm, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pBillTerm )),
-                        qof_instance_get_slots( QOF_INSTANCE(pBillTerm) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE( pBillTerm ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBillTerm) );
 }

@@ -103,8 +103,7 @@ load_single_entry( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pEntry = gncEntryCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_ENTRY, pEntry, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pEntry )),
-                        qof_instance_get_slots( QOF_INSTANCE(pEntry) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pEntry) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pEntry) );
 }

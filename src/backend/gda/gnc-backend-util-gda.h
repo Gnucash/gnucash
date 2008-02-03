@@ -197,6 +197,8 @@ GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* 
 void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 	            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey );
 
+void _retrieve_guid_( gpointer pObject, gpointer pValue );
+
 G_MODULE_EXPORT const gchar *
 g_module_check_init( GModule *module );
 

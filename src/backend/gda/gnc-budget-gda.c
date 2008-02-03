@@ -83,8 +83,7 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
     gnc_gda_load_object( be, pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_gda_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
-    gnc_gda_slots_load( be, gnc_budget_get_guid( pBudget ),
-                            qof_instance_get_slots( QOF_INSTANCE(pBudget) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pBudget) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
 }

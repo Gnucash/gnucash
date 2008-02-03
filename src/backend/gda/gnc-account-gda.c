@@ -174,8 +174,7 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
         pAccount = xaccMallocAccount( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
-    gnc_gda_slots_load( be, xaccAccountGetGUID( pAccount ),
-                        qof_instance_get_slots( QOF_INSTANCE(pAccount) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pAccount) );
     load_balances( be, pAccount );
 
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );

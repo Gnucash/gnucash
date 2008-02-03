@@ -1325,10 +1325,8 @@ gnc_gda_register_standard_col_type_handlers( void )
     gnc_gda_register_col_type_handler( CT_NUMERIC, &numeric_handler );
 }
 
-static void retrieve_guid( gpointer pObject, gpointer pValue );
-
-static void 
-retrieve_guid( gpointer pObject, gpointer pValue )
+void 
+_retrieve_guid_( gpointer pObject, gpointer pValue )
 {
     GUID* pGuid = (GUID*)pObject;
     GUID* guid = (GUID*)pValue;
@@ -1343,7 +1341,7 @@ retrieve_guid( gpointer pObject, gpointer pValue )
 // Table to retrieve just the guid
 static col_cvt_t guid_table[] =
 {
-    { "guid", CT_GUID, 0, 0, NULL, NULL, NULL, retrieve_guid },
+    { "guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
     { NULL }
 };
 
@@ -1364,7 +1362,7 @@ gnc_gda_load_guid( const GncGdaBackend* be, GdaDataModel* pModel, gint row )
 // Table to retrieve just the guid
 static col_cvt_t tx_guid_table[] =
 {
-    { "tx_guid", CT_GUID, 0, 0, NULL, NULL, NULL, retrieve_guid },
+    { "tx_guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
     { NULL }
 };
 

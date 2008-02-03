@@ -283,7 +283,7 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 }
 
 static void
-load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
     const GUID* guid;
     GUID split_guid;
@@ -304,15 +304,15 @@ load_single_split( GncGdaBackend* be, GdaDataModel* pModel, int row )
     /* If the split is dirty, don't overwrite it */
     if( !qof_instance_is_dirty( QOF_INSTANCE(pSplit) ) ) {
     	gnc_gda_load_object( be, pModel, row, GNC_ID_SPLIT, pSplit, split_col_table );
-    	gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pSplit) ),
-                            qof_instance_get_slots( QOF_INSTANCE(pSplit) ) );
+		*pList = g_list_append( *pList, pSplit );
+//    	gnc_gda_slots_load( be, QOF_INSTANCE(pSplit) );
 	}
 
     g_assert( pSplit == xaccSplitLookup( &split_guid, be->primary_book ) );
 }
 
 static void
-load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
+load_all_splits_for_tx( GncGdaBackend* be, const GUID* tx_guid )
 {
     GdaObject* ret;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
@@ -338,15 +338,32 @@ load_all_splits( GncGdaBackend* be, const GUID* tx_guid )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
+		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_split( be, pModel, r );
+            load_single_split( be, pModel, r, &list );
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
     }
 }
 
 static void
-load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_splits_for_tx_list( GncGdaBackend* be, GList* list )
+{
+	g_return_if_fail( be != NULL );
+
+	if( list == NULL ) return;
+
+	for( ; list != NULL; list = list->next ) {
+		load_all_splits_for_tx( be, qof_instance_get_guid( QOF_INSTANCE(list->data) ) );
+	}
+}
+
+static void
+load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
     const GUID* guid;
     GUID tx_guid;
@@ -365,9 +382,9 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     }
     xaccTransBeginEdit( pTx );
     gnc_gda_load_object( be, pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ),
-                            qof_instance_get_slots( QOF_INSTANCE(pTx) ) );
-    load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
+	*pList = g_list_append( *pList, pTx );
+//    load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pTx) );
     xaccTransCommitEdit( pTx );
@@ -388,10 +405,15 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
+		GList* tx_list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_tx( be, pModel, r );
+            load_single_tx( be, pModel, r, &tx_list );
         }
+
+		if( tx_list != NULL ) {
+			load_splits_for_tx_list( be, tx_list );
+		}
     }
 }
 
@@ -599,12 +621,12 @@ get_guid_from_query( QofQuery* pQuery )
 static gpointer
 compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 {
-    gchar* buf;
+	GString* sql;
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
-	gchar* s;
 	GdaQuery* query;
 	GdaObject* results;
+	gchar* buf;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( pQuery != NULL, NULL );
@@ -612,18 +634,20 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 #if 1
     acct_guid = get_guid_from_query( pQuery );
     guid_to_string_buff( acct_guid, guid_buf );
-	buf = g_strdup_printf( "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-	results = gnc_gda_execute_sql( be, buf );
-	g_free( buf );
+	sql = g_string_new( "" );
+	g_string_printf( sql, "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
+	results = gnc_gda_execute_sql( be, sql->str );
     if( GDA_IS_DATA_MODEL( results ) ) {
         GdaDataModel* pModel = GDA_DATA_MODEL(results);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
 
+		sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*numRows );
+
 		if( numRows != 1 ) {
-			buf = g_strdup_printf( "SELECT * FROM %s WHERE guid IN (", TRANSACTION_TABLE );
+			g_string_printf( sql, "SELECT * FROM %s WHERE guid IN (", TRANSACTION_TABLE );
 		} else {
-			buf = g_strdup_printf( "SELECT * FROM %s WHERE guid =", TRANSACTION_TABLE );
+			g_string_printf( sql, "SELECT * FROM %s WHERE guid =", TRANSACTION_TABLE );
 		}
 
         for( r = 0; r < numRows; r++ ) {
@@ -631,22 +655,21 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
 
 			guid = gnc_gda_load_tx_guid( be, pModel, r );
     		guid_to_string_buff( guid, guid_buf );
-			if( r == 0 ) {
-				s = g_strconcat( buf, "'", guid_buf, "'", NULL );
-			} else {
-				s = g_strconcat( buf, ",'", guid_buf, "'", NULL );
+			if( r != 0 ) {
+				g_string_append( sql, "," );
 			}
-			g_free( buf );
-			buf = s;
+			g_string_append( sql, "'" );
+			g_string_append( sql, guid_buf );
+			g_string_append( sql, "'" );
         }
 
 		if( numRows != 1 ) {
-			s = g_strconcat( buf, ")", NULL );
-			g_free( buf );
-			buf = s;
+			g_string_append( sql, ")" );
 		}
     }
 
+	buf = sql->str;
+	g_string_free( sql, FALSE );
 	return buf;
 #else
 #if 1

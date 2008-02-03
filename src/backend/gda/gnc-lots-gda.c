@@ -110,8 +110,7 @@ load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row )
     lot = gnc_lot_new( be->primary_book );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_LOT, lot, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE(lot) ),
-                            qof_instance_get_slots( QOF_INSTANCE(lot) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(lot) );
 
     qof_instance_mark_clean( QOF_INSTANCE(lot) );
 }

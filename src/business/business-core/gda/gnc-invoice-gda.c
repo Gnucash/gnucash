@@ -93,8 +93,7 @@ load_single_invoice( GncGdaBackend* be, GdaDataModel* pModel, int row )
         pInvoice = gncInvoiceCreate( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_INVOICE, pInvoice, col_table );
-    gnc_gda_slots_load( be, qof_instance_get_guid( QOF_INSTANCE( pInvoice )),
-                        qof_instance_get_slots( QOF_INSTANCE(pInvoice) ) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pInvoice) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pInvoice) );
 }
