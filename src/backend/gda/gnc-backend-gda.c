@@ -633,7 +633,7 @@ commit_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     /* If this has already been handled, or is not the correct handler, return */
     if( strcmp( pData->type_name, be_data->inst->e_type ) != 0 ) return;
-    g_return_if_fail( !be_data->ok );
+    if( be_data->ok ) return;
 
     if( pData->commit != NULL ) {
         (pData->commit)( be_data->inst, be_data->be );
@@ -966,7 +966,7 @@ run_query_cb( const gchar* type, gpointer data_p, gpointer be_data_p )
 
     g_return_if_fail( type != NULL && pData != NULL && be_data != NULL );
     g_return_if_fail( pData->version == GNC_GDA_BACKEND_VERSION );
-    g_return_if_fail( !be_data->ok );
+    if( be_data->ok ) return;
 
 	// Is this the right item?
     if( strcmp( type, be_data->pQueryInfo->searchObj ) != 0 ) return;

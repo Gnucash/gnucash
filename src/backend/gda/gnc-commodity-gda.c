@@ -107,14 +107,15 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_COMMODITY(pObject) );
-	g_return_if_fail( pValue != NULL );
+
+	if( pValue == NULL ) return;
 
     quote_source = gnc_quote_source_lookup_by_internal( quote_source_name );
     gnc_commodity_set_quote_source( pCommodity, quote_source );
 }
 
 static gnc_commodity*
-load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
     QofBook* pBook = be->primary_book;
     int col;
@@ -124,7 +125,8 @@ load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pCommodity) );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pCommodity) );
+	*pList = g_list_append( *pList, pCommodity );
 
     qof_instance_mark_clean( QOF_INSTANCE(pCommodity) );
 
@@ -147,11 +149,12 @@ load_all_commodities( GncGdaBackend* be )
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
         gnc_commodity* pCommodity;
+		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
             gnc_commodity* c;
 
-            pCommodity = load_single_commodity( be, pModel, r );
+            pCommodity = load_single_commodity( be, pModel, r, &list );
 
             if( pCommodity != NULL ) {
                 GUID guid;
@@ -161,6 +164,10 @@ load_all_commodities( GncGdaBackend* be )
                 qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
     }
 }
 /* ================================================================= */

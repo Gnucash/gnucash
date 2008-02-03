@@ -38,6 +38,7 @@
 
 #include "gnc-commodity-gda.h"
 #include "gnc-price-gda.h"
+#include "gnc-slots-gda.h"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -61,7 +62,7 @@ static col_cvt_t col_table[] =
 /* ================================================================= */
 
 static GNCPrice*
-load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
 	GNCPrice* pPrice;
 
@@ -72,6 +73,7 @@ load_single_price( GncGdaBackend* be, GdaDataModel* pModel, int row )
     pPrice = gnc_price_create( be->primary_book );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_PRICE, pPrice, col_table );
+	*pList = g_list_append( *pList, pPrice );
 
     qof_instance_mark_clean( QOF_INSTANCE(pPrice) );
 
@@ -99,14 +101,19 @@ load_all_prices( GncGdaBackend* be )
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
         GNCPrice* pPrice;
+		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            pPrice = load_single_price( be, pModel, r );
+            pPrice = load_single_price( be, pModel, r, &list );
 
             if( pPrice != NULL ) {
                 gnc_pricedb_add_price( pPriceDB, pPrice );
             }
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
     }
 }
 

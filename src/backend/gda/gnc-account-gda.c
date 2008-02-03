@@ -154,7 +154,7 @@ load_balances( GncGdaBackend* be, Account* pAccount )
 }
 
 static void
-load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
+load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList,
 				GList** l_accounts_needing_parents )
 {
     const GUID* guid;
@@ -174,7 +174,8 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row,
         pAccount = xaccMallocAccount( be->primary_book );
     }
     gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pAccount) );
+	*pList = g_list_append( *pList, pAccount );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pAccount) );
     load_balances( be, pAccount );
 
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
@@ -214,10 +215,15 @@ load_all_accounts( GncGdaBackend* be )
         int r;
         Account* parent;
 		GList* l_accounts_needing_parents = NULL;
+		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_account( be, pModel, r, &l_accounts_needing_parents );
+            load_single_account( be, pModel, r, &list, &l_accounts_needing_parents );
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
 
 		/* While there are items on the list of accounts needing parents,
 		   try to see if the parent has now been loaded.  Theory says that if

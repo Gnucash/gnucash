@@ -61,7 +61,7 @@ static col_cvt_t col_table[] =
 
 /* ================================================================= */
 static void
-load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
     const GUID* guid;
     GUID budget_guid;
@@ -83,7 +83,8 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row )
     gnc_gda_load_object( be, pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_gda_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pBudget) );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pBudget) );
+	*pList = g_list_append( *pList, pBudget );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
 }
@@ -104,10 +105,15 @@ load_all_budgets( GncGdaBackend* be )
         GdaDataModel* pModel = GDA_DATA_MODEL(ret);
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
+		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_budget( be, pModel, r );
+            load_single_budget( be, pModel, r, &list );
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
     }
 }
 

@@ -167,7 +167,7 @@ set_template_act_guid( gpointer pObject, gpointer pValue )
 
 /* ================================================================= */
 static SchedXaction*
-load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
+load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
 {
     const GUID* guid;
     GUID sx_guid;
@@ -186,7 +186,8 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row )
     gnc_gda_load_object( be, pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pSx) );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pSx) );
+	*pList = g_list_append( *pList, pSx );
 
     qof_instance_mark_clean( QOF_INSTANCE(pSx) );
 
@@ -210,16 +211,21 @@ load_all_sxes( GncGdaBackend* be )
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
      	SchedXactions *sxes;
+		GList* list = NULL;
      	sxes = gnc_book_get_schedxactions( be->primary_book );
 
         for( r = 0; r < numRows; r++ ) {
             SchedXaction* sx;
 			
-			sx = load_single_sx( be, pModel, r );
+			sx = load_single_sx( be, pModel, r, &list );
 			if( sx != NULL ) {
 		    	gnc_sxes_add_sx(sxes, sx);
 			}
         }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
     }
 }
 

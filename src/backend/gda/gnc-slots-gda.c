@@ -180,9 +180,8 @@ set_int64_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( pValue != NULL );
 
-    if( pInfo->value_type == KVP_TYPE_GINT64 ) {
+    if( pInfo->value_type == KVP_TYPE_GINT64 && pValue != NULL ) {
         kvp_frame_set_gint64( pInfo->pKvpFrame, pInfo->path->str, *(gint64*)pValue );
     }
 }
@@ -207,9 +206,8 @@ set_string_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( pValue != NULL );
 
-    if( pInfo->value_type == KVP_TYPE_STRING ) {
+    if( pInfo->value_type == KVP_TYPE_STRING && pValue != NULL ) {
         kvp_frame_set_string( pInfo->pKvpFrame, pInfo->path->str, (const gchar*)pValue );
     }
 }
@@ -236,9 +234,8 @@ set_double_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( pValue != NULL );
 
-    if( pInfo->value_type == KVP_TYPE_DOUBLE ) {
+    if( pInfo->value_type == KVP_TYPE_DOUBLE && pValue != NULL ) {
         kvp_frame_set_double( pInfo->pKvpFrame, pInfo->path->str, *(double*)pValue );
     }
 }
@@ -286,9 +283,8 @@ set_guid_val( gpointer pObject, gpointer pValue )
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
-	g_return_if_fail( pValue != NULL );
 
-    if( pInfo->value_type == KVP_TYPE_GUID ) {
+    if( pInfo->value_type == KVP_TYPE_GUID && pValue != NULL ) {
         kvp_frame_set_guid( pInfo->pKvpFrame, pInfo->path->str, (GUID*)pValue );
     }
 }
@@ -524,6 +520,7 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gboolean first_guid = TRUE;
 	GdaObject* ret;
+	gboolean single_item;
 
 	g_return_if_fail( be != NULL );
 
@@ -532,7 +529,14 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 
 	// Create the query for all slots for all items on the list
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
-	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", TABLE_NAME, obj_guid_col_table[0].col_name );
+	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME, obj_guid_col_table[0].col_name );
+	if( g_list_length( list ) != 1 ) {
+		g_string_append( sql, "IN (" );
+		single_item = FALSE;
+	} else {
+		g_string_append( sql, "= " );
+		single_item = TRUE;
+	}
 	for( ; list != NULL; list = list->next ) {
 		QofInstance* inst = QOF_INSTANCE(list->data);
 		coll = qof_instance_get_collection( inst );
@@ -546,7 +550,9 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 		g_string_append( sql, "'" );
 		first_guid = FALSE;
     }
-	g_string_append( sql, ")" );
+	if( !single_item ) {
+		g_string_append( sql, ")" );
+	}
 
 	// Execute the query and load the slots
 	query = gnc_gda_create_query_from_sql( be, sql->str );
