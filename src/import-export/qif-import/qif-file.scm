@@ -368,6 +368,10 @@
                        ((#\T)
                         (qif-stock-symbol:set-type! current-xtn value))
                        
+                       ;; G : asset class (ignored)
+                       ((#\G)
+                        #t)
+                       
                        ;; end-of-record
                        ((#\^)
                         (qif-ticker-map:add-ticker! ticker-map current-xtn)
