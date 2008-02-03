@@ -143,19 +143,29 @@
      tablist)
     table))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:read-commodities
+;;
+;;  This procedure examines a list of previously seen commodities
+;;  and returns a hash table of them, if they still exist.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (qif-import:read-commodities commlist)
   (let ((table (make-hash-table 20)))
     (for-each 
      (lambda (entry)
        (if (and (list? entry) 
                 (= 3 (length entry)))
-           (let ((name (car entry))
-                 (namespace (cadr entry))
-                 (mnemonic (caddr entry)))
-             (hash-set! table name
-                        (gnc-commodity-table-lookup
-                         (gnc-commodity-table-get-table (gnc-get-current-book))
-                         namespace mnemonic)))))
+           ;; The saved information about each commodity is a
+           ;; list of three items: name, namespace, and mnemonic.
+           ;; Example: ("McDonald's" "NYSE" "MCD")
+           (let ((commodity (gnc-commodity-table-lookup
+                              (gnc-commodity-table-get-table
+                                (gnc-get-current-book))
+                              (cadr entry)
+                              (caddr entry))))
+             (if (and commodity (not (null? commodity)))
+                 ;; The commodity is defined in GnuCash.
+                 (hash-set! table (car entry) commodity)))))
      commlist)
     table))
                               
