@@ -353,13 +353,52 @@ load_all_splits_for_tx( GncGdaBackend* be, const GUID* tx_guid )
 static void
 load_splits_for_tx_list( GncGdaBackend* be, GList* list )
 {
+	GString* sql;
+	GdaQuery* query;
+	QofCollection* col;
+	GdaObject* ret;
+	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gboolean first_guid = TRUE;
+
 	g_return_if_fail( be != NULL );
 
 	if( list == NULL ) return;
 
+	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
+	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE, guid_col_table[0].col_name );
 	for( ; list != NULL; list = list->next ) {
-		load_all_splits_for_tx( be, qof_instance_get_guid( QOF_INSTANCE(list->data) ) );
-	}
+		QofInstance* inst = QOF_INSTANCE(list->data);
+    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
+
+		if( !first_guid ) {
+			g_string_append( sql, "," );
+		}
+		g_string_append( sql, "'" );
+		g_string_append( sql, guid_buf );
+		g_string_append( sql, "'" );
+		first_guid = FALSE;
+    }
+	g_string_append( sql, ")" );
+
+	// Execute the query and load the splits
+	query = gnc_gda_create_query_from_sql( be, sql->str );
+	g_string_free( sql, TRUE );
+	ret = gnc_gda_execute_query( be, query );
+    if( GDA_IS_DATA_MODEL( ret ) ) {
+        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
+        int numRows = gda_data_model_get_n_rows( pModel );
+        int r;
+		GList* list = NULL;
+
+        for( r = 0; r < numRows; r++ ) {
+            load_single_split( be, pModel, r, &list );
+        }
+
+		if( list != NULL ) {
+			gnc_gda_slots_load_for_list( be, list );
+		}
+    }
+	g_object_unref( ret );
 }
 
 static void
@@ -382,7 +421,7 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList 
     }
     xaccTransBeginEdit( pTx );
     gnc_gda_load_object( be, pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
 	*pList = g_list_append( *pList, pTx );
 //    load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
@@ -412,6 +451,7 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
         }
 
 		if( tx_list != NULL ) {
+			gnc_gda_slots_load_for_list( be, tx_list );
 			load_splits_for_tx_list( be, tx_list );
 		}
     }
