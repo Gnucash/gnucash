@@ -675,7 +675,8 @@
     ;; list of acceptable formats.
 
     (cond 
-     ((null? formats) 
+     ((or (not formats)
+          (null? formats))
       (errormsg errortype "Data for number or date does not match a known format.")
       (set! retval #f)
       (set! do-parsing #f))
