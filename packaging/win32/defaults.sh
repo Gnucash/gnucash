@@ -267,6 +267,7 @@ set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 
 # There is no reason to ever need to comment these out!
 # * commented out glade, as it is not needed to run gnucash
+add_step prepare
 if [ "$CROSS_COMPILE" != "yes" ]; then
  add_step inst_wget
  add_step inst_dtk
@@ -309,6 +310,7 @@ if [ "$UPDATE_SOURCES" = "yes" ]; then
 fi
 add_step inst_gnucash
 add_step inst_docs
+add_step finish
 
 # run commands registered with late_eval
 eval_now

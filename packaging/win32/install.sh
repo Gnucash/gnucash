@@ -1000,8 +1000,12 @@ function inst_gnucash() {
                 gnucash
         qpopd
 
-        make install
+        make_install
     qpopd
+}
+
+function make_install() {
+    make install
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
@@ -1137,11 +1141,9 @@ function finish() {
     fi
 }
 
-prepare
 for step in "${steps[@]}" ; do
     eval $step
 done
-finish
 qpopd
 
 
