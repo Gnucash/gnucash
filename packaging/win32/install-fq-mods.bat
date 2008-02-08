@@ -1,4 +1,5 @@
 @echo off
+setlocal
 
 if not exist ssleay32.dll (
   echo.
@@ -10,18 +11,30 @@ if not exist ssleay32.dll (
 echo.
 echo * Check Perl
 echo.
-perl -e "$ver=1000*sprintf(\"%%.3f\", $]); exit(int($ver/100)+$ver%%1000);"
-if %errorlevel% equ 58 (
-  set _haveperl58=1
-  goto ccp
-)
-if %errorlevel% equ 56 (
-  set _haveperl58=
-  goto ccp
+perl -e "exit(int($]));"
+set _perlmajor=%errorlevel%
+perl -e "$ver=1000*sprintf(\"%%.3f\", $]); exit(int($ver)-5000);"
+set _perlminor=%errorlevel%
+if %_perlmajor% equ 5 (
+  if %_perlminor% equ 10 (
+    echo.
+    echo Found ActivePerl 5.10.  This version does not yet support Finance-Quote.
+    echo Please install ActivePerl 5.8 (http://www.activestate.com/store/activeperl^)
+    echo instead and add the bin directory to your Path environment variable.
+    goto error
+  )
+  if %_perlminor% equ 8 (
+    set _perlversion=5.8
+    goto ccp
+  )
+  if %_perlminor% equ 6 (
+    set _perlversion=5.6
+    goto ccp
+  )
 )
 echo.
 echo Did not find a usable perl.
-echo Please install ActivePerl (http://www.activestate.com/store/activeperl)
+echo Please install ActivePerl 5.8 (http://www.activestate.com/store/activeperl)
 echo and add the bin directory to your Path environment variable.
 goto error
 :ccp
@@ -36,7 +49,7 @@ echo * Install Crypt-SSLeay
 echo.
 set OLDPATH=%PATH%
 set PATH=%CD%;%PATH%
-if defined _haveperl58 (
+if %_perlversion% == 5.8 (
   echo anything | perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppms/Crypt-SSLeay.ppd
 ) else (
   perl -x -S ppm install http://theoryx5.uwinnipeg.ca/ppmpackages/Crypt-SSLeay.ppd
