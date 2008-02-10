@@ -3458,7 +3458,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
 				       "The GNU way to manage your money!");
-	const gchar *copyright = "© 1997-2007 Contributors";
+	const gchar *copyright = "© 1997-2008 Contributors";
 	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 
