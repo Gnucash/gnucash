@@ -164,7 +164,7 @@ GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 									gpointer pObject,
 									const col_cvt_t* table );
 GdaObject* gnc_gda_execute_query( const GncGdaBackend* pBackend, GdaQuery* pQuery );
-GdaObject* gnc_gda_execute_sql( const GncGdaBackend* pBackend, const gchar* sql );
+GdaDataModel* gnc_gda_execute_sql( const GncGdaBackend* pBackend, const gchar* sql );
 GdaQuery* gnc_gda_create_query_from_sql( const GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( const GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_query_get_count( const GncGdaBackend* pBackend, GdaQuery* query );
@@ -196,6 +196,7 @@ GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* 
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
 void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 	            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey );
+void gnc_gda_append_guid_list_to_sql( GString* str, GList* list );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 

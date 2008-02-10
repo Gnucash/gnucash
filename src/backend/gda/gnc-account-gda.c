@@ -154,6 +154,27 @@ load_balances( GncGdaBackend* be, Account* pAccount )
 }
 
 static void
+load_account_balances_for_list( GncGdaBackend* be, GList* list )
+{
+	GList* balance_list;
+
+	g_return_if_fail( be != NULL );
+
+	if( list == NULL ) return;
+
+	balance_list = gnc_gda_get_account_balances_for_list( be, list );
+	for( ; balance_list != NULL; balance_list = balance_list->next ) {
+		acct_balances_t* acct_balances = (acct_balances_t*)balance_list->data;
+
+    	g_object_set( acct_balances->acct,
+					"end-balance", &acct_balances->start_balance,
+                	"end-cleared-balance", &acct_balances->cleared_balance,
+                	"end-reconciled-balance", &acct_balances->reconciled_balance,
+                	NULL);
+	}
+}
+
+static void
 load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList,
 				GList** l_accounts_needing_parents )
 {
@@ -176,7 +197,7 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** p
     gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	*pList = g_list_append( *pList, pAccount );
 //    gnc_gda_slots_load( be, QOF_INSTANCE(pAccount) );
-    load_balances( be, pAccount );
+//    load_balances( be, pAccount );
 
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
 
@@ -222,6 +243,7 @@ load_all_accounts( GncGdaBackend* be )
         }
 
 		if( list != NULL ) {
+			load_account_balances_for_list( be, list );
 			gnc_gda_slots_load_for_list( be, list );
 		}
 

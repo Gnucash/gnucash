@@ -209,6 +209,82 @@ get_account_balance_from_query( GncGdaBackend* be, GdaQuery* query )
     return bal;
 }
 
+/*
+ * get_account_balance_from_sql
+ *
+ * Given an SQL query which should return a number of rows of gnc_numeric num/denom pairs,
+ * return the sum.
+ */
+static gnc_numeric
+get_account_balance_from_sql( GncGdaBackend* be, const gchar* sql )
+{
+	gnc_numeric bal = gnc_numeric_zero();
+	GdaDataModel* model;
+
+	g_return_val_if_fail( be != NULL, bal );
+	g_return_val_if_fail( sql != NULL, bal );
+
+	model = gnc_gda_execute_sql( be, sql );
+	if( model != NULL ) {
+    	int numRows;
+    	int r;
+
+		// Loop for all rows, convert each to a gnc_numeric and sum them
+    	numRows = gda_data_model_get_n_rows( model );
+
+    	for( r = 0; r < numRows; r++ ) {
+			gnc_numeric val = get_gnc_numeric_from_row( be, model, r );
+			bal = gnc_numeric_add( bal, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
+		}
+	}
+	g_object_unref( G_OBJECT(model) );
+
+    return bal;
+}
+
+static void
+get_account_balance_for_list_from_sql( GncGdaBackend* be, GList* result_list, const gchar* sql )
+{
+	GdaDataModel* model;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( sql != NULL );
+
+	model = gnc_gda_execute_sql( be, sql );
+	if( model != NULL ) {
+		for( ; result_list != NULL; result_list = result_list->next ) {
+			acct_balances_t* ab = (acct_balances_t*)result_list->data;
+			GdaDataModel* acct_values_model = gda_data_model_filter_sql_new();
+			gchar guid_buf[GUID_ENCODING_LENGTH+1];
+			gchar* filter_sql;
+			gboolean success;
+    		int numRows;
+    		int r;
+			gnc_numeric bal = gnc_numeric_zero();
+
+    		guid_to_string_buff( qof_instance_get_guid( ab->acct ), guid_buf );
+			filter_sql = g_strdup_printf( "SELECT quantity_num,quantity_denom FROM %s WHERE account_guid='%s'",
+											SPLIT_TABLE, guid_buf );
+			gda_data_model_filter_sql_set_sql( GDA_DATA_MODEL_FILTER_SQL(acct_values_model), filter_sql );
+			g_free( filter_sql );
+			success = gda_data_model_filter_sql_run( GDA_DATA_MODEL_FILTER_SQL(acct_values_model) );
+			if( !success ) {
+				PERR( "Unable to filter SQL data model" );
+			}
+
+			// Loop for all rows, convert each to a gnc_numeric and sum them
+    		numRows = gda_data_model_get_n_rows( acct_values_model );
+
+    		for( r = 0; r < numRows; r++ ) {
+				gnc_numeric val = get_gnc_numeric_from_row( be, acct_values_model, r );
+				bal = gnc_numeric_add( bal, val, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD );
+			}
+			ab->start_balance = bal;
+		}
+	}
+}
+
+
 void
 gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount, 
 								    gnc_numeric* start_balance,
@@ -236,13 +312,14 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	 * gnc_numerics and then added.  With luck, there will only be one entry.
 	 */
 
-	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
-	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM) AS quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
+	//sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf );
 
 	/* Create the query */
-	query = gnc_gda_create_query_from_sql( be, sql );
-	*start_balance = get_account_balance_from_query( be, query );
-	g_object_unref( G_OBJECT(query) );
+//	query = gnc_gda_create_query_from_sql( be, sql );
+//	*start_balance = get_account_balance_from_query( be, query );
+	*start_balance = get_account_balance_from_sql( be, sql );
+//	g_object_unref( G_OBJECT(query) );
 	g_free( sql );
 
 	/*
@@ -254,12 +331,13 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	 * This just requires a modification to the query
 	 */
 
-	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
-	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
+	sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM) as quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
+	//sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
 
-	query = gnc_gda_create_query_from_sql( be, sql );
-    *cleared_balance = get_account_balance_from_query( be, query );
-	g_object_unref( G_OBJECT(query) );
+	//query = gnc_gda_create_query_from_sql( be, sql );
+    //*cleared_balance = get_account_balance_from_query( be, query );
+    *cleared_balance = get_account_balance_from_sql( be, sql );
+	//g_object_unref( G_OBJECT(query) );
 
 	g_free( sql );
 
@@ -272,14 +350,97 @@ gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 	 * This just requires a small modification to the cleared balance query
 	 */
 
-	//sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
-	sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
+	sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM) as quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
+	//sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
 
-	query = gnc_gda_create_query_from_sql( be, sql );
-	*reconciled_balance = get_account_balance_from_query( be, query );
-	g_object_unref( G_OBJECT(query) );
+	//query = gnc_gda_create_query_from_sql( be, sql );
+	//*reconciled_balance = get_account_balance_from_query( be, query );
+	*reconciled_balance = get_account_balance_from_sql( be, sql );
+	//g_object_unref( G_OBJECT(query) );
 
 	g_free( sql );
+}
+
+GList*
+gnc_gda_get_account_balances_for_list( GncGdaBackend* be, GList* list )
+{
+	GdaQuery* query;
+	GString* sql;
+	GList* result_list = NULL;
+	GList* orig_list = list;
+
+	g_return_val_if_fail( be != NULL, NULL );
+
+	if( list == NULL ) return NULL;
+
+	// Create the result list
+	for( ; list != NULL; list = list->next ) {
+		acct_balances_t* acct_balances = g_new0( acct_balances_t, 1 );
+		acct_balances->acct = GNC_ACCOUNT(list->data);
+		acct_balances->start_balance = gnc_numeric_zero();
+		acct_balances->cleared_balance = gnc_numeric_zero();
+		acct_balances->reconciled_balance = gnc_numeric_zero();
+		result_list = g_list_append( result_list, acct_balances );
+	}
+	list = orig_list;
+
+	//
+	// For start balance,
+	//    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	//        WHERE ACCOUNT_GUID=<guid> GROUP BY QUANTITY_DENOM
+	//
+	// This will return one entry per denom.  These can then be made into
+	// gnc_numerics and then added.  With luck, there will only be one entry.
+	//
+
+	sql = g_string_new( "" );
+	g_string_printf( sql, "SELECT account_guid,SUM(QUANTITY_NUM) AS quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID IN (", SPLIT_TABLE );
+	gnc_gda_append_guid_list_to_sql( sql, list );
+	g_string_append( sql, ") GROUP BY ACCOUNT_GUID" );
+
+	get_account_balance_for_list_from_sql( be, result_list, sql->str );
+
+#if 0
+	/*
+	 * For cleared balance,
+	 *    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	 *        WHERE ACCOUNT_GUID=<guid> AND RECONCILE_STATE='c'
+	 *        GROUP BY QUANTITY_DENOM
+	 *
+	 * This just requires a modification to the query
+	 */
+
+	sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM) as quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
+	//sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, CREC );
+
+	//query = gnc_gda_create_query_from_sql( be, sql );
+    //*cleared_balance = get_account_balance_from_query( be, query );
+    *cleared_balance = get_account_balance_from_sql( be, sql );
+	//g_object_unref( G_OBJECT(query) );
+
+	g_free( sql );
+
+	/*
+	 * For reconciled balance,
+	 *    SELECT SUM(QUANTITY_NUM),QUANTITY_DENOM FROM SPLITS
+	 *        WHERE ACCOUNT_GUID=<guid> AND RECONCILE_STATE='c'
+	 *        GROUP BY QUANTITY_DENOM
+	 *
+	 * This just requires a small modification to the cleared balance query
+	 */
+
+	sql = g_strdup_printf( "SELECT SUM(QUANTITY_NUM) as quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
+	//sql = g_strdup_printf( "SELECT QUANTITY_NUM,QUANTITY_DENOM FROM %s WHERE ACCOUNT_GUID='%s' AND RECONCILE_STATE='%c' GROUP BY QUANTITY_DENOM", SPLIT_TABLE, guid_buf, YREC );
+
+	//query = gnc_gda_create_query_from_sql( be, sql );
+	//*reconciled_balance = get_account_balance_from_query( be, query );
+	*reconciled_balance = get_account_balance_from_sql( be, sql );
+	//g_object_unref( G_OBJECT(query) );
+#endif
+
+	g_string_free( sql, TRUE );
+
+	return result_list;
 }
 
 static void
@@ -356,8 +517,7 @@ load_splits_for_tx_list( GncGdaBackend* be, GList* list )
 	GString* sql;
 	GdaQuery* query;
 	QofCollection* col;
-	GdaObject* ret;
-	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	GdaDataModel* model;
 	gboolean first_guid = TRUE;
 
 	g_return_if_fail( be != NULL );
@@ -366,39 +526,26 @@ load_splits_for_tx_list( GncGdaBackend* be, GList* list )
 
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
 	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE, guid_col_table[0].col_name );
-	for( ; list != NULL; list = list->next ) {
-		QofInstance* inst = QOF_INSTANCE(list->data);
-    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
-
-		if( !first_guid ) {
-			g_string_append( sql, "," );
-		}
-		g_string_append( sql, "'" );
-		g_string_append( sql, guid_buf );
-		g_string_append( sql, "'" );
-		first_guid = FALSE;
-    }
+	gnc_gda_append_guid_list_to_sql( sql, list );
 	g_string_append( sql, ")" );
 
 	// Execute the query and load the splits
-	query = gnc_gda_create_query_from_sql( be, sql->str );
-	g_string_free( sql, TRUE );
-	ret = gnc_gda_execute_query( be, query );
-    if( GDA_IS_DATA_MODEL( ret ) ) {
-        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-        int numRows = gda_data_model_get_n_rows( pModel );
+	model = gnc_gda_execute_sql( be, sql->str );
+    if( model != NULL ) {
+        int numRows = gda_data_model_get_n_rows( model );
         int r;
 		GList* list = NULL;
 
         for( r = 0; r < numRows; r++ ) {
-            load_single_split( be, pModel, r, &list );
+            load_single_split( be, model, r, &list );
         }
 
 		if( list != NULL ) {
 			gnc_gda_slots_load_for_list( be, list );
 		}
     }
-	g_object_unref( ret );
+	g_string_free( sql, TRUE );
+	g_object_unref( model );
 }
 
 static void
@@ -665,7 +812,7 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
     const GUID* acct_guid;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	GdaQuery* query;
-	GdaObject* results;
+	GdaDataModel* model;
 	gchar* buf;
 
 	g_return_val_if_fail( be != NULL, NULL );
@@ -676,10 +823,9 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
     guid_to_string_buff( acct_guid, guid_buf );
 	sql = g_string_new( "" );
 	g_string_printf( sql, "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-	results = gnc_gda_execute_sql( be, sql->str );
-    if( GDA_IS_DATA_MODEL( results ) ) {
-        GdaDataModel* pModel = GDA_DATA_MODEL(results);
-        int numRows = gda_data_model_get_n_rows( pModel );
+	model = gnc_gda_execute_sql( be, sql->str );
+    if( model != NULL ) {
+        int numRows = gda_data_model_get_n_rows( model );
         int r;
 
 		sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*numRows );
@@ -693,7 +839,7 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
         for( r = 0; r < numRows; r++ ) {
 			const GUID* guid;
 
-			guid = gnc_gda_load_tx_guid( be, pModel, r );
+			guid = gnc_gda_load_tx_guid( be, model, r );
     		guid_to_string_buff( guid, guid_buf );
 			if( r != 0 ) {
 				g_string_append( sql, "," );

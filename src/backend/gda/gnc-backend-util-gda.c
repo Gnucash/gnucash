@@ -1474,40 +1474,37 @@ gnc_gda_create_query_from_sql( const GncGdaBackend* be, const gchar* sql )
 	return query;
 }
 
-GdaObject*
+GdaDataModel*
 gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
 {
-	GdaQuery* query;
+	GdaCommand* cmd;
+    GError* error = NULL;
+	GdaDataModel* model;
 
 	g_return_val_if_fail( be != NULL, NULL );
 	g_return_val_if_fail( sql != NULL, NULL );
 
-	query = gnc_gda_create_query_from_sql( be, sql );
-	if( query != NULL ) {
-	    return gnc_gda_execute_query( be, query );
-	} else {
-		return NULL;
-	}
+	cmd = gda_command_new( sql, GDA_COMMAND_TYPE_SQL, 0 );
+    model = gda_connection_execute_select_command( be->pConnection, cmd, NULL, &error );
+    if( error != NULL ) {
+        PERR( "SQL error: %s\n", error->message );
+    }
+
+	return model;
 }
 
 int
 gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 {
-    GError* error = NULL;
     int count = 0;
-    GdaObject* ret;
+    GdaDataModel* model;
 
 	g_return_val_if_fail( be != NULL, 0 );
 	g_return_val_if_fail( sql != NULL, 0 );
 
-    ret = gnc_gda_execute_sql( be, sql );
-    if( GDA_IS_DATA_MODEL(ret) ) {
-        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-        count = gda_data_model_get_n_rows( pModel );
-    }
-
-    if( error != NULL ) {
-        PERR( "SQL error: %s\n", error->message );
+    model = gnc_gda_execute_sql( be, sql );
+    if( model != NULL ) {
+        count = gda_data_model_get_n_rows( model );
     }
 
     return count;
@@ -1529,6 +1526,30 @@ gnc_gda_execute_query_get_count( const GncGdaBackend* be, GdaQuery* query )
     }
 
     return count;
+}
+
+void
+gnc_gda_append_guid_list_to_sql( GString* sql, GList* list )
+{
+	gchar guid_buf[GUID_ENCODING_LENGTH+1];
+	gboolean first_guid = TRUE;
+
+	g_return_if_fail( sql != NULL );
+
+	if( list == NULL ) return;
+
+	for( ; list != NULL; list = list->next ) {
+		QofInstance* inst = QOF_INSTANCE(list->data);
+    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
+
+		if( !first_guid ) {
+			g_string_append( sql, "," );
+		}
+		g_string_append( sql, "'" );
+		g_string_append( sql, guid_buf );
+		g_string_append( sql, "'" );
+		first_guid = FALSE;
+    }
 }
 /* ================================================================= */
 static void

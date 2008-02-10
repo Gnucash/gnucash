@@ -85,6 +85,7 @@ typedef struct {
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SQLITE_PROVIDER_NAME "SQLite"
+#define URI_PREFIX "gda://"
 
 /* ================================================================= */
 
@@ -102,6 +103,114 @@ create_tables_cb( const gchar* type, gpointer data_p, gpointer be_p )
     }
 }
 
+/*
+ * Parse the gda uri.  If successful, return TRUE.
+ */
+
+static gboolean parse_uri( const gchar* book_id,
+					gchar** pProvider, gchar** pDsn, gchar** pUsername, gchar** pPassword )
+{
+	gchar* uri_id;
+	gchar* book_info;
+	gchar* provider;
+	GList* provider_list;
+	gboolean provider_found;
+	gchar* dsn;
+
+	*pProvider = NULL;
+	*pDsn = NULL;
+	*pUsername = NULL;
+	*pPassword = NULL;
+
+	book_info = g_strdup( book_id );
+	uri_id = book_info;
+
+	/* If there is no gda:// prefix, we just have a sqlite file name.
+	 * Otherwise, the string will be one of:
+	 *
+	 *    sqlite:<filename>
+	 *    mysql:<dbname>
+	 *    pgsql:<dbname>
+	 *    @<gda_connectionname>
+	 */
+	if( g_str_has_prefix( uri_id, URI_PREFIX ) ) {
+		uri_id += strlen( URI_PREFIX );
+
+		if( uri_id[0] == '@' ) {
+			*pDsn = g_strdup( &uri_id[1] );
+			g_free( book_info );
+			return TRUE;
+		}
+
+		provider = uri_id;
+	    dsn = strchr( uri_id, ':' );
+		if( dsn == 0 ) {
+			g_free( book_info );
+			return FALSE;
+		}
+		*dsn = '\0';
+		dsn++;
+
+	} else {
+		provider = SQLITE_PROVIDER_NAME;
+		dsn = uri_id;
+	}
+
+	// Get a list of all of the providers.  If the requested provider is on the list, use it.
+	// Note that we need a case insensitive comparison here
+	provider_list = gda_config_get_provider_list();
+
+	provider_found = FALSE;
+	for( ; provider_list != NULL; provider_list = provider_list->next ) {
+		GdaProviderInfo* provider_info = (GdaProviderInfo*)provider_list->data;
+
+		if( provider_info != NULL && g_ascii_strcasecmp( provider_info->id, provider ) == 0 ) {
+			provider_found = TRUE;
+			provider = provider_info->id;
+			break;
+		}
+	}
+	if( provider_found ) {
+		gchar* cnc;
+
+		*pProvider = g_strdup( provider );
+
+		// If the provider is SQLite, split the file name into DB_DIR and
+		// DB_NAME
+		if( strcmp( provider, SQLITE_PROVIDER_NAME ) == 0 ) {
+			gchar* dirname;
+			gchar* basename;
+
+			dirname = g_path_get_dirname( dsn );
+
+			basename = g_path_get_basename( dsn );
+				
+			// Remove .db from the base name if it exists
+			if( g_str_has_suffix( basename, ".db" ) ) {
+				gchar* bn = g_strdup( basename );
+				gchar* suffix = g_strrstr( bn, ".db" );
+				*suffix = '\0';
+
+				cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s", dirname, bn );
+				g_free( bn );
+			} else {
+				cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
+											dirname, basename );
+			}
+			g_free( dirname );
+			g_free( basename );
+		} else {
+			cnc = g_strdup( dsn );
+		}
+		*pDsn = cnc;
+		g_free( book_info );
+		return TRUE;
+	} else {
+		g_free( book_info );
+		return FALSE;
+	}
+}
+
 static void
 gnc_gda_session_begin( QofBackend *be_start, QofSession *session, 
 	                   const gchar *book_id,
@@ -110,10 +219,11 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 {
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     GError* error = NULL;
-    gchar* book_info;
     gchar* dsn;
-    gchar* username = NULL;
-    gchar* password = NULL;
+    gchar* username;
+    gchar* password;
+	gchar* provider;
+	gboolean uriOK;
 
 	g_return_if_fail( be_start != NULL );
 	g_return_if_fail( session != NULL );
@@ -128,124 +238,56 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
 
     /* Split book_id into provider and connection string.  If there's no
 	provider, use "file" */
-    book_info = g_strdup( book_id );
-    dsn = strchr( book_info, ':' );
-	if( dsn != NULL && *(dsn+1)==*(dsn+2) && *(dsn+1)=='/' ) {
-    	*dsn = '\0';
-    	dsn += 3;						// Skip '://'
+	uriOK = parse_uri( book_id, &provider, &dsn, &username, &password );
+	if( !uriOK ) {
+        qof_backend_set_error( be_start, ERR_BACKEND_BAD_URL );
 
-		// String will be one of:
-		//
-		//    sqlite:<filename>
-		//    mysql:<dbname>
-		//    pgsql:<dbname>
-		//    @<gda_connectionname>
+        LEAVE( " " );
+        return;
+	}
 
-		if( dsn[0] == '@' ) {
-	    	be->pConnection = gda_client_open_connection( be->pClient,
-													&dsn[1],
+	if( provider == NULL ) {
+	    be->pConnection = gda_client_open_connection( be->pClient,
+													dsn,
 													username, password,
 													0,
 													&error );
-		}
 	} else {
-		dsn = NULL;
-	}
-
-	if( dsn == NULL || dsn[0] != '@' ) {
-		gchar* provider;
-		GList* provider_list;
-		GList* l;
-		gboolean provider_found;
-		
-		if( dsn != NULL ) {
-			provider = dsn;
-	    	dsn = strchr( dsn, ':' );
-			*dsn = '\0';
-			dsn++;
-		} else {
-			provider = SQLITE_PROVIDER_NAME;
-			dsn = book_info;
-		}
-
-		// Get a list of all of the providers.  If the requested provider is on the list, use it.
-		// Note that we need a case insensitive comparison here
-		provider_list = gda_config_get_provider_list();
-
-		provider_found = FALSE;
-		for( l = provider_list; l != NULL; l = l->next ) {
-			GdaProviderInfo* provider_info = (GdaProviderInfo*)l->data;
-
-			if( provider_info != NULL && g_ascii_strcasecmp( provider_info->id, provider ) == 0 ) {
-				provider_found = TRUE;
-				provider = provider_info->id;
-				break;
-			}
-		}
-
-		if( provider_found ) {
-			gchar* cnc;
-
-		    // If the provider is SQLite, split the file name into DB_DIR and
-			// DB_NAME
-			if( strcmp( provider, SQLITE_PROVIDER_NAME ) == 0 ) {
-				gchar* dirname;
-				gchar* basename;
-
-				dirname = g_path_get_dirname( dsn );
-				basename = g_path_get_basename( dsn );
-				
-				// Remove .db from the base name if it exists
-				if( g_str_has_suffix( basename, ".db" ) ) {
-					gchar* bn = g_strdup( basename );
-					gchar* suffix = g_strrstr( bn, ".db" );
-					*suffix = '\0';
-
-					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s", dirname, bn );
-					g_free( bn );
-				} else {
-					cnc = g_strdup_printf( "DB_DIR=%s;DB_NAME=%s",
-											dirname, basename );
-				}
-				g_free( dirname );
-				g_free( basename );
-			} else {
-			    cnc = g_strdup( dsn );
-			}
-
-			be->pConnection = gda_client_open_connection_from_string( be->pClient,
+		be->pConnection = gda_client_open_connection_from_string( be->pClient,
 									provider, 
-									cnc,
+									dsn,
 									username, password,
 									0,
 									&error );
 
-		    if( be->pConnection == NULL ) {
-				GdaServerOperation* op = gda_client_prepare_create_database(
+		if( be->pConnection == NULL ) {
+			GdaServerOperation* op = gda_client_prepare_create_database(
 													be->pClient,
 													dsn,
 													provider );
-				if( op != NULL ) {
-					gboolean isOK;
-					isOK = gda_client_perform_create_database(
+			if( op != NULL ) {
+				gboolean isOK;
+				isOK = gda_client_perform_create_database(
 													be->pClient,
 													op,
 													&error );
-					if( isOK ) {
-						be->pConnection = gda_client_open_connection_from_string(
+				if( isOK ) {
+					be->pConnection = gda_client_open_connection_from_string(
 													be->pClient,
 													provider, 
-													cnc,
+													dsn,
 													username, password,
 													0,
 													&error );
-					}
 				}
 			}
-		g_free( cnc );
 		}
 	}
-    g_free( book_info );
+
+	if( provider != NULL ) g_free( provider );
+	if( dsn != NULL ) g_free( dsn );
+	if( username != NULL ) g_free( username );
+	if( password != NULL ) g_free( password );
 
     if( be->pConnection == NULL ) {
         PERR( "SQL error: %s\n", error->message );
@@ -261,6 +303,7 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
     be->pDict = gda_dict_new();
     gda_dict_set_connection( be->pDict, be->pConnection );
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
+	gda_dict_extend_with_functions( be->pDict );
     if( error != NULL ) {
         PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }

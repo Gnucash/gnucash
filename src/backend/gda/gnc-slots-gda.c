@@ -519,13 +519,15 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 	GString* sql;
     gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gboolean first_guid = TRUE;
-	GdaObject* ret;
+	GdaDataModel* model;
 	gboolean single_item;
 
 	g_return_if_fail( be != NULL );
 
 	// Ignore empty list
 	if( list == NULL ) return;
+
+	coll = qof_instance_get_collection( QOF_INSTANCE(list->data) );
 
 	// Create the query for all slots for all items on the list
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
@@ -537,37 +539,24 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 		g_string_append( sql, "= " );
 		single_item = TRUE;
 	}
-	for( ; list != NULL; list = list->next ) {
-		QofInstance* inst = QOF_INSTANCE(list->data);
-		coll = qof_instance_get_collection( inst );
-    	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
-
-		if( !first_guid ) {
-			g_string_append( sql, "," );
-		}
-		g_string_append( sql, "'" );
-		g_string_append( sql, guid_buf );
-		g_string_append( sql, "'" );
-		first_guid = FALSE;
-    }
+	gnc_gda_append_guid_list_to_sql( sql, list );
 	if( !single_item ) {
 		g_string_append( sql, ")" );
 	}
 
 	// Execute the query and load the slots
 	query = gnc_gda_create_query_from_sql( be, sql->str );
-	g_string_free( sql, TRUE );
-	ret = gnc_gda_execute_query( be, query );
-    if( GDA_IS_DATA_MODEL( ret ) ) {
-        GdaDataModel* pModel = GDA_DATA_MODEL(ret);
-        int numRows = gda_data_model_get_n_rows( pModel );
+	model = gnc_gda_execute_sql( be, sql->str );
+    if( model != NULL ) {
+        int numRows = gda_data_model_get_n_rows( model );
         int r;
 
         for( r = 0; r < numRows; r++ ) {
-            load_slot_for_list_item( be, pModel, r, coll );
+            load_slot_for_list_item( be, model, r, coll );
         }
+		g_object_unref( model );
     }
-	g_object_unref( ret );
+	g_string_free( sql, TRUE );
 }
 
 /* ================================================================= */

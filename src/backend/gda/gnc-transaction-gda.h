@@ -40,4 +40,12 @@ void gnc_gda_get_account_balances( GncGdaBackend* be, Account* pAccount,
 								    gnc_numeric* cleared_balance,
 									gnc_numeric* reconciled_balance );
 
+typedef struct {
+	Account* acct;
+	gnc_numeric start_balance;
+	gnc_numeric cleared_balance;
+	gnc_numeric reconciled_balance;
+} acct_balances_t;
+GList* gnc_gda_get_account_balances_for_list( GncGdaBackend* be, GList* list );
+
 #endif /* GNC_TRANSACTION_GDA_H_ */
