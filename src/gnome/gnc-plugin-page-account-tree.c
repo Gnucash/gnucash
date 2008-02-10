@@ -164,7 +164,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
-	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), NULL,
+	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
 	{ "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts..."), NULL,
