@@ -3238,8 +3238,7 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
-  GtkWidget *tab_hbox, *widget, *label = NULL, *entry = NULL;
-  GList *children, *tmp;
+  GtkWidget *label, *entry;
 
   ENTER(" ");
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
@@ -3248,22 +3247,9 @@ gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *windo
     LEAVE("No current page");
     return;
   }
-  
-  tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
-                                       page->notebook_page);
-  children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
-  for (tmp = children; tmp; tmp = g_list_next(tmp)) {
-    widget = tmp->data;
-    if (GTK_IS_LABEL(widget)) {
-      label = widget;
-    } else if (GTK_IS_ENTRY(widget)) {
-      entry = widget;
-    }
-  }
-  g_list_free(children);
 
-  if (!label || !entry) {
-    LEAVE("Missing label or entry.");
+  if (!main_window_find_tab_items(window, page, &label, &entry)) {
+    LEAVE("can't find required widgets");
     return;
   }
 
