@@ -68,7 +68,8 @@ static col_cvt_t col_table[] =
 	{ "post_lot",     CT_LOTREF,       0,                  0,        NULL, NULL,
 			(QofAccessFunc)gncInvoiceGetPostedLot, (QofSetterFunc)gncInvoiceSetPostedLot },
 	{ "post_acc",     CT_ACCOUNTREF,   0,                  0,        NULL, INVOICE_ACC },
-	{ "billto",       CT_OWNERREF,     0,                  0,        NULL, INVOICE_BILLTO },
+	{ "billto",       CT_OWNERREF,     0,                  0,        NULL, NULL,
+			(QofAccessFunc)gncInvoiceGetBillTo, (QofSetterFunc)gncInvoiceSetBillTo },
 	{ "charge_amt",   CT_NUMERIC,      0,                  0,        NULL, NULL,
 			(QofAccessFunc)gncInvoiceGetToChargeAmount, (QofSetterFunc)gncInvoiceSetToChargeAmount },
 	{ NULL }
