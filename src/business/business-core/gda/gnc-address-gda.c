@@ -41,7 +41,7 @@
 
 #include "gnc-backend-util-gda.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define ADDRESS_MAX_NAME_LEN 50
 #define ADDRESS_MAX_ADDRESS_LINE_LEN 50

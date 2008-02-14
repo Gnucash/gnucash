@@ -42,7 +42,7 @@
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "invoices"
 

@@ -50,3 +50,5 @@ libgncmod_business_backend_gda_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${LIBGDA_LIBS}
+
+INCLUDES = -DG_LOG_DOMAIN=\"gnc.backend.gda\"

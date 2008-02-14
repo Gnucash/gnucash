@@ -37,7 +37,7 @@
 #include "gncEmployeeP.h"
 #include "gncVendorP.h"
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef void (*OwnerSetterFunc)( gpointer, GncOwner* );
 typedef GncOwner* (*OwnerGetterFunc)( const gpointer );

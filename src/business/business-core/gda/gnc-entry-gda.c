@@ -44,7 +44,7 @@
 
 #define _GNC_MOD_NAME	GNC_ID_ENTRY
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "entries"
 #define MAX_DESCRIPTION_LEN 50

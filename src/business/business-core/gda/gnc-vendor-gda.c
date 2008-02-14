@@ -47,7 +47,7 @@
 
 #define _GNC_MOD_NAME	GNC_ID_VENDOR
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define MAX_NAME_LEN 50
 #define MAX_ID_LEN 50

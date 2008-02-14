@@ -40,7 +40,7 @@
 
 #define _GNC_MOD_NAME	GNC_ID_TAXTABLE
 
-static QofLogModule log_module = GNC_MOD_BACKEND;
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 static void set_invisible( gpointer data, gpointer value );
 
