@@ -54,9 +54,9 @@ static void set_root_template_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",               CT_GUID, 0, COL_NNUL, "guid" },
-    { "root_account_guid",  CT_GUID, 0, COL_NNUL, NULL, NULL, get_root_account_guid,  set_root_account_guid },
-    { "root_template_guid", CT_GUID, 0, COL_NNUL, NULL, NULL, get_root_template_guid, set_root_template_guid },
+    { "guid",               CT_GUID, 0, COL_NNUL|COL_PKEY, "guid" },
+    { "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_account_guid,  set_root_account_guid },
+    { "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_template_guid, set_root_template_guid },
     { NULL }
 };
 

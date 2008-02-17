@@ -75,17 +75,23 @@ static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
 static col_cvt_t col_table[] =
 {
-    { "slot_id",      CT_INT,      0,                     COL_NNUL|COL_AUTOINC },
-    { "obj_guid",     CT_GUID,     0,                     COL_NNUL,             NULL, NULL, get_obj_guid,     set_obj_guid },
-    { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL,             NULL, NULL, get_path,         set_path },
-    { "slot_type",    CT_INT,      0,                     COL_NNUL,             NULL, NULL, get_slot_type,    set_slot_type, },
-    { "int64_val",    CT_INT64,    0,                     0,                    NULL, NULL, get_int64_val,    set_int64_val },
-    { "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,                    NULL, NULL, get_string_val,   set_string_val },
-    { "double_val",   CT_DOUBLE,   0,                     0,                    NULL, NULL, get_double_val,   set_double_val },
-    { "timespec_val", CT_TIMESPEC, 0,                     0,                    NULL, NULL,
+    { "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
+			get_obj_guid,     set_obj_guid },
+    { "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
+			get_path,         set_path },
+    { "slot_type",    CT_INT,      0,                     COL_NNUL, NULL, NULL,
+			get_slot_type,    set_slot_type, },
+    { "int64_val",    CT_INT64,    0,                     0,        NULL, NULL,
+			get_int64_val,    set_int64_val },
+    { "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,        NULL, NULL,
+			get_string_val,   set_string_val },
+    { "double_val",   CT_DOUBLE,   0,                     0,        NULL, NULL,
+			get_double_val,   set_double_val },
+    { "timespec_val", CT_TIMESPEC, 0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_timespec_val, (QofSetterFunc)set_timespec_val },
-    { "guid_val",     CT_GUID,     0,                     0,                    NULL, NULL, get_guid_val,     set_guid_val },
-    { "numeric_val",  CT_NUMERIC,  0,                     0,                    NULL, NULL,
+    { "guid_val",     CT_GUID,     0,                     0,        NULL, NULL,
+			get_guid_val,     set_guid_val },
+    { "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
 			(QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val },
     { NULL }
 };

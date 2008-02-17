@@ -59,21 +59,24 @@ static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",              CT_GUID,    0,               COL_NNUL, "guid" },
-    { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,        NULL, GNC_SX_NAME },
-    { "start_date",        CT_GDATE,   0,               COL_NNUL, NULL, GNC_SX_START_DATE },
-    { "last_occur",        CT_GDATE,   0,               0,        NULL, GNC_SX_LAST_DATE },
-    { "num_occur",         CT_INT,     0,               COL_NNUL, NULL, GNC_SX_NUM_OCCUR },
-    { "rem_occur",         CT_INT,     0,               COL_NNUL, NULL, GNC_SX_REM_OCCUR },
-    { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL, NULL, NULL,        get_autocreate,        set_autocreate },
-    { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL, NULL, NULL,        get_autonotify,        set_autonotify },
-    { "adv_creation",      CT_INT,     0,               COL_NNUL, NULL, NULL,
+    { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
+    { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
+    { "start_date",        CT_GDATE,   0,               COL_NNUL,          NULL, GNC_SX_START_DATE },
+    { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
+    { "num_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_NUM_OCCUR },
+    { "rem_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_REM_OCCUR },
+    { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
+			get_autocreate,        set_autocreate },
+    { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
+			get_autonotify,        set_autonotify },
+    { "adv_creation",      CT_INT,     0,               COL_NNUL,          NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceCreation,
             (QofSetterFunc)xaccSchedXactionSetAdvanceCreation },
-    { "adv_notify",        CT_INT,     0,               COL_NNUL, NULL, NULL,
+    { "adv_notify",        CT_INT,     0,               COL_NNUL,          NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
             (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
-    { "template_act_guid", CT_GUID,    0,               COL_NNUL, NULL, NULL,        get_template_act_guid, set_template_act_guid },
+    { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
+			get_template_act_guid, set_template_act_guid },
     { NULL }
 };
 

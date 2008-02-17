@@ -58,13 +58,13 @@ static void set_parent_guid( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "guid",           CT_GUID,         0,                           COL_NNUL, "guid" },
-    { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL, "name" },
-    { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL, NULL, ACCOUNT_TYPE_ },
-    { "commodity_guid", CT_COMMODITYREF, 0,                           COL_NNUL, "commodity" },
-    { "parent_guid",    CT_GUID,         0,                           0,        NULL, NULL, get_parent, set_parent },
-    { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,        "code" },
-    { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,        "description" },
+    { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
+    { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
+    { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
+    { "commodity_guid", CT_COMMODITYREF, 0,                           COL_NNUL,          "commodity" },
+    { "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL, get_parent, set_parent },
+    { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
+    { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
     { NULL }
 };
 static col_cvt_t parent_col_table[] =

@@ -62,14 +62,13 @@ static void set_recurrence_period_start( gpointer pObject, gpointer pValue );
 
 static col_cvt_t col_table[] =
 {
-    { "recurrence_id",           CT_INT,    0,                                     COL_NNUL|COL_AUTOINC },
-    { "obj_guid",                CT_GUID,   0,                                     COL_NNUL,             NULL, NULL,
+    { "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
             get_obj_guid, set_obj_guid },
-    { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL,             NULL, NULL,
+    { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,
             get_recurrence_mult, set_recurrence_mult },
-    { "recurrence_period_type",  CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN, COL_NNUL,             NULL, NULL,
+    { "recurrence_period_type",  CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN, COL_NNUL, NULL, NULL,
 			get_recurrence_period_type, set_recurrence_period_type },
-    { "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL,             NULL, NULL,
+    { "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
             get_recurrence_period_start, set_recurrence_period_start },
     { NULL }
 };

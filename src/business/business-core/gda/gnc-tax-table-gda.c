@@ -60,14 +60,14 @@ static void set_parent( gpointer pObject, gpointer pValue );
 
 static col_cvt_t tt_col_table[] =
 {
-	{ "guid",      CT_GUID,        0,            COL_NNUL, "guid" },
-	{ "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL, NULL, GNC_TT_NAME },
-	{ "refcount",  CT_INT64,       0,            COL_NNUL, NULL, GNC_TT_REFCOUNT },
-	{ "invisible", CT_BOOLEAN,     0,            COL_NNUL, NULL, NULL,
+	{ "guid",      CT_GUID,        0,            COL_NNUL|COL_PKEY, "guid" },
+	{ "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          NULL, GNC_TT_NAME },
+	{ "refcount",  CT_INT64,       0,            COL_NNUL,          NULL, GNC_TT_REFCOUNT },
+	{ "invisible", CT_BOOLEAN,     0,            COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetInvisible, set_invisible },
-	{ "child",     CT_TAXTABLEREF, 0,			 0,        NULL, NULL,
+	{ "child",     CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
 			get_child, (QofSetterFunc)gncTaxTableSetChild },
-	{ "parent",    CT_TAXTABLEREF, 0,			 0,        NULL, NULL,
+	{ "parent",    CT_TAXTABLEREF, 0,			 0,                 NULL, NULL,
 			(QofAccessFunc)gncTaxTableGetParent, set_parent },
 	{ NULL }
 };
@@ -76,14 +76,13 @@ static col_cvt_t tt_col_table[] =
 
 static col_cvt_t ttentries_col_table[] =
 {
-	{ "id",       CT_INT,         0, COL_NNUL|COL_AUTOINC },
-	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL,            NULL, NULL,
+	{ "taxtable", CT_TAXTABLEREF, 0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetTable, set_obj_guid },
-	{ "account",  CT_ACCOUNTREF,  0, COL_NNUL,            NULL, NULL,
+	{ "account",  CT_ACCOUNTREF,  0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetAccount, (QofSetterFunc)gncTaxTableEntrySetAccount },
-	{ "amount",   CT_NUMERIC,     0, COL_NNUL,            NULL, NULL,
+	{ "amount",   CT_NUMERIC,     0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetAmount, (QofSetterFunc)gncTaxTableEntrySetAmount },
-	{ "type",     CT_INT,         0, COL_NNUL,            NULL, NULL,
+	{ "type",     CT_INT,         0, COL_NNUL, NULL, NULL,
 			(QofAccessFunc)gncTaxTableEntryGetType, (QofSetterFunc)gncTaxTableEntrySetType },
 	{ NULL }
 };

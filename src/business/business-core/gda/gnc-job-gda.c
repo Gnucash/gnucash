@@ -49,12 +49,12 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",      CT_GUID,     0,                 COL_NNUL, "guid" },
-	{ "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL, NULL, JOB_ID },
-	{ "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL, NULL, JOB_NAME },
-	{ "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL, NULL, JOB_REFERENCE },
-	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL, NULL, JOB_ACTIVE },
-	{ "owner",     CT_OWNERREF, 0,                 COL_NNUL, NULL, JOB_OWNER },
+	{ "guid",      CT_GUID,     0,                 COL_NNUL|COL_PKEY, "guid" },
+	{ "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
+	{ "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          NULL, JOB_NAME },
+	{ "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
+	{ "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, JOB_ACTIVE },
+	{ "owner",     CT_OWNERREF, 0,                 COL_NNUL,          NULL, JOB_OWNER },
 	{ NULL }
 };
 

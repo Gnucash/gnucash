@@ -49,13 +49,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static col_cvt_t col_table[] =
 {
-    { "guid",           CT_GUID,           0,                    COL_NNUL, "guid" },
-    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_COMMODITY },
-    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL, NULL, PRICE_CURRENCY },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL, NULL, PRICE_DATE },
-    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,        NULL, PRICE_SOURCE },
-    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,        NULL, PRICE_TYPE },
-    { "value",          CT_NUMERIC,        0,                    COL_NNUL, NULL, PRICE_VALUE },
+    { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
+    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },
+    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_CURRENCY },
+    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          NULL, PRICE_DATE },
+    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 NULL, PRICE_SOURCE },
+    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 NULL, PRICE_TYPE },
+    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          NULL, PRICE_VALUE },
     { NULL }
 };
 

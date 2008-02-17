@@ -50,22 +50,22 @@ static void set_invisible( gpointer data, gpointer value );
 
 static col_cvt_t col_table[] =
 {
-	{ "guid",         CT_GUID,        0,                   COL_NNUL, "guid" },
-	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL, NULL, GNC_BILLTERM_NAME },
-	{ "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL, NULL, GNC_BILLTERM_DESC },
-	{ "refcount",     CT_INT,         0,                   COL_NNUL, NULL, NULL,
+	{ "guid",         CT_GUID,        0,                   COL_NNUL|COL_PKEY, "guid" },
+	{ "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_NAME },
+	{ "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL,          NULL, GNC_BILLTERM_DESC },
+	{ "refcount",     CT_INT,         0,                   COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncBillTermGetRefcount,  (QofSetterFunc)gncBillTermSetRefcount },
-	{ "invisible",    CT_BOOLEAN,     0,                   COL_NNUL, NULL, NULL,
+	{ "invisible",    CT_BOOLEAN,     0,                   COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)gncBillTermGetInvisible, (QofSetterFunc)set_invisible },
-	{ "parent",       CT_BILLTERMREF, 0,                   0,        NULL, NULL,
+	{ "parent",       CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
 			(QofAccessFunc)gncBillTermGetParent,    (QofSetterFunc)gncBillTermSetParent },
-	{ "child",        CT_BILLTERMREF, 0,                   0,        NULL, NULL,
+	{ "child",        CT_BILLTERMREF, 0,                   0,                 NULL, NULL,
 			(QofAccessFunc)gncBillTermReturnChild,  (QofSetterFunc)gncBillTermSetChild },
-	{ "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL, NULL, GNC_BILLTERM_TYPE },
-	{ "duedays",      CT_INT,         0,                   0,        0,    GNC_BILLTERM_DUEDAYS },
-	{ "discountdays", CT_INT,         0,                   0,        0,    GNC_BILLTERM_DISCDAYS },
-	{ "discount",     CT_NUMERIC,     0,                   0,        0,    GNC_BILLTERM_DISCOUNT },
-	{ "cutoff",       CT_INT,         0,                   0,        0,    GNC_BILLTERM_CUTOFF },
+	{ "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
+	{ "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
+	{ "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
+	{ "discount",     CT_NUMERIC,     0,                   0,                 0,    GNC_BILLTERM_DISCOUNT },
+	{ "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
 	{ NULL }
 };
 

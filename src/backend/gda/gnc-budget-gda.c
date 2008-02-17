@@ -52,10 +52,10 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static col_cvt_t col_table[] =
 {
-    { "guid",        CT_GUID,   0,                          COL_NNUL, "guid" },
-    { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL, NULL, "name" },
-    { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,        NULL, "description" },
-    { "num_periods", CT_INT,    0,                          COL_NNUL, NULL, "num_periods" },
+    { "guid",        CT_GUID,   0,                          COL_NNUL|COL_PKEY, "guid" },
+    { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          NULL, "name" },
+    { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 NULL, "description" },
+    { "num_periods", CT_INT,    0,                          COL_NNUL,          NULL, "num_periods" },
     { NULL }
 };
 

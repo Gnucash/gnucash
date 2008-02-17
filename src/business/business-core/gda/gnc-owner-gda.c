@@ -294,7 +294,7 @@ get_gvalue_owner_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_owner_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row, gboolean pkey )
+            xmlNodePtr array_data, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
     gchar* buf;
