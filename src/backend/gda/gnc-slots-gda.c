@@ -569,9 +569,16 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 static void
 create_slots_tables( GncGdaBackend* be )
 {
+	GError* error = NULL;
+	gboolean ok;
+
 	g_return_if_fail( be != NULL );
 
     gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	ok = gnc_gda_create_index( be, "slots_guid_index", TABLE_NAME, obj_guid_col_table, &error );
+	if( !ok ) {
+		g_critical( "GDA: unable to create index: %s\n", error->message );
+	}
 }
 
 /* ================================================================= */

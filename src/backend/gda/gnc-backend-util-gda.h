@@ -121,7 +121,7 @@ typedef void (*GNC_GDA_LOAD_FN)( const GncGdaBackend* be, GdaDataModel* pModel, 
                                 QofSetterFunc setter, gpointer pObject,
                                 const col_cvt_t* table );
 typedef void (*GNC_GDA_CREATE_COL_FN)( GdaServerProvider* server,
-				                        GdaConnection* cnn, xmlNodePtr array_data,
+				                        GdaConnection* cnn, GdaServerOperation* op,
                         				const col_cvt_t* table_row );
 typedef void (*GNC_GDA_GET_GVALUE_QUERY_FN)( const GncGdaBackend* be,
                 QofIdTypeConst obj_name, const gpointer pObject,
@@ -138,8 +138,7 @@ typedef struct {
 } col_type_handler_t;
 
 QofAccessFunc gnc_gda_get_getter( QofIdTypeConst obj_name, const col_cvt_t* table_row );
-void gnc_gda_add_table_column( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
+void gnc_gda_add_table_column( GdaServerOperation* op, const gchar* arg, const gchar* dbms_type,
             gint size, gint flags );
 
 gboolean gnc_gda_do_db_operation( GncGdaBackend* pBackend,
@@ -175,7 +174,10 @@ gboolean gnc_gda_object_is_it_in_db( const GncGdaBackend* be,
 									const gchar* table_name,
 									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );
-gboolean gnc_gda_create_table( GdaConnection* pConnection,
+gboolean gnc_gda_create_table( const GncGdaBackend* be,
+						const gchar* table_name, const col_cvt_t* col_table,
+						GError** error );
+gboolean gnc_gda_create_index( const GncGdaBackend* be, const gchar* index_name,
 						const gchar* table_name, const col_cvt_t* col_table,
 						GError** error );
 void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
@@ -195,7 +197,7 @@ void gnc_gda_get_gvalue_objectref_guid_for_query( const GncGdaBackend* be, QofId
 GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
 void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
-	            xmlNodePtr array_data, const col_cvt_t* table_row );
+	            GdaServerOperation* op, const col_cvt_t* table_row );
 void gnc_gda_append_guid_list_to_sql( GString* str, GList* list );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );

@@ -294,7 +294,7 @@ get_gvalue_owner_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_owner_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+    	        GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
     gchar* buf;
@@ -302,17 +302,17 @@ create_owner_col( GdaServerProvider* server, GdaConnection* cnn,
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn, G_TYPE_INT );
     buf = g_strdup_printf( "%s_type", table_row->col_name );
-   	gnc_gda_add_table_column( server, cnn, array_data, buf, dbms_type, table_row->size, table_row->flags );
+   	gnc_gda_add_table_column( op, buf, dbms_type, table_row->size, table_row->flags );
    	g_free( buf );
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn,
                                                             G_TYPE_STRING );
     buf = g_strdup_printf( "%s_guid", table_row->col_name );
-   	gnc_gda_add_table_column( server, cnn, array_data, buf, dbms_type, GUID_ENCODING_LENGTH, table_row->flags );
+   	gnc_gda_add_table_column( op, buf, dbms_type, GUID_ENCODING_LENGTH, table_row->flags );
    	g_free( buf );
 }
 

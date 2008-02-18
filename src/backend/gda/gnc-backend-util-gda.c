@@ -235,18 +235,18 @@ get_gvalue_string_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_string_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+	                GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_STRING );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -337,18 +337,18 @@ get_gvalue_int_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_int_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -439,18 +439,18 @@ get_gvalue_boolean_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_boolean_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            		GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -540,18 +540,18 @@ get_gvalue_int64_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_int64_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            		GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -642,18 +642,18 @@ get_gvalue_double_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_double_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            		GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_INT64 );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -754,14 +754,14 @@ get_gvalue_guid_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_guid_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+	            GdaServerOperation* op, const col_cvt_t* table_row )
 {
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     "char", GUID_ENCODING_LENGTH, table_row->flags );
 }
 
@@ -837,14 +837,14 @@ gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* be, QofIdTypeConst 
 
 void
 gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            					GdaServerOperation* op, const col_cvt_t* table_row )
 {
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     "char", GUID_ENCODING_LENGTH, table_row->flags );
 }
 
@@ -958,18 +958,18 @@ get_gvalue_timespec_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_timespec_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+		            GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server,
                                                         cnn, G_TYPE_DATE );
-    gnc_gda_add_table_column( server, cnn, array_data, table_row->col_name,
+    gnc_gda_add_table_column( op, table_row->col_name,
                     dbms_type, table_row->size, table_row->flags );
 }
 
@@ -1253,24 +1253,24 @@ get_gvalue_numeric_cond( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
 static void
 create_numeric_col( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const col_cvt_t* table_row )
+            	GdaServerOperation* op, const col_cvt_t* table_row )
 {
     const gchar* dbms_type;
     gchar* buf;
 
 	g_return_if_fail( server != NULL );
 	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( table_row != NULL );
 
     dbms_type = gda_server_provider_get_default_dbms_type( server, cnn,
                                                             G_TYPE_INT64 );
     buf = g_strdup_printf( "%s_num", table_row->col_name );
-    gnc_gda_add_table_column( server, cnn, array_data, buf, dbms_type,
+    gnc_gda_add_table_column( op, buf, dbms_type,
                         table_row->size, table_row->flags );
     g_free( buf );
     buf = g_strdup_printf( "%s_denom", table_row->col_name );
-    gnc_gda_add_table_column( server, cnn, array_data, buf, dbms_type,
+    gnc_gda_add_table_column( op, buf, dbms_type,
                         table_row->size, table_row->flags );
     g_free( buf );
 }
@@ -1758,72 +1758,77 @@ gnc_gda_build_delete_query( GncGdaBackend* be,
 
 /* ================================================================= */
 void
-gnc_gda_add_table_column( GdaServerProvider* server, GdaConnection* cnn,
-            xmlNodePtr array_data, const gchar* arg, const gchar* dbms_type,
+gnc_gda_add_table_column( GdaServerOperation* op, const gchar* arg, const gchar* dbms_type,
             gint size, gint flags )
 {
-    xmlNodePtr array_row, array_value;
     gchar* buf;
+	GdaServerOperationNode* node;
+	GdaDataModel* model;
+	gint col_num;
+	GError* error = NULL;
+	gboolean ok;
 
-	g_return_if_fail( server != NULL );
-	g_return_if_fail( cnn != NULL );
-	g_return_if_fail( array_data != NULL );
+	g_return_if_fail( op != NULL );
 	g_return_if_fail( arg != NULL );
 	g_return_if_fail( dbms_type != NULL );
 
-    array_row = xmlNewChild( array_data, NULL, "gda_array_row", NULL );
-    array_value = xmlNewChild( array_row, NULL, "gda_array_value", arg );
-    xmlSetProp( array_value, "colid", "COLUMN_NAME" );
-    array_value = xmlNewChild( array_row, NULL, "gda_array_value", dbms_type );
-    xmlSetProp( array_value, "colid", "COLUMN_TYPE" );
+	node = gda_server_operation_get_node_info( op, "/FIELDS_A" );
+	model = node->model;
+	col_num = gda_data_model_get_n_rows( model );
+
+	ok = gda_server_operation_set_value_at( op, arg, &error, "/FIELDS_A/@COLUMN_NAME/%d", col_num );
+	if( !ok ) return;
+	ok = gda_server_operation_set_value_at( op, dbms_type, &error, "/FIELDS_A/@COLUMN_TYPE/%d", col_num );
+	if( !ok ) return;
     if( size != 0 ) {
         buf = g_strdup_printf( "%d", size );
-        array_value = xmlNewChild( array_row, NULL, "gda_array_value", buf );
-        xmlSetProp( array_value, "colid", "COLUMN_SIZE" );
+		ok = gda_server_operation_set_value_at( op, buf, &error, "/FIELDS_A/@COLUMN_SIZE/%d", col_num );
         g_free( buf );
+		if( !ok ) return;
     }
     if( (flags & COL_PKEY) != 0 ) {
-        array_value = xmlNewChild( array_row, NULL, "gda_array_value", "TRUE" );
-        xmlSetProp( array_value, "colid", "COLUMN_PKEY" );
+		ok = gda_server_operation_set_value_at( op, "TRUE", &error, "/FIELDS_A/@COLUMN_PKEY/%d", col_num );
+		if( !ok ) return;
     }
     if( (flags & COL_NNUL) != 0 ) {
-        array_value = xmlNewChild( array_row, NULL, "gda_array_value", "TRUE" );
-        xmlSetProp( array_value, "colid", "COLUMN_NNUL" );
+		ok = gda_server_operation_set_value_at( op, "TRUE", &error, "/FIELDS_A/@COLUMN_NNUL/%d", col_num );
+		if( !ok ) return;
     }
     if( (flags & COL_AUTOINC) != 0 ) {
-        array_value = xmlNewChild( array_row, NULL, "gda_array_value", "TRUE" );
-        xmlSetProp( array_value, "colid", "COLUMN_AUTOINC" );
+		ok = gda_server_operation_set_value_at( op, "TRUE", &error, "/FIELDS_A/@COLUMN_AUTOINC/%d", col_num );
+		if( !ok ) return;
     }
     if( (flags & COL_UNIQUE) != 0 ) {
-        array_value = xmlNewChild( array_row, NULL, "gda_array_value", "TRUE" );
-        xmlSetProp( array_value, "colid", "COLUMN_UNIQUE" );
+		ok = gda_server_operation_set_value_at( op, "TRUE", &error, "/FIELDS_A/@COLUMN_UNIQUE/%d", col_num );
+		if( !ok ) return;
     }
 }
 
 gboolean
-gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
+gnc_gda_create_table( const GncGdaBackend* be, const gchar* table_name,
                     const col_cvt_t* col_table, GError** error )
 {
     GdaServerOperation *op;
     GdaServerProvider *server;
+	GdaConnection* cnn;
     
-	g_return_val_if_fail( cnn != NULL, FALSE );
-    g_return_val_if_fail( GDA_IS_CONNECTION(cnn), FALSE );
-    g_return_val_if_fail( gda_connection_is_opened(cnn), FALSE );
+	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
 	g_return_val_if_fail( col_table != NULL, FALSE );
 	g_return_val_if_fail( error != NULL, FALSE );
     
+	cnn = be->pConnection;
+	g_return_val_if_fail( cnn != NULL, FALSE );
+    g_return_val_if_fail( GDA_IS_CONNECTION(cnn), FALSE );
+    g_return_val_if_fail( gda_connection_is_opened(cnn), FALSE );
+
     server = gda_connection_get_provider_obj( cnn );
     
     op = gda_server_provider_create_operation( server, cnn, 
                            GDA_SERVER_OPERATION_CREATE_TABLE, NULL, error );
     if( GDA_IS_SERVER_OPERATION(op) ) {
         gint col;
-        GType type;
-        xmlDocPtr parameters;
-        xmlNodePtr root;
-        xmlNodePtr table, op_data, array_data;
+		gboolean ok;
         
         if( table_name == NULL ) {
             g_message( "Table name is NULL!" );      
@@ -1833,52 +1838,113 @@ gnc_gda_create_table( GdaConnection* cnn, const gchar* table_name,
             return FALSE;    
         }
         
-    
-        /* Initation of the xmlDoc */
-        parameters = xmlNewDoc( "1.0" );
-        
-        root = xmlNewDocNode( parameters, NULL, "serv_op_data", NULL );
-        xmlDocSetRootElement( parameters, root );
-        table = xmlNewChild( root, NULL, "op_data", table_name );
-        xmlSetProp( table, "path", "/TABLE_DEF_P/TABLE_NAME" );
+		ok = gda_server_operation_set_value_at( op, table_name, error, "/TABLE_DEF_P/TABLE_NAME" );
+		if( !ok ) return FALSE;
 
-        op_data = xmlNewChild( root, NULL, "op_data", NULL );
-        xmlSetProp( op_data, "path", "/FIELDS_A" );
-        array_data = xmlNewChild( op_data, NULL, "gda_array_data", NULL );
-
-        type = 0;
-        
         for( col = 0; col_table[col].col_name != NULL; col++ ) {
             col_type_handler_t* pHandler;
 
             pHandler = get_handler( col_table[col].col_type );
-            pHandler->create_col_fn( server, cnn, array_data, &col_table[col] );
+            pHandler->create_col_fn( server, cnn, op, &col_table[col] );
         }
         
-        if( !gda_server_operation_load_data_from_xml(op, root, error ) ) {
+        if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
             /* error */
-            g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
-                     "The XML operation doesn't exist or could't be loaded" );
-            g_object_unref( op );
-            xmlFreeDoc( parameters );
-            return FALSE;
-        } else {
-            if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
-                /* error */
-                g_set_error( error,
+            g_set_error( error,
                     GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
                     "The Server couldn't perform the CREATE TABLE operation!" );
-                g_object_unref( op );
-                xmlFreeDoc( parameters );
-                return FALSE;
-            }
+            g_object_unref( op );
+            return FALSE;
         }
 
         g_object_unref( op );
-        xmlFreeDoc( parameters );
     } else {
         g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
                 "The Server doesn't support the CREATE TABLE operation!" );
+        return FALSE;
+    }
+    return TRUE;
+}
+
+gboolean
+gnc_gda_create_index( const GncGdaBackend* be, const gchar* index_name,
+					const gchar* table_name,
+                    const col_cvt_t* col_table, GError** error )
+{
+    GdaServerOperation *op;
+    GdaServerProvider *server;
+	GdaConnection* cnn;
+    
+    g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( index_name != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+	g_return_val_if_fail( col_table != NULL, FALSE );
+	g_return_val_if_fail( error != NULL, FALSE );
+    
+	cnn = be->pConnection;
+	g_return_val_if_fail( cnn != NULL, FALSE );
+    g_return_val_if_fail( GDA_IS_CONNECTION(cnn), FALSE );
+    g_return_val_if_fail( gda_connection_is_opened(cnn), FALSE );
+
+    server = gda_connection_get_provider_obj( cnn );
+	g_return_val_if_fail( server != NULL, FALSE );
+    
+    op = gda_server_provider_create_operation( server, cnn, 
+                           GDA_SERVER_OPERATION_CREATE_INDEX, NULL, error );
+    if( GDA_IS_SERVER_OPERATION(op) ) {
+        gint col;
+		gboolean ok;
+        
+		if( index_name == NULL ) {
+            g_message( "Index name is NULL!" );      
+            g_set_error( error,
+                    GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
+                    "Couldn't create index with a NULL string" );
+            return FALSE;    
+		}
+        if( table_name == NULL ) {
+            g_message( "Table name is NULL!" );      
+            g_set_error( error,
+                    GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
+                    "Couldn't create index with a NULL string" );
+            return FALSE;    
+        }
+        
+    
+		ok = gda_server_operation_set_value_at( op, index_name, error, "/INDEX_DEF_P/INDEX_NAME" );
+		if( !ok ) return FALSE;
+		ok = gda_server_operation_set_value_at( op, "", error, "/INDEX_DEF_P/INDEX_TYPE" );
+		if( !ok ) return FALSE;
+		ok = gda_server_operation_set_value_at( op, "TRUE", error, "/INDEX_DEF_P/INDEX_IFNOTEXISTS" );
+		if( !ok ) return FALSE;
+		ok = gda_server_operation_set_value_at( op, table_name, error, "/INDEX_DEF_P/INDEX_ON_TABLE" );
+		if( !ok ) return FALSE;
+
+        for( col = 0; col_table[col].col_name != NULL; col++ ) {
+			guint item;
+
+			if( col != 0 ) {
+				item = gda_server_operation_add_item_to_sequence( op, "/INDEX_FIELDS_S" );
+				g_assert( item == col );
+			}
+			ok = gda_server_operation_set_value_at( op, col_table->col_name, error,
+													"/INDEX_FIELDS_S/%d/INDEX_FIELD", col );
+			if( !ok ) break;
+        }
+        
+        if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
+            /* error */
+            g_set_error( error,
+                    	GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
+                    	"The Server couldn't perform the CREATE INDEX operation!" );
+            g_object_unref( op );
+            return FALSE;
+        }
+
+        g_object_unref( op );
+    } else {
+        g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OBJECT_NAME_ERROR, 
+                "The Server doesn't support the CREATE INDEX operation!" );
         return FALSE;
     }
     return TRUE;
@@ -1899,7 +1965,7 @@ void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
     db = gda_dict_get_database( be->pDict );
     table = gda_dict_database_get_table_by_name( db, table_name );
     if( !GDA_IS_DICT_TABLE(table) ) {
-        gnc_gda_create_table( be->pConnection, table_name, col_table, &error );
+        gnc_gda_create_table( be, table_name, col_table, &error );
         if( error != NULL ) {
             PERR( "Error creating table: %s\n", error->message );
         }
@@ -1953,44 +2019,27 @@ create_or_drop_db( GdaConnection* cnn, GdaServerOperationType opType,
     op = gda_server_provider_create_operation( server, cnn, opType, NULL,
                                             error );
     if( GDA_IS_SERVER_OPERATION(op) ) {
-        xmlDocPtr parameters;
-        xmlNodePtr root;
-        xmlNodePtr db;
-    
-        /* Initation of the xmlDoc */
-        parameters = xmlNewDoc( "1.0" );
-        
-        root = xmlNewDocNode( parameters, NULL, "serv_op_data", NULL );
-        xmlDocSetRootElement( parameters, root );
-        db = xmlNewChild( root, NULL, "op_data", db_name );
-        buf = g_strdup_printf( "/%s/DB_NAME", op_info->op_path_name );
-        xmlSetProp( db, "path", buf );
-        g_free( buf );
+		gboolean ok;
+		GError* error = NULL;
 
-        if( !gda_server_operation_load_data_from_xml(op, root, error ) ) {
+        buf = g_strdup_printf( "/%s/DB_NAME", op_info->op_path_name );
+		ok = gda_server_operation_set_value_at( op, db_name, &error, buf );
+        g_free( buf );
+		if( !ok ) return FALSE;
+
+        if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
             /* error */
-            g_set_error( error, GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
-                     "The XML operation doesn't exist or could't be loaded" );
-            g_object_unref( op );
-            xmlFreeDoc( parameters );
-            return FALSE;
-        } else {
-            if( !gda_server_provider_perform_operation( server, cnn, op, error ) ) {
-                /* error */
-                buf = g_strdup_printf( "The server couldn't perform the %s operation",
+            buf = g_strdup_printf( "The server couldn't perform the %s operation",
                                         op_info->op_name );
-                g_set_error( error,
+            g_set_error( error,
                     GDA_GENERAL_ERROR, GDA_GENERAL_OPERATION_ERROR, 
                     buf );
-                g_free( buf );
-                g_object_unref( op );
-                xmlFreeDoc( parameters );
-                return FALSE;
-            }
+            g_free( buf );
+            g_object_unref( op );
+            return FALSE;
         }
 
         g_object_unref( op );
-        xmlFreeDoc( parameters );
     } else {
         buf = g_strdup_printf( "The server doesn't support the %s operation",
                                 op_info->op_name );
