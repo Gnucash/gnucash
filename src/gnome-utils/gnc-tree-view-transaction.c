@@ -608,11 +608,14 @@ cdf(GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_model,
         if (is_trans) {
             Timespec ts = {0,0};
             xaccTransGetDatePostedTS (trans, &ts);
-        //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
-        //is a new transaction and set the time to current time to show current
-        //date on new transactions
-        if (ts.tv_sec == 0)
-            ts.tv_sec = time(NULL);
+            //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
+            //is a new transaction and set the time to current time to show current
+            //date on new transactions
+            if (ts.tv_sec == 0)
+            {
+                ts.tv_sec = time(NULL);
+                //xaccTransSetDatePostedSecs(trans, ts.tv_sec);
+            }//if
             g_object_set(cell, "text", gnc_print_date(ts), NULL);
         }
         break;
@@ -995,35 +998,39 @@ model_copy(gpointer data)
 {
     GtkListStore *description_list, *memo_list;
     GtkTreeIter parent_iter, description_iter, memo_iter, child_iter;
+    GtkTreeRowReference *row_reference;
+    GtkTreeModel *model = GTK_TREE_MODEL(get_trans_model_from_view(data));
     gchar *string;
     gboolean parents = FALSE, children = FALSE;
     //gint column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), 
     //			"model_column"));
     gint column = GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION;
 
-    description_list = gtk_list_store_new(1, G_TYPE_STRING);
+    description_list = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_POINTER);
     memo_list = gtk_list_store_new(1, G_TYPE_STRING);
     
-    parents = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
+    parents = gtk_tree_model_get_iter_first(model, &parent_iter);
     while (parents)	
     {
-        gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter, column, &string, -1);
+        gtk_tree_model_get(model, &parent_iter, column, &string, -1);
         gtk_list_store_append(description_list, &description_iter);
         gtk_list_store_set(description_list, &description_iter, 0, string, -1);
-        children = gtk_tree_model_iter_children(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, &parent_iter);
+        row_reference = gtk_tree_row_reference_new(model, gtk_tree_model_get_path(model, &parent_iter));
+        gtk_list_store_set(description_list, &description_iter, 1, row_reference, -1);
+        children = gtk_tree_model_iter_children(model, &child_iter, &parent_iter);
         while (children)
         {
             //Get the Memo string for the child (split) node
-            gtk_tree_model_get(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter, column, &string, -1);
+            gtk_tree_model_get(model, &child_iter, column, &string, -1);
             //Store the memo field if it isn't an empty string
             if (g_ascii_strcasecmp(string, ""))    
             {
                 gtk_list_store_append(memo_list, &memo_iter);
                 gtk_list_store_set(memo_list, &memo_iter, 0, string, -1);
             }//if
-            children = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &child_iter);
+            children = gtk_tree_model_iter_next(model, &child_iter);
         }//while
-        parents = gtk_tree_model_iter_next(GTK_TREE_MODEL(get_trans_model_from_view(data)), &parent_iter);
+        parents = gtk_tree_model_iter_next(model, &parent_iter);
     }//while
 
     g_object_set_data(G_OBJECT(data), "model_copy", description_list);
@@ -1453,6 +1460,78 @@ gtvt_editing_canceled_cb(GtkCellRenderer *cr, gpointer user_data)
 
 }//gtvt_editing_canceled_cb
 
+//Handle the "match-selected" signal
+static void
+gtvt_match_selected_cb(GtkEntryCompletion *widget, GtkTreeModel *model,
+                        GtkTreeIter *iter, gpointer user_data)
+{
+    gchar *description_string, *amount_string, *value_string, *account_string;
+    GtkTreeRowReference *row_reference;
+    GtkTreePath *parent_path;
+    GtkTreeModel *parent_model;
+    GtkTreeIter parent_iter, child_iter, blank_iter;
+    gpointer reference_pointer;
+    gboolean is_split, is_blank, next_split;
+    Split *split;
+    Transaction *trans, *blank_trans;
+    GncTreeViewTransaction *tv = GNC_TREE_VIEW_TRANSACTION(user_data);
+    gint split_count = 0, children = 0;
+ 
+    //Get the row reference for the matching text, then set the real model and iter
+    gtk_tree_model_get(model, iter, 1, &reference_pointer, -1);
+    row_reference = (GtkTreeRowReference*)reference_pointer; //Reference to matching row in tree-model
+    parent_path = gtk_tree_row_reference_get_path(row_reference);
+    parent_model = gtk_tree_row_reference_get_model(row_reference);
+    gtk_tree_model_get_iter(parent_model, &parent_iter, parent_path);
+
+    //Get the iter and blank trans so we can set its splits
+    gnc_tree_model_transaction_get_blank_trans_iter(GNC_TREE_MODEL_TRANSACTION(parent_model), &blank_iter);
+    g_return_if_fail(gnc_tree_model_transaction_get_split_and_trans(
+        GNC_TREE_MODEL_TRANSACTION(parent_model), &blank_iter,
+            NULL, &is_blank, NULL, &blank_trans));
+
+    //Get the number of splits for current trans
+    children = gtk_tree_model_iter_n_children(parent_model, &parent_iter);
+
+    Split *new_splits[children];
+    Account *acct[children];
+    gnc_numeric amt[children]; 
+    gnc_numeric val[children]; 
+
+    //Get the first child of the matching row
+    next_split = gtk_tree_model_iter_children(parent_model, &child_iter, &parent_iter);
+    
+    //Go through each child node to get account, amount and value
+    while (next_split)
+    { 
+        g_return_if_fail(gnc_tree_model_transaction_get_split_and_trans(
+            GNC_TREE_MODEL_TRANSACTION(parent_model), &child_iter,
+                &is_split, NULL, &split, &trans));
+
+        if (is_split)
+        {
+            amt[split_count] = xaccSplitGetAmount(split);
+            val[split_count] = xaccSplitGetValue(split);
+            acct[split_count] = xaccSplitGetAccount(split);
+        }//if
+
+        next_split = gtk_tree_model_iter_next(parent_model, &child_iter);
+        split_count++;
+    }//while
+    
+    //Set account, amount and value for new splits
+    for (split_count = 0; split_count < children; split_count++)
+    {
+        new_splits[split_count] = xaccMallocSplit(tv->priv->book);
+
+        xaccTransAppendSplit(blank_trans, new_splits[split_count]);
+        xaccAccountInsertSplit(acct[split_count], new_splits[split_count]);
+        xaccSplitSetAmount(new_splits[split_count], amt[split_count]);
+        xaccSplitSetValue(new_splits[split_count], val[split_count]);
+    }//for
+
+}//gtvt_match_selected_cb
+
 static void
 get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
                               const gchar *path_string, gpointer user_data)
@@ -1497,7 +1576,7 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
     g_object_set_data(G_OBJECT(cr), "edit-canceled", FALSE);
     g_signal_connect(G_OBJECT(editable), "remove-widget",
                      (GCallback) remove_edit, tv);
-
+    
     if (GNC_TREE_MODEL_TRANSACTION_COL_DESCRIPTION 
         == GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")))
             //&& GTK_IS_ENTRY(editable))
@@ -1515,9 +1594,14 @@ get_editable_start_editing_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
         }//else
         //g_object_set(G_OBJECT(completion), "text-column", 
         //	GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cr), "model_column")));
-        gtk_entry_completion_set_inline_completion(completion, TRUE);
-        gtk_entry_completion_set_popup_completion(completion, FALSE);
+        //gtk_entry_completion_set_inline_completion(completion, TRUE);
+        //To emit "match-selected" signal we need to have a list of matches to
+        //select from instead of using inline autocompletion
+        gtk_entry_completion_set_popup_completion(completion, TRUE);
+        gtk_entry_completion_set_inline_selection(completion, TRUE);
         gtk_entry_set_completion(GTK_ENTRY(editable), completion);
+        g_signal_connect(G_OBJECT(completion), "match-selected",
+                            (GCallback)gtvt_match_selected_cb, tv);
     }//if
 
 }//get_editable_start_editing_cb
