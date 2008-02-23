@@ -701,9 +701,9 @@
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
-      (if (or (all-formats-equivalent? getter parser equiv-thunk formats 
-                                       objects printer errormsg errortype)      
-              (eq? on-error 'guess-on-ambiguity))
+      (if (or (eq? on-error 'guess-on-ambiguity)
+              (all-formats-equivalent? getter parser equiv-thunk formats 
+                                       objects printer errormsg errortype))
           (set! format (car formats))
           (begin 
             (errormsg errortype formats)
