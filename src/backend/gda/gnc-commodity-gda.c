@@ -49,12 +49,12 @@ static void set_quote_source_name( gpointer pObject, gpointer pValue );
 
 #define COMMODITIES_TABLE "commodities"
 
-#define COMMODITY_MAX_NAMESPACE_LEN 40
-#define COMMODITY_MAX_MNEMONIC_LEN 40
-#define COMMODITY_MAX_FULLNAME_LEN 100
-#define COMMODITY_MAX_CUSIP_LEN 50
-#define COMMODITY_MAX_QUOTESOURCE_LEN 50
-#define COMMODITY_MAX_QUOTE_TZ_LEN 50
+#define COMMODITY_MAX_NAMESPACE_LEN 2048
+#define COMMODITY_MAX_MNEMONIC_LEN 2048
+#define COMMODITY_MAX_FULLNAME_LEN 2048
+#define COMMODITY_MAX_CUSIP_LEN 2048
+#define COMMODITY_MAX_QUOTESOURCE_LEN 2048
+#define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
 static col_cvt_t col_table[] = {
     { "guid",         CT_GUID,   0,                             COL_NNUL|COL_PKEY, "guid" },

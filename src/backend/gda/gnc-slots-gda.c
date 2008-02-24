@@ -70,8 +70,8 @@ static void set_guid_val( gpointer pObject, gpointer pValue );
 static gnc_numeric get_numeric_val( gpointer pObject, const QofParam* param );
 static void set_numeric_val( gpointer pObject, gnc_numeric value );
 
-#define SLOT_MAX_PATHNAME_LEN 500
-#define SLOT_MAX_STRINGVAL_LEN 1000
+#define SLOT_MAX_PATHNAME_LEN 4096
+#define SLOT_MAX_STRINGVAL_LEN 4096
 
 static col_cvt_t col_table[] =
 {

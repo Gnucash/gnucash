@@ -44,8 +44,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
 
-#define PRICE_MAX_SOURCE_LEN 50
-#define PRICE_MAX_TYPE_LEN 50
+#define PRICE_MAX_SOURCE_LEN 2048
+#define PRICE_MAX_TYPE_LEN 2048
 
 static col_cvt_t col_table[] =
 {

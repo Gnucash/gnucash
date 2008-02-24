@@ -46,10 +46,10 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define MAX_USERNAME_LEN 50
-#define MAX_ID_LEN 50
-#define MAX_LANGUAGE_LEN 50
-#define MAX_ACL_LEN 50
+#define MAX_USERNAME_LEN 2048
+#define MAX_ID_LEN 2048
+#define MAX_LANGUAGE_LEN 2048
+#define MAX_ACL_LEN 2048
 
 #define TABLE_NAME "employees"
 

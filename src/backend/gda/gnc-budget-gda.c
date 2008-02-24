@@ -47,8 +47,8 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define BUDGET_MAX_NAME_LEN 50
-#define BUDGET_MAX_DESCRIPTION_LEN 500
+#define BUDGET_MAX_NAME_LEN 2048
+#define BUDGET_MAX_DESCRIPTION_LEN 2048
 
 static col_cvt_t col_table[] =
 {

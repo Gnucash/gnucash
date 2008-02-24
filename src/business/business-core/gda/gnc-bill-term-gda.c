@@ -40,9 +40,9 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define MAX_NAME_LEN 50
-#define MAX_DESCRIPTION_LEN 50
-#define MAX_TYPE_LEN 50
+#define MAX_NAME_LEN 2048
+#define MAX_DESCRIPTION_LEN 2048
+#define MAX_TYPE_LEN 2048
 
 static void set_invisible( gpointer data, gpointer value );
 

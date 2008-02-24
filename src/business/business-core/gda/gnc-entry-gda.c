@@ -47,11 +47,11 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "entries"
-#define MAX_DESCRIPTION_LEN 50
-#define MAX_ACTION_LEN 50
-#define MAX_NOTES_LEN 50
-#define MAX_DISCTYPE_LEN 50
-#define MAX_DISCHOW_LEN 50
+#define MAX_DESCRIPTION_LEN 2048
+#define MAX_ACTION_LEN 2048
+#define MAX_NOTES_LEN 2048
+#define MAX_DISCTYPE_LEN 2048
+#define MAX_DISCHOW_LEN 2048
 
 static col_cvt_t col_table[] =
 {

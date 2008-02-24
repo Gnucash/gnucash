@@ -42,9 +42,9 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "orders"
 
-#define MAX_ID_LEN 50
-#define MAX_NOTES_LEN 50
-#define MAX_REFERENCE_LEN 50
+#define MAX_ID_LEN 2048
+#define MAX_NOTES_LEN 2048
+#define MAX_REFERENCE_LEN 2048
 
 static col_cvt_t col_table[] =
 {

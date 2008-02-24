@@ -43,7 +43,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "recurrences"
 
-#define BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN 50
+#define BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN 2048
 
 typedef struct {
     GncGdaBackend* be;

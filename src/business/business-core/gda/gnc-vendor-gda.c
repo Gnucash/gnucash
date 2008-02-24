@@ -49,10 +49,10 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define MAX_NAME_LEN 50
-#define MAX_ID_LEN 50
-#define MAX_NOTES_LEN 100
-#define MAX_TAX_INC_LEN 50
+#define MAX_NAME_LEN 2048
+#define MAX_ID_LEN 2048
+#define MAX_NOTES_LEN 2048
+#define MAX_TAX_INC_LEN 2048
 
 #define TABLE_NAME "vendors"
 

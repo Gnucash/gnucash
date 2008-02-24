@@ -57,8 +57,8 @@ typedef struct {
     const GUID* guid;
 } split_info_t;
 
-#define TX_MAX_NUM_LEN 50
-#define TX_MAX_DESCRIPTION_LEN 500
+#define TX_MAX_NUM_LEN 2048
+#define TX_MAX_DESCRIPTION_LEN 2048
 
 static col_cvt_t tx_col_table[] =
 {
@@ -79,8 +79,8 @@ static gpointer get_split_reconcile_state( gpointer pObject, const QofParam* par
 static void set_split_reconcile_state( gpointer pObject, gpointer pValue );
 static void set_split_reconcile_date( gpointer pObject, Timespec ts );
 
-#define SPLIT_MAX_MEMO_LEN 50
-#define SPLIT_MAX_ACTION_LEN 50
+#define SPLIT_MAX_MEMO_LEN 2048
+#define SPLIT_MAX_ACTION_LEN 2048
 
 static col_cvt_t split_col_table[] =
 {

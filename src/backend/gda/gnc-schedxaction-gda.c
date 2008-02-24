@@ -48,7 +48,7 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define SX_MAX_NAME_LEN 50
+#define SX_MAX_NAME_LEN 2048
 
 static gpointer get_autocreate( gpointer pObject, const QofParam* param );
 static void set_autocreate( gpointer pObject, gpointer pValue );
