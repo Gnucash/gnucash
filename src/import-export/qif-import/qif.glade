@@ -43,7 +43,7 @@
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">1</property>
-	      <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb" last_modification_time="Sat, 25 Oct 2003 19:44:39 GMT"/>
+	      <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb"/>
 	    </widget>
 	  </child>
 
@@ -799,7 +799,7 @@ If you change your mind later, you can reorganize the account structure safely w
 	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_categories_prepare_cb"/>
-	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
+	  <signal name="next" handler="gnc_ui_qif_import_categories_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
 	  <child internal-child="vbox">
@@ -968,7 +968,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
 	  <property name="title" translatable="yes">Enter the QIF file currency</property>
 	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
-	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
+	  <signal name="back" handler="gnc_ui_qif_import_currency_back_cb"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox16">
