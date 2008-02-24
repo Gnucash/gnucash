@@ -174,6 +174,7 @@ gboolean gnc_gda_object_is_it_in_db( const GncGdaBackend* be,
 									const gchar* table_name,
 									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );
+gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_name );
 gboolean gnc_gda_create_table( const GncGdaBackend* be,
 						const gchar* table_name, const col_cvt_t* col_table,
 						GError** error );

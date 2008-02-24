@@ -1950,21 +1950,36 @@ gnc_gda_create_index( const GncGdaBackend* be, const gchar* index_name,
     return TRUE;
 }
 
+gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_name )
+{
+    GdaDictTable* table;
+    GdaDictDatabase* db;
+
+	g_return_val_if_fail( be != NULL, FALSE );
+	g_return_val_if_fail( table_name != NULL, FALSE );
+
+    db = gda_dict_get_database( be->pDict );
+	g_return_val_if_fail( db != NULL, FALSE );
+
+    table = gda_dict_database_get_table_by_name( db, table_name );
+	if( table != NULL && GDA_IS_DICT_TABLE(table) ) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
 void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
 			                        const gchar* table_name,
 									const col_cvt_t* col_table )
 {
-    GdaDictTable* table;
-    GError* error = NULL;
-    GdaDictDatabase* db;
-    
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( table_name != NULL );
 	g_return_if_fail( col_table != NULL );
 
-    db = gda_dict_get_database( be->pDict );
-    table = gda_dict_database_get_table_by_name( db, table_name );
-    if( !GDA_IS_DICT_TABLE(table) ) {
+    if( !gnc_gda_does_table_exist( be, table_name ) ) {
+    	GError* error = NULL;
+
         gnc_gda_create_table( be, table_name, col_table, &error );
         if( error != NULL ) {
             PERR( "Error creating table: %s\n", error->message );
