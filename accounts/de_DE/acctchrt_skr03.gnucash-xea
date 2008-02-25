@@ -955,7 +955,7 @@
     <act:parent type="new">709bf14d69164a6c2a48e6c0e13ece37</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4396 steuerlich abzugsfähige Verspätungszuschläge und Zwandsgelder</act:name>
+    <act:name>4396 steuerlich abzugsfähige Verspätungszuschläge und Zwangsgelder</act:name>
     <act:id type="new">0c73c5dc5e72bb4962b83ddc85991101</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>

@@ -397,7 +397,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Sonstige Ertr√§ge</act:description>
+  <act:description>Sonstige Ertr‰ge</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
