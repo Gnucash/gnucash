@@ -503,7 +503,8 @@ gnc_main_window_restore_page (GncMainWindow *window,
     if (page) {
       /* Does the page still need to be installed into the window? */
       if (page->window == NULL) {
-      	gnc_main_window_open_page(window, page);
+	gnc_plugin_page_set_use_new_window(page, FALSE);
+	gnc_main_window_open_page(window, page);
       }
 
       /* Restore the page name */

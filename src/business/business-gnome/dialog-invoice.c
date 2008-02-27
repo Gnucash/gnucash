@@ -1654,7 +1654,8 @@ find_handler (gpointer find_data, gpointer user_data)
 
 static InvoiceWindow *
 gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
-		      GncInvoice *invoice, GncOwner *owner)
+		      GncInvoice *invoice, GncOwner *owner,
+		      GncMainWindow *window)
 {
   InvoiceWindow *iw;
   GncOwner *billto;
@@ -1698,7 +1699,12 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
 
   /* Now create the plugin page for this invoice and display it. */
   new_page = gnc_plugin_page_invoice_new (iw);
-  gnc_main_window_open_page (gnc_plugin_business_get_window(), new_page);
+  if (window)
+    gnc_plugin_page_set_use_new_window (new_page, FALSE);
+  else
+    window = gnc_plugin_business_get_window ();
+
+  gnc_main_window_open_page (window, new_page);
 
   /* Initialize the summary bar */
   gnc_invoice_redraw_all_cb(iw->reg, iw);
@@ -1712,7 +1718,8 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
 #define KEY_OWNER_GUID          "OwnerGUID"
 
 GncPluginPage *
-gnc_invoice_recreate_page (GKeyFile *key_file,
+gnc_invoice_recreate_page (GncMainWindow *window,
+			   GKeyFile *key_file,
 			   const gchar *group_name)
 {
   InvoiceWindow *iw;
@@ -1784,7 +1791,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   g_free(tmp_string);
   g_free(owner_type);
 
-  iw = gnc_invoice_new_page (book, type, invoice, &owner);
+  iw = gnc_invoice_new_page (book, type, invoice, &owner, window);
   return iw->page;
 
  give_up:
@@ -2117,7 +2124,7 @@ gnc_ui_invoice_edit (GncInvoice *invoice)
     type = EDIT_INVOICE;
 
   iw = gnc_invoice_new_page (gncInvoiceGetBook(invoice), type,
-			     invoice, gncInvoiceGetOwner (invoice));
+			     invoice, gncInvoiceGetOwner (invoice), NULL);
 
   return iw;
 }

@@ -1024,6 +1024,9 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
   }
   g_free(reg_type);
 
+  /* Recreate page in given window */
+  gnc_plugin_page_set_use_new_window(page, FALSE);
+
   /* Install it now so we can them manipulate the created widget */
   gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
 
