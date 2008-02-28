@@ -198,6 +198,13 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   g_free(window);
 }
 
+
+/********************************************************************\
+ * get_next_druid_page
+ *
+ * Determine which page should be shown after the current page.
+\********************************************************************/
+
 static GtkWidget * 
 get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 {
@@ -205,10 +212,11 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   GList     * next;
   int       where = 0;
   
+  /* Figure out which stage of the druid we're in. */
   if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
-        /* where are we? */
+        /* Where are we? */
         printf("QIF import: I'm lost!\n");
         return FALSE;
       }
@@ -225,9 +233,10 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   }
   
   next = current->next;
-  while(!next ||
-        (!wind->show_doc_pages &&
-         g_list_find(wind->doc_pages, next->data))) {
+  while (!next ||
+         (!wind->show_doc_pages && g_list_find(wind->doc_pages, next->data)) ||
+         (wind->new_stocks == SCM_BOOL_F &&
+          GNOME_DRUID_PAGE(next->data) == get_named_page(wind, "commodity_doc_page"))) {
     if(next && next->next) {
       next = next->next;
     }
@@ -254,6 +263,13 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   else return NULL;
 }
 
+
+/********************************************************************\
+ * get_prev_druid_page
+ *
+ * Determine which page was shown before the current page.
+\********************************************************************/
+
 static GtkWidget * 
 get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 {
@@ -261,10 +277,11 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   GList     * prev;
   int       where = 0;
   
+  /* Figure out which stage of the druid we're in. */
   if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
-        /* where are we? */
+        /* Where are we? */
         printf("QIF import: I'm lost!\n");
         return FALSE;
       }
@@ -280,14 +297,26 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     where = 1;
   }
   
-  prev = current->prev;
-  while(!prev ||
-        (!wind->show_doc_pages &&
-         g_list_find(wind->doc_pages, prev->data))) {
+  /* If no duplicates were found, skip all post-conversion pages. */
+  if (where == 3 && SCM_NULLP(wind->match_transactions))
+    prev = NULL;
+  else
+    prev = current->prev;
+
+  /* Keep going back through the sets of available pages as long as:
+   * (a) there are no remaining pages in this set, or
+   * (b) the page is a doc page and we're not supposed to show them, or
+   * (c) the page is commodity related and the are no new commodities. */
+  while (!prev ||
+         (!wind->show_doc_pages && g_list_find(wind->doc_pages, prev->data)) ||
+         (wind->new_stocks == SCM_BOOL_F &&
+          GNOME_DRUID_PAGE(prev->data) == get_named_page(wind, "commodity_doc_page"))) {
     if(prev && prev->prev) {
+      /* Go back another page within the same stage. */
       prev = prev->prev;
     }
     else {
+      /* Start looking at the end of the previous stage. */
       where --;
       switch(where) {
       case 1:
@@ -1691,6 +1720,10 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
                                      SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
     #undef FUNC_NAME
     new_page = make_qif_druid_page(commodity);
+
+    g_signal_connect(new_page->page, "back",
+		     G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
+		     wind);
 
     g_signal_connect(new_page->page, "next",
 		     G_CALLBACK(gnc_ui_qif_import_comm_check_cb),
