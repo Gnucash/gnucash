@@ -6,9 +6,11 @@
 ;;;  Copyright 2000-2001 Bill Gribble <grib@billgribble.com> 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  find-or-make-acct:
-;;  given a colon-separated account path, return an Account* to
+;;  qif-import:find-or-make-acct
+;;
+;;  Given a colon-separated account path, return an Account* to
 ;;  an existing or new account.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -49,28 +51,26 @@
                   (string-append short-name (sprintf #f " %a" count)))))
           short-name))
     
-    ;; just because we found an account doesn't mean we can use it.
-    ;; if the name is in use but the commodity, or type are
-    ;; incompatible, we need to create a new account with a modified
-    ;; name.
+    ;; If a GnuCash account already exists in the old root with the same
+    ;; name, that doesn't necessarily mean we can use it. The type and
+    ;; commodity must be  compatible.
     (if (and same-gnc-account (not (null? same-gnc-account))) 
         (if (compatible? same-gnc-account)
             (begin 
-              ;; everything is ok, so we can just use the same
-              ;; account.  Make sure we make the same type. 
+              ;; The existing GnuCash account is compatible, so we
+              ;; can use it. Make sure we use the same type. 
               (set! make-new-acct #f)
               (set! incompatible-acct #f)
               (set! allowed-types 
                     (list (xaccAccountGetType same-gnc-account))))
             (begin 
-              ;; there's an existing account with that name, so we
-              ;; have to make a new acct with different properties and
-              ;; something to indicate that it's different
+              ;; There's an existing, incompatible account with that name,
+              ;; so we have to make a new account with different properties
+              ;; and a slightly different name.
               (set! make-new-acct #t)
               (set! incompatible-acct #t)))
         (begin 
-          ;; otherwise, there is no existing account with the same 
-          ;; name.
+          ;; Otherwise, there's no existing account with the same name.
           (set! make-new-acct #t)
           (set! incompatible-acct #f)))
     
@@ -84,8 +84,35 @@
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)
-              (last-colon #f))
-          (set! last-colon (string-rindex gnc-name separator))
+              (last-sep #f))
+
+          ;; This procedure returns a default account type.  This could
+          ;; be smarter, but at least it won't allow security account
+          ;; types to be used on currency-denominated accounts.
+          (define (default-account-type allowed-types currency?)
+            (if (or (not allowed-types)
+                    (null? allowed-types))
+                ;; None of the allowed types are compatible.
+                ;; Bug detected!
+                (throw 'bug
+                       "qif-import:find-or-make-acct"
+                       "No valid account types allowed for account ~A."
+                       (list acct-name)
+                       #f)
+                (if (memv (car allowed-types) (list GNC-STOCK-TYPE
+                                                    GNC-MUTUAL-TYPE))
+                    ;; The type is incompatible with a currency.
+                    (if currency?
+                      (default-account-type (cdr allowed-types)
+                                            currency?)
+                      (car allowed-types))
+                    ;; The type is compatible with a currency.
+                    (if currency?
+                      (car allowed-types)
+                      (default-account-type (cdr allowed-types)
+                                            currency?)))))
+
+          (set! last-sep (string-rindex gnc-name separator))
           
           (xaccAccountBeginEdit new-acct)
           
@@ -107,30 +134,29 @@
                 (xaccAccountSetCode
                  new-acct (xaccAccountGetCode same-gnc-account))))
           
-          ;; make sure that if this is a nested account foo:bar:baz,
-          ;; foo:bar and foo exist also.
-          (if last-colon
+          ;; If this is a nested account foo:bar:baz, make sure
+          ;; that foo:bar and foo exist also.
+          (if last-sep
               (begin 
-                (set! parent-name (substring gnc-name 0 last-colon))
-                (set! acct-name (substring gnc-name (+ 1 last-colon) 
+                (set! parent-name (substring gnc-name 0 last-sep))
+                (set! acct-name (substring gnc-name (+ 1 last-sep) 
                                            (string-length gnc-name))))
-              (begin 
-                (set! acct-name gnc-name)))
+              (set! acct-name gnc-name))
           
-          ;; if this is a new account, use the 
-          ;; parameters passed in
+          ;; If this is a completely new account (as opposed to a copy
+          ;; of an existing account), use the parameters passed in.
           (if make-new-acct
               (begin 
-                ;; set the name, description, etc.
+                ;; Set the name, description, and commodity.
                 (xaccAccountSetName new-acct acct-name)
                 (if (qif-map-entry:description acct-info)
                     (xaccAccountSetDescription
                      new-acct (qif-map-entry:description acct-info)))
                 (xaccAccountSetCommodity new-acct commodity)
                 
-                ;; if it's an incompatible account, set the
-                ;; name to be unique, and a description that 
-                ;; hints what's happening 
+                ;; If there was an existing, incompatible account with
+                ;; the same name, set the new account name to be unique,
+                ;; and set a description that hints at what's happened.
                 (if incompatible-acct
                     (let ((new-name (make-unique-name-variant 
                                      gnc-name acct-name)))
@@ -139,13 +165,15 @@
                        new-acct 
                        (_ "QIF import: Name conflict with another account."))))
                 
-                ;; set the account type.  this could be smarter. 
-                (if (qif-map-entry:allowed-types acct-info)
-                    (xaccAccountSetType
-                     new-acct (car (qif-map-entry:allowed-types acct-info))))))
+                ;; Set the account type.
+                (xaccAccountSetType new-acct
+                                    (default-account-type
+                                      (qif-map-entry:allowed-types acct-info)
+                                      (gnc-commodity-is-currency commodity)))))
           (xaccAccountCommitEdit new-acct)
 
-          (if last-colon
+          ;; If a parent account is needed, find or make it.
+          (if last-sep
               (let ((pinfo (make-qif-map-entry)))
                 (qif-map-entry:set-qif-name! pinfo parent-name)
                 (qif-map-entry:set-gnc-name! pinfo parent-name)
