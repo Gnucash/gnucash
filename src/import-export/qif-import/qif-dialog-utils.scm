@@ -6,8 +6,6 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (ice-9 regex))
-
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc-get-account-separator-string) security))
 
@@ -561,23 +559,21 @@
          (qif-xtn:set-from-acct! xtn new-acct-name)))
    (qif-file:xtns qif-file)))
 
-(define qif-import:account-name-regexp #f)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:get-account-name
+;;
+;;  Given an account name, return the rightmost subaccount.
+;;  For example, given the account name "foo:bar", "bar" is
+;;  returned (assuming the account separator is ":").
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:get-account-name fullname)
-  (if (not qif-import:account-name-regexp)
-      (let* ((rstr ":([^:]+)$|^([^:]+)$")
-             (newstr (regexp-substitute/global 
-                      #f ":" rstr 'pre (gnc-get-account-separator-string) 'post)))
-        
-        (set! qif-import:account-name-regexp (make-regexp newstr))))
-  
-  (let ((match (regexp-exec qif-import:account-name-regexp fullname)))
-    (if match
-        (begin 
-          (let ((substr (match:substring match 1)))
-            (if substr
-                substr
-                (match:substring match 2))))
+  (let ((lastsep (string-rindex fullname
+                                (string-ref (gnc-get-account-separator-string)
+                                            0))))
+    (if lastsep
+        (substring fullname (+ lastsep 1))
         fullname)))
 
 
