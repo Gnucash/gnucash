@@ -1205,6 +1205,41 @@ gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
   gnc_unset_busy_cursor(NULL);
 }
 
+/****************************************************************
+ * gnc_ui_qif_import_categories_next_cb
+ * Check to see if there are any payees and memos to show. If not
+ * jump to currency page.
+ ****************************************************************/
+static gboolean
+gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
+                                     gpointer arg1,
+                                     gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
+  SCM  accts_left;
+  
+  gnc_set_busy_cursor(NULL, TRUE);
+  /*
+   * Hack. Call make-memo-display to see if there are any memos to display.
+   * This will get called again when we actually do make the memo display.
+   */
+  accts_left = scm_call_3(make_memo_display,
+			  wind->imported_files,
+			  wind->memo_map_info,
+			  wind->gnc_acct_info);
+  
+  gnc_unset_busy_cursor(NULL);
+  
+  if (SCM_NULLP(accts_left)) {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "currency_page"));
+    return TRUE;
+  } else {
+      return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
+  }
+}
+
 /********************************************************************
  * gnc_ui_qif_import_memo_prepare_cb
  ********************************************************************/
@@ -1447,7 +1482,29 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
   }
 }
 
+/****************************************************************
+ * gnc_ui_qif_import_currency_back_cb
+ * Check to see if there are any payees and memos to show. If not
+ * jump to category match page.
+ ****************************************************************/
+static gboolean
+gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page, gpointer arg1, 
+                                  gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
   
+  if (!wind->memo_display_info ||
+      (wind->memo_display_info == SCM_BOOL_F) ||
+       SCM_NULLP(wind->memo_display_info))
+  {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "category_match_page"));
+    return TRUE;
+  } else {
+      return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
+  }
+}
+
 /********************************************************************
  * gnc_ui_qif_import_currency_next_cb
  ********************************************************************/
@@ -2053,7 +2110,11 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_categories_prepare_cb",
      G_CALLBACK (gnc_ui_qif_import_categories_prepare_cb), retval);
-
+  
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_categories_next_cb",
+     G_CALLBACK (gnc_ui_qif_import_categories_next_cb), retval);
+  
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_prepare_cb",
      G_CALLBACK (gnc_ui_qif_import_memo_prepare_cb), retval);
@@ -2061,7 +2122,11 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_next_cb",
      G_CALLBACK (gnc_ui_qif_import_memo_next_cb), retval);
-
+  
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_currency_back_cb",
+     G_CALLBACK (gnc_ui_qif_import_currency_back_cb), retval);
+  
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_currency_next_cb",
      G_CALLBACK (gnc_ui_qif_import_currency_next_cb), retval);
