@@ -5,6 +5,12 @@
 ;;;  Copyright 2001 Bill Gribble <grib@billgribble.com>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:account-tree-get-transactions
+;;
+;;  Given an account tree, this procedure returns a list of all
+;;  transactions whose splits only use accounts in the tree.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (gnc:account-tree-get-transactions root)
   (let ((accounts (gnc-account-get-descendants-sorted root)))
     (if (null? accounts)
@@ -29,9 +35,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:account-tree-find-duplicates
 ;;
-;;  This procedure compares two account trees, given by old-root
-;;  and new-root, and returns a list of splits/transactions in
-;;  old-root that may be duplicates.
+;;  Given two account trees, old-root and new-root, a search is
+;;  performed to determine, for each transaction in new-root,
+;;  whether there are any transactions in old-root that may be
+;;  duplicated by it.
+;;
+;;  The search results are returned in an association list, with
+;;  new-root transactions as the keys. The value associated with
+;;  each key is a second association list of possibly duplicated
+;;  transactions in the old-root, taking the form:
+;;  ( (old-xtn . #f) (old-xtn . #f) (old-xtn . #f) ... )
+;;
+;;  The druid can then ask the user for a final determination,
+;;  and change #f to #t where duplication is found.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:account-tree-find-duplicates old-root new-root window)
@@ -69,7 +85,8 @@
           ;; that matches possibly duplicate transactions in the old tree.
           (for-each
             (lambda (xtn)
-              (let ((query (qof-query-create-for-splits)))
+              (let ((query (qof-query-create-for-splits))
+                    (num-splits 0))
                 (set! work-done (+ 1 work-done))
                 (if (not (null? progress-dialog))
                   (begin
@@ -92,19 +109,19 @@
                                            (incdate date WeekDelta)
                                            QOF-QUERY-AND))
 
-                ;; For each split in the transaction, add a term
-                ;; to match the properties of one split.
+                ;; For each split in the new transaction, add a
+                ;; term that can match on its properties.
                 (let ((q-splits (qof-query-create-for-splits)))
                   (for-each
                     (lambda (split)
+                      (set! num-splits (+ num-splits 1))
                       (let ((sq (qof-query-create-for-splits)))
                         (qof-query-set-book sq (gnc-account-get-book old-root))
 
-                        ;; We want to match the account in the old tree that
-                        ;; has the same name as an account in the new tree.
-                        ;; If there's not one (indicating a new account),
-                        ;; the match will be NULL and the query won't find
-                        ;; anything.  Optimize this later.
+                        ;; Require a match on the account name. If the name
+                        ;; doesn't exist in the old tree (indicating a new
+                        ;; account), the match will be NULL and the query
+                        ;; won't find anything.  Optimize this later.
                         (xaccQueryAddSingleAccountMatch
                           sq
                           (gnc-account-lookup-by-full-name old-root
@@ -112,7 +129,7 @@
                               (xaccSplitGetAccount split)))
                           QOF-QUERY-AND)
 
-                        ;; We want the value of the split in the new tree
+                        ;; Require the value of the split in the new tree
                         ;; to match the the value of the split in the old
                         ;; tree.  We should really check for fuzziness.
                         (xaccQueryAddValueMatch sq
@@ -122,9 +139,9 @@
                                                 QOF-QUERY-AND)
 
                         ;; Now merge into the split query.  Reminder: q-splits
-                        ;; is set up to match any split that matches any split
-                        ;; in the new transaction; every split in an old
-                        ;; transaction must pass that filter.
+                        ;; must be merged with an OR. Otherwise, nothing will
+                        ;; match. (For example, something can be equal to 4 or
+                        ;; to -4, but not both.)
                         (let ((q-new (qof-query-merge q-splits
                                                       sq
                                                       QOF-QUERY-OR)))
@@ -133,8 +150,8 @@
                           (set! q-splits q-new))))
                     (xaccTransGetSplitList xtn))
 
-                  ;; Now q-splits will match any split that is the same as one
-                  ;; split in the old-root transaction.  Merge it in.
+                  ;; Now q-splits will find every split that is the same as
+                  ;; any one split of the new-root transaction.  Merge it in.
                   (let ((q-new (qof-query-merge query
                                                 q-splits
                                                 QOF-QUERY-AND)))
@@ -142,16 +159,34 @@
                     (qof-query-destroy q-splits)
                     (set! query q-new)))
 
-                ;; Now that we have built a query, get transactions in the old
-                ;; account tree that match it.
-                (let ((old-xtns (xaccQueryGetTransactions query
-                                                          QUERY-TXN-MATCH-ALL)))
+                ;; Now that we have built a query that finds matching splits
+                ;; in the old tree, run it and build a list of transactions
+                ;; from the results.
+                ;;
+                ;; If the transaction from the new tree has more than two
+                ;; splits, then we'll assume that it fully reflects what
+                ;; occurred, and only consider transactions in the old tree
+                ;; that match with every single split.
+                ;;
+                ;; All other new transactions could be incomplete, so we'll
+                ;; consider transactions from the old tree to be possible
+                ;; duplicates even if only one split matches.
+                ;;
+                ;; For more information, see bug 481528.
+                (let ((old-xtns (xaccQueryGetTransactions
+                                  query
+                                  (if (> num-splits 2)
+                                      QUERY-TXN-MATCH-ALL
+                                      QUERY-TXN-MATCH-ANY))))
+
+                  ;; Turn the resulting list of possibly duplicated
+                  ;; transactions into an association list.
                   (set! old-xtns (map
                                    (lambda (elt)
                                      (cons elt #f)) old-xtns))
 
-                  ;; If anything matched the query, push it onto the matches
-                  ;; list along with the transaction.
+                  ;; If anything matched the query, add it to our "matches"
+                  ;; association list, keyed by the new-root transaction.
                   (if (not (null? old-xtns))
                       (set! matches (cons (cons xtn old-xtns) matches))))
 
@@ -168,6 +203,17 @@
         ;; Since there are either no accounts or no transactions in the old
         ;; tree, duplicate checking is unnecessary. Return an empty list.
         '())))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:prune-matching-transactions
+;;
+;;  The parameter, match-list, is an association list of the form
+;;  returned by gnc:account-tree-find-duplicates. This procedure
+;;  looks through the list and discards any transaction that has
+;;  been definitively determined to be a duplicate of one of the
+;;  possible matches.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:prune-matching-transactions match-list)
   (for-each
@@ -187,6 +233,14 @@
              (xaccTransCommitEdit new-xtn)))))
    match-list))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  gnc:account-tree-catenate-and-merge
+;;
+;;  The procedure moves the entire contents of one account tree,
+;;  new-root, to a second account tree, old-root, and merges any
+;;  duplicated accounts.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (gnc:account-tree-catenate-and-merge old-root new-root)
   ;; stuff the new accounts into the old account tree and merge the accounts
   (gnc-account-join-children old-root new-root)
