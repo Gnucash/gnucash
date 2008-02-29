@@ -282,15 +282,23 @@
 
 ;; This is the function that is called when saved reports are evaluated.
 (define (gnc:restore-report id template-name options)
-  (let ((r ((record-constructor <report>)
-            template-name id options #t #t #f #f)))
-    (gnc-report-add r))
+  (if options
+      (let ((r ((record-constructor <report>)
+                template-name id options #t #t #f #f)))
+        (gnc-report-add r))
+      (begin
+        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        #f))
   )
 
 ;; dummy function to enable backwards compatibility with newer reports
 (define (gnc:restore-report-by-guid id template-id template-name options)
-  (gnc:restore-report id template-name options))
-
+  (if options
+      (gnc:restore-report id template-name options)
+      (begin
+        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        #f))
+  )
 
 (define (gnc:make-report-options template-name)
   (let ((template (hash-ref *gnc:_report-templates_* template-name)))
