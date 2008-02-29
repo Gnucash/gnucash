@@ -39,7 +39,11 @@
 #include "gnc-gui-query.h"
 #include "dialog-book-close.h"
 #include "gnc-account-sel.h"
+#include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
+#include "gnc-session.h"
+
+#define DIALOG_BOOK_CLOSE_CM_CLASS "dialog-book-close"
 
 void gnc_book_close_response_cb(GtkDialog *, gint, GtkDialog *);
 
@@ -58,6 +62,9 @@ struct CloseBookWindow
   /* The final settings */
   time_t close_date;
   const char* desc;
+
+  /* Component registration */
+  gint component_manager_id;
 };
 
 struct CloseAccountsCB
@@ -230,6 +237,25 @@ static void close_accounts_of_type(struct CloseBookWindow* cbw,
   g_hash_table_destroy(cacb.txns);
 }
 
+static void close_handler(gpointer data)
+{
+  GtkWidget *dialog = data;
+
+  gtk_widget_destroy(dialog);
+}
+
+static void destroy_cb(GtkObject *object, gpointer data)
+{
+  struct CloseBookWindow *cbw;
+
+  cbw = g_object_get_data(G_OBJECT(object), "CloseBookWindow");
+
+  if (cbw->component_manager_id) {
+    gnc_unregister_gui_component(cbw->component_manager_id);
+    cbw->component_manager_id = 0;
+  }
+}
+
 
 void
 gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
@@ -325,6 +351,14 @@ void gnc_ui_close_book (QofBook* book)
   /* Autoconnect signals */
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    cbw->dialog);
+
+  /* Register dialog with component manager */
+  cbw->component_manager_id =
+    gnc_register_gui_component(DIALOG_BOOK_CLOSE_CM_CLASS, NULL, close_handler,
+			       cbw->dialog);
+  gnc_gui_component_set_session(cbw->component_manager_id,
+				gnc_get_current_session());
+  g_signal_connect(cbw->dialog, "destroy", G_CALLBACK(destroy_cb), NULL);
 
   /* Clean up the xml data structure when the dialog is destroyed */
   g_object_set_data_full(G_OBJECT(cbw->dialog), "dialog-book-close.glade",
