@@ -253,6 +253,7 @@ src/gnome/top-level.c
 src/gnome-utils/account-quickfill.c
 src/gnome-utils/cursors.c
 src/gnome-utils/dialog-account.c
+src/gnome-utils/dialog-book-close.c
 src/gnome-utils/dialog-commodity.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/dialog-preferences.c
@@ -265,6 +266,7 @@ src/gnome-utils/druid-gconf-setup.c
 src/gnome-utils/druid-gnc-xml-import.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/glade/commodity.glade
+src/gnome-utils/glade/dialog-book-close.glade
 src/gnome-utils/glade/dialog-query-list.glade
 src/gnome-utils/glade/dialog-reset-warnings.glade
 src/gnome-utils/glade/druid-gconf-setup.glade
