@@ -1,6 +1,44 @@
 Version history:
 ------- -------
 
+ 2.2.4 - 02 March 2008
+ 	 Welcome to the GnuCash 2.2.4 Release.
+	 Fixed Bugs:
+	 o #106242: qif Importer should warn users about dates before 1970
+	 o #106383: feature request: close year end
+	 o #123312: QIF Import: Autoselection of Stock Exchange during import
+	 o #336211: QIF Import generates spurious duplicate transactions
+	 o #360058: GnuCash crashes on QIF-import after changing
+	            account's separator to * (asterisk)
+	 o #373584: Rounding error in QIF import of commodity transactions
+	 o #454834: Memo Incorrect or missing in Transaction Report
+	 o #457591: QIF import does not handle tabs at top of file
+	 o #481528: QIF importer should show imported transaction as
+	            possible duplicate if original transaction is split
+	 o #503166: QIF Import Druid Flow incorrect
+	 o #506798: Custom Reports don't allow sorting by Account Code
+	 o #506873: 'Install Online Price Retrieval' fails with ActivePerl 5.10
+	 o #506810: QIF Import can mismatch account transfers
+	 o #510221: Include Mexican Accounts
+	 o #510630: typo in description of BUYMF transaction (OFX import)
+	 o #510725: crash importing a .OFX file
+	 o #510940: Unrecognized date format causes crash
+	 o #510962: QIF transactions without dates are silently ignored
+	 o #511006: Commodity creation skipped due to saved mappings
+	 o #512166: doesn't build with glib-2.15.3
+	 o #512173: Empty "match payees/memos" druid step shown
+	 o #512497: Investment transactions ignore payee/memo mappings
+	 o #513088: "Find" immediately unmaps window
+	 o #513829: Investment account may be created with Stock account type
+	 o #516178: Scheme error during progress dialog causes freeze
+	 Other Changes:
+	 o Recognize 401k/403b in QIF import
+	 o Remove superfluous trailing colons of de_DE SKR04 account names
+	 o Add russian account templates
+	 o Add Swiss German translation
+	 o Update translations: Brazilian Portugese, German, Greek, Russian,
+	                        Simplified Chinese, Slovak, Spanish
+
  2.2.3 - 06 January 2008
  	 Welcome to the GnuCash 2.2.3 Release.
 	 Fixed Bugs:
