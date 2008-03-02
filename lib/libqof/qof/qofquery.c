@@ -1022,14 +1022,9 @@ QofQuery * qof_query_invert (QofQuery *q)
       qt = copy_query_term(cur->data);
       qt->invert = !(qt->invert);
       new_oterm = g_list_append(NULL, qt);
-
-      /* g_list_append() can take forever, so let's do this for speed
-       * in "large" queries.
-       */
-      retval->terms = g_list_reverse(retval->terms);
       retval->terms = g_list_prepend(retval->terms, new_oterm);
-      retval->terms = g_list_reverse(retval->terms);
     }
+    retval->terms = g_list_reverse(retval->terms);
     break;
 
     /* If there are multiple OR-terms, we just recurse by 
