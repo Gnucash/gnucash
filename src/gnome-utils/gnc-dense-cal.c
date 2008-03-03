@@ -1620,7 +1620,7 @@ wheres_this(GncDenseCal *dcal, int x, int y)
     {
         return -1;
     }
-    if (y >= col_height(dcal))
+    if (y >= dcal->dayLabelHeight + col_height(dcal))
     {
         return -1;
     }
