@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-10 21:47+0100\n"
-"PO-Revision-Date: 2008-02-10 21:50+0100\n"
+"POT-Creation-Date: 2008-03-04 21:40+0100\n"
+"PO-Revision-Date: 2008-03-04 22:03+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -731,7 +731,7 @@ msgstr "Benutzername"
 
 #. src/business/business-reports/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:706
-#: ../src/gnome/dialog-sx-editor.c:1695
+#: ../src/gnome/dialog-sx-editor.c:1698
 #: ../src/gnome/glade/sched-xact.glade.h:115
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:9
 #: ../src/gnome-utils/gnc-dense-cal.c:331
@@ -1051,8 +1051,8 @@ msgstr "Rechnung suchen"
 #: ../src/import-export/import-main-matcher.c:420
 #: ../src/import-export/import-match-picker.c:334
 #: ../src/import-export/import-match-picker.c:374
-#: ../src/import-export/qif-import/druid-qif-import.c:2181
-#: ../src/import-export/qif-import/druid-qif-import.c:2213
+#: ../src/import-export/qif-import/druid-qif-import.c:2279
+#: ../src/import-export/qif-import/druid-qif-import.c:2311
 #: ../intl-scm/guile-strings.c:822 ../intl-scm/guile-strings.c:1330
 #: ../intl-scm/guile-strings.c:1544 ../intl-scm/guile-strings.c:2258
 #: ../intl-scm/guile-strings.c:2318 ../intl-scm/guile-strings.c:2420
@@ -1539,8 +1539,8 @@ msgstr "Auswahl des Besitzers"
 #: ../src/import-export/import-main-matcher.c:421
 #: ../src/import-export/import-match-picker.c:335
 #: ../src/import-export/import-match-picker.c:375
-#: ../src/import-export/qif-import/druid-qif-import.c:2174
-#: ../src/import-export/qif-import/druid-qif-import.c:2206
+#: ../src/import-export/qif-import/druid-qif-import.c:2272
+#: ../src/import-export/qif-import/druid-qif-import.c:2304
 #: ../src/register/ledger-core/split-register-model.c:138
 #: ../intl-scm/guile-strings.c:1322 ../intl-scm/guile-strings.c:1524
 #: ../intl-scm/guile-strings.c:2000 ../intl-scm/guile-strings.c:2238
@@ -1929,8 +1929,8 @@ msgstr ""
 #: ../src/import-export/import-main-matcher.c:417
 #: ../src/import-export/import-match-picker.c:333
 #: ../src/import-export/import-match-picker.c:373
-#: ../src/import-export/qif-import/druid-qif-import.c:2168
-#: ../src/import-export/qif-import/druid-qif-import.c:2200
+#: ../src/import-export/qif-import/druid-qif-import.c:2266
+#: ../src/import-export/qif-import/druid-qif-import.c:2298
 #: ../src/register/ledger-core/split-register-model.c:101
 #: ../intl-scm/guile-strings.c:1318 ../intl-scm/guile-strings.c:1518
 #: ../intl-scm/guile-strings.c:1768 ../intl-scm/guile-strings.c:1916
@@ -3418,7 +3418,7 @@ msgstr "Alle Konten"
 #: ../src/import-export/import-main-matcher.c:418
 #: ../src/import-export/import-match-picker.c:332
 #: ../src/import-export/qif-import/dialog-account-picker.c:288
-#: ../src/import-export/qif-import/druid-qif-import.c:2140
+#: ../src/import-export/qif-import/druid-qif-import.c:2238
 #: ../src/register/ledger-core/split-register-model.c:176
 #: ../intl-scm/guile-strings.c:1324 ../intl-scm/guile-strings.c:1346
 #: ../intl-scm/guile-strings.c:1780 ../intl-scm/guile-strings.c:2078
@@ -3476,7 +3476,7 @@ msgid "Number"
 msgstr "Nummer"
 
 #: ../src/gnome/dialog-find-transactions.c:169
-#: ../src/gnome-search/dialog-search.c:1089
+#: ../src/gnome-search/dialog-search.c:1085
 msgid "Find Transaction"
 msgstr "Buchungen suchen"
 
@@ -3653,18 +3653,18 @@ msgstr ""
 "Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie "
 "auftritt. Wollen Sie wirklich fortsetzen?"
 
-#: ../src/gnome/dialog-sx-editor.c:1332
+#: ../src/gnome/dialog-sx-editor.c:1335
 msgid "(never)"
 msgstr "(niemals)"
 
-#: ../src/gnome/dialog-sx-editor.c:1483
+#: ../src/gnome/dialog-sx-editor.c:1486
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 "Die aktuelle Buchungsvorlage wurde verändert. Soll sie gespeichert werden?"
 
-#: ../src/gnome/dialog-sx-editor.c:1716
+#: ../src/gnome/dialog-sx-editor.c:1719
 #: ../src/gnome/gnc-plugin-page-sx-list.c:197
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
@@ -3717,7 +3717,7 @@ msgstr "(Wert benötigt)"
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
 #: ../src/gnome/dialog-sx-since-last-run.c:812
-#: ../src/gnome/gnc-plugin-basic-commands.c:484
+#: ../src/gnome/gnc-plugin-basic-commands.c:490
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
@@ -3813,6 +3813,7 @@ msgid "Period:"
 msgstr "Periode:"
 
 #: ../src/gnome/druid-acct-period.c:557
+#: ../src/gnome-utils/glade/dialog-book-close.glade.h:2
 msgid "Closing Date:"
 msgstr "Abschlußdatum:"
 
@@ -4482,6 +4483,7 @@ msgid "Book Closing Dates"
 msgstr "Datum Buchabschluß"
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
+#: ../src/gnome-utils/glade/dialog-book-close.glade.h:1
 msgid "Close Book"
 msgstr "Buch abschließen"
 
@@ -6604,161 +6606,169 @@ msgid "Open a new Account Tree page"
 msgstr "Neue Konto-Hierarchie Ansicht öffnen"
 
 #. File menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:95
+#: ../src/gnome/gnc-plugin-basic-commands.c:98
 msgid "New _File"
 msgstr "Neue _Datei"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:96
+#: ../src/gnome/gnc-plugin-basic-commands.c:99
 msgid "Create a new file"
 msgstr "Eine neue Datei anlegen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:98
+#: ../src/gnome/gnc-plugin-basic-commands.c:101
 msgid "_Open..."
 msgstr "Ö_ffnen..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:99
+#: ../src/gnome/gnc-plugin-basic-commands.c:102
 msgid "Open an existing GnuCash file"
 msgstr "Eine existierende GnuCash-Datei öffnen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:101
+#: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "_Save"
 msgstr "_Speichern"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:102
+#: ../src/gnome/gnc-plugin-basic-commands.c:105
 msgid "Save the current file"
 msgstr "Aktuelle Datei speichern"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:104
+#: ../src/gnome/gnc-plugin-basic-commands.c:107
 msgid "Save _As..."
 msgstr "Speichern _unter..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:109
+#: ../src/gnome/gnc-plugin-basic-commands.c:112
 msgid "_QSF Import"
 msgstr "_QSF-Import"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:110
+#: ../src/gnome/gnc-plugin-basic-commands.c:113
 msgid "Import a QSF object file"
 msgstr "QSF-Datei importieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:114
+#: ../src/gnome/gnc-plugin-basic-commands.c:117
 msgid "Export _Accounts"
 msgstr "_Konten exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:115
+#: ../src/gnome/gnc-plugin-basic-commands.c:118
 msgid "Export the account hierarchy to a new GnuCash datafile"
 msgstr "Die Konten-Hierarchie in eine neue GnuCash-Datei exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:118
+#: ../src/gnome/gnc-plugin-basic-commands.c:121
 msgid "Export _Chart of Accounts to QSF"
 msgstr "Kontenhierarchie nach _QSF XML exportieren"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:119
+#: ../src/gnome/gnc-plugin-basic-commands.c:122
 msgid "Export the chart of accounts for a date with balances as QSF"
 msgstr "Kontenhierarchie mit Salden eines bestimmten Tages als QSF exportieren"
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:124
+#: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "_Find..."
 msgstr "_Suchen..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:125
+#: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Find transactions with a search"
 msgstr "Finde Buchungssätze"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:127
+#: ../src/gnome/gnc-plugin-basic-commands.c:130
 msgid "Ta_x Options"
 msgstr "Steuer_relevante Optionen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:128
+#: ../src/gnome/gnc-plugin-basic-commands.c:131
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
 "Steuerrelevante Informationen für Ertrags- und Aufwandskonten einrichten"
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:133
+#: ../src/gnome/gnc-plugin-basic-commands.c:136
 msgid "_Scheduled Transactions"
 msgstr "_Terminierte Buchungen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:134
+#: ../src/gnome/gnc-plugin-basic-commands.c:137
 msgid "_Scheduled Transaction Editor"
 msgstr "Terminierte Buchungen Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:135
+#: ../src/gnome/gnc-plugin-basic-commands.c:138
 msgid "The list of Scheduled Transactions"
 msgstr "Die Liste der terminierten Buchungen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:137
+#: ../src/gnome/gnc-plugin-basic-commands.c:140
 msgid "Since _Last Run..."
 msgstr "Seit _letztem Aufruf..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:138
+#: ../src/gnome/gnc-plugin-basic-commands.c:141
 msgid "Create Scheduled Transactions since the last time run"
 msgstr ""
 "Alle terminierten Buchungen seit dem letzten Aufruf von GnuCash erstellen."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:140
+#: ../src/gnome/gnc-plugin-basic-commands.c:143
 msgid "_Mortgage & Loan Repayment..."
 msgstr "_Hypothek & Darlehen Assistent..."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:141
+#: ../src/gnome/gnc-plugin-basic-commands.c:144
 msgid "Setup scheduled transactions for repayment of a loan"
 msgstr "Terminierte Buchungen einrichten, die ein Darlehen tilgen sollen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:144
+#: ../src/gnome/gnc-plugin-basic-commands.c:147
 msgid "Close _Books"
 msgstr "_Buchabschluß"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:145
+#: ../src/gnome/gnc-plugin-basic-commands.c:148
 msgid "Archive old data using accounting periods"
 msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #. Tools menu
-#: ../src/gnome/gnc-plugin-basic-commands.c:151
+#: ../src/gnome/gnc-plugin-basic-commands.c:154
 msgid "_Price Editor"
 msgstr "_Preis-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:152
+#: ../src/gnome/gnc-plugin-basic-commands.c:155
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:154
+#: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Security Editor"
 msgstr "_Aktien-Editor"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:155
+#: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 "Wertpapiere für Aktienkonten und Investmentfonds anzeigen und bearbeiten"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:157
+#: ../src/gnome/gnc-plugin-basic-commands.c:160
 msgid "_Financial Calculator"
 msgstr "_Finanzrechner"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:158
+#: ../src/gnome/gnc-plugin-basic-commands.c:161
 msgid "Use the financial calculator"
 msgstr "Den Finanzrechner benutzen"
 
-#. Help menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:163
+msgid "_Close Book"
+msgstr "_Buchabschluss"
+
+#: ../src/gnome/gnc-plugin-basic-commands.c:164
+msgid "Close the Book at the end of the Period"
+msgstr "Die Bücher zum Ende der Buchführungsperiode abschließen."
+
+#. Help menu
+#: ../src/gnome/gnc-plugin-basic-commands.c:169
 msgid "_Tips Of The Day"
 msgstr "_Tipp des Tages"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:164
+#: ../src/gnome/gnc-plugin-basic-commands.c:170
 msgid "View the Tips of the Day"
 msgstr "»Tipp des Tages« anzeigen"
 
 #. Translators: %d is the error number; %s is the error message as
 #. text.
-#: ../src/gnome/gnc-plugin-basic-commands.c:381
+#: ../src/gnome/gnc-plugin-basic-commands.c:387
 #, c-format
 msgid "Error: Loading failed, error code %d - %s."
 msgstr "Fehler beim Laden: Fehlercode %d, »%s«."
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:403
+#: ../src/gnome/gnc-plugin-basic-commands.c:409
 msgid "Select the QSF file to import into GnuCash"
 msgstr "Zu ladende QIF-Datei auswählen"
 
-#: ../src/gnome/gnc-plugin-basic-commands.c:459
+#: ../src/gnome/gnc-plugin-basic-commands.c:465
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "Es gibt keine terminierten Buchungen, die gebucht werden sollten."
 
@@ -7506,14 +7516,6 @@ msgstr ""
 "Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das "
 "Dialogfenster »Konto Eigenschaften« des Unterkontos und deaktivieren Sie die "
 "Option »Platzhalter-Konto«."
-
-#: ../src/gnome/gnucash.desktop.in.h:1
-msgid "GnuCash Finance Management"
-msgstr "GnuCash Finanzverwaltung"
-
-#: ../src/gnome/gnucash.desktop.in.h:2
-msgid "Manage your finances, accounts, and investments"
-msgstr "Der Finanzmanager für Buchführung, Online-Banking und Investments"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
@@ -8832,22 +8834,22 @@ msgstr "Sie müssen ein Kriterium der Liste auswählen"
 msgid "Select"
 msgstr "Auswählen"
 
-#: ../src/gnome-search/dialog-search.c:806
+#: ../src/gnome-search/dialog-search.c:807
 msgid "all criteria are met"
 msgstr "Alle Kriterien werden erfüllt"
 
-#: ../src/gnome-search/dialog-search.c:807
+#: ../src/gnome-search/dialog-search.c:808
 msgid "any criteria are met"
 msgstr "Irgendeines der Kriterien wird erfüllt"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
-#: ../src/gnome-search/dialog-search.c:842
+#: ../src/gnome-search/dialog-search.c:844
 #, c-format
 msgid "New %s"
 msgstr "Neu: %s"
 
-#: ../src/gnome-search/dialog-search.c:842
+#: ../src/gnome-search/dialog-search.c:844
 msgid "item"
 msgstr "Kriterium"
 
@@ -9203,6 +9205,14 @@ msgid ""
 msgstr ""
 "Das Unterkonto von %s neu nummerieren?  Dies wird das Kontonummer-Feld von "
 "jedem Unterkonto mit dem entsprechenden neuen Wert überschreiben."
+
+#: ../src/gnome-utils/dialog-book-close.c:288
+msgid "Please select an Equity account to hold the total Period Income."
+msgstr "Bitte wählen Sie ein Eigenkapital-Konto, welches alle Erträge der Periode enthalten soll."
+
+#: ../src/gnome-utils/dialog-book-close.c:295
+msgid "Please select an Equity account to hold the total Period Expense."
+msgstr "Bitte wählen Sie ein Eigenkapital-Konto, welches alle Aufwendungen der Periode enthalten soll."
 
 #: ../src/gnome-utils/dialog-commodity.c:166
 msgid ""
@@ -9829,6 +9839,19 @@ msgstr "_Symbol/Abkürzung:"
 #: ../src/gnome-utils/glade/commodity.glade.h:23
 msgid "_Unknown:"
 msgstr "_Unbekannt:"
+
+#: ../src/gnome-utils/glade/dialog-book-close.glade.h:3
+#: ../src/gnome-utils/glade/transfer.glade.h:8
+msgid "Description:"
+msgstr "Beschreibung:"
+
+#: ../src/gnome-utils/glade/dialog-book-close.glade.h:4
+msgid "Expense Total:"
+msgstr "Aufwendungen gesamt:"
+
+#: ../src/gnome-utils/glade/dialog-book-close.glade.h:5
+msgid "Income Total:"
+msgstr "Erträge gesamt:"
 
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
@@ -11023,10 +11046,6 @@ msgstr "Währung:"
 msgid "Date:"
 msgstr "Datum:"
 
-#: ../src/gnome-utils/glade/transfer.glade.h:8
-msgid "Description:"
-msgstr "Beschreibung:"
-
 #: ../src/gnome-utils/glade/transfer.glade.h:9
 msgid "Exchange Rate:"
 msgstr "Wechselkurs:"
@@ -11923,23 +11942,23 @@ msgstr "Schließen _ohne zu speichern"
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3473
+#: ../src/gnome-utils/gnc-main-window.c:3459
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #. Development version
-#: ../src/gnome-utils/gnc-main-window.c:3486
+#: ../src/gnome-utils/gnc-main-window.c:3472
 #, c-format
 msgid "%s  This copy was built from svn r%s on %s."
 msgstr "%s  Dieses Programm wurde aus SVN r%s am %s erstellt."
 
-#: ../src/gnome-utils/gnc-main-window.c:3489
+#: ../src/gnome-utils/gnc-main-window.c:3475
 #, c-format
 msgid "%s  This copy was built from r%s on %s."
 msgstr "%s  Dieses Programm wurde aus r%s am %s erstellt."
 
-#: ../src/gnome-utils/gnc-main-window.c:3501
+#: ../src/gnome-utils/gnc-main-window.c:3487
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
@@ -12623,7 +12642,7 @@ msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 #: ../src/import-export/generic-import.glade.h:35
 #: ../src/import-export/hbci/druid-hbci-initial.c:770
 #: ../src/import-export/qif-import/dialog-account-picker.c:296
-#: ../src/import-export/qif-import/druid-qif-import.c:1064
+#: ../src/import-export/qif-import/druid-qif-import.c:1093
 msgid "New?"
 msgstr "Neu?"
 
@@ -14008,57 +14027,57 @@ msgstr "Eine OFX/QFX Datei verarbeiten"
 msgid "Enter a name for the account"
 msgstr "Bitte geben Sie einen Namen für das Konto ein"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:389
+#: ../src/import-export/qif-import/druid-qif-import.c:418
 msgid "Select QIF File"
 msgstr "QIF-Datei auswählen"
 
 #. stay here if no file specified
-#: ../src/import-export/qif-import/druid-qif-import.c:479
+#: ../src/import-export/qif-import/druid-qif-import.c:508
 msgid "Please select a file to load."
 msgstr "Sie müssen eine Datei angeben, die geladen werden soll"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:485
+#: ../src/import-export/qif-import/druid-qif-import.c:514
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
 "Datei nicht gefunden oder Zugriffsberechtigung liegt nicht vor. Bitte wählen "
 "Sie eine andere Datei."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:497
+#: ../src/import-export/qif-import/druid-qif-import.c:526
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "Diese QIF Datei ist bereits geladen. Bitte wählen Sie eine andere."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:527
+#: ../src/import-export/qif-import/druid-qif-import.c:556
 #, c-format
 msgid "QIF file load warning: %s"
 msgstr "Warnung beim Laden der QIF Datei: %s"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:534
+#: ../src/import-export/qif-import/druid-qif-import.c:563
 msgid "An error occurred while loading the QIF file."
 msgstr "Beim Laden der QIF Datei ist ein Fehler aufgetreten."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:542
+#: ../src/import-export/qif-import/druid-qif-import.c:571
 #, c-format
 msgid "QIF file load failed: %s"
 msgstr "Fehler beim Laden der QIF-Datei:%s"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:605
+#: ../src/import-export/qif-import/druid-qif-import.c:634
 msgid "An error occurred while parsing the QIF file."
 msgstr "Beim Verarbeiten der QIF Datei ist ein Fehler aufgetreten."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:615
+#: ../src/import-export/qif-import/druid-qif-import.c:644
 #, c-format
 msgid "QIF file parse failed: %s"
 msgstr "QIF-Datei Analyse fehlerhaft: %s"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:873
+#: ../src/import-export/qif-import/druid-qif-import.c:902
 msgid "You must enter an account name."
 msgstr "Sie müssen einen Kontonamen eingeben."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1056
+#: ../src/import-export/qif-import/druid-qif-import.c:1085
 msgid "GnuCash account name"
 msgstr "GnuCash Kontobezeichnung"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1307
+#: ../src/import-export/qif-import/druid-qif-import.c:1371
 msgid ""
 "An error occurred while importing QIF transactions into GnuCash. Your "
 "accounts are unchanged."
@@ -14066,43 +14085,43 @@ msgstr ""
 "Es ist ein Fehler während des QIF Imports aufgetreten. Ihre Konten wurden "
 "nicht geändert."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1351
-#: ../src/import-export/qif-import/druid-qif-import.c:1803
+#: ../src/import-export/qif-import/druid-qif-import.c:1415
+#: ../src/import-export/qif-import/druid-qif-import.c:1893
 msgid "(split)"
 msgstr "(Buchung)"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1522
+#: ../src/import-export/qif-import/druid-qif-import.c:1608
 msgid "You must enter a Type for the commodity."
 msgstr "Sie müssen einen Typ für die Währung/Aktie angeben."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1529
+#: ../src/import-export/qif-import/druid-qif-import.c:1615
 msgid "You must enter a name for the commodity."
 msgstr "Sie müssen einen Namen für die Währung/Aktie angeben."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1534
+#: ../src/import-export/qif-import/druid-qif-import.c:1620
 msgid "You must enter an abbreviation for the commodity."
 msgstr "Sie müssen eine Abkürzung für die Währung/Aktie angeben."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1543
+#: ../src/import-export/qif-import/druid-qif-import.c:1629
 msgid "You must enter an existing national currency or enter a different type."
 msgstr ""
 "Sie müssen entweder eine existierende Währung angeben oder einen anderen Typ "
 "wählen."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1681
+#: ../src/import-export/qif-import/druid-qif-import.c:1771
 #, c-format
 msgid "Enter information about \"%s\""
 msgstr "Informationen über »%s«"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1693
+#: ../src/import-export/qif-import/druid-qif-import.c:1783
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 msgstr "Wählen Sie das Börsenplatzkürzel für die Aktie (NASDAQ, NYSE, etc)."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1717
+#: ../src/import-export/qif-import/druid-qif-import.c:1807
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr "Geben Sie den vollen Namen der Aktie an, z.B. »Deutsche Telekom«"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1739
+#: ../src/import-export/qif-import/druid-qif-import.c:1829
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
@@ -14110,24 +14129,24 @@ msgstr ""
 "Geben Sie das Tickersymbol (z.B. »DTE«) der Aktie oder eine andere "
 "eindeutige Abkürzung an."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:1760
+#: ../src/import-export/qif-import/druid-qif-import.c:1850
 msgid "Click \"Forward\" to accept the information and move on."
 msgstr ""
 "Wenn Sie fertig gelesen haben, klicken Sie bitte »Vor«, um fortzufahren."
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2150
+#: ../src/import-export/qif-import/druid-qif-import.c:2248
 msgid "QIF account name"
 msgstr "QIF-Kontobezeichnung"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2153
+#: ../src/import-export/qif-import/druid-qif-import.c:2251
 msgid "QIF category name"
 msgstr "QIF Kategorie"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2156
+#: ../src/import-export/qif-import/druid-qif-import.c:2254
 msgid "QIF payee/memo"
 msgstr "QIF Empfänger/Text"
 
-#: ../src/import-export/qif-import/druid-qif-import.c:2219
+#: ../src/import-export/qif-import/druid-qif-import.c:2317
 msgid "Dup?"
 msgstr "Duplikat?"
 
