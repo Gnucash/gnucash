@@ -441,8 +441,8 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
         if ((dow_present_bits & (1 << dow_idx)) != 0)
         {
             gchar dbuf[10];
-            gnc_dow_abbrev(dbuf, 9, dow_idx);
-            g_string_append_printf(buf, "%c", dbuf[0]);
+            gnc_dow_abbrev(dbuf, 10, dow_idx);
+            g_string_append_unichar(buf, g_utf8_get_char(dbuf));
         }
         else
         {
@@ -458,10 +458,10 @@ _monthly_append_when(Recurrence *r, GString *buf)
     if (recurrenceGetPeriodType(r) == PERIOD_LAST_WEEKDAY)
     {
         gint abbrev_day_name_bufsize = 10;
-        gchar day_name_buf[abbrev_day_name_bufsize+1];
-                
+        gchar day_name_buf[abbrev_day_name_bufsize];
+
         gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
-            
+
         /* translators: %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("last %s"), day_name_buf);
     }

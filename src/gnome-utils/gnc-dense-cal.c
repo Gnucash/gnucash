@@ -149,13 +149,13 @@ static void gdc_remove_markings(GncDenseCal *cal);
 
 static GObject *parent_class = NULL;
 
-#define MONTH_NAME_BUFSIZE 5
+#define MONTH_NAME_BUFSIZE 10
 
 /* Takes the number of months since January, in the range 0 to
  * 11. Returns the abbreviated month name according to the current
  * locale.*/
 static const gchar*
-month_name(int mon) 
+month_name(int mon)
 {
     static gchar buf[MONTH_NAME_BUFSIZE];
     GDate date;
@@ -163,13 +163,13 @@ month_name(int mon)
 
     memset(buf, 0, MONTH_NAME_BUFSIZE);
     g_date_clear(&date, 1);
-     
+
     g_date_set_year(&date, arbitrary_year);
     g_date_set_day(&date, 1);
     // g_date API is 1..12 (not 0..11)
     g_date_set_month(&date, mon+1);
-    g_date_strftime(buf, MONTH_NAME_BUFSIZE-1, "%b", &date);
-     
+    g_date_strftime(buf, MONTH_NAME_BUFSIZE, "%b", &date);
+
     return buf;
 }
 
@@ -179,8 +179,11 @@ static void
 day_label(gchar *buf, int buf_len, int dow)
 {
     gnc_dow_abbrev(buf, buf_len, dow);
-    /* Wild hack to use only the first two letters */
-    buf[2]='\0';
+    /* Use only the first two characters */
+    if (g_utf8_strlen(buf, -1) > 2) {
+        gchar *pointer = g_utf8_offset_to_pointer(buf, 2);
+        *pointer = '\0';
+    }
 }
 
 GType
