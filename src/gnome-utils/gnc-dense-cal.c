@@ -930,7 +930,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             dcal->monthPositions[i].x
                 = floor(i/dcal->monthsPerCol)
                 * (col_width(dcal) + COL_BORDER_SIZE);
-            dcal->monthPositions[i].y = ((GdkRectangle*)mcList->next->data)->y;
+            dcal->monthPositions[i].y = ((GdkRectangle*)mcList->next->next->data)->y;
             for (mcListIter = mcList; mcListIter != NULL; mcListIter = mcListIter->next)
             {
                 rect = (GdkRectangle*)mcListIter->data;
