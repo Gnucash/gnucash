@@ -45,7 +45,7 @@ function prepare() {
     level1=$(basename ${_REPOS_UDIR})
     level2=$(basename $(dirname ${_REPOS_UDIR}))"/"$level1
     for mydir in $level0 $level1 $level2; do
-        if [ -f $mydir/make-gnucash-patch.in ]; then
+        if [ -f $mydir/make-gnucash-potfiles.in ]; then
             die "Do not save install.sh in the repository or one its parent directories"
         fi
     done

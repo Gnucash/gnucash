@@ -439,10 +439,20 @@ Before you start developing GnuCash, you should do the following:
 
 Submitting a Patch:
 
-  This section has been moved to the file README.patches
+  Once you have done some work that you would like to submit, you need
+  to send a patch.  There are two ways to submit a patch.  First, if
+  you're using SVN and only made changes to existing SVN files you
+  can generate the patch using:
 
-  Please consult that file for details on using the script provided to make
-  patches suitable for submitting to the GnuCash development team.
+      svn diff > /tmp/mypatch
 
+  and send /tmp/mypatch to gnucash-devel@gnucash.org with `[PATCH]'
+  prefixed to the Subject: of the email.  Note that this
+  ONLY WORKS if you have NOT added any new files to the source tree.
 
-Thank you. 
+  If your patch adds new files, use the `-N' flag to diff between a
+  clean directory and your development directory.  E.g.
+
+  $ diff -urN {gnucash-pristine} {gnucash-mydevel} > /tmp/mypatch
+
+Thank you.

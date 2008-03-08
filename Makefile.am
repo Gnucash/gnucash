@@ -6,7 +6,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles
+noinst_DATA = make-gnucash-potfiles
 
 dist_doc_DATA = \
   AUTHORS \
@@ -39,7 +39,6 @@ dist_doc_DATA = \
 
 EXTRA_DIST = \
   gnucash.lsm \
-  make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
@@ -82,13 +81,6 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-make-gnucash-patch: make-gnucash-patch.in Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-PERL-@:${PERL}:g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
-
 make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -99,7 +91,7 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
-  cscope.files cscope.out etags.files make-gnucash-patch \
+  cscope.files cscope.out etags.files \
   make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:

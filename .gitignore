@@ -39,7 +39,6 @@ lib/libqof/backend/file/qsf-dir.h
 lib/libqof/qof/qofla-dir.h
 libtool
 ltmain.sh
-make-gnucash-patch
 make-gnucash-potfiles
 missing
 mkinstalldirs
