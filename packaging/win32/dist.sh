@@ -34,6 +34,7 @@ function prepare() {
     _LIBOFX_UDIR=`unix_path $LIBOFX_DIR`
     _GWENHYWFAR_UDIR=`unix_path $GWENHYWFAR_DIR`
     _AQBANKING_UDIR=`unix_path $AQBANKING_DIR`
+    _LIBGDA_UDIR=`unix_path $LIBGDA_DIR`
     _GNUCASH_UDIR=`unix_path $GNUCASH_DIR`
     _REPOS_UDIR=`unix_path $REPOS_DIR`
     _BUILD_UDIR=`unix_path $BUILD_DIR`
