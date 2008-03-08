@@ -390,6 +390,7 @@ src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c
 src/import-export/qif-import/gnc-plugin-qif-import.c
 src/import-export/qif-import/qif.glade
+src/import-export/qif-import/schemas/apps_gnucash_import_qif.schemas.in
 src/import-export/qif-io-core/gncmod-qifiocore.c
 src/import-export/qif/qif-context.c
 src/import-export/qif/qif-file.c
