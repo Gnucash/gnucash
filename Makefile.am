@@ -23,7 +23,6 @@ dist_doc_DATA = \
   LICENSE \
   NEWS \
   README \
-  README.patches \
   README.dependencies
 
 # All the other files that go in the distribution tarfile that aren't
