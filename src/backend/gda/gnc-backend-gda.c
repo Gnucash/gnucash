@@ -645,7 +645,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 	be->is_pristine_db = FALSE;
 
 	// Mark the book as clean
-//	qof_book_mark_saved( book );
+	qof_book_mark_saved( book );
 
     LEAVE( "book=%p", book );
 }
