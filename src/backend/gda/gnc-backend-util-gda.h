@@ -162,15 +162,15 @@ GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 									QofIdTypeConst obj_name,
 									gpointer pObject,
 									const col_cvt_t* table );
-GdaObject* gnc_gda_execute_query( const GncGdaBackend* pBackend, GdaQuery* pQuery );
+GdaObject* gnc_gda_execute_query( GncGdaBackend* pBackend, GdaQuery* pQuery );
 GdaDataModel* gnc_gda_execute_sql( const GncGdaBackend* pBackend, const gchar* sql );
 GdaQuery* gnc_gda_create_query_from_sql( const GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( const GncGdaBackend* pBackend, const gchar* sql );
-int gnc_gda_execute_query_get_count( const GncGdaBackend* pBackend, GdaQuery* query );
+int gnc_gda_execute_query_get_count( GncGdaBackend* pBackend, GdaQuery* query );
 void gnc_gda_load_object( const GncGdaBackend* be, GdaDataModel* pModel, int row,
 						QofIdTypeConst obj_name, gpointer pObject,
 						const col_cvt_t* table );
-gboolean gnc_gda_object_is_it_in_db( const GncGdaBackend* be,
+gboolean gnc_gda_object_is_it_in_db( GncGdaBackend* be,
 									const gchar* table_name,
 									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );

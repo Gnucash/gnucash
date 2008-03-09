@@ -60,7 +60,7 @@ typedef struct {
 #define TX_MAX_NUM_LEN 2048
 #define TX_MAX_DESCRIPTION_LEN 2048
 
-static col_cvt_t tx_col_table[] =
+static const col_cvt_t tx_col_table[] =
 {
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
@@ -82,7 +82,7 @@ static void set_split_reconcile_date( gpointer pObject, Timespec ts );
 #define SPLIT_MAX_MEMO_LEN 2048
 #define SPLIT_MAX_ACTION_LEN 2048
 
-static col_cvt_t split_col_table[] =
+static const col_cvt_t split_col_table[] =
 {
     { "guid",            CT_GUID,         0,                    COL_NNUL|COL_PKEY, "guid" },
     { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          NULL, SPLIT_TRANS },
@@ -98,7 +98,7 @@ static col_cvt_t split_col_table[] =
     { NULL }
 };
 
-static col_cvt_t guid_col_table[] =
+static const col_cvt_t guid_col_table[] =
 {
     { "tx_guid", CT_GUID, 0, 0, "guid" },
     { NULL }

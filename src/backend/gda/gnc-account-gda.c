@@ -51,12 +51,12 @@ static gpointer get_parent( gpointer pObject, const QofParam* );
 static void set_parent( gpointer pObject, gpointer pValue );
 static void set_parent_guid( gpointer pObject, gpointer pValue );
 
-#define ACCOUNT_MAX_NAME_LEN 2048
+#define ACCOUNT_MAX_NAME_LEN /*2048*/20
 #define ACCOUNT_MAX_TYPE_LEN 2048
 #define ACCOUNT_MAX_CODE_LEN 2048
 #define ACCOUNT_MAX_DESCRIPTION_LEN 2048
 
-static col_cvt_t col_table[] =
+static const col_cvt_t col_table[] =
 {
     { "guid",           CT_GUID,         0,                           COL_NNUL|COL_PKEY, "guid" },
     { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },

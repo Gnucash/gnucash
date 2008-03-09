@@ -47,7 +47,7 @@ static gpointer get_lot_account( gpointer pObject, const QofParam* param );
 static void set_lot_account( gpointer pObject, gpointer pValue );
 static void set_lot_is_closed( gpointer pObject, gpointer pValue );
 
-static col_cvt_t col_table[] =
+static const col_cvt_t col_table[] =
 {
     { "guid",         CT_GUID,    0, COL_NNUL|COL_PKEY, "guid" },
     { "account_guid", CT_GUID,    0, COL_NNUL,          NULL, NULL, get_lot_account,   set_lot_account },

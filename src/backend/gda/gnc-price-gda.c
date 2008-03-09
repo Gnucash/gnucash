@@ -47,7 +47,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define PRICE_MAX_SOURCE_LEN 2048
 #define PRICE_MAX_TYPE_LEN 2048
 
-static col_cvt_t col_table[] =
+static const col_cvt_t col_table[] =
 {
     { "guid",           CT_GUID,           0,                    COL_NNUL|COL_PKEY, "guid" },
     { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          NULL, PRICE_COMMODITY },

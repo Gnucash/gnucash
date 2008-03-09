@@ -52,7 +52,7 @@ static void set_root_account_guid( gpointer pObject, gpointer pValue );
 static gpointer get_root_template_guid( gpointer pObject, const QofParam* );
 static void set_root_template_guid( gpointer pObject, gpointer pValue );
 
-static col_cvt_t col_table[] =
+static const col_cvt_t col_table[] =
 {
     { "guid",               CT_GUID, 0, COL_NNUL|COL_PKEY, "guid" },
     { "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL, get_root_account_guid,  set_root_account_guid },

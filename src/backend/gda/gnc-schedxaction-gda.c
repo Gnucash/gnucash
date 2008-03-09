@@ -57,7 +57,7 @@ static void set_autonotify( gpointer pObject, gpointer pValue );
 static gpointer get_template_act_guid( gpointer pObject, const QofParam* param );
 static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
-static col_cvt_t col_table[] =
+static const col_cvt_t col_table[] =
 {
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },

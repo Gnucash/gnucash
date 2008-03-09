@@ -1440,7 +1440,7 @@ gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name )
 
 /* ================================================================= */
 GdaObject*
-gnc_gda_execute_query( const GncGdaBackend* be, GdaQuery* query )
+gnc_gda_execute_query( GncGdaBackend* be, GdaQuery* query )
 {
     GError* error = NULL;
     GdaObject* ret;
@@ -1452,6 +1452,7 @@ gnc_gda_execute_query( const GncGdaBackend* be, GdaQuery* query )
 
     if( error != NULL ) {
         PERR( "SQL error: %s\n", error->message );
+		qof_backend_set_error( &be->be, ERR_BACKEND_SERVER_ERR );
     }
 
     return ret;
@@ -1511,7 +1512,7 @@ gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 }
 
 int
-gnc_gda_execute_query_get_count( const GncGdaBackend* be, GdaQuery* query )
+gnc_gda_execute_query_get_count( GncGdaBackend* be, GdaQuery* query )
 {
     int count = 0;
     GdaObject* ret;
@@ -1591,7 +1592,7 @@ get_col_gvalue_for_condition( const GncGdaBackend* be, QofIdTypeConst obj_name,
 }
 
 gboolean
-gnc_gda_object_is_it_in_db( const GncGdaBackend* be, const gchar* table_name,
+gnc_gda_object_is_it_in_db( GncGdaBackend* be, const gchar* table_name,
                     QofIdTypeConst obj_name, gpointer pObject,
                     const col_cvt_t* table )
 {

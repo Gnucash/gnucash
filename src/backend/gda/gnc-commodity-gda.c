@@ -56,7 +56,7 @@ static void set_quote_source_name( gpointer pObject, gpointer pValue );
 #define COMMODITY_MAX_QUOTESOURCE_LEN 2048
 #define COMMODITY_MAX_QUOTE_TZ_LEN 2048
 
-static col_cvt_t col_table[] = {
+static const col_cvt_t col_table[] = {
     { "guid",         CT_GUID,   0,                             COL_NNUL|COL_PKEY, "guid" },
     { "namespace",    CT_STRING, COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
             (QofAccessFunc)gnc_commodity_get_namespace,
