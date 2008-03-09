@@ -146,6 +146,8 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas->acctTypeFilters = FALSE;
         gas->newAccountButton = NULL;
 
+        g_object_set(gas, "spacing", 2, (gchar*)NULL);
+
 	gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
         widget =
 	  gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), ACCT_COL_NAME);
@@ -394,7 +396,7 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
 			  G_CALLBACK( gas_new_account_click ),
 			  gas );
         gtk_box_pack_start( GTK_BOX(gas), gas->newAccountButton,
-                            FALSE, FALSE, 2 );
+                            FALSE, FALSE, 0 );
 }
 
 void
