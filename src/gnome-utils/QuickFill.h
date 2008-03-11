@@ -122,6 +122,10 @@ QuickFill *  gnc_quickfill_get_unique_len_match (QuickFill *qf, int *len);
 /** Add the string "text" to the collection of searchable strings. */
 void         gnc_quickfill_insert (QuickFill *root, const char *text,
                                    QuickFillSort sort_code);
+
+void         gnc_quickfill_remove (QuickFill *root, const gchar *text,
+                                   QuickFillSort sort_code);
+
 /** @} */
 /** @} */
 #endif /* QUICKFILL_H */

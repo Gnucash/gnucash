@@ -313,8 +313,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
       DEBUG("remove %s", name);
 
       /* Remove from qf */
-      gnc_quickfill_purge(qfb->qf);
-      gnc_account_foreach_descendant(qfb->root, load_shared_qf_cb, qfb);
+      gnc_quickfill_remove(qfb->qf, name, QUICKFILL_ALPHA);
 
       /* Does the account exist in the model? */
       data.accounts = g_list_append(NULL, account);
