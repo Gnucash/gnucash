@@ -109,12 +109,12 @@ gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
 
   if (gtk_tree_row_reference_valid (ssi->row_ref)) {
     StyleSheetDialog * ss = gnc_style_sheet_dialog;
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(ss->list_store), &iter,
-				 gtk_tree_row_reference_get_path (ssi->row_ref)))
+    GtkTreePath *path = gtk_tree_row_reference_get_path (ssi->row_ref);
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(ss->list_store), &iter, path))
       gtk_list_store_set (ss->list_store, &iter,
 			  COLUMN_DIALOG, NULL,
 			  -1);
-    
+    gtk_tree_path_free(path);
   }
   gtk_tree_row_reference_free (ssi->row_ref);
   gnc_option_db_destroy(ssi->odb);
