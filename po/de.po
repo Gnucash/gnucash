@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-04 21:40+0100\n"
-"PO-Revision-Date: 2008-03-04 22:03+0100\n"
+"PO-Revision-Date: 2008-03-15 15:21+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -285,9 +285,7 @@ msgstr "DATEI"
 #: ../src/bin/gnucash-bin.c:273
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved"
-msgstr ""
-"Regulärer Ausdruck für den Namensstandard, in dem die Aktienkurse geholt "
-"werden sollen"
+msgstr "Regulärer Ausdruck für den Namensstandard, in dem die Kurse geholt werden sollen"
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -3352,25 +3350,21 @@ msgstr "Kontenhierarchie nach QSF XML exportieren"
 msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
-msgstr ""
-"Diese Währung/Aktie wird von (mindestens) einem Konto benutzt. Sie können "
-"Sie daher nicht löschen."
+msgstr "Diese Devise/Wertpapier wird von (mindestens) einem Konto benutzt. Sie können Sie daher nicht löschen."
 
 #: ../src/gnome/dialog-commodities.c:149
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
-msgstr ""
-"Zu dieser Währung/Aktie existieren Kurswerte. Sind Sie sicher, dass Sie die "
-"gewählte Währung/Aktie und ihre Kurswerte löschen wollen?"
+msgstr "Zu dieser Devise/Wertpapier existieren Kurswerte. Sind Sie sicher, dass Sie die gewählte Devise/Wertpapier und ihre Kurswerte löschen wollen?"
 
 #: ../src/gnome/dialog-commodities.c:154
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Sind Sie sicher, dass Sie die gewählte Währung/Aktie löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie die gewählte Devise/Wertpapier löschen wollen?"
 
 #: ../src/gnome/dialog-commodities.c:163
 msgid "Delete commodity?"
-msgstr "Währung/Aktie löschen?"
+msgstr "Devise/Wertpapier löschen?"
 
 #: ../src/gnome/dialog-fincalc.c:308
 msgid ""
@@ -3441,7 +3435,7 @@ msgstr "Abgleichen"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 msgid "Share Price"
-msgstr "Aktien-/Anteilspreis"
+msgstr "Wertpapier-/Anteilspreis"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -3495,7 +3489,7 @@ msgstr "Preise löschen?"
 
 #: ../src/gnome/dialog-price-editor.c:176
 msgid "You must select a commodity."
-msgstr "Sie müssen eine Währung/Aktie auswählen."
+msgstr "Sie müssen eine Devise/Wertpapier auswählen."
 
 #: ../src/gnome/dialog-price-editor.c:181
 msgid "You must select a currency."
@@ -4343,7 +4337,7 @@ msgstr "Kleinste _Stückelung:"
 
 #: ../src/gnome/glade/account.glade.h:59
 msgid "Smallest fraction of this commodity that can be referenced."
-msgstr "Kleinste Stückelung, in der diese Währung/Aktie gehandelt werden kann."
+msgstr "Kleinste Stückelung, in der diese Devise/Wertpapier gehandelt werden kann."
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
@@ -4420,7 +4414,7 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
-"Wie Aktie/Währung\n"
+"Wie Wertpapier/Devise\n"
 "1\n"
 "1/10\n"
 "1/100\n"
@@ -4463,7 +4457,7 @@ msgstr "Neu _nummerieren"
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:270
 msgid "_Security/currency:"
-msgstr "Aktie/_Währung:"
+msgstr "Wertpapier/_Währung:"
 
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
@@ -4700,11 +4694,11 @@ msgstr ""
 
 #: ../src/gnome/glade/commodities.glade.h:1
 msgid "<b>Securities</b>"
-msgstr "<b>Aktien</b>"
+msgstr "<b>Wertpapiere</b>"
 
 #: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
-msgstr "Neue Aktie/Währung hinzufügen."
+msgstr "Neue Devise/Wertpapier hinzufügen."
 
 #: ../src/gnome/glade/commodities.glade.h:3
 #: ../src/gnome/gnc-plugin-page-account-tree.c:222
@@ -4714,7 +4708,7 @@ msgstr "Bearbeiten"
 
 #: ../src/gnome/glade/commodities.glade.h:4
 msgid "Remove the current commodity."
-msgstr "Aktuelle Aktie/Währung entfernen."
+msgstr "Aktuelle Devise/Wertpapier entfernen."
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
@@ -5155,7 +5149,7 @@ msgstr "_Währung:"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _last price for a stock"
-msgstr "Auch _letzten Preis einer Aktie löschen"
+msgstr "Auch _letzten Preis eines Wertpapieres löschen"
 
 #: ../src/gnome/glade/price.glade.h:9
 msgid "Delete _manually entered prices"
@@ -5192,10 +5186,7 @@ msgid ""
 "If activated, delete manually entered stock prices dated earlier than the "
 "specified date.  Otherwise only stock prices added by Finance::Quote will be "
 "deleted."
-msgstr ""
-"Wenn gewählt, werden auch manuell eingegebene Preise/Aktienkurse vor dem "
-"gewählten Datum gelöscht. Andernfalls werden nur von Finance::Quote "
-"hinzugefügte Preise gelöscht."
+msgstr "Wenn gewählt, werden auch manuell eingegebene Preise/Kurse vor dem gewählten Datum gelöscht. Andernfalls werden nur von Finance::Quote hinzugefügte Preise gelöscht."
 
 #: ../src/gnome/glade/price.glade.h:16
 msgid "Price Editor"
@@ -5224,7 +5215,7 @@ msgstr "_Preis:"
 #: ../src/gnome/glade/price.glade.h:24
 #: ../src/gnome-utils/dialog-commodity.c:274
 msgid "_Security:"
-msgstr "_Aktie:"
+msgstr "_Wertpapier:"
 
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
@@ -6575,7 +6566,7 @@ msgstr "_Erträge"
 
 #: ../src/gnome/glade/tax.glade.h:12
 msgid "_Parent Account"
-msgstr "_Hauptkonto"
+msgstr "_Übergeordnetes Konto"
 
 #: ../src/gnome/glade/tax.glade.h:13
 msgid "_Select Subaccounts"
@@ -6725,7 +6716,7 @@ msgstr "Preise für Währungen/Wertpapiere anzeigen und bearbeiten"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
 msgid "_Security Editor"
-msgstr "_Aktien-Editor"
+msgstr "_Wertpapier-Editor"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -7721,7 +7712,7 @@ msgstr "Typ-Spalte anzeigen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
 msgid "Show the commodity column"
-msgstr "Währung/Aktie-Spalte anzeigen"
+msgstr "Währung/Wertpapier-Spalte anzeigen"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
 msgid "Show the currency column"
@@ -7745,8 +7736,7 @@ msgstr "Diese Einstellung kontrolliert, ob die Art-Spalte angezeigt wird."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
-msgstr ""
-"Diese Einstellung kontrolliert, ob die Aktie/Währung-Spalte angezeigt wird."
+msgstr "Diese Einstellung kontrolliert, ob die Währung/Wertpapier-Spalte angezeigt wird."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
@@ -8188,9 +8178,7 @@ msgstr ""
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
-msgstr ""
-"Falls angeklickt wird jeder Bericht in einem neuen Top-Level-Fenster "
-"angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
+msgstr "Falls angeklickt wird jeder Bericht in einem neuen Fenster angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
 msgid ""
@@ -8527,11 +8515,11 @@ msgstr "Änderungen in einer Buchung speichern"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
 msgid "Delete a commodity"
-msgstr "Eine Währung/Aktie löschen"
+msgstr "Eine Devise/Wertpapier löschen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
 msgid "Delete a commodity and prices"
-msgstr "Eine Währung/Aktie löschen"
+msgstr "Eine Devise/Wertpapier und deren Kurse löschen"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
 msgid "Delete a transaction"
@@ -8583,14 +8571,11 @@ msgstr ""
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
-msgstr ""
-"Diese Rückfrage kommt vor dem Löschen einer Währung/Aktie, wenn diese noch "
-"Kursinformationen gespeichert hat. Löschen der Aktie wird die "
-"Kursinformationen ebenfalls löschen."
+msgstr "Diese Rückfrage kommt vor dem Löschen einer Devise/Wertpapier, wenn diese noch Kursinformationen gespeichert hat. Löschen des Wertpapiers wird die Kursinformationen ebenfalls löschen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr "Diese Rückfrage kommt vor dem Löschen einer Währung/Aktie."
+msgstr "Diese Rückfrage kommt vor dem Löschen einer Devise/Wertpapier."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid ""
@@ -8714,9 +8699,7 @@ msgstr "Index für relativen Endzeitpunkt"
 msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
-msgstr ""
-"Wenn aktiviert, werden Aktien in der Zusammenfassungs-Zeile angezeigt, die "
-"keine Währungen sind. Wenn nicht aktiviert, werden nur Währungen angezeigt."
+msgstr "Wenn aktiviert, werden Wertpapiere in der Zusammenfassungs-Zeile angezeigt, die keine Devisen/Währungen sind. Wenn nicht aktiviert, werden nur Währungen angezeigt."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
 msgid "Profit/loss ending date type"
@@ -8735,7 +8718,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
-msgstr "Aktien/Edelmetalle (ohne Währungen) anzeigen"
+msgstr "Wertpapiere/Edelmetalle (ohne Währungen) anzeigen"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
 msgid "Starting date (in seconds from Jan 1, 1970)"
@@ -9156,7 +9139,7 @@ msgstr "Es gibt bereits ein Konto mit diesem Namen."
 
 #: ../src/gnome-utils/dialog-account.c:738
 msgid "You must choose a valid parent account."
-msgstr "Wählen Sie ein gültiges Hauptkonto"
+msgstr "Wählen Sie ein gültiges übergeordnetes Konto"
 
 #: ../src/gnome-utils/dialog-account.c:746
 msgid "You must select an account type."
@@ -9166,13 +9149,11 @@ msgstr "Wählen Sie eine Kontoart"
 msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
-msgstr ""
-"Die gewählte Kontoart passt nicht zu der Kontoart des Hauptkontos von diesem "
-"Konto."
+msgstr "Die gewählte Kontoart passt nicht zu der Kontoart des übergeordneten Kontos."
 
 #: ../src/gnome-utils/dialog-account.c:765
 msgid "You must choose a commodity."
-msgstr "Sie müssen eine Währung/Aktie auswählen."
+msgstr "Sie müssen eine Währung/Wertpapier auswählen."
 
 #: ../src/gnome-utils/dialog-account.c:817
 msgid "You must enter a valid opening balance or leave it blank."
@@ -9218,17 +9199,13 @@ msgstr "Bitte wählen Sie ein Eigenkapital-Konto, welches alle Aufwendungen der 
 msgid ""
 "\n"
 "Please select a commodity to match:"
-msgstr ""
-"\n"
-"Geben Sie eine Währung/Aktie an, die passt:"
+msgstr "\nGeben Sie eine Währung/Wertpapier an, die passt:"
 
 #: ../src/gnome-utils/dialog-commodity.c:173
 msgid ""
 "\n"
 "Commodity: "
-msgstr ""
-"\n"
-"Währung/Aktie: "
+msgstr "\nDevise/Wertpapier: "
 
 #: ../src/gnome-utils/dialog-commodity.c:175
 msgid ""
@@ -9248,11 +9225,11 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:269
 msgid "Select security/currency"
-msgstr "Bitte wählen Sie die Aktie/Währung"
+msgstr "Bitte wählen Sie das Wertpapier/Devise/Währung"
 
 #: ../src/gnome-utils/dialog-commodity.c:273
 msgid "Select security"
-msgstr "Bitte wählen Sie die Aktie"
+msgstr "Bitte wählen Sie das Wertpapier"
 
 #: ../src/gnome-utils/dialog-commodity.c:278
 msgid "Select currency"
@@ -9260,9 +9237,7 @@ msgstr "Bitte wählen Sie die Währung"
 
 #: ../src/gnome-utils/dialog-commodity.c:510
 msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr ""
-"Sie müssen eine Währung/Aktie auswählen. Wenn Sie eine neue anlegen möchten, "
-"klicken Sie auf »Neu«."
+msgstr "Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen möchten, klicken Sie auf »Neu«."
 
 #: ../src/gnome-utils/dialog-commodity.c:841
 msgid "Use local time"
@@ -9278,15 +9253,15 @@ msgstr "Währungsinformationen"
 
 #: ../src/gnome-utils/dialog-commodity.c:959
 msgid "Edit security"
-msgstr "Aktie bearbeiten"
+msgstr "Wertpapier bearbeiten"
 
 #: ../src/gnome-utils/dialog-commodity.c:959
 msgid "New security"
-msgstr "Neue Aktie/Währung"
+msgstr "Neues Wertpapier"
 
 #: ../src/gnome-utils/dialog-commodity.c:960
 msgid "Security Information"
-msgstr "Aktieninformationen"
+msgstr "Wertpapierinformationen"
 
 #: ../src/gnome-utils/dialog-commodity.c:1206
 msgid "You may not create a new national currency."
@@ -9294,15 +9269,13 @@ msgstr "Sie können keine neue nationale Währung erstellen."
 
 #: ../src/gnome-utils/dialog-commodity.c:1218
 msgid "That commodity already exists."
-msgstr "Diese Währung/Aktie existiert bereits."
+msgstr "Diese Devise/Wertpapier existiert bereits."
 
 #: ../src/gnome-utils/dialog-commodity.c:1261
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
-msgstr ""
-"Sie müssen in den Feldern »Voller Name«, »Symbol/Abkürzung« und »Typ« für "
-"die Währung/Aktie etwas angeben."
+msgstr "Sie müssen in den Feldern »Voller Name«, »Symbol/Abkürzung« und »Typ« für die Devise/Wertpapier etwas angeben."
 
 #: ../src/gnome-utils/dialog-options.c:880
 msgid "Select all accounts."
@@ -9731,36 +9704,26 @@ msgstr "_CUSIP oder anderer Code:"
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
-msgstr ""
-"Geben Sie einen eindeutigen Code für die Währung/Aktie ein. Sie können "
-"dieses Feld aber auch leer lassen."
+msgstr "Geben Sie einen eindeutigen Code für die Devise/Wertpapier ein. Sie können dieses Feld aber auch leer lassen."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:5
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple "
 "Computer, Inc."
-msgstr ""
-"Bitte geben Sie den vollen Namen der Währung/Aktie ein, z.B. »Deutsche Bank "
-"AG« oder »Google, Inc.«"
+msgstr "Bitte geben Sie den vollen Namen der Devise/Wertpapier ein, z.B. »Deutsche Bank AG« oder »Google, Inc.«"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:6
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
-msgstr ""
-"Geben Sie die kleinste Stückelung an, mit der die Währung/Aktie gehandelt "
-"werden kann. Für Aktien, die nur in ganzzahligen Mengen gehandelt werden, "
-"geben Sie 1 ein."
+msgstr "Geben Sie die kleinste Stückelung an, mit der die Devise/Wertpapier gehandelt werden kann. Für Wertpapiere, die nur in ganzzahligen Mengen gehandelt werden, geben Sie 1 ein."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:7
 msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
-msgstr ""
-"Geben Sie das Ticker-Symbol der Aktie ein (z. B. CSCO oder AAPL).  Wenn Sie "
-"Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der Webseite "
-"entsprechen, inklusive Groß/Kleinschreibung."
+msgstr "Geben Sie das Ticker-Symbol des Wertpapiers ein (z. B. CSCO oder AAPL).  Wenn Sie Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der Webseite entsprechen, inklusive Groß/Kleinschreibung."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
 msgid "F_raction traded:"
@@ -9768,7 +9731,7 @@ msgstr "_Handelbare Stückelung:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid "Select security/currency "
-msgstr "Bitte wählen Sie die Aktie/Währung"
+msgstr "Bitte wählen Sie die Devise/Wertpapier"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:10
 msgid "Select user information here..."
@@ -10617,17 +10580,13 @@ msgstr ""
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
-msgstr ""
-"Falls angeklickt wird jeder Bericht in einem neuen Top-Level-Fenster "
-"angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
+msgstr "Falls angeklickt wird jeder Bericht in einem neuen Fenster angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid ""
 "If checked, non-currency commodities will be shown in the summary bar.  If "
 "clear, only currencies will be shown."
-msgstr ""
-"Wenn aktiviert, werden Aktien in der Zusammenfassungs-Zeile angezeigt, die "
-"keine Währungen sind. Wenn nicht aktiviert, werden nur Währungen angezeigt."
+msgstr "Wenn aktiviert, werden Wertpapiere in der Zusammenfassungs-Zeile angezeigt, die keine Devisen/Währungen sind. Wenn nicht aktiviert, werden nur Währungen angezeigt."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid ""
@@ -10653,7 +10612,7 @@ msgstr "_Gesamtsumme anzeigen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:89
 msgid "Include _non-currency totals"
-msgstr "_Aktien-Gesamtsumme anzeigen"
+msgstr "_Wertpapier-Gesamtsumme anzeigen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:90
 msgid "Loc_ale:"
@@ -11808,7 +11767,7 @@ msgstr "_Neues Fenster"
 
 #: ../src/gnome-utils/gnc-main-window.c:287
 msgid "Open a new top-level GnuCash window."
-msgstr "Ein neues Top-Level GnuCash Fenster öffnen."
+msgstr "Ein neues GnuCash Fenster öffnen."
 
 #: ../src/gnome-utils/gnc-main-window.c:289
 msgid "New Window with _Page"
@@ -11816,7 +11775,7 @@ msgstr "Neues Fenster mit _Seite"
 
 #: ../src/gnome-utils/gnc-main-window.c:290
 msgid "Move the current page to a new top-level GnuCash window."
-msgstr "Aktuelle Seite in ein neues Top-Level GnuCash Fenster verschieben."
+msgstr "Aktuelle Seite in ein neues GnuCash Fenster verschieben."
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:295
@@ -12059,7 +12018,7 @@ msgstr "Laden..."
 
 #: ../src/gnome-utils/gnc-tree-model-account.c:599
 msgid "New top level account"
-msgstr "Neues Top-Level-Konto"
+msgstr "Neues Konto der obersten Ebene"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -12076,7 +12035,7 @@ msgstr "Kontobezeichnung"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:516
 msgid "Commodity"
-msgstr "Währung/Aktie"
+msgstr "Devise/Wertpapier"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -12241,7 +12200,7 @@ msgstr "Zeitzone"
 
 #: ../src/gnome-utils/gnc-tree-view-price.c:435
 msgid "Security"
-msgstr "Aktie"
+msgstr "Wertpapier"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/general-journal.scm
@@ -12327,7 +12286,7 @@ msgstr "%s, Summe:"
 #: ../src/gnome-utils/window-main-summarybar.c:315
 #, c-format
 msgid "%s, Non Currency Commodities Total:"
-msgstr "%s, Aktien gesamt:"
+msgstr "%s, Wertpapiere gesamt:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:318
 #, c-format
@@ -12474,7 +12433,7 @@ msgstr "Konto öffnen"
 
 #: ../src/gnome/window-reconcile.c:2018
 msgid "Edit the main account for this register"
-msgstr "Bearbeiten des Hauptkonto für dieses Kontobuch"
+msgstr "Bearbeiten des übergeordneten Kontos für dieses Kontobuch"
 
 #: ../src/gnome/window-reconcile.c:2031
 msgid "Add a new transaction to the account"
@@ -13792,10 +13751,7 @@ msgid ""
 "Please select a commodity to match the following exchange specific code. "
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
-msgstr ""
-"Bitte wählen Sie eine Währung/Aktie, die zum folgenden Aktiencode passt.  "
-"Achtung: Der Aktiencode der ausgewählten Währung/Aktie wird anschließend "
-"überschrieben."
+msgstr "Bitte wählen Sie eine Devise/Wertpapier, die zum folgenden Aktiencode passt.  Achtung: Der Aktiencode der ausgewählten Devise/Wertpapier wird anschließend überschrieben."
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
@@ -13972,7 +13928,7 @@ msgstr ""
 #: ../src/import-export/ofx/gnc-ofx-import.c:361
 #, c-format
 msgid "Stock account for security \"%s\""
-msgstr "Aktienkonto für Aktie »%s«"
+msgstr "Aktienkonto für Wertpapier »%s«"
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -13981,7 +13937,7 @@ msgstr "Aktienkonto für Aktie »%s«"
 #: ../src/import-export/ofx/gnc-ofx-import.c:427
 #, c-format
 msgid "Income account for security \"%s\""
-msgstr "Einnahmenkonto für Aktie »%s«"
+msgstr "Einnahmenkonto für Wertpapier »%s«"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:582
 msgid "Unknown OFX checking account"
@@ -14092,15 +14048,15 @@ msgstr "(Buchung)"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1608
 msgid "You must enter a Type for the commodity."
-msgstr "Sie müssen einen Typ für die Währung/Aktie angeben."
+msgstr "Sie müssen einen Typ für die Devise/Wertpapier angeben."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1615
 msgid "You must enter a name for the commodity."
-msgstr "Sie müssen einen Namen für die Währung/Aktie angeben."
+msgstr "Sie müssen einen Namen für die Devise/Wertpapier angeben."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1620
 msgid "You must enter an abbreviation for the commodity."
-msgstr "Sie müssen eine Abkürzung für die Währung/Aktie angeben."
+msgstr "Sie müssen eine Abkürzung für die Devise/Wertpapier angeben."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1629
 msgid "You must enter an existing national currency or enter a different type."
@@ -14115,19 +14071,17 @@ msgstr "Informationen über »%s«"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1783
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-msgstr "Wählen Sie das Börsenplatzkürzel für die Aktie (NASDAQ, NYSE, etc)."
+msgstr "Wählen Sie den Handelsplatz für das Wertpapier (NASDAQ, NYSE, etc)."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1807
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr "Geben Sie den vollen Namen der Aktie an, z.B. »Deutsche Telekom«"
+msgstr "Geben Sie den vollen Namen des Wertpapiers an, z.B. »Deutsche Telekom«"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1829
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
-msgstr ""
-"Geben Sie das Tickersymbol (z.B. »DTE«) der Aktie oder eine andere "
-"eindeutige Abkürzung an."
+msgstr "Geben Sie das Tickersymbol (z.B. »DTE«) des Wertpapiers oder eine andere eindeutige Abkürzung an."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1850
 msgid "Click \"Forward\" to accept the information and move on."
@@ -14343,19 +14297,11 @@ msgid ""
 "abbreviation you enter matches the ticker symbol used for the commodity on "
 "the exchange or listing for its type."
 msgstr ""
-"Auf den nächsten Seiten werden Sie nach Informationen über Ihre Aktien, "
-"Aktienfonds und anderen handelbaren Währungen gefragt, die in den QIF-"
-"Dateien auftauchen, die Sie importieren möchten. GnuCash benötigt mehr "
-"Informationen über handelbare Waren, als das QIF-Format normalerweise "
-"enthält.\n"
+"Auf den nächsten Seiten werden Sie nach Informationen über Ihre Aktien, Aktienfonds und anderen handelbaren Währungen gefragt, die in den QIF-Dateien auftauchen, die Sie importieren möchten. GnuCash benötigt mehr Informationen über handelbare Waren, als das QIF-Format normalerweise enthält.\n"
 "\n"
-"Jede Aktie, Fonds oder Währung muss einen Typ, einen vollen Namen und ein "
-"Kürzel haben. Der Typ ist das Börsenplatzkürzel (NASDAQ, NYSE etc.).\n"
+"Jede Aktie, Fonds oder Währung muss einen Typ, einen vollen Namen und ein Kürzel haben. Der Typ ist der Handelsplatz (NASDAQ, NYSE etc.).\n"
 "\n"
-"Prüfen Sie bitte, ob ein bereits existierender Typ passt. Andernfalls geben "
-"Sie einen neuen Typ in das Eingabefeld ein. Bitte benutzen Sie dabei das "
-"exakte Tickersymbol für die Aktie, das bei der offiziellen Börsennotierung "
-"benutzt wird."
+"Prüfen Sie bitte, ob ein bereits existierender Typ passt. Andernfalls geben Sie einen neuen Typ in das Eingabefeld ein. Bitte benutzen Sie dabei das exakte Tickersymbol für die Aktie, das bei der offiziellen Börsennotierung benutzt wird."
 
 #: ../src/import-export/qif-import/qif.glade.h:41
 msgid "Income and Expense categories"
@@ -15415,7 +15361,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:8 ../intl-scm/guile-strings.c:10
 #: ../intl-scm/guile-strings.c:52 ../intl-scm/guile-strings.c:54
 msgid "No commodities marked for quote retrieval."
-msgstr "Keine Aktien zum Börsenkurs-Abruf markiert."
+msgstr "Keine Devisen/Wertpapiere zum Börsenkurs-Abruf markiert."
 
 #. src/scm/price-quotes.scm
 #. src/scm/gnucash/price-quotes.scm
@@ -16355,7 +16301,7 @@ msgstr "Nach Betrag sortieren, vom größten zum kleinsten"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:826
 msgid "How to show the balances of parent accounts"
-msgstr "Anzeige der Salden von Hauptkonten"
+msgstr "Anzeige der Salden von übergeordneten Konten"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/account-summary.scm
@@ -16366,18 +16312,14 @@ msgstr "Kontosaldo"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:830
 msgid "Show only the balance in the parent account, excluding any subaccounts"
-msgstr ""
-"Nur unmittelbare Saldo von Hauptkonten anzeigen und dabei Unterkonten "
-"ignorieren"
+msgstr "Nur unmittelbare Saldo von übergeordneten Konten anzeigen und dabei Unterkonten ignorieren"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:834
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance"
-msgstr ""
-"Zwischensummen für Hauptkonto-Saldo und Salden aller Unterkonten berechnen "
-"und als Hauptkonto-Saldo anzeigen"
+msgstr "Zwischensummen für Salden der übergeordneten Konten und Salden aller Unterkonten berechnen und als Salden der übergeordneten Konten anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:836 ../intl-scm/guile-strings.c:846
@@ -16387,12 +16329,12 @@ msgstr "Nicht anzeigen"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:838
 msgid "Do not show any balances of parent accounts"
-msgstr "Salden von Hauptkonten nicht anzeigen"
+msgstr "Salden von übergeordneten Konten nicht anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:840
 msgid "How to show account subtotals for parent accounts"
-msgstr "Anzeige der Zwischensummen für Hauptkonten mit Unterkonten"
+msgstr "Anzeige der Zwischensummen für übergeordnete Konten mit Unterkonten"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:842
@@ -16402,12 +16344,12 @@ msgstr "Zwischensummen anzeigen"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:844
 msgid "Show subtotals for selected parent accounts which have subaccounts"
-msgstr "Zwischensummen für Hauptkonten anzeigen, die Unterkonten haben"
+msgstr "Zwischensummen für übergeordnete Konten anzeigen, die Unterkonten haben"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:848
 msgid "Do not show any subtotals for parent accounts"
-msgstr "Keine Zwischensummen von Hauptkonten anzeigen"
+msgstr "Keine Zwischensummen von übergeordneten Konten anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:850
@@ -16419,9 +16361,7 @@ msgstr "Rechnungswesen-Stil (experimentell)"
 msgid ""
 "Show parent account subtotals, indented per accounting text book practice "
 "(experimental)"
-msgstr ""
-"Zwischensummen für Hauptkonten eingerückt anzeigen, gemäß Rechnungswesen-"
-"Stil (experimentell)"
+msgstr "Zwischensummen für übergeordnete Konten eingerückt anzeigen, gemäß Rechnungswesen-Stil (experimentell)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:854
@@ -17180,7 +17120,7 @@ msgstr "Währung des Berichts"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1172
 msgid "Price of Commodity"
-msgstr "Preis der Währung/Aktie"
+msgstr "Preis der Devise/Wertpapier"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -17266,9 +17206,7 @@ msgstr "Diagrammhöhe"
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1192
 msgid "Calculate the price of this commodity."
-msgstr ""
-"Die Währung/Aktie, für die der Preis in diesem Bericht dargestellt werden "
-"soll."
+msgstr "Die Devise/Wertpapier, für die der Preis in diesem Bericht dargestellt werden soll."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1200
@@ -17359,33 +17297,26 @@ msgstr "Nur ein Preis gefunden"
 msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
-msgstr ""
-"Es wurde nur ein einziger Preis für die gewählte Währung/Aktie im gewählten "
-"Zeitraum gefunden. Dies ergibt kein sinnvolles Diagramm."
+msgstr "Es wurde nur ein einziger Preis für die gewählte Devise/Wertpapier im gewählten Zeitraum gefunden. Dies ergibt kein sinnvolles Diagramm."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1236
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
-msgstr ""
-"Es ist keine Preisinformation für die gewählte Währung/Aktie im gewählten "
-"Zeitraum vorhanden."
+msgstr "Es ist keine Preisinformation für die gewählte Devise/Wertpapier im gewählten Zeitraum vorhanden."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1238
 msgid "Identical commodities"
-msgstr "Identische Währungen/Aktien"
+msgstr "Identische Devisen/Wertpapiere"
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1240
 msgid ""
 "Your selected commodity and the currency of the report are identical. It "
 "doesn't make sense to show prices for identical commodities."
-msgstr ""
-"Die gewählte Währung/Aktie, deren Preis angezeigt werden soll, und die "
-"Währung des Berichts sind identisch. Es ergibt keinen Sinn, einen Preis für "
-"identische Währungen/Aktien anzuzeigen."
+msgstr "Die gewählte Devise/Wertpapier, deren Preis angezeigt werden soll, und die Währung des Berichts sind identisch. Es ergibt keinen Sinn, einen Preis für identische Devisen/Wertpapiere anzuzeigen."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1244
@@ -17549,7 +17480,7 @@ msgstr "Aktuelle Wechselkurse anzeigen"
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:1358 ../intl-scm/guile-strings.c:2748
 msgid "Show full account names (including parent accounts)"
-msgstr "Lange Kontenbezeichung (einschließlich Hauptkonten) anzeigen"
+msgstr "Lange Kontenbezeichung (einschließlich übergeordneter Konten) anzeigen"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1362
@@ -17871,7 +17802,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1866 ../intl-scm/guile-strings.c:1970
 #: ../intl-scm/guile-strings.c:2134
 msgid "Commodities"
-msgstr "Währungen/Aktien"
+msgstr "Währungen/Wertpapiere"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -18145,7 +18076,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1600 ../intl-scm/guile-strings.c:1822
 #: ../intl-scm/guile-strings.c:1930
 msgid "Parent account balances"
-msgstr "Salden Hauptkonto"
+msgstr "Saldo übergeordneter Konten"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18153,7 +18084,7 @@ msgstr "Salden Hauptkonto"
 #: ../intl-scm/guile-strings.c:1602 ../intl-scm/guile-strings.c:1824
 #: ../intl-scm/guile-strings.c:1932
 msgid "Parent account subtotals"
-msgstr "Zwischensummen für Hauptkonten"
+msgstr "Zwischensummen für übergeordnete Konten"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -18425,7 +18356,7 @@ msgstr "Portfolio"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1764 ../intl-scm/guile-strings.c:2012
 msgid "Share decimal places"
-msgstr "Dezimalstellen für Aktien"
+msgstr "Dezimalstellen für Wertpapiere"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -18463,7 +18394,7 @@ msgstr "Unterkonten, die Kontostand Null haben, mit einbeziehen."
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1784 ../intl-scm/guile-strings.c:2084
 msgid "Listing"
-msgstr "Börsenplatzkürzel"
+msgstr "Handelsplatz"
 
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:1786
@@ -18705,7 +18636,7 @@ msgstr "Tickersymbole anzeigen"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2018
 msgid "Show listings"
-msgstr "Listing anzeigen"
+msgstr "Handelsplatz anzeigen"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2020
@@ -18784,7 +18715,7 @@ msgstr "Das Tickersymbol anzeigen"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2064
 msgid "Display exchange listings"
-msgstr "Die Börsen-Listings anzeigen"
+msgstr "Den Handelsplatz (Börsen-Listing) anzeigen"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2066
@@ -20875,22 +20806,14 @@ msgid ""
 "accounts. For subaccounts, type the first letter(s) of the parent account, "
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
-msgstr ""
-"Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen eingeben, kann "
-"GnuCash den Namen anhand Ihrer Kontenliste vervollständigen. Für Unterkonten "
-"geben Sie die ersten Buchstaben des Hauptkontos ein, gefolgt von einem ':', "
-"gefolgt von den ersten Buchstaben des Unterkontos (z.B. A:B für Aktiva:"
-"Bargeld)."
+msgstr "Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen eingeben, kann GnuCash den Namen anhand Ihrer Kontenliste vervollständigen. Für Unterkonten geben Sie die ersten Buchstaben des übergeordneten Kontos ein, gefolgt von einem ':', gefolgt von den ersten Buchstaben des Unterkontos (z.B. A:B für Aktiva:Bargeld)."
 
 #: ../doc/tip_of_the_day.list.in:47
 msgid ""
 "Want to see all your subaccount transactions in one register? From the main "
 "menu, highlight the parent account and select Accounts -> Open Subaccounts "
 "from the menu."
-msgstr ""
-"Sie können alle Buchungssätze von mehreren Unterkonten in einem Kontobuch "
-"ansehen: Wählen Sie im Kontenhierarchie-Fenster das Hauptkonto und klicken "
-"Sie auf den Menüpunkt Konten -> Unterkonten öffnen."
+msgstr "Sie können alle Buchungssätze von mehreren Unterkonten in einem Kontobuch ansehen: Wählen Sie im Kontenhierarchie-Fenster das übergeordnete Konto und klicken Sie auf den Menüpunkt Konten -> Unterkonten öffnen."
 
 #: ../doc/tip_of_the_day.list.in:51
 msgid ""
