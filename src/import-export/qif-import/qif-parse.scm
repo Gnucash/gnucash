@@ -64,8 +64,7 @@
                          #f))))
           rv)
         (begin
-          (display "qif-split:parse-category : can't parse ")
-          (display value) (newline)
+          (gnc:warn "qif-split:parse-category: can't parse [" value "].")
           (list "" #f #f)))))
 
 
@@ -85,9 +84,8 @@
     ;; thanks dave p for reporting this.
     (if (eq? (string-ref year-string 0) #\')
         (begin
-          (display "qif-file:fix-year : found a weird QIF Y2K year : |")
-          (display year-string)
-          (display "|") (newline)
+          (gnc:warn "qif-file:fix-year: found weird QIF Y2K year ["
+                    year-string "].")
           (set! fixed-string
                 (substring year-string 2 (string-length year-string))))
         (set! fixed-string year-string))
@@ -129,9 +127,8 @@
      
      ;; No idea what the string represents.  Maybe a new bug in Quicken!
      (#t
-      (display "qif-file:fix-year : ay caramba! What is this? |")
-      (display year-string)
-      (display "|") (newline)))
+      (gnc:warn "qif-file:fix-year: ay caramba! What is this? ["
+                year-string "].")))
 
     y2k-fixed-value))
 
@@ -165,10 +162,9 @@
      ((string=? mangled-string "mutual")
       (list GNC-BANK-TYPE))
      (#t
-      (display "qif-parse:parse-acct-type : unhandled account type ")
-      (display read-value)
-      (display "... substituting Bank.")
-      (newline)
+      (gnc:warn "qif-parse:parse-acct-type: unrecognized account type ["
+                read-value
+                "]... substituting Bank.")
       (list GNC-BANK-TYPE)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -464,10 +460,8 @@
     ;; if the date parts list doesn't have 3 parts, we're in
     ;; trouble
     (if (not (eq? 3 (length date-parts)))
-        (begin
-          (display "qif-parse:parse-date/format : can't interpret date ")
-          (display date-string) (display " ") (write date-parts)(newline))
-        
+        (gnc:warn "qif-parse:parse-date/format: can't interpret date ["
+                  date-string "]\nDate parts: " date-parts)
         (case format
           ((d-m-y)
            (let ((d (car numeric-date-parts))
@@ -476,10 +470,9 @@
              (if (and (integer? d) (integer? m) (integer? y)
                       (<= m 12) (<= d 31))
                  (set! retval (list d m y))
-                 (begin
-                   (display "qif-parse:parse-date/format : ")
-                   (display "format is d/m/y, but date is ")
-                   (display date-string) (newline)))))
+                 (gnc:warn "qif-parse:parse-date/format: "
+                           "format is d/m/y, but date is ["
+                           date-string "]."))))
           
           ((m-d-y)
            (let ((m (car numeric-date-parts))
@@ -488,10 +481,9 @@
              (if (and (integer? d) (integer? m) (integer? y)
                       (<= m 12) (<= d 31))
                  (set! retval (list d m y))
-                 (begin
-                   (display "qif-parse:parse-date/format : ")
-                   (display " format is m/d/y, but date is ")
-                   (display date-string) (newline)))))
+                 (gnc:warn "qif-parse:parse-date/format: "
+                           "format is m/d/y, but date is ["
+                           date-string "]."))))
           
           ((y-m-d)
            (let ((y (qif-parse:fix-year (car date-parts) 50))
@@ -500,10 +492,9 @@
              (if (and (integer? d) (integer? m) (integer? y)
                       (<= m 12) (<= d 31))
                  (set! retval (list d m y))
-                 (begin
-                   (display "qif-parse:parse-date/format :")
-                   (display " format is y/m/d, but date is ")
-                   (display date-string) (newline)))))
+                 (gnc:warn "qif-parse:parse-date/format: "
+                           "format is y/m/d, but date is ["
+                           date-string "]."))))
           
           ((y-d-m)
            (let ((y (qif-parse:fix-year (car date-parts) 50))
@@ -512,10 +503,9 @@
              (if (and (integer? d) (integer? m) (integer? y)
                       (<= m 12) (<= d 31))
                  (set! retval (list d m y))
-                 (begin
-                   (display "qif-parse:parse-date/format : ")
-                   (display " format is y/m/d, but date is ")
-                   (display date-string) (newline)))))))
+                 (gnc:warn "qif-parse:parse-date/format: "
+                           "format is y/d/m, but date is ["
+                           date-string "]."))))))
     retval))
 
 
