@@ -2086,6 +2086,7 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
                 tree_restore_expanded_row(view, value);
                 g_free(value);
 	    }
+            g_free(key);
         }
     } else {
         g_warning("error reading group %s key %s: %s",

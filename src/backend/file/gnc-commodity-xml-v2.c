@@ -227,10 +227,18 @@ gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
     }
 
     if (!exchange || !mnemonic)
+    {
+      if (exchange) xmlFree(exchange);
+      if (mnemonic) xmlFree(mnemonic);
       return NULL;
+    }
 
     if (!gnc_commodity_namespace_is_iso(exchange))
+    {
+      xmlFree(exchange);
+      xmlFree(mnemonic);
       return NULL;
+    }
 
     table = gnc_commodity_table_get_table(book);
     return gnc_commodity_table_lookup(table, exchange, mnemonic);
