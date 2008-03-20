@@ -19,7 +19,7 @@ static GncDialog *pw;
 
 static gboolean apply_cb (GncDialog *pw, gpointer _n)
 {
-    const gchar *s;
+    gchar *s;
     gdouble d;
     gpointer p;
     gboolean b;
@@ -29,6 +29,7 @@ static gboolean apply_cb (GncDialog *pw, gpointer _n)
     printf("Entry: %s\n", s);
     s = gnc_dialog_get_string(pw, "SampleLabel");
     printf("Label: %s\n", s);
+    g_free(s);
 
     p = gnc_dialog_get_custom(pw, "SampleSpinButton");
     d = *(double *)p;
