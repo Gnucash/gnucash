@@ -21,7 +21,7 @@
 
 /** @addtogroup Utilities
     @{ */
-/** @file qof-util.h 
+/** @file qofutil.h
     @brief QOF utility functions
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>

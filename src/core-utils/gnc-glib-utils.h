@@ -23,7 +23,7 @@
 
 /** @addtogroup GLib
     @{ */
-/** @addtogroup GConf GLib Utilities
+/** @addtogroup GConf GConf Utilities
 
     The API in this file is designed to provide support functions that
     wrap the base glib functions and make them easier to use.
