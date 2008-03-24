@@ -34,10 +34,13 @@
 
 static void force_account_dirty(Account *acct)
 {
+  gchar *name = g_strdup(xaccAccountGetName(acct));
+
   /* This is necessary because modifying the KvpFrames doesn't mark
      accounts dirty, which means the changes wont be propagated to the
      backend. */
-  xaccAccountSetName(acct, xaccAccountGetName(acct));
+  xaccAccountSetName(acct, name);
+  g_free(name);
 }
 
 /* Account */
