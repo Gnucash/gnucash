@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-04 21:40+0100\n"
-"PO-Revision-Date: 2008-03-15 15:21+0100\n"
+"PO-Revision-Date: 2008-03-24 22:44+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3270,7 +3270,7 @@ msgstr "Wöchentlich"
 #: ../src/engine/Recurrence.c:563
 #, c-format
 msgid " (x%u)"
-msgstr "(%u Mal)"
+msgstr " (jedes %u. Mal)"
 
 #. translators: %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:466
