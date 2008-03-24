@@ -98,7 +98,7 @@ msgstr "Действие (журнал)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "action: торговый автомат"
+msgstr "action: платежный терминал"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
@@ -247,11 +247,11 @@ msgstr "закрыть"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "предмет"
+msgstr "товар"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "список предметов"
+msgstr "товарная номенклатура"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 #, fuzzy
@@ -342,7 +342,7 @@ msgstr "депонент"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr "курс обмена"
+msgstr "обменный курс"
 
 #. "in the account creation dialog??"
 msgid "field"
