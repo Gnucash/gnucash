@@ -430,7 +430,8 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
     g_string_printf(buf, _("Weekly"));
     if (multiplier > 1)
     {
-        /* translators: %u is the recurrence multipler. */
+        /* translators: %u is the recurrence multipler, i.e. this
+	   event should occur every %u'th week. */
         g_string_append_printf(buf, _(" (x%u)"), multiplier);
     }
     g_string_append_printf(buf, ": ");
@@ -532,7 +533,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, _("Daily"));
             if (multiplier > 1)
             {
-                /* translators: %u is the number of intervals */
+                /* translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
         } break;
