@@ -190,9 +190,9 @@
       (let ((action-symbol (string-to-canonical-symbol read-value)))
         (case action-symbol
           ;; buy
-          ((buy kauf)
+          ((buy cvrshrt kauf)
            'buy)
-          ((buyx kaufx)
+          ((buyx cvrshrtx kaufx)
            'buyx)
           ((cglong kapgew) ;; Kapitalgewinnsteuer
            'cglong)
@@ -252,9 +252,9 @@
            'rtrncap)
           ((rtrncapx)
            'rtrncapx)
-          ((sell verkauf)  ;; verkaufen
+          ((sell shtsell verkauf)  ;; verkaufen
            'sell)
-          ((sellx verkaufx)
+          ((sellx shtsellx verkaufx)
            'sellx)
           ((shrsin aktzu)
            'shrsin)
