@@ -372,6 +372,9 @@ gnc_xfer_dialog_from_tree_selection_changed_cb (GtkTreeSelection *selection,
   Account *account;
 
   account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_FROM);
+  if (!account)
+    return;
+
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
 		     gnc_commodity_get_printname(commodity));
@@ -402,6 +405,9 @@ gnc_xfer_dialog_to_tree_selection_changed_cb (GtkTreeSelection *selection, gpoin
   Account *account;
 
   account = gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
+  if (!account)
+    return;
+
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
 		     gnc_commodity_get_printname(commodity));
