@@ -134,6 +134,9 @@ typedef struct _startRecnWindowData
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
+static void   recn_cancel (RecnWindow *recnData);
+static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
+static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void   recnFinishCB (GtkAction *action, RecnWindow *recnData);
 static void   recnPostponeCB (GtkAction *action, gpointer data);
 static void   recnCancelCB (GtkAction *action, gpointer data);
@@ -1613,6 +1616,10 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
   g_signal_connect (recnData->window, "destroy",
                     G_CALLBACK(recn_destroy_cb), recnData);
+  g_signal_connect (recnData->window, "delete_event",
+                    G_CALLBACK(recn_delete_cb), recnData);
+  g_signal_connect (recnData->window, "key_press_event",
+                    G_CALLBACK(recn_key_press_cb), recnData);
 
 
   /* The main area */
@@ -1804,6 +1811,48 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
   g_free (recnData);
 }
 
+static void
+recn_cancel(RecnWindow *recnData)
+{
+  gboolean changed = FALSE;
+
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->credit)))
+    changed = TRUE;
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->debit)))
+    changed = TRUE;
+
+  if (changed)
+  {
+    const char *message = _("You have made changes to this reconcile "
+                            "window. Are you sure you want to cancel?");
+    if (!gnc_verify_dialog(recnData->window, FALSE, message))
+      return;
+  }
+
+  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+}
+
+static gboolean
+recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  recn_cancel(recnData);
+  return TRUE;
+}
+
+static gboolean
+recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+  RecnWindow *recnData = data;
+
+  if (event->keyval == GDK_Escape) {
+    recn_cancel(recnData);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
 
 /********************************************************************\
  * find_payment_account                                             *
@@ -1968,22 +2017,7 @@ static void
 recnCancelCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
-  gboolean changed = FALSE;
-
-  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->credit)))
-    changed = TRUE;
-  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->debit)))
-    changed = TRUE;
-
-  if (changed)
-  {
-    const char *message = _("You have made changes to this reconcile "
-                            "window. Are you sure you want to cancel?");
-    if (!gnc_verify_dialog(recnData->window, FALSE, message))
-      return;
-  }
-
-  gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
+  recn_cancel(recnData);
 }
 
 /** An array of all of the actions provided by the main window code.
