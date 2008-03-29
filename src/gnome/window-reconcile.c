@@ -1328,8 +1328,10 @@ gnc_get_reconcile_info (Account *account,
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);
 
-  if( !xaccAccountGetReconcilePostponeBalance (account, new_ending) )
-  {
+  if (xaccAccountGetReconcilePostponeBalance(account, new_ending)) {
+    if (gnc_reverse_balance(account))
+      *new_ending = gnc_numeric_neg(*new_ending);
+  } else {
     /* if the account wasn't previously postponed, try to predict
      * the statement balance based on the statement date.
      */
