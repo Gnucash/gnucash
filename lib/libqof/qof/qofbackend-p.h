@@ -377,6 +377,7 @@ void qof_backend_set_message(QofBackend *be, const char *format, ...);
 char * qof_backend_get_message(QofBackend *be);
 
 void qof_backend_init(QofBackend *be);
+void qof_backend_destroy(QofBackend *be);
 
 /** Allow backends to see if the book is open 
 

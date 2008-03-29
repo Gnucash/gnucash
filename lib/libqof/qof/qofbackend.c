@@ -145,6 +145,15 @@ qof_backend_init(QofBackend *be)
 }
 
 void
+qof_backend_destroy(QofBackend *be)
+{
+    g_free(be->error_msg);
+    be->error_msg = NULL;
+    kvp_frame_delete(be->backend_configuration);
+    be->backend_configuration = NULL;
+}
+
+void
 qof_backend_run_begin(QofBackend *be, QofInstance *inst)
 {
 	if(!be || !inst) { return; }

@@ -283,6 +283,7 @@ qsf_session_end( QofBackend *be)
 static void
 qsf_destroy_backend (QofBackend *be)
 {
+	qof_backend_destroy(be);
 	g_free(be);
 }
 
