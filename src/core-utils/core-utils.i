@@ -21,3 +21,5 @@ void gnc_scm_log_debug(const gchar *);
 
 %newobject gnc_utf8_strip_invalid_strdup;
 gchar * gnc_utf8_strip_invalid_strdup(const gchar *);
+%newobject gnc_locale_from_utf8;
+gchar * gnc_locale_from_utf8(const gchar *);
