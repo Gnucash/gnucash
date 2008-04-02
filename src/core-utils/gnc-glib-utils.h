@@ -55,6 +55,32 @@
  *  compares after str2. */
 int safe_utf8_collate (const char *str1, const char *str2);
 
+/**
+ * gnc_utf8_validate (copied from g_utf8_validate):
+ * @str: a pointer to character data
+ * @max_len: max bytes to validate, or -1 to go until nul
+ * @end: return location for end of valid data
+ * 
+ * Validates UTF-8 encoded text. @str is the text to validate;
+ * if @str is nul-terminated, then @max_len can be -1, otherwise
+ * @max_len should be the number of bytes to validate.
+ * If @end is non-%NULL, then the end of the valid range
+ * will be stored there (i.e. the address of the first invalid byte
+ * if some bytes were invalid, or the end of the text being validated
+ * otherwise).
+ *
+ * This function looks validates the strict subset of UTF-8 that is
+ * valid XML text, as detailed in
+ * http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
+ *
+ * Returns %TRUE if all of @str was valid. Many GLib and GTK+
+ * routines <emphasis>require</emphasis> valid UTF-8 as input;
+ * so data read from a file or the network should be checked
+ * with g_utf8_validate() before doing anything else with it.
+ * 
+ * Return value: %TRUE if the text was valid UTF-8
+ **/
+gboolean gnc_utf8_validate(const gchar *str, gssize max_len, const gchar **end);
 
 /** Strip any non-utf8 characters from a string.  This function
  *  rewrites the string "in place" instead of allocating and returning
@@ -91,8 +117,21 @@ gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
  * @param str A pointer to a UTF-8 encoded string to be converted.
  *
  * @return A newly allocated string that has to be g_free'd by the
- * caller. */
+ * caller. If an error occurs, NULL is returned. */
 gchar *gnc_locale_from_utf8(const gchar* str);
+
+/** Converts a string to UTF-8 from the encoding used for strings
+ * in the current locale.
+ *
+ * This essentially is a wrapper for g_locale_to_utf8 that can
+ * be swigified for use with Scheme to avoid adding a dependency
+ * for guile-glib.
+ *
+ * @param str A pointer to a string encoded according to locale.
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller. If an error occurs, NULL is returned. */
+gchar *gnc_locale_to_utf8(const gchar* str);
 
 typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
 
