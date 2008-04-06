@@ -57,8 +57,8 @@ static gpointer get_path( gpointer pObject, const QofParam* param );
 static void set_path( gpointer pObject, gpointer pValue );
 static gpointer get_slot_type( gpointer pObject, const QofParam* param );
 static void set_slot_type( gpointer pObject, gpointer pValue );
-static gpointer get_int64_val( gpointer pObject, const QofParam* param );
-static void set_int64_val( gpointer pObject, gpointer pValue );
+static gint64 get_int64_val( gpointer pObject, const QofParam* param );
+static void set_int64_val( gpointer pObject, gint64 pValue );
 static gpointer get_string_val( gpointer pObject, const QofParam* param );
 static void set_string_val( gpointer pObject, gpointer pValue );
 static gpointer get_double_val( gpointer pObject, const QofParam* param );
@@ -82,7 +82,7 @@ static const col_cvt_t col_table[] =
     { "slot_type",    CT_INT,      0,                     COL_NNUL, NULL, NULL,
 			get_slot_type,    set_slot_type, },
     { "int64_val",    CT_INT64,    0,                     0,        NULL, NULL,
-			get_int64_val,    set_int64_val },
+			(QofAccessFunc)get_int64_val,    (QofSetterFunc)set_int64_val },
     { "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,        NULL, NULL,
 			get_string_val,   set_string_val },
     { "double_val",   CT_DOUBLE,   0,                     0,        NULL, NULL,
@@ -164,31 +164,29 @@ set_slot_type( gpointer pObject, gpointer pValue )
     pInfo->value_type = (KvpValueType)pValue;
 }
 
-static gpointer
+static gint64
 get_int64_val( gpointer pObject, const QofParam* param )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-    static gint64 i64_val;
 
-	g_return_val_if_fail( pObject != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, 0 );
 
     if( kvp_value_get_type( pInfo->pKvpValue ) == KVP_TYPE_GINT64 ) {
-        i64_val = kvp_value_get_gint64( pInfo->pKvpValue );
-        return &i64_val;
+        return kvp_value_get_gint64( pInfo->pKvpValue );
     } else {
-        return NULL;
+        return 0;
     }
 }
 
 static void
-set_int64_val( gpointer pObject, gpointer pValue )
+set_int64_val( gpointer pObject, gint64 value )
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
 	g_return_if_fail( pObject != NULL );
 
-    if( pInfo->value_type == KVP_TYPE_GINT64 && pValue != NULL ) {
-        kvp_frame_set_gint64( pInfo->pKvpFrame, pInfo->path->str, *(gint64*)pValue );
+    if( pInfo->value_type == KVP_TYPE_GINT64 ) {
+        kvp_frame_set_gint64( pInfo->pKvpFrame, pInfo->path->str, value );
     }
 }
 

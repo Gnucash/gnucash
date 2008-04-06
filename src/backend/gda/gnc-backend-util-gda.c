@@ -458,6 +458,8 @@ static col_type_handler_t boolean_handler =
         { load_boolean, create_boolean_col,
             get_gvalue_boolean_for_query, get_gvalue_boolean_cond };
 /* ----------------------------------------------------------------- */
+typedef gint64 (*Int64AccessFunc)( const gpointer );
+typedef void (*Int64SetterFunc)( const gpointer, gint64 );
 
 static void
 load_int64( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
@@ -465,30 +467,29 @@ load_int64( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             const col_cvt_t* table_row )
 {
     const GValue* val;
-    gint64 i64_value;
+    gint64 i64_value = 0;
+	Int64SetterFunc i64_setter = (Int64SetterFunc)setter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pModel != NULL );
 	g_return_if_fail( row >= 0 );
+	g_return_if_fail( setter != NULL );
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 
     val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
-    if( gda_value_is_null( val ) ) {
-        (*setter)( pObject, NULL );
-    } else {    
+    if( !gda_value_is_null( val ) ) {
         i64_value = g_value_get_int64( val );
-        (*setter)( pObject, (gpointer)&i64_value );
     }
+    (*i64_setter)( pObject, i64_value );
 }
 
 static void
 get_gvalue_int64( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpointer pObject,
                 const col_cvt_t* table_row, GValue* value )
 {
-    gint64* pInt64;
     gint64 i64_value;
-    QofAccessFunc getter;
+    Int64AccessFunc getter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -497,13 +498,10 @@ get_gvalue_int64( const GncGdaBackend* be, QofIdTypeConst obj_name, const gpoint
 	g_return_if_fail( value != NULL );
 
     memset( value, 0, sizeof( GValue ) );
-    getter = gnc_gda_get_getter( obj_name, table_row );
-    pInt64 = (*getter)( pObject, NULL );
-    if( pInt64 != NULL ) {
-        i64_value = *pInt64;
-        g_value_init( value, G_TYPE_INT64 );
-        g_value_set_int64( value, i64_value );
-    }
+    getter = (Int64AccessFunc)gnc_gda_get_getter( obj_name, table_row );
+    i64_value = (*getter)( pObject );
+    g_value_init( value, G_TYPE_INT64 );
+    g_value_set_int64( value, i64_value );
 }
 
 static void
