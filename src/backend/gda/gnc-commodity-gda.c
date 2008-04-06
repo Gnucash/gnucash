@@ -64,7 +64,7 @@ static const col_cvt_t col_table[] = {
     { "mnemonic",     CT_STRING, COMMODITY_MAX_MNEMONIC_LEN,    COL_NNUL,          NULL, NULL,
             (QofAccessFunc)gnc_commodity_get_mnemonic,
             (QofSetterFunc)gnc_commodity_set_mnemonic },
-    { "fullname",     CT_STRING, COMMODITY_MAX_FULLNAME_LEN,    COL_NNUL,          NULL, NULL,
+    { "fullname",     CT_STRING, COMMODITY_MAX_FULLNAME_LEN,    0,                 NULL, NULL,
             (QofAccessFunc)gnc_commodity_get_fullname,
             (QofSetterFunc)gnc_commodity_set_fullname },
     { "cusip",        CT_STRING, COMMODITY_MAX_CUSIP_LEN,       0,                 NULL, NULL,
