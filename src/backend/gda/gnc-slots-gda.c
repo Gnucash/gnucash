@@ -545,7 +545,7 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 		g_string_append( sql, "= " );
 		single_item = TRUE;
 	}
-	gnc_gda_append_guid_list_to_sql( sql, list );
+	(void)gnc_gda_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	if( !single_item ) {
 		g_string_append( sql, ")" );
 	}

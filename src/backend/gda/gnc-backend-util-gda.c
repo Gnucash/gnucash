@@ -1533,17 +1533,18 @@ gnc_gda_execute_query_get_count( GncGdaBackend* be, GdaQuery* query )
     return count;
 }
 
-void
-gnc_gda_append_guid_list_to_sql( GString* sql, GList* list )
+guint
+gnc_gda_append_guid_list_to_sql( GString* sql, GList* list, guint maxCount )
 {
 	gchar guid_buf[GUID_ENCODING_LENGTH+1];
 	gboolean first_guid = TRUE;
+	guint count;
 
-	g_return_if_fail( sql != NULL );
+	g_return_val_if_fail( sql != NULL, 0 );
 
-	if( list == NULL ) return;
+	if( list == NULL ) return 0;
 
-	for( ; list != NULL; list = list->next ) {
+	for( count = 0; list != NULL && count < maxCount; list = list->next, count++ ) {
 		QofInstance* inst = QOF_INSTANCE(list->data);
     	guid_to_string_buff( qof_instance_get_guid( inst ), guid_buf );
 
@@ -1555,6 +1556,8 @@ gnc_gda_append_guid_list_to_sql( GString* sql, GList* list )
 		g_string_append( sql, "'" );
 		first_guid = FALSE;
     }
+
+	return count;
 }
 /* ================================================================= */
 static void

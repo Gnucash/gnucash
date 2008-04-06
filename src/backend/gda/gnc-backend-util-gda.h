@@ -199,7 +199,7 @@ GdaQueryCondition* gnc_gda_get_gvalue_objectref_guid_cond( const GncGdaBackend* 
                 const gpointer pObject, const col_cvt_t* table_row, GdaQuery* query );
 void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn,
 	            GdaServerOperation* op, const col_cvt_t* table_row );
-void gnc_gda_append_guid_list_to_sql( GString* str, GList* list );
+guint gnc_gda_append_guid_list_to_sql( GString* str, GList* list, guint maxCount );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
 

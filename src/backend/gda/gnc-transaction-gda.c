@@ -398,7 +398,7 @@ gnc_gda_get_account_balances_for_list( GncGdaBackend* be, GList* list )
 
 	sql = g_string_new( "" );
 	g_string_printf( sql, "SELECT account_guid,SUM(QUANTITY_NUM) AS quantity_num,quantity_denom FROM %s WHERE ACCOUNT_GUID IN (", SPLIT_TABLE );
-	gnc_gda_append_guid_list_to_sql( sql, list );
+	(void)gnc_gda_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	g_string_append( sql, ") GROUP BY ACCOUNT_GUID" );
 
 	get_account_balance_for_list_from_sql( be, result_list, sql->str );
@@ -529,7 +529,7 @@ load_splits_for_tx_list( GncGdaBackend* be, GList* list )
 
 	sql = g_string_sized_new( 40+(GUID_ENCODING_LENGTH+3)*g_list_length( list ) );
 	g_string_append_printf( sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE, guid_col_table[0].col_name );
-	gnc_gda_append_guid_list_to_sql( sql, list );
+	(void)gnc_gda_append_guid_list_to_sql( sql, list, G_MAXUINT );
 	g_string_append( sql, ")" );
 
 	// Execute the query and load the splits
@@ -571,12 +571,13 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList 
     }
     xaccTransBeginEdit( pTx );
     gnc_gda_load_object( be, pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
-    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
+//    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
 	*pList = g_list_append( *pList, pTx );
-    load_all_splits_for_tx( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
+//    load_all_splits_for_tx( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
-    qof_instance_mark_clean( QOF_INSTANCE(pTx) );
-    xaccTransCommitEdit( pTx );
+	// Leave the transaction open for edit until all of the slots and splits are loaded
+//    qof_instance_mark_clean( QOF_INSTANCE(pTx) );
+//    xaccTransCommitEdit( pTx );
 
     g_assert( pTx == xaccTransLookup( &tx_guid, be->primary_book ) );
 }
@@ -595,15 +596,23 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
         int numRows = gda_data_model_get_n_rows( pModel );
         int r;
 		GList* tx_list = NULL;
+		GList* node;
 
         for( r = 0; r < numRows; r++ ) {
             load_single_tx( be, pModel, r, &tx_list );
         }
 
-//		if( tx_list != NULL ) {
-//			gnc_gda_slots_load_for_list( be, tx_list );
-//			load_splits_for_tx_list( be, tx_list );
-//		}
+		if( tx_list != NULL ) {
+			gnc_gda_slots_load_for_list( be, tx_list );
+			load_splits_for_tx_list( be, tx_list );
+		}
+
+		// Commit all of the transactions
+		for( node = tx_list; node != NULL; node = node->next ) {
+			Transaction* pTx = GNC_TRANSACTION(node->data);
+    		qof_instance_mark_clean( QOF_INSTANCE(pTx) );
+    		xaccTransCommitEdit( pTx );
+		}
     }
 }
 
