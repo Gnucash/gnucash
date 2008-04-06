@@ -194,11 +194,13 @@ load_single_account( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** p
     if( pAccount == NULL ) {
         pAccount = xaccMallocAccount( be->primary_book );
     }
+	xaccAccountBeginEdit( pAccount );
     gnc_gda_load_object( be, pModel, row, GNC_ID_ACCOUNT, pAccount, col_table );
 	*pList = g_list_append( *pList, pAccount );
 //    gnc_gda_slots_load( be, QOF_INSTANCE(pAccount) );
 //    load_balances( be, pAccount );
 
+	xaccAccountCommitEdit( pAccount );
     qof_instance_mark_clean( QOF_INSTANCE(pAccount) );
 
 	/* If we don't have a parent, it might be because the parent account hasn't
@@ -243,7 +245,7 @@ load_all_accounts( GncGdaBackend* be )
         }
 
 		if( list != NULL ) {
-			load_account_balances_for_list( be, list );
+//			load_account_balances_for_list( be, list );
 			gnc_gda_slots_load_for_list( be, list );
 		}
 

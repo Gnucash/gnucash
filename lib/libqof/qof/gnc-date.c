@@ -1042,7 +1042,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 
   /* Timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
   str += strcspn (str, "+-");
-  if (str)
+  if (*str)
   {
     buf[0] = str[0];
     buf[1] = str[1];

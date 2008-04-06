@@ -38,6 +38,7 @@
 #include "qof.h"
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
+#include "Account.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "SX-book.h"
@@ -386,6 +387,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     GncGdaBackend *be = (GncGdaBackend*)be_start;
     GncGdaDataType_t* pData;
 	int i;
+	Account* root;
 
 	g_return_if_fail( be_start != NULL );
 	g_return_if_fail( book != NULL );
@@ -406,7 +408,12 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 		}
     }
 
+	root = gnc_book_get_root_account( book );
+	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountBeginEdit, NULL );
+
     qof_object_foreach_backend( GNC_GDA_BACKEND, initial_load_cb, be );
+
+	gnc_account_foreach_descendant( root, (AccountCb)xaccAccountCommitEdit, NULL );
 
     be->loading = FALSE;
 
@@ -1106,9 +1113,11 @@ gnc_gda_backend_new(void)
     be->rollback = gnc_gda_rollback_edit;
 
     /* The gda backend uses queries to load data ... */
+#if 0
     be->compile_query = gnc_gda_compile_query;
     be->free_query = gnc_gda_free_query;
     be->run_query = gnc_gda_run_query;
+#endif
 
     be->counter = NULL;
 

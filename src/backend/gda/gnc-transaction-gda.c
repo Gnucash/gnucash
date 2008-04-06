@@ -65,7 +65,9 @@ static const col_cvt_t tx_col_table[] =
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
-    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, TRANS_NUM },
+//    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, TRANS_NUM },
+    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, NULL,
+			(QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
     { "post_date",     CT_TIMESPEC,       0,                      COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)gnc_transaction_set_date_posted },
     { "enter_date",    CT_TIMESPEC,       0,                      COL_NNUL,          NULL, NULL,
@@ -569,9 +571,9 @@ load_single_tx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList 
     }
     xaccTransBeginEdit( pTx );
     gnc_gda_load_object( be, pModel, row, GNC_ID_TRANS, pTx, tx_col_table );
-//    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
+    gnc_gda_slots_load( be, QOF_INSTANCE(pTx) );
 	*pList = g_list_append( *pList, pTx );
-//    load_all_splits( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
+    load_all_splits_for_tx( be, qof_instance_get_guid( QOF_INSTANCE(pTx) ) );
 
     qof_instance_mark_clean( QOF_INSTANCE(pTx) );
     xaccTransCommitEdit( pTx );
@@ -598,10 +600,10 @@ query_transactions( GncGdaBackend* be, GdaQuery* query )
             load_single_tx( be, pModel, r, &tx_list );
         }
 
-		if( tx_list != NULL ) {
-			gnc_gda_slots_load_for_list( be, tx_list );
-			load_splits_for_tx_list( be, tx_list );
-		}
+//		if( tx_list != NULL ) {
+//			gnc_gda_slots_load_for_list( be, tx_list );
+//			load_splits_for_tx_list( be, tx_list );
+//		}
     }
 }
 
@@ -618,6 +620,21 @@ load_tx_by_guid( GncGdaBackend* be, GUID* tx_guid )
     guid_to_string_buff( tx_guid, guid_buf );
 	sql = g_strdup_printf( "SELECT * FROM %s WHERE guid = %s", TRANSACTION_TABLE, guid_buf );
 	query = gnc_gda_create_query_from_sql( be, sql );
+	query_transactions( be, query );
+}
+
+/* ================================================================= */
+static void
+load_all_tx( GncGdaBackend* be )
+{
+	gchar* sql;
+	GdaQuery* query;
+
+	g_return_if_fail( be != NULL );
+
+	sql = g_strdup_printf( "SELECT * FROM %s", TRANSACTION_TABLE );
+	query = gnc_gda_create_query_from_sql( be, sql );
+	g_free( sql );
 	query_transactions( be, query );
 }
 
@@ -1013,8 +1030,8 @@ gnc_gda_init_transaction_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_TRANS,
-        gnc_gda_save_transaction,            /* commit */
-        NULL,                        /* initial_load */
+        gnc_gda_save_transaction,    /* commit */
+        load_all_tx,                 /* initial_load */
         create_transaction_tables    /* create tables */
     };
     static GncGdaDataType_t be_data_split =

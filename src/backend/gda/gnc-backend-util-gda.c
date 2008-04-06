@@ -850,6 +850,7 @@ gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection* cnn
 
 /* ----------------------------------------------------------------- */
 typedef Timespec (*TimespecAccessFunc)( const gpointer );
+typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 
 static void
 load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
@@ -858,7 +859,8 @@ load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 {
     const GValue* val;
     GDate* date;
-    Timespec ts;
+    Timespec ts = {0, 0};
+	TimespecSetterFunc ts_setter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pModel != NULL );
@@ -866,9 +868,10 @@ load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( table_row != NULL );
 
+	ts_setter = (TimespecSetterFunc)setter;
     val = gda_data_model_get_value_at_col_name( pModel, table_row->col_name, row );
     if( gda_value_is_null( val ) ) {
-        (*setter)( pObject, NULL );
+        (*ts_setter)( pObject, ts );
     } else {
 		if( G_VALUE_HOLDS_STRING( val ) ) {
 			const gchar* s = g_value_get_string( val );
@@ -878,7 +881,7 @@ load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 									s[0], s[1],
 									s[3], s[4] );
 		    ts = gnc_iso8601_to_timespec_gmt( buf );
-			(*setter)( pObject, &ts );
+			(*ts_setter)( pObject, ts );
 			g_free( buf );
 
 		} else if( G_VALUE_HOLDS_BOXED( val ) ) {
@@ -887,7 +890,7 @@ load_timespec( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
             	ts = gnc_dmy2timespec( g_date_get_day( date ),
                                 g_date_get_month( date ),
                                 g_date_get_year( date ) );
-            	(*setter)( pObject, &ts );
+            	(*ts_setter)( pObject, ts );
 			}
 		} else {
 			PWARN( "Unknown timespec type: %s", G_VALUE_TYPE_NAME( val ) );
@@ -1487,6 +1490,7 @@ gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
 
 	cmd = gda_command_new( sql, GDA_COMMAND_TYPE_SQL, 0 );
     model = gda_connection_execute_select_command( be->pConnection, cmd, NULL, &error );
+	gda_command_free( cmd );
     if( error != NULL ) {
         PERR( "SQL error: %s\n", error->message );
     }
