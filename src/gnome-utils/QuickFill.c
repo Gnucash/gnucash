@@ -45,6 +45,9 @@ struct _QuickFill
 static void quickfill_insert_recursive (QuickFill *qf, const char *text,
                                         int depth, QuickFillSort sort);
 
+static void gnc_quickfill_remove_recursive (QuickFill *qf, const gchar *text,
+                                            gint depth, QuickFillSort sort);
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_REGISTER;
 
@@ -303,5 +306,131 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
   quickfill_insert_recursive (match_qf, text, ++depth, sort);
 }
 
-/********************** END OF FILE *********************************\
+/********************************************************************\
+\********************************************************************/
+
+void
+gnc_quickfill_remove (QuickFill *qf, const gchar *text, QuickFillSort sort)
+{
+  gchar *normalized_str;
+
+  if (qf == NULL) return;
+  if (text == NULL) return;
+
+  normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_NFC);
+  gnc_quickfill_remove_recursive (qf, normalized_str, 0, sort);
+  g_free (normalized_str);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+struct _BestText
+{
+  gchar *text;
+  QuickFillSort sort;
+};
+
+static void
+best_text_helper (gpointer key, gpointer value, gpointer user_data)
+{
+  QuickFill *qf = value;
+  struct _BestText *best = user_data;
+
+  if (best->text == NULL) {
+    /* start with the first text */
+    best->text = qf->text;
+
+  } else if (best->text == QUICKFILL_LIFO) {
+    /* we do not track history, so ignore it */
+    return;
+
+  } else if (g_utf8_collate (qf->text, best->text) < 0) {
+    /* even better text */
+    best->text = qf->text;
+  }
+}
+
+
+
+static void
+gnc_quickfill_remove_recursive (QuickFill *qf, const gchar *text, gint depth,
+                                QuickFillSort sort)
+{
+  QuickFill *match_qf;
+  gchar *child_text;
+  gint child_len;
+
+  child_text = NULL;
+  child_len = 0;
+
+  if (depth < g_utf8_strlen (text, -1)) {
+    /* process next letter */
+
+    gchar *key_char;
+    gunichar key_char_uc;
+    guint key;
+
+    key_char = g_utf8_offset_to_pointer (text, depth);
+    key_char_uc = g_utf8_get_char (key_char);
+    key = g_unichar_toupper (key_char_uc);
+
+    match_qf = g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
+    if (match_qf) {
+      /* remove text from child qf */
+      gnc_quickfill_remove_recursive (match_qf, text, depth + 1, sort);
+
+      if (match_qf->text == NULL) {
+        /* text was the only word with a prefix up to match_qf */
+        g_hash_table_remove (qf->matches, GUINT_TO_POINTER (key));
+        gnc_quickfill_destroy (match_qf);
+
+      } else {
+        /* remember remaining best child string */
+        child_text = match_qf->text;
+        child_len = match_qf->len;
+      }
+    }
+  }
+
+  if (qf->text == NULL)
+    return;
+
+  if (strcmp (text, qf->text) == 0) {
+    /* the currently best text is about to be removed */
+
+    gchar *best_text = NULL;
+    gint best_len = 0;
+
+    if (child_text != NULL) {
+      /* other children are pretty good as well */
+      best_text = child_text;
+      best_len = child_len;
+
+    } else {
+      if (g_hash_table_size (qf->matches) != 0) {
+        /* otherwise search for another good text */
+        struct _BestText bts;
+        bts.text = NULL;
+        bts.sort = sort;
+
+        g_hash_table_foreach (qf->matches, (GHFunc) best_text_helper, &bts);
+        best_text = bts.text;
+        best_len = (best_text == NULL) ? 0 : g_utf8_strlen (best_text, -1);
+      }
+    }
+
+    /* now replace or clear text */
+    CACHE_REMOVE(qf->text);
+    if (best_text != NULL) {
+      qf->text = CACHE_INSERT((gpointer) best_text);
+      qf->len = best_len;
+    } else {
+      qf->text = NULL;
+      qf->len = 0;
+    }
+  }
+}
+
+/********************** END OF FILE *********************************   \
 \********************************************************************/

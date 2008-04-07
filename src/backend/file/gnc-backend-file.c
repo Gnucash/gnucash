@@ -56,7 +56,7 @@
 
 #include "io-gncxml.h"
 #include "io-gncxml-v2.h"
-#include "gnc-backend-xml.h"
+#include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
 
 #ifndef HAVE_STRPTIME
@@ -320,6 +320,7 @@ file_session_end(QofBackend *be_start)
 static void
 file_destroy_backend(QofBackend *be)
 {
+    qof_backend_destroy(be);
     g_free(be);
 }
 

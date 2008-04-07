@@ -107,7 +107,7 @@ static void
 update_display_lists(gnc_column_view_edit * view)
 {
   SCM   get_names = scm_c_eval_string("gnc:all-report-template-names");
-  SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/name");
+  SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
   SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
   SCM   names = scm_call_0(get_names);
   SCM   contents = 
@@ -121,6 +121,7 @@ update_display_lists(gnc_column_view_edit * view)
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeSelection *tree_selection;
+
 
   /* Update the list of available reports (left selection box). */
   row = view->available_selected;
@@ -139,17 +140,19 @@ update_display_lists(gnc_column_view_edit * view)
 
   store = GTK_LIST_STORE(gtk_tree_view_get_model(view->available));
   gtk_list_store_clear(store);
+
   if(SCM_LISTP(names)) {
     for(i = 0; !SCM_NULLP(names); names = SCM_CDR(names), i++) {
       if (SCM_EQUALP (SCM_CAR(names), selection))
         row = i;
-      name = SCM_STRING_CHARS(scm_call_1(template_menu_name, SCM_CAR(names)));
+      name = SCM_STRING_CHARS(scm_call_2(template_menu_name, SCM_CAR(names), SCM_BOOL_F));
       gtk_list_store_append(store, &iter);
       gtk_list_store_set(store, &iter,
 			 AVAILABLE_COL_NAME, name,
 			 AVAILABLE_COL_ROW, i,
 			 -1);
     }
+
   }
   
   tree_selection = gtk_tree_view_get_selection(view->available);
@@ -339,6 +342,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     /* Build the 'available' view */
     store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_INT);
     gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),AVAILABLE_COL_NAME,GTK_SORT_ASCENDING);
     g_object_unref(store);
 
     renderer = gtk_cell_renderer_text_new();

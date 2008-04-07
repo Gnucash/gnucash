@@ -30,7 +30,7 @@
 #include "druid-gnc-xml-import.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include "gnc-backend-xml.h"
+#include "gnc-backend-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-module.h"
 #include "gnc-ui.h"
@@ -1113,6 +1113,7 @@ gxi_default_enc_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
   gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
                       0, &enc_string, -1);
   curr_enc = g_quark_from_string (enc_string);
+  g_free (enc_string);
 
   if (data->default_encoding == curr_enc)
     return;

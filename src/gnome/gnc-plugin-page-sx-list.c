@@ -421,7 +421,10 @@ gnc_plugin_page_sx_list_save_page (GncPluginPage *plugin_page,
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
     g_key_file_set_integer(key_file, group_name, "dense_cal_num_months",
-                           gnc_dense_cal_get_num_months(priv->gdcal)); 
+                           gnc_dense_cal_get_num_months(priv->gdcal));
+
+    g_key_file_set_integer(key_file, group_name, "paned_position",
+                           gtk_paned_get_position(GTK_PANED(priv->widget)));
 }
 
 /**
@@ -455,6 +458,16 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
         gint num_months = g_key_file_get_integer(key_file, group_name, "dense_cal_num_months", &err);
         if (err == NULL)
             gnc_dense_cal_set_num_months(priv->gdcal, num_months);
+        else
+            g_error_free(err);
+    }
+
+    {
+        GError *err = NULL;
+        gint paned_position = g_key_file_get_integer(key_file, group_name,
+                                                     "paned_position", &err);
+        if (err == NULL)
+            gtk_paned_set_position(GTK_PANED(priv->widget), paned_position);
         else
             g_error_free(err);
     }

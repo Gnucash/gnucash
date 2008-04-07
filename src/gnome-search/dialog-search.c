@@ -293,7 +293,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
     /* But maybe hide the select button */
     if (!sw->selected_cb)
-      gtk_widget_hide_all (sw->select_button);
+      gtk_widget_hide (sw->select_button);
   }
 
   /* Update the query in the list */
@@ -416,11 +416,11 @@ static void
 gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
 {
   if (sw->selected_cb) {
-    gtk_widget_show_all (sw->cancel_button);
-    gtk_widget_hide_all (sw->close_button);
+    gtk_widget_show (sw->cancel_button);
+    gtk_widget_hide (sw->close_button);
   } else {
-    gtk_widget_hide_all (sw->cancel_button);
-    gtk_widget_show_all (sw->close_button);
+    gtk_widget_hide (sw->cancel_button);
+    gtk_widget_show (sw->close_button);
   }
 }
 
@@ -800,6 +800,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
   box = glade_xml_get_widget (xml, "add_button_box");
   gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
+  gtk_widget_show (add);
   
   /* Set the match-type menu */
   combo_box = GTK_COMBO_BOX(gtk_combo_box_new_text());
@@ -810,6 +811,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
   box = glade_xml_get_widget (xml, "type_menu_box");
   gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
+  gtk_widget_show(GTK_WIDGET(combo_box));
 
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */
@@ -846,15 +848,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   /* add the first criterion */
   gnc_search_dialog_add_criterion (sw);
 
-  /* show it all */
-  gtk_widget_show_all (sw->dialog);
-
-  /* hide the dialog */
-  gtk_widget_hide (sw->dialog);
-
   /* Hide the 'new' button if there is no new_item_cb */
   if (!sw->new_item_cb)
-    gtk_widget_hide_all (new_item_button);
+    gtk_widget_hide (new_item_button);
 
   /* Connect XML signals */
 
@@ -1003,9 +999,9 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
   /* Show or hide the select button */
   if (sw->select_button) {
     if (selected_cb)
-      gtk_widget_show_all (sw->select_button);
+      gtk_widget_show (sw->select_button);
     else
-      gtk_widget_hide_all (sw->select_button);
+      gtk_widget_hide (sw->select_button);
   }
 
   /* Show the proper close/cancel button */

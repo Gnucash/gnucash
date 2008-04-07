@@ -215,6 +215,7 @@ gnc_currency_edit_new (void)
 /** @} */
 
 /** @name Get/Set Functions */
+/** @{ */
 
 /*  Set the widget to display a certain currency name.
  *
@@ -281,6 +282,8 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 	return commodity;
 }
 
+/** @} */
+/** @} */
 /** @} */
 
 /*

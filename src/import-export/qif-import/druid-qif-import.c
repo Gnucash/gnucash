@@ -48,6 +48,8 @@
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-account-tree.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
@@ -55,6 +57,7 @@
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
+#define GCONF_NAME_SHOW_DOC "show_doc"
 
 #define PREV_ROW "prev_row"
 
@@ -198,6 +201,15 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   g_free(window);
 }
 
+
+/********************************************************************\
+ * get_next_druid_page
+ *
+ * Determine which page to show after the current page. If NULL is
+ * ever returned, then a bug has been detected! (We really ought to
+ * do a better job of notifying someone.)
+\********************************************************************/
+
 static GtkWidget * 
 get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 {
@@ -205,11 +217,12 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   GList     * next;
   int       where = 0;
   
+  /* Figure out which stage of the druid we're in. */
   if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
-        /* where are we? */
-        printf("QIF import: I'm lost!\n");
+        /* Where are we? */
+        g_critical("QIF import: BUG DETECTED in get_next_druid_page! I'm lost!");
         return FALSE;
       }
       else {
@@ -225,9 +238,10 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   }
   
   next = current->next;
-  while(!next ||
-        (!wind->show_doc_pages &&
-         g_list_find(wind->doc_pages, next->data))) {
+  while (!next ||
+         (!wind->show_doc_pages && g_list_find(wind->doc_pages, next->data)) ||
+         (wind->new_stocks == SCM_BOOL_F &&
+          GNOME_DRUID_PAGE(next->data) == get_named_page(wind, "commodity_doc_page"))) {
     if(next && next->next) {
       next = next->next;
     }
@@ -241,7 +255,7 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         next = wind->post_comm_pages;
         break;
       default:
-        printf("QIF import: something fishy.\n");
+        g_critical("QIF import: BUG DETECTED in get_next_druid_page!");
         next = NULL;
         if (where > 3)
           return NULL;
@@ -254,6 +268,15 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   else return NULL;
 }
 
+
+/********************************************************************
+ * get_prev_druid_page
+ *
+ * Determine which page was shown before the current page. If NULL
+ * is ever returned, then a bug has been detected! (We really ought
+ * to do a better job of notifying someone.)
+ ********************************************************************/
+
 static GtkWidget * 
 get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 {
@@ -261,12 +284,13 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   GList     * prev;
   int       where = 0;
   
+  /* Figure out which stage of the druid we're in. */
   if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
-        /* where are we? */
-        printf("QIF import: I'm lost!\n");
-        return FALSE;
+        /* Where are we? */
+        g_critical("QIF import: BUG DETECTED in get_prev_druid_page! I'm lost!");
+        return NULL;
       }
       else {
         where = 3;
@@ -280,14 +304,29 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     where = 1;
   }
   
-  prev = current->prev;
-  while(!prev ||
-        (!wind->show_doc_pages &&
-         g_list_find(wind->doc_pages, prev->data))) {
+  /* If no duplicates were found, skip all post-conversion pages. */
+  if (where == 3 && SCM_NULLP(wind->match_transactions))
+    prev = NULL;
+  else
+    prev = current->prev;
+
+  /* Keep going back through the sets of available pages as long as:
+   * (a) there are no remaining pages in this set, or
+   * (b) the page is a doc page and we're not supposed to show them, or
+   * (c) the page is commodity related and the are no new commodities. */
+  while (!prev ||
+         (!wind->show_doc_pages && g_list_find(wind->doc_pages, prev->data)) ||
+         (wind->new_stocks == SCM_BOOL_F &&
+          GNOME_DRUID_PAGE(prev->data) == get_named_page(wind, "commodity_doc_page"))) {
+    /* We're either out of pages for this stage, or we've reached
+     * an optional doc page that shouldn't be shown. */
+
     if(prev && prev->prev) {
+      /* Go back another page within the same stage. */
       prev = prev->prev;
     }
     else {
+      /* Start looking at the end of the previous stage. */
       where --;
       switch(where) {
       case 1:
@@ -303,7 +342,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         break;
       default:
         if (wind->show_doc_pages)
-          printf("QIF import: something fishy.\n");
+          g_critical("QIF import: BUG DETECTED in get_prev_druid_page!");
         prev = NULL;
         if (where < 1)
           return NULL;
@@ -311,6 +350,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
       }              
     }
   }
+
   if(prev)
     return (GtkWidget *)prev->data;
   else 
@@ -320,7 +360,8 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 
 /********************************************************************
  * gnc_ui_qif_import_generic_next_cb
- * close the QIF Import druid window
+ *
+ * Display the next druid page.
  ********************************************************************/
 
 static gboolean
@@ -341,9 +382,11 @@ gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1,
   }
 }
 
+
 /********************************************************************
  * gnc_ui_qif_import_generic_back_cb
- * close the QIF Import druid window
+ *
+ * Display the previous druid page.
  ********************************************************************/
 
 static gboolean
@@ -366,6 +409,7 @@ gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1,
 
 /********************************************************************
  * gnc_ui_qif_import_select_file_cb
+ *
  * invoked when the "select file" button is clicked
  * this is just to pick a file name and reset-to-defaults all the 
  * fields describing how to parse the file.
@@ -1205,6 +1249,41 @@ gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
   gnc_unset_busy_cursor(NULL);
 }
 
+/****************************************************************
+ * gnc_ui_qif_import_categories_next_cb
+ * Check to see if there are any payees and memos to show. If not
+ * jump to currency page.
+ ****************************************************************/
+static gboolean
+gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
+                                     gpointer arg1,
+                                     gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
+  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
+  SCM  accts_left;
+  
+  gnc_set_busy_cursor(NULL, TRUE);
+  /*
+   * Hack. Call make-memo-display to see if there are any memos to display.
+   * This will get called again when we actually do make the memo display.
+   */
+  accts_left = scm_call_3(make_memo_display,
+			  wind->imported_files,
+			  wind->memo_map_info,
+			  wind->gnc_acct_info);
+  
+  gnc_unset_busy_cursor(NULL);
+  
+  if (SCM_NULLP(accts_left)) {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "currency_page"));
+    return TRUE;
+  } else {
+      return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
+  }
+}
+
 /********************************************************************
  * gnc_ui_qif_import_memo_prepare_cb
  ********************************************************************/
@@ -1223,161 +1302,273 @@ gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
 
 
 /****************************************************************
- * gnc_ui_qif_import_convert
- * do the work of actually translating QIF xtns to GNC xtns.  Fill in 
- * the match page if there are matches. 
+ * gnc_ui_qif_import_commodity_update
+ *
+ * This function updates the commodities based on the values for
+ * mnemonic, namespace, and name approved by the user.
  ****************************************************************/
 
-static gboolean
-gnc_ui_qif_import_convert(QIFImportWindow * wind)
+static void
+gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
 {
+  GList          *pageptr;
+  GnomeDruidPage *gtkpage;
+  QIFDruidPage   *page;
+  const char     *mnemonic = NULL;
+  gchar          *namespace = NULL;
+  const char     *fullname = NULL;
+  gnc_commodity  *old_commodity;
 
-  SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
-  SCM   find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
-  SCM   retval;
-  SCM   current_xtn;
-  SCM   window;
-
-  GnomeDruidPage * gtkpage;
-  QIFDruidPage * page;
-  GList        * pageptr;
-  Transaction  * gnc_xtn;
-  Split        * gnc_split;
-  gnc_commodity * old_commodity;
-  GtkTreeView *view;
-  GtkListStore *store;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  GtkTreeSelection* selection;
-
-  const char * mnemonic = NULL; 
-  gchar * namespace = NULL;
-  const char * fullname = NULL;
-  const gchar * amount_str;
-  int  rownum = 0;
-
-  /* get the default currency */
-  const char * currname =
-    gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
-
-  /* busy cursor */
-  gnc_suspend_gui_refresh ();
-  gnc_set_busy_cursor(NULL, TRUE);
-
-  /* get any changes to the imported stocks */
-  for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
-    gtkpage   = GNOME_DRUID_PAGE(pageptr->data); 
+  for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
+  {
+    gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
-    
+
+    /* Get any changes from the commodity page. */
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
     namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
     fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
-    
+
+    /* Update the commodity with the new values. */
     gnc_commodity_set_namespace(page->commodity, namespace);
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
     g_free(namespace);
+
+    /* Add the commodity to the commodity table. */
     old_commodity = page->commodity;
     page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
-    if (old_commodity != page->commodity) {
-	scm_hash_remove_x(wind->stock_hash, scm_makfrom0str(fullname));
+    /* If the table already contains the same namespace and mnemonic...
+     * ...blow away any existing entry in the hash table? Using the fullname
+     * as the key, which the user may have changed? Does this make any sense?
+     * Getting a match would just be luck!
+     *
+     * Shouldn't we do a hash-fold to update the Schema hash table, replacing
+     * each reference to the "old" commodity with a reference to the commodity
+     * returned by gnc_commodity_table_insert? */
+    if (old_commodity != page->commodity)
+      scm_hash_remove_x(wind->stock_hash, scm_makfrom0str(fullname));
+  }
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_prepare_duplicates
+ *
+ * This function prepares the duplicates checking page.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
+{
+  GtkTreeView      *view;
+  GtkListStore     *store;
+  SCM               duplicates;
+  SCM               current_xtn;
+  Transaction      *gnc_xtn;
+  Split            *gnc_split;
+  GtkTreeIter       iter;
+  GtkTreeSelection *selection;
+  GtkTreePath      *path;
+  const gchar      *amount_str;
+  int               rownum = 0;
+
+  view = GTK_TREE_VIEW(wind->new_transaction_view);
+  store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+  gtk_list_store_clear(store);
+
+  /* Loop through the list of new, potentially duplicate transactions. */
+  duplicates = wind->match_transactions;
+  while (!SCM_NULLP(duplicates))
+  {
+    current_xtn = SCM_CAAR(duplicates);
+    #define FUNC_NAME "xaccTransCountSplits"
+    gnc_xtn     = SWIG_MustGetPtr(current_xtn,
+    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+    #undef FUNC_NAME
+    if (xaccTransCountSplits(gnc_xtn) > 2)
+      amount_str = _("(split)");
+    else
+    {
+      gnc_split = xaccTransGetSplit(gnc_xtn, 0);
+      amount_str =
+        xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
+                        gnc_account_print_info
+                        (xaccSplitGetAccount(gnc_split), TRUE));
     }
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set
+      (store, &iter,
+       QIF_TRANS_COL_INDEX, rownum++,
+       QIF_TRANS_COL_DATE,
+       gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
+       QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
+       QIF_TRANS_COL_AMOUNT, amount_str,
+       -1);
+
+    duplicates = SCM_CDR(duplicates);
   }
 
-  /* call a scheme function to do the work.  The return value is the
+  selection = gtk_tree_view_get_selection(view);
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_selection_select_path(selection, path);
+  gtk_tree_path_free(path);
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_convert
+ *
+ * This function launches the Scheme procedures that actually do
+ * the work of (a) converting the QIF data into GnuCash accounts
+ * transactions, and (b) checking for possible duplication. Then
+ * the next druid page is prepared and displayed.
+ ****************************************************************/
+
+static gboolean
+gnc_ui_qif_import_convert(QIFImportWindow * wind)
+{
+  SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
+  SCM   find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
+  SCM   retval;
+  SCM   window;
+
+  /* Get the default currency. */
+  const char * currname =
+    gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->currency_picker));
+
+  /* Let the user know we're busy. */
+  gnc_suspend_gui_refresh ();
+  gnc_set_busy_cursor(NULL, TRUE);
+
+  /* Update the commodities. */
+  gnc_ui_qif_import_commodity_update(wind);
+
+  /* Call a Scheme function to do the work.  The return value is the
    * root account of an account tree containing all the new accounts
    * and transactions */
   window = SWIG_NewPointerObj(wind->window, SWIG_TypeQuery("_p_GtkWidget"), 0);
-  retval = scm_apply(qif_to_gnc, 
-		     SCM_LIST7(wind->imported_files,
-			       wind->acct_map_info, 
-			       wind->cat_map_info,
-			       wind->memo_map_info,
-			       wind->stock_hash,
-			       scm_makfrom0str(currname),
-			       window),
-		     SCM_EOL);
-
+  retval = scm_apply(qif_to_gnc,
+                     SCM_LIST7(wind->imported_files,
+                               wind->acct_map_info,
+                               wind->cat_map_info,
+                               wind->memo_map_info,
+                               wind->stock_hash,
+                               scm_makfrom0str(currname),
+                               window),
+                     SCM_EOL);
   gnc_unset_busy_cursor(NULL);
 
-  if(retval == SCM_BOOL_F) {
-    gnc_error_dialog(wind->window,
-		     _("An error occurred while importing "
-		       "QIF transactions into GnuCash. Your "
-		       "accounts are unchanged."));    
+  if (retval == SCM_BOOL_F)
+  {
+    /* An error occurred during conversion. */
+
+    /* There's no imported account tree. */
     scm_gc_unprotect_object(wind->imported_account_tree);
     wind->imported_account_tree = SCM_BOOL_F;
     scm_gc_protect_object(wind->imported_account_tree);
+
+    /* We don't know what data structures may have become corrupted,
+     * so we shouldn't allow further action. Display the failure
+     * page next, and just allow the user to cancel. */
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "failed_page"));
+    gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                      FALSE, FALSE, TRUE, TRUE);
   }
-  else {
+  else
+  {
+    /* Save the imported account tree. */
     scm_gc_unprotect_object(wind->imported_account_tree);
     wind->imported_account_tree = retval;
     scm_gc_protect_object(wind->imported_account_tree);
 
-    /* now detect duplicate transactions */ 
+    /* Detect duplicate transactions. */
     gnc_set_busy_cursor(NULL, TRUE);
-    retval = scm_call_3(find_duplicates, 
-			scm_c_eval_string("(gnc-get-current-root-account)"),
-			wind->imported_account_tree, window);
+    retval = scm_call_3(find_duplicates,
+                        scm_c_eval_string("(gnc-get-current-root-account)"),
+                        wind->imported_account_tree, window);
     gnc_unset_busy_cursor(NULL);
-    
+
+    /* Save the results. */
     scm_gc_unprotect_object(wind->match_transactions);
     wind->match_transactions = retval;
     scm_gc_protect_object(wind->match_transactions);
 
-    /* skip to the last page if we couldn't find duplicates 
-     * in the new group */
-    if((retval == SCM_BOOL_F) ||
-       (SCM_NULLP(retval))) {
-
-      gnc_resume_gui_refresh();
-      return FALSE;
+    /* Were any potential duplicates found? */
+    if (retval == SCM_BOOL_F)
+    {
+      /* An error occurred during duplicate checking. */
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "failed_page"));
+      gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                        FALSE, FALSE, TRUE, TRUE);
     }
-
-    /* otherwise, make up the display for the duplicates page */
-    view = GTK_TREE_VIEW(wind->new_transaction_view);
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-    gtk_list_store_clear(store);
-
-    while(!SCM_NULLP(retval)) {
-      current_xtn = SCM_CAAR(retval);
-      #define FUNC_NAME "xaccTransCountSplits"
-      gnc_xtn     = SWIG_MustGetPtr(current_xtn,
-                                    SWIG_TypeQuery("_p_Transaction"), 1, 0);
-      #undef FUNC_NAME
-      if(xaccTransCountSplits(gnc_xtn) > 2) {
-        amount_str = _("(split)"); 
-      }
-      else {
-	gnc_split = xaccTransGetSplit(gnc_xtn, 0);  
-        amount_str = 
-          xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
-                          gnc_account_print_info
-                          (xaccSplitGetAccount(gnc_split), TRUE));
-      }
-
-      gtk_list_store_append(store, &iter);
-      gtk_list_store_set
-	(store, &iter,
-	 QIF_TRANS_COL_INDEX, rownum++,
-	 QIF_TRANS_COL_DATE, gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn)),
-	 QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
-	 QIF_TRANS_COL_AMOUNT, amount_str,
-	 -1);
-
-      retval      = SCM_CDR(retval); 
+    else if (SCM_NULLP(retval))
+    {
+      /* No potential duplicates, so skip to the last page. */
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "end_page"));
     }
+    else
+    {
+      /* Prepare the duplicates page. */
+      gnc_ui_qif_import_prepare_duplicates(wind);
 
-    selection = gtk_tree_view_get_selection(view);
-    path = gtk_tree_path_new_from_indices (0, -1);
-    gtk_tree_selection_select_path(selection, path);
-    gtk_tree_path_free(path);
+      /* Display the next page. */
+      if (wind->show_doc_pages)
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_doc_page"));
+      else
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_duplicates_page"));
+    }
   }
 
   gnc_resume_gui_refresh();
   return TRUE;
+}
+
+
+/****************************************************************
+ * gnc_ui_qif_import_new_securities
+ *
+ * This function creates or updates the list of QIF securities
+ * for which no corresponding GnuCash commodity existed prior to
+ * import. If there are any such securities, TRUE is returned.
+ * Otherwise, FALSE is returned.
+ ****************************************************************/
+
+static gboolean
+gnc_ui_qif_import_new_securities(QIFImportWindow * wind)
+{
+  SCM updates;
+  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
+
+  /* Get a list of any new QIF securities since the previous call. */
+  updates = scm_call_3(update_stock, wind->stock_hash, 
+                       wind->ticker_map, wind->acct_map_info);
+  if (updates != SCM_BOOL_F)
+  {
+    /* A list of new QIF securities was returned. Save it. */
+    scm_gc_unprotect_object(wind->new_stocks);
+    if (wind->new_stocks != SCM_BOOL_F)
+      /* There is an existing list, so append the new list. */
+      wind->new_stocks = scm_append(scm_list_2(wind->new_stocks, updates));
+    else
+      wind->new_stocks = updates;
+    scm_gc_protect_object(wind->new_stocks);
+
+    return TRUE;
+  }
+
+  if (wind->new_stocks != SCM_BOOL_F)
+    return TRUE;
+
+  return FALSE;
 }
 
 
@@ -1391,63 +1582,61 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
                                gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM any_new      = scm_c_eval_string("qif-import:any-new-accts?");
-  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
-
-  int show_matches;
+  SCM any_new = scm_c_eval_string("qif-import:any-new-accts?");
   
   /* if any accounts are new, ask about the currency; else,
-   * just skip that page */
-  if((scm_call_1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
-     (scm_call_1(any_new, wind->cat_map_info) == SCM_BOOL_T)) {
+     just skip that page */
+  if ((scm_call_1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
+      (scm_call_1(any_new, wind->cat_map_info) == SCM_BOOL_T))
     /* go to currency page */ 
     return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
-  }
-  else {
+  else
+  {
     /* if we need to look at stocks, do that, otherwise import
-     * xtns and go to the duplicates page */
-    scm_gc_unprotect_object(wind->new_stocks);
-    wind->new_stocks = scm_call_3(update_stock, wind->stock_hash,
-				  wind->ticker_map, wind->acct_map_info);
-    scm_gc_protect_object(wind->new_stocks);
-    
-    if(wind->new_stocks != SCM_BOOL_F) {
-      if(wind->show_doc_pages) {
+       xtns and go to the duplicates page */
+    if (gnc_ui_qif_import_new_securities(wind))
+    {
+      if (wind->show_doc_pages)
         gnome_druid_set_page(GNOME_DRUID(wind->druid),
                              get_named_page(wind, "commodity_doc_page"));
-      }
-      else {
+      else
+      {
         gnc_ui_qif_import_commodity_prepare_cb(page, arg1, wind);
         gnome_druid_set_page(GNOME_DRUID(wind->druid),
                              GNOME_DRUID_PAGE(wind->commodity_pages->data));
       }
-      return TRUE;
     }
-    else {
-      /* it's time to import the accounts. */
-      show_matches = gnc_ui_qif_import_convert(wind);
-      
-      if(show_matches) {
-        if(wind->show_doc_pages) {
-          /* check for matches .. the docpage does it automatically */ 
-          gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                               get_named_page(wind, "match_doc_page"));
-        }
-        else {
-          gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                               get_named_page(wind, "match_duplicates_page"));
-        }
-      }
-      else {
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "end_page"));
-      }
-      return TRUE;
-    }
+    else
+      /* It's time to import the accounts. */
+      gnc_ui_qif_import_convert(wind);
+
+    return TRUE;
   }
 }
 
+/****************************************************************
+ * gnc_ui_qif_import_currency_back_cb
+ * Check to see if there are any payees and memos to show. If not
+ * jump to category match page.
+ ****************************************************************/
+static gboolean
+gnc_ui_qif_import_currency_back_cb(GnomeDruidPage * page, gpointer arg1, 
+                                  gpointer user_data)
+{
+  QIFImportWindow * wind = user_data;
   
+  if (!wind->memo_display_info ||
+      (wind->memo_display_info == SCM_BOOL_F) ||
+       SCM_NULLP(wind->memo_display_info))
+  {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         get_named_page(wind, "category_match_page"));
+    return TRUE;
+  } else {
+      return gnc_ui_qif_import_generic_back_cb(page, arg1, user_data);
+  }
+}
+
 /********************************************************************
  * gnc_ui_qif_import_currency_next_cb
  ********************************************************************/
@@ -1458,46 +1647,25 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
                                    gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
-  int show_matches;
 
   gnc_set_busy_cursor(NULL, TRUE);
-  scm_gc_unprotect_object(wind->new_stocks);
-  wind->new_stocks =  scm_call_3(update_stock, wind->stock_hash, 
-				 wind->ticker_map, wind->acct_map_info);
-  scm_gc_protect_object(wind->new_stocks);
   
-  if(wind->new_stocks != SCM_BOOL_F) {
-    if(wind->show_doc_pages) {
+  if (gnc_ui_qif_import_new_securities(wind))
+  {
+    /* There are new commodities, so show a commodity page next. */
+    if (wind->show_doc_pages)
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "commodity_doc_page"));
-    }
-    else {
+    else
+    {
       gnc_ui_qif_import_commodity_prepare_cb(page, arg1, user_data);
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            GNOME_DRUID_PAGE(wind->commodity_pages->data));
     }
   }
-  else {
-    /* it's time to import the accounts. */
-    show_matches = gnc_ui_qif_import_convert(wind);
-    
-    if(show_matches) {
-      if(wind->show_doc_pages) {
-        /* check for matches .. the docpage does it automatically */ 
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_doc_page"));
-      }
-      else {
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_duplicates_page"));
-      }
-    }
-    else {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "end_page"));
-    }
-  }
+  else
+    /* It's time to import the accounts. */
+    gnc_ui_qif_import_convert(wind);
 
   gnc_unset_busy_cursor(NULL);
   return TRUE;
@@ -1515,7 +1683,6 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   gchar *namespace       = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
   const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
-  int  show_matches;
 
   if(!namespace || (namespace[0] == 0)) {
     gnc_warning_dialog(wind->window,
@@ -1548,30 +1715,14 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   }
   g_free(namespace);
 
-  if(page == (g_list_last(wind->commodity_pages))->data) {
+  if(page == (g_list_last(wind->commodity_pages))->data)
+  {
     /* it's time to import the accounts. */
-    show_matches = gnc_ui_qif_import_convert(wind);
-    
-    if(show_matches) {
-      if(wind->show_doc_pages) {
-        /* check for matches .. the docpage does it automatically */ 
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_doc_page"));
-      }
-      else {
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_duplicates_page"));
-      }
-    }
-    else {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "end_page"));
-    } 
+    gnc_ui_qif_import_convert(wind);
     return TRUE;
   }
-  else {
+  else
     return FALSE;
-  }
 }
 
 
@@ -1590,67 +1741,71 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   SCM   hash_ref  = scm_c_eval_string("hash-ref");
   SCM   stocks;
   SCM   comm_ptr_token;
-  SCM   show_matches;
 
+  GList          * current;
   gnc_commodity  * commodity;
   GnomeDruidPage * back_page = get_named_page(wind, "commodity_doc_page");  
   QIFDruidPage   * new_page;
   
-  /* only set up once */
-  if(wind->commodity_pages) return;
-  
-  /* this shouldn't happen, but DTRT if it does */
-  if(SCM_NULLP(wind->new_stocks)) {
-    printf("somehow got to commodity doc page with nothing to do... BUG!\n");
-    if (gnc_ui_qif_import_convert(wind))
-      show_matches = SCM_BOOL_T;
-    else
-      show_matches = SCM_BOOL_F;
-    
-    if(show_matches) {
-      if(wind->show_doc_pages) {
-        /* check for matches .. the docpage does it automatically */ 
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_doc_page"));
+  /* This shouldn't happen, but do the right thing if it does. */
+  if (wind->new_stocks == SCM_BOOL_F || SCM_NULLP(wind->new_stocks))
+  {
+    g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
+    gnc_ui_qif_import_convert(wind);
+  }
+  else
+  {
+    /*
+     * Make druid pages for each new QIF security.
+     */
+    gnc_set_busy_cursor(NULL, TRUE);
+    stocks = wind->new_stocks;
+    current = wind->commodity_pages;
+    while (!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F))
+    {
+      if (current)
+      {
+        /* The page has already been made. */
+        back_page = GNOME_DRUID_PAGE(current->data);
+        current = current->next;
       }
-      else {
-        gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                             get_named_page(wind, "match_duplicates_page"));
+      else
+      {
+        /* Get the GnuCash commodity corresponding to the new QIF security. */
+        comm_ptr_token = scm_call_2(hash_ref,
+                                    wind->stock_hash,
+                                    SCM_CAR(stocks));
+        #define FUNC_NAME "make_qif_druid_page"
+        commodity = SWIG_MustGetPtr(comm_ptr_token,
+                                    SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
+        #undef FUNC_NAME
+
+        /* Add a druid page for the commodity. */
+        new_page = make_qif_druid_page(commodity);
+
+        g_signal_connect(new_page->page, "back",
+                         G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
+                         wind);
+
+        g_signal_connect(new_page->page, "next",
+                         G_CALLBACK(gnc_ui_qif_import_comm_check_cb),
+                         wind);
+
+        wind->commodity_pages = g_list_append(wind->commodity_pages, 
+                                              new_page->page);
+
+        gnome_druid_insert_page(GNOME_DRUID(wind->druid),
+                                back_page, 
+                                GNOME_DRUID_PAGE(new_page->page));
+        back_page = GNOME_DRUID_PAGE(new_page->page);
+        gtk_widget_show_all(new_page->page);
       }
+
+      stocks = SCM_CDR(stocks);
     }
-    else {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           get_named_page(wind, "end_page"));
-    } 
+
+    gnc_unset_busy_cursor(NULL);
   }
-
-  /* insert new pages, one for each stock */
-  gnc_set_busy_cursor(NULL, TRUE);
-  stocks = wind->new_stocks;
-  while(!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F)) {
-    comm_ptr_token = scm_call_2(hash_ref, wind->stock_hash, SCM_CAR(stocks));
-    #define FUNC_NAME "make_qif_druid_page"
-    commodity      = SWIG_MustGetPtr(comm_ptr_token,
-                                     SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
-    #undef FUNC_NAME
-    new_page = make_qif_druid_page(commodity);
-
-    g_signal_connect(new_page->page, "next",
-		     G_CALLBACK(gnc_ui_qif_import_comm_check_cb),
-		     wind);
-
-    wind->commodity_pages = g_list_append(wind->commodity_pages, 
-                                          new_page->page);
-
-    gnome_druid_insert_page(GNOME_DRUID(wind->druid),
-                            back_page, 
-                            GNOME_DRUID_PAGE(new_page->page));
-    back_page = GNOME_DRUID_PAGE(new_page->page);
-    
-    stocks = SCM_CDR(stocks);
-    gtk_widget_show_all(new_page->page);
-  }
-  gnc_unset_busy_cursor(NULL);
 
   gnc_druid_set_colors (GNOME_DRUID (wind->druid));
 }
@@ -1877,39 +2032,73 @@ gnc_ui_qif_import_duplicate_old_select_cb (GtkTreeSelection *selection,
   refresh_old_transactions(wind, row);
 }
 
+
+/********************************************************************
+ * gnc_ui_qif_import_check_acct_tree
+ * 
+ * Designed for use with gnc_main_window_foreach_page(), this
+ * function determines whether an account tab is open in the main
+ * window. The parameter user_data must point to a gboolean.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_check_acct_tree(GncPluginPage *page, gpointer user_data)
+{
+  gboolean *found = user_data;
+
+  if (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page) && found)
+    *found = TRUE;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_finish_cb
+ * 
+ * Invoked when the "Apply" button is clicked on the final page.
+ ********************************************************************/
+
 static void
 gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage, 
                             gpointer arg1, 
                             gpointer user_data)
 {
-  
   SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
   SCM   cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
   SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
   
   QIFImportWindow * wind = user_data;
+  GncPluginPage *page;
+  gboolean acct_tree_found = FALSE;
 
   gnc_suspend_gui_refresh();
 
-  /* prune the old transactions marked as dupes */
-  if(wind->match_transactions != SCM_BOOL_F) {
+  /* Prune any imported transactions that were determined to be duplicates. */
+  if (wind->match_transactions != SCM_BOOL_F)
     scm_call_1(prune_xtns, wind->match_transactions);
-  }
 
-  /* actually add in the new transactions. */
+  /* Merge the imported account tree with the existing one. */
   if (wind->imported_account_tree != SCM_BOOL_F)
     scm_call_2(cat_and_merge,
 	       scm_c_eval_string("(gnc-get-current-root-account)"),
 	       wind->imported_account_tree);
-  
+
   gnc_resume_gui_refresh();
-  
-  /* write out mapping info before destroying the window */
-  scm_apply(save_map_prefs, 
+
+  /* Save the user's mapping preferences. */
+  scm_apply(save_map_prefs,
 	    SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
 		      wind->memo_map_info, wind->stock_hash),
 	    SCM_EOL);
-  
+
+  /* Open an account tab in the main window if one doesn't exist already. */
+  gnc_main_window_foreach_page(gnc_ui_qif_import_check_acct_tree,
+                               &acct_tree_found);
+  if (!acct_tree_found)
+  {
+    page = gnc_plugin_page_account_tree_new();
+    gnc_main_window_open_page(NULL, page);
+  }
+
   gnc_ui_qif_import_druid_destroy(wind);  
 }
 
@@ -1967,6 +2156,7 @@ gnc_ui_qif_import_druid_make(void)
   
   QIFImportWindow * retval;
   GladeXML        * xml;
+  GError * err = NULL;
   SCM  load_map_prefs;
   SCM  mapping_info;
   SCM  create_ticker_map;
@@ -2053,7 +2243,11 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_categories_prepare_cb",
      G_CALLBACK (gnc_ui_qif_import_categories_prepare_cb), retval);
-
+  
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_categories_next_cb",
+     G_CALLBACK (gnc_ui_qif_import_categories_next_cb), retval);
+  
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_prepare_cb",
      G_CALLBACK (gnc_ui_qif_import_memo_prepare_cb), retval);
@@ -2061,7 +2255,11 @@ gnc_ui_qif_import_druid_make(void)
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_next_cb",
      G_CALLBACK (gnc_ui_qif_import_memo_next_cb), retval);
-
+  
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_qif_import_currency_back_cb",
+     G_CALLBACK (gnc_ui_qif_import_currency_back_cb), retval);
+  
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_currency_next_cb",
      G_CALLBACK (gnc_ui_qif_import_currency_next_cb), retval);
@@ -2111,8 +2309,19 @@ gnc_ui_qif_import_druid_make(void)
   retval->doc_pages        = NULL;
   retval->commodity_pages = NULL;
 
+  /* Get the user's preference for showing documentation pages. */
   retval->show_doc_pages = 
-    gnc_gconf_get_bool("dialogs/import/qif", "show_doc", NULL);
+    gnc_gconf_get_bool(GCONF_SECTION, GCONF_NAME_SHOW_DOC, &err);
+  if (err != NULL) {
+    g_warning("QIF import: gnc_gconf_get_bool error: %s\n", err->message);
+    g_error_free(err);
+
+    /* Show documentation pages by default. */
+    g_warning("QIF import: Couldn't get %s setting from gconf.\n",
+              GCONF_NAME_SHOW_DOC);
+    g_warning("QIF import: Documentation pages will be shown by default.\n");
+    retval->show_doc_pages = TRUE;
+  }
 
   for(i=0; i < NUM_PRE_PAGES; i++) {
     retval->pre_comm_pages = 

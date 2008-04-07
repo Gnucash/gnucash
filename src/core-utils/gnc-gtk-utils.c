@@ -43,8 +43,9 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  const gchar *tree_string;
+  gchar *tree_string;
   gint column, index, id;
+  gboolean match;
 
   model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
   if (!gtk_tree_model_get_iter_first(model, &iter)) {
@@ -56,7 +57,9 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
   column = gtk_combo_box_entry_get_text_column(cbe);
   do {
     gtk_tree_model_get(model, &iter, column, &tree_string, -1);
-    if (g_utf8_collate(text, tree_string) != 0)
+    match = g_utf8_collate(text, tree_string) == 0;
+    g_free(tree_string);
+    if (!match)
       continue;
 
     /* Found a matching string */
@@ -120,6 +123,7 @@ gnc_cbe_match_selected_cb (GtkEntryCompletion *completion,
   column = gtk_combo_box_entry_get_text_column(cbe);
   gtk_tree_model_get(comp_model, comp_iter, column, &text, -1);
   gnc_cbe_set_by_string(cbe, text);
+  g_free(text);
   return FALSE;
 }
 

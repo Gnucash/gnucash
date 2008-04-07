@@ -99,6 +99,7 @@ void
 gnc_druid_set_colors (GnomeDruid *druid)
 {
   GList *pages = gtk_container_get_children (GTK_CONTAINER (druid));
+  GList *item = pages;
   GdkColor bluish;
   GdkColor white;
   GdkColormap *cm;
@@ -119,9 +120,9 @@ gnc_druid_set_colors (GnomeDruid *druid)
   gdk_colormap_alloc_color(cm, &bluish, FALSE, TRUE);
   gdk_colormap_alloc_color(cm, &white, FALSE, TRUE);
 
-  while (pages != NULL)
+  while (item != NULL)
   {
-    GnomeDruidPage *page = GNOME_DRUID_PAGE (pages->data);
+    GnomeDruidPage *page = GNOME_DRUID_PAGE (item->data);
 
     if (GNOME_IS_DRUID_PAGE_EDGE (page))
     {
@@ -140,6 +141,7 @@ gnc_druid_set_colors (GnomeDruid *druid)
       gnome_druid_page_standard_set_logo_background (page_standard, &bluish);
       gnome_druid_page_standard_set_title_foreground (page_standard, &white);
     }    
-    pages = g_list_next (pages);
+    item = item->next;
   }
+  g_list_free(pages);
 }

@@ -528,6 +528,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
+ 'report-guid "f8748b813fab4220ba26e743aedf38da"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator cash-flow-options-generator
  'renderer cash-flow-renderer)

@@ -17,7 +17,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
   <signal name="response" handler="gnc_book_close_response_cb" last_modification_time="Mon, 24 Dec 2007 03:23:33 GMT"/>
 

@@ -1,0 +1,24 @@
+GC-export_en.xls
+----------------
+
+From: Jannick Asmus <jannick.news gmail com>
+http://lists.gnucash.org/pipermail/gnucash-devel/2008-January/022342.html
+
+I have attached an Excel2003 file for exporting data out of GC to Excel. It
+works pretty easily - even for non-advanced users. I checked it for Excel2003
+having some new XML features now and I suspect it is compatible with
+Excel2007 upwards. I did not check whether OpenOffice-Calc provides such
+XML-features.
+
+Once the data are exported from GC to Excel, they can be processed for other
+purposes.
+
+How to export data out of GC to Excel:
+
+- save GC-file in the uncompressed mode
+- open GC-export_en.xls (with Excel2003 upwards)
+- Excel: Data > XML > Import > choose GC-file (I just guessed the translation
+from German where it is "Daten > XML > Importieren > GX-file auswählen"
+
+... done: The sheets with the chart of accounts, transactions, clients, tax,
+billing terms are filled !!! :-) Other categories can be added if needed.

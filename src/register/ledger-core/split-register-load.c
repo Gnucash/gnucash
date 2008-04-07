@@ -249,8 +249,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
       if (!currency)
       {
 	gnc_info_dialog(NULL, "%s",
-			_("Could not compute the currency for this register.  "
-			  "Using the locale currency."));
+			_("Could not determine the account currency.  "
+			  "Using the default currency provided by your system."));
       }
     }
 

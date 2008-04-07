@@ -40,10 +40,10 @@ libgnc_backend_xml_utils_la_SOURCES = \
   sixtp.c
 
 libgncmod_backend_xml_la_SOURCES = \
-  gnc-backend-xml.c
+  gnc-backend-file.c
 
 noinst_HEADERS = \
-  gnc-backend-xml.h \
+  gnc-backend-file.h \
   gnc-xml.h \
   gnc-xml-helper.h \
   io-example-account.h \

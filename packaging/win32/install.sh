@@ -45,7 +45,7 @@ function prepare() {
     level1=$(basename ${_REPOS_UDIR})
     level2=$(basename $(dirname ${_REPOS_UDIR}))"/"$level1
     for mydir in $level0 $level1 $level2; do
-        if [ -f $mydir/make-gnucash-patch.in ]; then
+        if [ -f $mydir/make-gnucash-potfiles.in ]; then
             die "Do not save install.sh in the repository or one its parent directories"
         fi
     done
@@ -1027,15 +1027,19 @@ function inst_gnucash() {
                 gnucash
         qpopd
 
-        make install
+        make_install
     qpopd
+}
+
+function make_install() {
+    make install
 
     qpushd $_INSTALL_UDIR/lib
         # Move modules that are compiled without -module to lib/gnucash and
         # correct the 'dlname' in the libtool archives. We do not use these
         # files to dlopen the modules, so actually this is unneeded.
         # Also, in all installed .la files, remove the dependency_libs line
-        mv bin/*.dll gnucash || true
+        mv bin/*.dll gnucash 2>/dev/null || true
         for A in gnucash/*.la; do
             sed '/dependency_libs/d;s#../bin/##' $A > tmp ; mv tmp $A
         done
@@ -1045,7 +1049,7 @@ function inst_gnucash() {
 
         # gettext 0.17 installs translations to \share\locale, but not all
         # gnome packages have been recompiled against it
-        cp -a locale ../share && rm -rf locale
+        [ -d locale ] && cp -a locale ../share && rm -rf locale
     qpopd
 
     qpushd $_INSTALL_UDIR/etc/gconf/schemas
@@ -1059,6 +1063,7 @@ function inst_gnucash() {
 
     # Create a startup script that works without the msys shell
     qpushd $_INSTALL_UDIR/bin
+        echo "setlocal" > gnucash.bat
         echo "set PATH=${INSTALL_DIR}\\bin;${INSTALL_DIR}\\lib;${INSTALL_DIR}\\lib\\gnucash;${GOFFICE_DIR}\\bin;${LIBGSF_DIR}\\bin;${PCRE_DIR}\\bin;${GNOME_DIR}\\bin;${LIBXML2_DIR}\\bin;${GUILE_DIR}\\bin;${REGEX_DIR}\\bin;${AUTOTOOLS_DIR}\\bin;${AQBANKING_PATH};${LIBOFX_DIR}\\bin;${OPENSP_DIR}\\bin;${LIBGDA_DIR}\\bin;%PATH%" > gnucash.bat
         echo "set GUILE_WARN_DEPRECATED=no" >> gnucash.bat
         echo "set GNC_MODULE_PATH=${INSTALL_DIR}\\lib\\gnucash" >> gnucash.bat
@@ -1164,11 +1169,9 @@ function finish() {
     fi
 }
 
-prepare
 for step in "${steps[@]}" ; do
     eval $step
 done
-finish
 qpopd
 
 

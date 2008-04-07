@@ -69,7 +69,7 @@ acct_tree_add_accts(SCM accts,
     current = SCM_CAR(accts);
 
     if(SCM_NULLP(current)) {
-      printf(" ** BUG in acct tree .. grib fix me! (everybody else ignore)\n");
+      g_critical("QIF import: BUG DETECTED in acct_tree_add_accts!");
       accts = SCM_CDR(accts);
       continue;
     }
@@ -199,12 +199,10 @@ gnc_ui_qif_account_picker_changed_cb (GtkTreeSelection *selection,
   SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gchar *name;
 
   g_free(wind->selected_name);
   if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-    gtk_tree_model_get(model, &iter, ACCOUNT_COL_FULLNAME, &name, -1);
-    wind->selected_name = g_strdup(name);
+    gtk_tree_model_get(model, &iter, ACCOUNT_COL_FULLNAME, &wind->selected_name, -1);
     scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(wind->selected_name));
   } else {
     wind->selected_name = NULL;

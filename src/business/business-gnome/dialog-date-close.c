@@ -103,9 +103,7 @@ fill_in_acct_info (DialogDateClose *ddc)
   gnc_account_sel_set_acct_filters( gas, ddc->acct_types );
   gnc_account_sel_set_new_account_ability( gas, TRUE );
   gnc_account_sel_set_new_account_modal( gas, TRUE );
-
-  /* XXX: Some way to remember the last selection? */
-  gnc_account_sel_set_account( gas, NULL );
+  gnc_account_sel_set_account( gas, ddc->acct );
 }
 
 static void
@@ -248,6 +246,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
   ddc->ts2 = post;
   ddc->book = book;
   ddc->acct_types = acct_types;
+  ddc->acct = *acct;
   ddc->memo = memo;
   ddc->terms = terms;
 
@@ -357,6 +356,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   ddc->ts = date;
   ddc->book = book;
   ddc->acct_types = acct_types;
+  ddc->acct = *acct;
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
@@ -364,6 +364,8 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
   acct_box = glade_xml_get_widget (xml, "acct_hbox");
   ddc->acct_combo = gnc_account_sel_new();
+  if (*acct)
+    gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct);
   gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
   date_box = glade_xml_get_widget (xml, "date_box");

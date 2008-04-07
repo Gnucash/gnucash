@@ -6,9 +6,11 @@
 ;;;  Copyright 2000-2001 Bill Gribble <grib@billgribble.com> 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  find-or-make-acct:
-;;  given a colon-separated account path, return an Account* to
+;;  qif-import:find-or-make-acct
+;;
+;;  Given a colon-separated account path, return an Account* to
 ;;  an existing or new account.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -49,28 +51,26 @@
                   (string-append short-name (sprintf #f " %a" count)))))
           short-name))
     
-    ;; just because we found an account doesn't mean we can use it.
-    ;; if the name is in use but the commodity, or type are
-    ;; incompatible, we need to create a new account with a modified
-    ;; name.
+    ;; If a GnuCash account already exists in the old root with the same
+    ;; name, that doesn't necessarily mean we can use it. The type and
+    ;; commodity must be  compatible.
     (if (and same-gnc-account (not (null? same-gnc-account))) 
         (if (compatible? same-gnc-account)
             (begin 
-              ;; everything is ok, so we can just use the same
-              ;; account.  Make sure we make the same type. 
+              ;; The existing GnuCash account is compatible, so we
+              ;; can use it. Make sure we use the same type. 
               (set! make-new-acct #f)
               (set! incompatible-acct #f)
               (set! allowed-types 
                     (list (xaccAccountGetType same-gnc-account))))
             (begin 
-              ;; there's an existing account with that name, so we
-              ;; have to make a new acct with different properties and
-              ;; something to indicate that it's different
+              ;; There's an existing, incompatible account with that name,
+              ;; so we have to make a new account with different properties
+              ;; and a slightly different name.
               (set! make-new-acct #t)
               (set! incompatible-acct #t)))
         (begin 
-          ;; otherwise, there is no existing account with the same 
-          ;; name.
+          ;; Otherwise, there's no existing account with the same name.
           (set! make-new-acct #t)
           (set! incompatible-acct #f)))
     
@@ -84,8 +84,35 @@
               (parent-acct #f)
               (parent-name #f)
               (acct-name #f)
-              (last-colon #f))
-          (set! last-colon (string-rindex gnc-name separator))
+              (last-sep #f))
+
+          ;; This procedure returns a default account type.  This could
+          ;; be smarter, but at least it won't allow security account
+          ;; types to be used on currency-denominated accounts.
+          (define (default-account-type allowed-types currency?)
+            (if (or (not allowed-types)
+                    (null? allowed-types))
+                ;; None of the allowed types are compatible.
+                ;; Bug detected!
+                (throw 'bug
+                       "qif-import:find-or-make-acct"
+                       "No valid account types allowed for account ~A."
+                       (list acct-name)
+                       #f)
+                (if (memv (car allowed-types) (list GNC-STOCK-TYPE
+                                                    GNC-MUTUAL-TYPE))
+                    ;; The type is incompatible with a currency.
+                    (if currency?
+                      (default-account-type (cdr allowed-types)
+                                            currency?)
+                      (car allowed-types))
+                    ;; The type is compatible with a currency.
+                    (if currency?
+                      (car allowed-types)
+                      (default-account-type (cdr allowed-types)
+                                            currency?)))))
+
+          (set! last-sep (string-rindex gnc-name separator))
           
           (xaccAccountBeginEdit new-acct)
           
@@ -107,30 +134,29 @@
                 (xaccAccountSetCode
                  new-acct (xaccAccountGetCode same-gnc-account))))
           
-          ;; make sure that if this is a nested account foo:bar:baz,
-          ;; foo:bar and foo exist also.
-          (if last-colon
+          ;; If this is a nested account foo:bar:baz, make sure
+          ;; that foo:bar and foo exist also.
+          (if last-sep
               (begin 
-                (set! parent-name (substring gnc-name 0 last-colon))
-                (set! acct-name (substring gnc-name (+ 1 last-colon) 
+                (set! parent-name (substring gnc-name 0 last-sep))
+                (set! acct-name (substring gnc-name (+ 1 last-sep) 
                                            (string-length gnc-name))))
-              (begin 
-                (set! acct-name gnc-name)))
+              (set! acct-name gnc-name))
           
-          ;; if this is a new account, use the 
-          ;; parameters passed in
+          ;; If this is a completely new account (as opposed to a copy
+          ;; of an existing account), use the parameters passed in.
           (if make-new-acct
               (begin 
-                ;; set the name, description, etc.
+                ;; Set the name, description, and commodity.
                 (xaccAccountSetName new-acct acct-name)
                 (if (qif-map-entry:description acct-info)
                     (xaccAccountSetDescription
                      new-acct (qif-map-entry:description acct-info)))
                 (xaccAccountSetCommodity new-acct commodity)
                 
-                ;; if it's an incompatible account, set the
-                ;; name to be unique, and a description that 
-                ;; hints what's happening 
+                ;; If there was an existing, incompatible account with
+                ;; the same name, set the new account name to be unique,
+                ;; and set a description that hints at what's happened.
                 (if incompatible-acct
                     (let ((new-name (make-unique-name-variant 
                                      gnc-name acct-name)))
@@ -139,13 +165,15 @@
                        new-acct 
                        (_ "QIF import: Name conflict with another account."))))
                 
-                ;; set the account type.  this could be smarter. 
-                (if (qif-map-entry:allowed-types acct-info)
-                    (xaccAccountSetType
-                     new-acct (car (qif-map-entry:allowed-types acct-info))))))
+                ;; Set the account type.
+                (xaccAccountSetType new-acct
+                                    (default-account-type
+                                      (qif-map-entry:allowed-types acct-info)
+                                      (gnc-commodity-is-currency commodity)))))
           (xaccAccountCommitEdit new-acct)
 
-          (if last-colon
+          ;; If a parent account is needed, find or make it.
+          (if last-sep
               (let ((pinfo (make-qif-map-entry)))
                 (qif-map-entry:set-qif-name! pinfo parent-name)
                 (qif-map-entry:set-gnc-name! pinfo parent-name)
@@ -176,187 +204,192 @@
                                qif-acct-map qif-cat-map 
                                qif-memo-map stock-map 
                                default-currency-name window)
-  (gnc:backtrace-if-exception 
-   (lambda ()
-     (let* ((old-root (gnc-get-current-root-account))
-	    (new-root (xaccMallocAccount (gnc-get-current-book)))
-            (gnc-acct-hash (make-hash-table 20))
-            (separator (string-ref (gnc-get-account-separator-string) 0))
-            (default-currency 
-              (gnc-commodity-table-find-full
-               (gnc-commodity-table-get-table (gnc-get-current-book))
-               GNC_COMMODITY_NS_CURRENCY default-currency-name))
-            (sorted-accounts-list '())
-            (markable-xtns '())
-            (sorted-qif-files-list 
-             (sort qif-files-list 
-                   (lambda (a b)
-                     (> (length (qif-file:xtns a)) 
-                        (length (qif-file:xtns b))))))
-            (progress-dialog '())
-            (work-to-do 0)
-            (work-done 0))
+  (let ((progress-dialog '())
+        (retval #f))
+    (set! retval
+      (gnc:backtrace-if-exception 
+       (lambda ()
+         (let* ((old-root (gnc-get-current-root-account))
+                (new-root (xaccMallocAccount (gnc-get-current-book)))
+                (gnc-acct-hash (make-hash-table 20))
+                (separator (string-ref (gnc-get-account-separator-string) 0))
+                (default-currency 
+                  (gnc-commodity-table-find-full
+                   (gnc-commodity-table-get-table (gnc-get-current-book))
+                   GNC_COMMODITY_NS_CURRENCY default-currency-name))
+                (sorted-accounts-list '())
+                (markable-xtns '())
+                (sorted-qif-files-list 
+                 (sort qif-files-list 
+                       (lambda (a b)
+                         (> (length (qif-file:xtns a)) 
+                            (length (qif-file:xtns b))))))
+                (work-to-do 0)
+                (work-done 0))
        
-       ;; first, build a local account tree that mirrors the gnucash
-       ;; accounts in the mapping data.  we need to iterate over the
-       ;; cat-map and the acct-map to build the list
-       (hash-fold 
-        (lambda (k v p)
-          (if (qif-map-entry:display? v)
-              (set! sorted-accounts-list
-                    (cons v sorted-accounts-list)))
-          #t)
-        #t qif-acct-map)
+           ;; first, build a local account tree that mirrors the gnucash
+           ;; accounts in the mapping data.  we need to iterate over the
+           ;; cat-map and the acct-map to build the list
+           (hash-fold 
+            (lambda (k v p)
+              (if (qif-map-entry:display? v)
+                  (set! sorted-accounts-list
+                        (cons v sorted-accounts-list)))
+              #t)
+            #t qif-acct-map)
 
-       (hash-fold 
-        (lambda (k v p)
-          (if (qif-map-entry:display? v)
-              (set! sorted-accounts-list
-                    (cons v sorted-accounts-list)))
-          #t)
-        #t qif-cat-map)
+           (hash-fold 
+            (lambda (k v p)
+              (if (qif-map-entry:display? v)
+                  (set! sorted-accounts-list
+                        (cons v sorted-accounts-list)))
+              #t)
+            #t qif-cat-map)
 
-       (hash-fold 
-        (lambda (k v p)
-          (if (qif-map-entry:display? v)
-              (set! sorted-accounts-list
-                    (cons v sorted-accounts-list)))
-          #t)
-        #t qif-memo-map)
+           (hash-fold 
+            (lambda (k v p)
+              (if (qif-map-entry:display? v)
+                  (set! sorted-accounts-list
+                        (cons v sorted-accounts-list)))
+              #t)
+            #t qif-memo-map)
        
-       ;; sort the account info on the depth of the account path.  if a
-       ;; short part is explicitly mentioned, make sure it gets created
-       ;; before the deeper path, which will create the parent accounts
-       ;; without the information about their type.
-       (set! sorted-accounts-list 
-             (sort sorted-accounts-list 
-                   (lambda (a b)
-                     (let ((a-depth 
-                            (length 
-                             (string-split (qif-map-entry:gnc-name a) 
-                                           separator)))
-                           (b-depth 
-                            (length 
-                             (string-split (qif-map-entry:gnc-name b) 
-                                           separator))))
-                       (< a-depth b-depth)))))
+           ;; sort the account info on the depth of the account path.  if a
+           ;; short part is explicitly mentioned, make sure it gets created
+           ;; before the deeper path, which will create the parent accounts
+           ;; without the information about their type.
+           (set! sorted-accounts-list 
+                 (sort sorted-accounts-list 
+                       (lambda (a b)
+                         (let ((a-depth 
+                                (length 
+                                 (string-split (qif-map-entry:gnc-name a) 
+                                               separator)))
+                               (b-depth 
+                                (length 
+                                 (string-split (qif-map-entry:gnc-name b) 
+                                               separator))))
+                           (< a-depth b-depth)))))
        
-       ;; make all the accounts 
-       (for-each 
-        (lambda (acctinfo)
-          (let* ((security 
-                  (and stock-map 
-                       (hash-ref stock-map 
-                                 (qif-import:get-account-name 
-                                  (qif-map-entry:qif-name acctinfo)))))
-                 (ok-types (qif-map-entry:allowed-types acctinfo))
-                 (equity? (memv GNC-EQUITY-TYPE ok-types))
-		 (stock? (or (memv GNC-STOCK-TYPE ok-types)
-			     (memv GNC-MUTUAL-TYPE ok-types))))
+           ;; make all the accounts 
+           (for-each 
+            (lambda (acctinfo)
+              (let* ((security 
+                      (and stock-map 
+                           (hash-ref stock-map 
+                                     (qif-import:get-account-name 
+                                      (qif-map-entry:qif-name acctinfo)))))
+                     (ok-types (qif-map-entry:allowed-types acctinfo))
+                     (equity? (memv GNC-EQUITY-TYPE ok-types))
+                     (stock? (or (memv GNC-STOCK-TYPE ok-types)
+                                 (memv GNC-MUTUAL-TYPE ok-types))))
             
-	    ;; Debug
-	    ;; (for-each
-	    ;;  (lambda (expr)
-	    ;;    (display expr))
-	    ;;  (list "Account: " acctinfo "\nsecurity = " security 
-	    ;;	   "\nequity? = " equity? 
-	    ;;	   "\n"))
+                ;; Debug
+                ;; (for-each
+                ;;  (lambda (expr)
+                ;;    (display expr))
+                ;;  (list "Account: " acctinfo "\nsecurity = " security 
+                ;;     "\nequity? = " equity? 
+                ;;     "\n"))
 
-            (cond ((and equity? security)  ;; a "retained holdings" acct
-                   (qif-import:find-or-make-acct acctinfo #f
-                                                 security #t default-currency
-                                                 gnc-acct-hash 
-                                                 old-root new-root))
-                  ((and security (or stock?
-				     (gnc-commodity-is-currency security)))
-                   (qif-import:find-or-make-acct 
-                    acctinfo #f security #t default-currency
-                    gnc-acct-hash old-root new-root))
-                  (#t 
-                   (qif-import:find-or-make-acct 
-                    acctinfo #f default-currency #t default-currency
-                    gnc-acct-hash old-root new-root)))))
-        sorted-accounts-list)
+                (cond ((and equity? security)  ;; a "retained holdings" acct
+                       (qif-import:find-or-make-acct acctinfo #f
+                                                     security #t
+                                                     default-currency
+                                                     gnc-acct-hash 
+                                                     old-root new-root))
+                      ((and security (or stock?
+                                         (gnc-commodity-is-currency security)))
+                       (qif-import:find-or-make-acct 
+                        acctinfo #f security #t default-currency
+                        gnc-acct-hash old-root new-root))
+                      (#t 
+                       (qif-import:find-or-make-acct 
+                        acctinfo #f default-currency #t default-currency
+                        gnc-acct-hash old-root new-root)))))
+            sorted-accounts-list)
        
-       ;; before trying to mark transactions, prune down the list of 
-       ;; ones to match. 
-       (for-each 
-        (lambda (qif-file)
-          (for-each 
-           (lambda (xtn)
-             (set! work-to-do (+ 1 work-to-do))
-             (let splitloop ((splits (qif-xtn:splits xtn)))             
-               (if (qif-split:category-is-account? (car splits))
-                   (begin 
-                     (set! markable-xtns (cons xtn markable-xtns))
-                     (set! work-to-do (+ 1 work-to-do)))
-                   (if (not (null? (cdr splits)))
-                       (splitloop (cdr splits))))))
-           (qif-file:xtns qif-file)))
-        qif-files-list)
+           ;; before trying to mark transactions, prune down the list of 
+           ;; ones to match. 
+           (for-each 
+            (lambda (qif-file)
+              (for-each 
+               (lambda (xtn)
+                 (set! work-to-do (+ 1 work-to-do))
+                 (let splitloop ((splits (qif-xtn:splits xtn)))             
+                   (if (qif-split:category-is-account? (car splits))
+                       (begin 
+                         (set! markable-xtns (cons xtn markable-xtns))
+                         (set! work-to-do (+ 1 work-to-do)))
+                       (if (not (null? (cdr splits)))
+                           (splitloop (cdr splits))))))
+               (qif-file:xtns qif-file)))
+            qif-files-list)
        
-       (if (> work-to-do 100)
-           (begin 
-             (set! progress-dialog (gnc-progress-dialog-new window #f))
-             (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
-             (gnc-progress-dialog-set-heading progress-dialog
-                                              (_ "Importing transactions..."))))
+           (if (> work-to-do 100)
+               (begin 
+                 (set! progress-dialog (gnc-progress-dialog-new window #f))
+                 (gnc-progress-dialog-set-title progress-dialog (_ "Progress"))
+                 (gnc-progress-dialog-set-heading progress-dialog
+                                             (_ "Importing transactions..."))))
        
 
-       ;; now run through the markable transactions marking any
-       ;; duplicates.  marked transactions/splits won't get imported.
-       (if (> (length markable-xtns) 1)
-           (let xloop ((xtn (car markable-xtns))
-                       (rest (cdr markable-xtns)))
-             (set! work-done (+ 1 work-done))
-             (if (not (null? progress-dialog)) 
-                 (begin 
-                   (gnc-progress-dialog-set-value
-                    progress-dialog (/ work-done work-to-do))
-                   (gnc-progress-dialog-update progress-dialog)))
-             (if (not (qif-xtn:mark xtn))
-                 (qif-import:mark-matching-xtns xtn rest))
-             (if (not (null? (cdr rest)))
-                 (xloop (car rest) (cdr rest)))))
+           ;; now run through the markable transactions marking any
+           ;; duplicates.  marked transactions/splits won't get imported.
+           (if (> (length markable-xtns) 1)
+               (let xloop ((xtn (car markable-xtns))
+                           (rest (cdr markable-xtns)))
+                 (set! work-done (+ 1 work-done))
+                 (if (not (null? progress-dialog)) 
+                     (begin 
+                       (gnc-progress-dialog-set-value
+                        progress-dialog (/ work-done work-to-do))
+                       (gnc-progress-dialog-update progress-dialog)))
+                 (if (not (qif-xtn:mark xtn))
+                     (qif-import:mark-matching-xtns xtn rest))
+                 (if (not (null? (cdr rest)))
+                     (xloop (car rest) (cdr rest)))))
        
-       ;; iterate over files. Going in the sort order by number of 
-       ;; transactions should give us a small speed advantage.
-       (for-each 
-        (lambda (qif-file)
-          (for-each 
-           (lambda (xtn)
-             (set! work-done (+ 1 work-done))
-             (if (not (null? progress-dialog)) 
-                 (begin 
-                   (gnc-progress-dialog-set-value
-                    progress-dialog (/ work-done work-to-do))
-                   (gnc-progress-dialog-update progress-dialog)))
-             (if (not (qif-xtn:mark xtn))
-                 (begin 
-                   ;; create and fill in the GNC transaction
-                   (let ((gnc-xtn (xaccMallocTransaction
-                                   (gnc-get-current-book))))
-                     (xaccTransBeginEdit gnc-xtn)
+           ;; iterate over files. Going in the sort order by number of 
+           ;; transactions should give us a small speed advantage.
+           (for-each 
+            (lambda (qif-file)
+              (for-each 
+               (lambda (xtn)
+                 (set! work-done (+ 1 work-done))
+                 (if (not (null? progress-dialog)) 
+                     (begin 
+                       (gnc-progress-dialog-set-value
+                        progress-dialog (/ work-done work-to-do))
+                       (gnc-progress-dialog-update progress-dialog)))
+                 (if (not (qif-xtn:mark xtn))
+                     (begin 
+                       ;; create and fill in the GNC transaction
+                       (let ((gnc-xtn (xaccMallocTransaction
+                                       (gnc-get-current-book))))
+                         (xaccTransBeginEdit gnc-xtn)
 
-                     ;; FIXME. This is probably wrong
-                     (xaccTransSetCurrency gnc-xtn
-                                                   (gnc-default-currency))
+                         ;; FIXME. This is probably wrong
+                         (xaccTransSetCurrency gnc-xtn (gnc-default-currency))
 
-                     ;; build the transaction
-                     (qif-import:qif-xtn-to-gnc-xtn 
-                      xtn qif-file gnc-xtn gnc-acct-hash 
-                      qif-acct-map qif-cat-map qif-memo-map)
-                     
-                     ;; rebalance and commit everything
-                     (xaccTransCommitEdit gnc-xtn)))))
-           (qif-file:xtns qif-file)))
-        sorted-qif-files-list)
-       
-       ;; get rid of the progress dialog 
-       (if (not (null? progress-dialog))
-           (gnc-progress-dialog-destroy progress-dialog))
-       
-       new-root))))
+                         ;; build the transaction
+                         (qif-import:qif-xtn-to-gnc-xtn 
+                          xtn qif-file gnc-xtn gnc-acct-hash 
+                          qif-acct-map qif-cat-map qif-memo-map)
+
+                         ;; rebalance and commit everything
+                         (xaccTransCommitEdit gnc-xtn)))))
+               (qif-file:xtns qif-file)))
+            sorted-qif-files-list)
+
+           new-root))))
+
+    ;; Get rid of the progress dialog (if any).
+    (if (not (null? progress-dialog))
+        (gnc-progress-dialog-destroy progress-dialog))
+
+    retval))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn
@@ -379,6 +412,7 @@
         (qif-security (qif-xtn:security-name qif-xtn))
         (qif-default-split (qif-xtn:default-split qif-xtn))
         (qif-memo #f)
+        (qif-date (qif-xtn:date qif-xtn))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
         (qif-cleared (qif-xtn:cleared qif-xtn))
         (n- (lambda (n) (gnc-numeric-neg n)))
@@ -387,8 +421,24 @@
         (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
         (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
     
-    ;; set properties of the whole transaction     
-    (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))
+    ;; Set properties of the whole transaction.
+
+    ;; Set the transaction date.
+    (cond
+      ((not qif-date)
+        (throw 'bad-date
+               "qif-import:qif-xtn-to-gnc-xtn"
+               "Missing transaction date."
+               #f
+               #f))
+      ((< (list-ref qif-date 2) 1970)
+        (throw 'bad-date
+               "qif-import:qif-xtn-to-gnc-xtn"
+               "Invalid transaction year (~A)."
+               (list (list-ref qif-date 2))
+               #f))
+      (else
+        (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))))
     
     ;; fixme: bug #105 
     (if qif-payee
@@ -455,30 +505,33 @@
                    
                    ;; figure out what the far acct is
                    (cond 
-                    ;; if the category is valid, use that.  look it up
-                    ;; in the acct-hash if it's an account.
+                    ;; If the category is an account, use the account mapping.
                     ((and (not (string=? cat ""))
                           (qif-split:category-is-account? qif-split))
                      (set! far-acct-info (hash-ref qif-acct-map cat)))
                     
-                    ;; .. look it up in the cat-hash if it's a category 
+                    ;; Otherwise, if it isn't empty, use the category mapping.
                     ((not (string=? cat ""))
                      (set! far-acct-info (hash-ref qif-cat-map cat)))
 
-                    ;; otherwise, try to find the payee in the
-                    ;; memo-map if it's likely to have been used (only
-                    ;; 1 split).  then try the memo.  if neither
-                    ;; works, go back to the Unspecified account.
+                    ;; Otherwise, for non-split QIF transactions, try a payee
+                    ;; mapping, and if that doesn't work, try mapping the
+                    ;; transaction memo. For split transactions, map the memo
+                    ;; for this particular split line. If all else fails, use
+                    ;; the default category mapping (the Unspecified account,
+                    ;; unless the user has changed it).
                     (#t
                      (set! far-acct-info 
-                           (or 
-                            (and (string? qif-payee)
-                                 (not (string=? qif-payee ""))
-                                 (= (length splits) 1)
-                                 (hash-ref qif-memo-map qif-payee))
-                            (and (string? memo)
-                                 (not (string=? memo ""))
-                                 (hash-ref qif-memo-map memo))))
+                           (if (= (length splits) 1)
+                               (or (and (string? qif-payee)
+                                        (not (string=? qif-payee ""))
+                                        (hash-ref qif-memo-map qif-payee))
+                                   (and (string? qif-memo)
+                                        (not (string=? qif-memo ""))
+                                        (hash-ref qif-memo-map qif-memo)))
+                               (and (string? memo)
+                                    (not (string=? memo ""))
+                                    (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
                          (set! far-acct-info (hash-ref qif-cat-map cat)))))
 
@@ -525,15 +578,38 @@
                (gnc-far-split (xaccMallocSplit (gnc-get-current-book))))
           
           (if (not num-shares) (set! num-shares (gnc-numeric-zero)))
-          (if (not share-price) (set! share-price (gnc-numeric-zero)))
-          (if (not split-amt) (set! split-amt (n* num-shares share-price)))
+
+          ;; Determine the extended price of all shares without commission.
+          (if xtn-amt
+              ;; Adjust for commission (if any).
+              (if commission-amt
+                  (case qif-action
+                    ((sell sellx shrsout)
+                     (set! split-amt (n+ xtn-amt commission-amt)))
+                    (else
+                     (set! split-amt (nsub xtn-amt commission-amt))))
+                  (set! split-amt xtn-amt))
+              ;; There's no grand total available.
+              (if share-price
+                  ;; Use the given share price, despite possible rounding.
+                  (set! split-amt (n* num-shares share-price))
+                  (set! split-amt (gnc-numeric-zero))))
+
+          ;; Determine the share price.
+          (if (not share-price)
+              (set! share-price (gnc-numeric-zero))
+              (if (and xtn-amt (not (gnc-numeric-zero-p num-shares)))
+                  ;; There's a share price but it could be imprecise
+                  ;; enough to cause rounding. We can compute a better
+                  ;; share price ourselves. For more information, see
+                  ;; bug 373584.
+                  (set! share-price (n/ split-amt num-shares))))
           
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
-              (begin 
-                (display "qif-import:qif-xtn-to-gnc-xtn : ")
-                (display "splits in stock transaction!") (newline)))
+              (gnc:warn "qif-import:qif-xtn-to-gnc-xtn: "
+                        "splits in stock transaction!"))
 
           (set! qif-accts 
                 (qif-split:accounts-affected (car (qif-xtn:splits qif-xtn))
@@ -543,18 +619,30 @@
           (set! qif-far-acct (cadr qif-accts))
           (set! qif-commission-acct (caddr qif-accts))
 
-          ;; translate the QIF account names into Gnucash accounts
+          ;; Translate the QIF account names into GnuCash accounts.
           (if (and qif-near-acct qif-far-acct)
               (begin 
+                ;; Determine the near account.
                 (set! near-acct-info 
                       (or (hash-ref qif-acct-map qif-near-acct)
                           (hash-ref qif-cat-map qif-near-acct)))
                 (set! near-acct-name (qif-map-entry:gnc-name near-acct-info))
                 (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
                 
-                (set! far-acct-info
-                      (or (hash-ref qif-acct-map qif-far-acct)
-                          (hash-ref qif-cat-map qif-far-acct)))
+                ;; Determine the far account.
+                (if (or (not (string? qif-far-acct))
+                        (string=? qif-far-acct ""))
+                    ;; No far account name is specified, so try a
+                    ;; payee or memo mapping to get a default.
+                    (set! far-acct-info
+                          (or (hash-ref qif-memo-map (qif-xtn:payee qif-xtn))
+                              (hash-ref qif-memo-map
+                                        (qif-split:memo
+                                          (car (qif-xtn:splits qif-xtn)))))))
+                (if (not far-acct-info)
+                    (set! far-acct-info
+                          (or (hash-ref qif-acct-map qif-far-acct)
+                              (hash-ref qif-cat-map qif-far-acct))))
                 (set! far-acct-name (qif-map-entry:gnc-name far-acct-info))
                 (set! far-acct (hash-ref gnc-acct-hash far-acct-name))))
           
@@ -769,7 +857,8 @@
     ;; this is the grind loop.  Go over every unmarked transaction in
     ;; the candidate-xtns list.
     (let xtn-loop ((xtns candidate-xtns))
-      (if (not (qif-xtn:mark (car xtns)))
+      (if (and (not (qif-xtn:mark (car xtns)))
+               (string=? (qif-xtn:from-acct (car xtns)) far-acct-name))
           (begin 
             (set! how
                   (qif-import:xtn-has-matches? (car xtns) near-acct-name
@@ -1001,6 +1090,24 @@
       ;; otherwise: one-to-one, a normal single split match.
       (else 
        (cond 
+        ;; If one transaction has more splits than the other, mark the
+        ;; one with less splits, regardless of all other conditions.
+        ;; Otherwise, QIF split transactions will become mangled. For
+        ;; more information, see bug 114724.
+        ((< (length (qif-xtn:splits xtn))
+            (length (qif-xtn:splits other-xtn)))
+               (qif-xtn:mark-split xtn split)
+               (qif-import:merge-xtn-info xtn other-xtn)
+               (qif-split:set-matching-cleared!
+                (car match-splits) (qif-xtn:cleared xtn)))
+             
+        ((> (length (qif-xtn:splits xtn))
+            (length (qif-xtn:splits other-xtn)))
+               (qif-xtn:mark-split other-xtn (car match-splits))
+               (qif-import:merge-xtn-info other-xtn xtn)
+               (qif-split:set-matching-cleared!
+                split (qif-xtn:cleared other-xtn)))
+
         ;; this is a transfer involving a security xtn.  Let the 
         ;; security xtn dominate the way it's handled. 
         ((and (not action) o-action o-security)
@@ -1031,25 +1138,14 @@
             (qif-xtn:mark-split other-xtn (car match-splits))
             (qif-import:merge-xtn-info other-xtn xtn)
             (qif-split:set-matching-cleared! 
-             split (qif-xtn:cleared other-xtn)))))        
+             split (qif-xtn:cleared other-xtn)))))
         
-        ;; otherwise, this is a normal no-frills split match.  if one
-        ;; transaction has more splits than the other one,
-        ;; (heuristically) mark the one with less splits.
+        ;; Otherwise, this is a normal no-frills split match.
         (#t 
-         (if (< (length (qif-xtn:splits xtn))
-                (length (qif-xtn:splits other-xtn)))
-             (begin 
-               (qif-xtn:mark-split xtn split)
-               (qif-import:merge-xtn-info xtn other-xtn)
-               (qif-split:set-matching-cleared!
-                (car match-splits) (qif-xtn:cleared xtn)))
-             
-             (begin
-               (qif-xtn:mark-split other-xtn (car match-splits))
-               (qif-import:merge-xtn-info other-xtn xtn)
-               (qif-split:set-matching-cleared!
-                split (qif-xtn:cleared other-xtn))))))))))
+          (qif-xtn:mark-split other-xtn (car match-splits))
+          (qif-import:merge-xtn-info other-xtn xtn)
+          (qif-split:set-matching-cleared!
+           split (qif-xtn:cleared other-xtn))))))))
 
 
 (define (qif-import:merge-xtn-info from-xtn to-xtn)

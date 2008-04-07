@@ -6,12 +6,13 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles
+noinst_DATA = make-gnucash-potfiles
 
 dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2007 \
   ChangeLog.2006 \
   ChangeLog.2005 \
   ChangeLog.2004 \
@@ -22,7 +23,6 @@ dist_doc_DATA = \
   LICENSE \
   NEWS \
   README \
-  README.patches \
   README.dependencies
 
 # All the other files that go in the distribution tarfile that aren't
@@ -38,7 +38,6 @@ dist_doc_DATA = \
 
 EXTRA_DIST = \
   gnucash.lsm \
-  make-gnucash-patch.in \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
@@ -81,13 +80,6 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-make-gnucash-patch: make-gnucash-patch.in Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-PERL-@:${PERL}:g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
-
 make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
@@ -98,15 +90,17 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
-  cscope.files cscope.out etags.files make-gnucash-patch \
-  make-gnucash-potfiles po/.intltool-merge-cache \
-  po/POTFILES.in
+  cscope.files cscope.out etags.files \
+  make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:
 	find src lib -name '*.[ch]' > cscope.files
+if GNUCASH_SEPARATE_BUILDDIR
+	find ${srcdir}/src ${srcdir}/lib -name '*.[ch]' >> cscope.files
+endif
 
-cscope.out: cscope.files
-	cscope -b
+${srcdir}/cscope.out: cscope.files
+	cscope -b -f ${srcdir}/cscope.out
 
 
 # make sure etags.files is up to date.
@@ -140,8 +134,10 @@ doc:
 
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
+distuninstallcheck_listfiles = \
+  find . -type f -print | grep -v ./share/icons/hicolor/icon-theme.cache | grep -v ./share/info/dir
 
-dist-hook: po/POTFILES.in
+#dist-hook: po/POTFILES.in
 
 distcheck-hook:
 	@e=''; \
@@ -172,10 +168,8 @@ pot: Makefile po/POTFILES.in
 	${MAKE} -C po $(PACKAGE).pot
 
 
-BUILT_SOURCES = po/POTFILES.in
-
-po/POTFILES.in: make-gnucash-potfiles .potfiles
-	./make-gnucash-potfiles > ./po/POTFILES.in
+$(srcdir)/po/POTFILES.in: make-gnucash-potfiles .potfiles
+	if test -w $(srcdir)/po/POTFILES.in ; then ./make-gnucash-potfiles > $(srcdir)/po/POTFILES.in ; fi
 
 # Creation rules so that po/gnucash.pot can always be created for
 # make dist.
@@ -196,7 +190,7 @@ if BUILDING_FROM_SVN
 # idea? Before a release, NEWS will get updated because of the version
 # change, so this should fit just fine.)
 ChangeLog: NEWS
-	$(SVN) log -v --xml -r HEAD:15287 http://svn.gnucash.org/repo/gnucash | \
+	$(SVN) log -v --xml -r HEAD:16778 http://svn.gnucash.org/repo/gnucash | \
 	  $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@
 endif

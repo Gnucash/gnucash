@@ -268,13 +268,17 @@ void gnc_autosave_dirty_handler (QofBook *book, gboolean dirty)
   g_debug("gnc_main_window_autosave_dirty(dirty = %s)\n",
 	  (dirty ? "TRUE" : "FALSE"));
   if (dirty) {
-    /* Book state changed from non-dirty to dirty. Start the autosave
-       timer. */
-    /* First stop a potentially running old timer. */
-    gnc_autosave_remove_timer(book);
-    /* Add a new timer (timeout) that runs until the next autosave
-       timeout. */
-    gnc_autosave_add_timer(book);
+    /* Book state changed from non-dirty to dirty. */
+    if (!qof_book_shutting_down(book)) {
+      /* Start the autosave timer.
+	 First stop a potentially running old timer. */
+      gnc_autosave_remove_timer(book);
+      /* Add a new timer (timeout) that runs until the next autosave
+	 timeout. */
+      gnc_autosave_add_timer(book);
+    } else {
+      g_debug("Shutting down book, ignoring dirty book");
+    }
   } else {
     /* Book state changed from dirty to non-dirty (probably due to
        saving). Delete the running autosave timer. */

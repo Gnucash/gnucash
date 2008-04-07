@@ -228,17 +228,19 @@ Account * gnc_import_select_account(gncUIWidget parent,
 	switch (response) {
 	 case GTK_RESPONSE_OK:
 	  retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
-	  retval_name = xaccAccountGetName(retval);
-	  DEBUG("Selected account %p, %s", retval,
-		retval_name ? retval_name : "(null)");
+	  if (retval)
+	    retval_name = xaccAccountGetName(retval);
+	  if (!retval_name)
+	    retval_name = "(null)";
+	  DEBUG("Selected account %p, %s", retval, retval_name);
 
 	  /* See if the selected account is a placeholder. */
-	  if (xaccAccountGetPlaceholder (retval)) {
+	  if (retval && xaccAccountGetPlaceholder (retval)) {
 	    gnc_error_dialog
 	      (picker->dialog,
 	       _("The account %s is a placeholder account and does not allow "
 		 "transactions. Please choose a different account."),
-	       retval_name ? retval_name : "(null)");
+	       retval_name);
 	    response = GNC_RESPONSE_NEW;
 	    break;
 	  }

@@ -42,7 +42,8 @@ main(int argc, char **argv)
         else if(spec1->tv_sec != spec2.tv_sec)
         {
             failure_args("timespec_secs", __FILE__, __LINE__, 
-                         "not equal ints are %lld and %lld\n",
+                         "not equal ints are %" G_GINT64_FORMAT
+                         " and %" G_GINT64_FORMAT "\n",
                          spec1->tv_sec, spec2.tv_sec);
         }
 

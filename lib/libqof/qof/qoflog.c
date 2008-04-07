@@ -128,7 +128,8 @@ void
 qof_log_init_filename(const gchar* log_filename)
 {
      if (log_table == NULL)
-          log_table = g_hash_table_new(g_str_hash, g_str_equal);
+          log_table = g_hash_table_new_full(g_str_hash, g_str_equal,
+                                            g_free, NULL);
 
      if (log_filename)
      {

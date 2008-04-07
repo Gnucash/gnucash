@@ -56,9 +56,12 @@ gncsmallicon_DATA = 16x16/gnucash-icon.png
 
 gncscalableicondir = ${datadir}/icons/hicolor/scalable/apps
 gncscalableicon_DATA = scalable/gnucash-icon.svg
+
+if BUILDING_FROM_SVN
 scalable/gnucash-icon.svg: ${top_srcdir}/art/icon.svgz
 	-mkdir -p scalable
 	gzip -cd ${top_srcdir}/art/icon.svgz > scalable/gnucash-icon.svg
+endif
 
 # As suggested by <http://live.gnome.org/GnomeGoals/AppIcon>
 if !OS_WIN32

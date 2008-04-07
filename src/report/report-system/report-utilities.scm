@@ -597,29 +597,31 @@
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (qof-query-create-for-splits)))
-     (qof-query-set-book temp-query book)
-     
-     (xaccQueryAddClearedMatch
-	     temp-query
-	     CLEARED-VOIDED
-	     QOF-QUERY-AND)
+    (qof-query-set-book temp-query book)
 
-     (set! temp-query (qof-query-invert temp-query))
+    (xaccQueryAddClearedMatch
+     temp-query
+     CLEARED-VOIDED
+     QOF-QUERY-AND)
 
-     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
+    (let ((inv-query (qof-query-invert temp-query)))
+      (qof-query-merge-in-place query inv-query QOF-QUERY-AND)
+      (qof-query-destroy inv-query)
+      (qof-query-destroy temp-query))))
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
 (define (gnc:query-set-match-voids-only! query book)
   (let ((temp-query (qof-query-create-for-splits)))
-     (qof-query-set-book temp-query book)
-     
-     (xaccQueryAddClearedMatch
-	     temp-query
-	     CLEARED-VOIDED
-	     QOF-QUERY-AND)
+    (qof-query-set-book temp-query book)
 
-     (set! query (qof-query-merge query temp-query QOF-QUERY-AND))))
+    (xaccQueryAddClearedMatch
+     temp-query
+     CLEARED-VOIDED
+     QOF-QUERY-AND)
+
+    (qof-query-merge-in-place query temp-query QOF-QUERY-AND)
+    (qof-query-destroy temp-query)))
 
 (define (gnc:split-voided? split)
   (let ((trans (xaccSplitGetParent split)))
@@ -726,14 +728,16 @@
     (xaccQueryAddDescriptionMatch
      str-query matchstr case-sens regexp QOF-QUERY-AND)
     (set! total-query
-	  ;; this is a tad inefficient, but its a simple way to accomplish
-	  ;; description match inversion...
-	  (if pos?
-	      (qof-query-merge sign-query str-query QOF-QUERY-AND)
-	      (qof-query-merge
-	       sign-query (qof-query-invert str-query) QOF-QUERY-AND)
-	      ))
-    
+          ;; this is a tad inefficient, but its a simple way to accomplish
+          ;; description match inversion...
+          (if pos?
+              (qof-query-merge-in-place sign-query str-query QOF-QUERY-AND)
+              (let ((inv-query (qof-query-invert str-query)))
+                (qof-query-merge-in-place
+                 sign-query inv-query QOF-QUERY-AND)
+                qof-query-destroy inv-query)))
+    (qof-query-destroy str-query)
+
     (set! splits (qof-query-run total-query))
     (map (lambda (split)
 	   (let* ((shares (xaccSplitGetAmount split))

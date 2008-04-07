@@ -23,7 +23,7 @@
 
 /** @addtogroup GLib
     @{ */
-/** @addtogroup GConf GLib Utilities
+/** @addtogroup Helpers GLib Helpers
 
     The API in this file is designed to provide support functions that
     wrap the base glib functions and make them easier to use.
@@ -39,11 +39,11 @@
 
 #include <glib.h>
 
-/** @name glib Miscellaneous Functions
+/** @name Character Sets
  @{ 
 */
 
-/** Collate two utf8 strings.  This function performs basic argument
+/** Collate two UTF-8 strings.  This function performs basic argument
  *  checking before calling g_utf8_collate.
  *
  *  @param str1 The first string.
@@ -55,8 +55,33 @@
  *  compares after str2. */
 int safe_utf8_collate (const char *str1, const char *str2);
 
+/**
+ * @brief Validates UTF-8 encoded text for use in GnuCash.
+ * Validates the strict subset of UTF-8 that is valid XML text, as detailed in
+ * http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535.
+ *
+ * (copied from g_utf8_validate):
+ * Validates UTF-8 encoded text, where @a str is the text to validate; if
+ * @a str is nul-terminated, then @a max_len can be -1, otherwise @a max_len
+ * should be the number of bytes to validate. If @a end is non-%NULL, then the
+ * end of the valid range will be stored there (i.e. the start of the first
+ * invalid character if some bytes were invalid, or the end of the text being
+ * validated otherwise).
+ *
+ * Returns %TRUE if all of @a str was valid. Many GLib and GTK+
+ * routines @e require valid UTF-8 as input;
+ * so data read from a file or the network should be checked
+ * with g_utf8_validate() before doing anything else with it.
+ * 
+ * @param str a pointer to character data
+ * @param max_len max bytes to validate, or -1 to go until NUL
+ * @param end return location for end of valid data
+ *
+ * @return %TRUE if the text was valid UTF-8.
+ **/
+gboolean gnc_utf8_validate(const gchar *str, gssize max_len, const gchar **end);
 
-/** Strip any non-utf8 characters from a string.  This function
+/** Strip any non-UTF-8 characters from a string.  This function
  *  rewrites the string "in place" instead of allocating and returning
  *  a new string.  This allows it to operate on strings that are
  *  defined as character arrays in a larger data structure.  Note that
@@ -68,19 +93,54 @@ int safe_utf8_collate (const char *str1, const char *str2);
 void gnc_utf8_strip_invalid (gchar *str);
 
 /** Returns a newly allocated copy of the given string but with any
- * non-utf8 character stripped from it.
+ * non-UTF-8 character stripped from it.
  *
  * Note that it also removes some subset of invalid XML characters,
  * too.  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug
  * #346535
  *
  * @param str A pointer to the string to be copied and stripped of
- * non-utf8 characters.
+ * non-UTF-8 characters.
  *
  * @return A newly allocated string that has to be g_free'd by the
  * caller. */
 gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
 
+/**
+ * @brief Converts a string from UTF-8 to the current locale.
+ * Converts a string from UTF-8 to the encoding used for strings
+ * in the current locale.
+ *
+ * This essentially is a wrapper for g_locale_from_utf8 that can
+ * be swigified for use with Scheme to avoid adding a dependency
+ * for guile-glib.
+ *
+ * @param str A pointer to a UTF-8 encoded string to be converted.
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller. If an error occurs, NULL is returned. */
+gchar *gnc_locale_from_utf8(const gchar* str);
+
+/**
+ * @brief Converts a string to UTF-8 from the current locale.
+ * Converts a string to UTF-8 from the encoding used for strings
+ * in the current locale.
+ *
+ * This essentially is a wrapper for g_locale_to_utf8 that can
+ * be swigified for use with Scheme to avoid adding a dependency
+ * for guile-glib.
+ *
+ * @param str A pointer to a string encoded according to locale.
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller. If an error occurs, NULL is returned. */
+gchar *gnc_locale_to_utf8(const gchar* str);
+
+/** @} */
+
+/** @name GList Manipulation
+ @{ 
+*/
 typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
 
 /**
@@ -95,10 +155,21 @@ GList* gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data);
  **/
 void gnc_g_list_cut(GList **list, GList *cut_point);
 
+/** @} */
+
+/** @name Message Logging
+ @{ 
+*/
 void gnc_scm_log_warn(const gchar *msg);
 void gnc_scm_log_error(const gchar *msg);
 void gnc_scm_log_msg(const gchar *msg);
 void gnc_scm_log_debug(const gchar *msg);
+
+/** @} */
+
+/** @name glib Miscellaneous Functions
+ @{ 
+*/
 
 /** Kill a process.  On UNIX send a SIGKILL, on Windows call TerminateProcess.
  *

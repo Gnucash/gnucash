@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Gastos de guardería
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Cuenta para gestionar gastos de guardería
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Deberá seleccionar este juego de cuentas si tiene gastos de
+      guardería.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gastos</act:name>
+  <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Gastos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Guardería</act:name>
+  <act:id type="new">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:currency>
+  <act:description>Guardería</act:description>
+  <act:parent type="new">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

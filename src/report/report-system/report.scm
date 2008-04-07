@@ -43,11 +43,15 @@
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
 
+;; we want to warn users if they've got an old-style, non-guid saved
+;; report, but only once
+(define gnc:old-style-report-warned #f)
+
 ;; A <report-template> represents one of the available report types.
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
-                    '(version name options-generator
+                    '(version name report-guid parent-type options-generator
                               options-cleanup-cb options-changed-cb
                               renderer in-menu? menu-path menu-name
                               menu-tip export-types export-thunk)))
@@ -65,6 +69,8 @@
     ((record-constructor <report-template>)
      #f                         ;; version
      #f                         ;; name
+     #f                         ;; report-guid for backwards compat of newer reports
+     #f                         ;; parent-type for backwards compat of newer reports
      #f                         ;; options-generator
      #f                         ;; options-cleanup-cb
      #f                         ;; options-changed-cb
@@ -91,24 +97,59 @@
 
   (let ((report-rec (args-to-defn #f args)))
     (if (and report-rec
-             (gnc:report-template-name report-rec))
-	(let* ((name (gnc:report-template-name report-rec))
-	       (tmpl (hash-ref *gnc:_report-templates_* name)))
+	     ;; only process reports that have a report-guid
+             (gnc:report-template-report-guid report-rec))
+	(let* ((report-guid (gnc:report-template-report-guid report-rec))
+	       (name (gnc:report-template-name report-rec))
+	       (tmpl (hash-ref *gnc:_report-templates_* report-guid)))
 	  (if (not tmpl)
 	      (hash-set! *gnc:_report-templates_*
-			 (gnc:report-template-name report-rec) report-rec)
+			 report-guid report-rec)
 	      (begin
 		;; FIXME: We should pass the top-level window
 		;; instead of the '() to gnc-error-dialog, but I
 		;; have no idea where to get it from.
-		(gnc-error-dialog '() (string-append (_ "A custom report with this name already exists. Either rename the report to store it with a different name, or edit your saved-reports file and delete the section with the following name: ") name ))
+		(gnc-error-dialog '() (string-append (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ") report-guid))
 		)))
-        (gnc:warn "gnc:define-report: bad report"))))
+	(begin
+	  (if (gnc:report-template-name report-rec)
+	      (begin
+		;; we've got an old style report with no report-id, give it an arbitrary one
+		(gnc:report-template-set-report-guid! report-rec (guid-new-return))
+		;; we also need to give it a parent-type, so that it will restore from the open state properly
+		;; we'll key that from the only known good way to tie back to the original report -- the renderer
+		(hash-for-each
+		 (lambda (id rec) 
+		   (if (and (equal? (gnc:report-template-renderer rec) 
+				    (gnc:report-template-renderer report-rec))
+			    (not (gnc:report-template-parent-type rec)))
+		       (begin
+			 (gnc:debug "gnc:define-report: setting parent-type of " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid rec))
+			 (gnc:report-template-set-parent-type! report-rec (gnc:report-template-report-guid rec))
+			 (gnc:debug "done setting, is now " (gnc:report-template-parent-type report-rec))))) 
+		 *gnc:_report-templates_*)))
+	  
+	  (if (not gnc:old-style-report-warned)
+	      (begin
+		(set! gnc:old-style-report-warned #t)
+		(gnc-error-dialog '() (string-append (_ "Your report system includes one or more reports without a proper report-guid field. This report may break without warning in future versions of GnuCash. Please review your saved reports file and update those reports.")))))
+	  (hash-set! *gnc:_report-templates_*
+		     (gnc:report-template-report-guid report-rec) report-rec)
+	  (gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)))
+	)))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
+(define gnc:report-template-report-guid
+  (record-accessor <report-template> 'report-guid))
+(define gnc:report-template-set-report-guid!
+  (record-modifier <report-template> 'report-guid))
 (define gnc:report-template-name
   (record-accessor <report-template> 'name))
+(define gnc:report-template-parent-type
+  (record-accessor <report-template> 'parent-type))
+(define gnc:report-template-set-parent-type!
+  (record-modifier <report-template> 'parent-type))
 (define gnc:report-template-set-name
   (record-modifier <report-template> 'name))
 (define gnc:report-template-options-generator
@@ -132,21 +173,60 @@
 (define gnc:report-template-export-thunk
   (record-accessor <report-template> 'export-thunk))
 
-(define (gnc:report-template-new-options/name template-name)
-  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+(define (gnc:report-template-name-to-id template-name)
+  (let ((template-id #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+	   (set! template-id id))) *gnc:_report-templates_*)
+    template-id))
+
+(define (gnc:report-template-new-options/report-guid template-id template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
         (gnc:report-template-new-options templ)
         #f)))
 
-(define (gnc:report-template-menu-name/name template-name)
-  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+(define (gnc:report-template-new-options/name template-name)
+  (let ((templ #f))
+    (hash-for-each 
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
+    (if templ
+	(gnc:report-template-new-options templ)
+	#f)))
+
+(define (gnc:report-template-menu-name/report-guid template-id template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
     (if templ
 	(or (gnc:report-template-menu-name templ)
 	    (gnc:report-template-name templ))
         #f)))
 
+(define (gnc:report-template-menu-name/name template-name)
+  (let ((templ #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
+    (if templ
+	(or (gnc:report-template-menu-name templ)
+	    (gnc:report-template-name templ))
+        #f)))
+
+(define (gnc:report-template-renderer/report-guid template-id template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
+    (if templ
+	(gnc:report-template-renderer templ)
+        #f)))
+
 (define (gnc:report-template-renderer/name template-name)
-  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+  (let ((templ #f))
+    (hash-for-each
+     (lambda (id rec)
+       (if (equal? template-name (gnc:report-template-name rec))
+	   (set! templ (hash-ref *gnc:_report-templates_* id)))) *gnc:_report-templates_*)
     (if templ
 	(gnc:report-template-renderer templ)
         #f)))
@@ -241,8 +321,12 @@
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
 (define (gnc:make-report template-name . rest)
-  (let ((r ((record-constructor <report>) 
-            template-name ;; type
+  (let* ((template-parent (gnc:report-template-parent-type (hash-ref *gnc:_report-templates_* template-name)))
+	 (report-type (if template-parent
+			  template-parent
+			  template-name))
+	 (r ((record-constructor <report>) 
+            report-type ;; type
             #f            ;; id
             #f            ;; options
             #t            ;; dirty
@@ -272,11 +356,24 @@
 
 ;; This is the function that is called when saved reports are evaluated.
 (define (gnc:restore-report id template-name options)
-  (let ((r ((record-constructor <report>)
-            template-name id options #t #t #f #f)))
-    (gnc-report-add r))
+  (if options
+      (let ((r ((record-constructor <report>)
+		(gnc:report-template-name-to-id template-name) id options #t #t #f #f)))
+	(gnc-report-add r))
+      (begin
+	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+	#f))
   )
 
+(define (gnc:restore-report-by-guid id template-id template-name options)
+  (if options
+      (let ((r ((record-constructor <report>)
+		 template-id id options #t #t #f #f)))
+	 (gnc-report-add r))
+      (begin
+	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+	#f))
+  )
 
 (define (gnc:make-report-options template-name)
   (let ((template (hash-ref *gnc:_report-templates_* template-name)))
@@ -359,12 +456,12 @@
    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
    (simple-format #f ";; options for report ~S\n" (gnc:report-name report))
    (simple-format
-    #f "(let ((options (gnc:report-template-new-options/name ~S)))\n"
-    (gnc:report-type report))
+    #f "(let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
+    (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
    (simple-format 
-    #f "  (gnc:restore-report ~S ~S options))\n"
-    (gnc:report-id report) (gnc:report-type report))))
+    #f "  (gnc:restore-report-by-guid ~S ~S ~S options))\n"
+    (gnc:report-id report) (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
 
 (define (gnc:report-generate-saved-forms report)
   ;; clean up the options if necessary.  this is only needed 
@@ -382,14 +479,17 @@
    (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
 		  (gnc:report-name report) (gnc:report-type report))
    (simple-format
-    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/name ~S)))\n"
-    (gnc:report-type report))
+    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
+    (gnc:report-type report) (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
    (gnc:generate-restore-forms (gnc:report-options report) "options")
    "  options))\n"
    (simple-format 
-    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
+    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
     (gnc:report-name report)
-    (gnc:report-type report))))
+    (guid-new-return) ;; when saving a report, we need to create a guid for it for later reloading
+    (gnc:report-type report) ;;a saved report also needs its type stored separately to reference the template
+    (gnc:report-type report)
+    (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))))
 
 (define gnc:current-saved-reports
   (gnc-build-dotgnucash-path "saved-reports-2.0"))
@@ -464,7 +564,7 @@
 
 ;; "thunk" should take the report-type and the report template record
 (define (gnc:report-templates-for-each thunk)
-  (hash-for-each (lambda (name template) (thunk name template))
+  (hash-for-each (lambda (report-id template) (thunk report-id template))
                  *gnc:_report-templates_*))
 
 ;; return the list of reports embedded in the specified report

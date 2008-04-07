@@ -10,7 +10,7 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
@@ -107,7 +107,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/backend/xml \
+  -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome-search \
   -I${top_srcdir}/src/register/ledger-core \

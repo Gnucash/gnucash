@@ -146,6 +146,8 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas->acctTypeFilters = FALSE;
         gas->newAccountButton = NULL;
 
+        g_object_set(gas, "spacing", 2, (gchar*)NULL);
+
 	gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
         widget =
 	  gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(gas->store), ACCT_COL_NAME);
@@ -183,7 +185,7 @@ gas_populate_list( GNCAccountSel *gas )
 	Account *acc;
 	GtkTreeIter iter;
 	GtkEntry *entry;
-	gint i, active = 0;
+	gint i, active = -1;
         GList *accts, *ptr, *filteredAccts;
         gchar *currentSel, *name;
 
@@ -218,7 +220,8 @@ gas_populate_list( GNCAccountSel *gas )
 
         /* If the account which was in the text box before still exists, then
          * reset to it. */
-	gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
+	if (active != -1)
+	  gtk_combo_box_set_active(GTK_COMBO_BOX(gas->combo), active);
 
         g_list_free( filteredAccts );
         if ( currentSel ) {
@@ -393,7 +396,7 @@ gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
 			  G_CALLBACK( gas_new_account_click ),
 			  gas );
         gtk_box_pack_start( GTK_BOX(gas), gas->newAccountButton,
-                            FALSE, FALSE, 2 );
+                            FALSE, FALSE, 0 );
 }
 
 void

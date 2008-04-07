@@ -202,7 +202,7 @@ fi
 %exclude %{_libdir}/libgnc-backend-postgres*
 %endif
 %config %{_sysconfdir}/gnucash
-%doc AUTHORS COPYING ChangeLog* DOCUMENTERS HACKING LICENSE NEWS README README.patches
+%doc AUTHORS COPYING ChangeLog* DOCUMENTERS HACKING LICENSE NEWS README
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
 
 %files devel

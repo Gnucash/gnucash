@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Allgemeine Konten
@@ -7,7 +7,7 @@
       Grundlegende Kontenstruktur
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben. Wenn Sie aber einen SKR verwenden wollen, brauchen Sie sie nicht.
+    Die meisten Anwender benÃ¶tigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein Ã¼blichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, ErtrÃ¤ge und verschiedene Ausgaben. Wenn Sie aber einen SKR verwenden wollen, brauchen Sie sie nicht.
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -34,14 +34,14 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Barvermögen</act:name>
+  <act:name>BarvermÃ¶gen</act:name>
   <act:id type="new">12862aa943c3475761754a838a21460c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Barvermögen</act:description>
+  <act:description>BarvermÃ¶gen</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -129,14 +129,14 @@
   <act:parent type="new">265c29e7f9adb75346f96a4f7e79654e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Erträge</act:name>
+  <act:name>ErtrÃ¤ge</act:name>
   <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Erträge</act:description>
+  <act:description>ErtrÃ¤ge</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -203,7 +203,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Sonstige Erträge</act:description>
+  <act:description>Sonstige ErtrÃ¤ge</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -303,25 +303,25 @@
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bücher</act:name>
+  <act:name>BÃ¼cher</act:name>
   <act:id type="new">74b282047c3191ba045fb23f66f9b375</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Bücher</act:description>
+  <act:description>BÃ¼cher</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Büroartikel</act:name>
+  <act:name>BÃ¼roartikel</act:name>
   <act:id type="new">137ab9fbb95b59f8116de159eb319e28</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Büroartikel</act:description>
+  <act:description>BÃ¼roartikel</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -447,14 +447,14 @@
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bankgebühren</act:name>
+  <act:name>BankgebÃ¼hren</act:name>
   <act:id type="new">12a5ccccdded86ec783e61c8a059ee96</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Konto- und Bankgebühren</act:description>
+  <act:description>Konto- und BankgebÃ¼hren</act:description>
   <act:parent type="new">18ca785b6fcd2895427459c233a47c57</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -476,7 +476,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Wohltätige Spenden</act:description>
+  <act:description>WohltÃ¤tige Spenden</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -637,7 +637,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Auswärts Essen</act:description>
+  <act:description>AuswÃ¤rts Essen</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -720,7 +720,7 @@
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Ausgaben für Wohnung/Haus</act:description>
+  <act:description>Ausgaben fÃ¼r Wohnung/Haus</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>

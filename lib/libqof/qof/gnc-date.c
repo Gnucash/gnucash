@@ -1164,14 +1164,15 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   localtime_r(&tmp, &parsed);
 
   secs = gnc_timezone (&parsed);
-  tz_hour = secs / 3600;
-  tz_min = (secs % 3600) / 60;
 
   /* We also have to print the sign by hand, to work around a bug
    * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
    */
   cyn = '-';
-  if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
+  if (0>secs) { cyn = '+'; secs = -secs; }
+
+  tz_hour = secs / 3600;
+  tz_min = (secs % 3600) / 60;
 
   len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
                  parsed.tm_year + 1900,
@@ -1394,10 +1395,10 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
 {
     struct tm my_tm;
     int i;
-    
+
     memset(buf, 0, buf_len);
     memset(&my_tm, 0, sizeof(struct tm));
     my_tm.tm_wday = dow;
-    i = qof_strftime(buf, buf_len - 1, "%a", &my_tm);
+    i = qof_strftime(buf, buf_len, "%a", &my_tm);
     buf[i] = 0;
 }

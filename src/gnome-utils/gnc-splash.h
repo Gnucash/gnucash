@@ -25,7 +25,9 @@
 
 void gnc_show_splash_screen (void);
 void gnc_destroy_splash_screen (void);
-void gnc_update_splash_screen (const gchar *string);
+void gnc_update_splash_screen (const gchar *string, double percentage);
 void gnc_gui_init_splash (void);
+
+#define GNC_SPLASH_PERCENTAGE_UNKNOWN 101
 
 #endif

@@ -723,7 +723,7 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
 					 gpointer user_data)
 {
     GncPluginPageBudgetPrivate *priv = user_data;
-    const gchar *name;
+    gchar *name;
     gchar *desc;
     gint num_periods;
     GncRecurrence *gr;
@@ -737,10 +737,9 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
     if (name) {
         gnc_budget_set_name(priv->budget, name);
         DEBUG("%s", name);
+        g_free(name);
     }
 
-    //FIXME: this is special broken case where we actually do need to
-    //free because widget is a GtkTextView
     desc = (gchar *) gnc_dialog_get_string(d, "BudgetDescription");
     gnc_budget_set_description(priv->budget, desc);
     g_free(desc);

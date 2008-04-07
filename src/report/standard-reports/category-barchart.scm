@@ -170,7 +170,7 @@ developing over time"))
 ;; constant over the whole report period. Note that this might get
 ;; *really* complicated.
 
-(define (category-barchart-renderer report-obj reportname 
+(define (category-barchart-renderer report-obj reportname reportguid 
                                     account-types do-intervals?)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
@@ -437,7 +437,7 @@ developing over time"))
                    (set! all-data
                          (append start
                                  (list (list (_ "Other") other-sum))))
-                   (let* ((options (gnc:make-report-options reportname))
+                   (let* ((options (gnc:make-report-options reportguid))
                           (id #f))
                      ;; now copy all the options
                      (gnc:options-copy-values 
@@ -448,7 +448,7 @@ developing over time"))
                                          optname-accounts)
                       (map car finish))
                      ;; Set the URL to point to this report.
-                     (set! id (gnc:make-report reportname options))
+                     (set! id (gnc:make-report reportguid options))
                      (set! other-anchor (gnc:report-anchor-text id)))))
              
              
@@ -498,7 +498,7 @@ developing over time"))
                              ;; immediate subaccounts of this account
                              ;; (and including this account).
                              (gnc:make-report-anchor
-                              reportname
+                              reportguid
                               report-obj
                               (list
                                (list gnc:pagename-accounts optname-accounts
@@ -541,6 +541,7 @@ developing over time"))
      (gnc:define-report
       'version 1
       'name (car l)
+      'report-guid (car (reverse l))
       'menu-path (if (caddr l)
 		     (list gnc:menuname-income-expense)
 		     (list gnc:menuname-asset-liability))
@@ -549,21 +550,22 @@ developing over time"))
       'options-generator (lambda () (options-generator (cadr l) (cadr tip-and-rev)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 
-					      (car l) 
+					      (car l)
+					      (car (reverse l))
 					      (cadr l)
 					      (caddr l))))))
  (list 
   ;; reportname, account-types, do-intervals?, 
   ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t))
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f))
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "44f81bee049b4b3ea908f8dac9a9474e")
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "b1f15b2052c149df93e698fe85a81ea6")
   (list reportname-assets 
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f))
+        #f menuname-assets menutip-assets (lambda (x) #f) "e9cf815f79db44bcb637d0295093ae3d")
   (list reportname-liabilities 
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t))))
+        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "faf410e8f8da481fbc09e4763da40bcc")))

@@ -1227,6 +1227,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
     gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
     gnc_ledger_display_refresh( sxed->ledger );
 
+    /* Move keyboard focus to the name entry */
+    gtk_widget_grab_focus(GTK_WIDGET(sxed->nameEntry));
+
     return sxed;
 }
 

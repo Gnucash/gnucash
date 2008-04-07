@@ -71,10 +71,21 @@
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-main-window.h"
 
+/* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
+ * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
+ * gncInvoiceLookup and friends.  When the macro gets inlined, the compiler
+ * emits a warning that the guid null pointer test is always true.
+ */
+#if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
+#    pragma GCC diagnostic ignored "-Waddress"
+#endif
+
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
 #define GCONF_SECTION_SEARCH  "dialogs/business/invoice_search"
+
+#define LAST_POSTED_TO_ACCT "last-posted-to-acct"
 
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -593,6 +604,9 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   GList * acct_types = NULL;
   Timespec ddue, postdate;
   gboolean accumulate;
+  QofInstance *owner_inst;
+  KvpFrame *kvpf;
+  KvpValue *kvp_val;
 
   /* Make sure the invoice is ok */
   if (!gnc_invoice_window_verify_ok (iw))
@@ -641,6 +655,11 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   ddue = postdate;
   memo = NULL;
 
+  owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+  kvpf = qof_instance_get_slots (owner_inst);
+  acc = xaccAccountLookup (kvp_frame_get_guid (kvpf, LAST_POSTED_TO_ACCT),
+			   iw->book);
+
   /* Get the default for the accumulate option */
   accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
 
@@ -658,6 +677,13 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   gncInvoiceBeginEdit (invoice);
   gnc_invoice_window_ok_save (iw);
 
+  /* Save acc as last used account in the kvp frame of the invoice owner */
+  kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;
+  qof_begin_edit (owner_inst);
+  kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
+  qof_instance_set_dirty (owner_inst);
+  qof_commit_edit (owner_inst);
+  
   /* ... post it; post date is set to now ... */
   gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate);
   gncInvoiceCommitEdit (invoice);
@@ -1628,7 +1654,8 @@ find_handler (gpointer find_data, gpointer user_data)
 
 static InvoiceWindow *
 gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
-		      GncInvoice *invoice, GncOwner *owner)
+		      GncInvoice *invoice, GncOwner *owner,
+		      GncMainWindow *window)
 {
   InvoiceWindow *iw;
   GncOwner *billto;
@@ -1672,7 +1699,12 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
 
   /* Now create the plugin page for this invoice and display it. */
   new_page = gnc_plugin_page_invoice_new (iw);
-  gnc_main_window_open_page (gnc_plugin_business_get_window(), new_page);
+  if (window)
+    gnc_plugin_page_set_use_new_window (new_page, FALSE);
+  else
+    window = gnc_plugin_business_get_window ();
+
+  gnc_main_window_open_page (window, new_page);
 
   /* Initialize the summary bar */
   gnc_invoice_redraw_all_cb(iw->reg, iw);
@@ -1686,7 +1718,8 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
 #define KEY_OWNER_GUID          "OwnerGUID"
 
 GncPluginPage *
-gnc_invoice_recreate_page (GKeyFile *key_file,
+gnc_invoice_recreate_page (GncMainWindow *window,
+			   GKeyFile *key_file,
 			   const gchar *group_name)
 {
   InvoiceWindow *iw;
@@ -1758,7 +1791,7 @@ gnc_invoice_recreate_page (GKeyFile *key_file,
   g_free(tmp_string);
   g_free(owner_type);
 
-  iw = gnc_invoice_new_page (book, type, invoice, &owner);
+  iw = gnc_invoice_new_page (book, type, invoice, &owner, window);
   return iw->page;
 
  give_up:
@@ -2091,7 +2124,7 @@ gnc_ui_invoice_edit (GncInvoice *invoice)
     type = EDIT_INVOICE;
 
   iw = gnc_invoice_new_page (gncInvoiceGetBook(invoice), type,
-			     invoice, gncInvoiceGetOwner (invoice));
+			     invoice, gncInvoiceGetOwner (invoice), NULL);
 
   return iw;
 }

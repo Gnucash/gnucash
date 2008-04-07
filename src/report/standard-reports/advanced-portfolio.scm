@@ -320,6 +320,10 @@
 	(gnc:debug "blist is " b-list " value ratio is " value-ratio)
 	(apply-basis-ratio b-list (gnc:make-gnc-numeric 1 1) value-ratio))
       )
+
+     ;; when all else fails, just send the b-list back
+     (else
+      b-list)
      )
     )
 
@@ -353,6 +357,7 @@
                  (unitscoll     (gnc:make-commodity-collector))
                  (brokeragecoll (gnc:make-commodity-collector))
                  (dividendcoll  (gnc:make-commodity-collector))
+		 (dividend-reincoll (gnc:make-commodity-collector))
                  (moneyincoll   (gnc:make-commodity-collector))
                  (moneyoutcoll  (gnc:make-commodity-collector))
                  (gaincoll      (gnc:make-commodity-collector))
@@ -474,7 +479,84 @@
 				 ;; with these to differentiate them
 				 ;; :(
 				 ((split-account-type? s ACCT-TYPE-INCOME)
-				  (dividendcoll 'add commod-currency (gnc-numeric-neg split-value)))
+				  (dividendcoll 
+				   'add commod-currency 
+				   ;; dig through the txn looking for
+				   ;; the stock itself and base the
+				   ;; dividend on that. This allows
+				   ;; dividends to be split between
+				   ;; multiple stocks based on the
+				   ;; value of each stock purchased
+				   (let* ((txn (xaccSplitGetParent s))
+					 (dividend-rein (gnc-numeric-zero))
+					 (dividend-income (gnc-numeric-neg (xaccSplitGetValue s)))
+					 (adjusted-dividend dividend-income)
+					 (split-brokerage (gnc-numeric-zero))
+					 (split-ratio (gnc-numeric-zero)))
+				     (for-each
+				      (lambda (x) 
+					(cond 
+					 ((and (same-account? current (xaccSplitGetAccount x))
+					      (gnc-numeric-positive-p (xaccSplitGetAmount x)))
+					  (begin
+					    (set! dividend-rein (xaccSplitGetValue x))
+					    (dividend-reincoll 'add commod-currency dividend-rein)
+					    (gnc:debug "setting the dividend-rein to" (xaccSplitGetValue x))))
+					 ;; very special case: we have
+					 ;; a split that points to the
+					 ;; current account with no
+					 ;; shares (amount) but a
+					 ;; value == gains/loss split,
+					 ;; adjust this back out of
+					 ;; dividends because we'll
+					 ;; erroneously pick it up
+					 ;; later.
+					 ((and (same-account? current (xaccSplitGetAccount x))
+					       (gnc-numeric-zero-p (xaccSplitGetAmount x))
+					       (not (gnc-numeric-zero-p (xaccSplitGetValue x))))
+					  (dividendcoll 'add commod-currency (xaccSplitGetValue x)))
+
+					 ((split-account-type? x ACCT-TYPE-EXPENSE)
+					  (begin
+					    (set! adjusted-dividend (gnc-numeric-sub dividend-income (xaccSplitGetValue x) 
+										     GNC-DENOM-AUTO GNC-RND-ROUND))
+					    (gnc:debug "setting adjusted-dividend to" dividend-income)
+					    ;; grab the brokerage that
+					    ;; may be associated so we
+					    ;; can split it too
+					    (set! split-brokerage (xaccSplitGetValue x))
+					    )
+					  )
+					 )
+					)
+				      (xaccTransGetSplitList txn))
+				     
+				     ;; make a ratio out of the reinvest and adjusted dividends
+				     (set! split-ratio (gnc-numeric-div dividend-rein 
+									adjusted-dividend 
+									GNC-DENOM-AUTO GNC-RND-ROUND))
+
+				     ;; take the brokerage back out and apply the ratio
+				     (brokeragecoll 'add commod-currency (gnc-numeric-neg split-brokerage))
+				     (brokeragecoll 'add commod-currency 
+						    (gnc-numeric-mul split-brokerage 
+								     split-ratio
+								     100 GNC-RND-ROUND))
+
+				     (if (gnc-numeric-zero-p dividend-rein)
+					 ;; no reinvested dividend, return just the income split
+					 (xaccSplitGetValue s)
+					 ;; dividend reinvested so
+					 ;; apply the ratio to the
+					 ;; dividend and return it for
+					 ;; use in the dividend
+					 ;; collector
+					 (gnc-numeric-mul dividend-income 
+							  split-ratio
+							  100 GNC-RND-ROUND)
+					 )
+				     )
+				   ))
 
 				 ;; we have units, handle all cases of that
 				 ((not (gnc-numeric-zero-p split-units))
@@ -566,8 +648,8 @@
 	    (gaincoll 'merge moneyoutcoll #f)
 	    (gaincoll 'minusmerge moneyincoll #f)
 
-            ;; This removes the already-counted dividends from moneyin.
-	    (moneyincoll 'minusmerge dividendcoll #f)
+            ;; This removes the already-counted reinvested dividends from moneyin.
+	    (moneyincoll 'minusmerge dividend-reincoll #f)
 
             (if (not ignore-brokerage-fees)
 	      (moneyincoll 'merge brokeragecoll #f))
@@ -859,6 +941,7 @@
 
 (gnc:define-report
  'version 1
+ 'report-guid "21d7cfc59fc74f22887596ebde7e462d"
  'name reportname
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator

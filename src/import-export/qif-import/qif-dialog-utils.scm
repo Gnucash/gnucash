@@ -6,8 +6,6 @@
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (ice-9 regex))
-
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc-get-account-separator-string) security))
 
@@ -561,24 +559,54 @@
          (qif-xtn:set-from-acct! xtn new-acct-name)))
    (qif-file:xtns qif-file)))
 
-(define qif-import:account-name-regexp #f)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:get-account-name
+;;
+;;  Given an account name, return the rightmost subaccount.
+;;  For example, given the account name "foo:bar", "bar" is
+;;  returned (assuming the account separator is ":").
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:get-account-name fullname)
-  (if (not qif-import:account-name-regexp)
-      (let* ((rstr ":([^:]+)$|^([^:]+)$")
-             (newstr (regexp-substitute/global 
-                      #f ":" rstr 'pre (gnc-get-account-separator-string) 'post)))
-        
-        (set! qif-import:account-name-regexp (make-regexp newstr))))
-  
-  (let ((match (regexp-exec qif-import:account-name-regexp fullname)))
-    (if match
-        (begin 
-          (let ((substr (match:substring match 1)))
-            (if substr
-                substr
-                (match:substring match 2))))
+  (let ((lastsep (string-rindex fullname
+                                (string-ref (gnc-get-account-separator-string)
+                                            0))))
+    (if lastsep
+        (substring fullname (+ lastsep 1))
         fullname)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-dialog:default-namespace
+;;
+;;  For a given commodity symbol, return a default namespace.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (qif-dialog:default-namespace s)
+  (if (string? s)
+      (let ((l (string-length s))
+            (d (string-index s #\.)))
+        (cond
+          ;; Guess NYSE for symbols of 1-3 characters.
+          ((< l 4)
+           GNC_COMMODITY_NS_NYSE)
+
+          ;; Guess NYSE for symbols of 1-3 characters
+          ;; followed by a dot and 1-2 characters.
+          ((and d
+                (< l 7)
+                (< 0 d 4)
+                (<= 2 (- l d) 3))
+           GNC_COMMODITY_NS_NYSE)
+
+          ;; Guess NASDAQ for symbols of 4 characters.
+          ((= l 4)
+           GNC_COMMODITY_NS_NASDAQ)
+
+          ;; Otherwise it's probably a fund.
+          (else
+           GNC_COMMODITY_NS_MUTUAL)))
+      GNC_COMMODITY_NS_MUTUAL))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -623,15 +651,21 @@
                    
                    ;; we know nothing about this security.. we need to 
                    ;; ask about it
-                   (let ((ticker-symbol (qif-ticker-map:lookup-ticker ticker-map stock-name)))
+                   (let ((ticker-symbol
+                          (qif-ticker-map:lookup-ticker ticker-map
+                                                        stock-name))
+                         (namespace GNC_COMMODITY_NS_MUTUAL))
+
                      (if (not ticker-symbol)
-			 (set! ticker-symbol stock-name))
+			 (set! ticker-symbol stock-name)
+                         (set! namespace
+                           (qif-dialog:default-namespace ticker-symbol)))
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
                       (gnc-commodity-new book
 					    stock-name
-                                            GNC_COMMODITY_NS_NYSE
+                                            namespace
                                             ticker-symbol
                                             ""
                                             100000))))))
