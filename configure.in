@@ -1481,10 +1481,10 @@ AC_CONFIG_FILES(po/Makefile.in
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
-          src/backend/xml/Makefile
-          src/backend/xml/test/Makefile
-          src/backend/xml/test/test-files/Makefile
-          src/backend/xml/test/test-files/xml2/Makefile
+          src/backend/file/Makefile
+          src/backend/file/test/Makefile
+          src/backend/file/test/test-files/Makefile
+          src/backend/file/test/test-files/xml2/Makefile
 		  src/backend/gda/Makefile
 		  src/backend/gda/test/Makefile
           src/backend/postgres/Makefile
@@ -1570,7 +1570,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/business/business-core/Makefile
           src/business/business-core/gda/Makefile
           src/business/business-core/test/Makefile
-          src/business/business-core/xml/Makefile
+          src/business/business-core/file/Makefile
           src/business/business-utils/Makefile
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
