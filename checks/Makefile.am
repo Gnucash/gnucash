@@ -4,6 +4,7 @@ checksdir = ${GNC_CHECKS_DIR}
 if HAVE_GTK_2_10
 checks_DATA = \
 	deluxe.chk \
+	liberty.chk \
 	quicken.chk \
 	quicken_wallet.chk
 else
@@ -15,6 +16,7 @@ endif
 
 EXTRA_DIST = \
 	deluxe.chk \
+	liberty.chk \
 	quicken.chk \
 	quicken_wallet.chk \
 	gnomeprint/deluxe.chk \
