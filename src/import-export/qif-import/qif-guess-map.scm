@@ -33,7 +33,8 @@
 ;;   - a hash of QIF category to gnucash account info
 ;;   - a hash of QIF memo/payee to gnucash account info
 ;;     (older saved prefs may not have this one)
-;;   - a hash of QIF stock name to gnc-commodity*
+;;   - a hash of QIF security name to gnc-commodity*
+;;   - a list of all previously saved security mappings
 ;;     (older saved prefs may not have this one)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -80,18 +81,18 @@
             (let ((qif-account-list #f)
                   (qif-cat-list #f)
                   (qif-memo-list #f)
-                  (qif-stock-list #f)
+                  (qif-security-list #f)
                   (qif-account-hash #f)
                   (qif-cat-hash #f)
                   (qif-memo-hash #f)
-                  (qif-stock-hash #f)
+                  (qif-security-hash #f)
                   (saved-sep #f))
 
               ;; Read the mapping file.
               (set! qif-account-list (safe-read))
               (set! qif-cat-list (safe-read))
               (set! qif-memo-list (safe-read))
-              (set! qif-stock-list (safe-read))
+              (set! qif-security-list (safe-read))
               (set! saved-sep (safe-read))
 
               ;; Process the QIF account mapping.
@@ -114,22 +115,24 @@
                                                            saved-sep)))
 
               ;; Process the QIF security mapping.
-              (if (not (list? qif-stock-list))
-                  (set! qif-stock-hash (make-hash-table 20))
-                  (set! qif-stock-hash (qif-import:read-commodities
-                                          qif-stock-list)))
+              (if (not (list? qif-security-list))
+                  (set! qif-security-hash (make-hash-table 20))
+                  (set! qif-security-hash (qif-import:read-securities
+                                           qif-security-list)))
 
               ;; Put all the mappings together in a list.
               (set! results (list qif-account-hash
                                   qif-cat-hash
                                   qif-memo-hash
-                                  qif-stock-hash)))))
+                                  qif-security-hash
+                                  qif-security-list)))))
 
         ;; Otherwise, we can't get any saved mappings. Use empty tables.
         (set! results (list (make-hash-table 20)
                             (make-hash-table 20)
                             (make-hash-table 20)
-                            (make-hash-table 20))))
+                            (make-hash-table 20)
+                            '())))
 
     ;; Build the list of all known account names.
     (let* ((all-accounts (gnc-get-current-root-account))
@@ -180,20 +183,22 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-import:read-commodities
+;;  qif-import:read-securities
 ;;
-;;  This procedure examines a list of previously seen commodities
-;;  and returns a hash table of them, if they still exist.
+;;  This procedure examines a list of previously seen security
+;;  mappings and returns a hash table pairing QIF security names
+;;  with existing GnuCash commodities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:read-commodities commlist)
+(define (qif-import:read-securities security-list)
   (let ((table (make-hash-table 20)))
     (for-each
      (lambda (entry)
        (if (and (list? entry)
                 (= 3 (length entry)))
-           ;; The saved information about each commodity is a
-           ;; list of three items: name, namespace, and mnemonic.
+           ;; The saved information about each security mapping is a
+           ;; list of three items: the QIF name, and the GnuCash
+           ;; namespace and mnemonic (symbol) to which it maps.
            ;; Example: ("McDonald's" "NYSE" "MCD")
            (let ((commodity (gnc-commodity-table-lookup
                               (gnc-commodity-table-get-table
@@ -201,26 +206,47 @@
                               (cadr entry)
                               (caddr entry))))
              (if (and commodity (not (null? commodity)))
-                 ;; The commodity is defined in GnuCash.
+                 ;; There is an existing GnuCash commodity for this
+                 ;; combination of namespace and symbol.
                  (hash-set! table (car entry) commodity)))))
-     commlist)
+     security-list)
     table))
 
-(define (qif-import:write-commodities hashtab)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:write-securities
+;;
+;;  This procedure writes a mapping QIF security names to
+;;  GnuCash commodity namespaces and mnemonics (symbols).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-import:write-securities security-hash security-prefs)
   (let ((table '()))
+    ;; For each security that has been paired with an existing
+    ;; GnuCash commodity, create a list containing the QIF name
+    ;; and the commodity's namespace and mnemonic (symbol).
     (hash-fold
-     (lambda (key value p)
-       ;;FIXME: we used to type-check the values, like:
-       ;; (gw:wcp-is-of-type? <gnc:commodity*> value)
-       (if (and value #t)
-           (set! table
-                 (cons (list key
-                             (gnc-commodity-get-namespace value)
-                             (gnc-commodity-get-mnemonic value))
-                       table))
-           (gnc:warn "qif-import:write-commodities:"
-                     " something funny in hash table."))
-       #f) #f hashtab)
+      (lambda (key value p)
+        ;;FIXME: we used to type-check the values, like:
+        ;; (gw:wcp-is-of-type? <gnc:commodity*> value)
+        (if (and value #t)
+            (set! table (cons (list key
+                                   (gnc-commodity-get-namespace value)
+                                   (gnc-commodity-get-mnemonic value))
+                              table))
+            (gnc:warn "qif-import:write-securities:"
+                      " something funny in hash table."))
+        #f)
+      #f security-hash)
+
+    ;; Add on the rest of the saved security mapping preferences.
+    (for-each
+      (lambda (m)
+        (if (not (hash-ref security-hash (car m)))
+            (set! table (cons m table))))
+      security-prefs)
+
+    ;; Write out the mappings.
     (write table)))
 
 
@@ -233,7 +259,8 @@
 ;;  user cancels the import instead.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
+(define (qif-import:save-map-prefs acct-map cat-map memo-map
+                                   security-map security-prefs)
   (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map")))
     ;; does the file exist? if not, create it; in either case,
     ;; make sure it's a directory and we have write and execute
@@ -241,26 +268,31 @@
         (with-output-to-file pref-filename
           (lambda ()
             (display ";;; qif-accounts-map\n")
-            (display ";;; automatically generated by GNUcash.  DO NOT EDIT\n")
-            (display ";;; (unless you really, really want to).\n")
+            (display ";;; Automatically generated by GnuCash.  DO NOT EDIT.\n")
+            (display ";;; (Unless you really, really want to.)\n")
 
-            (display ";;; map from QIF accounts to GNC accounts") (newline)
+            (display ";;; Map QIF accounts to GnuCash accounts")
+            (newline)
             (qif-import:write-map acct-map)
             (newline)
 
-            (display ";;; map from QIF categories to GNC accounts") (newline)
+            (display ";;; Map QIF categories to GnuCash accounts")
+            (newline)
             (qif-import:write-map cat-map)
             (newline)
 
-            (display ";;; map from QIF payee/memo to GNC accounts") (newline)
+            (display ";;; Map QIF payee/memo to GnuCash accounts")
+            (newline)
             (qif-import:write-map memo-map)
             (newline)
 
-            (display ";;; map from QIF stock name to GNC commodity") (newline)
-            (qif-import:write-commodities stock-map)
+            (display ";;; Map QIF security names to GnuCash commodities")
+            (newline)
+            (qif-import:write-securities security-map security-prefs)
             (newline)
 
-            (display ";;; GnuCash separator used in these mappings") (newline)
+            (display ";;; GnuCash separator used in these mappings")
+            (newline)
             (write (string-ref (gnc-get-account-separator-string) 0))
             (newline)))))
 
