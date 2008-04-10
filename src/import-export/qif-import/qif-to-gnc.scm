@@ -6,6 +6,8 @@
 ;;;  Copyright 2000-2001 Bill Gribble <grib@billgribble.com> 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-13))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-or-make-acct
@@ -745,6 +747,12 @@
                       (xaccSplitSetParent commission-split gnc-xtn)
                       (xaccSplitSetAccount commission-split
                                            commission-acct)))))))
+
+    ;; QIF indicates a void transaction by starting the payee with "**VOID**".
+    (if (and (string? qif-payee)
+             (string-prefix? "**VOID**" qif-payee))
+        (xaccTransVoid gnc-xtn "QIF"))
+
     ;; return the modified transaction (though it's ignored).
     gnc-xtn))
 
