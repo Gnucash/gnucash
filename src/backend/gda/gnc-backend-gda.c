@@ -68,6 +68,8 @@ static void add_table_column( GdaServerProvider* server, GdaConnection* cnn,
             gint size, gint flags );
 static void update_save_progress( GncGdaBackend* be );
 
+#define TRANSACTION_NAME "trans"
+
 typedef struct {
     QofIdType searchObj;
     gpointer pCompiledQuery;
@@ -588,6 +590,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     GError* error = NULL;
     gint row;
     gint numTables;
+	gboolean status;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( book != NULL );
@@ -641,6 +644,19 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 	be->obj_total += gnc_book_count_transactions( book );
 	be->operations_done = 0;
 
+	error = NULL;
+	if( be->supports_transactions ) {
+		status = gda_connection_begin_transaction( be->pConnection, TRANSACTION_NAME,
+										GDA_TRANSACTION_ISOLATION_UNKNOWN, &error );
+		if( !status ) {
+			if( error != NULL ) {
+				PWARN( "Unable to begin transaction: %s\n", error->message );
+			} else {
+				PWARN( "Unable to begin transaction\n" );
+			}
+		}
+	}
+
 	// FIXME: should write the set of commodities that are used 
     //write_commodities( be, book );
 	gnc_gda_save_book( QOF_INSTANCE(book), be );
@@ -649,6 +665,16 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     write_template_transactions( be );
     write_schedXactions( be );
     qof_object_foreach_backend( GNC_GDA_BACKEND, write_cb, be );
+	if( be->supports_transactions ) {
+		status = gda_connection_commit_transaction( be->pConnection, TRANSACTION_NAME, &error );
+		if( !status ) {
+			if( error != NULL ) {
+				PWARN( "Unable to commit transaction: %s\n", error->message );
+			} else {
+				PWARN( "Unable to commit transaction\n" );
+			}
+		}
+	}
 	be->is_pristine_db = FALSE;
 
 	// Mark the book as clean
@@ -726,7 +752,6 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 
     if( !qof_instance_get_dirty_flag(inst) && !qof_instance_get_destroying(inst) ) return;
 
-#define TRANSACTION_NAME "trans"
 	error = NULL;
 	if( be->supports_transactions ) {
 		status = gda_connection_begin_transaction( be->pConnection, TRANSACTION_NAME,
