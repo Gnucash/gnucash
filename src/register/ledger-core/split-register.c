@@ -1400,7 +1400,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    g_assert(xaccTransIsOpen(trans));
 
    /* If we are committing the blank split, add it to the account now */
-   if (trans == blank_trans)
+   if (split == blank_split && !info->blank_split_edited)
    {
      account = gnc_split_register_get_default_account(reg);
      if (account)
