@@ -7,7 +7,7 @@ merged with the trunk through rev 17070.  The following bugs/issues are known.
 the result that the transactions are shown on the day before they were entered (I
 am at TZ -0500).
 * When saving from another file, the billterms table is not created/saved.  Instead,
-it will be created when the file is next opened.
+it will be created when the file is next opened. (libgda bug 527923)
 * Initial save performance is better than it used to be, but is still slow.  For
 example, saving my file with ~8000 transactions and ~21000 splits takes 13 minutes
 to an sqlite db.
