@@ -1,0 +1,27 @@
+Status of the GDA backend.
+
+Code for all standard and business objects has been written.  The branch has been
+merged with the trunk through rev 17070.  The following bugs/issues are known.
+
+* Transactions are saved with dates at 00:00:00 o'clock.  This often/usually has
+the result that the transactions are shown on the day before they were entered (I
+am at TZ -0500).
+* When saving from another file, the billterms table is not created/saved.  Instead,
+it will be created when the file is next opened.
+* Initial save performance is better than it used to be, but is still slow.  For
+example, saving my file with ~8000 transactions and ~21000 splits takes 13 minutes
+to an sqlite db.
+* The 'Database Connection' action (File menu) should see if the db already exists
+and should allow the user to connect to and open an existing file, not always
+overwrite it.
+* Foreign key definitions should be used for referential integrity.
+* The db should contain some indication of its schema version number.  When opening
+a db, gnucash should see if the schema is up to date, and should update it if it
+isn't.
+* (Maybe) Keep an 'old values' table for each main table.  When a record is updated,
+copy the old record to the 'old values' table first to keep track of any changes.
+* Use prepared statements
+* Use cursor-based data models when reading from the db for better performance
+* Write automated tests
+* Write doxygen comment headers
+* Don't need a log file
