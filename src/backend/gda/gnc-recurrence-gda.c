@@ -53,8 +53,8 @@ typedef struct {
 
 static gpointer get_obj_guid( gpointer pObject, const QofParam* param );
 static void set_obj_guid( gpointer pObject, gpointer pValue );
-static gpointer get_recurrence_mult( gpointer pObject, const QofParam* );
-static void set_recurrence_mult( gpointer pObject, gpointer pValue );
+static gint get_recurrence_mult( gpointer pObject );
+static void set_recurrence_mult( gpointer pObject, gint value );
 static gpointer get_recurrence_period_type( gpointer pObject, const QofParam* );
 static void set_recurrence_period_type( gpointer pObject, gpointer pValue );
 static gpointer get_recurrence_period_start( gpointer pObject, const QofParam* );
@@ -65,7 +65,7 @@ static const col_cvt_t col_table[] =
     { "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
             get_obj_guid, set_obj_guid },
     { "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,
-            get_recurrence_mult, set_recurrence_mult },
+            (QofAccessFunc)get_recurrence_mult, (QofSetterFunc)set_recurrence_mult },
     { "recurrence_period_type",  CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN, COL_NNUL, NULL, NULL,
 			get_recurrence_period_type, set_recurrence_period_type },
     { "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
@@ -99,29 +99,26 @@ set_obj_guid( gpointer pObject, gpointer pValue )
     // Nowhere to put the GUID
 }
 
-static gpointer
-get_recurrence_mult( gpointer pObject, const QofParam* param )
+static gint
+get_recurrence_mult( gpointer pObject )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
-    static guint m;
 	
-	g_return_val_if_fail( pObject != NULL, NULL );
-	g_return_val_if_fail( pInfo->pRecurrence != NULL, NULL );
+	g_return_val_if_fail( pObject != NULL, 0 );
+	g_return_val_if_fail( pInfo->pRecurrence != NULL, 0 );
 
-	m = pInfo->pRecurrence->mult;
-    return GUINT_TO_POINTER(m);
+	return pInfo->pRecurrence->mult;
 }
 
 static void
-set_recurrence_mult( gpointer pObject, gpointer pValue )
+set_recurrence_mult( gpointer pObject, gint value )
 {
     recurrence_info_t* pInfo = (recurrence_info_t*)pObject;
-    guint m = GPOINTER_TO_UINT(pValue);
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( pInfo->pRecurrence != NULL );
 
-    pInfo->pRecurrence->mult = m;
+    pInfo->pRecurrence->mult = value;
 }
 
 static gpointer

@@ -44,7 +44,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_DESCRIPTION_LEN 2048
 #define MAX_TYPE_LEN 2048
 
-static void set_invisible( gpointer data, gpointer value );
+static void set_invisible( gpointer data, gboolean value );
 
 #define TABLE_NAME "billterms"
 
@@ -70,14 +70,13 @@ static col_cvt_t col_table[] =
 };
 
 static void
-set_invisible( gpointer data, gpointer value )
+set_invisible( gpointer data, gboolean value )
 {
 	GncBillTerm* term = GNC_BILLTERM(data);
-	gboolean b = GPOINTER_TO_INT(value);
 
 	g_return_if_fail( term != NULL );
 
-	if( b ) {
+	if( value ) {
 		gncBillTermMakeInvisible( term );
 	}
 }

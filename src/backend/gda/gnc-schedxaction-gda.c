@@ -50,10 +50,11 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SX_MAX_NAME_LEN 2048
 
-static gpointer get_autocreate( gpointer pObject, const QofParam* param );
-static void set_autocreate( gpointer pObject, gpointer pValue );
-static gpointer get_autonotify( gpointer pObject, const QofParam* param );
-static void set_autonotify( gpointer pObject, gpointer pValue );
+static gboolean get_autocreate( gpointer pObject );
+static void set_autocreate( gpointer pObject, gboolean value );
+static gboolean get_autonotify( gpointer pObject );
+static void set_autonotify( gpointer pObject, gboolean value );
+static gint get_instance_count( gpointer pObject );
 static gpointer get_template_act_guid( gpointer pObject, const QofParam* param );
 static void set_template_act_guid( gpointer pObject, gpointer pValue );
 
@@ -61,20 +62,24 @@ static const col_cvt_t col_table[] =
 {
     { "guid",              CT_GUID,    0,               COL_NNUL|COL_PKEY, "guid" },
     { "name",              CT_STRING,  SX_MAX_NAME_LEN, 0,                 NULL, GNC_SX_NAME },
+	{ "enabled",           CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
+			(QofAccessFunc)xaccSchedXactionGetEnabled, (QofSetterFunc)xaccSchedXactionSetEnabled },
     { "start_date",        CT_GDATE,   0,               COL_NNUL,          NULL, GNC_SX_START_DATE },
     { "last_occur",        CT_GDATE,   0,               0,                 NULL, GNC_SX_LAST_DATE },
     { "num_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_NUM_OCCUR },
     { "rem_occur",         CT_INT,     0,               COL_NNUL,          NULL, GNC_SX_REM_OCCUR },
     { "auto_create",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
-			get_autocreate,        set_autocreate },
+			(QofAccessFunc)get_autocreate,        (QofSetterFunc)set_autocreate },
     { "auto_notify",       CT_BOOLEAN, 0,               COL_NNUL,          NULL, NULL,
-			get_autonotify,        set_autonotify },
+			(QofAccessFunc)get_autonotify,        (QofSetterFunc)set_autonotify },
     { "adv_creation",      CT_INT,     0,               COL_NNUL,          NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceCreation,
             (QofSetterFunc)xaccSchedXactionSetAdvanceCreation },
     { "adv_notify",        CT_INT,     0,               COL_NNUL,          NULL, NULL,
             (QofAccessFunc)xaccSchedXactionGetAdvanceReminder,
             (QofSetterFunc)xaccSchedXactionSetAdvanceReminder },
+	{ "instance_count",    CT_INT,     0,               COL_NNUL,          NULL, NULL,
+			(QofAccessFunc)get_instance_count, (QofSetterFunc)gnc_sx_set_instance_count },
     { "template_act_guid", CT_GUID,    0,               COL_NNUL,          NULL, NULL,
 			get_template_act_guid, set_template_act_guid },
     { NULL }
@@ -82,62 +87,71 @@ static const col_cvt_t col_table[] =
 
 /* ================================================================= */
 
-static gpointer
-get_autocreate( gpointer pObject, const QofParam* param )
+static gboolean
+get_autocreate( gpointer pObject )
 {
     const SchedXaction* pSx = GNC_SX(pObject);
     gboolean autoCreate;
     gboolean autoNotify;
 
-	g_return_val_if_fail( pObject != NULL, NULL );
-	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
+	g_return_val_if_fail( pObject != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return GINT_TO_POINTER(autoCreate);
+    return autoCreate;
 }
 
 static void 
-set_autocreate( gpointer pObject, gpointer pValue )
+set_autocreate( gpointer pObject, gboolean value )
 {
     SchedXaction* pSx = GNC_SX(pObject);
-    gboolean autoCreate;
     gboolean autoNotify;
+	gboolean dummy;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_SX(pObject) );
 
-    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    autoCreate = GPOINTER_TO_INT(pValue);
-    xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
+    xaccSchedXactionGetAutoCreate( pSx, &dummy, &autoNotify );
+    xaccSchedXactionSetAutoCreate( pSx, value, autoNotify );
 }
 
-static gpointer
-get_autonotify( gpointer pObject, const QofParam* param )
+static gboolean
+get_autonotify( gpointer pObject )
 {
     const SchedXaction* pSx = GNC_SX(pObject);
     gboolean autoCreate;
     gboolean autoNotify;
 
-	g_return_val_if_fail( pObject != NULL, NULL );
-	g_return_val_if_fail( GNC_IS_SX(pObject), NULL );
+	g_return_val_if_fail( pObject != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
 
     xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    return GINT_TO_POINTER(autoNotify);
+    return autoNotify;
 }
 
 static void 
-set_autonotify( gpointer pObject, gpointer pValue )
+set_autonotify( gpointer pObject, gboolean value )
 {
     SchedXaction* pSx = GNC_SX(pObject);
     gboolean autoCreate;
-    gboolean autoNotify;
+    gboolean dummy;
 
 	g_return_if_fail( pObject != NULL );
 	g_return_if_fail( GNC_IS_SX(pObject) );
 
-    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &autoNotify );
-    autoNotify = GPOINTER_TO_INT(pValue);
-    xaccSchedXactionSetAutoCreate( pSx, autoCreate, autoNotify );
+    xaccSchedXactionGetAutoCreate( pSx, &autoCreate, &dummy );
+    xaccSchedXactionSetAutoCreate( pSx, autoCreate, value );
+}
+
+static gint
+get_instance_count( gpointer pObject )
+{
+    const SchedXaction* pSx = GNC_SX(pObject);
+
+	g_return_val_if_fail( pObject != NULL, FALSE );
+	g_return_val_if_fail( GNC_IS_SX(pObject), FALSE );
+
+    return gnc_sx_get_instance_count( pSx, NULL );
 }
 
 static gpointer
@@ -261,10 +275,10 @@ gnc_gda_save_schedxaction( QofInstance* inst, GncGdaBackend* be )
 		op = OP_DB_ADD_OR_UPDATE;
 	}
     (void)gnc_gda_do_db_operation( be, op, SCHEDXACTION_TABLE, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
+    guid = qof_instance_get_guid( inst );
 	gnc_gda_recurrence_save_list( be, guid, gnc_sx_get_schedule( pSx ) );
 
     // Now, commit any slots
-    guid = qof_instance_get_guid( inst );
     if( !qof_instance_get_destroying(inst) ) {
         gnc_gda_slots_save( be, guid, qof_instance_get_slots( inst ) );
     } else {

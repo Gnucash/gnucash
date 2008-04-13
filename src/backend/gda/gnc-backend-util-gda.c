@@ -254,6 +254,8 @@ static col_type_handler_t string_handler
     = { load_string, create_string_col,
         get_gvalue_string_for_query, get_gvalue_string_cond };
 /* ----------------------------------------------------------------- */
+typedef gint (*IntAccessFunc)( const gpointer );
+typedef void (*IntSetterFunc)( const gpointer, gint );
 
 static void
 load_int( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
@@ -262,6 +264,7 @@ load_int( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 {
     const GValue* val;
     gint int_value;
+	IntSetterFunc i_setter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pModel != NULL );
@@ -278,7 +281,8 @@ load_int( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
     } else {
-    	(*setter)( pObject, GINT_TO_POINTER(int_value) );
+		i_setter = (IntSetterFunc)setter;
+    	(*i_setter)( pObject, int_value );
     }
 }
 
@@ -287,7 +291,7 @@ get_gvalue_int( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     gint int_value;
-    QofAccessFunc getter;
+    IntAccessFunc i_getter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -297,8 +301,8 @@ get_gvalue_int( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
     memset( value, 0, sizeof( GValue ) );
 
-    getter = gnc_gda_get_getter( obj_name, table_row );
-    int_value = GPOINTER_TO_INT((*getter)( pObject, NULL ));
+    i_getter = (IntAccessFunc)gnc_gda_get_getter( obj_name, table_row );
+    int_value = (*i_getter)( pObject );
     g_value_init( value, G_TYPE_INT );
     g_value_set_int( value, int_value );
 }
@@ -356,6 +360,8 @@ static col_type_handler_t int_handler =
         { load_int, create_int_col,
             get_gvalue_int_for_query, get_gvalue_int_cond };
 /* ----------------------------------------------------------------- */
+typedef gboolean (*BooleanAccessFunc)( const gpointer );
+typedef void (*BooleanSetterFunc)( const gpointer, gboolean );
 
 static void
 load_boolean( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
@@ -364,6 +370,7 @@ load_boolean( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
 {
     const GValue* val;
     gint int_value;
+	BooleanSetterFunc b_setter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( pModel != NULL );
@@ -380,7 +387,8 @@ load_boolean( const GncGdaBackend* be, GdaDataModel* pModel, gint row,
     if( table_row->gobj_param_name != NULL ) {
 		g_object_set( pObject, table_row->gobj_param_name, int_value, NULL );
     } else {
-    	(*setter)( pObject, GINT_TO_POINTER(int_value) );
+		b_setter = (BooleanSetterFunc)setter;
+    	(*b_setter)( pObject, int_value ? TRUE : FALSE );
     }
 }
 
@@ -389,7 +397,7 @@ get_gvalue_boolean( const GncGdaBackend* be, QofIdTypeConst obj_name,
                 const gpointer pObject, const col_cvt_t* table_row, GValue* value )
 {
     gint int_value;
-    QofAccessFunc getter;
+    BooleanAccessFunc b_getter;
 
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( obj_name != NULL );
@@ -399,8 +407,8 @@ get_gvalue_boolean( const GncGdaBackend* be, QofIdTypeConst obj_name,
 
     memset( value, 0, sizeof( GValue ) );
 
-    getter = gnc_gda_get_getter( obj_name, table_row );
-    int_value = GPOINTER_TO_INT((*getter)( pObject, NULL ));
+    b_getter = (BooleanAccessFunc)gnc_gda_get_getter( obj_name, table_row );
+    int_value = ((*b_getter)( pObject )) ? 1 : 0;
     g_value_init( value, G_TYPE_INT );
     g_value_set_int( value, int_value );
 }

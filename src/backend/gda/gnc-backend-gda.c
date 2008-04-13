@@ -549,7 +549,7 @@ write_schedXactions( GncGdaBackend* be )
 
     for( ; schedXactions != NULL; schedXactions = schedXactions->next ) {
         tmpSX = schedXactions->data;
-	gnc_gda_save_schedxaction( QOF_INSTANCE( tmpSX ), be );
+		gnc_gda_save_schedxaction( QOF_INSTANCE( tmpSX ), be );
     }
 }
 
