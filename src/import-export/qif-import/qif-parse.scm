@@ -19,11 +19,11 @@
 
 (define decimal-radix-regexp
   (make-regexp
-   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+\\.[0-9]* *$"))
+   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+\\.[0-9]* *$"))
 
 (define comma-radix-regexp
   (make-regexp
-   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+,[0-9]* *$"))
+   "^ *\\$?[+-]?\\$?[0-9]+$|^ *\\$?[+-]?\\$?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)? *$|^ *\\$?[+-]?\\$?[0-9]+,[0-9]* *$"))
 
 (define integer-regexp (make-regexp "^\\$?[+-]?\\$?[0-9]+ *$"))
 
@@ -89,26 +89,26 @@
           (set! fixed-string
                 (substring year-string 2 (string-length year-string))))
         (set! fixed-string year-string))
-    
+
     ;; now the string should just have a number in it plus some
     ;; optional trailing space.
     (set! post-read-value
           (with-input-from-string fixed-string
             (lambda () (read))))
-    
+
     (cond
      ;; 2-digit numbers less than the window size are interpreted to
      ;; be post-2000.
      ((and (integer? post-read-value)
            (< post-read-value y2k-threshold))
       (set! y2k-fixed-value (+ 2000 post-read-value)))
-     
+
      ;; there's a common bug in printing post-2000 dates that
      ;; prints 2000 as 19100 etc.
      ((and (integer? post-read-value)
            (> post-read-value 19000))
       (set! y2k-fixed-value (+ 1900 (- post-read-value 19000))))
-     
+
      ;; normal dates represented in unix years (i.e. year-1900, so
      ;; 2000 => 100.)  We also want to allow full year specifications,
      ;; (i.e. 1999, 2001, etc) and there's a point at which you can't
@@ -120,11 +120,11 @@
      ((and (integer? post-read-value)
            (< post-read-value 1902))
       (set! y2k-fixed-value (+ 1900 post-read-value)))
-     
+
      ;; this is a normal, 4-digit year spec (1999, 2000, etc).
      ((integer? post-read-value)
       (set! y2k-fixed-value post-read-value))
-     
+
      ;; No idea what the string represents.  Maybe a new bug in Quicken!
      (#t
       (gnc:warn "qif-file:fix-year: ay caramba! What is this? ["
@@ -326,14 +326,14 @@
                  (with-input-from-string elt
                    (lambda () (read))))
                date-parts))
-    
+
     (let ((possibilities possible-formats)
           (n1 (car numeric-date-parts))
           (n2 (cadr numeric-date-parts))
           (n3 (caddr numeric-date-parts))
           (s1 (car date-parts))
           (s3 (caddr date-parts)))
-      
+
       ;; filter the possibilities to eliminate (hopefully)
       ;; all but one
       (if (or (not (number? n1)) (> n1 12))
@@ -344,22 +344,22 @@
           (set! possibilities (delq 'd-m-y possibilities)))
       (if (or (not (number? n1)) (< n1 1))
           (set! possibilities (delq 'm-d-y possibilities)))
-      
+
       (if (or (not (number? n2)) (> n2 12))
           (begin
             (set! possibilities (delq 'd-m-y possibilities))
             (set! possibilities (delq 'y-m-d possibilities))))
-      
+
       (if (or (not (number? n2)) (> n2 31))
           (begin
             (set! possibilities (delq 'm-d-y possibilities))
             (set! possibilities (delq 'y-d-m possibilities))))
-      
+
       (if (or (not (number? n3)) (> n3 12))
           (set! possibilities (delq 'y-d-m possibilities)))
       (if (or (not (number? n3)) (> n3 31))
           (set! possibilities (delq 'y-m-d possibilities)))
-      
+
       (if (or (not (number? n3)) (< n3 1))
           (set! possibilities (delq 'y-m-d possibilities)))
       (if (or (not (number? n3)) (< n3 1))
@@ -449,14 +449,14 @@
                                            (match:substring m 2)
                                            (match:substring m 3)))))
                  ))))
-        
+
     ;; get the strings into numbers (but keep the strings around)
     (set! numeric-date-parts
           (map (lambda (elt)
                  (with-input-from-string elt
                    (lambda () (read))))
                date-parts))
-    
+
     ;; if the date parts list doesn't have 3 parts, we're in
     ;; trouble
     (if (not (eq? 3 (length date-parts)))
@@ -473,7 +473,7 @@
                  (gnc:warn "qif-parse:parse-date/format: "
                            "format is d/m/y, but date is ["
                            date-string "]."))))
-          
+
           ((m-d-y)
            (let ((m (car numeric-date-parts))
                  (d (cadr numeric-date-parts))
@@ -484,7 +484,7 @@
                  (gnc:warn "qif-parse:parse-date/format: "
                            "format is m/d/y, but date is ["
                            date-string "]."))))
-          
+
           ((y-m-d)
            (let ((y (qif-parse:fix-year (car date-parts) 50))
                  (m (cadr numeric-date-parts))
@@ -495,7 +495,7 @@
                  (gnc:warn "qif-parse:parse-date/format: "
                            "format is y/m/d, but date is ["
                            date-string "]."))))
-          
+
           ((y-d-m)
            (let ((y (qif-parse:fix-year (car date-parts) 50))
                  (d (cadr numeric-date-parts))
@@ -553,13 +553,9 @@
 (define (qif-parse:parse-number/format value-string format)
   (case format
     ((decimal)
-     (let* ((filtered-string
-             (string-remove-char
-              (string-remove-char value-string #\,)
-              #\$))
-            (read-val
-             (with-input-from-string filtered-string
-               (lambda () (read)))))
+     (let* ((filtered-string (string-remove-chars value-string ",$'"))
+            (read-val (with-input-from-string filtered-string
+                                              (lambda () (read)))))
        (if (number? read-val)
            (double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
@@ -568,15 +564,11 @@
                     GNC-RND-ROUND))
            (gnc-numeric-zero))))
     ((comma)
-     (let* ((filtered-string
-             (string-remove-char
-              (string-replace-char!
-               (string-remove-char value-string #\.)
-               #\, #\.)
-              #\$))
-            (read-val
-             (with-input-from-string filtered-string
-               (lambda () (read)))))
+     (let* ((filtered-string (string-replace-char
+                               (string-remove-chars value-string ".$'")
+                               #\, #\.))
+            (read-val (with-input-from-string filtered-string
+                                              (lambda () (read)))))
        (if (number? read-val)
            (double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
@@ -585,10 +577,9 @@
                     GNC-RND-ROUND))
            (gnc-numeric-zero))))
     ((integer)
-     (let ((read-val
-            (with-input-from-string
-                (string-remove-char value-string #\$)
-              (lambda () (read)))))
+     (let ((read-val (with-input-from-string (string-remove-char value-string
+                                                                 #\$)
+                                             (lambda () (read)))))
        (if (number? read-val)
            (double-to-gnc-numeric
             (+ 0.0 read-val) 1 GNC-RND-ROUND)
