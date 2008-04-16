@@ -1457,6 +1457,34 @@ gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
 
 
 /****************************************************************
+ * gnc_ui_qif_import_convert_undo
+ *
+ * This function launches the Scheme procedure that un-imports
+ * any imported accounts and transactions.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_convert_undo(QIFImportWindow * wind)
+{
+  SCM undo = scm_c_eval_string("qif-import:qif-to-gnc-undo");
+
+  /* Undo the conversion. */
+  scm_call_1(undo, wind->imported_account_tree);
+
+  /* There's no imported account tree any more. */
+  scm_gc_unprotect_object(wind->imported_account_tree);
+  wind->imported_account_tree = SCM_BOOL_F;
+  scm_gc_protect_object(wind->imported_account_tree);
+
+
+  /* Get rid of the list of matched transactions. */
+  scm_gc_unprotect_object(wind->match_transactions);
+  wind->match_transactions = SCM_BOOL_F;
+  scm_gc_protect_object(wind->match_transactions);
+}
+
+
+/****************************************************************
  * gnc_ui_qif_import_convert
  *
  * This function launches the Scheme procedures that actually do
@@ -1503,14 +1531,12 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   {
     /* An error occurred during conversion. */
 
-    /* There's no imported account tree. */
-    scm_gc_unprotect_object(wind->imported_account_tree);
-    wind->imported_account_tree = SCM_BOOL_F;
-    scm_gc_protect_object(wind->imported_account_tree);
+    /* Remove any converted data. */
+    gnc_ui_qif_import_convert_undo(wind);
 
     /* We don't know what data structures may have become corrupted,
      * so we shouldn't allow further action. Display the failure
-     * page next, and just allow the user to cancel. */
+     * page next, and only allow the user to cancel. */
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
                          get_named_page(wind, "failed_page"));
     gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
@@ -1539,6 +1565,11 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     if (retval == SCM_BOOL_F)
     {
       /* An error occurred during duplicate checking. */
+
+      /* Remove any converted data. */
+      gnc_ui_qif_import_convert_undo(wind);
+
+      /* Display the failure page. */
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "failed_page"));
       gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
@@ -2148,14 +2179,36 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   gnc_ui_qif_import_druid_destroy(wind);  
 }
 
+
+/****************************************************************
+ * gnc_ui_qif_import_cancel_cb
+ *
+ * Invoked when the "Cancel" button is clicked.
+ ****************************************************************/
+
 static void
-gnc_ui_qif_import_cancel_cb (GnomeDruid * druid, 
-                             gpointer user_data)
+gnc_ui_qif_import_cancel_cb(GnomeDruid * druid, gpointer user_data)
 {
-  QIFImportWindow * wind = user_data;
-  
+  QIFImportWindow *wind = user_data;
+  GList           *pageptr;
+  GnomeDruidPage  *gtkpage;
+  QIFDruidPage    *page;
+
+  /* Remove any converted data. */
+  gnc_ui_qif_import_convert_undo(wind);
+
+  /* Remove any commodities created for druid pages. */
+  for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
+  {
+    gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
+    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
+    gnc_commodity_destroy(page->commodity);
+  }
+
+  /* Destroy the druid. */
   gnc_ui_qif_import_druid_destroy(wind);
 }
+
 
 SCM
 gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w)

@@ -35,7 +35,6 @@
 
 (export make-qif-file)
 (export make-ticker-map)
-(export qif-import:qif-to-gnc)
 (export qif-import:get-all-accts)
 (export qif-import:fix-from-acct)
 (export qif-import:any-new-accts?)
@@ -43,6 +42,8 @@
 (export qif-import:refresh-match-selection)
 (export qif-import:save-map-prefs)
 (export qif-import:load-map-prefs)
+(export qif-import:qif-to-gnc)
+(export qif-import:qif-to-gnc-undo)
 
 (export qif-map-entry:gnc-name)
 (export qif-map-entry:set-gnc-name!)

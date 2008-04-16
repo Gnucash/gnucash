@@ -264,18 +264,38 @@ the following:
 
 QIF N Line    Notes
 ============  =====
+Aktab         Same as ShrsOut.
+AktSplit      Same as StkSplit.
+Aktzu         Same as ShrsIn.
 Buy           Buy shares.
 BuyX          Buy shares. Used with an L line.
 Cash          Miscellaneous cash transaction. Used with an L line.
+CGMid         Mid-term capital gains.
+CGMidX        Mid-term capital gains. For use with an L line.
+CGLong        Long-term capital gains.
+CGLongX       Long-term capital gains. For use with an L line.
+CGShort       Short-term capital gains.
+CGShortX      Short-term capital gains. For use with an L line.
 ContribX      Same as XIn. Used for tax-advantaged accounts.
 CvrShrt       Buy shares to cover a short sale.
+CvrShrtX      Buy shares to cover a short sale. Used with an L line.
 Div           Dividend received.
 DivX          Dividend received. For use with an L line.
+Errinerg      Same as Reminder.
 Exercise      Exercise an option.
+ExercisX      Exercise an option. For use with an L line.
 Expire        Mark an option as expired. (Uses D, N, Y & M lines)
 Grant         Receive a grant of stock options.
+Int           Same as IntInc.
+IntX          Same as IntIncX.
 IntInc        Interest received.
 IntIncX       Interest received. For use with an L line.
+K.gewsp       Same as CGShort. (German)
+K.gewspX      Same as CGShortX. (German)
+Kapgew        Same as CGLong. Kapitalgewinnsteuer.(German)
+KapgewX       Same as CGLongX. Kapitalgewinnsteuer. (German)
+Kauf          Same as Buy. (German)
+KaufX         Same as BuyX. (German)
 MargInt       Margin interest paid.
 MargIntX      Margin interest paid. For use with an L line.
 MiscExp       Miscellaneous expense.
@@ -284,6 +304,13 @@ MiscInc       Miscellaneous income.
 MiscIncX      Miscellaneous income. For use with an L line.
 ReinvDiv      Reinvested dividend.
 ReinvInt      Reinvested interest.
+ReinvLG       Reinvested long-term capital gains.
+Reinvkur      Same as ReinvLG.
+Reinvksp      Same as ReinvSh.
+ReinvMd       Reinvested mid-term capital gains.
+ReinvSG       Same as ReinvSh.
+ReinvSh       Reinvested short-term capital gains.
+Reinvzin      Same as ReinvDiv.
 Reminder      Reminder. (Uses D, N, C & M lines)
 RtrnCap       Return of capital.
 RtrnCapX      Return of capital. For use with an L line.
@@ -293,9 +320,12 @@ ShtSell       Short sale.
 ShrsIn        Deposit shares.
 ShrsOut       Withdraw shares.
 StkSplit      Stock split.
+Verkauf       Same as Sell. (German)
+VerkaufX      Same as SellX. (German)
+Vest          Mark options as vested. (Uses N, Y, Q, C & M lines)
+WithDrwX      Same as XOut. Used for tax-advantaged accounts.
 XIn           Transfer cash from another account.
 XOut          Transfer cash to another account.
-Vest          Mark options as vested. (Uses N, Y, Q, C & M lines)
 
 Category/Transfer/Class line: 
 -----------------------------
