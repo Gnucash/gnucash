@@ -978,29 +978,33 @@ SplitList* xaccAccountGetSplitList (const Account *account);
 void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
 
 /** The xaccAccountForEachTransaction() routine will traverse all of
-   the transactions in the given 'account' and call the callback
-   function 'proc' on each transaction.  Processing will continue
-   if-and-only-if 'proc' returns 0. The user data pointer
-   'data' will be passed on to the callback function 'proc'.
-
-   This function does not descend recursively to traverse transactions
-   in child accounts.
-
-   'proc' will be called exactly once for each transaction that is
-   pointed to by at least one split in the given account.
-
-   The result of this function will be 0 if-and-only-if
-   every relevant transaction was traversed exactly once. 
-   Else the return value is the last non-zero value returned by proc.
-
-   Note that the traversal occurs only over the transactions that 
-   are locally cached in the local gnucash engine.  If the gnucash 
-   engine is attached to a remote database, the database may contain
-   (many) transactions that are not mirrored in the local cache.
-   This routine will not cause an SQL database query to be performed;
-   it will not traverse transactions present only in the remote
-   database.
-*/
+ * the transactions in @a account and call the callback
+ * function @a proc on each transaction.  Processing will continue
+ * if-and-only-if @a proc returns 0. The user data pointer
+ * @a data will be passed on to the callback function @a proc.
+ *
+ * This function does not descend recursively to traverse transactions
+ * in child accounts.
+ *
+ * @a proc will be called exactly once for each transaction that is
+ * pointed to by at least one split in the given account.
+ *
+ * The result of this function will be 0 <em>if and only if</em>
+ * every relevant transaction was traversed exactly once. 
+ * Else the return value is the last non-zero value returned by proc.
+ *
+ * \warning For performance reasons, the transaction callback @a proc
+ * must never destroy any of the transaction's splits, nor assign any
+ * of them to a different account. <b>To do so risks a crash.</b>
+ *
+ * \warning The traversal occurs only over the transactions that 
+ * are locally cached in the local gnucash engine.  If the gnucash 
+ * engine is attached to a remote database, the database may contain
+ * (many) transactions that are not mirrored in the local cache.
+ * This routine will not cause an SQL database query to be performed;
+ * it will not traverse transactions present only in the remote
+ * database.
+ */
 gint xaccAccountForEachTransaction(const Account *account,
                                    TransactionCallback proc,
                                    void *data);
@@ -1278,16 +1282,17 @@ gboolean xaccTransactionTraverse(Transaction *trans, int stage);
  */
 gboolean xaccSplitTransactionTraverse(Split *split, int stage);
 
-/** xaccAccountStagedTransactionTraversal() calls thunk on each
- *    transaction in the account whose current marker is less than the
- *    given `stage' and updates each transaction's marker to be `stage'.
- *    The traversal will stop if thunk() returns a non-zero value.
+/** xaccAccountStagedTransactionTraversal() calls @a thunk on each
+ *    transaction in account @a a whose current marker is less than the
+ *    given @a stage and updates each transaction's marker to be @a stage.
+ *    The traversal will stop if @a thunk returns a non-zero value.
  *    xaccAccountStagedTransactionTraversal() function will return zero
- *    or the non-zero value returned by thunk().
+ *    or the non-zero value returned by @a thunk.
  *    This API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during
- *    a traversal is undefined, so don't do that. 
+ *    \warning For performance reasons, the transaction callback @a thunk
+ *    must never destroy any of the transaction's splits, nor assign any
+ *    of them to a different account. <b>To do so risks a crash.</b>
  */
 
 int xaccAccountStagedTransactionTraversal(const Account *a,
@@ -1295,16 +1300,17 @@ int xaccAccountStagedTransactionTraversal(const Account *a,
                                           TransactionCallback thunk,
                                           void *data);
 
-/** gnc_account_tree_staged_transaction_traversal() calls thunk on each
+/** gnc_account_tree_staged_transaction_traversal() calls @a thunk on each
  *    transaction in the group whose current marker is less than the
- *    given `stage' and updates each transaction's marker to be `stage'.
- *    The traversal will stop if thunk() returns a non-zero value.
- *    gnc_account_tree_staged_transaction_traversal() function will return zero 
- *    or the non-zero value returned by thunk().  This
+ *    given @a stage and updates each transaction's marker to be @a stage.
+ *    The traversal will stop if @a thunk returns a non-zero value.
+ *    gnc_account_tree_staged_transaction_traversal() function will return zero
+ *    or the non-zero value returned by @a thunk.  This
  *    API does not handle handle recursive traversals.
  *
- *    Currently the result of adding or removing transactions during
- *    a traversal is undefined, so don't do that.
+ *    \warning For performance reasons, the transaction callback @a thunk
+ *    must never destroy any of the transaction's splits, nor assign any
+ *    of them to a different account. <b>To do so risks a crash.</b>
  */
 
 int gnc_account_tree_staged_transaction_traversal(const Account *account,
@@ -1313,30 +1319,34 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
 						  void *data);
 
 /** Traverse all of the transactions in the given account group.
-   Continue processing IFF proc returns 0. This function
-   will descend recursively to traverse transactions in the
-   children of the accounts in the group.
-
-   Proc will be called exactly once for each transaction that is
-   pointed to by at least one split in any account in the hierarchy
-   topped by the root Account acc.
-
-   The result of this function will be 0 IFF every relevant
-   transaction was traversed exactly once; otherwise, the return
-   value is the last non-zero value returned by the callback.
-
-   Note that the traversal occurs only over the transactions that
-   are locally cached in the local gnucash engine.  If the gnucash
-   engine is attached to a remote database, the database may contain
-   (many) transactions that are not mirrored in the local cache.
-   This routine will not cause an SQL database query to be performed;
-   it will not traverse transactions present only in the remote
-   database.
-
-   Note that this routine is just a trivial wrapper for 
-   
-   gnc_account_tree_begin_staged_transaction_traversals(g);
-   gnc_account_tree_staged_transaction_traversal(g, 42, proc, data);
+ * Continue processing IFF @a proc returns 0. This function
+ * will descend recursively to traverse transactions in the
+ * children of the accounts in the group.
+ *
+ * @a Proc will be called exactly once for each transaction that is
+ * pointed to by at least one split in any account in the hierarchy
+ * topped by the root Account @a acc.
+ *
+ * The result of this function will be 0 IFF every relevant
+ * transaction was traversed exactly once; otherwise, the return
+ * value is the last non-zero value returned by the callback.
+ *
+ * \warning For performance reasons, the transaction callback @a proc
+ * must never destroy any of the transaction's splits, nor assign any
+ * of them to a different account. <b>To do so risks a crash.</b>
+ *
+ * \warning The traversal occurs only over the transactions that
+ * are locally cached in the local gnucash engine.  If the gnucash
+ * engine is attached to a remote database, the database may contain
+ * (many) transactions that are not mirrored in the local cache.
+ * This routine will not cause an SQL database query to be performed;
+ * it will not traverse transactions present only in the remote
+ * database.
+ *
+ * Note that this routine is just a trivial wrapper for
+ *
+ * gnc_account_tree_begin_staged_transaction_traversals(g);
+ * gnc_account_tree_staged_transaction_traversal(g, 42, proc, data);
  */
 
 int xaccAccountTreeForEachTransaction(Account *acc, 
