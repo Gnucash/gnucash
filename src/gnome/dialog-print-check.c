@@ -721,9 +721,9 @@ format_read_item_placement(const gchar * file,
             }
             g_free(key);
 
+            key = g_strdup_printf("%s_%d", KF_KEY_ALIGN, item_num);
             value =
-                g_key_file_get_string(key_file, KF_GROUP_ITEMS, KF_KEY_ALIGN,
-                                      &error);
+                g_key_file_get_string(key_file, KF_GROUP_ITEMS, key, &error);
             if (!error) {
                 g_debug("Check file %s, group %s, key %s, value: %s",
                         file, KF_GROUP_ITEMS, key, value);
@@ -744,6 +744,7 @@ format_read_item_placement(const gchar * file,
                 data->align = PANGO_ALIGN_LEFT;
                 g_clear_error(&error);
             }
+            g_free(key);
         }
         /* Get any extra data for specific items. */
         switch (data->type) {
