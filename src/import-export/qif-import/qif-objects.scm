@@ -661,13 +661,25 @@
    ticker-map
    (cons stock-symbol (qif-ticker-map:ticker-map ticker-map))))
 
-(define (qif-ticker-map:lookup-ticker ticker-map name)
+(define (qif-ticker-map:lookup-symbol ticker-map name)
   (let ((retval #f))
     (for-each 
      (lambda (symbol)
        (if (string=? name (qif-stock-symbol:name symbol))
 	   (begin
 	     (set! retval (qif-stock-symbol:symbol symbol))
+	     (if (string=? retval "")
+		 (set! retval #f)))))
+     (qif-ticker-map:ticker-map ticker-map))
+    retval))
+
+(define (qif-ticker-map:lookup-type ticker-map name)
+  (let ((retval #f))
+    (for-each 
+     (lambda (symbol)
+       (if (string=? name (qif-stock-symbol:name symbol))
+	   (begin
+	     (set! retval (qif-stock-symbol:type symbol))
 	     (if (string=? retval "")
 		 (set! retval #f)))))
      (qif-ticker-map:ticker-map ticker-map))

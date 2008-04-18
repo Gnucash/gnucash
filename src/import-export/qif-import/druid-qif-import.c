@@ -1617,8 +1617,11 @@ gnc_ui_qif_import_new_securities(QIFImportWindow * wind)
   SCM update_securities = scm_c_eval_string("qif-import:update-security-hash");
 
   /* Get a list of any new QIF securities since the previous call. */
-  updates = scm_call_3(update_securities, wind->security_hash, 
-                       wind->ticker_map, wind->acct_map_info);
+  updates = scm_call_4(update_securities,
+                       wind->security_hash, 
+                       wind->ticker_map,
+                       wind->acct_map_info,
+                       wind->security_prefs);
   if (updates != SCM_BOOL_F)
   {
     /* A list of new QIF securities was returned. Save it. */
