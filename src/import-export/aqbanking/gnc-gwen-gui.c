@@ -42,6 +42,7 @@
 #include "gnc-gwen-gui.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
+#include "md5.h"
 #include "qof.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -129,6 +130,8 @@ static gint setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token,
                                  GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
 static gint loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
                        GWEN_LOGGER_LEVEL priority, const gchar *text);
+static gint checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
+                         GWEN_IO_LAYER *io, guint32 guiid);
 
 gboolean ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 void ggg_abort_clicked_cb(GtkButton *button, gpointer user_data);
@@ -177,8 +180,12 @@ struct _GncGWENGui {
     gboolean cache_passwords;
     GHashTable *passwords;
 
+    /* Certificates handling */
+    GHashTable *accepted_certs;
+    GWEN_GUI_CHECKCERT_FN builtin_checkcert;
+
     /* Dialogs */
-    int showbox_id;
+    guint showbox_id;
     GHashTable *showbox_hash;
     GtkWidget *showbox_last;
 
@@ -276,6 +283,8 @@ gnc_GWEN_Gui_shutdown(void)
         g_hash_table_destroy(gui->passwords);
     if (gui->showbox_hash)
         g_hash_table_destroy(gui->showbox_hash);
+    if (gui->accepted_certs)
+        g_hash_table_destroy(gui->accepted_certs);
     gtk_widget_destroy(gui->dialog);
     g_free(gui);
 
@@ -306,6 +315,7 @@ register_callbacks(GncGWENGui *gui)
     GWEN_Gui_SetGetPasswordFn(gwen_gui, getpassword_cb);
     GWEN_Gui_SetSetPasswordStatusFn(gwen_gui, setpasswordstatus_cb);
     GWEN_Gui_SetLogHookFn(gwen_gui, loghook_cb);
+    gui->builtin_checkcert = GWEN_Gui_SetCheckCertFn(gwen_gui, checkcert_cb);
 
     GWEN_Gui_SetGui(gwen_gui);
     SETDATA_GUI(gwen_gui, gui);
@@ -354,12 +364,13 @@ setup_dialog(GncGWENGui *gui)
     gui->second_entry = glade_xml_get_widget(xml, "second_entry");
     gui->other_entries_box = NULL;
     gui->progresses = NULL;
-    gui->showbox_hash = NULL;
-    gui->showbox_id = 1;
     gui->log_text = glade_xml_get_widget(xml, "log_text");
     gui->abort_button = glade_xml_get_widget(xml, "abort_button");
     gui->close_button = glade_xml_get_widget(xml, "close_button");
     gui->close_checkbutton = glade_xml_get_widget(xml, "close_checkbutton");
+    gui->accepted_certs = NULL;
+    gui->showbox_hash = NULL;
+    gui->showbox_id = 1;
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(gui->close_checkbutton),
@@ -420,6 +431,10 @@ reset_dialog(GncGWENGui *gui)
         g_hash_table_destroy(gui->passwords);
         gui->passwords = NULL;
     }
+
+    if (!gui->accepted_certs)
+        gui->accepted_certs = g_hash_table_new_full(
+            g_str_hash, g_str_equal, (GDestroyNotify) g_free, NULL);
 
     LEAVE(" ");
 }
@@ -1187,6 +1202,45 @@ loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
         g_log(log_domain, log_levels[priority], text);
 
     return 1;
+}
+
+static gint
+checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
+             GWEN_IO_LAYER *io, guint32 guiid)
+{
+    GncGWENGui *gui = GETDATA_GUI(gwen_gui);
+    const gchar *hash, *status;
+    struct md5_ctx md5_context;
+    gchar cert_hash[16];
+    gint retval;
+
+    g_return_val_if_fail(gui && gui->accepted_certs, -1);
+
+    ENTER("gui=%p, cert=%p", gui, cert);
+
+    hash = GWEN_SslCertDescr_GetFingerPrint(cert);
+    status = GWEN_SslCertDescr_GetStatusText(cert);
+
+    /* Operate on an md5sum of the pair of hash and status */
+    md5_init_ctx(&md5_context);
+    md5_process_bytes(hash, strlen(hash), &md5_context);
+    md5_process_bytes(status, strlen(status), &md5_context);
+    md5_finish_ctx(&md5_context, cert_hash);
+
+    if (g_hash_table_lookup(gui->accepted_certs, cert_hash)) {
+        /* Certificate has been accepted before */
+        LEAVE("Automatically accepting certificate");
+        return 0;
+    }
+
+    retval = gui->builtin_checkcert(gwen_gui, cert, io, guiid);
+    if (retval == 0) {
+        /* Certificate has been accepted */
+        g_hash_table_insert(gui->accepted_certs, g_strdup(cert_hash), cert_hash);
+    }
+
+    LEAVE("retval=%d", retval);
+    return retval;
 }
 
 gboolean
