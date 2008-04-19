@@ -759,7 +759,6 @@ gnc_ab_initial_druid(void)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_append_column(info->account_view, column);
 
-    /*     renderer = gtk_cell_renderer_toggle_new(); */
     column = gtk_tree_view_column_new_with_attributes(
         _("New?"), gtk_cell_renderer_toggle_new(),
         "active", ACCOUNT_LIST_COL_CHECKED, (gchar*) NULL);

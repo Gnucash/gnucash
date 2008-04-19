@@ -30,8 +30,8 @@
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  */
 
-#ifndef GNC_HBCI_UTILS_H
-#define GNC_HBCI_UTILS_H
+#ifndef GNC_AB_UTILS_H
+#define GNC_AB_UTILS_H
 
 #include <glib.h>
 #include <aqbanking/banking.h>

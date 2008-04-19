@@ -36,12 +36,14 @@
 #define AB_ACCOUNT_UID "account-uid"
 #define AB_BANK_CODE "bank-code"
 #define AB_TRANS_RETRIEVAL "trans-retrieval"
+#define AB_TEMPLATES "template-list"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 static void force_account_dirty(Account *acct);
 static kvp_frame *gnc_ab_get_account_kvp(const Account *a, gboolean create);
+static kvp_frame *gnc_ab_get_book_kvp(QofBook *b, gboolean create);
 
 G_CONST_RETURN gchar *
 gnc_ab_get_account_accountid(const Account *a)
@@ -119,6 +121,23 @@ gnc_ab_set_account_trans_retrieval(Account *a, Timespec time)
     xaccAccountCommitEdit(a);
 }
 
+GList *
+gnc_ab_get_book_template_list(QofBook *b)
+{
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, FALSE);
+    kvp_value *value = kvp_frame_get_slot(frame, AB_TEMPLATES);
+    return kvp_value_get_glist(value);
+}
+
+void
+gnc_ab_set_book_template_list(QofBook *b, GList *template_list)
+{
+    kvp_frame *frame = gnc_ab_get_book_kvp(b, TRUE);
+    kvp_value *value = kvp_value_new_glist_nc(template_list);
+    kvp_frame_set_slot_nc(frame, AB_TEMPLATES, value);
+    qof_book_kvp_changed(b);
+}
+
 static void
 force_account_dirty(Account *acct)
 {
@@ -136,6 +155,18 @@ static kvp_frame *
 gnc_ab_get_account_kvp(const Account *a, gboolean create)
 {
     kvp_frame *toplevel = xaccAccountGetSlots(a);
+    kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
+    if (!result && create) {
+        result = kvp_frame_new();
+        kvp_frame_add_frame_nc(toplevel, AB_KEY, result);
+    }
+    return result;
+}
+
+static kvp_frame *
+gnc_ab_get_book_kvp(QofBook *b, gboolean create)
+{
+    kvp_frame *toplevel = qof_book_get_slots(b);
     kvp_frame *result = kvp_frame_get_frame(toplevel, AB_KEY);
     if (!result && create) {
         result = kvp_frame_new();

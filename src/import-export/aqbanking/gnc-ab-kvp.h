@@ -43,14 +43,14 @@ G_BEGIN_DECLS
  *  @{ */
 
 /**
- * Returns a non-copied pointer to the accountid string in the Account @a a.
+ * Return a non-copied pointer to the accountid string in the Account @a a.
  * The gchar* is still owned by the kvp_frame, so don't free it until you want
  * to delete the whole kvp_frame.
  *
  * @param a Account
  * @return Account ID
  */
-G_CONST_RETURN gchar *gnc_ab_get_account_accountid(const Account *a);
+const gchar *gnc_ab_get_account_accountid(const Account *a);
 
 /**
  * Set the accountid string in the Account @a a to @a id.  A copy of the string
@@ -62,14 +62,14 @@ G_CONST_RETURN gchar *gnc_ab_get_account_accountid(const Account *a);
 void gnc_ab_set_account_accountid(Account *a, const gchar *id);
 
 /**
- * Returns a non-copied pointer to the bankcode string in the Account @a a.  The
+ * Return a non-copied pointer to the bankcode string in the Account @a a.  The
  * gchar* is still owned by the kvp_frame, so don't free it until you want to
  * delete the whole kvp_frame.
  *
  * @param a Account
  * @return Bank code
  */
-G_CONST_RETURN gchar *gnc_ab_get_account_bankcode(const Account *a);
+const gchar *gnc_ab_get_account_bankcode(const Account *a);
 
 /**
  * Set the bankcode string in the Account @a a to @a code.  A copy of the string
@@ -81,7 +81,7 @@ G_CONST_RETURN gchar *gnc_ab_get_account_bankcode(const Account *a);
 void gnc_ab_set_account_bankcode(Account *a, const gchar *code);
 
 /**
- * Returns the unique id for the AB_BANKING account in the Account @a a.
+ * Return the unique id for the AB_BANKING account in the Account @a a.
  *
  * @param a Account
  * @return Unique ID
@@ -98,7 +98,7 @@ guint32 gnc_ab_get_account_uid(const Account *a);
 void gnc_ab_set_account_uid(Account *a, guint32 uid);
 
 /**
- * Returns the time of last online transaction retrieval for Account @a a.
+ * Return the time of last online transaction retrieval for Account @a a.
  *
  * @param a Account
  * @return Retrieval time
@@ -113,6 +113,30 @@ Timespec gnc_ab_get_account_trans_retrieval(const Account *a);
  * @param time Retrieval time
  */
 void gnc_ab_set_account_trans_retrieval(Account *a, Timespec time);
+
+/** @} */
+
+/** @name Book
+ *  @{ */
+
+/**
+ * Return a non-copied pointer to the GList of kvp_frames which eventually are
+ * the template transactions, stored in the given book.
+ *
+ * @param b Book
+ * @return Template list
+ */
+GList *gnc_ab_get_book_template_list(QofBook *b);
+
+/**
+ * Set the GList of kvp_frames of template transactions in the Book @a b to @a
+ * template_list.  No copy of the GList will be stored, the callee becomes the
+ * owner and the caller must not free it.  The book will be marked "dirty".
+ *
+ * @param b Book
+ * @param template_list Template list
+ */
+void gnc_ab_set_book_template_list(QofBook *b, GList *template_list);
 
 /** @} */
 

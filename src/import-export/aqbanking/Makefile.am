@@ -3,22 +3,28 @@ SUBDIRS = . schemas
 pkglib_LTLIBRARIES = libgncmod-aqbanking.la
 
 libgncmod_aqbanking_la_SOURCES = \
+  dialog-ab-trans.c \
   dialog-daterange.c \
   druid-ab-initial.c \
   gnc-ab-getbalance.c \
   gnc-ab-gettrans.c \
   gnc-ab-kvp.c \
+  gnc-ab-trans-templ.c \
+  gnc-ab-transfer.c \
   gnc-ab-utils.c \
   gnc-gwen-gui.c \
   gnc-plugin-aqbanking.c \
   gncmod-aqbanking.c
 
 noinst_HEADERS = \
+  dialog-ab-trans.h \
   dialog-daterange.h \
   druid-ab-initial.h \
   gnc-ab-getbalance.h \
   gnc-ab-gettrans.h \
   gnc-ab-kvp.h \
+  gnc-ab-trans-templ.h \
+  gnc-ab-transfer.h \
   gnc-ab-utils.h \
   gnc-gwen-gui.h \
   gnc-plugin-aqbanking.h

@@ -33,9 +33,11 @@
 #include <glib/gi18n.h>
 
 #include "Account.h"
+#include "dialog-ab-trans.h"
 #include "druid-ab-initial.h"
 #include "gnc-ab-getbalance.h"
 #include "gnc-ab-gettrans.h"
+#include "gnc-ab-transfer.h"
 #include "gnc-plugin-aqbanking.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
@@ -359,7 +361,19 @@ static void
 gnc_plugin_ab_cmd_issue_transaction (GtkAction *action,
                                      GncMainWindowActionData *data)
 {
-    /* FIXME */
+    Account *account;
+
+    ENTER("action %p, main window data %p", action, data);
+    account = main_window_to_account(data->window);
+    if (account == NULL) {
+        g_message("No AqBanking account selected");
+        LEAVE("no account");
+        return;
+    }
+
+    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_TRANSFER);
+
+    LEAVE(" ");
 }
 
 static void
