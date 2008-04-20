@@ -81,6 +81,19 @@ void gnc_utf8_strip_invalid (gchar *str);
  * caller. */
 gchar *gnc_utf8_strip_invalid_strdup (const gchar* str);
 
+/** Converts a string from UTF-8 to the encoding used for strings
+ * in the current locale.
+ *
+ * This essentially is a wrapper for g_locale_from_utf8 that can
+ * be swigified for use with Scheme to avoid adding a dependency
+ * for guile-glib.
+ *
+ * @param str A pointer to a UTF-8 encoded string to be converted.
+ *
+ * @return A newly allocated string that has to be g_free'd by the
+ * caller. */
+gchar *gnc_locale_from_utf8(const gchar* str);
+
 typedef gpointer (*GncGMapFunc)(gpointer data, gpointer user_data);
 
 /**

@@ -229,6 +229,21 @@ gnc_utf8_strip_invalid_strdup(const gchar* str)
   return result;
 }
 
+gchar *
+gnc_locale_from_utf8(const gchar* str)
+{
+  gchar *   locale_str;
+  gsize     bytes_written = 0;
+  GError *  err = NULL;
+
+  /* Convert from UTF-8 to the encoding used in the current locale. */
+  locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
+  if (err)
+    g_warning("g_locale_from_utf8 failed: %s", err->message);
+
+  return locale_str;
+}
+
 GList*
 gnc_g_list_map(GList* list, GncGMapFunc fn, gpointer user_data)
 {
