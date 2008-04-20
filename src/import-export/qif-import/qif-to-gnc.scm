@@ -505,30 +505,33 @@
                    
                    ;; figure out what the far acct is
                    (cond 
-                    ;; if the category is valid, use that.  look it up
-                    ;; in the acct-hash if it's an account.
+                    ;; If the category is an account, use the account mapping.
                     ((and (not (string=? cat ""))
                           (qif-split:category-is-account? qif-split))
                      (set! far-acct-info (hash-ref qif-acct-map cat)))
                     
-                    ;; .. look it up in the cat-hash if it's a category 
+                    ;; Otherwise, if it isn't empty, use the category mapping.
                     ((not (string=? cat ""))
                      (set! far-acct-info (hash-ref qif-cat-map cat)))
 
-                    ;; otherwise, try to find the payee in the
-                    ;; memo-map if it's likely to have been used (only
-                    ;; 1 split).  then try the memo.  if neither
-                    ;; works, go back to the Unspecified account.
+                    ;; Otherwise, for non-split QIF transactions, try a payee
+                    ;; mapping, and if that doesn't work, try mapping the
+                    ;; transaction memo. For split transactions, map the memo
+                    ;; for this particular split line. If all else fails, use
+                    ;; the default category mapping (the Unspecified account,
+                    ;; unless the user has changed it).
                     (#t
                      (set! far-acct-info 
-                           (or 
-                            (and (string? qif-payee)
-                                 (not (string=? qif-payee ""))
-                                 (= (length splits) 1)
-                                 (hash-ref qif-memo-map qif-payee))
-                            (and (string? memo)
-                                 (not (string=? memo ""))
-                                 (hash-ref qif-memo-map memo))))
+                           (if (= (length splits) 1)
+                               (or (and (string? qif-payee)
+                                        (not (string=? qif-payee ""))
+                                        (hash-ref qif-memo-map qif-payee))
+                                   (and (string? qif-memo)
+                                        (not (string=? qif-memo ""))
+                                        (hash-ref qif-memo-map qif-memo)))
+                               (and (string? memo)
+                                    (not (string=? memo ""))
+                                    (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
                          (set! far-acct-info (hash-ref qif-cat-map cat)))))
 
