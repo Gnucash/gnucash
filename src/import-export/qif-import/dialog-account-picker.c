@@ -69,7 +69,7 @@ acct_tree_add_accts(SCM accts,
     current = SCM_CAR(accts);
 
     if(SCM_NULLP(current)) {
-      printf(" ** BUG in acct tree .. grib fix me! (everybody else ignore)\n");
+      g_critical("QIF import: BUG DETECTED in acct_tree_add_accts!");
       accts = SCM_CDR(accts);
       continue;
     }

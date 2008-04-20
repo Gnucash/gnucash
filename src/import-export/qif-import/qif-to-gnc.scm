@@ -608,9 +608,8 @@
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
-              (begin 
-                (display "qif-import:qif-xtn-to-gnc-xtn : ")
-                (display "splits in stock transaction!") (newline)))
+              (gnc:warn "qif-import:qif-xtn-to-gnc-xtn: "
+                        "splits in stock transaction!"))
 
           (set! qif-accts 
                 (qif-split:accounts-affected (car (qif-xtn:splits qif-xtn))

@@ -220,7 +220,7 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
         /* Where are we? */
-        printf("QIF import: I'm lost!\n");
+        g_critical("QIF import: BUG DETECTED in get_next_druid_page! I'm lost!");
         return FALSE;
       }
       else {
@@ -253,7 +253,7 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         next = wind->post_comm_pages;
         break;
       default:
-        printf("QIF import: something fishy.\n");
+        g_critical("QIF import: BUG DETECTED in get_next_druid_page!");
         next = NULL;
         if (where > 3)
           return NULL;
@@ -287,7 +287,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
     if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
       if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
         /* Where are we? */
-        printf("QIF import: I'm lost!\n");
+        g_critical("QIF import: BUG DETECTED in get_prev_druid_page! I'm lost!");
         return NULL;
       }
       else {
@@ -340,7 +340,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         break;
       default:
         if (wind->show_doc_pages)
-          printf("QIF import: something fishy.\n");
+          g_critical("QIF import: BUG DETECTED in get_prev_druid_page!");
         prev = NULL;
         if (where < 1)
           return NULL;
@@ -1718,7 +1718,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   /* this shouldn't happen, but DTRT if it does */
   if (SCM_NULLP(wind->new_stocks))
   {
-    printf("somehow got to commodity doc page with nothing to do... BUG!\n");
+    g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
     gnc_ui_qif_import_convert(wind);
   }
 

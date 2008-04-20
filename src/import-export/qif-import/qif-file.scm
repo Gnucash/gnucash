@@ -140,9 +140,9 @@
                            (if (string-match "^option:"
                                              (symbol->string qstate-type))
                                (begin
-                                 (display "qif-file:read-file ignoring ")
-                                 (write qstate-type)
-                                 (newline)
+                                 (gnc:warn "qif-file:read-file:"
+                                           " ignoring '" qstate-type
+                                           "' option.")
                                  (set! qstate-type old-qstate))))))
 
 
@@ -314,10 +314,9 @@
                             (set! current-xtn (make-qif-class)))
 
                            (else
-                            (display "qif-file:read-file : unknown Class slot ")
-                            (display tag)
-                            (display " .. continuing anyway.")
-                            (newline))))
+                            (gnc:warn "qif-file:read-file:"
+                                      " ignoring class '" tag "' line."
+                                      "\nLine content: [" line "]"))))
 
 
                         ;;;;;;;;;;;;;;;;;;
@@ -385,9 +384,9 @@
                             (set! current-xtn (make-qif-cat)))
 
                            (else
-                            (display "qif-file:read-file : unknown Cat slot ")
-                            (display tag)
-                            (display " .. continuing anyway") (newline))))
+                            (gnc:warn "qif-file:read-file:"
+                                      " ignoring category '" tag "' line."
+                                      "\nLine content: [" line "]"))))
 
 
                         ;;;;;;;;;;;;;;;;;;;
@@ -418,10 +417,9 @@
                             (set! current-xtn (make-qif-stock-symbol)))
 
                            (else
-                            (display "qif-file:read-file : unknown Security slot ")
-                            (display tag)
-                            (display " .. continuing anyway.")
-                            (newline))))
+                            (gnc:warn "qif-file:read-file:"
+                                      " ignoring security '" tag "' line."
+                                      "\nLine content: [" line "]"))))
 
 
                         ;; trying to sneak one by, eh?
@@ -429,10 +427,9 @@
                           (if (and (not qstate-type)
                                    (not (string=? (string-trim line) "")))
                               (begin
-                                (display "line = ") (display line) (newline)
-                                (display "qif-file:read-file : ")
-                                (display "file does not appear to be a QIF file.")
-                                (newline)
+                                (gnc:warn "qif-file:read-file:"
+                                          " file does not appear to be a QIF."
+                                          "\nLine content: [" line "]")
                                 (set! return-val
                                       (list #f "File does not appear to be a QIF file."))
                                 (set! heinous-error #t))))))

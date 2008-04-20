@@ -218,7 +218,8 @@
                              (gnc-commodity-get-namespace value)
                              (gnc-commodity-get-mnemonic value))
                        table))
-           (display "write-commodities: something funny in hash table.\n"))
+           (gnc:warn "qif-import:write-commodities:"
+                     " something funny in hash table."))
        #f) #f hashtab)
     (write table)))
 
