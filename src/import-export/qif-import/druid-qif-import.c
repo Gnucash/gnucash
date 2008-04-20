@@ -118,8 +118,9 @@ struct _qifimportwindow {
   SCM       memo_display_info;
 
   SCM       gnc_acct_info;
-  SCM       stock_hash;
-  SCM       new_stocks;
+  SCM       security_hash;
+  SCM       security_prefs;
+  SCM       new_securities;
   SCM       ticker_map;
 
   SCM       imported_account_tree;
@@ -192,8 +193,9 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   scm_gc_unprotect_object(window->memo_map_info);
   scm_gc_unprotect_object(window->acct_display_info);
   scm_gc_unprotect_object(window->acct_map_info);
-  scm_gc_unprotect_object(window->stock_hash);
-  scm_gc_unprotect_object(window->new_stocks);
+  scm_gc_unprotect_object(window->security_hash);
+  scm_gc_unprotect_object(window->security_prefs);
+  scm_gc_unprotect_object(window->new_securities);
   scm_gc_unprotect_object(window->ticker_map);
   scm_gc_unprotect_object(window->imported_account_tree);
   scm_gc_unprotect_object(window->match_transactions);
@@ -240,7 +242,7 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
   next = current->next;
   while (!next ||
          (!wind->show_doc_pages && g_list_find(wind->doc_pages, next->data)) ||
-         (wind->new_stocks == SCM_BOOL_F &&
+         (wind->new_securities == SCM_BOOL_F &&
           GNOME_DRUID_PAGE(next->data) == get_named_page(wind, "commodity_doc_page"))) {
     if(next && next->next) {
       next = next->next;
@@ -316,7 +318,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
    * (c) the page is commodity related and the are no new commodities. */
   while (!prev ||
          (!wind->show_doc_pages && g_list_find(wind->doc_pages, prev->data)) ||
-         (wind->new_stocks == SCM_BOOL_F &&
+         (wind->new_securities == SCM_BOOL_F &&
           GNOME_DRUID_PAGE(prev->data) == get_named_page(wind, "commodity_doc_page"))) {
     /* We're either out of pages for this stage, or we've reached
      * an optional doc page that shouldn't be shown. */
@@ -333,7 +335,7 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
         prev = g_list_last(wind->pre_comm_pages);
         break;
       case 2:
-        if(wind->new_stocks != SCM_BOOL_F) {
+        if(wind->new_securities != SCM_BOOL_F) {
           prev = g_list_last(wind->commodity_pages);
         }
         else {
@@ -1349,7 +1351,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
      * each reference to the "old" commodity with a reference to the commodity
      * returned by gnc_commodity_table_insert? */
     if (old_commodity != page->commodity)
-      scm_hash_remove_x(wind->stock_hash, scm_makfrom0str(fullname));
+      scm_hash_remove_x(wind->security_hash, scm_makfrom0str(fullname));
   }
 }
 
@@ -1456,7 +1458,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
                                wind->acct_map_info,
                                wind->cat_map_info,
                                wind->memo_map_info,
-                               wind->stock_hash,
+                               wind->security_hash,
                                scm_makfrom0str(currname),
                                window),
                      SCM_EOL);
@@ -1546,26 +1548,27 @@ static gboolean
 gnc_ui_qif_import_new_securities(QIFImportWindow * wind)
 {
   SCM updates;
-  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
+  SCM update_securities = scm_c_eval_string("qif-import:update-security-hash");
 
   /* Get a list of any new QIF securities since the previous call. */
-  updates = scm_call_3(update_stock, wind->stock_hash, 
+  updates = scm_call_3(update_securities, wind->security_hash, 
                        wind->ticker_map, wind->acct_map_info);
   if (updates != SCM_BOOL_F)
   {
     /* A list of new QIF securities was returned. Save it. */
-    scm_gc_unprotect_object(wind->new_stocks);
-    if (wind->new_stocks != SCM_BOOL_F)
+    scm_gc_unprotect_object(wind->new_securities);
+    if (wind->new_securities != SCM_BOOL_F)
       /* There is an existing list, so append the new list. */
-      wind->new_stocks = scm_append(scm_list_2(wind->new_stocks, updates));
+      wind->new_securities = scm_append(scm_list_2(wind->new_securities,
+                                                   updates));
     else
-      wind->new_stocks = updates;
-    scm_gc_protect_object(wind->new_stocks);
+      wind->new_securities = updates;
+    scm_gc_protect_object(wind->new_securities);
 
     return TRUE;
   }
 
-  if (wind->new_stocks != SCM_BOOL_F)
+  if (wind->new_securities != SCM_BOOL_F)
     return TRUE;
 
   return FALSE;
@@ -1592,7 +1595,7 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
     return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
   else
   {
-    /* if we need to look at stocks, do that, otherwise import
+    /* If we need to look at securities do that; otherwise import
        xtns and go to the duplicates page */
     if (gnc_ui_qif_import_new_securities(wind))
     {
@@ -1728,7 +1731,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
 
 /********************************************************************
  * gnc_ui_qif_import_commodity_prepare_cb
- * build a mapping of QIF stock name to a gnc_commodity 
+ * build a mapping of QIF security name to gnc_commodity 
  ********************************************************************/
 
 static void
@@ -1739,7 +1742,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   SCM   hash_ref  = scm_c_eval_string("hash-ref");
-  SCM   stocks;
+  SCM   securities;
   SCM   comm_ptr_token;
 
   GList          * current;
@@ -1748,7 +1751,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   QIFDruidPage   * new_page;
   
   /* This shouldn't happen, but do the right thing if it does. */
-  if (wind->new_stocks == SCM_BOOL_F || SCM_NULLP(wind->new_stocks))
+  if (wind->new_securities == SCM_BOOL_F || SCM_NULLP(wind->new_securities))
   {
     g_warning("QIF import: BUG DETECTED! Reached commodity doc page with nothing to do!");
     gnc_ui_qif_import_convert(wind);
@@ -1759,9 +1762,9 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
      * Make druid pages for each new QIF security.
      */
     gnc_set_busy_cursor(NULL, TRUE);
-    stocks = wind->new_stocks;
+    securities = wind->new_securities;
     current = wind->commodity_pages;
-    while (!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F))
+    while (!SCM_NULLP(securities) && (securities != SCM_BOOL_F))
     {
       if (current)
       {
@@ -1773,8 +1776,8 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
       {
         /* Get the GnuCash commodity corresponding to the new QIF security. */
         comm_ptr_token = scm_call_2(hash_ref,
-                                    wind->stock_hash,
-                                    SCM_CAR(stocks));
+                                    wind->security_hash,
+                                    SCM_CAR(securities));
         #define FUNC_NAME "make_qif_druid_page"
         commodity = SWIG_MustGetPtr(comm_ptr_token,
                                     SWIG_TypeQuery("_p_gnc_commodity"), 1, 0);
@@ -1801,7 +1804,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
         gtk_widget_show_all(new_page->page);
       }
 
-      stocks = SCM_CDR(stocks);
+      securities = SCM_CDR(securities);
     }
 
     gnc_unset_busy_cursor(NULL);
@@ -2086,8 +2089,9 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* Save the user's mapping preferences. */
   scm_apply(save_map_prefs,
-	    SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
-		      wind->memo_map_info, wind->stock_hash),
+	    SCM_LIST5(wind->acct_map_info, wind->cat_map_info,
+		      wind->memo_map_info, wind->security_hash,
+                      wind->security_prefs),
 	    SCM_EOL);
 
   /* Open an account tab in the main window if one doesn't exist already. */
@@ -2283,8 +2287,8 @@ gnc_ui_qif_import_druid_make(void)
   retval->acct_map_info     =  SCM_BOOL_F;
   retval->memo_display_info =  SCM_BOOL_F;
   retval->memo_map_info     =  SCM_BOOL_F;
-  retval->stock_hash        =  SCM_BOOL_F;
-  retval->new_stocks        =  SCM_BOOL_F;
+  retval->security_hash     =  SCM_BOOL_F;
+  retval->new_securities    =  SCM_BOOL_F;
   retval->ticker_map        =  SCM_BOOL_F;
   retval->imported_account_tree   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
@@ -2445,7 +2449,8 @@ gnc_ui_qif_import_druid_make(void)
   retval->acct_map_info    = scm_list_ref(mapping_info, scm_int2num(1));
   retval->cat_map_info     = scm_list_ref(mapping_info, scm_int2num(2));
   retval->memo_map_info    = scm_list_ref(mapping_info, scm_int2num(3));
-  retval->stock_hash       = scm_list_ref(mapping_info, scm_int2num(4));
+  retval->security_hash    = scm_list_ref(mapping_info, scm_int2num(4));
+  retval->security_prefs   = scm_list_ref(mapping_info, scm_int2num(5));
 
   create_ticker_map = scm_c_eval_string("make-ticker-map");
   retval->ticker_map = scm_call_0(create_ticker_map);
@@ -2459,8 +2464,9 @@ gnc_ui_qif_import_druid_make(void)
   scm_gc_protect_object(retval->memo_map_info);
   scm_gc_protect_object(retval->acct_display_info);
   scm_gc_protect_object(retval->acct_map_info);
-  scm_gc_protect_object(retval->stock_hash);
-  scm_gc_protect_object(retval->new_stocks);
+  scm_gc_protect_object(retval->security_hash);
+  scm_gc_protect_object(retval->security_prefs);
+  scm_gc_protect_object(retval->new_securities);
   scm_gc_protect_object(retval->ticker_map);
   scm_gc_protect_object(retval->imported_account_tree);
   scm_gc_protect_object(retval->match_transactions);
