@@ -48,6 +48,8 @@
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-account-tree.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
@@ -358,7 +360,8 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page)
 
 /********************************************************************
  * gnc_ui_qif_import_generic_next_cb
- * close the QIF Import druid window
+ *
+ * Display the next druid page.
  ********************************************************************/
 
 static gboolean
@@ -379,9 +382,11 @@ gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1,
   }
 }
 
+
 /********************************************************************
  * gnc_ui_qif_import_generic_back_cb
- * close the QIF Import druid window
+ *
+ * Display the previous druid page.
  ********************************************************************/
 
 static gboolean
@@ -404,6 +409,7 @@ gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1,
 
 /********************************************************************
  * gnc_ui_qif_import_select_file_cb
+ *
  * invoked when the "select file" button is clicked
  * this is just to pick a file name and reset-to-defaults all the 
  * fields describing how to parse the file.
@@ -2026,39 +2032,73 @@ gnc_ui_qif_import_duplicate_old_select_cb (GtkTreeSelection *selection,
   refresh_old_transactions(wind, row);
 }
 
+
+/********************************************************************
+ * gnc_ui_qif_import_check_acct_tree
+ * 
+ * Designed for use with gnc_main_window_foreach_page(), this
+ * function determines whether an account tab is open in the main
+ * window. The parameter user_data must point to a gboolean.
+ ********************************************************************/
+
+static void
+gnc_ui_qif_import_check_acct_tree(GncPluginPage *page, gpointer user_data)
+{
+  gboolean *found = user_data;
+
+  if (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page) && found)
+    *found = TRUE;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_finish_cb
+ * 
+ * Invoked when the "Apply" button is clicked on the final page.
+ ********************************************************************/
+
 static void
 gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage, 
                             gpointer arg1, 
                             gpointer user_data)
 {
-  
   SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
   SCM   cat_and_merge = scm_c_eval_string("gnc:account-tree-catenate-and-merge");
   SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
   
   QIFImportWindow * wind = user_data;
+  GncPluginPage *page;
+  gboolean acct_tree_found = FALSE;
 
   gnc_suspend_gui_refresh();
 
-  /* prune the old transactions marked as dupes */
-  if(wind->match_transactions != SCM_BOOL_F) {
+  /* Prune any imported transactions that were determined to be duplicates. */
+  if (wind->match_transactions != SCM_BOOL_F)
     scm_call_1(prune_xtns, wind->match_transactions);
-  }
 
-  /* actually add in the new transactions. */
+  /* Merge the imported account tree with the existing one. */
   if (wind->imported_account_tree != SCM_BOOL_F)
     scm_call_2(cat_and_merge,
 	       scm_c_eval_string("(gnc-get-current-root-account)"),
 	       wind->imported_account_tree);
-  
+
   gnc_resume_gui_refresh();
-  
-  /* write out mapping info before destroying the window */
-  scm_apply(save_map_prefs, 
+
+  /* Save the user's mapping preferences. */
+  scm_apply(save_map_prefs,
 	    SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
 		      wind->memo_map_info, wind->stock_hash),
 	    SCM_EOL);
-  
+
+  /* Open an account tab in the main window if one doesn't exist already. */
+  gnc_main_window_foreach_page(gnc_ui_qif_import_check_acct_tree,
+                               &acct_tree_found);
+  if (!acct_tree_found)
+  {
+    page = gnc_plugin_page_account_tree_new();
+    gnc_main_window_open_page(NULL, page);
+  }
+
   gnc_ui_qif_import_druid_destroy(wind);  
 }
 
