@@ -129,15 +129,17 @@ struct _qifimportwindow {
 };
 
 struct _qifdruidpage {
-  GtkWidget * page;
-  GtkWidget * new_type_combo;
-  GtkWidget * new_name_entry;
-  GtkWidget * new_mnemonic_entry;
-  gnc_commodity * commodity;
+  GtkWidget     *page;
+  GtkWidget     *new_type_combo;
+  GtkWidget     *new_name_entry;
+  GtkWidget     *new_mnemonic_entry;
+  gnc_commodity *commodity;
+  SCM            hash_key;
 };  
 
 typedef struct _qifdruidpage QIFDruidPage;
-static QIFDruidPage * make_qif_druid_page(gnc_commodity * comm);
+static QIFDruidPage * make_qif_druid_page(SCM security_hash_key,
+                                          gnc_commodity * comm);
 
 static void update_file_page(QIFImportWindow * win);
 static void update_accounts_page(QIFImportWindow * win);
@@ -167,6 +169,39 @@ get_named_page(QIFImportWindow * w, const char * name)
 }
 
 
+/****************************************************************
+ * gnc_ui_qif_import_commodity_destroy
+ *
+ * This function destroys any commodity pages.
+ ****************************************************************/
+
+static void
+gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
+{
+  GList          *pageptr;
+  GnomeDruidPage *gtkpage;
+  QIFDruidPage   *page;
+
+  for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
+  {
+    gtkpage   = GNOME_DRUID_PAGE(pageptr->data);
+    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
+
+    /* Unprotect the Scheme hash key. */
+    scm_gc_unprotect_object(page->hash_key);
+
+    /* Free the memory allocated for the page's struct. */
+    g_free(page);
+
+    /*
+     * FIXME -- Do we need to call gtk_widget_destroy() for anything?
+     *          Or will they all get destroyed when the druid gets destroyed?
+     *          Any other cleanup?
+     */
+  }
+}
+
+
 /********************************************************************\
  * gnc_ui_qif_import_druid_destroy
  * close the QIF Import druid window
@@ -178,7 +213,8 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
   if (!window)
     return;
 
-  /* FIXME -- commodity pages */
+  /* Destroy any commodity pages. */
+  gnc_ui_qif_import_commodity_destroy(window);
 
   gnc_unregister_gui_component_by_data(DRUID_QIF_IMPORT_CM_CLASS, window);
 
@@ -772,6 +808,7 @@ gnc_ui_qif_import_select_loaded_file_cb (GtkTreeSelection *selection,
   }
 }
 
+
 /********************************************************************
  * gnc_ui_qif_import_loaded_files_prepare_cb
  * 
@@ -1319,7 +1356,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
   const char     *mnemonic = NULL;
   gchar          *namespace = NULL;
   const char     *fullname = NULL;
-  gnc_commodity  *old_commodity;
+  gnc_commodity  *tab_commodity;
 
   for (pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next)
   {
@@ -1336,22 +1373,20 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
-    g_free(namespace);
-
-    /* Add the commodity to the commodity table. */
-    old_commodity = page->commodity;
-    page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
+    /* Add the commodity to the commodity table (if it isn't a duplicate). */
+    tab_commodity = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+                                               namespace, mnemonic);
+    if (!tab_commodity || tab_commodity == page->commodity)
+      tab_commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
-    /* If the table already contains the same namespace and mnemonic...
-     * ...blow away any existing entry in the hash table? Using the fullname
-     * as the key, which the user may have changed? Does this make any sense?
-     * Getting a match would just be luck!
-     *
-     * Shouldn't we do a hash-fold to update the Schema hash table, replacing
-     * each reference to the "old" commodity with a reference to the commodity
-     * returned by gnc_commodity_table_insert? */
-    if (old_commodity != page->commodity)
-      scm_hash_remove_x(wind->security_hash, scm_makfrom0str(fullname));
+
+    /* Update the security hash table. */
+    scm_hash_set_x(wind->security_hash,
+                   page->hash_key,
+                   SWIG_NewPointerObj(tab_commodity,
+                                      SWIG_TypeQuery("_p_gnc_commodity"), 0));
+
+    g_free(namespace);
   }
 }
 
@@ -1388,7 +1423,7 @@ gnc_ui_qif_import_prepare_duplicates(QIFImportWindow * wind)
     current_xtn = SCM_CAAR(duplicates);
     #define FUNC_NAME "xaccTransCountSplits"
     gnc_xtn     = SWIG_MustGetPtr(current_xtn,
-    SWIG_TypeQuery("_p_Transaction"), 1, 0);
+                                  SWIG_TypeQuery("_p_Transaction"), 1, 0);
     #undef FUNC_NAME
     if (xaccTransCountSplits(gnc_xtn) > 2)
       amount_str = _("(split)");
@@ -1704,6 +1739,10 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
       (wind->window, _("You must enter an abbreviation for the commodity."));
     return TRUE;
   }
+  /* FIXME: Should check whether a commodity with this namespace and
+   *        mnemonic already exists. If so, ask the user whether to use
+   *        the existing one, or go back and change what they've entered.
+   */
 
   if (gnc_commodity_namespace_is_iso (namespace) &&
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
@@ -1784,7 +1823,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
         #undef FUNC_NAME
 
         /* Add a druid page for the commodity. */
-        new_page = make_qif_druid_page(commodity);
+        new_page = make_qif_druid_page(SCM_CAR(securities), commodity);
 
         g_signal_connect(new_page->page, "back",
                          G_CALLBACK(gnc_ui_qif_import_generic_back_cb),
@@ -1814,43 +1853,48 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 }
 
 static QIFDruidPage *
-make_qif_druid_page(gnc_commodity * comm)
+make_qif_druid_page(SCM security_hash_key, gnc_commodity *comm)
 {
   
-  QIFDruidPage * retval = g_new0(QIFDruidPage, 1);
-  GtkWidget * top_vbox;
-  GtkWidget * info_label;
-  GtkWidget * next_label;
-  GtkWidget * temp;
-  char      * title = NULL;
-  const char * str;
-  GnomeDruidPageStandard * page;
+  QIFDruidPage *retval = g_new0(QIFDruidPage, 1);
+  GtkWidget    *top_vbox;
+  GtkWidget    *info_label;
+  GtkWidget    *next_label;
+  GtkWidget    *temp;
+  gchar        *title = NULL;
+  const char   *str;
+  GnomeDruidPageStandard *page;
 
-  /* make the page widget */
+  /* Make the page widget. */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
-  retval->commodity = comm;
   g_object_set_data(G_OBJECT(retval->page), "page_struct", retval);
-
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
 
-  /* save the old commodity name */
+  /* Save the commodity and the hash table key. */
+  retval->commodity = comm;
+  retval->hash_key = security_hash_key;
+  scm_gc_protect_object(retval->hash_key);
+
+  /* Set the page title. */
   str = gnc_commodity_get_mnemonic(comm);
   str = str ? str : "";
   title = g_markup_printf_escaped(_("Enter information about \"%s\""), str);
+  gnome_druid_page_standard_set_title(page, title);
+  g_free(title);
 
+  /* Set the page colors. */
   gnome_druid_page_standard_set_background(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
   gnome_druid_page_standard_set_title_foreground (page, & std_title_color);
-  gnome_druid_page_standard_set_title(page, title);
-  g_free(title);
   
+  /*
+   * Add all the widgets to the page.
+   */
   top_vbox = gtk_vbox_new(FALSE, 3);
   gtk_box_pack_start(GTK_BOX(page->vbox), top_vbox, FALSE, FALSE, 0);
-                     
-  info_label = 
-    gtk_label_new(_("Pick the commodity's exchange or listing "
-                    "(NASDAQ, NYSE, etc)."));
 
+  info_label = gtk_label_new(_("Pick the commodity's exchange or listing "
+                               "(NASDAQ, NYSE, etc)."));
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
@@ -1871,13 +1915,12 @@ make_qif_druid_page(gnc_commodity * comm)
                                  gnc_commodity_get_namespace(comm),
                                  DIAG_COMM_ALL);
 
-  info_label = 
-    gtk_label_new(_("Enter the full name of the commodity, "
-                    "such as \"Red Hat Stock\""));
-  
+  info_label = gtk_label_new(_("Enter the full name of the commodity, "
+                               "such as \"Red Hat Stock\""));
+
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
-  
+
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
 
@@ -1889,14 +1932,13 @@ make_qif_druid_page(gnc_commodity * comm)
                      TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_name_entry),
                      gnc_commodity_get_fullname(comm));
-  
+
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  info_label = 
-    gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\") or "
-                    "other unique abbreviation for the name."));
-  
+  info_label = gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\") or "
+                               "other unique abbreviation for the name."));
+
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
  
@@ -1911,7 +1953,7 @@ make_qif_druid_page(gnc_commodity * comm)
                      TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_mnemonic_entry),
                      gnc_commodity_get_mnemonic(comm));
-  
+
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
@@ -1920,7 +1962,7 @@ make_qif_druid_page(gnc_commodity * comm)
   gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_end(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
 
-  
+
   return retval;
 }
 
@@ -1951,7 +1993,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
 
     while(!SCM_NULLP(possible_matches)) {
       current_xtn = SCM_CAR(possible_matches);
-      #define FUNC_NAME "make_qif_druid_page"
+      #define FUNC_NAME "xaccTransCountSplits"
       gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),
                                     SWIG_TypeQuery("_p_Transaction"), 1, 0);
       #undef FUNC_NAME
