@@ -213,8 +213,10 @@ gnc_locale_from_utf8(const gchar* str)
 
   /* Convert from UTF-8 to the encoding used in the current locale. */
   locale_str = g_locale_from_utf8(str, -1, NULL, &bytes_written, &err);
-  if (err)
+  if (err) {
     g_warning("g_locale_from_utf8 failed: %s", err->message);
+    g_error_free(err);
+  }
 
   return locale_str;
 }
@@ -228,8 +230,10 @@ gnc_locale_to_utf8(const gchar* str)
 
   /* Convert to UTF-8 from the encoding used in the current locale. */
   utf8_str = g_locale_to_utf8(str, -1, NULL, &bytes_written, &err);
-  if (err)
+  if (err) {
     g_warning("g_locale_to_utf8 failed: %s", err->message);
+    g_error_free(err);
+  }
 
   return utf8_str;
 }
