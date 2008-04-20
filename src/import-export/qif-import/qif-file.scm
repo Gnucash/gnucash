@@ -28,6 +28,9 @@
 ;;
 ;;  Suck in all the lines. Don't do any string interpretation,
 ;;  just store the fields "raw".
+;;
+;; FIXME: This function really should be able to return multiple
+;;        errors and warnings rather than a single one.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-file:read-file self path ticker-map window)
@@ -87,10 +90,34 @@
                   (set! tag (string-ref line 0))
                   (set! value (substring line 1))
 
-                  ;; If the line doesn't conform to UTF-8, remove any invalid
-                  ;; characters. This could be smarter, perhaps by trying a
-                  ;; a default character set conversion based on the locale.
-                  (set! value (gnc-utf8-strip-invalid-strdup value))
+                  ;; If the line doesn't conform to UTF-8, try a default
+                  ;; character set conversion based on the locale. If that
+                  ;; fails, remove any invalid characters.
+                  (if (not (gnc-utf8? value))
+                      (let ((converted-value (gnc-locale-to-utf8 value)))
+                        (if (or (string=? converted-value "")
+                                (not (gnc-utf8? converted-value)))
+                            (begin
+                              (set! value (gnc-utf8-strip-invalid-strdup value))
+                              (set! return-val
+                                    (list #t (string-append
+                               (_ "This file is not encoded in UTF-8 or ASCII.")
+                               " "
+                               (_ "Some characters have been discarded."))))
+                              (gnc:warn "qif-file:read-file:"
+                                        " stripping invalid characters."
+                                        "\nAfter: [" value "]"))
+                            (begin
+                              (set! return-val
+                                    (list #t (string-append
+                               (_ "This file is not encoded in UTF-8 or ASCII.")
+                               " "
+                               (_ "Some characters have been converted according to your locale."))))
+                              (gnc:warn "qif-file:read-file:"
+                                        " converting characters by locale."
+                                        "\nBefore: [" value "]"
+                                        "\nAfter:  [" converted-value "]")
+                              (set! value converted-value)))))
 
                   (if (eq? tag #\!)
                       ;; The "!" tag has the highest precedence and is used

@@ -23,3 +23,14 @@ void gnc_scm_log_debug(const gchar *);
 gchar * gnc_utf8_strip_invalid_strdup(const gchar *);
 %newobject gnc_locale_from_utf8;
 gchar * gnc_locale_from_utf8(const gchar *);
+%newobject gnc_locale_to_utf8;
+gchar * gnc_locale_to_utf8(const gchar *);
+%rename ("gnc-utf8?") wrap_gnc_utf8_validate;
+%inline %{
+  /* This helper function wraps gnc_utf8_validate() into a predicate. */
+  gboolean wrap_gnc_utf8_validate(const gchar *);
+  gboolean wrap_gnc_utf8_validate(const gchar * str)
+  {
+    return gnc_utf8_validate(str, -1, 0);
+  }
+%}
