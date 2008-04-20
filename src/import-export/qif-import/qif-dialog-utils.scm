@@ -580,13 +580,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-dialog:default-namespace
 ;;
-;;  For a given commodity symbol, return a default namespace.
+;;  Given a security's QIF symbol and type, along with all
+;;  previously seen security mapping preferences, return a
+;;  default namespace.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (qif-dialog:default-namespace s)
-  (if (string? s)
+(define (qif-dialog:default-namespace qif-symbol qif-type prefs)
+
+  ;; Guess a namespace based on the symbol alone.
+  (define (guess-by-symbol s)
+    (if (string? s)
       (let ((l (string-length s))
-            (d (string-index s #\.)))
+            (d (string-index s #\.))
+            (pref-match
+              (if (list? prefs)
+                  (find (lambda (elt)
+                          ;; Does the symbol match, and is the namespace
+                          ;; compatible with the QIF type?
+                          (and (string=? s (caddr elt))
+                               (not (and (string? qif-type)
+                                         (string=? GNC_COMMODITY_NS_MUTUAL
+                                                   (cadr elt))
+                                         (or (string-ci=? qif-type "stock")
+                                             (string-ci=? qif-type "etf"))))))
+                        prefs)
+                   #f)))
         (cond
+          ;; If a preferences match was found, use its namespace.
+          (pref-match
+           (cadr pref-match))
+
           ;; Guess NYSE for symbols of 1-3 characters.
           ((< l 4)
            GNC_COMMODITY_NS_NYSE)
@@ -606,25 +628,47 @@
           ;; Otherwise it's probably a fund.
           (else
            GNC_COMMODITY_NS_MUTUAL)))
+      ;; There's no symbol. Default to a fund.
       GNC_COMMODITY_NS_MUTUAL))
+
+  ;; Was a QIF type given?
+  (if (string? qif-type)
+     ;; Yes. We might be able to definitely determine the namespace.
+     (cond
+       ;; Mutual fund
+       ((string-ci=? qif-type "mutual fund")
+        GNC_COMMODITY_NS_MUTUAL)
+
+       ;; Index
+       ((string-ci=? qif-type "index")
+        ;; This QIF type must be wrong; indexes aren't tradable!
+        GNC_COMMODITY_NS_MUTUAL)
+
+       (else
+        (guess-by-symbol qif-symbol)))
+
+     ;; No QIF type was given, so guess a
+     ;; default namespace by symbol alone.
+     (guess-by-symbol qif-symbol)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:update-security-hash
 ;;
-;;  Make new commodities for each new security in acct-hash
-;;  that isn't already in security-hash.  Return a list of
-;;  the QIF names for which new commodities are created, or
-;;  #f if none.
+;;  For each QIF security in acct-hash, find a matching
+;;  GnuCash security or create a new one, then add it to the
+;;  security-hash table. Return a list of security-hash keys
+;;  for all newly created GnuCash securities, or #f if none.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:update-security-hash security-hash ticker-map acct-hash)
+(define (qif-import:update-security-hash security-hash ticker-map
+                                         acct-hash sec-prefs)
   (let ((names '()))
     (hash-fold
      (lambda (qif-name map-entry p)
        (let ((security-name (qif-import:get-account-name qif-name)))
-         ;; is it: a stock or mutual fund and displayed and not already in
-         ;; the security-hash?
+         ;; Is this account going to be imported, is it security-denominated, 
+         ;; and is the security not already in the security hash table?
          (if (and
               security-name
               (qif-map-entry:display? map-entry)
@@ -638,35 +682,45 @@
                       (gnc-get-current-root-account)
                       (qif-map-entry:gnc-name map-entry)))
                    (book (gnc-account-get-book (gnc-get-current-root-account))))
+               ;; Are we importing to an existing, security-denominated account?
                (if (and (not (null? existing-gnc-acct))
                         (memv (xaccAccountGetType existing-gnc-acct)
                               (list GNC-STOCK-TYPE GNC-MUTUAL-TYPE)))
-                   ;; gnc account already exists... we *know* what the
-                   ;; security is supposed to be
+                   ;; Yes, so that security is the one to use. Add it
+                   ;; to the security hash table.
                    (let ((commodity
                           (xaccAccountGetCommodity existing-gnc-acct)))
                      (hash-set! security-hash security-name commodity))
 
-                   ;; we know nothing about this security.. we need to
-                   ;; ask about it
-                   (let ((ticker-symbol
-                          (qif-ticker-map:lookup-ticker ticker-map
+                   ;; Otherwise, since we can't definitively match this QIF
+                   ;; security to a GnuCash security, create a new one with
+                   ;; some (hopefully) intelligent defaults.
+                   (let* ((qif-symbol
+                            (qif-ticker-map:lookup-symbol ticker-map
+                                                          security-name))
+                          (qif-type
+                            (qif-ticker-map:lookup-type ticker-map
                                                         security-name))
-                         (namespace GNC_COMMODITY_NS_MUTUAL))
+                          (namespace (qif-dialog:default-namespace qif-symbol
+                                                                   qif-type
+                                                                   sec-prefs)))
 
-                     (if (not ticker-symbol)
-                         (set! ticker-symbol security-name)
-                         (set! namespace
-                           (qif-dialog:default-namespace ticker-symbol)))
-                     (set! names (cons security-name names))
+                     ;; If no symbol has been provided, default to the name.
+                     (if (not qif-symbol)
+                         (set! qif-symbol security-name))
+
+                     ;; Create the new security and add it to the hash table.
                      (hash-set! security-hash
                                 security-name
                                 (gnc-commodity-new book
                                                    security-name
                                                    namespace
-                                                   ticker-symbol
+                                                   qif-symbol
                                                    ""
-                                                   100000))))))
+                                                   100000))
+
+                     ;; Add the hash key to the list to be returned.
+                     (set! names (cons security-name names))))))
          #f))
      #f acct-hash)
 
