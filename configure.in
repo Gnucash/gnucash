@@ -1500,6 +1500,7 @@ AC_CONFIG_FILES(po/Makefile.in
           src/import-export/qif-import/Makefile
           src/import-export/qif/Makefile
           src/import-export/qif/test/Makefile
+          src/import-export/qif-import/schemas/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile

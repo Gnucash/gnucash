@@ -55,6 +55,7 @@
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
 #define GCONF_SECTION "dialogs/import/qif"
+#define GCONF_NAME_SHOW_DOC "show_doc"
 
 #define PREV_ROW "prev_row"
 
@@ -2057,6 +2058,7 @@ gnc_ui_qif_import_druid_make(void)
   
   QIFImportWindow * retval;
   GladeXML        * xml;
+  GError * err = NULL;
   SCM  load_map_prefs;
   SCM  mapping_info;
   SCM  create_ticker_map;
@@ -2209,8 +2211,19 @@ gnc_ui_qif_import_druid_make(void)
   retval->doc_pages        = NULL;
   retval->commodity_pages = NULL;
 
+  /* Get the user's preference for showing documentation pages. */
   retval->show_doc_pages = 
-    gnc_gconf_get_bool("dialogs/import/qif", "show_doc", NULL);
+    gnc_gconf_get_bool(GCONF_SECTION, GCONF_NAME_SHOW_DOC, &err);
+  if (err != NULL) {
+    g_warning("QIF import: gnc_gconf_get_bool error: %s\n", err->message);
+    g_error_free(err);
+
+    /* Show documentation pages by default. */
+    g_warning("QIF import: Couldn't get %s setting from gconf.\n",
+              GCONF_NAME_SHOW_DOC);
+    g_warning("QIF import: Documentation pages will be shown by default.\n");
+    retval->show_doc_pages = TRUE;
+  }
 
   for(i=0; i < NUM_PRE_PAGES; i++) {
     retval->pre_comm_pages = 
