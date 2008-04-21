@@ -58,6 +58,8 @@ if [ "$BUILD_FROM_TARBALL" = "yes" ]; then
 else
     # change this to "no" if you are using install.sh from the same repository checkout
     set_default UPDATE_SOURCES yes
+    # latest revision that should compile, use HEAD or vwxyz
+    set_default SVN_REV "HEAD"
     set_default GNUCASH_DIR $GLOBAL_DIR\\gnucash
     set_default REPOS_URL "http://svn.gnucash.org/repo/gnucash/trunk"
     set_default REPOS_DIR $GNUCASH_DIR\\repos
@@ -261,6 +263,8 @@ set_default AQBANKING_WITH_QT yes
 # install it and set QTDIR in custom.sh, like "QTDIR=/c/Qt/4.2.3".
 
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
+set_default UPDATE_DOCS yes
+set_default DOCS_REV "HEAD"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
 set_default XSLTPROCFLAGS ""

@@ -932,8 +932,6 @@ function inst_aqbanking() {
 function svn_up() {
     mkdir -p $_REPOS_UDIR
     qpushd $REPOS_DIR
-    # latest revision that should compile, use HEAD or vwxyz
-    SVN_REV="HEAD"
     if [ -x .svn ]; then
         setup "svn update in ${REPOS_DIR}"
         svn up -r ${SVN_REV}
@@ -1085,14 +1083,14 @@ function inst_docs() {
     fi
     mkdir -p $_DOCS_UDIR/repos
     qpushd $DOCS_DIR/repos
-        # latest revision that should compile, use HEAD or vwxyz
-        SVN_REV="HEAD"
-        if [ -x .svn ]; then
-            setup "SVN update of docs"
-            svn up -r ${SVN_REV}
-        else
-            setup "SVN checkout of docs"
-            svn co -r ${SVN_REV} $DOCS_URL .
+        if [ "$UPDATE_DOCS" = "yes" ]; then
+            if [ -x .svn ]; then
+                setup "SVN update of docs"
+                svn up -r ${DOCS_REV}
+            else
+                setup "SVN checkout of docs"
+                svn co -r ${DOCS_REV} $DOCS_URL .
+            fi
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help
