@@ -1051,7 +1051,7 @@ function make_chm() {
     _CHM_LANG=$2
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        xsltproc ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        xsltproc $XSLTPROCFLAGS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
         echo "[ALIAS]" >> htmlhelp.hhp

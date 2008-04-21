@@ -263,6 +263,7 @@ set_default AQBANKING_WITH_QT yes
 set_default DOCBOOK_XSL_URL "$SF_MIRROR/docbook/docbook-xsl-1.72.0.zip"
 set_default DOCS_URL "http://svn.gnucash.org/repo/gnucash-docs/trunk"
 set_default DOCS_DIR $GLOBAL_DIR\\gnucash-docs
+set_default XSLTPROCFLAGS ""
 ##
 
 # There is no reason to ever need to comment these out!
