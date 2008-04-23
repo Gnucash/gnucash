@@ -110,6 +110,7 @@ Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
 Richard Braakman <dark@xs4all.nl> xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
+Nathan Buchanan <nbinont@yahoo.ca> packaging Windows binaries for release
 Johan Buret <johanburet@free.fr> french translation
 Thomas Bushnell <tb@becket.net> fix for file backups
 Eskil Bylund <eskil.bylund@gmail.com> account type deprecation
@@ -151,6 +152,7 @@ Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
+Daniel Harding <dharding@gmail.com> Windows build tweaks; various code fixes
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
@@ -249,6 +251,7 @@ Nigel Titley <nigel@titley.com> British English translation
 James A. Treacy <treacy@debian.org> doc patch
 Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
+Nicolae Turcan <nicturcan@gmail.com> Romanian translation
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> lots of postgres backend work
 Didier Vidal <didier-devel@9online.fr> various G2 fixes.
