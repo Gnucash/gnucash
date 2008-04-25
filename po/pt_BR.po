@@ -435,7 +435,6 @@ msgid "Edit..."
 msgstr "Editar..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:217
-#, fuzzy
 msgid "Voucher"
 msgstr "Vale"
 
@@ -1287,7 +1286,7 @@ msgstr "<b>Definição da Forma de Cobrança</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "<b>Terms</b>"
-msgstr "<b>FOrma</b>"
+msgstr "<b>Forma</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Cancel your changes"
@@ -1318,13 +1317,12 @@ msgid ""
 msgstr "Próximo"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
-#, fuzzy
 msgid "De_scription:"
-msgstr "Descrição:"
+msgstr "De_scrição:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 msgid "Delete the current Billing Term"
-msgstr "Exclui a Forma de Cobrança atual"
+msgstr "Excluir a Forma de Cobrança atual"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
 #, no-c-format
@@ -1503,12 +1501,11 @@ msgstr "_Dias de antecedência:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Notify when due"
-msgstr "_Notificar quando vencer"
+msgstr "_Notificar no vencimento"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
-#, fuzzy
 msgid "_Open in new window"
-msgstr "Abrir numa nova janela"
+msgstr "_Abrir em uma janela nova"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Tax included"
@@ -2667,15 +2664,13 @@ msgid "The tax table %s does not exist. Would you like to create it?"
 msgstr "A tabela de impostos %s não existe. Você deseja criá-la?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:487
-#, fuzzy
 msgid ""
 "The current entry has been changed.  However, this entry is part of an "
 "existing order. Would you like to record the change and effectively change "
 "your order?"
 msgstr ""
-"O registro atual foi alterado. Esse registro é parte de um pedido "
-"prexistente. Você gostaria de gravar a mudança e efetivamente mudar seu "
-"pedido?"
+"O registro atual foi alterado. Entretanto, este registro é parte de um pedido "
+"preexistente. Você gostaria de gravar a mudança e alterar o pedido?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:502
 #: ../src/gnome/gnc-split-reg.c:724
@@ -2683,9 +2678,8 @@ msgid "_Don't Record"
 msgstr "_Não Gravar"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:589
-#, fuzzy
 msgid "The current entry has been changed. Would you like to save it?"
-msgstr "O registro atual foi alterado. Você deseja salvá-lo?"
+msgstr "O registro atual foi alterado. Você deseja grava-lo?"
 
 #. Translators: The 'sample:' items are strings which are not
 #. displayed, but only used to estimate widths. Please only
@@ -3011,13 +3005,13 @@ msgid "You must provide a name for this Tax Table."
 msgstr "Você deve dar um nome a essa Tabela de Impostos."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Você deve fornecer um nome único a essa Tabela de Impostos. Sua escolha \"%s"
-"\" já foi usada."
+"Você deve fornecer um nome único para esta Tabela de Impostos. O nome \"%s"
+"\" já foi usado."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:144
 msgid "You must choose a Tax Account."
@@ -3267,9 +3261,9 @@ msgstr "Diariamente (x%u)"
 
 #. translators: %s is an already-localized form of the day of the week.
 #: ../src/engine/Recurrence.c:466
-#, fuzzy, c-format
+#, c-format
 msgid "last %s"
-msgstr "último dia"
+msgstr "último(a) %s"
 
 #: ../src/engine/Recurrence.c:503 ../src/gnome/glade/fincalc.glade.h:42
 msgid "Semi-monthly"
@@ -3348,12 +3342,11 @@ msgstr ""
 "não pode excluí-la."
 
 #: ../src/gnome/dialog-commodities.c:149
-#, fuzzy
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr ""
-"Essa commodity tem cotações. Você tem certeza que deseja apagar a commodity "
+"Esta commodity tem cotações. Você tem certeza que deseja apagar a commodity "
 "selecionada e suas cotações?"
 
 #: ../src/gnome/dialog-commodities.c:154
@@ -3681,9 +3674,8 @@ msgid "Postponed"
 msgstr "Adiado"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:381
-#, fuzzy
 msgid "To-Create"
-msgstr "Criar"
+msgstr "À criar"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:382
 #, fuzzy
@@ -3691,14 +3683,12 @@ msgid "Reminder"
 msgstr "Registro"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:383
-#, fuzzy
 msgid "Created"
-msgstr "Criar"
+msgstr "Criada"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:446
-#, fuzzy
 msgid "Never"
-msgstr "Nunca Terminar"
+msgstr "Nunca"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:516
 #, fuzzy
@@ -3709,7 +3699,7 @@ msgstr "Novo Valor"
 #. ngettext(3) message.
 #: ../src/gnome/dialog-sx-since-last-run.c:812
 #: ../src/gnome/gnc-plugin-basic-commands.c:484
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transaction automatically created)"
@@ -3818,14 +3808,14 @@ msgstr "Tipos de Conta"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: ../src/gnome/druid-hierarchy.c:486
-#, fuzzy, c-format
+#, c-format
 msgid "Accounts in '%s'"
-msgstr "Tipo de Conta"
+msgstr "Contas do tipo '%s'"
 
 #: ../src/gnome/druid-hierarchy.c:505
-#, fuzzy
+#
 msgid "Accounts in Category"
-msgstr "Tipo de Conta"
+msgstr "Contas na Categoria"
 
 #: ../src/gnome/druid-hierarchy.c:711
 msgid "zero"
@@ -3846,22 +3836,18 @@ msgstr "Usar Conta Existente"
 
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: ../src/gnome/druid-loan.c:161
-#, fuzzy
 msgid "Taxes"
-msgstr "_Impostos"
+msgstr "Impostos"
 
 #: ../src/gnome/druid-loan.c:161
-#, fuzzy
 msgid "Tax Payment"
-msgstr "Pagamento"
+msgstr "Pagamento de Impostos"
 
 #: ../src/gnome/druid-loan.c:162
-#, fuzzy
 msgid "Insurance"
-msgstr "Interface"
+msgstr "Seguro"
 
 #: ../src/gnome/druid-loan.c:162
-#, fuzzy
 msgid "Insurance Payment"
 msgstr "Pagamento de Taxa de Juros"
 
@@ -4098,7 +4084,7 @@ msgstr "<b>Moeda para Nova Conta</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Transações de sub-contas</b>"
+msgstr "<b>Transações de subcontas</b>"
 
 #: ../src/gnome/glade/account.glade.h:11
 msgid "<b>Sub-accounts</b>"
@@ -4139,18 +4125,16 @@ msgid "Delete Account"
 msgstr "Excluir Conta"
 
 #: ../src/gnome/glade/account.glade.h:20
-#, fuzzy
 msgid "Delete all _subaccounts"
-msgstr "Selecionar Subcontas"
+msgstr "Apagar todas as subcontas"
 
 #: ../src/gnome/glade/account.glade.h:21
 msgid "Delete all _transactions"
 msgstr "Excluir todas as _transações"
 
 #: ../src/gnome/glade/account.glade.h:22
-#, fuzzy
 msgid "Examples:"
-msgstr "Exemplo"
+msgstr "Exemplos:"
 
 #: ../src/gnome/glade/account.glade.h:23
 msgid "Filter By..."
@@ -4274,19 +4258,17 @@ msgstr "Outro"
 
 #: ../src/gnome/glade/account.glade.h:43
 msgid "Placeholde_r"
-msgstr "Temporária"
+msgstr "T_emporária"
 
 #: ../src/gnome/glade/account.glade.h:44
 msgid "Please choose the currency to use for new accounts."
 msgstr "Por favor selecione a moeda a utilizar para as novas contas."
 
 #: ../src/gnome/glade/account.glade.h:45
-#, fuzzy
 msgid "Prefix:"
-msgstr "Lucros"
+msgstr "Prefixo:"
 
 #: ../src/gnome/glade/account.glade.h:46
-#, fuzzy
 msgid ""
 "Press `Apply' to create your new accounts.\n"
 "\n"
@@ -4296,14 +4278,14 @@ msgid ""
 msgstr ""
 "Selecione \"Aplicar\" para criar as suas novas contas.\n"
 "\n"
-"Selecione \"Voltar\" para rever as suas seleções.\n"
+"Selecione \"Voltar\" para rever as suas escolhas.\n"
 "\n"
 "Selecione \"Cancelar\" para fechar esta janela sem criar contas novas."
 
 #: ../src/gnome/glade/account.glade.h:51
-#, fuzzy
+#
 msgid "Renumber sub-accounts"
-msgstr "Incluir Subcontas"
+msgstr "Renumerar subcontas"
 
 #: ../src/gnome/glade/account.glade.h:52
 #: ../src/import-export/generic-import.glade.h:44
@@ -4333,14 +4315,12 @@ msgid "Setup new accounts"
 msgstr "Criar novas contas"
 
 #: ../src/gnome/glade/account.glade.h:56
-#, fuzzy
 msgid "Show _hidden accounts"
-msgstr "Mostrar contas com nomes longos"
+msgstr "Mostrar contas _escondidas"
 
 #: ../src/gnome/glade/account.glade.h:57
-#, fuzzy
 msgid "Show _zero total accounts"
-msgstr "Mostrar o saldo total na legenda?"
+msgstr "Mostrar contas com total _zero"
 
 #: ../src/gnome/glade/account.glade.h:58
 msgid "Smallest _fraction:"
@@ -4352,7 +4332,7 @@ msgstr "Menor Fração que pode ser referenciada dessa commodity."
 
 #: ../src/gnome/glade/account.glade.h:60
 msgid "Ta_x related"
-msgstr "Relativo a impostos"
+msgstr "_Relativo a impostos"
 
 #: ../src/gnome/glade/account.glade.h:61
 msgid ""
@@ -4377,14 +4357,16 @@ msgstr ""
 msgid ""
 "This account contains sub-accounts.  What would you like to do with these "
 "sub-accounts?"
-msgstr "Essa conta possui subcontas. O que você deseja fazer com elas?"
+msgstr ""
+"Essa conta possui subcontas. O que você deseja fazer com as subcontas?"
 
 #: ../src/gnome/glade/account.glade.h:64
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
 msgstr ""
-"Essa conta possui transações. O que você deseja fazer com essas transações"
+"Essa conta possui transações. "
+"O que você deseja fazer com essas transações?"
 
 #: ../src/gnome/glade/account.glade.h:65
 msgid ""
@@ -4421,7 +4403,7 @@ msgid ""
 "1/100000\n"
 "1/1000000"
 msgstr ""
-"Use o valor de Commodity\n"
+"Usar o valor da Commodity\n"
 "1\n"
 "1/10\n"
 "1/100\n"
@@ -4458,14 +4440,13 @@ msgid "_Move to:"
 msgstr "_Mover para:"
 
 #: ../src/gnome/glade/account.glade.h:83
-#, fuzzy
 msgid "_Renumber"
-msgstr "_Número"
+msgstr "_Renumerar"
 
 #: ../src/gnome/glade/account.glade.h:84
 #: ../src/gnome-utils/dialog-commodity.c:270
 msgid "_Security/currency:"
-msgstr "Título/moeda:"
+msgstr "_Título/moeda:"
 
 #: ../src/gnome/glade/account.glade.h:85
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
@@ -4485,8 +4466,8 @@ msgid "Book Closing Dates"
 msgstr "Datas de Fechamento de Balanço"
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
-msgid "Close Book"
-msgstr "Fechar Balanço"
+msgid "_Close Book"
+msgstr "_Fechar Balanço"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
 msgid "Enter a title for this book."
@@ -4713,7 +4694,7 @@ msgstr "Editar"
 
 #: ../src/gnome/glade/commodities.glade.h:4
 msgid "Remove the current commodity."
-msgstr "Exclui a commodity atual."
+msgstr "Excluir a commodity atual."
 
 #: ../src/gnome/glade/commodities.glade.h:5
 msgid "Securities"
@@ -5279,7 +5260,7 @@ msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:19
 msgid "Save Custom Check Format"
-msgstr "Salvar Formato Personalizado de Chegue"
+msgstr "Gravar Formato Personalizado de Cheque"
 
 #: ../src/gnome/glade/print.glade.h:20
 msgid "The origin point is the lower left-hand corner of the page."
@@ -5419,7 +5400,7 @@ msgstr "Recortar a transação selecionada"
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-register.c:203
 msgid "Delete the current transaction"
-msgstr "Exclui a transação atual"
+msgstr "Excluir a transação atual"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
@@ -5493,7 +5474,7 @@ msgstr "Razão para cancelar a transação:"
 #: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome/gnc-plugin-page-register.c:209
 msgid "Record the current transaction"
-msgstr "Salvar a transação atual"
+msgstr "Gravar a transação atual"
 
 #: ../src/gnome/glade/register.glade.h:38
 msgid "Remove Transaction Splits"
@@ -5506,9 +5487,8 @@ msgid "S_plit Transaction"
 msgstr "Di_vidir Transação"
 
 #: ../src/gnome/glade/register.glade.h:40
-#, fuzzy
 msgid "S_tatement Date"
-msgstr "Data do Extrato:"
+msgstr "Da_ta do Extrato:"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Schedule..."
@@ -5529,23 +5509,23 @@ msgstr "Mostrar Tod_as"
 #: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:276
 msgid "Show all splits in the current transaction"
-msgstr "Mostra todas as divisões da transação atual"
+msgstr "Mostrar todas as divisões da transação atual"
 
 #: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:291
 msgid "Show expanded transactions with all splits"
-msgstr "Mostra transações expandidas com todas as suas divisões"
+msgstr "Mostrar transações expandidas com todas as suas divisões"
 
 #: ../src/gnome/glade/register.glade.h:48
 #: ../src/gnome/gnc-plugin-page-register.c:285
 msgid "Show transactions on one or two lines"
-msgstr "Mostra transações em uma ou duas linhas"
+msgstr "Mostrar transações em uma ou duas linhas"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:288
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
-msgstr "Mostra transações em uma ou duas linhas e expandir a transação atual"
+msgstr "Mostrar transações em uma ou duas linhas e expandir a transação atual"
 
 #: ../src/gnome/glade/register.glade.h:50
 #: ../src/gnome/gnc-plugin-page-register.c:272
@@ -5833,19 +5813,16 @@ msgid "<b>Options</b>"
 msgstr "<b>Opções</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
-#, fuzzy
 msgid "<b>Since Last Run Dialog</b>"
-msgstr "Assistente da Última Utilização"
+msgstr "<b>Diálogo 'Desde a Última Utilização'</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:49
-#, fuzzy
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr "Diário de Transações"
+msgstr "<b>Padrões do Editor de Transações</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:51
-#, fuzzy
 msgid "<b>Upcoming</b>"
-msgstr "Informação de Reconciliação"
+msgstr "<b>Datas Futuras</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:52
 #, fuzzy
@@ -5888,7 +5865,6 @@ msgid "Create as scheduled"
 msgstr "Criar como programado"
 
 #: ../src/gnome/glade/sched-xact.glade.h:61
-#, fuzzy
 msgid "Create automatically"
 msgstr "Criar Automaticamente"
 
@@ -5963,9 +5939,8 @@ msgstr "Editar Transação Programada"
 
 #: ../src/gnome/glade/sched-xact.glade.h:84
 #: ../src/gnome-utils/gnc-tree-view-sx-list.c:172
-#, fuzzy
 msgid "Enabled"
-msgstr "Tabela"
+msgstr "Habilitado"
 
 #: ../src/gnome/glade/sched-xact.glade.h:85
 msgid "End Date:"
@@ -5997,14 +5972,12 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
-#, fuzzy
 msgid "For:"
-msgstr "Ficha"
+msgstr "Por:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
-#, fuzzy
 msgid "Forever"
-msgstr "Quarto nível"
+msgstr "Indefinidamente"
 
 #: ../src/gnome/glade/sched-xact.glade.h:98
 #: ../src/gnome-utils/gnc-dense-cal.c:332
@@ -6039,7 +6012,7 @@ msgstr "Última Ocorrência: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:106
 msgid "Length:"
-msgstr "Comprimento:"
+msgstr "Duração:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
 msgid "Loan Account:"
@@ -6115,9 +6088,8 @@ msgid "On the"
 msgstr "No"
 
 #: ../src/gnome/glade/sched-xact.glade.h:133
-#, fuzzy
 msgid "Overview"
-msgstr "Relatório"
+msgstr "Geral"
 
 #: ../src/gnome/glade/sched-xact.glade.h:134
 msgid "Part of Payment Transaction"
@@ -6208,7 +6180,7 @@ msgstr "Selecionar Tudo"
 
 #: ../src/gnome/glade/sched-xact.glade.h:156
 msgid "Select occurrence date above."
-msgstr "Selecionar data de ocorrência, acima."
+msgstr "Selecionar a data de ocorrência, acima."
 
 #: ../src/gnome/glade/sched-xact.glade.h:157
 msgid "Semi-Monthly"
@@ -6229,12 +6201,11 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:161
 msgid "Since Last Run"
-msgstr "Desde a Última Utilização"
+msgstr "Desde a Última Execução"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
-#, fuzzy
 msgid "Since Last Run..."
-msgstr "_Desde a Última Corrida..."
+msgstr "Desde a Última Execução..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:163
 msgid "Specify Source Account"
@@ -6254,7 +6225,6 @@ msgid "Sunday"
 msgstr "Domingo"
 
 #: ../src/gnome/glade/sched-xact.glade.h:168
-#, fuzzy
 msgid "Template Transaction"
 msgstr "Modelo de Transação"
 
@@ -6295,7 +6265,7 @@ msgid ""
 "This druid will walk you through any scheduled transactions that should be "
 "created."
 msgstr ""
-"Este assistente lhe guiará pelas transações agendadas que precisam ser "
+"Este assistente lhe guiará pelas transações programadas que precisam ser "
 "criadas."
 
 #: ../src/gnome/glade/sched-xact.glade.h:174
@@ -6308,7 +6278,7 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"Este é um método passo-a-passo de configurar o repagamento de um empréstimo "
+"Este é um método passo-a-passo para configurar o repagamento de um empréstimo "
 "no GnuCash. Com esse Assistente, você pode digitar os parâmetros de seu "
 "empréstimo e fornecer detalhes de seu pagamento. Usando essas informações, "
 "as Transações Programadas adequadas serão criadas.\n"
@@ -6376,9 +6346,8 @@ msgid "_Notify before transactions are created "
 msgstr "_Notificar antes que as transações sejam criadas"
 
 #: ../src/gnome/glade/sched-xact.glade.h:194
-#, fuzzy
 msgid "_Review created transactions"
-msgstr "Marcar transações aprovadas"
+msgstr "_Revisar transações criadas"
 
 #: ../src/gnome/glade/sched-xact.glade.h:195
 msgid "_Run when data file opened"
@@ -6394,52 +6363,47 @@ msgid "days."
 msgstr "dias."
 
 #: ../src/gnome/glade/sched-xact.glade.h:198
-#, fuzzy
 msgid ""
 "months\n"
 "years"
-msgstr "meses"
+msgstr "meses\n"
+"anos"
 
 #: ../src/gnome/glade/sched-xact.glade.h:200
 msgid "months."
 msgstr "meses."
 
 #: ../src/gnome/glade/sched-xact.glade.h:201
-#, fuzzy
 msgid "occurrences"
-msgstr "Moedas"
+msgstr "ocorrências"
 
 #: ../src/gnome/glade/sched-xact.glade.h:202
-#, fuzzy
 msgid "remaining"
-msgstr "Cobrança"
+msgstr "restante"
 
 #: ../src/gnome/glade/sched-xact.glade.h:203
 msgid "then on the:"
-msgstr "aí em:"
+msgstr "então em:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:204
 msgid "weeks."
 msgstr "semanas."
 
 #: ../src/gnome/glade/stocks.glade.h:1
-#, fuzzy
 msgid "<b>A_sset Account</b>"
-msgstr "Conta Superior"
+msgstr "<b>Conta de ativo</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:2
-#, fuzzy
 msgid "<b>_Income Account</b>"
-msgstr "Conta de Receita"
+msgstr "<b>Conta de Receita</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:3
 msgid "Cash In Lieu"
 msgstr "Dinheiro em vez de"
 
 #: ../src/gnome/glade/stocks.glade.h:4
-#, fuzzy
 msgid "Currenc_y:"
-msgstr "Moeda:"
+msgstr "_Moeda:"
 
 #: ../src/gnome/glade/stocks.glade.h:5
 msgid "Desc_ription:"
@@ -6485,9 +6449,8 @@ msgstr ""
 "Você pode deixá-lo em branco sem problema."
 
 #: ../src/gnome/glade/stocks.glade.h:10
-#, fuzzy
 msgid "New _Price:"
-msgstr "Novo Preço:"
+msgstr "Novo _Preço:"
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid ""
@@ -6519,21 +6482,18 @@ msgid "_Amount:"
 msgstr "_Quantia:"
 
 #: ../src/gnome/glade/stocks.glade.h:18
-#, fuzzy
 msgid "_Memo:"
-msgstr "_Memo"
+msgstr "_Memo:"
 
 #: ../src/gnome/glade/stocks.glade.h:19
-#, fuzzy
 msgid "_Shares:"
-msgstr "Ações:"
+msgstr "_Ações:"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
 msgstr "0"
 
 #: ../src/gnome/glade/tax.glade.h:2
-#, fuzzy
 msgid "<b>Payer Name Source</b>"
 msgstr "Nome de Fonte Pagadora"
 
@@ -6548,47 +6508,40 @@ msgid "<b>_Accounts</b>"
 msgstr "Tipo de Conta"
 
 #: ../src/gnome/glade/tax.glade.h:5
-#, fuzzy
 msgid "<b>_TXF Categories</b>"
-msgstr "Categorias TXF"
+msgstr "<b>Categorias TXF</b>"
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "Accounts Selected:"
 msgstr "Contas Selecionadas"
 
 #: ../src/gnome/glade/tax.glade.h:7
-#, fuzzy
 msgid "C_urrent Account"
-msgstr "Conta Atual"
+msgstr "_Esta Conta"
 
 #: ../src/gnome/glade/tax.glade.h:8
 msgid "Tax Information"
 msgstr "Informação sobre Impostos"
 
 #: ../src/gnome/glade/tax.glade.h:9
-#, fuzzy
 msgid "Tax _Related"
-msgstr "Relativo a Impostos"
+msgstr "_Relativo a Impostos"
 
 #: ../src/gnome/glade/tax.glade.h:10
-#, fuzzy
 msgid "_Expense"
 msgstr "Despesa"
 
 #: ../src/gnome/glade/tax.glade.h:11
-#, fuzzy
 msgid "_Income"
 msgstr "Receita"
 
 #: ../src/gnome/glade/tax.glade.h:12
-#, fuzzy
 msgid "_Parent Account"
-msgstr "Conta Superior"
+msgstr "Conta _Pai"
 
 #: ../src/gnome/glade/tax.glade.h:13
-#, fuzzy
 msgid "_Select Subaccounts"
-msgstr "Selecionar Subcontas"
+msgstr "_Selecionar Subcontas"
 
 #: ../src/gnome/glade/userpass.glade.h:1
 msgid "Enter your username and password"
@@ -6599,23 +6552,20 @@ msgid "Username and Password"
 msgstr "Nome de Usuário e Senha"
 
 #: ../src/gnome/glade/userpass.glade.h:3
-#, fuzzy
 msgid "_Password:"
-msgstr "Senha:"
+msgstr "_Senha:"
 
 #: ../src/gnome/glade/userpass.glade.h:4
-#, fuzzy
 msgid "_Username:"
-msgstr "Nome de Usuário:"
+msgstr "_Nome de Usuário:"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:57
 msgid "New Accounts _Page"
 msgstr "Nova _Página de Contas"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
-#, fuzzy
 msgid "Open a new Account Tree page"
-msgstr "Abrir uma nova vista de hierarquia de contas"
+msgstr "Abrir uma nova página de contas"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:95
@@ -6631,29 +6581,26 @@ msgid "_Open..."
 msgstr "_Abrir..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
-#, fuzzy
 msgid "Open an existing GnuCash file"
-msgstr "Abrir a Janela de Ajuda do GnuCash"
+msgstr "Abrir um arquivo do GnuCash"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:101
 msgid "_Save"
-msgstr "_Salvar"
+msgstr "_Gravar"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:102
-#, fuzzy
 msgid "Save the current file"
-msgstr "Remover o preço atual"
+msgstr "Gravar o arquivo atual"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:104
 msgid "Save _As..."
-msgstr "Salvar _Como..."
+msgstr "Gravar _Como..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:109
 msgid "_QSF Import"
 msgstr "Importar Q_SF"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:110
-#, fuzzy
 msgid "Import a QSF object file"
 msgstr "Importar arquivos QIF"
 
@@ -6671,9 +6618,8 @@ msgid "Export _Chart of Accounts to QSF"
 msgstr "Exportar _Plano de Contas para QSF XML"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:119
-#, fuzzy
 msgid "Export the chart of accounts for a date with balances as QSF"
-msgstr "Exporta o gráfico das contas para uma data com saldos como QSF"
+msgstr "Exportar o plano de contas para uma data com saldos como QSF"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:124
@@ -6711,9 +6657,8 @@ msgid "Since _Last Run..."
 msgstr "_Desde a Última Vez..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:138
-#, fuzzy
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Criar Transações Programadas desde a última corrida."
+msgstr "Criar Transações Programadas desde a última execução."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:140
 msgid "_Mortgage & Loan Repayment..."
@@ -6729,9 +6674,8 @@ msgid "Close _Books"
 msgstr "_Fechar Balanço"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:145
-#, fuzzy
 msgid "Archive old data using accounting periods"
-msgstr "Final do último trimestre contábil"
+msgstr "Arquivar dados antigos utilizando períodos contábeis"
 
 #. Tools menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
@@ -6775,9 +6719,8 @@ msgid "Error: Loading failed, error code %d - %s."
 msgstr "Erro: Carga falhou, código de erro %d - %s."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:403
-#, fuzzy
 msgid "Select the QSF file to import into GnuCash"
-msgstr "Selecione um arquivo QIF para carregar"
+msgstr "Selecione um arquivo QSF para carregar no GnuCash"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:459
 msgid "There are no Scheduled Transactions to be entered at this time."
@@ -6788,9 +6731,8 @@ msgid "New Budget"
 msgstr "Novo Orçamento"
 
 #: ../src/gnome/gnc-plugin-budget.c:56
-#, fuzzy
 msgid "Create a new Budget"
-msgstr "Criar um arquivo novo"
+msgstr "Criar um novo orçamento"
 
 #: ../src/gnome/gnc-plugin-budget.c:59
 msgid "Open Budget"
@@ -6861,9 +6803,8 @@ msgid "_Renumber Subaccounts..."
 msgstr "_Renumerar Subcontas..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
-#, fuzzy
 msgid "Renumber the children of the selected account"
-msgstr "Reconciliar a conta selecionada"
+msgstr "Renumerar subcontas da conta selecionada"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:175
@@ -6915,7 +6856,7 @@ msgstr "Ver Lotes..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:189
 #: ../src/gnome/gnc-plugin-page-register.c:240
 msgid "Bring up the lot viewer/editor window"
-msgstr ""
+msgstr "Exibir a janela do visualizador/editor de lotes"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
 msgid "Check & Repair A_ccount"
@@ -6983,19 +6924,18 @@ msgid "Accounts"
 msgstr "Contas"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:906
-#, fuzzy
 msgid "(no name)"
-msgstr "(sem memo)"
+msgstr "(sem nome)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:927
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting account %s"
-msgstr "Selecione contas"
+msgstr "Excluindo conta %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1019
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s will be deleted."
-msgstr "Lista das contas será atualizada"
+msgstr "A conta %s será excluida."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1029
 #, c-format
@@ -7003,29 +6943,26 @@ msgid "All transactions in this account will be moved to the account %s."
 msgstr "Todas as transações nesta conta serão movidas para a conta %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1033
-#, fuzzy
 msgid "All transactions in this account will be deleted."
-msgstr "Todos os preços anteriores à data abaixo serão apagados."
+msgstr "Todas as transações nesta conta serão excluidas."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1040
-#, fuzzy, c-format
+#, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
-msgstr "Incluir sub-contas de todas as contas selecionadas"
+msgstr "Todas as subcontas serão movidas para a conta %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1044
-#, fuzzy
 msgid "All of its subaccounts will be deleted."
-msgstr "Lista das contas será atualizada"
+msgstr "Todas as sub-contas serão excluidas."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1048
-#, fuzzy, c-format
+#, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "Adicionar uma nova transação à conta"
+msgstr "Todas as transações da subconta serão movidas para a conta %s."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1052
-#, fuzzy
 msgid "All sub-account transactions will be deleted."
-msgstr "Lista das contas será atualizada"
+msgstr "Todas as transações da subconta serão excluídas."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1057
 msgid "Are you sure you want to do this?"
@@ -7041,24 +6978,21 @@ msgid "Delete this budget"
 msgstr "Exclui esse orçamento"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:140
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "Editar opções de visualização de contas"
+msgstr "Editar as opções deste orçamento"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Estimate Budget"
 msgstr "Orçamento Estimado"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:144
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "Mostrar uma tabela dos dados selecionados"
+msgstr "Estimar uma previsão de valor para as contas selecionadas a partir de transaçãoes passadas"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:167
-#, fuzzy
 msgid "Estimate"
-msgstr "Status"
+msgstr "Estimar"
 
 #. src/report/standard-reports/budget.scm
 #: ../src/gnome/gnc-plugin-page-budget.c:275 ../intl-scm/guile-strings.c:2730
@@ -7067,9 +7001,8 @@ msgid "Budget"
 msgstr "Orçamento"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:770
-#, fuzzy
 msgid "Set the budget options using this dialog."
-msgstr "Definir as opções de relatório que você quiser com esse diálogo."
+msgstr "Definir as opções de orçamento usando esse diálogo."
 
 #: ../src/gnome/gnc-plugin-page-budget.c:849
 #, c-format
@@ -7077,15 +7010,13 @@ msgid "Delete %s?"
 msgstr "Excluir %s?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:913
-#, fuzzy
 msgid "You must select at least one account to estimate."
-msgstr "Você precisa selecionar um tipo de conta."
+msgstr "Você precisa selecionar pelo menos uma conta para fazer uma estimativa."
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:170
-#, fuzzy
 msgid "_Print Check..."
-msgstr "Imprimir Cheque"
+msgstr "_Imprimir Cheque"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-register.c:175
@@ -7097,9 +7028,8 @@ msgstr "Recor_tar"
 #: ../src/gnome/gnc-plugin-page-register.c:176
 #: ../src/gnome-utils/gnc-main-window.c:252
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:957
-#, fuzzy
 msgid "Cut the current selection and copy it to clipboard"
-msgstr "Colar a transação da área de transferência"
+msgstr "Recortar a transação e copiar para a área de transferência"
 
 #: ../src/gnome/gnc-plugin-page-register.c:178
 #: ../src/gnome-utils/gnc-main-window.c:254
@@ -7111,7 +7041,7 @@ msgstr "_Copiar"
 #: ../src/gnome-utils/gnc-main-window.c:255
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:960
 msgid "Copy the current selection to clipboard"
-msgstr "Cpia a seleção atual para a área de transferência"
+msgstr "Copiar a seleção atual para a área de transferência"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
 #: ../src/gnome-utils/gnc-main-window.c:258
@@ -7125,29 +7055,24 @@ msgid "Cu_t Transaction"
 msgstr "Recor_tar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:191
-#, fuzzy
 msgid "Cut the selected transaction into clipboard"
 msgstr "Recortar a transação selecionada"
 
 #: ../src/gnome/gnc-plugin-page-register.c:193
-#, fuzzy
 msgid "_Copy Transaction"
-msgstr "Copiar Transação"
+msgstr "_Copiar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:194
-#, fuzzy
 msgid "Copy the selected transaction into clipboard"
 msgstr "Copiar a transação selecionada"
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
-#, fuzzy
 msgid "_Paste Transaction"
-msgstr "Colar Transação"
+msgstr "C_olar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:199
-#, fuzzy
 msgid "Dup_licate Transaction"
-msgstr "Transação Duplicada"
+msgstr "_Duplicar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:202
 #: ../src/gnome/gnc-split-reg.c:1163
@@ -7156,32 +7081,27 @@ msgstr "E_xcluir Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:205
 msgid "Remo_ve Transaction Splits"
-msgstr "E_xcluir Divisões de Transação"
+msgstr "_Excluir Divisões de Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:206
-#, fuzzy
 msgid "Remove all splits in the current transaction"
-msgstr "Mostrar todas as divisões da transação atual"
+msgstr "Remover todas as divisões da transação atual"
 
 #: ../src/gnome/gnc-plugin-page-register.c:208
-#, fuzzy
 msgid "_Enter Transaction"
-msgstr "Registrar uma Transação"
+msgstr "_Registrar uma Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:211
-#, fuzzy
 msgid "Ca_ncel Transaction"
-msgstr "Rebalancear Transação"
+msgstr "Limpar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:214
-#, fuzzy
 msgid "_Void Transaction"
-msgstr "Cancelar Transações?"
+msgstr "De_sabilitar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:216
-#, fuzzy
 msgid "_Unvoid Transaction"
-msgstr "_Pesquisar Transações"
+msgstr "Re_habilitar Transações"
 
 #: ../src/gnome/gnc-plugin-page-register.c:218
 msgid "Add _Reversing Transaction"
@@ -7190,29 +7110,24 @@ msgstr "Adicionar _Inversão de Transação"
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:223
 #: ../src/gnome-utils/gnc-main-window.c:266
-#, fuzzy
 msgid "_Sort By..."
-msgstr "Ordenar Por"
+msgstr "_Ordenar Por"
 
 #: ../src/gnome/gnc-plugin-page-register.c:242
-#, fuzzy
 msgid "_Blank Transaction"
-msgstr "_Transação"
+msgstr "_Ir para Transação em Branco"
 
 #: ../src/gnome/gnc-plugin-page-register.c:245
-#, fuzzy
 msgid "Edit E_xchange Rate"
-msgstr "Editar a Taxa de Câmbio"
+msgstr "Editar a _Taxa de Câmbio"
 
 #: ../src/gnome/gnc-plugin-page-register.c:246
-#, fuzzy
 msgid "Edit the exchange rate for the current transaction"
-msgstr "Editar a taxa de câmbio para a divisão atual"
+msgstr "Editar a taxa de câmbio para a transação atual"
 
 #: ../src/gnome/gnc-plugin-page-register.c:251
-#, fuzzy
 msgid "Sche_dule..."
-msgstr "Programar..."
+msgstr "Pro_gramar..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:254
 msgid "_All transactions"
@@ -7224,9 +7139,8 @@ msgstr "Essa _Transação"
 
 #. Reports menu
 #: ../src/gnome/gnc-plugin-page-register.c:261
-#, fuzzy
 msgid "Account Report"
-msgstr "Relatório de Cont_as"
+msgstr "Extrato da Conta"
 
 #: ../src/gnome/gnc-plugin-page-register.c:262
 #, fuzzy
@@ -7234,9 +7148,8 @@ msgid "Open a register report for this Account"
 msgstr "Abrir uma janela de relatório de registro para esta transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:264
-#, fuzzy
 msgid "Account Transaction Report"
-msgstr "Relatório de Transação"
+msgstr "Extrato da Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:265
 #, fuzzy
@@ -7245,9 +7158,8 @@ msgstr "Abrir uma janela de relatório de registro para esta transação"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:290
-#, fuzzy
 msgid "Transaction _Journal"
-msgstr "Diário de Transações"
+msgstr "Diário de _Transações"
 
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/gnc-plugin-page-register.c:326
@@ -7269,38 +7181,34 @@ msgstr "Livro Razão"
 #. Translators: %s is the name
 #. of the tab page
 #: ../src/gnome/gnc-plugin-page-register.c:1094
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to %s?"
-msgstr "Carregar outro arquivo"
+msgstr "Gravar alterações em %s"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1098
-#, fuzzy
 msgid ""
 "This register has pending changes to a transaction.  Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
-"O modelo de transação atual foi modificado.\n"
-"Deseja salvar as modificações?"
+"Este registro tem mudanças pendentes para a transação atual. Você gostaria "
+"de gravar o que foi modificado, descartar a transação ou cancelar a operação ?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1101
-#, fuzzy
 msgid "_Discard Transaction"
-msgstr "Cancelar Transações?"
+msgstr "_Descartar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1105
-#, fuzzy
 msgid "_Save Transaction"
-msgstr "Colar Transação"
+msgstr "_Gravar Transação"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1136
 #: ../src/gnome/gnc-plugin-page-register.c:1168
 #: ../src/gnome/gnc-plugin-page-register.c:1180
 #: ../src/import-export/hbci/gnc-hbci-utils.c:884
 #: ../src/import-export/hbci/gnc-hbci-utils.c:886
-#, fuzzy
 msgid "unknown"
-msgstr "(desconhecido)"
+msgstr "desconhecido"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1157
 #: ../src/gnome/gnc-plugin-page-register.c:1753
@@ -7343,21 +7251,19 @@ msgid "and subaccounts"
 msgstr "e sub-contas"
 
 #: ../src/gnome/gnc-plugin-page-register.c:2037
-#, fuzzy
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "Mostrar transações expandidas com todas as suas divisões"
+msgstr "Você nao pode desabilitar uma transação com divisões reconciliadas ou aprovadas."
 
 #: ../src/gnome/gnc-plugin-page-register.c:2105
 #: ../src/gnome/gnc-split-reg.c:907
-#, fuzzy
 msgid "A reversing entry has already been created for this transaction."
-msgstr "Etapa 2: Criar um Mapa de Transações"
+msgstr "Um registro reverso já foi criado para esta transação."
 
 #. Translations: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2153
-#, fuzzy, c-format
+#, c-format
 msgid "Sort %s by..."
-msgstr "Ordenar empresas por"
+msgstr "Ordenar %s por..."
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:2205
@@ -7367,9 +7273,8 @@ msgid "Filter %s by..."
 msgstr "Filtrar %s por..."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:119
-#, fuzzy
 msgid "_Scheduled"
-msgstr "Programmado"
+msgstr "A_gendamento"
 
 #. File menu
 #. Transaction menu
@@ -7380,9 +7285,8 @@ msgid "_New"
 msgstr "_Novo"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:121
-#, fuzzy
 msgid "Create a new scheduled transaction"
-msgstr "Por favor, dê um nome para a Transação Programada."
+msgstr "Criar uma nova transação agendada."
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:123
 msgid "Edit the selected scheduled transaction"
@@ -7477,7 +7381,10 @@ msgid ""
 "delete it from this register window.  You may delete the entire transaction "
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
-msgstr ""
+msgstr "Esta é a divisão \"ancorando\" esta transação ao registro.\nVocê não "
+"pode excluí-la a partir desta janela. Você pode excluir a transação "
+"inteira desta janela, ou você pode ir até o registro contendo o outro lado "
+"desta mesma transação e remover a divisão a partir daquela transação." 
 
 #: ../src/gnome/gnc-split-reg.c:1100
 msgid "(no memo)"
@@ -7532,24 +7439,21 @@ msgid "Current Value:"
 msgstr "Valor Atual:"
 
 #: ../src/gnome/gnc-split-reg.c:1874
-#, fuzzy
 msgid "This account register is read-only."
-msgstr "Janela de Registro de Conta"
+msgstr "Esta conta é somente de leitura."
 
 #: ../src/gnome/gnc-split-reg.c:1908
-#, fuzzy
 msgid ""
 "This account may not be edited.  If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
 "checkbox."
 msgstr ""
-"Essa conta não pode ser editada. Se você quiser\n"
+"Esta conta não pode ser editada. Se você quiser\n"
 "editar transações nesse registro, por favor\n"
 "abra o menu de opções da conta e deselecione a\n"
 "opção Temporária."
 
 #: ../src/gnome/gnc-split-reg.c:1915
-#, fuzzy
 msgid ""
 "One of the sub-accounts selected may not be edited.  If you want to edit "
 "transactions in this register, please open the sub-account options and turn "
@@ -7562,9 +7466,8 @@ msgstr ""
 "conta individual ao invés de um conjunto de contas."
 
 #: ../src/gnome/gnucash.desktop.in.h:1
-#, fuzzy
 msgid "GnuCash Finance Management"
-msgstr "Nome da conta GnuCash"
+msgstr "Gerenciador de Finanças GnuCash"
 
 #: ../src/gnome/gnucash.desktop.in.h:2
 msgid "Manage your finances, accounts, and investments"
@@ -8144,14 +8047,12 @@ msgid "Display negative amounts in red"
 msgstr "Mostrar quantias negativas em vermelho"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:20
-#, fuzzy
 msgid "Enables Euro support"
-msgstr "Ativar suporte para EURO"
+msgstr "Habilita suporte ao EURO"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
-#, fuzzy
 msgid "Enables additional support for the European Union EURO currency."
-msgstr "Ativar suporte para a moeda EURO da União Europeia"
+msgstr "Habilita suporte para a moeda EURO da União Europeia"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid "Enables file compression when writing the data file."
@@ -8261,10 +8162,10 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:36
-#, fuzzy
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Utilizar um formato 24 horas (em vez de 12 horas)."
+msgstr "Se ativos, utilizar o formato 24 horas. Caso contrário, utilizar " 
+"o formato de 12 horas."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 #, fuzzy
@@ -8281,9 +8182,8 @@ msgid "Position of the notebook tabs"
 msgstr "Posição das abas"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
-#, fuzzy
 msgid "Position of the summary bar"
-msgstr "Posição das abas"
+msgstr "Posição da barra de sumário"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
 msgid "Save window sizes and locations"
@@ -8306,9 +8206,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
-#, fuzzy
 msgid "Show horizontal borders in a register"
-msgstr "Por padrão, mostrar margens horizontais nas células."
+msgstr "Mostrar margens horizontais nos registros."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid "Show splash screen"
@@ -8368,11 +8267,11 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:57
-#, fuzzy
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "Quantas casas decimais serão automaticamente preenchidas."
+msgstr "Este campo especifica quantas casas decimais serão preenchidas "
+"automaticamente."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:58
 msgid ""
@@ -8571,12 +8470,10 @@ msgid "Read only register"
 msgstr "Registro somente-leitura"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
-#, fuzzy
 msgid "Remove a reconciled split from a transaction"
-msgstr "Remover um desdobramento de uma transação"
+msgstr "Remover um desdobramento reconciliado de uma transação"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
-#, fuzzy
 msgid "Remove a split from a transaction"
 msgstr "Remover um desdobramento de uma transação"
 
@@ -8655,7 +8552,6 @@ msgstr ""
 "reconciliações."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
-#, fuzzy
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
@@ -10339,9 +10235,8 @@ msgid "<b>Start Date</b>"
 msgstr "<b>Data de Início</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:26
-#, fuzzy
 msgid "<b>Summary Bar Position</b>"
-msgstr "<b>Conteúdo da Barra de Sumário</b>"
+msgstr "<b>Posição da Barra de Sumário</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:27
 msgid "<b>Summarybar Content</b>"
@@ -10437,9 +10332,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "Abaixo da data real, imprime o formato desta data no tipo de 8 pontos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:47
-#, fuzzy
 msgid "Bottom"
-msgstr "Fund_o"
+msgstr "Fundo"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:48
 msgid "Bring the most _recent tab to the front"
@@ -10517,14 +10411,12 @@ msgid "Display the notebook tabs at the top of the window."
 msgstr "Exibe as abas acima da janela."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:67
-#, fuzzy
 msgid "Display the summary bar at the bottom of the page."
-msgstr "Exibe as abas embaixo da janela."
+msgstr "Exibe a barra de sumário no fundo da página. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:68
-#, fuzzy
 msgid "Display the summary bar at the top of the page."
-msgstr "Exibe as abas acima da janela."
+msgstr "Exibe a barra de sumário no topo da página. "
 
 #: ../src/gnome-utils/glade/preferences.glade.h:69
 msgid "Display this many rows when a register is created."
@@ -10558,7 +10450,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Don't sign reverse any accounts."
-msgstr "Não inverter o sinal de nenhuma conta;"
+msgstr "Não inverter o sinal de nenhuma conta."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "Double _mode colors alternate with transactions"
@@ -10804,9 +10696,8 @@ msgid "To_p"
 msgstr "To_po"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:127
-#, fuzzy
 msgid "Top"
-msgstr "To_po"
+msgstr "Topo"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:128
 msgid "Transaction _journal"
@@ -11074,7 +10965,7 @@ msgstr "Nova..."
 
 #: ../src/gnome-utils/gnc-autosave.c:99
 msgid "Save file automatically?"
-msgstr "Salvar arquivo automaticamente?"
+msgstr "Gravar arquivo automaticamente?"
 
 #: ../src/gnome-utils/gnc-autosave.c:102
 #, c-format
@@ -11210,7 +11101,7 @@ msgstr "Importar"
 
 #: ../src/gnome-utils/gnc-file.c:108 ../src/gnome-utils/gnc-file.c:1032
 msgid "Save"
-msgstr "Salvar"
+msgstr "Gravar"
 
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-main-window.c:236
 msgid "_Export"
@@ -11529,7 +11420,7 @@ msgstr "Ocorreu um erro de E/S (%d) desconhecido."
 
 #: ../src/gnome-utils/gnc-file.c:561
 msgid "Save changes to the file?"
-msgstr "Salvar alterações no arquivo?"
+msgstr "Gravar alterações no arquivo?"
 
 #: ../src/gnome-utils/gnc-file.c:564 ../src/gnome-utils/gnc-main-window.c:999
 #, c-format
@@ -11539,7 +11430,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:578
 msgid "Continue _Without Saving"
-msgstr "Continuar Sem Salvar"
+msgstr "Continuar _Sem Gravar"
 
 #: ../src/gnome-utils/gnc-file.c:658
 #, c-format
@@ -11714,7 +11605,7 @@ msgstr "_Fechar"
 
 #: ../src/gnome-utils/gnc-main-window.c:243
 msgid "Close the currently active page"
-msgstr "Fecha a página ativa atual"
+msgstr "Fechar a página ativa atual"
 
 #: ../src/gnome-utils/gnc-main-window.c:245
 msgid "_Quit"
@@ -11730,7 +11621,7 @@ msgstr "_Preferências"
 
 #: ../src/gnome-utils/gnc-main-window.c:261
 msgid "Edit the global preferences of GnuCash"
-msgstr "Edita as preferências globais do GnuCash"
+msgstr "Editar as preferências globais do GnuCash"
 
 #: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Select sorting criteria for this page view"
@@ -11761,10 +11652,8 @@ msgid "Reset _Warnings..."
 msgstr "Restaurar _Avisos..."
 
 #: ../src/gnome-utils/gnc-main-window.c:278
-#, fuzzy
 msgid "Reset the state of all warning messages so they will be shown again."
-msgstr ""
-"Restaura o estado de todas as mensagens de aviso para que elas sejam "
+msgstr "Restaura o estado de todas as mensagens de aviso para que elas sejam "
 "mostradas novamente."
 
 #: ../src/gnome-utils/gnc-main-window.c:280
@@ -11884,7 +11773,7 @@ msgstr "Janela _0"
 #: ../src/gnome-utils/gnc-main-window.c:996
 #, c-format
 msgid "Save changes to file %s before closing?"
-msgstr "Salvar mudanças no arquivo %s antes de fechar?"
+msgstr "Gravar alterações no arquivo %s antes de fechar?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1001
 #, c-format
@@ -12311,7 +12200,7 @@ msgstr "%s, Total de Commodities Não Monetárias:"
 #: ../src/gnome-utils/window-main-summarybar.c:318
 #, c-format
 msgid "%s, Grand Total:"
-msgstr "%s, Grande Total:"
+msgstr "%s, Total Geral:"
 
 #: ../src/gnome-utils/window-main-summarybar.c:322
 #, c-format
@@ -12555,7 +12444,6 @@ msgstr ""
 "por padrão."
 
 #: ../src/import-export/generic-import.glade.h:22
-#, fuzzy
 msgid ""
 "For a new transaction, click on the \"Other Account\" entry to choose the "
 "other (destination) account of this transaction.\n"
@@ -12568,7 +12456,7 @@ msgid ""
 "duplicates are matched with the right existing transaction, \n"
 "click \"OK\"."
 msgstr ""
-"Para uma nova transação, selecione a opção \"Outra Conta\" para escolher a "
+"Para uma transação nova, selecione a opção \"Outra Conta\" para escolher a "
 "outra conta (destino) dessa transação.\n"
 "Para uma transação duplicada, selecione a opção \"Outra Conta\" ou "
 "\"Descrição\" para \n"
@@ -12591,7 +12479,6 @@ msgid "Imported transaction's first split:"
 msgstr "Primeira divisão de transação importada"
 
 #: ../src/import-export/generic-import.glade.h:32
-#, fuzzy
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convenience stores.  These ATMs add their fee "
@@ -13147,7 +13034,6 @@ msgid "Start Online Banking Wizard"
 msgstr "Iniciar o Assistente do Banco via Internet"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:46
-#, fuzzy
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup Wizard\". Please press the button below to start "
@@ -13246,9 +13132,8 @@ msgid "_Now"
 msgstr "_Agora"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:71
-#, fuzzy
 msgid "_Start AqBanking Wizard"
-msgstr "Iniciar o Assistente do AqBanking"
+msgstr "Iniciar o assistente do _AqBanking"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
 msgid "at Bank"
@@ -13936,13 +13821,13 @@ msgstr ""
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:45
 msgid "_Replay GnuCash .log file..."
-msgstr "_Reexibir o arquivo .log do GnuCash..."
+msgstr "_Aplicar arquivo .log do Gnucash..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
 msgstr ""
-"Reexibir um arquivo de log do GnuCash depois de uma queda. Isto não pode ser "
-"desfeito."
+"Aplicar um arquivo de log do GnuCash após uma queda. Esta ação não pode ser "
+"desfeita."
 
 #. This string is a default account
 #. name. It MUST NOT contain the
@@ -14108,7 +13993,6 @@ msgstr ""
 "para o nome."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:1760
-#, fuzzy
 msgid "Click \"Forward\" to accept the information and move on."
 msgstr "Clique \"Próxima\" para aceitar a informação e prosseguir."
 
@@ -14260,7 +14144,6 @@ msgstr ""
 "de contas dentro do GnuCash."
 
 #: ../src/import-export/qif-import/qif.glade.h:27
-#, fuzzy
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial "
 "institution, some of the information in the QIF file may duplicate "
@@ -14282,12 +14165,12 @@ msgid ""
 msgstr ""
 "Se você estiver importando um arquivo QIF oriundo de um banco ou outra "
 "instituição financeira, parte da informação no arquivo QIF poderá duplicar "
-"informações já existentes nas suas contas GnuCash. O GnuCash tentará "
+"informações já existentes nas suas contas do GnuCash. O GnuCash tentará "
 "detectar duplicatas de transações existentes.\n"
 "\n"
 "Na próxima página, será pedido que você confirme que uma transação existente "
 "bate com uma transação importada. Transações importadas são exibidas no lado "
-"esquerdo da página, e possíveis coincidências para a transação selecionada à "
+"esquerdo da página e possíveis coincidências para a transação selecionada à "
 "esquerda são exibidas à direita. Poderá haver várias transações antigas que "
 "podem coincidir com uma transação importada; você poderá selecionar a "
 "transação correta com um duplo clique na coluna \"Dup?\" da transação "
@@ -14551,7 +14434,6 @@ msgid "Minimum score to be displayed"
 msgstr "Pontuação mínima a ser exibida"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
-#, fuzzy
 msgid ""
 "This field specifies the extra fee that is taken into account when matching "
 "imported transactions. In some places commercial ATMs (not belonging to a "
@@ -14569,8 +14451,8 @@ msgstr ""
 "de conveniência. Esses Caixas Eletrônicos podem adicionar suas taxas "
 "diretamente à quantia ao invés de listá-las como uma transação separada ou "
 "nas taxas mensais de seu banco. Por exemplo, você saca $100, e você é "
-"debitado $101,50 mais as taxas de seu banco. Caso você tivesse digitado os "
-"$100 manualmente, os valores não irão bater. Você deve configurar isso para "
+"debitado em $101,50 mais as taxas de seu banco. Caso você tivesse digitado os "
+"$100 manualmente, os valores não iriam bater. Você deve configurar isso para "
 "qualquer que seja a taxa máxima em sua área (em unidades monetárias locais), "
 "para que a transação seja casada."
 
@@ -14950,7 +14832,7 @@ msgstr "Fórmula de Crédito"
 #. is set to, and subsequently displayed.
 #: ../src/register/ledger-core/split-register-model.c:805
 msgid "Scheduled"
-msgstr "Programmado"
+msgstr "Programado"
 
 #: ../src/register/ledger-core/split-register-model.c:836
 msgid "Enter the transaction reference, such as the invoice or check number"
@@ -15308,9 +15190,9 @@ msgid "Badly formed options URL: %s"
 msgstr "Endereço de opções mal formado: %s"
 
 #: ../src/report/report-gnome/window-report.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Badly-formed report id: %s"
-msgstr "ID de relatório ruim: %s"
+msgstr "ID do relatório mal formado: %s"
 
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
@@ -16152,7 +16034,7 @@ msgstr ""
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
-"Ignorar seleções de contas e mostrar sub-contas de todas as contas "
+"Ignorar seleções de contas e mostrar subcontas de todas as contas "
 "selecionadas?"
 
 #. src/report/report-system/options-utilities.scm
@@ -16168,7 +16050,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:760
 msgid "Include sub-account balances in printed balance?"
-msgstr "Incluir saldos das sub-contas nos saldos impressos?"
+msgstr "Incluir saldos das subcontas nos saldos impressos?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:762
@@ -17464,7 +17346,7 @@ msgstr "Profundidade de Visualisação de Contas"
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:1344 ../intl-scm/guile-strings.c:2720
 msgid "Always show sub-accounts"
-msgstr "Sempre mostrar sub-contas"
+msgstr "Mostrar sempre as subcontas"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -17508,13 +17390,13 @@ msgstr "Mostrar o nome completo da conta (incluindo contas superiores)"
 #: ../intl-scm/guile-strings.c:1362
 #, c-format
 msgid "%s and subaccounts"
-msgstr "%s e sub-contas"
+msgstr "%s e subcontas"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1364
 #, c-format
 msgid "%s and selected subaccounts"
-msgstr "%s e sub-contas selecionadas"
+msgstr "%s e subcontas selecionadas"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1368
@@ -17963,7 +17845,7 @@ msgstr "Cancelar Transações?"
 #: ../intl-scm/guile-strings.c:2294 ../intl-scm/guile-strings.c:2396
 #: ../intl-scm/guile-strings.c:2484
 msgid "Reconciled Date"
-msgstr "Data de Reconciliação:"
+msgstr "Data de Reconciliação"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -18190,21 +18072,18 @@ msgstr "Se inclui ou não uma linha indicando o total de gastos"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1664
-#, fuzzy
 msgid "Display as a two column report"
-msgstr "Mostrar o relatório %s"
+msgstr "Exibir como um relatório de duas colunas"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1666
-#, fuzzy
 msgid "Divides the report into an income column and an expense column"
-msgstr ""
-"Definir informação de impostos para todas as contas de receitas e despesas"
+msgstr "Divide o relatório em uma coluna para renda e uma coluna para despesas"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1668
 msgid "Display in standard, income first, order"
-msgstr ""
+msgstr "Exibir na ordem padrão com renda em primeiro"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1670
@@ -18411,7 +18290,7 @@ msgstr "Contas de Ações para relatório"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1778 ../intl-scm/guile-strings.c:2076
 msgid "Include accounts that have a zero share balances."
-msgstr "Incluir contas que tem saldo zero de ações."
+msgstr "Incluir contas com saldo zero de ações."
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -18651,7 +18530,7 @@ msgstr "Título da conta"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2008
 msgid "Advanced Portfolio"
-msgstr "Portfólio Advancado"
+msgstr "Portfólio Avançado"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2016
@@ -18889,7 +18768,7 @@ msgstr "Único"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2332
 msgid "Display 1 line"
-msgstr "Mostrar uma linha"
+msgstr "Exibir uma linha"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2334
@@ -19148,7 +19027,7 @@ msgstr "Exibir o nome da conta?"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2506 ../intl-scm/guile-strings.c:2518
 msgid "Display the full account name"
-msgstr "Exibir a nome completo da conta"
+msgstr "Exibir o nome completo da conta"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2510
@@ -19467,7 +19346,7 @@ msgstr "Mostra um gráfico circular com a receita total para cada dia de semana"
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2824
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Mostra um gráfico circular com a despesa total para cada dia de semana"
+msgstr "Mostra umr gráfico circular com a despesa total para cada dia de semana"
 
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -20361,13 +20240,12 @@ msgstr "<br>Fatura&nbsp;em&nbsp;progresso...."
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:3436 ../intl-scm/guile-strings.c:3746
 #: ../intl-scm/guile-strings.c:3978
-#, fuzzy
 msgid ""
 "No valid invoice selected.  Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Nenhuma conta válida selecionada. Clique no botão Opções e selecione a conta "
-"a ser utilizada."
+"Não foi selecionada fatura válida.  Clique no botão Opções e selecione a "
+"fatura a ser utilizada."
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3438 ../intl-scm/guile-strings.c:3440
@@ -20603,7 +20481,6 @@ msgstr ""
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3770
-#, fuzzy
 msgid "Sort companies by"
 msgstr "Ordenar empresas por"
 
