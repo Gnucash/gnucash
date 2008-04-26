@@ -302,14 +302,15 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     find_trans = blank_trans;
     find_split = NULL;
     find_trans_split = blank_split;
+    find_class = CURSOR_CLASS_SPLIT;
   }
   else
   {
     find_trans = info->cursor_hint_trans;
     find_split = info->cursor_hint_split;
     find_trans_split = info->cursor_hint_trans_split;
+    find_class = info->cursor_hint_cursor_class;
   }
-  find_class = info->cursor_hint_cursor_class;
 
   save_loc = table->current_cursor_loc;
 
