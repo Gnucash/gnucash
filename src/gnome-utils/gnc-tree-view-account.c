@@ -270,7 +270,7 @@ sort_by_string (GtkTreeModel *f_model,
   GtkTreeModel *model;
   GtkTreeIter iter1, iter2;
   const Account *account1, *account2;
-  const gchar *str1, *str2;
+  gchar *str1, *str2;
   gint column = GPOINTER_TO_INT(user_data);
   gint result;
 
@@ -281,6 +281,8 @@ sort_by_string (GtkTreeModel *f_model,
   gtk_tree_model_get(GTK_TREE_MODEL(model), &iter2,  column, &str2, -1);
 
   result = safe_utf8_collate(str1, str2);
+  g_free(str1);
+  g_free(str2);
   if (result != 0)
     return result;
   return xaccAccountOrder(account1, account2);

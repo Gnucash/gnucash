@@ -303,6 +303,7 @@ gnc_style_sheet_select_dialog_response_cb (GtkDialog *unused,
       gtk_list_store_set (ss->list_store, &iter,
 			  COLUMN_DIALOG, ssinfo,
 			  -1);
+      g_free(name);
     }
     break;
     
