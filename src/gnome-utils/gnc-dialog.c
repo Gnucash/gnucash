@@ -291,8 +291,11 @@ static GtkWidget *gnc_dialog_get_widget_smart(GtkWidget *w)
     if (GTK_IS_BOX(w)) {
         GList *children = gtk_container_get_children(GTK_CONTAINER(w));
         if (g_list_length(children) == 1) {
-            return gnc_dialog_get_widget_smart(GTK_WIDGET(children->data));
+            GtkWidget *child = GTK_WIDGET(children->data);
+            g_list_free(children);
+            return gnc_dialog_get_widget_smart(child);
         }
+        g_list_free(children);
     }
     return w;
 }
