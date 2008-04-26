@@ -385,7 +385,7 @@
                  accounts 
                  (lambda (acct) (gnc:account-get-comm-balance-at-date 
                                  acct beforebegindate #f))
-                 gnc-reverse-balance))
+                 (lambda (x) #f)))
 	  (gnc:report-percent-done 50)
 
           (set! startbal 
