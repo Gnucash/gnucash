@@ -215,6 +215,7 @@ static gnc_commodity *
 gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
 {
     gnc_commodity_table * table;
+    gnc_commodity *currency = NULL;
     gchar *exchange = NULL, *mnemonic = NULL;
     xmlNodePtr node;
 
@@ -226,22 +227,20 @@ gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
 	mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
     }
 
-    if (!exchange || !mnemonic)
+    if (exchange
+        && gnc_commodity_namespace_is_iso(exchange)
+        && mnemonic)
     {
-      if (exchange) xmlFree(exchange);
-      if (mnemonic) xmlFree(mnemonic);
-      return NULL;
+      table = gnc_commodity_table_get_table(book);
+      currency = gnc_commodity_table_lookup(table, exchange, mnemonic);
     }
 
-    if (!gnc_commodity_namespace_is_iso(exchange))
-    {
+    if (exchange)
       xmlFree(exchange);
+    if (mnemonic)
       xmlFree(mnemonic);
-      return NULL;
-    }
 
-    table = gnc_commodity_table_get_table(book);
-    return gnc_commodity_table_lookup(table, exchange, mnemonic);
+    return currency;
 }
 
 static gboolean
