@@ -1,6 +1,53 @@
 Version history:
 ------- -------
 
+ 2.2.5 - 27 April 2008
+ 	 Welcome to the GnuCash 2.2.5 Release.
+	 Fixed Bugs:
+	 o #166101: Register: Topmost splits' accounts are rewritten confusingly
+	 o #341414: QIF Import: Changing account separator breaks saved account
+	            mappings
+	 o #341608: Transaction Report: Filtering void/non-void doesn't work
+	 o #347474: Register: Tab goes to wrong split
+	 o #396665: QIF Import: Detect and convert non-ascii character encoding
+	            of QIF files
+	 o #450354: QIF Import, Win32: Can only load files from ascii paths
+	 o #475960: Reconciliation: Postponed balances of liability accounts are
+	            not reversed correctly
+	 o #467529: Check Printing: Align_n not working in custom check
+	            definitions
+	 o #509089: QIF Import: Duplicates windows shown after Scheme error
+	 o #511182: QIF Import: Saved commodity mappings lost after import to
+	            new GnuCash file
+	 o #511231: QIF Import: Use QIF security type to provide better default
+	            namespace
+	 o #512208: QIF Import: New commodities remain if import canceled
+	 o #512841: Register: Crash in expression parser on nullary functions,
+	            like pmt()
+	 o #514027: QIF Import: Commodities page is skipped if you go back to
+	            currency page
+	 o #519988: QIF Import: Error reporting doesn't follow GnuCash guidelines
+	 o #520606: QIF import: Memo mappings for non-split, non-investment
+	            transactions are ignored
+	 o #521957: Auto-save not canceled on opening other files
+	 o #522795: QIF Import: Does not support "ShtSell" or "CvrShrt"
+	            transactions
+	 o #523194: QIF Import: Existing commodities can cause import failure
+	 o #523922: GnuCash ships the wrong scalable icon and no small (22²,
+	            24²) sizes
+	 o #527459: QIF Import: Support voided transactions
+	 o #527886: QIF Import: Support QIF numeric formats of 12'345.67 as
+	            produced by Quicken 4
+	 o #529232: Average Balance Report: Reversing the starting balance
+	            distorts the numbers
+	 Other Changes:
+	 o Add a new Liberty(tm) check format
+	 o Show QIF import documentation by default
+	 o Improve cancel behavior in reconciliation window
+	 o Fix a few memory leaks
+	 o Update translations: Brazilian Portuguese, German, Romanian, Russian,
+	                        Swiss German
+
  2.2.4 - 02 March 2008
  	 Welcome to the GnuCash 2.2.4 Release.
 	 Fixed Bugs:
