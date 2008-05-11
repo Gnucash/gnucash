@@ -623,14 +623,17 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   {
     GNCAccountType other_type;
     GtkWidget *other_button;
-    
+    XferDirection other_direction;
+
     DEBUG("updating other split");
     if (xferData->quickfill == XFER_DIALOG_FROM) {
-      other_button = xferData->from_show_button;
+      other_button = xferData->to_show_button;
+      other_direction = XFER_DIALOG_TO;
     }
     else
     {
-      other_button = xferData->to_show_button;
+      other_button = xferData->from_show_button;
+      other_direction = XFER_DIALOG_FROM;
     }
 
     other_type = xaccAccountGetType(other_acct);
@@ -641,7 +644,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
     if( (other_type == ACCT_TYPE_EXPENSE) || (other_type == ACCT_TYPE_INCOME) )
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(other_button), TRUE);
 
-    gnc_transfer_dialog_set_selected_account (xferData, other_acct, xferData->quickfill);
+    gnc_transfer_dialog_set_selected_account (xferData, other_acct, other_direction);
 
     changed = TRUE;
   }
