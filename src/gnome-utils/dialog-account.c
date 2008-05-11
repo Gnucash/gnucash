@@ -319,7 +319,8 @@ gnc_ui_to_account(AccountWindow *aw)
     return;
   }
 
-  if (aw->type != xaccAccountGetType (account)) {
+  if (aw->dialog_type == EDIT_ACCOUNT
+      && aw->type != xaccAccountGetType (account)) {
     /* Just refreshing won't work. */
     aw_call_destroy_callbacks (account);
   }
