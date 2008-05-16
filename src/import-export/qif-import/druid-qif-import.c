@@ -1224,8 +1224,7 @@ select_line(QIFImportWindow *wind, GtkTreeSelection *selection,
   map_entry = scm_list_ref(display_info, scm_int2num(row));
 
   /* Call the account picker to update it. */
-  map_entry = qif_account_picker_dialog(wind, map_entry);
-  if (map_entry == SCM_BOOL_F)
+  if (!qif_account_picker_dialog(wind, map_entry))
     return;
   gnc_name = scm_call_1(get_gnc_name, map_entry);
 
@@ -1901,7 +1900,7 @@ gnc_ui_qif_import_comm_next_cb(GnomeDruidPage * page,
       wind->new_namespaces = g_list_prepend(wind->new_namespaces, namespace);
     else
     {
-      g_warning("QIF import: Couldn't create namespace %s\n", namespace);
+      g_warning("QIF import: Couldn't create namespace %s", namespace);
       g_free(namespace);
     }
   }
@@ -2547,13 +2546,13 @@ gnc_ui_qif_import_druid_make(void)
   retval->show_doc_pages =
     gnc_gconf_get_bool(GCONF_SECTION, GCONF_NAME_SHOW_DOC, &err);
   if (err != NULL) {
-    g_warning("QIF import: gnc_gconf_get_bool error: %s\n", err->message);
+    g_warning("QIF import: gnc_gconf_get_bool error: %s", err->message);
     g_error_free(err);
 
     /* Show documentation pages by default. */
-    g_warning("QIF import: Couldn't get %s setting from gconf.\n",
+    g_warning("QIF import: Couldn't get %s setting from gconf.",
               GCONF_NAME_SHOW_DOC);
-    g_warning("QIF import: Documentation pages will be shown by default.\n");
+    g_warning("QIF import: Documentation pages will be shown by default.");
     retval->show_doc_pages = TRUE;
   }
 
