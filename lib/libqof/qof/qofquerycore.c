@@ -661,7 +661,7 @@ guid_match_predicate (gpointer object, QofParam *getter,
     return (node == NULL);
     break;
   case QOF_GUID_MATCH_NULL:
-    return (guid == NULL);
+    return ((guid == NULL) || guid_equal(guid, guid_null()));
     break;
   default:
     PWARN ("bad match type");
@@ -1383,7 +1383,7 @@ collect_match_predicate (gpointer object, QofParam *getter,
 				break;
 			}
 			case QOF_GUID_MATCH_NULL : {
-				return (guid == NULL);
+				return ((guid == NULL) || guid_equal(guid, guid_null()));
 				break;
 			}
 			default : {
@@ -1563,7 +1563,7 @@ choice_match_predicate (gpointer object, QofParam *getter,
     return (node == NULL);
     break;
   case QOF_GUID_MATCH_NULL:
-    return (guid == NULL);
+    return ((guid == NULL) || guid_equal(guid, guid_null()));
     break;
   default:
     PWARN ("bad match type");
