@@ -1222,13 +1222,17 @@ gnc_main_window_generate_title (GncMainWindow *window)
 
   /* The save action is sensitive iff the book is dirty */
   action = gnc_main_window_find_action (window, "FileSaveAction");
-  gtk_action_set_sensitive(action, FALSE);
+  if (action != NULL) {
+  	gtk_action_set_sensitive(action, FALSE);
+  }
   if (gnc_current_session_exist()) {
       filename = gnc_session_get_url (gnc_get_current_session ());
       book = gnc_get_current_book();
       if (qof_instance_is_dirty(QOF_INSTANCE(book))) {
 		dirty = "*";
-		gtk_action_set_sensitive(action, TRUE);
+		if (action != NULL) {
+		  gtk_action_set_sensitive(action, TRUE);
+		}
 	  }
   }
 

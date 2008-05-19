@@ -38,7 +38,11 @@
 #include "gnc-file.h"
 #include "gnc-session.h"
 
+static QofLogModule log_module = GNC_MOD_GUI;
+
 void gnc_database_connection_response_cb( GtkDialog *, gint, GtkDialog * );
+#define PB_LOAD_RESPONSE 1000
+#define PB_SAVE_RESPONSE 1001
 
 struct DatabaseConnectionWindow
 {
@@ -48,31 +52,29 @@ struct DatabaseConnectionWindow
   GtkWidget* rb_general;
   GtkWidget* cb_predefined;
   GtkWidget* tf_general;
-
-  /* The final settings */
 };
 
-static void
-save_to_db( const gchar* url )
+static gchar*
+geturl( struct DatabaseConnectionWindow* dcw )
 {
-	gnc_file_do_save_as( url );
-}
+	gchar* url;
 
-static void
-discard_and_open_db( const gchar* url )
-{
-  	QofBook* current_book;
+	if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(dcw->rb_predefined) ) ) {
+		/* Selection from predefined list */
+		url = g_strdup_printf( "gda://@%s", gtk_combo_box_get_active_text( GTK_COMBO_BOX(dcw->cb_predefined) ) );
 
-    current_book = qof_session_get_book( gnc_get_current_session() );
-	qof_book_mark_saved( current_book );
-	gnc_file_open_file( url );
+	} else {
+		/* Selection using entered info */
+		url = g_strdup_printf( "gdk://%s", gtk_entry_get_text( GTK_ENTRY(dcw->tf_general) ) );
+	}
+
+	return url;
 }
 
 void
 gnc_database_connection_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 {
     struct DatabaseConnectionWindow* dcw;
-	gchar* url;
 
     g_return_if_fail( dialog != NULL );
 
@@ -84,22 +86,25 @@ gnc_database_connection_response_cb(GtkDialog *dialog, gint response, GtkDialog 
         gnc_gnome_help( HF_HELP, HL_GLOBPREFS );
         break;
   
-    case GTK_RESPONSE_OK:
-		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(dcw->rb_predefined) ) ) {
-			/* Selection from predefined list */
-			url = g_strdup_printf( "gda://@%s", gtk_combo_box_get_active_text( GTK_COMBO_BOX(dcw->cb_predefined) ) );
+    case PB_LOAD_RESPONSE:
+		gnc_file_open_file( geturl( dcw ) );
+		break;
 
-		} else {
-			/* Selection using entered info */
-			url = g_strdup_printf( "gdk://%s", gtk_entry_get_text( GTK_ENTRY(dcw->tf_general) ) );
-		}
-		save_to_db( url );
+    case PB_SAVE_RESPONSE:
+		gnc_file_do_save_as( geturl( dcw ) );
+		break;
 
-      /* FALLTHROUGH */ 
+	case GTK_RESPONSE_CANCEL:
+		break;
+
     default:
-        gtk_widget_destroy( GTK_WIDGET(dialog) );
+        PERR( "Invalid response" );
         break;
     }
+
+	if( response != GTK_RESPONSE_HELP ) {
+        gtk_widget_destroy( GTK_WIDGET(dialog) );
+	}
 }
 
 void gnc_ui_database_connection( void )
@@ -107,9 +112,10 @@ void gnc_ui_database_connection( void )
     struct DatabaseConnectionWindow *dcw;
     GladeXML* xml;
     GtkWidget* box;
-	GList* ds_list;
 	GList* ds_node;
-	int n_rows;
+	GdaDataModel* dsns;
+	gint numDsns;
+	gint i;
 
     dcw = g_new0(struct DatabaseConnectionWindow, 1);
     g_return_if_fail(dcw);
@@ -121,17 +127,14 @@ void gnc_ui_database_connection( void )
     /* Predefined */
     dcw->rb_predefined = glade_xml_get_widget( xml, "rb_predefined" );
 	box = glade_xml_get_widget( xml, "predefined_connection_box" );
-//    dcw->cb_predefined = glade_xml_get_widget( xml, "cb_predefined_db_connections" );
 	dcw->cb_predefined = gtk_combo_box_new_text();
-	ds_list = gda_config_get_data_source_list();
-	n_rows = 0;
-	for( ds_node = ds_list; ds_node != NULL; ds_node = ds_node->next ) {
-		GdaDataSourceInfo* ds_info = ds_node->data;
+	numDsns = gda_config_get_nb_dsn();
+	dsns = gda_config_list_dsn();
+	for( i = 0; i < numDsns; i++ ) {
+		GdaDataSourceInfo* ds_info = gda_config_get_dsn_at_index( i );
 		gtk_combo_box_append_text( GTK_COMBO_BOX(dcw->cb_predefined), g_strdup(ds_info->name) );
-		n_rows++;
 	}
-	gda_config_free_data_source_list( ds_list );
-	if( n_rows != 0 ) {
+	if( numDsns != 0 ) {
 		gtk_combo_box_set_active( GTK_COMBO_BOX(dcw->cb_predefined), 0 );
 	} else {
 		gtk_widget_set_sensitive( dcw->rb_predefined, FALSE );

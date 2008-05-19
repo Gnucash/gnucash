@@ -41,7 +41,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-		  <property name="response_id">-11</property>
+	      <property name="response_id">-11</property>
 	    </widget>
 	  </child>
 
@@ -54,20 +54,33 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-		  <property name="response_id">-6</property>
+	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="pb_ok">
+	    <widget class="GtkButton" id="pb_load">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
+	      <property name="label" translatable="yes">_Load</property>
+	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-		  <property name="response_id">-5</property>
+	      <property name="response_id">1000</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="pb_save">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Save</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">1001</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -75,8 +88,10 @@
 	  <property name="padding">0</property>
 	  <property name="expand">True</property>
 	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
 	</packing>
       </child>
+
       <child>
 	<widget class="GtkTable" id="table1">
 	  <property name="visible">True</property>
