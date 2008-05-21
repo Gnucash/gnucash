@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-18 02:05+0300\n"
-"PO-Revision-Date: 2008-04-25 16:43+0200\n"
+"PO-Revision-Date: 2008-05-21 17:48+0200\n"
 "Last-Translator: Ori Hoch <ori@uumpa.com>\n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Poedit-Bookmarks: 1028,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-Bookmarks: 300,458,-1,436,-1,-1,-1,-1,-1,-1\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:633
 msgid "Illegal variable in expression."
@@ -375,7 +375,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7126
 #: ../intl-scm/guile-strings.c:7376
 msgid "Invoice"
-msgstr "חשבונית מס"
+msgstr "חשבונית"
 
 #. src/app-utils/prefs.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -399,7 +399,7 @@ msgstr "חשבונית מס"
 #: ../intl-scm/guile-strings.c:7128
 #: ../intl-scm/guile-strings.c:7378
 msgid "Bill"
-msgstr ""
+msgstr "תשלום"
 
 #. src/report/standard-reports/gnucash/report/net-barchart.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -419,7 +419,7 @@ msgstr ""
 
 #: ../src/business/business-core/gncInvoice.c:1102
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr ""
+msgstr "הפעולה יוצרה מחשבונית. נסה לבטל את שליחת החשבונית."
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/business/business-core/gncInvoice.c:1124
@@ -453,11 +453,11 @@ msgstr "תשלום מראש"
 
 #: ../src/business/business-core/gncInvoice.c:1538
 msgid " (posted)"
-msgstr ""
+msgstr "(נשלחה)"
 
 #: ../src/business/business-core/gncOrder.c:416
 msgid " (closed)"
-msgstr ""
+msgstr "(סגורה)"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:68
 #: ../src/business/business-gnome/business-gnome-utils.c:251
@@ -466,7 +466,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-general-select.c:217
 #: ../src/import-export/qif-import/qif.glade.h:67
 msgid "Select..."
-msgstr ""
+msgstr "בחר..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:71
 #: ../src/gnome-utils/gnc-general-select.c:219
@@ -475,7 +475,7 @@ msgstr "ערוך..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:217
 msgid "Voucher"
-msgstr ""
+msgstr "שובר"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -497,7 +497,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3928
 #, c-format
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:630
 #: ../src/gnome/druid-hierarchy.c:829
@@ -511,14 +511,14 @@ msgstr "לא"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:640
 msgid "Use Global"
-msgstr ""
+msgstr "השתמש בהגדרה גלובלית"
 
 #: ../src/business/business-gnome/business-urls.c:67
 #: ../src/business/business-gnome/business-urls.c:199
 #: ../src/gnome/top-level.c:192
 #, c-format
 msgid "Badly formed URL %s"
-msgstr ""
+msgstr "צורת URL שגויה %s"
 
 #. ==============================================================
 #. HTML Handler for reports.
@@ -529,52 +529,52 @@ msgstr ""
 #: ../src/gnome/top-level.c:89
 #, c-format
 msgid "Bad URL: %s"
-msgstr ""
+msgstr "URL שגוי: %s"
 
 #: ../src/business/business-gnome/business-urls.c:81
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "יישות לא קיימת: %s"
 
 #. =================================================================
 #: ../src/business/business-gnome/business-urls.c:171
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "לא קיימת יישות אב: %s"
 
 #: ../src/business/business-gnome/business-urls.c:263
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "סוג היישות לא תואם %s: %s"
 
 #: ../src/business/business-gnome/business-urls.c:273
 #, c-format
 msgid "Bad URL %s"
-msgstr ""
+msgstr "URL שגוי %s"
 
 #: ../src/business/business-gnome/business-urls.c:285
 #, c-format
 msgid "No such Account entity: %s"
-msgstr ""
+msgstr "יישות חשבון לא קיימת: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:262
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:129
 msgid "Negative amounts are not allowed."
-msgstr ""
+msgstr "לא ניתן להכניס ערכים שליליים."
 
 #: ../src/business/business-gnome/dialog-billterms.c:267
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:136
 msgid "Percentage amount must be between 0 and 100."
-msgstr ""
+msgstr "ערכים באחוזים חייבים להיות בטווח של 0 עד 100."
 
 #: ../src/business/business-gnome/dialog-billterms.c:290
 msgid "You must provide a name for this Billing Term."
-msgstr ""
+msgstr "עליך להכניס שם עבור תנאי התשלום."
 
 #: ../src/business/business-gnome/dialog-billterms.c:296
 #, c-format
 msgid "You must provide a unique name for this Billing Term. Your choice \"%s\" is already in use."
-msgstr ""
+msgstr "עליך להכניס שם ייחודי עבור תנאי התשלום. בחירתך \"%s\" נמצאת כבר בשימוש."
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/gnucash/report/price-scatter.scm
@@ -598,42 +598,45 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6316
 #: ../intl-scm/guile-strings.c:6828
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: ../src/business/business-gnome/dialog-billterms.c:592
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "תנאי תשלום \"%s\" נמצא בשימוש. לא ניתן למחוק."
 
 #: ../src/business/business-gnome/dialog-billterms.c:598
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:542
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr ""
+msgstr "אתה בטוח שברצונך למחוק את \"%s\"?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr ""
+msgstr "פעולה זו צריכה להיות מקושרת ללקוח. אנא בחר את הלקוח."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr ""
+msgstr "פעולה זו צריכה להיות מקושרת לספק. אנא בחר את הספק."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
+"עליך להכניס שם חברה.\n"
+"אם הלקוח הוא פרטי (לא חברה),\n"
+"שם החברה ושם איש הקשר צריכים להיות זהים."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
 msgid "You must enter a billing address."
-msgstr ""
+msgstr "עליך להכניס כתובת לתשלום"
 
 #: ../src/business/business-gnome/dialog-customer.c:289
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
+msgstr "אחוז הנחה חייב להיות בין 0-100 או ריק."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
+msgstr "אשראי חייב להיות ערך חיובי או ריק."
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
@@ -641,29 +644,29 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-vendor.c:287
 #: ../src/gnome-utils/dialog-account.c:1290
 msgid "<No name>"
-msgstr ""
+msgstr "<ללא שם>"
 
 #: ../src/business/business-gnome/dialog-customer.c:372
 msgid "Edit Customer"
-msgstr ""
+msgstr "ערוך לקוח"
 
 #: ../src/business/business-gnome/dialog-customer.c:374
 #: ../src/business/business-gnome/glade/customer.glade.h:15
 msgid "New Customer"
-msgstr ""
+msgstr "לקוח חדש"
 
 #: ../src/business/business-gnome/dialog-customer.c:781
 msgid "View/Edit Customer"
-msgstr ""
+msgstr "הצג/ערוך לקוח"
 
 #: ../src/business/business-gnome/dialog-customer.c:782
 msgid "Customer's Jobs"
-msgstr ""
+msgstr "מטלות של הלקוח"
 
 #. { N_("Customer's Orders"), order_customer_cb},
 #: ../src/business/business-gnome/dialog-customer.c:784
 msgid "Customer's Invoices"
-msgstr ""
+msgstr "חשבוניות של הלקוח"
 
 #: ../src/business/business-gnome/dialog-customer.c:785
 #: ../src/business/business-gnome/dialog-employee.c:684
@@ -673,20 +676,20 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-invoice.c:2464
 #: ../src/business/business-gnome/dialog-job.c:516
 msgid "Process Payment"
-msgstr ""
+msgstr "עיבוד תשלום"
 
 #: ../src/business/business-gnome/dialog-customer.c:794
 msgid "Shipping Contact"
-msgstr ""
+msgstr "איש קשר למשלוח"
 
 #: ../src/business/business-gnome/dialog-customer.c:796
 #: ../src/business/business-gnome/dialog-vendor.c:659
 msgid "Billing Contact"
-msgstr ""
+msgstr "איש קשר לתשלום"
 
 #: ../src/business/business-gnome/dialog-customer.c:798
 msgid "Customer ID"
-msgstr ""
+msgstr "מזהה לקוח"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
@@ -695,12 +698,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7412
 #: ../intl-scm/guile-strings.c:7430
 msgid "Company Name"
-msgstr ""
+msgstr "שם חברה"
 
 #: ../src/business/business-gnome/dialog-customer.c:806
 #: ../src/business/business-gnome/dialog-vendor.c:669
 msgid "Contact"
-msgstr ""
+msgstr "איש קשר"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -717,7 +720,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6964
 #: ../intl-scm/guile-strings.c:7214
 msgid "Company"
-msgstr ""
+msgstr "חברה"
 
 #: ../src/business/business-gnome/dialog-customer.c:810
 #: ../src/business/business-gnome/dialog-employee.c:704
@@ -728,7 +731,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-customer.c:832
 msgid "Find Customer"
-msgstr ""
+msgstr "חפש לקוח"
 
 #: ../src/business/business-gnome/dialog-date-close.c:72
 msgid "No Account selected.  Please try again."
@@ -736,49 +739,49 @@ msgstr "לא נבחר חשבון. נסה שנית."
 
 #: ../src/business/business-gnome/dialog-employee.c:216
 msgid "You must enter a username."
-msgstr ""
+msgstr "עליך להכניס שם משתמש."
 
 #: ../src/business/business-gnome/dialog-employee.c:221
 msgid "You must enter the employee's name."
-msgstr ""
+msgstr "עליך להכניס את שם העובד."
 
 #: ../src/business/business-gnome/dialog-employee.c:229
 msgid "You must enter an address."
-msgstr ""
+msgstr "עליך להכניס כתובת."
 
 #: ../src/business/business-gnome/dialog-employee.c:308
 msgid "Edit Employee"
-msgstr ""
+msgstr "ערוך עובד."
 
 #: ../src/business/business-gnome/dialog-employee.c:310
 #: ../src/business/business-gnome/glade/employee.glade.h:18
 msgid "New Employee"
-msgstr ""
+msgstr "עובד חדש."
 
 #: ../src/business/business-gnome/dialog-employee.c:682
 msgid "View/Edit Employee"
-msgstr ""
+msgstr "הצג/ערוך עובד"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
-msgstr ""
+msgstr "שוברי הוצאות"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
 msgid "Employee ID"
-msgstr ""
+msgstr "מזהה עובד"
 
 #: ../src/business/business-gnome/dialog-employee.c:694
 msgid "Employee Username"
-msgstr ""
+msgstr "שם משתמש העובד"
 
 #: ../src/business/business-gnome/dialog-employee.c:696
 #: ../src/business/business-gnome/dialog-invoice.c:2308
 msgid "Employee Name"
-msgstr ""
+msgstr "שם העובד"
 
 #: ../src/business/business-gnome/dialog-employee.c:702
 msgid "Username"
-msgstr ""
+msgstr "שם משתמש"
 
 #. src/business/business-reports/gnucash/report/aging.scm
 #. src/business/business-reports/aging.scm
@@ -793,11 +796,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6938
 #: ../intl-scm/guile-strings.c:7188
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: ../src/business/business-gnome/dialog-employee.c:727
 msgid "Find Employee"
-msgstr ""
+msgstr "חפש עובד"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -807,34 +810,34 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-invoice.c:349
 #: ../src/business/business-gnome/dialog-order.c:174
 msgid "You need to supply Billing Information."
-msgstr ""
+msgstr "עליך לספק פרטי תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:504
 msgid "Are you sure you want to delete the selected entry?"
-msgstr ""
+msgstr "אתה בטוח שברצונך למחוק את הרשומה המסומנת?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:506
 msgid "This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
+msgstr "הרשומה מקושת להזמנה ותימחק גם משם!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:614
 msgid "The Invoice must have at least one Entry."
-msgstr ""
+msgstr "חייבת להיות לפחות רשומה אחת בחשבונית."
 
 #: ../src/business/business-gnome/dialog-invoice.c:621
 msgid "You may not post an invoice with a negative total value."
-msgstr ""
+msgstr "לא ניתן לשלוח חשבונית עם ערך סה\"כ שלילי"
 
 #: ../src/business/business-gnome/dialog-invoice.c:628
 msgid "You may not post an expense voucher with a negative total cash value."
-msgstr ""
+msgstr "לא ניתן לשלוח שובר הוצאות עם ערך מזומן סה\"כ שלילי."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:635
 msgid "Do you really want to post the invoice?"
-msgstr ""
+msgstr "אתה בטוח שברצונך לשלוח את החשבונית?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/owner-report.scm
@@ -851,96 +854,96 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7136
 #: ../intl-scm/guile-strings.c:7386
 msgid "Due Date"
-msgstr ""
+msgstr "תאריך חיוב"
 
 #: ../src/business/business-gnome/dialog-invoice.c:637
 msgid "Post Date"
-msgstr ""
+msgstr "תאריך שליחה"
 
 #: ../src/business/business-gnome/dialog-invoice.c:638
 msgid "Post to Account"
-msgstr ""
+msgstr "שלח לחשבון"
 
 #: ../src/business/business-gnome/dialog-invoice.c:639
 msgid "Accumulate Splits?"
-msgstr ""
+msgstr "אחד פיצולים?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:929
 #: ../src/gnome/window-reconcile.c:1049
 msgid "Total:"
-msgstr ""
+msgstr "סה\"כ:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:934
 msgid "Subtotal:"
-msgstr ""
+msgstr "סכום ביניים:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:935
 msgid "Tax:"
-msgstr ""
+msgstr "מס:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:939
 msgid "Total Cash:"
-msgstr ""
+msgstr "סה\"כ מזומן:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:940
 msgid "Total Charge:"
-msgstr ""
+msgstr "סה\"כ לחיוב:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1556
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
 msgid "New Invoice"
-msgstr ""
+msgstr "חשבונית חדשה"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1560
 msgid "Edit Invoice"
-msgstr ""
+msgstr "ערוך חשבונית"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1563
 msgid "View Invoice"
-msgstr ""
+msgstr "הצג חשבונית"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1571
 msgid "New Bill"
-msgstr ""
+msgstr "תשלום חדש"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1575
 msgid "Edit Bill"
-msgstr ""
+msgstr "ערוך תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1578
 msgid "View Bill"
-msgstr ""
+msgstr "הצג תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1586
 msgid "New Expense Voucher"
-msgstr ""
+msgstr "שובר הוצאות חדש"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1590
 msgid "Edit Expense Voucher"
-msgstr ""
+msgstr "ערוך שובר הוצאות"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1593
 msgid "View Expense Voucher"
-msgstr ""
+msgstr "הצג שובר הוצאות"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2205
 msgid "View/Edit Invoice"
-msgstr ""
+msgstr "הצג/ערוך חשבונית"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2210
 #: ../src/business/business-gnome/dialog-invoice.c:2463
 msgid "View/Edit Bill"
-msgstr ""
+msgstr "הצג/ערוך תשלום"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: ../src/business/business-gnome/dialog-invoice.c:2217
 msgid "View/Edit Voucher"
-msgstr ""
+msgstr "הצג/ערוך שובר"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2227
 msgid "Invoice Owner"
-msgstr ""
+msgstr "בעל החשבונית"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -956,7 +959,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7092
 #: ../intl-scm/guile-strings.c:7342
 msgid "Invoice Notes"
-msgstr ""
+msgstr "הערות לחשבונית"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -982,13 +985,13 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7086
 #: ../intl-scm/guile-strings.c:7336
 msgid "Billing ID"
-msgstr ""
+msgstr "מזהה תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2236
 #: ../src/business/business-gnome/dialog-invoice.c:2266
 #: ../src/business/business-gnome/dialog-invoice.c:2296
 msgid "Is Paid?"
-msgstr ""
+msgstr "האם שולם?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2239
 #: ../src/business/business-gnome/dialog-invoice.c:2269
@@ -996,13 +999,13 @@ msgstr ""
 #: ../src/business/business-gnome/glade/invoice.glade.h:9
 #: ../src/gnome/dialog-find-transactions.c:117
 msgid "Date Posted"
-msgstr ""
+msgstr "תאריך שליחה"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2242
 #: ../src/business/business-gnome/dialog-invoice.c:2272
 #: ../src/business/business-gnome/dialog-invoice.c:2302
 msgid "Is Posted?"
-msgstr ""
+msgstr "האם נשלח?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2245
 #: ../src/business/business-gnome/dialog-invoice.c:2275
@@ -1011,41 +1014,41 @@ msgstr ""
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 #: ../src/business/business-gnome/glade/order.glade.h:6
 msgid "Date Opened"
-msgstr ""
+msgstr "תאריך פתיחה"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2248
 #: ../src/business/business-gnome/dialog-invoice.c:2278
 msgid "Company Name "
-msgstr ""
+msgstr "שם חברה"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2252
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
 msgid "Invoice ID"
-msgstr ""
+msgstr "מזהה חשבונית"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2257
 msgid "Bill Owner"
-msgstr ""
+msgstr "בעל התשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2260
 msgid "Bill Notes"
-msgstr ""
+msgstr "הערות לתשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2282
 msgid "Bill ID"
-msgstr ""
+msgstr "מזהה תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2287
 msgid "Voucher Owner"
-msgstr ""
+msgstr "בעל השובר"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2290
 msgid "Voucher Notes"
-msgstr ""
+msgstr "הערות לשובר"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2312
 msgid "Voucher ID"
-msgstr ""
+msgstr "מזהה שובר"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/gnucash/report/account-summary.scm
@@ -1065,17 +1068,17 @@ msgstr "סוג"
 #: ../src/business/business-gnome/dialog-invoice.c:2322
 #: ../src/register/ledger-core/split-register-model.c:151
 msgid "Paid"
-msgstr ""
+msgstr "שולם"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2325
 msgid "Posted"
-msgstr ""
+msgstr "נשלח"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2330
 #: ../src/business/business-gnome/dialog-order.c:831
 #: ../src/gnome/lot-viewer.c:611
 msgid "Opened"
-msgstr ""
+msgstr "נפתח"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -1110,11 +1113,11 @@ msgstr "מס'"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2401
 msgid "Find Bill"
-msgstr ""
+msgstr "חפש תשלום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2407
 msgid "Find Expense Voucher"
-msgstr ""
+msgstr "חפש שובר הוצאות"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -1130,11 +1133,11 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7130
 #: ../intl-scm/guile-strings.c:7380
 msgid "Expense Voucher"
-msgstr ""
+msgstr "שובר הוצאות"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2413
 msgid "Find Invoice"
-msgstr ""
+msgstr "חפש חשבונית"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -1178,70 +1181,70 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6304
 #: ../intl-scm/guile-strings.c:6816
 msgid "Amount"
-msgstr ""
+msgstr "סכום"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2474
 msgid "Due"
-msgstr ""
+msgstr "תאריך לחיוב"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2516
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "תזכורת תשלומים לחיוב"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2518
 msgid "The following bills are due"
-msgstr ""
+msgstr "עבר תאריך החיוב עבור התשלומים הבאים"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2519
 msgid "The following bill is due"
-msgstr ""
+msgstr "עבר תאריך החיוב עבור התשלום"
 
 #: ../src/business/business-gnome/dialog-job.c:130
 msgid "The Job must be given a name."
-msgstr ""
+msgstr "עליך לקבוע שם למטלה."
 
 #: ../src/business/business-gnome/dialog-job.c:139
 msgid "You must choose an owner for this job."
-msgstr ""
+msgstr "עליך לבחור את בעל המטלה."
 
 #: ../src/business/business-gnome/dialog-job.c:237
 msgid "Edit Job"
-msgstr ""
+msgstr "ערוך מטלה"
 
 #: ../src/business/business-gnome/dialog-job.c:239
 msgid "New Job"
-msgstr ""
+msgstr "מטלה חדשה"
 
 #: ../src/business/business-gnome/dialog-job.c:514
 msgid "View/Edit Job"
-msgstr ""
+msgstr "הצג/ערוך מטלה"
 
 #: ../src/business/business-gnome/dialog-job.c:515
 msgid "View Invoices"
-msgstr ""
+msgstr "הצג חשבוניות"
 
 #: ../src/business/business-gnome/dialog-job.c:524
 msgid "Owner's Name"
-msgstr ""
+msgstr "שם בעל המטלה"
 
 #: ../src/business/business-gnome/dialog-job.c:526
 msgid "Only Active?"
-msgstr ""
+msgstr "רק פעילות?"
 
 #: ../src/business/business-gnome/dialog-job.c:530
 #: ../src/business/business-gnome/glade/job.glade.h:7
 msgid "Job Number"
-msgstr ""
+msgstr "מספר מטלה"
 
 #: ../src/business/business-gnome/dialog-job.c:532
 #: ../src/business/business-gnome/dialog-job.c:542
 #: ../src/business/business-gnome/glade/job.glade.h:6
 msgid "Job Name"
-msgstr ""
+msgstr "שם מטלה"
 
 #: ../src/business/business-gnome/dialog-job.c:590
 msgid "Find Job"
-msgstr ""
+msgstr "חפש מטלה"
 
 #: ../src/business/business-gnome/dialog-order.c:165
 msgid "The Order must be given an ID."
@@ -1296,7 +1299,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-order.c:829
 #: ../src/gnome/lot-viewer.c:616
 msgid "Closed"
-msgstr ""
+msgstr "נסגר"
 
 #: ../src/business/business-gnome/dialog-order.c:884
 msgid "Find Order"
@@ -1305,98 +1308,109 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-payment.c:228
 msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
 msgstr ""
+"עליך להכניס את סכום התשלום.\n"
+"סכום התשלום חייב להיות גדול מ0."
 
 #: ../src/business/business-gnome/dialog-payment.c:237
 msgid "You must select a company for payment processing."
 msgstr ""
+"עליך לבחור חברה בשביל לבצע\n"
+"עיבוד תשלומים."
 
 #: ../src/business/business-gnome/dialog-payment.c:245
 msgid "You must select a transfer account from the account tree."
-msgstr ""
+msgstr "עליך לבחור חשבון להעברה מתוך עץ החשבונות."
 
 #: ../src/business/business-gnome/dialog-payment.c:253
 msgid "You must enter an account name for posting."
-msgstr ""
+msgstr "עליך להכניס שם חשבון לשליחה."
 
 #: ../src/business/business-gnome/dialog-payment.c:262
 #, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr ""
+msgstr "החשבון לשליחה שבחרת, %s, לא קיים."
 
 #: ../src/business/business-gnome/dialog-payment.c:463
 #, c-format
 msgid "You have no valid \"Post To\" accounts.  Please create an account of type \"%s\" before you continue to process this payment.  Perhaps you want to create an Invoice or Bill first?"
 msgstr ""
+"אין לך חשבונות מתאימים לשליחה.\n"
+"עליך ליצור חשבון מסוג \"%s\" לפני\n"
+"ביצוע עיבוד לתשלום.\n"
+"אולי תרצה ליצור חשבונית או תשלום קודם?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
 msgid "You must enter a company name. If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
+"עליך להכניס שם חברה.\n"
+"אם הספק הוא פרטי ולא חברה עליך\n"
+"לקבוע שם חברה ושם איש קשר זהים."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
-msgstr ""
+msgstr "עליך להכניס כתובת לתשלום."
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
 msgid "Edit Vendor"
-msgstr ""
+msgstr "ערוך ספק"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
 msgid "New Vendor"
-msgstr ""
+msgstr "ספק חדש"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "הצג/ערוך ספק"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "מטלות של הספק"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "תשלומים לספק"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
 msgid "Pay Bill"
-msgstr ""
+msgstr "שלום תשלום"
 
 #: ../src/business/business-gnome/dialog-vendor.c:661
 msgid "Vendor ID"
-msgstr ""
+msgstr "מזהה ספק"
 
 #: ../src/business/business-gnome/dialog-vendor.c:694
 msgid "Find Vendor"
-msgstr ""
+msgstr "חפש ספק"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
 msgid "<b>New Billing Term</b>"
-msgstr ""
+msgstr "<b>תנאי תשלום חדש</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 msgid "<b>Term Definition</b>"
-msgstr ""
+msgstr "<b>הגדרת התנאי</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "<b>Terms</b>"
-msgstr ""
+msgstr "<b>תנאים</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Cancel your changes"
-msgstr ""
+msgstr "בטל שינויים"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:5
 msgid "Close this window"
-msgstr ""
+msgstr "סגור חלון"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "שמור את תנאי התשלום"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr ""
+msgstr "צור תנאי תשלום חדש"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
@@ -1410,40 +1424,40 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
 msgid "De_scription:"
-msgstr ""
+msgstr "_תיאור:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
 msgid "Delete the current Billing Term"
-msgstr ""
+msgstr "מחק את תנאי התשלום הנוכחי"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
 #, no-c-format
 msgid "Discount %: "
-msgstr ""
+msgstr "% הנחה:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:16
 msgid "Discount Day: "
-msgstr ""
+msgstr "יום הנחה:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:17
 msgid "Discount Days: "
-msgstr ""
+msgstr "ימי הנחה:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:18
 msgid "Due Day: "
-msgstr ""
+msgstr "יום תשלום:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Due Days: "
-msgstr ""
+msgstr "ימי תשלום:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
 msgid "Edit the current Billing Term"
-msgstr ""
+msgstr "ערוך את תנאי התשלום הנוכחי"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:22
 msgid "Table"
-msgstr ""
+msgstr "טבלה"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -1460,7 +1474,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7142
 #: ../intl-scm/guile-strings.c:7392
 msgid "Terms"
-msgstr ""
+msgstr "תנאים"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:24
 msgid "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
@@ -1468,71 +1482,75 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:25
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "היום בחודש שבו צריך לשלם את התשלום"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
 msgid "The description of the Billing Term, printed on invoices"
-msgstr ""
+msgstr "תיאור תנאי התשלום, מודפס על חשבוניות"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
 msgid "The discount percentage applied if paid early."
-msgstr ""
+msgstr "אחוז הנחה אם התשלום משולם לפני תאריך היעד."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
 msgid "The internal name of the Billing Term."
-msgstr ""
+msgstr "השם הפנימי של תנאי התשלום."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
 msgid "The last day of the month for the early payment discount."
-msgstr ""
+msgstr "היום האחרון בחודש עבור הנחת תשלום מוקדם."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The number of days after the post date during which a discount will be applied for early payment."
 msgstr ""
+"מספר הימים אחרי תאריך השליחה בהם\n"
+"תפעל הנחה עבור תשלום מוקדם."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:31
 msgid "The number of days to pay the bill after the post date."
 msgstr ""
+"מספר הימים אחרי תאריך השליחה\n"
+"שבהם צריך לשלם את התשלום."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The percentage discount applied for early payment."
-msgstr ""
+msgstr "אחוז ההנחה עבור תשלום מוקדם."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
 #: ../src/report/report-gnome/report.glade.h:18
 msgid "_Name:"
-msgstr ""
+msgstr "_שם:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:34
 #: ../src/gnome/glade/price.glade.h:25
 #: ../src/gnome-utils/glade/commodity.glade.h:22
 msgid "_Type:"
-msgstr ""
+msgstr "_סוג:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
 msgid "<b>Bills</b>"
-msgstr ""
+msgstr "<b>תשלומים</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
 msgid "<b>Invoices</b>"
-msgstr ""
+msgstr "<b>חשבוניות</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
 msgid "Default number of register rows to display in Invoices."
-msgstr ""
+msgstr "מספר שורות יומן ברירת מחדל שיוצגו בחשבוניות"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:4
 msgid "How many days in the future to warn about Bills coming due."
-msgstr ""
+msgstr "כמה ימים בעתיד שבהם יש להזהיר על תשלומים שצריך לשלם."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:5
 msgid "If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window."
-msgstr ""
+msgstr "אם מסומן, כל חשבונית תפתח בחלון משלה. אחרת, החשבונית תפתח בחלון הנוכחי."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:92
 msgid "Number of _rows:"
-msgstr ""
+msgstr "מספר _שורות:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:141
@@ -1540,51 +1558,51 @@ msgstr ""
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
 #: ../src/import-export/qif-import/qif.glade.h:57
 msgid "Preferences"
-msgstr ""
+msgstr "העדפות"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 msgid "Ta_x included"
-msgstr ""
+msgstr "כולל _מס"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid "Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog."
-msgstr ""
+msgstr "האם מספר רשומות בחשבונית שמעבירות לאותו חשבון יוצגו בפיצול אחד. ניתן לשנות את ההגדרה בחלון השליחה."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
 msgid "Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors."
-msgstr ""
+msgstr "אם מס יוכלל ברשומות עבור תשלומים כברירת מחדל. ההגדרה יורשת מלקוחות וספקים חדשים."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
 msgid "Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors."
-msgstr ""
+msgstr "אם מס יוכלל ברשומות עבור חשבוניות כברירת מחדל. ההגדרה יורשת מלקוחות וספקים חדשים."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
-msgstr ""
+msgstr "אם להציג את רשימת התשלומים שצריך לשלם בזמן פתיחת התוכנה."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
-msgstr ""
+msgstr "_אחד פיצולים בשליחה"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
 msgid "_Days in advance:"
-msgstr ""
+msgstr "_ימים מראש:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 msgid "_Notify when due"
-msgstr ""
+msgstr "_הזהר כשצריך לשלם"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Open in new window"
-msgstr ""
+msgstr "_פתח בחלון חדש"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Tax included"
-msgstr ""
+msgstr "_כולל מס"
 
 #: ../src/business/business-gnome/glade/choose-owner.glade.h:1
 msgid "Choose Owner Dialog"
-msgstr ""
+msgstr "חלון בחירת בעל"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/account-summary.scm
@@ -1662,38 +1680,38 @@ msgstr "תיאור"
 #: ../src/business/business-gnome/glade/order.glade.h:2
 #: ../src/business/business-gnome/glade/vendor.glade.h:1
 msgid "Active"
-msgstr ""
+msgstr "פעיל"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:2
 #: ../src/business/business-gnome/glade/employee.glade.h:4
 #: ../src/business/business-gnome/glade/vendor.glade.h:2
 msgid "Address: "
-msgstr ""
+msgstr "כתובת:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:3
 msgid "Billing Address"
-msgstr ""
+msgstr "כתובת תשלום"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:4
 #: ../src/business/business-gnome/glade/invoice.glade.h:5
 #: ../src/business/business-gnome/glade/order.glade.h:3
 msgid "Billing Information"
-msgstr ""
+msgstr "פרטי תשלום"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:5
 #: ../src/business/business-gnome/glade/vendor.glade.h:3
 msgid "Company Name: "
-msgstr ""
+msgstr "שם חברה:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:6
 msgid "Credit Limit: "
-msgstr ""
+msgstr "מגבלת אשראי:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:7
 #: ../src/business/business-gnome/glade/employee.glade.h:7
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
 msgid "Currency: "
-msgstr ""
+msgstr "מטבע:"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -1704,39 +1722,39 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6366
 #: ../intl-scm/guile-strings.c:6878
 msgid "Customer"
-msgstr ""
+msgstr "לקוח"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:9
 msgid "Customer Number: "
-msgstr ""
+msgstr "מזהה לקוח:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:10
 msgid "Discount: "
-msgstr ""
+msgstr "הנחה:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:11
 #: ../src/business/business-gnome/glade/employee.glade.h:10
 #: ../src/business/business-gnome/glade/vendor.glade.h:5
 msgid "Email: "
-msgstr ""
+msgstr "אימייל:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:12
 #: ../src/business/business-gnome/glade/employee.glade.h:13
 #: ../src/business/business-gnome/glade/vendor.glade.h:6
 msgid "Fax: "
-msgstr ""
+msgstr "פקס:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:13
 #: ../src/business/business-gnome/glade/employee.glade.h:14
 #: ../src/business/business-gnome/glade/vendor.glade.h:7
 msgid "Identification"
-msgstr ""
+msgstr "זיהוי"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:14
 #: ../src/business/business-gnome/glade/employee.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:8
 msgid "Name: "
-msgstr ""
+msgstr "שם:"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/gnucash/report/account-summary.scm
@@ -1765,46 +1783,46 @@ msgstr "הערות"
 #: ../src/business/business-gnome/glade/customer.glade.h:17
 #: ../src/business/business-gnome/glade/vendor.glade.h:11
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "לא להתייחס לטבלת המס הגלובלית?"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:18
 #: ../src/business/business-gnome/glade/employee.glade.h:20
 #: ../src/business/business-gnome/glade/vendor.glade.h:14
 msgid "Phone: "
-msgstr ""
+msgstr "טלפון:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:19
 msgid "Shipping Address"
-msgstr ""
+msgstr "כתובת משלוח"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:20
 msgid "Shipping Information"
-msgstr ""
+msgstr "פרטי משלוח"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:21
 msgid "Tax Included: "
-msgstr ""
+msgstr "כולל מס:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:22
 msgid "Tax Table: "
-msgstr ""
+msgstr "טבלת מס:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:23
 #: ../src/business/business-gnome/glade/vendor.glade.h:17
 msgid "Terms: "
-msgstr ""
+msgstr "תנאים:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "מזהה הלקוח. אם ריק המספר ייקבע באופן אוטומטי"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
 msgid "What Tax Table should be applied to this customer?"
-msgstr ""
+msgstr "איזו טבלת מס תקבע עבור הלקוח?"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:2
 msgid "Question"
-msgstr ""
+msgstr "שאלה"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:3
 msgid "acct"
@@ -1824,28 +1842,28 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/employee.glade.h:1
 msgid "Access Control"
-msgstr ""
+msgstr "הגבלת גישה"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:2
 msgid "Access Control List"
-msgstr ""
+msgstr "רשימת הגבלת גישה"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:5
 msgid "Billing"
-msgstr ""
+msgstr "תשלומים"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:6
 #: ../src/gnome-utils/dialog-transfer.c:1627
 msgid "Credit Account"
-msgstr ""
+msgstr "זכה חשבון"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 msgid "Default Hours per Day: "
-msgstr ""
+msgstr "שעות ביום:"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:9
 msgid "Default Rate: "
-msgstr ""
+msgstr "שעור (שכר לשעה)"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -1854,32 +1872,32 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6370
 #: ../intl-scm/guile-strings.c:6882
 msgid "Employee"
-msgstr ""
+msgstr "עובד"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:12
 msgid "Employee Number: "
-msgstr ""
+msgstr "מזהה עובד"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:15
 msgid "Interface"
-msgstr ""
+msgstr "ממשק"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:16
 msgid "Language: "
-msgstr ""
+msgstr "שפה:"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:19
 #: ../src/business/business-gnome/glade/vendor.glade.h:12
 msgid "Payment Address"
-msgstr ""
+msgstr "כתובת לתשלום"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:21
 msgid "The employee ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "מזהה העובד. אם ריק מספר ייקבע באופן אוטומטי"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:22
 msgid "Username: "
-msgstr ""
+msgstr "שם משתמש:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:1
 #: ../src/business/business-gnome/glade/order.glade.h:1
@@ -1892,78 +1910,78 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:7
 msgid "Customer: "
-msgstr ""
+msgstr "לקוח:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 msgid "Default Chargeback Project"
-msgstr ""
+msgstr "פרויקט ברירת מחדל לחיוב חוזר"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
 msgid "Extra Payments"
-msgstr ""
+msgstr "תשלומים נוספים"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 msgid "Invoice Entries"
-msgstr ""
+msgstr "רשומות חשבונית"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
 msgid "Invoice Information"
-msgstr ""
+msgstr "פרטי חשבונית"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:16
 #: ../src/business/business-gnome/search-owner.c:239
 msgid "Job"
-msgstr ""
+msgstr "מטלה"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:17
 msgid "Job: "
-msgstr ""
+msgstr "מטלה:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
 msgid "No, keep them as they are"
-msgstr ""
+msgstr "לא, השאר אותם כמו שהם"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:21
 msgid "Posted Account"
-msgstr ""
+msgstr "חשבון לשליחה"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
 msgid "Reset Tax Tables to present Values?"
-msgstr ""
+msgstr "אפס טבלאות מס לערכים הקיימים?"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:24
 msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you."
-msgstr ""
+msgstr "מזהה החשבונית. אם ריק מספר ייקבע באופן אוטומטי."
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
 msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
-msgstr ""
+msgstr "ביטול שליחת החשבונית יימחק את הפעולות שנשלחו.אתה בטוח שברצונך לבטל את שליחת החשבונית?"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:27
 msgid "Yes, reset the Tax Tables"
-msgstr ""
+msgstr "כן, אפס את טבלאות המס"
 
 #: ../src/business/business-gnome/glade/job.glade.h:3
 msgid "Job Active"
-msgstr ""
+msgstr "מטלה פעילה"
 
 #: ../src/business/business-gnome/glade/job.glade.h:4
 msgid "Job Dialog"
-msgstr ""
+msgstr "חלון מטלה"
 
 #: ../src/business/business-gnome/glade/job.glade.h:5
 msgid "Job Information"
-msgstr ""
+msgstr "פרטי מטלה"
 
 #: ../src/business/business-gnome/glade/job.glade.h:8
 msgid "Owner Information"
-msgstr ""
+msgstr "פרטי בעל המטלה"
 
 #: ../src/business/business-gnome/glade/job.glade.h:9
 msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "מזהה המטלה. אם ריק מספר ייקבע באופן אוטומטי"
 
 #: ../src/business/business-gnome/glade/order.glade.h:4
 msgid "Close Order"
@@ -2110,33 +2128,33 @@ msgstr "תאריך"
 #: ../intl-scm/guile-strings.c:3786
 #: ../intl-scm/guile-strings.c:3902
 msgid "Memo"
-msgstr ""
+msgstr "מזכר"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:5
 #: ../src/business/business-gnome/glade/vendor.glade.h:13
 #: ../src/gnome/window-reconcile.c:443
 msgid "Payment Information"
-msgstr ""
+msgstr "פרטי תשלום"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:6
 msgid "Post To"
-msgstr ""
+msgstr "שלח אל"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
 msgid "Transfer Account"
-msgstr ""
+msgstr "חשבון להעברה"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
 msgid "Tax Included:"
-msgstr ""
+msgstr "כולל מס:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:16
 msgid "Tax Table:"
-msgstr ""
+msgstr "טבלת מס:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:18
 msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "מזהה הספק. אם ריק מספר ייקבע באופן אוטומטי"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/gnucash/report/owner-report.scm
@@ -2146,15 +2164,15 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6368
 #: ../intl-scm/guile-strings.c:6880
 msgid "Vendor"
-msgstr ""
+msgstr "ספק"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
 msgid "Vendor Number: "
-msgstr ""
+msgstr "מזהה ספק"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
 msgid "What Tax Table should be applied to this vendor?"
-msgstr ""
+msgstr "איזו טבלת מס תקבע לספק?"
 
 #. src/business/business-utils/gnucash/business-utils.scm
 #. src/business/business-utils/business-utils.scm
@@ -2162,7 +2180,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7410
 #: ../intl-scm/guile-strings.c:7428
 msgid "Business"
-msgstr ""
+msgstr "עסק"
 
 #. Toplevel
 #. Extensions Menu
@@ -2173,211 +2191,211 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6910
 #: ../intl-scm/guile-strings.c:7160
 msgid "_Business"
-msgstr ""
+msgstr "_עסק"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
 msgid "_Customer"
-msgstr ""
+msgstr "_לקוחות"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
 msgid "_New Customer..."
-msgstr ""
+msgstr "_לקוח חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:153
 msgid "Open the New Customer dialog"
-msgstr ""
+msgstr "פתח את חלון לקוח חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
 msgid "_Find Customer..."
-msgstr ""
+msgstr "_חפש לקוח"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
 msgid "Open the Find Customer dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש לקוח"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
 msgid "New _Invoice..."
-msgstr ""
+msgstr "_חשבונית חדשה..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
 msgid "Open the New Invoice dialog"
-msgstr ""
+msgstr "פתח את חלון חשבונית חדשה"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Find In_voice..."
-msgstr ""
+msgstr "חפש _חשבונית..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
 msgid "Open the Find Invoice dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
 msgid "New _Job..."
-msgstr ""
+msgstr "_מטלה חדשה..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:165
 #: ../src/business/business-gnome/gnc-plugin-business.c:189
 msgid "Open the New Job dialog"
-msgstr ""
+msgstr "פתח את חלון מטלה חדשה"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
 msgid "Find Jo_b..."
-msgstr ""
+msgstr "חפש _מטלה..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
 msgid "Open the Find Job dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש מטלה"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
 msgid "_Process Payment..."
-msgstr ""
+msgstr "_עיבוד תשלומים..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
 msgid "Open the Process Payment dialog"
-msgstr ""
+msgstr "פתח את חלון עיבוד תשלומים"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
 msgid "_Vendor"
-msgstr ""
+msgstr "_ספקים"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
 msgid "_New Vendor..."
-msgstr ""
+msgstr "_ספק חדש..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
 msgid "Open the New Vendor dialog"
-msgstr ""
+msgstr "פתח את חלון יצירת ספק חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 msgid "_Find Vendor..."
-msgstr ""
+msgstr "_חפש ספק..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
 msgid "Open the Find Vendor dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש ספק"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
 msgid "New _Bill..."
-msgstr ""
+msgstr "_תשלום חדש..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
 msgid "Open the New Bill dialog"
-msgstr ""
+msgstr "פתח את חלון יצירת תשלום חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 msgid "Find Bi_ll..."
-msgstr ""
+msgstr "חפש ת_שלום"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
 msgid "Open the Find Bill dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש תשלום"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
 msgid "_Employee"
-msgstr ""
+msgstr "_עובדים"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
 msgid "_New Employee..."
-msgstr ""
+msgstr "_עובד חדש..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
 msgid "Open the New Employee dialog"
-msgstr ""
+msgstr "פתח את חלון יצירת עובד חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
 msgid "_Find Employee..."
-msgstr ""
+msgstr "_חפש עובד..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
 msgid "Open the Find Employee dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש עובד"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "New _Expense Voucher..."
-msgstr ""
+msgstr "_שובר הוצאות חדש..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:207
 msgid "Open the New Expense Voucher dialog"
-msgstr ""
+msgstr "פתח את חלון יצירת שובר הוצאות חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Find Expense _Voucher..."
-msgstr ""
+msgstr "חפש _שובר הוצאות..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
 msgid "Open the Find Expense Voucher dialog"
-msgstr ""
+msgstr "פתח את חלון חיפוש שובר הוצאות"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
 msgid "_Tax Table Editor"
-msgstr ""
+msgstr "_עורך טבלאות המס"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:218
 msgid "View and edit the list of Tax Tables"
-msgstr ""
+msgstr "הצג וערוך את רשימת טבלאות המס"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "_Billing Terms Editor"
-msgstr ""
+msgstr "_עורך תנאי התשלום"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
 msgid "View and edit the list of Billing Terms"
-msgstr ""
+msgstr "הצג וערוך את רשימת תנאי התשלום"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
 msgid "Bills _Due Reminder"
-msgstr ""
+msgstr "_תזכורת תשלומים"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:224
 msgid "Open the Bills Due Reminder dialog"
-msgstr ""
+msgstr "פתח את חלון תזכורת תשלומים"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
 msgid "E_xport"
-msgstr ""
+msgstr "י_יצוא"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
 msgid "QSF _Invoice..."
-msgstr ""
+msgstr "_חשבונית QSF..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
 msgid "Export one or more invoices to QSF"
-msgstr ""
+msgstr "ייצא חשבונית אחת או יותר לQSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "QSF _Customer..."
-msgstr ""
+msgstr "לקוח _QSF..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
 msgid "Export one or more customers to QSF"
-msgstr ""
+msgstr "ייצא לקוח אחד או יותר לQSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "QSF _Vendor..."
-msgstr ""
+msgstr "ס_פק QSF..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
 msgid "Export one or more vendors to QSF"
-msgstr ""
+msgstr "ייצא ספק אחד או יותר לQSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "QSF _Employee..."
-msgstr ""
+msgstr "ע_ובד QSF..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
 msgid "Export one or more employees to QSF"
-msgstr ""
+msgstr "ייצא עובד אחד או יותר לQSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
@@ -2415,33 +2433,33 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:724
 msgid "Export Invoices to XML"
-msgstr ""
+msgstr "ייצא חשבוניות לXML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:759
 msgid "Export Customers to XML"
-msgstr ""
+msgstr "ייצא לקוחות לXML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:791
 msgid "Export Vendors to XML"
-msgstr ""
+msgstr "ייצא ספקים לXML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:823
 msgid "Export Employees to XML"
-msgstr ""
+msgstr "ייצא עובדים לXML"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:96
 #: ../src/gnome/glade/register.glade.h:51
 msgid "Sort _Order"
-msgstr ""
+msgstr "מיין _הזמנות"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:99
 msgid "New _Invoice"
-msgstr ""
+msgstr "_חשבונית חדשה"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:100
 msgid "Create a new invoice"
-msgstr ""
+msgstr "צור חשבונית חדשה"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:102
@@ -2451,15 +2469,15 @@ msgstr "ח_שבון חדש..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:103
 msgid "Create a new account"
-msgstr ""
+msgstr "צור חשבון חדש"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
 msgid "Print Invoice"
-msgstr ""
+msgstr "הדפס חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:106
 msgid "Make a printable invoice"
-msgstr ""
+msgstr "צור חשבונית ניתנת להדפסה"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:110
@@ -2479,93 +2497,93 @@ msgstr "_הדבק"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:119
 msgid "_Edit Invoice"
-msgstr ""
+msgstr "_ערוך חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:120
 msgid "Edit this invoice"
-msgstr ""
+msgstr "ערוך את החשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:122
 msgid "_Post Invoice"
-msgstr ""
+msgstr "_שלח חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:123
 msgid "Post this Invoice to your Chart of Accounts"
-msgstr ""
+msgstr "שלח את החשבונית לטבלת החשבונות"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:125
 msgid "_Unpost Invoice"
-msgstr ""
+msgstr "_בטל שליחת חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:126
 msgid "Unpost this Invoice and make it editable"
-msgstr ""
+msgstr "בטל שליחת החשבונית והפוך אותה לניתנת לעריכה"
 
 #. Actions menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
 #: ../src/gnome/glade/register.glade.h:86
 msgid "_Enter"
-msgstr ""
+msgstr "_הכנס"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:131
 msgid "Record the current entry"
-msgstr ""
+msgstr "הכנס את הפעולה הנוכחית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
 #: ../src/gnome/glade/register.glade.h:79
 #: ../src/gnome/window-reconcile.c:2008
 msgid "_Cancel"
-msgstr ""
+msgstr "_ביטול"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:134
 msgid "Cancel the current entry"
-msgstr ""
+msgstr "בטל את הפעולה הנוכחית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
 #: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome/gnc-plugin-page-sx-list.c:124
 #: ../src/gnome/window-reconcile.c:2036
 msgid "_Delete"
-msgstr ""
+msgstr "_מחק"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:137
 msgid "Delete the current entry"
-msgstr ""
+msgstr "מחק את הפעולה הנוכחית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
 #: ../src/gnome/glade/register.glade.h:78
 msgid "_Blank"
-msgstr ""
+msgstr "_ריקה"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:140
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr ""
+msgstr "עבור לפעולה הריקה בסוף החשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:142
 msgid "Dup_licate Entry"
-msgstr ""
+msgstr "_שכפל רשומה"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:143
 msgid "Make a copy of the current entry"
-msgstr ""
+msgstr "צור עותק של הרשומה הנוכחית"
 
 #. Business menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:147
 msgid "_Pay Invoice"
-msgstr ""
+msgstr "_שלם חשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:148
 msgid "Enter a payment for the owner of this Invoice"
-msgstr ""
+msgstr "הכנס תשלום לבעל החשבונית"
 
 #. Reports menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:152
 msgid "_Company Report"
-msgstr ""
+msgstr "_דו\"ח חברה"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:153
 msgid "Open a company report window for the owner of this Invoice"
-msgstr ""
+msgstr "פתח דו\"ח חברה עבור בעל החשבונית"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:160
 #: ../src/gnome/glade/register.glade.h:95
@@ -2621,25 +2639,25 @@ msgstr "מחק"
 #: ../src/gnome/glade/register.glade.h:20
 #: ../src/gnome/gnc-plugin-page-register.c:330
 msgid "Duplicate"
-msgstr ""
+msgstr "שכפל"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 #: ../src/gnome/glade/register.glade.h:3
 #: ../src/gnome/gnc-plugin-page-register.c:333
 msgid "Blank"
-msgstr ""
+msgstr "חדשה"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:199
 msgid "Post"
-msgstr ""
+msgstr "שלח"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:200
 msgid "Unpost"
-msgstr ""
+msgstr "בטל שליחה"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
 msgid "Accumulate multiple splits into one"
-msgstr ""
+msgstr "אחד פיצולים"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid "If active, at startup GnuCash will check to see whether any bills will become due soon. If so, it will present the user with a reminder dialog. The definition of \"soon\" is controlled by the \"Days in Advance\" setting. Otherwise GnuCash does not check for due bills."
@@ -2711,13 +2729,13 @@ msgstr ""
 #: ../src/gnome-search/search-boolean.c:177
 #: ../src/gnome-search/search-reconciled.c:185
 msgid "is"
-msgstr ""
+msgstr "הוא"
 
 #: ../src/business/business-gnome/search-owner.c:257
 #: ../src/gnome-search/search-boolean.c:178
 #: ../src/gnome-search/search-reconciled.c:186
 msgid "is not"
-msgstr ""
+msgstr "אינו"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:81
 #: ../src/gnome-utils/dialog-transfer.c:1264
@@ -2735,15 +2753,15 @@ msgstr ""
 #. XXX: change this based on the ledger type
 #: ../src/business/business-ledger/gncEntryLedger.c:228
 msgid "Hours"
-msgstr ""
+msgstr "שעות"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:229
 msgid "Project"
-msgstr ""
+msgstr "פרוייקט"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:230
 msgid "Material"
-msgstr ""
+msgstr "חומר"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:805
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:485
@@ -2917,15 +2935,15 @@ msgstr "מזומן"
 #: ../intl-scm/guile-strings.c:5658
 #: ../intl-scm/guile-strings.c:5674
 msgid "Charge"
-msgstr ""
+msgstr "חיוב"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:55
 msgid "Income Account"
-msgstr ""
+msgstr "חשבות הכנסות"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:60
 msgid "Expense Account"
-msgstr ""
+msgstr "חשבון הוצאות"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -2965,15 +2983,15 @@ msgstr "פעולה"
 #: ../intl-scm/guile-strings.c:7244
 #: ../intl-scm/guile-strings.c:7288
 msgid "Discount"
-msgstr ""
+msgstr "הנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:85
 msgid "Discount Type"
-msgstr ""
+msgstr "סוג הנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:90
 msgid "Discount How"
-msgstr ""
+msgstr "איך הנחה"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -2989,7 +3007,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6992
 #: ../intl-scm/guile-strings.c:7242
 msgid "Unit Price"
-msgstr ""
+msgstr "מחיר ליחידה"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -3011,23 +3029,23 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7240
 #: ../intl-scm/guile-strings.c:7276
 msgid "Quantity"
-msgstr ""
+msgstr "כמות"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:105
 msgid "Tax Table"
-msgstr ""
+msgstr "טבלת מס"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:110
 msgid "Taxable?"
-msgstr ""
+msgstr "תלוי מיסוי?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:115
 msgid "Tax Included?"
-msgstr ""
+msgstr "כולל מס?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:120
 msgid "Invoiced?"
-msgstr ""
+msgstr "בחשבונית?"
 
 #. src/report/report-system/options-utilities.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -3047,7 +3065,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7118
 #: ../intl-scm/guile-strings.c:7368
 msgid "Subtotal"
-msgstr ""
+msgstr "סכום ביניים"
 
 #. src/tax/us/de_DE.scm
 #. src/tax/us/gnucash/tax/de_DE.scm
@@ -3067,91 +3085,91 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:7120
 #: ../intl-scm/guile-strings.c:7370
 msgid "Tax"
-msgstr ""
+msgstr "מס"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:135
 msgid "Billable?"
-msgstr ""
+msgstr "תלוי תשלום?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:528
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr ""
+msgstr "הכנס את חשבון ההכנסות/הוצאות עבור הרשומה, או בחר מרשימה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the type of Entry"
-msgstr ""
+msgstr "הכנס את סוג הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:577
 msgid "Enter the Entry Description"
-msgstr ""
+msgstr "הכנס את תיאור הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:592
 msgid "Enter the Discount Amount"
-msgstr ""
+msgstr "הכנס את כמות ההנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:595
 msgid "Enter the Discount Percent"
-msgstr ""
+msgstr "הכנס את אחוז ההנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:598
 msgid "Enter the Discount ... unknown type"
-msgstr ""
+msgstr "הכנס את ההנחה ... סוג לא ידוע"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:615
 msgid "Discount Type: Monetary Value"
-msgstr ""
+msgstr "סוג הנחה: ערך מספרי"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:618
 msgid "Discount Type: Percent"
-msgstr ""
+msgstr "סוג הנחה: אחוזים"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:621
 msgid "Select the Discount Type"
-msgstr ""
+msgstr "בחר את סוג ההנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Tax computed after discount is applied"
-msgstr ""
+msgstr "מס מחושב אחרי ביצוע ההנחה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:640
 msgid "Discount and tax both applied on pretax value"
-msgstr ""
+msgstr "חישוב הנחה ומס יבוצעו על הערך לפני מס"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:643
 msgid "Discount computed after tax is applied"
-msgstr ""
+msgstr "הנחה תחושב אחרי מס"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:646
 msgid "Select how to compute the Discount and Taxes"
-msgstr ""
+msgstr "בחר איך לחשב את ההנחה והמיסים"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:659
 msgid "Enter the unit-Price for this Entry"
-msgstr ""
+msgstr "הכנס את מחיר היחידה עבור הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:671
 msgid "Enter the Quantity of units for this Entry"
-msgstr ""
+msgstr "הכנס את כמות היחידות עבור הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:683
 msgid "Enter the Tax Table to apply to this entry"
-msgstr ""
+msgstr "הכנס את טבלת המס עבור הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:692
 msgid "Is this entry taxable?"
-msgstr ""
+msgstr "האם אפשר לחשב מס לרשומה?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:701
 msgid "Is the tax already included in the price of this entry?"
-msgstr ""
+msgstr "האם המס כבר כלול במחיר הרשומה?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:718
 msgid "Is this entry Invoiced?"
-msgstr ""
+msgstr "האם הרשומה כלולה בחשבונית?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:722
 msgid "Include this entry on this invoice?"
-msgstr ""
+msgstr "כלול את הרשומה בחשבונית?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:725
 msgid "Unknown EntryLedger Type"
@@ -3159,65 +3177,65 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:738
 msgid "The subtotal value of this entry "
-msgstr ""
+msgstr "ערך סכום הביניים של הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:750
 msgid "The total tax of this entry "
-msgstr ""
+msgstr "סה\"כ מס עבור הרשומה"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:759
 msgid "Is this entry billable to a customer or job?"
-msgstr ""
+msgstr "האם הרשומה ניתנת לשילום ע\"י לקוח או מטלה?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:768
 msgid "How did you pay for this item?"
-msgstr ""
+msgstr "איך שילמת עבור הפריט?"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:112
 msgid "You must provide a name for this Tax Table."
-msgstr ""
+msgstr "עליך לבחור שם עבור טבלת המס."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:118
 #, c-format
 msgid "You must provide a unique name for this Tax Table. Your choice \"%s\" is already in use."
-msgstr ""
+msgstr "עליך לבחור שם ייחודי עבור טבלת המס. בחירתך \"%s\" נמצאת כבר בשימוש."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:144
 msgid "You must choose a Tax Account."
-msgstr ""
+msgstr "עליך לבחור חשבון מס."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:534
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "טבלת מס \"%s\" נמצאת בשימוש. לא ניתן למחוק."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:580
 msgid "You cannot remove the last entry from the tax table. Try deleting the tax table if you want to do that."
-msgstr ""
+msgstr "לא ניתן למחוק את הרשומה האחרונה מטבלת המס. נסה למחוק את טבלת המס אם ברצונך לעשות זאת."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:587
 msgid "Are you sure you want to delete this entry?"
-msgstr ""
+msgstr "אתה בטוח שברצונך למחוק את הרשומה?"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:1
 msgid "<b>Tax Table Entries</b>"
-msgstr ""
+msgstr "<b>רשומות טבלת המס</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:2
 msgid "<b>Tax Table Entry</b>"
-msgstr ""
+msgstr "<b>פרטי טבלת המס</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:3
 msgid "<b>Tax Table</b>"
-msgstr ""
+msgstr "<b>טבלת מס</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:4
 msgid "<b>Tax Tables</b>"
-msgstr ""
+msgstr "<b>טבלאות מס</b>"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:5
 msgid "Tax Tables"
-msgstr ""
+msgstr "טבלאות מס"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:7
 #, no-c-format
@@ -3225,22 +3243,24 @@ msgid ""
 "Value $\n"
 "Percent %"
 msgstr ""
+"ערך $\n"
+"אחוז %"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
-msgstr ""
+msgstr "_חשבון:"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:10
 msgid "_Name: "
-msgstr ""
+msgstr "_שם:"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:11
 msgid "_Type: "
-msgstr ""
+msgstr "_סוג:"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:12
 msgid "_Value: "
-msgstr ""
+msgstr "_ערך:"
 
 #: ../src/core-utils/gnc-gkeyfile-utils.c:111
 #, c-format
@@ -3300,11 +3320,11 @@ msgstr "הכנסות"
 
 #: ../src/engine/Account.c:3645
 msgid "A/Receivable"
-msgstr ""
+msgstr "ח/קבלות"
 
 #: ../src/engine/Account.c:3646
 msgid "A/Payable"
-msgstr ""
+msgstr "ח/תשלומים"
 
 #: ../src/engine/cap-gains.c:236
 msgid "Orphaned Gains"
@@ -3540,7 +3560,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-find-transactions.c:99
 msgid "All Accounts"
-msgstr ""
+msgstr "כל החשבונות"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/register.scm
@@ -3586,22 +3606,22 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:6290
 #: ../intl-scm/guile-strings.c:6802
 msgid "Account"
-msgstr ""
+msgstr "חשבון"
 
 #: ../src/gnome/dialog-find-transactions.c:106
 #: ../src/import-export/import-match-picker.c:337
 msgid "Balanced"
-msgstr ""
+msgstr "מאוזן"
 
 #: ../src/gnome/dialog-find-transactions.c:109
 #: ../src/gnome/gnc-plugin-page-register.c:334
 #: ../src/gnome/window-reconcile.c:1172
 msgid "Reconcile"
-msgstr ""
+msgstr "סטטוס אישור"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 msgid "Share Price"
-msgstr ""
+msgstr "מחיר מניה"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -3633,7 +3653,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3668
 #: ../intl-scm/guile-strings.c:3886
 msgid "Shares"
-msgstr ""
+msgstr "מניות"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/standard-reports/gnucash/report/advanced-portfolio.scm
@@ -3648,7 +3668,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1988
 #: ../intl-scm/guile-strings.c:3086
 msgid "Value"
-msgstr ""
+msgstr "ערך"
 
 #. src/report/standard-reports/gnucash/report/transaction.scm
 #. src/report/standard-reports/transaction.scm
@@ -3657,12 +3677,12 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2684
 #: ../intl-scm/guile-strings.c:3782
 msgid "Number"
-msgstr ""
+msgstr "מס'"
 
 #: ../src/gnome/dialog-find-transactions.c:169
 #: ../src/gnome-search/dialog-search.c:1085
 msgid "Find Transaction"
-msgstr ""
+msgstr "חפש פעולה"
 
 #. Translators: %d is the number of prices. This
 #. is a ngettext(3) message.
@@ -3831,7 +3851,10 @@ msgstr "הפעולה המתוזמנת לא מאוזנת. מומלץ לתקן מ�
 
 #: ../src/gnome/dialog-sx-from-trans.c:771
 msgid "Cannot create a Scheduled Transaction from a Transaction currently being edited. Please Enter the Transaction before Scheduling."
-msgstr "לא ניתן ליצור פעולה מתוזמנת מפעולה שנמצאת בעריכה. הכנס את הפעולה לפני ביצוע תיזמונים."
+msgstr ""
+"לא ניתן ליצור פעולה מתוזמנת מפעולה\n"
+"שנמצאת בעריכה.\n"
+"הכנס את הפעולה לפני ביצוע תיזמונים."
 
 #: ../src/gnome/dialog-sx-since-last-run.c:379
 msgid "Ignored"
@@ -4651,7 +4674,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:1
 msgid "Always use the last day (or day of week) in the month?"
-msgstr ""
+msgstr "השתמש תמיד ביום האחרון של החודש (או השבוע)?"
 
 #: ../src/gnome/glade/budget.glade.h:2
 msgid "Budget List"
@@ -4659,58 +4682,58 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:3
 msgid "Budget Name:"
-msgstr ""
+msgstr "שם התקציב:"
 
 #: ../src/gnome/glade/budget.glade.h:4
 #: ../src/gnome/gnc-plugin-page-budget.c:139
 #: ../src/gnome/gnc-plugin-page-budget.c:825
 msgid "Budget Options"
-msgstr ""
+msgstr "אפשרויות התקציב"
 
 #: ../src/gnome/glade/budget.glade.h:5
 msgid "Budget Period:"
-msgstr ""
+msgstr "תקופת התקציב:"
 
 #: ../src/gnome/glade/budget.glade.h:6
 msgid "Close the Budget List"
-msgstr ""
+msgstr "סגור את רשימת התקציבים"
 
 #: ../src/gnome/glade/budget.glade.h:7
 msgid "Create a New Budget"
-msgstr ""
+msgstr "צור תקציב חדש"
 
 #: ../src/gnome/glade/budget.glade.h:8
 msgid "Delete the Selected Budget"
-msgstr ""
+msgstr "מחק את התקציב המסומן"
 
 #: ../src/gnome/glade/budget.glade.h:9
 msgid "Estimate Budget Values"
-msgstr ""
+msgstr "בצע הערכה של ערכי התקציב"
 
 #: ../src/gnome/glade/budget.glade.h:10
 #: ../src/gnome/glade/sched-xact.glade.h:89
 msgid "Every "
-msgstr ""
+msgstr "כל"
 
 #: ../src/gnome/glade/budget.glade.h:11
 msgid "GnuCash will estimate budget values for the selected accounts from past transactions."
-msgstr ""
+msgstr "התוכנה תנסה להעריך את ערכי התקציב עבור החשבונות המסומנים לפי פעולות שבוצעו בעבר."
 
 #: ../src/gnome/glade/budget.glade.h:12
 msgid "Match the \"day of week\" and \"week of month\"?  (for example, the \"second Tuesday\" of every month)"
-msgstr ""
+msgstr "התאם ליום בשבוע ויום בחודש? (לדוגמה, יום שלישי השני בכל חודש)"
 
 #: ../src/gnome/glade/budget.glade.h:14
 msgid "Number of Periods:"
-msgstr ""
+msgstr "מספר מחזורים:"
 
 #: ../src/gnome/glade/budget.glade.h:15
 msgid "Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; Quarterly = every 3 months"
-msgstr ""
+msgstr "מספר יחידות קלנדריות בהשנות: לדוגמה כל שבועיים, כל 3 חודשים"
 
 #: ../src/gnome/glade/budget.glade.h:16
 msgid "Open the Selected Budget"
-msgstr ""
+msgstr "פתח את התקציב המסומן"
 
 #: ../src/gnome/glade/budget.glade.h:17
 #: ../src/gnome/glade/print.glade.h:12
@@ -4718,20 +4741,20 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-budget.c:166
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1000
 msgid "Options"
-msgstr ""
+msgstr "אפשרויות"
 
 #: ../src/gnome/glade/budget.glade.h:18
 msgid "Significant Digits:"
-msgstr ""
+msgstr "ספרות אחרי הנקודה:"
 
 #: ../src/gnome/glade/budget.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:164
 msgid "Start Date:"
-msgstr ""
+msgstr "תאריך התחלה"
 
 #: ../src/gnome/glade/budget.glade.h:20
 msgid "The number of leading digits to keep when rounding"
-msgstr ""
+msgstr "מספר הספרות אחרי הנקודה שיש לשמור כשמעגלים"
 
 #: ../src/gnome/glade/budget.glade.h:21
 msgid "This is Sample2."
@@ -4739,7 +4762,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:22
 msgid "beginning on: "
-msgstr ""
+msgstr "התחל ב:"
 
 #: ../src/gnome/glade/budget.glade.h:23
 msgid ""
@@ -4748,14 +4771,18 @@ msgid ""
 "month(s)\n"
 "year(s)"
 msgstr ""
+"יום/ימים\n"
+"שבוע/ות\n"
+"חודש/ים\n"
+"שנה/ים"
 
 #: ../src/gnome/glade/budget.glade.h:27
 msgid "last of month"
-msgstr ""
+msgstr "האחרון בחודש"
 
 #: ../src/gnome/glade/budget.glade.h:28
 msgid "same week & day"
-msgstr ""
+msgstr "אותו יום ושבוע"
 
 #: ../src/gnome/glade/chart-export.glade.h:1
 msgid "Click to choose the filename and location."
@@ -5410,37 +5437,37 @@ msgstr ""
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:252
 msgid "Create a Scheduled Transaction with the current transaction as a template"
-msgstr ""
+msgstr "צור פעולה מתוזמנת עם הפעולה הנוכחית כתבנית"
 
 #: ../src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
-msgstr ""
+msgstr "גזור פעולה"
 
 #: ../src/gnome/glade/register.glade.h:13
 msgid "Cut the selected transaction"
-msgstr ""
+msgstr "גזור את הפעולה הנוכחית"
 
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-register.c:203
 msgid "Delete the current transaction"
-msgstr ""
+msgstr "מחק את הפעולה הנוכחית"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
-msgstr ""
+msgstr "שכ_פל פעולה..."
 
 #: ../src/gnome/glade/register.glade.h:21
 #: ../src/import-export/generic-import.glade.h:17
 msgid "Duplicate Transaction"
-msgstr ""
+msgstr "שכפל פעולה"
 
 #: ../src/gnome/glade/register.glade.h:22
 msgid "Edit Exchange Rate"
-msgstr ""
+msgstr "ערוך שער חליפין"
 
 #: ../src/gnome/glade/register.glade.h:23
 msgid "Edit the exchange rate for the current split"
-msgstr ""
+msgstr "ערוך את שער החליפין לפיצול הנוכחי"
 
 #: ../src/gnome/glade/register.glade.h:24
 msgid "End:"
@@ -6931,15 +6958,15 @@ msgstr "ערוך את האפשרויות של תקציב זה"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Estimate Budget"
-msgstr ""
+msgstr "הערך תקציב"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:144
 msgid "Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
+msgstr "הערך את התקציב לפי פעולות שבוצעו בעבר"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:167
 msgid "Estimate"
-msgstr ""
+msgstr "הערך"
 
 #. src/report/standard-reports/gnucash/report/budget.scm
 #. src/report/standard-reports/budget.scm
@@ -6962,7 +6989,7 @@ msgstr "מחק %s?"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:913
 msgid "You must select at least one account to estimate."
-msgstr ""
+msgstr "עליך לבחור לפחות חשבון אחד להערכה"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:170
@@ -8223,46 +8250,46 @@ msgstr ""
 
 #: ../src/gnome-search/dialog-search.c:155
 msgid "You must select an item from the list"
-msgstr ""
+msgstr "עליך לבחור פריט מהרשימה"
 
 #: ../src/gnome-search/dialog-search.c:272
 msgid "Select"
-msgstr ""
+msgstr "בחר"
 
 #: ../src/gnome-search/dialog-search.c:807
 msgid "all criteria are met"
-msgstr ""
+msgstr "מתאימים לכל הקריטריונים"
 
 #: ../src/gnome-search/dialog-search.c:808
 msgid "any criteria are met"
-msgstr ""
+msgstr "מתאימים לקריטריון כלשהו"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
 #: ../src/gnome-search/dialog-search.c:844
 #, c-format
 msgid "New %s"
-msgstr ""
+msgstr "%s חדש"
 
 #: ../src/gnome-search/dialog-search.c:844
 msgid "item"
-msgstr ""
+msgstr "פריט"
 
 #: ../src/gnome-search/search-account.c:170
 msgid "You have not selected any accounts"
-msgstr ""
+msgstr "לא בחרת חשבונות"
 
 #: ../src/gnome-search/search-account.c:190
 msgid "matches all accounts"
-msgstr ""
+msgstr "תואם לכל החשבונות"
 
 #: ../src/gnome-search/search-account.c:193
 msgid "matches any account"
-msgstr ""
+msgstr "תואם חשבון כלשהו"
 
 #: ../src/gnome-search/search-account.c:194
 msgid "matches no accounts"
-msgstr ""
+msgstr "לא תואם לאף חשבון"
 
 #. src/report/standard-reports/cash-flow.scm
 #. src/report/standard-reports/gnucash/report/cash-flow.scm
@@ -8270,89 +8297,89 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1066
 #: ../intl-scm/guile-strings.c:1766
 msgid "Selected Accounts"
-msgstr ""
+msgstr "חשבונות מסומנים"
 
 #: ../src/gnome-search/search-account.c:212
 msgid "Choose Accounts"
-msgstr ""
+msgstr "בחר חשבונות"
 
 #. Create the label
 #: ../src/gnome-search/search-account.c:246
 msgid "Select Accounts to Match"
-msgstr ""
+msgstr "בחר חשבונות להתאמה"
 
 #: ../src/gnome-search/search-account.c:250
 msgid "Select the Accounts to Compare"
-msgstr ""
+msgstr "בחר חשבונות להשוואה"
 
 #. Build and connect the toggle
 #: ../src/gnome-search/search-boolean.c:201
 msgid "set true"
-msgstr ""
+msgstr "קבע נכון"
 
 #: ../src/gnome-search/search-date.c:191
 msgid "is before"
-msgstr ""
+msgstr "לפני"
 
 #: ../src/gnome-search/search-date.c:192
 msgid "is before or on"
-msgstr ""
+msgstr "לפני או ב"
 
 #: ../src/gnome-search/search-date.c:193
 msgid "is on"
-msgstr ""
+msgstr "ב"
 
 #: ../src/gnome-search/search-date.c:194
 msgid "is not on"
-msgstr ""
+msgstr "לא ב"
 
 #: ../src/gnome-search/search-date.c:195
 msgid "is after"
-msgstr ""
+msgstr "אחרי"
 
 #: ../src/gnome-search/search-date.c:196
 msgid "is on or after"
-msgstr ""
+msgstr "אחרי או ב"
 
 #: ../src/gnome-search/search-double.c:183
 #: ../src/gnome-search/search-int64.c:185
 #: ../src/gnome-search/search-numeric.c:216
 msgid "is less than"
-msgstr ""
+msgstr "קטן מ"
 
 #: ../src/gnome-search/search-double.c:184
 #: ../src/gnome-search/search-int64.c:186
 #: ../src/gnome-search/search-numeric.c:220
 msgid "is less than or equal to"
-msgstr ""
+msgstr "קטן או שווה ל"
 
 #: ../src/gnome-search/search-double.c:185
 #: ../src/gnome-search/search-int64.c:187
 #: ../src/gnome-search/search-numeric.c:223
 msgid "equals"
-msgstr ""
+msgstr "שווה ל"
 
 #: ../src/gnome-search/search-double.c:186
 #: ../src/gnome-search/search-int64.c:188
 #: ../src/gnome-search/search-numeric.c:226
 msgid "does not equal"
-msgstr ""
+msgstr "לא שווה ל"
 
 #: ../src/gnome-search/search-double.c:187
 #: ../src/gnome-search/search-int64.c:189
 #: ../src/gnome-search/search-numeric.c:229
 msgid "is greater than"
-msgstr ""
+msgstr "גדול מ"
 
 #: ../src/gnome-search/search-double.c:188
 #: ../src/gnome-search/search-int64.c:190
 #: ../src/gnome-search/search-numeric.c:233
 msgid "is greater than or equal to"
-msgstr ""
+msgstr "גדול או שווה ל"
 
 #: ../src/gnome-search/search.glade.h:1
 msgid " Search "
-msgstr ""
+msgstr "חיפוש"
 
 #: ../src/gnome-search/search.glade.h:2
 msgid "()"
@@ -8360,79 +8387,79 @@ msgstr ""
 
 #: ../src/gnome-search/search.glade.h:3
 msgid "Add results to current search"
-msgstr ""
+msgstr "הוסף תוצאות לחיפוש הנוכחי"
 
 #: ../src/gnome-search/search.glade.h:4
 msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr ""
+msgstr "בחר האם לחפש בכל הנתונים או רק בנתונים שמסומנים כפעילים"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
-msgstr ""
+msgstr "מחק תוצאות מהחיפוש"
 
 #: ../src/gnome-search/search.glade.h:6
 msgid "New search"
-msgstr ""
+msgstr "חיפוש חדש"
 
 #: ../src/gnome-search/search.glade.h:7
 msgid "Refine current search"
-msgstr ""
+msgstr "סנן חיפוש נוכחי"
 
 #: ../src/gnome-search/search.glade.h:8
 msgid "Search Criteria"
-msgstr ""
+msgstr "קריטריונים לחיפוש"
 
 #: ../src/gnome-search/search.glade.h:9
 msgid "Search for items where"
-msgstr ""
+msgstr "חפש פריטים ש"
 
 #: ../src/gnome-search/search.glade.h:10
 msgid "Search only active data"
-msgstr ""
+msgstr "חפש רק בנתונים פעילים"
 
 #: ../src/gnome-search/search.glade.h:11
 msgid "Type of search"
-msgstr ""
+msgstr "סוג החיפוש"
 
 #: ../src/gnome-search/search.glade.h:12
 msgid "_New item..."
-msgstr ""
+msgstr "_פריט חדש..."
 
 #: ../src/gnome-search/search-numeric.c:216
 msgid "less than"
-msgstr ""
+msgstr "קטן מ"
 
 #: ../src/gnome-search/search-numeric.c:219
 msgid "less than or equal to"
-msgstr ""
+msgstr "קטן או שווה ל"
 
 #: ../src/gnome-search/search-numeric.c:223
 msgid "equal to"
-msgstr ""
+msgstr "שווה ל"
 
 #: ../src/gnome-search/search-numeric.c:226
 msgid "not equal to"
-msgstr ""
+msgstr "לא שווה ל"
 
 #: ../src/gnome-search/search-numeric.c:229
 msgid "greater than"
-msgstr ""
+msgstr "גדול מ"
 
 #: ../src/gnome-search/search-numeric.c:232
 msgid "greater than or equal to"
-msgstr ""
+msgstr "גדול או שווה ל"
 
 #: ../src/gnome-search/search-numeric.c:249
 msgid "has credits or debits"
-msgstr ""
+msgstr "עם חובות או זיכויים"
 
 #: ../src/gnome-search/search-numeric.c:250
 msgid "has debits"
-msgstr ""
+msgstr "עם חובות"
 
 #: ../src/gnome-search/search-numeric.c:251
 msgid "has credits"
-msgstr ""
+msgstr "עם זיכויים"
 
 #. Build and connect the toggles
 #: ../src/gnome-search/search-reconciled.c:222
@@ -8459,7 +8486,7 @@ msgstr "שגוי"
 
 #: ../src/gnome-search/search-string.c:186
 msgid "You need to enter a string value"
-msgstr ""
+msgstr "עליך להכניס ערך טקסטואלי"
 
 #: ../src/gnome-search/search-string.c:213
 #, c-format
@@ -8467,23 +8494,25 @@ msgid ""
 "Error in regular expression '%s':\n"
 "%s"
 msgstr ""
+"שגיאה בביטוי רגולרי: '%s':\n"
+"%s"
 
 #: ../src/gnome-search/search-string.c:257
 msgid "contains"
-msgstr ""
+msgstr "מכיל"
 
 #: ../src/gnome-search/search-string.c:258
 msgid "matches regex"
-msgstr ""
+msgstr "תואם לביטוי הרגולרי"
 
 #: ../src/gnome-search/search-string.c:260
 msgid "does not match regex"
-msgstr ""
+msgstr "אינו תואם לביטוי רגולרי"
 
 #. Build and connect the toggle button
 #: ../src/gnome-search/search-string.c:322
 msgid "Case Insensitive?"
-msgstr ""
+msgstr "בלי הבדלת רישיות?"
 
 #: ../src/gnome/top-level.c:96
 #, c-format
@@ -8612,19 +8641,19 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:269
 msgid "Select security/currency"
-msgstr ""
+msgstr "בחר נייר ערך/מטבע"
 
 #: ../src/gnome-utils/dialog-commodity.c:273
 msgid "Select security"
-msgstr ""
+msgstr "בחר נייר ערך"
 
 #: ../src/gnome-utils/dialog-commodity.c:278
 msgid "Select currency"
-msgstr ""
+msgstr "בחר מטבע"
 
 #: ../src/gnome-utils/dialog-commodity.c:510
 msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr ""
+msgstr "עליך לבחור מטבע. ליצירת מטבע חדש לחץ על \"חדש\""
 
 #: ../src/gnome-utils/dialog-commodity.c:841
 msgid "Use local time"
@@ -10090,7 +10119,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/transfer.glade.h:6
 msgid "Currency:"
-msgstr ""
+msgstr "מטבע:"
 
 #: ../src/gnome-utils/glade/transfer.glade.h:7
 msgid "Date:"
@@ -10194,7 +10223,7 @@ msgstr ""
 #. Calendar label, only shown if the date editor has a time field
 #: ../src/gnome-utils/gnc-date-edit.c:663
 msgid "Calendar"
-msgstr ""
+msgstr "לוח שנה"
 
 #: ../src/gnome-utils/gnc-dense-cal.c:244
 msgid "12 months"
@@ -13292,19 +13321,19 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-model.c:280
 #, c-format
 msgid "Tot %s"
-msgstr ""
+msgstr "סה\"כ %s"
 
 #: ../src/register/ledger-core/split-register-model.c:262
 msgid "Tot Credit"
-msgstr ""
+msgstr "סה\"כ זכות"
 
 #: ../src/register/ledger-core/split-register-model.c:286
 msgid "Tot Debit"
-msgstr ""
+msgstr "סה\"כ חובה"
 
 #: ../src/register/ledger-core/split-register-model.c:295
 msgid "Tot Shares"
-msgstr ""
+msgstr "סה\"כ מניות"
 
 #: ../src/register/ledger-core/split-register-model.c:316
 msgid "Debit Formula"
@@ -15475,7 +15504,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1992
 #: ../intl-scm/guile-strings.c:3090
 msgid "Balance Sheet"
-msgstr ""
+msgstr "מאזן"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/gnucash/report/trial-balance.scm
@@ -20362,7 +20391,7 @@ msgstr ""
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:5640
 msgid "Funds In"
-msgstr ""
+msgstr "נכנס"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:5644
@@ -20386,7 +20415,7 @@ msgstr ""
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:5668
 msgid "Funds Out"
-msgstr ""
+msgstr "יוצא"
 
 #. src/app-utils/prefs.scm
 #: ../intl-scm/guile-strings.c:5670
