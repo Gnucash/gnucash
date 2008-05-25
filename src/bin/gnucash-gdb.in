@@ -27,14 +27,4 @@ export LD_LIBRARY_PATH
 # Other potentially useful options, particularly for valgrind-2.x:
 # --tool=memcheck --trace-children=yes
 #
-exec valgrind -v \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-gnucash.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-glib.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libfontconfig.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libgda.supp \
-    --suppressions=${TOP_SRC_DIR}/src/valgrind-libguile.supp \
-	--num-callers=25 \
-    --error-limit=no \
-    --tool=memcheck \
-	--leak-check=full \
-    gnucash-bin "$@"
+exec gdb gnucash-bin "$@"

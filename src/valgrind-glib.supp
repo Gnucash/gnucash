@@ -1,0 +1,53 @@
+
+# FILE: valgrind-gnucash.supp
+#
+# FUNCTION: This file is a valgrind 'suppression' file, used to 
+#     get valgrind to not report certain errors that we aren't 
+#     interested in.
+#
+#     valgrind is a memory allocation debugging tool.  See the
+#     file ./HACKING for instructions on how to run gnucash with
+#     valgrind
+#
+# HISTORY: created aug 2003 linas vepstas
+
+
+##----------------------------------------------------------------------##
+
+# Format of this file is:
+# {
+#     name_of_suppression
+#     skin_name:supp_kind
+#     (optional extra info for some suppression types)
+#     caller0 name, or /name/of/so/file.so
+#     caller1 name, or ditto
+#     (optionally: caller2 name)
+#     (optionally: caller3 name)
+#  }
+#
+# For memcheck, the supp_kinds are:
+#
+#     Param Value1 Value2 Value4 Value8 Value16
+#     Free Addr1 Addr2 Addr4 Addr8 Addr16
+#     Cond (previously known as Value0)
+#     Leak
+#
+# and the optional extra info is:
+#     if Param: name of system call param
+#     if Free: name of free-ing fn)
+
+{
+	g_thread_init Leak
+	Memcheck:Leak
+	fun:memalign
+	fun:posix_memalign
+	obj:/opt/gnome/lib/libglib-2.0.so.0.1200.4
+	fun:g_slice_alloc
+	fun:g_array_sized_new
+	fun:g_array_new
+	fun:g_static_private_set
+	fun:g_get_filename_charsets
+}
+
+
+# ##----------------------------------------------------------------------##

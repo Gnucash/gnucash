@@ -113,9 +113,8 @@ void gnc_ui_database_connection( void )
     GladeXML* xml;
     GtkWidget* box;
 	GList* ds_node;
-	GdaDataModel* dsns;
-	gint numDsns;
-	gint i;
+	GList* ds_list;
+	gint numDsns = 0;
 
     dcw = g_new0(struct DatabaseConnectionWindow, 1);
     g_return_if_fail(dcw);
@@ -128,12 +127,13 @@ void gnc_ui_database_connection( void )
     dcw->rb_predefined = glade_xml_get_widget( xml, "rb_predefined" );
 	box = glade_xml_get_widget( xml, "predefined_connection_box" );
 	dcw->cb_predefined = gtk_combo_box_new_text();
-	numDsns = gda_config_get_nb_dsn();
-	dsns = gda_config_list_dsn();
-	for( i = 0; i < numDsns; i++ ) {
-		GdaDataSourceInfo* ds_info = gda_config_get_dsn_at_index( i );
+	ds_list = gda_config_get_data_source_list();
+	for( ds_node = ds_list; ds_node != NULL; ds_node = ds_node->next ) {
+		GdaDataSourceInfo* ds_info = (GdaDataSourceInfo*)ds_node->data;
 		gtk_combo_box_append_text( GTK_COMBO_BOX(dcw->cb_predefined), g_strdup(ds_info->name) );
+		numDsns++;
 	}
+	gda_config_free_data_source_list( ds_list );
 	if( numDsns != 0 ) {
 		gtk_combo_box_set_active( GTK_COMBO_BOX(dcw->cb_predefined), 0 );
 	} else {
