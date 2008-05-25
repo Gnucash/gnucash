@@ -54,22 +54,31 @@ then
   fi
 fi
 
+if test $OSTYPE == "msys"
+then
+  svk_name="svk.bat"
+  svk_cmd="cmd \/c svk"
+else
+  svk_name="svk"
+  svk_cmd="svk"
+fi
+
 # Maybe it's SVK?  First, check if we've got 'svk' in the path.  If not,
 # then exit with an error code of 1..
-which svk >/dev/null 2>&1
+which $svk_name >/dev/null 2>&1
 if test $? != 0 ; then exit 1 ; fi
 
 # Okay, we have 'svk'.  Now see if $real_srcdir is an svk checkout
 # Note that the 'echo n' is to protect against having svk installed
 # without having configured the depotmap.
-svkinfo=`echo n | svk info "$real_srcdir" 2>&1`
+svkinfo=`echo n | $svk_cmd info "$real_srcdir" 2>&1`
 if test $? != 0 ; then exit 1 ; fi
 
 # If we got here, then $real_srcdir is an svk checkout.  Parse out
 # the revision info, print it out, and then output 0.  Just combine
 # all the revision numbers into a single string by combining them
 # with periods.
-svkinfo=`svk info "$real_srcdir" | grep Rev | head -5 | sed -e 's/^.* \([0-9:]*\)$/\1/'`
-echo $svkinfo | sed -e 's/\s/./g'
+svkinfo=`$svk_cmd info "$real_srcdir" | grep Rev | head -5 | sed -e 's/^.* \([0-9:]*\)$/\1/'`
+echo $svkinfo | sed -e 's/ /./g'
 
 exit 0

@@ -262,7 +262,7 @@ gnc_hbci_debug_outboxjob (GNCInteractor *inter, AB_JOB *job, gboolean verbose)
   if (verbose) {
     g_warning("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
-    g_warning(", result: %s", AB_Job_GetResultText(job));
+    g_warning(", result: %s", AB_Job_GetResultText(job) ? AB_Job_GetResultText(job) : "(none)");
     g_warning("\n");
   }
 
@@ -280,7 +280,7 @@ gnc_hbci_debug_outboxjob (GNCInteractor *inter, AB_JOB *job, gboolean verbose)
     if (!verbose)
       g_warning("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
 	     AB_Job_Type2Char(AB_Job_GetType(job)),
-	     AB_Job_GetResultText(job));
+	     AB_Job_GetResultText(job) ? AB_Job_GetResultText(job) : "(none)");
     cause = 9000;
   } else {
     cause = 0;

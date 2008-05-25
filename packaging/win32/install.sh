@@ -959,8 +959,6 @@ function inst_libgda() {
 function svn_up() {
     mkdir -p $_REPOS_UDIR
     qpushd $REPOS_DIR
-    # latest revision that should compile, use HEAD or vwxyz
-    SVN_REV="HEAD"
     if [ -x .svn ]; then
         setup "svn update in ${REPOS_DIR}"
         svn up -r ${SVN_REV}
@@ -980,10 +978,8 @@ function inst_gnucash() {
     mkdir -p $_BUILD_UDIR
     add_to_env $_INSTALL_UDIR/bin PATH
 
-    # When aqbanking is enabled, uncomment this:
     AQBANKING_OPTIONS="--enable-hbci --with-aqbanking-dir=${_AQBANKING_UDIR}"
     AQBANKING_UPATH="${_OPENSSL_UDIR}/bin:${_GWENHYWFAR_UDIR}/bin:${_AQBANKING_UDIR}/bin"
-    AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
     LIBOFX_OPTIONS="--enable-ofx --with-ofx-prefix=${_LIBOFX_UDIR}"
 
     qpushd $REPOS_DIR
@@ -1032,6 +1028,8 @@ function inst_gnucash() {
 }
 
 function make_install() {
+    AQBANKING_PATH="${OPENSSL_DIR}\\bin;${GWENHYWFAR_DIR}\\bin;${AQBANKING_DIR}\\bin"
+
     make install
 
     qpushd $_INSTALL_UDIR/lib
@@ -1078,7 +1076,7 @@ function make_chm() {
     _CHM_LANG=$2
     echo "Processing $_CHM_TYPE ($_CHM_LANG) ..."
     qpushd $_CHM_TYPE/$_CHM_LANG
-        xsltproc ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
+        xsltproc $XSLTPROCFLAGS ../../../docbook-xsl/htmlhelp/htmlhelp.xsl gnucash-$_CHM_TYPE.xml
         count=0
         echo >> htmlhelp.hhp
         echo "[ALIAS]" >> htmlhelp.hhp
@@ -1112,14 +1110,14 @@ function inst_docs() {
     fi
     mkdir -p $_DOCS_UDIR/repos
     qpushd $DOCS_DIR/repos
-        # latest revision that should compile, use HEAD or vwxyz
-        SVN_REV="HEAD"
-        if [ -x .svn ]; then
-            setup "SVN update of docs"
-            svn up -r ${SVN_REV}
-        else
-            setup "SVN checkout of docs"
-            svn co -r ${SVN_REV} $DOCS_URL .
+        if [ "$UPDATE_DOCS" = "yes" ]; then
+            if [ -x .svn ]; then
+                setup "SVN update of docs"
+                svn up -r ${DOCS_REV}
+            else
+                setup "SVN checkout of docs"
+                svn co -r ${DOCS_REV} $DOCS_URL .
+            fi
         fi
         setup docs
         _DOCS_INST_UDIR=`unix_path $INSTALL_DIR`/share/gnucash/help

@@ -206,15 +206,6 @@ GtkWidget *gnc_split_reg_get_summarybar( GNCSplitReg *gsr );
 void gnc_split_reg_set_split_state( GNCSplitReg *gsr, gboolean split );
 void gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine );
 
-/**
- * Check if its OK to close this register window.  Gives the register
- * a chance to abort the close if there are roblems, e.g. an open
- * transaction.
- *
- * @return TRUE if the register may be closed, FALSE if not.
- **/
-gboolean gnc_split_reg_check_close( GNCSplitReg *gsr );
-
 void gnc_split_reg_raise( GNCSplitReg *gsr );
 
 /**

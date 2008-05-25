@@ -39,7 +39,9 @@
 ;;;; Private
 
 (define (gnc:txf-get-code-info categories code index)
-  (vector-ref (cdr (assv code categories)) index))
+  (let ((category (assv code categories)))
+    (and category
+         (vector-ref (cdr category) index))))
 
 (define txf-help-categories
   (list

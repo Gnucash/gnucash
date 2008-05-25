@@ -6,6 +6,8 @@
 ;;;  Copyright 2000-2001 Bill Gribble <grib@billgribble.com> 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-13))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-or-make-acct
@@ -195,8 +197,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-to-gnc 
-;; this is the top-level of the back end conversion from 
-;; QIF to GNC.  all the account mappings and so on should be 
+;;
+;; This is the top-level of the back end conversion from QIF
+;; to GnuCash. All the account mappings and so on should be 
 ;; done before this is called. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -325,7 +328,7 @@
                            (splitloop (cdr splits))))))
                (qif-file:xtns qif-file)))
             qif-files-list)
-       
+
            (if (> work-to-do 100)
                (begin 
                  (set! progress-dialog (gnc-progress-dialog-new window #f))
@@ -349,7 +352,7 @@
                      (qif-import:mark-matching-xtns xtn rest))
                  (if (not (null? (cdr rest)))
                      (xloop (car rest) (cdr rest)))))
-       
+
            ;; iterate over files. Going in the sort order by number of 
            ;; transactions should give us a small speed advantage.
            (for-each 
@@ -745,6 +748,12 @@
                       (xaccSplitSetParent commission-split gnc-xtn)
                       (xaccSplitSetAccount commission-split
                                            commission-acct)))))))
+
+    ;; QIF indicates a void transaction by starting the payee with "**VOID**".
+    (if (and (string? qif-payee)
+             (string-prefix? "**VOID**" qif-payee))
+        (xaccTransVoid gnc-xtn "QIF"))
+
     ;; return the modified transaction (though it's ignored).
     gnc-xtn))
 
@@ -1170,3 +1179,22 @@
               (loop (cdr splits)))))
     (if all-marked
         (qif-xtn:set-mark! xtn #t))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:qif-to-gnc-undo
+;;
+;;  Cancel the import by removing all newly created accounts,
+;;  splits, and transactions.
+;;
+;;  NOTE: Any new commodities should be destroyed by the druid.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (qif-import:qif-to-gnc-undo root)
+  (if root
+    (let ((txns (gnc:account-tree-get-transactions root)))
+      ;; Destroy all the transactions and their splits.
+      (for-each (lambda (elt) (xaccTransDestroy elt)) txns)
+
+      ;; Destroy the accounts
+      (xaccAccountBeginEdit root)
+      (xaccAccountDestroy root))))

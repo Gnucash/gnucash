@@ -4403,6 +4403,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
 {
   AccountPrivate *priv;
   GList *split_p;
+  GList *next;
   Transaction *trans;
   Split *s;
   int retval;
@@ -4410,7 +4411,13 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
   if (!acc) return 0;
 
   priv = GET_PRIVATE(acc);
-  for(split_p = priv->splits; split_p; split_p = g_list_next(split_p)) {
+  for(split_p = priv->splits; split_p; split_p = next) {
+    /* Get the next element in the split list now, just in case some
+     * naughty thunk destroys the one we're using. This reduces, but
+     * does not eliminate, the possibility of undefined results if
+     * a thunk removes splits from this account. */
+    next = g_list_next(split_p);
+
     s = split_p->data;
     trans = s->parent;   
     if (trans && (trans->marker < stage)) {

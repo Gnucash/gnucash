@@ -431,9 +431,12 @@ static gboolean
 sx_schedule_recurrence_handler(xmlNodePtr node, gpointer parsing_data)
 {
     GList **schedule = (GList**)parsing_data;
+	gchar* sched_str;
     Recurrence *r = dom_tree_to_recurrence(node);
     g_return_val_if_fail(r, FALSE);
-    g_debug("parsed recurrence [%s]", recurrenceToString(r));
+    sched_str = recurrenceToString(r);
+    g_debug("parsed recurrence [%s]", sched_str);
+	g_free(sched_str);
     *schedule = g_list_append(*schedule, r);
     return TRUE;
 }

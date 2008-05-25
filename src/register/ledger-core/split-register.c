@@ -1400,7 +1400,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    g_assert(xaccTransIsOpen(trans));
 
    /* If we are committing the blank split, add it to the account now */
-   if (trans == blank_trans)
+   if (split == blank_split && !info->blank_split_edited)
    {
      account = gnc_split_register_get_default_account(reg);
      if (account)
@@ -2149,6 +2149,7 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
   SplitRegister * reg = user_data;
   SRInfo *info;
 
+  g_return_if_fail(entry && entry->key);
   if (reg == NULL)
     return;
 
@@ -2156,16 +2157,23 @@ split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
   if (!info)
     return;
 
-  /* Release current strings. Will be reloaded at next reference. */
-  g_free (info->debit_str);
-  g_free (info->tdebit_str);
-  g_free (info->credit_str);
-  g_free (info->tcredit_str);
+  if (g_str_has_suffix(entry->key, KEY_ACCOUNTING_LABELS)) {
+    /* Release current strings. Will be reloaded at next reference. */
+    g_free (info->debit_str);
+    g_free (info->tdebit_str);
+    g_free (info->credit_str);
+    g_free (info->tcredit_str);
 
-  info->debit_str = NULL;
-  info->tdebit_str = NULL;
-  info->credit_str = NULL;
-  info->tcredit_str = NULL;
+    info->debit_str = NULL;
+    info->tdebit_str = NULL;
+    info->credit_str = NULL;
+    info->tcredit_str = NULL;
+
+  } else if (g_str_has_suffix(entry->key, KEY_ACCOUNT_SEPARATOR)) {
+    info->separator_changed = TRUE;
+  } else {
+    g_warning("split_register_gconf_changed: Unknown gconf key %s", entry->key);
+  }
 }
 
 static void 
@@ -2182,6 +2190,9 @@ gnc_split_register_init (SplitRegister *reg,
 
   /* Register 'destroy' callback */
   gnc_gconf_general_register_cb(KEY_ACCOUNTING_LABELS,
+				split_register_gconf_changed,
+				reg);
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
 				split_register_gconf_changed,
 				reg);
 
@@ -2413,6 +2424,9 @@ gnc_split_register_destroy (SplitRegister *reg)
     return;
 
   gnc_gconf_general_remove_cb(KEY_ACCOUNTING_LABELS,
+			      split_register_gconf_changed,
+			      reg);
+  gnc_gconf_general_remove_cb(KEY_ACCOUNT_SEPARATOR,
 			      split_register_gconf_changed,
 			      reg);
   gnc_split_register_cleanup (reg);

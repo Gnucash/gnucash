@@ -1,8 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;  qif-import.scm
-;;;  virtual loader for QIF import facility 
+;;;  virtual loader for QIF import facility
 ;;;
-;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
+;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash import-export qif-import))
@@ -24,25 +24,26 @@
 (gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)
 
-(load-from-path "qif-import/qif-objects.scm")      ;; class definitions 
+(load-from-path "qif-import/qif-objects.scm")      ;; class definitions
 (load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
-(load-from-path "qif-import/qif-utils.scm")         
-(load-from-path "qif-import/qif-file.scm")         ;; actual file reading 
-(load-from-path "qif-import/qif-dialog-utils.scm") ;; build displays 
+(load-from-path "qif-import/qif-utils.scm")
+(load-from-path "qif-import/qif-file.scm")         ;; actual file reading
+(load-from-path "qif-import/qif-dialog-utils.scm") ;; build displays
 (load-from-path "qif-import/qif-guess-map.scm")    ;; build acct mappings
-(load-from-path "qif-import/qif-to-gnc.scm")       ;; conv QIF xtns to GNC 
-(load-from-path "qif-import/qif-merge-groups.scm") ;; merge into user's acct  
+(load-from-path "qif-import/qif-to-gnc.scm")       ;; conv QIF xtns to GNC
+(load-from-path "qif-import/qif-merge-groups.scm") ;; merge into user's acct
 
 (export make-qif-file)
 (export make-ticker-map)
-(export qif-import:qif-to-gnc)
 (export qif-import:get-all-accts)
 (export qif-import:fix-from-acct)
 (export qif-import:any-new-accts?)
-(export qif-import:update-stock-hash)
+(export qif-import:update-security-hash)
 (export qif-import:refresh-match-selection)
 (export qif-import:save-map-prefs)
 (export qif-import:load-map-prefs)
+(export qif-import:qif-to-gnc)
+(export qif-import:qif-to-gnc-undo)
 
 (export qif-map-entry:gnc-name)
 (export qif-map-entry:set-gnc-name!)
