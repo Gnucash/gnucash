@@ -115,7 +115,7 @@ set_quote_source_name( gpointer pObject, gpointer pValue )
 }
 
 static gnc_commodity*
-load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList )
+load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row )
 {
     QofBook* pBook = be->primary_book;
     int col;
@@ -125,8 +125,6 @@ load_single_commodity( GncGdaBackend* be, GdaDataModel* pModel, int row, GList**
     pCommodity = gnc_commodity_new( pBook, NULL, NULL, NULL, NULL, 100 );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_COMMODITY, pCommodity, col_table );
-//    gnc_gda_slots_load( be, QOF_INSTANCE(pCommodity) );
-	*pList = g_list_append( *pList, pCommodity );
 
     qof_instance_mark_clean( QOF_INSTANCE(pCommodity) );
 
@@ -154,13 +152,14 @@ load_all_commodities( GncGdaBackend* be )
         for( r = 0; r < numRows; r++ ) {
             gnc_commodity* c;
 
-            pCommodity = load_single_commodity( be, pModel, r, &list );
+            pCommodity = load_single_commodity( be, pModel, r );
 
             if( pCommodity != NULL ) {
                 GUID guid;
 
                 guid = *qof_instance_get_guid( QOF_INSTANCE(pCommodity) );
                 pCommodity = gnc_commodity_table_insert( pTable, pCommodity );
+				list = g_list_append( list, pCommodity );
                 qof_instance_set_guid( QOF_INSTANCE(pCommodity), &guid );
             }
         }
