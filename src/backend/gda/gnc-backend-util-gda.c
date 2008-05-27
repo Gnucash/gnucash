@@ -930,7 +930,7 @@ get_gvalue_timespec( const GncGdaBackend* be, QofIdTypeConst obj_name,
     sscanf( iso8601_buf, "%d-%d-%d", &y, &m, &d );
     g_date_set_dmy( date, d, m, y );
     g_value_init( value, G_TYPE_DATE );
-    g_value_set_boxed( value, date );
+    g_value_take_boxed( value, date );
 }
 
 static void

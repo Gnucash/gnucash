@@ -740,6 +740,13 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 	    return;
 	}
 
+	// The engine has a PriceDB object but it isn't in the database
+	if( strcmp( inst->e_type, "PriceDB" ) == 0 ) {
+    	qof_instance_mark_clean(inst);
+    	qof_book_mark_saved( be->primary_book );
+		return;
+	}
+
     ENTER( " " );
 
     DEBUG( "gda_commit_edit(): %s dirty = %d, do_free=%d\n",
@@ -782,6 +789,10 @@ gnc_gda_commit_edit (QofBackend *be_start, QofInstance *inst)
 				}
 			}
 		}
+
+		// Don't let unknown items still mark the book as being dirty
+    	qof_instance_mark_clean(inst);
+    	qof_book_mark_saved( be->primary_book );
         return;
     }
 	if( be->supports_transactions ) {

@@ -121,9 +121,9 @@ price_to_gui (PriceEditDialog *pedit_dialog)
   gnc_numeric value;
   Timespec date;
 
-  if (pedit_dialog->price)
+  commodity = gnc_price_get_commodity (pedit_dialog->price);
+  if (commodity)
   {
-    commodity = gnc_price_get_commodity (pedit_dialog->price);
     currency = gnc_price_get_currency (pedit_dialog->price);
     date = gnc_price_get_time (pedit_dialog->price);
     source = gnc_price_get_source (pedit_dialog->price);
@@ -132,11 +132,10 @@ price_to_gui (PriceEditDialog *pedit_dialog)
   }
   else
   {
-    commodity = NULL;
     currency = gnc_default_currency ();
     date.tv_sec = time (NULL);
     date.tv_nsec = 0;
-    source = "";
+    source = "user:price-editor";
     type = "";
     value = gnc_numeric_zero ();
   }
@@ -385,22 +384,6 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 }
 
 static void
-gnc_price_new_price_init (GNCPrice *price)
-{
-  Timespec date;
-
-  gnc_price_begin_edit (price);
-
-  gnc_price_set_source (price, "user:price-editor");
-  date.tv_sec = time (NULL);
-  date.tv_nsec = 0;
-  gnc_price_set_time (price, date);
-
-  gnc_price_commit_edit (price);
-  
-}
-
-static void
 close_handler (gpointer user_data)
 {
   PriceEditDialog *pedit_dialog = user_data;
@@ -437,7 +420,7 @@ show_handler (const char *class, gint component_id,
  * Args:   parent  - the parent of the window to be created         *
  * Return: nothing                                                  *
 \********************************************************************/
-GNCPrice *
+void
 gnc_price_edit_dialog (GtkWidget * parent,
 		       QofSession *session,
 		       GNCPrice * price,
@@ -449,7 +432,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
   if ((type == GNC_PRICE_EDIT) &&
       (gnc_forall_gui_components (DIALOG_PRICE_EDIT_CM_CLASS,
 				  show_handler, price)))
-      return(price);
+      return;
 
   pedit_dialog = g_new0 (PriceEditDialog, 1);
   gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
@@ -462,7 +445,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
     } else {
       price = gnc_price_create (pedit_dialog->book);
     }
-    gnc_price_new_price_init(price);
+
     pedit_dialog->new = TRUE;
     /* New price will only have one ref, this dialog. */
     break;
@@ -474,16 +457,12 @@ gnc_price_edit_dialog (GtkWidget * parent,
 
   pedit_dialog->price = price;
   price_to_gui(pedit_dialog);
-
   component_id = gnc_register_gui_component (DIALOG_PRICE_EDIT_CM_CLASS,
                                              refresh_handler, close_handler,
                                              pedit_dialog);
   gnc_gui_component_set_session (component_id, pedit_dialog->session);
-
   gtk_widget_grab_focus (pedit_dialog->commodity_edit);
-
   gtk_widget_show (pedit_dialog->dialog);
-  return(price);
 }
 
 /********************************************************************\
@@ -504,5 +483,6 @@ gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid)
   if (price == NULL)
     return(NULL);
 
-  return(gnc_price_edit_dialog(parent, session, price, GNC_PRICE_EDIT));
+  gnc_price_edit_dialog(parent, session, price, GNC_PRICE_EDIT);
+  return price;
 }

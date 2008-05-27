@@ -25,3 +25,7 @@ copy the old record to the 'old values' table first to keep track of any changes
 * Write automated tests
 * Write doxygen comment headers
 * Don't need a log file
+* Certain dialogs create an object when opened and update it as they go along. This
+can result in trying to save invalid objects:
+	- Price editor (new price has no commodity or currency)
+	- New invoice
