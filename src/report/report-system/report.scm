@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; report.scm : structures/utilities for representing reports 
+;; rport.scm : structures/utilities for representing reports 
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;
 ;; This program is free software; you can redistribute it and/or    
@@ -253,13 +253,19 @@
            (gnc:get-html-style-sheets)))))
 
     (if (procedure? generator)
-        (let ((options (generator)))
+        (let ((options (gnc:backtrace-if-exception generator)))
+          (if (not options)
+              (begin
+                (gnc:warn "BUG DETECTED: Scheme exception raised in "
+                          "report options generator procedure named "
+                          (procedure-name generator))
+                (set! options (gnc:new-options))))
           (gnc:register-option options stylesheet)
           (gnc:register-option options namer)
           options)
         (let ((options (gnc:new-options)))
           (gnc:register-option options stylesheet)
-          (gnc:register-option options names)
+          (gnc:register-option options namer)
           options))))
 
 ;; A <report> represents an instantiation of a particular report type.
