@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; rport.scm : structures/utilities for representing reports 
+;; report.scm : structures/utilities for representing reports 
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;
 ;; This program is free software; you can redistribute it and/or    
