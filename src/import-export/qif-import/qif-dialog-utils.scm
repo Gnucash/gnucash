@@ -149,7 +149,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
 
                     ((divx cgshortx cgmidx cglongx intincx margintx rtrncapx)
                      (set! qif-account
@@ -159,7 +161,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((miscincx miscexpx)
                      (set! qif-account
                            (qif-split:miscx-category
@@ -168,7 +172,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE))))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE))))
 
                   ;; now reference the near-end account
                   (if qif-account
@@ -203,7 +209,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((buyx sellx xin xout)
                      (set! qif-account
                            (qif-split:category
@@ -212,7 +220,9 @@
                                                    GNC-CCARD-TYPE
                                                    GNC-CASH-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
 
                     ((stksplit)
                      (set! qif-account
@@ -220,7 +230,9 @@
                      (set! qif-account-types (list GNC-STOCK-TYPE
                                                    GNC-MUTUAL-TYPE
                                                    GNC-ASSET-TYPE
-                                                   GNC-LIABILITY-TYPE)))
+                                                   GNC-LIABILITY-TYPE
+                                                   GNC-RECEIVABLE-TYPE
+                                                   GNC-PAYABLE-TYPE)))
                     ((cgshort cgshortx reinvsg reinvsh)
                      (set! qif-account
                            (default-cgshort-acct from-acct stock-acct))
@@ -301,12 +313,13 @@
                   (if (not entry)
                       (set! entry (qif-import:guess-acct
                                    from-acct
-                                   (list
-                                    GNC-BANK-TYPE
-                                    GNC-CCARD-TYPE
-                                    GNC-CASH-TYPE
-                                    GNC-ASSET-TYPE
-                                    GNC-LIABILITY-TYPE)
+                                   (list GNC-BANK-TYPE
+                                         GNC-CCARD-TYPE
+                                         GNC-CASH-TYPE
+                                         GNC-ASSET-TYPE
+                                         GNC-LIABILITY-TYPE
+                                         GNC-RECEIVABLE-TYPE
+                                         GNC-PAYABLE-TYPE)
                                    gnc-acct-info)))
                   (qif-map-entry:set-display?! entry #t)
                   (hash-set! acct-hash from-acct entry)
@@ -325,12 +338,13 @@
                                  (set! entry
                                        (qif-import:guess-acct
                                         xtn-acct
-                                        (list
-                                         GNC-BANK-TYPE
-                                         GNC-CCARD-TYPE
-                                         GNC-CASH-TYPE
-                                         GNC-ASSET-TYPE
-                                         GNC-LIABILITY-TYPE)
+                                        (list GNC-BANK-TYPE
+                                              GNC-CCARD-TYPE
+                                              GNC-CASH-TYPE
+                                              GNC-ASSET-TYPE
+                                              GNC-LIABILITY-TYPE
+                                              GNC-RECEIVABLE-TYPE
+                                              GNC-PAYABLE-TYPE)
                                         gnc-acct-info)))
                              (qif-map-entry:set-display?! entry #t)
                              (hash-set! acct-hash xtn-acct entry)))))
@@ -497,10 +511,12 @@
                                   (list GNC-INCOME-TYPE GNC-EXPENSE-TYPE
                                         GNC-BANK-TYPE GNC-CCARD-TYPE
                                         GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                        GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE
                                         GNC-STOCK-TYPE GNC-MUTUAL-TYPE)
                                   (list GNC-EXPENSE-TYPE GNC-INCOME-TYPE
                                         GNC-BANK-TYPE GNC-CCARD-TYPE
                                         GNC-LIABILITY-TYPE GNC-ASSET-TYPE
+                                        GNC-RECEIVABLE-TYPE GNC-PAYABLE-TYPE
                                         GNC-STOCK-TYPE GNC-MUTUAL-TYPE)))))
                        (qif-map-entry:set-display?! entry #t)
                        (hash-set! memo-hash key-string entry)))))

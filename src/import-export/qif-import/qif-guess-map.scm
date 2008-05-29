@@ -17,6 +17,8 @@
 (define GNC-INCOME-TYPE 8)
 (define GNC-EXPENSE-TYPE 9)
 (define GNC-EQUITY-TYPE 10)
+(define GNC-RECEIVABLE-TYPE 11)
+(define GNC-PAYABLE-TYPE 12)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
