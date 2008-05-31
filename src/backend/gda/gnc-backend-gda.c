@@ -628,6 +628,7 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
     }
 
     /* Create new tables */
+	be->is_pristine_db = TRUE;
     qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
 
     // Update the dictionary because new tables may exist
@@ -638,7 +639,6 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
 
     /* Save all contents */
 	be->primary_book = book;
-	be->is_pristine_db = TRUE;
 	be->obj_total = 0;
     be->obj_total += 1 + gnc_account_n_descendants( gnc_book_get_root_account( book ) );
 	be->obj_total += gnc_book_count_transactions( book );

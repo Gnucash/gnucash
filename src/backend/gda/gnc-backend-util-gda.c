@@ -1972,6 +1972,15 @@ gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_n
 	g_return_val_if_fail( be != NULL, FALSE );
 	g_return_val_if_fail( table_name != NULL, FALSE );
 
+	/* If the db is pristine because it's being saved, the table does not
+	 * exist.  This gets around a GDA-3 bug where deleting all tables and
+	 * updating the meta-data leaves the meta-data still thinking 1 table
+	 * exists.
+	 */
+	if( be->is_pristine_db ) {
+		return FALSE;
+	}
+
     db = gda_dict_get_database( be->pDict );
 	g_return_val_if_fail( db != NULL, FALSE );
 
