@@ -311,18 +311,6 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
         PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
-	// Set up table version information
-	_init_version_info( be );
-
-    // Call all object backends to create any required tables
-    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
-
-    // Update the dictionary because new tables may exist
-    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
-    if( error != NULL ) {
-        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
-    }
-
     LEAVE (" ");
 }
 
@@ -394,6 +382,7 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
     GncGdaDataType_t* pData;
 	int i;
 	Account* root;
+	GError* error = NULL;
 
 	g_return_if_fail( be_start != NULL );
 	g_return_if_fail( book != NULL );
@@ -402,6 +391,18 @@ gnc_gda_load(QofBackend* be_start, QofBook *book)
 
     g_assert( be->primary_book == NULL );
     be->primary_book = book;
+
+	// Set up table version information
+	_init_version_info( be );
+
+    // Call all object backends to create any required tables
+    qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
+
+    // Update the dictionary because new tables may exist
+    gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );
+    if( error != NULL ) {
+        PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
+    }
 
     /* Load any initial stuff */
     be->loading = TRUE;
@@ -584,6 +585,27 @@ update_save_progress( GncGdaBackend* be )
 		}
 		(be->be.percentage)( NULL, percent_done );
 	}
+}
+
+static gboolean
+gnc_gda_save_may_clobber_data( QofBackend* qbe )
+{
+    GncGdaBackend* be = (GncGdaBackend*)qbe;
+    GdaDataModel* tables;
+    GError* error = NULL;
+	gint numTables;
+
+	/* Data may be clobbered iff the number of tables != 0 */
+    tables = gda_connection_get_schema( be->pConnection,
+                                        GDA_CONNECTION_SCHEMA_TABLES,
+                                        NULL,
+                                        &error );
+    if( error != NULL ) {
+        PERR( "SQL error: %s\n", error->message );
+    }
+    numTables = gda_data_model_get_n_rows( tables );
+
+	return (numTables != 0);
 }
 
 static void
@@ -1147,7 +1169,7 @@ gnc_gda_backend_new(void)
     be->destroy_backend = gnc_gda_destroy_backend;
 
     be->load = gnc_gda_load;
-    be->save_may_clobber_data = NULL;
+    be->save_may_clobber_data = gnc_gda_save_may_clobber_data;
 
     /* The gda backend treats accounting periods transactionally. */
     be->begin = gnc_gda_begin_edit;
