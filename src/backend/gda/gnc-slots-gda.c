@@ -41,6 +41,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
+#define TABLE_VERSION 1
 
 typedef struct {
     GncGdaBackend* be;
@@ -550,7 +551,7 @@ gnc_gda_slots_load_for_list( GncGdaBackend* be, GList* list )
 
 	// Execute the query and load the slots
 	query = gnc_gda_create_query_from_sql( be, sql->str );
-	model = gnc_gda_execute_sql( be, sql->str );
+	model = gnc_gda_execute_select_sql( be, sql->str );
     if( model != NULL ) {
         int numRows = gda_data_model_get_n_rows( model );
         int r;
@@ -569,11 +570,13 @@ create_slots_tables( GncGdaBackend* be )
 {
 	GError* error = NULL;
 	gboolean ok;
+	gint version;
 
 	g_return_if_fail( be != NULL );
 
-	if( !gnc_gda_does_table_exist( be, TABLE_NAME ) ) {
-    	gnc_gda_create_table( be, TABLE_NAME, col_table, &error );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+	if( version == 0 ) {
+    	gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
 		if( error != NULL ) {
 			g_critical( "GDA: unable to create SLOTS table: %s\n", error->message );
 		}

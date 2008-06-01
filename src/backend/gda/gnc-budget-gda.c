@@ -44,6 +44,7 @@
 #include "gnc-budget.h"
 
 #define BUDGET_TABLE "budgets"
+#define TABLE_VERSION 1
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -83,7 +84,6 @@ load_single_budget( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pL
     gnc_gda_load_object( be, pModel, row, GNC_ID_BUDGET, pBudget, col_table );
 	r = g_new0( Recurrence, 1 );
 	gnc_gda_recurrence_load( be, gnc_budget_get_guid( pBudget ), r );
-//    gnc_gda_slots_load( be, QOF_INSTANCE(pBudget) );
 	*pList = g_list_append( *pList, pBudget );
 
     qof_instance_mark_clean( QOF_INSTANCE(pBudget) );
@@ -121,9 +121,19 @@ load_all_budgets( GncGdaBackend* be )
 static void
 create_budget_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, BUDGET_TABLE, col_table );
+	version = gnc_gda_get_table_version( be, BUDGET_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, BUDGET_TABLE, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

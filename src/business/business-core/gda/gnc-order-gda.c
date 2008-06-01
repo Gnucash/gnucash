@@ -41,6 +41,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "orders"
+#define TABLE_VERSION 1
 
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
@@ -115,9 +116,19 @@ load_all_orders( GncGdaBackend* be )
 static void
 create_order_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

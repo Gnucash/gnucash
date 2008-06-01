@@ -42,6 +42,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "lots"
+#define TABLE_VERSION 1
 
 static gpointer get_lot_account( gpointer pObject, const QofParam* param );
 static void set_lot_account( gpointer pObject, gpointer pValue );
@@ -110,7 +111,6 @@ load_single_lot( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList
     lot = gnc_lot_new( be->primary_book );
 
     gnc_gda_load_object( be, pModel, row, GNC_ID_LOT, lot, col_table );
-//    gnc_gda_slots_load( be, QOF_INSTANCE(lot) );
 	*pList = g_list_append( *pList, lot );
 
     qof_instance_mark_clean( QOF_INSTANCE(lot) );
@@ -148,9 +148,19 @@ load_all_lots( GncGdaBackend* be )
 static void
 create_lots_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

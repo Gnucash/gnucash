@@ -57,6 +57,7 @@ static void set_parent( gpointer pObject, gpointer pValue );
 #define MAX_NAME_LEN 50
 
 #define TT_TABLE_NAME "taxtables"
+#define TT_TABLE_VERSION 1
 
 static col_cvt_t tt_col_table[] =
 {
@@ -73,6 +74,7 @@ static col_cvt_t tt_col_table[] =
 };
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
+#define TTENTRIES_TABLE_VERSION 1
 
 static col_cvt_t ttentries_col_table[] =
 {
@@ -252,10 +254,29 @@ load_all_taxtables( GncGdaBackend* be )
 static void
 create_taxtable_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TT_TABLE_NAME, tt_col_table );
-    gnc_gda_create_table_if_needed( be, TTENTRIES_TABLE_NAME, ttentries_col_table );
+	version = gnc_gda_get_table_version( be, TT_TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
+
+	version = gnc_gda_get_table_version( be, TTENTRIES_TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION, ttentries_col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

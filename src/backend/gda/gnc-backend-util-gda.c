@@ -58,6 +58,9 @@ typedef struct {
     gnc_gda_query_info* pQueryInfo;
 } gda_backend;
 
+static void register_table_version( const GncGdaBackend* be, const gchar* table_name, gint version );
+static gint get_table_version( const GncGdaBackend* be, const gchar* table_name );
+
 /* ================================================================= */
 void
 gnc_gda_add_field_to_query( GdaQuery* query, const gchar* col_name, const GValue* value )
@@ -1485,7 +1488,7 @@ gnc_gda_create_query_from_sql( const GncGdaBackend* be, const gchar* sql )
 }
 
 GdaDataModel*
-gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
+gnc_gda_execute_select_sql( const GncGdaBackend* be, const gchar* sql )
 {
 	GdaCommand* cmd;
     GError* error = NULL;
@@ -1504,6 +1507,26 @@ gnc_gda_execute_sql( const GncGdaBackend* be, const gchar* sql )
 	return model;
 }
 
+gint
+gnc_gda_execute_nonselect_sql( const GncGdaBackend* be, const gchar* sql )
+{
+	GdaCommand* cmd;
+    GError* error = NULL;
+	gint ret;
+
+	g_return_val_if_fail( be != NULL, 0 );
+	g_return_val_if_fail( sql != NULL, 0 );
+
+	cmd = gda_command_new( sql, GDA_COMMAND_TYPE_SQL, 0 );
+    ret = gda_connection_execute_non_select_command( be->pConnection, cmd, NULL, &error );
+	gda_command_free( cmd );
+    if( error != NULL ) {
+        PERR( "SQL error: %s\n", error->message );
+    }
+
+	return ret;
+}
+
 int
 gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 {
@@ -1513,7 +1536,7 @@ gnc_gda_execute_select_get_count( const GncGdaBackend* be, const gchar* sql )
 	g_return_val_if_fail( be != NULL, 0 );
 	g_return_val_if_fail( sql != NULL, 0 );
 
-    model = gnc_gda_execute_sql( be, sql );
+    model = gnc_gda_execute_select_sql( be, sql );
     if( model != NULL ) {
         count = gda_data_model_get_n_rows( model );
     }
@@ -1818,9 +1841,9 @@ gnc_gda_add_table_column( GdaServerOperation* op, const gchar* arg, const gchar*
     }
 }
 
-gboolean
-gnc_gda_create_table( const GncGdaBackend* be, const gchar* table_name,
-                    const col_cvt_t* col_table, GError** error )
+static gboolean
+create_table( const GncGdaBackend* be, const gchar* table_name,
+				const col_cvt_t* col_table, GError** error )
 {
     GdaServerOperation *op;
     GdaServerProvider *server;
@@ -1878,6 +1901,19 @@ gnc_gda_create_table( const GncGdaBackend* be, const gchar* table_name,
         return FALSE;
     }
     return TRUE;
+}
+
+gboolean
+gnc_gda_create_table( const GncGdaBackend* be, const gchar* table_name,
+					gint table_version, const col_cvt_t* col_table, GError** error )
+{
+	gboolean ok;
+
+	ok = create_table( be, table_name, col_table, error );
+	if( ok ) {
+		register_table_version( be, table_name, table_version );
+	}
+	return ok;
 }
 
 gboolean
@@ -1964,7 +2000,29 @@ gnc_gda_create_index( const GncGdaBackend* be, const gchar* index_name,
     return TRUE;
 }
 
-gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_name )
+gint
+gnc_gda_get_table_version( const GncGdaBackend* be, const gchar* table_name )
+{
+    GdaDictTable* table;
+    GdaDictDatabase* db;
+
+	g_return_val_if_fail( be != NULL, 0 );
+	g_return_val_if_fail( table_name != NULL, 0 );
+
+	/* If the db is pristine because it's being saved, the table does not
+	 * exist.  This gets around a GDA-3 bug where deleting all tables and
+	 * updating the meta-data leaves the meta-data still thinking 1 table
+	 * exists.
+	 */
+	if( be->is_pristine_db ) {
+		return 0;
+	}
+
+	return get_table_version( be, table_name );
+}
+
+static gboolean
+does_table_exist( const GncGdaBackend* be, const gchar* table_name )
 {
     GdaDictTable* table;
     GdaDictDatabase* db;
@@ -1992,23 +2050,6 @@ gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_n
 	}
 }
 
-void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
-			                        const gchar* table_name,
-									const col_cvt_t* col_table )
-{
-	g_return_if_fail( be != NULL );
-	g_return_if_fail( table_name != NULL );
-	g_return_if_fail( col_table != NULL );
-
-    if( !gnc_gda_does_table_exist( be, table_name ) ) {
-    	GError* error = NULL;
-
-        gnc_gda_create_table( be, table_name, col_table, &error );
-        if( error != NULL ) {
-            PERR( "Error creating table: %s\n", error->message );
-        }
-    }
-}
 /* ================================================================= */
 #if 0
 static gboolean
@@ -2103,4 +2144,147 @@ create_db( GncGdaBackend* be, const gchar* db_name, GError** error )
                                 db_name, error );
 }
 #endif
+/* ================================================================= */
+#define VERSION_TABLE_NAME "versions"
+#define MAX_TABLE_NAME_LEN 50
+#define TABLE_COL_NAME "table_name"
+#define VERSION_COL_NAME "table_version"
+
+static col_cvt_t version_table[] =
+{
+    { TABLE_COL_NAME,   CT_STRING, MAX_TABLE_NAME_LEN },
+	{ VERSION_COL_NAME, CT_INT },
+    { NULL }
+};
+
+/**
+ * Sees if the version table exists, and if it does, loads the info into
+ * the version hash table.  Otherwise, it creates an empty version table.
+ *
+ * @param be Backend struct
+ */
+void
+_init_version_info( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+	be->versions = g_hash_table_new( g_str_hash, g_str_equal );
+
+	if( does_table_exist( be, VERSION_TABLE_NAME ) ) {
+		GdaDataModel* model;
+		gchar* sql;
+
+		sql = g_strdup_printf( "SELECT * FROM %s", VERSION_TABLE_NAME );
+		model = gnc_gda_execute_select_sql( be, sql );
+		g_free( sql );
+		if( model != NULL ) {
+			gint numRows = gda_data_model_get_n_rows( model );
+			const GValue* name;
+			const GValue* version;
+			gint row;
+
+			for( row = 0; row < numRows; row++ ) {
+    			name = gda_data_model_get_value_at_col_name( model, TABLE_COL_NAME, row );
+				version = gda_data_model_get_value_at_col_name( model, VERSION_COL_NAME,
+																row );
+				g_hash_table_insert( be->versions,
+									(gpointer)g_value_get_string( name ),
+									GINT_TO_POINTER(g_value_get_int( version )) );
+			}
+		}
+	} else {
+		gboolean ok;
+		GError* error = NULL;
+
+		ok = create_table( be, VERSION_TABLE_NAME, version_table, &error );
+		if( error != NULL ) {
+			PERR( "Error creating versions table: %s\n", error->message );
+		}
+	}
+}
+
+/**
+ * Resets the version table information by removing all version table info.
+ * It also recreates the version table in the db.
+ *
+ * @param be Backend struct
+ */
+void
+_reset_version_info( const GncGdaBackend* be )
+{
+	gboolean ok;
+	GError* error = NULL;
+
+	g_return_if_fail( be != NULL );
+
+	ok = create_table( be, VERSION_TABLE_NAME, version_table, &error );
+	if( error != NULL ) {
+		PERR( "Error creating versions table: %s\n", error->message );
+	}
+	g_hash_table_remove_all( be->versions );
+}
+
+/**
+ * Finalizes the version table info by destroying the hash table.
+ *
+ * @param be Backend struct
+ */
+void
+_finalize_version_info( GncGdaBackend* be )
+{
+	g_return_if_fail( be != NULL );
+
+	g_hash_table_destroy( be->versions );
+}
+
+/**
+ * Registers the version for a table.  Registering involves updating the
+ * db version table and also the hash table.
+ *
+ * @param be Backend struct
+ * @param table_name Table name
+ * @param version Version number
+ */
+static void
+register_table_version( const GncGdaBackend* be, const gchar* table_name, gint version )
+{
+	gchar* sql;
+	gint cur_version;
+
+	g_return_if_fail( be != NULL );
+	g_return_if_fail( table_name != NULL );
+	g_return_if_fail( version > 0 );
+
+	cur_version = get_table_version( be, table_name );
+	if( cur_version != version ) {
+		if( cur_version == 0 ) {
+			sql = g_strdup_printf( "INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
+								table_name, version );
+		} else {
+			sql = g_strdup_printf( "UPDATE %s SET %s=%d WHERE %s='%s'", VERSION_TABLE_NAME,
+								VERSION_COL_NAME, version,
+								TABLE_COL_NAME, table_name );
+		}
+		(void)gnc_gda_execute_nonselect_sql( be, sql );
+		g_free( sql );
+	}
+
+	g_hash_table_insert( be->versions, (gpointer)table_name, GINT_TO_POINTER(version) );
+}
+
+/**
+ * Returns the registered version number for a table.
+ *
+ * @param be Backend struct
+ * @param table_name Table name
+ * @return Version number
+ */
+static gint
+get_table_version( const GncGdaBackend* be, const gchar* table_name )
+{
+	g_return_val_if_fail( be != NULL, 0 );
+	g_return_val_if_fail( table_name != NULL, 0 );
+
+	return GPOINTER_TO_INT(g_hash_table_lookup( be->versions, table_name ));
+}
 /* ========================== END OF FILE ===================== */

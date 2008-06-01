@@ -49,6 +49,7 @@ struct GncGdaBackend_struct
 
   gint obj_total;			// Total # of objects (for percentage calculation)
   gint operations_done;		// Number of operations (save/load) done
+  GHashTable* versions;		// Version number for each table
 };
 typedef struct GncGdaBackend_struct GncGdaBackend;
 
@@ -163,7 +164,8 @@ GdaQuery* gnc_gda_build_delete_query( GncGdaBackend* pBackend,
 									gpointer pObject,
 									const col_cvt_t* table );
 GdaObject* gnc_gda_execute_query( GncGdaBackend* pBackend, GdaQuery* pQuery );
-GdaDataModel* gnc_gda_execute_sql( const GncGdaBackend* pBackend, const gchar* sql );
+GdaDataModel* gnc_gda_execute_select_sql( const GncGdaBackend* pBackend, const gchar* sql );
+gint gnc_gda_execute_nonselect_sql( const GncGdaBackend* pBackend, const gchar* sql );
 GdaQuery* gnc_gda_create_query_from_sql( const GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_select_get_count( const GncGdaBackend* pBackend, const gchar* sql );
 int gnc_gda_execute_query_get_count( GncGdaBackend* pBackend, GdaQuery* query );
@@ -174,15 +176,13 @@ gboolean gnc_gda_object_is_it_in_db( GncGdaBackend* be,
 									const gchar* table_name,
 									QofIdTypeConst obj_name, const gpointer pObject,
 									const col_cvt_t* table );
-gboolean gnc_gda_does_table_exist( const GncGdaBackend* be, const gchar* table_name );
-gboolean gnc_gda_create_table( const GncGdaBackend* be,
-						const gchar* table_name, const col_cvt_t* col_table,
-						GError** error );
+gint gnc_gda_get_table_version( const GncGdaBackend* be, const gchar* table_name );
+gboolean gnc_gda_create_table( const GncGdaBackend* be, const gchar* table_name,
+								gint table_version, const col_cvt_t* col_table,
+								GError** error );
 gboolean gnc_gda_create_index( const GncGdaBackend* be, const gchar* index_name,
 						const gchar* table_name, const col_cvt_t* col_table,
 						GError** error );
-void gnc_gda_create_table_if_needed( const GncGdaBackend* be,
-						const gchar* table_name, const col_cvt_t* col_table );
 const GUID* gnc_gda_load_guid( const GncGdaBackend* be, GdaDataModel* pModel, int row );
 const GUID* gnc_gda_load_tx_guid( const GncGdaBackend* be, GdaDataModel* pModel, int row );
 GdaQuery* gnc_gda_create_select_query( const GncGdaBackend* be, const gchar* table_name );
@@ -202,6 +202,9 @@ void gnc_gda_create_objectref_guid_col( GdaServerProvider* server, GdaConnection
 guint gnc_gda_append_guid_list_to_sql( GString* str, GList* list, guint maxCount );
 
 void _retrieve_guid_( gpointer pObject, gpointer pValue );
+void _init_version_info( GncGdaBackend* be );
+void _reset_version_info( const GncGdaBackend* be );
+void _finalize_version_info( GncGdaBackend* be );
 
 G_MODULE_EXPORT const gchar *
 g_module_check_init( GModule *module );

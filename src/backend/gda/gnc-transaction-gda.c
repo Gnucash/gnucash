@@ -50,7 +50,9 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
+#define TX_TABLE_VERSION 1
 #define SPLIT_TABLE "splits"
+#define SPLIT_TABLE_VERSION 1
 
 typedef struct {
     GncGdaBackend* be;
@@ -65,7 +67,6 @@ static const col_cvt_t tx_col_table[] =
     { "guid",          CT_GUID,           0,                      COL_NNUL|COL_PKEY, "guid" },
     { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetCurrency, (QofSetterFunc)xaccTransSetCurrency },
-//    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, TRANS_NUM },
     { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          NULL, NULL,
 			(QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
     { "post_date",     CT_TIMESPEC,       0,                      COL_NNUL,          NULL, NULL,
@@ -227,7 +228,7 @@ get_account_balance_from_sql( GncGdaBackend* be, const gchar* sql )
 	g_return_val_if_fail( be != NULL, bal );
 	g_return_val_if_fail( sql != NULL, bal );
 
-	model = gnc_gda_execute_sql( be, sql );
+	model = gnc_gda_execute_select_sql( be, sql );
 	if( model != NULL ) {
     	int numRows;
     	int r;
@@ -253,7 +254,7 @@ get_account_balance_for_list_from_sql( GncGdaBackend* be, GList* result_list, co
 	g_return_if_fail( be != NULL );
 	g_return_if_fail( sql != NULL );
 
-	model = gnc_gda_execute_sql( be, sql );
+	model = gnc_gda_execute_select_sql( be, sql );
 	if( model != NULL ) {
 		for( ; result_list != NULL; result_list = result_list->next ) {
 			acct_balances_t* ab = (acct_balances_t*)result_list->data;
@@ -533,7 +534,7 @@ load_splits_for_tx_list( GncGdaBackend* be, GList* list )
 	g_string_append( sql, ")" );
 
 	// Execute the query and load the splits
-	model = gnc_gda_execute_sql( be, sql->str );
+	model = gnc_gda_execute_select_sql( be, sql->str );
     if( model != NULL ) {
         int numRows = gda_data_model_get_n_rows( model );
         int r;
@@ -651,10 +652,29 @@ load_all_tx( GncGdaBackend* be )
 static void
 create_transaction_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TRANSACTION_TABLE, tx_col_table );
-    gnc_gda_create_table_if_needed( be, SPLIT_TABLE, split_col_table );
+	version = gnc_gda_get_table_version( be, TRANSACTION_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TRANSACTION_TABLE, TX_TABLE_VERSION, tx_col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
+
+	version = gnc_gda_get_table_version( be, SPLIT_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, SPLIT_TABLE, SPLIT_TABLE_VERSION, split_col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 /* ================================================================= */
 static void
@@ -850,7 +870,7 @@ compile_split_query( GncGdaBackend* be, QofQuery* pQuery )
     guid_to_string_buff( acct_guid, guid_buf );
 	sql = g_string_new( "" );
 	g_string_printf( sql, "SELECT DISTINCT tx_guid FROM %s WHERE account_guid='%s'", SPLIT_TABLE, guid_buf );
-	model = gnc_gda_execute_sql( be, sql->str );
+	model = gnc_gda_execute_select_sql( be, sql->str );
     if( model != NULL ) {
         int numRows = gda_data_model_get_n_rows( model );
         int r;

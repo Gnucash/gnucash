@@ -48,6 +48,7 @@ static gpointer get_quote_source_name( gpointer pObject, const QofParam* );
 static void set_quote_source_name( gpointer pObject, gpointer pValue );
 
 #define COMMODITIES_TABLE "commodities"
+#define TABLE_VERSION 1
 
 #define COMMODITY_MAX_NAMESPACE_LEN 2048
 #define COMMODITY_MAX_MNEMONIC_LEN 2048
@@ -173,9 +174,19 @@ load_all_commodities( GncGdaBackend* be )
 static void
 create_commodities_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, COMMODITIES_TABLE, col_table );
+	version = gnc_gda_get_table_version( be, COMMODITIES_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, COMMODITIES_TABLE, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

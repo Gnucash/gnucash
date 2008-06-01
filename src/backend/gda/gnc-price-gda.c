@@ -43,6 +43,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
+#define TABLE_VERSION 1
 
 #define PRICE_MAX_SOURCE_LEN 2048
 #define PRICE_MAX_TYPE_LEN 2048
@@ -121,9 +122,19 @@ load_all_prices( GncGdaBackend* be )
 static void
 create_prices_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

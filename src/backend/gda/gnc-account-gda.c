@@ -46,6 +46,7 @@
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "accounts"
+#define TABLE_VERSION 1
 
 static gpointer get_parent( gpointer pObject, const QofParam* );
 static void set_parent( gpointer pObject, gpointer pValue );
@@ -292,9 +293,19 @@ load_all_accounts( GncGdaBackend* be )
 static void
 create_account_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */
@@ -382,8 +393,8 @@ gnc_gda_init_account_handler( void )
     {
         GNC_GDA_BACKEND_VERSION,
         GNC_ID_ACCOUNT,
-        gnc_gda_save_account,				/* commit */
-        load_all_accounts,				/* initial_load */
+        gnc_gda_save_account,		/* commit */
+        load_all_accounts,			/* initial_load */
         create_account_tables		/* create_tables */
     };
 

@@ -52,6 +52,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ACL_LEN 2048
 
 #define TABLE_NAME "employees"
+#define TABLE_VERSION 1
 
 static col_cvt_t col_table[] =
 {
@@ -128,9 +129,19 @@ load_all_employees( GncGdaBackend* be )
 static void
 create_employee_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, TABLE_NAME, col_table );
+	version = gnc_gda_get_table_version( be, TABLE_NAME );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, TABLE_NAME, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

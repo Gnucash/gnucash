@@ -45,6 +45,7 @@
 #include "gnc-recurrence-gda.h"
 
 #define SCHEDXACTION_TABLE "schedxactions"
+#define TABLE_VERSION 1
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -203,7 +204,6 @@ load_single_sx( GncGdaBackend* be, GdaDataModel* pModel, int row, GList** pList 
     gnc_gda_load_object( be, pModel, row, /*GNC_ID_SCHEDXACTION*/GNC_SX_ID, pSx, col_table );
 	gnc_gda_recurrence_load_list( be, guid, &schedule );
 	gnc_sx_set_schedule( pSx, schedule );
-//    gnc_gda_slots_load( be, QOF_INSTANCE(pSx) );
 	*pList = g_list_append( *pList, pSx );
 
     qof_instance_mark_clean( QOF_INSTANCE(pSx) );
@@ -250,9 +250,19 @@ load_all_sxes( GncGdaBackend* be )
 static void
 create_sx_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, SCHEDXACTION_TABLE, col_table );
+	version = gnc_gda_get_table_version( be, SCHEDXACTION_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */

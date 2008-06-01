@@ -311,6 +311,9 @@ gnc_gda_session_begin( QofBackend *be_start, QofSession *session,
         PERR( "gda_dict_update_dbms_meta_data() error: %s\n", error->message );
     }
 
+	// Set up table version information
+	_init_version_info( be );
+
     // Call all object backends to create any required tables
     qof_object_foreach_backend( GNC_GDA_BACKEND, create_tables_cb, be );
 
@@ -346,6 +349,7 @@ gnc_gda_session_end(QofBackend *be_start)
         g_object_unref( G_OBJECT(be->pClient ) );
         be->pClient = NULL;
     }
+	_finalize_version_info( be );
 
     LEAVE (" ");
 }
@@ -620,6 +624,8 @@ gnc_gda_sync_all( QofBackend* fbe, QofBook *book )
             }
         }
     }
+
+	_reset_version_info( be );
 
     // Update the dictionary because new tables may exist
     gda_dict_update_dbms_meta_data( be->pDict, 0, NULL, &error );

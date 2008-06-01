@@ -44,6 +44,7 @@
 #include "SX-book-p.h"
 
 #define BOOK_TABLE "books"
+#define TABLE_VERSION 1
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -180,9 +181,19 @@ load_all_books( GncGdaBackend* be )
 static void
 create_book_tables( GncGdaBackend* be )
 {
+	gint version;
+
 	g_return_if_fail( be != NULL );
 
-    gnc_gda_create_table_if_needed( be, BOOK_TABLE, col_table );
+	version = gnc_gda_get_table_version( be, BOOK_TABLE );
+    if( version == 0 ) {
+    	GError* error = NULL;
+
+        gnc_gda_create_table( be, BOOK_TABLE, TABLE_VERSION, col_table, &error );
+        if( error != NULL ) {
+            PERR( "Error creating table: %s\n", error->message );
+        }
+    }
 }
 
 /* ================================================================= */
