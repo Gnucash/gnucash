@@ -19,7 +19,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <signal name="key_press_event" handler="dai_key_press_event_cb" last_modification_time="Mon, 24 Mar 2008 03:19:32 GMT"/>
   <signal name="destroy" handler="dai_destroy_cb" last_modification_time="Mon, 24 Mar 2008 03:20:48 GMT"/>
 
@@ -244,7 +243,6 @@ Press &quot;Apply&quot; now.</property>
 
 <widget class="GtkDialog" id="Transaction Dialog">
   <property name="border_width">5</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Online Transaction</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -257,7 +255,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -273,7 +270,6 @@ Press &quot;Apply&quot; now.</property>
 
 	  <child>
 	    <widget class="GtkButton" id="exec_later_button">
-	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Execute later (unimpl.)</property>
@@ -494,6 +490,7 @@ Press &quot;Apply&quot; now.</property>
 		  <property name="has_frame">True</property>
 		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
+		  <signal name="changed" handler="dat_bankcode_changed_cb" last_modification_time="Tue, 03 Jun 2008 22:22:13 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">2</property>
@@ -964,7 +961,7 @@ Press &quot;Apply&quot; now.</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="add_template_cb"/>
+			  <signal name="clicked" handler="dat_add_templ_cb" last_modification_time="Sun, 01 Jun 2008 14:39:57 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment3">
@@ -1041,7 +1038,7 @@ Press &quot;Apply&quot; now.</property>
 			  <property name="use_stock">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="moveup_templ_cb"/>
+			  <signal name="clicked" handler="dat_moveup_templ_cb" last_modification_time="Sun, 01 Jun 2008 14:32:42 GMT"/>
 			</widget>
 		      </child>
 
@@ -1054,7 +1051,7 @@ Press &quot;Apply&quot; now.</property>
 			  <property name="use_stock">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="movedown_templ_cb"/>
+			  <signal name="clicked" handler="dat_movedown_templ_cb" last_modification_time="Sun, 01 Jun 2008 14:32:50 GMT"/>
 			</widget>
 		      </child>
 
@@ -1065,7 +1062,7 @@ Press &quot;Apply&quot; now.</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="sort_templ_cb"/>
+			  <signal name="clicked" handler="dat_sort_templ_cb" last_modification_time="Sun, 01 Jun 2008 14:32:33 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment4">
@@ -1142,7 +1139,7 @@ Press &quot;Apply&quot; now.</property>
 			  <property name="use_stock">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
-			  <signal name="clicked" handler="del_template_cb"/>
+			  <signal name="clicked" handler="dat_del_templ_cb" last_modification_time="Sun, 01 Jun 2008 14:41:33 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -1163,24 +1160,16 @@ Press &quot;Apply&quot; now.</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkViewport" id="viewport1">
+			<widget class="GtkTreeView" id="template_list">
 			  <property name="visible">True</property>
-			  <property name="shadow_type">GTK_SHADOW_IN</property>
-
-			  <child>
-			    <widget class="GtkTreeView" id="template_list">
-			      <property name="headers_visible">True</property>
-			      <property name="rules_hint">True</property>
-			      <property name="reorderable">False</property>
-			      <property name="enable_search">True</property>
-			      <property name="fixed_height_mode">False</property>
-			      <property name="hover_selection">False</property>
-			      <property name="hover_expand">False</property>
-			      <signal name="select_child" handler="on_template_list_select_child"/>
-			      <signal name="selection_changed" handler="on_template_list_selection_changed"/>
-			      <signal name="unselect_child" handler="on_template_list_unselect_child"/>
-			    </widget>
-			  </child>
+			  <property name="headers_visible">False</property>
+			  <property name="rules_hint">True</property>
+			  <property name="reorderable">False</property>
+			  <property name="enable_search">True</property>
+			  <property name="fixed_height_mode">False</property>
+			  <property name="hover_selection">False</property>
+			  <property name="hover_expand">False</property>
+			  <signal name="row_activated" handler="templ_list_row_activated_cb" last_modification_time="Wed, 04 Jun 2008 20:43:02 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -1420,7 +1409,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
   <signal name="delete_event" handler="ggg_delete_event_cb" last_modification_time="Thu, 03 Apr 2008 23:38:57 GMT"/>
 
@@ -1822,7 +1810,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2204,7 +2191,6 @@ Press &quot;Apply&quot; now.</property>
 
 <widget class="GtkDialog" id="Template Name Dialog">
   <property name="border_width">5</property>
-  <property name="visible">True</property>
   <property name="title" translatable="yes">Name for new template</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
@@ -2217,7 +2203,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2341,7 +2326,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2559,7 +2543,6 @@ Press &quot;Apply&quot; now.</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkTable" id="aqbanking_prefs">

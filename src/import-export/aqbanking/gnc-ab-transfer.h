@@ -43,7 +43,7 @@ G_BEGIN_DECLS
 /**
  * FIXME
  *
- * @param parent Widget to use as parent
+ * @param parent Widget to use as parent, may be NULL
  * @param gnc_acc GnuCash account to fetch balance for
  * @param trans_type Type of transaction
  */

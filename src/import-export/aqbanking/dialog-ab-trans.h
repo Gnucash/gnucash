@@ -35,11 +35,17 @@
 #ifndef DIALOG_AB_TRANS_H
 #define DIALOG_AB_TRANS_H
 
-#include <glib.h>
+#include <gtk/gtk.h>
+#include <aqbanking/banking.h>
+
+#include "Account.h"
 
 G_BEGIN_DECLS
 
-typedef struct _ABTransDialog ABTransDialog;
+#define GNC_RESPONSE_NOW GTK_RESPONSE_YES
+#define GNC_RESPONSE_LATER GTK_RESPONSE_NO
+
+typedef struct _GncABTransDialog GncABTransDialog;
 
 typedef enum _GncABTransType GncABTransType;
 enum _GncABTransType {
@@ -47,6 +53,87 @@ enum _GncABTransType {
     SINGLE_DEBITNOTE,
     SINGLE_INTERNAL_TRANSFER
 };
+
+/**
+ * FIXME
+ *
+ * @param parent Widget to use as parent, may be NULL
+ * @param ab_acc FIXME
+ * @param commodity_scu FIXME
+ * @param trans_type Type of transaction
+ * @param templates A GList of template transactions which will become fully
+ * managed by the dialog, so do not free it and retrieve snapshots via
+ * gnc_ab_trans_dialog_get_templ()
+ * @return FIXME
+ */
+GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
+                                          gint commodity_scu,
+                                          GncABTransType trans_type,
+                                          GList *templates);
+
+/**
+ * FIXME
+ *
+ * @param td Transaction dialog
+ * @param ab_acc AqBanking account
+ * @return FIXME
+ */
+gint gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td);
+
+/**
+ * FIXME
+ *
+ * @param td Transaction dialog
+ */
+void gnc_ab_trans_dialog_free(GncABTransDialog *td);
+
+/**
+ * Retrieve the current list of transaction templates from the dialog @a
+ * td, unless @a changed is a specified location and the templates have
+ * not been touched by the user.
+ *
+ * @param td Transaction dialog
+ * @param changed Location to store whether the templates have been
+ * changed, may be NULL
+ * @return The a newly allocated list of the internal transaction
+ * templates. Free this one via g_list_free().
+ */
+GList *gnc_ab_trans_dialog_get_templ(const GncABTransDialog *td,
+                                     gboolean *changed);
+
+/**
+ * Retrieve the widget used as parent.
+ *
+ * @param td Transaction dialog
+ * @return The parent
+ */
+GtkWidget *gnc_ab_trans_dialog_get_parent(const GncABTransDialog *td);
+
+/**
+ * FIXME
+ *
+ * @param td Transaction dialog
+ * @return FIXME
+ */
+const AB_TRANSACTION *gnc_ab_trans_dialog_get_ab_trans(
+    const GncABTransDialog *td);
+
+/**
+ * FIXME
+ *
+ * @param td Transaction dialog
+ * @return FIXME
+ */
+AB_JOB *gnc_ab_trans_dialog_get_job(const GncABTransDialog *td);
+
+/**
+ * FIXME
+ *
+ * @param td Transaction dialog
+ * @return FIXME
+ */
+AB_JOB *gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
+                             GncABTransType trans_type);
 
 G_END_DECLS
 
