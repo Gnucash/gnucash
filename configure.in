@@ -855,7 +855,7 @@ then
   # aqbanking-1.6.1 was released on 2005-11-04; aqbanking ships with
   # a pkg-config file since 1.6.1.
   PKG_CHECK_MODULES(AQBANKING, aqbanking >= 3.0.0 gwenhywfar, [AQBANKING_DIR=aqbanking], [
-    PKG_CHECK_MODULES(HBCI, aqbanking >= 1.6.1 aqbanking < 2.9.0 gwenhywfar, [AQBANKING_DIR=hbci], [
+    PKG_CHECK_MODULES(AQBANKING, aqbanking >= 1.6.1 aqbanking < 2.9.0 gwenhywfar, [AQBANKING_DIR=hbci], [
       AC_MSG_ERROR([Could not find aqbanking > 1.6.0. If you use --enable-aqbanking or --enable-hbci, you *have* to have aqbanking installed!])
     ])
   ])
