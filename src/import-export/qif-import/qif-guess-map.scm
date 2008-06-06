@@ -97,6 +97,11 @@
               (set! qif-security-list (safe-read))
               (set! saved-sep (safe-read))
 
+              ;; Convert the separator to a string if necessary.
+              ;; It was a character prior to 2.2.6.
+              (if (char? saved-sep)
+                  (set! saved-sep (string saved-sep)))
+
               ;; Process the QIF account mapping.
               (if (not (list? qif-account-list))
                   (set! qif-account-hash (make-hash-table 20))
@@ -162,8 +167,8 @@
 
 (define (qif-import:read-map tablist tab-sep)
   (let* ((table (make-hash-table 20))
-         (sep (string-ref (gnc-get-account-separator-string) 0))
-         (changed-sep? (and (char? tab-sep) (not (char=? tab-sep sep)))))
+         (sep (gnc-get-account-separator-string))
+         (changed-sep? (and (string? tab-sep) (not (string=? tab-sep sep)))))
 
     (for-each
      (lambda (entry)
@@ -175,8 +180,9 @@
            (let ((acct-name (qif-map-entry:gnc-name value)))
              (if (string? acct-name)
                  (qif-map-entry:set-gnc-name! value
-                   (string-map (lambda (c) (if (char=? c tab-sep) sep c))
-                               acct-name)))))
+                                              (gnc:substring-replace acct-name
+                                                                     tab-sep  
+                                                                     sep)))))
 
          (qif-map-entry:set-display?! value #f)
          (hash-set! table key value)))
@@ -295,7 +301,7 @@
 
             (display ";;; GnuCash separator used in these mappings")
             (newline)
-            (write (string-ref (gnc-get-account-separator-string) 0))
+            (write (gnc-get-account-separator-string))
             (newline)))))
 
 

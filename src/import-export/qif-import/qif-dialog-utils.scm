@@ -637,11 +637,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:get-account-name fullname)
-  (let ((lastsep (string-rindex fullname
-                                (string-ref (gnc-get-account-separator-string)
-                                            0))))
-    (if lastsep
-        (substring fullname (+ lastsep 1))
+  (let* ((sep (gnc-get-account-separator-string))
+         (last-sep (gnc:string-rcontains fullname sep)))
+    (if last-sep
+        (substring fullname (+ last-sep (string-length sep)))
         fullname)))
 
 
@@ -839,7 +838,8 @@
 
   (let ((accts '())
         (acct-tree '())
-        (separator (string-ref (gnc-get-account-separator-string) 0)))
+        (sep (gnc-get-account-separator-string)))
+
     ;; get the new accounts from the account map
     (for-each
      (lambda (acctmap)
@@ -849,8 +849,8 @@
               (if (qif-map-entry:display? v)
                   (set! accts
                         (cons
-                         (cons (string-split (qif-map-entry:gnc-name v)
-                                             separator)
+                         (cons (gnc:substring-split (qif-map-entry:gnc-name v)
+                                                    sep)
                                (qif-map-entry:new-acct? v))
                          accts)))
               #f)
@@ -862,9 +862,7 @@
      (lambda (acct)
        (set! accts
              (cons
-              (cons (string-split
-                     (gnc-account-get-full-name acct)
-                     separator)
+              (cons (gnc:substring-split (gnc-account-get-full-name acct) sep)
                     #f)
               accts)))
      (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))

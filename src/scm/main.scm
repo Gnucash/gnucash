@@ -37,6 +37,7 @@
 
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
+(load-from-path "string.scm")
 (load-from-path "doc.scm")
 (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
 (load-from-path "fin.scm")
@@ -56,7 +57,6 @@
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 (re-export hash-fold)
-(re-export string-split)
 
 ;; from command-line.scm
 (export gnc:*doc-path*)
@@ -126,20 +126,6 @@
                    '()
                    (cons joinstr (cons (car remaining-elements)
                                        (loop (cdr remaining-elements)))))))))
-
-(define (string-split str char)
-  (let ((parts '())
-        (first-char #f))
-    (let loop ((last-char (string-length str)))
-      (set! first-char (string-rindex str char 0 last-char))
-      (if first-char 
-          (begin 
-            (set! parts (cons (substring str (+ 1 first-char) last-char) 
-                              parts))
-            (loop first-char))
-          (set! parts (cons (substring str 0 last-char) parts))))    
-    parts))
-
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
