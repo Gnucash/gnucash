@@ -47,12 +47,6 @@
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
 
-enum _ConfirmationState {
-    UNCHANGED,
-    REPLACE,
-    RETAIN
-};
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -64,9 +58,6 @@ static gboolean clear_templ_helper(GtkTreeModel *model, GtkTreePath *path,
                                    GtkTreeIter *iter, gpointer user_data);
 static gboolean get_templ_helper(GtkTreeModel *model, GtkTreePath *path,
                                  GtkTreeIter *iter, gpointer data);
-static gboolean is_change_allowed(gboolean changed,
-                                  enum _ConfirmationState *state,
-                                  GtkWidget *parent, GncABTransTempl *templ);
 
 void dat_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
 void templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
@@ -663,34 +654,6 @@ AB_JOB *gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
     return job;
 }
 
-static gboolean
-is_change_allowed(gboolean changed, enum _ConfirmationState *state,
-                  GtkWidget *parent, GncABTransTempl *templ)
-{
-    if (*state == RETAIN)
-        return FALSE;
-    if (*state == REPLACE || !changed)
-        return TRUE;
-    if (gnc_verify_dialog(
-            parent, FALSE,
-            _("Do you really want to overwrite your changes with the "
-              "contents of the template \"%s\"?"),
-            gnc_ab_trans_templ_get_name(templ))) {
-        *state = REPLACE;
-        return TRUE;
-    } else {
-        *state = RETAIN;
-        return FALSE;
-    }
-}
-
-#define FILL_ENTRY(accessor, widget)                                \
-    str = (accessor)(templ);                                        \
-    if (!str) str = "";                                             \
-    changed = strcmp(str, gtk_entry_get_text(GTK_ENTRY((widget)))); \
-    if (is_change_allowed(changed, &state, td->parent, templ))      \
-        gtk_entry_set_text(GTK_ENTRY((widget)), str);
-
 void
 templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
                             GtkTreeViewColumn *column, gpointer user_data)
@@ -699,10 +662,14 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
     GtkTreeModel *model;
     GtkTreeIter iter;
     GncABTransTempl *templ;
-    const gchar *str;
-    gnc_numeric amount;
-    gboolean changed;
-    enum _ConfirmationState state = UNCHANGED;
+    const gchar *old_name, *new_name;
+    const gchar *old_account, *new_account;
+    const gchar *old_bankcode, *new_bankcode;
+    const gchar *old_purpose, *new_purpose;
+    const gchar *old_purpose_cont, *new_purpose_cont;
+    GtkWidget *amount_widget;
+    const gchar *old_amount_text;
+    gnc_numeric old_amount, new_amount;
 
     g_return_if_fail(td);
 
@@ -715,18 +682,54 @@ templ_list_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
     gtk_tree_model_get(GTK_TREE_MODEL(td->template_list_store), &iter,
                        TEMPLATE_POINTER, &templ, -1);
 
-    FILL_ENTRY(gnc_ab_trans_templ_get_recp_name, td->recp_name_entry);
-    FILL_ENTRY(gnc_ab_trans_templ_get_recp_account, td->recp_account_entry);
-    FILL_ENTRY(gnc_ab_trans_templ_get_recp_bankcode, td->recp_bankcode_entry);
-    FILL_ENTRY(gnc_ab_trans_templ_get_purpose, td->purpose_entry);
-    FILL_ENTRY(gnc_ab_trans_templ_get_purpose_cont, td->purpose_cont_entry);
+    /* Get old values */
+    old_name = gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry));
+    old_account = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
+    old_bankcode = gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry));
+    old_purpose = gtk_entry_get_text(GTK_ENTRY(td->purpose_entry));
+    old_purpose_cont = gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry));
+    amount_widget = gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit));
+    old_amount_text = gtk_entry_get_text(GTK_ENTRY(amount_widget));
+    old_amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit));
 
-    amount = gnc_ab_trans_templ_get_amount(templ);
-    changed = !gnc_numeric_equal(
-        amount, gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)));
-    if (is_change_allowed(changed, &state, td->parent, templ))
-        gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(td->amount_edit), amount);
+    /* Get new values */
+    new_name = gnc_ab_trans_templ_get_name(templ);
+    new_account = gnc_ab_trans_templ_get_recp_account(templ);
+    new_bankcode = gnc_ab_trans_templ_get_recp_bankcode(templ);
+    new_purpose = gnc_ab_trans_templ_get_purpose(templ);
+    new_purpose_cont = gnc_ab_trans_templ_get_purpose_cont(templ);
+    new_amount = gnc_ab_trans_templ_get_amount(templ);
+    if (!new_name) new_name = "";
+    if (!new_account) new_account = "";
+    if (!new_bankcode) new_bankcode = "";
+    if (!new_purpose) new_purpose = "";
+    if (!new_purpose_cont) new_purpose_cont = "";
 
+    /* Check for differences to avoid overwriting entered text */
+    if ((*old_name && strcmp(old_name, new_name))
+        || (*old_account && strcmp(old_account, new_account))
+        || (*old_bankcode && strcmp(old_bankcode, new_bankcode))
+        || (*old_purpose && strcmp(old_purpose, new_purpose))
+        || (*old_purpose_cont && strcmp(old_purpose_cont, new_purpose_cont))
+        || (*old_amount_text && !gnc_numeric_equal(old_amount, new_amount))) {
+        if (!gnc_verify_dialog(
+                td->parent, FALSE,
+                _("Do you really want to overwrite your changes with the "
+                  "contents of the template \"%s\"?"),
+                gnc_ab_trans_templ_get_name(templ))) {
+
+            LEAVE("aborted");
+            return;
+        }
+    }
+
+    /* Fill in */
+    gtk_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
+    gtk_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
+    gtk_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
+    gtk_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
+    gtk_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
+    gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(td->amount_edit), new_amount);
     LEAVE(" ");
 }
 
